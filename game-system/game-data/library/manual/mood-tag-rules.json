@@ -1,0 +1,31 @@
+const gameData = {};
+
+Object.keys(ownedGames).forEach((gameKey) => {
+  const bggData = bggAllGames[gameKey];
+  const ownedData = ownedGames[gameKey];
+
+  if (!bggData) return;
+
+  const translatedCategories =
+    (bggData.categories || []).map((tag) =>
+      bggTagTranslations.categories[tag] || tag
+    );
+
+  const translatedMechanics =
+    (bggData.mechanics || []).map((tag) =>
+      bggTagTranslations.mechanics[tag] || tag
+    );
+
+  gameData[gameKey] = {
+    ...bggData,
+    ...ownedData,
+
+    categories_kr: translatedCategories,
+    mechanics_kr: translatedMechanics,
+
+    display_tags:
+      ownedData.cottage_tags && ownedData.cottage_tags.length > 0
+        ? ownedData.cottage_tags
+        : [...translatedCategories, ...translatedMechanics].slice(0, 4)
+  };
+});

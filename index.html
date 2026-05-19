@@ -1,0 +1,692 @@
+<!-- =========================
+     # PROJECT STRUCTURE
+=========================
+
+ROOT
+├─ index.html
+│
+├─ assets/
+│  ├─ css/
+│  │  └─ style.css
+│  ├─ js/
+│  │  └─ script.js
+│  └─ images/
+│     ├─ logo.png
+│     └─ main-visual.png
+│
+├─ content/
+│  └─ game-images/
+│     ├─ thumb/
+│     └─ detail/
+│
+├─ data/
+│  ├─ raw/
+│  │  ├─ boardgames_ranks.csv
+│  │  └─ cottage-owned-games.tsv
+│  │
+│  ├─ cache/
+│  │  ├─ bgg-match-result.json
+│  │  └─ bgg-details-cache.json
+│  │
+│  └─ output/
+│     ├─ cottage-games-data.js
+│     └─ cottage-games-data.json
+│
+└─ tools/
+   ├─ convert-bgg.js
+   ├─ normalize-game-name.js
+   ├─ match-owned-games-to-bgg.js
+   ├─ fetch-bgg-details.js
+   └─ build-cottage-game-data.js
+
+========================= -->
+
+
+<!-- =========================
+역할 색인
+
+
+index.html
+→ 홈페이지 구조
+
+assets/css/style.css
+→ 전체 디자인
+
+assets/js/script.js
+→ 화면 동작 / 추천 UI / 카드 렌더링
+
+assets/images/
+→ 로고, 메인 비주얼 같은 사이트 공통 이미지
+
+content/game-images/thumb/
+→ 게임 카드용 작은 이미지
+
+content/game-images/detail/
+→ 게임 상세 바텀시트용 큰 이미지
+
+data/raw/
+→ 원본 데이터 보관소
+→ 직접 수정하는 원본 파일
+
+data/cache/
+→ 자동 처리 중간 결과
+→ 매칭 결과 / BGG API 캐시
+
+data/output/
+→ 홈페이지가 실제 사용하는 최종 데이터
+
+tools/
+→ 데이터 변환용 개발 도구
+
+
+normalize-game-name.js
+→ 게임명 정규화 담당
+→ 한글/영문/기호/확장명/괄호 제거
+→ "스플렌더 포켓몬" 같은 이름을 비교 가능한 형태로 바꿈
+
+match-owned-games-to-bgg.js
+→ 네 보유게임 리스트와 BGG 랭킹 CSV 매칭
+→ 보유게임명 → BGG id 찾기
+→ 자동 매칭 / 애매한 매칭 / 실패 목록 분리
+
+fetch-bgg-details.js
+→ BGG API 상세정보 수집
+→ BGG id를 기준으로 weight, 인원, 이미지, 설명, 메커니즘 수집
+→ data/cache/bgg-details-cache.json 저장
+
+build-cottage-game-data.js
+→ 최종 홈페이지용 데이터 생성
+→ 네 보유게임 리스트 + BGG 상세정보 + 코티지 큐레이션 문구 병합
+→ data/output/cottage-games-data.js 생성
+→ data/output/cottage-games-data.json도 같이 생성
+
+convert-bgg.js
+→ 전체 실행 파일
+→ 위 4개를 순서대로 호출하는 메인 스크립트
+
+
+
+
+
+========================= -->
+
+
+<!-- =========================
+     # HTML INDEX
+
+     1. HEADER
+     2. HERO / LANDING
+     3. RECOMMEND SECTION
+     4. GAME CARD SCROLL
+     5. GAME DETAIL
+     6. RECOMMEND SITUATION
+     7. RULE SUMMARY
+
+
+BODY
+├ HEADER
+├ MAIN
+│  ├ HERO / LANDING
+│  └ RECOMMEND SECTION
+│     ├ RECOMMEND HEADER
+│     ├ RECOMMEND FILTER
+│     ├ GAME CARD SCROLL
+│     ├ GAME DETAIL
+│     ├ RECOMMEND SITUATION
+│     └ RULE SUMMARY
+└ SCRIPT
+
+========================== -->
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>코티지보드</title>
+
+  <link
+    rel="stylesheet"
+    href="./assets/css/style.css"
+  />
+
+</head>
+
+<body>
+
+
+
+  <!-- =========================
+       # HEADER
+  ========================== -->
+
+  <header class="site-header">
+
+  <a
+  class="header-logo"
+  href="#"
+  id="goHomeLogo"
+>
+  <img
+    src="./assets/images/main/logo.png"
+    alt="코티지보드 로고"
+  >
+</a>
+
+
+<a
+  class="header-center"
+  id="goHomeTitle"
+  href="#"
+>
+  오래 머무르고 싶은, 보드게임 공간
+</a>
+
+
+ <button
+  class="menu-toggle"
+  id="menuToggle"
+  type="button"
+>
+  ☰
+</button>
+
+
+    <nav class="header-menu" id="mobileMenu">
+
+      <a href="#" id="openRecommendMenu">
+        추천 게임 찾기
+      </a>
+
+   <a href="./owned-games.html">
+  전체 게임 보기
+</a>
+
+      <a href="#">
+        매장 이용 안내
+      </a>
+
+      <a href="#">
+        문의하기
+      </a>
+
+    </nav>
+
+  </header>
+
+
+
+
+
+  <main>
+
+
+
+    <!-- =========================
+         # HERO
+    ========================== -->
+
+    <section class="hero">
+
+      <div class="hero-deco deco-1">
+        ⌇
+      </div>
+
+      <div class="hero-deco deco-2">
+        🌱
+      </div>
+
+      <div class="hero-deco deco-3">
+        🌿
+      </div>
+
+
+      <div class="hero-inner">
+
+        <div class="hero-visual">
+
+          <img
+            src="./assets/images/main/hero.png"
+            alt="코티지보드 대표 이미지"
+          >
+
+        </div>
+
+
+        <div class="hero-text">
+
+          <p class="label">
+            24시 무제한 보드게임카페
+          </p>
+
+
+          <h1>
+            오래 머무르고 싶은,<br>
+            보드게임 공간
+          </h1>
+
+
+          <div class="dotted-line"></div>
+
+
+          <p class="desc">
+            게임을 몰라도 괜찮아요.<br>
+            추천게임으로 편하게 시작해보세요.
+          </p>
+
+
+          <div class="buttons">
+
+            <button
+  class="btn primary-btn"
+  id="openRecommendModal"
+  type="button"
+>
+  추천 게임 찾기
+</button>
+
+
+           <a
+  class="btn secondary-btn"
+  href="./owned-games.html"
+>
+  전체 게임 보기
+</a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+
+
+    <!-- =========================
+         # RECOMMEND SECTION
+    ========================== -->
+
+    <section
+      class="recommend-section is-hidden"
+      id="recommend"
+    >
+
+
+      <!-- =========================
+           # RECOMMEND HEADER
+      ========================== -->
+
+      <div class="recommend-header">
+
+
+
+
+        <div class="recommend-title-group">
+
+  <h2 id="recommendTitle">
+    추천 게임 찾기
+  </h2>
+
+</div>
+
+
+
+
+      </div>
+
+
+
+
+
+    <!-- =========================
+     # RECOMMEND FILTER
+========================== -->
+
+<div
+  class="recommend-filter"
+  id="recommendFilter"
+>
+  <!-- script.js에서 선택 조건을 자동 렌더링함 -->
+</div>
+
+
+
+
+
+      <!-- =========================
+           # GAME CARD SCROLL
+      ========================== -->
+
+      <div
+        class="game-scroll"
+        id="gameScroll"
+      >
+      </div>
+
+    </section>
+
+  </main>
+
+
+
+
+
+  <!-- =========================
+       # RECOMMEND MODAL
+  ========================== -->
+
+  <div
+    class="recommend-modal"
+    id="recommendModal"
+    aria-hidden="true"
+  >
+
+
+    <div
+      class="recommend-modal-dim"
+      id="closeRecommendModalDim"
+    ></div>
+
+
+
+
+
+    <div class="recommend-modal-panel">
+
+
+
+
+      <!-- =========================
+           # MODAL HEADER
+      ========================== -->
+
+      <div class="recommend-modal-header">
+
+        <h3>
+        🍀 오늘은 어떤 게임이 어울릴까요?
+        </h3>
+
+
+        <button
+          class="modal-close-btn"
+          id="closeRecommendModal"
+          type="button"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+
+
+
+      <!-- =========================
+           # MODAL BODY
+      ========================== -->
+
+      <div class="recommend-modal-body">
+
+
+
+        <!-- =========================
+             # PLAYER FILTER
+        ========================== -->
+
+        <div class="modal-filter-group">
+
+          <p>
+            인원
+          </p>
+
+
+          <div class="modal-option-row">
+
+            <button
+              class="modal-option"
+              type="button"
+              data-players="2"
+            >
+              💗둘이 왔어요
+            </button>
+
+
+            <button
+              class="modal-option"
+              type="button"
+              data-players="3"
+            >
+              🍻셋이 왔어요
+            </button>
+
+
+            <button
+              class="modal-option"
+              type="button"
+              data-players="4"
+            >
+              🎲넷이 왔어요
+            </button>
+
+
+            <button
+              class="modal-option"
+              type="button"
+              data-players="group"
+            >
+              🎉단체로 왔어요
+            </button>
+
+             <button
+              class="modal-option"
+              type="button"
+              data-players="1"
+            >
+              ☕혼자 왔어요
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+
+
+        <!-- =========================
+             # LEVEL FILTER
+        ========================== -->
+
+        <div class="modal-filter-group">
+
+  <p>
+    난이도
+  </p>
+
+  <div class="modal-option-row">
+
+<button
+  class="modal-option"
+  type="button"
+  data-level="kids"
+>
+  😊 아이도 할 수 있어요
+</button>
+
+
+<button
+  class="modal-option"
+  type="button"
+  data-level="beginner"
+>
+  🌱 입문 추천
+</button>
+
+
+<button
+  class="modal-option"
+  type="button"
+  data-level="light"
+>
+  🏡 라이트·패밀리
+</button>
+
+
+<button
+  class="modal-option"
+  type="button"
+  data-level="heavy"
+>
+  🧠 헤비·매니아
+</button>
+
+
+<button
+  class="modal-option"
+  type="button"
+  data-level="hardcore"
+>
+  😈 하드코어
+</button>
+
+  </div>
+
+</div>
+
+
+
+
+
+        <!-- =========================
+             # MOOD FILTER
+        ========================== -->
+
+        <div class="modal-filter-group">
+
+          <p>
+            분위기
+          </p>
+
+
+          <div class="modal-option-row">
+
+            <button
+              class="modal-option"
+              type="button"
+              data-mood="fun"
+            >
+              😄 가볍게 웃고 싶어요
+            </button>
+
+
+            <button
+              class="modal-option"
+              type="button"
+              data-mood="brain"
+            >
+              🧠 머리 쓰는 느낌
+            </button>
+
+
+            <button
+              class="modal-option"
+              type="button"
+              data-mood="talk"
+            >
+              💬 대화가 많은 게임
+            </button>
+
+
+            <button
+              class="modal-option"
+              type="button"
+              data-mood="immersive"
+            >
+              🔥 몰입감 있게
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+      <!-- =========================
+           # MODAL SUBMIT
+      ========================== -->
+
+   </div>
+
+      <button
+        class="modal-submit-btn"
+        id="applyRecommendCondition"
+        type="button"
+      >
+        추천 게임 보기
+      </button>
+
+
+  </div>
+
+
+<!-- =========================
+     # GAME BOTTOM SHEET
+========================= -->
+
+<div
+  class="game-sheet"
+  id="gameSheet"
+>
+
+  <div
+    class="game-sheet-dim"
+    id="closeGameSheetDim"
+  ></div>
+
+  <div class="game-sheet-panel">
+
+    <button
+      class="game-sheet-close"
+      id="closeGameSheetButton"
+    >
+      ✕
+    </button>
+
+    <div id="gameSheetContent"></div>
+
+  </div>
+
+</div>
+
+
+
+  <!-- =========================
+       # SCRIPT
+  ========================== -->
+
+  
+
+  
+
+<script src="game-system/game-data/generated/maps/bgg-tag-translations.js"></script>
+<script src="game-system/game-data/library/games/cottage-games-data.js"></script>
+<script src="assets/js/view/game-view-utils.js"></script>
+  <script src="./assets/js/script.js"></script>
+
+</body>
+</html>
