@@ -77,7 +77,10 @@ button{
   height:var(--header-h);
   padding:0 clamp(12px,4vw,28px);
   display:grid;
-  grid-template-columns:clamp(82px,24vw,130px) 1fr clamp(38px,10vw,48px);
+  grid-template-columns:
+    clamp(82px,24vw,130px)
+    1fr
+    auto;
   align-items:center;
   background:var(--bg);
   border-bottom:1px solid rgba(223,199,161,0.45);
@@ -112,6 +115,36 @@ button{
   white-space:nowrap;
   text-decoration:none;
   cursor:pointer;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:2px;
+  justify-self:end;
+}
+
+.header-search{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  width:28px;
+  height:28px;
+
+  border:0;
+  background:transparent;
+
+  color:var(--green);
+
+  font-size:20px;
+  font-weight:900;
+
+  text-decoration:none;
+}
+
+.header-search:hover{
+  opacity:0.7;
 }
 
 .menu-toggle{
@@ -931,6 +964,25 @@ body.sheet-open{
   font-weight:900;
 }
 
+
+.sheet-action-btn{
+  display:block;
+  width:100%;
+
+  padding:15px 18px;
+
+  border-radius:999px;
+
+  background:#5f823f;
+  color:#fff;
+
+  text-align:center;
+  text-decoration:none;
+
+  font-size:17px;
+  font-weight:900;
+}
+
 /* =========================
    # RESPONSIVE
 ========================= */
@@ -941,7 +993,9 @@ body.sheet-open{
   }
 
   .site-header{
-    grid-template-columns:1fr clamp(38px,10vw,46px);
+    grid-template-columns:
+      1fr
+      auto;
   }
 }
 
@@ -1580,14 +1634,13 @@ body.recommend-page .recommend-section{
 ========================= */
 
 body.owned-page .site-header{
-  grid-template-columns:clamp(82px,24vw,130px) 1fr clamp(38px,10vw,48px) !important;
+  grid-template-columns:
+    clamp(82px,24vw,130px)
+    1fr
+    auto !important;
 }
 
-body.owned-page .menu-toggle{
-  display:flex !important;
-  align-items:center;
-  justify-content:center;
-}
+
 
 body.owned-page .header-menu{
   position:absolute !important;
@@ -1868,4 +1921,176 @@ body.owned-page .header-menu.active{
 
 .owned-game-meta .difficulty-hardcore{
   background:#f5e7df;
+}
+
+
+.header-search-panel{
+  position:absolute;
+  top:calc(var(--header-h) - 6px);
+  left:12px;
+  right:12px;
+  display:none;
+  padding:12px;
+  border:1px solid rgba(223,199,161,0.7);
+  border-radius:18px;
+  background:var(--paper-2);
+  box-shadow:0 14px 28px rgba(40,30,18,0.12);
+  z-index:1002;
+}
+
+.header-search-panel.is-active{
+  display:block;
+}
+
+.header-search-panel input{
+  width:100%;
+  height:42px;
+  padding:0 14px;
+  border:1.5px solid #dfc7a1;
+  border-radius:999px;
+  background:#fffdf8;
+  color:#314d35;
+  font-size:15px;
+  font-weight:800;
+  outline:none;
+}
+
+
+.header-search-results{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:10px;
+
+  max-height:55svh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+
+  padding-right:2px;
+}
+
+.header-search-result{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border:1px solid #ead8b8;
+  border-radius:14px;
+  background:#fffdf8;
+  text-align:left;
+  cursor:pointer;
+}
+
+.header-search-results{
+  position:relative;
+  max-height:42svh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  padding-right:2px;
+  padding-bottom:10px;
+}
+
+.header-search-panel::after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:10px;
+  height:28px;
+  pointer-events:none;
+  border-radius:0 0 18px 18px;
+  background:linear-gradient(
+    to bottom,
+    rgba(255,253,248,0),
+    rgba(255,250,240,0.95)
+  );
+}
+
+
+.header-search-result img{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  object-fit:contain;
+  border-radius:10px;
+  background:#f7f2e8;
+}
+
+.header-search-result strong{
+  display:block;
+  color:#2f2a21;
+  font-size:14px;
+  font-weight:900;
+  line-height:1.25;
+}
+
+.header-search-empty{
+  margin:8px 2px 0;
+  color:#6f5d43;
+  font-size:13px;
+  font-weight:800;
+}
+
+
+/* =========================
+   # OWNED SEARCH
+========================= */
+
+.owned-search-box{
+  max-width:720px;
+  margin:0 auto 14px;
+}
+
+.owned-search-box input{
+  width:100%;
+  height:46px;
+
+  padding:0 16px;
+
+  border:1.5px solid #dfc7a1;
+  border-radius:999px;
+
+  background:#fffdf8;
+
+  color:#314d35;
+
+  font-size:15px;
+  font-weight:800;
+}
+
+.header-search-hint{
+  margin:8px 4px 0;
+opacity:0.82;
+  color:#8f8474;
+
+  font-size:11px;
+  font-weight:700;
+
+  line-height:1.35;
+}
+
+
+/* =========================
+   # INPUT SELECTION FIX
+========================= */
+
+input,
+textarea{
+  -webkit-user-select:text !important;
+  user-select:text !important;
+
+  -webkit-touch-callout:default !important;
+
+  touch-action:manipulation;
+}
+
+.header-search-panel input,
+.owned-search-box input{
+  -webkit-user-select:text !important;
+  user-select:text !important;
+
+  -webkit-touch-callout:default !important;
+
+  pointer-events:auto !important;
 }

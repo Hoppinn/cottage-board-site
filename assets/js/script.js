@@ -1,3 +1,111 @@
+const CHOSEONG_LIST = [
+  "ㄱ","ㄲ","ㄴ","ㄷ","ㄸ",
+  "ㄹ","ㅁ","ㅂ","ㅃ","ㅅ",
+  "ㅆ","ㅇ","ㅈ","ㅉ","ㅊ",
+  "ㅋ","ㅌ","ㅍ","ㅎ"
+];
+
+function getChoseong(text=""){
+  return [...String(text)]
+    .map(char=>{
+      const code = char.charCodeAt(0) - 44032;
+
+      if(code >= 0 && code <= 11171){
+        return CHOSEONG_LIST[
+          Math.floor(code / 588)
+        ];
+      }
+
+      return char;
+    })
+    .join("");
+
+    
+
+}
+
+const DOUBLE_CONSONANT_MAP = {
+  "ㄳ": "ㄱㅅ",
+  "ㄵ": "ㄴㅈ",
+  "ㄶ": "ㄴㅎ",
+  "ㄺ": "ㄹㄱ",
+  "ㄻ": "ㄹㅁ",
+  "ㄼ": "ㄹㅂ",
+  "ㄽ": "ㄹㅅ",
+  "ㄾ": "ㄹㅌ",
+  "ㄿ": "ㄹㅍ",
+  "ㅀ": "ㄹㅎ",
+  "ㅄ": "ㅂㅅ"
+};
+
+function normalizeKoreanSearchQuery(text=""){
+  return normalizeSearchText(text)
+    .split("")
+    .map(char => DOUBLE_CONSONANT_MAP[char] || char)
+    .join("");
+}
+
+function isHangulSyllable(char){
+  const code = char.charCodeAt(0);
+  return code >= 44032 && code <= 55203;
+}
+
+function isKoreanConsonant(char){
+  return CHOSEONG_LIST.includes(char);
+}
+
+function matchKoreanSmart(title, query){
+  const target =
+    normalizeSearchText(title);
+
+  const pattern =
+    normalizeKoreanSearchQuery(query);
+
+  if(!target || !pattern){
+    return false;
+  }
+
+  for(let start = 0; start <= target.length - pattern.length; start++){
+    let matched = true;
+
+    for(let i = 0; i < pattern.length; i++){
+      const queryChar = pattern[i];
+      const titleChar = target[start + i];
+
+      if(isHangulSyllable(queryChar)){
+        if(queryChar !== titleChar){
+          matched = false;
+          break;
+        }
+      } else if(isKoreanConsonant(queryChar)){
+        if(getChoseong(titleChar) !== queryChar){
+          matched = false;
+          break;
+        }
+      } else {
+        if(queryChar !== titleChar){
+          matched = false;
+          break;
+        }
+      }
+    }
+
+    if(matched){
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function normalizeSearchText(text=""){
+  return String(text)
+    .toLowerCase()
+    .replace(/\s+/g,"")
+    .trim();
+}
+
+
 /* =========================
    # COTTAGEBOARD FRONT SCRIPT
    - nested gameData schema 기준
@@ -337,15 +445,7 @@ function getAllGamesArray(){
    # RECOMMEND MATCH HELPERS
 ========================= */
 
-const DEFAULT_RECOMMEND_MAX_WEIGHT = 3.0;
-
-const moodMaxWeightMap = {
-  fun: 2.5,
-  brain: 2.5,
-  talk: 2.5,
-  immersive: 3.0,
-  cozy: 2.3
-};
+const DEFAULT_RECOMMEND_MAX_WEIGHT = 2.5;
 
 function arrayIncludesPlayer(values, playerValue){
   const normalized =
@@ -541,8 +641,17 @@ function renderGameCards(){
 
   
 
+const normalizedLevel =
+  normalizeLevelValue(levelValue);
+
+const hasHardDifficultyFilter =
+  normalizedLevel === "heavy_mania" ||
+  normalizedLevel === "hardcore";
+
 const maxWeight =
-  moodMaxWeightMap[moodValue] || DEFAULT_RECOMMEND_MAX_WEIGHT;
+  hasHardDifficultyFilter
+    ? 5.0
+    : DEFAULT_RECOMMEND_MAX_WEIGHT;
 
 const filteredGames =
   getAllGamesArray()
@@ -670,10 +779,260 @@ if (weight > maxWeight) {
       })
       .join("");
 
-  gameScroll.innerHTML = html;
-  bindGameCardEvents();
+ gameScroll.innerHTML = html;
+bindGameCardEvents();
+
+gameScroll.scrollTo({
+  left: 0,
+  top: 0,
+  behavior: "smooth"
+});
 }
 
+
+const headerSearchButton =
+  document.getElementById("headerSearchButton");
+
+if(mobileMenu){
+  mobileMenu.classList.remove("active");
+}
+  
+const headerSearchPanel =
+  document.getElementById("headerSearchPanel");
+
+const headerSearchInput =
+  document.getElementById("headerSearchInput");
+
+if(headerSearchButton && headerSearchPanel && headerSearchInput){
+  headerSearchButton.addEventListener("click", ()=>{
+  if(mobileMenu){
+    mobileMenu.classList.remove("active");
+  }
+
+  headerSearchPanel.classList.toggle("is-active");
+
+  if(headerSearchPanel.classList.contains("is-active")){
+    headerSearchInput.focus();
+
+    renderHeaderSearchResults(
+      headerSearchInput.value
+    );
+  }
+});
+}
+
+const headerSearchResults =
+  document.getElementById("headerSearchResults");
+
+function renderHeaderSearchResults(keyword){
+  if(!headerSearchResults){
+    return;
+  }
+
+  const query =
+    String(keyword || "").trim().toLowerCase();
+
+  if(!query){
+    headerSearchResults.innerHTML = "";
+    return;
+  }
+
+  const matchedGames =
+  getAllGamesArray()
+    .map(game=>{
+      const detail =
+        GameView.getGameDetailData(game);
+
+      const title =
+        String(detail.title || "");
+
+      const originalTitle =
+        String(detail.originalTitle || "");
+
+      const lowerTitle =
+        title.toLowerCase();
+
+      const lowerOriginalTitle =
+        originalTitle.toLowerCase();
+
+      const rating =
+        Number(detail.rating) || 0;
+
+      const normalizedTitle =
+  normalizeSearchText(title);
+
+const normalizedOriginalTitle =
+  normalizeSearchText(originalTitle);
+
+const normalizedQuery =
+  normalizeKoreanSearchQuery(query);
+
+const titleChoseong =
+  getChoseong(normalizedTitle);
+
+const originalTitleChoseong =
+  getChoseong(normalizedOriginalTitle);
+
+const queryChoseong =
+  getChoseong(normalizedQuery);
+
+const isMatched =
+  normalizedTitle.includes(normalizedQuery) ||
+  normalizedOriginalTitle.includes(normalizedQuery) ||
+  matchKoreanSmart(title, normalizedQuery) ||
+  matchKoreanSmart(originalTitle, normalizedQuery);
+
+      if(!isMatched){
+        return null;
+      }
+
+      let score = 0;
+
+      if(lowerTitle === query){
+        score += 1000;
+      }
+
+      if(lowerTitle.startsWith(query)){
+        score += 500;
+      }
+
+if(titleChoseong.startsWith(queryChoseong)){
+  score += 400;
+}
+
+if(titleChoseong.includes(queryChoseong)){
+  score += 120;
+}
+
+
+      
+      if(lowerOriginalTitle.startsWith(query)){
+        score += 300;
+      }
+
+      if(lowerTitle.includes(query)){
+        score += 100;
+      }
+
+      if(lowerOriginalTitle.includes(query)){
+        score += 60;
+      }
+
+      score -= title.length * 0.5;
+      score += rating;
+
+      return {
+        game,
+        score
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score)
+    .map(item => item.game)
+    .slice(0, 8);
+
+  if(matchedGames.length === 0){
+    headerSearchResults.innerHTML = `
+      <p class="header-search-empty">
+        검색 결과가 없어요.
+      </p>
+    `;
+    return;
+  }
+
+  headerSearchResults.innerHTML =
+    matchedGames
+      .map(game=>{
+        const detail =
+          GameView.getGameDetailData(game);
+
+        return `
+          <button
+            class="header-search-result"
+            type="button"
+            data-game="${getGameKey(game)}"
+          >
+            <img
+              src="${detail.thumbnail || detail.image || DEFAULT_GAME_IMAGE}"
+              alt="${detail.title}"
+              loading="lazy"
+              onerror="this.onerror=null; this.src='${DEFAULT_GAME_IMAGE}';"
+            >
+
+            <strong>
+              ${detail.title}
+            </strong>
+          </button>
+        `;
+      })
+      .join("");
+}
+
+if(headerSearchInput){
+  headerSearchInput.addEventListener("input", ()=>{
+    renderHeaderSearchResults(headerSearchInput.value);
+  });
+
+  headerSearchInput.addEventListener("keydown", (event)=>{
+    if(event.key !== "Enter"){
+      return;
+    }
+
+    const keyword =
+      headerSearchInput.value.trim();
+
+    if(!keyword){
+      return;
+    }
+
+    window.location.href =
+      `./owned-games.html?search=${encodeURIComponent(keyword)}`;
+  });
+}
+
+if(headerSearchResults){
+  headerSearchResults.addEventListener("click", (event)=>{
+    const resultButton =
+      event.target.closest("[data-game]");
+
+    if(!resultButton){
+      return;
+    }
+
+    openGameSheet(resultButton.dataset.game);
+
+    
+  });
+}
+
+document.addEventListener("click", (event)=>{
+  if(
+    !headerSearchPanel ||
+    !headerSearchButton
+  ){
+    return;
+  }
+
+  const clickedInsideSearch =
+    headerSearchPanel.contains(event.target);
+
+  const clickedSearchButton =
+    headerSearchButton.contains(event.target);
+
+  const clickedInsideGameSheet =
+    event.target.closest("#gameSheet");
+
+  if(clickedInsideGameSheet){
+    return;
+  }
+
+  if(
+    !clickedInsideSearch &&
+    !clickedSearchButton
+  ){
+    headerSearchPanel.classList.remove("is-active");
+  }
+});
 
 /* =========================
    # CARD EVENTS
@@ -922,6 +1281,15 @@ function openGameSheet(gameKey){
           `
           : ""
       }
+
+<section class="sheet-section">
+  <a
+    class="sheet-action-btn"
+    href="./owned-games.html?search=${encodeURIComponent(detail.title)}"
+  >
+    전체 게임에서 보기
+  </a>
+</section>
 
     </div>
   `;
@@ -1415,7 +1783,9 @@ const ownedPageState = {
   sortRating: "none",
 
   difficultyFilter: "",
-  mechanicFilter: ""
+  mechanicFilter: "",
+
+  search: ""
 };
 
 
@@ -1455,6 +1825,29 @@ function matchOwnedMechanic(game){
   );
 }
 
+
+/* =========================
+   # OWNED SEARCH
+========================= */
+
+function matchOwnedSearch(game){
+  const query =
+    normalizeSearchText(
+      ownedPageState.search
+    );
+
+  if(!query){
+    return true;
+  }
+
+  const detail =
+    GameView.getGameDetailData(game);
+
+  return (
+    matchKoreanSmart(detail.title, query) ||
+    matchKoreanSmart(detail.originalTitle, query)
+  );
+}
 
 /* =========================
    # OWNED SORT
@@ -1648,8 +2041,9 @@ function renderOwnedGameList(){
 
   const filteredGames =
     getAllGamesArray()
-      .filter(matchOwnedDifficulty)
-      .filter(matchOwnedMechanic);
+    .filter(matchOwnedDifficulty)
+    .filter(matchOwnedMechanic)
+    .filter(matchOwnedSearch);
 
   const sortedGames =
     sortOwnedGames(filteredGames);
@@ -1789,6 +2183,18 @@ document
       renderOwnedGameList();
     }
   );
+
+document
+  .getElementById("ownedSearchInput")
+  ?.addEventListener("input", (event)=>{
+
+    ownedPageState.search =
+      event.target.value;
+
+    ownedPageState.page = 1;
+
+    renderOwnedGameList();
+  });
 
 document
   .getElementById("ownedMechanicFilter")
@@ -1957,7 +2363,31 @@ moodOptions.forEach(option=>{
   );
 });
 
+const ownedSearchInput =
+  document.getElementById("ownedSearchInput");
 
+if(ownedSearchInput){
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const searchKeyword =
+    params.get("search") || "";
+
+  ownedSearchInput.value =
+    searchKeyword;
+
+  ownedPageState.search =
+    searchKeyword;
+
+  ownedSearchInput.addEventListener("input", (event)=>{
+    ownedPageState.search =
+      event.target.value;
+
+    ownedPageState.page = 1;
+
+    renderOwnedGameList();
+  });
+}
 
 
 updateRecommendFilterText();
