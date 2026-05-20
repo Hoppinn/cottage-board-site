@@ -1633,7 +1633,7 @@ body.sheet-open{
 .owned-sort-compact{
   display:flex !important;
   align-items:center;
-  gap:4px;
+  gap:8px;
 }
 
 /* 실제 select는 투명 처리, label이 보이는 버튼 역할 */
@@ -1873,3 +1873,5 @@ body.sheet-open{
     line-height:1.6;
   }
 }
+
+

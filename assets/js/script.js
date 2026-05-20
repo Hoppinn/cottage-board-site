@@ -323,7 +323,13 @@ function getGameDetailImage(game){
 function formatDifficultyWeight(value){
   const num = Number(value);
 
-  if(!Number.isFinite(num)){
+  if(
+    value === undefined ||
+    value === null ||
+    value === "" ||
+    !Number.isFinite(num) ||
+    num <= 0
+  ){
     return "-";
   }
 
@@ -723,7 +729,7 @@ if (weight > maxWeight) {
               </span>
 
   <span class="card-difficulty ${difficulty.className}">
-                ${difficulty.icon} ${card.difficultyWeight || "-"}
+                ${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}
               </span>
 
 
@@ -1826,16 +1832,16 @@ function activateSortKey(key){
     rating: ownedPageState.sortRating
   };
 
-  if(sortDirMap[key] === "none"){
-    ownedPageState.activeSortKeys =
-      ownedPageState.activeSortKeys.filter(item => item !== key);
+  ownedPageState.activeSortKeys =
+    ownedPageState.activeSortKeys.filter(item => item !== key);
 
+  if(sortDirMap[key] === "none"){
     return;
   }
 
   ownedPageState.activeSortKeys = [
     key,
-    ...ownedPageState.activeSortKeys.filter(item => item !== key)
+    ...ownedPageState.activeSortKeys
   ];
 }
 
@@ -2036,8 +2042,28 @@ function renderMechanicOptions(){
    # OWNED FILTERED GAMES
 ========================= */
 
+function hasOwnedDifficultyWeight(game){
+  const detail =
+    GameView.getGameDetailData(game);
+
+  const weight =
+    Number(detail.difficultyWeight);
+
+  return Number.isFinite(weight) && weight > 0;
+}
+
 function getOwnedFilteredGames(){
+  const isDifficultySortActive =
+    ownedPageState.sortWeight !== "none";
+
   return getAllGamesArray()
+    .filter(game=>{
+      if(!isDifficultySortActive){
+        return true;
+      }
+
+      return hasOwnedDifficultyWeight(game);
+    })
     .filter(matchOwnedDifficulty)
     .filter(matchOwnedMechanic)
     .filter(matchOwnedSearch);
@@ -2243,12 +2269,9 @@ function renderOwnedGameList(){
   </span>
 
   <span class="${difficulty.className}">
-    ${difficulty.icon}
-    ${
-      detail.difficultyWeight ||
-      "-"
-    }
-  </span>
+  ${difficulty.icon}
+  ${formatDifficultyWeight(detail.difficultyWeight)}
+</span>
 
   <span>
     ⭐ ${
@@ -2434,7 +2457,22 @@ document
   });
 
 
+["sortTitle", "sortWeight", "sortRating"].forEach(id=>{
+  const select =
+    document.getElementById(id);
 
+  if(!select){
+    return;
+  }
+
+  select.addEventListener("pointerdown", ()=>{
+    updateSortOptionLabelsForOpen();
+  });
+
+  select.addEventListener("blur", ()=>{
+    updateSortOptionLabels();
+  });
+});
 
 /* =========================
    # URL HASH
