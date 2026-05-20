@@ -66,71 +66,78 @@
     <section class="owned-games-page">
       <h1>전체 게임 보기</h1>
 
-      <div class="owned-search-box">
-  <input
-    id="ownedSearchInput"
-    type="search"
-    placeholder="게임명을 검색하세요"
-  >
+
+<div
+  class="owned-toolbar is-collapsed"
+  id="ownedToolbar"
+>
+  <div class="owned-sort-grid">
+
+    <div class="owned-sort-line">
+      <span class="owned-sort-title">↕ 정렬</span>
+
+      <div class="owned-sort-compact">
+        <select id="sortTitle">
+          <option value="asc">이름 ↑</option>
+          <option value="desc">이름 ↓</option>
+          <option value="none">이름 -</option>
+        </select>
+
+        <select id="sortWeight">
+          <option value="none">난이도 -</option>
+          <option value="asc">난이도 ↑</option>
+          <option value="desc">난이도 ↓</option>
+        </select>
+
+        <select id="sortRating">
+          <option value="none">평점 -</option>
+          <option value="asc">평점 ↑</option>
+          <option value="desc">평점 ↓</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="owned-control-divider"></div>
+
+    <div class="owned-filter-line">
+      <span class="owned-filter-title">
+        🔎 필터
+      </span>
+
+      <select id="ownedDifficultyFilter">
+        <option value="">체감 난이도</option>
+        <option value="kids">아이도 가능</option>
+        <option value="beginner">입문 추천</option>
+        <option value="light">라이트·패밀리</option>
+        <option value="heavy">헤비·매니아</option>
+        <option value="hardcore">하드코어</option>
+      </select>
+
+      <select id="ownedMechanicFilter">
+        <option value="">메커니즘</option>
+      </select>
+    </div>
+
+  </div>
 </div>
 
-      <div class="owned-toolbar">
-        <div class="owned-sort-grid">
+<div class="owned-search-row">
+  <div class="owned-search-box">
+    <input
+      id="ownedSearchInput"
+      type="search"
+      placeholder="게임명을 검색하세요"
+    >
+  </div>
 
-          <p class="owned-control-title">정렬</p>
-
-          <div class="owned-sort-item">
-            <span>이름</span>
-            <select id="sortTitle">
-              <option value="asc">오름차순</option>
-              <option value="desc">내림차순</option>
-              <option value="none">사용 안함</option>
-            </select>
-          </div>
-
-          <div class="owned-sort-item">
-            <span>난이도</span>
-            <select id="sortWeight">
-              <option value="none">사용 안함</option>
-              <option value="asc">낮은순</option>
-              <option value="desc">높은순</option>
-            </select>
-          </div>
-
-          <div class="owned-sort-item">
-            <span>평점</span>
-            <select id="sortRating">
-              <option value="none">사용 안함</option>
-              <option value="asc">낮은순</option>
-              <option value="desc">높은순</option>
-            </select>
-          </div>
-
-          <div class="owned-control-divider"></div>
-
-          <p class="owned-control-title">필터</p>
-
-          <div class="owned-sort-item">
-            <span>체감 난이도</span>
-            <select id="ownedDifficultyFilter">
-              <option value="">전체</option>
-              <option value="kids">아이도 가능</option>
-              <option value="beginner">입문 추천</option>
-              <option value="light">라이트·패밀리</option>
-              <option value="heavy">헤비·매니아</option>
-              <option value="hardcore">하드코어</option>
-            </select>
-          </div>
-
-          <div class="owned-sort-item">
-            <span>메커니즘</span>
-            <select id="ownedMechanicFilter">
-              <option value="">전체</option>
-            </select>
-          </div>
-
-        </div>
-      </div>
+  <button
+    class="owned-tools-toggle"
+    id="ownedToolsToggle"
+    type="button"
+  >
+    ▼ 정렬·필터
+  </button>
+</div>
 
       <div id="ownedGameList"></div>
 

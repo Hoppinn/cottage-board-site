@@ -581,44 +581,9 @@ function renderGameCards(){
     return;
   }
 
-  const modalSelectedPlayer =
-    document.querySelector('[data-players].is-selected');
-
-  const modalSelectedLevel =
-    document.querySelector('[data-level].is-selected');
-
-  const modalSelectedMood =
-    document.querySelector('[data-mood].is-selected');
-
-  const inlineSelectedPlayer =
-    document.querySelector('[data-inline-type="players"].is-selected');
-
-  const inlineSelectedLevel =
-    document.querySelector('[data-inline-type="level"].is-selected');
-
-  const inlineSelectedMood =
-    document.querySelector('[data-inline-type="mood"].is-selected');
-
-  const playerValue =
-    modalSelectedPlayer
-      ? modalSelectedPlayer.dataset.players
-      : inlineSelectedPlayer
-        ? inlineSelectedPlayer.dataset.inlineValue
-        : null;
-
-  const levelValue =
-    modalSelectedLevel
-      ? modalSelectedLevel.dataset.level
-      : inlineSelectedLevel
-        ? inlineSelectedLevel.dataset.inlineValue
-        : null;
-
-  const moodValue =
-    modalSelectedMood
-      ? modalSelectedMood.dataset.mood
-      : inlineSelectedMood
-        ? inlineSelectedMood.dataset.inlineValue
-        : null;
+  const playerValue = recommendState.players;
+const levelValue = recommendState.level;
+const moodValue = recommendState.mood;
 
  if(
   !playerValue &&
@@ -1405,27 +1370,33 @@ function renderInlineOption(type, value, label, selectedValue){
   `;
 }
 
+const recommendState = {
+  players: "",
+  level: "",
+  mood: ""
+};
+
 const playerTextMap = {
-  "1": "혼자 왔어요",
-  "2": "둘이 왔어요",
-  "3": "셋이 왔어요",
-  "4": "넷이 왔어요",
-  "group": "단체로 왔어요"
+    "1": "☕ 혼자 왔어요",
+  "2": "💗 둘이 왔어요",
+  "3": "🍻 셋이 왔어요",
+  "4": "🎲 넷이 왔어요",
+  "group": "🎉 단체로 왔어요"
 };
 
 const levelTextMap = {
-  kids: "아이도 할 수 있어요",
-  beginner: "입문 추천",
-  light: "라이트·패밀리",
-  heavy: "헤비·매니아",
-  hardcore: "하드코어"
+  kids: "😊 아이도 할 수 있어요",
+  beginner: "🌱 입문 추천",
+  light: "🏡 라이트·패밀리",
+  heavy: "🧠 헤비·매니아",
+  hardcore: "😈 하드코어"
 };
 
 const moodTextMap = {
-  fun: "가볍게 웃고 싶어요",
-  brain: "머리 쓰는 느낌",
-  talk: "대화가 많은 게임",
-  immersive: "몰입감 있게"
+   fun: "😄 가볍게 웃고 싶어요",
+  brain: "🧠 머리 쓰는 느낌",
+  talk: "💬 대화가 많은 게임",
+  immersive: "🔥 몰입감 있게"
 };
 
 function updateRecommendFilterText(){
@@ -1433,44 +1404,9 @@ function updateRecommendFilterText(){
     return;
   }
 
-  const selectedPlayers =
-    document.querySelector('[data-players].is-selected');
-
-  const selectedLevel =
-    document.querySelector('[data-level].is-selected');
-
-  const selectedMood =
-    document.querySelector('[data-mood].is-selected');
-
-  const inlineSelectedPlayer =
-    document.querySelector('[data-inline-type="players"].is-selected');
-
-  const inlineSelectedLevel =
-    document.querySelector('[data-inline-type="level"].is-selected');
-
-  const inlineSelectedMood =
-    document.querySelector('[data-inline-type="mood"].is-selected');
-
-  const playerValue =
-    selectedPlayers
-      ? selectedPlayers.dataset.players
-      : inlineSelectedPlayer
-        ? inlineSelectedPlayer.dataset.inlineValue
-        : null;
-
-  const levelValue =
-    selectedLevel
-      ? selectedLevel.dataset.level
-      : inlineSelectedLevel
-        ? inlineSelectedLevel.dataset.inlineValue
-        : null;
-
-  const moodValue =
-    selectedMood
-      ? selectedMood.dataset.mood
-      : inlineSelectedMood
-        ? inlineSelectedMood.dataset.inlineValue
-        : null;
+  const playerValue = recommendState.players;
+const levelValue = recommendState.level;
+const moodValue = recommendState.mood;
 
   recommendFilter.innerHTML = `
     <div class="recommend-filter-card recommend-filter-card-v3">
@@ -1489,12 +1425,26 @@ function updateRecommendFilterText(){
 
         <div class="recommend-step-options">
         
-          ${renderInlineOption("players", "2", "💗 둘이 왔어요", playerValue)}
-          ${renderInlineOption("players", "3", "🍻 셋이 왔어요", playerValue)}
-          ${renderInlineOption("players", "4", "🎲 넷이 왔어요", playerValue)}
-          ${renderInlineOption("players", "group", "🎉 단체로왔어요", playerValue)}
-          ${renderInlineOption("players", "1", "☕ 혼자 왔어요", playerValue)}
-        ${renderInlineOption("players", "", "상관없어요", playerValue)}
+          ${playerValue !== "2"
+  ? renderInlineOption("players", "2", "💗 둘이 왔어요", playerValue)
+  : ""}
+
+${playerValue !== "3"
+  ? renderInlineOption("players", "3", "🍻 셋이 왔어요", playerValue)
+  : ""}
+
+${playerValue !== "4"
+  ? renderInlineOption("players", "4", "🎲 넷이 왔어요", playerValue)
+  : ""}
+
+${playerValue !== "group"
+  ? renderInlineOption("players", "group", "🎉 단체로왔어요", playerValue)
+  : ""}
+
+${playerValue !== "1"
+  ? renderInlineOption("players", "1", "☕ 혼자 왔어요", playerValue)
+  : ""}
+  ${renderInlineOption("players", "", "상관없어요", playerValue)}
           </div>
       </div>
 
@@ -1507,12 +1457,26 @@ function updateRecommendFilterText(){
         </button>
 
         <div class="recommend-step-options">
-          ${renderInlineOption("level", "kids", "😊 아이도 할 수 있어요", levelValue)}
-          ${renderInlineOption("level", "beginner", "🌱 입문 추천", levelValue)}
-          ${renderInlineOption("level", "light", "🏡 라이트·패밀리", levelValue)}
-          ${renderInlineOption("level", "heavy", "🧠 헤비·매니아", levelValue)}
-          ${renderInlineOption("level", "hardcore", "😈 하드코어", levelValue)}
-          ${renderInlineOption("level", "", "상관없어요", levelValue)}
+          ${levelValue !== "kids"
+  ? renderInlineOption("level", "kids", "😊 아이도 할 수 있어요", levelValue)
+  : ""}
+
+${levelValue !== "beginner"
+  ? renderInlineOption("level", "beginner", "🌱 입문 추천", levelValue)
+  : ""}
+
+${levelValue !== "light"
+  ? renderInlineOption("level", "light", "🏡 라이트·패밀리", levelValue)
+  : ""}
+
+${levelValue !== "heavy"
+  ? renderInlineOption("level", "heavy", "🧠 헤비·매니아", levelValue)
+  : ""}
+
+${levelValue !== "hardcore"
+  ? renderInlineOption("level", "hardcore", "😈 하드코어", levelValue)
+  : ""}
+  ${renderInlineOption("level", "", "상관없어요", levelValue)}
         </div>
       </div>
 
@@ -1525,11 +1489,22 @@ function updateRecommendFilterText(){
         </button>
 
         <div class="recommend-step-options">
-          ${renderInlineOption("mood", "fun", "😄 가볍게 웃고 싶어요", moodValue)}
-          ${renderInlineOption("mood", "brain", "🧠 머리 쓰는 느낌", moodValue)}
-          ${renderInlineOption("mood", "talk", "💬 대화가 많은 게임", moodValue)}
-          ${renderInlineOption("mood", "immersive", "🔥 몰입감 있게", moodValue)}
-          ${renderInlineOption("mood", "", "상관없어요", moodValue)}
+          ${moodValue !== "fun"
+  ? renderInlineOption("mood", "fun", "😄 가볍게 웃고 싶어요", moodValue)
+  : ""}
+
+${moodValue !== "brain"
+  ? renderInlineOption("mood", "brain", "🧠 머리 쓰는 느낌", moodValue)
+  : ""}
+
+${moodValue !== "talk"
+  ? renderInlineOption("mood", "talk", "💬 대화가 많은 게임", moodValue)
+  : ""}
+
+${moodValue !== "immersive"
+  ? renderInlineOption("mood", "immersive", "🔥 몰입감 있게", moodValue)
+  : ""}
+  ${renderInlineOption("mood", "", "상관없어요", moodValue)}
         </div>
       </div>
 
@@ -1565,21 +1540,10 @@ if(!optionButton){
 const type =
   optionButton.dataset.inlineType;
 
-const wasSelected =
-  optionButton.classList.contains('is-selected');
+const value =
+  optionButton.dataset.inlineValue || "";
 
-recommendFilter
-  .querySelectorAll(`[data-inline-type="${type}"]`)
-  .forEach(btn=>{
-    btn.classList.remove('is-selected');
-  });
-
-if(
-  !wasSelected &&
-  optionButton.dataset.inlineValue !== ""
-){
-  optionButton.classList.add('is-selected');
-}
+recommendState[type] = value;
 
 updateRecommendFilterText();
 renderGameCards();
@@ -1776,7 +1740,7 @@ document.addEventListener(
 
 const ownedPageState = {
   page: 1,
-  perPage: 20,
+  perPage: 4,
 
   sortTitle: "asc",
   sortWeight: "none",
@@ -1963,6 +1927,17 @@ function renderMechanicOptions(){
 
 
 /* =========================
+   # OWNED FILTERED GAMES
+========================= */
+
+function getOwnedFilteredGames(){
+  return getAllGamesArray()
+    .filter(matchOwnedDifficulty)
+    .filter(matchOwnedMechanic)
+    .filter(matchOwnedSearch);
+}
+
+/* =========================
    # OWNED PAGINATION
 ========================= */
 
@@ -2025,6 +2000,41 @@ function renderOwnedPagination(totalPages){
    # OWNED LIST
 ========================= */
 
+function renderOwnedAccordionSummary(){
+  const filterSummary =
+    document.getElementById("ownedFilterSummary");
+
+  if(filterSummary){
+    const filterTexts = [];
+
+    const difficultyLabelMap = {
+      kids: "아이도 가능",
+      beginner: "입문 추천",
+      light: "라이트·패밀리",
+      heavy: "헤비·매니아",
+      hardcore: "하드코어"
+    };
+
+    if(ownedPageState.difficultyFilter){
+      filterTexts.push(
+        difficultyLabelMap[ownedPageState.difficultyFilter] ||
+        ownedPageState.difficultyFilter
+      );
+    }
+
+    if(ownedPageState.mechanicFilter){
+      filterTexts.push(ownedPageState.mechanicFilter);
+    }
+
+    filterSummary.textContent =
+      filterTexts.length ? filterTexts.join(" / ") : "전체";
+  }
+}
+
+function updateOwnedGames(){
+  renderOwnedAccordionSummary();
+  renderOwnedGameList();}
+
 function renderOwnedGameList(){
   const ownedGameList =
     document.getElementById("ownedGameList");
@@ -2040,10 +2050,7 @@ function renderOwnedGameList(){
   }
 
   const filteredGames =
-    getAllGamesArray()
-    .filter(matchOwnedDifficulty)
-    .filter(matchOwnedMechanic)
-    .filter(matchOwnedSearch);
+  getOwnedFilteredGames();
 
   const sortedGames =
     sortOwnedGames(filteredGames);
@@ -2172,29 +2179,42 @@ function renderOwnedGameList(){
 ========================= */
 
 document
-  .getElementById("ownedDifficultyFilter")
-  ?.addEventListener(
-    "change",
-    (event)=>{
-      ownedPageState.difficultyFilter =
-        event.target.value;
+  .querySelectorAll("[data-owned-accordion]")
+  .forEach((button)=>{
+    button.addEventListener("click", ()=>{
+      const target =
+        button.dataset.ownedAccordion;
 
-      ownedPageState.page = 1;
-      renderOwnedGameList();
-    }
-  );
+      const body =
+        document.querySelector(
+          `[data-owned-accordion-body="${target}"]`
+        );
 
-document
-  .getElementById("ownedSearchInput")
-  ?.addEventListener("input", (event)=>{
+      button.classList.toggle("is-open");
 
-    ownedPageState.search =
-      event.target.value;
-
-    ownedPageState.page = 1;
-
-    renderOwnedGameList();
+      if(body){
+        body.classList.toggle("is-open");
+      }
+    });
   });
+
+const ownedDifficultyFilter =
+  document.getElementById("ownedDifficultyFilter");
+
+if (ownedDifficultyFilter) {
+  ownedDifficultyFilter.addEventListener("change", () => {
+    selectedDifficulty =
+      ownedDifficultyFilter.value || "";
+
+    currentOwnedPage = 1;
+
+    renderOwnedGames();
+  });
+}
+
+
+
+
 
 document
   .getElementById("ownedMechanicFilter")
@@ -2205,7 +2225,7 @@ document
         event.target.value;
 
       ownedPageState.page = 1;
-      renderOwnedGameList();
+      updateOwnedGames();
     }
   );
 
@@ -2221,19 +2241,19 @@ document
         event.target.closest("[data-page-action]");
 
       const totalPages =
-        Math.max(
-          Math.ceil(
-            getAllGamesArray().length /
-            ownedPageState.perPage
-          ),
-          1
-        );
+  Math.max(
+    Math.ceil(
+      getOwnedFilteredGames().length /
+      ownedPageState.perPage
+    ),
+    1
+  );
 
       if(pageButton){
         ownedPageState.page =
           Number(pageButton.dataset.page);
 
-        renderOwnedGameList();
+        updateOwnedGames();
 
         window.scrollTo({
           top:0,
@@ -2252,7 +2272,7 @@ document
             ownedPageState.page - 1
           );
 
-        renderOwnedGameList();
+        updateOwnedGames();
         return;
       }
 
@@ -2265,7 +2285,7 @@ document
             ownedPageState.page + 1
           );
 
-        renderOwnedGameList();
+        updateOwnedGames();
       }
     }
   );
@@ -2275,7 +2295,7 @@ document
   ?.addEventListener("change", (event)=>{
     ownedPageState.sortTitle = event.target.value;
     ownedPageState.page = 1;
-    renderOwnedGameList();
+    updateOwnedGames();
   });
 
 document
@@ -2283,7 +2303,7 @@ document
   ?.addEventListener("change", (event)=>{
     ownedPageState.sortWeight = event.target.value;
     ownedPageState.page = 1;
-    renderOwnedGameList();
+    updateOwnedGames();
   });
 
 document
@@ -2291,7 +2311,7 @@ document
   ?.addEventListener("change", (event)=>{
     ownedPageState.sortRating = event.target.value;
     ownedPageState.page = 1;
-    renderOwnedGameList();
+    updateOwnedGames();
   });
 
 
@@ -2385,16 +2405,14 @@ if(ownedSearchInput){
 
     ownedPageState.page = 1;
 
-    renderOwnedGameList();
+    updateOwnedGames();
   });
 }
 
 
 updateRecommendFilterText();
-
 renderMechanicOptions();
-renderOwnedGameList();
-
+updateOwnedGames();
 
 const recommendTitle =
   document.getElementById("recommendTitle");
@@ -2414,6 +2432,31 @@ if (recommendTitle && recommendSection) {
         recommendSection.offsetTop - headerHeight + 12,
       behavior: "smooth"
     });
+
+  });
+
+}
+
+
+const ownedToolsToggle =
+  document.getElementById("ownedToolsToggle");
+
+const ownedToolbar =
+  document.getElementById("ownedToolbar");
+
+if(ownedToolsToggle && ownedToolbar){
+
+  ownedToolsToggle.addEventListener("click", ()=>{
+
+    ownedToolbar.classList.toggle("is-collapsed");
+
+    const isCollapsed =
+      ownedToolbar.classList.contains("is-collapsed");
+
+    ownedToolsToggle.textContent =
+      isCollapsed
+        ? "▼ 정렬·필터"
+        : "▲ 접기";
 
   });
 

@@ -1468,6 +1468,20 @@ body.sheet-open{
   font-size:14px;
   font-weight:900;
   white-space:nowrap;
+  max-width:160px;
+font-size:13px;
+}
+
+.recommend-step-head strong{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.recommend-step-head strong:not(.is-placeholder){
+  background:#5f823f !important;
+  border-color:#5f823f !important;
+  color:#fff !important;
 }
 
 .recommend-step-options{
@@ -1796,7 +1810,7 @@ body.owned-page .header-menu.active{
 
 .recommend-inline-option.is-none-option::before{
   content:"⊘";
-  color:#c85a5a;
+  color:#7f9a67;
     margin-right:4px;
 }
 
@@ -2093,4 +2107,1043 @@ textarea{
   -webkit-touch-callout:default !important;
 
   pointer-events:auto !important;
+}
+
+
+/* =========================
+   # OWNED FILTER POLISH
+========================= */
+
+.owned-toolbar{
+  margin-bottom:18px;
+}
+
+.owned-sort-grid{
+  gap:12px;
+  padding:16px;
+  box-shadow:0 8px 20px rgba(70,50,20,0.04);
+}
+
+.owned-control-title{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin:2px 0 2px;
+}
+
+.owned-control-title:first-child::before{
+  content:"↕";
+}
+
+.owned-control-title:nth-of-type(2)::before{
+  content:"🔎";
+}
+
+.owned-sort-item{
+  min-height:46px;
+}
+
+.owned-sort-item span{
+  font-size:13px;
+  color:#5f553f;
+}
+
+.owned-sort-item select{
+  appearance:none;
+  -webkit-appearance:none;
+
+  background:
+    linear-gradient(45deg, transparent 50%, #6f5d43 50%),
+    linear-gradient(135deg, #6f5d43 50%, transparent 50%),
+    #fffdf8;
+  background-position:
+    calc(100% - 18px) 18px,
+    calc(100% - 12px) 18px,
+    0 0;
+  background-size:
+    6px 6px,
+    6px 6px,
+    100% 100%;
+  background-repeat:no-repeat;
+
+  padding-right:34px;
+}
+
+.owned-sort-item select:focus{
+  outline:none;
+  border-color:#5f823f;
+  box-shadow:0 0 0 3px rgba(95,130,63,0.12);
+}
+
+.owned-control-divider{
+  margin:6px 0;
+}
+
+
+/* =========================
+   # OWNED PILL FILTER
+========================= */
+
+.owned-filter-block{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.owned-filter-label{
+  color:#5f553f;
+  font-size:13px;
+  font-weight:900;
+}
+
+.owned-pill-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.owned-pill{
+  min-height:38px;
+  padding:0 12px;
+
+  border:1.5px solid #dfcfb4;
+  border-radius:999px;
+
+  background:#fffdf8;
+  color:#4d463d;
+
+  font-size:13px;
+  font-weight:800;
+
+  cursor:pointer;
+  transition:
+  background .16s ease,
+  border-color .16s ease,
+  transform .12s ease;
+}
+
+.owned-pill:active{
+  transform:scale(0.96);
+}
+
+.owned-pill.is-active{
+  border-color:#5f823f;
+  background:#eef5e3;
+  color:#29432f;
+    box-shadow:
+    0 4px 10px rgba(95,130,63,0.14);
+}
+
+
+/* =========================
+   # OWNED ACCORDION
+========================= */
+
+.owned-accordion-head{
+  width:100%;
+  min-height:46px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+
+  padding:0;
+
+  border:0;
+  background:transparent;
+
+  color:#314d35;
+
+  cursor:pointer;
+}
+
+.owned-accordion-head span{
+  font-size:16px;
+  font-weight:900;
+}
+
+.owned-accordion-head strong{
+  padding:7px 11px;
+
+  border:1px solid #e2d4bb;
+  border-radius:999px;
+
+  background:#f5efe4;
+  color:#6f5d43;
+
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.owned-accordion-head::after{
+  content:"▾";
+  color:#6f5d43;
+  font-size:13px;
+  transition:transform .16s ease;
+}
+
+.owned-accordion-head.is-open::after{
+  transform:rotate(180deg);
+}
+
+.owned-accordion-body{
+  display:none;
+  flex-direction:column;
+  gap:10px;
+}
+
+.owned-accordion-body.is-open{
+  display:flex;
+}
+
+
+.owned-sort-compact{
+  display:flex;
+  gap:10px;
+}
+
+.owned-sort-compact select{
+  flex:1;
+
+  min-width:0;
+
+  height:42px;
+
+  padding:0 12px;
+
+  border:1px solid #d7ccb4;
+  border-radius:999px;
+
+  background:#fffdf8;
+
+  font-size:13px;
+  font-weight:600;
+
+  color:#4f463c;
+}
+
+.owned-sort-line{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 0 14px;
+}
+
+.owned-sort-title{
+  flex:0 0 auto;
+  font-weight:800;
+  color:#284232;
+  white-space:nowrap;
+}
+
+.owned-sort-compact{
+  flex:1;
+  display:flex;
+  gap:8px;
+  min-width:0;
+}
+
+.owned-sort-compact select{
+  flex:1;
+  min-width:0;
+  height:38px;
+  padding:0 8px;
+  border:1px solid #d7ccb4;
+  border-radius:999px;
+  background:#fffdf8;
+  font-size:12px;
+  font-weight:700;
+  color:#4f463c;
+}
+
+
+/* =========================
+   owned-games compact polish
+========================= */
+
+.owned-toolbar{
+  gap:8px;
+  padding:10px 12px;
+  margin-bottom:10px;
+}
+
+.owned-sort-line{
+  gap:6px;
+  padding:0;
+  margin:0;
+  min-height:34px;
+}
+
+.owned-sort-label{
+  font-size:13px;
+  padding:6px 9px;
+}
+
+.owned-sort-btn{
+  min-height:32px;
+  padding:6px 9px;
+  font-size:13px;
+  border-radius:999px;
+}
+
+.owned-filter-accordion{
+  margin-top:6px;
+}
+
+.owned-accordion-head{
+  min-height:34px;
+  padding:7px 10px;
+  font-size:13px;
+  border-radius:12px;
+}
+
+.owned-accordion-head small,
+.owned-accordion-summary{
+  font-size:12px;
+}
+
+.owned-accordion-body{
+  padding:10px 8px 8px;
+}
+
+.owned-filter-row{
+  gap:6px;
+  margin-bottom:8px;
+}
+
+.owned-filter-chip{
+  min-height:30px;
+  padding:6px 9px;
+  font-size:12.5px;
+  border-radius:999px;
+}
+
+.owned-games-grid{
+  gap:10px;
+}
+
+.owned-game-card{
+  padding:10px;
+  gap:9px;
+}
+
+.owned-game-thumb{
+  width:72px;
+  height:72px;
+}
+
+.owned-game-title{
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.owned-game-meta{
+  gap:4px 6px;
+  font-size:12px;
+}
+
+.owned-game-tags{
+  gap:4px;
+  margin-top:6px;
+}
+
+.owned-game-tag{
+  padding:4px 7px;
+  font-size:11.5px;
+}
+
+/* =========================
+   owned filter open compact final
+========================= */
+
+.owned-sort-grid{
+  gap:8px !important;
+  padding:12px 14px !important;
+}
+
+.owned-control-divider{
+  margin:2px 0 !important;
+}
+
+.owned-accordion-head{
+  min-height:38px !important;
+  padding:0 4px !important;
+}
+
+.owned-accordion-head span{
+  font-size:15px !important;
+}
+
+.owned-accordion-head strong{
+  padding:6px 10px !important;
+  font-size:12px !important;
+}
+
+.owned-accordion-body{
+  gap:8px !important;
+  padding:6px 0 0 !important;
+}
+
+.owned-filter-block{
+  gap:7px !important;
+}
+
+.owned-filter-label{
+  font-size:13px !important;
+  line-height:1.2 !important;
+}
+
+.owned-pill-row{
+  gap:6px !important;
+}
+
+.owned-pill{
+  min-height:32px !important;
+  padding:0 10px !important;
+  font-size:12.5px !important;
+}
+
+.owned-sort-item{
+  min-height:36px !important;
+  grid-template-columns:72px 1fr !important;
+  gap:8px !important;
+}
+
+.owned-sort-item span{
+  font-size:13px !important;
+}
+
+.owned-sort-item select{
+  height:38px !important;
+  padding:0 34px 0 12px !important;
+  font-size:13px !important;
+}
+
+.owned-search-box{
+  margin:4px auto 0 !important;
+}
+
+.owned-search-box input{
+  height:40px !important;
+  padding:0 14px !important;
+  font-size:14px !important;
+}
+
+#ownedGameList{
+  gap:8px !important;
+}
+
+.owned-game-item{
+  gap:10px !important;
+  padding:10px !important;
+  border-radius:18px !important;
+}
+
+.owned-game-item img{
+  width:58px !important;
+  height:58px !important;
+  flex-basis:58px !important;
+}
+
+.owned-game-info strong{
+  margin-bottom:5px !important;
+  font-size:16px !important;
+}
+
+.owned-game-meta{
+  gap:4px !important;
+  margin-top:6px !important;
+}
+
+.owned-game-meta span{
+  min-height:23px !important;
+  padding:3px 7px !important;
+  font-size:11.5px !important;
+}
+
+
+/* =========================
+   owned search visibility polish
+========================= */
+
+.owned-search-box{
+  position:relative;
+  margin:8px auto 0 !important;
+}
+
+.owned-search-box::before{
+  content:"게임 검색";
+  display:block;
+  margin:0 0 6px 2px;
+  color:#5f553f;
+  font-size:13px;
+  font-weight:900;
+}
+
+.owned-search-box input{
+  height:42px !important;
+  padding:0 14px 0 38px !important;
+  border:1.5px solid #dfc7a1 !important;
+  background:#fffdf8 !important;
+  font-size:14px !important;
+  font-weight:800 !important;
+}
+
+.owned-search-box::after{
+  content:"🔍";
+  position:absolute;
+  left:14px;
+  bottom:10px;
+  font-size:15px;
+  opacity:0.75;
+  pointer-events:none;
+}
+
+/* 필터 열린 상태 조금 더 압축 */
+.owned-sort-grid{
+  gap:7px !important;
+  padding:10px 14px !important;
+}
+
+.owned-accordion-body{
+  gap:7px !important;
+  padding-top:4px !important;
+}
+
+.owned-filter-block{
+  gap:6px !important;
+}
+
+.owned-pill-row{
+  gap:6px !important;
+}
+
+.owned-pill{
+  min-height:30px !important;
+  padding:0 9px !important;
+  font-size:12px !important;
+}
+
+.owned-sort-item{
+  min-height:34px !important;
+}
+
+.owned-sort-item select{
+  height:36px !important;
+}
+
+
+/* =========================
+   owned controls layout reset
+========================= */
+
+.owned-toolbar{
+  max-width:720px !important;
+  margin:0 auto 10px !important;
+  padding:0 !important;
+  display:block !important;
+}
+
+.owned-sort-grid{
+  padding:10px 12px !important;
+  gap:8px !important;
+  border-radius:20px !important;
+}
+
+.owned-sort-line{
+  min-height:34px !important;
+  padding:0 !important;
+}
+
+.owned-control-divider{
+  margin:2px 0 !important;
+}
+
+.owned-accordion-head{
+  min-height:36px !important;
+  padding:0 2px !important;
+}
+
+.owned-accordion-body{
+  padding:4px 0 0 !important;
+  gap:8px !important;
+}
+
+.owned-filter-block{
+  gap:6px !important;
+}
+
+.owned-pill-row{
+  gap:6px !important;
+}
+
+.owned-pill{
+  min-height:30px !important;
+  padding:0 9px !important;
+  font-size:12px !important;
+}
+
+.owned-sort-item{
+  min-height:34px !important;
+  grid-template-columns:70px 1fr !important;
+}
+
+.owned-sort-item select{
+  height:36px !important;
+}
+
+/* 검색창은 조작 카드 바깥에서 독립 */
+.owned-search-box{
+  max-width:720px !important;
+  margin:0 auto 10px !important;
+  position:relative !important;
+}
+
+.owned-search-box::before{
+  content:none !important;
+}
+
+.owned-search-box::after{
+  content:"🔍" !important;
+  position:absolute !important;
+  left:14px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  font-size:15px !important;
+  opacity:0.7 !important;
+  pointer-events:none !important;
+}
+
+.owned-search-box input{
+  height:42px !important;
+  padding:0 14px 0 38px !important;
+  border-radius:999px !important;
+  background:#fffdf8 !important;
+  font-size:14px !important;
+}
+
+
+/* 검색바와 카드 사이 압축 */
+.owned-search-box{
+  margin:0 auto 8px !important;
+}
+
+/* 검색 결과가 1개일 때도 목록 시작감 살리기 */
+#ownedGameList{
+  margin-top:0 !important;
+  gap:8px !important;
+}
+
+/* 필터 열렸을 때 카드 아래 여백 살짝만 줄이기 */
+.owned-toolbar{
+  margin-bottom:8px !important;
+}
+
+/* 페이지네이션 위 간격 줄이기 */
+.owned-pagination{
+  margin-top:12px !important;
+}
+
+
+/* owned filter select mode */
+
+.owned-accordion-head{
+  justify-content:flex-start !important;
+}
+
+.owned-accordion-head::after{
+  margin-left:auto !important;
+}
+
+.owned-filter-block,
+.owned-pill-row,
+.owned-pill{
+  display:none !important;
+}
+
+.owned-accordion-body{
+  gap:7px !important;
+  padding-top:6px !important;
+}
+
+
+/* =========================
+   owned page visual polish final
+========================= */
+
+/* 전체 타이틀 아래 간격 줄이기 */
+.owned-games-page h1{
+  margin-bottom:14px !important;
+}
+
+/* 정렬/필터 카드 더 얇고 가볍게 */
+.owned-sort-grid{
+  padding:9px 10px !important;
+  gap:7px !important;
+  border-radius:18px !important;
+  background:#fffdf8 !important;
+  box-shadow:none !important;
+}
+
+.owned-sort-line{
+  min-height:32px !important;
+}
+
+.owned-sort-title{
+  font-size:15px !important;
+}
+
+.owned-sort-compact{
+  gap:6px !important;
+}
+
+.owned-sort-compact select{
+  height:34px !important;
+  font-size:12px !important;
+  padding:0 8px !important;
+}
+
+/* 필터 헤더: 검은 테두리 제거하고 자연스럽게 */
+.owned-accordion-head{
+  min-height:34px !important;
+  padding:0 6px !important;
+  border:1px solid #e1d4bc !important;
+  border-radius:14px !important;
+  background:#fffaf0 !important;
+}
+
+.owned-accordion-head span{
+  font-size:15px !important;
+}
+
+.owned-control-divider{
+  margin:1px 0 !important;
+}
+
+/* 필터 열린 영역 */
+.owned-accordion-body{
+  padding:4px 2px 2px !important;
+  gap:6px !important;
+}
+
+.owned-sort-item{
+  min-height:32px !important;
+  grid-template-columns:76px 1fr !important;
+  gap:8px !important;
+}
+
+.owned-sort-item span{
+  font-size:13px !important;
+}
+
+.owned-sort-item select{
+  height:34px !important;
+  font-size:13px !important;
+  border-radius:999px !important;
+}
+
+/* 검색창: 단독 조작바처럼 */
+.owned-search-box{
+  margin:8px auto 9px !important;
+}
+
+.owned-search-box input{
+  height:40px !important;
+  border-width:1.5px !important;
+  background:#fffdf8 !important;
+  box-shadow:0 3px 8px rgba(70,50,20,0.035) !important;
+}
+
+/* 게임 카드 */
+.owned-game-item{
+  padding:10px 11px !important;
+  border-radius:18px !important;
+  background:#fffdf8 !important;
+  box-shadow:0 3px 10px rgba(70,50,20,0.035) !important;
+}
+
+.owned-game-item img{
+  width:56px !important;
+  height:56px !important;
+  flex-basis:56px !important;
+}
+
+.owned-game-info strong{
+  font-size:16px !important;
+  line-height:1.15 !important;
+}
+
+.owned-game-meta span{
+  min-height:22px !important;
+  font-size:11.5px !important;
+  padding:3px 7px !important;
+}
+
+/* 페이지네이션 */
+.owned-pagination{
+  margin-top:14px !important;
+}
+
+
+/* =========================
+   owned compact filter line
+========================= */
+
+.owned-filter-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  padding-top:2px;
+}
+
+.owned-filter-title{
+  flex:0 0 auto;
+
+  color:#314d35;
+  font-size:15px;
+  font-weight:900;
+
+  white-space:nowrap;
+}
+
+.owned-filter-line select{
+  flex:1;
+  min-width:0;
+
+  height:34px;
+
+  padding:0 10px;
+
+  border:1px solid #dccdb3;
+  border-radius:999px;
+
+  background:#fffdf8;
+
+  color:#4f463c;
+
+  font-size:12px;
+  font-weight:700;
+}
+
+.owned-accordion-head,
+.owned-accordion-body{
+  display:none !important;
+}
+
+
+
+
+
+:root{
+  --selected-pill-bg:#f4f8ee;
+  --selected-pill-border:#bdd0a8;
+  --selected-pill-text:#526b43;
+}
+
+
+
+/* =========================
+   RECOMMEND SELECTED PILL FINAL OVERRIDE
+========================= */
+
+.recommend-step-head strong:not(.is-placeholder){
+  background:#f5efe4 !important;
+  border-color:#d8ccb7 !important;
+  color:#4d463d !important;
+}
+
+
+/* =========================
+   OWNED TOOLS TOGGLE
+========================= */
+
+.owned-tools-toggle{
+  width:100%;
+  max-width:720px;
+  min-height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  margin:0 auto 8px;
+  padding:0 14px;
+
+  border:1.5px solid #dfc7a1;
+  border-radius:999px;
+
+  background:#fffaf0;
+  color:#5f553f;
+
+  font-size:14px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+.owned-toolbar{
+  overflow:hidden;
+
+  transition:
+    max-height .22s ease,
+    opacity .16s ease,
+    margin .16s ease;
+}
+
+.owned-toolbar.is-collapsed{
+  max-height:0 !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  margin-bottom:0 !important;
+}
+
+
+.owned-tools-toggle.is-hidden{
+  display:none !important;
+}
+
+.owned-tools-close{
+  width:100%;
+  min-height:34px;
+
+  border:0;
+  border-radius:999px;
+
+  background:#f5efe4;
+  color:#5f553f;
+
+  font-size:13px;
+  font-weight:900;
+
+  cursor:pointer;
+}
+
+
+/* =========================
+   OWNED SEARCH + TOOLS ROW
+========================= */
+
+.owned-search-row{
+  max-width:720px;
+  margin:0 auto 10px;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.owned-search-row .owned-search-box{
+  flex:1;
+  min-width:0;
+  margin:0 !important;
+}
+
+.owned-tools-toggle{
+  flex:0 0 auto;
+
+  min-height:40px;
+  padding:0 12px;
+
+  border:1.5px solid #dfc7a1;
+  border-radius:999px;
+
+  background:#fffaf0;
+  color:#5f553f;
+
+  font-size:13px;
+  font-weight:900;
+  white-space:nowrap;
+
+  cursor:pointer;
+}
+
+.owned-toolbar{
+  overflow:hidden;
+
+  transition:
+    max-height .22s ease,
+    opacity .16s ease,
+    margin .16s ease;
+}
+
+.owned-toolbar.is-collapsed{
+  max-height:0 !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  margin-bottom:0 !important;
+}
+
+
+.owned-search-row{
+  max-width:720px;
+  margin:0 auto 10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.owned-search-row .owned-search-box{
+  flex:1;
+  min-width:0;
+  margin:0 !important;
+}
+
+.owned-tools-toggle{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:0 12px;
+  white-space:nowrap;
+}
+
+
+/* =========================
+   OWNED SEARCH ROW FINAL FIX
+========================= */
+
+.owned-search-row{
+  max-width:720px !important;
+  margin:0 auto 10px !important;
+
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+}
+
+.owned-search-row .owned-search-box{
+  flex:1 1 auto !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+
+.owned-search-row .owned-search-box input{
+  width:100% !important;
+}
+
+.owned-search-row .owned-tools-toggle{
+  width:auto !important;
+  max-width:none !important;
+
+  flex:0 0 auto !important;
+  min-width:92px !important;
+  height:42px !important;
+
+  margin:0 !important;
+  padding:0 12px !important;
+}
+
+
+.owned-search-row .owned-tools-toggle{
+  border-color:#dfc7a1 !important;
+  background:#fffaf0 !important;
+  color:#5f553f !important;
+  box-shadow:none !important;
+}
+
+.owned-search-row .owned-search-box::after{
+  top:50% !important;
+  bottom:auto !important;
+  transform:translateY(-50%) !important;
 }
