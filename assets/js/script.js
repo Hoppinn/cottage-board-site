@@ -1746,6 +1746,8 @@ const ownedPageState = {
   sortWeight: "none",
   sortRating: "none",
 
+  activeSortKeys: ["title"],
+
   difficultyFilter: "",
   mechanicFilter: "",
 
@@ -1817,22 +1819,125 @@ function matchOwnedSearch(game){
    # OWNED SORT
 ========================= */
 
+function activateSortKey(key){
+  const sortDirMap = {
+    title: ownedPageState.sortTitle,
+    weight: ownedPageState.sortWeight,
+    rating: ownedPageState.sortRating
+  };
+
+  if(sortDirMap[key] === "none"){
+    ownedPageState.activeSortKeys =
+      ownedPageState.activeSortKeys.filter(item => item !== key);
+
+    return;
+  }
+
+  ownedPageState.activeSortKeys = [
+    key,
+    ...ownedPageState.activeSortKeys.filter(item => item !== key)
+  ];
+}
+
+function getSortOrderText(key, label){
+  const index =
+    ownedPageState.activeSortKeys.indexOf(key);
+
+  if(index === -1){
+    return label;
+  }
+
+  return `${index + 1}.${label}`;
+}
+
+function updateSortOptionLabels(){
+  const sortTitleLabel =
+    document.getElementById("sortTitleLabel");
+
+  const sortWeightLabel =
+    document.getElementById("sortWeightLabel");
+
+  const sortRatingLabel =
+    document.getElementById("sortRatingLabel");
+
+  if(sortTitleLabel){
+    const mark =
+      ownedPageState.sortTitle === "desc" ? "↓" :
+      ownedPageState.sortTitle === "none" ? "-" : "↑";
+
+    sortTitleLabel.textContent =
+      `${getSortOrderText("title", "이름")} ${mark}`;
+  }
+
+  if(sortWeightLabel){
+    const mark =
+      ownedPageState.sortWeight === "asc" ? "↑" :
+      ownedPageState.sortWeight === "desc" ? "↓" : "-";
+
+    sortWeightLabel.textContent =
+      `${getSortOrderText("weight", "난이도")} ${mark}`;
+  }
+
+  if(sortRatingLabel){
+    const mark =
+      ownedPageState.sortRating === "asc" ? "↑" :
+      ownedPageState.sortRating === "desc" ? "↓" : "-";
+
+    sortRatingLabel.textContent =
+      `${getSortOrderText("rating", "평점")} ${mark}`;
+  }
+
+  const sortBox =
+    document.querySelector(".owned-sort-compact");
+
+  if(sortBox){
+    const sortSelectMap = {
+      title: document.getElementById("sortTitle")?.closest(".sort-select-wrap"),
+      weight: document.getElementById("sortWeight")?.closest(".sort-select-wrap"),
+      rating: document.getElementById("sortRating")?.closest(".sort-select-wrap")
+    };
+
+    const allSortKeys = ["title", "weight", "rating"];
+
+    const inactiveSortKeys =
+      allSortKeys.filter(
+        key => !ownedPageState.activeSortKeys.includes(key)
+      );
+
+    const orderedSortKeys = [
+      ...ownedPageState.activeSortKeys,
+      ...inactiveSortKeys
+    ];
+
+    orderedSortKeys.forEach(key=>{
+      const item = sortSelectMap[key];
+
+      if(item){
+        sortBox.appendChild(item);
+      }
+    });
+  }
+}
+
+
+
+
+
 function sortOwnedGames(games){
   return [...games].sort((a, b)=>{
-    const sortRules = [
-      {
-        key: "title",
-        dir: ownedPageState.sortTitle
-      },
-      {
-        key: "weight",
-        dir: ownedPageState.sortWeight
-      },
-      {
-        key: "rating",
-        dir: ownedPageState.sortRating
-      }
-    ];
+    const sortDirMap = {
+  title: ownedPageState.sortTitle,
+  weight: ownedPageState.sortWeight,
+  rating: ownedPageState.sortRating
+};
+
+const sortRules =
+  ownedPageState.activeSortKeys
+    .map(key => ({
+      key,
+      dir: sortDirMap[key]
+    }))
+    .filter(rule => rule.dir !== "none");
 
     for(const rule of sortRules){
       if(rule.dir === "none"){
@@ -1911,7 +2016,8 @@ function renderMechanicOptions(){
       );
 
   mechanicSelect.innerHTML = `
-    <option value="">전체</option>
+     <option value="" selected hidden>🎲 게임 유형</option>
+  <option value="">전체</option>
 
     ${
       mechanics
@@ -2032,8 +2138,10 @@ function renderOwnedAccordionSummary(){
 }
 
 function updateOwnedGames(){
+  updateSortOptionLabels();
   renderOwnedAccordionSummary();
-  renderOwnedGameList();}
+  renderOwnedGameList();
+}
 
 function renderOwnedGameList(){
   const ownedGameList =
@@ -2078,9 +2186,9 @@ function renderOwnedGameList(){
 
   if(pageGames.length === 0){
     ownedGameList.innerHTML = `
-      <p class="recommend-empty">
-        표시할 게임이 없어요.
-      </p>
+      <p class="owned-empty">
+  표시할 게임이 없어요.
+</p>
     `;
 
     renderOwnedPagination(totalPages);
@@ -2202,14 +2310,18 @@ const ownedDifficultyFilter =
   document.getElementById("ownedDifficultyFilter");
 
 if (ownedDifficultyFilter) {
-  ownedDifficultyFilter.addEventListener("change", () => {
-    selectedDifficulty =
-      ownedDifficultyFilter.value || "";
+ ownedDifficultyFilter.addEventListener("change", () => {
+  const value = ownedDifficultyFilter.value || "";
 
-    currentOwnedPage = 1;
+  ownedPageState.difficultyFilter = value;
+  ownedPageState.page = 1;
 
-    renderOwnedGames();
-  });
+  if(value === ""){
+    ownedDifficultyFilter.selectedIndex = 0;
+  }
+
+  updateOwnedGames();
+});
 }
 
 
@@ -2221,10 +2333,15 @@ document
   ?.addEventListener(
     "change",
     (event)=>{
-      ownedPageState.mechanicFilter =
-        event.target.value;
+      const value = event.target.value || "";
 
+      ownedPageState.mechanicFilter = value;
       ownedPageState.page = 1;
+
+      if(value === ""){
+        event.target.selectedIndex = 0;
+      }
+
       updateOwnedGames();
     }
   );
@@ -2294,6 +2411,7 @@ document
   .getElementById("sortTitle")
   ?.addEventListener("change", (event)=>{
     ownedPageState.sortTitle = event.target.value;
+       activateSortKey("title");
     ownedPageState.page = 1;
     updateOwnedGames();
   });
@@ -2302,7 +2420,7 @@ document
   .getElementById("sortWeight")
   ?.addEventListener("change", (event)=>{
     ownedPageState.sortWeight = event.target.value;
-    ownedPageState.page = 1;
+activateSortKey("weight");    ownedPageState.page = 1;
     updateOwnedGames();
   });
 
@@ -2310,9 +2428,12 @@ document
   .getElementById("sortRating")
   ?.addEventListener("change", (event)=>{
     ownedPageState.sortRating = event.target.value;
+    activateSortKey("rating");
     ownedPageState.page = 1;
     updateOwnedGames();
   });
+
+
 
 
 /* =========================
@@ -2461,3 +2582,5 @@ if(ownedToolsToggle && ownedToolbar){
   });
 
 }
+
+
