@@ -1,7 +1,9 @@
 const { readJson, writeJson } = require("../core/read-write");
 
 const {
-  BGG_MATCH_RESULT_PATH,
+  COTTAGE_OWNED_GAMES_MASTER_PATH,
+  COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH,
+    BGG_MATCH_RESULT_PATH,
   BGG_DETAILS_CACHE_PATH,
 } = require("../core/paths");
 
@@ -204,6 +206,11 @@ function parseBggThingXml(xml, bggId) {
       "minplayers"
     ),
 
+minage: getAttr(
+  xml,
+  "minage"
+),
+
     maxplayers: getAttr(
       xml,
       "maxplayers"
@@ -233,6 +240,54 @@ function parseBggThingXml(xml, bggId) {
         ? match[1]
         : "";
     })(),
+
+
+average: (() => {
+  const match = xml.match(
+    /<average\s+[^>]*value="([^"]*)"[^>]*\/?>/i
+  );
+
+  return match ? match[1] : "";
+})(),
+
+bayesaverage: (() => {
+  const match = xml.match(
+    /<bayesaverage\s+[^>]*value="([^"]*)"[^>]*\/?>/i
+  );
+
+  return match ? match[1] : "";
+})(),
+
+usersrated: (() => {
+  const match = xml.match(
+    /<usersrated\s+[^>]*value="([^"]*)"[^>]*\/?>/i
+  );
+
+  return match ? match[1] : "";
+})(),
+
+rank: (() => {
+  const match = xml.match(
+    /<rank\s+[^>]*name="boardgame"[^>]*value="([^"]*)"[^>]*\/?>/i
+  );
+
+  return match ? match[1] : "";
+})(),
+
+designers: getLinks(
+  xml,
+  "boardgamedesigner"
+),
+
+artists: getLinks(
+  xml,
+  "boardgameartist"
+),
+
+publishers: getLinks(
+  xml,
+  "boardgamepublisher"
+),
 
     categories: getLinks(
       xml,

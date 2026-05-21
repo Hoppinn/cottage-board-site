@@ -1066,6 +1066,7 @@ body.recommend-page main{
   line-height:1.38;
   display:-webkit-box;
   -webkit-line-clamp:2;
+  line-clamp:2;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
@@ -1734,21 +1735,9 @@ body.sheet-open{
   display:none !important;
 }
 
-/* 구버전 클래스 보존: JS/HTML이 남아 있어도 기본 스타일은 안전하게 유지 */
-.owned-control-title,
-.owned-sort-item,
-.owned-filter-label,
-.owned-sort-label,
-.owned-sort-btn,
-.owned-filter-chip,
-.owned-games-grid,
-.owned-game-card,
-.owned-game-thumb,
-.owned-game-title,
-.owned-game-tags,
-.owned-game-tag{
+
   /* legacy selector placeholder */
-}
+
 
 /* =========================
    # 9. RESPONSIVE

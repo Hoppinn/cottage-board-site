@@ -38,7 +38,7 @@ const {
  * - details fetch 생략
  * - 기존 cache만 사용
  */
-const ENABLE_FETCH_BGG_DETAILS = true;
+const ENABLE_FETCH_BGG_DETAILS = false;
 
 async function main() {
   console.log(

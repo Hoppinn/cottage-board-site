@@ -1,4 +1,11 @@
 {
+  "scripts": {
+    "build": "node game-system/tools/build/build-cottage-game-data.js",
+    "convert": "node game-system/tools/convert-bgg.js",
+    "convert:xlsx": "node game-system/tools/source/convert-owned-xlsx.js",
+    "match:auto": "node game-system/tools/match/auto-resolve-bgg-matches.js",
+    "fetch:bgg": "node game-system/tools/fetch/fetch-bgg-details.js"
+  },
   "dependencies": {
     "exceljs": "^4.4.0"
   }

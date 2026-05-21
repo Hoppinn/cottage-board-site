@@ -429,6 +429,13 @@ function getGameKey(game){
   return game?.key || game?.id || "";
 }
 
+function getGameShelfLabel(game){
+  return (
+    game?.cottage?.shelfGroupId ||
+    "-"
+  );
+}
+
 function getAllGamesArray(){
   if(GameView?.getAllGamesArray){
     return GameView
@@ -1062,7 +1069,8 @@ function openGameSheet(gameKey){
   const detail =
     GameView.getGameDetailData(game);
 
-
+const shelfLabel =
+  getGameShelfLabel(game);
     
   const difficulty =
     getDifficultyData(
@@ -1089,6 +1097,10 @@ function openGameSheet(gameKey){
       <h3>
         ${detail.title}
       </h3>
+
+<div class="sheet-location">
+  🗂️ ${shelfLabel}
+</div>
 
       <p class="sheet-description">
         ${detail.comment || detail.bgg.description || ""}
@@ -1420,6 +1432,8 @@ const moodValue = recommendState.mood;
       <h2 class="recommend-filter-main-title">
         🍀 오늘은 어떤 게임이 어울릴까요?
       </h2>
+
+      
 
       <div class="recommend-step" data-filter-group="players">
         <button class="recommend-step-head" type="button" data-toggle-filter="players">
@@ -2261,6 +2275,7 @@ function renderOwnedGameList(){
     }
   </span>
 
+  
   <span>
     ⏱ ${
       detail.playingTimeText ||
@@ -2279,6 +2294,11 @@ function renderOwnedGameList(){
       "-"
     }
   </span>
+
+<span>
+  🗂️ ${getGameShelfLabel(game)}
+</span>
+
 </div>
 
             </div>

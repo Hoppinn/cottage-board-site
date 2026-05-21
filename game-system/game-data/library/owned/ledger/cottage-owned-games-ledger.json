@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "source": "cottageboard-master",
+  "games": {
+    "아크노바": {
+      "id": "아크노바",
+      "title": {
+        "owned": "아크노바"
+      },
+      "createdAt": "2026-05-20T17:57:51.419Z",
+      "status": "draft"
+    }
+  }
+}

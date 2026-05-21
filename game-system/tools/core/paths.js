@@ -39,7 +39,7 @@ const GAME_SYSTEM_DIR = path.join(ROOT_DIR, "game-system");
 ========================= */
 
 const GAME_CONFIG_DIR = path.join(GAME_SYSTEM_DIR, "config");
-const GAME_CONFIG_TAG_DIR = path.join(GAME_CONFIG_DIR, "tag");
+const GAME_CONFIG_TAG_DIR = path.join(GAME_CONFIG_DIR, "tags");
 
 const DIFFICULTY_LEVELS_PATH = path.join(
   GAME_CONFIG_DIR,
@@ -161,19 +161,44 @@ const OWNED_GAMES_NORMALIZED_PATH =
    LIBRARY DATA
 ========================= */
 
-const LIBRARY_GAMES_DIR = path.join(LIBRARY_DIR, "games");
+const OWNED_DIR = path.join(LIBRARY_DIR, "owned");
+
+const OWNED_LEDGER_DIR = path.join(
+  OWNED_DIR,
+  "ledger"
+);
+
+const COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH = path.join(
+  OWNED_LEDGER_DIR,
+  "cottage-owned-games-ledger.xlsx"
+);
+
+const OWNED_MASTER_DIR = path.join(
+  OWNED_DIR,
+  "master"
+);
+
+const COTTAGE_OWNED_GAMES_MASTER_PATH = path.join(
+  OWNED_MASTER_DIR,
+  "cottage-owned-games-master.json"
+);
+
+const OWNED_FINAL_DIR = path.join(
+  OWNED_DIR,
+  "final"
+);
 const LIBRARY_MANUAL_DIR = path.join(LIBRARY_DIR, "manual");
 const LIBRARY_IMAGES_DIR = path.join(LIBRARY_DIR, "images");
 const LIBRARY_IMAGES_THUMB_DIR = path.join(LIBRARY_IMAGES_DIR, "thumb");
 const LIBRARY_IMAGES_DETAIL_DIR = path.join(LIBRARY_IMAGES_DIR, "detail");
 
 const COTTAGE_GAMES_DATA_JSON_PATH = path.join(
-  LIBRARY_GAMES_DIR,
+  OWNED_FINAL_DIR,
   "cottage-games-data.json"
 );
 
 const COTTAGE_GAMES_DATA_JS_PATH = path.join(
-  LIBRARY_GAMES_DIR,
+  OWNED_FINAL_DIR,
   "cottage-games-data.js"
 );
 
@@ -245,6 +270,7 @@ module.exports = {
   SOURCE_DIR,
   GENERATED_DIR,
   LIBRARY_DIR,
+COTTAGE_OWNED_GAMES_MASTER_PATH,
 
   SOURCE_CSV_DIR,
   SOURCE_MANUAL_DIR,
@@ -260,7 +286,12 @@ module.exports = {
   BGG_SEARCH_CANDIDATES_PATH,
   BGG_TAG_TRANSLATIONS_PATH,
 
-  LIBRARY_GAMES_DIR,
+  
+  OWNED_DIR,
+  OWNED_LEDGER_DIR,
+  COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH,
+  OWNED_MASTER_DIR,
+  OWNED_FINAL_DIR,
   LIBRARY_MANUAL_DIR,
   LIBRARY_IMAGES_DIR,
   LIBRARY_IMAGES_THUMB_DIR,
@@ -279,3 +310,4 @@ module.exports = {
   TOOLS_BUILD_DIR,
   TOOLS_LEGACY_DIR,
 };
+

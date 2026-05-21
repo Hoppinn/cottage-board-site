@@ -19,6 +19,11 @@ const {
   mergeCottageTags,
 } = require("../tagging/auto-tag-rules");
 
+const {
+  getShelfGroupBySourceValue,
+  getShelfGroupDisplay,
+} = require("../../config/shelf-groups");
+
 function parseTsv(text) {
   const lines = text
     .split(/\r?\n/)
@@ -335,6 +340,30 @@ const suggestedPlayers =
      const normalizedRecommendedPlayers =
   normalizedOwned.recommendedPlayers || [];
 
+
+const rawShelfValue = getValue(
+  row,
+  [
+    "책장그룹",
+    "위치",
+    "shelfGroupId",
+    "shelf_group",
+    "shelf",
+  ]
+);
+
+const shelfGroup = getShelfGroupBySourceValue(rawShelfValue);
+
+const shelfInfo = shelfGroup
+  ? getShelfGroupDisplay(shelfGroup.id)
+  : {
+      shelfGroupId: rawShelfValue || "",
+      shelfLabel: rawShelfValue || "-",
+      shelfFullLabel: rawShelfValue || "-",
+    };
+
+
+
   return {
     id,
 
@@ -414,15 +443,9 @@ mechanics:
         "active"
       ),
 
-      shelfGroupId: getValue(
-        row,
-        [
-          "책장그룹",
-          "shelfGroupId",
-          "shelf_group",
-          "shelf",
-        ]
-      ),
+      shelfGroupId: shelfInfo.shelfGroupId,
+shelfLabel: shelfInfo.shelfLabel,
+shelfFullLabel: shelfInfo.shelfFullLabel,
 
       /*
        * difficultyId:
@@ -626,3 +649,7 @@ const item = buildGameItem(
 module.exports = {
   buildCottageGameData,
 };
+
+if (require.main === module) {
+  buildCottageGameData();
+}

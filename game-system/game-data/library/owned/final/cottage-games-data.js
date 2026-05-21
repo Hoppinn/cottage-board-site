@@ -1,4 +1,4 @@
-{
+const gameData = {
   "1862-이스턴-카운티": {
     "id": "1862-이스턴-카운티",
     "title": {
@@ -36,7 +36,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.61,
       "moodTags": [
@@ -132,13 +134,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
@@ -226,13 +232,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "드레프트",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
@@ -322,13 +333,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림",
+        "속이기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
@@ -420,13 +436,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "눈치"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -513,13 +533,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "가치관추측"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
@@ -605,13 +629,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력 (사장추천★)"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
@@ -699,13 +727,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "강도맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
@@ -791,13 +823,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.28,
       "moodTags": [
@@ -888,13 +924,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "같은단어쓰기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
@@ -984,13 +1024,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "벌점덜기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -1078,13 +1123,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
@@ -1171,13 +1220,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협잡",
+        "블러핑"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
@@ -1266,13 +1320,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -1360,13 +1418,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -1462,7 +1524,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.72,
       "moodTags": [
@@ -1550,13 +1614,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -1643,13 +1711,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "예측배팅"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -1736,13 +1808,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.29,
       "moodTags": [
@@ -1833,13 +1909,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -1926,13 +2006,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "지리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
@@ -2023,13 +2107,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림찾기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.03,
       "moodTags": [
@@ -2118,13 +2206,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "총개수",
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
@@ -2212,13 +2305,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "공주찾기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -2309,13 +2406,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -2406,13 +2507,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -2499,13 +2604,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "균형잡기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -2591,13 +2700,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
@@ -2685,13 +2798,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.64,
       "moodTags": [
@@ -2780,13 +2897,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "상대 카드맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
@@ -2875,13 +2996,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
@@ -2972,13 +3097,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경마"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.33,
       "moodTags": [
@@ -3069,13 +3198,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.46,
       "moodTags": [
@@ -3165,13 +3298,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "상대패 맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.41,
       "moodTags": [
@@ -3261,13 +3398,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.06,
       "moodTags": [
@@ -3357,13 +3498,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드내기순서"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [
@@ -3459,13 +3604,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "프로그래밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.38,
       "moodTags": [
@@ -3557,13 +3706,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.38,
       "moodTags": [
@@ -3656,13 +3809,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.23,
       "moodTags": [
@@ -3750,13 +3907,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.24,
       "moodTags": [
@@ -3844,13 +4006,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -3936,13 +4102,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "부루마불"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
       "moodTags": [
@@ -4032,13 +4202,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력",
+        "블러핑"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.01,
       "moodTags": [
@@ -4124,13 +4299,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.54,
       "moodTags": [
@@ -4221,13 +4400,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
@@ -4314,13 +4497,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -4408,13 +4595,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍(달무티)"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
@@ -4499,13 +4690,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -4595,13 +4790,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.28,
       "moodTags": [
@@ -4688,13 +4887,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "발음하기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -4782,13 +4985,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림추측"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -4877,13 +5084,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -4973,13 +5184,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.45,
       "moodTags": [
@@ -5071,13 +5286,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퀴즈"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.06,
       "moodTags": [
@@ -5163,13 +5382,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -5254,13 +5477,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "팀전",
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -5350,13 +5578,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
@@ -5445,13 +5677,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아",
+        "RPG"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -5540,13 +5777,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -5639,13 +5880,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "세트찾기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.66,
       "moodTags": [
@@ -5736,13 +5981,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "블러핑"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -5833,13 +6082,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퀴즈",
+        "속이기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -5929,7 +6183,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -6013,13 +6269,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "발음하기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -6106,13 +6366,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
@@ -6200,13 +6464,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹",
+        "예측"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.56,
       "moodTags": [
@@ -6297,13 +6566,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
       "moodTags": [
@@ -6392,13 +6665,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "삼가동님 제공"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.78,
       "moodTags": [
@@ -6490,13 +6767,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "블러핑",
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.34,
       "moodTags": [
@@ -6585,13 +6867,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "술래속이기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
@@ -6681,13 +6967,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "술래속이기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
@@ -6777,13 +7067,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "오목"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
@@ -6872,13 +7166,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협잡"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
@@ -6968,13 +7266,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
       "moodTags": [
@@ -7062,13 +7364,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협잡"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
       "moodTags": [
@@ -7158,13 +7464,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "삼가동님 제공"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
       "moodTags": [
@@ -7254,13 +7564,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.08,
       "moodTags": [
@@ -7346,13 +7660,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -7437,13 +7755,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "야찌",
+        "배팅"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -7533,13 +7856,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "이야기만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.37,
       "moodTags": [
@@ -7626,13 +7953,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
@@ -7723,13 +8054,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩배틀"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.79,
       "moodTags": [
@@ -7822,13 +8157,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "강도맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -7918,13 +8257,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티 ㅡ주사위운"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
@@ -8017,13 +8360,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
@@ -8110,13 +8457,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -8205,13 +8556,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -8300,13 +8655,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "피지컬"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -8397,13 +8756,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "롤랜라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.84,
       "moodTags": [
@@ -8496,13 +8859,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "롤앤라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.48,
       "moodTags": [
@@ -8594,13 +8961,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
@@ -8697,7 +9068,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.12,
       "moodTags": [
@@ -8792,13 +9165,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림힌트주기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -8886,13 +9263,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "스무고개",
+        "내부자"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
@@ -8981,13 +9363,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -9079,13 +9465,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "고or스톱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
@@ -9175,13 +9565,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위족보"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
@@ -9272,13 +9666,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "눈치",
+        "맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
@@ -9365,13 +9764,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력",
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -9460,13 +9864,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "벌점안먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.19,
       "moodTags": [
@@ -9554,13 +9962,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
       "moodTags": [
@@ -9648,13 +10060,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아",
+        "블러핑"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
@@ -9745,13 +10162,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아",
+        "단어"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -9840,13 +10262,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "베팅",
+        "레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.51,
       "moodTags": [
@@ -9938,13 +10365,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "총겨누기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
@@ -10034,13 +10465,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "팀",
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.26,
       "moodTags": [
@@ -10130,13 +10566,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "팀",
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.26,
       "moodTags": [
@@ -10225,13 +10666,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "팀전",
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
@@ -10321,13 +10767,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.38,
       "moodTags": [
@@ -10419,13 +10869,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
@@ -10515,13 +10969,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
       "moodTags": [
@@ -10611,13 +11069,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어연상",
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -10704,13 +11167,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -10800,13 +11267,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "마을건설"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.34,
       "moodTags": [
@@ -10901,13 +11373,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "할리갈리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.02,
       "moodTags": [
@@ -10996,13 +11472,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "강도맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
@@ -11094,13 +11574,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위튕기기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -11186,13 +11670,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -11284,13 +11772,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "롤앤라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.26,
       "moodTags": [
@@ -11378,13 +11870,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "지리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.52,
       "moodTags": [
@@ -11472,13 +11968,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "3인 팀웍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -11565,13 +12065,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.25,
       "moodTags": [
@@ -11663,13 +12168,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
@@ -11758,13 +12267,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "쌓기",
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -11860,7 +12374,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.1,
       "moodTags": [
@@ -11949,13 +12465,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
@@ -12046,13 +12566,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "블러핑",
+        "족보만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "poker_mahjong",
+      "shelfLabel": "범용코인 · 포커칩 · 마작패",
+      "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
       "difficultyId": "light_family",
       "difficultyWeight": 2.43,
       "moodTags": [
@@ -12139,13 +12664,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "팀전",
+        "카드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [
@@ -12242,7 +12772,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.2,
       "moodTags": [
@@ -12334,13 +12866,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "운시험"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.03,
       "moodTags": [
@@ -12428,13 +12964,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
@@ -12519,13 +13059,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "쌓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -12614,13 +13158,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.38,
       "moodTags": [
@@ -12711,13 +13259,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.4,
       "moodTags": [
@@ -12806,13 +13358,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -12898,13 +13454,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력",
+        "레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
@@ -12999,7 +13560,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
@@ -13101,7 +13664,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.2,
       "moodTags": [
@@ -13195,13 +13760,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩",
+        "레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.2,
       "moodTags": [
@@ -13290,13 +13860,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "철도"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.87,
       "moodTags": [
@@ -13396,7 +13971,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.6,
       "moodTags": [
@@ -13483,13 +14060,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "블러핑"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
       "moodTags": [
@@ -13577,13 +14158,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력",
+        "수치비교"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
@@ -13672,13 +14258,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "땅따먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.39,
       "moodTags": [
@@ -13763,13 +14353,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -13842,13 +14436,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -13933,7 +14531,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
       "moodTags": [
@@ -14021,13 +14621,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.9,
       "moodTags": [
@@ -14117,13 +14721,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "킥아웃"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.22,
       "moodTags": [
@@ -14213,13 +14822,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍",
+        "팀전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
       "moodTags": [
@@ -14305,13 +14919,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -14393,7 +15011,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
       "moodTags": [
@@ -14479,13 +15099,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
@@ -14570,13 +15194,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "워게임"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.28,
       "moodTags": [
@@ -14664,13 +15292,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -14749,13 +15381,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "주사위"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [
@@ -14838,13 +15475,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -14932,13 +15573,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "세트컬렉션",
+        "상호작용"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.43,
       "moodTags": [
@@ -15031,7 +15677,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.62,
       "moodTags": [
@@ -15121,13 +15769,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼",
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.21,
       "moodTags": [
@@ -15217,13 +15870,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "부루마불"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.7,
       "moodTags": [
@@ -15315,13 +15972,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "부루마불",
+        "소팔기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.94,
       "moodTags": [
@@ -15413,13 +16075,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.96,
       "moodTags": [
@@ -15510,13 +16176,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.91,
       "moodTags": [
@@ -15614,7 +16284,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.89,
       "moodTags": [
@@ -15705,13 +16377,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
@@ -15798,13 +16475,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드자원"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
       "moodTags": [
@@ -15890,13 +16571,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.02,
       "moodTags": [
@@ -15984,13 +16669,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -16071,13 +16760,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -16153,13 +16846,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -16226,13 +16923,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력",
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -16317,13 +17019,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.9,
       "moodTags": [
@@ -16416,7 +17122,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송예정",
+      "shelfLabel": "배송예정",
+      "shelfFullLabel": "배송예정",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.13,
       "moodTags": [
@@ -16507,13 +17215,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "요트다이스"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "별도",
+      "shelfLabel": "별도",
+      "shelfFullLabel": "별도",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -16596,13 +17308,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "네트워크"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.19,
       "moodTags": [
@@ -16693,13 +17409,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -16781,7 +17501,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.11,
       "moodTags": [
@@ -16875,7 +17597,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -16961,13 +17685,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "스토리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.88,
       "moodTags": [
@@ -17055,13 +17783,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.49,
       "moodTags": [
@@ -17146,13 +17878,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.49,
       "moodTags": [
@@ -17237,13 +17973,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "만칼라"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.84,
       "moodTags": [
@@ -17334,13 +18074,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "일꾼강화"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.9,
       "moodTags": [
@@ -17433,13 +18178,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -17527,13 +18276,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력",
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
@@ -17623,13 +18377,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -17710,7 +18468,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.45,
       "moodTags": [
@@ -17800,13 +18560,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력",
+        "카드털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
@@ -17894,13 +18659,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩디펜스"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.79,
       "moodTags": [
@@ -17988,13 +18757,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주식"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
       "moodTags": [
@@ -18082,13 +18855,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력",
+        "카드털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -18170,13 +18948,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
@@ -18269,7 +19051,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.57,
       "moodTags": [
@@ -18360,13 +19144,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
@@ -18453,13 +19241,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "운시험"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
@@ -18544,13 +19336,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "생존"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.01,
       "moodTags": [
@@ -18640,13 +19436,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -18735,13 +19535,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.64,
       "moodTags": [
@@ -18827,13 +19631,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "2인",
+        "경찰도둑"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
@@ -18919,13 +19728,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.35,
       "moodTags": [
@@ -19011,13 +19824,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.47,
       "moodTags": [
@@ -19103,13 +19920,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.81,
       "moodTags": [
@@ -19197,13 +20018,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
       "moodTags": [
@@ -19291,13 +20116,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "그림찾기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.03,
       "moodTags": [
@@ -19383,13 +20212,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "케잌나누기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.5,
       "moodTags": [
@@ -19476,13 +20309,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -19569,13 +20406,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.29,
       "moodTags": [
@@ -19667,7 +20508,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.05,
       "moodTags": [
@@ -19749,13 +20592,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "-"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "따로",
+      "shelfLabel": "따로",
+      "shelfFullLabel": "따로",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -19835,13 +20682,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "쌓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -19927,13 +20778,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "운시험",
+        "셋컬"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
@@ -20022,13 +20878,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.05,
       "moodTags": [
@@ -20114,13 +20974,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "2인"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
       "moodTags": [
@@ -20207,13 +21071,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "블럭떨구기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
@@ -20305,7 +21173,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -20392,13 +21262,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "RPG",
+        "던전크롤링"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.69,
       "moodTags": [
@@ -20486,13 +21361,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "생존"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.31,
       "moodTags": [
@@ -20581,13 +21460,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "생존"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.47,
       "moodTags": [
@@ -20678,13 +21561,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼",
+        "계약서달성"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.57,
       "moodTags": [
@@ -20781,7 +21669,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
@@ -20869,13 +21759,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위배팅"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -20969,7 +21863,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
@@ -21056,13 +21952,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "자모음조합하기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -21147,13 +22047,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "지리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -21238,7 +22142,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -21315,13 +22221,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -21400,7 +22310,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.61,
       "moodTags": [
@@ -21488,13 +22400,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -21582,13 +22498,19 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "코딩",
+        "자원"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
       "moodTags": [
@@ -21672,13 +22594,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기지부수기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -21762,13 +22688,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.06,
       "moodTags": [
@@ -21854,13 +22784,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
@@ -21950,13 +22884,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "운빨빙고"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -22035,13 +22973,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "삼가동님 제공"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -22108,13 +23050,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순서대로내기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -22201,13 +23147,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
@@ -22297,13 +23247,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -22385,13 +23339,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "철도"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송예정",
+      "shelfLabel": "배송예정",
+      "shelfFullLabel": "배송예정",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.17,
       "moodTags": [
@@ -22477,13 +23436,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
@@ -22571,7 +23534,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -22637,13 +23602,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "poker_mahjong",
+      "shelfLabel": "범용코인 · 포커칩 · 마작패",
+      "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -22729,13 +23698,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "poker_mahjong",
+      "shelfLabel": "범용코인 · 포커칩 · 마작패",
+      "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -22812,13 +23785,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "생존"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.82,
       "moodTags": [
@@ -22909,13 +23886,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.48,
       "moodTags": [
@@ -23002,13 +23983,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "역할선택",
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
@@ -23098,13 +24084,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "손패털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.71,
       "moodTags": [
@@ -23197,7 +24187,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.32,
       "moodTags": [
@@ -23284,13 +24276,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "비대칭전쟁"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.81,
       "moodTags": [
@@ -23381,13 +24377,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
@@ -23469,13 +24470,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -23555,13 +24560,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.11,
       "moodTags": [
@@ -23658,7 +24667,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.14,
       "moodTags": [
@@ -23747,13 +24758,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.72,
       "moodTags": [
@@ -23842,13 +24857,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "2인"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.51,
       "moodTags": [
@@ -23937,13 +24956,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "3X"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.42,
       "moodTags": [
@@ -24029,13 +25052,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드대결"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
       "moodTags": [
@@ -24122,13 +25149,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "운",
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
@@ -24217,13 +25249,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "부루마불"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.92,
       "moodTags": [
@@ -24315,13 +25351,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.41,
       "moodTags": [
@@ -24409,13 +25449,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.38,
       "moodTags": [
@@ -24507,7 +25551,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -24589,13 +25635,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
       "moodTags": [
@@ -24683,13 +25733,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위",
+        "등반"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.21,
       "moodTags": [
@@ -24774,13 +25829,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
       "moodTags": [
@@ -24864,13 +25923,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션",
+        "팀전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.75,
       "moodTags": [
@@ -24958,13 +26022,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "족보만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "poker_mahjong",
+      "shelfLabel": "범용코인 · 포커칩 · 마작패",
+      "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.57,
       "moodTags": [
@@ -25052,13 +26120,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전",
+        "수치맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.38,
       "moodTags": [
@@ -25145,13 +26218,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "보드",
+        "기둥쌓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.55,
       "moodTags": [
@@ -25240,13 +26318,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "테크트리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.26,
       "moodTags": [
@@ -25340,7 +26422,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.43,
       "moodTags": [
@@ -25426,13 +26510,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -25521,7 +26609,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.61,
       "moodTags": [
@@ -25612,13 +26702,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "던전크롤링"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.66,
       "moodTags": [
@@ -25710,13 +26804,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드",
+        "콤보"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.69,
       "moodTags": [
@@ -25805,13 +26904,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
@@ -25902,13 +27005,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
       "moodTags": [
@@ -25996,13 +27103,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "부루마불"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -26086,13 +27197,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
       "moodTags": [
@@ -26179,13 +27294,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
@@ -26273,13 +27392,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.41,
       "moodTags": [
@@ -26364,13 +27487,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
       "moodTags": [
@@ -26457,13 +27584,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.3,
       "moodTags": [
@@ -26549,13 +27680,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.19,
       "moodTags": [
@@ -26642,13 +27777,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.75,
       "moodTags": [
@@ -26744,7 +27883,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.64,
       "moodTags": [
@@ -26844,7 +27985,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.66,
       "moodTags": [
@@ -26939,7 +28082,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.36,
       "moodTags": [
@@ -27028,13 +28173,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "길막"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
@@ -27122,13 +28271,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "탐험"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.66,
       "moodTags": [
@@ -27216,13 +28369,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "드래프팅",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
       "moodTags": [
@@ -27306,13 +28464,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "워게임"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.23,
       "moodTags": [
@@ -27403,13 +28565,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상전략"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.46,
       "moodTags": [
@@ -27498,7 +28664,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
@@ -27587,13 +28755,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.03,
       "moodTags": [
@@ -27679,13 +28851,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "콤보"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.77,
       "moodTags": [
@@ -27773,13 +28950,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위액션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.98,
       "moodTags": [
@@ -27870,13 +29051,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "네트워크"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.11,
       "moodTags": [
@@ -27974,7 +29160,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
       "moodTags": [
@@ -28061,13 +29249,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [
@@ -28156,13 +29348,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.12,
       "moodTags": [
@@ -28255,7 +29451,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
@@ -28341,13 +29539,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -28421,13 +29623,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
@@ -28515,13 +29721,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
       "moodTags": [
@@ -28608,13 +29818,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.63,
       "moodTags": [
@@ -28706,13 +29920,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추론",
+        "타일털기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.99,
       "moodTags": [
@@ -28802,13 +30021,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -28893,13 +30117,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "부루마불"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -28983,13 +30211,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
       "moodTags": [
@@ -29073,13 +30305,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "동시액션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.81,
       "moodTags": [
@@ -29178,7 +30414,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "따로",
+      "shelfLabel": "따로",
+      "shelfFullLabel": "따로",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
       "moodTags": [
@@ -29267,13 +30505,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.82,
       "moodTags": [
@@ -29359,13 +30601,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "오목"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
@@ -29451,13 +30697,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "네트워킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.88,
       "moodTags": [
@@ -29554,7 +30804,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
@@ -29648,7 +30900,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.86,
       "moodTags": [
@@ -29734,13 +30988,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "1인추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.09,
       "moodTags": [
@@ -29830,7 +31088,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.47,
       "moodTags": [
@@ -29918,13 +31178,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주식"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.71,
       "moodTags": [
@@ -30020,7 +31284,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.75,
       "moodTags": [
@@ -30110,7 +31376,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
       "moodTags": [
@@ -30196,7 +31464,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -30265,13 +31535,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.89,
       "moodTags": [
@@ -30362,13 +31636,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.98,
       "moodTags": [
@@ -30455,13 +31733,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "레이싱",
+        "밟기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.88,
       "moodTags": [
@@ -30549,13 +31832,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "테크타기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.22,
       "moodTags": [
@@ -30643,13 +31930,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.15,
       "moodTags": [
@@ -30742,13 +32033,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -30838,13 +32133,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩",
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.45,
       "moodTags": [
@@ -30933,13 +32233,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "솔플"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.93,
       "moodTags": [
@@ -31032,7 +32336,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.03,
       "moodTags": [
@@ -31128,7 +32434,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.8,
       "moodTags": [
@@ -31216,13 +32524,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "2인"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.58,
       "moodTags": [
@@ -31308,13 +32620,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -31398,13 +32714,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -31492,13 +32812,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.76,
       "moodTags": [
@@ -31589,13 +32913,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "풀빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.72,
       "moodTags": [
@@ -31689,13 +33017,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.46,
       "moodTags": [
@@ -31777,13 +33109,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "벌점덜먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -31867,13 +33203,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "힐링셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -31953,13 +33293,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -32023,13 +33367,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
       "moodTags": [
@@ -32122,7 +33470,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.76,
       "moodTags": [
@@ -32215,13 +33565,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
       "moodTags": [
@@ -32309,13 +33663,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.12,
       "moodTags": [
@@ -32400,13 +33758,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -32498,7 +33860,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.79,
       "moodTags": [
@@ -32589,13 +33953,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "족보만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
       "moodTags": [
@@ -32687,7 +34055,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.12,
       "moodTags": [
@@ -32775,13 +34145,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
@@ -32868,13 +34242,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타이밍잡기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -32956,13 +34334,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.35,
       "moodTags": [
@@ -33056,7 +34438,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.88,
       "moodTags": [
@@ -33149,13 +34533,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.17,
       "moodTags": [
@@ -33241,13 +34630,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
@@ -33333,13 +34726,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.06,
       "moodTags": [
@@ -33434,7 +34831,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.76,
       "moodTags": [
@@ -33520,13 +34919,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
@@ -33612,13 +35015,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
       "moodTags": [
@@ -33707,13 +35114,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주식"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.11,
       "moodTags": [
@@ -33805,7 +35216,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.33,
       "moodTags": [
@@ -33888,13 +35301,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "블랙잭"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -33980,13 +35397,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.95,
       "moodTags": [
@@ -34074,13 +35495,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.78,
       "moodTags": [
@@ -34164,13 +35589,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.99,
       "moodTags": [
@@ -34256,13 +35685,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
       "moodTags": [
@@ -34354,7 +35787,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [
@@ -34440,13 +35875,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.9,
       "moodTags": [
@@ -34534,13 +35973,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드내기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.06,
       "moodTags": [
@@ -34624,13 +36067,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
@@ -34714,13 +36161,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "별도",
+      "shelfLabel": "별도",
+      "shelfFullLabel": "별도",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.04,
       "moodTags": [
@@ -34811,13 +36262,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퀴즈"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -34906,13 +36361,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위조합액션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.23,
       "moodTags": [
@@ -35004,13 +36463,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
@@ -35100,13 +36563,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -35195,13 +36662,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
@@ -35289,13 +36760,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
       "moodTags": [
@@ -35383,13 +36858,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "롤앤라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
       "moodTags": [
@@ -35475,13 +36954,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션포인트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.44,
       "moodTags": [
@@ -35575,13 +37058,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.64,
       "moodTags": [
@@ -35672,13 +37159,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
@@ -35764,13 +37255,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "도시건설"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.12,
       "moodTags": [
@@ -35860,13 +37355,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.67,
       "moodTags": [
@@ -35957,13 +37457,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [
@@ -36049,13 +37553,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -36149,7 +37657,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송예정",
+      "shelfLabel": "배송예정",
+      "shelfFullLabel": "배송예정",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.19,
       "moodTags": [
@@ -36237,13 +37747,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "폭탄돌리기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.76,
       "moodTags": [
@@ -36330,13 +37844,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱구축"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.54,
       "moodTags": [
@@ -36433,7 +37951,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.3,
       "moodTags": [
@@ -36519,13 +38039,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.77,
       "moodTags": [
@@ -36618,13 +38142,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐쌓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
       "moodTags": [
@@ -36711,13 +38239,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "건물배치"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.81,
       "moodTags": [
@@ -36811,7 +38343,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송예정",
+      "shelfLabel": "배송예정",
+      "shelfFullLabel": "배송예정",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.42,
       "moodTags": [
@@ -36910,7 +38444,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.75,
       "moodTags": [
@@ -37001,13 +38537,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.93,
       "moodTags": [
@@ -37104,7 +38644,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.41,
       "moodTags": [
@@ -37186,13 +38728,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "-"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "따로",
+      "shelfLabel": "따로",
+      "shelfFullLabel": "따로",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -37272,13 +38818,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "워게임"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
@@ -37371,13 +38921,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "워게임"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.15,
       "moodTags": [
@@ -37468,13 +39022,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.36,
       "moodTags": [
@@ -37560,13 +39118,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
       "moodTags": [
@@ -37660,7 +39222,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
@@ -37746,13 +39310,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "상원님 제공"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.14,
       "moodTags": [
@@ -37842,13 +39410,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.91,
       "moodTags": [
@@ -37938,13 +39510,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.58,
       "moodTags": [
@@ -38035,13 +39611,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "1인디펜스"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.4,
       "moodTags": [
@@ -38126,13 +39706,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 1.56,
       "moodTags": [
@@ -38220,13 +39804,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.1,
       "moodTags": [
@@ -38314,13 +39902,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.07,
       "moodTags": [
@@ -38408,13 +40000,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.14,
       "moodTags": [
@@ -38503,13 +40099,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
       "moodTags": [
@@ -38597,13 +40197,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
@@ -38691,13 +40295,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.13,
       "moodTags": [
@@ -38785,13 +40393,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "SRPG",
+        "카드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -38880,13 +40493,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.28,
       "moodTags": [
@@ -38977,13 +40594,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.83,
       "moodTags": [
@@ -39071,7 +40692,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -39137,13 +40760,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포커",
+        "성장"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.5,
       "moodTags": [
@@ -39227,13 +40855,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -39309,13 +40941,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.81,
       "moodTags": [
@@ -39404,13 +41040,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드나눠먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.23,
       "moodTags": [
@@ -39498,13 +41138,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드",
+        "콤보"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.84,
       "moodTags": [
@@ -39596,13 +41241,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.55,
       "moodTags": [
@@ -39690,13 +41339,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.27,
       "moodTags": [
@@ -39785,13 +41438,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.53,
       "moodTags": [
@@ -39881,13 +41538,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.58,
       "moodTags": [
@@ -39984,7 +41645,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.84,
       "moodTags": [
@@ -40075,13 +41738,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경쟁",
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.91,
       "moodTags": [
@@ -40170,13 +41838,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "짬뽕"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.32,
       "moodTags": [
@@ -40266,13 +41938,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력",
+        "주사위"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.25,
       "moodTags": [
@@ -40369,7 +42046,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.32,
       "moodTags": [
@@ -40456,13 +42135,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.41,
       "moodTags": [
@@ -40548,13 +42231,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "롤앤라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
       "moodTags": [
@@ -40649,7 +42336,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.48,
       "moodTags": [
@@ -40737,13 +42426,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -40832,13 +42525,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.99,
       "moodTags": [
@@ -40929,13 +42626,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -41021,13 +42722,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "백빌딩",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.01,
       "moodTags": [
@@ -41122,7 +42828,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송중",
+      "shelfLabel": "배송중",
+      "shelfFullLabel": "배송중",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.54,
       "moodTags": [
@@ -41220,7 +42928,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.31,
       "moodTags": [
@@ -41307,13 +43017,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [
@@ -41399,7 +43113,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -41465,13 +43181,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
@@ -41557,13 +43277,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.63,
       "moodTags": [
@@ -41655,13 +43379,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "론델",
+        "짬뽕"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.73,
       "moodTags": [
@@ -41752,13 +43481,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "나이올리기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -41849,7 +43582,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.29,
       "moodTags": [
@@ -41931,13 +43666,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -42003,13 +43742,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션",
+        "계약달성"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.83,
       "moodTags": [
@@ -42101,13 +43845,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.94,
       "moodTags": [
@@ -42195,13 +43943,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -42288,13 +44040,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
@@ -42378,13 +44134,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.3,
       "moodTags": [
@@ -42470,13 +44230,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
       "moodTags": [
@@ -42570,7 +44334,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.45,
       "moodTags": [
@@ -42658,13 +44424,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "백빌딩",
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.02,
       "moodTags": [
@@ -42754,13 +44525,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
@@ -42846,13 +44621,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.59,
       "moodTags": [
@@ -42939,13 +44718,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "던전크롤링"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
       "moodTags": [
@@ -43029,13 +44812,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주식",
+        "홀덤"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -43123,13 +44911,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -43218,13 +45010,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "심리전",
+        "수치맞추기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
@@ -43310,13 +45107,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.3,
       "moodTags": [
@@ -43404,13 +45205,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.76,
       "moodTags": [
@@ -43498,7 +45303,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -43565,13 +45372,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.47,
       "moodTags": [
@@ -43656,13 +45467,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
       "moodTags": [
@@ -43756,7 +45571,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.98,
       "moodTags": [
@@ -43855,7 +45672,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.45,
       "moodTags": [
@@ -43940,13 +45759,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위자원"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
       "moodTags": [
@@ -44032,13 +45855,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위",
+        "컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.02,
       "moodTags": [
@@ -44121,13 +45949,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "파티"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.08,
       "moodTags": [
@@ -44213,13 +46045,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.31,
       "moodTags": [
@@ -44303,13 +46140,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "스무고개",
+        "내부자"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
@@ -44397,13 +46239,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹",
+        "마피아"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -44489,13 +46336,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
@@ -44589,7 +46440,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.23,
       "moodTags": [
@@ -44680,13 +46533,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "눈치게임"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.02,
       "moodTags": [
@@ -44770,13 +46627,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "수싸움"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
       "moodTags": [
@@ -44870,7 +46731,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.08,
       "moodTags": [
@@ -44961,13 +46824,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.51,
       "moodTags": [
@@ -45058,13 +46925,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.47,
       "moodTags": [
@@ -45156,7 +47027,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.83,
       "moodTags": [
@@ -45248,13 +47121,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.13,
       "moodTags": [
@@ -45340,13 +47217,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
@@ -45434,13 +47315,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "디펜스"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.07,
       "moodTags": [
@@ -45539,7 +47424,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
       "moodTags": [
@@ -45633,7 +47520,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
       "moodTags": [
@@ -45715,13 +47604,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "빼기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -45800,13 +47693,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "핵앤슬래시"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.84,
       "moodTags": [
@@ -45892,13 +47789,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "고스톱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
@@ -45979,13 +47880,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -46058,7 +47963,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
       "moodTags": [
@@ -46144,13 +48051,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹",
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [
@@ -46235,13 +48147,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협상",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.24,
       "moodTags": [
@@ -46329,13 +48246,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위눈금",
+        "심리전"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
@@ -46418,13 +48340,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "생존"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.15,
       "moodTags": [
@@ -46513,13 +48439,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상전략"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.65,
       "moodTags": [
@@ -46610,13 +48540,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "자원치환"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.67,
       "moodTags": [
@@ -46705,13 +48640,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
@@ -46797,13 +48736,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.59,
       "moodTags": [
@@ -46889,13 +48832,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -46982,13 +48929,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.81,
       "moodTags": [
@@ -47080,13 +49031,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.85,
       "moodTags": [
@@ -47180,7 +49135,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.51,
       "moodTags": [
@@ -47268,13 +49225,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
@@ -47361,13 +49322,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "농사"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.78,
       "moodTags": [
@@ -47459,13 +49425,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.55,
       "moodTags": [
@@ -47560,7 +49530,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.28,
       "moodTags": [
@@ -47643,13 +49615,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.93,
       "moodTags": [
@@ -47734,13 +49710,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위땅따먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
       "moodTags": [
@@ -47824,13 +49804,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력",
+        "점령"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
@@ -47921,7 +49906,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.01,
       "moodTags": [
@@ -48009,13 +49996,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.85,
       "moodTags": [
@@ -48103,13 +50094,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "카드드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
       "moodTags": [
@@ -48198,13 +50193,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.18,
       "moodTags": [
@@ -48294,13 +50293,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "21만들기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
@@ -48388,13 +50391,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.5,
       "moodTags": [
@@ -48481,13 +50488,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주문서달성"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.82,
       "moodTags": [
@@ -48574,13 +50585,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "같은색모으기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.27,
       "moodTags": [
@@ -48674,7 +50689,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.86,
       "moodTags": [
@@ -48765,13 +50782,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기",
+        "셋컬"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.76,
       "moodTags": [
@@ -48855,13 +50877,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "단어연상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "beginner",
       "difficultyWeight": 1.35,
       "moodTags": [
@@ -48947,13 +50973,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.89,
       "moodTags": [
@@ -49046,7 +51076,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
@@ -49137,13 +51169,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -49231,13 +51267,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -49323,13 +51363,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -49418,7 +51462,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.3,
       "moodTags": [
@@ -49504,13 +51550,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "길막기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.81,
       "moodTags": [
@@ -49597,13 +51647,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "프로그래밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
       "moodTags": [
@@ -49688,13 +51742,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "패턴빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
       "moodTags": [
@@ -49782,13 +51840,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
@@ -49876,13 +51938,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위빌딩",
+        "레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.19,
       "moodTags": [
@@ -49967,13 +52034,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.4,
       "moodTags": [
@@ -50059,13 +52130,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "만칼라",
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.46,
       "moodTags": [
@@ -50157,7 +52233,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.79,
       "moodTags": [
@@ -50248,13 +52326,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "백빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.94,
       "moodTags": [
@@ -50338,13 +52420,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "에어하키"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
@@ -50427,13 +52513,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "땅따먹기",
+        "계약서달성"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.46,
       "moodTags": [
@@ -50521,13 +52612,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩어드벤처"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.22,
       "moodTags": [
@@ -50613,13 +52708,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩",
+        "루팅"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.5,
       "moodTags": [
@@ -50705,13 +52805,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "자석피하기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.01,
       "moodTags": [
@@ -50791,13 +52895,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -50890,7 +52998,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.98,
       "moodTags": [
@@ -50982,13 +53092,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타이쿤"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.18,
       "moodTags": [
@@ -51073,13 +53187,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위족보"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -51162,13 +53280,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.23,
       "moodTags": [
@@ -51253,13 +53375,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.34,
       "moodTags": [
@@ -51347,13 +53473,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "던전크롤링"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.08,
       "moodTags": [
@@ -51445,13 +53575,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
@@ -51537,13 +53671,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -51613,13 +53751,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -51685,13 +53827,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -51751,13 +53897,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -51823,13 +53973,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩",
+        "레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [
@@ -51915,13 +54070,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "테크트리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.13,
       "moodTags": [
@@ -52010,13 +54169,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
@@ -52105,13 +54268,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.26,
       "moodTags": [
@@ -52200,13 +54367,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위자원",
+        "엔진빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.37,
       "moodTags": [
@@ -52301,7 +54473,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.77,
       "moodTags": [
@@ -52399,7 +54573,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.07,
       "moodTags": [
@@ -52484,13 +54660,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "작은"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -52569,13 +54749,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.63,
       "moodTags": [
@@ -52666,13 +54850,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위일꾼",
+        "점수달성"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.46,
       "moodTags": [
@@ -52766,7 +54955,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.26,
       "moodTags": [
@@ -52858,13 +55049,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "비대칭",
+        "트릭테이킹"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.82,
       "moodTags": [
@@ -52952,13 +55148,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "팀클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -53044,13 +55244,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션포인트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
@@ -53139,13 +55343,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -53233,13 +55441,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경마",
+        "순서조절"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.29,
       "moodTags": [
@@ -53325,13 +55538,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위론델"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.41,
       "moodTags": [
@@ -53423,13 +55640,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "프로그래밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.91,
       "moodTags": [
@@ -53520,13 +55741,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "던전크롤링"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송예정",
+      "shelfLabel": "배송예정",
+      "shelfFullLabel": "배송예정",
       "difficultyId": "light_family",
       "difficultyWeight": 2.43,
       "moodTags": [
@@ -53620,7 +55845,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.85,
       "moodTags": [
@@ -53712,13 +55939,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "1인",
+        "디펜스"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.08,
       "moodTags": [
@@ -53806,13 +56038,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "족보모으기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.81,
       "moodTags": [
@@ -53904,13 +56140,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "생존"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.63,
       "moodTags": [
@@ -53998,13 +56238,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.6,
       "moodTags": [
@@ -54091,13 +56335,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "디펜스"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.4,
       "moodTags": [
@@ -54190,7 +56438,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
       "moodTags": [
@@ -54276,13 +56526,19 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "철도",
+        "콤보",
+        "카드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.8,
       "moodTags": [
@@ -54376,7 +56632,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.35,
       "moodTags": [
@@ -54469,7 +56727,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.08,
       "moodTags": [
@@ -54557,13 +56817,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "운",
+        "카드획득"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -54650,13 +56915,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "벌점덜먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -54742,13 +57011,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "전시",
+      "shelfLabel": "전시",
+      "shelfFullLabel": "전시",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -54820,13 +57093,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "점수모으기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.4,
       "moodTags": [
@@ -54913,13 +57191,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "폭탄돌리기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -55004,13 +57286,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "포인트샐러드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.21,
       "moodTags": [
@@ -55104,7 +57390,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
@@ -55193,13 +57481,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
       "moodTags": [
@@ -55285,13 +57577,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "구슬콤보"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
       "moodTags": [
@@ -55378,13 +57674,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
@@ -55465,13 +57765,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -55552,13 +57856,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "푸시유어럭"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.61,
       "moodTags": [
@@ -55651,13 +57959,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "기억력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -55744,7 +58056,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -55824,13 +58138,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "액션드래프트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.25,
       "moodTags": [
@@ -55921,13 +58239,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "보스레이드"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "배송예정",
+      "shelfLabel": "배송예정",
+      "shelfFullLabel": "배송예정",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.84,
       "moodTags": [
@@ -56020,13 +58342,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매",
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.64,
       "moodTags": [
@@ -56116,13 +58443,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "퍼즐"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.56,
       "moodTags": [
@@ -56212,13 +58543,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "플립앤라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
       "moodTags": [
@@ -56304,13 +58639,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.24,
       "moodTags": [
@@ -56401,13 +58740,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.08,
       "moodTags": [
@@ -56501,7 +58844,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
@@ -56591,7 +58936,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
       "moodTags": [
@@ -56678,13 +59025,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "협력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.07,
       "moodTags": [
@@ -56774,13 +59125,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "셋컬렉션"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.21,
       "moodTags": [
@@ -56868,13 +59223,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "롤앤라이트"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.15,
       "moodTags": [
@@ -56964,13 +59323,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "타일놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.01,
       "moodTags": [
@@ -57056,13 +59419,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.31,
       "moodTags": [
@@ -57149,13 +59516,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "경매"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.48,
       "moodTags": [
@@ -57242,13 +59613,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.54,
       "moodTags": [
@@ -57336,13 +59711,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.95,
       "moodTags": [
@@ -57433,13 +59812,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.3,
       "moodTags": [
@@ -57529,13 +59912,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -57624,7 +60011,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.1,
       "moodTags": [
@@ -57710,13 +60099,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "1인"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -57798,13 +60191,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "클라이밍"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.11,
       "moodTags": [
@@ -57900,7 +60297,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.7,
       "moodTags": [
@@ -57984,13 +60383,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "순발력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -58063,13 +60466,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "일꾼놓기",
+        "목표달성"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.56,
       "moodTags": [
@@ -58159,13 +60567,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추리"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.42,
       "moodTags": [
@@ -58247,13 +60659,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "방탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "방탈출",
+      "shelfLabel": "방탈출",
+      "shelfFullLabel": "방탈출",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -58325,7 +60741,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.2,
       "moodTags": [
@@ -58418,13 +60836,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "땅따먹기"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.26,
       "moodTags": [
@@ -58523,7 +60945,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.49,
       "moodTags": [
@@ -58610,13 +61034,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "덱빌딩레이싱"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.94,
       "moodTags": [
@@ -58704,13 +61132,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "추상전략",
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.07,
       "moodTags": [
@@ -58796,13 +61229,17 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "영향력"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.61,
       "moodTags": [
@@ -58893,13 +61330,18 @@
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
-      "mechanics": [],
+      "mechanics": [
+        "주사위비교",
+        "탈출"
+      ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.17,
       "moodTags": [
@@ -58991,7 +61433,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.04,
       "moodTags": [
@@ -59079,7 +61523,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "구매예정",
+      "shelfLabel": "구매예정",
+      "shelfFullLabel": "구매예정",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -59152,7 +61598,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
+      "shelfGroupId": "x",
+      "shelfLabel": "x",
+      "shelfFullLabel": "x",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [
@@ -59210,4 +61658,8 @@
       "boardId": "테베"
     }
   }
+};
+
+if (typeof window !== "undefined") {
+  window.gameData = gameData;
 }
