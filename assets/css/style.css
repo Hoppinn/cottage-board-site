@@ -1637,30 +1637,29 @@ body.sheet-open{
   box-shadow:none !important;
 }
 
-/* 튜닝 포인트: 정렬 한 줄 */
+/* 튜닝 포인트: 정렬 한 줄 — 세로 배치 */
 .owned-sort-line{
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:8px;
+  gap:4px;
   margin:0;
   padding:0 !important;
 }
 
 /* 튜닝 포인트: 정렬 제목 */
 .owned-sort-title{
-  flex:0 0 auto;
   color:#314d35;
-  font-size:14px;
+  font-size:13px;
   font-weight:900;
   white-space:nowrap;
 }
 
-/* 정렬 버튼 3개 묶음 */
+/* 정렬 버튼 + 🛡️ 묶음 */
 .owned-sort-compact{
   display:flex !important;
   align-items:center;
-  gap:8px;
+  gap:6px;
 }
 
 /* 실제 select는 투명 처리, label이 보이는 버튼 역할 */
@@ -1716,21 +1715,20 @@ body.sheet-open{
   background:repeating-linear-gradient(to right,rgba(190,170,135,0.35) 0 6px,transparent 6px 12px);
 }
 
-/* 튜닝 포인트: 필터 한 줄 */
+/* 튜닝 포인트: 필터 한 줄 — 세로 배치 */
 .owned-filter-line{
   display:flex !important;
-  align-items:flex-start;
-  justify-content:center;
-  gap:8px;
+  flex-direction:column;
+  align-items:stretch;
+  gap:4px;
   padding-top:0;
 }
 
 /* 튜닝 포인트: 필터 제목 */
 .owned-filter-title{
-  flex:0 0 auto;
-  padding-top:4px;
+  text-align:center;
   color:#314d35;
-  font-size:14px;
+  font-size:13px;
   font-weight:900;
   white-space:nowrap;
 }
@@ -1739,23 +1737,28 @@ body.sheet-open{
 .owned-filter-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:5px;
-  flex:1 1 auto;
+  gap:4px;
   align-items:center;
 }
 
-/* 난이도 제한 토글 — OFF 기본 (검색바 내 인라인 버튼) */
+/* 난이도 제한 토글 — OFF 기본 (sort-compact 내 소형 2줄 버튼) */
 .owned-weight-cap-btn{
   flex:0 0 auto;
-  height:42px;
-  padding:0 10px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:38px;
+  height:22px;
+  padding:1px 5px;
   border:1.5px solid #d0b8b8;
-  border-radius:999px;
+  border-radius:8px;
   background:#f7eded;
   color:#a06060;
-  font-size:11px;
+  font-size:8px;
   font-weight:900;
-  white-space:nowrap;
+  white-space:pre-line;
+  line-height:1.2;
+  text-align:center;
   cursor:pointer;
   letter-spacing:-0.2px;
 }
@@ -1778,12 +1781,12 @@ body.sheet-open{
   display:block !important;
   width:100%;
   height:22px;
-  padding:0 8px;
+  padding:0 5px;
   border:1px solid #dccdb3;
   border-radius:999px;
   background:#fffdf8;
   color:#4f463c;
-  font-size:11px;
+  font-size:10.5px;
   font-weight:700;
   text-align:left;
   text-align-last:auto;

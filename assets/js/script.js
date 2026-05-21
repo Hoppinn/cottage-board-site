@@ -750,7 +750,7 @@ if (weight > maxWeight) {
             </div>
 
             ${card.tags?.length
-              ? `<p class="game-card-description">${card.tags.slice(0, 3).join(" · ")}</p>`
+              ? `<p class="game-card-description">${card.tags.slice(0, 3).map(t => `#${t}`).join(" ")}</p>`
               : ""}
 
           </button>
@@ -2434,8 +2434,8 @@ if(ownedWeightCapToggle){
     const on = ownedPageState.weightCap;
     ownedWeightCapToggle.classList.toggle("is-on", on);
     ownedWeightCapToggle.textContent = on
-      ? "🛡️ 난이도 제한 ON"
-      : "🛡️✕ 난이도 제한 OFF";
+      ? "🛡️\n제한ON"
+      : "🛡️✕\n제한OFF";
     ownedPageState.page = 1;
     updateOwnedGames();
   });
@@ -2690,7 +2690,7 @@ if(ownedSearchInput){
     const btn = document.getElementById("ownedWeightCapToggle");
     if(btn){
       btn.classList.add("is-on");
-      btn.textContent = "🛡️ 난이도 제한 ON";
+      btn.textContent = "🛡️\n제한ON";
     }
   }
 
