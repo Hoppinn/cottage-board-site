@@ -1744,7 +1744,12 @@ body.sheet-open{
   align-items:center;
 }
 
-/* 난이도 제한 토글 — OFF 기본 (sort-compact 내 소형 2줄 버튼) */
+/* 정렬 라인 내 버튼은 오른쪽 끝 */
+.owned-sort-line .owned-weight-cap-btn{
+  margin-left:auto;
+}
+
+/* 난이도 제한 토글 — OFF 기본 (sort-line 내 소형 2줄 버튼) */
 .owned-weight-cap-btn{
   flex:0 0 auto;
   display:inline-flex;
