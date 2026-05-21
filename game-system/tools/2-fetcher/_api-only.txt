@@ -1,0 +1,1 @@
+2-fetcher/a_ 파일은 BGG API 승인 이후에만 실행할 것.
