@@ -1510,6 +1510,19 @@ body.sheet-open{
   opacity:0.35;
 }
 
+.pagination-ellipsis{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:24px;
+  height:38px;
+  color:#a09070;
+  font-size:14px;
+  font-weight:700;
+  pointer-events:none;
+  user-select:none;
+}
+
 /* =========================
    # 8. OWNED SEARCH + SORT/FILTER TOOLBAR
 ========================= */

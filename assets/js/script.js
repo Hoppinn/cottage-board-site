@@ -2133,48 +2133,36 @@ function renderOwnedPagination(totalPages){
     return;
   }
 
-  const safeTotalPages =
-    Math.max(totalPages, 1);
+  const cur   = ownedPageState.page;
+  const total = Math.max(totalPages, 1);
+
+  const btn = (page, label) =>
+    `<button type="button" class="${page === cur ? "is-active" : ""}" data-page="${page}">${label ?? page}</button>`;
+  const ellipsis =
+    `<span class="pagination-ellipsis">…</span>`;
 
   let html = "";
 
-  html += `
-    <button
-      type="button"
-      ${ownedPageState.page === 1 ? "disabled" : ""}
-      data-page-action="prev"
-    >
-      이전
-    </button>
-  `;
+  html += `<button type="button" ${cur === 1 ? "disabled" : ""} data-page-action="prev">이전</button>`;
 
-  for(let i = 1; i <= safeTotalPages; i++){
-    if(
-      i === 1 ||
-      i === safeTotalPages ||
-      Math.abs(i - ownedPageState.page) <= 2
-    ){
-      html += `
-        <button
-          type="button"
-          class="${i === ownedPageState.page ? "is-active" : ""}"
-          data-page="${i}"
-        >
-          ${i}
-        </button>
-      `;
-    }
+  // 첫 페이지
+  html += btn(1);
+
+  const winStart = Math.max(2, cur - 2);
+  const winEnd   = Math.min(total - 1, cur + 2);
+
+  if(winStart > 2)  html += ellipsis;
+
+  for(let i = winStart; i <= winEnd; i++){
+    html += btn(i);
   }
 
-  html += `
-    <button
-      type="button"
-      ${ownedPageState.page === safeTotalPages ? "disabled" : ""}
-      data-page-action="next"
-    >
-      다음
-    </button>
-  `;
+  if(winEnd < total - 1) html += ellipsis;
+
+  // 마지막 페이지 (total > 1 일 때만)
+  if(total > 1) html += btn(total);
+
+  html += `<button type="button" ${cur === total ? "disabled" : ""} data-page-action="next">다음</button>`;
 
   ownedPagination.innerHTML = html;
 }
