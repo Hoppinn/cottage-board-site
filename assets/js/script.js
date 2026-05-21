@@ -749,9 +749,11 @@ if (weight > maxWeight) {
 
             </div>
 
-            <p class="game-card-description">
-              ${(getGameDescription(game) || "").slice(0, 16)}...
-            </p>
+            ${(()=>{
+              const desc = getGameDescription(game) || "";
+              if(!desc) return "";
+              return `<p class="game-card-description">${desc.slice(0, 100)}${desc.length > 100 ? "..." : ""}</p>`;
+            })()}
 
           </button>
         `;
