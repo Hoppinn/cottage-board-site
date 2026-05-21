@@ -1,19 +1,19 @@
 const fs = require("fs");
 
 const {
-  readText,
   readJson,
   writeJson,
 } = require("../_core/file-read-writer");
 
 const {
-  COTTAGE_OWNED_GAMES_TSV_PATH,
   BGG_MATCH_MAP_PATH,
   BGG_GAME_DETAILS_PATH,
   COTTAGE_GAMES_DATA_JS_PATH,
   COTTAGE_GAMES_DATA_JSON_PATH,
   COTTAGE_OWNED_GAMES_XLSX_PATH,
 } = require("../_core/paths");
+
+const { readXlsxNormalized } = require("../0-input/from-file/import-from-xlsx");
 
 const {
   mergeCottageTags,
@@ -23,42 +23,6 @@ const {
   getShelfGroupBySourceValue,
   getShelfGroupDisplay,
 } = require("../../config/shelf-locations");
-
-function parseTsv(text) {
-  const lines = text
-    .split(/\r?\n/)
-    .map((line) => line.trimEnd())
-    .filter(Boolean);
-
-  const headerIndex = lines.findIndex((line) =>
-    line
-      .split("\t")
-      .some((cell) => cell.trim() === "보유게임명")
-  );
-
-  if (headerIndex === -1) {
-    throw new Error(
-      "TSV에서 '보유게임명' 헤더를 찾지 못했습니다."
-    );
-  }
-
-  const headers = lines[headerIndex]
-    .split("\t")
-    .map((h) => h.trim());
-
-  return lines
-    .slice(headerIndex + 1)
-    .map((line) => {
-      const values = line.split("\t");
-      const row = {};
-
-      headers.forEach((header, index) => {
-        row[header] = values[index] || "";
-      });
-
-      return row;
-    });
-}
 
 function getValue(row, keys, fallback = "") {
   for (const key of keys) {
@@ -75,6 +39,7 @@ function getValue(row, keys, fallback = "") {
 
 function getGameName(row) {
   return getValue(row, [
+    "ownedName",
     "보유게임명",
     "name_kr",
     "korean_name",
@@ -567,28 +532,12 @@ const rawGame = buildRawGameItem(
   return mergeCottageTags(rawGame);
 }
 
-function buildCottageGameData() {
-  const ownedRows = parseTsv(
-    readText(
-      COTTAGE_OWNED_GAMES_TSV_PATH
-    )
-  );
+async function buildCottageGameData() {
+  const { normalized: ownedGamesNormalized, rows: ownedRows } =
+    await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
 
-  const matchResult = readJson(
-    BGG_MATCH_MAP_PATH,
-    {}
-  );
-
-  const detailsCache = readJson(
-    BGG_GAME_DETAILS_PATH,
-    {}
-  );
-
-
-  const ownedGamesNormalized = readJson(
-  COTTAGE_OWNED_GAMES_XLSX_PATH,
-  {}
-);
+  const matchResult = readJson(BGG_MATCH_MAP_PATH, {});
+  const detailsCache = readJson(BGG_GAME_DETAILS_PATH, {});
 
   const gameData = {};
 
@@ -599,13 +548,7 @@ function buildCottageGameData() {
       return;
     }
 
-const item = buildGameItem(
-  row,
-  matchResult,
-  detailsCache,
-  ownedGamesNormalized
-);
-
+    const item = buildGameItem(row, matchResult, detailsCache, ownedGamesNormalized);
     gameData[item.id] = item;
   });
 
@@ -651,5 +594,8 @@ module.exports = {
 };
 
 if (require.main === module) {
-  buildCottageGameData();
+  buildCottageGameData().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 }

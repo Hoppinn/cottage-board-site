@@ -1,44 +1,18 @@
-const { readText, readJson, writeJson } = require("../_core/file-read-writer");
+const { readJson, writeJson } = require("../_core/file-read-writer");
 const {
-  COTTAGE_OWNED_GAMES_TSV_PATH,
+  COTTAGE_OWNED_GAMES_XLSX_PATH,
   FORCED_BGG_OVERRIDES_PATH,
   BGG_MATCH_MAP_PATH,
 } = require("../_core/paths");
 
+const { readXlsxNormalized } = require("../0-input/from-file/import-from-xlsx");
 const { generateNameCandidates } = require("./1-korean-to-english-title");
 const { searchBggCandidates } = require("./2b-search-bgg-csv-by-title");
 const { scoreBggCandidates } = require("./3-score-and-pick-best-title");
 
-function parseTsv(text) {
-  const lines = text
-    .split(/\r?\n/)
-    .map((line) => line.trimEnd())
-    .filter(Boolean);
-
-  const headerIndex = lines.findIndex((line) => {
-    return line.split("\t").some((cell) => cell.trim() === "보유게임명");
-  });
-
-  if (headerIndex === -1) {
-    throw new Error("TSV에서 '보유게임명' 헤더를 찾지 못했습니다.");
-  }
-
-  const headers = lines[headerIndex].split("\t").map((h) => h.trim());
-
-  return lines.slice(headerIndex + 1).map((line) => {
-    const values = line.split("\t");
-    const row = {};
-
-    headers.forEach((header, index) => {
-      row[header] = values[index] || "";
-    });
-
-    return row;
-  });
-}
-
 function getGameName(row) {
   return (
+    row.ownedName ||
     row["보유게임명"] ||
     row.name_kr ||
     row.korean_name ||
@@ -68,7 +42,7 @@ function simplifyCandidate(candidate) {
 }
 
 async function autoResolveBggMatches() {
-  const ownedRows = parseTsv(readText(COTTAGE_OWNED_GAMES_TSV_PATH));
+  const { rows: ownedRows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
   const overrides = readJson(FORCED_BGG_OVERRIDES_PATH, {});
 
   const result = {};

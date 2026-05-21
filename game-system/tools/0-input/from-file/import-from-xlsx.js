@@ -320,6 +320,41 @@ function extractRow(row, headerMap) {
   };
 }
 
+async function readXlsxNormalized(inputPath) {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(inputPath);
+
+  const worksheet =
+    workbook.getWorksheet("보유게임리스트") ||
+    workbook.worksheets[0];
+
+  if (!worksheet) {
+    throw new Error(
+      "XLSX 안에서 읽을 수 있는 시트를 찾지 못했습니다."
+    );
+  }
+
+  const headerRowNumber = findHeaderRow(worksheet);
+  const headerMap = buildHeaderMap(worksheet, headerRowNumber);
+
+  const normalized = {};
+  const rows = [];
+
+  for (
+    let rowNumber = headerRowNumber + 1;
+    rowNumber <= worksheet.rowCount;
+    rowNumber++
+  ) {
+    const row = worksheet.getRow(rowNumber);
+    const item = extractRow(row, headerMap);
+    if (!item) continue;
+    normalized[item.ownedName] = item;
+    rows.push(item);
+  }
+
+  return { normalized, rows };
+}
+
 async function convertOwnedXlsx() {
   const inputPath =
     process.argv[2]
@@ -454,4 +489,5 @@ if (require.main === module) {
 
 module.exports = {
   convertOwnedXlsx,
+  readXlsxNormalized,
 };
