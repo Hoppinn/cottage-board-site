@@ -2476,12 +2476,6 @@ document
           Number(pageButton.dataset.page);
 
         updateOwnedGames();
-
-        window.scrollTo({
-          top:0,
-          behavior:"smooth"
-        });
-
         return;
       }
 
