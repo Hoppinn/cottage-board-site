@@ -1364,6 +1364,36 @@ body.sheet-open{
 }
 
 /* =========================
+   # 6-A. SITE FOOTER
+========================= */
+
+.site-footer{
+  background:#e8dfc8;
+  border-top:1px solid #d8ccb0;
+  padding:20px var(--page-x) calc(20px + var(--safe-bottom));
+  text-align:center;
+}
+
+.site-footer p{
+  margin:0;
+  color:#7a6848;
+  font-size:12px;
+  font-weight:500;
+  line-height:1.8;
+}
+
+.site-footer .footer-name{
+  font-weight:700;
+  color:#5a4a30;
+}
+
+@media(max-width:480px){
+  .site-footer p{
+    font-size:11px;
+  }
+}
+
+/* =========================
    # 6-B. INNER PAGES (이용안내, 문의하기)
 ========================= */
 
