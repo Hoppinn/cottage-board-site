@@ -1609,6 +1609,7 @@ body.sheet-open{
 /* 정렬/필터 접힘 영역 */
 .owned-toolbar{
   max-width:720px !important;
+  max-height:180px;
   margin:0 auto 8px !important;
   padding:0 !important;
   display:block !important;
@@ -1718,7 +1719,7 @@ body.sheet-open{
 /* 튜닝 포인트: 필터 한 줄 */
 .owned-filter-line{
   display:flex !important;
-  align-items:center;
+  align-items:flex-start;
   justify-content:center;
   gap:8px;
   padding-top:0;
@@ -1727,18 +1728,25 @@ body.sheet-open{
 /* 튜닝 포인트: 필터 제목 */
 .owned-filter-title{
   flex:0 0 auto;
+  padding-top:4px;
   color:#314d35;
   font-size:14px;
   font-weight:900;
   white-space:nowrap;
 }
 
-/* 튜닝 포인트: 체감난이도 / 게임유형 select */
+/* 2x2 필터 그리드 */
+.owned-filter-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  flex:1 1 auto;
+}
+
+/* 튜닝 포인트: 필터 select */
 .owned-filter-line select{
   display:block !important;
-  flex:0 1 auto;
-  min-width:92px;
-  max-width:108px;
+  width:100%;
   height:22px;
   padding:0 8px;
   border:1px solid #dccdb3;

@@ -758,8 +758,14 @@ if (weight > maxWeight) {
       })
       .join("");
 
+  const moreParams = new URLSearchParams();
+  if(recommendState.players) moreParams.set("players", recommendState.players);
+  if(recommendState.level)   moreParams.set("level",   recommendState.level);
+  if(recommendState.mood)    moreParams.set("mood",     recommendState.mood);
+  const moreQuery = moreParams.toString() ? `?${moreParams.toString()}` : "";
+
   const moreHtml = hasMore
-    ? `<a class="game-card-more" href="./owned-games.html">전체 ${filteredGames.length}개<br>더보기 →</a>`
+    ? `<a class="game-card-more" href="./owned-games.html${moreQuery}">전체 ${filteredGames.length}개<br>더보기 →</a>`
     : "";
 
   gameScroll.innerHTML = cardsHtml + moreHtml;
@@ -1773,7 +1779,9 @@ const ownedPageState = {
 
   activeSortKeys: ["title"],
 
+  playerFilter: "",
   difficultyFilter: "",
+  moodFilter: "",
   mechanicFilter: "",
 
   search: ""
@@ -1783,6 +1791,14 @@ const ownedPageState = {
 /* =========================
    # OWNED FILTER
 ========================= */
+
+function matchOwnedPlayer(game){
+  return matchRecommendPlayer(game, ownedPageState.playerFilter);
+}
+
+function matchOwnedMood(game){
+  return matchRecommendMood(game, ownedPageState.moodFilter);
+}
 
 function matchOwnedDifficulty(game){
   const filter =
@@ -2083,7 +2099,9 @@ function getOwnedFilteredGames(){
 
       return hasOwnedDifficultyWeight(game);
     })
+    .filter(matchOwnedPlayer)
     .filter(matchOwnedDifficulty)
+    .filter(matchOwnedMood)
     .filter(matchOwnedMechanic)
     .filter(matchOwnedSearch);
 }
@@ -2354,6 +2372,14 @@ document
     });
   });
 
+document
+  .getElementById("ownedPlayerFilter")
+  ?.addEventListener("change", (event) => {
+    ownedPageState.playerFilter = event.target.value || "";
+    ownedPageState.page = 1;
+    updateOwnedGames();
+  });
+
 const ownedDifficultyFilter =
   document.getElementById("ownedDifficultyFilter");
 
@@ -2371,6 +2397,14 @@ if (ownedDifficultyFilter) {
   updateOwnedGames();
 });
 }
+
+document
+  .getElementById("ownedMoodFilter")
+  ?.addEventListener("change", (event) => {
+    ownedPageState.moodFilter = event.target.value || "";
+    ownedPageState.page = 1;
+    updateOwnedGames();
+  });
 
 
 
@@ -2582,6 +2616,28 @@ if(ownedSearchInput){
 
   ownedPageState.search =
     searchKeyword;
+
+  const urlPlayers = params.get("players") || "";
+  const urlLevel   = params.get("level")   || "";
+  const urlMood    = params.get("mood")     || "";
+
+  if(urlPlayers){
+    ownedPageState.playerFilter = urlPlayers;
+    const sel = document.getElementById("ownedPlayerFilter");
+    if(sel) sel.value = urlPlayers;
+  }
+
+  if(urlLevel){
+    ownedPageState.difficultyFilter = urlLevel;
+    const sel = document.getElementById("ownedDifficultyFilter");
+    if(sel) sel.value = urlLevel;
+  }
+
+  if(urlMood){
+    ownedPageState.moodFilter = urlMood;
+    const sel = document.getElementById("ownedMoodFilter");
+    if(sel) sel.value = urlMood;
+  }
 
   ownedSearchInput.addEventListener("input", (event)=>{
     ownedPageState.search =
