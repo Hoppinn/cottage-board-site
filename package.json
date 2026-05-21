@@ -1,10 +1,11 @@
 {
   "scripts": {
-    "build": "node game-system/tools/build/build-cottage-game-data.js",
-    "convert": "node game-system/tools/convert-bgg.js",
-    "convert:xlsx": "node game-system/tools/source/convert-owned-xlsx.js",
-    "match:auto": "node game-system/tools/match/auto-resolve-bgg-matches.js",
-    "fetch:bgg": "node game-system/tools/fetch/fetch-bgg-details.js"
+    "build": "node game-system/tools/4-build-output/build-output.js",
+    "match:local": "node game-system/tools/1-matcher/b_run-local-match.js",
+    "match:api": "node game-system/tools/1-matcher/a_run-api-match.js",
+    "fetch:bgg": "node game-system/tools/2-fetcher/a_fetch-bgg-game-data-by-id.js",
+    "import:xlsx": "node game-system/tools/0-input/from-file/import-from-xlsx.js",
+    "add": "node game-system/tools/0-input/from-name/add-owned-game.js"
   },
   "dependencies": {
     "exceljs": "^4.4.0"
