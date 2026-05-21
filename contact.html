@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문의하기 | 코티지보드</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+
+    <a class="header-logo" href="./index.html">
+      <img src="./assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+
+    <a class="header-center" href="./index.html">
+      오래 머무르고 싶은, 보드게임 공간
+    </a>
+
+    <div class="header-actions">
+      <button
+        class="header-search"
+        id="headerSearchButton"
+        type="button"
+        aria-label="게임 검색 열기"
+      >🔍</button>
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="메뉴 열기"
+      >☰</button>
+    </div>
+
+    <nav class="header-menu" id="mobileMenu">
+      <a href="./index.html#recommend">추천 게임 찾기</a>
+      <a href="./owned-games.html">전체 게임 보기</a>
+      <a href="./store-usage-guide.html">매장 이용 안내</a>
+      <a href="./contact.html">문의하기</a>
+    </nav>
+
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input
+        id="headerSearchInput"
+        type="search"
+        placeholder="게임명을 입력하세요"
+      >
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+
+  </header>
+
+  <main>
+    <section class="inner-page">
+      <h1>문의하기</h1>
+      <div class="inner-page-body">
+        <div class="inner-page-coming-soon">
+          곧 안내 드릴게요 💬
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./game-system/config/bgg-label-map.js"></script>
+  <script src="./game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="./assets/js/game-display-adapter.js"></script>
+  <script src="./assets/js/script.js"></script>
+</body>
+</html>

@@ -1364,6 +1364,37 @@ body.sheet-open{
 }
 
 /* =========================
+   # 6-B. INNER PAGES (이용안내, 문의하기)
+========================= */
+
+.inner-page{
+  min-height:100svh;
+  padding:calc(var(--header-h) + 28px) 18px 60px;
+  background:var(--bg);
+}
+
+.inner-page h1{
+  max-width:720px;
+  margin:0 auto 28px !important;
+  color:#314d35;
+  font-size:32px;
+  font-weight:900;
+}
+
+.inner-page-body{
+  max-width:720px;
+  margin:0 auto;
+}
+
+.inner-page-coming-soon{
+  padding:64px 0;
+  text-align:center;
+  color:#b0a080;
+  font-size:17px;
+  font-weight:700;
+}
+
+/* =========================
    # 7. OWNED GAMES PAGE
 ========================= */
 
