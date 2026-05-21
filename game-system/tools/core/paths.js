@@ -72,18 +72,8 @@ const TAG_UTILS_PATH = path.join(
 );
 
 const AUTO_TAG_RULES_PATH = path.join(
-  GAME_CONFIG_DIR,
-  "auto-tag-rules.js"
-);
-
-const GAME_STATUS_PATH = path.join(
-  GAME_CONFIG_DIR,
-  "game-status.js"
-);
-
-const UI_CONFIG_PATH = path.join(
-  GAME_CONFIG_DIR,
-  "ui-config.js"
+  GAME_DATA_TOOLS_DIR,
+  "tagging/auto-tag-rules.js"
 );
 
 /* =========================
@@ -183,22 +173,19 @@ const COTTAGE_OWNED_GAMES_MASTER_PATH = path.join(
   "cottage-owned-games-master.json"
 );
 
-const OWNED_FINAL_DIR = path.join(
-  OWNED_DIR,
-  "final"
-);
+const LIBRARY_GAMES_DIR = path.join(LIBRARY_DIR, "games");
 const LIBRARY_MANUAL_DIR = path.join(LIBRARY_DIR, "manual");
 const LIBRARY_IMAGES_DIR = path.join(LIBRARY_DIR, "images");
 const LIBRARY_IMAGES_THUMB_DIR = path.join(LIBRARY_IMAGES_DIR, "thumb");
 const LIBRARY_IMAGES_DETAIL_DIR = path.join(LIBRARY_IMAGES_DIR, "detail");
 
 const COTTAGE_GAMES_DATA_JSON_PATH = path.join(
-  OWNED_FINAL_DIR,
+  LIBRARY_GAMES_DIR,
   "cottage-games-data.json"
 );
 
 const COTTAGE_GAMES_DATA_JS_PATH = path.join(
-  OWNED_FINAL_DIR,
+  LIBRARY_GAMES_DIR,
   "cottage-games-data.js"
 );
 
@@ -263,8 +250,6 @@ module.exports = {
   RELATIONSHIP_TAGS_PATH,
   TAG_UTILS_PATH,
   AUTO_TAG_RULES_PATH,
-  GAME_STATUS_PATH,
-  UI_CONFIG_PATH,
 
   GAME_DATA_DIR,
   SOURCE_DIR,
@@ -291,7 +276,7 @@ COTTAGE_OWNED_GAMES_MASTER_PATH,
   OWNED_LEDGER_DIR,
   COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH,
   OWNED_MASTER_DIR,
-  OWNED_FINAL_DIR,
+  LIBRARY_GAMES_DIR,
   LIBRARY_MANUAL_DIR,
   LIBRARY_IMAGES_DIR,
   LIBRARY_IMAGES_THUMB_DIR,
