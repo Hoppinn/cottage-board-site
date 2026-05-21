@@ -1783,6 +1783,7 @@ const ownedPageState = {
   difficultyFilter: "",
   moodFilter: "",
   mechanicFilter: "",
+  weightCap: false,
 
   search: ""
 };
@@ -1798,6 +1799,14 @@ function matchOwnedPlayer(game){
 
 function matchOwnedMood(game){
   return matchRecommendMood(game, ownedPageState.moodFilter);
+}
+
+function matchOwnedWeightCap(game){
+  if(!ownedPageState.weightCap) return true;
+  const detail = GameView.getGameDetailData(game);
+  const weight = Number(detail.difficultyWeight);
+  if(!weight || weight === 0) return true;
+  return weight <= 2.5;
 }
 
 function matchOwnedDifficulty(game){
@@ -2101,6 +2110,7 @@ function getOwnedFilteredGames(){
     })
     .filter(matchOwnedPlayer)
     .filter(matchOwnedDifficulty)
+    .filter(matchOwnedWeightCap)
     .filter(matchOwnedMood)
     .filter(matchOwnedMechanic)
     .filter(matchOwnedSearch);
@@ -2405,6 +2415,22 @@ document
     ownedPageState.page = 1;
     updateOwnedGames();
   });
+
+const ownedWeightCapToggle =
+  document.getElementById("ownedWeightCapToggle");
+
+if(ownedWeightCapToggle){
+  ownedWeightCapToggle.addEventListener("click", () => {
+    ownedPageState.weightCap = !ownedPageState.weightCap;
+    const on = ownedPageState.weightCap;
+    ownedWeightCapToggle.classList.toggle("is-on", on);
+    ownedWeightCapToggle.textContent = on
+      ? "🛡️ 난이도 제한 ON"
+      : "🛡️✕ 난이도 제한";
+    ownedPageState.page = 1;
+    updateOwnedGames();
+  });
+}
 
 
 
