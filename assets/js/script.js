@@ -698,9 +698,12 @@ if (weight > maxWeight) {
     return;
   }
 
-  const html =
-    filteredGames
-      .slice(0, 40)
+  const MAX_CARDS = 5;
+  const displayGames = filteredGames.slice(0, MAX_CARDS);
+  const hasMore = filteredGames.length > MAX_CARDS;
+
+  const cardsHtml =
+    displayGames
       .map((game, index)=>{
         const gameKey =
           getGameKey(game);
@@ -736,31 +739,30 @@ if (weight > maxWeight) {
                 👥 ${formatPlayers(card.bestPlayers)}
               </span>
 
-  <span class="card-difficulty ${difficulty.className}">
+              <span class="card-difficulty ${difficulty.className}">
                 ${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}
               </span>
-
 
               <span>
                 ⏱ ${card.playingTimeText || "-"}
               </span>
 
-            
-
             </div>
 
-            ${(()=>{
-              const desc = getGameDescription(game) || "";
-              if(!desc) return "";
-              return `<p class="game-card-description">${desc.slice(0, 100)}${desc.length > 100 ? "..." : ""}</p>`;
-            })()}
+            ${card.tags?.length
+              ? `<p class="game-card-description">${card.tags.slice(0, 3).join(" · ")}</p>`
+              : ""}
 
           </button>
         `;
       })
       .join("");
 
- gameScroll.innerHTML = html;
+  const moreHtml = hasMore
+    ? `<a class="game-card-more" href="./owned-games.html">전체 ${filteredGames.length}개<br>더보기 →</a>`
+    : "";
+
+  gameScroll.innerHTML = cardsHtml + moreHtml;
 bindGameCardEvents();
 
 gameScroll.scrollTo({
