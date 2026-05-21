@@ -762,7 +762,11 @@ if (weight > maxWeight) {
   if(recommendState.players) moreParams.set("players", recommendState.players);
   if(recommendState.level)   moreParams.set("level",   recommendState.level);
   if(recommendState.mood)    moreParams.set("mood",     recommendState.mood);
-  moreParams.set("weightCap", "1");
+  moreParams.set("sort", "rating");
+  const isHeavyLevel =
+    recommendState.level === "heavy" ||
+    recommendState.level === "hardcore";
+  if(!isHeavyLevel) moreParams.set("weightCap", "1");
   const moreQuery = `?${moreParams.toString()}`;
 
   const moreHtml = hasMore
@@ -2386,7 +2390,9 @@ document
 document
   .getElementById("ownedPlayerFilter")
   ?.addEventListener("change", (event) => {
-    ownedPageState.playerFilter = event.target.value || "";
+    const value = event.target.value || "";
+    ownedPageState.playerFilter = value;
+    if(value === "") event.target.selectedIndex = 0;
     ownedPageState.page = 1;
     updateOwnedGames();
   });
@@ -2412,7 +2418,9 @@ if (ownedDifficultyFilter) {
 document
   .getElementById("ownedMoodFilter")
   ?.addEventListener("change", (event) => {
-    ownedPageState.moodFilter = event.target.value || "";
+    const value = event.target.value || "";
+    ownedPageState.moodFilter = value;
+    if(value === "") event.target.selectedIndex = 0;
     ownedPageState.page = 1;
     updateOwnedGames();
   });
@@ -2664,6 +2672,17 @@ if(ownedSearchInput){
     ownedPageState.moodFilter = urlMood;
     const sel = document.getElementById("ownedMoodFilter");
     if(sel) sel.value = urlMood;
+  }
+
+  if(params.get("sort") === "rating"){
+    ownedPageState.sortRating = "desc";
+    ownedPageState.sortTitle  = "none";
+    ownedPageState.activeSortKeys = ["rating"];
+    const selTitle  = document.getElementById("sortTitle");
+    const selRating = document.getElementById("sortRating");
+    if(selTitle)  selTitle.value  = "none";
+    if(selRating) selRating.value = "desc";
+    updateSortOptionLabels();
   }
 
   if(params.get("weightCap") === "1"){
