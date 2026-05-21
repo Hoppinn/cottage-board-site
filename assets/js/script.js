@@ -762,7 +762,8 @@ if (weight > maxWeight) {
   if(recommendState.players) moreParams.set("players", recommendState.players);
   if(recommendState.level)   moreParams.set("level",   recommendState.level);
   if(recommendState.mood)    moreParams.set("mood",     recommendState.mood);
-  const moreQuery = moreParams.toString() ? `?${moreParams.toString()}` : "";
+  moreParams.set("weightCap", "1");
+  const moreQuery = `?${moreParams.toString()}`;
 
   const moreHtml = hasMore
     ? `<a class="game-card-more" href="./owned-games.html${moreQuery}">전체 ${filteredGames.length}개<br>더보기 →</a>`
@@ -2426,7 +2427,7 @@ if(ownedWeightCapToggle){
     ownedWeightCapToggle.classList.toggle("is-on", on);
     ownedWeightCapToggle.textContent = on
       ? "🛡️ 난이도 제한 ON"
-      : "🛡️✕ 난이도 제한";
+      : "🛡️✕ 난이도 제한 OFF";
     ownedPageState.page = 1;
     updateOwnedGames();
   });
@@ -2663,6 +2664,15 @@ if(ownedSearchInput){
     ownedPageState.moodFilter = urlMood;
     const sel = document.getElementById("ownedMoodFilter");
     if(sel) sel.value = urlMood;
+  }
+
+  if(params.get("weightCap") === "1"){
+    ownedPageState.weightCap = true;
+    const btn = document.getElementById("ownedWeightCapToggle");
+    if(btn){
+      btn.classList.add("is-on");
+      btn.textContent = "🛡️ 난이도 제한 ON";
+    }
   }
 
   ownedSearchInput.addEventListener("input", (event)=>{

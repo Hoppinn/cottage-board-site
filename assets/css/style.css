@@ -1735,24 +1735,23 @@ body.sheet-open{
   white-space:nowrap;
 }
 
-/* 2x2 필터 그리드 */
+/* 2x2 필터 그리드 (3행: 인원수/분위기, 토글/난이도, 게임유형) */
 .owned-filter-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:5px;
   flex:1 1 auto;
-  align-items:start;
+  align-items:center;
 }
 
-/* 체감난이도 + 토글 묶음 */
-.owned-difficulty-wrap{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
+/* 게임유형: 풀 너비 */
+.owned-filter-full{
+  grid-column:1 / -1;
 }
 
 /* 난이도 제한 토글 — OFF 기본 */
 .owned-weight-cap-btn{
+  display:block;
   width:100%;
   height:22px;
   padding:0 8px;
