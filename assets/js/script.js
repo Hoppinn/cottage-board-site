@@ -116,7 +116,7 @@ const GameView = window.CottageGameView;
 
 if (!GameView) {
   console.warn(
-    "CottageGameView가 로드되지 않았습니다. assets/js/view/game-view-utils.js를 script.js보다 먼저 불러오세요."
+    "CottageGameView가 로드되지 않았습니다. assets/js/game-display-adapter.js를 script.js보다 먼저 불러오세요."
   );
 }
 
@@ -431,6 +431,7 @@ function getGameKey(game){
 
 function getGameShelfLabel(game){
   return (
+    game?.cottage?.shelfLabel ||
     game?.cottage?.shelfGroupId ||
     "-"
   );
@@ -2486,7 +2487,7 @@ document
   }
 
   select.addEventListener("pointerdown", ()=>{
-    updateSortOptionLabelsForOpen();
+    updateSortOptionLabels();
   });
 
   select.addEventListener("blur", ()=>{
