@@ -128,7 +128,7 @@ if (!GameView) {
 }
 
 const DEFAULT_GAME_IMAGE =
-  "./assets/images/main/hero.png";
+  `${rootPath}assets/images/main/hero.png`;
 
 
 /* =========================
