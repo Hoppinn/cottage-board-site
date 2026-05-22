@@ -259,14 +259,29 @@ textarea{
   font-size:13px !important;
 }
 
+/* 현재 페이지 메뉴 active */
 .header-menu a.is-current{
-  color:var(--brown);
-  font-weight:900;
+  background:#edf5e2;
+  color:#2c4a30;
+  border-radius:10px;
 }
 
 .menu-group-body a.is-current{
-  color:var(--brown) !important;
-  font-weight:900;
+  background:#edf5e2 !important;
+  color:#2c4a30 !important;
+  border-left:3px solid #5f823f;
+  padding-left:9px !important;
+}
+
+/* 데스크톱: 배경 대신 밑줄 */
+@media(min-width:900px){
+  .header-menu a.is-current{
+    background:transparent;
+    color:var(--green);
+    border-radius:0;
+    border-bottom:2.5px solid var(--green);
+    padding-bottom:2px;
+  }
 }
 
 /* 모바일: 클릭으로 아코디언 */
