@@ -266,10 +266,10 @@ textarea{
   border-radius:10px;
 }
 
-/* 서브메뉴 active: 녹색 채움 */
+/* 서브메뉴 active */
 .menu-group-body a.is-current{
-  background:#5f823f !important;
-  color:#fff !important;
+  background:#e7f1d8 !important;
+  color:#29432f !important;
 }
 
 /* 펼쳐진 그룹 헤더: 베이지 배경 */
