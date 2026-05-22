@@ -211,6 +211,69 @@ textarea{
   background:#f3eadc;
 }
 
+/* 서브메뉴 그룹 */
+.menu-group{
+  width:100%;
+}
+
+.menu-group-header{
+  width:100%;
+  padding:10px 12px;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  color:var(--green);
+  font-size:15px;
+  font-weight:900;
+  text-align:left;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.menu-group-header:hover{
+  background:#f3eadc;
+}
+
+.menu-group-arrow{
+  display:inline-block;
+  color:#a09070;
+  font-size:11px;
+  transition:transform 0.18s ease;
+}
+
+.menu-group.is-open .menu-group-arrow{
+  transform:rotate(90deg);
+}
+
+.menu-group-body{
+  display:none;
+  flex-direction:column;
+  gap:1px;
+  padding:3px 0 3px 10px;
+}
+
+.menu-group-body a{
+  padding:7px 12px !important;
+  font-size:13px !important;
+}
+
+/* 모바일: 클릭으로 아코디언 */
+.menu-group.is-open .menu-group-body{
+  display:flex;
+}
+
+/* 데스크톱: 호버로 드롭다운 */
+@media(hover:hover) and (pointer:fine){
+  .menu-group:hover .menu-group-body{
+    display:flex;
+  }
+  .menu-group:hover .menu-group-arrow{
+    transform:rotate(90deg);
+  }
+}
+
 /* 헤더 검색 패널 */
 .header-search-panel{
   position:absolute;

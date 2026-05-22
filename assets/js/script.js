@@ -222,6 +222,16 @@ mobileMenuLinks.forEach(link=>{
   );
 });
 
+// 메뉴 그룹 아코디언 (모바일 클릭 / 데스크톱 hover는 CSS)
+document.querySelectorAll('.menu-group-header').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const group = btn.closest('.menu-group');
+    const isOpen = group.classList.contains('is-open');
+    document.querySelectorAll('.menu-group').forEach(g=>g.classList.remove('is-open'));
+    if(!isOpen) group.classList.add('is-open');
+  });
+});
+
 
 /* =========================
    # DIFFICULTY SYSTEM
