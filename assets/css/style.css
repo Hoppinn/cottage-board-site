@@ -269,8 +269,7 @@ textarea{
 .menu-group-body a.is-current{
   background:#edf5e2 !important;
   color:#2c4a30 !important;
-  border-left:3px solid #5f823f;
-  padding-left:9px !important;
+  box-shadow:inset 3px 0 0 #5f823f;
 }
 
 /* 데스크톱: 배경 대신 밑줄 */
