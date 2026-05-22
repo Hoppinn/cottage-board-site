@@ -65,6 +65,13 @@ body{
   background:var(--bg);
   color:#111;
   font-family:Arial,sans-serif;
+  display:flex;
+  flex-direction:column;
+  min-height:100svh;
+}
+
+main{
+  flex:1 0 auto;
 }
 
 button,
@@ -272,10 +279,6 @@ textarea{
   color:#29432f !important;
 }
 
-/* 펼쳐진 그룹 헤더: 베이지 배경 */
-.menu-group.is-open > .menu-group-header{
-  background:#ede5d4;
-}
 
 /* 데스크톱: 최상위 링크만 밑줄 */
 @media(min-width:900px){
@@ -1490,7 +1493,6 @@ body.sheet-open{
 ========================= */
 
 .inner-page{
-  min-height:100svh;
   padding:calc(var(--header-h) + 28px) 18px 60px;
   background:var(--bg);
 }
@@ -1521,7 +1523,6 @@ body.sheet-open{
 ========================= */
 
 .owned-games-page{
-  min-height:100svh;
   padding:calc(var(--header-h) + 28px) 18px 60px;
   background:var(--bg);
 }
