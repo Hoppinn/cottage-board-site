@@ -239,9 +239,6 @@ textarea{
   justify-content:space-between;
 }
 
-.menu-group-header:hover{
-  background:#f3eadc;
-}
 
 .menu-group-arrow{
   display:inline-block;
