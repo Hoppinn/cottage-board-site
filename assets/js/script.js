@@ -106,6 +106,13 @@ function normalizeSearchText(text=""){
 }
 
 
+// 현재 페이지 기준 사이트 루트 경로 (script.js src로 역산)
+const rootPath = (()=>{
+  const el = document.querySelector('script[src$="assets/js/script.js"]');
+  if(!el) return './';
+  return el.src.replace(/assets\/js\/script\.js(\?.*)?$/, '');
+})();
+
 /* =========================
    # COTTAGEBOARD FRONT SCRIPT
    - nested gameData schema 기준
@@ -793,7 +800,7 @@ if (weight > maxWeight) {
   const moreQuery = `?${moreParams.toString()}`;
 
   const moreHtml = hasMore
-    ? `<a class="game-card-more" href="./owned-games.html${moreQuery}">전체 ${filteredGames.length}개<br>더보기 →</a>`
+    ? `<a class="game-card-more" href="${rootPath}pages/owned-games.html${moreQuery}">전체 ${filteredGames.length}개<br>더보기 →</a>`
     : "";
 
   gameScroll.innerHTML = cardsHtml + moreHtml;
@@ -1003,7 +1010,7 @@ if(headerSearchInput){
     }
 
     window.location.href =
-      `./owned-games.html?search=${encodeURIComponent(keyword)}`;
+      `${rootPath}pages/owned-games.html?search=${encodeURIComponent(keyword)}`;
   });
 }
 
@@ -1307,7 +1314,7 @@ const shelfLabel =
 <section class="sheet-section">
   <a
     class="sheet-action-btn"
-    href="./owned-games.html?search=${encodeURIComponent(detail.title)}"
+    href="${rootPath}pages/owned-games.html?search=${encodeURIComponent(detail.title)}"
   >
     전체 게임에서 보기
   </a>
