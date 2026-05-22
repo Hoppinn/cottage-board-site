@@ -259,6 +259,16 @@ textarea{
   font-size:13px !important;
 }
 
+.header-menu a.is-current{
+  color:var(--brown);
+  font-weight:900;
+}
+
+.menu-group-body a.is-current{
+  color:var(--brown) !important;
+  font-weight:900;
+}
+
 /* 모바일: 클릭으로 아코디언 */
 .menu-group.is-open .menu-group-body{
   display:flex;

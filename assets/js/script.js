@@ -232,6 +232,19 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
   });
 });
 
+// 현재 페이지 메뉴 active 표시 + 해당 그룹 자동 펼침
+(()=>{
+  const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
+  document.querySelectorAll('.header-menu a').forEach(link=>{
+    const linkPath = new URL(link.href, location.href).pathname.replace(/\/$/, '');
+    if(linkPath === currentPath){
+      link.classList.add('is-current');
+      const group = link.closest('.menu-group');
+      if(group) group.classList.add('is-open');
+    }
+  });
+})();
+
 
 /* =========================
    # DIFFICULTY SYSTEM
