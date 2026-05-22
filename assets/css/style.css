@@ -266,14 +266,20 @@ textarea{
   border-radius:10px;
 }
 
+/* 서브메뉴 active: 녹색 채움 */
 .menu-group-body a.is-current{
-  background:#edf5e2 !important;
-  color:#2c4a30 !important;
+  background:#5f823f !important;
+  color:#fff !important;
 }
 
-/* 데스크톱: 배경 대신 밑줄 */
+/* 펼쳐진 그룹 헤더: 베이지 배경 */
+.menu-group.is-open > .menu-group-header{
+  background:#ede5d4;
+}
+
+/* 데스크톱: 최상위 링크만 밑줄 */
 @media(min-width:900px){
-  .header-menu a.is-current{
+  .header-menu > a.is-current{
     background:transparent;
     color:var(--green);
     border-radius:0;

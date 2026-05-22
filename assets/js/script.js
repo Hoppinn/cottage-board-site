@@ -174,11 +174,20 @@ const menuToggle =
 const mobileMenu =
   document.querySelector('#mobileMenu');
 
+function resetMenuGroups(){
+  document.querySelectorAll('.menu-group').forEach(g=>g.classList.remove('is-open'));
+  document.querySelector('.header-menu a.is-current')
+    ?.closest('.menu-group')
+    ?.classList.add('is-open');
+}
+
 function toggleMenu(){
   if(!mobileMenu){
     return;
   }
 
+  const isOpening = !mobileMenu.classList.contains('active');
+  if(isOpening) resetMenuGroups();
   mobileMenu.classList.toggle('active');
 }
 
