@@ -1,206 +1,4 @@
 const gameData = {
-  "1862-이스턴-카운티": {
-    "id": "1862-이스턴-카운티",
-    "title": {
-      "display": "1862 이스턴 카운티",
-      "owned": "1862 이스턴 카운티",
-      "bgg": "1862: Railway Mania in the Eastern Counties"
-    },
-    "bgg": {
-      "id": "66837",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 8.2,
-      "weight": 4.61,
-      "minPlayers": 1,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "heavy_strategy",
-      "shelfLabel": "헤비 전략게임",
-      "shelfFullLabel": "헤비 전략게임",
-      "difficultyId": "hardcore",
-      "difficultyWeight": 4.61,
-      "moodTags": [
-        "brainy",
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "silent_focus"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "brainy",
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group",
-        "silent_focus"
-      ],
-      "displayTags": [
-        "전략",
-        "조용히집중",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "1862-이스턴-카운티"
-    }
-  },
-  "5초준다": {
-    "id": "5초준다",
-    "title": {
-      "display": "5초준다",
-      "owned": "5초준다",
-      "bgg": "5 Second Rule"
-    },
-    "bgg": {
-      "id": "86073",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 5.5,
-      "weight": 1.1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "단어연상"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "5초준다"
-    }
-  },
   "7원더스": {
     "id": "7원더스",
     "title": {
@@ -505,28 +303,28 @@ const gameData = {
       "boardId": "갈팡질팡"
     }
   },
-  "그것이문제로다": {
-    "id": "그것이문제로다",
+  "게놈의탑": {
+    "id": "게놈의탑",
     "title": {
-      "display": "그것이문제로다",
-      "owned": "그것이문제로다",
-      "bgg": "Top Ten"
+      "display": "게놈의탑",
+      "owned": "게놈의탑",
+      "bgg": ""
     },
     "bgg": {
-      "id": "300905",
-      "matchStatus": "auto-confirmed",
+      "id": "",
+      "matchStatus": "unresolved",
       "year": "",
-      "rating": 5.7,
-      "weight": 1.05,
-      "minPlayers": 4,
-      "maxPlayers": 6,
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 7,
+      "maxPlayers": 8,
       "bestPlayers": [
-        6
+        7,
+        8
       ],
       "recommendedPlayers": [
-        4,
-        5,
-        6
+        7,
+        8
       ],
       "notRecommendedPlayers": [],
       "playingTime": 0,
@@ -534,25 +332,21 @@ const gameData = {
       "maxPlayTime": 0,
       "categories": [],
       "mechanics": [
-        "가치관추측"
+        "머더미스터리"
       ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.05,
-      "moodTags": [
-        "light"
-      ],
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
-        "first_game",
-        "quick_play",
         "group",
         "large_group"
       ],
@@ -560,16 +354,10 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
         "모임추천",
         "단체추천"
       ],
@@ -597,32 +385,31 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "그것이문제로다"
+      "boardId": "게놈의탑"
     }
   },
-  "나나": {
-    "id": "나나",
+  "구두룡저택의살인-미스터리파티시리즈": {
+    "id": "구두룡저택의살인-미스터리파티시리즈",
     "title": {
-      "display": "나나",
-      "owned": "나나",
-      "bgg": "Trio"
+      "display": "구두룡저택의살인 (미스터리파티시리즈)",
+      "owned": "구두룡저택의살인 (미스터리파티시리즈)",
+      "bgg": ""
     },
     "bgg": {
-      "id": "352515",
-      "matchStatus": "auto-confirmed",
+      "id": "",
+      "matchStatus": "unresolved",
       "year": "",
-      "rating": 7.4,
-      "weight": 1.05,
-      "minPlayers": 3,
-      "maxPlayers": 6,
+      "rating": 7.6,
+      "weight": 2,
+      "minPlayers": 7,
+      "maxPlayers": 8,
       "bestPlayers": [
-        4
+        7,
+        8
       ],
       "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
+        7,
+        8
       ],
       "notRecommendedPlayers": [],
       "playingTime": 0,
@@ -630,44 +417,47 @@ const gameData = {
       "maxPlayTime": 0,
       "categories": [],
       "mechanics": [
-        "기억력 (사장추천★)"
+        "머더미스터리"
       ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.05,
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2,
       "moodTags": [
-        "light"
+        "light",
+        "brainy"
       ],
       "playTags": [],
       "situationTags": [
-        "first_game",
-        "quick_play",
+        "beginner",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "low_conflict"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "light",
-        "first_game",
-        "quick_play",
+        "brainy",
+        "beginner",
         "group",
-        "large_group"
+        "large_group",
+        "low_conflict"
       ],
       "displayTags": [
+        "갈등적음",
         "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
       ],
       "comment": {
         "text": "",
@@ -693,7 +483,7 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "나나"
+      "boardId": "구두룡저택의살인-미스터리파티시리즈"
     }
   },
   "내마음의주파수": {
@@ -792,104 +582,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "내마음의주파수"
-    }
-  },
-  "냥자역학연구소": {
-    "id": "냥자역학연구소",
-    "title": {
-      "display": "냥자역학연구소",
-      "owned": "냥자역학연구소",
-      "bgg": "Cat in the box"
-    },
-    "bgg": {
-      "id": "324345",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 5.9,
-      "weight": 1.28,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "작은"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.28,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "냥자역학연구소"
     }
   },
   "너도나도": {
@@ -1192,105 +884,6 @@ const gameData = {
       "boardId": "노터치크라켄"
     }
   },
-  "노팅엄의지방관": {
-    "id": "노팅엄의지방관",
-    "title": {
-      "display": "노팅엄의지방관",
-      "owned": "노팅엄의지방관",
-      "bgg": "Sheriff of Nottingham"
-    },
-    "bgg": {
-      "id": "157969",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.7,
-      "minPlayers": 4,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5
-      ],
-      "recommendedPlayers": [
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "협잡",
-        "블러핑"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.7,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "노팅엄의지방관"
-    }
-  },
   "놉놉테이블": {
     "id": "놉놉테이블",
     "title": {
@@ -1487,127 +1080,28 @@ const gameData = {
       "boardId": "누가치즈를훔쳤을까"
     }
   },
-  "다운포스": {
-    "id": "다운포스",
+  "늑대인간마을의축제미스터리파티시리즈": {
+    "id": "늑대인간마을의축제미스터리파티시리즈",
     "title": {
-      "display": "다운포스",
-      "owned": "다운포스",
-      "bgg": "Downforce"
-    },
-    "bgg": {
-      "id": "215311",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.3,
-      "weight": 1.72,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3,
-        6
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.72,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "다운포스"
-    }
-  },
-  "다잉메시지-공범만화가-확장": {
-    "id": "다잉메시지-공범만화가-확장",
-    "title": {
-      "display": "다잉메시지 + 공범,만화가 확장",
-      "owned": "다잉메시지 + 공범,만화가 확장",
+      "display": "늑대인간마을의축제(미스터리파티시리즈)",
+      "owned": "늑대인간마을의축제(미스터리파티시리즈)",
       "bgg": ""
     },
     "bgg": {
       "id": "",
       "matchStatus": "unresolved",
       "year": "",
-      "rating": 7.1,
-      "weight": 1,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [],
+      "rating": 6.9,
+      "weight": 0,
+      "minPlayers": 7,
+      "maxPlayers": 8,
+      "bestPlayers": [
+        7,
+        8
+      ],
       "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
+        7,
+        8
       ],
       "notRecommendedPlayers": [],
       "playingTime": 0,
@@ -1615,25 +1109,21 @@ const gameData = {
       "maxPlayTime": 0,
       "categories": [],
       "mechanics": [
-        "협력추리"
+        "머더미스터리"
       ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
-        "first_game",
-        "quick_play",
         "group",
         "large_group"
       ],
@@ -1641,16 +1131,10 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
         "모임추천",
         "단체추천"
       ],
@@ -1678,33 +1162,31 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "다잉메시지-공범만화가-확장"
+      "boardId": "늑대인간마을의축제미스터리파티시리즈"
     }
   },
-  "다크호스": {
-    "id": "다크호스",
+  "다크율": {
+    "id": "다크율",
     "title": {
-      "display": "다크호스",
-      "owned": "다크호스",
-      "bgg": "Dark Horse"
+      "display": "다크율",
+      "owned": "다크율",
+      "bgg": ""
     },
     "bgg": {
-      "id": "98443",
-      "matchStatus": "needs-review",
+      "id": "",
+      "matchStatus": "unresolved",
       "year": "",
-      "rating": 6.5,
-      "weight": 1.07,
-      "minPlayers": 2,
-      "maxPlayers": 6,
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 7,
+      "maxPlayers": 8,
       "bestPlayers": [
-        5
+        7,
+        8
       ],
       "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
+        7,
+        8
       ],
       "notRecommendedPlayers": [],
       "playingTime": 0,
@@ -1712,25 +1194,21 @@ const gameData = {
       "maxPlayTime": 0,
       "categories": [],
       "mechanics": [
-        "예측배팅"
+        "머더미스터리"
       ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.07,
-      "moodTags": [
-        "light"
-      ],
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
-        "first_game",
-        "quick_play",
         "group",
         "large_group"
       ],
@@ -1738,16 +1216,10 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
         "모임추천",
         "단체추천"
       ],
@@ -1775,7 +1247,7 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "다크호스"
+      "boardId": "다크율"
     }
   },
   "달무티": {
@@ -1875,204 +1347,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "달무티"
-    }
-  },
-  "당나귀다리": {
-    "id": "당나귀다리",
-    "title": {
-      "display": "당나귀다리",
-      "owned": "당나귀다리",
-      "bgg": "Donkey Bridge"
-    },
-    "bgg": {
-      "id": "386470",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.1,
-      "weight": 1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "기억력"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "당나귀다리"
-    }
-  },
-  "데스티네이션x": {
-    "id": "데스티네이션x",
-    "title": {
-      "display": "데스티네이션x",
-      "owned": "데스티네이션x",
-      "bgg": "Destination X"
-    },
-    "bgg": {
-      "id": "223726",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.6,
-      "weight": 1.25,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "지리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.25,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "데스티네이션x"
     }
   },
   "도블": {
@@ -2576,495 +1850,6 @@ const gameData = {
       "boardId": "딕싯"
     }
   },
-  "딩고디스크": {
-    "id": "딩고디스크",
-    "title": {
-      "display": "딩고디스크",
-      "owned": "딩고디스크",
-      "bgg": "Dingo's Dreams"
-    },
-    "bgg": {
-      "id": "182116",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.4,
-      "weight": 1,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "균형잡기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "딩고디스크"
-    }
-  },
-  "라마": {
-    "id": "라마",
-    "title": {
-      "display": "라마",
-      "owned": "라마",
-      "bgg": "L.L.A.M.A."
-    },
-    "bgg": {
-      "id": "266083",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.5,
-      "weight": 1.05,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "손패털기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.05,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "라마"
-    }
-  },
-  "라이즈오브아우구스투스": {
-    "id": "라이즈오브아우구스투스",
-    "title": {
-      "display": "라이즈오브아우구스투스",
-      "owned": "라이즈오브아우구스투스",
-      "bgg": "Rise of Augustus"
-    },
-    "bgg": {
-      "id": "137297",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.7,
-      "weight": 1.64,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3,
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "엔진빌딩"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.64,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "라이즈오브아우구스투스"
-    }
-  },
-  "러브레터": {
-    "id": "러브레터",
-    "title": {
-      "display": "러브레터",
-      "owned": "러브레터",
-      "bgg": "Love Letter"
-    },
-    "bgg": {
-      "id": "277085",
-      "matchStatus": "needs-review",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.11,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "상대 카드맞추기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.11,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "러브레터"
-    }
-  },
-  "러브크래프트-레터": {
-    "id": "러브크래프트-레터",
-    "title": {
-      "display": "러브크래프트 레터",
-      "owned": "러브크래프트 레터",
-      "bgg": "Lovecraft Letter"
-    },
-    "bgg": {
-      "id": "198740",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.5,
-      "weight": 1.44,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "파티"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.44,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "러브크래프트-레터"
-    }
-  },
   "레디셋벳": {
     "id": "레디셋벳",
     "title": {
@@ -3166,207 +1951,6 @@ const gameData = {
       "boardId": "레디셋벳"
     }
   },
-  "레일로드잉크": {
-    "id": "레일로드잉크",
-    "title": {
-      "display": "레일로드잉크",
-      "owned": "레일로드잉크",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.46,
-      "minPlayers": 1,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        2,
-        3
-      ],
-      "recommendedPlayers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "파티"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.46,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "couple",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "couple",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "2인추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "레일로드잉크"
-    }
-  },
-  "레지스탕스-쿠": {
-    "id": "레지스탕스-쿠",
-    "title": {
-      "display": "레지스탕스 쿠",
-      "owned": "레지스탕스 쿠",
-      "bgg": "Coup"
-    },
-    "bgg": {
-      "id": "131357",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7,
-      "weight": 1.41,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "상대패 맞추기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.41,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "레지스탕스-쿠"
-    }
-  },
   "로보77": {
     "id": "로보77",
     "title": {
@@ -3463,109 +2047,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "로보77"
-    }
-  },
-  "리버탈리아": {
-    "id": "리버탈리아",
-    "title": {
-      "display": "리버탈리아",
-      "owned": "리버탈리아",
-      "bgg": "Libertalia"
-    },
-    "bgg": {
-      "id": "125618",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.4,
-      "weight": 2.16,
-      "minPlayers": 1,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "카드내기순서"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.16,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "리버탈리아"
     }
   },
   "리코셰로봇": {
@@ -3674,110 +2155,6 @@ const gameData = {
       "boardId": "리코셰로봇"
     }
   },
-  "마블좀비": {
-    "id": "마블좀비",
-    "title": {
-      "display": "마블좀비",
-      "owned": "마블좀비",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.9,
-      "weight": 2.38,
-      "minPlayers": 1,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        2,
-        4
-      ],
-      "recommendedPlayers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "협력"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "협력",
-      "shelfLabel": "협력",
-      "shelfFullLabel": "협력",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.38,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "couple",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "couple",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "2인추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "마블좀비"
-    }
-  },
   "마헤": {
     "id": "마헤",
     "title": {
@@ -3878,300 +2255,6 @@ const gameData = {
       "boardId": "마헤"
     }
   },
-  "메디치": {
-    "id": "메디치",
-    "title": {
-      "display": "메디치",
-      "owned": "메디치",
-      "bgg": "Medici"
-    },
-    "bgg": {
-      "id": "46",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.2,
-      "weight": 2.24,
-      "minPlayers": 4,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "경매",
-        "셋컬렉션"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.24,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "메디치"
-    }
-  },
-  "나의최애명대사": {
-    "id": "나의최애명대사",
-    "title": {
-      "display": "나의최애명대사",
-      "owned": "나의최애명대사",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.2,
-      "weight": 1,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "작은"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "나의최애명대사"
-    }
-  },
-  "모노폴리-딜럭스": {
-    "id": "모노폴리-딜럭스",
-    "title": {
-      "display": "모노폴리 딜럭스",
-      "owned": "모노폴리 딜럭스",
-      "bgg": "Monopoly"
-    },
-    "bgg": {
-      "id": "1406",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 4.4,
-      "weight": 1.62,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "부루마불"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.62,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "모노폴리-딜럭스"
-    }
-  },
   "모자가아니잖아": {
     "id": "모자가아니잖아",
     "title": {
@@ -4268,300 +2351,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "모자가아니잖아"
-    }
-  },
-  "미노다이스": {
-    "id": "미노다이스",
-    "title": {
-      "display": "미노다이스",
-      "owned": "미노다이스",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.54,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "주사위트릭테이킹"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.54,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "미노다이스"
-    }
-  },
-  "바퀴벌레포커": {
-    "id": "바퀴벌레포커",
-    "title": {
-      "display": "바퀴벌레포커",
-      "owned": "바퀴벌레포커",
-      "bgg": "Cockroach Poker"
-    },
-    "bgg": {
-      "id": "11971",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3,
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "심리전"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "바퀴벌레포커"
-    }
-  },
-  "방방곡곡-세계유랑": {
-    "id": "방방곡곡-세계유랑",
-    "title": {
-      "display": "방방곡곡 세계유랑",
-      "owned": "방방곡곡 세계유랑",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.6,
-      "weight": 1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "손패털기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "방방곡곡-세계유랑"
     }
   },
   "뱀파이어퀸": {
@@ -4859,101 +2648,6 @@ const gameData = {
       "boardId": "뱅-주사위"
     }
   },
-  "베티보터보우트썸버터": {
-    "id": "베티보터보우트썸버터",
-    "title": {
-      "display": "베티보터보우트썸버터",
-      "owned": "베티보터보우트썸버터",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.3,
-      "weight": 1,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "발음하기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "베티보터보우트썸버터"
-    }
-  },
   "벨라티": {
     "id": "벨라티",
     "title": {
@@ -5152,301 +2846,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "보난자"
-    }
-  },
-  "듄임페리움봉기": {
-    "id": "듄임페리움봉기",
-    "title": {
-      "display": "듄임페리움봉기",
-      "owned": "듄임페리움봉기",
-      "bgg": "Dune: Imperium – Uprising"
-    },
-    "bgg": {
-      "id": "397598",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 8.7,
-      "weight": 3.45,
-      "minPlayers": 1,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        1,
-        2,
-        3,
-        4,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "덱빌딩영향력"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "heavy_strategy",
-      "shelfLabel": "헤비 전략게임",
-      "shelfFullLabel": "헤비 전략게임",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 3.45,
-      "moodTags": [
-        "brainy",
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "brainy",
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "전략",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천",
-        "오래즐김"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "듄임페리움봉기"
-    }
-  },
-  "브레인토피아": {
-    "id": "브레인토피아",
-    "title": {
-      "display": "브레인토피아",
-      "owned": "브레인토피아",
-      "bgg": "Braintopia"
-    },
-    "bgg": {
-      "id": "206175",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.2,
-      "weight": 1.06,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "퀴즈"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.06,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "브레인토피아"
-    }
-  },
-  "블리츠": {
-    "id": "블리츠",
-    "title": {
-      "display": "블리츠",
-      "owned": "블리츠",
-      "bgg": "Dutch Blitz"
-    },
-    "bgg": {
-      "id": "148203",
-      "matchStatus": "needs-review",
-      "year": "",
-      "rating": 6.7,
-      "weight": 1.04,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "단어연상"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.04,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "블리츠"
     }
   },
   "블러드바운드": {
@@ -5748,104 +3147,6 @@ const gameData = {
       "boardId": "섀도우레이더스"
     }
   },
-  "서퍼사우르스맥스": {
-    "id": "서퍼사우르스맥스",
-    "title": {
-      "display": "서퍼사우르스맥스",
-      "owned": "서퍼사우르스맥스",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7,
-      "weight": 1.17,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "파티"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.17,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "서퍼사우르스맥스"
-    }
-  },
   "세트": {
     "id": "세트",
     "title": {
@@ -5950,107 +3251,6 @@ const gameData = {
       "boardId": "세트"
     }
   },
-  "셀레스티아-빅박스": {
-    "id": "셀레스티아-빅박스",
-    "title": {
-      "display": "셀레스티아 빅박스",
-      "owned": "셀레스티아 빅박스",
-      "bgg": "Celestia"
-    },
-    "bgg": {
-      "id": "175117",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.8,
-      "weight": 2,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "블러핑"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "셀레스티아-빅박스"
-    }
-  },
   "수상한생선들": {
     "id": "수상한생선들",
     "title": {
@@ -6148,693 +3348,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "수상한생선들"
-    }
-  },
-  "숲속의음악대": {
-    "id": "숲속의음악대",
-    "title": {
-      "display": "숲속의음악대",
-      "owned": "숲속의음악대",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5.4,
-      "weight": 1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "숲속의음악대"
-    }
-  },
-  "스위스사는스미스씨": {
-    "id": "스위스사는스미스씨",
-    "title": {
-      "display": "스위스사는스미스씨",
-      "owned": "스위스사는스미스씨",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5.9,
-      "weight": 1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "발음하기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "스위스사는스미스씨"
-    }
-  },
-  "스컬": {
-    "id": "스컬",
-    "title": {
-      "display": "스컬",
-      "owned": "스컬",
-      "bgg": "Skull"
-    },
-    "bgg": {
-      "id": "92415",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.12,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "심리전"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.12,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "스컬"
-    }
-  },
-  "스컬퀸": {
-    "id": "스컬퀸",
-    "title": {
-      "display": "스컬퀸",
-      "owned": "스컬퀸",
-      "bgg": "Skull Queen"
-    },
-    "bgg": {
-      "id": "423432",
-      "matchStatus": "needs-review",
-      "year": "",
-      "rating": 7.3,
-      "weight": 1.56,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "트릭테이킹",
-        "예측"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.56,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "스컬퀸"
-    }
-  },
-  "스컬킹": {
-    "id": "스컬킹",
-    "title": {
-      "display": "스컬킹",
-      "owned": "스컬킹",
-      "bgg": "Skull King"
-    },
-    "bgg": {
-      "id": "150145",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.5,
-      "weight": 1.74,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "트릭테이킹"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.74,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "스컬킹"
-    }
-  },
-  "스타워즈에픽듀얼": {
-    "id": "스타워즈에픽듀얼",
-    "title": {
-      "display": "스타워즈에픽듀얼",
-      "owned": "스타워즈에픽듀얼",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7,
-      "weight": 1.78,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        2,
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        4,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "삼가동님 제공"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.78,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "couple",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "couple",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "2인추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "스타워즈에픽듀얼"
-    }
-  },
-  "스파이시": {
-    "id": "스파이시",
-    "title": {
-      "display": "스파이시",
-      "owned": "스파이시",
-      "bgg": "Spicy"
-    },
-    "bgg": {
-      "id": "299169",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.34,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "블러핑",
-        "클라이밍"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.34,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "스파이시"
     }
   },
   "스파이폴": {
@@ -7036,31 +3549,27 @@ const gameData = {
       "boardId": "스파이폴2"
     }
   },
-  "시퀀스-해리포터": {
-    "id": "시퀀스-해리포터",
+  "시계탑에흐른피": {
+    "id": "시계탑에흐른피",
     "title": {
-      "display": "시퀀스 해리포터",
-      "owned": "시퀀스 해리포터",
-      "bgg": ""
+      "display": "시계탑에흐른피",
+      "owned": "시계탑에흐른피",
+      "bgg": "Blood on the Clocktower"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
+      "id": "240980",
+      "matchStatus": "auto-confirmed",
       "year": "",
-      "rating": 6.2,
-      "weight": 1.32,
-      "minPlayers": 2,
-      "maxPlayers": 6,
+      "rating": 8.4,
+      "weight": 3.04,
+      "minPlayers": 7,
+      "maxPlayers": 8,
       "bestPlayers": [
-        3,
-        4
+        8
       ],
       "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
+        7,
+        8
       ],
       "notRecommendedPlayers": [],
       "playingTime": 0,
@@ -7068,26 +3577,28 @@ const gameData = {
       "maxPlayTime": 0,
       "categories": [],
       "mechanics": [
-        "오목"
+        "마피아"
       ],
       "designers": [],
       "description": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.32,
+      "shelfGroupId": "별도",
+      "shelfLabel": "별도",
+      "shelfFullLabel": "별도",
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.04,
       "moodTags": [
-        "light",
-        "cozy"
+        "brainy",
+        "immersive"
       ],
-      "playTags": [],
+      "playTags": [
+        "strategy"
+      ],
       "situationTags": [
-        "beginner",
-        "first_game",
+        "experienced",
+        "long_stay",
         "group",
         "large_group"
       ],
@@ -7095,19 +3606,20 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
+        "brainy",
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
+        "전략",
+        "머리 쓰는",
+        "몰입감",
+        "게임러추천",
+        "오래즐김"
       ],
       "comment": {
         "text": "",
@@ -7133,7 +3645,7 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "시퀀스-해리포터"
+      "boardId": "시계탑에흐른피"
     }
   },
   "시타델": {
@@ -7336,104 +3848,6 @@ const gameData = {
       "boardId": "레지스탕스-아발론"
     }
   },
-  "아임더보스": {
-    "id": "아임더보스",
-    "title": {
-      "display": "아임더보스",
-      "owned": "아임더보스",
-      "bgg": "I'm the Boss!"
-    },
-    "bgg": {
-      "id": "115",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.97,
-      "minPlayers": 4,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        6
-      ],
-      "recommendedPlayers": [
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "협잡"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.97,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "아임더보스"
-    }
-  },
   "악마성의마차": {
     "id": "악마성의마차",
     "title": {
@@ -7532,598 +3946,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "악마성의마차"
-    }
-  },
-  "야채주식": {
-    "id": "야채주식",
-    "title": {
-      "display": "야채주식",
-      "owned": "야채주식",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.08,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "작은"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.08,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "야채주식"
-    }
-  },
-  "언더워터항해기": {
-    "id": "언더워터항해기",
-    "title": {
-      "display": "언더워터항해기",
-      "owned": "언더워터항해기",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.4,
-      "weight": 1,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "작은"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "언더워터항해기"
-    }
-  },
-  "에메랄드스컬": {
-    "id": "에메랄드스컬",
-    "title": {
-      "display": "에메랄드스컬",
-      "owned": "에메랄드스컬",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7,
-      "weight": 1.92,
-      "minPlayers": 4,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5
-      ],
-      "recommendedPlayers": [
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "야찌",
-        "배팅"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.92,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "에메랄드스컬"
-    }
-  },
-  "옛날옛적에": {
-    "id": "옛날옛적에",
-    "title": {
-      "display": "옛날옛적에",
-      "owned": "옛날옛적에",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.4,
-      "weight": 1.37,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "이야기만들기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.37,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "옛날옛적에"
-    }
-  },
-  "오딘": {
-    "id": "오딘",
-    "title": {
-      "display": "오딘",
-      "owned": "오딘",
-      "bgg": "Odin"
-    },
-    "bgg": {
-      "id": "406854",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.24,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "클라이밍"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.24,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "오딘"
-    }
-  },
-  "오토배틀-챌린저스": {
-    "id": "오토배틀-챌린저스",
-    "title": {
-      "display": "오토배틀 챌린저스",
-      "owned": "오토배틀 챌린저스",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.1,
-      "weight": 1.79,
-      "minPlayers": 2,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        2,
-        4,
-        6,
-        8
-      ],
-      "recommendedPlayers": [
-        2,
-        4,
-        6,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "덱빌딩배틀"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.79,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "couple",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "couple",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "2인추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "오토배틀-챌린저스"
     }
   },
   "왓츠잇투야": {
@@ -8226,106 +4048,6 @@ const gameData = {
       "boardId": "왓츠잇투야"
     }
   },
-  "요트다이스": {
-    "id": "요트다이스",
-    "title": {
-      "display": "요트다이스",
-      "owned": "요트다이스",
-      "bgg": "Yahtzee"
-    },
-    "bgg": {
-      "id": "2243",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 5.5,
-      "weight": 1.18,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3,
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "파티 ㅡ주사위운"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.18,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "요트다이스"
-    }
-  },
   "우노포켓몬우노": {
     "id": "우노포켓몬우노",
     "title": {
@@ -8425,301 +4147,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "우노포켓몬우노"
-    }
-  },
-  "워드캡처": {
-    "id": "워드캡처",
-    "title": {
-      "display": "워드캡처",
-      "owned": "워드캡처",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.7,
-      "weight": 1.13,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "단어연상"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.13,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "워드캡처"
-    }
-  },
-  "워드캡처-티키타카": {
-    "id": "워드캡처-티키타카",
-    "title": {
-      "display": "워드캡처 티키타카",
-      "owned": "워드캡처 티키타카",
-      "bgg": "워드캡처 티키타카 (Word Capture Tiki-Taka)"
-    },
-    "bgg": {
-      "id": "375815",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.7,
-      "weight": 1.13,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "단어연상"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.13,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "워드캡처-티키타카"
-    }
-  },
-  "원더볼링": {
-    "id": "원더볼링",
-    "title": {
-      "display": "원더볼링",
-      "owned": "원더볼링",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.9,
-      "weight": 1,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "피지컬"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "원더볼링"
     }
   },
   "웰컴투": {
@@ -8824,312 +4251,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "웰컴투"
-    }
-  },
-  "웰컴투더문": {
-    "id": "웰컴투더문",
-    "title": {
-      "display": "웰컴투더문",
-      "owned": "웰컴투더문",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.9,
-      "weight": 2.48,
-      "minPlayers": 1,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        2,
-        3,
-        4
-      ],
-      "recommendedPlayers": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "롤앤라이트"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.48,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "couple",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "couple",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "2인추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "웰컴투더문"
-    }
-  },
-  "위자드": {
-    "id": "위자드",
-    "title": {
-      "display": "위자드",
-      "owned": "위자드",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7,
-      "weight": 1.7,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "클라이밍"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.7,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "위자드"
-    }
-  },
-  "유포리아확장": {
-    "id": "유포리아확장",
-    "title": {
-      "display": "유포리아+확장",
-      "owned": "유포리아+확장",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.2,
-      "weight": 3.12,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "heavy_strategy",
-      "shelfLabel": "헤비 전략게임",
-      "shelfFullLabel": "헤비 전략게임",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 3.12,
-      "moodTags": [
-        "brainy",
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "brainy",
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "전략",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천",
-        "오래즐김"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "유포리아확장"
     }
   },
   "이매진": {
@@ -9333,105 +4454,6 @@ const gameData = {
       "boardId": "인사이더"
     }
   },
-  "인생게임": {
-    "id": "인생게임",
-    "title": {
-      "display": "인생게임",
-      "owned": "인생게임",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 4.4,
-      "weight": 1.17,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "주사위"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.17,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "인생게임"
-    }
-  },
   "잉카의황금": {
     "id": "잉카의황금",
     "title": {
@@ -9532,106 +4554,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "잉카의황금"
-    }
-  },
-  "잠만보다이스": {
-    "id": "잠만보다이스",
-    "title": {
-      "display": "잠만보다이스",
-      "owned": "잠만보다이스",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5.5,
-      "weight": 1.18,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        3,
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "주사위족보"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.18,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "잠만보다이스"
     }
   },
   "재치와눈치": {
@@ -9931,204 +4853,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "젝스님트"
-    }
-  },
-  "젬블로": {
-    "id": "젬블로",
-    "title": {
-      "display": "젬블로",
-      "owned": "젬블로",
-      "bgg": "Gemblo"
-    },
-    "bgg": {
-      "id": "19427",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.86,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        6
-      ],
-      "recommendedPlayers": [
-        2,
-        4,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "타일놓기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.86,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "젬블로"
-    }
-  },
-  "차가운그녀가눈을뜨기전에": {
-    "id": "차가운그녀가눈을뜨기전에",
-    "title": {
-      "display": "차가운그녀가눈을뜨기전에",
-      "owned": "차가운그녀가눈을뜨기전에",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.9,
-      "weight": 1.7,
-      "minPlayers": 4,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        5
-      ],
-      "recommendedPlayers": [
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "마피아",
-        "블러핑"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.7,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "차가운그녀가눈을뜨기전에"
     }
   },
   "카멜레온": {
@@ -11039,307 +5763,6 @@ const gameData = {
       "boardId": "퀘스트"
     }
   },
-  "크로스클루": {
-    "id": "크로스클루",
-    "title": {
-      "display": "크로스클루",
-      "owned": "크로스클루",
-      "bgg": "Cross Clues"
-    },
-    "bgg": {
-      "id": "300753",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.07,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "단어연상",
-        "협력"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.07,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "크로스클루"
-    }
-  },
-  "클루": {
-    "id": "클루",
-    "title": {
-      "display": "클루",
-      "owned": "클루",
-      "bgg": "Clue"
-    },
-    "bgg": {
-      "id": "1294",
-      "matchStatus": "needs-review",
-      "year": "",
-      "rating": 5.7,
-      "weight": 1.65,
-      "minPlayers": 3,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4,
-        5
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "추리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.65,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "클루"
-    }
-  },
-  "키플라워-농부들-확장": {
-    "id": "키플라워-농부들-확장",
-    "title": {
-      "display": "키플라워 + 농부들 확장",
-      "owned": "키플라워 + 농부들 확장",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.7,
-      "weight": 3.34,
-      "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [
-        4
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "경매",
-        "마을건설"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "heavy_strategy",
-      "shelfLabel": "헤비 전략게임",
-      "shelfFullLabel": "헤비 전략게임",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 3.34,
-      "moodTags": [
-        "brainy",
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "brainy",
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "전략",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천",
-        "오래즐김"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "키플라워-농부들-확장"
-    }
-  },
   "타코캣고트치즈피자": {
     "id": "타코캣고트치즈피자",
     "title": {
@@ -11841,6 +6264,6636 @@ const gameData = {
       "boardId": "투카나여행길"
     }
   },
+  "포가튼워터스": {
+    "id": "포가튼워터스",
+    "title": {
+      "display": "포가튼워터스",
+      "owned": "포가튼워터스",
+      "bgg": "Forgotten Waters"
+    },
+    "bgg": {
+      "id": "302723",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.8,
+      "weight": 2.1,
+      "minPlayers": 2,
+      "maxPlayers": 7,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.1,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "포가튼워터스"
+    }
+  },
+  "포커칩세트": {
+    "id": "포커칩세트",
+    "title": {
+      "display": "포커칩세트",
+      "owned": "포커칩세트",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.7,
+      "weight": 2.43,
+      "minPlayers": 3,
+      "maxPlayers": 8,
+      "bestPlayers": [
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "블러핑",
+        "족보만들기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "poker_mahjong",
+      "shelfLabel": "범용코인 · 포커칩 · 마작패",
+      "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.43,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "포커칩세트"
+    }
+  },
+  "몇번이고푸른달에불을붙였다": {
+    "id": "몇번이고푸른달에불을붙였다",
+    "title": {
+      "display": "몇번이고푸른달에불을붙였다",
+      "owned": "몇번이고푸른달에불을붙였다",
+      "bgg": "Blue Moon"
+    },
+    "bgg": {
+      "id": "9446",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 8.7,
+      "weight": 3,
+      "minPlayers": 7,
+      "maxPlayers": 7,
+      "bestPlayers": [
+        7
+      ],
+      "recommendedPlayers": [
+        7
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "머더미스터리"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "머더미",
+      "shelfLabel": "머더미",
+      "shelfFullLabel": "머더미",
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3,
+      "moodTags": [
+        "brainy",
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "brainy",
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "전략",
+        "머리 쓰는",
+        "몰입감",
+        "게임러추천",
+        "오래즐김"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "몇번이고푸른달에불을붙였다"
+    }
+  },
+  "플립7": {
+    "id": "플립7",
+    "title": {
+      "display": "플립7",
+      "owned": "플립7",
+      "bgg": "Flip 7"
+    },
+    "bgg": {
+      "id": "420087",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.03,
+      "minPlayers": 3,
+      "maxPlayers": 8,
+      "bestPlayers": [
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "운시험"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.03,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "플립7"
+    }
+  },
+  "한밤의늑대인간": {
+    "id": "한밤의늑대인간",
+    "title": {
+      "display": "한밤의늑대인간",
+      "owned": "한밤의늑대인간",
+      "bgg": "One Night Ultimate Werewolf"
+    },
+    "bgg": {
+      "id": "147949",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7,
+      "weight": 1.38,
+      "minPlayers": 4,
+      "maxPlayers": 8,
+      "bestPlayers": [
+        6,
+        7,
+        8
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "마피아"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.38,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "한밤의늑대인간"
+    }
+  },
+  "할라피노": {
+    "id": "할라피노",
+    "title": {
+      "display": "할라피노",
+      "owned": "할라피노",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.3,
+      "weight": 1.4,
+      "minPlayers": 3,
+      "maxPlayers": 8,
+      "bestPlayers": [
+        3,
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "작은"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.4,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "할라피노"
+    }
+  },
+  "1862-이스턴-카운티": {
+    "id": "1862-이스턴-카운티",
+    "title": {
+      "display": "1862 이스턴 카운티",
+      "owned": "1862 이스턴 카운티",
+      "bgg": "1862: Railway Mania in the Eastern Counties"
+    },
+    "bgg": {
+      "id": "66837",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 8.2,
+      "weight": 4.61,
+      "minPlayers": 1,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
+      "difficultyId": "hardcore",
+      "difficultyWeight": 4.61,
+      "moodTags": [
+        "brainy",
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "silent_focus"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "brainy",
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group",
+        "silent_focus"
+      ],
+      "displayTags": [
+        "전략",
+        "조용히집중",
+        "머리 쓰는",
+        "몰입감",
+        "게임러추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "1862-이스턴-카운티"
+    }
+  },
+  "5초준다": {
+    "id": "5초준다",
+    "title": {
+      "display": "5초준다",
+      "owned": "5초준다",
+      "bgg": "5 Second Rule"
+    },
+    "bgg": {
+      "id": "86073",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 5.5,
+      "weight": 1.1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "단어연상"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "5초준다"
+    }
+  },
+  "그것이문제로다": {
+    "id": "그것이문제로다",
+    "title": {
+      "display": "그것이문제로다",
+      "owned": "그것이문제로다",
+      "bgg": "Top Ten"
+    },
+    "bgg": {
+      "id": "300905",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 5.7,
+      "weight": 1.05,
+      "minPlayers": 4,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        6
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "가치관추측"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.05,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "그것이문제로다"
+    }
+  },
+  "나나": {
+    "id": "나나",
+    "title": {
+      "display": "나나",
+      "owned": "나나",
+      "bgg": "Trio"
+    },
+    "bgg": {
+      "id": "352515",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.4,
+      "weight": 1.05,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "기억력 (사장추천★)"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.05,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "나나"
+    }
+  },
+  "냥자역학연구소": {
+    "id": "냥자역학연구소",
+    "title": {
+      "display": "냥자역학연구소",
+      "owned": "냥자역학연구소",
+      "bgg": "Cat in the box"
+    },
+    "bgg": {
+      "id": "324345",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 5.9,
+      "weight": 1.28,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "작은"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.28,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "냥자역학연구소"
+    }
+  },
+  "노팅엄의지방관": {
+    "id": "노팅엄의지방관",
+    "title": {
+      "display": "노팅엄의지방관",
+      "owned": "노팅엄의지방관",
+      "bgg": "Sheriff of Nottingham"
+    },
+    "bgg": {
+      "id": "157969",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.7,
+      "minPlayers": 4,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "협잡",
+        "블러핑"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.7,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "노팅엄의지방관"
+    }
+  },
+  "다운포스": {
+    "id": "다운포스",
+    "title": {
+      "display": "다운포스",
+      "owned": "다운포스",
+      "bgg": "Downforce"
+    },
+    "bgg": {
+      "id": "215311",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.3,
+      "weight": 1.72,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        6
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.72,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "다운포스"
+    }
+  },
+  "다잉메시지-공범만화가-확장": {
+    "id": "다잉메시지-공범만화가-확장",
+    "title": {
+      "display": "다잉메시지 + 공범,만화가 확장",
+      "owned": "다잉메시지 + 공범,만화가 확장",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.1,
+      "weight": 1,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "협력추리"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "다잉메시지-공범만화가-확장"
+    }
+  },
+  "다크호스": {
+    "id": "다크호스",
+    "title": {
+      "display": "다크호스",
+      "owned": "다크호스",
+      "bgg": "Dark Horse"
+    },
+    "bgg": {
+      "id": "98443",
+      "matchStatus": "needs-review",
+      "year": "",
+      "rating": 6.5,
+      "weight": 1.07,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "예측배팅"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.07,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "다크호스"
+    }
+  },
+  "당나귀다리": {
+    "id": "당나귀다리",
+    "title": {
+      "display": "당나귀다리",
+      "owned": "당나귀다리",
+      "bgg": "Donkey Bridge"
+    },
+    "bgg": {
+      "id": "386470",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.1,
+      "weight": 1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "기억력"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "당나귀다리"
+    }
+  },
+  "데스티네이션x": {
+    "id": "데스티네이션x",
+    "title": {
+      "display": "데스티네이션x",
+      "owned": "데스티네이션x",
+      "bgg": "Destination X"
+    },
+    "bgg": {
+      "id": "223726",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.6,
+      "weight": 1.25,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "지리"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.25,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "데스티네이션x"
+    }
+  },
+  "딩고디스크": {
+    "id": "딩고디스크",
+    "title": {
+      "display": "딩고디스크",
+      "owned": "딩고디스크",
+      "bgg": "Dingo's Dreams"
+    },
+    "bgg": {
+      "id": "182116",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.4,
+      "weight": 1,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "균형잡기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "딩고디스크"
+    }
+  },
+  "라마": {
+    "id": "라마",
+    "title": {
+      "display": "라마",
+      "owned": "라마",
+      "bgg": "L.L.A.M.A."
+    },
+    "bgg": {
+      "id": "266083",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.5,
+      "weight": 1.05,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "손패털기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.05,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "라마"
+    }
+  },
+  "라이즈오브아우구스투스": {
+    "id": "라이즈오브아우구스투스",
+    "title": {
+      "display": "라이즈오브아우구스투스",
+      "owned": "라이즈오브아우구스투스",
+      "bgg": "Rise of Augustus"
+    },
+    "bgg": {
+      "id": "137297",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.7,
+      "weight": 1.64,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "엔진빌딩"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.64,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "라이즈오브아우구스투스"
+    }
+  },
+  "러브레터": {
+    "id": "러브레터",
+    "title": {
+      "display": "러브레터",
+      "owned": "러브레터",
+      "bgg": "Love Letter"
+    },
+    "bgg": {
+      "id": "277085",
+      "matchStatus": "needs-review",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.11,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "상대 카드맞추기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.11,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "러브레터"
+    }
+  },
+  "러브크래프트-레터": {
+    "id": "러브크래프트-레터",
+    "title": {
+      "display": "러브크래프트 레터",
+      "owned": "러브크래프트 레터",
+      "bgg": "Lovecraft Letter"
+    },
+    "bgg": {
+      "id": "198740",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.5,
+      "weight": 1.44,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "파티"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.44,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "러브크래프트-레터"
+    }
+  },
+  "레일로드잉크": {
+    "id": "레일로드잉크",
+    "title": {
+      "display": "레일로드잉크",
+      "owned": "레일로드잉크",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.46,
+      "minPlayers": 1,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        2,
+        3
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "파티"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.46,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "couple",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "couple",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "2인추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "레일로드잉크"
+    }
+  },
+  "레지스탕스-쿠": {
+    "id": "레지스탕스-쿠",
+    "title": {
+      "display": "레지스탕스 쿠",
+      "owned": "레지스탕스 쿠",
+      "bgg": "Coup"
+    },
+    "bgg": {
+      "id": "131357",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7,
+      "weight": 1.41,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "상대패 맞추기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.41,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "레지스탕스-쿠"
+    }
+  },
+  "리버탈리아": {
+    "id": "리버탈리아",
+    "title": {
+      "display": "리버탈리아",
+      "owned": "리버탈리아",
+      "bgg": "Libertalia"
+    },
+    "bgg": {
+      "id": "125618",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.4,
+      "weight": 2.16,
+      "minPlayers": 1,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "카드내기순서"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.16,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "리버탈리아"
+    }
+  },
+  "마블좀비": {
+    "id": "마블좀비",
+    "title": {
+      "display": "마블좀비",
+      "owned": "마블좀비",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.9,
+      "weight": 2.38,
+      "minPlayers": 1,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        2,
+        4
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "협력"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.38,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "couple",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "couple",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "2인추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "마블좀비"
+    }
+  },
+  "메디치": {
+    "id": "메디치",
+    "title": {
+      "display": "메디치",
+      "owned": "메디치",
+      "bgg": "Medici"
+    },
+    "bgg": {
+      "id": "46",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.2,
+      "weight": 2.24,
+      "minPlayers": 4,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "경매",
+        "셋컬렉션"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.24,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "메디치"
+    }
+  },
+  "나의최애명대사": {
+    "id": "나의최애명대사",
+    "title": {
+      "display": "나의최애명대사",
+      "owned": "나의최애명대사",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.2,
+      "weight": 1,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "작은"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "나의최애명대사"
+    }
+  },
+  "모노폴리-딜럭스": {
+    "id": "모노폴리-딜럭스",
+    "title": {
+      "display": "모노폴리 딜럭스",
+      "owned": "모노폴리 딜럭스",
+      "bgg": "Monopoly"
+    },
+    "bgg": {
+      "id": "1406",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 4.4,
+      "weight": 1.62,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "부루마불"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.62,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "모노폴리-딜럭스"
+    }
+  },
+  "미노다이스": {
+    "id": "미노다이스",
+    "title": {
+      "display": "미노다이스",
+      "owned": "미노다이스",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.8,
+      "weight": 1.54,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "주사위트릭테이킹"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.54,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "미노다이스"
+    }
+  },
+  "바퀴벌레포커": {
+    "id": "바퀴벌레포커",
+    "title": {
+      "display": "바퀴벌레포커",
+      "owned": "바퀴벌레포커",
+      "bgg": "Cockroach Poker"
+    },
+    "bgg": {
+      "id": "11971",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.8,
+      "weight": 1.1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "심리전"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "바퀴벌레포커"
+    }
+  },
+  "방방곡곡-세계유랑": {
+    "id": "방방곡곡-세계유랑",
+    "title": {
+      "display": "방방곡곡 세계유랑",
+      "owned": "방방곡곡 세계유랑",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.6,
+      "weight": 1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "손패털기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "방방곡곡-세계유랑"
+    }
+  },
+  "베티보터보우트썸버터": {
+    "id": "베티보터보우트썸버터",
+    "title": {
+      "display": "베티보터보우트썸버터",
+      "owned": "베티보터보우트썸버터",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.3,
+      "weight": 1,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "발음하기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "베티보터보우트썸버터"
+    }
+  },
+  "듄임페리움봉기": {
+    "id": "듄임페리움봉기",
+    "title": {
+      "display": "듄임페리움봉기",
+      "owned": "듄임페리움봉기",
+      "bgg": "Dune: Imperium – Uprising"
+    },
+    "bgg": {
+      "id": "397598",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 8.7,
+      "weight": 3.45,
+      "minPlayers": 1,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "덱빌딩영향력"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.45,
+      "moodTags": [
+        "brainy",
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "brainy",
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "전략",
+        "머리 쓰는",
+        "몰입감",
+        "게임러추천",
+        "오래즐김"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "듄임페리움봉기"
+    }
+  },
+  "브레인토피아": {
+    "id": "브레인토피아",
+    "title": {
+      "display": "브레인토피아",
+      "owned": "브레인토피아",
+      "bgg": "Braintopia"
+    },
+    "bgg": {
+      "id": "206175",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.2,
+      "weight": 1.06,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "퀴즈"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.06,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "브레인토피아"
+    }
+  },
+  "블리츠": {
+    "id": "블리츠",
+    "title": {
+      "display": "블리츠",
+      "owned": "블리츠",
+      "bgg": "Dutch Blitz"
+    },
+    "bgg": {
+      "id": "148203",
+      "matchStatus": "needs-review",
+      "year": "",
+      "rating": 6.7,
+      "weight": 1.04,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "단어연상"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.04,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "블리츠"
+    }
+  },
+  "서퍼사우르스맥스": {
+    "id": "서퍼사우르스맥스",
+    "title": {
+      "display": "서퍼사우르스맥스",
+      "owned": "서퍼사우르스맥스",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7,
+      "weight": 1.17,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "파티"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.17,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "서퍼사우르스맥스"
+    }
+  },
+  "셀레스티아-빅박스": {
+    "id": "셀레스티아-빅박스",
+    "title": {
+      "display": "셀레스티아 빅박스",
+      "owned": "셀레스티아 빅박스",
+      "bgg": "Celestia"
+    },
+    "bgg": {
+      "id": "175117",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.8,
+      "weight": 2,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "블러핑"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "셀레스티아-빅박스"
+    }
+  },
+  "숲속의음악대": {
+    "id": "숲속의음악대",
+    "title": {
+      "display": "숲속의음악대",
+      "owned": "숲속의음악대",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 5.4,
+      "weight": 1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "숲속의음악대"
+    }
+  },
+  "스위스사는스미스씨": {
+    "id": "스위스사는스미스씨",
+    "title": {
+      "display": "스위스사는스미스씨",
+      "owned": "스위스사는스미스씨",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 5.9,
+      "weight": 1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "발음하기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스위스사는스미스씨"
+    }
+  },
+  "스컬": {
+    "id": "스컬",
+    "title": {
+      "display": "스컬",
+      "owned": "스컬",
+      "bgg": "Skull"
+    },
+    "bgg": {
+      "id": "92415",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.12,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "심리전"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.12,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스컬"
+    }
+  },
+  "스컬퀸": {
+    "id": "스컬퀸",
+    "title": {
+      "display": "스컬퀸",
+      "owned": "스컬퀸",
+      "bgg": "Skull Queen"
+    },
+    "bgg": {
+      "id": "423432",
+      "matchStatus": "needs-review",
+      "year": "",
+      "rating": 7.3,
+      "weight": 1.56,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "트릭테이킹",
+        "예측"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.56,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스컬퀸"
+    }
+  },
+  "스컬킹": {
+    "id": "스컬킹",
+    "title": {
+      "display": "스컬킹",
+      "owned": "스컬킹",
+      "bgg": "Skull King"
+    },
+    "bgg": {
+      "id": "150145",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.5,
+      "weight": 1.74,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "트릭테이킹"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.74,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스컬킹"
+    }
+  },
+  "스타워즈에픽듀얼": {
+    "id": "스타워즈에픽듀얼",
+    "title": {
+      "display": "스타워즈에픽듀얼",
+      "owned": "스타워즈에픽듀얼",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7,
+      "weight": 1.78,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        2,
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        4,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "삼가동님 제공"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.78,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "couple",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "couple",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "2인추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스타워즈에픽듀얼"
+    }
+  },
+  "스파이시": {
+    "id": "스파이시",
+    "title": {
+      "display": "스파이시",
+      "owned": "스파이시",
+      "bgg": "Spicy"
+    },
+    "bgg": {
+      "id": "299169",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.34,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "블러핑",
+        "클라이밍"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.34,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "스파이시"
+    }
+  },
+  "시퀀스-해리포터": {
+    "id": "시퀀스-해리포터",
+    "title": {
+      "display": "시퀀스 해리포터",
+      "owned": "시퀀스 해리포터",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.2,
+      "weight": 1.32,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "오목"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.32,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "시퀀스-해리포터"
+    }
+  },
+  "아임더보스": {
+    "id": "아임더보스",
+    "title": {
+      "display": "아임더보스",
+      "owned": "아임더보스",
+      "bgg": "I'm the Boss!"
+    },
+    "bgg": {
+      "id": "115",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.8,
+      "weight": 1.97,
+      "minPlayers": 4,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        6
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "협잡"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.97,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "아임더보스"
+    }
+  },
+  "야채주식": {
+    "id": "야채주식",
+    "title": {
+      "display": "야채주식",
+      "owned": "야채주식",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.8,
+      "weight": 1.08,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "작은"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.08,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "야채주식"
+    }
+  },
+  "언더워터항해기": {
+    "id": "언더워터항해기",
+    "title": {
+      "display": "언더워터항해기",
+      "owned": "언더워터항해기",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.4,
+      "weight": 1,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "작은"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "언더워터항해기"
+    }
+  },
+  "에메랄드스컬": {
+    "id": "에메랄드스컬",
+    "title": {
+      "display": "에메랄드스컬",
+      "owned": "에메랄드스컬",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7,
+      "weight": 1.92,
+      "minPlayers": 4,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "야찌",
+        "배팅"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.92,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "에메랄드스컬"
+    }
+  },
+  "옛날옛적에": {
+    "id": "옛날옛적에",
+    "title": {
+      "display": "옛날옛적에",
+      "owned": "옛날옛적에",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.4,
+      "weight": 1.37,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "이야기만들기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.37,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "옛날옛적에"
+    }
+  },
+  "오딘": {
+    "id": "오딘",
+    "title": {
+      "display": "오딘",
+      "owned": "오딘",
+      "bgg": "Odin"
+    },
+    "bgg": {
+      "id": "406854",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.8,
+      "weight": 1.24,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "클라이밍"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.24,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "오딘"
+    }
+  },
+  "오토배틀-챌린저스": {
+    "id": "오토배틀-챌린저스",
+    "title": {
+      "display": "오토배틀 챌린저스",
+      "owned": "오토배틀 챌린저스",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.1,
+      "weight": 1.79,
+      "minPlayers": 2,
+      "maxPlayers": 8,
+      "bestPlayers": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "recommendedPlayers": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "덱빌딩배틀"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.79,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "couple",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "couple",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "2인추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "오토배틀-챌린저스"
+    }
+  },
+  "요트다이스": {
+    "id": "요트다이스",
+    "title": {
+      "display": "요트다이스",
+      "owned": "요트다이스",
+      "bgg": "Yahtzee"
+    },
+    "bgg": {
+      "id": "2243",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 5.5,
+      "weight": 1.18,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "파티 ㅡ주사위운"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.18,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "요트다이스"
+    }
+  },
+  "워드캡처": {
+    "id": "워드캡처",
+    "title": {
+      "display": "워드캡처",
+      "owned": "워드캡처",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.7,
+      "weight": 1.13,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "단어연상"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.13,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "워드캡처"
+    }
+  },
+  "워드캡처-티키타카": {
+    "id": "워드캡처-티키타카",
+    "title": {
+      "display": "워드캡처 티키타카",
+      "owned": "워드캡처 티키타카",
+      "bgg": "워드캡처 티키타카 (Word Capture Tiki-Taka)"
+    },
+    "bgg": {
+      "id": "375815",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.7,
+      "weight": 1.13,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        6
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "단어연상"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.13,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "워드캡처-티키타카"
+    }
+  },
+  "원더볼링": {
+    "id": "원더볼링",
+    "title": {
+      "display": "원더볼링",
+      "owned": "원더볼링",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.9,
+      "weight": 1,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "피지컬"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "원더볼링"
+    }
+  },
+  "웰컴투더문": {
+    "id": "웰컴투더문",
+    "title": {
+      "display": "웰컴투더문",
+      "owned": "웰컴투더문",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.9,
+      "weight": 2.48,
+      "minPlayers": 1,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        2,
+        3,
+        4
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "롤앤라이트"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.48,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "couple",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "couple",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "2인추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "웰컴투더문"
+    }
+  },
+  "위자드": {
+    "id": "위자드",
+    "title": {
+      "display": "위자드",
+      "owned": "위자드",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7,
+      "weight": 1.7,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "클라이밍"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.7,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "위자드"
+    }
+  },
+  "유포리아확장": {
+    "id": "유포리아확장",
+    "title": {
+      "display": "유포리아+확장",
+      "owned": "유포리아+확장",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.2,
+      "weight": 3.12,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.12,
+      "moodTags": [
+        "brainy",
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "brainy",
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "전략",
+        "머리 쓰는",
+        "몰입감",
+        "게임러추천",
+        "오래즐김"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "유포리아확장"
+    }
+  },
+  "인생게임": {
+    "id": "인생게임",
+    "title": {
+      "display": "인생게임",
+      "owned": "인생게임",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 4.4,
+      "weight": 1.17,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "주사위"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.17,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "인생게임"
+    }
+  },
+  "잠만보다이스": {
+    "id": "잠만보다이스",
+    "title": {
+      "display": "잠만보다이스",
+      "owned": "잠만보다이스",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 5.5,
+      "weight": 1.18,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        3,
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "주사위족보"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
+      "difficultyId": "beginner",
+      "difficultyWeight": 1.18,
+      "moodTags": [
+        "light",
+        "cozy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "cozy",
+        "beginner",
+        "first_game",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "편안하게",
+        "입문추천",
+        "첫게임추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "잠만보다이스"
+    }
+  },
+  "젬블로": {
+    "id": "젬블로",
+    "title": {
+      "display": "젬블로",
+      "owned": "젬블로",
+      "bgg": "Gemblo"
+    },
+    "bgg": {
+      "id": "19427",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 6.8,
+      "weight": 1.86,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        6
+      ],
+      "recommendedPlayers": [
+        2,
+        4,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "타일놓기"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.86,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "젬블로"
+    }
+  },
+  "차가운그녀가눈을뜨기전에": {
+    "id": "차가운그녀가눈을뜨기전에",
+    "title": {
+      "display": "차가운그녀가눈을뜨기전에",
+      "owned": "차가운그녀가눈을뜨기전에",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 6.9,
+      "weight": 1.7,
+      "minPlayers": 4,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        5
+      ],
+      "recommendedPlayers": [
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "마피아",
+        "블러핑"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.7,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "차가운그녀가눈을뜨기전에"
+    }
+  },
+  "크로스클루": {
+    "id": "크로스클루",
+    "title": {
+      "display": "크로스클루",
+      "owned": "크로스클루",
+      "bgg": "Cross Clues"
+    },
+    "bgg": {
+      "id": "300753",
+      "matchStatus": "auto-confirmed",
+      "year": "",
+      "rating": 7.2,
+      "weight": 1.07,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "단어연상",
+        "협력"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
+      "difficultyId": "kids",
+      "difficultyWeight": 1.07,
+      "moodTags": [
+        "light"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "first_game",
+        "quick_play",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "가볍게",
+        "첫게임추천",
+        "짧게한판",
+        "모임추천",
+        "단체추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "크로스클루"
+    }
+  },
+  "클루": {
+    "id": "클루",
+    "title": {
+      "display": "클루",
+      "owned": "클루",
+      "bgg": "Clue"
+    },
+    "bgg": {
+      "id": "1294",
+      "matchStatus": "needs-review",
+      "year": "",
+      "rating": 5.7,
+      "weight": 1.65,
+      "minPlayers": 3,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4,
+        5
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "추리"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.65,
+      "moodTags": [
+        "light",
+        "brainy"
+      ],
+      "playTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [
+        "low_conflict"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "light",
+        "brainy",
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "클루"
+    }
+  },
+  "키플라워-농부들-확장": {
+    "id": "키플라워-농부들-확장",
+    "title": {
+      "display": "키플라워 + 농부들 확장",
+      "owned": "키플라워 + 농부들 확장",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 7.7,
+      "weight": 3.34,
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "mechanics": [
+        "경매",
+        "마을건설"
+      ],
+      "designers": [],
+      "description": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.34,
+      "moodTags": [
+        "brainy",
+        "immersive"
+      ],
+      "playTags": [
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "brainy",
+        "immersive",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "large_group"
+      ],
+      "displayTags": [
+        "전략",
+        "머리 쓰는",
+        "몰입감",
+        "게임러추천",
+        "오래즐김"
+      ],
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "키플라워-농부들-확장"
+    }
+  },
   "트래블블로그영": {
     "id": "트래블블로그영",
     "title": {
@@ -12337,105 +13390,6 @@ const gameData = {
       "boardId": "펭귄파티"
     }
   },
-  "포가튼워터스": {
-    "id": "포가튼워터스",
-    "title": {
-      "display": "포가튼워터스",
-      "owned": "포가튼워터스",
-      "bgg": "Forgotten Waters"
-    },
-    "bgg": {
-      "id": "302723",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.8,
-      "weight": 2.1,
-      "minPlayers": 2,
-      "maxPlayers": 7,
-      "bestPlayers": [
-        5
-      ],
-      "recommendedPlayers": [
-        2,
-        3,
-        4,
-        5,
-        6,
-        7
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "협력",
-      "shelfLabel": "협력",
-      "shelfFullLabel": "협력",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.1,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "포가튼워터스"
-    }
-  },
   "포인트샐러드-이브이에디션": {
     "id": "포인트샐러드-이브이에디션",
     "title": {
@@ -12532,109 +13486,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "포인트샐러드-이브이에디션"
-    }
-  },
-  "포커칩세트": {
-    "id": "포커칩세트",
-    "title": {
-      "display": "포커칩세트",
-      "owned": "포커칩세트",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.7,
-      "weight": 2.43,
-      "minPlayers": 3,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "블러핑",
-        "족보만들기"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "poker_mahjong",
-      "shelfLabel": "범용코인 · 포커칩 · 마작패",
-      "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.43,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "포커칩세트"
     }
   },
   "프리세이지": {
@@ -12834,105 +13685,6 @@ const gameData = {
       "boardId": "플래시포인트-영"
     }
   },
-  "플립7": {
-    "id": "플립7",
-    "title": {
-      "display": "플립7",
-      "owned": "플립7",
-      "bgg": "Flip 7"
-    },
-    "bgg": {
-      "id": "420087",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.2,
-      "weight": 1.03,
-      "minPlayers": 3,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        5,
-        6
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "운시험"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.03,
-      "moodTags": [
-        "light"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "첫게임추천",
-        "짧게한판",
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "플립7"
-    }
-  },
   "하베스트": {
     "id": "하베스트",
     "title": {
@@ -13124,208 +13876,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "하이다이브"
-    }
-  },
-  "한밤의늑대인간": {
-    "id": "한밤의늑대인간",
-    "title": {
-      "display": "한밤의늑대인간",
-      "owned": "한밤의늑대인간",
-      "bgg": "One Night Ultimate Werewolf"
-    },
-    "bgg": {
-      "id": "147949",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7,
-      "weight": 1.38,
-      "minPlayers": 4,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        6,
-        7,
-        8
-      ],
-      "recommendedPlayers": [
-        4,
-        5,
-        6,
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "마피아"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.38,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "한밤의늑대인간"
-    }
-  },
-  "할라피노": {
-    "id": "할라피노",
-    "title": {
-      "display": "할라피노",
-      "owned": "할라피노",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.3,
-      "weight": 1.4,
-      "minPlayers": 3,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        3,
-        4
-      ],
-      "recommendedPlayers": [
-        3,
-        4,
-        5,
-        6,
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "작은"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.4,
-      "moodTags": [
-        "light",
-        "cozy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "cozy",
-        "beginner",
-        "first_game",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "가볍게",
-        "편안하게",
-        "입문추천",
-        "첫게임추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "할라피노"
     }
   },
   "할리갈리": {
@@ -14891,91 +15441,6 @@ const gameData = {
       "boardId": "갱오브포"
     }
   },
-  "게놈의탑": {
-    "id": "게놈의탑",
-    "title": {
-      "display": "게놈의탑",
-      "owned": "게놈의탑",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 0,
-      "weight": 0,
-      "minPlayers": 7,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        7,
-        8
-      ],
-      "recommendedPlayers": [
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "머더미스터리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "머더미",
-      "shelfLabel": "머더미",
-      "shelfFullLabel": "머더미",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "게놈의탑"
-    }
-  },
   "고고시티": {
     "id": "고고시티",
     "title": {
@@ -15445,104 +15910,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "골드러시"
-    }
-  },
-  "구두룡저택의살인-미스터리파티시리즈": {
-    "id": "구두룡저택의살인-미스터리파티시리즈",
-    "title": {
-      "display": "구두룡저택의살인 (미스터리파티시리즈)",
-      "owned": "구두룡저택의살인 (미스터리파티시리즈)",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.6,
-      "weight": 2,
-      "minPlayers": 7,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        7,
-        8
-      ],
-      "recommendedPlayers": [
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "머더미스터리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "머더미",
-      "shelfLabel": "머더미",
-      "shelfFullLabel": "머더미",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
-      "playTags": [],
-      "situationTags": [
-        "beginner",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [
-        "low_conflict"
-      ],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "light",
-        "brainy",
-        "beginner",
-        "group",
-        "large_group",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "구두룡저택의살인-미스터리파티시리즈"
     }
   },
   "궁신": {
@@ -17381,91 +17748,6 @@ const gameData = {
       "boardId": "뉴클리엄"
     }
   },
-  "늑대인간마을의축제미스터리파티시리즈": {
-    "id": "늑대인간마을의축제미스터리파티시리즈",
-    "title": {
-      "display": "늑대인간마을의축제(미스터리파티시리즈)",
-      "owned": "늑대인간마을의축제(미스터리파티시리즈)",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.9,
-      "weight": 0,
-      "minPlayers": 7,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        7,
-        8
-      ],
-      "recommendedPlayers": [
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "머더미스터리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "머더미",
-      "shelfLabel": "머더미",
-      "shelfFullLabel": "머더미",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "늑대인간마을의축제미스터리파티시리즈"
-    }
-  },
   "니다벨리르": {
     "id": "니다벨리르",
     "title": {
@@ -18347,91 +18629,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "다이너스티-혼인과통치"
-    }
-  },
-  "다크율": {
-    "id": "다크율",
-    "title": {
-      "display": "다크율",
-      "owned": "다크율",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 0,
-      "weight": 0,
-      "minPlayers": 7,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        7,
-        8
-      ],
-      "recommendedPlayers": [
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "머더미스터리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "머더미",
-      "shelfLabel": "머더미",
-      "shelfFullLabel": "머더미",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "모임추천",
-        "단체추천"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "다크율"
     }
   },
   "대만차연대기": {
@@ -26876,104 +27073,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "멘네페르"
-    }
-  },
-  "몇번이고푸른달에불을붙였다": {
-    "id": "몇번이고푸른달에불을붙였다",
-    "title": {
-      "display": "몇번이고푸른달에불을붙였다",
-      "owned": "몇번이고푸른달에불을붙였다",
-      "bgg": "Blue Moon"
-    },
-    "bgg": {
-      "id": "9446",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 8.7,
-      "weight": 3,
-      "minPlayers": 7,
-      "maxPlayers": 7,
-      "bestPlayers": [
-        7
-      ],
-      "recommendedPlayers": [
-        7
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "머더미스터리"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "머더미",
-      "shelfLabel": "머더미",
-      "shelfFullLabel": "머더미",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 3,
-      "moodTags": [
-        "brainy",
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "brainy",
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "전략",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천",
-        "오래즐김"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "몇번이고푸른달에불을붙였다"
     }
   },
   "모던아트-페가수스": {
@@ -36132,105 +36231,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "시간을달리는트라이앵글-머더미스터리미니"
-    }
-  },
-  "시계탑에흐른피": {
-    "id": "시계탑에흐른피",
-    "title": {
-      "display": "시계탑에흐른피",
-      "owned": "시계탑에흐른피",
-      "bgg": "Blood on the Clocktower"
-    },
-    "bgg": {
-      "id": "240980",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 8.4,
-      "weight": 3.04,
-      "minPlayers": 7,
-      "maxPlayers": 8,
-      "bestPlayers": [
-        8
-      ],
-      "recommendedPlayers": [
-        7,
-        8
-      ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "mechanics": [
-        "마피아"
-      ],
-      "designers": [],
-      "description": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "별도",
-      "shelfLabel": "별도",
-      "shelfFullLabel": "별도",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 3.04,
-      "moodTags": [
-        "brainy",
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "brainy",
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
-      ],
-      "displayTags": [
-        "전략",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천",
-        "오래즐김"
-      ],
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "시계탑에흐른피"
     }
   },
   "시냅스챌린지2": {
