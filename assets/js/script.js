@@ -2422,8 +2422,8 @@ if(ownedWeightCapToggle){
     const on = ownedPageState.weightCap;
     ownedWeightCapToggle.classList.toggle("is-on", on);
     ownedWeightCapToggle.textContent = on
-      ? "🛡️\n제한ON"
-      : "🛡️✕\n제한OFF";
+      ? "난이도\n제한ON"
+      : "난이도\n제한OFF";
     ownedPageState.page = 1;
     updateOwnedGames();
   });
@@ -2672,7 +2672,7 @@ if(ownedSearchInput){
     const btn = document.getElementById("ownedWeightCapToggle");
     if(btn){
       btn.classList.add("is-on");
-      btn.textContent = "🛡️\n제한ON";
+      btn.textContent = "난이도\n제한ON";
     }
   }
 
