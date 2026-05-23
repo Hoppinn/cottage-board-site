@@ -1,3 +1,20 @@
+const fs = require("fs");
+const path = require("path");
+
+// .env 로드 (dotenv 없이 직접 파싱)
+try {
+  const envPath = path.resolve(process.cwd(), ".env");
+  fs.readFileSync(envPath, "utf-8")
+    .split("\n")
+    .forEach((line) => {
+      const eq = line.indexOf("=");
+      if (eq < 1) return;
+      const key = line.slice(0, eq).trim();
+      const val = line.slice(eq + 1).trim();
+      if (key && !process.env[key]) process.env[key] = val;
+    });
+} catch {}
+
 const { readJson, writeJson } = require("../_core/file-read-writer");
 
 const {
@@ -7,13 +24,7 @@ const {
   BGG_GAME_DETAILS_PATH,
 } = require("../_core/paths");
 
-const ENABLE_BGG_THING_API = false;
-
-/**
- * TEMP:
- * BGG API 승인 전에는 false.
- * 승인 후 true로 바꾸면 Thing API 상세정보를 가져옴.
- */
+const ENABLE_BGG_THING_API = true;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -312,15 +323,19 @@ async function fetchBggThing(bggId) {
 
   console.log(`BGG thing fetch: ${bggId}`);
 
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent":
-        "CottageBoardGameDataBot/1.0 (personal boardgame cafe data tool)",
+  const headers = {
+    "User-Agent":
+      "CottageBoardGameDataBot/1.0 (personal boardgame cafe data tool)",
+    Accept:
+      "application/xml,text/xml,*/*",
+  };
 
-      Accept:
-        "application/xml,text/xml,*/*",
-    },
-  });
+  if (process.env.BGG_API_TOKEN) {
+    headers["Authorization"] =
+      `Bearer ${process.env.BGG_API_TOKEN}`;
+  }
+
+  const res = await fetch(url, { headers });
 
   if (!res.ok) {
     throw new Error(
@@ -422,3 +437,10 @@ async function fetchBggDetails() {
 module.exports = {
   fetchBggDetails,
 };
+
+if (require.main === module) {
+  fetchBggDetails().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
