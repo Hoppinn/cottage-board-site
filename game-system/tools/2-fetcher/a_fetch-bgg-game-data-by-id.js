@@ -25,6 +25,7 @@ const {
 } = require("../_core/paths");
 
 const ENABLE_BGG_THING_API = true;
+const BATCH_SIZE = 20;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -323,19 +324,7 @@ async function fetchBggThing(bggId) {
 
   console.log(`BGG thing fetch: ${bggId}`);
 
-  const headers = {
-    "User-Agent":
-      "CottageBoardGameDataBot/1.0 (personal boardgame cafe data tool)",
-    Accept:
-      "application/xml,text/xml,*/*",
-  };
-
-  if (process.env.BGG_API_TOKEN) {
-    headers["Authorization"] =
-      `Bearer ${process.env.BGG_API_TOKEN}`;
-  }
-
-  const res = await fetch(url, { headers });
+  const res = await fetch(url, { headers: makeBggHeaders() });
 
   if (!res.ok) {
     throw new Error(
@@ -346,6 +335,52 @@ async function fetchBggThing(bggId) {
   const xml = await res.text();
 
   return parseBggThingXml(xml, bggId);
+}
+
+function extractItemBlocks(xml) {
+  const blocks = [];
+  const regex =
+    /<item\s+[^>]*id="(\d+)"[^>]*>([\s\S]*?)<\/item>/gi;
+  let match;
+  while ((match = regex.exec(xml)) !== null) {
+    blocks.push({ id: match[1], xml: match[0] });
+  }
+  return blocks;
+}
+
+function makeBggHeaders() {
+  const headers = {
+    "User-Agent":
+      "CottageBoardGameDataBot/1.0 (personal boardgame cafe data tool)",
+    Accept: "application/xml,text/xml,*/*",
+  };
+  if (process.env.BGG_API_TOKEN) {
+    headers["Authorization"] =
+      `Bearer ${process.env.BGG_API_TOKEN}`;
+  }
+  return headers;
+}
+
+async function fetchBggThingBatch(bggIds) {
+  const url =
+    `https://boardgamegeek.com/xmlapi2/thing?id=${bggIds.join(",")}&stats=1`;
+
+  console.log(
+    `BGG batch fetch: ${bggIds.length}개 [${bggIds.slice(0, 3).join(",")}${bggIds.length > 3 ? "..." : ""}]`
+  );
+
+  const res = await fetch(url, { headers: makeBggHeaders() });
+
+  if (!res.ok) {
+    throw new Error(
+      `BGG batch failed: ${res.status} (${bggIds.join(",")})`
+    );
+  }
+
+  const xml = await res.text();
+  return extractItemBlocks(xml).map(({ id, xml: itemXml }) =>
+    parseBggThingXml(itemXml, id)
+  );
 }
 
 function getTargetBggIds(
@@ -405,29 +440,48 @@ async function fetchBggDetails() {
     return;
   }
 
-  for (const bggId of targetIds) {
+  const total = targetIds.length;
+  console.log(`fetch 대상: ${total}개 → ${Math.ceil(total / BATCH_SIZE)}배치`);
+
+  for (let i = 0; i < targetIds.length; i += BATCH_SIZE) {
+    const batch = targetIds.slice(i, i + BATCH_SIZE);
+
     try {
-      const detail =
-        await fetchBggThing(bggId);
+      const results = await fetchBggThingBatch(batch);
 
-      detailsCache[bggId] = detail;
+      results.forEach((detail) => {
+        detailsCache[detail.bggId] = detail;
+      });
 
-      writeJson(
-        BGG_GAME_DETAILS_PATH,
-        detailsCache
+      writeJson(BGG_GAME_DETAILS_PATH, detailsCache);
+
+      console.log(
+        `진행: ${Math.min(i + BATCH_SIZE, total)} / ${total}`
       );
 
       await sleep(1500);
-    } catch (error) {
-      console.log(error.message);
+    } catch (batchError) {
+      console.log(`배치 실패, 개별 재시도: ${batchError.message}`);
 
-      await sleep(2500);
+      for (const bggId of batch) {
+        try {
+          const detail = await fetchBggThing(bggId);
+
+          detailsCache[bggId] = detail;
+
+          writeJson(BGG_GAME_DETAILS_PATH, detailsCache);
+
+          await sleep(1500);
+        } catch (err) {
+          console.log(err.message);
+
+          await sleep(2500);
+        }
+      }
     }
   }
 
-  console.log(
-    "BGG details cache updated:"
-  );
+  console.log("BGG details cache updated:");
 
   console.log({
     total: Object.keys(detailsCache).length,
