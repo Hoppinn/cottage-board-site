@@ -6,7 +6,7 @@ const { readJson } = require("../../_core/file-read-writer");
 const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
   COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH,
-  BGG_DETAILS_CACHE_PATH,
+  BGG_GAME_DETAILS_PATH,
 } = require("../../_core/paths");
 
 function saveMaster(master) {
@@ -60,7 +60,7 @@ function createGameId(gameName) {
 }
 
 function findBggDetailByOwnedName(gameName) {
-  const detailsCache = readJson(BGG_DETAILS_CACHE_PATH, {});
+  const detailsCache = readJson(BGG_GAME_DETAILS_PATH, {});
   const cleanName = String(gameName || "").trim();
 
   return Object.values(detailsCache).find((detail) => {

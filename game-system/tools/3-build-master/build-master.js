@@ -1,1 +1,145 @@
-// build-master.js — master.json 기반 최종 빌드 (미구현)
+const { readJson, writeJson } = require("../_core/file-read-writer");
+const { readXlsxNormalized } = require("../0-input/from-file/import-from-xlsx");
+
+const {
+  COTTAGE_OWNED_GAMES_MASTER_PATH,
+  COTTAGE_OWNED_GAMES_LEDGER_JSON_PATH,
+  COTTAGE_OWNED_GAMES_XLSX_PATH,
+  BGG_MATCH_MAP_PATH,
+  BGG_GAME_DETAILS_PATH,
+} = require("../_core/paths");
+
+function toNumber(v, fallback = null) {
+  const n = Number(String(v || "").replace(/[^\d.]/g, ""));
+  return Number.isFinite(n) && n !== 0 ? n : fallback;
+}
+
+function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing) {
+  const bggId = matchInfo?.bggId ? String(matchInfo.bggId) : null;
+  const d = bggDetails || {};
+
+  const suggestedPlayers = d.suggested_numplayers || {};
+  const bggBest = suggestedPlayers.best || [];
+  const bggRecommended = suggestedPlayers.recommended || [];
+  const bggNotRecommended = suggestedPlayers.not_recommended || [];
+
+  // XLSX bold cells take priority for bestPlayers (curator's pick)
+  const bestPlayers = xlsxRow.bestPlayers?.length ? xlsxRow.bestPlayers : bggBest;
+  const recommendedPlayers = xlsxRow.recommendedPlayers?.length ? xlsxRow.recommendedPlayers : bggRecommended;
+
+  const now = new Date().toISOString();
+  const hasBggData = Boolean(bggId && d.image);
+
+  return {
+    id: xlsxRow.id,
+    ownedName: xlsxRow.ownedName,
+    titleKo: xlsxRow.ownedName,
+    titleEn: matchInfo?.bggName || d.title || "",
+
+    bggId,
+    matchStatus: matchInfo?.status || "unmatched",
+
+    yearPublished: toNumber(d.yearpublished),
+    minPlayers: toNumber(d.minplayers),
+    maxPlayers: toNumber(d.maxplayers),
+    playingTime: toNumber(d.playingtime),
+    minPlayTime: toNumber(d.minplaytime),
+    maxPlayTime: toNumber(d.maxplaytime),
+    minAge: toNumber(d.minage),
+    difficulty: toNumber(d.averageweight),
+    rating: toNumber(d.average),
+    bayesRating: toNumber(d.bayesaverage),
+    usersRated: toNumber(d.usersrated),
+    rank: d.rank && d.rank !== "Not Ranked" ? toNumber(d.rank) : null,
+    designers: d.designers || [],
+    artists: d.artists || [],
+    publishers: d.publishers || [],
+    categories: d.categories || [],
+    mechanics: d.mechanics || [],
+    recommendedPlayers,
+    bestPlayers,
+    notRecommendedPlayers: bggNotRecommended,
+    image: d.image || "",
+    thumbnail: d.thumbnail || "",
+    description: d.description || "",
+
+    // Cottage XLSX fields
+    difficultyWeight: xlsxRow.difficultyWeight || 0,
+    location: xlsxRow.shelfGroupId || "",
+    sourceMechanism: xlsxRow.sourceMechanism || "",
+    sourceRating: xlsxRow.sourceRating || 0,
+    supportsLargeGroup: xlsxRow.supportsLargeGroup || false,
+
+    // Human-editable — preserve if already in existing master
+    comment: existing?.comment || "",
+    tags: existing?.tags?.length ? existing.tags : [],
+
+    status: hasBggData ? "ready" : "pending-cache",
+    createdAt: existing?.createdAt || now,
+    updatedAt: now,
+    source: {
+      base: "xlsx-import",
+      overrides: ["ownedName", "titleKo", "bestPlayers", "recommendedPlayers"],
+    },
+  };
+}
+
+function buildLedger(games) {
+  return Object.values(games).map((g) => ({
+    id: g.id,
+    ownedName: g.ownedName,
+    titleEn: g.titleEn,
+    bggId: g.bggId,
+    matchStatus: g.matchStatus,
+    status: g.status,
+    location: g.location,
+    difficulty: g.difficulty,
+    difficultyWeight: g.difficultyWeight,
+    rating: g.rating,
+    bestPlayers: g.bestPlayers,
+    recommendedPlayers: g.recommendedPlayers,
+  }));
+}
+
+async function buildMaster() {
+  const { rows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
+  const matchMap = readJson(BGG_MATCH_MAP_PATH, {});
+  const bggDetails = readJson(BGG_GAME_DETAILS_PATH, {});
+  const existingMaster = readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { version: 1, source: "cottageboard-master", games: {} });
+
+  const games = {};
+  const now = new Date().toISOString();
+
+  for (const row of rows) {
+    const matchInfo = matchMap[row.ownedName] || null;
+    const bggId = matchInfo?.bggId ? String(matchInfo.bggId) : null;
+    const details = bggId ? bggDetails[bggId] || {} : {};
+    const existing = existingMaster.games?.[row.id] || null;
+
+    games[row.id] = buildMasterGame(row, matchInfo, details, existing);
+  }
+
+  writeJson(COTTAGE_OWNED_GAMES_MASTER_PATH, {
+    version: 1,
+    source: "cottageboard-master",
+    updatedAt: now,
+    games,
+  });
+
+  writeJson(COTTAGE_OWNED_GAMES_LEDGER_JSON_PATH, buildLedger(games));
+
+  const total = Object.keys(games).length;
+  const ready = Object.values(games).filter((g) => g.status === "ready").length;
+
+  console.log("master.json built:");
+  console.log({ total, ready, pendingCache: total - ready, ledger: COTTAGE_OWNED_GAMES_LEDGER_JSON_PATH });
+}
+
+module.exports = { buildMaster };
+
+if (require.main === module) {
+  buildMaster().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

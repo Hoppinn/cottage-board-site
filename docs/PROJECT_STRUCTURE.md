@@ -276,7 +276,7 @@ status 체계:
 
 BGG Thing API로 수집한 게임 상세 데이터 캐시.
 
-현재 상태: 거의 비어있음 (BGG API 승인 대기 중, ENABLE_BGG_THING_API = false).
+현재 상태: BGG API 승인 완료, ENABLE_BGG_THING_API = true. 636개 중 ~346개 수집 완료 (일부 429 rate limit으로 pending).
 API 승인 후 2-fetcher/a_fetch-bgg-game-data-by-id.js를 실행하면 채워진다.
 
 포함 예정 데이터:
@@ -320,7 +320,7 @@ library/
 ### library/1-master/cottage-owned-games-master.json
 
 사람이 자세히 보는 상세 장부. 검수 / 수동 보정용.
-향후 final output build의 기준 데이터가 될 예정.
+build-master.js 실행으로 생성. final output build(build-output.js)의 기준 데이터.
 
 저장되는 resolvedGame 구조:
 id, ownedName, titleKo, titleEn, bggId, yearPublished,
@@ -560,11 +560,18 @@ categories, mechanics, suggested_numplayers
 
 ```
 3-build-master/
-└── build-master.js     ← 현재 stub (미구현)
+└── build-master.js
 ```
 
-향후 역할: staging 데이터 + XLSX + human-input/overwrite를 조합해서 master.json 생성.
-현재는 add-owned-game.js가 master.json에 직접 쓰는 방식.
+입력: XLSX + 2-match-map.json + bgg-game-details.json
+출력: library/1-master/cottage-owned-games-master.json + library/2-ledger/cottage-owned-games-ledger.json
+
+실행: node game-system/tools/3-build-master/build-master.js (또는 npm run build:master)
+
+특징:
+- 기존 master.json에서 수동 편집 필드(comment, tags) 보존
+- XLSX 굵은 글씨 bestPlayers 우선 사용 (BGG 추천보다 코티지 큐레이션 우선)
+- status: ready (BGG 이미지 있음) / pending-cache (BGG 데이터 없음)
 
 ---
 
@@ -579,21 +586,20 @@ categories, mechanics, suggested_numplayers
 
 **build-output.js**
 
-입력: XLSX + 2-match-map + bgg-game-details + human-input/overwrite
+입력: library/1-master/cottage-owned-games-master.json
 출력: library/3-output/cottage-games-data-output.js / .json
 
 내부적으로 _core/auto-tagger.js의 mergeCottageTags()를 호출해서 태그를 병합한다.
 
-실행: node game-system/tools/4-build-output/build-output.js
+실행: node game-system/tools/4-build-output/build-output.js (또는 npm run build)
 
-주의: 현재 COTTAGE_OWNED_GAMES_XLSX_PATH를 입력으로 참조하지만,
-이전 구조에서는 normalized JSON을 읽었음. 로직 전환 완전 검증 필요.
+주의: master.json이 없거나 비어있으면 실패. 먼저 npm run build:master 를 실행해야 한다.
 
 ---
 
 ## 9. 데이터 흐름
 
-### 9-1. 현재 파이프라인 (로컬 CSV 기반)
+### 9-1. 현재 파이프라인
 
 ```
 source/2-cottage-manual/cottage-owned-games.xlsx
@@ -602,11 +608,16 @@ tools/1-matcher/b_run-local-match.js
         ↓
 staging/bgg-id-mapping/2-match-map.json
         ↓
-tools/2-fetcher/a_fetch-bgg-game-data-by-id.js  [현재 비활성]
+tools/2-fetcher/a_fetch-bgg-game-data-by-id.js
         ↓
 staging/bgg-api-snapshot/bgg-game-details.json
         ↓
-tools/4-build-output/build-output.js
+tools/3-build-master/build-master.js  (npm run build:master)
+        ↓
+library/1-master/cottage-owned-games-master.json
+library/2-ledger/cottage-owned-games-ledger.json
+        ↓
+tools/4-build-output/build-output.js  (npm run build)
         ↓
 library/3-output/cottage-games-data-output.js / .json
         ↓
@@ -630,18 +641,19 @@ library/2-ledger/cottage-owned-games-ledger.xlsx
 [향후] library/3-output/ 자동 rebuild
 ```
 
-### 9-3. BGG API cache 생성 흐름 (현재 비활성)
+### 9-3. BGG API cache 갱신 흐름
 
 ```
-BGG API 승인 완료
-        ↓
-ENABLE_BGG_THING_API = true
+npm run fetch:bgg
         ↓
 tools/2-fetcher/a_fetch-bgg-game-data-by-id.js 실행
+(match-map에서 auto-confirmed/forced 게임 중 미수집 항목만 요청)
         ↓
 staging/bgg-api-snapshot/bgg-game-details.json 갱신
         ↓
-pending-cache 게임들 → status: ready 전환 (refresh 도구 예정)
+npm run build:master  (pending-cache → ready 전환)
+        ↓
+npm run build
 ```
 
 ### 9-4. HTML → 브라우저 로딩 순서
@@ -667,10 +679,10 @@ pending-cache 게임들 → status: ready 전환 (refresh 도구 예정)
 | 항목 | 현재 상태 | 미래 의도 |
 |------|-----------|-----------|
 | 데이터 원본 | XLSX (수작업) | BGG API (자동) |
-| BGG details | 거의 비어있음 | API 승인 후 채워짐 |
-| final build | XLSX + staging 기반 | master.json 기반으로 전환 |
+| BGG details | ~346개 수집 완료, 290개 pending | 전체 수집 완료 |
+| final build | master.json 기반 (완료) | — |
 | 게임 추가 방식 | add-owned-game.js CLI | GUI / 모바일 입력창 |
-| 3-build-master | stub (미구현) | staging + overwrite → master.json 생성 |
+| 3-build-master | 구현 완료 | — |
 | b_run-local-match 입력 | 로직 전환 미완 | XLSX 또는 master.json 기반으로 정리 |
 | script.js 구조 | 통합 단일 파일 | 역할별 분리 (장기) |
 | assets/js/config/ | 빈 폴더 | config 파일 복사본 빌드 후 배치 예정 |
@@ -679,11 +691,8 @@ pending-cache 게임들 → status: ready 전환 (refresh 도구 예정)
 
 ## 11. 현재 미완 / 결정 대기 항목
 
-- BGG API 승인 후 ENABLE_BGG_THING_API = true 전환
-- pending-cache refresh 도구 (refresh-owned-games-from-cache.js)
-- 3-build-master/build-master.js 구현
+- pending-cache 290개 → fetch:bgg 재실행으로 추가 수집 필요 (429 rate limit으로 미수집)
 - b_run-local-match.js 로직 전환 (TSV → XLSX/master.json 기반)
-- build-output.js 로직 검증 (XLSX 직접 읽기 방식 전환 확인)
 - config/difficulty-levels.js와 script.js 내 DIFFICULTY_LEVELS 중복 해소
 - game-tag-matcher.js ES module/CommonJS 충돌 해소 (장기)
 - assets/js/config/ 빌드 도구 구현

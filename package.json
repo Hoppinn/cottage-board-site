@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "build:master": "node game-system/tools/3-build-master/build-master.js",
     "build": "node game-system/tools/4-build-output/build-output.js",
     "match:local": "node game-system/tools/1-matcher/b_run-local-match.js",
     "match:api": "node game-system/tools/1-matcher/a_run-api-match.js",

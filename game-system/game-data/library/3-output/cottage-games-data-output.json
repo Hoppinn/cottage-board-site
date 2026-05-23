@@ -4,7 +4,7 @@
     "title": {
       "display": "7원더스",
       "owned": "7원더스",
-      "bgg": ""
+      "bgg": "7 Wonders"
     },
     "bgg": {
       "id": "68448",
@@ -20,6 +20,8 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6,
         7
       ],
@@ -157,9 +159,9 @@
       ],
       "recommendedPlayers": [
         5,
-        8,
-        9,
-        10
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -291,17 +293,17 @@
       "minPlayers": 2,
       "maxPlayers": 12,
       "bestPlayers": [
-        6,
-        8
+        5,
+        6
       ],
       "recommendedPlayers": [
+        2,
+        3,
         4,
         5,
+        6,
         7,
-        9,
-        10,
-        11,
-        12
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -607,11 +609,9 @@
       "recommendedPlayers": [
         4,
         5,
+        6,
         7,
-        9,
-        10,
-        11,
-        12
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -855,6 +855,8 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6,
         7
       ],
@@ -967,10 +969,10 @@
     "title": {
       "display": "노터치크라켄",
       "owned": "노터치크라켄",
-      "bgg": "Touch"
+      "bgg": ""
     },
     "bgg": {
-      "id": "7119",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.3,
@@ -1443,11 +1445,13 @@
       "maxPlayers": 8,
       "bestPlayers": [
         6,
-        7,
-        8
+        7
       ],
       "recommendedPlayers": [
-        5
+        5,
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -1572,6 +1576,8 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
+        5,
         6,
         7
       ],
@@ -1716,7 +1722,11 @@
         7
       ],
       "recommendedPlayers": [
-        4
+        3,
+        4,
+        5,
+        6,
+        7
       ],
       "notRecommendedPlayers": [
         1,
@@ -1951,9 +1961,9 @@
       ],
       "recommendedPlayers": [
         5,
-        9,
-        10,
-        11
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -2105,7 +2115,11 @@
         6
       ],
       "recommendedPlayers": [
-        4
+        4,
+        5,
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -2235,7 +2249,9 @@
       "recommendedPlayers": [
         4,
         5,
-        9
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -2467,12 +2483,12 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
+        4,
+        5,
+        6,
         7,
-        8,
-        9,
-        10,
-        11,
-        12
+        8
       ],
       "notRecommendedPlayers": [
         13,
@@ -2614,11 +2630,15 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        4
+        5,
+        6
       ],
       "recommendedPlayers": [
-        2,
-        3
+        3,
+        4,
+        5,
+        6,
+        7
       ],
       "notRecommendedPlayers": [
         1,
@@ -2660,7 +2680,8 @@
       "situationTags": [
         "beginner",
         "first_game",
-        "group"
+        "group",
+        "large_group"
       ],
       "interactionTags": [
         "competitive"
@@ -2676,6 +2697,7 @@
         "beginner",
         "first_game",
         "group",
+        "large_group",
         "competitive"
       ],
       "displayTags": [
@@ -2728,11 +2750,12 @@
       "minPlayers": 3,
       "maxPlayers": 8,
       "bestPlayers": [
-        5,
-        6
+        5
       ],
       "recommendedPlayers": [
         4,
+        5,
+        6,
         7,
         8
       ],
@@ -2854,16 +2877,15 @@
       "minPlayers": 3,
       "maxPlayers": 12,
       "bestPlayers": [
+        6,
+        7
+      ],
+      "recommendedPlayers": [
+        4,
         5,
         6,
         7,
         8
-      ],
-      "recommendedPlayers": [
-        4,
-        10,
-        11,
-        12
       ],
       "notRecommendedPlayers": [
         1,
@@ -2971,7 +2993,8 @@
       ],
       "recommendedPlayers": [
         5,
-        6
+        6,
+        7
       ],
       "notRecommendedPlayers": [
         1,
@@ -3119,6 +3142,8 @@
       ],
       "recommendedPlayers": [
         5,
+        6,
+        7,
         8
       ],
       "notRecommendedPlayers": [
@@ -3273,6 +3298,8 @@
       "recommendedPlayers": [
         3,
         4,
+        5,
+        6,
         7
       ],
       "notRecommendedPlayers": [
@@ -3397,11 +3424,14 @@
       "minPlayers": 2,
       "maxPlayers": 7,
       "bestPlayers": [
+        3,
         4,
         5
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6,
         7
       ],
@@ -3523,15 +3553,12 @@
       "minPlayers": 6,
       "maxPlayers": 12,
       "bestPlayers": [
-        8,
-        10,
-        12
+        8
       ],
       "recommendedPlayers": [
         6,
         7,
-        9,
-        11
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -3671,8 +3698,8 @@
       "recommendedPlayers": [
         5,
         6,
-        9,
-        10
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -3823,6 +3850,8 @@
       ],
       "recommendedPlayers": [
         5,
+        6,
+        7,
         8
       ],
       "notRecommendedPlayers": [
@@ -3966,9 +3995,14 @@
         4
       ],
       "recommendedPlayers": [
+        1,
         2,
+        3,
+        4,
         5,
-        6
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -4208,6 +4242,7 @@
       "recommendedPlayers": [
         4,
         5,
+        6,
         7,
         8
       ],
@@ -4351,10 +4386,9 @@
       ],
       "recommendedPlayers": [
         5,
-        9,
-        10,
-        11,
-        12
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -4485,18 +4519,11 @@
       "minPlayers": 6,
       "maxPlayers": 21,
       "bestPlayers": [
-        9,
-        10,
-        11,
-        12
+        8
       ],
       "recommendedPlayers": [
         7,
-        8,
-        13,
-        14,
-        15,
-        16
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -4639,10 +4666,10 @@
     "title": {
       "display": "시타델",
       "owned": "시타델",
-      "bgg": "Citadels"
+      "bgg": ""
     },
     "bgg": {
-      "id": "205398",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.2,
@@ -4756,8 +4783,8 @@
       "recommendedPlayers": [
         5,
         6,
-        9,
-        10
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -5723,6 +5750,7 @@
       "recommendedPlayers": [
         4,
         5,
+        6,
         7
       ],
       "notRecommendedPlayers": [
@@ -5855,11 +5883,12 @@
         6
       ],
       "recommendedPlayers": [
+        3,
         4,
+        5,
+        6,
         7,
-        8,
-        9,
-        10
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -5996,6 +6025,8 @@
       "recommendedPlayers": [
         4,
         5,
+        6,
+        7,
         8
       ],
       "notRecommendedPlayers": [
@@ -6120,10 +6151,10 @@
     "title": {
       "display": "카멜업2판",
       "owned": "카멜업2판",
-      "bgg": "Camel Up (Second Edition)"
+      "bgg": ""
     },
     "bgg": {
-      "id": "260605",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.5,
@@ -6341,6 +6372,7 @@
       "recommendedPlayers": [
         4,
         5,
+        6,
         7,
         8
       ],
@@ -6482,6 +6514,7 @@
       "recommendedPlayers": [
         4,
         5,
+        6,
         7,
         8
       ],
@@ -6617,12 +6650,12 @@
       "minPlayers": 2,
       "maxPlayers": 8,
       "bestPlayers": [
-        6,
-        8
+        6
       ],
       "recommendedPlayers": [
         4,
         5,
+        6,
         7,
         8
       ],
@@ -6758,17 +6791,15 @@
       "minPlayers": 4,
       "maxPlayers": 12,
       "bestPlayers": [
-        6,
-        8
+        6
       ],
       "recommendedPlayers": [
         3,
         4,
         5,
+        6,
         7,
-        9,
-        10,
-        11
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -6894,12 +6925,17 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        5
+        4,
+        5,
+        6
       ],
       "recommendedPlayers": [
         3,
         4,
-        6
+        5,
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -7152,6 +7188,9 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
+        6,
         7,
         8
       ],
@@ -7495,7 +7534,8 @@
       "recommendedPlayers": [
         5,
         6,
-        7
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -7627,6 +7667,9 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
+        4,
+        5,
         6,
         7,
         8
@@ -7741,8 +7784,10 @@
         5
       ],
       "recommendedPlayers": [
+        2,
         3,
         4,
+        5,
         6,
         7
       ],
@@ -8187,8 +8232,9 @@
       "recommendedPlayers": [
         4,
         5,
-        9,
-        10
+        6,
+        7,
+        8
       ],
       "notRecommendedPlayers": [
         1,
@@ -8440,6 +8486,7 @@
         1,
         2,
         3,
+        4,
         5,
         6
       ],
@@ -8565,6 +8612,8 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -8685,14 +8734,12 @@
       "minPlayers": 4,
       "maxPlayers": 9,
       "bestPlayers": [
-        6,
-        7,
-        8
+        6
       ],
       "recommendedPlayers": [
         4,
         5,
-        9
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -8819,11 +8866,12 @@
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5
+        4
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -8944,7 +8992,10 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -9061,8 +9112,9 @@
         5
       ],
       "recommendedPlayers": [
-        3,
-        4
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -9200,8 +9252,10 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4,
-        5
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -9405,10 +9459,10 @@
     "title": {
       "display": "다크호스",
       "owned": "다크호스",
-      "bgg": "Dark Horse"
+      "bgg": ""
     },
     "bgg": {
-      "id": "98443",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.5,
@@ -9513,7 +9567,10 @@
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
-        4
+        3,
+        4,
+        5,
+        6
       ],
       "recommendedPlayers": [
         3,
@@ -9633,11 +9690,12 @@
       "minPlayers": 2,
       "maxPlayers": 10,
       "bestPlayers": [
-        2,
         4
       ],
       "recommendedPlayers": [
+        2,
         3,
+        4,
         5,
         6
       ],
@@ -9686,7 +9744,6 @@
         "group",
         "beginner",
         "first_game",
-        "couple",
         "large_group"
       ],
       "interactionTags": [
@@ -9704,7 +9761,6 @@
         "group",
         "beginner",
         "first_game",
-        "couple",
         "large_group",
         "table_talk",
         "team"
@@ -9763,7 +9819,11 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -9877,11 +9937,12 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5
+        4
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -10007,6 +10068,8 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
+        4,
         5,
         6
       ],
@@ -10116,10 +10179,10 @@
     "title": {
       "display": "러브레터",
       "owned": "러브레터",
-      "bgg": "Love Letter"
+      "bgg": ""
     },
     "bgg": {
-      "id": "277085",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.2,
@@ -10230,6 +10293,8 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -10471,6 +10536,7 @@
       "recommendedPlayers": [
         3,
         4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -10617,10 +10683,15 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4
+        4,
+        5,
+        6
       ],
       "recommendedPlayers": [
+        1,
+        2,
         3,
+        4,
         5,
         6
       ],
@@ -10861,7 +10932,9 @@
         6
       ],
       "recommendedPlayers": [
-        4
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -11082,6 +11155,7 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
         5,
         6
       ],
@@ -11307,11 +11381,14 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
+        3,
+        4,
         5
       ],
       "recommendedPlayers": [
         3,
         4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -11632,6 +11709,7 @@
         1,
         2,
         3,
+        4,
         6
       ],
       "notRecommendedPlayers": [
@@ -11763,6 +11841,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5,
         6
       ],
@@ -11876,10 +11955,10 @@
     "title": {
       "display": "블리츠",
       "owned": "블리츠",
-      "bgg": "Dutch Blitz"
+      "bgg": ""
     },
     "bgg": {
-      "id": "148203",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.7,
@@ -12085,8 +12164,11 @@
         6
       ],
       "recommendedPlayers": [
+        2,
         3,
-        4
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -12399,7 +12481,9 @@
       ],
       "recommendedPlayers": [
         3,
-        4
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -12513,10 +12597,10 @@
     "title": {
       "display": "스컬퀸",
       "owned": "스컬퀸",
-      "bgg": "Skull Queen"
+      "bgg": ""
     },
     "bgg": {
-      "id": "423432",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.3,
@@ -12629,7 +12713,10 @@
         6
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -12853,6 +12940,8 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -13072,7 +13161,8 @@
       ],
       "recommendedPlayers": [
         4,
-        5
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -13593,6 +13683,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5,
         6
       ],
@@ -13809,6 +13900,8 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
+        4,
         5,
         6
       ],
@@ -14747,7 +14840,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        4,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -15046,10 +15140,10 @@
     "title": {
       "display": "클루",
       "owned": "클루",
-      "bgg": "Clue"
+      "bgg": ""
     },
     "bgg": {
-      "id": "1294",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 5.7,
@@ -15443,10 +15537,10 @@
     "title": {
       "display": "파워그리드",
       "owned": "파워그리드",
-      "bgg": "파워그리드 재충전 확장: 지도 모음집 (Power Grid Recharged – Map Collection)"
+      "bgg": ""
     },
     "bgg": {
-      "id": "358526",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.8,
@@ -15562,7 +15656,9 @@
       ],
       "recommendedPlayers": [
         3,
-        4
+        4,
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -15691,6 +15787,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5,
         6
       ],
@@ -16300,6 +16397,8 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -16535,9 +16634,11 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4,
-        5
+        5,
+        6
       ],
       "notRecommendedPlayers": [
         1,
@@ -16873,11 +16974,12 @@
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5
+        4
       ],
       "recommendedPlayers": [
         3,
+        4,
+        5,
         6
       ],
       "notRecommendedPlayers": [
@@ -17322,7 +17424,9 @@
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -17706,7 +17810,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -17836,7 +17941,9 @@
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -17959,7 +18066,8 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -18840,6 +18948,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -18960,6 +19069,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -19078,6 +19188,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -19310,6 +19421,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -19429,6 +19541,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -19982,12 +20095,13 @@
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5
+        3,
+        4
       ],
       "recommendedPlayers": [
         3,
-        6
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -20498,6 +20612,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4,
         5
       ],
@@ -20717,6 +20832,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -20863,11 +20979,12 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -21061,10 +21178,10 @@
     "title": {
       "display": "다섯부족",
       "owned": "다섯부족",
-      "bgg": "Tribes"
+      "bgg": ""
     },
     "bgg": {
-      "id": "2480",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.8,
@@ -21177,6 +21294,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -21695,10 +21813,11 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2
+        4
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -21748,8 +21867,7 @@
         "beginner",
         "group",
         "experienced",
-        "long_stay",
-        "couple"
+        "long_stay"
       ],
       "interactionTags": [
         "cooperative",
@@ -21768,7 +21886,6 @@
         "group",
         "experienced",
         "long_stay",
-        "couple",
         "cooperative",
         "low_conflict"
       ],
@@ -21924,7 +22041,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -22039,10 +22157,10 @@
     "title": {
       "display": "던전레이더스",
       "owned": "던전레이더스",
-      "bgg": "Dungeon Raiders"
+      "bgg": ""
     },
     "bgg": {
-      "id": "80771",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.1,
@@ -22151,7 +22269,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -22380,7 +22499,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -22499,10 +22619,10 @@
     "title": {
       "display": "데드오브윈터",
       "owned": "데드오브윈터",
-      "bgg": "Winter"
+      "bgg": ""
     },
     "bgg": {
-      "id": "359857",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.4,
@@ -22614,6 +22734,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -22749,6 +22870,8 @@
         2
       ],
       "recommendedPlayers": [
+        1,
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -22866,10 +22989,10 @@
     "title": {
       "display": "도망자",
       "owned": "도망자",
-      "bgg": "Fugitive"
+      "bgg": ""
     },
     "bgg": {
-      "id": "197443",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.4,
@@ -24125,7 +24248,9 @@
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -24446,7 +24571,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -24548,10 +24675,10 @@
     "title": {
       "display": "디센트",
       "owned": "디센트",
-      "bgg": "Descent: Journeys in the Dark (Second Edition)"
+      "bgg": ""
     },
     "bgg": {
-      "id": "104162",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.9,
@@ -24662,6 +24789,7 @@
         1
       ],
       "recommendedPlayers": [
+        1,
         2,
         3
       ],
@@ -25307,7 +25435,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -26339,6 +26468,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -27633,7 +27763,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -27843,7 +27974,8 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -27983,7 +28115,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -28189,7 +28322,9 @@
       ],
       "recommendedPlayers": [
         1,
-        3
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -28298,10 +28433,12 @@
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
-        5,
-        6
+        2
       ],
       "recommendedPlayers": [
+        1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -28343,6 +28480,7 @@
       ],
       "situationTags": [
         "beginner",
+        "couple",
         "group",
         "large_group",
         "long_stay"
@@ -28359,6 +28497,7 @@
         "immersive",
         "strategy",
         "beginner",
+        "couple",
         "group",
         "large_group",
         "long_stay",
@@ -28420,6 +28559,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -28639,6 +28779,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -28740,10 +28881,10 @@
     "title": {
       "display": "리볼버2",
       "owned": "리볼버2",
-      "bgg": "Revolver"
+      "bgg": ""
     },
     "bgg": {
-      "id": "76150",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.9,
@@ -28845,10 +28986,12 @@
       "minPlayers": 3,
       "maxPlayers": 5,
       "bestPlayers": [
-        4
+        4,
+        5
       ],
       "recommendedPlayers": [
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -28977,6 +29120,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -29206,6 +29350,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -29334,6 +29479,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -29460,11 +29606,12 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5
+        4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -29674,7 +29821,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -29788,7 +29936,7 @@
         5
       ],
       "recommendedPlayers": [
-        4
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -30038,6 +30186,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -30167,6 +30316,8 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -30279,7 +30430,9 @@
       ],
       "recommendedPlayers": [
         1,
-        3
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -30406,7 +30559,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -30621,6 +30775,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -30740,6 +30895,7 @@
         1
       ],
       "recommendedPlayers": [
+        1,
         2,
         3
       ],
@@ -30884,6 +31040,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -31004,7 +31161,9 @@
         5
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -31414,10 +31573,10 @@
     "title": {
       "display": "모자익스",
       "owned": "모자익스",
-      "bgg": "Mosaic"
+      "bgg": ""
     },
     "bgg": {
-      "id": "104398",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.5,
@@ -31510,10 +31669,10 @@
     "title": {
       "display": "몰타의관문",
       "owned": "몰타의관문",
-      "bgg": "Gates"
+      "bgg": ""
     },
     "bgg": {
-      "id": "36627",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.8,
@@ -31622,6 +31781,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -31839,7 +31999,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -31969,6 +32130,8 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -32089,10 +32252,10 @@
     "title": {
       "display": "바람의부족",
       "owned": "바람의부족",
-      "bgg": "Tribe"
+      "bgg": ""
     },
     "bgg": {
-      "id": "235760",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.3,
@@ -32201,7 +32364,9 @@
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -32412,6 +32577,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -32803,10 +32969,10 @@
     "title": {
       "display": "배틀쉽",
       "owned": "배틀쉽",
-      "bgg": "Battleship"
+      "bgg": ""
     },
     "bgg": {
-      "id": "2425",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.6,
@@ -33008,6 +33174,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -33255,6 +33422,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -33779,7 +33947,8 @@
       "minPlayers": 2,
       "maxPlayers": 2,
       "bestPlayers": [
-        2
+        3,
+        4
       ],
       "recommendedPlayers": [
         2,
@@ -34093,9 +34262,11 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        3
+        3,
+        4
       ],
       "recommendedPlayers": [
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -34321,7 +34492,9 @@
         4
       ],
       "recommendedPlayers": [
+        2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -34444,10 +34617,10 @@
     "title": {
       "display": "봉잡았다",
       "owned": "봉잡았다",
-      "bgg": "Catch"
+      "bgg": ""
     },
     "bgg": {
-      "id": "15929",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.4,
@@ -34557,7 +34730,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -34754,7 +34928,9 @@
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -34866,10 +35042,10 @@
     "title": {
       "display": "분수(영)",
       "owned": "분수(영)",
-      "bgg": "Minikin Saga: The Fountain"
+      "bgg": ""
     },
     "bgg": {
-      "id": "289260",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.4,
@@ -35193,7 +35369,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -35326,7 +35504,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -35665,6 +35844,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -35766,10 +35946,10 @@
     "title": {
       "display": "블랙프라이데이",
       "owned": "블랙프라이데이",
-      "bgg": "Black Friday"
+      "bgg": ""
     },
     "bgg": {
-      "id": "39242",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.4,
@@ -35881,7 +36061,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -36211,6 +36392,8 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -36318,10 +36501,10 @@
     "title": {
       "display": "빅샷",
       "owned": "빅샷",
-      "bgg": "Big Shot"
+      "bgg": ""
     },
     "bgg": {
-      "id": "1125",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7,
@@ -36430,7 +36613,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -36619,10 +36804,10 @@
     "title": {
       "display": "빌리지 빅박스",
       "owned": "빌리지 빅박스",
-      "bgg": "Village: Big Box"
+      "bgg": ""
     },
     "bgg": {
-      "id": "365056",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.8,
@@ -36732,10 +36917,13 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -36869,6 +37057,7 @@
         1,
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -36989,10 +37178,10 @@
     "title": {
       "display": "사이베리온",
       "owned": "사이베리온",
-      "bgg": "Cyberion"
+      "bgg": ""
     },
     "bgg": {
-      "id": "376893",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.9,
@@ -37100,6 +37289,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -37304,10 +37494,10 @@
     "title": {
       "display": "서머너워즈",
       "owned": "서머너워즈",
-      "bgg": "Summoner Wars (Second Edition)"
+      "bgg": ""
     },
     "bgg": {
-      "id": "332800",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 8.1,
@@ -37411,11 +37601,9 @@
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        2
+        4
       ],
       "recommendedPlayers": [
-        1,
-        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -37463,7 +37651,6 @@
       "situationTags": [
         "beginner",
         "group",
-        "couple",
         "large_group",
         "long_stay"
       ],
@@ -37485,7 +37672,6 @@
         "party",
         "beginner",
         "group",
-        "couple",
         "large_group",
         "long_stay",
         "cooperative",
@@ -37531,46 +37717,32 @@
     "title": {
       "display": "서스펙트게임 리로드",
       "owned": "서스펙트게임 리로드",
-      "bgg": "Suspects: Claire Harper Takes the Stage"
+      "bgg": ""
     },
     "bgg": {
-      "id": "322785",
+      "id": "",
       "matchStatus": "needs-review",
-      "year": "2021",
-      "rating": 7.25648,
-      "weight": 1.8333,
-      "minPlayers": 1,
-      "maxPlayers": 6,
+      "year": "",
+      "rating": 8.3,
+      "weight": 2.25,
+      "minPlayers": 4,
+      "maxPlayers": 4,
       "bestPlayers": [
-        2
-      ],
-      "recommendedPlayers": [
-        1,
-        3,
         4
       ],
-      "notRecommendedPlayers": [
-        5,
-        6,
-        6
+      "recommendedPlayers": [
+        4
       ],
-      "playingTime": 90,
-      "minPlayTime": 60,
-      "maxPlayTime": 90,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Solo / Solitaire Game",
-        "Storytelling"
+        "머더미스터리"
       ],
-      "designers": [
-        "Guillaume Montiage"
-      ],
-      "description": "Suspects is a range of investigation games with streamlined rules and plots centered on the psychology of the characters in the style of Agatha Christie&rsquo;s novels. The first opus will feature the ingenious and fearless Claire Harper in three stories that pay tribute to the great classics of detective literature!\n\nClaire Harper was one of the first women to graduate from Oxford in 1927. Specializing in criminal law, she is also an adventurous traveler. Every mystery is an opportunity for her to test her formidable spirit of deduction and her unfailing determination! In this first episode, follow her in her investigations that will take her from grand manor houses to shady theaters and from Scotland to...Egypt!\n\n--description from the publisher"
+      "designers": [],
+      "description": ""
     },
     "cottage": {
       "status": "active",
@@ -37580,55 +37752,32 @@
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
-        "cozy",
-        "tense",
-        "brainy",
-        "immersive",
-        "light"
+        "light",
+        "brainy"
       ],
-      "playTags": [
-        "deduction",
-        "storytelling",
-        "party"
-      ],
+      "playTags": [],
       "situationTags": [
         "beginner",
-        "group",
-        "couple",
-        "large_group",
-        "long_stay"
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
-        "table_talk"
+        "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "cozy",
-        "tense",
-        "brainy",
-        "immersive",
         "light",
-        "deduction",
-        "storytelling",
-        "party",
+        "brainy",
         "beginner",
         "group",
-        "couple",
-        "large_group",
-        "long_stay",
-        "cooperative",
-        "low_conflict",
-        "table_talk"
+        "low_conflict"
       ],
       "displayTags": [
-        "추리",
-        "스토리",
-        "파티게임",
-        "협력",
-        "갈등적음"
+        "갈등적음",
+        "가볍게",
+        "머리 쓰는",
+        "입문추천",
+        "모임추천"
       ],
       "comment": {
         "text": "",
@@ -37646,9 +37795,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/W62RivF2drCQVe6x1L7XiQ__original/img/PNbiU550YL28Kdet7CBulOcycNs=/0x0/filters:format(png)/pic6039476.png",
-      "thumbnail": "https://cf.geekdo-images.com/W62RivF2drCQVe6x1L7XiQ__small/img/vXJe3D0jSuglcR_loyXLY0Yl6AA=/fit-in/200x150/filters:strip_icc()/pic6039476.png",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -37679,6 +37828,7 @@
         1,
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -37808,10 +37958,12 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2
+        2,
+        3
       ],
       "recommendedPlayers": [
         1,
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -38117,7 +38269,9 @@
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -38571,6 +38725,8 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -38693,7 +38849,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -38806,7 +38963,8 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -39136,6 +39294,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -39252,12 +39411,12 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5,
-        6
+        4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -39462,6 +39621,7 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -39581,7 +39741,8 @@
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -40048,6 +40209,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -40282,6 +40444,7 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -40615,10 +40778,10 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        4
+        2
       ],
       "recommendedPlayers": [
-        3
+        2
       ],
       "notRecommendedPlayers": [],
       "playingTime": 90,
@@ -40657,6 +40820,7 @@
       ],
       "situationTags": [
         "beginner",
+        "couple",
         "group",
         "long_stay"
       ],
@@ -40674,6 +40838,7 @@
         "puzzle",
         "strategy",
         "beginner",
+        "couple",
         "group",
         "long_stay",
         "competitive",
@@ -40733,6 +40898,7 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -41346,7 +41512,9 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -41694,7 +41862,10 @@
         3
       ],
       "recommendedPlayers": [
-        1
+        1,
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -41824,6 +41995,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -41938,10 +42110,10 @@
     "title": {
       "display": "시체와온천 (머더미스터리미니)",
       "owned": "시체와온천 (머더미스터리미니)",
-      "bgg": "Spring"
+      "bgg": ""
     },
     "bgg": {
-      "id": "243592",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.3,
@@ -42051,6 +42223,8 @@
         3
       ],
       "recommendedPlayers": [
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -42154,10 +42328,10 @@
     "title": {
       "display": "실버 아뮬렛",
       "owned": "실버 아뮬렛",
-      "bgg": "Silver"
+      "bgg": ""
     },
     "bgg": {
-      "id": "278553",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7,
@@ -42364,6 +42538,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -42478,10 +42653,10 @@
     "title": {
       "display": "아그리콜라",
       "owned": "아그리콜라",
-      "bgg": "Agricola"
+      "bgg": ""
     },
     "bgg": {
-      "id": "31260",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 8,
@@ -42815,10 +42990,14 @@
       "minPlayers": 1,
       "maxPlayers": 2,
       "bestPlayers": [
-        2
+        1,
+        2,
+        3
       ],
       "recommendedPlayers": [
-        1
+        1,
+        2,
+        3
       ],
       "notRecommendedPlayers": [
         2
@@ -42926,10 +43105,10 @@
     "title": {
       "display": "아발론 클래식",
       "owned": "아발론 클래식",
-      "bgg": "Avalon"
+      "bgg": ""
     },
     "bgg": {
-      "id": "6187",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.5,
@@ -43228,6 +43407,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -43336,10 +43516,10 @@
     "title": {
       "display": "아컴호러카드게임 + 던위치 확장",
       "owned": "아컴호러카드게임 + 던위치 확장",
-      "bgg": "Arkham Horror: The Card Game"
+      "bgg": ""
     },
     "bgg": {
-      "id": "205637",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 8.1,
@@ -43451,6 +43631,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -43579,6 +43760,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -43810,6 +43992,8 @@
         3
       ],
       "recommendedPlayers": [
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -43922,10 +44106,11 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3
+        2
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -43972,6 +44157,7 @@
       "situationTags": [
         "experienced",
         "long_stay",
+        "couple",
         "group"
       ],
       "interactionTags": [
@@ -43988,6 +44174,7 @@
         "strategy",
         "experienced",
         "long_stay",
+        "couple",
         "group",
         "competitive",
         "silent_focus"
@@ -44045,7 +44232,9 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -44255,10 +44444,10 @@
     "title": {
       "display": "암스테르담",
       "owned": "암스테르담",
-      "bgg": "Amsterdam"
+      "bgg": ""
     },
     "bgg": {
-      "id": "314582",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.6,
@@ -44448,6 +44637,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4,
         5
@@ -44570,7 +44760,8 @@
       "recommendedPlayers": [
         2,
         3,
-        4
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -44787,7 +44978,8 @@
       ],
       "recommendedPlayers": [
         3,
-        4
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -44986,10 +45178,10 @@
     "title": {
       "display": "어센션",
       "owned": "어센션",
-      "bgg": "Ascension"
+      "bgg": ""
     },
     "bgg": {
-      "id": "10403",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.8,
@@ -45100,6 +45292,8 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -45233,6 +45427,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -45586,6 +45781,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -45719,7 +45915,7 @@
         2
       ],
       "recommendedPlayers": [
-        1,
+        2,
         3,
         4
       ],
@@ -45860,11 +46056,11 @@
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
-        1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -46106,6 +46302,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -46253,8 +46450,8 @@
       ],
       "recommendedPlayers": [
         1,
-        3,
-        4
+        2,
+        3
       ],
       "notRecommendedPlayers": [
         5,
@@ -46379,10 +46576,10 @@
     "title": {
       "display": "언매치드",
       "owned": "언매치드",
-      "bgg": "Unmatched: Battle of Legends, Volume One"
+      "bgg": ""
     },
     "bgg": {
-      "id": "274637",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.7,
@@ -46493,6 +46690,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -46955,12 +47153,10 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        3
+        5
       ],
       "recommendedPlayers": [
-        1,
-        2,
-        4
+        5
       ],
       "notRecommendedPlayers": [
         4
@@ -47007,7 +47203,8 @@
         "quick_play",
         "experienced",
         "long_stay",
-        "group"
+        "group",
+        "large_group"
       ],
       "interactionTags": [
         "competitive",
@@ -47027,6 +47224,7 @@
         "experienced",
         "long_stay",
         "group",
+        "large_group",
         "competitive",
         "silent_focus"
       ],
@@ -47181,8 +47379,7 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         2,
@@ -47312,6 +47509,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -47431,6 +47629,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -47669,6 +47868,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -47796,10 +47996,10 @@
     "title": {
       "display": "엑시트 저주받은 섬",
       "owned": "엑시트 저주받은 섬",
-      "bgg": "EXIT: The Game – The Forgotten Island"
+      "bgg": ""
     },
     "bgg": {
-      "id": "215841",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.9,
@@ -47912,6 +48112,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -48038,6 +48239,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -48264,6 +48466,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4,
         5
       ],
@@ -48390,7 +48593,7 @@
         1,
         2,
         3,
-        5
+        4
       ],
       "notRecommendedPlayers": [
         6,
@@ -48523,7 +48726,8 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -48735,6 +48939,8 @@
         4
       ],
       "recommendedPlayers": [
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -48964,11 +49170,12 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        3
+        2
       ],
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -49030,6 +49237,7 @@
         "beginner",
         "experienced",
         "long_stay",
+        "couple",
         "group"
       ],
       "interactionTags": [
@@ -49052,6 +49260,7 @@
         "beginner",
         "experienced",
         "long_stay",
+        "couple",
         "group",
         "competitive",
         "silent_focus",
@@ -49107,12 +49316,10 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        3
+        2
       ],
       "recommendedPlayers": [
-        1,
-        2,
-        4
+        2
       ],
       "notRecommendedPlayers": [
         4
@@ -49159,6 +49366,7 @@
         "experienced",
         "long_stay",
         "beginner",
+        "couple",
         "group"
       ],
       "interactionTags": [
@@ -49176,6 +49384,7 @@
         "experienced",
         "long_stay",
         "beginner",
+        "couple",
         "group",
         "competitive",
         "turn_based",
@@ -49235,7 +49444,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -49462,6 +49672,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -49580,11 +49791,11 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
-        2
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -49922,6 +50133,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -50055,6 +50267,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -50271,6 +50484,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -50565,7 +50779,8 @@
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -50682,12 +50897,14 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
+        1,
         4
       ],
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -50809,7 +51026,8 @@
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -50935,6 +51153,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         4
       ],
       "notRecommendedPlayers": [
@@ -51161,6 +51380,8 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -51306,8 +51527,9 @@
         4
       ],
       "recommendedPlayers": [
+        2,
         3,
-        5
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -51438,6 +51660,7 @@
         1,
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -51645,10 +51868,10 @@
     "title": {
       "display": "원덱던전 + 스토리즈 확장",
       "owned": "원덱던전 + 스토리즈 확장",
-      "bgg": "One Deck Dungeon"
+      "bgg": ""
     },
     "bgg": {
-      "id": "179275",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.9,
@@ -51756,7 +51979,9 @@
         5
       ],
       "recommendedPlayers": [
-        6
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -51879,12 +52104,11 @@
       "minPlayers": 4,
       "maxPlayers": 5,
       "bestPlayers": [
-        1,
-        4,
         5
       ],
       "recommendedPlayers": [
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -52001,7 +52225,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -52228,6 +52454,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -52441,10 +52668,10 @@
     "title": {
       "display": "윙스팬 + 아시아 + 오세아니아",
       "owned": "윙스팬 + 아시아 + 오세아니아",
-      "bgg": "Wingspan"
+      "bgg": ""
     },
     "bgg": {
-      "id": "266192",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 8,
@@ -52538,10 +52765,10 @@
     "title": {
       "display": "육식동물짓이야",
       "owned": "육식동물짓이야",
-      "bgg": "A Carnivore Did It!"
+      "bgg": ""
     },
     "bgg": {
-      "id": "451594",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.1,
@@ -52649,6 +52876,8 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -52861,6 +53090,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -52977,6 +53207,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -53095,7 +53326,9 @@
         5
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -53323,13 +53556,10 @@
       "minPlayers": 4,
       "maxPlayers": 8,
       "bestPlayers": [
-        5,
-        6,
-        7,
-        8
+        5
       ],
       "recommendedPlayers": [
-        4
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -53464,7 +53694,9 @@
         5
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -53608,11 +53840,10 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        4
+        2
       ],
       "recommendedPlayers": [
-        2,
-        3
+        2
       ],
       "notRecommendedPlayers": [
         1,
@@ -53668,6 +53899,7 @@
       "situationTags": [
         "experienced",
         "long_stay",
+        "couple",
         "group"
       ],
       "interactionTags": [
@@ -53686,6 +53918,7 @@
         "card_play",
         "experienced",
         "long_stay",
+        "couple",
         "group",
         "competitive",
         "betrayal"
@@ -53843,7 +54076,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -54071,12 +54305,14 @@
       "minPlayers": 1,
       "maxPlayers": 5,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         5,
@@ -54422,6 +54658,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -54520,10 +54757,10 @@
     "title": {
       "display": "전지적추리시점",
       "owned": "전지적추리시점",
-      "bgg": "Perspective"
+      "bgg": ""
     },
     "bgg": {
-      "id": "176887",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.7,
@@ -54628,10 +54865,11 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -55180,9 +55418,9 @@
         1
       ],
       "recommendedPlayers": [
+        1,
         2,
-        3,
-        4
+        3
       ],
       "notRecommendedPlayers": [
         5,
@@ -55279,10 +55517,10 @@
     "title": {
       "display": "종이와바다",
       "owned": "종이와바다",
-      "bgg": "Sea Salt & Paper"
+      "bgg": ""
     },
     "bgg": {
-      "id": "367220",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.5,
@@ -55593,10 +55831,10 @@
     "title": {
       "display": "지킬&하이드&스코틀랜드야드",
       "owned": "지킬&하이드&스코틀랜드야드",
-      "bgg": "Scotland Yard"
+      "bgg": ""
     },
     "bgg": {
-      "id": "438",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.3,
@@ -55702,7 +55940,8 @@
         5
       ],
       "recommendedPlayers": [
-        4
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -55832,7 +56071,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -55936,6 +56176,7 @@
         1
       ],
       "recommendedPlayers": [
+        1,
         2,
         3,
         4
@@ -56172,7 +56413,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -56293,7 +56535,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -56407,8 +56650,7 @@
         1,
         2,
         3,
-        4,
-        5
+        4
       ],
       "notRecommendedPlayers": [
         5
@@ -56520,7 +56762,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -56755,8 +56998,9 @@
         3
       ],
       "recommendedPlayers": [
-        4,
-        5
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -56876,6 +57120,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -56976,10 +57221,10 @@
     "title": {
       "display": "카리바",
       "owned": "카리바",
-      "bgg": "Kariba"
+      "bgg": ""
     },
     "bgg": {
-      "id": "84732",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7,
@@ -57088,6 +57333,7 @@
         1,
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -57294,10 +57540,10 @@
     "title": {
       "display": "카보",
       "owned": "카보",
-      "bgg": "CABO (Second Edition)"
+      "bgg": ""
     },
     "bgg": {
-      "id": "271321",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.3,
@@ -57402,7 +57648,7 @@
         2
       ],
       "recommendedPlayers": [
-        1
+        2
       ],
       "notRecommendedPlayers": [
         2
@@ -57514,7 +57760,8 @@
         4
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -57864,6 +58111,8 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -57980,6 +58229,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -58104,6 +58354,7 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
         3,
         4
       ],
@@ -58426,6 +58677,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -58531,6 +58783,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -58657,6 +58910,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -58887,14 +59141,10 @@
       "minPlayers": 2,
       "maxPlayers": 8,
       "bestPlayers": [
-        6,
-        8
+        2
       ],
       "recommendedPlayers": [
-        4,
-        5,
-        7,
-        8
+        2
       ],
       "notRecommendedPlayers": [
         1,
@@ -58949,7 +59199,8 @@
         "quick_play",
         "group",
         "large_group",
-        "first_game"
+        "first_game",
+        "couple"
       ],
       "interactionTags": [
         "cooperative",
@@ -58974,6 +59225,7 @@
         "group",
         "large_group",
         "first_game",
+        "couple",
         "cooperative",
         "table_talk",
         "team"
@@ -59033,6 +59285,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -59133,10 +59386,10 @@
     "title": {
       "display": "콩코르디아 + 비너스 확장",
       "owned": "콩코르디아 + 비너스 확장",
-      "bgg": "Concordia"
+      "bgg": ""
     },
     "bgg": {
-      "id": "124361",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 8.1,
@@ -59630,7 +59883,7 @@
         2
       ],
       "recommendedPlayers": [
-        4
+        2
       ],
       "notRecommendedPlayers": [
         1,
@@ -59749,7 +60002,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -59966,6 +60221,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -60086,11 +60342,12 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -60307,7 +60564,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -60527,7 +60786,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -60771,7 +61031,8 @@
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -60869,10 +61130,10 @@
     "title": {
       "display": "클랭크",
       "owned": "클랭크",
-      "bgg": "Clank! Legacy: Acquisitions Incorporated"
+      "bgg": ""
     },
     "bgg": {
-      "id": "266507",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.8,
@@ -61158,10 +61419,10 @@
     "title": {
       "display": "클레임1+클레임2",
       "owned": "클레임1+클레임2",
-      "bgg": "Claim"
+      "bgg": ""
     },
     "bgg": {
-      "id": "233961",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.9,
@@ -61263,12 +61524,13 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         1,
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -61370,10 +61632,10 @@
     "title": {
       "display": "키친러시",
       "owned": "키친러시",
-      "bgg": "Kitchen Rush"
+      "bgg": ""
     },
     "bgg": {
-      "id": "223953",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.2,
@@ -61483,6 +61745,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -61818,6 +62081,8 @@
         2
       ],
       "recommendedPlayers": [
+        1,
+        2,
         3,
         4
       ],
@@ -61957,6 +62222,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4,
         5
       ],
@@ -62165,8 +62431,9 @@
         2
       ],
       "recommendedPlayers": [
-        1,
-        3
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -62646,6 +62913,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -62764,6 +63032,8 @@
         4
       ],
       "recommendedPlayers": [
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -62892,6 +63162,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -63130,7 +63401,8 @@
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -63262,6 +63534,7 @@
       "recommendedPlayers": [
         1,
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -63607,6 +63880,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -63741,7 +64015,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -63857,7 +64132,7 @@
     "bgg": {
       "id": "246813",
       "matchStatus": "auto-confirmed",
-      "year": "0",
+      "year": "",
       "rating": 7.4,
       "weight": 2.82,
       "minPlayers": 2,
@@ -64073,7 +64348,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -64204,6 +64480,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -64330,7 +64607,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -64551,6 +64829,8 @@
         3
       ],
       "recommendedPlayers": [
+        2,
+        3,
         4,
         5
       ],
@@ -64683,8 +64963,10 @@
         1
       ],
       "recommendedPlayers": [
+        1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -64809,7 +65091,10 @@
         4
       ],
       "recommendedPlayers": [
+        1,
+        2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -65030,6 +65315,8 @@
         3
       ],
       "recommendedPlayers": [
+        2,
+        3,
         4,
         5
       ],
@@ -65155,6 +65442,8 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -65506,7 +65795,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -65740,7 +66031,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -65952,6 +66244,7 @@
       ],
       "recommendedPlayers": [
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -66059,10 +66352,10 @@
     "title": {
       "display": "페이퍼사파리(스모키)",
       "owned": "페이퍼사파리(스모키)",
-      "bgg": "Safari"
+      "bgg": ""
     },
     "bgg": {
-      "id": "2777",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 6.8,
@@ -66378,11 +66671,12 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
-        3
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -66602,6 +66896,7 @@
         1,
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -66736,7 +67031,8 @@
       "recommendedPlayers": [
         1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4
@@ -66868,6 +67164,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -66996,11 +67293,12 @@
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -67215,6 +67513,8 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -67331,10 +67631,10 @@
     "title": {
       "display": "폭시",
       "owned": "폭시",
-      "bgg": "Foxy"
+      "bgg": ""
     },
     "bgg": {
-      "id": "359318",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.2,
@@ -67528,7 +67828,9 @@
         4
       ],
       "recommendedPlayers": [
+        2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -67644,7 +67946,9 @@
       ],
       "recommendedPlayers": [
         1,
-        3
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         4,
@@ -67774,7 +68078,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -67993,9 +68298,11 @@
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        1
+        3,
+        4
       ],
       "recommendedPlayers": [
+        1,
         2,
         3,
         4
@@ -68115,7 +68422,8 @@
       ],
       "recommendedPlayers": [
         3,
-        4
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -68230,9 +68538,11 @@
       "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
-        2
+        2,
+        3
       ],
       "recommendedPlayers": [
+        2,
         3,
         4
       ],
@@ -68541,6 +68851,7 @@
       "recommendedPlayers": [
         2,
         3,
+        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -68678,7 +68989,9 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -68799,6 +69112,7 @@
         1
       ],
       "recommendedPlayers": [
+        1,
         2,
         3
       ],
@@ -69134,7 +69448,9 @@
         5
       ],
       "recommendedPlayers": [
-        3
+        3,
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -69236,10 +69552,10 @@
     "title": {
       "display": "하트오브크라운페어리 + 확장2",
       "owned": "하트오브크라운페어리 + 확장2",
-      "bgg": "Heart of Crown"
+      "bgg": ""
     },
     "bgg": {
-      "id": "131904",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 8,
@@ -69349,7 +69665,8 @@
       ],
       "recommendedPlayers": [
         3,
-        4
+        4,
+        5
       ],
       "notRecommendedPlayers": [
         1,
@@ -69568,12 +69885,12 @@
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5
+        4
       ],
       "recommendedPlayers": [
+        2,
         3,
-        6
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -69695,10 +70012,10 @@
     "title": {
       "display": "할리우드골든에이지",
       "owned": "할리우드골든에이지",
-      "bgg": "Hollywood"
+      "bgg": ""
     },
     "bgg": {
-      "id": "147021",
+      "id": "",
       "matchStatus": "needs-review",
       "year": "",
       "rating": 7.1,
@@ -69917,6 +70234,7 @@
         2
       ],
       "recommendedPlayers": [
+        2,
         3
       ],
       "notRecommendedPlayers": [
@@ -70032,11 +70350,14 @@
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
+        1,
         4
       ],
       "recommendedPlayers": [
+        1,
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -70346,6 +70667,8 @@
       ],
       "recommendedPlayers": [
         1,
+        2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -70583,7 +70906,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -70808,6 +71132,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -71032,7 +71357,8 @@
       ],
       "recommendedPlayers": [
         2,
-        3
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
@@ -71383,6 +71709,7 @@
       ],
       "recommendedPlayers": [
         2,
+        3,
         4
       ],
       "notRecommendedPlayers": [
@@ -71610,7 +71937,9 @@
         4
       ],
       "recommendedPlayers": [
-        2
+        2,
+        3,
+        4
       ],
       "notRecommendedPlayers": [
         1,
