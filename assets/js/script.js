@@ -359,6 +359,12 @@ function getGameDetailImage(game){
   );
 }
 
+function formatRating(value){
+  const num = Number(value);
+  if(!value || !Number.isFinite(num) || num <= 0) return "-";
+  return num.toFixed(2);
+}
+
 function formatDifficultyWeight(value){
   const num = Number(value);
 
@@ -1194,7 +1200,7 @@ const shelfLabel =
 
       <div>
   <strong>
-    ⭐ ${detail.rating || "-"}
+    ⭐ ${formatRating(detail.rating)}
   </strong>
 
   <span>평점</span>
@@ -1224,7 +1230,7 @@ const shelfLabel =
                     ? `
                       <div>
                         <span>평점</span>
-                        <strong>⭐ ${detail.rating}</strong>
+                        <strong>⭐ ${formatRating(detail.rating)}</strong>
                       </div>
                     `
                     : ""
@@ -2354,10 +2360,7 @@ function renderOwnedGameList(){
 </span>
 
   <span>
-    ⭐ ${
-      detail.rating ||
-      "-"
-    }
+    ⭐ ${formatRating(detail.rating)}
   </span>
 
 <span>
