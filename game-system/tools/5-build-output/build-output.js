@@ -73,6 +73,7 @@ function buildRawGameItem(game) {
       mechanics: game.mechanics?.length ? game.mechanics : toArray(game.sourceMechanism || ""),
       designers: game.designers || [],
       description: game.description || "",
+      descriptionKo: game.descriptionKo || "",
     },
 
     cottage: {

@@ -414,6 +414,7 @@ function getGameDetailData(game) {
       mechanics: getBggMechanics(game),
       designers: getDesigners(game),
       description: safeText(game?.bgg?.description),
+      descriptionKo: safeText(game?.bgg?.descriptionKo),
     },
 
     community: getCommunityData(game),

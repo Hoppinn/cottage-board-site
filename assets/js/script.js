@@ -1164,7 +1164,7 @@ const shelfLabel =
 </div>
 
       <p class="sheet-description">
-        ${detail.comment || detail.bgg.description || ""}
+        ${detail.comment || detail.bgg.descriptionKo || detail.bgg.description || ""}
       </p>
       <div class="sheet-info-grid">
 
