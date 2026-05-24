@@ -1241,7 +1241,7 @@ const shelfLabel =
                     ? `
                       <div>
                         <span>진행방식</span>
-                        <strong>${detail.bgg.mechanics.slice(0, 3).join(", ")}</strong>
+                        <strong>${(detail.bgg.mechanicsKo?.length ? detail.bgg.mechanicsKo : detail.bgg.mechanics).slice(0, 3).join(", ")}</strong>
                       </div>
                     `
                     : ""
@@ -1252,7 +1252,7 @@ const shelfLabel =
                     ? `
                       <div>
                         <span>테마</span>
-                        <strong>${detail.bgg.categories.slice(0, 3).join(", ")}</strong>
+                        <strong>${(detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories).slice(0, 3).join(", ")}</strong>
                       </div>
                     `
                     : ""

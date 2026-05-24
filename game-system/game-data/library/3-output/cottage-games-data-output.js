@@ -40,6 +40,13 @@ const gameData = {
         "Civilization",
         "Economic"
       ],
+      "categoriesKo": [
+        "고대",
+        "카드게임",
+        "도시 건설",
+        "문명",
+        "경제"
+      ],
       "mechanics": [
         "Closed Drafting",
         "End Game Bonuses",
@@ -55,6 +62,22 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "최종 보너스",
+        "패 관리",
+        "결합과 펼치기",
+        "다목적 카드",
+        "인접 범위",
+        "게임당 1회 능력",
+        "점수 후 리셋",
+        "세트 수집",
+        "동시 액션 선택",
+        "태그",
+        "기술 트리",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Antoine Bauza"
@@ -179,10 +202,20 @@ const gameData = {
         "Deduction",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "파티게임"
+      ],
       "mechanics": [
         "Hidden Roles",
         "Line Drawing",
         "Targeted Clues"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "선 긋기",
+        "힌트 제공"
       ],
       "designers": [
         "Jun Sasaki"
@@ -319,10 +352,18 @@ const gameData = {
       "categories": [
         "Party Game"
       ],
+      "categoriesKo": [
+        "파티게임"
+      ],
       "mechanics": [
         "Race",
         "Targeted Clues",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "레이스",
+        "힌트 제공",
+        "팀 게임"
       ],
       "designers": [
         "Alex Hague",
@@ -435,9 +476,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -521,9 +564,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -630,10 +675,18 @@ const gameData = {
       "categories": [
         "Party Game"
       ],
+      "categoriesKo": [
+        "파티게임"
+      ],
       "mechanics": [
         "Race",
         "Targeted Clues",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "레이스",
+        "힌트 제공",
+        "팀 게임"
       ],
       "designers": [
         "Alex Hague",
@@ -754,11 +807,22 @@ const gameData = {
         "Card Game",
         "Number"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "카드게임",
+        "숫자"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "I Cut, You Choose",
         "Set Collection",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "내가 자르고 네가 고르기",
+        "세트 수집",
+        "투표"
       ],
       "designers": [
         "Igor Ganzha"
@@ -878,12 +942,22 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Closed Economy Auction",
         "Push Your Luck",
         "Score-and-Reset Game",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "폐쇄 경제 경매",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "세트 수집"
       ],
       "designers": [
         "Thorsten Gimmler"
@@ -1001,9 +1075,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "마피아"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -1100,9 +1176,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -1199,9 +1277,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "마피아"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -1297,9 +1377,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -1383,9 +1465,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -1480,10 +1564,19 @@ const gameData = {
         "Card Game",
         "Medieval"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "중세"
+      ],
       "mechanics": [
         "Hand Management",
         "Ladder Climbing",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "비대칭 능력"
       ],
       "designers": [
         "Richard Garfield"
@@ -1611,10 +1704,23 @@ const gameData = {
         "Real-time",
         "Sports"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "어린이 게임",
+        "교육",
+        "파티게임",
+        "실시간",
+        "스포츠"
+      ],
       "mechanics": [
         "Hot Potato",
         "Pattern Recognition",
         "Speed Matching"
+      ],
+      "mechanicsKo": [
+        "핫 포테이토",
+        "패턴 인식",
+        "스피드 매칭"
       ],
       "designers": [
         "Denis Blanchot",
@@ -1758,10 +1864,21 @@ const gameData = {
         "Card Game",
         "Party Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임",
+        "파티게임"
+      ],
       "mechanics": [
         "Deduction",
         "Hand Management",
         "Push Your Luck"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "패 관리",
+        "욕심 부리기"
       ],
       "designers": [
         "Masato Uesugi"
@@ -1885,9 +2002,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "공주찾기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -1999,6 +2118,12 @@ const gameData = {
         "Murder / Mystery",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "추리/미스터리",
+        "파티게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Deduction",
@@ -2009,6 +2134,17 @@ const gameData = {
         "Team-Based Game",
         "Traitor Game",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "이벤트",
+        "피날레 종료",
+        "숨겨진 역할",
+        "스토리텔링",
+        "팀 게임",
+        "배신자 게임",
+        "가변 셋업"
       ],
       "designers": [
         "Tobey Ho"
@@ -2153,12 +2289,24 @@ const gameData = {
         "Humor",
         "Party Game"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "유머",
+        "파티게임"
+      ],
       "mechanics": [
         "Race",
         "Singing",
         "Storytelling",
         "Targeted Clues",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "레이스",
+        "노래",
+        "스토리텔링",
+        "힌트 제공",
+        "투표"
       ],
       "designers": [
         "Jean-Louis Roubira"
@@ -2288,11 +2436,24 @@ const gameData = {
         "Real-time",
         "Sports"
       ],
+      "categoriesKo": [
+        "동물",
+        "파티게임",
+        "레이싱",
+        "실시간",
+        "스포츠"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Dice Rolling",
         "Real-Time",
         "Track Movement"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기",
+        "실시간",
+        "트랙 이동"
       ],
       "designers": [
         "John D. Clair"
@@ -2412,9 +2573,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "손패털기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -2541,6 +2704,12 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "미로",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Grid Movement",
         "Modular Board",
@@ -2548,6 +2717,14 @@ const gameData = {
         "Square Grid",
         "Turn Order: Stat-Based",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "모듈형 보드",
+        "실시간",
+        "사각 격자",
+        "스탯 기반 순서",
+        "가변 셋업"
       ],
       "designers": [
         "Alex Randolph"
@@ -2672,11 +2849,20 @@ const gameData = {
       "categories": [
         "Arabian"
       ],
+      "categoriesKo": [
+        "아라비안"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Layering",
         "Roll / Spin and Move",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "레이어링",
+        "굴리고 이동",
+        "타일 배치"
       ],
       "designers": [
         "Dominique Ehrhard"
@@ -2797,8 +2983,17 @@ const gameData = {
         "Memory",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "기억력",
+        "파티게임"
+      ],
       "mechanics": [
         "Memory"
+      ],
+      "mechanicsKo": [
+        "기억력"
       ],
       "designers": [
         "Kasper Lapp"
@@ -2925,8 +3120,15 @@ const gameData = {
         "Card Game",
         "Horror"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "공포"
+      ],
       "mechanics": [
         "Ladder Climbing"
+      ],
+      "mechanicsKo": [
+        "사다리 오르기"
       ],
       "designers": [
         "Wolfgang Kramer"
@@ -3038,6 +3240,13 @@ const gameData = {
         "Deduction",
         "Fighting"
       ],
+      "categoriesKo": [
+        "미국 서부",
+        "블러핑",
+        "카드게임",
+        "추리",
+        "격투"
+      ],
       "mechanics": [
         "Hand Management",
         "Hidden Roles",
@@ -3047,6 +3256,16 @@ const gameData = {
         "Take That",
         "Team-Based Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "숨겨진 역할",
+        "핫 포테이토",
+        "킬 스틸",
+        "플레이어 탈락",
+        "공격형 플레이",
+        "팀 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Emiliano Sciarra"
@@ -3190,6 +3409,14 @@ const gameData = {
         "Fighting",
         "Party Game"
       ],
+      "categoriesKo": [
+        "미국 서부",
+        "블러핑",
+        "추리",
+        "주사위",
+        "격투",
+        "파티게임"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Hidden Roles",
@@ -3198,6 +3425,15 @@ const gameData = {
         "Re-rolling and Locking",
         "Team-Based Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "숨겨진 역할",
+        "플레이어 탈락",
+        "욕심 부리기",
+        "재굴림과 고정",
+        "팀 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Michael Palm",
@@ -3341,9 +3577,17 @@ const gameData = {
         "Card Game",
         "Deduction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임"
       ],
       "designers": [
         "Michael Loth"
@@ -3476,12 +3720,24 @@ const gameData = {
         "Farming",
         "Negotiation"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "농업",
+        "협상"
+      ],
       "mechanics": [
         "Hand Management",
         "Multi-Use Cards",
         "Negotiation",
         "Set Collection",
         "Trading"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "다목적 카드",
+        "협상",
+        "세트 수집",
+        "교역"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -3608,10 +3864,23 @@ const gameData = {
         "Negotiation",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "판타지",
+        "공포",
+        "협상",
+        "파티게임"
+      ],
       "mechanics": [
         "Role Playing",
         "Team-Based Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "역할극",
+        "팀 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Kalle Krenzer"
@@ -3749,6 +4018,14 @@ const gameData = {
         "Fantasy",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "탐험",
+        "판타지",
+        "파티게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Hidden Roles",
@@ -3758,6 +4035,16 @@ const gameData = {
         "Score-and-Reset Game",
         "Take That",
         "Traitor Game"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "숨겨진 역할",
+        "숨겨진 승리 점수",
+        "지도 추가",
+        "네트워크/루트 건설",
+        "점수 후 리셋",
+        "공격형 플레이",
+        "배신자 게임"
       ],
       "designers": [
         "Fréderic Moyersoen"
@@ -3903,12 +4190,27 @@ const gameData = {
         "Dice",
         "Party Game"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "블러핑",
+        "카드게임",
+        "추리",
+        "주사위",
+        "파티게임"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Modular Board",
         "Player Elimination",
         "Team-Based Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "모듈형 보드",
+        "플레이어 탈락",
+        "팀 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Yasutaka Ikeda"
@@ -4061,10 +4363,19 @@ const gameData = {
         "Card Game",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "퍼즐"
+      ],
       "mechanics": [
         "Pattern Recognition",
         "Real-Time",
         "Speed Matching"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "실시간",
+        "스피드 매칭"
       ],
       "designers": [
         "Marsha J. Falco"
@@ -4186,10 +4497,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "퀴즈",
         "속이기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -4296,6 +4609,13 @@ const gameData = {
         "Party Game",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "유머",
+        "파티게임",
+        "스파이"
+      ],
       "mechanics": [
         "Acting",
         "Communication Limits",
@@ -4305,6 +4625,16 @@ const gameData = {
         "Targeted Clues",
         "Traitor Game",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "연기",
+        "소통 제한",
+        "기억력",
+        "역할극",
+        "비대칭 정보 역할",
+        "힌트 제공",
+        "배신자 게임",
+        "투표"
       ],
       "designers": [
         "Alexandr Ushan"
@@ -4442,11 +4772,24 @@ const gameData = {
         "Party Game",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "유머",
+        "파티게임",
+        "스파이"
+      ],
       "mechanics": [
         "Acting",
         "Memory",
         "Role Playing",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "연기",
+        "기억력",
+        "역할극",
+        "투표"
       ],
       "designers": [
         "Alexandr Ushan"
@@ -4584,6 +4927,12 @@ const gameData = {
         "Murder / Mystery",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "추리/미스터리",
+        "파티게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Deduction",
@@ -4596,6 +4945,19 @@ const gameData = {
         "Traitor Game",
         "Variable Player Powers",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "추리",
+        "숨겨진 역할",
+        "협상",
+        "죄수의 딜레마",
+        "가위바위보",
+        "비대칭 정보 역할",
+        "팀 게임",
+        "배신자 게임",
+        "비대칭 능력",
+        "투표"
       ],
       "designers": [
         "Steven Medway"
@@ -4728,9 +5090,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "협잡"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -4844,6 +5208,16 @@ const gameData = {
         "Party Game",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "판타지",
+        "중세",
+        "협상",
+        "파티게임",
+        "스파이"
+      ],
       "mechanics": [
         "Finale Ending",
         "Hidden Roles",
@@ -4853,6 +5227,16 @@ const gameData = {
         "Traitor Game",
         "Variable Player Powers",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "피날레 종료",
+        "숨겨진 역할",
+        "비대칭 정보 역할",
+        "동시 액션 선택",
+        "팀 게임",
+        "배신자 게임",
+        "비대칭 능력",
+        "투표"
       ],
       "designers": [
         "Don Eskridge"
@@ -4989,9 +5373,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "삼가동님 제공"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5091,9 +5477,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "강도맞추기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5195,9 +5583,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "손패털기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5297,9 +5687,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "롤랜라이트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5401,9 +5793,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "그림힌트주기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5500,10 +5894,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "스무고개",
         "내부자"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5604,9 +6000,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "고or스톱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5706,10 +6104,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "눈치",
         "맞추기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -5813,11 +6213,22 @@ const gameData = {
         "Party Game",
         "Word Game"
       ],
+      "categoriesKo": [
+        "추리",
+        "파티게임",
+        "언어 게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
         "Deduction",
         "Score-and-Reset Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "추리",
+        "점수 후 리셋"
       ],
       "designers": [
         "Ludovic Roudy",
@@ -5952,12 +6363,24 @@ const gameData = {
         "Number",
         "Party Game"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "숫자",
+        "파티게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Ordering",
         "Push Your Luck",
         "Score-and-Reset Game",
         "Simultaneous Action Selection"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "순서 정하기",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "동시 액션 선택"
       ],
       "designers": [
         "Wolfgang Kramer"
@@ -6095,11 +6518,25 @@ const gameData = {
         "Party Game",
         "Word Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "유머",
+        "파티게임",
+        "언어 게임"
+      ],
       "mechanics": [
         "Hidden Roles",
         "Targeted Clues",
         "Team-Based Game",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "힌트 제공",
+        "팀 게임",
+        "투표"
       ],
       "designers": [
         "Rikki Tahta"
@@ -6228,10 +6665,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "베팅",
         "레이싱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -6332,9 +6771,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "총겨누기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -6443,12 +6884,26 @@ const gameData = {
         "Spies / Secret Agents",
         "Word Game"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Deduction",
         "Memory",
         "Race",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
       ],
       "designers": [
         "Vlaada Chvátil"
@@ -6586,12 +7041,26 @@ const gameData = {
         "Spies / Secret Agents",
         "Word Game"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Deduction",
         "Memory",
         "Race",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
       ],
       "designers": [
         "Vlaada Chvátil"
@@ -6728,12 +7197,26 @@ const gameData = {
         "Spies / Secret Agents",
         "Word Game"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Deduction",
         "Memory",
         "Race",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
       ],
       "designers": [
         "Vlaada Chvátil"
@@ -6870,10 +7353,20 @@ const gameData = {
         "Party Game",
         "Word Game"
       ],
+      "categoriesKo": [
+        "추리",
+        "파티게임",
+        "언어 게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Race",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "레이스",
+        "팀 게임"
       ],
       "designers": [
         "Gaëtan Beaujannot",
@@ -7008,12 +7501,26 @@ const gameData = {
         "Party Game",
         "Political"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "파티게임",
+        "정치"
+      ],
       "mechanics": [
         "Hidden Roles",
         "Memory",
         "Player Elimination",
         "Take That",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "기억력",
+        "플레이어 탈락",
+        "공격형 플레이",
+        "비대칭 능력"
       ],
       "designers": [
         "Rikki Tahta"
@@ -7153,9 +7660,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "마피아"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -7267,12 +7776,26 @@ const gameData = {
         "Party Game",
         "Real-time"
       ],
+      "categoriesKo": [
+        "순발력",
+        "카드게임",
+        "어린이 게임",
+        "파티게임",
+        "실시간"
+      ],
       "mechanics": [
         "Interrupts",
         "Pattern Recognition",
         "Race",
         "Real-Time",
         "Speed Matching"
+      ],
+      "mechanicsKo": [
+        "인터럽트",
+        "패턴 인식",
+        "레이스",
+        "실시간",
+        "스피드 매칭"
       ],
       "designers": [
         "Dave Campbell (II)"
@@ -7403,9 +7926,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "강도맞추기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -7506,9 +8031,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위튕기기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -7613,9 +8140,18 @@ const gameData = {
         "Party Game",
         "Real-time"
       ],
+      "categoriesKo": [
+        "유머",
+        "파티게임",
+        "실시간"
+      ],
       "mechanics": [
         "Drawing",
         "Paper-and-Pencil"
+      ],
+      "mechanicsKo": [
+        "그림 그리기",
+        "종이와 연필"
       ],
       "designers": [
         "(Uncredited)"
@@ -7745,6 +8281,9 @@ const gameData = {
       "categories": [
         "Exploration"
       ],
+      "categoriesKo": [
+        "탐험"
+      ],
       "mechanics": [
         "Bingo",
         "Connections",
@@ -7755,6 +8294,17 @@ const gameData = {
         "Paper-and-Pencil",
         "Solo / Solitaire Game",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "연결",
+        "헥사곤 격자",
+        "선 긋기",
+        "덱 이동",
+        "네트워크/루트 건설",
+        "종이와 연필",
+        "솔로 게임",
+        "가변 셋업"
       ],
       "designers": [
         "Kristian Amundsen Østby",
@@ -7870,6 +8420,14 @@ const gameData = {
         "Pirates",
         "Travel"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "항해",
+        "해적",
+        "여행"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Events",
@@ -7879,6 +8437,16 @@ const gameData = {
         "Stat Check Resolution",
         "Storytelling",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "이벤트",
+        "선택형 서사",
+        "시나리오 게임",
+        "반협동게임",
+        "스탯 확인",
+        "스토리텔링",
+        "워커 배치"
       ],
       "designers": [
         "Mr. Bistro",
@@ -8005,10 +8573,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "블러핑",
         "족보만들기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -8103,9 +8673,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -8208,9 +8780,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "운시험"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -8319,6 +8893,13 @@ const gameData = {
         "Horror",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "공포",
+        "파티게임"
+      ],
       "mechanics": [
         "Hidden Roles",
         "Role Playing",
@@ -8326,6 +8907,14 @@ const gameData = {
         "Traitor Game",
         "Variable Player Powers",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "역할극",
+        "비대칭 정보 역할",
+        "배신자 게임",
+        "비대칭 능력",
+        "투표"
       ],
       "designers": [
         "Ted Alspach",
@@ -8463,9 +9052,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -8571,6 +9162,10 @@ const gameData = {
         "Economic",
         "Trains"
       ],
+      "categoriesKo": [
+        "경제",
+        "기차"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Market",
@@ -8580,6 +9175,16 @@ const gameData = {
         "Stock Holding",
         "Tile Placement",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "시장",
+        "네트워크/루트 건설",
+        "소유권",
+        "솔로 게임",
+        "주식 보유",
+        "타일 배치",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Mike Hutton"
@@ -8698,9 +9303,18 @@ const gameData = {
         "Party Game",
         "Trivia"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "파티게임",
+        "퀴즈"
+      ],
       "mechanics": [
         "Action Timer",
         "Real-Time"
+      ],
+      "mechanicsKo": [
+        "액션 타이머",
+        "실시간"
       ],
       "designers": [
         "Michael Sistrunk"
@@ -8824,12 +9438,22 @@ const gameData = {
       "categories": [
         "Party Game"
       ],
+      "categoriesKo": [
+        "파티게임"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Deduction",
         "Ordering",
         "Player Judge",
         "Targeted Clues"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "순서 정하기",
+        "플레이어 심판",
+        "힌트 제공"
       ],
       "designers": [
         "Aurélien Picolet"
@@ -8959,11 +9583,22 @@ const gameData = {
         "Card Game",
         "Memory"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "기억력"
+      ],
       "mechanics": [
         "Matching",
         "Memory",
         "Questions and Answers",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "매칭",
+        "기억력",
+        "질문과 답변",
+        "세트 수집"
       ],
       "designers": [
         "宮野 華也 (Kaya Miyano)"
@@ -9082,11 +9717,21 @@ const gameData = {
         "Animals",
         "Card Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임"
+      ],
       "mechanics": [
         "Enclosure",
         "Hand Management",
         "Predictive Bid",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "패 관리",
+        "예측 입찰",
+        "트릭 테이킹"
       ],
       "designers": [
         "Muneyuki Yokouchi (横内宗幸)"
@@ -9207,6 +9852,15 @@ const gameData = {
         "Novel-based",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "유머",
+        "중세",
+        "협상",
+        "소설 원작",
+        "파티게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Bribery",
@@ -9215,6 +9869,15 @@ const gameData = {
         "Open Drafting",
         "Role Playing",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "뇌물",
+        "패 관리",
+        "협상",
+        "공개 드래프팅",
+        "역할극",
+        "세트 수집"
       ],
       "designers": [
         "Sérgio Halaban",
@@ -9343,6 +10006,10 @@ const gameData = {
         "Racing",
         "Sports"
       ],
+      "categoriesKo": [
+        "레이싱",
+        "스포츠"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Betting and Bluffing",
@@ -9351,6 +10018,15 @@ const gameData = {
         "Predictive Bid",
         "Track Movement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "배팅과 블러핑",
+        "패 관리",
+        "다중 유닛 이동",
+        "예측 입찰",
+        "트랙 이동",
+        "비대칭 능력"
       ],
       "designers": [
         "Rob Daviau",
@@ -9463,9 +10139,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "협력추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -9561,9 +10239,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "예측배팅"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -9663,9 +10343,16 @@ const gameData = {
       "categories": [
         "Memory"
       ],
+      "categoriesKo": [
+        "기억력"
+      ],
       "mechanics": [
         "Memory",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "기억력",
+        "스토리텔링"
       ],
       "designers": [
         "Stefan Dorra",
@@ -9793,9 +10480,17 @@ const gameData = {
         "Deduction",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "추리",
+        "스파이"
+      ],
       "mechanics": [
         "Deduction",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "팀 게임"
       ],
       "designers": [
         "Kristian Amundsen Østby",
@@ -9917,11 +10612,22 @@ const gameData = {
         "Fantasy",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "동물",
+        "판타지",
+        "퍼즐"
+      ],
       "mechanics": [
         "Bingo",
         "Modular Board",
         "Pattern Building",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "모듈형 보드",
+        "패턴 만들기",
+        "타일 배치"
       ],
       "designers": [
         "Alf Seegert"
@@ -10038,11 +10744,21 @@ const gameData = {
         "Card Game",
         "Number"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "숫자"
+      ],
       "mechanics": [
         "Hand Management",
         "Ladder Climbing",
         "Matching",
         "Push Your Luck"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "매칭",
+        "욕심 부리기"
       ],
       "designers": [
         "Reiner Knizia"
@@ -10166,11 +10882,21 @@ const gameData = {
         "Ancient",
         "Card Game"
       ],
+      "categoriesKo": [
+        "고대",
+        "카드게임"
+      ],
       "mechanics": [
         "Bingo",
         "Open Drafting",
         "Push Your Luck",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "공개 드래프팅",
+        "욕심 부리기",
+        "세트 수집"
       ],
       "designers": [
         "Paolo Mori"
@@ -10286,9 +11012,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "상대 카드맞추기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -10395,12 +11123,25 @@ const gameData = {
         "Fantasy",
         "Horror"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "판타지",
+        "공포"
+      ],
       "mechanics": [
         "Deduction",
         "Hand Management",
         "Player Elimination",
         "Score-and-Reset Game",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "패 관리",
+        "플레이어 탈락",
+        "점수 후 리셋",
+        "공격형 플레이"
       ],
       "designers": [
         "Seiji Kanai"
@@ -10529,9 +11270,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -10640,12 +11383,26 @@ const gameData = {
         "Party Game",
         "Political"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "파티게임",
+        "정치"
+      ],
       "mechanics": [
         "Hidden Roles",
         "Memory",
         "Player Elimination",
         "Take That",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "기억력",
+        "플레이어 탈락",
+        "공격형 플레이",
+        "비대칭 능력"
       ],
       "designers": [
         "Rikki Tahta"
@@ -10794,6 +11551,10 @@ const gameData = {
         "Card Game",
         "Pirates"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "해적"
+      ],
       "mechanics": [
         "Action Queue",
         "Deduction",
@@ -10804,6 +11565,17 @@ const gameData = {
         "Take That",
         "Turn Order: Role Order",
         "Variable Phase Order"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "추리",
+        "패 관리",
+        "순서 선택 입찰",
+        "세트 수집",
+        "동시 액션 선택",
+        "공격형 플레이",
+        "역할 순서",
+        "가변 페이즈 순서"
       ],
       "designers": [
         "Paolo Mori"
@@ -10928,9 +11700,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "협력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -11037,6 +11811,9 @@ const gameData = {
       "categories": [
         "Renaissance"
       ],
+      "categoriesKo": [
+        "르네상스"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Once Around",
@@ -11044,6 +11821,14 @@ const gameData = {
         "Push Your Luck",
         "Set Collection",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "1회전 경매",
+        "수입",
+        "욕심 부리기",
+        "세트 수집",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Reiner Knizia"
@@ -11158,9 +11943,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -11263,6 +12050,9 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: English",
@@ -11275,6 +12065,19 @@ const gameData = {
         "Set Collection",
         "Track Movement",
         "Trading"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "잉글리시 경매",
+        "수입",
+        "대출",
+        "턴 건너뛰기",
+        "소유권",
+        "플레이어 탈락",
+        "굴리고 이동",
+        "세트 수집",
+        "트랙 이동",
+        "교역"
       ],
       "designers": [
         "Charles Darrow",
@@ -11387,9 +12190,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위트릭테이킹"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -11497,10 +12302,20 @@ const gameData = {
         "Card Game",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "파티게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Set Collection",
         "Single Loser Game"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "세트 수집",
+        "단독 패배 게임"
       ],
       "designers": [
         "Jacques Zeimet"
@@ -11619,9 +12434,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "손패털기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -11715,9 +12532,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "발음하기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -11820,6 +12639,11 @@ const gameData = {
         "Novel-based",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "미디어 테마",
+        "소설 원작",
+        "SF"
+      ],
       "mechanics": [
         "Automatic Resource Growth",
         "Card Play Conflict Resolution",
@@ -11835,6 +12659,22 @@ const gameData = {
         "Turn Order: Progressive",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "카드 전투 해결",
+        "계약",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "강제 헌신",
+        "미선택 자원 가치 증가",
+        "다목적 카드",
+        "공개 드래프팅",
+        "솔로 게임",
+        "팀 게임",
+        "순차 진행",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Paul Dennen"
@@ -11956,9 +12796,20 @@ const gameData = {
         "Party Game",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "교육",
+        "기억력",
+        "파티게임",
+        "퍼즐"
+      ],
       "mechanics": [
         "Memory",
         "Pattern Recognition"
+      ],
+      "mechanicsKo": [
+        "기억력",
+        "패턴 인식"
       ],
       "designers": [
         "Johan Benvenuto",
@@ -12077,9 +12928,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "단어연상"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -12174,9 +13027,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -12284,11 +13139,23 @@ const gameData = {
         "Card Game",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "항공",
+        "카드게임",
+        "판타지"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Dice Rolling",
         "Hidden Victory Points",
         "Push Your Luck"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기",
+        "숨겨진 승리 점수",
+        "욕심 부리기"
       ],
       "designers": [
         "Aaron Weissblum"
@@ -12402,7 +13269,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -12495,9 +13364,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "발음하기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -12601,6 +13472,11 @@ const gameData = {
         "Card Game",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "파티게임"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Turn Order Until Pass",
@@ -12608,6 +13484,14 @@ const gameData = {
         "Hand Management",
         "Player Elimination",
         "Predictive Bid"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "베팅식 입찰",
+        "패 관리",
+        "플레이어 탈락",
+        "예측 입찰"
       ],
       "designers": [
         "Hervé Marly"
@@ -12725,10 +13609,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "트릭테이킹",
         "예측"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -12838,11 +13724,22 @@ const gameData = {
         "Nautical",
         "Pirates"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "항해",
+        "해적"
+      ],
       "mechanics": [
         "Hand Management",
         "Predictive Bid",
         "Rock-Paper-Scissors",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "예측 입찰",
+        "가위바위보",
+        "트릭 테이킹"
       ],
       "designers": [
         "Brent Beck",
@@ -12953,9 +13850,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "삼가동님 제공"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -13064,9 +13963,18 @@ const gameData = {
         "Bluffing",
         "Card Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Hand Management"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "패 관리"
       ],
       "designers": [
         "Győri Zoltán Gábor"
@@ -13180,9 +14088,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "오목"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -13286,6 +14196,10 @@ const gameData = {
         "Economic",
         "Negotiation"
       ],
+      "categoriesKo": [
+        "경제",
+        "협상"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Hand Management",
@@ -13293,6 +14207,14 @@ const gameData = {
         "Roll / Spin and Move",
         "Set Collection",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "패 관리",
+        "협상",
+        "굴리고 이동",
+        "세트 수집",
+        "공격형 플레이"
       ],
       "designers": [
         "Sid Sackson"
@@ -13411,9 +14333,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -13508,9 +14432,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -13604,10 +14530,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "야찌",
         "배팅"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -13706,9 +14634,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "이야기만들기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -13811,8 +14741,14 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Ladder Climbing"
+      ],
+      "mechanicsKo": [
+        "사다리 오르기"
       ],
       "designers": [
         "Yohan Goh",
@@ -13922,9 +14858,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩배틀"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14040,12 +14978,27 @@ const gameData = {
         "Music",
         "Travel"
       ],
+      "categoriesKo": [
+        "어린이 게임",
+        "만화",
+        "주사위",
+        "미디어 테마",
+        "음악",
+        "여행"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Paper-and-Pencil",
         "Push Your Luck",
         "Re-rolling and Locking",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "종이와 연필",
+        "욕심 부리기",
+        "재굴림과 고정",
+        "세트 수집"
       ],
       "designers": [
         "Edwin S. Lowe"
@@ -14166,9 +15119,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "단어연상"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14266,9 +15221,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "단어연상"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14366,9 +15323,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "피지컬"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14467,9 +15426,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "롤앤라이트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14570,9 +15531,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "클라이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14672,7 +15635,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14773,9 +15738,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14874,9 +15841,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위족보"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -14979,11 +15948,20 @@ const gameData = {
       "categories": [
         "Abstract Strategy"
       ],
+      "categoriesKo": [
+        "추상 전략"
+      ],
       "mechanics": [
         "Grid Coverage",
         "Hand Management",
         "Hexagon Grid",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "패 관리",
+        "헥사곤 격자",
+        "타일 배치"
       ],
       "designers": [
         "Justin Oh"
@@ -15092,10 +16070,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "마피아",
         "블러핑"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15194,10 +16174,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "단어연상",
         "협력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15293,9 +16275,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15394,10 +16378,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "마을건설"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15497,9 +16483,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "지리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15596,9 +16584,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "3인 팀웍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15694,10 +16684,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "영향력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -15812,10 +16804,22 @@ const gameData = {
         "Movies / TV / Radio theme",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "어린이 게임",
+        "주사위",
+        "미디어 테마",
+        "파티게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Dice Rolling",
         "Player Elimination"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기",
+        "플레이어 탈락"
       ],
       "designers": [
         "Richard Borg"
@@ -15937,8 +16941,16 @@ const gameData = {
         "Card Game",
         "Children's Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "어린이 게임"
+      ],
       "mechanics": [
         "Hand Management"
+      ],
+      "mechanicsKo": [
+        "패 관리"
       ],
       "designers": [
         "Reiner Knizia"
@@ -16052,9 +17064,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "포인트샐러드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -16149,10 +17163,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "팀전",
         "카드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -16252,7 +17268,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -16352,9 +17370,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -16448,9 +17468,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "쌓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -16556,9 +17578,20 @@ const gameData = {
         "Party Game",
         "Real-time"
       ],
+      "categoriesKo": [
+        "순발력",
+        "카드게임",
+        "어린이 게임",
+        "파티게임",
+        "실시간"
+      ],
       "mechanics": [
         "Pattern Recognition",
         "Player Elimination"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "플레이어 탈락"
       ],
       "designers": [
         "Haim Shafir"
@@ -16686,10 +17719,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순발력",
         "레이싱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -16796,6 +17831,12 @@ const gameData = {
         "Murder / Mystery",
         "Post-Napoleonic"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "추리/미스터리",
+        "나폴레옹 이후"
+      ],
       "mechanics": [
         "Hidden Movement",
         "Memory",
@@ -16803,6 +17844,14 @@ const gameData = {
         "Questions and Answers",
         "Secret Unit Deployment",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "숨은 이동",
+        "기억력",
+        "포인트 이동",
+        "질문과 답변",
+        "비밀 유닛 배치",
+        "팀 게임"
       ],
       "designers": [
         "Gabriele Mari",
@@ -16928,7 +17977,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17031,10 +18082,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩",
         "레이싱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17141,6 +18194,12 @@ const gameData = {
         "Trains",
         "Transportation"
       ],
+      "categoriesKo": [
+        "경제",
+        "나폴레옹 이후",
+        "기차",
+        "운송"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Catch the Leader",
@@ -17157,6 +18216,23 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Auction",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "선두 견제",
+        "연결",
+        "주사위 굴리기",
+        "헥사곤 격자",
+        "대출",
+        "네트워크/루트 건설",
+        "픽업 앤 딜리버",
+        "플레이어 탈락",
+        "시나리오 게임",
+        "순서 선택 입찰",
+        "솔로 게임",
+        "타일 배치",
+        "순서 경매",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "John Bohrer",
@@ -17267,7 +18343,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17368,9 +18446,14 @@ const gameData = {
       "minPlayTime": 20,
       "maxPlayTime": 20,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "Hand Management",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "트릭 테이킹"
       ],
       "designers": [
         "root (ルート)"
@@ -17481,10 +18564,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순발력",
         "수치비교"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17590,6 +18675,13 @@ const gameData = {
         "Space Exploration",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "문명",
+        "경제",
+        "SF",
+        "우주 탐험",
+        "영토 건설"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hexagon Grid",
@@ -17603,6 +18695,20 @@ const gameData = {
         "Variable Player Powers",
         "Variable Set-up",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "헥사곤 격자",
+        "수입",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "솔로 게임",
+        "태그",
+        "기술 트리",
+        "패스 순서",
+        "비대칭 능력",
+        "가변 셋업",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Jens Drögemüller",
@@ -17700,9 +18806,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17784,9 +18892,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17874,7 +18984,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -17979,6 +19091,12 @@ const gameData = {
         "Renaissance",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "르네상스",
+        "영토 건설"
+      ],
       "mechanics": [
         "Connections",
         "Dice Rolling",
@@ -17987,6 +19105,15 @@ const gameData = {
         "Track Movement",
         "Worker Placement",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "주사위 굴리기",
+        "레이스",
+        "타일 배치",
+        "트랙 이동",
+        "워커 배치",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Inka Brand",
@@ -18108,6 +19235,9 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Commodity Speculation",
         "Contracts",
@@ -18120,6 +19250,19 @@ const gameData = {
         "Victory Points as a Resource",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "상품 투기",
+        "계약",
+        "투자",
+        "공개 드래프팅",
+        "포인트 이동",
+        "자원 이동",
+        "세트 수집",
+        "솔로 게임",
+        "승리 점수를 자원으로",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Vital Lacerda"
@@ -18236,10 +19379,19 @@ const gameData = {
         "Card Game",
         "Political"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "정치"
+      ],
       "mechanics": [
         "Hand Management",
         "Ladder Climbing",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "세트 수집"
       ],
       "designers": [
         "Lee Yih"
@@ -18345,7 +19497,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -18440,9 +19594,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "심리전"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -18536,9 +19692,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "워게임"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -18635,9 +19793,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -18725,10 +19885,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "주사위"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -18820,10 +19982,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "세트컬렉션",
         "상호작용"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -18919,7 +20083,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -19018,10 +20184,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위일꾼",
         "자원치환"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -19126,6 +20294,10 @@ const gameData = {
         "American West",
         "Animals"
       ],
+      "categoriesKo": [
+        "미국 서부",
+        "동물"
+      ],
       "mechanics": [
         "Deck, Bag, and Pool Building",
         "Hand Management",
@@ -19133,6 +20305,14 @@ const gameData = {
         "Set Collection",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "소유권",
+        "세트 수집",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Alexander Pfister"
@@ -19246,6 +20426,9 @@ const gameData = {
       "categories": [
         "Animals"
       ],
+      "categoriesKo": [
+        "동물"
+      ],
       "mechanics": [
         "Deck, Bag, and Pool Building",
         "Hand Management",
@@ -19254,6 +20437,15 @@ const gameData = {
         "Solo / Solitaire Game",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "소유권",
+        "세트 수집",
+        "솔로 게임",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Alexander Pfister"
@@ -19370,6 +20562,12 @@ const gameData = {
         "Industry / Manufacturing",
         "Medieval"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "중세"
+      ],
       "mechanics": [
         "Automatic Resource Growth",
         "End Game Bonuses",
@@ -19381,6 +20579,18 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Progressive",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "최종 보너스",
+        "따라하기",
+        "공개 드래프팅",
+        "세트 수집",
+        "동시 액션 선택",
+        "솔로 게임",
+        "타일 배치",
+        "순차 진행",
+        "가변 셋업"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -19494,9 +20704,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "협력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -19606,12 +20818,27 @@ const gameData = {
         "Religious",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "중세",
+        "종교",
+        "영토 건설"
+      ],
       "mechanics": [
         "Increase Value of Unchosen Resources",
         "Modular Board",
         "Network and Route Building",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "미선택 자원 가치 증가",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -19724,11 +20951,21 @@ const gameData = {
         "Card Game",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "SF"
+      ],
       "mechanics": [
         "Action Queue",
         "Contracts",
         "Open Drafting",
         "Race"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "계약",
+        "공개 드래프팅",
+        "레이스"
       ],
       "designers": [
         "Phil Walker-Harding"
@@ -19830,9 +21067,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "카드자원"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -19927,9 +21166,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20026,9 +21267,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순발력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20118,9 +21361,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순발력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20205,9 +21450,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20291,11 +21538,22 @@ const gameData = {
         "Card Game",
         "Memory"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "기억력"
+      ],
       "mechanics": [
         "Matching",
         "Memory",
         "Questions and Answers",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "매칭",
+        "기억력",
+        "질문과 답변",
+        "세트 수집"
       ],
       "designers": [
         "宮野 華也 (Kaya Miyano)"
@@ -20406,9 +21664,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20504,7 +21764,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20604,9 +21866,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "요트다이스"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20698,9 +21962,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "네트워크"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -20808,6 +22074,11 @@ const gameData = {
         "Fantasy",
         "Mythology"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "신화"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Multiple Lot",
@@ -20817,6 +22088,16 @@ const gameData = {
         "Selection Order Bid",
         "Set Collection",
         "Simultaneous Action Selection"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "다중 경매",
+        "비밀 입찰",
+        "제한 입찰",
+        "최종 보너스",
+        "순서 선택 입찰",
+        "세트 수집",
+        "동시 액션 선택"
       ],
       "designers": [
         "Serge Laget"
@@ -20927,7 +22208,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -21030,6 +22313,12 @@ const gameData = {
         "Fantasy",
         "Fighting"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투"
+      ],
       "mechanics": [
         "Closed Drafting",
         "Contracts",
@@ -21050,6 +22339,27 @@ const gameData = {
         "Tags",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "주사위 굴리기",
+        "최종 보너스",
+        "패 관리",
+        "이동 포인트",
+        "다중 지도",
+        "선택형 서사",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "포인트 이동",
+        "욕심 부리기",
+        "자원 이동",
+        "시나리오 게임",
+        "세트 수집",
+        "스토리텔링",
+        "태그",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Ryan Laukat"
@@ -21179,9 +22489,13 @@ const gameData = {
       "categories": [
         "Deduction"
       ],
+      "categoriesKo": [
+        "추리"
+      ],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [
         "Hiroaki Suzuki",
         "Eiji Wakasugi"
@@ -21290,9 +22604,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -21386,9 +22702,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "만칼라"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -21493,6 +22811,10 @@ const gameData = {
         "Exploration",
         "Travel"
       ],
+      "categoriesKo": [
+        "탐험",
+        "여행"
+      ],
       "mechanics": [
         "Contracts",
         "Ownership",
@@ -21504,6 +22826,18 @@ const gameData = {
         "Variable Set-up",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "소유권",
+        "픽업 앤 딜리버",
+        "포인트 이동",
+        "세트 수집",
+        "솔로 게임",
+        "순서 선점",
+        "가변 셋업",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Simone Luciani",
@@ -21617,9 +22951,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -21716,10 +23052,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "영향력",
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -21818,7 +23156,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -21917,10 +23257,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "협력",
         "카드털기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -22022,6 +23364,10 @@ const gameData = {
         "Card Game",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "SF"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Cube Tower",
@@ -22030,6 +23376,15 @@ const gameData = {
         "Solo / Solitaire Game",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "큐브 타워",
+        "덱/백/풀 빌딩",
+        "시나리오 게임",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Maxime Rambourg",
@@ -22143,9 +23498,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주식"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -22248,10 +23605,19 @@ const gameData = {
         "Card Game",
         "Number"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "숫자"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
         "Hand Management"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "패 관리"
       ],
       "designers": [
         "Wolfgang Warsch"
@@ -22374,9 +23740,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -22480,12 +23848,25 @@ const gameData = {
         "Fighting",
         "Humor"
       ],
+      "categoriesKo": [
+        "경제",
+        "판타지",
+        "격투",
+        "유머"
+      ],
       "mechanics": [
         "Action Queue",
         "Hand Management",
         "Simultaneous Action Selection",
         "Tile Placement",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "패 관리",
+        "동시 액션 선택",
+        "타일 배치",
+        "워커 배치"
       ],
       "designers": [
         "Vlaada Chvátil"
@@ -22606,9 +23987,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -22711,11 +24094,22 @@ const gameData = {
         "Pirates",
         "Video Game Theme"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "해적",
+        "비디오게임 테마"
+      ],
       "mechanics": [
         "Push Your Luck",
         "Set Collection",
         "Take That",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "욕심 부리기",
+        "세트 수집",
+        "공격형 플레이",
+        "비대칭 능력"
       ],
       "designers": [
         "Chris Bray",
@@ -22840,9 +24234,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "생존"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -22949,6 +24345,13 @@ const gameData = {
         "Fighting",
         "Medieval"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투",
+        "중세"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Map Addition",
@@ -22957,6 +24360,15 @@ const gameData = {
         "Solo / Solitaire Game",
         "Storytelling",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "지도 추가",
+        "역할극",
+        "시나리오 게임",
+        "솔로 게임",
+        "스토리텔링",
+        "타일 배치"
       ],
       "designers": [
         "Michał Gołąb Gołębiowski",
@@ -23089,6 +24501,12 @@ const gameData = {
         "Territory Building",
         "Video Game Theme"
       ],
+      "categoriesKo": [
+        "환경",
+        "퍼즐",
+        "영토 건설",
+        "비디오게임 테마"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Cooperative Game",
@@ -23098,6 +24516,16 @@ const gameData = {
         "Scenario / Mission / Campaign Game",
         "Tile Placement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "협동게임",
+        "헥사곤 격자",
+        "지도 추가",
+        "모듈형 보드",
+        "시나리오 게임",
+        "타일 배치",
+        "가변 셋업"
       ],
       "designers": [
         "Michael Palm",
@@ -23211,10 +24639,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "2인",
         "경찰도둑"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23309,9 +24739,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23406,9 +24838,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23503,9 +24937,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23602,9 +25038,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23701,9 +25139,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "그림찾기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23798,9 +25238,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "케잌나누기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23896,9 +25338,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -23994,9 +25438,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24091,7 +25537,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24182,9 +25630,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "-"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24273,9 +25723,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "쌓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24370,10 +25822,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "운시험",
         "셋컬"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24478,6 +25932,12 @@ const gameData = {
         "Political",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "미디어 테마",
+        "소설 원작",
+        "정치",
+        "SF"
+      ],
       "mechanics": [
         "Card Play Conflict Resolution",
         "Deck, Bag, and Pool Building",
@@ -24494,6 +25954,23 @@ const gameData = {
         "Turn Order: Progressive",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "강제 헌신",
+        "미선택 자원 가치 증가",
+        "다목적 카드",
+        "공개 드래프팅",
+        "소유권",
+        "레이스",
+        "솔로 게임",
+        "태그",
+        "공격형 플레이",
+        "순차 진행",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Paul Dennen"
@@ -24602,9 +26079,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "2인"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24700,9 +26179,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "블럭떨구기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -24802,12 +26283,22 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Memory",
         "Open Drafting",
         "Pattern Building",
         "Set Collection",
         "Variable Phase Order"
+      ],
+      "mechanicsKo": [
+        "기억력",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "가변 페이즈 순서"
       ],
       "designers": [
         "Klemens Kalicki"
@@ -24917,10 +26408,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "RPG",
         "던전크롤링"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25028,6 +26521,13 @@ const gameData = {
         "Modern Warfare",
         "Video Game Theme"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "성인",
+        "현대 전쟁",
+        "비디오게임 테마"
+      ],
       "mechanics": [
         "Action Points",
         "Cooperative Game",
@@ -25043,6 +26543,22 @@ const gameData = {
         "Storytelling",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "협동게임",
+        "주사위 굴리기",
+        "이벤트",
+        "격자 이동",
+        "선택형 서사",
+        "욕심 부리기",
+        "역할극",
+        "시나리오 게임",
+        "시뮬레이션",
+        "솔로 게임",
+        "스토리텔링",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Michał Oracz",
@@ -25171,9 +26687,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "생존"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25273,10 +26791,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위일꾼",
         "계약서달성"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25376,7 +26896,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25473,9 +26995,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위배팅"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25572,7 +27096,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25673,9 +27199,16 @@ const gameData = {
       "categories": [
         "Word Game"
       ],
+      "categoriesKo": [
+        "언어 게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "타일 배치"
       ],
       "designers": [
         "Justin Oh"
@@ -25794,9 +27327,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "지리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25884,7 +27419,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -25970,9 +27507,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26054,7 +27593,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26151,9 +27692,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26250,11 +27793,13 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "코딩",
         "자원"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26354,6 +27899,11 @@ const gameData = {
         "Fighting",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "격투",
+        "SF"
+      ],
       "mechanics": [
         "Action Points",
         "Action Queue",
@@ -26361,6 +27911,14 @@ const gameData = {
         "Multi-Use Cards",
         "Take That",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 큐",
+        "패 관리",
+        "다목적 카드",
+        "공격형 플레이",
+        "비대칭 능력"
       ],
       "designers": [
         "Daniel Piechnick"
@@ -26482,6 +28040,11 @@ const gameData = {
         "Fighting",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "동물",
+        "격투",
+        "SF"
+      ],
       "mechanics": [
         "Action Points",
         "Action Retrieval",
@@ -26491,6 +28054,16 @@ const gameData = {
         "Simultaneous Action Selection",
         "Take That",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 회수",
+        "격자 이동",
+        "패 관리",
+        "모듈형 보드",
+        "동시 액션 선택",
+        "공격형 플레이",
+        "비대칭 능력"
       ],
       "designers": [
         "Bruno Cathala",
@@ -26610,9 +28183,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "영향력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26717,9 +28292,17 @@ const gameData = {
         "Abstract Strategy",
         "Number"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "숫자"
+      ],
       "mechanics": [
         "Solo / Solitaire Game",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "솔로 게임",
+        "타일 배치"
       ],
       "designers": [
         "Michael Schacht"
@@ -26822,9 +28405,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "삼가동님 제공"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26900,9 +28485,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순서대로내기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -26998,9 +28585,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "액션드래프트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27099,9 +28688,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27192,10 +28783,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "철도"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27290,9 +28883,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27383,7 +28978,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27458,9 +29055,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "클라이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27555,9 +29154,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "손패털기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -27651,6 +29252,13 @@ const gameData = {
         "Novel-based",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "격투",
+        "소설 원작",
+        "영토 건설"
+      ],
       "mechanics": [
         "Action Queue",
         "Area Movement",
@@ -27668,6 +29276,24 @@ const gameData = {
         "Turn Order: Progressive",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "영역 이동",
+        "협동게임",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "이벤트",
+        "헥사곤 격자",
+        "지도 추가",
+        "이동 포인트",
+        "선택형 서사",
+        "시나리오 게임",
+        "솔로 게임",
+        "타일 배치",
+        "순차 진행",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Joanna Kijanka",
@@ -27794,6 +29420,11 @@ const gameData = {
         "Exploration",
         "Number"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "숫자"
+      ],
       "mechanics": [
         "Hand Management",
         "Melding and Splaying",
@@ -27801,6 +29432,14 @@ const gameData = {
         "Push Your Luck",
         "Score-and-Reset Game",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "결합과 펼치기",
+        "순서 정하기",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "세트 수집"
       ],
       "designers": [
         "Reiner Knizia"
@@ -27917,10 +29556,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "역할선택",
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -28026,9 +29667,18 @@ const gameData = {
         "Card Game",
         "Number"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "카드게임",
+        "숫자"
+      ],
       "mechanics": [
         "Set Collection",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "세트 수집",
+        "타일 배치"
       ],
       "designers": [
         "Ephraim Hertzano"
@@ -28136,7 +29786,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -28242,6 +29894,13 @@ const gameData = {
         "Territory Building",
         "Wargame"
       ],
+      "categoriesKo": [
+        "동물",
+        "판타지",
+        "협상",
+        "영토 건설",
+        "워게임"
+      ],
       "mechanics": [
         "Action Points",
         "Action Queue",
@@ -28258,6 +29917,23 @@ const gameData = {
         "Take That",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 큐",
+        "액션 회수",
+        "영역 지배",
+        "영역 이동",
+        "주사위 굴리기",
+        "패 관리",
+        "다목적 카드",
+        "협상",
+        "포인트 이동",
+        "레이스",
+        "돌발 종료",
+        "공격형 플레이",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Cole Wehrle"
@@ -28380,6 +30056,10 @@ const gameData = {
         "Post-Napoleonic",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "나폴레옹 이후",
+        "퍼즐"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hidden Victory Points",
@@ -28389,6 +30069,16 @@ const gameData = {
         "Set Collection",
         "Tile Placement",
         "Turn Order: Progressive"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "숨겨진 승리 점수",
+        "내가 자르고 네가 고르기",
+        "미선택 자원 가치 증가",
+        "패턴 만들기",
+        "세트 수집",
+        "타일 배치",
+        "순차 진행"
       ],
       "designers": [
         "Ted Alspach"
@@ -28493,9 +30183,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -28590,6 +30282,10 @@ const gameData = {
         "Economic",
         "Farming"
       ],
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
       "mechanics": [
         "Contracts",
         "Income",
@@ -28598,6 +30294,15 @@ const gameData = {
         "Open Drafting",
         "Solo / Solitaire Game",
         "Turn Order: Progressive"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "수입",
+        "대출",
+        "시장",
+        "공개 드래프팅",
+        "솔로 게임",
+        "순차 진행"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -28707,10 +30412,18 @@ const gameData = {
       "categories": [
         "Medieval"
       ],
+      "categoriesKo": [
+        "중세"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Campaign / Battle Card Driven",
         "Dice Rolling"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "캠페인 카드 구동",
+        "주사위 굴리기"
       ],
       "designers": [
         "Pascal Bernard"
@@ -28830,6 +30543,12 @@ const gameData = {
         "Industry / Manufacturing",
         "Nautical"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "항해"
+      ],
       "mechanics": [
         "Automatic Resource Growth",
         "End Game Bonuses",
@@ -28838,6 +30557,15 @@ const gameData = {
         "Ownership",
         "Solo / Solitaire Game",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "최종 보너스",
+        "미선택 자원 가치 증가",
+        "대출",
+        "소유권",
+        "솔로 게임",
+        "워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -28944,9 +30672,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "2인"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -29051,6 +30781,12 @@ const gameData = {
         "Industry / Manufacturing",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "문명",
+        "탐험",
+        "산업",
+        "SF"
+      ],
       "mechanics": [
         "Deck, Bag, and Pool Building",
         "Hexagon Grid",
@@ -29060,6 +30796,16 @@ const gameData = {
         "Scenario / Mission / Campaign Game",
         "Tech Trees / Tech Tracks",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "헥사곤 격자",
+        "지도 추가",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "시나리오 게임",
+        "기술 트리",
+        "비대칭 능력"
       ],
       "designers": [
         "Helge Meissner",
@@ -29160,9 +30906,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "카드대결"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -29266,6 +31014,11 @@ const gameData = {
         "Pirates",
         "Transportation"
       ],
+      "categoriesKo": [
+        "항해",
+        "해적",
+        "운송"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Turn Order Until Pass",
@@ -29275,6 +31028,16 @@ const gameData = {
         "Loans",
         "Stock Holding",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "배팅과 블러핑",
+        "상품 투기",
+        "주사위 굴리기",
+        "대출",
+        "주식 보유",
+        "워커 배치"
       ],
       "designers": [
         "Franz-Benno Delonge"
@@ -29395,6 +31158,12 @@ const gameData = {
         "Nautical",
         "Pirates"
       ],
+      "categoriesKo": [
+        "경제",
+        "탐험",
+        "항해",
+        "해적"
+      ],
       "mechanics": [
         "Contracts",
         "End Game Bonuses",
@@ -29412,6 +31181,24 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "패 관리",
+        "수입",
+        "이동 포인트",
+        "다목적 카드",
+        "선택형 서사",
+        "포인트 이동",
+        "시나리오 게임",
+        "세트 수집",
+        "솔로 게임",
+        "주식 보유",
+        "기술 트리",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Alexander Pfister"
@@ -29521,9 +31308,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "포인트샐러드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -29628,6 +31417,12 @@ const gameData = {
         "Medieval",
         "Travel"
       ],
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "중세",
+        "여행"
+      ],
       "mechanics": [
         "Contracts",
         "Dice Rolling",
@@ -29637,6 +31432,16 @@ const gameData = {
         "Variable Player Powers",
         "Worker Placement",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "주사위 굴리기",
+        "포인트 이동",
+        "자원 이동",
+        "스탯 기반 순서",
+        "비대칭 능력",
+        "워커 배치",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Simone Luciani",
@@ -29756,6 +31561,10 @@ const gameData = {
         "Fantasy",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "판타지",
+        "퍼즐"
+      ],
       "mechanics": [
         "Contracts",
         "Open Drafting",
@@ -29764,6 +31573,15 @@ const gameData = {
         "Set Collection",
         "Take That",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "공개 드래프팅",
+        "패턴 인식",
+        "물리적 제거",
+        "세트 수집",
+        "공격형 플레이",
+        "가변 셋업"
       ],
       "designers": [
         "Stefano Castelli",
@@ -29890,9 +31708,17 @@ const gameData = {
         "Card Game",
         "Sports"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "스포츠"
+      ],
       "mechanics": [
         "Ladder Climbing",
         "Score-and-Reset Game"
+      ],
+      "mechanicsKo": [
+        "사다리 오르기",
+        "점수 후 리셋"
       ],
       "designers": [
         "Jun Sasaki",
@@ -29998,10 +31824,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위",
         "등반"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -30100,6 +31928,9 @@ const gameData = {
       "categories": [
         "City Building"
       ],
+      "categoriesKo": [
+        "도시 건설"
+      ],
       "mechanics": [
         "Bingo",
         "Catch the Leader",
@@ -30108,6 +31939,15 @@ const gameData = {
         "Pattern Building",
         "Scenario / Mission / Campaign Game",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "선두 견제",
+        "격자 커버리지",
+        "레거시 게임",
+        "패턴 만들기",
+        "시나리오 게임",
+        "타일 배치"
       ],
       "designers": [
         "Reiner Knizia"
@@ -30220,11 +32060,20 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Hidden Roles",
         "Team-Based Game",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "숨겨진 역할",
+        "팀 게임",
+        "트릭 테이킹"
       ],
       "designers": [
         "(Uncredited)"
@@ -30354,9 +32203,16 @@ const gameData = {
       "categories": [
         "Abstract Strategy"
       ],
+      "categoriesKo": [
+        "추상 전략"
+      ],
       "mechanics": [
         "Hand Management",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "세트 수집"
       ],
       "designers": [
         "(Uncredited)"
@@ -30471,11 +32327,23 @@ const gameData = {
         "Fantasy",
         "Fighting"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "판타지",
+        "격투"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Memory",
         "Player Elimination",
         "Push Your Luck"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "기억력",
+        "플레이어 탈락",
+        "욕심 부리기"
       ],
       "designers": [
         "Hisanori Hiraoka",
@@ -30600,10 +32468,19 @@ const gameData = {
         "Action / Dexterity",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "순발력",
+        "판타지"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Physical Removal",
         "Stacking and Balancing"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "물리적 제거",
+        "쌓기와 균형"
       ],
       "designers": [
         "Oliver Richtberg"
@@ -30718,6 +32595,12 @@ const gameData = {
         "Environmental",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "환경",
+        "퍼즐"
+      ],
       "mechanics": [
         "Hand Management",
         "Layering",
@@ -30725,6 +32608,14 @@ const gameData = {
         "Set Collection",
         "Solo / Solitaire Game",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "레이어링",
+        "공개 드래프팅",
+        "세트 수집",
+        "솔로 게임",
+        "다중 워커 배치"
       ],
       "designers": [
         "Klemens Kalicki"
@@ -30847,6 +32738,12 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "아라비안",
+        "도시 건설",
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Auction: Turn Order Until Pass",
         "Contracts",
@@ -30859,6 +32756,19 @@ const gameData = {
         "Track Movement",
         "Turn Order: Auction",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "패스 경매",
+        "계약",
+        "모듈형 보드",
+        "소유권",
+        "론델",
+        "세트 수집",
+        "솔로 게임",
+        "사각 격자",
+        "트랙 이동",
+        "순서 경매",
+        "가변 셋업"
       ],
       "designers": [
         "Fabio Lopiano"
@@ -30963,9 +32873,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "기억력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -31063,6 +32975,11 @@ const gameData = {
         "Medical",
         "Medieval"
       ],
+      "categoriesKo": [
+        "경제",
+        "의료",
+        "중세"
+      ],
       "mechanics": [
         "Grid Movement",
         "Income",
@@ -31072,6 +32989,16 @@ const gameData = {
         "Variable Player Powers",
         "Variable Set-up",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "수입",
+        "모듈형 보드",
+        "솔로 게임",
+        "트랙 이동",
+        "비대칭 능력",
+        "가변 셋업",
+        "워커 배치"
       ],
       "designers": [
         "Raúl Fernández Aparicio",
@@ -31188,6 +33115,12 @@ const gameData = {
         "Fantasy",
         "Fighting"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투"
+      ],
       "mechanics": [
         "Card Play Conflict Resolution",
         "Cooperative Game",
@@ -31201,6 +33134,20 @@ const gameData = {
         "Solo / Solitaire Game",
         "Tile Placement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "협동게임",
+        "덱/백/풀 빌딩",
+        "주사위 굴리기",
+        "격자 이동",
+        "패 관리",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "역할극",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력"
       ],
       "designers": [
         "Vlaada Chvátil",
@@ -31330,12 +33277,24 @@ const gameData = {
         "Civilization",
         "Industry / Manufacturing"
       ],
+      "categoriesKo": [
+        "고대",
+        "문명",
+        "산업"
+      ],
       "mechanics": [
         "Income",
         "Open Drafting",
         "Set Collection",
         "Track Movement",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "수입",
+        "공개 드래프팅",
+        "세트 수집",
+        "트랙 이동",
+        "워커 배치"
       ],
       "designers": [
         "Germán P. Millán"
@@ -31454,6 +33413,10 @@ const gameData = {
         "Card Game",
         "Economic"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "경제"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: English",
@@ -31463,6 +33426,16 @@ const gameData = {
         "Commodity Speculation",
         "Hand Management",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "잉글리시 경매",
+        "1회전 경매",
+        "비밀 입찰",
+        "패스 경매",
+        "상품 투기",
+        "패 관리",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Reiner Knizia"
@@ -31569,9 +33542,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "부루마불"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -31670,10 +33645,19 @@ const gameData = {
         "Card Game",
         "Educational"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "교육"
+      ],
       "mechanics": [
         "Hand Management",
         "Open Drafting",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "공개 드래프팅",
+        "세트 수집"
       ],
       "designers": [
         "Brent Povis"
@@ -31779,9 +33763,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -31878,9 +33864,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -31974,9 +33962,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "자원치환"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -32077,6 +34067,10 @@ const gameData = {
         "Ancient",
         "Civilization"
       ],
+      "categoriesKo": [
+        "고대",
+        "문명"
+      ],
       "mechanics": [
         "Action Points",
         "Increase Value of Unchosen Resources",
@@ -32084,6 +34078,14 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "미선택 자원 가치 증가",
+        "솔로 게임",
+        "기술 트리",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Jeffrey CCH"
@@ -32194,9 +34196,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "파티"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -32302,11 +34306,25 @@ const gameData = {
         "Medieval",
         "Mythology"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "주사위",
+        "판타지",
+        "격투",
+        "중세",
+        "신화"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Set Collection",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "세트 수집",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Ole Steiness"
@@ -32431,6 +34449,10 @@ const gameData = {
         "Card Game",
         "Real-time"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "실시간"
+      ],
       "mechanics": [
         "Commodity Speculation",
         "Deck, Bag, and Pool Building",
@@ -32440,6 +34462,16 @@ const gameData = {
         "Set Collection",
         "Simulation",
         "Trading"
+      ],
+      "mechanicsKo": [
+        "상품 투기",
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "공개 드래프팅",
+        "실시간",
+        "세트 수집",
+        "시뮬레이션",
+        "교역"
       ],
       "designers": [
         "D. Brad Talton, Jr."
@@ -32563,7 +34595,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -32666,10 +34700,18 @@ const gameData = {
       "categories": [
         "City Building"
       ],
+      "categoriesKo": [
+        "도시 건설"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Tile Placement",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "타일 배치",
+        "워커 배치"
       ],
       "designers": [
         "Dani Garcia"
@@ -32777,9 +34819,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "길막"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -32885,6 +34929,13 @@ const gameData = {
         "Fighting",
         "Novel-based"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투",
+        "소설 원작"
+      ],
       "mechanics": [
         "Action Points",
         "Area Movement",
@@ -32898,6 +34949,20 @@ const gameData = {
         "Solo / Solitaire Game",
         "Stat Check Resolution",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 이동",
+        "캠페인 카드 구동",
+        "협동게임",
+        "덱/백/풀 빌딩",
+        "지도 추가",
+        "모듈형 보드",
+        "역할극",
+        "시나리오 게임",
+        "솔로 게임",
+        "스탯 확인",
+        "비대칭 능력"
       ],
       "designers": [
         "Nathan I. Hajek",
@@ -33020,6 +35085,11 @@ const gameData = {
         "Fantasy",
         "Novel-based"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "소설 원작"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hand Management",
@@ -33040,6 +35110,27 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "수입",
+        "레이어링",
+        "시장",
+        "모듈형 보드",
+        "다목적 카드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "포인트 이동",
+        "레이스",
+        "상대적 이동",
+        "세트 수집",
+        "돌발 종료",
+        "태그",
+        "공격형 플레이",
+        "기술 트리",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Antoine Bauza",
@@ -33165,6 +35256,14 @@ const gameData = {
         "Territory Building",
         "Wargame"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "판타지",
+        "격투",
+        "소설 원작",
+        "영토 건설",
+        "워게임"
+      ],
       "mechanics": [
         "Action Points",
         "Area Majority / Influence",
@@ -33173,6 +35272,15 @@ const gameData = {
         "Dice Rolling",
         "Events",
         "Hand Management"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "영역 이동",
+        "캠페인 카드 구동",
+        "주사위 굴리기",
+        "이벤트",
+        "패 관리"
       ],
       "designers": [
         "Roberto Di Meglio",
@@ -33285,9 +35393,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추상전략"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -33379,7 +35489,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -33483,6 +35595,11 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Action Drafting",
         "Area Movement",
@@ -33498,6 +35615,22 @@ const gameData = {
         "Variable Set-up",
         "Worker Placement",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "영역 이동",
+        "주사위 굴리기",
+        "최종 보너스",
+        "수입",
+        "결합과 펼치기",
+        "다목적 카드",
+        "공개 드래프팅",
+        "레이스",
+        "자원 큐",
+        "솔로 게임",
+        "가변 셋업",
+        "워커 배치",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Isra C.",
@@ -33615,6 +35748,10 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Action Drafting",
         "End Game Bonuses",
@@ -33623,6 +35760,15 @@ const gameData = {
         "Open Drafting",
         "Variable Set-up",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "최종 보너스",
+        "수입",
+        "다목적 카드",
+        "공개 드래프팅",
+        "가변 셋업",
+        "워커 배치"
       ],
       "designers": [
         "Isra C.",
@@ -33736,6 +35882,12 @@ const gameData = {
         "Medieval",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "동물",
+        "주사위",
+        "중세",
+        "영토 건설"
+      ],
       "mechanics": [
         "Delayed Purchase",
         "Dice Rolling",
@@ -33749,6 +35901,20 @@ const gameData = {
         "Turn Order: Stat-Based",
         "Variable Set-up",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "지연 구매",
+        "주사위 굴리기",
+        "최종 보너스",
+        "격자 커버리지",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "타일 배치",
+        "트랙 이동",
+        "스탯 기반 순서",
+        "가변 셋업",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Stefan Feld"
@@ -33864,10 +36030,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기",
         "네트워크"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -33968,7 +36136,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -34064,9 +36234,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -34164,9 +36336,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -34269,6 +36443,11 @@ const gameData = {
         "Puzzle",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "퍼즐",
+        "영토 건설"
+      ],
       "mechanics": [
         "Action Drafting",
         "Grid Coverage",
@@ -34276,6 +36455,14 @@ const gameData = {
         "Open Drafting",
         "Square Grid",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "격자 커버리지",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "사각 격자",
+        "타일 배치"
       ],
       "designers": [
         "José Antonio Abascal Acebo"
@@ -34380,9 +36567,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -34467,8 +36656,14 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "세트 수집"
       ],
       "designers": [
         "Tobia Botta"
@@ -34588,11 +36783,21 @@ const gameData = {
         "Card Game",
         "Novel-based"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "소설 원작"
+      ],
       "mechanics": [
         "Hot Potato",
         "Score-and-Reset Game",
         "Team-Based Game",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "핫 포테이토",
+        "점수 후 리셋",
+        "팀 게임",
+        "트릭 테이킹"
       ],
       "designers": [
         "Günter Cornett"
@@ -34706,9 +36911,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "포인트샐러드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -34815,6 +37022,9 @@ const gameData = {
       "categories": [
         "Deduction"
       ],
+      "categoriesKo": [
+        "추리"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
@@ -34824,6 +37034,16 @@ const gameData = {
         "Real-Time",
         "Scenario / Mission / Campaign Game",
         "Sudden Death Ending"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "추리",
+        "기억력",
+        "게임당 1회 능력",
+        "실시간",
+        "시나리오 게임",
+        "돌발 종료"
       ],
       "designers": [
         "Hisashi Hayashi"
@@ -34950,10 +37170,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -35052,8 +37274,14 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Roll / Spin and Move"
+      ],
+      "mechanicsKo": [
+        "굴리고 이동"
       ],
       "designers": [
         "Lee Sangbae"
@@ -35153,9 +37381,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "트릭테이킹"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -35259,6 +37489,15 @@ const gameData = {
         "Industry / Manufacturing",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "미국 서부",
+        "문명",
+        "경제",
+        "탐험",
+        "농업",
+        "산업",
+        "영토 건설"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Follow",
@@ -35271,6 +37510,19 @@ const gameData = {
         "Tile Placement",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "따라하기",
+        "헥사곤 격자",
+        "수입",
+        "지도 추가",
+        "다목적 카드",
+        "포인트 이동",
+        "솔로 게임",
+        "타일 배치",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Alexander Pfister"
@@ -35379,7 +37631,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -35477,9 +37731,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "자원치환"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -35580,6 +37836,10 @@ const gameData = {
         "Abstract Strategy",
         "Animals"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "동물"
+      ],
       "mechanics": [
         "Grid Movement",
         "Pattern Building",
@@ -35587,6 +37847,14 @@ const gameData = {
         "Slide / Push",
         "Square Grid",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "패턴 만들기",
+        "레이스",
+        "밀기/당기기",
+        "사각 격자",
+        "공격형 플레이"
       ],
       "designers": [
         "Scott Brady"
@@ -35703,6 +37971,14 @@ const gameData = {
         "Trains",
         "Transportation"
       ],
+      "categoriesKo": [
+        "이성의 시대",
+        "경제",
+        "산업",
+        "나폴레옹 이후",
+        "기차",
+        "운송"
+      ],
       "mechanics": [
         "Chaining",
         "End Game Bonuses",
@@ -35718,6 +37994,22 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Stat-Based",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "최종 보너스",
+        "패 관리",
+        "수입",
+        "대출",
+        "시장",
+        "다목적 카드",
+        "네트워크/루트 건설",
+        "소유권",
+        "태그",
+        "기술 트리",
+        "타일 배치",
+        "스탯 기반 순서",
+        "가변 셋업"
       ],
       "designers": [
         "Gavan Brown",
@@ -35837,6 +38129,13 @@ const gameData = {
         "Industry / Manufacturing",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "문명",
+        "탐험",
+        "산업",
+        "영토 건설"
+      ],
       "mechanics": [
         "Card Play Conflict Resolution",
         "Contracts",
@@ -35848,6 +38147,18 @@ const gameData = {
         "Solo / Solitaire Game",
         "Tile Placement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "계약",
+        "격자 이동",
+        "헥사곤 격자",
+        "모듈형 보드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력"
       ],
       "designers": [
         "Zé Mendes"
@@ -35952,7 +38263,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -36053,6 +38366,11 @@ const gameData = {
         "Print & Play",
         "Renaissance"
       ],
+      "categoriesKo": [
+        "추리",
+        "프린트 앤 플레이",
+        "르네상스"
+      ],
       "mechanics": [
         "Action Queue",
         "Deduction",
@@ -36060,6 +38378,14 @@ const gameData = {
         "Point to Point Movement",
         "Push Your Luck",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "추리",
+        "숨은 이동",
+        "포인트 이동",
+        "욕심 부리기",
+        "솔로 게임"
       ],
       "designers": [
         "John Kean"
@@ -36176,6 +38502,10 @@ const gameData = {
         "Economic",
         "Exploration"
       ],
+      "categoriesKo": [
+        "경제",
+        "탐험"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Deck, Bag, and Pool Building",
@@ -36185,6 +38515,16 @@ const gameData = {
         "Open Drafting",
         "Solo / Solitaire Game",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "주사위 굴리기",
+        "패 관리",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "솔로 게임",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Alexander Pfister"
@@ -36289,9 +38629,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주식"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -36396,10 +38738,19 @@ const gameData = {
         "Abstract Strategy",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "영토 건설"
+      ],
       "mechanics": [
         "Enclosure",
         "Hand Management",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "패 관리",
+        "타일 배치"
       ],
       "designers": [
         "Stefan Kögl"
@@ -36506,7 +38857,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -36604,6 +38957,11 @@ const gameData = {
         "Farming",
         "Medieval"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "농업",
+        "중세"
+      ],
       "mechanics": [
         "Closed Drafting",
         "Contracts",
@@ -36614,6 +38972,17 @@ const gameData = {
         "Neighbor Scope",
         "Turn Order: Stat-Based",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "최고-최저 득점",
+        "다목적 카드",
+        "인접 범위",
+        "스탯 기반 순서",
+        "비대칭 능력"
       ],
       "designers": [
         "Scott Almes"
@@ -36731,6 +39100,10 @@ const gameData = {
         "Economic",
         "Farming"
       ],
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
       "mechanics": [
         "Contracts",
         "Hand Management",
@@ -36740,6 +39113,16 @@ const gameData = {
         "Victory Points as a Resource",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "패 관리",
+        "레이스",
+        "솔로 게임",
+        "순서 경매",
+        "승리 점수를 자원으로",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Jamey Stegmaier",
@@ -36850,9 +39233,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -36955,10 +39340,20 @@ const gameData = {
         "Animals",
         "Racing"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "동물",
+        "레이싱"
+      ],
       "mechanics": [
         "Grid Movement",
         "Race",
         "Square Grid"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "레이스",
+        "사각 격자"
       ],
       "designers": [
         "Eric Solomon"
@@ -37058,9 +39453,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "테크타기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -37157,9 +39554,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -37267,6 +39666,11 @@ const gameData = {
         "Dice",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "주사위",
+        "퍼즐"
+      ],
       "mechanics": [
         "Contracts",
         "Dice Rolling",
@@ -37278,6 +39682,18 @@ const gameData = {
         "Solo / Solitaire Game",
         "Turn Order: Progressive",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "주사위 굴리기",
+        "최종 보너스",
+        "격자 커버리지",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "솔로 게임",
+        "순차 진행",
+        "가변 셋업"
       ],
       "designers": [
         "Adrian Adamescu",
@@ -37402,6 +39818,12 @@ const gameData = {
         "Science Fiction",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "경제",
+        "격투",
+        "SF",
+        "영토 건설"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Card Play Conflict Resolution",
@@ -37420,6 +39842,25 @@ const gameData = {
         "Variable Set-up",
         "Victory Points as a Resource",
         "Zone of Control"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "카드 전투 해결",
+        "계약",
+        "최종 보너스",
+        "강제 헌신",
+        "격자 이동",
+        "헥사곤 격자",
+        "정상 점령",
+        "이동 포인트",
+        "선택형 서사",
+        "솔로 게임",
+        "공격형 플레이",
+        "기술 트리",
+        "비대칭 능력",
+        "가변 셋업",
+        "승리 점수를 자원으로",
+        "지배 구역"
       ],
       "designers": [
         "Jamey Stegmaier"
@@ -37531,9 +39972,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "솔플"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -37634,6 +40077,10 @@ const gameData = {
         "Civilization",
         "Farming"
       ],
+      "categoriesKo": [
+        "문명",
+        "농업"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Network and Route Building",
@@ -37641,6 +40088,14 @@ const gameData = {
         "Set Collection",
         "Tile Placement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "세트 수집",
+        "타일 배치",
+        "비대칭 능력"
       ],
       "designers": [
         "Kristian Amundsen Østby",
@@ -37752,7 +40207,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -37849,9 +40306,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "2인"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -37953,11 +40412,21 @@ const gameData = {
         "Deduction",
         "Murder / Mystery"
       ],
+      "categoriesKo": [
+        "추리",
+        "추리/미스터리"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Deduction",
         "Solo / Solitaire Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "솔로 게임",
+        "스토리텔링"
       ],
       "designers": [
         "Guillaume Montiage"
@@ -38074,9 +40543,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -38179,6 +40650,11 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Area Movement",
         "Contracts",
@@ -38195,6 +40671,23 @@ const gameData = {
         "Variable Player Powers",
         "Variable Set-up",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "킬 스틸",
+        "대출",
+        "공개 드래프팅",
+        "솔로 게임",
+        "정적 포획",
+        "태그",
+        "공격형 플레이",
+        "트랙 이동",
+        "비대칭 능력",
+        "가변 셋업",
+        "워커 배치"
       ],
       "designers": [
         "S J Macdonald",
@@ -38314,6 +40807,9 @@ const gameData = {
       "categories": [
         "Medieval"
       ],
+      "categoriesKo": [
+        "중세"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Market",
@@ -38321,6 +40817,14 @@ const gameData = {
         "Solo / Solitaire Game",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "시장",
+        "공개 드래프팅",
+        "솔로 게임",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "S J Macdonald",
@@ -38431,9 +40935,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -38524,9 +41030,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "벌점덜먹기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -38624,11 +41132,21 @@ const gameData = {
         "Card Game",
         "Environmental"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "환경"
+      ],
       "mechanics": [
         "Grid Movement",
         "Set Collection",
         "Simultaneous Action Selection",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "세트 수집",
+        "동시 액션 선택",
+        "솔로 게임"
       ],
       "designers": [
         "Eduardo Baraf",
@@ -38740,10 +41258,19 @@ const gameData = {
         "Ancient",
         "Card Game"
       ],
+      "categoriesKo": [
+        "고대",
+        "카드게임"
+      ],
       "mechanics": [
         "Card Play Conflict Resolution",
         "Hand Management",
         "Melding and Splaying"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "패 관리",
+        "결합과 펼치기"
       ],
       "designers": [
         "Reiner Knizia"
@@ -38855,6 +41382,13 @@ const gameData = {
         "Civilization",
         "Economic"
       ],
+      "categoriesKo": [
+        "고대",
+        "카드게임",
+        "도시 건설",
+        "문명",
+        "경제"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Income",
@@ -38871,6 +41405,23 @@ const gameData = {
         "Track Movement",
         "Tug of War",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "수입",
+        "결합과 펼치기",
+        "모듈형 보드",
+        "다목적 카드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "점수 후 리셋",
+        "세트 수집",
+        "돌발 종료",
+        "태그",
+        "기술 트리",
+        "트랙 이동",
+        "줄다리기",
+        "가변 셋업"
       ],
       "designers": [
         "Antoine Bauza",
@@ -38977,7 +41528,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -39086,6 +41639,11 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Action Retrieval",
         "Auction: Dutch",
@@ -39097,6 +41655,18 @@ const gameData = {
         "Open Drafting",
         "Set Collection",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 회수",
+        "더치 경매",
+        "계약",
+        "덱/백/풀 빌딩",
+        "최종 보너스",
+        "패 관리",
+        "미선택 자원 가치 증가",
+        "공개 드래프팅",
+        "세트 수집",
+        "가변 셋업"
       ],
       "designers": [
         "Emerson Matsuuchi"
@@ -39208,6 +41778,9 @@ const gameData = {
       "categories": [
         "Nautical"
       ],
+      "categoriesKo": [
+        "항해"
+      ],
       "mechanics": [
         "Contracts",
         "Grid Movement",
@@ -39215,6 +41788,14 @@ const gameData = {
         "Pick-up and Deliver",
         "Point to Point Movement",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "격자 이동",
+        "모듈형 보드",
+        "픽업 앤 딜리버",
+        "포인트 이동",
+        "세트 수집"
       ],
       "designers": [
         "Emerson Matsuuchi"
@@ -39326,9 +41907,15 @@ const gameData = {
         "Deduction",
         "Novel-based"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "소설 원작"
+      ],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [
         "Hope S. Hwang"
       ],
@@ -39436,7 +42023,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -39541,12 +42130,22 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Card Play Conflict Resolution",
         "Hand Management",
         "Melding and Splaying",
         "Race",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "패 관리",
+        "결합과 펼치기",
+        "레이스",
+        "세트 수집"
       ],
       "designers": [
         "Reiner Knizia"
@@ -39659,6 +42258,10 @@ const gameData = {
         "Card Game",
         "Number"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "숫자"
+      ],
       "mechanics": [
         "Connections",
         "Hand Management",
@@ -39668,6 +42271,16 @@ const gameData = {
         "Pattern Building",
         "Set Collection",
         "Square Grid"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "패 관리",
+        "덱 이동",
+        "공개 드래프팅",
+        "순서 정하기",
+        "패턴 만들기",
+        "세트 수집",
+        "사각 격자"
       ],
       "designers": [
         "Dan Cassar"
@@ -39782,10 +42395,20 @@ const gameData = {
         "Bluffing",
         "Card Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Once-Per-Game Abilities",
         "Player Elimination"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "게임당 1회 능력",
+        "플레이어 탈락"
       ],
       "designers": [
         "Heather O'Neill",
@@ -39889,9 +42512,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타이밍잡기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -39988,10 +42613,18 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Ladder Climbing",
         "Score-and-Reset Game"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "점수 후 리셋"
       ],
       "designers": [
         "Kei Kajino (梶野 桂)"
@@ -40108,6 +42741,10 @@ const gameData = {
         "Economic",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "경제",
+        "SF"
+      ],
       "mechanics": [
         "Action Queue",
         "Area Majority / Influence",
@@ -40125,6 +42762,24 @@ const gameData = {
         "Variable Player Powers",
         "Victory Points as a Resource",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "투자",
+        "공개 드래프팅",
+        "자원 이동",
+        "비대칭 정보 역할",
+        "시나리오 게임",
+        "동시 액션 선택",
+        "솔로 게임",
+        "주식 보유",
+        "순서 선점",
+        "비대칭 능력",
+        "승리 점수를 자원으로",
+        "워커 배치"
       ],
       "designers": [
         "Viktor Kobilke",
@@ -40240,10 +42895,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "타일놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -40344,6 +43001,10 @@ const gameData = {
         "Aviation / Flight",
         "Dice"
       ],
+      "categoriesKo": [
+        "항공",
+        "주사위"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
@@ -40353,6 +43014,16 @@ const gameData = {
         "Variable Player Powers",
         "Variable Set-up",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "주사위 굴리기",
+        "시나리오 게임",
+        "순차 진행",
+        "비대칭 능력",
+        "가변 셋업",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Luc Rémond"
@@ -40475,9 +43146,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "단어만들기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -40579,6 +43252,9 @@ const gameData = {
       "categories": [
         "Ancient"
       ],
+      "categoriesKo": [
+        "고대"
+      ],
       "mechanics": [
         "Contracts",
         "Dice Rolling",
@@ -40588,6 +43264,16 @@ const gameData = {
         "Variable Player Powers",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "주사위 굴리기",
+        "패 관리",
+        "공개 드래프팅",
+        "솔로 게임",
+        "비대칭 능력",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Shem Phillips"
@@ -40700,10 +43386,21 @@ const gameData = {
         "Movies / TV / Radio theme",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "격투",
+        "미디어 테마",
+        "SF"
+      ],
       "mechanics": [
         "Deck, Bag, and Pool Building",
         "Open Drafting",
         "Tug of War"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "공개 드래프팅",
+        "줄다리기"
       ],
       "designers": [
         "Caleb Grace"
@@ -40821,6 +43518,10 @@ const gameData = {
         "Card Game",
         "Economic"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "경제"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hot Potato",
@@ -40829,6 +43530,15 @@ const gameData = {
         "Score-and-Reset Game",
         "Set Collection",
         "Stock Holding"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "핫 포테이토",
+        "미선택 자원 가치 증가",
+        "투자",
+        "점수 후 리셋",
+        "세트 수집",
+        "주식 보유"
       ],
       "designers": [
         "Jun Sasaki"
@@ -40938,9 +43648,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주식"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -41042,9 +43754,18 @@ const gameData = {
         "Bluffing",
         "Deduction"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "블러핑",
+        "추리"
+      ],
       "mechanics": [
         "Grid Movement",
         "Memory"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "기억력"
       ],
       "designers": [],
       "description": "On a planet far, far away, two platoons are locked in battle. Two platoons of 10 elite Galactic Marines. The commander who makes the best use of his platoon's special powers will defeat his opponent and capture the enemy's flag. Are you that commander? This special edition lets you play in two ways: Stratego Duel is played with 10 playing pieces per player, Stratego Barrage with 8 per player.",
@@ -41155,9 +43876,18 @@ const gameData = {
         "Fighting",
         "Maze"
       ],
+      "categoriesKo": [
+        "만화",
+        "격투",
+        "미로"
+      ],
       "mechanics": [
         "Pick-up and Deliver",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "픽업 앤 딜리버",
+        "타일 배치"
       ],
       "designers": [
         "Michael Gray"
@@ -41278,12 +44008,24 @@ const gameData = {
         "Science Fiction",
         "Space Exploration"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "SF",
+        "우주 탐험"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
         "Hand Management",
         "Scenario / Mission / Campaign Game",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "패 관리",
+        "시나리오 게임",
+        "트릭 테이킹"
       ],
       "designers": [
         "Thomas Sing"
@@ -41408,9 +44150,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -41503,9 +44247,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -41600,9 +44346,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -41697,7 +44445,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -41792,9 +44542,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -41901,11 +44653,25 @@ const gameData = {
         "Memory",
         "Number"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "어린이 게임",
+        "판타지",
+        "기억력",
+        "숫자"
+      ],
       "mechanics": [
         "Hand Management",
         "Memory",
         "Set Collection",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "기억력",
+        "세트 수집",
+        "공격형 플레이"
       ],
       "designers": [
         "Miranda Evarts"
@@ -42029,11 +44795,20 @@ const gameData = {
       "categories": [
         "Abstract Strategy"
       ],
+      "categoriesKo": [
+        "추상 전략"
+      ],
       "mechanics": [
         "Pattern Building",
         "Pattern Recognition",
         "Point to Point Movement",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "패턴 만들기",
+        "패턴 인식",
+        "포인트 이동",
+        "타일 배치"
       ],
       "designers": [
         "(Uncredited)"
@@ -42145,9 +44920,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "퀴즈"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -42254,6 +45031,13 @@ const gameData = {
         "Exploration",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "문명",
+        "주사위",
+        "경제",
+        "탐험",
+        "SF"
+      ],
       "mechanics": [
         "Area Movement",
         "Dice Rolling",
@@ -42266,6 +45050,19 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "주사위 굴리기",
+        "이벤트",
+        "수입",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "솔로 게임",
+        "기술 트리",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Stefan Feld"
@@ -42384,6 +45181,10 @@ const gameData = {
         "Card Game",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "판타지"
+      ],
       "mechanics": [
         "Closed Drafting",
         "Dice Rolling",
@@ -42394,6 +45195,17 @@ const gameData = {
         "Take That",
         "Turn Order: Progressive",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "패 관리",
+        "공개 드래프팅",
+        "태그",
+        "공격형 플레이",
+        "순차 진행",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Régis Bonnessée"
@@ -42508,9 +45320,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -42614,9 +45428,17 @@ const gameData = {
         "Deduction",
         "Transportation"
       ],
+      "categoriesKo": [
+        "추리",
+        "운송"
+      ],
       "mechanics": [
         "Deduction",
         "Hidden Movement"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "숨은 이동"
       ],
       "designers": [
         "Martino Chiacchiera",
@@ -42729,9 +45551,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "심리전"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -42828,9 +45652,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "롤앤라이트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -42932,6 +45758,11 @@ const gameData = {
         "Civilization",
         "Economic"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "문명",
+        "경제"
+      ],
       "mechanics": [
         "Action Points",
         "Auction / Bidding",
@@ -42942,6 +45773,17 @@ const gameData = {
         "Player Elimination",
         "Tags",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "경매/입찰",
+        "더치 경매",
+        "이벤트",
+        "수입",
+        "공개 드래프팅",
+        "플레이어 탈락",
+        "태그",
+        "공격형 플레이"
       ],
       "designers": [
         "Vlaada Chvátil"
@@ -43059,9 +45901,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -43167,6 +46011,10 @@ const gameData = {
         "Animals",
         "Farming"
       ],
+      "categoriesKo": [
+        "동물",
+        "농업"
+      ],
       "mechanics": [
         "Automatic Resource Growth",
         "Enclosure",
@@ -43174,6 +46022,14 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Claim Action",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "울타리 치기",
+        "미선택 자원 가치 증가",
+        "타일 배치",
+        "순서 선점",
+        "워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -43286,9 +46142,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "도시건설"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -43393,6 +46251,11 @@ const gameData = {
         "Farming",
         "Industry / Manufacturing"
       ],
+      "categoriesKo": [
+        "경제",
+        "농업",
+        "산업"
+      ],
       "mechanics": [
         "Automatic Resource Growth",
         "Highest-Lowest Scoring",
@@ -43402,6 +46265,16 @@ const gameData = {
         "Turn Order: Claim Action",
         "Turn Order: Progressive",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "최고-최저 득점",
+        "수입",
+        "세트 수집",
+        "솔로 게임",
+        "순서 선점",
+        "순차 진행",
+        "워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -43510,9 +46383,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추상"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -43607,9 +46482,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -43706,7 +46583,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -43809,6 +46688,10 @@ const gameData = {
         "Abstract Strategy",
         "Renaissance"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "르네상스"
+      ],
       "mechanics": [
         "Chaining",
         "End Game Bonuses",
@@ -43819,6 +46702,17 @@ const gameData = {
         "Square Grid",
         "Tile Placement",
         "Turn Order: Claim Action"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "최종 보너스",
+        "격자 커버리지",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "사각 격자",
+        "타일 배치",
+        "순서 선점"
       ],
       "designers": [
         "Michael Kiesling"
@@ -43926,9 +46820,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱구축"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -44035,6 +46931,11 @@ const gameData = {
         "Fantasy",
         "Nautical"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "항해"
+      ],
       "mechanics": [
         "Action Retrieval",
         "Contracts",
@@ -44050,6 +46951,22 @@ const gameData = {
         "Tags",
         "Track Movement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 회수",
+        "계약",
+        "덱/백/풀 빌딩",
+        "최종 보너스",
+        "패 관리",
+        "결합과 펼치기",
+        "공개 드래프팅",
+        "레이스",
+        "세트 수집",
+        "밀기/당기기",
+        "솔로 게임",
+        "태그",
+        "트랙 이동",
+        "비대칭 능력"
       ],
       "designers": [
         "Ivan Tuzovsky"
@@ -44165,6 +47082,11 @@ const gameData = {
         "Card Game",
         "Environmental"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "환경"
+      ],
       "mechanics": [
         "Contracts",
         "End Game Bonuses",
@@ -44183,6 +47105,25 @@ const gameData = {
         "Track Movement",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "격자 커버리지",
+        "패 관리",
+        "헥사곤 격자",
+        "수입",
+        "미선택 자원 가치 증가",
+        "공개 드래프팅",
+        "레이스",
+        "세트 수집",
+        "솔로 게임",
+        "태그",
+        "타일 배치",
+        "트랙 이동",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Mathias Wigge"
@@ -44295,9 +47236,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "퍼즐쌓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -44399,10 +47342,19 @@ const gameData = {
         "Card Game",
         "City Building"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "도시 건설"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hand Management",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "타일 배치"
       ],
       "designers": [
         "Pavel Atamanchuk"
@@ -44518,6 +47470,11 @@ const gameData = {
         "Medieval",
         "Religious"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "중세",
+        "종교"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Turn Order Until Pass",
@@ -44525,6 +47482,14 @@ const gameData = {
         "Commodity Speculation",
         "Hand Management",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "비공개 드래프팅",
+        "상품 투기",
+        "패 관리",
+        "세트 수집"
       ],
       "designers": [
         "Steve Finn"
@@ -44641,12 +47606,22 @@ const gameData = {
       "categories": [
         "Renaissance"
       ],
+      "categoriesKo": [
+        "르네상스"
+      ],
       "mechanics": [
         "Closed Drafting",
         "End Game Bonuses",
         "Hand Management",
         "Tile Placement",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "최종 보너스",
+        "패 관리",
+        "타일 배치",
+        "워커 배치"
       ],
       "designers": [
         "Acchittocca",
@@ -44761,9 +47736,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -44863,7 +47840,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -44954,9 +47933,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "-"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -45051,11 +48032,21 @@ const gameData = {
         "Wargame",
         "World War II"
       ],
+      "categoriesKo": [
+        "워게임",
+        "2차 세계대전"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Area Movement",
         "Dice Rolling",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "영역 이동",
+        "주사위 굴리기",
+        "팀 게임"
       ],
       "designers": [
         "Larry Harris, Jr."
@@ -45174,6 +48165,11 @@ const gameData = {
         "Wargame",
         "World War II"
       ],
+      "categoriesKo": [
+        "경제",
+        "워게임",
+        "2차 세계대전"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Area Movement",
@@ -45181,6 +48177,14 @@ const gameData = {
         "Income",
         "Simulation",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "영역 이동",
+        "주사위 굴리기",
+        "수입",
+        "시뮬레이션",
+        "팀 게임"
       ],
       "designers": [
         "Larry Harris, Jr."
@@ -45290,9 +48294,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타일놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -45393,12 +48399,22 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Sealed Bid",
         "End Game Bonuses",
         "Memory",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "비밀 입찰",
+        "최종 보너스",
+        "기억력",
+        "세트 수집"
       ],
       "designers": [
         "Gavin Birnbaum"
@@ -45509,7 +48525,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -45604,9 +48622,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "상원님 제공"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -45712,6 +48732,11 @@ const gameData = {
         "Card Game",
         "Environmental"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "환경"
+      ],
       "mechanics": [
         "Contracts",
         "End Game Bonuses",
@@ -45724,6 +48749,19 @@ const gameData = {
         "Tile Placement",
         "Variable Set-up",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "따라하기",
+        "패 관리",
+        "패턴 만들기",
+        "솔로 게임",
+        "태그",
+        "팀 게임",
+        "타일 배치",
+        "가변 셋업",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Maxime Tardif"
@@ -45849,6 +48887,13 @@ const gameData = {
         "Nautical",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "도시 건설",
+        "산업",
+        "항해",
+        "SF"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hand Management",
@@ -45858,6 +48903,16 @@ const gameData = {
         "Turn Order: Claim Action",
         "Turn Order: Stat-Based",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "수입",
+        "네트워크/루트 건설",
+        "솔로 게임",
+        "순서 선점",
+        "스탯 기반 순서",
+        "워커 배치"
       ],
       "designers": [
         "Vladimír Suchý"
@@ -45973,6 +49028,10 @@ const gameData = {
         "Dice",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "주사위",
+        "SF"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Modular Board",
@@ -45985,6 +49044,19 @@ const gameData = {
         "Variable Set-up",
         "Worker Placement",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "모듈형 보드",
+        "게임당 1회 능력",
+        "재굴림과 고정",
+        "시나리오 게임",
+        "솔로 게임",
+        "사각 격자",
+        "돌발 종료",
+        "가변 셋업",
+        "워커 배치",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Tomáš Uhlíř"
@@ -46099,9 +49171,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "방탈출"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -46206,11 +49280,21 @@ const gameData = {
         "Card Game",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "퍼즐"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Elapsed Real Time Ending",
         "Scenario / Mission / Campaign Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "실시간 종료",
+        "시나리오 게임",
+        "스토리텔링"
       ],
       "designers": [
         "Alice Carroll",
@@ -46342,9 +49426,19 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
       ],
       "designers": [
         "Arnaud Ladagnous",
@@ -46487,9 +49581,19 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
       ],
       "designers": [
         "Thomas Cauët",
@@ -46623,9 +49727,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "방탈출"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -46733,9 +49839,20 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "소설 원작",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
       ],
       "designers": [
         "Aristide Bruyant",
@@ -46880,10 +49997,21 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Real-Time",
         "Scenario / Mission / Campaign Game"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "실시간",
+        "시나리오 게임"
       ],
       "designers": [
         "Mathieu Casnin",
@@ -47013,10 +50141,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "SRPG",
         "카드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -47119,11 +50249,21 @@ const gameData = {
         "Industry / Manufacturing",
         "Trains"
       ],
+      "categoriesKo": [
+        "산업",
+        "기차"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Tech Trees / Tech Tracks",
         "Turn Order: Claim Action",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "기술 트리",
+        "순서 선점",
+        "워커 배치"
       ],
       "designers": [
         "Helmut Ohley",
@@ -47232,9 +50372,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -47336,6 +50478,12 @@ const gameData = {
         "City Building",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "도시 건설",
+        "판타지"
+      ],
       "mechanics": [
         "Contracts",
         "Cooperative Game",
@@ -47346,6 +50494,17 @@ const gameData = {
         "Solo / Solitaire Game",
         "Variable Set-up",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "협동게임",
+        "수입",
+        "공개 드래프팅",
+        "시나리오 게임",
+        "세트 수집",
+        "솔로 게임",
+        "가변 셋업",
+        "워커 배치"
       ],
       "designers": [
         "James A. Wilson",
@@ -47470,10 +50629,19 @@ const gameData = {
         "American West",
         "Card Game"
       ],
+      "categoriesKo": [
+        "미국 서부",
+        "카드게임"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Hand Management",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "패 관리",
+        "솔로 게임"
       ],
       "designers": [
         "Benjamín Amorín"
@@ -47588,12 +50756,24 @@ const gameData = {
         "Industry / Manufacturing",
         "Math"
       ],
+      "categoriesKo": [
+        "주사위",
+        "산업",
+        "수학"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Hand Management",
         "Rondel",
         "Solo / Solitaire Game",
         "Tech Trees / Tech Tracks"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "패 관리",
+        "론델",
+        "솔로 게임",
+        "기술 트리"
       ],
       "designers": [
         "Toni López"
@@ -47711,9 +50891,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -47820,6 +51002,12 @@ const gameData = {
         "Card Game",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임",
+        "스파이"
+      ],
       "mechanics": [
         "Hand Management",
         "I Cut, You Choose",
@@ -47827,6 +51015,14 @@ const gameData = {
         "Relative Movement",
         "Set Collection",
         "Track Movement"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "내가 자르고 네가 고르기",
+        "레이스",
+        "상대적 이동",
+        "세트 수집",
+        "트랙 이동"
       ],
       "designers": [
         "Christian Kudahl",
@@ -47945,6 +51141,11 @@ const gameData = {
         "City Building",
         "Religious"
       ],
+      "categoriesKo": [
+        "고대",
+        "도시 건설",
+        "종교"
+      ],
       "mechanics": [
         "Chaining",
         "Hand Management",
@@ -47953,6 +51154,15 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "패 관리",
+        "다목적 카드",
+        "솔로 게임",
+        "기술 트리",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "S J Macdonald",
@@ -48069,8 +51279,16 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "추리",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Cooperative Game"
+      ],
+      "mechanicsKo": [
+        "협동게임"
       ],
       "designers": [
         "Inka Brand",
@@ -48202,9 +51420,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "방탈출"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -48310,8 +51530,16 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "추리",
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Cooperative Game"
+      ],
+      "mechanicsKo": [
+        "협동게임"
       ],
       "designers": [
         "Inka Brand",
@@ -48445,9 +51673,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "방탈출"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -48554,6 +51784,11 @@ const gameData = {
         "Nautical",
         "Renaissance"
       ],
+      "categoriesKo": [
+        "탐험",
+        "항해",
+        "르네상스"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Connections",
@@ -48565,6 +51800,18 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Turn Order: Progressive",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "연결",
+        "최종 보너스",
+        "공개 드래프팅",
+        "포인트 이동",
+        "세트 수집",
+        "시뮬레이션",
+        "기술 트리",
+        "순차 진행",
+        "가변 셋업"
       ],
       "designers": [
         "Carl de Visser",
@@ -48681,6 +51928,11 @@ const gameData = {
         "Exploration",
         "Nautical"
       ],
+      "categoriesKo": [
+        "환경",
+        "탐험",
+        "항해"
+      ],
       "mechanics": [
         "Action Points",
         "Action Retrieval",
@@ -48694,6 +51946,20 @@ const gameData = {
         "Solo / Solitaire Game",
         "Tech Trees / Tech Tracks",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 회수",
+        "연쇄",
+        "협동게임",
+        "최종 보너스",
+        "격자 이동",
+        "지도 추가",
+        "모듈형 보드",
+        "시나리오 게임",
+        "솔로 게임",
+        "기술 트리",
+        "가변 셋업"
       ],
       "designers": [
         "Carl de Visser",
@@ -48804,9 +52070,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "짬뽕"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -48911,6 +52179,11 @@ const gameData = {
         "Fantasy",
         "Fighting"
       ],
+      "categoriesKo": [
+        "경제",
+        "판타지",
+        "격투"
+      ],
       "mechanics": [
         "Action Retrieval",
         "Dice Rolling",
@@ -48920,6 +52193,16 @@ const gameData = {
         "Variable Player Powers",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "액션 회수",
+        "주사위 굴리기",
+        "패 관리",
+        "모듈형 보드",
+        "솔로 게임",
+        "비대칭 능력",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Luke Laurie"
@@ -49042,6 +52325,13 @@ const gameData = {
         "Novel-based",
         "Travel"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "격투",
+        "공포",
+        "소설 원작",
+        "여행"
+      ],
       "mechanics": [
         "Action Points",
         "Cooperative Game",
@@ -49052,6 +52342,17 @@ const gameData = {
         "Solo / Solitaire Game",
         "Stat Check Resolution",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "협동게임",
+        "주사위 굴리기",
+        "포인트 이동",
+        "자원 이동",
+        "역할극",
+        "솔로 게임",
+        "스탯 확인",
+        "비대칭 능력"
       ],
       "designers": [
         "Corey Konieczka",
@@ -49172,9 +52473,16 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hand Management"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리"
       ],
       "designers": [
         "Saashi"
@@ -49282,9 +52590,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "롤앤라이트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -49391,11 +52701,23 @@ const gameData = {
         "Deduction",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "판타지"
+      ],
       "mechanics": [
         "Deduction",
         "Hand Management",
         "Set Collection",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "패 관리",
+        "세트 수집",
+        "공격형 플레이"
       ],
       "designers": [
         "Kuro"
@@ -49519,9 +52841,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "클라이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -49627,6 +52951,13 @@ const gameData = {
         "Medieval",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "동물",
+        "농업",
+        "산업",
+        "중세",
+        "퍼즐"
+      ],
       "mechanics": [
         "Action Points",
         "Automatic Resource Growth",
@@ -49643,6 +52974,23 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Pass Order",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "자동 자원 성장",
+        "주사위 굴리기",
+        "울타리 치기",
+        "격자 커버리지",
+        "패 관리",
+        "수입",
+        "레이어링",
+        "패턴 인식",
+        "욕심 부리기",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "패스 순서",
+        "워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -49772,12 +53120,27 @@ const gameData = {
         "Religious",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "중세",
+        "종교",
+        "영토 건설"
+      ],
       "mechanics": [
         "Increase Value of Unchosen Resources",
         "Modular Board",
         "Network and Route Building",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "미선택 자원 가치 증가",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -49898,6 +53261,11 @@ const gameData = {
         "Religious",
         "Travel"
       ],
+      "categoriesKo": [
+        "중세",
+        "종교",
+        "여행"
+      ],
       "mechanics": [
         "Contracts",
         "Deck, Bag, and Pool Building",
@@ -49910,6 +53278,19 @@ const gameData = {
         "Turn Order: Progressive",
         "Variable Set-up",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "덱/백/풀 빌딩",
+        "최종 보너스",
+        "이벤트",
+        "킬 스틸",
+        "포인트 이동",
+        "동시 액션 선택",
+        "기술 트리",
+        "순차 진행",
+        "가변 셋업",
+        "다중 워커 배치"
       ],
       "designers": [
         "Reiner Stockhausen"
@@ -50019,7 +53400,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -50126,12 +53509,24 @@ const gameData = {
         "Dice",
         "Mythology"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "주사위",
+        "신화"
+      ],
       "mechanics": [
         "Open Drafting",
         "Tile Placement",
         "Turn Order: Stat-Based",
         "Variable Set-up",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "공개 드래프팅",
+        "타일 배치",
+        "스탯 기반 순서",
+        "가변 셋업",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Adam Kwapiński"
@@ -50250,12 +53645,24 @@ const gameData = {
         "Humor",
         "Medieval"
       ],
+      "categoriesKo": [
+        "판타지",
+        "유머",
+        "중세"
+      ],
       "mechanics": [
         "Action Queue",
         "Area Majority / Influence",
         "Commodity Speculation",
         "Hand Management",
         "Trick-taking"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "영역 지배",
+        "상품 투기",
+        "패 관리",
+        "트릭 테이킹"
       ],
       "designers": [
         "Filippo Landini"
@@ -50372,6 +53779,11 @@ const gameData = {
         "City Building",
         "Nautical"
       ],
+      "categoriesKo": [
+        "고대",
+        "도시 건설",
+        "항해"
+      ],
       "mechanics": [
         "Contracts",
         "End Game Bonuses",
@@ -50382,6 +53794,17 @@ const gameData = {
         "Set Collection",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "수입",
+        "만칼라",
+        "자원 이동",
+        "론델",
+        "세트 수집",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Totsuca Chuo"
@@ -50488,9 +53911,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "작은"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -50594,6 +54019,14 @@ const gameData = {
         "Space Exploration",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "탐험",
+        "SF",
+        "우주 탐험",
+        "영토 건설"
+      ],
       "mechanics": [
         "Contracts",
         "Delayed Purchase",
@@ -50607,6 +54040,20 @@ const gameData = {
         "Tile Placement",
         "Variable Phase Order",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "지연 구매",
+        "최종 보너스",
+        "헥사곤 격자",
+        "수입",
+        "이동 포인트",
+        "세트 수집",
+        "솔로 게임",
+        "기술 트리",
+        "타일 배치",
+        "가변 페이즈 순서",
+        "워커 배치"
       ],
       "designers": [
         "Vital Lacerda"
@@ -50726,6 +54173,11 @@ const gameData = {
         "Medieval",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "중세",
+        "퍼즐"
+      ],
       "mechanics": [
         "Action Drafting",
         "Area Majority / Influence",
@@ -50737,6 +54189,18 @@ const gameData = {
         "Tile Placement",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "영역 지배",
+        "울타리 치기",
+        "최종 보너스",
+        "헥사곤 격자",
+        "수입",
+        "3D 이동",
+        "타일 배치",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Vladimír Suchý"
@@ -50843,9 +54307,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "나이올리기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -50944,6 +54410,9 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Contracts",
         "End Game Bonuses",
@@ -50954,6 +54423,17 @@ const gameData = {
         "Variable Set-up",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "격자 이동",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "세트 수집",
+        "가변 셋업",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Hisashi Hayashi"
@@ -51056,9 +54536,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -51133,10 +54615,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션",
         "계약달성"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -51242,10 +54726,19 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Grid Coverage",
         "Pattern Building",
         "Real-Time"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "패턴 만들기",
+        "실시간"
       ],
       "designers": [
         "Grzegorz Rejchtman"
@@ -51367,10 +54860,19 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Grid Coverage",
         "Pattern Building",
         "Real-Time"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "패턴 만들기",
+        "실시간"
       ],
       "designers": [
         "Grzegorz Rejchtman"
@@ -51491,10 +54993,19 @@ const gameData = {
         "Puzzle",
         "Real-time"
       ],
+      "categoriesKo": [
+        "퍼즐",
+        "실시간"
+      ],
       "mechanics": [
         "Pattern Recognition",
         "Real-Time",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "실시간",
+        "타일 배치"
       ],
       "designers": [
         "Grzegorz Rejchtman"
@@ -51622,6 +55133,11 @@ const gameData = {
         "Medieval",
         "Wargame"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "중세",
+        "워게임"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Deck, Bag, and Pool Building",
@@ -51632,6 +55148,17 @@ const gameData = {
         "Team-Based Game",
         "Turn Order: Claim Action",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "격자 이동",
+        "패 관리",
+        "헥사곤 격자",
+        "팀 게임",
+        "순서 선점",
+        "비대칭 능력"
       ],
       "designers": [
         "Trevor Benjamin",
@@ -51745,9 +55272,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "영향력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -51850,6 +55379,10 @@ const gameData = {
         "City Building",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "판타지"
+      ],
       "mechanics": [
         "Contracts",
         "Hidden Roles",
@@ -51859,6 +55392,16 @@ const gameData = {
         "Take That",
         "Turn Order: Claim Action",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "숨겨진 역할",
+        "미선택 자원 가치 증가",
+        "소유권",
+        "세트 수집",
+        "공격형 플레이",
+        "순서 선점",
+        "워커 배치"
       ],
       "designers": [
         "Peter Lee",
@@ -51999,6 +55542,10 @@ const gameData = {
         "Fantasy",
         "Novel-based"
       ],
+      "categoriesKo": [
+        "판타지",
+        "소설 원작"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Deck, Bag, and Pool Building",
@@ -52007,6 +55554,15 @@ const gameData = {
         "Push Your Luck",
         "Rondel",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "주사위 굴리기",
+        "공개 드래프팅",
+        "욕심 부리기",
+        "론델",
+        "비대칭 능력"
       ],
       "designers": [
         "Tim Eisner",
@@ -52132,6 +55688,12 @@ const gameData = {
         "Economic",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "문명",
+        "경제",
+        "SF"
+      ],
       "mechanics": [
         "Closed Drafting",
         "End Game Bonuses",
@@ -52141,6 +55703,16 @@ const gameData = {
         "Simultaneous Action Selection",
         "Solo / Solitaire Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "최종 보너스",
+        "패 관리",
+        "수입",
+        "세트 수집",
+        "동시 액션 선택",
+        "솔로 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Frédéric Guérard"
@@ -52251,9 +55823,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "카드드래프트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -52349,9 +55923,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "던전크롤링"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -52456,10 +56032,20 @@ const gameData = {
         "Economic",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "경제",
+        "파티게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Set Collection",
         "Stock Holding"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "세트 수집",
+        "주식 보유"
       ],
       "designers": [
         "Lee Ju-Hwa",
@@ -52582,9 +56168,17 @@ const gameData = {
         "Murder / Mystery",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "추리/미스터리",
+        "SF"
+      ],
       "mechanics": [
         "Deduction",
         "Role Playing"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "역할극"
       ],
       "designers": [
         "Yutaka Kohno"
@@ -52704,11 +56298,23 @@ const gameData = {
         "Fantasy",
         "Fighting"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "판타지",
+        "격투"
+      ],
       "mechanics": [
         "Bids As Wagers",
         "Memory",
         "Player Elimination",
         "Push Your Luck"
+      ],
+      "mechanicsKo": [
+        "베팅식 입찰",
+        "기억력",
+        "플레이어 탈락",
+        "욕심 부리기"
       ],
       "designers": [
         "Antoine Bauza",
@@ -52827,9 +56433,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위일꾼"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -52931,6 +56539,9 @@ const gameData = {
       "categories": [
         "Fantasy"
       ],
+      "categoriesKo": [
+        "판타지"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Grid Coverage",
@@ -52939,6 +56550,15 @@ const gameData = {
         "Open Drafting",
         "Point to Point Movement",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "격자 커버리지",
+        "헥사곤 격자",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "포인트 이동",
+        "타일 배치"
       ],
       "designers": [
         "Martino Chiacchiera",
@@ -53049,6 +56669,10 @@ const gameData = {
         "Economic",
         "Farming"
       ],
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Market",
@@ -53058,6 +56682,16 @@ const gameData = {
         "Solo / Solitaire Game",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "시장",
+        "다목적 카드",
+        "네트워크/루트 건설",
+        "론델",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Dani Garcia"
@@ -53158,9 +56792,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -53254,9 +56890,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -53360,12 +56998,25 @@ const gameData = {
         "Science Fiction",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "산업",
+        "레이싱",
+        "SF",
+        "영토 건설"
+      ],
       "mechanics": [
         "Hand Management",
         "Highest-Lowest Scoring",
         "Income",
         "Pick-up and Deliver",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "최고-최저 득점",
+        "수입",
+        "픽업 앤 딜리버",
+        "솔로 게임"
       ],
       "designers": [
         "Vladimír Suchý"
@@ -53474,7 +57125,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -53574,10 +57227,19 @@ const gameData = {
         "Arabian",
         "Dice"
       ],
+      "categoriesKo": [
+        "아라비안",
+        "주사위"
+      ],
       "mechanics": [
         "Action Points",
         "Dice Rolling",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "주사위 굴리기",
+        "세트 수집"
       ],
       "designers": [
         "Rüdiger Dorn"
@@ -53692,10 +57354,19 @@ const gameData = {
         "Children's Game",
         "Dice"
       ],
+      "categoriesKo": [
+        "어린이 게임",
+        "주사위"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Push Your Luck",
         "Re-rolling and Locking"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "욕심 부리기",
+        "재굴림과 고정"
       ],
       "designers": [
         "Reiner Knizia"
@@ -53816,6 +57487,12 @@ const gameData = {
         "Comic Book / Strip",
         "Humor"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "만화",
+        "유머"
+      ],
       "mechanics": [
         "Hand Management",
         "Hot Potato",
@@ -53823,6 +57500,14 @@ const gameData = {
         "Push Your Luck",
         "Set Collection",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "핫 포테이토",
+        "플레이어 탈락",
+        "욕심 부리기",
+        "세트 수집",
+        "공격형 플레이"
       ],
       "designers": [
         "Matthew Inman",
@@ -53944,10 +57629,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "자원치환"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -54049,12 +57736,24 @@ const gameData = {
         "Deduction",
         "Party Game"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "파티게임"
+      ],
       "mechanics": [
         "Hidden Roles",
         "Roles with Asymmetric Information",
         "Team-Based Game",
         "Traitor Game",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "비대칭 정보 역할",
+        "팀 게임",
+        "배신자 게임",
+        "투표"
       ],
       "designers": [],
       "description": "A new, spicier version of the hit conversation game, Insider, which sold 100,000 copies worldwide! While trying to find the correct answer to the quiz you also need to be on the look out for the insider that is manipulating the game from behind the scenes. Some tricky new elements have been added to insider such as, more difficult theme cards, the new \"follower\" role, and some \"off-limits question\" cards. You can play with this version only. In addition, you can also add this version together with the original game, Insider, and play with up to 11 people in a team battle. If you want more Insider fun then this is for you!\n\nThis game has 42 all new, more difficult theme cards and a 3 minute hourglass, exciting \"black rules\", \"team rules\" that can be used when playing together with the original Insider and many other exciting things! Of course Insider Black' can be played as a standalone game too!\n\nThere are many new ways to play!\nThe \"follower\" has been added. The follower role card can be used when 6 or more players are playing the game. The follower teams up with the insider and tries to support the insider during play.\n\n\"Off-limits question cards\" that prohibit certain questions.  These cards make certain types of questions off-limits and are not allowed to be asked by players. Depending on which of the 5 off-limits question cards is in play, for example, \"questions about the master can't be asked\", specific topics or questions are unable to be asked.\n\nTeam battle when played together with the original Insider. Split into two teams and try to find the opposing team's insider. The team that answers the quiz correctly first has an advantage so even the quiz can get heated!\n\n&mdash;description from the publisher",
@@ -54185,6 +57884,10 @@ const gameData = {
         "Card Game",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "스파이"
+      ],
       "mechanics": [
         "Communication Limits",
         "Deduction",
@@ -54196,6 +57899,18 @@ const gameData = {
         "Trick-taking",
         "Variable Player Powers",
         "Voting"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "패 관리",
+        "숨겨진 역할",
+        "반협동게임",
+        "팀 게임",
+        "배신자 게임",
+        "트릭 테이킹",
+        "비대칭 능력",
+        "투표"
       ],
       "designers": [
         "Tanner Simmons"
@@ -54335,6 +58050,13 @@ const gameData = {
         "Mythology",
         "Wargame"
       ],
+      "categoriesKo": [
+        "고대",
+        "카드게임",
+        "탐험",
+        "신화",
+        "워게임"
+      ],
       "mechanics": [
         "Action Drafting",
         "Area Majority / Influence",
@@ -54348,6 +58070,20 @@ const gameData = {
         "Modular Board",
         "Take That",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "영역 지배",
+        "영역 이동",
+        "캠페인 카드 구동",
+        "비공개 드래프팅",
+        "패 관리",
+        "인터럽트",
+        "정상 점령",
+        "지도 추가",
+        "모듈형 보드",
+        "공격형 플레이",
+        "가변 셋업"
       ],
       "designers": [
         "Christian Martinez"
@@ -54462,7 +58198,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -54568,11 +58306,21 @@ const gameData = {
         "Ancient",
         "Transportation"
       ],
+      "categoriesKo": [
+        "고대",
+        "운송"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "End Game Bonuses",
         "Modular Board",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "최종 보너스",
+        "모듈형 보드",
+        "세트 수집"
       ],
       "designers": [
         "Phil Walker-Harding"
@@ -54680,11 +58428,20 @@ const gameData = {
       "categories": [
         "Ancient"
       ],
+      "categoriesKo": [
+        "고대"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Modular Board",
         "Set Collection",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "모듈형 보드",
+        "세트 수집",
+        "워커 배치"
       ],
       "designers": [
         "Phil Walker-Harding"
@@ -54805,11 +58562,21 @@ const gameData = {
         "Medieval",
         "Travel"
       ],
+      "categoriesKo": [
+        "중세",
+        "여행"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hand Management",
         "Set Collection",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "세트 수집",
+        "워커 배치"
       ],
       "designers": [
         "Andreas Steding"
@@ -54921,9 +58688,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -55030,6 +58799,11 @@ const gameData = {
         "Card Game",
         "Economic"
       ],
+      "categoriesKo": [
+        "아라비안",
+        "카드게임",
+        "경제"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hand Management",
@@ -55042,6 +58816,19 @@ const gameData = {
         "Sudden Death Ending",
         "Turn Order: Progressive",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "숨겨진 승리 점수",
+        "시장",
+        "공개 드래프팅",
+        "레이스",
+        "점수 후 리셋",
+        "세트 수집",
+        "돌발 종료",
+        "순차 진행",
+        "가변 셋업"
       ],
       "designers": [
         "Sébastien Pauchon"
@@ -55153,10 +58940,18 @@ const gameData = {
       "categories": [
         "Ancient"
       ],
+      "categoriesKo": [
+        "고대"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hand Management",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "솔로 게임"
       ],
       "designers": [
         "Marco Canetta",
@@ -55265,9 +59060,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -55369,6 +59166,11 @@ const gameData = {
         "Card Game",
         "Dice"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "주사위"
+      ],
       "mechanics": [
         "Action Drafting",
         "Contracts",
@@ -55379,6 +59181,17 @@ const gameData = {
         "Re-rolling and Locking",
         "Set Collection",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "계약",
+        "주사위 굴리기",
+        "미선택 자원 가치 증가",
+        "욕심 부리기",
+        "레이스",
+        "재굴림과 고정",
+        "세트 수집",
+        "가변 셋업"
       ],
       "designers": [
         "Alex Hague",
@@ -55498,9 +59311,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "디펜스"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -55602,7 +59417,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -55699,7 +59516,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -55805,10 +59624,19 @@ const gameData = {
         "Action / Dexterity",
         "Party Game"
       ],
+      "categoriesKo": [
+        "순발력",
+        "파티게임"
+      ],
       "mechanics": [
         "Physical Removal",
         "Single Loser Game",
         "Stacking and Balancing"
+      ],
+      "mechanicsKo": [
+        "물리적 제거",
+        "단독 패배 게임",
+        "쌓기와 균형"
       ],
       "designers": [
         "Leslie Scott"
@@ -55923,10 +59751,18 @@ const gameData = {
       "categories": [
         "Zombies"
       ],
+      "categoriesKo": [
+        "좀비"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Paper-and-Pencil",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "종이와 연필",
+        "솔로 게임"
       ],
       "designers": [
         "Jordy Adan",
@@ -56031,9 +59867,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "고스톱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -56135,11 +59973,21 @@ const gameData = {
         "Murder / Mystery",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "추리/미스터리",
+        "퍼즐"
+      ],
       "mechanics": [
         "Passed Action Token",
         "Pattern Building",
         "Roll / Spin and Move",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "전달 액션 토큰",
+        "패턴 만들기",
+        "굴리고 이동",
+        "세트 수집"
       ],
       "designers": [
         "(Uncredited)"
@@ -56251,7 +60099,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -56346,10 +60196,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "트릭테이킹",
         "협력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -56452,6 +60304,11 @@ const gameData = {
         "Economic",
         "Negotiation"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "협상"
+      ],
       "mechanics": [
         "Enclosure",
         "Income",
@@ -56461,6 +60318,16 @@ const gameData = {
         "Tile Placement",
         "Trading",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "수입",
+        "투자",
+        "협상",
+        "세트 수집",
+        "타일 배치",
+        "교역",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Karsten Hartwig"
@@ -56581,9 +60448,17 @@ const gameData = {
         "Bluffing",
         "Dice"
       ],
+      "categoriesKo": [
+        "블러핑",
+        "주사위"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Dice Rolling"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기"
       ],
       "designers": [
         "Alex Randolph"
@@ -56690,6 +60565,12 @@ const gameData = {
         "Science Fiction",
         "Space Exploration"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "SF",
+        "우주 탐험"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Dice Rolling",
@@ -56700,6 +60581,17 @@ const gameData = {
         "Storytelling",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "레거시 게임",
+        "모듈형 보드",
+        "시나리오 게임",
+        "솔로 게임",
+        "스토리텔링",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Ignacy Trzewiczek"
@@ -56818,9 +60710,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "추상전략"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -56929,6 +60823,13 @@ const gameData = {
         "Farming",
         "Mythology"
       ],
+      "categoriesKo": [
+        "고대",
+        "문명",
+        "경제",
+        "농업",
+        "신화"
+      ],
       "mechanics": [
         "Bias",
         "End Game Bonuses",
@@ -56936,6 +60837,14 @@ const gameData = {
         "Track Movement",
         "Turn Order: Claim Action",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "편향",
+        "최종 보너스",
+        "게임당 1회 능력",
+        "트랙 이동",
+        "순서 선점",
+        "워커 배치"
       ],
       "designers": [
         "Simone Luciani",
@@ -57050,8 +60959,16 @@ const gameData = {
         "Children's Game",
         "Memory"
       ],
+      "categoriesKo": [
+        "동물",
+        "어린이 게임",
+        "기억력"
+      ],
       "mechanics": [
         "Memory"
+      ],
+      "mechanicsKo": [
+        "기억력"
       ],
       "designers": [
         "Klaus Zoch"
@@ -57163,11 +61080,21 @@ const gameData = {
         "City Building",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "퍼즐"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Grid Coverage",
         "Highest-Lowest Scoring",
         "Square Grid"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "격자 커버리지",
+        "최고-최저 득점",
+        "사각 격자"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -57278,6 +61205,10 @@ const gameData = {
         "Animals",
         "Card Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Open Drafting",
@@ -57286,6 +61217,15 @@ const gameData = {
         "Set Collection",
         "Turn Order: Claim Action",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "욕심 부리기",
+        "세트 수집",
+        "순서 선점",
+        "워커 배치"
       ],
       "designers": [
         "Bruno Cathala",
@@ -57408,9 +61348,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "액션드래프트"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -57517,6 +61459,10 @@ const gameData = {
         "Medieval",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "중세",
+        "영토 건설"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Enclosure",
@@ -57525,6 +61471,15 @@ const gameData = {
         "Pattern Building",
         "Square Grid",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "울타리 치기",
+        "킬 스틸",
+        "지도 추가",
+        "패턴 만들기",
+        "사각 격자",
+        "타일 배치"
       ],
       "designers": [
         "Klaus-Jürgen Wrede"
@@ -57638,6 +61593,9 @@ const gameData = {
       "categories": [
         "Ancient"
       ],
+      "categoriesKo": [
+        "고대"
+      ],
       "mechanics": [
         "Area Movement",
         "Contracts",
@@ -57646,6 +61604,15 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Progressive",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "계약",
+        "최종 보너스",
+        "공개 드래프팅",
+        "타일 배치",
+        "순차 진행",
+        "가변 셋업"
       ],
       "designers": [
         "Stefan Feld"
@@ -57750,9 +61717,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "카드먹기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -57857,6 +61826,12 @@ const gameData = {
         "Fantasy",
         "Farming"
       ],
+      "categoriesKo": [
+        "동물",
+        "경제",
+        "판타지",
+        "농업"
+      ],
       "mechanics": [
         "Automatic Resource Growth",
         "Increase Value of Unchosen Resources",
@@ -57864,6 +61839,14 @@ const gameData = {
         "Tile Placement",
         "Turn Order: Claim Action",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "미선택 자원 가치 증가",
+        "솔로 게임",
+        "타일 배치",
+        "순서 선점",
+        "워커 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -57973,9 +61956,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -58073,7 +62058,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -58171,11 +62158,22 @@ const gameData = {
         "Civil War",
         "Wargame"
       ],
+      "categoriesKo": [
+        "고대",
+        "남북전쟁",
+        "워게임"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Chit-Pull System",
         "Simulation",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "칩 뽑기",
+        "시뮬레이션",
+        "솔로 게임"
       ],
       "designers": [
         "Paolo Mori"
@@ -58286,6 +62284,10 @@ const gameData = {
         "Economic",
         "Negotiation"
       ],
+      "categoriesKo": [
+        "경제",
+        "협상"
+      ],
       "mechanics": [
         "Chaining",
         "Dice Rolling",
@@ -58301,6 +62303,22 @@ const gameData = {
         "Take That",
         "Trading",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "주사위 굴리기",
+        "패 관리",
+        "헥사곤 격자",
+        "숨겨진 승리 점수",
+        "수입",
+        "시장",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "레이스",
+        "랜덤 생산",
+        "공격형 플레이",
+        "교역",
+        "가변 셋업"
       ],
       "designers": [
         "Klaus Teuber"
@@ -58418,6 +62436,9 @@ const gameData = {
       "categories": [
         "Abstract Strategy"
       ],
+      "categoriesKo": [
+        "추상 전략"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Hand Management",
@@ -58428,6 +62449,17 @@ const gameData = {
         "Sudden Death Ending",
         "Tags",
         "Take That"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "다목적 카드",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "세트 수집",
+        "돌발 종료",
+        "태그",
+        "공격형 플레이"
       ],
       "designers": [
         "Günter Cornett"
@@ -58537,7 +62569,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -58639,6 +62673,10 @@ const gameData = {
         "Animals",
         "Environmental"
       ],
+      "categoriesKo": [
+        "동물",
+        "환경"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hexagon Grid",
@@ -58647,6 +62685,15 @@ const gameData = {
         "Solo / Solitaire Game",
         "Tile Placement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "솔로 게임",
+        "타일 배치",
+        "가변 셋업"
       ],
       "designers": [
         "Randy Flynn"
@@ -58760,6 +62807,10 @@ const gameData = {
         "Card Game",
         "Medieval"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "중세"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Multi-Use Cards",
@@ -58767,6 +62818,14 @@ const gameData = {
         "Set Collection",
         "Tags",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "다목적 카드",
+        "공개 드래프팅",
+        "세트 수집",
+        "태그",
+        "타일 배치"
       ],
       "designers": [
         "Grégory Grard",
@@ -58885,6 +62944,11 @@ const gameData = {
         "Animals",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "동물",
+        "퍼즐"
+      ],
       "mechanics": [
         "Enclosure",
         "End Game Bonuses",
@@ -58895,6 +62959,17 @@ const gameData = {
         "Set Collection",
         "Solo / Solitaire Game",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "최종 보너스",
+        "격자 커버리지",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "솔로 게임",
+        "타일 배치"
       ],
       "designers": [
         "Kevin Russ"
@@ -59007,9 +63082,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "21만들기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -59106,9 +63183,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "셋컬렉션"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -59209,10 +63288,18 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Contracts",
         "Grid Movement",
         "Simulation"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "격자 이동",
+        "시뮬레이션"
       ],
       "designers": [
         "Euijin Han"
@@ -59317,11 +63404,21 @@ const gameData = {
         "Animals",
         "Card Game"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임"
+      ],
       "mechanics": [
         "Open Drafting",
         "Push Your Luck",
         "Set Collection",
         "Turn Order: Pass Order"
+      ],
+      "mechanicsKo": [
+        "공개 드래프팅",
+        "욕심 부리기",
+        "세트 수집",
+        "패스 순서"
       ],
       "designers": [
         "Michael Schacht"
@@ -59446,6 +63543,11 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Action Queue",
         "End Game Bonuses",
@@ -59463,6 +63565,24 @@ const gameData = {
         "Variable Set-up",
         "Victory Points as a Resource",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "최종 보너스",
+        "숨겨진 승리 점수",
+        "수입",
+        "공개 드래프팅",
+        "소유권",
+        "자원 이동",
+        "태그",
+        "공격형 플레이",
+        "타일 배치",
+        "순서 선점",
+        "패스 순서",
+        "비대칭 능력",
+        "가변 셋업",
+        "승리 점수를 자원으로",
+        "워커 배치"
       ],
       "designers": [
         "William Attia"
@@ -59578,10 +63698,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타일놓기",
         "셋컬"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -59684,12 +63806,26 @@ const gameData = {
         "Spies / Secret Agents",
         "Word Game"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Deduction",
         "Memory",
         "Race",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
       ],
       "designers": [
         "Vlaada Chvátil"
@@ -59823,11 +63959,22 @@ const gameData = {
         "Farming",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "농업",
+        "퍼즐"
+      ],
       "mechanics": [
         "Grid Coverage",
         "Open Drafting",
         "Pattern Building",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "타일 배치"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -59935,7 +64082,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -60035,9 +64184,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "방탈출"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -60134,9 +64285,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -60231,9 +64384,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순발력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -60325,7 +64480,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -60428,12 +64585,24 @@ const gameData = {
         "Children's Game",
         "Maze"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "어린이 게임",
+        "미로"
+      ],
       "mechanics": [
         "Connections",
         "Grid Movement",
         "Race",
         "Square Grid",
         "Zone of Control"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "격자 이동",
+        "레이스",
+        "사각 격자",
+        "지배 구역"
       ],
       "designers": [
         "Mirko Marchesi"
@@ -60548,11 +64717,21 @@ const gameData = {
         "Animals",
         "Maze"
       ],
+      "categoriesKo": [
+        "동물",
+        "미로"
+      ],
       "mechanics": [
         "Action Queue",
         "Communication Limits",
         "Cooperative Game",
         "Programmed Movement"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "소통 제한",
+        "협동게임",
+        "프로그래밍 이동"
       ],
       "designers": [
         "Nikki Valens"
@@ -60664,9 +64843,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "패턴빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -60771,6 +64952,12 @@ const gameData = {
         "Puzzle",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "판타지",
+        "중세",
+        "퍼즐",
+        "영토 건설"
+      ],
       "mechanics": [
         "Enclosure",
         "Market",
@@ -60778,6 +64965,14 @@ const gameData = {
         "Pattern Building",
         "Tile Placement",
         "Turn Order: Claim Action"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "시장",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "타일 배치",
+        "순서 선점"
       ],
       "designers": [
         "Bruno Cathala"
@@ -60894,6 +65089,10 @@ const gameData = {
         "Dice",
         "Racing"
       ],
+      "categoriesKo": [
+        "주사위",
+        "레이싱"
+      ],
       "mechanics": [
         "Catch the Leader",
         "Deck, Bag, and Pool Building",
@@ -60905,6 +65104,18 @@ const gameData = {
         "Race",
         "Re-rolling and Locking",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "선두 견제",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "주사위 굴리기",
+        "격자 이동",
+        "시장",
+        "욕심 부리기",
+        "레이스",
+        "재굴림과 고정",
+        "가변 셋업"
       ],
       "designers": [
         "John D. Clair"
@@ -61012,9 +65223,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "클라이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -61115,6 +65328,10 @@ const gameData = {
         "Medieval",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "중세",
+        "영토 건설"
+      ],
       "mechanics": [
         "Action Points",
         "Area Majority / Influence",
@@ -61126,6 +65343,18 @@ const gameData = {
         "Rondel",
         "Tech Trees / Tech Tracks",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "최종 보너스",
+        "격자 이동",
+        "헥사곤 격자",
+        "만칼라",
+        "이동 포인트",
+        "론델",
+        "기술 트리",
+        "비대칭 능력"
       ],
       "designers": [
         "Seth Jaffee"
@@ -61232,7 +65461,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -61338,6 +65569,10 @@ const gameData = {
         "Fantasy",
         "Medieval"
       ],
+      "categoriesKo": [
+        "판타지",
+        "중세"
+      ],
       "mechanics": [
         "Catch the Leader",
         "Deck, Bag, and Pool Building",
@@ -61351,6 +65586,20 @@ const gameData = {
         "Simultaneous Action Selection",
         "Track Movement",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "선두 견제",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "이벤트",
+        "인접 범위",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "동시 액션 선택",
+        "트랙 이동",
+        "가변 셋업"
       ],
       "designers": [
         "Wolfgang Warsch"
@@ -61467,9 +65716,17 @@ const gameData = {
         "Action / Dexterity",
         "Real-time"
       ],
+      "categoriesKo": [
+        "순발력",
+        "실시간"
+      ],
       "mechanics": [
         "Real-Time",
         "Score-and-Reset Game"
+      ],
+      "mechanicsKo": [
+        "실시간",
+        "점수 후 리셋"
       ],
       "designers": [
         "Mikkel Bertelsen"
@@ -61584,6 +65841,10 @@ const gameData = {
         "Economic",
         "Farming"
       ],
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
       "mechanics": [
         "Commodity Speculation",
         "Contracts",
@@ -61595,6 +65856,18 @@ const gameData = {
         "Solo / Solitaire Game",
         "Turn Order: Pass Order",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "상품 투기",
+        "계약",
+        "헥사곤 격자",
+        "수입",
+        "시장",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "솔로 게임",
+        "패스 순서",
+        "비대칭 능력"
       ],
       "designers": [
         "Juma Al-JouJou"
@@ -61694,9 +65967,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩어드벤처"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -61791,10 +66066,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩",
         "루팅"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -61891,9 +66168,13 @@ const gameData = {
       "categories": [
         "Abstract Strategy"
       ],
+      "categoriesKo": [
+        "추상 전략"
+      ],
       "mechanics": [
         "자석피하기"
       ],
+      "mechanicsKo": [],
       "designers": [
         "Philip Shoptaugh"
       ],
@@ -61984,9 +66265,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "트릭테이킹"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -62090,11 +66373,24 @@ const gameData = {
         "Territory Building",
         "Transportation"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "의료",
+        "영토 건설",
+        "운송"
+      ],
       "mechanics": [
         "Catch the Leader",
         "Pick-up and Deliver",
         "Simulation",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "선두 견제",
+        "픽업 앤 딜리버",
+        "시뮬레이션",
+        "타일 배치"
       ],
       "designers": [
         "Alban Viard"
@@ -62202,9 +66498,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타이쿤"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -62304,11 +66602,20 @@ const gameData = {
       "categories": [
         "Dice"
       ],
+      "categoriesKo": [
+        "주사위"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Push Your Luck",
         "Re-rolling and Locking",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "욕심 부리기",
+        "재굴림과 고정",
+        "솔로 게임"
       ],
       "designers": [
         "Reiner Knizia"
@@ -62416,9 +66723,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타일놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -62518,6 +66827,10 @@ const gameData = {
         "Arabian",
         "Card Game"
       ],
+      "categoriesKo": [
+        "아라비안",
+        "카드게임"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Modular Board",
@@ -62527,6 +66840,16 @@ const gameData = {
         "Square Grid",
         "Turn Order: Progressive",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "사각 격자",
+        "순차 진행",
+        "워커 배치"
       ],
       "designers": [
         "Andreas Steiger"
@@ -62649,6 +66972,13 @@ const gameData = {
         "Fantasy",
         "Fighting"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "주사위",
+        "탐험",
+        "판타지",
+        "격투"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Dice Rolling",
@@ -62658,6 +66988,16 @@ const gameData = {
         "Tile Placement",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "피날레 종료",
+        "모듈형 보드",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Scott Almes"
@@ -62790,6 +67130,12 @@ const gameData = {
         "City Building",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "동물",
+        "도시 건설",
+        "퍼즐"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Follow",
@@ -62802,6 +67148,19 @@ const gameData = {
         "Variable Phase Order",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "따라하기",
+        "격자 커버리지",
+        "패턴 만들기",
+        "플레이어 탈락",
+        "솔로 게임",
+        "사각 격자",
+        "순차 진행",
+        "가변 페이즈 순서",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Peter McPherson"
@@ -62910,9 +67269,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "머더미스터리"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -62999,6 +67360,10 @@ const gameData = {
         "Deduction",
         "Murder / Mystery"
       ],
+      "categoriesKo": [
+        "추리",
+        "추리/미스터리"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Deduction",
@@ -63006,6 +67371,14 @@ const gameData = {
         "Solo / Solitaire Game",
         "Storytelling",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "시나리오 게임",
+        "솔로 게임",
+        "스토리텔링",
+        "팀 게임"
       ],
       "designers": [
         "Johannes Sich"
@@ -63132,12 +67505,24 @@ const gameData = {
         "Humor",
         "Murder / Mystery"
       ],
+      "categoriesKo": [
+        "추리",
+        "유머",
+        "추리/미스터리"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Deduction",
         "Scenario / Mission / Campaign Game",
         "Solo / Solitaire Game",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "시나리오 게임",
+        "솔로 게임",
+        "팀 게임"
       ],
       "designers": [
         "Johannes Sich"
@@ -63261,11 +67646,21 @@ const gameData = {
         "Deduction",
         "Murder / Mystery"
       ],
+      "categoriesKo": [
+        "추리",
+        "추리/미스터리"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Deduction",
         "Scenario / Mission / Campaign Game",
         "Solo / Solitaire Game"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "시나리오 게임",
+        "솔로 게임"
       ],
       "designers": [
         "Johannes Sich"
@@ -63380,10 +67775,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩",
         "레이싱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -63485,6 +67882,11 @@ const gameData = {
         "Science Fiction",
         "Space Exploration"
       ],
+      "categoriesKo": [
+        "문명",
+        "SF",
+        "우주 탐험"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Contracts",
@@ -63494,6 +67896,16 @@ const gameData = {
         "Point to Point Movement",
         "Tech Trees / Tech Tracks",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "수입",
+        "포인트 이동",
+        "기술 트리",
+        "워커 배치"
       ],
       "designers": [
         "Dennis K. Chan"
@@ -63606,6 +68018,10 @@ const gameData = {
         "Ancient",
         "Mythology"
       ],
+      "categoriesKo": [
+        "고대",
+        "신화"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Once Around",
@@ -63614,6 +68030,15 @@ const gameData = {
         "Hidden Victory Points",
         "Push Your Luck",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "1회전 경매",
+        "폐쇄 경제 경매",
+        "제한 입찰",
+        "숨겨진 승리 점수",
+        "욕심 부리기",
+        "세트 수집"
       ],
       "designers": [
         "Reiner Knizia"
@@ -63740,6 +68165,15 @@ const gameData = {
         "Space Exploration",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "문명",
+        "경제",
+        "환경",
+        "산업",
+        "SF",
+        "우주 탐험",
+        "영토 건설"
+      ],
       "mechanics": [
         "Closed Drafting",
         "Contracts",
@@ -63754,6 +68188,21 @@ const gameData = {
         "Turn Order: Progressive",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "헥사곤 격자",
+        "수입",
+        "솔로 게임",
+        "태그",
+        "공격형 플레이",
+        "타일 배치",
+        "순차 진행",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Jacob Fryxelius"
@@ -63869,10 +68318,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위자원",
         "엔진빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -63976,6 +68427,11 @@ const gameData = {
         "City Building",
         "Economic"
       ],
+      "categoriesKo": [
+        "고대",
+        "도시 건설",
+        "경제"
+      ],
       "mechanics": [
         "Area Movement",
         "End Game Bonuses",
@@ -63993,6 +68449,24 @@ const gameData = {
         "Variable Set-up",
         "Victory Points as a Resource",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "최종 보너스",
+        "이벤트",
+        "격자 커버리지",
+        "레이어링",
+        "소유권",
+        "론델",
+        "점수 후 리셋",
+        "세트 수집",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "트랙 이동",
+        "가변 셋업",
+        "승리 점수를 자원으로",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Daniele Tascini"
@@ -64110,6 +68584,11 @@ const gameData = {
         "Dice",
         "Mythology"
       ],
+      "categoriesKo": [
+        "고대",
+        "주사위",
+        "신화"
+      ],
       "mechanics": [
         "Action Drafting",
         "Income",
@@ -64117,6 +68596,14 @@ const gameData = {
         "Pattern Building",
         "Turn Order: Stat-Based",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "수입",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "스탯 기반 순서",
+        "가변 셋업"
       ],
       "designers": [
         "Daniele Tascini",
@@ -64224,10 +68711,18 @@ const gameData = {
       "categories": [
         "Party Game"
       ],
+      "categoriesKo": [
+        "파티게임"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "스토리텔링"
       ],
       "designers": [
         "Valéry Fourcade",
@@ -64351,9 +68846,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "포인트샐러드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -64460,6 +68957,11 @@ const gameData = {
         "Economic",
         "Medieval"
       ],
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "중세"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Dice Rolling",
@@ -64475,6 +68977,22 @@ const gameData = {
         "Variable Set-up",
         "Worker Placement with Dice Workers",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "주사위 굴리기",
+        "최종 보너스",
+        "이벤트",
+        "숨겨진 승리 점수",
+        "수입",
+        "소유권",
+        "세트 수집",
+        "밀기/당기기",
+        "솔로 게임",
+        "순차 진행",
+        "가변 셋업",
+        "주사위 워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Sébastien Dujardin",
@@ -64594,6 +69112,9 @@ const gameData = {
       "categories": [
         "Post-Napoleonic"
       ],
+      "categoriesKo": [
+        "나폴레옹 이후"
+      ],
       "mechanics": [
         "Action Points",
         "Action Queue",
@@ -64604,6 +69125,17 @@ const gameData = {
         "Turn Order: Stat-Based",
         "Worker Placement",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 큐",
+        "선두 견제",
+        "주사위 굴리기",
+        "동시 액션 선택",
+        "타일 배치",
+        "스탯 기반 순서",
+        "워커 배치",
+        "다중 워커 배치"
       ],
       "designers": [
         "Richard Ámann",
@@ -64720,10 +69252,14 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "비대칭",
         "트릭테이킹"
       ],
+      "mechanicsKo": [],
       "designers": [
         "Romaric Galonnier"
       ],
@@ -64828,9 +69364,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "팀클라이밍"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -64933,6 +69471,12 @@ const gameData = {
         "Exploration",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "고대",
+        "탐험",
+        "영토 건설"
+      ],
       "mechanics": [
         "Action Points",
         "Area Majority / Influence",
@@ -64948,6 +69492,22 @@ const gameData = {
         "Tile Placement",
         "Victory Points as a Resource",
         "Zone of Control"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "경매/입찰",
+        "이벤트",
+        "격자 이동",
+        "헥사곤 격자",
+        "킬 스틸",
+        "레이어링",
+        "지도 추가",
+        "모듈형 보드",
+        "세트 수집",
+        "타일 배치",
+        "승리 점수를 자원으로",
+        "지배 구역"
       ],
       "designers": [
         "Michael Kiesling",
@@ -65063,6 +69623,9 @@ const gameData = {
       "categories": [
         "Trains"
       ],
+      "categoriesKo": [
+        "기차"
+      ],
       "mechanics": [
         "Connections",
         "Contracts",
@@ -65072,6 +69635,16 @@ const gameData = {
         "Open Drafting",
         "Push Your Luck",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "욕심 부리기",
+        "세트 수집"
       ],
       "designers": [
         "Alan R. Moon"
@@ -65193,9 +69766,18 @@ const gameData = {
         "Bluffing",
         "Card Game"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "블러핑",
+        "카드게임"
+      ],
       "mechanics": [
         "Hand Management",
         "Pattern Recognition"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "패턴 인식"
       ],
       "designers": [
         "Keith Meyers"
@@ -65309,9 +69891,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위론델"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -65420,6 +70004,11 @@ const gameData = {
         "Fantasy",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "퍼즐"
+      ],
       "mechanics": [
         "Constrained Bidding",
         "End Game Bonuses",
@@ -65429,6 +70018,16 @@ const gameData = {
         "Set Collection",
         "Simultaneous Action Selection",
         "Tags"
+      ],
+      "mechanicsKo": [
+        "제한 입찰",
+        "최종 보너스",
+        "패 관리",
+        "공개 드래프팅",
+        "순서 선택 입찰",
+        "세트 수집",
+        "동시 액션 선택",
+        "태그"
       ],
       "designers": [
         "Johannes Goupy",
@@ -65555,11 +70154,23 @@ const gameData = {
         "Dice",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "카드게임",
+        "주사위",
+        "판타지"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Dice Rolling",
         "Solo / Solitaire Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "솔로 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Mike Gnade",
@@ -65687,11 +70298,24 @@ const gameData = {
         "Political",
         "Spies / Secret Agents"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "경제",
+        "협상",
+        "정치",
+        "스파이"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Area Movement",
         "Hand Management",
         "Simulation"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "영역 이동",
+        "패 관리",
+        "시뮬레이션"
       ],
       "designers": [
         "Phil Eklund",
@@ -65802,10 +70426,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "1인",
         "디펜스"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -65909,12 +70535,23 @@ const gameData = {
         "Card Game",
         "Fantasy"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "판타지"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hand Management",
         "Open Drafting",
         "Set Collection",
         "Tags"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "공개 드래프팅",
+        "세트 수집",
+        "태그"
       ],
       "designers": [
         "Bruce Glassco"
@@ -66035,6 +70672,11 @@ const gameData = {
         "Exploration",
         "Prehistoric"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "선사시대"
+      ],
       "mechanics": [
         "Action / Event",
         "Cooperative Game",
@@ -66043,6 +70685,15 @@ const gameData = {
         "Scenario / Mission / Campaign Game",
         "Simultaneous Action Selection",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "협동게임",
+        "덱/백/풀 빌딩",
+        "기억력",
+        "시나리오 게임",
+        "동시 액션 선택",
+        "가변 셋업"
       ],
       "designers": [
         "Peter Rustemeyer"
@@ -66170,6 +70821,11 @@ const gameData = {
         "Economic",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "경제",
+        "퍼즐"
+      ],
       "mechanics": [
         "Grid Coverage",
         "Income",
@@ -66180,6 +70836,17 @@ const gameData = {
         "Turn Order: Stat-Based",
         "Turn Order: Time Track",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "수입",
+        "공개 드래프팅",
+        "론델",
+        "사각 격자",
+        "타일 배치",
+        "스탯 기반 순서",
+        "타임 트랙 순서",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Uwe Rosenberg"
@@ -66287,9 +70954,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "디펜스"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -66392,6 +71061,11 @@ const gameData = {
         "Economic",
         "Transportation"
       ],
+      "categoriesKo": [
+        "항공",
+        "경제",
+        "운송"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Fixed Placement",
@@ -66405,6 +71079,20 @@ const gameData = {
         "Turn Order: Claim Action",
         "Turn Order: Progressive",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "고정 입찰",
+        "연결",
+        "제한 입찰",
+        "주사위 굴리기",
+        "이벤트",
+        "수입",
+        "투자",
+        "주식 보유",
+        "순서 선점",
+        "순차 진행",
+        "워커 배치"
       ],
       "designers": [
         "Prospero Hall",
@@ -66518,9 +71206,16 @@ const gameData = {
       "categories": [
         "Economic"
       ],
+      "categoriesKo": [
+        "경제"
+      ],
       "mechanics": [
         "Roll / Spin and Move",
         "Stock Holding"
+      ],
+      "mechanicsKo": [
+        "굴리고 이동",
+        "주식 보유"
       ],
       "designers": [
         "Robert Canedella"
@@ -66629,11 +71324,22 @@ const gameData = {
         "Science Fiction",
         "Space Exploration"
       ],
+      "categoriesKo": [
+        "주사위",
+        "SF",
+        "우주 탐험"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Open Drafting",
         "Point to Point Movement",
         "Worker Placement with Dice Workers"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "공개 드래프팅",
+        "포인트 이동",
+        "주사위 워커 배치"
       ],
       "designers": [
         "Vladimír Suchý"
@@ -66740,7 +71446,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -66846,11 +71554,23 @@ const gameData = {
         "Children's Game",
         "Video Game Theme"
       ],
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "어린이 게임",
+        "비디오게임 테마"
+      ],
       "mechanics": [
         "Hand Management",
         "Open Drafting",
         "Score-and-Reset Game",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "공개 드래프팅",
+        "점수 후 리셋",
+        "세트 수집"
       ],
       "designers": [
         "Kevin Kim"
@@ -66961,9 +71681,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "벌점덜먹기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -67060,8 +71782,14 @@ const gameData = {
       "categories": [
         "Children's Game"
       ],
+      "categoriesKo": [
+        "어린이 게임"
+      ],
       "mechanics": [
         "Pattern Recognition"
+      ],
+      "mechanicsKo": [
+        "패턴 인식"
       ],
       "designers": [
         "Stefan Kloß",
@@ -67173,10 +71901,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "경매",
         "점수모으기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -67280,10 +72010,21 @@ const gameData = {
         "Children's Game",
         "Movies / TV / Radio theme"
       ],
+      "categoriesKo": [
+        "순발력",
+        "동물",
+        "어린이 게임",
+        "미디어 테마"
+      ],
       "mechanics": [
         "Physical Removal",
         "Player Elimination",
         "Push Your Luck"
+      ],
+      "mechanicsKo": [
+        "물리적 제거",
+        "플레이어 탈락",
+        "욕심 부리기"
       ],
       "designers": [],
       "description": "An evolution of the classic Don't Break the Ice, using hexagonal blocks in two colours instead of square, which adds a little more strategy. Also added is a spinner which dictates which colour of block a player should attempt to remove.\n\nApparently popular in China and spreading worldwide under a variety of English translations.",
@@ -67394,9 +72135,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "포인트샐러드"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -67501,6 +72244,11 @@ const gameData = {
         "Fantasy",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "판타지",
+        "SF"
+      ],
       "mechanics": [
         "Action Points",
         "Bias",
@@ -67514,6 +72262,20 @@ const gameData = {
         "Square Grid",
         "Tile Placement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "편향",
+        "협동게임",
+        "격자 이동",
+        "패 관리",
+        "지도 변형",
+        "모듈형 보드",
+        "픽업 앤 딜리버",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "비대칭 능력"
       ],
       "designers": [
         "Matt Leacock"
@@ -67637,6 +72399,11 @@ const gameData = {
         "Fantasy",
         "Science Fiction"
       ],
+      "categoriesKo": [
+        "어드벤처",
+        "판타지",
+        "SF"
+      ],
       "mechanics": [
         "Action Points",
         "Cooperative Game",
@@ -67651,6 +72418,21 @@ const gameData = {
         "Square Grid",
         "Tile Placement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "협동게임",
+        "이벤트",
+        "격자 이동",
+        "패 관리",
+        "지도 축소",
+        "모듈형 보드",
+        "픽업 앤 딜리버",
+        "세트 수집",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "비대칭 능력"
       ],
       "designers": [
         "Matt Leacock"
@@ -67771,6 +72553,10 @@ const gameData = {
         "Fantasy",
         "Puzzle"
       ],
+      "categoriesKo": [
+        "판타지",
+        "퍼즐"
+      ],
       "mechanics": [
         "Contracts",
         "Open Drafting",
@@ -67779,6 +72565,15 @@ const gameData = {
         "Set Collection",
         "Take That",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "공개 드래프팅",
+        "패턴 인식",
+        "물리적 제거",
+        "세트 수집",
+        "공격형 플레이",
+        "가변 셋업"
       ],
       "designers": [
         "Stefano Castelli",
@@ -67907,9 +72702,17 @@ const gameData = {
         "Card Game",
         "Deduction"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Storytelling"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
       ],
       "designers": [
         "Yury Yamshchikov"
@@ -68026,9 +72829,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -68126,6 +72931,12 @@ const gameData = {
         "Nautical",
         "Pirates"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "경제",
+        "항해",
+        "해적"
+      ],
       "mechanics": [
         "Contracts",
         "Events",
@@ -68137,6 +72948,18 @@ const gameData = {
         "Race",
         "Set Collection",
         "Tags"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "이벤트",
+        "수입",
+        "덱 이동",
+        "공개 드래프팅",
+        "소유권",
+        "욕심 부리기",
+        "레이스",
+        "세트 수집",
+        "태그"
       ],
       "designers": [
         "Alexander Pfister"
@@ -68256,9 +73079,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "기억력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -68348,7 +73173,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -68445,6 +73272,11 @@ const gameData = {
         "Economic",
         "Farming"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "농업"
+      ],
       "mechanics": [
         "Action Drafting",
         "End Game Bonuses",
@@ -68453,6 +73285,15 @@ const gameData = {
         "Increase Value of Unchosen Resources",
         "Turn Order: Progressive",
         "Variable Phase Order"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "최종 보너스",
+        "따라하기",
+        "숨겨진 승리 점수",
+        "미선택 자원 가치 증가",
+        "순차 진행",
+        "가변 페이즈 순서"
       ],
       "designers": [
         "Andreas Seyfarth"
@@ -68562,12 +73403,24 @@ const gameData = {
         "Fighting",
         "Miniatures"
       ],
+      "categoriesKo": [
+        "판타지",
+        "격투",
+        "미니어처"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Hand Management",
         "Scenario / Mission / Campaign Game",
         "Solo / Solitaire Game",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "패 관리",
+        "시나리오 게임",
+        "솔로 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Tommaso Mondadori",
@@ -68692,6 +73545,9 @@ const gameData = {
       "categories": [
         "Renaissance"
       ],
+      "categoriesKo": [
+        "르네상스"
+      ],
       "mechanics": [
         "Action Queue",
         "Grid Movement",
@@ -68700,6 +73556,15 @@ const gameData = {
         "Simultaneous Action Selection",
         "Turn Order: Stat-Based",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "격자 이동",
+        "시장",
+        "세트 수집",
+        "동시 액션 선택",
+        "스탯 기반 순서",
+        "워커 배치"
       ],
       "designers": [
         "Wolfgang Panning",
@@ -68814,9 +73679,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "퍼즐"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -68921,6 +73788,11 @@ const gameData = {
         "Card Game",
         "Print & Play"
       ],
+      "categoriesKo": [
+        "미국 서부",
+        "카드게임",
+        "프린트 앤 플레이"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Paper-and-Pencil",
@@ -68928,6 +73800,14 @@ const gameData = {
         "Tech Trees / Tech Tracks",
         "Track Movement",
         "Variable Player Powers"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "종이와 연필",
+        "솔로 게임",
+        "기술 트리",
+        "트랙 이동",
+        "비대칭 능력"
       ],
       "designers": [
         "Steven Aramini"
@@ -69041,12 +73921,23 @@ const gameData = {
         "City Building",
         "Renaissance"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "르네상스"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "End Game Bonuses",
         "Grid Coverage",
         "Tile Placement",
         "Victory Points as a Resource"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "최종 보너스",
+        "격자 커버리지",
+        "타일 배치",
+        "승리 점수를 자원으로"
       ],
       "designers": [
         "Wolfgang Kramer",
@@ -69163,12 +74054,23 @@ const gameData = {
         "Economic",
         "Farming"
       ],
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
       "mechanics": [
         "Contracts",
         "Mancala",
         "Once-Per-Game Abilities",
         "Rondel",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "만칼라",
+        "게임당 1회 능력",
+        "론델",
+        "세트 수집"
       ],
       "designers": [
         "Wolfgang Sentker",
@@ -69278,7 +74180,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -69371,7 +74275,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -69474,6 +74380,11 @@ const gameData = {
         "Deduction",
         "Memory"
       ],
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "기억력"
+      ],
       "mechanics": [
         "Communication Limits",
         "Cooperative Game",
@@ -69481,6 +74392,14 @@ const gameData = {
         "Memory",
         "Ordering",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "패 관리",
+        "기억력",
+        "순서 정하기",
+        "세트 수집"
       ],
       "designers": [
         "Antoine Bauza"
@@ -69613,12 +74532,23 @@ const gameData = {
         "City Building",
         "Civilization"
       ],
+      "categoriesKo": [
+        "도시 건설",
+        "문명"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Memory",
         "Open Drafting",
         "Set Collection",
         "Simultaneous Action Selection"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "기억력",
+        "공개 드래프팅",
+        "세트 수집",
+        "동시 액션 선택"
       ],
       "designers": [
         "Benjamin Schwer"
@@ -69739,11 +74669,21 @@ const gameData = {
         "Ancient",
         "City Building"
       ],
+      "categoriesKo": [
+        "고대",
+        "도시 건설"
+      ],
       "mechanics": [
         "Hand Management",
         "Paper-and-Pencil",
         "Solo / Solitaire Game",
         "Tech Trees / Tech Tracks"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "종이와 연필",
+        "솔로 게임",
+        "기술 트리"
       ],
       "designers": [
         "Bobby Hill"
@@ -69852,9 +74792,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "타일놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -69955,6 +74897,10 @@ const gameData = {
         "Abstract Strategy",
         "Animals"
       ],
+      "categoriesKo": [
+        "추상 전략",
+        "동물"
+      ],
       "mechanics": [
         "Enclosure",
         "Grid Movement",
@@ -69963,6 +74909,15 @@ const gameData = {
         "Pieces as Map",
         "Three Dimensional Movement",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "격자 이동",
+        "헥사곤 격자",
+        "패턴 이동",
+        "피스가 지도",
+        "3D 이동",
+        "타일 배치"
       ],
       "designers": [
         "John Yianni"
@@ -70076,11 +75031,20 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Auction / Bidding",
         "Auction: Turn Order Until Pass",
         "Constrained Bidding",
         "Hand Management"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "제한 입찰",
+        "패 관리"
       ],
       "designers": [
         "Reiner Knizia"
@@ -70189,9 +75153,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -70294,6 +75260,9 @@ const gameData = {
       "categories": [
         "Medieval"
       ],
+      "categoriesKo": [
+        "중세"
+      ],
       "mechanics": [
         "Action Points",
         "Area Majority / Influence",
@@ -70302,6 +75271,15 @@ const gameData = {
         "Ownership",
         "Take That",
         "Tech Trees / Tech Tracks"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "최종 보너스",
+        "네트워크/루트 건설",
+        "소유권",
+        "공격형 플레이",
+        "기술 트리"
       ],
       "designers": [
         "Andreas Steding"
@@ -70413,9 +75391,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "일꾼놓기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -70524,9 +75504,20 @@ const gameData = {
         "Party Game",
         "Real-time"
       ],
+      "categoriesKo": [
+        "순발력",
+        "카드게임",
+        "어린이 게임",
+        "파티게임",
+        "실시간"
+      ],
       "mechanics": [
         "Pattern Recognition",
         "Player Elimination"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "플레이어 탈락"
       ],
       "designers": [
         "Haim Shafir"
@@ -70654,7 +75645,9 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -70751,9 +75744,13 @@ const gameData = {
       "categories": [
         "Party Game"
       ],
+      "categoriesKo": [
+        "파티게임"
+      ],
       "mechanics": [
         "1인"
       ],
+      "mechanicsKo": [],
       "designers": [
         "(Uncredited)"
       ],
@@ -70868,11 +75865,20 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Betting and Bluffing",
         "Hand Management",
         "Ladder Climbing",
         "Team-Based Game"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "패 관리",
+        "사다리 오르기",
+        "팀 게임"
       ],
       "designers": [
         "Sean Ross (I)"
@@ -70993,6 +75999,12 @@ const gameData = {
         "Negotiation",
         "Political"
       ],
+      "categoriesKo": [
+        "경제",
+        "교육",
+        "협상",
+        "정치"
+      ],
       "mechanics": [
         "Action / Event",
         "Hand Management",
@@ -71000,6 +76012,14 @@ const gameData = {
         "Variable Player Powers",
         "Voting",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "패 관리",
+        "시뮬레이션",
+        "비대칭 능력",
+        "투표",
+        "다중 워커 배치"
       ],
       "designers": [
         "Vangelis Bagiartakis",
@@ -71101,9 +76121,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "순발력"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -71187,9 +76209,16 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Pattern Building",
         "Set Collection"
+      ],
+      "mechanicsKo": [
+        "패턴 만들기",
+        "세트 수집"
       ],
       "designers": [
         "Larry Levy"
@@ -71306,6 +76335,11 @@ const gameData = {
         "Puzzle",
         "Space Exploration"
       ],
+      "categoriesKo": [
+        "추리",
+        "퍼즐",
+        "우주 탐험"
+      ],
       "mechanics": [
         "Action Points",
         "Deduction",
@@ -71314,6 +76348,15 @@ const gameData = {
         "Rondel",
         "Solo / Solitaire Game",
         "Turn Order: Time Track"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "추리",
+        "최종 보너스",
+        "종이와 연필",
+        "론델",
+        "솔로 게임",
+        "타임 트랙 순서"
       ],
       "designers": [
         "Matthew O'Malley",
@@ -71428,6 +76471,10 @@ const gameData = {
         "Science Fiction",
         "Wargame"
       ],
+      "categoriesKo": [
+        "SF",
+        "워게임"
+      ],
       "mechanics": [
         "Dice Rolling",
         "Grid Movement",
@@ -71439,6 +76486,18 @@ const gameData = {
         "Solo / Solitaire Game",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "격자 이동",
+        "헥사곤 격자",
+        "시야",
+        "이동 포인트",
+        "시나리오 게임",
+        "시뮬레이션",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Dave Casciano"
@@ -71548,6 +76607,12 @@ const gameData = {
         "Negotiation",
         "Political"
       ],
+      "categoriesKo": [
+        "경제",
+        "교육",
+        "협상",
+        "정치"
+      ],
       "mechanics": [
         "Action / Event",
         "Hand Management",
@@ -71555,6 +76620,14 @@ const gameData = {
         "Variable Player Powers",
         "Voting",
         "Worker Placement, Different Worker Types"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "패 관리",
+        "시뮬레이션",
+        "비대칭 능력",
+        "투표",
+        "다중 워커 배치"
       ],
       "designers": [
         "Vangelis Bagiartakis",
@@ -71664,9 +76737,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "땅따먹기"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -71775,6 +76850,11 @@ const gameData = {
         "Fantasy",
         "Travel"
       ],
+      "categoriesKo": [
+        "경제",
+        "판타지",
+        "여행"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Contracts",
@@ -71787,6 +76867,19 @@ const gameData = {
         "Ownership",
         "Set Collection",
         "Track Movement"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "계약",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "최종 보너스",
+        "시장",
+        "다목적 카드",
+        "공개 드래프팅",
+        "소유권",
+        "세트 수집",
+        "트랙 이동"
       ],
       "designers": [
         "Keith Piggott"
@@ -71896,9 +76989,11 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "덱빌딩레이싱"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -72002,6 +77097,11 @@ const gameData = {
         "Civilization",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "고대",
+        "문명",
+        "영토 건설"
+      ],
       "mechanics": [
         "Action Points",
         "Area Majority / Influence",
@@ -72013,6 +77113,18 @@ const gameData = {
         "Open Drafting",
         "Set Collection",
         "Tile Placement"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "패 관리",
+        "헥사곤 격자",
+        "숨겨진 승리 점수",
+        "최고-최저 득점",
+        "수입",
+        "공개 드래프팅",
+        "세트 수집",
+        "타일 배치"
       ],
       "designers": [
         "Reiner Knizia"
@@ -72126,6 +77238,11 @@ const gameData = {
         "Political",
         "Wargame"
       ],
+      "categoriesKo": [
+        "현대 전쟁",
+        "정치",
+        "워게임"
+      ],
       "mechanics": [
         "Action / Event",
         "Advantage Token",
@@ -72141,6 +77258,22 @@ const gameData = {
         "Tug of War",
         "Variable Player Powers",
         "Variable Set-up"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "어드밴티지 토큰",
+        "영역 지배",
+        "캠페인 카드 구동",
+        "주사위 굴리기",
+        "이벤트",
+        "패 관리",
+        "시뮬레이션",
+        "동시 액션 선택",
+        "스탯 확인",
+        "돌발 종료",
+        "줄다리기",
+        "비대칭 능력",
+        "가변 셋업"
       ],
       "designers": [
         "Ananda Gupta",
@@ -72252,10 +77385,12 @@ const gameData = {
       "minPlayTime": 0,
       "maxPlayTime": 0,
       "categories": [],
+      "categoriesKo": [],
       "mechanics": [
         "주사위비교",
         "탈출"
       ],
+      "mechanicsKo": [],
       "designers": [],
       "description": "",
       "descriptionKo": ""
@@ -72355,10 +77490,18 @@ const gameData = {
       "categories": [
         "Industry / Manufacturing"
       ],
+      "categoriesKo": [
+        "산업"
+      ],
       "mechanics": [
         "Tile Placement",
         "Variable Player Powers",
         "Worker Placement"
+      ],
+      "mechanicsKo": [
+        "타일 배치",
+        "비대칭 능력",
+        "워커 배치"
       ],
       "designers": [
         "Scott Caputo",
@@ -72472,12 +77615,24 @@ const gameData = {
         "Medieval",
         "Territory Building"
       ],
+      "categoriesKo": [
+        "남북전쟁",
+        "중세",
+        "영토 건설"
+      ],
       "mechanics": [
         "Area Majority / Influence",
         "Area-Impulse",
         "Dice Rolling",
         "Once-Per-Game Abilities",
         "Re-rolling and Locking"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "지역 충동",
+        "주사위 굴리기",
+        "게임당 1회 능력",
+        "재굴림과 고정"
       ],
       "designers": [
         "Yogi Shinichi (与儀新一)"
@@ -72588,10 +77743,20 @@ const gameData = {
         "Exploration",
         "Travel"
       ],
+      "categoriesKo": [
+        "고대",
+        "탐험",
+        "여행"
+      ],
       "mechanics": [
         "Point to Point Movement",
         "Set Collection",
         "Turn Order: Time Track"
+      ],
+      "mechanicsKo": [
+        "포인트 이동",
+        "세트 수집",
+        "타임 트랙 순서"
       ],
       "designers": [
         "Peter Prinz"
