@@ -582,7 +582,8 @@ BGG 영어 labels를 한국어로 번역해 master.json에 추가하는 도구.
 
 ```
 4-label-translator/
-└── label-translator.js
+├── label-translator.js
+└── description-translator.js
 ```
 
 **label-translator.js**
@@ -590,10 +591,22 @@ BGG 영어 labels를 한국어로 번역해 master.json에 추가하는 도구.
 입력: library/1-master/cottage-owned-games-master.json
 출력: 동일 파일 (categoriesKo / mechanicsKo 필드 추가)
 
-번역 소스: config/bgg-label-map.js (categories 69개 + mechanics 173개)
+번역 소스: config/bgg-label-map.js (categories 69개 + mechanics 175개)
 미번역 항목은 원문 그대로 유지하고 콘솔에 경고 출력.
 
-실행: node game-system/tools/4-label-translator/label-translator.js (또는 npm run translate)
+실행: npm run translate
+
+**description-translator.js**
+
+입력: library/1-master/cottage-owned-games-master.json
+출력: 동일 파일 (descriptionKo 필드 추가)
+
+Claude Haiku API(claude-haiku-4-5-20251001)로 description 영→한 번역.
+이미 번역된 게임(descriptionKo 있음)은 스킵.
+옵션: --limit N (최대 N개), --dry-run (목록만 출력)
+환경변수: ANTHROPIC_API_KEY 필수
+
+실행: npm run translate:desc [-- --limit N] [-- --dry-run]
 
 ---
 

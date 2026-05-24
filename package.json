@@ -2,6 +2,7 @@
   "scripts": {
     "build:master": "node game-system/tools/3-build-master/build-master.js",
     "translate": "node game-system/tools/4-label-translator/label-translator.js",
+    "translate:desc": "node game-system/tools/4-label-translator/description-translator.js",
     "build": "node game-system/tools/5-build-output/build-output.js",
     "match:local": "node game-system/tools/1-matcher/b_run-local-match.js",
     "match:api": "node game-system/tools/1-matcher/a_run-api-match.js",
@@ -10,6 +11,7 @@
     "add": "node game-system/tools/0-input/from-name/add-owned-game.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.98.0",
     "exceljs": "^4.4.0"
   }
 }
