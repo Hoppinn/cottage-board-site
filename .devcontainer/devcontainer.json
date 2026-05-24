@@ -1,0 +1,14 @@
+{
+  "name": "Cottage Board",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:lts-bookworm",
+  "postCreateCommand": "npm install && npm install -g @anthropic/claude-code",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ritwickdey.LiveServer",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "forwardPorts": [5500]
+}
