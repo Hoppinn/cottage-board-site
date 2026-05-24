@@ -266,6 +266,7 @@ function getDesigners(game) {
 function getCommentText(game) {
   return (
     getTextBlockText(game?.cottage?.comment) ||
+    safeText(game?.bgg?.descriptionKo) ||
     safeText(game?.bgg?.description)
   );
 }
