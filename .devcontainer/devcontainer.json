@@ -1,7 +1,7 @@
 {
   "name": "Cottage Board",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:lts-bookworm",
-  "postCreateCommand": "npm install && npm install -g @anthropic/claude-code",
+  "postCreateCommand": "npm install",
   "customizations": {
     "vscode": {
       "extensions": [
