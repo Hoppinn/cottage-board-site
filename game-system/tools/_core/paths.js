@@ -34,7 +34,8 @@ const TOOLS_INPUT_DIR = path.join(TOOLS_DIR, "0-input");
 const TOOLS_MATCHER_DIR = path.join(TOOLS_DIR, "1-matcher");
 const TOOLS_FETCHER_DIR = path.join(TOOLS_DIR, "2-fetcher");
 const TOOLS_BUILD_MASTER_DIR = path.join(TOOLS_DIR, "3-build-master");
-const TOOLS_BUILD_OUTPUT_DIR = path.join(TOOLS_DIR, "4-build-output");
+const TOOLS_TRANSLATE_DIR = path.join(TOOLS_DIR, "4-label-translator");
+const TOOLS_BUILD_OUTPUT_DIR = path.join(TOOLS_DIR, "5-build-output");
 
 const AUTO_TAGGER_PATH = path.join(TOOLS_CORE_DIR, "auto-tagger.js");
 
@@ -141,6 +142,7 @@ module.exports = {
   TOOLS_MATCHER_DIR,
   TOOLS_FETCHER_DIR,
   TOOLS_BUILD_MASTER_DIR,
+  TOOLS_TRANSLATE_DIR,
   TOOLS_BUILD_OUTPUT_DIR,
   AUTO_TAGGER_PATH,
 

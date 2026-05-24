@@ -106,7 +106,30 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "카드게임",
+        "도시 건설",
+        "문명",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "최종 보너스",
+        "패 관리",
+        "결합과 펼치기",
+        "다목적 카드",
+        "인접 범위",
+        "게임당 1회 능력",
+        "점수 후 리셋",
+        "세트 수집",
+        "동시 액션 선택",
+        "태그",
+        "기술 트리",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "가짜예술가뉴욕에가다": {
       "id": "가짜예술가뉴욕에가다",
@@ -187,7 +210,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "선 긋기",
+        "힌트 제공"
+      ]
     },
     "갈팡질팡": {
       "id": "갈팡질팡",
@@ -284,7 +317,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "레이스",
+        "힌트 제공",
+        "팀 게임"
+      ]
     },
     "게놈의탑": {
       "id": "게놈의탑",
@@ -340,7 +381,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "구두룡저택의살인-미스터리파티시리즈": {
       "id": "구두룡저택의살인-미스터리파티시리즈",
@@ -396,7 +439,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "내마음의주파수": {
       "id": "내마음의주파수",
@@ -491,7 +536,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "레이스",
+        "힌트 제공",
+        "팀 게임"
+      ]
     },
     "너도나도": {
       "id": "너도나도",
@@ -564,7 +617,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "카드게임",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "내가 자르고 네가 고르기",
+        "세트 수집",
+        "투표"
+      ]
     },
     "노땡스": {
       "id": "노땡스",
@@ -676,7 +740,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "폐쇄 경제 경매",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "세트 수집"
+      ]
     },
     "노터치크라켄": {
       "id": "노터치크라켄",
@@ -733,7 +807,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "놉놉테이블": {
       "id": "놉놉테이블",
@@ -790,7 +866,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "누가치즈를훔쳤을까": {
       "id": "누가치즈를훔쳤을까",
@@ -849,7 +927,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "늑대인간마을의축제미스터리파티시리즈": {
       "id": "늑대인간마을의축제미스터리파티시리즈",
@@ -905,7 +985,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "다크율": {
       "id": "다크율",
@@ -961,7 +1043,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "달무티": {
       "id": "달무티",
@@ -1052,7 +1136,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "비대칭 능력"
+      ]
     },
     "도블": {
       "id": "도블",
@@ -1182,7 +1275,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "어린이 게임",
+        "교육",
+        "파티게임",
+        "실시간",
+        "스포츠"
+      ],
+      "mechanicsKo": [
+        "핫 포테이토",
+        "패턴 인식",
+        "스피드 매칭"
+      ]
     },
     "두리안": {
       "id": "두리안",
@@ -1264,7 +1370,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "패 관리",
+        "욕심 부리기"
+      ]
     },
     "두부왕국": {
       "id": "두부왕국",
@@ -1321,7 +1438,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "디셉션": {
       "id": "디셉션",
@@ -1424,7 +1543,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "추리/미스터리",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "이벤트",
+        "피날레 종료",
+        "숨겨진 역할",
+        "스토리텔링",
+        "팀 게임",
+        "배신자 게임",
+        "가변 셋업"
+      ]
     },
     "딕싯": {
       "id": "딕싯",
@@ -1524,7 +1660,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "유머",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "레이스",
+        "노래",
+        "스토리텔링",
+        "힌트 제공",
+        "투표"
+      ]
     },
     "레디셋벳": {
       "id": "레디셋벳",
@@ -1619,7 +1767,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "파티게임",
+        "레이싱",
+        "실시간",
+        "스포츠"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기",
+        "실시간",
+        "트랙 이동"
+      ]
     },
     "로보77": {
       "id": "로보77",
@@ -1678,7 +1839,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "리코셰로봇": {
       "id": "리코셰로봇",
@@ -1792,7 +1955,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "미로",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "모듈형 보드",
+        "실시간",
+        "사각 격자",
+        "스탯 기반 순서",
+        "가변 셋업"
+      ]
     },
     "마헤": {
       "id": "마헤",
@@ -1884,7 +2061,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "아라비안"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "레이어링",
+        "굴리고 이동",
+        "타일 배치"
+      ]
     },
     "모자가아니잖아": {
       "id": "모자가아니잖아",
@@ -1964,7 +2150,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "기억력",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "기억력"
+      ]
     },
     "뱀파이어퀸": {
       "id": "뱀파이어퀸",
@@ -2049,7 +2244,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "공포"
+      ],
+      "mechanicsKo": [
+        "사다리 오르기"
+      ]
     },
     "뱅": {
       "id": "뱅",
@@ -2161,7 +2363,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미국 서부",
+        "블러핑",
+        "카드게임",
+        "추리",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "숨겨진 역할",
+        "핫 포테이토",
+        "킬 스틸",
+        "플레이어 탈락",
+        "공격형 플레이",
+        "팀 게임",
+        "비대칭 능력"
+      ]
     },
     "뱅-주사위": {
       "id": "뱅-주사위",
@@ -2264,7 +2483,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미국 서부",
+        "블러핑",
+        "추리",
+        "주사위",
+        "격투",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "숨겨진 역할",
+        "플레이어 탈락",
+        "욕심 부리기",
+        "재굴림과 고정",
+        "팀 게임",
+        "비대칭 능력"
+      ]
     },
     "벨라티": {
       "id": "벨라티",
@@ -2346,7 +2582,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임"
+      ]
     },
     "보난자": {
       "id": "보난자",
@@ -2456,7 +2700,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "농업",
+        "협상"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "다목적 카드",
+        "협상",
+        "세트 수집",
+        "교역"
+      ]
     },
     "블러드바운드": {
       "id": "블러드바운드",
@@ -2542,7 +2798,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "판타지",
+        "공포",
+        "협상",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "역할극",
+        "팀 게임",
+        "비대칭 능력"
+      ]
     },
     "사보타지": {
       "id": "사보타지",
@@ -2668,7 +2937,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "탐험",
+        "판타지",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "숨겨진 역할",
+        "숨겨진 승리 점수",
+        "지도 추가",
+        "네트워크/루트 건설",
+        "점수 후 리셋",
+        "공격형 플레이",
+        "배신자 게임"
+      ]
     },
     "섀도우레이더스": {
       "id": "섀도우레이더스",
@@ -2754,7 +3041,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "블러핑",
+        "카드게임",
+        "추리",
+        "주사위",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "모듈형 보드",
+        "플레이어 탈락",
+        "팀 게임",
+        "비대칭 능력"
+      ]
     },
     "세트": {
       "id": "세트",
@@ -2872,7 +3174,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "실시간",
+        "스피드 매칭"
+      ]
     },
     "수상한생선들": {
       "id": "수상한생선들",
@@ -2931,7 +3242,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스파이폴": {
       "id": "스파이폴",
@@ -3041,7 +3354,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "유머",
+        "파티게임",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "연기",
+        "소통 제한",
+        "기억력",
+        "역할극",
+        "비대칭 정보 역할",
+        "힌트 제공",
+        "배신자 게임",
+        "투표"
+      ]
     },
     "스파이폴2": {
       "id": "스파이폴2",
@@ -3138,7 +3468,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "유머",
+        "파티게임",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "연기",
+        "기억력",
+        "역할극",
+        "투표"
+      ]
     },
     "시계탑에흐른피": {
       "id": "시계탑에흐른피",
@@ -3240,7 +3583,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "추리/미스터리",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "추리",
+        "숨겨진 역할",
+        "협상",
+        "죄수의 딜레마",
+        "가위바위보",
+        "비대칭 정보 역할",
+        "팀 게임",
+        "배신자 게임",
+        "비대칭 능력",
+        "투표"
+      ]
     },
     "시타델": {
       "id": "시타델",
@@ -3298,7 +3660,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레지스탕스-아발론": {
       "id": "레지스탕스-아발론",
@@ -3407,7 +3771,27 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "판타지",
+        "중세",
+        "협상",
+        "파티게임",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "피날레 종료",
+        "숨겨진 역할",
+        "비대칭 정보 역할",
+        "동시 액션 선택",
+        "팀 게임",
+        "배신자 게임",
+        "비대칭 능력",
+        "투표"
+      ]
     },
     "악마성의마차": {
       "id": "악마성의마차",
@@ -3465,7 +3849,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "왓츠잇투야": {
       "id": "왓츠잇투야",
@@ -3524,7 +3910,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "우노포켓몬우노": {
       "id": "우노포켓몬우노",
@@ -3586,7 +3974,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "웰컴투": {
       "id": "웰컴투",
@@ -3648,7 +4038,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "이매진": {
       "id": "이매진",
@@ -3709,7 +4101,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "인사이더": {
       "id": "인사이더",
@@ -3768,7 +4162,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "잉카의황금": {
       "id": "잉카의황금",
@@ -3829,7 +4225,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "재치와눈치": {
       "id": "재치와눈치",
@@ -3889,7 +4287,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "저스트원": {
       "id": "저스트원",
@@ -3986,7 +4386,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "파티게임",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "추리",
+        "점수 후 리셋"
+      ]
     },
     "젝스님트": {
       "id": "젝스님트",
@@ -4116,7 +4527,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "숫자",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "순서 정하기",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "동시 액션 선택"
+      ]
     },
     "카멜레온": {
       "id": "카멜레온",
@@ -4212,7 +4635,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "유머",
+        "파티게임",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "힌트 제공",
+        "팀 게임",
+        "투표"
+      ]
     },
     "카멜업2판": {
       "id": "카멜업2판",
@@ -4272,7 +4709,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "캐시앤건즈": {
       "id": "캐시앤건즈",
@@ -4332,7 +4771,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "코드네임": {
       "id": "코드네임",
@@ -4454,7 +4895,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
+      ]
     },
     "코드네임영어": {
       "id": "코드네임영어",
@@ -4576,7 +5031,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
+      ]
     },
     "코드네임픽처스": {
       "id": "코드네임픽처스",
@@ -4697,7 +5166,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
+      ]
     },
     "콘셉트": {
       "id": "콘셉트",
@@ -4790,7 +5273,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "파티게임",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "레이스",
+        "팀 게임"
+      ]
     },
     "쿠": {
       "id": "쿠",
@@ -4916,7 +5409,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "파티게임",
+        "정치"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "기억력",
+        "플레이어 탈락",
+        "공격형 플레이",
+        "비대칭 능력"
+      ]
     },
     "퀘스트": {
       "id": "퀘스트",
@@ -4975,7 +5482,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "타코캣고트치즈피자": {
       "id": "타코캣고트치즈피자",
@@ -5083,7 +5592,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "카드게임",
+        "어린이 게임",
+        "파티게임",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "인터럽트",
+        "패턴 인식",
+        "레이스",
+        "실시간",
+        "스피드 매칭"
+      ]
     },
     "탑텐티비": {
       "id": "탑텐티비",
@@ -5143,7 +5666,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "텀블링다이스": {
       "id": "텀블링다이스",
@@ -5206,7 +5731,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "텔레스트레이션": {
       "id": "텔레스트레이션",
@@ -5300,7 +5827,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "유머",
+        "파티게임",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "그림 그리기",
+        "종이와 연필"
+      ]
     },
     "투카나여행길": {
       "id": "투카나여행길",
@@ -5394,7 +5930,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "탐험"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "연결",
+        "헥사곤 격자",
+        "선 긋기",
+        "덱 이동",
+        "네트워크/루트 건설",
+        "종이와 연필",
+        "솔로 게임",
+        "가변 셋업"
+      ]
     },
     "포가튼워터스": {
       "id": "포가튼워터스",
@@ -5489,7 +6039,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "항해",
+        "해적",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "이벤트",
+        "선택형 서사",
+        "시나리오 게임",
+        "반협동게임",
+        "스탯 확인",
+        "스토리텔링",
+        "워커 배치"
+      ]
     },
     "포커칩세트": {
       "id": "포커칩세트",
@@ -5549,7 +6117,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "몇번이고푸른달에불을붙였다": {
       "id": "몇번이고푸른달에불을붙였다",
@@ -5603,7 +6173,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "플립7": {
       "id": "플립7",
@@ -5663,7 +6235,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "한밤의늑대인간": {
       "id": "한밤의늑대인간",
@@ -5764,7 +6338,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "공포",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "역할극",
+        "비대칭 정보 역할",
+        "배신자 게임",
+        "비대칭 능력",
+        "투표"
+      ]
     },
     "할라피노": {
       "id": "할라피노",
@@ -5824,7 +6413,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "1862-이스턴-카운티": {
       "id": "1862-이스턴-카운티",
@@ -5909,7 +6500,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "기차"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "시장",
+        "네트워크/루트 건설",
+        "소유권",
+        "솔로 게임",
+        "주식 보유",
+        "타일 배치",
+        "승리 점수를 자원으로"
+      ]
     },
     "5초준다": {
       "id": "5초준다",
@@ -6004,7 +6609,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "파티게임",
+        "퀴즈"
+      ],
+      "mechanicsKo": [
+        "액션 타이머",
+        "실시간"
+      ]
     },
     "그것이문제로다": {
       "id": "그것이문제로다",
@@ -6092,7 +6706,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "순서 정하기",
+        "플레이어 심판",
+        "힌트 제공"
+      ]
     },
     "나나": {
       "id": "나나",
@@ -6192,7 +6816,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "기억력"
+      ],
+      "mechanicsKo": [
+        "매칭",
+        "기억력",
+        "질문과 답변",
+        "세트 수집"
+      ]
     },
     "냥자역학연구소": {
       "id": "냥자역학연구소",
@@ -6268,7 +6903,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "패 관리",
+        "예측 입찰",
+        "트릭 테이킹"
+      ]
     },
     "노팅엄의지방관": {
       "id": "노팅엄의지방관",
@@ -6369,7 +7014,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "유머",
+        "중세",
+        "협상",
+        "소설 원작",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "뇌물",
+        "패 관리",
+        "협상",
+        "공개 드래프팅",
+        "역할극",
+        "세트 수집"
+      ]
     },
     "다운포스": {
       "id": "다운포스",
@@ -6467,7 +7130,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "레이싱",
+        "스포츠"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "배팅과 블러핑",
+        "패 관리",
+        "다중 유닛 이동",
+        "예측 입찰",
+        "트랙 이동",
+        "비대칭 능력"
+      ]
     },
     "다잉메시지-공범만화가-확장": {
       "id": "다잉메시지-공범만화가-확장",
@@ -6523,7 +7199,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "다크호스": {
       "id": "다크호스",
@@ -6581,7 +7259,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "당나귀다리": {
       "id": "당나귀다리",
@@ -6658,7 +7338,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "기억력"
+      ],
+      "mechanicsKo": [
+        "기억력",
+        "스토리텔링"
+      ]
     },
     "데스티네이션x": {
       "id": "데스티네이션x",
@@ -6738,7 +7425,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "팀 게임"
+      ]
     },
     "딩고디스크": {
       "id": "딩고디스크",
@@ -6815,7 +7510,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "판타지",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "모듈형 보드",
+        "패턴 만들기",
+        "타일 배치"
+      ]
     },
     "라마": {
       "id": "라마",
@@ -6912,7 +7618,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "매칭",
+        "욕심 부리기"
+      ]
     },
     "라이즈오브아우구스투스": {
       "id": "라이즈오브아우구스투스",
@@ -6990,7 +7706,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "공개 드래프팅",
+        "욕심 부리기",
+        "세트 수집"
+      ]
     },
     "러브레터": {
       "id": "러브레터",
@@ -7047,7 +7773,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "러브크래프트-레터": {
       "id": "러브크래프트-레터",
@@ -7130,7 +7858,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "판타지",
+        "공포"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "패 관리",
+        "플레이어 탈락",
+        "점수 후 리셋",
+        "공격형 플레이"
+      ]
     },
     "레일로드잉크": {
       "id": "레일로드잉크",
@@ -7190,7 +7931,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레지스탕스-쿠": {
       "id": "레지스탕스-쿠",
@@ -7312,7 +8055,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "파티게임",
+        "정치"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "기억력",
+        "플레이어 탈락",
+        "공격형 플레이",
+        "비대칭 능력"
+      ]
     },
     "리버탈리아": {
       "id": "리버탈리아",
@@ -7399,7 +8156,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "해적"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "추리",
+        "패 관리",
+        "순서 선택 입찰",
+        "세트 수집",
+        "동시 액션 선택",
+        "공격형 플레이",
+        "역할 순서",
+        "가변 페이즈 순서"
+      ]
     },
     "마블좀비": {
       "id": "마블좀비",
@@ -7459,7 +8231,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "메디치": {
       "id": "메디치",
@@ -7551,7 +8325,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "1회전 경매",
+        "수입",
+        "욕심 부리기",
+        "세트 수집",
+        "승리 점수를 자원으로"
+      ]
     },
     "나의최애명대사": {
       "id": "나의최애명대사",
@@ -7607,7 +8392,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "모노폴리-딜럭스": {
       "id": "모노폴리-딜럭스",
@@ -7755,7 +8542,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "잉글리시 경매",
+        "수입",
+        "대출",
+        "턴 건너뛰기",
+        "소유권",
+        "플레이어 탈락",
+        "굴리고 이동",
+        "세트 수집",
+        "트랙 이동",
+        "교역"
+      ]
     },
     "미노다이스": {
       "id": "미노다이스",
@@ -7812,7 +8615,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "바퀴벌레포커": {
       "id": "바퀴벌레포커",
@@ -7906,7 +8711,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "세트 수집",
+        "단독 패배 게임"
+      ]
     },
     "방방곡곡-세계유랑": {
       "id": "방방곡곡-세계유랑",
@@ -7964,7 +8779,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "베티보터보우트썸버터": {
       "id": "베티보터보우트썸버터",
@@ -8020,7 +8837,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "듄임페리움봉기": {
       "id": "듄임페리움봉기",
@@ -8120,7 +8939,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미디어 테마",
+        "소설 원작",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "카드 전투 해결",
+        "계약",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "강제 헌신",
+        "미선택 자원 가치 증가",
+        "다목적 카드",
+        "공개 드래프팅",
+        "솔로 게임",
+        "팀 게임",
+        "순차 진행",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "브레인토피아": {
       "id": "브레인토피아",
@@ -8209,7 +9049,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "교육",
+        "기억력",
+        "파티게임",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "기억력",
+        "패턴 인식"
+      ]
     },
     "블리츠": {
       "id": "블리츠",
@@ -8266,7 +9117,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "서퍼사우르스맥스": {
       "id": "서퍼사우르스맥스",
@@ -8323,7 +9176,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "셀레스티아-빅박스": {
       "id": "셀레스티아-빅박스",
@@ -8422,7 +9277,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "항공",
+        "카드게임",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기",
+        "숨겨진 승리 점수",
+        "욕심 부리기"
+      ]
     },
     "숲속의음악대": {
       "id": "숲속의음악대",
@@ -8477,7 +9344,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스위스사는스미스씨": {
       "id": "스위스사는스미스씨",
@@ -8532,7 +9401,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스컬": {
       "id": "스컬",
@@ -8625,7 +9496,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "베팅식 입찰",
+        "패 관리",
+        "플레이어 탈락",
+        "예측 입찰"
+      ]
     },
     "스컬퀸": {
       "id": "스컬퀸",
@@ -8682,7 +9566,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스컬킹": {
       "id": "스컬킹",
@@ -8774,7 +9660,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "항해",
+        "해적"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "예측 입찰",
+        "가위바위보",
+        "트릭 테이킹"
+      ]
     },
     "스타워즈에픽듀얼": {
       "id": "스타워즈에픽듀얼",
@@ -8831,7 +9728,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스파이시": {
       "id": "스파이시",
@@ -8928,7 +9827,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "패 관리"
+      ]
     },
     "시퀀스-해리포터": {
       "id": "시퀀스-해리포터",
@@ -8987,7 +9895,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아임더보스": {
       "id": "아임더보스",
@@ -9074,7 +9984,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "협상"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "패 관리",
+        "협상",
+        "굴리고 이동",
+        "세트 수집",
+        "공격형 플레이"
+      ]
     },
     "야채주식": {
       "id": "야채주식",
@@ -9132,7 +10054,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "언더워터항해기": {
       "id": "언더워터항해기",
@@ -9189,7 +10113,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "에메랄드스컬": {
       "id": "에메랄드스컬",
@@ -9245,7 +10171,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "옛날옛적에": {
       "id": "옛날옛적에",
@@ -9303,7 +10231,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "오딘": {
       "id": "오딘",
@@ -9390,7 +10320,13 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "사다리 오르기"
+      ]
     },
     "오토배틀-챌린저스": {
       "id": "오토배틀-챌린저스",
@@ -9450,7 +10386,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "요트다이스": {
       "id": "요트다이스",
@@ -9604,7 +10542,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어린이 게임",
+        "만화",
+        "주사위",
+        "미디어 테마",
+        "음악",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "종이와 연필",
+        "욕심 부리기",
+        "재굴림과 고정",
+        "세트 수집"
+      ]
     },
     "워드캡처": {
       "id": "워드캡처",
@@ -9662,7 +10615,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "워드캡처-티키타카": {
       "id": "워드캡처-티키타카",
@@ -9720,7 +10675,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "원더볼링": {
       "id": "원더볼링",
@@ -9778,7 +10735,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "웰컴투더문": {
       "id": "웰컴투더문",
@@ -9839,7 +10798,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "위자드": {
       "id": "위자드",
@@ -9897,7 +10858,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "유포리아확장": {
       "id": "유포리아확장",
@@ -9956,7 +10919,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "인생게임": {
       "id": "인생게임",
@@ -10014,7 +10979,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "잠만보다이스": {
       "id": "잠만보다이스",
@@ -10073,7 +11040,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "젬블로": {
       "id": "젬블로",
@@ -10155,7 +11124,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "패 관리",
+        "헥사곤 격자",
+        "타일 배치"
+      ]
     },
     "차가운그녀가눈을뜨기전에": {
       "id": "차가운그녀가눈을뜨기전에",
@@ -10211,7 +11189,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "크로스클루": {
       "id": "크로스클루",
@@ -10269,7 +11249,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "클루": {
       "id": "클루",
@@ -10327,7 +11309,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "키플라워-농부들-확장": {
       "id": "키플라워-농부들-확장",
@@ -10385,7 +11369,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "트래블블로그영": {
       "id": "트래블블로그영",
@@ -10442,7 +11428,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "팀3-핑크": {
       "id": "팀3-핑크",
@@ -10498,7 +11486,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "파워그리드": {
       "id": "파워그리드",
@@ -10556,7 +11546,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "페루도": {
       "id": "페루도",
@@ -10698,7 +11690,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "어린이 게임",
+        "주사위",
+        "미디어 테마",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기",
+        "플레이어 탈락"
+      ]
     },
     "펭귄파티": {
       "id": "펭귄파티",
@@ -10790,7 +11794,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "어린이 게임"
+      ],
+      "mechanicsKo": [
+        "패 관리"
+      ]
     },
     "포인트샐러드-이브이에디션": {
       "id": "포인트샐러드-이브이에디션",
@@ -10847,7 +11859,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "프리세이지": {
       "id": "프리세이지",
@@ -10902,7 +11916,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "플래시포인트-영": {
       "id": "플래시포인트-영",
@@ -10961,7 +11977,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "하베스트": {
       "id": "하베스트",
@@ -11020,7 +12038,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "하이다이브": {
       "id": "하이다이브",
@@ -11076,7 +12096,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "할리갈리": {
       "id": "할리갈리",
@@ -11193,7 +12215,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "카드게임",
+        "어린이 게임",
+        "파티게임",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "플레이어 탈락"
+      ]
     },
     "허리컵": {
       "id": "허리컵",
@@ -11250,7 +12283,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "화이트채플": {
       "id": "화이트채플",
@@ -11347,7 +12382,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "추리/미스터리",
+        "나폴레옹 이후"
+      ],
+      "mechanicsKo": [
+        "숨은 이동",
+        "기억력",
+        "포인트 이동",
+        "질문과 답변",
+        "비밀 유닛 배치",
+        "팀 게임"
+      ]
     },
     "황혼의비문": {
       "id": "황혼의비문",
@@ -11407,7 +12456,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "히트": {
       "id": "히트",
@@ -11467,7 +12518,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "에이지오브스팀": {
       "id": "에이지오브스팀",
@@ -11572,7 +12625,30 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "나폴레옹 이후",
+        "기차",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "선두 견제",
+        "연결",
+        "주사위 굴리기",
+        "헥사곤 격자",
+        "대출",
+        "네트워크/루트 건설",
+        "픽업 앤 딜리버",
+        "플레이어 탈락",
+        "시나리오 게임",
+        "순서 선택 입찰",
+        "솔로 게임",
+        "타일 배치",
+        "순서 경매",
+        "승리 점수를 자원으로"
+      ]
     },
     "1의기적": {
       "id": "1의기적",
@@ -11629,7 +12705,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "12칩트릭": {
       "id": "12칩트릭",
@@ -11702,7 +12780,12 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": [
+        "패 관리",
+        "트릭 테이킹"
+      ]
     },
     "5분-마블": {
       "id": "5분-마블",
@@ -11760,7 +12843,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "가이아프로젝트": {
       "id": "가이아프로젝트",
@@ -11864,7 +12949,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "문명",
+        "경제",
+        "SF",
+        "우주 탐험",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "헥사곤 격자",
+        "수입",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "솔로 게임",
+        "태그",
+        "기술 트리",
+        "패스 순서",
+        "비대칭 능력",
+        "가변 셋업",
+        "승리 점수를 자원으로"
+      ]
     },
     "개구리벌주기": {
       "id": "개구리벌주기",
@@ -11914,7 +13020,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "개구리사탕먹기": {
       "id": "개구리사탕먹기",
@@ -11964,7 +13072,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "갠지스-다이스차머": {
       "id": "갠지스-다이스차머",
@@ -12020,7 +13130,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "갠지스의-라자": {
       "id": "갠지스의-라자",
@@ -12109,7 +13221,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "르네상스",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "주사위 굴리기",
+        "레이스",
+        "타일 배치",
+        "트랙 이동",
+        "워커 배치",
+        "주사위 워커 배치"
+      ]
     },
     "갤러리스트": {
       "id": "갤러리스트",
@@ -12198,7 +13325,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "상품 투기",
+        "계약",
+        "투자",
+        "공개 드래프팅",
+        "포인트 이동",
+        "자원 이동",
+        "세트 수집",
+        "솔로 게임",
+        "승리 점수를 자원으로",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "갱오브포": {
       "id": "갱오브포",
@@ -12275,7 +13418,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "정치"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "세트 수집"
+      ]
     },
     "고고시티": {
       "id": "고고시티",
@@ -12332,7 +13484,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "고스트": {
       "id": "고스트",
@@ -12386,7 +13540,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "고질라도쿄클래시": {
       "id": "고질라도쿄클래시",
@@ -12442,7 +13598,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "골드": {
       "id": "골드",
@@ -12500,7 +13658,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "골드러시": {
       "id": "골드러시",
@@ -12550,7 +13710,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "궁신": {
       "id": "궁신",
@@ -12606,7 +13768,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "그라운드플로어": {
       "id": "그라운드플로어",
@@ -12662,7 +13826,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "그랜드오스트리아호텔": {
       "id": "그랜드오스트리아호텔",
@@ -12717,7 +13883,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "그레이트웨스턴트레일": {
       "id": "그레이트웨스턴트레일",
@@ -12809,7 +13977,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미국 서부",
+        "동물"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "소유권",
+        "세트 수집",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "그레이트웨스턴트레일-뉴질랜드": {
       "id": "그레이트웨스턴트레일-뉴질랜드",
@@ -12892,7 +14072,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "소유권",
+        "세트 수집",
+        "솔로 게임",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "글래스로드": {
       "id": "글래스로드",
@@ -12985,7 +14177,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "최종 보너스",
+        "따라하기",
+        "공개 드래프팅",
+        "세트 수집",
+        "동시 액션 선택",
+        "솔로 게임",
+        "타일 배치",
+        "순차 진행",
+        "가변 셋업"
+      ]
     },
     "글룸헤이븐": {
       "id": "글룸헤이븐",
@@ -13042,7 +14252,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "기도하고일하라": {
       "id": "기도하고일하라",
@@ -13130,7 +14342,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "중세",
+        "종교",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "미선택 자원 가치 증가",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "기즈모": {
       "id": "기즈모",
@@ -13221,7 +14448,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "계약",
+        "공개 드래프팅",
+        "레이스"
+      ]
     },
     "기차섬-탑승하세요": {
       "id": "기차섬-탑승하세요",
@@ -13278,7 +14515,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "기차섬영": {
       "id": "기차섬영",
@@ -13334,7 +14573,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "김밥요리사": {
       "id": "김밥요리사",
@@ -13390,7 +14631,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "꼬치의달인": {
       "id": "꼬치의달인",
@@ -13445,7 +14688,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "끝나지않는한여름미스터리파티시리즈": {
       "id": "끝나지않는한여름미스터리파티시리즈",
@@ -13495,7 +14740,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "나나-크리스마스에디션": {
       "id": "나나-크리스마스에디션",
@@ -13595,7 +14842,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "기억력"
+      ],
+      "mechanicsKo": [
+        "매칭",
+        "기억력",
+        "질문과 답변",
+        "세트 수집"
+      ]
     },
     "나르": {
       "id": "나르",
@@ -13651,7 +14909,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "남티그리스의학자들": {
       "id": "남티그리스의학자들",
@@ -13708,7 +14968,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "냥냥집사": {
       "id": "냥냥집사",
@@ -13764,7 +15026,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "뉴클리엄": {
       "id": "뉴클리엄",
@@ -13821,7 +15085,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "니다벨리르": {
       "id": "니다벨리르",
@@ -13918,7 +15184,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "신화"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "다중 경매",
+        "비밀 입찰",
+        "제한 입찰",
+        "최종 보너스",
+        "순서 선택 입찰",
+        "세트 수집",
+        "동시 액션 선택"
+      ]
     },
     "니말리아": {
       "id": "니말리아",
@@ -13974,7 +15255,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "니어앤파": {
       "id": "니어앤파",
@@ -14072,7 +15355,34 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "주사위 굴리기",
+        "최종 보너스",
+        "패 관리",
+        "이동 포인트",
+        "다중 지도",
+        "선택형 서사",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "포인트 이동",
+        "욕심 부리기",
+        "자원 이동",
+        "시나리오 게임",
+        "세트 수집",
+        "스토리텔링",
+        "태그",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "다빈치코드": {
       "id": "다빈치코드",
@@ -14155,7 +15465,11 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리"
+      ],
+      "mechanicsKo": []
     },
     "다빈치코드플러스": {
       "id": "다빈치코드플러스",
@@ -14211,7 +15525,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "다섯부족": {
       "id": "다섯부족",
@@ -14267,7 +15583,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "다윈의여정": {
       "id": "다윈의여정",
@@ -14362,7 +15680,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "탐험",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "소유권",
+        "픽업 앤 딜리버",
+        "포인트 이동",
+        "세트 수집",
+        "솔로 게임",
+        "순서 선점",
+        "가변 셋업",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "다윈의위대한발자취": {
       "id": "다윈의위대한발자취",
@@ -14420,7 +15754,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "다이너스티-혼인과통치": {
       "id": "다이너스티-혼인과통치",
@@ -14476,7 +15812,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "대만차연대기": {
       "id": "대만차연대기",
@@ -14532,7 +15870,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "더게임": {
       "id": "더게임",
@@ -14590,7 +15930,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "더루프": {
       "id": "더루프",
@@ -14675,7 +16017,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "큐브 타워",
+        "덱/백/풀 빌딩",
+        "시나리오 게임",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "더리치앤더굿": {
       "id": "더리치앤더굿",
@@ -14731,7 +16086,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "더마인드": {
       "id": "더마인드",
@@ -14829,7 +16186,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "패 관리"
+      ]
     },
     "던전레이더스": {
       "id": "던전레이더스",
@@ -14885,7 +16251,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "던전로드": {
       "id": "던전로드",
@@ -14971,7 +16339,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "판타지",
+        "격투",
+        "유머"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "패 관리",
+        "동시 액션 선택",
+        "타일 배치",
+        "워커 배치"
+      ]
     },
     "덤불속": {
       "id": "덤불속",
@@ -15027,7 +16408,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "데드맨스드로우": {
       "id": "데드맨스드로우",
@@ -15122,7 +16505,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "해적",
+        "비디오게임 테마"
+      ],
+      "mechanicsKo": [
+        "욕심 부리기",
+        "세트 수집",
+        "공격형 플레이",
+        "비대칭 능력"
+      ]
     },
     "데드오브윈터": {
       "id": "데드오브윈터",
@@ -15178,7 +16572,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "데스티니즈": {
       "id": "데스티니즈",
@@ -15271,7 +16667,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "지도 추가",
+        "역할극",
+        "시나리오 게임",
+        "솔로 게임",
+        "스토리텔링",
+        "타일 배치"
+      ]
     },
     "도르프로만틱": {
       "id": "도르프로만틱",
@@ -15370,7 +16782,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "환경",
+        "퍼즐",
+        "영토 건설",
+        "비디오게임 테마"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "협동게임",
+        "헥사곤 격자",
+        "지도 추가",
+        "모듈형 보드",
+        "시나리오 게임",
+        "타일 배치",
+        "가변 셋업"
+      ]
     },
     "도망자": {
       "id": "도망자",
@@ -15424,7 +16852,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "도미니언": {
       "id": "도미니언",
@@ -15480,7 +16910,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "도미니언-약속된번영": {
       "id": "도미니언-약속된번영",
@@ -15536,7 +16968,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "도미니언-위대한제국": {
       "id": "도미니언-위대한제국",
@@ -15592,7 +17026,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "도미니언-장막뒤의사람들": {
       "id": "도미니언-장막뒤의사람들",
@@ -15648,7 +17084,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "도블-동물원": {
       "id": "도블-동물원",
@@ -15706,7 +17144,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "도적단의월급날": {
       "id": "도적단의월급날",
@@ -15763,7 +17203,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "독수리눈치싸움": {
       "id": "독수리눈치싸움",
@@ -15819,7 +17261,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "동물왕와일드사파리": {
       "id": "동물왕와일드사파리",
@@ -15875,7 +17319,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "동인도회사": {
       "id": "동인도회사",
@@ -15930,7 +17376,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "두근두근악어이빨": {
       "id": "두근두근악어이빨",
@@ -15980,7 +17428,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "뒤죽박죽서커스": {
       "id": "뒤죽박죽서커스",
@@ -16037,7 +17487,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "뒤집어줘캡틴": {
       "id": "뒤집어줘캡틴",
@@ -16094,7 +17546,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "듄임페리움": {
       "id": "듄임페리움",
@@ -16196,7 +17650,30 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미디어 테마",
+        "소설 원작",
+        "정치",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "강제 헌신",
+        "미선택 자원 가치 증가",
+        "다목적 카드",
+        "공개 드래프팅",
+        "소유권",
+        "레이스",
+        "솔로 게임",
+        "태그",
+        "공격형 플레이",
+        "순차 진행",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "드라큘라VS반헬싱": {
       "id": "드라큘라VS반헬싱",
@@ -16250,7 +17727,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "드랍잇-독": {
       "id": "드랍잇-독",
@@ -16307,7 +17786,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "드림홈": {
       "id": "드림홈",
@@ -16399,7 +17880,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "기억력",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "가변 페이즈 순서"
+      ]
     },
     "디센트": {
       "id": "디센트",
@@ -16456,7 +17947,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "디스워오브마인": {
       "id": "디스워오브마인",
@@ -16562,7 +18055,30 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "성인",
+        "현대 전쟁",
+        "비디오게임 테마"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "협동게임",
+        "주사위 굴리기",
+        "이벤트",
+        "격자 이동",
+        "선택형 서사",
+        "욕심 부리기",
+        "역할극",
+        "시나리오 게임",
+        "시뮬레이션",
+        "솔로 게임",
+        "스토리텔링",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "디스워오브마인-폐허가된도시이야기-확장": {
       "id": "디스워오브마인-폐허가된도시이야기-확장",
@@ -16619,7 +18135,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라그랑하-디럭스-마스터": {
       "id": "라그랑하-디럭스-마스터",
@@ -16676,7 +18194,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라마랜드": {
       "id": "라마랜드",
@@ -16732,7 +18252,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라스베가스": {
       "id": "라스베가스",
@@ -16788,7 +18310,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라스베가스로얄중": {
       "id": "라스베가스로얄중",
@@ -16845,7 +18369,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라온": {
       "id": "라온",
@@ -16914,7 +18440,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "타일 배치"
+      ]
     },
     "라운드더월드영": {
       "id": "라운드더월드영",
@@ -16970,7 +18503,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라이": {
       "id": "라이",
@@ -17020,7 +18555,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라이노교수가아는다가오는죽음": {
       "id": "라이노교수가아는다가오는죽음",
@@ -17074,7 +18611,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라이벌시티": {
       "id": "라이벌시티",
@@ -17128,7 +18667,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라이슬라": {
       "id": "라이슬라",
@@ -17184,7 +18725,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "라타": {
       "id": "라타",
@@ -17242,7 +18785,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "래드랜드": {
       "id": "래드랜드",
@@ -17329,7 +18874,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "격투",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 큐",
+        "패 관리",
+        "다목적 카드",
+        "공격형 플레이",
+        "비대칭 능력"
+      ]
     },
     "랩터": {
       "id": "랩터",
@@ -17414,7 +18972,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "격투",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 회수",
+        "격자 이동",
+        "패 관리",
+        "모듈형 보드",
+        "동시 액션 선택",
+        "공격형 플레이",
+        "비대칭 능력"
+      ]
     },
     "랭카스터": {
       "id": "랭카스터",
@@ -17470,7 +19043,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "럭키넘버스": {
       "id": "럭키넘버스",
@@ -17554,7 +19129,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "솔로 게임",
+        "타일 배치"
+      ]
     },
     "레드룸": {
       "id": "레드룸",
@@ -17604,7 +19187,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레벨10": {
       "id": "레벨10",
@@ -17661,7 +19246,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레이스포더갤럭시-첫번째아크-확장": {
       "id": "레이스포더갤럭시-첫번째아크-확장",
@@ -17717,7 +19304,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레인보우세븐": {
       "id": "레인보우세븐",
@@ -17773,7 +19362,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레일웨이붐": {
       "id": "레일웨이붐",
@@ -17829,7 +19420,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레즈아르카나-확장": {
       "id": "레즈아르카나-확장",
@@ -17883,7 +19476,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "레코-플러스": {
       "id": "레코-플러스",
@@ -17933,7 +19528,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "렉시오": {
       "id": "렉시오",
@@ -17989,7 +19586,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "로그": {
       "id": "로그",
@@ -18043,7 +19642,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "로빈슨크루소": {
       "id": "로빈슨크루소",
@@ -18161,7 +19762,32 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "격투",
+        "소설 원작",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "영역 이동",
+        "협동게임",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "이벤트",
+        "헥사곤 격자",
+        "지도 추가",
+        "이동 포인트",
+        "선택형 서사",
+        "시나리오 게임",
+        "솔로 게임",
+        "타일 배치",
+        "순차 진행",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "로스트시티": {
       "id": "로스트시티",
@@ -18273,7 +19899,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "결합과 펼치기",
+        "순서 정하기",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "세트 수집"
+      ]
     },
     "롤포더갤럭시": {
       "id": "롤포더갤럭시",
@@ -18331,7 +19970,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "루미큐브": {
       "id": "루미큐브",
@@ -18506,7 +20147,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "카드게임",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "세트 수집",
+        "타일 배치"
+      ]
     },
     "루이스앤클라크": {
       "id": "루이스앤클라크",
@@ -18563,7 +20213,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "루트-리버포크-확장": {
       "id": "루트-리버포크-확장",
@@ -18665,7 +20317,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "판타지",
+        "협상",
+        "영토 건설",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 큐",
+        "액션 회수",
+        "영역 지배",
+        "영역 이동",
+        "주사위 굴리기",
+        "패 관리",
+        "다목적 카드",
+        "협상",
+        "포인트 이동",
+        "레이스",
+        "돌발 종료",
+        "공격형 플레이",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "루트비히의-성": {
       "id": "루트비히의-성",
@@ -18758,7 +20434,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "나폴레옹 이후",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "숨겨진 승리 점수",
+        "내가 자르고 네가 고르기",
+        "미선택 자원 가치 증가",
+        "패턴 만들기",
+        "세트 수집",
+        "타일 배치",
+        "순차 진행"
+      ]
     },
     "루핑루이": {
       "id": "루핑루이",
@@ -18808,7 +20498,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "뤄양의사람들": {
       "id": "뤄양의사람들",
@@ -18897,7 +20589,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "수입",
+        "대출",
+        "시장",
+        "공개 드래프팅",
+        "솔로 게임",
+        "순차 진행"
+      ]
     },
     "르네상스의거장들": {
       "id": "르네상스의거장들",
@@ -18971,7 +20676,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "캠페인 카드 구동",
+        "주사위 굴리기"
+      ]
     },
     "르아브르": {
       "id": "르아브르",
@@ -19067,7 +20780,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "항해"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "최종 보너스",
+        "미선택 자원 가치 증가",
+        "대출",
+        "소유권",
+        "솔로 게임",
+        "워커 배치"
+      ]
     },
     "르아브르-내륙항": {
       "id": "르아브르-내륙항",
@@ -19121,7 +20849,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "리바이브": {
       "id": "리바이브",
@@ -19220,7 +20950,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "문명",
+        "탐험",
+        "산업",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "헥사곤 격자",
+        "지도 추가",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "시나리오 게임",
+        "기술 트리",
+        "비대칭 능력"
+      ]
     },
     "리볼버2": {
       "id": "리볼버2",
@@ -19274,7 +21020,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "마닐라": {
       "id": "마닐라",
@@ -19362,7 +21110,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "항해",
+        "해적",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "배팅과 블러핑",
+        "상품 투기",
+        "주사위 굴리기",
+        "대출",
+        "주식 보유",
+        "워커 배치"
+      ]
     },
     "마라카이보": {
       "id": "마라카이보",
@@ -19462,7 +21225,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "탐험",
+        "항해",
+        "해적"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "패 관리",
+        "수입",
+        "이동 포인트",
+        "다목적 카드",
+        "선택형 서사",
+        "포인트 이동",
+        "시나리오 게임",
+        "세트 수집",
+        "솔로 게임",
+        "주식 보유",
+        "기술 트리",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "마라케시-확장": {
       "id": "마라케시-확장",
@@ -19519,7 +21306,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "마르코폴로2": {
       "id": "마르코폴로2",
@@ -19609,7 +21398,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "중세",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "주사위 굴리기",
+        "포인트 이동",
+        "자원 이동",
+        "스탯 기반 순서",
+        "비대칭 능력",
+        "워커 배치",
+        "주사위 워커 배치"
+      ]
     },
     "마법사의물약독": {
       "id": "마법사의물약독",
@@ -19708,7 +21513,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "공개 드래프팅",
+        "패턴 인식",
+        "물리적 제거",
+        "세트 수집",
+        "공격형 플레이",
+        "가변 셋업"
+      ]
     },
     "마스크맨": {
       "id": "마스크맨",
@@ -19784,7 +21602,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "스포츠"
+      ],
+      "mechanicsKo": [
+        "사다리 오르기",
+        "점수 후 리셋"
+      ]
     },
     "마운틴고트": {
       "id": "마운틴고트",
@@ -19840,7 +21666,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "마이시티": {
       "id": "마이시티",
@@ -19928,7 +21756,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설"
+      ],
+      "mechanicsKo": [
+        "빙고",
+        "선두 견제",
+        "격자 커버리지",
+        "레거시 게임",
+        "패턴 만들기",
+        "시나리오 게임",
+        "타일 배치"
+      ]
     },
     "마이티": {
       "id": "마이티",
@@ -20002,7 +21842,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "숨겨진 역할",
+        "팀 게임",
+        "트릭 테이킹"
+      ]
     },
     "마작-미니마작": {
       "id": "마작-미니마작",
@@ -20143,7 +21992,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "세트 수집"
+      ]
     },
     "맨덤의던전": {
       "id": "맨덤의던전",
@@ -20240,7 +22096,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "판타지",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "기억력",
+        "플레이어 탈락",
+        "욕심 부리기"
+      ]
     },
     "메나라": {
       "id": "메나라",
@@ -20317,7 +22185,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "물리적 제거",
+        "쌓기와 균형"
+      ]
     },
     "메도우-하류-확장": {
       "id": "메도우-하류-확장",
@@ -20405,7 +22282,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "환경",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "레이어링",
+        "공개 드래프팅",
+        "세트 수집",
+        "솔로 게임",
+        "다중 워커 배치"
+      ]
     },
     "메르브실크로드의심장": {
       "id": "메르브실크로드의심장",
@@ -20493,7 +22384,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "아라비안",
+        "도시 건설",
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "패스 경매",
+        "계약",
+        "모듈형 보드",
+        "소유권",
+        "론델",
+        "세트 수집",
+        "솔로 게임",
+        "사각 격자",
+        "트랙 이동",
+        "순서 경매",
+        "가변 셋업"
+      ]
     },
     "메모리아일랜드": {
       "id": "메모리아일랜드",
@@ -20547,7 +22457,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "메시나1347": {
       "id": "메시나1347",
@@ -20638,7 +22550,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "의료",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "수입",
+        "모듈형 보드",
+        "솔로 게임",
+        "트랙 이동",
+        "비대칭 능력",
+        "가변 셋업",
+        "워커 배치"
+      ]
     },
     "메이지나이트-얼티밋-에디션": {
       "id": "메이지나이트-얼티밋-에디션",
@@ -20744,7 +22671,27 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "협동게임",
+        "덱/백/풀 빌딩",
+        "주사위 굴리기",
+        "격자 이동",
+        "패 관리",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "역할극",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력"
+      ]
     },
     "멘네페르": {
       "id": "멘네페르",
@@ -20826,7 +22773,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "문명",
+        "산업"
+      ],
+      "mechanicsKo": [
+        "수입",
+        "공개 드래프팅",
+        "세트 수집",
+        "트랙 이동",
+        "워커 배치"
+      ]
     },
     "모던아트-페가수스": {
       "id": "모던아트-페가수스",
@@ -20938,7 +22897,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "잉글리시 경매",
+        "1회전 경매",
+        "비밀 입찰",
+        "패스 경매",
+        "상품 투기",
+        "패 관리",
+        "승리 점수를 자원으로"
+      ]
     },
     "모두의마블": {
       "id": "모두의마블",
@@ -20994,7 +22967,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "모렐": {
       "id": "모렐",
@@ -21079,7 +23054,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "교육"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "공개 드래프팅",
+        "세트 수집"
+      ]
     },
     "모아보새": {
       "id": "모아보새",
@@ -21136,7 +23120,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "모자익스": {
       "id": "모자익스",
@@ -21193,7 +23179,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "몰타의관문": {
       "id": "몰타의관문",
@@ -21249,7 +23237,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "문명의시대": {
       "id": "문명의시대",
@@ -21326,7 +23316,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "문명"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "미선택 자원 가치 증가",
+        "솔로 게임",
+        "기술 트리",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "뮤제": {
       "id": "뮤제",
@@ -21382,7 +23384,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "미드가르드의챔피언": {
       "id": "미드가르드의챔피언",
@@ -21466,7 +23470,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "주사위",
+        "판타지",
+        "격투",
+        "중세",
+        "신화"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "세트 수집",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "밀레니엄블레이즈": {
       "id": "밀레니엄블레이즈",
@@ -21548,7 +23566,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "상품 투기",
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "공개 드래프팅",
+        "실시간",
+        "세트 수집",
+        "시뮬레이션",
+        "교역"
+      ]
     },
     "바람의부족": {
       "id": "바람의부족",
@@ -21605,7 +23637,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "바르셀로나-영": {
       "id": "바르셀로나-영",
@@ -21690,7 +23724,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "타일 배치",
+        "워커 배치"
+      ]
     },
     "반디도": {
       "id": "반디도",
@@ -21747,7 +23789,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "반지의제왕-가운데땅여정": {
       "id": "반지의제왕-가운데땅여정",
@@ -21838,7 +23882,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "판타지",
+        "격투",
+        "소설 원작"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 이동",
+        "캠페인 카드 구동",
+        "협동게임",
+        "덱/백/풀 빌딩",
+        "지도 추가",
+        "모듈형 보드",
+        "역할극",
+        "시나리오 게임",
+        "솔로 게임",
+        "스탯 확인",
+        "비대칭 능력"
+      ]
     },
     "반지의제왕가운데땅에서의대결": {
       "id": "반지의제왕가운데땅에서의대결",
@@ -21937,7 +24002,33 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "소설 원작"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "수입",
+        "레이어링",
+        "시장",
+        "모듈형 보드",
+        "다목적 카드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "포인트 이동",
+        "레이스",
+        "상대적 이동",
+        "세트 수집",
+        "돌발 종료",
+        "태그",
+        "공격형 플레이",
+        "기술 트리",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "반지전쟁": {
       "id": "반지전쟁",
@@ -22034,7 +24125,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "판타지",
+        "격투",
+        "소설 원작",
+        "영토 건설",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "영역 이동",
+        "캠페인 카드 구동",
+        "주사위 굴리기",
+        "이벤트",
+        "패 관리"
+      ]
     },
     "배틀쉽": {
       "id": "배틀쉽",
@@ -22090,7 +24198,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "배틀콘-인다인즈의유린": {
       "id": "배틀콘-인다인즈의유린",
@@ -22144,7 +24254,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "백로성": {
       "id": "백로성",
@@ -22241,7 +24353,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "영역 이동",
+        "주사위 굴리기",
+        "최종 보너스",
+        "수입",
+        "결합과 펼치기",
+        "다목적 카드",
+        "공개 드래프팅",
+        "레이스",
+        "자원 큐",
+        "솔로 게임",
+        "가변 셋업",
+        "워커 배치",
+        "주사위 워커 배치"
+      ]
     },
     "백로성대결": {
       "id": "백로성대결",
@@ -22325,7 +24458,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "최종 보너스",
+        "수입",
+        "다목적 카드",
+        "공개 드래프팅",
+        "가변 셋업",
+        "워커 배치"
+      ]
     },
     "버건디의성-20주년": {
       "id": "버건디의성-20주년",
@@ -22416,7 +24562,27 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "주사위",
+        "중세",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "지연 구매",
+        "주사위 굴리기",
+        "최종 보너스",
+        "격자 커버리지",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "타일 배치",
+        "트랙 이동",
+        "스탯 기반 순서",
+        "가변 셋업",
+        "주사위 워커 배치"
+      ]
     },
     "버라지-레이흐바터르-나일강-확장": {
       "id": "버라지-레이흐바터르-나일강-확장",
@@ -22473,7 +24639,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "번레이트": {
       "id": "번레이트",
@@ -22530,7 +24698,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "범고래고래": {
       "id": "범고래고래",
@@ -22587,7 +24757,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "베일오브이터니티": {
       "id": "베일오브이터니티",
@@ -22644,7 +24816,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "벨에포크파리": {
       "id": "벨에포크파리",
@@ -22732,7 +24906,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "퍼즐",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "격자 커버리지",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "사각 격자",
+        "타일 배치"
+      ]
     },
     "보랏빛리라이트-머더미스터리미니": {
       "id": "보랏빛리라이트-머더미스터리미니",
@@ -22786,7 +24973,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "보타닉가든": {
       "id": "보타닉가든",
@@ -22855,7 +25044,13 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "세트 수집"
+      ]
     },
     "보틀임프": {
       "id": "보틀임프",
@@ -22935,7 +25130,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "소설 원작"
+      ],
+      "mechanicsKo": [
+        "핫 포테이토",
+        "점수 후 리셋",
+        "팀 게임",
+        "트릭 테이킹"
+      ]
     },
     "본파이어-빅박스": {
       "id": "본파이어-빅박스",
@@ -22992,7 +25197,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "봄버스터즈": {
       "id": "봄버스터즈",
@@ -23087,7 +25294,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "추리",
+        "기억력",
+        "게임당 1회 능력",
+        "실시간",
+        "시나리오 게임",
+        "돌발 종료"
+      ]
     },
     "봉잡았다": {
       "id": "봉잡았다",
@@ -23145,7 +25365,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "부루마불-클래식": {
       "id": "부루마불-클래식",
@@ -23212,7 +25434,13 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "굴리고 이동"
+      ]
     },
     "북쪽숲을-위하여": {
       "id": "북쪽숲을-위하여",
@@ -23266,7 +25494,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "분레이크": {
       "id": "분레이크",
@@ -23360,7 +25590,29 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미국 서부",
+        "문명",
+        "경제",
+        "탐험",
+        "농업",
+        "산업",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "따라하기",
+        "헥사곤 격자",
+        "수입",
+        "지도 추가",
+        "다목적 카드",
+        "포인트 이동",
+        "솔로 게임",
+        "타일 배치",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "분수영": {
       "id": "분수영",
@@ -23418,7 +25670,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "붉은대성당": {
       "id": "붉은대성당",
@@ -23475,7 +25729,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "붑": {
       "id": "붑",
@@ -23558,7 +25814,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "동물"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "패턴 만들기",
+        "레이스",
+        "밀기/당기기",
+        "사각 격자",
+        "공격형 플레이"
+      ]
     },
     "브라스-버밍엄": {
       "id": "브라스-버밍엄",
@@ -23673,7 +25941,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "이성의 시대",
+        "경제",
+        "산업",
+        "나폴레옹 이후",
+        "기차",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "최종 보너스",
+        "패 관리",
+        "수입",
+        "대출",
+        "시장",
+        "다목적 카드",
+        "네트워크/루트 건설",
+        "소유권",
+        "태그",
+        "기술 트리",
+        "타일 배치",
+        "스탯 기반 순서",
+        "가변 셋업"
+      ]
     },
     "브라질임페리얼": {
       "id": "브라질임페리얼",
@@ -23779,7 +26071,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "문명",
+        "탐험",
+        "산업",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "계약",
+        "격자 이동",
+        "헥사곤 격자",
+        "모듈형 보드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력"
+      ]
     },
     "브뤼셀1897": {
       "id": "브뤼셀1897",
@@ -23835,7 +26146,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "블랙소나타": {
       "id": "블랙소나타",
@@ -23915,7 +26228,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "프린트 앤 플레이",
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "추리",
+        "숨은 이동",
+        "포인트 이동",
+        "욕심 부리기",
+        "솔로 게임"
+      ]
     },
     "블랙아웃홍콩": {
       "id": "블랙아웃홍콩",
@@ -24002,7 +26328,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "탐험"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "주사위 굴리기",
+        "패 관리",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "솔로 게임",
+        "승리 점수를 자원으로"
+      ]
     },
     "블랙프라이데이": {
       "id": "블랙프라이데이",
@@ -24058,7 +26398,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "블로커스3D": {
       "id": "블로커스3D",
@@ -24141,7 +26483,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "패 관리",
+        "타일 배치"
+      ]
     },
     "블리츠크리그": {
       "id": "블리츠크리그",
@@ -24195,7 +26546,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "비어앤브레드": {
       "id": "비어앤브레드",
@@ -24283,7 +26636,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "농업",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "최고-최저 득점",
+        "다목적 카드",
+        "인접 범위",
+        "스탯 기반 순서",
+        "비대칭 능력"
+      ]
     },
     "비티컬처-에센셜": {
       "id": "비티컬처-에센셜",
@@ -24383,7 +26752,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "패 관리",
+        "레이스",
+        "솔로 게임",
+        "순서 경매",
+        "승리 점수를 자원으로",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "빅샷": {
       "id": "빅샷",
@@ -24440,7 +26823,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "빌라봉": {
       "id": "빌라봉",
@@ -24521,7 +26906,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "동물",
+        "레이싱"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "레이스",
+        "사각 격자"
+      ]
     },
     "빌리저": {
       "id": "빌리저",
@@ -24579,7 +26974,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "빌리지-빅박스": {
       "id": "빌리지-빅박스",
@@ -24637,7 +27034,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "사그라다": {
       "id": "사그라다",
@@ -24740,7 +27139,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "주사위",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "주사위 굴리기",
+        "최종 보너스",
+        "격자 커버리지",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "솔로 게임",
+        "순차 진행",
+        "가변 셋업"
+      ]
     },
     "사이드-준풀확": {
       "id": "사이드-준풀확",
@@ -24848,7 +27264,32 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "격투",
+        "SF",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "카드 전투 해결",
+        "계약",
+        "최종 보너스",
+        "강제 헌신",
+        "격자 이동",
+        "헥사곤 격자",
+        "정상 점령",
+        "이동 포인트",
+        "선택형 서사",
+        "솔로 게임",
+        "공격형 플레이",
+        "기술 트리",
+        "비대칭 능력",
+        "가변 셋업",
+        "승리 점수를 자원으로",
+        "지배 구역"
+      ]
     },
     "사이베리온": {
       "id": "사이베리온",
@@ -24903,7 +27344,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "산타마리아": {
       "id": "산타마리아",
@@ -24988,7 +27431,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "문명",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "세트 수집",
+        "타일 배치",
+        "비대칭 능력"
+      ]
     },
     "생츄어리-아크노바게임": {
       "id": "생츄어리-아크노바게임",
@@ -25046,7 +27501,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "서머너워즈": {
       "id": "서머너워즈",
@@ -25100,7 +27557,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "서스펙트게임-클로즈드-서클-미스터리": {
       "id": "서스펙트게임-클로즈드-서클-미스터리",
@@ -25185,7 +27644,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "추리/미스터리"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "솔로 게임",
+        "스토리텔링"
+      ]
     },
     "서스펙트게임-리로드": {
       "id": "서스펙트게임-리로드",
@@ -25239,7 +27708,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "서쪽왕국의건축가": {
       "id": "서쪽왕국의건축가",
@@ -25346,7 +27817,29 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "킬 스틸",
+        "대출",
+        "공개 드래프팅",
+        "솔로 게임",
+        "정적 포획",
+        "태그",
+        "공격형 플레이",
+        "트랙 이동",
+        "비대칭 능력",
+        "가변 셋업",
+        "워커 배치"
+      ]
     },
     "서쪽왕국의성기사": {
       "id": "서쪽왕국의성기사",
@@ -25439,7 +27932,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "시장",
+        "공개 드래프팅",
+        "솔로 게임",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "석기시대": {
       "id": "석기시대",
@@ -25496,7 +28000,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "선물입니다": {
       "id": "선물입니다",
@@ -25548,7 +28054,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "선셋오버워터": {
       "id": "선셋오버워터",
@@ -25626,7 +28134,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "환경"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "세트 수집",
+        "동시 액션 선택",
+        "솔로 게임"
+      ]
     },
     "성투": {
       "id": "성투",
@@ -25702,7 +28220,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "패 관리",
+        "결합과 펼치기"
+      ]
     },
     "세븐원더스-대결-판테온-확장": {
       "id": "세븐원더스-대결-판테온-확장",
@@ -25808,7 +28335,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "카드게임",
+        "도시 건설",
+        "문명",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "수입",
+        "결합과 펼치기",
+        "모듈형 보드",
+        "다목적 카드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "점수 후 리셋",
+        "세트 수집",
+        "돌발 종료",
+        "태그",
+        "기술 트리",
+        "트랙 이동",
+        "줄다리기",
+        "가변 셋업"
+      ]
     },
     "세티": {
       "id": "세티",
@@ -25865,7 +28416,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "센추리1-향신료의-길": {
       "id": "센추리1-향신료의-길",
@@ -25963,7 +28516,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "액션 회수",
+        "더치 경매",
+        "계약",
+        "덱/백/풀 빌딩",
+        "최종 보너스",
+        "패 관리",
+        "미선택 자원 가치 증가",
+        "공개 드래프팅",
+        "세트 수집",
+        "가변 셋업"
+      ]
     },
     "센추리2-동방의-바다": {
       "id": "센추리2-동방의-바다",
@@ -26051,7 +28621,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "항해"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "격자 이동",
+        "모듈형 보드",
+        "픽업 앤 딜리버",
+        "포인트 이동",
+        "세트 수집"
+      ]
     },
     "셜록13": {
       "id": "셜록13",
@@ -26130,7 +28711,13 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "소설 원작"
+      ],
+      "mechanicsKo": []
     },
     "솔튼씨": {
       "id": "솔튼씨",
@@ -26186,7 +28773,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "쇼텐토텐": {
       "id": "쇼텐토텐",
@@ -26281,7 +28870,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "카드 전투 해결",
+        "패 관리",
+        "결합과 펼치기",
+        "레이스",
+        "세트 수집"
+      ]
     },
     "수목원-영": {
       "id": "수목원-영",
@@ -26376,7 +28975,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "패 관리",
+        "덱 이동",
+        "공개 드래프팅",
+        "순서 정하기",
+        "패턴 만들기",
+        "세트 수집",
+        "사각 격자"
+      ]
     },
     "슈뢰딩거의고양이": {
       "id": "슈뢰딩거의고양이",
@@ -26458,7 +29071,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "게임당 1회 능력",
+        "플레이어 탈락"
+      ]
     },
     "스릴팡": {
       "id": "스릴팡",
@@ -26513,7 +29136,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스카우트": {
       "id": "스카우트",
@@ -26599,7 +29224,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "사다리 오르기",
+        "점수 후 리셋"
+      ]
     },
     "스카이마인": {
       "id": "스카이마인",
@@ -26693,7 +29326,29 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "패 관리",
+        "투자",
+        "공개 드래프팅",
+        "자원 이동",
+        "비대칭 정보 역할",
+        "시나리오 게임",
+        "동시 액션 선택",
+        "솔로 게임",
+        "주식 보유",
+        "순서 선점",
+        "비대칭 능력",
+        "승리 점수를 자원으로",
+        "워커 배치"
+      ]
     },
     "스카이섬": {
       "id": "스카이섬",
@@ -26751,7 +29406,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스카이팀-난기류확장": {
       "id": "스카이팀-난기류확장",
@@ -26848,7 +29505,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "항공",
+        "주사위"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "주사위 굴리기",
+        "시나리오 게임",
+        "순차 진행",
+        "비대칭 능력",
+        "가변 셋업",
+        "주사위 워커 배치"
+      ]
     },
     "스크래블-딜럭스": {
       "id": "스크래블-딜럭스",
@@ -26904,7 +29575,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스키티아의침략자": {
       "id": "스키티아의침략자",
@@ -26996,7 +29669,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "주사위 굴리기",
+        "패 관리",
+        "공개 드래프팅",
+        "솔로 게임",
+        "비대칭 능력",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "스타워즈-덱빌딩": {
       "id": "스타워즈-덱빌딩",
@@ -27111,7 +29797,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "격투",
+        "미디어 테마",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "덱/백/풀 빌딩",
+        "공개 드래프팅",
+        "줄다리기"
+      ]
     },
     "스타트업스": {
       "id": "스타트업스",
@@ -27193,7 +29890,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "핫 포테이토",
+        "미선택 자원 가치 증가",
+        "투자",
+        "점수 후 리셋",
+        "세트 수집",
+        "주식 보유"
+      ]
     },
     "스탁파일": {
       "id": "스탁파일",
@@ -27250,7 +29960,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스트라테고-퀵배틀": {
       "id": "스트라테고-퀵배틀",
@@ -27316,7 +30028,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "블러핑",
+        "추리"
+      ],
+      "mechanicsKo": [
+        "격자 이동",
+        "기억력"
+      ]
     },
     "스파이vs스파이": {
       "id": "스파이vs스파이",
@@ -27384,7 +30105,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "만화",
+        "격투",
+        "미로"
+      ],
+      "mechanicsKo": [
+        "픽업 앤 딜리버",
+        "타일 배치"
+      ]
     },
     "스페이스-크루": {
       "id": "스페이스-크루",
@@ -27483,7 +30213,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "SF",
+        "우주 탐험"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "패 관리",
+        "시나리오 게임",
+        "트릭 테이킹"
+      ]
     },
     "스플렌더": {
       "id": "스플렌더",
@@ -27539,7 +30281,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스플렌더-대결": {
       "id": "스플렌더-대결",
@@ -27593,7 +30337,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스플렌더-마블": {
       "id": "스플렌더-마블",
@@ -27649,7 +30395,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스플렌더-찬란한도시확장": {
       "id": "스플렌더-찬란한도시확장",
@@ -27705,7 +30453,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "스플렌더-포켓몬": {
       "id": "스플렌더-포켓몬",
@@ -27761,7 +30511,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "슬리핑퀸즈": {
       "id": "슬리핑퀸즈",
@@ -27858,7 +30610,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "어린이 게임",
+        "판타지",
+        "기억력",
+        "숫자"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "기억력",
+        "세트 수집",
+        "공격형 플레이"
+      ]
     },
     "시간을달리는트라이앵글-머더미스터리미니": {
       "id": "시간을달리는트라이앵글-머더미스터리미니",
@@ -27925,7 +30691,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략"
+      ],
+      "mechanicsKo": [
+        "패턴 만들기",
+        "패턴 인식",
+        "포인트 이동",
+        "타일 배치"
+      ]
     },
     "시냅스챌린지2": {
       "id": "시냅스챌린지2",
@@ -27982,7 +30757,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "시볼루션": {
       "id": "시볼루션",
@@ -28076,7 +30853,27 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "문명",
+        "주사위",
+        "경제",
+        "탐험",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "주사위 굴리기",
+        "이벤트",
+        "수입",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "솔로 게임",
+        "기술 트리",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "시즌스-마법에걸린왕국-운명의길-확장": {
       "id": "시즌스-마법에걸린왕국-운명의길-확장",
@@ -28165,7 +30962,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "패 관리",
+        "공개 드래프팅",
+        "태그",
+        "공격형 플레이",
+        "순차 진행",
+        "승리 점수를 자원으로"
+      ]
     },
     "시체와온천-머더미스터리미니": {
       "id": "시체와온천-머더미스터리미니",
@@ -28221,7 +31033,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "시티체이스": {
       "id": "시티체이스",
@@ -28296,7 +31110,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "숨은 이동"
+      ]
     },
     "실버-아뮬렛": {
       "id": "실버-아뮬렛",
@@ -28353,7 +31175,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "썬플라워밸리": {
       "id": "썬플라워밸리",
@@ -28409,7 +31233,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "쓰루디에이지스-신판": {
       "id": "쓰루디에이지스-신판",
@@ -28506,7 +31332,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "문명",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "경매/입찰",
+        "더치 경매",
+        "이벤트",
+        "수입",
+        "공개 드래프팅",
+        "플레이어 탈락",
+        "태그",
+        "공격형 플레이"
+      ]
     },
     "아그리콜라": {
       "id": "아그리콜라",
@@ -28565,7 +31407,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아그리콜라-크고작은생물들-확장": {
       "id": "아그리콜라-크고작은생물들-확장",
@@ -28646,7 +31490,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "울타리 치기",
+        "미선택 자원 가치 증가",
+        "타일 배치",
+        "순서 선점",
+        "워커 배치"
+      ]
     },
     "아노1800": {
       "id": "아노1800",
@@ -28702,7 +31558,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아를의평원": {
       "id": "아를의평원",
@@ -28788,7 +31646,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "농업",
+        "산업"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "최고-최저 득점",
+        "수입",
+        "세트 수집",
+        "솔로 게임",
+        "순서 선점",
+        "순차 진행",
+        "워커 배치"
+      ]
     },
     "아발론-클래식": {
       "id": "아발론-클래식",
@@ -28842,7 +31715,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아브라카왓": {
       "id": "아브라카왓",
@@ -28898,7 +31773,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아야르": {
       "id": "아야르",
@@ -28954,7 +31831,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아줄": {
       "id": "아줄",
@@ -29055,7 +31934,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "최종 보너스",
+        "격자 커버리지",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "사각 격자",
+        "타일 배치",
+        "순서 선점"
+      ]
     },
     "아컴호러카드게임-던위치-확장": {
       "id": "아컴호러카드게임-던위치-확장",
@@ -29110,7 +32004,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아쿠아티카": {
       "id": "아쿠아티카",
@@ -29208,7 +32104,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "항해"
+      ],
+      "mechanicsKo": [
+        "액션 회수",
+        "계약",
+        "덱/백/풀 빌딩",
+        "최종 보너스",
+        "패 관리",
+        "결합과 펼치기",
+        "공개 드래프팅",
+        "레이스",
+        "세트 수집",
+        "밀기/당기기",
+        "솔로 게임",
+        "태그",
+        "트랙 이동",
+        "비대칭 능력"
+      ]
     },
     "아크노바-마린월드-확장": {
       "id": "아크노바-마린월드-확장",
@@ -29316,7 +32233,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "환경"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "격자 커버리지",
+        "패 관리",
+        "헥사곤 격자",
+        "수입",
+        "미선택 자원 가치 증가",
+        "공개 드래프팅",
+        "레이스",
+        "세트 수집",
+        "솔로 게임",
+        "태그",
+        "타일 배치",
+        "트랙 이동",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "아크로폴리스": {
       "id": "아크로폴리스",
@@ -29372,7 +32313,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "아키텍추라": {
       "id": "아키텍추라",
@@ -29453,7 +32396,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "도시 건설"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "타일 배치"
+      ]
     },
     "알렉산드리아의도서관": {
       "id": "알렉산드리아의도서관",
@@ -29540,7 +32492,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "중세",
+        "종교"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "비공개 드래프팅",
+        "상품 투기",
+        "패 관리",
+        "세트 수집"
+      ]
     },
     "알마마터": {
       "id": "알마마터",
@@ -29622,7 +32587,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "최종 보너스",
+        "패 관리",
+        "타일 배치",
+        "워커 배치"
+      ]
     },
     "알케미스트-왕의골렘-합본": {
       "id": "알케미스트-왕의골렘-합본",
@@ -29678,7 +32653,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "암스테르담": {
       "id": "암스테르담",
@@ -29734,7 +32711,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "애꾸눈선장룰렛게임": {
       "id": "애꾸눈선장룰렛게임",
@@ -29784,7 +32763,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "액시스앤얼라이어스1941-영": {
       "id": "액시스앤얼라이어스1941-영",
@@ -29859,7 +32840,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "워게임",
+        "2차 세계대전"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "영역 이동",
+        "주사위 굴리기",
+        "팀 게임"
+      ]
     },
     "액시스앤얼라이어스1942-영": {
       "id": "액시스앤얼라이어스1942-영",
@@ -29940,7 +32931,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "워게임",
+        "2차 세계대전"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "영역 이동",
+        "주사위 굴리기",
+        "수입",
+        "시뮬레이션",
+        "팀 게임"
+      ]
     },
     "야옹섬": {
       "id": "야옹섬",
@@ -29997,7 +33001,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "양적완화QE": {
       "id": "양적완화QE",
@@ -30079,7 +33085,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "비밀 입찰",
+        "최종 보너스",
+        "기억력",
+        "세트 수집"
+      ]
     },
     "어비스": {
       "id": "어비스",
@@ -30135,7 +33151,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "어센션": {
       "id": "어센션",
@@ -30191,7 +33209,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "어스": {
       "id": "어스",
@@ -30291,7 +33311,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "환경"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "따라하기",
+        "패 관리",
+        "패턴 만들기",
+        "솔로 게임",
+        "태그",
+        "팀 게임",
+        "타일 배치",
+        "가변 셋업",
+        "승리 점수를 자원으로"
+      ]
     },
     "언더워터시티즈": {
       "id": "언더워터시티즈",
@@ -30387,7 +33425,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "도시 건설",
+        "산업",
+        "항해",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "수입",
+        "네트워크/루트 건설",
+        "솔로 게임",
+        "순서 선점",
+        "스탯 기반 순서",
+        "워커 배치"
+      ]
     },
     "언더폴링스카이즈": {
       "id": "언더폴링스카이즈",
@@ -30476,7 +33531,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "모듈형 보드",
+        "게임당 1회 능력",
+        "재굴림과 고정",
+        "시나리오 게임",
+        "솔로 게임",
+        "사각 격자",
+        "돌발 종료",
+        "가변 셋업",
+        "워커 배치",
+        "주사위 워커 배치"
+      ]
     },
     "언락철가면을찾아서": {
       "id": "언락철가면을찾아서",
@@ -30534,7 +33606,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "언락1": {
       "id": "언락1",
@@ -30626,7 +33700,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "실시간 종료",
+        "시나리오 게임",
+        "스토리텔링"
+      ]
     },
     "언락2": {
       "id": "언락2",
@@ -30709,7 +33793,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
+      ]
     },
     "언락3": {
       "id": "언락3",
@@ -30793,7 +33887,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
+      ]
     },
     "언락5": {
       "id": "언락5",
@@ -30850,7 +33954,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "언락6": {
       "id": "언락6",
@@ -30934,7 +34040,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "소설 원작",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
+      ]
     },
     "언락7": {
       "id": "언락7",
@@ -31018,7 +34135,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "실시간",
+        "시나리오 게임"
+      ]
     },
     "언매치드": {
       "id": "언매치드",
@@ -31074,7 +34202,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "얼티밋레일로드": {
       "id": "얼티밋레일로드",
@@ -31154,7 +34284,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "산업",
+        "기차"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "기술 트리",
+        "순서 선점",
+        "워커 배치"
+      ]
     },
     "에버델": {
       "id": "에버델",
@@ -31211,7 +34351,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "에버델듀오": {
       "id": "에버델듀오",
@@ -31298,7 +34440,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "도시 건설",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "협동게임",
+        "수입",
+        "공개 드래프팅",
+        "시나리오 게임",
+        "세트 수집",
+        "솔로 게임",
+        "가변 셋업",
+        "워커 배치"
+      ]
     },
     "에에스오브스페이드": {
       "id": "에에스오브스페이드",
@@ -31370,7 +34529,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미국 서부",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "패 관리",
+        "솔로 게임"
+      ]
     },
     "에이다": {
       "id": "에이다",
@@ -31443,7 +34611,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "산업",
+        "수학"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "패 관리",
+        "론델",
+        "솔로 게임",
+        "기술 트리"
+      ]
     },
     "에이언즈-엔드": {
       "id": "에이언즈-엔드",
@@ -31500,7 +34680,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "에이전트애비뉴": {
       "id": "에이전트애비뉴",
@@ -31588,7 +34770,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "블러핑",
+        "카드게임",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "내가 자르고 네가 고르기",
+        "레이스",
+        "상대적 이동",
+        "세트 수집",
+        "트랙 이동"
+      ]
     },
     "에즈라와-느헤미아": {
       "id": "에즈라와-느헤미아",
@@ -31674,7 +34870,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "도시 건설",
+        "종교"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "패 관리",
+        "다목적 카드",
+        "솔로 게임",
+        "기술 트리",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "엑시트-버려진오두막": {
       "id": "엑시트-버려진오두막",
@@ -31771,7 +34981,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "협동게임"
+      ]
     },
     "엑시트-불길한고성": {
       "id": "엑시트-불길한고성",
@@ -31825,7 +35043,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "엑시트-연구실의비밀": {
       "id": "엑시트-연구실의비밀",
@@ -31921,7 +35141,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "협동게임"
+      ]
     },
     "엑시트-저주받은-섬": {
       "id": "엑시트-저주받은-섬",
@@ -31977,7 +35205,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "엔데버-대항해시대": {
       "id": "엔데버-대항해시대",
@@ -32072,7 +35302,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "탐험",
+        "항해",
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "연결",
+        "최종 보너스",
+        "공개 드래프팅",
+        "포인트 이동",
+        "세트 수집",
+        "시뮬레이션",
+        "기술 트리",
+        "순차 진행",
+        "가변 셋업"
+      ]
     },
     "엔데버심해": {
       "id": "엔데버심해",
@@ -32170,7 +35417,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "환경",
+        "탐험",
+        "항해"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 회수",
+        "연쇄",
+        "협동게임",
+        "최종 보너스",
+        "격자 이동",
+        "지도 추가",
+        "모듈형 보드",
+        "시나리오 게임",
+        "솔로 게임",
+        "기술 트리",
+        "가변 셋업"
+      ]
     },
     "엔들리스윈확장2": {
       "id": "엔들리스윈확장2",
@@ -32227,7 +35493,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "엘더베일의거처": {
       "id": "엘더베일의거처",
@@ -32323,7 +35591,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "판타지",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "액션 회수",
+        "주사위 굴리기",
+        "패 관리",
+        "모듈형 보드",
+        "솔로 게임",
+        "비대칭 능력",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "엘드리치호러-확장": {
       "id": "엘드리치호러-확장",
@@ -32427,7 +35710,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "격투",
+        "공포",
+        "소설 원작",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "협동게임",
+        "주사위 굴리기",
+        "포인트 이동",
+        "자원 이동",
+        "역할극",
+        "솔로 게임",
+        "스탯 확인",
+        "비대칭 능력"
+      ]
     },
     "엘리베이터앞에서": {
       "id": "엘리베이터앞에서",
@@ -32503,7 +35804,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리"
+      ]
     },
     "영리한여우": {
       "id": "영리한여우",
@@ -32560,7 +35868,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "영웅을빌려줘": {
       "id": "영웅을빌려줘",
@@ -32654,7 +35964,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "추리",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "패 관리",
+        "세트 수집",
+        "공격형 플레이"
+      ]
     },
     "오-미우바우": {
       "id": "오-미우바우",
@@ -32711,7 +36033,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "오딘을위하여-노르웨이-사람들-확장-소형확장1": {
       "id": "오딘을위하여-노르웨이-사람들-확장-소형확장1",
@@ -32813,7 +36137,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "농업",
+        "산업",
+        "중세",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "자동 자원 성장",
+        "주사위 굴리기",
+        "울타리 치기",
+        "격자 커버리지",
+        "패 관리",
+        "수입",
+        "레이어링",
+        "패턴 인식",
+        "욕심 부리기",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "패스 순서",
+        "워커 배치"
+      ]
     },
     "오라파마인": {
       "id": "오라파마인",
@@ -32898,7 +36246,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "산업",
+        "중세",
+        "종교",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "미선택 자원 가치 증가",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "오를레앙확장2": {
       "id": "오를레앙확장2",
@@ -32997,7 +36360,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세",
+        "종교",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "덱/백/풀 빌딩",
+        "최종 보너스",
+        "이벤트",
+        "킬 스틸",
+        "포인트 이동",
+        "동시 액션 선택",
+        "기술 트리",
+        "순차 진행",
+        "가변 셋업",
+        "다중 워커 배치"
+      ]
     },
     "오를로이": {
       "id": "오를로이",
@@ -33054,7 +36435,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "오리진스확장": {
       "id": "오리진스확장",
@@ -33137,7 +36520,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "주사위",
+        "신화"
+      ],
+      "mechanicsKo": [
+        "공개 드래프팅",
+        "타일 배치",
+        "스탯 기반 순서",
+        "가변 셋업",
+        "주사위 워커 배치"
+      ]
     },
     "오버부킹": {
       "id": "오버부킹",
@@ -33218,7 +36613,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "유머",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "영역 지배",
+        "상품 투기",
+        "패 관리",
+        "트릭 테이킹"
+      ]
     },
     "오스티아": {
       "id": "오스티아",
@@ -33299,7 +36706,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "도시 건설",
+        "항해"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "수입",
+        "만칼라",
+        "자원 이동",
+        "론델",
+        "세트 수집",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "오하나미": {
       "id": "오하나미",
@@ -33355,7 +36778,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "온마스": {
       "id": "온마스",
@@ -33452,7 +36877,29 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "탐험",
+        "SF",
+        "우주 탐험",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "지연 구매",
+        "최종 보너스",
+        "헥사곤 격자",
+        "수입",
+        "이동 포인트",
+        "세트 수집",
+        "솔로 게임",
+        "기술 트리",
+        "타일 배치",
+        "가변 페이즈 순서",
+        "워커 배치"
+      ]
     },
     "왕국의수도-프라하": {
       "id": "왕국의수도-프라하",
@@ -33544,7 +36991,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "중세",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "영역 지배",
+        "울타리 치기",
+        "최종 보너스",
+        "헥사곤 격자",
+        "수입",
+        "3D 이동",
+        "타일 배치",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "요람에서무덤까지": {
       "id": "요람에서무덤까지",
@@ -33600,7 +37064,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "요코하마": {
       "id": "요코하마",
@@ -33698,7 +37164,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "최종 보너스",
+        "격자 이동",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "세트 수집",
+        "가변 셋업",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "용사가죽었다미스터리파티시리즈": {
       "id": "용사가죽었다미스터리파티시리즈",
@@ -33748,7 +37228,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "우드크래프트": {
       "id": "우드크래프트",
@@ -33804,7 +37286,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "우봉고-3D프로": {
       "id": "우봉고-3D프로",
@@ -33885,7 +37369,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "패턴 만들기",
+        "실시간"
+      ]
     },
     "우봉고3D": {
       "id": "우봉고3D",
@@ -33967,7 +37460,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "패턴 만들기",
+        "실시간"
+      ]
     },
     "우봉고미니": {
       "id": "우봉고미니",
@@ -34050,7 +37552,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "퍼즐",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "실시간",
+        "타일 배치"
+      ]
     },
     "워체스트": {
       "id": "워체스트",
@@ -34141,7 +37652,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "중세",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "격자 이동",
+        "패 관리",
+        "헥사곤 격자",
+        "팀 게임",
+        "순서 선점",
+        "비대칭 능력"
+      ]
     },
     "워터게이트": {
       "id": "워터게이트",
@@ -34195,7 +37722,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "워터딥의군주들": {
       "id": "워터딥의군주들",
@@ -34309,7 +37838,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "숨겨진 역할",
+        "미선택 자원 가치 증가",
+        "소유권",
+        "세트 수집",
+        "공격형 플레이",
+        "순서 선점",
+        "워커 배치"
+      ]
     },
     "원더랜드워-풀확": {
       "id": "원더랜드워-풀확",
@@ -34401,7 +37944,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "소설 원작"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "덱/백/풀 빌딩",
+        "주사위 굴리기",
+        "공개 드래프팅",
+        "욕심 부리기",
+        "론델",
+        "비대칭 능력"
+      ]
     },
     "원더풀월드-부폐와진보-확장-전쟁과-평화-확장": {
       "id": "원더풀월드-부폐와진보-확장-전쟁과-평화-확장",
@@ -34500,7 +38056,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "문명",
+        "경제",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "최종 보너스",
+        "패 관리",
+        "수입",
+        "세트 수집",
+        "동시 액션 선택",
+        "솔로 게임",
+        "비대칭 능력"
+      ]
     },
     "원더풀킹덤": {
       "id": "원더풀킹덤",
@@ -34554,7 +38126,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "원덱던전-스토리즈-확장": {
       "id": "원덱던전-스토리즈-확장",
@@ -34609,7 +38183,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "웨일스트리트-전용매트": {
       "id": "웨일스트리트-전용매트",
@@ -34686,7 +38262,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "경제",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "세트 수집",
+        "주식 보유"
+      ]
     },
     "웬디어른이되렴머더미스터리미니": {
       "id": "웬디어른이되렴머더미스터리미니",
@@ -34756,7 +38342,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리/미스터리",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "추리",
+        "역할극"
+      ]
     },
     "웰컴백투더던전": {
       "id": "웰컴백투더던전",
@@ -34844,7 +38438,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "카드게임",
+        "판타지",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "베팅식 입찰",
+        "기억력",
+        "플레이어 탈락",
+        "욕심 부리기"
+      ]
     },
     "위대한로렌초": {
       "id": "위대한로렌초",
@@ -34901,7 +38507,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "위치스톤": {
       "id": "위치스톤",
@@ -34990,7 +38598,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "격자 커버리지",
+        "헥사곤 격자",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "포인트 이동",
+        "타일 배치"
+      ]
     },
     "윈드밀밸리": {
       "id": "윈드밀밸리",
@@ -35078,7 +38698,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "시장",
+        "다목적 카드",
+        "네트워크/루트 건설",
+        "론델",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "윙스팬-아시아-오세아니아": {
       "id": "윙스팬-아시아-오세아니아",
@@ -35135,7 +38769,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "육식동물짓이야": {
       "id": "육식동물짓이야",
@@ -35190,7 +38826,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "이베큐에이션": {
       "id": "이베큐에이션",
@@ -35279,7 +38917,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "산업",
+        "레이싱",
+        "SF",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "최고-최저 득점",
+        "수입",
+        "픽업 앤 딜리버",
+        "솔로 게임"
+      ]
     },
     "이봐그건내물고기야영": {
       "id": "이봐그건내물고기야영",
@@ -35335,7 +38986,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "이스탄불-주사위게임": {
       "id": "이스탄불-주사위게임",
@@ -35420,7 +39073,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "아라비안",
+        "주사위"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "주사위 굴리기",
+        "세트 수집"
+      ]
     },
     "이지컴이지고": {
       "id": "이지컴이지고",
@@ -35496,7 +39158,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어린이 게임",
+        "주사위"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "욕심 부리기",
+        "재굴림과 고정"
+      ]
     },
     "익스플로딩키튼": {
       "id": "익스플로딩키튼",
@@ -35600,7 +39271,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "만화",
+        "유머"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "핫 포테이토",
+        "플레이어 탈락",
+        "욕심 부리기",
+        "세트 수집",
+        "공격형 플레이"
+      ]
     },
     "인더스트리아": {
       "id": "인더스트리아",
@@ -35657,7 +39342,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "인사이더블랙": {
       "id": "인사이더블랙",
@@ -35732,7 +39419,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "추리",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "숨겨진 역할",
+        "비대칭 정보 역할",
+        "팀 게임",
+        "배신자 게임",
+        "투표"
+      ]
     },
     "인사이드잡": {
       "id": "인사이드잡",
@@ -35821,7 +39520,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "패 관리",
+        "숨겨진 역할",
+        "반협동게임",
+        "팀 게임",
+        "배신자 게임",
+        "트릭 테이킹",
+        "비대칭 능력",
+        "투표"
+      ]
     },
     "인쉬": {
       "id": "인쉬",
@@ -35919,7 +39634,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "카드게임",
+        "탐험",
+        "신화",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "영역 지배",
+        "영역 이동",
+        "캠페인 카드 구동",
+        "비공개 드래프팅",
+        "패 관리",
+        "인터럽트",
+        "정상 점령",
+        "지도 추가",
+        "모듈형 보드",
+        "공격형 플레이",
+        "가변 셋업"
+      ]
     },
     "임페리얼스팀": {
       "id": "임페리얼스팀",
@@ -35975,7 +39711,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "임호텝": {
       "id": "임호텝",
@@ -36061,7 +39799,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "최종 보너스",
+        "모듈형 보드",
+        "세트 수집"
+      ]
     },
     "임호텝-대결": {
       "id": "임호텝-대결",
@@ -36137,7 +39885,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "모듈형 보드",
+        "세트 수집",
+        "워커 배치"
+      ]
     },
     "자금성-디럭스": {
       "id": "자금성-디럭스",
@@ -36223,7 +39980,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "세트 수집",
+        "워커 배치"
+      ]
     },
     "자반도르의셉터": {
       "id": "자반도르의셉터",
@@ -36280,7 +40047,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "자이푸르": {
       "id": "자이푸르",
@@ -36375,7 +40144,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "아라비안",
+        "카드게임",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "숨겨진 승리 점수",
+        "시장",
+        "공개 드래프팅",
+        "레이스",
+        "점수 후 리셋",
+        "세트 수집",
+        "돌발 종료",
+        "순차 진행",
+        "가변 셋업"
+      ]
     },
     "전국-첫번째제국": {
       "id": "전국-첫번째제국",
@@ -36454,7 +40241,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "솔로 게임"
+      ]
     },
     "전지적추리시점": {
       "id": "전지적추리시점",
@@ -36511,7 +40306,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "점박이": {
       "id": "점박이",
@@ -36604,7 +40401,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "주사위"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "계약",
+        "주사위 굴리기",
+        "미선택 자원 가치 증가",
+        "욕심 부리기",
+        "레이스",
+        "재굴림과 고정",
+        "세트 수집",
+        "가변 셋업"
+      ]
     },
     "정령섬-가지와발톱-확장": {
       "id": "정령섬-가지와발톱-확장",
@@ -36661,7 +40474,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "제왕의깃발": {
       "id": "제왕의깃발",
@@ -36717,7 +40532,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "제왕의불꽃": {
       "id": "제왕의불꽃",
@@ -36773,7 +40590,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "젠가": {
       "id": "젠가",
@@ -36918,7 +40737,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "물리적 제거",
+        "단독 패배 게임",
+        "쌓기와 균형"
+      ]
     },
     "좀비사이드-무기를-들어라": {
       "id": "좀비사이드-무기를-들어라",
@@ -36998,7 +40826,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "좀비"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "종이와 연필",
+        "솔로 게임"
+      ]
     },
     "종이와바다": {
       "id": "종이와바다",
@@ -37054,7 +40890,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "죄와벌의도서관미스터리파티시리즈": {
       "id": "죄와벌의도서관미스터리파티시리즈",
@@ -37125,7 +40963,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리/미스터리",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "전달 액션 토큰",
+        "패턴 만들기",
+        "굴리고 이동",
+        "세트 수집"
+      ]
     },
     "줄로레또": {
       "id": "줄로레또",
@@ -37182,7 +41030,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "지킬하이드스코틀랜드야드": {
       "id": "지킬하이드스코틀랜드야드",
@@ -37236,7 +41086,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "차이나타운": {
       "id": "차이나타운",
@@ -37325,7 +41177,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "협상"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "수입",
+        "투자",
+        "협상",
+        "세트 수집",
+        "타일 배치",
+        "교역",
+        "승리 점수를 자원으로"
+      ]
     },
     "챠오챠오": {
       "id": "챠오챠오",
@@ -37402,7 +41269,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "블러핑",
+        "주사위"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "주사위 굴리기"
+      ]
     },
     "첫번째화성인": {
       "id": "첫번째화성인",
@@ -37491,7 +41366,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "탐험",
+        "SF",
+        "우주 탐험"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "레거시 게임",
+        "모듈형 보드",
+        "시나리오 게임",
+        "솔로 게임",
+        "스토리텔링",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "체스": {
       "id": "체스",
@@ -37545,7 +41437,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "촐킨": {
       "id": "촐킨",
@@ -37640,7 +41534,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "문명",
+        "경제",
+        "농업",
+        "신화"
+      ],
+      "mechanicsKo": [
+        "편향",
+        "최종 보너스",
+        "게임당 1회 능력",
+        "트랙 이동",
+        "순서 선점",
+        "워커 배치"
+      ]
     },
     "치킨차차-미니": {
       "id": "치킨차차-미니",
@@ -37729,7 +41638,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "어린이 게임",
+        "기억력"
+      ],
+      "mechanicsKo": [
+        "기억력"
+      ]
     },
     "칠교신도시": {
       "id": "칠교신도시",
@@ -37806,7 +41723,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "격자 커버리지",
+        "최고-최저 득점",
+        "사각 격자"
+      ]
     },
     "카나가와": {
       "id": "카나가와",
@@ -37895,7 +41822,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "욕심 부리기",
+        "세트 수집",
+        "순서 선점",
+        "워커 배치"
+      ]
     },
     "카네기": {
       "id": "카네기",
@@ -37952,7 +41892,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "카르카손-20주년-기념판": {
       "id": "카르카손-20주년-기념판",
@@ -38074,7 +42016,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "울타리 치기",
+        "킬 스틸",
+        "지도 추가",
+        "패턴 만들기",
+        "사각 격자",
+        "타일 배치"
+      ]
     },
     "카르페디엠": {
       "id": "카르페디엠",
@@ -38153,7 +42108,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "계약",
+        "최종 보너스",
+        "공개 드래프팅",
+        "타일 배치",
+        "순차 진행",
+        "가변 셋업"
+      ]
     },
     "카리바": {
       "id": "카리바",
@@ -38209,7 +42176,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "카베르나-잊힌종족-확장": {
       "id": "카베르나-잊힌종족-확장",
@@ -38306,7 +42275,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "경제",
+        "판타지",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "자동 자원 성장",
+        "미선택 자원 가치 증가",
+        "솔로 게임",
+        "타일 배치",
+        "순서 선점",
+        "워커 배치"
+      ]
     },
     "카베르나-동대동": {
       "id": "카베르나-동대동",
@@ -38361,7 +42344,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "카보": {
       "id": "카보",
@@ -38418,7 +42403,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "카이사르": {
       "id": "카이사르",
@@ -38501,7 +42488,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "남북전쟁",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "칩 뽑기",
+        "시뮬레이션",
+        "솔로 게임"
+      ]
     },
     "카탄영-기사56인-확장": {
       "id": "카탄영-기사56인-확장",
@@ -38649,7 +42647,27 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "협상"
+      ],
+      "mechanicsKo": [
+        "연쇄",
+        "주사위 굴리기",
+        "패 관리",
+        "헥사곤 격자",
+        "숨겨진 승리 점수",
+        "수입",
+        "시장",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "레이스",
+        "랜덤 생산",
+        "공격형 플레이",
+        "교역",
+        "가변 셋업"
+      ]
     },
     "카후나": {
       "id": "카후나",
@@ -38739,7 +42757,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "패 관리",
+        "다목적 카드",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "세트 수집",
+        "돌발 종료",
+        "태그",
+        "공격형 플레이"
+      ]
     },
     "캐노피": {
       "id": "캐노피",
@@ -38794,7 +42826,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "캐스캐디아": {
       "id": "캐스캐디아",
@@ -38895,7 +42929,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "환경"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "솔로 게임",
+        "타일 배치",
+        "가변 셋업"
+      ]
     },
     "캐슬콤보": {
       "id": "캐슬콤보",
@@ -38990,7 +43037,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "다목적 카드",
+        "공개 드래프팅",
+        "세트 수집",
+        "태그",
+        "타일 배치"
+      ]
     },
     "캘리코": {
       "id": "캘리코",
@@ -39084,7 +43143,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "동물",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "최종 보너스",
+        "격자 커버리지",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "솔로 게임",
+        "타일 배치"
+      ]
     },
     "캡틴블랙잭": {
       "id": "캡틴블랙잭",
@@ -39142,7 +43217,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "캣레이디": {
       "id": "캣레이디",
@@ -39199,7 +43276,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "커피러시": {
       "id": "커피러시",
@@ -39280,7 +43359,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "격자 이동",
+        "시뮬레이션"
+      ]
     },
     "컬러레또": {
       "id": "컬러레또",
@@ -39374,7 +43461,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "공개 드래프팅",
+        "욕심 부리기",
+        "세트 수집",
+        "패스 순서"
+      ]
     },
     "케일러스1303": {
       "id": "케일러스1303",
@@ -39467,7 +43564,30 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "최종 보너스",
+        "숨겨진 승리 점수",
+        "수입",
+        "공개 드래프팅",
+        "소유권",
+        "자원 이동",
+        "태그",
+        "공격형 플레이",
+        "타일 배치",
+        "순서 선점",
+        "패스 순서",
+        "비대칭 능력",
+        "가변 셋업",
+        "승리 점수를 자원으로",
+        "워커 배치"
+      ]
     },
     "코덱스": {
       "id": "코덱스",
@@ -39524,7 +43644,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "코드네임-듀엣": {
       "id": "코드네임-듀엣",
@@ -39641,7 +43763,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "파티게임",
+        "스파이",
+        "언어 게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "추리",
+        "기억력",
+        "레이스",
+        "팀 게임"
+      ]
     },
     "코티지가든": {
       "id": "코티지가든",
@@ -39727,7 +43863,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "농업",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "타일 배치"
+      ]
     },
     "콩코르디아-비너스-확장": {
       "id": "콩코르디아-비너스-확장",
@@ -39784,7 +43931,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "콰이어트하우스": {
       "id": "콰이어트하우스",
@@ -39841,7 +43990,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "쿠키런킹덤": {
       "id": "쿠키런킹덤",
@@ -39897,7 +44048,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "쿠키박스-포켓몬": {
       "id": "쿠키박스-포켓몬",
@@ -39953,7 +44106,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "쿠트나호라": {
       "id": "쿠트나호라",
@@ -40010,7 +44165,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "쿼리도": {
       "id": "쿼리도",
@@ -40101,7 +44258,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "어린이 게임",
+        "미로"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "격자 이동",
+        "레이스",
+        "사각 격자",
+        "지배 구역"
+      ]
     },
     "쿼키서킷": {
       "id": "쿼키서킷",
@@ -40178,7 +44347,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "미로"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "소통 제한",
+        "협동게임",
+        "프로그래밍 이동"
+      ]
     },
     "퀵소": {
       "id": "퀵소",
@@ -40233,7 +44412,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "퀸도미노": {
       "id": "퀸도미노",
@@ -40323,7 +44504,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "중세",
+        "퍼즐",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "시장",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "타일 배치",
+        "순서 선점"
+      ]
     },
     "큐비토스": {
       "id": "큐비토스",
@@ -40415,7 +44610,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "레이싱"
+      ],
+      "mechanicsKo": [
+        "선두 견제",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "주사위 굴리기",
+        "격자 이동",
+        "시장",
+        "욕심 부리기",
+        "레이스",
+        "재굴림과 고정",
+        "가변 셋업"
+      ]
     },
     "크라스카리어트": {
       "id": "크라스카리어트",
@@ -40470,7 +44681,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "크루세이더": {
       "id": "크루세이더",
@@ -40554,7 +44767,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "최종 보너스",
+        "격자 이동",
+        "헥사곤 격자",
+        "만칼라",
+        "이동 포인트",
+        "론델",
+        "기술 트리",
+        "비대칭 능력"
+      ]
     },
     "크리스탈팰리스": {
       "id": "크리스탈팰리스",
@@ -40610,7 +44839,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "크베들린부르크의돌팔이약장수": {
       "id": "크베들린부르크의돌팔이약장수",
@@ -40710,7 +44941,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "선두 견제",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "이벤트",
+        "인접 범위",
+        "욕심 부리기",
+        "점수 후 리셋",
+        "동시 액션 선택",
+        "트랙 이동",
+        "가변 셋업"
+      ]
     },
     "클라스크": {
       "id": "클라스크",
@@ -40799,7 +45048,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "실시간",
+        "점수 후 리셋"
+      ]
     },
     "클랜오브칼레도니아": {
       "id": "클랜오브칼레도니아",
@@ -40888,7 +45145,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "상품 투기",
+        "계약",
+        "헥사곤 격자",
+        "수입",
+        "시장",
+        "모듈형 보드",
+        "네트워크/루트 건설",
+        "솔로 게임",
+        "패스 순서",
+        "비대칭 능력"
+      ]
     },
     "클랭크": {
       "id": "클랭크",
@@ -40944,7 +45217,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "클랭크카타콤": {
       "id": "클랭크카타콤",
@@ -41000,7 +45275,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "클러스터": {
       "id": "클러스터",
@@ -41063,7 +45340,11 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략"
+      ],
+      "mechanicsKo": []
     },
     "클레임1클레임2": {
       "id": "클레임1클레임2",
@@ -41117,7 +45398,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "클리닉": {
       "id": "클리닉",
@@ -41195,7 +45478,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "의료",
+        "영토 건설",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "선두 견제",
+        "픽업 앤 딜리버",
+        "시뮬레이션",
+        "타일 배치"
+      ]
     },
     "키친러시": {
       "id": "키친러시",
@@ -41252,7 +45548,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "킹덤오브다이스": {
       "id": "킹덤오브다이스",
@@ -41324,7 +45622,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "욕심 부리기",
+        "재굴림과 고정",
+        "솔로 게임"
+      ]
     },
     "킹도미노": {
       "id": "킹도미노",
@@ -41381,7 +45688,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "타르기": {
       "id": "타르기",
@@ -41471,7 +45780,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "아라비안",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "모듈형 보드",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "사각 격자",
+        "순차 진행",
+        "워커 배치"
+      ]
     },
     "타이니에픽던전-스토리즈-확장": {
       "id": "타이니에픽던전-스토리즈-확장",
@@ -41559,7 +45882,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "주사위",
+        "탐험",
+        "판타지",
+        "격투"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "피날레 종료",
+        "모듈형 보드",
+        "솔로 게임",
+        "타일 배치",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "타이니타운": {
       "id": "타이니타운",
@@ -41662,7 +46002,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "동물",
+        "도시 건설",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "따라하기",
+        "격자 커버리지",
+        "패턴 만들기",
+        "플레이어 탈락",
+        "솔로 게임",
+        "사각 격자",
+        "순차 진행",
+        "가변 페이즈 순서",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "탁상탐정단1": {
       "id": "탁상탐정단1",
@@ -41716,7 +46075,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "탁상탐정단2": {
       "id": "탁상탐정단2",
@@ -41813,7 +46174,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "추리/미스터리"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "시나리오 게임",
+        "솔로 게임",
+        "스토리텔링",
+        "팀 게임"
+      ]
     },
     "탁상탐정단3": {
       "id": "탁상탐정단3",
@@ -41901,7 +46274,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "유머",
+        "추리/미스터리"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "시나리오 게임",
+        "솔로 게임",
+        "팀 게임"
+      ]
     },
     "탁상탐정단4": {
       "id": "탁상탐정단4",
@@ -41985,7 +46370,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "추리/미스터리"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "추리",
+        "시나리오 게임",
+        "솔로 게임"
+      ]
     },
     "탐험가들": {
       "id": "탐험가들",
@@ -42041,7 +46436,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "태양너머로-새여명의지도자들-확장": {
       "id": "태양너머로-새여명의지도자들-확장",
@@ -42128,7 +46525,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "문명",
+        "SF",
+        "우주 탐험"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "계약",
+        "최종 보너스",
+        "이벤트",
+        "수입",
+        "포인트 이동",
+        "기술 트리",
+        "워커 배치"
+      ]
     },
     "태양신라": {
       "id": "태양신라",
@@ -42233,7 +46645,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "신화"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "1회전 경매",
+        "폐쇄 경제 경매",
+        "제한 입찰",
+        "숨겨진 승리 점수",
+        "욕심 부리기",
+        "세트 수집"
+      ]
     },
     "테라포밍마스-서곡-맵확장": {
       "id": "테라포밍마스-서곡-맵확장",
@@ -42347,7 +46772,31 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "문명",
+        "경제",
+        "환경",
+        "산업",
+        "SF",
+        "우주 탐험",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "헥사곤 격자",
+        "수입",
+        "솔로 게임",
+        "태그",
+        "공격형 플레이",
+        "타일 배치",
+        "순차 진행",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "테라포밍마스주사위": {
       "id": "테라포밍마스주사위",
@@ -42404,7 +46853,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "테오티우아칸": {
       "id": "테오티우아칸",
@@ -42504,7 +46955,30 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "도시 건설",
+        "경제"
+      ],
+      "mechanicsKo": [
+        "영역 이동",
+        "최종 보너스",
+        "이벤트",
+        "격자 커버리지",
+        "레이어링",
+        "소유권",
+        "론델",
+        "점수 후 리셋",
+        "세트 수집",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "트랙 이동",
+        "가변 셋업",
+        "승리 점수를 자원으로",
+        "주사위 워커 배치"
+      ]
     },
     "테케누": {
       "id": "테케누",
@@ -42594,7 +47068,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "주사위",
+        "신화"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "수입",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "스탯 기반 순서",
+        "가변 셋업"
+      ]
     },
     "텔미모어": {
       "id": "텔미모어",
@@ -42659,7 +47146,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "파티게임"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "스토리텔링"
+      ]
     },
     "트라야누스": {
       "id": "트라야누스",
@@ -42715,7 +47210,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "트루아-영": {
       "id": "트루아-영",
@@ -42807,7 +47304,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "경제",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "주사위 굴리기",
+        "최종 보너스",
+        "이벤트",
+        "숨겨진 승리 점수",
+        "수입",
+        "소유권",
+        "세트 수집",
+        "밀기/당기기",
+        "솔로 게임",
+        "순차 진행",
+        "가변 셋업",
+        "주사위 워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "트릭케리언": {
       "id": "트릭케리언",
@@ -42889,7 +47407,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "나폴레옹 이후"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "액션 큐",
+        "선두 견제",
+        "주사위 굴리기",
+        "동시 액션 선택",
+        "타일 배치",
+        "스탯 기반 순서",
+        "워커 배치",
+        "다중 워커 배치"
+      ]
     },
     "트릭테이커스": {
       "id": "트릭테이커스",
@@ -42954,7 +47486,11 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": []
     },
     "티츄-딜럭스": {
       "id": "티츄-딜럭스",
@@ -43008,7 +47544,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "티칼": {
       "id": "티칼",
@@ -43111,7 +47649,29 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "고대",
+        "탐험",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "경매/입찰",
+        "이벤트",
+        "격자 이동",
+        "헥사곤 격자",
+        "킬 스틸",
+        "레이어링",
+        "지도 추가",
+        "모듈형 보드",
+        "세트 수집",
+        "타일 배치",
+        "승리 점수를 자원으로",
+        "지배 구역"
+      ]
     },
     "티켓투라이드-유럽-15주년-기념판": {
       "id": "티켓투라이드-유럽-15주년-기념판",
@@ -43209,7 +47769,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "기차"
+      ],
+      "mechanicsKo": [
+        "연결",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "네트워크/루트 건설",
+        "공개 드래프팅",
+        "욕심 부리기",
+        "세트 수집"
+      ]
     },
     "티키토플": {
       "id": "티키토플",
@@ -43289,7 +47862,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "블러핑",
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "패턴 인식"
+      ]
     },
     "틸레툼": {
       "id": "틸레툼",
@@ -43346,7 +47928,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "파러웨이": {
       "id": "파러웨이",
@@ -43451,7 +48035,22 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "판타지",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "제한 입찰",
+        "최종 보너스",
+        "패 관리",
+        "공개 드래프팅",
+        "순서 선택 입찰",
+        "세트 수집",
+        "동시 액션 선택",
+        "태그"
+      ]
     },
     "파수꾼들-셋어와치": {
       "id": "파수꾼들-셋어와치",
@@ -43535,7 +48134,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "카드게임",
+        "주사위",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "솔로 게임",
+        "비대칭 능력"
+      ]
     },
     "팍스파미르": {
       "id": "팍스파미르",
@@ -43616,7 +48227,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "경제",
+        "협상",
+        "정치",
+        "스파이"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "영역 이동",
+        "패 관리",
+        "시뮬레이션"
+      ]
     },
     "판타지디펜스": {
       "id": "판타지디펜스",
@@ -43671,7 +48295,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "판타지왕국": {
       "id": "판타지왕국",
@@ -43762,7 +48388,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "판타지"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "공개 드래프팅",
+        "세트 수집",
+        "태그"
+      ]
     },
     "팔레오": {
       "id": "팔레오",
@@ -43858,7 +48495,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "탐험",
+        "선사시대"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "협동게임",
+        "덱/백/풀 빌딩",
+        "기억력",
+        "시나리오 게임",
+        "동시 액션 선택",
+        "가변 셋업"
+      ]
     },
     "패치워크-크리스마스에디션": {
       "id": "패치워크-크리스마스에디션",
@@ -43968,7 +48619,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "경제",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "격자 커버리지",
+        "수입",
+        "공개 드래프팅",
+        "론델",
+        "사각 격자",
+        "타일 배치",
+        "스탯 기반 순서",
+        "타임 트랙 순서",
+        "승리 점수를 자원으로"
+      ]
     },
     "팬데믹-벼랑끝에서-확장": {
       "id": "팬데믹-벼랑끝에서-확장",
@@ -44025,7 +48692,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "팬암영": {
       "id": "팬암영",
@@ -44110,7 +48779,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "항공",
+        "경제",
+        "운송"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "고정 입찰",
+        "연결",
+        "제한 입찰",
+        "주사위 굴리기",
+        "이벤트",
+        "수입",
+        "투자",
+        "주식 보유",
+        "순서 선점",
+        "순차 진행",
+        "워커 배치"
+      ]
     },
     "퍼스트클래스": {
       "id": "퍼스트클래스",
@@ -44175,7 +48863,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제"
+      ],
+      "mechanicsKo": [
+        "굴리고 이동",
+        "주식 보유"
+      ]
     },
     "펄서2849": {
       "id": "펄서2849",
@@ -44260,7 +48955,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "주사위",
+        "SF",
+        "우주 탐험"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "공개 드래프팅",
+        "포인트 이동",
+        "주사위 워커 배치"
+      ]
     },
     "페야의늪": {
       "id": "페야의늪",
@@ -44315,7 +49021,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "페이퍼사파리": {
       "id": "페이퍼사파리",
@@ -44400,7 +49108,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "동물",
+        "카드게임",
+        "어린이 게임",
+        "비디오게임 테마"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "공개 드래프팅",
+        "점수 후 리셋",
+        "세트 수집"
+      ]
     },
     "페이퍼사파리스모키": {
       "id": "페이퍼사파리스모키",
@@ -44456,7 +49176,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "펜스테르담": {
       "id": "펜스테르담",
@@ -44522,7 +49244,13 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어린이 게임"
+      ],
+      "mechanicsKo": [
+        "패턴 인식"
+      ]
     },
     "펠리시티-자루속고양이": {
       "id": "펠리시티-자루속고양이",
@@ -44578,7 +49306,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "펭귄얼음깨기": {
       "id": "펭귄얼음깨기",
@@ -44657,7 +49387,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "동물",
+        "어린이 게임",
+        "미디어 테마"
+      ],
+      "mechanicsKo": [
+        "물리적 제거",
+        "플레이어 탈락",
+        "욕심 부리기"
+      ]
     },
     "포레스트셔플": {
       "id": "포레스트셔플",
@@ -44713,7 +49454,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "포비든데저트": {
       "id": "포비든데저트",
@@ -44811,7 +49554,26 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "판타지",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "편향",
+        "협동게임",
+        "격자 이동",
+        "패 관리",
+        "지도 변형",
+        "모듈형 보드",
+        "픽업 앤 딜리버",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "비대칭 능력"
+      ]
     },
     "포비든아일랜드": {
       "id": "포비든아일랜드",
@@ -44913,7 +49675,27 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "어드벤처",
+        "판타지",
+        "SF"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "협동게임",
+        "이벤트",
+        "격자 이동",
+        "패 관리",
+        "지도 축소",
+        "모듈형 보드",
+        "픽업 앤 딜리버",
+        "세트 수집",
+        "솔로 게임",
+        "사각 격자",
+        "타일 배치",
+        "비대칭 능력"
+      ]
     },
     "포션폭발-다섯번째학생-확장": {
       "id": "포션폭발-다섯번째학생-확장",
@@ -45012,7 +49794,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "퍼즐"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "공개 드래프팅",
+        "패턴 인식",
+        "물리적 제거",
+        "세트 수집",
+        "공격형 플레이",
+        "가변 셋업"
+      ]
     },
     "포켓디텍티브-13": {
       "id": "포켓디텍티브-13",
@@ -45097,7 +49892,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "스토리텔링"
+      ]
     },
     "포켓몬사다리게임": {
       "id": "포켓몬사다리게임",
@@ -45147,7 +49950,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "포트로얄": {
       "id": "포트로얄",
@@ -45250,7 +50055,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "경제",
+        "항해",
+        "해적"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "이벤트",
+        "수입",
+        "덱 이동",
+        "공개 드래프팅",
+        "소유권",
+        "욕심 부리기",
+        "레이스",
+        "세트 수집",
+        "태그"
+      ]
     },
     "폭시": {
       "id": "폭시",
@@ -45311,7 +50134,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "푸들택시": {
       "id": "푸들택시",
@@ -45361,7 +50186,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "푸에르토리코-2014": {
       "id": "푸에르토리코-2014",
@@ -45452,7 +50279,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "경제",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "액션 드래프팅",
+        "최종 보너스",
+        "따라하기",
+        "숨겨진 승리 점수",
+        "미선택 자원 가치 증가",
+        "순차 진행",
+        "가변 페이즈 순서"
+      ]
     },
     "프라이머-각성": {
       "id": "프라이머-각성",
@@ -45531,7 +50372,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "판타지",
+        "격투",
+        "미니어처"
+      ],
+      "mechanicsKo": [
+        "협동게임",
+        "패 관리",
+        "시나리오 게임",
+        "솔로 게임",
+        "비대칭 능력"
+      ]
     },
     "프레스코": {
       "id": "프레스코",
@@ -45613,7 +50466,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "액션 큐",
+        "격자 이동",
+        "시장",
+        "세트 수집",
+        "동시 액션 선택",
+        "스탯 기반 순서",
+        "워커 배치"
+      ]
     },
     "프로젝트L": {
       "id": "프로젝트L",
@@ -45671,7 +50536,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "플립타운": {
       "id": "플립타운",
@@ -45757,7 +50624,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "미국 서부",
+        "카드게임",
+        "프린트 앤 플레이"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "종이와 연필",
+        "솔로 게임",
+        "기술 트리",
+        "트랙 이동",
+        "비대칭 능력"
+      ]
     },
     "피렌체의제후-영": {
       "id": "피렌체의제후-영",
@@ -45860,7 +50740,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "르네상스"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "최종 보너스",
+        "격자 커버리지",
+        "타일 배치",
+        "승리 점수를 자원으로"
+      ]
     },
     "핀카": {
       "id": "핀카",
@@ -45952,7 +50843,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "농업"
+      ],
+      "mechanicsKo": [
+        "계약",
+        "만칼라",
+        "게임당 1회 능력",
+        "론델",
+        "세트 수집"
+      ]
     },
     "필름을감아일": {
       "id": "필름을감아일",
@@ -46008,7 +50910,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "하나미코지": {
       "id": "하나미코지",
@@ -46062,7 +50966,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "하나비-거대한불꽃": {
       "id": "하나비-거대한불꽃",
@@ -46167,7 +51073,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임",
+        "추리",
+        "기억력"
+      ],
+      "mechanicsKo": [
+        "소통 제한",
+        "협동게임",
+        "패 관리",
+        "기억력",
+        "순서 정하기",
+        "세트 수집"
+      ]
     },
     "하다라": {
       "id": "하다라",
@@ -46255,7 +51174,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "도시 건설",
+        "문명"
+      ],
+      "mechanicsKo": [
+        "최종 보너스",
+        "기억력",
+        "공개 드래프팅",
+        "세트 수집",
+        "동시 액션 선택"
+      ]
     },
     "하드리아누스방벽": {
       "id": "하드리아누스방벽",
@@ -46345,7 +51275,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "도시 건설"
+      ],
+      "mechanicsKo": [
+        "패 관리",
+        "종이와 연필",
+        "솔로 게임",
+        "기술 트리"
+      ]
     },
     "하모니즈": {
       "id": "하모니즈",
@@ -46403,7 +51343,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "하이브": {
       "id": "하이브",
@@ -46494,7 +51436,20 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추상 전략",
+        "동물"
+      ],
+      "mechanicsKo": [
+        "울타리 치기",
+        "격자 이동",
+        "헥사곤 격자",
+        "패턴 이동",
+        "피스가 지도",
+        "3D 이동",
+        "타일 배치"
+      ]
     },
     "하이소사이어티": {
       "id": "하이소사이어티",
@@ -46602,7 +51557,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "경매/입찰",
+        "패스 경매",
+        "제한 입찰",
+        "패 관리"
+      ]
     },
     "하트오브크라운페어리-확장2": {
       "id": "하트오브크라운페어리-확장2",
@@ -46658,7 +51622,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "한자토이토니카-빅박스": {
       "id": "한자토이토니카-빅박스",
@@ -46747,7 +51713,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "중세"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "최종 보너스",
+        "네트워크/루트 건설",
+        "소유권",
+        "공격형 플레이",
+        "기술 트리"
+      ]
     },
     "할러타우": {
       "id": "할러타우",
@@ -46804,7 +51782,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "할리갈리컵스": {
       "id": "할리갈리컵스",
@@ -46919,7 +51899,18 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "순발력",
+        "카드게임",
+        "어린이 게임",
+        "파티게임",
+        "실시간"
+      ],
+      "mechanicsKo": [
+        "패턴 인식",
+        "플레이어 탈락"
+      ]
     },
     "할리우드골든에이지": {
       "id": "할리우드골든에이지",
@@ -46976,7 +51967,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "항로개척자": {
       "id": "항로개척자",
@@ -47036,7 +52029,11 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "파티게임"
+      ],
+      "mechanicsKo": []
     },
     "해기스": {
       "id": "해기스",
@@ -47117,7 +52114,16 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "배팅과 블러핑",
+        "패 관리",
+        "사다리 오르기",
+        "팀 게임"
+      ]
     },
     "핵클레드-확장": {
       "id": "핵클레드-확장",
@@ -47205,7 +52211,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "교육",
+        "협상",
+        "정치"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "패 관리",
+        "시뮬레이션",
+        "비대칭 능력",
+        "투표",
+        "다중 워커 배치"
+      ]
     },
     "햄버거타이쿤": {
       "id": "햄버거타이쿤",
@@ -47257,7 +52277,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "행복을찾아서": {
       "id": "행복을찾아서",
@@ -47323,7 +52345,14 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "카드게임"
+      ],
+      "mechanicsKo": [
+        "패턴 만들기",
+        "세트 수집"
+      ]
     },
     "행성x를찾아서": {
       "id": "행성x를찾아서",
@@ -47416,7 +52445,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "추리",
+        "퍼즐",
+        "우주 탐험"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "추리",
+        "최종 보너스",
+        "종이와 연필",
+        "론델",
+        "솔로 게임",
+        "타임 트랙 순서"
+      ]
     },
     "허즐방탈출-Hex-it": {
       "id": "허즐방탈출-Hex-it",
@@ -47492,7 +52535,23 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "SF",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "격자 이동",
+        "헥사곤 격자",
+        "시야",
+        "이동 포인트",
+        "시나리오 게임",
+        "시뮬레이션",
+        "솔로 게임",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "헤게모니-역사적사건들-확장": {
       "id": "헤게모니-역사적사건들-확장",
@@ -47578,7 +52637,21 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "교육",
+        "협상",
+        "정치"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "패 관리",
+        "시뮬레이션",
+        "비대칭 능력",
+        "투표",
+        "다중 워커 배치"
+      ]
     },
     "혁신의시대": {
       "id": "혁신의시대",
@@ -47636,7 +52709,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "황금의강영": {
       "id": "황금의강영",
@@ -47722,7 +52797,25 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "경제",
+        "판타지",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "계약",
+        "주사위 굴리기",
+        "주사위 아이콘 해결",
+        "최종 보너스",
+        "시장",
+        "다목적 카드",
+        "공개 드래프팅",
+        "소유권",
+        "세트 수집",
+        "트랙 이동"
+      ]
     },
     "황금의땅-엘도라도": {
       "id": "황금의땅-엘도라도",
@@ -47779,7 +52872,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "황하와장강": {
       "id": "황하와장강",
@@ -47864,7 +52959,24 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "문명",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "액션 포인트",
+        "영역 지배",
+        "패 관리",
+        "헥사곤 격자",
+        "숨겨진 승리 점수",
+        "최고-최저 득점",
+        "수입",
+        "공개 드래프팅",
+        "세트 수집",
+        "타일 배치"
+      ]
     },
     "황혼의투쟁": {
       "id": "황혼의투쟁",
@@ -47962,7 +53074,28 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "현대 전쟁",
+        "정치",
+        "워게임"
+      ],
+      "mechanicsKo": [
+        "액션/이벤트",
+        "어드밴티지 토큰",
+        "영역 지배",
+        "캠페인 카드 구동",
+        "주사위 굴리기",
+        "이벤트",
+        "패 관리",
+        "시뮬레이션",
+        "동시 액션 선택",
+        "스탯 확인",
+        "돌발 종료",
+        "줄다리기",
+        "비대칭 능력",
+        "가변 셋업"
+      ]
     },
     "후지": {
       "id": "후지",
@@ -48018,7 +53151,9 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [],
+      "mechanicsKo": []
     },
     "휘슬마운틴": {
       "id": "휘슬마운틴",
@@ -48099,7 +53234,15 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "산업"
+      ],
+      "mechanicsKo": [
+        "타일 배치",
+        "비대칭 능력",
+        "워커 배치"
+      ]
     },
     "럼블네이션": {
       "id": "럼블네이션",
@@ -48180,7 +53323,19 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "남북전쟁",
+        "중세",
+        "영토 건설"
+      ],
+      "mechanicsKo": [
+        "영역 지배",
+        "지역 충동",
+        "주사위 굴리기",
+        "게임당 1회 능력",
+        "재굴림과 고정"
+      ]
     },
     "테베": {
       "id": "테베",
@@ -48261,7 +53416,17 @@
           "bestPlayers",
           "recommendedPlayers"
         ]
-      }
+      },
+      "categoriesKo": [
+        "고대",
+        "탐험",
+        "여행"
+      ],
+      "mechanicsKo": [
+        "포인트 이동",
+        "세트 수집",
+        "타임 트랙 순서"
+      ]
     }
   }
 }

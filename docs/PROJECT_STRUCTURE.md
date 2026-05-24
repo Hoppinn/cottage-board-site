@@ -395,8 +395,9 @@ tools/
 ├── 0-input/                         ← 게임 데이터 입력 도구
 ├── 1-matcher/                       ← 한국어명 → BGG ID 매칭 파이프라인
 ├── 2-fetcher/                       ← BGG API 수집 도구
-├── 3-build-master/                  ← master.json 빌드 (현재 stub)
-└── 4-build-output/                  ← 사이트 출력 데이터 빌드
+├── 3-build-master/                  ← master.json 빌드
+├── 4-label-translator/              ← BGG 영어 labels → 한국어 번역 (categoriesKo / mechanicsKo)
+└── 5-build-output/                  ← 사이트 출력 데이터 빌드
 ```
 
 ---
@@ -575,12 +576,33 @@ categories, mechanics, suggested_numplayers
 
 ---
 
-### tools/4-build-output/
+### tools/4-label-translator/
+
+BGG 영어 labels를 한국어로 번역해 master.json에 추가하는 도구.
+
+```
+4-label-translator/
+└── label-translator.js
+```
+
+**label-translator.js**
+
+입력: library/1-master/cottage-owned-games-master.json
+출력: 동일 파일 (categoriesKo / mechanicsKo 필드 추가)
+
+번역 소스: config/bgg-label-map.js (categories 69개 + mechanics 173개)
+미번역 항목은 원문 그대로 유지하고 콘솔에 경고 출력.
+
+실행: node game-system/tools/4-label-translator/label-translator.js (또는 npm run translate)
+
+---
+
+### tools/5-build-output/
 
 사이트 출력 데이터(library/3-output/) 빌드 도구.
 
 ```
-4-build-output/
+5-build-output/
 └── build-output.js
 ```
 
@@ -591,7 +613,7 @@ categories, mechanics, suggested_numplayers
 
 내부적으로 _core/auto-tagger.js의 mergeCottageTags()를 호출해서 태그를 병합한다.
 
-실행: node game-system/tools/4-build-output/build-output.js (또는 npm run build)
+실행: node game-system/tools/5-build-output/build-output.js (또는 npm run build)
 
 주의: master.json이 없거나 비어있으면 실패. 먼저 npm run build:master 를 실행해야 한다.
 
@@ -617,7 +639,11 @@ tools/3-build-master/build-master.js  (npm run build:master)
 library/1-master/cottage-owned-games-master.json
 library/2-ledger/cottage-owned-games-ledger.json
         ↓
-tools/4-build-output/build-output.js  (npm run build)
+tools/4-label-translator/label-translator.js  (npm run translate)
+        ↓
+library/1-master/cottage-owned-games-master.json  (categoriesKo / mechanicsKo 추가)
+        ↓
+tools/5-build-output/build-output.js  (npm run build)
         ↓
 library/3-output/cottage-games-data-output.js / .json
         ↓

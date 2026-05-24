@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build:master": "node game-system/tools/3-build-master/build-master.js",
-    "build": "node game-system/tools/4-build-output/build-output.js",
+    "translate": "node game-system/tools/4-label-translator/label-translator.js",
+    "build": "node game-system/tools/5-build-output/build-output.js",
     "match:local": "node game-system/tools/1-matcher/b_run-local-match.js",
     "match:api": "node game-system/tools/1-matcher/a_run-api-match.js",
     "fetch:bgg": "node game-system/tools/2-fetcher/a_fetch-bgg-game-data-by-id.js",
