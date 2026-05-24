@@ -1326,6 +1326,13 @@ const shelfLabel =
           : ""
       }
 
+<section class="sheet-section sheet-rating-section">
+  <h4>손님 별점</h4>
+  <div class="cottage-rating-widget" data-game-id="${gameKey}">
+    <div class="cottage-rating-loading">불러오는 중...</div>
+  </div>
+</section>
+
 <section class="sheet-section">
   <a
     class="sheet-action-btn"
@@ -1338,10 +1345,10 @@ const shelfLabel =
     </div>
   `;
 
-
-  
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
+
+  initCottageRatingWidget(gameKey).catch(() => {});
 }
 
 function closeGameSheet(){
@@ -1351,6 +1358,80 @@ function closeGameSheet(){
 
   gameSheet.classList.remove('is-active');
   document.body.classList.remove('sheet-open');
+}
+
+// ── 손님 별점 위젯 ──────────────────────────────────────
+
+function renderStarIcons(value) {
+  return [1, 2, 3, 4, 5]
+    .map((n) => `<span class="cottage-star-icon ${n <= value ? "filled" : ""}">${n <= value ? "★" : "☆"}</span>`)
+    .join("");
+}
+
+function renderRatingWidget(widget, gameKey, ratingData, myRating) {
+  const avgText = ratingData
+    ? `평균 ${ratingData.avg}점 · ${ratingData.count}명`
+    : "아직 별점이 없어요";
+
+  if (myRating) {
+    widget.innerHTML = `
+      <div class="cottage-rating-result">
+        <div class="cottage-rating-stars">${renderStarIcons(myRating)}</div>
+        <p class="cottage-rating-info">내 별점 ${myRating}점 · ${avgText}</p>
+      </div>`;
+    return;
+  }
+
+  widget.innerHTML = `
+    <div class="cottage-star-input" data-game-id="${gameKey}">
+      ${[1, 2, 3, 4, 5]
+        .map((n) => `<button class="cottage-star-btn" data-value="${n}" aria-label="${n}점">★</button>`)
+        .join("")}
+    </div>
+    ${ratingData ? `<p class="cottage-rating-info">${avgText}</p>` : ""}`;
+}
+
+async function initCottageRatingWidget(gameKey) {
+  const widget = document.querySelector(`.cottage-rating-widget[data-game-id="${gameKey}"]`);
+  if (!widget) return;
+
+  if (!window.CottageDB) {
+    widget.style.display = "none";
+    return;
+  }
+
+  window.CottageDB.trackView(gameKey);
+
+  const [ratingData] = await Promise.all([
+    window.CottageDB.getGameRating(gameKey),
+  ]);
+  const myRating = window.CottageDB.getMyRating(gameKey);
+
+  renderRatingWidget(widget, gameKey, ratingData, myRating);
+}
+
+// 별점 클릭 이벤트 (이벤트 위임)
+if (gameSheetContent) {
+  gameSheetContent.addEventListener("click", async function (e) {
+    const btn = e.target.closest(".cottage-star-btn");
+    if (!btn || !window.CottageDB) return;
+
+    const container = btn.closest(".cottage-star-input");
+    const gameKey = container?.dataset.gameId;
+    const rating = parseInt(btn.dataset.value, 10);
+    if (!gameKey || !rating) return;
+
+    // 즉시 선택 피드백 — 버튼 비활성화
+    container.querySelectorAll(".cottage-star-btn").forEach((b) => (b.disabled = true));
+
+    const result = await window.CottageDB.submitRating(gameKey, rating);
+    const widget = document.querySelector(`.cottage-rating-widget[data-game-id="${gameKey}"]`);
+    if (!widget) return;
+
+    const ratingData = await window.CottageDB.getGameRating(gameKey);
+    const myRating = result.alreadyRated ? result.myRating : rating;
+    renderRatingWidget(widget, gameKey, ratingData, myRating);
+  });
 }
 
 
