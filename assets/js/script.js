@@ -603,20 +603,12 @@ const allTags = [
 
 
   const moodTagMap = {
-    fun: ["funny", "light", "party"],
-brain: [
-  "brainy",
-  "머리 쓰는",
-  "puzzle",
-  "abstract",
-  "pattern",
-  "tile_placement",
-  "number",
-  "set_collection",
-  "hand_management",
-  "card_drafting",
-  "light_strategy"
-],
+    fun:      ["funny", "light", "party", "chaotic"],
+    brain:    ["brainy", "머리 쓰는", "puzzle", "abstract", "pattern", "tile_placement", "number", "set_collection", "hand_management", "card_drafting", "light_strategy"],
+    talk:     ["table_talk", "social", "bluffing", "hidden_role", "betrayal", "negotiation"],
+    immersive:["immersive", "tense", "storytelling"],
+    coop:     ["cooperative", "coop", "team"],
+    social:   ["social", "table_talk", "bluffing", "hidden_role"],
   };
 
   const targetTags =
@@ -744,7 +736,15 @@ if (weight > maxWeight) {
   }
 
   const MAX_CARDS = 5;
-  const displayGames = filteredGames.slice(0, MAX_CARDS);
+  const seenBaseTitles = new Set();
+  const dedupedGames = filteredGames.filter(game => {
+    const title = GameView.getDisplayTitle(game);
+    const base = title.replace(/\s*\d+\s*$/, "").trim();
+    if (seenBaseTitles.has(base)) return false;
+    seenBaseTitles.add(base);
+    return true;
+  });
+  const displayGames = dedupedGames.slice(0, MAX_CARDS);
   const hasMore = filteredGames.length > MAX_CARDS;
 
   const cardsHtml =
@@ -1145,11 +1145,17 @@ function openGameSheet(gameKey){
     : "";
 
   const bestText = formatPlayers(detail.bestPlayers);
-  const recText  = formatPlayers(detail.recommendedPlayers);
+  const recArr   = detail.recommendedPlayers;
+  const recShort = (Array.isArray(recArr) && recArr.length)
+    ? (() => {
+        const s = [...recArr].map(Number).sort((a,b)=>a-b);
+        return s[0] === s[s.length-1] ? `${s[0]}` : `${s[0]}~${s[s.length-1]}`;
+      })()
+    : null;
   const playersLine =
-    bestText !== "-" && recText !== "-" ? `베스트 ${bestText} (추천 ${recText})`
+    bestText !== "-" && recShort ? `베스트 ${bestText} (추천 ${recShort}명)`
     : bestText !== "-" ? `베스트 ${bestText}`
-    : recText !== "-" ? `추천 ${recText}`
+    : recShort ? `추천 ${recShort}명`
     : detail.playerRangeText || "-";
 
   const shelfGroupId = game.cottage?.shelfGroupId || "";
@@ -1194,18 +1200,26 @@ function openGameSheet(gameKey){
       🎯 ${difficultyLabel}${weightDisplay}
     </p>
 
-    <!-- 평점 한 줄 -->
-    <div class="sheet-ratings-row">
-      <div class="sheet-bgg-rating">
-        <span class="sheet-cottage-label">BGG 평점</span>
-        <strong>⭐ ${formatRating(detail.rating)}</strong>
-      </div>
-      <div class="sheet-cottage-rating">
-        <span class="sheet-cottage-label">손님 별점</span>
-        <div class="cottage-rating-widget" data-game-id="${gameKey}">
-          <div class="cottage-rating-loading">불러오는 중...</div>
+    <!-- 평점 + 반응 + 코멘트 통합 -->
+    <div class="sheet-feedback">
+      <div class="sheet-feedback-ratings">
+        <div class="sheet-bgg-rating">
+          <span class="sheet-cottage-label">BGG 평점</span>
+          <strong>⭐ ${formatRating(detail.rating)}</strong>
+        </div>
+        <div class="sheet-cottage-rating">
+          <span class="sheet-cottage-label">손님 별점</span>
+          <div class="cottage-rating-widget" data-game-id="${gameKey}">
+            <div class="cottage-rating-loading">불러오는 중...</div>
+          </div>
         </div>
       </div>
+      <div class="sheet-feedback-reactions">
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👍 0</button>
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👎 0</button>
+      </div>
+      <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>
+      <p class="sheet-comment-login-hint">카카오 로그인 후 이용 가능</p>
     </div>
 
     <!-- 게임 설명 -->
@@ -1232,17 +1246,10 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
-    <!-- 커뮤니티 반응 (UI only, 카카오 로그인 후 활성화 예정) -->
-    <div class="sheet-community">
-      <div class="sheet-community-reactions">
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👍 0</button>
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👎 0</button>
-      </div>
-      <div class="sheet-comment-box">
-        <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>
-        <p class="sheet-comment-login-hint">카카오 로그인 후 이용 가능</p>
-      </div>
-    </div>
+    <!-- 전체 게임에서 보기 -->
+    <a class="sheet-view-all-btn"
+      href="${rootPath}pages/owned-games.html?search=${encodeURIComponent(detail.title)}"
+    >전체 게임에서 보기 →</a>
 
   `;
 
@@ -2337,12 +2344,15 @@ function renderOwnedGameList(){
             data-game="${getGameKey(game)}"
           >
 
-            <img
-              src="${detail.thumbnail || detail.image || DEFAULT_GAME_IMAGE}"
-              alt="${detail.title}"
-              loading="lazy"
-              onerror="this.onerror=null; this.src='${DEFAULT_GAME_IMAGE}';"
-            >
+            <div class="owned-game-thumb">
+              <img
+                src="${detail.thumbnail || detail.image || DEFAULT_GAME_IMAGE}"
+                alt="${detail.title}"
+                loading="lazy"
+                onerror="this.onerror=null; this.src='${DEFAULT_GAME_IMAGE}';"
+              >
+              <span class="owned-img-rating">⭐ ${formatRating(detail.rating)}</span>
+            </div>
 
             <div class="owned-game-info">
 
@@ -2353,9 +2363,6 @@ function renderOwnedGameList(){
               <div class="owned-game-meta">
   <span>
     👥 ${formatPlayers(detail.bestPlayers) || detail.playerRangeText || "-"}
-  </span>
-  <span>
-    ⭐ ${formatRating(detail.rating)}
   </span>
   <span class="${difficulty.className}">
     ${difficulty.icon} ${formatDifficultyWeight(detail.difficultyWeight)}

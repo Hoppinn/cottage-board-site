@@ -1152,7 +1152,7 @@ body.recommend-page main{
 }
 
 .game-card-description{
-  margin:0 0 8px;
+  margin:4px 0 8px;
   color:#3B6D11;
   font-size:10px;
   line-height:1.38;
@@ -1572,7 +1572,7 @@ body.sheet-open{
 .owned-game-item{
   width:100%;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   gap:10px !important;
   padding:10px 11px !important;
   border:1.5px solid #e5d7bd;
@@ -1583,14 +1583,30 @@ body.sheet-open{
   cursor:pointer;
 }
 
-.owned-game-item img{
+.owned-game-thumb{
+  flex:0 0 56px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+}
+
+.owned-game-thumb img{
   width:56px !important;
   height:56px !important;
-  flex:0 0 56px !important;
+  flex:none !important;
   object-fit:contain;
   border-radius:14px;
   background:#f7f2e8;
   border:1px solid rgba(223,199,161,0.35);
+}
+
+.owned-img-rating{
+  font-size:10px;
+  color:#6f5d43;
+  font-weight:700;
+  line-height:1;
+  white-space:nowrap;
 }
 
 .owned-game-info{
@@ -2219,25 +2235,33 @@ body.sheet-open{
   line-height:1.5;
 }
 
-/* 평점 */
-.sheet-ratings-row{
+/* 피드백 통합 섹션 */
+.sheet-feedback{
+  margin-bottom:14px;
+  padding:12px;
+  border-radius:14px;
+  border:1.5px solid #ead8b8;
+  background:var(--paper);
+}
+
+.sheet-feedback-ratings{
   display:flex;
   gap:10px;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .sheet-bgg-rating,
 .sheet-cottage-rating{
   flex:1;
-  padding:10px 12px;
-  border-radius:12px;
-  border:1.5px solid #ead8b8;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid #ead8b8;
   background:var(--cream);
 }
 
 .sheet-bgg-rating strong{
   display:block;
-  font-size:16px;
+  font-size:15px;
   color:#2f5d50;
   margin-top:2px;
 }
@@ -2247,6 +2271,12 @@ body.sheet-open{
   font-size:11px;
   color:var(--muted);
   font-weight:900;
+}
+
+.sheet-feedback-reactions{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
 }
 
 /* 게임 설명 + 더보기/접기 */
@@ -2313,40 +2343,35 @@ body.sheet-open{
   font-weight:900;
 }
 
-/* 커뮤니티 반응 (UI only) */
-.sheet-community{
-  margin-top:14px;
-  padding:14px;
-  border-radius:14px;
-  border:1.5px solid #ead8b8;
-  background:var(--paper);
-}
-
-.sheet-community-reactions{
-  display:flex;
-  gap:10px;
-  margin-bottom:12px;
-}
-
 .sheet-reaction-btn{
   flex:1;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:6px;
-  padding:10px;
-  border:1.5px solid #ead8b8;
+  gap:4px;
+  padding:8px;
+  border:1px solid #ead8b8;
   border-radius:10px;
   background:var(--cream);
-  font-size:15px;
+  font-size:14px;
   font-weight:700;
   color:#b0a898;
   cursor:not-allowed;
   opacity:0.6;
 }
 
-.sheet-reaction-btn span{
+.sheet-view-all-btn{
+  display:block;
+  margin-top:14px;
+  padding:10px;
+  border-radius:12px;
+  border:1.5px solid #c8dba8;
+  background:#f0f7e6;
+  color:#3B6D11;
   font-size:13px;
+  font-weight:900;
+  text-align:center;
+  text-decoration:none;
 }
 
 .sheet-comment-input{

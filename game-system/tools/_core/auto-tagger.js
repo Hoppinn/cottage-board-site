@@ -53,11 +53,13 @@ const TAG_MINIMUM_SET_V1 = {
   interactionTags: [
     "competitive",
     "cooperative",
+    "coop",
     "team",
     "hidden_role",
     "betrayal",
     "low_conflict",
     "table_talk",
+    "social",
     "silent_focus",
     "simultaneous",
     "turn_based"
@@ -101,11 +103,13 @@ const TAG_LABELS_KR = {
   // interactionTags
   competitive: "개인경쟁",
   cooperative: "협력",
+  coop: "협력게임",
   team: "팀전",
   hidden_role: "정체숨김",
   betrayal: "배신/심리전",
   low_conflict: "갈등적음",
   table_talk: "대화많음",
+  social: "대화/심리전",
   silent_focus: "조용히집중",
   simultaneous: "동시진행",
   turn_based: "차례진행"
