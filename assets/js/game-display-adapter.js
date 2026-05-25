@@ -390,6 +390,7 @@ function getGameDetailData(game) {
 
     comment: getCommentText(game),
     commentSource: getCommentSource(game),
+    summaryKo: safeText(game?.cottage?.summaryKo),
     ruleSummary: getRuleSummaryText(game),
     recommendPoint: getRecommendPointText(game),
     caution: getCautionText(game),

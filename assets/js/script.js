@@ -1130,225 +1130,113 @@ function openGameSheet(gameKey){
   const detail =
     GameView.getGameDetailData(game);
 
-const shelfLabel =
-  getGameShelfLabel(game);
-    
   const difficulty =
-    getDifficultyData(
-      detail.difficultyWeight
-    );
+    getDifficultyData(detail.difficultyWeight);
+
+  const shelfGroupId = game.cottage?.shelfGroupId || "";
+  const shelfLabel   = game.cottage?.shelfLabel   || "-";
+  const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
+  const categoriesDisplay = (detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories) || [];
 
   gameSheetContent.innerHTML = `
-    <div class="sheet-image">
 
-      <img
+    <!-- 상단 섹션 -->
+    <div class="sheet-header">
+      <img class="sheet-thumb"
         src="${detail.image || DEFAULT_GAME_IMAGE}"
         alt="${detail.title}"
-        onerror="this.onerror=null; this.src='${DEFAULT_GAME_IMAGE}';"
+        onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
       >
-
-    </div>
-
-    <div class="sheet-content">
-
-      <span class="level-badge">
-        ${difficulty.label}
-      </span>
-
-      <h3>
-        ${detail.title}
-      </h3>
-
-<div class="sheet-location">
-  🗂️ ${shelfLabel}
-</div>
-
-      <p class="sheet-description">
-        ${detail.comment || ""}
-      </p>
-      <div class="sheet-info-grid">
-
-        <div>
-          <strong>
-            ${formatPlayers(detail.bestPlayers)}
-          </strong>
-
-          <span>베스트 인원</span>
-
-          ${
-            detail.recommendedPlayers?.length
-              ? `
-                <em class="player-sub-info">
-                  (추천 ${formatPlayers(detail.recommendedPlayers)})
-                </em>
-              `
-              : ""
-          }
-        </div>
-
-        <div>
-          <strong>
-            ${formatDifficultyWeight(detail.difficultyWeight)}
-          </strong>
-
-          <span>난이도</span>
-
-          <em class="difficulty-sub-info">
-            ${formatDifficultyLabel(difficulty)}
-          </em>
-        </div>
-
-      <div>
-  <strong>
-    ⭐ ${formatRating(detail.rating)}
-  </strong>
-
-  <span>평점</span>
-</div>
-
-<div>
-  <strong>
-    ${detail.playingTimeText || "-"}
-  </strong>
-
-  <span>플레이 시간</span>
-</div>
-
+      <div class="sheet-title-block">
+        <h3>${detail.title}</h3>
+        ${detail.bggTitle && detail.bggTitle !== detail.title
+          ? `<p class="sheet-en-title">${detail.bggTitle}</p>`
+          : ""}
+        ${detail.summaryKo
+          ? `<p class="sheet-summary">${detail.summaryKo}</p>`
+          : ""}
       </div>
-
-      ${
-        detail.rating ||
-        detail.bgg?.mechanics?.length ||
-        detail.bgg?.categories?.length
-          ? `
-            <section class="sheet-section sheet-data-section">
-              <h4>게임 정보</h4>
-
-              <div class="sheet-data-list">
-                ${
-                  detail.rating
-                    ? `
-                      <div>
-                        <span>평점</span>
-                        <strong>⭐ ${formatRating(detail.rating)}</strong>
-                      </div>
-                    `
-                    : ""
-                }
-
-                ${
-                  detail.bgg?.mechanics?.length
-                    ? `
-                      <div>
-                        <span>진행방식</span>
-                        <strong>${(detail.bgg.mechanicsKo?.length ? detail.bgg.mechanicsKo : detail.bgg.mechanics).slice(0, 3).join(", ")}</strong>
-                      </div>
-                    `
-                    : ""
-                }
-
-                ${
-                  detail.bgg?.categories?.length
-                    ? `
-                      <div>
-                        <span>테마</span>
-                        <strong>${(detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories).slice(0, 3).join(", ")}</strong>
-                      </div>
-                    `
-                    : ""
-                }
-              </div>
-            </section>
-          `
-          : ""
-      }
-
-      ${
-        detail.ruleSummary
-          ? `
-            <section class="sheet-section">
-              <h4>🎲 간단 게임 규칙</h4>
-              <p>${detail.ruleSummary}</p>
-            </section>
-          `
-          : ''
-      }
-
-      ${
-        detail.recommendPoint
-          ? `
-            <section class="sheet-section">
-              <h4>💡 이런 분께 추천해요</h4>
-              <p>${detail.recommendPoint}</p>
-            </section>
-          `
-          : ''
-      }
-
-      ${
-        detail.caution
-          ? `
-            <section class="sheet-section">
-              <h4>⚠ 참고하면 좋아요</h4>
-              <p>${detail.caution}</p>
-            </section>
-          `
-          : ''
-      }
-
-      ${
-        detail.youtubeUrl
-          ? `
-            <section class="sheet-section">
-              <h4>🎥 룰 설명 영상</h4>
-
-              <a
-                class="sheet-youtube-link"
-                href="${detail.youtubeUrl}"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                유튜브로 설명 보기
-              </a>
-            </section>
-          `
-          : ''
-      }
-
-      ${
-        detail.designers?.length
-          ? `
-            <section class="sheet-section">
-              <h4>디자이너</h4>
-              <p>${detail.designers.join(", ")}</p>
-            </section>
-          `
-          : ""
-      }
-
-<section class="sheet-section sheet-rating-section">
-  <h4>손님 별점</h4>
-  <div class="cottage-rating-widget" data-game-id="${gameKey}">
-    <div class="cottage-rating-loading">불러오는 중...</div>
-  </div>
-</section>
-
-<section class="sheet-section">
-  <a
-    class="sheet-action-btn"
-    href="${rootPath}pages/owned-games.html?search=${encodeURIComponent(detail.title)}"
-  >
-    전체 게임에서 보기
-  </a>
-</section>
-
+      <div class="sheet-action-btns">
+        <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">
+          🗂 ${shelfLabel}
+        </button>
+        ${detail.youtubeUrl
+          ? `<a class="sheet-yt-btn" href="${detail.youtubeUrl}" target="_blank" rel="noopener noreferrer">▶ 룰 영상</a>`
+          : ""}
+      </div>
     </div>
+
+    <!-- 인원 / 시간 / 난이도 -->
+    <div class="sheet-info-row">
+      <div class="sheet-info-item">
+        <strong>${detail.primaryPlayersText || formatPlayers(detail.bestPlayers) || "-"}</strong>
+        <span>인원</span>
+      </div>
+      <div class="sheet-info-item">
+        <strong>${detail.playingTimeText || "-"}</strong>
+        <span>시간</span>
+      </div>
+      <div class="sheet-info-item">
+        <strong>${difficulty.label}</strong>
+        <span>난이도</span>
+      </div>
+    </div>
+
+    <!-- 평점 -->
+    <div class="sheet-ratings-row">
+      <div class="sheet-bgg-rating">
+        <strong>⭐ ${formatRating(detail.rating)}</strong>
+        <span>BGG 평점</span>
+      </div>
+      <div class="sheet-cottage-rating">
+        <span class="sheet-cottage-label">손님 별점</span>
+        <div class="cottage-rating-widget" data-game-id="${gameKey}">
+          <div class="cottage-rating-loading">불러오는 중...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 게임 설명 -->
+    ${detail.comment ? `
+      <div class="sheet-desc-wrap">
+        <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment}</p>
+        <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">더보기</button>
+      </div>
+    ` : ""}
+
+    <!-- 진행방식 | 테마 -->
+    ${mechanicsDisplay.length || categoriesDisplay.length ? `
+      <div class="sheet-tags-grid">
+        ${mechanicsDisplay.length ? `
+          <div class="sheet-tag-col">
+            <h4>진행방식</h4>
+            <p>${mechanicsDisplay.join(" · ")}</p>
+          </div>
+        ` : ""}
+        ${categoriesDisplay.length ? `
+          <div class="sheet-tag-col">
+            <h4>테마</h4>
+            <p>${categoriesDisplay.join(" · ")}</p>
+          </div>
+        ` : ""}
+      </div>
+    ` : ""}
+
+    <!-- 디자이너 -->
+    ${detail.bgg.designers?.length ? `
+      <div class="sheet-meta">
+        <span class="sheet-meta-label">디자이너</span>
+        <span>${detail.bgg.designers.join(", ")}</span>
+      </div>
+    ` : ""}
+
   `;
 
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
   initCottageRatingWidget(gameKey).catch(() => {});
+  initSheetDescToggle();
 }
 
 function closeGameSheet(){
@@ -1358,6 +1246,28 @@ function closeGameSheet(){
 
   gameSheet.classList.remove('is-active');
   document.body.classList.remove('sheet-open');
+}
+
+function toggleSheetDesc(btn){
+  const desc = document.getElementById('sheetDesc');
+  if(!desc) return;
+  const clamped = desc.classList.toggle('is-clamped');
+  btn.textContent = clamped ? '더보기' : '접기';
+}
+
+function initSheetDescToggle(){
+  const desc   = document.getElementById('sheetDesc');
+  const toggle = document.getElementById('sheetDescToggle');
+  if(!desc || !toggle) return;
+  if(desc.scrollHeight <= desc.clientHeight){
+    toggle.style.display = 'none';
+  }
+}
+
+function goToShelf(shelfGroupId){
+  if(!shelfGroupId) return;
+  window.location.href =
+    rootPath + 'pages/owned-games.html?shelf=' + encodeURIComponent(shelfGroupId);
 }
 
 // ── 손님 별점 위젯 ──────────────────────────────────────
@@ -1914,6 +1824,7 @@ const ownedPageState = {
   difficultyFilter: "",
   moodFilter: "",
   mechanicFilter: "",
+  shelfFilter: "",
   weightCap: false,
 
   search: ""
@@ -1970,6 +1881,12 @@ function matchOwnedMechanic(game){
     detail.playTags?.includes(filter) ||
     detail.displayTags?.includes(filter)
   );
+}
+
+function matchOwnedShelf(game){
+  const filter = ownedPageState.shelfFilter;
+  if(!filter) return true;
+  return game.cottage?.shelfGroupId === filter;
 }
 
 
@@ -2244,6 +2161,7 @@ function getOwnedFilteredGames(){
     .filter(matchOwnedWeightCap)
     .filter(matchOwnedMood)
     .filter(matchOwnedMechanic)
+    .filter(matchOwnedShelf)
     .filter(matchOwnedSearch);
 }
 
@@ -2777,6 +2695,11 @@ if(ownedSearchInput){
     ownedPageState.moodFilter = urlMood;
     const sel = document.getElementById("ownedMoodFilter");
     if(sel) sel.value = urlMood;
+  }
+
+  const urlShelf = params.get("shelf") || "";
+  if(urlShelf){
+    ownedPageState.shelfFilter = urlShelf;
   }
 
   if(params.get("sort") === "rating"){
