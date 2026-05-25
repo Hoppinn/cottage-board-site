@@ -1158,11 +1158,11 @@ function openGameSheet(gameKey){
       </div>
       <div class="sheet-action-btns">
         <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">
-          🗂 ${shelfLabel}
+          📍 ${shelfLabel}
         </button>
-        ${detail.youtubeUrl
-          ? `<a class="sheet-yt-btn" href="${detail.youtubeUrl}" target="_blank" rel="noopener noreferrer">▶ 룰 영상</a>`
-          : ""}
+        <a class="sheet-yt-btn"
+          href="https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}"
+          target="_blank" rel="noopener noreferrer">▶ 룰 영상</a>
       </div>
     </div>
 
@@ -1200,7 +1200,7 @@ function openGameSheet(gameKey){
     ${detail.comment ? `
       <div class="sheet-desc-wrap">
         <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment}</p>
-        <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">더보기</button>
+        <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">+ 더보기</button>
       </div>
     ` : ""}
 
@@ -1230,6 +1230,22 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
+    <!-- 커뮤니티 반응 (UI only, 카카오 로그인 후 활성화 예정) -->
+    <div class="sheet-community">
+      <div class="sheet-community-reactions">
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">
+          👍 <span>좋아요</span>
+        </button>
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">
+          👎 <span>별로예요</span>
+        </button>
+      </div>
+      <div class="sheet-comment-box">
+        <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>
+        <p class="sheet-comment-login-hint">카카오 로그인 후 이용 가능</p>
+      </div>
+    </div>
+
   `;
 
   gameSheet.classList.add('is-active');
@@ -1252,7 +1268,7 @@ function toggleSheetDesc(btn){
   const desc = document.getElementById('sheetDesc');
   if(!desc) return;
   const clamped = desc.classList.toggle('is-clamped');
-  btn.textContent = clamped ? '더보기' : '접기';
+  btn.textContent = clamped ? '+ 더보기' : '- 접기';
 }
 
 function initSheetDescToggle(){
