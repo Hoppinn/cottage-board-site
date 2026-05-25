@@ -93,8 +93,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -115,8 +113,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -233,9 +229,7 @@ const gameData = {
       "difficultyWeight": 1.12,
       "moodTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -255,15 +249,14 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -277,6 +270,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -384,7 +378,6 @@ const gameData = {
       "difficultyWeight": 1.17,
       "moodTags": [
         "funny",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -405,7 +398,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "funny",
-        "light",
         "chaotic",
         "cozy",
         "party",
@@ -421,7 +413,7 @@ const gameData = {
         "팀전",
         "대화많음",
         "웃긴",
-        "가볍게"
+        "왁자지껄"
       ],
       "summaryKo": "두 팀이 사이킥의 단서를 통해 스펙트럼 위 과녁의 위치를 맞추는 사회 추론 게임.",
       "comment": {
@@ -495,22 +487,38 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "immersive",
+        "deduction",
         "group",
-        "large_group"
+        "large_group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
-        "모임추천",
-        "단체추천"
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "",
       "comment": {
@@ -585,34 +593,41 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
-        "light",
-        "brainy"
+        "tense",
+        "immersive"
       ],
-      "playTags": [],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "beginner",
         "group",
         "large_group"
       ],
       "interactionTags": [
+        "social",
+        "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
+        "tense",
+        "immersive",
+        "deduction",
         "beginner",
         "group",
         "large_group",
+        "social",
+        "table_talk",
         "low_conflict"
       ],
       "displayTags": [
+        "추리",
+        "대화/심리전",
+        "대화많음",
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
+        "쫄깃하게"
       ],
       "summaryKo": "",
       "comment": {
@@ -710,8 +725,8 @@ const gameData = {
       "difficultyWeight": 1.1,
       "moodTags": [
         "funny",
-        "light",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "party"
@@ -731,8 +746,8 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "funny",
-        "light",
         "chaotic",
+        "cozy",
         "party",
         "group",
         "beginner",
@@ -747,7 +762,7 @@ const gameData = {
         "팀전",
         "대화많음",
         "웃긴",
-        "가볍게"
+        "왁자지껄"
       ],
       "summaryKo": "사이킥의 힌트를 받아 대립하는 두 개념 사이의 숨겨진 목표점을 맞추는 게임.",
       "comment": {
@@ -844,8 +859,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -865,8 +878,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "cozy",
         "card_play",
         "strategy",
@@ -881,8 +892,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "가볍게",
-        "머리 쓰는"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "숫자 카드 줄을 나누어 선택하며 같은 숫자를 모아 점수를 겨루는 게임.",
       "comment": {
@@ -982,8 +993,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -1006,8 +1015,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy",
         "party",
         "card_play",
@@ -1100,7 +1107,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -1114,7 +1120,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -1122,11 +1127,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -1202,7 +1207,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -1215,14 +1220,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -1304,7 +1309,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -1318,7 +1322,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -1326,11 +1329,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -1404,22 +1407,38 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "immersive",
+        "deduction",
         "group",
-        "large_group"
+        "large_group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
-        "모임추천",
-        "단체추천"
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "",
       "comment": {
@@ -1493,22 +1512,38 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "immersive",
+        "deduction",
         "group",
-        "large_group"
+        "large_group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
-        "모임추천",
-        "단체추천"
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "",
       "comment": {
@@ -1605,9 +1640,7 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.29,
       "moodTags": [
-        "brainy",
         "immersive",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -1627,9 +1660,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -1644,8 +1675,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "편안하게"
       ],
       "summaryKo": "손의 카드를 모두 버리기 위해 더 높은 순위 카드를 내는 게임이다.",
       "comment": {
@@ -1753,8 +1784,6 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.03,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -1782,8 +1811,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -1910,9 +1937,7 @@ const gameData = {
       "difficultyWeight": 1.11,
       "moodTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -1930,6 +1955,7 @@ const gameData = {
         "first_game"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -1937,9 +1963,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -1951,6 +1975,7 @@ const gameData = {
         "group",
         "large_group",
         "first_game",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -1959,7 +1984,7 @@ const gameData = {
         "카드운용",
         "전략",
         "파티게임",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "과일 가게 직원들이 협력해 주문을 정리하되 사장 고릴라에게 들키지 않도록 하는 게임.",
       "comment": {
@@ -2034,10 +2059,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -2050,8 +2072,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -2059,10 +2079,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -2179,10 +2198,8 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
         "cozy",
         "immersive",
-        "light",
         "chaotic"
       ],
       "playTags": [
@@ -2200,6 +2217,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "hidden_role",
         "betrayal",
@@ -2211,10 +2229,8 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
         "cozy",
         "immersive",
-        "light",
         "chaotic",
         "deduction",
         "party",
@@ -2226,6 +2242,7 @@ const gameData = {
         "first_game",
         "quick_play",
         "cooperative",
+        "social",
         "table_talk",
         "hidden_role",
         "betrayal",
@@ -2342,7 +2359,6 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "light",
         "funny",
         "chaotic"
       ],
@@ -2365,7 +2381,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
         "funny",
         "chaotic",
         "storytelling",
@@ -2491,7 +2506,6 @@ const gameData = {
         "chaotic",
         "tense",
         "funny",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -2515,7 +2529,6 @@ const gameData = {
         "chaotic",
         "tense",
         "funny",
-        "light",
         "cozy",
         "party",
         "dexterity",
@@ -2610,7 +2623,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.06,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -2623,14 +2636,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -2762,9 +2775,7 @@ const gameData = {
       "difficultyWeight": 2.38,
       "moodTags": [
         "chaotic",
-        "tense",
-        "brainy",
-        "light"
+        "tense"
       ],
       "playTags": [
         "party",
@@ -2787,8 +2798,6 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "tense",
-        "brainy",
-        "light",
         "party",
         "dexterity",
         "puzzle",
@@ -2900,8 +2909,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.23,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -2920,8 +2927,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "strategy",
         "puzzle",
@@ -2935,8 +2940,8 @@ const gameData = {
         "전략",
         "퍼즐",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "주사위를 굴려 이동한 말 위치에 카펫을 배치하며 상대 카펫 위에 착지할 때마다 돈을 내는 게임.",
       "comment": {
@@ -3032,10 +3037,9 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.01,
       "moodTags": [
-        "light",
-        "brainy",
         "funny",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "puzzle",
@@ -3055,10 +3059,9 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "funny",
         "chaotic",
+        "cozy",
         "puzzle",
         "card_play",
         "party",
@@ -3074,7 +3077,7 @@ const gameData = {
         "카드운용",
         "파티게임",
         "대화많음",
-        "가볍게"
+        "웃긴"
       ],
       "summaryKo": "서로 주고받은 선물과 자신 앞의 물건들을 기억하며 허풍으로 페널티를 피하는 게임.",
       "comment": {
@@ -3168,7 +3171,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [
         "card_play"
@@ -3183,7 +3186,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "card_play",
         "first_game",
         "quick_play",
@@ -3192,7 +3195,7 @@ const gameData = {
       ],
       "displayTags": [
         "카드운용",
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -3306,12 +3309,10 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
-        "brainy",
         "tense",
         "chaotic",
         "funny",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "card_play",
@@ -3330,18 +3331,17 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "chaotic",
         "funny",
         "immersive",
-        "light",
         "card_play",
         "strategy",
         "deduction",
@@ -3354,6 +3354,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -3479,8 +3480,6 @@ const gameData = {
         "tense",
         "funny",
         "immersive",
-        "brainy",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -3502,6 +3501,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -3511,8 +3511,6 @@ const gameData = {
         "tense",
         "funny",
         "immersive",
-        "brainy",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -3528,6 +3526,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -3632,9 +3631,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "cozy",
-        "light",
-        "brainy"
+        "cozy"
       ],
       "playTags": [
         "deduction",
@@ -3650,6 +3647,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -3659,8 +3657,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "light",
-        "brainy",
         "deduction",
         "party",
         "card_play",
@@ -3670,6 +3666,7 @@ const gameData = {
         "quick_play",
         "large_group",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -3678,7 +3675,7 @@ const gameData = {
         "파티게임",
         "카드운용",
         "협력",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "미술작품을 구매하면서 화가의 작품과 위작을 구분하는 게임.",
       "comment": {
@@ -3781,10 +3778,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
-        "brainy",
         "tense",
-        "chaotic",
-        "light"
+        "chaotic"
       ],
       "playTags": [
         "card_play",
@@ -3797,22 +3792,22 @@ const gameData = {
       ],
       "interactionTags": [
         "competitive",
+        "social",
         "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "chaotic",
-        "light",
         "card_play",
         "strategy",
         "group",
         "beginner",
         "large_group",
         "competitive",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -3820,8 +3815,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "대화많음",
-        "갈등적음"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "콩을 심고 수확하여 동전을 모으되 다른 플레이어와의 카드 교환으로 전략을 펼치는 게임.",
       "comment": {
@@ -3927,9 +3922,7 @@ const gameData = {
       "moodTags": [
         "immersive",
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic"
       ],
       "playTags": [
@@ -3947,6 +3940,7 @@ const gameData = {
       "interactionTags": [
         "team",
         "table_talk",
+        "social",
         "low_conflict"
       ],
       "relationshipTags": [],
@@ -3954,9 +3948,7 @@ const gameData = {
       "autoTags": [
         "immersive",
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "strategy",
         "deduction",
@@ -3968,6 +3960,7 @@ const gameData = {
         "first_game",
         "team",
         "table_talk",
+        "social",
         "low_conflict"
       ],
       "displayTags": [
@@ -4090,11 +4083,9 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
-        "brainy",
         "tense",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "cozy"
       ],
@@ -4116,16 +4107,15 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "cozy",
         "card_play",
@@ -4141,6 +4131,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -4258,9 +4249,7 @@ const gameData = {
       "difficultyWeight": 1.67,
       "moodTags": [
         "immersive",
-        "light",
         "tense",
-        "brainy",
         "funny",
         "chaotic"
       ],
@@ -4281,15 +4270,14 @@ const gameData = {
       "interactionTags": [
         "team",
         "table_talk",
+        "social",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "light",
         "tense",
-        "brainy",
         "funny",
         "chaotic",
         "strategy",
@@ -4304,6 +4292,7 @@ const gameData = {
         "first_game",
         "team",
         "table_talk",
+        "social",
         "low_conflict"
       ],
       "displayTags": [
@@ -4423,10 +4412,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.66,
       "moodTags": [
-        "brainy",
         "chaotic",
-        "tense",
-        "light"
+        "tense"
       ],
       "playTags": [
         "puzzle",
@@ -4448,10 +4435,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "puzzle",
         "party",
         "dexterity",
@@ -4548,7 +4533,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -4561,14 +4546,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -4687,8 +4672,6 @@ const gameData = {
         "funny",
         "chaotic",
         "tense",
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -4706,7 +4689,8 @@ const gameData = {
       ],
       "interactionTags": [
         "table_talk",
-        "cooperative"
+        "cooperative",
+        "social"
       ],
       "relationshipTags": [],
       "manualTags": [],
@@ -4714,8 +4698,6 @@ const gameData = {
         "funny",
         "chaotic",
         "tense",
-        "light",
-        "brainy",
         "cozy",
         "party",
         "storytelling",
@@ -4727,7 +4709,8 @@ const gameData = {
         "large_group",
         "first_game",
         "table_talk",
-        "cooperative"
+        "cooperative",
+        "social"
       ],
       "displayTags": [
         "파티게임",
@@ -4842,8 +4825,6 @@ const gameData = {
       "moodTags": [
         "funny",
         "chaotic",
-        "light",
-        "brainy",
         "tense",
         "cozy"
       ],
@@ -4861,15 +4842,14 @@ const gameData = {
         "first_game"
       ],
       "interactionTags": [
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "funny",
         "chaotic",
-        "light",
-        "brainy",
         "tense",
         "cozy",
         "party",
@@ -4881,7 +4861,8 @@ const gameData = {
         "quick_play",
         "large_group",
         "first_game",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "displayTags": [
         "파티게임",
@@ -5010,11 +4991,9 @@ const gameData = {
       "difficultyWeight": 3.04,
       "moodTags": [
         "tense",
-        "brainy",
         "chaotic",
         "immersive",
-        "funny",
-        "light"
+        "funny"
       ],
       "playTags": [
         "deduction",
@@ -5031,6 +5010,7 @@ const gameData = {
         "long_stay"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "hidden_role",
         "betrayal",
@@ -5041,11 +5021,9 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
         "chaotic",
         "immersive",
         "funny",
-        "light",
         "deduction",
         "bluffing",
         "strategy",
@@ -5056,6 +5034,7 @@ const gameData = {
         "beginner",
         "first_game",
         "long_stay",
+        "social",
         "table_talk",
         "hidden_role",
         "betrayal",
@@ -5067,7 +5046,7 @@ const gameData = {
         "블러핑",
         "전략",
         "파티게임",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "마을 사람들이 낮과 밤의 토론과 투표로 악마를 찾아내는 블러핑 게임이다.",
       "comment": {
@@ -5143,10 +5122,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -5159,8 +5135,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -5168,10 +5142,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -5291,9 +5264,7 @@ const gameData = {
       "difficultyWeight": 1.74,
       "moodTags": [
         "tense",
-        "light",
         "immersive",
-        "brainy",
         "funny",
         "chaotic"
       ],
@@ -5315,6 +5286,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "simultaneous",
         "competitive",
@@ -5324,9 +5296,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "light",
         "immersive",
-        "brainy",
         "funny",
         "chaotic",
         "deduction",
@@ -5342,6 +5312,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "simultaneous",
         "competitive",
@@ -5428,10 +5399,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -5444,8 +5412,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -5453,10 +5419,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -5534,7 +5499,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -5548,7 +5512,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -5556,11 +5519,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -5641,7 +5604,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -5654,14 +5617,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -5745,10 +5708,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.84,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -5761,8 +5721,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -5770,10 +5728,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -5853,7 +5810,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -5866,14 +5823,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -5956,7 +5913,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -5970,7 +5926,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -5978,11 +5933,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -6062,7 +6017,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -6076,7 +6030,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -6084,11 +6037,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -6168,7 +6121,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -6181,14 +6134,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -6295,8 +6248,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "chaotic"
       ],
       "playTags": [
@@ -6312,6 +6263,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -6321,8 +6273,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "chaotic",
         "deduction",
         "party",
@@ -6332,6 +6282,7 @@ const gameData = {
         "first_game",
         "quick_play",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -6339,8 +6290,8 @@ const gameData = {
         "추리",
         "파티게임",
         "협력",
-        "대화많음",
-        "갈등적음"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "팀원들의 창의적인 단서로 비밀 단어를 맞히는 협력 파티 게임.",
       "comment": {
@@ -6444,10 +6395,8 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.19,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -6471,10 +6420,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "chaotic",
         "cozy",
         "card_play",
@@ -6602,10 +6549,9 @@ const gameData = {
       "difficultyWeight": 1.04,
       "moodTags": [
         "tense",
-        "light",
-        "brainy",
         "funny",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "deduction",
@@ -6624,16 +6570,16 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "light",
-        "brainy",
         "funny",
         "chaotic",
+        "cozy",
         "deduction",
         "bluffing",
         "card_play",
@@ -6646,6 +6592,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -6732,10 +6679,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.51,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -6748,8 +6692,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -6757,10 +6699,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -6839,7 +6780,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -6853,7 +6793,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -6861,11 +6800,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -6973,8 +6912,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -6993,6 +6930,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7001,8 +6939,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -7015,6 +6951,7 @@ const gameData = {
         "large_group",
         "first_game",
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7131,8 +7068,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -7151,6 +7086,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7159,8 +7095,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -7173,6 +7107,7 @@ const gameData = {
         "large_group",
         "first_game",
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7288,8 +7223,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -7308,6 +7241,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7316,8 +7250,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -7330,6 +7262,7 @@ const gameData = {
         "large_group",
         "first_game",
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7440,8 +7373,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -7457,6 +7388,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7465,8 +7397,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -7476,6 +7406,7 @@ const gameData = {
         "large_group",
         "first_game",
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -7483,8 +7414,8 @@ const gameData = {
         "추리",
         "파티게임",
         "협력",
-        "대화많음",
-        "팀전"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "아이콘에 말을 배치해 단어를 연관성으로 표현하고 맞추는 게임",
       "comment": {
@@ -7593,8 +7524,6 @@ const gameData = {
       "difficultyWeight": 1.32,
       "moodTags": [
         "tense",
-        "light",
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -7620,6 +7549,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -7627,8 +7557,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "light",
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -7648,6 +7576,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -7733,10 +7662,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -7749,8 +7675,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -7758,10 +7682,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -7869,10 +7792,8 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.02,
       "moodTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "cozy",
         "funny"
       ],
@@ -7898,10 +7819,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "cozy",
         "funny",
         "puzzle",
@@ -8002,7 +7921,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -8015,14 +7934,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -8108,7 +8027,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -8121,14 +8040,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -8230,7 +8149,6 @@ const gameData = {
       "moodTags": [
         "funny",
         "cozy",
-        "light",
         "chaotic",
         "tense"
       ],
@@ -8255,7 +8173,6 @@ const gameData = {
       "autoTags": [
         "funny",
         "cozy",
-        "light",
         "chaotic",
         "tense",
         "party",
@@ -8383,7 +8300,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.26,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -8398,7 +8314,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -8407,11 +8322,11 @@ const gameData = {
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "공개되는 지형 카드를 연결해 투카나 지도에 도로 네트워크를 그리고 항구와 명소를 연결하는 게임.",
       "comment": {
@@ -8528,9 +8443,7 @@ const gameData = {
       "difficultyWeight": 2.1,
       "moodTags": [
         "cozy",
-        "immersive",
-        "brainy",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "storytelling",
@@ -8555,8 +8468,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "brainy",
-        "light",
         "storytelling",
         "party",
         "strategy",
@@ -8654,10 +8565,7 @@ const gameData = {
       "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
       "difficultyId": "light_family",
       "difficultyWeight": 2.43,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -8670,8 +8578,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -8679,10 +8585,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -8755,10 +8660,11 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
-        "brainy",
+        "tense",
         "immersive"
       ],
       "playTags": [
+        "deduction",
         "strategy"
       ],
       "situationTags": [
@@ -8767,24 +8673,30 @@ const gameData = {
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
+        "tense",
         "immersive",
+        "deduction",
         "strategy",
         "experienced",
         "long_stay",
         "group",
-        "large_group"
+        "large_group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
+        "추리",
         "전략",
-        "머리 쓰는",
-        "몰입감",
-        "게임러추천",
-        "오래즐김"
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게"
       ],
       "summaryKo": "",
       "comment": {
@@ -8863,7 +8775,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.03,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -8876,14 +8788,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -9000,8 +8912,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "immersive",
-        "light",
-        "brainy",
         "funny",
         "chaotic",
         "cozy"
@@ -9025,6 +8935,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
@@ -9032,8 +8943,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "immersive",
-        "light",
-        "brainy",
         "funny",
         "chaotic",
         "cozy",
@@ -9051,6 +8960,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -9137,7 +9047,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.4,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -9151,7 +9060,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -9159,11 +9067,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -9269,7 +9177,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.61,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -9289,7 +9196,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -9305,7 +9211,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "영국 동앙글리아 철도 회사를 상장하고 운영하며 수익을 극대화하는 18xx 게임이다.",
       "comment": {
@@ -9402,8 +9308,8 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "tense",
-        "light",
-        "funny"
+        "funny",
+        "cozy"
       ],
       "playTags": [
         "party",
@@ -9426,8 +9332,8 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "tense",
-        "light",
         "funny",
+        "cozy",
         "party",
         "dexterity",
         "card_play",
@@ -9542,9 +9448,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic"
       ],
       "playTags": [
@@ -9561,6 +9465,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
@@ -9568,9 +9473,7 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "deduction",
         "party",
@@ -9581,6 +9484,7 @@ const gameData = {
         "quick_play",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -9588,7 +9492,7 @@ const gameData = {
         "파티게임",
         "협력",
         "갈등적음",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "주어진 번호에 맞춰 창의적인 답변을 제시하고 진행자가 순서를 맞추는 게임.",
       "comment": {
@@ -9686,8 +9590,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
-        "light",
-        "brainy"
+        "cozy"
       ],
       "playTags": [
         "puzzle",
@@ -9707,8 +9610,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
+        "cozy",
         "puzzle",
         "card_play",
         "strategy",
@@ -9724,7 +9626,7 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "같은 숫자 3장을 모아 세트를 완성하거나 7의 조합을 만드는 카드 게임",
       "comment": {
@@ -9820,8 +9722,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.28,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -9840,8 +9740,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -9856,7 +9754,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "편안하게"
       ],
       "summaryKo": "카드의 색을 숨긴 채 트릭을 예측하고 역설을 피하는 양자역학 기반 게임.",
       "comment": {
@@ -9968,10 +9866,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
-        "brainy",
         "tense",
         "chaotic",
-        "light",
         "funny"
       ],
       "playTags": [
@@ -9987,16 +9883,15 @@ const gameData = {
       ],
       "interactionTags": [
         "competitive",
+        "social",
         "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "chaotic",
-        "light",
         "funny",
         "card_play",
         "strategy",
@@ -10006,6 +9901,7 @@ const gameData = {
         "large_group",
         "first_game",
         "competitive",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -10014,7 +9910,7 @@ const gameData = {
         "전략",
         "파티게임",
         "개인경쟁",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "상인과 보안관의 역할을 번갈아 하며 물품 밀수와 적발을 겨루는 협상 게임.",
       "comment": {
@@ -10119,9 +10015,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.72,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "card_play",
@@ -10140,9 +10034,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "card_play",
         "strategy",
         "experienced",
@@ -10157,7 +10049,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "경주용 자동차를 입찰해 소유한 후 카드로 움직여 경주하며 우승자에 베팅하는 게임.",
       "comment": {
@@ -10232,7 +10124,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -10245,14 +10137,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -10333,7 +10225,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -10346,14 +10238,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -10447,8 +10339,6 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light",
-        "brainy",
         "cozy",
         "immersive"
       ],
@@ -10470,8 +10360,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "cozy",
         "immersive",
         "puzzle",
@@ -10489,7 +10377,7 @@ const gameData = {
         "스토리",
         "파티게임",
         "대화많음",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "무작위 기호와 물건으로 창의적인 이야기를 만들어 다른 플레이어들의 기억력을 겨루는 게임.",
       "comment": {
@@ -10587,8 +10475,6 @@ const gameData = {
       "difficultyWeight": 1.25,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -10601,6 +10487,7 @@ const gameData = {
         "large_group"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "team"
       ],
@@ -10608,23 +10495,22 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "cozy",
         "deduction",
         "group",
         "beginner",
         "first_game",
         "large_group",
+        "social",
         "table_talk",
         "team"
       ],
       "displayTags": [
         "추리",
+        "대화/심리전",
         "대화많음",
         "팀전",
-        "쫄깃하게",
-        "머리 쓰는"
+        "쫄깃하게"
       ],
       "summaryKo": "스파이가 비밀리에 선택한 목적지를 추리와 질문을 통해 찾아내는 협력 게임.",
       "comment": {
@@ -10723,9 +10609,8 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "brainy",
         "immersive",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "puzzle",
@@ -10743,9 +10628,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
+        "cozy",
         "puzzle",
         "strategy",
         "first_game",
@@ -10759,7 +10643,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "뽑은 카드에 따라 타일을 뒤집고 밀어내며 꿈의 패턴을 완성하는 게임.",
       "comment": {
@@ -10855,10 +10739,9 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "card_play",
@@ -10878,10 +10761,9 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
+        "cozy",
         "card_play",
         "strategy",
         "party",
@@ -10897,7 +10779,7 @@ const gameData = {
         "전략",
         "파티게임",
         "개인경쟁",
-        "머리 쓰는"
+        "쫄깃하게"
       ],
       "summaryKo": "손패를 빨리 비우되 라마 카드를 피하며 최저점을 겨루는 게임",
       "comment": {
@@ -10995,9 +10877,7 @@ const gameData = {
       "difficultyWeight": 1.64,
       "moodTags": [
         "tense",
-        "funny",
-        "light",
-        "brainy"
+        "funny"
       ],
       "playTags": [
         "party",
@@ -11019,8 +10899,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "party",
         "card_play",
         "strategy",
@@ -11112,7 +10990,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -11126,7 +11003,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -11134,11 +11010,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -11242,10 +11118,8 @@ const gameData = {
       "difficultyWeight": 1.44,
       "moodTags": [
         "tense",
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "cozy"
       ],
@@ -11262,6 +11136,7 @@ const gameData = {
         "quick_play"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "competitive",
         "betrayal"
@@ -11270,10 +11145,8 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "cozy",
         "deduction",
@@ -11284,6 +11157,7 @@ const gameData = {
         "group",
         "large_group",
         "quick_play",
+        "social",
         "table_talk",
         "competitive",
         "betrayal"
@@ -11292,8 +11166,8 @@ const gameData = {
         "추리",
         "카드운용",
         "전략",
-        "대화많음",
-        "개인경쟁"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "1920년대 신비한 사건을 조사하며 정상과 광기 사이에서 토큰을 모아 승리하는 게임.",
       "comment": {
@@ -11372,7 +11246,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.46,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -11387,7 +11260,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -11396,11 +11268,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -11505,8 +11377,6 @@ const gameData = {
       "difficultyWeight": 1.41,
       "moodTags": [
         "tense",
-        "light",
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -11532,6 +11402,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -11539,8 +11410,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "light",
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -11560,6 +11429,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive"
       ],
@@ -11679,8 +11549,6 @@ const gameData = {
       "difficultyWeight": 2.16,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "chaotic",
         "funny"
       ],
@@ -11695,6 +11563,7 @@ const gameData = {
         "large_group"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "competitive",
         "simultaneous",
@@ -11705,8 +11574,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "deduction",
@@ -11715,6 +11582,7 @@ const gameData = {
         "beginner",
         "group",
         "large_group",
+        "social",
         "table_talk",
         "competitive",
         "simultaneous",
@@ -11725,8 +11593,8 @@ const gameData = {
         "추리",
         "카드운용",
         "전략",
-        "대화많음",
-        "개인경쟁"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "같은 선원 카드를 사용하며 타이밍을 겨루는 해적 경쟁 게임.",
       "comment": {
@@ -11804,10 +11672,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.38,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -11821,8 +11686,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -11831,10 +11694,10 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -11934,9 +11797,7 @@ const gameData = {
       "difficultyWeight": 2.24,
       "moodTags": [
         "tense",
-        "funny",
-        "light",
-        "brainy"
+        "funny"
       ],
       "playTags": [
         "party",
@@ -11958,8 +11819,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "party",
         "card_play",
         "strategy",
@@ -12050,7 +11909,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -12063,14 +11922,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -12185,8 +12044,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -12206,8 +12063,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -12223,7 +12078,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "몰입감"
       ],
       "summaryKo": "주사위를 굴려 보드를 이동하며 부동산을 매입하고 개발하여 상대방의 파산을 유도하는 게임.",
       "comment": {
@@ -12298,10 +12153,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.54,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -12314,8 +12166,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -12323,10 +12173,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -12424,10 +12273,9 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "card_play",
@@ -12448,10 +12296,9 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "chaotic",
+        "cozy",
         "card_play",
         "strategy",
         "party",
@@ -12545,7 +12392,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -12558,14 +12405,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -12644,7 +12491,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -12657,14 +12504,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -12786,8 +12633,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.45,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -12808,7 +12654,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "group",
         "experienced",
@@ -12923,10 +12768,9 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.06,
       "moodTags": [
-        "light",
-        "brainy",
         "funny",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "puzzle",
@@ -12947,10 +12791,9 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "funny",
         "chaotic",
+        "cozy",
         "puzzle",
         "card_play",
         "party",
@@ -13043,7 +12886,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -13056,14 +12899,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -13143,7 +12986,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -13157,7 +12999,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -13165,11 +13006,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -13273,9 +13114,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "party",
@@ -13296,9 +13135,7 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
         "immersive",
-        "brainy",
         "party",
         "card_play",
         "beginner",
@@ -13385,7 +13222,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -13398,14 +13235,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -13483,7 +13320,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -13496,14 +13333,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -13610,8 +13447,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
         "chaotic",
         "cozy"
@@ -13634,8 +13469,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "chaotic",
         "cozy",
@@ -13730,10 +13563,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.56,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -13746,8 +13576,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -13755,10 +13583,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -13860,10 +13687,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -13881,8 +13705,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -13972,10 +13794,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.78,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -13989,8 +13808,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -13999,10 +13816,10 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -14097,8 +13914,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.34,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -14118,8 +13933,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -14134,8 +13947,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "블러핑으로 상대를 속이며 맵고 자극적인 음식 먹기 대회에서 최강 고양이를 가리는 게임",
       "comment": {
@@ -14213,7 +14026,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -14227,7 +14039,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -14235,11 +14046,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -14339,10 +14150,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
       "moodTags": [
-        "brainy",
         "tense",
         "chaotic",
-        "light",
         "funny"
       ],
       "playTags": [
@@ -14356,6 +14165,7 @@ const gameData = {
       ],
       "interactionTags": [
         "competitive",
+        "social",
         "table_talk",
         "betrayal",
         "low_conflict"
@@ -14363,10 +14173,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "chaotic",
-        "light",
         "funny",
         "card_play",
         "strategy",
@@ -14374,6 +14182,7 @@ const gameData = {
         "beginner",
         "large_group",
         "competitive",
+        "social",
         "table_talk",
         "betrayal",
         "low_conflict"
@@ -14382,8 +14191,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "대화많음",
-        "배신/심리전"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "영향력 카드로 거래를 조종하며 배당금을 최대화해 가장 많은 현금을 모으는 게임.",
       "comment": {
@@ -14460,7 +14269,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.08,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -14473,14 +14282,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -14560,7 +14369,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -14573,14 +14382,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -14659,10 +14468,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -14675,8 +14481,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -14684,10 +14488,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -14764,7 +14567,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.37,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -14778,7 +14580,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -14786,11 +14587,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -14880,7 +14681,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -14897,7 +14697,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "card_play",
         "beginner",
@@ -14908,10 +14707,10 @@ const gameData = {
       ],
       "displayTags": [
         "카드운용",
-        "가볍게",
         "편안하게",
         "입문추천",
-        "첫게임추천"
+        "첫게임추천",
+        "모임추천"
       ],
       "summaryKo": "바이킹 카드를 빨리 내서 손패를 비우고 낮은 점수를 겨루는 게임.",
       "comment": {
@@ -14989,10 +14788,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.79,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -15006,8 +14802,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -15016,10 +14810,10 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15132,8 +14926,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -15157,8 +14949,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy",
         "party",
         "card_play",
@@ -15253,7 +15043,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -15267,7 +15056,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -15275,11 +15063,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15356,7 +15144,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -15370,7 +15157,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -15378,11 +15164,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15459,7 +15245,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -15472,14 +15258,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -15562,10 +15348,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.48,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -15579,8 +15362,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -15589,10 +15370,10 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15668,10 +15449,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -15684,8 +15462,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -15693,10 +15469,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15772,7 +15547,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.12,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -15788,7 +15562,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -15798,10 +15571,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15878,7 +15651,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -15892,7 +15664,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -15900,11 +15671,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -15982,7 +15753,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -15996,7 +15766,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -16004,11 +15773,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -16101,10 +15870,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -16122,8 +15888,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "puzzle",
@@ -16213,10 +15977,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -16229,8 +15990,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -16238,10 +15997,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -16319,7 +16077,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -16332,14 +16090,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -16419,10 +16177,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -16435,8 +16190,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -16444,10 +16197,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -16525,7 +16277,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.34,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -16541,7 +16292,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -16551,10 +16301,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -16629,10 +16379,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.52,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -16645,8 +16392,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -16654,10 +16399,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -16732,7 +16476,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -16745,14 +16489,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -16834,7 +16578,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.25,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -16850,7 +16593,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -16860,10 +16602,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -16968,7 +16710,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
-        "light",
         "cozy",
         "funny",
         "chaotic"
@@ -16990,7 +16731,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -17006,9 +16746,9 @@ const gameData = {
       "displayTags": [
         "파티게임",
         "대화많음",
-        "가볍게",
         "편안하게",
-        "웃긴"
+        "웃긴",
+        "왁자지껄"
       ],
       "summaryKo": "숨겨진 주사위의 개수를 추측하고 블러프하며 주사위를 잃지 않는 게임.",
       "comment": {
@@ -17100,8 +16840,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -17122,8 +16860,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -17139,8 +16875,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "협력하여 펭귄 피라미드를 쌓으며 손의 카드를 내려놓고 페널티를 최소화하는 게임.",
       "comment": {
@@ -17216,7 +16952,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -17230,7 +16965,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -17238,11 +16972,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -17316,10 +17050,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -17332,8 +17063,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -17341,10 +17070,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -17419,10 +17147,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -17435,8 +17160,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -17444,10 +17167,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -17525,7 +17247,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -17538,14 +17260,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -17624,7 +17346,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -17637,14 +17359,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -17747,8 +17469,6 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -17776,8 +17496,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -17878,7 +17596,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -17892,7 +17609,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -17900,11 +17616,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -18010,8 +17726,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
-        "light",
-        "brainy",
         "tense",
         "immersive"
       ],
@@ -18031,13 +17745,12 @@ const gameData = {
       ],
       "interactionTags": [
         "team",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "tense",
         "immersive",
         "puzzle",
@@ -18051,7 +17764,8 @@ const gameData = {
         "couple",
         "large_group",
         "team",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "displayTags": [
         "퍼즐",
@@ -18135,7 +17849,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.2,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -18151,7 +17864,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -18161,10 +17873,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -18243,10 +17955,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -18259,8 +17968,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -18268,10 +17975,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -18394,7 +18100,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.87,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -18414,7 +18119,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -18430,7 +18134,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "철로 건설과 화물 운송으로 수익을 극대화하며 경쟁하는 철도 경영 게임.",
       "comment": {
@@ -18503,10 +18207,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.6,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -18519,8 +18220,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -18528,10 +18227,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -18615,10 +18313,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -18636,8 +18331,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -18730,7 +18423,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -18744,7 +18436,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -18752,11 +18443,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -18874,8 +18565,7 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.39,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -18892,7 +18582,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -18903,8 +18592,8 @@ const gameData = {
         "전략",
         "조용히집중",
         "몰입감",
-        "머리 쓰는",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "14개 진영이 행성을 개조하며 기술 발전을 겨루는 우주 개척 게임.",
       "comment": {
@@ -18973,7 +18662,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -18984,12 +18673,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -19060,7 +18749,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -19071,12 +18760,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -19150,10 +18839,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -19166,8 +18852,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -19175,10 +18859,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -19283,9 +18966,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.9,
       "moodTags": [
-        "brainy",
         "immersive",
-        "light",
         "funny"
       ],
       "playTags": [
@@ -19306,9 +18987,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "funny",
         "puzzle",
         "strategy",
@@ -19325,7 +19004,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "무굴 제국의 귀족이 되어 주사위와 워커 배치로 부와 명성을 겨루는 게임.",
       "comment": {
@@ -19432,8 +19111,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.22,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -19453,8 +19130,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -19561,10 +19236,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -19580,8 +19252,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -19594,7 +19264,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "자신의 카드를 모두 없애고 최저 점수를 얻으며 권력 투쟁을 겨루는 게임.",
       "comment": {
@@ -19667,10 +19337,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -19683,8 +19350,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -19692,10 +19357,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -19768,7 +19432,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -19781,14 +19444,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "couple"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -19866,10 +19527,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.28,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -19881,16 +19539,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -19969,7 +19623,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -19982,14 +19636,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -20062,10 +19716,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner"
@@ -20076,15 +19727,11 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천"
       ],
       "summaryKo": "",
@@ -20161,7 +19808,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.43,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -20175,7 +19821,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -20183,11 +19828,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -20260,7 +19905,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.62,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -20277,7 +19921,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -20288,9 +19931,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -20365,7 +20008,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.21,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -20381,7 +20023,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -20391,10 +20032,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -20492,8 +20133,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.7,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -20512,8 +20151,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -20528,7 +20165,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "소 떼를 관리하고 건물을 짓고 직원을 고용해 텍사스에서 캔자스시티까지 목축업으로 부를 이루는 게임.",
       "comment": {
@@ -20626,8 +20263,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.94,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -20646,8 +20281,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -20662,7 +20295,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "뉴질랜드 목장을 경영하며 트레일을 따라 이동해 양을 판매하고 승리점을 모으는 게임.",
       "comment": {
@@ -20772,8 +20405,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.96,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -20794,8 +20425,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -20888,7 +20517,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.91,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -20905,7 +20533,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -20916,9 +20543,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -21022,7 +20649,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.89,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -21041,7 +20667,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -21056,7 +20681,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "중세 수도원의 원장이 되어 건물을 건설하고 자원을 생산해 명성 높은 물품을 제조하며 승리점을 겨루는 게임.",
       "comment": {
@@ -21149,10 +20774,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play"
       ],
@@ -21166,8 +20788,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "beginner",
         "group",
@@ -21176,9 +20796,8 @@ const gameData = {
       "displayTags": [
         "카드운용",
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천"
+        "입문추천",
+        "모임추천"
       ],
       "summaryKo": "색깔 구슬을 모아 기계를 건설하고 승리점을 얻으며 연쇄 반응으로 더 많은 행동을 하는 게임.",
       "comment": {
@@ -21253,10 +20872,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -21268,16 +20884,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -21353,10 +20965,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.02,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -21369,8 +20978,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -21378,10 +20985,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -21456,7 +21062,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -21468,13 +21074,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -21551,7 +21157,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -21563,13 +21169,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -21640,14 +21246,34 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "tense",
+        "immersive",
+        "deduction",
+        "social",
+        "table_talk"
+      ],
+      "displayTags": [
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -21744,8 +21370,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light",
-        "brainy"
+        "cozy"
       ],
       "playTags": [
         "puzzle",
@@ -21765,8 +21390,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
+        "cozy",
         "puzzle",
         "card_play",
         "strategy",
@@ -21782,7 +21406,7 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "같은 숫자 3장을 찾아 세트를 만드는 메모리 카드 게임입니다.",
       "comment": {
@@ -21856,10 +21480,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.9,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -21871,16 +21492,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -21956,7 +21573,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.13,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -21973,7 +21589,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -21984,9 +21599,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -22061,7 +21676,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -22073,13 +21688,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -22158,7 +21773,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.19,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -22175,7 +21789,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -22186,9 +21799,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -22293,8 +21906,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.11,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -22314,8 +21925,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -22403,10 +22012,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -22418,16 +22024,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -22557,10 +22159,8 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.88,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "cozy",
         "immersive"
       ],
@@ -22585,10 +22185,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "cozy",
         "immersive",
         "card_play",
@@ -22695,8 +22293,6 @@ const gameData = {
       "difficultyWeight": 1.49,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -22709,28 +22305,28 @@ const gameData = {
         "quick_play"
       ],
       "interactionTags": [
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "cozy",
         "deduction",
         "beginner",
         "first_game",
         "group",
         "quick_play",
+        "social",
         "table_talk"
       ],
       "displayTags": [
         "추리",
+        "대화/심리전",
         "대화많음",
         "쫄깃하게",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "상대의 숨겨진 숫자 수열을 먼저 맞히면서 자신의 코드를 지키는 추리 게임.",
       "comment": {
@@ -22805,7 +22401,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.49,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -22818,14 +22413,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -22904,7 +22497,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.84,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -22920,7 +22512,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -22930,10 +22521,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -23040,8 +22631,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.9,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -23061,8 +22650,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -23154,10 +22741,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -23170,8 +22754,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -23179,10 +22761,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -23258,7 +22839,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -23274,7 +22854,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -23284,10 +22863,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -23360,7 +22939,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.45,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -23375,7 +22953,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -23384,10 +22961,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -23465,7 +23042,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -23479,7 +23055,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -23487,11 +23062,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -23593,9 +23168,7 @@ const gameData = {
       "difficultyWeight": 2.79,
       "moodTags": [
         "cozy",
-        "immersive",
-        "light",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy",
@@ -23616,8 +23189,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "strategy",
         "card_play",
         "beginner",
@@ -23706,10 +23277,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -23722,8 +23290,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -23731,10 +23297,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -23828,9 +23393,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "cozy",
-        "brainy",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "deduction",
@@ -23846,6 +23409,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "competitive"
@@ -23856,8 +23420,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "deduction",
         "party",
         "card_play",
@@ -23867,6 +23429,7 @@ const gameData = {
         "first_game",
         "quick_play",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "competitive"
@@ -23951,7 +23514,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.32,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -23965,7 +23527,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -23973,11 +23534,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -24077,8 +23638,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.57,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive",
         "tense",
         "funny"
@@ -24103,8 +23662,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "tense",
         "funny",
@@ -24200,7 +23757,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -24214,7 +23770,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -24222,11 +23777,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -24326,8 +23881,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "chaotic",
         "immersive",
         "cozy"
@@ -24353,8 +23906,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "chaotic",
         "immersive",
         "cozy",
@@ -24449,7 +24000,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.01,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -24465,7 +24015,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -24475,10 +24024,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -24586,9 +24135,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "brainy",
-        "tense",
-        "light"
+        "tense"
       ],
       "playTags": [
         "storytelling",
@@ -24612,9 +24159,7 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "brainy",
         "tense",
-        "light",
         "storytelling",
         "party",
         "puzzle",
@@ -24742,9 +24287,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.64,
       "moodTags": [
-        "brainy",
-        "cozy",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "strategy",
@@ -24765,9 +24308,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "cozy",
-        "light",
         "strategy",
         "puzzle",
         "beginner",
@@ -24857,10 +24398,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -24872,16 +24410,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -24957,10 +24491,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.35,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -24972,16 +24503,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -25057,10 +24584,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.47,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -25072,16 +24596,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -25158,7 +24678,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.81,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -25173,7 +24692,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -25182,10 +24700,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -25259,10 +24777,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -25274,16 +24789,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -25362,7 +24873,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.03,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -25375,14 +24886,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -25462,7 +24973,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.5,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -25476,7 +24986,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -25484,11 +24993,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -25563,7 +25072,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -25577,7 +25085,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -25585,11 +25092,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -25664,7 +25171,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.29,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -25678,7 +25184,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -25686,11 +25191,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -25762,7 +25267,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.05,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -25777,7 +25281,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -25786,10 +25289,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -25858,7 +25361,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -25869,12 +25372,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -25952,7 +25455,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -25965,14 +25467,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -26053,7 +25553,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.18,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -26067,7 +25566,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -26075,11 +25573,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -26202,8 +25700,7 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "funny",
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -26224,7 +25721,6 @@ const gameData = {
         "chaotic",
         "funny",
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -26310,10 +25806,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -26325,16 +25818,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -26412,7 +25901,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.09,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -26425,14 +25914,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "couple",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "2인추천",
@@ -26530,10 +26019,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "card_play",
@@ -26551,8 +26037,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "puzzle",
         "card_play",
         "strategy",
@@ -26644,7 +26128,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.69,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -26659,7 +26142,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -26668,10 +26150,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -26797,8 +26279,7 @@ const gameData = {
         "cozy",
         "tense",
         "funny",
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "party",
@@ -26827,7 +26308,6 @@ const gameData = {
         "tense",
         "funny",
         "immersive",
-        "brainy",
         "party",
         "storytelling",
         "strategy",
@@ -26924,7 +26404,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.47,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -26940,7 +26419,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -26950,10 +26428,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -27030,7 +26508,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.57,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -27047,7 +26524,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -27058,9 +26534,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -27132,10 +26608,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -27148,8 +26621,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -27157,10 +26628,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -27235,7 +26705,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -27249,7 +26718,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -27257,11 +26725,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -27335,7 +26803,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -27349,7 +26816,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -27357,11 +26823,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -27449,8 +26915,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
         "cozy"
       ],
@@ -27474,8 +26938,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "cozy",
         "card_play",
@@ -27570,7 +27032,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -27583,14 +27045,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "couple",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "2인추천",
@@ -27661,7 +27123,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -27672,12 +27134,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -27751,22 +27213,38 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "immersive",
+        "deduction",
         "group",
-        "large_group"
+        "large_group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
-        "모임추천",
-        "단체추천"
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "",
       "comment": {
@@ -27837,7 +27315,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.61,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -27852,7 +27329,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -27861,10 +27337,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -27938,10 +27414,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -27953,16 +27426,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -28042,10 +27511,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -28057,16 +27523,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -28166,11 +27628,9 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
-        "light",
         "tense"
       ],
       "playTags": [
@@ -28190,11 +27650,9 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
-        "light",
         "tense",
         "card_play",
         "strategy",
@@ -28313,8 +27771,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.06,
       "moodTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
@@ -28338,8 +27794,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
@@ -28434,7 +27888,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -28450,7 +27903,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -28460,10 +27912,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -28553,8 +28005,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -28573,8 +28023,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "puzzle",
         "strategy",
@@ -28588,8 +28036,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "숫자 타일로 4x4 그리드를 채우되 수치 순서 규칙을 지키며 먼저 완성하는 게임.",
       "comment": {
@@ -28739,7 +28187,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -28753,7 +28200,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -28761,11 +28207,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -28840,7 +28286,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -28856,7 +28301,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -28866,10 +28310,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -28944,7 +28388,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -28956,13 +28400,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -29041,7 +28485,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.17,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -29056,7 +28499,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -29065,10 +28507,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -29141,7 +28583,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -29156,7 +28597,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -29165,10 +28605,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -29314,10 +28754,7 @@ const gameData = {
       "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -29330,8 +28767,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -29339,10 +28774,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -29556,7 +28990,6 @@ const gameData = {
       "difficultyWeight": 3.82,
       "moodTags": [
         "cozy",
-        "brainy",
         "immersive",
         "tense"
       ],
@@ -29582,7 +29015,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
         "immersive",
         "tense",
         "puzzle",
@@ -29701,10 +29133,8 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.48,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -29724,10 +29154,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -29743,7 +29171,7 @@ const gameData = {
         "전략",
         "파티게임",
         "개인경쟁",
-        "머리 쓰는"
+        "쫄깃하게"
       ],
       "summaryKo": "다섯 가지 색상의 발굴지로 수익성 있는 원정을 떠나 점수를 겨루는 2인용 카드게임입니다",
       "comment": {
@@ -29821,7 +29249,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -29837,7 +29264,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -29847,10 +29273,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -29941,10 +29367,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.71,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -29961,8 +29384,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "puzzle",
@@ -30050,7 +29471,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.32,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -30065,7 +29485,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -30074,10 +29493,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -30199,7 +29618,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.81,
       "moodTags": [
-        "brainy",
         "tense",
         "chaotic",
         "funny",
@@ -30216,6 +29634,7 @@ const gameData = {
       ],
       "interactionTags": [
         "competitive",
+        "social",
         "table_talk",
         "betrayal",
         "silent_focus"
@@ -30223,7 +29642,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "chaotic",
         "funny",
@@ -30234,6 +29652,7 @@ const gameData = {
         "experienced",
         "long_stay",
         "competitive",
+        "social",
         "table_talk",
         "betrayal",
         "silent_focus"
@@ -30242,8 +29661,8 @@ const gameData = {
         "전략",
         "카드운용",
         "개인경쟁",
-        "대화많음",
-        "배신/심리전"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "각 진영이 서로 다른 능력과 승리 조건으로 숲의 지배권을 놓고 벌이는 비대칭 전쟁 게임.",
       "comment": {
@@ -30345,8 +29764,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -30366,8 +29783,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -30452,7 +29867,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -30463,12 +29878,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -30571,7 +29986,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.11,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -30587,7 +30001,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -30597,10 +30010,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "밭을 가꾸고 물건을 판매해 돈을 벌어 득점 경쟁에서 이기는 게임.",
       "comment": {
@@ -30693,8 +30106,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.14,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -30714,8 +30125,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "beginner",
@@ -30730,8 +30139,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는",
-        "가볍게"
+        "몰입감",
+        "입문추천"
       ],
       "summaryKo": "이탈리아를 배경으로 세력 다툼을 벌이는 전략 게임.",
       "comment": {
@@ -30836,7 +30245,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.72,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -30856,7 +30264,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -30872,7 +30279,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "상품 거래와 건물 투자로 부를 늘려 최고의 재산가가 되는 게임.",
       "comment": {
@@ -30945,7 +30352,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.51,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -30960,7 +30366,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -30969,10 +30374,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -31081,8 +30486,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.42,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -31097,7 +30501,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -31106,9 +30509,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "몰입감",
-        "머리 쓰는",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "파괴된 문명을 부족을 이끌고 재건하며 자원 활용과 기술 습득을 통해 승리점을 겨루는 게임.",
       "comment": {
@@ -31180,10 +30583,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -31195,16 +30595,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -31312,9 +30708,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -31334,9 +30728,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "strategy",
         "experienced",
         "long_stay",
@@ -31352,7 +30744,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "배의 안전 도착을 예측하고 베팅하는 추측과 투기의 게임이다.",
       "comment": {
@@ -31474,8 +30866,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.92,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -31494,8 +30884,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -31510,7 +30898,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "17세기 카리브해를 배경으로 배를 조종해 도시를 방문하며 영향력을 높이는 전략 게임.",
       "comment": {
@@ -31586,7 +30974,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.41,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -31601,7 +30988,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -31610,10 +30996,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -31721,8 +31107,6 @@ const gameData = {
       "difficultyWeight": 3.38,
       "moodTags": [
         "immersive",
-        "brainy",
-        "light",
         "funny"
       ],
       "playTags": [
@@ -31743,8 +31127,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
-        "light",
         "funny",
         "strategy",
         "experienced",
@@ -31760,7 +31142,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "몰입감",
-        "머리 쓰는"
+        "웃긴"
       ],
       "summaryKo": "칸의 제국을 탐험하며 부와 명성을 추구하는 모험 게임.",
       "comment": {
@@ -31862,11 +31244,10 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
-        "immersive"
+        "immersive",
+        "cozy"
       ],
       "playTags": [
         "puzzle",
@@ -31886,11 +31267,10 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
+        "cozy",
         "puzzle",
         "card_play",
         "strategy",
@@ -31998,10 +31378,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play"
       ],
@@ -32017,8 +31394,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "beginner",
         "group",
@@ -32029,9 +31404,9 @@ const gameData = {
       "displayTags": [
         "카드운용",
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천"
+        "입문추천",
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "레슬러 카드를 내어 전력을 높이고 포인트를 겨루는 게임",
       "comment": {
@@ -32107,7 +31482,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.21,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -32120,14 +31494,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -32228,10 +31600,7 @@ const gameData = {
       "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "strategy"
@@ -32247,8 +31616,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "puzzle",
         "strategy",
         "beginner",
@@ -32261,7 +31628,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "각자의 도시를 시대별로 발전시키며 누적되는 선택으로 개인화된 도시를 만드는 레거시 게임.",
       "comment": {
@@ -32357,8 +31724,6 @@ const gameData = {
       "difficultyWeight": 2.75,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -32377,6 +31742,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive",
         "turn_based"
@@ -32385,8 +31751,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "immersive",
         "deduction",
         "bluffing",
@@ -32399,6 +31763,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive",
         "turn_based"
@@ -32496,8 +31861,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.57,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -32515,8 +31878,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -32529,8 +31890,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "네 명이 타일을 모아 숫자 시퀀스와 같은 패턴을 만드는 럼미 유사 게임.",
       "comment": {
@@ -32629,8 +31990,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.38,
       "moodTags": [
-        "light",
-        "brainy",
         "tense",
         "funny",
         "immersive",
@@ -32653,8 +32012,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "tense",
         "funny",
         "immersive",
@@ -32673,7 +32030,7 @@ const gameData = {
         "파티게임",
         "카드운용",
         "개인경쟁",
-        "가볍게"
+        "쫄깃하게"
       ],
       "summaryKo": "플레이어들이 돌아가며 던전에 몬스터를 채우고 도전자가 장비로 생존하는 운 시험 게임.",
       "comment": {
@@ -32767,9 +32124,7 @@ const gameData = {
       "difficultyWeight": 1.55,
       "moodTags": [
         "cozy",
-        "immersive",
-        "light",
-        "brainy"
+        "immersive"
       ],
       "playTags": [],
       "situationTags": [
@@ -32786,8 +32141,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "beginner",
         "group",
         "couple",
@@ -32799,7 +32152,7 @@ const gameData = {
         "갈등적음",
         "편안하게",
         "몰입감",
-        "가볍게"
+        "입문추천"
       ],
       "summaryKo": "팀 협력으로 불안정한 신전 구조물을 쌓아 올리는 손 기술 게임.",
       "comment": {
@@ -32902,8 +32255,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.26,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -32925,8 +32276,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -33056,8 +32405,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.43,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -33075,8 +32422,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -33089,8 +32434,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "가볍게",
-        "머리 쓰는"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "실크로드 중심지 메르브에서 부와 권력을 쌓으면서 몽골 침략 위협에 대처하는 경제 게임.",
       "comment": {
@@ -33163,7 +32508,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -33175,13 +32520,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -33289,8 +32634,7 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.61,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -33309,7 +32653,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -33441,7 +32784,6 @@ const gameData = {
       "difficultyWeight": 4.66,
       "moodTags": [
         "cozy",
-        "brainy",
         "immersive",
         "tense"
       ],
@@ -33467,7 +32809,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
         "immersive",
         "tense",
         "card_play",
@@ -33586,8 +32927,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.69,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -33607,8 +32946,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -33727,10 +33064,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -33747,8 +33081,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -33762,7 +33094,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "그림을 사고팔면서 경매로 이익을 극대화하는 게임.",
       "comment": {
@@ -33836,10 +33168,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -33851,16 +33180,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -33951,10 +33276,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -33970,8 +33292,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -33984,7 +33304,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "숲에서 버섯을 채집해 판매하거나 조리하며 점수를 겨루는 2인 전략 카드게임.",
       "comment": {
@@ -34060,7 +33380,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -34074,7 +33393,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -34082,11 +33400,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -34162,7 +33480,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.41,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -34175,14 +33492,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -34260,10 +33575,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -34275,16 +33587,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -34384,9 +33692,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.3,
       "moodTags": [
-        "immersive",
-        "brainy",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -34406,8 +33712,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
-        "light",
         "strategy",
         "experienced",
         "long_stay",
@@ -34497,7 +33801,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.19,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -34511,7 +33814,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -34519,11 +33821,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -34625,8 +33927,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.75,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive",
         "funny",
         "tense"
@@ -34649,8 +33949,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "funny",
         "tense",
@@ -34669,7 +33967,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "가볍게"
+        "몰입감"
       ],
       "summaryKo": "바이킹 클랜의 지도자로서 워커를 배치해 자원을 모으고 북유럽 신화의 괴물들을 격퇴하여 영광을 겨루는 게임",
       "comment": {
@@ -34773,10 +34071,8 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.64,
       "moodTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -34800,10 +34096,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -34897,7 +34191,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.66,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -34912,7 +34205,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -34921,10 +34213,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -35015,7 +34307,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.36,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -35034,7 +34325,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -35049,7 +34339,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "19세기 바르셀로나의 건설업자가 되어 도시를 확장하고 건물을 지으며 점수를 겨루는 게임.",
       "comment": {
@@ -35125,7 +34415,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -35139,7 +34428,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -35147,11 +34435,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -35271,8 +34559,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "tense",
-        "brainy"
+        "tense"
       ],
       "playTags": [
         "strategy"
@@ -35296,7 +34583,6 @@ const gameData = {
         "cozy",
         "immersive",
         "tense",
-        "brainy",
         "strategy",
         "beginner",
         "group",
@@ -35438,8 +34724,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
       "moodTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive"
@@ -35461,8 +34745,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
@@ -35590,7 +34872,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.23,
       "moodTags": [
-        "brainy",
         "immersive",
         "tense"
       ],
@@ -35611,7 +34892,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "tense",
         "strategy",
@@ -35628,7 +34908,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "주사위 굴림으로 군사 작전과 반지원정대의 모르도르 침투를 동시에 진행하는 게임.",
       "comment": {
@@ -35703,7 +34983,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.46,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -35716,14 +34995,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -35798,7 +35075,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -35813,7 +35089,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -35822,10 +35097,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -35942,9 +35217,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.03,
       "moodTags": [
-        "brainy",
         "immersive",
-        "light",
         "funny"
       ],
       "playTags": [
@@ -35964,9 +35237,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "funny",
         "strategy",
         "experienced",
@@ -35981,8 +35252,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "웃긴"
       ],
       "summaryKo": "히메지 성을 배경으로 씨족을 통치하며 일꾼 배치와 자원 관리로 승리점을 겨루는 게임.",
       "comment": {
@@ -36081,7 +35352,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.77,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -36099,7 +35369,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -36112,8 +35381,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "두 가문이 자원 관리와 엔진 빌딩으로 히메지성의 영향력을 겨루는 게임.",
       "comment": {
@@ -36227,8 +35496,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.98,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive"
       ],
@@ -36250,8 +35517,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive",
         "puzzle",
@@ -36268,8 +35533,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "웃긴",
+        "몰입감"
       ],
       "summaryKo": "중세 부르고뉴에서 정착촌을 건설하고 무역하며 영지를 발전시켜 승점을 겨루는 게임",
       "comment": {
@@ -36346,7 +35611,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.11,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -36363,7 +35627,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -36374,9 +35637,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -36449,10 +35712,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -36464,16 +35724,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -36550,10 +35806,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -36566,8 +35819,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -36575,10 +35826,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -36653,10 +35903,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.12,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -36668,16 +35915,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -36780,7 +36023,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -36799,7 +36041,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -36814,7 +36055,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "1889년 파리를 배경으로 가로등 근처에 건물을 지어 더 많은 점수를 얻는 2인용 게임.",
       "comment": {
@@ -36886,19 +36127,36 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "couple"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "couple"
+        "tense",
+        "immersive",
+        "deduction",
+        "couple",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
-        "2인추천"
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "",
       "comment": {
@@ -36982,10 +36240,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -37004,8 +36259,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "beginner",
@@ -37021,7 +36274,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "입문추천"
       ],
       "summaryKo": "색상과 모양의 균형을 맞춰 가장 아름다운 부케를 만드는 게임",
       "comment": {
@@ -37117,10 +36370,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -37140,8 +36390,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "group",
@@ -37234,7 +36482,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.63,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -37251,7 +36498,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -37262,9 +36508,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -37369,8 +36615,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "chaotic"
       ],
       "playTags": [
@@ -37387,6 +36631,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "simultaneous"
@@ -37397,8 +36642,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "chaotic",
         "deduction",
         "party",
@@ -37409,6 +36652,7 @@ const gameData = {
         "quick_play",
         "large_group",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "simultaneous"
@@ -37496,7 +36740,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -37509,14 +36753,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -37606,8 +36850,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [],
@@ -37622,8 +36864,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "beginner",
         "group",
@@ -37632,10 +36872,10 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "몰입감",
-        "입문추천"
+        "입문추천",
+        "모임추천",
+        "오래즐김"
       ],
       "summaryKo": "한국의 주요 도시를 사고팔며 건물을 지어 재산을 늘리는 모노폴리 한국식 변형 게임.",
       "comment": {
@@ -37707,10 +36947,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner"
@@ -37721,15 +36958,11 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천"
       ],
       "summaryKo": "",
@@ -37849,7 +37082,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.81,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -37868,7 +37100,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -37883,7 +37114,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "미개척지에 정착하며 자동화된 생산 시스템을 구축하는 전략 게임.",
       "comment": {
@@ -37957,10 +37188,7 @@ const gameData = {
       "shelfFullLabel": "따로",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -37973,8 +37201,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -37982,10 +37208,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -38061,7 +37286,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.82,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -38076,7 +37300,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -38085,10 +37308,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -38186,7 +37409,6 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "funny",
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -38204,7 +37426,6 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "funny",
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -38217,7 +37438,7 @@ const gameData = {
         "배신/심리전",
         "왁자지껄",
         "웃긴",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "새끼 고양이를 밀어내며 일렬로 맞춰 고양이로 성장시키는 2인용 추상 전략 게임.",
       "comment": {
@@ -38342,7 +37563,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.88,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -38362,7 +37582,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -38490,7 +37709,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -38508,7 +37726,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -38521,8 +37738,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "건설, 자원 관리, 탐험을 통해 브라질 제국을 건설하고 황제의 칭호를 겨루는 게임.",
       "comment": {
@@ -38595,7 +37812,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.86,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -38610,7 +37826,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -38619,10 +37834,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -38720,9 +37935,7 @@ const gameData = {
       "difficultyWeight": 2.09,
       "moodTags": [
         "tense",
-        "brainy",
-        "funny",
-        "light"
+        "funny"
       ],
       "playTags": [
         "deduction",
@@ -38733,6 +37946,7 @@ const gameData = {
         "quick_play"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "competitive",
         "low_conflict"
@@ -38741,13 +37955,12 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "deduction",
         "party",
         "beginner",
         "quick_play",
+        "social",
         "table_talk",
         "competitive",
         "low_conflict"
@@ -38755,9 +37968,9 @@ const gameData = {
       "displayTags": [
         "추리",
         "파티게임",
+        "대화/심리전",
         "대화많음",
-        "개인경쟁",
-        "갈등적음"
+        "개인경쟁"
       ],
       "summaryKo": "카드 덱의 숨겨진 이동 경로를 추론하여 셰익스피어의 '암흑의 숙녀'를 추적하는 솔리테어 게임.",
       "comment": {
@@ -38859,7 +38072,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.47,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -38877,7 +38089,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "card_play",
@@ -38890,8 +38101,8 @@ const gameData = {
         "전략",
         "카드운용",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "정전 상황에서 자원을 관리하며 홍콩의 질서를 회복하고 권력을 놓고 겨루는 게임.",
       "comment": {
@@ -38966,7 +38177,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.71,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -38982,7 +38192,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -38992,10 +38201,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -39086,10 +38295,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.75,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -39107,8 +38313,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "puzzle",
@@ -39193,10 +38397,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -39208,16 +38409,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -39321,9 +38518,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.3493,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "card_play",
@@ -39341,9 +38536,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "card_play",
         "strategy",
         "experienced",
@@ -39357,7 +38550,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 게임.",
       "comment": {
@@ -39463,7 +38656,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.89,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -39483,7 +38675,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -39499,7 +38690,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "일꾼을 배치해 포도밭을 개발하고 포도주 주문을 완성하는 농장 경영 게임.",
       "comment": {
@@ -39574,10 +38765,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.98,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -39589,16 +38777,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -39694,10 +38878,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.88,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -39709,16 +38890,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -39796,10 +38973,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.22,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -39811,16 +38985,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -39899,7 +39069,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.15,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -39915,7 +39084,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -39925,10 +39093,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -40039,8 +39207,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
-        "light",
-        "brainy",
         "funny"
       ],
       "playTags": [
@@ -40062,8 +39228,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "funny",
         "card_play",
         "strategy",
@@ -40206,7 +39370,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.45,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -40228,7 +39391,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -40245,8 +39407,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "배신/심리전",
-        "머리 쓰는",
-        "왁자지껄"
+        "왁자지껄",
+        "웃긴"
       ],
       "summaryKo": "1920년대 대체역사를 배경으로 영토 정복과 자원 확보를 통해 부와 입지를 겨루는 엔진빌딩 게임.",
       "comment": {
@@ -40319,10 +39481,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.93,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -40334,16 +39493,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -40444,8 +39599,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.03,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -40464,8 +39617,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -40480,7 +39631,7 @@ const gameData = {
         "전략",
         "퍼즐",
         "개인경쟁",
-        "가볍게"
+        "몰입감"
       ],
       "summaryKo": "주사위 드래프팅으로 폴리오미노 건물을 배치하여 식민지를 확장하고 엔진을 빌드하는 게임",
       "comment": {
@@ -40555,7 +39706,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.8,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -40571,7 +39721,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -40581,10 +39730,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -40657,7 +39806,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.58,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -40672,7 +39820,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -40681,10 +39828,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -40779,9 +39926,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "tense",
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "deduction",
@@ -40797,6 +39942,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
@@ -40804,9 +39950,7 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
         "immersive",
-        "light",
         "deduction",
         "storytelling",
         "party",
@@ -40816,6 +39960,7 @@ const gameData = {
         "long_stay",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -40896,32 +40041,39 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
-        "light",
-        "brainy"
+        "tense",
+        "immersive"
       ],
-      "playTags": [],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "beginner",
         "group"
       ],
       "interactionTags": [
+        "social",
+        "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
+        "tense",
+        "immersive",
+        "deduction",
         "beginner",
         "group",
+        "social",
+        "table_talk",
         "low_conflict"
       ],
       "displayTags": [
+        "추리",
+        "대화/심리전",
+        "대화많음",
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
+        "쫄깃하게"
       ],
       "summaryKo": "",
       "comment": {
@@ -41043,8 +40195,7 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "funny",
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -41066,7 +40217,6 @@ const gameData = {
         "chaotic",
         "funny",
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -41179,7 +40329,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.72,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -41199,7 +40348,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -41215,7 +40363,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "중세 유럽 귀족으로서 팔라딘의 도움을 받아 요새를 짓고 외침을 물리쳐 승리점을 경쟁하는 게임.",
       "comment": {
@@ -41290,10 +40438,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.46,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -41305,16 +40450,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -41387,7 +40528,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -41399,13 +40540,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -41503,10 +40644,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -41524,8 +40662,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "beginner",
@@ -41627,10 +40763,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8881,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -41646,8 +40779,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -41660,7 +40791,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "포커식 카드 조합으로 깃발을 놓고 벌이는 2인 전술 카드 게임.",
       "comment": {
@@ -41780,10 +40911,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -41799,8 +40927,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "beginner",
@@ -41813,7 +40939,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "입문추천"
       ],
       "summaryKo": "2명이 카드를 선택하며 군사, 과학, 점수 중 하나로 문명 발전을 겨루는 게임.",
       "comment": {
@@ -41887,7 +41013,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.76,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -41904,7 +41029,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -41915,9 +41039,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -42026,10 +41150,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -42046,8 +41167,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -42061,7 +41180,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "실크로드에서 향신료를 거래하며 승리점을 모아 명성을 얻는 게임.",
       "comment": {
@@ -42156,10 +41275,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.12,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -42175,8 +41291,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "beginner",
@@ -42189,7 +41303,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "입문추천"
       ],
       "summaryKo": "향신료 무역의 패권을 놓고 항해하며 번영과 영광을 추구하는 게임.",
       "comment": {
@@ -42277,9 +41391,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
-        "light",
-        "tense",
-        "brainy"
+        "tense"
       ],
       "playTags": [
         "card_play",
@@ -42291,29 +41403,29 @@ const gameData = {
         "quick_play"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "tense",
-        "brainy",
         "card_play",
         "deduction",
         "beginner",
         "group",
         "quick_play",
+        "social",
         "table_talk",
         "low_conflict"
       ],
       "displayTags": [
         "카드운용",
         "추리",
+        "대화/심리전",
         "대화많음",
-        "갈등적음",
-        "가볍게"
+        "갈등적음"
       ],
       "summaryKo": "질문과 추리를 통해 변장한 도둑 아르센 루팽을 찾아내는 탐정 게임.",
       "comment": {
@@ -42386,7 +41498,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.79,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -42404,7 +41515,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -42416,9 +41526,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -42509,10 +41619,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -42529,8 +41636,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -42544,7 +41649,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "9개의 경계석 앞에서 포커처럼 카드 조합을 겨루어 5개 이상 차지하거나 3개 연속 확보하는 게임.",
       "comment": {
@@ -42645,10 +41750,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.12,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -42665,8 +41767,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -42680,7 +41780,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "같은 색깔 카드를 모아 숫자 순서로 경로를 만들어 점수를 겨루는 게임.",
       "comment": {
@@ -42776,10 +41876,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play"
       ],
@@ -42794,8 +41891,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "beginner",
         "group",
@@ -42805,9 +41900,9 @@ const gameData = {
       "displayTags": [
         "카드운용",
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천"
+        "입문추천",
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "고양이 물리학자가 되어 상자 속 고양이의 생사와 빈 상자를 추론하고 경쟁하는 게임.",
       "comment": {
@@ -42881,7 +41976,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -42893,13 +41988,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -42993,8 +42088,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.35,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -43014,8 +42107,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -43030,8 +42121,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "손패를 재정렬할 수 없지만 스카우트로 탁상 양 끝 카드를 가져와 배치하며 래더 클라이밍을 겨루는 게임.",
       "comment": {
@@ -43150,8 +42241,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.88,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -43172,8 +42261,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -43267,10 +42354,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.17,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -43283,8 +42367,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -43292,10 +42374,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -43398,9 +42479,7 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "immersive",
-        "light",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "deduction",
@@ -43416,6 +42495,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -43426,8 +42506,6 @@ const gameData = {
         "funny",
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "deduction",
         "party",
         "strategy",
@@ -43437,6 +42515,7 @@ const gameData = {
         "quick_play",
         "couple",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -43445,7 +42524,7 @@ const gameData = {
         "파티게임",
         "전략",
         "협력",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "조종사와 부조종사가 침묵 속에서 주사위를 배치하여 비행기를 안전하게 착륙시키는 협력 게임.",
       "comment": {
@@ -43519,10 +42598,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.06,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -43535,8 +42611,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -43544,10 +42618,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -43647,7 +42720,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.76,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -43666,7 +42738,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -43681,7 +42752,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "스키타이 약탈자가 되어 정착촌을 약탈하고 퀘스트를 완료하며 승리점을 겨루는 게임.",
       "comment": {
@@ -43775,9 +42846,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
-        "light",
         "tense",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -43795,9 +42864,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "tense",
-        "brainy",
         "immersive",
         "card_play",
         "beginner",
@@ -43810,8 +42877,8 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "갈등적음",
-        "가볍게",
-        "쫄깃하게"
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "제국과 반란군으로 나뉘어 덱을 강화하며 상대 기지 3개를 먼저 파괴하는 게임.",
       "comment": {
@@ -43913,10 +42980,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "strategy",
         "card_play"
@@ -43934,8 +42998,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "strategy",
         "card_play",
         "beginner",
@@ -43950,7 +43012,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "여섯 기업의 최대 주주가 되어 부를 축적하는 투자 게임.",
       "comment": {
@@ -44025,10 +43087,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.11,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -44041,8 +43100,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -44050,10 +43107,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -44141,8 +43197,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.33,
       "moodTags": [
-        "light",
-        "brainy",
         "tense",
         "cozy"
       ],
@@ -44157,13 +43211,12 @@ const gameData = {
         "couple"
       ],
       "interactionTags": [
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "tense",
         "cozy",
         "puzzle",
@@ -44172,14 +43225,15 @@ const gameData = {
         "quick_play",
         "first_game",
         "couple",
+        "social",
         "table_talk"
       ],
       "displayTags": [
         "퍼즐",
         "추리",
+        "대화/심리전",
         "대화많음",
-        "가볍게",
-        "머리 쓰는"
+        "쫄깃하게"
       ],
       "summaryKo": "특수 능력을 활용해 상대 소대를 격퇴하고 깃발을 탈취하는 전술 게임",
       "comment": {
@@ -44266,9 +43320,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
-        "brainy",
         "tense",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -44288,9 +43340,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
-        "light",
         "immersive",
         "puzzle",
         "strategy",
@@ -44306,7 +43356,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "쫄깃하게"
       ],
       "summaryKo": "맨홀에서 출발해 터널을 건설하며 폭탄을 먼저 찾아 집으로 가져오는 게임.",
       "comment": {
@@ -44407,9 +43457,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "cozy",
-        "brainy",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "deduction",
@@ -44425,6 +43473,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "competitive",
@@ -44436,8 +43485,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "deduction",
         "party",
         "card_play",
@@ -44447,6 +43494,7 @@ const gameData = {
         "large_group",
         "quick_play",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "competitive",
@@ -44531,10 +43579,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.78,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -44546,16 +43591,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -44629,10 +43670,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.99,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -44644,16 +43682,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -44729,10 +43763,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -44744,16 +43775,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -44827,10 +43854,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -44842,16 +43866,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -44927,10 +43947,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.9,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -44942,16 +43959,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -45057,8 +44070,6 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.06,
       "moodTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "cozy",
@@ -45084,8 +44095,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "cozy",
@@ -45195,8 +44204,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -45216,8 +44223,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "puzzle",
         "strategy",
@@ -45233,7 +44238,7 @@ const gameData = {
         "전략",
         "조용히집중",
         "개인경쟁",
-        "머리 쓰는"
+        "편안하게"
       ],
       "summaryKo": "상대 말을 다양한 방식으로 포획하며 즐기는 체커식 전략게임",
       "comment": {
@@ -45309,7 +44314,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -45323,7 +44327,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -45331,11 +44334,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -45451,9 +44454,7 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.23,
       "moodTags": [
-        "light",
         "funny",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -45473,9 +44474,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "funny",
-        "brainy",
         "immersive",
         "strategy",
         "beginner",
@@ -45489,9 +44488,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "가볍게",
         "웃긴",
-        "머리 쓰는"
+        "몰입감",
+        "입문추천"
       ],
       "summaryKo": "주사위를 선택해 문명을 발전시키고 다른 문명들과 경쟁하는 전략 게임.",
       "comment": {
@@ -45595,10 +44594,8 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -45618,10 +44615,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -45637,7 +44632,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "배신/심리전",
-        "머리 쓰는"
+        "왁자지껄"
       ],
       "summaryKo": "카드 드래프트와 주사위 선택으로 에너지를 모아 크리스탈로 변환하는 마법사 토너먼트 게임.",
       "comment": {
@@ -45712,34 +44707,41 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
-        "light",
-        "brainy"
+        "tense",
+        "immersive"
       ],
-      "playTags": [],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "beginner",
         "group",
         "large_group"
       ],
       "interactionTags": [
+        "social",
+        "table_talk",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
+        "tense",
+        "immersive",
+        "deduction",
         "beginner",
         "group",
         "large_group",
+        "social",
+        "table_talk",
         "low_conflict"
       ],
       "displayTags": [
+        "추리",
+        "대화/심리전",
+        "대화많음",
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
-        "입문추천",
-        "모임추천"
+        "쫄깃하게"
       ],
       "summaryKo": "",
       "comment": {
@@ -45832,8 +44834,6 @@ const gameData = {
       "difficultyWeight": 1.25,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -45847,14 +44847,13 @@ const gameData = {
         "quick_play"
       ],
       "interactionTags": [
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "cozy",
         "deduction",
         "beginner",
@@ -45862,14 +44861,15 @@ const gameData = {
         "couple",
         "group",
         "quick_play",
+        "social",
         "table_talk"
       ],
       "displayTags": [
         "추리",
+        "대화/심리전",
         "대화많음",
         "쫄깃하게",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "경찰들이 눈을 감은 사이 도둑이 몰래 이동하고, 눈을 뜬 경찰들이 건물을 수색하며 도둑을 추적하는 숨바꼭지 게임.",
       "comment": {
@@ -45944,10 +44944,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -45960,8 +44957,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -45969,10 +44964,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -46046,10 +45040,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -46061,16 +45052,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -46180,8 +45167,6 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "funny",
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -46203,8 +45188,6 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "funny",
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -46298,7 +45281,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.64,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -46316,7 +45298,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -46328,9 +45309,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -46426,9 +45407,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "puzzle",
@@ -46448,9 +45427,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "puzzle",
         "strategy",
         "experienced",
@@ -46541,7 +45518,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.12,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -46556,7 +45532,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -46565,10 +45540,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -46673,8 +45648,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.67,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -46694,8 +45667,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -46783,10 +45754,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -46798,16 +45766,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -46883,10 +45847,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -46899,8 +45860,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -46908,10 +45867,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -46984,7 +45942,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.19,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -46999,7 +45956,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -47008,10 +45964,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -47114,10 +46070,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.76,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -47135,8 +46088,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "puzzle",
@@ -47225,7 +46176,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.54,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -47242,7 +46192,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -47253,9 +46202,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -47371,8 +46320,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.3,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -47391,8 +46338,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -47407,7 +46352,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "카드를 조합해 연속 행동을 실행하며 수중 왕국의 영광을 겨루는 엔진 빌더 게임.",
       "comment": {
@@ -47529,8 +46474,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.77,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -47551,8 +46494,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -47643,10 +46584,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -47658,16 +46596,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -47761,10 +46695,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.81,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "strategy",
         "card_play",
@@ -47782,8 +46713,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "strategy",
         "card_play",
         "puzzle",
@@ -47898,8 +46827,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.42,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -47919,8 +46846,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -47936,7 +46861,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "제한된 기부금으로 인력과 자원을 확보하여 다섯 가지 카테고리에서 우승을 겨루는 게임.",
       "comment": {
@@ -48035,7 +46960,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.75,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -48056,7 +46980,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -48148,7 +47071,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.93,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -48165,7 +47087,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -48176,9 +47097,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -48251,7 +47172,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.41,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -48266,7 +47186,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -48275,10 +47194,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -48347,7 +47266,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -48358,12 +47277,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -48460,7 +47379,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -48481,7 +47399,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "group",
@@ -48498,7 +47415,7 @@ const gameData = {
         "개인경쟁",
         "팀전",
         "대화많음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "제2차 세계대전을 배경으로 5개 강대국이 군사력과 전략으로 세계 패권을 겨루는 게임.",
       "comment": {
@@ -48599,7 +47516,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.15,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -48619,7 +47535,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "group",
@@ -48635,7 +47550,7 @@ const gameData = {
         "개인경쟁",
         "팀전",
         "대화많음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "제2차 세계대전 배경으로 5개국의 군사력과 경제를 통제하며 영토 점령과 전투를 겨루는 게임",
       "comment": {
@@ -48710,10 +47625,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.36,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -48725,16 +47637,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -48830,10 +47738,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "card_play",
@@ -48852,8 +47757,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "puzzle",
         "card_play",
         "strategy",
@@ -48941,10 +47844,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -48956,16 +47856,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -49041,10 +47937,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.14,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -49057,8 +47950,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -49066,10 +47957,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -49181,8 +48071,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.91,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -49205,8 +48093,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -49333,9 +48219,7 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.58,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "card_play",
@@ -49355,9 +48239,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "card_play",
         "strategy",
         "experienced",
@@ -49478,9 +48360,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.4,
       "moodTags": [
-        "brainy",
         "immersive",
-        "light",
         "funny"
       ],
       "playTags": [
@@ -49500,9 +48380,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "funny",
         "strategy",
         "experienced",
@@ -49518,7 +48396,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "주사위 배치로 액션 효율과 적 침략 속도를 동시에 조절하며 지구를 지키는 솔로 게임.",
       "comment": {
@@ -49594,10 +48472,7 @@ const gameData = {
       "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 1.56,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -49610,8 +48485,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -49619,10 +48492,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -49721,9 +48593,7 @@ const gameData = {
       "difficultyWeight": 2.1,
       "moodTags": [
         "cozy",
-        "immersive",
-        "light",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "storytelling",
@@ -49748,8 +48618,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "storytelling",
         "party",
         "card_play",
@@ -49868,8 +48736,6 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "chaotic",
         "tense"
       ],
@@ -49899,8 +48765,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "chaotic",
         "tense",
         "storytelling",
@@ -50023,8 +48887,6 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "chaotic",
         "tense"
       ],
@@ -50054,8 +48916,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "chaotic",
         "tense",
         "storytelling",
@@ -50154,10 +49014,7 @@ const gameData = {
       "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -50170,8 +49027,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -50179,10 +49034,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -50285,8 +49139,6 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "chaotic",
         "tense"
       ],
@@ -50317,8 +49169,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
-        "brainy",
         "chaotic",
         "tense",
         "storytelling",
@@ -50447,9 +49297,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "chaotic",
-        "tense",
-        "light",
-        "brainy"
+        "tense"
       ],
       "playTags": [
         "party",
@@ -50476,8 +49324,6 @@ const gameData = {
         "cozy",
         "chaotic",
         "tense",
-        "light",
-        "brainy",
         "party",
         "dexterity",
         "card_play",
@@ -50572,10 +49418,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -50588,8 +49431,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -50597,10 +49438,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -50695,7 +49535,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.28,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -50714,7 +49553,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -50728,8 +49566,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "노동자를 배치해 철도망을 확장하고 현대화하며 제국을 발전시키는 게임.",
       "comment": {
@@ -50805,7 +49643,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.83,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -50820,7 +49657,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -50829,10 +49665,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -50939,8 +49775,6 @@ const gameData = {
       "difficultyWeight": 2.7213,
       "moodTags": [
         "cozy",
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -50964,8 +49798,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -51075,9 +49907,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.5,
       "moodTags": [
-        "cozy",
-        "brainy",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "card_play",
@@ -51097,8 +49927,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "beginner",
@@ -51208,8 +50036,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.9091,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive"
       ],
@@ -51232,8 +50058,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive",
         "card_play",
@@ -51252,7 +50076,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "웃긴"
       ],
       "summaryKo": "주사위 론델로 자원을 모아 분석 엔진을 완성하고 명성을 겨루는 게임.",
       "comment": {
@@ -51328,7 +50152,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.81,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -51344,7 +50167,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -51354,10 +50176,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -51460,8 +50282,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.23,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -51481,8 +50301,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -51497,8 +50315,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "공개/비공개 카드 선택으로 상대를 압도하고 첩보원을 적발하는 전략 게임.",
       "comment": {
@@ -51601,7 +50419,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.84,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -51620,7 +50437,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -51635,7 +50451,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "예루살렘을 재건하기 위해 자원과 일꾼을 활용해 성전, 성벽, 토라 교육으로 승리점을 얻는 게임.",
       "comment": {
@@ -51730,7 +50546,6 @@ const gameData = {
       "moodTags": [
         "cozy",
         "tense",
-        "brainy",
         "chaotic",
         "immersive"
       ],
@@ -51753,6 +50568,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "silent_focus",
         "simultaneous"
@@ -51762,7 +50578,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
         "chaotic",
         "immersive",
         "deduction",
@@ -51779,6 +50594,7 @@ const gameData = {
         "large_group",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "silent_focus",
         "simultaneous"
@@ -51861,7 +50677,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.27,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -51876,7 +50691,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -51885,10 +50699,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -51983,7 +50797,6 @@ const gameData = {
       "moodTags": [
         "cozy",
         "tense",
-        "brainy",
         "chaotic",
         "immersive"
       ],
@@ -52006,6 +50819,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "silent_focus",
         "simultaneous"
@@ -52015,7 +50829,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
         "chaotic",
         "immersive",
         "deduction",
@@ -52032,6 +50845,7 @@ const gameData = {
         "large_group",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "silent_focus",
         "simultaneous"
@@ -52116,7 +50930,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.58,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -52132,7 +50945,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -52142,10 +50954,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -52255,8 +51067,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.84,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -52275,8 +51085,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -52290,8 +51098,8 @@ const gameData = {
         "전략",
         "카드운용",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "해상 무역로를 개척하고 도시를 점령하며 제국의 영향력을 확대하는 게임",
       "comment": {
@@ -52405,7 +51213,6 @@ const gameData = {
       "difficultyWeight": 2.91,
       "moodTags": [
         "cozy",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -52425,7 +51232,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
         "immersive",
         "strategy",
         "beginner",
@@ -52440,7 +51246,7 @@ const gameData = {
         "협력",
         "갈등적음",
         "편안하게",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "연구소를 운영하며 해양 탐험과 생태 보전 프로젝트를 추진하는 게임.",
       "comment": {
@@ -52516,7 +51322,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.32,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -52531,7 +51336,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -52540,10 +51344,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -52648,7 +51452,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.25,
       "moodTags": [
-        "brainy",
         "immersive",
         "tense"
       ],
@@ -52669,7 +51472,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "tense",
         "card_play",
@@ -52686,7 +51488,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "신비로운 세계 엘더베일에서 워커를 배치하며 8가지 정령의 힘을 놓고 영역 지배를 겨루는 게임.",
       "comment": {
@@ -52802,8 +51604,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "tense",
-        "brainy"
+        "tense"
       ],
       "playTags": [
         "strategy"
@@ -52826,7 +51627,6 @@ const gameData = {
         "cozy",
         "immersive",
         "tense",
-        "brainy",
         "strategy",
         "beginner",
         "group",
@@ -52930,8 +51730,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.41,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -52949,8 +51747,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "strategy",
         "card_play",
@@ -52963,8 +51759,8 @@ const gameData = {
         "전략",
         "카드운용",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "엘리베이터 줄에서 가족 구성원들을 더 많이 탑승시켜 점수를 겨루는 게임.",
       "comment": {
@@ -53039,10 +51835,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -53055,8 +51848,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -53064,10 +51855,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -53168,8 +51958,6 @@ const gameData = {
       "difficultyWeight": 1.48,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
@@ -53187,6 +51975,7 @@ const gameData = {
         "large_group"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "competitive",
         "betrayal"
@@ -53195,8 +51984,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
@@ -53208,6 +51995,7 @@ const gameData = {
         "first_game",
         "group",
         "large_group",
+        "social",
         "table_talk",
         "competitive",
         "betrayal"
@@ -53216,8 +52004,8 @@ const gameData = {
         "추리",
         "카드운용",
         "전략",
-        "대화많음",
-        "개인경쟁"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "7명의 영웅 중 6명을 먼저 모으기 위해 카드를 주고받으며 벌이는 전략 게임.",
       "comment": {
@@ -53292,10 +52080,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -53308,8 +52093,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -53317,10 +52100,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -53442,7 +52224,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.99,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
         "immersive"
@@ -53469,7 +52250,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
         "immersive",
@@ -53593,9 +52373,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -53615,9 +52393,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "strategy",
         "experienced",
         "long_stay",
@@ -53633,7 +52409,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "중세 수도원의 원장이 되어 토지와 건물을 개발하고 명성 높은 아이템을 제조하여 승리점을 겨루는 게임.",
       "comment": {
@@ -53744,8 +52520,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.01,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -53764,8 +52538,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -53779,8 +52551,8 @@ const gameData = {
         "전략",
         "동시진행",
         "개인경쟁",
-        "가볍게",
-        "머리 쓰는"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "중세 프랑스에서 다양한 추종자들을 모아 무역, 건설, 과학으로 패권을 노리는 게임.",
       "comment": {
@@ -53854,7 +52626,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.54,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -53871,7 +52642,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -53882,9 +52652,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -53982,8 +52752,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.31,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive"
       ],
@@ -54004,8 +52772,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive",
         "puzzle",
@@ -54021,8 +52787,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "웃긴",
+        "몰입감"
       ],
       "summaryKo": "문명을 발전시키며 건물을 짓고 신전을 올라가 문화, 과학, 군사 점수를 겨루는 게임.",
       "comment": {
@@ -54119,10 +52885,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [
-        "brainy",
         "immersive",
-        "funny",
-        "light"
+        "funny"
       ],
       "playTags": [
         "strategy",
@@ -54140,10 +52904,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "funny",
-        "light",
         "strategy",
         "card_play",
         "group",
@@ -54262,8 +53024,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.9242,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -54281,8 +53041,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -54295,8 +53053,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "가볍게",
-        "머리 쓰는"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "만깔라 시스템으로 함대를 강화하고 교역로를 개발하며 명예를 겨루는 게임.",
       "comment": {
@@ -54371,7 +53129,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.14,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -54384,14 +53141,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -54513,8 +53268,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.63,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -54535,8 +53288,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -54661,7 +53412,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.73,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -54680,7 +53430,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "puzzle",
@@ -54695,7 +53444,7 @@ const gameData = {
         "퍼즐",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "변화하는 비용의 여섯 가지 행동을 선택해 자원을 모으고 중세 프라하를 건설하며 왕의 호의를 겨루는 게임",
       "comment": {
@@ -54770,7 +53519,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -54783,14 +53532,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천",
@@ -54896,8 +53645,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.29,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -54916,8 +53663,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -54932,7 +53677,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "가볍게"
+        "몰입감"
       ],
       "summaryKo": "메이지 시대 요코하마의 상인이 되어 상점 건설과 무역으로 명성을 얻는 게임.",
       "comment": {
@@ -55000,14 +53745,34 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "tense",
+        "immersive",
+        "deduction",
+        "social",
+        "table_talk"
+      ],
+      "displayTags": [
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -55082,7 +53847,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.83,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -55099,7 +53863,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -55110,9 +53873,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -55205,9 +53968,7 @@ const gameData = {
       "difficultyWeight": 1.94,
       "moodTags": [
         "chaotic",
-        "tense",
-        "brainy",
-        "light"
+        "tense"
       ],
       "playTags": [
         "party",
@@ -55229,8 +53990,6 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "tense",
-        "brainy",
-        "light",
         "party",
         "dexterity",
         "puzzle",
@@ -55340,9 +54099,7 @@ const gameData = {
       "difficultyWeight": 1.67,
       "moodTags": [
         "chaotic",
-        "tense",
-        "brainy",
-        "light"
+        "tense"
       ],
       "playTags": [
         "party",
@@ -55364,8 +54121,6 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "tense",
-        "brainy",
-        "light",
         "party",
         "dexterity",
         "puzzle",
@@ -55473,10 +54228,8 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.17,
       "moodTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -55499,10 +54252,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "tense",
-        "light",
         "cozy",
         "puzzle",
         "party",
@@ -55628,9 +54379,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.3,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy",
@@ -55651,9 +54400,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "strategy",
         "card_play",
         "group",
@@ -55742,10 +54489,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -55757,16 +54501,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -55874,8 +54614,6 @@ const gameData = {
       "difficultyWeight": 2.45,
       "moodTags": [
         "tense",
-        "light",
-        "brainy",
         "chaotic",
         "funny",
         "immersive"
@@ -55897,6 +54635,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive",
         "turn_based",
@@ -55906,8 +54645,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "light",
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -55923,6 +54660,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk",
         "competitive",
         "turn_based",
@@ -56036,7 +54774,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.02,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
         "immersive"
@@ -56059,7 +54796,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
         "immersive",
@@ -56077,8 +54813,8 @@ const gameData = {
         "전략",
         "파티게임",
         "개인경쟁",
-        "머리 쓰는",
-        "쫄깃하게"
+        "쫄깃하게",
+        "웃긴"
       ],
       "summaryKo": "티 파티에서 카드를 수집해 군대를 모으고 전쟁에서 승리를 겨루는 게임.",
       "comment": {
@@ -56185,8 +54921,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.32,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -56207,8 +54941,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -56298,7 +55030,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.59,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -56313,7 +55044,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -56322,10 +55052,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -56398,10 +55128,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -56413,16 +55140,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -56522,8 +55245,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
-        "light",
-        "brainy",
         "funny",
         "chaotic"
       ],
@@ -56546,8 +55267,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "funny",
         "chaotic",
         "card_play",
@@ -56656,8 +55375,6 @@ const gameData = {
       "difficultyWeight": 2,
       "moodTags": [
         "tense",
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -56670,6 +55387,7 @@ const gameData = {
         "long_stay"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -56677,23 +55395,22 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "immersive",
         "deduction",
         "beginner",
         "group",
         "large_group",
         "long_stay",
+        "social",
         "table_talk",
         "low_conflict"
       ],
       "displayTags": [
         "추리",
+        "대화/심리전",
         "대화많음",
         "갈등적음",
-        "쫄깃하게",
-        "머리 쓰는"
+        "쫄깃하게"
       ],
       "summaryKo": "의사, 기자 등 보좌진들이 AI의 죽음 속에서 범인을 찾아 탈출 조건을 해결하는 게임.",
       "comment": {
@@ -56793,8 +55510,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
-        "light",
-        "brainy",
         "tense",
         "funny",
         "immersive",
@@ -56817,8 +55532,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "tense",
         "funny",
         "immersive",
@@ -56837,7 +55550,7 @@ const gameData = {
         "파티게임",
         "카드운용",
         "개인경쟁",
-        "가볍게"
+        "쫄깃하게"
       ],
       "summaryKo": "던전 탐험을 계속할지 포기할지 판단하며 상대를 제치는 운의 게임.",
       "comment": {
@@ -56913,7 +55626,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.3,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -56928,7 +55640,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -56937,10 +55648,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -57039,7 +55750,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.76,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -57057,7 +55767,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -57070,8 +55779,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "도미노 타일을 배치하여 마법 네트워크를 펼치고 승점을 겨루는 게임",
       "comment": {
@@ -57172,8 +55881,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.0641,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -57188,7 +55896,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -57197,9 +55904,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "몰입감",
-        "머리 쓰는",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "풍차를 건설하고 튤립을 재배하며 엔진을 구축해 수익을 높이는 게임.",
       "comment": {
@@ -57274,10 +55981,7 @@ const gameData = {
       "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.47,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -57289,16 +55993,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -57373,10 +56073,7 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -57388,16 +56085,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -57500,7 +56193,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.98,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -57520,7 +56212,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -57536,7 +56227,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "멸망하는 행성에서 새 행성으로 경제를 이전하는 4라운드의 긴박한 이주 게임.",
       "comment": {
@@ -57609,7 +56300,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.45,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -57622,14 +56312,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -57725,8 +56413,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.8,
       "moodTags": [
-        "light",
-        "brainy",
         "funny"
       ],
       "playTags": [
@@ -57745,8 +56431,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "funny",
         "card_play",
         "strategy",
@@ -57761,7 +56445,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "웃긴"
       ],
       "summaryKo": "주사위를 굴려 돈과 물품을 얻은 후 루비로 교환하는 게임",
       "comment": {
@@ -57855,7 +56539,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -57876,7 +56559,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
         "cozy",
         "party",
         "beginner",
@@ -57891,7 +56573,7 @@ const gameData = {
         "개인경쟁",
         "쫄깃하게",
         "웃긴",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "주사위 조합을 만들어 타일을 모으되, 3번째 타일을 얻으면 상대가 빼앗을 기회를 주는 게임.",
       "comment": {
@@ -57997,11 +56679,10 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.08,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "card_play",
@@ -58022,11 +56703,10 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "chaotic",
+        "cozy",
         "card_play",
         "strategy",
         "party",
@@ -58119,10 +56799,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.31,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -58134,16 +56811,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -58242,9 +56915,7 @@ const gameData = {
       "difficultyWeight": 1.11,
       "moodTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -58264,15 +56935,14 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
         "funny",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -58286,6 +56956,7 @@ const gameData = {
         "hidden_role",
         "betrayal",
         "team",
+        "social",
         "table_talk"
       ],
       "displayTags": [
@@ -58403,9 +57074,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "deduction",
@@ -58422,6 +57091,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "competitive",
         "hidden_role",
@@ -58435,9 +57105,7 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
         "immersive",
-        "light",
         "deduction",
         "party",
         "card_play",
@@ -58448,6 +57116,7 @@ const gameData = {
         "experienced",
         "beginner",
         "cooperative",
+        "social",
         "table_talk",
         "competitive",
         "hidden_role",
@@ -58575,10 +57244,8 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.65,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -58598,10 +57265,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -58617,7 +57282,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "배신/심리전",
-        "머리 쓰는"
+        "왁자지껄"
       ],
       "summaryKo": "켈트 신화를 배경으로 카드 드래프트와 영토 확장을 통해 섬의 왕이 되는 게임.",
       "comment": {
@@ -58690,7 +57355,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.23,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -58707,7 +57371,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -58718,9 +57381,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -58813,10 +57476,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.02,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "strategy",
         "card_play"
@@ -58832,8 +57492,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "strategy",
         "card_play",
         "beginner",
@@ -58846,7 +57504,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "돌을 배로 운반하여 이집트 기념비를 건설하는 게임",
       "comment": {
@@ -58936,8 +57594,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.97,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -58958,8 +57614,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -59072,8 +57726,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.08,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -59093,8 +57745,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -59110,7 +57760,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "관리들과 선물을 교환하여 영향력을 얻고 황제 알현을 성사시키는 게임.",
       "comment": {
@@ -59186,7 +57836,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.51,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -59204,7 +57853,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -59216,9 +57864,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -59326,8 +57974,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.47,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -59345,8 +57991,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -59359,8 +58003,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "자이푸르에서 물품을 사고팔며 낙타를 관리해 경쟁자보다 더 많은 이윤을 얻는 게임",
       "comment": {
@@ -59451,7 +58095,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.83,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -59470,7 +58113,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "card_play",
@@ -59485,7 +58127,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "카드를 활용해 진시황제의 제국 건설에 기여하고 병마용군에 오를 자리를 놓고 벌이는 게임.",
       "comment": {
@@ -59560,10 +58202,7 @@ const gameData = {
       "shelfFullLabel": "방탈출",
       "difficultyId": "light_family",
       "difficultyWeight": 2.13,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -59575,16 +58214,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -59696,8 +58331,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -59720,8 +58353,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy",
         "party",
         "card_play",
@@ -59814,7 +58445,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.07,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -59832,7 +58462,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -59844,9 +58473,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -59918,10 +58547,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -59934,8 +58560,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -59943,10 +58567,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -60018,10 +58641,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -60034,8 +58654,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -60043,10 +58661,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -60142,8 +58759,8 @@ const gameData = {
       "difficultyWeight": 1,
       "moodTags": [
         "funny",
-        "light",
-        "chaotic"
+        "chaotic",
+        "cozy"
       ],
       "playTags": [
         "party"
@@ -60162,8 +58779,8 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "funny",
-        "light",
         "chaotic",
+        "cozy",
         "party",
         "beginner",
         "group",
@@ -60176,8 +58793,8 @@ const gameData = {
         "파티게임",
         "대화많음",
         "웃긴",
-        "가볍게",
-        "왁자지껄"
+        "왁자지껄",
+        "편안하게"
       ],
       "summaryKo": "아래층 블록을 하나씩 제거해 위에 쌓으며 타워를 무너뜨리지 않는 게임.",
       "comment": {
@@ -60269,9 +58886,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.84,
       "moodTags": [
-        "cozy",
-        "light",
-        "brainy"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -60287,8 +58902,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -60299,8 +58912,8 @@ const gameData = {
         "협력",
         "갈등적음",
         "편안하게",
-        "가볍게",
-        "머리 쓰는"
+        "입문추천",
+        "모임추천"
       ],
       "summaryKo": "플레이어들이 협력해 무기를 조합해 좀비를 격퇴하고 보스를 격퇴하는 게임.",
       "comment": {
@@ -60375,7 +58988,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.44,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -60389,7 +59001,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -60397,11 +59008,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -60494,10 +59105,7 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "light_family",
       "difficultyWeight": 1.75,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -60516,8 +59124,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "puzzle",
@@ -60606,10 +59212,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -60622,8 +59225,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -60631,10 +59232,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -60707,10 +59307,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -60722,16 +59319,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -60839,9 +59432,7 @@ const gameData = {
       "difficultyWeight": 2.24,
       "moodTags": [
         "tense",
-        "chaotic",
-        "light",
-        "brainy"
+        "chaotic"
       ],
       "playTags": [
         "card_play",
@@ -60855,6 +59446,7 @@ const gameData = {
       ],
       "interactionTags": [
         "competitive",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -60863,8 +59455,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "chaotic",
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "puzzle",
@@ -60872,6 +59462,7 @@ const gameData = {
         "beginner",
         "large_group",
         "competitive",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -60880,7 +59471,7 @@ const gameData = {
         "전략",
         "퍼즐",
         "개인경쟁",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "도시 블록의 구획을 놓고 협상하며 사업 타일을 배치해 수익을 겨루는 게임.",
       "comment": {
@@ -60970,8 +59561,8 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
-        "light",
-        "funny"
+        "funny",
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -60984,16 +59575,16 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "funny",
+        "cozy",
         "beginner",
         "quick_play",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "웃긴",
+        "편안하게",
         "입문추천",
         "짧게한판",
         "첫게임추천"
@@ -61105,8 +59696,7 @@ const gameData = {
       "difficultyWeight": 4.15,
       "moodTags": [
         "cozy",
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "storytelling",
@@ -61132,7 +59722,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "brainy",
         "storytelling",
         "party",
         "strategy",
@@ -61225,7 +59814,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.65,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -61242,7 +59830,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -61253,9 +59840,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -61360,7 +59947,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.67,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -61379,7 +59965,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -61394,7 +59979,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "회전하는 기어에 일꾼을 배치하고 회수하며 마야 문명을 건설하는 게임",
       "comment": {
@@ -61484,8 +60069,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.12,
       "moodTags": [
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -61502,8 +60085,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "cozy",
         "puzzle",
         "beginner",
@@ -61514,10 +60095,10 @@ const gameData = {
       ],
       "displayTags": [
         "퍼즐",
-        "가볍게",
-        "머리 쓰는",
         "편안하게",
-        "입문추천"
+        "입문추천",
+        "짧게한판",
+        "family"
       ],
       "summaryKo": "닭을 움직이며 카드 이미지를 맞춰 다른 닭을 지나가 꼬리 깃털을 모으는 게임",
       "comment": {
@@ -61610,10 +60191,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.59,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle"
       ],
@@ -61629,8 +60207,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "puzzle",
         "beginner",
         "group",
@@ -61642,8 +60218,8 @@ const gameData = {
         "퍼즐",
         "조용히집중",
         "갈등적음",
-        "머리 쓰는",
-        "가볍게"
+        "입문추천",
+        "모임추천"
       ],
       "summaryKo": "비밀 정보로 다음 타일을 예측하며 양면 탄그램 타일로 조화로운 도시를 건설하는 게임.",
       "comment": {
@@ -61744,10 +60320,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -61770,10 +60344,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -61868,7 +60440,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.81,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -61885,7 +60456,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -61896,9 +60466,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -61998,10 +60568,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.85,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "strategy",
         "puzzle"
@@ -62019,8 +60586,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "strategy",
         "puzzle",
         "beginner",
@@ -62035,7 +60600,7 @@ const gameData = {
         "퍼즐",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "타일을 배치하고 미플을 배정해 완성된 영역의 점수를 겨루는 게임.",
       "comment": {
@@ -62133,7 +60698,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.51,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -62151,7 +60715,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -62164,8 +60727,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "고대 로마의 귀족이 되어 도시 구역을 건설하고 명성점을 겨루는 게임.",
       "comment": {
@@ -62240,7 +60803,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -62253,14 +60816,14 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "couple",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "2인추천",
@@ -62369,7 +60932,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.78,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -62390,7 +60952,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -62481,7 +61042,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.55,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -62496,7 +61056,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -62505,10 +61064,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -62582,7 +61141,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.28,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -62595,14 +61153,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -62698,10 +61254,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.93,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "strategy"
       ],
@@ -62717,8 +61270,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "strategy",
         "beginner",
         "couple",
@@ -62730,8 +61281,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는",
-        "가볍게"
+        "입문추천",
+        "2인추천"
       ],
       "summaryKo": "카이사르와 폼페이의 권력 싸움에서 군단을 배치하여 로마의 지역을 장악하는 전략 게임.",
       "comment": {
@@ -62845,10 +61396,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.29,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -62868,10 +61417,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -62987,8 +61534,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny"
       ],
@@ -63008,8 +61553,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "strategy",
@@ -63096,10 +61639,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.01,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -63111,16 +61651,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -63222,10 +61758,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.85,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "strategy"
@@ -63242,8 +61775,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "puzzle",
         "strategy",
         "beginner",
@@ -63257,7 +61788,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "태평양 북서부 서식지를 완성하며 야생동물을 배치해 점수를 겨루는 퍼즐 타일 깔기 게임.",
       "comment": {
@@ -63356,10 +61887,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -63378,8 +61906,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "puzzle",
@@ -63500,10 +62026,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.18,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy",
@@ -63522,8 +62045,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "puzzle",
@@ -63616,7 +62137,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.25,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -63630,7 +62150,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -63638,11 +62157,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -63718,7 +62237,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.5,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -63732,7 +62250,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -63740,11 +62257,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -63833,10 +62350,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.82,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -63848,16 +62362,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -63956,8 +62466,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy"
       ],
       "playTags": [
@@ -63980,8 +62488,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "cozy",
         "party",
         "card_play",
@@ -64121,7 +62627,6 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "funny",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -64144,7 +62649,6 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "funny",
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -64237,10 +62741,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.76,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -64252,16 +62753,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -64366,8 +62863,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy"
       ],
@@ -64387,6 +62882,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -64395,8 +62891,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "brainy",
-        "light",
         "chaotic",
         "cozy",
         "deduction",
@@ -64410,6 +62904,7 @@ const gameData = {
         "first_game",
         "couple",
         "cooperative",
+        "social",
         "table_talk",
         "team"
       ],
@@ -64513,10 +63008,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.89,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "strategy"
@@ -64533,8 +63025,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "puzzle",
         "strategy",
         "beginner",
@@ -64622,7 +63112,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.99,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -64638,7 +63127,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -64648,10 +63136,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -64726,10 +63214,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -64742,8 +63227,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -64751,10 +63234,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -64828,10 +63310,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -64843,16 +63322,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -64929,7 +63404,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -64941,13 +63416,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "모임추천"
@@ -65024,7 +63499,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.3,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -65039,7 +63513,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -65048,10 +63521,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -65148,9 +63621,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.81,
       "moodTags": [
-        "light",
-        "cozy",
-        "brainy"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -65167,9 +63638,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
-        "brainy",
         "beginner",
         "family",
         "first_game",
@@ -65180,10 +63649,10 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
         "편안하게",
-        "머리 쓰는",
-        "입문추천"
+        "입문추천",
+        "family",
+        "첫게임추천"
       ],
       "summaryKo": "폰을 반대편까지 먼저 진행시키되 벽을 설치해 상대를 방해하는 게임",
       "comment": {
@@ -65280,9 +63749,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "cozy",
-        "light",
-        "brainy"
+        "cozy"
       ],
       "playTags": [
         "deduction",
@@ -65294,6 +63761,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -65303,13 +63771,12 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "light",
-        "brainy",
         "deduction",
         "party",
         "beginner",
         "group",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -65317,8 +63784,8 @@ const gameData = {
         "추리",
         "파티게임",
         "협력",
-        "대화많음",
-        "갈등적음"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "다른 플레이어들의 명령을 예측하며 로봇을 올바른 위치로 유도하는 협력 프로그래밍 게임",
       "comment": {
@@ -65391,10 +63858,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -65407,8 +63871,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -65416,10 +63878,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -65521,9 +63982,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "puzzle",
@@ -65542,9 +64001,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "puzzle",
         "strategy",
         "beginner",
@@ -65666,9 +64123,7 @@ const gameData = {
       "difficultyWeight": 2.19,
       "moodTags": [
         "tense",
-        "funny",
-        "light",
-        "brainy"
+        "funny"
       ],
       "playTags": [
         "party"
@@ -65687,8 +64142,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "party",
         "beginner",
         "quick_play",
@@ -65775,7 +64228,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.4,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -65788,14 +64240,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
@@ -65906,9 +64356,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.46,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -65925,9 +64373,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "strategy",
         "experienced",
         "beginner",
@@ -65939,8 +64385,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "론델을 조작하며 기사단을 확장하되, 너무 강해지면 게임이 끝나는 균형 게임.",
       "comment": {
@@ -66013,7 +64459,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.79,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -66030,7 +64475,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -66041,9 +64485,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -66155,9 +64599,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "party"
@@ -66177,9 +64619,7 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
         "immersive",
-        "brainy",
         "party",
         "beginner",
         "quick_play",
@@ -66283,7 +64723,7 @@ const gameData = {
       "moodTags": [
         "chaotic",
         "tense",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "party",
@@ -66303,7 +64743,7 @@ const gameData = {
       "autoTags": [
         "chaotic",
         "tense",
-        "light",
+        "cozy",
         "party",
         "dexterity",
         "group",
@@ -66423,8 +64863,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.46,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -66439,7 +64878,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -66448,9 +64886,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "몰입감",
-        "머리 쓰는",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "스코틀랜드 역사적 클랜을 이끌며 농산물과 위스키를 생산·거래·수출하여 경쟁하는 경제 게임.",
       "comment": {
@@ -66524,10 +64962,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.22,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -66539,16 +64974,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -66625,10 +65056,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.5,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -66640,16 +65068,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -66732,7 +65156,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.01,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -66744,13 +65168,13 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "couple"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "2인추천"
@@ -66825,10 +65249,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -66840,16 +65261,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -66951,7 +65368,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.98,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -66970,7 +65386,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -66985,7 +65400,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "3차원 병원을 건설하고 효율적으로 환자를 치료하여 인기도를 얻는 게임",
       "comment": {
@@ -67060,10 +65475,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.18,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -67075,16 +65487,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -67180,7 +65588,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "party"
@@ -67199,7 +65607,7 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
+        "cozy",
         "party",
         "beginner",
         "quick_play",
@@ -67212,7 +65620,7 @@ const gameData = {
         "개인경쟁",
         "쫄깃하게",
         "웃긴",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "주사위를 굴려 보드에 마커를 배치하고 왕국의 주민들을 모아 점수를 겨루는 게임.",
       "comment": {
@@ -67288,7 +65696,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.23,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -67302,7 +65709,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -67310,11 +65716,11 @@ const gameData = {
         "group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -67414,8 +65820,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.34,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -67436,8 +65840,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -67564,9 +65966,7 @@ const gameData = {
       "difficultyWeight": 3.08,
       "moodTags": [
         "cozy",
-        "brainy",
         "immersive",
-        "light",
         "funny",
         "tense"
       ],
@@ -67591,9 +65991,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
         "immersive",
-        "light",
         "funny",
         "tense",
         "puzzle",
@@ -67727,9 +66125,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.05,
       "moodTags": [
-        "immersive",
-        "brainy",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy",
@@ -67749,8 +66145,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
-        "light",
         "strategy",
         "puzzle",
         "experienced",
@@ -67837,19 +66231,36 @@ const gameData = {
       "shelfFullLabel": "머더미",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "group"
+        "tense",
+        "immersive",
+        "deduction",
+        "group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
-        "모임추천"
+        "추리",
+        "대화/심리전",
+        "대화많음",
+        "쫄깃하게",
+        "몰입감"
       ],
       "summaryKo": "",
       "comment": {
@@ -67949,9 +66360,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "tense",
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "deduction",
@@ -67967,6 +66376,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "team"
       ],
@@ -67975,9 +66385,7 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
         "immersive",
-        "light",
         "deduction",
         "storytelling",
         "party",
@@ -67987,6 +66395,7 @@ const gameData = {
         "couple",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "team"
       ],
@@ -68094,9 +66503,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "tense",
-        "brainy",
-        "funny",
-        "light"
+        "funny"
       ],
       "playTags": [
         "deduction"
@@ -68111,6 +66518,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "team"
       ],
@@ -68119,9 +66527,7 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
         "funny",
-        "light",
         "deduction",
         "beginner",
         "group",
@@ -68130,6 +66536,7 @@ const gameData = {
         "couple",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk",
         "team"
       ],
@@ -68137,8 +66544,8 @@ const gameData = {
         "추리",
         "협력",
         "갈등적음",
-        "대화많음",
-        "팀전"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "거대한 도시 지도에서 숨겨진 범죄의 증거를 찾아 사건을 해결하는 관찰력 추리 게임",
       "comment": {
@@ -68232,9 +66639,7 @@ const gameData = {
       "difficultyWeight": 1,
       "moodTags": [
         "cozy",
-        "tense",
-        "brainy",
-        "light"
+        "tense"
       ],
       "playTags": [
         "deduction"
@@ -68249,6 +66654,7 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk"
       ],
       "relationshipTags": [],
@@ -68256,8 +66662,6 @@ const gameData = {
       "autoTags": [
         "cozy",
         "tense",
-        "brainy",
-        "light",
         "deduction",
         "beginner",
         "group",
@@ -68266,14 +66670,15 @@ const gameData = {
         "couple",
         "cooperative",
         "low_conflict",
+        "social",
         "table_talk"
       ],
       "displayTags": [
         "추리",
         "협력",
         "갈등적음",
-        "대화많음",
-        "편안하게"
+        "대화/심리전",
+        "대화많음"
       ],
       "summaryKo": "범죄 도시의 지도에서 단서를 찾아 범죄 사건을 해결하는 협력 추리 게임.",
       "comment": {
@@ -68348,10 +66753,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -68363,16 +66765,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -68478,7 +66876,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.13,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -68496,7 +66893,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -68509,8 +66905,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "인류의 기술 발전을 함께 결정하며 경제, 과학, 은하계 영향력을 겨루는 우주 문명 게임.",
       "comment": {
@@ -68613,9 +67009,7 @@ const gameData = {
       "difficultyWeight": 2.32,
       "moodTags": [
         "tense",
-        "funny",
-        "light",
-        "brainy"
+        "funny"
       ],
       "playTags": [
         "party",
@@ -68637,8 +67031,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "party",
         "card_play",
         "strategy",
@@ -68777,7 +67169,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.26,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive"
@@ -68800,7 +67191,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -68895,10 +67285,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.37,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -68911,8 +67298,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -68920,10 +67305,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -69043,8 +67427,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.77,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -69064,8 +67446,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -69182,9 +67562,7 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.07,
       "moodTags": [
-        "light",
         "funny",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -69203,9 +67581,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "funny",
-        "brainy",
         "immersive",
         "strategy",
         "beginner",
@@ -69218,9 +67594,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "가볍게",
         "웃긴",
-        "머리 쓰는"
+        "몰입감",
+        "입문추천"
       ],
       "summaryKo": "주사위 선택으로 순수와 오염의 균형을 맞춰 고대 이집트 신전을 건설하는 게임.",
       "comment": {
@@ -69306,7 +67682,6 @@ const gameData = {
         "funny",
         "cozy",
         "immersive",
-        "light",
         "chaotic"
       ],
       "playTags": [
@@ -69323,6 +67698,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -69333,7 +67709,6 @@ const gameData = {
         "funny",
         "cozy",
         "immersive",
-        "light",
         "chaotic",
         "deduction",
         "party",
@@ -69344,6 +67719,7 @@ const gameData = {
         "first_game",
         "quick_play",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict"
       ],
@@ -69352,7 +67728,7 @@ const gameData = {
         "파티게임",
         "스토리",
         "협력",
-        "대화많음"
+        "대화/심리전"
       ],
       "summaryKo": "주어진 핵심 단어로 창작 스토리를 협력해 만들고 예상 질문에 같은 답변을 제시하는 게임.",
       "comment": {
@@ -69427,7 +67803,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.63,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -69444,7 +67819,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -69455,9 +67829,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -69575,8 +67949,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.46,
       "moodTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive"
       ],
@@ -69597,8 +67969,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "funny",
         "immersive",
         "strategy",
@@ -69614,8 +67984,8 @@ const gameData = {
         "전략",
         "카드운용",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "웃긴",
+        "몰입감"
       ],
       "summaryKo": "트루아 도시의 발전을 위해 주사위 부하들을 관리하고 상대 주민을 매수하여 명성을 겨루는 게임.",
       "comment": {
@@ -69718,8 +68088,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.26,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -69740,8 +68108,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -69841,8 +68207,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.82,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -69860,8 +68224,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -69874,9 +68236,9 @@ const gameData = {
       "displayTags": [
         "카드운용",
         "전략",
-        "가볍게",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "네 지역 중 숨겨진 한 곳을 추론하며 범죄자 카드를 내려 가장 많은 돈을 터는 게임.",
       "comment": {
@@ -69948,10 +68310,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -69963,16 +68322,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -70093,8 +68448,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.78,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -70113,8 +68466,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -70129,7 +68480,7 @@ const gameData = {
         "카드운용",
         "퍼즐",
         "개인경쟁",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "정글을 탐험하며 사원을 점거하고 보물을 수집해 점수를 겨루는 게임",
       "comment": {
@@ -70230,10 +68581,8 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
-        "brainy",
         "tense",
-        "funny",
-        "light"
+        "funny"
       ],
       "playTags": [
         "card_play",
@@ -70253,10 +68602,8 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "tense",
         "funny",
-        "light",
         "card_play",
         "strategy",
         "party",
@@ -70364,8 +68711,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.29,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -70386,8 +68731,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -70480,7 +68823,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.41,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -70496,7 +68838,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -70506,10 +68847,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -70617,8 +68958,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.91,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -70641,8 +68980,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -70763,9 +69100,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "light",
-        "funny",
-        "brainy"
+        "funny"
       ],
       "playTags": [
         "strategy",
@@ -70786,9 +69121,7 @@ const gameData = {
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
         "funny",
-        "brainy",
         "strategy",
         "card_play",
         "beginner",
@@ -70907,8 +69240,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.85,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -70928,8 +69259,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -70945,7 +69274,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "19세기 그레이트 게임을 배경으로 러시아, 영국, 아프가니스탄의 패권을 놓고 벌이는 영향력 게임.",
       "comment": {
@@ -71019,10 +69348,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.08,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -71034,16 +69360,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -71144,8 +69466,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.81,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -71166,8 +69486,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -71184,7 +69502,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "카드를 뽑고 버려 최고의 조합을 만들어 점수를 겨루는 게임.",
       "comment": {
@@ -71288,8 +69606,6 @@ const gameData = {
       "difficultyWeight": 2.63,
       "moodTags": [
         "cozy",
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -71315,8 +69631,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "light",
-        "brainy",
         "immersive",
         "puzzle",
         "card_play",
@@ -71440,10 +69754,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.6,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "strategy"
@@ -71460,8 +69771,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "puzzle",
         "strategy",
         "beginner",
@@ -71550,10 +69859,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.4,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -71565,16 +69871,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -71690,9 +69992,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
       "moodTags": [
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -71711,9 +70011,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
-        "light",
         "strategy",
         "experienced",
         "long_stay",
@@ -71728,7 +70026,7 @@ const gameData = {
         "개인경쟁",
         "차례진행",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "항공 노선 확보와 판매로 수익을 극대화하는 항공사 경영 게임.",
       "comment": {
@@ -71813,7 +70111,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.8,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -71829,7 +70126,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -71839,10 +70135,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "지위 상승과 도덕성 유지를 동시에 이루려는 게임.",
       "comment": {
@@ -71938,9 +70234,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.35,
       "moodTags": [
-        "light",
         "funny",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -71957,9 +70251,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "funny",
-        "brainy",
         "immersive",
         "strategy",
         "beginner",
@@ -71970,10 +70262,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "가볍게",
         "웃긴",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "입문추천",
+        "짧게한판"
       ],
       "summaryKo": "주사위를 드래프트하여 우주를 탐험하고 펄서 에너지 인프라를 구축하는 8라운드 우주 개발 게임.",
       "comment": {
@@ -72045,7 +70337,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.08,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -72060,7 +70351,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -72069,10 +70359,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -72171,8 +70461,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -72192,8 +70480,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -72208,8 +70494,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "손의 6장 카드 합계를 최소화하는 게임",
       "comment": {
@@ -72284,7 +70570,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -72298,7 +70583,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -72306,11 +70590,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -72393,8 +70677,6 @@ const gameData = {
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -72414,8 +70696,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "puzzle",
         "quick_play",
@@ -72429,9 +70709,9 @@ const gameData = {
       "displayTags": [
         "퍼즐",
         "조용히집중",
-        "머리 쓰는",
-        "가볍게",
-        "편안하게"
+        "편안하게",
+        "짧게한판",
+        "입문추천"
       ],
       "summaryKo": "나타난 유령을 맞는 그림자로 쫓아내는 게임.",
       "comment": {
@@ -72507,7 +70787,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.4,
       "moodTags": [
-        "light",
         "cozy"
       ],
       "playTags": [],
@@ -72521,7 +70800,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
         "cozy",
         "beginner",
         "first_game",
@@ -72529,11 +70807,11 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
         "편안하게",
         "입문추천",
         "첫게임추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -72629,7 +70907,6 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -72651,7 +70928,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
         "cozy",
         "party",
         "beginner",
@@ -72667,7 +70943,7 @@ const gameData = {
         "개인경쟁",
         "쫄깃하게",
         "웃긴",
-        "가볍게"
+        "편안하게"
       ],
       "summaryKo": "육각형 블록의 색상을 스피너로 정해 제거하며 전략성을 겨루는 게임.",
       "comment": {
@@ -72741,10 +71017,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.21,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -72757,8 +71030,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -72766,10 +71037,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -72883,9 +71153,7 @@ const gameData = {
       "difficultyWeight": 2.04,
       "moodTags": [
         "cozy",
-        "brainy",
-        "immersive",
-        "light"
+        "immersive"
       ],
       "playTags": [
         "card_play",
@@ -72907,9 +71175,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
         "immersive",
-        "light",
         "card_play",
         "strategy",
         "puzzle",
@@ -73041,8 +71307,6 @@ const gameData = {
       "difficultyWeight": 1.73,
       "moodTags": [
         "cozy",
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -73064,8 +71328,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
-        "light",
         "immersive",
         "card_play",
         "strategy",
@@ -73184,8 +71446,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.77,
       "moodTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive"
@@ -73209,8 +71469,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "chaotic",
         "funny",
         "immersive",
@@ -73324,9 +71582,7 @@ const gameData = {
       "moodTags": [
         "cozy",
         "immersive",
-        "light",
-        "tense",
-        "brainy"
+        "tense"
       ],
       "playTags": [
         "storytelling",
@@ -73344,16 +71600,15 @@ const gameData = {
       "interactionTags": [
         "cooperative",
         "low_conflict",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
         "immersive",
-        "light",
         "tense",
-        "brainy",
         "storytelling",
         "party",
         "card_play",
@@ -73365,7 +71620,8 @@ const gameData = {
         "large_group",
         "cooperative",
         "low_conflict",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "displayTags": [
         "스토리",
@@ -73441,7 +71697,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -73452,12 +71708,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -73572,9 +71828,7 @@ const gameData = {
       "difficultyWeight": 1.61,
       "moodTags": [
         "tense",
-        "funny",
-        "light",
-        "brainy"
+        "funny"
       ],
       "playTags": [
         "party",
@@ -73596,8 +71850,6 @@ const gameData = {
       "autoTags": [
         "tense",
         "funny",
-        "light",
-        "brainy",
         "party",
         "card_play",
         "strategy",
@@ -73693,7 +71945,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -73707,7 +71959,7 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play",
         "couple",
@@ -73715,7 +71967,7 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판",
         "2인추천",
@@ -73786,7 +72038,7 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "light"
+        "cozy"
       ],
       "playTags": [],
       "situationTags": [
@@ -73797,12 +72049,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
+        "cozy",
         "first_game",
         "quick_play"
       ],
       "displayTags": [
-        "가볍게",
+        "편안하게",
         "첫게임추천",
         "짧게한판"
       ],
@@ -73908,7 +72160,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.25,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -73924,7 +72175,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -73934,10 +72184,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "역할 카드를 선택하며 작물을 재배하고 건물을 지어 승리점을 모으는 게임.",
       "comment": {
@@ -74038,7 +72288,6 @@ const gameData = {
       "difficultyWeight": 3.84,
       "moodTags": [
         "cozy",
-        "brainy",
         "immersive",
         "tense"
       ],
@@ -74063,7 +72312,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "brainy",
         "immersive",
         "tense",
         "card_play",
@@ -74183,8 +72431,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.64,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -74204,8 +72450,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -74297,10 +72541,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.56,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -74313,8 +72554,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -74322,10 +72561,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -74426,9 +72664,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
       "moodTags": [
-        "immersive",
-        "light",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy",
@@ -74446,8 +72682,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "light",
-        "brainy",
         "strategy",
         "card_play",
         "experienced",
@@ -74460,7 +72694,7 @@ const gameData = {
         "카드운용",
         "갈등적음",
         "몰입감",
-        "가볍게"
+        "게임러추천"
       ],
       "summaryKo": "황야를 탐험하며 카드를 뒤집어 별을 모으는 플립 앤 라이트 게임.",
       "comment": {
@@ -74559,7 +72793,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.24,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -74578,7 +72811,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -74592,8 +72824,8 @@ const gameData = {
         "퍼즐",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "경매로 건물과 경관을 모아 예술가를 초대하고 작업점을 승점으로 바꿔 명성을 겨루는 게임.",
       "comment": {
@@ -74691,10 +72923,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.08,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -74712,8 +72941,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "beginner",
@@ -74728,7 +72955,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "입문추천"
       ],
       "summaryKo": "풍차를 움직여 과일을 수확하고 판매하여 가장 먼저 납품하는 게임",
       "comment": {
@@ -74800,10 +73027,7 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -74815,16 +73039,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -74896,10 +73116,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -74911,16 +73128,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "2인추천"
       ],
@@ -75025,9 +73238,7 @@ const gameData = {
       "moodTags": [
         "tense",
         "funny",
-        "cozy",
-        "brainy",
-        "light"
+        "cozy"
       ],
       "playTags": [
         "deduction",
@@ -75044,6 +73255,7 @@ const gameData = {
       ],
       "interactionTags": [
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "competitive"
@@ -75054,8 +73266,6 @@ const gameData = {
         "tense",
         "funny",
         "cozy",
-        "brainy",
-        "light",
         "deduction",
         "party",
         "card_play",
@@ -75066,6 +73276,7 @@ const gameData = {
         "quick_play",
         "large_group",
         "cooperative",
+        "social",
         "table_talk",
         "low_conflict",
         "competitive"
@@ -75172,10 +73383,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.21,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "card_play",
@@ -75195,8 +73403,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "puzzle",
         "card_play",
         "strategy",
@@ -75309,7 +73515,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.15,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -75328,7 +73533,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -75342,8 +73546,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "로마 장군이 되어 하드리아누스 벽을 건설하고 픽트족을 방어하며 명성을 겨루는 게임.",
       "comment": {
@@ -75419,10 +73623,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.01,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -75435,8 +73636,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -75444,10 +73643,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -75544,10 +73742,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.31,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "puzzle",
         "strategy"
@@ -75564,8 +73759,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "puzzle",
         "strategy",
         "beginner",
@@ -75579,7 +73772,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "입문추천"
       ],
       "summaryKo": "각 곤충마다 다른 움직임으로 상대 여왕벌을 포위하는 2인용 전략 게임입니다.",
       "comment": {
@@ -75673,8 +73866,6 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.48,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy"
       ],
       "playTags": [
@@ -75693,8 +73884,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "card_play",
         "strategy",
@@ -75708,8 +73897,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "가볍게"
+        "편안하게",
+        "입문추천"
       ],
       "summaryKo": "부의 상징물을 입찰로 획득하되 현금 관리를 실패하면 탈락하는 게임.",
       "comment": {
@@ -75784,7 +73973,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.54,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -75799,7 +73987,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -75808,10 +73995,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -75910,7 +74097,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.95,
       "moodTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive"
@@ -75931,7 +74117,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "chaotic",
         "funny",
         "immersive",
@@ -75947,8 +74132,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "배신/심리전",
-        "머리 쓰는",
-        "왁자지껄"
+        "왁자지껄",
+        "웃긴"
       ],
       "summaryKo": "한자 도시의 무역로를 점유하고 계산소 네트워크를 구축해 명성을 얻는 전략 게임이다.",
       "comment": {
@@ -76024,7 +74209,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.3,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -76040,7 +74224,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -76050,10 +74233,10 @@ const gameData = {
       ],
       "displayTags": [
         "전략",
-        "머리 쓰는",
         "몰입감",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -76150,8 +74333,6 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
-        "brainy",
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -76179,8 +74360,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "cozy",
         "funny",
         "chaotic",
@@ -76277,10 +74456,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.1,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -76293,8 +74469,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "large_group",
@@ -76302,10 +74476,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "모임추천"
+        "모임추천",
+        "단체추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -76385,9 +74558,7 @@ const gameData = {
       "difficultyWeight": 2,
       "moodTags": [
         "funny",
-        "light",
-        "chaotic",
-        "brainy"
+        "chaotic"
       ],
       "playTags": [
         "party"
@@ -76406,9 +74577,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "funny",
-        "light",
         "chaotic",
-        "brainy",
         "party",
         "beginner",
         "group",
@@ -76422,7 +74591,7 @@ const gameData = {
         "대화많음",
         "갈등적음",
         "웃긴",
-        "가볍게"
+        "왁자지껄"
       ],
       "summaryKo": "항해 나침반으로 다섯 개의 트랙을 진행하며 군도를 누비는 경주 게임.",
       "comment": {
@@ -76513,10 +74682,7 @@ const gameData = {
       "shelfFullLabel": "2인 베스트게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.11,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -76535,8 +74701,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "card_play",
         "strategy",
         "group",
@@ -76657,7 +74821,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.7,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -76675,7 +74838,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -76688,8 +74850,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "머리 쓰는",
-        "몰입감"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "서로 다른 계급의 입장에서 정책 투표와 영향력 행사로 자신의 헤게모니를 달성하는 정치경제 게임.",
       "comment": {
@@ -76857,8 +75019,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.56,
       "moodTags": [
-        "light",
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -76877,8 +75037,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -76892,8 +75050,8 @@ const gameData = {
         "카드운용",
         "전략",
         "개인경쟁",
-        "가볍게",
-        "머리 쓰는"
+        "몰입감",
+        "게임러추천"
       ],
       "summaryKo": "표준 카드로 슈트별 멜드의 능력을 활용하여 행복을 모으는 게임.",
       "comment": {
@@ -76997,9 +75155,7 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.42,
       "moodTags": [
-        "tense",
-        "brainy",
-        "light"
+        "tense"
       ],
       "playTags": [
         "deduction",
@@ -77011,6 +75167,7 @@ const gameData = {
         "group"
       ],
       "interactionTags": [
+        "social",
         "table_talk",
         "silent_focus",
         "low_conflict"
@@ -77019,13 +75176,12 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "brainy",
-        "light",
         "deduction",
         "puzzle",
         "beginner",
         "couple",
         "group",
+        "social",
         "table_talk",
         "silent_focus",
         "low_conflict"
@@ -77033,9 +75189,9 @@ const gameData = {
       "displayTags": [
         "추리",
         "퍼즐",
+        "대화/심리전",
         "대화많음",
-        "조용히집중",
-        "갈등적음"
+        "조용히집중"
       ],
       "summaryKo": "관측과 논리적 추론으로 숨겨진 행성 X의 위치를 찾아내는 게임.",
       "comment": {
@@ -77138,8 +75294,7 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.6667,
       "moodTags": [
-        "immersive",
-        "brainy"
+        "immersive"
       ],
       "playTags": [
         "strategy"
@@ -77155,7 +75310,6 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "brainy",
         "strategy",
         "experienced",
         "long_stay",
@@ -77165,9 +75319,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "몰입감",
-        "머리 쓰는",
         "게임러추천",
-        "오래즐김"
+        "오래즐김",
+        "2인추천"
       ],
       "summaryKo": "거대 전쟁기계 IT를 커스터마이징하여 행성을 정복하는 미니 SF 워게임이다.",
       "comment": {
@@ -77270,7 +75424,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.2,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -77289,7 +75442,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "card_play",
         "strategy",
@@ -77304,7 +75456,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "조용히집중",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "네 개의 사회경제 계급이 정책 투표와 전략으로 자신의 권력과 의제를 추진하는 정치경제 게임.",
       "comment": {
@@ -77381,7 +75533,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 4.26,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -77399,7 +75550,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "strategy",
         "experienced",
@@ -77411,9 +75561,9 @@ const gameData = {
       "displayTags": [
         "전략",
         "조용히집중",
-        "머리 쓰는",
         "몰입감",
-        "게임러추천"
+        "게임러추천",
+        "오래즐김"
       ],
       "summaryKo": "",
       "comment": {
@@ -77523,8 +75673,6 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.49,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -77543,8 +75691,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -77559,7 +75705,7 @@ const gameData = {
         "카드운용",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "황금의 강을 따라 상인 클랜으로서 부와 영광을 얻기 위해 투자와 항해로 경쟁하는 게임",
       "comment": {
@@ -77634,10 +75780,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.94,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -77650,8 +75793,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "couple",
         "group",
@@ -77659,10 +75800,9 @@ const gameData = {
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
-        "2인추천"
+        "2인추천",
+        "모임추천"
       ],
       "summaryKo": "",
       "comment": {
@@ -77770,8 +75910,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.07,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -77790,8 +75928,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -77806,7 +75942,7 @@ const gameData = {
         "카드운용",
         "퍼즐",
         "개인경쟁",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "타일 배치로 문명을 건설하며 다섯 카테고리의 균형잡힌 승점을 겨루는 게임.",
       "comment": {
@@ -77921,8 +76057,6 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.61,
       "moodTags": [
-        "brainy",
-        "light",
         "immersive"
       ],
       "playTags": [
@@ -77942,8 +76076,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "immersive",
         "strategy",
         "card_play",
@@ -78034,10 +76166,7 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.17,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [],
       "situationTags": [
         "beginner",
@@ -78049,16 +76178,12 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "beginner",
         "group",
         "low_conflict"
       ],
       "displayTags": [
         "갈등적음",
-        "가볍게",
-        "머리 쓰는",
         "입문추천",
         "모임추천"
       ],
@@ -78151,7 +76276,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.04,
       "moodTags": [
-        "brainy",
         "immersive"
       ],
       "playTags": [
@@ -78170,7 +76294,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
         "immersive",
         "puzzle",
         "strategy",
@@ -78185,7 +76308,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "차례진행",
-        "머리 쓰는"
+        "몰입감"
       ],
       "summaryKo": "워커를 배치하여 기계를 건설하고 능력을 업그레이드하며 상승하는 물에서 벗어나는 전략 게임.",
       "comment": {
@@ -78281,10 +76404,7 @@ const gameData = {
       "shelfFullLabel": "구매예정",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8193,
-      "moodTags": [
-        "brainy",
-        "light"
-      ],
+      "moodTags": [],
       "playTags": [
         "strategy"
       ],
@@ -78299,8 +76419,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "brainy",
-        "light",
         "strategy",
         "beginner",
         "group",
@@ -78311,8 +76429,8 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "머리 쓰는",
-        "가볍게"
+        "입문추천",
+        "모임추천"
       ],
       "summaryKo": "센고쿠 시대 무장이 되어 주사위와 전술 카드로 일본의 11개 성을 차지하는 게임.",
       "comment": {
@@ -78406,10 +76524,7 @@ const gameData = {
       "shelfFullLabel": "x",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
-      "moodTags": [
-        "light",
-        "brainy"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -78425,8 +76540,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "light",
-        "brainy",
         "card_play",
         "strategy",
         "beginner",
@@ -78439,7 +76552,7 @@ const gameData = {
         "전략",
         "개인경쟁",
         "갈등적음",
-        "가볍게"
+        "입문추천"
       ],
       "summaryKo": "고고학자가 되어 다섯 문명의 유물을 발굴하고 전시회에서 가장 가치 있는 소장품을 모으는 게임.",
       "comment": {

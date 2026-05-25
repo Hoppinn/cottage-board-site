@@ -337,6 +337,14 @@ function normalizeLevelValue(value){
     return "heavy_mania";
   }
 
+  if(value === "easy_coop"){
+    return "easy_coop";
+  }
+
+  if(value === "hard_coop"){
+    return "hard_coop";
+  }
+
   return value || "";
 }
 
@@ -585,17 +593,10 @@ function matchRecommendMood(game, moodValue){
 const allTags = [
   ...(recommend?.moodTags || []),
   ...(recommend?.playTags || []),
-  ...(recommend?.situationTags || []),
-  ...(recommend?.interactionTags || []),
   ...(recommend?.relationshipTags || []),
   ...(recommend?.displayTags || []),
-
-  ...(game?.cottage?.moodTags || []),
-  ...(game?.cottage?.playTags || []),
   ...(game?.cottage?.situationTags || []),
   ...(game?.cottage?.interactionTags || []),
-  ...(game?.cottage?.relationshipTags || []),
-  ...(game?.cottage?.displayTags || []),
   ...(game?.cottage?.autoTags || [])
 ];
 
@@ -603,11 +604,12 @@ const allTags = [
 
 
   const moodTagMap = {
-    fun:      ["funny", "light", "party", "chaotic"],
-    brain:    ["brainy", "머리 쓰는", "puzzle", "abstract", "pattern", "tile_placement", "number", "set_collection", "hand_management", "card_drafting", "light_strategy"],
+    fun:      ["funny", "party", "chaotic"],
+    brain:    ["puzzle", "pattern", "strategy", "deduction"],
     talk:     ["table_talk", "social", "bluffing", "hidden_role", "betrayal", "negotiation"],
     immersive:["immersive", "tense", "storytelling"],
     coop:     ["cooperative", "coop", "team"],
+    cozy:     ["cozy", "low_conflict", "beginner", "first_game"],
     social:   ["social", "table_talk", "bluffing", "hidden_role"],
   };
 
@@ -1185,7 +1187,7 @@ function openGameSheet(gameKey){
             📍 ${shelfLabel}
           </button>
           <a class="sheet-yt-btn"
-            href="https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}"
+            href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}`}"
             target="_blank" rel="noopener noreferrer">▶ 룰</a>
         </div>
       </div>
@@ -1484,10 +1486,12 @@ const levelTextMap = {
 };
 
 const moodTextMap = {
-   fun: "😄 가볍게 웃고 싶어요",
-  brain: "🧠 머리 쓰는 느낌",
-  talk: "💬 대화가 많은 게임",
-  immersive: "🔥 몰입감 있게"
+  fun:      "😄 가볍게 웃고 싶어요",
+  brain:    "🧠 머리 쓰는 느낌",
+  talk:     "💬 대화가 많은 게임",
+  immersive:"🔥 몰입감 있게",
+  coop:     "🤝 같이 해내기",
+  cozy:     "😌 편안하게"
 };
 
 function updateRecommendFilterText(){
@@ -1596,6 +1600,14 @@ ${moodValue !== "talk"
 
 ${moodValue !== "immersive"
   ? renderInlineOption("mood", "immersive", "🔥 몰입감 있게", moodValue)
+  : ""}
+
+${moodValue !== "coop"
+  ? renderInlineOption("mood", "coop", "🤝 같이 해내기", moodValue)
+  : ""}
+
+${moodValue !== "cozy"
+  ? renderInlineOption("mood", "cozy", "😌 편안하게", moodValue)
   : ""}
   ${renderInlineOption("mood", "", "상관없어요", moodValue)}
         </div>
@@ -1878,6 +1890,23 @@ function matchOwnedDifficulty(game){
 
   if(!filter){
     return true;
+  }
+
+  if(filter === "easy_coop" || filter === "hard_coop"){
+    const isCooperative =
+      game?.bgg?.mechanics?.includes("Cooperative Game") ||
+      game?.cottage?.interactionTags?.includes("cooperative") ||
+      game?.cottage?.interactionTags?.includes("coop");
+
+    if(!isCooperative){
+      return false;
+    }
+
+    const weight = Number(game?.cottage?.difficultyWeight) || Number(game?.bgg?.weight) || 0;
+
+    return filter === "easy_coop"
+      ? weight <= 2.50
+      : weight > 2.50;
   }
 
   return matchRecommendLevel(
@@ -2249,7 +2278,9 @@ function renderOwnedAccordionSummary(){
       beginner: "입문 추천",
       light: "라이트·패밀리",
       heavy: "헤비·매니아",
-      hardcore: "하드코어"
+      hardcore: "하드코어",
+      easy_coop: "쉬운 협력게임",
+      hard_coop: "어려운 협력게임"
     };
 
     if(ownedPageState.difficultyFilter){

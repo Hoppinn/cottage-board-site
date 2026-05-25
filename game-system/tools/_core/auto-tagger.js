@@ -19,12 +19,10 @@
 
 const TAG_MINIMUM_SET_V1 = {
   moodTags: [
-    "light",
     "cozy",
     "tense",
-    "brainy",
-    "chaotic",
     "funny",
+    "chaotic",
     "immersive"
   ],
 
@@ -129,26 +127,24 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Area Majority / Influence": {
     playTags: ["strategy"],
-    moodTags: ["brainy"],
     interactionTags: ["competitive"]
   },
 
   "Auction/Bidding": {
     playTags: ["strategy"],
-    moodTags: ["brainy"],
     interactionTags: ["competitive", "table_talk"]
   },
 
   "Bluffing": {
     playTags: ["bluffing", "party"],
     moodTags: ["tense", "funny"],
-    interactionTags: ["competitive", "table_talk"]
+    interactionTags: ["competitive", "social", "table_talk"]
   },
 
   "Communication Limits": {
     playTags: ["deduction", "party"],
     moodTags: ["tense", "funny"],
-    interactionTags: ["cooperative", "table_talk"]
+    interactionTags: ["cooperative", "social", "table_talk"]
   },
 
   "Cooperative Game": {
@@ -159,8 +155,8 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Deduction": {
     playTags: ["deduction"],
-    moodTags: ["tense", "brainy"],
-    interactionTags: ["table_talk"]
+    moodTags: ["tense"],
+    interactionTags: ["social", "table_talk"]
   },
 
   "Dexterity": {
@@ -178,14 +174,13 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Engine Building": {
     playTags: ["strategy"],
-    moodTags: ["brainy", "immersive"],
+    moodTags: ["immersive"],
     situationTags: ["experienced", "long_stay"],
     interactionTags: ["competitive"]
   },
 
   "Hand Management": {
     playTags: ["card_play", "strategy"],
-    moodTags: ["brainy"],
     interactionTags: ["competitive"]
   },
 
@@ -193,26 +188,30 @@ const BGG_MECHANIC_TAG_RULES = {
     playTags: ["deduction", "bluffing"],
     moodTags: ["tense"],
     situationTags: ["group", "large_group"],
-    interactionTags: ["hidden_role", "betrayal", "team", "table_talk"]
+    interactionTags: ["hidden_role", "betrayal", "team", "social", "table_talk"]
   },
 
   "Memory": {
     playTags: ["puzzle"],
-    moodTags: ["light", "brainy"],
     situationTags: ["beginner", "quick_play"]
   },
 
   "Negotiation": {
     moodTags: ["tense", "chaotic"],
     situationTags: ["group"],
-    interactionTags: ["competitive", "table_talk"]
+    interactionTags: ["competitive", "social", "table_talk"]
   },
 
   "Pattern Recognition": {
     playTags: ["puzzle"],
-    moodTags: ["brainy"],
     situationTags: ["quick_play"],
     interactionTags: ["silent_focus"]
+  },
+
+  "머더미스터리": {
+    playTags: ["deduction"],
+    moodTags: ["tense", "immersive"],
+    interactionTags: ["social", "table_talk"]
   },
 
   "Push Your Luck": {
@@ -231,12 +230,10 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Set Collection": {
     playTags: ["card_play", "strategy"],
-    moodTags: ["light", "brainy"],
     interactionTags: ["competitive"]
   },
 
   "Simultaneous Action Selection": {
-    moodTags: ["light"],
     interactionTags: ["simultaneous", "competitive"]
   },
 
@@ -259,13 +256,11 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Tile Placement": {
     playTags: ["puzzle", "strategy"],
-    moodTags: ["brainy"],
     interactionTags: ["competitive"]
   },
 
   "Trick-taking": {
     playTags: ["card_play", "strategy"],
-    moodTags: ["brainy"],
     interactionTags: ["competitive", "turn_based"]
   },
 
@@ -277,14 +272,14 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Worker Placement": {
     playTags: ["strategy"],
-    moodTags: ["brainy", "immersive"],
+    moodTags: ["immersive"],
     situationTags: ["experienced", "long_stay"],
     interactionTags: ["competitive", "turn_based"]
   },
 
   "Word Game": {
     playTags: ["party", "deduction"],
-    moodTags: ["light", "funny"],
+    moodTags: ["funny"],
     situationTags: ["beginner", "group"],
     interactionTags: ["table_talk"]
   }
@@ -296,23 +291,22 @@ const BGG_MECHANIC_TAG_RULES = {
 
 const BGG_CATEGORY_TAG_RULES = {
   "Card Game": {
-    playTags: ["card_play"],
-    moodTags: ["light"]
+    playTags: ["card_play"]
   },
 
   "Children's Game": {
-    moodTags: ["light", "cozy"],
+    moodTags: ["cozy"],
     situationTags: ["beginner", "family", "first_game"]
   },
 
   "Deduction": {
     playTags: ["deduction"],
-    moodTags: ["tense", "brainy"],
-    interactionTags: ["table_talk"]
+    moodTags: ["tense"],
+    interactionTags: ["social", "table_talk"]
   },
 
   "Dice": {
-    moodTags: ["light", "funny"],
+    moodTags: ["funny"],
     situationTags: ["beginner", "quick_play"]
   },
 
@@ -326,26 +320,25 @@ const BGG_CATEGORY_TAG_RULES = {
   },
 
   "Humor": {
-    moodTags: ["funny", "light"],
+    moodTags: ["funny"],
     situationTags: ["group", "beginner"]
   },
 
   "Murder/Mystery": {
     playTags: ["deduction"],
     moodTags: ["tense", "immersive"],
-    interactionTags: ["table_talk"]
+    interactionTags: ["social", "table_talk"]
   },
 
   "Party Game": {
     playTags: ["party"],
-    moodTags: ["funny", "light", "chaotic"],
+    moodTags: ["funny", "chaotic"],
     situationTags: ["beginner", "group", "large_group", "first_game"],
     interactionTags: ["table_talk"]
   },
 
   "Puzzle": {
     playTags: ["puzzle"],
-    moodTags: ["brainy"],
     interactionTags: ["silent_focus"]
   },
 
@@ -358,14 +351,14 @@ const BGG_CATEGORY_TAG_RULES = {
 
   "Trivia": {
     playTags: ["party"],
-    moodTags: ["funny", "light"],
+    moodTags: ["funny"],
     situationTags: ["group", "beginner"],
     interactionTags: ["table_talk"]
   },
 
   "Word Game": {
     playTags: ["party", "deduction"],
-    moodTags: ["light", "funny"],
+    moodTags: ["funny"],
     situationTags: ["beginner", "group"],
     interactionTags: ["table_talk"]
   }
@@ -385,7 +378,7 @@ function getDifficultyAutoTags(weight) {
   // 아이도 가능
   if (n <= 1.10) {
     return {
-      moodTags: ["light"],
+      moodTags: ["cozy"],
       situationTags: ["first_game", "quick_play"]
     };
   }
@@ -393,7 +386,7 @@ function getDifficultyAutoTags(weight) {
   // 입문 추천
   if (n <= 1.50) {
     return {
-      moodTags: ["light", "cozy"],
+      moodTags: ["cozy"],
       situationTags: ["beginner", "first_game"]
     };
   }
@@ -401,7 +394,6 @@ function getDifficultyAutoTags(weight) {
   // 라이트 · 패밀리
   if (n <= 2.50) {
     return {
-      moodTags: ["light", "brainy"],
       situationTags: ["beginner"],
       interactionTags: ["low_conflict"]
     };
@@ -411,7 +403,7 @@ function getDifficultyAutoTags(weight) {
   if (n <= 3.50) {
     return {
       playTags: ["strategy"],
-      moodTags: ["brainy", "immersive"],
+      moodTags: ["immersive"],
       situationTags: ["experienced", "long_stay"]
     };
   }
@@ -419,7 +411,7 @@ function getDifficultyAutoTags(weight) {
   // 하드코어
   return {
     playTags: ["strategy"],
-    moodTags: ["brainy", "immersive"],
+    moodTags: ["immersive"],
     situationTags: ["experienced", "long_stay"],
     interactionTags: ["silent_focus"]
   };
@@ -480,8 +472,7 @@ function getTimeAutoTags(game) {
 
   if (playingTime <= 20) {
     return {
-      situationTags: ["quick_play"],
-      moodTags: ["light"]
+      situationTags: ["quick_play"]
     };
   }
 
@@ -596,9 +587,9 @@ function buildDisplayTags(cottage) {
     ...normalizeArray(cottage.situationTags)
   ];
 
-  return unique(priorityTags)
-    .map((tag) => TAG_LABELS_KR[tag] || tag)
-    .slice(0, 5);
+  return unique(
+    unique(priorityTags).map((tag) => TAG_LABELS_KR[tag] || tag)
+  ).slice(0, 5);
 }
 
 /* =========================
