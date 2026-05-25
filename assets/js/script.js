@@ -1155,38 +1155,31 @@ function openGameSheet(gameKey){
         ${detail.summaryKo
           ? `<p class="sheet-summary">${detail.summaryKo}</p>`
           : ""}
-      </div>
-      <div class="sheet-action-btns">
-        <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">
-          📍 ${shelfLabel}
-        </button>
-        <a class="sheet-yt-btn"
-          href="https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}"
-          target="_blank" rel="noopener noreferrer">▶ 룰 영상</a>
-      </div>
-    </div>
-
-    <!-- 인원 / 시간 / 난이도 -->
-    <div class="sheet-info-row">
-      <div class="sheet-info-item">
-        <strong>${detail.primaryPlayersText || formatPlayers(detail.bestPlayers) || "-"}</strong>
-        <span>인원</span>
-      </div>
-      <div class="sheet-info-item">
-        <strong>${detail.playingTimeText || "-"}</strong>
-        <span>시간</span>
-      </div>
-      <div class="sheet-info-item">
-        <strong>${difficulty.label}</strong>
-        <span>난이도</span>
+        <div class="sheet-action-btns">
+          <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">
+            📍 ${shelfLabel}
+          </button>
+          <a class="sheet-yt-btn"
+            href="https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}"
+            target="_blank" rel="noopener noreferrer">▶ 룰</a>
+        </div>
       </div>
     </div>
 
-    <!-- 평점 -->
+    <!-- 인원 / 시간 / 난이도 한 줄 -->
+    <p class="sheet-info-line">
+      👥 ${detail.primaryPlayersText || formatPlayers(detail.bestPlayers) || "-"}
+      &nbsp;·&nbsp;
+      ⏱ ${detail.playingTimeText || "-"}
+      &nbsp;·&nbsp;
+      🎯 ${difficulty.label}
+    </p>
+
+    <!-- 평점 한 줄 -->
     <div class="sheet-ratings-row">
       <div class="sheet-bgg-rating">
+        <span class="sheet-cottage-label">BGG 평점</span>
         <strong>⭐ ${formatRating(detail.rating)}</strong>
-        <span>BGG 평점</span>
       </div>
       <div class="sheet-cottage-rating">
         <span class="sheet-cottage-label">손님 별점</span>
