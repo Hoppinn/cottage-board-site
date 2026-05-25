@@ -38,7 +38,7 @@ const bggTagTranslations = {
     "Miniatures":                 "미니어처",
     "Modern Warfare":             "현대 전쟁",
     "Movies / TV / Radio theme":  "미디어 테마",
-    "Murder / Mystery":           "추리/미스터리",
+    "Murder / Mystery":           "머더미스터리",
     "Music":                      "음악",
     "Mythology":                  "신화",
     "Nautical":                   "항해",

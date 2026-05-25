@@ -2281,32 +2281,14 @@ body.sheet-open{
 }
 
 /* 진행방식 | 테마 2열 */
-.sheet-tags-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.sheet-tags-plain{
   margin-bottom:12px;
 }
 
-.sheet-tag-col{
-  padding:12px;
-  border-radius:14px;
-  border:1.5px solid #ead8b8;
-  background:var(--paper);
-}
-
-.sheet-tag-col h4{
-  margin:0 0 6px;
-  font-size:13px;
-  color:var(--muted);
-  font-weight:900;
-}
-
-.sheet-tag-col p{
-  margin:0;
+.sheet-tags-plain p{
+  margin:0 0 4px;
   font-size:13px;
   color:#3a3025;
-  font-weight:700;
   line-height:1.5;
 }
 

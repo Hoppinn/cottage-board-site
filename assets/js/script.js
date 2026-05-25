@@ -1133,6 +1133,25 @@ function openGameSheet(gameKey){
   const difficulty =
     getDifficultyData(detail.difficultyWeight);
 
+  const isCooperative =
+    game.bgg?.mechanics?.includes("Cooperative Game") || false;
+
+  const difficultyLabel = isCooperative
+    ? (detail.difficultyWeight <= 2.50 ? "쉬운 협력게임" : "어려운 협력게임")
+    : difficulty.label;
+
+  const weightDisplay = detail.difficultyWeight > 0
+    ? ` 🏠 ${formatDifficultyWeight(detail.difficultyWeight)}`
+    : "";
+
+  const bestText = formatPlayers(detail.bestPlayers);
+  const recText  = formatPlayers(detail.recommendedPlayers);
+  const playersLine =
+    bestText !== "-" && recText !== "-" ? `베스트 ${bestText} (추천 ${recText})`
+    : bestText !== "-" ? `베스트 ${bestText}`
+    : recText !== "-" ? `추천 ${recText}`
+    : detail.playerRangeText || "-";
+
   const shelfGroupId = game.cottage?.shelfGroupId || "";
   const shelfLabel   = game.cottage?.shelfLabel   || "-";
   const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
@@ -1168,11 +1187,11 @@ function openGameSheet(gameKey){
 
     <!-- 인원 / 시간 / 난이도 한 줄 -->
     <p class="sheet-info-line">
-      👥 ${detail.primaryPlayersText || formatPlayers(detail.bestPlayers) || "-"}
+      👥 ${playersLine}
       &nbsp;·&nbsp;
       ⏱ ${detail.playingTimeText || "-"}
       &nbsp;·&nbsp;
-      🎯 ${difficulty.label}
+      🎯 ${difficultyLabel}${weightDisplay}
     </p>
 
     <!-- 평점 한 줄 -->
@@ -1199,19 +1218,9 @@ function openGameSheet(gameKey){
 
     <!-- 진행방식 | 테마 -->
     ${mechanicsDisplay.length || categoriesDisplay.length ? `
-      <div class="sheet-tags-grid">
-        ${mechanicsDisplay.length ? `
-          <div class="sheet-tag-col">
-            <h4>진행방식</h4>
-            <p>${mechanicsDisplay.join(" · ")}</p>
-          </div>
-        ` : ""}
-        ${categoriesDisplay.length ? `
-          <div class="sheet-tag-col">
-            <h4>테마</h4>
-            <p>${categoriesDisplay.join(" · ")}</p>
-          </div>
-        ` : ""}
+      <div class="sheet-tags-plain">
+        ${mechanicsDisplay.length ? `<p>진행방식: ${mechanicsDisplay.join(" · ")}</p>` : ""}
+        ${categoriesDisplay.length ? `<p>테마: ${categoriesDisplay.join(" · ")}</p>` : ""}
       </div>
     ` : ""}
 
@@ -1226,12 +1235,8 @@ function openGameSheet(gameKey){
     <!-- 커뮤니티 반응 (UI only, 카카오 로그인 후 활성화 예정) -->
     <div class="sheet-community">
       <div class="sheet-community-reactions">
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">
-          👍 <span>좋아요</span>
-        </button>
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">
-          👎 <span>별로예요</span>
-        </button>
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👍 0</button>
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👎 0</button>
       </div>
       <div class="sheet-comment-box">
         <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>

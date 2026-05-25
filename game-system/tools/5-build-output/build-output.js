@@ -93,6 +93,7 @@ function buildRawGameItem(game) {
       manualTags: game.tags || [],
       autoTags: [],
       displayTags: [],
+      summaryKo: game.summaryKo || "",
       comment: makeTextBlock(game.comment || "", "manual"),
       ruleSummary: makeTextBlock("", "none"),
       recommendPoint: makeTextBlock("", "none"),
