@@ -2352,34 +2352,20 @@ function renderOwnedGameList(){
 
               <div class="owned-game-meta">
   <span>
-    👥 ${
-      formatPlayers(detail.bestPlayers) ||
-      detail.playerRangeText ||
-      "-"
-    }
+    👥 ${formatPlayers(detail.bestPlayers) || detail.playerRangeText || "-"}
   </span>
-
-  
-  <span>
-    ⏱ ${
-      detail.playingTimeText ||
-      "-"
-    }
-  </span>
-
-  <span class="${difficulty.className}">
-  ${difficulty.icon}
-  ${formatDifficultyWeight(detail.difficultyWeight)}
-</span>
-
   <span>
     ⭐ ${formatRating(detail.rating)}
   </span>
-
-<span>
-  🗂️ ${getGameShelfLabel(game)}
-</span>
-
+  <span class="${difficulty.className}">
+    ${difficulty.icon} ${formatDifficultyWeight(detail.difficultyWeight)}
+  </span>
+  <span>
+    ⏱ ${detail.playingTimeText || "-"}
+  </span>
+  <span>
+    📦 ${getGameShelfLabel(game)}
+  </span>
 </div>
 
             </div>
