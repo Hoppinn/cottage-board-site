@@ -183,6 +183,41 @@ textarea{
   cursor:pointer;
 }
 
+.header-login-btn{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 10px;
+  border:1.5px solid #ccc;
+  border-radius:20px;
+  background:#fff;
+  cursor:pointer;
+  font-size:12px;
+  color:#555;
+  white-space:nowrap;
+  line-height:1.4;
+  transition:border-color .15s, color .15s;
+}
+
+.header-login-btn:hover{
+  border-color:var(--green);
+  color:var(--green);
+}
+
+.header-login-btn.is-logged-in{
+  border-color:var(--green);
+  color:var(--green);
+  font-weight:600;
+}
+
+.header-profile-img{
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  object-fit:cover;
+  display:none;
+}
+
 .header-menu{
   position:absolute;
   top:calc(var(--header-h) - 8px);

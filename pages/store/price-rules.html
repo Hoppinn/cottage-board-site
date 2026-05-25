@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>가격 &amp; 규칙 | 코티지보드</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="owned-page">
@@ -19,6 +20,10 @@
     </a>
 
     <div class="header-actions">
+      <button class="header-login-btn" id="kakaoLoginBtn" type="button" aria-label="카카오 로그인">
+        <img id="kakaoProfileImg" class="header-profile-img" alt="">
+        <span id="kakaoLoginText">로그인</span>
+      </button>
       <button
         class="header-search"
         id="headerSearchButton"
@@ -86,6 +91,7 @@
   <script src="../../assets/js/supabase-config.js"></script>
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
 
   <footer class="site-footer">
     <p><a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
