@@ -126,15 +126,25 @@
     const key = `cottage_played_${gameId}`;
     if (localStorage.getItem(key)) return { alreadyRecorded: true };
     try {
-      const { error } = await db.from("game_play_records").insert({
+      const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
         player_count: playerCount || null,
-      });
+      }).select("id");
       if (!error) {
-        localStorage.setItem(key, "1");
-        return { success: true };
+        localStorage.setItem(key, data?.[0]?.id || "1");
+        return { success: true, id: data?.[0]?.id };
       }
       return { error };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async function deleteGamePlay(id) {
+    if (!id) return { error: "invalid" };
+    try {
+      const { error } = await db.from("game_play_records").delete().eq("id", id);
+      return error ? { error } : { success: true };
     } catch (e) {
       return { error: e };
     }
@@ -174,7 +184,7 @@
     try {
       const { data } = await db
         .from("game_comments")
-        .select("comment_text, created_at")
+        .select("id, comment_text, created_at")
         .eq("game_key", gameKey)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -187,9 +197,21 @@
   async function insertComment(gameKey, commentText) {
     if (!gameKey || !commentText?.trim()) return { error: "invalid" };
     try {
-      const { error } = await db
+      const { data, error } = await db
         .from("game_comments")
-        .insert({ game_key: gameKey, comment_text: commentText.trim() });
+        .insert({ game_key: gameKey, comment_text: commentText.trim() })
+        .select("id");
+      if (error) return { error };
+      return { success: true, id: data?.[0]?.id };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async function deleteComment(id) {
+    if (!id) return { error: "invalid" };
+    try {
+      const { error } = await db.from("game_comments").delete().eq("id", id);
       return error ? { error } : { success: true };
     } catch (e) {
       return { error: e };
@@ -285,11 +307,13 @@
     getPopularGames,
     getAllGameRatings,
     recordGamePlay,
+    deleteGamePlay,
     getGamePlayCount,
     getPlayHighlights,
     getVisitorStats,
     getGameComments,
     insertComment,
+    deleteComment,
     getGameLikeCount,
     toggleGameLike,
     hasUserLiked,

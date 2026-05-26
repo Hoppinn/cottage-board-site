@@ -98,6 +98,12 @@ create policy "anon_select_game_play_records"
   to anon
   using (true);
 
+drop policy if exists "anon_delete_game_play_records" on public.game_play_records;
+create policy "anon_delete_game_play_records"
+  on public.game_play_records for delete
+  to anon
+  using (true);
+
 
 -- ── play_highlights (플레이 하이라이트 메모) ─────────────
 create table if not exists public.play_highlights (
@@ -146,6 +152,12 @@ create policy "anon_insert_game_comments"
 drop policy if exists "anon_select_game_comments" on public.game_comments;
 create policy "anon_select_game_comments"
   on public.game_comments for select
+  to anon
+  using (true);
+
+drop policy if exists "anon_delete_game_comments" on public.game_comments;
+create policy "anon_delete_game_comments"
+  on public.game_comments for delete
   to anon
   using (true);
 

@@ -1459,21 +1459,58 @@ async function onSheetLike(btn) {
 function onSheetDislike(btn) { requireLogin(() => {}); }
 function onSheetComment() { requireLogin(() => {}); }
 
+async function onCancelPlayRecord(gameKey, id) {
+  if (!confirm('플레이 기록을 삭제할까요?')) return;
+  if (!window.CottageDB) return;
+  const result = await window.CottageDB.deleteGamePlay(id);
+  if (!result.error) {
+    localStorage.removeItem(`cottage_played_${gameKey}`);
+    await initPlayWidget(gameKey);
+  }
+}
+
 function initSheetCommentGate() {
   // legacy — textarea removed, now using onOpenCommentInput gate
+}
+
+function getMyCommentIds() {
+  try { return JSON.parse(localStorage.getItem('cottage_my_comments') || '[]'); } catch { return []; }
+}
+function saveMyCommentId(id) {
+  const ids = getMyCommentIds();
+  if (id && !ids.includes(id)) { ids.push(id); localStorage.setItem('cottage_my_comments', JSON.stringify(ids)); }
+}
+function removeMyCommentId(id) {
+  localStorage.setItem('cottage_my_comments', JSON.stringify(getMyCommentIds().filter(x => x !== id)));
 }
 
 async function initSheetComments(gameKey) {
   const listEl = document.getElementById(`sheetCommentsList-${gameKey}`);
   if (!listEl || !window.CottageDB) return;
   const comments = await window.CottageDB.getGameComments(gameKey);
-  if (!comments.length) return;
+  if (!comments.length) {
+    listEl.classList.remove('has-comments');
+    listEl.innerHTML = '<span class="sheet-comments-empty">코멘트가 없습니다</span>';
+    return;
+  }
+  const myIds = getMyCommentIds();
   listEl.classList.add('has-comments');
   listEl.innerHTML = comments.map(c => `
-    <div class="sheet-comment-item" onclick="requireLogin(() => {})">
-      <p class="sheet-comment-text">${c.comment_text.replace(/</g,'&lt;')}</p>
+    <div class="sheet-comment-item">
+      <p class="sheet-comment-text">${c.comment_text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+      ${myIds.includes(c.id) ? `<button class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>` : ''}
     </div>
   `).join('');
+}
+
+async function onDeleteComment(id, gameKey) {
+  if (!confirm('이 코멘트를 삭제할까요?')) return;
+  if (!window.CottageDB) return;
+  const result = await window.CottageDB.deleteComment(id);
+  if (!result.error) {
+    removeMyCommentId(id);
+    await initSheetComments(gameKey);
+  }
 }
 
 function getOrCreateCommentModal() {
@@ -1524,6 +1561,7 @@ async function onSubmitCommentModal() {
   if (submitBtn) submitBtn.disabled = true;
   const result = await window.CottageDB.insertComment(gameKey, text);
   if (!result.error) {
+    if (result.id) saveMyCommentId(result.id);
     onCloseCommentModal();
     await initSheetComments(gameKey);
   }
@@ -1602,7 +1640,9 @@ async function initPlayWidget(gameKey) {
     window.CottageDB.getPlayHighlights(gameKey),
   ]);
 
-  const alreadyPlayed = !!localStorage.getItem(`cottage_played_${gameKey}`);
+  const playedId = localStorage.getItem(`cottage_played_${gameKey}`);
+  const alreadyPlayed = !!playedId;
+  const canCancelPlay = playedId && playedId !== "1";
 
   let html = "";
 
@@ -1615,7 +1655,7 @@ async function initPlayWidget(gameKey) {
   html += `<div class="sheet-play-record">
     <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
     ${alreadyPlayed
-      ? `<span class="sheet-played-recorded">✅ 기록됨</span>`
+      ? `<span class="sheet-played-recorded">✅ 기록됨${canCancelPlay ? ` <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${playedId}')" type="button">취소</button>` : ""}</span>`
       : `<button class="sheet-played-btn" data-game-id="${gameKey}" type="button">플레이했어요</button>`
     }
   </div>`;
