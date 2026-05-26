@@ -69,6 +69,9 @@ const TAG_MINIMUM_SET_V1 = {
 ========================= */
 
 const TAG_LABELS_KR = {
+  // manualTags aliases
+  머더미: "머더미스터리",
+
   // moodTags
   light: "가볍게",
   cozy: "편안하게",

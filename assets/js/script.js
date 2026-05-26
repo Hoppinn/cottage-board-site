@@ -605,7 +605,7 @@ const allTags = [
 
   const moodTagMap = {
     fun:      ["funny", "party", "chaotic"],
-    brain:    ["puzzle", "pattern", "strategy", "deduction"],
+    brain:    ["puzzle", "strategy", "deduction", "card_play"],
     talk:     ["table_talk", "social", "bluffing", "hidden_role", "betrayal", "negotiation"],
     immersive:["immersive", "tense", "storytelling"],
     coop:     ["cooperative", "coop", "team"],
@@ -1165,15 +1165,34 @@ function openGameSheet(gameKey){
   const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
   const categoriesDisplay = (detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories) || [];
 
+  // 인원 정보
+  const bestDisplayMain = bestText !== "-"
+    ? `👥 베스트 ${bestText}`
+    : (recShort ? `👥 추천 ${recShort}명` : "👥 -");
+  const bestDisplaySub = bestText !== "-" && recShort
+    ? `(추천 ${recShort}명)`
+    : "";
+
+  // 무게/난이도 정보
+  const weightMain = detail.difficultyWeight > 0
+    ? `🎯 ${formatDifficultyWeight(detail.difficultyWeight)}`
+    : `🎯 ${difficultyLabel}`;
+  const weightSub = detail.difficultyWeight > 0
+    ? `(${difficultyLabel})`
+    : "";
+
   gameSheetContent.innerHTML = `
 
     <!-- 상단 섹션 -->
     <div class="sheet-header">
-      <img class="sheet-thumb"
-        src="${detail.image || DEFAULT_GAME_IMAGE}"
-        alt="${detail.title}"
-        onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
-      >
+      <div class="sheet-img-col">
+        <img class="sheet-thumb"
+          src="${detail.image || DEFAULT_GAME_IMAGE}"
+          alt="${detail.title}"
+          onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
+        >
+        ${detail.rating ? `<div class="sheet-img-bgg">⭐ ${formatRating(detail.rating)}</div>` : ""}
+      </div>
       <div class="sheet-title-block">
         <h3>${detail.title}</h3>
         ${detail.bggTitle && detail.bggTitle !== detail.title
@@ -1188,40 +1207,27 @@ function openGameSheet(gameKey){
           </button>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}`}"
-            target="_blank" rel="noopener noreferrer">▶ 룰</a>
+            target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+            룰영상 보기
+          </a>
         </div>
       </div>
     </div>
 
-    <!-- 인원 / 시간 / 난이도 한 줄 -->
-    <p class="sheet-info-line">
-      👥 ${playersLine}
-      &nbsp;·&nbsp;
-      ⏱ ${detail.playingTimeText || "-"}
-      &nbsp;·&nbsp;
-      🎯 ${difficultyLabel}${weightDisplay}
-    </p>
-
-    <!-- 평점 + 반응 + 코멘트 통합 -->
-    <div class="sheet-feedback">
-      <div class="sheet-feedback-ratings">
-        <div class="sheet-bgg-rating">
-          <span class="sheet-cottage-label">BGG 평점</span>
-          <strong>⭐ ${formatRating(detail.rating)}</strong>
-        </div>
-        <div class="sheet-cottage-rating">
-          <span class="sheet-cottage-label">손님 별점</span>
-          <div class="cottage-rating-widget" data-game-id="${gameKey}">
-            <div class="cottage-rating-loading">불러오는 중...</div>
-          </div>
-        </div>
+    <!-- 인원 / 시간 / 무게 - 3칸 -->
+    <div class="sheet-info-grid">
+      <div class="sheet-info-cell">
+        <span class="sheet-info-main">${bestDisplayMain}</span>
+        ${bestDisplaySub ? `<span class="sheet-info-sub">${bestDisplaySub}</span>` : ""}
       </div>
-      <div class="sheet-feedback-reactions">
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👍 0</button>
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👎 0</button>
+      <div class="sheet-info-cell">
+        <span class="sheet-info-main">⏱ ${detail.playingTimeText || "-"}</span>
       </div>
-      <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>
-      <p class="sheet-comment-login-hint">카카오 로그인 후 이용 가능</p>
+      <div class="sheet-info-cell">
+        <span class="sheet-info-main">${weightMain}</span>
+        ${weightSub ? `<span class="sheet-info-sub">${weightSub}</span>` : ""}
+      </div>
     </div>
 
     <!-- 게임 설명 -->
@@ -1248,6 +1254,16 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
+    <!-- 따봉 + 코멘트 -->
+    <div class="sheet-reactions-footer">
+      <div class="sheet-feedback-reactions">
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👍 0</button>
+        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👎 0</button>
+      </div>
+      <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>
+      <p class="sheet-comment-login-hint">카카오 로그인 후 이용 가능</p>
+    </div>
+
     <!-- 전체 게임에서 보기 -->
     <a class="sheet-view-all-btn"
       href="${rootPath}pages/owned-games.html?search=${encodeURIComponent(detail.title)}"
@@ -1258,7 +1274,7 @@ function openGameSheet(gameKey){
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
-  initCottageRatingWidget(gameKey).catch(() => {});
+  if (window.CottageDB) window.CottageDB.trackView(gameKey);
   initSheetDescToggle();
 }
 
