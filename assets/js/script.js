@@ -1183,7 +1183,25 @@ function openGameSheet(gameKey){
 
   gameSheetContent.innerHTML = `
 
-    <!-- 상단 섹션 -->
+    <!-- sticky bar (스크롤 시 표시) -->
+    <div class="sheet-sticky-bar" id="sheetStickyBar">
+      <img class="sheet-sticky-thumb"
+        src="${detail.image || DEFAULT_GAME_IMAGE}"
+        alt="${detail.title}"
+        onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
+      >
+      <span class="sheet-sticky-title">${detail.title}</span>
+      ${detail.rating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(detail.rating)}</span>` : ""}
+    </div>
+
+    <!-- 제목 행 -->
+    <div class="sheet-title-row">
+      <h3 class="sheet-game-title">${detail.title}</h3>
+      ${detail.bggTitle && detail.bggTitle !== detail.title
+        ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
+    </div>
+
+    <!-- 이미지 + 설명 -->
     <div class="sheet-header">
       <div class="sheet-img-col">
         <img class="sheet-thumb"
@@ -1194,13 +1212,7 @@ function openGameSheet(gameKey){
         ${detail.rating ? `<div class="sheet-img-bgg">⭐ ${formatRating(detail.rating)}</div>` : ""}
       </div>
       <div class="sheet-title-block">
-        <h3>${detail.title}</h3>
-        ${detail.bggTitle && detail.bggTitle !== detail.title
-          ? `<p class="sheet-en-title">${detail.bggTitle}</p>`
-          : ""}
-        ${detail.summaryKo
-          ? `<p class="sheet-summary">${detail.summaryKo}</p>`
-          : ""}
+        ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
           <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">
             📍 ${shelfLabel}
@@ -1215,34 +1227,51 @@ function openGameSheet(gameKey){
       </div>
     </div>
 
-    <!-- 인원 / 시간 / 무게 - 3칸 -->
-    <div class="sheet-info-grid">
-      <div class="sheet-info-cell">
-        <span class="sheet-info-main">${bestDisplayMain}</span>
-        ${bestDisplaySub ? `<span class="sheet-info-sub">${bestDisplaySub}</span>` : ""}
-      </div>
-      <div class="sheet-info-cell">
-        <span class="sheet-info-main">⏱ ${detail.playingTimeText || "-"}</span>
-      </div>
-      <div class="sheet-info-cell">
-        <span class="sheet-info-main">${weightMain}</span>
-        ${weightSub ? `<span class="sheet-info-sub">${weightSub}</span>` : ""}
+    <!-- 인원 · 시간 · 무게 한 줄 -->
+    <div class="sheet-stats-block">
+      <div class="sheet-stats-row">
+        <span class="sheet-stats-item">
+          <span class="sheet-stats-main">${bestDisplayMain}</span>
+          ${bestDisplaySub ? `<span class="sheet-stats-sub">${bestDisplaySub}</span>` : ""}
+        </span>
+        <span class="sheet-stats-dot">·</span>
+        <span class="sheet-stats-item">
+          <span class="sheet-stats-main">⏱ ${detail.playingTimeText || "-"}</span>
+        </span>
+        <span class="sheet-stats-dot">·</span>
+        <span class="sheet-stats-item">
+          <span class="sheet-stats-main">${weightMain}</span>
+          ${weightSub ? `<span class="sheet-stats-sub">${weightSub}</span>` : ""}
+        </span>
       </div>
     </div>
 
-    <!-- 게임 설명 -->
-    ${detail.comment ? `
-      <div class="sheet-desc-wrap">
-        <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment}</p>
-        <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">+ 더보기</button>
+    <!-- 분위기 태그 -->
+    ${detail.displayTags?.length ? `
+      <div class="sheet-dtags">
+        ${detail.displayTags.map(t => `<span class="sheet-dtag">${t}</span>`).join("")}
       </div>
     ` : ""}
 
-    <!-- 진행방식 | 테마 -->
+    <!-- 게임 설명 -->
+    ${detail.comment ? `
+      <div class="sheet-section">
+        <p class="sheet-section-label">게임 설명</p>
+        <div class="sheet-desc-wrap">
+          <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment}</p>
+          <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">+ 더보기</button>
+        </div>
+      </div>
+    ` : ""}
+
+    <!-- 메커니즘 · 테마 -->
     ${mechanicsDisplay.length || categoriesDisplay.length ? `
-      <div class="sheet-tags-plain">
-        ${mechanicsDisplay.length ? `<p>진행방식: ${mechanicsDisplay.join(" · ")}</p>` : ""}
-        ${categoriesDisplay.length ? `<p>테마: ${categoriesDisplay.join(" · ")}</p>` : ""}
+      <div class="sheet-mechs-wrap">
+        <p class="sheet-mechs-text is-clamped" id="sheetMechsText">${[
+          mechanicsDisplay.length ? `진행: ${mechanicsDisplay.join(" · ")}` : "",
+          categoriesDisplay.length ? `테마: ${categoriesDisplay.join(" · ")}` : ""
+        ].filter(Boolean).join("　　")}</p>
+        <button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">+ 더보기</button>
       </div>
     ` : ""}
 
@@ -1260,11 +1289,12 @@ function openGameSheet(gameKey){
     <!-- 따봉 + 코멘트 -->
     <div class="sheet-reactions-footer">
       <div class="sheet-feedback-reactions">
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👍 0</button>
-        <button class="sheet-reaction-btn" disabled title="로그인 후 이용 가능">👎 0</button>
+        <button class="sheet-reaction-btn" id="sheetLikeBtn" onclick="onSheetLike(this)">👍 0</button>
+        <button class="sheet-reaction-btn" id="sheetDislikeBtn" onclick="onSheetDislike(this)">👎 0</button>
       </div>
-      <textarea class="sheet-comment-input" disabled placeholder="로그인 후 코멘트를 남길 수 있어요"></textarea>
-      <p class="sheet-comment-login-hint">카카오 로그인 후 이용 가능</p>
+      <textarea class="sheet-comment-input" id="sheetCommentInput"
+        placeholder="코멘트를 남겨보세요" rows="3"></textarea>
+      <button class="sheet-comment-submit" onclick="onSheetComment()">등록</button>
     </div>
 
     <!-- 전체 게임에서 보기 -->
@@ -1278,13 +1308,22 @@ function openGameSheet(gameKey){
   document.body.classList.add('sheet-open');
 
   if (window.CottageDB) window.CottageDB.trackView(gameKey);
+  initStickyBar();
   initPlayWidget(gameKey).catch(() => {});
   initSheetDescToggle();
+  initSheetMechsToggle();
+  initSheetCommentGate();
 }
 
 function closeGameSheet(){
   if(!gameSheet){
     return;
+  }
+
+  const panel = gameSheet.querySelector('.game-sheet-panel');
+  if (panel?._stickyCleanup) {
+    panel._stickyCleanup();
+    delete panel._stickyCleanup;
   }
 
   gameSheet.classList.remove('is-active');
@@ -1305,6 +1344,52 @@ function initSheetDescToggle(){
   if(desc.scrollHeight <= desc.clientHeight){
     toggle.style.display = 'none';
   }
+}
+
+function toggleSheetMechs(btn) {
+  const text = document.getElementById('sheetMechsText');
+  if (!text) return;
+  const clamped = text.classList.toggle('is-clamped');
+  btn.textContent = clamped ? '+ 더보기' : '- 접기';
+}
+
+function initSheetMechsToggle() {
+  const text   = document.getElementById('sheetMechsText');
+  const toggle = document.getElementById('sheetMechsToggle');
+  if (!text || !toggle) return;
+  if (text.scrollHeight <= text.clientHeight) toggle.style.display = 'none';
+}
+
+function initStickyBar() {
+  const panel = gameSheet?.querySelector('.game-sheet-panel');
+  const bar   = document.getElementById('sheetStickyBar');
+  if (!panel || !bar) return;
+  function onScroll() {
+    bar.classList.toggle('is-visible', panel.scrollTop > 80);
+  }
+  panel.addEventListener('scroll', onScroll);
+  panel._stickyCleanup = () => panel.removeEventListener('scroll', onScroll);
+}
+
+function requireLogin(action) {
+  const user = window.getKakaoUser?.();
+  if (user) { action(); return; }
+  if (typeof kakaoLogin === 'function') kakaoLogin();
+}
+
+function onSheetLike()    { requireLogin(() => {}); }
+function onSheetDislike() { requireLogin(() => {}); }
+function onSheetComment() { requireLogin(() => {}); }
+
+function initSheetCommentGate() {
+  const ta = document.getElementById('sheetCommentInput');
+  if (!ta) return;
+  ta.addEventListener('focus', function() {
+    if (!window.getKakaoUser?.()) {
+      ta.blur();
+      if (typeof kakaoLogin === 'function') kakaoLogin();
+    }
+  });
 }
 
 function goToShelf(shelfGroupId){
