@@ -78,8 +78,9 @@ function removeEditionWords(name) {
 }
 
 function splitSubtitle(name) {
+  // "+" 구분도 처리: "윙스팬 + 아시아 + 오세아니아" → ["윙스팬", "아시아", "오세아니아"]
   return String(name || "")
-    .split(/[:：\-–—]/)
+    .split(/[:：\-–—+]/)
     .map((item) => item.trim())
     .filter(Boolean);
 }

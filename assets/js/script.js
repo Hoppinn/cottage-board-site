@@ -1314,12 +1314,12 @@ function openGameSheet(gameKey){
     <!-- 따봉 + 코멘트 -->
     <div class="sheet-reactions-footer">
       <div class="sheet-feedback-reactions">
-        <button class="sheet-reaction-btn" id="sheetLikeBtn" onclick="onSheetLike(this)">👍 0</button>
-        <button class="sheet-reaction-btn" id="sheetDislikeBtn" onclick="onSheetDislike(this)">👎 0</button>
+        <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
+        <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎</button>
       </div>
       <div class="sheet-comments-area">
         <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
-          <p class="sheet-comments-empty">코멘트가 없습니다</p>
+          <span class="sheet-comments-empty">코멘트가 없습니다</span>
         </div>
         <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)">💬 코멘트 남기기</button>
       </div>
@@ -1341,6 +1341,7 @@ function openGameSheet(gameKey){
   initSheetDescToggle();
   initSheetMechsToggle();
   initSheetComments(gameKey).catch(() => {});
+  initSheetLikes(gameKey).catch(() => {});
 }
 
 function closeGameSheet(){
@@ -1405,8 +1406,40 @@ function requireLogin(action) {
   if (typeof kakaoLogin === 'function') kakaoLogin();
 }
 
-function onSheetLike()    { requireLogin(() => {}); }
-function onSheetDislike() { requireLogin(() => {}); }
+async function initSheetLikes(gameKey) {
+  if (!window.CottageDB) return;
+  const [count, liked] = await Promise.all([
+    window.CottageDB.getGameLikeCount(gameKey),
+    (async () => {
+      const user = window.getKakaoUser?.();
+      return user ? window.CottageDB.hasUserLiked(gameKey, String(user.id)) : false;
+    })(),
+  ]);
+  const likeBtn = document.getElementById('sheetLikeBtn');
+  if (likeBtn) {
+    likeBtn.textContent = `👍 ${count}`;
+    likeBtn.classList.toggle('is-active', liked);
+  }
+}
+
+async function onSheetLike(btn) {
+  requireLogin(async () => {
+    const user = window.getKakaoUser?.();
+    if (!user || !window.CottageDB) return;
+    const gameKey = btn?.dataset.gameId;
+    if (!gameKey) return;
+    const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
+    if (result.liked !== undefined) {
+      const count = await window.CottageDB.getGameLikeCount(gameKey);
+      const likeBtn = document.getElementById('sheetLikeBtn');
+      if (likeBtn) {
+        likeBtn.textContent = `👍 ${count}`;
+        likeBtn.classList.toggle('is-active', result.liked);
+      }
+    }
+  });
+}
+function onSheetDislike(btn) { requireLogin(() => {}); }
 function onSheetComment() { requireLogin(() => {}); }
 
 function initSheetCommentGate() {
@@ -1418,8 +1451,9 @@ async function initSheetComments(gameKey) {
   if (!listEl || !window.CottageDB) return;
   const comments = await window.CottageDB.getGameComments(gameKey);
   if (!comments.length) return;
+  listEl.classList.add('has-comments');
   listEl.innerHTML = comments.map(c => `
-    <div class="sheet-comment-item">
+    <div class="sheet-comment-item" onclick="requireLogin(() => {})">
       <p class="sheet-comment-text">${c.comment_text.replace(/</g,'&lt;')}</p>
     </div>
   `).join('');

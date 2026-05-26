@@ -32,17 +32,15 @@ function tokenSimilarity(a, b) {
         ? normalizedA
         : normalizedB;
 
-    /**
-     * 짧은 단어가 긴 단어 내부 일부로만 들어간 경우 방지
-     *
-     * 예:
-     * cat / catastrophe
-     */
+    // cat/catastrophe 같은 부분 포함 오탐 방지:
+    // shorter의 모든 단어가 longer의 단어 집합에 있어야 고점 인정
+    // (예: "vale of eternity" → "the vale of eternity" 올바르게 82점)
     const longerWords = new Set(
       longer.split(" ").filter(Boolean)
     );
 
-    if (!longerWords.has(shorter)) {
+    const shorterWords = shorter.split(" ").filter(Boolean);
+    if (!shorterWords.every(w => longerWords.has(w))) {
       return 20;
     }
 
