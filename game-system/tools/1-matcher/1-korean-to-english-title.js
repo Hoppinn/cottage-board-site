@@ -38,6 +38,29 @@ const knownKoToEn = {
   도미니언: "Dominion",
   카르카손: "Carcassonne",
   팬데믹: "Pandemic",
+
+  // 의미 번역형 — 자동 검색이 어려운 한국어 제목
+  "고질라도쿄클래시": "Godzilla: Tokyo Clash",
+  "남티그리스의학자들": "Scholars of the South Tigris",
+  "다윈의위대한발자취": "Darwin's Journey",
+  "두근두근악어이빨": "Crocodile Dentist",
+  "드라큘라VS반헬싱": "Dracula vs Van Helsing",
+  "그라운드플로어": "Ground Floor",
+  "더리치앤더굿": "The Rich and the Good",
+
+  // 음차 직역형 — 발음이 영문명과 동일
+  뉴클리엄: "Nucleum",
+  렉시오: "Lexio",
+  고스트: "Ghost Blitz",
+  골드: "GOLD",
+  레일웨이붐: "Railway Boom",
+  라이벌시티: "Rival Cities",
+  콰이어트하우스: "Quiet House",
+  번레이트: "Burn Rate",
+  레벨10: "Level 10",
+
+  // 확장 포함 번들
+  "라그랑하 디럭스 마스터": "La Granja: Deluxe Master Set",
 };
 
 function compactKorean(name) {
@@ -74,6 +97,15 @@ function removeEditionWords(name) {
     .replace(/구판/g, "")
     .replace(/디럭스/g, "")
     .replace(/프로모/g, "")
+    // 언어 버전 suffix: (영)=영어판, (독)=독일어판, (일)=일본어판, (중)=중국어판
+    .replace(/\s*\(영\)/g, "")
+    .replace(/\s*\(독\)/g, "")
+    .replace(/\s*\(일\)/g, "")
+    .replace(/\s*\(중\)/g, "")
+    .replace(/\(영\)/g, "")
+    .replace(/\(독\)/g, "")
+    .replace(/\(일\)/g, "")
+    .replace(/\(중\)/g, "")
     .trim();
 }
 
