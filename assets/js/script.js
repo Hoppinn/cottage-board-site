@@ -618,12 +618,15 @@ const allTags = [
   ...(game?.cottage?.autoTags || [])
 ];
 
-  // 대화가 많은 게임: 협력 어드벤처류 추가 제외
-  // hard_coop인데 블러핑/히든롤/배신 등 핵심 대화 태그가 없으면 제외
+  // 대화가 많은 게임: 추가 필터
   if (moodValue === "talk") {
-    const talkCoreTags = ["bluffing", "hidden_role", "betrayal", "negotiation"];
+    // 1) 협력 어드벤처류: hard_coop이면서 핵심 대화 태그 없으면 제외
+    const talkCoreTags = ["bluffing", "hidden_role", "negotiation"];
     const hasTalkCore = allTags.some(t => talkCoreTags.includes(t));
     if (allTags.includes("hard_coop") && !hasTalkCore) return false;
+    // 2) betrayal만 있고 bluffing/hidden_role 없으면 제외
+    //    (Take That류 경쟁 게임이 잘못 걸리는 케이스)
+    if (allTags.includes("betrayal") && !hasTalkCore) return false;
   }
 
   const moodTagMap = {

@@ -252,7 +252,7 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Take That": {
     moodTags: ["chaotic", "funny"],
-    interactionTags: ["competitive", "betrayal"]
+    interactionTags: ["competitive"]
   },
 
   "Team-Based Game": {
