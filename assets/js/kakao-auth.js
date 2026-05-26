@@ -1,6 +1,10 @@
 const KAKAO_APP_KEY = 'a1121194b54290671b9c1521c6cfe392';
 const KAKAO_USER_KEY = 'kakao_user';
 
+// ── 관리자 카카오 ID ────────────────────────────────────────
+// 로그인 후 브라우저 콘솔에서 getKakaoUser().id 를 입력해서 확인한 뒤 아래에 넣으세요
+const OWNER_KAKAO_ID = '';
+
 function initKakaoAuth() {
   if (typeof Kakao === 'undefined') return;
 
@@ -102,12 +106,22 @@ function updateLoginUI(user) {
     if (profileImg) profileImg.style.display = 'none';
     if (loginText) loginText.textContent = '로그인';
   }
+
+  // 로그인 상태 변경을 페이지에 알림
+  window.dispatchEvent(new CustomEvent('cottage-auth-changed', { detail: { user } }));
 }
 
 if (typeof window !== 'undefined') {
   window.getKakaoUser = getKakaoUser;
   window.kakaoLogin = kakaoLogin;
   window.kakaoLogout = kakaoLogout;
+
+  // 현재 로그인 유저가 관리자(소유자)인지 확인
+  window.isOwner = function() {
+    if (!OWNER_KAKAO_ID) return false;
+    const user = getKakaoUser();
+    return !!user && String(user.id) === String(OWNER_KAKAO_ID);
+  };
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

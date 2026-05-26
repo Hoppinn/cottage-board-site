@@ -111,17 +111,30 @@
       });
     });
 
-    // ── 관리자 모드 (비밀 URL: ?admin=cottage2026 / 해제: ?admin_exit=1) ──
-    const params = new URLSearchParams(location.search);
-    if (params.get('admin') === 'cottage2026') localStorage.setItem('cottage_admin', '1');
-    if (params.get('admin_exit') === '1') localStorage.removeItem('cottage_admin');
-    const isAdmin = localStorage.getItem('cottage_admin') === '1';
-    if (isAdmin) {
-      const badge = document.createElement('div');
-      badge.className = 'req-admin-badge';
-      badge.innerHTML = '🔑 관리자 모드 · <a href="?admin_exit=1">해제</a>';
-      document.querySelector('.inner-page-body')?.prepend(badge);
+    // ── 관리자: 카카오 로그인된 오너 계정 ──────────────────
+    function isAdmin() { return window.isOwner?.() || false; }
+
+    function updateAdminBadge() {
+      const existing = document.querySelector('.req-admin-badge');
+      if (isAdmin()) {
+        if (!existing) {
+          const badge = document.createElement('div');
+          badge.className = 'req-admin-badge';
+          badge.textContent = '🔑 관리자 모드';
+          document.querySelector('.inner-page-body')?.prepend(badge);
+        }
+      } else {
+        existing?.remove();
+      }
     }
+
+    // 로그인 상태 바뀔 때 목록 재렌더
+    window.addEventListener('cottage-auth-changed', () => {
+      updateAdminBadge();
+      loadGameRequests();
+      loadSnackRequests();
+    });
+    updateAdminBadge();
 
     const MY_GAME_KEY  = 'cottage_my_game_reqs';
     const MY_SNACK_KEY = 'cottage_my_snack_reqs';
@@ -131,7 +144,7 @@
     function removeMyId(k, id) { localStorage.setItem(k, JSON.stringify(getMyIds(k).filter(x => x !== id))); }
 
     function delBtn(table, id, count) {
-      return `<button class="req-delete-btn" data-table="${table}" data-id="${id}" data-count="${count}" title="${isAdmin ? '삭제(관리자)' : '취소'}" type="button">✕</button>`;
+      return `<button class="req-delete-btn" data-table="${table}" data-id="${id}" data-count="${count}" title="${isAdmin() ? '삭제(관리자)' : '취소'}" type="button">✕</button>`;
     }
 
     function escHtml(str) {
@@ -154,7 +167,7 @@
       }
       const myIds = getMyIds(MY_GAME_KEY);
       el.innerHTML = '<ul class="req-list">' + data.map(r => {
-        const can = isAdmin || myIds.includes(r.id);
+        const can = isAdmin() || myIds.includes(r.id);
         return `<li class="req-list-item"><span class="req-list-name">${escHtml(r.game_name)}</span><span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${can ? delBtn('game_requests', r.id, r.request_count) : ''}</span></li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
@@ -196,7 +209,7 @@
       }
       const myIds = getMyIds(MY_SNACK_KEY);
       el.innerHTML = '<ul class="req-list">' + data.map(r => {
-        const can = isAdmin || myIds.includes(r.id);
+        const can = isAdmin() || myIds.includes(r.id);
         return `<li class="req-list-item"><span class="req-list-name">${escHtml(r.item_name)}</span><span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${can ? delBtn('snack_requests', r.id, r.request_count) : ''}</span></li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
@@ -249,7 +262,7 @@
       const count = parseInt(btn.dataset.count || '1', 10);
       const storageKey = table === 'game_requests' ? MY_GAME_KEY : MY_SNACK_KEY;
 
-      if (isAdmin || count <= 1) {
+      if (isAdmin() || count <= 1) {
         if (!confirm('이 요청을 삭제할까요?')) return;
         const { error } = await getDb().from(table).delete().eq('id', id);
         if (!error) { removeMyId(storageKey, id); }
