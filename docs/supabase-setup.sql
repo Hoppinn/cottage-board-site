@@ -1,7 +1,7 @@
 -- ======================================================
 -- 코티지보드 Supabase 전체 테이블 설정 SQL
 -- Supabase 대시보드 > SQL Editor 에서 전체 실행
--- 이미 존재하는 테이블은 IF NOT EXISTS로 건너뜀
+-- 테이블: IF NOT EXISTS / 정책: DROP 후 재생성 (멱등)
 -- ======================================================
 
 
@@ -16,12 +16,14 @@ create index if not exists page_views_created_at_idx on public.page_views (creat
 
 alter table public.page_views enable row level security;
 
-create policy if not exists "anon_insert_page_views"
+drop policy if exists "anon_insert_page_views" on public.page_views;
+create policy "anon_insert_page_views"
   on public.page_views for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_page_views"
+drop policy if exists "anon_select_page_views" on public.page_views;
+create policy "anon_select_page_views"
   on public.page_views for select
   to anon
   using (true);
@@ -39,7 +41,8 @@ create index if not exists game_views_viewed_at_idx on public.game_views (viewed
 
 alter table public.game_views enable row level security;
 
-create policy if not exists "anon_insert_game_views"
+drop policy if exists "anon_insert_game_views" on public.game_views;
+create policy "anon_insert_game_views"
   on public.game_views for insert
   to anon
   with check (true);
@@ -58,12 +61,14 @@ create index if not exists game_ratings_game_id_idx on public.game_ratings (game
 
 alter table public.game_ratings enable row level security;
 
-create policy if not exists "anon_insert_game_ratings"
+drop policy if exists "anon_insert_game_ratings" on public.game_ratings;
+create policy "anon_insert_game_ratings"
   on public.game_ratings for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_game_ratings"
+drop policy if exists "anon_select_game_ratings" on public.game_ratings;
+create policy "anon_select_game_ratings"
   on public.game_ratings for select
   to anon
   using (true);
@@ -81,12 +86,14 @@ create index if not exists game_play_records_game_id_idx on public.game_play_rec
 
 alter table public.game_play_records enable row level security;
 
-create policy if not exists "anon_insert_game_play_records"
+drop policy if exists "anon_insert_game_play_records" on public.game_play_records;
+create policy "anon_insert_game_play_records"
   on public.game_play_records for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_game_play_records"
+drop policy if exists "anon_select_game_play_records" on public.game_play_records;
+create policy "anon_select_game_play_records"
   on public.game_play_records for select
   to anon
   using (true);
@@ -104,12 +111,14 @@ create index if not exists play_highlights_game_id_idx on public.play_highlights
 
 alter table public.play_highlights enable row level security;
 
-create policy if not exists "anon_insert_play_highlights"
+drop policy if exists "anon_insert_play_highlights" on public.play_highlights;
+create policy "anon_insert_play_highlights"
   on public.play_highlights for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_play_highlights"
+drop policy if exists "anon_select_play_highlights" on public.play_highlights;
+create policy "anon_select_play_highlights"
   on public.play_highlights for select
   to anon
   using (true);
@@ -128,12 +137,14 @@ create index if not exists game_comments_created_at_idx on public.game_comments 
 
 alter table public.game_comments enable row level security;
 
-create policy if not exists "anon_insert_game_comments"
+drop policy if exists "anon_insert_game_comments" on public.game_comments;
+create policy "anon_insert_game_comments"
   on public.game_comments for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_game_comments"
+drop policy if exists "anon_select_game_comments" on public.game_comments;
+create policy "anon_select_game_comments"
   on public.game_comments for select
   to anon
   using (true);
@@ -152,17 +163,20 @@ create index if not exists game_likes_game_id_idx on public.game_likes (game_id)
 
 alter table public.game_likes enable row level security;
 
-create policy if not exists "anon_insert_game_likes"
+drop policy if exists "anon_insert_game_likes" on public.game_likes;
+create policy "anon_insert_game_likes"
   on public.game_likes for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_game_likes"
+drop policy if exists "anon_select_game_likes" on public.game_likes;
+create policy "anon_select_game_likes"
   on public.game_likes for select
   to anon
   using (true);
 
-create policy if not exists "anon_delete_game_likes"
+drop policy if exists "anon_delete_game_likes" on public.game_likes;
+create policy "anon_delete_game_likes"
   on public.game_likes for delete
   to anon
   using (true);
@@ -181,17 +195,20 @@ create index if not exists game_requests_count_idx on public.game_requests (requ
 
 alter table public.game_requests enable row level security;
 
-create policy if not exists "anon_insert_game_requests"
+drop policy if exists "anon_insert_game_requests" on public.game_requests;
+create policy "anon_insert_game_requests"
   on public.game_requests for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_game_requests"
+drop policy if exists "anon_select_game_requests" on public.game_requests;
+create policy "anon_select_game_requests"
   on public.game_requests for select
   to anon
   using (true);
 
-create policy if not exists "anon_update_game_requests"
+drop policy if exists "anon_update_game_requests" on public.game_requests;
+create policy "anon_update_game_requests"
   on public.game_requests for update
   to anon
   using (true);
@@ -209,17 +226,20 @@ create index if not exists snack_requests_count_idx on public.snack_requests (re
 
 alter table public.snack_requests enable row level security;
 
-create policy if not exists "anon_insert_snack_requests"
+drop policy if exists "anon_insert_snack_requests" on public.snack_requests;
+create policy "anon_insert_snack_requests"
   on public.snack_requests for insert
   to anon
   with check (true);
 
-create policy if not exists "anon_select_snack_requests"
+drop policy if exists "anon_select_snack_requests" on public.snack_requests;
+create policy "anon_select_snack_requests"
   on public.snack_requests for select
   to anon
   using (true);
 
-create policy if not exists "anon_update_snack_requests"
+drop policy if exists "anon_update_snack_requests" on public.snack_requests;
+create policy "anon_update_snack_requests"
   on public.snack_requests for update
   to anon
   using (true);
@@ -234,7 +254,8 @@ create table if not exists public.suggestions (
 
 alter table public.suggestions enable row level security;
 
-create policy if not exists "anon_insert_suggestions"
+drop policy if exists "anon_insert_suggestions" on public.suggestions;
+create policy "anon_insert_suggestions"
   on public.suggestions for insert
   to anon
   with check (true);
