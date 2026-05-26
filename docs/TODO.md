@@ -11,8 +11,9 @@
 | `pages/owned-games.html` | ✅ 완료 | 전체게임, 바텀시트 |
 | `pages/cottage/about.html` | ✅ 완료 | 소개, 오시는 길 |
 | `pages/store/price-rules.html` | ✅ 완료 | 가격, 규칙 |
-| `pages/store/requests.html` | ✅ 완료 | Supabase 코드 연결 완료 (테이블 생성 대기) |
+| `pages/store/requests.html` | ✅ 완료 | 작성자 삭제 기능 포함 |
 | `pages/cottage/club.html` | ✅ 완료 | 동호회 소개/참여방법/바로가기 링크 |
+| `pages/cottage/club-intro.html` | ✅ 완료 | 가입 인사 게시판 (member_intros) |
 | `pages/store/game-location.html` | ❌ 플레이스홀더 | 3D 책장 구현 보류 |
 
 ---
@@ -29,8 +30,8 @@
 
 | 항목 | 상태 |
 |------|------|
-| 테이블 생성: SQL 파일(`docs/supabase-setup.sql`) 대시보드에서 실행 필요 | 🔧 대기 (사용자가 직접 실행) |
-| 카카오 비즈채널 문의하기 실제 연결 | 🔧 대기 |
+| 카카오 Developers 웹 플랫폼 도메인 등록 | 🔧 사용자 직접 (앱 1467212 → 앱설정 → 플랫폼 → Web) |
+| "팽" 테스트 요청 삭제 | 🔧 Supabase 대시보드 game_requests에서 직접 삭제 |
 
 ---
 
@@ -50,10 +51,14 @@
 - ✅ 카카오 로그인 전체 페이지 연동
 - ✅ 카카오 비즈채널 버튼 전체 페이지 연동
 - ✅ 바텀시트 UI 개편 (스티키바/통계/코멘트/로그인게이트)
-- ✅ 바텀시트 스티키바 빈칸 제거 (height:0 방식)
-- ✅ 바텀시트 코멘트 섹션: 빈상태+버튼 같은 줄, 타인코멘트 표시
-- ✅ 따봉 기능 Supabase 연결 (toggleGameLike, 카운트 표시)
-- ✅ 방문자수 Supabase 연동 (page_views)
+- ✅ 바텀시트 스티키바 빈칸 제거
+- ✅ 바텀시트 코멘트/플레이기록/따봉 삭제·취소 기능 추가
+- ✅ 따봉 토글 (toggleGameLike — 다시 누르면 취소)
+- ✅ 방문자수 Supabase 연동 (sessionStorage 중복 방지)
+- ✅ requests.html 게임/간식 요청 작성자 삭제 기능
+- ✅ club-intro.html 가입 인사 게시판 신규 생성
+- ✅ club.html 참여방법 → club-intro.html 링크 연결
+- ✅ Supabase 전체 테이블 + 정책 설정 완료 (supabase-setup.sql)
 - ✅ requests.html, about.html, price-rules.html 구현
 - ✅ club.html 동호회 페이지 구현
 - ✅ 분위기 태그 재정의 + 오분류 수정
