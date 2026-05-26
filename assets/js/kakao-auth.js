@@ -1,4 +1,4 @@
-const KAKAO_APP_KEY = 'a1121194b54290671b9c1521c6cfe392';
+const KAKAO_APP_KEY = 'e0f056bc67d4a032e7a612c2e4ff2b71';
 const KAKAO_USER_KEY = 'kakao_user';
 
 // ── 관리자 카카오 ID ────────────────────────────────────────
