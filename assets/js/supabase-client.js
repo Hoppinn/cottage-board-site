@@ -122,17 +122,27 @@
 
   // ── 플레이 기록 ─────────────────────────────────────────
 
-  async function recordGamePlay(gameId, playerCount) {
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote) {
     const key = `cottage_played_${gameId}`;
     if (localStorage.getItem(key)) return { alreadyRecorded: true };
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
         player_count: playerCount || null,
+        player_names: playerNames || null,
+        play_time_min: playTimeMin || null,
+        score_note: scoreNote || null,
       }).select("id");
       if (!error) {
-        localStorage.setItem(key, data?.[0]?.id || "1");
-        return { success: true, id: data?.[0]?.id };
+        const id = data?.[0]?.id || null;
+        localStorage.setItem(key, JSON.stringify({
+          id,
+          playerCount: playerCount || null,
+          playerNames: playerNames || null,
+          playTimeMin: playTimeMin || null,
+          scoreNote: scoreNote || null,
+        }));
+        return { success: true, id };
       }
       return { error };
     } catch (e) {
@@ -212,6 +222,19 @@
     if (!id) return { error: "invalid" };
     try {
       const { error } = await db.from("game_comments").delete().eq("id", id);
+      return error ? { error } : { success: true };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async function updateComment(id, commentText) {
+    if (!id || !commentText?.trim()) return { error: "invalid" };
+    try {
+      const { error } = await db
+        .from("game_comments")
+        .update({ comment_text: commentText.trim() })
+        .eq("id", id);
       return error ? { error } : { success: true };
     } catch (e) {
       return { error: e };
@@ -314,6 +337,7 @@
     getGameComments,
     insertComment,
     deleteComment,
+    updateComment,
     getGameLikeCount,
     toggleGameLike,
     hasUserLiked,

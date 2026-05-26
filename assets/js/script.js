@@ -1495,12 +1495,18 @@ async function initSheetComments(gameKey) {
   }
   const myIds = getMyCommentIds();
   listEl.classList.add('has-comments');
-  listEl.innerHTML = comments.map(c => `
-    <div class="sheet-comment-item">
-      <p class="sheet-comment-text">${c.comment_text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
-      ${myIds.includes(c.id) ? `<button class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>` : ''}
-    </div>
-  `).join('');
+  listEl.innerHTML = comments.map(c => {
+    const txt = c.comment_text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const mine = myIds.includes(c.id);
+    return `<div class="sheet-comment-item">
+      <p class="sheet-comment-text">${txt}</p>
+      ${mine ? `<div class="sheet-comment-actions">
+        <button class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
+        <button class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 async function onDeleteComment(id, gameKey) {
@@ -1539,29 +1545,54 @@ function onOpenCommentInput(btn) {
   requireLogin(() => {
     const modal = getOrCreateCommentModal();
     modal.dataset.gameId = gameKey;
+    delete modal.dataset.editId;
+    const titleEl = modal.querySelector('.sheet-comment-modal-title');
+    const submitEl = document.getElementById('sheetCommentModalSubmit');
+    if (titleEl) titleEl.textContent = '코멘트 남기기';
+    if (submitEl) submitEl.textContent = '등록';
     document.getElementById('sheetCommentModalInput').value = '';
     modal.style.display = 'flex';
     document.getElementById('sheetCommentModalInput')?.focus();
   });
 }
 
+function onEditComment(btn) {
+  const modal = getOrCreateCommentModal();
+  modal.dataset.gameId = btn.dataset.game;
+  modal.dataset.editId = btn.dataset.id;
+  const titleEl = modal.querySelector('.sheet-comment-modal-title');
+  const submitEl = document.getElementById('sheetCommentModalSubmit');
+  if (titleEl) titleEl.textContent = '코멘트 수정';
+  if (submitEl) submitEl.textContent = '수정 완료';
+  const input = document.getElementById('sheetCommentModalInput');
+  if (input) input.value = btn.dataset.text;
+  modal.style.display = 'flex';
+  input?.focus();
+}
+
 function onCloseCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) { modal.style.display = 'none'; delete modal.dataset.editId; }
 }
 
 async function onSubmitCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
   const gameKey = modal?.dataset.gameId;
+  const editId = modal?.dataset.editId;
   const input = document.getElementById('sheetCommentModalInput');
   const text = input?.value?.trim();
   if (!text || !gameKey) { input?.focus(); return; }
   if (!window.CottageDB) return;
   const submitBtn = document.getElementById('sheetCommentModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
-  const result = await window.CottageDB.insertComment(gameKey, text);
+  let result;
+  if (editId) {
+    result = await window.CottageDB.updateComment(editId, text);
+  } else {
+    result = await window.CottageDB.insertComment(gameKey, text);
+    if (!result.error && result.id) saveMyCommentId(result.id);
+  }
   if (!result.error) {
-    if (result.id) saveMyCommentId(result.id);
     onCloseCommentModal();
     await initSheetComments(gameKey);
   }
@@ -1640,9 +1671,18 @@ async function initPlayWidget(gameKey) {
     window.CottageDB.getPlayHighlights(gameKey),
   ]);
 
-  const playedId = localStorage.getItem(`cottage_played_${gameKey}`);
-  const alreadyPlayed = !!playedId;
-  const canCancelPlay = playedId && playedId !== "1";
+  // localStorage: 신규=JSON, 구형=문자열 id/"1"
+  const playedRaw = localStorage.getItem(`cottage_played_${gameKey}`);
+  let alreadyPlayed = !!playedRaw, playedId = null, canCancelPlay = false, playedInfo = null;
+  if (playedRaw) {
+    try {
+      const p = JSON.parse(playedRaw);
+      if (p && typeof p === "object") { playedId = p.id; canCancelPlay = !!p.id; playedInfo = p; }
+      else { playedId = playedRaw; canCancelPlay = playedRaw !== "1"; }
+    } catch { playedId = playedRaw; canCancelPlay = playedRaw !== "1"; }
+  }
+
+  function escH(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
   let html = "";
 
@@ -1660,6 +1700,15 @@ async function initPlayWidget(gameKey) {
     }
   </div>`;
 
+  if (playedInfo && (playedInfo.playerCount || playedInfo.playerNames || playedInfo.playTimeMin || playedInfo.scoreNote)) {
+    html += `<div class="sheet-play-info">
+      ${playedInfo.playerCount ? `<span class="sheet-play-info-tag">👥 ${playedInfo.playerCount}명</span>` : ""}
+      ${playedInfo.playerNames ? `<span class="sheet-play-info-tag">🎮 ${escH(playedInfo.playerNames)}</span>` : ""}
+      ${playedInfo.playTimeMin ? `<span class="sheet-play-info-tag">⏱ ${playedInfo.playTimeMin}분</span>` : ""}
+      ${playedInfo.scoreNote ? `<span class="sheet-play-info-tag">🏆 ${escH(playedInfo.scoreNote)}</span>` : ""}
+    </div>`;
+  }
+
   if (!alreadyPlayed) {
     html += `<div class="sheet-player-select" id="sheetPlayerSelect-${gameKey}" style="display:none;">
       <p class="sheet-player-select-label">몇 명이서 했나요?</p>
@@ -1667,6 +1716,17 @@ async function initPlayWidget(gameKey) {
         ${[1,2,3,4,5,6,7,8].map(n =>
           `<button class="sheet-player-select-btn" data-count="${n}" data-game-id="${gameKey}" type="button">${n}명</button>`
         ).join("")}
+      </div>
+      <div class="sheet-play-details" id="sheetPlayDetails-${gameKey}" style="display:none;">
+        <input class="sheet-play-detail-input" id="sheetPlayNames-${gameKey}" type="text" placeholder="플레이어 이름 (선택, 예: 김철수, 이영희)" maxlength="100">
+        <div class="sheet-play-detail-row">
+          <input class="sheet-play-detail-input is-half" id="sheetPlayTime-${gameKey}" type="number" placeholder="플레이 시간(분)" min="1" max="999">
+          <input class="sheet-play-detail-input is-half" id="sheetPlayScore-${gameKey}" type="text" placeholder="점수 메모 (선택)" maxlength="100">
+        </div>
+        <div class="sheet-play-detail-actions">
+          <button class="sheet-play-detail-skip" data-game-id="${gameKey}" type="button">건너뛰기</button>
+          <button class="sheet-play-detail-submit" data-game-id="${gameKey}" type="button">기록하기</button>
+        </div>
       </div>
     </div>`;
   }
@@ -1688,15 +1748,38 @@ if (gameSheetContent) {
       return;
     }
 
-    // 인원 선택 버튼 → 기록 제출
+    // 인원 선택 버튼 → 상세 입력 폼 표시
     const countBtn = e.target.closest(".sheet-player-select-btn");
-    if (countBtn && window.CottageDB) {
+    if (countBtn) {
       const gameKey = countBtn.dataset.gameId;
-      const count = parseInt(countBtn.dataset.count, 10);
       countBtn.closest(".sheet-player-select-btns")
         .querySelectorAll(".sheet-player-select-btn")
-        .forEach(b => { b.disabled = true; });
-      await window.CottageDB.recordGamePlay(gameKey, count);
+        .forEach(b => b.classList.remove("is-selected"));
+      countBtn.classList.add("is-selected");
+      const detailsEl = document.getElementById(`sheetPlayDetails-${gameKey}`);
+      if (detailsEl) { detailsEl.style.display = "block"; detailsEl.dataset.count = countBtn.dataset.count; }
+      return;
+    }
+
+    // 건너뛰기 or 기록하기
+    const skipBtn = e.target.closest(".sheet-play-detail-skip");
+    const submitDetailBtn = e.target.closest(".sheet-play-detail-submit");
+    const actionBtn = skipBtn || submitDetailBtn;
+    if (actionBtn && window.CottageDB) {
+      const gameKey = actionBtn.dataset.gameId;
+      const detailsEl = document.getElementById(`sheetPlayDetails-${gameKey}`);
+      const count = parseInt(detailsEl?.dataset.count || "0", 10);
+      let playerNames = null, playTimeMin = null, scoreNote = null;
+      if (submitDetailBtn) {
+        playerNames = document.getElementById(`sheetPlayNames-${gameKey}`)?.value?.trim() || null;
+        const tv = document.getElementById(`sheetPlayTime-${gameKey}`)?.value;
+        playTimeMin = tv ? parseInt(tv, 10) : null;
+        scoreNote = document.getElementById(`sheetPlayScore-${gameKey}`)?.value?.trim() || null;
+      }
+      actionBtn.disabled = true;
+      if (skipBtn) skipBtn.disabled = true;
+      if (submitDetailBtn) submitDetailBtn.disabled = true;
+      await window.CottageDB.recordGamePlay(gameKey, count, playerNames, playTimeMin, scoreNote);
       await initPlayWidget(gameKey);
     }
   });

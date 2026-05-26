@@ -328,6 +328,21 @@ create policy "anon_select_member_intros"
   using (true);
 
 
+-- ── 마이그레이션: game_play_records 컬럼 추가 ─────────────
+alter table public.game_play_records
+  add column if not exists player_names text,
+  add column if not exists play_time_min smallint,
+  add column if not exists score_note text;
+
+-- ── game_comments UPDATE 정책 (코멘트 수정) ───────────────
+drop policy if exists "anon_update_game_comments" on public.game_comments;
+create policy "anon_update_game_comments"
+  on public.game_comments for update
+  to anon
+  using (true)
+  with check (char_length(comment_text) between 1 and 500);
+
+
 -- ── RPC: 전체 게임 별점 요약 ──────────────────────────────
 create or replace function public.get_all_game_ratings()
 returns table(game_id text, avg_rating numeric, rating_count bigint)

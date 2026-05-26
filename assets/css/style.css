@@ -2550,6 +2550,88 @@ body.sheet-open{
   background:#fff0ee;
 }
 
+/* 플레이 기록 상세 정보 */
+.sheet-play-info{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:4px;
+}
+.sheet-play-info-tag{
+  font-size:11px;
+  font-weight:700;
+  color:#5a7a3a;
+  background:#edf5e1;
+  border-radius:999px;
+  padding:2px 8px;
+}
+
+/* 플레이 상세 입력 폼 */
+.sheet-play-details{
+  margin-top:8px;
+  padding:10px 12px;
+  background:#f9f9f5;
+  border-radius:10px;
+  border:1px solid #e0d8c8;
+}
+.sheet-play-detail-input{
+  width:100%;
+  box-sizing:border-box;
+  padding:7px 10px;
+  border:1.5px solid #d8ceba;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  color:#3a3025;
+  background:#fff;
+  margin-bottom:6px;
+}
+.sheet-play-detail-input:focus{
+  outline:none;
+  border-color:var(--green);
+}
+.sheet-play-detail-row{
+  display:flex;
+  gap:6px;
+}
+.sheet-play-detail-input.is-half{
+  width:50%;
+  flex:1;
+}
+.sheet-play-detail-actions{
+  display:flex;
+  gap:6px;
+  margin-top:4px;
+}
+.sheet-play-detail-skip{
+  flex:1;
+  padding:7px;
+  border:1px solid #d0c8b8;
+  border-radius:8px;
+  background:#fff;
+  font-size:13px;
+  font-weight:700;
+  color:#888;
+  cursor:pointer;
+}
+.sheet-play-detail-submit{
+  flex:2;
+  padding:7px;
+  border:none;
+  border-radius:8px;
+  background:var(--green);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+.sheet-play-detail-submit:hover{ background:#4a8a30; }
+.sheet-player-select-btn.is-selected{
+  background:var(--green);
+  color:#fff;
+  border-color:var(--green);
+}
+
 .sheet-player-select{
   margin-top:6px;
   padding:10px 12px;
@@ -3169,6 +3251,30 @@ body.sheet-open{
   color:#c0392b;
   background:#fff0ee;
 }
+.req-admin-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#fff3cd;
+  border:1px solid #ffd97d;
+  border-radius:8px;
+  padding:6px 12px;
+  font-size:12px;
+  font-weight:700;
+  color:#7a5c00;
+  margin-bottom:12px;
+}
+.req-admin-badge a{
+  color:#c07800;
+  text-decoration:underline;
+}
+
+.rules-sub{
+  font-size:0.88em;
+  color:var(--muted);
+  font-weight:500;
+}
+
 .req-list-empty{
   padding:24px;
   text-align:center;
@@ -3278,6 +3384,28 @@ body.sheet-open{
 .sheet-comment-delete-btn:hover{
   color:#c0392b;
   background:#fff0ee;
+}
+
+.sheet-comment-actions{
+  display:flex;
+  flex-shrink:0;
+  gap:2px;
+  margin-top:1px;
+}
+
+.sheet-comment-edit-btn{
+  background:none;
+  border:none;
+  font-size:12px;
+  cursor:pointer;
+  padding:1px 3px;
+  line-height:1;
+  border-radius:4px;
+  opacity:0.6;
+}
+.sheet-comment-edit-btn:hover{
+  opacity:1;
+  background:#f0ede8;
 }
 
 .sheet-comment-write-btn{

@@ -111,55 +111,53 @@
       });
     });
 
-    function getDb() {
-      return window.CottageDB ? window.supabase?.createClient?.(
-        window.SUPABASE_CONFIG?.url, window.SUPABASE_CONFIG?.anonKey
-      ) : null;
+    // ── 관리자 모드 (비밀 URL: ?admin=cottage2026 / 해제: ?admin_exit=1) ──
+    const params = new URLSearchParams(location.search);
+    if (params.get('admin') === 'cottage2026') localStorage.setItem('cottage_admin', '1');
+    if (params.get('admin_exit') === '1') localStorage.removeItem('cottage_admin');
+    const isAdmin = localStorage.getItem('cottage_admin') === '1';
+    if (isAdmin) {
+      const badge = document.createElement('div');
+      badge.className = 'req-admin-badge';
+      badge.innerHTML = '🔑 관리자 모드 · <a href="?admin_exit=1">해제</a>';
+      document.querySelector('.inner-page-body')?.prepend(badge);
     }
 
     const MY_GAME_KEY  = 'cottage_my_game_reqs';
     const MY_SNACK_KEY = 'cottage_my_snack_reqs';
 
-    function getMyIds(storageKey) {
-      try { return JSON.parse(localStorage.getItem(storageKey) || '[]'); } catch { return []; }
+    function getMyIds(k) { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch { return []; } }
+    function saveMyId(k, id) { const ids = getMyIds(k); if (!ids.includes(id)) { ids.push(id); localStorage.setItem(k, JSON.stringify(ids)); } }
+    function removeMyId(k, id) { localStorage.setItem(k, JSON.stringify(getMyIds(k).filter(x => x !== id))); }
+
+    function delBtn(table, id, count) {
+      return `<button class="req-delete-btn" data-table="${table}" data-id="${id}" data-count="${count}" title="${isAdmin ? '삭제(관리자)' : '취소'}" type="button">✕</button>`;
     }
-    function saveMyId(storageKey, id) {
-      const ids = getMyIds(storageKey);
-      if (!ids.includes(id)) { ids.push(id); localStorage.setItem(storageKey, JSON.stringify(ids)); }
+
+    function escHtml(str) {
+      return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
-    function removeMyId(storageKey, id) {
-      const ids = getMyIds(storageKey).filter(x => x !== id);
-      localStorage.setItem(storageKey, JSON.stringify(ids));
+
+    function getDb() {
+      return window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
     }
 
     // ── 게임 요청 ────────────────────────────────────────
     async function loadGameRequests() {
       const el = document.getElementById('gameRequestList');
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
-        el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>';
-        return;
+        el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
-      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
-      const { data, error } = await db
-        .from('game_requests')
-        .select('id, game_name, request_count')
-        .order('request_count', { ascending: false })
-        .limit(50);
+      const { data, error } = await getDb().from('game_requests').select('id, game_name, request_count').order('request_count', { ascending: false }).limit(50);
       if (error || !data?.length) {
-        el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>';
-        return;
+        el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>'; return;
       }
       const myIds = getMyIds(MY_GAME_KEY);
-      el.innerHTML = '<ul class="req-list">' +
-        data.map(r => `<li class="req-list-item" data-id="${r.id}">
-          <span class="req-list-name">${escHtml(r.game_name)}</span>
-          <span class="req-list-right">
-            <span class="req-list-count">${r.request_count}명 희망</span>
-            ${myIds.includes(r.id) ? `<button class="req-delete-btn" data-table="game_requests" data-id="${r.id}" title="삭제" type="button">✕</button>` : ''}
-          </span>
-        </li>`).join('') +
-        '</ul>';
-      el.querySelectorAll('.req-delete-btn').forEach(btn => btn.addEventListener('click', handleDeleteReq));
+      el.innerHTML = '<ul class="req-list">' + data.map(r => {
+        const can = isAdmin || myIds.includes(r.id);
+        return `<li class="req-list-item"><span class="req-list-name">${escHtml(r.game_name)}</span><span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${can ? delBtn('game_requests', r.id, r.request_count) : ''}</span></li>`;
+      }).join('') + '</ul>';
+      el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
     }
 
     document.getElementById('gameRequestBtn').addEventListener('click', async () => {
@@ -167,62 +165,41 @@
       const name = input.value.trim();
       if (!name) { input.focus(); return; }
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
-      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
       const btn = document.getElementById('gameRequestBtn');
       btn.disabled = true;
-      const { data: existing } = await db
-        .from('game_requests')
-        .select('id, request_count')
-        .ilike('game_name', name)
-        .maybeSingle();
+      const db = getDb();
+      const { data: existing } = await db.from('game_requests').select('id, request_count').ilike('game_name', name).maybeSingle();
       if (existing) {
         await db.from('game_requests').update({ request_count: existing.request_count + 1 }).eq('id', existing.id);
         saveMyId(MY_GAME_KEY, existing.id);
       } else {
-        const { data: inserted } = await db.from('game_requests').insert({ game_name: name, request_count: 1, status: 'pending' }).select('id');
-        if (inserted?.[0]?.id) saveMyId(MY_GAME_KEY, inserted[0].id);
+        const { data: ins } = await db.from('game_requests').insert({ game_name: name, request_count: 1, status: 'pending' }).select('id');
+        if (ins?.[0]?.id) saveMyId(MY_GAME_KEY, ins[0].id);
       }
-      input.value = '';
-      btn.disabled = false;
+      input.value = ''; btn.disabled = false;
       const msg = document.getElementById('gameSuccessMsg');
-      msg.textContent = `"${name}" 요청이 전달됐어요!`;
-      msg.style.display = 'block';
+      msg.textContent = `"${name}" 요청이 전달됐어요!`; msg.style.display = 'block';
       setTimeout(() => { msg.style.display = 'none'; }, 3000);
       await loadGameRequests();
     });
-
-    document.getElementById('gameRequestInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('gameRequestBtn').click();
-    });
+    document.getElementById('gameRequestInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('gameRequestBtn').click(); });
 
     // ── 간식·음료 요청 ────────────────────────────────────
     async function loadSnackRequests() {
       const el = document.getElementById('snackRequestList');
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
-        el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>';
-        return;
+        el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
-      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
-      const { data, error } = await db
-        .from('snack_requests')
-        .select('id, item_name, request_count')
-        .order('request_count', { ascending: false })
-        .limit(50);
+      const { data, error } = await getDb().from('snack_requests').select('id, item_name, request_count').order('request_count', { ascending: false }).limit(50);
       if (error || !data?.length) {
-        el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 원하는 간식을 알려주세요!</div>';
-        return;
+        el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 원하는 간식을 알려주세요!</div>'; return;
       }
       const myIds = getMyIds(MY_SNACK_KEY);
-      el.innerHTML = '<ul class="req-list">' +
-        data.map(r => `<li class="req-list-item" data-id="${r.id}">
-          <span class="req-list-name">${escHtml(r.item_name)}</span>
-          <span class="req-list-right">
-            <span class="req-list-count">${r.request_count}명 희망</span>
-            ${myIds.includes(r.id) ? `<button class="req-delete-btn" data-table="snack_requests" data-id="${r.id}" title="삭제" type="button">✕</button>` : ''}
-          </span>
-        </li>`).join('') +
-        '</ul>';
-      el.querySelectorAll('.req-delete-btn').forEach(btn => btn.addEventListener('click', handleDeleteReq));
+      el.innerHTML = '<ul class="req-list">' + data.map(r => {
+        const can = isAdmin || myIds.includes(r.id);
+        return `<li class="req-list-item"><span class="req-list-name">${escHtml(r.item_name)}</span><span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${can ? delBtn('snack_requests', r.id, r.request_count) : ''}</span></li>`;
+      }).join('') + '</ul>';
+      el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
     }
 
     document.getElementById('snackRequestBtn').addEventListener('click', async () => {
@@ -230,33 +207,24 @@
       const name = input.value.trim();
       if (!name) { input.focus(); return; }
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
-      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
       const btn = document.getElementById('snackRequestBtn');
       btn.disabled = true;
-      const { data: existing } = await db
-        .from('snack_requests')
-        .select('id, request_count')
-        .ilike('item_name', name)
-        .maybeSingle();
+      const db = getDb();
+      const { data: existing } = await db.from('snack_requests').select('id, request_count').ilike('item_name', name).maybeSingle();
       if (existing) {
         await db.from('snack_requests').update({ request_count: existing.request_count + 1 }).eq('id', existing.id);
         saveMyId(MY_SNACK_KEY, existing.id);
       } else {
-        const { data: inserted } = await db.from('snack_requests').insert({ item_name: name, request_count: 1 }).select('id');
-        if (inserted?.[0]?.id) saveMyId(MY_SNACK_KEY, inserted[0].id);
+        const { data: ins } = await db.from('snack_requests').insert({ item_name: name, request_count: 1 }).select('id');
+        if (ins?.[0]?.id) saveMyId(MY_SNACK_KEY, ins[0].id);
       }
-      input.value = '';
-      btn.disabled = false;
+      input.value = ''; btn.disabled = false;
       const msg = document.getElementById('snackSuccessMsg');
-      msg.textContent = `"${name}" 요청이 전달됐어요!`;
-      msg.style.display = 'block';
+      msg.textContent = `"${name}" 요청이 전달됐어요!`; msg.style.display = 'block';
       setTimeout(() => { msg.style.display = 'none'; }, 3000);
       await loadSnackRequests();
     });
-
-    document.getElementById('snackRequestInput').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('snackRequestBtn').click();
-    });
+    document.getElementById('snackRequestInput').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('snackRequestBtn').click(); });
 
     // ── 개선 건의 ─────────────────────────────────────────
     document.getElementById('suggestBtn').addEventListener('click', async () => {
@@ -264,37 +232,34 @@
       const content = input.value.trim();
       if (!content) { input.focus(); return; }
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
-      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
       const btn = document.getElementById('suggestBtn');
       btn.disabled = true;
-      await db.from('suggestions').insert({ content });
-      input.value = '';
-      btn.disabled = false;
+      await getDb().from('suggestions').insert({ content });
+      input.value = ''; btn.disabled = false;
       const msg = document.getElementById('suggestSuccessMsg');
       msg.style.display = 'block';
       setTimeout(() => { msg.style.display = 'none'; }, 4000);
     });
 
-    // ── 삭제 핸들러 ──────────────────────────────────────
+    // ── 삭제/취소 핸들러 ─────────────────────────────────
     async function handleDeleteReq(e) {
       const btn = e.currentTarget;
       const table = btn.dataset.table;
       const id = btn.dataset.id;
-      if (!confirm('이 요청을 삭제할까요?')) return;
-      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
-      const { error } = await db.from(table).delete().eq('id', id);
-      if (!error) {
-        const storageKey = table === 'game_requests' ? MY_GAME_KEY : MY_SNACK_KEY;
-        removeMyId(storageKey, id);
-        if (table === 'game_requests') await loadGameRequests();
-        else await loadSnackRequests();
-      }
-    }
+      const count = parseInt(btn.dataset.count || '1', 10);
+      const storageKey = table === 'game_requests' ? MY_GAME_KEY : MY_SNACK_KEY;
 
-    function escHtml(str) {
-      return String(str)
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      if (isAdmin || count <= 1) {
+        if (!confirm('이 요청을 삭제할까요?')) return;
+        const { error } = await getDb().from(table).delete().eq('id', id);
+        if (!error) { removeMyId(storageKey, id); }
+      } else {
+        if (!confirm('내 요청을 취소할까요? (희망 수가 1 줄어요)')) return;
+        const { error } = await getDb().from(table).update({ request_count: count - 1 }).eq('id', id);
+        if (!error) { removeMyId(storageKey, id); }
+      }
+      if (table === 'game_requests') await loadGameRequests();
+      else await loadSnackRequests();
     }
 
     // 초기 로드
