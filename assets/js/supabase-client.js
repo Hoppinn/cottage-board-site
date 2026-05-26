@@ -168,6 +168,84 @@
     }
   }
 
+  // ── 게임 코멘트 ─────────────────────────────────────────
+
+  async function getGameComments(gameKey, limit = 10) {
+    try {
+      const { data } = await db
+        .from("game_comments")
+        .select("comment_text, created_at")
+        .eq("game_key", gameKey)
+        .order("created_at", { ascending: false })
+        .limit(limit);
+      return data || [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  async function insertComment(gameKey, commentText) {
+    if (!gameKey || !commentText?.trim()) return { error: "invalid" };
+    try {
+      const { error } = await db
+        .from("game_comments")
+        .insert({ game_key: gameKey, comment_text: commentText.trim() });
+      return error ? { error } : { success: true };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  // ── 따봉 (game_likes) ────────────────────────────────────
+
+  async function getGameLikeCount(gameId) {
+    try {
+      const { count } = await db
+        .from("game_likes")
+        .select("*", { count: "exact", head: true })
+        .eq("game_id", gameId);
+      return count || 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  async function toggleGameLike(gameId, userId) {
+    if (!gameId || !userId) return { error: "invalid" };
+    try {
+      const { data: existing } = await db
+        .from("game_likes")
+        .select("id")
+        .eq("game_id", gameId)
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (existing) {
+        await db.from("game_likes").delete().eq("id", existing.id);
+        return { liked: false };
+      } else {
+        await db.from("game_likes").insert({ game_id: gameId, user_id: userId });
+        return { liked: true };
+      }
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async function hasUserLiked(gameId, userId) {
+    if (!gameId || !userId) return false;
+    try {
+      const { data } = await db
+        .from("game_likes")
+        .select("id")
+        .eq("game_id", gameId)
+        .eq("user_id", userId)
+        .maybeSingle();
+      return !!data;
+    } catch (_) {
+      return false;
+    }
+  }
+
   // ── 방문자 통계 ─────────────────────────────────────
 
   async function getVisitorStats() {
@@ -209,5 +287,10 @@
     getGamePlayCount,
     getPlayHighlights,
     getVisitorStats,
+    getGameComments,
+    insertComment,
+    getGameLikeCount,
+    toggleGameLike,
+    hasUserLiked,
   };
 })();

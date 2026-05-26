@@ -1415,28 +1415,14 @@ function initSheetCommentGate() {
 
 async function initSheetComments(gameKey) {
   const listEl = document.getElementById(`sheetCommentsList-${gameKey}`);
-  if (!listEl) return;
-  if (!window.supabase || !window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
-  try {
-    const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
-    const { data, error } = await db
-      .from('game_comments')
-      .select('comment_text, created_at')
-      .eq('game_key', gameKey)
-      .order('created_at', { ascending: false })
-      .limit(10);
-    if (error || !data?.length) return;
-    listEl.innerHTML = '';
-    data.forEach(c => {
-      const item = document.createElement('div');
-      item.className = 'sheet-comment-item';
-      const p = document.createElement('p');
-      p.className = 'sheet-comment-text';
-      p.textContent = c.comment_text;
-      item.appendChild(p);
-      listEl.appendChild(item);
-    });
-  } catch(e) {}
+  if (!listEl || !window.CottageDB) return;
+  const comments = await window.CottageDB.getGameComments(gameKey);
+  if (!comments.length) return;
+  listEl.innerHTML = comments.map(c => `
+    <div class="sheet-comment-item">
+      <p class="sheet-comment-text">${c.comment_text.replace(/</g,'&lt;')}</p>
+    </div>
+  `).join('');
 }
 
 function getOrCreateCommentModal() {
@@ -1482,15 +1468,14 @@ async function onSubmitCommentModal() {
   const input = document.getElementById('sheetCommentModalInput');
   const text = input?.value?.trim();
   if (!text || !gameKey) { input?.focus(); return; }
-  if (!window.supabase || !window.SUPABASE_CONFIG?.url) return;
+  if (!window.CottageDB) return;
   const submitBtn = document.getElementById('sheetCommentModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
-  try {
-    const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
-    await db.from('game_comments').insert({ game_key: gameKey, comment_text: text });
+  const result = await window.CottageDB.insertComment(gameKey, text);
+  if (!result.error) {
     onCloseCommentModal();
     await initSheetComments(gameKey);
-  } catch(e) {}
+  }
   if (submitBtn) submitBtn.disabled = false;
 }
 
