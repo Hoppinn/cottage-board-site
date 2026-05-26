@@ -151,7 +151,7 @@ const BGG_MECHANIC_TAG_RULES = {
   "Communication Limits": {
     playTags: ["deduction", "party"],
     moodTags: ["tense", "funny"],
-    interactionTags: ["cooperative", "social", "table_talk"]
+    interactionTags: ["cooperative", "social"]
   },
 
   "Cooperative Game": {
@@ -162,7 +162,7 @@ const BGG_MECHANIC_TAG_RULES = {
   "Deduction": {
     playTags: ["deduction"],
     moodTags: ["tense"],
-    interactionTags: ["social", "table_talk"]
+    interactionTags: ["social"]
   },
 
   "Dexterity": {
@@ -247,7 +247,7 @@ const BGG_MECHANIC_TAG_RULES = {
     playTags: ["storytelling", "party"],
     moodTags: ["cozy", "immersive"],
     situationTags: ["group", "beginner"],
-    interactionTags: ["table_talk"]
+    interactionTags: []
   },
 
   "Take That": {
@@ -257,7 +257,7 @@ const BGG_MECHANIC_TAG_RULES = {
 
   "Team-Based Game": {
     situationTags: ["group"],
-    interactionTags: ["team", "table_talk"]
+    interactionTags: ["team"]
   },
 
   "Tile Placement": {
@@ -308,7 +308,7 @@ const BGG_CATEGORY_TAG_RULES = {
   "Deduction": {
     playTags: ["deduction"],
     moodTags: ["tense"],
-    interactionTags: ["social", "table_talk"]
+    interactionTags: ["social"]
   },
 
   "Dice": {

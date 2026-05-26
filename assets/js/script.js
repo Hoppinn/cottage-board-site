@@ -618,6 +618,14 @@ const allTags = [
   ...(game?.cottage?.autoTags || [])
 ];
 
+  // 대화가 많은 게임: 협력 어드벤처류 추가 제외
+  // hard_coop인데 블러핑/히든롤/배신 등 핵심 대화 태그가 없으면 제외
+  if (moodValue === "talk") {
+    const talkCoreTags = ["bluffing", "hidden_role", "betrayal", "negotiation"];
+    const hasTalkCore = allTags.some(t => talkCoreTags.includes(t));
+    if (allTags.includes("hard_coop") && !hasTalkCore) return false;
+  }
+
   const moodTagMap = {
     fun:       ["funny", "party", "chaotic", "dexterity"],
     brain:     ["puzzle", "strategy", "deduction", "card_play"],
