@@ -1254,6 +1254,9 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
+    <!-- 플레이 기록 -->
+    <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
+
     <!-- 따봉 + 코멘트 -->
     <div class="sheet-reactions-footer">
       <div class="sheet-feedback-reactions">
@@ -1275,6 +1278,7 @@ function openGameSheet(gameKey){
   document.body.classList.add('sheet-open');
 
   if (window.CottageDB) window.CottageDB.trackView(gameKey);
+  initPlayWidget(gameKey).catch(() => {});
   initSheetDescToggle();
 }
 
@@ -1359,27 +1363,77 @@ async function initCottageRatingWidget(gameKey) {
   renderRatingWidget(widget, gameKey, ratingData, myRating);
 }
 
-// 별점 클릭 이벤트 (이벤트 위임)
+// ── 플레이 위젯 ─────────────────────────────────────────
+
+async function initPlayWidget(gameKey) {
+  const widget = document.getElementById(`sheetPlayWidget-${gameKey}`);
+  if (!widget) return;
+
+  if (!window.CottageDB) {
+    widget.style.display = "none";
+    return;
+  }
+
+  const [playCount, highlights] = await Promise.all([
+    window.CottageDB.getGamePlayCount(gameKey),
+    window.CottageDB.getPlayHighlights(gameKey),
+  ]);
+
+  const alreadyPlayed = !!localStorage.getItem(`cottage_played_${gameKey}`);
+
+  let html = "";
+
+  if (highlights.length) {
+    html += `<div class="sheet-highlights">
+      ${highlights.map(h => `<p class="sheet-highlight-item">✨ ${h.highlight_text}</p>`).join("")}
+    </div>`;
+  }
+
+  html += `<div class="sheet-play-record">
+    <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
+    ${alreadyPlayed
+      ? `<span class="sheet-played-recorded">✅ 기록됨</span>`
+      : `<button class="sheet-played-btn" data-game-id="${gameKey}" type="button">플레이했어요</button>`
+    }
+  </div>`;
+
+  if (!alreadyPlayed) {
+    html += `<div class="sheet-player-select" id="sheetPlayerSelect-${gameKey}" style="display:none;">
+      <p class="sheet-player-select-label">몇 명이서 했나요?</p>
+      <div class="sheet-player-select-btns">
+        ${[1,2,3,4,5,6,7,8].map(n =>
+          `<button class="sheet-player-select-btn" data-count="${n}" data-game-id="${gameKey}" type="button">${n}명</button>`
+        ).join("")}
+      </div>
+    </div>`;
+  }
+
+  widget.innerHTML = html;
+}
+
+// 플레이 위젯 클릭 이벤트
 if (gameSheetContent) {
   gameSheetContent.addEventListener("click", async function (e) {
-    const btn = e.target.closest(".cottage-star-btn");
-    if (!btn || !window.CottageDB) return;
+    // "플레이했어요" 버튼 → 인원 선택 토글
+    const playBtn = e.target.closest(".sheet-played-btn");
+    if (playBtn) {
+      const gameKey = playBtn.dataset.gameId;
+      const select = document.getElementById(`sheetPlayerSelect-${gameKey}`);
+      if (select) select.style.display = select.style.display === "none" ? "block" : "none";
+      return;
+    }
 
-    const container = btn.closest(".cottage-star-input");
-    const gameKey = container?.dataset.gameId;
-    const rating = parseInt(btn.dataset.value, 10);
-    if (!gameKey || !rating) return;
-
-    // 즉시 선택 피드백 — 버튼 비활성화
-    container.querySelectorAll(".cottage-star-btn").forEach((b) => (b.disabled = true));
-
-    const result = await window.CottageDB.submitRating(gameKey, rating);
-    const widget = document.querySelector(`.cottage-rating-widget[data-game-id="${gameKey}"]`);
-    if (!widget) return;
-
-    const ratingData = await window.CottageDB.getGameRating(gameKey);
-    const myRating = result.alreadyRated ? result.myRating : rating;
-    renderRatingWidget(widget, gameKey, ratingData, myRating);
+    // 인원 선택 버튼 → 기록 제출
+    const countBtn = e.target.closest(".sheet-player-select-btn");
+    if (countBtn && window.CottageDB) {
+      const gameKey = countBtn.dataset.gameId;
+      const count = parseInt(countBtn.dataset.count, 10);
+      countBtn.closest(".sheet-player-select-btns")
+        .querySelectorAll(".sheet-player-select-btn")
+        .forEach(b => { b.disabled = true; });
+      await window.CottageDB.recordGamePlay(gameKey, count);
+      await initPlayWidget(gameKey);
+    }
   });
 }
 

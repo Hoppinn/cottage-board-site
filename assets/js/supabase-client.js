@@ -111,12 +111,82 @@
     }
   }
 
+  // ── 페이지 뷰 트래킹 ────────────────────────────────────
+
+  async function trackPageView(page) {
+    if (!page) return;
+    try {
+      await db.from("page_views").insert({ page });
+    } catch (_) {}
+  }
+
+  // ── 플레이 기록 ─────────────────────────────────────────
+
+  async function recordGamePlay(gameId, playerCount) {
+    const key = `cottage_played_${gameId}`;
+    if (localStorage.getItem(key)) return { alreadyRecorded: true };
+    try {
+      const { error } = await db.from("game_play_records").insert({
+        game_id: gameId,
+        player_count: playerCount || null,
+      });
+      if (!error) {
+        localStorage.setItem(key, "1");
+        return { success: true };
+      }
+      return { error };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
+  async function getGamePlayCount(gameId) {
+    try {
+      const { count } = await db
+        .from("game_play_records")
+        .select("*", { count: "exact", head: true })
+        .eq("game_id", gameId);
+      return count || 0;
+    } catch (_) {
+      return 0;
+    }
+  }
+
+  // ── 플레이 하이라이트 ────────────────────────────────────
+
+  async function getPlayHighlights(gameId) {
+    try {
+      const { data } = await db
+        .from("play_highlights")
+        .select("highlight_text, created_at")
+        .eq("game_id", gameId)
+        .order("created_at", { ascending: false })
+        .limit(3);
+      return data || [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  // ── 자동 페이지 뷰 트래킹 ──────────────────────────────
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const page =
+      location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
+      "index";
+    trackPageView(page);
+  });
+
   window.CottageDB = {
     trackView,
+    trackPageView,
     getGameRating,
     submitRating,
     getMyRating,
     getPopularGames,
     getAllGameRatings,
+    recordGamePlay,
+    getGamePlayCount,
+    getPlayHighlights,
   };
 })();

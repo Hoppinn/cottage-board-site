@@ -2309,6 +2309,110 @@ body.sheet-open{
   font-weight:700;
 }
 
+/* 플레이 기록 위젯 */
+.sheet-play-widget{
+  margin-bottom:10px;
+}
+
+.sheet-highlights{
+  margin-bottom:8px;
+  padding:8px 12px;
+  border-radius:10px;
+  background:#fffbf0;
+  border:1px solid #ead8b8;
+}
+
+.sheet-highlight-item{
+  margin:0 0 4px;
+  font-size:13px;
+  color:#3a3025;
+  line-height:1.5;
+  font-weight:600;
+}
+.sheet-highlight-item:last-child{ margin-bottom:0; }
+
+.sheet-play-record{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid #ead8b8;
+  background:var(--paper);
+}
+
+.sheet-play-count{
+  font-size:13px;
+  font-weight:700;
+  color:#3a3025;
+}
+
+.sheet-played-btn{
+  padding:5px 12px;
+  border-radius:999px;
+  border:1.5px solid var(--green);
+  background:#fff;
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background .15s, color .15s;
+}
+.sheet-played-btn:hover{
+  background:var(--green);
+  color:#fff;
+}
+
+.sheet-played-recorded{
+  font-size:12px;
+  font-weight:700;
+  color:#888;
+}
+
+.sheet-player-select{
+  margin-top:6px;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px dashed #c8dba8;
+  background:#f7faf0;
+}
+
+.sheet-player-select-label{
+  margin:0 0 8px;
+  font-size:12px;
+  font-weight:700;
+  color:#5f823f;
+}
+
+.sheet-player-select-btns{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.sheet-player-select-btn{
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid #c8dba8;
+  background:#fff;
+  color:#3a3025;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .12s, color .12s;
+}
+.sheet-player-select-btn:hover:not(:disabled){
+  background:var(--green);
+  color:#fff;
+  border-color:var(--green);
+}
+.sheet-player-select-btn:disabled{
+  opacity:0.4;
+  cursor:default;
+}
+
 /* 따봉 + 코멘트 푸터 */
 .sheet-reactions-footer{
   margin-bottom:8px;
