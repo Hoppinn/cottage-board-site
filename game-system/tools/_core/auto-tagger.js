@@ -34,7 +34,8 @@ const TAG_MINIMUM_SET_V1 = {
     "puzzle",
     "card_play",
     "storytelling",
-    "dexterity"
+    "dexterity",
+    "murder_mystery"
   ],
 
   situationTags: [
@@ -51,6 +52,8 @@ const TAG_MINIMUM_SET_V1 = {
   interactionTags: [
     "competitive",
     "cooperative",
+    "easy_coop",
+    "hard_coop",
     "coop",
     "team",
     "hidden_role",
@@ -69,51 +72,52 @@ const TAG_MINIMUM_SET_V1 = {
 ========================= */
 
 const TAG_LABELS_KR = {
-  // manualTags aliases
-  머더미: "머더미스터리",
+  // 특수/수동 태그
+  머더미:        "머더미스터리",
+  murder_mystery:"머더미스터리",
 
-  // moodTags
-  light: "가볍게",
-  cozy: "편안하게",
-  tense: "쫄깃하게",
-  brainy: "머리 쓰는",
-  chaotic: "왁자지껄",
-  funny: "웃긴",
-  immersive: "몰입감",
+  // moodTags → 6 카테고리
+  cozy:          "편안하게",
+  tense:         "빠져들게",
+  funny:         "즐기고",
+  chaotic:       "즐기고",
+  immersive:     "빠져들게",
 
-  // playTags
-  party: "파티게임",
-  strategy: "전략",
-  deduction: "추리",
-  bluffing: "블러핑",
-  puzzle: "퍼즐",
-  card_play: "카드운용",
-  storytelling: "스토리",
-  dexterity: "손재주",
+  // playTags → 6 카테고리
+  party:         "즐기고",
+  strategy:      "머리쓰게",
+  deduction:     "머리쓰게",
+  bluffing:      "대화하며",
+  puzzle:        "머리쓰게",
+  card_play:     "머리쓰게",
+  storytelling:  "빠져들게",
+  dexterity:     "즐기고",
 
-  // situationTags
-  beginner: "입문추천",
-  experienced: "게임러추천",
-  couple: "2인추천",
-  group: "모임추천",
-  large_group: "단체추천",
-  quick_play: "짧게한판",
-  long_stay: "오래즐김",
-  first_game: "첫게임추천",
+  // interactionTags → 6 카테고리 또는 특수
+  competitive:   "경쟁형",
+  cooperative:   "같이해낼게",
+  easy_coop:     "쉬운협력",
+  hard_coop:     "어려운협력",
+  coop:          "같이해낼게",
+  team:          "같이해낼게",
+  hidden_role:   "대화하며",
+  betrayal:      "대화하며",
+  low_conflict:  "편안하게",
+  table_talk:    "대화하며",
+  social:        "대화하며",
+  silent_focus:  "집중형",
+  simultaneous:  "동시진행",
+  turn_based:    "순서진행",
 
-  // interactionTags
-  competitive: "개인경쟁",
-  cooperative: "협력",
-  coop: "협력게임",
-  team: "팀전",
-  hidden_role: "정체숨김",
-  betrayal: "배신/심리전",
-  low_conflict: "갈등적음",
-  table_talk: "대화많음",
-  social: "대화/심리전",
-  silent_focus: "조용히집중",
-  simultaneous: "동시진행",
-  turn_based: "차례진행"
+  // 상황 태그 (displayTags 미포함)
+  beginner:      "입문추천",
+  experienced:   "게임러추천",
+  couple:        "2인추천",
+  group:         "모임추천",
+  large_group:   "단체추천",
+  quick_play:    "짧게한판",
+  long_stay:     "오래즐김",
+  first_game:    "첫게임추천",
 };
 
 /* =========================
@@ -151,7 +155,6 @@ const BGG_MECHANIC_TAG_RULES = {
   },
 
   "Cooperative Game": {
-    moodTags: ["cozy"],
     situationTags: ["beginner", "group"],
     interactionTags: ["cooperative", "low_conflict"]
   },
@@ -212,7 +215,7 @@ const BGG_MECHANIC_TAG_RULES = {
   },
 
   "머더미스터리": {
-    playTags: ["deduction"],
+    playTags: ["deduction", "murder_mystery"],
     moodTags: ["tense", "immersive"],
     interactionTags: ["social", "table_talk"]
   },
@@ -327,8 +330,8 @@ const BGG_CATEGORY_TAG_RULES = {
     situationTags: ["group", "beginner"]
   },
 
-  "Murder/Mystery": {
-    playTags: ["deduction"],
+  "Murder / Mystery": {
+    playTags: ["deduction", "murder_mystery"],
     moodTags: ["tense", "immersive"],
     interactionTags: ["social", "table_talk"]
   },
@@ -418,6 +421,14 @@ function getDifficultyAutoTags(weight) {
     situationTags: ["experienced", "long_stay"],
     interactionTags: ["silent_focus"]
   };
+}
+
+function getCoopTypeTags(mechanics, weight) {
+  if (!normalizeArray(mechanics).includes("Cooperative Game")) return {};
+  const n = toNumber(weight);
+  return (n > 0 && n <= 2.50)
+    ? { interactionTags: ["easy_coop"], moodTags: ["cozy"] }
+    : { interactionTags: ["hard_coop"] };
 }
 
 function getDifficultyIdFromWeight(weight) {
@@ -513,6 +524,7 @@ function generateAutoTags(game) {
   mergeTagBucket(result, getDifficultyAutoTags(weight));
   mergeTagBucket(result, getPlayerAutoTags(game));
   mergeTagBucket(result, getTimeAutoTags(game));
+  mergeTagBucket(result, getCoopTypeTags(mechanics, weight));
 
   return cleanupTagBucket(result);
 }
@@ -579,20 +591,27 @@ function mergeCottageTags(game) {
   return next;
 }
 
+const DISPLAY_INTERACTION_ALLOWLIST = new Set([
+  "easy_coop", "hard_coop",
+  "competitive", "hidden_role",
+  "table_talk", "social",
+]);
+
 function buildDisplayTags(cottage) {
   const manualTags = normalizeArray(cottage.manualTags);
 
   const priorityTags = [
     ...manualTags,
     ...normalizeArray(cottage.playTags),
-    ...normalizeArray(cottage.interactionTags),
     ...normalizeArray(cottage.moodTags),
-    ...normalizeArray(cottage.situationTags)
+    ...normalizeArray(cottage.interactionTags).filter(
+      t => DISPLAY_INTERACTION_ALLOWLIST.has(t)
+    ),
   ];
 
   return unique(
     unique(priorityTags).map((tag) => TAG_LABELS_KR[tag] || tag)
-  ).slice(0, 5);
+  ).slice(0, 4);
 }
 
 /* =========================

@@ -604,13 +604,12 @@ const allTags = [
 
 
   const moodTagMap = {
-    fun:      ["funny", "party", "chaotic"],
-    brain:    ["puzzle", "strategy", "deduction", "card_play"],
-    talk:     ["table_talk", "social", "bluffing", "hidden_role", "betrayal", "negotiation"],
-    immersive:["immersive", "tense", "storytelling"],
-    coop:     ["cooperative", "coop", "team"],
-    cozy:     ["cozy", "low_conflict", "beginner", "first_game"],
-    social:   ["social", "table_talk", "bluffing", "hidden_role"],
+    fun:       ["funny", "party", "chaotic", "dexterity"],
+    brain:     ["puzzle", "strategy", "deduction", "card_play"],
+    talk:      ["table_talk", "social", "bluffing", "hidden_role", "betrayal", "negotiation"],
+    immersive: ["immersive", "tense", "storytelling"],
+    coop:      ["cooperative", "easy_coop", "hard_coop", "coop", "team"],
+    cozy:      ["cozy"],
   };
 
   const targetTags =
