@@ -3089,14 +3089,10 @@ body.sheet-open{
 
 .sheet-comments-empty{
   margin:0;
-  padding:10px 12px;
-  font-size:12px;
-  font-weight:700;
-  color:#b0a080;
-  background:#fffbf4;
-  border:1px dashed #e0d0b0;
-  border-radius:8px;
-  text-align:center;
+  padding:6px 0;
+  font-size:11px;
+  color:#bbb;
+  text-align:left;
 }
 
 .sheet-comment-item{
@@ -3180,4 +3176,55 @@ body.sheet-open{
   font-size:12px;
   font-weight:700;
   cursor:pointer;
+}
+
+/* 코멘트 입력 모달 */
+.sheet-comment-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:2200;
+  background:rgba(0,0,0,0.5);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  box-sizing:border-box;
+}
+
+.sheet-comment-modal-box{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  width:min(90vw,400px);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.18);
+}
+
+.sheet-comment-modal-title{
+  margin:0;
+  font-size:14px;
+  font-weight:800;
+  color:#3a3025;
+}
+
+.sheet-comment-modal-input{
+  width:100%;
+  box-sizing:border-box;
+  padding:10px;
+  border:1.5px solid #ead8b8;
+  border-radius:8px;
+  background:var(--cream);
+  font-size:13px;
+  color:#3a3025;
+  resize:none;
+  font-family:inherit;
+  line-height:1.5;
+}
+
+.sheet-comment-modal-actions{
+  display:flex;
+  gap:6px;
+  justify-content:flex-end;
 }

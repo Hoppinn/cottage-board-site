@@ -1308,16 +1308,9 @@ function openGameSheet(gameKey){
       </div>
       <div class="sheet-comments-area">
         <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
-          <p class="sheet-comments-empty">코멘트를 남겨보세요</p>
+          <p class="sheet-comments-empty">코멘트가 없습니다</p>
         </div>
         <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)">💬 코멘트 남기기</button>
-        <div class="sheet-comment-form" id="sheetCommentForm-${gameKey}" style="display:none">
-          <textarea class="sheet-comment-mini-input" id="sheetCommentMiniInput-${gameKey}" rows="2" placeholder="게임에 대한 코멘트를 남겨보세요"></textarea>
-          <div class="sheet-comment-form-row">
-            <button class="sheet-comment-form-submit" data-game-id="${gameKey}" onclick="onSubmitComment(this)">등록</button>
-            <button class="sheet-comment-form-cancel" data-game-id="${gameKey}" onclick="onCancelComment(this)">취소</button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -1435,37 +1428,59 @@ async function initSheetComments(gameKey) {
   } catch(e) {}
 }
 
+function getOrCreateCommentModal() {
+  let modal = document.getElementById('sheetCommentModal');
+  if (modal) return modal;
+  modal = document.createElement('div');
+  modal.id = 'sheetCommentModal';
+  modal.className = 'sheet-comment-modal';
+  modal.innerHTML = `
+    <div class="sheet-comment-modal-box">
+      <p class="sheet-comment-modal-title">코멘트 남기기</p>
+      <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 코멘트를 남겨보세요"></textarea>
+      <div class="sheet-comment-modal-actions">
+        <button class="sheet-comment-form-cancel" onclick="onCloseCommentModal()">취소</button>
+        <button class="sheet-comment-form-submit" id="sheetCommentModalSubmit" onclick="onSubmitCommentModal()">등록</button>
+      </div>
+    </div>
+  `;
+  modal.addEventListener('click', (e) => { if (e.target === modal) onCloseCommentModal(); });
+  document.body.appendChild(modal);
+  return modal;
+}
+
 function onOpenCommentInput(btn) {
   const gameKey = btn.dataset.gameId;
   requireLogin(() => {
-    const form = document.getElementById(`sheetCommentForm-${gameKey}`);
-    if (!form) return;
-    form.style.display = 'block';
-    document.getElementById(`sheetCommentMiniInput-${gameKey}`)?.focus();
+    const modal = getOrCreateCommentModal();
+    modal.dataset.gameId = gameKey;
+    document.getElementById('sheetCommentModalInput').value = '';
+    modal.style.display = 'flex';
+    document.getElementById('sheetCommentModalInput')?.focus();
   });
 }
 
-async function onSubmitComment(btn) {
-  const gameKey = btn.dataset.gameId;
-  const input = document.getElementById(`sheetCommentMiniInput-${gameKey}`);
-  const text = input?.value?.trim();
-  if (!text) { input?.focus(); return; }
-  if (!window.supabase || !window.SUPABASE_CONFIG?.url) return;
-  const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
-  btn.disabled = true;
-  try {
-    await db.from('game_comments').insert({ game_key: gameKey, comment_text: text });
-    input.value = '';
-    document.getElementById(`sheetCommentForm-${gameKey}`).style.display = 'none';
-    await initSheetComments(gameKey);
-  } catch(e) {}
-  btn.disabled = false;
+function onCloseCommentModal() {
+  const modal = document.getElementById('sheetCommentModal');
+  if (modal) modal.style.display = 'none';
 }
 
-function onCancelComment(btn) {
-  const gameKey = btn.dataset.gameId;
-  const form = document.getElementById(`sheetCommentForm-${gameKey}`);
-  if (form) form.style.display = 'none';
+async function onSubmitCommentModal() {
+  const modal = document.getElementById('sheetCommentModal');
+  const gameKey = modal?.dataset.gameId;
+  const input = document.getElementById('sheetCommentModalInput');
+  const text = input?.value?.trim();
+  if (!text || !gameKey) { input?.focus(); return; }
+  if (!window.supabase || !window.SUPABASE_CONFIG?.url) return;
+  const submitBtn = document.getElementById('sheetCommentModalSubmit');
+  if (submitBtn) submitBtn.disabled = true;
+  try {
+    const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+    await db.from('game_comments').insert({ game_key: gameKey, comment_text: text });
+    onCloseCommentModal();
+    await initSheetComments(gameKey);
+  } catch(e) {}
+  if (submitBtn) submitBtn.disabled = false;
 }
 
 function goToShelf(shelfGroupId){
