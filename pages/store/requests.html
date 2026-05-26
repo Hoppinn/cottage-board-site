@@ -10,35 +10,19 @@
 
 <body class="owned-page">
   <header class="site-header">
-
     <a class="header-logo" href="../../index.html">
       <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
     </a>
-
     <a class="header-center" href="../../index.html">
       오래 머무르고 싶은, 보드게임 공간
     </a>
-
     <div class="header-actions">
-      <button
-        class="header-search"
-        id="headerSearchButton"
-        type="button"
-        aria-label="게임 검색 열기"
-      >🔍</button>
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="메뉴 열기"
-      >☰</button>
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
     </div>
-
     <nav class="header-menu" id="mobileMenu">
       <div class="menu-group">
-        <button class="menu-group-header" type="button">
-          게임 찾기 <span class="menu-group-arrow">›</span>
-        </button>
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../../index.html#recommend">추천 게임 찾기</a>
           <a href="../owned-games.html">전체 게임 보기</a>
@@ -46,9 +30,7 @@
         </div>
       </div>
       <div class="menu-group">
-        <button class="menu-group-header" type="button">
-          코티지보드 안내 <span class="menu-group-arrow">›</span>
-        </button>
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../cottage/about.html">소개</a>
           <a href="./price-rules.html">가격 &amp; 규칙</a>
@@ -57,25 +39,53 @@
       </div>
       <a href="./requests.html">요청하기</a>
     </nav>
-
     <div class="header-search-panel" id="headerSearchPanel">
-      <input
-        id="headerSearchInput"
-        type="search"
-        placeholder="게임명을 입력하세요"
-      >
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
       <div class="header-search-results" id="headerSearchResults"></div>
     </div>
-
   </header>
 
   <main>
     <section class="inner-page">
       <h1>요청하기</h1>
       <div class="inner-page-body">
-        <div class="inner-page-coming-soon">
-          곧 안내 드릴게요 📬
+
+        <!-- 탭 -->
+        <div class="req-tabs">
+          <button class="req-tab-btn is-active" data-tab="game" type="button">🎲 게임 구매 요청</button>
+          <button class="req-tab-btn" data-tab="snack" type="button">🍿 간식·음료 요청</button>
+          <button class="req-tab-btn" data-tab="suggest" type="button">💬 개선 건의</button>
         </div>
+
+        <!-- 탭1: 게임 구매 요청 -->
+        <div class="req-tab-panel is-active" id="tab-game">
+          <div class="req-input-row">
+            <input class="req-text-input" id="gameRequestInput" type="text" placeholder="구매 희망 게임명을 입력하세요" maxlength="100">
+            <button class="req-submit-btn" id="gameRequestBtn" type="button">요청</button>
+          </div>
+          <div class="req-success-msg" id="gameSuccessMsg"></div>
+          <div id="gameRequestList"><div class="req-list-empty">불러오는 중...</div></div>
+        </div>
+
+        <!-- 탭2: 간식·음료 요청 -->
+        <div class="req-tab-panel" id="tab-snack">
+          <div class="req-input-row">
+            <input class="req-text-input" id="snackRequestInput" type="text" placeholder="원하는 간식이나 음료를 입력하세요" maxlength="100">
+            <button class="req-submit-btn" id="snackRequestBtn" type="button">요청</button>
+          </div>
+          <div class="req-success-msg" id="snackSuccessMsg"></div>
+          <div id="snackRequestList"><div class="req-list-empty">불러오는 중...</div></div>
+        </div>
+
+        <!-- 탭3: 개선 건의 -->
+        <div class="req-tab-panel" id="tab-suggest">
+          <p class="req-note">운영자에게만 전달되며 공개되지 않습니다.</p>
+          <textarea class="req-textarea" id="suggestInput" placeholder="불편한 점, 개선 아이디어 등 자유롭게 적어주세요" maxlength="500"></textarea>
+          <button class="req-submit-btn" id="suggestBtn" type="button" style="width:100%">건의하기</button>
+          <div class="req-success-msg" id="suggestSuccessMsg">소중한 의견 감사합니다.</div>
+        </div>
+
       </div>
     </section>
   </main>
@@ -88,6 +98,166 @@
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function() {
+    // 탭 전환
+    document.querySelectorAll('.req-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.req-tab-btn').forEach(b => b.classList.remove('is-active'));
+        document.querySelectorAll('.req-tab-panel').forEach(p => p.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('is-active');
+      });
+    });
+
+    function getDb() {
+      return window.CottageDB ? window.supabase?.createClient?.(
+        window.SUPABASE_CONFIG?.url, window.SUPABASE_CONFIG?.anonKey
+      ) : null;
+    }
+
+    // ── 게임 요청 ────────────────────────────────────────
+    async function loadGameRequests() {
+      const el = document.getElementById('gameRequestList');
+      if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
+        el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>';
+        return;
+      }
+      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      const { data, error } = await db
+        .from('game_requests')
+        .select('game_name, request_count')
+        .order('request_count', { ascending: false })
+        .limit(50);
+      if (error || !data?.length) {
+        el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>';
+        return;
+      }
+      el.innerHTML = '<ul class="req-list">' +
+        data.map(r => `<li class="req-list-item">
+          <span class="req-list-name">${escHtml(r.game_name)}</span>
+          <span class="req-list-count">${r.request_count}명 희망</span>
+        </li>`).join('') +
+        '</ul>';
+    }
+
+    document.getElementById('gameRequestBtn').addEventListener('click', async () => {
+      const input = document.getElementById('gameRequestInput');
+      const name = input.value.trim();
+      if (!name) { input.focus(); return; }
+      if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
+      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      const btn = document.getElementById('gameRequestBtn');
+      btn.disabled = true;
+      // 기존 항목 조회
+      const { data: existing } = await db
+        .from('game_requests')
+        .select('id, request_count')
+        .ilike('game_name', name)
+        .maybeSingle();
+      if (existing) {
+        await db.from('game_requests').update({ request_count: existing.request_count + 1 }).eq('id', existing.id);
+      } else {
+        await db.from('game_requests').insert({ game_name: name, request_count: 1, status: 'pending' });
+      }
+      input.value = '';
+      btn.disabled = false;
+      const msg = document.getElementById('gameSuccessMsg');
+      msg.textContent = `"${name}" 요청이 전달됐어요!`;
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+      await loadGameRequests();
+    });
+
+    document.getElementById('gameRequestInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('gameRequestBtn').click();
+    });
+
+    // ── 간식·음료 요청 ────────────────────────────────────
+    async function loadSnackRequests() {
+      const el = document.getElementById('snackRequestList');
+      if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
+        el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>';
+        return;
+      }
+      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      const { data, error } = await db
+        .from('snack_requests')
+        .select('item_name, request_count')
+        .order('request_count', { ascending: false })
+        .limit(50);
+      if (error || !data?.length) {
+        el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 원하는 간식을 알려주세요!</div>';
+        return;
+      }
+      el.innerHTML = '<ul class="req-list">' +
+        data.map(r => `<li class="req-list-item">
+          <span class="req-list-name">${escHtml(r.item_name)}</span>
+          <span class="req-list-count">${r.request_count}명 희망</span>
+        </li>`).join('') +
+        '</ul>';
+    }
+
+    document.getElementById('snackRequestBtn').addEventListener('click', async () => {
+      const input = document.getElementById('snackRequestInput');
+      const name = input.value.trim();
+      if (!name) { input.focus(); return; }
+      if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
+      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      const btn = document.getElementById('snackRequestBtn');
+      btn.disabled = true;
+      const { data: existing } = await db
+        .from('snack_requests')
+        .select('id, request_count')
+        .ilike('item_name', name)
+        .maybeSingle();
+      if (existing) {
+        await db.from('snack_requests').update({ request_count: existing.request_count + 1 }).eq('id', existing.id);
+      } else {
+        await db.from('snack_requests').insert({ item_name: name, request_count: 1 });
+      }
+      input.value = '';
+      btn.disabled = false;
+      const msg = document.getElementById('snackSuccessMsg');
+      msg.textContent = `"${name}" 요청이 전달됐어요!`;
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+      await loadSnackRequests();
+    });
+
+    document.getElementById('snackRequestInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('snackRequestBtn').click();
+    });
+
+    // ── 개선 건의 ─────────────────────────────────────────
+    document.getElementById('suggestBtn').addEventListener('click', async () => {
+      const input = document.getElementById('suggestInput');
+      const content = input.value.trim();
+      if (!content) { input.focus(); return; }
+      if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
+      const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      const btn = document.getElementById('suggestBtn');
+      btn.disabled = true;
+      await db.from('suggestions').insert({ content });
+      input.value = '';
+      btn.disabled = false;
+      const msg = document.getElementById('suggestSuccessMsg');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 4000);
+    });
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // 초기 로드
+    loadGameRequests();
+    loadSnackRequests();
+  })();
+  </script>
 
   <footer class="site-footer">
     <p><a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
@@ -108,6 +278,5 @@
       supportMultipleDensities: true
     });
   </script>
-
 </body>
 </html>

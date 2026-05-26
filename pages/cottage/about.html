@@ -10,35 +10,19 @@
 
 <body class="owned-page">
   <header class="site-header">
-
     <a class="header-logo" href="../../index.html">
       <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
     </a>
-
     <a class="header-center" href="../../index.html">
       오래 머무르고 싶은, 보드게임 공간
     </a>
-
     <div class="header-actions">
-      <button
-        class="header-search"
-        id="headerSearchButton"
-        type="button"
-        aria-label="게임 검색 열기"
-      >🔍</button>
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="메뉴 열기"
-      >☰</button>
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
     </div>
-
     <nav class="header-menu" id="mobileMenu">
       <div class="menu-group">
-        <button class="menu-group-header" type="button">
-          게임 찾기 <span class="menu-group-arrow">›</span>
-        </button>
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../../index.html#recommend">추천 게임 찾기</a>
           <a href="../owned-games.html">전체 게임 보기</a>
@@ -46,9 +30,7 @@
         </div>
       </div>
       <div class="menu-group">
-        <button class="menu-group-header" type="button">
-          코티지보드 안내 <span class="menu-group-arrow">›</span>
-        </button>
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="./about.html">소개</a>
           <a href="../store/price-rules.html">가격 &amp; 규칙</a>
@@ -57,27 +39,87 @@
       </div>
       <a href="../store/requests.html">요청하기</a>
     </nav>
-
     <div class="header-search-panel" id="headerSearchPanel">
-      <input
-        id="headerSearchInput"
-        type="search"
-        placeholder="게임명을 입력하세요"
-      >
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
       <div class="header-search-results" id="headerSearchResults"></div>
     </div>
-
   </header>
 
   <main>
-    <section class="inner-page">
-      <h1>코티지보드 소개</h1>
-      <div class="inner-page-body">
-        <div class="inner-page-coming-soon">
-          곧 안내 드릴게요 🌿
+
+    <!-- 히어로 -->
+    <div class="about-hero">
+      <span class="about-hero-eyebrow">24시 무제한 보드게임카페</span>
+      <h2>오래 머무르고 싶은,<br>보드게임 공간</h2>
+      <p class="about-hero-sub">카페거리의 편안한 분위기에서<br>쉽게 시작하고 깊이 즐기는 곳</p>
+    </div>
+
+    <!-- 소개 문단 -->
+    <div class="about-section">
+      <p class="about-section-label">About</p>
+      <p class="about-intro-text">
+        코티지보드는 보드게임을 좋아하는 분들의 아지트이자,
+        처음 접하는 분들도 자연스럽게 시작할 수 있는 공간입니다.<br><br>
+        게임을 몰라도 괜찮아요. 인원수와 분위기에 맞는 게임을 추천해드리고,
+        룰 영상으로 바로 시작할 수 있어요.
+      </p>
+    </div>
+
+    <hr class="about-divider">
+
+    <!-- 공간 특징 -->
+    <div class="about-section">
+      <p class="about-section-label">Space</p>
+      <div class="about-feature-grid">
+        <div class="about-feature-card">
+          <div class="about-feature-icon">🪑</div>
+          <p class="about-feature-label">넓고 밝은 좌석</p>
+        </div>
+        <div class="about-feature-card">
+          <div class="about-feature-icon">🧦</div>
+          <p class="about-feature-label">신발 벗고 편하게</p>
+        </div>
+        <div class="about-feature-card">
+          <div class="about-feature-icon">🛋</div>
+          <p class="about-feature-label">쉬어가는 빈백</p>
+        </div>
+        <div class="about-feature-card">
+          <div class="about-feature-icon">🎲</div>
+          <p class="about-feature-label">700개 이상의 게임</p>
+        </div>
+        <div class="about-feature-card">
+          <div class="about-feature-icon">📱</div>
+          <p class="about-feature-label">홈페이지 추천 시스템</p>
         </div>
       </div>
-    </section>
+    </div>
+
+    <hr class="about-divider">
+
+    <!-- 이런 분들께 -->
+    <div class="about-section">
+      <p class="about-section-label">For You</p>
+      <ul class="about-for-list">
+        <li class="about-for-item">
+          <span class="about-for-icon">💗</span>
+          <p class="about-for-text">데이트 다음 코스를 찾는 커플에게</p>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">🍻</span>
+          <p class="about-for-text">카페 다음이 아쉬운 친구 모임에</p>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">📚</span>
+          <p class="about-for-text">수업 끝나고 바로 집 가기 아쉬운 학생들에게</p>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">🎉</span>
+          <p class="about-for-text">정기적으로 함께하는 동호회에</p>
+        </li>
+      </ul>
+    </div>
+
   </main>
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
@@ -108,6 +150,5 @@
       supportMultipleDensities: true
     });
   </script>
-
 </body>
 </html>

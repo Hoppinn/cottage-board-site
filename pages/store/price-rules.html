@@ -10,35 +10,19 @@
 
 <body class="owned-page">
   <header class="site-header">
-
     <a class="header-logo" href="../../index.html">
       <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
     </a>
-
     <a class="header-center" href="../../index.html">
       오래 머무르고 싶은, 보드게임 공간
     </a>
-
     <div class="header-actions">
-      <button
-        class="header-search"
-        id="headerSearchButton"
-        type="button"
-        aria-label="게임 검색 열기"
-      >🔍</button>
-      <button
-        class="menu-toggle"
-        id="menuToggle"
-        type="button"
-        aria-label="메뉴 열기"
-      >☰</button>
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
     </div>
-
     <nav class="header-menu" id="mobileMenu">
       <div class="menu-group">
-        <button class="menu-group-header" type="button">
-          게임 찾기 <span class="menu-group-arrow">›</span>
-        </button>
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../../index.html#recommend">추천 게임 찾기</a>
           <a href="../owned-games.html">전체 게임 보기</a>
@@ -46,9 +30,7 @@
         </div>
       </div>
       <div class="menu-group">
-        <button class="menu-group-header" type="button">
-          코티지보드 안내 <span class="menu-group-arrow">›</span>
-        </button>
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../cottage/about.html">소개</a>
           <a href="./price-rules.html">가격 &amp; 규칙</a>
@@ -57,25 +39,78 @@
       </div>
       <a href="./requests.html">요청하기</a>
     </nav>
-
     <div class="header-search-panel" id="headerSearchPanel">
-      <input
-        id="headerSearchInput"
-        type="search"
-        placeholder="게임명을 입력하세요"
-      >
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
       <div class="header-search-results" id="headerSearchResults"></div>
     </div>
-
   </header>
 
   <main>
     <section class="inner-page">
       <h1>가격 &amp; 규칙</h1>
       <div class="inner-page-body">
-        <div class="inner-page-coming-soon">
-          곧 안내 드릴게요 🎲
+
+        <!-- 가격 카드 -->
+        <div class="price-hero-card">
+          <div class="price-amount">7,000<span>원</span></div>
+          <p class="price-desc">무제한 · 입장 시 선결제 · 시간 제한 없음</p>
+          <div class="price-payment-methods">
+            <span class="price-pay-chip">삼성페이</span>
+            <span class="price-pay-chip">지역화폐</span>
+            <span class="price-pay-chip">네이버페이</span>
+            <span class="price-pay-chip">카카오페이</span>
+          </div>
+          <p class="price-pay-note">바코드·QR 결제는 이용이 어려워요</p>
         </div>
+
+        <!-- 공간 규칙 -->
+        <div class="rules-group">
+          <p class="rules-group-title">🏠 공간 이용 규칙</p>
+          <ul class="rules-list">
+            <li>매장은 슬리퍼로 갈아신고 이용해주세요</li>
+            <li>화장실은 화장실 슬리퍼로</li>
+            <li>핸드폰 충전은 충전 자리에서 부탁드려요</li>
+            <li>쓰레기 분리수거 부탁드립니다</li>
+            <li>밤 10시 이후 소음을 자제해주세요 (할리갈리·타코캣 등 테이블 치는 게임 포함)</li>
+            <li>숙박 목적 이용은 불가합니다</li>
+            <li>주차: 매장 앞 1자리 제공, 나머지는 근처 갓길 분산주차</li>
+          </ul>
+        </div>
+
+        <!-- 게임 규칙 -->
+        <div class="rules-group">
+          <p class="rules-group-title">🎲 게임 이용 규칙</p>
+          <ul class="rules-list">
+            <li>게임을 아껴주세요. 찢거나 훼손하지 말아주세요.</li>
+            <li>한 번에 1개씩 꺼내고, 다 쓰면 꼭 제자리에 돌려주세요</li>
+            <li>이용 후 테이블 매트를 롤러로 한 번 밀어주시면 다음 손님에게 도움이 돼요</li>
+            <li>미흡한 부분은 사장이 처리하지만, 기본 자리 정리를 도와주시면 감사합니다</li>
+          </ul>
+        </div>
+
+        <!-- 외부 음식 -->
+        <div class="rules-group">
+          <p class="rules-group-title">🥪 외부 음식</p>
+          <ul class="rules-list">
+            <li>샌드위치, 스낵, 커피 등 간단한 음식은 반입 가능합니다</li>
+            <li>라면, 햄버거, 주류는 제한됩니다</li>
+          </ul>
+        </div>
+
+        <!-- 이런 것도 돼요 -->
+        <div class="rules-group">
+          <p class="rules-group-title">✅ 이런 것도 돼요</p>
+          <ul class="rules-ok-list">
+            <li>혼자 이용</li>
+            <li>공부·대화 목적</li>
+            <li>블루투스 스피커</li>
+            <li>명함·전단지 수령</li>
+            <li>구매 희망 게임 게시판 요청</li>
+            <li>편한 문의</li>
+          </ul>
+        </div>
+
       </div>
     </section>
   </main>
@@ -108,6 +143,5 @@
       supportMultipleDensities: true
     });
   </script>
-
 </body>
 </html>
