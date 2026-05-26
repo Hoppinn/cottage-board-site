@@ -268,6 +268,8 @@
   // ── 자동 페이지 뷰 트래킹 ──────────────────────────────
 
   document.addEventListener("DOMContentLoaded", function () {
+    if (sessionStorage.getItem("cottage_visited")) return;
+    sessionStorage.setItem("cottage_visited", "1");
     const page =
       location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
       "index";

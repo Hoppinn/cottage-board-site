@@ -213,6 +213,12 @@ create policy "anon_update_game_requests"
   to anon
   using (true);
 
+drop policy if exists "anon_delete_game_requests" on public.game_requests;
+create policy "anon_delete_game_requests"
+  on public.game_requests for delete
+  to anon
+  using (true);
+
 
 -- ── snack_requests (간식·음료 요청) ──────────────────────
 create table if not exists public.snack_requests (
@@ -241,6 +247,12 @@ create policy "anon_select_snack_requests"
 drop policy if exists "anon_update_snack_requests" on public.snack_requests;
 create policy "anon_update_snack_requests"
   on public.snack_requests for update
+  to anon
+  using (true);
+
+drop policy if exists "anon_delete_snack_requests" on public.snack_requests;
+create policy "anon_delete_snack_requests"
+  on public.snack_requests for delete
   to anon
   using (true);
 
@@ -275,6 +287,33 @@ as $$
   order by view_count desc
   limit limit_count;
 $$;
+
+
+-- ── member_intros (동호회 가입 인사 게시판) ──────────────
+create table if not exists public.member_intros (
+  id           uuid primary key default gen_random_uuid(),
+  nickname     text not null check (char_length(nickname) between 1 and 20),
+  favorite_games text check (char_length(favorite_games) <= 100),
+  available    text check (char_length(available) <= 100),
+  location     text check (char_length(location) <= 50),
+  created_at   timestamptz not null default now()
+);
+
+create index if not exists member_intros_created_at_idx on public.member_intros (created_at desc);
+
+alter table public.member_intros enable row level security;
+
+drop policy if exists "anon_insert_member_intros" on public.member_intros;
+create policy "anon_insert_member_intros"
+  on public.member_intros for insert
+  to anon
+  with check (true);
+
+drop policy if exists "anon_select_member_intros" on public.member_intros;
+create policy "anon_select_member_intros"
+  on public.member_intros for select
+  to anon
+  using (true);
 
 
 -- ── RPC: 전체 게임 별점 요약 ──────────────────────────────

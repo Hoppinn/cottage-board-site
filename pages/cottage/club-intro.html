@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가입 인사 | 코티지보드 동호회</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+    <a class="header-center" href="../../index.html">
+      오래 머무르고 싶은, 보드게임 공간
+    </a>
+    <div class="header-actions">
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
+    </div>
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../owned-games.html">전체 게임 보기</a>
+          <a href="../store/game-location.html">게임 위치</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="./about.html">소개</a>
+          <a href="../store/price-rules.html">가격 &amp; 규칙</a>
+          <a href="./club.html">동호회</a>
+        </div>
+      </div>
+      <a href="../store/requests.html">요청하기</a>
+    </nav>
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="inner-page">
+      <h1>가입 인사</h1>
+      <div class="inner-page-body">
+
+        <!-- 입력 폼 -->
+        <div class="intro-form-card">
+          <p class="intro-form-title">반갑습니다! 간단히 소개해주세요 👋</p>
+          <div class="intro-form-fields">
+            <div class="intro-field">
+              <label class="intro-label" for="introNickname">닉네임 <span class="intro-required">*</span></label>
+              <input class="intro-input" id="introNickname" type="text" placeholder="단톡방 닉네임" maxlength="20">
+            </div>
+            <div class="intro-field">
+              <label class="intro-label" for="introGames">좋아하는 게임</label>
+              <input class="intro-input" id="introGames" type="text" placeholder="ex. 윙스팬, 아줄, 코드네임" maxlength="100">
+            </div>
+            <div class="intro-field">
+              <label class="intro-label" for="introAvailable">참여 가능 요일 / 시간</label>
+              <input class="intro-input" id="introAvailable" type="text" placeholder="ex. 주말 오후, 평일 저녁 가능" maxlength="100">
+            </div>
+            <div class="intro-field">
+              <label class="intro-label" for="introLocation">사시는 곳</label>
+              <input class="intro-input" id="introLocation" type="text" placeholder="ex. 용인 기흥구" maxlength="50">
+            </div>
+          </div>
+          <button class="intro-submit-btn" id="introSubmitBtn" type="button">인사 남기기</button>
+          <p class="intro-submit-msg" id="introSubmitMsg"></p>
+        </div>
+
+        <!-- 목록 -->
+        <div class="intro-list" id="introList">
+          <div class="intro-list-loading">불러오는 중...</div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    const cfg = window.SUPABASE_CONFIG;
+    if (!cfg?.url || !window.supabase) return;
+    const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function formatDate(iso) {
+      const d = new Date(iso);
+      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    async function loadIntros() {
+      const el = document.getElementById('introList');
+      const { data, error } = await db
+        .from('member_intros')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error || !data?.length) {
+        el.innerHTML = '<p class="intro-list-empty">아직 인사가 없어요. 첫 번째로 남겨보세요!</p>';
+        return;
+      }
+      el.innerHTML = data.map(r => `
+        <div class="intro-card">
+          <div class="intro-card-header">
+            <span class="intro-card-nickname">${escHtml(r.nickname)}</span>
+            <span class="intro-card-date">${formatDate(r.created_at)}</span>
+          </div>
+          ${r.favorite_games ? `<p class="intro-card-row"><span class="intro-card-label">🎲 게임</span>${escHtml(r.favorite_games)}</p>` : ''}
+          ${r.available ? `<p class="intro-card-row"><span class="intro-card-label">📅 요일/시간</span>${escHtml(r.available)}</p>` : ''}
+          ${r.location ? `<p class="intro-card-row"><span class="intro-card-label">📍 지역</span>${escHtml(r.location)}</p>` : ''}
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('introSubmitBtn').addEventListener('click', async () => {
+      const nickname = document.getElementById('introNickname').value.trim();
+      const games    = document.getElementById('introGames').value.trim();
+      const avail    = document.getElementById('introAvailable').value.trim();
+      const loc      = document.getElementById('introLocation').value.trim();
+      const msg      = document.getElementById('introSubmitMsg');
+
+      if (!nickname) {
+        msg.textContent = '닉네임을 입력해주세요.';
+        msg.style.color = '#c0392b';
+        msg.style.display = 'block';
+        document.getElementById('introNickname').focus();
+        return;
+      }
+
+      const btn = document.getElementById('introSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = '등록 중...';
+
+      const { error } = await db.from('member_intros').insert({
+        nickname,
+        favorite_games: games || null,
+        available: avail || null,
+        location: loc || null,
+      });
+
+      btn.disabled = false;
+      btn.textContent = '인사 남기기';
+
+      if (error) {
+        msg.textContent = '오류가 발생했어요. 다시 시도해주세요.';
+        msg.style.color = '#c0392b';
+        msg.style.display = 'block';
+        return;
+      }
+
+      ['introNickname','introGames','introAvailable','introLocation'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      msg.textContent = '인사를 남겼어요!';
+      msg.style.color = 'var(--green)';
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+      await loadIntros();
+    });
+
+    ['introNickname','introGames','introAvailable','introLocation'].forEach(id => {
+      document.getElementById(id).addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('introSubmitBtn').click();
+      });
+    });
+
+    loadIntros();
+  })();
+  </script>
+
+  <footer class="site-footer">
+    <p><a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="#" onclick="document.querySelector('#kakao-channel-btn a, #kakao-channel-btn button')?.click(); return false;">← 카카오 채널 문의</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+
+  <div id="kakao-channel-btn"></div>
+  <script src="//cs.kakao.com/talks_channel_button/jssdk.js" type="text/javascript"></script>
+  <script>
+    KAKAO_TALKS_CHANNEL.createChatButton({
+      src: '_ExbKxan',
+      container: '#kakao-channel-btn',
+      title: '문의하기',
+      color: 'yellow',
+      shape: 'pc',
+      supportMultipleDensities: true
+    });
+  </script>
+
+</body>
+</html>

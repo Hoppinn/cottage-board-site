@@ -3129,6 +3129,26 @@ body.sheet-open{
   padding:3px 10px;
   white-space:nowrap;
 }
+.req-list-right{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.req-delete-btn{
+  background:none;
+  border:none;
+  color:#b0a090;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  padding:2px 4px;
+  line-height:1;
+  border-radius:4px;
+}
+.req-delete-btn:hover{
+  color:#c0392b;
+  background:#fff0ee;
+}
 .req-list-empty{
   padding:24px;
   text-align:center;
