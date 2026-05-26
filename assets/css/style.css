@@ -589,6 +589,14 @@ body.owned-page .header-menu.active{
   font-weight:800;
 }
 
+.hero-visitor-count{
+  margin:0 0 clamp(12px,3vw,20px);
+  font-size:clamp(11px,2.8vw,14px);
+  color:#a09080;
+  font-weight:700;
+  letter-spacing:.01em;
+}
+
 .buttons{
   display:flex;
   justify-content:center;

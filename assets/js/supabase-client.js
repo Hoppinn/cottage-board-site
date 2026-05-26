@@ -168,6 +168,26 @@
     }
   }
 
+  // ── 방문자 통계 ─────────────────────────────────────
+
+  async function getVisitorStats() {
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const [allRes, todayRes] = await Promise.all([
+        db.from("page_views").select("*", { count: "exact", head: true }),
+        db.from("page_views").select("*", { count: "exact", head: true })
+          .gte("created_at", today + "T00:00:00.000Z")
+          .lt("created_at", today + "T23:59:59.999Z")
+      ]);
+      return {
+        total: allRes.count || 0,
+        today: todayRes.count || 0
+      };
+    } catch (_) {
+      return null;
+    }
+  }
+
   // ── 자동 페이지 뷰 트래킹 ──────────────────────────────
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -188,5 +208,6 @@
     recordGamePlay,
     getGamePlayCount,
     getPlayHighlights,
+    getVisitorStats,
   };
 })();

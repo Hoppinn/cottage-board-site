@@ -2977,4 +2977,17 @@ if(ownedToolsToggle && ownedToolbar){
 
 }
 
+/* =========================
+   # VISITOR COUNT
+========================= */
+
+(async function initVisitorCount() {
+  const el = document.getElementById("heroVisitorCount");
+  if (!el || !window.CottageDB) return;
+  const stats = await window.CottageDB.getVisitorStats();
+  if (!stats) return;
+  const fmt = n => Number(n).toLocaleString("ko-KR");
+  el.textContent = `오늘 ${fmt(stats.today)}명 · 누적 ${fmt(stats.total)}명이 함께했어요`;
+})();
+
 
