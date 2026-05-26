@@ -87,6 +87,13 @@ const SHELF_GROUPS = [
     sourceValues: ["2인", "두명", "2인베스트", "two"]
   },
   {
+    id: "murder_mystery",
+    code: "G",
+    label: "머더미스터리",
+    parentId: null,
+    sourceValues: ["머더미", "머더미스터리", "murder_mystery", "murdermystery"]
+  },
+  {
     id: "etc_space",
     code: "F",
     label: "기타공간",

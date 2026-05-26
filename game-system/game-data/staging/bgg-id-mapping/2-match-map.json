@@ -29,12 +29,10 @@
     "scoreGap": 78
   },
   "갈팡질팡": {
-    "status": "auto-confirmed",
-    "bggId": "262543",
+    "status": "forced",
+    "bggId": "254640",
     "ownedName": "갈팡질팡",
-    "bggName": "Wavelength",
-    "score": 117,
-    "scoreGap": 12
+    "bggName": "Just One"
   },
   "그것이문제로다": {
     "status": "auto-confirmed",
@@ -152,12 +150,10 @@
     ]
   },
   "노팅엄의지방관": {
-    "status": "auto-confirmed",
-    "bggId": "157969",
+    "status": "forced",
+    "bggId": "298638",
     "ownedName": "노팅엄의지방관",
-    "bggName": "Sheriff of Nottingham",
-    "score": 117,
-    "scoreGap": 26
+    "bggName": "Sheriff of Nottingham: 2nd Edition"
   },
   "놉놉테이블": {
     "status": "unresolved",
@@ -640,12 +636,10 @@
     ]
   },
   "리버탈리아": {
-    "status": "auto-confirmed",
-    "bggId": "125618",
+    "status": "forced",
+    "bggId": "356033",
     "ownedName": "리버탈리아",
-    "bggName": "Libertalia",
-    "score": 117,
-    "scoreGap": 20
+    "bggName": "Libertalia: Winds of Galecrest"
   },
   "리코셰로봇": {
     "status": "auto-confirmed",
@@ -2475,12 +2469,10 @@
     "scoreGap": 18
   },
   "코드네임픽처스": {
-    "status": "auto-confirmed",
-    "bggId": "178900",
+    "status": "forced",
+    "bggId": "198773",
     "ownedName": "코드네임픽처스",
-    "bggName": "Codenames",
-    "score": 119,
-    "scoreGap": 18
+    "bggName": "Codenames: Pictures"
   },
   "콘셉트": {
     "status": "auto-confirmed",
@@ -7208,12 +7200,10 @@
     "scoreGap": 62
   },
   "보틀임프": {
-    "status": "auto-confirmed",
-    "bggId": "413364",
+    "status": "forced",
+    "bggId": "619",
     "ownedName": "보틀임프",
-    "bggName": "Bottle Imp",
-    "score": 107,
-    "scoreGap": 74
+    "bggName": "The Bottle Imp"
   },
   "본파이어 빅박스": {
     "status": "auto-confirmed",
@@ -10838,12 +10828,10 @@
     "scoreGap": 28
   },
   "코드네임 듀엣": {
-    "status": "auto-confirmed",
-    "bggId": "178900",
+    "status": "forced",
+    "bggId": "224037",
     "ownedName": "코드네임 듀엣",
-    "bggName": "Codenames",
-    "score": 119,
-    "scoreGap": 18
+    "bggName": "Codenames: Duet"
   },
   "코티지가든": {
     "status": "auto-confirmed",
@@ -11461,36 +11449,24 @@
     "scoreGap": 30
   },
   "탁상탐정단1": {
-    "status": "auto-confirmed",
-    "bggId": "318977",
-    "ownedName": "탁상탐정단1",
-    "bggName": "MicroMacro: Crime City",
-    "score": 119,
-    "scoreGap": 32
+    "status": "unmatched",
+    "bggId": null,
+    "ownedName": "탁상탐정단1"
   },
   "탁상탐정단2": {
-    "status": "auto-confirmed",
-    "bggId": "338834",
-    "ownedName": "탁상탐정단2",
-    "bggName": "MicroMacro: Crime City – Full House",
-    "score": 115,
-    "scoreGap": 28
+    "status": "unmatched",
+    "bggId": null,
+    "ownedName": "탁상탐정단2"
   },
   "탁상탐정단3": {
-    "status": "auto-confirmed",
-    "bggId": "364766",
-    "ownedName": "탁상탐정단3",
-    "bggName": "MicroMacro: Crime City – All In",
-    "score": 111,
-    "scoreGap": 24
+    "status": "unmatched",
+    "bggId": null,
+    "ownedName": "탁상탐정단3"
   },
   "탁상탐정단4": {
-    "status": "auto-confirmed",
-    "bggId": "398162",
-    "ownedName": "탁상탐정단4",
-    "bggName": "MicroMacro: Crime City – Showdown",
-    "score": 109,
-    "scoreGap": 22
+    "status": "unmatched",
+    "bggId": null,
+    "ownedName": "탁상탐정단4"
   },
   "탐험가들": {
     "status": "auto-confirmed",
@@ -12326,12 +12302,10 @@
     ]
   },
   "항로개척자": {
-    "status": "auto-confirmed",
-    "bggId": "63419",
+    "status": "forced",
+    "bggId": "330174",
     "ownedName": "항로개척자",
-    "bggName": "A Voyage of Discovery or The Five Navigators: An entirely new game",
-    "score": 87,
-    "scoreGap": 18
+    "bggName": "Explorers"
   },
   "해기스": {
     "status": "auto-confirmed",

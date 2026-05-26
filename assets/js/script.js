@@ -590,6 +590,24 @@ function matchRecommendMood(game, moodValue){
   const recommend =
     GameView?.getRecommendData(game);
 
+  const weight =
+    Number(recommend?.difficultyWeight) ||
+    Number(game?.bgg?.weight) ||
+    0;
+
+  // 편안하게: 난이도 1.5 이하만
+  if (moodValue === "cozy" && weight > 1.50) return false;
+
+  // 가볍게 웃고싶어요: 난이도 1.5 미만 + party 태그 필수
+  if (moodValue === "fun") {
+    if (weight >= 1.50) return false;
+    const playTags = recommend?.playTags || [];
+    if (!playTags.includes("party")) return false;
+  }
+
+  // 대화가 많은 게임: 난이도 2.5 이하만 (전략 헤비게임 제외)
+  if (moodValue === "talk" && weight > 2.50) return false;
+
 const allTags = [
   ...(recommend?.moodTags || []),
   ...(recommend?.playTags || []),
@@ -599,9 +617,6 @@ const allTags = [
   ...(game?.cottage?.interactionTags || []),
   ...(game?.cottage?.autoTags || [])
 ];
-
-
-
 
   const moodTagMap = {
     fun:       ["funny", "party", "chaotic", "dexterity"],

@@ -47,14 +47,14 @@
   {
     "id": "갈팡질팡",
     "ownedName": "갈팡질팡",
-    "titleEn": "Wavelength",
-    "bggId": "262543",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Just One",
+    "bggId": "254640",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 1.1084,
+    "difficulty": 1.0338,
     "difficultyWeight": 1.17,
-    "rating": 7.19647,
+    "rating": 7.59209,
     "bestPlayers": [
       5,
       6
@@ -1234,14 +1234,14 @@
   {
     "id": "코드네임픽처스",
     "ownedName": "코드네임픽처스",
-    "titleEn": "Codenames",
-    "bggId": "178900",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Codenames: Pictures",
+    "bggId": "198773",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 1.2549,
+    "difficulty": 1.2382,
     "difficultyWeight": 1.24,
-    "rating": 7.52482,
+    "rating": 7.17575,
     "bestPlayers": [
       6
     ],
@@ -1501,11 +1501,11 @@
     "titleEn": "Blue Moon",
     "bggId": "9446",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "머더미",
-    "difficulty": null,
+    "difficulty": 2.1667,
     "difficultyWeight": 3,
-    "rating": null,
+    "rating": 6.68872,
     "bestPlayers": [
       7
     ],
@@ -1519,11 +1519,11 @@
     "titleEn": "Flip 7",
     "bggId": "420087",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.0257,
     "difficultyWeight": 1.03,
-    "rating": null,
+    "rating": 7.21503,
     "bestPlayers": [
       5,
       6
@@ -1696,14 +1696,14 @@
   {
     "id": "노팅엄의지방관",
     "ownedName": "노팅엄의지방관",
-    "titleEn": "Sheriff of Nottingham",
-    "bggId": "157969",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Sheriff of Nottingham: 2nd Edition",
+    "bggId": "298638",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
-    "difficulty": 1.6592,
+    "difficulty": 1.7093,
     "difficultyWeight": 1.7,
-    "rating": 7.0464,
+    "rating": 7.20733,
     "bestPlayers": [
       5
     ],
@@ -1982,14 +1982,14 @@
   {
     "id": "리버탈리아",
     "ownedName": "리버탈리아",
-    "titleEn": "Libertalia",
-    "bggId": "125618",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Libertalia: Winds of Galecrest",
+    "bggId": "356033",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
-    "difficulty": 2.2324,
+    "difficulty": 2.1923,
     "difficultyWeight": 2.16,
-    "rating": 7.10098,
+    "rating": 7.43689,
     "bestPlayers": [
       4,
       5,
@@ -2857,11 +2857,11 @@
     "titleEn": "Cross Clues",
     "bggId": "300753",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.0894,
     "difficultyWeight": 1.07,
-    "rating": null,
+    "rating": 7.19416,
     "bestPlayers": [
       4
     ],
@@ -2944,11 +2944,11 @@
     "titleEn": "TEAM3 PINK",
     "bggId": "247694",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.3333,
     "difficultyWeight": 1.07,
-    "rating": null,
+    "rating": 6.87554,
     "bestPlayers": [
       3,
       6
@@ -3225,11 +3225,11 @@
     "titleEn": "Heat: Pedal to the Metal",
     "bggId": "366013",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.2024,
     "difficultyWeight": 2.2,
-    "rating": null,
+    "rating": 7.99655,
     "bestPlayers": [
       5,
       6
@@ -3382,11 +3382,11 @@
     "titleEn": "Rajas of the Ganges: The Dice Charmers",
     "bggId": "318553",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.275,
     "difficultyWeight": 2.29,
-    "rating": null,
+    "rating": 7.47055,
     "bestPlayers": [
       2
     ],
@@ -3598,11 +3598,11 @@
     "titleEn": "Grand Austria Hotel",
     "bggId": "182874",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 3.1962,
     "difficultyWeight": 3.21,
-    "rating": null,
+    "rating": 7.96338,
     "bestPlayers": [
       2
     ],
@@ -3679,11 +3679,11 @@
     "titleEn": "Gloomhaven",
     "bggId": "174430",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 3.9192,
     "difficultyWeight": 3.91,
-    "rating": null,
+    "rating": 8.53891,
     "bestPlayers": [
       3
     ],
@@ -3959,11 +3959,11 @@
     "titleEn": "Nimalia",
     "bggId": "361850",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.7321,
     "difficultyWeight": 1.67,
-    "rating": null,
+    "rating": 6.99846,
     "bestPlayers": [
       3
     ],
@@ -4142,11 +4142,11 @@
     "titleEn": "The Game",
     "bggId": "173090",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 1.2364,
     "difficultyWeight": 1.24,
-    "rating": null,
+    "rating": 6.71338,
     "bestPlayers": [
       3
     ],
@@ -4265,11 +4265,11 @@
     "titleEn": "In a Grove",
     "bggId": "102181",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 1.4286,
     "difficultyWeight": 1.44,
-    "rating": null,
+    "rating": 6.33825,
     "bestPlayers": [
       4
     ],
@@ -4384,11 +4384,11 @@
     "titleEn": "Dominion",
     "bggId": "36218",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.3445,
     "difficultyWeight": 2.35,
-    "rating": null,
+    "rating": 7.59776,
     "bestPlayers": [
       3
     ],
@@ -4404,11 +4404,11 @@
     "titleEn": "Dominion",
     "bggId": "36218",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.3445,
     "difficultyWeight": 2.47,
-    "rating": null,
+    "rating": 7.59776,
     "bestPlayers": [
       3
     ],
@@ -4424,11 +4424,11 @@
     "titleEn": "Dominion",
     "bggId": "36218",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.3445,
     "difficultyWeight": 2.81,
-    "rating": null,
+    "rating": 7.59776,
     "bestPlayers": [
       3
     ],
@@ -4444,11 +4444,11 @@
     "titleEn": "Dominion",
     "bggId": "36218",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.3445,
     "difficultyWeight": 2.41,
-    "rating": null,
+    "rating": 7.59776,
     "bestPlayers": [
       3
     ],
@@ -4807,11 +4807,11 @@
     "titleEn": "Las Vegas",
     "bggId": "117959",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.167,
     "difficultyWeight": 1.17,
-    "rating": null,
+    "rating": 7.18246,
     "bestPlayers": [
       4
     ],
@@ -5016,11 +5016,11 @@
     "titleEn": "Lancaster",
     "bggId": "96913",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 2.9937,
     "difficultyWeight": 2.99,
-    "rating": null,
+    "rating": 7.38072,
     "bestPlayers": [
       4
     ],
@@ -5261,11 +5261,11 @@
     "titleEn": "Roll for the Galaxy",
     "bggId": "132531",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 2.7843,
     "difficultyWeight": 2.78,
-    "rating": null,
+    "rating": 7.56381,
     "bestPlayers": [
       3,
       4
@@ -5363,13 +5363,17 @@
     "titleEn": "Loopin' Louie",
     "bggId": "327",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "몸",
-    "difficulty": null,
+    "difficulty": 1.051,
     "difficultyWeight": 1,
-    "rating": null,
-    "bestPlayers": [],
-    "recommendedPlayers": []
+    "rating": 6.7273,
+    "bestPlayers": [
+      4
+    ],
+    "recommendedPlayers": [
+      2
+    ]
   },
   {
     "id": "뤄양의사람들",
@@ -5440,11 +5444,11 @@
     "titleEn": "Le Havre: The Inland Port",
     "bggId": "129051",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 2.5029,
     "difficultyWeight": 2.51,
-    "rating": null,
+    "rating": 6.79477,
     "bestPlayers": [
       2
     ],
@@ -5539,11 +5543,11 @@
     "titleEn": "Marrakesh",
     "bggId": "342810",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.4527,
     "difficultyWeight": 3.41,
-    "rating": null,
+    "rating": 8.07743,
     "bestPlayers": [
       3,
       4
@@ -5620,11 +5624,11 @@
     "titleEn": "Mountain Goats",
     "bggId": "63975",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.211,
     "difficultyWeight": 1.21,
-    "rating": null,
+    "rating": 6.83468,
     "bestPlayers": [
       4
     ],
@@ -5783,7 +5787,7 @@
     "location": "작은",
     "difficulty": null,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 7,
     "bestPlayers": [],
     "recommendedPlayers": [
       2,
@@ -6001,11 +6005,11 @@
     "titleEn": "Muse",
     "bggId": "234396",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.1111,
     "difficultyWeight": 1.19,
-    "rating": null,
+    "rating": 6.57157,
     "bestPlayers": [
       2
     ],
@@ -6105,11 +6109,11 @@
     "titleEn": "Bandido",
     "bggId": "191925",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 1.1294,
     "difficultyWeight": 1.12,
-    "rating": null,
+    "rating": 6.39897,
     "bestPlayers": [
       2
     ],
@@ -6203,11 +6207,11 @@
     "titleEn": "BattleCON: Devastation of Indines",
     "bggId": "123123",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 3.131,
     "difficultyWeight": 3,
-    "rating": null,
+    "rating": 7.78969,
     "bestPlayers": [
       2
     ],
@@ -6280,11 +6284,11 @@
     "titleEn": "Barrage",
     "bggId": "251247",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 4.1141,
     "difficultyWeight": 4.11,
-    "rating": null,
+    "rating": 8.13662,
     "bestPlayers": [
       3,
       4
@@ -6422,14 +6426,14 @@
   {
     "id": "보틀임프",
     "ownedName": "보틀임프",
-    "titleEn": "Bottle Imp",
-    "bggId": "413364",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "The Bottle Imp",
+    "bggId": "619",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "작은",
-    "difficulty": 2.125,
+    "difficulty": 1.8669,
     "difficultyWeight": 1.87,
-    "rating": 7.12129,
+    "rating": 6.74124,
     "bestPlayers": [
       3,
       4
@@ -6445,11 +6449,11 @@
     "titleEn": "Bonfire",
     "bggId": "304420",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.6299,
     "difficultyWeight": 3.63,
-    "rating": null,
+    "rating": 7.59824,
     "bestPlayers": [
       3
     ],
@@ -6590,11 +6594,11 @@
     "titleEn": "The Red Cathedral",
     "bggId": "227224",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 2.812,
     "difficultyWeight": 2.82,
-    "rating": null,
+    "rating": 7.65812,
     "bestPlayers": [
       3
     ],
@@ -6670,11 +6674,11 @@
     "titleEn": "Bruxelles 1897",
     "bggId": "275913",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 2.8588,
     "difficultyWeight": 2.86,
-    "rating": null,
+    "rating": 7.12678,
     "bestPlayers": [
       3
     ],
@@ -6769,11 +6773,11 @@
     "titleEn": "Blitzkrieg!: World War Two in 20 Minutes",
     "bggId": "258210",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 1.9064,
     "difficultyWeight": 1.73,
-    "rating": null,
+    "rating": 7.53128,
     "bestPlayers": [
       2
     ],
@@ -6868,11 +6872,11 @@
     "titleEn": "Villagers",
     "bggId": "241724",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.227,
     "difficultyWeight": 2.22,
-    "rating": null,
+    "rating": 7.10528,
     "bestPlayers": [
       3,
       4
@@ -6997,11 +7001,11 @@
     "titleEn": "Sanctuary: The Keepers Era",
     "bggId": "299733",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 2.1538,
     "difficultyWeight": 2.8,
-    "rating": null,
+    "rating": 7.18654,
     "bestPlayers": [
       2,
       3
@@ -7116,11 +7120,11 @@
     "titleEn": "Stone Age",
     "bggId": "34635",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.4558,
     "difficultyWeight": 2.46,
-    "rating": null,
+    "rating": 7.51026,
     "bestPlayers": [
       3,
       4
@@ -7209,11 +7213,11 @@
     "titleEn": "SETI: Search for Extraterrestrial Intelligence",
     "bggId": "418059",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.8296,
     "difficultyWeight": 3.76,
-    "rating": null,
+    "rating": 8.4154,
     "bestPlayers": [
       3
     ],
@@ -7291,11 +7295,11 @@
     "titleEn": "Salton Sea",
     "bggId": "402663",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 3.8562,
     "difficultyWeight": 3.79,
-    "rating": null,
+    "rating": 7.43042,
     "bestPlayers": [
       2
     ],
@@ -7369,11 +7373,11 @@
     "titleEn": "Thrill",
     "bggId": "2014",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "몸",
-    "difficulty": null,
+    "difficulty": 1.1667,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 5.92553,
     "bestPlayers": [
       4
     ],
@@ -7469,11 +7473,11 @@
     "titleEn": "Scrabble",
     "bggId": "320",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.0511,
     "difficultyWeight": 2.06,
-    "rating": null,
+    "rating": 6.27461,
     "bestPlayers": [
       2
     ],
@@ -7548,11 +7552,11 @@
     "titleEn": "Stockpile",
     "bggId": "161614",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.1268,
     "difficultyWeight": 2.11,
-    "rating": null,
+    "rating": 7.4174,
     "bestPlayers": [
       4,
       5
@@ -7625,11 +7629,11 @@
     "titleEn": "Splendor",
     "bggId": "148228",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.7753,
     "difficultyWeight": 1.78,
-    "rating": null,
+    "rating": 7.42055,
     "bestPlayers": [
       3
     ],
@@ -7645,11 +7649,11 @@
     "titleEn": "Splendor",
     "bggId": "148228",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 1.7753,
     "difficultyWeight": 1.99,
-    "rating": null,
+    "rating": 7.42055,
     "bestPlayers": [
       2
     ],
@@ -7663,11 +7667,11 @@
     "titleEn": "Splendor",
     "bggId": "148228",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.7753,
     "difficultyWeight": 1.8,
-    "rating": null,
+    "rating": 7.42055,
     "bestPlayers": [
       3
     ],
@@ -7683,11 +7687,11 @@
     "titleEn": "Splendor",
     "bggId": "148228",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.7753,
     "difficultyWeight": 2.16,
-    "rating": null,
+    "rating": 7.42055,
     "bestPlayers": [
       3
     ],
@@ -7703,11 +7707,11 @@
     "titleEn": "Splendor",
     "bggId": "148228",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.7753,
     "difficultyWeight": 1.9,
-    "rating": null,
+    "rating": 7.42055,
     "bestPlayers": [
       3
     ],
@@ -7888,11 +7892,11 @@
     "titleEn": "Sunflower Valley",
     "bggId": "228390",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.7333,
     "difficultyWeight": 1.73,
-    "rating": null,
+    "rating": 6.53175,
     "bestPlayers": [
       3
     ],
@@ -8029,11 +8033,11 @@
     "titleEn": "Abracada...What?",
     "bggId": "163930",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.64,
     "difficultyWeight": 1.65,
-    "rating": null,
+    "rating": 6.56205,
     "bestPlayers": [
       4
     ],
@@ -8148,11 +8152,11 @@
     "titleEn": "Akropolis",
     "bggId": "357563",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.8007,
     "difficultyWeight": 1.8,
-    "rating": null,
+    "rating": 7.44619,
     "bestPlayers": [
       3
     ],
@@ -8229,11 +8233,11 @@
     "titleEn": "Alchemists",
     "bggId": "161970",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.9244,
     "difficultyWeight": 3.93,
-    "rating": null,
+    "rating": 7.6372,
     "bestPlayers": [
       4
     ],
@@ -8366,11 +8370,11 @@
     "titleEn": "Abyss",
     "bggId": "155987",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.3199,
     "difficultyWeight": 2.32,
-    "rating": null,
+    "rating": 7.32204,
     "bestPlayers": [
       4
     ],
@@ -8466,11 +8470,11 @@
     "titleEn": "Treasure (in the Canadian Rockies)",
     "bggId": "5556",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "방탈출",
-    "difficulty": null,
+    "difficulty": 2,
     "difficultyWeight": 1.56,
-    "rating": null,
+    "rating": 4,
     "bestPlayers": [
       2,
       3
@@ -8548,11 +8552,11 @@
     "titleEn": "Unlock!: Heroic Adventures",
     "bggId": "266121",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "방탈출",
-    "difficulty": null,
+    "difficulty": 2.24,
     "difficultyWeight": 2.23,
-    "rating": null,
+    "rating": 7.57254,
     "bestPlayers": [
       2
     ],
@@ -8650,11 +8654,11 @@
     "titleEn": "Everdell",
     "bggId": "199792",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 2.8337,
     "difficultyWeight": 2.83,
-    "rating": null,
+    "rating": 7.9808,
     "bestPlayers": [
       3
     ],
@@ -8727,11 +8731,11 @@
     "titleEn": "Aeon's End",
     "bggId": "191189",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 2.8008,
     "difficultyWeight": 2.81,
-    "rating": null,
+    "rating": 7.8626,
     "bestPlayers": [
       2
     ],
@@ -8809,12 +8813,14 @@
     "titleEn": "EXIT: The Game – The Sinister Mansion",
     "bggId": "226520",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "방탈출",
-    "difficulty": null,
+    "difficulty": 2.4773,
     "difficultyWeight": 3.27,
-    "rating": null,
-    "bestPlayers": [],
+    "rating": 7.21026,
+    "bestPlayers": [
+      2
+    ],
     "recommendedPlayers": [
       1,
       3,
@@ -8910,11 +8916,11 @@
     "titleEn": "Endless Winter: Paleoamericans",
     "bggId": "305096",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.3262,
     "difficultyWeight": 3.32,
-    "rating": null,
+    "rating": 7.6226,
     "bestPlayers": [
       3
     ],
@@ -8993,11 +8999,11 @@
     "titleEn": "CLEVER",
     "bggId": "150797",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1,
     "difficultyWeight": 1.87,
-    "rating": null,
+    "rating": 6.85773,
     "bestPlayers": [
       2
     ],
@@ -9115,11 +9121,11 @@
     "titleEn": "Orloj: The Prague Astronomical Clock",
     "bggId": "429405",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "배송중",
-    "difficulty": null,
+    "difficulty": 3.602,
     "difficultyWeight": 3.54,
-    "rating": null,
+    "rating": 7.94162,
     "bestPlayers": [
       3
     ],
@@ -9196,11 +9202,11 @@
     "titleEn": "Ohanami",
     "bggId": "270314",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 1.1583,
     "difficultyWeight": 1.14,
-    "rating": null,
+    "rating": 7.25663,
     "bestPlayers": [
       3
     ],
@@ -9312,11 +9318,11 @@
     "titleEn": "Woodcraft",
     "bggId": "355093",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.8235,
     "difficultyWeight": 3.83,
-    "rating": null,
+    "rating": 7.57393,
     "bestPlayers": [
       3
     ],
@@ -9415,11 +9421,11 @@
     "titleEn": "Watergate",
     "bggId": "274364",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 2.2936,
     "difficultyWeight": 2.27,
-    "rating": null,
+    "rating": 7.71351,
     "bestPlayers": [
       2
     ],
@@ -9497,11 +9503,11 @@
     "titleEn": "It's a Wonderful Kingdom",
     "bggId": "327711",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 2.5773,
     "difficultyWeight": 2.59,
-    "rating": null,
+    "rating": 7.05616,
     "bestPlayers": [
       2
     ],
@@ -9597,11 +9603,11 @@
     "titleEn": "Lorenzo il Magnifico",
     "bggId": "203993",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.2896,
     "difficultyWeight": 3.3,
-    "rating": null,
+    "rating": 7.82533,
     "bestPlayers": [
       3,
       4
@@ -9720,11 +9726,11 @@
     "titleEn": "Hey, That's My Fish!",
     "bggId": "8203",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.4443,
     "difficultyWeight": 1.45,
-    "rating": null,
+    "rating": 6.6993,
     "bestPlayers": [
       3
     ],
@@ -9801,11 +9807,11 @@
     "titleEn": "Industria",
     "bggId": "8124",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.6762,
     "difficultyWeight": 2.31,
-    "rating": null,
+    "rating": 6.40723,
     "bestPlayers": [
       3,
       4
@@ -9879,11 +9885,11 @@
     "titleEn": "Imperial Steam",
     "bggId": "338760",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 4.2222,
     "difficultyWeight": 4.23,
-    "rating": null,
+    "rating": 7.72892,
     "bestPlayers": [
       4
     ],
@@ -9959,11 +9965,11 @@
     "titleEn": "The Scepter of Zavandor",
     "bggId": "13884",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.5014,
     "difficultyWeight": 3.51,
-    "rating": null,
+    "rating": 6.95029,
     "bestPlayers": [
       4
     ],
@@ -10060,11 +10066,11 @@
     "titleEn": "Spirit Island",
     "bggId": "162886",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 4.073,
     "difficultyWeight": 4.07,
-    "rating": null,
+    "rating": 8.34028,
     "bestPlayers": [
       2
     ],
@@ -10202,11 +10208,11 @@
     "titleEn": "Zooloretto",
     "bggId": "27588",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.857,
     "difficultyWeight": 1.86,
-    "rating": null,
+    "rating": 6.78375,
     "bestPlayers": [
       4
     ],
@@ -10301,11 +10307,11 @@
     "titleEn": "Chess",
     "bggId": "171",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 3.6445,
     "difficultyWeight": 3.65,
-    "rating": null,
+    "rating": 7.23811,
     "bestPlayers": [
       2
     ],
@@ -10400,11 +10406,11 @@
     "titleEn": "Carnegie",
     "bggId": "310873",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.8169,
     "difficultyWeight": 3.81,
-    "rating": null,
+    "rating": 7.95715,
     "bestPlayers": [
       4
     ],
@@ -10504,11 +10510,11 @@
     "titleEn": "Caverna: Cave vs Cave",
     "bggId": "220520",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 2.5594,
     "difficultyWeight": 2.55,
-    "rating": null,
+    "rating": 7.07523,
     "bestPlayers": [
       2
     ],
@@ -10599,11 +10605,11 @@
     "titleEn": "Canopy",
     "bggId": "295607",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.0069,
     "difficultyWeight": 2.01,
-    "rating": null,
+    "rating": 7.23187,
     "bestPlayers": [
       2
     ],
@@ -10703,11 +10709,11 @@
     "titleEn": "Cat Lady",
     "bggId": "228504",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.3714,
     "difficultyWeight": 1.5,
-    "rating": null,
+    "rating": 6.98165,
     "bestPlayers": [
       2,
       3
@@ -10786,11 +10792,11 @@
     "titleEn": "Codex Naturalis",
     "bggId": "314503",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.7682,
     "difficultyWeight": 1.76,
-    "rating": null,
+    "rating": 7.2164,
     "bestPlayers": [
       3,
       4
@@ -10804,14 +10810,14 @@
   {
     "id": "코드네임-듀엣",
     "ownedName": "코드네임 듀엣",
-    "titleEn": "Codenames",
-    "bggId": "178900",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Codenames: Duet",
+    "bggId": "224037",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "협력",
-    "difficulty": 1.2549,
+    "difficulty": 1.3601,
     "difficultyWeight": 1.35,
-    "rating": 7.52482,
+    "rating": 7.40707,
     "bestPlayers": [
       2
     ],
@@ -10988,11 +10994,11 @@
     "titleEn": "Quixo",
     "bggId": "3190",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 1.62,
     "difficultyWeight": 1.62,
-    "rating": null,
+    "rating": 6.26227,
     "bestPlayers": [
       2
     ],
@@ -11087,11 +11093,11 @@
     "titleEn": "Crystal Palace",
     "bggId": "280480",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.7677,
     "difficultyWeight": 3.79,
-    "rating": null,
+    "rating": 7.49501,
     "bestPlayers": [
       3
     ],
@@ -11186,11 +11192,11 @@
     "titleEn": "Clank!: Catacombs",
     "bggId": "365717",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.487,
     "difficultyWeight": 2.5,
-    "rating": null,
+    "rating": 8.22828,
     "bestPlayers": [
       3
     ],
@@ -11307,11 +11313,11 @@
     "titleEn": "Kingdomino",
     "bggId": "204583",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 1.239,
     "difficultyWeight": 1.23,
-    "rating": null,
+    "rating": 7.28739,
     "bestPlayers": [
       2,
       4
@@ -11387,9 +11393,9 @@
   {
     "id": "탁상탐정단1",
     "ownedName": "탁상탐정단1",
-    "titleEn": "MicroMacro: Crime City",
-    "bggId": "318977",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "unmatched",
     "status": "pending-cache",
     "location": "머더미",
     "difficulty": null,
@@ -11405,17 +11411,15 @@
   {
     "id": "탁상탐정단2",
     "ownedName": "탁상탐정단2",
-    "titleEn": "MicroMacro: Crime City – Full House",
-    "bggId": "338834",
-    "matchStatus": "auto-confirmed",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "unmatched",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1.1616,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.63256,
-    "bestPlayers": [
-      2
-    ],
+    "rating": null,
+    "bestPlayers": [],
     "recommendedPlayers": [
       2,
       3,
@@ -11425,40 +11429,30 @@
   {
     "id": "탁상탐정단3",
     "ownedName": "탁상탐정단3",
-    "titleEn": "MicroMacro: Crime City – All In",
-    "bggId": "364766",
-    "matchStatus": "auto-confirmed",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "unmatched",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1.075,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.79634,
-    "bestPlayers": [
-      1,
-      2
-    ],
-    "recommendedPlayers": [
-      3
-    ]
+    "rating": null,
+    "bestPlayers": [],
+    "recommendedPlayers": []
   },
   {
     "id": "탁상탐정단4",
     "ownedName": "탁상탐정단4",
-    "titleEn": "MicroMacro: Crime City – Showdown",
-    "bggId": "398162",
-    "matchStatus": "auto-confirmed",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "unmatched",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.87124,
-    "bestPlayers": [
-      2
-    ],
-    "recommendedPlayers": [
-      1,
-      3
-    ]
+    "rating": null,
+    "bestPlayers": [],
+    "recommendedPlayers": []
   },
   {
     "id": "탐험가들",
@@ -11466,11 +11460,11 @@
     "titleEn": "The Quest for El Dorado",
     "bggId": "217372",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.9413,
     "difficultyWeight": 1.83,
-    "rating": null,
+    "rating": 7.71724,
     "bestPlayers": [
       3
     ],
@@ -11548,11 +11542,11 @@
     "titleEn": "Terraforming Mars: The Dice Game",
     "bggId": "296108",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.4148,
     "difficultyWeight": 2.37,
-    "rating": null,
+    "rating": 7.31552,
     "bestPlayers": [
       2
     ],
@@ -11625,11 +11619,11 @@
     "titleEn": "Trajan",
     "bggId": "102680",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.6255,
     "difficultyWeight": 3.63,
-    "rating": null,
+    "rating": 7.74239,
     "bestPlayers": [
       4
     ],
@@ -11706,11 +11700,11 @@
     "titleEn": "Tichu",
     "bggId": "215",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 2.3451,
     "difficultyWeight": 2,
-    "rating": null,
+    "rating": 7.57223,
     "bestPlayers": [
       4
     ],
@@ -11785,11 +11779,11 @@
     "titleEn": "Tiletum",
     "bggId": "351913",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 3.3851,
     "difficultyWeight": 3.41,
-    "rating": null,
+    "rating": 7.85404,
     "bestPlayers": [
       2,
       3
@@ -11871,11 +11865,11 @@
     "titleEn": "Fantasy Defense",
     "bggId": "223950",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 2.0769,
     "difficultyWeight": 2.08,
-    "rating": null,
+    "rating": 6.66401,
     "bestPlayers": [
       1
     ],
@@ -11952,11 +11946,11 @@
     "titleEn": "Pandemic",
     "bggId": "30549",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 2.3942,
     "difficultyWeight": 2.4,
-    "rating": null,
+    "rating": 7.51325,
     "bestPlayers": [
       4
     ],
@@ -12034,11 +12028,11 @@
     "titleEn": "Feya's Swamp",
     "bggId": "438442",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.1333,
     "difficultyWeight": 3.08,
-    "rating": null,
+    "rating": 7.59637,
     "bestPlayers": [
       4
     ],
@@ -12152,11 +12146,11 @@
     "titleEn": "Forest Shuffle",
     "bggId": "391163",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 2.2113,
     "difficultyWeight": 2.21,
-    "rating": null,
+    "rating": 7.73005,
     "bestPlayers": [
       2
     ],
@@ -12317,11 +12311,11 @@
     "titleEn": "Poodle Taxi",
     "bggId": "429662",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "작은",
     "difficulty": null,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 6.10909,
     "bestPlayers": [],
     "recommendedPlayers": []
   },
@@ -12393,11 +12387,11 @@
     "titleEn": "Project L",
     "bggId": "260180",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.5585,
     "difficultyWeight": 1.56,
-    "rating": null,
+    "rating": 7.44495,
     "bestPlayers": [
       2,
       3
@@ -12498,11 +12492,11 @@
     "titleEn": "Hanamikoji",
     "bggId": "158600",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "2인",
-    "difficulty": null,
+    "difficulty": 1.6749,
     "difficultyWeight": 1.68,
-    "rating": null,
+    "rating": 7.45121,
     "bestPlayers": [
       2
     ],
@@ -12579,11 +12573,11 @@
     "titleEn": "Harmonies",
     "bggId": "414317",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.0112,
     "difficultyWeight": 2.01,
-    "rating": null,
+    "rating": 8.03067,
     "bestPlayers": [
       2,
       3
@@ -12680,11 +12674,11 @@
     "titleEn": "Hallertau",
     "bggId": "300322",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 3.2875,
     "difficultyWeight": 3.3,
-    "rating": null,
+    "rating": 7.81801,
     "bestPlayers": [
       2
     ],
@@ -12739,14 +12733,14 @@
   {
     "id": "항로개척자",
     "ownedName": "항로개척자",
-    "titleEn": "A Voyage of Discovery or The Five Navigators: An entirely new game",
-    "bggId": "63419",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Explorers",
+    "bggId": "330174",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "협력",
-    "difficulty": 1,
+    "difficulty": 1.8852,
     "difficultyWeight": 2,
-    "rating": null,
+    "rating": 7.10783,
     "bestPlayers": [
       1
     ],
@@ -12801,12 +12795,15 @@
     "titleEn": "Food Chain Magnate",
     "bggId": "175914",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "몸",
-    "difficulty": null,
+    "difficulty": 4.1848,
     "difficultyWeight": 0,
-    "rating": null,
-    "bestPlayers": [],
+    "rating": 8.03819,
+    "bestPlayers": [
+      3,
+      4
+    ],
     "recommendedPlayers": [
       2
     ]
@@ -12900,11 +12897,11 @@
     "titleEn": "Age of Innovation",
     "bggId": "383179",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "전략",
-    "difficulty": null,
+    "difficulty": 4.2689,
     "difficultyWeight": 4.26,
-    "rating": null,
+    "rating": 8.44937,
     "bestPlayers": [
       4
     ],
@@ -12942,11 +12939,11 @@
     "titleEn": "The Quest for El Dorado",
     "bggId": "217372",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 1.9413,
     "difficultyWeight": 1.94,
-    "rating": null,
+    "rating": 7.71724,
     "bestPlayers": [
       2,
       4
@@ -13001,11 +12998,11 @@
     "titleEn": "Fuji",
     "bggId": "258308",
     "matchStatus": "auto-confirmed",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 2.16,
     "difficultyWeight": 2.17,
-    "rating": null,
+    "rating": 6.5888,
     "bestPlayers": [
       3
     ],
