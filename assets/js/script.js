@@ -1400,10 +1400,27 @@ function initStickyBar() {
   panel._stickyCleanup = () => panel.removeEventListener('scroll', onScroll);
 }
 
+function showLoginToast() {
+  let toast = document.getElementById('loginToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'loginToast';
+    toast.className = 'login-toast';
+    toast.innerHTML = `
+      <span>카카오 로그인 후 이용할 수 있어요</span>
+      <button onclick="if(typeof kakaoLogin==='function')kakaoLogin()" type="button">로그인</button>
+    `;
+    document.body.appendChild(toast);
+  }
+  toast.classList.add('is-visible');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 3000);
+}
+
 function requireLogin(action) {
   const user = window.getKakaoUser?.();
   if (user) { action(); return; }
-  if (typeof kakaoLogin === 'function') kakaoLogin();
+  showLoginToast();
 }
 
 async function initSheetLikes(gameKey) {

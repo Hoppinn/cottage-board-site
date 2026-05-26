@@ -250,17 +250,16 @@
 
   async function getVisitorStats() {
     try {
-      const today = new Date().toISOString().slice(0, 10);
-      const [allRes, todayRes] = await Promise.all([
-        db.from("page_views").select("*", { count: "exact", head: true }),
-        db.from("page_views").select("*", { count: "exact", head: true })
-          .gte("created_at", today + "T00:00:00.000Z")
-          .lt("created_at", today + "T23:59:59.999Z")
-      ]);
-      return {
-        total: allRes.count || 0,
-        today: todayRes.count || 0
-      };
+      const { data } = await db.from("page_views").select("created_at");
+      if (!data) return null;
+      // KST(UTC+9) 기준 오늘 날짜
+      const kstNow = new Date(Date.now() + 9 * 3600000);
+      const todayKst = kstNow.toISOString().slice(0, 10);
+      const todayCount = data.filter(r =>
+        r.created_at && (new Date(r.created_at).getTime() + 9 * 3600000 >= new Date(todayKst + "T00:00:00Z").getTime())
+          && (new Date(r.created_at).getTime() + 9 * 3600000 < new Date(todayKst + "T00:00:00Z").getTime() + 86400000)
+      ).length;
+      return { total: data.length, today: todayCount };
     } catch (_) {
       return null;
     }
