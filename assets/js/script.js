@@ -1267,12 +1267,12 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
-    <!-- 게임 설명 -->
-    ${detail.comment ? `
+    <!-- 게임 설명 (한국어 소스만 표시) -->
+    ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
       <div class="sheet-section">
         <p class="sheet-section-label">게임 설명</p>
         <div class="sheet-desc-wrap">
-          <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment}</p>
+          <p class="sheet-desc is-clamped" id="sheetDesc">${detail.comment.replace(/\n/g, '<br>')}</p>
           <button class="sheet-desc-toggle" id="sheetDescToggle" onclick="toggleSheetDesc(this)">+ 더보기</button>
         </div>
       </div>
