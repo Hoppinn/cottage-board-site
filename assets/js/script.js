@@ -1306,9 +1306,19 @@ function openGameSheet(gameKey){
         <button class="sheet-reaction-btn" id="sheetLikeBtn" onclick="onSheetLike(this)">👍 0</button>
         <button class="sheet-reaction-btn" id="sheetDislikeBtn" onclick="onSheetDislike(this)">👎 0</button>
       </div>
-      <textarea class="sheet-comment-input" id="sheetCommentInput"
-        placeholder="코멘트를 남겨보세요" rows="3"></textarea>
-      <button class="sheet-comment-submit" onclick="onSheetComment()">등록</button>
+      <div class="sheet-comments-area">
+        <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
+          <p class="sheet-comments-empty">코멘트를 남겨보세요</p>
+        </div>
+        <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)">💬 코멘트 남기기</button>
+        <div class="sheet-comment-form" id="sheetCommentForm-${gameKey}" style="display:none">
+          <textarea class="sheet-comment-mini-input" id="sheetCommentMiniInput-${gameKey}" rows="2" placeholder="게임에 대한 코멘트를 남겨보세요"></textarea>
+          <div class="sheet-comment-form-row">
+            <button class="sheet-comment-form-submit" data-game-id="${gameKey}" onclick="onSubmitComment(this)">등록</button>
+            <button class="sheet-comment-form-cancel" data-game-id="${gameKey}" onclick="onCancelComment(this)">취소</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 전체 게임에서 보기 -->
@@ -1326,7 +1336,7 @@ function openGameSheet(gameKey){
   initPlayWidget(gameKey).catch(() => {});
   initSheetDescToggle();
   initSheetMechsToggle();
-  initSheetCommentGate();
+  initSheetComments(gameKey).catch(() => {});
 }
 
 function closeGameSheet(){
@@ -1396,14 +1406,66 @@ function onSheetDislike() { requireLogin(() => {}); }
 function onSheetComment() { requireLogin(() => {}); }
 
 function initSheetCommentGate() {
-  const ta = document.getElementById('sheetCommentInput');
-  if (!ta) return;
-  ta.addEventListener('focus', function() {
-    if (!window.getKakaoUser?.()) {
-      ta.blur();
-      if (typeof kakaoLogin === 'function') kakaoLogin();
-    }
+  // legacy — textarea removed, now using onOpenCommentInput gate
+}
+
+async function initSheetComments(gameKey) {
+  const listEl = document.getElementById(`sheetCommentsList-${gameKey}`);
+  if (!listEl) return;
+  if (!window.supabase || !window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') return;
+  try {
+    const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+    const { data, error } = await db
+      .from('game_comments')
+      .select('comment_text, created_at')
+      .eq('game_key', gameKey)
+      .order('created_at', { ascending: false })
+      .limit(10);
+    if (error || !data?.length) return;
+    listEl.innerHTML = '';
+    data.forEach(c => {
+      const item = document.createElement('div');
+      item.className = 'sheet-comment-item';
+      const p = document.createElement('p');
+      p.className = 'sheet-comment-text';
+      p.textContent = c.comment_text;
+      item.appendChild(p);
+      listEl.appendChild(item);
+    });
+  } catch(e) {}
+}
+
+function onOpenCommentInput(btn) {
+  const gameKey = btn.dataset.gameId;
+  requireLogin(() => {
+    const form = document.getElementById(`sheetCommentForm-${gameKey}`);
+    if (!form) return;
+    form.style.display = 'block';
+    document.getElementById(`sheetCommentMiniInput-${gameKey}`)?.focus();
   });
+}
+
+async function onSubmitComment(btn) {
+  const gameKey = btn.dataset.gameId;
+  const input = document.getElementById(`sheetCommentMiniInput-${gameKey}`);
+  const text = input?.value?.trim();
+  if (!text) { input?.focus(); return; }
+  if (!window.supabase || !window.SUPABASE_CONFIG?.url) return;
+  const db = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+  btn.disabled = true;
+  try {
+    await db.from('game_comments').insert({ game_key: gameKey, comment_text: text });
+    input.value = '';
+    document.getElementById(`sheetCommentForm-${gameKey}`).style.display = 'none';
+    await initSheetComments(gameKey);
+  } catch(e) {}
+  btn.disabled = false;
+}
+
+function onCancelComment(btn) {
+  const gameKey = btn.dataset.gameId;
+  const form = document.getElementById(`sheetCommentForm-${gameKey}`);
+  if (form) form.style.display = 'none';
 }
 
 function goToShelf(shelfGroupId){
@@ -1513,12 +1575,14 @@ async function initPlayWidget(gameKey) {
 // 플레이 위젯 클릭 이벤트
 if (gameSheetContent) {
   gameSheetContent.addEventListener("click", async function (e) {
-    // "플레이했어요" 버튼 → 인원 선택 토글
+    // "플레이했어요" 버튼 → 로그인 게이트 → 인원 선택 토글
     const playBtn = e.target.closest(".sheet-played-btn");
     if (playBtn) {
-      const gameKey = playBtn.dataset.gameId;
-      const select = document.getElementById(`sheetPlayerSelect-${gameKey}`);
-      if (select) select.style.display = select.style.display === "none" ? "block" : "none";
+      requireLogin(() => {
+        const gameKey = playBtn.dataset.gameId;
+        const select = document.getElementById(`sheetPlayerSelect-${gameKey}`);
+        if (select) select.style.display = select.style.display === "none" ? "block" : "none";
+      });
       return;
     }
 

@@ -2294,6 +2294,7 @@ body.sheet-open{
   display:flex;
   flex-direction:column;
   gap:1px;
+  align-items:center;
 }
 
 .sheet-stats-main{
@@ -2336,8 +2337,9 @@ body.sheet-open{
   position:sticky;
   top:0;
   z-index:20;
-  margin:0 -20px 14px;
+  margin:-22px -20px 14px;
   padding:10px 20px;
+  border-radius:28px 28px 0 0;
   display:flex;
   align-items:center;
   gap:10px;
@@ -2407,7 +2409,7 @@ body.sheet-open{
 }
 
 .sheet-section-label{
-  margin:0 0 5px;
+  margin:0 0 12px;
   font-size:11px;
   font-weight:900;
   color:var(--muted);
@@ -3074,4 +3076,108 @@ body.sheet-open{
 
 .cottage-rating-info{
   font-size:0.8rem; color:#999; margin:0;
+}
+
+/* 코멘트 섹션 */
+.sheet-comments-area{
+  margin-top:8px;
+}
+
+.sheet-comments-list{
+  margin-bottom:8px;
+}
+
+.sheet-comments-empty{
+  margin:0;
+  padding:10px 12px;
+  font-size:12px;
+  font-weight:700;
+  color:#b0a080;
+  background:#fffbf4;
+  border:1px dashed #e0d0b0;
+  border-radius:8px;
+  text-align:center;
+}
+
+.sheet-comment-item{
+  padding:8px 12px;
+  margin-bottom:6px;
+  background:var(--paper);
+  border:1px solid #ead8b8;
+  border-radius:8px;
+}
+
+.sheet-comment-text{
+  margin:0;
+  font-size:13px;
+  color:#3a3025;
+  font-weight:600;
+  line-height:1.5;
+  word-break:keep-all;
+}
+
+.sheet-comment-write-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:5px 12px;
+  border:1.5px solid #c8dba8;
+  border-radius:999px;
+  background:#f4f8ee;
+  color:#3B6D11;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+  margin-top:4px;
+}
+
+.sheet-comment-write-btn:hover{
+  background:#e7f1d8;
+}
+
+.sheet-comment-form{
+  margin-top:8px;
+}
+
+.sheet-comment-mini-input{
+  width:100%;
+  box-sizing:border-box;
+  padding:8px 10px;
+  border:1.5px solid #ead8b8;
+  border-radius:8px;
+  background:var(--cream);
+  font-size:13px;
+  color:#3a3025;
+  resize:none;
+  font-family:inherit;
+  line-height:1.5;
+}
+
+.sheet-comment-form-row{
+  display:flex;
+  gap:6px;
+  margin-top:5px;
+}
+
+.sheet-comment-form-submit{
+  flex:1;
+  padding:7px;
+  border:none;
+  border-radius:8px;
+  background:var(--green);
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.sheet-comment-form-cancel{
+  padding:7px 14px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  background:#fff;
+  color:#888;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
 }
