@@ -46,8 +46,7 @@
       "Bash(node *)",
       "PowerShell(Rename-Item *)",
       "Bash(npm install *)",
-      "Bash(node game-system/tools/4-label-translator/description-translator.js *)",
-      "Bash(ANTHROPIC_API_KEY=\"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\" node game-system/tools/4-label-translator/description-translator.js --summary)"
+      "Bash(node game-system/tools/4-label-translator/description-translator.js *)"
     ]
   }
 }
