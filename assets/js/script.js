@@ -369,9 +369,9 @@ function getGameDetailImage(game){
 
 function cleanTitleForYoutubeSearch(title) {
   return (title || '')
-    .replace(/\+.*$/, '')
     .replace(/\s*\([^)]*\)/g, '')
     .replace(/\s*\[[^\]]*\]/g, '')
+    .replace(/\+.*$/, '')
     .trim();
 }
 
