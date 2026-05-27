@@ -2575,15 +2575,31 @@ body.sheet-open{
 }
 .sheet-highlight-item:last-child{ margin-bottom:0; }
 
+/* 플레이 박스 (플레이됨 헤더 + 기록 목록을 하나의 카드로) */
+.sheet-play-box{
+  border:1px solid #ead8b8;
+  border-radius:10px;
+  background:var(--paper);
+  overflow:hidden;
+}
 .sheet-play-record{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:8px;
   padding:8px 12px;
-  border-radius:10px;
-  border:1px solid #ead8b8;
-  background:var(--paper);
+}
+.sheet-play-box .sheet-my-records-list{
+  border-top:1px solid #f0e8d8;
+  padding:4px 0 6px;
+}
+.sheet-play-box .sheet-my-record-item{
+  padding:6px 12px;
+  border-bottom:1px solid #f0e8d8;
+  border-radius:0;
+}
+.sheet-play-box .sheet-my-record-item:last-child{
+  border-bottom:none;
 }
 
 .sheet-play-count{
@@ -2930,8 +2946,10 @@ body.sheet-open{
   display:none;
 }
 .sheet-toggle-arrow{
-  font-size:11px;
-  opacity:.6;
+  font-size:16px;
+  color:var(--green-2);
+  opacity:1;
+  line-height:1;
 }
 
 /* 코멘트 헤더 */
@@ -2940,7 +2958,7 @@ body.sheet-open{
   align-items:center;
   justify-content:space-between;
   gap:6px;
-  padding:4px 0 6px;
+  padding:8px 12px 6px;
 }
 .sheet-comments-count-label{
   font-size:12px;
@@ -3644,44 +3662,44 @@ body.sheet-open{
   font-size:0.8rem; color:#999; margin:0;
 }
 
-/* 코멘트 섹션 */
+/* 코멘트 섹션 (헤더+목록 하나의 카드) */
 .sheet-comments-area{
   margin-top:8px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  flex-wrap:wrap;
+  border:1px solid #ead8b8;
+  border-radius:10px;
+  background:var(--paper);
+  overflow:hidden;
 }
 
 .sheet-comments-list{
-  flex:1;
-  min-width:0;
+  display:block;
 }
-
-/* 코멘트가 있으면 전체 폭 차지 → 버튼 아래 줄로 */
 .sheet-comments-list.has-comments{
-  width:100%;
-  flex:none;
-  margin-bottom:6px;
+  border-top:1px solid #f0e8d8;
 }
 
 .sheet-comments-empty{
   font-size:11px;
   color:#bbb;
-  white-space:nowrap;
+  padding:6px 12px 8px;
+  display:block;
 }
 
 .sheet-comment-item{
   padding:8px 12px;
-  margin-bottom:6px;
-  background:var(--paper);
-  border:1px solid #ead8b8;
-  border-radius:8px;
+  margin-bottom:0;
+  background:none;
+  border:none;
+  border-bottom:1px solid #f0e8d8;
+  border-radius:0;
   display:flex;
   flex-direction:column;
   gap:2px;
   position:relative;
   padding-right:52px;
+}
+.sheet-comment-item:last-child{
+  border-bottom:none;
 }
 
 .sheet-comment-nickname{

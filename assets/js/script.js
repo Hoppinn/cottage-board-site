@@ -1870,7 +1870,8 @@ async function initPlayWidget(gameKey) {
 
   const listId = `sheetAllRecords-${gameKey}`;
 
-  // 플레이 카운트 + 기록 버튼 + 접기 화살표
+  // 플레이 박스 (헤더 + 기록 목록 하나의 카드)
+  html += `<div class="sheet-play-box">`;
   html += `<div class="sheet-play-record">
     <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
     <div class="sheet-play-record-btns">
@@ -1904,6 +1905,8 @@ async function initPlayWidget(gameKey) {
       }).join("")}
     </div>`;
   }
+
+  html += `</div>`; // .sheet-play-box 닫기
 
   widget.innerHTML = html;
 }
