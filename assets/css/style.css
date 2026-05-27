@@ -4110,6 +4110,60 @@ body.sheet-open{
   padding:10px 12px 8px;
   position:relative;
 }
+.intro-card-edit{
+  position:absolute;
+  top:6px;right:30px;
+  background:none;
+  border:none;
+  color:rgba(255,255,255,0.8);
+  font-size:13px;
+  cursor:pointer;
+  padding:2px 5px;
+  border-radius:4px;
+  line-height:1;
+}
+.intro-card-edit:hover{color:#fff;background:rgba(0,0,0,0.2);}
+.intro-edit-form{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.intro-edit-btns{
+  display:flex;
+  gap:8px;
+  margin-top:2px;
+}
+.intro-edit-save-btn{
+  flex:1;
+  padding:8px;
+  background:var(--green);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.intro-edit-save-btn:hover{background:var(--green-2);}
+.intro-edit-cancel-btn{
+  flex:1;
+  padding:8px;
+  background:#f0ede8;
+  color:#3a3025;
+  font-size:12px;
+  font-weight:800;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+.intro-edit-cancel-btn:hover{background:#e5e0d8;}
+.intro-edit-msg{
+  font-size:11px;
+  color:#c0392b;
+  display:none;
+  margin:0;
+}
 .intro-card-del{
   position:absolute;
   top:6px;right:8px;

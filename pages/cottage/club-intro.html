@@ -180,6 +180,62 @@
       }
     }
 
+    function editIntro(id, r) {
+      const cardEl = document.querySelector(`.intro-card-news[data-id="${id}"]`);
+      if (!cardEl) return;
+      cardEl.innerHTML = `
+        <div class="intro-edit-form">
+          <div class="intro-field">
+            <label class="intro-label">닉네임 <span class="intro-required">*</span></label>
+            <input class="intro-input" id="editNick_${id}" type="text" value="${escHtml(r.nickname)}" maxlength="20">
+          </div>
+          <div class="intro-field">
+            <label class="intro-label">좋아하는 게임</label>
+            <input class="intro-input" id="editGames_${id}" type="text" value="${escHtml(r.favorite_games || '')}" maxlength="100">
+          </div>
+          <div class="intro-field">
+            <label class="intro-label">참여 가능 요일 / 시간</label>
+            <input class="intro-input" id="editAvail_${id}" type="text" value="${escHtml(r.available || '')}" maxlength="100">
+          </div>
+          <div class="intro-field">
+            <label class="intro-label">사시는 곳</label>
+            <input class="intro-input" id="editLoc_${id}" type="text" value="${escHtml(r.location || '')}" maxlength="50">
+          </div>
+          <div class="intro-edit-btns">
+            <button class="intro-edit-save-btn" type="button">저장</button>
+            <button class="intro-edit-cancel-btn" type="button">취소</button>
+          </div>
+          <p class="intro-edit-msg"></p>
+        </div>`;
+      cardEl.querySelector('.intro-edit-cancel-btn').addEventListener('click', loadIntros);
+      cardEl.querySelector('.intro-edit-save-btn').addEventListener('click', async () => {
+        const nickname = cardEl.querySelector(`#editNick_${id}`).value.trim();
+        const msg = cardEl.querySelector('.intro-edit-msg');
+        if (!nickname) {
+          msg.textContent = '닉네임을 입력해주세요.';
+          msg.style.display = 'block';
+          return;
+        }
+        const saveBtn = cardEl.querySelector('.intro-edit-save-btn');
+        saveBtn.disabled = true;
+        saveBtn.textContent = '저장 중...';
+        const { error } = await db.from('member_intros').update({
+          nickname,
+          favorite_games: cardEl.querySelector(`#editGames_${id}`).value.trim() || null,
+          available: cardEl.querySelector(`#editAvail_${id}`).value.trim() || null,
+          location: cardEl.querySelector(`#editLoc_${id}`).value.trim() || null,
+        }).eq('id', id);
+        if (!error) {
+          await loadIntros();
+        } else {
+          saveBtn.disabled = false;
+          saveBtn.textContent = '저장';
+          msg.textContent = '저장에 실패했어요. 다시 시도해주세요.';
+          msg.style.display = 'block';
+        }
+      });
+    }
+
     async function loadIntros() {
       const el = document.getElementById('introList');
       const { data, error } = await db
@@ -191,13 +247,13 @@
         return;
       }
       el.innerHTML = data.map(r => {
-        const del = canDelete(r)
-          ? `<button class="intro-card-del" data-id="${r.id}" type="button" title="삭제">✕</button>`
-          : '';
+        const canAct = canDelete(r);
+        const del  = canAct ? `<button class="intro-card-del"  data-id="${r.id}" type="button" title="삭제">✕</button>` : '';
+        const edit = canAct ? `<button class="intro-card-edit" data-id="${r.id}" type="button" title="수정">✎</button>` : '';
         return `
-        <div class="intro-card-news">
+        <div class="intro-card-news" data-id="${r.id}">
           <div class="intro-card-news-head">
-            ${del}
+            ${edit}${del}
             <div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>
             <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
           </div>
@@ -211,6 +267,11 @@
 
       el.querySelectorAll('.intro-card-del').forEach(btn => {
         btn.addEventListener('click', () => deleteIntro(btn.dataset.id));
+      });
+      el.querySelectorAll('.intro-card-edit').forEach(btn => {
+        const id = btn.dataset.id;
+        const r  = data.find(x => String(x.id) === String(id));
+        btn.addEventListener('click', () => editIntro(id, r));
       });
     }
 
