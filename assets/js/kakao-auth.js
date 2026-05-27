@@ -38,6 +38,7 @@ function kakaoLogin() {
   Kakao.Auth.authorize({
     redirectUri: window.location.origin + '/auth-callback.html',
     scope: 'profile_nickname,profile_image',
+    throughTalk: false,
   });
 }
 
