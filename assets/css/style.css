@@ -4393,3 +4393,49 @@ body.sheet-open{
   color:var(--green);
   font-weight:900;
 }
+.rules-list li code{
+  background:#f0ede8;
+  border-radius:4px;
+  padding:1px 5px;
+  font-size:12px;
+  font-family:inherit;
+  color:var(--green-2);
+  font-weight:700;
+}
+.rules-example{
+  margin-top:10px;
+  background:#f7f4ef;
+  border:1px solid #ead8b8;
+  border-radius:8px;
+  overflow:hidden;
+}
+.rules-example-label{
+  font-size:11px;
+  font-weight:800;
+  color:var(--muted);
+  padding:6px 12px 4px;
+  margin:0;
+  border-bottom:1px solid #ead8b8;
+}
+.rules-example-pre{
+  margin:0;
+  padding:10px 12px;
+  font-size:12px;
+  font-family:inherit;
+  color:#3a3025;
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:keep-all;
+}
+.rules-fulltext-link{
+  display:inline-block;
+  margin-top:10px;
+  padding:9px 16px;
+  background:var(--green);
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  border-radius:10px;
+  text-decoration:none;
+}
+.rules-fulltext-link:hover{background:var(--green-2);}
