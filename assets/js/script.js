@@ -1154,7 +1154,10 @@ const closeGameSheetButton =
 const closeGameSheetDim =
   document.querySelector('#closeGameSheetDim');
 
+let _currentSheetGameKey = null;
+
 function openGameSheet(gameKey){
+  _currentSheetGameKey = gameKey;
   const game =
     window.gameData?.[gameKey];
 
@@ -1375,6 +1378,7 @@ function closeGameSheet(){
 
   gameSheet.classList.remove('is-active');
   document.body.classList.remove('sheet-open');
+  _currentSheetGameKey = null;
 }
 
 function toggleSheetDesc(btn){
@@ -1418,6 +1422,23 @@ function initStickyBar() {
   panel._stickyCleanup = () => panel.removeEventListener('scroll', onScroll);
 }
 
+function loginFromSheet() {
+  if (typeof Kakao === 'undefined' || typeof kakaoLogin !== 'function') return;
+  // 바텀시트가 열려 있으면 ?open= 파라미터로 복원 위치 보존
+  if (_currentSheetGameKey) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('open', _currentSheetGameKey);
+    sessionStorage.setItem('kakao_login_return', url.toString());
+    Kakao.Auth.authorize({
+      redirectUri: window.location.origin + '/auth-callback.html',
+      scope: 'profile_nickname,profile_image',
+      throughTalk: false,
+    });
+  } else {
+    kakaoLogin();
+  }
+}
+
 function showLoginToast() {
   let toast = document.getElementById('loginToast');
   if (!toast) {
@@ -1426,7 +1447,7 @@ function showLoginToast() {
     toast.className = 'login-toast';
     toast.innerHTML = `
       <span>카카오 로그인 후 이용할 수 있어요</span>
-      <button onclick="if(typeof kakaoLogin==='function')kakaoLogin()" type="button">로그인</button>
+      <button onclick="loginFromSheet()" type="button">로그인</button>
     `;
     document.body.appendChild(toast);
   }
