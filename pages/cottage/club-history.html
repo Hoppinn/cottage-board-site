@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모임 기록 | 코티지보드</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+    <a class="header-center" href="../../index.html">
+      오래 머무르고 싶은, 보드게임 공간
+    </a>
+    <div class="header-actions">
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
+    </div>
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../owned-games.html">전체 게임 보기</a>
+          <a href="../store/game-location.html">게임 위치</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="./about.html">소개</a>
+          <a href="../store/price-rules.html">가격 &amp; 규칙</a>
+          <a href="./club.html">동호회</a>
+        </div>
+      </div>
+      <a href="../store/requests.html">요청하기</a>
+      <div class="menu-login-area">
+        <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
+          <img id="kakaoProfileImg" src="" alt="" style="display:none">
+          <span id="kakaoLoginText">카카오 로그인</span>
+        </button>
+        <div id="kakaoUserActions" class="menu-kakao-user-actions">
+          <button id="kakaoPhotoBtn" type="button">사진 변경</button>
+          <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>
+          <button id="kakaoLogoutBtn" type="button">로그 아웃</button>
+        </div>
+      </div>
+    </nav>
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="inner-page">
+      <h1>모임 기록</h1>
+      <div class="inner-page-body">
+        <div id="historyRoot">
+          <p class="history-loading">불러오는 중...</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    // game_id → 표시 이름 매핑
+    function getGameName(gameId) {
+      if (!window.COTTAGE_GAMES) return gameId;
+      const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(gameId));
+      return g ? (g.display || g.titleKo || g.titleEn || gameId) : gameId;
+    }
+
+    // KST 날짜 문자열 (YYYY-MM-DD)
+    function toKstDate(isoStr) {
+      const d = new Date(new Date(isoStr).getTime() + 9 * 3600000);
+      return d.toISOString().slice(0, 10);
+    }
+
+    // YYYY-MM-DD → 읽기 좋은 형태
+    function formatKstDate(dateStr) {
+      const [y, m, d] = dateStr.split('-');
+      return `${y}년 ${Number(m)}월 ${Number(d)}일`;
+    }
+
+    // 인스타 캡션 생성
+    function buildCaption(groupName, dateStr, records) {
+      const dateLabel = formatKstDate(dateStr);
+      const lines = records.map(r => {
+        const name = getGameName(r.game_id);
+        const tags = [
+          r.player_count ? `${r.player_count}명` : null,
+          r.player_names || null,
+          r.play_time_min ? `${r.play_time_min}분` : null,
+          r.score_note || null,
+        ].filter(Boolean);
+        return `- ${name}${tags.length ? ' · ' + tags.join(' · ') : ''}`;
+      });
+      return `🎲 ${groupName} (${dateLabel})\n${lines.join('\n')}\n\n#코티지보드 #보드게임`;
+    }
+
+    async function render() {
+      const root = document.getElementById('historyRoot');
+      if (!window.CottageDB) {
+        root.innerHTML = '<p class="history-empty">데이터를 불러올 수 없습니다.</p>';
+        return;
+      }
+
+      const records = await window.CottageDB.getAllPlayRecordsForHistory();
+      if (!records.length) {
+        root.innerHTML = '<p class="history-empty">아직 모임 기록이 없습니다.<br>플레이 기록 시 "모임 기록으로 남기기"를 체크해주세요.</p>';
+        return;
+      }
+
+      // group_name → date → records[]
+      const grouped = {};
+      for (const r of records) {
+        const g = r.group_name;
+        const d = toKstDate(r.created_at);
+        if (!grouped[g]) grouped[g] = {};
+        if (!grouped[g][d]) grouped[g][d] = [];
+        grouped[g][d].push(r);
+      }
+
+      let html = '';
+      for (const [groupName, dates] of Object.entries(grouped)) {
+        const totalSessions = Object.keys(dates).length;
+        html += `<div class="history-group">
+          <div class="history-group-header">
+            <span class="history-group-name">${escH(groupName)}</span>
+            <span class="history-group-count">${totalSessions}회</span>
+          </div>`;
+
+        for (const [dateStr, recs] of Object.entries(dates).sort((a, b) => b[0].localeCompare(a[0]))) {
+          const captionAttr = escAttr(buildCaption(groupName, dateStr, recs));
+          html += `<div class="history-session">
+            <div class="history-session-header">
+              <span class="history-session-date">${formatKstDate(dateStr)}</span>
+              <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션 복사</button>
+            </div>
+            <div class="history-record-list">
+              ${recs.map(r => {
+                const name = getGameName(r.game_id);
+                const tags = [
+                  r.player_count ? `👥 ${r.player_count}명` : null,
+                  r.player_names ? `🎮 ${escH(r.player_names)}` : null,
+                  r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
+                  r.score_note ? `🏆 ${escH(r.score_note)}` : null,
+                ].filter(Boolean);
+                return `<div class="history-record-item">
+                  <span class="history-game-name">${escH(name)}</span>
+                  ${tags.length ? `<div class="history-record-tags">${tags.map(t => `<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
+                </div>`;
+              }).join('')}
+            </div>
+          </div>`;
+        }
+
+        html += `</div>`;
+      }
+
+      root.innerHTML = html;
+
+      root.querySelectorAll('.history-copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const caption = btn.dataset.caption;
+          navigator.clipboard.writeText(caption).then(() => {
+            btn.textContent = '복사됨!';
+            btn.classList.add('is-copied');
+            setTimeout(() => {
+              btn.textContent = '캡션 복사';
+              btn.classList.remove('is-copied');
+            }, 2000);
+          }).catch(() => {
+            prompt('아래 텍스트를 복사해주세요', caption);
+          });
+        });
+      });
+    }
+
+    function escH(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function escAttr(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  })();
+  </script>
+
+  <footer class="site-footer">
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="https://pf.kakao.com/_ExbKxan/chat" target="_blank" rel="noopener noreferrer">← 카카오 채널 문의</a> &nbsp;<a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

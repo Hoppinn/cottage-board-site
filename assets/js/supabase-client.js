@@ -122,7 +122,7 @@
 
   // ── 플레이 기록 ─────────────────────────────────────────
 
-  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId) {
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -132,6 +132,7 @@
         score_note: scoreNote || null,
         nickname: nickname || null,
         user_id: userId || null,
+        group_name: groupName || null,
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
@@ -147,7 +148,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, created_at")
+        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, created_at")
         .eq("game_id", gameId)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -167,15 +168,44 @@
     }
   }
 
-  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note }) {
+  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note, group_name }) {
     if (!id) return { error: "invalid" };
     try {
       const { error } = await db.from("game_play_records")
-        .update({ player_count, player_names, play_time_min, score_note })
+        .update({ player_count, player_names, play_time_min, score_note, group_name: group_name || null })
         .eq("id", id);
       return error ? { error } : { success: true };
     } catch (e) {
       return { error: e };
+    }
+  }
+
+  async function getGroupNames() {
+    try {
+      const { data } = await db
+        .from("game_play_records")
+        .select("group_name")
+        .not("group_name", "is", null)
+        .neq("group_name", "");
+      if (!data) return [];
+      return [...new Set(data.map(r => r.group_name).filter(Boolean))].sort();
+    } catch (_) {
+      return [];
+    }
+  }
+
+  async function getAllPlayRecordsForHistory(limit = 500) {
+    try {
+      const { data } = await db
+        .from("game_play_records")
+        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, created_at")
+        .not("group_name", "is", null)
+        .neq("group_name", "")
+        .order("created_at", { ascending: false })
+        .limit(limit);
+      return data || [];
+    } catch (_) {
+      return [];
     }
   }
 
@@ -408,6 +438,8 @@
     deleteComment,
     updateComment,
     getGamePlayRecords,
+    getGroupNames,
+    getAllPlayRecordsForHistory,
     getGameLikeCount,
     toggleGameLike,
     hasUserLiked,

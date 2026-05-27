@@ -1905,6 +1905,7 @@ async function initPlayWidget(gameKey) {
               data-game="${gameKey}" data-id="${r.id}"
               data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
               data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
+              data-group="${escH(r.group_name || '')}"
               type="button">수정</button>
             <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
           </div>` : ""}
@@ -1935,7 +1936,8 @@ async function initPlayWidget(gameKey) {
       Number(btn.dataset.count) || 0,
       btn.dataset.names,
       Number(btn.dataset.time) || 0,
-      btn.dataset.score
+      btn.dataset.score,
+      btn.dataset.group || ''
     ));
   });
 }
@@ -1974,6 +1976,15 @@ function getOrCreatePlayModal() {
           <input class="sheet-play-detail-input is-half" id="sheetPlayModalScore" type="text" placeholder="점수 메모 (선택)" maxlength="100">
         </div>
       </div>
+      <label class="sheet-play-group-check-label">
+        <input type="checkbox" id="sheetPlayModalGroupCheck">
+        <span>모임 기록으로 남기기</span>
+      </label>
+      <div class="sheet-play-group-name-wrap" id="sheetPlayModalGroupNameWrap" style="display:none;">
+        <input class="sheet-play-detail-input" id="sheetPlayModalGroupName"
+          type="text" placeholder="모임명 (예: 코티지동호회)" list="sheetPlayGroupNameList" maxlength="50" autocomplete="off">
+        <datalist id="sheetPlayGroupNameList"></datalist>
+      </div>
       <div class="sheet-play-modal-actions">
         <button class="sheet-play-modal-cancel" onclick="onClosePlayModal()" type="button">취소</button>
         <button class="sheet-play-modal-skip" onclick="onSubmitPlayModal(true)" type="button">건너뛰기</button>
@@ -1990,7 +2001,19 @@ function getOrCreatePlayModal() {
     modal.dataset.count = btn.dataset.count;
     document.getElementById('sheetPlayModalDetails').style.display = 'block';
   });
+  modal.querySelector('#sheetPlayModalGroupCheck').addEventListener('change', e => {
+    document.getElementById('sheetPlayModalGroupNameWrap').style.display = e.target.checked ? 'block' : 'none';
+    if (!e.target.checked) document.getElementById('sheetPlayModalGroupName').value = '';
+  });
   document.body.appendChild(modal);
+
+  if (window.CottageDB) {
+    window.CottageDB.getGroupNames().then(names => {
+      const dl = document.getElementById('sheetPlayGroupNameList');
+      if (dl) dl.innerHTML = names.map(n => `<option value="${n}">`).join('');
+    });
+  }
+
   return modal;
 }
 
@@ -2003,6 +2026,10 @@ function onOpenPlayModal(gameKey) {
   document.getElementById('sheetPlayModalNames').value = '';
   document.getElementById('sheetPlayModalTime').value = '';
   document.getElementById('sheetPlayModalScore').value = '';
+  const groupCheck = document.getElementById('sheetPlayModalGroupCheck');
+  if (groupCheck) { groupCheck.checked = false; }
+  document.getElementById('sheetPlayModalGroupNameWrap').style.display = 'none';
+  document.getElementById('sheetPlayModalGroupName').value = '';
   modal.style.display = 'flex';
 }
 
@@ -2019,7 +2046,7 @@ function onClosePlayModal() {
   if (skipBtn) skipBtn.style.display = '';
 }
 
-function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote) {
+function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName) {
   const modal = getOrCreatePlayModal();
   modal.dataset.gameId = gameKey;
   modal.dataset.editId = recordId;
@@ -2038,6 +2065,19 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
   document.getElementById('sheetPlayModalNames').value = playerNames || '';
   document.getElementById('sheetPlayModalTime').value = playTimeMin || '';
   document.getElementById('sheetPlayModalScore').value = scoreNote || '';
+
+  const groupCheck = document.getElementById('sheetPlayModalGroupCheck');
+  const groupNameInput = document.getElementById('sheetPlayModalGroupName');
+  const groupWrap = document.getElementById('sheetPlayModalGroupNameWrap');
+  if (groupName) {
+    if (groupCheck) groupCheck.checked = true;
+    if (groupWrap) groupWrap.style.display = 'block';
+    if (groupNameInput) groupNameInput.value = groupName;
+  } else {
+    if (groupCheck) groupCheck.checked = false;
+    if (groupWrap) groupWrap.style.display = 'none';
+    if (groupNameInput) groupNameInput.value = '';
+  }
 
   const errEl = modal.querySelector('.sheet-play-modal-err');
   if (errEl) errEl.textContent = '';
@@ -2065,6 +2105,10 @@ async function onSubmitPlayModal(skip) {
     playTimeMin = tv ? parseInt(tv, 10) : null;
     scoreNote = document.getElementById('sheetPlayModalScore')?.value?.trim() || null;
   }
+  const groupCheck = document.getElementById('sheetPlayModalGroupCheck');
+  const groupName = (groupCheck?.checked
+    ? document.getElementById('sheetPlayModalGroupName')?.value?.trim()
+    : null) || null;
   const submitBtn = document.getElementById('sheetPlayModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
 
@@ -2074,6 +2118,7 @@ async function onSubmitPlayModal(skip) {
       player_names: playerNames,
       play_time_min: playTimeMin,
       score_note: scoreNote,
+      group_name: groupName,
     });
     if (!result?.error) {
       onClosePlayModal();
@@ -2092,7 +2137,7 @@ async function onSubmitPlayModal(skip) {
     const _u = window.getKakaoUser?.();
     const playResult = await window.CottageDB.recordGamePlay(
       gameKey, count, playerNames, playTimeMin, scoreNote,
-      _u?.nickname || null, _u?.id || null
+      _u?.nickname || null, _u?.id || null, groupName
     );
     if (!playResult?.error) {
       addMyPlayRecord(gameKey, {
