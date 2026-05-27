@@ -1511,17 +1511,19 @@ body.sheet-open{
 
 .menu-kakao-login-btn {
   width: 100%;
-  padding: 9px 12px;
+  padding: 10px 12px;
   text-align: left;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.83em;
+  font-size: 15px;
+  font-weight: 900;
   color: #c0426e;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   font-family: inherit;
+  border-radius: 12px;
 }
 
 .menu-kakao-login-btn:hover {
@@ -1529,8 +1531,8 @@ body.sheet-open{
 }
 
 .menu-kakao-login-btn #kakaoProfileImg {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -1539,7 +1541,7 @@ body.sheet-open{
 .menu-kakao-user-actions {
   display: none;
   flex-direction: row;
-  padding: 0 12px 6px;
+  padding: 2px 12px 8px;
   gap: 0;
 }
 
@@ -1548,11 +1550,13 @@ body.sheet-open{
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.78em;
-  color: #999;
-  padding: 4px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #a09080;
+  padding: 5px 0;
   text-align: center;
   font-family: inherit;
+  border-radius: 8px;
 }
 
 .menu-kakao-user-actions button:not(:last-child) {
@@ -1560,7 +1564,8 @@ body.sheet-open{
 }
 
 .menu-kakao-user-actions button:hover {
-  color: #555;
+  color: #c0426e;
+  background: #fce8ef;
 }
 
 /* =========================
