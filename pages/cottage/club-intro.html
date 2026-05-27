@@ -121,7 +121,9 @@
     const toggle = document.getElementById('introFormToggle');
     const body   = document.getElementById('introFormBody');
     const arrow  = document.getElementById('introFormArrow');
-    let open = true;
+    let open = false;
+    body.style.display = 'none';
+    arrow.textContent  = '▸';
     toggle.addEventListener('click', () => {
       open = !open;
       body.style.display = open ? '' : 'none';
