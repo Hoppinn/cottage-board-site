@@ -1915,7 +1915,19 @@ async function initPlayWidget(gameKey) {
 
   html += `</div>`; // .sheet-play-box 닫기
 
+  const wasExpanded = (() => {
+    const prev = document.getElementById(listId);
+    return prev ? !prev.classList.contains('is-collapsed') : false;
+  })();
+
   widget.innerHTML = html;
+
+  if (wasExpanded) {
+    const newList = document.getElementById(listId);
+    const newArrow = document.getElementById(`${listId}-arrow`);
+    if (newList) newList.classList.remove('is-collapsed');
+    if (newArrow) newArrow.textContent = '▴';
+  }
 
   widget.querySelectorAll('.sheet-play-edit-btn').forEach(btn => {
     btn.addEventListener('click', () => onOpenEditPlayModal(
