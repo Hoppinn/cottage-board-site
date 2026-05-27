@@ -2507,7 +2507,7 @@ body.sheet-open{
   display:block;
   font-size:11px;
   font-weight:900;
-  color:var(--muted);
+  color:var(--green-2);
   margin-bottom:2px;
   letter-spacing:0.03em;
 }
@@ -2588,7 +2588,7 @@ body.sheet-open{
 .sheet-play-count{
   font-size:13px;
   font-weight:700;
-  color:#3a3025;
+  color:var(--green-2);
 }
 .sheet-play-record-btns{
   display:flex;
@@ -2781,7 +2781,7 @@ body.sheet-open{
 .sheet-feedback-reactions{
   display:flex;
   gap:8px;
-  margin-bottom:10px;
+  margin-top:10px;
 }
 
 /* 게임 설명 + 더보기/접기 */
@@ -2845,7 +2845,7 @@ body.sheet-open{
 
 .sheet-meta-label{
   flex-shrink:0;
-  color:var(--muted);
+  color:var(--green-2);
   font-weight:900;
 }
 
@@ -2944,7 +2944,7 @@ body.sheet-open{
 .sheet-comments-count-label{
   font-size:12px;
   font-weight:700;
-  color:var(--muted);
+  color:var(--green-2);
   flex:1;
 }
 .sheet-comments-header-right{

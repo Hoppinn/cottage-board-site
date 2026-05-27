@@ -1333,14 +1333,10 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
-    <!-- 플레이기록 · 따봉 · 코멘트 -->
+    <!-- 플레이기록 · 코멘트 · 따봉 -->
     <div class="sheet-social-group">
       <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
       <div class="sheet-reactions-footer">
-        <div class="sheet-feedback-reactions">
-          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
-          <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎 0</button>
-        </div>
         <div class="sheet-comments-area">
           <div class="sheet-comments-header">
             <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">코멘트</span>
@@ -1354,6 +1350,10 @@ function openGameSheet(gameKey){
           <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
             <span class="sheet-comments-empty">코멘트가 없습니다</span>
           </div>
+        </div>
+        <div class="sheet-feedback-reactions">
+          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
+          <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎 0</button>
         </div>
       </div>
     </div>
