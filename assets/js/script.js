@@ -1073,9 +1073,13 @@ if(headerSearchResults){
       return;
     }
 
-    openGameSheet(resultButton.dataset.game);
-
-    
+    const gameKey = resultButton.dataset.game;
+    if(gameSheet && gameSheetContent){
+      openGameSheet(gameKey);
+    } else {
+      window.location.href =
+        `${rootPath}pages/owned-games.html?open=${encodeURIComponent(gameKey)}`;
+    }
   });
 }
 
@@ -3200,6 +3204,12 @@ if(ownedSearchInput){
 updateRecommendFilterText();
 renderMechanicOptions();
 updateOwnedGames();
+
+// ?open=gameKey → 게임 시트 자동 오픈 (타이틀 검색에서 이동)
+const _openGameKey = new URLSearchParams(window.location.search).get('open');
+if(_openGameKey && gameSheet){
+  openGameSheet(decodeURIComponent(_openGameKey));
+}
 
 const recommendTitle =
   document.getElementById("recommendTitle");
