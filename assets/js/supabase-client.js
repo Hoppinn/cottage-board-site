@@ -122,7 +122,7 @@
 
   // ── 플레이 기록 ─────────────────────────────────────────
 
-  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname) {
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -131,6 +131,7 @@
         play_time_min: playTimeMin || null,
         score_note: scoreNote || null,
         nickname: nickname || null,
+        user_id: userId || null,
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
@@ -146,7 +147,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, nickname, player_count, player_names, play_time_min, score_note, created_at")
+        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, created_at")
         .eq("game_id", gameId)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -200,7 +201,7 @@
     try {
       const { data } = await db
         .from("game_comments")
-        .select("id, comment_text, nickname, created_at")
+        .select("id, comment_text, nickname, user_id, created_at")
         .eq("game_key", gameKey)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -210,12 +211,17 @@
     }
   }
 
-  async function insertComment(gameKey, commentText, nickname) {
+  async function insertComment(gameKey, commentText, nickname, userId) {
     if (!gameKey || !commentText?.trim()) return { error: "invalid" };
     try {
       const { data, error } = await db
         .from("game_comments")
-        .insert({ game_key: gameKey, comment_text: commentText.trim(), nickname: nickname || null })
+        .insert({
+          game_key: gameKey,
+          comment_text: commentText.trim(),
+          nickname: nickname || null,
+          user_id: userId || null,
+        })
         .select("id");
       if (error) return { error };
       return { success: true, id: data?.[0]?.id };

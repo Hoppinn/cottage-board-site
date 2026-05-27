@@ -2497,22 +2497,35 @@ body.sheet-open{
 .sheet-mechs-wrap{
   margin-bottom:12px;
 }
-
+.sheet-mechs-section{
+  margin-bottom:8px;
+}
+.sheet-mechs-section:last-of-type{
+  margin-bottom:4px;
+}
+.sheet-mechs-label{
+  display:block;
+  font-size:11px;
+  font-weight:900;
+  color:var(--muted);
+  margin-bottom:2px;
+  letter-spacing:0.03em;
+}
 .sheet-mechs-text{
-  margin:0 0 3px;
+  margin:0;
   font-size:13px;
   font-weight:600;
   color:#3a3025;
   line-height:1.5;
+  word-break:keep-all;
 }
-
 .sheet-mechs-text.is-clamped{
   display:-webkit-box;
-  -webkit-line-clamp:1;
+  -webkit-line-clamp:2;
+  line-clamp:2;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
-
 .sheet-mechs-toggle{
   border:none;
   background:none;
@@ -2576,6 +2589,21 @@ body.sheet-open{
   font-size:13px;
   font-weight:700;
   color:#3a3025;
+}
+.sheet-play-record-btns{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  flex-shrink:0;
+}
+.sheet-records-toggle-btn{
+  border:none;
+  background:none;
+  padding:4px 6px;
+  cursor:pointer;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1;
 }
 
 .sheet-played-btn{
@@ -2902,22 +2930,35 @@ body.sheet-open{
   opacity:.6;
 }
 
-/* 코멘트 접기/펼치기 헤더 */
-.sheet-comments-toggle{
+/* 코멘트 헤더 */
+.sheet-comments-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  width:100%;
+  gap:6px;
   padding:4px 0 6px;
-  border:none;
-  background:none;
+}
+.sheet-comments-count-label{
   font-size:12px;
   font-weight:700;
   color:var(--muted);
-  cursor:pointer;
-  text-align:left;
+  flex:1;
 }
-.sheet-comments-toggle:hover{
+.sheet-comments-header-right{
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+.sheet-comments-toggle-btn{
+  border:none;
+  background:none;
+  padding:4px 6px;
+  cursor:pointer;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1;
+}
+.sheet-comments-toggle-btn:hover{
   color:#3a3025;
 }
 
@@ -3700,17 +3741,17 @@ body.sheet-open{
   display:inline-flex;
   align-items:center;
   gap:4px;
-  padding:5px 12px;
+  padding:4px 10px;
   border:1.5px solid #c8dba8;
   border-radius:999px;
   background:#f4f8ee;
   color:#3B6D11;
-  font-size:12px;
+  font-size:11px;
   font-weight:900;
   cursor:pointer;
-  margin-top:4px;
+  white-space:nowrap;
+  flex-shrink:0;
 }
-
 .sheet-comment-write-btn:hover{
   background:#e7f1d8;
 }
@@ -3811,4 +3852,89 @@ body.sheet-open{
   display:flex;
   gap:6px;
   justify-content:flex-end;
+}
+
+/* 플레이 기록 모달 */
+.sheet-play-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:2200;
+  background:rgba(0,0,0,0.5);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  box-sizing:border-box;
+}
+.sheet-play-modal-box{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  width:min(90vw,400px);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.18);
+}
+.sheet-play-modal-title{
+  margin:0;
+  font-size:14px;
+  font-weight:800;
+  color:#3a3025;
+}
+.sheet-play-modal-label{
+  margin:0;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+}
+.sheet-play-modal-details{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.sheet-play-modal-actions{
+  display:flex;
+  gap:6px;
+  margin-top:4px;
+}
+.sheet-play-modal-cancel{
+  flex:1;
+  padding:9px;
+  border:1.5px solid #ddd;
+  border-radius:10px;
+  background:none;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  color:var(--muted);
+  font-family:inherit;
+}
+.sheet-play-modal-skip{
+  flex:1;
+  padding:9px;
+  border:1.5px solid var(--green);
+  border-radius:10px;
+  background:none;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  color:var(--green);
+  font-family:inherit;
+}
+.sheet-play-modal-submit{
+  flex:1;
+  padding:9px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  font-family:inherit;
+}
+.sheet-play-modal-submit:disabled{
+  opacity:0.5;
+  cursor:default;
 }
