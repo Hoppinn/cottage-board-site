@@ -367,6 +367,14 @@ function getGameDetailImage(game){
   );
 }
 
+function cleanTitleForYoutubeSearch(title) {
+  return (title || '')
+    .replace(/\+.*$/, '')
+    .replace(/\s*\([^)]*\)/g, '')
+    .replace(/\s*\[[^\]]*\]/g, '')
+    .trim();
+}
+
 function formatRating(value){
   const num = Number(value);
   if(!value || !Number.isFinite(num) || num <= 0) return "-";
@@ -1243,7 +1251,7 @@ function openGameSheet(gameKey){
             📍 ${shelfLabel}
           </button>
           <a class="sheet-yt-btn"
-            href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(detail.title + ' 룰 설명')}`}"
+            href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
             target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
             룰영상 보기
