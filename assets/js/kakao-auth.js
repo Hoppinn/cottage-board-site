@@ -35,13 +35,10 @@ function initKakaoAuth() {
 
 function kakaoLogin() {
   sessionStorage.setItem('kakao_login_return', window.location.href);
-  const callbackUrl = window.location.origin + '/auth-callback.html';
-  window.location.href =
-    'https://kauth.kakao.com/oauth/authorize' +
-    '?response_type=code' +
-    '&client_id=' + KAKAO_REST_KEY +
-    '&redirect_uri=' + encodeURIComponent(callbackUrl) +
-    '&scope=profile_nickname%2Cprofile_image';
+  Kakao.Auth.authorize({
+    redirectUri: window.location.origin + '/auth-callback.html',
+    scope: 'profile_nickname,profile_image',
+  });
 }
 
 function kakaoLogout() {
