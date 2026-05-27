@@ -3963,3 +3963,413 @@ body.sheet-open{
   opacity:0.5;
   cursor:default;
 }
+
+/* ── 동호회 서브페이지 공통 ─────────────────────────────── */
+.club-breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:14px;
+}
+.club-breadcrumb-parent{
+  color:var(--green-2);
+  text-decoration:none;
+}
+.club-breadcrumb-parent:hover{
+  text-decoration:underline;
+}
+.club-breadcrumb-sep{
+  color:#c8b8a0;
+}
+.club-breadcrumb-current{
+  color:var(--muted);
+}
+
+/* ── 가입인사 입력 폼 ──────────────────────────────────── */
+.intro-form-card{
+  background:var(--paper);
+  border:1px solid #ead8b8;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:20px;
+}
+.intro-form-title{
+  margin:0 0 12px;
+  font-size:14px;
+  font-weight:800;
+  color:#3a3025;
+}
+.intro-form-fields{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:14px;
+}
+.intro-field{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.intro-label{
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+}
+.intro-required{color:#c0392b;}
+.intro-input{
+  padding:8px 10px;
+  border:1.5px solid #ead8b8;
+  border-radius:8px;
+  background:#fff;
+  font-size:13px;
+  color:#3a3025;
+  font-family:inherit;
+}
+.intro-input:focus{outline:none;border-color:var(--green);}
+.intro-submit-btn{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  background:var(--green);
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+  font-family:inherit;
+}
+.intro-submit-btn:hover{background:var(--green-2);}
+.intro-submit-btn:disabled{opacity:0.5;cursor:default;}
+.intro-submit-msg{
+  display:none;
+  margin:8px 0 0;
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+}
+.intro-list-empty,.intro-list-loading{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  padding:32px 0;
+}
+
+/* ── 가입인사 카드뉴스 그리드 ─────────────────────────── */
+.intro-card-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  padding:4px 0 24px;
+}
+@media(min-width:520px){
+  .intro-card-grid{grid-template-columns:repeat(3,1fr);}
+}
+.intro-card-news{
+  background:var(--paper);
+  border:1px solid #ead8b8;
+  border-radius:12px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.intro-card-news-head{
+  background:var(--green);
+  color:#fff;
+  padding:10px 12px 8px;
+  position:relative;
+}
+.intro-card-del{
+  position:absolute;
+  top:6px;right:8px;
+  background:none;
+  border:none;
+  color:rgba(255,255,255,0.6);
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+  padding:2px 4px;
+  border-radius:4px;
+  line-height:1;
+}
+.intro-card-del:hover{color:#fff;background:rgba(0,0,0,0.2);}
+.intro-card-news-nickname{
+  font-size:14px;
+  font-weight:900;
+  line-height:1.2;
+  word-break:keep-all;
+}
+.intro-card-news-date{
+  font-size:10px;
+  font-weight:500;
+  opacity:0.75;
+  margin-top:2px;
+}
+.intro-card-news-body{
+  padding:9px 12px 11px;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  flex:1;
+}
+.intro-card-news-row{
+  display:flex;
+  gap:4px;
+  font-size:11px;
+  line-height:1.45;
+}
+.intro-card-news-label{
+  flex-shrink:0;
+  color:var(--muted);
+  font-weight:700;
+}
+.intro-card-news-val{
+  color:#3a3025;
+  font-weight:600;
+  word-break:keep-all;
+}
+
+/* ── 모임참여 페이지 ───────────────────────────────────── */
+.meeting-section{
+  margin-bottom:28px;
+}
+.meeting-section-label{
+  font-size:11px;
+  font-weight:800;
+  color:var(--green-2);
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  margin:0 0 8px;
+}
+.meeting-section-title{
+  font-size:15px;
+  font-weight:800;
+  color:#3a3025;
+  margin:0 0 12px;
+}
+
+/* 투표 */
+.poll-box{
+  background:var(--paper);
+  border:1px solid #ead8b8;
+  border-radius:14px;
+  overflow:hidden;
+}
+.poll-header{
+  padding:14px 16px 10px;
+  border-bottom:1px solid #f0e8d8;
+}
+.poll-question{
+  font-size:14px;
+  font-weight:800;
+  color:#3a3025;
+  margin:0 0 2px;
+  word-break:keep-all;
+}
+.poll-week{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:600;
+}
+.poll-options{
+  padding:10px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.poll-option{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border:1.5px solid #e0d5c0;
+  border-radius:10px;
+  background:#fff;
+  cursor:pointer;
+  overflow:hidden;
+  text-align:left;
+  width:100%;
+  font-family:inherit;
+  transition:border-color 0.12s;
+}
+.poll-option:hover:not(:disabled){border-color:var(--green);}
+.poll-option.my-vote{border-color:var(--green);background:#f4f8ee;}
+.poll-option-bar{
+  position:absolute;
+  left:0;top:0;bottom:0;
+  background:#e7f1d8;
+  z-index:0;
+  border-radius:8px 0 0 8px;
+  pointer-events:none;
+}
+.poll-option-text{
+  position:relative;
+  z-index:1;
+  flex:1;
+  font-size:13px;
+  font-weight:700;
+  color:#3a3025;
+  word-break:keep-all;
+}
+.poll-option-count{
+  position:relative;
+  z-index:1;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  white-space:nowrap;
+}
+.poll-option.my-vote .poll-option-text{color:var(--green-2);}
+.poll-option.my-vote .poll-option-count{color:var(--green-2);}
+.poll-footer{
+  padding:10px 16px;
+  border-top:1px solid #f0e8d8;
+}
+.poll-total{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:600;
+}
+.poll-login-hint{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:600;
+  margin-top:4px;
+}
+.poll-empty{
+  padding:32px 16px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* 모임 댓글 게시판 */
+.meeting-comments-box{
+  background:var(--paper);
+  border:1px solid #ead8b8;
+  border-radius:14px;
+  overflow:hidden;
+}
+.meeting-comments-write{
+  padding:12px 14px;
+  border-bottom:1px solid #f0e8d8;
+}
+.meeting-comment-input{
+  width:100%;
+  box-sizing:border-box;
+  padding:9px 11px;
+  border:1.5px solid #ead8b8;
+  border-radius:8px;
+  background:#fff;
+  font-size:13px;
+  color:#3a3025;
+  resize:none;
+  font-family:inherit;
+  line-height:1.5;
+}
+.meeting-comment-input:focus{outline:none;border-color:var(--green);}
+.meeting-comment-row{
+  display:flex;
+  gap:6px;
+  margin-top:6px;
+  justify-content:flex-end;
+}
+.meeting-comment-submit{
+  padding:7px 16px;
+  border:none;
+  border-radius:8px;
+  background:var(--green);
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+  font-family:inherit;
+}
+.meeting-comment-submit:disabled{opacity:0.5;cursor:default;}
+.meeting-login-prompt{
+  padding:14px 16px;
+  font-size:13px;
+  color:var(--muted);
+  font-weight:600;
+  text-align:center;
+  border-bottom:1px solid #f0e8d8;
+}
+.meeting-comments-list{
+  padding:4px 0 6px;
+}
+.meeting-comment-item{
+  padding:10px 14px;
+  border-bottom:1px solid #f5f0e8;
+  position:relative;
+}
+.meeting-comment-item:last-child{border-bottom:none;}
+.meeting-comment-meta{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:3px;
+}
+.meeting-comment-text{
+  font-size:13px;
+  font-weight:600;
+  color:#3a3025;
+  line-height:1.5;
+  word-break:keep-all;
+  margin:0;
+}
+.meeting-comment-delete{
+  position:absolute;
+  top:8px;right:10px;
+  background:none;
+  border:none;
+  color:#c8b8a0;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+  padding:2px 4px;
+  border-radius:4px;
+}
+.meeting-comment-delete:hover{color:#c0392b;background:#fff0ee;}
+.meeting-comments-empty{
+  padding:24px 14px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ── 회칙 페이지 ─────────────────────────────────────── */
+.rules-block{
+  margin-bottom:22px;
+}
+.rules-block-title{
+  font-size:13px;
+  font-weight:800;
+  color:var(--green-2);
+  margin:0 0 8px;
+}
+.rules-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.rules-list li{
+  font-size:13px;
+  font-weight:600;
+  color:#3a3025;
+  padding-left:14px;
+  position:relative;
+  line-height:1.55;
+  word-break:keep-all;
+}
+.rules-list li::before{
+  content:"·";
+  position:absolute;
+  left:0;
+  color:var(--green);
+  font-weight:900;
+}

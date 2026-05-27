@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모임 참여 | 코티지보드 동호회</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+    <a class="header-center" href="../../index.html">
+      오래 머무르고 싶은, 보드게임 공간
+    </a>
+    <div class="header-actions">
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
+    </div>
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../owned-games.html">전체 게임 보기</a>
+          <a href="../store/game-location.html">게임 위치</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="./about.html">소개</a>
+          <a href="../store/price-rules.html">가격 &amp; 규칙</a>
+          <a href="./club.html">동호회</a>
+        </div>
+      </div>
+      <a href="../store/requests.html">요청하기</a>
+      <div class="menu-login-area">
+        <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
+          <img id="kakaoProfileImg" src="" alt="" style="display:none">
+          <span id="kakaoLoginText">카카오 로그인</span>
+        </button>
+        <div id="kakaoUserActions" class="menu-kakao-user-actions">
+          <button id="kakaoPhotoBtn" type="button">사진 변경</button>
+          <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>
+          <button id="kakaoLogoutBtn" type="button">로그 아웃</button>
+        </div>
+      </div>
+    </nav>
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="inner-page">
+      <div class="club-breadcrumb">
+        <a class="club-breadcrumb-parent" href="./club.html">동호회</a>
+        <span class="club-breadcrumb-sep">›</span>
+        <span class="club-breadcrumb-current">모임 참여</span>
+      </div>
+      <h1>모임 참여</h1>
+      <div class="inner-page-body">
+
+        <!-- 이번 주 투표 -->
+        <div class="meeting-section">
+          <p class="meeting-section-label">투표</p>
+          <p class="meeting-section-title" id="pollTitle">이번 주 모임 일정</p>
+          <div class="poll-box" id="pollBox">
+            <div class="poll-empty">불러오는 중...</div>
+          </div>
+        </div>
+
+        <!-- 댓글 게시판 -->
+        <div class="meeting-section">
+          <p class="meeting-section-label">게시판</p>
+          <p class="meeting-section-title">자유 댓글</p>
+          <div class="meeting-comments-box">
+            <div id="meetingWriteArea"></div>
+            <div class="meeting-comments-list" id="meetingCommentList">
+              <div class="meeting-comments-empty">불러오는 중...</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    const cfg = window.SUPABASE_CONFIG;
+    if (!cfg?.url || !window.supabase) return;
+    const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+    const MY_CMT_KEY = 'cottage_my_meeting_cmts';
+
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      const kst = new Date(d.getTime() + 9 * 3600000);
+      const yy = String(kst.getUTCFullYear()).slice(2);
+      const mm = String(kst.getUTCMonth() + 1).padStart(2, '0');
+      const dd = String(kst.getUTCDate()).padStart(2, '0');
+      const day = ['일','월','화','수','목','금','토'][kst.getUTCDay()];
+      return `${yy}.${mm}.${dd}(${day})`;
+    }
+    function isAdmin() { return window.isOwner?.() || false; }
+    function getUser() { return window.getKakaoUser?.() || null; }
+
+    function getMyCmtIds() {
+      try { return JSON.parse(localStorage.getItem(MY_CMT_KEY) || '[]'); } catch { return []; }
+    }
+    function saveMyCmtId(id) {
+      const ids = getMyCmtIds();
+      if (!ids.includes(id)) { ids.push(id); localStorage.setItem(MY_CMT_KEY, JSON.stringify(ids)); }
+    }
+    function removeMyCmtId(id) {
+      localStorage.setItem(MY_CMT_KEY, JSON.stringify(getMyCmtIds().filter(x => x !== id)));
+    }
+    function canDeleteCmt(c) {
+      if (isAdmin()) return true;
+      const u = getUser();
+      if (u && c.user_id && String(c.user_id) === String(u.id)) return true;
+      return getMyCmtIds().includes(c.id);
+    }
+
+    // ── 투표 ─────────────────────────────────────────────────
+    let currentPollId = null;
+    let myVoteOptionId = null;
+
+    async function loadPoll() {
+      const box = document.getElementById('pollBox');
+
+      const { data: polls } = await db
+        .from('club_polls')
+        .select('id, week_label, question')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (!polls?.length) {
+        box.innerHTML = '<div class="poll-empty">현재 진행 중인 투표가 없어요.</div>';
+        return;
+      }
+
+      const poll = polls[0];
+      currentPollId = poll.id;
+      document.getElementById('pollTitle').textContent = poll.week_label || '이번 주 모임 일정';
+
+      const [{ data: options }, { data: votes }] = await Promise.all([
+        db.from('club_poll_options')
+          .select('id, option_text, sort_order')
+          .eq('poll_id', poll.id)
+          .order('sort_order'),
+        db.from('club_poll_votes')
+          .select('option_id, user_id')
+          .eq('poll_id', poll.id),
+      ]);
+
+      const u = getUser();
+      myVoteOptionId = null;
+      if (u) {
+        const mine = (votes || []).find(v => String(v.user_id) === String(u.id));
+        myVoteOptionId = mine?.option_id || null;
+      }
+
+      const countMap = {};
+      (votes || []).forEach(v => {
+        countMap[v.option_id] = (countMap[v.option_id] || 0) + 1;
+      });
+      const total = votes?.length || 0;
+
+      const optHtml = (options || []).map(opt => {
+        const cnt = countMap[opt.id] || 0;
+        const pct = total ? Math.round(cnt / total * 100) : 0;
+        const isMine = opt.id === myVoteOptionId;
+        return `<button class="poll-option${isMine ? ' my-vote' : ''}" data-optid="${opt.id}" type="button">
+          <div class="poll-option-bar" style="width:${pct}%"></div>
+          <span class="poll-option-text">${escHtml(opt.option_text)}</span>
+          <span class="poll-option-count">${cnt}명${isMine ? ' ✓' : ''}</span>
+        </button>`;
+      }).join('');
+
+      const loginHint = u ? '' : '<p class="poll-login-hint">투표하려면 카카오 로그인이 필요해요.</p>';
+
+      box.innerHTML = `
+        <div class="poll-header">
+          <p class="poll-question">${escHtml(poll.question)}</p>
+          <span class="poll-week">${escHtml(poll.week_label || '')}</span>
+        </div>
+        <div class="poll-options">${optHtml}</div>
+        <div class="poll-footer">
+          <span class="poll-total">총 ${total}명 참여</span>
+          ${loginHint}
+        </div>`;
+
+      box.querySelectorAll('.poll-option').forEach(btn => {
+        btn.addEventListener('click', () => vote(poll.id, Number(btn.dataset.optid)));
+      });
+    }
+
+    async function vote(pollId, optionId) {
+      const u = getUser();
+      if (!u) {
+        alert('투표하려면 카카오 로그인이 필요해요.');
+        return;
+      }
+      const userId = String(u.id);
+
+      // 기존 투표 확인
+      const { data: existing } = await db
+        .from('club_poll_votes')
+        .select('id, option_id')
+        .eq('poll_id', pollId)
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (existing) {
+        if (existing.option_id === optionId) return; // 이미 같은 항목 선택
+        await db.from('club_poll_votes').delete().eq('id', existing.id);
+      }
+
+      await db.from('club_poll_votes').insert({
+        poll_id: pollId,
+        option_id: optionId,
+        user_id: userId,
+      });
+
+      await loadPoll();
+    }
+
+    // ── 댓글 ─────────────────────────────────────────────────
+    async function loadComments() {
+      const list = document.getElementById('meetingCommentList');
+      const writeArea = document.getElementById('meetingWriteArea');
+
+      const u = getUser();
+
+      // 작성 영역 렌더
+      if (u) {
+        writeArea.innerHTML = `
+          <div class="meeting-comments-write">
+            <textarea class="meeting-comment-input" id="meetingCmtInput" rows="2" placeholder="자유롭게 댓글을 남겨보세요"></textarea>
+            <div class="meeting-comment-row">
+              <button class="meeting-comment-submit" id="meetingCmtSubmit" type="button">등록</button>
+            </div>
+          </div>`;
+        document.getElementById('meetingCmtSubmit').addEventListener('click', submitComment);
+      } else {
+        writeArea.innerHTML = `<div class="meeting-login-prompt">댓글을 남기려면 카카오 로그인이 필요해요.</div>`;
+      }
+
+      const { data, error } = await db
+        .from('club_meeting_comments')
+        .select('id, nickname, user_id, content, created_at')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error || !data?.length) {
+        list.innerHTML = '<div class="meeting-comments-empty">아직 댓글이 없어요. 첫 번째로 남겨보세요!</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(c => {
+        const del = canDeleteCmt(c)
+          ? `<button class="meeting-comment-delete" data-id="${c.id}" type="button" title="삭제">✕</button>`
+          : '';
+        return `<div class="meeting-comment-item">
+          ${del}
+          <div class="meeting-comment-meta">${escHtml(c.nickname)} · ${formatDate(c.created_at)}</div>
+          <p class="meeting-comment-text">${escHtml(c.content)}</p>
+        </div>`;
+      }).join('');
+
+      list.querySelectorAll('.meeting-comment-delete').forEach(btn => {
+        btn.addEventListener('click', () => deleteComment(btn.dataset.id));
+      });
+    }
+
+    async function submitComment() {
+      const u = getUser();
+      if (!u) return;
+      const input = document.getElementById('meetingCmtInput');
+      const content = input?.value?.trim();
+      if (!content) return;
+
+      const btn = document.getElementById('meetingCmtSubmit');
+      btn.disabled = true;
+
+      const { data: ins, error } = await db.from('club_meeting_comments').insert({
+        nickname: u.nickname || '익명',
+        user_id: String(u.id),
+        content,
+      }).select('id');
+
+      btn.disabled = false;
+      if (!error) {
+        if (ins?.[0]?.id) saveMyCmtId(ins[0].id);
+        if (input) input.value = '';
+        await loadComments();
+      }
+    }
+
+    async function deleteComment(id) {
+      if (!confirm('댓글을 삭제할까요?')) return;
+      const { error } = await db.from('club_meeting_comments').delete().eq('id', id);
+      if (!error) {
+        removeMyCmtId(id);
+        await loadComments();
+      }
+    }
+
+    // 카카오 로그인/로그아웃 후 새로고침
+    window.addEventListener('cottage-auth-changed', () => {
+      loadPoll();
+      loadComments();
+    });
+
+    loadPoll();
+    loadComments();
+  })();
+  </script>
+
+  <footer class="site-footer">
+    <p><a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="https://pf.kakao.com/_ExbKxan/chat" target="_blank" rel="noopener noreferrer">← 카카오 채널 문의</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

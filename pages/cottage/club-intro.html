@@ -59,6 +59,11 @@
 
   <main>
     <section class="inner-page">
+      <div class="club-breadcrumb">
+        <a class="club-breadcrumb-parent" href="./club.html">동호회</a>
+        <span class="club-breadcrumb-sep">›</span>
+        <span class="club-breadcrumb-current">가입 인사</span>
+      </div>
       <h1>가입 인사</h1>
       <div class="inner-page-body">
 
@@ -87,9 +92,9 @@
           <p class="intro-submit-msg" id="introSubmitMsg"></p>
         </div>
 
-        <!-- 목록 -->
-        <div class="intro-list" id="introList">
-          <div class="intro-list-loading">불러오는 중...</div>
+        <!-- 카드뉴스 그리드 -->
+        <div class="intro-card-grid" id="introList">
+          <p class="intro-list-loading" style="grid-column:1/-1">불러오는 중...</p>
         </div>
 
       </div>
@@ -111,13 +116,46 @@
     if (!cfg?.url || !window.supabase) return;
     const db = window.supabase.createClient(cfg.url, cfg.anonKey);
 
+    const MY_KEY = 'cottage_my_intros';
+
     function escHtml(str) {
       return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
     function formatDate(iso) {
       const d = new Date(iso);
-      return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+      const kst = new Date(d.getTime() + 9 * 3600000);
+      return `${kst.getUTCFullYear()}.${String(kst.getUTCMonth()+1).padStart(2,'0')}.${String(kst.getUTCDate()).padStart(2,'0')}`;
+    }
+
+    function isAdmin() { return window.isOwner?.() || false; }
+    function getCurrentUser() { return window.getKakaoUser?.() || null; }
+
+    function getMyIds() {
+      try { return JSON.parse(localStorage.getItem(MY_KEY) || '[]'); } catch { return []; }
+    }
+    function saveMyId(id) {
+      const ids = getMyIds();
+      if (!ids.includes(id)) { ids.push(id); localStorage.setItem(MY_KEY, JSON.stringify(ids)); }
+    }
+    function removeMyId(id) {
+      localStorage.setItem(MY_KEY, JSON.stringify(getMyIds().filter(x => x !== id)));
+    }
+
+    function canDelete(r) {
+      if (isAdmin()) return true;
+      const u = getCurrentUser();
+      if (u && r.user_id && String(r.user_id) === String(u.id)) return true;
+      return getMyIds().includes(r.id);
+    }
+
+    async function deleteIntro(id) {
+      if (!confirm('이 가입 인사를 삭제할까요?')) return;
+      const { error } = await db.from('member_intros').delete().eq('id', id);
+      if (!error) {
+        removeMyId(id);
+        await loadIntros();
+      }
     }
 
     async function loadIntros() {
@@ -127,20 +165,31 @@
         .select('*')
         .order('created_at', { ascending: false });
       if (error || !data?.length) {
-        el.innerHTML = '<p class="intro-list-empty">아직 인사가 없어요. 첫 번째로 남겨보세요!</p>';
+        el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">아직 인사가 없어요. 첫 번째로 남겨보세요!</p>';
         return;
       }
-      el.innerHTML = data.map(r => `
-        <div class="intro-card">
-          <div class="intro-card-header">
-            <span class="intro-card-nickname">${escHtml(r.nickname)}</span>
-            <span class="intro-card-date">${formatDate(r.created_at)}</span>
+      el.innerHTML = data.map(r => {
+        const del = canDelete(r)
+          ? `<button class="intro-card-del" data-id="${r.id}" type="button" title="삭제">✕</button>`
+          : '';
+        return `
+        <div class="intro-card-news">
+          <div class="intro-card-news-head">
+            ${del}
+            <div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>
+            <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
           </div>
-          ${r.favorite_games ? `<p class="intro-card-row"><span class="intro-card-label">🎲 게임</span>${escHtml(r.favorite_games)}</p>` : ''}
-          ${r.available ? `<p class="intro-card-row"><span class="intro-card-label">📅 요일/시간</span>${escHtml(r.available)}</p>` : ''}
-          ${r.location ? `<p class="intro-card-row"><span class="intro-card-label">📍 지역</span>${escHtml(r.location)}</p>` : ''}
-        </div>
-      `).join('');
+          <div class="intro-card-news-body">
+            ${r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : ''}
+            ${r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : ''}
+            ${r.location ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📍</span><span class="intro-card-news-val">${escHtml(r.location)}</span></div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+
+      el.querySelectorAll('.intro-card-del').forEach(btn => {
+        btn.addEventListener('click', () => deleteIntro(btn.dataset.id));
+      });
     }
 
     document.getElementById('introSubmitBtn').addEventListener('click', async () => {
@@ -162,12 +211,14 @@
       btn.disabled = true;
       btn.textContent = '등록 중...';
 
-      const { error } = await db.from('member_intros').insert({
+      const u = getCurrentUser();
+      const { data: ins, error } = await db.from('member_intros').insert({
         nickname,
         favorite_games: games || null,
         available: avail || null,
         location: loc || null,
-      });
+        user_id: u?.id ? String(u.id) : null,
+      }).select('id');
 
       btn.disabled = false;
       btn.textContent = '인사 남기기';
@@ -178,6 +229,8 @@
         msg.style.display = 'block';
         return;
       }
+
+      if (ins?.[0]?.id) saveMyId(ins[0].id);
 
       ['introNickname','introGames','introAvailable','introLocation'].forEach(id => {
         document.getElementById(id).value = '';
@@ -194,6 +247,9 @@
         if (e.key === 'Enter') document.getElementById('introSubmitBtn').click();
       });
     });
+
+    // 로그인/로그아웃 시 삭제 버튼 표시 여부 갱신
+    window.addEventListener('cottage-auth-changed', loadIntros);
 
     loadIntros();
   })();
