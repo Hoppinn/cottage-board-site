@@ -2531,10 +2531,11 @@ body.sheet-open{
   background:none;
   padding:0;
   font-size:12px;
-  font-weight:900;
-  color:#5f823f;
+  font-weight:700;
+  color:var(--muted);
   cursor:pointer;
   text-decoration:underline;
+  text-underline-offset:2px;
 }
 
 /* 코멘트 등록 버튼 */
