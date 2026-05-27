@@ -3427,7 +3427,7 @@ body.sheet-open{
   align-items:center;
   gap:6px;
 }
-.rules-list{
+.price-rules-list{
   list-style:none;
   margin:0;
   padding:0;
@@ -3435,7 +3435,7 @@ body.sheet-open{
   flex-direction:column;
   gap:8px;
 }
-.rules-list li{
+.price-rules-list li{
   display:flex;
   align-items:flex-start;
   gap:10px;
@@ -3449,7 +3449,7 @@ body.sheet-open{
   line-height:1.5;
   word-break:keep-all;
 }
-.rules-list li::before{
+.price-rules-list li::before{
   content:"•";
   color:#78983d;
   font-size:16px;
@@ -4369,7 +4369,7 @@ body.sheet-open{
   color:var(--green-2);
   margin:0 0 8px;
 }
-.rules-list{
+.club-rules-list{
   list-style:none;
   padding:0;
   margin:0;
@@ -4377,7 +4377,7 @@ body.sheet-open{
   flex-direction:column;
   gap:6px;
 }
-.rules-list li{
+.club-rules-list li{
   font-size:13px;
   font-weight:600;
   color:#3a3025;
@@ -4386,14 +4386,14 @@ body.sheet-open{
   line-height:1.55;
   word-break:keep-all;
 }
-.rules-list li::before{
+.club-rules-list li::before{
   content:"·";
   position:absolute;
   left:0;
   color:var(--green);
   font-weight:900;
 }
-.rules-list li code{
+.club-rules-list li code{
   background:#f0ede8;
   border-radius:4px;
   padding:1px 5px;
@@ -4427,6 +4427,13 @@ body.sheet-open{
   white-space:pre-wrap;
   word-break:keep-all;
 }
+.rules-inline-link{
+  color:var(--green-2);
+  font-weight:700;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+.rules-inline-link:hover{color:var(--green);}
 .rules-fulltext-link{
   display:inline-block;
   margin-top:10px;

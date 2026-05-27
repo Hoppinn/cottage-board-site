@@ -53525,8 +53525,8 @@ const gameData = {
   "엔들리스윈확장2": {
     "id": "엔들리스윈확장2",
     "title": {
-      "display": "엔들리스윈(+확장2)",
-      "owned": "엔들리스윈(+확장2)",
+      "display": "엔들리스윈터(+확장2)",
+      "owned": "엔들리스윈터(+확장2)",
       "bgg": "Endless Winter: Paleoamericans"
     },
     "bgg": {
