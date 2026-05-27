@@ -2925,6 +2925,9 @@ body.sheet-open{
   font-weight:700;
   color:var(--muted);
 }
+.sheet-my-records-list.is-collapsed .sheet-my-record-item:not(:first-child){
+  display:none;
+}
 .sheet-toggle-arrow{
   font-size:11px;
   opacity:.6;
@@ -3684,6 +3687,9 @@ body.sheet-open{
   font-size:11px;
   font-weight:700;
   color:var(--muted);
+}
+.sheet-comments-list.is-collapsed .sheet-comment-item:not(:first-child){
+  display:none;
 }
 
 .sheet-comment-text{

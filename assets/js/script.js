@@ -1,4 +1,4 @@
-const CHOSEONG_LIST = [
+﻿const CHOSEONG_LIST = [
   "ㄱ","ㄲ","ㄴ","ㄷ","ㄸ",
   "ㄹ","ㅁ","ㅂ","ㅃ","ㅅ",
   "ㅆ","ㅇ","ㅈ","ㅉ","ㅊ",
@@ -1351,7 +1351,7 @@ function openGameSheet(gameKey){
               </button>
             </div>
           </div>
-          <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}" style="display:none;">
+          <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
             <span class="sheet-comments-empty">코멘트가 없습니다</span>
           </div>
         </div>
@@ -1594,9 +1594,9 @@ function toggleSheetComments(gameKey) {
   const list = document.getElementById(`sheetCommentsList-${gameKey}`);
   const arrow = document.getElementById(`sheetCommentsArrow-${gameKey}`);
   if (!list) return;
-  const expanded = list.style.display !== "none";
-  list.style.display = expanded ? "none" : "block";
-  if (arrow) arrow.textContent = expanded ? "▾" : "▴";
+  const collapsed = list.classList.toggle('is-collapsed');
+  list.dataset.open = collapsed ? "0" : "1";
+  if (arrow) arrow.textContent = collapsed ? "▾" : "▴";
 }
 
 async function initSheetComments(gameKey) {
@@ -1605,15 +1605,19 @@ async function initSheetComments(gameKey) {
   const arrowEl = document.getElementById(`sheetCommentsArrow-${gameKey}`);
   if (!listEl || !window.CottageDB) return;
   const comments = await window.CottageDB.getGameComments(gameKey);
+  const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
   if (!comments.length) {
     if (countEl) countEl.textContent = "코멘트";
-    listEl.style.display = "block";
-    listEl.classList.remove('has-comments');
+    if (toggleBtn) toggleBtn.style.display = "none";
+    listEl.classList.remove('is-collapsed', 'has-comments');
     listEl.innerHTML = '<span class="sheet-comments-empty">코멘트가 없습니다</span>';
     return;
   }
   if (countEl) countEl.textContent = `코멘트 ${comments.length}개`;
-  if (listEl.style.display !== "block") listEl.style.display = "none";
+  if (toggleBtn) toggleBtn.style.display = comments.length > 1 ? "" : "none";
+  // 이전에 열었으면 유지, 아니면 접힌 상태로 시작
+  const wasOpen = listEl.dataset.open === "1";
+  listEl.classList.toggle('is-collapsed', !wasOpen);
   const myIds = getMyCommentIds();
   const currentUserId = window.getKakaoUser?.()?.id || null;
   listEl.classList.add('has-comments');
@@ -1828,9 +1832,8 @@ function togglePlayRecords(listId) {
   const list = document.getElementById(listId);
   const arrow = document.getElementById(`${listId}-arrow`);
   if (!list) return;
-  const expanded = list.style.display !== "none";
-  list.style.display = expanded ? "none" : "block";
-  if (arrow) arrow.textContent = expanded ? "▾" : "▴";
+  const collapsed = list.classList.toggle('is-collapsed');
+  if (arrow) arrow.textContent = collapsed ? "▾" : "▴";
 }
 
 // ── 플레이 위젯 ─────────────────────────────────────────
@@ -1872,13 +1875,13 @@ async function initPlayWidget(gameKey) {
     <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
     <div class="sheet-play-record-btns">
       <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
-      ${allRecords.length ? `<button class="sheet-records-toggle-btn" onclick="togglePlayRecords('${listId}')" type="button"><span class="sheet-toggle-arrow" id="${listId}-arrow">▾</span></button>` : ""}
+      ${allRecords.length > 1 ? `<button class="sheet-records-toggle-btn" onclick="togglePlayRecords('${listId}')" type="button"><span class="sheet-toggle-arrow" id="${listId}-arrow">▾</span></button>` : ""}
     </div>
   </div>`;
 
   // 전체 플레이 기록 목록 (접기/펼치기)
   if (allRecords.length) {
-    html += `<div class="sheet-my-records-list" id="${listId}" style="display:none;">
+    html += `<div class="sheet-my-records-list is-collapsed" id="${listId}">
       ${allRecords.map(r => {
         const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
           || (r.id && myRecordIds.has(String(r.id)));
