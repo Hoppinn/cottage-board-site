@@ -38,7 +38,7 @@ function kakaoLogin() {
   const callbackUrl = window.location.origin + '/auth-callback.html';
   window.location.href =
     'https://kauth.kakao.com/oauth/authorize' +
-    '?response_type=token' +
+    '?response_type=code' +
     '&client_id=' + KAKAO_REST_KEY +
     '&redirect_uri=' + encodeURIComponent(callbackUrl) +
     '&scope=profile_nickname%2Cprofile_image';
