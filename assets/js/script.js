@@ -1331,7 +1331,11 @@ function openGameSheet(gameKey){
           <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎 0</button>
         </div>
         <div class="sheet-comments-area">
-          <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
+          <button class="sheet-comments-toggle" id="sheetCommentsToggle-${gameKey}" onclick="toggleSheetComments('${gameKey}')" type="button">
+            <span id="sheetCommentsCount-${gameKey}">코멘트</span>
+            <span class="sheet-toggle-arrow" id="sheetCommentsArrow-${gameKey}">▾</span>
+          </button>
+          <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}" style="display:none;">
             <span class="sheet-comments-empty">코멘트가 없습니다</span>
           </div>
           <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)">💬 코멘트 남기기</button>
@@ -1513,11 +1517,11 @@ async function onSheetDislike(btn) {
 function onSheetComment() { requireLogin(() => {}); }
 
 async function onCancelPlayRecord(gameKey, id) {
-  if (!confirm('플레이 기록을 삭제할까요?')) return;
+  if (!confirm('이 플레이 기록을 삭제할까요?')) return;
   if (!window.CottageDB) return;
   const result = await window.CottageDB.deleteGamePlay(id);
   if (!result.error) {
-    localStorage.removeItem(`cottage_played_${gameKey}`);
+    removeMyPlayRecord(gameKey, id);
     await initPlayWidget(gameKey);
   }
 }
@@ -1537,14 +1541,36 @@ function removeMyCommentId(id) {
   localStorage.setItem('cottage_my_comments', JSON.stringify(getMyCommentIds().filter(x => x !== id)));
 }
 
+function toggleSheetComments(gameKey) {
+  const list = document.getElementById(`sheetCommentsList-${gameKey}`);
+  const arrow = document.getElementById(`sheetCommentsArrow-${gameKey}`);
+  if (!list) return;
+  const expanded = list.style.display !== "none";
+  list.style.display = expanded ? "none" : "block";
+  if (arrow) arrow.textContent = expanded ? "▾" : "▴";
+}
+
 async function initSheetComments(gameKey) {
   const listEl = document.getElementById(`sheetCommentsList-${gameKey}`);
+  const countEl = document.getElementById(`sheetCommentsCount-${gameKey}`);
+  const arrowEl = document.getElementById(`sheetCommentsArrow-${gameKey}`);
   if (!listEl || !window.CottageDB) return;
   const comments = await window.CottageDB.getGameComments(gameKey);
   if (!comments.length) {
+    if (countEl) countEl.textContent = "코멘트";
+    if (arrowEl) arrowEl.style.display = "none";
+    listEl.style.display = "block";
     listEl.classList.remove('has-comments');
     listEl.innerHTML = '<span class="sheet-comments-empty">코멘트가 없습니다</span>';
     return;
+  }
+  if (countEl) countEl.textContent = `코멘트 ${comments.length}개`;
+  if (arrowEl) arrowEl.style.display = "";
+  // 이미 펼쳐진 상태가 아니면 접힌 채로 유지
+  if (listEl.style.display === "block") {
+    // 이미 열려 있으면 그대로 유지
+  } else {
+    listEl.style.display = "none";
   }
   const myIds = getMyCommentIds();
   listEl.classList.add('has-comments');
@@ -1708,6 +1734,56 @@ async function initCottageRatingWidget(gameKey) {
   renderRatingWidget(widget, gameKey, ratingData, myRating);
 }
 
+// ── 플레이 기록 localStorage 헬퍼 ──────────────────────
+
+function getMyPlayRecords(gameKey) {
+  try {
+    const d = localStorage.getItem(`cottage_play_records_${gameKey}`);
+    if (d) return JSON.parse(d);
+  } catch {}
+  // 구형 단일 포맷 마이그레이션
+  try {
+    const old = localStorage.getItem(`cottage_played_${gameKey}`);
+    if (old) {
+      const p = JSON.parse(old);
+      const rec = (p && typeof p === "object") ? p : { id: old !== "1" ? old : null };
+      const arr = [rec];
+      localStorage.setItem(`cottage_play_records_${gameKey}`, JSON.stringify(arr));
+      localStorage.removeItem(`cottage_played_${gameKey}`);
+      return arr;
+    }
+  } catch {
+    const old = localStorage.getItem(`cottage_played_${gameKey}`);
+    if (old) {
+      const arr = [{ id: old !== "1" ? old : null }];
+      localStorage.setItem(`cottage_play_records_${gameKey}`, JSON.stringify(arr));
+      localStorage.removeItem(`cottage_played_${gameKey}`);
+      return arr;
+    }
+  }
+  return [];
+}
+
+function addMyPlayRecord(gameKey, rec) {
+  const arr = getMyPlayRecords(gameKey);
+  arr.push(rec);
+  localStorage.setItem(`cottage_play_records_${gameKey}`, JSON.stringify(arr));
+}
+
+function removeMyPlayRecord(gameKey, id) {
+  const arr = getMyPlayRecords(gameKey).filter(r => String(r.id) !== String(id));
+  localStorage.setItem(`cottage_play_records_${gameKey}`, JSON.stringify(arr));
+}
+
+function togglePlayRecords(listId) {
+  const list = document.getElementById(listId);
+  const arrow = document.getElementById(`${listId}-arrow`);
+  if (!list) return;
+  const expanded = list.style.display !== "none";
+  list.style.display = expanded ? "none" : "block";
+  if (arrow) arrow.textContent = expanded ? "▾" : "▴";
+}
+
 // ── 플레이 위젯 ─────────────────────────────────────────
 
 async function initPlayWidget(gameKey) {
@@ -1724,16 +1800,7 @@ async function initPlayWidget(gameKey) {
     window.CottageDB.getPlayHighlights(gameKey),
   ]);
 
-  // localStorage: 신규=JSON, 구형=문자열 id/"1"
-  const playedRaw = localStorage.getItem(`cottage_played_${gameKey}`);
-  let alreadyPlayed = !!playedRaw, playedId = null, canCancelPlay = false, playedInfo = null;
-  if (playedRaw) {
-    try {
-      const p = JSON.parse(playedRaw);
-      if (p && typeof p === "object") { playedId = p.id; canCancelPlay = !!p.id; playedInfo = p; }
-      else { playedId = playedRaw; canCancelPlay = playedRaw !== "1"; }
-    } catch { playedId = playedRaw; canCancelPlay = playedRaw !== "1"; }
-  }
+  const myRecords = getMyPlayRecords(gameKey);
 
   function escH(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
@@ -1745,44 +1812,54 @@ async function initPlayWidget(gameKey) {
     </div>`;
   }
 
+  // 플레이 카운트 + 기록 버튼 (항상 표시)
   html += `<div class="sheet-play-record">
     <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
-    ${alreadyPlayed
-      ? `<span class="sheet-played-recorded">✅ 기록됨${canCancelPlay ? ` <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${playedId}')" type="button">취소</button>` : ""}</span>`
-      : `<button class="sheet-played-btn" data-game-id="${gameKey}" type="button">플레이했어요</button>`
-    }
+    <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
   </div>`;
 
-  if (playedInfo && (playedInfo.playerCount || playedInfo.playerNames || playedInfo.playTimeMin || playedInfo.scoreNote)) {
-    html += `<div class="sheet-play-info">
-      ${playedInfo.playerCount ? `<span class="sheet-play-info-tag">👥 ${playedInfo.playerCount}명</span>` : ""}
-      ${playedInfo.playerNames ? `<span class="sheet-play-info-tag">🎮 ${escH(playedInfo.playerNames)}</span>` : ""}
-      ${playedInfo.playTimeMin ? `<span class="sheet-play-info-tag">⏱ ${playedInfo.playTimeMin}분</span>` : ""}
-      ${playedInfo.scoreNote ? `<span class="sheet-play-info-tag">🏆 ${escH(playedInfo.scoreNote)}</span>` : ""}
+  // 내 기록 목록 (접기/펼치기)
+  if (myRecords.length) {
+    const listId = `sheetMyRecords-${gameKey}`;
+    html += `<button class="sheet-my-records-toggle" onclick="togglePlayRecords('${listId}')" type="button">
+      내 기록 ${myRecords.length}건 <span class="sheet-toggle-arrow" id="${listId}-arrow">▾</span>
+    </button>
+    <div class="sheet-my-records-list" id="${listId}" style="display:none;">
+      ${myRecords.map(r => `
+        <div class="sheet-my-record-item">
+          <div class="sheet-play-info">
+            ${r.playerCount ? `<span class="sheet-play-info-tag">👥 ${r.playerCount}명</span>` : ""}
+            ${r.playerNames ? `<span class="sheet-play-info-tag">🎮 ${escH(r.playerNames)}</span>` : ""}
+            ${r.playTimeMin ? `<span class="sheet-play-info-tag">⏱ ${r.playTimeMin}분</span>` : ""}
+            ${r.scoreNote ? `<span class="sheet-play-info-tag">🏆 ${escH(r.scoreNote)}</span>` : ""}
+            ${!r.playerCount && !r.playerNames && !r.playTimeMin && !r.scoreNote ? `<span class="sheet-play-info-tag">기록됨</span>` : ""}
+          </div>
+          ${r.id ? `<button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>` : ""}
+        </div>
+      `).join("")}
     </div>`;
   }
 
-  if (!alreadyPlayed) {
-    html += `<div class="sheet-player-select" id="sheetPlayerSelect-${gameKey}" style="display:none;">
-      <p class="sheet-player-select-label">몇 명이서 했나요?</p>
-      <div class="sheet-player-select-btns">
-        ${[1,2,3,4,5,6,7,8].map(n =>
-          `<button class="sheet-player-select-btn" data-count="${n}" data-game-id="${gameKey}" type="button">${n}명</button>`
-        ).join("")}
+  // 인원 선택 폼 (항상 렌더, 숨김 상태)
+  html += `<div class="sheet-player-select" id="sheetPlayerSelect-${gameKey}" style="display:none;">
+    <p class="sheet-player-select-label">몇 명이서 했나요?</p>
+    <div class="sheet-player-select-btns">
+      ${[1,2,3,4,5,6,7,8].map(n =>
+        `<button class="sheet-player-select-btn" data-count="${n}" data-game-id="${gameKey}" type="button">${n}명</button>`
+      ).join("")}
+    </div>
+    <div class="sheet-play-details" id="sheetPlayDetails-${gameKey}" style="display:none;">
+      <input class="sheet-play-detail-input" id="sheetPlayNames-${gameKey}" type="text" placeholder="플레이어 이름 (선택, 예: 김철수, 이영희)" maxlength="100">
+      <div class="sheet-play-detail-row">
+        <input class="sheet-play-detail-input is-half" id="sheetPlayTime-${gameKey}" type="number" placeholder="플레이 시간(분)" min="1" max="999">
+        <input class="sheet-play-detail-input is-half" id="sheetPlayScore-${gameKey}" type="text" placeholder="점수 메모 (선택)" maxlength="100">
       </div>
-      <div class="sheet-play-details" id="sheetPlayDetails-${gameKey}" style="display:none;">
-        <input class="sheet-play-detail-input" id="sheetPlayNames-${gameKey}" type="text" placeholder="플레이어 이름 (선택, 예: 김철수, 이영희)" maxlength="100">
-        <div class="sheet-play-detail-row">
-          <input class="sheet-play-detail-input is-half" id="sheetPlayTime-${gameKey}" type="number" placeholder="플레이 시간(분)" min="1" max="999">
-          <input class="sheet-play-detail-input is-half" id="sheetPlayScore-${gameKey}" type="text" placeholder="점수 메모 (선택)" maxlength="100">
-        </div>
-        <div class="sheet-play-detail-actions">
-          <button class="sheet-play-detail-skip" data-game-id="${gameKey}" type="button">건너뛰기</button>
-          <button class="sheet-play-detail-submit" data-game-id="${gameKey}" type="button">기록하기</button>
-        </div>
+      <div class="sheet-play-detail-actions">
+        <button class="sheet-play-detail-skip" data-game-id="${gameKey}" type="button">건너뛰기</button>
+        <button class="sheet-play-detail-submit" data-game-id="${gameKey}" type="button">기록하기</button>
       </div>
-    </div>`;
-  }
+    </div>
+  </div>`;
 
   widget.innerHTML = html;
 }
@@ -1832,7 +1909,16 @@ if (gameSheetContent) {
       actionBtn.disabled = true;
       if (skipBtn) skipBtn.disabled = true;
       if (submitDetailBtn) submitDetailBtn.disabled = true;
-      await window.CottageDB.recordGamePlay(gameKey, count, playerNames, playTimeMin, scoreNote);
+      const playResult = await window.CottageDB.recordGamePlay(gameKey, count, playerNames, playTimeMin, scoreNote);
+      if (!playResult?.error) {
+        addMyPlayRecord(gameKey, {
+          id: playResult?.id || null,
+          playerCount: count || null,
+          playerNames: playerNames || null,
+          playTimeMin: playTimeMin || null,
+          scoreNote: scoreNote || null,
+        });
+      }
       await initPlayWidget(gameKey);
     }
   });

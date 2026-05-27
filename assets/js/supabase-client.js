@@ -123,8 +123,6 @@
   // ── 플레이 기록 ─────────────────────────────────────────
 
   async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote) {
-    const key = `cottage_played_${gameId}`;
-    if (localStorage.getItem(key)) return { alreadyRecorded: true };
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -135,13 +133,6 @@
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
-        localStorage.setItem(key, JSON.stringify({
-          id,
-          playerCount: playerCount || null,
-          playerNames: playerNames || null,
-          playTimeMin: playTimeMin || null,
-          scoreNote: scoreNote || null,
-        }));
         return { success: true, id };
       }
       return { error };

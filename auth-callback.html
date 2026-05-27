@@ -44,10 +44,13 @@
           });
           const data = await userRes.json();
           const profile = data.kakao_account?.profile || {};
+          const userId = String(data.id);
+          const customNick = localStorage.getItem(`cottage_custom_nick_${userId}`);
+          const customPhoto = localStorage.getItem(`cottage_custom_photo_${userId}`);
           const user = {
-            id: String(data.id),
-            nickname: profile.nickname || '손님',
-            profileImage: profile.profile_image_url || '',
+            id: userId,
+            nickname: customNick || profile.nickname || '손님',
+            profileImage: customPhoto || profile.profile_image_url || '',
             kakaoProfileImage: profile.profile_image_url || '',
           };
           localStorage.setItem('kakao_user', JSON.stringify(user));

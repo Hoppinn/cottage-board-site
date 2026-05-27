@@ -105,6 +105,7 @@ function promptProfileImageChange() {
 
   function applyAndClose(imgSrc) {
     user.profileImage = imgSrc;
+    localStorage.setItem(`cottage_custom_photo_${user.id}`, imgSrc);
     localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
     updateLoginUI(user);
     modal.remove();
@@ -142,6 +143,7 @@ function promptNicknameChange() {
     return;
   }
   user.nickname = trimmed;
+  localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
   localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
   updateLoginUI(user);
 }

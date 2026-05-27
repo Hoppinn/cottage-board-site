@@ -2844,6 +2844,65 @@ body.sheet-open{
   cursor:default;
 }
 
+/* 내 플레이 기록 접기/펼치기 */
+.sheet-my-records-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  padding:5px 0;
+  border:none;
+  background:none;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  cursor:pointer;
+  text-align:left;
+  margin-top:6px;
+}
+.sheet-my-records-list{
+  margin-top:2px;
+}
+.sheet-my-record-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+  padding:5px 0;
+  border-bottom:1px solid #f0e8d8;
+}
+.sheet-my-record-item:last-child{
+  border-bottom:none;
+  padding-bottom:0;
+}
+.sheet-my-record-item .sheet-play-info{
+  margin:0;
+  flex:1;
+}
+.sheet-toggle-arrow{
+  font-size:11px;
+  opacity:.6;
+}
+
+/* 코멘트 접기/펼치기 헤더 */
+.sheet-comments-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  padding:4px 0 6px;
+  border:none;
+  background:none;
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  cursor:pointer;
+  text-align:left;
+}
+.sheet-comments-toggle:hover{
+  color:#3a3025;
+}
+
 /* 게임 정보 그룹 (메커니즘 + 디자이너) */
 .sheet-info-group{
   border:1.5px solid #ead8b8;
