@@ -4,7 +4,6 @@ const KAKAO_USER_KEY = 'kakao_user';
 
 const OWNER_KAKAO_ID = '';
 
-// SDK 즉시 초기화 (채널 버튼이 DOMContentLoaded 전에 사용할 수 있도록)
 if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   Kakao.init(KAKAO_APP_KEY);
 }
@@ -20,17 +19,21 @@ function initKakaoAuth() {
   }
 
   const btn = document.getElementById('kakaoLoginBtn');
-  if (!btn) return;
+  if (btn) {
+    btn.addEventListener('click', () => {
+      if (!getKakaoUser()) kakaoLogin();
+    });
+  }
 
-  btn.addEventListener('click', () => {
-    if (getKakaoUser()) {
-      if (confirm(getKakaoUser().nickname + '님, 로그아웃할까요?')) {
-        kakaoLogout();
-      }
-    } else {
-      kakaoLogin();
-    }
-  });
+  const nicknameBtn = document.getElementById('kakaoNicknameBtn');
+  if (nicknameBtn) {
+    nicknameBtn.addEventListener('click', promptNicknameChange);
+  }
+
+  const logoutBtn = document.getElementById('kakaoLogoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', kakaoLogout);
+  }
 }
 
 function kakaoLogin() {
@@ -47,6 +50,21 @@ function kakaoLogout() {
   updateLoginUI(null);
 }
 
+function promptNicknameChange() {
+  const user = getKakaoUser();
+  if (!user) return;
+  const newNick = window.prompt('사용할 닉네임을 입력하세요 (2~10자)', user.nickname);
+  if (newNick === null) return;
+  const trimmed = newNick.trim();
+  if (!trimmed || trimmed.length < 2 || trimmed.length > 10) {
+    alert('닉네임은 2~10자로 입력해주세요.');
+    return;
+  }
+  user.nickname = trimmed;
+  localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
+  updateLoginUI(user);
+}
+
 function getKakaoUser() {
   const saved = localStorage.getItem(KAKAO_USER_KEY);
   if (!saved) return null;
@@ -61,6 +79,7 @@ function updateLoginUI(user) {
   const btn = document.getElementById('kakaoLoginBtn');
   const profileImg = document.getElementById('kakaoProfileImg');
   const loginText = document.getElementById('kakaoLoginText');
+  const userActions = document.getElementById('kakaoUserActions');
 
   if (!btn) return;
 
@@ -75,10 +94,12 @@ function updateLoginUI(user) {
       }
     }
     if (loginText) loginText.textContent = user.nickname;
+    if (userActions) userActions.style.display = 'flex';
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
-    if (loginText) loginText.textContent = '로그인';
+    if (loginText) loginText.textContent = '카카오 로그인';
+    if (userActions) userActions.style.display = 'none';
   }
 
   window.dispatchEvent(new CustomEvent('cottage-auth-changed', { detail: { user } }));
@@ -88,6 +109,7 @@ if (typeof window !== 'undefined') {
   window.getKakaoUser = getKakaoUser;
   window.kakaoLogin = kakaoLogin;
   window.kakaoLogout = kakaoLogout;
+  window.promptNicknameChange = promptNicknameChange;
 
   window.isOwner = function () {
     if (!OWNER_KAKAO_ID) return false;

@@ -1499,6 +1499,71 @@ body.sheet-open{
 }
 
 /* =========================
+   # KAKAO LOGIN MENU
+========================= */
+
+.menu-login-area {
+  width: 100%;
+  border-top: 1px solid #e0d5c0;
+  margin-top: 4px;
+  padding-top: 2px;
+}
+
+.menu-kakao-login-btn {
+  width: 100%;
+  padding: 9px 12px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.83em;
+  color: #c0426e;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: inherit;
+}
+
+.menu-kakao-login-btn:hover {
+  background: #fce8ef;
+}
+
+.menu-kakao-login-btn #kakaoProfileImg {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.menu-kakao-user-actions {
+  display: none;
+  flex-direction: row;
+  padding: 0 12px 6px;
+  gap: 0;
+}
+
+.menu-kakao-user-actions button {
+  flex: 1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.78em;
+  color: #999;
+  padding: 4px 0;
+  text-align: center;
+  font-family: inherit;
+}
+
+.menu-kakao-user-actions button:first-child {
+  border-right: 1px solid #ddd;
+}
+
+.menu-kakao-user-actions button:hover {
+  color: #555;
+}
+
+/* =========================
    # 6-A. SITE FOOTER
 ========================= */
 
