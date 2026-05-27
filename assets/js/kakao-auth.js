@@ -2,7 +2,7 @@ const KAKAO_APP_KEY = 'a1121194b54290671b9c1521c6cfe392';
 const KAKAO_REST_KEY = '0e496d427628f9f9b239b106cb5313fa';
 const KAKAO_USER_KEY = 'kakao_user';
 
-const OWNER_KAKAO_ID = '';
+const OWNER_KAKAO_ID = '4916417947';
 
 if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   Kakao.init(KAKAO_APP_KEY);
@@ -30,6 +30,11 @@ function initKakaoAuth() {
     nicknameBtn.addEventListener('click', promptNicknameChange);
   }
 
+  const photoBtn = document.getElementById('kakaoPhotoBtn');
+  if (photoBtn) {
+    photoBtn.addEventListener('click', promptProfileImageChange);
+  }
+
   const logoutBtn = document.getElementById('kakaoLogoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', kakaoLogout);
@@ -48,6 +53,82 @@ function kakaoLogin() {
 function kakaoLogout() {
   localStorage.removeItem(KAKAO_USER_KEY);
   updateLoginUI(null);
+}
+
+function genPresetAvatar(emoji, bg) {
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 64;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  ctx.arc(32, 32, 32, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.font = '28px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, 32, 34);
+  return canvas.toDataURL();
+}
+
+const PRESET_AVATAR_CONFIGS = [
+  { emoji: '🎲', bg: '#F0A820' },
+  { emoji: '🃏', bg: '#5B7ED7' },
+  { emoji: '♟️', bg: '#5A8A4A' },
+  { emoji: '🎯', bg: '#D04040' },
+  { emoji: '🌲', bg: '#4A7D5A' },
+  { emoji: '🏡', bg: '#8B6B4A' },
+];
+
+function promptProfileImageChange() {
+  const user = getKakaoUser();
+  if (!user) return;
+
+  const presets = PRESET_AVATAR_CONFIGS.map(c => genPresetAvatar(c.emoji, c.bg));
+
+  const modal = document.createElement('div');
+  modal.className = 'photo-picker-modal';
+  modal.innerHTML = `
+    <div class="photo-picker-panel">
+      <p class="photo-picker-title">프로필 사진 변경</p>
+      <div class="photo-picker-presets">
+        ${presets.map((url, i) => `<button class="photo-preset-btn" data-idx="${i}" type="button"><img src="${url}" alt="프리셋 ${i + 1}"></button>`).join('')}
+      </div>
+      <label class="photo-upload-btn">
+        📁 내 사진 업로드
+        <input type="file" accept="image/*" style="display:none" id="photoFileInput">
+      </label>
+      ${user.kakaoProfileImage ? `<button class="photo-kakao-reset-btn" type="button">카카오 사진으로 돌아가기</button>` : ''}
+      <button class="photo-picker-close" type="button">취소</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  function applyAndClose(imgSrc) {
+    user.profileImage = imgSrc;
+    localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
+    updateLoginUI(user);
+    modal.remove();
+  }
+
+  modal.querySelector('#photoFileInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => applyAndClose(ev.target.result);
+    reader.readAsDataURL(file);
+  });
+
+  modal.querySelectorAll('.photo-preset-btn').forEach((btn, i) => {
+    btn.addEventListener('click', () => applyAndClose(presets[i]));
+  });
+
+  const resetBtn = modal.querySelector('.photo-kakao-reset-btn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => applyAndClose(user.kakaoProfileImage || ''));
+  }
+
+  modal.querySelector('.photo-picker-close').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 }
 
 function promptNicknameChange() {
@@ -110,6 +191,7 @@ if (typeof window !== 'undefined') {
   window.kakaoLogin = kakaoLogin;
   window.kakaoLogout = kakaoLogout;
   window.promptNicknameChange = promptNicknameChange;
+  window.promptProfileImageChange = promptProfileImageChange;
 
   window.isOwner = function () {
     if (!OWNER_KAKAO_ID) return false;

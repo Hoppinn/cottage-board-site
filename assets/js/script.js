@@ -1301,39 +1301,41 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
-    <!-- 메커니즘 · 테마 -->
-    ${mechanicsDisplay.length || categoriesDisplay.length ? `
-      <div class="sheet-mechs-wrap">
-        <p class="sheet-mechs-text is-clamped" id="sheetMechsText">${[
-          mechanicsDisplay.length ? `진행: ${mechanicsDisplay.join(" · ")}` : "",
-          categoriesDisplay.length ? `테마: ${categoriesDisplay.join(" · ")}` : ""
-        ].filter(Boolean).join("　　")}</p>
-        <button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">+ 더보기</button>
+    <!-- 메커니즘 · 테마 + 디자이너 -->
+    ${mechanicsDisplay.length || categoriesDisplay.length || detail.bgg.designers?.length ? `
+      <div class="sheet-info-group">
+        ${mechanicsDisplay.length || categoriesDisplay.length ? `
+          <div class="sheet-mechs-wrap">
+            <p class="sheet-mechs-text is-clamped" id="sheetMechsText">${[
+              mechanicsDisplay.length ? `진행: ${mechanicsDisplay.join(" · ")}` : "",
+              categoriesDisplay.length ? `테마: ${categoriesDisplay.join(" · ")}` : ""
+            ].filter(Boolean).join("　　")}</p>
+            <button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">+ 더보기</button>
+          </div>
+        ` : ""}
+        ${detail.bgg.designers?.length ? `
+          <div class="sheet-meta">
+            <span class="sheet-meta-label">디자이너</span>
+            <span>${detail.bgg.designers.join(", ")}</span>
+          </div>
+        ` : ""}
       </div>
     ` : ""}
 
-    <!-- 디자이너 -->
-    ${detail.bgg.designers?.length ? `
-      <div class="sheet-meta">
-        <span class="sheet-meta-label">디자이너</span>
-        <span>${detail.bgg.designers.join(", ")}</span>
-      </div>
-    ` : ""}
-
-    <!-- 플레이 기록 -->
-    <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
-
-    <!-- 따봉 + 코멘트 -->
-    <div class="sheet-reactions-footer">
-      <div class="sheet-feedback-reactions">
-        <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
-        <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎</button>
-      </div>
-      <div class="sheet-comments-area">
-        <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
-          <span class="sheet-comments-empty">코멘트가 없습니다</span>
+    <!-- 플레이기록 · 따봉 · 코멘트 -->
+    <div class="sheet-social-group">
+      <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
+      <div class="sheet-reactions-footer">
+        <div class="sheet-feedback-reactions">
+          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
+          <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎 0</button>
         </div>
-        <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)">💬 코멘트 남기기</button>
+        <div class="sheet-comments-area">
+          <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
+            <span class="sheet-comments-empty">코멘트가 없습니다</span>
+          </div>
+          <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)">💬 코멘트 남기기</button>
+        </div>
       </div>
     </div>
 
@@ -1437,17 +1439,23 @@ function requireLogin(action) {
 
 async function initSheetLikes(gameKey) {
   if (!window.CottageDB) return;
-  const [count, liked] = await Promise.all([
+  const user = window.getKakaoUser?.();
+  const userId = user ? String(user.id) : null;
+  const [likeCount, dislikeCount, liked, disliked] = await Promise.all([
     window.CottageDB.getGameLikeCount(gameKey),
-    (async () => {
-      const user = window.getKakaoUser?.();
-      return user ? window.CottageDB.hasUserLiked(gameKey, String(user.id)) : false;
-    })(),
+    window.CottageDB.getGameDislikeCount(gameKey),
+    userId ? window.CottageDB.hasUserLiked(gameKey, userId) : false,
+    userId ? window.CottageDB.hasUserDisliked(gameKey, userId) : false,
   ]);
   const likeBtn = document.getElementById('sheetLikeBtn');
   if (likeBtn) {
-    likeBtn.textContent = `👍 ${count}`;
+    likeBtn.textContent = `👍 ${likeCount}`;
     likeBtn.classList.toggle('is-active', liked);
+  }
+  const dislikeBtn = document.getElementById('sheetDislikeBtn');
+  if (dislikeBtn) {
+    dislikeBtn.textContent = `👎 ${dislikeCount}`;
+    dislikeBtn.classList.toggle('is-active', disliked);
   }
 }
 
@@ -1459,16 +1467,49 @@ async function onSheetLike(btn) {
     if (!gameKey) return;
     const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
     if (result.liked !== undefined) {
-      const count = await window.CottageDB.getGameLikeCount(gameKey);
+      const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
       const likeBtn = document.getElementById('sheetLikeBtn');
       if (likeBtn) {
-        likeBtn.textContent = `👍 ${count}`;
+        likeBtn.textContent = `👍 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);
+      }
+      if (result.liked) {
+        const dislikeCount = await window.CottageDB.getGameDislikeCount(gameKey);
+        const dislikeBtn = document.getElementById('sheetDislikeBtn');
+        if (dislikeBtn) {
+          dislikeBtn.textContent = `👎 ${dislikeCount}`;
+          dislikeBtn.classList.remove('is-active');
+        }
       }
     }
   });
 }
-function onSheetDislike(btn) { requireLogin(() => {}); }
+
+async function onSheetDislike(btn) {
+  requireLogin(async () => {
+    const user = window.getKakaoUser?.();
+    if (!user || !window.CottageDB) return;
+    const gameKey = btn?.dataset.gameId;
+    if (!gameKey) return;
+    const result = await window.CottageDB.toggleGameDislike(gameKey, String(user.id));
+    if (result.disliked !== undefined) {
+      const dislikeCount = await window.CottageDB.getGameDislikeCount(gameKey);
+      const dislikeBtn = document.getElementById('sheetDislikeBtn');
+      if (dislikeBtn) {
+        dislikeBtn.textContent = `👎 ${dislikeCount}`;
+        dislikeBtn.classList.toggle('is-active', result.disliked);
+      }
+      if (result.disliked) {
+        const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
+        const likeBtn = document.getElementById('sheetLikeBtn');
+        if (likeBtn) {
+          likeBtn.textContent = `👍 ${likeCount}`;
+          likeBtn.classList.remove('is-active');
+        }
+      }
+    }
+  });
+}
 function onSheetComment() { requireLogin(() => {}); }
 
 async function onCancelPlayRecord(gameKey, id) {

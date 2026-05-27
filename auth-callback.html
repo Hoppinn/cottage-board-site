@@ -48,6 +48,7 @@
             id: String(data.id),
             nickname: profile.nickname || '손님',
             profileImage: profile.profile_image_url || '',
+            kakaoProfileImage: profile.profile_image_url || '',
           };
           localStorage.setItem('kakao_user', JSON.stringify(user));
         } catch (e) {

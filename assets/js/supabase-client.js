@@ -291,6 +291,50 @@
     }
   }
 
+  // ── 비추 (game_dislikes) ─────────────────────────────
+  async function getGameDislikeCount(gameId) {
+    try {
+      const { count } = await db
+        .from("game_dislikes")
+        .select("*", { count: "exact", head: true })
+        .eq("game_id", gameId);
+      return count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function toggleGameDislike(gameId, userId) {
+    if (!gameId || !userId) return { error: "invalid" };
+    try {
+      const { data: existing } = await db
+        .from("game_dislikes")
+        .select("id")
+        .eq("game_id", gameId)
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (existing) {
+        await db.from("game_dislikes").delete().eq("id", existing.id);
+        return { disliked: false };
+      } else {
+        await db.from("game_likes").delete().eq("game_id", gameId).eq("user_id", userId);
+        await db.from("game_dislikes").insert({ game_id: gameId, user_id: userId });
+        return { disliked: true };
+      }
+    } catch (e) { return { error: e }; }
+  }
+
+  async function hasUserDisliked(gameId, userId) {
+    if (!gameId || !userId) return false;
+    try {
+      const { data } = await db
+        .from("game_dislikes")
+        .select("id")
+        .eq("game_id", gameId)
+        .eq("user_id", userId)
+        .maybeSingle();
+      return !!data;
+    } catch (_) { return false; }
+  }
+
   // ── 방문자 통계 ─────────────────────────────────────
 
   async function getVisitorStats() {
@@ -341,5 +385,8 @@
     getGameLikeCount,
     toggleGameLike,
     hasUserLiked,
+    getGameDislikeCount,
+    toggleGameDislike,
+    hasUserDisliked,
   };
 })();
