@@ -3263,6 +3263,13 @@ body.sheet-open{
   background:var(--paper);
   border:1.5px solid var(--line);
   border-radius:12px;
+  position:relative;
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+}
+.about-for-item:hover{
+  border-color:var(--green);
+  background:#f5f9ee;
 }
 .about-for-icon{
   font-size:20px;
@@ -3360,8 +3367,11 @@ body.sheet-open{
   text-decoration:none;
   font-weight:700;
 }
-.club-step-link:hover{
-  text-decoration:underline;
+.club-step-link:hover{color:var(--green-2);}
+.club-card-link{
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
 }
 
 /* =========================
