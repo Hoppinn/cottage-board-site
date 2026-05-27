@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 처리 중...</title>
+  <style>
+    body { margin: 0; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; background: #faf9f5; color: #555; }
+  </style>
+</head>
+<body>
+  <p>로그인 처리 중...</p>
+  <script>
+    (async function () {
+      const hashParams = new URLSearchParams(window.location.hash.slice(1));
+      const queryParams = new URLSearchParams(window.location.search);
+      const returnUrl = sessionStorage.getItem('kakao_login_return') || '/index.html';
+      sessionStorage.removeItem('kakao_login_return');
+
+      let accessToken = hashParams.get('access_token');
+
+      // implicit grant가 안 될 경우 authorization code exchange 시도
+      if (!accessToken) {
+        const code = queryParams.get('code');
+        if (code) {
+          try {
+            const res = await fetch('https://kauth.kakao.com/oauth/token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' },
+              body: new URLSearchParams({
+                grant_type: 'authorization_code',
+                client_id: '0e496d427628f9f9b239b106cb5313fa',
+                redirect_uri: window.location.origin + '/auth-callback.html',
+                code: code,
+              }),
+            });
+            const data = await res.json();
+            accessToken = data.access_token;
+          } catch (e) {
+            console.error('token exchange error', e);
+          }
+        }
+      }
+
+      if (accessToken) {
+        try {
+          const res = await fetch('https://kapi.kakao.com/v2/user/me', {
+            headers: { 'Authorization': 'Bearer ' + accessToken },
+          });
+          const data = await res.json();
+          const profile = data.kakao_account?.profile || {};
+          const user = {
+            id: String(data.id),
+            nickname: profile.nickname || '손님',
+            profileImage: profile.profile_image_url || '',
+          };
+          localStorage.setItem('kakao_user', JSON.stringify(user));
+        } catch (e) {
+          console.error('kakao user info error', e);
+        }
+      }
+
+      window.location.replace(returnUrl);
+    })();
+  </script>
+</body>
+</html>

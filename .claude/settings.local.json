@@ -55,7 +55,21 @@
       "Bash(sed -n '2400,2430p' assets/css/style.css)",
       "Bash(sed -n '2570,2610p' assets/css/style.css)",
       "Bash(sed -n '3080,3145p' assets/css/style.css)",
-      "Bash(ANTHROPIC_API_KEY=\"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\" node \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\\\\game-system\\\\tools\\\\4-label-translator\\\\description-translator.js\")"
+      "Bash(ANTHROPIC_API_KEY=\"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\" node \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\\\\game-system\\\\tools\\\\4-label-translator\\\\description-translator.js\")",
+      "WebSearch",
+      "WebFetch(domain:boardgamegeek.com)",
+      "WebFetch(domain:us.trictrac.net)",
+      "WebFetch(domain:www.spieletest.at)",
+      "WebFetch(domain:luding.org)",
+      "WebFetch(domain:spiele-check.de)",
+      "WebFetch(domain:www.janetts-meinung.de)",
+      "WebFetch(domain:www.uplay.it)",
+      "WebFetch(domain:escaleajeux.fr)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' 'https://fqddfvprknwcgojwfrbs.supabase.co/rest/v1/game_requests?select=id&limit=1' -H 'apikey: sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Authorization: Bearer sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl')",
+      "Bash(curl -s 'https://fqddfvprknwcgojwfrbs.supabase.co/rest/v1/game_requests?select=id&limit=1' -H 'apikey: sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Authorization: Bearer sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl')",
+      "Bash(curl -s 'https://fqddfvprknwcgojwfrbs.supabase.co/rest/v1/page_views?select=page,created_at&limit=5&order=created_at.desc' -H 'apikey: sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Authorization: Bearer sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl')",
+      "Bash(curl -s https://fqddfvprknwcgojwfrbs.supabase.co/rest/v1/page_views?select=count -H 'apikey: sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Authorization: Bearer sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Prefer: count=exact' -o /dev/null -w '%{header: Content-Range}')",
+      "Bash(curl -si https://fqddfvprknwcgojwfrbs.supabase.co/rest/v1/page_views?select=* -H 'apikey: sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Authorization: Bearer sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' -H 'Prefer: count=exact' -H 'Range: 0-0')"
     ]
   }
 }

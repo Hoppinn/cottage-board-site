@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -97,15 +97,16 @@
   </footer>
 
   <div id="kakao-channel-btn"></div>
-  <script src="//cs.kakao.com/talks_channel_button/jssdk.js" type="text/javascript"></script>
+
   <script>
-    KAKAO_TALKS_CHANNEL.createChatButton({
-      src: '_ExbKxan',
+    Kakao.Channel.createChatButton({
       container: '#kakao-channel-btn',
-      title: '문의하기',
+      channelPublicId: '_ExbKxan',
+      title: 'consult',
+      size: 'small',
       color: 'yellow',
-      shape: 'pc',
-      supportMultipleDensities: true
+      shape: 'round',
+      supportMultipleDensities: true,
     });
   </script>
 

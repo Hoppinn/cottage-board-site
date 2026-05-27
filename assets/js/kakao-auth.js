@@ -1,17 +1,15 @@
 const KAKAO_APP_KEY = 'e0f056bc67d4a032e7a612c2e4ff2b71';
+const KAKAO_REST_KEY = '0e496d427628f9f9b239b106cb5313fa';
 const KAKAO_USER_KEY = 'kakao_user';
 
-// ── 관리자 카카오 ID ────────────────────────────────────────
-// 로그인 후 브라우저 콘솔에서 getKakaoUser().id 를 입력해서 확인한 뒤 아래에 넣으세요
 const OWNER_KAKAO_ID = '';
 
+// SDK 즉시 초기화 (채널 버튼이 DOMContentLoaded 전에 사용할 수 있도록)
+if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
+  Kakao.init(KAKAO_APP_KEY);
+}
+
 function initKakaoAuth() {
-  if (typeof Kakao === 'undefined') return;
-
-  if (!Kakao.isInitialized()) {
-    Kakao.init(KAKAO_APP_KEY);
-  }
-
   const saved = localStorage.getItem(KAKAO_USER_KEY);
   if (saved) {
     try {
@@ -36,41 +34,19 @@ function initKakaoAuth() {
 }
 
 function kakaoLogin() {
-  Kakao.Auth.login({
-    success: function () {
-      Kakao.API.request({
-        url: '/v2/user/me',
-        success: function (res) {
-          const profile = res.kakao_account?.profile || {};
-          const user = {
-            id: String(res.id),
-            nickname: profile.nickname || '손님',
-            profileImage: profile.profile_image_url || '',
-          };
-          localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
-          updateLoginUI(user);
-        },
-        fail: function (err) {
-          console.error('kakao user info error', err);
-        },
-      });
-    },
-    fail: function (err) {
-      console.error('kakao login error', err);
-    },
-  });
+  sessionStorage.setItem('kakao_login_return', window.location.href);
+  const callbackUrl = window.location.origin + '/auth-callback.html';
+  window.location.href =
+    'https://kauth.kakao.com/oauth/authorize' +
+    '?response_type=token' +
+    '&client_id=' + KAKAO_REST_KEY +
+    '&redirect_uri=' + encodeURIComponent(callbackUrl) +
+    '&scope=profile_nickname%2Cprofile_image';
 }
 
 function kakaoLogout() {
-  if (Kakao.Auth.getAccessToken()) {
-    Kakao.Auth.logout(function () {
-      localStorage.removeItem(KAKAO_USER_KEY);
-      updateLoginUI(null);
-    });
-  } else {
-    localStorage.removeItem(KAKAO_USER_KEY);
-    updateLoginUI(null);
-  }
+  localStorage.removeItem(KAKAO_USER_KEY);
+  updateLoginUI(null);
 }
 
 function getKakaoUser() {
@@ -107,7 +83,6 @@ function updateLoginUI(user) {
     if (loginText) loginText.textContent = '로그인';
   }
 
-  // 로그인 상태 변경을 페이지에 알림
   window.dispatchEvent(new CustomEvent('cottage-auth-changed', { detail: { user } }));
 }
 
@@ -116,8 +91,7 @@ if (typeof window !== 'undefined') {
   window.kakaoLogin = kakaoLogin;
   window.kakaoLogout = kakaoLogout;
 
-  // 현재 로그인 유저가 관리자(소유자)인지 확인
-  window.isOwner = function() {
+  window.isOwner = function () {
     if (!OWNER_KAKAO_ID) return false;
     const user = getKakaoUser();
     return !!user && String(user.id) === String(OWNER_KAKAO_ID);
