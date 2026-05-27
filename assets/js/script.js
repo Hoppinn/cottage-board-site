@@ -2019,15 +2019,16 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
     if (btn) {
       btn.classList.add('is-selected');
       modal.dataset.count = String(playerCount);
-      document.getElementById('sheetPlayModalDetails').style.display = 'block';
     }
-  } else {
-    document.getElementById('sheetPlayModalDetails').style.display = 'none';
   }
+  document.getElementById('sheetPlayModalDetails').style.display = 'block';
 
   document.getElementById('sheetPlayModalNames').value = playerNames || '';
   document.getElementById('sheetPlayModalTime').value = playTimeMin || '';
   document.getElementById('sheetPlayModalScore').value = scoreNote || '';
+
+  const errEl = modal.querySelector('.sheet-play-modal-err');
+  if (errEl) errEl.textContent = '';
 
   const title = modal.querySelector('.sheet-play-modal-title');
   const submit = document.getElementById('sheetPlayModalSubmit');
@@ -2065,6 +2066,15 @@ async function onSubmitPlayModal(skip) {
     if (!result?.error) {
       onClosePlayModal();
       await initPlayWidget(gameKey);
+    } else {
+      const errEl = modal.querySelector('.sheet-play-modal-err') || (() => {
+        const el = document.createElement('p');
+        el.className = 'sheet-play-modal-err';
+        el.style.cssText = 'color:#e03;font-size:12px;margin:6px 0 0;text-align:center';
+        modal.querySelector('.sheet-play-modal-actions').before(el);
+        return el;
+      })();
+      errEl.textContent = '수정에 실패했습니다. 잠시 후 다시 시도해주세요.';
     }
   } else {
     const _u = window.getKakaoUser?.();
