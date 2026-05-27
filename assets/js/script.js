@@ -1599,7 +1599,9 @@ async function initSheetComments(gameKey) {
     const txt = c.comment_text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const mine = myIds.includes(c.id);
+    const nick = c.nickname ? c.nickname.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '익명';
     return `<div class="sheet-comment-item">
+      <span class="sheet-comment-nickname">${nick}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
         <button class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
@@ -1689,7 +1691,7 @@ async function onSubmitCommentModal() {
   if (editId) {
     result = await window.CottageDB.updateComment(editId, text);
   } else {
-    result = await window.CottageDB.insertComment(gameKey, text);
+    result = await window.CottageDB.insertComment(gameKey, text, window.getKakaoUser?.()?.nickname || null);
     if (!result.error && result.id) saveMyCommentId(result.id);
   }
   if (!result.error) {
@@ -1816,12 +1818,15 @@ async function initPlayWidget(gameKey) {
     return;
   }
 
-  const [playCount, highlights] = await Promise.all([
+  const [playCount, highlights, allRecords] = await Promise.all([
     window.CottageDB.getGamePlayCount(gameKey),
     window.CottageDB.getPlayHighlights(gameKey),
+    window.CottageDB.getGamePlayRecords(gameKey),
   ]);
 
-  const myRecords = getMyPlayRecords(gameKey);
+  const myRecordIds = new Set(
+    getMyPlayRecords(gameKey).map(r => String(r.id)).filter(Boolean)
+  );
 
   function escH(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
@@ -1839,25 +1844,30 @@ async function initPlayWidget(gameKey) {
     <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
   </div>`;
 
-  // 내 기록 목록 (접기/펼치기)
-  if (myRecords.length) {
-    const listId = `sheetMyRecords-${gameKey}`;
+  // 전체 플레이 기록 목록 (접기/펼치기)
+  if (allRecords.length) {
+    const listId = `sheetAllRecords-${gameKey}`;
     html += `<button class="sheet-my-records-toggle" onclick="togglePlayRecords('${listId}')" type="button">
-      내 기록 ${myRecords.length}건 <span class="sheet-toggle-arrow" id="${listId}-arrow">▾</span>
+      플레이 기록 ${allRecords.length}건 <span class="sheet-toggle-arrow" id="${listId}-arrow">▾</span>
     </button>
     <div class="sheet-my-records-list" id="${listId}" style="display:none;">
-      ${myRecords.map(r => `
-        <div class="sheet-my-record-item">
-          <div class="sheet-play-info">
-            ${r.playerCount ? `<span class="sheet-play-info-tag">👥 ${r.playerCount}명</span>` : ""}
-            ${r.playerNames ? `<span class="sheet-play-info-tag">🎮 ${escH(r.playerNames)}</span>` : ""}
-            ${r.playTimeMin ? `<span class="sheet-play-info-tag">⏱ ${r.playTimeMin}분</span>` : ""}
-            ${r.scoreNote ? `<span class="sheet-play-info-tag">🏆 ${escH(r.scoreNote)}</span>` : ""}
-            ${!r.playerCount && !r.playerNames && !r.playTimeMin && !r.scoreNote ? `<span class="sheet-play-info-tag">기록됨</span>` : ""}
+      ${allRecords.map(r => {
+        const isMine = r.id && myRecordIds.has(String(r.id));
+        const nick = r.nickname ? escH(r.nickname) : "익명";
+        const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
+        return `<div class="sheet-my-record-item">
+          <div class="sheet-record-info">
+            <span class="sheet-record-nickname">${nick}</span>
+            ${hasDetail ? `<div class="sheet-play-info">
+              ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
+              ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
+              ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ""}
+              ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
+            </div>` : ""}
           </div>
-          ${r.id ? `<button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>` : ""}
-        </div>
-      `).join("")}
+          ${isMine ? `<button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>` : ""}
+        </div>`;
+      }).join("")}
     </div>`;
   }
 
@@ -1930,7 +1940,7 @@ if (gameSheetContent) {
       actionBtn.disabled = true;
       if (skipBtn) skipBtn.disabled = true;
       if (submitDetailBtn) submitDetailBtn.disabled = true;
-      const playResult = await window.CottageDB.recordGamePlay(gameKey, count, playerNames, playTimeMin, scoreNote);
+      const playResult = await window.CottageDB.recordGamePlay(gameKey, count, playerNames, playTimeMin, scoreNote, window.getKakaoUser?.()?.nickname || null);
       if (!playResult?.error) {
         addMyPlayRecord(gameKey, {
           id: playResult?.id || null,

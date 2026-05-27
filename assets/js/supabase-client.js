@@ -122,7 +122,7 @@
 
   // ── 플레이 기록 ─────────────────────────────────────────
 
-  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote) {
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -130,6 +130,7 @@
         player_names: playerNames || null,
         play_time_min: playTimeMin || null,
         score_note: scoreNote || null,
+        nickname: nickname || null,
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
@@ -138,6 +139,20 @@
       return { error };
     } catch (e) {
       return { error: e };
+    }
+  }
+
+  async function getGamePlayRecords(gameId, limit = 30) {
+    try {
+      const { data } = await db
+        .from("game_play_records")
+        .select("id, nickname, player_count, player_names, play_time_min, score_note, created_at")
+        .eq("game_id", gameId)
+        .order("created_at", { ascending: false })
+        .limit(limit);
+      return data || [];
+    } catch (_) {
+      return [];
     }
   }
 
@@ -185,7 +200,7 @@
     try {
       const { data } = await db
         .from("game_comments")
-        .select("id, comment_text, created_at")
+        .select("id, comment_text, nickname, created_at")
         .eq("game_key", gameKey)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -195,12 +210,12 @@
     }
   }
 
-  async function insertComment(gameKey, commentText) {
+  async function insertComment(gameKey, commentText, nickname) {
     if (!gameKey || !commentText?.trim()) return { error: "invalid" };
     try {
       const { data, error } = await db
         .from("game_comments")
-        .insert({ game_key: gameKey, comment_text: commentText.trim() })
+        .insert({ game_key: gameKey, comment_text: commentText.trim(), nickname: nickname || null })
         .select("id");
       if (error) return { error };
       return { success: true, id: data?.[0]?.id };
@@ -373,6 +388,7 @@
     insertComment,
     deleteComment,
     updateComment,
+    getGamePlayRecords,
     getGameLikeCount,
     toggleGameLike,
     hasUserLiked,

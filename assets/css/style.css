@@ -1557,6 +1557,7 @@ body.sheet-open{
   text-align: center;
   font-family: inherit;
   border-radius: 8px;
+  word-break: keep-all;
 }
 
 .menu-kakao-user-actions button:not(:last-child) {
@@ -2884,6 +2885,18 @@ body.sheet-open{
   margin:0;
   flex:1;
 }
+.sheet-record-info{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  flex:1;
+  min-width:0;
+}
+.sheet-record-nickname{
+  font-size:11px;
+  font-weight:700;
+  color:var(--muted);
+}
 .sheet-toggle-arrow{
   font-size:11px;
   opacity:.6;
@@ -3620,13 +3633,20 @@ body.sheet-open{
   border:1px solid #ead8b8;
   border-radius:8px;
   display:flex;
-  align-items:flex-start;
-  gap:6px;
+  flex-direction:column;
+  gap:2px;
+  position:relative;
+  padding-right:52px;
+}
+
+.sheet-comment-nickname{
+  font-size:11px;
+  font-weight:700;
+  color:var(--muted);
 }
 
 .sheet-comment-text{
   margin:0;
-  flex:1;
   font-size:13px;
   color:#3a3025;
   font-weight:600;
@@ -3656,7 +3676,9 @@ body.sheet-open{
   display:flex;
   flex-shrink:0;
   gap:2px;
-  margin-top:1px;
+  position:absolute;
+  top:6px;
+  right:8px;
 }
 
 .sheet-comment-edit-btn{
