@@ -69,27 +69,32 @@
 
         <!-- 입력 폼 -->
         <div class="intro-form-card">
-          <p class="intro-form-title">반갑습니다! 간단히 소개해주세요 👋</p>
-          <div class="intro-form-fields">
-            <div class="intro-field">
-              <label class="intro-label" for="introNickname">닉네임 <span class="intro-required">*</span></label>
-              <input class="intro-input" id="introNickname" type="text" placeholder="단톡방 닉네임" maxlength="20">
+          <button class="intro-form-toggle" id="introFormToggle" type="button">
+            반갑습니다! 간단히 소개해주세요 👋
+            <span class="intro-form-toggle-arrow" id="introFormArrow">▾</span>
+          </button>
+          <div class="intro-form-body" id="introFormBody">
+            <div class="intro-form-fields">
+              <div class="intro-field">
+                <label class="intro-label" for="introNickname">닉네임 <span class="intro-required">*</span></label>
+                <input class="intro-input" id="introNickname" type="text" placeholder="단톡방 닉네임" maxlength="20">
+              </div>
+              <div class="intro-field">
+                <label class="intro-label" for="introGames">좋아하는 게임</label>
+                <input class="intro-input" id="introGames" type="text" placeholder="ex. 윙스팬, 아줄, 코드네임" maxlength="100">
+              </div>
+              <div class="intro-field">
+                <label class="intro-label" for="introAvailable">참여 가능 요일 / 시간</label>
+                <input class="intro-input" id="introAvailable" type="text" placeholder="ex. 주말 오후, 평일 저녁 가능" maxlength="100">
+              </div>
+              <div class="intro-field">
+                <label class="intro-label" for="introLocation">사시는 곳</label>
+                <input class="intro-input" id="introLocation" type="text" placeholder="ex. 용인 기흥구" maxlength="50">
+              </div>
             </div>
-            <div class="intro-field">
-              <label class="intro-label" for="introGames">좋아하는 게임</label>
-              <input class="intro-input" id="introGames" type="text" placeholder="ex. 윙스팬, 아줄, 코드네임" maxlength="100">
-            </div>
-            <div class="intro-field">
-              <label class="intro-label" for="introAvailable">참여 가능 요일 / 시간</label>
-              <input class="intro-input" id="introAvailable" type="text" placeholder="ex. 주말 오후, 평일 저녁 가능" maxlength="100">
-            </div>
-            <div class="intro-field">
-              <label class="intro-label" for="introLocation">사시는 곳</label>
-              <input class="intro-input" id="introLocation" type="text" placeholder="ex. 용인 기흥구" maxlength="50">
-            </div>
+            <button class="intro-submit-btn" id="introSubmitBtn" type="button">인사 남기기</button>
+            <p class="intro-submit-msg" id="introSubmitMsg"></p>
           </div>
-          <button class="intro-submit-btn" id="introSubmitBtn" type="button">인사 남기기</button>
-          <p class="intro-submit-msg" id="introSubmitMsg"></p>
         </div>
 
         <!-- 카드뉴스 그리드 -->
@@ -109,6 +114,21 @@
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  // 폼 접기/펼치기
+  (function () {
+    const toggle = document.getElementById('introFormToggle');
+    const body   = document.getElementById('introFormBody');
+    const arrow  = document.getElementById('introFormArrow');
+    let open = true;
+    toggle.addEventListener('click', () => {
+      open = !open;
+      body.style.display = open ? '' : 'none';
+      arrow.textContent  = open ? '▾' : '▸';
+    });
+  })();
+  </script>
 
   <script>
   (function () {
