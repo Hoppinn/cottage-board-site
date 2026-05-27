@@ -1900,7 +1900,14 @@ async function initPlayWidget(gameKey) {
               ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
             </div>` : ""}
           </div>
-          ${isMine ? `<button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>` : ""}
+          ${isMine ? `<div class="sheet-play-record-actions">
+            <button class="sheet-play-edit-btn"
+              data-game="${gameKey}" data-id="${r.id}"
+              data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
+              data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
+              type="button">수정</button>
+            <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
+          </div>` : ""}
         </div>`;
       }).join("")}
     </div>`;
@@ -1909,6 +1916,16 @@ async function initPlayWidget(gameKey) {
   html += `</div>`; // .sheet-play-box 닫기
 
   widget.innerHTML = html;
+
+  widget.querySelectorAll('.sheet-play-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => onOpenEditPlayModal(
+      btn.dataset.game, btn.dataset.id,
+      Number(btn.dataset.count) || 0,
+      btn.dataset.names,
+      Number(btn.dataset.time) || 0,
+      btn.dataset.score
+    ));
+  });
 }
 
 // 플레이 위젯 클릭 이벤트
@@ -1979,12 +1996,53 @@ function onOpenPlayModal(gameKey) {
 
 function onClosePlayModal() {
   const modal = document.getElementById('sheetPlayModal');
-  if (modal) modal.style.display = 'none';
+  if (!modal) return;
+  modal.style.display = 'none';
+  delete modal.dataset.editId;
+  const title = modal.querySelector('.sheet-play-modal-title');
+  const submit = document.getElementById('sheetPlayModalSubmit');
+  const skipBtn = modal.querySelector('.sheet-play-modal-skip');
+  if (title) title.textContent = '플레이 기록하기';
+  if (submit) submit.textContent = '기록하기';
+  if (skipBtn) skipBtn.style.display = '';
+}
+
+function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote) {
+  const modal = getOrCreatePlayModal();
+  modal.dataset.gameId = gameKey;
+  modal.dataset.editId = recordId;
+  delete modal.dataset.count;
+
+  modal.querySelectorAll('.sheet-player-select-btn').forEach(b => b.classList.remove('is-selected'));
+  if (playerCount) {
+    const btn = modal.querySelector(`.sheet-player-select-btn[data-count="${playerCount}"]`);
+    if (btn) {
+      btn.classList.add('is-selected');
+      modal.dataset.count = String(playerCount);
+      document.getElementById('sheetPlayModalDetails').style.display = 'block';
+    }
+  } else {
+    document.getElementById('sheetPlayModalDetails').style.display = 'none';
+  }
+
+  document.getElementById('sheetPlayModalNames').value = playerNames || '';
+  document.getElementById('sheetPlayModalTime').value = playTimeMin || '';
+  document.getElementById('sheetPlayModalScore').value = scoreNote || '';
+
+  const title = modal.querySelector('.sheet-play-modal-title');
+  const submit = document.getElementById('sheetPlayModalSubmit');
+  const skipBtn = modal.querySelector('.sheet-play-modal-skip');
+  if (title) title.textContent = '플레이 기록 수정';
+  if (submit) submit.textContent = '수정하기';
+  if (skipBtn) skipBtn.style.display = 'none';
+
+  modal.style.display = 'flex';
 }
 
 async function onSubmitPlayModal(skip) {
   const modal = document.getElementById('sheetPlayModal');
   const gameKey = modal?.dataset.gameId;
+  const editId = modal?.dataset.editId || null;
   if (!gameKey || !window.CottageDB) return;
   const count = parseInt(modal?.dataset.count || "0", 10);
   let playerNames = null, playTimeMin = null, scoreNote = null;
@@ -1996,21 +2054,35 @@ async function onSubmitPlayModal(skip) {
   }
   const submitBtn = document.getElementById('sheetPlayModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
-  const _u = window.getKakaoUser?.();
-  const playResult = await window.CottageDB.recordGamePlay(
-    gameKey, count, playerNames, playTimeMin, scoreNote,
-    _u?.nickname || null, _u?.id || null
-  );
-  if (!playResult?.error) {
-    addMyPlayRecord(gameKey, {
-      id: playResult?.id || null,
-      playerCount: count || null,
-      playerNames: playerNames || null,
-      playTimeMin: playTimeMin || null,
-      scoreNote: scoreNote || null,
+
+  if (editId) {
+    const result = await window.CottageDB.updateGamePlay(editId, {
+      player_count: count || null,
+      player_names: playerNames,
+      play_time_min: playTimeMin,
+      score_note: scoreNote,
     });
-    onClosePlayModal();
-    await initPlayWidget(gameKey);
+    if (!result?.error) {
+      onClosePlayModal();
+      await initPlayWidget(gameKey);
+    }
+  } else {
+    const _u = window.getKakaoUser?.();
+    const playResult = await window.CottageDB.recordGamePlay(
+      gameKey, count, playerNames, playTimeMin, scoreNote,
+      _u?.nickname || null, _u?.id || null
+    );
+    if (!playResult?.error) {
+      addMyPlayRecord(gameKey, {
+        id: playResult?.id || null,
+        playerCount: count || null,
+        playerNames: playerNames || null,
+        playTimeMin: playTimeMin || null,
+        scoreNote: scoreNote || null,
+      });
+      onClosePlayModal();
+      await initPlayWidget(gameKey);
+    }
   }
   if (submitBtn) submitBtn.disabled = false;
 }

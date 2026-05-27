@@ -2649,6 +2649,26 @@ body.sheet-open{
   gap:6px;
 }
 
+.sheet-play-record-actions{
+  display:flex;
+  gap:4px;
+  flex-shrink:0;
+}
+.sheet-play-edit-btn{
+  background:none;
+  border:1px solid #ddd;
+  border-radius:999px;
+  font-size:11px;
+  color:var(--muted);
+  cursor:pointer;
+  padding:2px 8px;
+  line-height:1.4;
+}
+.sheet-play-edit-btn:hover{
+  border-color:var(--green);
+  color:var(--green);
+  background:#f5f9ee;
+}
 .sheet-play-cancel-btn{
   background:none;
   border:1px solid #ddd;

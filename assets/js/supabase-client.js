@@ -167,6 +167,18 @@
     }
   }
 
+  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note }) {
+    if (!id) return { error: "invalid" };
+    try {
+      const { error } = await db.from("game_play_records")
+        .update({ player_count, player_names, play_time_min, score_note })
+        .eq("id", id);
+      return error ? { error } : { success: true };
+    } catch (e) {
+      return { error: e };
+    }
+  }
+
   async function getGamePlayCount(gameId) {
     try {
       const { count } = await db
@@ -387,6 +399,7 @@
     getAllGameRatings,
     recordGamePlay,
     deleteGamePlay,
+    updateGamePlay,
     getGamePlayCount,
     getPlayHighlights,
     getVisitorStats,
