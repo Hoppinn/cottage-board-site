@@ -356,18 +356,39 @@
         const saveBtn = li.querySelector('.req-edit-save');
         if (saveBtn) saveBtn.disabled = true;
         const db = getDb();
+        const storageKey = table === 'game_requests' ? MY_GAME_KEY : MY_SNACK_KEY;
         const currentCount = parseInt(li.dataset.count || '1', 10);
 
-        // 같은 이름이 이미 있으면 합치기
-        const { data: existing } = await db.from(table).select('id, request_count').ilike(nameField, newName).neq('id', id).maybeSingle();
-        if (existing) {
-          await db.from(table).update({ request_count: existing.request_count + currentCount }).eq('id', existing.id);
-          await db.from(table).delete().eq('id', id);
-          const storageKey = table === 'game_requests' ? MY_GAME_KEY : MY_SNACK_KEY;
+        // 이름이 그대로면 아무것도 안 함
+        if (newName.toLowerCase() === currentName.toLowerCase()) {
+          li.innerHTML = original;
+          li.classList.remove('is-editing');
+          li.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
+          li.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
+          return;
+        }
+
+        // 내 투표 1개를 현재 항목에서 빼기
+        if (currentCount > 1) {
+          await db.from(table).update({ request_count: currentCount - 1 }).eq('id', id);
           removeMyId(storageKey, id);
+        } else {
+          await db.from(table).delete().eq('id', id);
+          removeMyId(storageKey, id);
+        }
+
+        // 새 이름에 내 투표 1개 추가 (기존 항목 있으면 병합)
+        const { data: existing } = await db.from(table).select('id, request_count').ilike(nameField, newName).maybeSingle();
+        if (existing) {
+          await db.from(table).update({ request_count: existing.request_count + 1 }).eq('id', existing.id);
           saveMyId(storageKey, existing.id);
         } else {
-          await db.from(table).update({ [nameField]: newName }).eq('id', id);
+          const u = getCurrentUser();
+          const insertData = table === 'game_requests'
+            ? { game_name: newName, request_count: 1, status: 'pending', user_id: u?.id || null }
+            : { item_name: newName, request_count: 1, user_id: u?.id || null };
+          const { data: ins } = await db.from(table).insert(insertData).select('id');
+          if (ins?.[0]?.id) saveMyId(storageKey, ins[0].id);
         }
 
         if (table === 'game_requests') await loadGameRequests();
