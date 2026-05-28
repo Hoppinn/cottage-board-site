@@ -355,16 +355,23 @@
         if (!newName) { input.focus(); return; }
         const saveBtn = li.querySelector('.req-edit-save');
         if (saveBtn) saveBtn.disabled = true;
-        const { error } = await getDb().from(table).update({ [nameField]: newName }).eq('id', id);
-        if (!error) {
-          if (table === 'game_requests') await loadGameRequests();
-          else await loadSnackRequests();
+        const db = getDb();
+        const currentCount = parseInt(li.dataset.count || '1', 10);
+
+        // 같은 이름이 이미 있으면 합치기
+        const { data: existing } = await db.from(table).select('id, request_count').ilike(nameField, newName).neq('id', id).maybeSingle();
+        if (existing) {
+          await db.from(table).update({ request_count: existing.request_count + currentCount }).eq('id', existing.id);
+          await db.from(table).delete().eq('id', id);
+          const storageKey = table === 'game_requests' ? MY_GAME_KEY : MY_SNACK_KEY;
+          removeMyId(storageKey, id);
+          saveMyId(storageKey, existing.id);
         } else {
-          li.innerHTML = original;
-          li.classList.remove('is-editing');
-          li.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
-          li.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
+          await db.from(table).update({ [nameField]: newName }).eq('id', id);
         }
+
+        if (table === 'game_requests') await loadGameRequests();
+        else await loadSnackRequests();
       }
 
       li.querySelector('.req-edit-save').addEventListener('click', saveEdit);
