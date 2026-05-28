@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>요청 관리 | 코티지보드</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+  <style>
+    .admin-section { margin-bottom: 32px; }
+    .admin-section-title { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--green); }
+    .admin-req-list { display: flex; flex-direction: column; gap: 8px; }
+    .admin-req-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .admin-req-name { font-size: 14px; font-weight: 600; flex: 1; }
+    .admin-req-count { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-del:hover { border-color: #c0392b; color: #c0392b; }
+    .admin-req-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-done:hover { opacity: 0.85; }
+    .admin-req-item.is-done { opacity: 0.45; }
+    .admin-req-item.is-done .admin-req-name { text-decoration: line-through; }
+    .admin-gate { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .admin-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 24px 0; }
+  </style>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+    <a class="header-center" href="../../index.html">오래 머무르고 싶은, 보드게임 공간</a>
+    <div class="header-actions">
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
+    </div>
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../owned-games.html">전체 게임 보기</a>
+          <a href="./game-location.html">게임 위치</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../cottage/about.html">소개</a>
+          <a href="./price-rules.html">가격 &amp; 규칙</a>
+          <a href="../cottage/club.html">동호회</a>
+        </div>
+      </div>
+      <a href="./requests.html">요청하기</a>
+      <div class="menu-login-area">
+        <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
+          <img id="kakaoProfileImg" src="" alt="" style="display:none">
+          <span id="kakaoLoginText">카카오 로그인</span>
+        </button>
+        <div id="kakaoUserActions" class="menu-kakao-user-actions">
+          <button id="kakaoPhotoBtn" type="button">사진 변경</button>
+          <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>
+          <button id="kakaoLogoutBtn" type="button">로그 아웃</button>
+        </div>
+      </div>
+    </nav>
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="about-hero">
+      <span class="about-hero-eyebrow">관리자 전용</span>
+      <h2>요청 관리</h2>
+      <p class="about-hero-sub">게임 구매 요청 · 간식 요청 전체 목록</p>
+    </div>
+
+    <section class="inner-page">
+      <div class="inner-page-body" id="mainContent">
+        <div class="admin-empty">로딩 중...</div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    function escH(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    async function load() {
+      const el = document.getElementById('mainContent');
+      if (!window.isOwner?.()) {
+        el.innerHTML = '<div class="admin-gate">관리자만 볼 수 있는 페이지예요.</div>';
+        return;
+      }
+
+      const cfg = window.SUPABASE_CONFIG;
+      if (!cfg || !window.supabase) { el.innerHTML = '<div class="admin-empty">DB 연결 실패</div>'; return; }
+      const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+
+      const [gameRes, snackRes] = await Promise.all([
+        db.from('game_requests').select('id, game_name, request_count, status').order('request_count', { ascending: false }),
+        db.from('snack_requests').select('id, item_name, request_count').order('request_count', { ascending: false }),
+      ]);
+
+      function renderItem(id, name, count, table, done) {
+        return `<div class="admin-req-item${done ? ' is-done' : ''}" data-id="${id}" data-table="${table}">
+          <span class="admin-req-name">${escH(name)}</span>
+          <span class="admin-req-count">${count}명</span>
+          ${table === 'game_requests' ? `<button class="admin-req-done" type="button">${done ? '완료됨' : '구매완료'}</button>` : ''}
+          <button class="admin-req-del" type="button">삭제</button>
+        </div>`;
+      }
+
+      const gameItems = (gameRes.data || []).map(r => renderItem(r.id, r.game_name, r.request_count, 'game_requests', r.status === 'done'));
+      const snackItems = (snackRes.data || []).map(r => renderItem(r.id, r.item_name, r.request_count, 'snack_requests', false));
+
+      el.innerHTML = `
+        <div class="admin-section">
+          <div class="admin-section-title">🎲 게임 구매 요청</div>
+          <div class="admin-req-list" id="gameList">${gameItems.length ? gameItems.join('') : '<div class="admin-empty">없음</div>'}</div>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-title">🍿 간식·음료 요청</div>
+          <div class="admin-req-list" id="snackList">${snackItems.length ? snackItems.join('') : '<div class="admin-empty">없음</div>'}</div>
+        </div>`;
+
+      el.querySelectorAll('.admin-req-del').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.admin-req-item');
+          if (!confirm('삭제할까요?')) return;
+          await db.from(item.dataset.table).delete().eq('id', item.dataset.id);
+          item.remove();
+        });
+      });
+
+      el.querySelectorAll('.admin-req-done').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.admin-req-item');
+          const isDone = item.classList.contains('is-done');
+          const newStatus = isDone ? 'pending' : 'done';
+          await db.from('game_requests').update({ status: newStatus }).eq('id', item.dataset.id);
+          item.classList.toggle('is-done', !isDone);
+          btn.textContent = isDone ? '구매완료' : '완료됨';
+        });
+      });
+    }
+
+    let tried = false;
+    function tryLoad() { if (tried) return; tried = true; load(); }
+    window.addEventListener('kakao-auth-ready', tryLoad);
+    setTimeout(tryLoad, 1200);
+  })();
+  </script>
+
+  <footer class="site-footer">
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="https://pf.kakao.com/_ExbKxan/chat" target="_blank" rel="noopener noreferrer">← 카카오 채널 문의</a> &nbsp;<a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
