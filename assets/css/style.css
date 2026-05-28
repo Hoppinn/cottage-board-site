@@ -3621,6 +3621,61 @@ body.sheet-open{
   color:#c0392b;
   background:#fff0ee;
 }
+.req-edit-btn{
+  background:none;
+  border:none;
+  color:#b0a090;
+  font-size:13px;
+  cursor:pointer;
+  padding:2px 4px;
+  line-height:1;
+  border-radius:4px;
+}
+.req-edit-btn:hover{
+  color:var(--green-2);
+  background:#f0f7e8;
+}
+.req-edit-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  width:100%;
+}
+.req-edit-input{
+  flex:1;
+  padding:5px 8px;
+  font-size:13px;
+  font-family:inherit;
+  border:1.5px solid var(--green);
+  border-radius:7px;
+  outline:none;
+  min-width:0;
+}
+.req-edit-save{
+  padding:5px 10px;
+  font-size:12px;
+  font-weight:700;
+  font-family:inherit;
+  background:var(--green);
+  color:#fff;
+  border:none;
+  border-radius:7px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.req-edit-save:disabled{ opacity:0.5; cursor:default; }
+.req-edit-cancel{
+  padding:5px 10px;
+  font-size:12px;
+  font-weight:700;
+  font-family:inherit;
+  background:#f0ede8;
+  color:#7a6a55;
+  border:none;
+  border-radius:7px;
+  cursor:pointer;
+  white-space:nowrap;
+}
 .req-admin-badge{
   display:inline-flex;
   align-items:center;
