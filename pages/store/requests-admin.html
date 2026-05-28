@@ -7,20 +7,23 @@
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
-    .admin-section { margin-bottom: 32px; }
+    .admin-section { margin-bottom: 36px; }
     .admin-section-title { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--green); }
     .admin-req-list { display: flex; flex-direction: column; gap: 8px; }
-    .admin-req-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .admin-req-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
     .admin-req-name { font-size: 14px; font-weight: 600; flex: 1; }
-    .admin-req-count { font-size: 12px; color: var(--muted); white-space: nowrap; }
-    .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
-    .admin-req-del:hover { border-color: #c0392b; color: #c0392b; }
+    .admin-req-content { font-size: 13px; flex: 1; line-height: 1.5; white-space: pre-wrap; color: var(--text); }
+    .admin-req-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-req-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
     .admin-req-done:hover { opacity: 0.85; }
+    .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-del:hover { border-color: #c0392b; color: #c0392b; }
     .admin-req-item.is-done { opacity: 0.45; }
     .admin-req-item.is-done .admin-req-name { text-decoration: line-through; }
     .admin-gate { text-align: center; padding: 60px 20px; color: var(--muted); }
     .admin-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 24px 0; }
+    .admin-back { display: inline-block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    .admin-back:hover { color: var(--green); }
   </style>
 </head>
 
@@ -73,9 +76,10 @@
 
   <main>
     <div class="about-hero">
+      <a class="admin-back" href="./requests.html">← 요청하기로 돌아가기</a>
       <span class="about-hero-eyebrow">관리자 전용</span>
       <h2>요청 관리</h2>
-      <p class="about-hero-sub">게임 구매 요청 · 간식 요청 전체 목록</p>
+      <p class="about-hero-sub">구매 요청 · 간식 요청 · 개선 건의</p>
     </div>
 
     <section class="inner-page">
@@ -97,6 +101,9 @@
   <script>
   (function () {
     function escH(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
 
     async function load() {
       const el = document.getElementById('mainContent');
@@ -109,31 +116,45 @@
       if (!cfg || !window.supabase) { el.innerHTML = '<div class="admin-empty">DB 연결 실패</div>'; return; }
       const db = window.supabase.createClient(cfg.url, cfg.anonKey);
 
-      const [gameRes, snackRes] = await Promise.all([
+      const [gameRes, snackRes, suggestRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, status').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count').order('request_count', { ascending: false }),
+        db.from('suggestions').select('id, content, created_at').order('created_at', { ascending: false }),
       ]);
 
-      function renderItem(id, name, count, table, done) {
-        return `<div class="admin-req-item${done ? ' is-done' : ''}" data-id="${id}" data-table="${table}">
+      function reqItem(id, name, count, table, done) {
+        return `<div class="admin-req-item${done?' is-done':''}" data-id="${id}" data-table="${table}">
           <span class="admin-req-name">${escH(name)}</span>
-          <span class="admin-req-count">${count}명</span>
-          ${table === 'game_requests' ? `<button class="admin-req-done" type="button">${done ? '완료됨' : '구매완료'}</button>` : ''}
+          <span class="admin-req-meta">${count}명</span>
+          ${table==='game_requests'?`<button class="admin-req-done" type="button">${done?'완료됨':'구매완료'}</button>`:''}
           <button class="admin-req-del" type="button">삭제</button>
         </div>`;
       }
 
-      const gameItems = (gameRes.data || []).map(r => renderItem(r.id, r.game_name, r.request_count, 'game_requests', r.status === 'done'));
-      const snackItems = (snackRes.data || []).map(r => renderItem(r.id, r.item_name, r.request_count, 'snack_requests', false));
+      function suggestItem(id, content, date) {
+        return `<div class="admin-req-item" data-id="${id}" data-table="suggestions">
+          <span class="admin-req-content">${escH(content)}</span>
+          <span class="admin-req-meta">${formatDate(date)}</span>
+          <button class="admin-req-del" type="button">삭제</button>
+        </div>`;
+      }
+
+      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',r.status==='done')).join('');
+      const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false)).join('');
+      const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at)).join('');
 
       el.innerHTML = `
         <div class="admin-section">
           <div class="admin-section-title">🎲 게임 구매 요청</div>
-          <div class="admin-req-list" id="gameList">${gameItems.length ? gameItems.join('') : '<div class="admin-empty">없음</div>'}</div>
+          <div class="admin-req-list">${gameHtml||'<div class="admin-empty">없음</div>'}</div>
         </div>
         <div class="admin-section">
           <div class="admin-section-title">🍿 간식·음료 요청</div>
-          <div class="admin-req-list" id="snackList">${snackItems.length ? snackItems.join('') : '<div class="admin-empty">없음</div>'}</div>
+          <div class="admin-req-list">${snackHtml||'<div class="admin-empty">없음</div>'}</div>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-title">💬 개선 건의</div>
+          <div class="admin-req-list">${suggestHtml||'<div class="admin-empty">없음</div>'}</div>
         </div>`;
 
       el.querySelectorAll('.admin-req-del').forEach(btn => {
@@ -149,8 +170,7 @@
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
           const isDone = item.classList.contains('is-done');
-          const newStatus = isDone ? 'pending' : 'done';
-          await db.from('game_requests').update({ status: newStatus }).eq('id', item.dataset.id);
+          await db.from('game_requests').update({ status: isDone?'pending':'done' }).eq('id', item.dataset.id);
           item.classList.toggle('is-done', !isDone);
           btn.textContent = isDone ? '구매완료' : '완료됨';
         });
