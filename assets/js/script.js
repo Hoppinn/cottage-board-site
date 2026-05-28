@@ -1888,7 +1888,7 @@ async function initPlayWidget(gameKey) {
           || (r.id && myRecordIds.has(String(r.id)));
         const showNick = !r.player_names && r.nickname;
         const dateStr = formatDate(r.created_at);
-        const header = [showNick ? escH(r.nickname) : null, dateStr].filter(Boolean).join(" · ");
+        const header = [showNick ? escH(r.nickname) : null, dateStr, r.group_name ? escH(r.group_name) : null].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
         return `<div class="sheet-my-record-item">
           <div class="sheet-record-info">
