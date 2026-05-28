@@ -119,14 +119,20 @@
   <script>
   (function() {
     // 탭 전환
+    function activateTab(tabId) {
+      document.querySelectorAll('.req-tab-btn').forEach(b => b.classList.remove('is-active'));
+      document.querySelectorAll('.req-tab-panel').forEach(p => p.classList.remove('is-active'));
+      const btn = document.querySelector(`.req-tab-btn[data-tab="${tabId}"]`);
+      const panel = document.getElementById('tab-' + tabId);
+      if (btn && panel) { btn.classList.add('is-active'); panel.classList.add('is-active'); }
+    }
     document.querySelectorAll('.req-tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.req-tab-btn').forEach(b => b.classList.remove('is-active'));
-        document.querySelectorAll('.req-tab-panel').forEach(p => p.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        document.getElementById('tab-' + btn.dataset.tab).classList.add('is-active');
-      });
+      btn.addEventListener('click', () => activateTab(btn.dataset.tab));
     });
+    const tabMap = { game_requests: 'game', snack_requests: 'snack', suggestions: 'suggest' };
+    const rawTab = new URLSearchParams(window.location.search).get('tab') || window.location.hash.slice(1);
+    const resolvedTab = tabMap[rawTab] || rawTab;
+    if (resolvedTab && document.getElementById('tab-' + resolvedTab)) activateTab(resolvedTab);
 
     function isAdmin() { return window.isOwner?.() || false; }
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
