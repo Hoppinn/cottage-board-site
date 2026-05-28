@@ -1887,7 +1887,9 @@ async function initPlayWidget(gameKey) {
         const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
           || (r.id && myRecordIds.has(String(r.id)));
         const showNick = !r.player_names && r.nickname;
-        const dateStr = formatDate(r.created_at);
+        const dateStr = r.played_at
+          ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+          : formatDate(r.created_at);
         const header = [showNick ? escH(r.nickname) : null, dateStr, r.group_name ? escH(r.group_name) : null].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
         return `<div class="sheet-my-record-item">
@@ -1905,7 +1907,7 @@ async function initPlayWidget(gameKey) {
               data-game="${gameKey}" data-id="${r.id}"
               data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
               data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
-              data-group="${escH(r.group_name || '')}"
+              data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
               type="button">수정</button>
             <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
           </div>` : ""}
@@ -1937,7 +1939,8 @@ async function initPlayWidget(gameKey) {
       btn.dataset.names,
       Number(btn.dataset.time) || 0,
       btn.dataset.score,
-      btn.dataset.group || ''
+      btn.dataset.group || '',
+      btn.dataset.playedAt || ''
     ));
   });
 }
@@ -1975,6 +1978,10 @@ function getOrCreatePlayModal() {
           <input class="sheet-play-detail-input is-half" id="sheetPlayModalTime" type="number" placeholder="플레이 시간(분)" min="1" max="999">
           <input class="sheet-play-detail-input is-half" id="sheetPlayModalScore" type="text" placeholder="점수 메모 (선택)" maxlength="100">
         </div>
+      </div>
+      <div class="sheet-play-date-wrap">
+        <span class="sheet-play-date-lbl">📅 플레이 날짜</span>
+        <input class="sheet-play-detail-input" id="sheetPlayModalDate" type="date">
       </div>
       <label class="sheet-play-group-check-label">
         <input type="checkbox" id="sheetPlayModalGroupCheck">
@@ -2030,6 +2037,11 @@ function onOpenPlayModal(gameKey) {
   if (groupCheck) { groupCheck.checked = false; }
   document.getElementById('sheetPlayModalGroupNameWrap').style.display = 'none';
   document.getElementById('sheetPlayModalGroupName').value = '';
+  const dateInput = document.getElementById('sheetPlayModalDate');
+  if (dateInput) {
+    dateInput.value = new Date().toISOString().split('T')[0];
+    dateInput.max = new Date().toISOString().split('T')[0];
+  }
   modal.style.display = 'flex';
 }
 
@@ -2046,7 +2058,7 @@ function onClosePlayModal() {
   if (skipBtn) skipBtn.style.display = '';
 }
 
-function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName) {
+function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName, playedAt) {
   const modal = getOrCreatePlayModal();
   modal.dataset.gameId = gameKey;
   modal.dataset.editId = recordId;
@@ -2079,6 +2091,12 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
     if (groupNameInput) groupNameInput.value = '';
   }
 
+  const dateInput = document.getElementById('sheetPlayModalDate');
+  if (dateInput) {
+    dateInput.value = playedAt || new Date().toISOString().split('T')[0];
+    dateInput.max = new Date().toISOString().split('T')[0];
+  }
+
   const errEl = modal.querySelector('.sheet-play-modal-err');
   if (errEl) errEl.textContent = '';
 
@@ -2109,6 +2127,7 @@ async function onSubmitPlayModal(skip) {
   const groupName = (groupCheck?.checked
     ? document.getElementById('sheetPlayModalGroupName')?.value?.trim()
     : null) || null;
+  const playedAt = document.getElementById('sheetPlayModalDate')?.value || null;
   const submitBtn = document.getElementById('sheetPlayModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
 
@@ -2119,6 +2138,7 @@ async function onSubmitPlayModal(skip) {
       play_time_min: playTimeMin,
       score_note: scoreNote,
       group_name: groupName,
+      played_at: playedAt,
     });
     if (!result?.error) {
       onClosePlayModal();
@@ -2137,7 +2157,7 @@ async function onSubmitPlayModal(skip) {
     const _u = window.getKakaoUser?.();
     const playResult = await window.CottageDB.recordGamePlay(
       gameKey, count, playerNames, playTimeMin, scoreNote,
-      _u?.nickname || null, _u?.id || null, groupName
+      _u?.nickname || null, _u?.id || null, groupName, playedAt
     );
     if (!playResult?.error) {
       addMyPlayRecord(gameKey, {

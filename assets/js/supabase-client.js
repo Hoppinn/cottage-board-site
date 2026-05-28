@@ -122,7 +122,7 @@
 
   // ── 플레이 기록 ─────────────────────────────────────────
 
-  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName) {
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -133,6 +133,7 @@
         nickname: nickname || null,
         user_id: userId || null,
         group_name: groupName || null,
+        played_at: playedAt || null,
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
@@ -148,7 +149,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, created_at")
+        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at")
         .eq("game_id", gameId)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -168,11 +169,11 @@
     }
   }
 
-  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note, group_name }) {
+  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note, group_name, played_at }) {
     if (!id) return { error: "invalid" };
     try {
       const { error } = await db.from("game_play_records")
-        .update({ player_count, player_names, play_time_min, score_note, group_name: group_name || null })
+        .update({ player_count, player_names, play_time_min, score_note, group_name: group_name || null, played_at: played_at || null })
         .eq("id", id);
       return error ? { error } : { success: true };
     } catch (e) {
@@ -198,7 +199,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, created_at")
+        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at")
         .not("group_name", "is", null)
         .neq("group_name", "")
         .order("created_at", { ascending: false })

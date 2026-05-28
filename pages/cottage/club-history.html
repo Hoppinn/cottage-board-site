@@ -131,7 +131,7 @@
       const grouped = {};
       for (const r of records) {
         const g = r.group_name;
-        const d = toKstDate(r.created_at);
+        const d = r.played_at || toKstDate(r.created_at);
         if (!grouped[g]) grouped[g] = {};
         if (!grouped[g][d]) grouped[g][d] = [];
         grouped[g][d].push(r);

@@ -4048,6 +4048,17 @@ body.sheet-open{
   opacity:0.5;
   cursor:default;
 }
+.sheet-play-date-wrap{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+}
+.sheet-play-date-lbl{
+  font-size:12px;
+  color:var(--muted);
+  white-space:nowrap;
+}
 .sheet-play-group-check-label{
   display:flex;
   align-items:center;
