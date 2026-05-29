@@ -1687,43 +1687,9 @@
     "scoreGap": 32
   },
   "디스워오브마인 폐허가된도시이야기 확장": {
-    "status": "unresolved",
-    "ownedName": "디스워오브마인 폐허가된도시이야기 확장",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "247665",
+    "ownedName": "디스워오브마인 폐허가된도시이야기 확장"
   },
   "라그랑하 디럭스 마스터": {
     "status": "forced",
@@ -1731,43 +1697,9 @@
     "ownedName": "라그랑하 디럭스 마스터"
   },
   "라마랜드": {
-    "status": "unresolved",
-    "ownedName": "라마랜드",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "330038",
+    "ownedName": "라마랜드"
   },
   "라스베가스": {
     "status": "auto-confirmed",
@@ -3198,12 +3130,8 @@
     "scoreGap": 26
   },
   "시간을달리는트라이앵글 (머더미스터리미니 )": {
-    "status": "auto-confirmed",
-    "bggId": "7589",
-    "ownedName": "시간을달리는트라이앵글 (머더미스터리미니 )",
-    "bggName": "Triangle",
-    "score": 87,
-    "scoreGap": 37
+    "status": "no-bgg",
+    "ownedName": "시간을달리는트라이앵글 (머더미스터리미니 )"
   },
   "시냅스챌린지2": {
     "status": "forced",

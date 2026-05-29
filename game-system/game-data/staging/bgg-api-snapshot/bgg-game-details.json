@@ -23888,6 +23888,78 @@
       "not_recommended": []
     }
   },
+  "247665": {
+    "bggId": "247665",
+    "title": "This War of Mine: Tales from the Ruined City",
+    "image": "https://cf.geekdo-images.com/zQkM10Zet79y2obhiIpicg__original/img/9G_OSxBOVkPDHSN-1guYjmhCAOk=/0x0/filters:format(jpeg)/pic4013946.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/zQkM10Zet79y2obhiIpicg__small/img/2C41QmTv__lQOj-cWJ_4dqjorQs=/fit-in/200x150/filters:strip_icc()/pic4013946.jpg",
+    "description": "War knows no end. Its victims are counted in thousands and each day we lose hope, little by little. Food is becoming scarce and our shelter is falling apart &mdash; yet we keep struggling.\n\nNew faces can be seen around the city: the friendly ones at the makeshift market or in neighboring houses, the hostile ones in the night with blinding flashlights and clubs and knives. We seek new paths to travel through the ruins &mdash; sometimes even underground &mdash; just to avoid sniper fire and loot anything of value. It's never much, yet we keep struggling. We have no other choice.\n\nTales from the Ruined City is the first expansion for This War of Mine: The Board Game, a story-rich game of survival in a war-torn city.\n\nThe expansion introduces a range of game modules to enrich the base game:\n\n- Emira is the 13th Character complete with a personal background; you may introduce her in any playthrough\n- Desperate Measures cards empower you whenever you lose anyone from your group\n- Farmers module features the Market, where your choices affect the way people perceive you; it also gives you a chance to interact with people from outside the city\n- Sewers are full of unknown dangers and thrilling narrative, providing you with options for additional Scavenging runs\n- Five Scenarios offer many hours of thrilling gameplay; each features unique rules and components and winning one of them gives you access to a reward envelope with special legacy content\n\nFace atrocities of war and prove that from horrible desperation comes great courage.\n\n&mdash;description from the publisher",
+    "yearpublished": "2018",
+    "minplayers": "1",
+    "minage": "18",
+    "maxplayers": "6",
+    "playingtime": "120",
+    "minplaytime": "45",
+    "maxplaytime": "120",
+    "averageweight": "3.4348",
+    "average": "8.39736",
+    "bayesaverage": "6.20626",
+    "usersrated": "908",
+    "rank": "Not Ranked",
+    "designers": [
+      "Marek Mydel",
+      "Michał Oracz",
+      "Jakub Wiśniewski"
+    ],
+    "artists": [
+      "Paweł Kurowski",
+      "Michał Lechowski",
+      "Paweł Niziołek",
+      "Michał Oracz"
+    ],
+    "publishers": [
+      "Galakta",
+      "11 bit studios",
+      "Albi",
+      "CrowD Games",
+      "Edge Entertainment",
+      "Elznir Games",
+      "Pendragon Game Studio",
+      "Summon Games"
+    ],
+    "categories": [
+      "Expansion for Base-game",
+      "Adventure",
+      "Exploration",
+      "Mature / Adult",
+      "Modern Warfare",
+      "Video Game Theme"
+    ],
+    "mechanics": [
+      "Action Points",
+      "Cooperative Game",
+      "Grid Movement",
+      "Push Your Luck",
+      "Simulation",
+      "Storytelling",
+      "Worker Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        1,
+        2
+      ],
+      "recommended": [
+        3
+      ],
+      "not_recommended": [
+        4,
+        5,
+        6,
+        6
+      ]
+    }
+  },
   "247694": {
     "bggId": "247694",
     "title": "TEAM3 PINK",
@@ -32197,6 +32269,74 @@
         4
       ],
       "not_recommended": [
+        4
+      ]
+    }
+  },
+  "330038": {
+    "bggId": "330038",
+    "title": "Llamaland",
+    "image": "https://cf.geekdo-images.com/SZS3cUukT7DFA04aNMjD5A__original/img/916JpcDbN66156QkN2AcBNZnOY4=/0x0/filters:format(jpeg)/pic6036704.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/SZS3cUukT7DFA04aNMjD5A__small/img/2nYAiUDGDP8x_2kXhBYUaMsQ7ZI=/fit-in/200x150/filters:strip_icc()/pic6036704.jpg",
+    "description": "The plateaus are wild, stunningly beautiful, and...full of llamas?!\n\nBeing a farmer in Llamaland isn't exactly easy with all the hills and mountains around, but even so, growing potatoes, corn, and cocoa on the slopes of the mountains is what you love. Luckily the llamas are a big help, too!\n\nBy fitting your fields in giddy heights, you gain the necessary crops in order to obtain the desired llama cards. These cards not only provide victory points, but also allow you to place a llama on your farm. After about 45 minutes, you will have an impressive crop-growing area in front of you, including your sweet and cuddly llamas.",
+    "yearpublished": "2021",
+    "minplayers": "2",
+    "minage": "10",
+    "maxplayers": "4",
+    "playingtime": "45",
+    "minplaytime": "45",
+    "maxplaytime": "45",
+    "averageweight": "2.0145",
+    "average": "7.26166",
+    "bayesaverage": "6.43241",
+    "usersrated": "2755",
+    "rank": "1500",
+    "designers": [
+      "Phil Walker-Harding"
+    ],
+    "artists": [
+      "Klemens Franz"
+    ],
+    "publishers": [
+      "Lookout Games",
+      "999 Games",
+      "ADC Blackfire Entertainment",
+      "Funforge",
+      "Gémklub",
+      "Hobby Japan",
+      "Lacerta",
+      "Maldito Games",
+      "Popcorn Games"
+    ],
+    "categories": [
+      "Animals",
+      "Farming",
+      "Territory Building"
+    ],
+    "mechanics": [
+      "Contracts",
+      "End Game Bonuses",
+      "Income",
+      "Layering",
+      "Map Addition",
+      "Open Drafting",
+      "Set Collection",
+      "Tags",
+      "Tile Placement",
+      "Variable Player Powers",
+      "Variable Set-up",
+      "Victory Points as a Resource"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2
+      ],
+      "recommended": [
+        3,
+        4
+      ],
+      "not_recommended": [
+        1,
         4
       ]
     }

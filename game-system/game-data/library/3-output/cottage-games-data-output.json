@@ -29406,16 +29406,16 @@
     "title": {
       "display": "디스워오브마인 폐허가된도시이야기 확장",
       "owned": "디스워오브마인 폐허가된도시이야기 확장",
-      "bgg": ""
+      "bgg": "This War of Mine: Tales from the Ruined City"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 8.4,
-      "weight": 3.47,
+      "id": "247665",
+      "matchStatus": "forced",
+      "year": "2018",
+      "rating": 8.39736,
+      "weight": 3.4348,
       "minPlayers": 1,
-      "maxPlayers": 3,
+      "maxPlayers": 6,
       "bestPlayers": [
         1,
         2
@@ -29425,18 +29425,40 @@
         2,
         3
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        4,
+        5,
+        6,
+        6
+      ],
+      "playingTime": 120,
+      "minPlayTime": 45,
+      "maxPlayTime": 120,
+      "categories": [
+        "Expansion for Base-game",
+        "Adventure",
+        "Exploration",
+        "Mature / Adult",
+        "Modern Warfare",
+        "Video Game Theme"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "생존"
+        "Action Points",
+        "Cooperative Game",
+        "Grid Movement",
+        "Push Your Luck",
+        "Simulation",
+        "Storytelling",
+        "Worker Placement"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Marek Mydel",
+        "Michał Oracz",
+        "Jakub Wiśniewski"
+      ],
+      "description": "War knows no end. Its victims are counted in thousands and each day we lose hope, little by little. Food is becoming scarce and our shelter is falling apart &mdash; yet we keep struggling.\n\nNew faces can be seen around the city: the friendly ones at the makeshift market or in neighboring houses, the hostile ones in the night with blinding flashlights and clubs and knives. We seek new paths to travel through the ruins &mdash; sometimes even underground &mdash; just to avoid sniper fire and loot anything of value. It's never much, yet we keep struggling. We have no other choice.\n\nTales from the Ruined City is the first expansion for This War of Mine: The Board Game, a story-rich game of survival in a war-torn city.\n\nThe expansion introduces a range of game modules to enrich the base game:\n\n- Emira is the 13th Character complete with a personal background; you may introduce her in any playthrough\n- Desperate Measures cards empower you whenever you lose anyone from your group\n- Farmers module features the Market, where your choices affect the way people perceive you; it also gives you a chance to interact with people from outside the city\n- Sewers are full of unknown dangers and thrilling narrative, providing you with options for additional Scavenging runs\n- Five Scenarios offer many hours of thrilling gameplay; each features unique rules and components and winning one of them gives you access to a reward envelope with special legacy content\n\nFace atrocities of war and prove that from horrible desperation comes great courage.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -29447,31 +29469,60 @@
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.47,
       "moodTags": [
+        "tense",
+        "funny",
+        "cozy",
         "immersive"
       ],
       "playTags": [
+        "party",
+        "storytelling",
         "strategy"
       ],
       "situationTags": [
+        "beginner",
+        "group",
+        "quick_play",
         "experienced",
         "long_stay",
         "couple",
-        "group"
+        "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "cooperative",
+        "low_conflict",
+        "competitive",
+        "turn_based",
+        "hard_coop"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "funny",
+        "cozy",
         "immersive",
+        "party",
+        "storytelling",
         "strategy",
+        "beginner",
+        "group",
+        "quick_play",
         "experienced",
         "long_stay",
         "couple",
-        "group"
+        "large_group",
+        "cooperative",
+        "low_conflict",
+        "competitive",
+        "turn_based",
+        "hard_coop"
       ],
       "displayTags": [
+        "즐기고",
+        "빠져들게",
         "머리쓰게",
-        "빠져들게"
+        "편안하게"
       ],
       "summaryKo": "",
       "comment": {
@@ -29490,9 +29541,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/zQkM10Zet79y2obhiIpicg__original/img/9G_OSxBOVkPDHSN-1guYjmhCAOk=/0x0/filters:format(jpeg)/pic4013946.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/zQkM10Zet79y2obhiIpicg__small/img/2C41QmTv__lQOj-cWJ_4dqjorQs=/fit-in/200x150/filters:strip_icc()/pic4013946.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -29647,14 +29698,14 @@
     "title": {
       "display": "라마랜드",
       "owned": "라마랜드",
-      "bgg": ""
+      "bgg": "Llamaland"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.3,
-      "weight": 2.03,
+      "id": "330038",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 7.26166,
+      "weight": 2.0145,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -29665,16 +29716,38 @@
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 45,
+      "minPlayTime": 45,
+      "maxPlayTime": 45,
+      "categories": [
+        "Animals",
+        "Farming",
+        "Territory Building"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Contracts",
+        "End Game Bonuses",
+        "Income",
+        "Layering",
+        "Map Addition",
+        "Open Drafting",
+        "Set Collection",
+        "Tags",
+        "Tile Placement",
+        "Variable Player Powers",
+        "Variable Set-up",
+        "Victory Points as a Resource"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Phil Walker-Harding"
+      ],
+      "description": "The plateaus are wild, stunningly beautiful, and...full of llamas?!\n\nBeing a farmer in Llamaland isn't exactly easy with all the hills and mountains around, but even so, growing potatoes, corn, and cocoa on the slopes of the mountains is what you love. Luckily the llamas are a big help, too!\n\nBy fitting your fields in giddy heights, you gain the necessary crops in order to obtain the desired llama cards. These cards not only provide victory points, but also allow you to place a llama on your farm. After about 45 minutes, you will have an impressive crop-growing area in front of you, including your sweet and cuddly llamas.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -29684,25 +29757,43 @@
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy",
+        "puzzle"
+      ],
       "situationTags": [
+        "experienced",
         "beginner",
         "couple",
         "group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "immersive",
+        "card_play",
+        "strategy",
+        "puzzle",
+        "experienced",
         "beginner",
         "couple",
         "group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -29720,9 +29811,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/SZS3cUukT7DFA04aNMjD5A__original/img/916JpcDbN66156QkN2AcBNZnOY4=/0x0/filters:format(jpeg)/pic6036704.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/SZS3cUukT7DFA04aNMjD5A__small/img/2nYAiUDGDP8x_2kXhBYUaMsQ7ZI=/fit-in/200x150/filters:strip_icc()/pic6036704.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -48601,16 +48692,16 @@
     "title": {
       "display": "시간을달리는트라이앵글 (머더미스터리미니 )",
       "owned": "시간을달리는트라이앵글 (머더미스터리미니 )",
-      "bgg": "Triangle"
+      "bgg": ""
     },
     "bgg": {
-      "id": "7589",
-      "matchStatus": "auto-confirmed",
-      "year": "1983",
-      "rating": 8.25,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 6.9,
       "weight": 1.24,
       "minPlayers": 2,
-      "maxPlayers": 2,
+      "maxPlayers": 3,
       "bestPlayers": [
         3
       ],
@@ -48619,20 +48710,15 @@
         3
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 20,
-      "minPlayTime": 20,
-      "maxPlayTime": 20,
-      "categories": [
-        "Abstract Strategy"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추상 전략"
       ],
       "mechanics": [
-        "Pattern Building",
-        "Pattern Recognition",
-        "Point to Point Movement",
-        "Tile Placement"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "패턴 만들기",
@@ -48640,10 +48726,8 @@
         "포인트 이동",
         "타일 배치"
       ],
-      "designers": [
-        "(Uncredited)"
-      ],
-      "description": "(From the box) Triangle is unlike any other board game you've ever played. Yet it has one thing in common with all the classic games - it doesn't yield its secrets all at once. Played at basic level, Triangle is as enjoyable and as satisfying as draughts. It's almost as easy to play too. Except that the moves with which you capture your opponent's pieces are far more varied and interesting.",
+      "designers": [],
+      "description": "",
       "descriptionKo": "(상자 설명) 트라이앵글은 당신이 지금까지 경험한 다른 모든 보드게임과 다릅니다. 다만 고전 게임들과 한 가지 공통점이 있습니다 - 비결을 한 번에 드러내지 않는다는 것입니다. 기본 수준으로 플레이하면 트라이앵글은 드로츠(체커)만큼 즐겁고 만족스럽습니다. 배우기도 거의 같을 정도로 쉽습니다. 다만 상대방의 말을 포획하는 방식이 훨씬 더 다양하고 흥미롭다는 점이 다릅니다."
     },
     "cottage": {
@@ -48654,39 +48738,42 @@
       "difficultyId": "beginner",
       "difficultyWeight": 1.24,
       "moodTags": [
+        "tense",
+        "immersive",
         "cozy"
       ],
       "playTags": [
-        "puzzle",
-        "strategy"
+        "deduction",
+        "murder_mystery"
       ],
       "situationTags": [
-        "quick_play",
         "beginner",
         "first_game",
-        "couple"
+        "group"
       ],
       "interactionTags": [
-        "silent_focus",
-        "competitive"
+        "social",
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "immersive",
         "cozy",
-        "puzzle",
-        "strategy",
-        "quick_play",
+        "deduction",
+        "murder_mystery",
         "beginner",
         "first_game",
-        "couple",
-        "silent_focus",
-        "competitive"
+        "group",
+        "social",
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
-        "편안하게",
-        "경쟁형"
+        "머더미스터리",
+        "빠져들게",
+        "편안하게"
       ],
       "summaryKo": "상대 말을 다양한 방식으로 포획하며 즐기는 체커식 전략게임",
       "comment": {
@@ -48705,9 +48792,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/eCEP8xyhQq3WEot8RR1Edw__original/img/NmwGqzhD_1ZRB5-us_ivH3n1Gmw=/0x0/filters:format(jpeg)/pic30774.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/eCEP8xyhQq3WEot8RR1Edw__small/img/CD8i9fj6YW1AFWHlj-kDqygp0dM=/fit-in/200x150/filters:strip_icc()/pic30774.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {

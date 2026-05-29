@@ -4763,14 +4763,14 @@
   {
     "id": "디스워오브마인-폐허가된도시이야기-확장",
     "ownedName": "디스워오브마인 폐허가된도시이야기 확장",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "This War of Mine: Tales from the Ruined City",
+    "bggId": "247665",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "협력",
-    "difficulty": null,
+    "difficulty": 3.4348,
     "difficultyWeight": 3.47,
-    "rating": null,
+    "rating": 8.39736,
     "bestPlayers": [
       1,
       2
@@ -4805,14 +4805,14 @@
   {
     "id": "라마랜드",
     "ownedName": "라마랜드",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Llamaland",
+    "bggId": "330038",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.0145,
     "difficultyWeight": 2.03,
-    "rating": null,
+    "rating": 7.26166,
     "bestPlayers": [
       2
     ],
@@ -7767,14 +7767,14 @@
   {
     "id": "시간을달리는트라이앵글-머더미스터리미니",
     "ownedName": "시간을달리는트라이앵글 (머더미스터리미니 )",
-    "titleEn": "Triangle",
-    "bggId": "7589",
-    "matchStatus": "auto-confirmed",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "no-bgg",
+    "status": "pending-cache",
     "location": "머더미",
     "difficulty": null,
     "difficultyWeight": 1.24,
-    "rating": 8.25,
+    "rating": null,
     "bestPlayers": [
       3
     ],
