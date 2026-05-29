@@ -586,6 +586,7 @@
           showToast('저장됐어요!');
           document.getElementById('prGameRows').innerHTML = '';
           addRow(false);
+          if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);
           recordsLoaded = false;
           const recTab = root.querySelector('[data-tab="records"]');
           if (recTab) recTab.click();
