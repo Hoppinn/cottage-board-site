@@ -5497,36 +5497,24 @@
     "scoreGap": 30
   },
   "탁상탐정단1": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "318977",
-    "ownedName": "탁상탐정단1",
-    "bggName": "MicroMacro: Crime City",
-    "score": 119,
-    "scoreGap": 22
+    "ownedName": "탁상탐정단1"
   },
   "탁상탐정단2": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "338834",
-    "ownedName": "탁상탐정단2",
-    "bggName": "MicroMacro: Crime City – Full House",
-    "score": 115,
-    "scoreGap": 14
+    "ownedName": "탁상탐정단2"
   },
   "탁상탐정단3": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "364766",
-    "ownedName": "탁상탐정단3",
-    "bggName": "MicroMacro: Crime City – All In",
-    "score": 111,
-    "scoreGap": 10
+    "ownedName": "탁상탐정단3"
   },
   "탁상탐정단4": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "398162",
-    "ownedName": "탁상탐정단4",
-    "bggName": "MicroMacro: Crime City – Showdown",
-    "score": 109,
-    "scoreGap": 8
+    "ownedName": "탁상탐정단4"
   },
   "탐험가들": {
     "status": "auto-confirmed",
