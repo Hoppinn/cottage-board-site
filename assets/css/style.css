@@ -3061,6 +3061,12 @@ body.sheet-open{
 .profile-panel-stats span{color:var(--muted);}
 .profile-panel-stats strong{color:var(--text);font-weight:700;}
 .profile-panel-loading{font-size:14px;color:var(--muted);}
+.profile-activity-group{margin-top:16px;}
+.profile-activity-label{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 6px;}
+.profile-activity-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;}
+.profile-activity-list li{font-size:13px;color:var(--text);display:flex;justify-content:space-between;}
+.profile-activity-list li span{color:var(--muted);font-size:12px;}
+.profile-more{color:var(--muted);font-size:12px;}
 
 /* 프로필 사진 피커 모달 */
 .photo-picker-modal{

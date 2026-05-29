@@ -244,15 +244,49 @@ async function openProfilePanel() {
   if (!window.CottageDB?.getMyStats) return;
   const stats = await window.CottageDB.getMyStats(String(user.id));
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
+  const fmtShort = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
+
+  function getGameName(gameId) {
+    if (window.gameData?.[gameId]) {
+      const g = window.gameData[gameId];
+      return g.display || g.titleKo || g.titleEn || gameId;
+    }
+    if (window.COTTAGE_GAMES) {
+      const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(gameId));
+      if (g) return g.display || g.titleKo || g.titleEn || gameId;
+    }
+    return gameId;
+  }
+
+  function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  const playItems = stats.plays.slice(0, 5).map(r => {
+    const date = r.played_at || (r.created_at||'').slice(0,10);
+    return `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(date)}</span></li>`;
+  }).join('');
+  const morePlay = stats.plays.length > 5 ? `<li class="profile-more">… 외 ${stats.plays.length - 5}건</li>` : '';
+
+  const commentItems = stats.comments.slice(0, 5).map(r =>
+    `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
+  ).join('');
+  const moreComment = stats.comments.length > 5 ? `<li class="profile-more">… 외 ${stats.comments.length - 5}건</li>` : '';
+
   panel.querySelector('.profile-panel-body').innerHTML = `
-    <p class="profile-panel-nick">${String(user.nickname || '손님').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</p>
+    <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>마지막 방문</span><strong>${fmt(stats.profile?.last_seen_at)}</strong></li>
-      <li><span>플레이 기록</span><strong>${stats.plays}건</strong></li>
-      <li><span>코멘트</span><strong>${stats.comments}건</strong></li>
+      ${stats.moimCount ? `<li><span>모임 참여</span><strong>${stats.moimCount}회</strong></li>` : ''}
       <li><span>건의하기</span><strong>${stats.suggestions}건</strong></li>
-    </ul>`;
+    </ul>
+    ${stats.plays.length ? `<div class="profile-activity-group">
+      <p class="profile-activity-label">🎲 플레이 기록 ${stats.plays.length}건</p>
+      <ul class="profile-activity-list">${playItems}${morePlay}</ul>
+    </div>` : ''}
+    ${stats.comments.length ? `<div class="profile-activity-group">
+      <p class="profile-activity-label">💬 코멘트 ${stats.comments.length}건</p>
+      <ul class="profile-activity-list">${commentItems}${moreComment}</ul>
+    </div>` : ''}`;
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

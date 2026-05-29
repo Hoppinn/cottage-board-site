@@ -442,18 +442,27 @@
   async function getMyStats(userId) {
     try {
       const [playRes, commentRes, suggestRes, profile] = await Promise.all([
-        db.from('game_play_records').select('*', { count: 'exact', head: true }).eq('user_id', userId),
-        db.from('game_comments').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+        db.from('game_play_records').select('id, game_id, played_at, created_at, group_name').eq('user_id', userId).order('created_at', { ascending: false }),
+        db.from('game_comments').select('id, game_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
       ]);
+      const plays = playRes.data || [];
+      const moimSessions = new Set();
+      for (const r of plays) {
+        if (r.group_name) {
+          const d = r.played_at || (r.created_at || '').slice(0, 10);
+          moimSessions.add(`${r.group_name}_${d}`);
+        }
+      }
       return {
-        plays: playRes.count || 0,
-        comments: commentRes.count || 0,
+        plays,
+        comments: commentRes.data || [],
         suggestions: suggestRes.count || 0,
+        moimCount: moimSessions.size,
         profile: profile.data || null,
       };
-    } catch (_) { return { plays: 0, comments: 0, suggestions: 0, profile: null }; }
+    } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null }; }
   }
 
   window.CottageDB = {
