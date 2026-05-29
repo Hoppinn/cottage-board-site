@@ -1,32 +1,71 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>게임 후기 | 코티지보드</title>
+  <title>플레이 기록 | 코티지보드</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
-    .review-game-title { font-size: 18px; font-weight: 900; color: var(--green); margin: 0 0 4px; }
-    .review-back { font-size: 13px; color: var(--muted); text-decoration: none; display: inline-block; margin-bottom: 12px; }
-    .review-back:hover { color: var(--green); }
-    .review-write-box { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
-    .review-write-box textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border, #e8e4dc); border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; }
-    .review-write-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
-    .review-submit-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
-    .review-submit-btn:disabled { opacity: 0.5; }
-    .review-login-notice { font-size: 13px; color: var(--muted); text-align: center; padding: 12px 0; }
-    .review-list { display: flex; flex-direction: column; gap: 12px; }
-    .review-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 12px; padding: 14px; }
-    .review-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .review-item-game { font-size: 12px; font-weight: 700; color: var(--green); }
-    .review-item-nick { font-size: 13px; font-weight: 700; color: var(--text); }
-    .review-item-date { font-size: 11px; color: var(--muted); }
-    .review-item-content { font-size: 14px; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
-    .review-del-btn { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 6px; }
-    .review-del-btn:hover { color: #c0392b; }
-    .review-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 32px 0; }
-    .review-section-title { font-size: 14px; font-weight: 700; color: var(--muted); margin: 0 0 12px; }
+    /* tabs */
+    .pr-tabs { display: flex; border-bottom: 2px solid var(--border,#e8e4dc); margin-bottom: 20px; }
+    .pr-tab { flex: 1; padding: 10px 4px; font-size: 14px; font-weight: 700; color: var(--muted); background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; margin-bottom: -2px; }
+    .pr-tab.is-active { color: var(--green); border-bottom-color: var(--green); }
+    .pr-panel { display: none; }
+    .pr-panel.is-active { display: block; }
+
+    /* input form */
+    .pr-field-label { font-size: 11px; color: var(--muted); margin-bottom: 3px; display: block; }
+    .pr-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .pr-meta-grid input { border: 1px solid var(--border,#e8e4dc); border-radius: 8px; padding: 8px 10px; font-size: 14px; font-family: inherit; background: var(--card-bg,#fff); width: 100%; box-sizing: border-box; }
+    .pr-add-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 9px 14px; font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: 12px; }
+    .pr-add-btn:hover { opacity: 0.85; }
+    .pr-game-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    .pr-game-row { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 12px; }
+    .pr-row-head { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .pr-row-head input { flex: 1; border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 14px; font-family: inherit; background: var(--bg,#f5f0e8); }
+    .pr-rm-btn { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; padding: 2px 6px; flex-shrink: 0; }
+    .pr-rm-btn:hover { color: #c0392b; }
+    .pr-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .pr-detail-grid input { border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; background: var(--bg,#f5f0e8); width: 100%; box-sizing: border-box; }
+    .pr-review-ta { width: 100%; box-sizing: border-box; border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 52px; margin-top: 6px; background: var(--bg,#f5f0e8); }
+    .pr-submit-btn { width: 100%; background: var(--green); color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .pr-submit-btn:disabled { opacity: 0.5; }
+    .pr-login-notice { text-align: center; padding: 36px 0; color: var(--muted); font-size: 14px; }
+
+    /* record list */
+    .pr-date-group { margin-bottom: 22px; }
+    .pr-date-hd { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .pr-group-chip { font-size: 11px; background: var(--green); color: #fff; border-radius: 20px; padding: 1px 8px; }
+    .pr-rec-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; }
+    .pr-rec-game { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
+    .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; }
+    .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 5px; padding: 1px 7px; color: var(--muted); }
+
+    /* review list */
+    .rv-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
+    .rv-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .rv-game { font-size: 12px; font-weight: 700; color: var(--green); }
+    .rv-nick { font-size: 13px; font-weight: 700; color: var(--text); }
+    .rv-date { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .rv-content { font-size: 14px; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
+    .rv-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 6px; margin-left: 6px; }
+    .rv-del:hover { color: #c0392b; }
+
+    /* single game view (from bottom sheet ?game=) */
+    .rv-write-box { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
+    .rv-write-box textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border,#e8e4dc); border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; }
+    .rv-write-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .rv-submit-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .rv-submit-btn:disabled { opacity: 0.5; }
+    .rv-game-title { font-size: 18px; font-weight: 900; color: var(--green); margin: 0 0 4px; }
+    .rv-section-title { font-size: 14px; font-weight: 700; color: var(--muted); margin: 0 0 12px; }
+
+    /* toast */
+    .pr-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; border-radius: 22px; padding: 10px 24px; font-size: 14px; font-weight: 700; z-index: 9999; opacity: 0; transition: opacity 0.25s; pointer-events: none; white-space: nowrap; }
+    .pr-toast.show { opacity: 1; }
+
+    .pr-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0; }
   </style>
 </head>
 
@@ -87,13 +126,15 @@
 
   <main>
     <section class="inner-page">
-      <nav class="breadcrumb">게임 찾기 <span>›</span> 플레이 기록</nav>
+      <nav class="breadcrumb" id="pageBreadcrumb">게임 찾기 <span>›</span> 플레이 기록</nav>
       <div id="reviewPageHeader"></div>
       <div class="inner-page-body" id="reviewRoot">
-        <p class="review-empty">불러오는 중...</p>
+        <p class="pr-empty">불러오는 중...</p>
       </div>
     </section>
   </main>
+
+  <div class="pr-toast" id="prToast"></div>
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
@@ -107,13 +148,12 @@
   <script>
   (function () {
     const params = new URLSearchParams(location.search);
-    const gameId = params.get('game') || '';
+    const GAME_ID = params.get('game') || '';
+
+    // ── helpers ─────────────────────────────────────────────────────
 
     function getGameName(id) {
-      if (window.gameData?.[id]) {
-        const g = window.gameData[id];
-        return g.display || g.titleKo || g.titleEn || id;
-      }
+      if (!id) return '알 수 없는 게임';
       if (window.COTTAGE_GAMES) {
         const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(id));
         if (g) return g.display || g.titleKo || g.titleEn || id;
@@ -121,99 +161,381 @@
       return id;
     }
 
-    function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function gameIdByName(name) {
+      if (!window.COTTAGE_GAMES || !name) return name;
+      const found = window.COTTAGE_GAMES.find(g => {
+        const label = g.display || g.titleKo || g.titleEn || '';
+        return label.trim() === name.trim();
+      });
+      return found ? String(found.bggId) : name;
+    }
+
+    function escH(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
     function formatDate(iso) {
       return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
     }
 
+    function todayKst() {
+      return new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    }
+
+    function formatKstDate(d) {
+      if (!d || d === '?') return d;
+      const [y, m, day] = d.split('-');
+      return `${y}년 ${Number(m)}월 ${Number(day)}일`;
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('prToast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function getDb() {
+      const cfg = window.SUPABASE_CONFIG;
+      return window.supabase.createClient(cfg.url, cfg.anonKey);
+    }
+
+    // ── entry point ──────────────────────────────────────────────────
+
     const headerEl = document.getElementById('reviewPageHeader');
     const root = document.getElementById('reviewRoot');
 
-    if (gameId) {
-      const name = getGameName(gameId);
-      document.title = `${name} 후기 | 코티지보드`;
-      headerEl.innerHTML = `
-        <nav class="breadcrumb"><a href="./game-reviews.html">전체 후기</a> <span>›</span> ${escH(name)}</nav>
-        <p class="review-game-title">${escH(name)}</p>`;
-    } else {
-      headerEl.innerHTML = `<h1 style="font-size:20px;font-weight:900;margin:0 0 16px">게임 후기</h1>`;
+    let tried = false;
+    function tryInit() { if (tried) return; tried = true; GAME_ID ? initGameView() : initHub(); }
+    window.addEventListener('kakao-auth-ready', tryInit);
+    window.addEventListener('cottage-auth-changed', () => { if (!GAME_ID) renderInputPanel(); });
+    setTimeout(tryInit, 1200);
+
+    // ══════════════════════════════════════════════════════════════
+    // HUB MODE (메인 플레이 기록 허브)
+    // ══════════════════════════════════════════════════════════════
+
+    function initHub() {
+      document.title = '플레이 기록 | 코티지보드';
+      headerEl.innerHTML = '<h1 style="font-size:20px;font-weight:900;margin:0 0 16px">플레이 기록</h1>';
+
+      root.innerHTML = `
+        <div class="pr-tabs">
+          <button class="pr-tab is-active" data-tab="input">기록 입력</button>
+          <button class="pr-tab" data-tab="records">최근 기록</button>
+          <button class="pr-tab" data-tab="reviews">게임 후기</button>
+        </div>
+        <div id="prPanelInput" class="pr-panel is-active"></div>
+        <div id="prPanelRecords" class="pr-panel"></div>
+        <div id="prPanelReviews" class="pr-panel"></div>`;
+
+      root.querySelectorAll('.pr-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          root.querySelectorAll('.pr-tab').forEach(t => t.classList.remove('is-active'));
+          root.querySelectorAll('.pr-panel').forEach(p => p.classList.remove('is-active'));
+          tab.classList.add('is-active');
+          document.getElementById('prPanel' + cap(tab.dataset.tab)).classList.add('is-active');
+          if (tab.dataset.tab === 'records') loadRecords();
+          if (tab.dataset.tab === 'reviews') loadReviews();
+        });
+      });
+
+      renderInputPanel();
     }
 
-    function renderWriteBox() {
+    function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    // ── 기록 입력 탭 ─────────────────────────────────────────────
+
+    async function renderInputPanel() {
+      const panel = document.getElementById('prPanelInput');
+      if (!panel) return;
+
       const user = window.getKakaoUser?.();
       if (!user) {
-        return `<div class="review-write-box review-login-notice">
-          <button class="btn primary-btn" style="font-size:13px;padding:8px 18px;min-width:0" onclick="window.kakaoLogin?.()">카카오 로그인 후 후기를 남겨보세요</button>
+        panel.innerHTML = `<div class="pr-login-notice">
+          <p>로그인하면 플레이 기록을 남길 수 있어요.</p>
+          <button class="btn primary-btn" style="margin-top:14px;font-size:13px;padding:8px 18px;min-width:0" onclick="window.kakaoLogin?.()">카카오 로그인</button>
         </div>`;
+        return;
       }
-      return `<div class="review-write-box">
-        <textarea id="reviewInput" placeholder="이 게임에 대한 후기를 남겨보세요." maxlength="500"></textarea>
-        <div class="review-write-actions">
-          <button class="review-submit-btn" id="reviewSubmitBtn" type="button">등록</button>
+
+      const groups = await window.CottageDB?.getGroupNames() || [];
+      const groupDl = groups.map(g => `<option value="${escH(g)}">`).join('');
+      const gameDl = (window.COTTAGE_GAMES || []).map(g => {
+        const label = escH(g.display || g.titleKo || g.titleEn || '');
+        return `<option value="${label}">`;
+      }).join('');
+
+      panel.innerHTML = `
+        <datalist id="dlGroups">${groupDl}</datalist>
+        <datalist id="dlGames">${gameDl}</datalist>
+
+        <div class="pr-meta-grid">
+          <div>
+            <label class="pr-field-label">날짜</label>
+            <input type="date" id="prDate" value="${todayKst()}">
+          </div>
+          <div>
+            <label class="pr-field-label">그룹명 (선택)</label>
+            <input type="text" id="prGroup" placeholder="동호회명 등" list="dlGroups">
+          </div>
         </div>
-      </div>`;
+
+        <div class="pr-game-rows" id="prGameRows"></div>
+        <button class="pr-add-btn" id="prAddBtn" type="button">+ 게임 추가</button>
+        <button class="pr-submit-btn" id="prSaveBtn" type="button">저장하기</button>`;
+
+      let rowIdx = 0;
+
+      function addRow(focusInput) {
+        const div = document.createElement('div');
+        div.className = 'pr-game-row';
+        div.dataset.row = ++rowIdx;
+        div.innerHTML = `
+          <div class="pr-row-head">
+            <input type="text" class="prGameName" placeholder="게임명 검색" list="dlGames" autocomplete="off">
+            <button class="pr-rm-btn" type="button" title="삭제">✕</button>
+          </div>
+          <div class="pr-detail-grid">
+            <div>
+              <label class="pr-field-label">인원수</label>
+              <input type="number" class="prCount" placeholder="–" min="1" max="20">
+            </div>
+            <div>
+              <label class="pr-field-label">플레이시간(분)</label>
+              <input type="number" class="prTime" placeholder="–" min="1">
+            </div>
+            <div>
+              <label class="pr-field-label">참여자</label>
+              <input type="text" class="prNames" placeholder="홍길동, 이순신">
+            </div>
+            <div>
+              <label class="pr-field-label">점수·메모</label>
+              <input type="text" class="prScore" placeholder="1등: 홍길동">
+            </div>
+          </div>
+          <textarea class="pr-review-ta prReview" placeholder="후기 (선택)" rows="2"></textarea>`;
+        div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
+        document.getElementById('prGameRows').appendChild(div);
+        if (focusInput) div.querySelector('.prGameName').focus();
+      }
+
+      addRow(false);
+
+      document.getElementById('prAddBtn').addEventListener('click', () => addRow(true));
+
+      document.getElementById('prSaveBtn').addEventListener('click', async () => {
+        const dateVal = document.getElementById('prDate').value || todayKst();
+        const groupVal = document.getElementById('prGroup').value.trim();
+        const rows = document.querySelectorAll('#prGameRows .pr-game-row');
+
+        const entries = [];
+        for (const row of rows) {
+          const name = row.querySelector('.prGameName').value.trim();
+          if (!name) continue;
+          entries.push({
+            id: gameIdByName(name),
+            count: parseInt(row.querySelector('.prCount').value) || null,
+            time: parseInt(row.querySelector('.prTime').value) || null,
+            names: row.querySelector('.prNames').value.trim() || null,
+            score: row.querySelector('.prScore').value.trim() || null,
+            review: row.querySelector('.prReview').value.trim() || null,
+          });
+        }
+
+        if (!entries.length) { alert('게임을 하나 이상 입력해주세요.'); return; }
+
+        const btn = document.getElementById('prSaveBtn');
+        btn.disabled = true; btn.textContent = '저장 중...';
+
+        let ok = true;
+        for (const e of entries) {
+          const res = await window.CottageDB.recordGamePlay(
+            e.id, e.count, e.names, e.time, e.score,
+            user.nickname, user.id, groupVal || null, dateVal
+          );
+          if (res?.error) { ok = false; continue; }
+          if (e.review) {
+            await window.CottageDB.insertGameReview(e.id, e.review, user.nickname, user.id);
+          }
+        }
+
+        btn.disabled = false; btn.textContent = '저장하기';
+
+        if (ok) {
+          showToast('저장됐어요!');
+          document.getElementById('prGameRows').innerHTML = '';
+          addRow(false);
+        } else {
+          alert('일부 저장에 실패했어요. 다시 시도해주세요.');
+        }
+      });
     }
 
-    async function render() {
-      if (!window.CottageDB) { root.innerHTML = '<p class="review-empty">DB 연결 실패</p>'; return; }
+    // ── 최근 기록 탭 ─────────────────────────────────────────────
 
-      const reviews = gameId
-        ? await window.CottageDB.getGameReviews(gameId)
-        : await (async () => {
-            // 전체 후기: 최근 100건
-            try {
-              const cfg = window.SUPABASE_CONFIG;
-              const db = window.supabase.createClient(cfg.url, cfg.anonKey);
-              const { data } = await db.from('game_reviews')
-                .select('id, user_id, nickname, game_id, content, created_at')
-                .order('created_at', { ascending: false })
-                .limit(100);
-              return data || [];
-            } catch (_) { return []; }
-          })();
+    let recordsLoaded = false;
+    async function loadRecords() {
+      if (recordsLoaded) return;
+      recordsLoaded = true;
+      const panel = document.getElementById('prPanelRecords');
+      panel.innerHTML = '<p class="pr-empty">불러오는 중...</p>';
 
-      const writeBox = gameId ? renderWriteBox() : '';
+      try {
+        const { data } = await getDb().from('game_play_records')
+          .select('id, game_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at')
+          .order('created_at', { ascending: false })
+          .limit(120);
+
+        if (!data?.length) { panel.innerHTML = '<p class="pr-empty">아직 기록이 없어요.</p>'; return; }
+
+        const byDate = {};
+        for (const r of data) {
+          const d = r.played_at || r.created_at?.slice(0, 10) || '?';
+          if (!byDate[d]) byDate[d] = { group: r.group_name, recs: [] };
+          byDate[d].recs.push(r);
+        }
+
+        let html = '';
+        for (const [d, { group, recs }] of Object.entries(byDate)) {
+          html += `<div class="pr-date-group">
+            <div class="pr-date-hd">${escH(formatKstDate(d))}${group ? `<span class="pr-group-chip">${escH(group)}</span>` : ''}</div>`;
+          for (const r of recs) {
+            const tags = [
+              r.player_count ? `👥 ${r.player_count}명` : null,
+              r.player_names ? `🎮 ${r.player_names}` : null,
+              r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
+              r.score_note ? `🏆 ${r.score_note}` : null,
+              r.nickname ? `${r.nickname}` : null,
+            ].filter(Boolean);
+            html += `<div class="pr-rec-item">
+              <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
+              ${tags.length ? `<div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>` : ''}
+            </div>`;
+          }
+          html += '</div>';
+        }
+        panel.innerHTML = html;
+      } catch (_) {
+        panel.innerHTML = '<p class="pr-empty">불러오기 실패</p>';
+      }
+    }
+
+    // ── 게임 후기 탭 ─────────────────────────────────────────────
+
+    let reviewsLoaded = false;
+    async function loadReviews() {
+      if (reviewsLoaded) return;
+      reviewsLoaded = true;
+      const panel = document.getElementById('prPanelReviews');
+      panel.innerHTML = '<p class="pr-empty">불러오는 중...</p>';
+
+      try {
+        const { data } = await getDb().from('game_reviews')
+          .select('id, user_id, nickname, game_id, content, created_at')
+          .order('created_at', { ascending: false })
+          .limit(50);
+
+        if (!data?.length) { panel.innerHTML = '<p class="pr-empty">아직 후기가 없어요.</p>'; return; }
+
+        const user = window.getKakaoUser?.();
+        panel.innerHTML = data.map(r => {
+          const isMine = user && String(r.user_id) === String(user.id);
+          return `<div class="rv-item" data-id="${r.id}">
+            <div class="rv-head">
+              <div>
+                <div class="rv-game">${escH(getGameName(r.game_id))}</div>
+                <div class="rv-nick">${escH(r.nickname || '익명')}</div>
+              </div>
+              <div style="display:flex;align-items:center">
+                <span class="rv-date">${formatDate(r.created_at)}</span>
+                ${isMine ? `<button class="rv-del" data-id="${r.id}" type="button">삭제</button>` : ''}
+              </div>
+            </div>
+            <p class="rv-content">${escH(r.content)}</p>
+          </div>`;
+        }).join('');
+
+        panel.querySelectorAll('.rv-del').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            if (!confirm('삭제할까요?')) return;
+            await window.CottageDB.deleteGameReview(btn.dataset.id);
+            btn.closest('.rv-item').remove();
+          });
+        });
+      } catch (_) {
+        panel.innerHTML = '<p class="pr-empty">불러오기 실패</p>';
+      }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // SINGLE GAME VIEW (바텀시트에서 ?game=<id>로 진입)
+    // ══════════════════════════════════════════════════════════════
+
+    function initGameView() {
+      const name = getGameName(GAME_ID);
+      document.title = `${name} 후기 | 코티지보드`;
+
+      const bc = document.getElementById('pageBreadcrumb');
+      bc.innerHTML = `<a href="./game-reviews.html">게임 찾기 <span>›</span> 플레이 기록</a> <span>›</span> ${escH(name)}`;
+
+      headerEl.innerHTML = `<p class="rv-game-title">${escH(name)}</p>`;
+
+      renderSingleGame();
+    }
+
+    async function renderSingleGame() {
+      if (!window.CottageDB) { root.innerHTML = '<p class="pr-empty">DB 연결 실패</p>'; return; }
+
+      const reviews = await window.CottageDB.getGameReviews(GAME_ID);
+      const user = window.getKakaoUser?.();
+
+      const writeBox = user
+        ? `<div class="rv-write-box">
+            <textarea id="rvInput" placeholder="이 게임에 대한 후기를 남겨보세요." maxlength="500"></textarea>
+            <div class="rv-write-actions">
+              <button class="rv-submit-btn" id="rvSubmitBtn" type="button">등록</button>
+            </div>
+          </div>`
+        : `<div class="rv-write-box" style="text-align:center;padding:12px 0">
+            <button class="btn primary-btn" style="font-size:13px;padding:8px 18px;min-width:0" onclick="window.kakaoLogin?.()">카카오 로그인 후 후기를 남겨보세요</button>
+          </div>`;
 
       const listHtml = reviews.length
         ? reviews.map(r => {
-            const user = window.getKakaoUser?.();
             const isMine = user && String(r.user_id) === String(user.id);
-            const gameName = gameId ? '' : `<span class="review-item-game">${escH(getGameName(r.game_id))}</span> · `;
-            return `<div class="review-item" data-id="${r.id}">
-              <div class="review-item-header">
-                <span class="review-item-nick">${gameName}${escH(r.nickname || '익명')}</span>
-                <span style="display:flex;align-items:center;gap:6px">
-                  <span class="review-item-date">${formatDate(r.created_at)}</span>
-                  ${isMine ? `<button class="review-del-btn" type="button">삭제</button>` : ''}
+            return `<div class="rv-item" data-id="${r.id}">
+              <div class="rv-head">
+                <span class="rv-nick">${escH(r.nickname || '익명')}</span>
+                <span style="display:flex;align-items:center">
+                  <span class="rv-date">${formatDate(r.created_at)}</span>
+                  ${isMine ? `<button class="rv-del" type="button">삭제</button>` : ''}
                 </span>
               </div>
-              <p class="review-item-content">${escH(r.content)}</p>
+              <p class="rv-content">${escH(r.content)}</p>
             </div>`;
           }).join('')
-        : `<p class="review-empty">아직 후기가 없어요.<br>${gameId ? '첫 번째 후기를 남겨보세요!' : ''}</p>`;
+        : `<p class="pr-empty">아직 후기가 없어요.<br>첫 번째 후기를 남겨보세요!</p>`;
 
-      root.innerHTML = `${writeBox}<div class="review-section-title">${gameId ? '후기' : '최근 후기'} ${reviews.length}건</div><div class="review-list">${listHtml}</div>`;
+      root.innerHTML = `${writeBox}<div class="rv-section-title">후기 ${reviews.length}건</div>${listHtml}`;
 
-      // 등록 버튼
-      const submitBtn = document.getElementById('reviewSubmitBtn');
-      if (submitBtn && gameId) {
+      const submitBtn = document.getElementById('rvSubmitBtn');
+      if (submitBtn) {
         submitBtn.addEventListener('click', async () => {
-          const input = document.getElementById('reviewInput');
+          const input = document.getElementById('rvInput');
           const content = input?.value?.trim();
           if (!content) return;
-          const user = window.getKakaoUser?.();
           submitBtn.disabled = true;
-          const res = await window.CottageDB.insertGameReview(gameId, content, user?.nickname, user?.id);
-          if (!res?.error) { input.value = ''; await render(); }
+          const res = await window.CottageDB.insertGameReview(GAME_ID, content, user?.nickname, user?.id);
+          if (!res?.error) { input.value = ''; await renderSingleGame(); }
           else submitBtn.disabled = false;
         });
       }
 
-      // 삭제 버튼
-      root.querySelectorAll('.review-del-btn').forEach(btn => {
+      root.querySelectorAll('.rv-del').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const item = btn.closest('.review-item');
+          const item = btn.closest('.rv-item');
           if (!confirm('삭제할까요?')) return;
           await window.CottageDB.deleteGameReview(item.dataset.id);
           item.remove();
@@ -221,11 +543,6 @@
       });
     }
 
-    let tried = false;
-    function tryRender() { if (tried) return; tried = true; render(); }
-    window.addEventListener('kakao-auth-ready', tryRender);
-    window.addEventListener('cottage-auth-changed', render);
-    setTimeout(tryRender, 1200);
   })();
   </script>
 
