@@ -348,9 +348,15 @@ const DIFFICULTY_LEVELS = [
   }
 ];
 
+const DIFFICULTY_UNKNOWN = { id: "unknown", label: "-", shortLabel: "-", icon: "", className: "" };
+
 function getDifficultyData(weight){
   const numericWeight =
     Number(weight) || 0;
+
+  if(numericWeight === 0){
+    return DIFFICULTY_UNKNOWN;
+  }
 
   return (
     DIFFICULTY_LEVELS.find((level) =>
@@ -431,6 +437,7 @@ function formatDifficultyWeight(value){
 }
 
 function formatDifficultyLabel(difficulty){
+  if(!difficulty || difficulty.id === "unknown") return "";
   if(difficulty.id === "kids"){
     return `(${difficulty.icon} 아이도 <br>할 수 있어요)`;
   }
@@ -619,6 +626,10 @@ function matchRecommendLevel(game, levelValue){
   const difficultyId =
     recommend?.difficultyId ||
     getDifficultyData(recommend?.difficultyWeight).id;
+
+  if(difficultyId === "unknown"){
+    return false;
+  }
 
   return difficultyId === normalizedLevel;
 }

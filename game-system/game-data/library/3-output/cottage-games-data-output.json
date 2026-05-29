@@ -72183,15 +72183,15 @@
     "title": {
       "display": "탁상탐정단1",
       "owned": "탁상탐정단1",
-      "bgg": "MicroMacro: Crime City"
+      "bgg": "Bloody Antique"
     },
     "bgg": {
-      "id": "318977",
-      "matchStatus": "auto-confirmed",
-      "year": "2020",
-      "rating": 7.4465,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
       "weight": 1.1007,
-      "minPlayers": 1,
+      "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
         2
@@ -72205,22 +72205,16 @@
         4,
         4
       ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72228,11 +72222,9 @@
         "시나리오 게임",
         "솔로 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "Crimes have taken place all over the city, and you want to figure out exactly what's happened, so you'll need to look closely at the giant city map (75 x 110 cm / 29.5 x 43 inches) to find all the hidden information and trace the trails of those who had it in for their foes.\n\nMicroMacro: Crime City includes 16 cases for you to solve. Each case includes a number of cards that ask you to find something on the map or uncover where someone has gone or otherwise reveal information relevant to a case. The city map serves as a map in time as well as space, so you'll typically find people in multiple locations throughout the streets and buildings, and you need to piece together what happened, whether by going through the case card by card or by reading only the starting card in the case and trying to figure out everything that happened for yourself. Will you be able to answer all questions about the case without fail?\n\nThe second edition of MicroMacro: Crime City now marks each case with symbols so that parents can decide which cases the youngest investigators are cleared to research.",
-      "descriptionKo": "도시 곳곳에서 범죄가 발생했고, 당신은 정확히 무엇이 일어났는지 파악하려고 합니다. 거대한 도시 지도(75 x 110 cm)를 자세히 살펴보며 숨겨진 정보를 찾고 범인들의 이동 경로를 추적해야 합니다.\n\n마이크로매크로: 크라임 시티는 16가지 사건을 포함하고 있습니다. 각 사건마다 지도에서 특정 대상을 찾거나 누군가의 이동 경로를 추적하거나 사건과 관련된 정보를 밝혀내도록 요구하는 카드들이 있습니다. 도시 지도는 공간뿐 아니라 시간의 흐름도 나타내므로, 일반적으로 거리와 건물 곳곳에서 여러 위치에 있는 사람들을 발견하게 됩니다. 사건 카드를 하나씩 풀어나가거나 초기 카드만 읽고 모든 일을 스스로 파악하며 무엇이 일어났는지를 조각 맞추듯 해결해야 합니다. 사건의 모든 질문에 빠짐없이 답할 수 있을까요?\n\n마이크로매크로: 크라임 시티 2판은 각 사건에 기호를 표시하여 부모들이 어린 수사관들이 조사할 수 있는 사건을 결정하도록 돕습니다."
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
@@ -72252,16 +72244,13 @@
       ],
       "situationTags": [
         "beginner",
-        "group",
         "first_game",
-        "couple"
+        "couple",
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
@@ -72272,14 +72261,11 @@
         "deduction",
         "murder_mystery",
         "beginner",
-        "group",
         "first_game",
         "couple",
-        "cooperative",
-        "low_conflict",
+        "group",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
@@ -72304,9 +72290,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/bLL3P-G25nIUkFjHxfJfnw__original/img/HBEhgjfb0QcF9pFrdJ8VYhBapoU=/0x0/filters:format(jpeg)/pic7632081.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/bLL3P-G25nIUkFjHxfJfnw__small/img/XY_Z5rRJe3IPLRfOvWp70OM2B68=/fit-in/200x150/filters:strip_icc()/pic7632081.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -72320,15 +72306,15 @@
     "title": {
       "display": "탁상탐정단2",
       "owned": "탁상탐정단2",
-      "bgg": "MicroMacro: Crime City – Full House"
+      "bgg": "The Grand Hotel Duet Case"
     },
     "bgg": {
-      "id": "338834",
-      "matchStatus": "auto-confirmed",
-      "year": "2021",
-      "rating": 7.63256,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
       "weight": 1.1616,
-      "minPlayers": 1,
+      "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
         2
@@ -72342,24 +72328,16 @@
         4,
         4
       ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game",
-        "Storytelling",
-        "Team-Based Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72369,11 +72347,9 @@
         "스토리텔링",
         "팀 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "Crimes have taken place all over the city, and you want to figure out exactly what's happened, so you'll need to look closely at the giant city map (75 x 110 cm) to find all the hidden information and trace the trails of those who had it in for their foes.\n\nMicroMacro: Crime City &ndash; Full House includes 16 cases for you to solve. Each case includes a number of cards that ask you to find something on the map or uncover where someone has gone or otherwise reveal information relevant to a case. The city map serves as a map in time as well as space, so you'll typically find people in multiple locations throughout the streets and buildings, and you need to piece together what happened, whether by going through the case card by card or by reading only the starting card in the case and trying to figure out everything that happened for yourself. Will you be able to answer all questions about the case without fail?\n\nUnlike the original MicroMacro: Crime City, Full House marks each case with symbols so that parents can decide which cases the youngest investigators are cleared to research.",
-      "descriptionKo": "도시 곳곳에서 범죄가 발생했고, 당신은 정확히 무슨 일이 일어났는지 알아내야 합니다. 거대한 도시 지도(75 x 110cm)를 자세히 살펴보며 숨겨진 정보를 찾고 범인들의 이동 경로를 추적해야 합니다.\n\n《마이크로매크로: 크라임 시티 - 풀 하우스》는 16가지 사건을 해결하도록 합니다. 각 사건마다 여러 장의 카드가 포함되어 있으며, 지도에서 특정 물건을 찾거나 누군가의 이동 경로를 추적하거나 사건 관련 정보를 밝혀내도록 요구합니다. 도시 지도는 공간뿐 아니라 시간의 지도이기도 하므로, 일반적으로 거리와 건물 곳곳에서 여러 위치에 있는 사람들을 발견하게 됩니다. 카드를 차례대로 풀어나가거나 초기 카드만 읽고 스스로 모든 사건을 파악할 수 있습니다.\n\n원작과 달리 풀 하우스는 각 사건에 난이도 기호를 표시하여 부모가 어느 사건을 어린 수사꾼들이 조사할 수 있을지 결정할 수 있도록 합니다."
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
@@ -72384,55 +72360,43 @@
       "difficultyWeight": 1.1616,
       "moodTags": [
         "tense",
-        "cozy",
-        "immersive"
+        "immersive",
+        "cozy"
       ],
       "playTags": [
         "deduction",
-        "storytelling",
-        "party",
         "murder_mystery"
       ],
       "situationTags": [
         "beginner",
-        "group",
         "first_game",
-        "couple"
+        "couple",
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "cozy",
         "immersive",
+        "cozy",
         "deduction",
-        "storytelling",
-        "party",
         "murder_mystery",
         "beginner",
-        "group",
         "first_game",
         "couple",
-        "cooperative",
-        "low_conflict",
+        "group",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
+        "머더미스터리",
         "빠져들게",
-        "즐기고",
-        "머더미스터리"
+        "편안하게"
       ],
       "summaryKo": "거대한 도시 지도에서 숨겨진 단서를 찾아 16가지 범죄 사건을 해결하는 게임.",
       "comment": {
@@ -72451,9 +72415,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/bNuZIssobDbFYaLbgMofgw__original/img/_UyVrUsVU_AZNO93QmcosKGs0TA=/0x0/filters:format(jpeg)/pic6242068.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/bNuZIssobDbFYaLbgMofgw__small/img/VEB-DHKUWobYsUOFwuywHnsbF2k=/fit-in/200x150/filters:strip_icc()/pic6242068.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -72467,16 +72431,16 @@
     "title": {
       "display": "탁상탐정단3",
       "owned": "탁상탐정단3",
-      "bgg": "MicroMacro: Crime City – All In"
+      "bgg": "Welcome to Mascot Murder"
     },
     "bgg": {
-      "id": "364766",
-      "matchStatus": "auto-confirmed",
-      "year": "2022",
-      "rating": 7.79634,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
       "weight": 1.075,
-      "minPlayers": 1,
-      "maxPlayers": 4,
+      "minPlayers": 3,
+      "maxPlayers": 3,
       "bestPlayers": [
         1,
         2
@@ -72488,25 +72452,17 @@
         4,
         4
       ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Humor",
-        "Murder / Mystery"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "유머",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game",
-        "Team-Based Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72515,11 +72471,9 @@
         "솔로 게임",
         "팀 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "With MicroMacro: Crime City &ndash; All In, the next district of the crime-ridden black-and-white metropolis Crime City now opens up for the players. On a new, huge city map, which seamlessly follows the previous plans, 16 tricky crime cases are again waiting to be solved by one to four amateur detectives. These are brand new stories, more sophisticated and criminal than ever before! The aim is to determine motives, find evidence and convict the perpetrators. An attentive eye is just as much in demand as creative powers of deduction to unravel everything on the 75 x 110 cm game board. As a little help, a magnifying glass is included in the game and the individual cases are again marked with symbols, so that parents can decide which cases even the youngest investigators may investigate and uncover. MicroMacro: Crime City 3 - All In can be played completely independently, no previous knowledge from the other two parts is required.\n\n&mdash;description from the publisher",
-      "descriptionKo": "MicroMacro: Crime City – All In에서는 범죄로 가득한 흑백 도시 Crime City의 새로운 지역이 플레이어들에게 공개됩니다. 이전 지도와 자연스럽게 연결되는 새로운 대형 도시 지도에서 1~4명의 아마추어 탐정들은 16가지의 까다로운 범죄 사건을 해결해야 합니다. 이번에는 더욱 정교하고 흉악한 새로운 스토리들입니다! 동기를 파악하고, 증거를 찾으며, 범인을 기소하는 것이 목표입니다. 75 x 110cm 게임보드의 모든 것을 풀어내기 위해서는 예리한 관찰력과 창의로운 추리력이 필요합니다. 게임에는 돋보기가 포함되어 있으며, 각 사건마다 기호가 표시되어 있어 부모가 어린 탐정들이 어떤 사건을 조사할 수 있을지 결정할 수 있습니다. MicroMacro: Crime City 3 - All In은 완전히 독립적으로 플레이할 수 있으며, 이전 시리즈에 대한 사전 지식이 필요 없습니다."
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
@@ -72530,7 +72484,6 @@
       "difficultyWeight": 1.075,
       "moodTags": [
         "tense",
-        "funny",
         "immersive",
         "cozy"
       ],
@@ -72539,46 +72492,35 @@
         "murder_mystery"
       ],
       "situationTags": [
-        "beginner",
-        "group",
         "first_game",
         "quick_play",
-        "couple"
+        "couple",
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "funny",
         "immersive",
         "cozy",
         "deduction",
         "murder_mystery",
-        "beginner",
-        "group",
         "first_game",
         "quick_play",
         "couple",
-        "cooperative",
-        "low_conflict",
+        "group",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
         "머더미스터리",
         "빠져들게",
-        "즐기고"
+        "편안하게"
       ],
       "summaryKo": "거대한 도시 지도에서 숨겨진 범죄의 증거를 찾아 사건을 해결하는 관찰력 추리 게임",
       "comment": {
@@ -72597,9 +72539,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/sAYWQ4BFiLTF137eYGwRhQ__original/img/Qw1oXW3GPsF-JRTpqH1r7vGRtkM=/0x0/filters:format(png)/pic8987379.png",
-      "thumbnail": "https://cf.geekdo-images.com/sAYWQ4BFiLTF137eYGwRhQ__small/img/FvDfTwekIV3eAf6AOxObUKpd9i0=/fit-in/200x150/filters:strip_icc()/pic8987379.png",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -72613,16 +72555,16 @@
     "title": {
       "display": "탁상탐정단4",
       "owned": "탁상탐정단4",
-      "bgg": "MicroMacro: Crime City – Showdown"
+      "bgg": "The Man Who Died Too Much"
     },
     "bgg": {
-      "id": "398162",
-      "matchStatus": "auto-confirmed",
-      "year": "2023",
-      "rating": 7.87124,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
       "weight": 1,
       "minPlayers": 1,
-      "maxPlayers": 4,
+      "maxPlayers": 3,
       "bestPlayers": [
         2
       ],
@@ -72634,22 +72576,16 @@
         4,
         4
       ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72657,11 +72593,9 @@
         "시나리오 게임",
         "솔로 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "Welcome to Crime City - a city where crime lurks around every corner. Fatal secrets, sneaky attacks and cold-blooded murders are the order of the day here.\n\nMicroMacro is a cooperative detective game. Together you will solve tricky criminal cases, determine motives, find evidence and convict the perpetrators.\nAn attentive eye is just as important as creative combination skills!\n\nShowdown is the fourth and final part of the MicroMacro: Crime City series.\nA new city map with brand new criminal cases awaits you. It is a standalone game. The 16 cases contained here can be played without knowledge of the first parts.\n\n&mdash;description from the publisher (translated)",
-      "descriptionKo": "범죄 도시에 오신 것을 환영합니다 - 범죄가 모든 모퉁이에 도사리고 있는 도시입니다. 치명적인 비밀, 은밀한 공격, 냉혈한 살인이 일상입니다.\n\n마이크로매크로는 협력 탐정 게임입니다. 함께 난해한 범죄 사건을 해결하고, 동기를 파악하며, 증거를 찾아 범인을 기소합니다. 예리한 관찰력은 창의적인 추리 능력만큼 중요합니다!\n\n'쇼다운'은 마이크로매크로: 크라임 시티 시리즈의 네 번째이자 최종 작품입니다. 새로운 도시 지도와 완전히 새로운 범죄 사건들이 당신을 기다립니다. 독립 게임으로 즐길 수 있으며, 수록된 16개 사건은 전작들의 배경 지식 없이 플레이할 수 있습니다."
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
@@ -72680,18 +72614,14 @@
         "murder_mystery"
       ],
       "situationTags": [
-        "beginner",
-        "group",
         "first_game",
         "quick_play",
-        "couple"
+        "couple",
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
@@ -72701,16 +72631,12 @@
         "cozy",
         "deduction",
         "murder_mystery",
-        "beginner",
-        "group",
         "first_game",
         "quick_play",
         "couple",
-        "cooperative",
-        "low_conflict",
+        "group",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
@@ -72735,9 +72661,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/9y3smbtFTGqNjmkMhKFq1w__original/img/kJb2wWjTrc02B-fAO1a-p_I3SC0=/0x0/filters:format(png)/pic8987382.png",
-      "thumbnail": "https://cf.geekdo-images.com/9y3smbtFTGqNjmkMhKFq1w__small/img/gSXOH65E-W4gNn6-yq0YbJk4qks=/fit-in/200x150/filters:strip_icc()/pic8987382.png",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {

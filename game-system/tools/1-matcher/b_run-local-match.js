@@ -51,12 +51,13 @@ async function autoResolveBggMatches() {
     const ownedName = getGameName(row);
     if (!ownedName) continue;
 
-    if (overrides[ownedName]) {
-      result[ownedName] = {
-        status: "forced",
-        bggId: overrides[ownedName],
-        ownedName,
-      };
+    if (ownedName in overrides) {
+      const overrideId = overrides[ownedName];
+      if (!overrideId || overrideId === "skip") {
+        result[ownedName] = { status: "no-bgg", ownedName };
+      } else {
+        result[ownedName] = { status: "forced", bggId: overrideId, ownedName };
+      }
       continue;
     }
 
