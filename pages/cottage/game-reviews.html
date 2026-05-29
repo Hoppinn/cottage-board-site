@@ -33,16 +33,35 @@
     .pr-submit-btn:disabled { opacity: 0.5; }
     .pr-login-notice { text-align: center; padding: 36px 0; color: var(--muted); font-size: 14px; }
 
-    /* record list */
-    .pr-date-group { margin-bottom: 22px; }
-    .pr-date-hd { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-    .pr-group-chip { font-size: 11px; background: var(--green); color: #fff; border-radius: 20px; padding: 1px 8px; }
-    .pr-rec-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 10px 12px; margin-bottom: 6px; }
-    .pr-rec-game { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
-    .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; }
-    .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 5px; padding: 1px 7px; color: var(--muted); }
+    /* session accordion (기록 보기) */
+    .pr-session { border: 1px solid var(--border,#e8e4dc); border-radius: 12px; margin-bottom: 10px; overflow: hidden; background: var(--card-bg,#fff); }
+    .pr-session-hd {
+      width: 100%; display: flex; align-items: center; gap: 8px;
+      padding: 13px 14px; background: none; border: none; cursor: pointer;
+      text-align: left; font-family: inherit;
+    }
+    .pr-session-hd:hover { background: var(--bg,#f5f0e8); }
+    .pr-session-date { font-size: 14px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+    .pr-session-group { font-size: 12px; background: var(--green); color: #fff; border-radius: 20px; padding: 1px 9px; flex-shrink: 0; }
+    .pr-session-summary { font-size: 12px; color: var(--muted); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pr-session-arrow { font-size: 14px; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
+    .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
+    .pr-session-body { display: none; border-top: 1px solid var(--border,#e8e4dc); }
+    .pr-session.is-open .pr-session-body { display: block; }
 
-    /* review list */
+    .pr-rec-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border,#e8e4dc); }
+    .pr-rec-row:last-child { border-bottom: none; }
+    .pr-rec-main { flex: 1; min-width: 0; }
+    .pr-rec-game { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 5px; }
+    .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; }
+    .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 5px; padding: 2px 7px; color: var(--text,#333); }
+    .pr-rec-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-top: 2px; }
+    .pr-rec-review-link { font-size: 12px; color: var(--muted); text-decoration: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 2px 7px; white-space: nowrap; }
+    .pr-rec-review-link:hover { color: var(--green); border-color: var(--green); }
+    .pr-rec-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
+    .pr-rec-del:hover { color: #c0392b; }
+
+    /* single game view (from bottom sheet ?game=) */
     .rv-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
     .rv-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
     .rv-game { font-size: 12px; font-weight: 700; color: var(--green); }
@@ -52,7 +71,6 @@
     .rv-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 6px; margin-left: 6px; }
     .rv-del:hover { color: #c0392b; }
 
-    /* single game view (from bottom sheet ?game=) */
     .rv-write-box { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
     .rv-write-box textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border,#e8e4dc); border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; }
     .rv-write-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
@@ -222,12 +240,10 @@
       root.innerHTML = `
         <div class="pr-tabs">
           <button class="pr-tab is-active" data-tab="input">기록 입력</button>
-          <button class="pr-tab" data-tab="records">최근 기록</button>
-          <button class="pr-tab" data-tab="reviews">게임 후기</button>
+          <button class="pr-tab" data-tab="records">기록 보기</button>
         </div>
         <div id="prPanelInput" class="pr-panel is-active"></div>
-        <div id="prPanelRecords" class="pr-panel"></div>
-        <div id="prPanelReviews" class="pr-panel"></div>`;
+        <div id="prPanelRecords" class="pr-panel"></div>`;
 
       root.querySelectorAll('.pr-tab').forEach(tab => {
         tab.addEventListener('click', () => {
@@ -236,7 +252,6 @@
           tab.classList.add('is-active');
           document.getElementById('prPanel' + cap(tab.dataset.tab)).classList.add('is-active');
           if (tab.dataset.tab === 'records') loadRecords();
-          if (tab.dataset.tab === 'reviews') loadReviews();
         });
       });
 
@@ -373,7 +388,7 @@
       });
     }
 
-    // ── 최근 기록 탭 ─────────────────────────────────────────────
+    // ── 기록 보기 탭 ─────────────────────────────────────────────
 
     let recordsLoaded = false;
     async function loadRecords() {
@@ -384,89 +399,94 @@
 
       try {
         const { data } = await getDb().from('game_play_records')
-          .select('id, game_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at')
+          .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at')
+          .order('played_at', { ascending: false })
           .order('created_at', { ascending: false })
-          .limit(120);
+          .limit(200);
 
         if (!data?.length) { panel.innerHTML = '<p class="pr-empty">아직 기록이 없어요.</p>'; return; }
 
-        const byDate = {};
+        const user = window.getKakaoUser?.();
+
+        // group by (played_at + group_name) — preserves insertion order = newest first
+        const sessionMap = new Map();
         for (const r of data) {
           const d = r.played_at || r.created_at?.slice(0, 10) || '?';
-          if (!byDate[d]) byDate[d] = { group: r.group_name, recs: [] };
-          byDate[d].recs.push(r);
+          const key = d + '|' + (r.group_name || '');
+          if (!sessionMap.has(key)) sessionMap.set(key, { date: d, group: r.group_name || '', recs: [] });
+          sessionMap.get(key).recs.push(r);
         }
 
-        let html = '';
-        for (const [d, { group, recs }] of Object.entries(byDate)) {
-          html += `<div class="pr-date-group">
-            <div class="pr-date-hd">${escH(formatKstDate(d))}${group ? `<span class="pr-group-chip">${escH(group)}</span>` : ''}</div>`;
-          for (const r of recs) {
-            const tags = [
-              r.player_count ? `👥 ${r.player_count}명` : null,
-              r.player_names ? `🎮 ${r.player_names}` : null,
-              r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
-              r.score_note ? `🏆 ${r.score_note}` : null,
-              r.nickname ? `${r.nickname}` : null,
-            ].filter(Boolean);
-            html += `<div class="pr-rec-item">
-              <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
-              ${tags.length ? `<div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>` : ''}
-            </div>`;
-          }
-          html += '</div>';
-        }
-        panel.innerHTML = html;
-      } catch (_) {
+        const sessions = [...sessionMap.values()];
+
+        const container = document.createElement('div');
+        sessions.forEach((sess, idx) => {
+          const gameNames = sess.recs.map(r => getGameName(r.game_id));
+          const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
+
+          const el = document.createElement('div');
+          el.className = 'pr-session' + (idx === 0 ? ' is-open' : '');
+          el.innerHTML = `
+            <button class="pr-session-hd" type="button">
+              <span class="pr-session-date">${escH(formatKstDate(sess.date))}</span>
+              ${sess.group ? `<span class="pr-session-group">${escH(sess.group)}</span>` : ''}
+              <span class="pr-session-summary">${escH(summaryText)}</span>
+              <span class="pr-session-arrow">▾</span>
+            </button>
+            <div class="pr-session-body">${buildSessionBody(sess.recs, user)}</div>`;
+
+          el.querySelector('.pr-session-hd').addEventListener('click', () => {
+            el.classList.toggle('is-open');
+          });
+
+          // delete handlers
+          el.querySelectorAll('.pr-rec-del').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+              e.stopPropagation();
+              if (!confirm('이 기록을 삭제할까요?')) return;
+              const res = await window.CottageDB?.deleteGamePlay(btn.dataset.id);
+              if (!res?.error) {
+                const row = btn.closest('.pr-rec-row');
+                row.remove();
+                // if no rows left, remove session
+                if (!el.querySelector('.pr-rec-row')) el.remove();
+              }
+            });
+          });
+
+          container.appendChild(el);
+        });
+
+        panel.innerHTML = '';
+        panel.appendChild(container);
+      } catch (err) {
+        console.error(err);
         panel.innerHTML = '<p class="pr-empty">불러오기 실패</p>';
       }
     }
 
-    // ── 게임 후기 탭 ─────────────────────────────────────────────
-
-    let reviewsLoaded = false;
-    async function loadReviews() {
-      if (reviewsLoaded) return;
-      reviewsLoaded = true;
-      const panel = document.getElementById('prPanelReviews');
-      panel.innerHTML = '<p class="pr-empty">불러오는 중...</p>';
-
-      try {
-        const { data } = await getDb().from('game_reviews')
-          .select('id, user_id, nickname, game_id, content, created_at')
-          .order('created_at', { ascending: false })
-          .limit(50);
-
-        if (!data?.length) { panel.innerHTML = '<p class="pr-empty">아직 후기가 없어요.</p>'; return; }
-
-        const user = window.getKakaoUser?.();
-        panel.innerHTML = data.map(r => {
-          const isMine = user && String(r.user_id) === String(user.id);
-          return `<div class="rv-item" data-id="${r.id}">
-            <div class="rv-head">
-              <div>
-                <div class="rv-game">${escH(getGameName(r.game_id))}</div>
-                <div class="rv-nick">${escH(r.nickname || '익명')}</div>
-              </div>
-              <div style="display:flex;align-items:center">
-                <span class="rv-date">${formatDate(r.created_at)}</span>
-                ${isMine ? `<button class="rv-del" data-id="${r.id}" type="button">삭제</button>` : ''}
-              </div>
-            </div>
-            <p class="rv-content">${escH(r.content)}</p>
-          </div>`;
-        }).join('');
-
-        panel.querySelectorAll('.rv-del').forEach(btn => {
-          btn.addEventListener('click', async () => {
-            if (!confirm('삭제할까요?')) return;
-            await window.CottageDB.deleteGameReview(btn.dataset.id);
-            btn.closest('.rv-item').remove();
-          });
-        });
-      } catch (_) {
-        panel.innerHTML = '<p class="pr-empty">불러오기 실패</p>';
-      }
+    function buildSessionBody(recs, user) {
+      return recs.map(r => {
+        const isMine = user && String(r.user_id) === String(user.id);
+        const tags = [
+          r.player_count ? `👥 ${r.player_count}명` : null,
+          r.player_names ? r.player_names : null,
+          r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
+          r.score_note ? `🏆 ${r.score_note}` : null,
+          r.nickname ? `✏️ ${r.nickname}` : null,
+        ].filter(Boolean);
+        const gameReviewUrl = `./game-reviews.html?game=${encodeURIComponent(r.game_id)}`;
+        return `<div class="pr-rec-row" data-id="${r.id}">
+          <div class="pr-rec-main">
+            <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
+            ${tags.length ? `<div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>` : ''}
+          </div>
+          <div class="pr-rec-actions">
+            <a class="pr-rec-review-link" href="${gameReviewUrl}">💬 후기</a>
+            ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+          </div>
+        </div>`;
+      }).join('');
     }
 
     // ══════════════════════════════════════════════════════════════
