@@ -3096,8 +3096,8 @@ body.sheet-open{
 }
 .photo-picker-presets{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
   margin-bottom:14px;
 }
 .photo-preset-btn{

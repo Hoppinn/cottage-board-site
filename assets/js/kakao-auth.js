@@ -92,6 +92,20 @@ const PRESET_AVATAR_CONFIGS = [
   { emoji: '🎯', bg: '#D04040' },
   { emoji: '🌲', bg: '#4A7D5A' },
   { emoji: '🏡', bg: '#8B6B4A' },
+  { emoji: '🦊', bg: '#E8813A' },
+  { emoji: '🐻', bg: '#9B7B5A' },
+  { emoji: '🐱', bg: '#E8C55A' },
+  { emoji: '🐸', bg: '#5DB85D' },
+  { emoji: '🦝', bg: '#8888AA' },
+  { emoji: '🐧', bg: '#5599CC' },
+  { emoji: '🌙', bg: '#5C4A8A' },
+  { emoji: '⭐', bg: '#D4A820' },
+  { emoji: '🌈', bg: '#6AAED6' },
+  { emoji: '🍀', bg: '#4A9A5A' },
+  { emoji: '🎮', bg: '#4455AA' },
+  { emoji: '🏆', bg: '#C8952A' },
+  { emoji: '🎨', bg: '#CC5577' },
+  { emoji: '🔮', bg: '#7755BB' },
 ];
 
 function promptProfileImageChange() {
