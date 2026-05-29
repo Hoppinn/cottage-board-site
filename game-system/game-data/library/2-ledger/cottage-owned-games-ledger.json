@@ -7767,14 +7767,14 @@
   {
     "id": "시간을달리는트라이앵글-머더미스터리미니",
     "ownedName": "시간을달리는트라이앵글 (머더미스터리미니 )",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "no-bgg",
-    "status": "pending-cache",
+    "titleEn": "시간을 달리는 트라이앵글",
+    "bggId": "379872",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "머더미",
     "difficulty": null,
     "difficultyWeight": 1.24,
-    "rating": null,
+    "rating": 6.94737,
     "bestPlayers": [
       3
     ],

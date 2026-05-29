@@ -48782,15 +48782,15 @@ const gameData = {
     "title": {
       "display": "시간을달리는트라이앵글 (머더미스터리미니 )",
       "owned": "시간을달리는트라이앵글 (머더미스터리미니 )",
-      "bgg": ""
+      "bgg": "시간을 달리는 트라이앵글"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "no-bgg",
-      "year": "",
-      "rating": 6.9,
+      "id": "379872",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 6.94737,
       "weight": 1.24,
-      "minPlayers": 2,
+      "minPlayers": 3,
       "maxPlayers": 3,
       "bestPlayers": [
         3
@@ -48800,15 +48800,17 @@ const gameData = {
         3
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 90,
+      "minPlayTime": 90,
+      "maxPlayTime": 90,
+      "categories": [
+        "Murder / Mystery"
+      ],
       "categoriesKo": [
         "추상 전략"
       ],
       "mechanics": [
-        "머더미스터리"
+        "Role Playing"
       ],
       "mechanicsKo": [
         "패턴 만들기",
@@ -48816,8 +48818,10 @@ const gameData = {
         "포인트 이동",
         "타일 배치"
       ],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Jun'ichi Kawabata"
+      ],
+      "description": "During the commemoration of the university Occult Laboratory, the president died.\nIt has vomit marks in the mouth of the cremains and bruises on the back of the head, and biting scars and blood marks on the chest.\nThe criminal is within the three remaining members!?\nIt became evident in a room investigation, president's past villains, three connotations,\nAnd the mystery of the creepy relief that has been carved from the course of the floor of the room and a monstrous phenomenon that can be spoken.",
       "descriptionKo": "(상자 설명) 트라이앵글은 당신이 지금까지 경험한 다른 모든 보드게임과 다릅니다. 다만 고전 게임들과 한 가지 공통점이 있습니다 - 비결을 한 번에 드러내지 않는다는 것입니다. 기본 수준으로 플레이하면 트라이앵글은 드로츠(체커)만큼 즐겁고 만족스럽습니다. 배우기도 거의 같을 정도로 쉽습니다. 다만 상대방의 말을 포획하는 방식이 훨씬 더 다양하고 흥미롭다는 점이 다릅니다."
     },
     "cottage": {
@@ -48839,7 +48843,8 @@ const gameData = {
       "situationTags": [
         "beginner",
         "first_game",
-        "group"
+        "group",
+        "long_stay"
       ],
       "interactionTags": [
         "social",
@@ -48856,6 +48861,7 @@ const gameData = {
         "beginner",
         "first_game",
         "group",
+        "long_stay",
         "social",
         "table_talk"
       ],
@@ -48882,9 +48888,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/ifnFB6QEiXbFBEVZyoAqBw__original/img/jC5OrsG3M4yA1Lt4Vh5Pmqyf68o=/0x0/filters:format(jpeg)/pic7668045.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/ifnFB6QEiXbFBEVZyoAqBw__small/img/TOCE1PJTtem4NYOZXjF5DH8fZS0=/fit-in/200x150/filters:strip_icc()/pic7668045.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
