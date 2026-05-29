@@ -252,6 +252,8 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
 (()=>{
   const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
   document.querySelectorAll('.header-menu a').forEach(link=>{
+    const rawHref = link.getAttribute('href') || '';
+    if(rawHref === '#' || rawHref.startsWith('#')) return;
     const linkPath = new URL(link.href, location.href).pathname.replace(/\/$/, '');
     if(linkPath === currentPath){
       link.classList.add('is-current');
