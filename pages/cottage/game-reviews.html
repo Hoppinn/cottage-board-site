@@ -242,6 +242,24 @@
       return `${y}년 ${Number(m)}월 ${Number(day)}일`;
     }
 
+    // 한글 초성 검색 지원
+    const INITIALS = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+    function toInitials(str) {
+      return [...str].map(ch => {
+        const code = ch.charCodeAt(0);
+        return (code >= 0xAC00 && code <= 0xD7A3)
+          ? INITIALS[Math.floor((code - 0xAC00) / 28 / 21)]
+          : ch;
+      }).join('');
+    }
+    function hangulMatch(target, query) {
+      const t = target.toLowerCase();
+      const q = query.toLowerCase();
+      if (t.includes(q)) return true;
+      if (/^[ㄱ-ㅎ]+$/.test(q)) return toInitials(target).includes(q);
+      return false;
+    }
+
     function showToast(msg) {
       const t = document.getElementById('prToast');
       t.textContent = msg;
@@ -407,10 +425,10 @@
         }
 
         nameInput.addEventListener('input', () => {
-          const q = nameInput.value.trim().toLowerCase();
+          const q = nameInput.value.trim();
           if (!q || !window.COTTAGE_GAMES) { acList.classList.remove('is-open'); return; }
           const matches = window.COTTAGE_GAMES
-            .filter(g => (g.display || g.titleKo || g.titleEn || '').toLowerCase().includes(q))
+            .filter(g => hangulMatch(g.display || g.titleKo || g.titleEn || '', q))
             .slice(0, 12);
           acRender(matches);
         });
@@ -491,9 +509,9 @@
         }
 
         gInput.addEventListener('input', () => {
-          const q = gInput.value.trim().toLowerCase();
+          const q = gInput.value.trim();
           const matches = q
-            ? groups.filter(g => g.toLowerCase().includes(q))
+            ? groups.filter(g => hangulMatch(g, q))
             : groups.slice(0, 8);
           gRender(matches);
         });
