@@ -549,12 +549,9 @@
     "scoreGap": 20
   },
   "그것이문제로다": {
-    "status": "auto-confirmed",
-    "bggId": "300905",
-    "ownedName": "그것이문제로다",
-    "bggName": "Top Ten",
-    "score": 115,
-    "scoreGap": 26
+    "status": "forced",
+    "bggId": "226322",
+    "ownedName": "그것이문제로다"
   },
   "나나": {
     "status": "auto-confirmed",
@@ -965,43 +962,9 @@
     "ownedName": "플래시포인트 (영)"
   },
   "하베스트": {
-    "status": "unresolved",
-    "ownedName": "하베스트",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "15390",
+    "ownedName": "하베스트"
   },
   "하이다이브": {
     "status": "forced",
@@ -1272,82 +1235,14 @@
     "scoreGap": 30
   },
   "기차섬 탑승하세요": {
-    "status": "unresolved",
-    "ownedName": "기차섬 탑승하세요",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "355224",
+    "ownedName": "기차섬 탑승하세요"
   },
   "기차섬(영)": {
-    "status": "unresolved",
-    "ownedName": "기차섬(영)",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "154906",
+    "ownedName": "기차섬(영)"
   },
   "김밥요리사": {
     "status": "forced",
@@ -2425,7 +2320,7 @@
   },
   "배틀쉽": {
     "status": "forced",
-    "bggId": "2425",
+    "bggId": "54137",
     "ownedName": "배틀쉽"
   },
   "배틀콘 인다인즈의유린": {
@@ -2760,71 +2655,9 @@
     "scoreGap": 24
   },
   "서스펙트게임 리로드": {
-    "status": "needs-review",
-    "ownedName": "서스펙트게임 리로드",
-    "bestGuess": {
-      "bggId": "322785",
-      "bggName": "Suspects: Claire Harper Takes the Stage",
-      "score": 93,
-      "scoreGap": 0
-    },
-    "reviewCandidates": [
-      {
-        "bggId": "322785",
-        "bggName": "Suspects: Claire Harper Takes the Stage",
-        "year": "2021",
-        "score": 93,
-        "reason": {
-          "nameScore": 82,
-          "matchedSearchName": "Suspects",
-          "matchedCandidateName": "Suspects: Claire Harper Takes the Stage"
-        }
-      },
-      {
-        "bggId": "178570",
-        "bggName": "Unusual Suspects",
-        "year": "2015",
-        "score": 93,
-        "reason": {
-          "nameScore": 82,
-          "matchedSearchName": "Suspects",
-          "matchedCandidateName": "Unusual Suspects"
-        }
-      },
-      {
-        "bggId": "353546",
-        "bggName": "Museum Suspects",
-        "year": "2022",
-        "score": 89,
-        "reason": {
-          "nameScore": 82,
-          "matchedSearchName": "Suspects",
-          "matchedCandidateName": "Museum Suspects"
-        }
-      },
-      {
-        "bggId": "360956",
-        "bggName": "Suspects: Claire Harper, Eternal Investigator",
-        "year": "2022",
-        "score": 87,
-        "reason": {
-          "nameScore": 82,
-          "matchedSearchName": "Suspects",
-          "matchedCandidateName": "Suspects: Claire Harper, Eternal Investigator"
-        }
-      },
-      {
-        "bggId": "387202",
-        "bggName": "Suspects: Adele and Neville, Investigative Reporters",
-        "year": "2023",
-        "score": 87,
-        "reason": {
-          "nameScore": 82,
-          "matchedSearchName": "Suspects",
-          "matchedCandidateName": "Suspects: Adele and Neville, Investigative Reporters"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "322785",
+    "ownedName": "서스펙트게임 리로드"
   },
   "서쪽왕국의건축가": {
     "status": "auto-confirmed",

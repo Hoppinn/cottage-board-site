@@ -1634,14 +1634,14 @@
   {
     "id": "그것이문제로다",
     "ownedName": "그것이문제로다",
-    "titleEn": "Top Ten",
-    "bggId": "300905",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "That's a Question!",
+    "bggId": "226322",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 1.075,
+    "difficulty": 1.0435,
     "difficultyWeight": 1.05,
-    "rating": 7.37821,
+    "rating": 5.67203,
     "bestPlayers": [
       6
     ],
@@ -3092,14 +3092,14 @@
   {
     "id": "하베스트",
     "ownedName": "하베스트",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Harvest",
+    "bggId": "15390",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 1.087,
     "difficultyWeight": 1.1,
-    "rating": null,
+    "rating": 7.27097,
     "bestPlayers": [
       3,
       4
@@ -3754,14 +3754,14 @@
   {
     "id": "기차섬-탑승하세요",
     "ownedName": "기차섬 탑승하세요",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Isle of Trains: All Aboard",
+    "bggId": "355224",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.2667,
     "difficultyWeight": 2.27,
-    "rating": null,
+    "rating": 6.92625,
     "bestPlayers": [
       3
     ],
@@ -3775,14 +3775,14 @@
   {
     "id": "기차섬영",
     "ownedName": "기차섬(영)",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Isle of Trains",
+    "bggId": "154906",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 2.0159,
     "difficultyWeight": 2.02,
-    "rating": null,
+    "rating": 6.72915,
     "bestPlayers": [
       2
     ],
@@ -6205,14 +6205,14 @@
   {
     "id": "배틀쉽",
     "ownedName": "배틀쉽",
-    "titleEn": "Battleship",
-    "bggId": "2425",
+    "titleEn": "Battle Sheep",
+    "bggId": "54137",
     "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 1.1997,
+    "difficulty": 1.4555,
     "difficultyWeight": 1.46,
-    "rating": 4.7578,
+    "rating": 6.59748,
     "bestPlayers": [
       4
     ],
@@ -7077,14 +7077,14 @@
   {
     "id": "서스펙트게임-리로드",
     "ownedName": "서스펙트게임 리로드",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "needs-review",
-    "status": "pending-cache",
+    "titleEn": "Suspects: Claire Harper Takes the Stage",
+    "bggId": "322785",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "머더미",
-    "difficulty": null,
+    "difficulty": 1.8333,
     "difficultyWeight": 2.25,
-    "rating": null,
+    "rating": 7.25648,
     "bestPlayers": [
       4
     ],

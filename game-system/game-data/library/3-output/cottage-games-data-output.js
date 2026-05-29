@@ -10109,16 +10109,16 @@ const gameData = {
     "title": {
       "display": "그것이문제로다",
       "owned": "그것이문제로다",
-      "bgg": "Top Ten"
+      "bgg": "That's a Question!"
     },
     "bgg": {
-      "id": "300905",
-      "matchStatus": "auto-confirmed",
-      "year": "2020",
-      "rating": 7.37821,
-      "weight": 1.075,
-      "minPlayers": 4,
-      "maxPlayers": 9,
+      "id": "226322",
+      "matchStatus": "forced",
+      "year": "2017",
+      "rating": 5.67203,
+      "weight": 1.0435,
+      "minPlayers": 3,
+      "maxPlayers": 6,
       "bestPlayers": [
         6
       ],
@@ -10131,7 +10131,7 @@ const gameData = {
         1,
         2,
         3,
-        9
+        6
       ],
       "playingTime": 30,
       "minPlayTime": 30,
@@ -10143,11 +10143,7 @@ const gameData = {
         "파티게임"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Ordering",
-        "Player Judge",
-        "Targeted Clues"
+        "가치관추측"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -10157,9 +10153,9 @@ const gameData = {
         "힌트 제공"
       ],
       "designers": [
-        "Aurélien Picolet"
+        "Vlaada Chvátil"
       ],
-      "description": "Your goal in Top Ten is to survive five rounds, so you and your fellow players need to figure out how to get things in order!\n\nTo start the game, place a number of unicorn tokens on the game board. Choose one player to be the round's chief. That player gives all players a random card numbered 1-10, then they read one of the five hundred theme cards included in the game, e.g., \"Batman wants to replace Robin to fight the bad guys. Create a new duo 'Batman and ...' from the worst to the best.\" The chief looks at their number, then gives an answer based on their number. If they have a 1, they want to give the worst possible suggestion; if a 10, the best; if a 5-7, somewhere in the middle.\n\nEach other player then gives an answer to this theme based on the number they were dealt, then the chief needs to decide who has the lowest number, then the next lowest, and so on. For each mistake, the chief flips a unicorn token over to its poop side.\n\nIf all the unicorns have left by the end of the fifth round, leaving you with nothing but poop, then you lose. Otherwise you win!",
+      "description": "The party game That's a Question!, takes the familiar format of challenging others with questions, then voting on what they'll say.\n\nIn more detail, each player has a hand of hexagonal cards, with words or phrases in three color blocks on the card. On a turn, you choose a player that has a token in front of them, take that token, then present them with a question by choosing one of the three question prompts (which are all color-coded), then choosing two cards from your hand and adding the properly-colored section of those cards to the question. A sample question: \"What would you miss more if it ceases to exist: Facebook or doors?\" That player secretly votes on A or B, while everyone else but the questioner secretly votes A or B depending on how they think the person will answer; a voter can optionally add their 3x scoring token to their vote.\n\nOnce everyone votes, you reveal the tiles. Everyone who voted correctly moves ahead one or three spaces on the scoring track, and the questioner moves ahead one space for each person who voted incorrectly. If you pass a certain space on the scoring track, you retrieve your 3x token (if you've used it). Since you can ask a question only of those with a token in front of them, everyone is asked roughly the same number of questions, and whoever has the most points after a certain number of rounds wins.",
       "descriptionKo": "《탑 텐》의 목표는 5라운드를 생존하는 것입니다. 당신과 다른 플레이어들이 함께 순서를 정해야 합니다!\n\n게임을 시작할 때 게임 보드에 유니콘 토큰을 여러 개 놓습니다. 한 명의 플레이어를 라운드의 진행자로 선택합니다. 진행자는 모든 플레이어에게 1부터 10까지 번호가 적힌 카드를 무작위로 나눠준 후, 500장의 테마 카드 중 하나를 읽습니다. 예를 들어 \"배트맨이 악당 퇴치를 위해 로빈을 대체하려고 한다. '배트맨과...'의 새로운 듀오를 최악부터 최고까지 만들어보세요\"라는 식입니다. 진행자는 자신의 카드 번호를 보고 그에 맞는 답변을 제시합니다. 1번이면 최악의 제안을, 10번이면 최고의 제안을, 5~7번이면 중간 정도의 제안을 해야 합니다.\n\n다른 플레이어들은 각자 받은 번호에 맞춰 테마에 대한 답변을 제시합니다. 그러면 진행자가 가장 낮은 번호부터 높은 번호 순서로 정렬해야 합니다. 틀린 횟수만큼 유니콘 토큰을 뒤집어서 똥 면으로 만듭니다.\n\n5라운드 끝에 모든 유니콘이 사라져 똥만 남으면 패배합니다. 그렇지 않으면 승리합니다!"
     },
     "cottage": {
@@ -10170,13 +10166,11 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.05,
       "moodTags": [
-        "tense",
         "funny",
         "chaotic",
         "cozy"
       ],
       "playTags": [
-        "deduction",
         "party"
       ],
       "situationTags": [
@@ -10187,37 +10181,26 @@ const gameData = {
         "quick_play"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
-        "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "tense",
         "funny",
         "chaotic",
         "cozy",
-        "deduction",
         "party",
         "beginner",
         "group",
         "large_group",
         "first_game",
         "quick_play",
-        "cooperative",
-        "low_conflict",
-        "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
-        "머리쓰게",
         "즐기고",
-        "빠져들게",
-        "편안하게"
+        "편안하게",
+        "대화하며"
       ],
       "summaryKo": "주어진 번호에 맞춰 창의적인 답변을 제시하고 진행자가 순서를 맞추는 게임.",
       "comment": {
@@ -10236,8 +10219,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/0LVOOyXtNNyFhyj7tFaKCQ__original/img/P8h6npX36CQrxXua-8UWYocpc44=/0x0/filters:format(jpeg)/pic5212719.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/0LVOOyXtNNyFhyj7tFaKCQ__small/img/a-klyIgrojswCIe3KKOmJrCOgOw=/fit-in/200x150/filters:strip_icc()/pic5212719.jpg",
+      "main": "https://cf.geekdo-images.com/MTGTksYC45yzbOB-UJdBTw__original/img/Mzb1d-T1X992LnjqdeqkMd4ewAc=/0x0/filters:format(jpeg)/pic3643950.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/MTGTksYC45yzbOB-UJdBTw__small/img/Pe10KxKTwYWeK_Ikgu0YJEsDdkk=/fit-in/200x150/filters:strip_icc()/pic3643950.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -18851,15 +18834,15 @@ const gameData = {
     "title": {
       "display": "하베스트",
       "owned": "하베스트",
-      "bgg": ""
+      "bgg": "Harvest"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.3,
-      "weight": 1.1,
-      "minPlayers": 2,
+      "id": "15390",
+      "matchStatus": "forced",
+      "year": "1992",
+      "rating": 7.27097,
+      "weight": 1.087,
+      "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
         3,
@@ -18872,18 +18855,29 @@ const gameData = {
         5,
         6
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        6
+      ],
+      "playingTime": 20,
+      "minPlayTime": 20,
+      "maxPlayTime": 20,
+      "categories": [
+        "Card Game",
+        "Farming"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "작은"
+        "Pattern Building",
+        "Square Grid",
+        "Take That",
+        "Tile Placement"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Yukihito Morikawa (森川幸人)"
+      ],
+      "description": "In \"Harvest\", the goal is to harvest a lot of vegetables, but harvesting cannot be done by one person.\nKeep the big vegetables for yourself and the damaged vegetables for the other person.\n\nBegin with connecting field tile each other.\nIt will be harvested when 3 or more vegetables are lined up.\nAll completed vegetables in your field must be harvested even if it is rotten!\n\n『ハーベスト』では、野菜をたくさん収穫することを目指しますが、収穫は一人ではできません。\n大きな野菜は自分のものに、傷んだ野菜は相手のものにしてしまいましょう。\n\n畑が並んだ状態でゲームが始まります。野菜が3個以上並ぶと収穫になります。\n収穫では、自分の畑の野菜を獲得することになります。それが腐っていてもです。",
       "descriptionKo": ""
     },
     "cottage": {
@@ -18894,27 +18888,44 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.1,
       "moodTags": [
+        "chaotic",
+        "funny",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "puzzle",
+        "strategy",
+        "card_play"
+      ],
       "situationTags": [
         "first_game",
         "quick_play",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "funny",
         "cozy",
+        "puzzle",
+        "strategy",
+        "card_play",
         "first_game",
         "quick_play",
         "group",
-        "large_group"
+        "large_group",
+        "competitive"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "즐기고",
+        "편안하게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -18933,9 +18944,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/pImGcBuPfLEov1mm-e7iMA__original/img/zcGXpAdlvLoxmONV_Xcr2CaZtH8=/0x0/filters:format(png)/pic7490756.png",
+      "thumbnail": "https://cf.geekdo-images.com/pImGcBuPfLEov1mm-e7iMA__small/img/axIfUWMoM6yxfH6n8wmdOqdjS1U=/fit-in/200x150/filters:strip_icc()/pic7490756.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -22953,14 +22964,14 @@ const gameData = {
     "title": {
       "display": "기차섬 탑승하세요",
       "owned": "기차섬 탑승하세요",
-      "bgg": ""
+      "bgg": "Isle of Trains: All Aboard"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.9,
-      "weight": 2.27,
+      "id": "355224",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 6.92625,
+      "weight": 2.2667,
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -22972,18 +22983,32 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        4
+      ],
+      "playingTime": 60,
+      "minPlayTime": 60,
+      "maxPlayTime": 60,
+      "categories": [
+        "Card Game",
+        "Trains",
+        "Transportation"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "카드자원"
+        "Contracts",
+        "Hand Management",
+        "Multi-Use Cards",
+        "Open Drafting",
+        "Set Collection",
+        "Solo / Solitaire Game"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Seth Jaffee",
+        "Dan Keltner"
+      ],
+      "description": "Welcome to the Isle of Trains, where you are the conductor, and constructor of one of the island&rsquo;s locomotives. You&rsquo;ll build trains and load a range of goods to complete contracts across the island, and also deliver passengers to their destinations.\n\nIsle of Trains: All Aboard is a card-based engine building game where cards have multiple uses: You can use cards as locomotives, freight cars, passenger cars, or buildings to improve the effectiveness and abilities of your train. Cards can also be spent to pay for the construction of your new train cars and buildings, or you can use your cards as cargo and load them onto available freight cars.\n\nYou will also have a range of passengers who want to be taken to different destinations. You will draw these passengers at random from a bag when you build passenger cars and certain locomotives. You can then load passengers into any available passenger car. When passengers are delivered to their destinations, they will give you an instant powerful bonus!\n\nLoading cargo and passengers into opponents&rsquo; trains is important on the Isle of Trains as it&rsquo;ll also gain you extra bonuses that turn! But this will help the other train conductors get a little closer to completing their goals, by giving them the cargo or passengers, which they can then use for deliveries and big end game points!\n\nThe game ends when a certain number of contracts have been completed, or a certain number of passengers are delivered. You win by scoring the most points, which you earn by building up your train, completing contracts, and delivering passengers.\n\nIsle of Trains: All Aboard is all about balancing the need to upgrade your train, with loading cargo or passengers onto opponent&rsquo;s train for big bonuses, and delivering cargo and passengers to their destinations before anyone else. Build your engine effectively enough to be remembered as the greatest train conductor on the Isle of Trains!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -22994,22 +23019,32 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "card_play",
+        "strategy",
         "beginner",
         "group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -23027,9 +23062,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/XLetZJjJMO_EQkIYTyOfAw__original/img/UQQMJpxaYAkN7L62UPcUHg2uGAw=/0x0/filters:format(jpeg)/pic6652396.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/XLetZJjJMO_EQkIYTyOfAw__small/img/5Hy5msbYsR0vuJlAcEExB7gpQpU=/fit-in/200x150/filters:strip_icc()/pic6652396.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -23043,14 +23078,14 @@ const gameData = {
     "title": {
       "display": "기차섬(영)",
       "owned": "기차섬(영)",
-      "bgg": ""
+      "bgg": "Isle of Trains"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.7,
-      "weight": 2.02,
+      "id": "154906",
+      "matchStatus": "forced",
+      "year": "2014",
+      "rating": 6.72915,
+      "weight": 2.0159,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -23061,18 +23096,42 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 45,
+      "minPlayTime": 45,
+      "maxPlayTime": 45,
+      "categories": [
+        "Card Game",
+        "Trains",
+        "Transportation"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "엔진빌딩"
+        "Action Points",
+        "Contracts",
+        "End Game Bonuses",
+        "Hand Management",
+        "Income",
+        "Layering",
+        "Modular Board",
+        "Move Through Deck",
+        "Multi-Use Cards",
+        "Set Collection",
+        "Sudden Death Ending",
+        "Tags",
+        "Tech Trees / Tech Tracks",
+        "Turn Order: Progressive",
+        "Variable Player Powers"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Seth Jaffee",
+        "Dan Keltner"
+      ],
+      "description": "In Isle of Trains, players are train operators, building trains with the right mix of freight cars needed to complete delivery contracts before your opponents.\n\nCards are used in multiple ways: they can be built as train cars or buildings supporting your train line, used as currency to pay the cost of building those new train cars and buildings, or used as cargo to load on available train cars.\n\nWhen loading cargo on an opponent&rsquo;s train, players receive an immediate benefit or action, but they are also giving their opponent the cargo they just might need to be able to complete a delivery contract and score big!\n\nBalancing the need to upgrade your train, take advantage of benefits from loading other players' trains, and complete delivery contracts first is the key to being the most successful train operator on the Isle of Trains!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -23082,25 +23141,41 @@ const gameData = {
       "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.02,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
+        "experienced",
         "beginner",
         "couple",
         "group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "immersive",
+        "card_play",
+        "strategy",
+        "experienced",
         "beginner",
         "couple",
         "group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -23118,9 +23193,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/tzEq9B-ZsUaR6ck5-S49BA__original/img/mB-obAYqX8oSuJjaAh2aAW-wUS8=/0x0/filters:format(jpeg)/pic1951594.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/tzEq9B-ZsUaR6ck5-S49BA__small/img/ItASwe8Jixi4F82eefROIPHbaD8=/fit-in/200x150/filters:strip_icc()/pic1951594.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -38700,16 +38775,16 @@ const gameData = {
     "title": {
       "display": "배틀쉽",
       "owned": "배틀쉽",
-      "bgg": "Battleship"
+      "bgg": "Battle Sheep"
     },
     "bgg": {
-      "id": "2425",
+      "id": "54137",
       "matchStatus": "forced",
-      "year": "1931",
-      "rating": 4.7578,
-      "weight": 1.1997,
+      "year": "2010",
+      "rating": 6.59748,
+      "weight": 1.4555,
       "minPlayers": 2,
-      "maxPlayers": 2,
+      "maxPlayers": 4,
       "bestPlayers": [
         4
       ],
@@ -38720,15 +38795,14 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        2
+        4
       ],
-      "playingTime": 30,
-      "minPlayTime": 30,
-      "maxPlayTime": 30,
+      "playingTime": 15,
+      "minPlayTime": 15,
+      "maxPlayTime": 15,
       "categories": [
-        "Children's Game",
-        "Nautical",
-        "Wargame"
+        "Abstract Strategy",
+        "Animals"
       ],
       "categoriesKo": [
         "어린이 게임",
@@ -38736,9 +38810,10 @@ const gameData = {
         "워게임"
       ],
       "mechanics": [
-        "Deduction",
-        "Paper-and-Pencil",
-        "Secret Unit Deployment"
+        "Enclosure",
+        "Grid Movement",
+        "Hexagon Grid",
+        "Modular Board"
       ],
       "mechanicsKo": [
         "추리",
@@ -38746,9 +38821,9 @@ const gameData = {
         "비밀 유닛 배치"
       ],
       "designers": [
-        "Clifford Von Wickler"
+        "Francesco Rotta"
       ],
-      "description": "Battleship was originally a pencil-and-paper public domain game known by different names, but Milton Bradley made it into the well known board game in 1967.  The pencil and paper grids were changed to plastic grids with holes that could hold plastic pegs used to record the guesses.\n\nEach player deploys his ships (of lengths varying from 2 to 5 squares) secretly on a square grid.  Then each player shoots at the other's grid by calling a location.  The defender responds by \"Hit!\" or \"Miss!\".  You try to deduce where the enemy ships are and sink them.  First to do so wins.\n\nThe Salvo variant listed in the rules allows each player to call out from 1 to 5 shots at a time depending on the amount of ships the player has left (IE: players each start off with 5 ships, so they start off with 5 shots.  As ships are sunk, the players gets fewer shots).  This version of the game is closer to the original pencil-and-paper public domain game.  Many versions of the pencil-and-paper game have different amounts of shots based on the ship (IE: Battleship: 5 shots. Destroyer: 3 Shots, Etc.).",
+      "description": "In Battle Sheep (first released as Splits), players start the game by constructing the board from identical four-hex tiles, then each player places his/her tall stack of discs on one of the border hexes. Players take turns removing some number of discs from the top of one of their stacks, moving that new stack of discs as far away as it can go in a straight line. Players must leave at least one disc behind when moving, so the board gradually fills up and movement opportunities become more and more scarce. The player occupying the most spaces at the end of the game wins!",
       "descriptionKo": "배틀십은 원래 연필과 종이로 하는 공개 도메인 게임이었지만, 1967년 Milton Bradley가 유명한 보드게임으로 만들었습니다. 종이 격자는 플라스틱 못으로 추측을 기록할 수 있는 구멍이 있는 플라스틱 격자로 바뀌었습니다.\n\n각 플레이어는 길이가 2~5칸인 배들을 정사각형 격자에 비밀리에 배치합니다. 그 다음 각 플레이어는 위치를 부르며 상대방의 격자를 공격합니다. 방어자는 \"명중!\" 또는 \"빗맞음!\"으로 응답합니다. 적의 배 위치를 추론하고 격침하는 것이 목표이며, 먼저 모든 배를 격침하는 플레이어가 승리합니다.\n\n규칙서의 살보 변형룰에서는 각 플레이어가 남은 배의 개수에 따라 한 번에 1~5발을 발사할 수 있습니다(예: 게임 시작 시 5척의 배가 있으므로 5발 발사. 배가 격침될 때마다 발사 횟수 감소). 이 버전은 원래의 연필과 종이 게임에 더 가깝습니다."
     },
     "cottage": {
@@ -38759,38 +38834,27 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.46,
       "moodTags": [
-        "tense",
         "cozy"
       ],
-      "playTags": [
-        "deduction"
-      ],
+      "playTags": [],
       "situationTags": [
         "beginner",
-        "family",
         "first_game",
-        "couple"
+        "group",
+        "quick_play"
       ],
-      "interactionTags": [
-        "social"
-      ],
+      "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "tense",
         "cozy",
-        "deduction",
         "beginner",
-        "family",
         "first_game",
-        "couple",
-        "social"
+        "group",
+        "quick_play"
       ],
       "displayTags": [
-        "머리쓰게",
-        "빠져들게",
-        "편안하게",
-        "대화하며"
+        "편안하게"
       ],
       "summaryKo": "",
       "comment": {
@@ -38809,8 +38873,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/oWcB33sfig9QF_KBEv7iLQ__original/img/retN48ZHxCC5YaECdlWjRdWHPGs=/0x0/filters:format(png)/pic2439783.png",
-      "thumbnail": "https://cf.geekdo-images.com/oWcB33sfig9QF_KBEv7iLQ__small/img/qczOMhLMAddodKHspHSXyYqZ578=/fit-in/200x150/filters:strip_icc()/pic2439783.png",
+      "main": "https://cf.geekdo-images.com/CyRdRpZaIsCb4B8zfotI4Q__original/img/5FfCNbuFMYfXNoUKKAZkJugz-dE=/0x0/filters:format(jpeg)/pic1887253.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/CyRdRpZaIsCb4B8zfotI4Q__small/img/whuWEpda3VITkjptCXHcYD4tCm0=/fit-in/200x150/filters:strip_icc()/pic1887253.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -44243,34 +44307,46 @@ const gameData = {
     "title": {
       "display": "서스펙트게임 리로드",
       "owned": "서스펙트게임 리로드",
-      "bgg": ""
+      "bgg": "Suspects: Claire Harper Takes the Stage"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "needs-review",
-      "year": "",
-      "rating": 8.3,
-      "weight": 2.25,
-      "minPlayers": 4,
-      "maxPlayers": 4,
+      "id": "322785",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 7.25648,
+      "weight": 1.8333,
+      "minPlayers": 1,
+      "maxPlayers": 6,
       "bestPlayers": [
         4
       ],
       "recommendedPlayers": [
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        5,
+        6,
+        6
+      ],
+      "playingTime": 90,
+      "minPlayTime": 60,
+      "maxPlayTime": 90,
+      "categories": [
+        "Deduction",
+        "Murder / Mystery"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "머더미스터리"
+        "Cooperative Game",
+        "Deduction",
+        "Solo / Solitaire Game",
+        "Storytelling"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Guillaume Montiage"
+      ],
+      "description": "Suspects is a range of investigation games with streamlined rules and plots centered on the psychology of the characters in the style of Agatha Christie&rsquo;s novels. The first opus will feature the ingenious and fearless Claire Harper in three stories that pay tribute to the great classics of detective literature!\n\nClaire Harper was one of the first women to graduate from Oxford in 1927. Specializing in criminal law, she is also an adventurous traveler. Every mystery is an opportunity for her to test her formidable spirit of deduction and her unfailing determination! In this first episode, follow her in her investigations that will take her from grand manor houses to shady theaters and from Scotland to...Egypt!\n\n--description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -44282,39 +44358,53 @@ const gameData = {
       "difficultyWeight": 2.25,
       "moodTags": [
         "tense",
+        "cozy",
         "immersive"
       ],
       "playTags": [
         "deduction",
+        "storytelling",
+        "party",
         "murder_mystery"
       ],
       "situationTags": [
         "beginner",
-        "group"
+        "group",
+        "large_group",
+        "long_stay"
       ],
       "interactionTags": [
+        "cooperative",
+        "low_conflict",
         "social",
         "table_talk",
-        "low_conflict"
+        "easy_coop"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
+        "cozy",
         "immersive",
         "deduction",
+        "storytelling",
+        "party",
         "murder_mystery",
         "beginner",
         "group",
+        "large_group",
+        "long_stay",
+        "cooperative",
+        "low_conflict",
         "social",
         "table_talk",
-        "low_conflict"
+        "easy_coop"
       ],
       "displayTags": [
         "머리쓰게",
-        "머더미스터리",
         "빠져들게",
-        "대화하며"
+        "즐기고",
+        "머더미스터리"
       ],
       "summaryKo": "",
       "comment": {
@@ -44333,9 +44423,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/W62RivF2drCQVe6x1L7XiQ__original/img/PNbiU550YL28Kdet7CBulOcycNs=/0x0/filters:format(png)/pic6039476.png",
+      "thumbnail": "https://cf.geekdo-images.com/W62RivF2drCQVe6x1L7XiQ__small/img/vXJe3D0jSuglcR_loyXLY0Yl6AA=/fit-in/200x150/filters:strip_icc()/pic6039476.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
