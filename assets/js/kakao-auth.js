@@ -65,6 +65,7 @@ function kakaoLogin() {
 }
 
 function kakaoLogout() {
+  if (!confirm('로그아웃 하시겠습니까?')) return;
   localStorage.removeItem(KAKAO_USER_KEY);
   updateLoginUI(null);
 }
