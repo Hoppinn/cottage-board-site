@@ -175,6 +175,17 @@ const mobileMenu =
   document.querySelector('#mobileMenu');
 
 function resetMenuGroups(){
+  // 추천 섹션 표시 여부를 DOM 상태로 직접 판단해 is-current 동기화
+  const recommendLink = document.querySelector('#openRecommendMenu');
+  const recommendSec  = document.getElementById('recommend');
+  if(recommendLink && recommendSec){
+    if(recommendSec.classList.contains('is-hidden')){
+      recommendLink.classList.remove('is-current');
+    } else {
+      recommendLink.classList.add('is-current');
+    }
+  }
+
   document.querySelectorAll('.menu-group').forEach(g=>g.classList.remove('is-open'));
   document.querySelector('.header-menu a.is-current')
     ?.closest('.menu-group')
