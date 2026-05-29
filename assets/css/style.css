@@ -323,6 +323,18 @@ textarea{
   }
 }
 
+/* 요청하기 — 행동 유도 링크 */
+.header-menu a[href*="requests.html"]{color:#9e3a2a !important;font-weight:900;}
+.header-menu a[href*="requests.html"]:hover{background:#fce8e0 !important;}
+.header-menu a[href*="requests.html"].is-current{background:#fce8e0 !important;color:#7a2a1e !important;}
+@media(min-width:900px){
+  .header-menu > a[href*="requests.html"].is-current{
+    background:transparent !important;
+    border-bottom:2.5px solid #9e3a2a !important;
+    color:#9e3a2a !important;
+  }
+}
+
 /* 모바일: 클릭으로 아코디언 */
 .menu-group.is-open .menu-group-body{
   display:flex;

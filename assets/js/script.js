@@ -2475,10 +2475,23 @@ renderGameCards();
    # SHOW RECOMMEND RESULTS
 ========================= */
 
+function setRecommendMenuActive(active){
+  const link = document.querySelector('#openRecommendMenu');
+  if(!link) return;
+  if(active){
+    link.classList.add('is-current');
+    const group = link.closest('.menu-group');
+    if(group) group.classList.add('is-open');
+  } else {
+    link.classList.remove('is-current');
+  }
+}
+
 function showRecommendResults(){
   updateRecommendFilterText();
   renderGameCards();
   closeRecommendModal();
+  setRecommendMenuActive(true);
 
   if(recommendSection){
     recommendSection.classList.remove('is-hidden');
@@ -2503,6 +2516,8 @@ function showRecommendResults(){
 ========================= */
 
 function backToHero(){
+  setRecommendMenuActive(false);
+
   if(recommendSection){
     recommendSection.classList.add('is-hidden');
   }
