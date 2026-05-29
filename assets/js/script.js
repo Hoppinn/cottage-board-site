@@ -196,7 +196,12 @@ function toggleMenu(){
   }
 
   const isOpening = !mobileMenu.classList.contains('active');
-  if(isOpening) resetMenuGroups();
+  if(isOpening){
+    // 메뉴 열릴 때마다 DOM 상태로 플래그 재동기화
+    const rec = document.getElementById('recommend');
+    if(rec) _recommendActive = !rec.classList.contains('is-hidden');
+    resetMenuGroups();
+  }
   mobileMenu.classList.toggle('active');
 }
 
