@@ -85,7 +85,7 @@
             <strong>단톡방 들어가기</strong><br>
             <span style="color:var(--muted);font-weight:400">참여코드: <strong>CottageB</strong></span>
           </div>
-          <a class="club-card-link" href="https://open.kakao.com/o/gwfkA1Eg" target="_blank" rel="noopener noreferrer" aria-label="단톡방 들어가기"></a>
+          <a class="club-card-link" href="https://open.kakao.com/o/gwfkA1Eg" data-ext-confirm="카카오 오픈채팅이 새 창에서 열려요." aria-label="단톡방 들어가기"></a>
         </li>
         <li class="about-for-item">
           <span class="about-for-icon">📋</span>
@@ -130,7 +130,7 @@
             <strong>모임 사진 보기</strong><br>
             <span style="color:var(--muted);font-weight:400">인스타그램</span>
           </div>
-          <a class="club-card-link" href="https://www.instagram.com/CottageBoard" target="_blank" rel="noopener noreferrer" aria-label="모임 사진 보기"></a>
+          <a class="club-card-link" href="https://www.instagram.com/CottageBoard" data-ext-confirm="인스타그램이 새 창에서 열려요." aria-label="모임 사진 보기"></a>
         </li>
       </ul>
     </div>
@@ -145,6 +145,45 @@
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
+
+  <!-- 외부 링크 확인 다이얼로그 -->
+  <div id="extConfirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:280px;width:85%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
+      <p id="extConfirmMsg" style="font-size:15px;font-weight:600;color:var(--text);margin:0 0 6px;"></p>
+      <p style="font-size:13px;color:var(--muted);margin:0 0 20px;">계속할까요?</p>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button id="extConfirmCancel" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--muted);font-size:14px;cursor:pointer;">취소</button>
+        <button id="extConfirmOk" style="flex:1;padding:10px;border:none;border-radius:8px;background:var(--green);color:#fff;font-size:14px;font-weight:700;cursor:pointer;">열기</button>
+      </div>
+    </div>
+  </div>
+  <script>
+  (function () {
+    let pendingUrl = null;
+    const overlay = document.getElementById('extConfirmOverlay');
+    const msg = document.getElementById('extConfirmMsg');
+    document.querySelectorAll('[data-ext-confirm]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        pendingUrl = link.href;
+        msg.textContent = link.dataset.extConfirm;
+        overlay.style.display = 'flex';
+      });
+    });
+    document.getElementById('extConfirmOk').addEventListener('click', () => {
+      if (pendingUrl) window.open(pendingUrl, '_blank', 'noopener,noreferrer');
+      overlay.style.display = 'none';
+      pendingUrl = null;
+    });
+    document.getElementById('extConfirmCancel').addEventListener('click', () => {
+      overlay.style.display = 'none';
+      pendingUrl = null;
+    });
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) { overlay.style.display = 'none'; pendingUrl = null; }
+    });
+  })();
+  </script>
 
   <footer class="site-footer">
     <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
