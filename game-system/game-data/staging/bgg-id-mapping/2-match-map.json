@@ -2387,43 +2387,9 @@
     "scoreGap": 20
   },
   "보랏빛리라이트 (머더미스터리미니)": {
-    "status": "unresolved",
-    "ownedName": "보랏빛리라이트 (머더미스터리미니)",
-    "reviewCandidates": [
-      {
-        "bggId": "25420",
-        "bggName": "Ur",
-        "year": "2006",
-        "score": 29,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Purple Rewrite",
-          "matchedCandidateName": "Ur"
-        }
-      },
-      {
-        "bggId": "405646",
-        "bggName": "Rite",
-        "year": "2024",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Purple Rewrite",
-          "matchedCandidateName": "Rite"
-        }
-      },
-      {
-        "bggId": "12277",
-        "bggName": "IT",
-        "year": "1978",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Purple Rewrite",
-          "matchedCandidateName": "IT"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "379873",
+    "ownedName": "보랏빛리라이트 (머더미스터리미니)"
   },
   "보타닉가든": {
     "status": "auto-confirmed",

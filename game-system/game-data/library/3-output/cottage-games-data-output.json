@@ -40064,13 +40064,13 @@
     "title": {
       "display": "보랏빛리라이트 (머더미스터리미니)",
       "owned": "보랏빛리라이트 (머더미스터리미니)",
-      "bgg": ""
+      "bgg": "紫乃淵リライト (Shinobuchi Rewrite)"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 0,
+      "id": "379873",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 6.58125,
       "weight": 0,
       "minPlayers": 2,
       "maxPlayers": 2,
@@ -40081,17 +40081,26 @@
         2
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 60,
+      "minPlayTime": 60,
+      "maxPlayTime": 60,
+      "categories": [
+        "Deduction",
+        "Murder / Mystery"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "머더미스터리"
+        "Acting",
+        "Deduction",
+        "Role Playing"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Ryo Kawakami",
+        "Yoshida Masanori",
+        "Hideki Morikawa"
+      ],
+      "description": "Hull and Aki They are a childhood favorite that grows like a sister.\nTwo visited the campsite in the back of the mountains, get caught in an unexpected case.\nThe dead body of the administrator was found.\nDeep and closed environment 5 guest\nThe legend of cherry blossom trees and the mystery rope hung on branches.\nAnd there are many information that has been rewritten.\nCan the two people get to the truth?",
       "descriptionKo": ""
     },
     "cottage": {
@@ -40102,36 +40111,48 @@
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
+        "funny",
+        "chaotic",
         "tense",
         "immersive"
       ],
       "playTags": [
+        "party",
+        "storytelling",
         "deduction",
         "murder_mystery"
       ],
       "situationTags": [
+        "group",
+        "beginner",
         "couple"
       ],
       "interactionTags": [
-        "social",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "funny",
+        "chaotic",
         "tense",
         "immersive",
+        "party",
+        "storytelling",
         "deduction",
         "murder_mystery",
+        "group",
+        "beginner",
         "couple",
-        "social",
-        "table_talk"
+        "table_talk",
+        "social"
       ],
       "displayTags": [
-        "머리쓰게",
-        "머더미스터리",
+        "즐기고",
         "빠져들게",
-        "대화하며"
+        "머리쓰게",
+        "머더미스터리"
       ],
       "summaryKo": "",
       "comment": {
@@ -40150,9 +40171,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/pX7IDyQ2MOX6D3iI31ufxQ__original/img/qb2uPL-1K65wY7up3wdqdTGQFJA=/0x0/filters:format(png)/pic7421930.png",
+      "thumbnail": "https://cf.geekdo-images.com/pX7IDyQ2MOX6D3iI31ufxQ__small/img/T9YaqO2KppNcA63IS3I2rYj6EG8=/fit-in/200x150/filters:strip_icc()/pic7421930.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

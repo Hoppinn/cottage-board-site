@@ -6407,14 +6407,14 @@
   {
     "id": "보랏빛리라이트-머더미스터리미니",
     "ownedName": "보랏빛리라이트 (머더미스터리미니)",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "紫乃淵リライト (Shinobuchi Rewrite)",
+    "bggId": "379873",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "머더미",
     "difficulty": null,
     "difficultyWeight": 0,
-    "rating": null,
+    "rating": 6.58125,
     "bestPlayers": [
       2
     ],
