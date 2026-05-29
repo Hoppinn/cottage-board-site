@@ -211,9 +211,7 @@ function toggleMenu(){
     // 메뉴 열릴 때마다 DOM 상태로 플래그 재동기화
     const rec = document.getElementById('recommend');
     if(rec) _recommendActive = !rec.classList.contains('is-hidden');
-    console.log('[menu] rec:', !!rec, '_recommendActive:', _recommendActive);
     resetMenuGroups();
-    console.log('[menu] is-current:', document.querySelector('.header-menu a.is-current')?.id);
   }
   mobileMenu.classList.toggle('active');
 }
