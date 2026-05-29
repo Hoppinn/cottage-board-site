@@ -7380,7 +7380,7 @@ const gameData = {
     },
     "bgg": {
       "id": "178900",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2015",
       "rating": 7.52482,
       "weight": 1.2549,
@@ -7535,7 +7535,7 @@ const gameData = {
     },
     "bgg": {
       "id": "178900",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2015",
       "rating": 7.52482,
       "weight": 1.2549,
@@ -7981,7 +7981,7 @@ const gameData = {
     },
     "bgg": {
       "id": "131357",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2012",
       "rating": 6.97526,
       "weight": 1.4152,
@@ -10239,7 +10239,7 @@ const gameData = {
     },
     "bgg": {
       "id": "352515",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2021",
       "rating": 7.38606,
       "weight": 1.0776,
@@ -12112,7 +12112,7 @@ const gameData = {
     },
     "bgg": {
       "id": "131357",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2012",
       "rating": 6.97526,
       "weight": 1.4152,
@@ -21670,31 +21670,45 @@ const gameData = {
     "title": {
       "display": "골드러시",
       "owned": "골드러시",
-      "bgg": ""
+      "bgg": "Gold River"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "needs-review",
-      "year": "",
-      "rating": 6.7,
-      "weight": 1.83,
-      "minPlayers": 0,
-      "maxPlayers": 0,
+      "id": "297661",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 6.6737,
+      "weight": 1.8333,
+      "minPlayers": 2,
+      "maxPlayers": 5,
       "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "recommendedPlayers": [
+        3,
+        4,
+        5
+      ],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        5
+      ],
+      "playingTime": 35,
+      "minPlayTime": 35,
+      "maxPlayTime": 35,
+      "categories": [
+        "American West"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "경매",
-        "주사위"
+        "Auction / Bidding",
+        "Dice Rolling",
+        "Set Collection"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Bruno Cathala",
+        "Bruno Faidutti"
+      ],
+      "description": "In Gold River, an updated version of Boomtown and La Fi&egrave;vre de l'Or, players want to take home as much money as possible from the mines that surround them.\n\nOn a turn, multiple items &mdash; mines, dynamite, town characters, and more &mdash; will be available for auction. Players keep bidding until all but one player passes; that player pays their bid to the player on their right, who keeps half the money (rounded up), then passes the rest right, with that player keeping half, and so on. The winning bidder chooses one item from the lot, then the player to their left chooses one, and so on until each player has acquired something new.\n\nThe winning bidder also rolls two dice to determine which gold mines pay out. The first player to acquire two mines in a location becomes that town's Mayor, after which they earn a commission when anyone else acquires a card from that town.\n\nGold River includes a two-player game mode (unlike Boomtown) as well as an advanced \"poker\" game mode.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -21705,20 +21719,34 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
-        "beginner"
+        "beginner",
+        "group",
+        "large_group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "card_play",
+        "strategy",
         "beginner",
+        "group",
+        "large_group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -21736,9 +21764,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/lu3RBvuYBfO9JqBqB0gaww__original/img/oPSGu7e9CYXmELP_NOxgMs9LMLY=/0x0/filters:format(png)/pic5146616.png",
+      "thumbnail": "https://cf.geekdo-images.com/lu3RBvuYBfO9JqBqB0gaww__small/img/lgYZzAvWEmjklnuxz2X0puRFeL8=/fit-in/200x150/filters:strip_icc()/pic5146616.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -22721,7 +22749,7 @@ const gameData = {
     },
     "bgg": {
       "id": "70149",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2011",
       "rating": 7.67436,
       "weight": 3.8857,
@@ -23549,7 +23577,7 @@ const gameData = {
     },
     "bgg": {
       "id": "352515",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2021",
       "rating": 7.38606,
       "weight": 1.0776,
@@ -27169,7 +27197,7 @@ const gameData = {
     },
     "bgg": {
       "id": "36218",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2008",
       "rating": 7.59776,
       "weight": 2.3445,
@@ -27293,14 +27321,14 @@ const gameData = {
     "title": {
       "display": "도미니언 약속된번영",
       "owned": "도미니언 약속된번영",
-      "bgg": "Dominion"
+      "bgg": "Dominion: Prosperity"
     },
     "bgg": {
-      "id": "36218",
-      "matchStatus": "auto-confirmed",
-      "year": "2008",
-      "rating": 7.59776,
-      "weight": 2.3445,
+      "id": "66690",
+      "matchStatus": "forced",
+      "year": "2010",
+      "rating": 8.22133,
+      "weight": 2.4724,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -27320,6 +27348,7 @@ const gameData = {
       "maxPlayTime": 30,
       "categories": [
         "Card Game",
+        "Expansion for Base-game",
         "Medieval"
       ],
       "categoriesKo": [
@@ -27330,9 +27359,7 @@ const gameData = {
         "Deck, Bag, and Pool Building",
         "Delayed Purchase",
         "Hand Management",
-        "Open Drafting",
-        "Take That",
-        "Variable Set-up"
+        "Open Drafting"
       ],
       "mechanicsKo": [
         "덱/백/풀 빌딩",
@@ -27345,7 +27372,7 @@ const gameData = {
       "designers": [
         "Donald X. Vaccarino"
       ],
-      "description": "\"You are a monarch, like your parents before you, a ruler of a small pleasant kingdom of rivers and evergreens. Unlike your parents, however, you have hopes and dreams! You want a bigger and more pleasant kingdom, with more rivers and a wider variety of trees. You want a Dominion! In all directions lie fiefs, freeholds, and feodums. All are small bits of land, controlled by petty lords and verging on anarchy. You will bring civilization to these people, uniting them under your banner.\n\nBut wait! It must be something in the air; several other monarchs have had the exact same idea. You must race to get as much of the unclaimed land as possible, fending them off along the way. To do this you will hire minions, construct buildings, spruce up your castle, and fill the coffers of your treasury. Your parents wouldn't be proud, but your grandparents, on your mother's side, would be delighted.\"\n\n&mdash;description from the back of the box\n\nIn Dominion, each player starts with an identical, very small deck of cards.  In the center of the table is a selection of other cards the players can \"buy\" as they can afford them.  Through their selection of cards to buy, and how they play their hands as they draw them, the players construct their deck on the fly, striving for the most efficient path to the precious victory points by game end.\n\nDominion is not a Collectible Card Game (CCG), but the play of the game is similar to the construction and play of a CCG deck. The game comes with 500 cards. You select 10 of the 25 Kingdom card types to include in any given play&mdash;leading to immense variety.\n\n&mdash;user summary\n\nPart of the Dominion series.",
+      "description": "Released in late 2010, Prosperity is the 4th addition to the Dominion game family. It adds 25 new Kingdom cards to Dominion, plus 2 new Basic cards that let players keep building up past Gold and Province. The central theme is wealth; there are treasures with abilities, cards that interact with treasures, and powerful expensive cards. (Source: http://www.riograndegames.com/games.html?id=361 )\n\nFrom the back of the box: \"Ah, money. There's nothing like the sound of coins clinking in your hands. You vastly prefer it to the sound of coins clinking in someone else's hands, or the sound of coins just sitting there in a pile that no-one can quite reach without getting up. Getting up, that's all behind you now. Life has been good to you. Just ten years ago, you were tilling your own fields in a simple straw hat. Today, your kingdom stretches from sea to sea, and your straw hat is the largest the world has ever known. You also have the world's smallest dog, and a life-sized statue of yourself made out of baklava. Sure, money can't buy happiness, but it can buy envy, anger, and also this kind of blank feeling. You still have problems - troublesome neighbours that must be conquered. \nBut this time, you'll conquer them in style.\"\n\nPart of the Dominion series.",
       "descriptionKo": "당신은 부모처럼 강의 흐르고 상록수가 우거진 작은 왕국의 통치자입니다. 하지만 당신은 부모와 달리 야망이 있습니다! 더 큰 왕국, 더 많은 강, 더 다양한 나무가 있는 왕국을 원합니다. 바로 도미니언입니다! 사방에는 소령들이 지배하고 혼란에 빠진 작은 영지들이 있습니다. 당신은 이 백성들을 문명화하여 자신의 깃발 아래 통일할 것입니다.\n\n하지만 잠깐! 다른 군주들도 같은 생각을 했습니다. 당신은 다른 군주들과 경쟁하며 가능한 한 많은 미개척지를 차지해야 합니다. 이를 위해 부하를 고용하고, 건물을 짓고, 성을 꾸미며, 재무부 금고를 채워야 합니다.\n\n도미니언에서 각 플레이어는 동일한 작은 덱으로 시작합니다. 테이블 중앙에는 감당할 수 있는 범위 내에서 구매할 수 있는 다양한 카드들이 놓여 있습니다. 카드 선택과 손패를 플레이하는 방식을 통해 플레이어는 게임 진행 중 자신의 덱을 구성하며, 게임 종료 시 승리점을 얻는 가장 효율적인 경로를 추구합니다.\n\n도미니언은 수집형"
     },
     "cottage": {
@@ -27355,10 +27382,7 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.47,
-      "moodTags": [
-        "chaotic",
-        "funny"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
@@ -27374,8 +27398,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "chaotic",
-        "funny",
         "card_play",
         "strategy",
         "beginner",
@@ -27385,7 +27407,6 @@ const gameData = {
       ],
       "displayTags": [
         "머리쓰게",
-        "즐기고",
         "경쟁형"
       ],
       "summaryKo": "카드를 수집해 덱을 강화하고 승리점을 모으는 게임.",
@@ -27405,8 +27426,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__original/img/96COuakNiLRrjDLc1sM4Zxsw4WE=/0x0/filters:format(jpeg)/pic394356.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__small/img/B2u2ghwlmI_qsUtCwuvcbnBcIqU=/fit-in/200x150/filters:strip_icc()/pic394356.jpg",
+      "main": "https://cf.geekdo-images.com/fEawLvevkxPv9AQ3mSiwVQ__original/img/NhQI64z4i8MpZZyHPKiHVvbcKaA=/0x0/filters:format(jpeg)/pic1747320.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/fEawLvevkxPv9AQ3mSiwVQ__small/img/sjhU3XIXbxzrphkW5UGP2ZMuNMU=/fit-in/200x150/filters:strip_icc()/pic1747320.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -27421,14 +27442,14 @@ const gameData = {
     "title": {
       "display": "도미니언 위대한제국",
       "owned": "도미니언 위대한제국",
-      "bgg": "Dominion"
+      "bgg": "Dominion: Empires"
     },
     "bgg": {
-      "id": "36218",
-      "matchStatus": "auto-confirmed",
-      "year": "2008",
-      "rating": 7.59776,
-      "weight": 2.3445,
+      "id": "192951",
+      "matchStatus": "forced",
+      "year": "2016",
+      "rating": 8.34715,
+      "weight": 2.7674,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -27448,6 +27469,7 @@ const gameData = {
       "maxPlayTime": 30,
       "categories": [
         "Card Game",
+        "Expansion for Base-game",
         "Medieval"
       ],
       "categoriesKo": [
@@ -27458,9 +27480,7 @@ const gameData = {
         "Deck, Bag, and Pool Building",
         "Delayed Purchase",
         "Hand Management",
-        "Open Drafting",
-        "Take That",
-        "Variable Set-up"
+        "Open Drafting"
       ],
       "mechanicsKo": [
         "덱/백/풀 빌딩",
@@ -27473,7 +27493,7 @@ const gameData = {
       "designers": [
         "Donald X. Vaccarino"
       ],
-      "description": "\"You are a monarch, like your parents before you, a ruler of a small pleasant kingdom of rivers and evergreens. Unlike your parents, however, you have hopes and dreams! You want a bigger and more pleasant kingdom, with more rivers and a wider variety of trees. You want a Dominion! In all directions lie fiefs, freeholds, and feodums. All are small bits of land, controlled by petty lords and verging on anarchy. You will bring civilization to these people, uniting them under your banner.\n\nBut wait! It must be something in the air; several other monarchs have had the exact same idea. You must race to get as much of the unclaimed land as possible, fending them off along the way. To do this you will hire minions, construct buildings, spruce up your castle, and fill the coffers of your treasury. Your parents wouldn't be proud, but your grandparents, on your mother's side, would be delighted.\"\n\n&mdash;description from the back of the box\n\nIn Dominion, each player starts with an identical, very small deck of cards.  In the center of the table is a selection of other cards the players can \"buy\" as they can afford them.  Through their selection of cards to buy, and how they play their hands as they draw them, the players construct their deck on the fly, striving for the most efficient path to the precious victory points by game end.\n\nDominion is not a Collectible Card Game (CCG), but the play of the game is similar to the construction and play of a CCG deck. The game comes with 500 cards. You select 10 of the 25 Kingdom card types to include in any given play&mdash;leading to immense variety.\n\n&mdash;user summary\n\nPart of the Dominion series.",
+      "description": "Description from the publisher:\n\nThe world is big and your kingdom gigantic. It's no longer a kingdom really; it's an empire &mdash; which makes you the emperor. This entitles you to a better chair, plus you can name a salad after yourself.\n\nIt's not easy being emperor. The day starts early, when you light the sacred flame; then it's hours of committee meetings, trying to establish exactly why the sacred flame keeps going out. Sometimes your armies take over a continent and you just have no idea where to put it. And there's the risk of assassination; you have a food taster, who tastes anything before you eat it, and a dagger tester, who gets stabbed by anything before it stabs you. You've taken to staying at home whenever it's the Ides of anything. Still, overall it's a great job. You wouldn't trade it for the world &mdash; especially given how much of the world you already have.\n\nDominion: Empires, the tenth addition to the game of Dominion, contains 96 metal tokens and 300 cards, with cards you can buy now and pay for later, piles with two different cards, and Landmarks that add new ways to score. VP tokens and Events return from previous sets.\n\nPart of the Dominion series.",
       "descriptionKo": "당신은 부모님처럼 강 많고 푸른 숲이 어우러진 작은 왕국의 군주입니다. 하지만 부모님과 달리 당신은 더 큰 꿈을 가지고 있습니다! 더 넓은 영토와 다양한 나무들로 가득한 더욱 멋진 왕국을 원합니다. 바로 도미니언입니다! 사방팔방에는 소영지와 자유지가 산재해 있고, 모두 소영주들이 지배하며 혼란 직전의 땅들입니다. 당신은 이들을 문명화하여 당신의 깃발 아래 통일할 것입니다.\n\n하지만 잠깐! 공기 중에 뭔가 있는 것 같습니다. 다른 군주들도 똑같은 생각을 했거든요. 미지의 땅을 놓고 경쟁하면서 그들을 물리쳐야 합니다. 이를 위해 부하를 고용하고, 건물을 짓고, 성을 단장하고, 금고를 채워야 합니다.\n\n도미니언에서 각 플레이어는 동일한 작은 카드 덱으로 시작합니다. 테이블 중앙에는 플레이어들이 여유가 되는 대로 \"구입\"할 수 있는 카드들이 놓여 있습니다. 구매할 카드 선택과 손에 든 카드를 어떻게 플레이하는지를 통해 플레이어들은 게임 진행 중 즉석으로 자"
     },
     "cottage": {
@@ -27484,8 +27504,6 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.81,
       "moodTags": [
-        "chaotic",
-        "funny",
         "immersive"
       ],
       "playTags": [
@@ -27503,8 +27521,6 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "chaotic",
-        "funny",
         "immersive",
         "card_play",
         "strategy",
@@ -27515,7 +27531,6 @@ const gameData = {
       ],
       "displayTags": [
         "머리쓰게",
-        "즐기고",
         "빠져들게",
         "경쟁형"
       ],
@@ -27536,8 +27551,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__original/img/96COuakNiLRrjDLc1sM4Zxsw4WE=/0x0/filters:format(jpeg)/pic394356.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__small/img/B2u2ghwlmI_qsUtCwuvcbnBcIqU=/fit-in/200x150/filters:strip_icc()/pic394356.jpg",
+      "main": "https://cf.geekdo-images.com/JPUvgHftSAmqocl9zq5stA__original/img/O7TxK5Euj-f2Zfbp6mUmGR9mgMo=/0x0/filters:format(jpeg)/pic2868179.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/JPUvgHftSAmqocl9zq5stA__small/img/Hivv3FLtgMIXoA7T6rQD5cdamrM=/fit-in/200x150/filters:strip_icc()/pic2868179.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -27552,16 +27567,16 @@ const gameData = {
     "title": {
       "display": "도미니언 장막뒤의사람들",
       "owned": "도미니언 장막뒤의사람들",
-      "bgg": "Dominion"
+      "bgg": "Dominion: Intrigue"
     },
     "bgg": {
-      "id": "36218",
-      "matchStatus": "auto-confirmed",
-      "year": "2008",
-      "rating": 7.59776,
-      "weight": 2.3445,
+      "id": "40834",
+      "matchStatus": "forced",
+      "year": "2009",
+      "rating": 7.6859,
+      "weight": 2.4108,
       "minPlayers": 2,
-      "maxPlayers": 4,
+      "maxPlayers": 6,
       "bestPlayers": [
         3
       ],
@@ -27572,7 +27587,9 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        4
+        5,
+        6,
+        6
       ],
       "playingTime": 30,
       "minPlayTime": 30,
@@ -27590,7 +27607,6 @@ const gameData = {
         "Delayed Purchase",
         "Hand Management",
         "Open Drafting",
-        "Take That",
         "Variable Set-up"
       ],
       "mechanicsKo": [
@@ -27604,7 +27620,7 @@ const gameData = {
       "designers": [
         "Donald X. Vaccarino"
       ],
-      "description": "\"You are a monarch, like your parents before you, a ruler of a small pleasant kingdom of rivers and evergreens. Unlike your parents, however, you have hopes and dreams! You want a bigger and more pleasant kingdom, with more rivers and a wider variety of trees. You want a Dominion! In all directions lie fiefs, freeholds, and feodums. All are small bits of land, controlled by petty lords and verging on anarchy. You will bring civilization to these people, uniting them under your banner.\n\nBut wait! It must be something in the air; several other monarchs have had the exact same idea. You must race to get as much of the unclaimed land as possible, fending them off along the way. To do this you will hire minions, construct buildings, spruce up your castle, and fill the coffers of your treasury. Your parents wouldn't be proud, but your grandparents, on your mother's side, would be delighted.\"\n\n&mdash;description from the back of the box\n\nIn Dominion, each player starts with an identical, very small deck of cards.  In the center of the table is a selection of other cards the players can \"buy\" as they can afford them.  Through their selection of cards to buy, and how they play their hands as they draw them, the players construct their deck on the fly, striving for the most efficient path to the precious victory points by game end.\n\nDominion is not a Collectible Card Game (CCG), but the play of the game is similar to the construction and play of a CCG deck. The game comes with 500 cards. You select 10 of the 25 Kingdom card types to include in any given play&mdash;leading to immense variety.\n\n&mdash;user summary\n\nPart of the Dominion series.",
+      "description": "In Dominion: Intrigue (as with Dominion), each player starts with an identical, very small deck of cards. In the center of the table is a selection of other cards the players can \"buy\" as they can afford them. Through their selection of cards to buy, and how they play their hands as they draw them, the players construct their deck on the fly, striving for the most efficient path to the precious victory points by game end.\n\nFrom the back of the box: \"Something&rsquo;s afoot. The steward smiles at you like he has a secret, or like he thinks you have a secret, or like you think he thinks you have a secret. There are secret plots brewing, you&rsquo;re sure of it. At the very least, there are yours. A passing servant murmurs, &ldquo;The eggs are on the plate.&rdquo; You frantically search your codebook for the translation before realizing he means that breakfast is ready. Excellent. Everything is going according to plan.\"\n\nDominion: Intrigue adds rules for playing with up to 8 players at two tables or for playing a single game with up to 6 players when combined with Dominion. This game adds 25 new Kingdom cards and a complete set of Treasure and Victory cards. The game can be played alone by players experienced in Dominion or with the basic game of Dominion.\n\nPart of the Dominion series.\n\nIntegrates with:\n\n    Dominion\n\n\nAlso released as an expansion that requires the base game or card set to play: Dominion: Die Intrige – Erweiterung.",
       "descriptionKo": "당신은 부모처럼 작고 쾌적한 강과 상록수로 이루어진 왕국의 군주입니다. 하지만 당신은 부모와 달리 더 큰 야망을 품고 있습니다! 더 많은 강과 다양한 나무가 있는 더 크고 쾌적한 왕국, 즉 도미니언을 원합니다. 사방에는 소영지와 영토가 흩어져 있으며, 소영주들이 통제하는 이 땅들은 혼란 직전입니다. 당신이 이들을 문명화하여 자신의 깃발 아래 통일해야 합니다.\n\n그런데 잠깐! 공기 중에 뭔가 있는 건지, 다른 군주들도 같은 생각을 하고 있습니다. 당신은 경쟁자들을 격퇴하면서 미점령지를 최대한 많이 확보해야 합니다. 이를 위해 부하를 고용하고, 건물을 지으며, 성을 꾸미고, 재무를 충실히 해야 합니다.\n\n도미니언에서 각 플레이어는 동일한 작은 카드 덱으로 시작합니다. 테이블 중앙에는 플레이어들이 감당할 수 있는 범위 내에서 '구매'할 수 있는 다른 카드들이 놓여 있습니다. 구매할 카드 선택과 손에 들은 카드 활용 방식을 통해 플레이어들은 게임 중 덱을 구성하면서"
     },
     "cottage": {
@@ -27614,17 +27630,15 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.41,
-      "moodTags": [
-        "chaotic",
-        "funny"
-      ],
+      "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
       ],
       "situationTags": [
         "beginner",
-        "group"
+        "group",
+        "large_group"
       ],
       "interactionTags": [
         "competitive",
@@ -27633,18 +27647,16 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "chaotic",
-        "funny",
         "card_play",
         "strategy",
         "beginner",
         "group",
+        "large_group",
         "competitive",
         "low_conflict"
       ],
       "displayTags": [
         "머리쓰게",
-        "즐기고",
         "경쟁형"
       ],
       "summaryKo": "초기 덱을 강화하며 영토를 확보하는 카드 빌딩 게임.",
@@ -27664,8 +27676,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__original/img/96COuakNiLRrjDLc1sM4Zxsw4WE=/0x0/filters:format(jpeg)/pic394356.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__small/img/B2u2ghwlmI_qsUtCwuvcbnBcIqU=/fit-in/200x150/filters:strip_icc()/pic394356.jpg",
+      "main": "https://cf.geekdo-images.com/OGOmpi0GgwOwH2y28QgkuA__original/img/VHMKsFZvoK2KKGZiLyoKZb_YhNQ=/0x0/filters:format(jpeg)/pic460011.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/OGOmpi0GgwOwH2y28QgkuA__small/img/jnSHqOXWLN3PfdpCtnfjf44oTsA=/fit-in/200x150/filters:strip_icc()/pic460011.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -34887,7 +34899,7 @@ const gameData = {
     },
     "bgg": {
       "id": "180974",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2015",
       "rating": 7.12133,
       "weight": 1.7809,
@@ -47865,30 +47877,32 @@ const gameData = {
     "title": {
       "display": "스파이vs스파이",
       "owned": "스파이vs스파이",
-      "bgg": "Spy vs Spy"
+      "bgg": "Kompromat"
     },
     "bgg": {
-      "id": "1686",
-      "matchStatus": "auto-confirmed",
-      "year": "1986",
-      "rating": 5.64871,
-      "weight": 1.4286,
+      "id": "299569",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 7.0874,
+      "weight": 1.4615,
       "minPlayers": 2,
-      "maxPlayers": 4,
+      "maxPlayers": 2,
       "bestPlayers": [
         2
       ],
       "recommendedPlayers": [
         2
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 90,
-      "minPlayTime": 90,
-      "maxPlayTime": 90,
+      "notRecommendedPlayers": [
+        1,
+        2
+      ],
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
       "categories": [
-        "Comic Book / Strip",
-        "Fighting",
-        "Maze"
+        "Card Game",
+        "Spies / Secret Agents"
       ],
       "categoriesKo": [
         "만화",
@@ -47896,17 +47910,18 @@ const gameData = {
         "미로"
       ],
       "mechanics": [
-        "Pick-up and Deliver",
-        "Tile Placement"
+        "Push Your Luck",
+        "Set Collection"
       ],
       "mechanicsKo": [
         "픽업 앤 딜리버",
         "타일 배치"
       ],
       "designers": [
-        "Michael Gray"
+        "Rob Fisher",
+        "Adam Porter"
       ],
-      "description": "The object of the game is to build tunnels to bombs and bring them back to your home base.\n\nThe bombs have various effects hidden on their base.  The tunnels are built through tile laying, so each player (best played with four) digs furiously from his manhole in the corner towards the bombs, hoping to reach 'em first.  If you connect tunnels, then you'll be able to try to steal another player's bomb before he brings it home.\nThe basic turn goes like this:\nFirst, you move your pawn to another tunnel tile.\nSecond, if you ended up or started on a bomb, test (with a special die) to see if it blows up.\nThird, draw a tunnel tile (you have a hand of four) and play one.\nFinally, if you get a bomb home safely, read its message.\nIn addition to the tunnel tiles, there are white, black and grey spy tiles.  They are used to block tunnel tiles (each tunnel tile has a little black or white spy drawn in its middle, so you can play a White Spy only on black tunnel tiles and vice-versa; the Grey Spy can be played on either).\nSpy vs Spy is not be to be confused with Spion & Spion, an entirely different game by the same publisher and credited to Alex Randolph .",
+      "description": "In this one-on-one game, take on the mantle of rival spies competing by undertaking daring missions and trying to remain undercover. The two players compete using blackjack hands to win missions and collect special abilities. To complete a mission successfully, overtake your opponent but be careful not to go over 21 or you will collect notoriety tokens! Being famous is great, but being too well-known might bring you down... The game is played in 6 rounds unless one spy loses their cover.\n\nReady to push your luck to be the most successful and elusive spy in the world?",
       "descriptionKo": "게임의 목표는 폭탄까지 터널을 건설한 후 집으로 가져오는 것입니다.\n\n폭탄의 밑면에는 다양한 특수 효과가 숨겨져 있습니다. 터널은 타일 배치를 통해 건설되므로, 각 플레이어(4명이 최적)는 모서리의 맨홀에서 출발하여 폭탄에 먼저 도달하기 위해 열심히 파고 들어갑니다. 터널을 연결하면 다른 플레이어가 폭탄을 집으로 가져오기 전에 빼앗을 수 있습니다.\n\n기본 턴 순서는 다음과 같습니다:\n첫째, 폰을 다른 터널 타일로 이동합니다.\n둘째, 폭탄 위에서 끝나거나 시작했다면 특수 주사위로 폭탄이 터지는지 확인합니다.\n셋째, 터널 타일을 1장 뽑습니다(손에 4장 보유).\n넷째, 폭탄을 안전하게 집으로 가져오면 그 메시지를 읽습니다.\n\n터널 타일 외에도 흰색, 검은색, 회색 스파이 타일이 있습니다. 이들은 터널 타일을 차단하는 데 사용됩니다(각 터널 타일 중앙에 검은색 또는 흰색 스파이가 그려져 있으므로, 흰색 스파이는 검은색 터널 타일에만, 그 반대도 마찬가지입니다. 회색 스파이는 둘 다 사용 가능)."
     },
     "cottage": {
@@ -47918,17 +47933,17 @@ const gameData = {
       "difficultyWeight": 1.63,
       "moodTags": [
         "tense",
-        "immersive"
+        "funny"
       ],
       "playTags": [
-        "puzzle",
+        "party",
+        "card_play",
         "strategy"
       ],
       "situationTags": [
         "beginner",
-        "couple",
-        "group",
-        "long_stay"
+        "quick_play",
+        "couple"
       ],
       "interactionTags": [
         "competitive",
@@ -47938,17 +47953,18 @@ const gameData = {
       "manualTags": [],
       "autoTags": [
         "tense",
-        "immersive",
-        "puzzle",
+        "funny",
+        "party",
+        "card_play",
         "strategy",
         "beginner",
+        "quick_play",
         "couple",
-        "group",
-        "long_stay",
         "competitive",
         "low_conflict"
       ],
       "displayTags": [
+        "즐기고",
         "머리쓰게",
         "빠져들게",
         "경쟁형"
@@ -47970,8 +47986,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/t-NnH8r-c1IicG4xIF03YQ__original/img/yzgkhBgaYwYrGXYZDzo5sFFcK1A=/0x0/filters:format(jpeg)/pic451308.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/t-NnH8r-c1IicG4xIF03YQ__small/img/tKYNSvArJoxsOgG9uugywvhnODU=/fit-in/200x150/filters:strip_icc()/pic451308.jpg",
+      "main": "https://cf.geekdo-images.com/xeIxamKPESmuIxx0OiX-Ew__original/img/g5Zguko2AWZg16ey8r2zbq9p5Pk=/0x0/filters:format(jpeg)/pic5521198.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/xeIxamKPESmuIxx0OiX-Ew__small/img/_kgogyPHp2ZPflK3sWZ51VhqomQ=/fit-in/200x150/filters:strip_icc()/pic5521198.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -48138,7 +48154,7 @@ const gameData = {
     },
     "bgg": {
       "id": "148228",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2014",
       "rating": 7.42055,
       "weight": 1.7753,
@@ -48254,16 +48270,16 @@ const gameData = {
     "title": {
       "display": "스플렌더 대결",
       "owned": "스플렌더 대결",
-      "bgg": "Splendor"
+      "bgg": "Splendor Duel"
     },
     "bgg": {
-      "id": "148228",
-      "matchStatus": "auto-confirmed",
-      "year": "2014",
-      "rating": 7.42055,
-      "weight": 1.7753,
+      "id": "364073",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 7.87509,
+      "weight": 2.0263,
       "minPlayers": 2,
-      "maxPlayers": 4,
+      "maxPlayers": 2,
       "bestPlayers": [
         2
       ],
@@ -48272,7 +48288,7 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        4
+        2
       ],
       "playingTime": 30,
       "minPlayTime": 30,
@@ -48300,9 +48316,10 @@ const gameData = {
         "세트 수집"
       ],
       "designers": [
-        "Marc André"
+        "Marc André",
+        "Bruno Cathala"
       ],
-      "description": "Splendor is a game of chip-collecting and card development. Players are merchants of the Renaissance trying to buy gem mines, means of transportation, shops&mdash;all in order to acquire the most prestige points. If you're wealthy enough, you might even receive a visit from a noble at some point, which of course will further increase your prestige.\n\nOn your turn, you may (1) collect chips (gems), or (2) buy and build a card, or (3) reserve one card. If you collect chips, you take either three different kinds of chips or two chips of the same kind. If you buy a card, you pay its price in chips and add it to your playing area. To reserve a card&mdash;in order to make sure you get it, or, why not, your opponents don't get it&mdash;you place it in front of you face down for later building; this costs you a round, but you also get gold in the form of a joker chip, which you can use as any gem.\n\nAll of the cards you buy increase your wealth as they give you a permanent gem bonus for later buys; some of the cards also give you prestige points. In order to win the game, you must reach 15 prestige points before your opponents do.",
+      "description": "Confront your rival guild in a race for victory. Take Gem and Pearl tokens from the common board, then purchase cards, gather bonuses, royal favors, and prestige.\n\nDiscover new twists and strategic opportunities derived from Splendor, the original best-selling game. Acquire cards with impressive powers, take advantage of special Privileges, and fight over scarce access to Pearls.\n\nSplendor Duel is a two-player only standalone game based on Splendor that retains some of the main gameplay mechanisms of that design, while being a bit more complex, dynamic, interactive, rich, tense, and mean.\n\nThe game features a main board shared by both opponents, card powers, and three victory conditions.",
       "descriptionKo": "스플렌더는 칩 수집과 카드 개발 게임입니다. 플레이어들은 르네상스 시대의 상인으로서 보석 광산, 운송 수단, 상점 등을 구입하여 최고의 명성점을 얻기 위해 경쟁합니다. 충분히 부유하면 귀족의 방문을 받을 수 있으며, 이는 더욱 명성점을 높여줍니다.\n\n차례마다 (1) 칩(보석)을 수집하거나 (2) 카드를 구매하거나 (3) 카드를 예약할 수 있습니다. 칩을 수집할 때는 서로 다른 종류 3개 또는 같은 종류 2개를 가져갑니다. 카드를 구매하면 가격만큼 칩을 지불하고 카드를 획득합니다. 카드를 예약하려면 나중에 구매하기 위해 앞에 뒤집어 놓으며, 한 차례를 소비하지만 모든 보석으로 사용할 수 있는 금색 조커 칩을 얻습니다.\n\n구매한 모든 카드는 이후 구매 시 사용할 수 있는 영구적인 보석 보너스를 제공하며, 일부 카드는 명성점도 제공합니다. 승리하려면 상대보다 먼저 15점에 도달해야 합니다."
     },
     "cottage": {
@@ -48319,8 +48336,7 @@ const gameData = {
       ],
       "situationTags": [
         "beginner",
-        "couple",
-        "group"
+        "couple"
       ],
       "interactionTags": [
         "competitive",
@@ -48333,7 +48349,6 @@ const gameData = {
         "strategy",
         "beginner",
         "couple",
-        "group",
         "competitive",
         "low_conflict"
       ],
@@ -48358,8 +48373,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__original/img/rqcUdtu_N4v-SpI96XVmpYHnJww=/0x0/filters:format(png)/pic8234167.png",
-      "thumbnail": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__small/img/KKU_42Uswt4tKCpf1zY5kTzgr-g=/fit-in/200x150/filters:strip_icc()/pic8234167.png",
+      "main": "https://cf.geekdo-images.com/V1PyFDPNFY4bJFgreLPxmQ__original/img/NelFMJToi6WYyDQheBZiwCP7-qE=/0x0/filters:format(jpeg)/pic6929347.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/V1PyFDPNFY4bJFgreLPxmQ__small/img/E0OuG2X4HsbOdCh1uLyZZcMiapQ=/fit-in/200x150/filters:strip_icc()/pic6929347.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -48374,14 +48389,14 @@ const gameData = {
     "title": {
       "display": "스플렌더 마블",
       "owned": "스플렌더 마블",
-      "bgg": "Splendor"
+      "bgg": "Splendor: Marvel"
     },
     "bgg": {
-      "id": "148228",
-      "matchStatus": "auto-confirmed",
-      "year": "2014",
-      "rating": 7.42055,
-      "weight": 1.7753,
+      "id": "293296",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 7.5602,
+      "weight": 1.7965,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -48401,8 +48416,8 @@ const gameData = {
       "maxPlayTime": 30,
       "categories": [
         "Card Game",
-        "Economic",
-        "Renaissance"
+        "Comic Book / Strip",
+        "Economic"
       ],
       "categoriesKo": [
         "카드게임",
@@ -48424,7 +48439,7 @@ const gameData = {
       "designers": [
         "Marc André"
       ],
-      "description": "Splendor is a game of chip-collecting and card development. Players are merchants of the Renaissance trying to buy gem mines, means of transportation, shops&mdash;all in order to acquire the most prestige points. If you're wealthy enough, you might even receive a visit from a noble at some point, which of course will further increase your prestige.\n\nOn your turn, you may (1) collect chips (gems), or (2) buy and build a card, or (3) reserve one card. If you collect chips, you take either three different kinds of chips or two chips of the same kind. If you buy a card, you pay its price in chips and add it to your playing area. To reserve a card&mdash;in order to make sure you get it, or, why not, your opponents don't get it&mdash;you place it in front of you face down for later building; this costs you a round, but you also get gold in the form of a joker chip, which you can use as any gem.\n\nAll of the cards you buy increase your wealth as they give you a permanent gem bonus for later buys; some of the cards also give you prestige points. In order to win the game, you must reach 15 prestige points before your opponents do.",
+      "description": "Bring together a team of super heroes and prevent Thanos from ending the world!\nThe Infinity Stones are scattered throughout the Multiverse. Use their essence to recruit heroes and villains and gain Infinity Points.\n\nAssemble the Avengers, acquire locations and when ready, claim the Infinity Gauntlet!\n\nPick your tokens carefully, recruit characters to gain Infinity Points and bonuses. These bonuses help you recruit more powerful heroes and acquire locations&hellip; until you gather enough characters, power, and Infinity Points to trigger the endgame!\n\nEven though Splendor Marvel uses Splendor&rsquo;s core rules and high-quality materials, it has a different color structure, a new endgame trigger, and new victory conditions. You can also gain Infinity Points with the Avengers Assemble tile that can be passed from one player to another several times during the game!\n\nIf you are keen on Splendor, learning the rules will be easy, but mastering the game may take you a while.\n\nAnd if you don&rsquo;t know Splendor, soon you will enjoy its quick and simple rules and become addicted to this game without even realizing it!",
       "descriptionKo": "스플렌더는 칩 수집과 카드 개발 게임입니다. 플레이어들은 르네상스 시대의 상인으로서 보석 광산, 운송 수단, 상점 등을 구매하여 가장 많은 명성점을 얻기 위해 경쟁합니다. 충분한 부를 모으면 귀족의 방문을 받을 수 있으며, 이는 명성점을 더욱 증가시킵니다.\n\n차례마다 (1) 칩(보석)을 수집하거나, (2) 카드를 구매하여 건설하거나, (3) 한 장의 카드를 예약할 수 있습니다. 칩을 수집할 때는 서로 다른 종류의 칩 3개 또는 같은 종류의 칩 2개를 가져갑니다. 카드를 구매하면 해당 가격을 칩으로 지불하고 플레이 영역에 추가합니다. 카드를 예약하려면(나중에 구매하거나 상대방이 얻지 못하도록) 카드를 앞면이 보이지 않게 앞에 놓습니다. 이는 한 턴을 소모하지만 어떤 보석으로도 사용 가능한 와일드 칩인 금(조커 칩)을 받습니다.\n\n구매한 모든 카드는 향후 구매 시 사용할 영구적인 보석 보너스를 제공하며 일부 카드는 명성점도 줍니다. 게임에서 승리하려면 상대방보다 먼저 15"
     },
     "cottage": {
@@ -48478,8 +48493,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__original/img/rqcUdtu_N4v-SpI96XVmpYHnJww=/0x0/filters:format(png)/pic8234167.png",
-      "thumbnail": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__small/img/KKU_42Uswt4tKCpf1zY5kTzgr-g=/fit-in/200x150/filters:strip_icc()/pic8234167.png",
+      "main": "https://cf.geekdo-images.com/2thZjcw0ZvrsP09PDz002Q__original/img/2UIhoNUKWD5BxIZ6JPd4vmlPOzY=/0x0/filters:format(jpeg)/pic5585867.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/2thZjcw0ZvrsP09PDz002Q__small/img/lbZohm7uJ7OcwM0GmrOw9Y5WEVo=/fit-in/200x150/filters:strip_icc()/pic5585867.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -48614,14 +48629,14 @@ const gameData = {
     "title": {
       "display": "스플렌더 포켓몬",
       "owned": "스플렌더 포켓몬",
-      "bgg": "Splendor"
+      "bgg": "스플렌더: Pokémon (Splendor: Pokémon)"
     },
     "bgg": {
-      "id": "148228",
-      "matchStatus": "auto-confirmed",
-      "year": "2014",
-      "rating": 7.42055,
-      "weight": 1.7753,
+      "id": "406291",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 7.92023,
+      "weight": 1.8333,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -48642,7 +48657,8 @@ const gameData = {
       "categories": [
         "Card Game",
         "Economic",
-        "Renaissance"
+        "Movies / TV / Radio theme",
+        "Video Game Theme"
       ],
       "categoriesKo": [
         "카드게임",
@@ -48664,7 +48680,7 @@ const gameData = {
       "designers": [
         "Marc André"
       ],
-      "description": "Splendor is a game of chip-collecting and card development. Players are merchants of the Renaissance trying to buy gem mines, means of transportation, shops&mdash;all in order to acquire the most prestige points. If you're wealthy enough, you might even receive a visit from a noble at some point, which of course will further increase your prestige.\n\nOn your turn, you may (1) collect chips (gems), or (2) buy and build a card, or (3) reserve one card. If you collect chips, you take either three different kinds of chips or two chips of the same kind. If you buy a card, you pay its price in chips and add it to your playing area. To reserve a card&mdash;in order to make sure you get it, or, why not, your opponents don't get it&mdash;you place it in front of you face down for later building; this costs you a round, but you also get gold in the form of a joker chip, which you can use as any gem.\n\nAll of the cards you buy increase your wealth as they give you a permanent gem bonus for later buys; some of the cards also give you prestige points. In order to win the game, you must reach 15 prestige points before your opponents do.",
+      "description": "스플렌더: Pok&eacute;mon plays much like the original Splendor game, but with special rules based on Pok&eacute;mon.\n\nOn your turn, you may (1) collect Pok&eacute;balls (which come in five colors), or (2) catch a Pok&eacute;mon, or (3) reserve a Pok&eacute;mon. If you collect Pok&eacute;balls, you take either three different colors of Pok&eacute;balls or two Pok&eacute;balls of the same color (as long as four are available). If you catch a Pok&eacute;mon, you pay its cost in Pok&eacute;balls, then add it to your playing area. If you reserve a Pok&eacute;mon &mdash; in order to make sure you get it, or, why not, your opponents don't get it &mdash; you place it in front of you face down for later catching; this costs you a round, but you also get a Master Ball which you can later use as a Pok&eacute;ball of any color. Each Pok&eacute;mon you have caught gives you a permanent Pok&eacute;ball that you can use toward catching all future Pok&eacute;mon, meaning as you catch more Pok&eacute;mon, it becomes easier to catch the ones that are more expensive and worth more points.\n\nDifferences from the original Splendor include:\n\n     At the end of your turn, you can evolve one of the Pok&eacute;mon in your collection if the next level of that Pok&eacute;mon is in the display and you have the required Pok&eacute;balls. More points for you, and another card in your Pok&eacute;dex...\n     There are two new decks of cards: Rare Pok&eacute;mon and Legendary Pok&eacute;mon. Only one of each is on display at a time, and they each provide 2 permanent Pok&eacute;balls instead of 1 when caught. Legendary Pok&eacute;mon are worth more points than Rare Pok&eacute;mon but require you to use a Master Ball in order to catch them.\n\n\nWhen a player has 18 or more points in their collection, you complete the final round, then whoever has the most points wins.",
       "descriptionKo": "스플렌더는 칩 수집과 카드 개발 게임입니다. 플레이어는 르네상스 시대의 상인이 되어 보석 광산, 운송 수단, 상점 등을 구입하며 가장 많은 명성점을 획득하려고 합니다. 충분히 부유하면 귀족의 방문을 받을 수 있으며, 이는 명성점을 더욱 증가시킵니다.\n\n턴마다 다음 중 하나를 수행합니다: (1) 칩(보석) 수집, (2) 카드 구입 및 건설, (3) 카드 예약. 칩을 수집하면 서로 다른 종류 3개 또는 같은 종류 2개를 가져갑니다. 카드를 구입하면 칩으로 비용을 지불하고 당신의 영역에 추가합니다. 카드를 예약하면 뒷면으로 나중에 건설하기 위해 앞에 놓습니다. 이는 한 턴이 소비되지만 모든 보석으로 사용할 수 있는 금(조커 칩)을 얻습니다.\n\n구입한 모든 카드는 향후 구입에 영구적인 보석 보너스를 제공하여 재산을 늘리고, 일부 카드는 명성점도 제공합니다. 게임에서 승리하려면 상대보다 먼저 15점의 명성점에 도달해야 합니다."
     },
     "cottage": {
@@ -48718,8 +48734,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__original/img/rqcUdtu_N4v-SpI96XVmpYHnJww=/0x0/filters:format(png)/pic8234167.png",
-      "thumbnail": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__small/img/KKU_42Uswt4tKCpf1zY5kTzgr-g=/fit-in/200x150/filters:strip_icc()/pic8234167.png",
+      "main": "https://cf.geekdo-images.com/o6HpiLCBBFvc7XvBv7DEig__original/img/jVL7_CuVxXEHUMEEXGI9VyJ0-Vg=/0x0/filters:format(jpeg)/pic7902371.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/o6HpiLCBBFvc7XvBv7DEig__small/img/cP3zFhQXbpOo4jMbXWgPShAdn4E=/fit-in/200x150/filters:strip_icc()/pic7902371.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -55396,44 +55412,34 @@ const gameData = {
     "title": {
       "display": "에이다",
       "owned": "에이다",
-      "bgg": "Ada's Dream"
+      "bgg": ""
     },
     "bgg": {
-      "id": "413469",
-      "matchStatus": "auto-confirmed",
-      "year": "2025",
-      "rating": 8.03823,
-      "weight": 3.9091,
-      "minPlayers": 1,
-      "maxPlayers": 4,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 5,
+      "maxPlayers": 5,
       "bestPlayers": [
         5
       ],
       "recommendedPlayers": [
         5
       ],
-      "notRecommendedPlayers": [
-        4
-      ],
-      "playingTime": 120,
-      "minPlayTime": 90,
-      "maxPlayTime": 120,
-      "categories": [
-        "Dice",
-        "Industry / Manufacturing",
-        "Math"
-      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "주사위",
         "산업",
         "수학"
       ],
       "mechanics": [
-        "Dice Rolling",
-        "Hand Management",
-        "Rondel",
-        "Solo / Solitaire Game",
-        "Tech Trees / Tech Tracks"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "주사위 굴리기",
@@ -55442,10 +55448,8 @@ const gameData = {
         "솔로 게임",
         "기술 트리"
       ],
-      "designers": [
-        "Toni López"
-      ],
-      "description": "In Ada's Dream, work with Ada Lovelace to help build the first computer, fulfilling her dream in this alternate history Euro Game.\n\nOver the course of the game (18 turns), players take dice from the Workshop Rondel, Give Lectures in Prestigious Institutions, Travel the UK, and Complete Assignments from Ada to gather Prestige Points.\n\nPlayers add Dice, Gears, and Programs to their blueprint Board in a race to build the first Analytical Engine, using dice rondel and manipulation mechanics and literal \"engine building\". When any engine is completed, the end of the game is triggered and Prestige points are counted.  The player with the most prestige, wins.\n\n&mdash;description from the publisher",
+      "designers": [],
+      "description": "",
       "descriptionKo": "아다의 꿈\n\n아다 러브레이스와 함께 첫 번째 컴퓨터를 만들어 그녀의 꿈을 이루는 대체 역사 유로 게임입니다.\n\n게임의 18턴 동안 플레이어들은 작업실 론델에서 주사위를 가져가고, 명망 있는 기관에서 강연을 하며, 영국을 여행하고, 아다로부터 과제를 완수하여 명성 포인트를 모읍니다.\n\n플레이어들은 자신의 설계도 보드에 주사위, 기어, 프로그램을 추가하면서 분석 엔진을 가장 먼저 만드는 경쟁을 벌입니다. 주사위 론델 조작 메커닉과 실제 엔진 건딩을 활용합니다. 어떤 엔진이 완성되면 게임이 종료되고 명성 포인트를 계산합니다. 가장 많은 명성을 보유한 플레이어가 승리합니다."
     },
     "cottage": {
@@ -55453,49 +55457,41 @@ const gameData = {
       "shelfGroupId": "murder_mystery",
       "shelfLabel": "머더미스터리",
       "shelfFullLabel": "머더미스터리",
-      "difficultyId": "hardcore",
-      "difficultyWeight": 3.9091,
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [
-        "funny",
+        "tense",
         "immersive"
       ],
       "playTags": [
-        "card_play",
-        "strategy"
+        "deduction",
+        "murder_mystery"
       ],
       "situationTags": [
-        "beginner",
-        "quick_play",
-        "experienced",
-        "long_stay",
         "group",
         "large_group"
       ],
       "interactionTags": [
-        "competitive",
-        "silent_focus"
+        "social",
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "funny",
+        "tense",
         "immersive",
-        "card_play",
-        "strategy",
-        "beginner",
-        "quick_play",
-        "experienced",
-        "long_stay",
+        "deduction",
+        "murder_mystery",
         "group",
         "large_group",
-        "competitive",
-        "silent_focus"
+        "social",
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
-        "즐기고",
+        "머더미스터리",
         "빠져들게",
-        "경쟁형"
+        "대화하며"
       ],
       "summaryKo": "주사위 론델로 자원을 모아 분석 엔진을 완성하고 명성을 겨루는 게임.",
       "comment": {
@@ -55514,9 +55510,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/i3YeleJsNmnvcKdwgW3TKA__original/img/0bHPZadTVedYlWrXsy0LKZ0Kwf8=/0x0/filters:format(jpeg)/pic8030666.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/i3YeleJsNmnvcKdwgW3TKA__small/img/PnqlbLRuC-3OB7dWtElkQkhLdxg=/fit-in/200x150/filters:strip_icc()/pic8030666.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -57903,7 +57899,7 @@ const gameData = {
     },
     "bgg": {
       "id": "70149",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2011",
       "rating": 7.67436,
       "weight": 3.8857,
@@ -59735,7 +59731,7 @@ const gameData = {
     },
     "bgg": {
       "id": "46396",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2009",
       "rating": 7.05697,
       "weight": 1.9118,
@@ -70054,16 +70050,16 @@ const gameData = {
     "title": {
       "display": "쿠트나호라",
       "owned": "쿠트나호라",
-      "bgg": "Faraway"
+      "bgg": "Kutná Hora: The City of Silver"
     },
     "bgg": {
-      "id": "385761",
+      "id": "385610",
       "matchStatus": "forced",
       "year": "2023",
-      "rating": 7.54152,
-      "weight": 1.9387,
+      "rating": 7.75471,
+      "weight": 3.3396,
       "minPlayers": 2,
-      "maxPlayers": 6,
+      "maxPlayers": 4,
       "bestPlayers": [
         3,
         4
@@ -70075,16 +70071,15 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        6,
-        6
+        4
       ],
-      "playingTime": 30,
-      "minPlayTime": 15,
-      "maxPlayTime": 30,
+      "playingTime": 120,
+      "minPlayTime": 60,
+      "maxPlayTime": 120,
       "categories": [
-        "Card Game",
-        "Fantasy",
-        "Puzzle"
+        "City Building",
+        "Economic",
+        "Medieval"
       ],
       "categoriesKo": [
         "카드게임",
@@ -70092,14 +70087,16 @@ const gameData = {
         "퍼즐"
       ],
       "mechanics": [
-        "Constrained Bidding",
-        "End Game Bonuses",
+        "Action Queue",
+        "Events",
         "Hand Management",
-        "Open Drafting",
-        "Selection Order Bid",
-        "Set Collection",
-        "Simultaneous Action Selection",
-        "Tags"
+        "Market",
+        "Multi-Use Cards",
+        "Square Grid",
+        "Tile Placement",
+        "Turn Order: Progressive",
+        "Variable Player Powers",
+        "Variable Set-up"
       ],
       "mechanicsKo": [
         "제한 입찰",
@@ -70112,10 +70109,11 @@ const gameData = {
         "태그"
       ],
       "designers": [
-        "Johannes Goupy",
-        "Corentin Lebrat"
+        "Ondřej Bystroň",
+        "Petr Čáslava",
+        "Pavel Jarosch"
       ],
-      "description": "Welcome to Alula, a mysterious continent with ever-changing geography, shaped after the rhythm of the seasons. Beyond the Sea of Mists lies the mysterious continent of Alula. Roam across the land in search of its secrets, meet its inhabitants, and list its wonders in order to gain more fame than your opponents.\n\nThroughout a game of Faraway, you will play a row of 8 cards in front of you, from left to right. These cards represent the regions you will come across while exploring the lands. Characters on these cards will grant you victory points if you later fulfill the conditions they demand. At the end of the game, you walk back the same way, scoring cards in the opposite order you played them. There lies the heart of the gameplay. Throughout the game, the cards you play will serve both to set new objectives, and to meet the ones you played previously.\n\nEach turn, you play a card from a hand of 3. Then you pick a new card from a face-up river. As play is simultaneous in Faraway, you must take into account a clever priority system in all of your choices &ndash; being last to pick a card leaves you with fewer options and often less profitable choices for the next turns.\n\n&mdash;description from the publisher\n\nRelated Microbadges",
+      "description": "Join other ambitious guild leaders in mining and developing the famous City of Silver during its period of rapid economic growth and expansion in the 14th century &mdash; from the first discovery of silver near the Cistercian monastery to the construction of Kutn&aacute; Hora, which quickly became one of the most important cities in central Europe.\n\nKutn&aacute; Hora: The City of Silver is a historical city-building Eurogame for 2-4 players that features a real-life supply and demand experience in which every action you take has an impact on the game's dynamic economic systems.\n\nIn each round, players take turns selecting actions from a hand of double-sided cards to engage strategic plans like mining, purchasing plots of land on which to build, gaining permits, raising buildings for their affiliated guilds, gaining profit from their production, and of course working towards the construction of Saint Barbara's Cathedral.\n\nThe asymmetrical nature of each player's available guilds makes for highly interactive rounds in which each decision impacts the economy and other players in interesting ways as they expand their mines and build infrastructure across a shared board.\n\nMine ore and smelt it into a fortune of silver for expanding this beautiful historic city, but take care to balance your personal goal advancement with the need to further the city's growth. Everything is connected, and sometimes the path to personal victory relies on the prosperity of the many.\n\n&mdash;description from publisher",
       "descriptionKo": "알룰라에 오신 것을 환영합니다. 계절의 리듬에 따라 지형이 끊임없이 변하는 신비로운 대륙입니다. 안개의 바다 너머 알룰라 대륙을 누비며 그 비밀을 찾고, 주민을 만나고, 경이로운 것들을 기록하여 상대보다 더 많은 명성을 얻으세요.\n\n파라웨이 게임 내내 앞에 카드 8장을 왼쪽에서 오른쪽 순서로 펼칩니다. 이 카드들은 탐험 중 마주칠 지역을 나타냅니다. 카드의 인물들은 그들의 조건을 나중에 충족하면 승리점을 줍니다. 게임 끝에 같은 길을 되돌아가며 카드를 역순으로 계산합니다. 여기가 게임의 핵심입니다. 당신이 낸 카드들은 새로운 목표를 설정하면서 동시에 이전에 낸 조건들을 충족시킵니다.\n\n매 턴마다 손의 3장 중 1장을 냅니다. 그다음 공개된 카드 열에서 새 카드를 픽업합니다. 파라웨이는 동시 플레이이므로, 모든 선택에서 영리한 우선순위 시스템을 고려해야 합니다. 마지막에 카드를 픽업하면 다음 턴의 선택지가 줄어들고 수익성이 떨어집니다."
     },
     "cottage": {
@@ -70136,13 +70134,10 @@ const gameData = {
       "situationTags": [
         "experienced",
         "long_stay",
-        "group",
-        "large_group"
+        "group"
       ],
       "interactionTags": [
-        "competitive",
-        "simultaneous",
-        "silent_focus"
+        "competitive"
       ],
       "relationshipTags": [],
       "manualTags": [],
@@ -70154,10 +70149,7 @@ const gameData = {
         "experienced",
         "long_stay",
         "group",
-        "large_group",
-        "competitive",
-        "simultaneous",
-        "silent_focus"
+        "competitive"
       ],
       "displayTags": [
         "머리쓰게",
@@ -70181,8 +70173,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/u1cwi9BWSKsPxSkVO0BzbA__original/img/jTY6_PRF6FrUgInfMajzobVy0S8=/0x0/filters:format(png)/pic7570101.png",
-      "thumbnail": "https://cf.geekdo-images.com/u1cwi9BWSKsPxSkVO0BzbA__small/img/5G45GN8CE7pq38fJMMocmPtV4_U=/fit-in/200x150/filters:strip_icc()/pic7570101.png",
+      "main": "https://cf.geekdo-images.com/ar_YhktX6VcXBLcEfnu_dw__original/img/QyKTmZomxKVYO_uY5OjaojFQNUk=/0x0/filters:format(png)/pic7464921.png",
+      "thumbnail": "https://cf.geekdo-images.com/ar_YhktX6VcXBLcEfnu_dw__small/img/XlZo63iHoNfh7yKZdJiJj2Wfglo=/fit-in/200x150/filters:strip_icc()/pic7464921.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -71922,16 +71914,16 @@ const gameData = {
     "title": {
       "display": "클러스터",
       "owned": "클러스터",
-      "bgg": "Cluster"
+      "bgg": "Kluster"
     },
     "bgg": {
-      "id": "22004",
-      "matchStatus": "auto-confirmed",
-      "year": "1973",
-      "rating": 6.5,
-      "weight": 3,
-      "minPlayers": 2,
-      "maxPlayers": 2,
+      "id": "277458",
+      "matchStatus": "forced",
+      "year": "2018",
+      "rating": 6.5547,
+      "weight": 1.0413,
+      "minPlayers": 1,
+      "maxPlayers": 4,
       "bestPlayers": [
         3
       ],
@@ -71940,24 +71932,30 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 30,
-      "minPlayTime": 30,
-      "maxPlayTime": 30,
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 20,
+      "minPlayTime": 10,
+      "maxPlayTime": 20,
       "categories": [
-        "Abstract Strategy"
+        "Abstract Strategy",
+        "Action / Dexterity",
+        "Party Game"
       ],
       "categoriesKo": [
         "추상 전략"
       ],
       "mechanics": [
-        "자석피하기"
+        "Area Majority / Influence"
       ],
       "mechanicsKo": [],
       "designers": [
-        "Philip Shoptaugh"
+        "Paula Henning",
+        "Robert Henning"
       ],
-      "description": "Cluster's playing board consists of forty six holes, of which twenty four are shallow and twenty two are deep.  There are sixteen playing pieces, eight white and eight black. Within the set of eight there are four short pieces and four long ones. If a long piece is placed in a deep hole and short piece in a shallow hole, the the tops of the two pieces will be level.\n\nThe object of the game is to form a \"cluster\" before your opponent does. A cluster is when all of your pieces (one player has white and the other black) are in a group all next to each other and all of the tops of the pieces are at the same level.",
+      "description": "Kluster is a dexterity game for 1 to 4 players, very short, easy to transport, incredibly fun, really simple, accessible to everyone and still full of strategy!\n\nKluster&rsquo;s rules can be explain in no time: Magnetic stones are equally shared between players, who must, in turn, place one stone inside the area delimited by the cord. The first player to get rid of his or her magnets wins. But beware, when stones kluster together during one player&rsquo;s turn, he or she collects them!\n\nThat&rsquo;s all you need to know to play Kluster!\n\n&mdash;description from the publisher\n\n________________________________\nVERSION FOR 1-8 PLAYERS, LOOK HERE : Kluster XL",
       "descriptionKo": "클러스터의 게임판은 총 46개의 홈으로 이루어져 있으며, 그중 24개는 얕고 22개는 깊습니다. 게임 말은 16개로 흰색 8개와 검은색 8개입니다. 각 색깔별 8개의 말 중 4개는 짧은 말이고 4개는 긴 말입니다. 긴 말을 깊은 홈에, 짧은 말을 얕은 홈에 놓으면 두 말의 윗부분이 같은 높이에 정렬됩니다.\n\n게임의 목표는 상대방보다 먼저 \"클러스터\"를 만드는 것입니다. 클러스터는 자신의 모든 말(한 플레이어는 흰색, 다른 플레이어는 검은색)이 서로 인접하여 한 그룹을 이루면서 모든 말의 윗부분이 같은 높이에 정렬된 상태입니다."
     },
     "cottage": {
@@ -71968,25 +71966,46 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.01,
       "moodTags": [
+        "funny",
+        "chaotic",
         "cozy"
       ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "couple"
+      "playTags": [
+        "strategy",
+        "party"
       ],
-      "interactionTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group",
+        "first_game",
+        "quick_play"
+      ],
+      "interactionTags": [
+        "competitive",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "funny",
+        "chaotic",
         "cozy",
+        "strategy",
+        "party",
+        "beginner",
+        "group",
+        "large_group",
         "first_game",
         "quick_play",
-        "couple"
+        "competitive",
+        "table_talk"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "즐기고",
+        "편안하게",
+        "경쟁형"
       ],
       "summaryKo": "자신의 모든 말을 인접하게 모아 클러스터를 만드는 게임.",
       "comment": {
@@ -72005,8 +72024,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/eBDBOMPuJxgM0EMirOp8UA__original/img/1FGXNKMvZcM_HCeHoqlfeixLA7o=/0x0/filters:format(jpeg)/pic455548.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/eBDBOMPuJxgM0EMirOp8UA__small/img/TFMuWdJor47DRHMVuHUowx-dnKQ=/fit-in/200x150/filters:strip_icc()/pic455548.jpg",
+      "main": "https://cf.geekdo-images.com/emWxjnD9LSb6NSkX2h2p0w__original/img/ZBvmBJnIRLjFdLtmcga0nHnA_dg=/0x0/filters:format(jpeg)/pic9151948.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/emWxjnD9LSb6NSkX2h2p0w__small/img/xiyD7bFM4vDD4yynKyZlW0lnEhc=/fit-in/200x150/filters:strip_icc()/pic9151948.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -72143,15 +72162,15 @@ const gameData = {
     "title": {
       "display": "클리닉",
       "owned": "클리닉",
-      "bgg": "Clinic"
+      "bgg": "Clinic: Deluxe Edition"
     },
     "bgg": {
-      "id": "156840",
-      "matchStatus": "auto-confirmed",
-      "year": "2014",
-      "rating": 7.01139,
-      "weight": 4.0789,
-      "minPlayers": 2,
+      "id": "272739",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 7.56178,
+      "weight": 4.0132,
+      "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
         3
@@ -72165,9 +72184,9 @@ const gameData = {
       "notRecommendedPlayers": [
         4
       ],
-      "playingTime": 120,
-      "minPlayTime": 120,
-      "maxPlayTime": 120,
+      "playingTime": 150,
+      "minPlayTime": 60,
+      "maxPlayTime": 150,
       "categories": [
         "City Building",
         "Economic",
@@ -72184,8 +72203,11 @@ const gameData = {
       ],
       "mechanics": [
         "Catch the Leader",
+        "Network and Route Building",
         "Pick-up and Deliver",
         "Simulation",
+        "Solo / Solitaire Game",
+        "Three Dimensional Movement",
         "Tile Placement"
       ],
       "mechanicsKo": [
@@ -72197,7 +72219,7 @@ const gameData = {
       "designers": [
         "Alban Viard"
       ],
-      "description": "You are the rich owner of a large field near New York where health needs are more important. Your goal is to build the most efficient hospital in three dimensions in order to get the most popularity. You will manage the construction of the building from scratch as well as the installation of new services and the recruitment of the best doctors, nurses and administrative staff that align with the arrival of new patients. You will also be attentive to the well-being of patients and not forget that time is also money when competing with neighboring hospitals...\n\nEach turn in Clinic, players take three actions &mdash; building in different modules; hosting patients; hiring doctors, nurses and staff &mdash; by playing one card. Each cube that enters the clinic comes with a car that needs to be parked, leaving less space for the hospital being constructed! During the game, you'll move patients, doctors, nurses, and staff in the 3D structure as efficiently as you can in order to save time, with doctors and nurses tending to patients as long as their colors (indicating both training and illness) match. By taking care of patients you receive money, which lets you pay fees, salaries and maintenance as well as buy popularity points.\n\nDuring an administrative phase, uncared for patients grow sicker, new patients enter the pre-admission room, doctors become less knowledgable about the diseases they face, and new doctors and nurses become available from their schools. In the end, the player with the most popularity points and least time spent during the game wins.",
+      "description": "Your Town Center is flourishing, but as the city grows, the need for emergency medical care grows with it. Fortunately, you and your business partners have the wherewithal to build a clinic to help those in need of more than first aid. You quickly get a pre-admissions facility built to help process and route the different cases into the appropriate queues. Unfortunately, just before groundbreaking, your differing views of the ideal clinic cause a schism between you, and you go your separate ways, with patients already lining up in pre-admissions. Each of you decides to build the clinic of your dreams, trying to hire doctors, nurses, and maintenance staff, and build new modules, specialized services, and even parking, in order to meet the needs of the patients ailing in pre-admissions.\n\nThis is your Clinic! Build it however you like to give patients the care they need, so you can make your Clinic the most popular one in town!\n\nPossible exhaustive list of differences between the Deluxe edition and previous edition:\n- The rules have been totally rewritten\n- The rules offer two sets up for beginners and experts\n- The rules include a solo variant\n- Many bonuses and penalties have been changed such as when a Patient dies in your hospital, the turn order has been updated and clarified\n- The box includes a bag of wooden laser cut meeples for the cars, the doctors, the staff and the nurses",
       "descriptionKo": "당신은 뉴욕 근처의 대규모 부지를 소유한 부유한 사업가입니다. 목표는 3차원으로 가장 효율적인 병원을 건설하여 최대한의 인기도를 얻는 것입니다. 처음부터 건물 건설을 관리하고 새로운 서비스를 설치하며, 새로운 환자의 도착에 맞춰 최고의 의사, 간호사, 행정직원을 채용합니다. 환자의 복지에 신경 쓰고 인근 병원과의 경쟁에서 시간이 곧 돈임을 잊지 않아야 합니다.\n\n클리닉의 매 턴마다 플레이어는 카드 한 장을 내서 세 가지 행동을 수행합니다: 서로 다른 모듈 건설, 환자 수용, 의사·간호사·직원 채용. 병원에 들어오는 환자마다 주차할 차량이 함께 들어와 건설 공간을 줄입니다! 게임 중 의사와 간호사의 색(훈련 분야와 질병을 나타냄)이 환자와 일치하는 한, 3차원 구조에서 의료진과 환자를 최대한 효율적으로 이동시킵니다. 환자를 치료하면 돈을 받고, 이를 사용해 수수료, 급여, 유지비를 지불하고 인기도를 구매합니다.\n\n행정 단계마다 치료받지 못한 환자는 상태가 악화되고, 신규 환자가 입원 전실로 들어오며, 의료진은 질병 지식이 감소합니다. 최종적으로 인기도가 높고 소요 시간이 적은 플레이어가 승리합니다."
     },
     "cottage": {
@@ -72257,8 +72279,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/0h4tT_KNHsXjuWHIqf7mQw__original/img/aJr5PH_ufpviRKa_7wUViQRrz5k=/0x0/filters:format(jpeg)/pic2212910.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/0h4tT_KNHsXjuWHIqf7mQw__small/img/SKI7vJCUmYXqU8CPrmIzC5NhS1o=/fit-in/200x150/filters:strip_icc()/pic2212910.jpg",
+      "main": "https://cf.geekdo-images.com/iSPW4FWKZPiscVBbVgzJ0Q__original/img/Mlf3zgxNSckq276250BUObext8M=/0x0/filters:format(jpeg)/pic6625134.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/iSPW4FWKZPiscVBbVgzJ0Q__small/img/NQZu_MeYrdrZFsLASABeWJTKWtI=/fit-in/200x150/filters:strip_icc()/pic6625134.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -76166,15 +76188,15 @@ const gameData = {
     "title": {
       "display": "팍스파미르",
       "owned": "팍스파미르",
-      "bgg": "Pax Pamir"
+      "bgg": "Pax Pamir: Second Edition"
     },
     "bgg": {
-      "id": "155255",
-      "matchStatus": "auto-confirmed",
-      "year": "2015",
-      "rating": 7.30986,
-      "weight": 3.6739,
-      "minPlayers": 2,
+      "id": "256960",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 8.1263,
+      "weight": 3.842,
+      "minPlayers": 1,
       "maxPlayers": 5,
       "bestPlayers": [
         4
@@ -76187,18 +76209,17 @@ const gameData = {
         5
       ],
       "notRecommendedPlayers": [
-        1,
-        2,
         5
       ],
       "playingTime": 120,
-      "minPlayTime": 60,
+      "minPlayTime": 45,
       "maxPlayTime": 120,
       "categories": [
-        "Card Game",
         "Economic",
+        "Educational",
         "Negotiation",
         "Political",
+        "Post-Napoleonic",
         "Spies / Secret Agents"
       ],
       "categoriesKo": [
@@ -76209,10 +76230,20 @@ const gameData = {
         "스파이"
       ],
       "mechanics": [
+        "Action Points",
         "Area Majority / Influence",
         "Area Movement",
+        "Auction: Dutch",
+        "Bribery",
         "Hand Management",
-        "Simulation"
+        "Increase Value of Unchosen Resources",
+        "Negotiation",
+        "Open Drafting",
+        "Score-and-Reset Game",
+        "Simulation",
+        "Solo / Solitaire Game",
+        "Tags",
+        "Take That"
       ],
       "mechanicsKo": [
         "영역 지배",
@@ -76221,10 +76252,9 @@ const gameData = {
         "시뮬레이션"
       ],
       "designers": [
-        "Phil Eklund",
         "Cole Wehrle"
       ],
-      "description": "With the fall of Napoleon, the British East India Company plied its trade unchecked from the Cape of Good Hope to the markets of Hong Kong. India stood at the center of this sprawling imperial network, and the currents of empire ran through its ports, tying the Far East with European markets and awarding the British virtual control of the vast wealth of the subcontinent. However, the \"crown jewel\" of the empire was far from secure.\n\nAcross the forests of Siberia and the steppes of Asia, the Russian Empire advanced at a rate exceeding even the pace of America's western pioneers. This expansionism by the world&rsquo;s largest nation loomed over British holdings in India, casting a longer shadow each year. In the buffer region of central Asia, surveyors, adventurers, industrialists and government agents crossed paths, all seeking to manipulate the byzantine local politics. There, in the shadow of the Pamir Mountains, the stage was set for a game that would define the limits of global power in the 19th century and the present day.\n\nIn Pax Pamir, two to five players assume the role of Afghan tribal leaders navigating the winds of colonial power in \"The Great Game\". If either the Russian, British Empire, or Afghan is able to achieve supremacy, the player with the most influence in that empire wins.",
+      "description": "In Pax Pamir, players assume the role of nineteenth century Afghan leaders attempting to forge a new state after the collapse of the Durrani Empire. Western histories often call this period \"The Great Game\" because of the role played by the Europeans who attempted to use central Asia as a theater for their own rivalries. In this game, those empires are viewed strictly from the perspective of the Afghans who sought to manipulate the interloping ferengi (foreigners) for their own purposes.\n\nIn terms of game play, Pax Pamir is a pretty straightforward tableau builder. Players spend most of their turns purchasing cards from a central market, then playing those cards in front of them in a single row called a court. Playing cards adds units to the game's map and grants access to additional actions that can be taken to disrupt other players and influence the course of the game. That last point is worth emphasizing. Though everyone is building their own row of cards, the game offers many ways for players to interfere with each other directly and indirectly.\n\nTo survive, players will organize into coalitions. Throughout the game, the dominance of the different coalitions will be evaluated by the players when a special card, called a \"Dominance Check\", is resolved. If a single coalition has a commanding lead during one of these checks, those players loyal to that coalition will receive victory points based on their influence in their coalition. However, if Afghanistan remains fragmented during one of these checks, players instead will receive victory points based on their personal power base.\n\nAfter each Dominance Check, victory is checked and the game will be partially reset, offering players a fresh attempt to realize their ambitions. The game ends when a single player is able to achieve a lead of four or more victory points  or after the fourth and final Dominance Check is resolved.",
       "descriptionKo": "나폴레옹의 몰락과 함께 영국 동인도회사는 희망봉에서 홍콩 시장까지 방해 없이 무역을 영위했습니다. 인도는 이 광대한 제국 네트워크의 중심에 있었고, 제국의 흐름은 인도 항구를 통해 극동과 유럽 시장을 연결하며 영국에 인도 대륙의 막대한 부를 사실상 지배할 수 있게 했습니다. 하지만 제국의 '보석'은 결코 안전하지 않았습니다.\n\n시베리아 숲과 아시아 초원을 가로질러 러시아 제국은 미국의 서부 개척 속도마저 능가하는 속도로 팽창했습니다. 이러한 세계 최대 국가의 팽창주의는 영국의 인도 지배를 위협하며 해마다 더 긴 그림자를 드리웠습니다. 중앙아시아의 완충 지역에서는 측량사, 모험가, 실업가, 정부 요원들이 교차하며 파미르 산맥의 그림자 아래에서 현지의 복잡한 정치를 조종하려 했습니다. 19세기부터 현재까지 글로벌 패권의 한계를 결정할 게임이 준비되었습니다.\n\n팍스 파미르에서 2~5명의 플레이어는 '그레이트 게임'에서 식민지 세력의 바람을 헤쳐나가는 아프가니스탄 부족 지도자 역할을 맡습니다. 러시아, 영국 제국, 아프가니스탄 중 하나가 패권을 달성하면, 그 제국에서 가장 많은 영향력을 가진 플레이어가 승리합니다."
     },
     "cottage": {
@@ -76235,6 +76265,9 @@ const gameData = {
       "difficultyId": "hardcore",
       "difficultyWeight": 3.85,
       "moodTags": [
+        "tense",
+        "chaotic",
+        "funny",
         "immersive"
       ],
       "playTags": [
@@ -76242,31 +76275,39 @@ const gameData = {
         "card_play"
       ],
       "situationTags": [
+        "group",
         "experienced",
         "long_stay",
-        "group",
         "large_group"
       ],
       "interactionTags": [
         "competitive",
+        "social",
+        "table_talk",
         "silent_focus"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "chaotic",
+        "funny",
         "immersive",
         "strategy",
         "card_play",
+        "group",
         "experienced",
         "long_stay",
-        "group",
         "large_group",
         "competitive",
+        "social",
+        "table_talk",
         "silent_focus"
       ],
       "displayTags": [
         "머리쓰게",
         "빠져들게",
+        "즐기고",
         "경쟁형"
       ],
       "summaryKo": "19세기 그레이트 게임을 배경으로 러시아, 영국, 아프가니스탄의 패권을 놓고 벌이는 영향력 게임.",
@@ -76286,8 +76327,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/sNfoaekSZjlobomyewgMBQ__original/img/Thocz_QBNCgbPKzuh9vpWy1QGB8=/0x0/filters:format(jpeg)/pic2500108.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/sNfoaekSZjlobomyewgMBQ__small/img/NXBilI6lCDsWu38ubevP51g_Ygs=/fit-in/200x150/filters:strip_icc()/pic2500108.jpg",
+      "main": "https://cf.geekdo-images.com/oSM_AuKYfGIwOtKbVEsoVg__original/img/7DlaMCmuoJzm9AzelmStYIDgutI=/0x0/filters:format(png)/pic4503733.png",
+      "thumbnail": "https://cf.geekdo-images.com/oSM_AuKYfGIwOtKbVEsoVg__small/img/NyoufH5YBFCh1rKy4uy76bR4ITk=/fit-in/200x150/filters:strip_icc()/pic4503733.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -77791,16 +77832,16 @@ const gameData = {
     "title": {
       "display": "펜스테르담",
       "owned": "펜스테르담",
-      "bgg": "Gespenster am Fenster"
+      "bgg": ""
     },
     "bgg": {
-      "id": "219193",
-      "matchStatus": "auto-confirmed",
-      "year": "2017",
-      "rating": 6.25,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 7,
       "weight": 0,
-      "minPlayers": 2,
-      "maxPlayers": 4,
+      "minPlayers": 1,
+      "maxPlayers": 2,
       "bestPlayers": [
         2
       ],
@@ -77809,26 +77850,21 @@ const gameData = {
         2
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 15,
-      "minPlayTime": 10,
-      "maxPlayTime": 15,
-      "categories": [
-        "Children's Game"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "어린이 게임"
       ],
       "mechanics": [
-        "Pattern Recognition"
+        "퍼즐"
       ],
       "mechanicsKo": [
         "패턴 인식"
       ],
-      "designers": [
-        "Stefan Kloß",
-        "Anna Oppolzer"
-      ],
-      "description": "The midnight hour has arrived, and the ghosts are now pressing their noses against the window &mdash; but they're scared of their own shadows, so who can find the right shadow to drive them to flight?\n\nEach turn in Ghost Catchers (a.k.a. Gespenster am Fenster), one of the ghosts arrives at the window, and players compete to find the proper shadow for this ghost to scare it away. Whoever thinks they have the right shape, places the transparent card on the ghost and if they're correct, the ghost flees and the player scores. The shadows are all similar, however, and you can try to scare each ghost only once, so look carefully!\n\nThe game can played with children from age 4-1/2 and up, with the number of ghosts in play being adjusted to make the game more difficult for older players.",
+      "designers": [],
+      "description": "",
       "descriptionKo": "자정이 되었고, 유령들이 창문에 코를 비비고 있습니다. 하지만 자기 그림자를 무서워하므로, 누가 그들을 쫓아낼 올바른 그림자를 찾을 수 있을까요?\n\n유령 사냥꾼(유령들이 창문에)의 각 턴마다 유령 하나가 창문에 나타나고, 플레이어들은 이 유령을 쫓아낼 올바른 그림자를 찾기 위해 경쟁합니다. 자신이 올바른 모양이라고 생각하는 플레이어는 투명한 카드를 유령 위에 올려놓고, 맞으면 유령이 도망치고 그 플레이어가 점수를 얻습니다. 하지만 모든 그림자가 비슷하고, 각 유령마다 한 번씩만 시도할 수 있으므로 주의 깊게 살펴봐야 합니다!\n\n이 게임은 4세 반 이상의 어린이와 함께 플레이할 수 있으며, 더 오래된 플레이어를 위해 게임의 난이도를 조정하기 위해 등장하는 유령의 수를 조절할 수 있습니다."
     },
     "cottage": {
@@ -77838,40 +77874,18 @@ const gameData = {
       "shelfFullLabel": "전시",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [
-        "cozy"
-      ],
-      "playTags": [
-        "puzzle"
-      ],
+      "moodTags": [],
+      "playTags": [],
       "situationTags": [
-        "quick_play",
-        "beginner",
-        "family",
-        "first_game",
-        "couple",
-        "group"
+        "couple"
       ],
-      "interactionTags": [
-        "silent_focus"
-      ],
+      "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "cozy",
-        "puzzle",
-        "quick_play",
-        "beginner",
-        "family",
-        "first_game",
-        "couple",
-        "group",
-        "silent_focus"
+        "couple"
       ],
-      "displayTags": [
-        "머리쓰게",
-        "편안하게"
-      ],
+      "displayTags": [],
       "summaryKo": "나타난 유령을 맞는 그림자로 쫓아내는 게임.",
       "comment": {
         "text": "",
@@ -77889,9 +77903,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/dvGJgiJ_SBiLAMfC8OIxRw__original/img/KPQd2YmsRfgz3Q--JrIojATYI5A=/0x0/filters:format(jpeg)/pic3454223.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/dvGJgiJ_SBiLAMfC8OIxRw__small/img/mgJFxCzPczBL5MwQ_F77EGGZf4g=/fit-in/200x150/filters:strip_icc()/pic3454223.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -78595,7 +78609,7 @@ const gameData = {
     },
     "bgg": {
       "id": "180974",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2015",
       "rating": 7.12133,
       "weight": 1.7809,
@@ -81695,16 +81709,16 @@ const gameData = {
     "title": {
       "display": "할리갈리컵스",
       "owned": "할리갈리컵스",
-      "bgg": "Halli Galli"
+      "bgg": "Quick Cups"
     },
     "bgg": {
-      "id": "2944",
-      "matchStatus": "auto-confirmed",
-      "year": "1990",
-      "rating": 5.80659,
-      "weight": 1.0149,
+      "id": "146149",
+      "matchStatus": "forced",
+      "year": "2013",
+      "rating": 6.18399,
+      "weight": 1.037,
       "minPlayers": 2,
-      "maxPlayers": 6,
+      "maxPlayers": 4,
       "bestPlayers": [
         4
       ],
@@ -81715,17 +81729,14 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        2,
-        6
+        4
       ],
-      "playingTime": 10,
-      "minPlayTime": 10,
-      "maxPlayTime": 10,
+      "playingTime": 15,
+      "minPlayTime": 15,
+      "maxPlayTime": 15,
       "categories": [
         "Action / Dexterity",
-        "Card Game",
         "Children's Game",
-        "Party Game",
         "Real-time"
       ],
       "categoriesKo": [
@@ -81736,8 +81747,7 @@ const gameData = {
         "실시간"
       ],
       "mechanics": [
-        "Pattern Recognition",
-        "Player Elimination"
+        "Pattern Building"
       ],
       "mechanicsKo": [
         "패턴 인식",
@@ -81746,7 +81756,7 @@ const gameData = {
       "designers": [
         "Haim Shafir"
       ],
-      "description": "Halli Galli is a speed action game in which players watch for sets of exactly five fruit. The deck contains 56 playing cards showing four kinds of fruit in groups of 1 to 5 and a bell of the type found at hotel reception desks.\n\nThe deck is distributed evenly between the players. All players hold their deck face down and take turns dealing one card face up in front of them. As each player reveals her next card, the instant you see a total of five of one kind of fruit on the table, hit the bell. If you're correct, you pick up all the played cards and put them into your deck; if you're wrong, you pay the other players one card each. When you run out of cards, you're out. When two players are left, they play until the bell is struck once more, then the game ends and the taller deck wins.\n\nKeep in mind that a five-of-a-kind can occur both when cards are revealed and when they're covered. If, for example, cards showing 3, 1 and 4 bananas are on the table and the 3 is then covered by a non-banana card, suddenly five bananas are showing and somebody better be reaching for the bell.",
+      "description": "Haim Shafir's most famous game design, Halli Galli, includes one of the best-known game props in existence: a bell. Players both young and old love to hit the bell after spotting a winning combination, so it's no surprise to see the bell return in yet another Shafir design: Speed Cups, a.k.a. Quick Cups.\n\nIn this game, each player receives a set of five plastic cups, each a different color; a deck of 24 cards is shuffled and placed face down in the center of the table next to the bell. One player flips over the top card, which depicts colored objects &ndash; trains, birds, cups, etc. &ndash; stacked vertically or horizontally, then everyone tries to recreate this colored sequence with her own set of cups. The first player to do slams the bell, revels in the soul-brightening \"ding\", then (if correct), claims the card. Someone then reveals the next card, and the players start shuffling cups once again.\n\nOnce all the cards have been claimed, whoever holds the most cards wins!",
       "descriptionKo": "할리 갈리는 정확히 5개의 같은 과일을 찾는 스피드 액션 게임입니다. 56장의 카드에는 4종류의 과일이 1~5개씩 그려져 있고, 호텔 프런트 데스크의 벨이 있습니다.\n\n카드를 플레이어들에게 똑같이 나눕니다. 모든 플레이어는 카드를 앞면 아래로 들고 차례대로 자신 앞에 한 장씩 뒷면을 위로 향하게 깔아놓습니다. 카드가 공개될 때마다, 테이블에 같은 종류의 과일이 정확히 5개 보이는 순간 벨을 누르세요. 맞으면 공개된 모든 카드를 가져가 자신의 덱에 넣고, 틀리면 다른 플레이어들에게 카드 1장씩을 줍니다. 카드를 다 쓰면 탈락합니다. 2명만 남으면 벨이 한 번 더 울릴 때까지 계속하고, 게임 종료 시 카드가 많은 플레이어가 승리합니다.\n\n과일 5개 조합은 카드가 공개될 때와 덮일 때 모두 발생할 수 있습니다. 예를 들어 테이블에 바나나 3개, 1개, 4개가 있을 때 3개를 비바나나 카드로 덮으면 갑자기 바나나 5개가 보이므로 누군가 벨을 눌러야 합니다."
     },
     "cottage": {
@@ -81758,52 +81768,39 @@ const gameData = {
       "difficultyWeight": 1.04,
       "moodTags": [
         "cozy",
-        "funny",
         "chaotic",
         "tense"
       ],
       "playTags": [
-        "puzzle",
-        "card_play",
         "party",
         "dexterity"
       ],
       "situationTags": [
-        "quick_play",
         "beginner",
         "family",
         "first_game",
-        "group",
-        "large_group"
+        "quick_play",
+        "group"
       ],
       "interactionTags": [
-        "silent_focus",
-        "table_talk",
         "simultaneous"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "funny",
         "chaotic",
         "tense",
-        "puzzle",
-        "card_play",
         "party",
         "dexterity",
-        "quick_play",
         "beginner",
         "family",
         "first_game",
+        "quick_play",
         "group",
-        "large_group",
-        "silent_focus",
-        "table_talk",
         "simultaneous"
       ],
       "displayTags": [
-        "머리쓰게",
         "즐기고",
         "편안하게",
         "빠져들게"
@@ -81825,8 +81822,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/gm-LiZvjkluOeKqPvuUjDg__original/img/LK1FFqGshBAiepAk37cyGEm3DI0=/0x0/filters:format(jpeg)/pic8223481.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/gm-LiZvjkluOeKqPvuUjDg__small/img/eTHCJERXOmqmzJP-b0QQCChDhn8=/fit-in/200x150/filters:strip_icc()/pic8223481.jpg",
+      "main": "https://cf.geekdo-images.com/v2arPeSKVsJ4VPGjeVcBbg__original/img/3lCEU6_J3WIZ7LfZf-Tl6wkIWbY=/0x0/filters:format(png)/pic6486581.png",
+      "thumbnail": "https://cf.geekdo-images.com/v2arPeSKVsJ4VPGjeVcBbg__small/img/KGRyLoC8Q5oq2AJVKNxVYclN-zI=/fit-in/200x150/filters:strip_icc()/pic6486581.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -82190,15 +82187,15 @@ const gameData = {
     "title": {
       "display": "핵클레드 + 확장",
       "owned": "핵클레드 + 확장",
-      "bgg": "Hegemony: Lead Your Class to Victory"
+      "bgg": "HacKClaD"
     },
     "bgg": {
-      "id": "321608",
-      "matchStatus": "auto-confirmed",
-      "year": "2023",
-      "rating": 8.37108,
-      "weight": 4.2578,
-      "minPlayers": 2,
+      "id": "352228",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 7.61461,
+      "weight": 2.8462,
+      "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
         1,
@@ -82211,17 +82208,15 @@ const gameData = {
         4
       ],
       "notRecommendedPlayers": [
-        1,
         4
       ],
-      "playingTime": 180,
+      "playingTime": 120,
       "minPlayTime": 90,
-      "maxPlayTime": 180,
+      "maxPlayTime": 120,
       "categories": [
-        "Economic",
-        "Educational",
-        "Negotiation",
-        "Political"
+        "Card Game",
+        "Fantasy",
+        "Science Fiction"
       ],
       "categoriesKo": [
         "경제",
@@ -82230,12 +82225,14 @@ const gameData = {
         "정치"
       ],
       "mechanics": [
-        "Action / Event",
-        "Hand Management",
-        "Simulation",
-        "Variable Player Powers",
-        "Voting",
-        "Worker Placement, Different Worker Types"
+        "Action Drafting",
+        "Deck, Bag, and Pool Building",
+        "End Game Bonuses",
+        "Grid Movement",
+        "Solo / Solitaire Game",
+        "Square Grid",
+        "Team-Based Game",
+        "Variable Player Powers"
       ],
       "mechanicsKo": [
         "액션/이벤트",
@@ -82246,10 +82243,9 @@ const gameData = {
         "다중 워커 배치"
       ],
       "designers": [
-        "Vangelis Bagiartakis",
-        "Varnavas Timotheou"
+        "kaku"
       ],
-      "description": "Extended edition includes Crisis & Control expansion.\n\n\nThe Nation is in disarray and a war is waging between the classes. The working class faces a dismantled welfare system, the capitalists are losing their hard-earned profits, the middle class is gradually fading and the state is sinking into a deep deficit. Amidst all this chaos, the only person who can provide guidance is... you. Will you take the side of the working class and fight for social reforms? Or will you stand with the corporations and the free market? Will you help the government try to keep it all together, or will you try to enforce your agenda no matter the cost to the country?\n\nHegemony is an asymmetric politico-economic card-driven board game for 2-4 players that puts you in the role of one of the socio-economic groups in a fictional state: The Working Class, the Middle Class, the Capitalist Class and the State itself.\n\nThe Working class controls the workers. The Capitalist class controls the companies. The Middle class combines elements from both the Working class and the Capitalist. It has workers who can work in the Capitalist's companies but it can also build companies of its own, yet smaller. Finally the State is trying to keep everyone happy, providing benefits and subsidies when needed but trying also to maintain a steady income through taxes to avoid going into debt.\n\nWhile players have their own separate goals, they are all limited by a series of policies that affect most of their actions, like Taxation, Labor Market, Foreign Trade etc. Voting on those policies and using their influence to change them is also very important. Through careful planning, strategic actions and political maneuvering, you will do your best to increase the power of your class and carry out your agenda. Will you be the one to lead your class to victory?\n\nHegemony is heavily based on actual academic principles such as Social-Democracy, Neoliberalism, Nationalism and Globalism, and allows players to see their real world applications through engaging gameplay. There are many ways to achieve hegemony- which one will you take?\n\n&mdash;description from the publisher",
+      "description": "Monsters given the name of Clad have brought devastation upon humanity. However, they also hold a valuable resource known as magic stones. The only ones able to face them are witches given the power of future sight, who compete for the most fame. Players take control of these witches trying to complete missions and gain the most magic stones from the Clad.\n\nEach player uses a personal deck of cards which they can upgrade each time they cycle through. Each turn, draw from your deck to a hand of three cards. Play cards to maneuver your witch around the board, attack, and use other effects. The three attacks the Clad will unleash each round are always visible beforehand. Players draft for turn order, playing between each of the boss turns, so planning around where the boss will move and attack when your turn comes around becomes key. Each point of damage dealt to the Clad gets you a magic stone. After nine rounds, whoever has the most victory points from magic stones and cards in their deck wins the game.",
       "descriptionKo": "국가가 혼란에 빠지고 계급 간의 전쟁이 벌어지고 있습니다. 노동계급은 복지 체계의 붕괴에 직면하고, 자본가들은 이윤 감소로 고통받으며, 중산층은 점차 사라지고, 국가는 적자의 심연으로 빠져들고 있습니다. 이 모든 혼돈 속에서 지도력을 제공할 수 있는 사람은... 당신입니다. 노동계급의 편에 서서 사회 개혁을 위해 싸울 것입니까? 아니면 기업과 자유시장 진영에 설 것입니까?\n\n헤게모니는 2-4명이 플레이하는 비대칭 정치경제 카드 기반 보드게임입니다. 플레이어들은 가상 국가의 사회경제 집단 중 하나를 담당합니다: 노동계급, 중산층, 자본가계급, 국가.\n\n각 세력은 고유한 목표를 가지지만, 과세, 노동시장, 대외무역 등의 정책으로 제한됩니다. 정책에 투표하고 영향력을 행사하여 정책을 변경하는 것이 중요합니다. 신중한 계획, 전략적 행동, 정치적 기술을 통해 자신의 계급 권력을 증대시키고 의제를 추진하세요.\n\n헤게모니는 사회민주주의, 신자유주의, 민족주의, 세계화 등 실제 학문적 원리에 기반하며, 플레이어들이 흥미로운 게임플레이를 통해 현실의 적용을 경험하게 합니다. 헤게모니를 달성하는 방법은 많습니다. 당신의 선택은?\n\n확장판에는 위기 & 컨트롤 확장이 포함되어 있습니다."
     },
     "cottage": {
@@ -82263,32 +82259,31 @@ const gameData = {
         "immersive"
       ],
       "playTags": [
-        "card_play",
-        "strategy"
+        "strategy",
+        "card_play"
       ],
       "situationTags": [
+        "group",
         "experienced",
-        "long_stay",
-        "group"
+        "long_stay"
       ],
       "interactionTags": [
-        "competitive"
+        "team"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "card_play",
         "strategy",
+        "card_play",
+        "group",
         "experienced",
         "long_stay",
-        "group",
-        "competitive"
+        "team"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게",
-        "경쟁형"
+        "빠져들게"
       ],
       "summaryKo": "서로 다른 계급의 입장에서 정책 투표와 영향력 행사로 자신의 헤게모니를 달성하는 정치경제 게임.",
       "comment": {
@@ -82307,8 +82302,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/DCLgJlrvB-EqL6A3WgQLMQ__original/img/vGpYcxjDBCOVcI0BcWOevspTQMQ=/0x0/filters:format(jpeg)/pic5715770.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/DCLgJlrvB-EqL6A3WgQLMQ__small/img/9yp6ANJx6cqdQqQ6hkNr3zA88vw=/fit-in/200x150/filters:strip_icc()/pic5715770.jpg",
+      "main": "https://cf.geekdo-images.com/G89maghPscRqvi9jjkgMEQ__original/img/Xb_enFHYum3AQ4GhLKCU7oFJklg=/0x0/filters:format(png)/pic6715998.png",
+      "thumbnail": "https://cf.geekdo-images.com/G89maghPscRqvi9jjkgMEQ__small/img/vQ8H7HvK4WkHrizlF0ITKze89fw=/fit-in/200x150/filters:strip_icc()/pic6715998.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -82457,16 +82452,16 @@ const gameData = {
     "title": {
       "display": "행복을찾아서",
       "owned": "행복을찾아서",
-      "bgg": "Pursuit of Happiness"
+      "bgg": "The Pursuit of Happiness"
     },
     "bgg": {
-      "id": "40445",
-      "matchStatus": "auto-confirmed",
-      "year": "1995",
-      "rating": 4.64,
-      "weight": 2.56,
-      "minPlayers": 2,
-      "maxPlayers": 5,
+      "id": "181687",
+      "matchStatus": "forced",
+      "year": "2015",
+      "rating": 7.1497,
+      "weight": 2.5875,
+      "minPlayers": 1,
+      "maxPlayers": 4,
       "bestPlayers": [
         3
       ],
@@ -82476,28 +82471,37 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 45,
-      "minPlayTime": 45,
-      "maxPlayTime": 45,
+      "notRecommendedPlayers": [
+        4
+      ],
+      "playingTime": 90,
+      "minPlayTime": 60,
+      "maxPlayTime": 90,
       "categories": [
-        "Card Game"
+        "Economic"
       ],
       "categoriesKo": [
         "카드게임"
       ],
       "mechanics": [
-        "Pattern Building",
-        "Set Collection"
+        "End Game Bonuses",
+        "Income",
+        "Open Drafting",
+        "Simulation",
+        "Solo / Solitaire Game",
+        "Turn Order: Stat-Based",
+        "Variable Player Powers",
+        "Worker Placement"
       ],
       "mechanicsKo": [
         "패턴 만들기",
         "세트 수집"
       ],
       "designers": [
-        "Larry Levy"
+        "Adrian Abela",
+        "David Chircop"
       ],
-      "description": "A card game using standard cards that gives players a unique way of making melds.  In addition, the melds in each suit have different abilities.  Diamond melds let you acquire more cards; Spade melds let you attack your opponent's melds; Club melds let you defend against attacks; and Heart melds give you happiness, which is the goal of the game.  A good mix of luck and skill that has a different feel than most card games.  Plays best with 3 or 4 players.",
+      "description": "We all have one common desire: the desire for happiness. As we build our life, taking steps towards the pursuit of happiness, we come closer to the realization that happiness lies in the pursuit.\n\nThe Pursuit of Happiness&nbsp;is a game in which you take a character from birth and you live the life you always wanted. Using a worker-placement mechanism with time as your workers, you take on projects, you get jobs, you buy items, you establish relationships, you raise families. The possibilities are endless as you live the life you have always wanted.\n\nHow much will you be able to achieve in just one lifetime during The Pursuit of Happiness?",
       "descriptionKo": "표준 카드를 사용하여 독특한 방식의 멜드를 만드는 카드 게임입니다. 각 슈트의 멜드마다 서로 다른 능력이 있습니다. 다이아몬드 멜드는 카드를 더 획득할 수 있게 해주고, 스페이드 멜드는 상대방의 멜드를 공격하며, 클럽 멜드는 공격으로부터 방어합니다. 하트 멜드는 게임의 목표인 행복을 줍니다. 운과 실력의 좋은 조합으로, 대부분의 카드 게임과 다른 느낌을 제공합니다. 3~4명의 플레이어일 때 가장 잘 어울립니다."
     },
     "cottage": {
@@ -82511,29 +82515,27 @@ const gameData = {
         "immersive"
       ],
       "playTags": [
-        "card_play",
         "strategy"
       ],
       "situationTags": [
         "experienced",
         "long_stay",
-        "group",
-        "large_group"
+        "group"
       ],
       "interactionTags": [
-        "competitive"
+        "competitive",
+        "turn_based"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "card_play",
         "strategy",
         "experienced",
         "long_stay",
         "group",
-        "large_group",
-        "competitive"
+        "competitive",
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
@@ -82557,8 +82559,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/LfvREpKY-3iUFXjf8Da3Tg__original/img/7R_tCtOCJkR8tFeX8HiPVLPqQYw=/0x0/filters:format(jpeg)/pic9189163.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/LfvREpKY-3iUFXjf8Da3Tg__small/img/vcCszBYaU1sgmKGg7_SSmpwt3Ys=/fit-in/200x150/filters:strip_icc()/pic9189163.jpg",
+      "main": "https://cf.geekdo-images.com/RpUStaAwneWPT_JQJpAb1Q__original/img/-v7vEfHCJptqJSMPeNOf5ovy5zY=/0x0/filters:format(jpeg)/pic2853682.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/RpUStaAwneWPT_JQJpAb1Q__small/img/ZCZifuP73R52UhXomQKmGQ9OoCU=/fit-in/200x150/filters:strip_icc()/pic2853682.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -82709,47 +82711,29 @@ const gameData = {
     "title": {
       "display": "허즐방탈출 Hex-it",
       "owned": "허즐방탈출 Hex-it",
-      "bgg": "IT"
+      "bgg": ""
     },
     "bgg": {
-      "id": "12277",
-      "matchStatus": "auto-confirmed",
-      "year": "1978",
-      "rating": 6.4,
-      "weight": 2.6667,
-      "minPlayers": 1,
-      "maxPlayers": 3,
-      "bestPlayers": [
-        2,
-        3
-      ],
-      "recommendedPlayers": [
-        1,
-        3
-      ],
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
       "notRecommendedPlayers": [],
-      "playingTime": 90,
-      "minPlayTime": 90,
-      "maxPlayTime": 90,
-      "categories": [
-        "Science Fiction",
-        "Wargame"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "SF",
         "워게임"
       ],
       "mechanics": [
-        "Dice Rolling",
-        "Grid Movement",
-        "Hexagon Grid",
-        "Line of Sight",
-        "Movement Points",
-        "Scenario / Mission / Campaign Game",
-        "Simulation",
-        "Solo / Solitaire Game",
-        "Variable Player Powers",
-        "Variable Set-up"
+        "방탈출"
       ],
       "mechanicsKo": [
         "주사위 굴리기",
@@ -82763,10 +82747,8 @@ const gameData = {
         "비대칭 능력",
         "가변 셋업"
       ],
-      "designers": [
-        "Dave Casciano"
-      ],
-      "description": "Description From Rules\n\nIT is a Mini SF* game that you play by yourself or with one or two other people. It is fast, fun to play, and always exciting. The game is always different each time you play with four scenarios you can use depending on how much time you have and how many people are playing . . .\n\nIT (tm) is the game where you design the monsterous [sic] \"IT\" war machine yourself; then try to take a planet with it . . .\n\n* Trade mark for the Micro Science Fiction Games of ATTACK INTERNATIONAL, the creators of modern S.F. Wargaming, and the first to create Mini SF* games.     \n\n\nUser Summary\n\nIT is a small-format sci-fi wargame that may remind gamers of another asymmetrical conflict between a behemoth war machine and an array of lesser opposing forces. (See: Ogre.)\n\nIn this game, the opposing forces are faced off against IT, a sort of mega-tank or robot. The conventional forces must defend a planetary base from IT. The player controlling IT creates a customized war-machine design by allocating IT's 1000 mass/weight units. The variable characteristics include IT's speed, armor, weaponry, defensive systems, and (structural?) integrity.\n\nEach game turn consists of the first player moving any or all his units, followed by that player's combat phase. The second player then executes his own movement and combat phases, completing the turn. Terrain affects movement and combat, with line of sight being a factor.\n\nIn addition to the standard IT versus conventional forces scenario, three additional scenarios are provided: a two-player conventional forces battle, a two-player IT versus IT battle, and a three-player battle royale where two of the players control an IT and the third player controls the conventional forces. Rules are also provided for a solitaire game in which the player controls IT against 20 random conventional force units that move and attack as determined by the game system.\n\nAdvanced rules variations allow for plotted simultaneous movement and/or combat. Additional optional rules provide for opportunity fire and a two-player \"Blind IT\" game. The blind game uses two mapsheets so that the IT player can only see units visible to IT. The rules helpfully note that the blind \"system only works with a conventional player who does not cheat.\"\n\nGame Scale\n\nUnits = individual vehicles to small groups of combatants.\n\nHex and turn scales are not stated.",
+      "designers": [],
+      "description": "",
       "descriptionKo": "IT는 1~3명이 즐기는 미니 SF 워게임입니다. 빠르고 재미있으며 항상 흥미로운 게임으로, 4가지 시나리오로 시간과 인원에 맞춰 즐길 수 있습니다.\n\n게임의 핵심은 플레이어가 1000 질량 단위를 배분하여 거대 전쟁기계 IT를 직접 설계한 후, 행성을 정복하는 것입니다. 일반 병력은 행성 기지를 IT로부터 방어해야 합니다. IT의 속도, 장갑, 무기, 방어 시스템, 내구도 등을 커스터마이징할 수 있습니다.\n\n각 턴은 첫 번째 플레이어의 이동 및 전투 단계, 두 번째 플레이어의 이동 및 전투 단계로 구성됩니다. 지형은 이동과 전투에 영향을 미치며, 시계(視界)가 중요합니다.\n\n기본 시나리오 외에 일반 병력끼리의 전투, IT끼리의 전투, 2명이 IT를, 1명이 일반 병력을 조종하는 3인 전투 등이 있습니다. 솔로 플레이도 가능하며, 선택 규칙으로 동시 이동/전투, 기회 사격, 블라인드 IT 게임 등을 즐길 수 있습니다."
     },
     "cottage": {
@@ -82774,35 +82756,16 @@ const gameData = {
       "shelfGroupId": "방탈출",
       "shelfLabel": "방탈출",
       "shelfFullLabel": "방탈출",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 2.6667,
-      "moodTags": [
-        "immersive"
-      ],
-      "playTags": [
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "couple",
-        "group"
-      ],
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
       "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "couple",
-        "group"
-      ],
-      "displayTags": [
-        "머리쓰게",
-        "빠져들게"
-      ],
+      "autoTags": [],
+      "displayTags": [],
       "summaryKo": "거대 전쟁기계 IT를 커스터마이징하여 행성을 정복하는 미니 SF 워게임이다.",
       "comment": {
         "text": "",
@@ -82820,9 +82783,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/G0hRDeIHRfbyLAnQztlBWA__original/img/BBa4lObdyRUw_oeYkjYoO3OFnQ4=/0x0/filters:format(jpeg)/pic4075394.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/G0hRDeIHRfbyLAnQztlBWA__small/img/Miw9PnQzf-nW9kHJ_VfcvbE6F_w=/fit-in/200x150/filters:strip_icc()/pic4075394.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -83253,7 +83216,7 @@ const gameData = {
     },
     "bgg": {
       "id": "217372",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2017",
       "rating": 7.71724,
       "weight": 1.9413,

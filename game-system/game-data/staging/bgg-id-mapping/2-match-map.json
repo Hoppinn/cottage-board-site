@@ -346,20 +346,14 @@
     "ownedName": "캐시앤건즈"
   },
   "코드네임": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "178900",
-    "ownedName": "코드네임",
-    "bggName": "Codenames",
-    "score": 119,
-    "scoreGap": 18
+    "ownedName": "코드네임"
   },
   "코드네임(영어)": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "178900",
-    "ownedName": "코드네임(영어)",
-    "bggName": "Codenames",
-    "score": 119,
-    "scoreGap": 18
+    "ownedName": "코드네임(영어)"
   },
   "코드네임픽처스": {
     "status": "forced",
@@ -375,12 +369,9 @@
     "scoreGap": 22
   },
   "쿠": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "131357",
-    "ownedName": "쿠",
-    "bggName": "Coup",
-    "score": 117,
-    "scoreGap": 12
+    "ownedName": "쿠"
   },
   "퀘스트": {
     "status": "forced",
@@ -484,12 +475,9 @@
     "ownedName": "그것이문제로다"
   },
   "나나": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "352515",
-    "ownedName": "나나",
-    "bggName": "Trio",
-    "score": 119,
-    "scoreGap": 14
+    "ownedName": "나나"
   },
   "냥자역학연구소": {
     "status": "auto-confirmed",
@@ -581,12 +569,9 @@
     "ownedName": "레일로드잉크"
   },
   "레지스탕스 쿠": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "131357",
-    "ownedName": "레지스탕스 쿠",
-    "bggName": "Coup",
-    "score": 117,
-    "scoreGap": 12
+    "ownedName": "레지스탕스 쿠"
   },
   "리버탈리아": {
     "status": "forced",
@@ -1032,71 +1017,9 @@
     "ownedName": "골드"
   },
   "골드러시": {
-    "status": "needs-review",
-    "ownedName": "골드러시",
-    "bestGuess": {
-      "bggId": "306680",
-      "bggName": "GOLD",
-      "score": 109,
-      "scoreGap": 4
-    },
-    "reviewCandidates": [
-      {
-        "bggId": "306680",
-        "bggName": "GOLD",
-        "year": "2020",
-        "score": 109,
-        "reason": {
-          "nameScore": 100,
-          "matchedSearchName": "GOLD",
-          "matchedCandidateName": "GOLD"
-        }
-      },
-      {
-        "bggId": "181321",
-        "bggName": "Gold",
-        "year": "1934",
-        "score": 105,
-        "reason": {
-          "nameScore": 100,
-          "matchedSearchName": "GOLD",
-          "matchedCandidateName": "Gold"
-        }
-      },
-      {
-        "bggId": "270673",
-        "bggName": "Silver & Gold",
-        "year": "2019",
-        "score": 60,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "GOLD",
-          "matchedCandidateName": "Silver & Gold"
-        }
-      },
-      {
-        "bggId": "399941",
-        "bggName": "River of Gold",
-        "year": "2024",
-        "score": 60,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "GOLD",
-          "matchedCandidateName": "River of Gold"
-        }
-      },
-      {
-        "bggId": "154086",
-        "bggName": "Gold West",
-        "year": "2015",
-        "score": 58,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "GOLD",
-          "matchedCandidateName": "Gold West"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "297661",
+    "ownedName": "골드러시"
   },
   "궁신": {
     "status": "forced",
@@ -1149,12 +1072,9 @@
     "scoreGap": 14
   },
   "기도하고일하라": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "70149",
-    "ownedName": "기도하고일하라",
-    "bggName": "Ora et Labora",
-    "score": 119,
-    "scoreGap": 14
+    "ownedName": "기도하고일하라"
   },
   "기즈모": {
     "status": "auto-confirmed",
@@ -1189,12 +1109,9 @@
     "ownedName": "끝나지않는한여름(미스터리파티시리즈)"
   },
   "나나 크리스마스에디션": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "352515",
-    "ownedName": "나나 크리스마스에디션",
-    "bggName": "Trio",
-    "score": 119,
-    "scoreGap": 14
+    "ownedName": "나나 크리스마스에디션"
   },
   "나르": {
     "status": "forced",
@@ -1366,36 +1283,24 @@
     "ownedName": "도망자"
   },
   "도미니언": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "36218",
-    "ownedName": "도미니언",
-    "bggName": "Dominion",
-    "score": 119,
-    "scoreGap": 14
+    "ownedName": "도미니언"
   },
   "도미니언 약속된번영": {
-    "status": "auto-confirmed",
-    "bggId": "36218",
-    "ownedName": "도미니언 약속된번영",
-    "bggName": "Dominion",
-    "score": 119,
-    "scoreGap": 14
+    "status": "forced",
+    "bggId": "66690",
+    "ownedName": "도미니언 약속된번영"
   },
   "도미니언 위대한제국": {
-    "status": "auto-confirmed",
-    "bggId": "36218",
-    "ownedName": "도미니언 위대한제국",
-    "bggName": "Dominion",
-    "score": 119,
-    "scoreGap": 14
+    "status": "forced",
+    "bggId": "192951",
+    "ownedName": "도미니언 위대한제국"
   },
   "도미니언 장막뒤의사람들": {
-    "status": "auto-confirmed",
-    "bggId": "36218",
-    "ownedName": "도미니언 장막뒤의사람들",
-    "bggName": "Dominion",
-    "score": 119,
-    "scoreGap": 14
+    "status": "forced",
+    "bggId": "40834",
+    "ownedName": "도미니언 장막뒤의사람들"
   },
   "도블 동물원": {
     "status": "forced",
@@ -1751,12 +1656,9 @@
     "scoreGap": 30
   },
   "마법사의물약(독)": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "180974",
-    "ownedName": "마법사의물약(독)",
-    "bggName": "Potion Explosion",
-    "score": 117,
-    "scoreGap": 30
+    "ownedName": "마법사의물약(독)"
   },
   "마스크맨": {
     "status": "auto-confirmed",
@@ -2484,12 +2386,9 @@
     "scoreGap": 10
   },
   "스파이vs스파이": {
-    "status": "auto-confirmed",
-    "bggId": "1686",
-    "ownedName": "스파이vs스파이",
-    "bggName": "Spy vs Spy",
-    "score": 105,
-    "scoreGap": 55
+    "status": "forced",
+    "bggId": "299569",
+    "ownedName": "스파이vs스파이"
   },
   "스페이스 크루": {
     "status": "auto-confirmed",
@@ -2500,28 +2399,19 @@
     "scoreGap": 26
   },
   "스플렌더": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "148228",
-    "ownedName": "스플렌더",
-    "bggName": "Splendor",
-    "score": 119,
-    "scoreGap": 18
+    "ownedName": "스플렌더"
   },
   "스플렌더 대결": {
-    "status": "auto-confirmed",
-    "bggId": "148228",
-    "ownedName": "스플렌더 대결",
-    "bggName": "Splendor",
-    "score": 119,
-    "scoreGap": 18
+    "status": "forced",
+    "bggId": "364073",
+    "ownedName": "스플렌더 대결"
   },
   "스플렌더 마블": {
-    "status": "auto-confirmed",
-    "bggId": "148228",
-    "ownedName": "스플렌더 마블",
-    "bggName": "Splendor",
-    "score": 119,
-    "scoreGap": 18
+    "status": "forced",
+    "bggId": "293296",
+    "ownedName": "스플렌더 마블"
   },
   "스플렌더 찬란한도시확장": {
     "status": "auto-confirmed",
@@ -2532,12 +2422,9 @@
     "scoreGap": 18
   },
   "스플렌더 포켓몬": {
-    "status": "auto-confirmed",
-    "bggId": "148228",
-    "ownedName": "스플렌더 포켓몬",
-    "bggName": "Splendor",
-    "score": 119,
-    "scoreGap": 18
+    "status": "forced",
+    "bggId": "406291",
+    "ownedName": "스플렌더 포켓몬"
   },
   "슬리핑퀸즈": {
     "status": "auto-confirmed",
@@ -2895,12 +2782,8 @@
     "scoreGap": 14
   },
   "에이다": {
-    "status": "auto-confirmed",
-    "bggId": "413469",
-    "ownedName": "에이다",
-    "bggName": "Ada's Dream",
-    "score": 109,
-    "scoreGap": 22
+    "status": "no-bgg",
+    "ownedName": "에이다"
   },
   "에이언즈 엔드": {
     "status": "auto-confirmed",
@@ -3030,12 +2913,9 @@
     "scoreGap": 30
   },
   "오라파마인": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "70149",
-    "ownedName": "오라파마인",
-    "bggName": "Ora et Labora",
-    "score": 119,
-    "scoreGap": 14
+    "ownedName": "오라파마인"
   },
   "오를레앙+확장2": {
     "status": "auto-confirmed",
@@ -3135,12 +3015,9 @@
     "scoreGap": 14
   },
   "우봉고3D": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "46396",
-    "ownedName": "우봉고3D",
-    "bggName": "Ubongo 3D",
-    "score": 111,
-    "scoreGap": 14
+    "ownedName": "우봉고3D"
   },
   "우봉고미니": {
     "status": "auto-confirmed",
@@ -3714,7 +3591,7 @@
   },
   "쿠트나호라": {
     "status": "forced",
-    "bggId": "385761",
+    "bggId": "385610",
     "ownedName": "쿠트나호라"
   },
   "쿼리도": {
@@ -3816,12 +3693,9 @@
     "scoreGap": 26
   },
   "클러스터": {
-    "status": "auto-confirmed",
-    "bggId": "22004",
-    "ownedName": "클러스터",
-    "bggName": "Cluster",
-    "score": 105,
-    "scoreGap": 18
+    "status": "forced",
+    "bggId": "277458",
+    "ownedName": "클러스터"
   },
   "클레임1+클레임2": {
     "status": "forced",
@@ -3829,12 +3703,9 @@
     "ownedName": "클레임1+클레임2"
   },
   "클리닉": {
-    "status": "auto-confirmed",
-    "bggId": "156840",
-    "ownedName": "클리닉",
-    "bggName": "Clinic",
-    "score": 107,
-    "scoreGap": 10
+    "status": "forced",
+    "bggId": "272739",
+    "ownedName": "클리닉"
   },
   "키친러시": {
     "status": "forced",
@@ -4047,12 +3918,9 @@
     "scoreGap": 20
   },
   "팍스파미르": {
-    "status": "auto-confirmed",
-    "bggId": "155255",
-    "ownedName": "팍스파미르",
-    "bggName": "Pax Pamir",
-    "score": 111,
-    "scoreGap": 8
+    "status": "forced",
+    "bggId": "256960",
+    "ownedName": "팍스파미르"
   },
   "판타지디펜스": {
     "status": "auto-confirmed",
@@ -4140,12 +4008,8 @@
     "ownedName": "페이퍼사파리(스모키)"
   },
   "펜스테르담": {
-    "status": "auto-confirmed",
-    "bggId": "219193",
-    "ownedName": "펜스테르담",
-    "bggName": "Gespenster am Fenster",
-    "score": 87,
-    "scoreGap": 80
+    "status": "no-bgg",
+    "ownedName": "펜스테르담"
   },
   "펠리시티 자루속고양이": {
     "status": "forced",
@@ -4185,12 +4049,9 @@
     "scoreGap": 28
   },
   "포션폭발 + 다섯번째학생 확장": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "180974",
-    "ownedName": "포션폭발 + 다섯번째학생 확장",
-    "bggName": "Potion Explosion",
-    "score": 117,
-    "scoreGap": 10
+    "ownedName": "포션폭발 + 다섯번째학생 확장"
   },
   "포켓디텍티브 (1~3)": {
     "status": "auto-confirmed",
@@ -4364,12 +4225,9 @@
     "scoreGap": 48
   },
   "할리갈리컵스": {
-    "status": "auto-confirmed",
-    "bggId": "2944",
-    "ownedName": "할리갈리컵스",
-    "bggName": "Halli Galli",
-    "score": 109,
-    "scoreGap": 22
+    "status": "forced",
+    "bggId": "146149",
+    "ownedName": "할리갈리컵스"
   },
   "할리우드골든에이지": {
     "status": "forced",
@@ -4390,12 +4248,9 @@
     "scoreGap": 26
   },
   "핵클레드 + 확장": {
-    "status": "auto-confirmed",
-    "bggId": "321608",
-    "ownedName": "핵클레드 + 확장",
-    "bggName": "Hegemony: Lead Your Class to Victory",
-    "score": 121,
-    "scoreGap": 34
+    "status": "forced",
+    "bggId": "352228",
+    "ownedName": "핵클레드 + 확장"
   },
   "햄버거타이쿤": {
     "status": "auto-confirmed",
@@ -4406,12 +4261,9 @@
     "scoreGap": 34
   },
   "행복을찾아서": {
-    "status": "auto-confirmed",
-    "bggId": "40445",
-    "ownedName": "행복을찾아서",
-    "bggName": "Pursuit of Happiness",
-    "score": 105,
-    "scoreGap": 8
+    "status": "forced",
+    "bggId": "181687",
+    "ownedName": "행복을찾아서"
   },
   "행성x를찾아서": {
     "status": "auto-confirmed",
@@ -4422,12 +4274,8 @@
     "scoreGap": 24
   },
   "허즐방탈출 Hex-it": {
-    "status": "auto-confirmed",
-    "bggId": "12277",
-    "ownedName": "허즐방탈출 Hex-it",
-    "bggName": "IT",
-    "score": 105,
-    "scoreGap": 53
+    "status": "no-bgg",
+    "ownedName": "허즐방탈출 Hex-it"
   },
   "헤게모니 + 역사적사건들 확장": {
     "status": "auto-confirmed",
@@ -4454,12 +4302,9 @@
     "scoreGap": 28
   },
   "황금의땅 엘도라도": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "217372",
-    "ownedName": "황금의땅 엘도라도",
-    "bggName": "The Quest for El Dorado",
-    "score": 119,
-    "scoreGap": 26
+    "ownedName": "황금의땅 엘도라도"
   },
   "황하와장강": {
     "status": "auto-confirmed",

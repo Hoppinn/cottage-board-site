@@ -105,6 +105,30 @@ async function autoResolveBggMatches() {
     }
   }
 
+  // 같은 bggId로 auto-confirmed된 게임이 2개 이상이면 전부 needs-review로 강등
+  // (스플렌더 마블/포켓몬/대결이 모두 기본판 ID로 잡히는 문제 방지)
+  const bggIdToNames = {};
+  for (const [name, entry] of Object.entries(result)) {
+    if (entry.status === "auto-confirmed" && entry.bggId) {
+      if (!bggIdToNames[entry.bggId]) bggIdToNames[entry.bggId] = [];
+      bggIdToNames[entry.bggId].push(name);
+    }
+  }
+  for (const [bggId, names] of Object.entries(bggIdToNames)) {
+    if (names.length > 1) {
+      for (const name of names) {
+        const entry = result[name];
+        result[name] = {
+          status: "needs-review",
+          ownedName: name,
+          bestGuess: { bggId: entry.bggId, bggName: entry.bggName, score: entry.score, scoreGap: entry.scoreGap },
+          reviewCandidates: [],
+          flagReason: `duplicate: bggId ${bggId} matched by ${names.length} games (${names.join(", ")})`,
+        };
+      }
+    }
+  }
+
   writeJson(BGG_MATCH_MAP_PATH, result);
 
   const summary = Object.values(result).reduce(
