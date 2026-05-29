@@ -1022,14 +1022,14 @@
   {
     "id": "잉카의황금",
     "ownedName": "잉카의황금",
-    "titleEn": "",
-    "bggId": "37759",
+    "titleEn": "Diamant",
+    "bggId": "15512",
     "matchStatus": "forced",
-    "status": "pending-cache",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.1141,
     "difficultyWeight": 1.11,
-    "rating": null,
+    "rating": 6.8477,
     "bestPlayers": [
       6,
       7,
@@ -3781,14 +3781,14 @@
   {
     "id": "김밥요리사",
     "ownedName": "김밥요리사",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Gimbap",
+    "bggId": "377941",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 6.80298,
     "bestPlayers": [
       4
     ],
@@ -3801,14 +3801,14 @@
   {
     "id": "꼬치의달인",
     "ownedName": "꼬치의달인",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Kushi Express",
+    "bggId": "264797",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.2,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 6.40492,
     "bestPlayers": [
       4
     ],
@@ -3896,14 +3896,14 @@
   {
     "id": "냥냥집사",
     "ownedName": "냥냥집사",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Meow Meow Dice",
+    "bggId": "440029",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "별도",
-    "difficulty": null,
+    "difficulty": 1,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 6.1404,
     "bestPlayers": [
       4
     ],
@@ -5115,14 +5115,14 @@
   {
     "id": "레인보우세븐",
     "ownedName": "레인보우세븐",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unresolved",
-    "status": "pending-cache",
+    "titleEn": "Rainbow 7",
+    "bggId": "351149",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "작은",
-    "difficulty": null,
+    "difficulty": 1,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 6.20283,
     "bestPlayers": [
       3
     ],
@@ -5890,7 +5890,7 @@
     "ownedName": "모두의마블",
     "titleEn": "",
     "bggId": null,
-    "matchStatus": "unresolved",
+    "matchStatus": "no-bgg",
     "status": "pending-cache",
     "location": "가족",
     "difficulty": null,
@@ -11400,17 +11400,15 @@
   {
     "id": "탁상탐정단1",
     "ownedName": "탁상탐정단1",
-    "titleEn": "MicroMacro: Crime City",
-    "bggId": "318977",
-    "matchStatus": "forced",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "no-bgg",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1.1007,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.4465,
-    "bestPlayers": [
-      2
-    ],
+    "rating": null,
+    "bestPlayers": [],
     "recommendedPlayers": [
       2,
       3,
@@ -11420,17 +11418,15 @@
   {
     "id": "탁상탐정단2",
     "ownedName": "탁상탐정단2",
-    "titleEn": "MicroMacro: Crime City – Full House",
-    "bggId": "338834",
-    "matchStatus": "forced",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "no-bgg",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1.1616,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.63256,
-    "bestPlayers": [
-      2
-    ],
+    "rating": null,
+    "bestPlayers": [],
     "recommendedPlayers": [
       2,
       3,
@@ -11440,40 +11436,30 @@
   {
     "id": "탁상탐정단3",
     "ownedName": "탁상탐정단3",
-    "titleEn": "MicroMacro: Crime City – All In",
-    "bggId": "364766",
-    "matchStatus": "forced",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "no-bgg",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1.075,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.79634,
-    "bestPlayers": [
-      1,
-      2
-    ],
-    "recommendedPlayers": [
-      3
-    ]
+    "rating": null,
+    "bestPlayers": [],
+    "recommendedPlayers": []
   },
   {
     "id": "탁상탐정단4",
     "ownedName": "탁상탐정단4",
-    "titleEn": "MicroMacro: Crime City – Showdown",
-    "bggId": "398162",
-    "matchStatus": "forced",
-    "status": "ready",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "no-bgg",
+    "status": "pending-cache",
     "location": "머더미",
-    "difficulty": 1,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 7.87124,
-    "bestPlayers": [
-      2
-    ],
-    "recommendedPlayers": [
-      1,
-      3
-    ]
+    "rating": null,
+    "bestPlayers": [],
+    "recommendedPlayers": []
   },
   {
     "id": "탐험가들",

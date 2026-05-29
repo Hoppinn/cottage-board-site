@@ -338,7 +338,7 @@
   },
   "잉카의황금": {
     "status": "forced",
-    "bggId": "37759",
+    "bggId": "15512",
     "ownedName": "잉카의황금"
   },
   "재치와눈치": {
@@ -1656,82 +1656,14 @@
     ]
   },
   "김밥요리사": {
-    "status": "unresolved",
-    "ownedName": "김밥요리사",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "377941",
+    "ownedName": "김밥요리사"
   },
   "꼬치의달인": {
-    "status": "unresolved",
-    "ownedName": "꼬치의달인",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "264797",
+    "ownedName": "꼬치의달인"
   },
   "끝나지않는한여름(미스터리파티시리즈)": {
     "status": "unresolved",
@@ -1825,43 +1757,9 @@
     "ownedName": "남티그리스의학자들"
   },
   "냥냥집사": {
-    "status": "unresolved",
-    "ownedName": "냥냥집사",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "440029",
+    "ownedName": "냥냥집사"
   },
   "뉴클리엄": {
     "status": "forced",
@@ -2650,43 +2548,9 @@
     "ownedName": "레이스포더갤럭시 + 첫번째아크 확장"
   },
   "레인보우세븐": {
-    "status": "unresolved",
-    "ownedName": "레인보우세븐",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "351149",
+    "ownedName": "레인보우세븐"
   },
   "레일웨이붐": {
     "status": "forced",
@@ -3037,43 +2901,8 @@
     "scoreGap": 26
   },
   "모두의마블": {
-    "status": "unresolved",
-    "ownedName": "모두의마블",
-    "reviewCandidates": [
-      {
-        "bggId": "872",
-        "bggName": "M",
-        "year": "2000",
-        "score": 27,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Modoo Marble",
-          "matchedCandidateName": "M"
-        }
-      },
-      {
-        "bggId": "1715",
-        "bggName": "Od",
-        "year": "1985",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Modoo Marble",
-          "matchedCandidateName": "Od"
-        }
-      },
-      {
-        "bggId": "42409",
-        "bggName": "Om",
-        "year": "2009",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "ModooMarble",
-          "matchedCandidateName": "Om"
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "모두의마블"
   },
   "모렐": {
     "status": "auto-confirmed",
@@ -5497,23 +5326,19 @@
     "scoreGap": 30
   },
   "탁상탐정단1": {
-    "status": "forced",
-    "bggId": "318977",
+    "status": "no-bgg",
     "ownedName": "탁상탐정단1"
   },
   "탁상탐정단2": {
-    "status": "forced",
-    "bggId": "338834",
+    "status": "no-bgg",
     "ownedName": "탁상탐정단2"
   },
   "탁상탐정단3": {
-    "status": "forced",
-    "bggId": "364766",
+    "status": "no-bgg",
     "ownedName": "탁상탐정단3"
   },
   "탁상탐정단4": {
-    "status": "forced",
-    "bggId": "398162",
+    "status": "no-bgg",
     "ownedName": "탁상탐정단4"
   },
   "탐험가들": {

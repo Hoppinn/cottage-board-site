@@ -6393,14 +6393,14 @@
     "title": {
       "display": "잉카의황금",
       "owned": "잉카의황금",
-      "bgg": ""
+      "bgg": "Diamant"
     },
     "bgg": {
-      "id": "37759",
+      "id": "15512",
       "matchStatus": "forced",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.11,
+      "year": "2005",
+      "rating": 6.8477,
+      "weight": 1.1141,
       "minPlayers": 3,
       "maxPlayers": 8,
       "bestPlayers": [
@@ -6416,18 +6416,31 @@
         7,
         8
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        8
+      ],
+      "playingTime": 40,
+      "minPlayTime": 20,
+      "maxPlayTime": 40,
+      "categories": [
+        "Bluffing",
+        "Card Game",
+        "Exploration"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "고or스톱"
+        "Move Through Deck",
+        "Push Your Luck",
+        "Simultaneous Action Selection"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Bruno Faidutti",
+        "Alan R. Moon"
+      ],
+      "description": "Diamant &mdash; also published as Incan Gold &mdash; is a quick, fun, press-your-luck game. Players venture down mine shafts or explore paths in the jungle by turning up cards from a deck and evenly sharing the gems they find on the way, with any leftover gems being placed on the card. Before the next card is revealed, you have the chance to leave the mine and stash your holdings, including any gems you get on the way out.\n\nWhy would you leave? Because the deck also contains hazards: scorpions, snakes, poison gas, explosions and rockfalls. When a particular hazard is revealed for the second time (e.g., a second scorpion), anyone still in the shaft or on the path has to drop all the gems they've collected that round and flee for safety. The trick is that as more players leave each turn, your share of the pie grows larger, which will perhaps inspire you to explore deeper &mdash; but at the risk of ending up with nothing.\n\nAll editions of Incan Gold and later editions of Diamant include five artifact cards that are shuffled into the deck of gem and hazard cards, either one per round or all at once. When an artifact card is revealed, no one can take this card and it's placed on the path. If exactly one player leaves at the end of a turn, they collect not only all gems that remain on the path, but the artifact as well, which is worth extra points at the end of the game.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -6438,26 +6451,45 @@
       "difficultyId": "beginner",
       "difficultyWeight": 1.11,
       "moodTags": [
+        "tense",
+        "funny",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "party",
+        "card_play"
+      ],
       "situationTags": [
         "beginner",
+        "quick_play",
         "first_game",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "funny",
         "cozy",
+        "party",
+        "card_play",
         "beginner",
+        "quick_play",
         "first_game",
         "group",
-        "large_group"
+        "large_group",
+        "competitive",
+        "simultaneous"
       ],
       "displayTags": [
+        "즐기고",
+        "머리쓰게",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -6477,9 +6509,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/G7gR2mJRPosZmGahXFKFXA__original/img/mwD68OdF-9k-Jkd9dRY87Nt__qo=/0x0/filters:format(jpeg)/pic7924444.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/G7gR2mJRPosZmGahXFKFXA__small/img/4qe4Eo9pvyKtw4W0E-iv7TV6aa8=/fit-in/200x150/filters:strip_icc()/pic7924444.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -22879,13 +22911,13 @@
     "title": {
       "display": "김밥요리사",
       "owned": "김밥요리사",
-      "bgg": ""
+      "bgg": "Gimbap"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.8,
+      "id": "377941",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 6.80298,
       "weight": 1,
       "minPlayers": 2,
       "maxPlayers": 4,
@@ -22898,17 +22930,28 @@
         4
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 30,
+      "minPlayTime": 15,
+      "maxPlayTime": 30,
+      "categories": [
+        "Action / Dexterity",
+        "Dice",
+        "Puzzle",
+        "Real-time"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "순발력"
+        "Dice Rolling",
+        "Pattern Building",
+        "Pattern Recognition",
+        "Real-Time"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Roberto Fraga",
+        "Yohan Goh"
+      ],
+      "description": "Can you play a game and make food at the same time? You must if you are playing Gimbap.\n\nTo set up, each player takes one of each of the components: gim (dried seaweed); a sheet each of bap (rice), cheese, and perilla leaves; and a (wooden) strip of ham, spinach, and danmuji (yellow pickled radish).\n\nEach round, turn up point tokens equal to the number of players minus one. A player rolls 2-4 customer dice. Each die has multiple faces that show how the customer wants their ingredients in the gimbap: the cheese must (or must not) touch the gim, the ham must not touch the spinach and danmuji, the rice must touch the danmuji, etc. The more dice you roll, the harder the challenge.\n\nEveryone races to make their gimbap at the same time, which must be finished by rolling the gim and using the velcro to hold your gimbap together. Grab the highest point token still available.\n\nOnce everyone has finished, players check their gimbap to see whether they met the customer's requests, starting with whoever has the highest token. If a player succeeds, they turn the token face down and keep it; otherwise, they pass it to whoever finished first after them. (If a player has two tokens, they keep the higher-valued token and pass the lower &mdash; or they pass the higher one and discard the other.)\n\nAfter all the tokens have been claimed, whoever has the most points wins.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -22919,24 +22962,47 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
+        "chaotic",
+        "tense",
+        "funny",
         "cozy"
       ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group"
+      "playTags": [
+        "puzzle",
+        "party",
+        "dexterity"
       ],
-      "interactionTags": [],
+      "situationTags": [
+        "quick_play",
+        "group",
+        "beginner",
+        "first_game"
+      ],
+      "interactionTags": [
+        "silent_focus",
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "tense",
+        "funny",
         "cozy",
-        "first_game",
+        "puzzle",
+        "party",
+        "dexterity",
         "quick_play",
-        "group"
+        "group",
+        "beginner",
+        "first_game",
+        "silent_focus",
+        "simultaneous"
       ],
       "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -22956,9 +23022,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/pCWjcE7W9OdTf6jPVsRyLg__original/img/2yNIifw57iX_QRvszjUFP0VhwxI=/0x0/filters:format(jpeg)/pic8394996.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/pCWjcE7W9OdTf6jPVsRyLg__small/img/kV2ChGW0KEdjaUUbgg7LEVf0KcY=/fit-in/200x150/filters:strip_icc()/pic8394996.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -22972,15 +23038,15 @@
     "title": {
       "display": "꼬치의달인",
       "owned": "꼬치의달인",
-      "bgg": ""
+      "bgg": "Kushi Express"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.4,
-      "weight": 1,
-      "minPlayers": 3,
+      "id": "264797",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 6.40492,
+      "weight": 1.2,
+      "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
         4
@@ -22989,18 +23055,26 @@
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 20,
+      "minPlayTime": 20,
+      "maxPlayTime": 20,
+      "categories": [
+        "Action / Dexterity",
+        "Real-time"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "순발력"
+        "Pattern Building"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Yohan Goh"
+      ],
+      "description": "Kushi Express is a game of making BBQ skew (called \"Kushi\" in Japanese) as quickly as you can.\n\nEvery player has four plastic blocks of ingredient (Tomato, Pepper, Shrimp and Beef steak) and two fabrics (Cheese and Bacon).\n\nThere is a deck of \"order\" cards in the middle of the table.\n\nAs soon as a player reveals the top card of the deck, every player should race to prepare the corresponding Kushi. The first player who serves the right Kushi on the dish takes the cards.\n\nWhen a player successfully collects ten points, the game ends with the King of Kushi.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -23011,24 +23085,38 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
+        "chaotic",
+        "tense",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "party",
+        "dexterity"
+      ],
       "situationTags": [
-        "first_game",
         "quick_play",
+        "first_game",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "tense",
         "cozy",
-        "first_game",
+        "party",
+        "dexterity",
         "quick_play",
-        "group"
+        "first_game",
+        "group",
+        "simultaneous"
       ],
       "displayTags": [
+        "즐기고",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -23048,9 +23136,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/2UT-LailJv7so2C1bYGHdQ__original/img/ErtkAq5oUH8SSdWJraDrUFIxep0=/0x0/filters:format(png)/pic4627057.png",
+      "thumbnail": "https://cf.geekdo-images.com/2UT-LailJv7so2C1bYGHdQ__small/img/0a0iatwAfxs5MQsUGptQErPbNMY=/fit-in/200x150/filters:strip_icc()/pic4627057.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -23501,13 +23589,13 @@
     "title": {
       "display": "냥냥집사",
       "owned": "냥냥집사",
-      "bgg": ""
+      "bgg": "Meow Meow Dice"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.2,
+      "id": "440029",
+      "matchStatus": "forced",
+      "year": "2025",
+      "rating": 6.1404,
       "weight": 1,
       "minPlayers": 2,
       "maxPlayers": 4,
@@ -23519,18 +23607,31 @@
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 25,
+      "minPlayTime": 20,
+      "maxPlayTime": 25,
+      "categories": [
+        "Animals",
+        "Dice",
+        "Party Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "요트다이스"
+        "Dice Rolling",
+        "Push Your Luck",
+        "Re-rolling and Locking",
+        "Set Collection"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Sunhyuk Chae",
+        "DODAM"
+      ],
+      "description": "Be a lovely cat and get lots of treats from your butler!\nThe richest cat wins!\n\nYacht Dice with adorable cats.\nRoll the cat dice, make combinations, and become the wealthiest cat to win!\n\nContents: 4 cat dice, 1 board, 2 punchboards, 60 cards",
       "descriptionKo": ""
     },
     "cottage": {
@@ -23541,24 +23642,49 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
+        "tense",
+        "funny",
+        "chaotic",
         "cozy"
       ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group"
+      "playTags": [
+        "party",
+        "card_play",
+        "strategy"
       ],
-      "interactionTags": [],
+      "situationTags": [
+        "beginner",
+        "quick_play",
+        "group",
+        "large_group",
+        "first_game"
+      ],
+      "interactionTags": [
+        "competitive",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "funny",
+        "chaotic",
         "cozy",
-        "first_game",
+        "party",
+        "card_play",
+        "strategy",
+        "beginner",
         "quick_play",
-        "group"
+        "group",
+        "large_group",
+        "first_game",
+        "competitive",
+        "table_talk"
       ],
       "displayTags": [
+        "즐기고",
+        "머리쓰게",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -23578,9 +23704,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/8etymvRTSRTqtHUECsXv9w__original/img/yryrr7LokZvJpVtXQ68HqNcAoPo=/0x0/filters:format(png)/pic8732580.png",
+      "thumbnail": "https://cf.geekdo-images.com/8etymvRTSRTqtHUECsXv9w__small/img/wUBud6r8t_FnwV-NQcl_W-F2EY4=/fit-in/200x150/filters:strip_icc()/pic8732580.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -31112,16 +31238,16 @@
     "title": {
       "display": "레인보우세븐",
       "owned": "레인보우세븐",
-      "bgg": ""
+      "bgg": "Rainbow 7"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.2,
+      "id": "351149",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 6.20283,
       "weight": 1,
       "minPlayers": 2,
-      "maxPlayers": 4,
+      "maxPlayers": 5,
       "bestPlayers": [
         3
       ],
@@ -31130,18 +31256,28 @@
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        5
+      ],
+      "playingTime": 20,
+      "minPlayTime": 20,
+      "maxPlayTime": 20,
+      "categories": [
+        "Bluffing",
+        "Card Game",
+        "Number"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "작은"
+        "Hand Management"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Antoine Davrou",
+        "Alexandre Emerit"
+      ],
+      "description": "In Rainbow 7, you discard one or more cards from your hand each turn, but they keep coming back...\n\nThe deck in this game consists of 49 cards in seven colors from 1-7, as well as four rainbow cards valued at X. Each player starts with a hand of six random cards from 1-6 and one random 7. On a turn, you discard a single card or a group of three or more cards that are either the same number or color; if you discard a 7 as part of a group, you carry out the special effect of the card, such as discarding a rain token or forcing everyone else to draw a card. Place played cards on the three discard piles as you wish, then draw one card from the top of a discard pile or the deck and add it to your hand.\n\nAlternatively, if the sum of cards in your hand is at most 7, you can call \"Rainbow [sum]\", e.g. \"Rainbow 3\". If no one else has a lower score than you, you win the round, and everyone else gains two rain tokens; if someone is lower, you gains three rain tokens, and no one else gains tokens.\n\nFinally, if on a turn you play out the remaining cards in your hand, the round ends, and everyone else gains one rain token.\n\nIf a player has at least seven rain tokens, the game ends, and whoever has the fewest rain tokens wins. If not, start another round...",
       "descriptionKo": ""
     },
     "cottage": {
@@ -31154,23 +31290,35 @@
       "moodTags": [
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "first_game",
         "quick_play",
-        "group"
+        "group",
+        "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
+        "card_play",
+        "strategy",
         "first_game",
         "quick_play",
-        "group"
+        "group",
+        "large_group",
+        "competitive"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "편안하게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -31189,9 +31337,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/DzdXm27DRyrTx-CYsYvYgQ__original/img/9ptLg8eqLOQdRTd0TXVR6FLt6ao=/0x0/filters:format(jpeg)/pic7935143.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/DzdXm27DRyrTx-CYsYvYgQ__small/img/hzutdgZJGgt5-SI81HnhK7wFiBM=/fit-in/200x150/filters:strip_icc()/pic7935143.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -36137,7 +36285,7 @@
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 4.5,
       "weight": 1.58,
@@ -72183,44 +72331,33 @@
     "title": {
       "display": "탁상탐정단1",
       "owned": "탁상탐정단1",
-      "bgg": "MicroMacro: Crime City"
+      "bgg": ""
     },
     "bgg": {
-      "id": "318977",
-      "matchStatus": "forced",
-      "year": "2020",
-      "rating": 7.4465,
-      "weight": 1.1007,
-      "minPlayers": 1,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 2,
       "maxPlayers": 4,
-      "bestPlayers": [
-        2
-      ],
+      "bestPlayers": [],
       "recommendedPlayers": [
         2,
         3,
         4
       ],
-      "notRecommendedPlayers": [
-        4,
-        4
-      ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72228,10 +72365,8 @@
         "시나리오 게임",
         "솔로 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "Crimes have taken place all over the city, and you want to figure out exactly what's happened, so you'll need to look closely at the giant city map (75 x 110 cm / 29.5 x 43 inches) to find all the hidden information and trace the trails of those who had it in for their foes.\n\nMicroMacro: Crime City includes 16 cases for you to solve. Each case includes a number of cards that ask you to find something on the map or uncover where someone has gone or otherwise reveal information relevant to a case. The city map serves as a map in time as well as space, so you'll typically find people in multiple locations throughout the streets and buildings, and you need to piece together what happened, whether by going through the case card by card or by reading only the starting card in the case and trying to figure out everything that happened for yourself. Will you be able to answer all questions about the case without fail?\n\nThe second edition of MicroMacro: Crime City now marks each case with symbols so that parents can decide which cases the youngest investigators are cleared to research.",
+      "designers": [],
+      "description": "",
       "descriptionKo": ""
     },
     "cottage": {
@@ -72239,53 +72374,39 @@
       "shelfGroupId": "murder_mystery",
       "shelfLabel": "머더미스터리",
       "shelfFullLabel": "머더미스터리",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.1007,
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [
         "tense",
-        "immersive",
-        "cozy"
+        "immersive"
       ],
       "playTags": [
         "deduction",
         "murder_mystery"
       ],
       "situationTags": [
-        "beginner",
-        "group",
-        "first_game",
-        "couple"
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
         "immersive",
-        "cozy",
         "deduction",
         "murder_mystery",
-        "beginner",
         "group",
-        "first_game",
-        "couple",
-        "cooperative",
-        "low_conflict",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
         "머더미스터리",
         "빠져들게",
-        "편안하게"
+        "대화하며"
       ],
       "summaryKo": "",
       "comment": {
@@ -72304,9 +72425,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/bLL3P-G25nIUkFjHxfJfnw__original/img/HBEhgjfb0QcF9pFrdJ8VYhBapoU=/0x0/filters:format(jpeg)/pic7632081.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/bLL3P-G25nIUkFjHxfJfnw__small/img/XY_Z5rRJe3IPLRfOvWp70OM2B68=/fit-in/200x150/filters:strip_icc()/pic7632081.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -72320,46 +72441,33 @@
     "title": {
       "display": "탁상탐정단2",
       "owned": "탁상탐정단2",
-      "bgg": "MicroMacro: Crime City – Full House"
+      "bgg": ""
     },
     "bgg": {
-      "id": "338834",
-      "matchStatus": "forced",
-      "year": "2021",
-      "rating": 7.63256,
-      "weight": 1.1616,
-      "minPlayers": 1,
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 2,
       "maxPlayers": 4,
-      "bestPlayers": [
-        2
-      ],
+      "bestPlayers": [],
       "recommendedPlayers": [
         2,
         3,
         4
       ],
-      "notRecommendedPlayers": [
-        4,
-        4
-      ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game",
-        "Storytelling",
-        "Team-Based Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72369,10 +72477,8 @@
         "스토리텔링",
         "팀 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "Crimes have taken place all over the city, and you want to figure out exactly what's happened, so you'll need to look closely at the giant city map (75 x 110 cm) to find all the hidden information and trace the trails of those who had it in for their foes.\n\nMicroMacro: Crime City &ndash; Full House includes 16 cases for you to solve. Each case includes a number of cards that ask you to find something on the map or uncover where someone has gone or otherwise reveal information relevant to a case. The city map serves as a map in time as well as space, so you'll typically find people in multiple locations throughout the streets and buildings, and you need to piece together what happened, whether by going through the case card by card or by reading only the starting card in the case and trying to figure out everything that happened for yourself. Will you be able to answer all questions about the case without fail?\n\nUnlike the original MicroMacro: Crime City, Full House marks each case with symbols so that parents can decide which cases the youngest investigators are cleared to research.",
+      "designers": [],
+      "description": "",
       "descriptionKo": ""
     },
     "cottage": {
@@ -72380,59 +72486,39 @@
       "shelfGroupId": "murder_mystery",
       "shelfLabel": "머더미스터리",
       "shelfFullLabel": "머더미스터리",
-      "difficultyId": "beginner",
-      "difficultyWeight": 1.1616,
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [
         "tense",
-        "cozy",
         "immersive"
       ],
       "playTags": [
         "deduction",
-        "storytelling",
-        "party",
         "murder_mystery"
       ],
       "situationTags": [
-        "beginner",
-        "group",
-        "first_game",
-        "couple"
+        "group"
       ],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "cozy",
         "immersive",
         "deduction",
-        "storytelling",
-        "party",
         "murder_mystery",
-        "beginner",
         "group",
-        "first_game",
-        "couple",
-        "cooperative",
-        "low_conflict",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
+        "머더미스터리",
         "빠져들게",
-        "즐기고",
-        "머더미스터리"
+        "대화하며"
       ],
       "summaryKo": "거대한 도시 지도에서 숨겨진 단서를 찾아 16가지 범죄 사건을 해결하는 게임.",
       "comment": {
@@ -72451,9 +72537,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/bNuZIssobDbFYaLbgMofgw__original/img/_UyVrUsVU_AZNO93QmcosKGs0TA=/0x0/filters:format(jpeg)/pic6242068.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/bNuZIssobDbFYaLbgMofgw__small/img/VEB-DHKUWobYsUOFwuywHnsbF2k=/fit-in/200x150/filters:strip_icc()/pic6242068.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -72467,46 +72553,30 @@
     "title": {
       "display": "탁상탐정단3",
       "owned": "탁상탐정단3",
-      "bgg": "MicroMacro: Crime City – All In"
+      "bgg": ""
     },
     "bgg": {
-      "id": "364766",
-      "matchStatus": "forced",
-      "year": "2022",
-      "rating": 7.79634,
-      "weight": 1.075,
-      "minPlayers": 1,
-      "maxPlayers": 4,
-      "bestPlayers": [
-        1,
-        2
-      ],
-      "recommendedPlayers": [
-        3
-      ],
-      "notRecommendedPlayers": [
-        4,
-        4
-      ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Humor",
-        "Murder / Mystery"
-      ],
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "유머",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game",
-        "Team-Based Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72515,10 +72585,8 @@
         "솔로 게임",
         "팀 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "With MicroMacro: Crime City &ndash; All In, the next district of the crime-ridden black-and-white metropolis Crime City now opens up for the players. On a new, huge city map, which seamlessly follows the previous plans, 16 tricky crime cases are again waiting to be solved by one to four amateur detectives. These are brand new stories, more sophisticated and criminal than ever before! The aim is to determine motives, find evidence and convict the perpetrators. An attentive eye is just as much in demand as creative powers of deduction to unravel everything on the 75 x 110 cm game board. As a little help, a magnifying glass is included in the game and the individual cases are again marked with symbols, so that parents can decide which cases even the youngest investigators may investigate and uncover. MicroMacro: Crime City 3 - All In can be played completely independently, no previous knowledge from the other two parts is required.\n\n&mdash;description from the publisher",
+      "designers": [],
+      "description": "",
       "descriptionKo": ""
     },
     "cottage": {
@@ -72526,59 +72594,36 @@
       "shelfGroupId": "murder_mystery",
       "shelfLabel": "머더미스터리",
       "shelfFullLabel": "머더미스터리",
-      "difficultyId": "kids",
-      "difficultyWeight": 1.075,
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [
         "tense",
-        "funny",
-        "immersive",
-        "cozy"
+        "immersive"
       ],
       "playTags": [
         "deduction",
         "murder_mystery"
       ],
-      "situationTags": [
-        "beginner",
-        "group",
-        "first_game",
-        "quick_play",
-        "couple"
-      ],
+      "situationTags": [],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
-        "funny",
         "immersive",
-        "cozy",
         "deduction",
         "murder_mystery",
-        "beginner",
-        "group",
-        "first_game",
-        "quick_play",
-        "couple",
-        "cooperative",
-        "low_conflict",
         "social",
-        "team",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
         "머더미스터리",
         "빠져들게",
-        "즐기고"
+        "대화하며"
       ],
       "summaryKo": "거대한 도시 지도에서 숨겨진 범죄의 증거를 찾아 사건을 해결하는 관찰력 추리 게임",
       "comment": {
@@ -72597,9 +72642,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/sAYWQ4BFiLTF137eYGwRhQ__original/img/Qw1oXW3GPsF-JRTpqH1r7vGRtkM=/0x0/filters:format(png)/pic8987379.png",
-      "thumbnail": "https://cf.geekdo-images.com/sAYWQ4BFiLTF137eYGwRhQ__small/img/FvDfTwekIV3eAf6AOxObUKpd9i0=/fit-in/200x150/filters:strip_icc()/pic8987379.png",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -72613,43 +72658,29 @@
     "title": {
       "display": "탁상탐정단4",
       "owned": "탁상탐정단4",
-      "bgg": "MicroMacro: Crime City – Showdown"
+      "bgg": ""
     },
     "bgg": {
-      "id": "398162",
-      "matchStatus": "forced",
-      "year": "2023",
-      "rating": 7.87124,
-      "weight": 1,
-      "minPlayers": 1,
-      "maxPlayers": 4,
-      "bestPlayers": [
-        2
-      ],
-      "recommendedPlayers": [
-        1,
-        3
-      ],
-      "notRecommendedPlayers": [
-        4,
-        4
-      ],
-      "playingTime": 45,
-      "minPlayTime": 15,
-      "maxPlayTime": 45,
-      "categories": [
-        "Deduction",
-        "Murder / Mystery"
-      ],
+      "id": "",
+      "matchStatus": "no-bgg",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "추리",
         "머더미스터리"
       ],
       "mechanics": [
-        "Cooperative Game",
-        "Deduction",
-        "Scenario / Mission / Campaign Game",
-        "Solo / Solitaire Game"
+        "머더미스터리"
       ],
       "mechanicsKo": [
         "협동게임",
@@ -72657,10 +72688,8 @@
         "시나리오 게임",
         "솔로 게임"
       ],
-      "designers": [
-        "Johannes Sich"
-      ],
-      "description": "Welcome to Crime City - a city where crime lurks around every corner. Fatal secrets, sneaky attacks and cold-blooded murders are the order of the day here.\n\nMicroMacro is a cooperative detective game. Together you will solve tricky criminal cases, determine motives, find evidence and convict the perpetrators.\nAn attentive eye is just as important as creative combination skills!\n\nShowdown is the fourth and final part of the MicroMacro: Crime City series.\nA new city map with brand new criminal cases awaits you. It is a standalone game. The 16 cases contained here can be played without knowledge of the first parts.\n\n&mdash;description from the publisher (translated)",
+      "designers": [],
+      "description": "",
       "descriptionKo": ""
     },
     "cottage": {
@@ -72668,55 +72697,36 @@
       "shelfGroupId": "murder_mystery",
       "shelfLabel": "머더미스터리",
       "shelfFullLabel": "머더미스터리",
-      "difficultyId": "kids",
-      "difficultyWeight": 1,
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [
         "tense",
-        "immersive",
-        "cozy"
+        "immersive"
       ],
       "playTags": [
         "deduction",
         "murder_mystery"
       ],
-      "situationTags": [
-        "beginner",
-        "group",
-        "first_game",
-        "quick_play",
-        "couple"
-      ],
+      "situationTags": [],
       "interactionTags": [
-        "cooperative",
-        "low_conflict",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "tense",
         "immersive",
-        "cozy",
         "deduction",
         "murder_mystery",
-        "beginner",
-        "group",
-        "first_game",
-        "quick_play",
-        "couple",
-        "cooperative",
-        "low_conflict",
         "social",
-        "table_talk",
-        "easy_coop"
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
         "머더미스터리",
         "빠져들게",
-        "편안하게"
+        "대화하며"
       ],
       "summaryKo": "범죄 도시의 지도에서 단서를 찾아 범죄 사건을 해결하는 협력 추리 게임.",
       "comment": {
@@ -72735,9 +72745,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/9y3smbtFTGqNjmkMhKFq1w__original/img/kJb2wWjTrc02B-fAO1a-p_I3SC0=/0x0/filters:format(png)/pic8987382.png",
-      "thumbnail": "https://cf.geekdo-images.com/9y3smbtFTGqNjmkMhKFq1w__small/img/gSXOH65E-W4gNn6-yq0YbJk4qks=/fit-in/200x150/filters:strip_icc()/pic8987382.png",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
