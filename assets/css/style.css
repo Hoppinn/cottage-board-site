@@ -3243,7 +3243,7 @@ body.sheet-open{
 ========================= */
 .about-hero{
   background:linear-gradient(160deg,#2d4a33 0%,#4a7040 100%);
-  padding:clamp(48px,12vw,80px) var(--page-x) clamp(40px,10vw,64px);
+  padding:calc(var(--header-h) + clamp(24px,6vw,40px)) var(--page-x) clamp(40px,10vw,64px);
   text-align:center;
   color:#fff;
 }

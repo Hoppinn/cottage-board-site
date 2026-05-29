@@ -413,8 +413,10 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     if (!localStorage.getItem("kakao_user")) return;
-    if (sessionStorage.getItem("cottage_visited")) return;
-    sessionStorage.setItem("cottage_visited", "1");
+    const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    const visitedKey = "cottage_visited_" + kstDate;
+    if (localStorage.getItem(visitedKey)) return;
+    localStorage.setItem(visitedKey, "1");
     const page =
       location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
       "index";
