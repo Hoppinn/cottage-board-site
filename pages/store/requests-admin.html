@@ -143,6 +143,18 @@
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at)).join('');
 
+      // 회원 목록
+      const profiles = await window.CottageDB.getAllProfiles();
+      const memberHtml = profiles.length ? profiles.map(p => {
+        const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
+        return `<div class="admin-req-item">
+          <span class="admin-req-name">${escH(p.nickname || '(닉네임없음)')}</span>
+          <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>
+          <span class="admin-req-meta">최근 ${fmtDate(p.last_seen_at)}</span>
+          <span class="admin-req-meta">방문 ${p.visit_count || 1}회</span>
+        </div>`;
+      }).join('') : '<div class="admin-empty">회원 없음</div>';
+
       el.innerHTML = `
         <div class="admin-section">
           <div class="admin-section-title">🎲 게임 구매 요청</div>
@@ -155,9 +167,11 @@
         <div class="admin-section">
           <div class="admin-section-title">💬 개선 건의</div>
           <div class="admin-req-list">${suggestHtml||'<div class="admin-empty">없음</div>'}</div>
+        </div>
+        <div class="admin-section">
+          <div class="admin-section-title">👥 회원 목록 (${profiles.length}명)</div>
+          <div class="admin-req-list">${memberHtml}</div>
         </div>`;
-
-      el.querySelectorAll('.admin-req-del').forEach(btn => {
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
           if (!confirm('삭제할까요?')) return;

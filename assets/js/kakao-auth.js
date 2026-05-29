@@ -12,7 +12,11 @@ function initKakaoAuth() {
   const saved = localStorage.getItem(KAKAO_USER_KEY);
   if (saved) {
     try {
-      updateLoginUI(JSON.parse(saved));
+      const user = JSON.parse(saved);
+      updateLoginUI(user);
+      if (window.CottageDB?.upsertProfile && user.id) {
+        window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님').catch(() => {});
+      }
     } catch (e) {
       localStorage.removeItem(KAKAO_USER_KEY);
     }
@@ -38,6 +42,16 @@ function initKakaoAuth() {
   const logoutBtn = document.getElementById('kakaoLogoutBtn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', kakaoLogout);
+  }
+
+  const userActions = document.getElementById('kakaoUserActions');
+  if (userActions && !document.getElementById('kakaoProfileBtn')) {
+    const profileBtn = document.createElement('button');
+    profileBtn.id = 'kakaoProfileBtn';
+    profileBtn.type = 'button';
+    profileBtn.textContent = '내 활동';
+    userActions.insertBefore(profileBtn, userActions.firstChild);
+    profileBtn.addEventListener('click', openProfilePanel);
   }
 }
 
@@ -200,6 +214,44 @@ if (typeof window !== 'undefined') {
     const user = getKakaoUser();
     return !!user && String(user.id) === String(OWNER_KAKAO_ID);
   };
+}
+
+async function openProfilePanel() {
+  const user = getKakaoUser();
+  if (!user) return;
+
+  const existing = document.getElementById('profilePanel');
+  if (existing) { existing.remove(); return; }
+
+  const panel = document.createElement('div');
+  panel.id = 'profilePanel';
+  panel.className = 'profile-panel';
+  panel.innerHTML = `<div class="profile-panel-box">
+    <div class="profile-panel-header">
+      <span class="profile-panel-title">내 활동</span>
+      <button class="profile-panel-close" type="button">✕</button>
+    </div>
+    <div class="profile-panel-body">
+      <p class="profile-panel-nick">${String(user.nickname || '손님').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+      <p class="profile-panel-loading">불러오는 중...</p>
+    </div>
+  </div>`;
+  document.body.appendChild(panel);
+  panel.querySelector('.profile-panel-close').addEventListener('click', () => panel.remove());
+  panel.addEventListener('click', e => { if (e.target === panel) panel.remove(); });
+
+  if (!window.CottageDB?.getMyStats) return;
+  const stats = await window.CottageDB.getMyStats(String(user.id));
+  const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
+  panel.querySelector('.profile-panel-body').innerHTML = `
+    <p class="profile-panel-nick">${String(user.nickname || '손님').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</p>
+    <ul class="profile-panel-stats">
+      <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
+      <li><span>마지막 방문</span><strong>${fmt(stats.profile?.last_seen_at)}</strong></li>
+      <li><span>플레이 기록</span><strong>${stats.plays}건</strong></li>
+      <li><span>코멘트</span><strong>${stats.comments}건</strong></li>
+      <li><span>건의하기</span><strong>${stats.suggestions}건</strong></li>
+    </ul>`;
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

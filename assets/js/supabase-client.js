@@ -420,6 +420,42 @@
     trackPageView(page);
   });
 
+  async function upsertProfile(userId, nickname) {
+    try {
+      const { data } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
+      await db.from('profiles').upsert({
+        user_id: userId,
+        nickname,
+        last_seen_at: new Date().toISOString(),
+        visit_count: (data?.visit_count || 0) + 1,
+      }, { onConflict: 'user_id' });
+    } catch (_) {}
+  }
+
+  async function getAllProfiles() {
+    try {
+      const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function getMyStats(userId) {
+    try {
+      const [playRes, commentRes, suggestRes, profile] = await Promise.all([
+        db.from('game_play_records').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+        db.from('game_comments').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+        db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+        db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
+      ]);
+      return {
+        plays: playRes.count || 0,
+        comments: commentRes.count || 0,
+        suggestions: suggestRes.count || 0,
+        profile: profile.data || null,
+      };
+    } catch (_) { return { plays: 0, comments: 0, suggestions: 0, profile: null }; }
+  }
+
   window.CottageDB = {
     trackView,
     trackPageView,
@@ -447,5 +483,8 @@
     getGameDislikeCount,
     toggleGameDislike,
     hasUserDisliked,
+    upsertProfile,
+    getAllProfiles,
+    getMyStats,
   };
 })();
