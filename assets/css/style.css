@@ -620,10 +620,17 @@ body.owned-page .header-menu.active{
 .secondary-btn{background:#fffaf0;color:#78983d;}
 .hero-club-link{display:block;margin-top:14px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;}
 .hero-club-link:hover{color:var(--green);}
-.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:10px;}
+.breadcrumb{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px;display:block;letter-spacing:.01em;}
 .breadcrumb a{color:var(--green);text-decoration:none;}
 .breadcrumb a:hover{text-decoration:underline;}
-.breadcrumb span{margin:0 4px;}
+.breadcrumb span{margin:0 5px;opacity:.6;}
+/* breadcrumb inside dark about-hero */
+.about-hero .breadcrumb{color:rgba(255,255,255,.65);font-size:12px;margin-bottom:14px;}
+.about-hero .breadcrumb a{color:rgba(255,255,255,.85);}
+.about-hero .breadcrumb span{color:#fff;}
+/* inner-page breadcrumb: constrain same as h1 */
+.inner-page .breadcrumb{max-width:720px;margin-left:auto;margin-right:auto;}
+.owned-games-page .breadcrumb{padding:0 0 4px;}
 
 /* =========================
    # 4. RECOMMEND SECTION
