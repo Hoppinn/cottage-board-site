@@ -174,16 +174,14 @@ const menuToggle =
 const mobileMenu =
   document.querySelector('#mobileMenu');
 
+// 추천 결과 화면이 열려있는지 추적하는 플래그
+let _recommendActive = false;
+
 function resetMenuGroups(){
-  // 추천 섹션 표시 여부를 DOM 상태로 직접 판단해 is-current 동기화
+  // 추천 링크 active 상태 플래그 기반으로 동기화
   const recommendLink = document.querySelector('#openRecommendMenu');
-  const recommendSec  = document.getElementById('recommend');
-  if(recommendLink && recommendSec){
-    if(recommendSec.classList.contains('is-hidden')){
-      recommendLink.classList.remove('is-current');
-    } else {
-      recommendLink.classList.add('is-current');
-    }
+  if(recommendLink){
+    recommendLink.classList.toggle('is-current', _recommendActive);
   }
 
   document.querySelectorAll('.menu-group').forEach(g=>g.classList.remove('is-open'));
@@ -2499,6 +2497,7 @@ function setRecommendMenuActive(active){
 }
 
 function showRecommendResults(){
+  _recommendActive = true;
   updateRecommendFilterText();
   renderGameCards();
   closeRecommendModal();
@@ -2527,6 +2526,7 @@ function showRecommendResults(){
 ========================= */
 
 function backToHero(){
+  _recommendActive = false;
   setRecommendMenuActive(false);
 
   if(recommendSection){

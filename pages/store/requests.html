@@ -304,8 +304,13 @@
         const btn = document.getElementById('suggestBtn');
         btn.disabled = true;
         const u = getCurrentUser();
-        await getDb().from('suggestions').insert({ content, user_id: u?.id || null });
-        input.value = ''; btn.disabled = false;
+        const { error } = await getDb().from('suggestions').insert({ content, user_id: u?.id || null });
+        btn.disabled = false;
+        if (error) {
+          alert('저장 중 오류가 발생했어요.\n' + error.message);
+          return;
+        }
+        input.value = '';
         const msg = document.getElementById('suggestSuccessMsg');
         msg.style.display = 'block';
         setTimeout(() => { msg.style.display = 'none'; }, 4000);

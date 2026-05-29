@@ -264,9 +264,10 @@ textarea{
   border:0;
   border-radius:12px;
   background:transparent;
-  color:var(--green);
-  font-size:15px;
-  font-weight:900;
+  color:#8aaa88;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.03em;
   text-align:left;
   cursor:pointer;
   display:flex;
@@ -296,6 +297,8 @@ textarea{
 .menu-group-body a{
   padding:7px 12px !important;
   font-size:13px !important;
+  color:var(--green) !important;
+  font-weight:900 !important;
 }
 
 /* 현재 페이지 메뉴 active */
