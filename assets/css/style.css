@@ -620,6 +620,10 @@ body.owned-page .header-menu.active{
 .secondary-btn{background:#fffaf0;color:#78983d;}
 .hero-club-link{display:block;margin-top:14px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;}
 .hero-club-link:hover{color:var(--green);}
+.breadcrumb{font-size:13px;color:var(--muted);margin-bottom:10px;}
+.breadcrumb a{color:var(--green);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb span{margin:0 4px;}
 
 /* =========================
    # 4. RECOMMEND SECTION
