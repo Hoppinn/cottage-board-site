@@ -495,5 +495,34 @@
     upsertProfile,
     getAllProfiles,
     getMyStats,
+    getGameReviews,
+    insertGameReview,
+    deleteGameReview,
   };
+
+  async function getGameReviews(gameId) {
+    try {
+      const { data } = await db.from('game_reviews')
+        .select('id, user_id, nickname, content, created_at')
+        .eq('game_id', gameId)
+        .order('created_at', { ascending: false });
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function insertGameReview(gameId, content, nickname, userId) {
+    try {
+      const { error } = await db.from('game_reviews').insert({
+        game_id: gameId, content, nickname: nickname || null, user_id: userId || null,
+      });
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function deleteGameReview(id) {
+    try {
+      const { error } = await db.from('game_reviews').delete().eq('id', id);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
 })();

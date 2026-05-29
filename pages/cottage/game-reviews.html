@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게임 후기 | 코티지보드</title>
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+  <style>
+    .review-game-title { font-size: 18px; font-weight: 900; color: var(--green); margin: 0 0 4px; }
+    .review-back { font-size: 13px; color: var(--muted); text-decoration: none; display: inline-block; margin-bottom: 12px; }
+    .review-back:hover { color: var(--green); }
+    .review-write-box { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 20px; }
+    .review-write-box textarea { width: 100%; box-sizing: border-box; border: 1px solid var(--border, #e8e4dc); border-radius: 8px; padding: 10px; font-size: 14px; font-family: inherit; resize: vertical; min-height: 80px; }
+    .review-write-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .review-submit-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .review-submit-btn:disabled { opacity: 0.5; }
+    .review-login-notice { font-size: 13px; color: var(--muted); text-align: center; padding: 12px 0; }
+    .review-list { display: flex; flex-direction: column; gap: 12px; }
+    .review-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 12px; padding: 14px; }
+    .review-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .review-item-game { font-size: 12px; font-weight: 700; color: var(--green); }
+    .review-item-nick { font-size: 13px; font-weight: 700; color: var(--text); }
+    .review-item-date { font-size: 11px; color: var(--muted); }
+    .review-item-content { font-size: 14px; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
+    .review-del-btn { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 6px; }
+    .review-del-btn:hover { color: #c0392b; }
+    .review-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 32px 0; }
+    .review-section-title { font-size: 14px; font-weight: 700; color: var(--muted); margin: 0 0 12px; }
+  </style>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+    <a class="header-center" href="../../index.html">오래 머무르고 싶은, 보드게임 공간</a>
+    <div class="header-actions">
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기">🔍</button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
+    </div>
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">게임 찾기 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../owned-games.html">전체 게임 보기</a>
+          <a href="../store/game-location.html">게임 위치</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">코티지보드 안내 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="./about.html">소개</a>
+          <a href="../store/price-rules.html">가격 &amp; 규칙</a>
+          <a href="./club.html">동호회</a>
+        </div>
+      </div>
+      <a href="../store/requests.html">요청하기</a>
+      <div class="menu-login-area">
+        <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
+          <img id="kakaoProfileImg" src="" alt="" style="display:none">
+          <span id="kakaoLoginText">카카오 로그인</span>
+        </button>
+        <div id="kakaoUserActions" class="menu-kakao-user-actions">
+          <button id="kakaoPhotoBtn" type="button">사진 변경</button>
+          <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>
+          <button id="kakaoLogoutBtn" type="button">로그 아웃</button>
+        </div>
+      </div>
+    </nav>
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="inner-page">
+      <div id="reviewPageHeader"></div>
+      <div class="inner-page-body" id="reviewRoot">
+        <p class="review-empty">불러오는 중...</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    const params = new URLSearchParams(location.search);
+    const gameId = params.get('game') || '';
+
+    function getGameName(id) {
+      if (window.gameData?.[id]) {
+        const g = window.gameData[id];
+        return g.display || g.titleKo || g.titleEn || id;
+      }
+      if (window.COTTAGE_GAMES) {
+        const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(id));
+        if (g) return g.display || g.titleKo || g.titleEn || id;
+      }
+      return id;
+    }
+
+    function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    const headerEl = document.getElementById('reviewPageHeader');
+    const root = document.getElementById('reviewRoot');
+
+    if (gameId) {
+      const name = getGameName(gameId);
+      document.title = `${name} 후기 | 코티지보드`;
+      headerEl.innerHTML = `
+        <nav class="breadcrumb"><a href="./game-reviews.html">전체 후기</a> <span>›</span> ${escH(name)}</nav>
+        <p class="review-game-title">${escH(name)}</p>`;
+    } else {
+      headerEl.innerHTML = `<h1 style="font-size:20px;font-weight:900;margin:0 0 16px">게임 후기</h1>`;
+    }
+
+    function renderWriteBox() {
+      const user = window.getKakaoUser?.();
+      if (!user) {
+        return `<div class="review-write-box review-login-notice">
+          <button class="btn primary-btn" style="font-size:13px;padding:8px 18px;min-width:0" onclick="window.kakaoLogin?.()">카카오 로그인 후 후기를 남겨보세요</button>
+        </div>`;
+      }
+      return `<div class="review-write-box">
+        <textarea id="reviewInput" placeholder="이 게임에 대한 후기를 남겨보세요." maxlength="500"></textarea>
+        <div class="review-write-actions">
+          <button class="review-submit-btn" id="reviewSubmitBtn" type="button">등록</button>
+        </div>
+      </div>`;
+    }
+
+    async function render() {
+      if (!window.CottageDB) { root.innerHTML = '<p class="review-empty">DB 연결 실패</p>'; return; }
+
+      const reviews = gameId
+        ? await window.CottageDB.getGameReviews(gameId)
+        : await (async () => {
+            // 전체 후기: 최근 100건
+            try {
+              const cfg = window.SUPABASE_CONFIG;
+              const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+              const { data } = await db.from('game_reviews')
+                .select('id, user_id, nickname, game_id, content, created_at')
+                .order('created_at', { ascending: false })
+                .limit(100);
+              return data || [];
+            } catch (_) { return []; }
+          })();
+
+      const writeBox = gameId ? renderWriteBox() : '';
+
+      const listHtml = reviews.length
+        ? reviews.map(r => {
+            const user = window.getKakaoUser?.();
+            const isMine = user && String(r.user_id) === String(user.id);
+            const gameName = gameId ? '' : `<span class="review-item-game">${escH(getGameName(r.game_id))}</span> · `;
+            return `<div class="review-item" data-id="${r.id}">
+              <div class="review-item-header">
+                <span class="review-item-nick">${gameName}${escH(r.nickname || '익명')}</span>
+                <span style="display:flex;align-items:center;gap:6px">
+                  <span class="review-item-date">${formatDate(r.created_at)}</span>
+                  ${isMine ? `<button class="review-del-btn" type="button">삭제</button>` : ''}
+                </span>
+              </div>
+              <p class="review-item-content">${escH(r.content)}</p>
+            </div>`;
+          }).join('')
+        : `<p class="review-empty">아직 후기가 없어요.<br>${gameId ? '첫 번째 후기를 남겨보세요!' : ''}</p>`;
+
+      root.innerHTML = `${writeBox}<div class="review-section-title">${gameId ? '후기' : '최근 후기'} ${reviews.length}건</div><div class="review-list">${listHtml}</div>`;
+
+      // 등록 버튼
+      const submitBtn = document.getElementById('reviewSubmitBtn');
+      if (submitBtn && gameId) {
+        submitBtn.addEventListener('click', async () => {
+          const input = document.getElementById('reviewInput');
+          const content = input?.value?.trim();
+          if (!content) return;
+          const user = window.getKakaoUser?.();
+          submitBtn.disabled = true;
+          const res = await window.CottageDB.insertGameReview(gameId, content, user?.nickname, user?.id);
+          if (!res?.error) { input.value = ''; await render(); }
+          else submitBtn.disabled = false;
+        });
+      }
+
+      // 삭제 버튼
+      root.querySelectorAll('.review-del-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.review-item');
+          if (!confirm('삭제할까요?')) return;
+          await window.CottageDB.deleteGameReview(item.dataset.id);
+          item.remove();
+        });
+      });
+    }
+
+    let tried = false;
+    function tryRender() { if (tried) return; tried = true; render(); }
+    window.addEventListener('kakao-auth-ready', tryRender);
+    window.addEventListener('cottage-auth-changed', render);
+    setTimeout(tryRender, 1200);
+  })();
+  </script>
+
+  <footer class="site-footer">
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="https://pf.kakao.com/_ExbKxan/chat" target="_blank" rel="noopener noreferrer">← 카카오 채널 문의</a> &nbsp;<a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

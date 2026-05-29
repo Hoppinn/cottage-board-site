@@ -1362,6 +1362,9 @@ function openGameSheet(gameKey){
     <a class="sheet-view-all-btn"
       href="${rootPath}pages/owned-games.html?search=${encodeURIComponent(detail.title)}"
     >전체 게임에서 보기 →</a>
+    <a class="sheet-view-all-btn sheet-review-btn"
+      href="${rootPath}pages/cottage/game-reviews.html?game=${encodeURIComponent(gameKey)}"
+    >📝 플레이 사진 &amp; 후기 →</a>
 
   `;
 
