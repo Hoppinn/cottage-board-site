@@ -2968,6 +2968,8 @@ body.sheet-open{
   font-weight:700;
   color:var(--muted);
 }
+.sheet-history-link{color:var(--green);text-decoration:none;font-weight:700;}
+.sheet-history-link:hover{text-decoration:underline;}
 .sheet-my-records-list.is-collapsed .sheet-my-record-item:not(:first-child){
   display:none;
 }
@@ -4703,7 +4705,10 @@ body.sheet-open{
 }
 .history-game-name{
   font-weight:700;
+  color:var(--text);
+  text-decoration:none;
 }
+.history-game-name:hover{color:var(--green);text-decoration:underline;}
 .history-record-tags{
   display:flex;
   flex-wrap:wrap;

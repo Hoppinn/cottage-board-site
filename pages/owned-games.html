@@ -243,6 +243,12 @@
   <script src="../assets/js/supabase-client.js"></script>
   <script src="../assets/js/script.js"></script>
   <script src="../assets/js/kakao-auth.js"></script>
+  <script>
+    (function () {
+      const openKey = new URLSearchParams(location.search).get('open');
+      if (openKey && window.gameData?.[openKey]) openGameSheet(openKey);
+    })();
+  </script>
 
   <footer class="site-footer">
     <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>

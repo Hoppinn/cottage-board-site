@@ -141,7 +141,7 @@
       let html = '';
       for (const [groupName, dates] of Object.entries(grouped)) {
         const totalSessions = Object.keys(dates).length;
-        html += `<div class="history-group">
+        html += `<div class="history-group" data-history-group="${escAttr(groupName)}">
           <div class="history-group-header">
             <span class="history-group-name">${escH(groupName)}</span>
             <span class="history-group-count">${totalSessions}회</span>
@@ -164,7 +164,7 @@
                   r.score_note ? `🏆 ${escH(r.score_note)}` : null,
                 ].filter(Boolean);
                 return `<div class="history-record-item">
-                  <span class="history-game-name">${escH(name)}</span>
+                  <a class="history-game-name" href="../owned-games.html?open=${encodeURIComponent(r.game_id)}">${escH(name)}</a>
                   ${tags.length ? `<div class="history-record-tags">${tags.map(t => `<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
                 </div>`;
               }).join('')}
@@ -176,6 +176,13 @@
       }
 
       root.innerHTML = html;
+
+      // ?group= 파라미터로 특정 그룹 섹션 스크롤
+      const groupParam = new URLSearchParams(location.search).get('group');
+      if (groupParam) {
+        const el = root.querySelector(`[data-history-group="${CSS.escape(groupParam)}"]`);
+        if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+      }
 
       root.querySelectorAll('.history-copy-btn').forEach(btn => {
         btn.addEventListener('click', () => {
