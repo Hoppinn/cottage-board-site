@@ -955,43 +955,9 @@
     "ownedName": "포인트샐러드 이브이에디션"
   },
   "프리세이지": {
-    "status": "unresolved",
-    "ownedName": "프리세이지",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "428787",
+    "ownedName": "프리세이지"
   },
   "플래시포인트 (영)": {
     "status": "forced",
@@ -1038,43 +1004,9 @@
     ]
   },
   "하이다이브": {
-    "status": "unresolved",
-    "ownedName": "하이다이브",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "170041",
+    "ownedName": "하이다이브"
   },
   "할리갈리": {
     "status": "auto-confirmed",
@@ -1085,43 +1017,9 @@
     "scoreGap": 22
   },
   "허리컵": {
-    "status": "unresolved",
-    "ownedName": "허리컵",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "38504",
+    "ownedName": "허리컵"
   },
   "화이트채플": {
     "status": "auto-confirmed",
@@ -1132,43 +1030,9 @@
     "scoreGap": 50
   },
   "황혼의비문": {
-    "status": "unresolved",
-    "ownedName": "황혼의비문",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "361545",
+    "ownedName": "황혼의비문"
   },
   "히트": {
     "status": "auto-confirmed",
@@ -1187,43 +1051,9 @@
     "scoreGap": 18
   },
   "1%의기적": {
-    "status": "unresolved",
-    "ownedName": "1%의기적",
-    "reviewCandidates": [
-      {
-        "bggId": "190608",
-        "bggName": "1%",
-        "year": "0",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "1%의기적",
-          "matchedCandidateName": "1%"
-        }
-      },
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "378040",
+    "ownedName": "1%의기적"
   },
   "12칩트릭": {
     "status": "auto-confirmed",
@@ -1247,82 +1077,14 @@
     "scoreGap": 50
   },
   "개구리벌주기": {
-    "status": "unresolved",
-    "ownedName": "개구리벌주기",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "6387",
+    "ownedName": "개구리벌주기"
   },
   "개구리사탕먹기": {
-    "status": "unresolved",
-    "ownedName": "개구리사탕먹기",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "5895",
+    "ownedName": "개구리사탕먹기"
   },
   "갠지스 다이스차머": {
     "status": "auto-confirmed",
@@ -1357,43 +1119,9 @@
     "scoreGap": 61
   },
   "고고시티": {
-    "status": "unresolved",
-    "ownedName": "고고시티",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "264638",
+    "ownedName": "고고시티"
   },
   "고스트": {
     "status": "forced",
@@ -1478,43 +1206,9 @@
     ]
   },
   "궁신": {
-    "status": "unresolved",
-    "ownedName": "궁신",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "402283",
+    "ownedName": "궁신"
   },
   "그라운드플로어": {
     "status": "forced",
@@ -1713,43 +1407,9 @@
     "scoreGap": 14
   },
   "나르": {
-    "status": "unresolved",
-    "ownedName": "나르",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "379629",
+    "ownedName": "나르"
   },
   "남티그리스의학자들": {
     "status": "forced",
@@ -1799,43 +1459,9 @@
     "scoreGap": 14
   },
   "다빈치코드플러스": {
-    "status": "unresolved",
-    "ownedName": "다빈치코드플러스",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "8946",
+    "ownedName": "다빈치코드플러스"
   },
   "다섯부족": {
     "status": "forced",
@@ -1856,82 +1482,14 @@
     "ownedName": "다윈의위대한발자취"
   },
   "다이너스티 혼인과통치": {
-    "status": "unresolved",
-    "ownedName": "다이너스티 혼인과통치",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "191972",
+    "ownedName": "다이너스티 혼인과통치"
   },
   "대만차연대기": {
-    "status": "unresolved",
-    "ownedName": "대만차연대기",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "287941",
+    "ownedName": "대만차연대기"
   },
   "더게임": {
     "status": "auto-confirmed",
@@ -2070,43 +1628,9 @@
     "ownedName": "동물왕와일드사파리"
   },
   "동인도회사": {
-    "status": "unresolved",
-    "ownedName": "동인도회사",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "354132",
+    "ownedName": "동인도회사"
   },
   "두근두근악어이빨": {
     "status": "forced",
@@ -2267,43 +1791,9 @@
     "scoreGap": 55
   },
   "라운드더월드(영)": {
-    "status": "unresolved",
-    "ownedName": "라운드더월드(영)",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "244951",
+    "ownedName": "라운드더월드(영)"
   },
   "라이": {
     "status": "unresolved",
@@ -2861,12 +2351,9 @@
     "scoreGap": 28
   },
   "메모리아일랜드": {
-    "status": "auto-confirmed",
-    "bggId": "17632",
-    "ownedName": "메모리아일랜드",
-    "bggName": "Island",
-    "score": 87,
-    "scoreGap": 60
+    "status": "forced",
+    "bggId": "371785",
+    "ownedName": "메모리아일랜드"
   },
   "메시나1347": {
     "status": "auto-confirmed",
@@ -3052,43 +2539,9 @@
     "ownedName": "번레이트"
   },
   "범고래고래": {
-    "status": "unresolved",
-    "ownedName": "범고래고래",
-    "reviewCandidates": [
-      {
-        "bggId": "192830",
-        "bggName": "ORC",
-        "year": "2017",
-        "score": 27,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Orca Whale",
-          "matchedCandidateName": "ORC"
-        }
-      },
-      {
-        "bggId": "281559",
-        "bggName": "ORC",
-        "year": "2019",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Orca Whale",
-          "matchedCandidateName": "ORC"
-        }
-      },
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "388413",
+    "ownedName": "범고래고래"
   },
   "베일오브이터니티": {
     "status": "auto-confirmed",
@@ -3357,12 +2810,9 @@
     "scoreGap": 16
   },
   "생츄어리 아크노바게임": {
-    "status": "auto-confirmed",
-    "bggId": "299733",
-    "ownedName": "생츄어리 아크노바게임",
-    "bggName": "Sanctuary: The Keepers Era",
-    "score": 105,
-    "scoreGap": 8
+    "status": "forced",
+    "bggId": "441696",
+    "ownedName": "생츄어리 아크노바게임"
   },
   "서머너워즈": {
     "status": "forced",
@@ -3853,43 +3303,9 @@
     "scoreGap": 70
   },
   "아야르": {
-    "status": "unresolved",
-    "ownedName": "아야르",
-    "reviewCandidates": [
-      {
-        "bggId": "429438",
-        "bggName": "Ayar: Children of the Sun",
-        "year": "2025",
-        "score": 54,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "Ayar",
-          "matchedCandidateName": "Ayar: Children of the Sun"
-        }
-      },
-      {
-        "bggId": "182194",
-        "bggName": "AYA",
-        "year": "2015",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Ayar",
-          "matchedCandidateName": "AYA"
-        }
-      },
-      {
-        "bggId": "10813",
-        "bggName": "Aya",
-        "year": "1992",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Ayar",
-          "matchedCandidateName": "Aya"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "429438",
+    "ownedName": "아야르"
   },
   "아줄": {
     "status": "auto-confirmed",
@@ -4289,43 +3705,9 @@
     "scoreGap": 84
   },
   "오 미우바우": {
-    "status": "unresolved",
-    "ownedName": "오 미우바우",
-    "reviewCandidates": [
-      {
-        "bggId": "154541",
-        "bggName": "Omi",
-        "year": "0",
-        "score": 50,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "Omi Ubao",
-          "matchedCandidateName": "Omi"
-        }
-      },
-      {
-        "bggId": "872",
-        "bggName": "M",
-        "year": "2000",
-        "score": 27,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Omi Ubao",
-          "matchedCandidateName": "M"
-        }
-      },
-      {
-        "bggId": "14186",
-        "bggName": "Bao",
-        "year": "0",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Omi Ubao",
-          "matchedCandidateName": "Bao"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "311031",
+    "ownedName": "오 미우바우"
   },
   "오딘을위하여 + 노르웨이 사람들 확장 + 소형확장1": {
     "status": "auto-confirmed",
@@ -4752,82 +4134,14 @@
     "scoreGap": 22
   },
   "제왕의깃발": {
-    "status": "unresolved",
-    "ownedName": "제왕의깃발",
-    "reviewCandidates": [
-      {
-        "bggId": "11581",
-        "bggName": "King",
-        "year": "0",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "The King's Banner",
-          "matchedCandidateName": "King"
-        }
-      },
-      {
-        "bggId": "15922",
-        "bggName": "King",
-        "year": "1994",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "The King's Banner",
-          "matchedCandidateName": "King"
-        }
-      },
-      {
-        "bggId": "22452",
-        "bggName": "King",
-        "year": "1985",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "The King's Banner",
-          "matchedCandidateName": "King"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "287084",
+    "ownedName": "제왕의깃발"
   },
   "제왕의불꽃": {
-    "status": "unresolved",
-    "ownedName": "제왕의불꽃",
-    "reviewCandidates": [
-      {
-        "bggId": "872",
-        "bggName": "M",
-        "year": "2000",
-        "score": 27,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "The King's Flame",
-          "matchedCandidateName": "M"
-        }
-      },
-      {
-        "bggId": "11581",
-        "bggName": "King",
-        "year": "0",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "The King's Flame",
-          "matchedCandidateName": "King"
-        }
-      },
-      {
-        "bggId": "15922",
-        "bggName": "King",
-        "year": "1994",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "The King's Flame",
-          "matchedCandidateName": "King"
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "313261",
+    "ownedName": "제왕의불꽃"
   },
   "젠가": {
     "status": "auto-confirmed",
@@ -5118,43 +4432,8 @@
     "ownedName": "쿠키런킹덤"
   },
   "쿠키박스 포켓몬": {
-    "status": "unresolved",
-    "ownedName": "쿠키박스 포켓몬",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "쿠키박스 포켓몬"
   },
   "쿠트나호라": {
     "status": "forced",
@@ -5430,12 +4709,9 @@
     "scoreGap": 10
   },
   "트릭테이커스": {
-    "status": "auto-confirmed",
-    "bggId": "246813",
-    "ownedName": "트릭테이커스",
-    "bggName": "Takers",
-    "score": 87,
-    "scoreGap": 54
+    "status": "forced",
+    "bggId": "343566",
+    "ownedName": "트릭테이커스"
   },
   "티츄 딜럭스": {
     "status": "auto-confirmed",

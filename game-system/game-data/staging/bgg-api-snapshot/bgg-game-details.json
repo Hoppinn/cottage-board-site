@@ -5235,6 +5235,128 @@
       ]
     }
   },
+  "5895": {
+    "bggId": "5895",
+    "title": "Hungry Hungry Hippos",
+    "image": "https://cf.geekdo-images.com/oIF_SSRCrDwEbK5oHjm-QQ__original/img/h0zbFesCLPuJ59c1n03BE5EG4Hg=/0x0/filters:format(jpeg)/pic152043.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/oIF_SSRCrDwEbK5oHjm-QQ__small/img/KTHHU9o4w5V54SWnt5DD24Ot1fU=/fit-in/200x150/filters:strip_icc()/pic152043.jpg",
+    "description": "Jump into the jungle and join the feeding frenzy!​\n\nWhether they&rsquo;re munching at brunch or crunching at lunch, these four ravenous hippos are always ready for a yummy treat! No fruit in the jungle is safe from the rumbly tummies of Hungry, Sweetie, Bottomless, and Berry. Look out for your snacks at the Rumbly Lagoon when these chompy chewers dive in!",
+    "yearpublished": "1978",
+    "minplayers": "2",
+    "minage": "4",
+    "maxplayers": "4",
+    "playingtime": "10",
+    "minplaytime": "10",
+    "maxplaytime": "10",
+    "averageweight": "1.0663",
+    "average": "4.17652",
+    "bayesaverage": "4.71212",
+    "usersrated": "3210",
+    "rank": "30667",
+    "designers": [
+      "Fred Kroll",
+      "Masatoshi Todokoro"
+    ],
+    "artists": [
+      "(Uncredited)"
+    ],
+    "publishers": [
+      "Ambassador Games (Merchant Ambassador)",
+      "Blue Sky Inc.",
+      "Brekar",
+      "Chad Valley Co Ltd.",
+      "Estrela",
+      "Hasbro",
+      "International Playthings, Inc.",
+      "Köhler",
+      "Korea Boardgames",
+      "Maple Toys",
+      "MB Giochi",
+      "MB Jeux",
+      "MB Spellen",
+      "MB Spiele",
+      "Milton Bradley",
+      "Pavilion",
+      "Schmidt Spiele",
+      "Spin Master Ltd.",
+      "Top Toys",
+      "Toymonster"
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Animals",
+      "Children's Game",
+      "Comic Book / Strip",
+      "Real-time"
+    ],
+    "mechanics": [],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        2,
+        3
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
+  "6387": {
+    "bggId": "6387",
+    "title": "Mr. Mouth",
+    "image": "https://cf.geekdo-images.com/uJfy0kFdAf_Zciz_Hwk5fQ__original/img/bsyy0Jzw3Wty6tW4GfD4KJxPceg=/0x0/filters:format(jpeg)/pic95726.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/uJfy0kFdAf_Zciz_Hwk5fQ__small/img/DONE5qYndoidaAtgao-femevjfM=/fit-in/200x150/filters:strip_icc()/pic95726.jpg",
+    "description": "Mr. Mouth is a children's action game.  A motorized frog head rotates in the center of an X-shaped board.  Each player uses a spring-loaded hand affixed to each arm of the X to propel plastic housefly pieces into the frog's mouth, which periodically opens and closes.  The first player to flip all ten of his or her flies into the frog's mouth wins.",
+    "yearpublished": "1976",
+    "minplayers": "2",
+    "minage": "5",
+    "maxplayers": "4",
+    "playingtime": "10",
+    "minplaytime": "10",
+    "maxplaytime": "10",
+    "averageweight": "1",
+    "average": "5.02922",
+    "bayesaverage": "5.45429",
+    "usersrated": "225",
+    "rank": "30048",
+    "designers": [
+      "(Uncredited)"
+    ],
+    "artists": [],
+    "publishers": [
+      "Denys Fisher Toys",
+      "Hasbro",
+      "International Playthings, Inc.",
+      "Korea Boardgames",
+      "Milton Bradley",
+      "Oskar",
+      "Tomy",
+      "Vivid Imaginations"
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Animals",
+      "Children's Game",
+      "Electronic"
+    ],
+    "mechanics": [],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        2,
+        3
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
   "6411": {
     "bggId": "6411",
     "title": "Blokus 3D",
@@ -8107,6 +8229,60 @@
         1,
         4,
         4
+      ]
+    }
+  },
+  "38504": {
+    "bggId": "38504",
+    "title": "Hurry'Cup!",
+    "image": "https://cf.geekdo-images.com/AOMQ3EP8fVay1OP33HtJIA__original/img/831hTFMpTawAxuGjSmpmzF5JmOM=/0x0/filters:format(jpeg)/pic375267.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/AOMQ3EP8fVay1OP33HtJIA__small/img/Wh2tcd2WpprgXk3kPG_9Nqogfmk=/fit-in/200x150/filters:strip_icc()/pic375267.jpg",
+    "description": "Drivers from all over Europe have arrived and are lined up on the starting line. Consisting of narrow and winding roads, the track is filled with dangers and promises a tricky race. As one of the fastest and fearless pilots in the race, you will try to pass the finish line before your opponents by being the quickest at spotting and grabbing the die which will allow you to move forward.\n\nHurry'Cup is a car racing game where 3 to 6 players face off on tracks that are always different from one game to the next; as decided by the players themselves. Reflexes, dexterity, and risk-taking are the key to stepping first on the podium. It is a tile game with pavement-burning ambiance. Made up of 36 modular tiles, the Hurry'Cup race track offers many game possibilities, making it a new game each time. Hurry'Cup is a game with simple rules and Fast and Furious Fun.",
+    "yearpublished": "2008",
+    "minplayers": "3",
+    "minage": "9",
+    "maxplayers": "6",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "1.3143",
+    "average": "5.46064",
+    "bayesaverage": "5.49028",
+    "usersrated": "347",
+    "rank": "27846",
+    "designers": [
+      "Antoine Bauza"
+    ],
+    "artists": [
+      "Pierô"
+    ],
+    "publishers": [
+      "Hurrican"
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Racing",
+      "Real-time",
+      "Sports"
+    ],
+    "mechanics": [
+      "Dice Rolling",
+      "Modular Board",
+      "Roll / Spin and Move"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3,
+        4
+      ],
+      "recommended": [
+        5,
+        6
+      ],
+      "not_recommended": [
+        1,
+        2,
+        6
       ]
     }
   },
@@ -15691,6 +15867,72 @@
       ]
     }
   },
+  "170041": {
+    "bggId": "170041",
+    "title": "Splash!",
+    "image": "https://cf.geekdo-images.com/n5NDKKsn-A_YIFMM7Z5ikA__original/img/Ai8Fctc21yraqOQyj2dbeEZVLTg=/0x0/filters:format(jpeg)/pic2677385.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/n5NDKKsn-A_YIFMM7Z5ikA__small/img/6ZnX7J1b2DwwpvYncuZp8ScBHh0=/fit-in/200x150/filters:strip_icc()/pic2677385.jpg",
+    "description": "Carefully place piece after piece on top of the wobbly stack, and don't be the one makes it all topple!\n\nSplash! is a fast-paced, nail-biting dexterity game. After placing a piece on top of the stack, you get to give the next player a piece of your choice in your own pile that must be added to the stack. The piece must match the previous color or shape, but how it gets placed is up to the next player! When the stack comes crashing down, the player who gave the piece gets a gold gem. The first player to collect three gold gems or run out of pieces wins!",
+    "yearpublished": "2014",
+    "minplayers": "2",
+    "minage": "6",
+    "maxplayers": "8",
+    "playingtime": "20",
+    "minplaytime": "10",
+    "maxplaytime": "20",
+    "averageweight": "1",
+    "average": "6.28339",
+    "bayesaverage": "5.63075",
+    "usersrated": "509",
+    "rank": "8102",
+    "designers": [
+      "Wilfried Fort",
+      "Marie Fort"
+    ],
+    "artists": [
+      "Natalia Zelenina"
+    ],
+    "publishers": [
+      "999 Games",
+      "Atalia",
+      "Brain Games",
+      "DV Games",
+      "Egmont Polska",
+      "Game Factory",
+      "Hobby Japan",
+      "Kaissa Chess & Games",
+      "Lifestyle Boardgames Ltd",
+      "Mercurio",
+      "PopcornEdu",
+      "Rexhry",
+      "Spin Master Ltd.",
+      "Swan Panasia Co., Ltd."
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Children's Game",
+      "Party Game"
+    ],
+    "mechanics": [
+      "Pattern Building"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3,
+        4,
+        5
+      ],
+      "recommended": [
+        2
+      ],
+      "not_recommended": [
+        1,
+        6,
+        7,
+        8
+      ]
+    }
+  },
   "170624": {
     "bggId": "170624",
     "title": "Crusaders: Thy Will Be Done",
@@ -17781,6 +18023,58 @@
       ],
       "not_recommended": [
         4
+      ]
+    }
+  },
+  "191972": {
+    "bggId": "191972",
+    "title": "Dynasties: Heirate & Herrsche",
+    "image": "https://cf.geekdo-images.com/mV3c6ahvFBm4AnH2CSPqmw__original/img/MwL7yJTOK111ddeNwr7_Z52e8-0=/0x0/filters:format(png)/pic2987744.png",
+    "thumbnail": "https://cf.geekdo-images.com/mV3c6ahvFBm4AnH2CSPqmw__small/img/jvzkoqXKI8JUgSOOXrD4F2SiZpg=/fit-in/200x150/filters:strip_icc()/pic2987744.png",
+    "description": "Renaissance Europe is coming together, and people have realized that even the most powerful dynasties can achieve more together, so members of those dynasties are marrying, trading and sharing with one another &mdash; but who will end with the biggest piece of the pie?\n\nIn Dynasties, players must make many compromises, whether acting on their own or reacting to the behavior of their fellow players. In addition to these tactical and strategic decisions, luck also plays something of a role as not every marriage brings the windfall expected. Perhaps then another marriage will bring more success and influence?\n\n&mdash;description from the publisher",
+    "yearpublished": "2016",
+    "minplayers": "3",
+    "minage": "12",
+    "maxplayers": "5",
+    "playingtime": "90",
+    "minplaytime": "60",
+    "maxplaytime": "90",
+    "averageweight": "3",
+    "average": "7.19579",
+    "bayesaverage": "6.11532",
+    "usersrated": "1329",
+    "rank": "2585",
+    "designers": [
+      "Matthias Cramer"
+    ],
+    "artists": [
+      "Claus Stephan"
+    ],
+    "publishers": [
+      "Hans im Glück",
+      "White Goblin Games"
+    ],
+    "categories": [
+      "Renaissance"
+    ],
+    "mechanics": [
+      "Area Majority / Influence",
+      "End Game Bonuses",
+      "I Cut, You Choose",
+      "Turn Order: Stat-Based"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        3,
+        5
+      ],
+      "not_recommended": [
+        1,
+        2,
+        5
       ]
     }
   },
@@ -23168,6 +23462,56 @@
       ]
     }
   },
+  "244951": {
+    "bggId": "244951",
+    "title": "Round the World",
+    "image": "https://cf.geekdo-images.com/88wJzsUUhQo4tUJmbD5H3g__original/img/aO8VnwaWvVXnyX70JiE47KXXZQY=/0x0/filters:format(jpeg)/pic4172131.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/88wJzsUUhQo4tUJmbD5H3g__small/img/sq7BX2Ow_FBUQFktRY_oTaJbUyU=/fit-in/200x150/filters:strip_icc()/pic4172131.jpg",
+    "description": "Round the World is a real-time card game played simultaneously. The players are travel agents creating \"trips\" around the world for their customers. Each \"flight card\" shows two continents (each continent has its own color): a \"departure\" and a \"destination\" connected by an airplane/arrow. You try to get rid of your own 30-card deck within a period of exactly five minutes by creating \"trips\" card by card with matching colors from card to card until the trip is complete and can be \"booked\" (saved for scoring).\n\nAll players play at the same time, everybody to their own speed and rhythm. Holding your deck in one hand, you draw the top card as your sole \"hand card\" and add it to the ones you already placed in front of you to create \"trips\" &mdash; or you put it under the deck again. When you add a card, you may pick up the card from the other end of the trip and continue using this as your \"hand card\". You may also add cards to your opponents' trips and take cards (you desperately need) from them. All cards not \"booked\" (i.e., still in the deck or in incomplete trips) score against you, so if you empty your deck too soon, your opponents are able to lengthen your trips without completing them...\n\nA game consists of two rounds of five minutes, plus two simple scoring phases. The focus of the game is on your perfect timing within the five minutes, keep an eye on cards with landmarks (better for scoring!), and on your opponents \"offers\". There are variants included shifting the focus and making the game more challenging.",
+    "yearpublished": "2018",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "4",
+    "playingtime": "15",
+    "minplaytime": "15",
+    "maxplaytime": "15",
+    "averageweight": "1",
+    "average": "5.64251",
+    "bayesaverage": "5.50221",
+    "usersrated": "71",
+    "rank": "25190",
+    "designers": [
+      "Daniel Danzer",
+      "Doris Danzer"
+    ],
+    "artists": [
+      "Fiore GmbH"
+    ],
+    "publishers": [
+      "Pegasus Spiele"
+    ],
+    "categories": [
+      "Card Game",
+      "Real-time"
+    ],
+    "mechanics": [
+      "Hand Management",
+      "Simultaneous Action Selection"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2
+      ],
+      "recommended": [
+        3,
+        4
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
   "244992": {
     "bggId": "244992",
     "title": "The Mind",
@@ -25029,6 +25373,52 @@
         1,
         4
       ]
+    }
+  },
+  "264638": {
+    "bggId": "264638",
+    "title": "5x5 City",
+    "image": "https://cf.geekdo-images.com/-0cJym18I7iZakp3AqFCBA__original/img/CTtVdFJIQMAsUZEoJAQnz-q6FpU=/0x0/filters:format(jpeg)/pic4424042.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/-0cJym18I7iZakp3AqFCBA__small/img/yTaZ6ga2dUQpzhAcn7XwlfDuxIc=/fit-in/200x150/filters:strip_icc()/pic4424042.jpg",
+    "description": "You and your fellow players have just been elected mayors of a thriving new city in the midst of expansion. Over the course of the game, you will need to build various buildings and attract residents to this new city. However, you will face multiple challenges in terms of building restrictions throughout the game. Will you be able to build a city more splendid than the others?\n\n5&times;5 City is a tile placement game that builds various buildings in your city.\n\nEach city board is placed in front of every player. The city board has 25 squares of vacant lot, but it can be divided into various types of compartments depending on the compartment card selected at the start of the game.\n\nFor each round, draw a building tile randomly according to the number of squares in the specified section, keep in touch with other players and place it on your town board.\n\nIn 5&times;5 City, it is a point that you can place the building only in a fixed area in each round, not putting it in the place you like on the street board.\n\nThere are various effects in buildings, making effective use of the effect is the way to victory.\n\nIn addition, there may be buildings which sometimes do not need. In that case you can turn the building upside down into a park.\n\n&mdash;description from the designer",
+    "yearpublished": "2018",
+    "minplayers": "1",
+    "minage": "8",
+    "maxplayers": "4",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "1.5556",
+    "average": "6.98147",
+    "bayesaverage": "5.58318",
+    "usersrated": "141",
+    "rank": "10389",
+    "designers": [
+      "Hisashi Hayashi"
+    ],
+    "artists": [
+      "Ryo Nyamo"
+    ],
+    "publishers": [
+      "OKAZU Brand",
+      "MTS Games"
+    ],
+    "categories": [
+      "City Building"
+    ],
+    "mechanics": [
+      "Tile Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2,
+        3
+      ],
+      "recommended": [
+        1,
+        4
+      ],
+      "not_recommended": []
     }
   },
   "264647": {
@@ -27702,6 +28092,136 @@
       ]
     }
   },
+  "287084": {
+    "bggId": "287084",
+    "title": "Oriflamme",
+    "image": "https://cf.geekdo-images.com/8MpTeqlzyIupMpSSxP3PAw__original/img/XoqLo4dQlXvFHZBAcKbZheA8NHA=/0x0/filters:format(jpeg)/pic4949335.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/8MpTeqlzyIupMpSSxP3PAw__small/img/NACmpm6Pzd2IrmAq9teXwLlmKqA=/fit-in/200x150/filters:strip_icc()/pic4949335.jpg",
+    "description": "In Oriflamme, the players find themselves in the middle of a medieval feud over the French royal crown. The King is dead! Long live the King! As heads of influential families, players strive to come to power with cunning and malice, power and strength, virtue and infamy. Their goal: the king's throne!\n\nIn this tactical card game, hidden cards are played in turn. By tactically uncovering and activating their effects, players can outdo or get them out of the way, because all players have the same goal in mind &mdash; to collect the most influence points for their family and thus win the game.",
+    "yearpublished": "2019",
+    "minplayers": "3",
+    "minage": "10",
+    "maxplayers": "5",
+    "playingtime": "30",
+    "minplaytime": "15",
+    "maxplaytime": "30",
+    "averageweight": "1.6899",
+    "average": "7.0659",
+    "bayesaverage": "6.54795",
+    "usersrated": "5242",
+    "rank": "1205",
+    "designers": [
+      "Adrien Hesling",
+      "Axel Hesling"
+    ],
+    "artists": [
+      "Tomasz Jedruszek"
+    ],
+    "publishers": [
+      "Studio H",
+      "Albi",
+      "Arclight Games",
+      "Brädspel.se",
+      "Buró",
+      "Evrikus",
+      "Galakta",
+      "Geekach LLC",
+      "Gen-X Games",
+      "Geronimo Games",
+      "Hachette Boardgames Benelux",
+      "Kaissa Chess & Games",
+      "Lautapelit.fi",
+      "Mandoo Games",
+      "MEBO Games",
+      "MS Edizioni",
+      "Pegasus Spiele",
+      "Popcorn Games",
+      "Reflexshop",
+      "Spilbræt.dk",
+      "Swan Panasia Co., Ltd."
+    ],
+    "categories": [
+      "Card Game",
+      "Political"
+    ],
+    "mechanics": [
+      "Action Queue",
+      "Betting and Bluffing",
+      "Hand Management",
+      "Take That",
+      "Turn Order: Progressive"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        3,
+        5
+      ],
+      "not_recommended": [
+        1,
+        2,
+        5
+      ]
+    }
+  },
+  "287941": {
+    "bggId": "287941",
+    "title": "Formosa Tea",
+    "image": "https://cf.geekdo-images.com/zUU7fyzcPmC5dJ9ovT90vQ__original/img/qhjkgE38WiKvIANM2vTrsdb_4-w=/0x0/filters:format(jpeg)/pic4928296.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/zUU7fyzcPmC5dJ9ovT90vQ__small/img/X5Ls0TJfgBx0WZOa7Ak9FCu9qdg=/fit-in/200x150/filters:strip_icc()/pic4928296.jpg",
+    "description": "The sub-tropical climate and environment of Taiwan makes the island highly suitable for cultivating top quality tea. But it wasn't not until the 19th century after English businessman John Dodd discovered some amazing Oolong tea there that the Taiwanese tea business truly begin to bloom and \"Formosa Tea\" became world-reknowned.\n\nIn Formosa Tea, players are tea farm owners competing to harvest the best tea leaves, improve their tea processing techniques, and produce tea of the highest quality for not only the domestic market but also for the international market. With the unique worker placement and worker advancement mechanisms, along with the tea dehydration and scenting processing, players must use their workers wisely to make the best tea in the market.\n\nA game of Formosa Tea is played in four rounds. In each round, players take turns to perform one of the five possible actions:\n\n\n    Send a worker to harvest tea leaves\n    Send a worker to a tea factory to  process tea leaves\n    Retrieve a worker from the tea factory after tea processing is completed\n    Send a worker to sell tea in the domestic market\n    Send a worker to sell tea to international merchants. \n\n\nAfter the end of the fourth round, the player who has the most prestige points wins!",
+    "yearpublished": "2019",
+    "minplayers": "2",
+    "minage": "12",
+    "maxplayers": "4",
+    "playingtime": "90",
+    "minplaytime": "40",
+    "maxplaytime": "90",
+    "averageweight": "3.4167",
+    "average": "7.35656",
+    "bayesaverage": "6.01687",
+    "usersrated": "925",
+    "rank": "3085",
+    "designers": [
+      "Chu-Lan Kao"
+    ],
+    "artists": [
+      "Sammixyz",
+      "Huang Yu Wen"
+    ],
+    "publishers": [
+      "Soso Studio",
+      "BoardM Factory",
+      "Strohmann Games",
+      "Tasty Minstrel Games"
+    ],
+    "categories": [
+      "Farming",
+      "Industry / Manufacturing"
+    ],
+    "mechanics": [
+      "Contracts",
+      "Events",
+      "Tech Trees / Tech Tracks",
+      "Variable Player Powers",
+      "Worker Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        2,
+        3
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
   "288098": {
     "bggId": "288098",
     "title": "Shadow Raiders",
@@ -30019,6 +30539,63 @@
       ]
     }
   },
+  "311031": {
+    "bggId": "311031",
+    "title": "Five Three Five",
+    "image": "https://cf.geekdo-images.com/OyT_2pRVNs4w15kQaeHPqw__original/img/w_kaK-7WIfcs7bm0676lUyeXy44=/0x0/filters:format(png)/pic6822638.png",
+    "thumbnail": "https://cf.geekdo-images.com/OyT_2pRVNs4w15kQaeHPqw__small/img/2OI_RqYsO4dXT2tBYLpXTRg3kNM=/fit-in/200x150/filters:strip_icc()/pic6822638.png",
+    "description": "535 is a Climbing/Shedding game for 2 to 6 Players. The game's deck is comprised of cards numbered 1-15, with cards of rank 6 and 10 missing. The deck contains multiple copies of each card, depending on player count (4 each at 2-4 players/5 each at 5+ players). In addition to a rank, each card has a point value, which depends on the rank&rsquo;s strength. The object of the game is for players to be the first to play all of their cards to the table.\n\nOn a turn, a player may play one, two, or three cards to a single, central meld. Playable meld-types are:\n\n-Single: Any one card. (1 < 7 < 14)\n-Set: Any two or more cards of equal rank. (1,1,1 < 14,14,14)\n-Run: Any two or more cards of consecutive rank. (1,2,3 > 11,12,13)\n\nOn a turn, a player chooses to do one of the following actions:\n\n-Overwrite: Play a higher ranked meld, which matches the meld-type and size of the central meld.\n-Add: Attach a card or cards to the central meld, making sets/runs longer.\n-Pass: A player who can not or chooses not to play into the central meld may pass. Once a player passes, they are out for the trick.\n\nA trick ends once 1 of 4 things happens:\n\n-All but one player passes. \n-A player adds the fourth card to an active set of a like-numbered meld (or fifth in a 5+ player game).\n-A player adds the fifth card of a run.\n-A player plays a meld that follows the &ldquo;Rule of 8&rsquo;s&rdquo; (See Below).\n\nThe last player to have played a card to the meld in any of these situations above clears the trick and leads the next. A lead player must always play one, two, or three cards and may never \"Pass\".\n\nOnce one player has played their final card(s) to the table, the round ends immediately. The other players then score the points indicated on the cards left in their hands. Rounds are played until one player has 20 or more points, leaving the player(s) with the least points the winner(s).\n\nRule of 8&rsquo;s:\nAll cards of rank 8 in the deck are worth the most points in the game. However, these cards have a special function. When a rank 8 card is played to a trick (ie. A single 8, a set of 8&rsquo;s, a run of either 7,8 or 7,8,9) the trick is immediately cleared and the player who played the &ldquo;Rule of 8&rsquo;s&rdquo; clears the trick and leads the next. The only time the Rule of 8&rsquo;s will not function is when an 8 is included in the opening meld of any trick.",
+    "yearpublished": "2020",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "6",
+    "playingtime": "30",
+    "minplaytime": "15",
+    "maxplaytime": "30",
+    "averageweight": "1.5263",
+    "average": "6.93985",
+    "bayesaverage": "5.88556",
+    "usersrated": "865",
+    "rank": "3993",
+    "designers": [
+      "かぶきけんいち (Kenichi Kabuki)"
+    ],
+    "artists": [
+      "おーつぼじゅうじん (Jyujin Ohtsubo)",
+      "別府さい (Sai Beppu)"
+    ],
+    "publishers": [
+      "Game Nowa",
+      "The Game Builders",
+      "JJ Board Game",
+      "KAIKU JAPAN",
+      "MTS Games",
+      "Portland Game Collective"
+    ],
+    "categories": [
+      "Card Game"
+    ],
+    "mechanics": [
+      "Hand Management",
+      "Ladder Climbing",
+      "Push Your Luck"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2,
+        4
+      ],
+      "recommended": [
+        3,
+        5
+      ],
+      "not_recommended": [
+        1,
+        6,
+        6
+      ]
+    }
+  },
   "311193": {
     "bggId": "311193",
     "title": "Anno 1800: The Board Game",
@@ -30093,6 +30670,67 @@
       "not_recommended": [
         1,
         4
+      ]
+    }
+  },
+  "313261": {
+    "bggId": "313261",
+    "title": "Oriflamme: Ablaze",
+    "image": "https://cf.geekdo-images.com/9hF_9xzBnPZqqdLOsp-fkA__original/img/hq1n8--D3DjWKo4h05ZfBv3S-Vk=/0x0/filters:format(png)/pic6276029.png",
+    "thumbnail": "https://cf.geekdo-images.com/9hF_9xzBnPZqqdLOsp-fkA__small/img/ZNomdhNV8IyxkpaZhGXKnJrLiXY=/fit-in/200x150/filters:strip_icc()/pic6276029.png",
+    "description": "In Oriflamme and Oriflamme Embrasement, the players find themselves in the middle of a medieval feud over the French royal crown. The King is dead! Long live the King! As heads of influential families, the players strive to come to power with cunning and malice, power and strength, virtue and infamy. Their goal: the king's throne!\n\nIn the tactical card game, hidden cards are played in turn. By tactically uncovering and activating their effects, players can outdo or get them out of the way, because all players have the same goal in mind &mdash; to collect the most influence points for their family and thus win the game.\n\nIn Oriflamme Embrasement (second installment of the award winning game Oriflamme), the incendiary war threatens to bring the kingdom to the ground. But nothing will stop your house to conquer the throne by putting forward every inch of your famous lust for power and vengeance.\n\nOriflamme Embrasement offers 11 new action cards that can be mixed with Oriflamme or be used as a standalone.\n\n&mdash;description from the publisher (translated)",
+    "yearpublished": "2020",
+    "minplayers": "3",
+    "minage": "10",
+    "maxplayers": "5",
+    "playingtime": "20",
+    "minplaytime": "20",
+    "maxplaytime": "20",
+    "averageweight": "2.2273",
+    "average": "7.16844",
+    "bayesaverage": "5.91763",
+    "usersrated": "794",
+    "rank": "3733",
+    "designers": [
+      "Adrien Hesling",
+      "Axel Hesling"
+    ],
+    "artists": [
+      "Tomasz Jedruszek"
+    ],
+    "publishers": [
+      "Studio H",
+      "Evrikus",
+      "Galakta",
+      "Geekach LLC",
+      "Geronimo Games",
+      "Mandoo Games",
+      "MS Edizioni",
+      "Swan Panasia Co., Ltd."
+    ],
+    "categories": [
+      "Card Game",
+      "Medieval",
+      "Political"
+    ],
+    "mechanics": [
+      "Action Queue",
+      "Betting and Bluffing",
+      "Hand Management",
+      "Take That"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        3,
+        5
+      ],
+      "not_recommended": [
+        1,
+        2,
+        5
       ]
     }
   },
@@ -32445,6 +33083,60 @@
       ]
     }
   },
+  "343566": {
+    "bggId": "343566",
+    "title": "TRICKTAKERs",
+    "image": "https://cf.geekdo-images.com/82FhiRTZdJQUa1Z8H33Tag__original/img/wJAu2yzFGmB0KzwXJxAXgKGYc-Y=/0x0/filters:format(png)/pic7958476.png",
+    "thumbnail": "https://cf.geekdo-images.com/82FhiRTZdJQUa1Z8H33Tag__small/img/mLI0Pyem2uCMWxn6i9__W3YXcHU=/fit-in/200x150/filters:strip_icc()/pic7958476.png",
+    "description": "TRICKTAKERs is a...trick-taking game featuring role selection. After being dealt a hand of cards, the players choose from various characters (such as King or Gambler) that change how they will participate in the game.\n\nThe basic game consists of three rounds of trick-taking, and the winner will be the person that wins the most tricks in two of the three rounds.  Alternatively, if no one achieves that condition, if a player has taken no tricks in all three rounds, they will be the winner.\n\nThe game also features a higher priority victory condition and a lower one.  Each character in the game grants the player a special \"immediate victory\" condition that could be achieved.  The characters also give the players ways to earn points, and this is the lowest tier of victory determination: who has the most points.\n\nFor example, the \"Gambler\" can discard cards from the initial hand to draw replacements, and will bid for how many tricks they take, possibly granting them extra points if successful. The \"Resistance\" has the potential to cause a revolution which reverses the strength of the ranks, and earns more points if they can win tricks with what would normally be the \"high\" cards.",
+    "yearpublished": "2021",
+    "minplayers": "2",
+    "minage": "10",
+    "maxplayers": "5",
+    "playingtime": "40",
+    "minplaytime": "30",
+    "maxplaytime": "40",
+    "averageweight": "2.7826",
+    "average": "7.4122",
+    "bayesaverage": "5.92048",
+    "usersrated": "654",
+    "rank": "3710",
+    "designers": [
+      "Hiroken"
+    ],
+    "artists": [
+      "Nina (イラスト)",
+      "Ito Taichi"
+    ],
+    "publishers": [
+      "Joyple Games",
+      "MTS Games",
+      "Portland Game Collective"
+    ],
+    "categories": [
+      "Card Game"
+    ],
+    "mechanics": [
+      "Hand Management",
+      "Open Drafting",
+      "Trick-taking",
+      "Variable Player Powers"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4,
+        5
+      ],
+      "recommended": [
+        2,
+        3
+      ],
+      "not_recommended": [
+        1,
+        5
+      ]
+    }
+  },
   "343905": {
     "bggId": "343905",
     "title": "Boonlake",
@@ -33132,6 +33824,66 @@
         1,
         2,
         6
+      ]
+    }
+  },
+  "354132": {
+    "bggId": "354132",
+    "title": "East India Companies",
+    "image": "https://cf.geekdo-images.com/j3B__Qgm8PeUD0cl2Sue-w__original/img/g4borQIX-AI0GgwB-6-Jt7dLlns=/0x0/filters:format(jpeg)/pic7064114.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/j3B__Qgm8PeUD0cl2Sue-w__small/img/SkVXF-MBesJuPupHJL2OmFah_PY=/fit-in/200x150/filters:strip_icc()/pic7064114.jpg",
+    "description": "In the 18th and 19th centuries, shipping companies aimed to strengthen the trade between the West and the Far East that had begun in previous centuries. Tea, spices, coffee, and silk are commodities much consumed in Europe, and their buying and selling prices depend closely on supply and demand. Fortunes can be made and gambled depending on circumstances.\n\nIn East India Companies, players manage a large shipping company that trades with far flung trading posts in India. They must manage their ships and invest in buying shares of their own company or those of their competitors. Most importantly, players have to keep an eye on the constantly fluctuating market prices! Is it better to invest your money in the stock market or in buying goods? Do they prefer to use fast ships with low tonnage or slower ships with larger holds? Whatever the players choose, their strategies will influence those of their opponents.\n\n&mdash;description from the publisher",
+    "yearpublished": "2023",
+    "minplayers": "2",
+    "minage": "14",
+    "maxplayers": "4",
+    "playingtime": "120",
+    "minplaytime": "90",
+    "maxplaytime": "120",
+    "averageweight": "3",
+    "average": "7.43044",
+    "bayesaverage": "6.09326",
+    "usersrated": "1106",
+    "rank": "2694",
+    "designers": [
+      "Pascal Ribrault"
+    ],
+    "artists": [
+      "Guillaume Tavernier"
+    ],
+    "publishers": [
+      "HUCH!",
+      "R&R Games",
+      "Atalia",
+      "Fabrika Igr",
+      "Giochi Uniti",
+      "Korea Boardgames",
+      "Moon3 Inc.",
+      "Zvezda"
+    ],
+    "categories": [
+      "Economic",
+      "Transportation"
+    ],
+    "mechanics": [
+      "Investment",
+      "Market",
+      "Pick-up and Deliver",
+      "Stock Holding",
+      "Turn Order: Stat-Based",
+      "Worker Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        3
+      ],
+      "not_recommended": [
+        1,
+        2,
+        4
       ]
     }
   },
@@ -33844,6 +34596,67 @@
         3,
         5,
         7,
+        8
+      ]
+    }
+  },
+  "361545": {
+    "bggId": "361545",
+    "title": "Twilight Inscription",
+    "image": "https://cf.geekdo-images.com/g36va6ofPCzNZXF-9GEpCg__original/img/W-Goi5-dQP19Nj-MXa8xdEtpnVs=/0x0/filters:format(png)/pic7132023.png",
+    "thumbnail": "https://cf.geekdo-images.com/g36va6ofPCzNZXF-9GEpCg__small/img/F8SHn9giBPmooUkmJDz9kXAamS0=/fit-in/200x150/filters:strip_icc()/pic7132023.png",
+    "description": "The Lazax Empire has burned to ash, rejected by its subjects. The aftermath was tragedy and petty conflict in equal measure, a time of loss and exhaustion. In the ensuing Dark Years, the factions of the galaxy retreated and recovered their strength. Now, they look upon the stars and see an opportunity&mdash;a chance to reclaim what was lost. A chance to redefine galactic civilization. A chance to leave their mark upon the stars.\n\nTwilight Inscription, an epic roll-and-write game for one to eight players, offers an experience unlike anything Fantasy Flight Games has done before. With a limited pool of resources at your disposal, you&rsquo;ll need to carefully manage Navigation, Expansion, Industry, and Warfare as you amass victory points and earn your right to the throne on Mecatol Rex. Will your faction become the new rulers of the galaxy? Or will your fledgling empire fade into obscurity? Anything can happen in this strategic, infinitely-replayable game!\n\n&mdash;description from the publisher",
+    "yearpublished": "2022",
+    "minplayers": "1",
+    "minage": "14",
+    "maxplayers": "8",
+    "playingtime": "120",
+    "minplaytime": "90",
+    "maxplaytime": "120",
+    "averageweight": "3.2155",
+    "average": "7.40445",
+    "bayesaverage": "6.77769",
+    "usersrated": "5220",
+    "rank": "785",
+    "designers": [
+      "James Kniffen"
+    ],
+    "artists": [
+      "Anders Finér",
+      "Tomasz Jedruszek",
+      "Alex Kim",
+      "Stephen Somers"
+    ],
+    "publishers": [
+      "Fantasy Flight Games",
+      "ADC Blackfire Entertainment",
+      "Delta Vision Publishing",
+      "Hobby Game Mall",
+      "Hobby World",
+      "Rebel Sp. z o.o."
+    ],
+    "categories": [
+      "Science Fiction"
+    ],
+    "mechanics": [
+      "Dice Rolling",
+      "Paper-and-Pencil",
+      "Variable Player Powers"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3,
+        4
+      ],
+      "recommended": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "not_recommended": [
+        7,
+        8,
         8
       ]
     }
@@ -34931,6 +35744,48 @@
       ]
     }
   },
+  "371785": {
+    "bggId": "371785",
+    "title": "Memory Island",
+    "image": "https://cf.geekdo-images.com/45NJP9VEd_1q7LUgQbSItg__original/img/HiwLL53k01ZeoEbaNMEfD38zfO8=/0x0/filters:format(png)/pic9377489.png",
+    "thumbnail": "https://cf.geekdo-images.com/45NJP9VEd_1q7LUgQbSItg__small/img/0Bm6QYh9rfMo7xNUEGD9wstX2cU=/fit-in/200x150/filters:strip_icc()/pic9377489.png",
+    "description": "You have to find and rescue endangered animals scattered here and there. Check where the animals are, add their numbers, and make 10 &mdash; then you can bring them to a safe place! The first to rescue ten animals wins!\n\nMemory Island is a memory/arithmetic game for 2-4 players. Make the sum of the numbers equal to 10, and be the first player to collect ten cards to win.",
+    "yearpublished": "2022",
+    "minplayers": "2",
+    "minage": "6",
+    "maxplayers": "4",
+    "playingtime": "10",
+    "minplaytime": "5",
+    "maxplaytime": "10",
+    "averageweight": "0",
+    "average": "5.46667",
+    "bayesaverage": "0",
+    "usersrated": "12",
+    "rank": "Not Ranked",
+    "designers": [
+      "Gary Kim"
+    ],
+    "artists": [
+      "Lilia"
+    ],
+    "publishers": [
+      "Bloom Games (I)",
+      "BoardM Factory"
+    ],
+    "categories": [
+      "Educational",
+      "Math",
+      "Memory"
+    ],
+    "mechanics": [
+      "Memory"
+    ],
+    "suggested_numplayers": {
+      "best": [],
+      "recommended": [],
+      "not_recommended": []
+    }
+  },
   "371787": {
     "bggId": "371787",
     "title": "Cradle to Grave",
@@ -35595,6 +36450,63 @@
       "not_recommended": []
     }
   },
+  "378040": {
+    "bggId": "378040",
+    "title": "1%: A Game of Strategic Chance",
+    "image": "https://cf.geekdo-images.com/K2spoKKeCHm7OHonaSdK3g__original/img/sPdUIEJgxijCDtd6J5-23mHhYaM=/0x0/filters:format(jpeg)/pic7293478.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/K2spoKKeCHm7OHonaSdK3g__small/img/aRHiqdERA2rlcG5XmLNL1DxSZF0=/fit-in/200x150/filters:strip_icc()/pic7293478.jpg",
+    "description": "1% - A game of Strategic Chance! All you have to do to win is roll 0 with two 10-sided dice. Sounds easy? The chance is 1%! 1% is a fast and fun card game of strategy and probability, with a touch of misdirection! If you can outlast your opponents, you&rsquo;ll be rewarded with a choice: Do you roll the dice and try to win? Or do you sacrifice this turn to increase your chances next time? If there is a next time, that is! Take too long, and another player could snatch victory away from you.\n\n&mdash;description from the publisher",
+    "yearpublished": "2022",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "6",
+    "playingtime": "30",
+    "minplaytime": "10",
+    "maxplaytime": "30",
+    "averageweight": "1.5",
+    "average": "6.64848",
+    "bayesaverage": "5.59953",
+    "usersrated": "283",
+    "rank": "9435",
+    "designers": [
+      "Luke Melia"
+    ],
+    "artists": [
+      "Michael Dickinson",
+      "Sabine Kondirolli"
+    ],
+    "publishers": [
+      "Iconiq Studios",
+      "Arclight Games",
+      "Gémklub",
+      "HUCH!",
+      "IELLO",
+      "Korea Boardgames",
+      "Rexhry"
+    ],
+    "categories": [
+      "Card Game"
+    ],
+    "mechanics": [
+      "Dice Rolling",
+      "Push Your Luck"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        5,
+        6
+      ],
+      "recommended": [
+        4,
+        6
+      ],
+      "not_recommended": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
   "378256": {
     "bggId": "378256",
     "title": "Tell Me More",
@@ -35637,6 +36549,66 @@
       "best": [],
       "recommended": [],
       "not_recommended": []
+    }
+  },
+  "379629": {
+    "bggId": "379629",
+    "title": "Knarr",
+    "image": "https://cf.geekdo-images.com/PaYRAlezMGDlLt8LXmR_sQ__original/img/9nndYkVCIDsSHM3CmuiLk-0WCHk=/0x0/filters:format(png)/pic7857343.png",
+    "thumbnail": "https://cf.geekdo-images.com/PaYRAlezMGDlLt8LXmR_sQ__small/img/9BXSosnE91-b8tHUEz3Qgfr0aAo=/fit-in/200x150/filters:strip_icc()/pic7857343.png",
+    "description": "In Knarr, you are the leader of a band of Vikings that you send to new destinations. Manage the recruitment of your crew, and choose the best territories to explore. Depending on the destinations reached (for trading or influence) and the Vikings who accompany you, you can increase your reputation to gain even more wealth. Each turn, you:\n\n\n     Place a new member in your Viking crew, activate the effects of all of them with the same icon, and get another one from those available under the matching color on the central board, or\n\n\n\n     Explore new destinations, with the opportunity to trade with those places and get more gains or reputation.",
+    "yearpublished": "2023",
+    "minplayers": "2",
+    "minage": "10",
+    "maxplayers": "4",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "1.9009",
+    "average": "7.47024",
+    "bayesaverage": "7.00174",
+    "usersrated": "8173",
+    "rank": "503",
+    "designers": [
+      "Thomas Dupont"
+    ],
+    "artists": [
+      "Antoine Carrion"
+    ],
+    "publishers": [
+      "Bombyx",
+      "Devir",
+      "Fabrika Igr",
+      "Game Harbor",
+      "Gémklub",
+      "Hobby Japan",
+      "MINDOK",
+      "MM-Spiele",
+      "Pandasaurus Games",
+      "Popcorn Games",
+      "Red Square Games"
+    ],
+    "categories": [
+      "Card Game"
+    ],
+    "mechanics": [
+      "Hand Management",
+      "Open Drafting",
+      "Race",
+      "Set Collection"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3
+      ],
+      "recommended": [
+        2,
+        4
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
     }
   },
   "380607": {
@@ -36285,6 +37257,59 @@
       ],
       "recommended": [],
       "not_recommended": []
+    }
+  },
+  "388413": {
+    "bggId": "388413",
+    "title": "Whale to Look",
+    "image": "https://cf.geekdo-images.com/xxU1HKdkf1HIotFGyYO2bQ__original/img/cnGPfeD1TqnhWPlcAN0P0gzKzdc=/0x0/filters:format(jpeg)/pic7837610.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/xxU1HKdkf1HIotFGyYO2bQ__small/img/RjsKXDsc3Tb7iNdnvUARYyY7dJY=/fit-in/200x150/filters:strip_icc()/pic7837610.jpg",
+    "description": "A bay full of huge whales and orcas, and quite popular among whale-watching tourists, is becoming overrun with tour companies. The whales, on the other hand, seem to be enjoying themselves, sometimes showing up, sometimes not... As one of these tour companies, you must decide where to send out your boat! If you dilly-dally too long, one of the rival companies will pass by, but sometimes when your own investigation isn't enough, you might need to follow a rival company!",
+    "yearpublished": "2023",
+    "minplayers": "2",
+    "minage": "9",
+    "maxplayers": "5",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "1.8333",
+    "average": "6.53548",
+    "bayesaverage": "5.79438",
+    "usersrated": "985",
+    "rank": "4872",
+    "designers": [
+      "Bruno Faidutti",
+      "Jun Sasaki"
+    ],
+    "artists": [
+      "Rie Komatsuzaki",
+      "Jun Sasaki"
+    ],
+    "publishers": [
+      "Oink Games",
+      "Pixie Games",
+      "Popcorn Games"
+    ],
+    "categories": [
+      "Animals"
+    ],
+    "mechanics": [
+      "Betting and Bluffing",
+      "Grid Movement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        2,
+        3,
+        5
+      ],
+      "not_recommended": [
+        1,
+        5
+      ]
     }
   },
   "388544": {
@@ -37266,6 +38291,71 @@
         5,
         6,
         6
+      ]
+    }
+  },
+  "402283": {
+    "bggId": "402283",
+    "title": "Courtisans",
+    "image": "https://cf.geekdo-images.com/JK1HbIGtiVfsIbnw3Q543w__original/img/kPNCItrb8GwoIwV9R-vjczIkJR4=/0x0/filters:format(jpeg)/pic8004908.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/JK1HbIGtiVfsIbnw3Q543w__small/img/aLX0aSFbj4WBlK69h0x7j_8bItc=/fit-in/200x150/filters:strip_icc()/pic8004908.jpg",
+    "description": "Tonight, the queen holds a banquet that everyone will attend. Will they leave a good impression? Backstabbing is fair game, and no trick is too dirty if it allows you to place your favorite families in the spotlight.\n\nIn Courtisans, you receive and play three cards on each of your turns. One is played at the Queen's table to sway a family's influence, whether in a positive or negative manner. The two other cards are played in your domain and in an opponent's domain, and they can be worth positive or negative points, depending on their family's status at the end of the game. Choose where best to place your three cards if you want to end up with the most points and win.\n\n&mdash;description from the publisher",
+    "yearpublished": "2024",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "5",
+    "playingtime": "30",
+    "minplaytime": "20",
+    "maxplaytime": "30",
+    "averageweight": "1.3061",
+    "average": "7.26135",
+    "bayesaverage": "6.61699",
+    "usersrated": "4549",
+    "rank": "1071",
+    "designers": [
+      "Romaric Galonnier",
+      "Anthony Perone"
+    ],
+    "artists": [
+      "Noëmie Chevalier"
+    ],
+    "publishers": [
+      "Catch Up Games",
+      "Evrikus",
+      "GateOnGames",
+      "Hachette Boardgames UK",
+      "Hobby Japan",
+      "HUCH!",
+      "Lucky Duck Games",
+      "Maldito Games",
+      "MIPL",
+      "Pandasaurus Games",
+      "Popcorn Games",
+      "Reflexshop",
+      "Tower Tactic Games",
+      "White Goblin Games"
+    ],
+    "categories": [
+      "Card Game",
+      "Medieval"
+    ],
+    "mechanics": [
+      "End Game Bonuses",
+      "Set Collection",
+      "Take That"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        3,
+        5
+      ],
+      "not_recommended": [
+        1,
+        2,
+        5
       ]
     }
   },
@@ -38544,6 +39634,63 @@
       "not_recommended": []
     }
   },
+  "428787": {
+    "bggId": "428787",
+    "title": "Omens",
+    "image": "https://cf.geekdo-images.com/WU7pL8cFTYx7iDVU_UtOzw__original/img/X24PD_1CpCqsmGBSgwPnTB6QhOY=/0x0/filters:format(png)/pic9504349.png",
+    "thumbnail": "https://cf.geekdo-images.com/WU7pL8cFTYx7iDVU_UtOzw__small/img/X8kd447bN17NIEmeU2GqkLeZ3ac=/fit-in/200x150/filters:strip_icc()/pic9504349.png",
+    "description": "You've found a mysterious box filled with strange cards. As you try to decipher their meaning, you soon realize that you won't be able to do it without help. Surrounded by your friends, you begin to unravel their secret: played the right way, the cards eventually disappear. But they always come back, safely tucked away in the box, for the next game.\n\nIn Pr&eacute;sages, you team up to get rid of your cards until you have only one left in your hand.\n\nEach of your cards interacts with the cards played by your partner, as well as those of your opponents, so you need to play them at the right moment!\n\nThe team that sheds its cards first wins.\n\n&mdash;description from the publisher",
+    "yearpublished": "2025",
+    "minplayers": "4",
+    "minage": "8",
+    "maxplayers": "6",
+    "playingtime": "30",
+    "minplaytime": "20",
+    "maxplaytime": "30",
+    "averageweight": "1.8095",
+    "average": "7.39528",
+    "bayesaverage": "5.81901",
+    "usersrated": "548",
+    "rank": "4595",
+    "designers": [
+      "Maxime Rambourg"
+    ],
+    "artists": [
+      "Ben Renaut"
+    ],
+    "publishers": [
+      "Spiral Éditions",
+      "999 Games",
+      "Ghenos Games",
+      "Hachette Boardgames UK",
+      "Hachette Boardgames USA",
+      "Happy Baobab",
+      "Ravensburger AG",
+      "Swan Panasia Co., Ltd."
+    ],
+    "categories": [
+      "Card Game"
+    ],
+    "mechanics": [
+      "Hand Management",
+      "Team-Based Game"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        6
+      ],
+      "recommended": [
+        4,
+        5
+      ],
+      "not_recommended": [
+        1,
+        2,
+        3,
+        6
+      ]
+    }
+  },
   "429405": {
     "bggId": "429405",
     "title": "Orloj: The Prague Astronomical Clock",
@@ -38607,6 +39754,65 @@
         4
       ],
       "not_recommended": [
+        4
+      ]
+    }
+  },
+  "429438": {
+    "bggId": "429438",
+    "title": "Ayar: Children of the Sun",
+    "image": "https://cf.geekdo-images.com/Bpomnj9RBdTwQNcuFrAmVg__original/img/O7tSERhO4nluMd3_92_-paBvJwQ=/0x0/filters:format(jpeg)/pic8444642.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/Bpomnj9RBdTwQNcuFrAmVg__small/img/wkTKinRioV7dwaupRnywU5MpQ1Y=/fit-in/200x150/filters:strip_icc()/pic8444642.jpg",
+    "description": "Retell the incredible origin myth of the Inca in this dramatic mid-weight eurogame.\n\nIn the beginning, Viracocha the creator brought forth Inti, the sun god, and Mama Quilla, the moon god. From the union of these two gods sprang four sons and four daughters: the Ayar. These siblings were tasked with guiding the first clans and teaching them the skills needed to build a civilization. As they traveled the land in search of fertile ground, the Ayar one by one met their fates until only two remained to found Tawantinsuyu &ndash; the Inca Empire.\n\nIn Ayar: Children of the Sun, players take control of one of the first clans, journeying with the Ayar across the Andes. Follow their teaching and improve your skills at farming, pottery, weaving, and reed bundling. As well as advancing your own clan, you must influence the progress of the Ayar, ensuring the survival of those who reward your most developed skills. Seek the approval of Mama Quilla through long-term strategy, and please Inti with tactical play. Be careful not to earn the ire of one of these jealous gods because at the end of the game, whichever one favors you least will determine your final score.\n\nThe future of your clan &ndash; and the Inca civilization &ndash; is in your hands.\n\n&mdash;description from the publisher",
+    "yearpublished": "2025",
+    "minplayers": "1",
+    "minage": "14",
+    "maxplayers": "4",
+    "playingtime": "90",
+    "minplaytime": "60",
+    "maxplaytime": "90",
+    "averageweight": "3.2593",
+    "average": "7.90278",
+    "bayesaverage": "6.10554",
+    "usersrated": "833",
+    "rank": "2629",
+    "designers": [
+      "Mandela Fernandez-Grandon",
+      "Fabio Lopiano"
+    ],
+    "artists": [
+      "Ian O'Toole"
+    ],
+    "publishers": [
+      "Osprey Games",
+      "Giant Roc",
+      "Super Meeple"
+    ],
+    "categories": [
+      "Ancient",
+      "Civilization",
+      "Educational"
+    ],
+    "mechanics": [
+      "Area Majority / Influence",
+      "Highest-Lowest Scoring",
+      "Point to Point Movement",
+      "Set Collection",
+      "Solo / Solitaire Game",
+      "Tile Placement",
+      "Track Movement",
+      "Worker Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3
+      ],
+      "recommended": [
+        2,
+        4
+      ],
+      "not_recommended": [
+        1,
         4
       ]
     }
@@ -39038,6 +40244,80 @@
         5
       ],
       "not_recommended": [
+        5
+      ]
+    }
+  },
+  "441696": {
+    "bggId": "441696",
+    "title": "Sanctuary",
+    "image": "https://cf.geekdo-images.com/C6V2VCtf1_7cavenn7Is3A__original/img/mdgxo4BZpLgvG20XfNHfMg8j8Go=/0x0/filters:format(jpeg)/pic8932906.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/C6V2VCtf1_7cavenn7Is3A__small/img/ZJJOWNSKk81xpvNkMpGd5T0ybLo=/fit-in/200x150/filters:strip_icc()/pic8932906.jpg",
+    "description": "In Sanctuary, you will plan and design a modern, scientifically-managed zoo for animals and visitors. A supply of 135 unique zoo tiles provides you with animals, buildings, and projects. In every game, you want to find the best mix from those available to build the most successful zoological establishment. Different effects on the tiles will help you to achieve conservation goals and to increase the attraction of your zoo.\n\nEach player has a set of four action cards to manage their gameplay, and the power of an action is determined by the slot the card currently occupies. One of those cards will let you play projects, and the other three cards will let you play animals of a specific habitat: forest, rock, or water.\n\nSanctuary is based on its predecessor Ark Nova, but modifies and simplifies many of the mechanisms of that game in an elegant and surprising manner. Your goal to find the best way to puzzle together your animals, buildings, and projects on your zoo map is an ongoing pleasure!\n\n&mdash;description from the publisher",
+    "yearpublished": "2025",
+    "minplayers": "1",
+    "minage": "12",
+    "maxplayers": "5",
+    "playingtime": "100",
+    "minplaytime": "40",
+    "maxplaytime": "100",
+    "averageweight": "2.8099",
+    "average": "7.67728",
+    "bayesaverage": "6.7367",
+    "usersrated": "3252",
+    "rank": "853",
+    "designers": [
+      "Mathias Wigge"
+    ],
+    "artists": [
+      "Dennis Lohausen",
+      "Christof Tisch",
+      "Felix Wermke"
+    ],
+    "publishers": [
+      "Feuerland Spiele",
+      "Capstone Games",
+      "Cranio Creations",
+      "Game Harbor",
+      "Gémklub",
+      "Grok Games",
+      "IGAMES",
+      "Korea Boardgames",
+      "Lautapelit.fi",
+      "Maldito Games",
+      "MINDOK",
+      "Portal Games",
+      "Regatul Jocurilor",
+      "Super Meeple",
+      "テンデイズゲームズ (TendaysGames)",
+      "White Goblin Games"
+    ],
+    "categories": [
+      "Animals",
+      "Environmental",
+      "Territory Building"
+    ],
+    "mechanics": [
+      "Action Queue",
+      "Hand Management",
+      "Hexagon Grid",
+      "Open Drafting",
+      "Set Collection",
+      "Solo / Solitaire Game",
+      "Tile Placement",
+      "Variable Set-up"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2,
+        3
+      ],
+      "recommended": [
+        1,
+        4
+      ],
+      "not_recommended": [
+        5,
         5
       ]
     }

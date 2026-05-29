@@ -18612,14 +18612,14 @@ const gameData = {
     "title": {
       "display": "프리세이지",
       "owned": "프리세이지",
-      "bgg": ""
+      "bgg": "Omens"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.4,
-      "weight": 1.83,
+      "id": "428787",
+      "matchStatus": "forced",
+      "year": "2025",
+      "rating": 7.39528,
+      "weight": 1.8095,
       "minPlayers": 4,
       "maxPlayers": 6,
       "bestPlayers": [
@@ -18629,19 +18629,28 @@ const gameData = {
         4,
         6
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "playingTime": 30,
+      "minPlayTime": 20,
+      "maxPlayTime": 30,
+      "categories": [
+        "Card Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "팀전",
-        "카드"
+        "Hand Management",
+        "Team-Based Game"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Maxime Rambourg"
+      ],
+      "description": "You've found a mysterious box filled with strange cards. As you try to decipher their meaning, you soon realize that you won't be able to do it without help. Surrounded by your friends, you begin to unravel their secret: played the right way, the cards eventually disappear. But they always come back, safely tucked away in the box, for the next game.\n\nIn Pr&eacute;sages, you team up to get rid of your cards until you have only one left in your hand.\n\nEach of your cards interacts with the cards played by your partner, as well as those of your opponents, so you need to play them at the right moment!\n\nThe team that sheds its cards first wins.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -18652,24 +18661,36 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
-        "beginner",
         "group",
+        "beginner",
         "large_group"
       ],
       "interactionTags": [
+        "competitive",
+        "team",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "beginner",
+        "card_play",
+        "strategy",
         "group",
+        "beginner",
         "large_group",
+        "competitive",
+        "team",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -18687,9 +18708,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/WU7pL8cFTYx7iDVU_UtOzw__original/img/X24PD_1CpCqsmGBSgwPnTB6QhOY=/0x0/filters:format(png)/pic9504349.png",
+      "thumbnail": "https://cf.geekdo-images.com/WU7pL8cFTYx7iDVU_UtOzw__small/img/X8kd447bN17NIEmeU2GqkLeZ3ac=/fit-in/200x150/filters:strip_icc()/pic9504349.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -18928,17 +18949,21 @@ const gameData = {
     "title": {
       "display": "하이다이브",
       "owned": "하이다이브",
-      "bgg": ""
+      "bgg": "Splash!"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.3,
+      "id": "170041",
+      "matchStatus": "forced",
+      "year": "2014",
+      "rating": 6.28339,
       "weight": 1,
       "minPlayers": 2,
-      "maxPlayers": 6,
-      "bestPlayers": [],
+      "maxPlayers": 8,
+      "bestPlayers": [
+        3,
+        4,
+        5
+      ],
       "recommendedPlayers": [
         2,
         3,
@@ -18946,18 +18971,30 @@ const gameData = {
         5,
         6
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        6,
+        7,
+        8
+      ],
+      "playingTime": 20,
+      "minPlayTime": 10,
+      "maxPlayTime": 20,
+      "categories": [
+        "Action / Dexterity",
+        "Children's Game",
+        "Party Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "쌓기"
+        "Pattern Building"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Wilfried Fort",
+        "Marie Fort"
+      ],
+      "description": "Carefully place piece after piece on top of the wobbly stack, and don't be the one makes it all topple!\n\nSplash! is a fast-paced, nail-biting dexterity game. After placing a piece on top of the stack, you get to give the next player a piece of your choice in your own pile that must be added to the stack. The piece must match the previous color or shape, but how it gets placed is up to the next player! When the stack comes crashing down, the player who gave the piece gets a gold gem. The first player to collect three gold gems or run out of pieces wins!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -18968,27 +19005,43 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "cozy"
+        "cozy",
+        "funny",
+        "chaotic"
       ],
-      "playTags": [],
+      "playTags": [
+        "party"
+      ],
       "situationTags": [
+        "beginner",
+        "family",
         "first_game",
-        "quick_play",
         "group",
-        "large_group"
+        "large_group",
+        "quick_play"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
+        "funny",
+        "chaotic",
+        "party",
+        "beginner",
+        "family",
         "first_game",
-        "quick_play",
         "group",
-        "large_group"
+        "large_group",
+        "quick_play",
+        "table_talk"
       ],
       "displayTags": [
-        "편안하게"
+        "즐기고",
+        "편안하게",
+        "대화하며"
       ],
       "summaryKo": "",
       "comment": {
@@ -19007,9 +19060,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/n5NDKKsn-A_YIFMM7Z5ikA__original/img/Ai8Fctc21yraqOQyj2dbeEZVLTg=/0x0/filters:format(jpeg)/pic2677385.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/n5NDKKsn-A_YIFMM7Z5ikA__small/img/6ZnX7J1b2DwwpvYncuZp8ScBHh0=/fit-in/200x150/filters:strip_icc()/pic2677385.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -19171,14 +19224,14 @@ const gameData = {
     "title": {
       "display": "허리컵",
       "owned": "허리컵",
-      "bgg": ""
+      "bgg": "Hurry'Cup!"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5.5,
-      "weight": 1.31,
+      "id": "38504",
+      "matchStatus": "forced",
+      "year": "2008",
+      "rating": 5.46064,
+      "weight": 1.3143,
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
@@ -19190,19 +19243,31 @@ const gameData = {
         5,
         6
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        6
+      ],
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
+      "categories": [
+        "Action / Dexterity",
+        "Racing",
+        "Real-time",
+        "Sports"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "순발력",
-        "레이싱"
+        "Dice Rolling",
+        "Modular Board",
+        "Roll / Spin and Move"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Antoine Bauza"
+      ],
+      "description": "Drivers from all over Europe have arrived and are lined up on the starting line. Consisting of narrow and winding roads, the track is filled with dangers and promises a tricky race. As one of the fastest and fearless pilots in the race, you will try to pass the finish line before your opponents by being the quickest at spotting and grabbing the die which will allow you to move forward.\n\nHurry'Cup is a car racing game where 3 to 6 players face off on tracks that are always different from one game to the next; as decided by the players themselves. Reflexes, dexterity, and risk-taking are the key to stepping first on the podium. It is a tile game with pavement-burning ambiance. Made up of 36 modular tiles, the Hurry'Cup race track offers many game possibilities, making it a new game each time. Hurry'Cup is a game with simple rules and Fast and Furious Fun.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -19213,26 +19278,42 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.31,
       "moodTags": [
+        "chaotic",
+        "tense",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "party",
+        "dexterity"
+      ],
       "situationTags": [
+        "quick_play",
         "beginner",
         "first_game",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "tense",
         "cozy",
+        "party",
+        "dexterity",
+        "quick_play",
         "beginner",
         "first_game",
         "group",
-        "large_group"
+        "large_group",
+        "simultaneous"
       ],
       "displayTags": [
+        "즐기고",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -19252,9 +19333,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/AOMQ3EP8fVay1OP33HtJIA__original/img/831hTFMpTawAxuGjSmpmzF5JmOM=/0x0/filters:format(jpeg)/pic375267.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/AOMQ3EP8fVay1OP33HtJIA__small/img/Wh2tcd2WpprgXk3kPG_9Nqogfmk=/fit-in/200x150/filters:strip_icc()/pic375267.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -19421,16 +19502,16 @@ const gameData = {
     "title": {
       "display": "황혼의비문",
       "owned": "황혼의비문",
-      "bgg": ""
+      "bgg": "Twilight Inscription"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.4,
-      "weight": 3.2,
+      "id": "361545",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 7.40445,
+      "weight": 3.2155,
       "minPlayers": 1,
-      "maxPlayers": 6,
+      "maxPlayers": 8,
       "bestPlayers": [
         3,
         4
@@ -19443,16 +19524,28 @@ const gameData = {
         5,
         6
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        7,
+        8,
+        8
+      ],
+      "playingTime": 120,
+      "minPlayTime": 90,
+      "maxPlayTime": 120,
+      "categories": [
+        "Science Fiction"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Dice Rolling",
+        "Paper-and-Pencil",
+        "Variable Player Powers"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "James Kniffen"
+      ],
+      "description": "The Lazax Empire has burned to ash, rejected by its subjects. The aftermath was tragedy and petty conflict in equal measure, a time of loss and exhaustion. In the ensuing Dark Years, the factions of the galaxy retreated and recovered their strength. Now, they look upon the stars and see an opportunity&mdash;a chance to reclaim what was lost. A chance to redefine galactic civilization. A chance to leave their mark upon the stars.\n\nTwilight Inscription, an epic roll-and-write game for one to eight players, offers an experience unlike anything Fantasy Flight Games has done before. With a limited pool of resources at your disposal, you&rsquo;ll need to carefully manage Navigation, Expansion, Industry, and Warfare as you amass victory points and earn your right to the throne on Mecatol Rex. Will your faction become the new rulers of the galaxy? Or will your fledgling empire fade into obscurity? Anything can happen in this strategic, infinitely-replayable game!\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -19506,9 +19599,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/g36va6ofPCzNZXF-9GEpCg__original/img/W-Goi5-dQP19Nj-MXa8xdEtpnVs=/0x0/filters:format(png)/pic7132023.png",
+      "thumbnail": "https://cf.geekdo-images.com/g36va6ofPCzNZXF-9GEpCg__small/img/F8SHn9giBPmooUkmJDz9kXAamS0=/fit-in/200x150/filters:strip_icc()/pic7132023.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -19828,16 +19921,16 @@ const gameData = {
     "title": {
       "display": "1%의기적",
       "owned": "1%의기적",
-      "bgg": ""
+      "bgg": "1%: A Game of Strategic Chance"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.8,
-      "weight": 1.6,
+      "id": "378040",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 6.64848,
+      "weight": 1.5,
       "minPlayers": 2,
-      "maxPlayers": 5,
+      "maxPlayers": 6,
       "bestPlayers": [
         4
       ],
@@ -19847,16 +19940,27 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        3
+      ],
+      "playingTime": 30,
+      "minPlayTime": 10,
+      "maxPlayTime": 30,
+      "categories": [
+        "Card Game"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Dice Rolling",
+        "Push Your Luck"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Luke Melia"
+      ],
+      "description": "1% - A game of Strategic Chance! All you have to do to win is roll 0 with two 10-sided dice. Sounds easy? The chance is 1%! 1% is a fast and fun card game of strategy and probability, with a touch of misdirection! If you can outlast your opponents, you&rsquo;ll be rewarded with a choice: Do you roll the dice and try to win? Or do you sacrifice this turn to increase your chances next time? If there is a next time, that is! Take too long, and another player could snatch victory away from you.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -19866,25 +19970,44 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.6,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "funny"
+      ],
+      "playTags": [
+        "party",
+        "card_play"
+      ],
       "situationTags": [
         "beginner",
+        "quick_play",
         "group",
         "large_group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "funny",
+        "party",
+        "card_play",
         "beginner",
+        "quick_play",
         "group",
         "large_group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "즐기고",
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -19902,9 +20025,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/K2spoKKeCHm7OHonaSdK3g__original/img/sPdUIEJgxijCDtd6J5-23mHhYaM=/0x0/filters:format(jpeg)/pic7293478.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/K2spoKKeCHm7OHonaSdK3g__small/img/aRHiqdERA2rlcG5XmLNL1DxSZF0=/fit-in/200x150/filters:strip_icc()/pic7293478.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -20318,30 +20441,45 @@ const gameData = {
     "title": {
       "display": "개구리벌주기",
       "owned": "개구리벌주기",
-      "bgg": ""
+      "bgg": "Mr. Mouth"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5,
+      "id": "6387",
+      "matchStatus": "forced",
+      "year": "1976",
+      "rating": 5.02922,
       "weight": 1,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "minPlayers": 2,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3
+      ],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 10,
+      "minPlayTime": 10,
+      "maxPlayTime": 10,
+      "categories": [
+        "Action / Dexterity",
+        "Animals",
+        "Children's Game",
+        "Electronic"
+      ],
       "categoriesKo": [],
       "mechanics": [
         "타이밍"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "(Uncredited)"
+      ],
+      "description": "Mr. Mouth is a children's action game.  A motorized frog head rotates in the center of an X-shaped board.  Each player uses a spring-loaded hand affixed to each arm of the X to propel plastic housefly pieces into the frog's mouth, which periodically opens and closes.  The first player to flip all ten of his or her flies into the frog's mouth wins.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -20356,16 +20494,22 @@ const gameData = {
       ],
       "playTags": [],
       "situationTags": [
+        "beginner",
+        "family",
         "first_game",
-        "quick_play"
+        "quick_play",
+        "group"
       ],
       "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
+        "beginner",
+        "family",
         "first_game",
-        "quick_play"
+        "quick_play",
+        "group"
       ],
       "displayTags": [
         "편안하게"
@@ -20387,9 +20531,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/uJfy0kFdAf_Zciz_Hwk5fQ__original/img/bsyy0Jzw3Wty6tW4GfD4KJxPceg=/0x0/filters:format(jpeg)/pic95726.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/uJfy0kFdAf_Zciz_Hwk5fQ__small/img/DONE5qYndoidaAtgao-femevjfM=/fit-in/200x150/filters:strip_icc()/pic95726.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -20403,30 +20547,47 @@ const gameData = {
     "title": {
       "display": "개구리사탕먹기",
       "owned": "개구리사탕먹기",
-      "bgg": ""
+      "bgg": "Hungry Hungry Hippos"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 4.2,
-      "weight": 1,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "id": "5895",
+      "matchStatus": "forced",
+      "year": "1978",
+      "rating": 4.17652,
+      "weight": 1.0663,
+      "minPlayers": 2,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        2,
+        3
+      ],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 10,
+      "minPlayTime": 10,
+      "maxPlayTime": 10,
+      "categories": [
+        "Action / Dexterity",
+        "Animals",
+        "Children's Game",
+        "Comic Book / Strip",
+        "Real-time"
+      ],
       "categoriesKo": [],
       "mechanics": [
         "타이밍"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Fred Kroll",
+        "Masatoshi Todokoro"
+      ],
+      "description": "Jump into the jungle and join the feeding frenzy!​\n\nWhether they&rsquo;re munching at brunch or crunching at lunch, these four ravenous hippos are always ready for a yummy treat! No fruit in the jungle is safe from the rumbly tummies of Hungry, Sweetie, Bottomless, and Berry. Look out for your snacks at the Rumbly Lagoon when these chompy chewers dive in!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -20437,23 +20598,43 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "cozy"
+        "cozy",
+        "chaotic",
+        "tense"
       ],
-      "playTags": [],
+      "playTags": [
+        "party",
+        "dexterity"
+      ],
       "situationTags": [
+        "beginner",
+        "family",
         "first_game",
-        "quick_play"
+        "quick_play",
+        "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
+        "chaotic",
+        "tense",
+        "party",
+        "dexterity",
+        "beginner",
+        "family",
         "first_game",
-        "quick_play"
+        "quick_play",
+        "group",
+        "simultaneous"
       ],
       "displayTags": [
-        "편안하게"
+        "즐기고",
+        "편안하게",
+        "빠져들게"
       ],
       "summaryKo": "",
       "comment": {
@@ -20472,9 +20653,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/oIF_SSRCrDwEbK5oHjm-QQ__original/img/h0zbFesCLPuJ59c1n03BE5EG4Hg=/0x0/filters:format(jpeg)/pic152043.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/oIF_SSRCrDwEbK5oHjm-QQ__small/img/KTHHU9o4w5V54SWnt5DD24Ot1fU=/fit-in/200x150/filters:strip_icc()/pic152043.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -21002,14 +21183,14 @@ const gameData = {
     "title": {
       "display": "고고시티",
       "owned": "고고시티",
-      "bgg": ""
+      "bgg": "5x5 City"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7,
-      "weight": 1.57,
+      "id": "264638",
+      "matchStatus": "forced",
+      "year": "2018",
+      "rating": 6.98147,
+      "weight": 1.5556,
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -21022,15 +21203,21 @@ const gameData = {
         4
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
+      "categories": [
+        "City Building"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Tile Placement"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Hisashi Hayashi"
+      ],
+      "description": "You and your fellow players have just been elected mayors of a thriving new city in the midst of expansion. Over the course of the game, you will need to build various buildings and attract residents to this new city. However, you will face multiple challenges in terms of building restrictions throughout the game. Will you be able to build a city more splendid than the others?\n\n5&times;5 City is a tile placement game that builds various buildings in your city.\n\nEach city board is placed in front of every player. The city board has 25 squares of vacant lot, but it can be divided into various types of compartments depending on the compartment card selected at the start of the game.\n\nFor each round, draw a building tile randomly according to the number of squares in the specified section, keep in touch with other players and place it on your town board.\n\nIn 5&times;5 City, it is a point that you can place the building only in a fixed area in each round, not putting it in the place you like on the street board.\n\nThere are various effects in buildings, making effective use of the effect is the way to victory.\n\nIn addition, there may be buildings which sometimes do not need. In that case you can turn the building upside down into a park.\n\n&mdash;description from the designer",
       "descriptionKo": ""
     },
     "cottage": {
@@ -21041,24 +21228,34 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.57,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "puzzle",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "couple",
         "group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "puzzle",
+        "strategy",
         "beginner",
         "couple",
         "group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -21076,9 +21273,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/-0cJym18I7iZakp3AqFCBA__original/img/CTtVdFJIQMAsUZEoJAQnz-q6FpU=/0x0/filters:format(jpeg)/pic4424042.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/-0cJym18I7iZakp3AqFCBA__small/img/yTaZ6ga2dUQpzhAcn7XwlfDuxIc=/fit-in/200x150/filters:strip_icc()/pic4424042.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -21544,15 +21741,15 @@ const gameData = {
     "title": {
       "display": "궁신",
       "owned": "궁신",
-      "bgg": ""
+      "bgg": "Courtisans"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.3,
-      "weight": 1.43,
-      "minPlayers": 3,
+      "id": "402283",
+      "matchStatus": "forced",
+      "year": "2024",
+      "rating": 7.26135,
+      "weight": 1.3061,
+      "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
         4
@@ -21562,19 +21759,30 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        5
+      ],
+      "playingTime": 30,
+      "minPlayTime": 20,
+      "maxPlayTime": 30,
+      "categories": [
+        "Card Game",
+        "Medieval"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "세트컬렉션",
-        "상호작용"
+        "End Game Bonuses",
+        "Set Collection",
+        "Take That"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Romaric Galonnier",
+        "Anthony Perone"
+      ],
+      "description": "Tonight, the queen holds a banquet that everyone will attend. Will they leave a good impression? Backstabbing is fair game, and no trick is too dirty if it allows you to place your favorite families in the spotlight.\n\nIn Courtisans, you receive and play three cards on each of your turns. One is played at the Queen's table to sway a family's influence, whether in a positive or negative manner. The two other cards are played in your domain and in an opponent's domain, and they can be worth positive or negative points, depending on their family's status at the end of the game. Choose where best to place your three cards if you want to end up with the most points and win.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -21585,27 +21793,42 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.43,
       "moodTags": [
+        "chaotic",
+        "funny",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "first_game",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "funny",
         "cozy",
+        "card_play",
+        "strategy",
         "beginner",
         "first_game",
         "group",
-        "large_group"
+        "large_group",
+        "competitive"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "즐기고",
+        "편안하게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -21624,9 +21847,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/JK1HbIGtiVfsIbnw3Q543w__original/img/kPNCItrb8GwoIwV9R-vjczIkJR4=/0x0/filters:format(jpeg)/pic8004908.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/JK1HbIGtiVfsIbnw3Q543w__small/img/aLX0aSFbj4WBlK69h0x7j_8bItc=/fit-in/200x150/filters:strip_icc()/pic8004908.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -23379,14 +23602,14 @@ const gameData = {
     "title": {
       "display": "나르",
       "owned": "나르",
-      "bgg": ""
+      "bgg": "Knarr"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.5,
-      "weight": 1.9,
+      "id": "379629",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 7.47024,
+      "weight": 1.9009,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -23397,18 +23620,28 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
+      "categories": [
+        "Card Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "셋컬렉션"
+        "Hand Management",
+        "Open Drafting",
+        "Race",
+        "Set Collection"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Thomas Dupont"
+      ],
+      "description": "In Knarr, you are the leader of a band of Vikings that you send to new destinations. Manage the recruitment of your crew, and choose the best territories to explore. Depending on the destinations reached (for trading or influence) and the Vikings who accompany you, you can increase your reputation to gain even more wealth. Each turn, you:\n\n\n     Place a new member in your Viking crew, activate the effects of all of them with the same icon, and get another one from those available under the matching color on the central board, or\n\n\n\n     Explore new destinations, with the opportunity to trade with those places and get more gains or reputation.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -23419,22 +23652,32 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 1.9,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "card_play",
+        "strategy",
         "beginner",
         "group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -23452,9 +23695,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/PaYRAlezMGDlLt8LXmR_sQ__original/img/9nndYkVCIDsSHM3CmuiLk-0WCHk=/0x0/filters:format(png)/pic7857343.png",
+      "thumbnail": "https://cf.geekdo-images.com/PaYRAlezMGDlLt8LXmR_sQ__small/img/9BXSosnE91-b8tHUEz3Qgfr0aAo=/fit-in/200x150/filters:strip_icc()/pic7857343.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -24394,14 +24637,14 @@ const gameData = {
     "title": {
       "display": "다빈치코드플러스",
       "owned": "다빈치코드플러스",
-      "bgg": ""
+      "bgg": "Da Vinci Code"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.1,
-      "weight": 1.49,
+      "id": "8946",
+      "matchStatus": "forced",
+      "year": "2002",
+      "rating": 6.12269,
+      "weight": 1.4842,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -24412,18 +24655,26 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 15,
+      "minPlayTime": 15,
+      "maxPlayTime": 15,
+      "categories": [
+        "Deduction"
+      ],
       "categoriesKo": [],
       "mechanics": [
         "추리"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Hiroaki Suzuki",
+        "Eiji Wakasugi"
+      ],
+      "description": "From the box:\n\nConceal your secret code, outguess your opponent, deduce the solution, amaze your foes.  In the game of CODA players try to crack each other's \"code\" - a sequence of secret numbers.  Guess an opponent's secret number and it is revealed (by knocking it down).  Guess incorrectly and you must reveal one of your own secret numbers!  On each turn, a new number enters play, which helps you to narrow the possibilities and grow your own code.  Common sense, intuition and your \"detective\" skills will guide you to success.\n\nFrom me:\n\nThere are two sets of tiles (similar to Stratego pieces without the soldiers) numbered 0-11.  One set is black, one is white.  In four player game, everyone one grabs three random pieces and arranges them in numeric order, with white pieces going to the right on ties.  In order a player grabs one of the remaining tiles and guesses one of the opponents pieces.  If correct, that piece is revealed. If the player is incorrect the piece that was just drawn is placed in the correct place in his own sequence and revealed.  If the player was correct in guessing he MAY make another guess.  If he chooses not to then he places the picked piece in his code, in sequence, but does not reveal it.\n\nPlay continues until only one person has a piece standing.  When the new tiles run out, just keep going without drawing tiles.\n\nBelongs to a series / trilogy, containing:\n\n    Bernini Mysterie\n    Da Vinci Code\n    Salomon's Dilemma",
       "descriptionKo": ""
     },
     "cottage": {
@@ -24434,25 +24685,38 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.49,
       "moodTags": [
+        "tense",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "deduction"
+      ],
       "situationTags": [
         "beginner",
         "first_game",
-        "group"
+        "group",
+        "quick_play"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "social"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
         "cozy",
+        "deduction",
         "beginner",
         "first_game",
-        "group"
+        "group",
+        "quick_play",
+        "social"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "빠져들게",
+        "편안하게",
+        "대화하며"
       ],
       "summaryKo": "",
       "comment": {
@@ -24471,9 +24735,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/o7j9AgTLZu-bcGU1hRDTQA__original/img/DB2ByyzzMuuwzi2ZCJYmzqQ9BTI=/0x0/filters:format(jpeg)/pic4979576.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/o7j9AgTLZu-bcGU1hRDTQA__small/img/ZSKnVQl67zaZeHd7upUj1FPu8iw=/fit-in/200x150/filters:strip_icc()/pic4979576.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -24903,13 +25167,13 @@ const gameData = {
     "title": {
       "display": "다이너스티 혼인과통치",
       "owned": "다이너스티 혼인과통치",
-      "bgg": ""
+      "bgg": "Dynasties: Heirate & Herrsche"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.2,
+      "id": "191972",
+      "matchStatus": "forced",
+      "year": "2016",
+      "rating": 7.19579,
       "weight": 3,
       "minPlayers": 3,
       "maxPlayers": 5,
@@ -24921,19 +25185,29 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        5
+      ],
+      "playingTime": 90,
+      "minPlayTime": 60,
+      "maxPlayTime": 90,
+      "categories": [
+        "Renaissance"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "영향력",
-        "일꾼놓기"
+        "Area Majority / Influence",
+        "End Game Bonuses",
+        "I Cut, You Choose",
+        "Turn Order: Stat-Based"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Matthias Cramer"
+      ],
+      "description": "Renaissance Europe is coming together, and people have realized that even the most powerful dynasties can achieve more together, so members of those dynasties are marrying, trading and sharing with one another &mdash; but who will end with the biggest piece of the pie?\n\nIn Dynasties, players must make many compromises, whether acting on their own or reacting to the behavior of their fellow players. In addition to these tactical and strategic decisions, luck also plays something of a role as not every marriage brings the windfall expected. Perhaps then another marriage will bring more success and influence?\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -24955,7 +25229,9 @@ const gameData = {
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
@@ -24964,11 +25240,13 @@ const gameData = {
         "experienced",
         "long_stay",
         "group",
-        "large_group"
+        "large_group",
+        "competitive"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게"
+        "빠져들게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -24987,9 +25265,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/mV3c6ahvFBm4AnH2CSPqmw__original/img/MwL7yJTOK111ddeNwr7_Z52e8-0=/0x0/filters:format(png)/pic2987744.png",
+      "thumbnail": "https://cf.geekdo-images.com/mV3c6ahvFBm4AnH2CSPqmw__small/img/jvzkoqXKI8JUgSOOXrD4F2SiZpg=/fit-in/200x150/filters:strip_icc()/pic2987744.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -25003,14 +25281,14 @@ const gameData = {
     "title": {
       "display": "대만차연대기",
       "owned": "대만차연대기",
-      "bgg": ""
+      "bgg": "Formosa Tea"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.4,
-      "weight": 3.45,
+      "id": "287941",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 7.35656,
+      "weight": 3.4167,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -25021,16 +25299,30 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 90,
+      "minPlayTime": 40,
+      "maxPlayTime": 90,
+      "categories": [
+        "Farming",
+        "Industry / Manufacturing"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Contracts",
+        "Events",
+        "Tech Trees / Tech Tracks",
+        "Variable Player Powers",
+        "Worker Placement"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Chu-Lan Kao"
+      ],
+      "description": "The sub-tropical climate and environment of Taiwan makes the island highly suitable for cultivating top quality tea. But it wasn't not until the 19th century after English businessman John Dodd discovered some amazing Oolong tea there that the Taiwanese tea business truly begin to bloom and \"Formosa Tea\" became world-reknowned.\n\nIn Formosa Tea, players are tea farm owners competing to harvest the best tea leaves, improve their tea processing techniques, and produce tea of the highest quality for not only the domestic market but also for the international market. With the unique worker placement and worker advancement mechanisms, along with the tea dehydration and scenting processing, players must use their workers wisely to make the best tea in the market.\n\nA game of Formosa Tea is played in four rounds. In each round, players take turns to perform one of the five possible actions:\n\n\n    Send a worker to harvest tea leaves\n    Send a worker to a tea factory to  process tea leaves\n    Retrieve a worker from the tea factory after tea processing is completed\n    Send a worker to sell tea in the domestic market\n    Send a worker to sell tea to international merchants. \n\n\nAfter the end of the fourth round, the player who has the most prestige points wins!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -25051,7 +25343,10 @@ const gameData = {
         "long_stay",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "turn_based"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
@@ -25059,11 +25354,14 @@ const gameData = {
         "strategy",
         "experienced",
         "long_stay",
-        "group"
+        "group",
+        "competitive",
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게"
+        "빠져들게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -25082,9 +25380,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/zUU7fyzcPmC5dJ9ovT90vQ__original/img/qhjkgE38WiKvIANM2vTrsdb_4-w=/0x0/filters:format(jpeg)/pic4928296.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/zUU7fyzcPmC5dJ9ovT90vQ__small/img/X5Ls0TJfgBx0WZOa7Ak9FCu9qdg=/fit-in/200x150/filters:strip_icc()/pic4928296.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -27819,15 +28117,15 @@ const gameData = {
     "title": {
       "display": "동인도회사",
       "owned": "동인도회사",
-      "bgg": ""
+      "bgg": "East India Companies"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.4,
-      "weight": 3.05,
-      "minPlayers": 3,
+      "id": "354132",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 7.43044,
+      "weight": 3,
+      "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
         4
@@ -27836,16 +28134,32 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        4
+      ],
+      "playingTime": 120,
+      "minPlayTime": 90,
+      "maxPlayTime": 120,
+      "categories": [
+        "Economic",
+        "Transportation"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Investment",
+        "Market",
+        "Pick-up and Deliver",
+        "Stock Holding",
+        "Turn Order: Stat-Based",
+        "Worker Placement"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Pascal Ribrault"
+      ],
+      "description": "In the 18th and 19th centuries, shipping companies aimed to strengthen the trade between the West and the Far East that had begun in previous centuries. Tea, spices, coffee, and silk are commodities much consumed in Europe, and their buying and selling prices depend closely on supply and demand. Fortunes can be made and gambled depending on circumstances.\n\nIn East India Companies, players manage a large shipping company that trades with far flung trading posts in India. They must manage their ships and invest in buying shares of their own company or those of their competitors. Most importantly, players have to keep an eye on the constantly fluctuating market prices! Is it better to invest your money in the stock market or in buying goods? Do they prefer to use fast ships with low tonnage or slower ships with larger holds? Whatever the players choose, their strategies will influence those of their opponents.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -27866,7 +28180,10 @@ const gameData = {
         "long_stay",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "turn_based"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
@@ -27874,11 +28191,14 @@ const gameData = {
         "strategy",
         "experienced",
         "long_stay",
-        "group"
+        "group",
+        "competitive",
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게"
+        "빠져들게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -27897,9 +28217,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/j3B__Qgm8PeUD0cl2Sue-w__original/img/g4borQIX-AI0GgwB-6-Jt7dLlns=/0x0/filters:format(jpeg)/pic7064114.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/j3B__Qgm8PeUD0cl2Sue-w__small/img/SkVXF-MBesJuPupHJL2OmFah_PY=/fit-in/200x150/filters:strip_icc()/pic7064114.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -29793,13 +30113,13 @@ const gameData = {
     "title": {
       "display": "라운드더월드(영)",
       "owned": "라운드더월드(영)",
-      "bgg": ""
+      "bgg": "Round the World"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5.6,
+      "id": "244951",
+      "matchStatus": "forced",
+      "year": "2018",
+      "rating": 5.64251,
       "weight": 1,
       "minPlayers": 2,
       "maxPlayers": 4,
@@ -29811,18 +30131,28 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 15,
+      "minPlayTime": 15,
+      "maxPlayTime": 15,
+      "categories": [
+        "Card Game",
+        "Real-time"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "지리"
+        "Hand Management",
+        "Simultaneous Action Selection"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Daniel Danzer",
+        "Doris Danzer"
+      ],
+      "description": "Round the World is a real-time card game played simultaneously. The players are travel agents creating \"trips\" around the world for their customers. Each \"flight card\" shows two continents (each continent has its own color): a \"departure\" and a \"destination\" connected by an airplane/arrow. You try to get rid of your own 30-card deck within a period of exactly five minutes by creating \"trips\" card by card with matching colors from card to card until the trip is complete and can be \"booked\" (saved for scoring).\n\nAll players play at the same time, everybody to their own speed and rhythm. Holding your deck in one hand, you draw the top card as your sole \"hand card\" and add it to the ones you already placed in front of you to create \"trips\" &mdash; or you put it under the deck again. When you add a card, you may pick up the card from the other end of the trip and continue using this as your \"hand card\". You may also add cards to your opponents' trips and take cards (you desperately need) from them. All cards not \"booked\" (i.e., still in the deck or in incomplete trips) score against you, so if you empty your deck too soon, your opponents are able to lengthen your trips without completing them...\n\nA game consists of two rounds of five minutes, plus two simple scoring phases. The focus of the game is on your perfect timing within the five minutes, keep an eye on cards with landmarks (better for scoring!), and on your opponents \"offers\". There are variants included shifting the focus and making the game more challenging.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -29833,26 +30163,47 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
+        "chaotic",
+        "tense",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy",
+        "party",
+        "dexterity"
+      ],
       "situationTags": [
-        "first_game",
         "quick_play",
+        "first_game",
         "couple",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "tense",
         "cozy",
-        "first_game",
+        "card_play",
+        "strategy",
+        "party",
+        "dexterity",
         "quick_play",
+        "first_game",
         "couple",
-        "group"
+        "group",
+        "competitive",
+        "simultaneous"
       ],
       "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -29872,9 +30223,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/88wJzsUUhQo4tUJmbD5H3g__original/img/aO8VnwaWvVXnyX70JiE47KXXZQY=/0x0/filters:format(jpeg)/pic4172131.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/88wJzsUUhQo4tUJmbD5H3g__small/img/sq7BX2Ow_FBUQFktRY_oTaJbUyU=/fit-in/200x150/filters:strip_icc()/pic4172131.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -35627,16 +35978,16 @@ const gameData = {
     "title": {
       "display": "메모리아일랜드",
       "owned": "메모리아일랜드",
-      "bgg": "Island"
+      "bgg": "Memory Island"
     },
     "bgg": {
-      "id": "17632",
-      "matchStatus": "auto-confirmed",
-      "year": "2000",
-      "rating": 7,
+      "id": "371785",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 5.46667,
       "weight": 1,
       "minPlayers": 2,
-      "maxPlayers": 2,
+      "maxPlayers": 4,
       "bestPlayers": [],
       "recommendedPlayers": [
         2,
@@ -35644,23 +35995,25 @@ const gameData = {
         4
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 30,
-      "minPlayTime": 30,
-      "maxPlayTime": 30,
+      "playingTime": 10,
+      "minPlayTime": 5,
+      "maxPlayTime": 10,
       "categories": [
-        "Action / Dexterity"
+        "Educational",
+        "Math",
+        "Memory"
       ],
       "categoriesKo": [
         "순발력"
       ],
       "mechanics": [
-        "기억력"
+        "Memory"
       ],
       "mechanicsKo": [],
       "designers": [
-        "Tom Jolly"
+        "Gary Kim"
       ],
-      "description": "From Tom Jolly's website:\n\nThe idea is simple; you represent the survivors of one ship that smacked into another at sea. Both sunk. The other player is the survivors of the other ship. Of course, if you have more players, more ships might have been involved in the collision! Anyway, there's this little teeny rock of an island, and only enough space for about 10 people to stand there. The first player to have 7 of his or her own survivors standing on the ISLAND wins!\n\nRules and construction instructions here:\nhttp://www.silcom.com/~tomjolly/island.htm",
+      "description": "You have to find and rescue endangered animals scattered here and there. Check where the animals are, add their numbers, and make 10 &mdash; then you can bring them to a safe place! The first to rescue ten animals wins!\n\nMemory Island is a memory/arithmetic game for 2-4 players. Make the sum of the numbers equal to 10, and be the first player to collect ten cards to win.",
       "descriptionKo": "규칙은 간단합니다. 당신은 바다에서 다른 배와 충돌한 배의 생존자들을 대표합니다. 두 배 모두 침몰했습니다. 다른 플레이어는 다른 배의 생존자들입니다. 물론 더 많은 플레이어가 있으면 더 많은 배들이 충돌에 관여했을 수 있습니다! 어쨌든 작은 바위 섬이 있는데, 약 10명 정도만 그곳에 설 수 있습니다. 자신의 생존자 7명을 **섬** 위에 먼저 세우는 플레이어가 승리합니다!"
     },
     "cottage": {
@@ -35673,22 +36026,28 @@ const gameData = {
       "moodTags": [
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "puzzle"
+      ],
       "situationTags": [
-        "first_game",
+        "beginner",
         "quick_play",
-        "couple"
+        "first_game",
+        "group"
       ],
       "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "first_game",
+        "puzzle",
+        "beginner",
         "quick_play",
-        "couple"
+        "first_game",
+        "group"
       ],
       "displayTags": [
+        "머리쓰게",
         "편안하게"
       ],
       "summaryKo": "침몰한 배의 생존자들을 섬에 먼저 7명 배치하는 게임.",
@@ -35708,9 +36067,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/45NJP9VEd_1q7LUgQbSItg__original/img/HiwLL53k01ZeoEbaNMEfD38zfO8=/0x0/filters:format(png)/pic9377489.png",
+      "thumbnail": "https://cf.geekdo-images.com/45NJP9VEd_1q7LUgQbSItg__small/img/0Bm6QYh9rfMo7xNUEGD9wstX2cU=/fit-in/200x150/filters:strip_icc()/pic9377489.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -39187,14 +39546,14 @@ const gameData = {
     "title": {
       "display": "범고래고래",
       "owned": "범고래고래",
-      "bgg": ""
+      "bgg": "Whale to Look"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.6,
-      "weight": 1.83,
+      "id": "388413",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 6.53548,
+      "weight": 1.8333,
       "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
@@ -39206,18 +39565,27 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        5
+      ],
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
+      "categories": [
+        "Animals"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "작은"
+        "Betting and Bluffing",
+        "Grid Movement"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Bruno Faidutti",
+        "Jun Sasaki"
+      ],
+      "description": "A bay full of huge whales and orcas, and quite popular among whale-watching tourists, is becoming overrun with tour companies. The whales, on the other hand, seem to be enjoying themselves, sometimes showing up, sometimes not... As one of these tour companies, you must decide where to send out your boat! If you dilly-dally too long, one of the rival companies will pass by, but sometimes when your own investigation isn't enough, you might need to follow a rival company!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -39263,9 +39631,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/xxU1HKdkf1HIotFGyYO2bQ__original/img/cnGPfeD1TqnhWPlcAN0P0gzKzdc=/0x0/filters:format(jpeg)/pic7837610.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/xxU1HKdkf1HIotFGyYO2bQ__small/img/RjsKXDsc3Tb7iNdnvUARYyY7dJY=/fit-in/200x150/filters:strip_icc()/pic7837610.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -43367,16 +43735,16 @@ const gameData = {
     "title": {
       "display": "생츄어리 아크노바게임",
       "owned": "생츄어리 아크노바게임",
-      "bgg": "Sanctuary: The Keepers Era"
+      "bgg": "Sanctuary"
     },
     "bgg": {
-      "id": "299733",
-      "matchStatus": "auto-confirmed",
-      "year": "2021",
-      "rating": 7.18654,
-      "weight": 2.1538,
+      "id": "441696",
+      "matchStatus": "forced",
+      "year": "2025",
+      "rating": 7.67728,
+      "weight": 2.8099,
       "minPlayers": 1,
-      "maxPlayers": 2,
+      "maxPlayers": 5,
       "bestPlayers": [
         2,
         3
@@ -43388,17 +43756,16 @@ const gameData = {
         4
       ],
       "notRecommendedPlayers": [
-        2
+        5,
+        5
       ],
-      "playingTime": 60,
-      "minPlayTime": 20,
-      "maxPlayTime": 60,
+      "playingTime": 100,
+      "minPlayTime": 40,
+      "maxPlayTime": 100,
       "categories": [
-        "Card Game",
-        "Fantasy",
-        "Fighting",
-        "Medieval",
-        "Mythology"
+        "Animals",
+        "Environmental",
+        "Territory Building"
       ],
       "categoriesKo": [
         "카드게임",
@@ -43408,17 +43775,23 @@ const gameData = {
         "신화"
       ],
       "mechanics": [
+        "Action Queue",
         "Hand Management",
-        "Take That"
+        "Hexagon Grid",
+        "Open Drafting",
+        "Set Collection",
+        "Solo / Solitaire Game",
+        "Tile Placement",
+        "Variable Set-up"
       ],
       "mechanicsKo": [
         "패 관리",
         "공격형 플레이"
       ],
       "designers": [
-        "Leonardo Romano"
+        "Mathias Wigge"
       ],
-      "description": "Sanctuary: The Keepers Era is a competitive, fast paced, hand management card game, the starting chapter of a story which takes place in a brand new fantasy setting.\n\nThe game features six unique Faction decks illustrated with more than 135 stunning artworks by a team of international artists.\n\nAccording to the legends of Elnerth, a powerful mystic energy was flowing dangerously through the world. To avoid catastrophic events, that energy was split into six parts called the Essences.\n\nSanctuaries are the only way to channel the power of the Essences. Players impersonate the Keepers, each one is attuned to an Essence and rules over a Faction. The Keepers are fighting each other to preserve their Sanctuaries and themselves. The goal of the game is to destroy all the oppponent's Sanctuaries, to become the only Keeper able to shape the fate of the world through their Essence.\n\nChoose your Faction, each one with its own peculiarity, and dive into the dark and wondrous world of Elnerth.\n\n&mdash;description from the publisher",
+      "description": "In Sanctuary, you will plan and design a modern, scientifically-managed zoo for animals and visitors. A supply of 135 unique zoo tiles provides you with animals, buildings, and projects. In every game, you want to find the best mix from those available to build the most successful zoological establishment. Different effects on the tiles will help you to achieve conservation goals and to increase the attraction of your zoo.\n\nEach player has a set of four action cards to manage their gameplay, and the power of an action is determined by the slot the card currently occupies. One of those cards will let you play projects, and the other three cards will let you play animals of a specific habitat: forest, rock, or water.\n\nSanctuary is based on its predecessor Ark Nova, but modifies and simplifies many of the mechanisms of that game in an elegant and surprising manner. Your goal to find the best way to puzzle together your animals, buildings, and projects on your zoo map is an ongoing pleasure!\n\n&mdash;description from the publisher",
       "descriptionKo": "《성역: 키퍼의 시대(Sanctuary: The Keepers Era)》는 새로운 판타지 세계를 배경으로 한 이야기의 첫 장을 담은 경쟁형 손패 관리 카드게임입니다.\n\n게임은 국제 아티스트 팀이 그린 135개 이상의 아름다운 일러스트로 장식된 6개의 독특한 진영 덱을 특징으로 합니다.\n\n엘너스의 전설에 따르면, 강력한 신비로운 에너지가 세계를 위험하게 흐르고 있었습니다. 재앙을 막기 위해 이 에너지는 에센스라 불리는 6개 부분으로 분할되었습니다.\n\n성역은 에센스의 힘을 채널하는 유일한 방법입니다. 플레이어는 각각 하나의 에센스에 통달하고 진영을 다스리는 키퍼 역할을 합니다. 키퍼들은 자신의 성역과 자신을 보존하기 위해 서로 전쟁을 벌입니다. 게임의 목표는 상대의 모든 성역을 파괴하여 자신의 에센스로 세계의 운명을 결정할 수 있는 유일한 키퍼가 되는 것입니다.\n\n자신의 진영을 선택하고 엘너스의 어둡고 경이로운 세계로 뛰어드세요."
     },
     "cottage": {
@@ -43429,19 +43802,19 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.8,
       "moodTags": [
-        "chaotic",
-        "funny",
-        "immersive",
-        "tense"
+        "immersive"
       ],
       "playTags": [
         "card_play",
-        "strategy"
+        "strategy",
+        "puzzle"
       ],
       "situationTags": [
         "experienced",
         "long_stay",
-        "couple"
+        "couple",
+        "group",
+        "large_group"
       ],
       "interactionTags": [
         "competitive"
@@ -43449,20 +43822,19 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "chaotic",
-        "funny",
         "immersive",
-        "tense",
         "card_play",
         "strategy",
+        "puzzle",
         "experienced",
         "long_stay",
         "couple",
+        "group",
+        "large_group",
         "competitive"
       ],
       "displayTags": [
         "머리쓰게",
-        "즐기고",
         "빠져들게",
         "경쟁형"
       ],
@@ -43483,8 +43855,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/wiQaOIcmGl2mra8ylsTBZQ__original/img/mwgJo2mjbSXELzRM20veMX8AfQI=/0x0/filters:format(png)/pic5609556.png",
-      "thumbnail": "https://cf.geekdo-images.com/wiQaOIcmGl2mra8ylsTBZQ__small/img/GgyZbjFyH9H1cKUJY7RylMUV4D0=/fit-in/200x150/filters:strip_icc()/pic5609556.png",
+      "main": "https://cf.geekdo-images.com/C6V2VCtf1_7cavenn7Is3A__original/img/mdgxo4BZpLgvG20XfNHfMg8j8Go=/0x0/filters:format(jpeg)/pic8932906.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/C6V2VCtf1_7cavenn7Is3A__small/img/ZJJOWNSKk81xpvNkMpGd5T0ybLo=/fit-in/200x150/filters:strip_icc()/pic8932906.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -50213,15 +50585,15 @@ const gameData = {
     "title": {
       "display": "아야르",
       "owned": "아야르",
-      "bgg": ""
+      "bgg": "Ayar: Children of the Sun"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 8,
-      "weight": 3.19,
-      "minPlayers": 2,
+      "id": "429438",
+      "matchStatus": "forced",
+      "year": "2025",
+      "rating": 7.90278,
+      "weight": 3.2593,
+      "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
         3
@@ -50231,16 +50603,35 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 90,
+      "minPlayTime": 60,
+      "maxPlayTime": 90,
+      "categories": [
+        "Ancient",
+        "Civilization",
+        "Educational"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Area Majority / Influence",
+        "Highest-Lowest Scoring",
+        "Point to Point Movement",
+        "Set Collection",
+        "Solo / Solitaire Game",
+        "Tile Placement",
+        "Track Movement",
+        "Worker Placement"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Mandela Fernandez-Grandon",
+        "Fabio Lopiano"
+      ],
+      "description": "Retell the incredible origin myth of the Inca in this dramatic mid-weight eurogame.\n\nIn the beginning, Viracocha the creator brought forth Inti, the sun god, and Mama Quilla, the moon god. From the union of these two gods sprang four sons and four daughters: the Ayar. These siblings were tasked with guiding the first clans and teaching them the skills needed to build a civilization. As they traveled the land in search of fertile ground, the Ayar one by one met their fates until only two remained to found Tawantinsuyu &ndash; the Inca Empire.\n\nIn Ayar: Children of the Sun, players take control of one of the first clans, journeying with the Ayar across the Andes. Follow their teaching and improve your skills at farming, pottery, weaving, and reed bundling. As well as advancing your own clan, you must influence the progress of the Ayar, ensuring the survival of those who reward your most developed skills. Seek the approval of Mama Quilla through long-term strategy, and please Inti with tactical play. Be careful not to earn the ire of one of these jealous gods because at the end of the game, whichever one favors you least will determine your final score.\n\nThe future of your clan &ndash; and the Inca civilization &ndash; is in your hands.\n\n&mdash;description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -50254,26 +50645,36 @@ const gameData = {
         "immersive"
       ],
       "playTags": [
-        "strategy"
+        "strategy",
+        "card_play",
+        "puzzle"
       ],
       "situationTags": [
         "experienced",
         "long_stay",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "turn_based"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "immersive",
         "strategy",
+        "card_play",
+        "puzzle",
         "experienced",
         "long_stay",
-        "group"
+        "group",
+        "competitive",
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게"
+        "빠져들게",
+        "경쟁형"
       ],
       "summaryKo": "",
       "comment": {
@@ -50292,9 +50693,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/Bpomnj9RBdTwQNcuFrAmVg__original/img/O7tSERhO4nluMd3_92_-paBvJwQ=/0x0/filters:format(jpeg)/pic8444642.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/Bpomnj9RBdTwQNcuFrAmVg__small/img/wkTKinRioV7dwaupRnywU5MpQ1Y=/fit-in/200x150/filters:strip_icc()/pic8444642.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -56924,16 +57325,16 @@ const gameData = {
     "title": {
       "display": "오 미우바우",
       "owned": "오 미우바우",
-      "bgg": ""
+      "bgg": "Five Three Five"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7,
-      "weight": 1.63,
+      "id": "311031",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 6.93985,
+      "weight": 1.5263,
       "minPlayers": 2,
-      "maxPlayers": 5,
+      "maxPlayers": 6,
       "bestPlayers": [
         4
       ],
@@ -56943,18 +57344,28 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        6,
+        6
+      ],
+      "playingTime": 30,
+      "minPlayTime": 15,
+      "maxPlayTime": 30,
+      "categories": [
+        "Card Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "클라이밍"
+        "Hand Management",
+        "Ladder Climbing",
+        "Push Your Luck"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "かぶきけんいち (Kenichi Kabuki)"
+      ],
+      "description": "535 is a Climbing/Shedding game for 2 to 6 Players. The game's deck is comprised of cards numbered 1-15, with cards of rank 6 and 10 missing. The deck contains multiple copies of each card, depending on player count (4 each at 2-4 players/5 each at 5+ players). In addition to a rank, each card has a point value, which depends on the rank&rsquo;s strength. The object of the game is for players to be the first to play all of their cards to the table.\n\nOn a turn, a player may play one, two, or three cards to a single, central meld. Playable meld-types are:\n\n-Single: Any one card. (1 < 7 < 14)\n-Set: Any two or more cards of equal rank. (1,1,1 < 14,14,14)\n-Run: Any two or more cards of consecutive rank. (1,2,3 > 11,12,13)\n\nOn a turn, a player chooses to do one of the following actions:\n\n-Overwrite: Play a higher ranked meld, which matches the meld-type and size of the central meld.\n-Add: Attach a card or cards to the central meld, making sets/runs longer.\n-Pass: A player who can not or chooses not to play into the central meld may pass. Once a player passes, they are out for the trick.\n\nA trick ends once 1 of 4 things happens:\n\n-All but one player passes. \n-A player adds the fourth card to an active set of a like-numbered meld (or fifth in a 5+ player game).\n-A player adds the fifth card of a run.\n-A player plays a meld that follows the &ldquo;Rule of 8&rsquo;s&rdquo; (See Below).\n\nThe last player to have played a card to the meld in any of these situations above clears the trick and leads the next. A lead player must always play one, two, or three cards and may never \"Pass\".\n\nOnce one player has played their final card(s) to the table, the round ends immediately. The other players then score the points indicated on the cards left in their hands. Rounds are played until one player has 20 or more points, leaving the player(s) with the least points the winner(s).\n\nRule of 8&rsquo;s:\nAll cards of rank 8 in the deck are worth the most points in the game. However, these cards have a special function. When a rank 8 card is played to a trick (ie. A single 8, a set of 8&rsquo;s, a run of either 7,8 or 7,8,9) the trick is immediately cleared and the player who played the &ldquo;Rule of 8&rsquo;s&rdquo; clears the trick and leads the next. The only time the Rule of 8&rsquo;s will not function is when an 8 is included in the opening meld of any trick.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -56964,25 +57375,46 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "tense",
+        "funny"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy",
+        "party"
+      ],
       "situationTags": [
         "beginner",
+        "quick_play",
         "group",
         "large_group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "funny",
+        "card_play",
+        "strategy",
+        "party",
         "beginner",
+        "quick_play",
         "group",
         "large_group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -57000,9 +57432,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/OyT_2pRVNs4w15kQaeHPqw__original/img/w_kaK-7WIfcs7bm0676lUyeXy44=/0x0/filters:format(png)/pic6822638.png",
+      "thumbnail": "https://cf.geekdo-images.com/OyT_2pRVNs4w15kQaeHPqw__small/img/2OI_RqYsO4dXT2tBYLpXTRg3kNM=/fit-in/200x150/filters:strip_icc()/pic6822638.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -63908,14 +64340,14 @@ const gameData = {
     "title": {
       "display": "제왕의깃발",
       "owned": "제왕의깃발",
-      "bgg": ""
+      "bgg": "Oriflamme"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.1,
-      "weight": 1.68,
+      "id": "287084",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 7.0659,
+      "weight": 1.6899,
       "minPlayers": 3,
       "maxPlayers": 5,
       "bestPlayers": [
@@ -63926,16 +64358,32 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        5
+      ],
+      "playingTime": 30,
+      "minPlayTime": 15,
+      "maxPlayTime": 30,
+      "categories": [
+        "Card Game",
+        "Political"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Action Queue",
+        "Betting and Bluffing",
+        "Hand Management",
+        "Take That",
+        "Turn Order: Progressive"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Adrien Hesling",
+        "Axel Hesling"
+      ],
+      "description": "In Oriflamme, the players find themselves in the middle of a medieval feud over the French royal crown. The King is dead! Long live the King! As heads of influential families, players strive to come to power with cunning and malice, power and strength, virtue and infamy. Their goal: the king's throne!\n\nIn this tactical card game, hidden cards are played in turn. By tactically uncovering and activating their effects, players can outdo or get them out of the way, because all players have the same goal in mind &mdash; to collect the most influence points for their family and thus win the game.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -63945,25 +64393,41 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.68,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "chaotic",
+        "funny"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "group",
         "large_group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "funny",
+        "card_play",
+        "strategy",
         "beginner",
         "group",
         "large_group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -63981,9 +64445,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/8MpTeqlzyIupMpSSxP3PAw__original/img/XoqLo4dQlXvFHZBAcKbZheA8NHA=/0x0/filters:format(jpeg)/pic4949335.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/8MpTeqlzyIupMpSSxP3PAw__small/img/NACmpm6Pzd2IrmAq9teXwLlmKqA=/fit-in/200x150/filters:strip_icc()/pic4949335.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -63997,14 +64461,14 @@ const gameData = {
     "title": {
       "display": "제왕의불꽃",
       "owned": "제왕의불꽃",
-      "bgg": ""
+      "bgg": "Oriflamme: Ablaze"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.2,
-      "weight": 2.33,
+      "id": "313261",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 7.16844,
+      "weight": 2.2273,
       "minPlayers": 3,
       "maxPlayers": 5,
       "bestPlayers": [
@@ -64015,16 +64479,32 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        5
+      ],
+      "playingTime": 20,
+      "minPlayTime": 20,
+      "maxPlayTime": 20,
+      "categories": [
+        "Card Game",
+        "Medieval",
+        "Political"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Action Queue",
+        "Betting and Bluffing",
+        "Hand Management",
+        "Take That"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Adrien Hesling",
+        "Axel Hesling"
+      ],
+      "description": "In Oriflamme and Oriflamme Embrasement, the players find themselves in the middle of a medieval feud over the French royal crown. The King is dead! Long live the King! As heads of influential families, the players strive to come to power with cunning and malice, power and strength, virtue and infamy. Their goal: the king's throne!\n\nIn the tactical card game, hidden cards are played in turn. By tactically uncovering and activating their effects, players can outdo or get them out of the way, because all players have the same goal in mind &mdash; to collect the most influence points for their family and thus win the game.\n\nIn Oriflamme Embrasement (second installment of the award winning game Oriflamme), the incendiary war threatens to bring the kingdom to the ground. But nothing will stop your house to conquer the throne by putting forward every inch of your famous lust for power and vengeance.\n\nOriflamme Embrasement offers 11 new action cards that can be mixed with Oriflamme or be used as a standalone.\n\n&mdash;description from the publisher (translated)",
       "descriptionKo": ""
     },
     "cottage": {
@@ -64034,25 +64514,43 @@ const gameData = {
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "chaotic",
+        "funny"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "group",
-        "large_group"
+        "large_group",
+        "quick_play"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "funny",
+        "card_play",
+        "strategy",
         "beginner",
         "group",
         "large_group",
+        "quick_play",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -64070,9 +64568,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/9hF_9xzBnPZqqdLOsp-fkA__original/img/hq1n8--D3DjWKo4h05ZfBv3S-Vk=/0x0/filters:format(png)/pic6276029.png",
+      "thumbnail": "https://cf.geekdo-images.com/9hF_9xzBnPZqqdLOsp-fkA__small/img/ZNomdhNV8IyxkpaZhGXKnJrLiXY=/fit-in/200x150/filters:strip_icc()/pic6276029.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -69185,7 +69683,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 6.7,
       "weight": 1,
@@ -74304,14 +74802,14 @@ const gameData = {
     "title": {
       "display": "트릭테이커스",
       "owned": "트릭테이커스",
-      "bgg": "Takers"
+      "bgg": "TRICKTAKERs"
     },
     "bgg": {
-      "id": "246813",
-      "matchStatus": "auto-confirmed",
-      "year": "",
-      "rating": 7.4,
-      "weight": 2.82,
+      "id": "343566",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 7.4122,
+      "weight": 2.7826,
       "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
@@ -74323,10 +74821,13 @@ const gameData = {
         4,
         5
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 15,
-      "minPlayTime": 15,
-      "maxPlayTime": 15,
+      "notRecommendedPlayers": [
+        1,
+        5
+      ],
+      "playingTime": 40,
+      "minPlayTime": 30,
+      "maxPlayTime": 40,
       "categories": [
         "Card Game"
       ],
@@ -74334,14 +74835,16 @@ const gameData = {
         "카드게임"
       ],
       "mechanics": [
-        "비대칭",
-        "트릭테이킹"
+        "Hand Management",
+        "Open Drafting",
+        "Trick-taking",
+        "Variable Player Powers"
       ],
       "mechanicsKo": [],
       "designers": [
-        "Romaric Galonnier"
+        "Hiroken"
       ],
-      "description": "This game was never published\n\nThe National Bank has hidden a load of money in one of four possible locations &mdash; but you have the time to rob only one! Will you be smarter than the other players and pull off the heist of the century?\n\nIn Takers, players have five criminal cards from potentially four different locations in hand and will be able to play one per turn. Each gang is the best at robbing one place, is the second best at robbing another, and can't rob the remaining two.\n\nAt the beginning of the game, the four location cards are placed face down and one is put aside: it will be the place that will be robbed. On their turn, players can look at an incorrect location card to get info on the right one, but then they have to discard a card, having only four in hand until the end of the game, although maybe they will be able to play their cards for powers, allowing them to take back discarded cards, draw a card, then discard one,...\n\nThey can also chose to flip a jewel token. When all the jewel tokens matching the player colors have been placed face up, the game ends and players get points depending on what kind of criminals they have remaining in their hand.",
+      "description": "TRICKTAKERs is a...trick-taking game featuring role selection. After being dealt a hand of cards, the players choose from various characters (such as King or Gambler) that change how they will participate in the game.\n\nThe basic game consists of three rounds of trick-taking, and the winner will be the person that wins the most tricks in two of the three rounds.  Alternatively, if no one achieves that condition, if a player has taken no tricks in all three rounds, they will be the winner.\n\nThe game also features a higher priority victory condition and a lower one.  Each character in the game grants the player a special \"immediate victory\" condition that could be achieved.  The characters also give the players ways to earn points, and this is the lowest tier of victory determination: who has the most points.\n\nFor example, the \"Gambler\" can discard cards from the initial hand to draw replacements, and will bid for how many tricks they take, possibly granting them extra points if successful. The \"Resistance\" has the potential to cause a revolution which reverses the strength of the ranks, and earns more points if they can win tricks with what would normally be the \"high\" cards.",
       "descriptionKo": "이 게임은 출판되지 않았습니다.\n\n국립은행이 네 곳 중 한 곳에 돈을 숨겼는데, 당신은 한 곳만 털 시간이 있습니다! 다른 플레이어보다 똑똑하게 세기의 대도를 성공시킬 수 있을까요?\n\n'테이커스'에서 플레이어들은 최대 네 지역의 범죄자 카드 5장을 손에 가지고 있으며 매 턴마다 한 장씩 낼 수 있습니다. 각 조직은 한 곳은 최고로 잘 털고, 다른 곳은 두 번째로 잘 털며, 나머지 두 곳은 전혀 못 털 수 있습니다.\n\n게임 시작 시 네 지역 카드를 뒤집어 놓고 한 장을 따로 제쳐둡니다. 그것이 털 장소가 됩니다. 플레이어는 턴마다 잘못된 지역 카드를 보고 정답에 대한 정보를 얻을 수 있지만, 그러면 카드를 버려야 하므로 게임 끝까지 손에 4장만 남습니다. 하지만 카드의 특수 능력을 사용하면 버린 카드를 다시 가져오거나 카드를 뽑고 버릴 수 있습니다.\n\n또는 보석 토큰을 뒤집을 수도 있습니다. 플레이어 색깔의 모든 보석 토큰이 앞면으로 놓이면 게임이 끝나고, 남은 범죄자 카드에 따라 점수를 얻습니다."
     },
     "cottage": {
@@ -74362,10 +74865,12 @@ const gameData = {
         "experienced",
         "long_stay",
         "group",
-        "large_group",
-        "quick_play"
+        "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "turn_based"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
@@ -74376,11 +74881,13 @@ const gameData = {
         "long_stay",
         "group",
         "large_group",
-        "quick_play"
+        "competitive",
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게"
+        "빠져들게",
+        "경쟁형"
       ],
       "summaryKo": "네 지역 중 숨겨진 한 곳을 추론하며 범죄자 카드를 내려 가장 많은 돈을 터는 게임.",
       "comment": {
@@ -74399,8 +74906,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/l1JyClzr2lJPZEA7inHKgw__original/img/XtWL5G4PopDecly-QHzg6FO_yN8=/0x0/filters:format(jpeg)/pic4012067.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/l1JyClzr2lJPZEA7inHKgw__small/img/Vwn62mVmwYT2su_YFY9GPN7ptPg=/fit-in/200x150/filters:strip_icc()/pic4012067.jpg",
+      "main": "https://cf.geekdo-images.com/82FhiRTZdJQUa1Z8H33Tag__original/img/wJAu2yzFGmB0KzwXJxAXgKGYc-Y=/0x0/filters:format(png)/pic7958476.png",
+      "thumbnail": "https://cf.geekdo-images.com/82FhiRTZdJQUa1Z8H33Tag__small/img/mLI0Pyem2uCMWxn6i9__W3YXcHU=/fit-in/200x150/filters:strip_icc()/pic7958476.png",
       "source": "bgg",
       "type": "jpg"
     },
