@@ -285,22 +285,34 @@ async function openProfilePanel() {
   ).join('');
   const moreComment = stats.comments.length > 5 ? `<li class="profile-more">… 외 ${stats.comments.length - 5}건</li>` : '';
 
-  panel.querySelector('.profile-panel-body').innerHTML = `
+  const body = panel.querySelector('.profile-panel-body');
+  body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>마지막 방문</span><strong>${fmt(stats.profile?.last_seen_at)}</strong></li>
+      ${stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : ''}
       ${stats.moimCount ? `<li><span>모임 참여</span><strong>${stats.moimCount}회</strong></li>` : ''}
-      <li><span>건의하기</span><strong>${stats.suggestions}건</strong></li>
+      ${stats.comments.length ? `<li><span>코멘트</span><strong>${stats.comments.length}건</strong></li>` : ''}
+      ${stats.suggestions ? `<li><span>건의하기</span><strong>${stats.suggestions}건</strong></li>` : ''}
     </ul>
     ${stats.plays.length ? `<div class="profile-activity-group">
-      <p class="profile-activity-label">🎲 플레이 기록 ${stats.plays.length}건</p>
-      <ul class="profile-activity-list">${playItems}${morePlay}</ul>
+      <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-toggle-arrow">▾</span></button>
+      <ul class="profile-activity-list is-collapsed">${playItems}${morePlay}</ul>
     </div>` : ''}
     ${stats.comments.length ? `<div class="profile-activity-group">
-      <p class="profile-activity-label">💬 코멘트 ${stats.comments.length}건</p>
-      <ul class="profile-activity-list">${commentItems}${moreComment}</ul>
+      <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-toggle-arrow">▾</span></button>
+      <ul class="profile-activity-list is-collapsed">${commentItems}${moreComment}</ul>
     </div>` : ''}`;
+
+  body.querySelectorAll('.profile-activity-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const list = btn.nextElementSibling;
+      const arrow = btn.querySelector('.profile-toggle-arrow');
+      const collapsed = list.classList.toggle('is-collapsed');
+      arrow.textContent = collapsed ? '▾' : '▴';
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
