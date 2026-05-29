@@ -3671,4 +3671,12 @@ if(ownedToolsToggle && ownedToolbar){
   el.textContent = `오늘 ${fmt(stats.today)}명 · 누적 ${fmt(stats.total)}명이 함께했어요`;
 })();
 
+/* =========================
+   # HASH-BASED RECOMMEND OPEN
+   index.html#recommend 로 직접 진입 시 추천 섹션 자동 열기
+========================= */
+if(location.hash === '#recommend' && document.getElementById('recommend')){
+  showRecommendResults();
+}
+
 
