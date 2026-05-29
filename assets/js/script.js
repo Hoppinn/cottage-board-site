@@ -178,16 +178,27 @@ const mobileMenu =
 let _recommendActive = false;
 
 function resetMenuGroups(){
-  // 추천 링크 active 상태 플래그 기반으로 동기화
+  // 추천 링크 active 상태 동기화
   const recommendLink = document.querySelector('#openRecommendMenu');
   if(recommendLink){
     recommendLink.classList.toggle('is-current', _recommendActive);
   }
 
-  document.querySelectorAll('.menu-group').forEach(g=>g.classList.remove('is-open'));
-  document.querySelector('.header-menu a.is-current')
-    ?.closest('.menu-group')
-    ?.classList.add('is-open');
+  // 모든 그룹 닫기 (inline style 포함)
+  document.querySelectorAll('.menu-group').forEach(g=>{
+    g.classList.remove('is-open');
+    const body = g.querySelector('.menu-group-body');
+    if(body) body.style.display = '';
+  });
+
+  // is-current 포함 그룹만 열기 (inline style로 강제)
+  const currentLink = document.querySelector('.header-menu a.is-current');
+  const activeGroup = currentLink?.closest('.menu-group');
+  if(activeGroup){
+    activeGroup.classList.add('is-open');
+    const body = activeGroup.querySelector('.menu-group-body');
+    if(body) body.style.display = 'flex';
+  }
 }
 
 function toggleMenu(){
@@ -200,7 +211,9 @@ function toggleMenu(){
     // 메뉴 열릴 때마다 DOM 상태로 플래그 재동기화
     const rec = document.getElementById('recommend');
     if(rec) _recommendActive = !rec.classList.contains('is-hidden');
+    console.log('[menu] rec:', !!rec, '_recommendActive:', _recommendActive);
     resetMenuGroups();
+    console.log('[menu] is-current:', document.querySelector('.header-menu a.is-current')?.id);
   }
   mobileMenu.classList.toggle('active');
 }
