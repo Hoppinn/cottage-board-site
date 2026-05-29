@@ -463,7 +463,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -9165,7 +9165,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 6.7,
       "weight": 2.43,
@@ -23454,7 +23454,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -30409,7 +30409,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 1,
@@ -30492,7 +30492,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -30697,14 +30697,14 @@ const gameData = {
     "title": {
       "display": "라이슬라",
       "owned": "라이슬라",
-      "bgg": ""
+      "bgg": "La Isla"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6.9,
-      "weight": 2.25,
+      "id": "154246",
+      "matchStatus": "forced",
+      "year": "2014",
+      "rating": 6.86859,
+      "weight": 2.258,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -30715,18 +30715,32 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 60,
+      "minPlayTime": 30,
+      "maxPlayTime": 60,
+      "categories": [
+        "Animals"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "셋컬렉션"
+        "Action Queue",
+        "Commodity Speculation",
+        "Enclosure",
+        "Hand Management",
+        "Modular Board",
+        "Multi-Use Cards",
+        "Set Collection",
+        "Simultaneous Action Selection"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Stefan Feld"
+      ],
+      "description": "Ready to start exploring a previously uncharted island? Good! You and the other players each have a team of five scientists, and you want to capture animal species so that you can study them &mdash; and, of course, score points.\n\nThe game board in La Isla consists of a set of oddly-shaped tiles that are placed in a circular arrangement around a central polygonal tile. Thirty-five animal tokens (seven each of five types) are placed at random on spaces numbered 2, 3 and 4 on the game board; these numbers equal the number of camps that surround these spaces.\n\nOn a turn, a player has three cards that he places face-down in the A, B and D spaces on his card display. All players reveal their A cards at the same time, then place them in one of the three slots at the top of their display; the image depicted on the top of this card shows the special power that the owner of this card has available. Once a player has filled all three slots on her display, future cards placed with the A action cover an existing card.\n\nAfter revealing the cards in their B slots simultaneously, the players collect the goods depicted in the lower-left corner of their individual card.\n\nEach player in turn then places one of his scientists on a camp, first paying two resources of the type matching that camp. (If all of a player's scientists are on the board, she moves one of these scientists.) If the player now has a scientist on each camp surrounding an animal space, she takes that animal tile, scoring points for it as noted on the board (4, 3 or 2 points).\n\nFinally, the card in the D slot increases the value of one animal. You (and only you!) immediately score one point per animal of the type you moved up on the scale. If you don't have an animal of that type you don't get any points. Each animal has a points threshold so that if you move an animal up, say, four times, each animal of this type is worth an extra point at the end of the game. The scale goes up to five so that every animal can be worth up five points at the end of the game. When the sum of these values for all five animals equals seven, nine or eleven (based on the number of players), the game ends at the conclusion of the round. Players then tally their final scores to see who wins.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -30737,22 +30751,34 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
         "group"
       ],
       "interactionTags": [
+        "competitive",
+        "simultaneous",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "card_play",
+        "strategy",
         "beginner",
         "group",
+        "competitive",
+        "simultaneous",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -30770,9 +30796,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/NR5VdEHv-LilFS3UKG82wg__original/img/PU2IpbxX8KGs_sIV5IoBW6jfIS4=/0x0/filters:format(jpeg)/pic2073938.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/NR5VdEHv-LilFS3UKG82wg__small/img/PO7_SuSMn-k1xOVj4resJoonmnA=/fit-in/200x150/filters:strip_icc()/pic2073938.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -30786,14 +30812,14 @@ const gameData = {
     "title": {
       "display": "라타",
       "owned": "라타",
-      "bgg": ""
+      "bgg": "Lata"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.2,
-      "weight": 2.23,
+      "id": "374201",
+      "matchStatus": "forced",
+      "year": "2023",
+      "rating": 7.1559,
+      "weight": 2.2564,
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -30806,20 +30832,30 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        4
+      ],
+      "playingTime": 45,
+      "minPlayTime": 20,
+      "maxPlayTime": 45,
+      "categories": [
+        "Card Game",
+        "Industry / Manufacturing"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "경매",
-        "코딩",
-        "자원"
+        "Action Points",
+        "Area Majority / Influence",
+        "Contracts",
+        "End Game Bonuses",
+        "Turn Order: Auction"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Costa",
+        "Rôla"
+      ],
+      "description": "The Portuguese canning industry developed throughout the 20th century, going through periods of great splendor and of extraordinary importance in the social fabric of communities close to fishing centers. After the huge growth due to the immense supply of troops in Europe that World War II brought, the industry went through a period of stability with the consolidation of the quality of the products and the establishment of markets abroad.\n\nLata (\"tin can\" in English) is the name of the raw material for the containers in which the fish is packed, and it also turned out to be a popular designation for the product. In this game, players manage local canning companies in the 1950s and produce and sell the famous canned sardines or canned mackerel, the two main canned fish in the first decades of the industry, before the appearance of the very popular tuna.\n\nThe game takes place over six rounds. In each round, players buy a batch of fish, tomato or olive oil, which they then can use in their factory. These preserves will then be sold to markets. This operation will result in money that will be used to buy scorecards and increase the factory's production capacity.\n\nThe order in which each batch of raw materials is chosen is given by an auction of action points that players secretly make by sliding their disk to the left on the action track of their individual board. Whoever gives up more opportunities for action chooses the best lot, but it is clear that having more possibilities for action is vital to produce more and reach the best markets!\n\nThe player with the most victory points (VP), which are awarded at the end of the game by the scorecards, wins.\n\nLata is the second game in the \"Quinas Collection\", following the success of Caf&eacute;, the first game in the line.\n\n&mdash;description from the designer",
       "descriptionKo": ""
     },
     "cottage": {
@@ -30830,22 +30866,32 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.23,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "strategy",
+        "card_play"
+      ],
       "situationTags": [
         "beginner",
         "group"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "strategy",
+        "card_play",
         "beginner",
         "group",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -30863,9 +30909,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/7eFKLGEMBAELQLTS2ECgMA__original/img/b23BPr4G1SepaQNFwURMfWn_e5E=/0x0/filters:format(jpeg)/pic7358600.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/7eFKLGEMBAELQLTS2ECgMA__small/img/mkYNtT-0l2BTxhdP3F1wNtBJiaA=/fit-in/200x150/filters:strip_icc()/pic7358600.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -31401,22 +31447,22 @@ const gameData = {
     "title": {
       "display": "레드룸",
       "owned": "레드룸",
-      "bgg": ""
+      "bgg": "Red Room"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 6,
+      "id": "442306",
+      "matchStatus": "forced",
+      "year": "2024",
+      "rating": 5.2,
       "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
+      "minPlayers": 2,
+      "maxPlayers": 6,
       "bestPlayers": [],
       "recommendedPlayers": [],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
+      "playingTime": 30,
+      "minPlayTime": 20,
+      "maxPlayTime": 30,
       "categories": [],
       "categoriesKo": [],
       "mechanics": [
@@ -31424,7 +31470,7 @@ const gameData = {
       ],
       "mechanicsKo": [],
       "designers": [],
-      "description": "",
+      "description": "레드룸 is a fierce survival game in a mysterious room. Survive to the end and become the last one.\nOr find all the numbers in the red room to unlock the secret and escape!\n\nPlayers move to the room they want to start from among the border rooms. Players move cross-sectionally on their turns, instantly flipping the tiles where they moved and applying the effects of the room.\n\nPlayers can move around the room on their turn, and use up to two supply cards. When done, pull out a new card.\n\nIf the life token goes to zero, you lose. \nThe one who survives to the end wins. \nThe player who arrives in the last closed room and opens the room wins. (*The first to know all room numbers) \nIf you get all the closed room numbers right, that player wins.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -31436,11 +31482,17 @@ const gameData = {
       "difficultyWeight": 0,
       "moodTags": [],
       "playTags": [],
-      "situationTags": [],
+      "situationTags": [
+        "group",
+        "large_group"
+      ],
       "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
+      "autoTags": [
+        "group",
+        "large_group"
+      ],
       "displayTags": [],
       "summaryKo": "",
       "comment": {
@@ -31459,9 +31511,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/U6uZ3rbEbWnIbq8agOttow__original/img/V2HiQrAR0Rnr5cSLeCDcG0HwmI0=/0x0/filters:format(png)/pic8791133.png",
+      "thumbnail": "https://cf.geekdo-images.com/U6uZ3rbEbWnIbq8agOttow__small/img/iIC1IhP09SFA5GsiV73rs2LrUiY=/fit-in/200x150/filters:strip_icc()/pic8791133.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -32122,7 +32174,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -32304,7 +32356,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -40059,11 +40111,11 @@ const gameData = {
       "boardId": "벨에포크파리"
     }
   },
-  "보랏빛리라이트-머더미스터리미니": {
-    "id": "보랏빛리라이트-머더미스터리미니",
+  "보랏못리라이트-머더미스터리미니": {
+    "id": "보랏못리라이트-머더미스터리미니",
     "title": {
-      "display": "보랏빛리라이트 (머더미스터리미니)",
-      "owned": "보랏빛리라이트 (머더미스터리미니)",
+      "display": "보랏못리라이트 (머더미스터리미니)",
+      "owned": "보랏못리라이트 (머더미스터리미니)",
       "bgg": "紫乃淵リライト (Shinobuchi Rewrite)"
     },
     "bgg": {
@@ -40179,7 +40231,7 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "보랏빛리라이트-머더미스터리미니"
+      "boardId": "보랏못리라이트-머더미스터리미니"
     }
   },
   "보타닉가든": {
@@ -44885,32 +44937,39 @@ const gameData = {
     "title": {
       "display": "선물입니다",
       "owned": "선물입니다",
-      "bgg": ""
+      "bgg": "Present"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 5.4,
+      "id": "420887",
+      "matchStatus": "forced",
+      "year": "2011",
+      "rating": 5.41667,
       "weight": 1,
-      "minPlayers": 4,
-      "maxPlayers": 4,
-      "bestPlayers": [],
+      "minPlayers": 2,
+      "maxPlayers": 6,
+      "bestPlayers": [
+        4
+      ],
       "recommendedPlayers": [
         4
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 15,
+      "minPlayTime": 10,
+      "maxPlayTime": 15,
+      "categories": [
+        "Card Game",
+        "Party Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
         "벌점덜먹기"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Gary Kim"
+      ],
+      "description": "Players take turns secretly handing one of their three cards to another player, saying, \"It's a gift.\" He says. The opponent decides whether to receive the card or not. If you receive it, it becomes your score. If you do not receive it, it becomes the score of the person who gave it.\nA good gift will have a large number, and a bad gift, such as trash, will have a negative score.\nAfter that, a new card is drawn.\nProceed until all cards are gone.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -44921,25 +44980,44 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
+        "funny",
+        "chaotic",
         "cozy"
       ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group"
+      "playTags": [
+        "card_play",
+        "party"
       ],
-      "interactionTags": [],
+      "situationTags": [
+        "beginner",
+        "group",
+        "large_group",
+        "first_game",
+        "quick_play"
+      ],
+      "interactionTags": [
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "funny",
+        "chaotic",
         "cozy",
+        "card_play",
+        "party",
+        "beginner",
+        "group",
+        "large_group",
         "first_game",
         "quick_play",
-        "group"
+        "table_talk"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "즐기고",
+        "편안하게",
+        "대화하며"
       ],
       "summaryKo": "",
       "comment": {
@@ -44958,9 +45036,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/aNn9zyAwQ28-gQiKy3LiBw__original/img/sbJHeBlkpYWWD5GqYDI2pJ7vVZs=/0x0/filters:format(jpeg)/pic8196068.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/aNn9zyAwQ28-gQiKy3LiBw__small/img/mJygWkTzLLQT6XqmUJK7BZkWGGE=/fit-in/200x150/filters:strip_icc()/pic8196068.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -52314,7 +52392,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 1,
@@ -59306,7 +59384,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -78797,7 +78875,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unresolved",
+      "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
       "weight": 1,
@@ -80183,14 +80261,14 @@ const gameData = {
     "title": {
       "display": "필름을감아(일)",
       "owned": "필름을감아(일)",
-      "bgg": ""
+      "bgg": "Photograph"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 7.4,
-      "weight": 2.03,
+      "id": "215471",
+      "matchStatus": "forced",
+      "year": "2016",
+      "rating": 7.37004,
+      "weight": 2.087,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -80201,16 +80279,28 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 20,
+      "minPlayTime": 20,
+      "maxPlayTime": 20,
+      "categories": [
+        "Card Game",
+        "Number"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Hand Management",
+        "Open Drafting",
+        "Set Collection"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Saashi"
+      ],
+      "description": "Time to walk about town and take some pictures! It's the 1960s in Japan, and you have a half-size camera that lets you take half-size vertical pictures. Let's see whether you can put together good shots...\n\nIn Wind the Film!, you're trying to organize pictures on your roll so that they appear in the right order. Each player has a hand of cards, and on a turn, you'll add 1-3 cards to the front of your hand (without changing their order), move one card in your hand closer to the front, then discard as many cards from the back of your hand as the number of cards that you added. When the sunset card comes out, you can take no more pictures, and everyone scores for what's on their camera.\n\nThe cards all have numbers and colors on them, and you try to line them up in hand to score the most points possible.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -80221,22 +80311,34 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [],
-      "playTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
       "situationTags": [
         "beginner",
-        "group"
+        "group",
+        "quick_play"
       ],
       "interactionTags": [
+        "competitive",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "card_play",
+        "strategy",
         "beginner",
         "group",
+        "quick_play",
+        "competitive",
         "low_conflict"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
@@ -80254,9 +80356,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/hZxtHIrpYhtkrkx5etMBBQ__original/img/hLQGMWB-ReiXVrz5cbzE6crA7Xo=/0x0/filters:format(jpeg)/pic7245179.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/hZxtHIrpYhtkrkx5etMBBQ__small/img/m3WxHxBnv4JaP3NU5UmR3Ano20Y=/fit-in/200x150/filters:strip_icc()/pic7245179.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

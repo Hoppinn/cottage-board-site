@@ -18,43 +18,8 @@
     "ownedName": "갈팡질팡"
   },
   "게놈의탑": {
-    "status": "unresolved",
-    "ownedName": "게놈의탑",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "게놈의탑"
   },
   "구두룡저택의살인 (미스터리파티시리즈)": {
     "status": "forced",
@@ -465,43 +430,8 @@
     "scoreGap": 48
   },
   "포커칩세트": {
-    "status": "unresolved",
-    "ownedName": "포커칩세트",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "포커칩세트"
   },
   "몇번이고푸른달에불을붙였다": {
     "status": "auto-confirmed",
@@ -1255,43 +1185,8 @@
     "ownedName": "꼬치의달인"
   },
   "끝나지않는한여름(미스터리파티시리즈)": {
-    "status": "unresolved",
-    "ownedName": "끝나지않는한여름(미스터리파티시리즈)",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "끝나지않는한여름(미스터리파티시리즈)"
   },
   "나나 크리스마스에디션": {
     "status": "auto-confirmed",
@@ -1623,82 +1518,12 @@
     "ownedName": "라운드더월드(영)"
   },
   "라이": {
-    "status": "unresolved",
-    "ownedName": "라이",
-    "reviewCandidates": [
-      {
-        "bggId": "379872",
-        "bggName": "시간을 달리는 트라이앵글",
-        "year": "2021",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "라이",
-          "matchedCandidateName": "시간을 달리는 트라이앵글"
-        }
-      },
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "라이"
   },
   "라이노교수가아는다가오는죽음": {
-    "status": "unresolved",
-    "ownedName": "라이노교수가아는다가오는죽음",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "라이노교수가아는다가오는죽음"
   },
   "라이벌시티": {
     "status": "forced",
@@ -1706,82 +1531,14 @@
     "ownedName": "라이벌시티"
   },
   "라이슬라": {
-    "status": "unresolved",
-    "ownedName": "라이슬라",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "154246",
+    "ownedName": "라이슬라"
   },
   "라타": {
-    "status": "unresolved",
-    "ownedName": "라타",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "374201",
+    "ownedName": "라타"
   },
   "래드랜드": {
     "status": "auto-confirmed",
@@ -1816,43 +1573,9 @@
     "scoreGap": 8
   },
   "레드룸": {
-    "status": "unresolved",
-    "ownedName": "레드룸",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "442306",
+    "ownedName": "레드룸"
   },
   "레벨10": {
     "status": "forced",
@@ -1880,43 +1603,8 @@
     "ownedName": "레즈아르카나 + 확장"
   },
   "레코 플러스": {
-    "status": "unresolved",
-    "ownedName": "레코 플러스",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "레코 플러스"
   },
   "렉시오": {
     "status": "forced",
@@ -1924,43 +1612,8 @@
     "ownedName": "렉시오"
   },
   "로그": {
-    "status": "unresolved",
-    "ownedName": "로그",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "로그"
   },
   "로빈슨크루소": {
     "status": "auto-confirmed",
@@ -2386,10 +2039,10 @@
     "score": 115,
     "scoreGap": 20
   },
-  "보랏빛리라이트 (머더미스터리미니)": {
+  "보랏못리라이트 (머더미스터리미니)": {
     "status": "forced",
     "bggId": "379873",
-    "ownedName": "보랏빛리라이트 (머더미스터리미니)"
+    "ownedName": "보랏못리라이트 (머더미스터리미니)"
   },
   "보타닉가든": {
     "status": "auto-confirmed",
@@ -2650,43 +2303,9 @@
     "scoreGap": 24
   },
   "선물입니다": {
-    "status": "unresolved",
-    "ownedName": "선물입니다",
-    "reviewCandidates": [
-      {
-        "bggId": "246458",
-        "bggName": "GIFT",
-        "year": "2019",
-        "score": 50,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "It's a Gift",
-          "matchedCandidateName": "GIFT"
-        }
-      },
-      {
-        "bggId": "12277",
-        "bggName": "IT",
-        "year": "1978",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "It's a Gift",
-          "matchedCandidateName": "IT"
-        }
-      },
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "420887",
+    "ownedName": "선물입니다"
   },
   "선셋오버워터": {
     "status": "auto-confirmed",
@@ -3110,43 +2729,8 @@
     "ownedName": "암스테르담"
   },
   "애꾸눈선장룰렛게임": {
-    "status": "unresolved",
-    "ownedName": "애꾸눈선장룰렛게임",
-    "reviewCandidates": [
-      {
-        "bggId": "325413",
-        "bggName": "ONE",
-        "year": "2021",
-        "score": 50,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "One-Eyed Captain",
-          "matchedCandidateName": "ONE"
-        }
-      },
-      {
-        "bggId": "65868",
-        "bggName": "One",
-        "year": "0",
-        "score": 50,
-        "reason": {
-          "nameScore": 45,
-          "matchedSearchName": "One-Eyed Captain",
-          "matchedCandidateName": "One"
-        }
-      },
-      {
-        "bggId": "2868",
-        "bggName": "Eye",
-        "year": "1987",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "One-Eyed Captain",
-          "matchedCandidateName": "Eye"
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "애꾸눈선장룰렛게임"
   },
   "액시스앤얼라이어스1941 (영)": {
     "status": "auto-confirmed",
@@ -3531,43 +3115,8 @@
     "scoreGap": 30
   },
   "용사가죽었다(미스터리파티시리즈)": {
-    "status": "unresolved",
-    "ownedName": "용사가죽었다(미스터리파티시리즈)",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "용사가죽었다(미스터리파티시리즈)"
   },
   "우드크래프트": {
     "status": "auto-confirmed",
@@ -4652,43 +4201,8 @@
     "scoreGap": 20
   },
   "포켓몬사다리게임": {
-    "status": "unresolved",
-    "ownedName": "포켓몬사다리게임",
-    "reviewCandidates": [
-      {
-        "bggId": "872",
-        "bggName": "M",
-        "year": "2000",
-        "score": 27,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Pokémon Ladder Game",
-          "matchedCandidateName": "M"
-        }
-      },
-      {
-        "bggId": "235696",
-        "bggName": "POK",
-        "year": "2017",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Pokémon Ladder Game",
-          "matchedCandidateName": "POK"
-        }
-      },
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "no-bgg",
+    "ownedName": "포켓몬사다리게임"
   },
   "포트로얄": {
     "status": "auto-confirmed",
@@ -4768,43 +4282,9 @@
     "scoreGap": 10
   },
   "필름을감아(일)": {
-    "status": "unresolved",
-    "ownedName": "필름을감아(일)",
-    "reviewCandidates": [
-      {
-        "bggId": "872",
-        "bggName": "M",
-        "year": "2000",
-        "score": 27,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Wind the Film!",
-          "matchedCandidateName": "M"
-        }
-      },
-      {
-        "bggId": "396332",
-        "bggName": "WIN",
-        "year": "2024",
-        "score": 25,
-        "reason": {
-          "nameScore": 20,
-          "matchedSearchName": "Wind the Film!",
-          "matchedCandidateName": "WIN"
-        }
-      },
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "status": "forced",
+    "bggId": "215471",
+    "ownedName": "필름을감아(일)"
   },
   "하나미코지": {
     "status": "auto-confirmed",
