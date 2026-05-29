@@ -177,6 +177,15 @@ const mobileMenu =
 // 추천 결과 화면이 열려있는지 추적하는 플래그
 let _recommendActive = false;
 
+// IntersectionObserver: #recommend 섹션이 뷰포트에 들어오면 자동 active
+(function(){
+  const recEl = document.getElementById('recommend');
+  if(!recEl) return;
+  new IntersectionObserver(function(entries){
+    _recommendActive = entries[0].isIntersecting;
+  }, { threshold: 0.05 }).observe(recEl);
+})();
+
 function resetMenuGroups(){
   // 추천 링크 active 상태 동기화
   const recommendLink = document.querySelector('#openRecommendMenu');

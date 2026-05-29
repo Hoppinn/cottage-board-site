@@ -309,8 +309,8 @@ textarea{
 
 /* 서브메뉴 active */
 .menu-group-body a.is-current{
-  background:#c8e4a8 !important;
-  color:#1a3320 !important;
+  background:var(--green) !important;
+  color:#fff !important;
   font-weight:900 !important;
 }
 
