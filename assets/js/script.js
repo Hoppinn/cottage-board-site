@@ -191,6 +191,11 @@ function resetMenuGroups(){
   const recommendLink = document.querySelector('#openRecommendMenu');
   if(recommendLink){
     recommendLink.classList.toggle('is-current', _recommendActive);
+    // inline style 초기화
+    recommendLink.style.background = '';
+    recommendLink.style.color = '';
+    recommendLink.style.fontWeight = '';
+    recommendLink.style.borderRadius = '';
   }
 
   // 모든 그룹 닫기 (inline style 포함)
@@ -200,13 +205,20 @@ function resetMenuGroups(){
     if(body) body.style.display = '';
   });
 
-  // is-current 포함 그룹만 열기 (inline style로 강제)
+  // is-current 포함 그룹만 열기 + 링크 스타일 inline 강제 적용
   const currentLink = document.querySelector('.header-menu a.is-current');
-  const activeGroup = currentLink?.closest('.menu-group');
-  if(activeGroup){
-    activeGroup.classList.add('is-open');
-    const body = activeGroup.querySelector('.menu-group-body');
-    if(body) body.style.display = 'flex';
+  console.log('[menu] _recommendActive:', _recommendActive, 'currentLink:', currentLink?.id);
+  if(currentLink){
+    currentLink.style.setProperty('background', '#35543c', 'important');
+    currentLink.style.setProperty('color', '#fff', 'important');
+    currentLink.style.setProperty('font-weight', '900', 'important');
+    currentLink.style.setProperty('border-radius', '8px', 'important');
+    const activeGroup = currentLink.closest('.menu-group');
+    if(activeGroup){
+      activeGroup.classList.add('is-open');
+      const body = activeGroup.querySelector('.menu-group-body');
+      if(body) body.style.display = 'flex';
+    }
   }
 }
 
