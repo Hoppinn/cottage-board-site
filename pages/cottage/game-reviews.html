@@ -85,6 +85,14 @@
 
     .pr-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0; }
 
+    /* game name autocomplete */
+    .pr-autocomplete-wrap { position: relative; flex: 1; }
+    .pr-autocomplete-list { position: absolute; top: calc(100% + 3px); left: 0; right: 0; background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 200; max-height: 200px; overflow-y: auto; display: none; }
+    .pr-autocomplete-list.is-open { display: block; }
+    .pr-autocomplete-item { padding: 9px 12px; font-size: 14px; cursor: pointer; color: var(--text); border-bottom: 1px solid var(--border,#e8e4dc); }
+    .pr-autocomplete-item:last-child { border-bottom: none; }
+    .pr-autocomplete-item:hover, .pr-autocomplete-item.is-focused { background: var(--bg,#f5f0e8); }
+
     /* player count toggles */
     .pr-count-toggles { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
     .pr-count-btn { border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); border-radius: 6px; padding: 5px 9px; font-size: 12px; cursor: pointer; font-family: inherit; color: var(--text); line-height: 1; }
@@ -96,6 +104,22 @@
 
     /* photo thumbnail in record row */
     .pr-rec-photo { width: 72px; height: 54px; object-fit: cover; border-radius: 7px; flex-shrink: 0; }
+
+    /* view toggle (모임별 / 게임별) */
+    .pr-view-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
+    .pr-vt-btn { flex: 1; padding: 8px; font-size: 13px; font-weight: 700; border: 1px solid var(--border,#e8e4dc); border-radius: 8px; background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; font-family: inherit; }
+    .pr-vt-btn.is-active { background: var(--green); color: #fff; border-color: var(--green); }
+
+    /* sub-session (날짜 단위, 모임별 뷰 안) */
+    .pr-sub-session { border-top: 1px solid var(--border,#e8e4dc); }
+    .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 14px 9px 22px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; }
+    .pr-sub-hd:hover { background: rgba(0,0,0,0.03); }
+    .pr-sub-date { font-size: 13px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+    .pr-sub-summary { font-size: 12px; color: var(--muted); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pr-sub-arrow { font-size: 13px; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
+    .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
+    .pr-sub-body { display: none; }
+    .pr-sub-session.is-open .pr-sub-body { display: block; }
   </style>
 </head>
 
@@ -289,14 +313,9 @@
 
       const groups = await window.CottageDB?.getGroupNames() || [];
       const groupDl = groups.map(g => `<option value="${escH(g)}">`).join('');
-      const gameDl = (window.COTTAGE_GAMES || []).map(g => {
-        const label = escH(g.display || g.titleKo || g.titleEn || '');
-        return `<option value="${label}">`;
-      }).join('');
 
       panel.innerHTML = `
         <datalist id="dlGroups">${groupDl}</datalist>
-        <datalist id="dlGames">${gameDl}</datalist>
 
         <div class="pr-meta-grid">
           <div>
@@ -321,7 +340,10 @@
         div.dataset.row = ++rowIdx;
         div.innerHTML = `
           <div class="pr-row-head">
-            <input type="text" class="prGameName" placeholder="게임명 검색" list="dlGames" autocomplete="off">
+            <div class="pr-autocomplete-wrap">
+              <input type="text" class="prGameName" placeholder="게임명 검색" autocomplete="off">
+              <div class="pr-autocomplete-list"></div>
+            </div>
             <button class="pr-rm-btn" type="button" title="삭제">✕</button>
           </div>
           <div class="pr-detail-grid">
@@ -350,6 +372,72 @@
           </label>
           <img class="pr-photo-preview">
           <textarea class="pr-review-ta prReview" placeholder="후기 (선택)" rows="2"></textarea>`;
+
+        // autocomplete
+        const nameInput = div.querySelector('.prGameName');
+        const acList = div.querySelector('.pr-autocomplete-list');
+        let acFocusedIdx = -1;
+
+        function acRender(matches) {
+          acList.innerHTML = '';
+          acFocusedIdx = -1;
+          if (!matches.length) { acList.classList.remove('is-open'); return; }
+          matches.forEach(g => {
+            const label = g.display || g.titleKo || g.titleEn || '';
+            const item = document.createElement('div');
+            item.className = 'pr-autocomplete-item';
+            item.textContent = label;
+            item.dataset.label = label;
+            item.addEventListener('mousedown', e => { e.preventDefault(); acSelect(label); });
+            acList.appendChild(item);
+          });
+          acList.classList.add('is-open');
+        }
+
+        function acSelect(label) {
+          nameInput.value = label;
+          acList.classList.remove('is-open');
+          acFocusedIdx = -1;
+        }
+
+        function acUpdateFocus() {
+          const items = [...acList.querySelectorAll('.pr-autocomplete-item')];
+          items.forEach((item, i) => item.classList.toggle('is-focused', i === acFocusedIdx));
+          if (acFocusedIdx >= 0 && items[acFocusedIdx]) items[acFocusedIdx].scrollIntoView({ block: 'nearest' });
+        }
+
+        nameInput.addEventListener('input', () => {
+          const q = nameInput.value.trim().toLowerCase();
+          if (!q || !window.COTTAGE_GAMES) { acList.classList.remove('is-open'); return; }
+          const matches = window.COTTAGE_GAMES
+            .filter(g => (g.display || g.titleKo || g.titleEn || '').toLowerCase().includes(q))
+            .slice(0, 12);
+          acRender(matches);
+        });
+
+        nameInput.addEventListener('keydown', e => {
+          if (!acList.classList.contains('is-open')) return;
+          const items = [...acList.querySelectorAll('.pr-autocomplete-item')];
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            acFocusedIdx = Math.min(acFocusedIdx + 1, items.length - 1);
+            acUpdateFocus();
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            acFocusedIdx = Math.max(acFocusedIdx - 1, 0);
+            acUpdateFocus();
+          } else if (e.key === 'Enter' && acFocusedIdx >= 0) {
+            e.preventDefault();
+            acSelect(items[acFocusedIdx].dataset.label);
+          } else if (e.key === 'Escape') {
+            acList.classList.remove('is-open');
+            acFocusedIdx = -1;
+          }
+        });
+
+        nameInput.addEventListener('blur', () => {
+          setTimeout(() => acList.classList.remove('is-open'), 150);
+        });
 
         div.querySelectorAll('.pr-count-btn').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -411,6 +499,7 @@
           const photoUrl = e.photoFile
             ? await window.CottageDB.uploadPlayPhoto(e.photoFile, user.id)
             : null;
+          if (e.photoFile && !photoUrl) showToast('⚠️ 사진 업로드 실패 (Storage 정책 확인 필요)');
           const res = await window.CottageDB.recordGamePlay(
             e.id, e.count, e.names, e.time, e.score,
             user.nickname, user.id, groupVal || null, dateVal, photoUrl
@@ -439,8 +528,14 @@
     // ── 기록 보기 탭 ─────────────────────────────────────────────
 
     let recordsLoaded = false;
+    let recordsData = null;
+    let currentView = 'group';
+
     async function loadRecords() {
-      if (recordsLoaded) return;
+      if (recordsLoaded && recordsData !== null) {
+        renderRecords(recordsData);
+        return;
+      }
       recordsLoaded = true;
       const panel = document.getElementById('prPanelRecords');
       panel.innerHTML = '<p class="pr-empty">불러오는 중...</p>';
@@ -452,65 +547,133 @@
           .order('created_at', { ascending: false })
           .limit(200);
 
-        if (!data?.length) { panel.innerHTML = '<p class="pr-empty">아직 기록이 없어요.</p>'; return; }
-
-        const user = window.getKakaoUser?.();
-
-        // group by (played_at + group_name) — preserves insertion order = newest first
-        const sessionMap = new Map();
-        for (const r of data) {
-          const d = r.played_at || r.created_at?.slice(0, 10) || '?';
-          const key = d + '|' + (r.group_name || '');
-          if (!sessionMap.has(key)) sessionMap.set(key, { date: d, group: r.group_name || '', recs: [] });
-          sessionMap.get(key).recs.push(r);
-        }
-
-        const sessions = [...sessionMap.values()];
-
-        const container = document.createElement('div');
-        sessions.forEach((sess, idx) => {
-          const gameNames = sess.recs.map(r => getGameName(r.game_id));
-          const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
-
-          const el = document.createElement('div');
-          el.className = 'pr-session' + (idx === 0 ? ' is-open' : '');
-          el.innerHTML = `
-            <button class="pr-session-hd" type="button">
-              <span class="pr-session-date">${escH(formatKstDate(sess.date))}</span>
-              ${sess.group ? `<span class="pr-session-group">${escH(sess.group)}</span>` : ''}
-              <span class="pr-session-summary">${escH(summaryText)}</span>
-              <span class="pr-session-arrow">▾</span>
-            </button>
-            <div class="pr-session-body">${buildSessionBody(sess.recs, user)}</div>`;
-
-          el.querySelector('.pr-session-hd').addEventListener('click', () => {
-            el.classList.toggle('is-open');
-          });
-
-          // delete handlers
-          el.querySelectorAll('.pr-rec-del').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-              e.stopPropagation();
-              if (!confirm('이 기록을 삭제할까요?')) return;
-              const res = await window.CottageDB?.deleteGamePlay(btn.dataset.id);
-              if (!res?.error) {
-                const row = btn.closest('.pr-rec-row');
-                row.remove();
-                // if no rows left, remove session
-                if (!el.querySelector('.pr-rec-row')) el.remove();
-              }
-            });
-          });
-
-          container.appendChild(el);
-        });
-
-        panel.innerHTML = '';
-        panel.appendChild(container);
+        recordsData = data || [];
+        renderRecords(recordsData);
       } catch (err) {
         console.error(err);
-        panel.innerHTML = '<p class="pr-empty">불러오기 실패</p>';
+        document.getElementById('prPanelRecords').innerHTML = '<p class="pr-empty">불러오기 실패</p>';
       }
+    }
+
+    function renderRecords(data) {
+      const panel = document.getElementById('prPanelRecords');
+      const user = window.getKakaoUser?.();
+
+      const toggleHtml = `<div class="pr-view-toggle">
+        <button class="pr-vt-btn ${currentView === 'group' ? 'is-active' : ''}" data-view="group">모임별</button>
+        <button class="pr-vt-btn ${currentView === 'game' ? 'is-active' : ''}" data-view="game">게임별</button>
+      </div>`;
+
+      if (!data?.length) {
+        panel.innerHTML = toggleHtml + '<p class="pr-empty">아직 기록이 없어요.</p>';
+        bindToggle(panel);
+        return;
+      }
+
+      const contentHtml = currentView === 'group'
+        ? renderGroupView(data, user)
+        : renderGameView(data, user);
+
+      panel.innerHTML = toggleHtml + contentHtml;
+      bindToggle(panel);
+
+      panel.querySelectorAll('.pr-session-hd').forEach(hd => {
+        hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
+      });
+      panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
+        hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
+      });
+      panel.querySelectorAll('.pr-rec-del').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.stopPropagation();
+          if (!confirm('이 기록을 삭제할까요?')) return;
+          const res = await window.CottageDB?.deleteGamePlay(btn.dataset.id);
+          if (!res?.error) {
+            recordsData = recordsData.filter(r => String(r.id) !== String(btn.dataset.id));
+            renderRecords(recordsData);
+          }
+        });
+      });
+    }
+
+    function bindToggle(panel) {
+      panel.querySelectorAll('.pr-vt-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentView = btn.dataset.view;
+          renderRecords(recordsData);
+        });
+      });
+    }
+
+    function renderGroupView(data, user) {
+      // group_name → date → records[]
+      const groups = new Map();
+      for (const r of data) {
+        const g = r.group_name || '';
+        const d = r.played_at || r.created_at?.slice(0, 10) || '?';
+        if (!groups.has(g)) groups.set(g, new Map());
+        const dateMap = groups.get(g);
+        if (!dateMap.has(d)) dateMap.set(d, []);
+        dateMap.get(d).push(r);
+      }
+
+      let html = '';
+      let first = true;
+      for (const [groupName, dateMap] of groups) {
+        const label = groupName || '기타 기록';
+        const totalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
+        html += `<div class="pr-session${first ? ' is-open' : ''}">
+          <button class="pr-session-hd" type="button">
+            <span class="pr-session-date">${escH(label)}</span>
+            <span class="pr-session-summary">${dateMap.size}회 · ${totalGames}게임</span>
+            <span class="pr-session-arrow">▾</span>
+          </button>
+          <div class="pr-session-body">`;
+
+        let firstDate = true;
+        for (const [dateStr, recs] of dateMap) {
+          const gameNames = recs.map(r => getGameName(r.game_id));
+          const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
+          html += `<div class="pr-sub-session${firstDate ? ' is-open' : ''}">
+            <button class="pr-sub-hd" type="button">
+              <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
+              <span class="pr-sub-summary">${escH(summaryText)}</span>
+              <span class="pr-sub-arrow">▾</span>
+            </button>
+            <div class="pr-sub-body">${buildSessionBody(recs, user)}</div>
+          </div>`;
+          firstDate = false;
+        }
+
+        html += `</div></div>`;
+        first = false;
+      }
+      return html;
+    }
+
+    function renderGameView(data, user) {
+      // game_id → records[]
+      const games = new Map();
+      for (const r of data) {
+        if (!games.has(r.game_id)) games.set(r.game_id, []);
+        games.get(r.game_id).push(r);
+      }
+
+      let html = '';
+      let first = true;
+      for (const [gameId, recs] of games) {
+        const gameName = getGameName(gameId);
+        html += `<div class="pr-session${first ? ' is-open' : ''}">
+          <button class="pr-session-hd" type="button">
+            <span class="pr-session-date">${escH(gameName)}</span>
+            <span class="pr-session-summary">${recs.length}회 플레이</span>
+            <span class="pr-session-arrow">▾</span>
+          </button>
+          <div class="pr-session-body">${buildGameRows(recs, user)}</div>
+        </div>`;
+        first = false;
+      }
+      return html;
     }
 
     function buildSessionBody(recs, user) {
@@ -523,8 +686,8 @@
           r.score_note ? `🏆 ${r.score_note}` : null,
           r.nickname ? `✏️ ${r.nickname}` : null,
         ].filter(Boolean);
-        const gameReviewUrl = `./game-reviews.html?game=${encodeURIComponent(r.game_id)}`;
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+        const gameReviewUrl = `./game-reviews.html?game=${encodeURIComponent(r.game_id)}`;
         return `<div class="pr-rec-row" data-id="${r.id}">
           ${photoHtml}
           <div class="pr-rec-main">
@@ -533,6 +696,32 @@
           </div>
           <div class="pr-rec-actions">
             <a class="pr-rec-review-link" href="${gameReviewUrl}">💬 후기</a>
+            ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function buildGameRows(recs, user) {
+      return recs.map(r => {
+        const isMine = user && String(r.user_id) === String(user.id);
+        const date = r.played_at || r.created_at?.slice(0, 10) || '?';
+        const tags = [
+          formatKstDate(date),
+          r.group_name ? `📌 ${r.group_name}` : null,
+          r.player_count ? `👥 ${r.player_count}명` : null,
+          r.player_names ? r.player_names : null,
+          r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
+          r.score_note ? `🏆 ${r.score_note}` : null,
+          r.nickname ? `✏️ ${r.nickname}` : null,
+        ].filter(Boolean);
+        const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+        return `<div class="pr-rec-row" data-id="${r.id}">
+          ${photoHtml}
+          <div class="pr-rec-main">
+            <div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>
+          </div>
+          <div class="pr-rec-actions">
             ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
           </div>
         </div>`;

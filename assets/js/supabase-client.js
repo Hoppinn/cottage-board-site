@@ -128,9 +128,9 @@
       const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
       const path = `${userId || 'anon'}/${Date.now()}.${ext}`;
       const { data, error } = await db.storage.from('play-photos').upload(path, file, { upsert: false });
-      if (error) return null;
+      if (error) { console.error('[uploadPlayPhoto]', error); return null; }
       return db.storage.from('play-photos').getPublicUrl(data.path).data.publicUrl;
-    } catch (_) { return null; }
+    } catch (e) { console.error('[uploadPlayPhoto]', e); return null; }
   }
 
   async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt, photoUrl) {
