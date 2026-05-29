@@ -182,7 +182,6 @@ function resetMenuGroups(){
     const rect = recEl.getBoundingClientRect();
     isRecActive = rect.top < window.innerHeight * 0.5;
   }
-  console.log('[menu] rect.top:', recEl?.getBoundingClientRect().top?.toFixed(0), 'threshold:', (window.innerHeight*0.5).toFixed(0), '→ isRecActive:', isRecActive);
 
   const recommendLink = document.querySelector('#openRecommendMenu');
   if(recommendLink){
@@ -200,7 +199,6 @@ function resetMenuGroups(){
   });
 
   const currentLink = document.querySelector('.header-menu a.is-current');
-  console.log('[menu] currentLink:', currentLink?.id);
   if(currentLink){
     currentLink.style.setProperty('background', '#35543c', 'important');
     currentLink.style.setProperty('color', '#fff', 'important');
@@ -2521,7 +2519,6 @@ function setRecommendMenuActive(active){
 }
 
 function showRecommendResults(){
-  _recommendActive = true;
   updateRecommendFilterText();
   renderGameCards();
   closeRecommendModal();
@@ -2550,7 +2547,6 @@ function showRecommendResults(){
 ========================= */
 
 function backToHero(){
-  _recommendActive = false;
   setRecommendMenuActive(false);
 
   if(recommendSection){
