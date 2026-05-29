@@ -177,13 +177,13 @@ const mobileMenu =
 // 추천 결과 화면이 열려있는지 추적하는 플래그
 let _recommendActive = false;
 
-// IntersectionObserver: #recommend 섹션이 뷰포트에 들어오면 자동 active
+// MutationObserver: #recommend의 is-hidden 클래스 변화를 감시해 플래그 동기화
 (function(){
   const recEl = document.getElementById('recommend');
   if(!recEl) return;
-  new IntersectionObserver(function(entries){
-    _recommendActive = entries[0].isIntersecting;
-  }, { threshold: 0.05 }).observe(recEl);
+  new MutationObserver(function(){
+    _recommendActive = !recEl.classList.contains('is-hidden');
+  }).observe(recEl, { attributes: true, attributeFilter: ['class'] });
 })();
 
 function resetMenuGroups(){
