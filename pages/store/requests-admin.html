@@ -22,8 +22,8 @@
     .admin-req-item.is-done .admin-req-name { text-decoration: line-through; }
     .admin-gate { text-align: center; padding: 60px 20px; color: var(--muted); }
     .admin-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 24px 0; }
-    .admin-back { display: inline-block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-    .admin-back:hover { color: var(--green); }
+    .admin-back { display: inline-block; font-size: 13px; color: var(--green); font-weight: 600; margin-bottom: 4px; text-decoration: underline; text-underline-offset: 2px; }
+    .admin-back:hover { opacity: 0.75; }
   </style>
 </head>
 
@@ -173,6 +173,8 @@
           <div class="admin-section-title">👥 회원 목록 (${profiles.length}명)</div>
           <div class="admin-req-list">${memberHtml}</div>
         </div>`;
+
+      el.querySelectorAll('.admin-req-del').forEach(btn => {
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
           if (!confirm('삭제할까요?')) return;
