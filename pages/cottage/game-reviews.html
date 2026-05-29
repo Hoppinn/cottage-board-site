@@ -312,11 +312,8 @@
       }
 
       const groups = await window.CottageDB?.getGroupNames() || [];
-      const groupDl = groups.map(g => `<option value="${escH(g)}">`).join('');
 
       panel.innerHTML = `
-        <datalist id="dlGroups">${groupDl}</datalist>
-
         <div class="pr-meta-grid">
           <div>
             <label class="pr-field-label">날짜</label>
@@ -324,7 +321,10 @@
           </div>
           <div>
             <label class="pr-field-label">그룹명 (선택)</label>
-            <input type="text" id="prGroup" placeholder="동호회명 등" list="dlGroups">
+            <div class="pr-autocomplete-wrap">
+              <input type="text" id="prGroup" placeholder="동호회명 등" autocomplete="off">
+              <div class="pr-autocomplete-list" id="prGroupAcList"></div>
+            </div>
           </div>
         </div>
 
@@ -463,6 +463,58 @@
         document.getElementById('prGameRows').appendChild(div);
         if (focusInput) div.querySelector('.prGameName').focus();
       }
+
+      // 그룹명 자동완성
+      (function () {
+        const gInput = document.getElementById('prGroup');
+        const gList = document.getElementById('prGroupAcList');
+        let gFocused = -1;
+
+        function gRender(matches) {
+          gList.innerHTML = '';
+          gFocused = -1;
+          if (!matches.length) { gList.classList.remove('is-open'); return; }
+          matches.forEach(label => {
+            const item = document.createElement('div');
+            item.className = 'pr-autocomplete-item';
+            item.textContent = label;
+            item.addEventListener('mousedown', e => { e.preventDefault(); gInput.value = label; gList.classList.remove('is-open'); });
+            gList.appendChild(item);
+          });
+          gList.classList.add('is-open');
+        }
+
+        function gUpdateFocus() {
+          const items = [...gList.querySelectorAll('.pr-autocomplete-item')];
+          items.forEach((item, i) => item.classList.toggle('is-focused', i === gFocused));
+          if (gFocused >= 0 && items[gFocused]) items[gFocused].scrollIntoView({ block: 'nearest' });
+        }
+
+        gInput.addEventListener('input', () => {
+          const q = gInput.value.trim().toLowerCase();
+          const matches = q
+            ? groups.filter(g => g.toLowerCase().includes(q))
+            : groups.slice(0, 8);
+          gRender(matches);
+        });
+
+        gInput.addEventListener('focus', () => {
+          if (!gInput.value.trim()) gRender(groups.slice(0, 8));
+        });
+
+        gInput.addEventListener('keydown', e => {
+          if (!gList.classList.contains('is-open')) return;
+          const items = [...gList.querySelectorAll('.pr-autocomplete-item')];
+          if (e.key === 'ArrowDown') { e.preventDefault(); gFocused = Math.min(gFocused + 1, items.length - 1); gUpdateFocus(); }
+          else if (e.key === 'ArrowUp') { e.preventDefault(); gFocused = Math.max(gFocused - 1, 0); gUpdateFocus(); }
+          else if (e.key === 'Enter' && gFocused >= 0) { e.preventDefault(); gInput.value = items[gFocused].textContent; gList.classList.remove('is-open'); }
+          else if (e.key === 'Escape') { gList.classList.remove('is-open'); }
+        });
+
+        gInput.addEventListener('blur', () => {
+          setTimeout(() => gList.classList.remove('is-open'), 150);
+        });
+      })();
 
       addRow(false);
 
