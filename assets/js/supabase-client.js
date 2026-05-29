@@ -122,7 +122,18 @@
 
   // ── 플레이 기록 ─────────────────────────────────────────
 
-  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt) {
+  async function uploadPlayPhoto(file, userId) {
+    if (!file) return null;
+    try {
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const path = `${userId || 'anon'}/${Date.now()}.${ext}`;
+      const { data, error } = await db.storage.from('play-photos').upload(path, file, { upsert: false });
+      if (error) return null;
+      return db.storage.from('play-photos').getPublicUrl(data.path).data.publicUrl;
+    } catch (_) { return null; }
+  }
+
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt, photoUrl) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -134,6 +145,7 @@
         user_id: userId || null,
         group_name: groupName || null,
         played_at: playedAt || null,
+        photo_url: photoUrl || null,
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
@@ -149,7 +161,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at")
+        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at")
         .eq("game_id", gameId)
         .order("created_at", { ascending: false })
         .limit(limit);
@@ -199,7 +211,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at")
+        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at")
         .not("group_name", "is", null)
         .neq("group_name", "")
         .order("created_at", { ascending: false })
@@ -476,6 +488,7 @@
     getMyRating,
     getPopularGames,
     getAllGameRatings,
+    uploadPlayPhoto,
     recordGamePlay,
     deleteGamePlay,
     updateGamePlay,

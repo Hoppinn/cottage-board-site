@@ -84,6 +84,18 @@
     .pr-toast.show { opacity: 1; }
 
     .pr-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0; }
+
+    /* player count toggles */
+    .pr-count-toggles { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+    .pr-count-btn { border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); border-radius: 6px; padding: 5px 9px; font-size: 12px; cursor: pointer; font-family: inherit; color: var(--text); line-height: 1; }
+    .pr-count-btn.is-on { background: var(--green); color: #fff; border-color: var(--green); }
+
+    /* photo upload */
+    .pr-photo-trigger { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); cursor: pointer; border: 1px dashed var(--border,#e8e4dc); border-radius: 7px; padding: 6px 10px; margin-top: 6px; box-sizing: border-box; }
+    .pr-photo-preview { max-width: 100%; max-height: 100px; border-radius: 7px; margin-top: 6px; display: none; }
+
+    /* photo thumbnail in record row */
+    .pr-rec-photo { width: 72px; height: 54px; object-fit: cover; border-radius: 7px; flex-shrink: 0; }
   </style>
 </head>
 
@@ -315,7 +327,9 @@
           <div class="pr-detail-grid">
             <div>
               <label class="pr-field-label">인원수</label>
-              <input type="number" class="prCount" placeholder="–" min="1" max="20">
+              <div class="pr-count-toggles">
+                ${[1,2,3,4,5,6,7,8].map(n => `<button class="pr-count-btn" type="button" data-n="${n}">${n}명</button>`).join('')}
+              </div>
             </div>
             <div>
               <label class="pr-field-label">플레이시간(분)</label>
@@ -330,7 +344,33 @@
               <input type="text" class="prScore" placeholder="1등: 홍길동">
             </div>
           </div>
+          <label class="pr-photo-trigger">
+            📷 사진 추가 (선택)
+            <input type="file" class="prPhoto" accept="image/*" style="display:none">
+          </label>
+          <img class="pr-photo-preview">
           <textarea class="pr-review-ta prReview" placeholder="후기 (선택)" rows="2"></textarea>`;
+
+        div.querySelectorAll('.pr-count-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const wasOn = btn.classList.contains('is-on');
+            div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
+            if (!wasOn) btn.classList.add('is-on');
+          });
+        });
+
+        const photoInput = div.querySelector('.prPhoto');
+        const photoPreview = div.querySelector('.pr-photo-preview');
+        photoInput.addEventListener('change', () => {
+          const file = photoInput.files[0];
+          if (file) {
+            photoPreview.src = URL.createObjectURL(file);
+            photoPreview.style.display = 'block';
+          } else {
+            photoPreview.style.display = 'none';
+          }
+        });
+
         div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
         document.getElementById('prGameRows').appendChild(div);
         if (focusInput) div.querySelector('.prGameName').focus();
@@ -349,13 +389,15 @@
         for (const row of rows) {
           const name = row.querySelector('.prGameName').value.trim();
           if (!name) continue;
+          const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
           entries.push({
             id: gameIdByName(name),
-            count: parseInt(row.querySelector('.prCount').value) || null,
+            count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
             time: parseInt(row.querySelector('.prTime').value) || null,
             names: row.querySelector('.prNames').value.trim() || null,
             score: row.querySelector('.prScore').value.trim() || null,
             review: row.querySelector('.prReview').value.trim() || null,
+            photoFile: row.querySelector('.prPhoto').files[0] || null,
           });
         }
 
@@ -366,9 +408,12 @@
 
         let ok = true;
         for (const e of entries) {
+          const photoUrl = e.photoFile
+            ? await window.CottageDB.uploadPlayPhoto(e.photoFile, user.id)
+            : null;
           const res = await window.CottageDB.recordGamePlay(
             e.id, e.count, e.names, e.time, e.score,
-            user.nickname, user.id, groupVal || null, dateVal
+            user.nickname, user.id, groupVal || null, dateVal, photoUrl
           );
           if (res?.error) { ok = false; continue; }
           if (e.review) {
@@ -382,6 +427,9 @@
           showToast('저장됐어요!');
           document.getElementById('prGameRows').innerHTML = '';
           addRow(false);
+          recordsLoaded = false;
+          const recTab = root.querySelector('[data-tab="records"]');
+          if (recTab) recTab.click();
         } else {
           alert('일부 저장에 실패했어요. 다시 시도해주세요.');
         }
@@ -399,7 +447,7 @@
 
       try {
         const { data } = await getDb().from('game_play_records')
-          .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, created_at')
+          .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
           .order('played_at', { ascending: false })
           .order('created_at', { ascending: false })
           .limit(200);
@@ -476,7 +524,9 @@
           r.nickname ? `✏️ ${r.nickname}` : null,
         ].filter(Boolean);
         const gameReviewUrl = `./game-reviews.html?game=${encodeURIComponent(r.game_id)}`;
+        const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         return `<div class="pr-rec-row" data-id="${r.id}">
+          ${photoHtml}
           <div class="pr-rec-main">
             <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
             ${tags.length ? `<div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>` : ''}
