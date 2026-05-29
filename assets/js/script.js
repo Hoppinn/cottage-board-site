@@ -174,40 +174,29 @@ const menuToggle =
 const mobileMenu =
   document.querySelector('#mobileMenu');
 
-// 추천 결과 화면이 열려있는지 추적하는 플래그
-let _recommendActive = false;
-
-// MutationObserver: #recommend의 is-hidden 클래스 변화를 감시해 플래그 동기화
-(function(){
-  const recEl = document.getElementById('recommend');
-  if(!recEl) return;
-  new MutationObserver(function(){
-    _recommendActive = !recEl.classList.contains('is-hidden');
-  }).observe(recEl, { attributes: true, attributeFilter: ['class'] });
-})();
-
 function resetMenuGroups(){
-  // 추천 링크 active 상태 동기화
+  // 플래그 없이 매번 DOM 직접 읽기
+  const recEl = document.getElementById('recommend');
+  const isRecActive = recEl ? !recEl.classList.contains('is-hidden') : false;
+  console.log('[menu] recommend class:', recEl?.className, '→ isRecActive:', isRecActive);
+
   const recommendLink = document.querySelector('#openRecommendMenu');
   if(recommendLink){
-    recommendLink.classList.toggle('is-current', _recommendActive);
-    // inline style 초기화
+    recommendLink.classList.toggle('is-current', isRecActive);
     recommendLink.style.background = '';
     recommendLink.style.color = '';
     recommendLink.style.fontWeight = '';
     recommendLink.style.borderRadius = '';
   }
 
-  // 모든 그룹 닫기 (inline style 포함)
   document.querySelectorAll('.menu-group').forEach(g=>{
     g.classList.remove('is-open');
     const body = g.querySelector('.menu-group-body');
     if(body) body.style.display = '';
   });
 
-  // is-current 포함 그룹만 열기 + 링크 스타일 inline 강제 적용
   const currentLink = document.querySelector('.header-menu a.is-current');
-  console.log('[menu] _recommendActive:', _recommendActive, 'currentLink:', currentLink?.id);
+  console.log('[menu] currentLink:', currentLink?.id);
   if(currentLink){
     currentLink.style.setProperty('background', '#35543c', 'important');
     currentLink.style.setProperty('color', '#fff', 'important');
@@ -223,15 +212,9 @@ function resetMenuGroups(){
 }
 
 function toggleMenu(){
-  if(!mobileMenu){
-    return;
-  }
-
+  if(!mobileMenu){ return; }
   const isOpening = !mobileMenu.classList.contains('active');
   if(isOpening){
-    // 메뉴 열릴 때마다 DOM 상태로 플래그 재동기화
-    const rec = document.getElementById('recommend');
-    if(rec) _recommendActive = !rec.classList.contains('is-hidden');
     resetMenuGroups();
   }
   mobileMenu.classList.toggle('active');
