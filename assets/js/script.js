@@ -194,8 +194,6 @@ function resetMenuGroups(){
 
   document.querySelectorAll('.menu-group').forEach(g=>{
     g.classList.remove('is-open');
-    const body = g.querySelector('.menu-group-body');
-    if(body) body.style.display = '';
   });
 
   const currentLink = document.querySelector('.header-menu a.is-current');
@@ -205,11 +203,7 @@ function resetMenuGroups(){
     currentLink.style.setProperty('font-weight', '900', 'important');
     currentLink.style.setProperty('border-radius', '8px', 'important');
     const activeGroup = currentLink.closest('.menu-group');
-    if(activeGroup){
-      activeGroup.classList.add('is-open');
-      const body = activeGroup.querySelector('.menu-group-body');
-      if(body) body.style.display = 'flex';
-    }
+    if(activeGroup) activeGroup.classList.add('is-open');
   }
 }
 

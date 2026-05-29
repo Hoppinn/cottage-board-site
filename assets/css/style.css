@@ -58,6 +58,7 @@
 
 html{
   scroll-behavior:smooth;
+  scroll-padding-top:var(--header-h);
 }
 
 body{
