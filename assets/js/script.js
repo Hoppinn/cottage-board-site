@@ -175,10 +175,14 @@ const mobileMenu =
   document.querySelector('#mobileMenu');
 
 function resetMenuGroups(){
-  // 플래그 없이 매번 DOM 직접 읽기
+  // 스크롤 위치 기반: 추천 섹션 top이 뷰포트 상반부에 들어오면 active
   const recEl = document.getElementById('recommend');
-  const isRecActive = recEl ? !recEl.classList.contains('is-hidden') : false;
-  console.log('[menu] recommend class:', recEl?.className, '→ isRecActive:', isRecActive);
+  let isRecActive = false;
+  if(recEl){
+    const rect = recEl.getBoundingClientRect();
+    isRecActive = rect.top < window.innerHeight * 0.5;
+  }
+  console.log('[menu] rect.top:', recEl?.getBoundingClientRect().top?.toFixed(0), 'threshold:', (window.innerHeight*0.5).toFixed(0), '→ isRecActive:', isRecActive);
 
   const recommendLink = document.querySelector('#openRecommendMenu');
   if(recommendLink){
