@@ -126,7 +126,7 @@
       const db = window._cottageSupabaseDb;
 
       const [gameRes, snackRes, suggestRes] = await Promise.all([
-        db.from('game_requests').select('id, game_name, request_count, status').order('request_count', { ascending: false }),
+        db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count').order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at').order('created_at', { ascending: false }),
       ]);
@@ -148,7 +148,7 @@
         </div>`;
       }
 
-      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',r.status==='done')).join('');
+      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'))).join('');
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at)).join('');
 
@@ -195,7 +195,11 @@
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
           const isDone = item.classList.contains('is-done');
-          await db.from('game_requests').update({ status: isDone?'pending':'done' }).eq('id', item.dataset.id);
+          const today = new Date().toISOString().slice(0, 10);
+          await db.from('game_requests').update(isDone
+            ? { purchased_at: null, is_planned: false, status: 'pending' }
+            : { purchased_at: today, is_planned: false, status: 'done' }
+          ).eq('id', item.dataset.id);
           item.classList.toggle('is-done', !isDone);
           btn.textContent = isDone ? '구매완료' : '완료됨';
         });
