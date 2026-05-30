@@ -596,11 +596,6 @@ body.owned-page .header-menu.active{
 
 .hero-text{
   text-align:center;
-  background:rgba(20,12,5,0.28);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  border-radius:20px;
-  padding:24px 28px;
 }
 
 .label{
@@ -623,7 +618,7 @@ body.owned-page .header-menu.active{
   line-height:1.22;
   font-weight:900;
   letter-spacing:-1px;
-  text-shadow:0 2px 12px rgba(0,0,0,0.3);
+  text-shadow:0 2px 16px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.35);
 }
 
 .dotted-line{
@@ -642,7 +637,7 @@ body.owned-page .header-menu.active{
   font-size:clamp(14px,3.8vw,22px);
   line-height:1.45;
   font-weight:800;
-  text-shadow:0 1px 6px rgba(0,0,0,0.25);
+  text-shadow:0 1px 12px rgba(0,0,0,0.55), 0 0 30px rgba(0,0,0,0.3);
 }
 
 .hero-visitor-count{
