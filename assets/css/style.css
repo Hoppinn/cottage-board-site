@@ -161,7 +161,7 @@ textarea{
   height:28px;
   border:0;
   background:transparent;
-  color:#888;
+  color:#555;
   font-size:20px;
   font-weight:900;
   text-decoration:none;
@@ -1791,6 +1791,33 @@ body.sheet-open{
   position:absolute;
   inset:0;
   background:url('../images/main/photo-shelves.jpg') center 40%/cover no-repeat;
+  filter:brightness(0.72);
+  z-index:0;
+  border-radius:14px;
+}
+.page-mini-hero--price::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('../images/main/photo-snack.jpg') center/cover no-repeat;
+  filter:brightness(0.72);
+  z-index:0;
+  border-radius:14px;
+}
+.page-mini-hero--club::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('../images/main/photo-interior.jpg') center/cover no-repeat;
+  filter:brightness(0.72);
+  z-index:0;
+  border-radius:14px;
+}
+.page-mini-hero--cozy::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('../images/main/photo-cozy.jpg') center/cover no-repeat;
   filter:brightness(0.72);
   z-index:0;
   border-radius:14px;
