@@ -659,7 +659,8 @@ function matchRecommendMood(game, moodValue){
 
   const moodTagMap = {
     talk:   ["table_talk", "social", "storytelling", "negotiation", "murder_mystery"],
-    bluff:  ["bluffing", "hidden_role", "betrayal", "deduction"],
+    bluff:  ["bluffing", "hidden_role", "betrayal"],
+    guess:  ["deduction", "guessing", "word_game", "pattern_recognition"],
     brain:  ["puzzle", "strategy", "tense", "immersive"],
     coop:   ["cooperative", "easy_coop", "hard_coop"],
     team:   ["team"],
@@ -2323,6 +2324,7 @@ const levelTextMap = {
 const moodTextMap = {
   talk:   "💬 말·이야기 게임",
   bluff:  "🃏 속이기·심리전",
+  guess:  "🎯 맞추기·추론",
   brain:  "🧠 전략·두뇌",
   coop:   "🤝 협력 게임",
   team:   "⚔️ 팀 대항전",
@@ -2425,6 +2427,7 @@ ${levelValue !== "hardcore"
         <div class="recommend-step-options">
           ${moodValue !== "talk"   ? renderInlineOption("mood", "talk",   "💬 말·이야기 게임",    moodValue) : ""}
 ${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
+${moodValue !== "guess"  ? renderInlineOption("mood", "guess",  "🎯 맞추기·추론",       moodValue) : ""}
 ${moodValue !== "brain"  ? renderInlineOption("mood", "brain",  "🧠 전략·두뇌",         moodValue) : ""}
 ${moodValue !== "coop"   ? renderInlineOption("mood", "coop",   "🤝 협력 게임",         moodValue) : ""}
 ${moodValue !== "team"   ? renderInlineOption("mood", "team",   "⚔️ 팀 대항전",         moodValue) : ""}
