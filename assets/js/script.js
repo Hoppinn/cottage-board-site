@@ -1462,10 +1462,6 @@ function openGameSheet(gameKey){
       </div>
     </div>
 
-    <!-- 전체 게임에서 보기 -->
-    <a class="sheet-view-all-btn"
-      href="${rootPath}pages/owned-games.html?search=${encodeURIComponent(detail.title)}"
-    >전체 게임에서 보기 →</a>
     <a class="sheet-view-all-btn sheet-review-btn"
       href="${rootPath}pages/cottage/game-reviews.html?game=${encodeURIComponent(gameKey)}"
     >🎲 플레이기록 보러가기 →</a>
