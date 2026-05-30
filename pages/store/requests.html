@@ -229,11 +229,11 @@
           : r.is_planned
             ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
             : '';
-        const nameClass = isAdmin() ? 'req-list-name req-name-clickable' : 'req-list-name';
-        const nameAttr = isAdmin() ? ` data-planned="${r.is_planned ? '1' : '0'}" data-purchased="${r.purchased_at || ''}"` : '';
-        return `<li class="req-list-item" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
-          <span class="${nameClass}"${nameAttr}>${escHtml(r.game_name)}</span>
-          <span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${statusBadge}${can && !r.purchased_at ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
+        const liClass = isAdmin() ? 'req-list-item req-item-clickable' : 'req-list-item';
+        const liAttr = isAdmin() ? ` data-planned="${r.is_planned ? '1' : '0'}" data-purchased="${r.purchased_at || ''}"` : '';
+        return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}"${liAttr}>
+          <span class="req-list-name">${escHtml(r.game_name)}</span>
+          <span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${statusBadge}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
         </li>`;
       }
 
@@ -252,22 +252,19 @@
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
 
-      // 관리자: 게임 이름 클릭 → 대기 → 구매예정 → 구매완료(오늘날짜) → 대기 순환
-      el.querySelectorAll('.req-name-clickable').forEach(nameEl => {
-        nameEl.addEventListener('click', async () => {
-          const li = nameEl.closest('.req-list-item');
+      // 관리자: 박스 클릭 → 대기 → 구매예정 → 구매완료(오늘날짜) → 대기 순환
+      el.querySelectorAll('.req-item-clickable').forEach(li => {
+        li.addEventListener('click', async e => {
+          if (e.target.closest('button, input, a, .req-edit-wrap')) return; // 버튼 클릭은 제외
           const id = li.dataset.id;
-          const isPurchased = !!nameEl.dataset.purchased;
-          const isPlanned = nameEl.dataset.planned === '1';
+          const isPurchased = !!li.dataset.purchased;
+          const isPlanned = li.dataset.planned === '1';
           if (isPurchased) {
-            // 구매완료 → 대기(해제)
             await getDb().from('game_requests').update({ purchased_at: null, is_planned: false }).eq('id', id);
           } else if (isPlanned) {
-            // 구매예정 → 구매완료 (오늘 날짜)
             const today = new Date().toISOString().slice(0, 10);
             await getDb().from('game_requests').update({ is_planned: false, purchased_at: today }).eq('id', id);
           } else {
-            // 대기 → 구매예정
             await getDb().from('game_requests').update({ is_planned: true }).eq('id', id);
           }
           loadGameRequests();
