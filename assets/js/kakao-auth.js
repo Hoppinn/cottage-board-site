@@ -279,16 +279,29 @@ async function openProfilePanel() {
 
   function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  const playItems = stats.plays.slice(0, 5).map(r => {
+  const PREVIEW = 5;
+
+  function buildActivityList(items, renderFn) {
+    const preview = items.slice(0, PREVIEW).map(renderFn).join('');
+    const rest = items.slice(PREVIEW).map(renderFn).join('');
+    const hasMore = items.length > PREVIEW;
+    return `<ul class="profile-activity-list is-collapsed">
+      ${preview}
+      ${hasMore ? `<div class="profile-more-wrap is-hidden">${rest}</div>
+        <li class="profile-more-btn-wrap">
+          <button class="profile-more-btn" type="button">더 보기 (${items.length - PREVIEW}건 더)</button>
+        </li>` : ''}
+    </ul>`;
+  }
+
+  const playListHtml = buildActivityList(stats.plays, r => {
     const date = r.played_at || (r.created_at||'').slice(0,10);
     return `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(date)}</span></li>`;
-  }).join('');
-  const morePlay = stats.plays.length > 5 ? `<li class="profile-more">… 외 ${stats.plays.length - 5}건</li>` : '';
+  });
 
-  const commentItems = stats.comments.slice(0, 5).map(r =>
+  const commentListHtml = buildActivityList(stats.comments, r =>
     `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
-  ).join('');
-  const moreComment = stats.comments.length > 5 ? `<li class="profile-more">… 외 ${stats.comments.length - 5}건</li>` : '';
+  );
 
   const body = panel.querySelector('.profile-panel-body');
   body.innerHTML = `
@@ -305,11 +318,11 @@ async function openProfilePanel() {
     </ul>
     ${stats.plays.length ? `<div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-toggle-arrow">▾</span></button>
-      <ul class="profile-activity-list is-collapsed">${playItems}${morePlay}</ul>
+      ${playListHtml}
     </div>` : ''}
     ${stats.comments.length ? `<div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-toggle-arrow">▾</span></button>
-      <ul class="profile-activity-list is-collapsed">${commentItems}${moreComment}</ul>
+      ${commentListHtml}
     </div>` : ''}`;
 
   body.querySelectorAll('.profile-activity-toggle').forEach(btn => {
@@ -318,6 +331,16 @@ async function openProfilePanel() {
       const arrow = btn.querySelector('.profile-toggle-arrow');
       const collapsed = list.classList.toggle('is-collapsed');
       arrow.textContent = collapsed ? '▾' : '▴';
+    });
+  });
+
+  body.querySelectorAll('.profile-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+      const isHidden = wrap.classList.toggle('is-hidden');
+      btn.textContent = isHidden
+        ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
+        : '접기';
     });
   });
 }

@@ -3093,6 +3093,11 @@ body.sheet-open{
 .profile-activity-list li{font-size:13px;color:var(--text);display:flex;justify-content:space-between;}
 .profile-activity-list li span{color:var(--muted);font-size:12px;}
 .profile-more{color:var(--muted);font-size:12px;}
+.profile-more-wrap{display:flex;flex-direction:column;gap:7px;}
+.profile-more-wrap.is-hidden{display:none;}
+.profile-more-btn-wrap{list-style:none;margin-top:2px;}
+.profile-more-btn{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:0;text-decoration:underline;}
+.profile-more-btn:hover{color:var(--green);}
 
 /* 프로필 사진 피커 모달 */
 .photo-picker-modal{
