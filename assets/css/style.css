@@ -751,7 +751,7 @@ body.recommend-page main{
   content:"";
   position:absolute;
   inset:0;
-  background:url('./assets/images/main/photo-interior.jpg') center/cover no-repeat;
+  background:url('../images/main/photo-interior.jpg') center/cover no-repeat;
   filter:brightness(0.15);
   z-index:0;
 }
@@ -1774,7 +1774,7 @@ body.sheet-open{
   content:"";
   position:absolute;
   inset:0;
-  background:url('../assets/images/main/photo-shelves.jpg') center 40%/cover no-repeat;
+  background:url('../images/main/photo-shelves.jpg') center 40%/cover no-repeat;
   filter:brightness(0.45);
   z-index:0;
 }
