@@ -1,5 +1,5 @@
 # 코티지보드 홈페이지 TODO
-기준: 2026-05-29
+기준: 2026-05-30
 
 ---
 
@@ -26,11 +26,9 @@
 
 | 항목 | 우선순위 | 비고 |
 |------|----------|------|
-| **바텀시트 + 플레이기록 + 동호회 모임기록 연동 다듬기** | 높음 | 삭제 동기화, 사진 업로드 등 |
-| **club-history.html 모임기록 보기 고도화** | 높음 | 모임별 상세 보기 |
 | **club-schedule.html 일정 투표 기능 구현** | 높음 | Supabase 투표 테이블 설계·구현 |
+| **사진 업로드 실동작 확인** | 높음 | Storage RLS 적용 완료, 실제 테스트 필요 |
 | **동호회 하위→상위 뒤로가기 스크롤 위치 확인** | 중간 | 구현 완료, 실제 동작 확인 필요 |
-| page_views 테이블 초기화 (방문자 0 리셋) | 중간 | Supabase SQL: `DELETE FROM page_views;` 직접 실행 필요 |
 | 요청하기 페이지 개선 | 낮음 | |
 | 푸터 카카오 채널 링크 확인 | 낮음 | |
 | game-location.html 간단 콘텐츠 | 낮음 | 게임 위치 안내 이미지·텍스트 |
@@ -51,9 +49,9 @@
 
 | 항목 | 상태 |
 |------|------|
-| BGG 수동 보정: ~47개 unresolved 잔여 | ⏸ 일시정지 (요청 시 재개) |
-| 탁상탐정단1~4: MicroMacro BGG ID 유지, 영어 제목은 원판명 | ✅ 완료 |
-| 리테마 게임(스플렌더포켓몬 등) 개별 처리 | 🔧 대기 |
+| BGG 매칭 — 616/636 ready, no-bgg 19개, needs-review 0 | ✅ 완료 |
+| 중복 bggId 자동감지 규칙 (b_run-local-match.js) | ✅ 완료 |
+| 탁상탐정단1~4, 에이다, 펜스테르담 등 no-bgg 처리 | ✅ 완료 |
 
 ---
 
@@ -79,8 +77,14 @@
 - ✅ game-reviews.html: 기록보기 아코디언 (날짜+그룹 세션), 게임후기 탭 통합
 - ✅ club-schedule.html 신설 (플레이스홀더)
 - ✅ about.html + club.html 상단 헤더 여백 수정 (about-hero padding)
-- ✅ 방문자 카운팅: 로그인 사용자만, 하루 1회 제한 (localStorage)
-- ✅ BGG ID 매칭 대규모 업데이트 (~584/636개 이미지 확보)
+- ✅ 방문자 카운팅: 비로그인 포함 하루 1회 제한 (localStorage 날짜 기반)
+- ✅ BGG ID 매칭 완료 (616/636 ready, 중복감지 규칙 추가)
+- ✅ Supabase 다중 클라이언트 경고 해결 (_cottageSupabaseDb 싱글톤)
+- ✅ 플레이 후기 game_play_records.review_text 통합 (별도 insertGameReview 제거)
+- ✅ club-history.html 모임기록 연동 힌트 배너 항시 표시
+- ✅ supabase-setup.sql 전체 정합성 보완 (game_dislikes/profiles/game_reviews 추가)
+- ✅ Storage play-photos 버킷 + RLS 정책 추가
+- ✅ 동호회 소개 문구 수정 (코티지보드 동호회, 요금 5,000원)
 - ✅ 난이도 미설정("-") 게임 "아이도 가능" 필터에서 제외
 - ✅ 동호회 서브페이지 breadcrumb → club.html 섹션 해시 앵커 연결
 - ✅ club.html 모임 사진 보기 항목 제거
