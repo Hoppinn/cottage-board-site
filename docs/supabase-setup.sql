@@ -330,6 +330,7 @@ create policy "anon_select_member_intros"
 
 -- ── 마이그레이션: game_play_records 컬럼 추가 ─────────────
 alter table public.game_play_records
+  add column if not exists review_text text,
   add column if not exists player_names text,
   add column if not exists play_time_min smallint,
   add column if not exists score_note text,

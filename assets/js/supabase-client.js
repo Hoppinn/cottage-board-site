@@ -137,7 +137,7 @@
     } catch (e) { console.error('[uploadPlayPhoto]', e); return null; }
   }
 
-  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt, photoUrl) {
+  async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt, photoUrl, reviewText) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
         game_id: gameId,
@@ -150,6 +150,7 @@
         group_name: groupName || null,
         played_at: playedAt || null,
         photo_url: photoUrl || null,
+        review_text: reviewText || null,
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
@@ -165,7 +166,7 @@
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at")
+        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at")
         .eq("game_id", gameId)
         .order("created_at", { ascending: false })
         .limit(limit);
