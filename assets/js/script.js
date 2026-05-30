@@ -668,7 +668,7 @@ function matchRecommendMood(game, moodValue){
     coop:   ["cooperative", "easy_coop", "hard_coop"],
     team:   ["team"],
     card:   ["card_play"],
-    dice:   ["dice", "dice_rolling", "luck", "push_your_luck"],
+    dice:   ["dice_rolling", "re_rolling_and_locking", "die_icon_resolution"],
     active: ["dexterity", "chaotic", "quick_play"],
   };
 
@@ -3180,6 +3180,7 @@ function renderOwnedGameList(){
     heroSub.textContent = hasFilter
       ? `조건에 부합하는 ${sortedGames.length}개의 게임을 찾았습니다`
       : `${totalAll}종의 게임이 기다리고 있어요`;
+    heroSub.classList.toggle("is-filtered", !!hasFilter);
   }
 
   const totalPages =
