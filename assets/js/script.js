@@ -2323,14 +2323,14 @@ const levelTextMap = {
 
 const moodTextMap = {
   talk:   "💬 말·이야기 게임",
-  bluff:  "🃏 속이기·심리전",
   guess:  "🎯 맞추기·추론",
-  brain:  "🧠 전략·두뇌",
+  bluff:  "🃏 속이기·심리전",
+  active: "⚡ 몸·반응속도",
+  dice:   "🎲 가벼운 주사위게임",
+  card:   "🎴 가벼운 카드게임",
   coop:   "🤝 협력 게임",
   team:   "⚔️ 팀 대항전",
-  card:   "🎴 가벼운 카드게임",
-  dice:   "🎲 가벼운 주사위게임",
-  active: "⚡ 몸·반응속도"
+  brain:  "🧠 전략·두뇌"
 };
 
 function updateRecommendFilterText(){
@@ -2426,14 +2426,14 @@ ${levelValue !== "hardcore"
 
         <div class="recommend-step-options">
           ${moodValue !== "talk"   ? renderInlineOption("mood", "talk",   "💬 말·이야기 게임",    moodValue) : ""}
-${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
 ${moodValue !== "guess"  ? renderInlineOption("mood", "guess",  "🎯 맞추기·추론",       moodValue) : ""}
-${moodValue !== "brain"  ? renderInlineOption("mood", "brain",  "🧠 전략·두뇌",         moodValue) : ""}
+${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
+${moodValue !== "active" ? renderInlineOption("mood", "active", "⚡ 몸·반응속도",       moodValue) : ""}
+${moodValue !== "dice"   ? renderInlineOption("mood", "dice",   "🎲 가벼운 주사위게임", moodValue) : ""}
+${moodValue !== "card"   ? renderInlineOption("mood", "card",   "🎴 가벼운 카드게임",   moodValue) : ""}
 ${moodValue !== "coop"   ? renderInlineOption("mood", "coop",   "🤝 협력 게임",         moodValue) : ""}
 ${moodValue !== "team"   ? renderInlineOption("mood", "team",   "⚔️ 팀 대항전",         moodValue) : ""}
-${moodValue !== "card"   ? renderInlineOption("mood", "card",   "🎴 가벼운 카드게임",   moodValue) : ""}
-${moodValue !== "dice"   ? renderInlineOption("mood", "dice",   "🎲 가벼운 주사위게임", moodValue) : ""}
-${moodValue !== "active" ? renderInlineOption("mood", "active", "⚡ 몸·반응속도",       moodValue) : ""}
+${moodValue !== "brain"  ? renderInlineOption("mood", "brain",  "🧠 전략·두뇌",         moodValue) : ""}
   ${renderInlineOption("mood", "", "상관없어요", moodValue)}
         </div>
       </div>
