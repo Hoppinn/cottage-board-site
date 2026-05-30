@@ -520,6 +520,36 @@ body.owned-page .header-menu.active{
   z-index:0;
 }
 
+/* 캐릭터 스탬프 */
+.hero-stamp{
+  position:absolute;
+  z-index:2;
+  bottom:clamp(60px,12vw,100px);
+  right:clamp(16px,5vw,48px);
+  width:clamp(70px,16vw,120px);
+  opacity:0.75;
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+  pointer-events:none;
+}
+
+/* 방문자수 하단 바 */
+.hero-visitor-bar{
+  position:absolute;
+  z-index:2;
+  bottom:0;
+  left:0;right:0;
+  padding:10px 20px;
+  background:linear-gradient(transparent, rgba(0,0,0,0.4));
+  text-align:center;
+}
+.hero-visitor-bar .hero-visitor-count{
+  margin:0;
+  font-size:12px;
+  color:rgba(255,255,255,0.75);
+  font-weight:600;
+  letter-spacing:0.02em;
+}
+
 .hero-inner{
   position:relative;
   z-index:2;
@@ -529,7 +559,7 @@ body.owned-page .header-menu.active{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:clamp(10px,3vw,24px);
+  gap:clamp(14px,4vw,32px);
   text-align:center;
 }
 
