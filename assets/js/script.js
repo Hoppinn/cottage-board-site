@@ -641,12 +641,13 @@ function matchRecommendMood(game, moodValue){
   // 가벼운 주사위게임: 난이도 2.0 이하
   if (moodValue === "dice" && weight > 2.00) return false;
 
-  // 운 게임 수동 제외/포함
-  const LUCK_EXCLUDE = new Set(['클라스크', '탑텐티비', '텔레스트레이션']);
-  const LUCK_INCLUDE = new Set(['럭키넘버스']);
+  // 운 게임: whitelist 방식 (운이 메인인 게임만)
   if (moodValue === "luck") {
-    if (LUCK_EXCLUDE.has(game?.id)) return false;
-    if (LUCK_INCLUDE.has(game?.id)) return true;
+    const LUCK_WHITELIST = new Set([
+      '플립7', '에메랄드스컬', '냥냥집사', '럭키넘버스',
+      '데드맨스드로우', '뱅-주사위'
+    ]);
+    return LUCK_WHITELIST.has(game?.id);
   }
 
   const normalizeBgg = str => str.toLowerCase().replace(/[\s\-\/]+/g, '_');
@@ -900,7 +901,6 @@ function openRecommendOverlay(){
   const list    = document.getElementById("recommendOverlayList");
   if(!overlay || !list) return;
 
-  const games = getFilteredGames ? getFilteredGames() : filteredGames;
   const allFiltered = getAllGamesArray().filter(game =>
     matchRecommendPlayer(game, recommendState.players) &&
     matchRecommendLevel(game, recommendState.level) &&
