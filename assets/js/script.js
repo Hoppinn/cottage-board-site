@@ -916,11 +916,11 @@ function openRecommendOverlay(){
   );
 
   list.innerHTML = allFiltered.map(game => {
-    const detail = GameView.getGameDetailData(game);
-    const img    = GameView.getCoverImageUrl(game);
-    const title  = GameView.getDisplayTitle(game);
-    const weight = detail.difficultyWeight
-      ? `🧩 ${detail.difficultyWeight}`
+    const card   = GameView.getGameCardData(game);
+    const img    = card.image || DEFAULT_GAME_IMAGE;
+    const title  = card.title || game.id;
+    const weight = card.difficultyWeight
+      ? `🧩 ${card.difficultyWeight}`
       : "";
     return `<button class="rec-overlay-card" type="button" data-game-key="${game.id}">
       <img class="rec-overlay-thumb" src="${img}" alt="" loading="lazy">

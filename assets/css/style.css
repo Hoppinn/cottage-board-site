@@ -5152,5 +5152,5 @@ body.sheet-open{
 .dg-card.dg-beginner{background:#bbdefb;}.dg-card.dg-beginner .dg-name{color:#0d47a1;}
 .dg-card.dg-light   {background:#fff9c4;}.dg-card.dg-light    .dg-name{color:#f57f17;}
 .dg-card.dg-heavy   {background:#ffccbc;}.dg-card.dg-heavy    .dg-name{color:#bf360c;}
-.dg-card.dg-hardcore{background:#ffcdd2;}.dg-card.dg-hardcore .dg-name{color:#b71c1c;}
+.dg-card.dg-hardcore{background:#3d0a0a;}.dg-card.dg-hardcore .dg-name{color:#ff8a80;}.dg-card.dg-hardcore .dg-range,.dg-card.dg-hardcore .dg-desc{color:rgba(255,200,200,0.85);}
 .dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
