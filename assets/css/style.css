@@ -5064,9 +5064,9 @@ body.sheet-open{
 .dg-name{font-size:12px;font-weight:800;margin:0;}
 .dg-range{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.65);margin:4px 0;}
 .dg-desc{font-size:10.5px;color:var(--muted);line-height:1.5;margin:0;}
-.dg-card.dg-kids{background:#e8f7e8;}.dg-card.dg-kids .dg-name{color:#2e7d32;}
-.dg-card.dg-beginner{background:#e3f0fd;}.dg-card.dg-beginner .dg-name{color:#1565c0;}
-.dg-card.dg-light{background:#fff9e6;}.dg-card.dg-light .dg-name{color:#e65100;}
-.dg-card.dg-heavy{background:#fdf0e8;}.dg-card.dg-heavy .dg-name{color:#bf360c;}
-.dg-card.dg-hardcore{background:#fde8e8;}.dg-card.dg-hardcore .dg-name{color:#b71c1c;}
+.dg-card.dg-kids    {background:#c8e6c9;}.dg-card.dg-kids     .dg-name{color:#1b5e20;}
+.dg-card.dg-beginner{background:#bbdefb;}.dg-card.dg-beginner .dg-name{color:#0d47a1;}
+.dg-card.dg-light   {background:#fff9c4;}.dg-card.dg-light    .dg-name{color:#f57f17;}
+.dg-card.dg-heavy   {background:#ffccbc;}.dg-card.dg-heavy    .dg-name{color:#bf360c;}
+.dg-card.dg-hardcore{background:#ffcdd2;}.dg-card.dg-hardcore .dg-name{color:#b71c1c;}
 .dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
