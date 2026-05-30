@@ -1747,6 +1747,54 @@ body.sheet-open{
    # 6-B. INNER PAGES (이용안내, 문의하기)
 ========================= */
 
+/* ── 공통 미니히어로 (게임위치, 플레이기록 등) ── */
+.page-mini-hero{
+  position:relative;
+  margin:8px 0 12px;
+  height:160px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+  border-radius:14px;
+}
+.page-mini-hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(60,35,10,0.2);
+  z-index:0;
+  border-radius:14px;
+}
+.page-mini-hero h1{
+  position:relative;
+  z-index:1;
+  font-size:clamp(22px,5vw,36px);
+  margin:0;
+  color:#fff !important;
+  text-align:center;
+  text-shadow:0 2px 14px rgba(60,35,10,0.75);
+}
+.page-mini-hero--reviews::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('../images/main/photo-interior.jpg') center/cover no-repeat;
+  filter:brightness(0.72);
+  z-index:0;
+  border-radius:14px;
+}
+.page-mini-hero--location::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('../images/main/photo-shelves.jpg') center 40%/cover no-repeat;
+  filter:brightness(0.72);
+  z-index:0;
+  border-radius:14px;
+}
+
 .inner-page{
   padding:calc(var(--header-h) + 28px) 18px 60px;
   background:var(--bg);
@@ -2134,6 +2182,7 @@ body.sheet-open{
 /* 튜닝 포인트: 정렬 제목 */
 .owned-sort-title{
   flex:0 0 auto;
+  width:52px;
   color:#314d35;
   font-size:13px;
   font-weight:900;
@@ -2212,6 +2261,7 @@ body.sheet-open{
 /* 튜닝 포인트: 필터 제목 */
 .owned-filter-title{
   flex:0 0 auto;
+  width:52px;
   padding-top:3px;
   color:#314d35;
   font-size:13px;
@@ -4978,9 +5028,9 @@ body.sheet-open{
 .difficulty-guide{margin:20px 0 0;padding:20px 16px;border-top:1px solid var(--border,#e8e4dc);}
 .dg-title{font-size:15px;font-weight:900;text-align:center;margin:0 0 4px;color:var(--text);}
 .dg-subtitle{font-size:12px;color:var(--muted);text-align:center;margin:0 0 16px;}
-.dg-cards{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.dg-cards::-webkit-scrollbar{display:none;}
-.dg-card{flex:0 0 110px;border-radius:14px;padding:14px 8px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.dg-cards{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;overflow-x:visible;padding-bottom:0;}
+.dg-card{flex:0 0 calc((100% - 16px) / 3);min-width:0;border-radius:14px;padding:14px 8px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.dg-card:nth-child(4),.dg-card:nth-child(5){flex:0 0 calc((100% - 8px) / 2);}
 .dg-icon{font-size:26px;line-height:1;margin-bottom:4px;}
 .dg-name{font-size:12px;font-weight:800;margin:0;}
 .dg-range{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.65);margin:4px 0;}

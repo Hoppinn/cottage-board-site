@@ -198,8 +198,10 @@
 
   <main>
     <section class="inner-page">
-      <nav class="breadcrumb" id="pageBreadcrumb"><a href="../../index.html">게임 찾기</a> <span>›</span> 플레이 기록</nav>
-      <div id="reviewPageHeader"></div>
+      <nav class="breadcrumb owned-page-breadcrumb" id="pageBreadcrumb"><a href="../../index.html">게임 찾기</a> <span>›</span> 플레이 기록</nav>
+      <div class="page-mini-hero page-mini-hero--reviews" id="reviewPageHeader">
+        <h1>플레이 기록</h1>
+      </div>
       <div class="inner-page-body" id="reviewRoot">
         <p class="pr-empty">불러오는 중...</p>
       </div>
@@ -308,7 +310,7 @@
 
     function initHub() {
       document.title = '플레이 기록 | 코티지보드';
-      headerEl.innerHTML = '<h1 style="font-size:20px;font-weight:900;margin:0 0 16px">플레이 기록</h1>';
+      // h1은 static HTML에 있음
 
       root.innerHTML = `
         <div class="pr-tabs">
