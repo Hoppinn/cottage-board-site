@@ -15,7 +15,12 @@ function initKakaoAuth() {
       const user = JSON.parse(saved);
       updateLoginUI(user);
       if (window.CottageDB?.upsertProfile && user.id) {
-        window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님').catch(() => {});
+        const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+        const profileKey = `cottage_profile_visited_${user.id}_${kstDate}`;
+        if (!localStorage.getItem(profileKey)) {
+          localStorage.setItem(profileKey, '1');
+          window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님').catch(() => {});
+        }
       }
     } catch (e) {
       localStorage.removeItem(KAKAO_USER_KEY);
