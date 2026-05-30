@@ -211,25 +211,65 @@
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
-      const { data, error } = await getDb().from('game_requests').select('id, game_name, request_count, user_id, is_planned').order('request_count', { ascending: false }).limit(50);
+      const { data, error } = await getDb().from('game_requests')
+        .select('id, game_name, request_count, user_id, is_planned, purchased_at')
+        .order('request_count', { ascending: false }).limit(50);
       if (error || !data?.length) {
         el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>'; return;
       }
-      el.innerHTML = '<ul class="req-list">' + data.map(r => {
+
+      const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
+      const active = data.filter(r => !r.purchased_at);
+      const purchased = data.filter(r => r.purchased_at && new Date(r.purchased_at) >= cutoff);
+
+      function buildRow(r) {
         const can = canManage(r, MY_GAME_KEY);
-        const plannedToggle = isAdmin() ? `<button class="req-plan-btn" data-id="${r.id}" data-planned="${r.is_planned ? '1' : '0'}" type="button" title="구매예정 토글">${r.is_planned ? '✅' : '📋'}</button>` : '';
-        const countLabel = r.is_planned
-          ? `<span class="req-list-count req-count-planned">구매 예정</span>`
-          : `<span class="req-list-count">${r.request_count}명 희망</span>`;
-        return `<li class="req-list-item" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}"><span class="req-list-name">${escHtml(r.game_name)}</span><span class="req-list-right">${countLabel}${plannedToggle}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span></li>`;
-      }).join('') + '</ul>';
+        const statusBadge = r.purchased_at
+          ? `<span class="req-status-badge req-status-done">구매 완료 · ${r.purchased_at}</span>`
+          : r.is_planned
+            ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
+            : '';
+        const plannedToggle = isAdmin() && !r.purchased_at ? `<button class="req-plan-btn" data-id="${r.id}" data-planned="${r.is_planned ? '1' : '0'}" type="button" title="구매예정 토글">${r.is_planned ? '✅' : '📋'}</button>` : '';
+        const purchaseBtn = isAdmin() && !r.purchased_at ? `<button class="req-purchase-btn" data-id="${r.id}" type="button" title="구매완료 처리">🛒</button>` : '';
+        return `<li class="req-list-item" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
+          <span class="req-list-name">${escHtml(r.game_name)}</span>
+          <span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${statusBadge}${plannedToggle}${purchaseBtn}${can && !r.purchased_at ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
+        </li>`;
+      }
+
+      let html = active.length
+        ? '<ul class="req-list">' + active.map(buildRow).join('') + '</ul>'
+        : '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>';
+
+      if (purchased.length) {
+        html += `<div class="req-purchased-section">
+          <p class="req-purchased-title">구매 완료 <span class="req-purchased-note">· 구매 후 30일간 표시됩니다</span></p>
+          <ul class="req-list req-list-purchased">${purchased.map(buildRow).join('')}</ul>
+        </div>`;
+      }
+
+      el.innerHTML = html;
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
       el.querySelectorAll('.req-plan-btn').forEach(b => b.addEventListener('click', async () => {
-        const id = b.dataset.id;
         const nowPlanned = b.dataset.planned === '1';
-        await getDb().from('game_requests').update({ is_planned: !nowPlanned }).eq('id', id);
+        await getDb().from('game_requests').update({ is_planned: !nowPlanned }).eq('id', b.dataset.id);
         loadGameRequests();
+      }));
+      el.querySelectorAll('.req-purchase-btn').forEach(b => b.addEventListener('click', () => {
+        const li = b.closest('.req-list-item');
+        if (li.querySelector('.req-purchase-form')) return;
+        const today = new Date().toISOString().slice(0, 10);
+        const form = document.createElement('div');
+        form.className = 'req-purchase-form';
+        form.innerHTML = `<input type="date" class="req-purchase-date" value="${today}"><button class="req-purchase-confirm" type="button">완료 확인</button><button class="req-purchase-cancel" type="button">취소</button>`;
+        li.appendChild(form);
+        form.querySelector('.req-purchase-cancel').addEventListener('click', () => form.remove());
+        form.querySelector('.req-purchase-confirm').addEventListener('click', async () => {
+          const dateVal = form.querySelector('.req-purchase-date').value;
+          await getDb().from('game_requests').update({ purchased_at: dateVal, is_planned: false }).eq('id', b.dataset.id);
+          loadGameRequests();
+        });
       }));
     }
 

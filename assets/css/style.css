@@ -3660,10 +3660,19 @@ body.sheet-open{
   align-items:center;
   gap:6px;
 }
-.req-count-planned{
-  color:#2e7d32;
-  font-weight:700;
-}
+.req-status-badge{font-size:11px;border-radius:4px;padding:1px 7px;font-weight:700;margin-left:5px;white-space:nowrap;}
+.req-status-planned{background:#e8f5e9;color:#2e7d32;}
+.req-status-done{background:#e3f2fd;color:#1565c0;}
+.req-purchased-section{margin-top:18px;border-top:1px dashed var(--border,#e8e4dc);padding-top:12px;}
+.req-purchased-title{font-size:13px;font-weight:700;color:var(--text);margin:0 0 8px;}
+.req-purchased-note{font-size:11px;color:var(--muted);font-weight:400;}
+.req-list-purchased .req-list-item{opacity:0.7;}
+.req-plan-btn,.req-purchase-btn{background:none;border:none;cursor:pointer;padding:2px 4px;font-size:14px;line-height:1;opacity:0.7;}
+.req-plan-btn:hover,.req-purchase-btn:hover{opacity:1;}
+.req-purchase-form{display:flex;gap:6px;align-items:center;padding:6px 14px 8px;flex-wrap:wrap;}
+.req-purchase-date{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:3px 7px;}
+.req-purchase-confirm{font-size:12px;background:var(--green);color:#fff;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;}
+.req-purchase-cancel{font-size:12px;background:none;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:3px 8px;cursor:pointer;color:var(--muted);}
 .req-plan-btn{
   background:none;
   border:none;
