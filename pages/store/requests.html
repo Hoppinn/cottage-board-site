@@ -297,14 +297,21 @@
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           const id = li.dataset.id;
           const count = parseInt(li.dataset.count);
+          const userId = getCurrentUser().id;
           const myVotes = getMyVotes();
           const voted = myVotes.has(id);
           if (voted) {
-            if (count <= 1) return; // count=1이면 아무것도 안 함
-            await getDb().from('game_requests').update({ request_count: count - 1 }).eq('id', id);
+            if (count <= 1) return;
+            await Promise.all([
+              getDb().from('game_requests').update({ request_count: count - 1 }).eq('id', id),
+              getDb().from('game_request_votes').delete().eq('request_id', id).eq('user_id', userId),
+            ]);
             myVotes.delete(id);
           } else {
-            await getDb().from('game_requests').update({ request_count: count + 1 }).eq('id', id);
+            await Promise.all([
+              getDb().from('game_requests').update({ request_count: count + 1 }).eq('id', id),
+              getDb().from('game_request_votes').upsert({ request_id: id, user_id: userId }, { onConflict: 'request_id,user_id' }),
+            ]);
             myVotes.add(id);
           }
           saveMyVotes(myVotes);
@@ -320,7 +327,7 @@
           const isPurchased = !!badge.dataset.purchased;
           const isPlanned = badge.dataset.planned === '1';
           if (isPurchased) {
-            await getDb().from('game_requests').update({ purchased_at: null, is_planned: false }).eq('id', id);
+            await getDb().from('game_requests').update({ purchased_at: null, is_planned: false, status: 'pending' }).eq('id', id);
           } else if (isPlanned) {
             const today = new Date().toISOString().slice(0, 10);
             await getDb().from('game_requests').update({ is_planned: false, purchased_at: today }).eq('id', id);
@@ -344,11 +351,17 @@
         const u = getCurrentUser();
         const { data: existing } = await db.from('game_requests').select('id, request_count').ilike('game_name', name).maybeSingle();
         if (existing) {
-          await db.from('game_requests').update({ request_count: existing.request_count + 1 }).eq('id', existing.id);
+          await Promise.all([
+            db.from('game_requests').update({ request_count: existing.request_count + 1 }).eq('id', existing.id),
+            u?.id ? db.from('game_request_votes').upsert({ request_id: existing.id, user_id: u.id }, { onConflict: 'request_id,user_id' }) : Promise.resolve(),
+          ]);
           saveMyId(MY_GAME_KEY, existing.id);
         } else {
           const { data: ins } = await db.from('game_requests').insert({ game_name: name, request_count: 1, status: 'pending', user_id: u?.id || null }).select('id');
-          if (ins?.[0]?.id) saveMyId(MY_GAME_KEY, ins[0].id);
+          if (ins?.[0]?.id) {
+            saveMyId(MY_GAME_KEY, ins[0].id);
+            if (u?.id) await db.from('game_request_votes').upsert({ request_id: ins[0].id, user_id: u.id }, { onConflict: 'request_id,user_id' });
+          }
         }
         input.value = ''; btn.disabled = false;
         const msg = document.getElementById('gameSuccessMsg');

@@ -15,6 +15,7 @@
     .admin-req-content { font-size: 13px; flex: 1; line-height: 1.5; white-space: pre-wrap; color: var(--text); }
     .admin-req-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-req-requester { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
+    .admin-req-voters { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; flex: 1; }
     .admin-req-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
     .admin-req-done:hover { opacity: 0.85; }
     .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
@@ -126,26 +127,36 @@
       if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
       const db = window._cottageSupabaseDb;
 
-      const [gameRes, snackRes, suggestRes, profileRes] = await Promise.all([
+      const [gameRes, snackRes, suggestRes, profileRes, votesRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned, user_id').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id').order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname'),
+        db.from('game_request_votes').select('request_id, user_id'),
       ]);
 
       const profileMap = {};
-      (profileRes.data||[]).forEach(p => { profileMap[p.user_id] = p.nickname || p.user_id; });
-      function requesterTag(userId) {
-        if (!userId) return '';
-        const nick = profileMap[userId] || userId.slice(0, 8) + '…';
-        return `<span class="admin-req-requester">👤 ${escH(nick)}</span>`;
+      (profileRes.data||[]).forEach(p => { profileMap[p.user_id] = p.nickname || p.user_id?.slice(0,8)+'…'; });
+      function nick(userId) { return userId ? (profileMap[userId] || userId.slice(0,8)+'…') : '비회원'; }
+
+      // request_id → voter nicknames[]
+      const voteMap = {};
+      (votesRes.data||[]).forEach(v => {
+        if (!voteMap[v.request_id]) voteMap[v.request_id] = [];
+        voteMap[v.request_id].push(nick(v.user_id));
+      });
+
+      function votersTag(requestId) {
+        const voters = voteMap[requestId];
+        if (!voters?.length) return '';
+        return `<span class="admin-req-voters">👤 ${voters.map(n => escH(n)).join(', ')}</span>`;
       }
 
       function reqItem(id, name, count, table, done, userId) {
         return `<div class="admin-req-item${done?' is-done':''}" data-id="${id}" data-table="${table}">
           <span class="admin-req-name">${escH(name)}</span>
           <span class="admin-req-meta">${count}명</span>
-          ${requesterTag(userId)}
+          ${votersTag(id)}
           ${table==='game_requests'?`<button class="admin-req-done" type="button">${done?'완료됨':'구매완료'}</button>`:''}
           <button class="admin-req-del" type="button">삭제</button>
         </div>`;

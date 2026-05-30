@@ -499,6 +499,25 @@ create policy "anon_delete_game_reviews"
   using (true);
 
 
+-- ── game_request_votes (구매요청 투표자 기록) ───────────────
+create table if not exists public.game_request_votes (
+  id         uuid primary key default gen_random_uuid(),
+  request_id uuid not null,
+  user_id    text not null,
+  created_at timestamptz default now(),
+  unique (request_id, user_id)
+);
+
+alter table public.game_request_votes enable row level security;
+
+drop policy if exists "anon_all_req_votes" on public.game_request_votes;
+create policy "anon_all_req_votes"
+  on public.game_request_votes for all
+  to anon
+  using (true)
+  with check (true);
+
+
 -- ── RPC: 전체 게임 별점 요약 ──────────────────────────────
 create or replace function public.get_all_game_ratings()
 returns table(game_id text, avg_rating numeric, rating_count bigint)
