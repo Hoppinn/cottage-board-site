@@ -915,6 +915,26 @@ function openRecommendOverlay(){
     matchRecommendMood(game, recommendState.mood)
   );
 
+  // 헤더에 필터 조건 + 개수 표시
+  const filterChips = [];
+  if(recommendState.players) {
+    const pt = {2:'💗 둘이', 3:'🍻 셋이', 4:'🎲 넷이', group:'🎉 단체', 1:'☕ 혼자'};
+    filterChips.push(pt[recommendState.players] || recommendState.players);
+  }
+  if(recommendState.level) {
+    const lt = {kids:'😊 아이도', beginner:'🌱 입문', light:'🏡 라이트', heavy:'🧠 헤비', hardcore:'😈 하드코어'};
+    filterChips.push(lt[recommendState.level] || recommendState.level);
+  }
+  if(recommendState.mood && moodTextMap[recommendState.mood]) {
+    filterChips.push(moodTextMap[recommendState.mood]);
+  }
+  const titleEl = overlay.querySelector('.recommend-overlay-title');
+  if(titleEl) {
+    titleEl.innerHTML = filterChips.length
+      ? `${filterChips.join(' · ')} <span style="color:#888;font-weight:600;font-size:13px">${allFiltered.length}개</span>`
+      : `추천 게임 전체 <span style="color:#888;font-weight:600;font-size:13px">${allFiltered.length}개</span>`;
+  }
+
   list.innerHTML = allFiltered.map(game => {
     const card   = GameView.getGameCardData(game);
     const img    = card.image || DEFAULT_GAME_IMAGE;

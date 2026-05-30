@@ -1390,7 +1390,7 @@ body.recommend-page main{
 .recommend-overlay{
   position:fixed;
   inset:0;
-  z-index:9000;
+  z-index:1500;
   background:var(--bg);
   display:flex;
   flex-direction:column;
