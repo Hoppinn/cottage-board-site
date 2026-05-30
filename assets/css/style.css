@@ -596,6 +596,11 @@ body.owned-page .header-menu.active{
 
 .hero-text{
   text-align:center;
+  background:rgba(20,12,5,0.28);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  border-radius:20px;
+  padding:24px 28px;
 }
 
 .label{
