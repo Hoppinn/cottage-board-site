@@ -641,47 +641,31 @@ function matchRecommendMood(game, moodValue){
     Number(game?.bgg?.weight) ||
     0;
 
-  // 편안하게: 난이도 1.5 이하만
-  if (moodValue === "cozy" && weight > 1.50) return false;
+  // 가벼운 카드게임: 난이도 2.5 이하
+  if (moodValue === "card" && weight > 2.50) return false;
 
-  // 가볍게 웃고싶어요: 난이도 1.5 미만 + party 태그 필수
-  if (moodValue === "fun") {
-    if (weight >= 1.50) return false;
-    const playTags = recommend?.playTags || [];
-    if (!playTags.includes("party")) return false;
-  }
+  // 가벼운 주사위게임: 난이도 2.0 이하
+  if (moodValue === "dice" && weight > 2.00) return false;
 
-  // 대화가 많은 게임: 난이도 2.5 이하만 (전략 헤비게임 제외)
-  if (moodValue === "talk" && weight > 2.50) return false;
-
-const allTags = [
-  ...(recommend?.moodTags || []),
-  ...(recommend?.playTags || []),
-  ...(recommend?.relationshipTags || []),
-  ...(recommend?.displayTags || []),
-  ...(game?.cottage?.situationTags || []),
-  ...(game?.cottage?.interactionTags || []),
-  ...(game?.cottage?.autoTags || [])
-];
-
-  // 대화가 많은 게임: 추가 필터
-  if (moodValue === "talk") {
-    // 1) 협력 어드벤처류: hard_coop이면서 핵심 대화 태그 없으면 제외
-    const talkCoreTags = ["bluffing", "hidden_role", "negotiation"];
-    const hasTalkCore = allTags.some(t => talkCoreTags.includes(t));
-    if (allTags.includes("hard_coop") && !hasTalkCore) return false;
-    // 2) betrayal만 있고 bluffing/hidden_role 없으면 제외
-    //    (Take That류 경쟁 게임이 잘못 걸리는 케이스)
-    if (allTags.includes("betrayal") && !hasTalkCore) return false;
-  }
+  const allTags = [
+    ...(recommend?.moodTags || []),
+    ...(recommend?.playTags || []),
+    ...(recommend?.relationshipTags || []),
+    ...(recommend?.displayTags || []),
+    ...(game?.cottage?.situationTags || []),
+    ...(game?.cottage?.interactionTags || []),
+    ...(game?.cottage?.autoTags || [])
+  ];
 
   const moodTagMap = {
-    fun:       ["funny", "party", "chaotic", "dexterity"],
-    brain:     ["puzzle", "strategy", "deduction", "card_play"],
-    talk:      ["table_talk", "social", "bluffing", "hidden_role", "betrayal", "negotiation"],
-    immersive: ["immersive", "tense", "storytelling"],
-    coop:      ["cooperative", "easy_coop", "hard_coop", "coop", "team"],
-    cozy:      ["cozy"],
+    talk:   ["table_talk", "social", "storytelling", "negotiation", "murder_mystery"],
+    bluff:  ["bluffing", "hidden_role", "betrayal", "deduction"],
+    brain:  ["puzzle", "strategy", "tense", "immersive"],
+    coop:   ["cooperative", "easy_coop", "hard_coop"],
+    team:   ["team"],
+    card:   ["card_play"],
+    dice:   ["dice", "dice_rolling", "luck", "push_your_luck"],
+    active: ["dexterity", "chaotic", "quick_play"],
   };
 
   const targetTags =
