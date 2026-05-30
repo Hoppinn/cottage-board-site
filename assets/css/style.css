@@ -498,43 +498,40 @@ body.owned-page .header-menu.active{
   padding:calc(var(--header-h) + clamp(18px,5vw,34px)) var(--page-x) clamp(24px,6vw,48px);
   display:flex;
   align-items:center;
-  background:radial-gradient(circle at top center,#fff9ed 0%,#f7f0e3 55%,#efe3cf 100%);
+  background:none;
 }
 
-.hero::before,
+/* 배경 사진 */
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('../images/main/photo-exterior.jpg') center/cover no-repeat;
+  filter:blur(2px) brightness(0.45);
+  transform:scale(1.05);
+  z-index:0;
+}
+
+/* 부드러운 하단 그라디언트 오버레이 */
 .hero::after{
   content:"";
   position:absolute;
-  border-radius:50%;
-  pointer-events:none;
-}
-
-.hero::before{
-  left:-60px;
-  top:80px;
-  width:220px;
-  height:220px;
-  background:rgba(120,152,61,0.08);
-}
-
-.hero::after{
-  right:-80px;
-  bottom:80px;
-  width:260px;
-  height:260px;
-  background:rgba(138,75,43,0.06);
+  inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.35) 100%);
+  z-index:0;
 }
 
 .hero-inner{
   position:relative;
   z-index:2;
   width:100%;
-  max-width:1320px;
+  max-width:720px;
   margin:0 auto;
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:clamp(10px,3vw,24px);
+  text-align:center;
 }
 
 .hero-deco{
@@ -576,22 +573,23 @@ body.owned-page .header-menu.active{
   display:inline-block;
   padding:clamp(7px,2vw,9px) clamp(14px,4vw,18px);
   margin-bottom:clamp(10px,3vw,20px);
-  border:2px solid #d9be8b;
+  border:2px solid rgba(255,255,255,0.6);
   border-radius:999px;
-  background:#fff8ea;
-  color:var(--brown);
+  background:rgba(255,255,255,0.15);
+  color:#fff;
   font-size:clamp(13px,3.6vw,15px);
   font-weight:900;
-  box-shadow:0 4px 12px rgba(120,90,45,0.06);
+  backdrop-filter:blur(4px);
 }
 
 .hero h1{
   margin:0 0 clamp(10px,3vw,22px);
-  color:var(--ink);
+  color:#fff;
   font-size:clamp(26px,7.2vw,52px);
   line-height:1.22;
   font-weight:900;
   letter-spacing:-1px;
+  text-shadow:0 2px 12px rgba(0,0,0,0.3);
 }
 
 .dotted-line{
@@ -599,23 +597,24 @@ body.owned-page .header-menu.active{
   max-width:300px;
   height:8px;
   margin:0 auto clamp(12px,3vw,24px);
-  background-image:radial-gradient(circle,#a7ad73 2px,transparent 2px);
+  background-image:radial-gradient(circle,rgba(255,255,255,0.6) 2px,transparent 2px);
   background-size:16px 8px;
   background-repeat:repeat-x;
 }
 
 .desc{
   margin:0 0 clamp(14px,4vw,28px);
-  color:#3a3025;
+  color:rgba(255,255,255,0.92);
   font-size:clamp(14px,3.8vw,22px);
   line-height:1.45;
   font-weight:800;
+  text-shadow:0 1px 6px rgba(0,0,0,0.25);
 }
 
 .hero-visitor-count{
   margin:0 0 clamp(12px,3vw,20px);
   font-size:clamp(11px,2.8vw,14px);
-  color:#a09080;
+  color:rgba(255,255,255,0.75);
   font-weight:700;
   letter-spacing:.01em;
 }
@@ -2303,21 +2302,9 @@ body.sheet-open{
   }
 
   .hero-inner{
-    flex-direction:row;
-    justify-content:center;
-    gap:80px;
-  }
-
-  .hero-visual{
-    max-width:520px;
-  }
-
-  .hero-real-photo{
-    aspect-ratio:16/10;
-  }
-
-  .hero-text{
-    flex:1;
+    flex-direction:column;
+    align-items:center;
+    max-width:760px;
   }
 
   .hero h1{
