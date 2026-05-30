@@ -589,15 +589,9 @@ function matchRecommendPlayer(game, playerValue){
    */
   if(playerValue === "group"){
     const hasLargeBestPlayer =
-      bestPlayers.some((p) => Number(p) >= 6);
+      bestPlayers.some((p) => Number(p) >= 5);
 
-    const tags =
-      game?.cottage?.autoTags || [];
-
-    return (
-      hasLargeBestPlayer ||
-      tags.includes("large_group")
-    );
+    return hasLargeBestPlayer;
   }
 
   return arrayIncludesPlayer(
@@ -662,7 +656,7 @@ function matchRecommendMood(game, moodValue){
 
   const moodTagMap = {
     talk:   ["table_talk", "social", "storytelling", "negotiation", "murder_mystery"],
-    luck:   ["push_your_luck", "luck", "random", "press_your_luck"],
+    luck:   ["luck", "chaotic", "random"],
     bluff:  ["bluffing", "hidden_role", "betrayal"],
     guess:  ["deduction", "guessing", "word_game", "pattern_recognition"],
     brain:  ["puzzle", "strategy", "immersive"],
