@@ -641,6 +641,14 @@ function matchRecommendMood(game, moodValue){
   // 가벼운 주사위게임: 난이도 2.0 이하
   if (moodValue === "dice" && weight > 2.00) return false;
 
+  // 운 게임 수동 제외/포함
+  const LUCK_EXCLUDE = new Set(['클라스크', '탑텐티비', '텔레스트레이션']);
+  const LUCK_INCLUDE = new Set(['럭키넘버스']);
+  if (moodValue === "luck") {
+    if (LUCK_EXCLUDE.has(game?.id)) return false;
+    if (LUCK_INCLUDE.has(game?.id)) return true;
+  }
+
   const normalizeBgg = str => str.toLowerCase().replace(/[\s\-\/]+/g, '_');
   const allTags = [
     ...(recommend?.moodTags || []),
