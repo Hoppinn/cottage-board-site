@@ -145,9 +145,17 @@
         return;
       }
 
+      // 코티지보드 동호회 기록만 필터
+      const clubRecords = records.filter(r => r.group_name === '코티지보드 동호회');
+
+      if (!clubRecords.length) {
+        root.innerHTML = tipHtml + '<p class="history-empty">아직 동호회 모임 기록이 없습니다.</p>';
+        return;
+      }
+
       // group_name → date → records[]
       const grouped = {};
-      for (const r of records) {
+      for (const r of clubRecords) {
         const g = r.group_name;
         const d = r.played_at || toKstDate(r.created_at);
         if (!grouped[g]) grouped[g] = {};
