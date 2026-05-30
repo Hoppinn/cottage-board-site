@@ -662,6 +662,9 @@ function matchRecommendMood(game, moodValue){
     ...(game?.bgg?.categories || []).map(normalizeBgg),
   ];
 
+  // 협력 게임: 팀 대항전 태그 있으면 제외 (코드네임 등)
+  if (moodValue === "coop" && allTags.includes("team")) return false;
+
   const moodTagMap = {
     talk:   ["table_talk", "social", "storytelling", "negotiation", "murder_mystery"],
     luck:   ["luck", "chaotic", "random"],
@@ -879,7 +882,7 @@ if (weight > maxWeight) {
   const moreQuery = `?${moreParams.toString()}`;
 
   const moreHtml = hasMore
-    ? `<a class="game-card-more" href="${rootPath}pages/owned-games.html${moreQuery}">전체 ${filteredGames.length}개<br>더보기 →</a>`
+    ? `<button class="game-card-more" type="button" onclick="openRecommendOverlay()">전체 ${filteredGames.length}개<br>더보기 →</button>`
     : "";
 
   gameScroll.innerHTML = cardsHtml + moreHtml;
@@ -891,6 +894,50 @@ gameScroll.scrollTo({
   behavior: "smooth"
 });
 }
+
+function openRecommendOverlay(){
+  const overlay = document.getElementById("recommendOverlay");
+  const list    = document.getElementById("recommendOverlayList");
+  if(!overlay || !list) return;
+
+  const games = getFilteredGames ? getFilteredGames() : filteredGames;
+  const allFiltered = getAllGamesArray().filter(game =>
+    matchRecommendPlayer(game, recommendState.players) &&
+    matchRecommendLevel(game, recommendState.level) &&
+    matchRecommendMood(game, recommendState.mood)
+  );
+
+  list.innerHTML = allFiltered.map(game => {
+    const detail = GameView.getGameDetailData(game);
+    const img    = GameView.getCoverImageUrl(game);
+    const title  = GameView.getDisplayTitle(game);
+    const weight = detail.difficultyWeight
+      ? `🧩 ${detail.difficultyWeight}`
+      : "";
+    return `<button class="rec-overlay-card" type="button" data-game-key="${game.id}">
+      <img class="rec-overlay-thumb" src="${img}" alt="" loading="lazy">
+      <span class="rec-overlay-title">${title}</span>
+      <span class="rec-overlay-meta">${weight}</span>
+    </button>`;
+  }).join("");
+
+  list.querySelectorAll("[data-game-key]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      openGameSheet(btn.dataset.gameKey);
+    });
+  });
+
+  overlay.classList.add("is-open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeRecommendOverlay(){
+  const overlay = document.getElementById("recommendOverlay");
+  if(!overlay) return;
+  overlay.classList.remove("is-open");
+  document.body.style.overflow = "";
+}
+
 
 
 const headerSearchButton =
