@@ -21162,6 +21162,66 @@
       ]
     }
   },
+  "220653": {
+    "bggId": "220653",
+    "title": "Splendor: Cities of Splendor",
+    "image": "https://cf.geekdo-images.com/H7YUcZPxhbq2fPuzuxODlg__original/img/vFef8CbVK4ldaHq3Qt0y5QmVAOw=/0x0/filters:format(jpeg)/pic3711701.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/H7YUcZPxhbq2fPuzuxODlg__small/img/06WBYtB-cNLjKyKvJPz0Wse3TzY=/fit-in/200x150/filters:strip_icc()/pic3711701.jpg",
+    "description": "Cities of Splendor is a quartet of expansions for use with the Splendor base game. Each expansion is added to the basic game and they should be played separately.\n\nThe Cities replaces the noble tiles with 3 different city tiles (randomly taken from a pool of 14). The city tiles are objectives (in prestige points and/or development cards) and you need to fulfill one of them in order to win.\n\nThe Trading Posts are special bonuses you earn by acquiring an array of development cards: more prestige points from the 1st noble tile you receive, an extra gem of a different colour when you choose the \"Take 2 gem tokens of the same color\" action, and so on.\n\nThe Orient adds three decks of cards (one for each level of development cards). They are added on the right side of the regular cards and you place two of them face-up on the table for each level. The new cards have special powers (like double bonus cards or joker cards which take the color of one of the developments you already own).\n\nThe Strongholds expansion gives each player three towers (strongholds). When you acquire a new card, you must put a stronghold on an face-up card on the table. You're now the only player able to purchase/reserve it. You may also move one of your strongholds from one card to another one or remove another player's stronghold. When your three strongholds are on the same card, you can buy it after your regular action, allowing you to make two acquisitions in the same turn or buying that card after taking your tokens!",
+    "yearpublished": "2017",
+    "minplayers": "2",
+    "minage": "10",
+    "maxplayers": "4",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "2.1538",
+    "average": "7.32367",
+    "bayesaverage": "6.69556",
+    "usersrated": "5090",
+    "rank": "Not Ranked",
+    "designers": [
+      "Marc André"
+    ],
+    "artists": [
+      "Pascal Quidault"
+    ],
+    "publishers": [
+      "Space Cowboys",
+      "ADC Blackfire Entertainment",
+      "asmodee",
+      "Enigma (Bergsala Enigma)",
+      "Galápagos Jogos",
+      "GoKids 玩樂小子",
+      "Hobby Japan",
+      "Korea Boardgames",
+      "Rebel Sp. z o.o.",
+      "Siam Board Games"
+    ],
+    "categories": [
+      "Card Game",
+      "Economic",
+      "Expansion for Base-game",
+      "Renaissance"
+    ],
+    "mechanics": [
+      "Open Drafting",
+      "Set Collection"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3
+      ],
+      "recommended": [
+        2,
+        4
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
   "220738": {
     "bggId": "220738",
     "title": "Topito",

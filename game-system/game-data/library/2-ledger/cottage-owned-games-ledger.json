@@ -7711,14 +7711,14 @@
   {
     "id": "스플렌더-찬란한도시확장",
     "ownedName": "스플렌더 찬란한도시확장",
-    "titleEn": "Splendor",
-    "bggId": "148228",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Splendor: Cities of Splendor",
+    "bggId": "220653",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
-    "difficulty": 1.7753,
+    "difficulty": 2.1538,
     "difficultyWeight": 2.16,
-    "rating": 7.42055,
+    "rating": 7.32367,
     "bestPlayers": [
       3
     ],

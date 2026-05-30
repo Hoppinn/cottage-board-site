@@ -48509,14 +48509,14 @@
     "title": {
       "display": "스플렌더 찬란한도시확장",
       "owned": "스플렌더 찬란한도시확장",
-      "bgg": "Splendor"
+      "bgg": "Splendor: Cities of Splendor"
     },
     "bgg": {
-      "id": "148228",
-      "matchStatus": "auto-confirmed",
-      "year": "2014",
-      "rating": 7.42055,
-      "weight": 1.7753,
+      "id": "220653",
+      "matchStatus": "forced",
+      "year": "2017",
+      "rating": 7.32367,
+      "weight": 2.1538,
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -48537,6 +48537,7 @@
       "categories": [
         "Card Game",
         "Economic",
+        "Expansion for Base-game",
         "Renaissance"
       ],
       "categoriesKo": [
@@ -48545,9 +48546,7 @@
         "르네상스"
       ],
       "mechanics": [
-        "Contracts",
         "Open Drafting",
-        "Race",
         "Set Collection"
       ],
       "mechanicsKo": [
@@ -48559,7 +48558,7 @@
       "designers": [
         "Marc André"
       ],
-      "description": "Splendor is a game of chip-collecting and card development. Players are merchants of the Renaissance trying to buy gem mines, means of transportation, shops&mdash;all in order to acquire the most prestige points. If you're wealthy enough, you might even receive a visit from a noble at some point, which of course will further increase your prestige.\n\nOn your turn, you may (1) collect chips (gems), or (2) buy and build a card, or (3) reserve one card. If you collect chips, you take either three different kinds of chips or two chips of the same kind. If you buy a card, you pay its price in chips and add it to your playing area. To reserve a card&mdash;in order to make sure you get it, or, why not, your opponents don't get it&mdash;you place it in front of you face down for later building; this costs you a round, but you also get gold in the form of a joker chip, which you can use as any gem.\n\nAll of the cards you buy increase your wealth as they give you a permanent gem bonus for later buys; some of the cards also give you prestige points. In order to win the game, you must reach 15 prestige points before your opponents do.",
+      "description": "Cities of Splendor is a quartet of expansions for use with the Splendor base game. Each expansion is added to the basic game and they should be played separately.\n\nThe Cities replaces the noble tiles with 3 different city tiles (randomly taken from a pool of 14). The city tiles are objectives (in prestige points and/or development cards) and you need to fulfill one of them in order to win.\n\nThe Trading Posts are special bonuses you earn by acquiring an array of development cards: more prestige points from the 1st noble tile you receive, an extra gem of a different colour when you choose the \"Take 2 gem tokens of the same color\" action, and so on.\n\nThe Orient adds three decks of cards (one for each level of development cards). They are added on the right side of the regular cards and you place two of them face-up on the table for each level. The new cards have special powers (like double bonus cards or joker cards which take the color of one of the developments you already own).\n\nThe Strongholds expansion gives each player three towers (strongholds). When you acquire a new card, you must put a stronghold on an face-up card on the table. You're now the only player able to purchase/reserve it. You may also move one of your strongholds from one card to another one or remove another player's stronghold. When your three strongholds are on the same card, you can buy it after your regular action, allowing you to make two acquisitions in the same turn or buying that card after taking your tokens!",
       "descriptionKo": "스플렌더는 칩 수집과 카드 개발 게임입니다. 플레이어들은 르네상스 시대의 상인으로서 보석 광산, 운송 수단, 상점 등을 구매하여 가장 많은 명성점을 획득하는 것이 목표입니다. 충분한 자산을 모으면 귀족의 방문을 받을 수도 있으며, 이는 명성점을 더욱 증가시킵니다.\n\n턴마다 다음 중 하나를 할 수 있습니다: (1) 칩(보석) 수집, (2) 카드 구매 및 건설, (3) 카드 예약. 칩을 수집할 때는 서로 다른 종류 3개 또는 같은 종류 2개를 가져갑니다. 카드를 구매하면 칩으로 가격을 지불하고 게임 영역에 추가합니다. 카드를 예약하면(확보하거나 상대를 막기 위해) 카드를 앞에 놓고 나중에 구매할 수 있도록 예약합니다. 턴을 소비하지만 어떤 보석으로도 사용할 수 있는 금색 조커 칩을 얻습니다.\n\n구매한 카드들은 영구적인 보석 보너스를 제공하여 이후 구매를 수월하게 하며, 일부 카드는 명성점도 줍니다. 게임에 승리하려면 상대보다 먼저 15명성점에 도달해야 합니다."
     },
     "cottage": {
@@ -48613,8 +48612,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__original/img/rqcUdtu_N4v-SpI96XVmpYHnJww=/0x0/filters:format(png)/pic8234167.png",
-      "thumbnail": "https://cf.geekdo-images.com/vNFe4JkhKAERzi4T0Ntwpw__small/img/KKU_42Uswt4tKCpf1zY5kTzgr-g=/fit-in/200x150/filters:strip_icc()/pic8234167.png",
+      "main": "https://cf.geekdo-images.com/H7YUcZPxhbq2fPuzuxODlg__original/img/vFef8CbVK4ldaHq3Qt0y5QmVAOw=/0x0/filters:format(jpeg)/pic3711701.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/H7YUcZPxhbq2fPuzuxODlg__small/img/06WBYtB-cNLjKyKvJPz0Wse3TzY=/fit-in/200x150/filters:strip_icc()/pic3711701.jpg",
       "source": "bgg",
       "type": "jpg"
     },

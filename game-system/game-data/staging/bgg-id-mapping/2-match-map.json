@@ -2414,12 +2414,9 @@
     "ownedName": "스플렌더 마블"
   },
   "스플렌더 찬란한도시확장": {
-    "status": "auto-confirmed",
-    "bggId": "148228",
-    "ownedName": "스플렌더 찬란한도시확장",
-    "bggName": "Splendor",
-    "score": 119,
-    "scoreGap": 18
+    "status": "forced",
+    "bggId": "220653",
+    "ownedName": "스플렌더 찬란한도시확장"
   },
   "스플렌더 포켓몬": {
     "status": "forced",
