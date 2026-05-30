@@ -3165,6 +3165,20 @@ function renderOwnedGameList(){
   const sortedGames =
     sortOwnedGames(filteredGames);
 
+  const heroSub = document.getElementById("ownedHeroSub");
+  if(heroSub){
+    const totalAll = getAllGamesArray().length;
+    const hasFilter =
+      (document.getElementById("ownedSearchInput")?.value || "").trim() ||
+      document.getElementById("ownedPlayerFilter")?.value ||
+      document.getElementById("ownedDifficultyFilter")?.value ||
+      document.getElementById("ownedMoodFilter")?.value ||
+      document.getElementById("ownedMechanicFilter")?.value;
+    heroSub.textContent = hasFilter
+      ? `조건에 부합하는 ${sortedGames.length}개의 게임을 찾았습니다`
+      : `${totalAll}종의 게임이 기다리고 있어요`;
+  }
+
   const totalPages =
     Math.ceil(
       sortedGames.length /
