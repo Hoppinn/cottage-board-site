@@ -641,13 +641,21 @@ function matchRecommendMood(game, moodValue){
   // 가벼운 주사위게임: 난이도 2.0 이하
   if (moodValue === "dice" && weight > 2.00) return false;
 
-  // 운 게임: whitelist 방식 (운이 메인인 게임만)
+  // 운 게임: 메커닉 자동감지 + 수동 보정
   if (moodValue === "luck") {
-    const LUCK_WHITELIST = new Set([
-      '플립7', '에메랄드스컬', '냥냥집사', '럭키넘버스',
-      '데드맨스드로우', '뱅-주사위'
-    ]);
-    return LUCK_WHITELIST.has(game?.id);
+    const gameId = game?.id || "";
+    // 수동 제외 (메커닉 걸리지만 운게임 아닌 것)
+    const LUCK_EXCLUDE = new Set([]);
+    if (LUCK_EXCLUDE.has(gameId)) return false;
+    // 수동 포함 (메커닉으로 안 잡히지만 운게임인 것)
+    const LUCK_INCLUDE = new Set(['럭키넘버스', '데드맨스드로우', '플립7']);
+    if (LUCK_INCLUDE.has(gameId)) return true;
+    // 메커닉 자동감지
+    const mechs = new Set((game?.bgg?.mechanics || []).map(
+      m => m.toLowerCase().replace(/[\s\-]+/g, '_')
+    ));
+    return mechs.has('re_rolling_and_locking') ||
+      (mechs.has('push_your_luck') && mechs.has('score_and_reset_game'));
   }
 
   const normalizeBgg = str => str.toLowerCase().replace(/[\s\-\/]+/g, '_');
