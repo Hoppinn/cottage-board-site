@@ -349,7 +349,8 @@ create policy "anon_update_game_play_records"
 
 -- ── 마이그레이션: user_id 컬럼 추가 ──────────────────────
 alter table public.game_requests
-  add column if not exists user_id text;
+  add column if not exists user_id text,
+  add column if not exists is_planned boolean not null default false;
 
 alter table public.snack_requests
   add column if not exists user_id text;
