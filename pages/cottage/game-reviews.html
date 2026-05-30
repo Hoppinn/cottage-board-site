@@ -351,6 +351,7 @@
       }
 
       const groups = await window.CottageDB?.getGroupNames() || [];
+      if (!groups.includes('코티지보드 동호회')) groups.unshift('코티지보드 동호회');
 
       panel.innerHTML = `
         <div class="pr-meta-grid">
