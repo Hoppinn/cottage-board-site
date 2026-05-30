@@ -8,6 +8,7 @@
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
     .history-photo { display: block; max-width: 100%; max-height: 180px; object-fit: cover; border-radius: 8px; margin-top: 8px; }
+    .history-tip { font-size: 12px; color: var(--muted, #888); background: var(--bg, #f5f0e8); border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
   </style>
 </head>
 
@@ -134,8 +135,11 @@
       }
 
       const records = await window.CottageDB.getAllPlayRecordsForHistory();
+
+      const tipHtml = `<div class="history-tip">💡 <span><a href="./game-reviews.html" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"모임 기록으로 남기기"</strong>를 체크하면 여기에 기록돼요</span></div>`;
+
       if (!records.length) {
-        root.innerHTML = '<p class="history-empty">아직 모임 기록이 없습니다.<br>플레이 기록 시 "모임 기록으로 남기기"를 체크해주세요.</p>';
+        root.innerHTML = tipHtml + '<p class="history-empty">아직 모임 기록이 없습니다.</p>';
         return;
       }
 
@@ -149,7 +153,7 @@
         grouped[g][d].push(r);
       }
 
-      let html = '';
+      let html = tipHtml;
       for (const [groupName, dates] of Object.entries(grouped)) {
         const totalSessions = Object.keys(dates).length;
         html += `<div class="history-group" data-history-group="${escAttr(groupName)}">

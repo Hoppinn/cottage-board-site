@@ -334,6 +334,41 @@ alter table public.game_play_records
   add column if not exists play_time_min smallint,
   add column if not exists score_note text;
 
+-- ── 마이그레이션: game_play_records 컬럼 추가 (2차) ─────────
+alter table public.game_play_records
+  add column if not exists nickname text,
+  add column if not exists user_id text,
+  add column if not exists group_name text,
+  add column if not exists played_at date,
+  add column if not exists photo_url text;
+
+
+-- ── Storage: play-photos 버킷 + RLS ───────────────────────
+-- 버킷 생성 (public = 이미지 URL 공개 접근 가능)
+insert into storage.buckets (id, name, public)
+values ('play-photos', 'play-photos', true)
+on conflict (id) do nothing;
+
+-- 로그인 여부는 프론트(카카오 인증)에서 제어 — Supabase에서는 anon 허용
+drop policy if exists "anon_insert_play_photos" on storage.objects;
+create policy "anon_insert_play_photos"
+  on storage.objects for insert
+  to anon
+  with check (bucket_id = 'play-photos');
+
+drop policy if exists "public_select_play_photos" on storage.objects;
+create policy "public_select_play_photos"
+  on storage.objects for select
+  to anon
+  using (bucket_id = 'play-photos');
+
+drop policy if exists "anon_delete_play_photos" on storage.objects;
+create policy "anon_delete_play_photos"
+  on storage.objects for delete
+  to anon
+  using (bucket_id = 'play-photos');
+
+
 -- ── game_comments UPDATE 정책 (코멘트 수정) ───────────────
 drop policy if exists "anon_update_game_comments" on public.game_comments;
 create policy "anon_update_game_comments"

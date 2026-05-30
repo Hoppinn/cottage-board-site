@@ -13,7 +13,11 @@
     return;
   }
 
-  const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+  // 싱글톤 — 동일 페이지에서 여러 번 createClient 호출 방지
+  if (!window._cottageSupabaseDb) {
+    window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
+  }
+  const db = window._cottageSupabaseDb;
 
   // ── 세션 키 (익명 중복 방지용) ──────────────────────────
 

@@ -122,7 +122,8 @@
 
       const cfg = window.SUPABASE_CONFIG;
       if (!cfg || !window.supabase) { el.innerHTML = '<div class="admin-empty">DB 연결 실패</div>'; return; }
-      const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
+      const db = window._cottageSupabaseDb;
 
       const [gameRes, snackRes, suggestRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, status').order('request_count', { ascending: false }),

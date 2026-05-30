@@ -193,7 +193,8 @@
     }
 
     function getDb() {
-      return window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+      return window._cottageSupabaseDb;
     }
 
     function requireLoginForReq(cb) {

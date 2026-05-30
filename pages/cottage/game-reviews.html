@@ -269,7 +269,8 @@
 
     function getDb() {
       const cfg = window.SUPABASE_CONFIG;
-      return window.supabase.createClient(cfg.url, cfg.anonKey);
+      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
+      return window._cottageSupabaseDb;
     }
 
     // ── entry point ──────────────────────────────────────────────────

@@ -113,7 +113,8 @@
   (function () {
     const cfg = window.SUPABASE_CONFIG;
     if (!cfg?.url || !window.supabase) return;
-    const db = window.supabase.createClient(cfg.url, cfg.anonKey);
+    if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
+    const db = window._cottageSupabaseDb;
 
     const MY_CMT_KEY = 'cottage_my_meeting_cmts';
 
