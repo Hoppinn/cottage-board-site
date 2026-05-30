@@ -296,6 +296,8 @@ async function openProfilePanel() {
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>마지막 방문</span><strong>${fmt(stats.profile?.last_seen_at)}</strong></li>
+      ${stats.profile?.visit_count ? `<li><span>방문 횟수</span><strong>${stats.profile.visit_count}회</strong></li>` : ''}
+      ${(() => { const m = stats.profile?.total_minutes || 0; return m > 0 ? `<li><span>총 이용 시간</span><strong>${m >= 60 ? Math.floor(m/60)+'시간 '+(m%60)+'분' : m+'분'}</strong></li>` : ''; })()}
       ${stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : ''}
       ${stats.moimCount ? `<li><span>모임 참여</span><strong>${stats.moimCount}회</strong></li>` : ''}
       ${stats.comments.length ? `<li><span>코멘트</span><strong>${stats.comments.length}건</strong></li>` : ''}
