@@ -145,11 +145,18 @@
     function isAdmin() { return window.isOwner?.() || false; }
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
 
-    const VOTE_KEY = 'cottage_req_votes';
-    function getMyVotes() {
-      try { return new Set(JSON.parse(localStorage.getItem(VOTE_KEY) || '[]')); } catch { return new Set(); }
+    function voteKey() {
+      const u = getCurrentUser();
+      return u ? `cottage_req_votes_${u.id}` : null;
     }
-    function saveMyVotes(set) { localStorage.setItem(VOTE_KEY, JSON.stringify([...set])); }
+    function getMyVotes() {
+      const k = voteKey(); if (!k) return new Set();
+      try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); }
+    }
+    function saveMyVotes(set) {
+      const k = voteKey(); if (!k) return;
+      localStorage.setItem(k, JSON.stringify([...set]));
+    }
 
     function updateAdminBadge() {
       const existing = document.querySelector('.req-admin-badge');
@@ -283,10 +290,11 @@
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
 
-      // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1)
+      // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1, 로그인 필요)
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
           if (e.target.closest('button, input, a, .req-edit-wrap, .req-badge-clickable')) return;
+          if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           const id = li.dataset.id;
           const count = parseInt(li.dataset.count);
           const myVotes = getMyVotes();

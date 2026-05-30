@@ -14,6 +14,7 @@
     .admin-req-name { font-size: 14px; font-weight: 600; flex: 1; }
     .admin-req-content { font-size: 13px; flex: 1; line-height: 1.5; white-space: pre-wrap; color: var(--text); }
     .admin-req-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .admin-req-requester { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
     .admin-req-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
     .admin-req-done:hover { opacity: 0.85; }
     .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
@@ -125,32 +126,43 @@
       if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
       const db = window._cottageSupabaseDb;
 
-      const [gameRes, snackRes, suggestRes] = await Promise.all([
-        db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned').order('request_count', { ascending: false }),
-        db.from('snack_requests').select('id, item_name, request_count').order('request_count', { ascending: false }),
-        db.from('suggestions').select('id, content, created_at').order('created_at', { ascending: false }),
+      const [gameRes, snackRes, suggestRes, profileRes] = await Promise.all([
+        db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned, user_id').order('request_count', { ascending: false }),
+        db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
+        db.from('suggestions').select('id, content, created_at, user_id').order('created_at', { ascending: false }),
+        db.from('profiles').select('user_id, nickname'),
       ]);
 
-      function reqItem(id, name, count, table, done) {
+      const profileMap = {};
+      (profileRes.data||[]).forEach(p => { profileMap[p.user_id] = p.nickname || p.user_id; });
+      function requesterTag(userId) {
+        if (!userId) return '';
+        const nick = profileMap[userId] || userId.slice(0, 8) + '…';
+        return `<span class="admin-req-requester">👤 ${escH(nick)}</span>`;
+      }
+
+      function reqItem(id, name, count, table, done, userId) {
         return `<div class="admin-req-item${done?' is-done':''}" data-id="${id}" data-table="${table}">
           <span class="admin-req-name">${escH(name)}</span>
           <span class="admin-req-meta">${count}명</span>
+          ${requesterTag(userId)}
           ${table==='game_requests'?`<button class="admin-req-done" type="button">${done?'완료됨':'구매완료'}</button>`:''}
           <button class="admin-req-del" type="button">삭제</button>
         </div>`;
       }
 
-      function suggestItem(id, content, date) {
+      function suggestItem(id, content, date, userId) {
         return `<div class="admin-req-item" data-id="${id}" data-table="suggestions">
           <span class="admin-req-content">${escH(content)}</span>
           <span class="admin-req-meta">${formatDate(date)}</span>
+          ${requesterTag(userId)}
           <button class="admin-req-del" type="button">삭제</button>
         </div>`;
       }
 
-      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'))).join('');
-      const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false)).join('');
-      const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at)).join('');
+      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'),r.user_id)).join('');
+      const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
+      const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id)).join('');
 
       // 회원 목록
       const profiles = await window.CottageDB.getAllProfiles();
