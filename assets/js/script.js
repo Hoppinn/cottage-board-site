@@ -661,7 +661,7 @@ function matchRecommendMood(game, moodValue){
     talk:   ["table_talk", "social", "storytelling", "negotiation", "murder_mystery"],
     bluff:  ["bluffing", "hidden_role", "betrayal"],
     guess:  ["deduction", "guessing", "word_game", "pattern_recognition"],
-    brain:  ["puzzle", "strategy", "tense", "immersive"],
+    brain:  ["puzzle", "strategy", "immersive"],
     coop:   ["cooperative", "easy_coop", "hard_coop"],
     team:   ["team"],
     card:   ["card_play"],
