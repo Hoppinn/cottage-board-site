@@ -2321,12 +2321,14 @@ const levelTextMap = {
 };
 
 const moodTextMap = {
-  fun:      "😄 가볍게 웃고 싶어요",
-  brain:    "🧠 머리 쓰는 느낌",
-  talk:     "💬 대화가 많은 게임",
-  immersive:"🔥 몰입감 있게",
-  coop:     "🤝 같이 해내기",
-  cozy:     "😌 편안하게"
+  talk:   "💬 말·이야기 게임",
+  bluff:  "🃏 속이기·심리전",
+  brain:  "🧠 전략·두뇌",
+  coop:   "🤝 협력 게임",
+  team:   "⚔️ 팀 대항전",
+  card:   "🎴 가벼운 카드게임",
+  dice:   "🎲 가벼운 주사위게임",
+  active: "⚡ 몸·반응속도"
 };
 
 function updateRecommendFilterText(){
@@ -2421,29 +2423,14 @@ ${levelValue !== "hardcore"
         </button>
 
         <div class="recommend-step-options">
-          ${moodValue !== "fun"
-  ? renderInlineOption("mood", "fun", "😄 가볍게 웃고 싶어요", moodValue)
-  : ""}
-
-${moodValue !== "brain"
-  ? renderInlineOption("mood", "brain", "🧠 머리 쓰는 느낌", moodValue)
-  : ""}
-
-${moodValue !== "talk"
-  ? renderInlineOption("mood", "talk", "💬 대화가 많은 게임", moodValue)
-  : ""}
-
-${moodValue !== "immersive"
-  ? renderInlineOption("mood", "immersive", "🔥 몰입감 있게", moodValue)
-  : ""}
-
-${moodValue !== "coop"
-  ? renderInlineOption("mood", "coop", "🤝 같이 해내기", moodValue)
-  : ""}
-
-${moodValue !== "cozy"
-  ? renderInlineOption("mood", "cozy", "😌 편안하게", moodValue)
-  : ""}
+          ${moodValue !== "talk"   ? renderInlineOption("mood", "talk",   "💬 말·이야기 게임",    moodValue) : ""}
+${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
+${moodValue !== "brain"  ? renderInlineOption("mood", "brain",  "🧠 전략·두뇌",         moodValue) : ""}
+${moodValue !== "coop"   ? renderInlineOption("mood", "coop",   "🤝 협력 게임",         moodValue) : ""}
+${moodValue !== "team"   ? renderInlineOption("mood", "team",   "⚔️ 팀 대항전",         moodValue) : ""}
+${moodValue !== "card"   ? renderInlineOption("mood", "card",   "🎴 가벼운 카드게임",   moodValue) : ""}
+${moodValue !== "dice"   ? renderInlineOption("mood", "dice",   "🎲 가벼운 주사위게임", moodValue) : ""}
+${moodValue !== "active" ? renderInlineOption("mood", "active", "⚡ 몸·반응속도",       moodValue) : ""}
   ${renderInlineOption("mood", "", "상관없어요", moodValue)}
         </div>
       </div>
