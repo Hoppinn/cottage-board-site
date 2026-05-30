@@ -16,12 +16,13 @@
     .admin-req-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-req-requester { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
     .admin-req-voters { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; flex: 1; }
-    .admin-req-plan { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 6px; color: #2e7d32; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
-    .admin-req-plan.is-planned { background: #2e7d32; color: #fff; border-color: #2e7d32; }
-    .admin-req-plan:hover { opacity: 0.85; }
-    .admin-req-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
-    .admin-req-done.is-done { background: #888; }
-    .admin-req-done:hover { opacity: 0.85; }
+    .admin-req-plan, .admin-suggest-plan { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 6px; color: #2e7d32; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-plan.is-planned, .admin-suggest-plan.is-planned { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+    .admin-req-plan:hover, .admin-suggest-plan:hover { opacity: 0.85; }
+    .admin-req-done, .admin-suggest-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-done.is-done, .admin-suggest-done.is-done { background: #888; }
+    .admin-req-done:hover, .admin-suggest-done:hover { opacity: 0.85; }
+    .admin-req-content--done { text-decoration: line-through; opacity: 0.5; }
     .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
     .admin-req-del:hover { border-color: #c0392b; color: #c0392b; }
     .admin-req-item.is-done { opacity: 0.45; }
@@ -134,7 +135,7 @@
       const [gameRes, snackRes, suggestRes, profileRes, votesRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned, user_id').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
-        db.from('suggestions').select('id, content, created_at, user_id').order('created_at', { ascending: false }),
+        db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname'),
         db.from('game_request_votes').select('request_id, user_id'),
       ]);
@@ -169,18 +170,20 @@
         </div>`;
       }
 
-      function suggestItem(id, content, date, userId) {
-        return `<div class="admin-req-item" data-id="${id}" data-table="suggestions">
-          <span class="admin-req-content">${escH(content)}</span>
+      function suggestItem(id, content, date, userId, isDone, isPlanned) {
+        return `<div class="admin-req-item${isDone?' is-done':isPlanned?' is-planned':''}" data-id="${id}" data-table="suggestions">
+          <span class="admin-req-content${isDone?' admin-req-content--done':''}">${escH(content)}</span>
           <span class="admin-req-meta">${formatDate(date)}</span>
           ${requesterTag(userId)}
+          <button class="admin-suggest-plan${isPlanned?' is-planned':''}" type="button">${isPlanned?'예정됨':'예정'}</button>
+          <button class="admin-suggest-done${isDone?' is-done':''}" type="button">${isDone?'완료됨':'완료'}</button>
           <button class="admin-req-del" type="button">삭제</button>
         </div>`;
       }
 
       const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'),r.user_id,r.is_planned)).join('');
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
-      const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id)).join('');
+      const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id,r.is_done,r.is_planned)).join('');
 
       // 회원 목록
       const profiles = await window.CottageDB.getAllProfiles();
@@ -238,6 +241,32 @@
           btn.textContent = isPlanned ? '구매예정' : '예정됨';
           item.classList.toggle('is-planned', !isPlanned);
           if (!isPlanned) item.classList.remove('is-done');
+        });
+      });
+
+      el.querySelectorAll('.admin-suggest-plan').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.admin-req-item');
+          const isPlanned = btn.classList.contains('is-planned');
+          await db.from('suggestions').update({ is_planned: !isPlanned, is_done: false }).eq('id', item.dataset.id);
+          btn.classList.toggle('is-planned', !isPlanned);
+          btn.textContent = isPlanned ? '예정' : '예정됨';
+          item.className = `admin-req-item${!isPlanned?' is-planned':''}`;
+        });
+      });
+
+      el.querySelectorAll('.admin-suggest-done').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.admin-req-item');
+          const isDone = btn.classList.contains('is-done');
+          await db.from('suggestions').update({ is_done: !isDone, is_planned: false }).eq('id', item.dataset.id);
+          btn.classList.toggle('is-done', !isDone);
+          btn.textContent = isDone ? '완료' : '완료됨';
+          item.className = `admin-req-item${!isDone?' is-done':''}`;
+          if (!isDone) {
+            const planBtn = item.querySelector('.admin-suggest-plan');
+            if (planBtn) { planBtn.classList.remove('is-planned'); planBtn.textContent = '예정'; }
+          }
         });
       });
 

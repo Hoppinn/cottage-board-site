@@ -401,7 +401,9 @@ alter table public.game_comments
 
 -- ── 마이그레이션: suggestions 컬럼 추가 ──────────────────────
 alter table public.suggestions
-  add column if not exists user_id text;
+  add column if not exists user_id text,
+  add column if not exists is_done boolean not null default false,
+  add column if not exists is_planned boolean not null default false;
 
 
 -- ── game_dislikes (비추) ──────────────────────────────────
