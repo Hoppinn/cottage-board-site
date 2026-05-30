@@ -501,12 +501,16 @@ body.owned-page .header-menu.active{
   background:none;
 }
 
-/* 배경 사진 */
+/* 배경 사진 (세로 사진을 90° 회전해서 사용) */
 .hero::before{
   content:"";
   position:absolute;
-  inset:0;
-  background:url('../images/main/photo-exterior.jpg') center/cover no-repeat;
+  width:200vmax;
+  height:200vmax;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-90deg);
+  background:url('../images/main/photo-exteriorooo.jpg') center 30%/cover no-repeat;
   filter:brightness(0.65);
   z-index:0;
 }
