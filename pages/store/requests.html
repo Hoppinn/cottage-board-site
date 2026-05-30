@@ -211,8 +211,21 @@
       }
     }
 
+    // 내가 직접 제출한 항목은 이미 내 1표 → myVotes에 자동 등록
+    function syncSubmittedToVotes(storageKey) {
+      try {
+        const submitted = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        if (!submitted.length) return;
+        const myVotes = getMyVotes();
+        let changed = false;
+        submitted.forEach(id => { if (!myVotes.has(id)) { myVotes.add(id); changed = true; } });
+        if (changed) saveMyVotes(myVotes);
+      } catch (_) {}
+    }
+
     // ── 게임 요청 ────────────────────────────────────────
     async function loadGameRequests() {
+      syncSubmittedToVotes(MY_GAME_KEY);
       const el = document.getElementById('gameRequestList');
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
