@@ -3338,6 +3338,27 @@ body.sheet-open{
   max-width:720px;
   margin:0 auto;
 }
+.about-photo-strip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin:18px 0;
+  border-radius:12px;
+  overflow:hidden;
+}
+.about-photo-strip-item{
+  aspect-ratio:4/3;
+  overflow:hidden;
+}
+.about-photo-strip-item img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 0.4s ease;
+}
+.about-photo-strip-item:hover img{transform:scale(1.05);}
+@media(max-width:500px){
+  .about-photo-strip{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;}
+  .about-photo-strip-item:last-child{grid-column:1/-1;}
+}
 .about-section-label{
   font-size:11px;
   font-weight:900;
