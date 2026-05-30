@@ -229,11 +229,11 @@
           : r.is_planned
             ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
             : '';
-        const plannedToggle = isAdmin() && !r.purchased_at ? `<button class="req-plan-btn" data-id="${r.id}" data-planned="${r.is_planned ? '1' : '0'}" type="button" title="구매예정 토글">${r.is_planned ? '✅' : '📋'}</button>` : '';
-        const purchaseBtn = isAdmin() && !r.purchased_at ? `<button class="req-purchase-btn" data-id="${r.id}" type="button" title="구매완료 처리">🛒</button>` : '';
+        const nameClass = isAdmin() ? 'req-list-name req-name-clickable' : 'req-list-name';
+        const nameAttr = isAdmin() ? ` data-planned="${r.is_planned ? '1' : '0'}" data-purchased="${r.purchased_at || ''}"` : '';
         return `<li class="req-list-item" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
-          <span class="req-list-name">${escHtml(r.game_name)}</span>
-          <span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${statusBadge}${plannedToggle}${purchaseBtn}${can && !r.purchased_at ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
+          <span class="${nameClass}"${nameAttr}>${escHtml(r.game_name)}</span>
+          <span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${statusBadge}${can && !r.purchased_at ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
         </li>`;
       }
 
@@ -251,26 +251,28 @@
       el.innerHTML = html;
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
-      el.querySelectorAll('.req-plan-btn').forEach(b => b.addEventListener('click', async () => {
-        const nowPlanned = b.dataset.planned === '1';
-        await getDb().from('game_requests').update({ is_planned: !nowPlanned }).eq('id', b.dataset.id);
-        loadGameRequests();
-      }));
-      el.querySelectorAll('.req-purchase-btn').forEach(b => b.addEventListener('click', () => {
-        const li = b.closest('.req-list-item');
-        if (li.querySelector('.req-purchase-form')) return;
-        const today = new Date().toISOString().slice(0, 10);
-        const form = document.createElement('div');
-        form.className = 'req-purchase-form';
-        form.innerHTML = `<input type="date" class="req-purchase-date" value="${today}"><button class="req-purchase-confirm" type="button">완료 확인</button><button class="req-purchase-cancel" type="button">취소</button>`;
-        li.appendChild(form);
-        form.querySelector('.req-purchase-cancel').addEventListener('click', () => form.remove());
-        form.querySelector('.req-purchase-confirm').addEventListener('click', async () => {
-          const dateVal = form.querySelector('.req-purchase-date').value;
-          await getDb().from('game_requests').update({ purchased_at: dateVal, is_planned: false }).eq('id', b.dataset.id);
+
+      // 관리자: 게임 이름 클릭 → 대기 → 구매예정 → 구매완료(오늘날짜) → 대기 순환
+      el.querySelectorAll('.req-name-clickable').forEach(nameEl => {
+        nameEl.addEventListener('click', async () => {
+          const li = nameEl.closest('.req-list-item');
+          const id = li.dataset.id;
+          const isPurchased = !!nameEl.dataset.purchased;
+          const isPlanned = nameEl.dataset.planned === '1';
+          if (isPurchased) {
+            // 구매완료 → 대기(해제)
+            await getDb().from('game_requests').update({ purchased_at: null, is_planned: false }).eq('id', id);
+          } else if (isPlanned) {
+            // 구매예정 → 구매완료 (오늘 날짜)
+            const today = new Date().toISOString().slice(0, 10);
+            await getDb().from('game_requests').update({ is_planned: false, purchased_at: today }).eq('id', id);
+          } else {
+            // 대기 → 구매예정
+            await getDb().from('game_requests').update({ is_planned: true }).eq('id', id);
+          }
           loadGameRequests();
         });
-      }));
+      });
     }
 
     document.getElementById('gameRequestBtn').addEventListener('click', () => {
