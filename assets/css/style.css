@@ -3667,8 +3667,12 @@ body.sheet-open{
 .req-purchased-title{font-size:13px;font-weight:700;color:var(--text);margin:0 0 8px;}
 .req-purchased-note{font-size:11px;color:var(--muted);font-weight:400;}
 .req-list-purchased .req-list-item{opacity:0.7;}
-.req-item-clickable{cursor:pointer;}
-.req-item-clickable:hover{background:var(--bg,#f5f0e8);}
+.req-item-votable{cursor:pointer;}
+.req-item-votable:hover{background:var(--bg,#f5f0e8);}
+.req-count-voted{color:var(--green);font-weight:700;}
+.req-badge-clickable{cursor:pointer;}
+.req-badge-clickable:hover{filter:brightness(0.92);}
+.req-status-none{background:var(--border,#e8e4dc);color:var(--muted);min-width:20px;display:inline-block;}
 .req-purchase-form{display:flex;gap:6px;align-items:center;padding:6px 14px 8px;flex-wrap:wrap;}
 .req-purchase-date{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:3px 7px;}
 .req-purchase-confirm{font-size:12px;background:var(--green);color:#fff;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;}

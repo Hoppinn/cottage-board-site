@@ -145,6 +145,12 @@
     function isAdmin() { return window.isOwner?.() || false; }
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
 
+    const VOTE_KEY = 'cottage_req_votes';
+    function getMyVotes() {
+      try { return new Set(JSON.parse(localStorage.getItem(VOTE_KEY) || '[]')); } catch { return new Set(); }
+    }
+    function saveMyVotes(set) { localStorage.setItem(VOTE_KEY, JSON.stringify([...set])); }
+
     function updateAdminBadge() {
       const existing = document.querySelector('.req-admin-badge');
       if (isAdmin()) {
@@ -229,11 +235,23 @@
           : r.is_planned
             ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
             : '';
-        const liClass = isAdmin() ? 'req-list-item req-item-clickable' : 'req-list-item';
-        const liAttr = isAdmin() ? ` data-planned="${r.is_planned ? '1' : '0'}" data-purchased="${r.purchased_at || ''}"` : '';
-        return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}"${liAttr}>
+        const myVotes = getMyVotes();
+        const voted = myVotes.has(r.id);
+        const liClass = 'req-list-item req-item-votable' + (voted ? ' req-item-voted' : '');
+        // 관리자: 배지에 상태 순환 data 속성
+        const badgeAttr = isAdmin() ? ` class="req-status-badge req-status-planned req-badge-clickable" data-id="${r.id}" data-planned="1" data-purchased=""` : ' class="req-status-badge req-status-planned"';
+        const doneBadgeAttr = isAdmin() ? ` class="req-status-badge req-status-done req-badge-clickable" data-id="${r.id}" data-planned="0" data-purchased="${r.purchased_at}"` : ' class="req-status-badge req-status-done"';
+        const statusBadgeEl = r.purchased_at
+          ? `<span${doneBadgeAttr}>구매 완료 · ${r.purchased_at}</span>`
+          : r.is_planned
+            ? `<span${badgeAttr}>구매 예정</span>`
+            : (isAdmin() ? `<span class="req-status-badge req-status-none req-badge-clickable" data-id="${r.id}" data-planned="0" data-purchased=""> </span>` : '');
+        const countLabel = voted
+          ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
+          : `<span class="req-list-count">${r.request_count}명 희망</span>`;
+        return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
           <span class="req-list-name">${escHtml(r.game_name)}</span>
-          <span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${statusBadge}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
+          <span class="req-list-right">${countLabel}${statusBadgeEl}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
         </li>`;
       }
 
@@ -252,13 +270,34 @@
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
 
-      // 관리자: 박스 클릭 → 대기 → 구매예정 → 구매완료(오늘날짜) → 대기 순환
-      el.querySelectorAll('.req-item-clickable').forEach(li => {
+      // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1)
+      el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
-          if (e.target.closest('button, input, a, .req-edit-wrap')) return; // 버튼 클릭은 제외
+          if (e.target.closest('button, input, a, .req-edit-wrap, .req-badge-clickable')) return;
           const id = li.dataset.id;
-          const isPurchased = !!li.dataset.purchased;
-          const isPlanned = li.dataset.planned === '1';
+          const count = parseInt(li.dataset.count);
+          const myVotes = getMyVotes();
+          const voted = myVotes.has(id);
+          if (voted) {
+            const newCount = Math.max(1, count - 1);
+            await getDb().from('game_requests').update({ request_count: newCount }).eq('id', id);
+            myVotes.delete(id);
+          } else {
+            await getDb().from('game_requests').update({ request_count: count + 1 }).eq('id', id);
+            myVotes.add(id);
+          }
+          saveMyVotes(myVotes);
+          loadGameRequests();
+        });
+      });
+
+      // 관리자: 배지 클릭 → 대기 → 구매예정 → 구매완료 → 대기 순환
+      el.querySelectorAll('.req-badge-clickable').forEach(badge => {
+        badge.addEventListener('click', async e => {
+          e.stopPropagation();
+          const id = badge.dataset.id;
+          const isPurchased = !!badge.dataset.purchased;
+          const isPlanned = badge.dataset.planned === '1';
           if (isPurchased) {
             await getDb().from('game_requests').update({ purchased_at: null, is_planned: false }).eq('id', id);
           } else if (isPlanned) {
