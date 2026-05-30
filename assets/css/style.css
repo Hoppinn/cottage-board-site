@@ -758,7 +758,7 @@ body.recommend-page main{
   position:absolute;
   inset:0;
   background:url('../images/main/photo-interior.jpg') center/cover no-repeat;
-  filter:brightness(0.52);
+  filter:brightness(0.62);
   z-index:0;
 }
 .recommend-header--photo::after{
@@ -1790,7 +1790,7 @@ body.sheet-open{
   position:absolute;
   inset:0;
   background:url('../images/main/photo-shelves.jpg') center 40%/cover no-repeat;
-  filter:brightness(0.62);
+  filter:brightness(0.72);
   z-index:0;
 }
 .owned-page-hero::after{
