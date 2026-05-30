@@ -494,7 +494,7 @@ body.owned-page .header-menu.active{
 .hero{
   position:relative;
   overflow:hidden;
-  min-height:100svh;
+  min-height:60svh;
   padding:calc(var(--header-h) + clamp(18px,5vw,34px)) var(--page-x) clamp(24px,6vw,48px);
   display:flex;
   align-items:center;
