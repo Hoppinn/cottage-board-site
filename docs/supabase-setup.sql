@@ -514,6 +514,9 @@ create table if not exists public.game_request_votes (
 alter table public.game_request_votes enable row level security;
 
 drop policy if exists "anon_all_req_votes" on public.game_request_votes;
+drop policy if exists "anon_insert_req_votes" on public.game_request_votes;
+drop policy if exists "anon_select_req_votes" on public.game_request_votes;
+drop policy if exists "anon_delete_req_votes" on public.game_request_votes;
 create policy "anon_all_req_votes"
   on public.game_request_votes for all
   to anon
