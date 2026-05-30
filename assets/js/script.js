@@ -662,6 +662,7 @@ function matchRecommendMood(game, moodValue){
 
   const moodTagMap = {
     talk:   ["table_talk", "social", "storytelling", "negotiation", "murder_mystery"],
+    luck:   ["push_your_luck", "luck", "random", "press_your_luck"],
     bluff:  ["bluffing", "hidden_role", "betrayal"],
     guess:  ["deduction", "guessing", "word_game", "pattern_recognition"],
     brain:  ["puzzle", "strategy", "immersive"],
@@ -2326,14 +2327,15 @@ const levelTextMap = {
 
 const moodTextMap = {
   talk:   "💬 말·이야기 게임",
+  luck:   "🍀 운 게임",
   guess:  "🎯 맞추기·추론",
   bluff:  "🃏 속이기·심리전",
   active: "⚡ 몸·반응속도",
   dice:   "🎲 가벼운 주사위게임",
   card:   "🎴 가벼운 카드게임",
+  brain:  "🧠 전략·두뇌",
   coop:   "🤝 협력 게임",
-  team:   "⚔️ 팀 대항전",
-  brain:  "🧠 전략·두뇌"
+  team:   "⚔️ 팀 대항전"
 };
 
 function updateRecommendFilterText(){
@@ -2429,6 +2431,7 @@ ${levelValue !== "hardcore"
 
         <div class="recommend-step-options">
           ${moodValue !== "talk"   ? renderInlineOption("mood", "talk",   "💬 말·이야기 게임",    moodValue) : ""}
+${moodValue !== "luck"   ? renderInlineOption("mood", "luck",   "🍀 운 게임",            moodValue) : ""}
 ${moodValue !== "guess"  ? renderInlineOption("mood", "guess",  "🎯 맞추기·추론",       moodValue) : ""}
 ${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
 ${moodValue !== "active" ? renderInlineOption("mood", "active", "⚡ 몸·반응속도",       moodValue) : ""}

@@ -1910,13 +1910,6 @@ body.sheet-open{
   color:#6b5c40;
   margin:8px 0 16px;
   font-weight:600;
-  transition:color 0.2s, font-size 0.2s;
-}
-.owned-page-hero-sub.is-filtered{
-  font-size:15px;
-  font-weight:800;
-  color:#fff;
-  text-shadow:0 1px 8px rgba(60,35,10,0.5);
 }
 .owned-games-page h1{
   max-width:720px;
