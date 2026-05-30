@@ -56,6 +56,15 @@
     .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; }
     .pr-rec-review { font-size: 12px; color: var(--text); margin: 5px 0 0; line-height: 1.5; white-space: pre-wrap; }
     .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 5px; padding: 2px 7px; color: var(--text,#333); }
+    .pr-tag-who  { background: #e8f5e9; color: #2e7d32; }
+    .pr-tag-time { background: #e3f2fd; color: #1565c0; }
+    .pr-tag-score{ background: #fff3e0; color: #e65100; }
+    /* tag input */
+    .tag-input-wrap { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; border: 1px solid var(--border,#e8e4dc); border-radius: 6px; padding: 4px 8px; background: #fff; min-height: 34px; cursor: text; box-sizing: border-box; width: 100%; }
+    .tag-chip { display: inline-flex; align-items: center; gap: 3px; background: #e8f5e9; color: #2e7d32; border-radius: 4px; padding: 2px 7px; font-size: 12px; }
+    .tag-chip-del { background: none; border: none; color: inherit; cursor: pointer; padding: 0 1px; font-size: 14px; line-height: 1; opacity: 0.6; }
+    .tag-chip-del:hover { opacity: 1; }
+    .tag-text-input { border: none; outline: none; font-size: 12px; flex: 1; min-width: 70px; background: transparent; padding: 0; }
     .pr-rec-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-top: 2px; }
     .pr-rec-review-link { font-size: 12px; color: var(--muted); text-decoration: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 2px 7px; white-space: nowrap; }
     .pr-rec-review-link:hover { color: var(--green); border-color: var(--green); }
@@ -387,7 +396,11 @@
             </div>
             <div>
               <label class="pr-field-label">참여자</label>
-              <input type="text" class="prNames" placeholder="홍길동, 이순신">
+              <div class="tag-input-wrap prNamesWrap">
+                <div class="tag-chips"></div>
+                <input type="text" class="tag-text-input" placeholder="이름 입력 후 스페이스">
+                <input type="hidden" class="prNames">
+              </div>
             </div>
             <div>
               <label class="pr-field-label">점수·메모</label>
@@ -487,9 +500,46 @@
           }
         });
 
+        initTagInput(div.querySelector('.prNamesWrap'), div.querySelector('.prNames'));
+
         div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
         document.getElementById('prGameRows').appendChild(div);
         if (focusInput) div.querySelector('.prGameName').focus();
+      }
+
+      function initTagInput(wrap, hidden, initialValue) {
+        if (!wrap) return;
+        const chips = wrap.querySelector('.tag-chips');
+        const text = wrap.querySelector('.tag-text-input');
+        function updateHidden() {
+          hidden.value = [...chips.querySelectorAll('.tag-chip')].map(c => c.dataset.val).join(', ');
+        }
+        function addTag(val) {
+          val = val.trim();
+          if (!val) return;
+          const chip = document.createElement('span');
+          chip.className = 'tag-chip';
+          chip.dataset.val = val;
+          chip.innerHTML = escH(val) + '<button type="button" class="tag-chip-del">×</button>';
+          chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
+          chips.appendChild(chip);
+          updateHidden();
+        }
+        text.addEventListener('keydown', e => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            const v = text.value.trim();
+            if (v) { e.preventDefault(); addTag(v); text.value = ''; }
+          } else if (e.key === 'Backspace' && !text.value) {
+            const last = chips.querySelector('.tag-chip:last-child');
+            if (last) { last.remove(); updateHidden(); }
+          }
+        });
+        text.addEventListener('blur', () => {
+          const v = text.value.trim();
+          if (v) { addTag(v); text.value = ''; }
+        });
+        wrap.addEventListener('click', () => text.focus());
+        if (initialValue) initialValue.split(',').forEach(v => addTag(v));
       }
 
       // 그룹명 자동완성
@@ -682,8 +732,13 @@
           try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
           const form = document.createElement('div');
           form.className = 'pr-inline-edit';
+          const namesHiddenId = 'pie-names-hidden-' + btn.dataset.id;
           form.innerHTML = `
-            <input class="pie-names" placeholder="참여자명" value="${escH(rec.names||'')}">
+            <div class="tag-input-wrap pie-names-wrap">
+              <div class="tag-chips"></div>
+              <input type="text" class="tag-text-input" placeholder="이름 입력 후 스페이스">
+              <input type="hidden" class="pie-names" id="${namesHiddenId}">
+            </div>
             <input class="pie-time" type="number" placeholder="시간(분)" value="${escH(String(rec.time||''))}">
             <input class="pie-score" placeholder="점수·메모" value="${escH(rec.score||'')}">
             <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
@@ -692,6 +747,7 @@
               <button class="pr-inline-save" type="button">저장</button>
             </div>`;
           row.querySelector('.pr-rec-main').appendChild(form);
+          initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
 
           form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
           form.querySelector('.pr-inline-save').addEventListener('click', async () => {
@@ -804,20 +860,18 @@
     function buildSessionBody(recs, user) {
       return recs.map(r => {
         const isMine = user && String(r.user_id) === String(user.id);
-        const tags = [
-          r.player_count ? `👥 ${r.player_count}명` : null,
-          r.player_names ? r.player_names : null,
-          r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
-          r.score_note ? `🏆 ${r.score_note}` : null,
-          r.nickname ? `✏️ ${r.nickname}` : null,
-        ].filter(Boolean);
+        const nameTags = r.player_names ? r.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('') : '';
+        const timeTags = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
+        const scoreTags = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
+        const countTag = r.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${r.player_count}명</span>` : '';
+        const metaHtml = (countTag + nameTags + timeTags + scoreTags) || '';
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||''})}'>
           ${photoHtml}
           <div class="pr-rec-main">
             <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
-            ${tags.length ? `<div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>` : ''}
+            ${metaHtml ? `<div class="pr-rec-meta">${metaHtml}</div>` : ''}
             ${reviewHtml}
           </div>
           <div class="pr-rec-actions">
@@ -832,21 +886,21 @@
       return recs.map(r => {
         const isMine = user && String(r.user_id) === String(user.id);
         const date = r.played_at || r.created_at?.slice(0, 10) || '?';
-        const tags = [
-          formatKstDate(date),
-          r.group_name ? `📌 ${r.group_name}` : null,
-          r.player_count ? `👥 ${r.player_count}명` : null,
-          r.player_names ? r.player_names : null,
-          r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
-          r.score_note ? `🏆 ${r.score_note}` : null,
-          r.nickname ? `✏️ ${r.nickname}` : null,
-        ].filter(Boolean);
+        const nameTags2 = r.player_names ? r.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('') : '';
+        const metaHtml2 = [
+          `<span class="pr-rec-tag">${escH(formatKstDate(date))}</span>`,
+          r.group_name ? `<span class="pr-rec-tag">📌 ${escH(r.group_name)}</span>` : '',
+          r.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${r.player_count}명</span>` : '',
+          nameTags2,
+          r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '',
+          r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '',
+        ].filter(Boolean).join('');
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||''})}'>
           ${photoHtml}
           <div class="pr-rec-main">
-            <div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>
+            <div class="pr-rec-meta">${metaHtml2}</div>
             ${reviewHtml}
           </div>
           <div class="pr-rec-actions">

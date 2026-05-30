@@ -1402,7 +1402,7 @@ function openGameSheet(gameKey){
     >전체 게임에서 보기 →</a>
     <a class="sheet-view-all-btn sheet-review-btn"
       href="${rootPath}pages/cottage/game-reviews.html?game=${encodeURIComponent(gameKey)}"
-    >📝 플레이 사진 &amp; 후기 →</a>
+    >🎲 플레이기록 보러가기 →</a>
 
   `;
 
@@ -1945,6 +1945,7 @@ async function initPlayWidget(gameKey) {
               ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ""}
               ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
             </div>` : ""}
+          ${r.review_text ? `<p class="sheet-record-review">${escH(r.review_text)}</p>` : ""}
           </div>
           ${isMine ? `<div class="sheet-play-record-actions">
             <button class="sheet-play-edit-btn"

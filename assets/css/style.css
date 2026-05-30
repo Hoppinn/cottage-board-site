@@ -2991,6 +2991,7 @@ body.sheet-open{
   font-weight:700;
   color:var(--muted);
 }
+.sheet-record-review{font-size:11px;color:var(--text);margin:4px 0 0;line-height:1.4;white-space:pre-wrap;}
 .sheet-history-link{color:var(--green);text-decoration:none;font-weight:700;}
 .sheet-history-link:hover{text-decoration:underline;}
 .sheet-my-records-list.is-collapsed .sheet-my-record-item:not(:first-child){
