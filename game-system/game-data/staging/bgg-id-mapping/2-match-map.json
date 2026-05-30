@@ -3004,16 +3004,13 @@
     "scoreGap": 28
   },
   "우봉고 3D프로": {
-    "status": "auto-confirmed",
+    "status": "forced",
     "bggId": "46396",
-    "ownedName": "우봉고 3D프로",
-    "bggName": "Ubongo 3D",
-    "score": 111,
-    "scoreGap": 14
+    "ownedName": "우봉고 3D프로"
   },
   "우봉고3D": {
     "status": "forced",
-    "bggId": "46396",
+    "bggId": "269971",
     "ownedName": "우봉고3D"
   },
   "우봉고미니": {
@@ -3766,12 +3763,9 @@
     "ownedName": "탁상탐정단4"
   },
   "탐험가들": {
-    "status": "auto-confirmed",
-    "bggId": "217372",
-    "ownedName": "탐험가들",
-    "bggName": "The Quest for El Dorado",
-    "score": 119,
-    "scoreGap": 8
+    "status": "forced",
+    "bggId": "368413",
+    "ownedName": "탐험가들"
   },
   "태양너머로 (+새여명의지도자들 확장)": {
     "status": "auto-confirmed",

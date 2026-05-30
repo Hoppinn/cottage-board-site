@@ -9364,7 +9364,7 @@
     "ownedName": "우봉고 3D프로",
     "titleEn": "Ubongo 3D",
     "bggId": "46396",
-    "matchStatus": "auto-confirmed",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
     "difficulty": 1.9118,
@@ -9383,14 +9383,14 @@
   {
     "id": "우봉고3D",
     "ownedName": "우봉고3D",
-    "titleEn": "Ubongo 3D",
-    "bggId": "46396",
+    "titleEn": "Ubongo!: 3-D Family",
+    "bggId": "269971",
     "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
-    "difficulty": 1.9118,
+    "difficulty": 1.6667,
     "difficultyWeight": 1.67,
-    "rating": 7.05697,
+    "rating": 7.03621,
     "bestPlayers": [
       1,
       4
@@ -11484,14 +11484,14 @@
   {
     "id": "탐험가들",
     "ownedName": "탐험가들",
-    "titleEn": "The Quest for El Dorado",
-    "bggId": "217372",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Relic Hunters",
+    "bggId": "368413",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
-    "difficulty": 1.9413,
+    "difficulty": 1.8571,
     "difficultyWeight": 1.83,
-    "rating": 7.71724,
+    "rating": 7.16078,
     "bestPlayers": [
       3
     ],

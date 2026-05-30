@@ -59602,7 +59602,7 @@
     },
     "bgg": {
       "id": "46396",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2009",
       "rating": 7.05697,
       "weight": 1.9118,
@@ -59726,15 +59726,15 @@
     "title": {
       "display": "우봉고3D",
       "owned": "우봉고3D",
-      "bgg": "Ubongo 3D"
+      "bgg": "Ubongo!: 3-D Family"
     },
     "bgg": {
-      "id": "46396",
+      "id": "269971",
       "matchStatus": "forced",
-      "year": "2009",
-      "rating": 7.05697,
-      "weight": 1.9118,
-      "minPlayers": 2,
+      "year": "2019",
+      "rating": 7.03621,
+      "weight": 1.6667,
+      "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
         1,
@@ -59749,12 +59749,11 @@
       "notRecommendedPlayers": [
         4
       ],
-      "playingTime": 30,
-      "minPlayTime": 30,
-      "maxPlayTime": 30,
+      "playingTime": 25,
+      "minPlayTime": 25,
+      "maxPlayTime": 25,
       "categories": [
-        "Puzzle",
-        "Real-time"
+        "Puzzle"
       ],
       "categoriesKo": [
         "퍼즐",
@@ -59762,8 +59761,7 @@
       ],
       "mechanics": [
         "Grid Coverage",
-        "Pattern Building",
-        "Real-Time"
+        "Pattern Building"
       ],
       "mechanicsKo": [
         "격자 커버리지",
@@ -59773,7 +59771,7 @@
       "designers": [
         "Grzegorz Rejchtman"
       ],
-      "description": "Newest addition to the Ubongo series. This time players place wooden tiles over two layers in 2-sided puzzle cards, one side for beginner players and one for more advanced ones. Players collect gemstones for their performance and player with the most valuable gem collection at the end wins the game.",
+      "description": "Ubongo: 3-D Family includes puzzles with four levels of difficulty to offer the perfect challenge for every age group. Who will be the first to fit their puzzle pieces next to, above, and inside one another? Can you complete your puzzle before time expires? Precious gems await those who do...",
       "descriptionKo": "우봉고 시리즈의 최신작입니다. 이번에는 플레이어들이 양면 퍼즐 카드의 두 층 위에 나무 타일을 배치합니다. 한쪽 면은 초보자용, 다른 쪽 면은 고급 플레이어용입니다. 플레이어들은 퍼즐 해결 성과에 따라 보석을 수집하며, 게임 종료 시 가장 가치 높은 보석 컬렉션을 모은 플레이어가 승리합니다."
     },
     "cottage": {
@@ -59783,44 +59781,29 @@
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
-      "moodTags": [
-        "chaotic",
-        "tense"
-      ],
+      "moodTags": [],
       "playTags": [
-        "party",
-        "dexterity",
         "puzzle"
       ],
       "situationTags": [
-        "group",
-        "quick_play",
-        "beginner"
+        "beginner",
+        "group"
       ],
       "interactionTags": [
-        "simultaneous",
         "silent_focus",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "chaotic",
-        "tense",
-        "party",
-        "dexterity",
         "puzzle",
-        "group",
-        "quick_play",
         "beginner",
-        "simultaneous",
+        "group",
         "silent_focus",
         "low_conflict"
       ],
       "displayTags": [
-        "즐기고",
-        "머리쓰게",
-        "빠져들게"
+        "머리쓰게"
       ],
       "summaryKo": "양면 퍼즐 카드에 나무 타일을 배치해 보석을 수집하는 게임.",
       "comment": {
@@ -59839,8 +59822,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/WDzyiNLC4jxbxVLvovGp8w__original/img/p4_7s9oSB64a7nZe05RSR6KDi8k=/0x0/filters:format(jpeg)/pic6220818.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/WDzyiNLC4jxbxVLvovGp8w__small/img/o4vHm08llai9hSCmGhj_Ui2Z_So=/fit-in/200x150/filters:strip_icc()/pic6220818.jpg",
+      "main": "https://cf.geekdo-images.com/zGdarBv0D_AC5EyHaiptFw__original/img/L4F-Qrt0egEpQ1vkeUMc_PqqG2I=/0x0/filters:format(png)/pic9056927.png",
+      "thumbnail": "https://cf.geekdo-images.com/zGdarBv0D_AC5EyHaiptFw__small/img/vwnLV_TUDLdewZp_7ZqCI6gxBj4=/fit-in/200x150/filters:strip_icc()/pic9056927.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -73562,15 +73545,15 @@
     "title": {
       "display": "탐험가들",
       "owned": "탐험가들",
-      "bgg": "The Quest for El Dorado"
+      "bgg": "Relic Hunters"
     },
     "bgg": {
-      "id": "217372",
-      "matchStatus": "auto-confirmed",
-      "year": "2017",
-      "rating": 7.71724,
-      "weight": 1.9413,
-      "minPlayers": 2,
+      "id": "368413",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 7.16078,
+      "weight": 1.8571,
+      "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
         3
@@ -73584,11 +73567,12 @@
         1,
         4
       ],
-      "playingTime": 60,
-      "minPlayTime": 30,
-      "maxPlayTime": 60,
+      "playingTime": 50,
+      "minPlayTime": 50,
+      "maxPlayTime": 50,
       "categories": [
         "Adventure",
+        "Animals",
         "Exploration",
         "Racing"
       ],
@@ -73599,18 +73583,12 @@
       ],
       "mechanics": [
         "Deck, Bag, and Pool Building",
-        "Delayed Purchase",
         "Grid Movement",
         "Hand Management",
         "Hexagon Grid",
         "Modular Board",
-        "Multi-Use Cards",
-        "Once-Per-Game Abilities",
-        "Open Drafting",
-        "Race",
-        "Resource to Move",
-        "Variable Set-up",
-        "Zone of Control"
+        "Push Your Luck",
+        "Variable Set-up"
       ],
       "mechanicsKo": [
         "덱/백/풀 빌딩",
@@ -73628,9 +73606,9 @@
         "지배 구역"
       ],
       "designers": [
-        "Reiner Knizia"
+        "Jason Lee"
       ],
-      "description": "In The Quest for El Dorado, players take the roles of expedition leaders who have embarked on a search for the legendary land of gold in the dense jungles of South America.\n\nEach player assembles and equips their own team, hiring various helpers from the scout to the scientist to the aborigine. All of them have one goal in mind: Reaching the golden border first and winning all of the riches for themselves. Whoever chooses the best tactics will be rewarded!\n\nEach player starts with a face-down deck of 8 cards&mdash; his or her expedition &mdash;to draw from. You start each turn with 4 cards in your hand. Use expedition cards to move through the jungle or hire more people for your expedition. Each card in your hand can only be used once per turn - to  move or to buy 1 new card.\n\nWhen a player reaches one of the 3 finishing spaces, he moves to El Dorado and this triggers the final round. The other players will now play their final turn. Once the round is completed, the game is over. If the final round ends up with multiple players reaching El Dorado, the player who has collected the most blockades wins the game.",
+      "description": "This island holds ancient relics. It&rsquo;s too hard to dig them out without an expedition. Luckily for you, there are many expedition members lined up in the south who are willing to aid your expedition...for a bit of coin of course. No coin? No problem. Just a little exploring can get you enough coins to hire expedition members. Direct your expedition north and dig out the hidden relic! But do it before your competition...\n\nIn more detail, players will use the cards in their deck to move their meeples over a grid of tiles. When they move on a tile they flip it. There can be immediate rewards, dig sites which require additional cards or the relics needed to win.\nPlayers can choose to return to the base camp to buy more cards to add to their deck.\n\nDig up the relics first to win!\n\n&mdash;description from the publisher",
       "descriptionKo": "엘도라도의 비보에서 플레이어들은 남미의 밀림에서 전설의 황금의 땅을 찾아 떠난 탐험대 지도자 역할을 합니다.\n\n각 플레이어는 정찰병, 과학자, 원주민 등 다양한 조력자를 고용하여 자신의 탐험팀을 구성하고 장비를 갖춥니다. 모두의 목표는 단 하나: 먼저 황금의 국경에 도달하여 모든 부를 독차지하는 것입니다. 최고의 전략을 펼치는 자가 승리를 거머쥘 것입니다!\n\n각 플레이어는 8장의 카드 더미(탐험팀)로 시작합니다. 매 턴마다 손에 4장을 들고 시작합니다. 탐험 카드를 사용하여 정글을 이동하거나 탐험팀에 새로운 사람을 고용하세요. 각 카드는 턴마다 한 번만 사용할 수 있습니다 – 이동 또는 새 카드 1장 구입.\n\n플레이어가 3개의 결승 지점 중 하나에 도달하면 엘도라도로 이동하며 최종 라운드가 시작됩니다. 다른 플레이어들은 마지막 턴을 합니다. 라운드가 끝나면 게임도 종료됩니다. 여러 플레이어가 엘도라도에 도달한 경우, 가장 많은 방해물을 수집한 플레이어가 승리"
     },
     "cottage": {
@@ -73640,13 +73618,18 @@
       "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.83,
-      "moodTags": [],
+      "moodTags": [
+        "tense",
+        "funny"
+      ],
       "playTags": [
         "card_play",
-        "strategy"
+        "strategy",
+        "party"
       ],
       "situationTags": [
         "beginner",
+        "quick_play",
         "group"
       ],
       "interactionTags": [
@@ -73656,15 +73639,21 @@
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "tense",
+        "funny",
         "card_play",
         "strategy",
+        "party",
         "beginner",
+        "quick_play",
         "group",
         "competitive",
         "low_conflict"
       ],
       "displayTags": [
         "머리쓰게",
+        "즐기고",
+        "빠져들게",
         "경쟁형"
       ],
       "summaryKo": "카드를 사용해 정글을 횡단하며 먼저 엘도라도에 도달하는 경주 게임",
@@ -73684,8 +73673,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/b5VyYjNfAxJ4Z-Dx2UWlqg__original/img/-GqQ0EOfg9e3yFVpKgJbPdlunso=/0x0/filters:format(jpeg)/pic7945692.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/b5VyYjNfAxJ4Z-Dx2UWlqg__small/img/TB_X7b0PIfykfnI12rm3bt6rnGY=/fit-in/200x150/filters:strip_icc()/pic7945692.jpg",
+      "main": "https://cf.geekdo-images.com/6klB3kCIKlsYEdKfIei4bg__original/img/mOedD_6AVzACOiSjoM1E4G4B4h4=/0x0/filters:format(jpeg)/pic7004538.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/6klB3kCIKlsYEdKfIei4bg__small/img/hMAK1vNlx6KLtLnsLYJil8cRn4Q=/fit-in/200x150/filters:strip_icc()/pic7004538.jpg",
       "source": "bgg",
       "type": "jpg"
     },
