@@ -186,11 +186,16 @@
       const profiles = await window.CottageDB.getAllProfiles();
       const memberHtml = profiles.length ? profiles.map(p => {
         const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
+        const mins = p.total_minutes || 0;
+        const timeStr = mins >= 60
+          ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
+          : `${mins}분`;
         return `<div class="admin-req-item">
           <span class="admin-req-name">${escH(p.nickname || '(닉네임없음)')}</span>
           <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>
           <span class="admin-req-meta">최근 ${fmtDate(p.last_seen_at)}</span>
           <span class="admin-req-meta">방문 ${p.visit_count || 1}회</span>
+          <span class="admin-req-meta">⏱ ${timeStr}</span>
         </div>`;
       }).join('') : '<div class="admin-empty">회원 없음</div>';
 

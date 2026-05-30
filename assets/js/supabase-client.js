@@ -442,14 +442,49 @@
     trackPageView(page);
   });
 
+  // ── 체류 시간 누적 ──────────────────────────────────────
+  let _sessionStart = Date.now();
+  let _sessionUserId = null;
+
+  function _flushTime(userId) {
+    if (!userId) return;
+    const elapsed = Math.floor((Date.now() - _sessionStart) / 60000); // 분 단위
+    if (elapsed <= 0) return;
+    const key = `cottage_time_${userId}`;
+    const prev = parseInt(localStorage.getItem(key) || '0');
+    localStorage.setItem(key, String(prev + elapsed));
+    _sessionStart = Date.now();
+  }
+
+  function _popAccumulatedMinutes(userId) {
+    const key = `cottage_time_${userId}`;
+    const mins = parseInt(localStorage.getItem(key) || '0');
+    localStorage.removeItem(key);
+    return mins;
+  }
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && _sessionUserId) _flushTime(_sessionUserId);
+      else _sessionStart = Date.now();
+    });
+    window.addEventListener('beforeunload', () => {
+      if (_sessionUserId) _flushTime(_sessionUserId);
+    });
+  }
+
   async function upsertProfile(userId, nickname) {
+    _sessionUserId = userId;
+    _sessionStart = Date.now();
     try {
-      const { data } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
+      const accumulated = _popAccumulatedMinutes(userId);
+      const { data } = await db.from('profiles').select('visit_count, total_minutes').eq('user_id', userId).maybeSingle();
       await db.from('profiles').upsert({
         user_id: userId,
         nickname,
         last_seen_at: new Date().toISOString(),
         visit_count: (data?.visit_count || 0) + 1,
+        total_minutes: (data?.total_minutes || 0) + accumulated,
       }, { onConflict: 'user_id' });
     } catch (_) {}
   }
