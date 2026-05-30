@@ -16,7 +16,11 @@
     .admin-req-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-req-requester { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
     .admin-req-voters { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; flex: 1; }
+    .admin-req-plan { background: #e8f5e9; border: 1px solid #a5d6a7; border-radius: 6px; color: #2e7d32; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-plan.is-planned { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+    .admin-req-plan:hover { opacity: 0.85; }
     .admin-req-done { background: var(--green); border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
+    .admin-req-done.is-done { background: #888; }
     .admin-req-done:hover { opacity: 0.85; }
     .admin-req-del { background: none; border: 1px solid #e0d5c5; border-radius: 6px; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 10px; white-space: nowrap; }
     .admin-req-del:hover { border-color: #c0392b; color: #c0392b; }
@@ -152,12 +156,15 @@
         return `<span class="admin-req-voters">👤 ${voters.map(n => escH(n)).join(', ')}</span>`;
       }
 
-      function reqItem(id, name, count, table, done, userId) {
-        return `<div class="admin-req-item${done?' is-done':''}" data-id="${id}" data-table="${table}">
+      function reqItem(id, name, count, table, done, userId, planned) {
+        const statusBtns = table === 'game_requests' ? `
+          <button class="admin-req-plan${planned?' is-planned':''}" type="button">${planned?'예정됨':'구매예정'}</button>
+          <button class="admin-req-done${done?' is-done':''}" type="button">${done?'완료됨':'구매완료'}</button>` : '';
+        return `<div class="admin-req-item${done?' is-done':planned?' is-planned':''}" data-id="${id}" data-table="${table}">
           <span class="admin-req-name">${escH(name)}</span>
           <span class="admin-req-meta">${count}명</span>
           ${votersTag(id)}
-          ${table==='game_requests'?`<button class="admin-req-done" type="button">${done?'완료됨':'구매완료'}</button>`:''}
+          ${statusBtns}
           <button class="admin-req-del" type="button">삭제</button>
         </div>`;
       }
@@ -171,7 +178,7 @@
         </div>`;
       }
 
-      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'),r.user_id)).join('');
+      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'),r.user_id,r.is_planned)).join('');
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id)).join('');
 
@@ -214,17 +221,38 @@
         });
       });
 
+      el.querySelectorAll('.admin-req-plan').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.admin-req-item');
+          const isPlanned = btn.classList.contains('is-planned');
+          await db.from('game_requests').update(isPlanned
+            ? { is_planned: false }
+            : { is_planned: true, purchased_at: null, status: 'pending' }
+          ).eq('id', item.dataset.id);
+          btn.classList.toggle('is-planned', !isPlanned);
+          btn.textContent = isPlanned ? '구매예정' : '예정됨';
+          item.classList.toggle('is-planned', !isPlanned);
+          if (!isPlanned) item.classList.remove('is-done');
+        });
+      });
+
       el.querySelectorAll('.admin-req-done').forEach(btn => {
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
-          const isDone = item.classList.contains('is-done');
+          const isDone = btn.classList.contains('is-done');
           const today = new Date().toISOString().slice(0, 10);
           await db.from('game_requests').update(isDone
             ? { purchased_at: null, is_planned: false, status: 'pending' }
             : { purchased_at: today, is_planned: false, status: 'done' }
           ).eq('id', item.dataset.id);
-          item.classList.toggle('is-done', !isDone);
+          btn.classList.toggle('is-done', !isDone);
           btn.textContent = isDone ? '구매완료' : '완료됨';
+          item.classList.toggle('is-done', !isDone);
+          if (!isDone) {
+            item.classList.remove('is-planned');
+            const planBtn = item.querySelector('.admin-req-plan');
+            if (planBtn) { planBtn.classList.remove('is-planned'); planBtn.textContent = '구매예정'; }
+          }
         });
       });
     }
