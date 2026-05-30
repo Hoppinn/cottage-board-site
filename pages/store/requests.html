@@ -217,9 +217,11 @@
       }
       el.innerHTML = '<ul class="req-list">' + data.map(r => {
         const can = canManage(r, MY_GAME_KEY);
-        const plannedBadge = r.is_planned ? `<span class="req-planned-badge">구매 예정</span>` : '';
         const plannedToggle = isAdmin() ? `<button class="req-plan-btn" data-id="${r.id}" data-planned="${r.is_planned ? '1' : '0'}" type="button" title="구매예정 토글">${r.is_planned ? '✅' : '📋'}</button>` : '';
-        return `<li class="req-list-item" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}"><span class="req-list-name">${escHtml(r.game_name)}${plannedBadge}</span><span class="req-list-right"><span class="req-list-count">${r.request_count}명 희망</span>${plannedToggle}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span></li>`;
+        const countLabel = r.is_planned
+          ? `<span class="req-list-count req-count-planned">구매 예정</span>`
+          : `<span class="req-list-count">${r.request_count}명 희망</span>`;
+        return `<li class="req-list-item" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}"><span class="req-list-name">${escHtml(r.game_name)}</span><span class="req-list-right">${countLabel}${plannedToggle}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span></li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
