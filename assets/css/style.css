@@ -771,8 +771,9 @@ body.recommend-page main{
 }
 .recommend-header--photo > *{ position:relative; z-index:1; }
 .recommend-header.recommend-header--photo{
-  text-align:center;
+  align-items:center;
   justify-content:center;
+  text-align:center;
 }
 .recommend-header--photo .recommend-title-group h2,
 .recommend-header--photo h2{
@@ -1783,7 +1784,7 @@ body.sheet-open{
 
 .owned-page-hero{
   position:relative;
-  margin:8px -18px 0;
+  margin:8px 0 0;
   height:160px;
   display:flex;
   align-items:center;
