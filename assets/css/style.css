@@ -770,9 +770,14 @@ body.recommend-page main{
   z-index:0;
 }
 .recommend-header--photo > *{ position:relative; z-index:1; }
+.recommend-header.recommend-header--photo{
+  text-align:center;
+  justify-content:center;
+}
 .recommend-header--photo .recommend-title-group h2,
 .recommend-header--photo h2{
   color:#fff;
+  text-align:center;
   text-shadow:0 2px 14px rgba(60,35,10,0.75);
 }
 
