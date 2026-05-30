@@ -476,6 +476,7 @@
   async function upsertProfile(userId, nickname) {
     _sessionUserId = userId;
     _sessionStart = Date.now();
+    window._cottageSessionStart = _sessionStart;
     try {
       const accumulated = _popAccumulatedMinutes(userId);
       const { data } = await db.from('profiles').select('visit_count, total_minutes').eq('user_id', userId).maybeSingle();
