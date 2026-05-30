@@ -292,8 +292,8 @@
           const myVotes = getMyVotes();
           const voted = myVotes.has(id);
           if (voted) {
-            const newCount = Math.max(1, count - 1);
-            await getDb().from('game_requests').update({ request_count: newCount }).eq('id', id);
+            if (count <= 1) return; // count=1이면 아무것도 안 함
+            await getDb().from('game_requests').update({ request_count: count - 1 }).eq('id', id);
             myVotes.delete(id);
           } else {
             await getDb().from('game_requests').update({ request_count: count + 1 }).eq('id', id);
