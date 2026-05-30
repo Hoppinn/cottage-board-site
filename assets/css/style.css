@@ -758,14 +758,14 @@ body.recommend-page main{
   position:absolute;
   inset:0;
   background:url('../images/main/photo-interior.jpg') center/cover no-repeat;
-  filter:brightness(0.3);
+  filter:brightness(0.42);
   z-index:0;
 }
 .recommend-header--photo::after{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to bottom, rgba(60,35,10,0.05) 30%, rgba(60,35,10,0.55));
+  background:linear-gradient(to bottom, rgba(60,35,10,0.05) 30%, rgba(60,35,10,0.45));
   z-index:0;
 }
 .recommend-header--photo > *{ position:relative; z-index:1; }
@@ -1797,7 +1797,7 @@ body.sheet-open{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(to bottom, rgba(60,35,10,0.1), rgba(60,35,10,0.6));
+  background:linear-gradient(to bottom, rgba(60,35,10,0.1), rgba(60,35,10,0.5));
   z-index:0;
 }
 .owned-page-hero .breadcrumb,
