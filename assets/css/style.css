@@ -753,6 +753,7 @@ body.recommend-page main{
   justify-content:center;
   max-width:none;
   text-align:center;
+  border-radius:14px;
 }
 .recommend-header--photo::before{
   content:"";
@@ -1839,6 +1840,7 @@ body.sheet-open{
   justify-content:center;
   text-align:center;
   overflow:hidden;
+  border-radius:14px;
 }
 .owned-page-hero::before{
   content:"";
