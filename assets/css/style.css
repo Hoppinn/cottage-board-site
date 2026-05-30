@@ -586,7 +586,7 @@ body.owned-page .header-menu.active{
   border-radius:20px;
   overflow:hidden;
   aspect-ratio:4/3;
-  box-shadow:0 14px 32px rgba(0,0,0,0.18);
+  box-shadow:0 14px 32px rgba(100,72,38,0.18);
 }
 
 .hero-real-photo img{
@@ -1231,7 +1231,7 @@ body.recommend-page main{
   line-height:1.2;
   font-weight:900;
   letter-spacing:-0.6px;
-  box-shadow:0 10px 24px rgba(70,90,42,0.18),0 4px 10px rgba(0,0,0,0.08);
+  box-shadow:0 10px 24px rgba(70,90,42,0.18),0 4px 10px rgba(100,72,38,0.08);
   cursor:pointer;
   flex:0 0 auto !important;
   position:relative !important;
@@ -1427,7 +1427,7 @@ body.recommend-page main{
   padding:22px 20px 120px;
   border-radius:28px 28px 0 0;
   background:var(--paper-2);
-  box-shadow:0 -10px 30px rgba(0,0,0,0.16);
+  box-shadow:0 -10px 30px rgba(100,72,38,0.16);
   animation:sheetUp .22s ease;
 }
 
@@ -3245,7 +3245,7 @@ body.sheet-open{
   padding:20px;
   width:100%;
   max-width:320px;
-  box-shadow:0 8px 32px rgba(0,0,0,.2);
+  box-shadow:0 8px 32px rgba(100,72,38,0.2);
 }
 .photo-picker-title{
   margin:0 0 14px;
@@ -4179,7 +4179,7 @@ body.sheet-open{
   display:flex;
   flex-direction:column;
   gap:10px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.18);
+  box-shadow:0 8px 32px rgba(100,72,38,0.18);
 }
 
 .sheet-comment-modal-title{
@@ -4229,7 +4229,7 @@ body.sheet-open{
   display:flex;
   flex-direction:column;
   gap:10px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.18);
+  box-shadow:0 8px 32px rgba(100,72,38,0.18);
 }
 .sheet-play-modal-title{
   margin:0;
