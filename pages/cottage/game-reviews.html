@@ -61,6 +61,14 @@
     .pr-rec-review-link:hover { color: var(--green); border-color: var(--green); }
     .pr-rec-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
     .pr-rec-del:hover { color: #c0392b; }
+    .pr-rec-edit { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
+    .pr-rec-edit:hover { color: var(--green); }
+    .pr-inline-edit { background: var(--bg,#f5f0e8); border-radius: 8px; padding: 10px; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .pr-inline-edit input, .pr-inline-edit textarea { font-size: 12px; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 8px; width: 100%; box-sizing: border-box; background: #fff; }
+    .pr-inline-edit textarea { resize: vertical; min-height: 50px; }
+    .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
+    .pr-inline-save { font-size: 12px; background: var(--green); color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
+    .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
 
     /* single game view (from bottom sheet ?game=) */
     .rv-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
@@ -664,6 +672,53 @@
           }
         });
       });
+
+      panel.querySelectorAll('.pr-rec-edit').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const row = btn.closest('.pr-rec-row');
+          if (row.querySelector('.pr-inline-edit')) return;
+          let rec = {};
+          try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
+          const form = document.createElement('div');
+          form.className = 'pr-inline-edit';
+          form.innerHTML = `
+            <input class="pie-names" placeholder="참여자명" value="${escH(rec.names||'')}">
+            <input class="pie-time" type="number" placeholder="시간(분)" value="${escH(String(rec.time||''))}">
+            <input class="pie-score" placeholder="점수·메모" value="${escH(rec.score||'')}">
+            <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
+            <div class="pr-inline-edit-actions">
+              <button class="pr-inline-cancel" type="button">취소</button>
+              <button class="pr-inline-save" type="button">저장</button>
+            </div>`;
+          row.querySelector('.pr-rec-main').appendChild(form);
+
+          form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
+          form.querySelector('.pr-inline-save').addEventListener('click', async () => {
+            const saveBtn = form.querySelector('.pr-inline-save');
+            saveBtn.disabled = true;
+            const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, {
+              player_names: form.querySelector('.pie-names').value.trim() || null,
+              play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
+              score_note: form.querySelector('.pie-score').value.trim() || null,
+              review_text: form.querySelector('.pie-review').value.trim() || null,
+            });
+            if (!res?.error) {
+              const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
+              if (idx !== -1) {
+                recordsData[idx].player_names = form.querySelector('.pie-names').value.trim() || null;
+                recordsData[idx].play_time_min = parseInt(form.querySelector('.pie-time').value) || null;
+                recordsData[idx].score_note = form.querySelector('.pie-score').value.trim() || null;
+                recordsData[idx].review_text = form.querySelector('.pie-review').value.trim() || null;
+              }
+              renderRecords(recordsData);
+            } else {
+              saveBtn.disabled = false;
+              alert('수정에 실패했습니다.');
+            }
+          });
+        });
+      });
     }
 
     function bindToggle(panel) {
@@ -758,7 +813,7 @@
         ].filter(Boolean);
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}">
+        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||''})}'>
           ${photoHtml}
           <div class="pr-rec-main">
             <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
@@ -766,6 +821,7 @@
             ${reviewHtml}
           </div>
           <div class="pr-rec-actions">
+            ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
             ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
           </div>
         </div>`;
@@ -787,13 +843,14 @@
         ].filter(Boolean);
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}">
+        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||''})}'>
           ${photoHtml}
           <div class="pr-rec-main">
             <div class="pr-rec-meta">${tags.map(t => `<span class="pr-rec-tag">${escH(t)}</span>`).join('')}</div>
             ${reviewHtml}
           </div>
           <div class="pr-rec-actions">
+            ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
             ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
           </div>
         </div>`;
