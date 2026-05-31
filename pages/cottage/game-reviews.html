@@ -315,11 +315,11 @@
 
       root.innerHTML = `
         <div class="pr-tabs">
-          <button class="pr-tab is-active" data-tab="input">기록 입력</button>
-          <button class="pr-tab" data-tab="records">기록 보기</button>
+          <button class="pr-tab is-active" data-tab="records">기록 보기</button>
+          <button class="pr-tab" data-tab="input">기록 입력</button>
         </div>
-        <div id="prPanelInput" class="pr-panel is-active"></div>
-        <div id="prPanelRecords" class="pr-panel"></div>`;
+        <div id="prPanelInput" class="pr-panel"></div>
+        <div id="prPanelRecords" class="pr-panel is-active"></div>`;
 
       root.querySelectorAll('.pr-tab').forEach(tab => {
         tab.addEventListener('click', () => {
@@ -332,6 +332,7 @@
       });
 
       renderInputPanel();
+      loadRecords();
     }
 
     function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
