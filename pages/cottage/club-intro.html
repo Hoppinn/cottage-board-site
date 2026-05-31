@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>가입 인사 | 코티지보드 동호회</title>
+  <title>회원 자기소개 | 코티지보드 동호회</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
 </head>
@@ -70,10 +70,10 @@
       <div class="club-breadcrumb">
         <a class="club-breadcrumb-parent" href="./club.html#club-join">동호회</a>
         <span class="club-breadcrumb-sep">›</span>
-        <span class="club-breadcrumb-current">가입 인사</span>
+        <span class="club-breadcrumb-current">회원 자기소개</span>
       </div>
       <div class="page-mini-hero page-mini-hero--cozy">
-        <h1>가입 인사</h1>
+        <h1>회원 자기소개</h1>
       </div>
       <div class="inner-page-body">
 
@@ -183,7 +183,7 @@
     }
 
     async function deleteIntro(id) {
-      if (!confirm('이 가입 인사를 삭제할까요?')) return;
+      if (!confirm('이 자기소개를 삭제할까요?')) return;
       const { error } = await db.from('member_intros').delete().eq('id', id);
       if (!error) {
         removeMyId(id);
