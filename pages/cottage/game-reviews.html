@@ -756,6 +756,42 @@
             </div>`;
           row.querySelector('.pr-rec-main').appendChild(form);
 
+          // 자동완성 헬퍼
+          function attachAc(input, getSuggestions) {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'position:relative';
+            input.parentNode.insertBefore(wrap, input);
+            wrap.appendChild(input);
+            const list = document.createElement('div');
+            list.className = 'pr-autocomplete-list';
+            wrap.appendChild(list);
+            input.addEventListener('input', () => {
+              const q = input.value.trim();
+              const all = getSuggestions();
+              const matches = q ? all.filter(s => s.includes(q)) : all.slice(0, 6);
+              list.innerHTML = '';
+              if (!matches.length) { list.classList.remove('is-open'); return; }
+              matches.forEach(s => {
+                const item = document.createElement('div');
+                item.className = 'pr-autocomplete-item';
+                item.textContent = s;
+                item.addEventListener('mousedown', e => { e.preventDefault(); input.value = s; list.classList.remove('is-open'); });
+                list.appendChild(item);
+              });
+              list.classList.add('is-open');
+            });
+            input.addEventListener('blur', () => setTimeout(() => list.classList.remove('is-open'), 150));
+          }
+
+          // 모임명 자동완성
+          attachAc(form.querySelector('.pie-group'), () => groups);
+
+          // 참여자 이름 자동완성 (기존 기록에서 추출)
+          const allNames = [...new Set(
+            recordsData.flatMap(r => (r.player_names||'').split(',').map(n => n.trim()).filter(Boolean))
+          )];
+          attachAc(form.querySelector('.pie-names'), () => allNames);
+
           form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
           form.querySelector('.pr-inline-save').addEventListener('click', async () => {
             const saveBtn = form.querySelector('.pr-inline-save');
