@@ -352,6 +352,7 @@
 
       const groups = await window.CottageDB?.getGroupNames() || [];
       if (!groups.includes('코티지보드 동호회')) groups.unshift('코티지보드 동호회');
+      window._prGroups = groups;
 
       panel.innerHTML = `
         <div class="pr-meta-grid">
@@ -784,7 +785,7 @@
           }
 
           // 모임명 자동완성
-          attachAc(form.querySelector('.pie-group'), () => groups);
+          attachAc(form.querySelector('.pie-group'), () => window._prGroups || []);
 
           // 참여자 이름 자동완성 (기존 기록에서 추출)
           const allNames = [...new Set(
