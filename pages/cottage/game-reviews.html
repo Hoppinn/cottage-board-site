@@ -735,41 +735,44 @@
           try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
           const form = document.createElement('div');
           form.className = 'pr-inline-edit';
-          const namesHiddenId = 'pie-names-hidden-' + btn.dataset.id;
           form.innerHTML = `
-            <div class="tag-input-wrap pie-names-wrap">
-              <div class="tag-chips"></div>
-              <input type="text" class="tag-text-input" placeholder="이름 입력 후 스페이스">
-              <input type="hidden" class="pie-names" id="${namesHiddenId}">
-            </div>
-            <input class="pie-time" type="number" placeholder="시간(분)" value="${escH(String(rec.time||''))}">
-            <input class="pie-score" placeholder="점수·메모" value="${escH(rec.score||'')}">
+            <label style="font-size:11px;color:var(--muted)">참여자 이름 (쉼표로 구분)</label>
+            <input class="pie-names" placeholder="예: 호핀, 철수" value="${escH(rec.names||'')}">
+            <label style="font-size:11px;color:var(--muted)">인원수</label>
+            <input class="pie-count" type="number" placeholder="명" value="${escH(String(rec.count||''))}">
+            <label style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
+            <input class="pie-time" type="number" placeholder="분" value="${escH(String(rec.time||''))}">
+            <label style="font-size:11px;color:var(--muted)">점수·메모</label>
+            <input class="pie-score" placeholder="예: 83 / 75점" value="${escH(rec.score||'')}">
+            <label style="font-size:11px;color:var(--muted)">모임명</label>
+            <input class="pie-group" placeholder="예: 코티지보드 동호회" value="${escH(rec.group||'')}">
+            <label style="font-size:11px;color:var(--muted)">날짜</label>
+            <input class="pie-date" type="date" value="${escH(rec.date||'')}">
+            <label style="font-size:11px;color:var(--muted)">후기</label>
             <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
             <div class="pr-inline-edit-actions">
               <button class="pr-inline-cancel" type="button">취소</button>
               <button class="pr-inline-save" type="button">저장</button>
             </div>`;
           row.querySelector('.pr-rec-main').appendChild(form);
-          initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
 
           form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
           form.querySelector('.pr-inline-save').addEventListener('click', async () => {
             const saveBtn = form.querySelector('.pr-inline-save');
             saveBtn.disabled = true;
-            const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, {
+            const updFields = {
               player_names: form.querySelector('.pie-names').value.trim() || null,
+              player_count: parseInt(form.querySelector('.pie-count').value) || null,
               play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
               score_note: form.querySelector('.pie-score').value.trim() || null,
+              group_name: form.querySelector('.pie-group').value.trim() || null,
+              played_at: form.querySelector('.pie-date').value || null,
               review_text: form.querySelector('.pie-review').value.trim() || null,
-            });
+            };
+            const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, updFields);
             if (!res?.error) {
               const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
-              if (idx !== -1) {
-                recordsData[idx].player_names = form.querySelector('.pie-names').value.trim() || null;
-                recordsData[idx].play_time_min = parseInt(form.querySelector('.pie-time').value) || null;
-                recordsData[idx].score_note = form.querySelector('.pie-score').value.trim() || null;
-                recordsData[idx].review_text = form.querySelector('.pie-review').value.trim() || null;
-              }
+              if (idx !== -1) Object.assign(recordsData[idx], updFields);
               renderRecords(recordsData);
             } else {
               saveBtn.disabled = false;
@@ -870,7 +873,7 @@
         const metaHtml = (countTag + nameTags + timeTags + scoreTags) || '';
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||''})}'>
+        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
           ${photoHtml}
           <div class="pr-rec-main">
             <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
@@ -900,7 +903,7 @@
         ].filter(Boolean).join('');
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||''})}'>
+        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
           ${photoHtml}
           <div class="pr-rec-main">
             <div class="pr-rec-meta">${metaHtml2}</div>
