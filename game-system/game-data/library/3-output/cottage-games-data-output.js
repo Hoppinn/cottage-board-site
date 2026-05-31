@@ -84132,19 +84132,21 @@ const gameData = {
       "year": "2024",
       "rating": 7.27,
       "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
+      "minPlayers": 2,
+      "maxPlayers": 5,
       "bestPlayers": [],
       "recommendedPlayers": [],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
+      "playingTime": 75,
+      "minPlayTime": 45,
+      "maxPlayTime": 90,
       "categories": [],
       "categoriesKo": [],
       "mechanics": [],
       "mechanicsKo": [],
-      "designers": [],
+      "designers": [
+        "Lena Cassel"
+      ],
       "description": "",
       "descriptionKo": ""
     },
@@ -84157,11 +84159,17 @@ const gameData = {
       "difficultyWeight": 0,
       "moodTags": [],
       "playTags": [],
-      "situationTags": [],
+      "situationTags": [
+        "group",
+        "large_group"
+      ],
       "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
+      "autoTags": [
+        "group",
+        "large_group"
+      ],
       "displayTags": [],
       "summaryKo": "",
       "comment": {
@@ -84194,8 +84202,8 @@ const gameData = {
   "천국과맥주": {
     "id": "천국과맥주",
     "title": {
-      "display": "천국과맥주",
-      "owned": "천국과맥주",
+      "display": "맥주와빵",
+      "owned": "맥주와빵",
       "bgg": ""
     },
     "bgg": {
