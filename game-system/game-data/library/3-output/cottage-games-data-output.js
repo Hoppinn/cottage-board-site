@@ -61908,13 +61908,19 @@ const gameData = {
       "categories": [
         "Deduction"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "추리"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Deduction",
         "Scenario / Mission / Campaign Game"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "협력게임",
+        "추론",
+        "시나리오 게임"
+      ],
       "designers": [
         "Daumilas Ardickas",
         "Urtis Šulinskas"
@@ -61969,7 +61975,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "범인은 누구? 단서와 진술을 조합해 육식동물 범인을 찾아내는 협력 추리 퍼즐.",
       "comment": {
         "text": "",
         "source": "none"
@@ -84213,25 +84219,34 @@ const gameData = {
     "title": {
       "display": "맥주와빵",
       "owned": "맥주와빵",
-      "bgg": ""
+      "bgg": "Beer & Bread"
     },
     "bgg": {
       "id": "",
       "matchStatus": "unmatched",
-      "year": "",
+      "year": "2022",
       "rating": 0,
       "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
+      "minPlayers": 2,
+      "maxPlayers": 2,
+      "bestPlayers": [
+        2
+      ],
+      "recommendedPlayers": [
+        2
+      ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 40,
+      "minPlayTime": 30,
+      "maxPlayTime": 45,
+      "categories": [
+        "Card Game"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Hand Management",
+        "Set Collection"
+      ],
       "mechanicsKo": [],
       "designers": [],
       "description": "",
@@ -84245,13 +84260,28 @@ const gameData = {
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
-      "playTags": [],
-      "situationTags": [],
-      "interactionTags": [],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
+      "situationTags": [
+        "couple"
+      ],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "card_play",
+        "strategy",
+        "couple",
+        "competitive"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "경쟁형"
+      ],
       "summaryKo": "",
       "comment": {
         "text": "",
