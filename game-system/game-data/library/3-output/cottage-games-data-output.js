@@ -532,7 +532,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "DNA 나선 모양의 타워를 균형 있게 쌓아올리는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -662,7 +662,7 @@ const gameData = {
         "빠져들게",
         "즐기고"
       ],
-      "summaryKo": "",
+      "summaryKo": "저택에서 벌어진 살인 사건의 범인을 찾기 위해 각자의 숨겨진 목표를 달성하는 추리 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -1195,7 +1195,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "정체를 숨긴 컬티스트와 조사관이 크툴루 각성을 놓고 벌이는 정보 전쟁 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -1325,7 +1325,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드 조건에 맞는 답을 빠르게 말하고 틀리면 칩을 잃는 순발력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -1469,7 +1469,7 @@ const gameData = {
         "즐기고",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주민과 도둑이 치즈를 놓고 벌이는 사회적 추론 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -1592,7 +1592,7 @@ const gameData = {
         "즐기고",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "고유한 승리 조건을 가진 캐릭터가 되어 범인을 추리하는 미스터리 파티 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -1712,7 +1712,7 @@ const gameData = {
         "즐기고",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "흡혈귀들의 비밀 집회에서 범인을 찾아내는 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -2265,7 +2265,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "왕자가 질문으로 숨겨진 공주를 찾아내는 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -2847,7 +2847,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 내며 합을 11의 배수나 77 초과가 되지 않게 유지하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -4760,7 +4760,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "다른 플레이어들의 창의적인 거짓말 속에서 진짜 답을 피하며 가짜 답을 찾아내는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -5397,7 +5397,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "매 라운드 다른 캐릭터를 선택해 금화를 모으고 건물을 지어 승리하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -5718,7 +5718,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "마차 안에서 정체를 숨긴 두 진영이 유물 3개를 먼저 모으기 위해 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -5842,7 +5842,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "파트너와 같은 기준으로 항목을 순위 매겨 일치도를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -5968,7 +5968,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "포켓몬 캐릭터로 꾸민 우노에 트레이너 카드를 통해 상대방과 패를 교환하는 특별 규칙을 추가한 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -6115,7 +6115,7 @@ const gameData = {
       "displayTags": [
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 선택하여 1950년대 도시를 건설하고 점수를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -6215,7 +6215,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "공유된 테마로 묶인 캐릭터들이 함께 모험하며 독특한 능력을 활용하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -6360,7 +6360,7 @@ const gameData = {
         "즐기고",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "퀴즈를 풀면서 토론을 조종하는 내부자를 찾아내는 심리전 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -6492,7 +6492,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "광산을 탐험하며 보석을 모으되 같은 위험이 두 번 나오기 전에 빠져나가는 눈치 싸움 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -6619,7 +6619,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "숫자 추측 질문에 답하고 가장 정확한 답에 베팅하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -7201,7 +7201,7 @@ const gameData = {
       "displayTags": [
         "즐기고"
       ],
-      "summaryKo": "",
+      "summaryKo": "경주용 낙타가 어떻게 움직일지 예측해 1등과 2등을 맞히며 베팅하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -7343,7 +7343,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "총으로 협박하고 블러핑하며 전리품을 빼앗는 갱스터 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -8278,7 +8278,7 @@ const gameData = {
         "즐기고",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "아서왕의 신하 중 악의 추종자를 찾아내는 거짓말과 추론의 숨겨진 역할 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -8574,7 +8574,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "테마에 맞는 답을 올바른 순서대로 맞추는 협력 랭킹 파티 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -8701,7 +8701,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위를 굴려 계단에 착지시켜 점수를 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -9800,7 +9800,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "페퍼 카드를 피하며 최저 점수를 목표로 하는 역할 트릭 테이킹 게임입니다.",
       "comment": {
         "text": "",
         "source": "none"
@@ -10874,7 +10874,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "현장의 다잉 메시지를 단서로 범인의 직업, 무기, 동기를 추리하는 협력 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -10988,7 +10988,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "베팅한 말을 액션 카드로 조종하며 1위를 맞히는 경마 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -11788,7 +11788,7 @@ const gameData = {
         "즐기고",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "공주의 측근이 되기 위해 주변 인물의 능력을 활용해 편지를 전달하고 호의를 얻는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -12075,7 +12075,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위로 결정된 노선을 그려 출구를 최대한 연결하는 퍼즐 게임이다.",
       "comment": {
         "text": "",
         "source": "none"
@@ -12513,7 +12513,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "제국과 반란군이 덱을 강화하며 상대의 기지 3개를 먼저 파괴하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -12761,7 +12761,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "테마 카드에 맞는 명대사를 가장 먼저 외치는 순발력을 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -13007,7 +13007,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "가방에서 뽑은 주사위 결과를 예측하여 가장 정확히 맞추는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -13277,7 +13277,7 @@ const gameData = {
         "즐기고",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "여행 준비물 카드 3가지를 모아 목적지에 먼저 도착하는 레이스 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -13396,7 +13396,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "어려운 영어 단어를 빠르고 정확하게 발음하여 카드를 먼저 가져가는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -13820,7 +13820,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "같은 심볼이 나오면 상대방 카드의 항목을 먼저 외쳐야 하는 빠른 반응 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -13940,7 +13940,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "자신의 카드를 기여해 가장 강한 조합을 만드는 협력과 경쟁의 카드 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -14208,7 +14208,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "뮤지션 카드에 맞는 제스처를 빠르게 취하여 카드를 모으는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -14325,7 +14325,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "발음하기 어려운 문장을 빠르고 정확하게 읽는 잰말놀이 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -14590,7 +14590,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "각 슈트의 승패를 예측하고 트릭 테이킹으로 예측을 맞추는 해적 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -14847,7 +14847,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "스타워즈 캐릭터들의 고유 카드 덱으로 공격과 방어를 펼치는 1대1 배틀 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -15107,7 +15107,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "해리포터 테마로 카드를 내 같은 색 체커 5개를 연속으로 놓아 정해진 시퀀스를 먼저 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -15357,7 +15357,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "선택받지 못한 채소 가격을 올렸다가 폭락 전에 팔아 이익을 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -15487,7 +15487,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위로 비밀 수를 만들고 카드로 논리적으로 증명하는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -15620,7 +15620,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위를 굴려 눈금판을 채우면서 상대의 굴림에 베팅하는 도박사의 눈치 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -15732,7 +15732,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "인물 카드와 보조 카드를 배치하여 1848년 독일 혁명의 흐름을 통제하는 2인 카드게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -15972,7 +15972,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "다양한 캐릭터 카드를 모아 덱을 강화하며 매 라운드 새로운 상대와 대결하는 토너먼트 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -16258,7 +16258,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주어진 조건에 맞는 단어를 먼저 외쳐 카드를 모으되 중복을 피하는 단어 연상 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -16355,7 +16355,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주어진 조건에 맞는 단어를 빠르게 외쳐 카드를 모으는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -16461,7 +16461,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "레인을 두드려 핀을 정확히 조절하는 역발상 볼링 액션 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -16600,7 +16600,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드 조합으로 우주선 숫자와 액션을 선택해 달 식민지 개발 미션을 경쟁하는 캠페인 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -16721,7 +16721,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "선언한 트릭 수를 정확히 맞추는 트릭 테이킹 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -16846,7 +16846,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "일꾼 배치로 영향력을 확대하되 일꾼이 너무 똑똑해지면 반란이 일어나는 디스토피아 전략 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -16967,7 +16967,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "인생의 주요 사건들을 경험하며 최종 자산을 늘리는 운의 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -17087,7 +17087,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "포켓몬 캐릭터와 함께 주사위를 굴려 조합을 만들어 점수를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -17335,7 +17335,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "바이러스로 변한 여학교에서 제한된 자원으로 협력해 생존하는 미스터리 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -17628,7 +17628,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "저택에서 범인, 흉기, 장소를 추론하여 범죄를 해결하는 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -17785,7 +17785,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "색깔별 일꾼을 모아 마을 타일을 경매로 얻고 자원을 생산하며 승점을 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -17903,7 +17903,7 @@ const gameData = {
         "즐기고",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "두 국가 사이의 국경 수를 추측하여 정확성과 빠른 판단을 겨루는 지리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -18177,7 +18177,7 @@ const gameData = {
         "머리쓰게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "발전소 경매와 도시 네트워크 확장을 통해 가장 많은 도시에 전력을 공급하는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -18562,7 +18562,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "채소와 점수 카드를 드래프팅해 최고 점수 조합을 만드는 전략 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -18674,7 +18674,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "수수께끼 카드를 팀으로 풀며 패를 줄여나가는 협력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -18801,7 +18801,7 @@ const gameData = {
         "편안하게",
         "쉬운협력"
       ],
-      "summaryKo": "",
+      "summaryKo": "소방관이 되어 불길이 번지기 전에 요구조자를 구하는 협력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -18927,7 +18927,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "밭 타일을 연결해 채소를 3개 이상 모아 수확하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -19054,7 +19054,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "흔들리는 탑에 조각을 쌓다가 무너뜨린 사람이 지는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -19327,7 +19327,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "매 판 달라지는 트랙에서 주사위를 빠르게 집어 자동차를 앞으로 이동시키는 반응 속도 경쟁 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -19593,7 +19593,7 @@ const gameData = {
         "머리쓰게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위를 굴려 문명 발전, 전쟁, 정치, 물류 중 하나를 선택해 은하 제국을 재건하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -20019,7 +20019,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "두 개의 주사위로 0을 굴릴 확률 1%에 도전하는 운과 전략의 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -20276,7 +20276,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "마블 히어로들이 협력하여 5분 안에 빌런 보스를 물리치는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -20525,7 +20525,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "회전하는 개구리 입에 파리를 튕겨 넣어 먼저 10마리를 집어넣는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -20647,7 +20647,7 @@ const gameData = {
         "편안하게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "레버를 빠르게 눌러 공을 하마 입에 먹이는 손놀림 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -21267,7 +21267,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "제한된 공간에 건물을 배치하여 가장 잘 발전된 도시를 만드는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -21400,7 +21400,7 @@ const gameData = {
         "편안하게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "마법 카메라로 찍힌 엉뚱한 색의 물건을 빠르게 맞추는 반응 속도 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -21523,7 +21523,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "4대 괴수를 조종해 도쿄를 파괴하며 최강의 카이주가 되기를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -21637,7 +21637,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "뒤집은 카드에서 금괴를 찾아 가장 많이 모으는 기억력 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -21747,7 +21747,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "광산 경매에서 낙찰가의 절반을 옆 플레이어에게 넘기는 독특한 결제 방식으로 수익을 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -21869,7 +21869,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "왕비의 연회에서 카드를 배치해 가문의 영향력을 높이는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -21986,7 +21986,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "시간과 자본을 효율적으로 배분해 스타트업을 성장시키는 경영 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -23073,7 +23073,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 다양하게 활용해 기차를 완성하고 운송 계약을 완료하는 엔진 빌딩 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -23204,7 +23204,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 다목적으로 활용해 기차를 운영하고 화물 계약을 완료하는 엔진 빌딩 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -23331,7 +23331,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주문된 재료 조합을 맞춰 실제로 김밥을 만들며 점수를 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -23445,7 +23445,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "공개된 주문 카드에 맞게 꼬치 재료를 가장 빠르게 조립하는 순발력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -23781,7 +23781,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "바이킹 지도자가 되어 크루를 모집하고 자원을 모아 명성을 높이는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -23902,7 +23902,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "고대 바그다드에서 필사본을 수집하고 번역하여 지식과 영향력을 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -24033,7 +24033,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "귀여운 고양이 주사위로 조합을 만들어 점수를 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -24157,7 +24157,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "핵 기술을 연구하고 도시를 건설하며 영향력을 확장하는 전략 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -24821,7 +24821,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "상대의 비밀 코드를 추리하면서 자신의 숫자를 지켜내는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -24970,7 +24970,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "술탄국의 지배권을 놓고 다섯 부족을 전략적으로 배치하며 영향력을 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -25237,7 +25237,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "갈라파고스에서 동물을 관찰하며 생물 표본을 수집하는 탐험 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -25351,7 +25351,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "결혼과 교역을 통해 영향력을 확대하며 가장 강한 왕조가 되기를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -25466,7 +25466,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "차 잎을 재배하고 가공하여 포르모사 차 생산으로 최고의 농장주가 되는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -25859,7 +25859,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "주식을 사고팔며 이익을 추구하면서도 자선 기부로 명성을 쌓는 균형을 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -26146,7 +26146,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "던전을 함께 탐험하며 협력하되 가장 많은 보물을 챙기는 플레이어가 승리하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -26733,7 +26733,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "공동 목표와 개인 비밀 목표를 동시에 달성하며 식인 좀비 세계에서 생존하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -27160,7 +27160,7 @@ const gameData = {
         "대화하며",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "도망자의 숨겨진 카드를 추측해 뒤집는 1대1 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -27803,7 +27803,7 @@ const gameData = {
         "편안하게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "두 카드 사이의 공통 그림을 가장 빠르게 찾아 외치는 패턴 인식 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -27934,7 +27934,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "보물 카드를 분배할 때 블러핑으로 상대를 속이는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -28054,7 +28054,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "입찰 카드로 보상 타일을 놓고 벌어지는 심리전과 운의 균형을 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -28171,7 +28171,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "5가지 색상 칩을 모으기 위해 카드로 경매하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -28287,7 +28287,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "동서 무역 시대에 해운 회사를 경영하며 상품의 수급을 예측해 이익을 극대화하는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -28396,7 +28396,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "악어의 이빨을 조심스럽게 뽑되 틀린 이빨을 건드리면 악어가 문제의 스릴 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -28504,7 +28504,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "나무 블록을 쌓고 이동시켜 목표 카드의 조건을 먼저 완성하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -28634,7 +28634,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "뽑은 타일을 선택하거나 거절하며 최고의 해적 크루를 구성하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -28897,7 +28897,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "반 헬싱이 드라큘라를 처치하거나 드라큘라가 주민을 흡혈귀로 만드는 비대칭 2인 대결 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -29001,7 +29001,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "떨어지는 조각의 예측 불가한 움직임으로 점수를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -29286,7 +29286,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "한 명의 오버로드와 최대 4명의 영웅이 던전을 무대로 펼치는 협력형 판타지 모험 게임이다.",
       "comment": {
         "text": "",
         "source": "none"
@@ -29611,7 +29611,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "폐허 도시에서 약탈자들에 맞서 새로운 지역을 탐험하며 생존하는 협력 게임이다.",
       "comment": {
         "text": "",
         "source": "none"
@@ -29752,7 +29752,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위 드래프팅으로 자원을 관리하며 농장을 운영하는 전략 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -29881,7 +29881,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "라마 카드로 승점을 얻으며 경사진 밭에 작물을 심어 최고의 수확량을 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -30129,7 +30129,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "6개 카지노에 주사위를 배치해 가장 많은 주사위로 돈을 차지하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -30384,7 +30384,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "실시간으로 항공편 카드를 연결해 세계 여행 경로를 완성하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -30467,7 +30467,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "높은 카드 또는 거짓말로 상대 칩을 빼앗는 심리전 카드 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -30676,7 +30676,7 @@ const gameData = {
         "머리쓰게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "16세기 함부르크에서 도시 건설로 상대를 앞서 빠른 승리를 노리는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -30791,7 +30791,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "섬에서 과학자를 이동시켜 동물을 포획하고 연구 점수를 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -30904,7 +30904,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "포르투갈 통조림 회사를 운영하며 생산과 수출로 부를 축적하는 경제 전략 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -31506,7 +31506,7 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "방에서 숨겨진 숫자를 찾거나 마지막까지 생존해 탈출하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -31644,7 +31644,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "팀원과 함께 5개 세계의 10단계 레벨을 클리어하는 협력 카드 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -31786,7 +31786,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드로 은하 문명을 건설하며 비밀리에 선택한 행동 단계를 통해 승점을 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -31901,7 +31901,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "같은 숫자나 색상의 카드를 조합하여 버리되 7을 피하며 패를 가장 빨리 없애는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -32012,7 +32012,7 @@ const gameData = {
         "머리쓰게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "노선 건설과 회사 경영으로 거대 철도 기업을 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -32149,7 +32149,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "다섯 가지 본질을 모아 유물을 제작하고 마력의 장소를 정복하는 마법사 경쟁 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -32331,7 +32331,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "마작 타일로 빅 투 카드게임을 즐기며 먼저 패를 비우는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -32415,7 +32415,7 @@ const gameData = {
         "large_group"
       ],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "카드와 주사위로 무작위 던전을 탐험하며 보물을 모으고 몬스터를 처치하는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -33148,7 +33148,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "캐릭터와 자원을 관리하며 태평양에 먼저 도달하는 원정대 운영 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -34307,7 +34307,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "포커 토너먼트로 자금을 모아 악당으로부터 마을을 지키는 협력 게임이다.",
       "comment": {
         "text": "",
         "source": "none"
@@ -37157,7 +37157,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "같은 종류의 새를 모아 둥지로 돌려보내는 카드 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -37269,7 +37269,7 @@ const gameData = {
         "즐기고",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위를 굴려 나온 심볼을 격자에 기록하며 같은 심볼의 큰 연속 구역을 많이 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -37385,7 +37385,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "마법 구슬을 모아 강력한 캐릭터와 교환해 권능의 문장 12개를 먼저 수집하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -38087,7 +38087,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "상대 카드를 감지해 자신의 카드 효과를 결정하며 폐허 위에 숲과 마을을 재건하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -38920,7 +38920,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "상대의 배를 추론하여 먼저 모두 격침하는 해전 추측 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -39732,7 +39732,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "닷컴 CEO가 되어 최대한 천천히 돈을 잃으며 파산을 피하는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -39833,7 +39833,7 @@ const gameData = {
         "low_conflict"
       ],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "고래 관광 회사를 운영하며 보트를 최적의 위치에 배치해 수익을 극대화하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -39964,7 +39964,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "몬스터와 정령을 길들여 가장 강한 부하 생물을 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -40218,7 +40218,7 @@ const gameData = {
         "머리쓰게",
         "머더미스터리"
       ],
-      "summaryKo": "",
+      "summaryKo": "폐쇄된 캠프장에서 용의자들의 증언과 수수께끼를 풀어 살인범을 찾아내는 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -40850,7 +40850,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "눈으로 길이를 판단해 같은 크기 막대기를 모으는 경매 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -41082,7 +41082,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "손패 관리와 트릭 테이킹으로 8개 영지의 통치자들과 대화하며 왕국을 통일하는 싱글플레이 게임입니다",
       "comment": {
         "text": "",
         "source": "none"
@@ -41342,7 +41342,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "토큰을 이동해 분수 부품을 수집하고 가장 아름다운 분수를 완성하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -42394,7 +42394,7 @@ const gameData = {
         "머리쓰게",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "주식 시장의 붕괴 시점을 예측하며 최고 가격에 팔아 수익을 극대화하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -43023,7 +43023,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "주사위로 결정된 색깔 큐브를 경매하여 보드에 배치하고 구역의 다수를 점유하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -43388,7 +43388,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "가족의 세대를 거쳐 명성을 쌓아 승리를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -43813,7 +43813,7 @@ const gameData = {
         "경쟁형",
         "쉬운협력"
       ],
-      "summaryKo": "",
+      "summaryKo": "로봇 카드를 활용해 시간 제한 안에 고장난 기계를 모두 수리하는 협력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -44219,7 +44219,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "소환사가 되어 독특한 덱을 이끌고 상대 소환사를 무찌르는 전술 듀얼링 카드게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -44491,7 +44491,7 @@ const gameData = {
         "즐기고",
         "머더미스터리"
       ],
-      "summaryKo": "",
+      "summaryKo": "캐릭터 심리를 분석하여 세 가지 사건을 해결하는 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -45031,7 +45031,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "상대가 받을지 거부할지 예측하며 좋은 카드는 주고 나쁜 카드는 받지 않으려고 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -46931,7 +46931,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "타일을 배치하고 판매 가격을 정하며 왕국을 건설해 최고의 점수를 얻는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -49536,7 +49536,7 @@ const gameData = {
         "머리쓰게",
         "머더미스터리"
       ],
-      "summaryKo": "",
+      "summaryKo": "온천에서 발생한 살인 사건의 범인을 추리하는 미스터리 파티 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -49782,7 +49782,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "주민 능력과 은목걸이를 이용해 마을의 늑대인간을 가장 먼저 제거하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -50192,7 +50192,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "제한된 행동으로 농장을 확장하며 가족을 늘려 번영을 이루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -50484,7 +50484,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "생산 사슬을 계획하고 주민의 욕구를 충족시켜 가장 번영한 섬을 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -50719,7 +50719,7 @@ const gameData = {
         "low_conflict"
       ],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "구슬을 밀어 상대편 구슬을 모두 보드 밖으로 내보내는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -50973,7 +50973,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "잉카 창세 신화를 배경으로 4형제 중 하나를 선택해 자원을 관리하며 문명을 건설하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -51281,7 +51281,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "러브크래프트식 미스터리를 풀기 위해 커스텀 덱을 구성해 협력하는 카드 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -52370,7 +52370,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "20세기 초 암스테르담 상인이 되어 능력 조합을 구축하고 지연 보상을 계산하는 전략 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -52861,7 +52861,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드 드래프팅으로 고양이 가족을 함께 모아 배에 태우고 지혜를 완성하며 점수를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -53253,7 +53253,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "룬을 소비하여 카드를 획득해 덱을 강화하고 명예점수를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -54838,7 +54838,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "각 영웅의 고유한 덱으로 비대칭적 전투를 벌이는 미니어처 격투 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -56482,7 +56482,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "조난된 섬의 수수께끼를 풀어 보트를 풀고 탈출하는 방탈출 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -57692,7 +57692,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "1부터 15까지의 숫자 카드를 빠르게 내려놓는 클라이밍 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -59210,7 +59210,7 @@ const gameData = {
         "경쟁형",
         "대화하며"
       ],
-      "summaryKo": "",
+      "summaryKo": "빈 카드에 직접 그려가며 문명을 발전시키는 레거시 자작 문명 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -60930,7 +60930,7 @@ const gameData = {
         "즐기고",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "한 장의 덱으로 던전을 탐험하며 카드를 격파해 캐릭터를 성장시키는 로그라이크 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -61846,7 +61846,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "조류 카드를 수집하고 서식지에 배치하여 강력한 엔진을 구축하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -64267,7 +64267,7 @@ const gameData = {
         "머더미스터리",
         "빠져들게"
       ],
-      "summaryKo": "",
+      "summaryKo": "팀원끼리 나눠 가진 정보를 공유하며 사건을 해결하는 협력 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -64694,7 +64694,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 뒤집어 가문의 영향력을 키우며 중세 프랑스 왕위를 놓고 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -64817,7 +64817,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "숨겨진 카드를 활성화해 영향력을 쌓아 중세 프랑스 왕좌를 차지하는 전술 카드 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -65208,7 +65208,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 배치해 점수를 모으되 언제 라운드를 끝낼지 결정해 상대를 기습하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -65603,7 +65603,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "지킬 박사와 하이드 씨의 이중성을 유지하며 스코틀랜드 야드의 추적을 피하는 협력 트릭 테이킹 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -67168,7 +67168,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "동물의 약육강식 관계를 이용해 더 약한 동물을 쫓아내 점수를 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -67556,7 +67556,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "스파이, 스왑, 엿보기로 상대 카드를 읽으며 자신의 카드 총합을 최소화하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -68601,7 +68601,7 @@ const gameData = {
         "편안하게",
         "쉬운협력"
       ],
-      "summaryKo": "",
+      "summaryKo": "해적선 위에서 선원들을 이동시켜 과제를 해결하고 보물섬에 도달하는 협력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -69655,7 +69655,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "로마 제국 시대에 개척자를 파견해 무역망을 확장하고 신의 호의를 얻으며 승리를 노리는 순수 전략 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -69779,7 +69779,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "유령들을 만족시키도록 조각상을 배치하는 협력 게임이다",
       "comment": {
         "text": "",
         "source": "none"
@@ -69912,7 +69912,7 @@ const gameData = {
         "즐기고",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "쿠키 팀을 꾸려 자원을 모으고 건물을 지으며 몬스터와 싸우는 워커 플레이스먼트 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -70144,7 +70144,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "계절 변화하는 신비로운 대륙을 탐험하며 카드를 앞뒤로 내어 조건을 충족해 명성을 겨루는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -70903,7 +70903,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "선행 조합을 이기며 패를 빨리 내되 꼴찌를 피하는 카드 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -71716,7 +71716,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "용의 소굴에서 유물을 훔치되 소음을 내지 않고 살아 탈출하는 덱 빌딩 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -72117,7 +72117,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드로 추종자를 모집해 다섯 개 세력을 장악하고 3개 이상의 투표를 얻는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -72399,7 +72399,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "모래시계를 이용한 실시간 워커 플레이스먼트로 레스토랑 주방을 효율적으로 운영하는 협력 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -77793,7 +77793,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "6장 카드의 합계를 가장 낮게 만드는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -77993,7 +77993,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "좋은 고양이는 모으고 나쁜 고양이는 개로 쫓아내되 개의 수를 조절해야 하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -79202,7 +79202,7 @@ const gameData = {
         "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "환경과 동물 카드를 관찰하며 여우 카드 시 직전 카드를 빠르게 기억해 쓰는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -80347,7 +80347,7 @@ const gameData = {
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "카드를 올바른 순서로 배열하여 멋진 사진 롤을 완성하는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -81388,7 +81388,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "동일한 초기 덱에서 시작해 카드를 구매해 강화하며 황녀를 등극시키는 첫 플레이어가 우승하는 덱 빌딩 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -81903,7 +81903,7 @@ const gameData = {
         "low_conflict"
       ],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "영화 제작에 필요한 각종 칩을 경매로 획득해 가장 완성도 높은 영화를 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -84375,7 +84375,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "타일을 획득해 배치하면서 자원을 생산하고 가장 번성한 스코틀랜드 씨족을 만드는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -84447,7 +84447,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "잠수함 선원들이 말없이 손짓과 카드로만 소통하며 협력해 해저 임무를 완수하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -84519,7 +84519,7 @@ const gameData = {
       "manualTags": [],
       "autoTags": [],
       "displayTags": [],
-      "summaryKo": "",
+      "summaryKo": "부품을 조합해 발명품을 완성하는 증기 동력 시대의 발명가 경쟁 게임",
       "comment": {
         "text": "",
         "source": "none"
