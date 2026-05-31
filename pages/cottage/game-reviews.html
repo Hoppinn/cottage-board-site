@@ -779,7 +779,7 @@
             input.addEventListener('input', () => {
               const q = input.value.trim();
               const all = getSuggestions();
-              const matches = q ? all.filter(s => s.includes(q)) : all.slice(0, 6);
+              const matches = q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 6);
               list.innerHTML = '';
               if (!matches.length) { list.classList.remove('is-open'); return; }
               matches.forEach(s => {
