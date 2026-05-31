@@ -84137,7 +84137,7 @@ const gameData = {
       "matchStatus": "ready",
       "year": "2024",
       "rating": 7.27,
-      "weight": 0,
+      "weight": 2.5,
       "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
@@ -84155,14 +84155,28 @@ const gameData = {
       "playingTime": 75,
       "minPlayTime": 45,
       "maxPlayTime": 90,
-      "categories": [],
-      "categoriesKo": [],
-      "mechanics": [],
-      "mechanicsKo": [],
-      "designers": [
-        "Lena Cassel"
+      "categories": [
+        "Fantasy",
+        "Animals"
       ],
-      "description": "",
+      "categoriesKo": [
+        "판타지",
+        "동물"
+      ],
+      "mechanics": [
+        "Worker Placement",
+        "Hand Management",
+        "Card Drafting"
+      ],
+      "mechanicsKo": [
+        "워커 플레이스먼트",
+        "패 관리",
+        "카드 드래프팅"
+      ],
+      "designers": [
+        "Yeom C.W."
+      ],
+      "description": "In Wondrous Creatures, you are a creature enthusiast who joins the journey of forming the world's leading creature reserve. Deploy workers to interact with surrounding icons, collect fantastic creatures, and build the most harmonious reserve to win.",
       "descriptionKo": ""
     },
     "cottage": {
@@ -84170,23 +84184,48 @@ const gameData = {
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.5,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "strategy",
+        "card_play"
+      ],
       "situationTags": [
+        "experienced",
+        "long_stay",
+        "beginner",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "turn_based",
+        "low_conflict"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "immersive",
+        "strategy",
+        "card_play",
+        "experienced",
+        "long_stay",
+        "beginner",
         "group",
-        "large_group"
+        "large_group",
+        "competitive",
+        "turn_based",
+        "low_conflict"
       ],
-      "displayTags": [],
-      "summaryKo": "",
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
+      "summaryKo": "100여 종의 환상적인 생물을 모아 최고의 보호구역을 만드는 워커 플레이스먼트 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -84203,9 +84242,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://badcomet.co/cdn/shop/files/Wondrous-Creatures_Base-game-1.png",
+      "thumbnail": "https://badcomet.co/cdn/shop/files/Wondrous-Creatures_Base-game-1.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -84225,8 +84264,8 @@ const gameData = {
       "id": "",
       "matchStatus": "unmatched",
       "year": "2022",
-      "rating": 0,
-      "weight": 0,
+      "rating": 7.8,
+      "weight": 1.8,
       "minPlayers": 2,
       "maxPlayers": 2,
       "bestPlayers": [
@@ -84242,47 +84281,58 @@ const gameData = {
       "categories": [
         "Card Game"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "카드게임"
+      ],
       "mechanics": [
         "Hand Management",
-        "Set Collection"
+        "Set Collection",
+        "Drafting"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "패 관리",
+        "세트 수집",
+        "드래프팅"
+      ],
       "designers": [],
-      "description": "",
+      "description": "Beer & Bread is a multi-use card game for two players. Its clever structure of alternating rounds puts a fascinating twist on player interaction, card drafting, and resource management.",
       "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
+      "shelfGroupId": "two_player_best",
+      "shelfLabel": "2인 베스트게임",
+      "shelfFullLabel": "2인 베스트게임",
+      "difficultyId": "light_family",
+      "difficultyWeight": 1.8,
       "moodTags": [],
       "playTags": [
         "card_play",
         "strategy"
       ],
       "situationTags": [
+        "beginner",
         "couple"
       ],
       "interactionTags": [
-        "competitive"
+        "competitive",
+        "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "card_play",
         "strategy",
+        "beginner",
         "couple",
-        "competitive"
+        "competitive",
+        "low_conflict"
       ],
       "displayTags": [
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -84299,9 +84349,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__original/img/IiugqYTDlz1Rk1EAaEwDxr65YgI=/0x0/filters:format(jpeg)/pic7064178.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__small/img/x0Q2R8xgABJACUHYSCA00a7j3Cg=/fit-in/200x150/filters:strip_icc()/pic7064178.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
