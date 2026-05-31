@@ -16,8 +16,13 @@
     .admin-section-body { display: none; padding: 12px; }
     .admin-section.is-open .admin-section-body { display: block; }
     .admin-req-list { display: flex; flex-direction: column; gap: 8px; }
-    .admin-req-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
-    .admin-req-name { font-size: 14px; font-weight: 600; flex: 1; }
+    .admin-req-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .admin-req-name { font-size: 14px; font-weight: 700; white-space: nowrap; min-width: 0; }
+    /* 회원 카드 전용 */
+    .admin-member-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 11px 14px; }
+    .admin-member-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+    .admin-member-metas { display: flex; flex-wrap: wrap; gap: 6px; }
+    .admin-member-metas span { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-req-content { font-size: 13px; flex: 1; line-height: 1.5; white-space: pre-wrap; color: var(--text); }
     .admin-req-meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-req-requester { font-size: 11px; color: var(--muted); background: var(--bg,#f5f0e8); border-radius: 4px; padding: 2px 7px; white-space: nowrap; }
@@ -213,27 +218,28 @@
 
       // 회원 목록
       const profiles = await window.CottageDB.getAllProfiles();
-      const memberHtml = profiles.length ? profiles.map(p => {
+      const memberHtml = profiles.length ? `<div class="admin-req-list">` + profiles.map(p => {
         const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
         const mins = p.total_minutes || 0;
         const timeStr = mins >= 60
           ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
           : `${mins}분`;
-        // 인트로 닉네임 우선, 없으면 프로필 닉네임, 없으면 실명
         const displayNick = introNickMap[p.user_id] || p.nickname || '';
         const realName = p.real_name || '';
         const primaryName = displayNick || realName || '(닉네임없음)';
         const displayName = (realName && displayNick && realName !== displayNick)
           ? `${escH(displayNick)}<span class="admin-real-name">(${escH(realName)})</span>`
           : escH(primaryName);
-        return `<div class="admin-req-item" data-uid="${escH(p.user_id)}">
-          <span class="admin-req-name">${displayName}</span>
-          <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>
-          <span class="admin-req-meta">최근 ${fmtDate(p.last_seen_at)}</span>
-          <span class="admin-req-meta">방문 ${p.visit_count || 1}회</span>
-          <span class="admin-req-meta">⏱ ${timeStr}</span>
+        return `<div class="admin-member-card" data-uid="${escH(p.user_id)}">
+          <div class="admin-member-name">${displayName}</div>
+          <div class="admin-member-metas">
+            <span>가입 ${fmtDate(p.first_seen_at)}</span>
+            <span>최근 ${fmtDate(p.last_seen_at)}</span>
+            <span>방문 ${p.visit_count || 1}회</span>
+            <span>⏱ ${timeStr}</span>
+          </div>
         </div>`;
-      }).join('') : '<div class="admin-empty">회원 없음</div>';
+      }).join('') + `</div>` : '<div class="admin-empty">회원 없음</div>';
 
       const gameCount  = (gameRes.data||[]).length;
       const snackCount = (snackRes.data||[]).length;
@@ -388,35 +394,49 @@
       }
       html += '</tbody></table>';
 
-      // 사용자별 페이지 체류 (로그인 유저)
-      const profilesMap = new Map((await window.CottageDB.getAllProfiles()).map(p => [p.user_id, p.nickname]));
-      const userPage = new Map();
+      // 사용자별 페이지 체류 (로그인 유저) — 사용자별로 묶기
+      const profilesMap = new Map((await window.CottageDB.getAllProfiles()).map(p => [p.user_id, p.nickname || p.real_name || p.user_id?.slice(0,8)]));
+      const userMap = new Map(); // userId → Map<page, {visits, totalSec}>
       for (const r of rows) {
         if (!r.user_id) continue;
-        const key = r.user_id + '|' + r.page;
-        if (!userPage.has(key)) userPage.set(key, { userId: r.user_id, page: r.page, visits: 0, totalSec: 0 });
-        const u = userPage.get(key);
-        u.visits++;
-        u.totalSec += r.duration_sec || 0;
+        if (!userMap.has(r.user_id)) userMap.set(r.user_id, new Map());
+        const pageMap = userMap.get(r.user_id);
+        if (!pageMap.has(r.page)) pageMap.set(r.page, { visits: 0, totalSec: 0 });
+        const p = pageMap.get(r.page);
+        p.visits++;
+        p.totalSec += r.duration_sec || 0;
       }
-      const userRows = [...userPage.values()].sort((a, b) => b.totalSec - a.totalSec);
 
-      if (userRows.length) {
-        html += `<div style="margin-top:16px;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;">사용자별 상세</div>
-          <table class="admin-analytics-table">
-          <thead><tr><th>사용자</th><th>페이지</th><th>방문</th><th>총 체류</th><th>평균 체류</th></tr></thead><tbody>`;
-        for (const u of userRows) {
-          const nick = profilesMap.get(u.userId) || u.userId;
-          const avg = u.visits ? Math.round(u.totalSec / u.visits) : 0;
-          html += `<tr>
-            <td>${escH(nick)}</td>
-            <td class="anat-page">${escH(u.page)}</td>
-            <td>${u.visits}회</td>
-            <td>${fmtSec(u.totalSec)}</td>
-            <td>${fmtSec(avg)}</td>
-          </tr>`;
+      if (userMap.size) {
+        html += `<div style="margin-top:20px;font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;border-top:1px solid var(--border,#e8e4dc);padding-top:16px;">👤 사용자별 상세</div>`;
+
+        // 사용자를 총 체류시간 내림차순으로 정렬
+        const sortedUsers = [...userMap.entries()].sort((a, b) => {
+          const totalA = [...a[1].values()].reduce((s, v) => s + v.totalSec, 0);
+          const totalB = [...b[1].values()].reduce((s, v) => s + v.totalSec, 0);
+          return totalB - totalA;
+        });
+
+        for (const [userId, pageMap] of sortedUsers) {
+          const nick = profilesMap.get(userId) || userId.slice(0,8) + '…';
+          const totalSec = [...pageMap.values()].reduce((s, v) => s + v.totalSec, 0);
+          const sortedPages = [...pageMap.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
+          html += `<div style="margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">총 ${fmtSec(totalSec)}</span></div>
+            <table class="admin-analytics-table">
+              <thead><tr><th>페이지</th><th>방문</th><th>총 체류</th><th>평균 체류</th></tr></thead>
+              <tbody>`;
+          for (const [page, d] of sortedPages) {
+            const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
+            html += `<tr>
+              <td class="anat-page">${escH(page)}</td>
+              <td>${d.visits}회</td>
+              <td>${fmtSec(d.totalSec)}</td>
+              <td>${fmtSec(avg)}</td>
+            </tr>`;
+          }
+          html += `</tbody></table></div>`;
         }
-        html += '</tbody></table>';
       }
 
       body.innerHTML = html;
