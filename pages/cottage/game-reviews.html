@@ -460,7 +460,7 @@
               <label class="pr-field-label">참여자</label>
               <div class="tag-input-wrap prNamesWrap">
                 <div class="tag-chips"></div>
-                <input type="text" class="tag-text-input" placeholder="이름 입력 후 스페이스">
+                <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
                 <input type="hidden" class="prNames">
               </div>
             </div>
@@ -589,8 +589,9 @@
         }
         text.addEventListener('keydown', e => {
           if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault(); // 항상 막아서 다음 칸 이동 방지
             const v = text.value.trim();
-            if (v) { e.preventDefault(); addTag(v); text.value = ''; }
+            if (v) { addTag(v); text.value = ''; text.focus(); }
           } else if (e.key === 'Backspace' && !text.value) {
             const last = chips.querySelector('.tag-chip:last-child');
             if (last) { last.remove(); updateHidden(); }
