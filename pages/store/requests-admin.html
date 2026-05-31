@@ -224,12 +224,12 @@
         const timeStr = mins >= 60
           ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
           : `${mins}분`;
-        const displayNick = introNickMap[String(p.user_id)] || p.nickname || '';
+        const displayNick = introNickMap[String(p.user_id)] || p.nickname || p.real_name || '(닉네임없음)';
         const realName = p.real_name || '';
-        const primaryName = displayNick || realName || '(닉네임없음)';
-        const displayName = (realName && displayNick && realName !== displayNick)
+        // 항상 닉네임(실명) 형식 — 같아도 괄호에 실명 표시
+        const displayName = realName
           ? `${escH(displayNick)}<span class="admin-real-name">(${escH(realName)})</span>`
-          : escH(primaryName);
+          : escH(displayNick);
         return `<div class="admin-member-card" data-uid="${escH(p.user_id)}">
           <div class="admin-member-name">${displayName}</div>
           <div class="admin-member-metas">
@@ -409,9 +409,8 @@
         const profileNick = p.nickname || '';
         const realName = p.real_name || '';
         const displayNick = introNick || profileNick || realName || uid.slice(0,8) + '…';
-        const displayStr = (realName && displayNick && realName !== displayNick)
-          ? `${displayNick}(${realName})`
-          : displayNick;
+        // 항상 닉네임(실명) 형식
+        const displayStr = realName ? `${displayNick}(${realName})` : displayNick;
         return [p.user_id, displayStr];
       }));
       const userMap = new Map(); // userId → Map<page, {visits, totalSec}>
