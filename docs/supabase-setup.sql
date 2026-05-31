@@ -330,6 +330,19 @@ create policy "anon_select_member_intros"
   to anon
   using (true);
 
+drop policy if exists "anon_delete_member_intros" on public.member_intros;
+create policy "anon_delete_member_intros"
+  on public.member_intros for delete
+  to anon
+  using (true);
+
+drop policy if exists "anon_update_member_intros" on public.member_intros;
+create policy "anon_update_member_intros"
+  on public.member_intros for update
+  to anon
+  using (true)
+  with check (true);
+
 
 -- ── 마이그레이션: game_play_records 컬럼 추가 ─────────────
 alter table public.game_play_records
