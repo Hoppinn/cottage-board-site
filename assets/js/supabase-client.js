@@ -214,6 +214,23 @@
     }
   }
 
+  async function getPlayerNames() {
+    try {
+      const { data } = await db
+        .from("game_play_records")
+        .select("player_names")
+        .not("player_names", "is", null)
+        .neq("player_names", "");
+      if (!data) return [];
+      const names = data.flatMap(r =>
+        (r.player_names || "").split(",").map(n => n.trim()).filter(Boolean)
+      );
+      return [...new Set(names)].sort();
+    } catch (_) {
+      return [];
+    }
+  }
+
   async function getAllPlayRecordsForHistory(limit = 500) {
     try {
       const { data } = await db
@@ -544,6 +561,7 @@
     updateComment,
     getGamePlayRecords,
     getGroupNames,
+    getPlayerNames,
     getAllPlayRecordsForHistory,
     getGameLikeCount,
     toggleGameLike,

@@ -354,6 +354,7 @@
       const groups = await window.CottageDB?.getGroupNames() || [];
       if (!groups.includes('코티지보드 동호회')) groups.unshift('코티지보드 동호회');
       window._prGroups = groups;
+      window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
 
       panel.innerHTML = `
         <div class="pr-meta-grid">
@@ -788,10 +789,11 @@
           // 모임명 자동완성
           attachAc(form.querySelector('.pie-group'), () => window._prGroups || []);
 
-          // 참여자 이름 자동완성 (기존 기록에서 추출)
-          const allNames = [...new Set(
+          // 참여자 이름 자동완성 (전체 기록 기반 + 현재 뷰 보완)
+          const viewNames = [...new Set(
             recordsData.flatMap(r => (r.player_names||'').split(',').map(n => n.trim()).filter(Boolean))
           )];
+          const allNames = [...new Set([...(window._prPlayerNames||[]), ...viewNames])];
           attachAc(form.querySelector('.pie-names'), () => allNames);
 
           form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
