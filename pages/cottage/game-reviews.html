@@ -884,7 +884,6 @@
       }
 
       let html = '';
-      let first = true;
       const sortedGroups = [...groups.entries()].sort((a, b) => {
         const latestA = Math.max(...[...a[1].keys()].map(d => new Date(d).getTime() || 0));
         const latestB = Math.max(...[...b[1].keys()].map(d => new Date(d).getTime() || 0));
@@ -893,7 +892,7 @@
       for (const [groupName, dateMap] of sortedGroups) {
         const label = groupName || '기타 기록';
         const totalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
-        html += `<div class="pr-session${first ? ' is-open' : ''}">
+        html += `<div class="pr-session">
           <button class="pr-session-hd" type="button">
             <span class="pr-session-date">${escH(label)}</span>
             <span class="pr-session-summary">${dateMap.size}회 · ${totalGames}게임</span>
@@ -933,7 +932,6 @@
         }
 
         html += `</div></div>`;
-        first = false;
       }
       return html;
     }
@@ -947,10 +945,9 @@
       }
 
       let html = '';
-      let first = true;
       for (const [gameId, recs] of games) {
         const gameName = getGameName(gameId);
-        html += `<div class="pr-session${first ? ' is-open' : ''}">
+        html += `<div class="pr-session">
           <button class="pr-session-hd" type="button">
             <span class="pr-session-date">${escH(gameName)}</span>
             <span class="pr-session-summary">${recs.length}회 플레이</span>
@@ -958,7 +955,6 @@
           </button>
           <div class="pr-session-body">${buildGameBody(recs, user)}</div>
         </div>`;
-        first = false;
       }
       return html;
     }
