@@ -489,7 +489,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "유전자 타워를 쌓는 덱스터리티 게임. DNA 나선을 표현한 독특한 타워를 균형 있게 쌓아올립니다."
     },
     "cottage": {
       "status": "active",
@@ -609,7 +609,7 @@ const gameData = {
         "Ryo Kawakami"
       ],
       "description": "After conducting a s&eacute;ance in an old mansion, the medium in charge of establishing contact with the afterlife, who claims to be a descendant of witches, appears dead in the basement of the building. The suspects in the murder are the participants in the meeting: a university professor, a painter, the chauffeur of the house, the man of the mansion and five other assistants. Do the strange legends about monsters capable of controlling humans that are still transmitted in the region have something to do with it?\n\nThis original game from Japanese lands swells the catalogs of the murder mystery genre, increasingly widespread in the international recreational arena.\n\nWhat is a murder mystery?\nIn this deductive genre, each player plays the role of a character with the dual purpose of clarifying a mystery and simultaneously achieving their own goals. The investigation, the negotiations with the rest of the cast and the exchange of information are fundamental pieces to solve the crime, but we must not forget that the murderer is one of you. You cannot believe everything they tell you, but neither can you win without trusting someone ... Enjoy this unique experience that, although used only once, will leave you wanting more.",
-      "descriptionKo": ""
+      "descriptionKo": "저택에서 강령술 의식 후 무당이 죽은 채 발견됩니다. 참가자 중 한 명이 살인범. 각 플레이어는 서로 다른 캐릭터를 맡아 독립적인 승리 조건을 갖고 추리하는 미스터리 파티 게임입니다."
     },
     "cottage": {
       "status": "active",
@@ -1140,7 +1140,7 @@ const gameData = {
         "佐藤 雄介 (Yusuke Sato)"
       ],
       "description": "Don&rsquo;t Mess with Cthulhu is a social deduction game with secret identities. Players are either Investigators trying to keep Cthulhu from waking and controlling the world, or Cultists that want to bring the world to a disturbing end.\n\nThe game takes place over four rounds. The Investigators must uncover all the Elder Signs to win; the Cultists win when Cthulhu is revealed or if the game ends before all the Elder Signs are discovered.\n\nBefore each round players receive a number of Investigation cards, which they look at but then shuffle and put in front of themselves so they know what cards they have, but they don't know which card is which.  Each round has a number of actions equal to the number of players in the game.  Players take actions to reveal Investigation cards, and gather all unrevealed cards are shuffled an redistributed evenly among the players.\n\nReveal Cthulhu, and the Cultists win instantly.  Reveal all the Elder Signs, and the Investigators win.  If you want to play multiple rounds (it's highly recommended), the losers in each game get Insanity tokens.  Get three tokens, and the night is over with the winner(s) being those most sane.\n\nDon&rsquo;t Mess with Cthulhu Deluxe is a new edition of this game with the Necronomicon and Objects of Power that allows for play with 4-8 players.",
-      "descriptionKo": ""
+      "descriptionKo": "크툴루를 깨우려는 컬티스트와 이를 막으려는 조사관이 비밀 정체를 숨기며 맞서는 사회적 추론 게임. 4라운드 동안 장로 표식을 모두 찾으면 조사관 승리, 크툴루가 공개되면 컬티스트 승리."
     },
     "cottage": {
       "status": "active",
@@ -1266,7 +1266,7 @@ const gameData = {
         "Olivier Mousseau"
       ],
       "description": "In Tap the Table! players take turns to propose aloud a solution that fits the criteria on the cards in the middle of the table. The criteria accumulate until an answer is declared void by the other players&hellip; who tap their fists on the table! (Yes, really!) Tokens are given out as penalties, and the player with the least tokens at the end of the game is declared the winner.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "돌아가며 테이블 위 카드 조건에 맞는 답을 크게 말합니다. 틀린 답이라고 판단하면 다른 플레이어들이 테이블을 손으로 탁! 칩이 가장 적은 플레이어가 승리하는 순발력 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -1408,7 +1408,7 @@ const gameData = {
         "Dongxu Li"
       ],
       "description": "A fast-paced social deduction game for 4-8 players in a fantasy themed world.\n\nPlay either as one of the normal sleepyheads dreaming about the taste of delicious cheese in tomorrow's meal OR\nas the thief trying to steal away the cheese for his own belly.\nAs a thief clever enough, you might have to make a cut to your fellow minions so as to sneak away successfully.\n\nNo moderator. No player elimination. No set pattern.\n\nCheese Thief is different from other similar games in social deduction genre in that it uses die-face combinations in its core mechanism to provide countless replayable scenarios.\n\nOne night phase to setup. One die-face to provide genuine information. One vote down to decide who gets the cheese in the end.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "4~8인용 사회적 추론 게임. 대부분은 치즈 꿈을 꾸는 주민이지만, 도둑은 몰래 치즈를 훔치려 합니다. 진행자 없이 주사위 조합으로 매번 새로운 시나리오가 펼쳐지며 탈락자도 없습니다."
     },
     "cottage": {
       "status": "active",
@@ -1537,7 +1537,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "A small village where werewolf lore remains. The morning after an ancient festival, a traveling merchant was found dead. The body was horribly beaten, hair plucked, and throat gutted - as if he had been attacked by a werewolf. The blacksmith's wife had been found dead in the same manner two months earlier in the village. Was this really the work of a werewolf?　Where did the knight sent from King's Landing disappear to?　Why are there two fortune tellers..?\n\nIn this genre, each player plays a different character, and each character is given a separate winning condition. Other players' winning conditions are unknown, and after the end of the game, all players who achieve the conditions become winners.",
-      "descriptionKo": ""
+      "descriptionKo": "늑대인간 전설이 남아있는 마을, 축제 다음 날 아침 상인이 시체로 발견됩니다. 각 플레이어는 고유한 캐릭터와 승리 조건을 가지고 범인을 추리하는 미스터리 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -1659,7 +1659,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "Once every ten years, vampires gather in a town in the far north.\nOn the night of the great gathering to decide how to treat the humans, an incident was discovered just before the opening of the gathering.\nWhat was found was a charred, blackened corpse. The number two vampire of one of the two opposing factions had been destroyed. Which was the victim?　The higher ranking vampires glaring at each other. The newcomers are trying to solve the case for a hidden purpose. Vampire hunters' traps are hidden in plain sight. And the shadow of an old vampire from the distant past.\nWho has achieved redemption...?",
-      "descriptionKo": ""
+      "descriptionKo": "10년마다 흡혈귀들이 모이는 집회에서 살인 사건이 발생합니다. 적대하는 파벌의 흡혈귀들, 숨겨진 목적을 가진 신참들 속에서 범인을 찾는 흡혈귀 테마 추리 게임."
     },
     "cottage": {
       "status": "active",
@@ -2225,7 +2225,7 @@ const gameData = {
         "Kuraki Mura"
       ],
       "description": "Tofu Kingdom, a.k.a. Princess Legend, is a deduction game involving seven characters. The player assuming the role of Prince Mochi asks each of the other players one question, then guesses which player plays the role of Princess Tofu, the love of Prince Mochi. When answering Prince Mochi's questions, the other players must either lie or tell the truth based on the cards they hold.\n\nThe player who Prince Mochi chooses to be Princess Tofu (whether rightly or wrongly) wins the round and receives the number of points specified on their role card. The player who first accumulates 7 points wins.",
-      "descriptionKo": ""
+      "descriptionKo": "두부 공주를 찾아라! 왕자 역할 플레이어가 다른 플레이어들에게 질문을 하고 누가 공주인지 맞추는 추리 게임. 플레이어들은 자신의 카드에 따라 거짓말하거나 진실을 말해야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -2802,7 +2802,7 @@ const gameData = {
         "Thomas Pauli"
       ],
       "description": "Double Down, first released as Lobo 77, is a simple game of playing cards to add to (or subtract from) a running total. Players must try to avoid creating a total which is a multiple of 11, or taking the total over 77. Chips, given out at the start of the game, are lost as players fail to keep to these rules. The last player with chips remaining wins.",
-      "descriptionKo": ""
+      "descriptionKo": "카드를 내며 합산 수를 11의 배수나 77 초과가 되지 않게 이어가는 게임. 규칙을 어기면 칩을 잃고, 칩이 남은 마지막 플레이어가 승리합니다."
     },
     "cottage": {
       "status": "active",
@@ -4714,7 +4714,7 @@ const gameData = {
         "Rob Piesse"
       ],
       "description": "Sounds Fishy isn't about always knowing the right answer &mdash; it's about being able to spot the fake ones. It's like a mix between The Chameleon and Balderdash.\n\nSounds Fishy is the party game full of strange questions and even stranger answers.\n\nPick up points by eliminating the fake answers that have been invented by the other players &mdash; but be careful! One of them has given you the real answer. Accidentally choose it and you&rsquo;ll lose all your points and your turn.\n\nThink you can tell which answers sound fishy? You&rsquo;ll need to think on your feet, get creative and push your luck to win the game where everyone has an answer for you.",
-      "descriptionKo": ""
+      "descriptionKo": "이상한 질문과 더 이상한 답이 가득한 파티 게임. 다른 플레이어들이 지어낸 가짜 답을 찾아내야 하지만, 실제 정답을 고르면 포인트를 모두 잃습니다. 눈치와 창의력의 대결."
     },
     "cottage": {
       "status": "active",
@@ -5657,7 +5657,7 @@ const gameData = {
         "Lukas Zach"
       ],
       "description": "Castle of the Devil is a 4-8 player card game.\n\nAll players are passengers within a carriage that is rushing to Devil's Castle. They each act as a member of a secret association, but no one knows who is friend and who is foe.\n\nEach player starts in one of two secret associations. He also gets a secret profession with a special ability. So at the beginning of the game you have no information about the membership and the professions of the others. To win the game, each association has to collect 3 defined artifacts jointly. Therefore you have to find out who your allies are and where to find the artifacts among the other secret objects that are in possession of other players. You can get this information during the game either by trading objects with other players, because every object has a special ability, e.g. \"Trade it in and you may take a look at your trading partners-association.\" or by struggling with other players, because the winner of a struggle can view the cards of the underdog and steal one of them. But be careful, all players can support the attacker OR defender in a struggle. If they know about your identity but you don't know theirs it may be risky to struggle.\n\nTurn actions, one of:\nTrade\nDuel\nSpy - Choose another player and draw one random object card from her/his hand. Look at this object without revealing it to the other players. Then give it back to her/him.\nDeclare Victory by naming your team and who has the three items, starting with yourself, OR declare the opposing team and their items.\n\nIf someone refuses a trade you offer, you get a duel token as compensation. These tokens are used as extra votes that can be applied in future duels.\nDuels: Everyone declares sides secretly and simultaneously. Then anyone can apply items, professions and duel tokens in any order. Players must declare for one or the other and abstentions are not allowed.\n\nVictory: Declare Victory by naming your team and who has the three items, starting with yourself, then one by one. If you name players on your team incorrectly or they don't have the object(s) you lose. You can also declare victory by announcing the opposing team and the members of that team holding their objects by naming them, as firstly part of the team, and secondly that they have a relevant object. If you get the player's team wrong or they don't have the object(s) you lose.\n\nReimplements: Die Kutschfahrt zur Teufelsburg",
-      "descriptionKo": ""
+      "descriptionKo": "악마의 성으로 달려가는 마차 안, 승객들은 두 비밀 조직 중 하나에 속해 있습니다. 4~8인용 카드 게임으로, 서로 누가 같은 편인지 파악하며 3개의 유물을 먼저 모으는 조직이 승리합니다."
     },
     "cottage": {
       "status": "active",
@@ -5794,7 +5794,7 @@ const gameData = {
         "Mike Petty"
       ],
       "description": "Your goal in What's It To Ya?, a.k.a. Oh, Really!, is to think like the crowd &ndash; or at least like your partner. Five item cards &ndash; such as \"Hope\", \"Garbage Collectors\", \"Underwear\", \"Wisdom\", and \"Hearing\" &ndash; are placed on the table next to letters A-E. Each player then secretly places rank cards in order based on which item is most important to her: \"B\" first since you don't want to live in filth, then \"D\" because being wise is next most important after a clean home, and so on.\n\nPlayers then reveal their cards, showing all the cards in the first rank, then the second rank, and so on. Whichever letter appears the most in a position is the crowd favorite; those letters stay revealed, while all other letters are turned face-down again. Whichever player (or players) has the most cards revealed at the end of a round scores a point; if a player has all five cards revealed, she scores two points. Whoever scores seven points first wins.\n\nWhat's It To Ya? can also be played in teams, with one player on a team trying to match the ranking of the other member. Scoring is handled the same as in the group game, and the first team to earn seven points wins.",
-      "descriptionKo": ""
+      "descriptionKo": "파트너와 같은 방식으로 생각하는 게임. 테이블의 5가지 항목을 각자 중요도 순으로 비밀 순위를 매기고, 파트너와 얼마나 일치하는지 겨루는 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -5919,7 +5919,7 @@ const gameData = {
         "(Uncredited)"
       ],
       "description": "Variation of UNO celebrating the 10th Anniversary of Pok&eacute;mon.  Cards feature various Pok&eacute;mon, some themed to the cards they're featured on (Wobbuffet is on the \"Reverse\" card, Slaking is on the \"Skip\" card, Plusle and Minun are pictured on the \"Draw 2\" card).\n\nWHAT MAKES THIS DIFFERENT FROM TRADITIONAL UNO: Comes with a special \"Trainer\" card that allows the player to exchange all of their cards with one of their opponent's cards.",
-      "descriptionKo": ""
+      "descriptionKo": "포켓몬 10주년 기념 우노. 워버펫은 리버스, 내루미는 스킵, 플러리와 마이농은 드로우 2 카드에 등장. 트레이너 카드로 상대방과 패를 교환하는 특별 규칙이 추가되었습니다."
     },
     "cottage": {
       "status": "active",
@@ -6299,7 +6299,7 @@ const gameData = {
         "Kito Shinma"
       ],
       "description": "Do we really have free will? Who decides this? Are we controlled by what we hear and what we see, even while thinking we decide freely? Insider is a game that deals with these questions. While communicating to others, you have to find the right answers to a quiz or find the \"insider\" who is manipulating the discussion. The insider will do everything to hide their identity while misleading the others.\n\nIn more detail, players are assigned roles at random. One player is the \"master\", and they secretly select a word from a set given in a deck of cards. (In a variant given in the rulebook, they can freely select and write down a word.) The \"insider\" player, whose role is not known to the other players, will then secretly view the word. The rest of the players are known as \"commons\". The commons then have approximately five minutes in which to ask the master \"yes\" or \"no\"-type questions so that they can deduce the secret word. The insider attempts to secretly lead the commons towards the correct word. If the commons fail to guess the correct word, everyone loses.\n\nIf, however, the word is correctly guessed in the allowable time, the master flips the sand timer, and the commons and master have until the sand runs out to discuss the game and deduce the identity of the insider. If they guess correctly, they win the game together; if they do not, the insider wins.",
-      "descriptionKo": ""
+      "descriptionKo": "퀴즈를 맞히는 것이 목표지만, 토론을 은밀히 조종하는 내부자(인사이더)도 찾아야 합니다. 자유롭게 토론하는 것 같지만 누군가에게 조종당하고 있을 수도 있는 심리전 게임."
     },
     "cottage": {
       "status": "active",
@@ -6441,7 +6441,7 @@ const gameData = {
         "Alan R. Moon"
       ],
       "description": "Diamant &mdash; also published as Incan Gold &mdash; is a quick, fun, press-your-luck game. Players venture down mine shafts or explore paths in the jungle by turning up cards from a deck and evenly sharing the gems they find on the way, with any leftover gems being placed on the card. Before the next card is revealed, you have the chance to leave the mine and stash your holdings, including any gems you get on the way out.\n\nWhy would you leave? Because the deck also contains hazards: scorpions, snakes, poison gas, explosions and rockfalls. When a particular hazard is revealed for the second time (e.g., a second scorpion), anyone still in the shaft or on the path has to drop all the gems they've collected that round and flee for safety. The trick is that as more players leave each turn, your share of the pie grows larger, which will perhaps inspire you to explore deeper &mdash; but at the risk of ending up with nothing.\n\nAll editions of Incan Gold and later editions of Diamant include five artifact cards that are shuffled into the deck of gem and hazard cards, either one per round or all at once. When an artifact card is revealed, no one can take this card and it's placed on the path. If exactly one player leaves at the end of a turn, they collect not only all gems that remain on the path, but the artifact as well, which is worth extra points at the end of the game.",
-      "descriptionKo": ""
+      "descriptionKo": "광산이나 정글을 탐험하며 보석을 모읍니다. 위험 카드가 같은 종류로 두 번 나오기 전에 빠져나가야 합니다. 욕심을 부리면 모든 것을 잃는 눈치 보기 게임 (다이아몬트)."
     },
     "cottage": {
       "status": "active",
@@ -6571,7 +6571,7 @@ const gameData = {
         "Dominic Crapuchettes"
       ],
       "description": "Wits & Wagers Family is the family version of the most award winning party game in history.\nThis edition is more simple, has less down time, and is more portable than the original Wits & Wagers.  It also removes the \"gambling\" element and has questions that are appropriate for kids and the whole family.  Most importantly, Wits & Wagers Family makes use of the beloved Meeple playing piece!\n\nHow to Play\n1) A question is asked.\n2) Everyone writes down a guess.\n3) The guesses are placed face-up on the table and ordered smallest to largest.\n4) Place your Meeples on the guess that you think is closest to the right answer.\n\nFeeling confident?  Place a Meeple on your guess.\nThink your kids knows better?  Place your Meeples on their guess.\nHave no idea?  Bet on any guess and hope you get lucky!\n\nScoring\nYou can score up to 4 points on each question:\n 1 point for correctly placing the Small Meeple\n 2 points for correctly placing the Large Meeple\n 1 point if your guess is closest\n\nThe first player to 15 points wins.\n\nContents\n125 Question Cards (150 in first edition)\n5 Dry Erase Boards\n5 Dry Erase Pens\n1 Permanent Answer Board (with a \"1\")\n5 Large Meeples (worth 2 points)\n5 Small Meeples (worth 1 point)\n1 Dry Erase Score Board\n1 Full-color Rules",
-      "descriptionKo": ""
+      "descriptionKo": "위트 앤 웨거스 패밀리 에디션. 숫자 추측 질문에 답을 쓰고, 가장 정확하다고 생각하는 답에 미플을 놓습니다. 아이들도 즐길 수 있는 가족용 버전으로 베팅 요소가 제거되었습니다."
     },
     "cottage": {
       "status": "active",
@@ -7286,7 +7286,7 @@ const gameData = {
         "Ludovic Maublanc"
       ],
       "description": "In an abandoned warehouse a gangster band is splitting its loot, but they can't agree on the split! It's time to let the guns talk and soon everyone is aiming at everyone. The richest surviving gangster wins the game!\n\nCa$h 'n Guns helps you relive the best scenes of your favorite gangster movies. The goal is to have more money than anyone else after eight rounds while still being alive.\n\nEach round, one player is the Boss, and he controls the pace of play. First, loot cards are revealed on the table to show what's up for grabs. Next, players load their guns by secretly selecting either a \"Bang!\" or a \"Click! Click!\" card from their hand. The Boss counts to three, and on \"Three\" each player points his foam gun at someone else; due to his status, the Boss can tell one player who's pointing a gun at him that he needs to point it in another direction. After a pause to observe threats and measure the seriousness in an opponent's eyes, the Boss counts to three again and anyone who doesn't want to risk getting shot can chicken out and remove themselves from the round.\n\nEveryone who's pointing a gun at someone still in the round now reveals their card, and anyone who's the target of a \"Bang!\" takes a wound marker and gets none of the available loot. Starting with the Boss, everyone still in the round takes one loot card at a time from the table &mdash; money, diamonds, paintings, the position of Boss, medical care (to remove a wound), or a new bullet (to add a \"Bang!\" card to your hand) &mdash; until everything has been claimed.\n\nAfter eight rounds, the game ends. Whoever has the most diamonds receives a big bonus, and paintings score based on the number of them that you've collected. Whoever has the most valuable stash wins!",
-      "descriptionKo": ""
+      "descriptionKo": "갱단이 전리품을 나누다 총을 겨누기 시작합니다! 8라운드 동안 포폼 총으로 협박하고, 블러핑하며 살아남아 가장 많은 돈을 챙기는 갱스터 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -8203,7 +8203,7 @@ const gameData = {
         "Don Eskridge"
       ],
       "description": "In Quest, all will show their true colors as Good and Evil struggle for the future of civilization. Hidden amongst King Arthur&rsquo;s loyal servants are Mordred&rsquo;s unscrupulous minions. These forces of Evil are few in number, but if they go unknown, they can sabotage Arthur&rsquo;s great quests.\n\nPlayers are secretly dealt roles that determine if their allegiance is to Good or to Evil. Then, players debate, reason, and lie as they decide who to send on Quests&mdash;knowing that if just one minion of Mordred joins, the Quest could fail. Quest includes 25 different characters and many different ways to play the base game.\n\nQuest also includes the Director's Cut, a personal recommendation from the designer about the preferred way to play Quest.\n\n\nErrata:Page 7 of the rulebook should say: (for non-Director's Cut version)\n\nThree successful Quests&mdash;Good wins! The game is over.\n\nNote: When using the optional Blind Hunter, the Blind Hunter reveals themself and a Hunt occurs (see page8). There is no discussion, nor Good's Last Chance.\n\nWhile the Blind Hunter is listed as optional, that role should always be included when including any named Good roles to provide a penalty for claiming.\n\nThe above Errata rule does not apply to the Director's Cut.",
-      "descriptionKo": ""
+      "descriptionKo": "아서왕의 신하들 속에 모드레드의 부하들이 숨어 있습니다. 선과 악이 퀘스트 성패를 두고 거짓말과 추론으로 맞서는 숨겨진 역할 게임. 25가지 다양한 캐릭터가 포함되어 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -8515,7 +8515,7 @@ const gameData = {
         "Aurélien Picolet"
       ],
       "description": "Your goal in Top Ten is to survive five rounds, so you and your fellow players need to figure out how to get things in order!\n\nTo start the game, place a number of unicorn tokens on the game board. Choose one player to be the round's chief. That player gives all players a random card numbered 1-10, then they read one of the five hundred theme cards included in the game, e.g., \"Batman wants to replace Robin to fight the bad guys. Create a new duo 'Batman and ...' from the worst to the best.\" The chief looks at their number, then gives an answer based on their number. If they have a 1, they want to give the worst possible suggestion; if a 10, the best; if a 5-7, somewhere in the middle.\n\nEach other player then gives an answer to this theme based on the number they were dealt, then the chief needs to decide who has the lowest number, then the next lowest, and so on. For each mistake, the chief flips a unicorn token over to its poop side.\n\nIf all the unicorns have left by the end of the fifth round, leaving you with nothing but poop, then you lose. Otherwise you win!",
-      "descriptionKo": ""
+      "descriptionKo": "각자 1~10 숫자 카드를 받고, 테마에 맞는 답을 숫자 순서대로 발표합니다. 대장이 정한 테마에 가장 잘 맞는 순서를 맞추는 협력 랭킹 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -8655,7 +8655,7 @@ const gameData = {
         "Rick Soued"
       ],
       "description": "Tumblin' Dice is a dexterity dice game in which players take turns sliding, rolling, or flicking one of their dice down stepped surface. After all players have launched their four dice, they score points, multiplying the value of the die roll by 1&times;, 2&times;, 3&times;, or 4&times; depending on which area of the board the die has landed. (Dice which land in the 0&times; region are immediately removed from play.) After four rounds, the player with the most points win.\n\nTumblin' Dice Jr. is a \"travel\" version of this game.\n\nNote that the player count of Tumblin' Dice has varied across multiple editions, with some sets having only four colors of dice and others having up to six colors. In addition, some sets have a -1x scoring area in place of or preceding 0x.",
-      "descriptionKo": ""
+      "descriptionKo": "계단 모양 보드에서 주사위를 굴려 멀리 보내는 덱스터리티 게임. 착지 구역에 따라 주사위 숫자에 1~4배 곱한 점수를 얻습니다. 4라운드 후 가장 높은 점수를 얻은 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -9756,7 +9756,7 @@ const gameData = {
         "Wolfgang Kramer"
       ],
       "description": "Jalape-NO!, first released as Pepper, is a trick-taking game in which you want to dodge the spiciness to end up with the lowest score possible.\n\nThe deck consists of 108 cards (102 number cards and 6 pepper cards), with cards being numbered 1-18 in six colors and with the 1s being peppers. Based on the player count, you use 4-6 colors of cards ranging from 1-9 to 1-18.\n\nAt the start of each round, you receive 12 cards in hand, and you must place any peppers on the table in front of you. The lead player in a trick plays any card from their hand or one of their peppers. Each other player must follow suit, if possible, except that you are not forced to play the matching pepper card, should you have it. (However, if you do have it, you cannot play a pepper of another color to this trick.) Whoever plays the highest card in the suit led wins the trick and leads the next trick. If you win a pepper in a trick, place it on the table in front of you; you can play this pepper on a future trick, whether to lead off the trick or to play it on a trick that's already in progress.\n\nAs soon as a player has no cards in hand, the round ends. All players add any cards in hand to the cards in front of them, whether peppers or cards claimed in tricks. Each pepper you have is worth 2 points, and each card in the same suit as a pepper you have is worth 1 point. After five rounds, the player with the lowest score wins.",
-      "descriptionKo": ""
+      "descriptionKo": "트릭 테이킹 게임으로 최대한 점수가 낮아야 이깁니다. 페퍼(1) 카드가 핵심으로, 매운 맛을 피하며 가장 낮은 점수로 게임을 마치는 플레이어가 승리합니다."
     },
     "cottage": {
       "status": "active",
@@ -10819,7 +10819,7 @@ const gameData = {
         "Jong-Wan Jo"
       ],
       "description": "A famous novelist was murdered by someone. At the crime scene, there was a dying message left by the novelist.\nFrom the novelist's dying message, can you determine the killer's occupation, weapon, and motive?\n\nThis is a cooperative deduction game for 2 to 6 players.",
-      "descriptionKo": ""
+      "descriptionKo": "유명 소설가가 살해됩니다. 현장에 남겨진 다잉 메시지를 단서로 범인의 직업, 무기, 동기를 추리하는 2~6인 협력 추리 게임. 공범·만화가 확장 포함."
     },
     "cottage": {
       "status": "active",
@@ -10946,7 +10946,7 @@ const gameData = {
         "Lee Ju-Hwa"
       ],
       "description": "At the start of the racing card game Minuscule, each player randomly receives two betting cards (out of 14) and five action cards (out of 33). A betting card is numbered from 1 to 7, with two copies of each card.\n\nBeginning with the starting player, each player lays one of the seven critter cards on the table, adding it to the foremost or hindmost position. At the end of the initial set up, the seventh critter card is flipped, marking it as the \"dark horse\" in the race. On a player's turn, they must play an action card and execute its effect, e.g., moving the fourth critter card forward or backward two spaces, moving the number 6 critter card forward or backward one space, or exchanging one of your betting cards with an unused betting card.\n\nAdditionally, the player can pick up one of the three \"dark horse\" tokens, which is worth 5 points if the \"dark horse\" ends the race in the top three positions; if not, that token is worth -3 points.\n\nAfter five turns, each player reveals their two betting cards and receives points according to the matching critter card's position: 10, 8, 6, 4, 3, 2, and 1 point(s) for first through seventh place. After accounting for the dark horse tokens, whoever has the most points wins.\n\nMinuscule was first released under the title Dark Horse with a horse-racing theme.",
-      "descriptionKo": ""
+      "descriptionKo": "7종의 생물 카드를 앞이나 뒤에 놓으며 경주를 진행합니다. 베팅 카드로 1~7위 말에 배팅하고, 액션 카드로 순위를 바꿔가며 자신이 베팅한 말을 승리시키는 경마 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -12718,7 +12718,7 @@ const gameData = {
         "Yabuchi Ryoko"
       ],
       "description": "This party game revolves around the excitement of shouting out famous or favorite lines that match a given theme. Players decide on a memorable phrase or quote that aligns with the theme of a drawn card. When that card appears again, everyone races to be the first to accurately shout out their chosen line.\n\nThe game combines quick reflexes with a fun and lighthearted atmosphere, making it accessible and enjoyable for players of all ages. The cards feature a mix of suggested phrases and cute, friendly characters, adding to the charm and humor of the experience.\n\nThe goal of the game is to be the fastest and most accurate in recalling and shouting out your chosen lines, which leads to lots of laughter and excitement as players compete to outwit each other. With simple rules and high flexibility, the game is perfect for casual gatherings, offering a fun and engaging way to bring people together.\n\n&mdash;description from designer",
-      "descriptionKo": ""
+      "descriptionKo": "테마 카드가 나오면 자신이 고른 명대사를 빠르게 외쳐야 합니다. 이미 배정한 대사가 정확히 맞아 떨어지는 테마 카드가 나오면 누가 먼저 외치느냐 겨루는 순발력 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -12961,7 +12961,7 @@ const gameData = {
         "Manfred Reindl"
       ],
       "description": "In Mino Dice, first released as Skull King: Das W&uuml;rfelspiel, players try to predict the result of dice battles, and whoever predicts most accurately will come out the winner of the contest.\n\nThe game includes seven types of dice: minotaurs, griffins, mermaids, and four types of number dice. The game lasts 6-8 hands depending on the number of players, and in each round each player draws a number of dice from the bag equal to the current hand, e.g., five dice for the fifth hand, then places them behind their screen, keeping these dice a secret from all. After getting their dice, each player simultaneously bids the number of tricks they think they'll claim during the round by putting out fingers on their hand. Record these bids on the scoresheet.\n\nThe first player in a hand chooses a die from behind their screen, then rolls it in public. If they roll a number die, each other player must roll a number die of this color, if possible; otherwise they roll a die of their choice. Alternatively, a player can always roll a minotaur, griffin, or mermaid die. After each player has rolled, see who has the highest die and claims this trick. A rolled flag is a 0 and cannot win the trick. The minotaur beats the griffin, which beats the mermaid, which beats the minotaur &mdash; and all of these special characters beat numbers. If no one rolls a special character, the highest number rolled wins the trick, with a tie being broken in favor of whoever rolled later. The player who wins the trick collects the dice in front of their screen, then chooses a die from their collection to start the next trick.\n\nAfter all the tricks have been claimed, players score points. If you made your bid exactly, score 20 points per trick bid; if you missed your bid, lose 10 points for each trick your bid was off, whether higher or lower. If you bid zero tricks and make it, score 10 points for each trick in the hand; if you miss a 0 bid, lose 10 points for each trick in the hand regardless of how many tricks you made. If you made your bid and captured a minotaur with a mermaid without also capturing a flag, score 50 bonus points; similarly, if you capture a griffin with a minotaur without capturing a flag, score 30 bonus points.\n\nWhoever has the highest total score after the last hand is complete wins.",
-      "descriptionKo": ""
+      "descriptionKo": "주사위를 가방에서 뽑아 화면 뒤에 숨기고 결과를 예측합니다. 미노타우르스, 그리핀, 인어 등 7종류 주사위로 펼쳐지는 배틀에서 가장 정확한 예측을 한 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -13226,7 +13226,7 @@ const gameData = {
         "Maxime Rioux"
       ],
       "description": "Description from the publisher:\n\nItchy Feet: the Travel Game is a race. The goal is to be the first to \"travel\" to the country in the center of the table - but first each player must travel through their own country. Each country has three travel-related items required to travel there. Players need to gather these three items, and hold on to their passport, in order to travel - your hand is like your bag, and you've got to pack it right for your destination.\n\nTo get the items they need, players can choose to draw from the deck, \"recycle\" out of the discard pile, trade, or steal from each other.\n\nThe game also includes five \"extensions\" which players can choose to add to the deck to increase the depth and complexity of the game: Events which affect all players immediately, Special Items which allow special actions, Forbidden Items which prevent travel and are tricky to get rid of, Postcards which provide an alternate win scenario, and Characters which give each player a unique ability.",
-      "descriptionKo": ""
+      "descriptionKo": "여행 준비물 카드 3가지를 모아 목적지 나라로 먼저 이동하면 승리하는 레이스 게임. 드로우, 재활용, 교환, 훔치기로 필요한 아이템을 모으세요."
     },
     "cottage": {
       "status": "active",
@@ -13347,7 +13347,7 @@ const gameData = {
         "Sooyoung Youn"
       ],
       "description": "Betty Botter Bought Some Butter (Tongue-twister) is a game of quickly reading or repeating sentences that are difficult to pronounce quickly. \nword is made of English\nRace to accurately and swiftly read the unfolded word cards to claim victory.\n\nEveryone, you know tongue twisters, right? It's a game where you quickly read sentences that are difficult to pronounce. Quickly read the cards with extraordinary pronunciations without making any mistakes to achieve victory. The set includes 98 word cards/special cards.",
-      "descriptionKo": ""
+      "descriptionKo": "영어 발음하기 어려운 단어 카드를 빠르고 정확하게 읽는 게임. 실수 없이 먼저 읽은 플레이어가 카드를 가져갑니다. 98장의 단어 카드로 혀를 꼬이게 만드는 영어 잰말놀이."
     },
     "cottage": {
       "status": "active",
@@ -13761,7 +13761,7 @@ const gameData = {
         "Andrew Innes"
       ],
       "description": "Anomia plays off the fact that our minds are positively brimming with all sorts of random information: things to eat, pop songs, websites, etc... Sure, under normal circumstances, it's easy to give an example of a frozen food or a dog breed, but you'll find that your brain works a little differently under pressure!\n\nTo play, draw and reveal a card from the center pile. Does the symbol on your card match one on another player's card? If so, you must quickly face-off with the other player by giving an example of the person, place, or thing on their card before they can do the same for yours. If you blurt out a correct answer first, you win their card and the drawing continues.\n\nSounds simple, right? Wrong! Wild cards allow non-matching symbols to match, increasing the number of things to which you must pay attention. Cascading face-offs can occur when you hand over a lost card, thereby revealing a new top card on your play pile.",
-      "descriptionKo": ""
+      "descriptionKo": "카드 심볼이 다른 플레이어와 겹치면 먼저 상대방 카드의 항목 예시를 외쳐야 합니다. 압박감 속에서 단어가 생각나지 않는 아노미아(Anomia) 시스템의 빠른 반응 게임."
     },
     "cottage": {
       "status": "active",
@@ -13896,7 +13896,7 @@ const gameData = {
         "Ikhwan Kwon"
       ],
       "description": "Outcooperate the competition!\n\nSurfosaurus MAX's cards come in seven suits, with values from 01 to 12. The higher a card's value, the fewer victory points are on it.\n\nWhen it is your turn, you play a single hand card and draw a new one immediately. Once the right number of cards has been reached, the one strongest possible combination out of all the cards played by all the players wins. If you contributed a card to the winning combination, you get to score it.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "7가지 슈트, 01~12 숫자 카드. 모든 플레이어가 낸 카드 중 가장 강한 조합을 만든 쪽이 점수를 가져갑니다. 자신의 카드를 기여해 최강 조합에 포함되는 협력-경쟁 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -14149,7 +14149,7 @@ const gameData = {
         "Hajo Bücken"
       ],
       "description": "Got quick reflexes and a good memory? Test your skills in this high-energy card game of musical mayhem. Players must make certain gestures as certain musician cards are turned over.  But make a wrong move and you collect the whole orchestra! Whoever gets rid of their cards first is the maestro!",
-      "descriptionKo": ""
+      "descriptionKo": "뮤지션 카드가 뒤집힐 때마다 특정 제스처를 취해야 합니다. 잘못된 행동을 하면 모든 카드를 가져가야 하는 순발력과 기억력 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -14276,7 +14276,7 @@ const gameData = {
         "Sooyoung Youn"
       ],
       "description": "Mr. Smith Living in Swiss (Tongue-twister) is a game of quickly reading or repeating sentences that are difficult to pronounce quickly. Race to accurately and swiftly read the unfolded word cards to claim victory.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "발음하기 어려운 문장을 빠르고 정확하게 읽는 잰말놀이 카드 게임. 카드를 빠르게 정확히 읽어 승리를 차지하세요."
     },
     "cottage": {
       "status": "active",
@@ -14544,7 +14544,7 @@ const gameData = {
         "Stefan Dorra"
       ],
       "description": "Ahoy, mateys! Time to grab your pirate hats and set sail! Ready to claim the bounty of a lifetime?\n\nSkull Queen is a trick-taking game in which you determine before the game starts whether you will win or lose tricks for every suit. The player who chooses wisely and outplays their opponents will be victorious.\n\nYou&rsquo;re each the captain of a pirate ship, and your lookout has just spotted a ship full of bounty on the horizon. You need to line up your pirates\nso they are ready to board when you attack. Start by placing each Pirate on any one of the 5 spaces on your Plank. Once you&rsquo;ve all played all your cards, for each Pirate you have on your Plank, you score the points shown on the space that Pirate is standing on.\n\nYou play as many rounds as there are players. The player with the most points after the final round wins the game.",
-      "descriptionKo": ""
+      "descriptionKo": "해적 테마 트릭 테이킹 게임. 시작 전 각 슈트에서 이길지 질지 선언합니다. 현명한 예측과 실력으로 상대를 이긴 해적 선장이 승리."
     },
     "cottage": {
       "status": "active",
@@ -14801,7 +14801,7 @@ const gameData = {
         "Craig Van Ness"
       ],
       "description": "Individual battles between famous Star Wars characters set on different board locations. Players choose a major character that is accompanied by one or two minor characters. Each set of characters has its own deck of cards which are used for attack, defense, or special abilities. Each deck is unique with certain special powers relevant to the major character. There are different modes of play; one-on-one battles, up to three teams can play against each other, or up to six players can play a free-for-all battle.\n\nBattle fields included are Geonosis Arena, Emperor's Throne Room, Carbon-Freezing Chamber, and Kamino Platform. The game includes 31 decorated figures from across the entire Star Wars spectrum, 12 character cards (which have major and minor character life trackers on them), 378 action cards (31 per character group), 4 battle field boards, 1 movement die, wound markers, and rules.",
-      "descriptionKo": ""
+      "descriptionKo": "스타워즈 유명 캐릭터들의 1대1 배틀 게임. 각 캐릭터 고유 카드 덱으로 공격, 방어, 특수 능력을 사용합니다. 1대1부터 3팀, 6인 자유전까지 다양한 모드를 즐길 수 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -15058,7 +15058,7 @@ const gameData = {
         "Doug Reuter"
       ],
       "description": "Sequence is a board and card game. The board shows all the cards (except for the Jacks) of two (2) standard 52-card decks, laid in a 10 x 10 pattern. The four corners are free spaces and count for all players equally.\n\nThe players compete to create rows, columns or diagonals of 5 connected checkers placed on the cards that the player has laid down. Two-eyed Jacks are wild, while one-eyed Jacks allow an opponent's checker to be removed. The game ends when someone has reached a specified number of connections.",
-      "descriptionKo": ""
+      "descriptionKo": "해리포터 테마의 시퀀스. 10×10 보드에 카드를 내고 같은 색 체커 5개를 연속으로 놓으면 됩니다. 쌍눈 잭은 와일드, 외눈 잭은 상대 체커 제거. 정해진 시퀀스 수를 먼저 만드는 팀이 승리."
     },
     "cottage": {
       "status": "active",
@@ -15321,7 +15321,7 @@ const gameData = {
         "Zong-Ger(蔥哥)"
       ],
       "description": "Grow the vegetables, raise the sale price, and make a fortune!\n\nVegetable Stock, which debuted as Small Farmer, is a simple card game about vegetable economics. Each round, reveal one more card than the number of players on the table. Each card has three vegetable icons on it, with vegetables coming in five types. Players take turns choosing one of the cards and placing it in their harvest pile face down. The price of the vegetable(s) on the card not chosen goes up &mdash; but if the price goes too high, it crashes, although it can rise again next round.\n\nAfter six rounds, determine your score by multiplying the number of each vegetable you have harvested by the final price of that vegetable. The player with the highest score wins!",
-      "descriptionKo": ""
+      "descriptionKo": "채소 경제 카드 게임. 매 라운드 카드를 골라 수확 더미에 쌓고, 선택받지 못한 채소 가격이 오릅니다. 단, 가격이 너무 오르면 폭락! 최고가에 팔아 가장 많은 돈을 번 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -15434,7 +15434,7 @@ const gameData = {
         "Timofey Bokarev"
       ],
       "description": "Binomial is a logic card game where players aim to get maximum victory points. Unlike russian loto or bingo, players decide for themselves which numbers to create (in the first phase of game) and for what postulate to use them (in the second phase of game).\n\nSo Binomial has two phases. In first, the first player rolls dice 16 times, and from received 16 numerics players create numbers secretly from each other. Then players reveal up to 16 cards from the deck and choose most appropriate numbers from their own for announced postulates on cards. The game ends either when all 16 postulates are revealed, or when at least one player uses all of his numbers. The player with the most victory points is winner!",
-      "descriptionKo": ""
+      "descriptionKo": "이분법(Binomial) 논리 카드 게임. 두 단계로 진행되며, 1단계에서 주사위로 나온 숫자로 비밀리에 수를 만들고, 2단계에서 카드를 공개해 공리에 맞게 활용합니다. 승점이 가장 높은 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -15568,7 +15568,7 @@ const gameData = {
         "Steven Dast"
       ],
       "description": "In the grimy depths of Kulbak Prison, where the greatest Dragul warriors are confined, inmates gather around Nargash the goblin and his bone-carved dice. Best to keep your wits about you. A game of Emerald Skulls is about to begin&hellip;\n\nEmerald Skulls is a push-your-luck, dice gambling game. Attempt to fill the skull board with dice and place speedy, real-time wagers on the outcomes of your opponents&rsquo; rolls.\n\nOn your turn as the tumbler, roll dice and use tricks to place them on the five ascending tiers of the skull. But be warned - once you place dice, you can no longer put them on lower tiers for the rest of your turn!\n\nDuring your opponents&rsquo; turns as tumbler, you are a gambler. Swiftly place bets and counter-bets on the results of the tumbler&rsquo;s rolls. You may wager twice per round, but can only bet while the dice are in the tumbler&rsquo;s hands. So think fast and bet smart - the quicker your wager, the bigger your payout!\n\nWhen the pot of gears runs out, the player with the most claims the victory.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "감옥 배경 주사위 도박 게임. 눈금판을 채우고 상대 굴림에 실시간으로 베팅합니다. 기회를 최대한 활용하되 너무 욕심 부리면 다 잃는 도박사의 짜릿한 눈치 게임."
     },
     "cottage": {
       "status": "active",
@@ -15932,7 +15932,7 @@ const gameData = {
         "Markus Slawitscheck"
       ],
       "description": "Challengers! is an interactive deck-management game for 1-8 players that plays in about 45 minutes independent of player count. With the tournament gameplay style, you meet another opponent every round.\n\nIn the Deck Phase, you choose new members and add them to your deck, which might consist of a wizard, alien, cat, gangster and kraken. 75 distinct characters with more than 40 exciting effects create a unique experience every game. Choose from six different sets and discover new strategies and synergies every game.\n\nIn the Match Phase, stay in flag possession to win the trophy of that round. Try to get the most fans and trophies over the course of seven rounds to be able to qualify for the final. If you can best your opponent in the final, you win Challengers!\n\n(If you think that all sounds a lot like a board game adaption of a digital Autobattler, we are proud to tell you that this is the first of its kind!)\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "1~8인용 덱 빌딩 토너먼트 게임. 45분 내 완료. 마법사, 외계인, 고양이, 갱스터, 크라켄 등 75종 캐릭터를 덱에 추가하며 매 라운드 새 상대와 대결합니다."
     },
     "cottage": {
       "status": "active",
@@ -16201,7 +16201,7 @@ const gameData = {
         "Luffy"
       ],
       "description": "Word Capture needs speed and wit. This game for 2-6 player, and takes 10 minutes to play.\n\nIn Word Capture players has to call an associated word following the calling condition. But be aware of calling with another player at the same time unless you might get a penalty point.\nTo set up, shuffle 40 subject cards playing with 2 to 3 players and 50 cards playing with 4 to 6 players and make a face-down deck on the middle of the table and turn the rest back to the box\nWhen the game begins, one of the players turns the card over and puts it on the table so every player can see the Alphabet on the deck and the subject on the front of the card.\nWhen there is a subject that matches the alphabet, every player has to call a word that is associated with the subject following the calling condition.\nWhen this condition appears players must call a word matching the number of characters shown on the card.\nWhen this condition appears players have to call the number of syllable word that matches with the number of orders they have to call. For example, the first player who calls must call a one-syllable word, and the second player must call a two-syllable word. When playing with 2player, this condition is fixed by calling a five-syllable word.\nWhen this condition appears, the first letter of the word must include the letter that is shown on the card.\nThe last player who didn&rsquo;t call an associated word or a player who didn&rsquo;t follow the condition of calling has to take the subject card that is currently opened on the table as a penalty point.\nAnd when 2 player calls an associated word at the same time they both get a penalty point by one taking from the front opened card and one from the deck.\nWhen there is no alphabet matching with the subject, every player must place their hand on the card which is opened on the table. The last player who placed its hand on the card takes the card and gets a penalty point. If players made a mistake the first player who made the mistake takes the card.\nThe game ends immediately when there is one or less subject card left on the deck and the player with the less card on their front wins the game. In case of a tie, take 8 unused cards from the box and take extra rounds.",
-      "descriptionKo": ""
+      "descriptionKo": "2~6인용 단어 연상 게임. 주어진 조건에 맞는 단어를 먼저 외치는 플레이어가 카드를 가져갑니다. 단, 동시에 다른 플레이어와 같은 단어를 외치면 패널티를 받습니다."
     },
     "cottage": {
       "status": "active",
@@ -16323,7 +16323,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "빠른 단어 연상 게임. 주어진 조건에 맞는 단어를 먼저 외치는 플레이어가 카드를 가져갑니다. 티키타카 버전으로 더 빠른 진행과 새로운 카드가 추가된 에디션."
     },
     "cottage": {
       "status": "active",
@@ -16429,7 +16429,7 @@ const gameData = {
         "Susumu Kawasaki"
       ],
       "description": "A slightly unusual bowling alley is open! Its name is Wonder Bowling. Don't roll the ball here, bang the lane! and hit. Of course, the pins are knocked over, but the important thing is the remaining pins. Because if you kill all of them, it's a penalty, and if you leave only one, it's a strike! The secret to victory is control of the ball stick, neither too strong nor too weak! No bowling experience required! It's an action game that will make you laugh!\n\nWonder Bowling is a bowling game with a difference. The ball doesn't roll, it hits the lane and knocks down the pins with vibration. The important thing is not \"the number of knocked down pins\" but \"the number of standing pins without falling down\". \"Strike!\" Participants take turns hitting lanes and aim to be the first to clear all their goals.",
-      "descriptionKo": ""
+      "descriptionKo": "특이한 볼링 게임! 공을 굴리지 않고 레인을 두드려 핀을 쓰러뜨립니다. 핀을 전부 쓰러뜨리면 패널티, 하나만 남기면 스트라이크! 힘 조절이 승부를 가르는 액션 게임."
     },
     "cottage": {
       "status": "active",
@@ -16677,7 +16677,7 @@ const gameData = {
         "Ken Fisher"
       ],
       "description": "The trick-taking game Wizard uses a sixty-card deck that consists of the traditional 52-card deck (1-13 in four suits) along with four Wizards (high) and four Jesters (low).\n\nPlayers compete over multiple rounds based on the number of players, and whoever ends with the highest score wins. In each round, players are dealt a hand of cards &mdash; one card in the first round, two cards in the second, three in the third, etc. &mdash; then trump is determined by flipping the top card of the undealt deck; if a suit is revealed, that suit is trump, while if the card turned up is a Jester, it is turned down and there is no trump for that round. If the card turned up is a Wizard, the dealer chooses one of the 4 suits as the trump suit. The dealer cannot choose \"no trump\". On the last round of each game all cards are dealt out so there is no trump. Players then state how many tricks they expect to win in the round.\n\nThe playing and winning of the tricks uses mostly standard trick-taking rules. If a player leads a suited card, then all other players must follow suit, if possible. If a player leads a Jester, then the second player determines the suit led. If a player leads a Wizard, then those who follow can play whatever they want. However, in all cases a player may always play a Wizard or Jester, even if they hold cards in the suit led.\n\nAfter each player has played a card, determine the winner of the trick as follows: If one or more Wizards were played, the player of the first Wizard wins the trick, collects the cards, and leads to the next trick. If not, whoever played the highest trump wins the trick. If not, whoever played the highest card of the suit led wins the trick. If all players played Jesters, whoever played the first Jester wins.\n\nAfter all tricks have been played, players tally their score for the round. If a player matched their bid, winning exactly as many tricks as stated at the start of the round, they score 20 points, plus 10 points for each trick taken. If a player missed their bid, they lose 10 points for each trick that they were off, whether they took more or fewer than predicted.\n\nA common variant in Wizard is to not allow the total number of tricks bid in a round to match the round number, thereby forcing (at least) one player to be off each round.",
-      "descriptionKo": ""
+      "descriptionKo": "60장 덱(52장+마법사 4장+광대 4장) 트릭 테이킹. 각 라운드 시작 전 몇 번 이길지 선언하고 정확히 맞추면 보너스 점수. 라운드마다 카드가 한 장씩 늘어나며 진행합니다."
     },
     "cottage": {
       "status": "active",
@@ -16802,7 +16802,7 @@ const gameData = {
         "Alan Stone"
       ],
       "description": "You find yourself in a dystopian cityscape with a few workers at your disposal to make your mark on the world. Like most people in dystopian fiction, your workers are oblivious to their situation. This world is all they've ever known, and you may use them at your whim.\n\nThe world as we know it has ended, and in its place the city of Euphoria has risen. Believing that a new world order is needed to prevent another apocalypse, the Euphorian elite erect high walls around their golden city and promote intellectual equality above all else. Gone are personal freedoms; gone is knowledge of the past. All that matters is the future.\n\nThe Euphorians aren&rsquo;t alone. Outside the city are those who experienced the apocalypse firsthand&mdash;they have the memories and scars to prove it. These Wastelanders have cobbled together a society of historians and farmers among the forgotten scrap yards of the past.\n\nThere is more to the world than the surface of the earth. Deep underground lies the hidden city of Subterra, occupied by miners, mechanics, and revolutionaries. By keeping their workers in the dark, they&rsquo;ve patched together a network of pipes and sewers, of steam and gears, of hidden passages and secret stairways.\n\nIn Euphoria: Build a Better Dystopia, you lead a team of workers (dice) and recruits (cards) to claim ownership of the dystopian world. You will generate commodities, dig tunnels to infiltrate opposing areas, construct markets, collect artifacts, strengthen allegiances, and fulfill secret agendas.\n\nEuphoria is a worker-placement game in which dice are your workers. The number on each die represents a worker's knowledge&mdash;that is, his level of awareness that he's in a dystopia. Worker knowledge enables various bonuses and impacts player interaction. If the collective knowledge of all of your available workers gets too high, one of them might desert you. You also have two elite recruit cards at your disposal; one has pledged allegiance to you, but the other needs some convincing. You can reveal and use the reticent recruit by reaching certain milestones in the game... or by letting other players unwittingly reach those milestones for you.\n\nYour path to victory is paved with the sweat of your workers, the strength of your allegiances, and the tunnels you dig to infiltrate other areas of the world, but the destination is a land grab in the form of area control. You accomplish this by constructing markets that impose harsh restrictions of personal freedoms upon other players, changing the face of the game and opening new paths to victory. You can also focus on gathering artifacts from the old world, objects of leisure that are extremely rare in this utilitarian society. The dystopian elite covet these artifacts&mdash;especially matching pairs&mdash;and are willing to give you tracts of land in exchange for them.\n\nFour distinct societies, each of them waiting for you to rewrite history. What are you willing to sacrifice to build a better dystopia?",
-      "descriptionKo": ""
+      "descriptionKo": "디스토피아 도시 유포리아에서 일꾼 배치로 영향력을 넓히는 전략 게임. 일꾼들이 너무 영리해지면 반란을 일으킵니다! 다양한 파벌과 확장 규칙이 포함된 버전."
     },
     "cottage": {
       "status": "active",
@@ -17038,7 +17038,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "Pokemon Dice Game (aka. Snorlax Dice Game) is based on traditional dice game Yacht.\nOn your turn, you roll 5 dice to fill one of the combination on your score sheet. The dice can be rolled up to three times in a turn to try to make these combinations.\nThe object of the game is to score the most points after 12 rounds.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "포켓몬 야트(Yacht) 주사위 게임. 5개 주사위를 최대 3번 굴려 점수표의 조합을 완성합니다. 12라운드 후 가장 높은 점수를 얻은 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -17284,7 +17284,7 @@ const gameData = {
         "ゆお (Yuo)"
       ],
       "description": "An unknown virus that makes infected people violent has spread and the world has changed completely. A mob rushed to St. Lily&rsquo;s Girls Academy and the students fled to the old school building. There they remain hidden. The girls hold their breath and wait for rescue with anxiety and fear. At dawn, one of their friends died&hellip; they can&rsquo;t leave the corpse as it is as they don&rsquo;t know when help will come.  The girls are divided into groups and try to embalm the corpses with the limited materials in the school while looking for clues to the murderer who may be hiding among them&hellip; in this game, the players become leaders of each team and give instructions to the team members (hands). The last hand is the leaders themselves. Will you be able to reach the truth of the incident and survive the tragedy?\n&mdash;description from the publisher (translated)\n\nIn this quick card game players play cards from hand to either complete the embalming task, to place suspicion on other players, or perform a card's special action. When all players have only 1 card remaining, the game ends. The embalming is successful if the cards played to it meet the target number (based on the number of  players). Players then check their suspicion levels. The player(s) with the highest suspicion are arrested as suspects and cannot win. The remaining players then check the victory conditions of their final hand card in the priority order of the cards. If they meet the card's victory conditions then they have won the game.\n\n&mdash;user summary",
-      "descriptionKo": ""
+      "descriptionKo": "바이러스로 세상이 변한 여학교. 동료의 시신을 처리해야 하는 소녀들의 협력 생존 게임. 제한된 자원으로 역할을 나눠 어려운 상황을 헤쳐나가는 협동 미스터리 게임."
     },
     "cottage": {
       "status": "active",
@@ -17858,7 +17858,7 @@ const gameData = {
         "Vlaada Chvátil"
       ],
       "description": "Some people love to travel. Others love to read about traveling. Imagine an Internet magazine designed to bring these people together. Would you like to join ranks of their travelbloggers?\nTravel Blog is a swift and thrilling game about travelling. Your task is to pick a country or countries most suitable for your trip and to do it faster than your opponents. How many borders do you cross on your trip from France to Russia? Is it more or less than from Norway to Turkey? Detailed knowledge of the map is an advantage, but can be easily beaten by good intuition and fast decision making.\nThe interesting facts about 100 countries and states are here just as a bonus. This is not a trivia game &ndash; Travel Blog keeps to be fun even if you get pretty familiar with the maps. And you can bet you will, after a few games.\n\n(from CGE web site)",
-      "descriptionKo": ""
+      "descriptionKo": "나라들 사이의 국경 수를 추측하는 지리 지식 게임. 프랑스에서 러시아까지 몇 국경을 넘을까? 상대보다 빠르고 정확하게 답해야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -18520,7 +18520,7 @@ const gameData = {
         "Shawn Stankewich"
       ],
       "description": "Point Salad is a fast and fun card drafting game for the whole family. There are over 100 ways to score points. Players may use a variety of strategies and every game of Point Salad is unique!\n\nCards come in six different types of veggies, and the back of each card has a different scoring method. So for instance, one scoring method may award 2 points for every carrot you have, but deduct a point for every onion.  By drafting combinations of veggies and point cards that work for your strategy, you can amass the most points and win.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "이브이 포켓몬 테마 포인트샐러드. 6종 채소 카드와 100가지 이상 점수 방식. 채소와 점수 카드를 드래프팅해 최고의 조합을 만드는 전략 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -18634,7 +18634,7 @@ const gameData = {
         "Maxime Rambourg"
       ],
       "description": "You've found a mysterious box filled with strange cards. As you try to decipher their meaning, you soon realize that you won't be able to do it without help. Surrounded by your friends, you begin to unravel their secret: played the right way, the cards eventually disappear. But they always come back, safely tucked away in the box, for the next game.\n\nIn Pr&eacute;sages, you team up to get rid of your cards until you have only one left in your hand.\n\nEach of your cards interacts with the cards played by your partner, as well as those of your opponents, so you need to play them at the right moment!\n\nThe team that sheds its cards first wins.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "수수께끼 카드들을 팀으로 해결하는 협력 게임. 다른 플레이어가 낸 카드와 상호작용하며 패를 줄여나가 마지막 한 장만 남기는 것이 목표."
     },
     "cottage": {
       "status": "active",
@@ -18754,7 +18754,7 @@ const gameData = {
         "Kevin Lanzing"
       ],
       "description": "The call comes in... \"911, what is your emergency?\"  On the other end is a panicked response of \"FIRE!\" Moments later you don the protective suits that will keep you alive, gather your equipment and rush to the scene of a blazing inferno. The team has only seconds to assess the situation and devise a plan of attack &ndash; then you spring into action like the trained professionals that you are. You must face your fears, never give up, and above all else work as a team because the fire is raging, the building is threatening to collapse, and lives are in danger.\n\nYou must succeed. You are the brave men and women of fire rescue; people are depending on you. This is what you do every day.\n\nFlash Point: Fire Rescue is a cooperative game of fire rescue.\n\nThere are two versions of game play in Flash Point, a basic game and expert game.\nIn both variants, players are attempting to rescue 7 of 10 victims from a raging building fire.\nAs the players attempt to rescue the victims, the fire spreads to other parts of the building, causing structural damage and possibly blocking off pathways through the building.  Each turn a player may spend action points to try to extinguish fires, move through the building, move victims out of the building or perform various special actions such as moving emergency vehicles.  If 4 victims perish in the blaze or the building collapses from taking too much structural damage, the players lose.  Otherwise, the players win instantly when they rescue a 7th victim.\n\nThe expert variant included in the game adds thematic elements such as flash over, combustible materials, random setup, and variations on game difficulty from novice to heroic.  The game includes a double sided board with two different building plans and several expansion maps are available.",
-      "descriptionKo": ""
+      "descriptionKo": "화재 현장에 뛰어드는 소방관 협력 게임. 불길이 번지기 전에 요구조자를 구해야 합니다. 팀원과 역할을 분담하고 불을 진압하며 승리를 목표로 하는 전략 협동 게임."
     },
     "cottage": {
       "status": "active",
@@ -18878,7 +18878,7 @@ const gameData = {
         "Yukihito Morikawa (森川幸人)"
       ],
       "description": "In \"Harvest\", the goal is to harvest a lot of vegetables, but harvesting cannot be done by one person.\nKeep the big vegetables for yourself and the damaged vegetables for the other person.\n\nBegin with connecting field tile each other.\nIt will be harvested when 3 or more vegetables are lined up.\nAll completed vegetables in your field must be harvested even if it is rotten!\n\n『ハーベスト』では、野菜をたくさん収穫することを目指しますが、収穫は一人ではできません。\n大きな野菜は自分のものに、傷んだ野菜は相手のものにしてしまいましょう。\n\n畑が並んだ状態でゲームが始まります。野菜が3個以上並ぶと収穫になります。\n収穫では、自分の畑の野菜を獲得することになります。それが腐っていてもです。",
-      "descriptionKo": ""
+      "descriptionKo": "혼자서는 수확할 수 없는 밭! 밭 타일을 연결하고 채소를 3개 이상 연결하면 수확합니다. 큰 채소는 자신이 가져가고 상한 채소는 상대에게. 더 많은 채소를 거두는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -19006,7 +19006,7 @@ const gameData = {
         "Marie Fort"
       ],
       "description": "Carefully place piece after piece on top of the wobbly stack, and don't be the one makes it all topple!\n\nSplash! is a fast-paced, nail-biting dexterity game. After placing a piece on top of the stack, you get to give the next player a piece of your choice in your own pile that must be added to the stack. The piece must match the previous color or shape, but how it gets placed is up to the next player! When the stack comes crashing down, the player who gave the piece gets a gold gem. The first player to collect three gold gems or run out of pieces wins!",
-      "descriptionKo": ""
+      "descriptionKo": "흔들리는 탑에 조심조심 조각을 쌓는 덱스터리티 게임. 놓은 후 다음 플레이어에게 원하는 조각을 선택해 줄 수 있습니다. 탑이 무너졌을 때 마지막 조각을 준 플레이어가 금 보석을 받습니다."
     },
     "cottage": {
       "status": "active",
@@ -19279,7 +19279,7 @@ const gameData = {
         "Antoine Bauza"
       ],
       "description": "Drivers from all over Europe have arrived and are lined up on the starting line. Consisting of narrow and winding roads, the track is filled with dangers and promises a tricky race. As one of the fastest and fearless pilots in the race, you will try to pass the finish line before your opponents by being the quickest at spotting and grabbing the die which will allow you to move forward.\n\nHurry'Cup is a car racing game where 3 to 6 players face off on tracks that are always different from one game to the next; as decided by the players themselves. Reflexes, dexterity, and risk-taking are the key to stepping first on the podium. It is a tile game with pavement-burning ambiance. Made up of 36 modular tiles, the Hurry'Cup race track offers many game possibilities, making it a new game each time. Hurry'Cup is a game with simple rules and Fast and Furious Fun.",
-      "descriptionKo": ""
+      "descriptionKo": "3~6인 자동차 레이싱 게임. 매 판 달라지는 트랙에서 앞으로 이동하게 해주는 주사위를 가장 빠르게 집어드는 반응 속도 경쟁 게임."
     },
     "cottage": {
       "status": "active",
@@ -19557,7 +19557,7 @@ const gameData = {
         "James Kniffen"
       ],
       "description": "The Lazax Empire has burned to ash, rejected by its subjects. The aftermath was tragedy and petty conflict in equal measure, a time of loss and exhaustion. In the ensuing Dark Years, the factions of the galaxy retreated and recovered their strength. Now, they look upon the stars and see an opportunity&mdash;a chance to reclaim what was lost. A chance to redefine galactic civilization. A chance to leave their mark upon the stars.\n\nTwilight Inscription, an epic roll-and-write game for one to eight players, offers an experience unlike anything Fantasy Flight Games has done before. With a limited pool of resources at your disposal, you&rsquo;ll need to carefully manage Navigation, Expansion, Industry, and Warfare as you amass victory points and earn your right to the throne on Mecatol Rex. Will your faction become the new rulers of the galaxy? Or will your fledgling empire fade into obscurity? Anything can happen in this strategic, infinitely-replayable game!\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "트와일라잇 임페리엄 세계관의 1~8인 롤앤라이트 게임. 은하 문명을 재건하는 서사적 전략 게임으로, 진보·전쟁·정치·물류 4가지 행동으로 승점을 쌓습니다."
     },
     "cottage": {
       "status": "active",
@@ -19972,7 +19972,7 @@ const gameData = {
         "Luke Melia"
       ],
       "description": "1% - A game of Strategic Chance! All you have to do to win is roll 0 with two 10-sided dice. Sounds easy? The chance is 1%! 1% is a fast and fun card game of strategy and probability, with a touch of misdirection! If you can outlast your opponents, you&rsquo;ll be rewarded with a choice: Do you roll the dice and try to win? Or do you sacrifice this turn to increase your chances next time? If there is a next time, that is! Take too long, and another player could snatch victory away from you.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "두 개의 10면 주사위로 0을 굴려야 이기는 카드 게임. 확률은 단 1%! 버티거나 과감히 도전하는 전략과 확률의 게임."
     },
     "cottage": {
       "status": "active",
@@ -20211,7 +20211,7 @@ const gameData = {
         "Connor Reid"
       ],
       "description": "The Marvel version of the chaotically fast-paced cooperative card game 5-Minute Dungeon that lets a group of Marvel heroes battle past Marvel bosses all in less than 5 minutes! Fast and frenetic gameplay gets everyone involved and engaged. Cooperative gameplay encourages communication, interpersonal interaction, and teamwork. 10 Marvel heroes to choose from and 6 progressively difficult Marvel bosses delivers strong re-playability.\n\nIn more detail, players assume the role of one of ten superheroes, each with special cards and abilities. Once the Jarvis-hosted five-minute timer starts, the race is on to defeat all the villains in the mission. In order to defeat a villain, players must match symbols from their hand with ones on the villain's card. At the end of each mission is a powerful super villain &mdash; and after the first super villain is defeated, the campaign continues to the second super villain. Each super villain, and each randomized mission, gets harder until players reach Thanos, the final super villain.",
-      "descriptionKo": ""
+      "descriptionKo": "5분 안에 마블 히어로들이 빌런 보스를 물리치는 협력 카드 게임. 10명의 히어로와 6명의 빌런으로 높은 재플레이성을 자랑합니다."
     },
     "cottage": {
       "status": "active",
@@ -20491,7 +20491,7 @@ const gameData = {
         "(Uncredited)"
       ],
       "description": "Mr. Mouth is a children's action game.  A motorized frog head rotates in the center of an X-shaped board.  Each player uses a spring-loaded hand affixed to each arm of the X to propel plastic housefly pieces into the frog's mouth, which periodically opens and closes.  The first player to flip all ten of his or her flies into the frog's mouth wins.",
-      "descriptionKo": ""
+      "descriptionKo": "모터로 회전하는 개구리 얼굴에 파리 조각을 튕겨 넣는 아동용 액션 게임. 파리 10마리를 먼저 개구리 입에 집어넣는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -20599,7 +20599,7 @@ const gameData = {
         "Masatoshi Todokoro"
       ],
       "description": "Jump into the jungle and join the feeding frenzy!​\n\nWhether they&rsquo;re munching at brunch or crunching at lunch, these four ravenous hippos are always ready for a yummy treat! No fruit in the jungle is safe from the rumbly tummies of Hungry, Sweetie, Bottomless, and Berry. Look out for your snacks at the Rumbly Lagoon when these chompy chewers dive in!",
-      "descriptionKo": ""
+      "descriptionKo": "4마리 배고픈 하마가 공을 먹어치우는 신나는 아동용 게임! 레버를 눌러 볼을 퍼 올려 하마 입에 먹이는 빠른 손놀림 게임."
     },
     "cottage": {
       "status": "active",
@@ -21229,7 +21229,7 @@ const gameData = {
         "Hisashi Hayashi"
       ],
       "description": "You and your fellow players have just been elected mayors of a thriving new city in the midst of expansion. Over the course of the game, you will need to build various buildings and attract residents to this new city. However, you will face multiple challenges in terms of building restrictions throughout the game. Will you be able to build a city more splendid than the others?\n\n5&times;5 City is a tile placement game that builds various buildings in your city.\n\nEach city board is placed in front of every player. The city board has 25 squares of vacant lot, but it can be divided into various types of compartments depending on the compartment card selected at the start of the game.\n\nFor each round, draw a building tile randomly according to the number of squares in the specified section, keep in touch with other players and place it on your town board.\n\nIn 5&times;5 City, it is a point that you can place the building only in a fixed area in each round, not putting it in the place you like on the street board.\n\nThere are various effects in buildings, making effective use of the effect is the way to victory.\n\nIn addition, there may be buildings which sometimes do not need. In that case you can turn the building upside down into a park.\n\n&mdash;description from the designer",
-      "descriptionKo": ""
+      "descriptionKo": "도시 건설 타일 배치 게임. 새로 선출된 시장이 되어 다양한 건물을 짓고 주민을 유치합니다. 건축 제한을 극복하며 가장 화려한 도시를 만드는 5×5 타일 배치 게임."
     },
     "cottage": {
       "status": "active",
@@ -21341,7 +21341,7 @@ const gameData = {
         "Jacques Zeimet"
       ],
       "description": "Balduin, the house ghost, found an old camera in the castle cellar. Immediately he photographed everything that he loves to make disappear when he is haunting&thinsp; &ndash; including himself, of course. Unfortunately, the enchanted camera takes many photos in the wrong colors. Sometimes the green bottle is white, at other times it's blue. Looking at the photos, Balduin doesn't really remember any more what he wanted to make disappear next. Can you help him with his haunting and quickly name the right item, or even make it disappear by yourself? If you grab the right items quickly, you have a good chance of winning...\n\nThe lightning fast shape and color recognition game that is sure to test the reflexes of kids, families and gamers alike. In Ghost Blitz, five wooden items sit on the table waiting to be caught: a white ghost, a green bottle, a cute grey mouse, a blue book, and a comfortable red chair. Each card in the deck shows pictures of two objects, with one or both objects colored the wrong way. With all players playing at the same time, someone reveals a card, then players grab for the \"right\" object &ndash; but which object is right?\n\n\n    If one object is colored correctly &ndash; say, a green bottle and a red mouse &ndash; then players need to grab that correctly colored object.\n\n\n\n    If both objects are colored incorrectly &ndash; say, a green ghost and a red mouse &ndash; then you look for the object and color not represented among the four details shown. In this case you see green, red, ghost and mouse, so players need to grab the blue book.\n\n\nThe first player to grab the correct object keeps the card, then reveals the next card from the deck. If a player grabs the wrong object, she must discard one card previously collected. Once the card deck runs out, the game ends and whoever has collected the most cards wins!\n\nReimplements:\n\n    Knapp daneben, released in 2004 by HABA.",
-      "descriptionKo": ""
+      "descriptionKo": "마법 카메라로 찍힌 물건들이 엉뚱한 색으로 나왔습니다! 유령 발두인을 도와 사라질 물건을 빠르게 맞추세요. 정확한 색과 물건을 먼저 외치는 반응 속도와 기억력 게임."
     },
     "cottage": {
       "status": "active",
@@ -21479,7 +21479,7 @@ const gameData = {
         "Prospero Hall"
       ],
       "description": "In Godzilla: Tokyo Clash, you play as the Earth's most fearsome Kaiju &mdash; Godzilla, Mothra, King Ghidorah, and Megalon &mdash; battling for dominance as the most terrifying monster in Japan. With detailed miniatures of the legendary monsters and a modular cityscape of 3D buildings to destroy, it's an epic battle every time you play!\n\nIn more detail, each player has their own deck of cards unique to the kaiju they control. As you throw trains and tanks at the opponents and attack them directly to cause damage, you can burn cards out of their deck, reducing their options on future turns. As you stomp through the city, you can earn energy, which can help you lay out permanent enhancements to your abilities.",
-      "descriptionKo": ""
+      "descriptionKo": "고질라, 모스라, 킹기도라, 메가론 4대 괴수 중 하나를 선택해 도쿄에서 격전을 벌입니다. 독자적인 카드 덱으로 건물을 파괴하고 적을 공격하며 가장 강한 카이주가 되는 미니어처 배틀 게임."
     },
     "cottage": {
       "status": "active",
@@ -21597,7 +21597,7 @@ const gameData = {
         "Reiner Knizia"
       ],
       "description": "Gold is calling! Everyone rushes to Mount Goldrush, the last remaining gold mine. Which gold miner will unearth the most gold and possibly outwit their rivals along the way?\n\nIn this clever memory game by Reiner Knizia, you - as a gold digger - try to get the most gold out of the mine. A lucky hand, a good memory and a tactical flair help to outsmart one or the other annoying rival on the way to fame.\n\nReveal 2 cards.\nFind the nuggets.\nTrick your rivals.\nExtract the most gold.\n\nWatch out for the dynamite!",
-      "descriptionKo": ""
+      "descriptionKo": "두 장의 카드를 뒤집어 금괴를 찾는 기억력 게임. 라이너 크니치아 작품. 행운, 기억력, 전술로 경쟁자를 이기고 가장 많은 금을 채굴하는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -21709,7 +21709,7 @@ const gameData = {
         "Bruno Faidutti"
       ],
       "description": "In Gold River, an updated version of Boomtown and La Fi&egrave;vre de l'Or, players want to take home as much money as possible from the mines that surround them.\n\nOn a turn, multiple items &mdash; mines, dynamite, town characters, and more &mdash; will be available for auction. Players keep bidding until all but one player passes; that player pays their bid to the player on their right, who keeps half the money (rounded up), then passes the rest right, with that player keeping half, and so on. The winning bidder chooses one item from the lot, then the player to their left chooses one, and so on until each player has acquired something new.\n\nThe winning bidder also rolls two dice to determine which gold mines pay out. The first player to acquire two mines in a location becomes that town's Mayor, after which they earn a commission when anyone else acquires a card from that town.\n\nGold River includes a two-player game mode (unlike Boomtown) as well as an advanced \"poker\" game mode.",
-      "descriptionKo": ""
+      "descriptionKo": "광산 경매 게임(붐타운). 매 턴 광산, 다이너마이트, 마을 캐릭터 등을 경매합니다. 낙찰가의 절반이 오른쪽으로 전달되는 독특한 결제 방식으로 수익을 최대화하세요."
     },
     "cottage": {
       "status": "active",
@@ -21822,7 +21822,7 @@ const gameData = {
         "Anthony Perone"
       ],
       "description": "Tonight, the queen holds a banquet that everyone will attend. Will they leave a good impression? Backstabbing is fair game, and no trick is too dirty if it allows you to place your favorite families in the spotlight.\n\nIn Courtisans, you receive and play three cards on each of your turns. One is played at the Queen's table to sway a family's influence, whether in a positive or negative manner. The two other cards are played in your domain and in an opponent's domain, and they can be worth positive or negative points, depending on their family's status at the end of the game. Choose where best to place your three cards if you want to end up with the most points and win.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "왕비의 연회에서 가문의 영향력을 높이는 카드 게임. 매 턴 카드 3장을 받아 왕비 테이블과 자신의 영역에 플레이하며 가문 영향력을 올리고 내립니다. 가장 많은 영향력을 쌓은 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -21942,7 +21942,7 @@ const gameData = {
         "David Short"
       ],
       "description": "The day has come. The paperwork is complete, the registration filed, and the business cards purchased &ndash; you're open for business! So now what? Where do you spend your time? Where do you spend your money? Which tasks are most important? What should take priority? Should you hire new employees? Or maybe invest in a marketing campaign? These are just some of the decisions facing you as a fresh entrepreneur who dreams of running a successful business. You must excel at balancing your time, money and staff because all are scarce and all are required to thrive.\n\nSo barter with your fellow colleagues, manage your staff, collect information, expand your office, or schedule your next product shipment. It's up to you &ndash; after all, it's your business. Of course, no matter which route you decide to take to reach that corner office at the top of the tallest skyscraper, you must start with everyone else...\n\n...on the Ground Floor!\n\nOver the course of the game, you will:\n\n\n    Convert your employees' time into info, money, and results.\n    Adapt to changing economic conditions and brace for what's ahead. \n    Produce, promote, and sell your goods in the marketplace.\n    Build your company brand through marketing campaigns.\n    Challenge other players' enterprises for success and prestige.\n    Grow your business and build your high-rise!",
-      "descriptionKo": ""
+      "descriptionKo": "스타트업 사업가가 되어 시간과 돈을 배분하는 경영 시뮬레이션 게임. 직원 채용, 마케팅, 업무 우선순위 결정 등 현실적인 비즈니스 결정을 내리며 가장 성공한 사업가가 목표."
     },
     "cottage": {
       "status": "active",
@@ -23037,7 +23037,7 @@ const gameData = {
         "Dan Keltner"
       ],
       "description": "Welcome to the Isle of Trains, where you are the conductor, and constructor of one of the island&rsquo;s locomotives. You&rsquo;ll build trains and load a range of goods to complete contracts across the island, and also deliver passengers to their destinations.\n\nIsle of Trains: All Aboard is a card-based engine building game where cards have multiple uses: You can use cards as locomotives, freight cars, passenger cars, or buildings to improve the effectiveness and abilities of your train. Cards can also be spent to pay for the construction of your new train cars and buildings, or you can use your cards as cargo and load them onto available freight cars.\n\nYou will also have a range of passengers who want to be taken to different destinations. You will draw these passengers at random from a bag when you build passenger cars and certain locomotives. You can then load passengers into any available passenger car. When passengers are delivered to their destinations, they will give you an instant powerful bonus!\n\nLoading cargo and passengers into opponents&rsquo; trains is important on the Isle of Trains as it&rsquo;ll also gain you extra bonuses that turn! But this will help the other train conductors get a little closer to completing their goals, by giving them the cargo or passengers, which they can then use for deliveries and big end game points!\n\nThe game ends when a certain number of contracts have been completed, or a certain number of passengers are delivered. You win by scoring the most points, which you earn by building up your train, completing contracts, and delivering passengers.\n\nIsle of Trains: All Aboard is all about balancing the need to upgrade your train, with loading cargo or passengers onto opponent&rsquo;s train for big bonuses, and delivering cargo and passengers to their destinations before anyone else. Build your engine effectively enough to be remembered as the greatest train conductor on the Isle of Trains!",
-      "descriptionKo": ""
+      "descriptionKo": "기차 섬의 기관사가 되어 화물과 승객을 운송하는 엔진 빌딩 카드 게임. 카드를 기관차, 화물칸, 객차, 건물로 다양하게 활용하며 계약을 완료합니다."
     },
     "cottage": {
       "status": "active",
@@ -23160,7 +23160,7 @@ const gameData = {
         "Dan Keltner"
       ],
       "description": "In Isle of Trains, players are train operators, building trains with the right mix of freight cars needed to complete delivery contracts before your opponents.\n\nCards are used in multiple ways: they can be built as train cars or buildings supporting your train line, used as currency to pay the cost of building those new train cars and buildings, or used as cargo to load on available train cars.\n\nWhen loading cargo on an opponent&rsquo;s train, players receive an immediate benefit or action, but they are also giving their opponent the cargo they just might need to be able to complete a delivery contract and score big!\n\nBalancing the need to upgrade your train, take advantage of benefits from loading other players' trains, and complete delivery contracts first is the key to being the most successful train operator on the Isle of Trains!",
-      "descriptionKo": ""
+      "descriptionKo": "화물 운송 계약을 완료하는 기차 운영 게임. 카드를 기차 칸, 건물, 화폐, 화물로 다목적 활용합니다. 상대 기차에 화물을 싣는 상호작용이 특징인 엔진 빌딩 게임."
     },
     "cottage": {
       "status": "active",
@@ -23278,7 +23278,7 @@ const gameData = {
         "Yohan Goh"
       ],
       "description": "Can you play a game and make food at the same time? You must if you are playing Gimbap.\n\nTo set up, each player takes one of each of the components: gim (dried seaweed); a sheet each of bap (rice), cheese, and perilla leaves; and a (wooden) strip of ham, spinach, and danmuji (yellow pickled radish).\n\nEach round, turn up point tokens equal to the number of players minus one. A player rolls 2-4 customer dice. Each die has multiple faces that show how the customer wants their ingredients in the gimbap: the cheese must (or must not) touch the gim, the ham must not touch the spinach and danmuji, the rice must touch the danmuji, etc. The more dice you roll, the harder the challenge.\n\nEveryone races to make their gimbap at the same time, which must be finished by rolling the gim and using the velcro to hold your gimbap together. Grab the highest point token still available.\n\nOnce everyone has finished, players check their gimbap to see whether they met the customer's requests, starting with whoever has the highest token. If a player succeeds, they turn the token face down and keep it; otherwise, they pass it to whoever finished first after them. (If a player has two tokens, they keep the higher-valued token and pass the lower &mdash; or they pass the higher one and discard the other.)\n\nAfter all the tokens have been claimed, whoever has the most points wins.",
-      "descriptionKo": ""
+      "descriptionKo": "김밥을 만드는 요리 게임. 고객 주사위를 굴려 주문된 재료 조합을 맞춰 김밥을 만들고 점수를 얻습니다. 게임을 하면서 실제로 음식을 만드는 독특한 경험."
     },
     "cottage": {
       "status": "active",
@@ -23401,7 +23401,7 @@ const gameData = {
         "Yohan Goh"
       ],
       "description": "Kushi Express is a game of making BBQ skew (called \"Kushi\" in Japanese) as quickly as you can.\n\nEvery player has four plastic blocks of ingredient (Tomato, Pepper, Shrimp and Beef steak) and two fabrics (Cheese and Bacon).\n\nThere is a deck of \"order\" cards in the middle of the table.\n\nAs soon as a player reveals the top card of the deck, every player should race to prepare the corresponding Kushi. The first player who serves the right Kushi on the dish takes the cards.\n\nWhen a player successfully collects ten points, the game ends with the King of Kushi.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "주문 카드가 공개되면 동시에 해당 꼬치 재료를 빠르게 조립하는 게임. 토마토, 고추, 새우, 스테이크 등 재료를 카드에 맞게 가장 먼저 완성한 플레이어가 승리하는 순발력 게임."
     },
     "cottage": {
       "status": "active",
@@ -23745,7 +23745,7 @@ const gameData = {
         "Thomas Dupont"
       ],
       "description": "In Knarr, you are the leader of a band of Vikings that you send to new destinations. Manage the recruitment of your crew, and choose the best territories to explore. Depending on the destinations reached (for trading or influence) and the Vikings who accompany you, you can increase your reputation to gain even more wealth. Each turn, you:\n\n\n     Place a new member in your Viking crew, activate the effects of all of them with the same icon, and get another one from those available under the matching color on the central board, or\n\n\n\n     Explore new destinations, with the opportunity to trade with those places and get more gains or reputation.",
-      "descriptionKo": ""
+      "descriptionKo": "바이킹 지도자가 되어 크루를 모집하고 새 땅을 탐험합니다. 매 턴 크루원을 추가하고 같은 아이콘을 활성화해 자원과 카드를 얻습니다. 명성을 높여 가장 부유한 바이킹이 되는 게임."
     },
     "cottage": {
       "status": "active",
@@ -23860,7 +23860,7 @@ const gameData = {
         "Shem Phillips"
       ],
       "description": "Scholars of the South Tigris is set during the height of the Abbasid Caliphate, circa 830 AD. The Caliph has called upon the keenest minds to acquire scientific manuscripts from all over the known world. Players will need to increase their influence in the House of Wisdom, and hire skilled linguists to translate the foreign scrolls into Arabic. In this Golden Age of wisdom and knowledge, be mindful not to neglect one in pursuit of the other.\n\nThe aim of Scholars of the South Tigris is to be the player with the most victory points (VP) at the game&rsquo;s end. Points are gained by translating scrolls, increasing knowledge in various areas of science and mathematics, influencing the 3 guilds, and by retiring translators after their years of faithful service. The game end is triggered once all 4 caliph cards have been revealed.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "830년 아바스 칼리파 시대, 지혜의 전당에서 세계 각지의 과학 필사본을 수집합니다. 언어학자를 고용해 아랍어로 번역하며 지식과 영향력을 쌓는 미드웨이트 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -23978,7 +23978,7 @@ const gameData = {
         "DODAM"
       ],
       "description": "Be a lovely cat and get lots of treats from your butler!\nThe richest cat wins!\n\nYacht Dice with adorable cats.\nRoll the cat dice, make combinations, and become the wealthiest cat to win!\n\nContents: 4 cat dice, 1 board, 2 punchboards, 60 cards",
-      "descriptionKo": ""
+      "descriptionKo": "귀여운 고양이 주사위로 즐기는 야트(Yacht) 게임! 고양이 주사위 4개로 조합을 만들고 가장 부유한 고양이가 승리합니다."
     },
     "cottage": {
       "status": "active",
@@ -24115,7 +24115,7 @@ const gameData = {
         "Dávid Turczi"
       ],
       "description": "When Elsa von Fr&uuml;hlingsfeld presented her invention to King Frederik Augustus II of Saxony, people thought it was trickery. She used the recently isolated element Uranium to heat up a jar of water and used the resulting steam to power an engine that kept the Uranium active via a process she called &ldquo;atomization.&rdquo; Her device, the Nucleum, ushered in a new era of energy and prosperity over the next decades. Saxony went from a minor regional power to the hub of European science and engineering. Now, a generation later, factories are still hungry for more power, demanding bigger and more Nucleums to be built, more Uranium imported from the nearby country of Bohemia, and railways and power lines built across the country to carry the tamed power of the atoms to Saxony&rsquo;s great cities. Inventors, engineers, and industrialists flock to the Saxon court, vying to be the leader in this new industrial revolution.\n\nNucleum is a heavy euro board game in which players take role of industrialists trying to succeed during the economic and technological boom of 19th-century Saxony, fueled by the invention and spread of the Nucleum (a nuclear reactor).\n\nPlayers earn victory points by developing their networks, building and powering urban buildings, securing contracts, and meeting milestones (randomized endgame goals). Each player also gets unique asymmetric technologies, giving them special powers when unlocked. Gameplay is continuous; players take turns one after another with no rounds or phases.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "우라늄을 이용한 원자력 기관 뉴클리엄이 등장한 대체역사 세계. 작소니아 왕국에서 핵 기술을 연구하고 도시를 건설하며 영향력을 확장하는 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -24778,7 +24778,7 @@ const gameData = {
         "Eiji Wakasugi"
       ],
       "description": "From the box:\n\nConceal your secret code, outguess your opponent, deduce the solution, amaze your foes.  In the game of CODA players try to crack each other's \"code\" - a sequence of secret numbers.  Guess an opponent's secret number and it is revealed (by knocking it down).  Guess incorrectly and you must reveal one of your own secret numbers!  On each turn, a new number enters play, which helps you to narrow the possibilities and grow your own code.  Common sense, intuition and your \"detective\" skills will guide you to success.\n\nFrom me:\n\nThere are two sets of tiles (similar to Stratego pieces without the soldiers) numbered 0-11.  One set is black, one is white.  In four player game, everyone one grabs three random pieces and arranges them in numeric order, with white pieces going to the right on ties.  In order a player grabs one of the remaining tiles and guesses one of the opponents pieces.  If correct, that piece is revealed. If the player is incorrect the piece that was just drawn is placed in the correct place in his own sequence and revealed.  If the player was correct in guessing he MAY make another guess.  If he chooses not to then he places the picked piece in his code, in sequence, but does not reveal it.\n\nPlay continues until only one person has a piece standing.  When the new tiles run out, just keep going without drawing tiles.\n\nBelongs to a series / trilogy, containing:\n\n    Bernini Mysterie\n    Da Vinci Code\n    Salomon's Dilemma",
-      "descriptionKo": ""
+      "descriptionKo": "상대방의 비밀 코드 숫자 배열을 추리하는 2인 게임. 정확히 맞추면 해당 숫자가 공개되고, 틀리면 자신의 숫자를 하나 공개해야 합니다. 코다(CODA)라는 이름으로도 출판된 추리 게임."
     },
     "cottage": {
       "status": "active",
@@ -25191,7 +25191,7 @@ const gameData = {
         "Nestore Mangone"
       ],
       "description": "When all you can identify in the horizon for many long days is the line that detaches the sea from the sky, the glimpse of a distant shore appearing before you will make you shiver at the understanding that the adventure is about to begin.\n\nYou find yourself astonished, landing on the shore that will be the origin of an extensive exploration through the Galapagos, a magic place of inconceivable beauty and endless biodiversity. There, you will gather repertoires and expand your knowledge of the natural sciences. Your eyes will learn how to detect the hidden species in the tropical forest, gazing at the countless colors and textures of nature. After inspiring hours spent studying and getting to enlightening conclusions, you will rest under a sparkling sky, admiring the stunning complexity of the animal realm.\n\nDarwin's Journey is a worker-placement Eurogame in which players recall Charles Darwin's memories of his adventure through the Galapagos islands, which contributed to the development of his theory of evolution.\n\nWith the game's innovative worker progression system, each worker will have to study the disciplines that are a prerequisite to perform several actions in the game, such as exploration, correspondence, gathering, and dispatch of repertoires found on the island to museums in order to contribute to the human knowledge of biology. The game lasts five rounds, and thanks to several short- and long-term objectives, every action you take will grant victory points in different ways.",
-      "descriptionKo": ""
+      "descriptionKo": "갈라파고스 탐험가가 되어 동물을 관찰하고 생물 표본을 수집합니다. 다윈의 진화론 연구를 배경으로 한 탐험 게임으로 생물 다양성과 자연의 아름다움을 주제로 합니다."
     },
     "cottage": {
       "status": "active",
@@ -25311,7 +25311,7 @@ const gameData = {
         "Matthias Cramer"
       ],
       "description": "Renaissance Europe is coming together, and people have realized that even the most powerful dynasties can achieve more together, so members of those dynasties are marrying, trading and sharing with one another &mdash; but who will end with the biggest piece of the pie?\n\nIn Dynasties, players must make many compromises, whether acting on their own or reacting to the behavior of their fellow players. In addition to these tactical and strategic decisions, luck also plays something of a role as not every marriage brings the windfall expected. Perhaps then another marriage will bring more success and influence?\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "르네상스 유럽, 강력한 왕조들이 결혼과 교역으로 연대합니다. 전술적 타협과 전략적 결정으로 가장 많은 영향력을 차지하는 왕조가 되는 게임."
     },
     "cottage": {
       "status": "active",
@@ -25426,7 +25426,7 @@ const gameData = {
         "Chu-Lan Kao"
       ],
       "description": "The sub-tropical climate and environment of Taiwan makes the island highly suitable for cultivating top quality tea. But it wasn't not until the 19th century after English businessman John Dodd discovered some amazing Oolong tea there that the Taiwanese tea business truly begin to bloom and \"Formosa Tea\" became world-reknowned.\n\nIn Formosa Tea, players are tea farm owners competing to harvest the best tea leaves, improve their tea processing techniques, and produce tea of the highest quality for not only the domestic market but also for the international market. With the unique worker placement and worker advancement mechanisms, along with the tea dehydration and scenting processing, players must use their workers wisely to make the best tea in the market.\n\nA game of Formosa Tea is played in four rounds. In each round, players take turns to perform one of the five possible actions:\n\n\n    Send a worker to harvest tea leaves\n    Send a worker to a tea factory to  process tea leaves\n    Retrieve a worker from the tea factory after tea processing is completed\n    Send a worker to sell tea in the domestic market\n    Send a worker to sell tea to international merchants. \n\n\nAfter the end of the fourth round, the player who has the most prestige points wins!",
-      "descriptionKo": ""
+      "descriptionKo": "19세기 대만 차 농장주가 되어 최고의 차 잎을 재배하고 가공 기술을 개선합니다. 세계적으로 유명한 포르모사 차를 생산해 가장 성공한 차 농장주가 되는 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -25821,7 +25821,7 @@ const gameData = {
         "Carlo A. Rossi"
       ],
       "description": "Players are stock brokers during the second Industrial Revolution, trying to make as much money as possible while also coming across as good citizens by donating money to charity.  During the course of the game, players purchase or sell shares of stock, and then manipulate the stock prices with the cards that they share with their two neighbors.  Additionally, players donate stock to charities, which is sold off at the end of the round for the charitable donation.  Whoever donates the least to charity by the end of the game automatically lose, no matter how wealthy he&rsquo;s made himself.\n\nThe game uses a system of shared information where each player knows a little of what is about to happen in the markets, with each player knowing different pieces of information.  The player who makes the most money at the end of the game is the winner, provided that he or she is not the person who donated the least to charity.",
-      "descriptionKo": ""
+      "descriptionKo": "제2차 산업혁명 시대 주식 중개인. 주식을 사고팔며 가격을 조종하고 자선 기부도 합니다. 돈을 많이 벌면서도 좋은 시민으로 보이는 균형을 잡는 주식 게임."
     },
     "cottage": {
       "status": "active",
@@ -27107,7 +27107,7 @@ const gameData = {
         "Tim Fowers"
       ],
       "description": "Fugitive is a tense, easy-to-learn, two-player deduction card game. One player is a fugitive trying to make it out of town while being pursued by an unstoppable agent. The fugitive plays cards face down to the table trying to work their way to a goal, while the agent must guess those cards to uncover them. If all the cards are face up, the fugitive is caught.\n\nCORE RULE change from 1st Edition: When the Fugitive doesn't play a hideout, he may draw an extra card from the lowest numbered pile that still has cards.\n\nFugitive 2nd Edition also adds a brand new SHIFT system to replace the old event system and help balance the game with players of different skill levels.",
-      "descriptionKo": ""
+      "descriptionKo": "2인용 추리 카드 게임. 도망자는 카드를 엎어놓고 탈출 경로를 설계하고, 요원은 그 카드를 추측해 뒤집어야 합니다. 도망자의 모든 카드가 공개되면 잡힌 것. 긴장감 넘치는 1대1 대결."
     },
     "cottage": {
       "status": "active",
@@ -27742,7 +27742,7 @@ const gameData = {
         "Igor Polouchine"
       ],
       "description": "Spot it!, a.k.a. Dobble, is a simple pattern recognition game in which players try to find an image shown on two cards.\n\nEach card in original Spot it! features eight different symbols, with the symbols varying in size from one card to the next. Any two cards have exactly one symbol in common. For the basic Spot it! game, reveal one card, then another. Whoever spots the symbol in common on both cards claims the first card, then another card is revealed for players to search, and so on. Whoever has collected the most cards when the 55-card deck runs out wins!\n\nRules for different games &ndash; each an observation game with a speed element &ndash; are included with Spot it!, with the first player to find a match either gaining or getting rid of a card. Multiple versions of Spot it! have been published, with images in each version ranging from Halloween to hockey to baseball to San Francisco.\n\nThe game is sold as Spot it! in the USA and Dobble in Europe, with slight differences between the two editions.\n\nNote: some versions have fewer cards and fewer symbols per card. (E.g. 30 cards with 6 symbols each.): Spot it! 1,2,3",
-      "descriptionKo": ""
+      "descriptionKo": "동물원 테마 도블. 두 카드 사이의 공통 그림을 가장 빠르게 외치는 패턴 인식 게임. 모든 두 장의 카드에는 반드시 하나의 공통 그림이 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -27879,7 +27879,7 @@ const gameData = {
         "kaku"
       ],
       "description": "\"Are you sure you want to take that?\"\n\nAfter all the work is done, it's time for the bandits to split the treasures.\nIf you think these bandits will split the treasure fair and square, think again!\n\nOne team draws 5 treasure cards and splits them into two piles, and then the other team chooses.\nBut there's a catch. Out of the 5 treasure cards, one must be placed face down. Could the hidden card be the legendary Great Treasure, or a Cursed Painting&hellip;?!\n\n&middot; Collect sets of Treasure cards to cash in through the scheme of the opposite team\n&middot; Use your unique special ability wisely, as well as the one-time Backup card\n&middot; Perfect game for those who enjoy the psychological game",
-      "descriptionKo": ""
+      "descriptionKo": "5장의 보물 카드를 두 더미로 나누고 상대팀이 하나를 선택합니다. 단, 카드 하나는 반드시 뒤집어서 숨겨야 합니다. 전설의 보물인지 저주받은 그림인지 블러핑하는 분배 게임."
     },
     "cottage": {
       "status": "active",
@@ -28008,7 +28008,7 @@ const gameData = {
         "Alex Randolph"
       ],
       "description": "Rarely is a game broken down to its barest elements like this one.  Players are given an equal deck of bidding cards from one to fifteen.  Each turn, a prize tile is randomly selected from a pool.  A prize tile is worth either positive or negative points (from -5 to +10).  Each player is attempting to gather the most positive points from these prizes.  Players secretly select one of their remaining bidding cards and reveal them simultaneously.  For positive prizes, the highest card gets the prize; For negative prizes, the lowest card is stuck with the prize.  However, if two people play the highest (or lowest) card, they cancel each other out and the prize goes to the next in line.  The highest total score after all fifteen prizes are awarded wins.",
-      "descriptionKo": ""
+      "descriptionKo": "1~15 입찰 카드 중 하나를 비밀리에 선택해 보상 타일을 얻는 게임. 양수 보상은 원하고 음수 보상은 피해야 합니다. 간단하지만 심리전이 핵심인 경매 게임."
     },
     "cottage": {
       "status": "active",
@@ -28129,7 +28129,7 @@ const gameData = {
         "Reiner Knizia"
       ],
       "description": "Botswana / Wildlife Safari was originally published  as Flinke Pinke. This game is one of those 'painfully simple' Reiner Knizia games. There are five different colored chips, with six cards, zero through five, in each of the colors.  The cards are dealt out, and then players take turns playing a card and taking any available chip.  When one color has all six cards played on it, then the game is over, and players use the last card played in each category to value their chips.  The highest total value wins.\n\nDescription of 1994 Milton Bradley re-issue Quandary, for 2-4 players:\n\nA game of placement, shares and nerve by Reiner Knizia, this is a lovely edition with nice, heavy tiles akin to Mah-jong pieces in weight and feel. Players in turn lay numbered pieces on tracks curling to the centre, and then take a share in any colour. The round ends when a track is filled. Scoring is based on your total share multiplied by the value of the final tile played on each track. So if you are collecting blue shares, I'll try and lay a blue 1 as near last as possible. Then you'll want to play a blue 5 to raise your possible score, but must take a share in a different colour. Same game, different production.\n\nDescription of 2003 Fantasy Flight Games re-issue, Loco!, for 2-4 players:\n\nHere is the FOURTH version of the game that was originally Flinke Pinke only this time, the added \"rule\" is that whenever you play a card with a value of \"0\", you must say \"Loco!\" aloud or forfeit your opportunity to select one of the colored chips.  Apart from that, the game is identical.\n\nDescription of the 2010 Eagle-Gryphon Games games re-issue, Botswana, for 2-5 players:\n\nThis fifth version of the game adds a safari theme. Rules and gameplay are unchanged from the original version (no rules about animal noises), but the chips are replaced by plastic animal figures and the cards are covered in matching animal fur patterns. In 2014, Gryphon Games released a new edition of this game as Wildlife Safari, featuring the same components and artwork but changing the title of the game.",
-      "descriptionKo": ""
+      "descriptionKo": "5가지 색상 칩을 모으는 경매 게임. 각 색상 카드 0~5를 내며 칩을 가져갑니다. 한 색상의 카드 6장이 모두 나오면 게임 종료. 마지막 카드 값으로 점수를 계산하는 라이너 크니치아 작품."
     },
     "cottage": {
       "status": "active",
@@ -28247,7 +28247,7 @@ const gameData = {
         "Pascal Ribrault"
       ],
       "description": "In the 18th and 19th centuries, shipping companies aimed to strengthen the trade between the West and the Far East that had begun in previous centuries. Tea, spices, coffee, and silk are commodities much consumed in Europe, and their buying and selling prices depend closely on supply and demand. Fortunes can be made and gambled depending on circumstances.\n\nIn East India Companies, players manage a large shipping company that trades with far flung trading posts in India. They must manage their ships and invest in buying shares of their own company or those of their competitors. Most importantly, players have to keep an eye on the constantly fluctuating market prices! Is it better to invest your money in the stock market or in buying goods? Do they prefer to use fast ships with low tonnage or slower ships with larger holds? Whatever the players choose, their strategies will influence those of their opponents.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "18~19세기 동서 무역을 배경으로 대형 해운 회사를 운영합니다. 차, 향신료, 커피, 비단의 수요와 공급을 파악해 이익을 극대화하는 전략 경제 게임."
     },
     "cottage": {
       "status": "active",
@@ -28360,7 +28360,7 @@ const gameData = {
         "Sano Takeshi"
       ],
       "description": "Don't get chomped by the cranky croc.  Croc's got toothaches and a snap-happy attitude.  You're his dentist - so get ready to pull a mouthful of teeth.  Use the special tooth tongs to wiggle out one Croc tooth per turn.  But don't pull the one that triggers Croc's touchy temper or, Snap.  He'll growl, charge and chomp and you're out of the game.  To win, be the only dentist who doesn't rile the crocodile.",
-      "descriptionKo": ""
+      "descriptionKo": "신경 쓰이는 악어의 이빨을 하나씩 뽑아내는 스릴 게임. 틀린 이빨을 뽑으면 악어가 갑자기 달려들어 물어버립니다! 긴장감 넘치는 가족용 덱스터리티 게임."
     },
     "cottage": {
       "status": "active",
@@ -28470,7 +28470,7 @@ const gameData = {
         "Marco Teubner"
       ],
       "description": "In Topito, players manipulate the circus animals and workers &mdash; represented by giant wooden blocks &mdash; to complete objective cards in their hand. The game includes a number of circus rings in which activities take place, and on a turn a player adds a block to a stack or moves part of a stack onto another stack. If any player, whether active or not, has one of their objective cards met by this move, then they reveal it and draw a new card. If a player drops a block, they must discard a previously met card as a penalty.\n\nThe first player to have seven cards in front of themself wins!",
-      "descriptionKo": ""
+      "descriptionKo": "서커스 동물과 직원을 나타내는 대형 나무 블록을 조작해 목표 카드를 달성하는 게임. 블록을 쌓거나 이동시켜 자신의 목표 조건을 완성합니다."
     },
     "cottage": {
       "status": "active",
@@ -28583,7 +28583,7 @@ const gameData = {
         "Paolo Mori"
       ],
       "description": "Ahoy, Captain! \nHoist your flag, recruit a crew, and fill your coffers with shiny, gold coins.\n\nCaptain Flip is a game of obvious simplicity explained in less time than a cannonball shot. On your turn, draw a tile from the bag. You like it? Keep it! You don't like it? Flip it! Then place it on your board to form your crew.\n\nWith its nine characters and four boards with different tactics, Captain Flip offers an immediate, fun, and subtle gaming experience.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "가방에서 타일을 꺼내 맘에 들면 보관하고, 싫으면 뒤집어서 보드에 배치합니다. 9가지 캐릭터와 4가지 전술 보드로 즐기는 간단하고 재미있는 해적 크루 구성 게임."
     },
     "cottage": {
       "status": "active",
@@ -28861,7 +28861,7 @@ const gameData = {
         "Théo Rivière"
       ],
       "description": "Many years after the confrontation with Van Helsing, Dracula landed in Whitby, England once again. The citizens of Whitby sought help from the vampire hunter, Professor Van Helsing. Will Van Helsing defeat Dracula before he transforms all the inhabitants into vampires?\n\nIn Dracula vs Van Helsing, each player controls one of the title characters. Van Helsing must remove all of Dracula's life points to win, but if Dracula turns all four inhabitants of the same district into vampires first, Dracula wins.\n\nThe game lasts at most five rounds. Each round, players play in turn (starting with Dracula), drawing a card, then discarding that card or swapping it with one of the five cards on their rack to trigger the discarded card's ability. Cards come in eight types, each with its own effect. Instead of drawing (and discarding) a card, a player can call for the end of the round. In order to choose this action, at least six cards need to be in the discard pile. After the opponent plays one last turn, the round ends; otherwise, the round ends when the deck is empty.\n\nAt the end of a round, players compare the five cards on their rack. Each card corresponds to one of the five districts on the game board. If Dracula has the higher-valued card, one of the humans in this district is converted into a vampire; if Van Helsing is higher, Dracula loses a health point. If one of the game-winning conditions is met, the game ends immediately.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "드라큘라와 반 헬싱의 2인 대결 게임. 반 헬싱은 드라큘라의 생명력을 모두 제거해야 승리. 드라큘라는 주민 4명을 흡혈귀로 만들면 승리. 서로 다른 능력으로 맞서는 비대칭 2인 게임."
     },
     "cottage": {
       "status": "active",
@@ -28969,7 +28969,7 @@ const gameData = {
         "Uwe Rapp"
       ],
       "description": "Circles, triangles, squares and diamonds: Drop It is about letting go, with the pieces you drop landing somewhere in the vertical game board, ideally where they'll score the most points, but the tiles bounce around and don't always land where you expect them to!\n\nIn more detail, each turn the active player drops one of their pieces into the slot of the game board. The player scores points for the highest level that the piece touches and for any special locations that it touches, but if the piece touches anything of the same shape or color, then you score nothing! What's more, certain pieces are forbidden at certain spots on the edge of the playing area.\n\nThe Drop It rulebook includes variant rules for simpler play or more variety from game to game.",
-      "descriptionKo": ""
+      "descriptionKo": "수직 보드에 원형, 삼각형, 사각형, 다이아몬드 조각을 떨어뜨립니다. 조각이 닿은 가장 높은 칸의 점수와 보너스 점수를 얻습니다. 예측 불가한 물리가 재미의 핵심인 덱스터리티 게임."
     },
     "cottage": {
       "status": "active",
@@ -29546,7 +29546,7 @@ const gameData = {
         "Jakub Wiśniewski"
       ],
       "description": "War knows no end. Its victims are counted in thousands and each day we lose hope, little by little. Food is becoming scarce and our shelter is falling apart &mdash; yet we keep struggling.\n\nNew faces can be seen around the city: the friendly ones at the makeshift market or in neighboring houses, the hostile ones in the night with blinding flashlights and clubs and knives. We seek new paths to travel through the ruins &mdash; sometimes even underground &mdash; just to avoid sniper fire and loot anything of value. It's never much, yet we keep struggling. We have no other choice.\n\nTales from the Ruined City is the first expansion for This War of Mine: The Board Game, a story-rich game of survival in a war-torn city.\n\nThe expansion introduces a range of game modules to enrich the base game:\n\n- Emira is the 13th Character complete with a personal background; you may introduce her in any playthrough\n- Desperate Measures cards empower you whenever you lose anyone from your group\n- Farmers module features the Market, where your choices affect the way people perceive you; it also gives you a chance to interact with people from outside the city\n- Sewers are full of unknown dangers and thrilling narrative, providing you with options for additional Scavenging runs\n- Five Scenarios offer many hours of thrilling gameplay; each features unique rules and components and winning one of them gives you access to a reward envelope with special legacy content\n\nFace atrocities of war and prove that from horrible desperation comes great courage.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "폐허가 된 도시에서 생존하는 협력 게임의 확장판. 새로운 시장과 이웃, 적대적인 약탈자들이 등장합니다. 지하 통로 등 새로운 경로로 황폐한 도시를 탐험합니다."
     },
     "cottage": {
       "status": "active",
@@ -29703,7 +29703,7 @@ const gameData = {
         "Andrei Novac"
       ],
       "description": "La Granja: Deluxe Master Set is an upgraded and expanded version of the 2014 game La Granja in which 1&ndash;4 players manage small farms by the Alpich pond near the village of Esporles on Majorca.\n\nThe players must carefully consider the decisions of which dice to draft, which cards to play, when and where to deliver goods to various markets, and how best to utilize the flexible powers afforded by several \"anytime\" actions.\n\nThe multi-use cards offer four different options for players to choose from. Decide whether you want to use the card as an extension to your fields (increasing your ability to grow olives, grain, or grapes), as an extension to your farm (increasing the number of pigs you can house, the deliveries you can make, or the coins you will earn each round), as a market barrow (providing a personal contract you can fulfill for valuable rewards), or as a hired helper (each providing a unique and powerful ability to improve your actions).\n\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tGame RoundEach game round follows a consistent and simple structure.\n\n\n     Farm Phase\n         Play a farm card (optional)\n         Draw new card(s)\n         Take income\n         Farm growth (harvest goods and pigs)\n         Purchase roof markers (optional)\n    \n     Revenue Phase\n         Roll revenue dice\n         Draft a revenue die and perform the associated action (in turn order; repeated once)\n         Common action (undrafted revenue die)\n    \n     Transportation Phase\n         Choose donkey marker\n         Advance on siesta track and reset turn order\n         Deliver goods to common markets in the village, or to fulfill personal contracts\n    \n     Scoring Phase\n         Score victory points based on your position on the siesta track\n         Reset the siesta track\n    \n\n\nAt the end of the sixth game round, the game ends, wherafter the players convert remaining farm goods and coin into victory points. The player with the most victory points is crowned the winner.\n\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tDeluxe Master SetWhile La Granja Deluxe Master Set reimplements the beloved original game, it also adds a lot of never-before seen content, including modular expansion content designed by Michael Keller and Andreas \"ode.\" Odendahl themselves.\n\nAdditional expansion modules have been designed by Stefan Feld, Adam Kwapiński, and Andrei Novac.\n\nMany others have also participated in designing promo cards for La Granja Deluxe Master Set, including Tony Boydell, Mike Murphy, and David Waybright.\n\nThis Deluxe Master Set features brand new artwork, redesigned multi-layer player boards, high quality upgraded components, metal coins, and more.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "마요르카 섬 알피치 연못 가의 작은 농장을 운영하는 1~4인 농장 경영 게임 디럭스 에디션. 주사위 드래프팅, 다목적 카드, 시장 배달로 자원을 관리하는 미드헤비 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -29835,7 +29835,7 @@ const gameData = {
         "Phil Walker-Harding"
       ],
       "description": "The plateaus are wild, stunningly beautiful, and...full of llamas?!\n\nBeing a farmer in Llamaland isn't exactly easy with all the hills and mountains around, but even so, growing potatoes, corn, and cocoa on the slopes of the mountains is what you love. Luckily the llamas are a big help, too!\n\nBy fitting your fields in giddy heights, you gain the necessary crops in order to obtain the desired llama cards. These cards not only provide victory points, but also allow you to place a llama on your farm. After about 45 minutes, you will have an impressive crop-growing area in front of you, including your sweet and cuddly llamas.",
-      "descriptionKo": ""
+      "descriptionKo": "고지대 농장에서 감자, 옥수수, 코코아를 재배합니다. 라마 카드로 승점을 얻는 독특한 농장 경영 게임. 경사진 밭에 작물을 심어 가장 많은 수확을 하는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -30084,7 +30084,7 @@ const gameData = {
         "Rüdiger Dorn"
       ],
       "description": "Las Vegas Royale combines the original Las Vegas dice game from 2012 with some elements of the Las Vegas Boulevard expansion from 2014.\n\nLas Vegas is an easy-to-learn, dice-rolling game that includes six cardboard casino mats, one for each side of a normal six-sided die. For each mat in the basic game, players draw money cards until at least $50k is showing, but the amount may end up being a lot more, making that casino more desirable.\n\nEach player has eight dice of a different color, which they take turns rolling. When you roll your dice, you can choose to place them on the relevant casino cards; for example, a die showing a 1 will be placed on the casino mat marked \"1\". You must place all dice of one number on one casino in your turn. All players take turns doing this until all the dice have been used. Finally, the player with the most dice on each casino card takes the highest-valued money associated with it, then the player with the secondmost dice takes the next highest-valued money card. In case of a tie, the non-tied player with the most dice takes the highest-valued money card at that casino, while the tied players get bupkis.\n\nLas Vegas Royale includes twelve expansion tiles, and to play a more involved game, you can place an expansion tile at random by each casino. These tiles have special abilities on them, and by placing dice on them, players can activate these abilities. The expansion components also include a larger than normal die for each player that counts as two dice.",
-      "descriptionKo": ""
+      "descriptionKo": "라스베가스 주사위 게임과 불르바드 확장의 조합. 6개 카지노에 주사위를 놓고 가장 많은 주사위를 가진 플레이어가 해당 카지노의 돈 카드를 가져갑니다."
     },
     "cottage": {
       "status": "active",
@@ -30331,7 +30331,7 @@ const gameData = {
         "Doris Danzer"
       ],
       "description": "Round the World is a real-time card game played simultaneously. The players are travel agents creating \"trips\" around the world for their customers. Each \"flight card\" shows two continents (each continent has its own color): a \"departure\" and a \"destination\" connected by an airplane/arrow. You try to get rid of your own 30-card deck within a period of exactly five minutes by creating \"trips\" card by card with matching colors from card to card until the trip is complete and can be \"booked\" (saved for scoring).\n\nAll players play at the same time, everybody to their own speed and rhythm. Holding your deck in one hand, you draw the top card as your sole \"hand card\" and add it to the ones you already placed in front of you to create \"trips\" &mdash; or you put it under the deck again. When you add a card, you may pick up the card from the other end of the trip and continue using this as your \"hand card\". You may also add cards to your opponents' trips and take cards (you desperately need) from them. All cards not \"booked\" (i.e., still in the deck or in incomplete trips) score against you, so if you empty your deck too soon, your opponents are able to lengthen your trips without completing them...\n\nA game consists of two rounds of five minutes, plus two simple scoring phases. The focus of the game is on your perfect timing within the five minutes, keep an eye on cards with landmarks (better for scoring!), and on your opponents \"offers\". There are variants included shifting the focus and making the game more challenging.",
-      "descriptionKo": ""
+      "descriptionKo": "5분 안에 30장 카드 덱을 소진하는 실시간 카드 게임. 각 항공편 카드의 출발지와 목적지 색을 연결해 세계 여행 경로를 만들어야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -30439,7 +30439,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "간단하지만 심리전이 핵심인 3장 카드 게임. 상대보다 높은 숫자 카드를 내거나 라이(거짓말)를 선언해 상대 칩을 빼앗습니다."
     },
     "cottage": {
       "status": "active",
@@ -30642,7 +30642,7 @@ const gameData = {
         "Andreas Steding"
       ],
       "description": "In the 16th century, the small fishing village of Altona was founded in Northern Germany, initially posing no threat to its long-established neighbor, Hamburg. However, as Altona rapidly grew, a fierce rivalry emerged between the two cities, each constantly trying to outdo the other.\n\nIn Rival Cities, you face off in an enthralling city duel. Outmaneuver your opponent to achieve an instant victory &mdash; but beware as either of you can pull this off in many ways. Only by combining foresight with the art of deflection will you lead your city to victory. The suspenseful back and forth between the players makes it a very confrontational gaming experience full of weighty decisions.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "16세기 함부르크와 알토나의 도시 라이벌 게임. 상대를 능가해 즉각 승리를 노리되, 상대도 같은 기회를 노립니다. 순간의 판단력이 승패를 가르는 도시 건설 대결 게임."
     },
     "cottage": {
       "status": "active",
@@ -30753,7 +30753,7 @@ const gameData = {
         "Stefan Feld"
       ],
       "description": "Ready to start exploring a previously uncharted island? Good! You and the other players each have a team of five scientists, and you want to capture animal species so that you can study them &mdash; and, of course, score points.\n\nThe game board in La Isla consists of a set of oddly-shaped tiles that are placed in a circular arrangement around a central polygonal tile. Thirty-five animal tokens (seven each of five types) are placed at random on spaces numbered 2, 3 and 4 on the game board; these numbers equal the number of camps that surround these spaces.\n\nOn a turn, a player has three cards that he places face-down in the A, B and D spaces on his card display. All players reveal their A cards at the same time, then place them in one of the three slots at the top of their display; the image depicted on the top of this card shows the special power that the owner of this card has available. Once a player has filled all three slots on her display, future cards placed with the A action cover an existing card.\n\nAfter revealing the cards in their B slots simultaneously, the players collect the goods depicted in the lower-left corner of their individual card.\n\nEach player in turn then places one of his scientists on a camp, first paying two resources of the type matching that camp. (If all of a player's scientists are on the board, she moves one of these scientists.) If the player now has a scientist on each camp surrounding an animal space, she takes that animal tile, scoring points for it as noted on the board (4, 3 or 2 points).\n\nFinally, the card in the D slot increases the value of one animal. You (and only you!) immediately score one point per animal of the type you moved up on the scale. If you don't have an animal of that type you don't get any points. Each animal has a points threshold so that if you move an animal up, say, four times, each animal of this type is worth an extra point at the end of the game. The scale goes up to five so that every animal can be worth up five points at the end of the game. When the sum of these values for all five animals equals seven, nine or eleven (based on the number of players), the game ends at the conclusion of the round. Players then tally their final scores to see who wins.",
-      "descriptionKo": ""
+      "descriptionKo": "5명의 과학자를 이끌고 탐험 섬에서 동물 종을 포획해 연구합니다. 다각형 타일로 구성된 섬 보드에서 동물 토큰을 모으고 최다 점수를 얻는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -30868,7 +30868,7 @@ const gameData = {
         "Rôla"
       ],
       "description": "The Portuguese canning industry developed throughout the 20th century, going through periods of great splendor and of extraordinary importance in the social fabric of communities close to fishing centers. After the huge growth due to the immense supply of troops in Europe that World War II brought, the industry went through a period of stability with the consolidation of the quality of the products and the establishment of markets abroad.\n\nLata (\"tin can\" in English) is the name of the raw material for the containers in which the fish is packed, and it also turned out to be a popular designation for the product. In this game, players manage local canning companies in the 1950s and produce and sell the famous canned sardines or canned mackerel, the two main canned fish in the first decades of the industry, before the appearance of the very popular tuna.\n\nThe game takes place over six rounds. In each round, players buy a batch of fish, tomato or olive oil, which they then can use in their factory. These preserves will then be sold to markets. This operation will result in money that will be used to buy scorecards and increase the factory's production capacity.\n\nThe order in which each batch of raw materials is chosen is given by an auction of action points that players secretly make by sliding their disk to the left on the action track of their individual board. Whoever gives up more opportunities for action chooses the best lot, but it is clear that having more possibilities for action is vital to produce more and reach the best markets!\n\nThe player with the most victory points (VP), which are awarded at the end of the game by the scorecards, wins.\n\nLata is the second game in the \"Quinas Collection\", following the success of Caf&eacute;, the first game in the line.\n\n&mdash;description from the designer",
-      "descriptionKo": ""
+      "descriptionKo": "포르투갈 통조림 산업을 배경으로 한 경제 전략 게임. 2차 세계대전의 전성기를 겪은 포르투갈 통조림 회사를 운영하며 생산과 수출로 가장 성공한 사업가가 되는 게임."
     },
     "cottage": {
       "status": "active",
@@ -31483,7 +31483,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "레드룸 is a fierce survival game in a mysterious room. Survive to the end and become the last one.\nOr find all the numbers in the red room to unlock the secret and escape!\n\nPlayers move to the room they want to start from among the border rooms. Players move cross-sectionally on their turns, instantly flipping the tiles where they moved and applying the effects of the room.\n\nPlayers can move around the room on their turn, and use up to two supply cards. When done, pull out a new card.\n\nIf the life token goes to zero, you lose. \nThe one who survives to the end wins. \nThe player who arrives in the last closed room and opens the room wins. (*The first to know all room numbers) \nIf you get all the closed room numbers right, that player wins.",
-      "descriptionKo": ""
+      "descriptionKo": "불가사의한 방에서 살아남는 생존 게임. 마지막 생존자가 되거나, 숨겨진 숫자를 모두 찾아 탈출하는 두 가지 방법으로 승리할 수 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -31583,7 +31583,7 @@ const gameData = {
         "Hisashi Hayashi"
       ],
       "description": "In the co-operative card game Level 10 &mdash; which was first released as Okey Dokey &mdash; players work together to try to complete the challenge. In Okey Dokey, you are putting on a music festival with different performers and must play out all fifty cards in order to complete the performance.\n\nIn Level 10, you try to help Izzy play through all ten levels in each of five different video game worlds; each world is represented by a row of cards on the table. Players will play cards one by one to this 5x10 grid &mdash; 40 level cards and 10 reset cards &mdash; to (hopefully) complete the game. Players' hands are kept secret from one another and only slight suggestions can be made.\n\nIf a player cannot play a card on their turn, the players (and Izzy) lose.",
-      "descriptionKo": ""
+      "descriptionKo": "협력 카드 게임. 이지의 비디오 게임 5개 세계의 레벨 10까지 함께 클리어하는 것이 목표. 오케이도키(Okey Dokey) 시스템을 기반으로 한 협동 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -31859,7 +31859,7 @@ const gameData = {
         "Alexandre Emerit"
       ],
       "description": "In Rainbow 7, you discard one or more cards from your hand each turn, but they keep coming back...\n\nThe deck in this game consists of 49 cards in seven colors from 1-7, as well as four rainbow cards valued at X. Each player starts with a hand of six random cards from 1-6 and one random 7. On a turn, you discard a single card or a group of three or more cards that are either the same number or color; if you discard a 7 as part of a group, you carry out the special effect of the card, such as discarding a rain token or forcing everyone else to draw a card. Place played cards on the three discard piles as you wish, then draw one card from the top of a discard pile or the deck and add it to your hand.\n\nAlternatively, if the sum of cards in your hand is at most 7, you can call \"Rainbow [sum]\", e.g. \"Rainbow 3\". If no one else has a lower score than you, you win the round, and everyone else gains two rain tokens; if someone is lower, you gains three rain tokens, and no one else gains tokens.\n\nFinally, if on a turn you play out the remaining cards in your hand, the round ends, and everyone else gains one rain token.\n\nIf a player has at least seven rain tokens, the game ends, and whoever has the fewest rain tokens wins. If not, start another round...",
-      "descriptionKo": ""
+      "descriptionKo": "49장(7색×1~7) 카드 덱에서 한 번에 한 장 또는 같은 숫자·색상 3장 이상을 버립니다. 7을 조합에 넣으면 그 카드를 가져가야 합니다. 패를 가장 빨리 소진하면 승리."
     },
     "cottage": {
       "status": "active",
@@ -31978,7 +31978,7 @@ const gameData = {
         "Simone Luciani"
       ],
       "description": "In the late 19th century, during the early Meiji era, Japan opened its first railway line between Shimbashi and Yokohama. This new mode of transportation sparked a railway boom across the country.\n\nLocal entrepreneurs, and later powerful tycoons, established new companies that grew into large railway corporations throughout the Taishō and Shōwa eras.\n\nAs players, you will take on the roles of these tycoons, building and managing your own railway empires as you compete for the most renown.\n\nRailway Boom recreates this era of industry through gameplay by having players balance resource management with the growth of their railways connecting various cities across Japan.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "메이지 시대 일본 철도 붐을 배경으로 한 전략 게임. 노선을 건설하고 회사를 키워 다이쇼·쇼와 시대까지 거대 철도 기업을 만드는 철도 경영 게임."
     },
     "cottage": {
       "status": "active",
@@ -32291,7 +32291,7 @@ const gameData = {
         "Kwang Hee Lee"
       ],
       "description": "LEXIO is based on the traditional Chinese game system of \"Zheng Shangyou\" &ndash; the climbing game &ndash; and is virtually the same game as Big Two (also known as Chinese Poker). Many other card games are based on the same mechanism (The Great Dalmuti, Gang of Four, Tichu, etc.), but LEXIO uses tiles similar to those in Mah Jong instead of cards, and they are of excellent construction. In accordance with Chinese tradition, the number \"2\" is the strongest number. The suits are named after the sun, the moon, the stars, and the cloud.\n\nIn the game, a player leads a tile or set of tiles, and the other players must follow by either playing a higher tile or set of tiles or passing. The play continues until all players have passed in succession after the final play, and the player who played the last set leads next. Play continues until one player has played all of his tiles. Then each player pays chips to those players who performed better &ndash; that is, the player who went out will get paid by all other players, and the other players pay points to one another based on the difference in the number of tiles each held at the end of the hand. A game lasts five rounds, and the player at the end of the game with the most points wins.",
-      "descriptionKo": ""
+      "descriptionKo": "중국 전통 게임 쟁상유(Zheng Shangyou)를 기반으로 한 타일 게임. 마작 타일처럼 생긴 패로 빅 투(Big Two)를 즐깁니다. 숫자 2가 가장 강한 기본 숫자이며 패를 먼저 비우는 플레이어 승리."
     },
     "cottage": {
       "status": "active",
@@ -32392,7 +32392,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "마스터 없이 플레이하는 던전 탐험 게임. 카드와 주사위로 무작위 던전을 탐험하며 보물을 모으고 몬스터를 처치합니다."
     },
     "cottage": {
       "status": "active",
@@ -34267,7 +34267,7 @@ const gameData = {
         "Mark Chaplin"
       ],
       "description": "In 1894, farmers from the small village of Malpaso face the prospect of again losing their livelihood to a band of roving thieves, led by the self-styled \"General\" Mapache &ndash; himself wanted by the Mexican National Defense Army.\n\nTheir solution is to go to the much admired but fallen from grace \"Padre\" Esteban, and see whether he can hire gunfighters to protect them. After trying to raise funds by any means at the \"All Rivers\" Poker tournament, the Padre recruits a band of gunslingers for the task and, once complete, travels back to the village over the precipitous Los Quantos bridge &ndash; all the while harassed by a detachment of the General's men. There they fortify Malpaso itself, and usher the frightened villagers into the abandoned silver mine for protection.\n\nWhen the bandits finally attack, both sides are prepared. Mapache's men unleashing their Gatling gun to devastating effect, while the villagers have a few tricks of their own. Both sides will suffer many casualties in the calamitous battle, but will the Mexican Army arrive in time to put an end to the bloodshed?\n\nRevolver 2: Last Stand at Malpaso is a two-player card game set in the Old West, in which one player takes the role of General Mapache and his band of thieving outlaws, and the other player controls the villagers and guardians hired to protect the town of Malpaso, led by the infamous Padre Esteban. Each player has a unique deck of cards with unique possibilities as well as different winning conditions, which requires different tactics and different methods of play.\n\nMore than just new locations, Revolver 2 features brand new gameplay elements in players can use a mine cart-mounted Gatling gun, blow up a bridge, assemble their own team of gunfighters, and dynamite mine tunnels. The game also includes a terrific Stud Poker mini-game which determines in which town the initial firefights occur.\n\nLike the original Revolver, the game remains elegantly simple and can be learned in five minutes. That said, Revolver 2 is a standalone game and the cards from Revolver and its expansions (red packaging) are not interchangable with Revolver 2 and its expansions (green packaging).",
-      "descriptionKo": ""
+      "descriptionKo": "1894년 멕시코 작은 마을 말파소. 악당 마파체로부터 마을을 지키기 위해 총잡이들을 고용합니다. 포커 토너먼트로 자금을 마련하고 마을을 방어하는 협력 및 경쟁 게임."
     },
     "cottage": {
       "status": "active",
@@ -37113,7 +37113,7 @@ const gameData = {
         "Stefan Alexander"
       ],
       "description": "Every day, dozens of birds have a stop on the fences of our countryside. When it is time to leave, all these birds mix together, unable to organize themselves into flocks to fly home. Help them find their way back to their nest.\n\nPlayers begin each new round of CuBirds with eight bird cards in hand. Some birds also sit on four distinct fences on the table. On your turn, you lay a series of identical birds from your hand on one fence's extremity. These birds instantly gather with any identical bird already present on this fence, making all birds placed in-between them fly into your hand. With enough identical birds in your hand, you can perform a flock, allowing you to add some of these birds in your scoring area.\n\nYour ultimate goal is to be the first player to gather in your scoring area either seven different species, or two species with at least three identical birds in each. Each bird comes with one small and one big flock scores, so you may want to wait to reach a big flock to add more birds at once to your scoring area. Beware, though, as the round ends as soon as a player empties their hand, forcing all players to discard their current hands and plans!",
-      "descriptionKo": ""
+      "descriptionKo": "울타리에 앉은 새들을 같은 종류로 모아 둥지로 돌려보내는 카드 게임. 울타리 끝에 같은 새를 여러 마리 내면 다른 새들을 추가로 얻습니다. 이상한 새 조합으로 덱을 빠르게 비우세요."
     },
     "cottage": {
       "status": "active",
@@ -37227,7 +37227,7 @@ const gameData = {
         "Christof Tisch"
       ],
       "description": "This game combines elements from Take it easy! and W&uuml;rfel-Bingo.\n\nEach turn one of the players rolls 4 symbol dice with the 3 symbols circle (O), triangle (A) and cross (X) on their faces. \nThen he arranges these dice in a specific sequence.\n\nAll players transcribe this very sequence into their personal 7x7 grid on their player mat with erasable crayons. \nIn doing so, they try to create the most and the largest cohesive areas of matching symbols to maximize their final scoring.\n\nPublished September 2009.",
-      "descriptionKo": ""
+      "descriptionKo": "4개 주사위를 굴려 나온 심볼 배열을 7×7 개인 격자에 기록합니다. 같은 심볼의 연속 구역을 가장 크고 많이 만드는 플레이어가 승리하는 롤앤라이트 게임."
     },
     "cottage": {
       "status": "active",
@@ -37343,7 +37343,7 @@ const gameData = {
         "Johannes Schmidauer-König"
       ],
       "description": "The portals of Molthar have opened! The players travel through the portal into a world of a type that you know only through folklore and fairy tales. By collecting magic pearls and trading them in a timely fashion for fantastic and powerful character cards, you draw ever closer to victory &mdash; but only the one who first manages to gather twelve insignias of power will save Molthar and win the game.\n\nAt the start of Portal of Heroes, four pearl cards and two character cards lie face up in the middle of the table. The rest of the character and pearl cards are set nearby in separate decks. Each player receives their own player portal and places it face up in front of them.\n\nEach turn, you can take three actions from a menu of four options: Take a pearl card into your hand, replace all of the pearl cards in the display, place a character card on your portal, or activate a character. You can perform any of the four possible actions multiple times, and in any order. To activate a character, you must play a specific combination of pearl cards from your hand onto the character card. Activated characters grant you power points, diamonds, or special abilities. Once you have activated characters this way with twelve or more power points then that round becomes the penultimate one. Whoever has the most power points at the end of the game wins with diamonds acting as a tie breaker.",
-      "descriptionKo": ""
+      "descriptionKo": "마법 구슬을 수집하고 강력한 캐릭터 카드와 교환합니다. 권능의 문장 12개를 먼저 모으면 몰타를 구하고 게임에서 승리합니다."
     },
     "cottage": {
       "status": "active",
@@ -38043,7 +38043,7 @@ const gameData = {
         "Joachim Thôme"
       ],
       "description": "In a post-apocalyptic world, the tribes of the wind are going to rebuild the world on the polluted ruins from the past.\n\nPlayers will have to plant forests, build new villages and temples, and decontaminate surrounding areas.\n\nThey will be able to play cards from their hand. But be careful! The effect or even the possibility of playing the card may vary depending on... the back of your surrounding opponents' cards.\n\nPlayers may also send their wind riders to explore the area, plant forests, or build villages and temples using all the gathered resources.\n\nAs the game progresses, you strive to complete objectives that will allow you to unlock your guide's special abilities, and to improve your tribe's powers.\n\nWhen someone builds their 5th village, the end of the game is triggered. The player with the most points, depending on pollution, villages, temples, layout of their forests, and other various objectives, wins!\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "포스트아포칼립스 세계에서 숲을 심고 마을을 세우며 오염을 제거합니다. 상대방 카드의 뒷면에 따라 자신의 카드 효과가 달라지는 독특한 메커니즘의 재건 게임."
     },
     "cottage": {
       "status": "active",
@@ -39690,7 +39690,7 @@ const gameData = {
         "Rich Koehler"
       ],
       "description": "BURN RATE puts the players in the role of a dot-com CEO, trying to keep his startup afloat.  The challenge of the game is to keep a startup in business and lose money as slowly as possible.  Opponents try to force each other to flame out quickly with money-wasting dot-com projects, over hiring, and incompetent vice presidents.\n\nThe mechanics of the game are based on real life.  A player's employee [cards] each has a skill number, and that skill allows the play of cards that represent their actions.  For example, a FUNDING card with a skill prerequisite of 2 requires an Finance employee with a minimum skill of 2 to play it.\n\nA player's bank account is debited each turn based on his current situation, or \"burn rate\".  A player wins when all the others have run out of money.",
-      "descriptionKo": ""
+      "descriptionKo": "닷컴 CEO가 되어 스타트업을 유지하는 게임. 최대한 천천히 돈을 잃는 것이 목표. 상대방은 비효율적인 프로젝트와 과도한 채용으로 서로를 파산시키려 합니다."
     },
     "cottage": {
       "status": "active",
@@ -39805,7 +39805,7 @@ const gameData = {
         "Jun Sasaki"
       ],
       "description": "A bay full of huge whales and orcas, and quite popular among whale-watching tourists, is becoming overrun with tour companies. The whales, on the other hand, seem to be enjoying themselves, sometimes showing up, sometimes not... As one of these tour companies, you must decide where to send out your boat! If you dilly-dally too long, one of the rival companies will pass by, but sometimes when your own investigation isn't enough, you might need to follow a rival company!",
-      "descriptionKo": ""
+      "descriptionKo": "관광객을 가득 태운 보트를 고래가 나타날 장소로 보내는 게임. 경쟁 회사보다 먼저 좋은 위치를 선점하거나 때로는 협력해야 합니다. 고래 관광 회사 운영 게임."
     },
     "cottage": {
       "status": "active",
@@ -40165,7 +40165,7 @@ const gameData = {
         "Hideki Morikawa"
       ],
       "description": "Hull and Aki They are a childhood favorite that grows like a sister.\nTwo visited the campsite in the back of the mountains, get caught in an unexpected case.\nThe dead body of the administrator was found.\nDeep and closed environment 5 guest\nThe legend of cherry blossom trees and the mystery rope hung on branches.\nAnd there are many information that has been rewritten.\nCan the two people get to the truth?",
-      "descriptionKo": ""
+      "descriptionKo": "두 소녀가 산속 캠프장에서 관리인 시체를 발견합니다. 폐쇄된 환경의 5명 용의자, 벚꽃 나무 전설과 수수께끼를 풀어 진실에 접근하는 미스터리 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -40808,7 +40808,7 @@ const gameData = {
         "Yoshihisa Itsubaki"
       ],
       "description": "Let's win a stick with a 5 mm difference! Join the auction as a stick collector! Bid for a worthwhile stick with only a 5mm difference.\n\nPlayers compete for sticks that are put on the table one by one. The more sticks you collect with a 5mm difference in length, the more you score, but don't get their size to close to them during a competition because you can't measure them except by your eye. While consulting with your money, consider carefully and decide whether to participate in the competition or pass. If someone runs out of money or someone competes for 8, it adds points to the score at the end of the game, but if a player can align 4 of the same length in the middle of the game, they can win immediately. It is a unique competition game where overconfidence and disappointment in eye measurement are fun.\n\nスティックコレクターとしてオークションに参加しよう!\n価値ある5mm違いのスティックを見た目で落札するのです。\n\nプレイヤーは、一本ずつテーブルに出されるスティックを競り落としていきます。\n長さが5mm違いのスティックを集めるほど得点になっていきますが、競りの最中はスティックに近づいてはいけません。所持金と相談しながら、じっくり見つめて競りに参加するかパスするか決断してください。\n参加者の視線を浴びながら、競り落としたスティックを手中に収めるたび、答え合わせで盛り上がります。\n誰かの所持金がなくなるか、誰かが8本競り落としたらゲーム終了で得点計算ですが、もしゲーム途中で同じ長さを４本揃えることができたら即勝利というオプションがあります。\n目測への過信と失望が楽しい異色の競りゲームです。\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "5mm 차이 막대기 경매 게임! 같은 5mm 차이 막대기를 모을수록 점수가 올라갑니다. 단, 경매 중에는 자로 잴 수 없고 눈으로만 판단해야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -41304,7 +41304,7 @@ const gameData = {
         "Kedric Winks"
       ],
       "description": "Welcome to the elegant city of Florimelle, where a grand beautification effort has begun. In Fountains, you&rsquo;ll become a master Fountaineer tasked with transforming Florimelle&rsquo;s gardens and plazas by creating the most magnificent Fountain the world has ever seen!\n\nFountains is a take-and-make game in which each player starts with a round fountain that features a spout and room for four features.\n\nOn a turn, move one of the tokens 1-3 spaces clockwise around the central board, skipping occupied spaces, to land on an empty space. You then take the top tile next to this token and add it to your board. You can expand out or up or both, but you want to ensure that you have a spout at your highest level and water flowing through all of your lower levels or else you'll have dead zones that won't score. If you stop next to the tiny oval features instead of a tile stack, choose one of these features and add it to an empty space in your fountain.\n\nWhen someone lands on the green, blue, or white space with the matching colored token, everyone scores for the linked item: lilypads, separate pools linked by constant water flow, and fish. (Fish come in three types, and the player who scores fish chooses which color scores.) For each item, you score 1, 2, 3, etc. points if the item is on the first, second, third, etc. level.\n\nWhen a player hits a point threshold, players then score for all three colors once again, as well as endgame bonuses such as 2 points per coin icon and 4 points for a set of fish in the three colors.",
-      "descriptionKo": ""
+      "descriptionKo": "플로리멜 도시 아름다운 분수 만들기 게임. 토큰을 1~3칸 이동하며 분수 부품 카드를 가져갑니다. 최고의 분수를 만들어 가장 많은 점수를 얻는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -42989,7 +42989,7 @@ const gameData = {
         "Alex Randolph"
       ],
       "description": "Big Shot is an auction game in which a set of colored cubes is put up for auction each round based on a random die roll. Whoever wins the bid, places those cubes in areas on the game board. Once an area has seven cubes in it, that area is locked and no more cubes can be added. Whoever has the majority of cubes in that area owns it &mdash; except that ties for majority are disregarded, so in a spread of 3/3/1 cubes, the player with only one cube owns that area!\n\nPlayers have a limited amount of money with which to bid. They can take one loan each turn, but the first loan gives them only $9 more, while the second loan gives them $8 and the third $7. At the end of the game, the player must repay $10 for each loan taken, with that money coming from the value of the property they now own.\n\nAt the end of the game, players tally the value of what they own (with some properties being doubled in value if the player owns that region's doubler as well as areas within that region), then repay all loans. Whoever has the most money wins!",
-      "descriptionKo": ""
+      "descriptionKo": "주사위로 경매할 색깔 큐브를 결정합니다. 낙찰자가 보드에 큐브를 배치하고 7개가 채워진 구역의 다수를 점유한 플레이어가 그 구역을 소유합니다. 독특한 다수결 경매 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -43766,7 +43766,7 @@ const gameData = {
         "Shadi Torbey"
       ],
       "description": "The factory of the world of dreams is on the brink of destruction! The Evil Cogs have sabotaged all the machines, and it is only a matter of minutes before everything implodes. As the head of a robot squad, will you manage to repair the factory before all the failsafes have collapsed?\n\nCyberion is a game of hand-management, and you must use your robot cards wisely, either to repair the machine cards or to trigger powerful effects. The machines get harder to repair throughout the game, but you'll also have opportunities to increase the magnitude of the effects your robot can trigger.\n\n&mdash;description from the designer",
-      "descriptionKo": ""
+      "descriptionKo": "꿈의 세계 공장이 위기에 처했습니다! 로봇 카드로 기계를 수리하거나 강력한 효과를 발동해야 합니다. 시간 안에 모든 기계를 고쳐야 하는 협력 핸드 매니지먼트 게임."
     },
     "cottage": {
       "status": "active",
@@ -44432,7 +44432,7 @@ const gameData = {
         "Guillaume Montiage"
       ],
       "description": "Suspects is a range of investigation games with streamlined rules and plots centered on the psychology of the characters in the style of Agatha Christie&rsquo;s novels. The first opus will feature the ingenious and fearless Claire Harper in three stories that pay tribute to the great classics of detective literature!\n\nClaire Harper was one of the first women to graduate from Oxford in 1927. Specializing in criminal law, she is also an adventurous traveler. Every mystery is an opportunity for her to test her formidable spirit of deduction and her unfailing determination! In this first episode, follow her in her investigations that will take her from grand manor houses to shady theaters and from Scotland to...Egypt!\n\n--description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "아가사 크리스티 스타일 추리 게임. 1927년 옥스퍼드를 졸업한 클레어 하퍼가 세 가지 사건을 해결합니다. 캐릭터 심리를 분석하는 탐정 소설 분위기의 수사 게임."
     },
     "cottage": {
       "status": "active",
@@ -44982,7 +44982,7 @@ const gameData = {
         "Gary Kim"
       ],
       "description": "Players take turns secretly handing one of their three cards to another player, saying, \"It's a gift.\" He says. The opponent decides whether to receive the card or not. If you receive it, it becomes your score. If you do not receive it, it becomes the score of the person who gave it.\nA good gift will have a large number, and a bad gift, such as trash, will have a negative score.\nAfter that, a new card is drawn.\nProceed until all cards are gone.",
-      "descriptionKo": ""
+      "descriptionKo": "3장의 카드 중 하나를 몰래 상대에게 건넵니다. 받으면 그 점수가 자신의 것, 거부하면 준 사람의 점수가 됩니다. 좋은 선물을 주고 나쁜 선물을 받지 않는 심리 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -49481,7 +49481,7 @@ const gameData = {
         "Ryo Kawakami"
       ],
       "description": "A man's body was found beaten to death in an open-air bath.\nThe suspects were novelists, editors, hot spring writers, and guests at hot spring inns.\n\"Five dancers from a nearby theater who happened to visit the inn, and a wet towel dealer who came and went.\"\nWhile they were both suspicious, a pistol with a silencer was found in the victim's dressing basket.\nThings are getting more and more chaotic...",
-      "descriptionKo": ""
+      "descriptionKo": "노천 온천에서 남성 시체가 발견됩니다. 소설가, 편집자, 온천 작가, 여관 투숙객이 용의자. 소음기 달린 권총까지 발견된 온천 살인 미스터리 파티 게임."
     },
     "cottage": {
       "status": "active",
@@ -50693,7 +50693,7 @@ const gameData = {
         "Laurent Levi"
       ],
       "description": "This beautiful and functional board has room for two teams of large marbles. Players take turns pushing the marbles around the board, with the goal of pushing six of the opposing player's marbles off the board. The central idea is that a column of marbles has weight given by the number of marbles in line. Someone will need to push with a heavier group of marbles in order to push the column along that axis. However, with six possible directions, it's difficult to defend yourself perfectly. Also, it's possible to play the game with up to six players when supplemental marble sets are purchased.\n\nA winner of the 1988 Concours International de Créateurs de Jeux de Société.",
-      "descriptionKo": ""
+      "descriptionKo": "두 팀이 큰 구슬로 밀기 대결을 펼칩니다. 구슬 열의 수가 힘이 되어 더 많은 구슬로 밀어야 합니다. 상대 구슬 6개를 보드 밖으로 밀어내면 승리하는 추상 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -50929,7 +50929,7 @@ const gameData = {
         "Fabio Lopiano"
       ],
       "description": "Retell the incredible origin myth of the Inca in this dramatic mid-weight eurogame.\n\nIn the beginning, Viracocha the creator brought forth Inti, the sun god, and Mama Quilla, the moon god. From the union of these two gods sprang four sons and four daughters: the Ayar. These siblings were tasked with guiding the first clans and teaching them the skills needed to build a civilization. As they traveled the land in search of fertile ground, the Ayar one by one met their fates until only two remained to found Tawantinsuyu &ndash; the Inca Empire.\n\nIn Ayar: Children of the Sun, players take control of one of the first clans, journeying with the Ayar across the Andes. Follow their teaching and improve your skills at farming, pottery, weaving, and reed bundling. As well as advancing your own clan, you must influence the progress of the Ayar, ensuring the survival of those who reward your most developed skills. Seek the approval of Mama Quilla through long-term strategy, and please Inti with tactical play. Be careful not to earn the ire of one of these jealous gods because at the end of the game, whichever one favors you least will determine your final score.\n\nThe future of your clan &ndash; and the Inca civilization &ndash; is in your hands.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "잉카 창세 신화를 배경으로 한 미드웨이트 유로 게임. 아야르 4형제 중 하나를 선택해 부족을 이끌고 문명을 건설합니다. 자원 관리와 지역 개발로 승점을 쌓는 전략 게임."
     },
     "cottage": {
       "status": "active",
@@ -52323,7 +52323,7 @@ const gameData = {
         "Stefan Feld"
       ],
       "description": "Amsterdam is a reimplementation of Macao with a new setting, improved card balance, and new gameplay elements. It challenges players to build combinations of abilities, as well as to correctly calculate the advantage of delayed gratification for actions.\n\nIn the game, players are merchants in Amsterdam near the turn of the 20th century. At the start of the game, two district cards are placed on each of the twelve spaces on the designated board. At the beginning of a round, the next two district cards, as well as two building and two profession cards (each from a deck of 54 of each type) are drawn to form the offer of six cards. Each of these cards has a cost in colored action cubes and grants a new action, special ability, or way to score points. In turn order, each player takes a card from those on offer. Finally, a market card is revealed that allows players to exchange money for victory points on their turn.\n\nNext, the six colored dice are rolled. Each player decides which of the six dice they would like (players may choose the same die), then takes as many action cubes in that color as the number of pips. Players place their new action cubes on their rotatable windrose as many spaces in the future as the number on the dice. Finally, the wheel is spun, so that players gain access to all cubes that were located on the 1 space of their windrose.\n\nAction cubes are used to purchase cards that a player has taken, claim one of the nine types of goods around the city of Amsterdam, and ferry goods or workers through canals to warehouses. Players earn points for delivering their goods, as well as for bonuses on cards they purchase, and the player with the most points at the end of the twelfth round wins.",
-      "descriptionKo": ""
+      "descriptionKo": "마카오 리메이크. 20세기 초 암스테르담 상인이 되어 능력 조합을 구축합니다. 지연 보상 계산이 핵심인 미드헤비 전략 게임으로 개선된 카드 밸런스가 특징."
     },
     "cottage": {
       "status": "active",
@@ -56415,7 +56415,7 @@ const gameData = {
         "Markus Brand"
       ],
       "description": "For those shipwrecked on the beach  of this forgotten island, a chained boat is the only hope &mdash; but the mysterious owner has left puzzles over the whole island. Will the team solve them, free the boat, and escape?\n\nExit: The Game &ndash; The Forgotten Island is a puzzle game modeled after escape rooms.",
-      "descriptionKo": ""
+      "descriptionKo": "잊혀진 섬에 조난된 플레이어들이 퍼즐을 풀어 탈출합니다. 섬 곳곳의 수수께끼를 해결하고 묶여있는 보트를 풀어 탈출하는 방탈출 카드 게임."
     },
     "cottage": {
       "status": "active",
@@ -57643,7 +57643,7 @@ const gameData = {
         "かぶきけんいち (Kenichi Kabuki)"
       ],
       "description": "535 is a Climbing/Shedding game for 2 to 6 Players. The game's deck is comprised of cards numbered 1-15, with cards of rank 6 and 10 missing. The deck contains multiple copies of each card, depending on player count (4 each at 2-4 players/5 each at 5+ players). In addition to a rank, each card has a point value, which depends on the rank&rsquo;s strength. The object of the game is for players to be the first to play all of their cards to the table.\n\nOn a turn, a player may play one, two, or three cards to a single, central meld. Playable meld-types are:\n\n-Single: Any one card. (1 < 7 < 14)\n-Set: Any two or more cards of equal rank. (1,1,1 < 14,14,14)\n-Run: Any two or more cards of consecutive rank. (1,2,3 > 11,12,13)\n\nOn a turn, a player chooses to do one of the following actions:\n\n-Overwrite: Play a higher ranked meld, which matches the meld-type and size of the central meld.\n-Add: Attach a card or cards to the central meld, making sets/runs longer.\n-Pass: A player who can not or chooses not to play into the central meld may pass. Once a player passes, they are out for the trick.\n\nA trick ends once 1 of 4 things happens:\n\n-All but one player passes. \n-A player adds the fourth card to an active set of a like-numbered meld (or fifth in a 5+ player game).\n-A player adds the fifth card of a run.\n-A player plays a meld that follows the &ldquo;Rule of 8&rsquo;s&rdquo; (See Below).\n\nThe last player to have played a card to the meld in any of these situations above clears the trick and leads the next. A lead player must always play one, two, or three cards and may never \"Pass\".\n\nOnce one player has played their final card(s) to the table, the round ends immediately. The other players then score the points indicated on the cards left in their hands. Rounds are played until one player has 20 or more points, leaving the player(s) with the least points the winner(s).\n\nRule of 8&rsquo;s:\nAll cards of rank 8 in the deck are worth the most points in the game. However, these cards have a special function. When a rank 8 card is played to a trick (ie. A single 8, a set of 8&rsquo;s, a run of either 7,8 or 7,8,9) the trick is immediately cleared and the player who played the &ldquo;Rule of 8&rsquo;s&rdquo; clears the trick and leads the next. The only time the Rule of 8&rsquo;s will not function is when an 8 is included in the opening meld of any trick.",
-      "descriptionKo": ""
+      "descriptionKo": "1~15 숫자 카드(6과 10 없음)를 사용하는 클라이밍 게임. 2~6인용. 각 카드는 숫자에 따른 점수가 있으며, 가장 먼저 패를 다 내는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -61926,7 +61926,7 @@ const gameData = {
         "Urtis Šulinskas"
       ],
       "description": "A Carnivore Did It! promises a guilty meat-eater, but you will have to determine the culprit for yourself. Maybe an herbivore was actually behind the crime, or perhaps you're searching for two culprits &mdash; or even three?\n\nFor each case in this co-operative game, you're given a number of suspects, with each suspect being assigned a statement, e.g., \"Shark is telling the truth\" or \"A carnivore did it\". You know how many culprits you're looking for, and you have some idea of how truthful everyone is being. Perhaps only one suspect is lying, or perhaps 3-4 of them are telling the truth. Putting all of this information together, can you determine who did the crime?\n\nA Carnivore Did It! includes two thousand cases, each with a single solution, with the difficulty increasing to have up to seven suspects, conditional statements, and varying levels of truthiness.\n\nAlso included is a campaign mode that links several cases together, with you scoring in them based on the amount of time it takes to find each solution...if you find them at all.",
-      "descriptionKo": ""
+      "descriptionKo": "범인은 육식동물일까? 각 용의자의 진술을 분석해 범인의 정체, 범행 도구, 동기를 추리합니다. 2000가지 케이스가 포함된 협력 추리 퍼즐 게임."
     },
     "cottage": {
       "status": "active",
@@ -64204,7 +64204,7 @@ const gameData = {
         "Dave Neale"
       ],
       "description": "In Perspectives, each player holds key information for piecing together what has happened and finding the solution.\n\n\n     Three cases, each in four acts.\n     Cross-reference photographs, reports, and clues... without looking at the documents of your team players!\n     Will you find the details connecting all the pieces of the puzzle?\n\n\nWORK TOGETHER TO SOLVE THE CASES!\n\nThe three scenarios:\n\n     THE NAGARAJA - CASE 1: India - Museum &ndash; Theft \n     THE DREGS - CASE 2: California - Rock music &ndash; Poison\n     FROM BUENAVISTA WITH LOVE - CASE 3: South America - Gangs &ndash; Murders\n\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "각 플레이어가 핵심 정보를 나눠 갖고 팀으로 사건을 해결합니다. 사진, 보고서, 단서를 교차 분석하되 다른 플레이어의 문서는 볼 수 없습니다. 4막으로 구성된 3개 사건을 함께 풀어가는 협력 추리 게임."
     },
     "cottage": {
       "status": "active",
@@ -64650,7 +64650,7 @@ const gameData = {
         "Axel Hesling"
       ],
       "description": "In Oriflamme, the players find themselves in the middle of a medieval feud over the French royal crown. The King is dead! Long live the King! As heads of influential families, players strive to come to power with cunning and malice, power and strength, virtue and infamy. Their goal: the king's throne!\n\nIn this tactical card game, hidden cards are played in turn. By tactically uncovering and activating their effects, players can outdo or get them out of the way, because all players have the same goal in mind &mdash; to collect the most influence points for their family and thus win the game.",
-      "descriptionKo": ""
+      "descriptionKo": "중세 프랑스 왕위 쟁탈전 카드 게임. 영향력 있는 가문의 수장으로 왕좌를 차지하세요. 카드를 뒤집어 놓고 순서에 따라 효과를 활성화하는 전술적 숨겨진 역할 게임."
     },
     "cottage": {
       "status": "active",
@@ -64771,7 +64771,7 @@ const gameData = {
         "Axel Hesling"
       ],
       "description": "In Oriflamme and Oriflamme Embrasement, the players find themselves in the middle of a medieval feud over the French royal crown. The King is dead! Long live the King! As heads of influential families, the players strive to come to power with cunning and malice, power and strength, virtue and infamy. Their goal: the king's throne!\n\nIn the tactical card game, hidden cards are played in turn. By tactically uncovering and activating their effects, players can outdo or get them out of the way, because all players have the same goal in mind &mdash; to collect the most influence points for their family and thus win the game.\n\nIn Oriflamme Embrasement (second installment of the award winning game Oriflamme), the incendiary war threatens to bring the kingdom to the ground. But nothing will stop your house to conquer the throne by putting forward every inch of your famous lust for power and vengeance.\n\nOriflamme Embrasement offers 11 new action cards that can be mixed with Oriflamme or be used as a standalone.\n\n&mdash;description from the publisher (translated)",
-      "descriptionKo": ""
+      "descriptionKo": "제왕의깃발 + 불꽃 확장판. 중세 프랑스 왕위를 노리는 가문들의 전술 카드 게임. 숨겨진 카드를 활성화하며 영향력을 쌓고 왕좌를 차지하는 게임."
     },
     "cottage": {
       "status": "active",
@@ -65542,7 +65542,7 @@ const gameData = {
         "Geonil"
       ],
       "description": "Jekyll & Hyde vs Scotland Yard is a co-operative trick-taking game for two players that's a standalone spin-off of Jekyll vs. Hyde.\n\nYou're Dr. Jekyll, the kind doctor and valuable friend &mdash; but you're also the infamous Mr. Hyde, who is hunted by Scotland Yard for the many misdeeds committed in the City of London. Your objective is to maintain the balance in the duality of your personality, while staying ahead of Scotland Yard's investigation.\n\nThis is a story-based game in which you have to achieve the objectives of every chapter of the story to complete the game.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "2인 협력 트릭 테이킹 게임. 지킬 박사와 하이드 씨의 이중성을 균형 있게 유지하며 스코틀랜드 야드의 추적을 피해야 합니다. 지킬 vs 하이드의 스핀오프."
     },
     "cottage": {
       "status": "active",
@@ -69728,7 +69728,7 @@ const gameData = {
         "Emanuele Briano"
       ],
       "description": "Wandering ghosts in search of refuge have discovered an abandoned mansion. Inside this old and cozy mansion, the ghosts were all content, but they had different ideas about the arrangement of five statues scattered throughout the grand hall. To place the statues to their liking, the ghosts began moving them around at random. Can they find a placement that satisfies everyone before daybreak?\n\nQuiet House is a co-operative game in which players take turns moving statues to create arrangements that meet the goals. At the start of the game, goal tiles are assigned, indicating how the statues should be placed for a victory. However, players have only partial information about these goals and cannot communicate with each other regarding them. Success in the game relies on careful observation of others' moves, making guesses about the goals they know, and collaborating effectively to achieve the correct arrangement promptly.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "유령들이 저택의 5개 조각상을 모두 만족하도록 배치하는 협력 게임. 새벽이 오기 전에 모든 유령을 만족시키는 배치를 찾아야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -69861,7 +69861,7 @@ const gameData = {
         "Syou (しょう)"
       ],
       "description": "Cookie Run: Kingdom The Board Game is a worker placement territory building game based on the video game, Cookie Run: Kingdom. In this game, you become a king of a delectable kingdom and compete with other players to make your kingdom as awesome as possible.\n\nTo do so, you place your worker, Sugar Gnomes, to collect resources and construct exciting and fabulous buildings. You also team up cookies to fight against evil monsters. And you may clear the overgrown forest to expand your territory even bigger.",
-      "descriptionKo": ""
+      "descriptionKo": "쿠키런 킹덤 보드게임. 왕이 되어 설탕 놈들을 배치해 자원을 모으고 건물을 짓습니다. 쿠키들을 팀으로 꾸려 몬스터와 싸우는 워커 플레이스먼트 영토 건설 게임."
     },
     "cottage": {
       "status": "active",
@@ -70861,7 +70861,7 @@ const gameData = {
         "Katja Stremmel"
       ],
       "description": "In Dealt!, first released as Krass Kariert (Checkered Combos) then later as Combo Up, you don't necessarily win by going out first, but at least you don't lose the game.\n\nTo start, each player receives three life tokens and two reserve cards at random, which they place face up in front of themselves. They then receive a hand of cards, the order of which they cannot change. The start player for a round leads by playing a combination of up to three cards, and these cards must be next to one another in that player's hand. A player can lay down a single card, a pair, a triple, or a run of two or three consecutive cards. Each player in turn must beat the combination, with a pair being beaten by a higher pair or a triple. If you cannot or will not play, you instead pick up one of your reserve cards, placing it where you choose within your hand. If you have no more reserve cards, then you must discard a life token.\n\nOnce each player has played or passed, whoever played the highest combination wins that round and begins the next round. If a player must discard a life token but has none, this player loses the game and everyone else wins.\n\nCombo Up includes four new special action cards, but is otherwise identical in gameplay to the original release.",
-      "descriptionKo": ""
+      "descriptionKo": "패를 모두 내면 지지 않지만, 꼴찌가 되면 지는 카드 게임. 3개 생명 토큰으로 시작하며, 한 번에 최대 3장을 내며 선행 조합을 이겨야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -77749,7 +77749,7 @@ const gameData = {
         "Kevin Kim"
       ],
       "description": "In Paper Safari, first released as Ruby Gloom: The Game, each player tries to get the lowest sum possible with their six cards in play, swapping and replacing them according to the rules of play. Whoever has the lowest sum wins the round, and whoever wins three rounds first wins the game.",
-      "descriptionKo": ""
+      "descriptionKo": "6장 카드의 합계를 가장 낮게 만드는 카드 게임. 스모키 테마 에디션. 카드를 교환하고 교체하며 합계를 줄이고, 3라운드 먼저 이기는 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -77955,7 +77955,7 @@ const gameData = {
         "Friedemann Friese"
       ],
       "description": "Cats have very different personalities: Some adorable and sweet, and some...not so much...\n\nThe object of the game is to acquire the best cats. Sometimes, you'll use a dog to chase away unwanted cats, but too many dogs are bad as they will just chase each other!\n\nWith their mice, players attempt to grab the famous Felicity: The Cat In The Sack. In the sack, there are both good and bad cats. Each player can also put a dog or rabbit into the sack instead of a cat, allowing players to bluff one another. At the end of the game, all good cats and mice count as positive points, but bad cats count against you! This is a clever auction game with many interesting decisions.",
-      "descriptionKo": ""
+      "descriptionKo": "귀엽거나 못된 고양이를 모으는 게임. 자루 속 고양이들 중 좋은 것과 나쁜 것이 섞여 있습니다. 개를 이용해 원치 않는 고양이를 쫓아내세요. 하지만 개가 너무 많으면 역효과!"
     },
     "cottage": {
       "status": "active",
@@ -79158,7 +79158,7 @@ const gameData = {
         "David Spada"
       ],
       "description": "In Foxy, you'll put your memory and observation skills to the test while looking at a sequence of large, full-color cards. Each card shows one of four environments, as well as 1-2 animals that live in that environment &mdash; although a cat can show up anywhere, so sometimes a card will feature three animals.\n\nTo set up, shuffle 19 of the 40 cards into a deck, then shuffle the fox card into this deck. Each player takes a dry erase board and a marker. Flip the top card; for the types of animals depicted on this card, everyone secretly writes the total number of animals of these types that they've seen on all cards revealed so far. For the first round, this is easy &mdash; write the number of animals on this card! But you'll start seeing cards of many environments, and wait, how many chickens have I seen so far? How many cats? You can write only a single numeral for each round, with no reminders of which animals were which. When the fox card appears, write a numeral showing how many different animals you've seen total. Once during the game, you can circle a number to take a chance on doubling that score.\n\nOnce you've finished the deck after twenty rounds, flip it over, then go through the cards again, this time keeping a public tally of how many animals of each type have been seen. If the number you wrote for a round is equal to or less than the total number of animals seen, you score that many points; if the number is larger, then cross it out and score nothing for that round. For the circled number, if you correctly wrote the exact number of animals, score twice that many points; if you guess higher or lower, score nothing. Whoever scores the most points wins.",
-      "descriptionKo": ""
+      "descriptionKo": "4가지 환경과 동물이 그려진 카드를 관찰하는 기억력 게임. 여우 카드가 나타나면 직전 카드와 동일한 환경 동물을 빠르게 써야 합니다. 관찰력과 기억력을 테스트하는 게임."
     },
     "cottage": {
       "status": "active",
@@ -80309,7 +80309,7 @@ const gameData = {
         "Saashi"
       ],
       "description": "Time to walk about town and take some pictures! It's the 1960s in Japan, and you have a half-size camera that lets you take half-size vertical pictures. Let's see whether you can put together good shots...\n\nIn Wind the Film!, you're trying to organize pictures on your roll so that they appear in the right order. Each player has a hand of cards, and on a turn, you'll add 1-3 cards to the front of your hand (without changing their order), move one card in your hand closer to the front, then discard as many cards from the back of your hand as the number of cards that you added. When the sunset card comes out, you can take no more pictures, and everyone scores for what's on their camera.\n\nThe cards all have numbers and colors on them, and you try to line them up in hand to score the most points possible.",
-      "descriptionKo": ""
+      "descriptionKo": "1960년대 일본, 반사이즈 카메라로 사진을 찍습니다. 카드를 올바른 순서로 배열해 멋진 사진 롤을 만드는 게임. 카드를 앞에 추가하거나 이동하며 최상의 배열을 완성하세요."
     },
     "cottage": {
       "status": "active",
@@ -81875,7 +81875,7 @@ const gameData = {
         "Reiner Knizia"
       ],
       "description": "Reiner Knizia's auction game about producing movies. In four rounds, players bid on chips representing genuine directors, actors, camera, effects, music, guest stars and agents (or in Nightmare Productions edition: creatures, locations, directors, musical conductors, cameos, and contractors). These all get placed on players' film-strips to complete the movie production. So one movie might need 2 actors (in editions prior to Nightmare Productions), but no music or effects and so on. As films are completed, the points value is marked and another film-strip taken. There are two parties (in Nightmare Productions edition: horror cons) each round where players get to pick from offers without paying anything. There are bonus points for first films completed and best films, best directors (in Nightmare Productions edition: best creatures), even worst film.\n\nThe auction is a basic rising offer with passing until one winning bid remains. Players pay into the pot with contracts (in Nightmare Productions edition: money), and the rest of the players share the pot each turn. So it's a closed economy with players trying to time to bid on what they really need to complete films.\n\nSee Movie Comparison - Traumfabrik for listings of movies and actors in each version prior to Nightmare Productions edition.\n\nNote: There have been many editions of the game under varying names. All are identical except for Nightmare Productions edition which has introduced a few changes.",
-      "descriptionKo": ""
+      "descriptionKo": "라이너 크니치아의 영화 제작 경매 게임. 4라운드 동안 감독, 배우, 촬영, 음악 등 칩을 경매로 낙찰받아 필름스트립을 완성합니다. 가장 완성도 높은 영화를 만든 플레이어가 승리."
     },
     "cottage": {
       "status": "active",
@@ -84181,7 +84181,7 @@ const gameData = {
         "Yeom.C.W"
       ],
       "description": "Welcome to the world full of fantastic creatures! You are an admirer, a creature enthusiast who will join the journey of forming the world&rsquo;s leading creature reserve.\n\nTo win Wondrous Creatures, you must create the most harmonious reserve. To do this, you will need to collect various Creature Cards and Eggs in your reserve. As each Creature Card holds its own unique ability, it's important to bring cards into your reserve that fit and synergize with your strategy. Additionally, it is very important to create a reserve that helps complete the Achievements faster than other players.\n\n\n    The worker placement mechanism provides an intriguing Hex Puzzle experience. Your deployed worker interacts with surrounding icons to bring in resources or cards, and activate special effects! \n     Your workers hold their own unique abilities. As you progress through the game, unlock their abilities and strengthen your workers!\n     As the game progresses, powerful special effects are newly placed on the map. Get creative and use these special effects to unleash your very own powerful combos! \n     Collect and combine 100+ different creature cards. Every creature holds its own distinctive ability and provides a deep strategic tableau building experience. \n\n\nThe goal of Wondrous Creatures is to be the player with the highest Victory Points (VPs) at the end of the game.\n\n--description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "환상적인 생물로 가득한 세계에서 최고의 생물 보호구역을 만듭니다. 다양한 생물 카드와 알을 모아 시너지를 극대화하세요. 고유 능력을 가진 생물들이 서로 조화를 이루는 워커 플레이스먼트 게임."
     },
     "cottage": {
       "status": "active",
@@ -84286,7 +84286,7 @@ const gameData = {
       ],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드 게임. 교대 라운드 구조로 카드 드래프팅과 자원 관리에 독특한 플레이어 상호작용을 제공합니다."
     },
     "cottage": {
       "status": "active",
@@ -84358,7 +84358,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "스코틀랜드를 배경으로 타일을 획득하고 배치해 자신만의 지역을 건설합니다. 자원을 생산하고 거점을 세우며 가장 번성한 씨족을 이끄는 전략 타일 배치 게임."
     },
     "cottage": {
       "status": "active",
@@ -84430,7 +84430,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "잠수함 선원들이 해저 임무를 완수하는 협력 트릭 테이킹 게임. 말없이 손짓과 카드로만 소통하며 임무 카드를 배분하고 성공적으로 트릭을 이겨야 합니다."
     },
     "cottage": {
       "status": "active",
@@ -84502,7 +84502,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "",
-      "descriptionKo": ""
+      "descriptionKo": "증기 동력 시대 발명가들의 경쟁. 에이다 러브레이스의 꿈인 세계 최초 컴퓨터 완성을 향해 달려갑니다. 부품을 조합하고 발명품을 완성하는 전략 카드 게임."
     },
     "cottage": {
       "status": "active",
