@@ -84118,6 +84118,366 @@ const gameData = {
       "ratingEnabled": true,
       "boardId": "테베"
     }
+  },
+  "원드러스크리처": {
+    "id": "원드러스크리처",
+    "title": {
+      "display": "원드러스크리처",
+      "owned": "원드러스크리처",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unmatched",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [],
+      "displayTags": [],
+      "summaryKo": "",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "원드러스크리처"
+    }
+  },
+  "천국과맥주": {
+    "id": "천국과맥주",
+    "title": {
+      "display": "천국과맥주",
+      "owned": "천국과맥주",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unmatched",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [],
+      "displayTags": [],
+      "summaryKo": "",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "천국과맥주"
+    }
+  },
+  "글렌모어연대기": {
+    "id": "글렌모어연대기",
+    "title": {
+      "display": "글렌모어연대기",
+      "owned": "글렌모어연대기",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unmatched",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [],
+      "displayTags": [],
+      "summaryKo": "",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "글렌모어연대기"
+    }
+  },
+  "딥씨크루": {
+    "id": "딥씨크루",
+    "title": {
+      "display": "딥씨크루",
+      "owned": "딥씨크루",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unmatched",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [],
+      "displayTags": [],
+      "summaryKo": "",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "딥씨크루"
+    }
+  },
+  "에이다의꿈": {
+    "id": "에이다의꿈",
+    "title": {
+      "display": "에이다의꿈",
+      "owned": "에이다의꿈",
+      "bgg": ""
+    },
+    "bgg": {
+      "id": "",
+      "matchStatus": "unmatched",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [],
+      "displayTags": [],
+      "summaryKo": "",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "에이다의꿈"
+    }
   }
 };
 

@@ -6,6 +6,7 @@ const { readJson } = require("../../_core/file-read-writer");
 const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
   COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH,
+  COTTAGE_OWNED_GAMES_XLSX_PATH,
   BGG_GAME_DETAILS_PATH,
 } = require("../../_core/paths");
 
@@ -20,8 +21,9 @@ function saveMaster(master) {
 async function appendLedgerRow(game) {
   const workbook = new ExcelJS.Workbook();
 
+  // build-master가 읽는 소스 xlsx에 추가해야 반영됨
   await workbook.xlsx.readFile(
-    COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH
+    COTTAGE_OWNED_GAMES_XLSX_PATH
   );
 
   const worksheet = workbook.getWorksheet("보유게임리스트");
@@ -44,11 +46,11 @@ async function appendLedgerRow(game) {
     0;
 
   await workbook.xlsx.writeFile(
-    COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH
+    COTTAGE_OWNED_GAMES_XLSX_PATH
   );
 
   console.log(
-    "ledger 추가 완료:",
+    "source xlsx 추가 완료:",
     game.ownedName
   );
 }
