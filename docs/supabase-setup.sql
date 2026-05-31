@@ -308,8 +308,11 @@ create table if not exists public.member_intros (
   favorite_games text check (char_length(favorite_games) <= 100),
   available    text check (char_length(available) <= 100),
   location     text check (char_length(location) <= 50),
+  user_id      text,
   created_at   timestamptz not null default now()
 );
+
+alter table public.member_intros add column if not exists user_id text;
 
 create index if not exists member_intros_created_at_idx on public.member_intros (created_at desc);
 
