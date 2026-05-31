@@ -41,6 +41,7 @@
       text-align: left; font-family: inherit;
     }
     .pr-session-hd:hover { background: var(--bg,#f5f0e8); }
+    .pr-session > .pr-session-hd { border-left: 3px solid #c5d9c5; }
     .pr-session.is-open > .pr-session-hd { background: #e8f0e8; border-left: 3px solid var(--green); }
     .pr-session-date { font-size: 14px; font-weight: 700; color: var(--text); flex-shrink: 0; }
     .pr-session.is-open > .pr-session-hd .pr-session-date { color: #2d5a2d; }
@@ -369,7 +370,9 @@
         if (!fresh.includes('코티지보드 동호회')) fresh.unshift('코티지보드 동호회');
         window._prGroups = fresh;
         window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
+        window._refreshAutocompleteLists = refreshAutocompleteLists;
       }
+      window._refreshAutocompleteLists = refreshAutocompleteLists;
 
       panel.innerHTML = `
         <div class="pr-meta-grid">
@@ -661,7 +664,7 @@
         btn.disabled = false; btn.textContent = '저장하기';
 
         if (ok) {
-          showToast('저장됐어요!'); refreshAutocompleteLists();
+          showToast('저장됐어요!'); window._refreshAutocompleteLists?.();
           document.getElementById('prGameRows').innerHTML = '';
           addRow(false);
           if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);
@@ -813,12 +816,8 @@
           // 모임명 자동완성
           attachAc(form.querySelector('.pie-group'), () => window._prGroups || []);
 
-          // 참여자 이름 자동완성 (전체 기록 기반 + 현재 뷰 보완)
-          const viewNames = [...new Set(
-            recordsData.flatMap(r => (r.player_names||'').split(',').map(n => n.trim()).filter(Boolean))
-          )];
-          const allNames = [...new Set([...(window._prPlayerNames||[]), ...viewNames])];
-          attachAc(form.querySelector('.pie-names'), () => allNames);
+          // 참여자 이름 자동완성 — 항상 최신 window._prPlayerNames 참조
+          attachAc(form.querySelector('.pie-names'), () => window._prPlayerNames || []);
 
           form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
           form.querySelector('.pr-inline-save').addEventListener('click', async () => {
@@ -837,7 +836,7 @@
             if (!res?.error) {
               const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
               if (idx !== -1) Object.assign(recordsData[idx], updFields);
-              renderRecords(recordsData); refreshAutocompleteLists();
+              renderRecords(recordsData); window._refreshAutocompleteLists?.();
             } else {
               saveBtn.disabled = false;
               alert('수정에 실패했습니다.');
