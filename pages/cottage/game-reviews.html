@@ -79,6 +79,11 @@
     .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
     .pr-inline-save { font-size: 12px; background: var(--green); color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
     .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
+    .pr-dates-more-btn { width:100%; padding:8px; background:none; border:none; border-top:1px dashed var(--border,#e8e4dc); font-size:12px; color:var(--muted); cursor:pointer; text-align:center; }
+    .pr-dates-more-btn:hover { color:var(--green); }
+    .pr-dates-more-body { display:none; }
+    .pr-dates-more.is-open .pr-dates-more-body { display:block; }
+    .pr-dates-more.is-open .pr-dates-more-btn { color:var(--green); }
 
     /* single game view (from bottom sheet ?game=) */
     .rv-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
@@ -725,6 +730,15 @@
       panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
         hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
       });
+      panel.querySelectorAll('.pr-dates-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const wrap = btn.closest('.pr-dates-more');
+          wrap.classList.toggle('is-open');
+          btn.textContent = wrap.classList.contains('is-open')
+            ? btn.textContent.replace('더 보기 ▾', '접기 ▴')
+            : btn.textContent.replace('접기 ▴', '더 보기 ▾');
+        });
+      });
       panel.querySelectorAll('.pr-rec-del').forEach(btn => {
         btn.addEventListener('click', async e => {
           e.stopPropagation();
@@ -870,11 +884,15 @@
           </button>
           <div class="pr-session-body">`;
 
-        let firstDate = true;
-        for (const [dateStr, recs] of [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]))) {
+        const MAX_DATES = 3;
+        const sortedDates = [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+        const visibleDates = sortedDates.slice(0, MAX_DATES);
+        const hiddenDates = sortedDates.slice(MAX_DATES);
+
+        const renderDateBlock = ([dateStr, recs]) => {
           const gameNames = recs.map(r => getGameName(r.game_id));
           const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
-          html += `<div class="pr-sub-session${firstDate ? ' is-open' : ''}">
+          return `<div class="pr-sub-session">
             <button class="pr-sub-hd" type="button">
               <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
               <span class="pr-sub-summary">${escH(summaryText)}</span>
@@ -882,7 +900,15 @@
             </button>
             <div class="pr-sub-body">${buildSessionBody(recs, user)}</div>
           </div>`;
-          firstDate = false;
+        };
+
+        html += visibleDates.map(renderDateBlock).join('');
+
+        if (hiddenDates.length > 0) {
+          html += `<div class="pr-dates-more">
+            <button class="pr-dates-more-btn" type="button">이전 ${hiddenDates.length}회 더 보기 ▾</button>
+            <div class="pr-dates-more-body">${hiddenDates.map(renderDateBlock).join('')}</div>
+          </div>`;
         }
 
         html += `</div></div>`;
