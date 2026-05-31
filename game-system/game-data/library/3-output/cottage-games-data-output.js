@@ -84129,7 +84129,7 @@ const gameData = {
     "bgg": {
       "id": 400366,
       "matchStatus": "ready",
-      "year": 2024,
+      "year": "2024",
       "rating": 7.27,
       "weight": 0,
       "minPlayers": 0,
