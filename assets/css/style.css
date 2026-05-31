@@ -4627,8 +4627,8 @@ body.sheet-open{
   flex-direction:column;
 }
 .intro-card-news-head{
-  background:var(--green);
-  color:#fff;
+  background:#ddeedd;
+  color:#2d5a2d;
   padding:10px 12px 8px;
   position:relative;
 }
@@ -5103,6 +5103,14 @@ body.sheet-open{
   display:flex;
   flex-direction:column;
   gap:6px;
+}
+.history-player-header{
+  padding:6px 12px;
+  background:#f0f7f0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  border-top:1px solid #ddeedd;
 }
 .history-record-item{
   font-size:12px;

@@ -180,20 +180,39 @@
               <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션 복사</button>
             </div>
             <div class="history-record-list">
-              ${recs.map(r => {
-                const name = getGameName(r.game_id);
-                const tags = [
-                  r.player_count ? `👥 ${r.player_count}명` : null,
-                  r.player_names ? `🎮 ${escH(r.player_names)}` : null,
-                  r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
-                  r.score_note ? `🏆 ${escH(r.score_note)}` : null,
-                ].filter(Boolean);
-                return `<div class="history-record-item">
-                  <a class="history-game-name" href="../owned-games.html?open=${encodeURIComponent(r.game_id)}">${escH(name)}</a>
-                  ${tags.length ? `<div class="history-record-tags">${tags.map(t => `<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
-                  ${r.photo_url ? `<img class="history-photo" src="${escAttr(r.photo_url)}" alt="사진" loading="lazy">` : ''}
-                </div>`;
-              }).join('')}
+              ${(() => {
+                // 같은 인원+이름끼리 묶기
+                const playerGroups = new Map();
+                for (const r of recs) {
+                  const key = `${r.player_count||''}|${(r.player_names||'').trim()}`;
+                  if (!playerGroups.has(key)) playerGroups.set(key, []);
+                  playerGroups.get(key).push(r);
+                }
+                let out = '';
+                for (const [, grp] of playerGroups) {
+                  const f = grp[0];
+                  const playerTags = [
+                    f.player_count ? `👥 ${f.player_count}명` : null,
+                    f.player_names ? `🎮 ${escH(f.player_names)}` : null,
+                  ].filter(Boolean);
+                  if (playerTags.length) {
+                    out += `<div class="history-player-header">${playerTags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>`;
+                  }
+                  out += grp.map(r => {
+                    const name = getGameName(r.game_id);
+                    const tags = [
+                      r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
+                      r.score_note ? `🏆 ${escH(r.score_note)}` : null,
+                    ].filter(Boolean);
+                    return `<div class="history-record-item">
+                      <a class="history-game-name" href="../owned-games.html?open=${encodeURIComponent(r.game_id)}">${escH(name)}</a>
+                      ${tags.length ? `<div class="history-record-tags">${tags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
+                      ${r.photo_url ? `<img class="history-photo" src="${escAttr(r.photo_url)}" alt="사진" loading="lazy">` : ''}
+                    </div>`;
+                  }).join('');
+                }
+                return out;
+              })()}
             </div>
           </div>`;
         }
