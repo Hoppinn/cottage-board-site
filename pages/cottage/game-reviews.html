@@ -82,6 +82,11 @@
     .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
     .pr-inline-save { font-size: 12px; background: var(--green); color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
     .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
+    .pr-player-header { padding:8px 14px 4px; display:flex; flex-wrap:wrap; gap:4px; border-top:1px solid var(--border,#e8e4dc); background:var(--bg,#f5f0e8); }
+    .pr-player-header:first-child { border-top:none; }
+    .pr-rec-row--game { padding-left:14px; }
+    .pr-rec-game-line { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    .pr-rec-inline-meta { display:flex; flex-wrap:wrap; gap:4px; }
     .pr-dates-more-btn { width:100%; padding:8px; background:none; border:none; border-top:1px dashed var(--border,#e8e4dc); font-size:12px; color:var(--muted); cursor:pointer; text-align:center; }
     .pr-dates-more-btn:hover { color:var(--green); }
     .pr-dates-more-body { display:none; }
@@ -944,30 +949,51 @@
     }
 
     function buildSessionBody(recs, user) {
-      return recs.map(r => {
-        const isMine = user && String(r.user_id) === String(user.id);
-        const nameTags = r.player_names ? r.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('') : '';
-        const timeTags = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
-        const scoreTags = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
-        const countTag = r.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${r.player_count}명</span>` : '';
-        const metaHtml = (countTag + nameTags + timeTags + scoreTags) || '';
-        const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
-          <div class="pr-rec-row-top">
-            <div class="pr-rec-main">
-              <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
-              ${metaHtml ? `<div class="pr-rec-meta">${metaHtml}</div>` : ''}
-              ${reviewHtml}
+      // 참여자(인원+이름) 기준으로 묶기
+      const playerGroups = new Map();
+      for (const r of recs) {
+        const key = `${r.player_count||''}|${(r.player_names||'').trim()}`;
+        if (!playerGroups.has(key)) playerGroups.set(key, []);
+        playerGroups.get(key).push(r);
+      }
+
+      let html = '';
+      for (const [, groupRecs] of playerGroups) {
+        const first = groupRecs[0];
+        const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${first.player_count}명</span>` : '';
+        const nameTags = first.player_names
+          ? first.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('')
+          : '';
+
+        if (countTag || nameTags) {
+          html += `<div class="pr-player-header">${countTag}${nameTags}</div>`;
+        }
+
+        html += groupRecs.map(r => {
+          const isMine = user && String(r.user_id) === String(user.id);
+          const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
+          const scoreTag = r.score_note   ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
+          const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
+          const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+          return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+            <div class="pr-rec-row-top">
+              <div class="pr-rec-main">
+                <div class="pr-rec-game-line">
+                  <span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>
+                  <span class="pr-rec-inline-meta">${timeTag}${scoreTag}</span>
+                </div>
+                ${reviewHtml}
+              </div>
+              <div class="pr-rec-actions">
+                ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
+                ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+              </div>
             </div>
-            <div class="pr-rec-actions">
-              ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
-              ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
-            </div>
-          </div>
-          ${photoHtml}
-        </div>`;
-      }).join('');
+            ${photoHtml}
+          </div>`;
+        }).join('');
+      }
+      return html;
     }
 
     function buildGameRows(recs, user) {
