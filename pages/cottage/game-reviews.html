@@ -357,6 +357,13 @@
       window._prGroups = groups;
       window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
 
+      async function refreshAutocompleteLists() {
+        const fresh = await window.CottageDB?.getGroupNames() || [];
+        if (!fresh.includes('코티지보드 동호회')) fresh.unshift('코티지보드 동호회');
+        window._prGroups = fresh;
+        window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
+      }
+
       panel.innerHTML = `
         <div class="pr-meta-grid">
           <div>
@@ -647,7 +654,7 @@
         btn.disabled = false; btn.textContent = '저장하기';
 
         if (ok) {
-          showToast('저장됐어요!');
+          showToast('저장됐어요!'); refreshAutocompleteLists();
           document.getElementById('prGameRows').innerHTML = '';
           addRow(false);
           if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);
@@ -814,7 +821,7 @@
             if (!res?.error) {
               const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
               if (idx !== -1) Object.assign(recordsData[idx], updFields);
-              renderRecords(recordsData);
+              renderRecords(recordsData); refreshAutocompleteLists();
             } else {
               saveBtn.disabled = false;
               alert('수정에 실패했습니다.');
