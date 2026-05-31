@@ -56,7 +56,7 @@
     .pr-rec-row:hover { background: #f9fbe7; }
     .pr-rec-row-top { display: flex; align-items: center; gap: 8px; }
     .pr-rec-main { flex: 1; min-width: 0; }
-    .pr-rec-game { font-size: 15px; font-weight: 800; color: #3949ab; margin-bottom: 2px; display: block; }
+    .pr-rec-game { font-size: 15px; font-weight: 800; color: #1a1a1a; margin-bottom: 2px; display: block; }
     .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .pr-rec-review { font-size: 13px; color: var(--text); margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid #c8deda; padding-left: 10px; }
     .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 6px; padding: 2px 8px; color: var(--text,#333); font-weight: 500; }
@@ -796,7 +796,11 @@
           try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
           const form = document.createElement('div');
           form.className = 'pr-inline-edit';
+          // 현재 게임 표시 이름
+          const currentGameDisplay = getGameName(rec.gameId || '');
           form.innerHTML = `
+            <label style="font-size:11px;color:var(--muted);font-weight:700;color:#c0392b">🎲 게임명 수정</label>
+            <input class="pie-game" placeholder="게임명 검색" value="${escH(currentGameDisplay)}" autocomplete="off" style="border-color:#c0392b">
             <label style="font-size:11px;color:var(--muted)">참여자 이름 (쉼표로 구분)</label>
             <input class="pie-names" placeholder="예: 호핀, 철수" value="${escH(rec.names||'')}">
             <label style="font-size:11px;color:var(--muted)">인원수</label>
@@ -844,6 +848,11 @@
             input.addEventListener('blur', () => setTimeout(() => list.classList.remove('is-open'), 150));
           }
 
+          // 게임명 자동완성 (COTTAGE_GAMES display 목록)
+          attachAc(form.querySelector('.pie-game'), () =>
+            (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean)
+          );
+
           // 모임명 자동완성
           attachAc(form.querySelector('.pie-group'), () => window._prGroups || []);
 
@@ -854,6 +863,13 @@
           form.querySelector('.pr-inline-save').addEventListener('click', async () => {
             const saveBtn = form.querySelector('.pr-inline-save');
             saveBtn.disabled = true;
+            // 게임명 → game_id (gameKey 우선)
+            const gameDisplayInput = form.querySelector('.pie-game').value.trim();
+            let newGameId = null;
+            if (gameDisplayInput) {
+              const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
+              newGameId = found ? found.id : gameDisplayInput;
+            }
             const updFields = {
               player_names: form.querySelector('.pie-names').value.trim() || null,
               player_count: parseInt(form.querySelector('.pie-count').value) || null,
@@ -862,6 +878,7 @@
               group_name: form.querySelector('.pie-group').value.trim() || null,
               played_at: form.querySelector('.pie-date').value || null,
               review_text: form.querySelector('.pie-review').value.trim() || null,
+              ...(newGameId ? { game_id: newGameId } : {}),
             };
             const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, updFields);
             if (!res?.error) {
@@ -1002,8 +1019,8 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
           const gameKey = getGameKey(r.game_id);
-          const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}" title="코멘트·따봉 남기기">💬👍</a>` : '';
-          return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+          const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
+          return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
             <div class="pr-rec-row-top">
               <div class="pr-rec-main">
                 <span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>
@@ -1064,8 +1081,8 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
           const gameKey = getGameKey(r.game_id);
-          const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}" title="코멘트·따봉 남기기">💬👍</a>` : '';
-          return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+          const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
+          return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
             <div class="pr-rec-row-top">
               <div class="pr-rec-main">
                 <div class="pr-rec-meta">

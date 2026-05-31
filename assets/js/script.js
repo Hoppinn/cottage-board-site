@@ -1478,6 +1478,16 @@ function openGameSheet(gameKey){
   initSheetMechsToggle();
   initSheetComments(gameKey).catch(() => {});
   initSheetLikes(gameKey).catch(() => {});
+
+  // ?scroll=comments → 코멘트 섹션으로 스크롤
+  const _scrollParam = new URLSearchParams(location.search).get('scroll');
+  if (_scrollParam === 'comments') {
+    setTimeout(() => {
+      const panel = gameSheet.querySelector('.game-sheet-panel');
+      const commentsEl = document.getElementById(`sheetCommentsList-${gameKey}`);
+      if (panel && commentsEl) panel.scrollTo({ top: commentsEl.offsetTop - 20, behavior: 'smooth' });
+    }, 400);
+  }
 }
 
 function closeGameSheet(){

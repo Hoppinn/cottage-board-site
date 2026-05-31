@@ -84134,9 +84134,18 @@ const gameData = {
       "weight": 0,
       "minPlayers": 2,
       "maxPlayers": 5,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
+      "bestPlayers": [
+        4
+      ],
+      "recommendedPlayers": [
+        3,
+        4,
+        5
+      ],
+      "notRecommendedPlayers": [
+        1,
+        2
+      ],
       "playingTime": 75,
       "minPlayTime": 45,
       "maxPlayTime": 90,
