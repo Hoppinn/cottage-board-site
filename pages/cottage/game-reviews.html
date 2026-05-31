@@ -49,8 +49,9 @@
     .pr-session-body { display: none; border-top: 1px solid var(--border,#e8e4dc); }
     .pr-session.is-open .pr-session-body { display: block; }
 
-    .pr-rec-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border,#e8e4dc); }
+    .pr-rec-row { display: flex; flex-direction: column; padding: 10px 14px; border-bottom: 1px solid var(--border,#e8e4dc); gap: 0; }
     .pr-rec-row:last-child { border-bottom: none; }
+    .pr-rec-row-top { display: flex; align-items: flex-start; gap: 10px; }
     .pr-rec-main { flex: 1; min-width: 0; }
     .pr-rec-game { font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 5px; }
     .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -121,7 +122,7 @@
     .pr-photo-preview { max-width: 100%; max-height: 100px; border-radius: 7px; margin-top: 6px; display: none; }
 
     /* photo thumbnail in record row */
-    .pr-rec-photo { width: 72px; height: 54px; object-fit: cover; border-radius: 7px; flex-shrink: 0; }
+    .pr-rec-photo { width: 100%; max-height: 220px; object-fit: cover; border-radius: 7px; margin-top: 8px; display: block; }
 
     /* view toggle (모임별 / 게임별) */
     .pr-view-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
@@ -916,16 +917,18 @@
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+          <div class="pr-rec-row-top">
+            <div class="pr-rec-main">
+              <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
+              ${metaHtml ? `<div class="pr-rec-meta">${metaHtml}</div>` : ''}
+              ${reviewHtml}
+            </div>
+            <div class="pr-rec-actions">
+              ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
+              ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+            </div>
+          </div>
           ${photoHtml}
-          <div class="pr-rec-main">
-            <div class="pr-rec-game">${escH(getGameName(r.game_id))}</div>
-            ${metaHtml ? `<div class="pr-rec-meta">${metaHtml}</div>` : ''}
-            ${reviewHtml}
-          </div>
-          <div class="pr-rec-actions">
-            ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
-            ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
-          </div>
         </div>`;
       }).join('');
     }
@@ -946,15 +949,17 @@
         const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+          <div class="pr-rec-row-top">
+            <div class="pr-rec-main">
+              <div class="pr-rec-meta">${metaHtml2}</div>
+              ${reviewHtml}
+            </div>
+            <div class="pr-rec-actions">
+              ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
+              ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+            </div>
+          </div>
           ${photoHtml}
-          <div class="pr-rec-main">
-            <div class="pr-rec-meta">${metaHtml2}</div>
-            ${reviewHtml}
-          </div>
-          <div class="pr-rec-actions">
-            ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
-            ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
-          </div>
         </div>`;
       }).join('');
     }
