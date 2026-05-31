@@ -4344,5 +4344,10 @@
     "bggName": "Thebes",
     "score": 117,
     "scoreGap": 12
+  },
+  "원드러스크리처": {
+    "status": "forced",
+    "bggId": "400366",
+    "ownedName": "원드러스크리처"
   }
 }

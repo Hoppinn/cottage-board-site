@@ -84133,40 +84133,44 @@ const gameData = {
       "bgg": "Wondrous Creatures"
     },
     "bgg": {
-      "id": 400366,
-      "matchStatus": "ready",
+      "id": "400366",
+      "matchStatus": "forced",
       "year": "2024",
-      "rating": 7.27,
-      "weight": 2.5,
-      "minPlayers": 2,
-      "maxPlayers": 5,
+      "rating": 8.05572,
+      "weight": 3.0276,
+      "minPlayers": 1,
+      "maxPlayers": 4,
       "bestPlayers": [
-        4
+        2,
+        3
       ],
       "recommendedPlayers": [
-        3,
-        4,
-        5
+        1
       ],
       "notRecommendedPlayers": [
-        1,
-        2
+        4,
+        4
       ],
-      "playingTime": 75,
-      "minPlayTime": 45,
-      "maxPlayTime": 90,
+      "playingTime": 80,
+      "minPlayTime": 40,
+      "maxPlayTime": 80,
       "categories": [
-        "Fantasy",
-        "Animals"
+        "Fantasy"
       ],
       "categoriesKo": [
         "판타지",
         "동물"
       ],
       "mechanics": [
-        "Worker Placement",
+        "End Game Bonuses",
         "Hand Management",
-        "Card Drafting"
+        "Hexagon Grid",
+        "Open Drafting",
+        "Set Collection",
+        "Tags",
+        "Variable Player Powers",
+        "Worker Placement",
+        "Worker Placement, Different Worker Types"
       ],
       "mechanicsKo": [
         "워커 플레이스먼트",
@@ -84174,9 +84178,9 @@ const gameData = {
         "카드 드래프팅"
       ],
       "designers": [
-        "Yeom C.W."
+        "Yeom.C.W"
       ],
-      "description": "In Wondrous Creatures, you are a creature enthusiast who joins the journey of forming the world's leading creature reserve. Deploy workers to interact with surrounding icons, collect fantastic creatures, and build the most harmonious reserve to win.",
+      "description": "Welcome to the world full of fantastic creatures! You are an admirer, a creature enthusiast who will join the journey of forming the world&rsquo;s leading creature reserve.\n\nTo win Wondrous Creatures, you must create the most harmonious reserve. To do this, you will need to collect various Creature Cards and Eggs in your reserve. As each Creature Card holds its own unique ability, it's important to bring cards into your reserve that fit and synergize with your strategy. Additionally, it is very important to create a reserve that helps complete the Achievements faster than other players.\n\n\n    The worker placement mechanism provides an intriguing Hex Puzzle experience. Your deployed worker interacts with surrounding icons to bring in resources or cards, and activate special effects! \n     Your workers hold their own unique abilities. As you progress through the game, unlock their abilities and strengthen your workers!\n     As the game progresses, powerful special effects are newly placed on the map. Get creative and use these special effects to unleash your very own powerful combos! \n     Collect and combine 100+ different creature cards. Every creature holds its own distinctive ability and provides a deep strategic tableau building experience. \n\n\nThe goal of Wondrous Creatures is to be the player with the highest Victory Points (VPs) at the end of the game.\n\n--description from the publisher",
       "descriptionKo": ""
     },
     "cottage": {
@@ -84184,41 +84188,37 @@ const gameData = {
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.5,
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.0276,
       "moodTags": [
         "immersive"
       ],
       "playTags": [
-        "strategy",
-        "card_play"
+        "card_play",
+        "strategy"
       ],
       "situationTags": [
         "experienced",
         "long_stay",
-        "beginner",
-        "group",
-        "large_group"
+        "couple",
+        "group"
       ],
       "interactionTags": [
         "competitive",
-        "turn_based",
-        "low_conflict"
+        "turn_based"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "strategy",
         "card_play",
+        "strategy",
         "experienced",
         "long_stay",
-        "beginner",
+        "couple",
         "group",
-        "large_group",
         "competitive",
-        "turn_based",
-        "low_conflict"
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
@@ -84242,8 +84242,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://badcomet.co/cdn/shop/files/Wondrous-Creatures_Base-game-1.png",
-      "thumbnail": "https://badcomet.co/cdn/shop/files/Wondrous-Creatures_Base-game-1.png",
+      "main": "https://cf.geekdo-images.com/3ue_3La0WYopTSDER3shUA__original/img/fm8i0N9fCQRGqNHgk0jh0gk01Ww=/0x0/filters:format(jpeg)/pic8389014.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/3ue_3La0WYopTSDER3shUA__small/img/4SreytxNoZL435EkTriKB08W5W0=/fit-in/200x150/filters:strip_icc()/pic8389014.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -84256,82 +84256,53 @@ const gameData = {
   "천국과맥주": {
     "id": "천국과맥주",
     "title": {
-      "display": "맥주와빵",
-      "owned": "맥주와빵",
-      "bgg": "Beer & Bread"
+      "display": "천국과맥주",
+      "owned": "천국과맥주",
+      "bgg": ""
     },
     "bgg": {
       "id": "",
       "matchStatus": "unmatched",
-      "year": "2022",
-      "rating": 7.8,
-      "weight": 1.8,
-      "minPlayers": 2,
-      "maxPlayers": 2,
-      "bestPlayers": [
-        2
-      ],
-      "recommendedPlayers": [
-        2
-      ],
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
       "notRecommendedPlayers": [],
-      "playingTime": 40,
-      "minPlayTime": 30,
-      "maxPlayTime": 45,
-      "categories": [
-        "Card Game"
-      ],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "카드게임"
       ],
-      "mechanics": [
-        "Hand Management",
-        "Set Collection",
-        "Drafting"
-      ],
+      "mechanics": [],
       "mechanicsKo": [
         "패 관리",
         "세트 수집",
         "드래프팅"
       ],
       "designers": [],
-      "description": "Beer & Bread is a multi-use card game for two players. Its clever structure of alternating rounds puts a fascinating twist on player interaction, card drafting, and resource management.",
+      "description": "",
       "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "two_player_best",
-      "shelfLabel": "2인 베스트게임",
-      "shelfFullLabel": "2인 베스트게임",
-      "difficultyId": "light_family",
-      "difficultyWeight": 1.8,
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [],
-      "playTags": [
-        "card_play",
-        "strategy"
-      ],
-      "situationTags": [
-        "beginner",
-        "couple"
-      ],
-      "interactionTags": [
-        "competitive",
-        "low_conflict"
-      ],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [
-        "card_play",
-        "strategy",
-        "beginner",
-        "couple",
-        "competitive",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "머리쓰게",
-        "경쟁형"
-      ],
+      "autoTags": [],
+      "displayTags": [],
       "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드게임.",
       "comment": {
         "text": "",

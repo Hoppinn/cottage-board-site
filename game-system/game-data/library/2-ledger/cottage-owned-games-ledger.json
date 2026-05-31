@@ -13097,15 +13097,20 @@
     "id": "원드러스크리처",
     "ownedName": "원드러스크리처",
     "titleEn": "Wondrous Creatures",
-    "bggId": 400366,
-    "matchStatus": "ready",
-    "status": "pending-cache",
+    "bggId": "400366",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "",
-    "difficulty": null,
+    "difficulty": 3.0276,
     "difficultyWeight": 0,
-    "rating": null,
-    "bestPlayers": [],
-    "recommendedPlayers": []
+    "rating": 8.05572,
+    "bestPlayers": [
+      2,
+      3
+    ],
+    "recommendedPlayers": [
+      1
+    ]
   },
   {
     "id": "천국과맥주",
