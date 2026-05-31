@@ -193,8 +193,11 @@
         const timeStr = mins >= 60
           ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
           : `${mins}분`;
+        const displayName = (p.real_name && p.real_name !== p.nickname)
+          ? `${escH(p.nickname)}(${escH(p.real_name)})`
+          : escH(p.nickname || '(닉네임없음)');
         return `<div class="admin-req-item">
-          <span class="admin-req-name">${escH(p.nickname || '(닉네임없음)')}</span>
+          <span class="admin-req-name">${displayName}</span>
           <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>
           <span class="admin-req-meta">최근 ${fmtDate(p.last_seen_at)}</span>
           <span class="admin-req-meta">방문 ${p.visit_count || 1}회</span>

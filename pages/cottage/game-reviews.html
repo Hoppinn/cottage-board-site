@@ -82,10 +82,15 @@
     .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
     .pr-inline-save { font-size: 12px; background: var(--green); color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
     .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
-    .pr-player-header { padding:8px 14px 4px; display:flex; flex-wrap:wrap; gap:4px; border-top:1px solid var(--border,#e8e4dc); background:var(--bg,#f5f0e8); }
+    .pr-player-header { padding:8px 14px 6px; display:flex; flex-wrap:wrap; gap:4px; border-top:1px solid var(--border,#e8e4dc); background:#dff0df; border-left:3px solid #7ab87a; }
     .pr-player-header:first-child { border-top:none; }
     .pr-rec-row--game { padding-left:14px; }
-    .pr-rec-game-line { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+    /* 게임별 탭 — 모임+인원 그룹 */
+    .pr-game-group { border-top:1px solid var(--border,#e8e4dc); }
+    .pr-game-group:first-child { border-top:none; }
+    .pr-game-group-hd { padding:8px 14px 6px; background:#dff0df; display:flex; flex-wrap:wrap; gap:5px; align-items:center; border-left:3px solid #7ab87a; }
+    .pr-game-group-moim { font-size:11px; font-weight:700; color:#2d5a2d; background:rgba(0,100,0,0.1); border-radius:20px; padding:2px 9px; }
+    .pr-rec-game-line { display:flex; flex-direction:column; gap:3px; }
     .pr-rec-inline-meta { display:flex; flex-wrap:wrap; gap:4px; }
     .pr-dates-more-btn { width:100%; padding:8px; background:none; border:none; border-top:1px dashed var(--border,#e8e4dc); font-size:12px; color:var(--muted); cursor:pointer; text-align:center; }
     .pr-dates-more-btn:hover { color:var(--green); }
@@ -144,14 +149,20 @@
 
     /* sub-session (날짜 단위, 모임별 뷰 안) */
     .pr-sub-session { border-top: 1px solid var(--border,#e8e4dc); }
-    .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 14px 9px 22px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; }
-    .pr-sub-hd:hover { background: rgba(0,0,0,0.03); }
+    .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 14px 9px 18px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; border-left: 3px solid transparent; }
+    .pr-sub-hd:hover { background: rgba(0,0,0,0.02); }
+    .pr-sub-session.is-open > .pr-sub-hd { background: #f4fbf4; border-left-color: #7ab87a; }
     .pr-sub-date { font-size: 13px; font-weight: 700; color: var(--text); flex-shrink: 0; }
+    .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #3d6b3d; }
     .pr-sub-summary { font-size: 12px; color: var(--muted); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pr-sub-arrow { font-size: 13px; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
     .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
     .pr-sub-body { display: none; }
     .pr-sub-session.is-open .pr-sub-body { display: block; }
+    /* 동호회 기록 보러가기 링크 */
+    .pr-club-link-row { padding: 10px 14px; border-top: 1px dashed var(--border,#e8e4dc); text-align: center; }
+    .pr-club-link { font-size: 12px; color: var(--green); text-decoration: none; font-weight: 600; }
+    .pr-club-link:hover { text-decoration: underline; }
   </style>
 </head>
 
@@ -917,6 +928,10 @@
           </div>`;
         }
 
+        if (groupName === '코티지보드 동호회') {
+          html += `<div class="pr-club-link-row"><a class="pr-club-link" href="./club-history.html">📸 모임 기록 &amp; 사진 보러가기 →</a></div>`;
+        }
+
         html += `</div></div>`;
         first = false;
       }
@@ -941,7 +956,7 @@
             <span class="pr-session-summary">${recs.length}회 플레이</span>
             <span class="pr-session-arrow">▾</span>
           </button>
-          <div class="pr-session-body">${buildGameRows(recs, user)}</div>
+          <div class="pr-session-body">${buildGameBody(recs, user)}</div>
         </div>`;
         first = false;
       }
@@ -996,35 +1011,68 @@
       return html;
     }
 
-    function buildGameRows(recs, user) {
-      return recs.map(r => {
-        const isMine = user && String(r.user_id) === String(user.id);
-        const date = r.played_at || r.created_at?.slice(0, 10) || '?';
-        const nameTags2 = r.player_names ? r.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('') : '';
-        const metaHtml2 = [
-          `<span class="pr-rec-tag">${escH(formatKstDate(date))}</span>`,
-          r.group_name ? `<span class="pr-rec-tag">📌 ${escH(r.group_name)}</span>` : '',
-          r.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${r.player_count}명</span>` : '',
-          nameTags2,
-          r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '',
-          r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '',
-        ].filter(Boolean).join('');
-        const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
-          <div class="pr-rec-row-top">
-            <div class="pr-rec-main">
-              <div class="pr-rec-meta">${metaHtml2}</div>
-              ${reviewHtml}
+    function buildGameBody(recs, user) {
+      // group_name + player_count + player_names 동일 시 묶기
+      const groups = new Map();
+      for (const r of recs) {
+        const key = `${r.group_name||''}|${r.player_count||''}|${(r.player_names||'').trim()}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(r);
+      }
+
+      let html = '';
+      let isFirst = true;
+      for (const [, grp] of groups) {
+        const f = grp[0];
+        const groupLabel = f.group_name || '';
+        const countTag = f.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${f.player_count}명</span>` : '';
+        const nameTags = f.player_names
+          ? f.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('')
+          : '';
+
+        html += `<div class="pr-game-group${isFirst ? ' pr-game-group--first' : ''}">`;
+        if (groupLabel || countTag || nameTags) {
+          html += `<div class="pr-game-group-hd">
+            ${groupLabel ? `<span class="pr-game-group-moim">📌 ${escH(groupLabel)}</span>` : ''}
+            ${countTag}${nameTags}
+          </div>`;
+        }
+
+        const sorted = [...grp].sort((a, b) => {
+          const da = a.played_at || a.created_at?.slice(0, 10) || '';
+          const db = b.played_at || b.created_at?.slice(0, 10) || '';
+          return db.localeCompare(da);
+        });
+
+        html += sorted.map(r => {
+          const isMine = user && String(r.user_id) === String(user.id);
+          const date = r.played_at || r.created_at?.slice(0, 10) || '?';
+          const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
+          const scoreTag = r.score_note   ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
+          const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
+          const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+          return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+            <div class="pr-rec-row-top">
+              <div class="pr-rec-main">
+                <div class="pr-rec-meta">
+                  <span class="pr-rec-tag">${escH(formatKstDate(date))}</span>
+                  ${timeTag}${scoreTag}
+                </div>
+                ${reviewHtml}
+              </div>
+              <div class="pr-rec-actions">
+                ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
+                ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+              </div>
             </div>
-            <div class="pr-rec-actions">
-              ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
-              ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
-            </div>
-          </div>
-          ${photoHtml}
-        </div>`;
-      }).join('');
+            ${photoHtml}
+          </div>`;
+        }).join('');
+
+        html += `</div>`;
+        isFirst = false;
+      }
+      return html;
     }
 
     // ══════════════════════════════════════════════════════════════

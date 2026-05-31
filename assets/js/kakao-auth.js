@@ -19,7 +19,7 @@ function initKakaoAuth() {
         const profileKey = `cottage_profile_visited_${user.id}_${kstDate}`;
         if (!localStorage.getItem(profileKey)) {
           localStorage.setItem(profileKey, '1');
-          window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님').catch(() => {});
+          window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null).catch(() => {});
         }
       }
     } catch (e) {
@@ -166,7 +166,7 @@ function promptProfileImageChange() {
   modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
 }
 
-function promptNicknameChange() {
+async function promptNicknameChange() {
   const user = getKakaoUser();
   if (!user) return;
   const newNick = window.prompt('사용할 닉네임을 입력하세요 (2~10자)', user.nickname);
@@ -176,10 +176,18 @@ function promptNicknameChange() {
     alert('닉네임은 2~10자로 입력해주세요.');
     return;
   }
+  if (window.CottageDB?.checkNicknameAvailable) {
+    const available = await window.CottageDB.checkNicknameAvailable(trimmed, user.id);
+    if (!available) {
+      alert('이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해주세요.');
+      return;
+    }
+  }
   user.nickname = trimmed;
   localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
   localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
   updateLoginUI(user);
+  window.CottageDB?.upsertProfile(String(user.id), trimmed, user.kakaoNickname || null).catch(() => {});
 }
 
 function getKakaoUser() {
@@ -211,7 +219,19 @@ function updateLoginUI(user) {
       }
     }
     if (loginText) loginText.textContent = user.nickname;
-    if (userActions) userActions.style.display = 'flex';
+    if (userActions) {
+      userActions.style.display = 'flex';
+      if (String(user.id) === String(OWNER_KAKAO_ID) && !userActions.querySelector('#kakaoAdminBtn')) {
+        const adminBtn = document.createElement('button');
+        adminBtn.id = 'kakaoAdminBtn';
+        adminBtn.type = 'button';
+        adminBtn.textContent = '🔧 관리자';
+        adminBtn.addEventListener('click', () => {
+          window.location.href = window.location.origin + '/pages/store/requests-admin.html';
+        });
+        userActions.appendChild(adminBtn);
+      }
+    }
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
@@ -246,6 +266,8 @@ async function openProfilePanel() {
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
   panel.className = 'profile-panel';
+  const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
+  const adminOrigin = window.location.origin;
   panel.innerHTML = `<div class="profile-panel-box">
     <div class="profile-panel-header">
       <span class="profile-panel-title">내 활동</span>
@@ -253,6 +275,7 @@ async function openProfilePanel() {
     </div>
     <div class="profile-panel-body">
       <p class="profile-panel-nick">${String(user.nickname || '손님').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+      ${isOwnerUser ? `<a href="${adminOrigin}/pages/store/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
       <p class="profile-panel-loading">불러오는 중...</p>
     </div>
   </div>`;

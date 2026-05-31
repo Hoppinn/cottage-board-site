@@ -492,16 +492,17 @@
     });
   }
 
-  async function upsertProfile(userId, nickname) {
+  async function upsertProfile(userId, nickname, realName) {
     _sessionUserId = userId;
     _sessionStart = Date.now();
     window._cottageSessionStart = _sessionStart;
     try {
       const accumulated = _popAccumulatedMinutes(userId);
-      const { data } = await db.from('profiles').select('visit_count, total_minutes').eq('user_id', userId).maybeSingle();
+      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name').eq('user_id', userId).maybeSingle();
       await db.from('profiles').upsert({
         user_id: userId,
         nickname,
+        real_name: data?.real_name || realName || null,
         last_seen_at: new Date().toISOString(),
         visit_count: (data?.visit_count || 0) + 1,
         total_minutes: (data?.total_minutes || 0) + accumulated,
@@ -514,6 +515,17 @@
       const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
       return data || [];
     } catch (_) { return []; }
+  }
+
+  async function checkNicknameAvailable(nickname, currentUserId) {
+    try {
+      const { data } = await db.from('profiles')
+        .select('user_id')
+        .eq('nickname', nickname)
+        .neq('user_id', String(currentUserId))
+        .limit(1);
+      return !data?.length;
+    } catch (_) { return true; }
   }
 
   async function getMyStats(userId) {
@@ -573,6 +585,7 @@
     hasUserDisliked,
     upsertProfile,
     getAllProfiles,
+    checkNicknameAvailable,
     getMyStats,
     getGameReviews,
     insertGameReview,

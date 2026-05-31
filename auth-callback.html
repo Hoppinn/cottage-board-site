@@ -47,11 +47,13 @@
           const userId = String(data.id);
           const customNick = localStorage.getItem(`cottage_custom_nick_${userId}`);
           const customPhoto = localStorage.getItem(`cottage_custom_photo_${userId}`);
+          const kakaoImg = (profile.profile_image_url || '').replace(/^http:\/\//, 'https://');
           const user = {
             id: userId,
             nickname: customNick || profile.nickname || '손님',
-            profileImage: customPhoto || profile.profile_image_url || '',
-            kakaoProfileImage: profile.profile_image_url || '',
+            kakaoNickname: profile.nickname || '',
+            profileImage: customPhoto || kakaoImg,
+            kakaoProfileImage: kakaoImg,
           };
           localStorage.setItem('kakao_user', JSON.stringify(user));
         } catch (e) {
