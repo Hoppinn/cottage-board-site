@@ -306,41 +306,40 @@
           }
         });
       });
-    }
 
-    el.querySelectorAll('.admin-realname-edit').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const item = btn.closest('.admin-req-item');
-        const uid = item.dataset.uid;
-        const currentReal = item.querySelector('.admin-real-name')?.textContent.replace(/[()]/g, '') || '';
-        const nameSpan = btn.closest('.admin-req-name');
-        if (item.querySelector('.admin-realname-input')) return;
-        const input = document.createElement('input');
-        input.className = 'admin-realname-input';
-        input.type = 'text';
-        input.value = currentReal;
-        input.placeholder = '실명 입력';
-        input.style.cssText = 'font-size:12px;border:1px solid #ccc;border-radius:4px;padding:2px 6px;margin-left:4px;width:80px;';
-        const saveBtn = document.createElement('button');
-        saveBtn.type = 'button';
-        saveBtn.textContent = '저장';
-        saveBtn.style.cssText = 'font-size:11px;margin-left:4px;padding:2px 7px;background:#3d8a74;color:#fff;border:none;border-radius:4px;cursor:pointer;';
-        nameSpan.appendChild(input);
-        nameSpan.appendChild(saveBtn);
-        input.focus();
-        saveBtn.addEventListener('click', async () => {
-          const val = input.value.trim();
-          await db.from('profiles').update({ real_name: val || null }).eq('user_id', uid);
-          input.remove(); saveBtn.remove();
-          const nickText = nameSpan.firstChild;
-          let realSpan = nameSpan.querySelector('.admin-real-name');
-          if (val) {
-            if (!realSpan) { realSpan = document.createElement('span'); realSpan.className = 'admin-real-name'; nameSpan.insertBefore(realSpan, btn); }
-            realSpan.textContent = `(${val})`;
-          } else { realSpan?.remove(); }
+      el.querySelectorAll('.admin-realname-edit').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('.admin-req-item');
+          const uid = item.dataset.uid;
+          const currentReal = item.querySelector('.admin-real-name')?.textContent.replace(/[()]/g, '') || '';
+          const nameSpan = btn.closest('.admin-req-name');
+          if (item.querySelector('.admin-realname-input')) return;
+          const input = document.createElement('input');
+          input.className = 'admin-realname-input';
+          input.type = 'text';
+          input.value = currentReal;
+          input.placeholder = '실명 입력';
+          input.style.cssText = 'font-size:12px;border:1px solid #ccc;border-radius:4px;padding:2px 6px;margin-left:4px;width:80px;';
+          const saveBtn = document.createElement('button');
+          saveBtn.type = 'button';
+          saveBtn.textContent = '저장';
+          saveBtn.style.cssText = 'font-size:11px;margin-left:4px;padding:2px 7px;background:#3d8a74;color:#fff;border:none;border-radius:4px;cursor:pointer;';
+          nameSpan.appendChild(input);
+          nameSpan.appendChild(saveBtn);
+          input.focus();
+          saveBtn.addEventListener('click', async () => {
+            const val = input.value.trim();
+            await db.from('profiles').update({ real_name: val || null }).eq('user_id', uid);
+            input.remove(); saveBtn.remove();
+            let realSpan = nameSpan.querySelector('.admin-real-name');
+            if (val) {
+              if (!realSpan) { realSpan = document.createElement('span'); realSpan.className = 'admin-real-name'; nameSpan.insertBefore(realSpan, btn); }
+              realSpan.textContent = `(${val})`;
+            } else { realSpan?.remove(); }
+          });
         });
       });
-    });
+    }
 
     async function loadAnalytics() {
       const body = document.getElementById('analyticsBody');
