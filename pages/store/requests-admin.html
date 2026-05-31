@@ -142,13 +142,18 @@
       if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
       const db = window._cottageSupabaseDb;
 
-      const [gameRes, snackRes, suggestRes, profileRes, votesRes] = await Promise.all([
+      const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned, user_id').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname'),
         db.from('game_request_votes').select('request_id, user_id'),
+        db.from('member_intros').select('user_id, nickname').not('user_id', 'is', null),
       ]);
+
+      // user_id → 회원자기소개 닉네임
+      const introNickMap = {};
+      (introsRes.data||[]).forEach(i => { if (i.user_id) introNickMap[i.user_id] = i.nickname; });
 
       const profileMap = {};
       (profileRes.data||[]).forEach(p => { profileMap[p.user_id] = p.nickname || p.user_id?.slice(0,8)+'…'; });
@@ -203,9 +208,12 @@
         const timeStr = mins >= 60
           ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
           : `${mins}분`;
-        const displayName = (p.real_name && p.real_name !== p.nickname)
-          ? `${escH(p.nickname)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
-          : escH(p.nickname || '(닉네임없음)');
+        // 인트로 닉네임 우선, 없으면 프로필 닉네임
+        const displayNick = introNickMap[p.user_id] || p.nickname || '';
+        const realName = p.real_name || '';
+        const displayName = (realName && realName !== displayNick)
+          ? `${escH(displayNick)}<span class="admin-real-name">(${escH(realName)})</span>`
+          : escH(displayNick || '(닉네임없음)');
         return `<div class="admin-req-item" data-uid="${escH(p.user_id)}">
           <span class="admin-req-name">${displayName}</span>
           <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>

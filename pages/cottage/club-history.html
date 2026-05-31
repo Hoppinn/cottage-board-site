@@ -191,12 +191,14 @@
                 let out = '';
                 for (const [, grp] of playerGroups) {
                   const f = grp[0];
-                  const playerTags = [
-                    f.player_count ? `👥 ${f.player_count}명` : null,
-                    f.player_names ? `🎮 ${escH(f.player_names)}` : null,
-                  ].filter(Boolean);
-                  if (playerTags.length) {
-                    out += `<div class="history-player-header">${playerTags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>`;
+                  const pTags = [];
+                  if (f.player_count) pTags.push(`<span class="history-tag">👥 ${f.player_count}명</span>`);
+                  if (f.player_names) {
+                    f.player_names.split(',').map(n => n.trim()).filter(Boolean)
+                      .forEach(n => pTags.push(`<span class="history-tag">${escH(n)}</span>`));
+                  }
+                  if (pTags.length) {
+                    out += `<div class="history-player-header">${pTags.join('')}</div>`;
                   }
                   out += grp.map(r => {
                     const name = getGameName(r.game_id);
