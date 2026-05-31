@@ -531,6 +531,7 @@ if (typeof window !== "undefined") {
 
   // 게임명 검색 / ID 조회용 플랫 배열
   window.COTTAGE_GAMES = Object.values(window.gameData || {}).map(g => ({
+    id: g.id,
     bggId: g.bgg?.id ? String(g.bgg.id) : g.id,
     display: g.title?.display || g.title?.owned || g.title?.bgg || g.id,
     titleKo: g.title?.owned || g.title?.display || '',

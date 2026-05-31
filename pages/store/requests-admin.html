@@ -7,8 +7,14 @@
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
-    .admin-section { margin-bottom: 36px; }
-    .admin-section-title { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--green); }
+    .admin-section { margin-bottom: 16px; border: 1px solid var(--border,#e8e4dc); border-radius: 12px; overflow: hidden; }
+    .admin-section-title { font-size: 15px; font-weight: 700; color: var(--green); padding: 12px 16px; border-bottom: 2px solid var(--green); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; margin: 0; background: var(--bg,#f5f0e8); }
+    .admin-section-title:hover { background: #ede8df; }
+    .admin-section-count { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card-bg,#fff); border-radius: 20px; padding: 1px 8px; margin-left: 6px; }
+    .admin-section-arrow { font-size: 13px; color: var(--muted); transition: transform 0.2s; margin-left: auto; }
+    .admin-section.is-open .admin-section-arrow { transform: rotate(180deg); }
+    .admin-section-body { display: none; padding: 12px; }
+    .admin-section.is-open .admin-section-body { display: block; }
     .admin-req-list { display: flex; flex-direction: column; gap: 8px; }
     .admin-req-item { background: var(--card-bg, #fff); border: 1px solid var(--border, #e8e4dc); border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px; }
     .admin-req-name { font-size: 14px; font-weight: 600; flex: 1; }
@@ -172,6 +178,11 @@
         return `<span class="admin-req-voters">👤 ${voters.map(n => escH(n)).join(', ')}</span>`;
       }
 
+      function requesterTag(userId) {
+        if (!userId) return '';
+        return `<span class="admin-req-requester">${escH(nick(userId))}</span>`;
+      }
+
       function reqItem(id, name, count, table, done, userId, planned) {
         const statusBtns = table === 'game_requests' ? `
           <button class="admin-req-plan${planned?' is-planned':''}" type="button">${planned?'예정됨':'구매예정'}</button>
@@ -208,12 +219,13 @@
         const timeStr = mins >= 60
           ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
           : `${mins}분`;
-        // 인트로 닉네임 우선, 없으면 프로필 닉네임
+        // 인트로 닉네임 우선, 없으면 프로필 닉네임, 없으면 실명
         const displayNick = introNickMap[p.user_id] || p.nickname || '';
         const realName = p.real_name || '';
-        const displayName = (realName && realName !== displayNick)
+        const primaryName = displayNick || realName || '(닉네임없음)';
+        const displayName = (realName && displayNick && realName !== displayNick)
           ? `${escH(displayNick)}<span class="admin-real-name">(${escH(realName)})</span>`
-          : escH(displayNick || '(닉네임없음)');
+          : escH(primaryName);
         return `<div class="admin-req-item" data-uid="${escH(p.user_id)}">
           <span class="admin-req-name">${displayName}</span>
           <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>
@@ -223,27 +235,38 @@
         </div>`;
       }).join('') : '<div class="admin-empty">회원 없음</div>';
 
+      const gameCount  = (gameRes.data||[]).length;
+      const snackCount = (snackRes.data||[]).length;
+      const suggestCount = (suggestRes.data||[]).filter(r => !r.is_done).length;
+
       el.innerHTML = `
         <div class="admin-section">
-          <div class="admin-section-title">🎲 게임 구매 요청</div>
-          <div class="admin-req-list">${gameHtml||'<div class="admin-empty">없음</div>'}</div>
+          <div class="admin-section-title">🎲 게임 구매 요청 <span class="admin-section-count">${gameCount}건</span><span class="admin-section-arrow">▾</span></div>
+          <div class="admin-section-body"><div class="admin-req-list">${gameHtml||'<div class="admin-empty">없음</div>'}</div></div>
         </div>
         <div class="admin-section">
-          <div class="admin-section-title">🍿 간식·음료 요청</div>
-          <div class="admin-req-list">${snackHtml||'<div class="admin-empty">없음</div>'}</div>
+          <div class="admin-section-title">🍿 간식·음료 요청 <span class="admin-section-count">${snackCount}건</span><span class="admin-section-arrow">▾</span></div>
+          <div class="admin-section-body"><div class="admin-req-list">${snackHtml||'<div class="admin-empty">없음</div>'}</div></div>
         </div>
         <div class="admin-section">
-          <div class="admin-section-title">💬 개선 건의</div>
-          <div class="admin-req-list">${suggestHtml||'<div class="admin-empty">없음</div>'}</div>
+          <div class="admin-section-title">💬 개선 건의 <span class="admin-section-count">${suggestCount}건 미완료</span><span class="admin-section-arrow">▾</span></div>
+          <div class="admin-section-body"><div class="admin-req-list">${suggestHtml||'<div class="admin-empty">없음</div>'}</div></div>
         </div>
         <div class="admin-section">
-          <div class="admin-section-title">👥 회원 목록 (${profiles.length}명)</div>
-          <div class="admin-req-list">${memberHtml}</div>
+          <div class="admin-section-title">👥 회원 목록 <span class="admin-section-count">${profiles.length}명</span><span class="admin-section-arrow">▾</span></div>
+          <div class="admin-section-body"><div class="admin-req-list">${memberHtml}</div></div>
         </div>
         <div class="admin-section" id="analyticsSection">
-          <div class="admin-section-title">📊 페이지 분석 <span style="font-size:11px;font-weight:400;color:#888">(불러오는 중...)</span></div>
-          <div id="analyticsBody"></div>
+          <div class="admin-section-title">📊 페이지 분석 <span style="font-size:11px;font-weight:400;color:#888">(불러오는 중...)</span><span class="admin-section-arrow">▾</span></div>
+          <div class="admin-section-body" id="analyticsBody"></div>
         </div>`;
+
+      // 섹션 접기/펴기 (기본 접힘)
+      el.querySelectorAll('.admin-section-title').forEach(title => {
+        title.addEventListener('click', () => {
+          title.closest('.admin-section').classList.toggle('is-open');
+        });
+      });
 
       el.querySelectorAll('.admin-req-del').forEach(btn => {
         btn.addEventListener('click', async () => {

@@ -13096,9 +13096,9 @@
   {
     "id": "원드러스크리처",
     "ownedName": "원드러스크리처",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unmatched",
+    "titleEn": "Wondrous Creatures",
+    "bggId": 400366,
+    "matchStatus": "ready",
     "status": "pending-cache",
     "location": "",
     "difficulty": null,

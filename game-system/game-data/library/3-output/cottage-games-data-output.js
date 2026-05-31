@@ -84124,13 +84124,13 @@ const gameData = {
     "title": {
       "display": "원드러스크리처",
       "owned": "원드러스크리처",
-      "bgg": ""
+      "bgg": "Wondrous Creatures"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unmatched",
-      "year": "",
-      "rating": 0,
+      "id": 400366,
+      "matchStatus": "ready",
+      "year": 2024,
+      "rating": 7.27,
       "weight": 0,
       "minPlayers": 0,
       "maxPlayers": 0,
