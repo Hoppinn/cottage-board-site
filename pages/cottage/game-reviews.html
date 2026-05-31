@@ -843,7 +843,12 @@
 
       let html = '';
       let first = true;
-      for (const [groupName, dateMap] of groups) {
+      const sortedGroups = [...groups.entries()].sort((a, b) => {
+        const latestA = Math.max(...[...a[1].keys()].map(d => new Date(d).getTime() || 0));
+        const latestB = Math.max(...[...b[1].keys()].map(d => new Date(d).getTime() || 0));
+        return latestB - latestA;
+      });
+      for (const [groupName, dateMap] of sortedGroups) {
         const label = groupName || '기타 기록';
         const totalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
         html += `<div class="pr-session${first ? ' is-open' : ''}">
@@ -855,7 +860,7 @@
           <div class="pr-session-body">`;
 
         let firstDate = true;
-        for (const [dateStr, recs] of dateMap) {
+        for (const [dateStr, recs] of [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]))) {
           const gameNames = recs.map(r => getGameName(r.game_id));
           const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
           html += `<div class="pr-sub-session${firstDate ? ' is-open' : ''}">
