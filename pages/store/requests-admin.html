@@ -31,6 +31,16 @@
     .admin-empty { color: var(--muted); font-size: 14px; text-align: center; padding: 24px 0; }
     .admin-back { display: inline-block; font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 600; margin-bottom: 4px; text-decoration: underline; text-underline-offset: 2px; }
     .admin-back:hover { color: #fff; opacity: 1; }
+    .admin-real-name { color: var(--muted); font-size: 12px; font-weight: 400; margin-left: 2px; }
+    .admin-realname-edit { background: none; border: none; font-size: 11px; color: #bbb; cursor: pointer; padding: 0 2px; vertical-align: middle; }
+    .admin-realname-edit:hover { color: var(--green); }
+    .admin-analytics-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 4px; }
+    .admin-analytics-table th { background: var(--bg, #f5f0e8); padding: 7px 10px; text-align: left; font-size: 11px; color: var(--muted); border-bottom: 2px solid var(--border, #e8e4dc); white-space: nowrap; }
+    .admin-analytics-table td { padding: 7px 10px; border-bottom: 1px solid var(--border, #e8e4dc); vertical-align: middle; }
+    .admin-analytics-table tr:last-child td { border-bottom: none; }
+    .admin-analytics-table tr:hover td { background: var(--bg, #f5f0e8); }
+    .anat-page { font-weight: 600; color: var(--green); }
+    .anat-ref { color: var(--muted); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   </style>
 </head>
 
@@ -194,10 +204,10 @@
           ? `${Math.floor(mins / 60)}시간 ${mins % 60}분`
           : `${mins}분`;
         const displayName = (p.real_name && p.real_name !== p.nickname)
-          ? `${escH(p.nickname)}(${escH(p.real_name)})`
+          ? `${escH(p.nickname)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
           : escH(p.nickname || '(닉네임없음)');
-        return `<div class="admin-req-item">
-          <span class="admin-req-name">${displayName}</span>
+        return `<div class="admin-req-item" data-uid="${escH(p.user_id)}">
+          <span class="admin-req-name">${displayName} <button class="admin-realname-edit" type="button" title="실명 수정">✏</button></span>
           <span class="admin-req-meta">가입 ${fmtDate(p.first_seen_at)}</span>
           <span class="admin-req-meta">최근 ${fmtDate(p.last_seen_at)}</span>
           <span class="admin-req-meta">방문 ${p.visit_count || 1}회</span>
@@ -221,6 +231,10 @@
         <div class="admin-section">
           <div class="admin-section-title">👥 회원 목록 (${profiles.length}명)</div>
           <div class="admin-req-list">${memberHtml}</div>
+        </div>
+        <div class="admin-section" id="analyticsSection">
+          <div class="admin-section-title">📊 페이지 분석 <span style="font-size:11px;font-weight:400;color:#888">(불러오는 중...)</span></div>
+          <div id="analyticsBody"></div>
         </div>`;
 
       el.querySelectorAll('.admin-req-del').forEach(btn => {
@@ -294,8 +308,124 @@
       });
     }
 
+    el.querySelectorAll('.admin-realname-edit').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const item = btn.closest('.admin-req-item');
+        const uid = item.dataset.uid;
+        const currentReal = item.querySelector('.admin-real-name')?.textContent.replace(/[()]/g, '') || '';
+        const nameSpan = btn.closest('.admin-req-name');
+        if (item.querySelector('.admin-realname-input')) return;
+        const input = document.createElement('input');
+        input.className = 'admin-realname-input';
+        input.type = 'text';
+        input.value = currentReal;
+        input.placeholder = '실명 입력';
+        input.style.cssText = 'font-size:12px;border:1px solid #ccc;border-radius:4px;padding:2px 6px;margin-left:4px;width:80px;';
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.textContent = '저장';
+        saveBtn.style.cssText = 'font-size:11px;margin-left:4px;padding:2px 7px;background:#3d8a74;color:#fff;border:none;border-radius:4px;cursor:pointer;';
+        nameSpan.appendChild(input);
+        nameSpan.appendChild(saveBtn);
+        input.focus();
+        saveBtn.addEventListener('click', async () => {
+          const val = input.value.trim();
+          await db.from('profiles').update({ real_name: val || null }).eq('user_id', uid);
+          input.remove(); saveBtn.remove();
+          const nickText = nameSpan.firstChild;
+          let realSpan = nameSpan.querySelector('.admin-real-name');
+          if (val) {
+            if (!realSpan) { realSpan = document.createElement('span'); realSpan.className = 'admin-real-name'; nameSpan.insertBefore(realSpan, btn); }
+            realSpan.textContent = `(${val})`;
+          } else { realSpan?.remove(); }
+        });
+      });
+    });
+
+    async function loadAnalytics() {
+      const body = document.getElementById('analyticsBody');
+      const title = document.querySelector('#analyticsSection .admin-section-title span');
+      if (!body || !window.CottageDB?.getPageAnalytics) return;
+
+      const rows = await window.CottageDB.getPageAnalytics();
+      if (title) title.remove();
+
+      if (!rows.length) {
+        body.innerHTML = '<div class="admin-empty">아직 데이터 없음 (방문 후 누적됩니다)</div>';
+        return;
+      }
+
+      // 페이지별 집계
+      const pageMap = new Map();
+      for (const r of rows) {
+        if (!pageMap.has(r.page)) pageMap.set(r.page, { visits: 0, totalSec: 0, users: new Set(), paths: new Map() });
+        const p = pageMap.get(r.page);
+        p.visits++;
+        p.totalSec += r.duration_sec || 0;
+        if (r.user_id) p.users.add(r.user_id);
+        if (r.referrer) {
+          const ref = r.referrer;
+          p.paths.set(ref, (p.paths.get(ref) || 0) + 1);
+        }
+      }
+
+      const sorted = [...pageMap.entries()].sort((a, b) => b[1].visits - a[1].visits);
+
+      const fmtSec = s => s >= 60 ? `${Math.floor(s/60)}분 ${s%60}초` : `${s}초`;
+
+      let html = `<table class="admin-analytics-table">
+        <thead><tr><th>페이지</th><th>방문</th><th>평균 체류</th><th>로그인 방문자</th><th>주요 유입</th></tr></thead><tbody>`;
+
+      for (const [page, d] of sorted) {
+        const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
+        const topRef = [...d.paths.entries()].sort((a,b)=>b[1]-a[1])[0];
+        const refStr = topRef ? `${escH(topRef[0])} (${topRef[1]}회)` : '-';
+        html += `<tr>
+          <td class="anat-page">${escH(page)}</td>
+          <td>${d.visits}회</td>
+          <td>${fmtSec(avg)}</td>
+          <td>${d.users.size}명</td>
+          <td class="anat-ref">${refStr}</td>
+        </tr>`;
+      }
+      html += '</tbody></table>';
+
+      // 사용자별 페이지 체류 (로그인 유저)
+      const profilesMap = new Map((await window.CottageDB.getAllProfiles()).map(p => [p.user_id, p.nickname]));
+      const userPage = new Map();
+      for (const r of rows) {
+        if (!r.user_id) continue;
+        const key = r.user_id + '|' + r.page;
+        if (!userPage.has(key)) userPage.set(key, { userId: r.user_id, page: r.page, visits: 0, totalSec: 0 });
+        const u = userPage.get(key);
+        u.visits++;
+        u.totalSec += r.duration_sec || 0;
+      }
+      const userRows = [...userPage.values()].sort((a, b) => b.totalSec - a.totalSec);
+
+      if (userRows.length) {
+        html += `<div style="margin-top:16px;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;">사용자별 상세</div>
+          <table class="admin-analytics-table">
+          <thead><tr><th>사용자</th><th>페이지</th><th>방문</th><th>총 체류</th><th>평균 체류</th></tr></thead><tbody>`;
+        for (const u of userRows) {
+          const nick = profilesMap.get(u.userId) || u.userId;
+          const avg = u.visits ? Math.round(u.totalSec / u.visits) : 0;
+          html += `<tr>
+            <td>${escH(nick)}</td>
+            <td class="anat-page">${escH(u.page)}</td>
+            <td>${u.visits}회</td>
+            <td>${fmtSec(u.totalSec)}</td>
+            <td>${fmtSec(avg)}</td>
+          </tr>`;
+        }
+        html += '</tbody></table>';
+      }
+
+      body.innerHTML = html;
+    }
+
     let tried = false;
-    function tryLoad() { if (tried) return; tried = true; load(); }
+    function tryLoad() { if (tried) return; tried = true; load().then(loadAnalytics); }
     window.addEventListener('kakao-auth-ready', tryLoad);
     setTimeout(tryLoad, 1200);
   })();

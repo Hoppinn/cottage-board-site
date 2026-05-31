@@ -517,6 +517,16 @@
     } catch (_) { return []; }
   }
 
+  async function getPageAnalytics() {
+    try {
+      const { data } = await db.from('page_sessions')
+        .select('page, referrer, user_id, duration_sec, entered_at')
+        .order('entered_at', { ascending: false })
+        .limit(2000);
+      return data || [];
+    } catch (_) { return []; }
+  }
+
   async function checkNicknameAvailable(nickname, currentUserId) {
     try {
       const { data } = await db.from('profiles')
@@ -586,6 +596,7 @@
     upsertProfile,
     getAllProfiles,
     checkNicknameAvailable,
+    getPageAnalytics,
     getMyStats,
     getGameReviews,
     insertGameReview,

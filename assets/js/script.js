@@ -3784,4 +3784,72 @@ if(location.hash === '#recommend' && document.getElementById('recommend')){
   showRecommendResults();
 }
 
+/* =========================
+   # PAGE SESSION TRACKER
+   페이지별 체류 시간 + 유입 경로 기록 → page_sessions 테이블
+========================= */
+(function() {
+  const PAGE_LABELS = {
+    '/': '메인',
+    '/index.html': '메인',
+    '/pages/owned-games.html': '게임 목록',
+    '/pages/cottage/game-reviews.html': '플레이 기록',
+    '/pages/cottage/club.html': '동호회 소개',
+    '/pages/cottage/club-history.html': '모임 기록',
+    '/pages/cottage/club-intro.html': '회원 자기소개',
+    '/pages/cottage/club-schedule.html': '일정 투표',
+    '/pages/cottage/about.html': '코티지보드 소개',
+    '/pages/store/price-rules.html': '가격 & 규칙',
+    '/pages/store/game-location.html': '게임 위치',
+    '/pages/store/requests.html': '요청하기',
+    '/pages/store/requests-admin.html': '관리자',
+  };
+
+  const _entryTime = Date.now();
+  const _page = PAGE_LABELS[location.pathname] || location.pathname;
+  const _ref = document.referrer
+    ? (PAGE_LABELS[new URL(document.referrer).pathname] || new URL(document.referrer).pathname)
+    : '';
+
+  function _getUid() {
+    try { return JSON.parse(localStorage.getItem('kakao_user') || 'null')?.id || null; } catch(_) { return null; }
+  }
+  function _getSk() {
+    let k = localStorage.getItem('cottage_session_id');
+    if (!k) { k = Date.now().toString(36) + Math.random().toString(36).slice(2); localStorage.setItem('cottage_session_id', k); }
+    return k;
+  }
+
+  let _sent = false;
+  function _send() {
+    if (_sent) return;
+    const cfg = window.SUPABASE_CONFIG;
+    if (!cfg?.url || !cfg?.anonKey) return;
+    const dur = Math.round((Date.now() - _entryTime) / 1000);
+    if (dur < 3) return;
+    _sent = true;
+    fetch(cfg.url + '/rest/v1/page_sessions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': cfg.anonKey,
+        'Authorization': 'Bearer ' + cfg.anonKey,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({
+        page: _page,
+        referrer: _ref || null,
+        user_id: _getUid(),
+        session_key: _getSk(),
+        duration_sec: dur,
+        entered_at: new Date(_entryTime).toISOString(),
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  }
+
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') _send(); });
+  window.addEventListener('pagehide', _send);
+})();
+
 

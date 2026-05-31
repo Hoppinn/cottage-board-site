@@ -41,10 +41,10 @@
       text-align: left; font-family: inherit;
     }
     .pr-session-hd:hover { background: #eef2ee; }
-    .pr-session > .pr-session-hd { background: #fff; border-left: 3px solid #b8d4b8; }
-    .pr-session.is-open > .pr-session-hd { background: #eaf4ea; border-left: 3px solid #5a8a5a; }
+    .pr-session > .pr-session-hd { background: #fff; border-left: 3px solid #a8c8c0; }
+    .pr-session.is-open > .pr-session-hd { background: #eaf4f0; border-left: 3px solid #3d8a74; }
     .pr-session-date { font-size: 14px; font-weight: 700; color: var(--text); flex-shrink: 0; }
-    .pr-session.is-open > .pr-session-hd .pr-session-date { color: #3d6b3d; }
+    .pr-session.is-open > .pr-session-hd .pr-session-date { color: #1a5c48; }
     .pr-session-group { font-size: 12px; background: var(--green); color: #fff; border-radius: 20px; padding: 1px 9px; flex-shrink: 0; }
     .pr-session-summary { font-size: 12px; color: var(--muted); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pr-session-arrow { font-size: 14px; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
@@ -82,7 +82,7 @@
     .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
     .pr-inline-save { font-size: 12px; background: var(--green); color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
     .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
-    .pr-player-header { padding:8px 14px 6px; display:flex; flex-wrap:wrap; gap:4px; border-top:1px solid var(--border,#e8e4dc); background:#dff0df; border-left:3px solid #7ab87a; }
+    .pr-player-header { padding:8px 14px 6px; display:flex; flex-wrap:wrap; gap:4px; border-top:1px solid var(--border,#e8e4dc); background:#dce8e4; border-left:3px solid #3d8a74; }
     .pr-player-header:first-child { border-top:none; }
     .pr-rec-row--game { padding-left:14px; }
     /* 게임별 탭 — 모임+인원 그룹 */
@@ -151,9 +151,9 @@
     .pr-sub-session { border-top: 1px solid var(--border,#e8e4dc); }
     .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 14px 9px 18px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; border-left: 3px solid transparent; }
     .pr-sub-hd:hover { background: rgba(0,0,0,0.02); }
-    .pr-sub-session.is-open > .pr-sub-hd { background: #f4fbf4; border-left-color: #7ab87a; }
+    .pr-sub-session.is-open > .pr-sub-hd { background: #f0f7f4; border-left-color: #3d8a74; }
     .pr-sub-date { font-size: 13px; font-weight: 700; color: var(--text); flex-shrink: 0; }
-    .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #3d6b3d; }
+    .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #1a5c48; }
     .pr-sub-summary { font-size: 12px; color: var(--muted); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pr-sub-arrow { font-size: 13px; color: var(--muted); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
     .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
@@ -922,8 +922,8 @@
 
         if (hiddenDates.length > 0) {
           html += `<div class="pr-dates-more">
-            <button class="pr-dates-more-btn" type="button">이전 ${hiddenDates.length}회 더 보기 ▾</button>
             <div class="pr-dates-more-body">${hiddenDates.map(renderDateBlock).join('')}</div>
+            <button class="pr-dates-more-btn" type="button">이전 ${hiddenDates.length}회 더 보기 ▾</button>
           </div>`;
         }
 
