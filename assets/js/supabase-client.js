@@ -222,10 +222,12 @@
         .not("player_names", "is", null)
         .neq("player_names", "");
       if (!data) return [];
-      const names = data.flatMap(r =>
-        (r.player_names || "").split(",").map(n => n.trim()).filter(Boolean)
-      );
-      return [...new Set(names)].sort();
+      const combos = [...new Set(data.map(r => r.player_names.trim()).filter(Boolean))];
+      const individuals = [...new Set(
+        data.flatMap(r => (r.player_names || "").split(",").map(n => n.trim()).filter(Boolean))
+      )];
+      // 조합(전체) 먼저, 그 다음 개별 이름
+      return [...new Set([...combos, ...individuals])];
     } catch (_) {
       return [];
     }
