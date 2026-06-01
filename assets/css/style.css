@@ -895,11 +895,16 @@ body.recommend-page main{
 
 .recommend-filter-main-title{
   margin:0 0 10px;
-  color:#314d35;
+  color:#5a3418;
   font-size:20px;
   line-height:1.25;
   font-weight:700;
   letter-spacing:-0.3px;
+}
+/* 네잎클로버 이모지 브라운 필터 */
+.recommend-filter-main-title .emoji-clover{
+  display:inline-block;
+  filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
 
 .recommend-step{
@@ -927,7 +932,7 @@ body.recommend-page main{
   display:flex;
   align-items:center;
   gap:10px;
-  color:#2f2a21;
+  color:#5a3418;
   font-size:16px;
   font-weight:600;
 }
@@ -936,7 +941,7 @@ body.recommend-page main{
   width:28px;
   height:28px;
   border-radius:50%;
-  background:#486a3f;
+  background:#7a4828;
   color:#fff;
   display:inline-flex;
   align-items:center;
@@ -3178,6 +3183,7 @@ body.sheet-open{
 .sheet-desc.is-clamped{
   display:-webkit-box;
   -webkit-line-clamp:3;
+  line-clamp:3;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
