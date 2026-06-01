@@ -2731,10 +2731,9 @@ body.sheet-open{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
-/* 게임카드 인원 이모지 브라운 */
-.gm-emoji{
-  display:inline-block;
-  filter:sepia(1) brightness(0.65);
+/* 게임카드 인원 배지 전체 세피아 — 이모지·텍스트 모두 브라운 */
+.game-meta-player{
+  filter:sepia(0.8) brightness(0.88);
 }
 
 .sheet-stats-dot{
