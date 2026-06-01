@@ -601,7 +601,7 @@ body.owned-page .header-menu.active{
 .label{
   display:inline-block;
   padding:clamp(7px,2vw,9px) clamp(14px,4vw,18px);
-  margin-bottom:clamp(10px,3vw,20px);
+  margin-bottom:clamp(18px,3vw,24px);
   border:2px solid rgba(255,255,255,0.6);
   border-radius:999px;
   background:rgba(255,255,255,0.15);
@@ -612,7 +612,7 @@ body.owned-page .header-menu.active{
 }
 
 .hero h1{
-  margin:0 0 clamp(10px,3vw,22px);
+  margin:0 0 clamp(18px,3vw,26px);
   color:#fff;
   font-size:clamp(26px,7.2vw,52px);
   line-height:1.22;
@@ -632,7 +632,7 @@ body.owned-page .header-menu.active{
 }
 
 .desc{
-  margin:0 0 clamp(14px,4vw,28px);
+  margin:0 0 clamp(24px,4vw,32px);
   color:rgba(255,255,255,0.92);
   font-size:clamp(14px,3.8vw,22px);
   line-height:1.45;
