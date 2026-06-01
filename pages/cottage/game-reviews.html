@@ -54,6 +54,12 @@
     .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.13); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 600; }
     .pr-session-arrow { font-size: 15px; color: rgba(255,255,255,0.65); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
     .pr-session-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; opacity: 0.92; }
+    /* 게임별 헤더 게임명 링크 */
+    .pr-session-game-link { color: inherit; text-decoration: none; }
+    .pr-session-game-link:hover { text-decoration: underline; text-underline-offset: 2px; }
+    /* 모임별 기록 행 게임명 링크 */
+    .pr-rec-game-link { color: inherit; text-decoration: none; }
+    .pr-rec-game-link:hover { text-decoration: underline; text-underline-offset: 2px; }
     .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
     .pr-session-body { display: none; background: var(--bg,#f5f0e8); }
     .pr-session.is-open .pr-session-body { display: block; }
@@ -994,10 +1000,13 @@
         const thumbHtml = thumbUrl
           ? `<img class="pr-session-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
           : '';
+        const gameHref = gKey ? `../owned-games.html?open=${encodeURIComponent(gKey)}` : '';
         html += `<div class="pr-session">
           <button class="pr-session-hd" type="button">
             ${thumbHtml}
-            <span class="pr-session-date">${escH(gameName)}</span>
+            <span class="pr-session-date">${gKey
+              ? `<a class="pr-session-game-link" href="${gameHref}">${escH(gameName)}</a>`
+              : escH(gameName)}</span>
             <span class="pr-session-summary">${recs.length}회 플레이</span>
             <span class="pr-session-arrow">▾</span>
           </button>
@@ -1039,7 +1048,9 @@
           return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
             <div class="pr-rec-row-top">
               <div class="pr-rec-main">
-                <span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>
+                ${gameKey
+                  ? `<a class="pr-rec-game pr-rec-game-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}">${escH(getGameName(r.game_id))}</a>`
+                  : `<span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>`}
                 <div class="pr-rec-meta">${timeTag}${scoreTag}</div>
                 ${reviewHtml}
               </div>
