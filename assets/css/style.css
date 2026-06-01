@@ -246,7 +246,7 @@ textarea{
   width:100%;
   padding:10px 12px;
   border-radius:12px;
-  color:var(--green);
+  color:#5a3418;
   text-decoration:none;
   font-size:15px;
   font-weight:900;
@@ -299,20 +299,20 @@ textarea{
 .menu-group-body a{
   padding:7px 12px !important;
   font-size:13px !important;
-  color:var(--green) !important;
+  color:#5a3418 !important;
   font-weight:700 !important;
 }
 
 /* 현재 페이지 메뉴 active */
 .header-menu a.is-current{
-  background:#edf5e2;
-  color:#2c4a30;
+  background:#f0e4d4;
+  color:#3d2010;
   border-radius:10px;
 }
 
 /* 서브메뉴 active */
 .menu-group-body a.is-current{
-  background:var(--green) !important;
+  background:#7a4828 !important;
   color:#fff !important;
   font-weight:900 !important;
 }
@@ -322,9 +322,9 @@ textarea{
 @media(min-width:900px){
   .header-menu > a.is-current{
     background:transparent;
-    color:var(--green);
+    color:#5a3418;
     border-radius:0;
-    border-bottom:2.5px solid var(--green);
+    border-bottom:2.5px solid #7a4828;
     padding-bottom:2px;
   }
 }
