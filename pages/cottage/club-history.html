@@ -123,6 +123,15 @@
     </section>
   </main>
 
+  <!-- 게임 바텀시트 -->
+  <div class="game-sheet" id="gameSheet">
+    <div class="game-sheet-dim" id="closeGameSheetDim"></div>
+    <div class="game-sheet-panel">
+      <button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button>
+      <div id="gameSheetContent"></div>
+    </div>
+  </div>
+
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
   <script src="../../assets/js/game-display-adapter.js"></script>
@@ -257,7 +266,7 @@
                       r.score_note ? `🏆 ${escH(r.score_note)}` : null,
                     ].filter(Boolean);
                     return `<div class="history-record-item">
-                      <a class="history-game-name" href="../owned-games.html?open=${encodeURIComponent(gameKey)}">${escH(name)}</a>
+                      <a class="history-game-name" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}');return false">${escH(name)}</a>
                       ${tags.length ? `<div class="history-record-tags">${tags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
                       ${r.photo_url ? `<img class="history-photo" src="${escAttr(r.photo_url)}" alt="사진" loading="lazy">` : ''}
                     </div>`;
