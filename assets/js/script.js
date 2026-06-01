@@ -918,7 +918,7 @@ function openRecommendOverlay(){
   // 헤더에 필터 조건 + 개수 표시
   const filterChips = [];
   if(recommendState.players) {
-    const pt = {2:'💗 둘이', 3:'🍻 셋이', 4:'🎲 넷이', group:'🎉 단체', 1:'☕ 혼자'};
+    const pt = {2:'2인', 3:'3인', 4:'4인', group:'단체', 1:'1인'};
     filterChips.push(pt[recommendState.players] || recommendState.players);
   }
   if(recommendState.level) {
@@ -2393,11 +2393,11 @@ const recommendState = {
 };
 
 const playerTextMap = {
-    "1": "☕ 혼자 왔어요",
-  "2": "💗 둘이 왔어요",
-  "3": "🍻 셋이 왔어요",
-  "4": "🎲 넷이 왔어요",
-  "group": "🎉 단체로 왔어요"
+  "1": "1인",
+  "2": "2인",
+  "3": "3인",
+  "4": "4인",
+  "group": "단체"
 };
 
 const levelTextMap = {
@@ -2450,25 +2450,25 @@ const moodValue = recommendState.mood;
         <div class="recommend-step-options">
         
           ${playerValue !== "2"
-  ? renderInlineOption("players", "2", "💗 둘이 왔어요", playerValue)
+  ? renderInlineOption("players", "2", "2인", playerValue)
   : ""}
 
 ${playerValue !== "3"
-  ? renderInlineOption("players", "3", "🍻 셋이 왔어요", playerValue)
+  ? renderInlineOption("players", "3", "3인", playerValue)
   : ""}
 
 ${playerValue !== "4"
-  ? renderInlineOption("players", "4", "🎲 넷이 왔어요", playerValue)
+  ? renderInlineOption("players", "4", "4인", playerValue)
   : ""}
 
 ${playerValue !== "group"
-  ? renderInlineOption("players", "group", "🎉 단체로왔어요", playerValue)
+  ? renderInlineOption("players", "group", "단체", playerValue)
   : ""}
 
 ${playerValue !== "1"
-  ? renderInlineOption("players", "1", "☕ 혼자 왔어요", playerValue)
+  ? renderInlineOption("players", "1", "1인", playerValue)
   : ""}
-  ${renderInlineOption("players", "", "상관없어요", playerValue)}
+  ${renderInlineOption("players", "", "상관없음", playerValue)}
           </div>
       </div>
 
