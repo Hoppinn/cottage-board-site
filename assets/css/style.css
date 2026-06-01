@@ -2637,7 +2637,7 @@ body.sheet-open{
 .sheet-img-bgg{
   font-size:11px;
   font-weight:900;
-  color:#2f5d50;
+  color:#7a4828;
   white-space:nowrap;
 }
 
@@ -2811,7 +2811,7 @@ body.sheet-open{
 .sheet-sticky-bgg{
   font-size:12px;
   font-weight:900;
-  color:#2f5d50;
+  color:#7a4828;
   white-space:nowrap;
   flex-shrink:0;
 }
