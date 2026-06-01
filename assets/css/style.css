@@ -2734,7 +2734,7 @@ body.sheet-open{
 /* 게임카드 인원 이모지 — 텍스트색과 동일하게 */
 .gm-emoji{
   display:inline-block;
-  filter:brightness(0) opacity(0.65);
+  filter:grayscale(1) brightness(0.42) sepia(0.3);
 }
 
 .sheet-stats-dot{
