@@ -1319,8 +1319,8 @@ function openGameSheet(gameKey){
 
   // 무게/난이도 정보
   const weightMain = detail.difficultyWeight > 0
-    ? `🎯 ${formatDifficultyWeight(detail.difficultyWeight)}`
-    : `🎯 ${difficultyLabel}`;
+    ? `<span class="sheet-difficulty-icon">🎯</span> ${formatDifficultyWeight(detail.difficultyWeight)}`
+    : `<span class="sheet-difficulty-icon">🎯</span> ${difficultyLabel}`;
   const weightSub = detail.difficultyWeight > 0
     ? `(${difficultyLabel})`
     : "";

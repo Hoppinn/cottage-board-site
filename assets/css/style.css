@@ -2727,6 +2727,10 @@ body.sheet-open{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
+.sheet-difficulty-icon{
+  display:inline-block;
+  filter:grayscale(1) brightness(0.75);
+}
 
 .sheet-stats-dot{
   font-size:14px;
