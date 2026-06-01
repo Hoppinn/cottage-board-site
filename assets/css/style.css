@@ -2731,6 +2731,11 @@ body.sheet-open{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
+/* 게임카드 인원 이모지 — 텍스트색과 동일하게 */
+.gm-emoji{
+  display:inline-block;
+  filter:brightness(0) opacity(0.65);
+}
 
 .sheet-stats-dot{
   font-size:14px;
