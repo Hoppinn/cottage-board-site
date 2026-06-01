@@ -669,6 +669,13 @@ body.owned-page .header-menu.active{
 
 .primary-btn{background:#78983d;color:#fff;}
 .secondary-btn{background:#fffaf0;color:#78983d;}
+
+/* 히어로 전용 버튼 — 베이지/크림 팔레트 */
+.hero .primary-btn{background:#e8d9c0;color:#3d2810;border-color:#e8d9c0;}
+.hero .primary-btn:hover{background:#ddc9a8;border-color:#ddc9a8;}
+.hero .secondary-btn{background:rgba(232,217,192,0.15);color:#e8d9c0;border-color:rgba(232,217,192,0.6);}
+.hero .secondary-btn:hover{background:rgba(232,217,192,0.28);}
+
 .hero-club-link{display:block;margin-top:14px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;}
 .hero-club-link:hover{color:var(--green);}
 .breadcrumb{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px;display:block;letter-spacing:.01em;}
