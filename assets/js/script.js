@@ -861,7 +861,7 @@ if (weight > maxWeight) {
               </span>
 
               <span class="card-difficulty ${difficulty.className}">
-                <span class="sheet-difficulty-icon">${difficulty.icon}</span> ${formatDifficultyWeight(card.difficultyWeight)}
+                ${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}
               </span>
 
               <span>
@@ -1319,8 +1319,8 @@ function openGameSheet(gameKey){
 
   // 무게/난이도 정보
   const weightMain = detail.difficultyWeight > 0
-    ? `<span class="sheet-difficulty-icon">🎯</span> ${formatDifficultyWeight(detail.difficultyWeight)}`
-    : `<span class="sheet-difficulty-icon">🎯</span> ${difficultyLabel}`;
+    ? `🎯 ${formatDifficultyWeight(detail.difficultyWeight)}`
+    : `🎯 ${difficultyLabel}`;
   const weightSub = detail.difficultyWeight > 0
     ? `(${difficultyLabel})`
     : "";
