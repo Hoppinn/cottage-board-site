@@ -857,7 +857,7 @@ if (weight > maxWeight) {
             <div class="game-meta">
 
               <span class="game-meta-player">
-                👥&#xFE0E; ${formatPlayers(card.bestPlayers)}
+                <span class="gm-emoji">👥</span> ${formatPlayers(card.bestPlayers)}
               </span>
 
               <span class="card-difficulty ${difficulty.className}">
