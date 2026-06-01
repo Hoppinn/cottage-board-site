@@ -53,6 +53,7 @@
     .pr-session-group { display: none; }
     .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.13); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 600; }
     .pr-session-arrow { font-size: 15px; color: rgba(255,255,255,0.65); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
+    .pr-session-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; opacity: 0.92; }
     .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
     .pr-session-body { display: none; background: var(--bg,#f5f0e8); }
     .pr-session.is-open .pr-session-body { display: block; }
@@ -987,8 +988,15 @@
       let html = '';
       for (const [gameId, recs] of games) {
         const gameName = getGameName(gameId);
+        // 게임 썸네일 이미지
+        const gKey = getGameKey(gameId) || gameId;
+        const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
+        const thumbHtml = thumbUrl
+          ? `<img class="pr-session-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+          : '';
         html += `<div class="pr-session">
           <button class="pr-session-hd" type="button">
+            ${thumbHtml}
             <span class="pr-session-date">${escH(gameName)}</span>
             <span class="pr-session-summary">${recs.length}회 플레이</span>
             <span class="pr-session-arrow">▾</span>
