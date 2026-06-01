@@ -1311,8 +1311,8 @@ function openGameSheet(gameKey){
 
   // 인원 정보
   const bestDisplayMain = bestText !== "-"
-    ? `👥 베스트 ${bestText}`
-    : (recShort ? `👥 추천 ${recShort}명` : "👥 -");
+    ? `<span class="sheet-player-icon">👥</span> 베스트 ${bestText}`
+    : (recShort ? `<span class="sheet-player-icon">👥</span> 추천 ${recShort}명` : `<span class="sheet-player-icon">👥</span> -`);
   const bestDisplaySub = bestText !== "-" && recShort
     ? `(추천 ${recShort}명)`
     : "";

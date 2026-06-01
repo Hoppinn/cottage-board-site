@@ -2723,6 +2723,10 @@ body.sheet-open{
   color:#3a3025;
   white-space:nowrap;
 }
+.sheet-player-icon{
+  display:inline-block;
+  filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
+}
 
 .sheet-stats-dot{
   font-size:14px;
