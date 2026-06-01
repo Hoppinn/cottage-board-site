@@ -255,6 +255,15 @@
     </section>
   </main>
 
+  <!-- 게임 바텀시트 (script.js openGameSheet 사용) -->
+  <div class="game-sheet" id="gameSheet">
+    <div class="game-sheet-dim" id="closeGameSheetDim"></div>
+    <div class="game-sheet-panel">
+      <button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button>
+      <div id="gameSheetContent"></div>
+    </div>
+  </div>
+
   <div class="pr-toast" id="prToast"></div>
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
@@ -1005,7 +1014,7 @@
           <button class="pr-session-hd" type="button">
             ${thumbHtml}
             <span class="pr-session-date">${gKey
-              ? `<a class="pr-session-game-link" href="${gameHref}">${escH(gameName)}</a>`
+              ? `<a class="pr-session-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gKey.replace(/'/g,"\\'")}')">${escH(gameName)}</a>`
               : escH(gameName)}</span>
             <span class="pr-session-summary">${recs.length}회 플레이</span>
             <span class="pr-session-arrow">▾</span>
@@ -1049,7 +1058,7 @@
             <div class="pr-rec-row-top">
               <div class="pr-rec-main">
                 ${gameKey
-                  ? `<a class="pr-rec-game pr-rec-game-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}">${escH(getGameName(r.game_id))}</a>`
+                  ? `<a class="pr-rec-game pr-rec-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}')">${escH(getGameName(r.game_id))}</a>`
                   : `<span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>`}
                 <div class="pr-rec-meta">${timeTag}${scoreTag}</div>
                 ${reviewHtml}
