@@ -46,6 +46,9 @@
     .history-record-item { display: flex; flex-direction: column; padding: 10px 16px; border-top: 1px solid var(--border,#e8e4dc); gap: 6px; }
     .history-record-item:first-of-type { border-top: none; }
     .history-record-item:hover { background: #f6fcfa; }
+    .history-game-row { display: flex; align-items: center; gap: 10px; }
+    .history-game-thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .history-game-info { flex: 1; min-width: 0; }
     .history-game-name { font-size: 15px; font-weight: 800; color: #1a1a1a; text-decoration: none; display: block; }
     .history-game-name:hover { text-decoration: underline; color: #9e3a2a; }
     .history-record-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
@@ -251,7 +254,7 @@
                 for (const [, grp] of playerGroups) {
                   const f = grp[0];
                   const pTags = [];
-                  if (f.player_count) pTags.push(`<span class="history-tag history-tag-count">👥 ${f.player_count}명</span>`);
+                  if (f.player_count) pTags.push(`<span class="history-tag history-tag-count">${f.player_count}명</span>`);
                   if (f.player_names) {
                     f.player_names.split(',').map(n => n.trim()).filter(Boolean)
                       .forEach(n => pTags.push(`<span class="history-tag">${escH(n)}</span>`));
@@ -262,13 +265,19 @@
                   out += grp.map(r => {
                     const name = getGameName(r.game_id);
                     const gameKey = getGameKey(r.game_id) || r.game_id;
+                    const thumbUrl = window.gameData?.[gameKey]?.images?.thumbnail || '';
                     const tags = [
                       r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
                       r.score_note ? `🏆 ${escH(r.score_note)}` : null,
                     ].filter(Boolean);
                     return `<div class="history-record-item">
-                      <a class="history-game-name" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}');return false">${escH(name)}</a>
-                      ${tags.length ? `<div class="history-record-tags">${tags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
+                      <div class="history-game-row">
+                        ${thumbUrl ? `<img class="history-game-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+                        <div class="history-game-info">
+                          <a class="history-game-name" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}');return false">${escH(name)}</a>
+                          ${tags.length ? `<div class="history-record-tags">${tags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
+                        </div>
+                      </div>
                       ${r.photo_url ? `<img class="history-photo" src="${escAttr(r.photo_url)}" alt="사진" loading="lazy">` : ''}
                     </div>`;
                   }).join('');

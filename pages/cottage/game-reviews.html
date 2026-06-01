@@ -1043,7 +1043,7 @@
       let html = '';
       for (const [, groupRecs] of playerGroups) {
         const first = groupRecs[0];
-        const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count">👥 ${first.player_count}명</span>` : '';
+        const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count">${first.player_count}명</span>` : '';
         const nameTags = first.player_names
           ? first.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('')
           : '';
