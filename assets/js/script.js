@@ -2490,15 +2490,15 @@ ${levelValue !== "beginner"
   : ""}
 
 ${levelValue !== "light"
-  ? renderInlineOption("level", "light", "🏡 라이트·패밀리", levelValue)
+  ? renderInlineOption("level", "light", "라이트·패밀리", levelValue)
   : ""}
 
 ${levelValue !== "heavy"
-  ? renderInlineOption("level", "heavy", "🧠 헤비·매니아", levelValue)
+  ? renderInlineOption("level", "heavy", "헤비·매니아", levelValue)
   : ""}
 
 ${levelValue !== "hardcore"
-  ? renderInlineOption("level", "hardcore", "😈 하드코어", levelValue)
+  ? renderInlineOption("level", "hardcore", "하드코어", levelValue)
   : ""}
   ${renderInlineOption("level", "", "상관없음", levelValue)}
         </div>
