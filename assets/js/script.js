@@ -2434,7 +2434,7 @@ const moodValue = recommendState.mood;
     <div class="recommend-filter-card recommend-filter-card-v3">
 
       <h2 class="recommend-filter-main-title">
-        <span class="emoji-clover">🍀</span> 오늘은 어떤 게임이 어울릴까요?
+        오늘은 어떤 게임이 어울릴까요?
       </h2>
 
       
