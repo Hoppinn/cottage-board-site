@@ -2730,10 +2730,6 @@ body.sheet-open{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
-/* 게임 카드 안에서는 필터 제거 (베이지 배경과 합쳐져 연두빛으로 보임) */
-.game-meta .sheet-player-icon{
-  filter:none;
-}
 
 .sheet-stats-dot{
   font-size:14px;
