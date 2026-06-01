@@ -155,6 +155,25 @@
       return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
+    // 카드 컬러 팔레트 (bg, text, border)
+    const CARD_PALETTE = [
+      { key:'mint',   bg:'#ddeedd', text:'#1e4d1e', border:'#b5d9b5' },
+      { key:'sky',    bg:'#d4eaf7', text:'#1a3d6b', border:'#9fc8e8' },
+      { key:'lavender',bg:'#e8d5f0',text:'#4a1a72', border:'#c8a0e0' },
+      { key:'peach',  bg:'#fde8d8', text:'#7a3210', border:'#f0c0a0' },
+      { key:'lemon',  bg:'#fdf5d0', text:'#5a4a00', border:'#e8d888' },
+      { key:'pink',   bg:'#f8e0ef', text:'#7a1a52', border:'#e0a8cc' },
+      { key:'teal',   bg:'#d5f0e8', text:'#0d4a3a', border:'#98d8c0' },
+      { key:'sand',   bg:'#f0e8d8', text:'#5a3e18', border:'#d8c8a8' },
+    ];
+
+    function applyCardColor(cardEl, colorKey, idx) {
+      const color = CARD_PALETTE.find(c => c.key === colorKey) || CARD_PALETTE[idx % CARD_PALETTE.length];
+      cardEl.style.setProperty('--intro-head-bg', color.bg);
+      cardEl.style.setProperty('--intro-head-text', color.text);
+      cardEl.style.setProperty('--intro-border', color.border);
+    }
+
     function formatDate(iso) {
       const d = new Date(iso);
       const kst = new Date(d.getTime() + 9 * 3600000);
@@ -261,14 +280,15 @@
         el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">아직 인사가 없어요. 첫 번째로 남겨보세요!</p>';
         return;
       }
-      el.innerHTML = data.map(r => {
+      el.innerHTML = data.map((r, idx) => {
         const canAct = canDelete(r);
-        const del  = canAct ? `<button class="intro-card-del"  data-id="${r.id}" type="button" title="삭제">✕</button>` : '';
-        const edit = canAct ? `<button class="intro-card-edit" data-id="${r.id}" type="button" title="수정">✎</button>` : '';
+        const del    = canAct ? `<button class="intro-card-del"       data-id="${r.id}" type="button" title="삭제">✕</button>` : '';
+        const edit   = canAct ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정">✎</button>` : '';
+        const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경">🎨</button>` : '';
         return `
-        <div class="intro-card-news" data-id="${r.id}">
-          <div class="intro-card-news-head">
-            ${edit}${del}
+        <div class="intro-card-news" data-id="${r.id}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
+          <div class="intro-card-news-head" style="position:relative">
+            ${color}${edit}${del}
             <div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>
             <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
           </div>
@@ -280,6 +300,11 @@
         </div>`;
       }).join('');
 
+      // 카드 색상 적용
+      el.querySelectorAll('.intro-card-news').forEach(card => {
+        applyCardColor(card, card.dataset.color, Number(card.dataset.idx));
+      });
+
       el.querySelectorAll('.intro-card-del').forEach(btn => {
         btn.addEventListener('click', () => deleteIntro(btn.dataset.id));
       });
@@ -287,6 +312,46 @@
         const id = btn.dataset.id;
         const r  = data.find(x => String(x.id) === String(id));
         btn.addEventListener('click', () => editIntro(id, r));
+      });
+
+      // 컬러 피커
+      el.querySelectorAll('.intro-card-color-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          // 기존 팔레트 닫기
+          el.querySelectorAll('.intro-color-palette').forEach(p => p.remove());
+
+          const cardEl  = btn.closest('.intro-card-news');
+          const headEl  = btn.closest('.intro-card-news-head');
+          const curKey  = cardEl.dataset.color || '';
+
+          const palette = document.createElement('div');
+          palette.className = 'intro-color-palette';
+          CARD_PALETTE.forEach(c => {
+            const sw = document.createElement('button');
+            sw.type = 'button';
+            sw.className = 'intro-color-swatch' + (c.key === curKey ? ' is-selected' : '');
+            sw.style.background = c.bg;
+            sw.title = c.key;
+            sw.addEventListener('click', async e2 => {
+              e2.stopPropagation();
+              palette.remove();
+              cardEl.dataset.color = c.key;
+              applyCardColor(cardEl, c.key, Number(cardEl.dataset.idx));
+              // DB 저장 (card_color 컬럼 필요)
+              await db.from('member_intros').update({ card_color: c.key }).eq('id', btn.dataset.id);
+            });
+            palette.appendChild(sw);
+          });
+
+          headEl.style.position = 'relative';
+          headEl.appendChild(palette);
+
+          // 외부 클릭 시 닫기
+          setTimeout(() => {
+            document.addEventListener('click', () => palette.remove(), { once: true });
+          }, 0);
+        });
       });
     }
 

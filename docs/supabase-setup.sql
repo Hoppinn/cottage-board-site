@@ -313,6 +313,7 @@ create table if not exists public.member_intros (
 );
 
 alter table public.member_intros add column if not exists user_id text;
+alter table public.member_intros add column if not exists card_color text;
 
 create index if not exists member_intros_created_at_idx on public.member_intros (created_at desc);
 
