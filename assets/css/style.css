@@ -2802,7 +2802,7 @@ body.sheet-open{
   min-width:0;
   font-size:14px;
   font-weight:900;
-  color:#2f5d50;
+  color:#5a3418;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -3239,7 +3239,7 @@ body.sheet-open{
 
 .sheet-meta-label{
   flex-shrink:0;
-  color:var(--green-2);
+  color:#7a4828;
   font-weight:900;
 }
 
