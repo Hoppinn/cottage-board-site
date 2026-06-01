@@ -2731,10 +2731,9 @@ body.sheet-open{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
-/* 게임카드 인원 이모지 — 텍스트색과 동일하게 */
-.gm-emoji{
-  display:inline-block;
-  filter:grayscale(1) brightness(0.42) sepia(0.3);
+/* 게임카드 인원 배지 — 텍스트 프레젠테이션으로 color 적용 */
+.game-meta-player{
+  color:#5c5447;
 }
 
 .sheet-stats-dot{
