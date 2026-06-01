@@ -598,21 +598,6 @@ body.owned-page .header-menu.active{
   text-align:center;
 }
 
-/* 히어로 로고 배지 */
-.hero-logo-badge{
-  width:56px;
-  height:56px;
-  object-fit:contain;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,0.75);
-  background:transparent;
-  padding:6px;
-  filter:brightness(0) invert(1);
-  display:block;
-  margin:0 auto clamp(14px,3vw,20px);
-  backdrop-filter:blur(2px);
-}
-
 .label{
   display:inline-block;
   padding:clamp(7px,2vw,9px) clamp(14px,4vw,18px);
@@ -3184,7 +3169,6 @@ body.sheet-open{
 .sheet-desc.is-clamped{
   display:-webkit-box;
   -webkit-line-clamp:3;
-  line-clamp:3;
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
