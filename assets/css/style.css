@@ -900,6 +900,7 @@ body.recommend-page main{
   line-height:1.25;
   font-weight:700;
   letter-spacing:-0.3px;
+  text-align:center;
 }
 /* 네잎클로버 이모지 브라운 필터 */
 .recommend-filter-main-title .emoji-clover{
