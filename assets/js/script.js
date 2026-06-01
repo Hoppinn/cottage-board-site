@@ -198,7 +198,7 @@ function resetMenuGroups(){
 
   const currentLink = document.querySelector('.header-menu a.is-current');
   if(currentLink){
-    currentLink.style.setProperty('background', '#35543c', 'important');
+    currentLink.style.setProperty('background', '#7a4828', 'important');
     currentLink.style.setProperty('color', '#fff', 'important');
     currentLink.style.setProperty('font-weight', '900', 'important');
     currentLink.style.setProperty('border-radius', '8px', 'important');
