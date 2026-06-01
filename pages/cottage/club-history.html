@@ -16,15 +16,25 @@
     .history-group-name { font-size:16px; font-weight:900; letter-spacing:-0.3px; }
     .history-group-count { font-size:12px; font-weight:700; background:rgba(255,255,255,0.22); border-radius:20px; padding:2px 9px; }
 
-    /* 날짜 세션 */
+    /* 날짜 세션 — 접기/펴기 */
     .history-session { border-top: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); }
     .history-session:first-child { border-top: none; }
-    .history-session-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--bg,#f5f0e8); border-left: 4px solid #9e3a2a; }
-    .history-session-date { font-size: 15px; font-weight: 800; color: #9e3a2a; }
-    .history-copy-btn { font-size: 12px; color: var(--green,#3d8a74); background: rgba(61,138,116,0.1); border: 1px solid rgba(61,138,116,0.3); border-radius: 6px; padding: 4px 10px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .history-session-header { display: flex; align-items: center; gap: 8px; padding: 11px 16px; background: var(--bg,#f5f0e8); border-left: 4px solid transparent; cursor: pointer; user-select: none; }
+    .history-session-header:hover { background: #ece7dc; }
+    .history-session.is-open > .history-session-header { background: var(--bg,#f5f0e8); border-left-color: #9e3a2a; }
+    .history-session-date { font-size: 15px; font-weight: 800; color: #2c3e50; flex: 1; }
+    .history-session.is-open > .history-session-header .history-session-date { color: #9e3a2a; }
+    .history-session-summary { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .history-session-arrow { font-size: 13px; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+    .history-session.is-open .history-session-arrow { transform: rotate(180deg); }
+    .history-copy-btn { font-size: 12px; color: var(--green,#3d8a74); background: rgba(61,138,116,0.1); border: 1px solid rgba(61,138,116,0.3); border-radius: 6px; padding: 4px 10px; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0; }
     .history-copy-btn:hover { background: rgba(61,138,116,0.2); }
-    .history-copy-btn.copied { background: var(--green,#3d8a74); color: #fff; border-color: var(--green,#3d8a74); }
-    .history-record-list { padding: 0; }
+    .history-copy-btn.is-copied { background: var(--green,#3d8a74); color: #fff; border-color: var(--green,#3d8a74); }
+    .history-record-list { display: none; padding: 0; }
+    .history-session.is-open .history-record-list { display: block; }
+    /* 교차링크 */
+    .history-cross-link { display: block; text-align: center; padding: 10px 14px; font-size: 13px; font-weight: 700; color: var(--green,#3d8a74); text-decoration: none; border-top: 1px dashed var(--border,#e8e4dc); }
+    .history-cross-link:hover { background: var(--bg,#f5f0e8); }
 
     /* 플레이어 헤더 */
     .history-player-header { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 16px; background: #ece7dc; border-top: 1px solid #e8e4dc; }
@@ -210,10 +220,13 @@
 
         for (const [dateStr, recs] of Object.entries(dates).sort((a, b) => b[0].localeCompare(a[0]))) {
           const captionAttr = escAttr(buildCaption(groupName, dateStr, recs));
-          html += `<div class="history-session">
+          const gameCount = recs.length;
+          html += `<div class="history-session is-open">
             <div class="history-session-header">
               <span class="history-session-date">${formatKstDate(dateStr)}</span>
+              <span class="history-session-summary">${gameCount}게임</span>
               <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션 복사</button>
+              <span class="history-session-arrow">▾</span>
             </div>
             <div class="history-record-list">
               ${(() => {
@@ -256,10 +269,19 @@
           </div>`;
         }
 
+        html += `<a class="history-cross-link" href="./game-reviews.html">🎲 전체 플레이 기록 보기 →</a>`;
         html += `</div>`;
       }
 
       root.innerHTML = html;
+
+      // 날짜 섹션 접기/펴기
+      root.querySelectorAll('.history-session-header').forEach(hd => {
+        hd.addEventListener('click', e => {
+          if (e.target.classList.contains('history-copy-btn')) return; // 복사 버튼 클릭은 제외
+          hd.closest('.history-session').classList.toggle('is-open');
+        });
+      });
 
       // ?group= 파라미터로 특정 그룹 섹션 스크롤
       const groupParam = new URLSearchParams(location.search).get('group');
