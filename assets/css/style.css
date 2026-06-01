@@ -896,10 +896,10 @@ body.recommend-page main{
 .recommend-filter-main-title{
   margin:0 0 10px;
   color:#314d35;
-  font-size:22px;
-  line-height:1.15;
-  font-weight:900;
-  letter-spacing:-1.2px;
+  font-size:20px;
+  line-height:1.25;
+  font-weight:700;
+  letter-spacing:-0.3px;
 }
 
 .recommend-step{
@@ -928,8 +928,8 @@ body.recommend-page main{
   align-items:center;
   gap:10px;
   color:#2f2a21;
-  font-size:18px;
-  font-weight:900;
+  font-size:16px;
+  font-weight:600;
 }
 
 .recommend-step-head span b{
@@ -952,7 +952,7 @@ body.recommend-page main{
   background:#f5efe4;
   color:#2e2a24;
   font-size:13px;
-  font-weight:900;
+  font-weight:500;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
