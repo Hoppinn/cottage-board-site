@@ -2731,10 +2731,6 @@ body.sheet-open{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
-/* 추천 게임 카드 인원 배지 — 아우터에 필터로 이모지 브라운 처리 */
-.game-meta-player{
-  filter:sepia(0.7) saturate(2.5) hue-rotate(-15deg) brightness(0.9);
-}
 
 .sheet-stats-dot{
   font-size:14px;
