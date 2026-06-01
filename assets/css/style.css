@@ -1339,6 +1339,7 @@ body.recommend-page main{
   font-weight:800;
   line-height:1.16;
   letter-spacing:-0.5px;
+  text-align:center;
 }
 
 .game-card-description{
@@ -1346,6 +1347,7 @@ body.recommend-page main{
   color:#7a4828;
   font-size:10px;
   line-height:1.38;
+  text-align:center;
   display:-webkit-box;
   -webkit-line-clamp:2;
   line-clamp:2;
@@ -1358,6 +1360,7 @@ body.recommend-page main{
   flex-wrap:wrap;
   gap:4px;
   margin:0;
+  justify-content:center;
 }
 
 .game-meta span{
@@ -5237,5 +5240,5 @@ body.sheet-open{
 .dg-card.dg-beginner{background:#bbdefb;}.dg-card.dg-beginner .dg-name{color:#0d47a1;}
 .dg-card.dg-light   {background:#fff9c4;}.dg-card.dg-light    .dg-name{color:#f57f17;}
 .dg-card.dg-heavy   {background:#ffccbc;}.dg-card.dg-heavy    .dg-name{color:#bf360c;}
-.dg-card.dg-hardcore{background:#3d0a0a;}.dg-card.dg-hardcore .dg-name{color:#ff8a80;}.dg-card.dg-hardcore .dg-range,.dg-card.dg-hardcore .dg-desc{color:rgba(255,200,200,0.85);}
+.dg-card.dg-hardcore{background:#1a1a1a;}.dg-card.dg-hardcore .dg-name{color:#fff;}.dg-card.dg-hardcore .dg-range{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);}.dg-card.dg-hardcore .dg-desc{color:rgba(255,255,255,0.65);}
 .dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
