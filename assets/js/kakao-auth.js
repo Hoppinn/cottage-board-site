@@ -15,9 +15,11 @@ function initKakaoAuth() {
       const user = JSON.parse(saved);
       updateLoginUI(user);
       if (window.CottageDB?.upsertProfile && user.id) {
+        // localhost 개발 환경에서는 방문 카운트 안 함
+        const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
         const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
         const profileKey = `cottage_profile_visited_${user.id}_${kstDate}`;
-        if (!localStorage.getItem(profileKey)) {
+        if (!isLocal && !localStorage.getItem(profileKey)) {
           localStorage.setItem(profileKey, '1');
           window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null).catch(() => {});
         }
