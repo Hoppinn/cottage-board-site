@@ -254,7 +254,7 @@
                 for (const [, grp] of playerGroups) {
                   const f = grp[0];
                   const pTags = [];
-                  if (f.player_count) pTags.push(`<span class="history-tag history-tag-count">${f.player_count}명</span>`);
+                  if (f.player_count) pTags.push(`<span class="history-tag history-tag-count"><span style="filter:brightness(0)invert(1);display:inline-block;font-size:11px">👥</span> ${f.player_count}명</span>`);
                   if (f.player_names) {
                     f.player_names.split(',').map(n => n.trim()).filter(Boolean)
                       .forEach(n => pTags.push(`<span class="history-tag">${escH(n)}</span>`));
