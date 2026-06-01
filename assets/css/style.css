@@ -1367,11 +1367,12 @@ body.recommend-page main{
   height:20px;
   padding:0 6px;
   border-radius:999px;
-  background:#f5efe4;
-  color:#5c5447;
+  background:#f0e6d8;
+  color:#7a4828;
   font-size:9px;
   font-weight:700;
   white-space:nowrap;
+  filter:sepia(0.5) saturate(1.4) hue-rotate(5deg) brightness(0.95);
 }
 
 .game-card em{
