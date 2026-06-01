@@ -2482,11 +2482,11 @@ ${playerValue !== "1"
 
         <div class="recommend-step-options">
           ${levelValue !== "kids"
-  ? renderInlineOption("level", "kids", "😊 아이도 할 수 있어요", levelValue)
+  ? renderInlineOption("level", "kids", "아이도 가능", levelValue)
   : ""}
 
 ${levelValue !== "beginner"
-  ? renderInlineOption("level", "beginner", "🌱 입문 추천", levelValue)
+  ? renderInlineOption("level", "beginner", "입문 추천", levelValue)
   : ""}
 
 ${levelValue !== "light"
@@ -2500,7 +2500,7 @@ ${levelValue !== "heavy"
 ${levelValue !== "hardcore"
   ? renderInlineOption("level", "hardcore", "😈 하드코어", levelValue)
   : ""}
-  ${renderInlineOption("level", "", "상관없어요", levelValue)}
+  ${renderInlineOption("level", "", "상관없음", levelValue)}
         </div>
       </div>
 
