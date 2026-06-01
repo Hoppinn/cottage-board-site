@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css');
+
 /* =========================
    COTTAGE BOARD - style.css
    주석 포함 재정리본
@@ -65,7 +67,7 @@ body{
   margin:0;
   background:var(--bg);
   color:#111;
-  font-family:Arial,sans-serif;
+  font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,Roboto,'Helvetica Neue',Arial,sans-serif;
   display:flex;
   flex-direction:column;
   min-height:100svh;
