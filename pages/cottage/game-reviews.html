@@ -99,6 +99,7 @@
     .pr-player-header { padding:7px 16px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; border-top:1px solid #e8e4dc; background:#ece7dc; }
     .pr-player-header:first-child { border-top:none; }
     .pr-player-header .pr-rec-tag { background:#fff; color:#4a3728; font-weight:700; font-size:12px; border-radius:20px; padding:2px 9px; border: 1px solid #d8d0c6; }
+    .pr-tag-count { background:#37474f !important; color:#fff !important; border-color:#37474f !important; }
     .pr-rec-sheet-link { font-size:16px; text-decoration:none; color:var(--muted); padding:2px 3px; border-radius:5px; flex-shrink:0; }
     .pr-rec-sheet-link:hover { background:#e8f5e9; }
     .pr-rec-row--game { padding-left:14px; }
@@ -1042,7 +1043,7 @@
       let html = '';
       for (const [, groupRecs] of playerGroups) {
         const first = groupRecs[0];
-        const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${first.player_count}명</span>` : '';
+        const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count">👥 ${first.player_count}명</span>` : '';
         const nameTags = first.player_names
           ? first.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('')
           : '';

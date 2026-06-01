@@ -40,6 +40,7 @@
     .history-player-header { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 16px; background: #ece7dc; border-top: 1px solid #e8e4dc; }
     .history-player-header + .history-player-header { border-top: 1px solid #e0dbd0; }
     .history-tag { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 20px; padding: 3px 10px; background: #fff; color: #4a3728; border: 1px solid #d8d0c6; }
+    .history-tag-count { background: #37474f !important; color: #fff !important; border-color: #37474f !important; }
 
     /* 게임 레코드 행 */
     .history-record-item { display: flex; flex-direction: column; padding: 10px 16px; border-top: 1px solid var(--border,#e8e4dc); gap: 6px; }
@@ -250,7 +251,7 @@
                 for (const [, grp] of playerGroups) {
                   const f = grp[0];
                   const pTags = [];
-                  if (f.player_count) pTags.push(`<span class="history-tag">👥 ${f.player_count}명</span>`);
+                  if (f.player_count) pTags.push(`<span class="history-tag history-tag-count">👥 ${f.player_count}명</span>`);
                   if (f.player_names) {
                     f.player_names.split(',').map(n => n.trim()).filter(Boolean)
                       .forEach(n => pTags.push(`<span class="history-tag">${escH(n)}</span>`));
