@@ -124,7 +124,7 @@ textarea{
 }
 
 .header-logo img{
-  width:clamp(74px,21vw,120px);
+  width:clamp(88px,24vw,136px);
   height:auto;
   max-height:calc(var(--header-h) - 10px);
   object-fit:contain;
