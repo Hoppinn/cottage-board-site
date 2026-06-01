@@ -2726,9 +2726,15 @@ body.sheet-open{
   color:#3a3025;
   white-space:nowrap;
 }
+/* 바텀시트 인원 이모지 브라운 */
 .sheet-player-icon{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
+}
+/* 추천 게임 카드 인원 배지 — 필터 없이 브라운 배경으로 */
+.game-meta-player{
+  background:#eddcc8 !important;
+  color:#6b3d1a !important;
 }
 
 .sheet-stats-dot{
