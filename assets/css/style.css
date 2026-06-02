@@ -2777,11 +2777,11 @@ body.sheet-open{
 
   /* PC: game-scroll → 4열 wrap 그리드처럼 */
   #gameScroll{
-    display:flex !important;
-    flex-wrap:wrap !important;
-    flex-direction:row !important;
-    overflow:visible !important;
-    gap:12px !important;
+    display:flex;
+    flex-wrap:wrap;
+    flex-direction:row;
+    overflow:visible;
+    gap:12px;
     padding-bottom:18px;
     justify-content:center;
   }
@@ -2804,17 +2804,19 @@ body.sheet-open{
     font-size:15px;
   }
 
-  /* 추천 빈 박스 중앙정렬 */
-  #gameScroll .recommend-empty{
-    flex:0 0 100%;
-    margin:20px auto !important;
-    max-width:480px !important;
-    width:100% !important;
-    text-align:center;
+  /* 추천 빈 박스 중앙정렬 — text-align 방식으로 inline style override 우회 */
+  #gameScroll:has(.recommend-empty){
+    display:block !important;
+    text-align:center !important;
+    overflow:visible !important;
   }
 
-  #gameScroll:has(.recommend-empty){
-    justify-content:center;
+  #gameScroll .recommend-empty{
+    display:inline-block !important;
+    text-align:left !important;
+    max-width:480px !important;
+    width:100% !important;
+    margin:20px 0 !important;
   }
 
   /* 난이도 안내 */

@@ -724,7 +724,8 @@ const moodValue = recommendState.mood;
   !levelValue &&
   !moodValue
 ){
-  gameScroll.style.display = "block";
+  gameScroll.style.display = "";
+  gameScroll.style.removeProperty('display');
 
   gameScroll.innerHTML = `
     <p class="recommend-empty">
@@ -736,7 +737,7 @@ const moodValue = recommendState.mood;
   return;
 }
 
-  gameScroll.style.display = "flex";
+  gameScroll.style.removeProperty('display');
 
   
 
