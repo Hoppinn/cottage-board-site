@@ -2775,19 +2775,46 @@ body.sheet-open{
     margin-bottom:18px;
   }
 
-  .game-scroll{
+  /* PC: game-scroll → 4열 wrap 그리드처럼 */
+  #gameScroll{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    flex-direction:row !important;
+    overflow:visible !important;
+    gap:12px !important;
     padding-bottom:18px;
+    justify-content:center;
+  }
+
+  #gameScroll .game-card{
+    flex:0 0 calc(25% - 10px);
+    min-width:160px;
+    max-width:200px;
+    scroll-snap-align:none;
+  }
+
+  /* 더보기 버튼 — 하단 전체 폭 */
+  #gameScroll .game-card-more{
+    flex:0 0 100%;
+    width:100%;
+    max-width:none;
+    margin-top:4px;
+    border-radius:14px;
+    height:52px;
+    font-size:15px;
   }
 
   /* 추천 빈 박스 중앙정렬 */
   #gameScroll .recommend-empty{
+    flex:0 0 100%;
     margin:20px auto !important;
     max-width:480px !important;
     width:100% !important;
+    text-align:center;
   }
 
-  .game-scroll:has(.recommend-empty){
-    overflow:visible !important;
+  #gameScroll:has(.recommend-empty){
+    justify-content:center;
   }
 
   /* 난이도 안내 */
