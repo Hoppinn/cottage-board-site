@@ -90,12 +90,13 @@
     .pr-rec-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
     .pr-rec-del:hover { color: #c0392b; }
     .pr-rec-edit { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
-    .pr-rec-edit:hover { color: var(--green); }
+    .pr-rec-edit:hover { color: #7a4828; }
     .pr-inline-edit { background: var(--bg,#f5f0e8); border-radius: 8px; padding: 10px; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
     .pr-inline-edit input, .pr-inline-edit textarea { font-size: 12px; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 8px; width: 100%; box-sizing: border-box; background: #fff; }
     .pr-inline-edit textarea { resize: vertical; min-height: 50px; }
     .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
-    .pr-inline-save { font-size: 12px; background: var(--green); color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
+    .pr-inline-save { font-size: 12px; background: #7a4828; color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
+    .pie-photo-trigger { display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;border:1px dashed var(--border,#e8e4dc);border-radius:7px;padding:6px 10px;box-sizing:border-box; }
     .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
     .pr-player-header { padding:7px 16px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; border-top:1px solid #e8e4dc; background:#ece7dc; }
     .pr-player-header:first-child { border-top:none; }
@@ -846,6 +847,11 @@
             <input class="pie-date" type="date" value="${escH(rec.date||'')}">
             <label style="font-size:11px;color:var(--muted)">후기</label>
             <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
+            <label style="font-size:11px;color:var(--muted)">사진</label>
+            ${rec.photo ? `<img class="pie-photo-cur" src="${escH(rec.photo)}" style="max-width:100%;max-height:100px;border-radius:7px;object-fit:cover;display:block">
+            <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;color:#c0392b"><input type="checkbox" class="pie-photo-del"> 기존 사진 삭제</label>` : ''}
+            <label class="pr-photo-trigger pie-photo-trigger">📷 ${rec.photo ? '다른 사진으로 교체' : '사진 추가 (선택)'}<input type="file" class="pie-photo-file" accept="image/*" style="display:none"></label>
+            <img class="pie-photo-preview" style="max-width:100%;max-height:100px;border-radius:7px;margin-top:4px;display:none">
             <div class="pr-inline-edit-actions">
               <button class="pr-inline-cancel" type="button">취소</button>
               <button class="pr-inline-save" type="button">저장</button>
@@ -890,6 +896,16 @@
           // 참여자 이름 자동완성 — 항상 최신 window._prPlayerNames 참조
           attachAc(form.querySelector('.pie-names'), () => window._prPlayerNames || []);
 
+          const piePhotoFile = form.querySelector('.pie-photo-file');
+          const piePhotoPreview = form.querySelector('.pie-photo-preview');
+          if (piePhotoFile) {
+            piePhotoFile.addEventListener('change', () => {
+              const f = piePhotoFile.files[0];
+              if (f) { piePhotoPreview.src = URL.createObjectURL(f); piePhotoPreview.style.display = 'block'; }
+              else piePhotoPreview.style.display = 'none';
+            });
+          }
+
           form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
           form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => form.remove());
           form.querySelector('.pr-inline-save').addEventListener('click', async () => {
@@ -902,6 +918,18 @@
               const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
               newGameId = found ? found.id : gameDisplayInput;
             }
+            // 사진 처리
+            let photoUrlUpd = undefined; // undefined = 변경 안 함
+            const delChk = form.querySelector('.pie-photo-del');
+            const newPhotoFile = form.querySelector('.pie-photo-file')?.files[0];
+            if (newPhotoFile) {
+              const uploaded = await window.CottageDB.uploadPlayPhoto(newPhotoFile, user.id);
+              if (uploaded) photoUrlUpd = uploaded;
+              else { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
+            } else if (delChk?.checked) {
+              photoUrlUpd = '';
+            }
+
             const updFields = {
               player_names: form.querySelector('.pie-names').value.trim() || null,
               player_count: parseInt(form.querySelector('.pie-count').value) || null,
@@ -911,6 +939,7 @@
               played_at: form.querySelector('.pie-date').value || null,
               review_text: form.querySelector('.pie-review').value.trim() || null,
               ...(newGameId ? { game_id: newGameId } : {}),
+              ...(photoUrlUpd !== undefined ? { photo_url: photoUrlUpd } : {}),
             };
             const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, updFields);
             if (!res?.error) {
@@ -1064,7 +1093,7 @@
           const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
           const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
           const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
-          return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+          return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
             <div class="pr-rec-row-top">
               ${thumbHtml}
               <div class="pr-rec-main">
@@ -1129,7 +1158,7 @@
           const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
           const gameKey = getGameKey(r.game_id);
           const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
-          return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||''})}'>
+          return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
             <div class="pr-rec-row-top">
               <div class="pr-rec-main">
                 <div class="pr-rec-meta">

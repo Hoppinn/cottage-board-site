@@ -186,12 +186,13 @@
     }
   }
 
-  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note, group_name, played_at, review_text, game_id }) {
+  async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note, group_name, played_at, review_text, game_id, photo_url }) {
     if (!id) return { error: "invalid" };
     try {
       const fields = { player_count, player_names, play_time_min, score_note, group_name: group_name || null, played_at: played_at || null };
       if (review_text !== undefined) fields.review_text = review_text || null;
       if (game_id) fields.game_id = game_id;
+      if (photo_url !== undefined) fields.photo_url = photo_url || null;
       const { error } = await db.from("game_play_records")
         .update(fields)
         .eq("id", id);
