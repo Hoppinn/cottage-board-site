@@ -2816,19 +2816,24 @@ body.sheet-open{
     font-size:15px;
   }
 
-  /* 추천 빈 박스 중앙정렬 — text-align 방식으로 inline style override 우회 */
-  #gameScroll:has(.recommend-empty){
+  /* 추천 빈 박스 중앙정렬 — .game-scroll:has()의 margin:0 -18px !important 재정의 */
+  #gameScroll:has(.recommend-empty),
+  .game-scroll:has(.recommend-empty){
     display:block !important;
-    text-align:center !important;
+    margin:0 auto !important;
+    max-width:780px !important;
+    padding:20px 40px !important;
+    box-sizing:border-box !important;
     overflow:visible !important;
   }
 
-  #gameScroll .recommend-empty{
-    display:inline-block !important;
-    text-align:left !important;
+  #gameScroll .recommend-empty,
+  .game-scroll .recommend-empty{
+    display:block !important;
+    text-align:center !important;
     max-width:480px !important;
     width:100% !important;
-    margin:20px 0 !important;
+    margin:0 auto !important;
   }
 
   /* 난이도 안내 */
