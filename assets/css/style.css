@@ -2571,10 +2571,12 @@ body.sheet-open{
 }
 
 @media(min-width:900px){
-  /* Logo(auto) | Nav(auto) | spacer(1fr) | Actions(auto) — nav아이템 모아서 왼쪽 정렬 */
+  /* Logo(auto) | Nav(auto) | spacer(1fr) | Actions(auto) */
   .site-header{
     grid-template-columns:clamp(82px,12vw,130px) auto 1fr auto;
     column-gap:clamp(12px,2.5vw,32px);
+    align-items:center;
+    padding-bottom:0;
   }
 
   /* 태그라인 숨기고 nav가 그 자리 차지 */
@@ -2604,7 +2606,7 @@ body.sheet-open{
     flex-direction:row !important;
     align-items:center !important;
     justify-content:flex-start !important;
-    gap:4px !important;
+    gap:clamp(4px,1.5vw,20px) !important;
     grid-column:2 !important;
     grid-row:1 !important;
     width:auto !important;
@@ -2746,10 +2748,12 @@ body.sheet-open{
     padding:0 0 60px;
   }
 
-  /* 배너 full-width — 음수 마진 제거, 섹션 전체 폭 */
-  .recommend-header--photo{
-    width:100%;
-    margin:0 0 32px;
+  /* 배너 full-width — recommend-header max-width 해제 + 음수마진 제거 */
+  .recommend-header--photo,
+  .recommend-header.recommend-header--photo{
+    width:100% !important;
+    max-width:none !important;
+    margin:0 0 32px !important;
     border-radius:0;
     height:220px;
   }
