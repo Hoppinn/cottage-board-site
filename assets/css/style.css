@@ -5699,6 +5699,24 @@ body.sheet-open{
     font-size:clamp(30px,3.5vw,46px);
   }
 
+  /* ── 메인 히어로: PC에서 full-screen → 75vh ── */
+  .hero{
+    min-height:75vh;
+  }
+
+  /* ── 추천 배너: 사람 얼굴 보이도록 position 조정 ── */
+  .recommend-header--photo::before{
+    background-position:center 30% !important;
+  }
+
+  /* ── about 사진 그리드: 텍스트와 같은 960px 안으로 ── */
+  .about-photo-strip{
+    max-width:960px;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:0;
+  }
+
   /* ── about 히어로 ── */
   .about-hero{
     padding-top:calc(var(--header-total-h) + clamp(40px,6vw,60px));
