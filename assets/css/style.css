@@ -2905,10 +2905,11 @@ body.sheet-open{
     border-radius:0;
   }
 
-  /* about-section: --page-x 대신 고정 padding (base css가 더 늦게 선언되므로 !important) */
+  /* about-section: inner-page와 동일하게 --page-x로 960px 중앙 정렬 */
   .about-section{
-    padding-left:40px !important;
-    padding-right:40px !important;
+    max-width:none !important;
+    padding-left:var(--page-x) !important;
+    padding-right:var(--page-x) !important;
   }
 
   /* 추천 전체보기 오버레이: 헤더·리스트 960px 중앙, 카드 작게 */
@@ -5910,6 +5911,45 @@ body.sheet-open{
   /* ── 모임 참여 / 섹션 타이틀 ── */
   .meeting-section-title{
     font-size:18px;
+  }
+
+  /* ── 요청하기 페이지 폼 요소 ── */
+  .req-tab-btn{
+    font-size:15px;
+    padding:12px 8px;
+  }
+  .req-text-input{
+    font-size:16px;
+    padding:12px 16px;
+  }
+  .req-submit-btn{
+    font-size:15px;
+    padding:12px 22px;
+  }
+  .req-list-item{
+    padding:12px 16px;
+  }
+  .req-list-name{
+    font-size:16px;
+  }
+  .req-list-count{
+    font-size:13px;
+    padding:4px 12px;
+  }
+  .req-textarea{
+    font-size:16px;
+    padding:14px 16px;
+  }
+  .req-note,
+  .req-vote-hint{
+    font-size:13px;
+  }
+  .req-list-empty{
+    font-size:15px;
+    padding:32px;
+  }
+  .req-success-msg{
+    font-size:15px;
   }
 
 }
