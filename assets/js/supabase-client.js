@@ -465,6 +465,10 @@
     trackPageView(page);
   });
 
+  // ── 밴 상태 ──────────────────────────────────────────────
+  let _isBanned = false;
+  function isUserBanned() { return _isBanned; }
+
   // ── 체류 시간 누적 ──────────────────────────────────────
   let _sessionStart = Date.now();
   let _sessionUserId = null;
@@ -506,7 +510,8 @@
     startSession(userId);
     try {
       const accumulated = _popAccumulatedMinutes(userId);
-      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name').eq('user_id', userId).maybeSingle();
+      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned').eq('user_id', userId).maybeSingle();
+      _isBanned = !!data?.is_banned;
       await db.from('profiles').upsert({
         user_id: userId,
         nickname,
@@ -649,6 +654,7 @@
     banUser,
     unbanUser,
     deletePlayPhoto,
+    isUserBanned,
   };
 
   async function getGameReviews(gameId) {

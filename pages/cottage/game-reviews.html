@@ -684,6 +684,7 @@
       document.getElementById('prAddBtn').addEventListener('click', () => addRow(true));
 
       document.getElementById('prSaveBtn').addEventListener('click', async () => {
+        if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
         const dateVal = document.getElementById('prDate').value || todayKst();
         const groupVal = document.getElementById('prGroup').value.trim();
         const rows = document.querySelectorAll('#prGameRows .pr-game-row');

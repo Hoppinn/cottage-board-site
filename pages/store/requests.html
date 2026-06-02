@@ -213,11 +213,18 @@
     }
 
     function requireLoginForReq(cb) {
-      if (getCurrentUser()) { cb(); return; }
-      if (confirm('요청하려면 카카오 로그인이 필요해요. 로그인할까요?')) {
-        sessionStorage.setItem('kakao_login_return', window.location.href);
-        window.kakaoLogin?.();
+      if (!getCurrentUser()) {
+        if (confirm('요청하려면 카카오 로그인이 필요해요. 로그인할까요?')) {
+          sessionStorage.setItem('kakao_login_return', window.location.href);
+          window.kakaoLogin?.();
+        }
+        return;
       }
+      if (window.CottageDB?.isUserBanned?.()) {
+        alert('⛔ 이용이 제한된 계정입니다.');
+        return;
+      }
+      cb();
     }
 
     // 내가 직접 제출한 항목은 이미 내 1표 → myVotes에 자동 등록
