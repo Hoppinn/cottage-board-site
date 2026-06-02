@@ -541,24 +541,39 @@
     } catch (_) { return true; }
   }
 
-  async function getMyStats(userId) {
+  async function getMyStats(userId, nickname) {
     try {
-      const [playRes, commentRes, suggestRes, profile] = await Promise.all([
+      const queries = [
         db.from('game_play_records').select('id, game_id, played_at, created_at, group_name').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('game_comments').select('id, game_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
-      ]);
-      const plays = playRes.data || [];
+      ];
+      if (nickname) {
+        queries.push(
+          db.from('game_play_records')
+            .select('id, game_id, played_at, created_at, group_name')
+            .ilike('player_names', `%${nickname}%`)
+            .neq('user_id', userId)
+            .order('created_at', { ascending: false })
+        );
+      }
+      const [playRes, commentRes, suggestRes, profile, taggedRes] = await Promise.all(queries);
+      const ownPlays = playRes.data || [];
+      const taggedPlays = taggedRes?.data || [];
+      // 중복 제거 후 합치기 (내 기록 우선)
+      const seenIds = new Set(ownPlays.map(r => r.id));
+      const merged = [...ownPlays, ...taggedPlays.filter(r => !seenIds.has(r.id))];
+      merged.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
       const moimSessions = new Set();
-      for (const r of plays) {
+      for (const r of merged) {
         if (r.group_name) {
           const d = r.played_at || (r.created_at || '').slice(0, 10);
           moimSessions.add(`${r.group_name}_${d}`);
         }
       }
       return {
-        plays,
+        plays: merged,
         comments: commentRes.data || [],
         suggestions: suggestRes.count || 0,
         moimCount: moimSessions.size,

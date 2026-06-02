@@ -305,7 +305,7 @@ async function openProfilePanel() {
   panel.addEventListener('click', e => { if (e.target === panel) { panel.remove(); _restoreMenuExpanded(); } });
 
   if (!window.CottageDB?.getMyStats) return;
-  const stats = await window.CottageDB.getMyStats(String(user.id));
+  const stats = await window.CottageDB.getMyStats(String(user.id), user.nickname || null);
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
   const fmtShort = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
 
