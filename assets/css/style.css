@@ -2789,7 +2789,7 @@ body.sheet-open{
   .recommend-section > .recommend-filter,
   .recommend-section > #gameScroll,
   .recommend-section > .difficulty-guide{
-    max-width:780px;
+    max-width:960px;
     margin-left:auto;
     margin-right:auto;
     padding-left:clamp(16px,4vw,40px);
@@ -2820,11 +2820,11 @@ body.sheet-open{
     scroll-snap-align:none;
   }
 
-  /* 더보기 버튼 — 하단 중앙 버튼 */
+  /* 더보기 버튼 — 독립 행, 중앙 배치 */
   #gameScroll .game-card-more{
-    flex:0 0 280px;
-    width:280px;
-    max-width:none;
+    flex:0 0 100%;
+    width:100%;
+    max-width:320px;
     margin:8px auto 0;
     border-radius:14px;
     height:52px;
@@ -5621,11 +5621,11 @@ body.sheet-open{
     font-size:clamp(38px,4vw,52px);
   }
 
-  /* ── 게임 카드 (추천 섹션) ── */
+  /* ── 게임 카드 (추천 섹션) — 4열 고정 ── */
   #gameScroll .game-card{
-    flex:0 0 calc(25% - 12px);
-    min-width:185px;
-    max-width:220px;
+    flex:0 0 calc(25% - 9px);
+    min-width:0;
+    max-width:none;
     padding:14px;
   }
   #gameScroll .game-card strong{
