@@ -34038,6 +34038,90 @@
       ]
     }
   },
+  "336716": {
+    "bggId": "336716",
+    "title": "Wyrd: The Darkness",
+    "image": "https://cf.geekdo-images.com/dhTaF_Zp_7J5JfjOyn0hiA__original/img/N7zfu_Dw8XZjVCOb7AkhxTeoCag=/0x0/filters:format(jpeg)/pic6151530.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/dhTaF_Zp_7J5JfjOyn0hiA__small/img/Vi1pyt534VqD-CbtjDWMVZd7xRg=/fit-in/200x150/filters:strip_icc()/pic6151530.jpg",
+    "description": "The Darkness is the first expansion for Wyrd: The Descent.\n\nEmerge from the Hollows, beaten and weary only to Descend again and again, for the World of The Living is ever threatened by The Darkness that surrounds it.\n\nBut be careful, the Horrors are not the only threat. Demons claw their way into reality, and will take Possession of you should you delve too deep.\n\nFor you are not Wyrd yet.\n\nIn The Darkness you will attempt to link your games of Wyrd: The Descent together by developing your Wyrd and avoiding the risk of Possession.\n\nThis is the full colour rulebook for The Darkness updated to 2.15 including an updated FAQ, clarifications to the Laws of Possession with examples and the Sigils for the modular PnP Hollows tiles in the reference section. There are also two play sheets to print out to draw your Hollows on, with and without a grid.\n\nYou will need a copy of Wyrd: The Descent 1.2+, a set of RPG polyhedral dice and a pen and some paper to play.",
+    "yearpublished": "2021",
+    "minplayers": "1",
+    "minage": "12",
+    "maxplayers": "1",
+    "playingtime": "90",
+    "minplaytime": "30",
+    "maxplaytime": "90",
+    "averageweight": "0",
+    "average": "9",
+    "bayesaverage": "0",
+    "usersrated": "1",
+    "rank": "Not Ranked",
+    "designers": [
+      "E.J. Taylor"
+    ],
+    "artists": [
+      "E.J. Taylor"
+    ],
+    "publishers": [
+      "The Dark Age"
+    ],
+    "categories": [
+      "Expansion for Base-game",
+      "Ancient",
+      "Dice",
+      "Fantasy",
+      "Fighting",
+      "Horror",
+      "Print & Play"
+    ],
+    "mechanics": [
+      "Critical Hits and Failures",
+      "Dice Rolling",
+      "Map Addition",
+      "Modular Board",
+      "Paper-and-Pencil",
+      "Role Playing",
+      "Solo / Solitaire Game",
+      "Stat Check Resolution",
+      "Storytelling"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        1
+      ],
+      "recommended": [],
+      "not_recommended": []
+    }
+  },
+  "337593": {
+    "bggId": "337593",
+    "title": "La Fossa di Tarsus",
+    "image": "https://cf.geekdo-images.com/PF0LdQpjrgfVbYkTMHCLDQ__original/img/8xZVrt_qd_4UMRRFklbpjrMBMr4=/0x0/filters:format(jpeg)/pic6143660.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/PF0LdQpjrgfVbYkTMHCLDQ__small/img/TM1CdJTNZIjJTcCFVzbPhbfP4zU=/fit-in/200x150/filters:strip_icc()/pic6143660.jpg",
+    "description": "From the introduction:\n\nSei arrivato nelle Grandi Pianure quando sei stato assoldato come guardia da una carovana, sperando di trovare fortuna e fare qualche soldo lungo la strada...",
+    "yearpublished": "2020",
+    "minplayers": "",
+    "minage": "",
+    "maxplayers": "",
+    "playingtime": "",
+    "minplaytime": "",
+    "maxplaytime": "",
+    "averageweight": "0",
+    "average": "0",
+    "bayesaverage": "0",
+    "usersrated": "0",
+    "rank": "",
+    "designers": [],
+    "artists": [],
+    "publishers": [],
+    "categories": [],
+    "mechanics": [],
+    "suggested_numplayers": {
+      "best": [],
+      "recommended": [],
+      "not_recommended": []
+    }
+  },
   "338760": {
     "bggId": "338760",
     "title": "Imperial Steam",

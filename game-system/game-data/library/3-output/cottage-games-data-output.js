@@ -85310,28 +85310,68 @@ const gameData = {
     "title": {
       "display": "맥주와빵",
       "owned": "맥주와빵",
-      "bgg": ""
+      "bgg": "Wyrd: The Darkness"
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unmatched",
-      "year": "",
-      "rating": 0,
+      "matchStatus": "no-bgg",
+      "year": "2021",
+      "rating": 9,
       "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
+      "minPlayers": 2,
+      "maxPlayers": 2,
+      "bestPlayers": [
+        1
+      ],
       "recommendedPlayers": [],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "categoriesKo": [],
-      "mechanics": [],
-      "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "playingTime": 40,
+      "minPlayTime": 30,
+      "maxPlayTime": 40,
+      "categories": [
+        "Expansion for Base-game",
+        "Ancient",
+        "Dice",
+        "Fantasy",
+        "Fighting",
+        "Horror",
+        "Print & Play"
+      ],
+      "categoriesKo": [
+        "확장판",
+        "고대",
+        "주사위",
+        "판타지",
+        "격투",
+        "공포",
+        "프린트 앤 플레이"
+      ],
+      "mechanics": [
+        "Critical Hits and Failures",
+        "Dice Rolling",
+        "Map Addition",
+        "Modular Board",
+        "Paper-and-Pencil",
+        "Role Playing",
+        "Solo / Solitaire Game",
+        "Stat Check Resolution",
+        "Storytelling"
+      ],
+      "mechanicsKo": [
+        "치명타와 실패",
+        "주사위 굴리기",
+        "지도 추가",
+        "모듈형 보드",
+        "종이와 연필",
+        "역할극",
+        "솔로 게임",
+        "스탯 확인",
+        "스토리텔링"
+      ],
+      "designers": [
+        "E.J. Taylor"
+      ],
+      "description": "The Darkness is the first expansion for Wyrd: The Descent.\n\nEmerge from the Hollows, beaten and weary only to Descend again and again, for the World of The Living is ever threatened by The Darkness that surrounds it.\n\nBut be careful, the Horrors are not the only threat. Demons claw their way into reality, and will take Possession of you should you delve too deep.\n\nFor you are not Wyrd yet.\n\nIn The Darkness you will attempt to link your games of Wyrd: The Descent together by developing your Wyrd and avoiding the risk of Possession.\n\nThis is the full colour rulebook for The Darkness updated to 2.15 including an updated FAQ, clarifications to the Laws of Possession with examples and the Sigils for the modular PnP Hollows tiles in the reference section. There are also two play sheets to print out to draw your Hollows on, with and without a grid.\n\nYou will need a copy of Wyrd: The Descent 1.2+, a set of RPG polyhedral dice and a pen and some paper to play.",
       "descriptionKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드 게임. 교대 라운드 구조로 카드 드래프팅과 자원 관리에 독특한 플레이어 상호작용을 제공합니다."
     },
     "cottage": {
@@ -85341,14 +85381,46 @@ const gameData = {
       "shelfFullLabel": "-",
       "difficultyId": "",
       "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [],
-      "interactionTags": [],
+      "moodTags": [
+        "cozy",
+        "immersive",
+        "funny",
+        "tense"
+      ],
+      "playTags": [
+        "storytelling",
+        "party"
+      ],
+      "situationTags": [
+        "group",
+        "beginner",
+        "quick_play",
+        "couple"
+      ],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "cozy",
+        "immersive",
+        "funny",
+        "tense",
+        "storytelling",
+        "party",
+        "group",
+        "beginner",
+        "quick_play",
+        "couple",
+        "competitive"
+      ],
+      "displayTags": [
+        "빠져들게",
+        "즐기고",
+        "편안하게",
+        "경쟁형"
+      ],
       "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드게임.",
       "comment": {
         "text": "",
@@ -85366,9 +85438,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__original/img/IiugqYTDlz1Rk1EAaEwDxr65YgI=/0x0/filters:format(jpeg)/pic7064178.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__small/img/x0Q2R8xgABJACUHYSCA00a7j3Cg=/fit-in/200x150/filters:strip_icc()/pic7064178.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

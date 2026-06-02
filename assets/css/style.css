@@ -2628,7 +2628,7 @@ body.sheet-open{
     flex-direction:row;
     align-items:center;
     justify-content:flex-start;
-    gap:4px;
+    gap:clamp(4px,1.5vw,20px);
     padding:0;
     border:0;
     background:transparent;
@@ -2741,53 +2741,86 @@ body.sheet-open{
   .hero h1{ line-height:1.28; }
   .desc{ line-height:1.6; }
 
-  /* 추천 섹션 PC 레이아웃 — 전체 가운데정렬 */
+  /* 추천 섹션 PC 레이아웃 */
   .recommend-section{
     padding:0 0 60px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
   }
 
-  /* 배너 full-width */
+  /* 배너 full-width — 음수 마진 제거, 섹션 전체 폭 */
   .recommend-header--photo{
     width:100%;
-    margin:0 0 28px;
+    margin:0 0 32px;
     border-radius:0;
-    height:200px;
+    height:220px;
+  }
+
+  /* 필터·게임스크롤은 padding으로 중앙 */
+  .recommend-section > .recommend-filter,
+  .recommend-section > #gameScroll,
+  .recommend-section > .difficulty-guide{
+    max-width:780px;
+    margin-left:auto;
+    margin-right:auto;
+    padding-left:clamp(16px,4vw,40px);
+    padding-right:clamp(16px,4vw,40px);
+    box-sizing:border-box;
+    width:100%;
   }
 
   .recommend-filter{
-    width:100%;
-    max-width:680px;
-    margin:0 auto 18px;
+    margin-bottom:18px;
   }
 
   .game-scroll{
-    max-width:780px;
-    width:100%;
-    padding:0 0 18px;
-    margin:0 auto;
+    padding-bottom:18px;
   }
 
   /* 추천 빈 박스 중앙정렬 */
   #gameScroll .recommend-empty{
     margin:20px auto !important;
     max-width:480px !important;
-    width:480px;
+    width:100% !important;
   }
 
   .game-scroll:has(.recommend-empty){
     overflow:visible !important;
-    justify-content:center;
   }
 
-  /* 난이도 안내도 중앙정렬 */
+  /* 난이도 안내 */
   .difficulty-guide{
-    max-width:780px;
-    width:100%;
-    margin-left:auto;
-    margin-right:auto;
+    padding-top:24px;
+  }
+
+  /* ── 전체 게임 보기 PC: 2열 그리드 ── */
+  #ownedGameList{
+    max-width:900px !important;
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .owned-games-page{
+    max-width:960px;
+    margin:0 auto;
+    padding-left:clamp(16px,4vw,40px);
+    padding-right:clamp(16px,4vw,40px);
+    box-sizing:border-box;
+  }
+
+  /* ── 바텀시트 PC: 더 넓게 ── */
+  .sheet-overlay-panel{
+    max-width:680px !important;
+  }
+
+  /* ── 내부 페이지 콘텐츠 max-width 확대 ── */
+  .inner-page{
+    max-width:860px;
+    margin:0 auto;
+    box-sizing:border-box;
+  }
+
+  .about-section{
+    max-width:860px;
   }
 }
 

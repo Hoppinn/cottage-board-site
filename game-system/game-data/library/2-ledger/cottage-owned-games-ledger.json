@@ -13114,15 +13114,17 @@
   {
     "id": "천국과맥주",
     "ownedName": "천국과맥주",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unmatched",
-    "status": "pending-cache",
+    "titleEn": "Wyrd: The Darkness",
+    "bggId": "336716",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "",
     "difficulty": null,
     "difficultyWeight": 0,
-    "rating": null,
-    "bestPlayers": [],
+    "rating": 9,
+    "bestPlayers": [
+      1
+    ],
     "recommendedPlayers": []
   },
   {
