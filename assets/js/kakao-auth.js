@@ -25,7 +25,7 @@ function initKakaoAuth() {
     try {
       const user = JSON.parse(saved);
       updateLoginUI(user);
-      if (window.CottageDB?.upsertProfile && user.id) {
+      if (window.CottageDB && user.id) {
         // localhost 개발 환경에서는 방문 카운트 안 함
         const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
         const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
@@ -33,6 +33,9 @@ function initKakaoAuth() {
         if (!isLocal && !localStorage.getItem(profileKey)) {
           localStorage.setItem(profileKey, '1');
           window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null).catch(() => {});
+        } else {
+          // upsertProfile 스킵돼도 세션 시작 시각은 항상 기록
+          window.CottageDB.startSession?.(String(user.id));
         }
       }
     } catch (e) {

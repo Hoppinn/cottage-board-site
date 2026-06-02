@@ -495,10 +495,14 @@
     });
   }
 
-  async function upsertProfile(userId, nickname, realName) {
+  function startSession(userId) {
     _sessionUserId = userId;
     _sessionStart = Date.now();
     window._cottageSessionStart = _sessionStart;
+  }
+
+  async function upsertProfile(userId, nickname, realName) {
+    startSession(userId);
     try {
       const accumulated = _popAccumulatedMinutes(userId);
       const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name').eq('user_id', userId).maybeSingle();
@@ -611,6 +615,7 @@
     getGameDislikeCount,
     toggleGameDislike,
     hasUserDisliked,
+    startSession,
     upsertProfile,
     getAllProfiles,
     checkNicknameAvailable,
