@@ -818,7 +818,7 @@ if (weight > maxWeight) {
     return;
   }
 
-  const MAX_CARDS = 5;
+  const MAX_CARDS = window.innerWidth >= 900 ? 8 : 5;
   const seenBaseTitles = new Set();
   const dedupedGames = filteredGames.filter(game => {
     const title = GameView.getDisplayTitle(game);

@@ -2793,12 +2793,12 @@ body.sheet-open{
     scroll-snap-align:none;
   }
 
-  /* 더보기 버튼 — 하단 전체 폭 */
+  /* 더보기 버튼 — 하단 중앙 버튼 */
   #gameScroll .game-card-more{
-    flex:0 0 100%;
-    width:100%;
+    flex:0 0 280px;
+    width:280px;
     max-width:none;
-    margin-top:4px;
+    margin:8px auto 0;
     border-radius:14px;
     height:52px;
     font-size:15px;
