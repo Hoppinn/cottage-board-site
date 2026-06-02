@@ -2600,6 +2600,12 @@ body.sheet-open{
     box-shadow:none !important;
     border-radius:0 !important;
     z-index:auto !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:4px !important;
+    grid-column:2 !important;
+    grid-row:1 !important;
   }
 
   /* PC에서는 is-open(클릭)이 아닌 hover만으로 드롭다운 */
