@@ -8,6 +8,17 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   Kakao.init(KAKAO_APP_KEY);
 }
 
+function _restoreMenuExpanded() {
+  setTimeout(() => {
+    const menu = document.getElementById('mobileMenu');
+    const loginBtn = document.getElementById('kakaoLoginBtn');
+    const userActions = document.getElementById('kakaoUserActions');
+    if (menu) menu.classList.add('active');
+    if (loginBtn) loginBtn.classList.add('is-expanded');
+    if (userActions) userActions.style.display = 'flex';
+  }, 30);
+}
+
 function initKakaoAuth() {
   const saved = localStorage.getItem(KAKAO_USER_KEY);
   if (saved) {
@@ -172,8 +183,8 @@ function promptProfileImageChange() {
     resetBtn.addEventListener('click', () => applyAndClose(user.kakaoProfileImage || ''));
   }
 
-  modal.querySelector('.photo-picker-close').addEventListener('click', () => modal.remove());
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  modal.querySelector('.photo-picker-close').addEventListener('click', () => { modal.remove(); _restoreMenuExpanded(); });
+  modal.addEventListener('click', e => { if (e.target === modal) { modal.remove(); _restoreMenuExpanded(); } });
 }
 
 async function promptNicknameChange() {
@@ -290,8 +301,8 @@ async function openProfilePanel() {
     </div>
   </div>`;
   document.body.appendChild(panel);
-  panel.querySelector('.profile-panel-close').addEventListener('click', () => panel.remove());
-  panel.addEventListener('click', e => { if (e.target === panel) panel.remove(); });
+  panel.querySelector('.profile-panel-close').addEventListener('click', () => { panel.remove(); _restoreMenuExpanded(); });
+  panel.addEventListener('click', e => { if (e.target === panel) { panel.remove(); _restoreMenuExpanded(); } });
 
   if (!window.CottageDB?.getMyStats) return;
   const stats = await window.CottageDB.getMyStats(String(user.id));
