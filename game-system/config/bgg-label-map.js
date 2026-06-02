@@ -70,6 +70,11 @@ const bggTagTranslations = {
     "Word Game":                  "언어 게임",
     "World War II":               "2차 세계대전",
     "Zombies":                    "좀비",
+    "Collectible Components":     "수집형 구성품",
+    "Electronic":                 "전자기기",
+    "Expansion for Base-game":    "확장판",
+    "Mafia":                      "마피아",
+    "Napoleonic":                 "나폴레옹",
   },
 
   mechanics: {
@@ -248,6 +253,13 @@ const bggTagTranslations = {
     "Worker Placement with Dice Workers":         "주사위 워커 배치",
     "Worker Placement, Different Worker Types":   "다중 워커 배치",
     "Zone of Control":                            "지배 구역",
+    "Alliances":                                  "동맹",
+    "Auction: Dexterity":                         "경매: 순발력",
+    "Critical Hits and Failures":                 "치명타와 실패",
+    "Deck Construction":                          "덱 구성",
+    "Flicking":                                   "손가락 튕기기",
+    "Induction":                                  "귀납 추론",
+    "Spelling":                                   "스펠링 맞추기",
   },
 
 };
