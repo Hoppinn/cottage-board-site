@@ -1773,33 +1773,38 @@ body.sheet-open{
 
 .menu-kakao-user-actions {
   display: none;
-  flex-direction: row;
-  padding: 2px 12px 8px;
-  gap: 0;
+  flex-direction: column;
+  padding: 4px 6px 6px;
+  gap: 2px;
 }
 
 .menu-kakao-user-actions button {
-  flex: 1;
+  width: 100%;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  color: #a09080;
-  padding: 5px 0;
-  text-align: center;
+  color: #5a3e2b;
+  padding: 9px 12px;
+  text-align: left;
   font-family: inherit;
-  border-radius: 8px;
+  border-radius: 10px;
   word-break: keep-all;
 }
 
-.menu-kakao-user-actions button:not(:last-child) {
-  border-right: 1px solid #ddd;
+.menu-kakao-user-actions button:hover {
+  background: #f3eadc;
+  color: #3d2010;
 }
 
-.menu-kakao-user-actions button:hover {
-  color: #c0426e;
-  background: #fce8ef;
+#kakaoLogoutBtn {
+  color: #9e3a2a;
+}
+
+#kakaoLogoutBtn:hover {
+  background: #fce8e0 !important;
+  color: #7a2a1e !important;
 }
 
 /* =========================
