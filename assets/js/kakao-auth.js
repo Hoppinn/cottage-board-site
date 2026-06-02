@@ -218,7 +218,10 @@ function getKakaoUser() {
   const saved = localStorage.getItem(KAKAO_USER_KEY);
   if (!saved) return null;
   try {
-    return JSON.parse(saved);
+    const user = JSON.parse(saved);
+    if (user?.profileImage) user.profileImage = user.profileImage.replace(/^http:\/\//, 'https://');
+    if (user?.kakaoProfileImage) user.kakaoProfileImage = user.kakaoProfileImage.replace(/^http:\/\//, 'https://');
+    return user;
   } catch (e) {
     return null;
   }
@@ -236,7 +239,7 @@ function updateLoginUI(user) {
     btn.classList.add('is-logged-in');
     if (profileImg) {
       if (user.profileImage) {
-        profileImg.src = user.profileImage;
+        profileImg.src = user.profileImage.replace(/^http:\/\//, 'https://');
         profileImg.style.display = 'inline-block';
       } else {
         profileImg.style.display = 'none';
