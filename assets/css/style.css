@@ -2602,6 +2602,14 @@ body.sheet-open{
     width:auto;
   }
 
+  /* owned-page 헤더 그리드도 4열로 */
+  body.owned-page .site-header{
+    grid-template-columns:clamp(82px,12vw,130px) auto 1fr auto !important;
+    column-gap:clamp(12px,2.5vw,32px) !important;
+    align-items:center !important;
+    padding-bottom:0 !important;
+  }
+
   /* owned-page !important 덮어쓰기 */
   body.owned-page .header-menu{
     position:static !important;
