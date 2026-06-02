@@ -2590,6 +2590,18 @@ body.sheet-open{
     grid-row:1;
   }
 
+  /* menu-login-area PC에서 auto width */
+  .menu-login-area{
+    width:auto;
+    border-top:none;
+    margin-top:0;
+    padding-top:0;
+  }
+
+  .menu-kakao-login-btn{
+    width:auto;
+  }
+
   /* owned-page !important 덮어쓰기 */
   body.owned-page .header-menu{
     position:static !important;

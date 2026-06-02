@@ -724,8 +724,12 @@ const moodValue = recommendState.mood;
   !levelValue &&
   !moodValue
 ){
-  gameScroll.removeAttribute('style');
-  gameScroll.innerHTML = `<div style="width:100%;display:flex;justify-content:center;padding:20px 18px"><p class="recommend-empty" style="max-width:480px;width:100%;margin:0">인원, 난이도, 게임 방식 중<br>하나 이상을 골라주세요.</p></div>`;
+  if(window.innerWidth >= 900){
+    gameScroll.style.cssText = 'max-width:780px;margin:0 auto;padding:20px 40px;box-sizing:border-box;display:block;';
+  } else {
+    gameScroll.removeAttribute('style');
+  }
+  gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;">인원, 난이도, 게임 방식 중<br>하나 이상을 골라주세요.</p>`;
 
   return;
 }
@@ -802,7 +806,10 @@ if (weight > maxWeight) {
 
       
   if(filteredGames.length === 0){
-    gameScroll.innerHTML = `<div style="width:100%;display:flex;justify-content:center;padding:20px 18px"><p class="recommend-empty" style="max-width:480px;width:100%;margin:0">조건에 맞는 게임이 아직 없어요.<br>다른 조건으로 다시 찾아보세요.</p></div>`;
+    if(window.innerWidth >= 900){
+      gameScroll.style.cssText = 'max-width:780px;margin:0 auto;padding:20px 40px;box-sizing:border-box;display:block;';
+    }
+    gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;">조건에 맞는 게임이 아직 없어요.<br>다른 조건으로 다시 찾아보세요.</p>`;
 
     return;
   }
