@@ -2664,8 +2664,8 @@ body.sheet-open{
     box-shadow:none;
   }
 
-  /* 전체 기본 폰트 크기 상향 */
-  body{ font-size:17px; }
+  /* 전체 기본 폰트 크기 상향 — 모든 rem/em 비례 확대 */
+  body{ font-size:19px; }
 
   .header-menu a{
     width:auto;
