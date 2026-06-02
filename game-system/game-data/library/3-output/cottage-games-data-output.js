@@ -82312,47 +82312,40 @@ const gameData = {
     "title": {
       "display": "햄버거타이쿤",
       "owned": "햄버거타이쿤",
-      "bgg": "Food Chain Magnate"
+      "bgg": "Burgermania"
     },
     "bgg": {
-      "id": "175914",
-      "matchStatus": "auto-confirmed",
-      "year": "2015",
-      "rating": 8.03819,
-      "weight": 4.1848,
+      "id": "223094",
+      "matchStatus": "forced",
+      "year": "",
+      "rating": 5.21477,
+      "weight": 0,
       "minPlayers": 2,
-      "maxPlayers": 5,
+      "maxPlayers": 2,
       "bestPlayers": [
-        3,
-        4
+        2
       ],
       "recommendedPlayers": [
         2
       ],
       "notRecommendedPlayers": [
         1,
-        5
+        2
       ],
-      "playingTime": 240,
-      "minPlayTime": 120,
-      "maxPlayTime": 240,
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
       "categories": [
-        "Economic",
-        "Industry / Manufacturing"
+        "Action / Dexterity",
+        "Children's Game",
+        "Real-time"
       ],
       "categoriesKo": [
         "경제",
         "산업"
       ],
       "mechanics": [
-        "Delayed Purchase",
-        "Income",
-        "Market",
-        "Modular Board",
-        "Open Drafting",
-        "Simultaneous Action Selection",
-        "Tech Trees / Tech Tracks",
-        "Victory Points as a Resource"
+        "순발력"
       ],
       "mechanicsKo": [
         "지연 구매",
@@ -82365,10 +82358,9 @@ const gameData = {
         "승리 점수를 자원으로"
       ],
       "designers": [
-        "Jeroen Doumen",
-        "Joris Wiersinga"
+        "(Uncredited)"
       ],
-      "description": "\"Lemonade? They want lemonade? What is the world coming to? I want commercials for burgers on all channels, every 15 minutes. We are the Home of the Original Burger, not a hippie health haven. And place a billboard next to that new house on the corner. I want them craving beer every second they sit in their posh new garden.\" The new management trainee trembles in front of the CEO and tries to politely point out that... \"How do you mean, we don't have enough staff? The HR director reports to you. Hire more people! Train them! But whatever you do, don't pay them any real wages. I did not go into business to become poor. And fire that discount manager, she is only costing me money. From now on, we'll sell gourmet burgers. Same crap, double the price. Get my marketing director in here!\"\n\nFood Chain Magnate is a heavy strategy game about building a fast food chain. The focus is on building your company using a card-driven (human) resource management system. Players compete on a variable city map through purchasing, marketing and sales, and on a job market for key staff members. The game can be played by 2-5 serious gamers in 2-4 hours.\n\nGerman:\n\n\"Limonade? Sie wollen Limonade? Was ist mit der Welt los? Ich will Werbung f&uuml;r Burger auf allen Kan&auml;len, alle 15 Minuten. Wir sind die Heimat des Original-Burgers, kein Hippie-Gesundheitsparadies. Und stellen Sie eine Werbetafel neben das neue Haus an der Ecke. Ich will, dass sie jede Sekunde, in der sie in ihrem schicken neuen Garten sitzen, nach Bier lechzen.\" Der neue Management-Trainee zittert vor dem CEO und versucht, h&ouml;flich darauf hinzuweisen, dass... \"Wie meinen Sie das, wir haben nicht genug Personal? Der Personaldirektor berichtet an Sie. Stellen Sie mehr Leute ein! Bilden Sie sie aus! Aber was auch immer Sie tun, zahlen Sie ihnen keine echten L&ouml;hne. Ich bin nicht ins Gesch&auml;ft eingestiegen, um arm zu werden. Und feuere diese Discount-Managerin, sie kostet mich nur Geld. Von nun an werden wir Gourmet-Burger verkaufen. Derselbe Mist, nur doppelt so teuer. Holen Sie meinen Marketingdirektor her!\"\n\nFood Chain Magnate ist ein schweres Strategiespiel &uuml;ber den Aufbau einer Fast-Food-Kette. Der Schwerpunkt liegt auf dem Aufbau des eigenen Unternehmens mit Hilfe eines kartengesteuerten (Personal-)Managementsystems. Die Spieler konkurrieren auf einer variablen Stadtkarte durch Einkauf, Marketing und Verkauf sowie auf einem Stellenmarkt f&uuml;r wichtige Mitarbeiter.\n\nDas Spiel kann von 2-5 ernsthaften Spielern in 2-4 Stunden gespielt werden.",
+      "description": "Burgermania is a real-time dexterity game. Two players are racing to build hamburgers based on their order cards. The conveyor belt is battery-operated, and players try to stack ingredients like lettuce, cheese, and tomato on their hamburgers using tweezers. At the end of the conveyor line, the hamburger is placed on a plate. The conveyor belt gradually accelerates during play, so later hamburgers become more difficult to assemble.\n\nDescription from the publisher",
       "descriptionKo": "\"레모네이드? 레모네이드를 원한다고? 세상이 어떻게 된 일인가? 모든 채널에서 15분마다 버거 광고를 내보내야 한다. 우리는 오리지널 버거의 본거지지, 히피식 건강 천국이 아니다. 그리고 저 모퉁이의 새 집 옆에 광고판을 세워라. 저들이 멋진 정원에 앉아 있는 매 순간마다 맥주를 갈구하게 만들고 싶다.\" 새로 온 경영진 수습생이 CEO 앞에서 떨리며 정중히 지적하려 한다... \"직원이 부족하다고? 인사이사가 당신에게 보고하잖아. 직원을 고용해! 교육해! 하지만 절대 제대로 된 봉급은 주지 마. 난 돈을 잃으려고 사업을 한 게 아니다. 그리고 그 할인 담당자를 해고해. 그 여자는 내 돈만 낭비한다. 이제부터 우린 고급 버거를 팔 거다. 같은 물건, 두 배의 가격. 마케팅 이사를 데려와!\"\n\n푸드 체인 매그네이트는 패스트푸드 프랜차이즈를 구축하는 헤비급 전략 게임입니다. 카드 기반의 인적자원 관리 시스템을 통해 자신의 회사를 키우는 것이 핵심입니다. 플레이어들은 변수 있는 도시"
     },
     "cottage": {
@@ -82376,42 +82368,46 @@ const gameData = {
       "shelfGroupId": "dexterity",
       "shelfLabel": "몸으로 하는 게임",
       "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
-      "difficultyId": "hardcore",
-      "difficultyWeight": 4.1848,
+      "difficultyId": "",
+      "difficultyWeight": 0,
       "moodTags": [
-        "immersive"
+        "cozy",
+        "chaotic",
+        "tense"
       ],
       "playTags": [
-        "strategy"
+        "party",
+        "dexterity"
       ],
       "situationTags": [
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group"
+        "beginner",
+        "family",
+        "first_game",
+        "quick_play",
+        "couple"
       ],
       "interactionTags": [
-        "simultaneous",
-        "competitive",
-        "silent_focus"
+        "simultaneous"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "group",
-        "large_group",
-        "simultaneous",
-        "competitive",
-        "silent_focus"
+        "cozy",
+        "chaotic",
+        "tense",
+        "party",
+        "dexterity",
+        "beginner",
+        "family",
+        "first_game",
+        "quick_play",
+        "couple",
+        "simultaneous"
       ],
       "displayTags": [
-        "머리쓰게",
-        "빠져들게",
-        "경쟁형"
+        "즐기고",
+        "편안하게",
+        "빠져들게"
       ],
       "summaryKo": "카드를 통해 직원을 고용하고 광고하며 프랜차이즈를 확장하는 경영 전략 게임.",
       "comment": {
@@ -82430,8 +82426,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/Wtxml94LAXsIWQCxGPS63Q__original/img/9c-MJB6x54vN5eB-1hT4XQaHtP8=/0x0/filters:format(png)/pic2649434.png",
-      "thumbnail": "https://cf.geekdo-images.com/Wtxml94LAXsIWQCxGPS63Q__small/img/LKU2KoMev222qUIKyNqaCF_ZLPY=/fit-in/200x150/filters:strip_icc()/pic2649434.png",
+      "main": "https://cf.geekdo-images.com/h9ukc_vami23UUvDSr-Ngw__original/img/eo8ziZ1GFPVbCQw_J1jtVEQ-kmw=/0x0/filters:format(jpeg)/pic3620388.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/h9ukc_vami23UUvDSr-Ngw__small/img/d-Rk3KU8L4IREvh57fxSFGOhBy4=/fit-in/200x150/filters:strip_icc()/pic3620388.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -84256,8 +84252,8 @@ const gameData = {
   "천국과맥주": {
     "id": "천국과맥주",
     "title": {
-      "display": "맥주와빵",
-      "owned": "맥주와빵",
+      "display": "천국과맥주",
+      "owned": "천국과맥주",
       "bgg": ""
     },
     "bgg": {
@@ -84320,9 +84316,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__original/img/IiugqYTDlz1Rk1EAaEwDxr65YgI=/0x0/filters:format(jpeg)/pic7064178.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__small/img/x0Q2R8xgABJACUHYSCA00a7j3Cg=/fit-in/200x150/filters:strip_icc()/pic7064178.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -84336,28 +84332,50 @@ const gameData = {
     "title": {
       "display": "글렌모어연대기",
       "owned": "글렌모어연대기",
-      "bgg": ""
+      "bgg": "Glen More II: Chronicles"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unmatched",
-      "year": "",
-      "rating": 0,
-      "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "id": "265188",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 7.85533,
+      "weight": 3.006,
+      "minPlayers": 2,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        3
+      ],
+      "recommendedPlayers": [
+        2,
+        4
+      ],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 120,
+      "minPlayTime": 90,
+      "maxPlayTime": 120,
+      "categories": [
+        "City Building",
+        "Economic",
+        "Farming",
+        "Territory Building"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "Commodity Speculation",
+        "Grid Movement",
+        "Market",
+        "Set Collection",
+        "Tile Placement",
+        "Turn Order: Time Track"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Matthias Cramer"
+      ],
+      "description": "Glen More II: Chronicles is a sequel to Glen More, expanding the gameplay substantially compared to the original game.\n\nIn Glen More II: Chronicles, each player represents the leader of a Scottish clan from the early medieval ages until the 19th century, a leader looking to expand their territory and wealth. The success of your clan depends on your ability to make the right decision at the right time, be it by creating a new pasture for your livestock, growing barley for whisky production, selling your goods on the various markets, or gaining control of special landmarks such as lochs and castles.\n\nThe game lasts four rounds, represented by four stacks of tiles. After each round, a scoring phase takes place in which players compare their number of whisky casks, scotsmen in the home castle, landmark cards, and persons against the player with the fewest items in each category and receives victory points (VPs) based on the relative difference. After four rounds, additional VPs are awarded for gold coins and some landmarks while VP penalties are assessed based on territory size, comparing each player's territory to the smallest one in play.\n\nThe core mechanism of Glen More II: Chronicles and Glen More functions the same way: The last player in line takes a tile from a time track, advancing as far as they wish on this track. After paying the cost, they place this tile in their territory, with this tile activating itself and all neighboring tiles, triggering the production of resources, movement points, VPs, etc. Then the player who is last in line takes their turn.\n\nImprovements over the original Glen More include bigger tiles, better materials, new artwork, the ability for each player to control the end of the game, and balancing adjustments to the tiles for a better suspense curve. The game is designed to consist of one-third known systems, one-third new mechanisms, and one-third improvements to Glen More.\n\nThe \"Chronicles\" in the title &mdash; a set of eight expansions to the base game &mdash; are a major part of these new mechanisms. Each Chronicle adds a new gameplay element to the base game. The \"Highland Boat Race\" Chronicle, for example, tells the story of a boat race in which the winner needs to be the first to reach their home castle after navigating their boat along the river through all the other players' territories. The \"Hammer of the Scots\" Chronicle adds a neutral \"Englishman\" playing piece to the time track that players struggle to control to get an additional turn &mdash; if they can afford him, that is, as he is paid using the market mechanism. All Chronicles can be freely combined, although designer Matthias Cramer suggests that players use only one or two unless they want a \"monster game\".\n\nAnother major change to the game is the ability to invest in famous Scottish people of the time, who are represented through a new \"person\" tile type. Persons not only have their own scoring, they also trigger one-time or ongoing effects on the tactical clan board. This adds a new layer of decision making, especially since the ongoing effects allow players to focus on a personal strategy of winning through the use of the clan board.\n\n&mdash;description from the publisher",
       "descriptionKo": "스코틀랜드를 배경으로 타일을 획득하고 배치해 자신만의 지역을 건설합니다. 자원을 생산하고 거점을 세우며 가장 번성한 씨족을 이끄는 전략 타일 배치 게임."
     },
     "cottage": {
@@ -84365,16 +84383,41 @@ const gameData = {
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [],
-      "interactionTags": [],
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.006,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy",
+        "puzzle"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "immersive",
+        "card_play",
+        "strategy",
+        "puzzle",
+        "experienced",
+        "long_stay",
+        "group",
+        "competitive"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "타일을 획득해 배치하면서 자원을 생산하고 가장 번성한 스코틀랜드 씨족을 만드는 게임.",
       "comment": {
         "text": "",
@@ -84392,9 +84435,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/sMRuph3HFUcaSpJZihGZKw__original/img/ehoqoTirtFb5p9Wk2SwWV8nr6ZU=/0x0/filters:format(jpeg)/pic5841874.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/sMRuph3HFUcaSpJZihGZKw__small/img/UHuDcnjAwCiXbNfjuY26-EEnG2M=/fit-in/200x150/filters:strip_icc()/pic5841874.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

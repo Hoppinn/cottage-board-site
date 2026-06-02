@@ -21413,6 +21413,48 @@
       ]
     }
   },
+  "223094": {
+    "bggId": "223094",
+    "title": "Burgermania",
+    "image": "https://cf.geekdo-images.com/h9ukc_vami23UUvDSr-Ngw__original/img/eo8ziZ1GFPVbCQw_J1jtVEQ-kmw=/0x0/filters:format(jpeg)/pic3620388.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/h9ukc_vami23UUvDSr-Ngw__small/img/d-Rk3KU8L4IREvh57fxSFGOhBy4=/fit-in/200x150/filters:strip_icc()/pic3620388.jpg",
+    "description": "Burgermania is a real-time dexterity game. Two players are racing to build hamburgers based on their order cards. The conveyor belt is battery-operated, and players try to stack ingredients like lettuce, cheese, and tomato on their hamburgers using tweezers. At the end of the conveyor line, the hamburger is placed on a plate. The conveyor belt gradually accelerates during play, so later hamburgers become more difficult to assemble.\n\nDescription from the publisher",
+    "yearpublished": "0",
+    "minplayers": "2",
+    "minage": "6",
+    "maxplayers": "2",
+    "playingtime": "0",
+    "minplaytime": "0",
+    "maxplaytime": "0",
+    "averageweight": "0",
+    "average": "5.21477",
+    "bayesaverage": "5.49126",
+    "usersrated": "44",
+    "rank": "27709",
+    "designers": [
+      "(Uncredited)"
+    ],
+    "artists": [],
+    "publishers": [
+      "Fotorama USA"
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Children's Game",
+      "Real-time"
+    ],
+    "mechanics": [],
+    "suggested_numplayers": {
+      "best": [
+        2
+      ],
+      "recommended": [],
+      "not_recommended": [
+        1,
+        2
+      ]
+    }
+  },
   "223726": {
     "bggId": "223726",
     "title": "Destination X",
@@ -26470,6 +26512,70 @@
       "recommended": [
         2,
         3
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
+  "265188": {
+    "bggId": "265188",
+    "title": "Glen More II: Chronicles",
+    "image": "https://cf.geekdo-images.com/sMRuph3HFUcaSpJZihGZKw__original/img/ehoqoTirtFb5p9Wk2SwWV8nr6ZU=/0x0/filters:format(jpeg)/pic5841874.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/sMRuph3HFUcaSpJZihGZKw__small/img/UHuDcnjAwCiXbNfjuY26-EEnG2M=/fit-in/200x150/filters:strip_icc()/pic5841874.jpg",
+    "description": "Glen More II: Chronicles is a sequel to Glen More, expanding the gameplay substantially compared to the original game.\n\nIn Glen More II: Chronicles, each player represents the leader of a Scottish clan from the early medieval ages until the 19th century, a leader looking to expand their territory and wealth. The success of your clan depends on your ability to make the right decision at the right time, be it by creating a new pasture for your livestock, growing barley for whisky production, selling your goods on the various markets, or gaining control of special landmarks such as lochs and castles.\n\nThe game lasts four rounds, represented by four stacks of tiles. After each round, a scoring phase takes place in which players compare their number of whisky casks, scotsmen in the home castle, landmark cards, and persons against the player with the fewest items in each category and receives victory points (VPs) based on the relative difference. After four rounds, additional VPs are awarded for gold coins and some landmarks while VP penalties are assessed based on territory size, comparing each player's territory to the smallest one in play.\n\nThe core mechanism of Glen More II: Chronicles and Glen More functions the same way: The last player in line takes a tile from a time track, advancing as far as they wish on this track. After paying the cost, they place this tile in their territory, with this tile activating itself and all neighboring tiles, triggering the production of resources, movement points, VPs, etc. Then the player who is last in line takes their turn.\n\nImprovements over the original Glen More include bigger tiles, better materials, new artwork, the ability for each player to control the end of the game, and balancing adjustments to the tiles for a better suspense curve. The game is designed to consist of one-third known systems, one-third new mechanisms, and one-third improvements to Glen More.\n\nThe \"Chronicles\" in the title &mdash; a set of eight expansions to the base game &mdash; are a major part of these new mechanisms. Each Chronicle adds a new gameplay element to the base game. The \"Highland Boat Race\" Chronicle, for example, tells the story of a boat race in which the winner needs to be the first to reach their home castle after navigating their boat along the river through all the other players' territories. The \"Hammer of the Scots\" Chronicle adds a neutral \"Englishman\" playing piece to the time track that players struggle to control to get an additional turn &mdash; if they can afford him, that is, as he is paid using the market mechanism. All Chronicles can be freely combined, although designer Matthias Cramer suggests that players use only one or two unless they want a \"monster game\".\n\nAnother major change to the game is the ability to invest in famous Scottish people of the time, who are represented through a new \"person\" tile type. Persons not only have their own scoring, they also trigger one-time or ongoing effects on the tactical clan board. This adds a new layer of decision making, especially since the ongoing effects allow players to focus on a personal strategy of winning through the use of the clan board.\n\n&mdash;description from the publisher",
+    "yearpublished": "2019",
+    "minplayers": "2",
+    "minage": "12",
+    "maxplayers": "4",
+    "playingtime": "120",
+    "minplaytime": "90",
+    "maxplaytime": "120",
+    "averageweight": "3.006",
+    "average": "7.85533",
+    "bayesaverage": "7.3591",
+    "usersrated": "9518",
+    "rank": "207",
+    "designers": [
+      "Matthias Cramer"
+    ],
+    "artists": [
+      "Jason Coates",
+      "Hendrik Noack"
+    ],
+    "publishers": [
+      "Funtails",
+      "Broadway Toys LTD",
+      "Delirium Games",
+      "Engames",
+      "GateOnGames",
+      "Korea Boardgames",
+      "Lavka Games",
+      "Rebel Sp. z o.o.",
+      "Super Meeple"
+    ],
+    "categories": [
+      "City Building",
+      "Economic",
+      "Farming",
+      "Territory Building"
+    ],
+    "mechanics": [
+      "Commodity Speculation",
+      "Grid Movement",
+      "Market",
+      "Set Collection",
+      "Tile Placement",
+      "Turn Order: Time Track"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3
+      ],
+      "recommended": [
+        2,
+        4
       ],
       "not_recommended": [
         1,

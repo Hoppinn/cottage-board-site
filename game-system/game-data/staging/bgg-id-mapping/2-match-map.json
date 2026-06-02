@@ -4244,12 +4244,9 @@
     "ownedName": "핵클레드 + 확장"
   },
   "햄버거타이쿤": {
-    "status": "auto-confirmed",
-    "bggId": "175914",
-    "ownedName": "햄버거타이쿤",
-    "bggName": "Food Chain Magnate",
-    "score": 121,
-    "scoreGap": 34
+    "status": "forced",
+    "bggId": "223094",
+    "ownedName": "햄버거타이쿤"
   },
   "행복을찾아서": {
     "status": "forced",
@@ -4349,5 +4346,10 @@
     "status": "forced",
     "bggId": "400366",
     "ownedName": "원드러스크리처"
+  },
+  "글렌모어연대기": {
+    "status": "forced",
+    "bggId": "265188",
+    "ownedName": "글렌모어연대기"
   }
 }

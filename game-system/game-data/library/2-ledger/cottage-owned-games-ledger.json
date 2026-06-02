@@ -12819,17 +12819,16 @@
   {
     "id": "햄버거타이쿤",
     "ownedName": "햄버거타이쿤",
-    "titleEn": "Food Chain Magnate",
-    "bggId": "175914",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Burgermania",
+    "bggId": "223094",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "몸",
-    "difficulty": 4.1848,
+    "difficulty": null,
     "difficultyWeight": 0,
-    "rating": 8.03819,
+    "rating": 5.21477,
     "bestPlayers": [
-      3,
-      4
+      2
     ],
     "recommendedPlayers": [
       2
@@ -13129,16 +13128,21 @@
   {
     "id": "글렌모어연대기",
     "ownedName": "글렌모어연대기",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unmatched",
-    "status": "pending-cache",
+    "titleEn": "Glen More II: Chronicles",
+    "bggId": "265188",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "",
-    "difficulty": null,
+    "difficulty": 3.006,
     "difficultyWeight": 0,
-    "rating": null,
-    "bestPlayers": [],
-    "recommendedPlayers": []
+    "rating": 7.85533,
+    "bestPlayers": [
+      3
+    ],
+    "recommendedPlayers": [
+      2,
+      4
+    ]
   },
   {
     "id": "딥씨크루",
