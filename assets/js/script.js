@@ -728,7 +728,7 @@ const moodValue = recommendState.mood;
 
   gameScroll.innerHTML = `
     <p class="recommend-empty">
-      인원, 난이도, 분위기 중<br>
+      인원, 난이도, 게임 방식 중<br>
 하나 이상을 골라주세요.
     </p>
   `;
@@ -2513,9 +2513,9 @@ ${levelValue !== "hardcore"
 
       <div class="recommend-step" data-filter-group="mood">
         <button class="recommend-step-head" type="button" data-toggle-filter="mood">
-          <span><b>3</b> 분위기</span>
+          <span><b>3</b> 게임 방식</span>
           <strong class="${moodValue ? '' : 'is-placeholder'}">
-            ${moodValue ? moodTextMap[moodValue] : '분위기 선택'} ▾
+            ${moodValue ? moodTextMap[moodValue] : '게임 방식 선택'} ▾
           </strong>
         </button>
 
