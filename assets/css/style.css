@@ -2582,6 +2582,8 @@ body.sheet-open{
     column-gap:clamp(12px,2.5vw,32px);
     align-items:center;
     padding-bottom:0;
+    padding-left:var(--page-x);
+    padding-right:var(--page-x);
   }
 
   /* 태그라인 숨기고 nav가 그 자리 차지 */
@@ -2900,10 +2902,10 @@ body.sheet-open{
     border-radius:0;
   }
 
-  /* about-section: 동일하게 960px 안으로 */
+  /* about-section: --page-x 대신 고정 padding (base css가 더 늦게 선언되므로 !important) */
   .about-section{
-    max-width:960px;
-    margin:0 auto;
+    padding-left:40px !important;
+    padding-right:40px !important;
   }
 }
 
