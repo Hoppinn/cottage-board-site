@@ -5562,3 +5562,334 @@ body.sheet-open{
 .dg-card.dg-heavy   {background:#ffccbc;}.dg-card.dg-heavy    .dg-name{color:#bf360c;}
 .dg-card.dg-hardcore{background:#1a1a1a;}.dg-card.dg-hardcore .dg-name{color:#fff;}.dg-card.dg-hardcore .dg-range{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);}.dg-card.dg-hardcore .dg-desc{color:rgba(255,255,255,0.65);}
 .dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
+
+/* =========================
+   # PC LAYOUT ENLARGEMENTS (900px+)
+   모바일은 그대로, PC에서만 전체 크기 상향
+========================= */
+@media(min-width:900px){
+
+  /* ── body 기본 폰트 ── */
+  body{ font-size:20px; }
+
+  /* ── 히어로 섹션 ── */
+  .hero h1{
+    font-size:clamp(42px,5.5vw,68px);
+  }
+  .desc{
+    font-size:clamp(18px,2.2vw,26px);
+  }
+  .label{
+    font-size:clamp(15px,1.4vw,17px);
+    padding:10px 22px;
+  }
+  .hero-inner{
+    max-width:860px;
+    gap:clamp(20px,3vw,40px);
+  }
+  .hero-visitor-count{
+    font-size:clamp(13px,1.2vw,15px);
+  }
+
+  /* ── 히어로 버튼 ── */
+  .btn{
+    min-width:clamp(150px,16vw,210px);
+    padding:clamp(13px,1.4vw,16px) clamp(18px,2vw,26px);
+    font-size:clamp(15px,1.4vw,18px);
+  }
+
+  /* ── 추천 필터 ── */
+  .recommend-filter{
+    padding:18px 20px;
+    border-radius:28px;
+  }
+  .recommend-filter-main-title{
+    font-size:22px;
+  }
+  .recommend-step-head span{
+    font-size:17px;
+  }
+  .recommend-inline-option{
+    min-height:44px;
+    padding:10px 16px;
+    font-size:15px;
+  }
+
+  /* ── 추천 제목 ── */
+  .recommend-title-group h2,
+  .recommend-header h2{
+    font-size:clamp(38px,4vw,52px);
+  }
+
+  /* ── 게임 카드 (추천 섹션) ── */
+  #gameScroll .game-card{
+    flex:0 0 calc(25% - 12px);
+    min-width:185px;
+    max-width:220px;
+    padding:14px;
+  }
+  #gameScroll .game-card strong{
+    font-size:18px;
+  }
+  #gameScroll .game-card-description{
+    font-size:12px;
+  }
+  #gameScroll .game-meta span{
+    height:26px;
+    font-size:11px;
+  }
+
+  /* ── 전체게임보기 카드 ── */
+  #ownedGameList{
+    gap:12px !important;
+  }
+  .owned-game-item{
+    padding:14px 16px !important;
+    border-radius:22px !important;
+    gap:14px !important;
+  }
+  .owned-game-thumb img{
+    width:72px !important;
+    height:72px !important;
+  }
+  .owned-game-thumb{
+    flex:0 0 72px;
+  }
+  .owned-game-info strong{
+    font-size:18px !important;
+    margin-bottom:7px !important;
+  }
+  .owned-game-info p{
+    font-size:14px;
+  }
+  .owned-game-meta span{
+    font-size:13px !important;
+    min-height:26px !important;
+    padding:4px 10px !important;
+  }
+
+  /* ── 전체게임보기 페이지 패딩 ── */
+  .owned-games-page{
+    padding-top:calc(var(--header-total-h) + 44px);
+    padding-bottom:80px;
+  }
+  .owned-games-page h1{
+    font-size:40px;
+    margin-bottom:20px !important;
+  }
+
+  /* ── inner-page 패딩·폰트 ── */
+  .inner-page{
+    padding-top:calc(var(--header-total-h) + 44px) !important;
+    padding-bottom:80px !important;
+  }
+  .inner-page h1{
+    font-size:40px;
+    margin-bottom:36px !important;
+  }
+
+  /* ── page-mini-hero 높이 ── */
+  .page-mini-hero{
+    height:280px;
+  }
+  .page-mini-hero h1{
+    font-size:clamp(30px,3.5vw,46px);
+  }
+
+  /* ── about 히어로 ── */
+  .about-hero{
+    padding-top:calc(var(--header-total-h) + clamp(40px,6vw,60px));
+    padding-bottom:clamp(56px,8vw,80px);
+  }
+  .about-hero h2{
+    font-size:clamp(28px,3.6vw,46px);
+  }
+  .about-hero-sub{
+    font-size:clamp(16px,1.6vw,20px);
+  }
+  .about-hero-eyebrow{
+    font-size:14px;
+    padding:6px 18px;
+  }
+
+  /* ── about 섹션 폰트 ── */
+  .about-intro-text{
+    font-size:clamp(16px,1.5vw,18px);
+    line-height:1.85;
+  }
+  .about-section-label{
+    font-size:12px;
+    letter-spacing:.1em;
+  }
+  .about-for-text{
+    font-size:16px;
+  }
+  .about-feature-label{
+    font-size:14px;
+  }
+  .about-section{
+    padding-top:clamp(40px,5vw,64px) !important;
+    padding-bottom:clamp(40px,5vw,64px) !important;
+  }
+
+  /* ── 사이트 푸터 ── */
+  .site-footer{
+    padding:32px var(--page-x) calc(32px + var(--safe-bottom));
+  }
+  .site-footer p{
+    font-size:14px;
+    line-height:2;
+  }
+
+  /* ── difficulty-guide 카드 ── */
+  .difficulty-guide{
+    padding:32px 24px;
+  }
+  .dg-title{
+    font-size:18px;
+    margin-bottom:6px;
+  }
+  .dg-subtitle{
+    font-size:14px;
+    margin-bottom:22px;
+  }
+  .dg-cards{
+    gap:12px;
+  }
+  .dg-card{
+    flex:0 0 calc((100% - 48px) / 5);
+    padding:18px 12px 16px;
+    border-radius:18px;
+  }
+  .dg-icon{
+    font-size:32px;
+    margin-bottom:6px;
+  }
+  .dg-name{
+    font-size:14px;
+  }
+  .dg-range{
+    font-size:12px;
+    padding:3px 10px;
+  }
+  .dg-desc{
+    font-size:12px;
+  }
+  .dg-note{
+    font-size:12px;
+    padding:10px 16px;
+    margin-top:18px;
+  }
+
+  /* ── 버튼 (primary / secondary) ── */
+  .primary-btn,
+  .secondary-btn{
+    padding:clamp(12px,1.2vw,15px) clamp(22px,2.2vw,30px);
+    font-size:clamp(15px,1.3vw,17px);
+    border-radius:999px;
+  }
+
+  /* ── price-rules 페이지 ── */
+  .price-hero-card{
+    padding:clamp(36px,4vw,52px);
+    border-radius:26px;
+    margin-bottom:32px;
+  }
+  .price-amount{
+    font-size:clamp(52px,6vw,72px);
+  }
+  .price-amount span{
+    font-size:clamp(24px,2.5vw,32px);
+  }
+  .price-desc{
+    font-size:16px;
+  }
+  .price-pay-chip{
+    font-size:14px;
+    padding:6px 16px;
+  }
+  .rules-group-title{
+    font-size:19px;
+    margin-bottom:16px;
+  }
+  .price-rules-list li{
+    font-size:15px;
+    padding:13px 18px;
+    border-radius:14px;
+    gap:12px;
+  }
+  .rules-ok-list li{
+    font-size:14px;
+    padding:10px 16px;
+    border-radius:14px;
+  }
+
+  /* ── club 페이지 ── */
+  .club-link-card{
+    padding:28px 20px;
+    font-size:16px;
+    border-radius:18px;
+  }
+  .club-link-icon{
+    font-size:34px;
+  }
+
+  /* ── 헤더 검색 패널 PC에서 넓게 ── */
+  .header-search-panel{
+    left:var(--page-x);
+    right:var(--page-x);
+  }
+  .header-search-panel input{
+    height:48px;
+    font-size:16px;
+  }
+  .header-search-result strong{
+    font-size:15px;
+  }
+  .header-search-result img{
+    width:50px;
+    height:50px;
+    flex:0 0 50px;
+  }
+
+  /* ── recommend-section 배너 높이 ── */
+  .recommend-header--photo,
+  .recommend-header.recommend-header--photo{
+    height:260px !important;
+  }
+
+  /* ── 페이지네이션 ── */
+  .owned-pagination button{
+    min-width:44px;
+    height:44px;
+    font-size:15px;
+  }
+
+  /* ── 정렬/필터 툴바 입력 ── */
+  .owned-search-box input{
+    height:46px !important;
+    font-size:15px !important;
+    padding-left:44px !important;
+  }
+  .owned-tools-toggle{
+    height:46px !important;
+    font-size:14px !important;
+    padding:0 16px !important;
+  }
+
+  /* ── 전체게임보기 히어로 ── */
+  .owned-page-hero{
+    height:240px;
+    margin-bottom:20px;
+  }
+  .owned-page-hero h1{
+    font-size:clamp(30px,3.5vw,46px);
+  }
+
+  /* ── 모임 참여 / 섹션 타이틀 ── */
+  .meeting-section-title{
+    font-size:18px;
+  }
+
+}
+/* END PC LAYOUT ENLARGEMENTS */
