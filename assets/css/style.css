@@ -2597,16 +2597,22 @@ body.sheet-open{
     box-shadow:none;
   }
 
+  /* 전체 기본 폰트 크기 상향 */
+  body{ font-size:17px; }
+
   .header-menu a{
     width:auto;
     padding:0 10px;
     white-space:nowrap;
-    font-size:15px;
+    font-size:16px;
   }
+
+  /* 메뉴 그룹 화살표 숨김 (PC에선 드롭다운으로 대체) */
+  .menu-group-arrow{ display:none; }
 
   /* 그룹 헤더 버튼을 링크처럼 */
   .menu-group-header{
-    font-size:15px;
+    font-size:16px;
     font-weight:900;
     color:#5a3418;
     padding:0 10px;
@@ -2614,23 +2620,25 @@ body.sheet-open{
     border:none;
     cursor:pointer;
     font-family:inherit;
+    white-space:nowrap;
   }
 
-  /* 드롭다운: 호버 시 표시 */
+  /* 드롭다운: hover 갭 없애기 — padding-top으로 시각적 여백만 */
   .menu-group{
     position:relative;
+    padding-bottom:8px; /* hover 영역 확장 */
   }
 
   .menu-group-body{
     position:absolute;
-    top:calc(100% + 10px);
+    top:100%;          /* gap 제거, padding으로 띄움 */
     left:0;
-    min-width:160px;
+    min-width:170px;
     background:var(--paper-2,#faf7f0);
     border:1px solid rgba(223,199,161,0.7);
     border-radius:14px;
     box-shadow:0 8px 24px rgba(40,30,18,0.12);
-    padding:10px;
+    padding:14px 10px 10px; /* 위 패딩으로 시각적 여백 */
     flex-direction:column;
     gap:4px;
     z-index:1002;
@@ -2642,15 +2650,15 @@ body.sheet-open{
   }
 
   .menu-group-body a{
-    padding:8px 12px !important;
+    padding:9px 14px !important;
     border-radius:9px;
-    font-size:14px !important;
+    font-size:15px !important;
   }
 
-  /* 로그인 영역은 actions 쪽으로 */
+  /* 로그인 영역 */
   .menu-kakao-login-btn{
-    font-size:13px;
-    padding:4px 10px;
+    font-size:14px;
+    padding:4px 12px;
     border-radius:20px;
   }
 
@@ -2660,13 +2668,9 @@ body.sheet-open{
     left:auto;
   }
 
-  .menu-toggle{
-    display:none;
-  }
+  .menu-toggle{ display:none; }
 
-  .hero{
-    padding-top:calc(var(--header-total-h) + 60px);
-  }
+  .hero{ padding-top:calc(var(--header-total-h) + 60px); }
 
   .hero-inner{
     flex-direction:column;
@@ -2674,21 +2678,20 @@ body.sheet-open{
     max-width:760px;
   }
 
-  .hero h1{
-    line-height:1.28;
-  }
-
-  .desc{
-    line-height:1.6;
-  }
+  .hero h1{ line-height:1.28; }
+  .desc{ line-height:1.6; }
 
   /* 추천 섹션 PC 레이아웃 */
   .recommend-section{
-    padding:12px clamp(24px,6vw,80px) 60px;
+    padding:12px clamp(24px,5vw,60px) 60px;
   }
 
+  /* 배너를 섹션 패딩 밖으로 블리드 */
   .recommend-header--photo{
-    margin:-12px clamp(-24px,-6vw,-80px) 20px;
+    margin-left:calc(-1 * clamp(24px,5vw,60px));
+    margin-right:calc(-1 * clamp(24px,5vw,60px));
+    margin-top:-12px;
+    margin-bottom:24px;
   }
 
   .recommend-filter{
@@ -2701,9 +2704,10 @@ body.sheet-open{
   }
 
   /* 추천 빈 박스 중앙정렬 */
-  .recommend-empty{
-    margin:10px auto;
-    max-width:480px;
+  #gameScroll .recommend-empty{
+    margin:20px auto !important;
+    max-width:480px !important;
+    width:480px;
   }
 
   .game-scroll:has(.recommend-empty){
