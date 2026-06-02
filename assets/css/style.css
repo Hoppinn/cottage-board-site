@@ -2575,14 +2575,22 @@ body.sheet-open{
     grid-template-columns:clamp(82px,12vw,130px) 1fr auto;
   }
 
+  /* 태그라인 숨기고 nav가 그 자리 차지 */
+  .header-center{
+    display:none;
+  }
+
   .header-menu{
+    /* 그리드 1행 2열에 명시 배치 */
+    grid-column:2;
+    grid-row:1;
     position:static;
     width:auto;
     display:flex;
     flex-direction:row;
     align-items:center;
-    justify-content:flex-end;
-    gap:28px;
+    justify-content:flex-start;
+    gap:4px;
     padding:0;
     border:0;
     background:transparent;
@@ -2591,9 +2599,65 @@ body.sheet-open{
 
   .header-menu a{
     width:auto;
-    padding:0;
+    padding:0 10px;
     white-space:nowrap;
-    font-size:16px;
+    font-size:15px;
+  }
+
+  /* 그룹 헤더 버튼을 링크처럼 */
+  .menu-group-header{
+    font-size:15px;
+    font-weight:900;
+    color:#5a3418;
+    padding:0 10px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+  }
+
+  /* 드롭다운: 호버 시 표시 */
+  .menu-group{
+    position:relative;
+  }
+
+  .menu-group-body{
+    position:absolute;
+    top:calc(100% + 10px);
+    left:0;
+    min-width:160px;
+    background:var(--paper-2,#faf7f0);
+    border:1px solid rgba(223,199,161,0.7);
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(40,30,18,0.12);
+    padding:10px;
+    flex-direction:column;
+    gap:4px;
+    z-index:1002;
+    display:none;
+  }
+
+  .menu-group:hover .menu-group-body{
+    display:flex;
+  }
+
+  .menu-group-body a{
+    padding:8px 12px !important;
+    border-radius:9px;
+    font-size:14px !important;
+  }
+
+  /* 로그인 영역은 actions 쪽으로 */
+  .menu-kakao-login-btn{
+    font-size:13px;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+
+  .kakaoUserActions{
+    top:calc(100% + 4px);
+    right:0;
+    left:auto;
   }
 
   .menu-toggle{
@@ -2616,6 +2680,19 @@ body.sheet-open{
 
   .desc{
     line-height:1.6;
+  }
+
+  /* 추천 빈 박스 중앙정렬 */
+  .recommend-empty{
+    margin:10px auto;
+    max-width:500px;
+  }
+
+  .game-scroll:has(.recommend-empty){
+    display:flex !important;
+    justify-content:center;
+    margin:0 !important;
+    padding:0 18px 18px !important;
   }
 }
 
