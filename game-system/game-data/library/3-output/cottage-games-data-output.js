@@ -85308,8 +85308,8 @@ const gameData = {
   "천국과맥주": {
     "id": "천국과맥주",
     "title": {
-      "display": "천국과맥주",
-      "owned": "천국과맥주",
+      "display": "맥주와빵",
+      "owned": "맥주와빵",
       "bgg": ""
     },
     "bgg": {

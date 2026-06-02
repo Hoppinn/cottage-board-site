@@ -242,7 +242,7 @@
         for (const [dateStr, recs] of Object.entries(dates).sort((a, b) => b[0].localeCompare(a[0]))) {
           const captionAttr = escAttr(buildCaption(groupName, dateStr, recs));
           const gameCount = recs.length;
-          html += `<div class="history-session is-open">
+          html += `<div class="history-session">
             <div class="history-session-header">
               <span class="history-session-date">${formatKstDate(dateStr)}</span>
               <span class="history-session-summary">${gameCount}게임</span>

@@ -2571,9 +2571,10 @@ body.sheet-open{
 }
 
 @media(min-width:900px){
+  /* Logo(auto) | Nav(auto) | spacer(1fr) | Actions(auto) — nav아이템 모아서 왼쪽 정렬 */
   .site-header{
-    grid-template-columns:clamp(82px,12vw,130px) 1fr auto;
-    column-gap:clamp(16px,3vw,40px);
+    grid-template-columns:clamp(82px,12vw,130px) auto 1fr auto;
+    column-gap:clamp(12px,2.5vw,32px);
   }
 
   /* 태그라인 숨기고 nav가 그 자리 차지 */
@@ -2581,9 +2582,9 @@ body.sheet-open{
     display:none;
   }
 
-  /* 검색/햄버거 영역 — 항상 3열에 */
+  /* 검색/햄버거 영역 — 항상 4열에 */
   .header-actions{
-    grid-column:3;
+    grid-column:4;
     grid-row:1;
   }
 
@@ -2606,6 +2607,7 @@ body.sheet-open{
     gap:4px !important;
     grid-column:2 !important;
     grid-row:1 !important;
+    width:auto !important;
   }
 
   /* PC에서는 is-open(클릭)이 아닌 hover만으로 드롭다운 */
@@ -2739,29 +2741,33 @@ body.sheet-open{
   .hero h1{ line-height:1.28; }
   .desc{ line-height:1.6; }
 
-  /* 추천 섹션 PC 레이아웃 */
+  /* 추천 섹션 PC 레이아웃 — 전체 가운데정렬 */
   .recommend-section{
-    padding:12px clamp(24px,5vw,60px) 60px;
+    padding:0 0 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
 
-  /* 배너를 섹션 패딩 밖으로 블리드 */
+  /* 배너 full-width */
   .recommend-header--photo{
-    margin-left:calc(-1 * clamp(24px,5vw,60px));
-    margin-right:calc(-1 * clamp(24px,5vw,60px));
-    margin-top:-12px;
-    margin-bottom:24px;
-    width:calc(100% + 2 * clamp(24px,5vw,60px));
+    width:100%;
+    margin:0 0 28px;
     border-radius:0;
     height:200px;
   }
 
   .recommend-filter{
-    max-width:640px;
+    width:100%;
+    max-width:680px;
+    margin:0 auto 18px;
   }
 
   .game-scroll{
-    max-width:760px;
+    max-width:780px;
+    width:100%;
     padding:0 0 18px;
+    margin:0 auto;
   }
 
   /* 추천 빈 박스 중앙정렬 */
@@ -2773,6 +2779,15 @@ body.sheet-open{
 
   .game-scroll:has(.recommend-empty){
     overflow:visible !important;
+    justify-content:center;
+  }
+
+  /* 난이도 안내도 중앙정렬 */
+  .difficulty-guide{
+    max-width:780px;
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
   }
 }
 
