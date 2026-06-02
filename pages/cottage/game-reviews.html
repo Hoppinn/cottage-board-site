@@ -162,7 +162,9 @@
     .pr-photo-preview { max-width: 100%; max-height: 100px; border-radius: 7px; margin-top: 6px; display: none; }
 
     /* photo thumbnail in record row */
-    .pr-rec-photo { width: 100%; max-height: 220px; object-fit: cover; border-radius: 7px; margin-top: 8px; display: block; }
+    .pr-rec-photo-wrap { position: relative; margin-top: 8px; }
+    .pr-rec-photo { width: 100%; max-height: 220px; object-fit: cover; border-radius: 7px; display: block; }
+    .pr-rec-photo-del { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 5px; font-size: 11px; padding: 3px 8px; cursor: pointer; }
 
     /* view toggle (모임별 / 게임별) */
     .pr-view-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
@@ -815,6 +817,19 @@
         });
       });
 
+      panel.querySelectorAll('.pr-rec-photo-del').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.stopPropagation();
+          if (!confirm('사진을 삭제할까요?')) return;
+          const res = await window.CottageDB?.deletePlayPhoto(btn.dataset.id);
+          if (!res?.error) {
+            const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
+            if (idx !== -1) recordsData[idx].photo_url = null;
+            renderRecords(recordsData);
+          }
+        });
+      });
+
       panel.querySelectorAll('.pr-rec-edit').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
@@ -1088,7 +1103,8 @@
           const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
           const scoreTag = r.score_note   ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-          const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+          const canDelPhoto = r.photo_url && (isMine || window.isOwner?.());
+          const photoHtml  = r.photo_url ? `<div class="pr-rec-photo-wrap">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" type="button">🗑 사진 삭제</button>` : ''}<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy"></div>` : '';
           const gameKey = getGameKey(r.game_id);
           const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
           const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
@@ -1155,7 +1171,8 @@
           const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
           const scoreTag = r.score_note   ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
-          const photoHtml  = r.photo_url   ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+          const canDelPhoto = r.photo_url && (isMine || window.isOwner?.());
+          const photoHtml  = r.photo_url ? `<div class="pr-rec-photo-wrap">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" type="button">🗑 사진 삭제</button>` : ''}<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy"></div>` : '';
           const gameKey = getGameKey(r.game_id);
           const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
           return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
@@ -1232,7 +1249,8 @@
             const scoreTag = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
             const groupTag = r.group_name ? `<span class="pr-rec-tag" style="background:#e8f0ff;color:#5c6bc0">${escH(r.group_name)}</span>` : '';
             const namesTag = r.player_names ? `<span class="pr-rec-tag">${escH(r.player_names)}</span>` : '';
-            const photoHtml = r.photo_url ? `<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy">` : '';
+            const canDelPhoto = r.photo_url && (isMine || window.isOwner?.());
+            const photoHtml = r.photo_url ? `<div class="pr-rec-photo-wrap">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" type="button">🗑 사진 삭제</button>` : ''}<img class="pr-rec-photo" src="${escH(r.photo_url)}" alt="사진" loading="lazy"></div>` : '';
             return `<div class="rv-item" data-id="${r.id}">
               <div class="rv-head">
                 <span class="rv-nick">${escH(r.nickname || '익명')}</span>

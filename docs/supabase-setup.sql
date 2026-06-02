@@ -583,3 +583,16 @@ as $$
   from public.game_ratings
   group by game_id;
 $$;
+
+
+-- ── 마이그레이션: profiles 밴 기능 ────────────────────────────
+alter table public.profiles
+  add column if not exists is_banned boolean default false;
+
+-- profiles UPDATE 정책 (관리자가 is_banned 수정)
+drop policy if exists "anon_update_profiles" on public.profiles;
+create policy "anon_update_profiles"
+  on public.profiles for update
+  to anon
+  using (true)
+  with check (true);

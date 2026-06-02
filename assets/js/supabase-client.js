@@ -525,6 +525,27 @@
     } catch (_) { return []; }
   }
 
+  async function banUser(userId) {
+    try {
+      const { error } = await db.from('profiles').update({ is_banned: true }).eq('user_id', userId);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function unbanUser(userId) {
+    try {
+      const { error } = await db.from('profiles').update({ is_banned: false }).eq('user_id', userId);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function deletePlayPhoto(recordId) {
+    try {
+      const { error } = await db.from('game_play_records').update({ photo_url: null }).eq('id', recordId);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
   async function getPageAnalytics() {
     try {
       const { data } = await db.from('page_sessions')
@@ -625,6 +646,9 @@
     getGameReviews,
     insertGameReview,
     deleteGameReview,
+    banUser,
+    unbanUser,
+    deletePlayPhoto,
   };
 
   async function getGameReviews(gameId) {
