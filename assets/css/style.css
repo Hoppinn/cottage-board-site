@@ -2571,6 +2571,11 @@ body.sheet-open{
 }
 
 @media(min-width:900px){
+  /* ── A안: 콘텐츠를 960px 안에 가두는 전역 패딩 ── */
+  :root{
+    --page-x: max(32px, calc((100vw - 960px) / 2));
+  }
+
   /* Logo(auto) | Nav(auto) | spacer(1fr) | Actions(auto) */
   .site-header{
     grid-template-columns:clamp(82px,12vw,130px) auto 1fr auto;
@@ -2870,15 +2875,35 @@ body.sheet-open{
     max-width:680px !important;
   }
 
-  /* ── 내부 페이지 콘텐츠 max-width 확대 ── */
+  /* ── 내부 페이지: --page-x로 중앙 960px 가두기, max-width 제거 ── */
   .inner-page{
-    max-width:860px;
-    margin:0 auto;
+    padding-left:var(--page-x) !important;
+    padding-right:var(--page-x) !important;
+    max-width:none !important;
+    margin:0 !important;
     box-sizing:border-box;
   }
 
+  /* page-mini-hero: inner-page 패딩 벗어나 full-bleed + 둥근 모서리 제거 */
+  .page-mini-hero{
+    margin-left:calc(-1 * var(--page-x));
+    margin-right:calc(-1 * var(--page-x));
+    border-radius:0;
+    height:240px;
+  }
+  .page-mini-hero::after{
+    border-radius:0;
+  }
+  .page-mini-hero--reviews::before,
+  .page-mini-hero--location::before,
+  .page-mini-hero--price::before{
+    border-radius:0;
+  }
+
+  /* about-section: 동일하게 960px 안으로 */
   .about-section{
-    max-width:860px;
+    max-width:960px;
+    margin:0 auto;
   }
 }
 
