@@ -2802,33 +2802,36 @@ body.sheet-open{
     margin-bottom:18px;
   }
 
-  /* PC: game-scroll → 4열 wrap 그리드처럼 */
+  /* PC: game-scroll → CSS Grid 4열 */
   #gameScroll{
-    display:flex;
-    flex-wrap:wrap;
-    flex-direction:row;
-    overflow:visible;
+    display:grid !important;
+    grid-template-columns:repeat(4,1fr);
     gap:12px;
+    overflow:visible;
     padding-bottom:18px;
-    justify-content:center;
+    flex-wrap:unset;
+    flex-direction:unset;
+    justify-content:unset;
   }
 
   #gameScroll .game-card{
-    flex:0 0 calc(25% - 10px);
-    min-width:160px;
-    max-width:200px;
+    flex:none;
+    min-width:0;
+    max-width:none;
+    width:auto;
     scroll-snap-align:none;
   }
 
-  /* 더보기 버튼 — 독립 행, 중앙 배치 */
+  /* 더보기 버튼 — 4열 전체 span, 중앙 배치 */
   #gameScroll .game-card-more{
-    flex:0 0 100%;
-    width:100%;
-    max-width:320px;
-    margin:8px auto 0;
+    grid-column:1 / -1;
+    width:320px;
+    max-width:none;
+    margin:4px auto 0;
     border-radius:14px;
     height:52px;
     font-size:15px;
+    flex:none;
   }
 
   /* 추천 빈 박스 중앙정렬 — .game-scroll:has()의 margin:0 -18px !important 재정의 */
