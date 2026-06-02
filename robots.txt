@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /pages/store/requests-admin.html
+Disallow: /auth-callback.html
+
+Sitemap: https://cottageboard.com/sitemap.xml
