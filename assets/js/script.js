@@ -857,7 +857,7 @@ if (weight > maxWeight) {
             <div class="game-meta">
 
               <span>
-                👥 ${formatPlayers(card.bestPlayers)}
+                <span class="player-emoji">👥</span> ${formatPlayers(card.bestPlayers)}
               </span>
 
               <span class="card-difficulty ${difficulty.className}">
@@ -3337,7 +3337,7 @@ function renderOwnedGameList(){
 
               <div class="owned-game-meta">
   <span>
-    👥 ${formatPlayers(detail.bestPlayers) || detail.playerRangeText || "-"}
+    <span class="player-emoji">👥</span> ${formatPlayers(detail.bestPlayers) || detail.playerRangeText || "-"}
   </span>
   <span class="${difficulty.className}">
     ${difficulty.icon} ${formatDifficultyWeight(detail.difficultyWeight)}
