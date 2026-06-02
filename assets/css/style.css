@@ -2573,6 +2573,7 @@ body.sheet-open{
 @media(min-width:900px){
   .site-header{
     grid-template-columns:clamp(82px,12vw,130px) 1fr auto;
+    column-gap:clamp(16px,3vw,40px);
   }
 
   /* 태그라인 숨기고 nav가 그 자리 차지 */
@@ -2655,17 +2656,39 @@ body.sheet-open{
     font-size:15px !important;
   }
 
-  /* 로그인 영역 */
+  /* 로그인/프로필 버튼 */
   .menu-kakao-login-btn{
+    width:auto;
     font-size:14px;
     padding:4px 12px;
     border-radius:20px;
+    position:relative; /* 드롭다운 기준점 */
   }
 
-  .kakaoUserActions{
-    top:calc(100% + 4px);
-    right:0;
+  .menu-kakao-login-btn.is-logged-in::after{
+    display:none; /* PC에서 화살표 숨김 */
+  }
+
+  /* 프로필 드롭다운 PC용 — header(fixed)에 대해 absolute */
+  #kakaoUserActions{
+    position:absolute;
+    top:var(--header-total-h);
+    right:clamp(12px,4vw,28px);
     left:auto;
+    min-width:160px;
+    background:var(--paper-2,#faf7f0);
+    border:1px solid rgba(223,199,161,0.7);
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(40,30,18,0.12);
+    padding:8px;
+    z-index:1003;
+    flex-direction:column;
+  }
+
+  #kakaoUserActions button{
+    border-radius:9px;
+    font-size:14px;
+    padding:9px 14px;
   }
 
   .menu-toggle{ display:none; }
