@@ -85310,68 +85310,63 @@
     "title": {
       "display": "맥주와빵",
       "owned": "맥주와빵",
-      "bgg": "Wyrd: The Darkness"
+      "bgg": "Beer & Bread"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "no-bgg",
-      "year": "2021",
-      "rating": 9,
-      "weight": 0,
+      "id": "369880",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 7.30491,
+      "weight": 2.3493,
       "minPlayers": 2,
       "maxPlayers": 2,
       "bestPlayers": [
-        1
+        2
       ],
       "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 40,
+      "notRecommendedPlayers": [
+        1,
+        2
+      ],
+      "playingTime": 45,
       "minPlayTime": 30,
-      "maxPlayTime": 40,
+      "maxPlayTime": 45,
       "categories": [
-        "Expansion for Base-game",
-        "Ancient",
-        "Dice",
-        "Fantasy",
-        "Fighting",
-        "Horror",
-        "Print & Play"
+        "Card Game",
+        "Farming",
+        "Medieval"
       ],
       "categoriesKo": [
-        "확장판",
-        "고대",
-        "주사위",
-        "판타지",
-        "격투",
-        "공포",
-        "프린트 앤 플레이"
+        "카드게임",
+        "농업",
+        "중세"
       ],
       "mechanics": [
-        "Critical Hits and Failures",
-        "Dice Rolling",
-        "Map Addition",
-        "Modular Board",
-        "Paper-and-Pencil",
-        "Role Playing",
-        "Solo / Solitaire Game",
-        "Stat Check Resolution",
-        "Storytelling"
+        "Closed Drafting",
+        "Contracts",
+        "End Game Bonuses",
+        "Hand Management",
+        "Highest-Lowest Scoring",
+        "Multi-Use Cards",
+        "Neighbor Scope",
+        "Turn Order: Stat-Based",
+        "Variable Player Powers"
       ],
       "mechanicsKo": [
-        "치명타와 실패",
-        "주사위 굴리기",
-        "지도 추가",
-        "모듈형 보드",
-        "종이와 연필",
-        "역할극",
-        "솔로 게임",
-        "스탯 확인",
-        "스토리텔링"
+        "비공개 드래프팅",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "최고-최저 득점",
+        "다목적 카드",
+        "인접 범위",
+        "스탯 기반 순서",
+        "비대칭 능력"
       ],
       "designers": [
-        "E.J. Taylor"
+        "Scott Almes"
       ],
-      "description": "The Darkness is the first expansion for Wyrd: The Descent.\n\nEmerge from the Hollows, beaten and weary only to Descend again and again, for the World of The Living is ever threatened by The Darkness that surrounds it.\n\nBut be careful, the Horrors are not the only threat. Demons claw their way into reality, and will take Possession of you should you delve too deep.\n\nFor you are not Wyrd yet.\n\nIn The Darkness you will attempt to link your games of Wyrd: The Descent together by developing your Wyrd and avoiding the risk of Possession.\n\nThis is the full colour rulebook for The Darkness updated to 2.15 including an updated FAQ, clarifications to the Laws of Possession with examples and the Sigils for the modular PnP Hollows tiles in the reference section. There are also two play sheets to print out to draw your Hollows on, with and without a grid.\n\nYou will need a copy of Wyrd: The Descent 1.2+, a set of RPG polyhedral dice and a pen and some paper to play.",
+      "description": "Beer & Bread is a multi-use card game for two players. Its clever structure of alternating rounds puts a fascinating twist on player interaction, card drafting, and resource management.\n\nFounded on the fruitful lands of an erstwhile monastery, two villages have held up the dual tradition of brewing beer and baking bread. While sharing fields and resources, they still find pride in their friendly rivalry of besting each other&rsquo;s produce.\n\nEach of you represents one of these villages. Over the course of six years - which alternate between fruitful and dry - you must harmonize your duties of harvesting and storing resources, producing beer and bread, selling them for coins and upgrading your facilities.\n\nHowever, in order to win, you must maintain the balance between your baked and liquid goods. Because, after the sixth year, you only score the coins collected from the type of good - beer or bread - for which you earned less. The village with the higher score wins.\n\n&mdash;description from the publisher",
       "descriptionKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드 게임. 교대 라운드 구조로 카드 드래프팅과 자원 관리에 독특한 플레이어 상호작용을 제공합니다."
     },
     "cottage": {
@@ -85379,46 +85374,39 @@
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
+      "difficultyId": "light_family",
+      "difficultyWeight": 2.3493,
       "moodTags": [
-        "cozy",
-        "immersive",
-        "funny",
-        "tense"
+        "immersive"
       ],
       "playTags": [
-        "storytelling",
-        "party"
+        "card_play",
+        "strategy"
       ],
       "situationTags": [
-        "group",
+        "experienced",
         "beginner",
-        "quick_play",
         "couple"
       ],
       "interactionTags": [
-        "competitive"
+        "competitive",
+        "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "cozy",
         "immersive",
-        "funny",
-        "tense",
-        "storytelling",
-        "party",
-        "group",
+        "card_play",
+        "strategy",
+        "experienced",
         "beginner",
-        "quick_play",
         "couple",
-        "competitive"
+        "competitive",
+        "low_conflict"
       ],
       "displayTags": [
+        "머리쓰게",
         "빠져들게",
-        "즐기고",
-        "편안하게",
         "경쟁형"
       ],
       "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드게임.",

@@ -13114,16 +13114,16 @@
   {
     "id": "천국과맥주",
     "ownedName": "천국과맥주",
-    "titleEn": "Wyrd: The Darkness",
-    "bggId": "336716",
+    "titleEn": "Beer & Bread",
+    "bggId": "369880",
     "matchStatus": "forced",
     "status": "ready",
     "location": "",
-    "difficulty": null,
+    "difficulty": 2.3493,
     "difficultyWeight": 0,
-    "rating": 9,
+    "rating": 7.30491,
     "bestPlayers": [
-      1
+      2
     ],
     "recommendedPlayers": []
   },

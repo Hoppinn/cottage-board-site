@@ -4353,7 +4353,8 @@
     "ownedName": "글렌모어연대기"
   },
   "천국과맥주": {
-    "status": "no-bgg",
+    "status": "forced",
+    "bggId": "369880",
     "ownedName": "천국과맥주"
   }
 }
