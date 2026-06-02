@@ -29,8 +29,9 @@
 :root{
   --header-h:clamp(52px,13vw,68px);
   --page-x:clamp(18px,5vw,24px);
-  --safe-top:env(safe-area-inset-top);
-  --safe-bottom:env(safe-area-inset-bottom);
+  --safe-top:env(safe-area-inset-top, 0px);
+  --safe-bottom:env(safe-area-inset-bottom, 0px);
+  --header-total-h:calc(var(--header-h) + var(--safe-top));
 
   --bg:#f7f0e3;
   --paper:#fffdf8;
@@ -60,7 +61,7 @@
 
 html{
   scroll-behavior:smooth;
-  scroll-padding-top:var(--header-h);
+  scroll-padding-top:var(--header-total-h);
 }
 
 body{
@@ -108,11 +109,12 @@ textarea{
   left:0;
   right:0;
   z-index:1000;
-  height:var(--header-h);
-  padding:0 clamp(12px,4vw,28px);
+  height:var(--header-total-h);
+  padding:var(--safe-top) clamp(12px,4vw,28px) 0;
   display:grid;
   grid-template-columns:clamp(82px,24vw,130px) 1fr auto;
-  align-items:center;
+  align-items:end;
+  padding-bottom:6px;
   background:var(--bg);
   border-bottom:1px solid rgba(223,199,161,0.45);
 }
@@ -223,7 +225,7 @@ textarea{
 
 .header-menu{
   position:absolute;
-  top:calc(var(--header-h) - 8px);
+  top:calc(var(--header-total-h) - 8px);
   right:16px;
   width:170px;
   display:none;
@@ -359,7 +361,7 @@ textarea{
 /* 헤더 검색 패널 */
 .header-search-panel{
   position:absolute;
-  top:calc(var(--header-h) - 6px);
+  top:calc(var(--header-total-h) - 6px);
   left:12px;
   right:12px;
   display:none;
@@ -470,7 +472,7 @@ body.owned-page .site-header{
 
 body.owned-page .header-menu{
   position:absolute !important;
-  top:calc(var(--header-h) - 8px) !important;
+  top:calc(var(--header-total-h) - 8px) !important;
   right:16px !important;
   width:170px !important;
   display:none !important;
@@ -497,7 +499,7 @@ body.owned-page .header-menu.active{
   position:relative;
   overflow:hidden;
   min-height:100svh;
-  padding:calc(var(--header-h) + clamp(18px,5vw,34px)) var(--page-x) clamp(24px,6vw,48px);
+  padding:calc(var(--header-total-h) + clamp(18px,5vw,34px)) var(--page-x) clamp(24px,6vw,48px);
   display:flex;
   align-items:center;
   background:none;
@@ -697,15 +699,15 @@ body.owned-page .header-menu.active{
 ========================= */
 
 #recommend{
-  scroll-margin-top:var(--header-h);
+  scroll-margin-top:var(--header-total-h);
 }
 
 #recommend,
 body.recommend-page #recommend{
   display:block !important;
-  min-height:calc(100svh - var(--header-h));
+  min-height:calc(100svh - var(--header-total-h));
   padding-top:24px;
-  scroll-margin-top:var(--header-h);
+  scroll-margin-top:var(--header-total-h);
 }
 
 #recommend.is-hidden{
@@ -1061,7 +1063,7 @@ body.recommend-page main{
 /* 추천 모달 */
 .recommend-modal{
   position:fixed;
-  top:var(--header-h);
+  top:var(--header-total-h);
   left:0;
   right:0;
   bottom:0;
@@ -1089,7 +1091,7 @@ body.recommend-page main{
   z-index:1;
   width:100% !important;
   max-width:420px !important;
-  max-height:min(72svh, calc(100svh - var(--header-h) - 108px)) !important;
+  max-height:min(72svh, calc(100svh - var(--header-total-h) - 108px)) !important;
   margin:0 auto !important;
   display:flex !important;
   flex-direction:column !important;
@@ -1424,7 +1426,7 @@ body.recommend-page main{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:calc(var(--header-h) + 12px) 18px 12px;
+  padding:calc(var(--header-total-h) + 12px) 18px 12px;
   background:var(--bg);
   border-bottom:1px solid var(--line);
   flex-shrink:0;
@@ -1947,7 +1949,7 @@ body.sheet-open{
 }
 
 .inner-page{
-  padding:calc(var(--header-h) + 28px) 18px 60px;
+  padding:calc(var(--header-total-h) + 28px) 18px 60px;
   background:var(--bg);
 }
 
@@ -1977,7 +1979,7 @@ body.sheet-open{
 ========================= */
 
 .owned-games-page{
-  padding:calc(var(--header-h) + 28px) 18px 60px;
+  padding:calc(var(--header-total-h) + 28px) 18px 60px;
   background:var(--bg);
 }
 
@@ -2599,7 +2601,7 @@ body.sheet-open{
   }
 
   .hero{
-    padding-top:calc(var(--header-h) + 60px);
+    padding-top:calc(var(--header-total-h) + 60px);
   }
 
   .hero-inner{
@@ -3600,7 +3602,7 @@ body.sheet-open{
 ========================= */
 .about-hero{
   background:linear-gradient(160deg,#2d4a33 0%,#4a7040 100%);
-  padding:calc(var(--header-h) + clamp(24px,6vw,40px)) var(--page-x) clamp(40px,10vw,64px);
+  padding:calc(var(--header-total-h) + clamp(24px,6vw,40px)) var(--page-x) clamp(40px,10vw,64px);
   text-align:center;
   color:#fff;
 }
