@@ -543,6 +543,34 @@ create policy "anon_all_req_votes"
   with check (true);
 
 
+-- ── page_sessions (페이지별 체류시간 트래킹) ─────────────────
+create table if not exists public.page_sessions (
+  id           uuid primary key default gen_random_uuid(),
+  page         text not null,
+  referrer     text,
+  user_id      text,
+  duration_sec integer,
+  entered_at   timestamptz not null default now()
+);
+
+create index if not exists page_sessions_entered_at_idx on public.page_sessions (entered_at desc);
+create index if not exists page_sessions_page_idx on public.page_sessions (page);
+
+alter table public.page_sessions enable row level security;
+
+drop policy if exists "anon_insert_page_sessions" on public.page_sessions;
+create policy "anon_insert_page_sessions"
+  on public.page_sessions for insert
+  to anon
+  with check (true);
+
+drop policy if exists "anon_select_page_sessions" on public.page_sessions;
+create policy "anon_select_page_sessions"
+  on public.page_sessions for select
+  to anon
+  using (true);
+
+
 -- ── RPC: 전체 게임 별점 요약 ──────────────────────────────
 create or replace function public.get_all_game_ratings()
 returns table(game_id text, avg_rating numeric, rating_count bigint)
