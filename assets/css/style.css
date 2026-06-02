@@ -1760,7 +1760,22 @@ body.sheet-open{
 }
 
 .menu-kakao-login-btn:hover {
-  background: #fce8ef;
+  background: #f3eadc;
+}
+
+.menu-kakao-login-btn.is-logged-in::after {
+  content: '›';
+  margin-left: auto;
+  font-size: 18px;
+  color: #a09070;
+  display: inline-block;
+  transform: rotate(90deg);
+  transition: transform 0.2s;
+  line-height: 1;
+}
+
+.menu-kakao-login-btn.is-expanded::after {
+  transform: rotate(270deg);
 }
 
 .menu-kakao-login-btn #kakaoProfileImg {

@@ -196,6 +196,13 @@ function resetMenuGroups(){
     g.classList.remove('is-open');
   });
 
+  const loginBtn = document.getElementById('kakaoLoginBtn');
+  const userActions = document.getElementById('kakaoUserActions');
+  if(loginBtn && userActions){
+    loginBtn.classList.remove('is-expanded');
+    userActions.style.display = 'none';
+  }
+
   const currentLink = document.querySelector('.header-menu a.is-current');
   if(currentLink){
     currentLink.style.setProperty('background', '#7a4828', 'important');

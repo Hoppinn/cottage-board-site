@@ -32,7 +32,15 @@ function initKakaoAuth() {
   const btn = document.getElementById('kakaoLoginBtn');
   if (btn) {
     btn.addEventListener('click', () => {
-      if (!getKakaoUser()) kakaoLogin();
+      if (!getKakaoUser()) {
+        kakaoLogin();
+      } else {
+        const actions = document.getElementById('kakaoUserActions');
+        if (!actions) return;
+        const opening = !btn.classList.contains('is-expanded');
+        btn.classList.toggle('is-expanded', opening);
+        actions.style.display = opening ? 'flex' : 'none';
+      }
     });
   }
 
@@ -222,7 +230,7 @@ function updateLoginUI(user) {
     }
     if (loginText) loginText.textContent = user.nickname;
     if (userActions) {
-      userActions.style.display = 'flex';
+      userActions.style.display = 'none';
       if (String(user.id) === String(OWNER_KAKAO_ID) && !userActions.querySelector('#kakaoAdminBtn')) {
         const adminBtn = document.createElement('button');
         adminBtn.id = 'kakaoAdminBtn';
