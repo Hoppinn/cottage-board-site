@@ -1283,6 +1283,7 @@ body.recommend-page main{
 
 .game-scroll{
   max-width:720px;
+  margin:0 auto;
   display:flex;
   gap:10px;
   overflow-x:auto;
@@ -1290,7 +1291,6 @@ body.recommend-page main{
   scroll-snap-type:x proximity;
   scrollbar-width:none;
   padding:0 18px 18px;
-  margin:-6 -18px;
 }
 
 .game-scroll::-webkit-scrollbar{
@@ -2682,17 +2682,32 @@ body.sheet-open{
     line-height:1.6;
   }
 
+  /* 추천 섹션 PC 레이아웃 */
+  .recommend-section{
+    padding:12px clamp(24px,6vw,80px) 60px;
+  }
+
+  .recommend-header--photo{
+    margin:-12px clamp(-24px,-6vw,-80px) 20px;
+  }
+
+  .recommend-filter{
+    max-width:640px;
+  }
+
+  .game-scroll{
+    max-width:760px;
+    padding:0 0 18px;
+  }
+
   /* 추천 빈 박스 중앙정렬 */
   .recommend-empty{
     margin:10px auto;
-    max-width:500px;
+    max-width:480px;
   }
 
   .game-scroll:has(.recommend-empty){
-    display:flex !important;
-    justify-content:center;
-    margin:0 !important;
-    padding:0 18px 18px !important;
+    overflow:visible !important;
   }
 }
 
