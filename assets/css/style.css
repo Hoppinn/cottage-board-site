@@ -2726,16 +2726,10 @@ body.sheet-open{
   color:#3a3025;
   white-space:nowrap;
 }
-/* 인원 이모지 브라운 (바텀시트 + 게임카드 공통) */
-.sheet-player-icon,
-.player-emoji{
+/* 바텀시트 인원 이모지 브라운 */
+.sheet-player-icon{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
-}
-/* 게임카드 인원 배지 — 필터 블리드 방지 */
-.meta-player-badge{
-  background:#fff !important;
-  isolation:isolate;
 }
 
 .sheet-stats-dot{
