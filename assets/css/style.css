@@ -2914,7 +2914,7 @@ body.sheet-open{
     padding-right:var(--page-x);
   }
   .recommend-overlay-list{
-    grid-template-columns:repeat(auto-fill, minmax(110px,1fr));
+    grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
     padding-left:var(--page-x);
     padding-right:var(--page-x);
   }
