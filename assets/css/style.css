@@ -2889,20 +2889,20 @@ body.sheet-open{
     box-sizing:border-box;
   }
 
-  /* page-mini-hero: inner-page 패딩 벗어나 full-bleed + 둥근 모서리 제거 */
+  /* page-mini-hero: PC에서도 라운딩 유지 (inner-page 패딩 내에 위치) */
   .page-mini-hero{
-    margin-left:calc(-1 * var(--page-x));
-    margin-right:calc(-1 * var(--page-x));
-    border-radius:0;
-    height:240px;
+    margin-left:0;
+    margin-right:0;
+    border-radius:16px;
+    height:260px;
   }
   .page-mini-hero::after{
-    border-radius:0;
+    border-radius:16px;
   }
   .page-mini-hero--reviews::before,
   .page-mini-hero--location::before,
   .page-mini-hero--price::before{
-    border-radius:0;
+    border-radius:16px;
   }
 
   /* about-section: inner-page와 동일하게 --page-x로 960px 중앙 정렬 */
@@ -3907,7 +3907,9 @@ body.sheet-open{
 ========================= */
 .about-hero{
   background:linear-gradient(160deg,#2d4a33 0%,#4a7040 100%);
-  padding:calc(var(--header-total-h) + clamp(24px,6vw,40px)) var(--page-x) clamp(40px,10vw,64px);
+  margin:var(--header-total-h) 16px 0;
+  padding:clamp(28px,5vw,40px) 20px clamp(32px,8vw,52px);
+  border-radius:16px;
   text-align:center;
   color:#fff;
 }
@@ -5718,10 +5720,16 @@ body.sheet-open{
     border-radius:0;
   }
 
-  /* ── about 히어로 ── */
+  /* ── about 히어로: PC에서 960px 중앙 + 라운딩 ── */
   .about-hero{
-    padding-top:calc(var(--header-total-h) + clamp(40px,6vw,60px));
+    max-width:960px;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:20px;
+    padding-top:clamp(40px,6vw,60px);
     padding-bottom:clamp(56px,8vw,80px);
+    padding-left:48px;
+    padding-right:48px;
   }
   .about-hero h2{
     font-size:clamp(28px,3.6vw,46px);
