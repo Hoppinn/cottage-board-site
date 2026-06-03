@@ -5723,11 +5723,12 @@ body.sheet-open{
   /* ── about 히어로: PC에서 960px 중앙 + 라운딩 ── */
   .about-hero{
     max-width:960px;
+    margin-top:calc(var(--header-total-h) + 20px);
     margin-left:auto;
     margin-right:auto;
-    border-radius:20px;
-    padding-top:clamp(40px,6vw,60px);
-    padding-bottom:clamp(56px,8vw,80px);
+    border-radius:16px;
+    padding-top:clamp(36px,5vw,52px);
+    padding-bottom:clamp(44px,7vw,68px);
     padding-left:48px;
     padding-right:48px;
   }
