@@ -140,9 +140,17 @@ async function main() {
           ` | ${(result.origSize / 1024).toFixed(0)}KB → ${(result.newSize / 1024).toFixed(0)}KB`
         );
 
+        // anon 키는 UPDATE 불가 → DELETE 후 INSERT
+        const { error: delErr } = await db.storage.from(BUCKET).remove([storagePath]);
+        if (delErr) {
+          console.error(`  삭제 실패: ${delErr.message}`);
+          errors++;
+          continue;
+        }
+
         const { error: upErr } = await db.storage
           .from(BUCKET)
-          .upload(storagePath, result.outBuf, { contentType: "image/jpeg", upsert: true });
+          .upload(storagePath, result.outBuf, { contentType: "image/jpeg" });
 
         if (upErr) {
           console.error(`  업로드 실패: ${upErr.message}`);
