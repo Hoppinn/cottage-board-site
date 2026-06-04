@@ -494,13 +494,32 @@ window.escH = function(s) {
     return Math.floor(secs / 60); // DB는 total_minutes(분) 컬럼이므로 변환
   }
 
+  // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/beforeunload에서 호출
+  async function _syncTimeToDBNow(userId) {
+    if (!userId) return;
+    _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
+    const mins = _popAccumulatedMinutes(userId);
+    if (mins <= 0) return;
+    try {
+      const { data } = await db.from('profiles').select('total_minutes').eq('user_id', userId).maybeSingle();
+      const newTotal = (data?.total_minutes || 0) + mins;
+      const { error } = await db.from('profiles').update({
+        total_minutes: newTotal,
+        last_seen_at: new Date().toISOString(),
+      }).eq('user_id', userId);
+      if (!error) localStorage.removeItem(`cottage_time_sec_${userId}`);
+    } catch (_) {}
+  }
+
   if (typeof document !== 'undefined') {
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && _sessionUserId) _flushTime(_sessionUserId);
+      // 탭 숨김 시 DB에 즉시 반영 (async이므로 페이지 살아있는 동안 완료)
+      if (document.hidden && _sessionUserId) _syncTimeToDBNow(_sessionUserId);
       else _sessionStart = Date.now();
     });
     window.addEventListener('beforeunload', () => {
-      if (_sessionUserId) _flushTime(_sessionUserId);
+      // 페이지 종료 시 best-effort 반영 (완료 보장 불가, localStorage가 백업)
+      if (_sessionUserId) _syncTimeToDBNow(_sessionUserId);
     });
   }
 

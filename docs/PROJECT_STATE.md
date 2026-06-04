@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-04 (D-04, B-03 수정)
+최종 갱신: 2026-06-04 (B-06 수정)
 
 ---
 
@@ -63,7 +63,7 @@
 |----|------|------|
 | ~~B-04~~ | ~~game-reviews.html~~ | ~~참여자 자동완성이 수정폼에만 있고 등록폼에는 없음~~ → **수정 완료** |
 | B-05 | kakao-auth.js:35 | 프로필 사진이 localStorage에만 저장 → 다기기 접속 시 항상 카카오 기본 사진으로 표시 |
-| B-06 | supabase-client.js | 이용시간 DB 반영이 다음날 첫 방문 때만 됨 → 당일 시간 지연 반영, 재방문 없으면 누락 |
+| ~~B-06~~ | ~~supabase-client.js~~ | ~~이용시간 DB 반영 다음날 첫 방문 때만~~ → **_syncTimeToDBNow로 visibilitychange/beforeunload 즉시 반영 완료** |
 | B-07 | kakao-auth.js:32–35 | 방문 카운트가 기기별 독립 → 멀티기기 사용 시 중복 카운트 가능 |
 
 ### 하 (UX 불편)
@@ -152,7 +152,7 @@
 ### P2 — 기능 완성 (단기)
 
 - [x] **B-04** 등록폼 참여자 자동완성 — attachAc 공용화와 함께 해결 ✅ 완료
-- [ ] **B-06** 이용시간 DB 반영 타이밍 개선 — 당일 시간도 반영 (beforeunload 시 upsert or 분리)
+- [x] **B-06** 이용시간 당일 반영 — _syncTimeToDBNow, visibilitychange + beforeunload 즉시 DB 반영 ✅ 완료
 - [x] **B-08** 모바일 참여자 Enter 포커스 유지 — blur 시 re-focus ✅ 완료
 
 ### P3 — 중복 제거 (중기)
@@ -178,6 +178,7 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-04 | B-06: 이용시간 당일 반영 — _syncTimeToDBNow 추가, visibilitychange/beforeunload에서 즉시 DB 반영 |
 | 2026-06-04 | D-04: 수정폼 참여자 태그칩 통일 — initTagInput 공용화, 수정폼 적용 |
 | 2026-06-04 | B-03: 이용시간 초단위 누적 — cottage_time_sec_, DB 반영 시 분변환 |
 | 2026-06-04 | B-02: 기록 사진 개별 삭제 — 특정 URL만 제거 후 updateGamePlay, 렌더링 photo-item 래핑 |
