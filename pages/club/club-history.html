@@ -15,10 +15,10 @@
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
-    .history-photo-wrap { display: flex; flex-wrap: nowrap; gap: 6px; margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
-    .history-photo-item { position: relative; flex-shrink: 0; }
-    .history-photo { height: 80px; width: auto; border-radius: 6px; display: block; cursor: pointer; }
-    .history-photo-more { height: 80px; min-width: 52px; background: rgba(0,0,0,0.45); color: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+    .pr-rec-photo-wrap { display: flex; flex-wrap: nowrap; gap: 6px; margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
+    .pr-rec-photo-item { position: relative; flex-shrink: 0; }
+    .pr-rec-photo { height: 80px; width: auto; border-radius: 6px; display: block; cursor: pointer; }
+    .pr-rec-photo-more { height: 80px; min-width: 52px; background: rgba(0,0,0,0.45); color: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
     .history-tip { font-size: 12px; color: var(--muted, #888); background: var(--bg, #f5f0e8); border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
 
     /* 모임 섹션 */
@@ -330,6 +330,17 @@
       return [raw];
     }
 
+    function buildPhotoHtml(photoUrls, recordId, canDelPhoto) {
+      if (!photoUrls.length) return '';
+      const show = photoUrls.slice(0, 3);
+      const more = photoUrls.length - 3;
+      const allAttr = escAttr(JSON.stringify(photoUrls));
+      return `<div class="pr-rec-photo-wrap" data-urls="${allAttr}">
+        ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
+        ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
+      </div>`;
+    }
+
     // ── 렌더링 ────────────────────────────────────────────────────────────
 
     let allRecordsData = [];
@@ -427,9 +438,6 @@
                     ].filter(Boolean);
                     const isMine = currentUser && String(r.user_id) === String(currentUser.id);
                     const photos = prParsePhotoUrls(r.photo_url);
-                    const photoShow = photos.slice(0, 3);
-                    const photoMore = photos.length - 3;
-                    const photoAllAttr = escAttr(JSON.stringify(photos));
                     const recJson = escAttr(JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''}));
                     return `<div class="history-record-item" data-id="${r.id}" data-record='${recJson}'>
                       <div class="history-game-row">
@@ -440,7 +448,7 @@
                         </div>
                         ${isMine ? `<button class="history-edit-btn" type="button" title="수정">✏️</button>` : ''}
                       </div>
-                      ${photos.length ? `<div class="history-photo-wrap" data-urls="${photoAllAttr}">${photoShow.map((u,i)=>`<div class="history-photo-item"><img class="history-photo" src="${escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}${photoMore>0?`<div class="history-photo-more" data-idx="3">+${photoMore}장</div>`:''}</div>` : ''}
+                      ${buildPhotoHtml(photos, r.id, false)}
                     </div>`;
                   }).join('');
                 }
@@ -488,17 +496,17 @@
       });
 
       // ── 사진 썸네일 라이트박스 ────────────────────────────────────────────
-      root.querySelectorAll('.history-photo').forEach(img => {
+      root.querySelectorAll('.pr-rec-photo').forEach(img => {
         img.addEventListener('click', e => {
           e.stopPropagation();
-          const wrap = img.closest('.history-photo-wrap');
+          const wrap = img.closest('.pr-rec-photo-wrap');
           try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
         });
       });
-      root.querySelectorAll('.history-photo-more').forEach(el => {
+      root.querySelectorAll('.pr-rec-photo-more').forEach(el => {
         el.addEventListener('click', e => {
           e.stopPropagation();
-          const wrap = el.closest('.history-photo-wrap');
+          const wrap = el.closest('.pr-rec-photo-wrap');
           try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
         });
       });

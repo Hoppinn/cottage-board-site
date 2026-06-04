@@ -94,7 +94,7 @@
 | ~~D-05~~ | ~~`getDb()` vs `window.CottageDB`~~ | ~~직접 DB 쿼리 혼용~~ → **getAllPlayRecordsForHub 추가, getDb() 제거 완료** |
 | ~~D-06~~ | ~~`escH()` 함수~~ | ~~game-reviews.html / kakao-auth.js 각 독립 정의~~ → **supabase-client.js에 window.escH 전역 통합 완료** |
 | ~~D-07~~ | ~~`pie-photo-trigger` vs `pr-photo-trigger` CSS~~ | ~~동일 스타일 두 클래스로 분리~~ → **pr-photo-trigger 단일화 완료** |
-| D-08 | 사진 컴포넌트 | `buildPhotoHtml` (game-reviews.html) / club-history.html 인라인 생성 이원화 |
+| ~~D-08~~ | ~~사진 컴포넌트~~ | ~~`buildPhotoHtml` (game-reviews.html) / club-history.html 인라인 생성 이원화~~ → **buildPhotoHtml + pr-rec-photo-* 클래스로 통일 완료** |
 
 ---
 
@@ -166,7 +166,7 @@
 - [x] sitemap.xml / robots.txt 경로 현행화 ✅
 - [x] 빈 디렉토리(pages/cottage/, pages/store/) 삭제 ✅
 - [x] 죽은 CSS 일부 제거 (`.pr-session-group`, `.pr-rec-review-link`, `.rv-game`) ✅
-- [ ] **D-08** 사진 컴포넌트 공통화 — `buildPhotoHtml`을 club-history.html에도 공유
+- [x] **D-08** 사진 컴포넌트 공통화 — `buildPhotoHtml` + `pr-rec-photo-*` 클래스 통일 ✅
 - [ ] `matchRecommendPlayer` → `matchBestPlayers` rename (함수명이 역할과 불일치)
 - [ ] 기존 Supabase Storage 사진 일괄 리사이즈 — `game-system/tools/resize-existing-photos.js` 실행 대기
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
@@ -180,6 +180,7 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-05 | D-08: buildPhotoHtml + pr-rec-photo-* 클래스로 사진 컴포넌트 통일 (club-history.html) |
 | 2026-06-05 | 관리자 3버그 수정: B-10 이벤트명 불일치, B-11 _syncTimeToDBNow update→upsert, B-12 updateProfilePhoto upsert→update |
 | 2026-06-05 | 게임 필터 전면 개선: 전체게임 인원 1~9인+ 확장, bestPlayers 우선순위(BGG>XLSX) 복원, 머더미스터리 weight 예외, 추천 드롭다운 자동 닫힘 |
 | 2026-06-05 | 사진 UX 개선: 썸네일 전환(80px 가로 스크롤, +N장 배지), 업로드 리사이즈(1200px JPEG 0.85), 일괄 리사이즈 스크립트 추가 |
