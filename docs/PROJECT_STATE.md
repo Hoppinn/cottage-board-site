@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-04
+최종 갱신: 2026-06-04 (리팩토링 패치 반영)
 
 ---
 
@@ -25,7 +25,7 @@
 - [x] 단일 게임 플레이 기록 조회 (?game= 파라미터)
 - [x] 그룹명 자동완성 (등록폼)
 - [x] 게임명 자동완성 (등록폼, 수정폼)
-- [x] 참여자 이름 자동완성 (수정폼만)
+- [x] 참여자 이름 자동완성 (등록폼 + 수정폼)
 
 ### 게임 목록 / 바텀시트
 - [x] 전체 게임 목록 (필터: 인원, 난이도, 분위기, 키워드)
@@ -61,7 +61,7 @@
 
 | ID | 위치 | 설명 |
 |----|------|------|
-| B-04 | game-reviews.html | 참여자 자동완성이 수정폼에만 있고 등록폼에는 없음 |
+| ~~B-04~~ | ~~game-reviews.html~~ | ~~참여자 자동완성이 수정폼에만 있고 등록폼에는 없음~~ → **수정 완료** |
 | B-05 | kakao-auth.js:35 | 프로필 사진이 localStorage에만 저장 → 다기기 접속 시 항상 카카오 기본 사진으로 표시 |
 | B-06 | supabase-client.js | 이용시간 DB 반영이 다음날 첫 방문 때만 됨 → 당일 시간 지연 반영, 재방문 없으면 누락 |
 | B-07 | kakao-auth.js:32–35 | 방문 카운트가 기기별 독립 → 멀티기기 사용 시 중복 카운트 가능 |
@@ -79,12 +79,12 @@
 
 | ID | 항목 | 현황 |
 |----|------|------|
-| D-01 | 그룹명 자동완성 | 등록폼: 커스텀 IIFE (화살표키 포함, ~50줄) / 수정폼: `attachAc` (화살표키 없음, ~25줄) |
-| D-02 | 게임명 자동완성 | 등록폼: 커스텀 acRender/acSelect/acFocusedIdx (~60줄) / 수정폼: `attachAc` (~25줄) |
-| D-03 | 사진 업로드 로직 | 등록폼: `addPhotoItem` + `_photoFiles[]` / 수정폼: `addPieNewItem` + `pieNewFiles[]` — 동일 패턴 2벌 |
+| ~~D-01~~ | ~~그룹명 자동완성~~ | ~~등록폼 IIFE / 수정폼 attachAc 이원화~~ → **공용 attachAc로 통합 완료** |
+| ~~D-02~~ | ~~게임명 자동완성~~ | ~~등록폼 커스텀 / 수정폼 attachAc 이원화~~ → **공용 attachAc로 통합 완료** |
+| ~~D-03~~ | ~~사진 업로드 로직~~ | ~~addPhotoItem / addPieNewItem 2벌~~ → **buildPhotoItemAdder 공통 함수로 통합 완료** |
 | D-04 | 참여자 입력 방식 | 등록폼: `initTagInput` (태그칩 방식) / 수정폼: 일반 `<input>` (쉼표 구분 텍스트) |
 | D-05 | `getDb()` vs `window.CottageDB` | 직접 DB 쿼리(`getDb()`)와 CottageDB 래퍼 혼용 — `review_text` 같은 추가 컬럼이 필요한 경우 직접 쿼리 사용 |
-| D-06 | `escH()` 함수 | `game-reviews.html` 내부와 `kakao-auth.js` 내부에 각각 독립 정의 |
+| ~~D-06~~ | ~~`escH()` 함수~~ | ~~game-reviews.html / kakao-auth.js 각 독립 정의~~ → **supabase-client.js에 window.escH 전역 통합 완료** |
 | D-07 | `pie-photo-trigger` vs `pr-photo-trigger` CSS | 동일한 스타일을 두 클래스로 분리 |
 
 ---
@@ -151,16 +151,16 @@
 
 ### P2 — 기능 완성 (단기)
 
-- [ ] **B-04** 등록폼 참여자 자동완성 연결 (`attachAc` 공용화 후 `initTagInput`에 연결)
+- [x] **B-04** 등록폼 참여자 자동완성 — attachAc 공용화와 함께 해결 ✅ 완료
 - [ ] **B-06** 이용시간 DB 반영 타이밍 개선 — 당일 시간도 반영 (beforeunload 시 upsert or 분리)
 - [ ] **B-08** 모바일 참여자 Enter 포커스 유지 — `blur` 이벤트 처리 또는 `inputmode` 조정
 
 ### P3 — 중복 제거 (중기)
 
-- [ ] **D-01/D-02** `attachAc` 공용 함수로 외부 스코프 이동 — 등록폼/수정폼 공유
-- [ ] **D-03** 사진 업로드 로직 공통 함수 추출 (`addPhotoItem` / `addPieNewItem` 통합)
+- [x] **D-01/D-02** `attachAc` 공용 함수로 외부 스코프 이동 + 등록폼/수정폼 공유 ✅ 완료
+- [x] **D-03** `buildPhotoItemAdder` 공통 함수로 통합 ✅ 완료
 - [ ] **D-04** 수정폼 참여자 입력을 태그칩 방식으로 통일
-- [ ] **D-06** `escH` 공용 헬퍼로 외부 스코프 이동
+- [x] **D-06** `escH` → `window.escH` 전역 통합 (supabase-client.js) ✅ 완료
 
 ### P4 — 선택 개선 (장기)
 
@@ -178,6 +178,7 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-04 | D-06/D-01/D-02/D-03 리팩토링: escH 전역화, attachAc 공용화, buildPhotoItemAdder 통합, B-04(등록폼 참여자 AC) 해결 |
 | 2026-06-04 | B-01 수정: 이용시간 localStorage 삭제를 DB upsert 성공 후로 이동 |
 | 2026-06-04 | 사진 다중 업로드 + JSON 배열 저장 + parsePhotoUrls 헬퍼 추가 |
 | 2026-06-04 | 수정폼 사진 다중 지원 (기존 개별 삭제 + 신규 다중 추가) |

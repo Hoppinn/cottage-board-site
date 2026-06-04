@@ -327,8 +327,6 @@ async function openProfilePanel() {
     return gameId;
   }
 
-  function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
   const PREVIEW = 5;
 
   function buildActivityList(items, renderFn) {

@@ -325,10 +325,6 @@
       return found ? String(found.bggId) : name;
     }
 
-    function escH(s) {
-      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-
     function formatDate(iso) {
       return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
     }
@@ -368,6 +364,89 @@
         try { return JSON.parse(raw).filter(Boolean); } catch (_) {}
       }
       return [raw];
+    }
+
+    // 공용 자동완성 — listRef: 기존 .pr-autocomplete-list 엘리먼트 또는 부모 컨테이너
+    // onSelect: 항목 선택 시 input.value 대신 실행할 콜백 (태그칩 등)
+    function attachAc(input, getSuggestions, onSelect, listRef) {
+      let list, focusedIdx = -1;
+      if (listRef && listRef.classList.contains('pr-autocomplete-list')) {
+        list = listRef;
+      } else if (listRef) {
+        list = document.createElement('div');
+        list.className = 'pr-autocomplete-list';
+        listRef.style.position = 'relative';
+        listRef.appendChild(list);
+      } else {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position:relative';
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(input);
+        list = document.createElement('div');
+        list.className = 'pr-autocomplete-list';
+        wrap.appendChild(list);
+      }
+      function render(matches) {
+        list.innerHTML = ''; focusedIdx = -1;
+        if (!matches.length) { list.classList.remove('is-open'); return; }
+        matches.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'pr-autocomplete-item'; item.textContent = s;
+          item.addEventListener('mousedown', e => {
+            e.preventDefault();
+            if (onSelect) { onSelect(s); } else { input.value = s; }
+            list.classList.remove('is-open');
+          });
+          list.appendChild(item);
+        });
+        list.classList.add('is-open');
+      }
+      function updateFocus() {
+        const items = [...list.querySelectorAll('.pr-autocomplete-item')];
+        items.forEach((el, i) => el.classList.toggle('is-focused', i === focusedIdx));
+        if (focusedIdx >= 0 && items[focusedIdx]) items[focusedIdx].scrollIntoView({ block: 'nearest' });
+      }
+      input.addEventListener('input', () => {
+        const q = input.value.trim(), all = getSuggestions();
+        render(q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 8));
+      });
+      input.addEventListener('focus', () => { if (!input.value.trim()) render(getSuggestions().slice(0, 8)); });
+      input.addEventListener('keydown', e => {
+        if (!list.classList.contains('is-open')) return;
+        const items = [...list.querySelectorAll('.pr-autocomplete-item')];
+        if (e.key === 'ArrowDown') { e.preventDefault(); focusedIdx = Math.min(focusedIdx + 1, items.length - 1); updateFocus(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); focusedIdx = Math.max(focusedIdx - 1, 0); updateFocus(); }
+        else if (e.key === 'Enter' && focusedIdx >= 0) {
+          e.preventDefault();
+          const s = items[focusedIdx].textContent;
+          if (onSelect) { onSelect(s); } else { input.value = s; }
+          list.classList.remove('is-open');
+        } else if (e.key === 'Escape') { list.classList.remove('is-open'); }
+      });
+      input.addEventListener('blur', () => setTimeout(() => list.classList.remove('is-open'), 150));
+    }
+
+    // 공용 사진 그리드 아이템 추가 함수 — maxCount 미지정 시 제한 없음
+    function buildPhotoItemAdder(grid, files, maxCount) {
+      return function(file) {
+        if (maxCount && files.length >= maxCount) { alert(`사진은 최대 ${maxCount}장까지 추가할 수 있어요.`); return; }
+        files.push(file);
+        const item = document.createElement('div');
+        item.className = 'pr-photo-item';
+        item.dataset.idx = String(files.length - 1);
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        const del = document.createElement('button');
+        del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
+        del.addEventListener('click', () => {
+          const i = parseInt(item.dataset.idx);
+          files.splice(i, 1);
+          item.remove();
+          grid.querySelectorAll('.pr-photo-item').forEach((el, j) => el.dataset.idx = j);
+        });
+        item.append(img, del);
+        grid.appendChild(item);
+      };
     }
 
     function showToast(msg) {
@@ -519,71 +598,13 @@
           <div class="pr-photo-grid"></div>
           <textarea class="pr-review-ta prReview" placeholder="후기 (선택)" rows="2"></textarea>`;
 
-        // autocomplete
-        const nameInput = div.querySelector('.prGameName');
-        const acList = div.querySelector('.pr-autocomplete-list');
-        let acFocusedIdx = -1;
-
-        function acRender(matches) {
-          acList.innerHTML = '';
-          acFocusedIdx = -1;
-          if (!matches.length) { acList.classList.remove('is-open'); return; }
-          matches.forEach(g => {
-            const label = g.display || g.titleKo || g.titleEn || '';
-            const item = document.createElement('div');
-            item.className = 'pr-autocomplete-item';
-            item.textContent = label;
-            item.dataset.label = label;
-            item.addEventListener('mousedown', e => { e.preventDefault(); acSelect(label); });
-            acList.appendChild(item);
-          });
-          acList.classList.add('is-open');
-        }
-
-        function acSelect(label) {
-          nameInput.value = label;
-          acList.classList.remove('is-open');
-          acFocusedIdx = -1;
-        }
-
-        function acUpdateFocus() {
-          const items = [...acList.querySelectorAll('.pr-autocomplete-item')];
-          items.forEach((item, i) => item.classList.toggle('is-focused', i === acFocusedIdx));
-          if (acFocusedIdx >= 0 && items[acFocusedIdx]) items[acFocusedIdx].scrollIntoView({ block: 'nearest' });
-        }
-
-        nameInput.addEventListener('input', () => {
-          const q = nameInput.value.trim();
-          if (!q || !window.COTTAGE_GAMES) { acList.classList.remove('is-open'); return; }
-          const matches = window.COTTAGE_GAMES
-            .filter(g => hangulMatch(g.display || g.titleKo || g.titleEn || '', q))
-            .slice(0, 12);
-          acRender(matches);
-        });
-
-        nameInput.addEventListener('keydown', e => {
-          if (!acList.classList.contains('is-open')) return;
-          const items = [...acList.querySelectorAll('.pr-autocomplete-item')];
-          if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            acFocusedIdx = Math.min(acFocusedIdx + 1, items.length - 1);
-            acUpdateFocus();
-          } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            acFocusedIdx = Math.max(acFocusedIdx - 1, 0);
-            acUpdateFocus();
-          } else if (e.key === 'Enter' && acFocusedIdx >= 0) {
-            e.preventDefault();
-            acSelect(items[acFocusedIdx].dataset.label);
-          } else if (e.key === 'Escape') {
-            acList.classList.remove('is-open');
-            acFocusedIdx = -1;
-          }
-        });
-
-        nameInput.addEventListener('blur', () => {
-          setTimeout(() => acList.classList.remove('is-open'), 150);
-        });
+        // 게임명 자동완성
+        attachAc(
+          div.querySelector('.prGameName'),
+          () => (window.COTTAGE_GAMES || []).map(g => g.display || g.titleKo || g.titleEn || '').filter(Boolean),
+          null,
+          div.querySelector('.pr-autocomplete-list')
+        );
 
         div.querySelectorAll('.pr-count-btn').forEach(btn => {
           btn.addEventListener('click', () => {
@@ -595,28 +616,8 @@
 
         const photoInput = div.querySelector('.prPhoto');
         const photoGrid  = div.querySelector('.pr-photo-grid');
-        div._photoFiles  = []; // 선택된 File 객체 배열
-
-        function addPhotoItem(file) {
-          if (div._photoFiles.length >= 5) { alert('사진은 최대 5장까지 추가할 수 있어요.'); return; }
-          const idx = div._photoFiles.length;
-          div._photoFiles.push(file);
-          const item = document.createElement('div');
-          item.className = 'pr-photo-item';
-          item.dataset.idx = idx;
-          const img = document.createElement('img');
-          img.src = URL.createObjectURL(file);
-          const del = document.createElement('button');
-          del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
-          del.addEventListener('click', () => {
-            const i = parseInt(item.dataset.idx);
-            div._photoFiles.splice(i, 1);
-            item.remove();
-            photoGrid.querySelectorAll('.pr-photo-item').forEach((el, j) => el.dataset.idx = j);
-          });
-          item.append(img, del);
-          photoGrid.appendChild(item);
-        }
+        div._photoFiles  = [];
+        const addPhotoItem = buildPhotoItemAdder(photoGrid, div._photoFiles, 5);
 
         photoInput.addEventListener('change', () => {
           Array.from(photoInput.files).forEach(addPhotoItem);
@@ -624,6 +625,22 @@
         });
 
         initTagInput(div.querySelector('.prNamesWrap'), div.querySelector('.prNames'));
+
+        // 참여자 이름 자동완성 — 콤마 구분 조합 선택 시 개별 칩으로 분리
+        attachAc(
+          div.querySelector('.tag-text-input'),
+          () => window._prPlayerNames || [],
+          s => {
+            const ti = div.querySelector('.tag-text-input');
+            s.split(',').forEach(name => {
+              name = name.trim();
+              if (!name) return;
+              ti.value = name;
+              ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+            });
+          },
+          div.querySelector('.prNamesWrap')
+        );
 
         div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
         document.getElementById('prGameRows').appendChild(div);
@@ -667,56 +684,7 @@
       }
 
       // 그룹명 자동완성
-      (function () {
-        const gInput = document.getElementById('prGroup');
-        const gList = document.getElementById('prGroupAcList');
-        let gFocused = -1;
-
-        function gRender(matches) {
-          gList.innerHTML = '';
-          gFocused = -1;
-          if (!matches.length) { gList.classList.remove('is-open'); return; }
-          matches.forEach(label => {
-            const item = document.createElement('div');
-            item.className = 'pr-autocomplete-item';
-            item.textContent = label;
-            item.addEventListener('mousedown', e => { e.preventDefault(); gInput.value = label; gList.classList.remove('is-open'); });
-            gList.appendChild(item);
-          });
-          gList.classList.add('is-open');
-        }
-
-        function gUpdateFocus() {
-          const items = [...gList.querySelectorAll('.pr-autocomplete-item')];
-          items.forEach((item, i) => item.classList.toggle('is-focused', i === gFocused));
-          if (gFocused >= 0 && items[gFocused]) items[gFocused].scrollIntoView({ block: 'nearest' });
-        }
-
-        gInput.addEventListener('input', () => {
-          const q = gInput.value.trim();
-          const matches = q
-            ? groups.filter(g => hangulMatch(g, q))
-            : groups.slice(0, 8);
-          gRender(matches);
-        });
-
-        gInput.addEventListener('focus', () => {
-          if (!gInput.value.trim()) gRender(groups.slice(0, 8));
-        });
-
-        gInput.addEventListener('keydown', e => {
-          if (!gList.classList.contains('is-open')) return;
-          const items = [...gList.querySelectorAll('.pr-autocomplete-item')];
-          if (e.key === 'ArrowDown') { e.preventDefault(); gFocused = Math.min(gFocused + 1, items.length - 1); gUpdateFocus(); }
-          else if (e.key === 'ArrowUp') { e.preventDefault(); gFocused = Math.max(gFocused - 1, 0); gUpdateFocus(); }
-          else if (e.key === 'Enter' && gFocused >= 0) { e.preventDefault(); gInput.value = items[gFocused].textContent; gList.classList.remove('is-open'); }
-          else if (e.key === 'Escape') { gList.classList.remove('is-open'); }
-        });
-
-        gInput.addEventListener('blur', () => {
-          setTimeout(() => gList.classList.remove('is-open'), 150);
-        });
-      })();
+      attachAc(document.getElementById('prGroup'), () => window._prGroups || [], null, document.getElementById('prGroupAcList'));
 
       addRow(false);
 
@@ -921,33 +889,6 @@
             </div>`;
           row.querySelector('.pr-rec-main').appendChild(form);
 
-          // 자동완성 헬퍼
-          function attachAc(input, getSuggestions) {
-            const wrap = document.createElement('div');
-            wrap.style.cssText = 'position:relative';
-            input.parentNode.insertBefore(wrap, input);
-            wrap.appendChild(input);
-            const list = document.createElement('div');
-            list.className = 'pr-autocomplete-list';
-            wrap.appendChild(list);
-            input.addEventListener('input', () => {
-              const q = input.value.trim();
-              const all = getSuggestions();
-              const matches = q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 6);
-              list.innerHTML = '';
-              if (!matches.length) { list.classList.remove('is-open'); return; }
-              matches.forEach(s => {
-                const item = document.createElement('div');
-                item.className = 'pr-autocomplete-item';
-                item.textContent = s;
-                item.addEventListener('mousedown', e => { e.preventDefault(); input.value = s; list.classList.remove('is-open'); });
-                list.appendChild(item);
-              });
-              list.classList.add('is-open');
-            });
-            input.addEventListener('blur', () => setTimeout(() => list.classList.remove('is-open'), 150));
-          }
-
           // 게임명 자동완성 (COTTAGE_GAMES display 목록)
           attachAc(form.querySelector('.pie-game'), () =>
             (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean)
@@ -969,25 +910,7 @@
           const pieNewGrid = form.querySelector('.pie-new-grid');
           const pieNewFiles = [];
 
-          function addPieNewItem(file) {
-            const idx = pieNewFiles.length;
-            pieNewFiles.push(file);
-            const item = document.createElement('div');
-            item.className = 'pr-photo-item';
-            item.dataset.idx = String(idx);
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            const del = document.createElement('button');
-            del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
-            del.addEventListener('click', () => {
-              const i = parseInt(item.dataset.idx);
-              pieNewFiles.splice(i, 1);
-              item.remove();
-              pieNewGrid.querySelectorAll('.pr-photo-item').forEach((el, j) => el.dataset.idx = j);
-            });
-            item.append(img, del);
-            pieNewGrid.appendChild(item);
-          }
+          const addPieNewItem = buildPhotoItemAdder(pieNewGrid, pieNewFiles);
 
           if (piePhotoFile) {
             piePhotoFile.addEventListener('change', () => {
