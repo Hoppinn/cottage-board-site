@@ -486,6 +486,11 @@ create policy "anon_update_profiles"
   to anon
   using (true);
 
+-- ── 마이그레이션: profiles.photo_url, game_ratings.user_id 추가 ────
+alter table public.profiles add column if not exists photo_url text;
+alter table public.game_ratings add column if not exists user_id text;
+create index if not exists game_ratings_user_id_idx on public.game_ratings (user_id);
+
 
 -- ── game_reviews (게임 후기) ──────────────────────────────
 create table if not exists public.game_reviews (

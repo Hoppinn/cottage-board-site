@@ -65,10 +65,30 @@ window.escH = function(s) {
 
   async function submitRating(gameId, rating) {
     const storageKey = `cottage_rated_${gameId}`;
-    const existing = localStorage.getItem(storageKey);
-    if (existing) {
-      return { alreadyRated: true, myRating: Number(existing) };
+    const userId = window.getKakaoUser?.()?.id;
+
+    if (userId) {
+      // 로그인 사용자: DB 기반 중복 확인
+      const existing = await getMyRating(gameId);
+      if (existing !== null) return { alreadyRated: true, myRating: existing };
+      try {
+        const { error } = await db.from("game_ratings").insert({
+          game_id: gameId,
+          rating: Number(rating),
+          user_id: String(userId),
+          session_key: getSessionKey(),
+        });
+        if (!error) {
+          localStorage.setItem(storageKey, String(rating));
+          return { success: true };
+        }
+        return { error };
+      } catch (e) { return { error: e }; }
     }
+
+    // 비로그인: localStorage 기반 중복 확인
+    const existing = localStorage.getItem(storageKey);
+    if (existing) return { alreadyRated: true, myRating: Number(existing) };
     try {
       const { error } = await db.from("game_ratings").insert({
         game_id: gameId,
@@ -80,14 +100,23 @@ window.escH = function(s) {
         return { success: true };
       }
       return { error };
-    } catch (e) {
-      return { error: e };
-    }
+    } catch (e) { return { error: e }; }
   }
 
-  // ── 내 별점 확인 (로컬스토리지) ────────────────────────
+  // ── 내 별점 확인 — 로그인 시 DB, 비로그인 시 localStorage ──
 
-  function getMyRating(gameId) {
+  async function getMyRating(gameId) {
+    const userId = window.getKakaoUser?.()?.id;
+    if (userId) {
+      try {
+        const { data } = await db.from("game_ratings")
+          .select("rating")
+          .eq("game_id", gameId)
+          .eq("user_id", String(userId))
+          .maybeSingle();
+        if (data?.rating != null) return Number(data.rating);
+      } catch (_) {}
+    }
     const stored = localStorage.getItem(`cottage_rated_${gameId}`);
     return stored ? Number(stored) : null;
   }
@@ -551,6 +580,13 @@ window.escH = function(s) {
     } catch (_) {}
   }
 
+  async function updateProfilePhoto(userId, photoUrl) {
+    if (!userId) return;
+    try {
+      await db.from('profiles').update({ photo_url: photoUrl || null }).eq('user_id', userId);
+    } catch (_) {}
+  }
+
   async function getAllProfiles() {
     try {
       const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
@@ -683,6 +719,7 @@ window.escH = function(s) {
     unbanUser,
     deletePlayPhoto,
     isUserBanned,
+    updateProfilePhoto,
   };
 
   async function getGameReviews(gameId) {

@@ -167,6 +167,7 @@ function promptProfileImageChange() {
     localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
     updateLoginUI(user);
     modal.remove();
+    window.CottageDB?.updateProfilePhoto?.(String(user.id), imgSrc).catch(() => {});
   }
 
   modal.querySelector('#photoFileInput').addEventListener('change', e => {
