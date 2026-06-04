@@ -1897,10 +1897,10 @@ async function initCottageRatingWidget(gameKey) {
 
   window.CottageDB.trackView(gameKey);
 
-  const [ratingData] = await Promise.all([
+  const [ratingData, myRating] = await Promise.all([
     window.CottageDB.getGameRating(gameKey),
+    window.CottageDB.getMyRating(gameKey),
   ]);
-  const myRating = window.CottageDB.getMyRating(gameKey);
 
   renderRatingWidget(widget, gameKey, ratingData, myRating);
 }
