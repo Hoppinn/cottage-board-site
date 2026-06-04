@@ -910,10 +910,11 @@
             <label style="font-size:11px;color:var(--muted)">후기</label>
             <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
             <label style="font-size:11px;color:var(--muted)">사진</label>
-            ${rec.photo ? `<img class="pie-photo-cur" src="${escH(parsePhotoUrls(rec.photo)[0] || '')}" style="max-width:100%;max-height:100px;border-radius:7px;object-fit:cover;display:block">
-            <label style="font-size:11px;display:flex;align-items:center;gap:4px;cursor:pointer;color:#c0392b"><input type="checkbox" class="pie-photo-del"> 기존 사진 삭제</label>` : ''}
-            <label class="pr-photo-trigger pie-photo-trigger">📷 ${rec.photo ? '다른 사진으로 교체' : '사진 추가 (선택)'}<input type="file" class="pie-photo-file" accept="image/*" style="display:none"></label>
-            <img class="pie-photo-preview" style="max-width:100%;max-height:100px;border-radius:7px;margin-top:4px;display:none">
+            <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
+              ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
+            </div>
+            <div class="pr-photo-grid pie-new-grid"></div>
+            <label class="pr-photo-trigger pie-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
             <div class="pr-inline-edit-actions">
               <button class="pr-inline-cancel" type="button">취소</button>
               <button class="pr-inline-save" type="button">저장</button>
@@ -958,13 +959,40 @@
           // 참여자 이름 자동완성 — 항상 최신 window._prPlayerNames 참조
           attachAc(form.querySelector('.pie-names'), () => window._prPlayerNames || []);
 
+          // 기존 사진 개별 삭제
+          form.querySelectorAll('.pie-existing-del').forEach(btn => {
+            btn.addEventListener('click', () => btn.closest('.pie-existing-item').remove());
+          });
+
+          // 새 사진 추가 (다중)
           const piePhotoFile = form.querySelector('.pie-photo-file');
-          const piePhotoPreview = form.querySelector('.pie-photo-preview');
+          const pieNewGrid = form.querySelector('.pie-new-grid');
+          const pieNewFiles = [];
+
+          function addPieNewItem(file) {
+            const idx = pieNewFiles.length;
+            pieNewFiles.push(file);
+            const item = document.createElement('div');
+            item.className = 'pr-photo-item';
+            item.dataset.idx = String(idx);
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            const del = document.createElement('button');
+            del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
+            del.addEventListener('click', () => {
+              const i = parseInt(item.dataset.idx);
+              pieNewFiles.splice(i, 1);
+              item.remove();
+              pieNewGrid.querySelectorAll('.pr-photo-item').forEach((el, j) => el.dataset.idx = j);
+            });
+            item.append(img, del);
+            pieNewGrid.appendChild(item);
+          }
+
           if (piePhotoFile) {
             piePhotoFile.addEventListener('change', () => {
-              const f = piePhotoFile.files[0];
-              if (f) { piePhotoPreview.src = URL.createObjectURL(f); piePhotoPreview.style.display = 'block'; }
-              else piePhotoPreview.style.display = 'none';
+              Array.from(piePhotoFile.files).forEach(addPieNewItem);
+              piePhotoFile.value = '';
             });
           }
 
@@ -980,17 +1008,20 @@
               const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
               newGameId = found ? found.id : gameDisplayInput;
             }
-            // 사진 처리
-            let photoUrlUpd = undefined; // undefined = 변경 안 함
-            const delChk = form.querySelector('.pie-photo-del');
-            const newPhotoFile = form.querySelector('.pie-photo-file')?.files[0];
-            if (newPhotoFile) {
-              const uploaded = await window.CottageDB.uploadPlayPhoto(newPhotoFile, user.id);
-              if (uploaded) photoUrlUpd = uploaded;
-              else { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
-            } else if (delChk?.checked) {
-              photoUrlUpd = '';
+            // 사진 처리 — 남은 기존 URL + 새 업로드 URL 합산
+            const remainingUrls = [...form.querySelectorAll('.pie-existing-item')].map(el => el.dataset.url).filter(Boolean);
+            const uploadedUrls = [];
+            let uploadErr = false;
+            for (const pf of pieNewFiles) {
+              const url = await window.CottageDB.uploadPlayPhoto(pf, user.id);
+              if (url) uploadedUrls.push(url);
+              else uploadErr = true;
             }
+            if (uploadErr) { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
+            const allPhotoUrls = [...remainingUrls, ...uploadedUrls];
+            let photoUrlUpd = null;
+            if (allPhotoUrls.length === 1) photoUrlUpd = allPhotoUrls[0];
+            else if (allPhotoUrls.length > 1) photoUrlUpd = JSON.stringify(allPhotoUrls);
 
             const updFields = {
               player_names: form.querySelector('.pie-names').value.trim() || null,
@@ -1001,7 +1032,7 @@
               played_at: form.querySelector('.pie-date').value || null,
               review_text: form.querySelector('.pie-review').value.trim() || null,
               ...(newGameId ? { game_id: newGameId } : {}),
-              ...(photoUrlUpd !== undefined ? { photo_url: photoUrlUpd } : {}),
+              photo_url: photoUrlUpd,
             };
             const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, updFields);
             if (!res?.error) {
