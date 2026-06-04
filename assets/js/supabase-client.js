@@ -556,12 +556,12 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     if (mins <= 0) return;
     try {
       const { data } = await db.from('profiles').select('total_minutes').eq('user_id', userId).maybeSingle();
-      const newTotal = (data?.total_minutes || 0) + mins;
-      const { error } = await db.from('profiles').upsert({
-        user_id: userId,
+      if (!data) return; // row 없으면 localStorage 유지 — upsertProfile 실행 시 처리
+      const newTotal = (data.total_minutes || 0) + mins;
+      const { error } = await db.from('profiles').update({
         total_minutes: newTotal,
         last_seen_at: new Date().toISOString(),
-      }, { onConflict: 'user_id' });
+      }).eq('user_id', userId);
       if (!error) localStorage.removeItem(`cottage_time_sec_${userId}`);
     } catch (_) {}
   }
