@@ -2556,6 +2556,7 @@ if(recommendFilter){
   recommendFilter.addEventListener(
     'click',
     (event)=>{
+      // 헤더 토글 버튼
       const toggleButton =
         event.target.closest('[data-toggle-filter]');
 
@@ -2571,22 +2572,44 @@ if(recommendFilter){
       }
 
       const optionButton =
-  event.target.closest('[data-inline-type]');
+        event.target.closest('[data-inline-type]');
 
-if(!optionButton){
-  return;
-}
+      if(!optionButton){ return; }
 
-const type =
-  optionButton.dataset.inlineType;
+      const type  = optionButton.dataset.inlineType;
+      const value = optionButton.dataset.inlineValue || "";
 
-const value =
-  optionButton.dataset.inlineValue || "";
+      // 재빌드 전 열린 step 저장
+      const openGroups = new Set();
+      recommendFilter.querySelectorAll('.recommend-step.is-open').forEach(s => {
+        openGroups.add(s.dataset.filterGroup);
+      });
 
-recommendState[type] = value;
+      // 인원 step 열림/닫힘 제어
+      if(type === 'players'){
+        const wasGroupMode = ['group','5','6','7','8','9+'].includes(recommendState.players);
+        if(value === 'group'){
+          openGroups.add('players');       // 단체 클릭 → 유지 (서브버튼 표시)
+        } else if(['5','6','7','8','9+'].includes(value)){
+          openGroups.delete('players');    // 서브버튼 선택 → 닫힘
+        } else if(value === '' && wasGroupMode){
+          openGroups.add('players');       // 뒤로 클릭 → 유지 (기본 버튼 복원)
+        } else {
+          openGroups.delete('players');    // 1인/2인/3인/4인/상관없음 → 닫힘
+        }
+      }
 
-updateRecommendFilterText();
-renderGameCards();
+      recommendState[type] = value;
+      updateRecommendFilterText();
+
+      // is-open 상태 복원
+      recommendFilter.querySelectorAll('.recommend-step').forEach(s => {
+        if(openGroups.has(s.dataset.filterGroup)){
+          s.classList.add('is-open');
+        }
+      });
+
+      renderGameCards();
     }
   );
 }
