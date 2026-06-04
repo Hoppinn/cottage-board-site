@@ -9,7 +9,7 @@
   <meta property="og:title" content="모임 기록 & 사진 | 코티지보드">
   <meta property="og:description" content="코티지보드 동호회 모임 기록과 사진. 함께 플레이한 게임들의 기억을 남겨요.">
   <meta property="og:image" content="https://cottageboard.com/assets/images/main/og-image.jpg">
-  <meta property="og:url" content="https://cottageboard.com/pages/cottage/club-history.html">
+  <meta property="og:url" content="https://cottageboard.com/pages/club/club-history.html">
   <meta property="og:locale" content="ko_KR">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="../../assets/css/style.css">
@@ -111,16 +111,16 @@
         <button class="menu-group-header" type="button">게임 찾기 &amp; 기록 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../../index.html#recommend">추천 게임 찾기</a>
-          <a href="../owned-games.html">전체 게임 보기</a>
-          <a href="../store/game-location.html">게임 위치</a>
-          <a href="./game-reviews.html">플레이 기록</a>
+          <a href="../game/owned-games.html">전체 게임 보기</a>
+          <a href="../game/game-location.html">게임 위치</a>
+          <a href="../game/game-reviews.html">플레이 기록</a>
         </div>
       </div>
       <div class="menu-group">
         <button class="menu-group-header" type="button">코티지보드 소개 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
-          <a href="./about.html">소개</a>
-          <a href="../store/price-rules.html">가격 &amp; 규칙</a>
+          <a href="../info/about.html">소개</a>
+          <a href="../info/price-rules.html">가격 &amp; 규칙</a>
         </div>
       </div>
       <div class="menu-group">
@@ -131,7 +131,7 @@
           <a href="./club-history.html">모임 기록 &amp; 사진</a>
         </div>
       </div>
-      <a href="../store/requests.html">요청하기</a>
+      <a href="../admin/requests.html">요청하기</a>
       <div class="menu-login-area">
         <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
           <img id="kakaoProfileImg" src="" alt="" style="display:none">
@@ -348,7 +348,7 @@
       const records = await window.CottageDB.getAllPlayRecordsForHistory();
       allRecordsData = records;
 
-      const tipHtml = `<div class="history-tip">💡 <span><a href="./game-reviews.html" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
+      const tipHtml = `<div class="history-tip">💡 <span><a href="../game/game-reviews.html" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
 
       if (!records.length) {
         root.innerHTML = tipHtml + '<p class="history-empty">아직 모임 기록이 없습니다.</p>';
@@ -443,7 +443,7 @@
           </div>`;
         }
 
-        html += `<a class="history-cross-link" href="./game-reviews.html">🎲 전체 플레이 기록 보기 →</a>`;
+        html += `<a class="history-cross-link" href="../game/game-reviews.html">🎲 전체 플레이 기록 보기 →</a>`;
         html += `</div>`;
       }
 

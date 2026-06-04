@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>게임 위치 | 코티지보드</title>
+  <meta name="description" content="코티지보드 700여 종 게임의 위치 안내. 원하는 게임을 빠르게 찾아보세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="게임 위치 | 코티지보드">
+  <meta property="og:description" content="코티지보드 700여 종 게임의 위치 안내. 원하는 게임을 빠르게 찾아보세요.">
+  <meta property="og:image" content="https://cottageboard.com/assets/images/main/og-image.jpg">
+  <meta property="og:url" content="https://cottageboard.com/pages/game/game-location.html">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+
+    <a class="header-center" href="../../index.html">
+      오래 머무르고 싶은, 보드게임 공간
+    </a>
+
+    <div class="header-actions">
+      <button
+        class="header-search"
+        id="headerSearchButton"
+        type="button"
+        aria-label="게임 검색 열기"
+      ><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
+      <button
+        class="menu-toggle"
+        id="menuToggle"
+        type="button"
+        aria-label="메뉴 열기"
+      >☰</button>
+    </div>
+
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">
+          게임 찾기 &amp; 기록 <span class="menu-group-arrow">›</span>
+        </button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../game/owned-games.html">전체 게임 보기</a>
+          <a href="./game-location.html">게임 위치</a>
+          <a href="../game/game-reviews.html">플레이 기록</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">
+          코티지보드 소개 <span class="menu-group-arrow">›</span>
+        </button>
+        <div class="menu-group-body">
+          <a href="../info/about.html">소개</a>
+          <a href="../info/price-rules.html">가격 &amp; 규칙</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">
+          동호회 <span class="menu-group-arrow">›</span>
+        </button>
+        <div class="menu-group-body">
+          <a href="../club/club.html">소개</a>
+          <a href="../club/club-schedule.html">일정 투표 &amp; 확인</a>
+          <a href="../club/club-history.html">모임 기록 &amp; 사진</a>
+        </div>
+      </div>
+      <a href="../admin/requests.html">요청하기</a>
+      <div class="menu-login-area">
+        <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
+          <img id="kakaoProfileImg" src="" alt="" style="display:none">
+          <span id="kakaoLoginText">카카오 로그인</span>
+        </button>
+        <div id="kakaoUserActions" class="menu-kakao-user-actions">
+          <button id="kakaoPhotoBtn" type="button">사진 변경</button>
+          <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>
+          <button id="kakaoLogoutBtn" type="button">로그 아웃</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input
+        id="headerSearchInput"
+        type="search"
+        placeholder="게임명을 입력하세요"
+      >
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+
+  </header>
+
+  <main>
+    <section class="inner-page">
+      <nav class="breadcrumb owned-page-breadcrumb"><a href="../../index.html">게임 찾기</a> <span>›</span> 게임 위치</nav>
+      <div class="page-mini-hero page-mini-hero--location">
+        <h1>게임 위치</h1>
+      </div>
+      <div class="inner-page-body">
+        <div class="inner-page-coming-soon">
+          곧 안내 드릴게요 🗺️
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <footer class="site-footer">
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="https://pf.kakao.com/_ExbKxan" target="_blank" rel="noopener noreferrer">← 카카오 채널 문의</a> &nbsp;<a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>
