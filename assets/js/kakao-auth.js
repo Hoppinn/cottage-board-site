@@ -167,7 +167,13 @@ function promptProfileImageChange() {
     localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
     updateLoginUI(user);
     modal.remove();
-    window.CottageDB?.updateProfilePhoto?.(String(user.id), imgSrc).catch(() => {});
+    if (window.CottageDB?.updateProfilePhoto) {
+      window.CottageDB.updateProfilePhoto(String(user.id), imgSrc)
+        .then(() => console.log('[프로필사진] DB 저장 성공'))
+        .catch(e => console.warn('[프로필사진] DB 저장 실패', e));
+    } else {
+      console.warn('[프로필사진] CottageDB.updateProfilePhoto 없음 — localStorage만 저장됨');
+    }
   }
 
   modal.querySelector('#photoFileInput').addEventListener('change', e => {

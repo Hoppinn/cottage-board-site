@@ -66,8 +66,11 @@
               if (!customPhoto && dbProfile?.photo_url) {
                 dbPhoto = dbProfile.photo_url;
                 localStorage.setItem(`cottage_custom_photo_${userId}`, dbPhoto);
+                console.log('[auth-callback] DB photo_url 복원 성공');
+              } else if (!customPhoto) {
+                console.log('[auth-callback] DB photo_url 없음 (null 또는 컬럼 미존재)', dbProfile);
               }
-            } catch (_) {}
+            } catch (e) { console.warn('[auth-callback] DB profile fetch 실패', e); }
           }
 
           const user = {
