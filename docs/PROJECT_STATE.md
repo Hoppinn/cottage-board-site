@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-04 (라이트박스 + 텍스트 수정)
+최종 갱신: 2026-06-04 (폴더 구조 개편)
 
 ---
 
@@ -172,7 +172,7 @@
 - [ ] 죽은 CSS 정리 (`.pr-session-group`, `.pr-rec-review-link`, `.rv-game`, `.pr-rec-photo-item` 등)
 - [ ] `window._cottageSessionStart` 미사용 전역 변수 제거
 - [ ] `getPlayHighlights`, `getGamePlayCount` 사용 여부 재확인 후 미사용 시 제거
-- [ ] 폴더 구조 개편 (pages/cottage/, pages/store/ → 메뉴 기준으로 재편) — PC 호환성 전에 진행
+- [x] 폴더 구조 개편 → pages/game/, pages/info/, pages/club/, pages/admin/ ✅ 완료
 - [ ] PC 호환성
 
 ---
@@ -181,6 +181,7 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-04 | 폴더 구조 개편: pages/game/, pages/info/, pages/club/, pages/admin/ — 메뉴 기준 재편 |
 | 2026-06-04 | 바텀시트: 룰영상 confirm, 분위기태그 confirm→준비중, 책장 보러가기 버튼 추가 |
 | 2026-06-04 | 라이트박스: 기록 사진·등록폼 미리보기 클릭 시 전체화면, 스와이프/키보드 지원 |
 | 2026-06-04 | 텍스트: club-history 안내문 변경, game-reviews 동호회 링크 텍스트 변경 |
