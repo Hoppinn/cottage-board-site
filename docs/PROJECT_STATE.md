@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-05
+최종 갱신: 2026-06-05 (2차)
 
 ---
 
@@ -73,6 +73,7 @@
 | ~~B-11~~ | ~~supabase-client.js~~ | ~~_syncTimeToDBNow update 사용 — 프로필 row 없을 때 조용히 실패 + localStorage 제거~~ → **upsert로 교체 완료** |
 | ~~B-12~~ | ~~supabase-client.js~~ | ~~updateProfilePhoto upsert — row 없을 때 INSERT로 기존 필드 null 덮어쓰기~~ → **update로 교체 완료** |
 | B-07 | kakao-auth.js:32–35 | 방문 카운트가 기기별 독립 → 멀티기기 사용 시 중복 카운트 가능 |
+| B-13 | game-reviews.html 수정폼 | 입력 필드에 id/name 없음 — 접근성 경고 (기능 영향 없음) |
 
 ### 하 (UX 불편)
 
@@ -170,9 +171,10 @@
 - [x] `matchRecommendPlayer` → `matchBestPlayers` rename ✅
 - [x] 기존 Supabase Storage 사진 일괄 리사이즈 — 전체 20개 모두 이미 1200px 이하, 처리 불필요 ✅
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
-- [ ] `window._cottageSessionStart` — kakao-auth.js:370-371에서 실사용 중, 제거 불가
+- [ ] `window._cottageSessionStart` — kakao-auth.js에서 실사용 중, 제거 불가
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
 - [ ] PC 호환성
+- [ ] B-13 접근성 경고 — 수정폼 입력 필드 id/name 추가
 
 ---
 
@@ -180,6 +182,10 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-05 | 게임 데이터: 천국과맥주 → 맥주와빵 (Beer & Bread 한국어 이름 수정) |
+| 2026-06-05 | fix: 내 활동 이용시간 0분 — startSession을 하루 첫 방문 브랜치에서도 호출 |
+| 2026-06-05 | fix: 프로필 사진/닉네임 변경 후 햄버거+토글 유지 — stopPropagation + 동기 복원 |
+| 2026-06-05 | feat: getProfileSnapshot 추가, 닉네임도 다기기 동기화 (initKakaoAuth) |
 | 2026-06-05 | D-08: buildPhotoHtml + pr-rec-photo-* 클래스로 사진 컴포넌트 통일 (club-history.html) |
 | 2026-06-05 | 관리자 3버그 수정: B-10 이벤트명 불일치, B-11 _syncTimeToDBNow update→upsert, B-12 updateProfilePhoto upsert→update |
 | 2026-06-05 | 게임 필터 전면 개선: 전체게임 인원 1~9인+ 확장, bestPlayers 우선순위(BGG>XLSX) 복원, 머더미스터리 weight 예외, 추천 드롭다운 자동 닫힘 |

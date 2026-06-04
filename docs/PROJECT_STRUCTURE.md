@@ -98,6 +98,8 @@ assets/js/
 | `banUser(userId)` / `unbanUser(userId)` | 차단/해제 |
 | `deletePlayPhoto(recordId)` | 기록 사진 삭제 |
 | `isUserBanned()` | 현재 유저 차단 여부 |
+| `getProfilePhoto(userId)` | profiles.photo_url 단일 조회 |
+| `getProfileSnapshot(userId)` | profiles.photo_url + nickname 단일 조회 (다기기 동기화용) |
 
 ### kakao-auth.js가 노출하는 전역 함수
 
