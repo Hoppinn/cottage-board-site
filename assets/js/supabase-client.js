@@ -540,6 +540,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     const prev = parseInt(localStorage.getItem(key) || '0');
     localStorage.setItem(key, String(prev + elapsed));
     _sessionStart = Date.now();
+    window._cottageSessionStart = _sessionStart;
   }
 
   function _popAccumulatedMinutes(userId) {
@@ -570,7 +571,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     document.addEventListener('visibilitychange', () => {
       // 탭 숨김 시 DB에 즉시 반영 (async이므로 페이지 살아있는 동안 완료)
       if (document.hidden && _sessionUserId) _syncTimeToDBNow(_sessionUserId);
-      else _sessionStart = Date.now();
+      else { _sessionStart = Date.now(); window._cottageSessionStart = _sessionStart; }
     });
     window.addEventListener('beforeunload', () => {
       // 페이지 종료 시 best-effort 반영 (완료 보장 불가, localStorage가 백업)
