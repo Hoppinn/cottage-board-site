@@ -666,7 +666,12 @@
         // 참여자 이름 자동완성 — 콤마 구분 조합 선택 시 개별 칩으로 분리
         attachAc(
           div.querySelector('.tag-text-input'),
-          () => window._prPlayerNames || [],
+          () => {
+            const added = [...div.querySelectorAll('.prNamesWrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+            return (window._prPlayerNames || []).filter(s =>
+              !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
+            );
+          },
           s => {
             const ti = div.querySelector('.tag-text-input');
             s.split(',').forEach(name => {
@@ -913,7 +918,12 @@
           initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
           attachAc(
             form.querySelector('.pie-names-wrap .tag-text-input'),
-            () => window._prPlayerNames || [],
+            () => {
+              const added = [...form.querySelectorAll('.pie-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+              return (window._prPlayerNames || []).filter(s =>
+                !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
+              );
+            },
             s => {
               const ti = form.querySelector('.pie-names-wrap .tag-text-input');
               s.split(',').forEach(name => {
@@ -1136,7 +1146,8 @@
           const gameKey = getGameKey(r.game_id);
           const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
           const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
-          const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
+          const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
+          const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
           return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
             <div class="pr-rec-row-top">
               ${thumbHtml}
@@ -1203,7 +1214,8 @@
           const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
           const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
           const gameKey = getGameKey(r.game_id);
-          const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
+          const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
+          const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
           return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
             <div class="pr-rec-row-top">
               <div class="pr-rec-main">
