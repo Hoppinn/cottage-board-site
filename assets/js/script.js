@@ -2597,7 +2597,7 @@ if(recommendFilter){
         openGroups.add(s.dataset.filterGroup);
       });
 
-      // 인원 step 열림/닫힘 제어
+      // step 열림/닫힘 제어
       if(type === 'players'){
         const wasGroupMode = ['group','5','6','7','8','9+'].includes(recommendState.players);
         if(value === 'group'){
@@ -2609,6 +2609,8 @@ if(recommendFilter){
         } else {
           openGroups.delete('players');    // 1인/2인/3인/4인/상관없음 → 닫힘
         }
+      } else {
+        openGroups.delete(type);           // 난이도/게임방식 선택 → 닫힘
       }
 
       recommendState[type] = value;
