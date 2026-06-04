@@ -4,6 +4,15 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 ---
 
+## 세션 시작 시 필독
+
+모든 작업 세션 시작 전에 반드시 아래 두 문서를 먼저 읽는다.
+
+- `docs/PROJECT_STRUCTURE.md` — 페이지 구조, JS 역할, DB 테이블, 데이터 흐름
+- `docs/PROJECT_STATE.md` — 현재 완료 기능, 버그 목록, 중복 구현, 추후 작업
+
+---
+
 ## 문서 관리
 
 - PROJECT_STRUCTURE.md를 업데이트할 때는 새 버전 파일(v16, v17 등)을 만들지 않는다.
