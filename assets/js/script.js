@@ -918,11 +918,23 @@ function openRecommendOverlay(){
   const list    = document.getElementById("recommendOverlayList");
   if(!overlay || !list) return;
 
-  const allFiltered = getAllGamesArray().filter(game =>
-    matchRecommendPlayer(game, recommendState.players) &&
-    matchRecommendLevel(game, recommendState.level) &&
-    matchRecommendMood(game, recommendState.mood)
-  );
+  const _overlayLevel = recommendState.level;
+  const _overlayPlayer = recommendState.players;
+  const _overlayHardLevel = (()=>{
+    const nl = normalizeLevelValue(_overlayLevel);
+    return nl === "heavy_mania" || nl === "hardcore";
+  })();
+  const _overlayMaxWeight = _overlayHardLevel || _overlayPlayer === '9+' ? 5.0 : DEFAULT_RECOMMEND_MAX_WEIGHT;
+
+  const allFiltered = getAllGamesArray().filter(game => {
+    const data = GameView.getRecommendData(game);
+    const w = Number(data.difficultyWeight) || Number(data.weight) ||
+      Number(game?.cottage?.difficultyWeight) || Number(game?.bgg?.weight) || 999;
+    if(w > _overlayMaxWeight) return false;
+    return matchRecommendPlayer(game, _overlayPlayer) &&
+      matchRecommendLevel(game, _overlayLevel) &&
+      matchRecommendMood(game, recommendState.mood);
+  });
 
   // 헤더에 필터 조건 + 개수 표시
   const filterChips = [];
