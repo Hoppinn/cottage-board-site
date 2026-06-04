@@ -769,7 +769,8 @@ const filteredGames =
   Number(game?.bgg?.weight) ||
   999;
 
-if (weight > maxWeight) {
+const isMurderMystery = game?.cottage?.shelfGroupId === 'murder_mystery';
+if (!isMurderMystery && weight > maxWeight) {
   return false;
 }
 
@@ -930,7 +931,7 @@ function openRecommendOverlay(){
     const data = GameView.getRecommendData(game);
     const w = Number(data.difficultyWeight) || Number(data.weight) ||
       Number(game?.cottage?.difficultyWeight) || Number(game?.bgg?.weight) || 999;
-    if(w > _overlayMaxWeight) return false;
+    if(game?.cottage?.shelfGroupId !== 'murder_mystery' && w > _overlayMaxWeight) return false;
     return matchRecommendPlayer(game, _overlayPlayer) &&
       matchRecommendLevel(game, _overlayLevel) &&
       matchRecommendMood(game, recommendState.mood);
