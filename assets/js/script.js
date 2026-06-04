@@ -1366,6 +1366,7 @@ function openGameSheet(gameKey){
           </button>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
+            onclick="return confirm('유튜브로 이동할까요?')"
             target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
             룰영상 보기
@@ -1396,7 +1397,7 @@ function openGameSheet(gameKey){
     <!-- 분위기 태그 -->
     ${detail.displayTags?.length ? `
       <div class="sheet-dtags">
-        ${detail.displayTags.map(t => `<span class="sheet-dtag">${t}</span>`).join("")}
+        ${detail.displayTags.map(t => `<span class="sheet-dtag" style="cursor:pointer" onclick="if(confirm('책장 페이지로 이동할까요?'))alert('준비 중입니다.')">${t}</span>`).join("")}
       </div>
     ` : ""}
 
@@ -1465,6 +1466,7 @@ function openGameSheet(gameKey){
       </div>
     </div>
 
+    <button class="sheet-view-all-btn" style="cursor:pointer;font-family:inherit" onclick="alert('준비 중입니다.')">📚 꽂혀있는 책장 보러가기 →</button>
     <a class="sheet-view-all-btn sheet-review-btn"
       href="${rootPath}pages/cottage/game-reviews.html?game=${encodeURIComponent(gameKey)}"
     >🎲 플레이기록 보러가기 →</a>
