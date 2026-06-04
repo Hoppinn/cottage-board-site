@@ -58,7 +58,7 @@
     .pr-session > .pr-session-hd { background: #2c3e50; }
     .pr-session > .pr-session-hd:hover { background: #34495e; }
     .pr-session-date { font-size: 16px; font-weight: 900; color: #fff; flex-shrink: 0; letter-spacing: -0.3px; }
-    .pr-session-group { display: none; }
+
     .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.13); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 600; }
     .pr-session-arrow { font-size: 15px; color: rgba(255,255,255,0.65); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
     .pr-session-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; opacity: 0.92; }
@@ -93,8 +93,7 @@
     .tag-chip-del:hover { opacity: 1; }
     .tag-text-input { border: none; outline: none; font-size: 12px; flex: 1; min-width: 70px; background: transparent; padding: 0; }
     .pr-rec-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-top: 2px; }
-    .pr-rec-review-link { font-size: 12px; color: var(--muted); text-decoration: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 2px 7px; white-space: nowrap; }
-    .pr-rec-review-link:hover { color: var(--green); border-color: var(--green); }
+
     .pr-rec-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
     .pr-rec-del:hover { color: #c0392b; }
     .pr-rec-edit { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }
@@ -104,7 +103,7 @@
     .pr-inline-edit textarea { resize: vertical; min-height: 50px; }
     .pr-inline-edit-actions { display: flex; gap: 6px; justify-content: flex-end; }
     .pr-inline-save { font-size: 12px; background: #7a4828; color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
-    .pie-photo-trigger { display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;border:1px dashed var(--border,#e8e4dc);border-radius:7px;padding:6px 10px;box-sizing:border-box; }
+
     .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
     .pr-player-header { padding:7px 16px; display:flex; flex-wrap:wrap; gap:5px; align-items:center; border-top:1px solid #e8e4dc; background:#ece7dc; }
     .pr-player-header:first-child { border-top:none; }
@@ -131,7 +130,7 @@
     /* single game view (from bottom sheet ?game=) */
     .rv-item { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px; margin-bottom: 10px; }
     .rv-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-    .rv-game { font-size: 12px; font-weight: 700; color: var(--green); }
+
     .rv-nick { font-size: 13px; font-weight: 700; color: var(--text); }
     .rv-date { font-size: 11px; color: var(--muted); white-space: nowrap; }
     .rv-content { font-size: 14px; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
@@ -975,7 +974,7 @@
               ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
             </div>
             <div class="pr-photo-grid pie-new-grid"></div>
-            <label class="pr-photo-trigger pie-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
+            <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
             <div class="pr-inline-edit-actions">
               <button class="pr-inline-cancel" type="button">취소</button>
               <button class="pr-inline-save" type="button">저장</button>
