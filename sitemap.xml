@@ -6,47 +6,47 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/owned-games.html</loc>
+    <loc>https://cottageboard.com/pages/game/owned-games.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/cottage/about.html</loc>
+    <loc>https://cottageboard.com/pages/info/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/store/price-rules.html</loc>
+    <loc>https://cottageboard.com/pages/info/price-rules.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/store/requests.html</loc>
+    <loc>https://cottageboard.com/pages/admin/requests.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/cottage/game-reviews.html</loc>
+    <loc>https://cottageboard.com/pages/game/game-reviews.html</loc>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/cottage/club.html</loc>
+    <loc>https://cottageboard.com/pages/club/club.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/cottage/club-history.html</loc>
+    <loc>https://cottageboard.com/pages/club/club-history.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/cottage/club-schedule.html</loc>
+    <loc>https://cottageboard.com/pages/club/club-schedule.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://cottageboard.com/pages/store/game-location.html</loc>
+    <loc>https://cottageboard.com/pages/game/game-location.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

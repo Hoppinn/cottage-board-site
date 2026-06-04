@@ -76,7 +76,9 @@
       "Bash(curl -s \"https://boardgamegeek.com/xmlapi2/search?query=Triangle+through+the+Time&type=boardgame\")",
       "WebFetch(domain:bodoge.hoobby.net)",
       "WebFetch(domain:www.bear.cool)",
-      "WebFetch(domain:boardlife.co.kr)"
+      "WebFetch(domain:boardlife.co.kr)",
+      "Bash(git -C 'd:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site' commit -m 'feat: 인라인 필터 단체 서브버튼 로직 모달과 통일 *)",
+      "Bash(git -C 'd:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site' commit -m 'fix: 인라인 인원 선택 드롭다운 열림/닫힘 로직 재설계 *)"
     ]
   }
 }

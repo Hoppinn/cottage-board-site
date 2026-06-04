@@ -724,7 +724,20 @@ window.escH = function(s) {
     deletePlayPhoto,
     isUserBanned,
     updateProfilePhoto,
+    getAllPlayRecordsForHub,
   };
+
+  // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
+  async function getAllPlayRecordsForHub(limit = 200) {
+    try {
+      const { data } = await db.from('game_play_records')
+        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
+        .order('played_at', { ascending: false })
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      return data || [];
+    } catch (_) { return []; }
+  }
 
   async function getGameReviews(gameId) {
     try {

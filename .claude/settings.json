@@ -5,7 +5,18 @@
       "Bash(python3 -c ' *)",
       "Bash(where python *)",
       "Bash(where python3 *)",
-      "Bash(where py *)"
+      "Bash(where py *)",
+      "Bash(git -C 'd:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site' commit -m ' *)",
+      "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" log --oneline -5)",
+      "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" add pages/cottage/club-history.html assets/js/supabase-client.js)",
+      "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" add pages/cottage/game-reviews.html pages/cottage/club-history.html docs/PROJECT_STATE.md)",
+      "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" add assets/js/script.js docs/PROJECT_STATE.md)",
+      "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" add docs/PROJECT_STATE.md)",
+      "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" rm docs/TODO.md)",
+      "Bash(git mv *)"
+    ],
+    "additionalDirectories": [
+      "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\pages"
     ]
   }
 }

@@ -568,11 +568,7 @@
       setTimeout(() => t.classList.remove('show'), 2200);
     }
 
-    function getDb() {
-      const cfg = window.SUPABASE_CONFIG;
-      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
-      return window._cottageSupabaseDb;
-    }
+
 
     // ── entry point ──────────────────────────────────────────────────
 
@@ -674,7 +670,7 @@
         div.innerHTML = `
           <div class="pr-row-head">
             <div class="pr-autocomplete-wrap">
-              <input type="text" class="prGameName" placeholder="게임명 검색" autocomplete="off">
+              <input type="text" class="pr-game-name" placeholder="게임명 검색" autocomplete="off">
               <div class="pr-autocomplete-list"></div>
             </div>
             <button class="pr-rm-btn" type="button" title="삭제">✕</button>
@@ -688,31 +684,31 @@
             </div>
             <div>
               <label class="pr-field-label">플레이시간(분)</label>
-              <input type="number" class="prTime" placeholder="–" min="1">
+              <input type="number" class="pr-time" placeholder="–" min="1">
             </div>
             <div>
               <label class="pr-field-label">참여자</label>
-              <div class="tag-input-wrap prNamesWrap">
+              <div class="tag-input-wrap pr-names-wrap">
                 <div class="tag-chips"></div>
                 <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
-                <input type="hidden" class="prNames">
+                <input type="hidden" class="pr-names">
               </div>
             </div>
             <div>
               <label class="pr-field-label">점수·메모</label>
-              <input type="text" class="prScore" placeholder="1등: 홍길동">
+              <input type="text" class="pr-score" placeholder="1등: 홍길동">
             </div>
           </div>
           <label class="pr-photo-trigger">
             📷 사진 추가 (선택, 여러 장)
-            <input type="file" class="prPhoto" accept="image/*" multiple style="display:none">
+            <input type="file" class="pr-photo" accept="image/*" multiple style="display:none">
           </label>
           <div class="pr-photo-grid"></div>
-          <textarea class="pr-review-ta prReview" placeholder="후기 (선택)" rows="2"></textarea>`;
+          <textarea class="pr-review-ta pr-review" placeholder="후기 (선택)" rows="2"></textarea>`;
 
         // 게임명 자동완성
         attachAc(
-          div.querySelector('.prGameName'),
+          div.querySelector('.pr-game-name'),
           () => (window.COTTAGE_GAMES || []).map(g => g.display || g.titleKo || g.titleEn || '').filter(Boolean),
           null,
           div.querySelector('.pr-autocomplete-list')
@@ -726,7 +722,7 @@
           });
         });
 
-        const photoInput = div.querySelector('.prPhoto');
+        const photoInput = div.querySelector('.pr-photo');
         const photoGrid  = div.querySelector('.pr-photo-grid');
         div._photoFiles  = [];
         const addPhotoItem = buildPhotoItemAdder(photoGrid, div._photoFiles, 5);
@@ -736,13 +732,13 @@
           photoInput.value = '';
         });
 
-        initTagInput(div.querySelector('.prNamesWrap'), div.querySelector('.prNames'));
+        initTagInput(div.querySelector('.pr-names-wrap'), div.querySelector('.pr-names'));
 
         // 참여자 이름 자동완성 — 콤마 구분 조합 선택 시 개별 칩으로 분리
         attachAc(
           div.querySelector('.tag-text-input'),
           () => {
-            const added = [...div.querySelectorAll('.prNamesWrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+            const added = [...div.querySelectorAll('.pr-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
             return (window._prPlayerNames || []).filter(s =>
               !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
             );
@@ -756,12 +752,12 @@
               ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
             });
           },
-          div.querySelector('.prNamesWrap')
+          div.querySelector('.pr-names-wrap')
         );
 
         div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
         document.getElementById('prGameRows').appendChild(div);
-        if (focusInput) div.querySelector('.prGameName').focus();
+        if (focusInput) div.querySelector('.pr-game-name').focus();
       }
 
       // 그룹명 자동완성
@@ -779,16 +775,16 @@
 
         const entries = [];
         for (const row of rows) {
-          const name = row.querySelector('.prGameName').value.trim();
+          const name = row.querySelector('.pr-game-name').value.trim();
           if (!name) continue;
           const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
           entries.push({
             id: gameIdByName(name),
             count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
-            time: parseInt(row.querySelector('.prTime').value) || null,
-            names: row.querySelector('.prNames').value.trim() || null,
-            score: row.querySelector('.prScore').value.trim() || null,
-            review: row.querySelector('.prReview').value.trim() || null,
+            time: parseInt(row.querySelector('.pr-time').value) || null,
+            names: row.querySelector('.pr-names').value.trim() || null,
+            score: row.querySelector('.pr-score').value.trim() || null,
+            review: row.querySelector('.pr-review').value.trim() || null,
             photoFiles: row._photoFiles || [],
           });
         }
@@ -850,13 +846,7 @@
       panel.innerHTML = '<p class="pr-empty">불러오는 중...</p>';
 
       try {
-        const { data } = await getDb().from('game_play_records')
-          .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
-          .order('played_at', { ascending: false })
-          .order('created_at', { ascending: false })
-          .limit(200);
-
-        recordsData = data || [];
+        recordsData = await window.CottageDB.getAllPlayRecordsForHub();
         renderRecords(recordsData);
       } catch (err) {
         console.error(err);
