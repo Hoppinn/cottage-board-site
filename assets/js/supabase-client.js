@@ -244,7 +244,7 @@ window.escH = function(s) {
     try {
       const { data } = await db
         .from("game_play_records")
-        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at")
+        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at")
         .not("group_name", "is", null)
         .neq("group_name", "")
         .order("created_at", { ascending: false })
