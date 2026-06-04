@@ -254,7 +254,7 @@ function updateLoginUI(user) {
         adminBtn.type = 'button';
         adminBtn.textContent = '🔧 관리자';
         adminBtn.addEventListener('click', () => {
-          window.location.href = window.location.origin + '/pages/store/requests-admin.html';
+          window.location.href = window.location.origin + '/pages/admin/requests-admin.html';
         });
         userActions.appendChild(adminBtn);
       }
@@ -302,7 +302,7 @@ async function openProfilePanel() {
     </div>
     <div class="profile-panel-body">
       <p class="profile-panel-nick">${String(user.nickname || '손님').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
-      ${isOwnerUser ? `<a href="${adminOrigin}/pages/store/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
+      ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
       <p class="profile-panel-loading">불러오는 중...</p>
     </div>
   </div>`;

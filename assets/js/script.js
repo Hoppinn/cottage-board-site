@@ -1167,7 +1167,7 @@ if(headerSearchInput){
     }
 
     window.location.href =
-      `${rootPath}pages/owned-games.html?search=${encodeURIComponent(keyword)}`;
+      `${rootPath}pages/game/owned-games.html?search=${encodeURIComponent(keyword)}`;
   });
 }
 
@@ -1185,7 +1185,7 @@ if(headerSearchResults){
       openGameSheet(gameKey);
     } else {
       window.location.href =
-        `${rootPath}pages/owned-games.html?open=${encodeURIComponent(gameKey)}`;
+        `${rootPath}pages/game/owned-games.html?open=${encodeURIComponent(gameKey)}`;
     }
   });
 }
@@ -1468,7 +1468,7 @@ function openGameSheet(gameKey){
 
     <button class="sheet-view-all-btn" style="cursor:pointer;font-family:inherit" onclick="alert('준비 중입니다.')">📚 꽂혀있는 책장 보러가기 →</button>
     <a class="sheet-view-all-btn sheet-review-btn"
-      href="${rootPath}pages/cottage/game-reviews.html?game=${encodeURIComponent(gameKey)}"
+      href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
     >🎲 플레이기록 보러가기 →</a>
 
   `;
@@ -1852,7 +1852,7 @@ async function onSubmitCommentModal() {
 function goToShelf(shelfGroupId){
   if(!shelfGroupId) return;
   window.location.href =
-    rootPath + 'pages/owned-games.html?shelf=' + encodeURIComponent(shelfGroupId);
+    rootPath + 'pages/game/owned-games.html?shelf=' + encodeURIComponent(shelfGroupId);
 }
 
 // ── 손님 별점 위젯 ──────────────────────────────────────
@@ -2009,7 +2009,7 @@ async function initPlayWidget(gameKey) {
           ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
           : formatDate(r.created_at);
         const groupLabel = r.group_name
-          ? `<a class="sheet-history-link" href="./cottage/club-history.html?group=${encodeURIComponent(r.group_name)}">${escH(r.group_name)}</a>`
+          ? `<a class="sheet-history-link" href="./club/club-history.html?group=${encodeURIComponent(r.group_name)}">${escH(r.group_name)}</a>`
           : null;
         const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
@@ -3807,17 +3807,17 @@ if(location.hash === '#recommend' && document.getElementById('recommend')){
   const PAGE_LABELS = {
     '/': '메인',
     '/index.html': '메인',
-    '/pages/owned-games.html': '게임 목록',
-    '/pages/cottage/game-reviews.html': '플레이 기록',
-    '/pages/cottage/club.html': '동호회 소개',
-    '/pages/cottage/club-history.html': '모임 기록',
-    '/pages/cottage/club-intro.html': '회원 자기소개',
-    '/pages/cottage/club-schedule.html': '일정 투표',
-    '/pages/cottage/about.html': '코티지보드 소개',
-    '/pages/store/price-rules.html': '가격 & 규칙',
-    '/pages/store/game-location.html': '게임 위치',
-    '/pages/store/requests.html': '요청하기',
-    '/pages/store/requests-admin.html': '관리자',
+    '/pages/game/owned-games.html': '게임 목록',
+    '/pages/game/game-reviews.html': '플레이 기록',
+    '/pages/game/game-location.html': '게임 위치',
+    '/pages/info/about.html': '코티지보드 소개',
+    '/pages/info/price-rules.html': '가격 & 규칙',
+    '/pages/club/club.html': '동호회 소개',
+    '/pages/club/club-history.html': '모임 기록',
+    '/pages/club/club-intro.html': '회원 자기소개',
+    '/pages/club/club-schedule.html': '일정 투표',
+    '/pages/admin/requests.html': '요청하기',
+    '/pages/admin/requests-admin.html': '관리자',
   };
 
   const _entryTime = Date.now();
