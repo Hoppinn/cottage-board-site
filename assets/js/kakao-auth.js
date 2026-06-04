@@ -26,7 +26,6 @@ function initKakaoAuth() {
       const user = JSON.parse(saved);
       updateLoginUI(user);
       if (window.CottageDB && user.id) {
-        // localhost 개발 환경에서는 방문 카운트 안 함
         const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
         const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
         const profileKey = `cottage_profile_visited_${user.id}_${kstDate}`;
@@ -34,9 +33,17 @@ function initKakaoAuth() {
           localStorage.setItem(profileKey, '1');
           window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null).catch(() => {});
         } else {
-          // upsertProfile 스킵돼도 세션 시작 시각은 항상 기록
           window.CottageDB.startSession?.(String(user.id));
         }
+        // 다기기 프로필 사진 동기화 — DB photo_url이 localStorage와 다르면 갱신
+        window.CottageDB.getProfilePhoto?.(String(user.id)).then(dbPhoto => {
+          if (dbPhoto && dbPhoto !== user.profileImage) {
+            user.profileImage = dbPhoto;
+            localStorage.setItem(`cottage_custom_photo_${user.id}`, dbPhoto);
+            localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
+            updateLoginUI(user);
+          }
+        }).catch(() => {});
       }
     } catch (e) {
       localStorage.removeItem(KAKAO_USER_KEY);

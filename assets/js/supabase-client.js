@@ -617,6 +617,14 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     } catch (e) { console.warn('[updateProfilePhoto] 예외:', e); }
   }
 
+  async function getProfilePhoto(userId) {
+    if (!userId) return null;
+    try {
+      const { data } = await db.from('profiles').select('photo_url').eq('user_id', userId).maybeSingle();
+      return data?.photo_url || null;
+    } catch (_) { return null; }
+  }
+
   async function getAllProfiles() {
     try {
       const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
@@ -750,6 +758,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     deletePlayPhoto,
     isUserBanned,
     updateProfilePhoto,
+    getProfilePhoto,
     getAllPlayRecordsForHub,
   };
 
