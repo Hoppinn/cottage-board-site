@@ -2359,6 +2359,7 @@ function openRecommendModal(){
     'aria-hidden',
     'false'
   );
+
 }
 
 function closeRecommendModal(){
@@ -3636,10 +3637,11 @@ function showGroupMain() {
 
 if(playerMainRow){
   playerMainRow.querySelectorAll('[data-players]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
       document.querySelectorAll('[data-players]').forEach(b => b.classList.remove('is-selected'));
       btn.classList.add('is-selected');
       if(btn.dataset.players === 'group'){
+        e.stopPropagation(); // 단체 클릭 시 버블링 차단 → 드롭다운 닫힘 방지
         showGroupSub();
       } else {
         recommendState.players = btn.dataset.players || "";
@@ -3654,6 +3656,7 @@ if(playerSubRow){
       playerSubRow.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
       btn.classList.add('is-selected');
       recommendState.players = btn.dataset.players || "";
+      showRecommendResults(); // 서브버튼 선택 → 필터 적용 + 드롭다운 닫힘
     });
   });
 }
