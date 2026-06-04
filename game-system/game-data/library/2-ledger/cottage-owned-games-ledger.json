@@ -56,8 +56,10 @@
     "difficultyWeight": 1.17,
     "rating": 6.96248,
     "bestPlayers": [
+      3,
       5,
-      6
+      6,
+      8
     ],
     "recommendedPlayers": [
       2,
@@ -102,7 +104,8 @@
     "rating": 7.30576,
     "bestPlayers": [
       7,
-      8
+      8,
+      9
     ],
     "recommendedPlayers": [
       7,
@@ -297,7 +300,8 @@
     "rating": 6.59744,
     "bestPlayers": [
       6,
-      7
+      7,
+      8
     ],
     "recommendedPlayers": [
       5,
@@ -366,7 +370,8 @@
     "difficultyWeight": 1.58,
     "rating": 6.21522,
     "bestPlayers": [
-      7
+      7,
+      8
     ],
     "recommendedPlayers": [
       5,
@@ -457,6 +462,7 @@
     "difficultyWeight": 1.06,
     "rating": 5.62715,
     "bestPlayers": [
+      2,
       5
     ],
     "recommendedPlayers": [
@@ -508,6 +514,7 @@
     "difficultyWeight": 1.23,
     "rating": 6.70864,
     "bestPlayers": [
+      4,
       5,
       6
     ],
@@ -531,7 +538,8 @@
     "difficultyWeight": 1.01,
     "rating": 6.9918,
     "bestPlayers": [
-      5
+      5,
+      6
     ],
     "recommendedPlayers": [
       4,
@@ -553,8 +561,10 @@
     "difficultyWeight": 1.09,
     "rating": 6.47703,
     "bestPlayers": [
+      5,
       6,
-      7
+      7,
+      8
     ],
     "recommendedPlayers": [
       4,
@@ -665,7 +675,9 @@
     "difficultyWeight": 1.63,
     "rating": 6.57479,
     "bestPlayers": [
-      8
+      8,
+      10,
+      12
     ],
     "recommendedPlayers": [
       6,
@@ -757,7 +769,8 @@
     "bestPlayers": [
       6,
       7,
-      8
+      8,
+      9
     ],
     "recommendedPlayers": [
       5,
@@ -823,7 +836,11 @@
     "difficultyWeight": 3.04,
     "rating": 8.3487,
     "bestPlayers": [
-      8
+      8,
+      9,
+      10,
+      11,
+      12
     ],
     "recommendedPlayers": [
       7,
@@ -842,7 +859,8 @@
     "difficultyWeight": 2.04,
     "rating": 7.23018,
     "bestPlayers": [
-      5
+      5,
+      6
     ],
     "recommendedPlayers": [
       3,
@@ -1265,7 +1283,8 @@
     "difficultyWeight": 1.38,
     "rating": 6.7405,
     "bestPlayers": [
-      6
+      6,
+      8
     ],
     "recommendedPlayers": [
       3,
@@ -1663,7 +1682,8 @@
     "difficultyWeight": 1.05,
     "rating": 7.38606,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -1770,6 +1790,8 @@
     "difficultyWeight": 1.07,
     "rating": 6.50219,
     "bestPlayers": [
+      2,
+      4,
       5
     ],
     "recommendedPlayers": [
@@ -1816,6 +1838,7 @@
     "difficultyWeight": 1.25,
     "rating": 6.57585,
     "bestPlayers": [
+      2,
       4
     ],
     "recommendedPlayers": [
@@ -1861,7 +1884,8 @@
     "difficultyWeight": 1.05,
     "rating": 6.4925,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -2234,7 +2258,8 @@
     "difficultyWeight": 1.04,
     "rating": 6.69754,
     "bestPlayers": [
-      5
+      5,
+      6
     ],
     "recommendedPlayers": [
       3,
@@ -2552,6 +2577,7 @@
     "difficultyWeight": 1.37,
     "rating": 5.09697,
     "bestPlayers": [
+      2,
       5,
       6
     ],
@@ -2644,6 +2670,7 @@
     "rating": 6.64026,
     "bestPlayers": [
       4,
+      5,
       6
     ],
     "recommendedPlayers": [
@@ -2709,6 +2736,7 @@
     "difficultyWeight": 2.48,
     "rating": 7.85227,
     "bestPlayers": [
+      1,
       2,
       3,
       4
@@ -2931,7 +2959,8 @@
     "difficultyWeight": 1.52,
     "rating": 6.07139,
     "bestPlayers": [
-      5
+      5,
+      6
     ],
     "recommendedPlayers": [
       3,
@@ -3038,7 +3067,8 @@
     "difficultyWeight": 1.14,
     "rating": 7.08934,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -3170,6 +3200,7 @@
     "difficultyWeight": 1.31,
     "rating": 5.46064,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -3261,7 +3292,8 @@
     "difficultyWeight": 3.87,
     "rating": 7.8707,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -3282,7 +3314,9 @@
     "difficultyWeight": 1.6,
     "rating": 6.64848,
     "bestPlayers": [
-      4
+      4,
+      5,
+      6
     ],
     "recommendedPlayers": [
       2,
@@ -3485,7 +3519,8 @@
     "difficultyWeight": 1.57,
     "rating": 6.98147,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       1,
@@ -3506,7 +3541,9 @@
     "difficultyWeight": 1.31,
     "rating": 6.70767,
     "bestPlayers": [
-      2
+      2,
+      4,
+      5
     ],
     "recommendedPlayers": [
       2
@@ -3604,7 +3641,8 @@
     "difficultyWeight": 3.62,
     "rating": 6.9811,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -3862,7 +3900,8 @@
     "rating": 7.38606,
     "bestPlayers": [
       3,
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -3943,7 +3982,8 @@
     "difficultyWeight": 4.19,
     "rating": 8.11381,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       1,
@@ -4025,6 +4065,7 @@
     "difficultyWeight": 1.49,
     "rating": 6.12269,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -4045,6 +4086,7 @@
     "difficultyWeight": 1.49,
     "rating": 6.12269,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -4168,7 +4210,8 @@
     "difficultyWeight": 1.24,
     "rating": 6.71338,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       1,
@@ -4190,6 +4233,7 @@
     "difficultyWeight": 2.79,
     "rating": 7.70095,
     "bestPlayers": [
+      2,
       4
     ],
     "recommendedPlayers": [
@@ -4251,6 +4295,7 @@
     "difficultyWeight": 1.32,
     "rating": 6.63882,
     "bestPlayers": [
+      4,
       5
     ],
     "recommendedPlayers": [
@@ -4291,7 +4336,8 @@
     "difficultyWeight": 1.44,
     "rating": 6.33825,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -4450,6 +4496,7 @@
     "difficultyWeight": 2.81,
     "rating": 8.34715,
     "bestPlayers": [
+      2,
       3
     ],
     "recommendedPlayers": [
@@ -4513,6 +4560,7 @@
     "rating": 6.85856,
     "bestPlayers": [
       2,
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -4632,6 +4680,7 @@
     "difficultyWeight": 1.18,
     "rating": 7.1482,
     "bestPlayers": [
+      2,
       3
     ],
     "recommendedPlayers": [
@@ -4735,7 +4784,8 @@
     "difficultyWeight": 2.69,
     "rating": 7.60146,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       1,
@@ -5142,7 +5192,9 @@
     "difficultyWeight": 1,
     "rating": 6.20283,
     "bestPlayers": [
-      3
+      3,
+      4,
+      5
     ],
     "recommendedPlayers": [
       2,
@@ -5162,6 +5214,7 @@
     "difficultyWeight": 3.17,
     "rating": 7.78388,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -5635,7 +5688,8 @@
     "difficultyWeight": 1.77,
     "rating": 6.95434,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -6036,7 +6090,9 @@
     "difficultyWeight": 1.19,
     "rating": 6.57157,
     "bestPlayers": [
-      2
+      2,
+      4,
+      6
     ],
     "recommendedPlayers": [
       2,
@@ -6399,6 +6455,7 @@
     "difficultyWeight": 2.78,
     "rating": 7.21076,
     "bestPlayers": [
+      2,
       3,
       4
     ],
@@ -6705,7 +6762,8 @@
     "difficultyWeight": 2.86,
     "rating": 7.12678,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -7072,6 +7130,7 @@
     "difficultyWeight": 2.25,
     "rating": 7.25648,
     "bestPlayers": [
+      2,
       4
     ],
     "recommendedPlayers": [
@@ -7090,6 +7149,7 @@
     "difficultyWeight": 2.25,
     "rating": 7.25648,
     "bestPlayers": [
+      2,
       4
     ],
     "recommendedPlayers": [
@@ -7386,7 +7446,9 @@
     "difficultyWeight": 2.05,
     "rating": 5.89674,
     "bestPlayers": [
-      4
+      4,
+      5,
+      6
     ],
     "recommendedPlayers": [
       3,
@@ -7406,6 +7468,7 @@
     "difficultyWeight": 1,
     "rating": 5.92553,
     "bestPlayers": [
+      2,
       4
     ],
     "recommendedPlayers": [
@@ -7925,7 +7988,8 @@
     "difficultyWeight": 1.73,
     "rating": 6.53175,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -8066,7 +8130,8 @@
     "difficultyWeight": 1.65,
     "rating": 6.56205,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       3,
@@ -8226,7 +8291,8 @@
     "difficultyWeight": 4.42,
     "rating": 7.19449,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       2,
@@ -8565,7 +8631,8 @@
     "difficultyWeight": 2.14,
     "rating": 7.48764,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       2,
@@ -8785,7 +8852,8 @@
     "difficultyWeight": 1.23,
     "rating": 7.52457,
     "bestPlayers": [
-      2
+      2,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -9074,6 +9142,7 @@
     "difficultyWeight": 1.63,
     "rating": 6.93985,
     "bestPlayers": [
+      2,
       4
     ],
     "recommendedPlayers": [
@@ -9095,7 +9164,8 @@
     "difficultyWeight": 3.99,
     "rating": 8.16149,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       1,
@@ -9116,7 +9186,8 @@
     "difficultyWeight": 1.92,
     "rating": 7.67436,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       2
@@ -9196,6 +9267,7 @@
     "difficultyWeight": 1.83,
     "rating": 6.5041,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -9235,7 +9307,8 @@
     "difficultyWeight": 1.14,
     "rating": 7.25663,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -9595,6 +9668,8 @@
     "difficultyWeight": 2,
     "rating": 8.51745,
     "bestPlayers": [
+      1,
+      4,
       5
     ],
     "recommendedPlayers": [
@@ -9861,7 +9936,10 @@
     "difficultyWeight": 1.11,
     "rating": 7.20516,
     "bestPlayers": [
-      5
+      5,
+      6,
+      7,
+      8
     ],
     "recommendedPlayers": [
       5
@@ -9900,7 +9978,8 @@
     "difficultyWeight": 2.65,
     "rating": 7.81505,
     "bestPlayers": [
-      2
+      2,
+      4
     ],
     "recommendedPlayers": [
       2
@@ -9976,7 +10055,8 @@
     "difficultyWeight": 3.08,
     "rating": 7.41848,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       1,
@@ -10079,7 +10159,8 @@
     "difficultyWeight": 1.31,
     "rating": 7.12612,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       2,
@@ -10825,6 +10906,7 @@
     "difficultyWeight": 1.76,
     "rating": 7.2164,
     "bestPlayers": [
+      2,
       3,
       4
     ],
@@ -10907,6 +10989,7 @@
     "rating": 6.89038,
     "bestPlayers": [
       2,
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -11066,6 +11149,7 @@
     "difficultyWeight": 2.19,
     "rating": 7.35868,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -11126,7 +11210,8 @@
     "difficultyWeight": 3.79,
     "rating": 7.49501,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -11205,7 +11290,8 @@
     "difficultyWeight": 2.22,
     "rating": 7.76052,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -11493,7 +11579,8 @@
     "difficultyWeight": 1.83,
     "rating": 7.16078,
     "bestPlayers": [
-      3
+      3,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -11712,7 +11799,8 @@
     "difficultyWeight": 2.82,
     "rating": 7.4122,
     "bestPlayers": [
-      4
+      4,
+      5
     ],
     "recommendedPlayers": [
       2,
@@ -11898,7 +11986,8 @@
     "difficultyWeight": 2.08,
     "rating": 6.66401,
     "bestPlayers": [
-      1
+      1,
+      2
     ],
     "recommendedPlayers": [
       1,
@@ -12159,7 +12248,8 @@
     "difficultyWeight": 1,
     "rating": 5.88297,
     "bestPlayers": [
-      2
+      2,
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -12262,7 +12352,8 @@
     "difficultyWeight": 1.44,
     "rating": 6.63756,
     "bestPlayers": [
-      2
+      2,
+      3
     ],
     "recommendedPlayers": [
       1,
@@ -12442,6 +12533,7 @@
     "difficultyWeight": 2.41,
     "rating": 7.74449,
     "bestPlayers": [
+      1,
       3,
       4
     ],
@@ -12667,6 +12759,7 @@
     "difficultyWeight": 2.54,
     "rating": 7.54574,
     "bestPlayers": [
+      3,
       4
     ],
     "recommendedPlayers": [
@@ -12769,7 +12862,8 @@
     "difficultyWeight": 2,
     "rating": 7.10783,
     "bestPlayers": [
-      1
+      1,
+      2
     ],
     "recommendedPlayers": [
       1
