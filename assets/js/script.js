@@ -3617,59 +3617,62 @@ if(document.getElementById("gameScroll")){
   renderGameCards();
 }
 
-const playerOptions =
-  document.querySelectorAll('[data-players]');
+// ── 인원 선택 ─────────────────────────────────────────────
+const playerMainRow = document.getElementById('playerMainRow');
+const playerSubRow  = document.getElementById('playerSubRow');
+
+function showGroupSub() {
+  if(playerMainRow) playerMainRow.style.display = 'none';
+  if(playerSubRow)  playerSubRow.style.display  = '';
+  if(playerSubRow)  playerSubRow.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
+}
+
+function showGroupMain() {
+  if(playerMainRow) playerMainRow.style.display = '';
+  if(playerSubRow)  playerSubRow.style.display  = 'none';
+  recommendState.players = "";
+  document.querySelectorAll('[data-players]').forEach(b => b.classList.remove('is-selected'));
+}
+
+if(playerMainRow){
+  playerMainRow.querySelectorAll('[data-players]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-players]').forEach(b => b.classList.remove('is-selected'));
+      btn.classList.add('is-selected');
+      if(btn.dataset.players === 'group'){
+        showGroupSub();
+      } else {
+        recommendState.players = btn.dataset.players || "";
+      }
+    });
+  });
+}
+
+if(playerSubRow){
+  playerSubRow.querySelectorAll('.modal-option--sub').forEach(btn => {
+    btn.addEventListener('click', () => {
+      playerSubRow.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
+      btn.classList.add('is-selected');
+      recommendState.players = btn.dataset.players || "";
+    });
+  });
+}
+
+const groupBackBtn = document.getElementById('groupBackBtn');
+if(groupBackBtn){
+  groupBackBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showGroupMain();
+  });
+}
+
+const playerOptions = document.querySelectorAll('[data-players]');
 
 const levelOptions =
   document.querySelectorAll('[data-level]');
 
 const moodOptions =
   document.querySelectorAll('[data-mood]');
-
-playerOptions.forEach(option=>{
-  option.addEventListener('click', (e)=>{
-    if(option.id === 'groupBackBtn') return; // 뒤로 버튼은 별도 핸들러로 처리
-    const value = option.dataset.players;
-    const subBtns = document.getElementById('groupSubBtns');
-    const isGroupBtn = value === 'group';
-    const isSubBtn = ['5','6','7','8','9+'].includes(value);
-    const mainBtns = [...document.querySelectorAll('[data-players]:not(.modal-option--sub)')];
-
-    playerOptions.forEach(b => b.classList.remove('is-selected'));
-    option.classList.add('is-selected');
-    recommendState.players = value || "";
-
-    if(isGroupBtn){
-      // 단체 클릭 → 서브버튼 펼침, 기존 버튼 숨김
-      console.log('[단체클릭] subBtns.style.display 변경 전:', subBtns?.style.display, '| computed:', subBtns ? getComputedStyle(subBtns).display : 'null');
-      if(subBtns){
-        subBtns.style.display = 'flex';
-        console.log('[단체클릭] subBtns.style.display 변경 후:', subBtns.style.display);
-        subBtns.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
-      }
-      mainBtns.forEach(b => { if(b.dataset.players !== 'group') b.style.display = 'none'; });
-    } else if(!isSubBtn){
-      // 일반 버튼 클릭 → 서브버튼 숨김, 모든 버튼 복원
-      if(subBtns) subBtns.style.display = 'none';
-      mainBtns.forEach(b => b.style.display = '');
-    }
-    // 서브버튼 클릭 → 서브버튼 영역 유지, 필터만 설정됨
-  });
-});
-
-// 단체 뒤로가기 버튼
-const groupBackBtn = document.getElementById('groupBackBtn');
-if(groupBackBtn){
-  groupBackBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const subBtns = document.getElementById('groupSubBtns');
-    if(subBtns) subBtns.style.display = 'none';
-    const mainBtns = [...document.querySelectorAll('[data-players]:not(.modal-option--sub)')];
-    mainBtns.forEach(b => b.style.display = '');
-    playerOptions.forEach(b => b.classList.remove('is-selected'));
-    recommendState.players = "";
-  });
-}
 
 levelOptions.forEach(option=>{
   option.addEventListener(

@@ -388,60 +388,23 @@
           </p>
 
 
-          <div class="modal-option-row">
+          <!-- 기본 인원 버튼 그룹 -->
+          <div class="modal-option-row" id="playerMainRow">
+            <button class="modal-option" type="button" data-players="2">💗둘이 왔어요</button>
+            <button class="modal-option" type="button" data-players="3">🍻셋이 왔어요</button>
+            <button class="modal-option" type="button" data-players="4">🎲넷이 왔어요</button>
+            <button class="modal-option" type="button" data-players="group">🎉단체로 왔어요</button>
+            <button class="modal-option" type="button" data-players="1">☕혼자 왔어요</button>
+          </div>
 
-            <button
-              class="modal-option"
-              type="button"
-              data-players="2"
-            >
-              💗둘이 왔어요
-            </button>
-
-
-            <button
-              class="modal-option"
-              type="button"
-              data-players="3"
-            >
-              🍻셋이 왔어요
-            </button>
-
-
-            <button
-              class="modal-option"
-              type="button"
-              data-players="4"
-            >
-              🎲넷이 왔어요
-            </button>
-
-
-            <button
-              class="modal-option"
-              type="button"
-              data-players="group"
-            >
-              🎉단체로 왔어요
-            </button>
-
-            <div id="groupSubBtns" style="display:none;flex-wrap:wrap;gap:6px;padding:6px 0 2px;width:100%">
-              <button class="modal-option modal-option--back" type="button" id="groupBackBtn">← 뒤로</button>
-              <button class="modal-option modal-option--sub" type="button" data-players="5">5인</button>
-              <button class="modal-option modal-option--sub" type="button" data-players="6">6인</button>
-              <button class="modal-option modal-option--sub" type="button" data-players="7">7인</button>
-              <button class="modal-option modal-option--sub" type="button" data-players="8">8인</button>
-              <button class="modal-option modal-option--sub" type="button" data-players="9+">9인+</button>
-            </div>
-
-             <button
-              class="modal-option"
-              type="button"
-              data-players="1"
-            >
-              ☕혼자 왔어요
-            </button>
-
+          <!-- 단체 서브 버튼 그룹 (단체 클릭 시 교체 표시) -->
+          <div class="modal-option-row" id="playerSubRow" style="display:none">
+            <button class="modal-option modal-option--back" type="button" id="groupBackBtn">← 뒤로</button>
+            <button class="modal-option modal-option--sub" type="button" data-players="5">5인</button>
+            <button class="modal-option modal-option--sub" type="button" data-players="6">6인</button>
+            <button class="modal-option modal-option--sub" type="button" data-players="7">7인</button>
+            <button class="modal-option modal-option--sub" type="button" data-players="8">8인</button>
+            <button class="modal-option modal-option--sub" type="button" data-players="9+">9인+</button>
           </div>
 
         </div>
