@@ -751,8 +751,9 @@ const hasHardDifficultyFilter =
   normalizedLevel === "heavy_mania" ||
   normalizedLevel === "hardcore";
 
+const isLargeGroupFilter = ['5','6','7','8','9+'].includes(playerValue);
 const maxWeight =
-  hasHardDifficultyFilter
+  hasHardDifficultyFilter || isLargeGroupFilter
     ? 5.0
     : DEFAULT_RECOMMEND_MAX_WEIGHT;
 
