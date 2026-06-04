@@ -510,11 +510,15 @@
     startSession(userId);
     try {
       const accumulated = _popAccumulatedMinutes(userId);
-      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned').eq('user_id', userId).maybeSingle();
+      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned, nickname').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
+      // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명(realName)과 같으면 기존 보호
+      const nickToSave = (data?.nickname && realName && data.nickname !== realName && nickname === realName)
+        ? data.nickname
+        : nickname;
       await db.from('profiles').upsert({
         user_id: userId,
-        nickname,
+        nickname: nickToSave,
         real_name: data?.real_name || realName || null,
         last_seen_at: new Date().toISOString(),
         visit_count: (data?.visit_count || 0) + 1,

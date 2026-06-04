@@ -48,9 +48,27 @@
           const customNick = localStorage.getItem(`cottage_custom_nick_${userId}`);
           const customPhoto = localStorage.getItem(`cottage_custom_photo_${userId}`);
           const kakaoImg = (profile.profile_image_url || '').replace(/^http:\/\//, 'https://');
+
+          // localStorage에 커스텀 닉네임 없으면 DB에서 복원 시도
+          let dbNick = null;
+          if (!customNick) {
+            try {
+              const pRes = await fetch(
+                'https://fqddfvprknwcgojwfrbs.supabase.co/rest/v1/profiles?user_id=eq.' + userId + '&select=nickname&limit=1',
+                { headers: { 'apikey': 'sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl', 'Authorization': 'Bearer sb_publishable_gPxHQyp4fG7l3YBrCVUWJw_2-mBnNpl' } }
+              );
+              const pData = await pRes.json();
+              const saved = pData?.[0]?.nickname;
+              if (saved && saved !== (profile.nickname || '')) {
+                dbNick = saved;
+                localStorage.setItem(`cottage_custom_nick_${userId}`, dbNick);
+              }
+            } catch (_) {}
+          }
+
           const user = {
             id: userId,
-            nickname: customNick || profile.nickname || '손님',
+            nickname: customNick || dbNick || profile.nickname || '손님',
             kakaoNickname: profile.nickname || '',
             profileImage: customPhoto || kakaoImg,
             kakaoProfileImage: kakaoImg,
