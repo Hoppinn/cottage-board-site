@@ -167,10 +167,13 @@
 - [ ] 프로필 사진 DB 저장 (profiles 테이블에 photo_url 컬럼 추가)
 - [ ] 별점, 코멘트 소유권을 localStorage → 서버 인증 기반으로 전환
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
+- [ ] **D-05** getDb() vs CottageDB 혼용 정리
 - [ ] **D-07** CSS 중복 클래스 정리 (`.pie-photo-trigger` / `.pr-photo-trigger` 통합)
 - [ ] 죽은 CSS 정리 (`.pr-session-group`, `.pr-rec-review-link`, `.rv-game`, `.pr-rec-photo-item` 등)
 - [ ] `window._cottageSessionStart` 미사용 전역 변수 제거
 - [ ] `getPlayHighlights`, `getGamePlayCount` 사용 여부 재확인 후 미사용 시 제거
+- [ ] 폴더 구조 개편 (pages/cottage/, pages/store/ → 메뉴 기준으로 재편) — PC 호환성 전에 진행
+- [ ] PC 호환성
 
 ---
 
