@@ -203,12 +203,12 @@ function promptProfileImageChange() {
   });
 
   modal.querySelectorAll('.photo-preset-btn').forEach((btn, i) => {
-    btn.addEventListener('click', () => applyAndClose(presets[i]));
+    btn.addEventListener('click', e => { e.stopPropagation(); applyAndClose(presets[i]); });
   });
 
   const resetBtn = modal.querySelector('.photo-kakao-reset-btn');
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => applyAndClose(user.kakaoProfileImage || ''));
+    resetBtn.addEventListener('click', e => { e.stopPropagation(); applyAndClose(user.kakaoProfileImage || ''); });
   }
 
   modal.querySelector('.photo-picker-close').addEventListener('click', () => { modal.remove(); _restoreMenuExpanded(); });
@@ -236,7 +236,13 @@ async function promptNicknameChange() {
   localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
   localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
   updateLoginUI(user);
-  _restoreMenuExpanded();
+  // 동기적으로 즉시 복원 (setTimeout 의존 제거)
+  const _ua = document.getElementById('kakaoUserActions');
+  const _lb = document.getElementById('kakaoLoginBtn');
+  const _mm = document.getElementById('mobileMenu');
+  if (_ua) _ua.style.display = 'flex';
+  if (_lb) _lb.classList.add('is-expanded');
+  if (_mm) _mm.classList.add('active');
   window.CottageDB?.upsertProfile(String(user.id), trimmed, user.kakaoNickname || null).catch(() => {});
 }
 
