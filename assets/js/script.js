@@ -581,7 +581,7 @@ function arrayIncludesPlayer(values, playerValue){
   return normalized.includes(String(playerValue));
 }
 
-function matchRecommendPlayer(game, playerValue){
+function matchBestPlayers(game, playerValue){
   if(!playerValue){
     return true;
   }
@@ -776,7 +776,7 @@ if (!isMurderMystery && weight > maxWeight) {
 
       return (
         matchRecommendLevel(game, levelValue) &&
-        matchRecommendPlayer(game, playerValue) &&
+        matchBestPlayers(game, playerValue) &&
         matchRecommendMood(game, moodValue)
       );
     })
@@ -932,7 +932,7 @@ function openRecommendOverlay(){
     const w = Number(data.difficultyWeight) || Number(data.weight) ||
       Number(game?.cottage?.difficultyWeight) || Number(game?.bgg?.weight) || 999;
     if(game?.cottage?.shelfGroupId !== 'murder_mystery' && w > _overlayMaxWeight) return false;
-    return matchRecommendPlayer(game, _overlayPlayer) &&
+    return matchBestPlayers(game, _overlayPlayer) &&
       matchRecommendLevel(game, _overlayLevel) &&
       matchRecommendMood(game, recommendState.mood);
   });
@@ -2857,7 +2857,7 @@ const ownedPageState = {
 ========================= */
 
 function matchOwnedPlayer(game){
-  return matchRecommendPlayer(game, ownedPageState.playerFilter);
+  return matchBestPlayers(game, ownedPageState.playerFilter);
 }
 
 function matchOwnedMood(game){

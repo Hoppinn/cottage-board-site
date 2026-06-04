@@ -167,10 +167,10 @@
 - [x] 빈 디렉토리(pages/cottage/, pages/store/) 삭제 ✅
 - [x] 죽은 CSS 일부 제거 (`.pr-session-group`, `.pr-rec-review-link`, `.rv-game`) ✅
 - [x] **D-08** 사진 컴포넌트 공통화 — `buildPhotoHtml` + `pr-rec-photo-*` 클래스 통일 ✅
-- [ ] `matchRecommendPlayer` → `matchBestPlayers` rename (함수명이 역할과 불일치)
+- [x] `matchRecommendPlayer` → `matchBestPlayers` rename ✅
 - [ ] 기존 Supabase Storage 사진 일괄 리사이즈 — `game-system/tools/resize-existing-photos.js` 실행 대기
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
-- [ ] `window._cottageSessionStart` 미사용 전역 변수 제거 (kakao-auth.js에서 활발 사용 중 — 재확인 필요)
+- [ ] `window._cottageSessionStart` — kakao-auth.js:370-371에서 실사용 중, 제거 불가
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
 - [ ] PC 호환성
 
