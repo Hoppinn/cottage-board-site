@@ -3,6 +3,31 @@ window.escH = function(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 };
 
+// 이미지 리사이즈 — 긴 쪽 기준 maxPx 이하로 압축, JPEG quality 변환
+window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const { naturalWidth: w, naturalHeight: h } = img;
+      if (Math.max(w, h) <= maxPx) { resolve(file); return; }
+      const ratio = maxPx / Math.max(w, h);
+      const cw = Math.round(w * ratio);
+      const ch = Math.round(h * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = cw; canvas.height = ch;
+      canvas.getContext('2d').drawImage(img, 0, 0, cw, ch);
+      canvas.toBlob(
+        blob => resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' })),
+        'image/jpeg', quality
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+};
+
 (function () {
   "use strict";
 

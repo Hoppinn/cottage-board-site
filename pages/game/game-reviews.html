@@ -451,14 +451,15 @@
 
     // 공용 사진 그리드 아이템 추가 함수 — maxCount 미지정 시 제한 없음
     function buildPhotoItemAdder(grid, files, maxCount) {
-      return function(file) {
+      return async function(file) {
         if (maxCount && files.length >= maxCount) { alert(`사진은 최대 ${maxCount}장까지 추가할 수 있어요.`); return; }
-        files.push(file);
+        const resized = window.resizeImageFile ? await window.resizeImageFile(file) : file;
+        files.push(resized);
         const item = document.createElement('div');
         item.className = 'pr-photo-item';
         item.dataset.idx = String(files.length - 1);
         const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
+        img.src = URL.createObjectURL(resized);
         img.style.cursor = 'pointer';
         img.addEventListener('click', e => {
           e.stopPropagation();
@@ -740,8 +741,8 @@
         div._photoFiles  = [];
         const addPhotoItem = buildPhotoItemAdder(photoGrid, div._photoFiles, 5);
 
-        photoInput.addEventListener('change', () => {
-          Array.from(photoInput.files).forEach(addPhotoItem);
+        photoInput.addEventListener('change', async () => {
+          for (const f of Array.from(photoInput.files)) await addPhotoItem(f);
           photoInput.value = '';
         });
 
@@ -1027,8 +1028,8 @@
           const addPieNewItem = buildPhotoItemAdder(pieNewGrid, pieNewFiles);
 
           if (piePhotoFile) {
-            piePhotoFile.addEventListener('change', () => {
-              Array.from(piePhotoFile.files).forEach(addPieNewItem);
+            piePhotoFile.addEventListener('change', async () => {
+              for (const f of Array.from(piePhotoFile.files)) await addPieNewItem(f);
               piePhotoFile.value = '';
             });
           }
