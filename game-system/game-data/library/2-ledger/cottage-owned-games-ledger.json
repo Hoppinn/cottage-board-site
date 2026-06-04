@@ -988,14 +988,14 @@
   {
     "id": "이매진",
     "ownedName": "이매진",
-    "titleEn": "Party Themes",
-    "bggId": "232332",
+    "titleEn": "Imagine",
+    "bggId": "191894",
     "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1.0606,
     "difficultyWeight": 1.07,
-    "rating": null,
+    "rating": 6.80372,
     "bestPlayers": [
       4,
       5,
@@ -2021,16 +2021,17 @@
   {
     "id": "마블좀비",
     "ownedName": "마블좀비",
-    "titleEn": "Star Wars: The Deckbuilding Game",
-    "bggId": "374173",
+    "titleEn": "Marvel Zombies: A Zombicide Game",
+    "bggId": "351817",
     "matchStatus": "forced",
     "status": "ready",
     "location": "협력",
-    "difficulty": 2.0444,
+    "difficulty": 2.3623,
     "difficultyWeight": 2.38,
-    "rating": 7.81322,
+    "rating": 7.92804,
     "bestPlayers": [
-      2
+      2,
+      4
     ],
     "recommendedPlayers": [
       1,

@@ -6249,14 +6249,14 @@ const gameData = {
     "title": {
       "display": "이매진",
       "owned": "이매진",
-      "bgg": "Party Themes"
+      "bgg": "Imagine"
     },
     "bgg": {
-      "id": "232332",
+      "id": "191894",
       "matchStatus": "forced",
-      "year": "2017",
-      "rating": 6.8,
-      "weight": 1.07,
+      "year": "2015",
+      "rating": 6.80372,
+      "weight": 1.0606,
       "minPlayers": 3,
       "maxPlayers": 8,
       "bestPlayers": [
@@ -6272,19 +6272,32 @@ const gameData = {
         7,
         8
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        2,
+        8
+      ],
+      "playingTime": 20,
+      "minPlayTime": 20,
+      "maxPlayTime": 20,
+      "categories": [
+        "Deduction",
+        "Party Game"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "그림힌트주기"
+        "Acting",
+        "Team-Based Game"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "From publisher blurb:\n\nWhile traits help you tie a character to a game, themes help tie characters to their adventuring party. Is everyone in your party refugees trying to find a home? Are they garbage collectors or street sweeps just trying to keep the city clean? Maybe every plays together in a traveling band. Sidebar: Party Themes presents rules for how themes work and five working themes, each with unique benefits the whole party shares.",
-      "descriptionKo": "출판사 설명:\n\n특성(트레이트)이 캐릭터를 게임과 연결한다면, 테마는 캐릭터들을 모험 파티로 묶어줍니다. 모두가 집을 찾는 난민인가요? 도시를 깨끗이 유지하려는 쓰레기 수집가나 청소부인가요? 혹은 모두가 떠돌아다니는 악단에서 함께 연주하나요? 파티 테마는 테마의 작동 방식과 함께 각각 고유한 이점을 공유하는 5가지 테마를 제시합니다."
+      "designers": [
+        "藤田 真吾 (Shingo Fujita)",
+        "Shotaro Nakashima",
+        "大木基至 (Motoyuki Ohki)",
+        "Hiromi Oikawa"
+      ],
+      "description": "More than one thousand items from all walks of life can be guessed through the use of 61 transparent cards in Imagine, whether they're placed next to one another or superimposed. Almost everything in the world can be represented by a simplified concept &mdash; just don't speak while you're playing...",
+      "descriptionKo": "『Imagine』에서는 61장의 투명 카드를 나란히 놓거나 겹쳐서 사용하여 생활의 모든 분야에서 천 개 이상의 물건을 맞힐 수 있습니다. 세상의 거의 모든 것이 단순한 개념으로 표현될 수 있습니다. 단, 게임 중에는 말하지 마세요."
     },
     "cottage": {
       "status": "active",
@@ -6294,29 +6307,54 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1.07,
       "moodTags": [
+        "funny",
+        "chaotic",
+        "tense",
         "cozy"
       ],
-      "playTags": [],
-      "situationTags": [
-        "first_game",
-        "quick_play",
-        "group",
-        "large_group"
+      "playTags": [
+        "party",
+        "storytelling",
+        "deduction"
       ],
-      "interactionTags": [],
+      "situationTags": [
+        "group",
+        "beginner",
+        "large_group",
+        "first_game",
+        "quick_play"
+      ],
+      "interactionTags": [
+        "table_talk",
+        "team",
+        "social"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "funny",
+        "chaotic",
+        "tense",
         "cozy",
+        "party",
+        "storytelling",
+        "deduction",
+        "group",
+        "beginner",
+        "large_group",
         "first_game",
         "quick_play",
-        "group",
-        "large_group"
+        "table_talk",
+        "team",
+        "social"
       ],
       "displayTags": [
+        "즐기고",
+        "빠져들게",
+        "머리쓰게",
         "편안하게"
       ],
-      "summaryKo": "공통 테마로 묶인 캐릭터들이 협력하여 모험을 펼치는 게임.",
+      "summaryKo": "투명 카드를 겹쳐 만든 그림으로 물건을 맞히는 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -6333,8 +6371,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/rtr2KWzDkCmQMuVXuZqhQQ__original/img/qljEgVr9evodmFD9Ql28wo4l6ls=/0x0/filters:format(jpeg)/pic3676048.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/rtr2KWzDkCmQMuVXuZqhQQ__small/img/2N1HPJCJ6yNcIQpDGhCI8z5DwWA=/fit-in/200x150/filters:strip_icc()/pic3676048.jpg",
+      "main": "https://cf.geekdo-images.com/K-Hp2v5Bc_UKMGlBF2oIEQ__original/img/Yrr-KrZV24OPZyqPq9KR5CJO-pA=/0x0/filters:format(jpeg)/pic3061260.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/K-Hp2v5Bc_UKMGlBF2oIEQ__small/img/7iWqJ6jHsgKCTcNs41nEgT7_NzA=/fit-in/200x150/filters:strip_icc()/pic3061260.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -12605,18 +12643,19 @@ const gameData = {
     "title": {
       "display": "마블좀비",
       "owned": "마블좀비",
-      "bgg": "Star Wars: The Deckbuilding Game"
+      "bgg": "Marvel Zombies: A Zombicide Game"
     },
     "bgg": {
-      "id": "374173",
+      "id": "351817",
       "matchStatus": "forced",
       "year": "2023",
-      "rating": 7.81322,
-      "weight": 2.0444,
-      "minPlayers": 2,
-      "maxPlayers": 2,
+      "rating": 7.92804,
+      "weight": 2.3623,
+      "minPlayers": 1,
+      "maxPlayers": 6,
       "bestPlayers": [
-        2
+        2,
+        4
       ],
       "recommendedPlayers": [
         1,
@@ -12627,17 +12666,18 @@ const gameData = {
         6
       ],
       "notRecommendedPlayers": [
-        1,
-        2
+        6
       ],
-      "playingTime": 90,
-      "minPlayTime": 30,
-      "maxPlayTime": 90,
+      "playingTime": 60,
+      "minPlayTime": 60,
+      "maxPlayTime": 60,
       "categories": [
-        "Card Game",
+        "Comic Book / Strip",
         "Fighting",
+        "Horror",
+        "Miniatures",
         "Movies / TV / Radio theme",
-        "Science Fiction"
+        "Zombies"
       ],
       "categoriesKo": [
         "카드게임",
@@ -12646,9 +12686,13 @@ const gameData = {
         "SF"
       ],
       "mechanics": [
-        "Deck, Bag, and Pool Building",
-        "Open Drafting",
-        "Tug of War"
+        "Action Points",
+        "Cooperative Game",
+        "Dice Rolling",
+        "Modular Board",
+        "Scenario / Mission / Campaign Game",
+        "Solo / Solitaire Game",
+        "Variable Player Powers"
       ],
       "mechanicsKo": [
         "덱/백/풀 빌딩",
@@ -12656,10 +12700,11 @@ const gameData = {
         "줄다리기"
       ],
       "designers": [
-        "Caleb Grace"
+        "Fábio Cury",
+        "Michael Shinall"
       ],
-      "description": "The Rebel Alliance fights valiantly against the tyranny of the Galactic Empire. Each new victory brings the Rebels hope, and each heroic sacrifice strengthens their resolve. Still, the Empire's resources are vast, and the firepower of its Empire Navy is unmatched. With neither side willing to accept defeat, their war rages across the galaxy...\n\nIn Star Wars: The Deckbuilding Game, a head-to-head game for two players, the galaxy-spanning war between the Galactic Empire and the Rebel Alliance comes alive on your tabletop. In this easy-to-learn game, you and your opponent each choose a side, playing as either the Empire or the Rebels, and as the game progresses you both strengthen the power of your starting decks and work to destroy each other's bases. The first player to destroy three of their opponent's bases wins.\n\nIn more detail, each player starts with a unique ten-card deck, with seven of those cards providing only resources to acquire new cards. Six cards from a galaxy deck are always on display, with Rebel cards facing the Rebel player, Empire cards the Empire player, and neutral cards turned sideways. You can spend resources to acquire cards in the galaxy row that don't belong to the opponent, and you can use attack power to take out cards that do belong to them, gaining a reward in the process.\n\nEach player starts with a base that lacks abilities (Dantooine for the Rebels and Lothal for the Empire), but when that base is destroyed, you get to choose a replacement from your base deck, with each base having a special ability. Choose wisely to counter your opponent's plans! In addition to having special abilities, capital ships absorb damage meant for your base.\n\nPlayers also fight for control of a Force track to gain additional resources or make use of \"If the Force is with you...\" abilities on their cards.",
-      "descriptionKo": "반란군은 은하제국의 폭압에 맞서 용감하게 전투를 펼친다. 매번의 승리는 반란군에게 희망을 주고, 영웅적인 희생은 그들의 결의를 더욱 강하게 한다. 하지만 제국의 자원은 무한하고 제국 함대의 화력은 무적이다. 어느 쪽도 패배를 받아들이려 하지 않으면서 전쟁은 은하 전역으로 계속되고 있다...\n\n《스타워즈: 덱빌딩 게임》은 은하제국과 반란군 사이의 광대한 전쟁을 2명 플레이어의 대전 게임으로 구현한다. 배우기 쉬운 이 게임에서 당신과 상대는 각각 제국 또는 반란군을 선택해 게임을 진행하며, 시작 덱을 강화하고 상대의 기지를 파괴하기 위해 경쟁한다. 상대의 기지 3개를 먼저 파괴하는 플레이어가 승리한다.\n\n각 플레이어는 고유한 10장 시작 덱을 가지고 시작하며, 그 중 7장은 새로운 카드 습득을 위한 자원만 제공한다. 은하 행에는 항상 6장의 카드가 공개되어 있으며, 반란군 카드는 반란군 플레이어를 향하고, 제국 카드는 제국 플레이어를 향하고, 중립 카드는 옆으로 향해 있"
+      "description": "In Marvel Zombies: A Zombicide Game, the hunger takes hold after many superheroes in the Marvel Universe have been turned into zombies. You play as these infected heroes and will be eating people to satisfy your hunger...and objectives within the game.\n\nMarvel Zombicide is a stand-alone game using mostly the same Zombicide mechanics but set in the Marvel Universe.",
+      "descriptionKo": "마블 좀비사이드: 어 좀비사이드 게임에서는 마블 유니버스의 수많은 슈퍼히어로가 좀비로 변한 후 배고픔이 엄습합니다. 여러분은 이 감염된 히어로를 조종하며 사람들을 먹으면서 배고픔을 채우고 게임 내 목표를 달성합니다.\n\n마블 좀비사이드는 기존 좀비사이드의 게임 메카닉을 대부분 유지하면서 마블 유니버스를 배경으로 한 독립형 게임입니다."
     },
     "cottage": {
       "status": "active",
@@ -12669,39 +12714,50 @@ const gameData = {
       "difficultyId": "light_family",
       "difficultyWeight": 2.38,
       "moodTags": [
+        "immersive",
         "tense",
-        "immersive"
+        "cozy"
       ],
       "playTags": [
-        "card_play"
+        "strategy"
       ],
       "situationTags": [
         "beginner",
+        "group",
+        "experienced",
         "couple",
-        "long_stay"
+        "large_group"
       ],
       "interactionTags": [
+        "cooperative",
+        "low_conflict",
         "competitive",
-        "low_conflict"
+        "easy_coop"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "tense",
         "immersive",
-        "card_play",
+        "tense",
+        "cozy",
+        "strategy",
         "beginner",
+        "group",
+        "experienced",
         "couple",
-        "long_stay",
+        "large_group",
+        "cooperative",
+        "low_conflict",
         "competitive",
-        "low_conflict"
+        "easy_coop"
       ],
       "displayTags": [
         "머리쓰게",
         "빠져들게",
+        "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "제국과 반란군이 덱을 강화하며 상대의 기지 3개를 먼저 파괴하는 게임.",
+      "summaryKo": "마블 유니버스의 슈퍼히어로가 좀비로 변해 배고픔을 채우며 목표를 달성하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -12718,8 +12774,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/U6scsOGrPtVym4nCLaYjyw__original/img/bPFq87JbA919A2vxks_PFF2DwsY=/0x0/filters:format(png)/pic7387735.png",
-      "thumbnail": "https://cf.geekdo-images.com/U6scsOGrPtVym4nCLaYjyw__small/img/0kgu-vLB9MQStlEyaR6bgKkemAQ=/fit-in/200x150/filters:strip_icc()/pic7387735.png",
+      "main": "https://cf.geekdo-images.com/1nxn5PtVk-cbS3tHDg4Xlg__original/img/o3-QpsK2whgEm0teQ3IqwoC9zyk=/0x0/filters:format(jpeg)/pic6619019.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/1nxn5PtVk-cbS3tHDg4Xlg__small/img/vSamcRiZrL_RSpCkeCwL2sotMCw=/fit-in/200x150/filters:strip_icc()/pic6619019.jpg",
       "source": "bgg",
       "type": "jpg"
     },
