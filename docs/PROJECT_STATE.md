@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-04 (리팩토링 패치 반영)
+최종 갱신: 2026-06-04 (B-02, B-08 수정)
 
 ---
 
@@ -54,7 +54,7 @@
 
 | ID | 위치 | 설명 |
 |----|------|------|
-| B-02 | game-reviews.html:858 | 사진 삭제 핸들러가 `photo_url = null` 전체 삭제 → JSON 배열 중 특정 사진만 삭제 불가 |
+| ~~B-02~~ | ~~game-reviews.html~~ | ~~`photo_url = null` 전체 삭제~~ → **parsePhotoUrls + updateGamePlay로 개별 URL 삭제 완료** |
 | B-03 | supabase-client.js:478–479 | 이용시간: 59초 이하 세션 전체 폐기 (`Math.floor / 60000`, `if elapsed <= 0 return`) |
 
 ### 중 (기능 결함)
@@ -70,7 +70,7 @@
 
 | ID | 위치 | 설명 |
 |----|------|------|
-| B-08 | game-reviews.html | 모바일에서 참여자 Enter 후 포커스가 다음 칸으로 이동 (소프트 키보드 "다음" 버튼이 keydown 미발생) |
+| ~~B-08~~ | ~~game-reviews.html~~ | ~~모바일 소프트키보드 "다음"으로 포커스 이탈~~ → **blur 시 값 있으면 re-focus 완료** |
 | B-09 | game-reviews.html | 수정폼 게임명 자동완성에 화살표 키 이동 없음 (attachAc 단순 버전) |
 
 ---
@@ -146,14 +146,14 @@
 ### P1 — 데이터 안정성 (즉시)
 
 - [x] **B-01** 이용시간 localStorage 삭제 타이밍 수정 — DB upsert 성공 후 삭제 ✅ 완료
-- [ ] **B-02** 기록 표시에서 사진 개별 삭제 지원 — JSON 배열에서 특정 URL 제거 후 업데이트
+- [x] **B-02** 기록 표시 사진 개별 삭제 — parsePhotoUrls + updateGamePlay 적용 ✅ 완료
 - [ ] **B-03** 이용시간 단위를 초(sec)로 변경 — 59초 이하 폐기 방지
 
 ### P2 — 기능 완성 (단기)
 
 - [x] **B-04** 등록폼 참여자 자동완성 — attachAc 공용화와 함께 해결 ✅ 완료
 - [ ] **B-06** 이용시간 DB 반영 타이밍 개선 — 당일 시간도 반영 (beforeunload 시 upsert or 분리)
-- [ ] **B-08** 모바일 참여자 Enter 포커스 유지 — `blur` 이벤트 처리 또는 `inputmode` 조정
+- [x] **B-08** 모바일 참여자 Enter 포커스 유지 — blur 시 re-focus ✅ 완료
 
 ### P3 — 중복 제거 (중기)
 
@@ -178,6 +178,8 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-04 | B-02: 기록 사진 개별 삭제 — 특정 URL만 제거 후 updateGamePlay, 렌더링 photo-item 래핑 |
+| 2026-06-04 | B-08: 모바일 참여자 Enter 포커스 유지 — blur에 값 있을 때 re-focus 추가 |
 | 2026-06-04 | D-06/D-01/D-02/D-03 리팩토링: escH 전역화, attachAc 공용화, buildPhotoItemAdder 통합, B-04(등록폼 참여자 AC) 해결 |
 | 2026-06-04 | B-01 수정: 이용시간 localStorage 삭제를 DB upsert 성공 후로 이동 |
 | 2026-06-04 | 사진 다중 업로드 + JSON 배열 저장 + parsePhotoUrls 헬퍼 추가 |

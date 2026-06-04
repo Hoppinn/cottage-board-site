@@ -677,7 +677,9 @@
         });
         text.addEventListener('blur', () => {
           const v = text.value.trim();
-          if (v) { addTag(v); text.value = ''; }
+          // 모바일 소프트키보드 "다음" 버튼은 keydown 없이 blur만 발생하므로,
+          // 값이 있을 때 태그 추가 후 포커스 복원해 참여자 칸에 머물도록 함
+          if (v) { addTag(v); text.value = ''; setTimeout(() => text.focus(), 0); }
         });
         wrap.addEventListener('click', () => text.focus());
         if (initialValue) initialValue.split(',').forEach(v => addTag(v));
@@ -835,11 +837,18 @@
       panel.querySelectorAll('.pr-rec-photo-del').forEach(btn => {
         btn.addEventListener('click', async e => {
           e.stopPropagation();
-          if (!confirm('사진을 삭제할까요?')) return;
-          const res = await window.CottageDB?.deletePlayPhoto(btn.dataset.id);
+          if (!confirm('이 사진을 삭제할까요?')) return;
+          const recId = btn.dataset.id;
+          const delUrl = btn.dataset.url;
+          const idx = recordsData.findIndex(r => String(r.id) === String(recId));
+          if (idx === -1) return;
+          const remaining = parsePhotoUrls(recordsData[idx].photo_url).filter(u => u !== delUrl);
+          let newPhotoUrl = null;
+          if (remaining.length === 1) newPhotoUrl = remaining[0];
+          else if (remaining.length > 1) newPhotoUrl = JSON.stringify(remaining);
+          const res = await window.CottageDB?.updateGamePlay(recId, { photo_url: newPhotoUrl });
           if (!res?.error) {
-            const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
-            if (idx !== -1) recordsData[idx].photo_url = null;
+            recordsData[idx].photo_url = newPhotoUrl;
             renderRecords(recordsData);
           }
         });
@@ -1106,7 +1115,7 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const photoUrls = parsePhotoUrls(r.photo_url);
           const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-          const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" type="button">🗑 사진 삭제</button>` : ''}${photoUrls.map(u => `<img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">`).join('')}</div>` : '';
+          const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
           const gameKey = getGameKey(r.game_id);
           const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
           const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
@@ -1175,7 +1184,7 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const photoUrls = parsePhotoUrls(r.photo_url);
           const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-          const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" type="button">🗑 사진 삭제</button>` : ''}${photoUrls.map(u => `<img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">`).join('')}</div>` : '';
+          const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
           const gameKey = getGameKey(r.game_id);
           const sheetLink = gameKey ? `<a class="pr-rec-sheet-link" href="../owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
           return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
@@ -1254,7 +1263,7 @@
             const namesTag = r.player_names ? `<span class="pr-rec-tag">${escH(r.player_names)}</span>` : '';
             const photoUrls = parsePhotoUrls(r.photo_url);
             const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-            const photoHtml = photoUrls.length ? `<div class="pr-rec-photo-wrap">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" type="button">🗑 사진 삭제</button>` : ''}${photoUrls.map(u => `<img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">`).join('')}</div>` : '';
+            const photoHtml = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
             return `<div class="rv-item" data-id="${r.id}">
               <div class="rv-head">
                 <span class="rv-nick">${escH(r.nickname || '익명')}</span>
