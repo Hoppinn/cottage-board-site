@@ -172,10 +172,11 @@
     .pr-photo-item-del { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
 
     /* photo thumbnail in record row */
-    .pr-rec-photo-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .pr-rec-photo-item { position: relative; }
-    .pr-rec-photo { max-width: 100%; max-height: 220px; object-fit: cover; border-radius: 7px; display: block; }
-    .pr-rec-photo-del { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 5px; font-size: 11px; padding: 3px 8px; cursor: pointer; }
+    .pr-rec-photo-wrap { display: flex; flex-wrap: nowrap; gap: 6px; margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .pr-rec-photo-item { position: relative; flex-shrink: 0; }
+    .pr-rec-photo { height: 80px; width: auto; border-radius: 6px; display: block; cursor: pointer; }
+    .pr-rec-photo-del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 4px; font-size: 10px; padding: 2px 6px; cursor: pointer; }
+    .pr-rec-photo-more { height: 80px; min-width: 52px; background: rgba(0,0,0,0.45); color: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
 
     /* view toggle (모임별 / 게임별) */
     .pr-view-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
@@ -374,6 +375,18 @@
         try { return JSON.parse(raw).filter(Boolean); } catch (_) {}
       }
       return [raw];
+    }
+
+    // 사진 썸네일 HTML 생성 — 최대 3장 표시, 초과 시 +N장 배지
+    function buildPhotoHtml(photoUrls, recordId, canDelPhoto) {
+      if (!photoUrls.length) return '';
+      const show = photoUrls.slice(0, 3);
+      const more = photoUrls.length - 3;
+      const allAttr = escH(JSON.stringify(photoUrls));
+      return `<div class="pr-rec-photo-wrap" data-urls="${allAttr}">
+        ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}
+        ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
+      </div>`;
     }
 
     // 공용 자동완성 — listRef: 기존 .pr-autocomplete-list 엘리먼트 또는 부모 컨테이너
@@ -1073,12 +1086,17 @@
 
       // 기록 사진 라이트박스
       panel.querySelectorAll('.pr-rec-photo').forEach(img => {
-        img.style.cursor = 'pointer';
         img.addEventListener('click', e => {
           e.stopPropagation();
           const wrap = img.closest('.pr-rec-photo-wrap');
-          const imgs = [...wrap.querySelectorAll('.pr-rec-photo')];
-          openLightbox(imgs.map(i => i.src), imgs.indexOf(img));
+          try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
+        });
+      });
+      panel.querySelectorAll('.pr-rec-photo-more').forEach(el => {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          const wrap = el.closest('.pr-rec-photo-wrap');
+          try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
         });
       });
     }
@@ -1218,7 +1236,7 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const photoUrls = parsePhotoUrls(r.photo_url);
           const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-          const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
+          const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
           const gameKey = getGameKey(r.game_id);
           const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
           const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
@@ -1288,7 +1306,7 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const photoUrls = parsePhotoUrls(r.photo_url);
           const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-          const photoHtml  = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
+          const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
           const gameKey = getGameKey(r.game_id);
           const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
           const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="../game/owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
@@ -1368,7 +1386,7 @@
             const namesTag = r.player_names ? `<span class="pr-rec-tag">${escH(r.player_names)}</span>` : '';
             const photoUrls = parsePhotoUrls(r.photo_url);
             const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-            const photoHtml = photoUrls.length ? `<div class="pr-rec-photo-wrap">${photoUrls.map(u => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escH(u)}" alt="사진" loading="lazy">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${r.id}" data-url="${escH(u)}" type="button">×</button>` : ''}</div>`).join('')}</div>` : '';
+            const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
             return `<div class="rv-item" data-id="${r.id}">
               <div class="rv-head">
                 <span class="rv-nick">${escH(r.nickname || '익명')}</span>
@@ -1398,12 +1416,17 @@
       });
 
       root.querySelectorAll('.pr-rec-photo').forEach(img => {
-        img.style.cursor = 'pointer';
         img.addEventListener('click', e => {
           e.stopPropagation();
           const wrap = img.closest('.pr-rec-photo-wrap');
-          const imgs = [...wrap.querySelectorAll('.pr-rec-photo')];
-          openLightbox(imgs.map(i => i.src), imgs.indexOf(img));
+          try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
+        });
+      });
+      root.querySelectorAll('.pr-rec-photo-more').forEach(el => {
+        el.addEventListener('click', e => {
+          e.stopPropagation();
+          const wrap = el.closest('.pr-rec-photo-wrap');
+          try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
         });
       });
     }
