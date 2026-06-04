@@ -237,6 +237,11 @@ document.addEventListener(
       return;
     }
 
+    // 단체 버튼 클릭 시 드롭다운 닫힘 예외 처리
+    if(event.target.dataset?.players === 'group'){
+      return;
+    }
+
     const clickedInsideMenu =
       mobileMenu.contains(event.target);
 
