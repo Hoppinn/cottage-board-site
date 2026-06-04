@@ -3641,8 +3641,10 @@ playerOptions.forEach(option=>{
 
     if(isGroupBtn){
       // 단체 클릭 → 서브버튼 펼침, 기존 버튼 숨김
+      console.log('[단체클릭] subBtns.style.display 변경 전:', subBtns?.style.display, '| computed:', subBtns ? getComputedStyle(subBtns).display : 'null');
       if(subBtns){
         subBtns.style.display = 'flex';
+        console.log('[단체클릭] subBtns.style.display 변경 후:', subBtns.style.display);
         subBtns.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
       }
       mainBtns.forEach(b => { if(b.dataset.players !== 'group') b.style.display = 'none'; });
