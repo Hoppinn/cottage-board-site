@@ -175,6 +175,8 @@
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
 - [ ] PC 호환성
 - [ ] B-13 접근성 경고 — 수정폼 입력 필드 id/name 추가
+- [ ] 기록 입력폼: 두 번째 게임 행 추가 시 "위와 동일" 버튼 — 인원수·참여자를 첫 행에서 복사
+- [ ] 참여자 순서 정규화 — player_names 저장/조회 시 이름 정렬 후 비교, 순서 달라도 동일 그룹으로 통합 (game-reviews.html 렌더링 + 그룹핑 키 모두 적용)
 
 ---
 
