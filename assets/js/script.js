@@ -3632,7 +3632,7 @@ playerOptions.forEach(option=>{
     const subBtns = document.getElementById('groupSubBtns');
     const isGroupBtn = value === 'group';
     const isSubBtn = ['5','6','7','8','9+'].includes(value);
-    const mainBtns = [...document.querySelectorAll('.modal-option:not(.modal-option--sub)')];
+    const mainBtns = [...document.querySelectorAll('[data-players]:not(.modal-option--sub)')];
 
     if(isGroupBtn && subBtns && subBtns.style.display !== 'none'){
       // 단체 버튼 재클릭 → 접힘 + 선택 해제 + 나머지 버튼 복원
