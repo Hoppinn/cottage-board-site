@@ -3634,36 +3634,38 @@ playerOptions.forEach(option=>{
     const isSubBtn = ['5','6','7','8','9+'].includes(value);
     const mainBtns = [...document.querySelectorAll('[data-players]:not(.modal-option--sub)')];
 
-    if(isGroupBtn && subBtns && subBtns.dataset.open === '1'){
-      // 단체 버튼 재클릭 → 접힘 + 선택 해제 + 나머지 버튼 복원
-      subBtns.style.display = 'none';
-      subBtns.dataset.open = '0';
-      mainBtns.forEach(b => b.style.display = '');
-      playerOptions.forEach(b => b.classList.remove('is-selected'));
-      recommendState.players = "";
-      return;
-    }
-
     playerOptions.forEach(b => b.classList.remove('is-selected'));
     option.classList.add('is-selected');
     recommendState.players = value || "";
 
     if(isGroupBtn){
-      // 단체 첫 클릭 → 서브버튼 펼침, 1인/2인/3인/4인 숨김
+      // 단체 클릭 → 서브버튼 펼침, 기존 버튼 숨김
       if(subBtns){
         subBtns.style.display = 'flex';
-        subBtns.dataset.open = '1';
         subBtns.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
       }
       mainBtns.forEach(b => { if(b.dataset.players !== 'group') b.style.display = 'none'; });
     } else if(!isSubBtn){
       // 일반 버튼 클릭 → 서브버튼 숨김, 모든 버튼 복원
-      if(subBtns){ subBtns.style.display = 'none'; subBtns.dataset.open = '0'; }
+      if(subBtns) subBtns.style.display = 'none';
       mainBtns.forEach(b => b.style.display = '');
     }
     // 서브버튼 클릭 → 서브버튼 영역 유지, 필터만 설정됨
   });
 });
+
+// 단체 뒤로가기 버튼
+const groupBackBtn = document.getElementById('groupBackBtn');
+if(groupBackBtn){
+  groupBackBtn.addEventListener('click', () => {
+    const subBtns = document.getElementById('groupSubBtns');
+    if(subBtns) subBtns.style.display = 'none';
+    const mainBtns = [...document.querySelectorAll('[data-players]:not(.modal-option--sub)')];
+    mainBtns.forEach(b => b.style.display = '');
+    playerOptions.forEach(b => b.classList.remove('is-selected'));
+    recommendState.players = "";
+  });
+}
 
 levelOptions.forEach(option=>{
   option.addEventListener(
