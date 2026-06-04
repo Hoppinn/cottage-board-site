@@ -15,12 +15,13 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 ## 문서 관리
 
-- PROJECT_STRUCTURE.md를 업데이트할 때는 새 버전 파일(v16, v17 등)을 만들지 않는다.
-  기존 파일을 덮어씌운다.
-- 작업 세션이 끝날 때마다 `docs/PROJECT_STRUCTURE.md`와 `docs/PROJECT_STATE.md`를 실제 상태에 맞게 갱신한다.
-- 작업 세션이 끝날 때마다 `docs/TODO.md`를 실제 상태에 맞게 갱신한다.
-  완료된 항목은 ✅ 완료 처리, 새로 발견된 버그나 작업은 추가한다.
-- TODO.md의 날짜(기준: YYYY-MM-DD)도 갱신한다.
+- 추후 작업 목록은 PROJECT_STATE.md에서만 관리한다. TODO.md는 사용하지 않는다.
+- docs/TODO.md가 있으면 삭제한다.
+- 커밋 전 아래 순서로 문서 갱신한다:
+  1. PROJECT_STATE.md — 오늘 변경사항 반영
+  2. PROJECT_STRUCTURE.md — 파일/페이지/DB/API 흐름 변경 시에만 갱신
+  3. git diff로 실제 변경 여부 확인
+  4. 커밋, push 금지
 
 ## Git 작업
 
