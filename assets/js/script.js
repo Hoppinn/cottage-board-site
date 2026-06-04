@@ -238,7 +238,7 @@ document.addEventListener(
     }
 
     // 단체 버튼 클릭 시 드롭다운 닫힘 예외 처리 (자식 요소 클릭 포함)
-    if(event.target.closest('[data-players="group"]')){
+    if(event.target.closest('[data-inline-value="group"]')){
       return;
     }
 
