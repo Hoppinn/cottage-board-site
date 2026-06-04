@@ -576,8 +576,6 @@ const gameData = {
       "minPlayers": 7,
       "maxPlayers": 9,
       "bestPlayers": [
-        7,
-        8,
         9
       ],
       "recommendedPlayers": [
@@ -3115,9 +3113,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        4,
-        5,
-        6
+        4
       ],
       "recommendedPlayers": [
         3,
@@ -3174,8 +3170,7 @@ const gameData = {
       "situationTags": [
         "beginner",
         "first_game",
-        "group",
-        "large_group"
+        "group"
       ],
       "interactionTags": [
         "competitive"
@@ -3189,7 +3184,6 @@ const gameData = {
         "beginner",
         "first_game",
         "group",
-        "large_group",
         "competitive"
       ],
       "displayTags": [
@@ -3971,7 +3965,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 7,
       "bestPlayers": [
-        3,
         4,
         5
       ],
@@ -5185,7 +5178,6 @@ const gameData = {
       "minPlayers": 6,
       "maxPlayers": 21,
       "bestPlayers": [
-        8,
         9,
         10,
         11,
@@ -8127,9 +8119,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
-        5,
-        6
+        5
       ],
       "recommendedPlayers": [
         3,
@@ -8786,8 +8776,7 @@ const gameData = {
       "bestPlayers": [
         4,
         6,
-        7,
-        8
+        6
       ],
       "recommendedPlayers": [
         2,
@@ -9898,7 +9887,6 @@ const gameData = {
       "minPlayers": 3,
       "maxPlayers": 9,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
@@ -11223,10 +11211,7 @@ const gameData = {
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
-        3,
-        4,
-        5,
-        6
+        4
       ],
       "recommendedPlayers": [
         3,
@@ -12175,8 +12160,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
         1,
@@ -12622,8 +12606,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 2,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         1,
@@ -13268,8 +13251,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        3,
-        4,
         5
       ],
       "recommendedPlayers": [
@@ -15985,9 +15966,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 2,
       "bestPlayers": [
-        2,
-        5,
-        6
+        2
       ],
       "recommendedPlayers": [
         3,
@@ -16034,9 +16013,7 @@ const gameData = {
       "situationTags": [
         "beginner",
         "first_game",
-        "couple",
-        "group",
-        "large_group"
+        "couple"
       ],
       "interactionTags": [],
       "relationshipTags": [],
@@ -16046,9 +16023,7 @@ const gameData = {
         "card_play",
         "beginner",
         "first_game",
-        "couple",
-        "group",
-        "large_group"
+        "couple"
       ],
       "displayTags": [
         "머리쓰게",
@@ -16214,7 +16189,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 8,
       "bestPlayers": [
-        2,
         4,
         6,
         8
@@ -16280,7 +16254,6 @@ const gameData = {
       ],
       "situationTags": [
         "beginner",
-        "couple",
         "group",
         "large_group"
       ],
@@ -16294,7 +16267,6 @@ const gameData = {
         "card_play",
         "strategy",
         "beginner",
-        "couple",
         "group",
         "large_group",
         "competitive",
@@ -16501,8 +16473,7 @@ const gameData = {
       "maxPlayers": 6,
       "bestPlayers": [
         4,
-        5,
-        6
+        5
       ],
       "recommendedPlayers": [
         3,
@@ -19259,7 +19230,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
@@ -20388,7 +20358,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        4,
         5,
         6
       ],
@@ -21790,7 +21759,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 8,
       "bestPlayers": [
-        2,
         4,
         5
       ],
@@ -21855,7 +21823,6 @@ const gameData = {
         "beginner",
         "family",
         "first_game",
-        "couple",
         "group",
         "large_group"
       ],
@@ -21877,7 +21844,6 @@ const gameData = {
         "beginner",
         "family",
         "first_game",
-        "couple",
         "group",
         "large_group",
         "silent_focus",
@@ -22433,7 +22399,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
@@ -24157,7 +24122,6 @@ const gameData = {
       "minPlayers": 3,
       "maxPlayers": 6,
       "bestPlayers": [
-        3,
         4,
         5
       ],
@@ -26299,8 +26263,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         1,
@@ -29925,7 +29888,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 5,
       "bestPlayers": [
-        4,
         5
       ],
       "recommendedPlayers": [
@@ -35245,8 +35207,7 @@ const gameData = {
       "minPlayers": 3,
       "maxPlayers": 5,
       "bestPlayers": [
-        4,
-        5
+        4
       ],
       "recommendedPlayers": [
         3,
@@ -35537,8 +35498,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         2,
@@ -38477,7 +38437,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 12,
       "bestPlayers": [
-        2,
         4,
         6
       ],
@@ -38551,8 +38510,7 @@ const gameData = {
         "beginner",
         "group",
         "large_group",
-        "first_game",
-        "couple"
+        "first_game"
       ],
       "interactionTags": [
         "cooperative",
@@ -38576,7 +38534,6 @@ const gameData = {
         "group",
         "large_group",
         "first_game",
-        "couple",
         "cooperative",
         "social",
         "low_conflict",
@@ -38924,8 +38881,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         2,
@@ -40467,7 +40423,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
@@ -40834,8 +40789,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         2,
@@ -40965,9 +40919,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 2,
       "bestPlayers": [
-        2,
-        3,
-        4
+        2
       ],
       "recommendedPlayers": [
         2,
@@ -41342,8 +41294,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         3,
@@ -44162,8 +44113,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 5,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         1,
@@ -44418,9 +44368,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        3,
-        4
+        2
       ],
       "recommendedPlayers": [
         1,
@@ -45260,8 +45208,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         4
@@ -45403,8 +45350,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 6,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         4
@@ -45701,8 +45647,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
         1,
@@ -45831,7 +45776,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
         4
       ],
       "recommendedPlayers": [
@@ -47472,8 +47416,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 6,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         3,
@@ -50730,7 +50673,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
         4
       ],
       "recommendedPlayers": [
@@ -50783,7 +50725,6 @@ const gameData = {
       "situationTags": [
         "beginner",
         "quick_play",
-        "couple",
         "group"
       ],
       "interactionTags": [
@@ -50798,7 +50739,6 @@ const gameData = {
         "puzzle",
         "beginner",
         "quick_play",
-        "couple",
         "group",
         "competitive",
         "low_conflict"
@@ -51554,9 +51494,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 2,
       "bestPlayers": [
-        1,
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
         1,
@@ -52925,7 +52863,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
         3
       ],
       "recommendedPlayers": [
@@ -52989,7 +52926,6 @@ const gameData = {
       "situationTags": [
         "experienced",
         "long_stay",
-        "couple",
         "group"
       ],
       "interactionTags": [
@@ -53004,7 +52940,6 @@ const gameData = {
         "strategy",
         "experienced",
         "long_stay",
-        "couple",
         "group",
         "competitive",
         "silent_focus"
@@ -55796,8 +55731,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
-        4
+        2
       ],
       "recommendedPlayers": [
         2,
@@ -58810,7 +58744,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
         3
       ],
       "recommendedPlayers": [
@@ -58902,7 +58835,6 @@ const gameData = {
         "beginner",
         "experienced",
         "long_stay",
-        "couple",
         "group"
       ],
       "interactionTags": [
@@ -58924,7 +58856,6 @@ const gameData = {
         "beginner",
         "experienced",
         "long_stay",
-        "couple",
         "group",
         "competitive",
         "silent_focus",
@@ -58980,7 +58911,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
         3
       ],
       "recommendedPlayers": [
@@ -59045,7 +58975,6 @@ const gameData = {
         "experienced",
         "long_stay",
         "beginner",
-        "couple",
         "group"
       ],
       "interactionTags": [
@@ -59061,7 +58990,6 @@ const gameData = {
         "experienced",
         "long_stay",
         "beginner",
-        "couple",
         "group",
         "competitive",
         "turn_based",
@@ -60811,7 +60739,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        1,
         4
       ],
       "recommendedPlayers": [
@@ -64168,7 +64095,6 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        2,
         4
       ],
       "recommendedPlayers": [
@@ -64248,7 +64174,6 @@ const gameData = {
       "situationTags": [
         "experienced",
         "long_stay",
-        "couple",
         "group"
       ],
       "interactionTags": [
@@ -64264,7 +64189,6 @@ const gameData = {
         "card_play",
         "experienced",
         "long_stay",
-        "couple",
         "group",
         "competitive"
       ],
@@ -69638,8 +69562,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 4,
       "bestPlayers": [
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         2,
@@ -70284,8 +70207,7 @@ const gameData = {
       "maxPlayers": 4,
       "bestPlayers": [
         2,
-        3,
-        4
+        3
       ],
       "recommendedPlayers": [
         2,
@@ -81056,9 +80978,7 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        1,
-        3,
-        4
+        1
       ],
       "recommendedPlayers": [
         1,
@@ -81314,8 +81234,7 @@ const gameData = {
       "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [
-        2,
-        3
+        2
       ],
       "recommendedPlayers": [
         2,
@@ -83121,7 +83040,6 @@ const gameData = {
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
-        1,
         2
       ],
       "recommendedPlayers": [

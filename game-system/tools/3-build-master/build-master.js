@@ -23,9 +23,8 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing) {
   const bggRecommended = suggestedPlayers.recommended || [];
   const bggNotRecommended = suggestedPlayers.not_recommended || [];
 
-  // bestPlayers: XLSX curator pick + BGG 데이터 합집합 (BGG 9인+ 데이터 유실 방지)
-  const xlsxBest = xlsxRow.bestPlayers || [];
-  const bestPlayers = [...new Set([...xlsxBest, ...bggBest])].sort((a, b) => a - b);
+  // bestPlayers: BGG 우선, BGG 데이터 없을 때만 XLSX fallback
+  const bestPlayers = bggBest.length ? bggBest : (xlsxRow.bestPlayers || []);
   const recommendedPlayers = xlsxRow.recommendedPlayers?.length ? xlsxRow.recommendedPlayers : bggRecommended;
 
   const now = new Date().toISOString();
