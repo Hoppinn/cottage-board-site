@@ -485,9 +485,7 @@
 
   function _popAccumulatedMinutes(userId) {
     const key = `cottage_time_${userId}`;
-    const mins = parseInt(localStorage.getItem(key) || '0');
-    localStorage.removeItem(key);
-    return mins;
+    return parseInt(localStorage.getItem(key) || '0');
   }
 
   if (typeof document !== 'undefined') {
@@ -516,7 +514,7 @@
       const nickToSave = (data?.nickname && realName && data.nickname !== realName && nickname === realName)
         ? data.nickname
         : nickname;
-      await db.from('profiles').upsert({
+      const { error: upsertError } = await db.from('profiles').upsert({
         user_id: userId,
         nickname: nickToSave,
         real_name: data?.real_name || realName || null,
@@ -524,6 +522,7 @@
         visit_count: (data?.visit_count || 0) + 1,
         total_minutes: (data?.total_minutes || 0) + accumulated,
       }, { onConflict: 'user_id' });
+      if (!upsertError) localStorage.removeItem(`cottage_time_${userId}`);
     } catch (_) {}
   }
 
