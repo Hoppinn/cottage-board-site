@@ -595,10 +595,11 @@ function matchRecommendPlayer(game, playerValue){
    * large_group 태그가 있으면 통과
    */
   if(playerValue === "group"){
-    const hasLargeBestPlayer =
-      bestPlayers.some((p) => Number(p) >= 5);
+    return bestPlayers.some((p) => Number(p) >= 5);
+  }
 
-    return hasLargeBestPlayer;
+  if(playerValue === "9+"){
+    return bestPlayers.some((p) => Number(p) >= 9);
   }
 
   return arrayIncludesPlayer(
@@ -921,7 +922,7 @@ function openRecommendOverlay(){
   // 헤더에 필터 조건 + 개수 표시
   const filterChips = [];
   if(recommendState.players) {
-    const pt = {2:'2인', 3:'3인', 4:'4인', group:'단체', 1:'1인'};
+    const pt = {2:'2인', 3:'3인', 4:'4인', group:'단체', 1:'1인', 5:'5인', 6:'6인', 7:'7인', 8:'8인', '9+':'9인+'};
     filterChips.push(pt[recommendState.players] || recommendState.players);
   }
   if(recommendState.level) {
@@ -2405,7 +2406,12 @@ const playerTextMap = {
   "2": "2인",
   "3": "3인",
   "4": "4인",
-  "group": "단체"
+  "group": "단체",
+  "5": "5인",
+  "6": "6인",
+  "7": "7인",
+  "8": "8인",
+  "9+": "9인+"
 };
 
 const levelTextMap = {
@@ -2477,6 +2483,16 @@ ${playerValue !== "1"
   ? renderInlineOption("players", "1", "1인", playerValue)
   : ""}
   ${renderInlineOption("players", "", "상관없음", playerValue)}
+
+${ ['group','5','6','7','8','9+'].includes(playerValue)
+  ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;width:100%">
+      ${renderInlineOption("players","5","5인",playerValue)}
+      ${renderInlineOption("players","6","6인",playerValue)}
+      ${renderInlineOption("players","7","7인",playerValue)}
+      ${renderInlineOption("players","8","8인",playerValue)}
+      ${renderInlineOption("players","9+","9인+",playerValue)}
+     </div>`
+  : "" }
           </div>
       </div>
 
@@ -3617,8 +3633,19 @@ playerOptions.forEach(option=>{
       playerOptions.forEach(btn=>{
         btn.classList.remove('is-selected');
       });
-
       option.classList.add('is-selected');
+      recommendState.players = option.dataset.players || "";
+
+      // 단체 또는 서브 인원 선택 시 서브버튼 표시
+      const subBtns = document.getElementById('groupSubBtns');
+      if(subBtns){
+        const isGroupRelated = ['group','5','6','7','8','9+'].includes(option.dataset.players);
+        subBtns.style.display = isGroupRelated ? 'flex' : 'none';
+        // 단체 자체 클릭 시 서브버튼은 미선택 상태 유지 → 특정 인원 선택 유도
+        if(option.dataset.players === 'group'){
+          subBtns.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
+        }
+      }
     }
   );
 });
