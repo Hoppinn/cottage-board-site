@@ -2475,37 +2475,21 @@ const moodValue = recommendState.mood;
         </button>
 
         <div class="recommend-step-options">
-        
-          ${playerValue !== "2"
-  ? renderInlineOption("players", "2", "2인", playerValue)
-  : ""}
-
-${playerValue !== "3"
-  ? renderInlineOption("players", "3", "3인", playerValue)
-  : ""}
-
-${playerValue !== "4"
-  ? renderInlineOption("players", "4", "4인", playerValue)
-  : ""}
-
-${playerValue !== "group"
-  ? renderInlineOption("players", "group", "단체", playerValue)
-  : ""}
-
-${playerValue !== "1"
-  ? renderInlineOption("players", "1", "1인", playerValue)
-  : ""}
-  ${renderInlineOption("players", "", "상관없음", playerValue)}
 
 ${ ['group','5','6','7','8','9+'].includes(playerValue)
-  ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;width:100%">
-      ${renderInlineOption("players","5","5인",playerValue)}
-      ${renderInlineOption("players","6","6인",playerValue)}
-      ${renderInlineOption("players","7","7인",playerValue)}
-      ${renderInlineOption("players","8","8인",playerValue)}
-      ${renderInlineOption("players","9+","9인+",playerValue)}
-     </div>`
-  : "" }
+  ? `${renderInlineOption("players", "", "← 뒤로", playerValue)}
+     ${renderInlineOption("players","5","5인",playerValue)}
+     ${renderInlineOption("players","6","6인",playerValue)}
+     ${renderInlineOption("players","7","7인",playerValue)}
+     ${renderInlineOption("players","8","8인",playerValue)}
+     ${renderInlineOption("players","9+","9인+",playerValue)}`
+  : `${playerValue !== "2" ? renderInlineOption("players", "2", "2인", playerValue) : ""}
+     ${playerValue !== "3" ? renderInlineOption("players", "3", "3인", playerValue) : ""}
+     ${playerValue !== "4" ? renderInlineOption("players", "4", "4인", playerValue) : ""}
+     ${playerValue !== "group" ? renderInlineOption("players", "group", "단체", playerValue) : ""}
+     ${playerValue !== "1" ? renderInlineOption("players", "1", "1인", playerValue) : ""}
+     ${renderInlineOption("players", "", "상관없음", playerValue)}` }
+
           </div>
       </div>
 
