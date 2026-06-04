@@ -203,6 +203,17 @@
     /* 단일 게임 뷰: 코멘트·따봉 이동 링크 */
     .rv-back-to-sheet { display: block; text-align: center; background: var(--bg,#f5f0e8); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-weight: 700; color: var(--green); text-decoration: none; }
     .rv-back-to-sheet:hover { background: #ede8df; }
+
+    /* 라이트박스 */
+    .pr-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+    .pr-lightbox-img { max-width: 94vw; max-height: 88vh; object-fit: contain; border-radius: 6px; display: block; user-select: none; }
+    .pr-lightbox-close { position: absolute; top: 14px; right: 16px; background: rgba(255,255,255,0.15); color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pr-lightbox-close:hover { background: rgba(255,255,255,0.3); }
+    .pr-lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: #fff; border: none; border-radius: 50%; width: 44px; height: 44px; font-size: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .pr-lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+    .pr-lightbox-prev { left: 10px; }
+    .pr-lightbox-next { right: 10px; }
+    .pr-lightbox-counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 13px; pointer-events: none; }
   </style>
 </head>
 
@@ -436,6 +447,12 @@
         item.dataset.idx = String(files.length - 1);
         const img = document.createElement('img');
         img.src = URL.createObjectURL(file);
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', e => {
+          e.stopPropagation();
+          const allImgs = [...grid.querySelectorAll('.pr-photo-item img')];
+          openLightbox(allImgs.map(i => i.src), allImgs.indexOf(img));
+        });
         const del = document.createElement('button');
         del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
         del.addEventListener('click', () => {
@@ -447,6 +464,65 @@
         item.append(img, del);
         grid.appendChild(item);
       };
+    }
+
+    // 라이트박스 — 이미지 전체화면, 좌우 스와이프/키보드 지원, 등록폼·기록 보기 공용
+    function openLightbox(urls, startIdx) {
+      if (!urls.length) return;
+      let cur = ((startIdx || 0) + urls.length) % urls.length;
+
+      const lb = document.createElement('div');
+      lb.className = 'pr-lightbox';
+
+      const img = document.createElement('img');
+      img.className = 'pr-lightbox-img';
+      img.addEventListener('click', e => e.stopPropagation());
+
+      const close = document.createElement('button');
+      close.className = 'pr-lightbox-close'; close.type = 'button'; close.textContent = '✕';
+
+      const prev = document.createElement('button');
+      prev.className = 'pr-lightbox-nav pr-lightbox-prev'; prev.type = 'button'; prev.textContent = '‹';
+
+      const next = document.createElement('button');
+      next.className = 'pr-lightbox-nav pr-lightbox-next'; next.type = 'button'; next.textContent = '›';
+
+      const counter = document.createElement('div');
+      counter.className = 'pr-lightbox-counter';
+
+      function show(idx) {
+        cur = ((idx % urls.length) + urls.length) % urls.length;
+        img.src = urls[cur];
+        const multi = urls.length > 1;
+        prev.style.display = multi ? '' : 'none';
+        next.style.display = multi ? '' : 'none';
+        counter.textContent = multi ? `${cur + 1} / ${urls.length}` : '';
+      }
+
+      function closeLb() { document.removeEventListener('keydown', onKey); lb.remove(); }
+
+      prev.addEventListener('click', e => { e.stopPropagation(); show(cur - 1); });
+      next.addEventListener('click', e => { e.stopPropagation(); show(cur + 1); });
+      close.addEventListener('click', closeLb);
+      lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+
+      let touchStartX = 0;
+      lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      lb.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 40) show(dx < 0 ? cur + 1 : cur - 1);
+      }, { passive: true });
+
+      function onKey(e) {
+        if (e.key === 'ArrowRight') show(cur + 1);
+        else if (e.key === 'ArrowLeft') show(cur - 1);
+        else if (e.key === 'Escape') closeLb();
+      }
+      document.addEventListener('keydown', onKey);
+
+      lb.append(close, prev, img, next, counter);
+      document.body.appendChild(lb);
+      show(cur);
     }
 
     // 공용 태그칩 입력 초기화 — 등록폼/수정폼 공용
@@ -1005,6 +1081,17 @@
           });
         });
       });
+
+      // 기록 사진 라이트박스
+      panel.querySelectorAll('.pr-rec-photo').forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', e => {
+          e.stopPropagation();
+          const wrap = img.closest('.pr-rec-photo-wrap');
+          const imgs = [...wrap.querySelectorAll('.pr-rec-photo')];
+          openLightbox(imgs.map(i => i.src), imgs.indexOf(img));
+        });
+      });
     }
 
     function bindToggle(panel) {
@@ -1073,7 +1160,7 @@
         }
 
         if (groupName === '코티지보드 동호회') {
-          html += `<div class="pr-club-link-row"><a class="pr-club-link" href="./club-history.html">📸 동호회 기록 &amp; 사진 게시판 →</a></div>`;
+          html += `<div class="pr-club-link-row"><a class="pr-club-link" href="./club-history.html">📸 동호회 기록 &amp; 사진 게시판에서 보러가기 →</a></div>`;
         }
 
         html += `</div></div>`;
@@ -1318,6 +1405,16 @@
           if (!confirm('이 기록을 삭제할까요?')) return;
           const res = await window.CottageDB?.deleteGamePlay(item.dataset.id);
           if (!res?.error) item.remove();
+        });
+      });
+
+      root.querySelectorAll('.pr-rec-photo').forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', e => {
+          e.stopPropagation();
+          const wrap = img.closest('.pr-rec-photo-wrap');
+          const imgs = [...wrap.querySelectorAll('.pr-rec-photo')];
+          openLightbox(imgs.map(i => i.src), imgs.indexOf(img));
         });
       });
     }
