@@ -583,8 +583,12 @@ window.escH = function(s) {
   async function updateProfilePhoto(userId, photoUrl) {
     if (!userId) return;
     try {
-      await db.from('profiles').update({ photo_url: photoUrl || null }).eq('user_id', userId);
-    } catch (_) {}
+      const { error } = await db.from('profiles').upsert(
+        { user_id: userId, photo_url: photoUrl || null },
+        { onConflict: 'user_id' }
+      );
+      if (error) console.warn('[updateProfilePhoto] DB error:', error.message);
+    } catch (e) { console.warn('[updateProfilePhoto] 예외:', e); }
   }
 
   async function getAllProfiles() {
