@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-04
+최종 갱신: 2026-06-04 (폴더 구조 개편 반영)
 
 ---
 
@@ -11,21 +11,23 @@
 ├── index.html                      # 메인 (추천 게임, 인기 게임, 검색)
 ├── auth-callback.html              # 카카오 OAuth 리다이렉트 처리
 ├── pages/
-│   ├── owned-games.html            # 전체 게임 목록 + 필터 + 바텀시트
-│   ├── cottage/
+│   ├── game/                       # 게임 찾기 & 기록
+│   │   ├── owned-games.html        # 전체 게임 목록 + 필터 + 바텀시트
+│   │   ├── game-reviews.html       # 플레이 기록 허브 (핵심 기능 페이지)
+│   │   └── game-location.html      # 게임 위치 안내
+│   ├── info/                       # 코티지보드 소개
 │   │   ├── about.html              # 코티지보드 소개
+│   │   └── price-rules.html        # 가격 & 규칙
+│   ├── club/                       # 동호회
 │   │   ├── club.html               # 동호회 소개
 │   │   ├── club-intro.html         # 동호회 멤버 소개
 │   │   ├── club-schedule.html      # 일정 투표 & 확인
 │   │   ├── club-meeting.html       # 모임 기록
 │   │   ├── club-rules.html         # 동호회 규칙
-│   │   ├── club-history.html       # 모임 기록 & 사진 (DB 연동)
-│   │   └── game-reviews.html       # 플레이 기록 허브 (핵심 기능 페이지)
-│   └── store/
+│   │   └── club-history.html       # 모임 기록 & 사진 (DB 연동)
+│   └── admin/                      # 요청/관리
 │       ├── requests.html           # 게임/간식 요청 (로그인 필요)
-│       ├── requests-admin.html     # 요청 관리 어드민 (오너 전용)
-│       ├── price-rules.html        # 가격 & 규칙
-│       └── game-location.html      # 게임 위치 안내
+│       └── requests-admin.html     # 요청 관리 어드민 (오너 전용)
 ```
 
 ### 페이지별 인증 요구
@@ -33,11 +35,11 @@
 | 페이지 | 인증 필요 | 오너 전용 |
 |--------|----------|----------|
 | index.html | 선택 (별점 등) | N |
-| owned-games.html | 선택 (코멘트, 따봉) | N |
-| game-reviews.html | 기록 입력 시 필수 | N |
-| requests.html | 필수 | N |
-| requests-admin.html | 필수 | **Y** |
-| club-* | 대부분 선택 | N |
+| game/owned-games.html | 선택 (코멘트, 따봉) | N |
+| game/game-reviews.html | 기록 입력 시 필수 | N |
+| admin/requests.html | 필수 | N |
+| admin/requests-admin.html | 필수 | **Y** |
+| club/club-* | 대부분 선택 | N |
 
 ---
 
