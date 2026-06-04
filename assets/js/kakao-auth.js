@@ -32,9 +32,8 @@ function initKakaoAuth() {
         if (!isLocal && !localStorage.getItem(profileKey)) {
           localStorage.setItem(profileKey, '1');
           window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null).catch(() => {});
-        } else {
-          window.CottageDB.startSession?.(String(user.id));
         }
+        window.CottageDB.startSession?.(String(user.id));
         // 다기기 프로필 동기화 — DB photo_url/nickname이 localStorage와 다르면 갱신
         window.CottageDB.getProfileSnapshot?.(String(user.id)).then(snap => {
           if (!snap) return;
