@@ -85390,11 +85390,11 @@ const gameData = {
       "boardId": "원드러스크리처"
     }
   },
-  "천국과맥주": {
-    "id": "천국과맥주",
+  "맥주와빵": {
+    "id": "맥주와빵",
     "title": {
-      "display": "천국과맥주",
-      "owned": "천국과맥주",
+      "display": "맥주와빵",
+      "owned": "맥주와빵",
       "bgg": "Beer & Bread"
     },
     "bgg": {
@@ -85519,7 +85519,7 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "천국과맥주"
+      "boardId": "맥주와빵"
     }
   },
   "글렌모어연대기": {
