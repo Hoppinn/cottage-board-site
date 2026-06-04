@@ -367,7 +367,7 @@ const gameData = {
         "Mads Emil Christensen"
       ],
       "description": "The Witness knows the right word. The Detectives are on the case.\n\nIn Hard to Get, players must work together to find the right word, which only the Witness knows. The Detectives have few clues to go on &ndash; 5 dilemmas the Witness has to go through.\n\nIs Pancake more Tom Hanks or Tom Cruise? Is a Cactus Sweet or Sour?\n\nHard to Get is an entertaining party game that will definitely spark lively discussions around the table.",
-      "descriptionKo": "웨이브렝스는 두 팀이 서로의 생각을 읽어내는 사회 추론 게임입니다. 팀들은 돌아가며 스펙트럼 위에 숨겨진 과녁이 있다고 생각하는 위치로 다이얼을 회전시킵니다. 당신 팀의 한 명인 사이킥(초능력자)은 과녁의 정확한 위치를 알고 있으며, 두 개의 대립 개념이 적힌 카드를 뽑습니다(예: 직업 - 경력, 거친 - 부드러운, 판타지 - SF, 슬픈 노래 - 신나는 노래 등). 사이킥은 이 두 대립 개념 사이에서 과녁이 위치한 영역을 *개념적으로* 나타내는 단서를 제공해야 합니다.\n\n예를 들어, 이번 라운드 카드가 \"덥다-춥다\"이고 과녁이 중앙에서 약간 \"차다\"쪽에 있다면, 사이킥은 그 영역에 해당하는 단서를 제시합니다. \"샐러드\" 같은 것 말이죠.\n\n사이킥이 단서를 제시한 후, 팀원들은 과녁의 위치가 어디라고 생각하는지 논의하고 스펙트럼 위의 해당 위치로 다이얼을 돌립니다. 팀의 추측이 과녁의 중심에 가까울수록 더 많은 점수를 획득합니다!"
+      "descriptionKo": "증인만 정답을 알고 있습니다. 형사들이 수사에 나섭니다.\n\n'하드 투 겟'에서 플레이어들은 증인만 아는 정답 단어를 찾기 위해 함께 협력해야 합니다. 형사들에게는 증인이 겪어야 할 5가지 딜레마라는 제한된 단서만 주어집니다.\n\n팬케이크는 톰 행크스에 더 가깝나요, 톰 크루즈에 더 가깝나요? 선인장은 달콤한가요, 신맛인가요?\n\n'하드 투 겟'은 테이블 위에서 활발한 토론을 펼치게 해주는 재미있는 파티 게임입니다."
     },
     "cottage": {
       "status": "active",
@@ -426,7 +426,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "두 팀이 사이킥의 단서를 통해 스펙트럼 위 과녁의 위치를 맞추는 사회 추론 게임.",
+      "summaryKo": "증인만 아는 정답을 제한된 단서로 맞추는 협력 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -3154,7 +3154,7 @@ const gameData = {
         "Alex Randolph"
       ],
       "description": "In Die Heisse Schlacht am Kalten Buffet, alternatively released as Kangaroo and Generalowsky, players try to win prize cards from the limited number available to them &mdash; but to win they must lap a circular track that (typically) consists of 21 spaces, and not only must they circle the track, but they have to do so while being top dog, so to speak.\n\nOn a turn, a player rolls 1-3 six-sided dice to determine whether she moves and if so how far she moves. She rolls the dice one by one, stopping when she wishes, and the sum of the dice rolled can't exceed 7. If she rolls only one die, she moves forward by the number rolled; if she rolled two dice, she moves twice the sum of her dice (if the sum &le; 7); and if she rolled three dice, she moves three times the sum (again, if the sum &le; 7). If her sum exceeds 7, she removes her piece from the board and starts the lap from the beginning next turn.\n\nIf one piece lands on another, the bottom piece must carry the top one when it next moves; what's more, the owner of the piece on top dictates how many dice the bottom player must roll &mdash; and if those dice sum to more than seven, then both pieces are removed from the track. Stacks can have any number of pieces, and whoever is on top dictates to the active player how many dice she must roll. When a piece in the middle of a stack moves, it leaves all pieces below it in place.\n\nWhen a piece or a stack lands on or passes the final space in the lap, the owner of the topmost piece takes one of the prize cards; each prize has a value on it, and once all the prizes have been claimed, whoever has the highest sum of prize cards wins.\n\nThe 2014 edition of the game, Mahé, allows for play with up to seven player turtles, who are circling the island while trying to lay their eggs on the beach and receive points for doing a good job.\n\nThe 2024 Korean edition of the game, 공룡 대작전, allows for play with up to seven player adventurers, who are circling the island while taking back stolen eggs on the T-Rex nest and receive points for taking a lot of eggs.",
-      "descriptionKo": "마라케시에서 각 플레이어는 경쟁자들을 출려하려는 카펫 판매인의 역할을 합니다. 모든 플레이어는 동일한 금액의 자금과 동일한 수의 카펫으로 시작합니다.\n\n당신의 턴에는 아싸무를 90도 회전할 수 있습니다. 그 다음 주사위를 굴려 나온 칸만큼 앞으로 이동합니다(d6: 1, 2, 2, 3, 3, 4). 아싸무가 보드 끝에 도달하면 곡선을 따라 다음 줄에서 계속 이동합니다. 아싸무가 다른 플레이어의 카펫 위에 착지하면, 그 색깔의 인접한 카펫 영역 1칸당 해당 플레이어에게 동전 1개를 지불합니다. 그 다음 아싸무와 직교로 인접한 곳에 자신의 카펫 1개를 놓습니다(다른 카펫 위에 겹칠 수는 없습니다).\n\n게임은 모든 플레이어가 모든 카펫을 놓으면 끝납니다. 보이는 카펫 1칸당 동전 1개를 얻습니다. 가장 많은 동전을 가진 플레이어가 승리합니다! 동점 시 보이는 카펫 면적이 가장 큰 플레이어가 승리합니다."
+      "descriptionKo": "《뜨거운 차가운 뷔페 전투》(일명 《캥거루》, 《제너럴롭스키》)에서 플레이어들은 제한된 상을 획득하기 위해 경쟁합니다. 이기려면 보통 21칸으로 이루어진 원형 트랙을 완주해야 하며, 단순히 완주하는 것이 아니라 맨 위에 있어야 합니다.\n\n턴마다 플레이어는 주사위 1~3개를 굴려 이동 여부와 이동 거리를 결정합니다. 주사위를 하나씩 굴리다가 원할 때 멈추되, 주사위 합이 7을 초과하면 안 됩니다. 주사위 1개면 그 수만큼 이동하고, 2개면 합의 2배(합≤7), 3개면 합의 3배(합≤7)만큼 이동합니다. 합이 7을 초과하면 말을 제거하고 다음 턴에 처음부터 시작합니다.\n\n한 말이 다른 말 위에 내려앉으면, 아래의 말은 움직일 때 위의 말을 함께 옮겨야 합니다. 더욱이 위의 말 소유자가 아래 플레이어의 주사위 개수를 지정하며, 합이 7을 초과하면 두 말 모두 제거됩니다. 스택은 무제한이며, 맨 위의 말 소유자가 현재 플레이어의 주사위 개수를 결정합니다. 스택 중간"
     },
     "cottage": {
       "status": "active",
@@ -3201,7 +3201,7 @@ const gameData = {
         "편안하게",
         "경쟁형"
       ],
-      "summaryKo": "주사위를 굴려 이동한 말 위치에 카펫을 배치하며 상대 카펫 위에 착지할 때마다 돈을 내는 게임.",
+      "summaryKo": "주사위를 굴려 원형 트랙을 돌되 합이 7을 넘지 않으면서 상대 말 위에 올라가는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -6284,7 +6284,7 @@ const gameData = {
       "mechanicsKo": [],
       "designers": [],
       "description": "From publisher blurb:\n\nWhile traits help you tie a character to a game, themes help tie characters to their adventuring party. Is everyone in your party refugees trying to find a home? Are they garbage collectors or street sweeps just trying to keep the city clean? Maybe every plays together in a traveling band. Sidebar: Party Themes presents rules for how themes work and five working themes, each with unique benefits the whole party shares.",
-      "descriptionKo": "출판사 설명:\n\n특성이 캐릭터를 게임과 연결한다면, 테마는 캐릭터들을 모험 파티로 묶어줍니다. 당신의 파티 모두가 집을 찾으려는 난민인가요? 도시를 깨끗이 유지하려는 쓰레기 수거인이나 청소부인가요? 혹은 여행하는 악단으로 함께 활동하나요? 여담: 파티 테마는 테마가 어떻게 작동하는지에 대한 규칙과 파티 전체가 공유하는 독특한 이점을 가진 5가지 테마를 제시합니다."
+      "descriptionKo": "출판사 설명:\n\n특성(트레이트)이 캐릭터를 게임과 연결한다면, 테마는 캐릭터들을 모험 파티로 묶어줍니다. 모두가 집을 찾는 난민인가요? 도시를 깨끗이 유지하려는 쓰레기 수집가나 청소부인가요? 혹은 모두가 떠돌아다니는 악단에서 함께 연주하나요? 파티 테마는 테마의 작동 방식과 함께 각각 고유한 이점을 공유하는 5가지 테마를 제시합니다."
     },
     "cottage": {
       "status": "active",
@@ -6316,7 +6316,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "공유된 테마로 묶인 캐릭터들이 함께 모험하며 독특한 능력을 활용하는 게임.",
+      "summaryKo": "공통 테마로 묶인 캐릭터들이 협력하여 모험을 펼치는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -9474,7 +9474,7 @@ const gameData = {
         "Sho Tomono"
       ],
       "description": "In this deductive genre, each player plays the role of a character with the dual purpose of solving a mystery and simultaneously achieving their own goals. The investigation, the negotiations with the rest of the cast and the exchange of information are essential pieces to solve the crime, but do not forget that the murderer is one of you. You can't believe everything they tell you, but you can't take victory without trusting someone either...\n\nItaly, 1962. The head of a local mafia family is murdered in his mansion shortly before he is rumored to announce his successor. Next to the corpse, there is only a handcuffed man. The movements of the victim's little brother and wife, as well as those of the men in the family, the fortune teller who works for the house and the prostitute who frequents the mansion intertwine over and over again until weaving a dense tapestry that hides the truth.",
-      "descriptionKo": ""
+      "descriptionKo": "이 추리 게임에서 각 플레이어는 미스터리를 해결하면서 동시에 자신의 목표를 달성해야 하는 이중 역할을 맡습니다. 범죄를 해결하기 위해서는 수사, 다른 등장인물들과의 협상, 정보 교환이 필수적이지만, 살인자가 바로 당신 중 한 명이라는 사실을 잊지 마세요. 그들이 말하는 모든 것을 믿을 수는 없지만, 누군가를 신뢰하지 않고는 승리를 거둘 수 없습니다.\n\n1962년 이탈리아. 지역 마피아 가문의 수장이 후계자 발표 직전 자신의 저택에서 살해됩니다. 시신 옆에는 수갑에 묶인 남자만 남아 있습니다. 피해자의 남동생과 아내, 가문의 부하들, 저택에 고용된 점술가, 그리고 저택을 드나드는 창녀의 행동들이 얽히고설키며 진실을 감춘 복잡한 태피스트리를 짜아갑니다."
     },
     "cottage": {
       "status": "active",
@@ -9527,7 +9527,7 @@ const gameData = {
         "빠져들게",
         "즐기고"
       ],
-      "summaryKo": "",
+      "summaryKo": "범인을 찾기 위해 협상하고 추론하되, 자신의 숨겨진 목표까지 달성해야 하는 추리 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -10326,7 +10326,7 @@ const gameData = {
         "Vlaada Chvátil"
       ],
       "description": "The party game That's a Question!, takes the familiar format of challenging others with questions, then voting on what they'll say.\n\nIn more detail, each player has a hand of hexagonal cards, with words or phrases in three color blocks on the card. On a turn, you choose a player that has a token in front of them, take that token, then present them with a question by choosing one of the three question prompts (which are all color-coded), then choosing two cards from your hand and adding the properly-colored section of those cards to the question. A sample question: \"What would you miss more if it ceases to exist: Facebook or doors?\" That player secretly votes on A or B, while everyone else but the questioner secretly votes A or B depending on how they think the person will answer; a voter can optionally add their 3x scoring token to their vote.\n\nOnce everyone votes, you reveal the tiles. Everyone who voted correctly moves ahead one or three spaces on the scoring track, and the questioner moves ahead one space for each person who voted incorrectly. If you pass a certain space on the scoring track, you retrieve your 3x token (if you've used it). Since you can ask a question only of those with a token in front of them, everyone is asked roughly the same number of questions, and whoever has the most points after a certain number of rounds wins.",
-      "descriptionKo": "《탑 텐》의 목표는 5라운드를 생존하는 것입니다. 당신과 다른 플레이어들이 함께 순서를 정해야 합니다!\n\n게임을 시작할 때 게임 보드에 유니콘 토큰을 여러 개 놓습니다. 한 명의 플레이어를 라운드의 진행자로 선택합니다. 진행자는 모든 플레이어에게 1부터 10까지 번호가 적힌 카드를 무작위로 나눠준 후, 500장의 테마 카드 중 하나를 읽습니다. 예를 들어 \"배트맨이 악당 퇴치를 위해 로빈을 대체하려고 한다. '배트맨과...'의 새로운 듀오를 최악부터 최고까지 만들어보세요\"라는 식입니다. 진행자는 자신의 카드 번호를 보고 그에 맞는 답변을 제시합니다. 1번이면 최악의 제안을, 10번이면 최고의 제안을, 5~7번이면 중간 정도의 제안을 해야 합니다.\n\n다른 플레이어들은 각자 받은 번호에 맞춰 테마에 대한 답변을 제시합니다. 그러면 진행자가 가장 낮은 번호부터 높은 번호 순서로 정렬해야 합니다. 틀린 횟수만큼 유니콘 토큰을 뒤집어서 똥 면으로 만듭니다.\n\n5라운드 끝에 모든 유니콘이 사라져 똥만 남으면 패배합니다. 그렇지 않으면 승리합니다!"
+      "descriptionKo": "파티 게임 「That's a Question!」은 다른 플레이어들에게 질문을 던지고 그들의 답을 예측하는 투표 방식의 게임입니다.\n\n게임 진행 방식은 다음과 같습니다. 각 플레이어는 세 가지 색상 영역이 있는 육각형 카드를 손에 들고 있습니다. 자신의 차례에 토큰을 가진 플레이어를 선택하여 토큰을 가져간 후, 색상으로 구분된 질문 프롬프트 중 하나를 고르고 자신의 손에서 카드 두 장을 선택하여 해당 색상 부분을 조합해 질문을 만듭니다. 예: \"사라진다면 페이스북과 문 중 뭐가 더 그리울까요?\"\n\n질문받은 플레이어는 A 또는 B로 비밀투표하고, 다른 플레이어들은 그 플레이어가 어떻게 답할지 예측하여 투표합니다. 원하면 3배 점수 토큰을 투표에 추가할 수 있습니다.\n\n투표를 공개한 후, 정답을 맞힌 모든 플레이어는 1칸 또는 3칸 전진하고, 질문을 낸 플레이어는 틀린 투표자의 수만큼 전진합니다. 점수판의 특정 칸을 지나면 사용한 3배 토큰을 회수합니다. 토큰 소유자에게만 질문할 수 있으므로 모두가 비슷"
     },
     "cottage": {
       "status": "active",
@@ -10372,7 +10372,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "주어진 번호에 맞춰 창의적인 답변을 제시하고 진행자가 순서를 맞추는 게임.",
+      "summaryKo": "다른 플레이어의 답을 예측하여 득점하는 투표식 파티 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -21810,7 +21810,7 @@ const gameData = {
         "Alex Randolph"
       ],
       "description": "In Good & Bad Ghosts!, each player has four good ghosts and four evil ghosts &ndash; but only the player who owns a ghost can see whether it's good or evil (as with the pieces in Stratego). These ghosts start the game in the back rows of a 6x6 game board with the corners removed. Each turn, a player moves one of his ghosts one square orthogonally. Moving into an opponent's ghost kills that ghost. To win, you must get rid of your own evil ghosts, kill your opponent's good ghosts, or move one of your good ghosts off the board from one of your opponent's corner squares.",
-      "descriptionKo": "마법 카메라로 찍힌 물건들이 엉뚱한 색으로 나왔습니다! 유령 발두인을 도와 사라질 물건을 빠르게 맞추세요. 정확한 색과 물건을 먼저 외치는 반응 속도와 기억력 게임."
+      "descriptionKo": "'착한 유령과 악한 유령' 게임에서 각 플레이어는 착한 유령 4개와 악한 유령 4개를 가집니다. 단, 유령의 주인만이 그것이 착한지 악한지 볼 수 있습니다(스트래티고처럼). 유령들은 모서리가 제거된 6x6 게임 보드의 뒷줄에서 시작합니다. 매 턴마다 플레이어는 자신의 유령 하나를 정사각형 한 칸만큼 상하좌우로 이동시킵니다. 상대의 유령이 있는 칸으로 이동하면 그 유령을 제거합니다. 승리 조건은 세 가지입니다: 자신의 악한 유령을 모두 제거하거나, 상대의 착한 유령을 모두 제거하거나, 자신의 착한 유령 하나를 상대의 코너 칸에서 보드 밖으로 이동시키면 됩니다."
     },
     "cottage": {
       "status": "active",
@@ -21855,7 +21855,7 @@ const gameData = {
         "빠져들게",
         "대화하며"
       ],
-      "summaryKo": "마법 카메라로 찍힌 엉뚱한 색의 물건을 빠르게 맞추는 반응 속도 게임",
+      "summaryKo": "정체를 숨긴 유령들을 이동시켜 상대를 제거하거나 탈출시키는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -39779,7 +39779,7 @@ const gameData = {
         "Francesco Rotta"
       ],
       "description": "In Battle Sheep (first released as Splits), players start the game by constructing the board from identical four-hex tiles, then each player places his/her tall stack of discs on one of the border hexes. Players take turns removing some number of discs from the top of one of their stacks, moving that new stack of discs as far away as it can go in a straight line. Players must leave at least one disc behind when moving, so the board gradually fills up and movement opportunities become more and more scarce. The player occupying the most spaces at the end of the game wins!",
-      "descriptionKo": "배틀십은 원래 연필과 종이로 하는 공개 도메인 게임이었지만, 1967년 Milton Bradley가 유명한 보드게임으로 만들었습니다. 종이 격자는 플라스틱 못으로 추측을 기록할 수 있는 구멍이 있는 플라스틱 격자로 바뀌었습니다.\n\n각 플레이어는 길이가 2~5칸인 배들을 정사각형 격자에 비밀리에 배치합니다. 그 다음 각 플레이어는 위치를 부르며 상대방의 격자를 공격합니다. 방어자는 \"명중!\" 또는 \"빗맞음!\"으로 응답합니다. 적의 배 위치를 추론하고 격침하는 것이 목표이며, 먼저 모든 배를 격침하는 플레이어가 승리합니다.\n\n규칙서의 살보 변형룰에서는 각 플레이어가 남은 배의 개수에 따라 한 번에 1~5발을 발사할 수 있습니다(예: 게임 시작 시 5척의 배가 있으므로 5발 발사. 배가 격침될 때마다 발사 횟수 감소). 이 버전은 원래의 연필과 종이 게임에 더 가깝습니다."
+      "descriptionKo": "《배틀 셉(Battle Sheep)》에서 플레이어들은 동일한 육각형 타일로 게임판을 구성하는 것으로 시작합니다. 각 플레이어는 자신의 높은 원판 스택을 테두리 육각형 중 하나에 놓습니다. 플레이어들은 차례대로 자신의 스택 중 하나에서 여러 개의 원판을 떼어내 그 스택을 일직선으로 최대한 멀리 이동시킵니다. 이동할 때는 반드시 한 개 이상의 원판을 남겨두어야 하므로, 게임판이 점차 가득 차면서 이동 기회는 점점 줄어듭니다. 게임 종료 시 가장 많은 공간을 점유한 플레이어가 승리합니다!"
     },
     "cottage": {
       "status": "active",
@@ -39811,7 +39811,7 @@ const gameData = {
       "displayTags": [
         "편안하게"
       ],
-      "summaryKo": "상대의 배를 추론하여 먼저 모두 격침하는 해전 추측 게임",
+      "summaryKo": "자신의 원판 스택을 일직선으로 이동시켜 게임판을 점유하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -50029,7 +50029,7 @@ const gameData = {
         "Nicolas Bourgoin"
       ],
       "description": "Braintopia Beyond is the follow-up to the fast-paced brain bender that tests your mental focus,  flexibility, and speed. Comprised of eight different types of challenges, up to six players race through a deck of cards, fighting to keep up with the ever-changing mini-games, and attempt to solve the puzzles faster than their opponents. Collect brain tokens by beating a single Touch challenge or claiming a pair of cards from any of the other seven games: Multitasking, Observation, Squares, Analysis, Unique, Combination, and Tracking. The first player to collect four brain tokens wins!\n\n&mdash;description from the publisher",
-      "descriptionKo": "챌린지는 포커 챌린지와 유사한 단어 주사위 게임입니다. 플레이어들은 글자 주사위를 굴려 단어를 만들어 점수를 얻습니다. 하지만 글자와 단어를 2배 또는 3배로 만드는 빨간색과 파란색 칸이 있는 보드판이 특징으로, 다른 게임들과 차별됩니다.\n\n2명에서 10명이 플레이할 수 있으며, 모든 플레이어는 차례대로 2분간 진행합니다."
+      "descriptionKo": "브레인토피아 비욘드는 정신 집중력, 유연성, 속도를 시험하는 빠르고 짜릿한 두뇌 게임의 후속작입니다. 8가지 유형의 챌린지로 구성되어 있으며, 최대 6명의 플레이어가 카드 덱을 통해 경쟁하면서 계속 변하는 미니게임에 발맞추고 상대방보다 빨리 퍼즐을 풀기 위해 노력합니다. 터치 챌린지 한 개를 이기거나 멀티태스킹, 관찰력, 정사각형, 분석, 유니크, 조합, 추적 등 7가지 게임 중 한 쌍의 카드를 확보하여 뇌 토큰을 수집합니다. 4개의 뇌 토큰을 먼저 수집한 플레이어가 승리합니다!"
     },
     "cottage": {
       "status": "active",
@@ -50082,7 +50082,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "주사위로 단어를 만들어 점수를 얻되 보드판의 배수 칸을 활용해 고득점을 겨루는 게임.",
+      "summaryKo": "8가지 다양한 퍼즐 챌린지를 빠르게 풀어 뇌 토큰을 모으는 두뇌 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -71166,7 +71166,7 @@ const gameData = {
         "Pavel Jarosch"
       ],
       "description": "Join other ambitious guild leaders in mining and developing the famous City of Silver during its period of rapid economic growth and expansion in the 14th century &mdash; from the first discovery of silver near the Cistercian monastery to the construction of Kutn&aacute; Hora, which quickly became one of the most important cities in central Europe.\n\nKutn&aacute; Hora: The City of Silver is a historical city-building Eurogame for 2-4 players that features a real-life supply and demand experience in which every action you take has an impact on the game's dynamic economic systems.\n\nIn each round, players take turns selecting actions from a hand of double-sided cards to engage strategic plans like mining, purchasing plots of land on which to build, gaining permits, raising buildings for their affiliated guilds, gaining profit from their production, and of course working towards the construction of Saint Barbara's Cathedral.\n\nThe asymmetrical nature of each player's available guilds makes for highly interactive rounds in which each decision impacts the economy and other players in interesting ways as they expand their mines and build infrastructure across a shared board.\n\nMine ore and smelt it into a fortune of silver for expanding this beautiful historic city, but take care to balance your personal goal advancement with the need to further the city's growth. Everything is connected, and sometimes the path to personal victory relies on the prosperity of the many.\n\n&mdash;description from publisher",
-      "descriptionKo": "알룰라에 오신 것을 환영합니다. 계절의 리듬에 따라 지형이 끊임없이 변하는 신비로운 대륙입니다. 안개의 바다 너머 알룰라 대륙을 누비며 그 비밀을 찾고, 주민을 만나고, 경이로운 것들을 기록하여 상대보다 더 많은 명성을 얻으세요.\n\n파라웨이 게임 내내 앞에 카드 8장을 왼쪽에서 오른쪽 순서로 펼칩니다. 이 카드들은 탐험 중 마주칠 지역을 나타냅니다. 카드의 인물들은 그들의 조건을 나중에 충족하면 승리점을 줍니다. 게임 끝에 같은 길을 되돌아가며 카드를 역순으로 계산합니다. 여기가 게임의 핵심입니다. 당신이 낸 카드들은 새로운 목표를 설정하면서 동시에 이전에 낸 조건들을 충족시킵니다.\n\n매 턴마다 손의 3장 중 1장을 냅니다. 그다음 공개된 카드 열에서 새 카드를 픽업합니다. 파라웨이는 동시 플레이이므로, 모든 선택에서 영리한 우선순위 시스템을 고려해야 합니다. 마지막에 카드를 픽업하면 다음 턴의 선택지가 줄어들고 수익성이 떨어집니다."
+      "descriptionKo": "14세기 시스터회 수도원 인근에서 은이 처음 발견된 때부터 중부 유럽의 가장 중요한 도시 중 하나로 급속도로 성장한 쿠트나 호라의 건설까지, 야심 찬 길드 지도자들과 함께 이 유명한 은의 도시를 개발하세요.\n\n《쿠트나 호라: 은의 도시》는 2-4명용 역사 도시건설 유로게임으로, 모든 행동이 역동적인 경제 시스템에 영향을 미치는 실제의 수요와 공급 경험을 제공합니다.\n\n각 라운드마다 플레이어들은 양면 카드 손패에서 행동을 선택하여 채굴, 토지 구입, 허가 획득, 길드 건설, 생산으로부터 이윤 창출, 그리고 성 바바라 성당 건설을 향해 나아갑니다.\n\n각 플레이어가 이용할 수 있는 길드의 비대칭적 특성으로 인해 공유 보드에서 광산을 확장하고 인프라를 건설할 때 경제와 다른 플레이어에게 흥미로운 방식으로 영향을 미치는 상호작용적인 라운드가 펼쳐집니다.\n\n광석을 채굴하고 제련하여 은의 재산으로 만들어 이 아름다운 역사도시를 확장하되, 개인의 목표 달성과 도시의 성장을 균형 있게 진행하세요. 모"
     },
     "cottage": {
       "status": "active",
@@ -71208,7 +71208,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "계절 변화하는 신비로운 대륙을 탐험하며 카드를 앞뒤로 내어 조건을 충족해 명성을 겨루는 게임",
+      "summaryKo": "광석 채굴과 은 생산으로 중세 도시를 건설하며 경제 시스템을 조종하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -83586,7 +83586,7 @@ const gameData = {
         "David Chircop"
       ],
       "description": "We all have one common desire: the desire for happiness. As we build our life, taking steps towards the pursuit of happiness, we come closer to the realization that happiness lies in the pursuit.\n\nThe Pursuit of Happiness&nbsp;is a game in which you take a character from birth and you live the life you always wanted. Using a worker-placement mechanism with time as your workers, you take on projects, you get jobs, you buy items, you establish relationships, you raise families. The possibilities are endless as you live the life you have always wanted.\n\nHow much will you be able to achieve in just one lifetime during The Pursuit of Happiness?",
-      "descriptionKo": "표준 카드를 사용하여 독특한 방식의 멜드를 만드는 카드 게임입니다. 각 슈트의 멜드마다 서로 다른 능력이 있습니다. 다이아몬드 멜드는 카드를 더 획득할 수 있게 해주고, 스페이드 멜드는 상대방의 멜드를 공격하며, 클럽 멜드는 공격으로부터 방어합니다. 하트 멜드는 게임의 목표인 행복을 줍니다. 운과 실력의 좋은 조합으로, 대부분의 카드 게임과 다른 느낌을 제공합니다. 3~4명의 플레이어일 때 가장 잘 어울립니다."
+      "descriptionKo": "우리 모두는 공통된 바람을 가지고 있습니다: 행복을 향한 욕망입니다. 우리는 인생을 만들어가면서 행복을 추구하기 위해 한 걸음씩 나아가며, 결국 행복은 그 추구 과정 속에 있다는 깨달음에 도달합니다.\n\n《행복의 추구》는 당신이 태어날 때부터 한 인물이 되어 항상 원했던 삶을 살아가는 게임입니다. 시간을 워커로 사용하는 워커 플레이스먼트 메커니즘을 통해 프로젝트에 참여하고, 직업을 얻고, 물건을 구매하고, 관계를 맺고, 가족을 이루게 됩니다. 당신이 항상 원했던 삶을 사는 동안 무한한 가능성이 열려 있습니다.\n\n한 번의 인생 동안 《행복의 추구》에서 얼마나 많은 것을 이루어낼 수 있을까요?"
     },
     "cottage": {
       "status": "active",
@@ -83626,7 +83626,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "표준 카드로 슈트별 멜드의 능력을 활용하여 행복을 모으는 게임.",
+      "summaryKo": "시간을 활용해 인생의 선택지를 결정하며 행복을 추구하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
