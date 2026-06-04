@@ -9409,33 +9409,29 @@ const gameData = {
     "title": {
       "display": "몇번이고푸른달에불을붙였다",
       "owned": "몇번이고푸른달에불을붙였다",
-      "bgg": "Blue Moon"
+      "bgg": "Mystery Party in the Box: Bajo la Luna Azul"
     },
     "bgg": {
-      "id": "9446",
-      "matchStatus": "auto-confirmed",
-      "year": "2004",
-      "rating": 6.68872,
-      "weight": 2.1667,
-      "minPlayers": 2,
-      "maxPlayers": 2,
+      "id": "357173",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 8.08846,
+      "weight": 2,
+      "minPlayers": 6,
+      "maxPlayers": 7,
       "bestPlayers": [
         7
       ],
       "recommendedPlayers": [
         7
       ],
-      "notRecommendedPlayers": [
-        1,
-        2
-      ],
-      "playingTime": 30,
-      "minPlayTime": 30,
-      "maxPlayTime": 30,
+      "notRecommendedPlayers": [],
+      "playingTime": 180,
+      "minPlayTime": 120,
+      "maxPlayTime": 180,
       "categories": [
-        "Card Game",
-        "Fantasy",
-        "Fighting"
+        "Mafia",
+        "Murder / Mystery"
       ],
       "categoriesKo": [
         "카드게임",
@@ -9443,11 +9439,9 @@ const gameData = {
         "격투"
       ],
       "mechanics": [
-        "Auction / Bidding",
-        "Deck Construction",
-        "Hand Management",
-        "Tug of War",
-        "Variable Player Powers"
+        "Alliances",
+        "Deduction",
+        "Negotiation"
       ],
       "mechanicsKo": [
         "경매/입찰",
@@ -9457,9 +9451,9 @@ const gameData = {
         "비대칭 능력"
       ],
       "designers": [
-        "Reiner Knizia"
+        "Sho Tomono"
       ],
-      "description": "Blue Moon is a card game for two players, which has often been compared to Magic: The Gathering, although it has considerably different game mechanics. Particularly, it is not a CCG: There are no random cards in any expansion. It can thus be regarded as the first LCG, although it doesn't use that term yet.\n\nIt is set in the fictional world of Blue Moon, where different peoples fight for dominance of the world and the favor of the Dragons.\nEach people has its own unique traits and gameplay mechanics, and is represented by a 30 card deck.\n\nThe standard game box contains the 'Vulca' and the 'Hoax' decks, a small gameboard and three small plastic dragon miniatures, used as scoring counters in the game.\n\nOther decks can be bought separately as expansions with 31 or 30 cards each.\n\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tRules overview from the official rules:The game consists of independent consecutive fights. The starting player begins the first fight.\n\nEach fight is contested in one of two elements, either fire or earth, as announced by the starting player of the fight. During each fight, players take alternate turns to play their cards building up power in their combat and support areas. Basically, each turn the players play a character card and possibly some additional cards to at least match the total power of their opponent, who must then in turn match his opponent&rsquo;s power, and so on. &ndash; If a player is unable to do this, he must retreat from the fight.\n\nA fight ends when one of the players retreats. The other player is the winner of the fight and attracts a number of dragons. Both players remove all their cards from their combat and support areas and place them onto their face up discard pile. The retreating player then starts the next fight.\n\nUsually, the game ends when one player runs out of cards and retreats from the last fight. Then the player with dragons on his side is the victor and scores some victory points (crystals). A player wins the game instantly if he has all three dragons on his side and then attracts further dragons.\n\n\t\t\t\t\n\t\t\t\t\n\t\t\t\t\tDescription from the publisher.The world of Blue Moon is in chaos. Its god has abandoned it, and its people are in open war against each other, while the ruling power of three elemental dragons reigns above all! In this original 2-player game designed by Reiner Knizia, each player takes control over one of the Blue Moon peoples - the creative machinations of the Mimix, the fiery Vulca, the lofty Flit, and the clever Hoax - in their quest for dominance. The Blue Moon Legends basic set provides all the material needed to play, including details on the various peoples, a game board, full-color rules, and three plastic dragon figures. Expansion packs contain additional people cards.\n\nBlue Moon is part of the Kosmos two-player series.",
+      "description": "In this deductive genre, each player plays the role of a character with the dual purpose of solving a mystery and simultaneously achieving their own goals. The investigation, the negotiations with the rest of the cast and the exchange of information are essential pieces to solve the crime, but do not forget that the murderer is one of you. You can't believe everything they tell you, but you can't take victory without trusting someone either...\n\nItaly, 1962. The head of a local mafia family is murdered in his mansion shortly before he is rumored to announce his successor. Next to the corpse, there is only a handcuffed man. The movements of the victim's little brother and wife, as well as those of the men in the family, the fortune teller who works for the house and the prostitute who frequents the mansion intertwine over and over again until weaving a dense tapestry that hides the truth.",
       "descriptionKo": "블루문은 2인용 카드게임으로, 매직: 더 개더링과 자주 비교되지만 상당히 다른 게임 메카닉을 가지고 있습니다. 특히 CCG가 아니며, 확장팩에 무작위 카드가 없습니다. 따라서 아직 그 용어를 사용하지는 않지만 최초의 LCG로 간주됩니다.\n\n블루문이라는 가상의 세계를 배경으로 하며, 다양한 종족들이 세계의 패권과 용의 호의를 놓고 싸웁니다. 각 종족은 고유한 특성과 게임 메카닉을 가지며 30장의 카드 덱으로 표현됩니다.\n\n기본 박스에는 '불카'와 '호악스' 덱, 작은 게임 보드, 점수 계산용 플라스틱 용 미니어처 3개가 포함되어 있습니다.\n\n**게임 규칙**\n\n게임은 독립적인 연속 전투로 이루어집니다. 각 전투는 화염 또는 대지 중 한 요소에서 진행됩니다. 플레이어들은 번갈아가며 카드를 플레이하여 자신의 전투 및 지원 영역에 힘을 쌓습니다. 기본적으로 상대의 힘에 맞춰야 하며, 맞추지 못하면 전투에서 후퇴합니다.\n\n한 플레이어가 후퇴하면 전투가 끝나고, 승자가 용을 획득합니"
     },
     "cottage": {
@@ -9470,41 +9464,48 @@ const gameData = {
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3,
       "moodTags": [
-        "immersive",
-        "tense"
+        "tense",
+        "chaotic",
+        "immersive"
       ],
       "playTags": [
-        "card_play",
+        "deduction",
+        "murder_mystery",
         "strategy"
       ],
       "situationTags": [
+        "group",
         "experienced",
         "long_stay",
-        "couple",
-        "group",
         "large_group"
       ],
       "interactionTags": [
-        "competitive"
+        "social",
+        "competitive",
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "immersive",
         "tense",
-        "card_play",
+        "chaotic",
+        "immersive",
+        "deduction",
+        "murder_mystery",
         "strategy",
+        "group",
         "experienced",
         "long_stay",
-        "couple",
-        "group",
         "large_group",
-        "competitive"
+        "social",
+        "competitive",
+        "table_talk"
       ],
       "displayTags": [
         "머리쓰게",
+        "머더미스터리",
         "빠져들게",
-        "경쟁형"
+        "즐기고"
       ],
       "summaryKo": "두 종족이 번갈아 카드를 플레이해 힘을 비교하며 전투에서 승리하는 게임.",
       "comment": {
@@ -9523,8 +9524,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/6Ao12l2jSf8F8ZufO4DEHg__original/img/DcusAHDupSMnyo2deskmW7RIE2k=/0x0/filters:format(jpeg)/pic174185.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/6Ao12l2jSf8F8ZufO4DEHg__small/img/scihNGFxIXdMSUcoJDUAsdMzHLM=/fit-in/200x150/filters:strip_icc()/pic174185.jpg",
+      "main": "https://cf.geekdo-images.com/-stFnwkQ4rN9r6OHa5zBmA__original/img/0-3jnRUf-OVC5MNCfuJxmb86Aps=/0x0/filters:format(jpeg)/pic6687599.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/-stFnwkQ4rN9r6OHa5zBmA__small/img/ncvQ7Ncpkz8WJigt35g1NUSupzU=/fit-in/200x150/filters:strip_icc()/pic6687599.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -25715,16 +25716,16 @@ const gameData = {
     "title": {
       "display": "다윈의위대한발자취",
       "owned": "다윈의위대한발자취",
-      "bgg": "Darwin's Journey"
+      "bgg": "In the Footsteps of Darwin"
     },
     "bgg": {
-      "id": "322289",
+      "id": "376683",
       "matchStatus": "forced",
       "year": "2023",
-      "rating": 8.09374,
-      "weight": 3.8934,
-      "minPlayers": 1,
-      "maxPlayers": 4,
+      "rating": 7.35125,
+      "weight": 1.6667,
+      "minPlayers": 2,
+      "maxPlayers": 5,
       "bestPlayers": [
         3,
         4
@@ -25736,30 +25737,30 @@ const gameData = {
         5
       ],
       "notRecommendedPlayers": [
-        4
+        1,
+        5
       ],
-      "playingTime": 120,
-      "minPlayTime": 60,
-      "maxPlayTime": 120,
+      "playingTime": 30,
+      "minPlayTime": 20,
+      "maxPlayTime": 30,
       "categories": [
-        "Exploration",
-        "Travel"
+        "Animals",
+        "Educational",
+        "Nautical"
       ],
       "categoriesKo": [
         "탐험",
         "여행"
       ],
       "mechanics": [
-        "Contracts",
-        "Ownership",
-        "Pick-up and Deliver",
-        "Point to Point Movement",
-        "Set Collection",
-        "Solo / Solitaire Game",
-        "Turn Order: Claim Action",
-        "Variable Set-up",
-        "Worker Placement",
-        "Worker Placement, Different Worker Types"
+        "End Game Bonuses",
+        "Grid Coverage",
+        "Layering",
+        "Open Drafting",
+        "Pattern Building",
+        "Rondel",
+        "Square Grid",
+        "Tile Placement"
       ],
       "mechanicsKo": [
         "계약",
@@ -25774,10 +25775,10 @@ const gameData = {
         "다중 워커 배치"
       ],
       "designers": [
-        "Simone Luciani",
-        "Nestore Mangone"
+        "Grégory Grard",
+        "Matthieu Verdier"
       ],
-      "description": "When all you can identify in the horizon for many long days is the line that detaches the sea from the sky, the glimpse of a distant shore appearing before you will make you shiver at the understanding that the adventure is about to begin.\n\nYou find yourself astonished, landing on the shore that will be the origin of an extensive exploration through the Galapagos, a magic place of inconceivable beauty and endless biodiversity. There, you will gather repertoires and expand your knowledge of the natural sciences. Your eyes will learn how to detect the hidden species in the tropical forest, gazing at the countless colors and textures of nature. After inspiring hours spent studying and getting to enlightening conclusions, you will rest under a sparkling sky, admiring the stunning complexity of the animal realm.\n\nDarwin's Journey is a worker-placement Eurogame in which players recall Charles Darwin's memories of his adventure through the Galapagos islands, which contributed to the development of his theory of evolution.\n\nWith the game's innovative worker progression system, each worker will have to study the disciplines that are a prerequisite to perform several actions in the game, such as exploration, correspondence, gathering, and dispatch of repertoires found on the island to museums in order to contribute to the human knowledge of biology. The game lasts five rounds, and thanks to several short- and long-term objectives, every action you take will grant victory points in different ways.",
+      "description": "Twenty years after his expedition around the world, Charles Darwin is writing On the Origin of Species. He wants to gather new information about animal life, particularly about continents he hardly explored. Who other than young naturalists, eager for discovery, could help the renowned scholar finish writing his most famous work?\n\nIn In the Footsteps of Darwin, players are junior naturalists who have just arrived aboard the Beagle to help Charles Darwin finish his book On the Origin of Species. During this journey, you will study animals, carry out cartographic surveys, publish your findings, and develop theories. Starting with the naturalist controlling the Darwin token, naturalists take turns in clockwise order, performing these two steps in order:\n\n\n     Study an animal or take inspiration from a character: Choose one of the three tiles facing the Beagle and place it onto your naturalist's notebook. It may be either an animal to study or a character from the Beagle's previous journey who will inspire you. Gain the bonuses depicted or any additional scoring bonuses triggered by the tile's placement.\n\n\n\n     Voyage of the Beagle: After placing a tile on your notebook, move the Beagle as many spaces forward as the distance between the Beagle and the tile you just selected (1-3 spaces), then draw a new tile to replace the empty space on the journey board.\n\n\nYour goal is to score more points than your opponents to determine who contributed the most to On the Origin of Species.\n\n&mdash;description from the publisher",
       "descriptionKo": "갈라파고스 탐험가가 되어 동물을 관찰하고 생물 표본을 수집합니다. 다윈의 진화론 연구를 배경으로 한 탐험 게임으로 생물 다양성과 자연의 아름다움을 주제로 합니다."
     },
     "cottage": {
@@ -25787,41 +25788,33 @@ const gameData = {
       "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
-      "moodTags": [
-        "immersive"
-      ],
+      "moodTags": [],
       "playTags": [
-        "card_play",
+        "puzzle",
         "strategy"
       ],
       "situationTags": [
-        "experienced",
-        "long_stay",
         "beginner",
-        "group"
+        "group",
+        "large_group"
       ],
       "interactionTags": [
         "competitive",
-        "turn_based",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "immersive",
-        "card_play",
+        "puzzle",
         "strategy",
-        "experienced",
-        "long_stay",
         "beginner",
         "group",
+        "large_group",
         "competitive",
-        "turn_based",
         "low_conflict"
       ],
       "displayTags": [
         "머리쓰게",
-        "빠져들게",
         "경쟁형"
       ],
       "summaryKo": "갈라파고스에서 동물을 관찰하며 생물 표본을 수집하는 탐험 게임.",
@@ -25841,8 +25834,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/-A_ABjMw4PdoAZrH-FjiiA__original/img/GuDlOog3eTRrkxCUzCEgRc17B-g=/0x0/filters:format(png)/pic5726930.png",
-      "thumbnail": "https://cf.geekdo-images.com/-A_ABjMw4PdoAZrH-FjiiA__small/img/_rJRtHzqatLg9OQM0x1UaC1cRGY=/fit-in/200x150/filters:strip_icc()/pic5726930.png",
+      "main": "https://cf.geekdo-images.com/1KPQC8pVuTXL32RdbTxDjw__original/img/EQC8y33vySGjfyaZ8hhE9fcOj5I=/0x0/filters:format(jpeg)/pic7234392.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/1KPQC8pVuTXL32RdbTxDjw__small/img/5-diW-kjrYWpfEsAHjBoKyyIL5g=/fit-in/200x150/filters:strip_icc()/pic7234392.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -85308,8 +85301,8 @@ const gameData = {
   "천국과맥주": {
     "id": "천국과맥주",
     "title": {
-      "display": "맥주와빵",
-      "owned": "맥주와빵",
+      "display": "천국과맥주",
+      "owned": "천국과맥주",
       "bgg": "Beer & Bread"
     },
     "bgg": {

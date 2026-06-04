@@ -35810,6 +35810,50 @@
       ]
     }
   },
+  "357173": {
+    "bggId": "357173",
+    "title": "Mystery Party in the Box: Bajo la Luna Azul",
+    "image": "https://cf.geekdo-images.com/-stFnwkQ4rN9r6OHa5zBmA__original/img/0-3jnRUf-OVC5MNCfuJxmb86Aps=/0x0/filters:format(jpeg)/pic6687599.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/-stFnwkQ4rN9r6OHa5zBmA__small/img/ncvQ7Ncpkz8WJigt35g1NUSupzU=/fit-in/200x150/filters:strip_icc()/pic6687599.jpg",
+    "description": "In this deductive genre, each player plays the role of a character with the dual purpose of solving a mystery and simultaneously achieving their own goals. The investigation, the negotiations with the rest of the cast and the exchange of information are essential pieces to solve the crime, but do not forget that the murderer is one of you. You can't believe everything they tell you, but you can't take victory without trusting someone either...\n\nItaly, 1962. The head of a local mafia family is murdered in his mansion shortly before he is rumored to announce his successor. Next to the corpse, there is only a handcuffed man. The movements of the victim's little brother and wife, as well as those of the men in the family, the fortune teller who works for the house and the prostitute who frequents the mansion intertwine over and over again until weaving a dense tapestry that hides the truth.",
+    "yearpublished": "2021",
+    "minplayers": "6",
+    "minage": "10",
+    "maxplayers": "7",
+    "playingtime": "180",
+    "minplaytime": "120",
+    "maxplaytime": "180",
+    "averageweight": "2",
+    "average": "8.08846",
+    "bayesaverage": "0",
+    "usersrated": "26",
+    "rank": "Not Ranked",
+    "designers": [
+      "Sho Tomono"
+    ],
+    "artists": [],
+    "publishers": [
+      "GDM Games",
+      "Group SNE",
+      "MTS Games"
+    ],
+    "categories": [
+      "Mafia",
+      "Murder / Mystery"
+    ],
+    "mechanics": [
+      "Alliances",
+      "Deduction",
+      "Negotiation"
+    ],
+    "suggested_numplayers": {
+      "best": [],
+      "recommended": [
+        7
+      ],
+      "not_recommended": []
+    }
+  },
   "357563": {
     "bggId": "357563",
     "title": "Akropolis",
@@ -38067,6 +38111,78 @@
     "categories": [],
     "mechanics": [],
     "bestPlayer": null
+  },
+  "376683": {
+    "bggId": "376683",
+    "title": "In the Footsteps of Darwin",
+    "image": "https://cf.geekdo-images.com/1KPQC8pVuTXL32RdbTxDjw__original/img/EQC8y33vySGjfyaZ8hhE9fcOj5I=/0x0/filters:format(jpeg)/pic7234392.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/1KPQC8pVuTXL32RdbTxDjw__small/img/5-diW-kjrYWpfEsAHjBoKyyIL5g=/fit-in/200x150/filters:strip_icc()/pic7234392.jpg",
+    "description": "Twenty years after his expedition around the world, Charles Darwin is writing On the Origin of Species. He wants to gather new information about animal life, particularly about continents he hardly explored. Who other than young naturalists, eager for discovery, could help the renowned scholar finish writing his most famous work?\n\nIn In the Footsteps of Darwin, players are junior naturalists who have just arrived aboard the Beagle to help Charles Darwin finish his book On the Origin of Species. During this journey, you will study animals, carry out cartographic surveys, publish your findings, and develop theories. Starting with the naturalist controlling the Darwin token, naturalists take turns in clockwise order, performing these two steps in order:\n\n\n     Study an animal or take inspiration from a character: Choose one of the three tiles facing the Beagle and place it onto your naturalist's notebook. It may be either an animal to study or a character from the Beagle's previous journey who will inspire you. Gain the bonuses depicted or any additional scoring bonuses triggered by the tile's placement.\n\n\n\n     Voyage of the Beagle: After placing a tile on your notebook, move the Beagle as many spaces forward as the distance between the Beagle and the tile you just selected (1-3 spaces), then draw a new tile to replace the empty space on the journey board.\n\n\nYour goal is to score more points than your opponents to determine who contributed the most to On the Origin of Species.\n\n&mdash;description from the publisher",
+    "yearpublished": "2023",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "5",
+    "playingtime": "30",
+    "minplaytime": "20",
+    "maxplaytime": "30",
+    "averageweight": "1.6667",
+    "average": "7.35125",
+    "bayesaverage": "6.54547",
+    "usersrated": "3230",
+    "rank": "1210",
+    "designers": [
+      "Grégory Grard",
+      "Matthieu Verdier"
+    ],
+    "artists": [
+      "Maud Briand",
+      "David Sitbon"
+    ],
+    "publishers": [
+      "Sorry We Are French",
+      "Broadway Toys LTD",
+      "Dino Toys s. r. o.",
+      "Feelindigo",
+      "Fractal Juegos",
+      "Gémklub",
+      "Hachette Boardgames UK",
+      "Hachette Boardgames USA",
+      "Happy Baobab",
+      "Lifestyle Boardgames Ltd",
+      "Mancalamaro",
+      "Mar Lúdico",
+      "Rebel Sp. z o.o.",
+      "Tranjis Games"
+    ],
+    "categories": [
+      "Animals",
+      "Educational",
+      "Nautical"
+    ],
+    "mechanics": [
+      "End Game Bonuses",
+      "Grid Coverage",
+      "Layering",
+      "Open Drafting",
+      "Pattern Building",
+      "Rondel",
+      "Square Grid",
+      "Tile Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3,
+        4
+      ],
+      "recommended": [
+        2,
+        5
+      ],
+      "not_recommended": [
+        1,
+        5
+      ]
+    }
   },
   "376893": {
     "bggId": "376893",

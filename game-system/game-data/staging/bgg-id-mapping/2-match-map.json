@@ -425,12 +425,9 @@
     "ownedName": "포커칩세트"
   },
   "몇번이고푸른달에불을붙였다": {
-    "status": "auto-confirmed",
-    "bggId": "9446",
-    "ownedName": "몇번이고푸른달에불을붙였다",
-    "bggName": "Blue Moon",
-    "score": 113,
-    "scoreGap": 8
+    "status": "forced",
+    "bggId": "357173",
+    "ownedName": "몇번이고푸른달에불을붙였다"
   },
   "플립7": {
     "status": "auto-confirmed",
@@ -1185,7 +1182,7 @@
   },
   "다윈의위대한발자취": {
     "status": "forced",
-    "bggId": "322289",
+    "bggId": "376683",
     "ownedName": "다윈의위대한발자취"
   },
   "다이너스티 혼인과통치": {

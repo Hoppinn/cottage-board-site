@@ -1498,14 +1498,14 @@
   {
     "id": "몇번이고푸른달에불을붙였다",
     "ownedName": "몇번이고푸른달에불을붙였다",
-    "titleEn": "Blue Moon",
-    "bggId": "9446",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Mystery Party in the Box: Bajo la Luna Azul",
+    "bggId": "357173",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "머더미",
-    "difficulty": 2.1667,
+    "difficulty": 2,
     "difficultyWeight": 3,
-    "rating": 6.68872,
+    "rating": 8.08846,
     "bestPlayers": [
       7
     ],
@@ -4097,14 +4097,14 @@
   {
     "id": "다윈의위대한발자취",
     "ownedName": "다윈의위대한발자취",
-    "titleEn": "Darwin's Journey",
-    "bggId": "322289",
+    "titleEn": "In the Footsteps of Darwin",
+    "bggId": "376683",
     "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 3.8934,
+    "difficulty": 1.6667,
     "difficultyWeight": 1.67,
-    "rating": 8.09374,
+    "rating": 7.35125,
     "bestPlayers": [
       3,
       4
