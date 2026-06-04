@@ -449,6 +449,43 @@
       };
     }
 
+    // 공용 태그칩 입력 초기화 — 등록폼/수정폼 공용
+    function initTagInput(wrap, hidden, initialValue) {
+      if (!wrap) return;
+      const chips = wrap.querySelector('.tag-chips');
+      const text = wrap.querySelector('.tag-text-input');
+      function updateHidden() {
+        hidden.value = [...chips.querySelectorAll('.tag-chip')].map(c => c.dataset.val).join(', ');
+      }
+      function addTag(val) {
+        val = val.trim();
+        if (!val) return;
+        const chip = document.createElement('span');
+        chip.className = 'tag-chip';
+        chip.dataset.val = val;
+        chip.innerHTML = escH(val) + '<button type="button" class="tag-chip-del">×</button>';
+        chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
+        chips.appendChild(chip);
+        updateHidden();
+      }
+      text.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          const v = text.value.trim();
+          if (v) { addTag(v); text.value = ''; text.focus(); }
+        } else if (e.key === 'Backspace' && !text.value) {
+          const last = chips.querySelector('.tag-chip:last-child');
+          if (last) { last.remove(); updateHidden(); }
+        }
+      });
+      text.addEventListener('blur', () => {
+        const v = text.value.trim();
+        if (v) { addTag(v); text.value = ''; setTimeout(() => text.focus(), 0); }
+      });
+      wrap.addEventListener('click', () => text.focus());
+      if (initialValue) initialValue.split(',').forEach(v => addTag(v));
+    }
+
     function showToast(msg) {
       const t = document.getElementById('prToast');
       t.textContent = msg;
@@ -647,44 +684,6 @@
         if (focusInput) div.querySelector('.prGameName').focus();
       }
 
-      function initTagInput(wrap, hidden, initialValue) {
-        if (!wrap) return;
-        const chips = wrap.querySelector('.tag-chips');
-        const text = wrap.querySelector('.tag-text-input');
-        function updateHidden() {
-          hidden.value = [...chips.querySelectorAll('.tag-chip')].map(c => c.dataset.val).join(', ');
-        }
-        function addTag(val) {
-          val = val.trim();
-          if (!val) return;
-          const chip = document.createElement('span');
-          chip.className = 'tag-chip';
-          chip.dataset.val = val;
-          chip.innerHTML = escH(val) + '<button type="button" class="tag-chip-del">×</button>';
-          chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
-          chips.appendChild(chip);
-          updateHidden();
-        }
-        text.addEventListener('keydown', e => {
-          if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault(); // 항상 막아서 다음 칸 이동 방지
-            const v = text.value.trim();
-            if (v) { addTag(v); text.value = ''; text.focus(); }
-          } else if (e.key === 'Backspace' && !text.value) {
-            const last = chips.querySelector('.tag-chip:last-child');
-            if (last) { last.remove(); updateHidden(); }
-          }
-        });
-        text.addEventListener('blur', () => {
-          const v = text.value.trim();
-          // 모바일 소프트키보드 "다음" 버튼은 keydown 없이 blur만 발생하므로,
-          // 값이 있을 때 태그 추가 후 포커스 복원해 참여자 칸에 머물도록 함
-          if (v) { addTag(v); text.value = ''; setTimeout(() => text.focus(), 0); }
-        });
-        wrap.addEventListener('click', () => text.focus());
-        if (initialValue) initialValue.split(',').forEach(v => addTag(v));
-      }
-
       // 그룹명 자동완성
       attachAc(document.getElementById('prGroup'), () => window._prGroups || [], null, document.getElementById('prGroupAcList'));
 
@@ -872,8 +871,12 @@
             </div>
             <label style="font-size:11px;color:var(--muted);font-weight:700;color:#c0392b">🎲 게임명 수정</label>
             <input class="pie-game" placeholder="게임명 검색" value="${escH(currentGameDisplay)}" autocomplete="off" style="border-color:#c0392b">
-            <label style="font-size:11px;color:var(--muted)">참여자 이름 (쉼표로 구분)</label>
-            <input class="pie-names" placeholder="예: 호핀, 철수" value="${escH(rec.names||'')}">
+            <label style="font-size:11px;color:var(--muted)">참여자</label>
+            <div class="tag-input-wrap pie-names-wrap">
+              <div class="tag-chips"></div>
+              <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
+              <input type="hidden" class="pie-names">
+            </div>
             <label style="font-size:11px;color:var(--muted)">인원수</label>
             <input class="pie-count" type="number" placeholder="명" value="${escH(String(rec.count||''))}">
             <label style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
@@ -906,8 +909,22 @@
           // 모임명 자동완성
           attachAc(form.querySelector('.pie-group'), () => window._prGroups || []);
 
-          // 참여자 이름 자동완성 — 항상 최신 window._prPlayerNames 참조
-          attachAc(form.querySelector('.pie-names'), () => window._prPlayerNames || []);
+          // 참여자 태그칩 (등록폼과 동일 방식, 기존 값 초기 로드)
+          initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
+          attachAc(
+            form.querySelector('.pie-names-wrap .tag-text-input'),
+            () => window._prPlayerNames || [],
+            s => {
+              const ti = form.querySelector('.pie-names-wrap .tag-text-input');
+              s.split(',').forEach(name => {
+                name = name.trim();
+                if (!name) return;
+                ti.value = name;
+                ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+              });
+            },
+            form.querySelector('.pie-names-wrap')
+          );
 
           // 기존 사진 개별 삭제
           form.querySelectorAll('.pie-existing-del').forEach(btn => {

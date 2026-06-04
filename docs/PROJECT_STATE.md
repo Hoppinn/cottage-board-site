@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-04 (B-02, B-08 수정)
+최종 갱신: 2026-06-04 (D-04, B-03 수정)
 
 ---
 
@@ -55,7 +55,7 @@
 | ID | 위치 | 설명 |
 |----|------|------|
 | ~~B-02~~ | ~~game-reviews.html~~ | ~~`photo_url = null` 전체 삭제~~ → **parsePhotoUrls + updateGamePlay로 개별 URL 삭제 완료** |
-| B-03 | supabase-client.js:478–479 | 이용시간: 59초 이하 세션 전체 폐기 (`Math.floor / 60000`, `if elapsed <= 0 return`) |
+| ~~B-03~~ | ~~supabase-client.js~~ | ~~59초 이하 폐기~~ → **초단위 누적 + 분변환 완료** |
 
 ### 중 (기능 결함)
 
@@ -82,7 +82,7 @@
 | ~~D-01~~ | ~~그룹명 자동완성~~ | ~~등록폼 IIFE / 수정폼 attachAc 이원화~~ → **공용 attachAc로 통합 완료** |
 | ~~D-02~~ | ~~게임명 자동완성~~ | ~~등록폼 커스텀 / 수정폼 attachAc 이원화~~ → **공용 attachAc로 통합 완료** |
 | ~~D-03~~ | ~~사진 업로드 로직~~ | ~~addPhotoItem / addPieNewItem 2벌~~ → **buildPhotoItemAdder 공통 함수로 통합 완료** |
-| D-04 | 참여자 입력 방식 | 등록폼: `initTagInput` (태그칩 방식) / 수정폼: 일반 `<input>` (쉼표 구분 텍스트) |
+| ~~D-04~~ | ~~참여자 입력 방식~~ | ~~등록폼 태그칩 / 수정폼 plain input 이원화~~ → **initTagInput 공용화, 수정폼도 태그칩으로 통일 완료** |
 | D-05 | `getDb()` vs `window.CottageDB` | 직접 DB 쿼리(`getDb()`)와 CottageDB 래퍼 혼용 — `review_text` 같은 추가 컬럼이 필요한 경우 직접 쿼리 사용 |
 | ~~D-06~~ | ~~`escH()` 함수~~ | ~~game-reviews.html / kakao-auth.js 각 독립 정의~~ → **supabase-client.js에 window.escH 전역 통합 완료** |
 | D-07 | `pie-photo-trigger` vs `pr-photo-trigger` CSS | 동일한 스타일을 두 클래스로 분리 |
@@ -147,7 +147,7 @@
 
 - [x] **B-01** 이용시간 localStorage 삭제 타이밍 수정 — DB upsert 성공 후 삭제 ✅ 완료
 - [x] **B-02** 기록 표시 사진 개별 삭제 — parsePhotoUrls + updateGamePlay 적용 ✅ 완료
-- [ ] **B-03** 이용시간 단위를 초(sec)로 변경 — 59초 이하 폐기 방지
+- [x] **B-03** 이용시간 초단위 누적, DB 반영 시 분변환 (`cottage_time_sec_`) ✅ 완료
 
 ### P2 — 기능 완성 (단기)
 
@@ -159,7 +159,7 @@
 
 - [x] **D-01/D-02** `attachAc` 공용 함수로 외부 스코프 이동 + 등록폼/수정폼 공유 ✅ 완료
 - [x] **D-03** `buildPhotoItemAdder` 공통 함수로 통합 ✅ 완료
-- [ ] **D-04** 수정폼 참여자 입력을 태그칩 방식으로 통일
+- [x] **D-04** 수정폼 참여자 태그칩 통일 — initTagInput 외부 스코프 이동, 수정폼 적용 ✅ 완료
 - [x] **D-06** `escH` → `window.escH` 전역 통합 (supabase-client.js) ✅ 완료
 
 ### P4 — 선택 개선 (장기)
@@ -178,6 +178,8 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-04 | D-04: 수정폼 참여자 태그칩 통일 — initTagInput 공용화, 수정폼 적용 |
+| 2026-06-04 | B-03: 이용시간 초단위 누적 — cottage_time_sec_, DB 반영 시 분변환 |
 | 2026-06-04 | B-02: 기록 사진 개별 삭제 — 특정 URL만 제거 후 updateGamePlay, 렌더링 photo-item 래핑 |
 | 2026-06-04 | B-08: 모바일 참여자 Enter 포커스 유지 — blur에 값 있을 때 re-focus 추가 |
 | 2026-06-04 | D-06/D-01/D-02/D-03 리팩토링: escH 전역화, attachAc 공용화, buildPhotoItemAdder 통합, B-04(등록폼 참여자 AC) 해결 |

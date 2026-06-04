@@ -480,17 +480,18 @@ window.escH = function(s) {
 
   function _flushTime(userId) {
     if (!userId) return;
-    const elapsed = Math.floor((Date.now() - _sessionStart) / 60000); // 분 단위
+    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000); // 초 단위 누적
     if (elapsed <= 0) return;
-    const key = `cottage_time_${userId}`;
+    const key = `cottage_time_sec_${userId}`;
     const prev = parseInt(localStorage.getItem(key) || '0');
     localStorage.setItem(key, String(prev + elapsed));
     _sessionStart = Date.now();
   }
 
   function _popAccumulatedMinutes(userId) {
-    const key = `cottage_time_${userId}`;
-    return parseInt(localStorage.getItem(key) || '0');
+    const key = `cottage_time_sec_${userId}`;
+    const secs = parseInt(localStorage.getItem(key) || '0');
+    return Math.floor(secs / 60); // DB는 total_minutes(분) 컬럼이므로 변환
   }
 
   if (typeof document !== 'undefined') {
@@ -527,7 +528,7 @@ window.escH = function(s) {
         visit_count: (data?.visit_count || 0) + 1,
         total_minutes: (data?.total_minutes || 0) + accumulated,
       }, { onConflict: 'user_id' });
-      if (!upsertError) localStorage.removeItem(`cottage_time_${userId}`);
+      if (!upsertError) localStorage.removeItem(`cottage_time_sec_${userId}`);
     } catch (_) {}
   }
 
