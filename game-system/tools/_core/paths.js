@@ -7,7 +7,7 @@ const ROOT_DIR = path.resolve(__dirname, "../../..");
 ========================= */
 
 const INDEX_HTML_PATH = path.join(ROOT_DIR, "index.html");
-const OWNED_GAMES_HTML_PATH = path.join(ROOT_DIR, "owned-games.html");
+const OWNED_GAMES_HTML_PATH = path.join(ROOT_DIR, "pages/game/owned-games.html");
 
 const ASSETS_DIR = path.join(ROOT_DIR, "assets");
 const ASSETS_CSS_DIR = path.join(ASSETS_DIR, "css");
