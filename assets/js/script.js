@@ -604,7 +604,9 @@ function matchRecommendPlayer(game, playerValue){
   }
 
   if(playerValue === "9+"){
-    return bestPlayers.some((p) => Number(p) >= 9);
+    // bestPlayers는 최대 8까지만 기록됨 → maxPlayers로 판단
+    const maxPlayers = Number(game?.bgg?.maxPlayers || 0);
+    return maxPlayers >= 9;
   }
 
   return arrayIncludesPlayer(
