@@ -1742,8 +1742,11 @@ async function initSheetComments(gameKey) {
   listEl.innerHTML = comments.map(c => {
     const txt = c.comment_text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const mine = (currentUserId && c.user_id && String(c.user_id) === String(currentUserId))
-      || myIds.includes(c.id);
+    // 로그인 시: user_id 기반 서버 판단만 사용 (다기기 일관성)
+    // 비로그인 시: localStorage 폴백
+    const mine = currentUserId
+      ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
+      : myIds.includes(c.id);
     const nick = c.nickname ? c.nickname.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '익명';
     const dateStr = formatDate(c.created_at);
     const meta = dateStr ? `${nick} · ${dateStr}` : nick;
