@@ -69,6 +69,9 @@
 | ~~B-04~~ | ~~game-reviews.html~~ | ~~참여자 자동완성이 수정폼에만 있고 등록폼에는 없음~~ → **수정 완료** |
 | ~~B-05~~ | ~~kakao-auth.js~~ | ~~프로필 사진 localStorage만~~ → **DB 저장 + 다기기 복원 완료** |
 | ~~B-06~~ | ~~supabase-client.js~~ | ~~이용시간 DB 반영 다음날 첫 방문 때만~~ → **_syncTimeToDBNow로 visibilitychange/beforeunload 즉시 반영 완료** |
+| ~~B-10~~ | ~~requests-admin.html~~ | ~~kakao-auth-ready 이벤트 수신 — kakao-auth.js는 cottage-auth-changed 발행~~ → **이벤트명 통일 완료** |
+| ~~B-11~~ | ~~supabase-client.js~~ | ~~_syncTimeToDBNow update 사용 — 프로필 row 없을 때 조용히 실패 + localStorage 제거~~ → **upsert로 교체 완료** |
+| ~~B-12~~ | ~~supabase-client.js~~ | ~~updateProfilePhoto upsert — row 없을 때 INSERT로 기존 필드 null 덮어쓰기~~ → **update로 교체 완료** |
 | B-07 | kakao-auth.js:32–35 | 방문 카운트가 기기별 독립 → 멀티기기 사용 시 중복 카운트 가능 |
 
 ### 하 (UX 불편)
@@ -177,6 +180,7 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-05 | 관리자 3버그 수정: B-10 이벤트명 불일치, B-11 _syncTimeToDBNow update→upsert, B-12 updateProfilePhoto upsert→update |
 | 2026-06-05 | 게임 필터 전면 개선: 전체게임 인원 1~9인+ 확장, bestPlayers 우선순위(BGG>XLSX) 복원, 머더미스터리 weight 예외, 추천 드롭다운 자동 닫힘 |
 | 2026-06-05 | 사진 UX 개선: 썸네일 전환(80px 가로 스크롤, +N장 배지), 업로드 리사이즈(1200px JPEG 0.85), 일괄 리사이즈 스크립트 추가 |
 | 2026-06-05 | 데이터 수정: BGG ID 6건(푸른달, 다윈, 마헤, 고스트, 이매진, 마블좀비), 번역 재생성 12게임 |
