@@ -500,7 +500,7 @@
 
     let tried = false;
     function tryLoad() { if (tried) return; tried = true; load().then(loadAnalytics); }
-    window.addEventListener('kakao-auth-ready', tryLoad);
+    window.addEventListener('cottage-auth-changed', tryLoad);
     setTimeout(tryLoad, 1200);
   })();
   </script>

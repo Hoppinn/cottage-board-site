@@ -557,10 +557,11 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     try {
       const { data } = await db.from('profiles').select('total_minutes').eq('user_id', userId).maybeSingle();
       const newTotal = (data?.total_minutes || 0) + mins;
-      const { error } = await db.from('profiles').update({
+      const { error } = await db.from('profiles').upsert({
+        user_id: userId,
         total_minutes: newTotal,
         last_seen_at: new Date().toISOString(),
-      }).eq('user_id', userId);
+      }, { onConflict: 'user_id' });
       if (!error) localStorage.removeItem(`cottage_time_sec_${userId}`);
     } catch (_) {}
   }
@@ -608,10 +609,9 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   async function updateProfilePhoto(userId, photoUrl) {
     if (!userId) return;
     try {
-      const { error } = await db.from('profiles').upsert(
-        { user_id: userId, photo_url: photoUrl || null },
-        { onConflict: 'user_id' }
-      );
+      const { error } = await db.from('profiles')
+        .update({ photo_url: photoUrl || null })
+        .eq('user_id', userId);
       if (error) console.warn('[updateProfilePhoto] DB error:', error.message);
     } catch (e) { console.warn('[updateProfilePhoto] 예외:', e); }
   }
