@@ -3627,7 +3627,8 @@ const moodOptions =
   document.querySelectorAll('[data-mood]');
 
 playerOptions.forEach(option=>{
-  option.addEventListener('click', ()=>{
+  option.addEventListener('click', (e)=>{
+    if(option.id === 'groupBackBtn') return; // 뒤로 버튼은 별도 핸들러로 처리
     const value = option.dataset.players;
     const subBtns = document.getElementById('groupSubBtns');
     const isGroupBtn = value === 'group';
@@ -3657,7 +3658,8 @@ playerOptions.forEach(option=>{
 // 단체 뒤로가기 버튼
 const groupBackBtn = document.getElementById('groupBackBtn');
 if(groupBackBtn){
-  groupBackBtn.addEventListener('click', () => {
+  groupBackBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
     const subBtns = document.getElementById('groupSubBtns');
     if(subBtns) subBtns.style.display = 'none';
     const mainBtns = [...document.querySelectorAll('[data-players]:not(.modal-option--sub)')];
