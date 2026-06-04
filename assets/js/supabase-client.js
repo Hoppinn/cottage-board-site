@@ -625,6 +625,14 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     } catch (_) { return null; }
   }
 
+  async function getProfileSnapshot(userId) {
+    if (!userId) return null;
+    try {
+      const { data } = await db.from('profiles').select('photo_url,nickname').eq('user_id', userId).maybeSingle();
+      return data || null;
+    } catch (_) { return null; }
+  }
+
   async function getAllProfiles() {
     try {
       const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
@@ -759,6 +767,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     isUserBanned,
     updateProfilePhoto,
     getProfilePhoto,
+    getProfileSnapshot,
     getAllPlayRecordsForHub,
   };
 

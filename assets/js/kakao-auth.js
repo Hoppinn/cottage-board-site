@@ -35,11 +35,21 @@ function initKakaoAuth() {
         } else {
           window.CottageDB.startSession?.(String(user.id));
         }
-        // 다기기 프로필 사진 동기화 — DB photo_url이 localStorage와 다르면 갱신
-        window.CottageDB.getProfilePhoto?.(String(user.id)).then(dbPhoto => {
-          if (dbPhoto && dbPhoto !== user.profileImage) {
-            user.profileImage = dbPhoto;
-            localStorage.setItem(`cottage_custom_photo_${user.id}`, dbPhoto);
+        // 다기기 프로필 동기화 — DB photo_url/nickname이 localStorage와 다르면 갱신
+        window.CottageDB.getProfileSnapshot?.(String(user.id)).then(snap => {
+          if (!snap) return;
+          let changed = false;
+          if (snap.photo_url && snap.photo_url !== user.profileImage) {
+            user.profileImage = snap.photo_url;
+            localStorage.setItem(`cottage_custom_photo_${user.id}`, snap.photo_url);
+            changed = true;
+          }
+          if (snap.nickname && snap.nickname !== user.kakaoNickname && snap.nickname !== user.nickname) {
+            user.nickname = snap.nickname;
+            localStorage.setItem(`cottage_custom_nick_${user.id}`, snap.nickname);
+            changed = true;
+          }
+          if (changed) {
             localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
             updateLoginUI(user);
           }
@@ -174,6 +184,7 @@ function promptProfileImageChange() {
     localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
     updateLoginUI(user);
     modal.remove();
+    _restoreMenuExpanded();
     if (window.CottageDB?.updateProfilePhoto) {
       window.CottageDB.updateProfilePhoto(String(user.id), imgSrc)
         .then(() => console.log('[프로필사진] DB 저장 성공'))
@@ -225,6 +236,7 @@ async function promptNicknameChange() {
   localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
   localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
   updateLoginUI(user);
+  _restoreMenuExpanded();
   window.CottageDB?.upsertProfile(String(user.id), trimmed, user.kakaoNickname || null).catch(() => {});
 }
 
