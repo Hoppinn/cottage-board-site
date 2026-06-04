@@ -2353,6 +2353,10 @@ function openRecommendModal(){
     return;
   }
 
+  // playerSubRow/playerMainRow 상태 보존 — 모달 재열기 시 초기화 방지
+  const _subD  = playerSubRow  ? playerSubRow.style.display  : null;
+  const _mainD = playerMainRow ? playerMainRow.style.display : null;
+
   recommendModal.classList.add('is-active');
 
   recommendModal.setAttribute(
@@ -2360,6 +2364,9 @@ function openRecommendModal(){
     'false'
   );
 
+  // 상태 복원 (다른 코드가 중간에 덮어썼을 경우 대비)
+  if(playerSubRow  && _subD  !== null) playerSubRow.style.display  = _subD;
+  if(playerMainRow && _mainD !== null) playerMainRow.style.display = _mainD;
 }
 
 function closeRecommendModal(){
