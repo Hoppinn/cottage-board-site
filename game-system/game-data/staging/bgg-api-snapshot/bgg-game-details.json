@@ -3804,6 +3804,77 @@
       ]
     }
   },
+  "2290": {
+    "bggId": "2290",
+    "title": "Good & Bad Ghosts",
+    "image": "https://cf.geekdo-images.com/Fy7HWkJoZNgpksF7sxd46g__original/img/IMs7B2ZvqPKSSRMejwEbYagRh4w=/0x0/filters:format(png)/pic6973301.png",
+    "thumbnail": "https://cf.geekdo-images.com/Fy7HWkJoZNgpksF7sxd46g__small/img/i8ORBYojfGE1TrRxBtD9sA2ad6I=/fit-in/200x150/filters:strip_icc()/pic6973301.png",
+    "description": "In Good & Bad Ghosts!, each player has four good ghosts and four evil ghosts &ndash; but only the player who owns a ghost can see whether it's good or evil (as with the pieces in Stratego). These ghosts start the game in the back rows of a 6x6 game board with the corners removed. Each turn, a player moves one of his ghosts one square orthogonally. Moving into an opponent's ghost kills that ghost. To win, you must get rid of your own evil ghosts, kill your opponent's good ghosts, or move one of your good ghosts off the board from one of your opponent's corner squares.",
+    "yearpublished": "1980",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "2",
+    "playingtime": "15",
+    "minplaytime": "15",
+    "maxplaytime": "15",
+    "averageweight": "1.3191",
+    "average": "6.36902",
+    "bayesaverage": "5.84684",
+    "usersrated": "1688",
+    "rank": "4327",
+    "designers": [
+      "Alex Randolph"
+    ],
+    "artists": [
+      "(Uncredited)",
+      "Johann Rüttinger"
+    ],
+    "publishers": [
+      "Istituto Del Gioco (IDG)",
+      "asmodee",
+      "Bütehorn Spiele (Buchholz Verlag)",
+      "Drei Magier Spiele",
+      "Estrela",
+      "Granna",
+      "Kärnan",
+      "Kirjalito",
+      "Kod Kod",
+      "Litor",
+      "Milton Bradley",
+      "Möbius Games",
+      "Noris Spiele",
+      "Oliphante",
+      "Schmidt Spiele",
+      "Venice Connection",
+      "Waddingtons",
+      "놀이속의세상"
+    ],
+    "categories": [
+      "Abstract Strategy",
+      "Bluffing",
+      "Children's Game",
+      "Deduction",
+      "Horror"
+    ],
+    "mechanics": [
+      "Grid Movement",
+      "Player Elimination",
+      "Point to Point Movement",
+      "Secret Unit Deployment",
+      "Square Grid",
+      "Static Capture"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2
+      ],
+      "recommended": [],
+      "not_recommended": [
+        1,
+        2
+      ]
+    }
+  },
   "2375": {
     "bggId": "2375",
     "title": "Sequence",
@@ -4822,6 +4893,77 @@
       "not_recommended": [
         1,
         4
+      ]
+    }
+  },
+  "3383": {
+    "bggId": "3383",
+    "title": "Mahé",
+    "image": "https://cf.geekdo-images.com/MLs0CGP2Uoq0bK-xMpnNBg__original/img/ZYE7mcbRFMF20arZ23GmvbSRoCI=/0x0/filters:format(jpeg)/pic2215153.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/MLs0CGP2Uoq0bK-xMpnNBg__small/img/bsJWYo0dr2kiMoFGY5ItFOe_pKo=/fit-in/200x150/filters:strip_icc()/pic2215153.jpg",
+    "description": "In Die Heisse Schlacht am Kalten Buffet, alternatively released as Kangaroo and Generalowsky, players try to win prize cards from the limited number available to them &mdash; but to win they must lap a circular track that (typically) consists of 21 spaces, and not only must they circle the track, but they have to do so while being top dog, so to speak.\n\nOn a turn, a player rolls 1-3 six-sided dice to determine whether she moves and if so how far she moves. She rolls the dice one by one, stopping when she wishes, and the sum of the dice rolled can't exceed 7. If she rolls only one die, she moves forward by the number rolled; if she rolled two dice, she moves twice the sum of her dice (if the sum &le; 7); and if she rolled three dice, she moves three times the sum (again, if the sum &le; 7). If her sum exceeds 7, she removes her piece from the board and starts the lap from the beginning next turn.\n\nIf one piece lands on another, the bottom piece must carry the top one when it next moves; what's more, the owner of the piece on top dictates how many dice the bottom player must roll &mdash; and if those dice sum to more than seven, then both pieces are removed from the track. Stacks can have any number of pieces, and whoever is on top dictates to the active player how many dice she must roll. When a piece in the middle of a stack moves, it leaves all pieces below it in place.\n\nWhen a piece or a stack lands on or passes the final space in the lap, the owner of the topmost piece takes one of the prize cards; each prize has a value on it, and once all the prizes have been claimed, whoever has the highest sum of prize cards wins.\n\nThe 2014 edition of the game, Mahé, allows for play with up to seven player turtles, who are circling the island while trying to lay their eggs on the beach and receive points for doing a good job.\n\nThe 2024 Korean edition of the game, 공룡 대작전, allows for play with up to seven player adventurers, who are circling the island while taking back stolen eggs on the T-Rex nest and receive points for taking a lot of eggs.",
+    "yearpublished": "1974",
+    "minplayers": "2",
+    "minage": "6",
+    "maxplayers": "7",
+    "playingtime": "20",
+    "minplaytime": "20",
+    "maxplaytime": "20",
+    "averageweight": "1.2222",
+    "average": "6.36665",
+    "bayesaverage": "5.76295",
+    "usersrated": "1081",
+    "rank": "5264",
+    "designers": [
+      "Alex Randolph"
+    ],
+    "artists": [
+      "Fred Bauer",
+      "Sybille Engels",
+      "Klemens Franz",
+      "Wanjin Gill",
+      "Macovill",
+      "Nordy",
+      "Alex Randolph",
+      "Paulina Victoria"
+    ],
+    "publishers": [
+      "Egmont Polska",
+      "Fractal Juegos",
+      "franjos Spieleverlag",
+      "Gonggan27",
+      "International Team (I)",
+      "Macovill",
+      "Möbius Games",
+      "OPEN'N PLAY",
+      "Otto Maier Verlag",
+      "Oya",
+      "Playte",
+      "Winterthur Schweizerische Versicherungs-Gesellschaft"
+    ],
+    "categories": [
+      "Animals",
+      "Dice"
+    ],
+    "mechanics": [
+      "Dice Rolling",
+      "Push Your Luck",
+      "Roll / Spin and Move"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        5,
+        6,
+        7
+      ],
+      "recommended": [
+        3,
+        4
+      ],
+      "not_recommended": [
+        1,
+        2,
+        7
       ]
     }
   },

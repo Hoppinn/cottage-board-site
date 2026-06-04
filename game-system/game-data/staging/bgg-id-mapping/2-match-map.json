@@ -142,8 +142,8 @@
     "scoreGap": 28
   },
   "마헤": {
-    "status": "auto-confirmed",
-    "bggId": "29223",
+    "status": "forced",
+    "bggId": "3383",
     "ownedName": "마헤",
     "bggName": "Marrakech",
     "score": 113,
@@ -1000,7 +1000,7 @@
   },
   "고스트": {
     "status": "forced",
-    "bggId": "83195",
+    "bggId": "2290",
     "ownedName": "고스트"
   },
   "고질라도쿄클래시": {

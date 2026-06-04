@@ -504,15 +504,17 @@
     "id": "마헤",
     "ownedName": "마헤",
     "titleEn": "Marrakech",
-    "bggId": "29223",
-    "matchStatus": "auto-confirmed",
+    "bggId": "3383",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 1.327,
+    "difficulty": 1.2222,
     "difficultyWeight": 1.23,
-    "rating": 6.70864,
+    "rating": 6.36665,
     "bestPlayers": [
-      4
+      5,
+      6,
+      7
     ],
     "recommendedPlayers": [
       3,
@@ -3509,17 +3511,16 @@
   {
     "id": "고스트",
     "ownedName": "고스트",
-    "titleEn": "Ghost Blitz",
-    "bggId": "83195",
+    "titleEn": "Good & Bad Ghosts",
+    "bggId": "2290",
     "matchStatus": "forced",
     "status": "ready",
     "location": "2인",
-    "difficulty": 1.1303,
+    "difficulty": 1.3191,
     "difficultyWeight": 1.31,
-    "rating": 6.70767,
+    "rating": 6.36902,
     "bestPlayers": [
-      4,
-      5
+      2
     ],
     "recommendedPlayers": [
       2
