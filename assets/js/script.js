@@ -3627,27 +3627,40 @@ const moodOptions =
   document.querySelectorAll('[data-mood]');
 
 playerOptions.forEach(option=>{
-  option.addEventListener(
-    'click',
-    ()=>{
-      playerOptions.forEach(btn=>{
-        btn.classList.remove('is-selected');
-      });
-      option.classList.add('is-selected');
-      recommendState.players = option.dataset.players || "";
+  option.addEventListener('click', ()=>{
+    const value = option.dataset.players;
+    const subBtns = document.getElementById('groupSubBtns');
+    const isGroupBtn = value === 'group';
+    const isSubBtn = ['5','6','7','8','9+'].includes(value);
+    const mainBtns = [...document.querySelectorAll('.modal-option:not(.modal-option--sub)')];
 
-      // 단체 또는 서브 인원 선택 시 서브버튼 표시
-      const subBtns = document.getElementById('groupSubBtns');
-      if(subBtns){
-        const isGroupRelated = ['group','5','6','7','8','9+'].includes(option.dataset.players);
-        subBtns.style.display = isGroupRelated ? 'flex' : 'none';
-        // 단체 자체 클릭 시 서브버튼은 미선택 상태 유지 → 특정 인원 선택 유도
-        if(option.dataset.players === 'group'){
-          subBtns.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
-        }
-      }
+    if(isGroupBtn && subBtns && subBtns.style.display !== 'none'){
+      // 단체 버튼 재클릭 → 접힘 + 선택 해제 + 나머지 버튼 복원
+      subBtns.style.display = 'none';
+      mainBtns.forEach(b => b.style.display = '');
+      playerOptions.forEach(b => b.classList.remove('is-selected'));
+      recommendState.players = "";
+      return;
     }
-  );
+
+    playerOptions.forEach(b => b.classList.remove('is-selected'));
+    option.classList.add('is-selected');
+    recommendState.players = value || "";
+
+    if(isGroupBtn){
+      // 단체 첫 클릭 → 서브버튼 펼침, 1인/2인/3인/4인 숨김
+      if(subBtns){
+        subBtns.style.display = 'flex';
+        subBtns.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
+      }
+      mainBtns.forEach(b => { if(b.dataset.players !== 'group') b.style.display = 'none'; });
+    } else if(!isSubBtn){
+      // 일반 버튼 클릭 → 서브버튼 숨김, 모든 버튼 복원
+      if(subBtns) subBtns.style.display = 'none';
+      mainBtns.forEach(b => b.style.display = '');
+    }
+    // 서브버튼 클릭 → 서브버튼 영역 유지, 필터만 설정됨
+  });
 });
 
 levelOptions.forEach(option=>{
