@@ -1352,7 +1352,7 @@ body.recommend-page main{
 .game-card strong{
   display:block;
   margin-bottom:7px;
-  color:#2d2b26;
+  color:#111;
   font-size:16px;
   font-weight:800;
   line-height:1.16;
@@ -4263,7 +4263,7 @@ body.sheet-open{
 }
 .rules-ok-list li::before{
   content:"✓";
-  color:#7a4828;
+  color:#c87820;
   font-size:13px;
   flex-shrink:0;
 }
@@ -4345,7 +4345,7 @@ body.sheet-open{
 .req-list-name{
   font-size:14px;
   font-weight:900;
-  color:#7a4828;
+  color:#111;
 }
 .req-list-count{
   font-size:12px;
