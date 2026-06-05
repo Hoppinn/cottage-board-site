@@ -2962,7 +2962,7 @@ body.sheet-open{
     border-radius:20px;
     padding-left:56px !important;
     padding-right:56px !important;
-    min-height:520px;
+    min-height:100svh;
   }
 
   /* ── owned-games: max-width 방식 → full-width+padding 방식으로 전환 (헤더와 정렬) ── */
@@ -5780,9 +5780,9 @@ body.sheet-open{
     font-size:clamp(30px,3.5vw,46px);
   }
 
-  /* ── 메인 히어로: PC에서 full-screen → 75vh ── */
+  /* ── 메인 히어로: PC에서 full-screen ── */
   .hero{
-    min-height:75vh;
+    min-height:100svh;
   }
 
   /* ── 추천 배너: 사람 얼굴 보이도록 position 조정 ── */
@@ -6041,6 +6041,55 @@ body.sheet-open{
 
 }
 /* END PC LAYOUT ENLARGEMENTS */
+
+/* ── PC 컴포넌트 스케일업: 바텀시트·기록보기·브레드크럼 ── */
+@media(min-width:900px){
+
+  /* 브레드크럼 */
+  .breadcrumb{ font-size:14px; }
+
+  /* ── 바텀시트 내용 ── */
+  .sheet-thumb{ width:90px !important; height:90px !important; }
+  .sheet-img-bgg{ font-size:13px; }
+  .sheet-game-title{ font-size:26px; }
+  .sheet-en-title{ font-size:14px; }
+  .sheet-summary{ font-size:16px; }
+  .sheet-loc-btn,
+  .sheet-yt-btn{ font-size:13px; padding:5px 12px; }
+  .sheet-stats-main{ font-size:17px; }
+  .sheet-stats-sub{ font-size:13px; }
+  .sheet-section-label{ font-size:13px; }
+  .sheet-mechs-label{ font-size:13px; }
+  .sheet-mechs-text{ font-size:16px; }
+  .sheet-mechs-toggle{ font-size:14px; }
+  .sheet-highlight-item{ font-size:16px; }
+  .sheet-comment-submit{ font-size:15px; padding:12px; }
+
+  /* ── 기록보기 (game-reviews) ── */
+  .pr-tab{ font-size:17px; }
+  .pr-field-label{ font-size:13px; }
+  .pr-add-btn{ font-size:16px; }
+  .pr-submit-btn{ font-size:17px; }
+  .pr-session-hd{ padding:18px 24px; }
+  .pr-session-date{ font-size:20px; }
+  .pr-session-summary{ font-size:15px; }
+  .pr-session-arrow{ font-size:18px; }
+  .pr-session-thumb{ width:46px; height:46px; border-radius:8px; }
+  .pr-sub-hd{ padding:12px 20px; }
+  .pr-sub-date{ font-size:18px; }
+  .pr-sub-summary{ font-size:15px; }
+  .pr-sub-arrow{ font-size:15px; }
+  .pr-rec-row{ padding:14px 20px; }
+  .pr-rec-thumb{ width:48px; height:48px; border-radius:8px; }
+  .pr-rec-game{ font-size:18px; }
+  .pr-rec-review{ font-size:15px; }
+  .pr-rec-tag{ font-size:13px; padding:3px 10px; }
+  .pr-player-header{ padding:10px 20px; }
+  .pr-player-header .pr-rec-tag{ font-size:13px; }
+  .pr-rec-sheet-link{ font-size:18px; }
+  .pr-club-link{ font-size:14px; }
+  .pr-dates-more-btn{ font-size:14px; }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    PLAY RECORDS (game-reviews.html) — pr-* classes
