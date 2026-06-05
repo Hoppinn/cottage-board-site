@@ -842,7 +842,7 @@
             id: gameIdByName(name),
             count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
             time: parseInt(row.querySelector('.pr-time').value) || null,
-            names: normalizeNames(row.querySelector('.pr-names').value),
+            names: row.querySelector('.pr-names').value.trim() || null,
             score: row.querySelector('.pr-score').value.trim() || null,
             review: row.querySelector('.pr-review').value.trim() || null,
             photoFiles: row._photoFiles || [],
@@ -1108,7 +1108,7 @@
             else if (allPhotoUrls.length > 1) photoUrlUpd = JSON.stringify(allPhotoUrls);
 
             const updFields = {
-              player_names: normalizeNames(form.querySelector('.pie-names').value),
+              player_names: form.querySelector('.pie-names').value.trim() || null,
               player_count: parseInt(form.querySelector('.pie-count').value) || null,
               play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
               score_note: form.querySelector('.pie-score').value.trim() || null,
