@@ -5462,6 +5462,11 @@ body.sheet-open{
     padding-right:var(--page-x);
   }
 
+  /* 로고 크기를 col1에 맞게 축소 */
+  .header-logo img{
+    width:clamp(60px,9vw,88px);
+  }
+
   /* 태그라인 숨기고 nav가 그 자리 차지 */
   .header-center{
     display:none;
@@ -5637,7 +5642,11 @@ body.sheet-open{
 
   .menu-toggle{ display:none; }
 
-  .hero{ padding-top:calc(var(--header-total-h) + 60px); }
+  .hero{
+    margin-top:calc(var(--header-total-h) + 12px);
+    margin-bottom:28px;
+    padding-top:clamp(28px,4vw,52px);
+  }
 
   .hero-inner{
     flex-direction:column;
@@ -5770,12 +5779,14 @@ body.sheet-open{
     box-sizing:border-box;
   }
 
-  /* page-mini-hero: PC에서도 라운딩 유지 (inner-page 패딩 내에 위치) */
+  /* page-mini-hero: PC에서 절반 높이, 좌측정렬 */
   .page-mini-hero{
     margin-left:0;
     margin-right:0;
     border-radius:16px;
-    height:260px;
+    height:90px;
+    justify-content:flex-start;
+    padding-left:clamp(20px,3vw,36px);
   }
   .page-mini-hero::after{
     border-radius:16px;
@@ -5823,7 +5834,7 @@ body.sheet-open{
     border-radius:20px;
     padding-left:56px;
     padding-right:56px;
-    min-height:66svh;
+    min-height:calc(100svh - var(--header-total-h) - 40px);
   }
 
   /* ── owned-games: max-width 방식 → full-width+padding 방식으로 전환 (헤더와 정렬) ── */
@@ -5921,17 +5932,17 @@ body.sheet-open{
     flex:0 0 calc(25% - 9px);
     min-width:0;
     max-width:none;
-    padding:16px;
+    padding:11px;
   }
   #gameScroll .game-card strong{
-    font-size:21px;
-  }
-  #gameScroll .game-card-description{
     font-size:14px;
   }
+  #gameScroll .game-card-description{
+    font-size:11px;
+  }
   #gameScroll .game-meta span{
-    height:28px;
-    font-size:13px;
+    height:22px;
+    font-size:10px;
   }
 
   /* ── 전체게임보기 카드 ── */
@@ -5988,15 +5999,16 @@ body.sheet-open{
 
   /* ── page-mini-hero 높이 ── */
   .page-mini-hero{
-    height:185px;
+    height:90px;
   }
   .page-mini-hero h1{
-    font-size:clamp(22px,2.8vw,34px);
+    font-size:clamp(16px,2vw,24px);
+    text-align:left;
   }
 
-  /* ── 메인 히어로: PC에서 2/3 높이 ── */
+  /* ── 메인 히어로: PC에서 뷰포트 - 헤더 - 여백 높이 ── */
   .hero{
-    min-height:66svh;
+    min-height:calc(100svh - var(--header-total-h) - 40px);
   }
 
   /* ── 추천 배너: 사람 얼굴 보이도록 position 조정 ── */
@@ -6114,22 +6126,22 @@ body.sheet-open{
 
   /* ── price-rules 페이지 ── */
   .price-hero-card{
-    padding:clamp(36px,4vw,52px);
-    border-radius:26px;
-    margin-bottom:32px;
+    padding:clamp(22px,2.5vw,34px);
+    border-radius:20px;
+    margin-bottom:24px;
   }
   .price-amount{
-    font-size:clamp(52px,6vw,72px);
+    font-size:clamp(40px,4.5vw,54px);
   }
   .price-amount span{
-    font-size:clamp(24px,2.5vw,32px);
+    font-size:clamp(20px,2vw,26px);
   }
   .price-desc{
-    font-size:16px;
+    font-size:14px;
   }
   .price-pay-chip{
-    font-size:14px;
-    padding:6px 16px;
+    font-size:13px;
+    padding:5px 13px;
   }
   .rules-group-title{
     font-size:19px;

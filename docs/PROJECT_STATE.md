@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-05 (10차)
+최종 갱신: 2026-06-06 (11차)
 
 ---
 
@@ -220,32 +220,39 @@
 - [x] Step 1: style.css CSS 아키텍처 재구조화 — 9개 900px 블록 → 단일 720px 블록, !important 전부 제거
 - [x] Step 2: PC 스케일 기준 — 모바일 ×1.1 (pr-*, sheet-* 적용 완료)
 
-### 협의 확정 작업 목록 (순서대로 진행)
+### 완료된 항목
 
-| # | 항목 | 방법 | 결정값 | 상태 |
-|---|------|------|--------|------|
-| 1 | 헤더 메뉴 축소 | logo clamp(70px), menu a 13px, gap 1vw | 검색 아이콘 720px 내부로 | ✅ |
-| 1-2 | 모든 페이지 헤더 표시 | `body.owned-page .header-menu` 모바일 규칙을 max-width:719px 블록으로 스코핑 | - | ✅ |
-| 2 | 메인 hero 텍스트 축소 | clamp(42px...) → clamp(30px,4.5vw,44px); desc 동일 비율 | ~30px | ✅ |
-| 3 | 추천 "하나이상골라주세요" 중앙정렬 | 미룸 | - | ⏸ |
-| 4 | 배너/히어로 높이 2/3 | page-mini-hero 280→185px; owned-page-hero 260→175px; hero 100svh→66svh; about-hero 패딩 2/3 | 전 페이지 통일 | ✅ |
-| 4-2 | 추천 게임카드 5열 | 128px 카드 너무 빡빡 → 미룸 | - | ⏸ |
-| 5 | 전체더보기 4열 | recommend-overlay-list → repeat(4,1fr) | - | ✅ |
-| 6 | owned-games 필터 기본 접힘 + 텍스트 축소 | JS auto-open 제거; filter select 11px/22px; filter-title 12px | - | ✅ |
-| 7 | game-reviews 박스 두께 + 전체 축소 | pr-* font-size 80%; padding 80% (session-hd, rec-row 등) | ×0.8 | ✅ |
-| 8 | 동호회>모임기록 | TODO — 추후 세션 | - | 📋 |
-| 9 | 요청하기 텍스트 추가 축소 | req-* → 모바일 수준(14-15px)으로 낮춤 | - | ✅ |
-| 10 | 관리자 금일이용데이터 | TODO — 원인 불명, 추후 조사 | - | 📋 |
+| # | 항목 | 상태 |
+|---|------|------|
+| 1 | 헤더 메뉴 축소 (logo 70px, nav 13px) | ✅ |
+| 1-2 | 모든 owned-page 헤더 표시 (max-width:719px 스코핑) | ✅ |
+| 2 | 메인 hero 텍스트 축소 (42→30px) | ✅ |
+| 4 | 배너 높이 2/3 (mini-hero 185px, owned-hero 175px, hero 66svh) | ✅ |
+| 5 | 전체더보기 4열 (repeat(4,1fr)) | ✅ |
+| 6 | owned-games 필터 기본 접힘 + 텍스트 축소 | ✅ |
+| 7 | game-reviews 박스 80% 축소 | ✅ |
+| 9 | 요청하기 텍스트 모바일 수준으로 축소 | ✅ |
+
+### 완료된 2차 작업 (2026-06-06)
+
+| # | 항목 | 상태 |
+|---|------|------|
+| A | index.html hero 헤더 로고 overflow → PC block `.header-logo img` 크기 제한 | ✅ |
+| B | 메인 hero 높이 — margin-top+bottom + calc(100svh - header - 40px) | ✅ |
+| C | page-mini-hero 배너 185→90px + 좌측정렬 + h1 font-size 줄임 | ✅ |
+| D | 추천 카드 padding 16→11px, strong 21→14px, description 14→11px | ✅ |
+| F | price-hero-card padding/font 20~25% 축소 | ✅ |
 
 ### TODO (작업 안 함)
-- [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 (별도 세션)
-- [ ] 관리자 페이지 금일이용데이터 미표시 버그 (원인 불명, 별도 조사 필요)
-- [ ] owned-games 필터 기본 접힘 (Step 3 — 위 6번에서 처리 예정)
+- [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
+- [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 — 별도 세션
+- [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
+- [ ] 추천 "하나이상골라주세요" 박스 중앙정렬 — 선택 사항
 
 ### 주의사항
-- req-* 는 현재 너무 큰 상태 → 더 줄여야 함 (이전 메모의 "수정 금지" 기준 폐기)
 - 720px 블록 기준 (min-width:720px), 900px 아님
 - style.css 720px 단일 블록 안에서만 수정
+- req-* 는 모바일 수준으로 이미 낮춤 (14-15px)
 
 ---
 
