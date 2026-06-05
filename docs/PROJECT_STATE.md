@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-06 (11차)
+최종 갱신: 2026-06-06 (12차)
 
 ---
 
@@ -261,6 +261,15 @@
 | L | club.html about-hero "동호회" 배너 밖, h2+sub 한줄 가로 | HTML wrapper + PC absolute breadcrumb |
 | M | index.html hero h1+desc `<br>` 제거 (각 한줄화) | HTML |
 | N | 모바일 hero 카드 스타일 — 상하좌우 margin + border-radius 14px | ✅ |
+
+### 완료 (5차 작업, 2026-06-06) — 모바일+PC
+
+| # | 항목 | 방법 |
+|---|------|------|
+| O | about·club·requests 모바일 breadcrumb 카드 위로 분리 | .about-hero position:relative + breadcrumb absolute top:-24px (PC와 동일 패턴) |
+| P | price-rules 모바일 배너 제거 | .page-mini-hero--price display:none (기존 PC와 동일, base 추가) |
+| Q | requests.html "요청하기" breadcrumb 추가 (모바일+PC) | HTML <nav class="breadcrumb"> 추가 → 자동 카드 위 배치 |
+| R | requests.html h2 1줄화 | <br> 제거 + .requests-page .about-hero h2 font-size 축소 |
 
 ### TODO (작업 안 함)
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
