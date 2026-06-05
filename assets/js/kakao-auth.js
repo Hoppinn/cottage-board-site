@@ -395,7 +395,7 @@ async function openProfilePanel() {
         const localVc = parseInt(localStorage.getItem(`cottage_visit_count_${user.id}`) || '0');
         const dbVc = stats.profile?.visit_count || 0;
         const vc = Math.max(localVc, dbVc);
-        return vc ? `<li><span>방문 횟수</span><strong>${vc}회</strong></li>` : '';
+        return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
       })()}
       ${(() => {
         const saved = stats.profile?.total_minutes || 0;
