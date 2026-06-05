@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-05 (3차)
+최종 갱신: 2026-06-05 (4차)
 
 ---
 
@@ -72,7 +72,7 @@
 | ~~B-10~~ | ~~requests-admin.html~~ | ~~kakao-auth-ready 이벤트 수신 — kakao-auth.js는 cottage-auth-changed 발행~~ → **이벤트명 통일 완료** |
 | ~~B-11~~ | ~~supabase-client.js~~ | ~~_syncTimeToDBNow update 사용 — 프로필 row 없을 때 조용히 실패 + localStorage 제거~~ → **upsert로 교체 완료** |
 | ~~B-12~~ | ~~supabase-client.js~~ | ~~updateProfilePhoto upsert — row 없을 때 INSERT로 기존 필드 null 덮어쓰기~~ → **update로 교체 완료** |
-| B-07 | kakao-auth.js:32–35 | 방문 카운트가 기기별 독립 → 멀티기기 사용 시 중복 카운트 가능 |
+| ~~B-07~~ | ~~kakao-auth.js~~ | ~~방문 카운트 기기별 독립~~ → **로컬 카운터 소스, DB 동기화로 전환. 기기별 독립은 유지되나 DB SELECT null이어도 정확한 값 보존** |
 | B-13 | game-reviews.html 수정폼 | 입력 필드에 id/name 없음 — 접근성 경고 (기능 영향 없음) |
 
 ### 하 (UX 불편)
@@ -184,6 +184,9 @@
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-05 | fix: "위와 동일" 직전 행 복사로 수정 (항상 첫 행이 아닌 바로 앞 행 기준) |
+| 2026-06-05 | fix: 방문횟수 — 로컬 카운터 소스 전환으로 로그인 유지 상태에서도 날짜별 정확 카운팅 |
+| 2026-06-05 | fix: 참여자 자동완성 — 칩 추가 후 input 이벤트 발생시켜 콤보 목록 즉시 갱신 |
 | 2026-06-05 | feat: 기록 입력폼 "위와 동일" 버튼 (2번째 행 이상에서 첫 행 인원수·참여자 복사) |
 | 2026-06-05 | feat: 참여자 순서 정규화 — normalizeNames() 추가, 저장/수정/그룹핑 키 모두 적용 |
 | 2026-06-05 | 게임 데이터: 천국과맥주 → 맥주와빵 (Beer & Bread 한국어 이름 수정) |

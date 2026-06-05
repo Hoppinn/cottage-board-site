@@ -559,11 +559,14 @@
         chips.appendChild(chip);
         updateHidden();
       }
+      function triggerRefresh() {
+        text.dispatchEvent(new Event('input', { bubbles: true }));
+      }
       text.addEventListener('keydown', e => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
           const v = text.value.trim();
-          if (v) { addTag(v); text.value = ''; text.focus(); }
+          if (v) { addTag(v); text.value = ''; triggerRefresh(); text.focus(); }
         } else if (e.key === 'Backspace' && !text.value) {
           const last = chips.querySelector('.tag-chip:last-child');
           if (last) { last.remove(); updateHidden(); }
@@ -571,7 +574,7 @@
       });
       text.addEventListener('blur', () => {
         const v = text.value.trim();
-        if (v) { addTag(v); text.value = ''; setTimeout(() => text.focus(), 0); }
+        if (v) { addTag(v); text.value = ''; triggerRefresh(); setTimeout(() => text.focus(), 0); }
       });
       wrap.addEventListener('click', () => text.focus());
       if (initialValue) initialValue.split(',').forEach(v => addTag(v));
@@ -783,9 +786,10 @@
         const sameBtn = div.querySelector('.pr-same-as-above-btn');
         if (sameBtn) {
           sameBtn.addEventListener('click', () => {
-            const allRows = document.querySelectorAll('#prGameRows .pr-game-row');
-            const firstRow = allRows[0];
-            if (!firstRow || firstRow === div) return;
+            const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
+            const curIdx = allRows.indexOf(div);
+            if (curIdx <= 0) return;
+            const firstRow = allRows[curIdx - 1];
             const activeCountBtn = firstRow.querySelector('.pr-count-btn.is-on');
             div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
             if (activeCountBtn) {

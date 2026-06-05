@@ -31,7 +31,10 @@ function initKakaoAuth() {
         const profileKey = `cottage_profile_visited_${user.id}_${kstDate}`;
         if (!isLocal && !localStorage.getItem(profileKey)) {
           localStorage.setItem(profileKey, '1');
-          window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null).catch(() => {});
+          const vcKey = `cottage_visit_count_${user.id}`;
+          const newVisitCount = parseInt(localStorage.getItem(vcKey) || '0') + 1;
+          localStorage.setItem(vcKey, String(newVisitCount));
+          window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null, newVisitCount).catch(() => {});
         }
         window.CottageDB.startSession?.(String(user.id));
         // 다기기 프로필 동기화 — DB photo_url/nickname이 localStorage와 다르면 갱신
@@ -388,7 +391,12 @@ async function openProfilePanel() {
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>마지막 방문</span><strong>${fmt(stats.profile?.last_seen_at)}</strong></li>
-      ${stats.profile?.visit_count ? `<li><span>방문 횟수</span><strong>${stats.profile.visit_count}회</strong></li>` : ''}
+      ${(() => {
+        const localVc = parseInt(localStorage.getItem(`cottage_visit_count_${user.id}`) || '0');
+        const dbVc = stats.profile?.visit_count || 0;
+        const vc = Math.max(localVc, dbVc);
+        return vc ? `<li><span>방문 횟수</span><strong>${vc}회</strong></li>` : '';
+      })()}
       ${(() => {
         const saved = stats.profile?.total_minutes || 0;
         const sessionMins = window._cottageSessionStart

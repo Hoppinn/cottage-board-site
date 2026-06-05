@@ -585,7 +585,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     window._cottageSessionStart = _sessionStart;
   }
 
-  async function upsertProfile(userId, nickname, realName) {
+  async function upsertProfile(userId, nickname, realName, explicitVisitCount) {
     startSession(userId);
     try {
       const accumulated = _popAccumulatedMinutes(userId);
@@ -595,12 +595,16 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       const nickToSave = (data?.nickname && realName && data.nickname !== realName && nickname === realName)
         ? data.nickname
         : nickname;
+      // explicitVisitCount가 있으면 로컬 카운터 우선 — DB SELECT가 null일 때도 올바른 값 보존
+      const newVisitCount = explicitVisitCount !== undefined
+        ? Math.max(explicitVisitCount, data?.visit_count || 0)
+        : (data?.visit_count || 0) + 1;
       const { error: upsertError } = await db.from('profiles').upsert({
         user_id: userId,
         nickname: nickToSave,
         real_name: data?.real_name || realName || null,
         last_seen_at: new Date().toISOString(),
-        visit_count: (data?.visit_count || 0) + 1,
+        visit_count: newVisitCount,
         total_minutes: (data?.total_minutes || 0) + accumulated,
       }, { onConflict: 'user_id' });
       if (!upsertError) localStorage.removeItem(`cottage_time_sec_${userId}`);
