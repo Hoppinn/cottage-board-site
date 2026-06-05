@@ -6170,3 +6170,89 @@ body.sheet-open{
 .pr-lightbox-prev { left: 10px; }
 .pr-lightbox-next { right: 10px; }
 .pr-lightbox-counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 13px; pointer-events: none; }
+
+/* =========================
+   # PC LAYOUT (min-width: 768px)
+========================= */
+
+@media (min-width: 768px) {
+
+  /* ── 바텀시트 → 센터 모달 ── */
+  .game-sheet-panel {
+    left: 50%;
+    right: auto;
+    top: 52px;
+    bottom: 52px;
+    width: min(92vw, 560px);
+    transform: translateX(-50%);
+    border-radius: 20px;
+    animation: sheetModalIn .22s ease;
+    padding: 28px 32px 60px;
+  }
+  @keyframes sheetModalIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(14px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  /* ── owned-games 2컬럼 게임 목록 ── */
+  #ownedGameList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  #ownedGameList .owned-empty {
+    grid-column: 1 / -1;
+  }
+
+  /* owned-games inner-page-body 너비 확장 */
+  .inner-page-body:has(#ownedGameList),
+  .inner-page-body:has(#ownedPagination) {
+    max-width: 1040px;
+  }
+
+  /* owned-games 툴바 PC에서 기본 펼쳐짐 */
+  .owned-toolbar.is-collapsed {
+    max-height: 400px !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+    margin-bottom: 8px !important;
+  }
+  #ownedToolsToggle {
+    display: none;
+  }
+
+  /* ── game-reviews 2컬럼 ── */
+  #reviewRoot {
+    max-width: 1040px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 32px;
+  }
+  .pr-tabs {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 32px;
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  .pr-tab {
+    border-bottom: 2px solid var(--border, #e8e4dc);
+    margin-bottom: 0;
+    padding-bottom: 10px;
+  }
+  .pr-panel {
+    display: block !important;
+  }
+  #prPanelRecords {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  #prPanelInput {
+    grid-column: 2;
+    grid-row: 2;
+    border-left: 1px solid var(--border, #e8e4dc);
+    padding-left: 32px;
+  }
+}
