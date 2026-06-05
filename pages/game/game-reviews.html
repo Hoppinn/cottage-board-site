@@ -86,6 +86,7 @@
     .pr-rec-review { font-size: 13px; color: var(--text); margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid #c8deda; padding-left: 10px; }
     .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 6px; padding: 2px 8px; color: var(--text,#333); font-weight: 500; }
     .pr-tag-who  { background: #e8f5e9; color: #2e7d32; }
+    .pr-tag-creator { font-size: 9px; opacity: 0.6; margin-left: 2px; font-weight: 400; vertical-align: middle; }
     .pr-tag-time { background: #e3f2fd; color: #1565c0; }
     .pr-tag-score{ background: #fff3e0; color: #e65100; }
     /* tag input */
@@ -1277,8 +1278,13 @@
       for (const [, groupRecs] of playerGroups) {
         const first = groupRecs[0];
         const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${first.player_count}명</span>` : '';
+        const creatorNick = (first.nickname || '').toLowerCase();
         const nameTags = first.player_names
-          ? first.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('')
+          ? first.player_names.split(',').map(n => {
+              const t = n.trim();
+              const badge = creatorNick && t.toLowerCase() === creatorNick ? '<span class="pr-tag-creator">작성자</span>' : '';
+              return `<span class="pr-rec-tag pr-tag-who">${escH(t)}${badge}</span>`;
+            }).join('')
           : '';
 
         if (countTag || nameTags) {
@@ -1336,8 +1342,13 @@
         const f = grp[0];
         const groupLabel = f.group_name || '';
         const countTag = f.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${f.player_count}명</span>` : '';
+        const creatorNickG = (f.nickname || '').toLowerCase();
         const nameTags = f.player_names
-          ? f.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${escH(n.trim())}</span>`).join('')
+          ? f.player_names.split(',').map(n => {
+              const t = n.trim();
+              const badge = creatorNickG && t.toLowerCase() === creatorNickG ? '<span class="pr-tag-creator">작성자</span>' : '';
+              return `<span class="pr-rec-tag pr-tag-who">${escH(t)}${badge}</span>`;
+            }).join('')
           : '';
 
         html += `<div class="pr-game-group${isFirst ? ' pr-game-group--first' : ''}">`;
