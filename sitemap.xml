@@ -36,6 +36,21 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://cottageboard.com/pages/club/club-intro.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://cottageboard.com/pages/club/club-rules.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://cottageboard.com/pages/club/club-meeting.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://cottageboard.com/pages/club/club-history.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
