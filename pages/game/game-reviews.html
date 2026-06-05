@@ -34,6 +34,8 @@
     .pr-row-head input { flex: 1; border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 14px; font-family: inherit; background: var(--bg,#f5f0e8); }
     .pr-rm-btn { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; padding: 2px 6px; flex-shrink: 0; }
     .pr-rm-btn:hover { color: #c0392b; }
+    .pr-same-as-above-btn { font-size: 11px; color: #7a4828; background: #f5ede6; border: 1px solid #d4a98a; border-radius: 6px; padding: 3px 10px; cursor: pointer; margin-bottom: 6px; font-family: inherit; }
+    .pr-same-as-above-btn:hover { background: #ecddd4; }
     .pr-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
     .pr-detail-grid input { border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; background: var(--bg,#f5f0e8); width: 100%; box-sizing: border-box; }
     .pr-review-ta { width: 100%; box-sizing: border-box; border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 52px; margin-top: 6px; background: var(--bg,#f5f0e8); }
@@ -575,6 +577,14 @@
       if (initialValue) initialValue.split(',').forEach(v => addTag(v));
     }
 
+    // 참여자 이름 정규화 — 콤마 구분, 각 이름 trim, 가나다순 정렬, 빈 항목 제거
+    function normalizeNames(raw) {
+      if (!raw) return null;
+      const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+      if (!parts.length) return null;
+      return parts.sort((a, b) => a.localeCompare(b, 'ko')).join(', ');
+    }
+
     function showToast(msg) {
       const t = document.getElementById('prToast');
       t.textContent = msg;
@@ -689,6 +699,7 @@
             </div>
             <button class="pr-rm-btn" type="button" title="삭제">✕</button>
           </div>
+          ${rowIdx > 1 ? `<button class="pr-same-as-above-btn" type="button">↑ 위와 동일 (인원·참여자)</button>` : ''}
           <div class="pr-detail-grid">
             <div>
               <label class="pr-field-label">인원수</label>
@@ -769,6 +780,35 @@
           div.querySelector('.pr-names-wrap')
         );
 
+        const sameBtn = div.querySelector('.pr-same-as-above-btn');
+        if (sameBtn) {
+          sameBtn.addEventListener('click', () => {
+            const allRows = document.querySelectorAll('#prGameRows .pr-game-row');
+            const firstRow = allRows[0];
+            if (!firstRow || firstRow === div) return;
+            const activeCountBtn = firstRow.querySelector('.pr-count-btn.is-on');
+            div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
+            if (activeCountBtn) {
+              const matchBtn = div.querySelector(`.pr-count-btn[data-n="${activeCountBtn.dataset.n}"]`);
+              if (matchBtn) matchBtn.classList.add('is-on');
+            }
+            const firstNames = firstRow.querySelector('.pr-names').value;
+            const chipsWrap = div.querySelector('.tag-chips');
+            const textInput = div.querySelector('.tag-text-input');
+            const hiddenInput = div.querySelector('.pr-names');
+            chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
+            hiddenInput.value = '';
+            if (firstNames) {
+              firstNames.split(',').forEach(name => {
+                name = name.trim();
+                if (!name) return;
+                textInput.value = name;
+                textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+              });
+            }
+          });
+        }
+
         div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
         document.getElementById('prGameRows').appendChild(div);
         if (focusInput) div.querySelector('.pr-game-name').focus();
@@ -796,7 +836,7 @@
             id: gameIdByName(name),
             count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
             time: parseInt(row.querySelector('.pr-time').value) || null,
-            names: row.querySelector('.pr-names').value.trim() || null,
+            names: normalizeNames(row.querySelector('.pr-names').value),
             score: row.querySelector('.pr-score').value.trim() || null,
             review: row.querySelector('.pr-review').value.trim() || null,
             photoFiles: row._photoFiles || [],
@@ -1062,7 +1102,7 @@
             else if (allPhotoUrls.length > 1) photoUrlUpd = JSON.stringify(allPhotoUrls);
 
             const updFields = {
-              player_names: form.querySelector('.pie-names').value.trim() || null,
+              player_names: normalizeNames(form.querySelector('.pie-names').value),
               player_count: parseInt(form.querySelector('.pie-count').value) || null,
               play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
               score_note: form.querySelector('.pie-score').value.trim() || null,
@@ -1213,7 +1253,7 @@
       // 참여자(인원+이름) 기준으로 묶기
       const playerGroups = new Map();
       for (const r of recs) {
-        const key = `${r.player_count||''}|${(r.player_names||'').trim()}`;
+        const key = `${r.player_count||''}|${normalizeNames(r.player_names)||''}`;
         if (!playerGroups.has(key)) playerGroups.set(key, []);
         playerGroups.get(key).push(r);
       }
@@ -1270,7 +1310,7 @@
       // group_name + player_count + player_names 동일 시 묶기
       const groups = new Map();
       for (const r of recs) {
-        const key = `${r.group_name||''}|${r.player_count||''}|${(r.player_names||'').trim()}`;
+        const key = `${r.group_name||''}|${r.player_count||''}|${normalizeNames(r.player_names)||''}`;
         if (!groups.has(key)) groups.set(key, []);
         groups.get(key).push(r);
       }
