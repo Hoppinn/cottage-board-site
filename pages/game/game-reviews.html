@@ -85,11 +85,11 @@
     .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .pr-rec-review { font-size: 13px; color: var(--text); margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid #c8deda; padding-left: 10px; }
     .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 6px; padding: 2px 8px; color: var(--text,#333); font-weight: 500; }
-    .pr-tag-who  { background: #e8f5e9; color: #2e7d32; }
+    .pr-tag-who  { background: #fdf0e8; color: #7a4828; }
     .pr-tag-who-first { border-bottom: 2px solid #455a64 !important; padding-bottom: 1px !important; }
     .pr-tag-count-game { background: #607d8b !important; color: #fff !important; font-weight: 600 !important; }
     .pr-tag-time { background: #e3f2fd; color: #1565c0; }
-    .pr-tag-score{ background: #fff3e0; color: #e65100; }
+    .pr-tag-score{ background: #f5ede4; color: #8a4a20; }
     /* tag input */
     .tag-input-wrap { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; border: 1px solid var(--border,#e8e4dc); border-radius: 6px; padding: 4px 8px; background: #fff; min-height: 34px; cursor: text; box-sizing: border-box; width: 100%; }
     .tag-chip { display: inline-flex; align-items: center; gap: 3px; background: #e8f5e9; color: #2e7d32; border-radius: 4px; padding: 2px 7px; font-size: 12px; }
@@ -1443,10 +1443,10 @@
         ? records.map(r => {
             const isMine = user && String(r.user_id) === String(user.id);
             const playedLabel = r.played_at ? formatKstDate(r.played_at) : formatDate(r.created_at);
-            const countTag = r.player_count ? `<span class="pr-rec-tag pr-tag-who">👥 ${r.player_count}명</span>` : '';
+            const countTag = r.player_count ? `<span class="pr-rec-tag pr-tag-count-game">${r.player_count}명</span>` : '';
             const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
             const scoreTag = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
-            const groupTag = r.group_name ? `<span class="pr-rec-tag" style="background:#e8f0ff;color:#5c6bc0">${escH(r.group_name)}</span>` : '';
+            const groupTag = r.group_name ? `<span class="pr-rec-tag" style="background:#455a64;color:#fff;font-weight:700;">${escH(r.group_name)}</span>` : '';
             const namesTag = r.player_names ? `<span class="pr-rec-tag">${escH(r.player_names)}</span>` : '';
             const photoUrls = parsePhotoUrls(r.photo_url);
             const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
