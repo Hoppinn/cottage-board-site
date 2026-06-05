@@ -5712,17 +5712,17 @@ body.sheet-open{
     flex:0 0 calc(25% - 9px);
     min-width:0;
     max-width:none;
-    padding:14px;
+    padding:16px;
   }
   #gameScroll .game-card strong{
-    font-size:18px;
+    font-size:21px;
   }
   #gameScroll .game-card-description{
-    font-size:12px;
+    font-size:14px;
   }
   #gameScroll .game-meta span{
-    height:26px;
-    font-size:11px;
+    height:28px;
+    font-size:13px;
   }
 
   /* ── 전체게임보기 카드 ── */
@@ -5742,16 +5742,16 @@ body.sheet-open{
     flex:0 0 80px;
   }
   .owned-game-info strong{
-    font-size:20px !important;
+    font-size:22px !important;
     margin-bottom:8px !important;
   }
   .owned-game-info p{
-    font-size:15px;
+    font-size:16px;
   }
   .owned-game-meta span{
-    font-size:14px !important;
-    min-height:28px !important;
-    padding:5px 12px !important;
+    font-size:15px !important;
+    min-height:30px !important;
+    padding:6px 14px !important;
   }
   .owned-img-rating{
     font-size:13px !important;
@@ -6007,41 +6007,54 @@ body.sheet-open{
 
   /* ── 요청하기 페이지 폼 요소 ── */
   .req-tab-btn{
-    font-size:15px;
-    padding:12px 8px;
+    font-size:18px;
+    padding:14px 10px;
   }
   .req-text-input{
-    font-size:16px;
-    padding:12px 16px;
+    font-size:18px;
+    padding:14px 18px;
   }
   .req-submit-btn{
-    font-size:15px;
-    padding:12px 22px;
+    font-size:18px;
+    padding:14px 28px;
   }
   .req-list-item{
-    padding:12px 16px;
+    padding:16px 20px;
   }
   .req-list-name{
-    font-size:16px;
+    font-size:19px;
   }
   .req-list-count{
-    font-size:13px;
-    padding:4px 12px;
+    font-size:15px;
+    padding:6px 16px;
   }
   .req-textarea{
-    font-size:16px;
-    padding:14px 16px;
+    font-size:18px;
+    padding:16px 18px;
   }
   .req-note,
   .req-vote-hint{
-    font-size:13px;
+    font-size:15px;
   }
   .req-list-empty{
-    font-size:15px;
-    padding:32px;
+    font-size:17px;
+    padding:40px;
   }
   .req-success-msg{
-    font-size:15px;
+    font-size:17px;
+  }
+  .req-purchased-title{
+    font-size:16px;
+  }
+  .req-purchased-note{
+    font-size:14px;
+  }
+  .req-status-badge{
+    font-size:13px;
+    padding:3px 10px;
+  }
+  .req-admin-badge{
+    font-size:13px;
   }
 
 }
@@ -6080,49 +6093,49 @@ body.sheet-open{
   .sheet-comment-submit{ font-size:15px; padding:12px; }
 
   /* ── 기록보기 (game-reviews) ── */
-  .pr-tab{ font-size:17px; }
-  .pr-field-label{ font-size:13px; }
-  .pr-add-btn{ font-size:16px; }
-  .pr-submit-btn{ font-size:17px; }
-  .pr-session-hd{ padding:18px 24px; }
-  .pr-session-date{ font-size:20px; }
-  .pr-session-summary{ font-size:15px; }
-  .pr-session-arrow{ font-size:18px; }
-  .pr-session-thumb{ width:46px; height:46px; border-radius:8px; }
-  .pr-sub-hd{ padding:12px 20px; }
-  .pr-sub-date{ font-size:18px; }
-  .pr-sub-summary{ font-size:15px; }
-  .pr-sub-arrow{ font-size:15px; }
-  .pr-rec-row{ padding:14px 20px; }
-  .pr-rec-thumb{ width:48px; height:48px; border-radius:8px; }
-  .pr-rec-game{ font-size:18px; }
-  .pr-rec-review{ font-size:15px; }
-  .pr-rec-tag{ font-size:13px; padding:3px 10px; }
-  .pr-player-header{ padding:10px 20px; }
-  .pr-player-header .pr-rec-tag{ font-size:13px; }
-  .pr-rec-sheet-link{ font-size:18px; }
-  .pr-club-link{ font-size:14px; }
-  .pr-dates-more-btn{ font-size:14px; }
+  .pr-tab{ font-size:20px; padding:14px 8px; }
+  .pr-field-label{ font-size:14px; }
+  .pr-add-btn{ font-size:18px; }
+  .pr-submit-btn{ font-size:19px; }
+  .pr-session-hd{ padding:20px 26px; }
+  .pr-session-date{ font-size:24px; }
+  .pr-session-summary{ font-size:16px; padding:3px 12px; }
+  .pr-session-arrow{ font-size:20px; }
+  .pr-session-thumb{ width:54px; height:54px; border-radius:9px; }
+  .pr-sub-hd{ padding:14px 22px; }
+  .pr-sub-date{ font-size:21px; }
+  .pr-sub-summary{ font-size:16px; }
+  .pr-sub-arrow{ font-size:17px; }
+  .pr-rec-row{ padding:16px 22px; }
+  .pr-rec-thumb{ width:56px; height:56px; border-radius:9px; }
+  .pr-rec-game{ font-size:22px; }
+  .pr-rec-review{ font-size:17px; }
+  .pr-rec-tag{ font-size:15px; padding:4px 12px; }
+  .pr-player-header{ padding:12px 22px; }
+  .pr-player-header .pr-rec-tag{ font-size:15px; }
+  .pr-rec-sheet-link{ font-size:20px; }
+  .pr-club-link{ font-size:16px; }
+  .pr-dates-more-btn{ font-size:16px; }
 
   /* ── 기록 입력 폼 ── */
-  .pr-field-label{ font-size:14px; }
-  .pr-meta-grid input{ font-size:16px; padding:10px 12px; }
-  .pr-add-btn{ font-size:17px; padding:12px 16px; }
-  .pr-submit-btn{ font-size:18px; padding:14px; }
-  .pr-game-row{ padding:16px; }
-  .pr-row-head input{ font-size:16px; padding:9px 12px; }
-  .pr-detail-grid input{ font-size:15px; padding:9px 12px; }
-  .pr-review-ta{ font-size:15px; padding:9px 12px; }
-  .pr-count-btn{ font-size:14px; padding:7px 13px; }
-  .pr-photo-trigger{ font-size:14px; padding:8px 13px; }
-  .pr-login-notice{ font-size:16px; }
-  .pr-same-as-above-btn{ font-size:13px; }
+  .pr-field-label{ font-size:15px; }
+  .pr-meta-grid input{ font-size:17px; padding:11px 14px; }
+  .pr-add-btn{ font-size:18px; padding:14px 18px; }
+  .pr-submit-btn{ font-size:20px; padding:16px; }
+  .pr-game-row{ padding:18px; }
+  .pr-row-head input{ font-size:17px; padding:11px 14px; }
+  .pr-detail-grid input{ font-size:16px; padding:11px 14px; }
+  .pr-review-ta{ font-size:16px; padding:11px 14px; }
+  .pr-count-btn{ font-size:16px; padding:9px 16px; }
+  .pr-photo-trigger{ font-size:16px; padding:10px 16px; }
+  .pr-login-notice{ font-size:18px; }
+  .pr-same-as-above-btn{ font-size:14px; }
 
   /* ── 기록 보기 뷰 토글 ── */
-  .pr-vt-btn{ font-size:16px; padding:11px; }
-  .pr-empty{ font-size:16px; }
-  .pr-game-group-moim{ font-size:13px; }
-  .pr-game-group-hd .pr-rec-tag{ font-size:14px; }
+  .pr-vt-btn{ font-size:18px; padding:13px; }
+  .pr-empty{ font-size:18px; }
+  .pr-game-group-moim{ font-size:15px; }
+  .pr-game-group-hd .pr-rec-tag{ font-size:16px; }
 }
 
 /* ── PC 전체 페이지 글씨 일괄 확대 (@media 900px) ── */
@@ -6173,15 +6186,18 @@ body.sheet-open{
   .meeting-comments-empty{ font-size:15px; }
 
   /* ── 모임 기록 & 사진 (club-history) ── */
-  .history-group-name{ font-size:19px; }
-  .history-group-count{ font-size:14px; }
-  .history-session-date{ font-size:17px; }
-  .history-copy-btn{ font-size:13px; padding:5px 12px; }
-  .history-record-item{ font-size:16px; padding:7px 20px; }
-  .history-tag{ font-size:13px; padding:3px 9px; }
-  .history-empty{ font-size:16px; }
-  .history-loading{ font-size:15px; }
-  .history-player-header{ padding:9px 20px; }
+  .history-group-name{ font-size:24px; }
+  .history-group-count{ font-size:17px; }
+  .history-session-date{ font-size:21px; }
+  .history-session-summary{ font-size:16px; }
+  .history-copy-btn{ font-size:14px; padding:7px 14px; }
+  .history-record-item{ font-size:17px; padding:10px 22px; }
+  .history-game-name{ font-size:20px; }
+  .history-tag{ font-size:15px; padding:4px 12px; }
+  .history-empty{ font-size:18px; }
+  .history-loading{ font-size:17px; }
+  .history-player-header{ padding:12px 22px; }
+  .history-game-thumb{ width:56px; height:56px; border-radius:8px; }
 
   /* ── inner-page 본문 일반 텍스트 ── */
   .inner-page-body p{ font-size:16px; line-height:1.8; }
