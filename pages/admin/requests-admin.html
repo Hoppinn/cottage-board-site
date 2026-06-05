@@ -57,6 +57,21 @@
     .admin-analytics-table tr:hover td { background: var(--bg, #f5f0e8); }
     .anat-page { font-weight: 600; color: var(--green); }
     .anat-ref { color: var(--muted); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* 분석 기간 섹션 */
+    .admin-period-section { margin-bottom: 12px; }
+    .admin-period-title { font-size: 13px; font-weight: 800; color: var(--text); padding: 8px 4px; border-bottom: 2px solid var(--border,#e8e4dc); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+    .admin-period-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; margin-left: auto; }
+    .admin-period-section.is-open .admin-period-arrow { transform: rotate(180deg); }
+    .admin-period-body { display: none; }
+    .admin-period-section.is-open .admin-period-body { display: block; }
+    /* 분석 서브 섹션 */
+    .admin-sub-section { margin: 6px 0; border: 1px solid var(--border,#e8e4dc); border-radius: 8px; overflow: hidden; }
+    .admin-sub-section-title { font-size: 12px; font-weight: 700; color: var(--text); padding: 8px 12px; background: var(--bg,#f5f0e8); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
+    .admin-sub-section-title:hover { background: #ede8df; }
+    .admin-sub-section-arrow { font-size: 11px; color: var(--muted); transition: transform 0.2s; }
+    .admin-sub-section.is-open .admin-sub-section-arrow { transform: rotate(180deg); }
+    .admin-sub-section-body { display: none; padding: 8px 0; }
+    .admin-sub-section.is-open .admin-sub-section-body { display: block; }
   </style>
 </head>
 
@@ -387,115 +402,151 @@
 
     async function loadAnalytics() {
       const body = document.getElementById('analyticsBody');
-      const title = document.querySelector('#analyticsSection .admin-section-title span');
+      const titleSpan = document.querySelector('#analyticsSection .admin-section-title span');
       if (!body || !window.CottageDB?.getPageAnalytics) return;
 
       const rows = await window.CottageDB.getPageAnalytics();
-      if (title) title.remove();
+      if (titleSpan) titleSpan.remove();
 
       if (!rows.length) {
         body.innerHTML = '<div class="admin-empty">아직 데이터 없음 (방문 후 누적됩니다)</div>';
         return;
       }
 
-      // 페이지별 집계
-      const pageMap = new Map();
-      for (const r of rows) {
-        if (!pageMap.has(r.page)) pageMap.set(r.page, { visits: 0, totalSec: 0, users: new Set(), paths: new Map() });
-        const p = pageMap.get(r.page);
-        p.visits++;
-        p.totalSec += r.duration_sec || 0;
-        if (r.user_id) p.users.add(r.user_id);
-        if (r.referrer) {
-          const ref = r.referrer;
-          p.paths.set(ref, (p.paths.get(ref) || 0) + 1);
-        }
-      }
-
-      const sorted = [...pageMap.entries()].sort((a, b) => b[1].visits - a[1].visits);
-
       const fmtSec = s => s >= 60 ? `${Math.floor(s/60)}분 ${s%60}초` : `${s}초`;
 
-      let html = `<table class="admin-analytics-table">
-        <thead><tr><th>페이지</th><th>방문</th><th>평균 체류</th><th>로그인 방문자</th><th>주요 유입</th></tr></thead><tbody>`;
+      // KST 오늘 날짜
+      const todayKst = new Date(Date.now() + 9*3600000).toISOString().slice(0, 10);
+      const todayRows = rows.filter(r => (r.entered_at || '').slice(0, 10) === todayKst);
 
-      for (const [page, d] of sorted) {
-        const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
-        const topRef = [...d.paths.entries()].sort((a,b)=>b[1]-a[1])[0];
-        const refStr = topRef ? `${escH(topRef[0])} (${topRef[1]}회)` : '-';
-        html += `<tr>
-          <td class="anat-page">${escH(page)}</td>
-          <td>${d.visits}회</td>
-          <td>${fmtSec(avg)}</td>
-          <td>${d.users.size}명</td>
-          <td class="anat-ref">${refStr}</td>
-        </tr>`;
-      }
-      html += '</tbody></table>';
-
-      // 사용자별 페이지 체류 (로그인 유저) — 사용자별로 묶기
-      // member_intros에서 인트로 닉네임 추가 로드
-      const cfg2 = window.SUPABASE_CONFIG;
+      // 프로필·인트로 로드
       const db2 = window._cottageSupabaseDb;
-      const introsForAnalytics = db2 ? (await db2.from('member_intros').select('user_id, nickname').not('user_id', 'is', null)).data || [] : [];
-      const introNickForAnalytics = new Map(introsForAnalytics.map(i => [String(i.user_id), i.nickname]));
-
+      const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
+      const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
       const allProfiles = await window.CottageDB.getAllProfiles();
-      // userId → 표시용 닉네임(실명) 문자열
       const profilesMap = new Map(allProfiles.map(p => {
         const uid = String(p.user_id);
-        const introNick = introNickForAnalytics.get(uid) || '';
+        const introNick = introNickMap.get(uid) || '';
         const profileNick = p.nickname || '';
         const realName = p.real_name || '';
         const displayNick = introNick || profileNick || realName || uid.slice(0,8) + '…';
-        // 항상 닉네임(실명) 형식
-        const displayStr = realName ? `${displayNick}(${realName})` : displayNick;
-        return [p.user_id, displayStr];
+        return [p.user_id, realName ? `${displayNick}(${realName})` : displayNick];
       }));
-      const userMap = new Map(); // userId → Map<page, {visits, totalSec}>
-      for (const r of rows) {
-        if (!r.user_id) continue;
-        if (!userMap.has(r.user_id)) userMap.set(r.user_id, new Map());
-        const pageMap = userMap.get(r.user_id);
-        if (!pageMap.has(r.page)) pageMap.set(r.page, { visits: 0, totalSec: 0 });
-        const p = pageMap.get(r.page);
-        p.visits++;
-        p.totalSec += r.duration_sec || 0;
-      }
 
-      if (userMap.size) {
-        html += `<div style="margin-top:20px;font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;border-top:1px solid var(--border,#e8e4dc);padding-top:16px;">👤 사용자별 상세</div>`;
-
-        // 사용자를 총 체류시간 내림차순으로 정렬
-        const sortedUsers = [...userMap.entries()].sort((a, b) => {
-          const totalA = [...a[1].values()].reduce((s, v) => s + v.totalSec, 0);
-          const totalB = [...b[1].values()].reduce((s, v) => s + v.totalSec, 0);
-          return totalB - totalA;
-        });
-
-        for (const [userId, pageMap] of sortedUsers) {
-          const nick = profilesMap.get(userId) || userId.slice(0,8) + '…';
-          const totalSec = [...pageMap.values()].reduce((s, v) => s + v.totalSec, 0);
-          const sortedPages = [...pageMap.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
-          html += `<div style="margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">총 ${fmtSec(totalSec)}</span></div>
-            <table class="admin-analytics-table">
-              <thead><tr><th>페이지</th><th>방문</th><th>총 체류</th><th>평균 체류</th></tr></thead>
-              <tbody>`;
-          for (const [page, d] of sortedPages) {
-            const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
-            html += `<tr>
-              <td class="anat-page">${escH(page)}</td>
-              <td>${d.visits}회</td>
-              <td>${fmtSec(d.totalSec)}</td>
-              <td>${fmtSec(avg)}</td>
-            </tr>`;
-          }
-          html += `</tbody></table></div>`;
+      // ── 집계 헬퍼 ─────────────────────────────────
+      function buildPageMap(rowset) {
+        const m = new Map();
+        for (const r of rowset) {
+          if (!m.has(r.page)) m.set(r.page, { visits: 0, totalSec: 0, users: new Set(), paths: new Map() });
+          const p = m.get(r.page);
+          p.visits++; p.totalSec += r.duration_sec || 0;
+          if (r.user_id) p.users.add(r.user_id);
+          if (r.referrer) p.paths.set(r.referrer, (p.paths.get(r.referrer) || 0) + 1);
         }
+        return [...m.entries()].sort((a, b) => b[1].visits - a[1].visits);
       }
 
-      body.innerHTML = html;
+      function buildUserMap(rowset) {
+        const m = new Map();
+        for (const r of rowset) {
+          if (!r.user_id) continue;
+          if (!m.has(r.user_id)) m.set(r.user_id, new Map());
+          const pm = m.get(r.user_id);
+          if (!pm.has(r.page)) pm.set(r.page, { visits: 0, totalSec: 0 });
+          pm.get(r.page).visits++; pm.get(r.page).totalSec += r.duration_sec || 0;
+        }
+        return [...m.entries()].sort((a,b) => {
+          const tA = [...a[1].values()].reduce((s,v)=>s+v.totalSec,0);
+          const tB = [...b[1].values()].reduce((s,v)=>s+v.totalSec,0);
+          return tB - tA;
+        });
+      }
+
+      // ── 렌더 헬퍼 ─────────────────────────────────
+      function renderPageTable(sorted, showRef = false) {
+        if (!sorted.length) return '<div class="admin-empty">데이터 없음</div>';
+        let h = `<table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>평균체류</th><th>로그인</th>${showRef ? '<th>주요유입</th>' : ''}</tr></thead><tbody>`;
+        for (const [page, d] of sorted) {
+          const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
+          const ref = showRef ? (() => { const t = [...d.paths.entries()].sort((a,b)=>b[1]-a[1])[0]; return t ? `<td class="anat-ref">${escH(t[0])} (${t[1]}회)</td>` : '<td>-</td>'; })() : '';
+          h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtSec(avg)}</td><td>${d.users.size}명</td>${ref}</tr>`;
+        }
+        return h + '</tbody></table>';
+      }
+
+      function renderUserSummary(sortedUsers) {
+        if (!sortedUsers.length) return '<div class="admin-empty">오늘 로그인 사용자 없음</div>';
+        let h = '<table class="admin-analytics-table"><thead><tr><th>사용자</th><th>방문페이지</th><th>총체류</th></tr></thead><tbody>';
+        for (const [uid, pm] of sortedUsers) {
+          const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
+          h += `<tr><td class="anat-page">${escH(profilesMap.get(uid) || uid.slice(0,8)+'…')}</td><td>${pm.size}페이지</td><td>${fmtSec(totalSec)}</td></tr>`;
+        }
+        return h + '</tbody></table>';
+      }
+
+      function renderUserDetail(sortedUsers) {
+        if (!sortedUsers.length) return '<div class="admin-empty">로그인 사용자 데이터 없음</div>';
+        let h = '';
+        for (const [uid, pm] of sortedUsers) {
+          const nick = profilesMap.get(uid) || uid.slice(0,8) + '…';
+          const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
+          const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
+          h += `<div style="margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">총 ${fmtSec(totalSec)}</span></div>
+            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>총체류</th><th>평균체류</th></tr></thead><tbody>`;
+          for (const [page, d] of sortedPages) {
+            const avg = d.visits ? Math.round(d.totalSec/d.visits) : 0;
+            h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtSec(d.totalSec)}</td><td>${fmtSec(avg)}</td></tr>`;
+          }
+          h += '</tbody></table></div>';
+        }
+        return h;
+      }
+
+      // ── 섹션 조립 ─────────────────────────────────
+      let subIdx = 0;
+      function subSection(title, content, open = true) {
+        const id = `asub${subIdx++}`;
+        return `<div class="admin-sub-section${open?' is-open':''}" id="${id}">
+          <div class="admin-sub-section-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
+            ${escH(title)}<span class="admin-sub-section-arrow">▾</span>
+          </div>
+          <div class="admin-sub-section-body">${content}</div>
+        </div>`;
+      }
+
+      let periodIdx = 0;
+      function periodSection(label, content, open = true) {
+        const id = `aper${periodIdx++}`;
+        return `<div class="admin-period-section${open?' is-open':''}" id="${id}">
+          <div class="admin-period-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
+            ${label}<span class="admin-period-arrow">▾</span>
+          </div>
+          <div class="admin-period-body">${content}</div>
+        </div>`;
+      }
+
+      // 금일
+      const todayPageSorted = buildPageMap(todayRows);
+      const todayUserSorted = buildUserMap(todayRows);
+      const todayHtml = periodSection(
+        `📅 금일 이용 <span class="admin-section-count">${todayRows.length}세션</span>`,
+        subSection('페이지별', renderPageTable(todayPageSorted)) +
+        subSection('사용자별', renderUserSummary(todayUserSorted)),
+        true
+      );
+
+      // 전체
+      const allPageSorted = buildPageMap(rows);
+      const allUserSorted = buildUserMap(rows);
+      const allHtml = periodSection(
+        `📊 전체 이용 <span class="admin-section-count">${rows.length}세션</span>`,
+        subSection('페이지별', renderPageTable(allPageSorted, true)) +
+        subSection('사용자별 상세', renderUserDetail(allUserSorted), false),
+        false
+      );
+
+      body.innerHTML = todayHtml + allHtml;
     }
 
     let tried = false;
