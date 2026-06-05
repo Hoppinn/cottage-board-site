@@ -2940,6 +2940,53 @@ body.sheet-open{
     padding-left:var(--page-x);
     padding-right:var(--page-x);
   }
+
+  /* ── index: hero 960px 카드 ── */
+  .hero{
+    max-width:960px;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius:20px;
+    padding-left:56px !important;
+    padding-right:56px !important;
+    min-height:520px;
+  }
+
+  /* ── owned-games: max-width 방식 → full-width+padding 방식으로 전환 (헤더와 정렬) ── */
+  .owned-games-page{
+    max-width:none !important;
+    margin:0 !important;
+    padding-left:var(--page-x) !important;
+    padding-right:var(--page-x) !important;
+  }
+  /* 내부 요소들 패딩 안에서 꽉 채우기 */
+  #ownedGameList{
+    max-width:100% !important;
+  }
+  .owned-toolbar{
+    max-width:100% !important;
+  }
+  .owned-page-hero{
+    height:260px;
+  }
+
+  /* ── 내부 페이지 본문 넓히기: 720 → 960 ── */
+  .inner-page-body{
+    max-width:960px;
+  }
+  .inner-page h1{
+    max-width:960px;
+  }
+  .inner-page .breadcrumb{
+    max-width:960px;
+  }
+
+  /* ── 추천 섹션 컨텐츠 넓히기 ── */
+  .recommend-header,
+  .recommend-filter,
+  .recommend-step-list{
+    max-width:960px;
+  }
 }
 
 
