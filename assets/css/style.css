@@ -320,12 +320,12 @@ textarea{
 }
 
 
-/* 데스크톱: 최상위 링크만 밑줄 */
+/* 데스크톱: 최상위 링크만 밑줄 */
 
 /* 요청하기 — 행동 유도 링크 */
 .header-menu a[href*="requests.html"]{color:#9e3a2a !important;font-weight:900;}
 .header-menu a[href*="requests.html"]:hover{background:#fce8e0 !important;}
-.header-menu a[href*="requests.html"].is-current{background:#fce8e0 !important;color:#7a2a1e !important;}
+.header-menu a[href*="requests.html"].is-current{background:#fce8e0 !important;color:#7a2a1e !important;}
 
 /* 모바일: 클릭으로 아코디언 */
 .menu-group.is-open .menu-group-body{
@@ -2543,8 +2543,8 @@ body.sheet-open{
   .deco-2{right:6%;top:12%;}
   .deco-3{left:6%;bottom:7%;}
 }
-
-
+
+
 
 
 
@@ -5194,12 +5194,12 @@ body.sheet-open{
 /* =========================
    # PC LAYOUT ENLARGEMENTS (720px+)
    모바일은 그대로, PC에서만 전체 크기 상향
-========================= */
+========================= */
 /* END PC LAYOUT ENLARGEMENTS */
 
-/* ── PC 컴포넌트 스케일업: 바텀시트·기록보기·브레드크럼 ── */
+/* ── PC 컴포넌트 스케일업: 바텀시트·기록보기·브레드크럼 ── */
 
-/* ── PC 전체 페이지 글씨 일괄 확대 (@media 720px) ── */
+/* ── PC 전체 페이지 글씨 일괄 확대 (@media 720px) ── */
 
 /* ═══════════════════════════════════════════════════════════════
    PLAY RECORDS (game-reviews.html) — pr-* classes
@@ -5393,7 +5393,7 @@ body.sheet-open{
 /* =========================
    # PC LAYOUT (min-width: 720px)
 ========================= */
-
+
 
 /* ── PC 720px: pr-* 확대 (파일 맨 끝 — 768px 블록 이후라 캐스케이드 정상 적용) ── */
 
@@ -5401,6 +5401,10 @@ body.sheet-open{
    # PC LAYOUT (min-width: 720px) — 통합 블록
 ========================= */
 @media(min-width:720px){
+  /* ===== TEMP: PC 110% scale test — 확인 후 이 블록 삭제 ===== */
+  main { zoom: 1.1; }
+  /* ===== END TEMP ===== */
+
   .header-menu > a.is-current{
     background:transparent;
     color:#5a3418;
@@ -6021,30 +6025,30 @@ body.sheet-open{
     padding-right:48px;
   }
   .about-hero h2{
-    font-size:clamp(28px,3.6vw,46px);
+    font-size:clamp(24px,3.1vw,39px);
   }
   .about-hero-sub{
-    font-size:clamp(16px,1.6vw,20px);
+    font-size:clamp(14px,1.4vw,17px);
   }
   .about-hero-eyebrow{
-    font-size:14px;
+    font-size:12px;
     padding:6px 18px;
   }
 
   /* ── about 섹션 폰트 ── */
   .about-intro-text{
-    font-size:clamp(16px,1.5vw,18px);
+    font-size:clamp(14px,1.3vw,15px);
     line-height:1.85;
   }
   .about-section-label{
-    font-size:12px;
+    font-size:10px;
     letter-spacing:.1em;
   }
   .about-for-text{
-    font-size:16px;
+    font-size:14px;
   }
   .about-feature-label{
-    font-size:14px;
+    font-size:12px;
   }
   .about-section{
     padding-top:clamp(40px,5vw,64px);
@@ -6342,8 +6346,8 @@ body.sheet-open{
 
 
   /* ── about / club 공통 섹션 ── */
-  .about-section-label{ font-size:14px; }
-  .about-for-text{ font-size:17px; }
+  .about-section-label{ font-size:10px; }
+  .about-for-text{ font-size:14px; }
 
   /* ── club 서브페이지 브레드크럼 ── */
   .club-breadcrumb{ font-size:14px; }
