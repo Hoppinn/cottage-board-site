@@ -1256,7 +1256,7 @@
             <span class="pr-session-date">${gKey
               ? `<a class="pr-session-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gKey.replace(/'/g,"\\'")}')">${escH(gameName)}</a>`
               : escH(gameName)}</span>
-            <span class="pr-session-summary">${recs.length}회 플레이</span>
+            <span class="pr-session-summary">${recs.length}회</span>
             <span class="pr-session-arrow">▾</span>
           </button>
           <div class="pr-session-body">${buildGameBody(recs, user)}</div>
