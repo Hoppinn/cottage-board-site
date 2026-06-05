@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-05 (4차)
+최종 갱신: 2026-06-05 (5차)
 
 ---
 
@@ -73,14 +73,14 @@
 | ~~B-11~~ | ~~supabase-client.js~~ | ~~_syncTimeToDBNow update 사용 — 프로필 row 없을 때 조용히 실패 + localStorage 제거~~ → **upsert로 교체 완료** |
 | ~~B-12~~ | ~~supabase-client.js~~ | ~~updateProfilePhoto upsert — row 없을 때 INSERT로 기존 필드 null 덮어쓰기~~ → **update로 교체 완료** |
 | ~~B-07~~ | ~~kakao-auth.js~~ | ~~방문 카운트 기기별 독립~~ → **로컬 카운터 소스, DB 동기화로 전환. 기기별 독립은 유지되나 DB SELECT null이어도 정확한 값 보존** |
-| B-13 | game-reviews.html 수정폼 | 입력 필드에 id/name 없음 — 접근성 경고 (기능 영향 없음) |
+| ~~B-13~~ | ~~game-reviews.html 수정폼~~ | ~~입력 필드 id/name 없음~~ → **레코드 id suffix로 label for + input id/name 추가 완료** |
 
 ### 하 (UX 불편)
 
 | ID | 위치 | 설명 |
 |----|------|------|
 | ~~B-08~~ | ~~game-reviews.html~~ | ~~모바일 소프트키보드 "다음"으로 포커스 이탈~~ → **blur 시 값 있으면 re-focus 완료** |
-| B-09 | game-reviews.html | 수정폼 게임명 자동완성에 화살표 키 이동 없음 (attachAc 단순 버전) |
+| ~~B-09~~ | ~~game-reviews.html~~ | ~~수정폼 게임명 자동완성 화살표 키 없음~~ → **attachAc 통합으로 이미 해결** |
 
 ---
 
@@ -174,7 +174,8 @@
 - [ ] `window._cottageSessionStart` — kakao-auth.js에서 실사용 중, 제거 불가
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
 - [ ] PC 호환성
-- [ ] B-13 접근성 경고 — 수정폼 입력 필드 id/name 추가
+- [x] B-13 접근성 경고 — 수정폼 입력 필드 id/name 추가 ✅
+- [x] B-09 수정폼 게임명 자동완성 화살표 키 — attachAc 통합으로 자동 해결 ✅
 - [x] 기록 입력폼: 두 번째 게임 행 추가 시 "위와 동일" 버튼 — 인원수·참여자를 첫 행에서 복사 ✅
 - [x] 참여자 순서 정규화 — player_names 저장/조회 시 이름 정렬 후 비교, 순서 달라도 동일 그룹으로 통합 (game-reviews.html 렌더링 + 그룹핑 키 모두 적용) ✅
 
