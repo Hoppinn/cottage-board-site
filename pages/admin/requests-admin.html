@@ -558,7 +558,7 @@
       const todayHtml = periodSection(
         `📅 금일 이용 <span class="admin-section-count">${todayRows.length}세션</span>`,
         subSection('페이지별', renderPageTable(todayPageSorted)) +
-        subSection('사용자별', renderUserSummary(todayUserSorted)),
+        subSection('사용자별', renderUserDetail(todayUserSorted)),
         true
       );
 
