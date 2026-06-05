@@ -435,7 +435,7 @@
         const q = input.value.trim(), all = getSuggestions();
         render(q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 8));
       });
-      input.addEventListener('focus', () => { if (!input.value.trim()) render(getSuggestions().slice(0, 8)); });
+      input.addEventListener('focus', () => { const q = input.value.trim(), all = getSuggestions(); render(q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 8)); });
       input.addEventListener('keydown', e => {
         if (!list.classList.contains('is-open')) return;
         const items = [...list.querySelectorAll('.pr-autocomplete-item')];
