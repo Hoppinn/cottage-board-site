@@ -895,6 +895,12 @@ const ownedToolbar =
 
 if(ownedToolsToggle && ownedToolbar){
 
+  // PC 화면에서는 기본으로 펼쳐진 상태로 시작
+  if(window.innerWidth >= 768){
+    ownedToolbar.classList.remove("is-collapsed");
+    ownedToolsToggle.textContent = "▲ 접기";
+  }
+
   ownedToolsToggle.addEventListener("click", ()=>{
 
     ownedToolbar.classList.toggle("is-collapsed");

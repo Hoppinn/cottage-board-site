@@ -2758,20 +2758,22 @@ body.sheet-open{
     top:var(--header-total-h);
     right:var(--page-x);
     left:auto;
-    min-width:160px;
+    width:max-content;
     background:var(--paper-2,#faf7f0);
     border:1px solid rgba(223,199,161,0.7);
     border-radius:14px;
     box-shadow:0 8px 24px rgba(40,30,18,0.12);
-    padding:8px;
+    padding:6px 8px;
     z-index:1003;
-    flex-direction:column;
+    flex-direction:row;
+    gap:2px;
   }
 
   #kakaoUserActions button{
     border-radius:9px;
     font-size:14px;
-    padding:9px 14px;
+    padding:8px 14px;
+    white-space:nowrap;
   }
 
   .menu-toggle{ display:none; }
@@ -5733,23 +5735,26 @@ body.sheet-open{
     gap:14px !important;
   }
   .owned-game-thumb img{
-    width:72px !important;
-    height:72px !important;
+    width:80px !important;
+    height:80px !important;
   }
   .owned-game-thumb{
-    flex:0 0 72px;
+    flex:0 0 80px;
   }
   .owned-game-info strong{
-    font-size:18px !important;
-    margin-bottom:7px !important;
+    font-size:20px !important;
+    margin-bottom:8px !important;
   }
   .owned-game-info p{
-    font-size:14px;
+    font-size:15px;
   }
   .owned-game-meta span{
+    font-size:14px !important;
+    min-height:28px !important;
+    padding:5px 12px !important;
+  }
+  .owned-img-rating{
     font-size:13px !important;
-    min-height:26px !important;
-    padding:4px 10px !important;
   }
 
   /* ── 전체게임보기 페이지 패딩 ── */
@@ -6048,6 +6053,15 @@ body.sheet-open{
   /* 브레드크럼 */
   .breadcrumb{ font-size:14px; }
 
+  /* ── 툴바: 정렬·필터 select + 버튼 확대 ── */
+  .owned-toolbar select{ font-size:15px !important; padding:9px 32px 9px 12px !important; height:42px !important; }
+  .owned-sort-btn{ font-size:14px !important; height:38px !important; padding:0 14px !important; }
+  .owned-tools-toggle{ font-size:15px !important; height:42px !important; padding:0 18px !important; }
+  .owned-search-box input{ font-size:16px !important; height:48px !important; padding-left:46px !important; }
+  .owned-filter-label{ font-size:14px; }
+  .owned-empty{ font-size:17px !important; }
+  .owned-count-line{ font-size:15px; }
+
   /* ── 바텀시트 내용 ── */
   .sheet-thumb{ width:90px !important; height:90px !important; }
   .sheet-img-bgg{ font-size:13px; }
@@ -6319,17 +6333,7 @@ body.sheet-open{
     max-width: 1040px;
   }
 
-  /* owned-games 툴바 PC에서 기본 펼쳐짐 */
-  .owned-toolbar.is-collapsed {
-    max-height: 400px !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    overflow: visible !important;
-    margin-bottom: 8px !important;
-  }
-  #ownedToolsToggle {
-    display: none;
-  }
+  /* PC에서 툴바 토글 버튼 유지 (JS에서 기본 펼침으로 초기화) */
 
   /* ── game-reviews 2컬럼 ── */
   #reviewRoot {
