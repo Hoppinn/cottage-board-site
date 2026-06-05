@@ -5643,8 +5643,8 @@ body.sheet-open{
   .menu-toggle{ display:none; }
 
   .hero{
-    margin-top:calc(var(--header-total-h) + 12px);
-    margin-bottom:28px;
+    margin-top:calc(var(--header-total-h) + 28px);
+    margin-bottom:56px;
     padding-top:clamp(28px,4vw,52px);
   }
 
@@ -5670,7 +5670,10 @@ body.sheet-open{
     width:100%;
     margin:0 auto 32px;
     border-radius:16px;
-    height:220px;
+    height:90px;
+    justify-content:flex-start;
+    padding-left:clamp(20px,3vw,36px);
+    text-align:left;
   }
 
   /* 필터·게임스크롤은 padding으로 중앙 */
@@ -5834,7 +5837,7 @@ body.sheet-open{
     border-radius:20px;
     padding-left:56px;
     padding-right:56px;
-    min-height:calc(100svh - var(--header-total-h) - 40px);
+    min-height:calc(100svh - var(--header-total-h) - 84px);
   }
 
   /* ── owned-games: max-width 방식 → full-width+padding 방식으로 전환 (헤더와 정렬) ── */
@@ -5852,7 +5855,7 @@ body.sheet-open{
     max-width:100%;
   }
   .owned-page-hero{
-    height:175px;
+    height:90px;
   }
 
   /* ── 내부 페이지 본문: 720px 유지 ── */
@@ -5924,7 +5927,8 @@ body.sheet-open{
   /* ── 추천 제목 ── */
   .recommend-title-group h2,
   .recommend-header h2{
-    font-size:clamp(38px,4vw,52px);
+    font-size:clamp(16px,2vw,22px);
+    text-align:left;
   }
 
   /* ── 게임 카드 (추천 섹션) — 4열 고정 ── */
@@ -6008,7 +6012,7 @@ body.sheet-open{
 
   /* ── 메인 히어로: PC에서 뷰포트 - 헤더 - 여백 높이 ── */
   .hero{
-    min-height:calc(100svh - var(--header-total-h) - 40px);
+    min-height:calc(100svh - var(--header-total-h) - 84px);
   }
 
   /* ── 추천 배너: 사람 얼굴 보이도록 position 조정 ── */
@@ -6031,20 +6035,31 @@ body.sheet-open{
     margin-left:auto;
     margin-right:auto;
     border-radius:16px;
-    padding-top:clamp(22px,3vw,32px);
-    padding-bottom:clamp(28px,4vw,44px);
-    padding-left:48px;
-    padding-right:48px;
+    padding-top:clamp(14px,2vw,18px);
+    padding-bottom:clamp(14px,2vw,18px);
+    padding-left:36px;
+    padding-right:36px;
+    text-align:left;
+  }
+  .about-hero-title-row{
+    display:flex;
+    align-items:baseline;
+    gap:clamp(10px,2vw,20px);
+    margin-top:6px;
   }
   .about-hero h2{
-    font-size:clamp(18px,2.4vw,30px);
+    font-size:clamp(15px,1.9vw,22px);
+    white-space:nowrap;
+    flex-shrink:0;
+    margin-bottom:0;
   }
   .about-hero-sub{
-    font-size:clamp(13px,1.3vw,16px);
+    font-size:clamp(11px,1.1vw,13px);
   }
   .about-hero-eyebrow{
-    font-size:12px;
-    padding:6px 18px;
+    font-size:11px;
+    padding:4px 12px;
+    margin-bottom:6px;
   }
 
   /* ── about 섹션 폰트 ── */
@@ -6190,7 +6205,10 @@ body.sheet-open{
   /* ── recommend-section 배너 높이 ── */
   .recommend-header--photo,
   .recommend-header.recommend-header--photo{
-    height:260px;
+    height:90px;
+    justify-content:flex-start;
+    padding-left:clamp(20px,3vw,36px);
+    text-align:left;
   }
 
   /* ── 페이지네이션 ── */
@@ -6214,11 +6232,14 @@ body.sheet-open{
 
   /* ── 전체게임보기 히어로 ── */
   .owned-page-hero{
-    height:240px;
+    height:90px;
     margin-bottom:20px;
+    justify-content:flex-start;
+    padding-left:clamp(20px,3vw,36px);
   }
   .owned-page-hero h1{
-    font-size:clamp(30px,3.5vw,46px);
+    font-size:clamp(16px,2vw,22px);
+    text-align:left;
   }
 
   /* ── 모임 참여 / 섹션 타이틀 ── */

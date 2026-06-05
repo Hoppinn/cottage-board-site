@@ -237,11 +237,20 @@
 
 | # | 항목 | 상태 |
 |---|------|------|
-| A | index.html hero 헤더 로고 overflow → PC block `.header-logo img` 크기 제한 | ✅ |
-| B | 메인 hero 높이 — margin-top+bottom + calc(100svh - header - 40px) | ✅ |
+| A | index.html hero 헤더 로고 overflow → PC block `.header-logo img` 크기 제한 → 스크린샷 확인 정상 | ✅ |
+| B | 메인 hero 높이 — margin-top+bottom + calc(100svh - header - 40px) | ✅ → 여백 더 증가 작업 중 |
 | C | page-mini-hero 배너 185→90px + 좌측정렬 + h1 font-size 줄임 | ✅ |
 | D | 추천 카드 padding 16→11px, strong 21→14px, description 14→11px | ✅ |
 | F | price-hero-card padding/font 20~25% 축소 | ✅ |
+
+### 완료 (3차 작업, 2026-06-06)
+
+| # | 항목 | 상태 |
+|---|------|------|
+| B2 | 메인 hero 여백 증가 — margin-top +28px, margin-bottom 56px | ✅ |
+| G | about-hero 타이틀+서브타이틀 가로 한줄 (HTML wrapper + PC flex-row) + 배너 압축 | ✅ |
+| H | owned-page-hero 240→90px + 좌측정렬 | ✅ |
+| I | recommend-header--photo 260→90px + 좌측정렬 | ✅ |
 
 ### TODO (작업 안 함)
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
