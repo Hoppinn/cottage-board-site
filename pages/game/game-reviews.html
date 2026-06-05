@@ -582,12 +582,21 @@
       if (initialValue) initialValue.split(',').forEach(v => addTag(v));
     }
 
-    // 참여자 이름 정규화 — 콤마 구분, 각 이름 trim, 가나다순 정렬, 빈 항목 제거
+    // 참여자 이름 정규화 — 그룹핑 키 전용 (가나다순 정렬)
     function normalizeNames(raw) {
       if (!raw) return null;
       const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
       if (!parts.length) return null;
       return parts.sort((a, b) => a.localeCompare(b, 'ko')).join(', ');
+    }
+
+    // 입력자를 맨 앞으로 — 신규 저장 전용
+    function putSelfFirst(names, selfNick) {
+      if (!names || !selfNick) return names;
+      const parts = names.split(',').map(s => s.trim()).filter(Boolean);
+      const idx = parts.findIndex(n => n.toLowerCase() === selfNick.toLowerCase());
+      if (idx > 0) { const [me] = parts.splice(idx, 1); parts.unshift(me); }
+      return parts.join(', ') || null;
     }
 
     function showToast(msg) {
@@ -842,7 +851,7 @@
             id: gameIdByName(name),
             count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
             time: parseInt(row.querySelector('.pr-time').value) || null,
-            names: row.querySelector('.pr-names').value.trim() || null,
+            names: putSelfFirst(row.querySelector('.pr-names').value.trim() || null, user.nickname),
             score: row.querySelector('.pr-score').value.trim() || null,
             review: row.querySelector('.pr-review').value.trim() || null,
             photoFiles: row._photoFiles || [],

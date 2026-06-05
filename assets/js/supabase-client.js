@@ -278,6 +278,15 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   // 개별 이름 자동완성 표시 순서 — 원하는 순서로 편집
   const MEMBER_ORDER = ['호핀', '김기성', 'DK', '설애', '덕지', '죠르디'];
 
+  // 콤보 문자열을 MEMBER_ORDER 기준으로 정규화 (자동완성 중복 제거용)
+  function normalizeComboForAc(str) {
+    const parts = str.split(',').map(n => n.trim()).filter(Boolean);
+    return [
+      ...MEMBER_ORDER.filter(n => parts.includes(n)),
+      ...parts.filter(n => !MEMBER_ORDER.includes(n)),
+    ].join(', ');
+  }
+
   async function getPlayerNames() {
     try {
       const { data } = await db
@@ -286,7 +295,10 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         .not("player_names", "is", null)
         .neq("player_names", "");
       if (!data) return [];
-      const combos = [...new Set(data.map(r => r.player_names.trim()).filter(Boolean))];
+      // 콤보: MEMBER_ORDER로 정규화 후 중복 제거 → 같은 멤버면 하나만 표시
+      const combos = [...new Set(
+        data.map(r => r.player_names.trim()).filter(Boolean).map(normalizeComboForAc)
+      )];
       const rawIndividuals = [...new Set(
         data.flatMap(r => (r.player_names || "").split(",").map(n => n.trim()).filter(Boolean))
       )];
