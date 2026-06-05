@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-05 (5차)
+최종 갱신: 2026-06-05 (6차)
 
 ---
 
@@ -173,12 +173,38 @@
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] `window._cottageSessionStart` — kakao-auth.js에서 실사용 중, 제거 불가
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
-- [ ] PC 호환성
 - [x] 자동완성 화살표 선택 후 Enter — initTagInput early return + attachAc 선처리로 수정 ✅
 - [x] B-13 접근성 경고 — 수정폼 입력 필드 id/name 추가 ✅
 - [x] B-09 수정폼 게임명 자동완성 화살표 키 — attachAc 통합으로 자동 해결 ✅
 - [x] 기록 입력폼: 두 번째 게임 행 추가 시 "위와 동일" 버튼 — 인원수·참여자를 첫 행에서 복사 ✅
 - [x] 참여자 순서 정규화 — player_names 저장/조회 시 이름 정렬 후 비교, 순서 달라도 동일 그룹으로 통합 (game-reviews.html 렌더링 + 그룹핑 키 모두 적용) ✅
+
+---
+
+## 6. 장기 리팩토링 계획 (다중 세션)
+
+### 목표
+- **전체 리팩토링**: game-reviews.html이 1,400줄 이상으로 비대화. JS 분리 및 구조 개선
+- **PC 호환성**: 현재 모바일 우선 설계. PC 레이아웃(와이드 뷰), 마우스 UX, 키보드 단축키 대응
+
+### 리팩토링 세부 계획 (미착수)
+- [ ] game-reviews.html JS → assets/js/game-reviews.js 로 분리
+- [ ] addRow / renderGroupView / buildSessionBody 등 함수 모듈화
+- [ ] CSS 인라인 → style.css 통합 (pr-* 클래스)
+- [ ] initTagInput / attachAc → 별도 utils.js 분리 검토
+
+### PC 호환성 세부 계획 (미착수)
+- [ ] 뷰포트 768px 이상에서 2컬럼 레이아웃 (게임 목록, 기록 허브)
+- [ ] 마우스 hover 상태 전반 점검
+- [ ] 바텀시트 → PC에서 사이드패널 또는 모달 대체 검토
+- [ ] 키보드 네비게이션 (Tab 순서, Enter 동작)
+
+### 세션별 진행 기록
+| 세션 | 날짜 | 작업 범위 |
+|------|------|-----------|
+| 2026-06-05 세션 | 2026-06-05 | 플레이 기록 UX 대규모 개선, 참여자 입력 버그 수정, 방문 일수 카운팅, 관리자 페이지 분석 재구성, MEMBER_ORDER, 입력자 첫번째, 인원칩/첫칩 스타일 |
+| *(다음 세션)* | - | 리팩토링 1단계: game-reviews.html JS 분리 |
+| *(그 다음)* | - | PC 호환성 레이아웃 작업 |
 
 ---
 
