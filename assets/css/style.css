@@ -6103,6 +6103,26 @@ body.sheet-open{
   .pr-rec-sheet-link{ font-size:18px; }
   .pr-club-link{ font-size:14px; }
   .pr-dates-more-btn{ font-size:14px; }
+
+  /* ── 기록 입력 폼 ── */
+  .pr-field-label{ font-size:14px; }
+  .pr-meta-grid input{ font-size:16px; padding:10px 12px; }
+  .pr-add-btn{ font-size:17px; padding:12px 16px; }
+  .pr-submit-btn{ font-size:18px; padding:14px; }
+  .pr-game-row{ padding:16px; }
+  .pr-row-head input{ font-size:16px; padding:9px 12px; }
+  .pr-detail-grid input{ font-size:15px; padding:9px 12px; }
+  .pr-review-ta{ font-size:15px; padding:9px 12px; }
+  .pr-count-btn{ font-size:14px; padding:7px 13px; }
+  .pr-photo-trigger{ font-size:14px; padding:8px 13px; }
+  .pr-login-notice{ font-size:16px; }
+  .pr-same-as-above-btn{ font-size:13px; }
+
+  /* ── 기록 보기 뷰 토글 ── */
+  .pr-vt-btn{ font-size:16px; padding:11px; }
+  .pr-empty{ font-size:16px; }
+  .pr-game-group-moim{ font-size:13px; }
+  .pr-game-group-hd .pr-rec-tag{ font-size:14px; }
 }
 
 /* ── PC 전체 페이지 글씨 일괄 확대 (@media 900px) ── */
@@ -6400,37 +6420,23 @@ body.sheet-open{
 
   /* PC에서 툴바 토글 버튼 유지 (JS에서 기본 펼침으로 초기화) */
 
-  /* ── game-reviews 2컬럼 ── */
+  /* ── game-reviews PC: 탭 전환 (전체 너비 단일 패널) ── */
   #reviewRoot {
-    max-width: 1040px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr;
-    column-gap: 32px;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
   }
   .pr-tabs {
-    grid-column: 1 / -1;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 32px;
-    border-bottom: none;
-    margin-bottom: 0;
+    border-bottom: 2px solid var(--border, #e8e4dc);
+    margin-bottom: 20px;
   }
   .pr-tab {
-    border-bottom: 2px solid var(--border, #e8e4dc);
-    margin-bottom: 0;
-    padding-bottom: 10px;
+    font-size: 17px;
+    padding: 12px 8px;
   }
-  .pr-panel {
-    display: block !important;
-  }
-  #prPanelRecords {
-    grid-column: 1;
-    grid-row: 2;
-  }
+  /* 탭 전환은 JS is-active 클래스로 제어 — 패널 display 기본 유지 */
   #prPanelInput {
-    grid-column: 2;
-    grid-row: 2;
-    border-left: 1px solid var(--border, #e8e4dc);
-    padding-left: 32px;
+    border-left: none;
+    padding-left: 0;
   }
 }
