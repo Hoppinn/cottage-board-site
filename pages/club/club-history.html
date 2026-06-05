@@ -183,6 +183,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="../../assets/js/supabase-config.js"></script>
   <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/play-records-utils.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
 
@@ -324,22 +325,8 @@
       };
     }
 
-    function prParsePhotoUrls(raw) {
-      if (!raw) return [];
-      if (raw.trimStart().startsWith('[')) { try { return JSON.parse(raw).filter(Boolean); } catch (_) {} }
-      return [raw];
-    }
-
-    function buildPhotoHtml(photoUrls, recordId, canDelPhoto) {
-      if (!photoUrls.length) return '';
-      const show = photoUrls.slice(0, 3);
-      const more = photoUrls.length - 3;
-      const allAttr = escAttr(JSON.stringify(photoUrls));
-      return `<div class="pr-rec-photo-wrap" data-urls="${allAttr}">
-        ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
-        ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
-      </div>`;
-    }
+    // parsePhotoUrls, buildPhotoHtml, openLightbox → play-records-utils.js 전역 사용
+    const prParsePhotoUrls = window.parsePhotoUrls;
 
     // ── 렌더링 ────────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-05 (9차)
+최종 갱신: 2026-06-05 (10차)
 
 ---
 
@@ -209,6 +209,7 @@
 | 2026-06-05 세션 4 | 2026-06-05 | 리팩토링 2단계: script.js 모듈 분리 (owned-games-page.js + index-page.js) + PC 레이아웃 (768px+ 2컬럼, 바텀시트 센터 모달) |
 | 2026-06-05 세션 5 | 2026-06-05 | PC 스케일업: hero 100svh 복구, 바텀시트·기록보기·브레드크럼 폰트 확대, SEO(og:image, sitemap 3개 추가) |
 | 2026-06-05 세션 6 | 2026-06-05 | PC 전체 페이지 글씨 일괄 확대: club/meeting/history/rules/intro/schedule 모든 클래스, inner-page 본문 p·li, 프로필 메뉴 가로 배치, 툴바 토글 복원, 게임카드 확대 |
+| 2026-06-05 세션 7 | 2026-06-05 | game-reviews↔club-history 연동: play-records-utils.js 공유 모듈(parsePhotoUrls/buildPhotoHtml/openLightbox), club-history 라이트박스 수정, game-reviews PC 탭 전환(2컬럼→단일패널) |
 | *(다음 세션)* | - | 마우스 hover 점검, 키보드 네비게이션, 추가 모듈화 |
 
 ---
@@ -232,6 +233,9 @@
 | 2026-06-05 | fix: 내 활동 이용시간 0분 — startSession을 하루 첫 방문 브랜치에서도 호출 |
 | 2026-06-05 | fix: 프로필 사진/닉네임 변경 후 햄버거+토글 유지 — stopPropagation + 동기 복원 |
 | 2026-06-05 | feat: getProfileSnapshot 추가, 닉네임도 다기기 동기화 (initKakaoAuth) |
+| 2026-06-05 | feat: play-records-utils.js 생성 — parsePhotoUrls/buildPhotoHtml/openLightbox 전역 공유 모듈 |
+| 2026-06-05 | fix: club-history 라이트박스 수정 (openLightbox 미정의 → window.openLightbox 전역 사용) |
+| 2026-06-05 | refactor: game-reviews PC 탭 전환 (2컬럼 사이드바이사이드 → 단일 패널 전체너비, max-width:760px) |
 | 2026-06-05 | D-08: buildPhotoHtml + pr-rec-photo-* 클래스로 사진 컴포넌트 통일 (club-history.html) |
 | 2026-06-05 | 관리자 3버그 수정: B-10 이벤트명 불일치, B-11 _syncTimeToDBNow update→upsert, B-12 updateProfilePhoto upsert→update |
 | 2026-06-05 | 게임 필터 전면 개선: 전체게임 인원 1~9인+ 확장, bestPlayers 우선순위(BGG>XLSX) 복원, 머더미스터리 weight 예외, 추천 드롭다운 자동 닫힘 |
