@@ -1407,10 +1407,10 @@ body.recommend-page main{
   align-items:center;
   justify-content:center;
   padding:10px;
-  border:2px dashed #c8d9b0;
+  border:2px dashed #c8a070;
   border-radius:22px;
-  background:#f4f8ee;
-  color:#4f7445;
+  background:#fdf0e4;
+  color:#7a4828;
   font-size:14px;
   font-weight:900;
   line-height:1.4;
@@ -2481,9 +2481,9 @@ body.sheet-open{
 
 /* 난이도 제한 토글 — ON */
 .owned-weight-cap-btn.is-on{
-  border-color:#5c9a6a;
-  background:#e6f3eb;
-  color:#2e6b40;
+  border-color:#c8905a;
+  background:#fbecd8;
+  color:#7a4828;
 }
 .owned-weight-cap-btn.is-on:hover{
   background:#d6ecde;
@@ -3394,8 +3394,8 @@ body.sheet-open{
 .sheet-play-info-tag{
   font-size:11px;
   font-weight:700;
-  color:#5a7a3a;
-  background:#edf5e1;
+  color:#7a4828;
+  background:#fbecd8;
   border-radius:999px;
   padding:2px 8px;
 }
@@ -3459,7 +3459,7 @@ body.sheet-open{
   font-weight:700;
   cursor:pointer;
 }
-.sheet-play-detail-submit:hover{ background:#4a8a30; }
+.sheet-play-detail-submit:hover{ background:#5a3015; }
 .sheet-player-select-btn.is-selected{
   background:var(--green);
   color:#fff;
@@ -3606,9 +3606,9 @@ body.sheet-open{
   background:#ead8b8;
 }
 .sheet-reaction-btn.is-active{
-  background:#d4edda;
-  border-color:#a8d5b5;
-  color:#2d6a4f;
+  background:#fbecd8;
+  border-color:#d4a878;
+  color:#7a4828;
 }
 
 .sheet-comment-item{
@@ -4254,16 +4254,16 @@ body.sheet-open{
   align-items:center;
   gap:6px;
   padding:8px 12px;
-  background:#f4f8ee;
-  border:1.5px solid #d0e4b0;
+  background:#fdf0e4;
+  border:1.5px solid #d4a878;
   border-radius:10px;
   font-size:12px;
   font-weight:900;
-  color:#3B6D11;
+  color:#7a4828;
 }
 .rules-ok-list li::before{
   content:"✓";
-  color:#5a9e30;
+  color:#7a4828;
   font-size:13px;
   flex-shrink:0;
 }
@@ -5491,7 +5491,7 @@ body.sheet-open{
 .history-session-date{
   font-size:14px;
   font-weight:800;
-  color:#1a5c48;
+  color:#7a4828;
 }
 .history-copy-btn{
   font-size:11px;
