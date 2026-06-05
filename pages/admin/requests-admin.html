@@ -8,7 +8,9 @@
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
     /* 최상위 그룹 */
-    .admin-group { margin-bottom: 24px; }
+    .admin-group { margin-bottom: 32px; }
+    .admin-group + .admin-group { margin-top: 8px; }
+    .admin-group .admin-section-title { border-bottom: none; }
     .admin-group-title { font-size: 16px; font-weight: 900; color: #2c3e50; padding: 10px 2px; border-bottom: 3px solid #2c3e50; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
     .admin-group-title:hover { color: var(--green); border-bottom-color: var(--green); }
     .admin-group-arrow { font-size: 13px; color: var(--muted); transition: transform 0.2s; }
@@ -277,7 +279,7 @@
       const suggestCount = (suggestRes.data||[]).filter(r => !r.is_done).length;
 
       el.innerHTML = `
-        <div class="admin-group is-open" id="groupAnalysis">
+        <div class="admin-group" id="groupAnalysis">
           <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
             <div class="admin-section">
@@ -290,7 +292,7 @@
             </div>
           </div>
         </div>
-        <div class="admin-group is-open" id="groupRequests">
+        <div class="admin-group" id="groupRequests">
           <div class="admin-group-title">📋 요청관리<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
             <div class="admin-section">
