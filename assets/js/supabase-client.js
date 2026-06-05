@@ -275,6 +275,9 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     }
   }
 
+  // 개별 이름 자동완성 표시 순서 — 원하는 순서로 편집
+  const MEMBER_ORDER = ['호핀', '김기성', 'DK', '설애', '덕지', '죠르디'];
+
   async function getPlayerNames() {
     try {
       const { data } = await db
@@ -284,9 +287,14 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         .neq("player_names", "");
       if (!data) return [];
       const combos = [...new Set(data.map(r => r.player_names.trim()).filter(Boolean))];
-      const individuals = [...new Set(
+      const rawIndividuals = [...new Set(
         data.flatMap(r => (r.player_names || "").split(",").map(n => n.trim()).filter(Boolean))
       )];
+      // MEMBER_ORDER 기준 정렬, 목록에 없는 이름은 뒤에 추가
+      const individuals = [
+        ...MEMBER_ORDER.filter(n => rawIndividuals.includes(n)),
+        ...rawIndividuals.filter(n => !MEMBER_ORDER.includes(n)),
+      ];
       // 조합(전체) 먼저, 그 다음 개별 이름
       return [...new Set([...combos, ...individuals])];
     } catch (_) {
