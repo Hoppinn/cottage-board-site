@@ -321,7 +321,7 @@ textarea{
 
 
 /* 데스크톱: 최상위 링크만 밑줄 */
-@media(min-width:900px){
+@media(min-width:720px){
   .header-menu > a.is-current{
     background:transparent;
     color:#5a3418;
@@ -335,7 +335,7 @@ textarea{
 .header-menu a[href*="requests.html"]{color:#9e3a2a !important;font-weight:900;}
 .header-menu a[href*="requests.html"]:hover{background:#fce8e0 !important;}
 .header-menu a[href*="requests.html"].is-current{background:#fce8e0 !important;color:#7a2a1e !important;}
-@media(min-width:900px){
+@media(min-width:720px){
   .header-menu > a[href*="requests.html"].is-current{
     background:transparent !important;
     border-bottom:2.5px solid #9e3a2a !important;
@@ -2587,10 +2587,10 @@ body.sheet-open{
   }
 }
 
-@media(min-width:900px){
-  /* ── A안: 콘텐츠를 960px 안에 가두는 전역 패딩 ── */
+@media(min-width:720px){
+  /* ── A안: 콘텐츠를 720px 안에 가두는 전역 패딩 ── */
   :root{
-    --page-x: max(32px, calc((100vw - 960px) / 2));
+    --page-x: max(16px, calc((100vw - 720px) / 2));
   }
 
   /* Logo(auto) | Nav(auto) | spacer(1fr) | Actions(auto) */
@@ -2795,10 +2795,10 @@ body.sheet-open{
     scroll-margin-top:calc(var(--header-total-h) + 24px);
   }
 
-  /* 배너 960px 카드 — 히어로와 동일 패턴 */
+  /* 배너 720px 카드 — 히어로와 동일 패턴 */
   .recommend-header--photo,
   .recommend-header.recommend-header--photo{
-    max-width:960px !important;
+    max-width:720px !important;
     width:100% !important;
     margin:0 auto 32px !important;
     border-radius:16px !important;
@@ -2809,7 +2809,7 @@ body.sheet-open{
   .recommend-section > .recommend-filter,
   .recommend-section > #gameScroll,
   .recommend-section > .difficulty-guide{
-    max-width:960px;
+    max-width:720px;
     margin-left:auto;
     margin-right:auto;
     padding-left:clamp(16px,4vw,40px);
@@ -2859,7 +2859,7 @@ body.sheet-open{
   .game-scroll:has(.recommend-empty){
     display:block !important;
     margin:0 auto !important;
-    max-width:960px !important;
+    max-width:720px !important;
     padding:20px 40px !important;
     box-sizing:border-box !important;
     overflow:visible !important;
@@ -2883,14 +2883,14 @@ body.sheet-open{
 
   /* ── 전체 게임 보기 PC: 2열 그리드 ── */
   #ownedGameList{
-    max-width:900px !important;
+    max-width:720px !important;
     display:grid !important;
     grid-template-columns:1fr 1fr !important;
     gap:10px !important;
   }
 
   .owned-games-page{
-    max-width:960px;
+    max-width:720px;
     margin:0 auto;
     padding-left:clamp(16px,4vw,40px);
     padding-right:clamp(16px,4vw,40px);
@@ -2902,7 +2902,7 @@ body.sheet-open{
     max-width:680px !important;
   }
 
-  /* ── 내부 페이지: --page-x로 중앙 960px 가두기, max-width 제거 ── */
+  /* ── 내부 페이지: --page-x로 중앙 720px 가두기, max-width 제거 ── */
   .inner-page{
     padding-left:var(--page-x) !important;
     padding-right:var(--page-x) !important;
@@ -2927,14 +2927,14 @@ body.sheet-open{
     border-radius:16px;
   }
 
-  /* about-section: inner-page와 동일하게 --page-x로 960px 중앙 정렬 */
+  /* about-section: inner-page와 동일하게 --page-x로 720px 중앙 정렬 */
   .about-section{
     max-width:none !important;
     padding-left:var(--page-x) !important;
     padding-right:var(--page-x) !important;
   }
 
-  /* 추천 전체보기 오버레이: 헤더·리스트 960px 중앙, 카드 작게 */
+  /* 추천 전체보기 오버레이: 헤더·리스트 720px 중앙, 카드 작게 */
   .recommend-overlay-header{
     padding-left:var(--page-x);
     padding-right:var(--page-x);
@@ -2956,9 +2956,9 @@ body.sheet-open{
     font-size:12px;
   }
 
-  /* ── index: hero 960px 카드 ── */
+  /* ── index: hero 720px 카드 ── */
   .hero{
-    max-width:960px;
+    max-width:720px;
     margin-left:auto;
     margin-right:auto;
     border-radius:20px;
@@ -2985,22 +2985,22 @@ body.sheet-open{
     height:260px;
   }
 
-  /* ── 내부 페이지 본문 넓히기: 720 → 960 ── */
+  /* ── 내부 페이지 본문: 720px 유지 ── */
   .inner-page-body{
-    max-width:960px;
+    max-width:720px;
   }
   .inner-page h1{
-    max-width:960px;
+    max-width:720px;
   }
   .inner-page .breadcrumb{
-    max-width:960px;
+    max-width:720px;
   }
 
-  /* ── 추천 섹션 컨텐츠 넓히기 ── */
+  /* ── 추천 섹션 컨텐츠 ── */
   .recommend-header,
   .recommend-filter,
   .recommend-step-list{
-    max-width:960px;
+    max-width:720px;
   }
 }
 
@@ -5650,10 +5650,10 @@ body.sheet-open{
 .dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
 
 /* =========================
-   # PC LAYOUT ENLARGEMENTS (900px+)
+   # PC LAYOUT ENLARGEMENTS (720px+)
    모바일은 그대로, PC에서만 전체 크기 상향
 ========================= */
-@media(min-width:900px){
+@media(min-width:720px){
 
   /* ── body 기본 폰트 ── */
   body{ font-size:20px; }
@@ -5795,17 +5795,17 @@ body.sheet-open{
     background-position:center 30% !important;
   }
 
-  /* ── about 사진 그리드: 텍스트와 같은 960px 안으로 ── */
+  /* ── about 사진 그리드: 텍스트와 같은 720px 안으로 ── */
   .about-photo-strip{
-    max-width:960px;
+    max-width:720px;
     margin-left:auto;
     margin-right:auto;
     border-radius:0;
   }
 
-  /* ── about 히어로: PC에서 960px 중앙 + 라운딩 ── */
+  /* ── about 히어로: PC에서 720px 중앙 + 라운딩 ── */
   .about-hero{
-    max-width:960px;
+    max-width:720px;
     margin-top:calc(var(--header-total-h) + 20px);
     margin-left:auto;
     margin-right:auto;
@@ -6061,7 +6061,7 @@ body.sheet-open{
 /* END PC LAYOUT ENLARGEMENTS */
 
 /* ── PC 컴포넌트 스케일업: 바텀시트·기록보기·브레드크럼 ── */
-@media(min-width:900px){
+@media(min-width:720px){
 
   /* 브레드크럼 */
   .breadcrumb{ font-size:14px; }
@@ -6138,8 +6138,8 @@ body.sheet-open{
   .pr-game-group-hd .pr-rec-tag{ font-size:18px; }
 }
 
-/* ── PC 전체 페이지 글씨 일괄 확대 (@media 900px) ── */
-@media(min-width:900px){
+/* ── PC 전체 페이지 글씨 일괄 확대 (@media 720px) ── */
+@media(min-width:720px){
 
   /* ── about / club 공통 섹션 ── */
   .about-section-label{ font-size:14px; }
@@ -6396,10 +6396,10 @@ body.sheet-open{
 .pr-lightbox-counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 13px; pointer-events: none; }
 
 /* =========================
-   # PC LAYOUT (min-width: 768px)
+   # PC LAYOUT (min-width: 720px)
 ========================= */
 
-@media (min-width: 768px) {
+@media (min-width: 720px) {
 
   /* ── 바텀시트 → 센터 모달 ── */
   .game-sheet-panel {
@@ -6428,10 +6428,10 @@ body.sheet-open{
     grid-column: 1 / -1;
   }
 
-  /* owned-games inner-page-body 너비 확장 */
+  /* owned-games inner-page-body */
   .inner-page-body:has(#ownedGameList),
   .inner-page-body:has(#ownedPagination) {
-    max-width: 1040px;
+    max-width: 720px;
   }
 
   /* PC에서 툴바 토글 버튼 유지 (JS에서 기본 펼침으로 초기화) */
@@ -6457,8 +6457,8 @@ body.sheet-open{
   }
 }
 
-/* ── PC 900px: pr-* 확대 (파일 맨 끝 — 768px 블록 이후라 캐스케이드 정상 적용) ── */
-@media(min-width:900px){
+/* ── PC 720px: pr-* 확대 (파일 맨 끝 — 768px 블록 이후라 캐스케이드 정상 적용) ── */
+@media(min-width:720px){
   .pr-tab{ font-size:26px !important; padding:16px 8px !important; }
   .pr-session-date{ font-size:30px !important; }
   .pr-session-summary{ font-size:18px !important; padding:4px 14px !important; }
