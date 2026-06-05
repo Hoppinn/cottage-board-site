@@ -673,10 +673,10 @@ body.owned-page .site-header{
 .breadcrumb a{color:var(--green);text-decoration:none;}
 .breadcrumb a:hover{text-decoration:underline;}
 .breadcrumb span{margin:0 5px;opacity:.6;}
-/* breadcrumb inside dark about-hero */
-.about-hero .breadcrumb{color:rgba(255,255,255,.65);font-size:12px;margin-bottom:14px;}
-.about-hero .breadcrumb a{color:rgba(255,255,255,.85);}
-.about-hero .breadcrumb span{color:#fff;}
+/* breadcrumb: about-hero 카드 위로 절대배치 (모바일·PC 공통) */
+.about-hero .breadcrumb{position:absolute;top:-24px;left:0;color:#8c6a4a;font-size:12px;font-weight:600;margin-bottom:0;}
+.about-hero .breadcrumb a{color:#8c6a4a;}
+.about-hero .breadcrumb span{color:#8c6a4a;}
 /* inner-page breadcrumb: constrain same as h1 */
 .inner-page .breadcrumb{max-width:720px;margin-left:auto;margin-right:auto;}
 .owned-games-page .breadcrumb{padding:0 0 4px;}
@@ -1933,6 +1933,8 @@ body.sheet-open{
   z-index:0;
   border-radius:14px;
 }
+.page-mini-hero--price{display:none;}
+.requests-page .about-hero h2{font-size:clamp(16px,4.5vw,22px);}
 .page-mini-hero--club::before{
   content:"";
   position:absolute;
@@ -3531,9 +3533,10 @@ body.sheet-open{
    # ABOUT PAGE
 ========================= */
 .about-hero{
+  position:relative;
   background:linear-gradient(160deg,#3d2010 0%,#7a4828 100%);
-  margin:var(--header-total-h) 16px 0;
-  padding:clamp(28px,5vw,40px) 20px clamp(32px,8vw,52px);
+  margin:calc(var(--header-total-h) + 28px) 16px 0;
+  padding:clamp(20px,4vw,28px) 20px clamp(32px,8vw,52px);
   border-radius:16px;
   text-align:center;
   color:#fff;
