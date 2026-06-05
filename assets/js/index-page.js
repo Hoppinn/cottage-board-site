@@ -110,7 +110,7 @@ if (!isMurderMystery && weight > maxWeight) {
     return;
   }
 
-  const MAX_CARDS = window.innerWidth >= 900 ? 4 : 5;
+  const MAX_CARDS = window.innerWidth >= 720 ? 4 : 5;
   const seenBaseTitles = new Set();
   const dedupedGames = filteredGames.filter(game => {
     const title = GameView.getDisplayTitle(game);

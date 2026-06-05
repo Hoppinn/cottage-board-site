@@ -182,7 +182,7 @@ textarea{
   height:clamp(38px,10vw,46px);
   border:0;
   background:transparent;
-  color:var(--green);
+  color:#444;
   font-size:clamp(28px,7vw,34px);
   line-height:1;
   cursor:pointer;
@@ -6075,6 +6075,10 @@ body.sheet-open{
     white-space:nowrap;
     flex-shrink:0;
     margin-bottom:0;
+  }
+  .about-hero h2 br,
+  .about-hero-sub br{
+    display:none;
   }
   .about-hero-sub{
     font-size:clamp(11px,1.1vw,13px);
