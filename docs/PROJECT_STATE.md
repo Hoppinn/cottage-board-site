@@ -210,7 +210,46 @@
 | 2026-06-05 세션 5 | 2026-06-05 | PC 스케일업: hero 100svh 복구, 바텀시트·기록보기·브레드크럼 폰트 확대, SEO(og:image, sitemap 3개 추가) |
 | 2026-06-05 세션 6 | 2026-06-05 | PC 전체 페이지 글씨 일괄 확대: club/meeting/history/rules/intro/schedule 모든 클래스, inner-page 본문 p·li, 프로필 메뉴 가로 배치, 툴바 토글 복원, 게임카드 확대 |
 | 2026-06-05 세션 7 | 2026-06-05 | game-reviews↔club-history 연동: play-records-utils.js 공유 모듈(parsePhotoUrls/buildPhotoHtml/openLightbox), club-history 라이트박스 수정, game-reviews PC 탭 전환(2컬럼→단일패널) |
-| *(다음 세션)* | - | 마우스 hover 점검, 키보드 네비게이션, 추가 모듈화 |
+| *(다음 세션)* | - | **[필수] CSS 아키텍처 리팩토링 + 전 페이지 PC 스케일 동시 적용** — 아래 "다음 세션 필수 작업" 참조 |
+
+---
+
+## ★ 다음 세션 필수 작업 (세션 시작 즉시 실행)
+
+### 배경
+현재 style.css는 `@media(min-width:900px)` 블록이 파일 중간에 3곳 이상 흩어져 있고,
+파일 끝에 `!important` 패치 블록이 추가된 상태 — 응급처치 구조.
+
+원래 계획: **CSS 아키텍처 리팩토링 + PC 스케일 동시 적용** (효율 이유로 합치기로 결정)
+
+### 작업 순서
+
+**Step 1 — CSS 아키텍처 재구조화 (style.css)**
+- 모든 `@media(min-width:900px)` 블록을 파일 맨 끝 단일 블록으로 통합
+- `!important` 전부 제거 (cascade 순서로 해결)
+- 결과: 모바일 기본 스타일 앞 / PC 오버라이드 파일 끝 단일 블록
+
+**Step 2 — 전 페이지 PC 스케일 동시 적용 (900px 블록 안에서)**
+아래 페이지 모든 구성요소(메인, 하부패널, 바텀시트, 연동페이지 포함)를 모바일 대비 같은 비율로 업스케일:
+
+| 페이지 | 미처리 항목 |
+|--------|-------------|
+| game-reviews | pr-* 글씨 현재 너무 큼 → 약간 줄임. pr-rec-thumb 64px → 80px |
+| owned-games | `.og-hero-count`("~종의 게임"), 정렬 텍스트, 필터 기본 접힘(JS) |
+| index (추천 게임) | 필터 텍스트, 게임카드 전체 |
+| admin (requests-admin.html 등) | 전체 텍스트/버튼 PC 확대 |
+| price-rules.html | 전체 텍스트/요금표 PC 확대 |
+| club-history.html | history-* 클래스 → pr-* 전환 고려 |
+| 바텀시트 (game-sheet) | PC 사이즈에서 텍스트/버튼 크기 |
+
+**Step 3 — owned-games 필터 기본 접힘 (JS)**
+- owned-games-page.js: 페이지 로드 시 필터 패널 `.is-open` 없이 시작
+- 토글 버튼 클릭 시에만 열림
+
+### 주의
+- style.css 전체 재구조화이므로 작업 전 git commit 확인
+- 재구조화 후 모든 페이지 브라우저에서 확인
+- `!important` 한 줄도 남기지 말 것
 
 ---
 
