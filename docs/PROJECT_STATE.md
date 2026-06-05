@@ -174,6 +174,7 @@
 - [ ] `window._cottageSessionStart` — kakao-auth.js에서 실사용 중, 제거 불가
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
 - [ ] PC 호환성
+- [x] 자동완성 화살표 선택 후 Enter — initTagInput early return + attachAc 선처리로 수정 ✅
 - [x] B-13 접근성 경고 — 수정폼 입력 필드 id/name 추가 ✅
 - [x] B-09 수정폼 게임명 자동완성 화살표 키 — attachAc 통합으로 자동 해결 ✅
 - [x] 기록 입력폼: 두 번째 게임 행 추가 시 "위와 동일" 버튼 — 인원수·참여자를 첫 행에서 복사 ✅

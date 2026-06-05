@@ -444,8 +444,11 @@
         else if (e.key === 'Enter' && focusedIdx >= 0) {
           e.preventDefault();
           const s = items[focusedIdx].textContent;
-          if (onSelect) { onSelect(s); } else { input.value = s; }
+          // initTagInput보다 먼저 상태 초기화 — onSelect 내부 Enter dispatch 시 is-focused 없어야 함
+          items.forEach(el => el.classList.remove('is-focused'));
+          focusedIdx = -1;
           list.classList.remove('is-open');
+          if (onSelect) { onSelect(s); } else { input.value = s; }
         } else if (e.key === 'Escape') { list.classList.remove('is-open'); }
       });
       input.addEventListener('blur', () => setTimeout(() => list.classList.remove('is-open'), 150));
@@ -564,6 +567,8 @@
       }
       text.addEventListener('keydown', e => {
         if (e.key === ' ' || e.key === 'Enter') {
+          // 자동완성 아이템이 포커스된 경우 attachAc에 양보
+          if (wrap.querySelector('.pr-autocomplete-item.is-focused')) { e.preventDefault(); return; }
           e.preventDefault();
           const v = text.value.trim();
           if (v) { addTag(v); text.value = ''; triggerRefresh(); text.focus(); }
