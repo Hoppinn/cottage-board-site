@@ -2756,7 +2756,7 @@ body.sheet-open{
   #kakaoUserActions{
     position:absolute;
     top:var(--header-total-h);
-    right:clamp(12px,4vw,28px);
+    right:var(--page-x);
     left:auto;
     min-width:160px;
     background:var(--paper-2,#faf7f0);
@@ -2793,13 +2793,13 @@ body.sheet-open{
     scroll-margin-top:calc(var(--header-total-h) + 24px);
   }
 
-  /* 배너 full-width — recommend-header max-width 해제 + 음수마진 제거 */
+  /* 배너 960px 카드 — 히어로와 동일 패턴 */
   .recommend-header--photo,
   .recommend-header.recommend-header--photo{
+    max-width:960px !important;
     width:100% !important;
-    max-width:none !important;
-    margin:0 0 32px !important;
-    border-radius:0;
+    margin:0 auto 32px !important;
+    border-radius:16px !important;
     height:220px;
   }
 
@@ -2857,7 +2857,7 @@ body.sheet-open{
   .game-scroll:has(.recommend-empty){
     display:block !important;
     margin:0 auto !important;
-    max-width:780px !important;
+    max-width:960px !important;
     padding:20px 40px !important;
     box-sizing:border-box !important;
     overflow:visible !important;
@@ -2867,7 +2867,9 @@ body.sheet-open{
   .game-scroll .recommend-empty{
     display:block !important;
     text-align:center !important;
-    max-width:480px !important;
+    max-width:640px !important;
+    font-size:18px !important;
+    padding:36px 32px !important;
     width:100% !important;
     margin:0 auto !important;
   }
@@ -2936,9 +2938,20 @@ body.sheet-open{
     padding-right:var(--page-x);
   }
   .recommend-overlay-list{
-    grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+    grid-template-columns:repeat(auto-fill, minmax(168px,1fr));
     padding-left:var(--page-x);
     padding-right:var(--page-x);
+    gap:14px;
+  }
+  .rec-overlay-card{
+    padding:14px 10px 12px;
+    border-radius:16px;
+  }
+  .rec-overlay-title{
+    font-size:13px;
+  }
+  .rec-overlay-meta{
+    font-size:12px;
   }
 
   /* ── index: hero 960px 카드 ── */
