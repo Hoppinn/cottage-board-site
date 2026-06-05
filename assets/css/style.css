@@ -454,25 +454,26 @@ body.owned-page .site-header{
   grid-template-columns:clamp(82px,24vw,130px) 1fr auto !important;
 }
 
-body.owned-page .header-menu{
-  position:absolute !important;
-  top:calc(var(--header-total-h) - 8px) !important;
-  right:16px !important;
-  width:170px !important;
-  display:none !important;
-  flex-direction:column !important;
-  align-items:flex-start !important;
-  gap:10px !important;
-  padding:16px !important;
-  border:1px solid rgba(223,199,161,0.7) !important;
-  border-radius:20px !important;
-  background:var(--paper-2) !important;
-  box-shadow:0 14px 28px rgba(40,30,18,0.12) !important;
-  z-index:1001 !important;
-}
-
-body.owned-page .header-menu.active{
-  display:flex !important;
+@media(max-width:719px){
+  body.owned-page .header-menu{
+    position:absolute;
+    top:calc(var(--header-total-h) - 8px);
+    right:16px;
+    width:170px;
+    display:none;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    padding:16px;
+    border:1px solid rgba(223,199,161,0.7);
+    border-radius:20px;
+    background:var(--paper-2);
+    box-shadow:0 14px 28px rgba(40,30,18,0.12);
+    z-index:1001;
+  }
+  body.owned-page .header-menu.active{
+    display:flex;
+  }
 }
 
 /* =========================
@@ -5453,8 +5454,8 @@ body.sheet-open{
 
   /* Logo(auto) | Nav(auto) | spacer(1fr) | Actions(auto) */
   .site-header{
-    grid-template-columns:clamp(82px,12vw,130px) auto 1fr auto;
-    column-gap:clamp(12px,2.5vw,32px);
+    grid-template-columns:clamp(70px,10vw,100px) auto 1fr auto;
+    column-gap:clamp(8px,1.5vw,20px);
     align-items:center;
     padding-bottom:0;
     padding-left:var(--page-x);
@@ -5486,8 +5487,8 @@ body.sheet-open{
 
   /* owned-page 헤더 그리드도 4열로 */
   body.owned-page .site-header{
-    grid-template-columns:clamp(82px,12vw,130px) auto 1fr auto;
-    column-gap:clamp(12px,2.5vw,32px);
+    grid-template-columns:clamp(70px,10vw,100px) auto 1fr auto;
+    column-gap:clamp(8px,1.5vw,20px);
     align-items:center;
     padding-bottom:0;
   }
@@ -5508,7 +5509,7 @@ body.sheet-open{
     flex-direction:row;
     align-items:center;
     justify-content:flex-start;
-    gap:clamp(4px,1.5vw,20px);
+    gap:clamp(2px,1vw,10px);
     grid-column:2;
     grid-row:1;
     width:auto;
@@ -5532,7 +5533,7 @@ body.sheet-open{
     flex-direction:row;
     align-items:center;
     justify-content:flex-start;
-    gap:clamp(4px,1.5vw,20px);
+    gap:clamp(2px,1vw,10px);
     padding:0;
     border:0;
     background:transparent;
@@ -5544,9 +5545,9 @@ body.sheet-open{
 
   .header-menu a{
     width:auto;
-    padding:0 10px;
+    padding:0 7px;
     white-space:nowrap;
-    font-size:16px;
+    font-size:13px;
   }
 
   /* 메뉴 그룹 화살표 숨김 (PC에선 드롭다운으로 대체) */
@@ -5554,10 +5555,10 @@ body.sheet-open{
 
   /* 그룹 헤더 버튼을 링크처럼 */
   .menu-group-header{
-    font-size:16px;
+    font-size:13px;
     font-weight:900;
     color:#5a3418;
-    padding:0 10px;
+    padding:0 7px;
     background:none;
     border:none;
     cursor:pointer;
@@ -5798,7 +5799,7 @@ body.sheet-open{
     padding-right:var(--page-x);
   }
   .recommend-overlay-list{
-    grid-template-columns:repeat(auto-fill, minmax(168px,1fr));
+    grid-template-columns:repeat(4,1fr);
     padding-left:var(--page-x);
     padding-right:var(--page-x);
     gap:14px;
@@ -5822,7 +5823,7 @@ body.sheet-open{
     border-radius:20px;
     padding-left:56px;
     padding-right:56px;
-    min-height:100svh;
+    min-height:66svh;
   }
 
   /* ── owned-games: max-width 방식 → full-width+padding 방식으로 전환 (헤더와 정렬) ── */
@@ -5840,7 +5841,7 @@ body.sheet-open{
     max-width:100%;
   }
   .owned-page-hero{
-    height:260px;
+    height:175px;
   }
 
   /* ── 내부 페이지 본문: 720px 유지 ── */
@@ -5868,10 +5869,10 @@ body.sheet-open{
 
   /* ── 히어로 섹션 ── */
   .hero h1{
-    font-size:clamp(42px,5.5vw,68px);
+    font-size:clamp(30px,4.5vw,44px);
   }
   .desc{
-    font-size:clamp(18px,2.2vw,26px);
+    font-size:clamp(13px,1.8vw,20px);
   }
   .label{
     font-size:clamp(15px,1.4vw,17px);
@@ -5987,15 +5988,15 @@ body.sheet-open{
 
   /* ── page-mini-hero 높이 ── */
   .page-mini-hero{
-    height:280px;
+    height:185px;
   }
   .page-mini-hero h1{
-    font-size:clamp(30px,3.5vw,46px);
+    font-size:clamp(22px,2.8vw,34px);
   }
 
-  /* ── 메인 히어로: PC에서 full-screen ── */
+  /* ── 메인 히어로: PC에서 2/3 높이 ── */
   .hero{
-    min-height:100svh;
+    min-height:66svh;
   }
 
   /* ── 추천 배너: 사람 얼굴 보이도록 position 조정 ── */
@@ -6018,16 +6019,16 @@ body.sheet-open{
     margin-left:auto;
     margin-right:auto;
     border-radius:16px;
-    padding-top:clamp(36px,5vw,52px);
-    padding-bottom:clamp(44px,7vw,68px);
+    padding-top:clamp(22px,3vw,32px);
+    padding-bottom:clamp(28px,4vw,44px);
     padding-left:48px;
     padding-right:48px;
   }
   .about-hero h2{
-    font-size:clamp(24px,3.1vw,39px);
+    font-size:clamp(18px,2.4vw,30px);
   }
   .about-hero-sub{
-    font-size:clamp(14px,1.4vw,17px);
+    font-size:clamp(13px,1.3vw,16px);
   }
   .about-hero-eyebrow{
     font-size:12px;
@@ -6215,44 +6216,44 @@ body.sheet-open{
 
   /* ── 요청하기 페이지 폼 요소 ── */
   .req-tab-btn{
-    font-size:18px;
-    padding:14px 10px;
+    font-size:14px;
+    padding:10px 8px;
   }
   .req-text-input{
-    font-size:18px;
-    padding:14px 18px;
+    font-size:14px;
+    padding:12px 14px;
   }
   .req-submit-btn{
-    font-size:18px;
-    padding:14px 28px;
+    font-size:15px;
+    padding:12px 20px;
   }
   .req-list-item{
-    padding:16px 20px;
+    padding:12px 16px;
   }
   .req-list-name{
-    font-size:19px;
+    font-size:15px;
   }
   .req-list-count{
-    font-size:15px;
-    padding:6px 16px;
+    font-size:12px;
+    padding:4px 12px;
   }
   .req-textarea{
-    font-size:18px;
-    padding:16px 18px;
+    font-size:14px;
+    padding:12px 14px;
   }
   .req-note,
   .req-vote-hint{
-    font-size:15px;
+    font-size:12px;
   }
   .req-list-empty{
-    font-size:17px;
-    padding:40px;
+    font-size:14px;
+    padding:30px;
   }
   .req-success-msg{
-    font-size:17px;
+    font-size:14px;
   }
   .req-purchased-title{
-    font-size:16px;
+    font-size:13px;
   }
   .req-purchased-note{
     font-size:14px;
@@ -6273,10 +6274,12 @@ body.sheet-open{
 
   /* ── 툴바: 정렬·필터 select + 버튼 확대 ── */
   .owned-toolbar select{ font-size:15px; padding:9px 32px 9px 12px; height:42px; }
+  .owned-filter-line select{ font-size:11px; height:22px; padding:0 4px; }
   .owned-sort-btn{ font-size:14px; height:38px; padding:0 14px; }
   .owned-tools-toggle{ font-size:15px; height:42px; padding:0 18px; }
   .owned-search-box input{ font-size:16px; height:48px; padding-left:46px; }
-  .owned-filter-label{ font-size:14px; }
+  .owned-filter-label{ font-size:12px; }
+  .owned-filter-title{ font-size:12px; }
   .owned-empty{ font-size:17px; }
   .owned-count-line{ font-size:15px; }
 
@@ -6302,21 +6305,21 @@ body.sheet-open{
   .pr-field-label{ font-size:16px; }
   .pr-add-btn{ font-size:20px; }
   .pr-submit-btn{ font-size:21px; }
-  .pr-session-hd{ padding:22px 28px; }
+  .pr-session-hd{ padding:18px 22px; }
   .pr-session-date{ font-size:30px; }
   .pr-session-summary{ font-size:18px; padding:4px 14px; }
   .pr-session-arrow{ font-size:22px; }
   .pr-session-thumb{ width:64px; height:64px; border-radius:10px; }
-  .pr-sub-hd{ padding:16px 24px; }
+  .pr-sub-hd{ padding:13px 19px; }
   .pr-sub-date{ font-size:26px; }
   .pr-sub-summary{ font-size:18px; }
   .pr-sub-arrow{ font-size:19px; }
-  .pr-rec-row{ padding:18px 24px; }
+  .pr-rec-row{ padding:14px 19px; }
   .pr-rec-thumb{ width:64px; height:64px; border-radius:10px; }
   .pr-rec-game{ font-size:28px; }
   .pr-rec-review{ font-size:19px; }
   .pr-rec-tag{ font-size:18px; padding:5px 14px; }
-  .pr-player-header{ padding:14px 24px; }
+  .pr-player-header{ padding:11px 19px; }
   .pr-player-header .pr-rec-tag{ font-size:18px; }
   .pr-rec-sheet-link{ font-size:22px; }
   .pr-club-link{ font-size:18px; }
@@ -6324,20 +6327,20 @@ body.sheet-open{
 
   /* ── 기록 입력 폼 ── */
   .pr-field-label{ font-size:16px; }
-  .pr-meta-grid input{ font-size:19px; padding:13px 16px; }
-  .pr-add-btn{ font-size:20px; padding:16px 20px; }
-  .pr-submit-btn{ font-size:22px; padding:18px; }
-  .pr-game-row{ padding:20px; }
-  .pr-row-head input{ font-size:19px; padding:13px 16px; }
-  .pr-detail-grid input{ font-size:18px; padding:12px 14px; }
-  .pr-review-ta{ font-size:18px; padding:12px 14px; }
-  .pr-count-btn{ font-size:18px; padding:11px 18px; }
-  .pr-photo-trigger{ font-size:18px; padding:12px 18px; }
+  .pr-meta-grid input{ font-size:19px; padding:10px 13px; }
+  .pr-add-btn{ font-size:20px; padding:13px 16px; }
+  .pr-submit-btn{ font-size:22px; padding:14px; }
+  .pr-game-row{ padding:16px; }
+  .pr-row-head input{ font-size:19px; padding:10px 13px; }
+  .pr-detail-grid input{ font-size:18px; padding:10px 11px; }
+  .pr-review-ta{ font-size:18px; padding:10px 11px; }
+  .pr-count-btn{ font-size:18px; padding:9px 14px; }
+  .pr-photo-trigger{ font-size:18px; padding:10px 14px; }
   .pr-login-notice{ font-size:20px; }
   .pr-same-as-above-btn{ font-size:16px; }
 
   /* ── 기록 보기 뷰 토글 ── */
-  .pr-vt-btn{ font-size:21px; padding:15px; }
+  .pr-vt-btn{ font-size:21px; padding:12px; }
   .pr-empty{ font-size:20px; }
   .pr-game-group-moim{ font-size:17px; }
   .pr-game-group-hd .pr-rec-tag{ font-size:18px; }
@@ -6457,7 +6460,7 @@ body.sheet-open{
   }
   .pr-tab {
     font-size: 17px;
-    padding: 12px 8px;
+    padding: 10px 6px;
   }
   /* 탭 전환은 JS is-active 클래스로 제어 — 패널 display 기본 유지 */
   #prPanelInput {
@@ -6466,36 +6469,36 @@ body.sheet-open{
   }
 
 
-  /* ── 기록 보기 (mobile ×1.1) ── */
-  .pr-tab{ font-size:15px; }
-  .pr-session-date{ font-size:18px; }
-  .pr-session-summary{ font-size:13px; }
-  .pr-session-arrow{ font-size:17px; }
-  .pr-sub-date{ font-size:18px; }
-  .pr-sub-summary{ font-size:13px; }
-  .pr-sub-arrow{ font-size:17px; }
-  .pr-rec-game{ font-size:17px; }
-  .pr-rec-review{ font-size:14px; }
-  .pr-rec-tag{ font-size:13px; }
-  .pr-rec-sheet-link{ font-size:18px; }
-  .pr-player-header .pr-rec-tag{ font-size:13px; }
-  .pr-vt-btn{ font-size:14px; }
-  .pr-empty{ font-size:15px; }
-  .pr-game-group-moim{ font-size:12px; }
-  .pr-game-group-hd .pr-rec-tag{ font-size:13px; }
-  .pr-club-link{ font-size:13px; }
-  .pr-dates-more-btn{ font-size:13px; }
-  /* 입력 폼 (mobile ×1.1) */
-  .pr-field-label{ font-size:12px; }
-  .pr-meta-grid input{ font-size:15px; }
-  .pr-add-btn{ font-size:15px; }
-  .pr-submit-btn{ font-size:17px; }
-  .pr-row-head input{ font-size:15px; }
-  .pr-detail-grid input{ font-size:14px; }
-  .pr-review-ta{ font-size:14px; }
-  .pr-count-btn{ font-size:13px; }
-  .pr-photo-trigger{ font-size:13px; }
-  .pr-login-notice{ font-size:15px; }
-  .pr-same-as-above-btn{ font-size:12px; }
+  /* ── 기록 보기 (현재 ×0.8) ── */
+  .pr-tab{ font-size:12px; }
+  .pr-session-date{ font-size:14px; }
+  .pr-session-summary{ font-size:10px; }
+  .pr-session-arrow{ font-size:14px; }
+  .pr-sub-date{ font-size:14px; }
+  .pr-sub-summary{ font-size:10px; }
+  .pr-sub-arrow{ font-size:14px; }
+  .pr-rec-game{ font-size:14px; }
+  .pr-rec-review{ font-size:11px; }
+  .pr-rec-tag{ font-size:10px; }
+  .pr-rec-sheet-link{ font-size:14px; }
+  .pr-player-header .pr-rec-tag{ font-size:10px; }
+  .pr-vt-btn{ font-size:11px; }
+  .pr-empty{ font-size:12px; }
+  .pr-game-group-moim{ font-size:10px; }
+  .pr-game-group-hd .pr-rec-tag{ font-size:10px; }
+  .pr-club-link{ font-size:10px; }
+  .pr-dates-more-btn{ font-size:10px; }
+  /* 입력 폼 (현재 ×0.8) */
+  .pr-field-label{ font-size:10px; }
+  .pr-meta-grid input{ font-size:12px; }
+  .pr-add-btn{ font-size:12px; }
+  .pr-submit-btn{ font-size:14px; }
+  .pr-row-head input{ font-size:12px; }
+  .pr-detail-grid input{ font-size:11px; }
+  .pr-review-ta{ font-size:11px; }
+  .pr-count-btn{ font-size:10px; }
+  .pr-photo-trigger{ font-size:10px; }
+  .pr-login-notice{ font-size:12px; }
+  .pr-same-as-above-btn{ font-size:10px; }
 
 }
