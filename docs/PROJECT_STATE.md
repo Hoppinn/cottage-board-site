@@ -260,7 +260,7 @@
 | K | price-rules.html 배너 제거 | PC: .page-mini-hero--price display:none |
 | L | club.html about-hero "동호회" 배너 밖, h2+sub 한줄 가로 | HTML wrapper + PC absolute breadcrumb |
 | M | index.html hero h1+desc `<br>` 제거 (각 한줄화) | HTML |
-| N | 모바일 hero 카드 스타일 검토 | 별도 항목 — 사용자 승인 후 구현 |
+| N | 모바일 hero 카드 스타일 — 상하좌우 margin + border-radius 14px | ✅ |
 
 ### TODO (작업 안 함)
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
