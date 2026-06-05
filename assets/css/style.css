@@ -6105,6 +6105,71 @@ body.sheet-open{
   .pr-dates-more-btn{ font-size:14px; }
 }
 
+/* ── PC 전체 페이지 글씨 일괄 확대 (@media 900px) ── */
+@media(min-width:900px){
+
+  /* ── about / club 공통 섹션 ── */
+  .about-section-label{ font-size:14px; }
+  .about-for-text{ font-size:17px; }
+
+  /* ── club 서브페이지 브레드크럼 ── */
+  .club-breadcrumb{ font-size:14px; }
+
+  /* ── 회칙 (club-rules) ── */
+  .rules-block-title{ font-size:17px; }
+  .club-rules-list li{ font-size:16px; }
+  .rules-example-label{ font-size:13px; }
+  .rules-example-pre{ font-size:14px; }
+  .rules-fulltext-link{ font-size:15px; }
+
+  /* ── 가입인사 (club-intro) ── */
+  .intro-form-toggle{ font-size:17px; padding:15px 18px; }
+  .intro-label{ font-size:14px; }
+  .intro-input{ font-size:15px; padding:10px 12px; }
+  .intro-submit-btn{ font-size:16px; padding:13px; }
+  .intro-submit-msg{ font-size:14px; }
+  .intro-list-empty,
+  .intro-list-loading{ font-size:16px; }
+  .intro-card-news-nickname{ font-size:16px; }
+  .intro-card-news-date{ font-size:12px; }
+  .intro-card-news-row{ font-size:13px; }
+
+  /* ── 모임 참여 (club-meeting) ── */
+  .meeting-section-label{ font-size:13px; }
+  .meeting-section-title{ font-size:20px; }
+  .poll-question{ font-size:18px; }
+  .poll-week{ font-size:13px; }
+  .poll-option-text{ font-size:16px; }
+  .poll-option-count{ font-size:14px; }
+  .poll-option{ padding:13px 16px; }
+  .poll-total{ font-size:13px; }
+  .poll-login-hint{ font-size:13px; }
+  .poll-empty{ font-size:16px; padding:40px 20px; }
+  .meeting-comment-input{ font-size:15px; padding:11px 13px; }
+  .meeting-comment-submit{ font-size:14px; padding:9px 20px; }
+  .meeting-login-prompt{ font-size:15px; }
+  .meeting-comment-meta{ font-size:13px; }
+  .meeting-comment-text{ font-size:15px; }
+  .meeting-comments-empty{ font-size:15px; }
+
+  /* ── 모임 기록 & 사진 (club-history) ── */
+  .history-group-name{ font-size:19px; }
+  .history-group-count{ font-size:14px; }
+  .history-session-date{ font-size:17px; }
+  .history-copy-btn{ font-size:13px; padding:5px 12px; }
+  .history-record-item{ font-size:16px; padding:7px 20px; }
+  .history-tag{ font-size:13px; padding:3px 9px; }
+  .history-empty{ font-size:16px; }
+  .history-loading{ font-size:15px; }
+  .history-player-header{ padding:9px 20px; }
+
+  /* ── inner-page 본문 일반 텍스트 ── */
+  .inner-page-body p{ font-size:16px; line-height:1.8; }
+  .inner-page-body li{ font-size:16px; line-height:1.8; }
+  .inner-page-coming-soon{ font-size:17px; }
+  .inner-page-coming-soon small{ font-size:15px; }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    PLAY RECORDS (game-reviews.html) — pr-* classes
    ═══════════════════════════════════════════════════════════════ */
