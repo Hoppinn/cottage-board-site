@@ -531,7 +531,7 @@
 
       // ── 섹션 조립 ─────────────────────────────────
       let subIdx = 0;
-      function subSection(title, content, open = true) {
+      function subSection(title, content, open = false) {
         const id = `asub${subIdx++}`;
         return `<div class="admin-sub-section${open?' is-open':''}" id="${id}">
           <div class="admin-sub-section-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
@@ -542,7 +542,7 @@
       }
 
       let periodIdx = 0;
-      function periodSection(label, content, open = true) {
+      function periodSection(label, content, open = false) {
         const id = `aper${periodIdx++}`;
         return `<div class="admin-period-section${open?' is-open':''}" id="${id}">
           <div class="admin-period-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
