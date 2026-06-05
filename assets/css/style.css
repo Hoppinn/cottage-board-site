@@ -1451,7 +1451,7 @@ body.recommend-page main{
 .recommend-overlay-title{
   font-size:16px;
   font-weight:900;
-  color:#4a2810;
+  color:#111;
 }
 .recommend-overlay-close{
   width:36px;
@@ -1495,7 +1495,7 @@ body.recommend-page main{
 .rec-overlay-title{
   font-size:11px;
   font-weight:800;
-  color:#4a2810;
+  color:#111;
   line-height:1.3;
   overflow:hidden;
   display:-webkit-box;
@@ -2790,6 +2790,7 @@ body.sheet-open{
   /* 추천 섹션 PC 레이아웃 */
   .recommend-section{
     padding:0 0 60px;
+    scroll-margin-top:calc(var(--header-total-h) + 24px);
   }
 
   /* 배너 full-width — recommend-header max-width 해제 + 음수마진 제거 */
