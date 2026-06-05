@@ -5891,6 +5891,10 @@ body.sheet-open{
   .hero h1{
     font-size:clamp(30px,4.5vw,44px);
   }
+  .hero h1 br,
+  .hero .desc br{
+    display:none;
+  }
   .desc{
     font-size:clamp(13px,1.8vw,20px);
   }
