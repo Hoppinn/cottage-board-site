@@ -48,8 +48,8 @@
   --muted:#6f5d43;
 
   --selected-pill-bg:#f4f8ee;
-  --selected-pill-border:#bdd0a8;
-  --selected-pill-text:#526b43;
+  --selected-pill-border:#d4a878;
+  --selected-pill-text:#7a4828;
 
   --overlay-z:2000;
   --sheet-z:2100;
@@ -384,7 +384,7 @@ textarea{
   border:1.5px solid #dfc7a1;
   border-radius:999px;
   background:#fffdf8;
-  color:#314d35;
+  color:#4a2810;
   font-size:15px;
   font-weight:800;
   outline:none;
@@ -570,7 +570,7 @@ body.owned-page .header-menu.active{
 .hero-deco{
   position:absolute;
   z-index:1;
-  color:#78983d;
+  color:#7a4828;
   opacity:0.45;
   pointer-events:none;
 }
@@ -662,7 +662,7 @@ body.owned-page .header-menu.active{
 .btn{
   min-width:clamp(120px,34vw,170px);
   padding:clamp(10px,3vw,13px) clamp(12px,4vw,18px);
-  border:2px solid #78983d;
+  border:2px solid #7a4828;
   border-radius:999px;
   text-decoration:none;
   font-size:clamp(13px,3.5vw,17px);
@@ -671,8 +671,8 @@ body.owned-page .header-menu.active{
   cursor:pointer;
 }
 
-.primary-btn{background:#78983d;color:#fff;}
-.secondary-btn{background:#fffaf0;color:#78983d;}
+.primary-btn{background:#7a4828;color:#fff;}
+.secondary-btn{background:#fffaf0;color:#7a4828;}
 
 /* 히어로 전용 버튼 — 크림 채움 / 크림 아웃라인 */
 .hero .primary-btn{background:#e8d9c0;color:#3d2810;border-color:#e8d9c0;}
@@ -812,7 +812,7 @@ body.recommend-page main{
 .recommend-title-group h2,
 .recommend-header h2{
   margin:0;
-  color:#314d35;
+  color:#4a2810;
   font-size:clamp(32px,8vw,40px);
   line-height:0.98;
   font-weight:900;
@@ -1004,9 +1004,9 @@ body.recommend-page main{
 }
 
 .recommend-inline-option.is-selected{
-  background:#e7f1d8;
-  border-color:#5f823f;
-  color:#29432f;
+  background:#fbecd8;
+  border-color:#7a4828;
+  color:#3a2010;
 }
 
 .recommend-inline-option.is-none-option{
@@ -1195,7 +1195,7 @@ body.recommend-page main{
   width:32px;
   height:32px;
   border-radius:50%;
-  background:#486a3f;
+  background:#7a4828;
   color:#fff;
   display:flex;
   align-items:center;
@@ -1254,9 +1254,9 @@ body.recommend-page main{
 }
 
 .modal-option.is-selected{
-  background:#e7f1d8 !important;
-  border-color:#5f823f !important;
-  color:#29432f !important;
+  background:#fbecd8 !important;
+  border-color:#7a4828 !important;
+  color:#3a2010 !important;
   box-shadow:inset 0 0 0 1px rgba(79,116,69,0.08);
 }
 
@@ -1268,7 +1268,7 @@ body.recommend-page main{
   padding:14px 18px;
   border:0;
   border-radius:999px;
-  background:linear-gradient(90deg,#6f9448 0%,#5f823f 100%);
+  background:linear-gradient(90deg,#9a5c38 0%,#7a4828 100%);
   color:#fff;
   font-size:17px;
   line-height:1.2;
@@ -1420,8 +1420,8 @@ body.recommend-page main{
 }
 
 .game-card-more:hover{
-  background:#e7f1d8;
-  border-color:#5f823f;
+  background:#fbecd8;
+  border-color:#7a4828;
 }
 
 /* ── 추천게임 전체보기 오버레이 ── */
@@ -1450,7 +1450,7 @@ body.recommend-page main{
 .recommend-overlay-title{
   font-size:16px;
   font-weight:900;
-  color:#314d35;
+  color:#4a2810;
 }
 .recommend-overlay-close{
   width:36px;
@@ -1494,7 +1494,7 @@ body.recommend-page main{
 .rec-overlay-title{
   font-size:11px;
   font-weight:800;
-  color:#314d35;
+  color:#4a2810;
   line-height:1.3;
   overflow:hidden;
   display:-webkit-box;
@@ -1515,7 +1515,7 @@ body.recommend-page main{
   padding:14px 18px;
   border:0;
   border-radius:999px;
-  background:#5f823f;
+  background:#7a4828;
   color:#fff;
   font-size:18px;
   font-weight:900;
@@ -1605,15 +1605,15 @@ body.sheet-open{
   margin-top:18px;
   padding:7px 14px;
   border-radius:999px;
-  background:#edf3df;
-  color:#2f5d50;
+  background:#fef0e0;
+  color:#7a4828;
   font-size:15px;
   font-weight:900;
 }
 
 .sheet-content h3{
   margin:14px 0 10px;
-  color:#2f5d50;
+  color:#7a4828;
   font-size:30px;
   line-height:1.15;
 }
@@ -1648,7 +1648,7 @@ body.sheet-open{
 .sheet-info-grid strong{
   display:block;
   margin-bottom:5px;
-  color:#2f5d50;
+  color:#7a4828;
   font-size:18px;
   line-height:1.2;
 }
@@ -1712,7 +1712,7 @@ body.sheet-open{
 .sheet-action-btn{
   width:100%;
   margin-top:0;
-  background:#5f823f;
+  background:#7a4828;
 }
 
 .sheet-data-section{
@@ -1972,7 +1972,7 @@ body.sheet-open{
 .inner-page h1{
   max-width:720px;
   margin:0 auto 28px !important;
-  color:#314d35;
+  color:#4a2810;
   font-size:32px;
   font-weight:900;
 }
@@ -2055,7 +2055,7 @@ body.sheet-open{
 .owned-games-page h1{
   max-width:720px;
   margin:0 auto 14px !important;
-  color:#314d35;
+  color:#4a2810;
   font-size:32px;
   font-weight:900;
   letter-spacing:-1.2px;
@@ -2190,7 +2190,7 @@ body.sheet-open{
   border:1.5px solid #dfc7a1;
   border-radius:999px;
   background:#fffdf8;
-  color:#314d35;
+  color:#4a2810;
   font-size:14px;
   font-weight:900;
 }
@@ -2260,7 +2260,7 @@ body.sheet-open{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='16.5' y1='16.5' x2='22' y2='22'/%3E%3C/svg%3E") !important;
   background-repeat:no-repeat !important;
   background-position:12px center !important;
-  color:#314d35;
+  color:#4a2810;
   font-size:14px !important;
   font-weight:800 !important;
   box-shadow:0 3px 8px rgba(70,50,20,0.035) !important;
@@ -2355,7 +2355,7 @@ body.sheet-open{
 .owned-sort-title{
   flex:0 0 auto;
   width:52px;
-  color:#314d35;
+  color:#4a2810;
   font-size:13px;
   font-weight:900;
   white-space:nowrap;
@@ -2435,7 +2435,7 @@ body.sheet-open{
   flex:0 0 auto;
   width:52px;
   padding-top:3px;
-  color:#314d35;
+  color:#4a2810;
   font-size:13px;
   font-weight:900;
   white-space:nowrap;
@@ -3478,7 +3478,7 @@ body.sheet-open{
   margin:0 0 8px;
   font-size:12px;
   font-weight:700;
-  color:#5f823f;
+  color:#7a4828;
 }
 
 .sheet-player-select-btns{
@@ -3833,7 +3833,7 @@ body.sheet-open{
   text-align:center;
   font-size:13px;
   font-weight:700;
-  color:#5f823f;
+  color:#7a4828;
   cursor:pointer;
   margin-bottom:8px;
   box-sizing:border-box;
@@ -3922,7 +3922,7 @@ body.sheet-open{
    # ABOUT PAGE
 ========================= */
 .about-hero{
-  background:linear-gradient(160deg,#2d4a33 0%,#4a7040 100%);
+  background:linear-gradient(160deg,#3d2010 0%,#7a4828 100%);
   margin:var(--header-total-h) 16px 0;
   padding:clamp(28px,5vw,40px) 20px clamp(32px,8vw,52px);
   border-radius:16px;
@@ -4018,7 +4018,7 @@ body.sheet-open{
 .about-feature-label{
   font-size:13px;
   font-weight:900;
-  color:#2f5d50;
+  color:#7a4828;
   margin:0;
   word-break:keep-all;
 }
@@ -4153,7 +4153,7 @@ body.sheet-open{
    # PRICE-RULES PAGE
 ========================= */
 .price-hero-card{
-  background:linear-gradient(135deg,#35543c 0%,#4a7040 100%);
+  background:linear-gradient(135deg,#4a2810 0%,#7a4828 100%);
   border-radius:20px;
   padding:clamp(24px,6vw,36px);
   text-align:center;
@@ -4206,7 +4206,7 @@ body.sheet-open{
 .rules-group-title{
   font-size:16px;
   font-weight:900;
-  color:#2f5d50;
+  color:#7a4828;
   margin:0 0 12px;
   display:flex;
   align-items:center;
@@ -4236,7 +4236,7 @@ body.sheet-open{
 }
 .price-rules-list li::before{
   content:"•";
-  color:#78983d;
+  color:#7a4828;
   font-size:16px;
   flex-shrink:0;
   margin-top:1px;
@@ -4292,8 +4292,8 @@ body.sheet-open{
   word-break:keep-all;
 }
 .req-tab-btn.is-active{
-  color:#2f5d50;
-  border-bottom-color:#2f5d50;
+  color:#7a4828;
+  border-bottom-color:#7a4828;
 }
 .req-tab-panel{ display:none; }
 .req-tab-panel.is-active{ display:block; }
@@ -4345,13 +4345,13 @@ body.sheet-open{
 .req-list-name{
   font-size:14px;
   font-weight:900;
-  color:#2f5d50;
+  color:#7a4828;
 }
 .req-list-count{
   font-size:12px;
   font-weight:900;
-  color:#78983d;
-  background:#f0f8e0;
+  color:#fff;
+  background:#7a4828;
   border-radius:999px;
   padding:3px 10px;
   white-space:nowrap;
@@ -4370,7 +4370,7 @@ body.sheet-open{
 .req-list-purchased .req-list-item{opacity:0.7;}
 .req-item-votable{cursor:pointer;}
 .req-item-votable:hover{background:var(--bg,#f5f0e8);}
-.req-count-voted{color:var(--green);font-weight:700;}
+.req-count-voted{color:#fff;font-weight:700;}
 .req-badge-clickable{cursor:pointer;}
 .req-badge-clickable:hover{filter:brightness(0.92);}
 .req-status-none{background:var(--border,#e8e4dc);color:var(--muted);min-width:20px;display:inline-block;}
@@ -5219,7 +5219,7 @@ body.sheet-open{
 .poll-option-bar{
   position:absolute;
   left:0;top:0;bottom:0;
-  background:#e7f1d8;
+  background:#fbecd8;
   z-index:0;
   border-radius:8px 0 0 8px;
   pointer-events:none;
