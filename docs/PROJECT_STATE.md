@@ -252,6 +252,16 @@
 | H | owned-page-hero 240→90px + 좌측정렬 | ✅ |
 | I | recommend-header--photo 260→90px + 좌측정렬 | ✅ |
 
+### 완료 (4차 작업, 2026-06-06) — PC only
+
+| # | 항목 | 방법 |
+|---|------|------|
+| J | about-hero "코티지보드 소개" 배너 밖으로 + 배너 압축 | PC: breadcrumb absolute position above card |
+| K | price-rules.html 배너 제거 | PC: .page-mini-hero--price display:none |
+| L | club.html about-hero "동호회" 배너 밖, h2+sub 한줄 가로 | HTML wrapper + PC absolute breadcrumb |
+| M | index.html hero h1+desc `<br>` 제거 (각 한줄화) | HTML |
+| N | 모바일 hero 카드 스타일 검토 | 별도 항목 — 사용자 승인 후 구현 |
+
 ### TODO (작업 안 함)
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
 - [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 — 별도 세션

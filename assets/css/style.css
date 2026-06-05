@@ -5795,9 +5795,13 @@ body.sheet-open{
     border-radius:16px;
   }
   .page-mini-hero--reviews::before,
-  .page-mini-hero--location::before,
-  .page-mini-hero--price::before{
+  .page-mini-hero--location::before{
     border-radius:16px;
+  }
+
+  /* price-rules 배너 PC에서 제거 */
+  .page-mini-hero--price{
+    display:none;
   }
 
   /* about-section: inner-page와 동일하게 --page-x로 720px 중앙 정렬 */
@@ -6030,22 +6034,35 @@ body.sheet-open{
 
   /* ── about 히어로: PC에서 720px 중앙 + 라운딩 ── */
   .about-hero{
+    position:relative;
     max-width:720px;
-    margin-top:calc(var(--header-total-h) + 20px);
+    margin-top:calc(var(--header-total-h) + 46px);
     margin-left:auto;
     margin-right:auto;
     border-radius:16px;
-    padding-top:clamp(14px,2vw,18px);
-    padding-bottom:clamp(14px,2vw,18px);
+    padding-top:clamp(12px,1.8vw,16px);
+    padding-bottom:clamp(12px,1.8vw,16px);
     padding-left:36px;
     padding-right:36px;
     text-align:left;
+  }
+  /* breadcrumb: 카드 위로 절대배치 */
+  .about-hero .breadcrumb{
+    position:absolute;
+    top:-26px;
+    left:0;
+    color:#8c6a4a;
+    font-size:12px;
+    margin-bottom:0;
+    font-weight:600;
+  }
+  .about-hero .breadcrumb a{
+    color:#8c6a4a;
   }
   .about-hero-title-row{
     display:flex;
     align-items:baseline;
     gap:clamp(10px,2vw,20px);
-    margin-top:6px;
   }
   .about-hero h2{
     font-size:clamp(15px,1.9vw,22px);
