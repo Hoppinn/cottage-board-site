@@ -304,11 +304,23 @@
         chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
         chips.appendChild(chip); updateHidden();
       }
+      text.setAttribute('enterkeyhint', 'done');
+      let _enterDone = false;
       text.addEventListener('keydown', e => {
-        if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); const v = text.value.trim(); if (v) { addTag(v); text.value = ''; text.focus(); } }
-        else if (e.key === 'Backspace' && !text.value) { const last = chips.querySelector('.tag-chip:last-child'); if (last) { last.remove(); updateHidden(); } }
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          if (e.isComposing) { _enterDone = false; return; }
+          const v = text.value.trim(); _enterDone = !!v;
+          if (v) { addTag(v); text.value = ''; text.focus(); }
+        } else if (e.key === 'Backspace' && !text.value) { const last = chips.querySelector('.tag-chip:last-child'); if (last) { last.remove(); updateHidden(); } }
       });
-      text.addEventListener('blur', () => { const v = text.value.trim(); if (v) { addTag(v); text.value = ''; setTimeout(() => text.focus(), 0); } });
+      text.addEventListener('keyup', e => {
+        if (e.key === 'Enter' && !e.isComposing) {
+          if (_enterDone) { _enterDone = false; return; }
+          const v = text.value.trim(); if (v) { addTag(v); text.value = ''; text.focus(); }
+        }
+      });
+      text.addEventListener('blur', () => { const v = text.value.trim(); if (v) { addTag(v); text.value = ''; } });
       wrap.addEventListener('click', () => text.focus());
       if (initialValue) initialValue.split(',').forEach(v => addTag(v));
     }

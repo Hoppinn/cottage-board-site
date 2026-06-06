@@ -256,16 +256,29 @@
     function triggerRefresh() {
       text.dispatchEvent(new Event('input', { bubbles: true }));
     }
+    text.setAttribute('enterkeyhint', 'done');
+    let _enterDone = false;
     text.addEventListener('keydown', e => {
       if (e.key === ' ' || e.key === 'Enter') {
         // 자동완성 아이템이 포커스된 경우 attachAc에 양보
         if (wrap.querySelector('.pr-autocomplete-item.is-focused')) { e.preventDefault(); return; }
         e.preventDefault();
+        if (e.isComposing) { _enterDone = false; return; } // 모바일 IME: keyup에서 처리
         const v = text.value.trim();
+        _enterDone = !!v;
         if (v) { addTag(v); text.value = ''; triggerRefresh(); text.focus(); }
       } else if (e.key === 'Backspace' && !text.value) {
         const last = chips.querySelector('.tag-chip:last-child');
         if (last) { last.remove(); updateHidden(); }
+      }
+    });
+    // 모바일 IME: compositionend 이후 keyup에서 태그 등록
+    text.addEventListener('keyup', e => {
+      if (e.key === 'Enter' && !e.isComposing) {
+        if (_enterDone) { _enterDone = false; return; }
+        if (wrap.querySelector('.pr-autocomplete-item.is-focused')) return;
+        const v = text.value.trim();
+        if (v) { addTag(v); text.value = ''; triggerRefresh(); text.focus(); }
       }
     });
     // blur 시 미등록 텍스트 유지 — Enter/Space로만 등록
