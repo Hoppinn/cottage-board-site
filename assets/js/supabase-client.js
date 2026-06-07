@@ -595,11 +595,16 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     });
     window.addEventListener('beforeunload', () => {
       // 페이지 종료 시 best-effort 반영 (완료 보장 불가, localStorage가 백업)
-      if (_sessionUserId) _syncTimeToDBNow(_sessionUserId);
+      if (_sessionUserId) _flushTime(_sessionUserId);
+    });
+    window.addEventListener('pagehide', () => {
+      // 모바일에서 beforeunload 미발화 시 보완
+      if (_sessionUserId) _flushTime(_sessionUserId);
     });
   }
 
   function startSession(userId) {
+    if (_sessionUserId) _flushTime(_sessionUserId); // 이전 세션 시간 플러시 후 리셋
     _sessionUserId = userId;
     _sessionStart = Date.now();
     window._cottageSessionStart = _sessionStart;
@@ -609,7 +614,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     startSession(userId);
     try {
       const accumulated = _popAccumulatedMinutes(userId);
-      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned, nickname').eq('user_id', userId).maybeSingle();
+      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
       // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명(realName)과 같으면 기존 보호
       const nickToSave = (data?.nickname && realName && data.nickname !== realName && nickname === realName)
@@ -626,6 +631,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         last_seen_at: new Date().toISOString(),
         visit_count: newVisitCount,
         total_minutes: (data?.total_minutes || 0) + accumulated,
+        ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
       }, { onConflict: 'user_id' });
       if (!upsertError) localStorage.removeItem(`cottage_time_sec_${userId}`);
     } catch (_) {}

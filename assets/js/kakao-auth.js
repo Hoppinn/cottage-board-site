@@ -64,17 +64,36 @@ function initKakaoAuth() {
 
   const btn = document.getElementById('kakaoLoginBtn');
   if (btn) {
-    btn.addEventListener('click', () => {
-      if (!getKakaoUser()) {
-        kakaoLogin();
-      } else {
+    const isHover = window.matchMedia?.('(hover: hover) and (pointer: fine)').matches;
+    const loginArea = btn.closest('.menu-login-area') || btn.parentElement;
+    if (isHover && loginArea) {
+      // PC: 마우스 올리면 열고 벗어나면 닫힘
+      loginArea.addEventListener('mouseenter', () => {
+        if (!getKakaoUser()) return;
         const actions = document.getElementById('kakaoUserActions');
         if (!actions) return;
-        const opening = !btn.classList.contains('is-expanded');
-        btn.classList.toggle('is-expanded', opening);
-        actions.style.display = opening ? 'flex' : 'none';
-      }
-    });
+        btn.classList.add('is-expanded');
+        actions.style.display = 'flex';
+      });
+      loginArea.addEventListener('mouseleave', () => {
+        const actions = document.getElementById('kakaoUserActions');
+        if (actions) actions.style.display = 'none';
+        btn.classList.remove('is-expanded');
+      });
+      btn.addEventListener('click', () => { if (!getKakaoUser()) kakaoLogin(); });
+    } else {
+      btn.addEventListener('click', () => {
+        if (!getKakaoUser()) {
+          kakaoLogin();
+        } else {
+          const actions = document.getElementById('kakaoUserActions');
+          if (!actions) return;
+          const opening = !btn.classList.contains('is-expanded');
+          btn.classList.toggle('is-expanded', opening);
+          actions.style.display = opening ? 'flex' : 'none';
+        }
+      });
+    }
   }
 
   const nicknameBtn = document.getElementById('kakaoNicknameBtn');
@@ -399,10 +418,11 @@ async function openProfilePanel() {
       })()}
       ${(() => {
         const saved = stats.profile?.total_minutes || 0;
+        const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
         const sessionMins = window._cottageSessionStart
           ? Math.floor((Date.now() - window._cottageSessionStart) / 60000)
           : 0;
-        const total = saved + sessionMins;
+        const total = saved + Math.floor(localSecs / 60) + sessionMins;
         const fmt = m => m >= 60 ? Math.floor(m/60)+'시간 '+(m%60)+'분' : m+'분';
         return `<li><span>총 이용 시간</span><strong>${fmt(total)}</strong></li>`;
       })()}
