@@ -17,7 +17,7 @@ const {
   COTTAGE_OWNED_GAMES_XLSX_PATH,
 } = require('../_core/paths');
 const { readXlsxNormalized } = require('./from-file/import-from-xlsx');
-const { addOwnedGame } = require('./from-name/add-owned-game');
+const { addOwnedGame, updateXlsxLocation } = require('./from-name/add-owned-game');
 const { autoResolveBggMatches } = require('../1-matcher/b_run-local-match');
 
 const args = process.argv.slice(2);
@@ -274,9 +274,23 @@ async function main() {
     const location = await selectLocation(rl);
 
     // 2. xlsx + master에 추가 (위치만 반영, 난이도·추천인원은 BGG 자동)
+    console.log(`\n   선택된 위치값: "${location || '(없음)'}"`);
     console.log('\n▶ 1. 게임 목록 추가...');
     await addOwnedGame(gameName, { location });
     console.log('✅ 게임 목록 추가 완료');
+
+    // 위치 저장 직후 xlsx 확인
+    {
+      const { rows: xlsxRows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
+      const xlsxGame = xlsxRows.find(r => r.ownedName === gameName);
+      const xlsxLoc = xlsxGame?.shelfGroupId || '(없음)';
+      console.log(`   ✔ xlsx 저장 위치 확인: "${xlsxLoc}"`);
+      if (location && xlsxLoc !== location) {
+        console.warn(`   ⚠️  위치 불일치! 선택="${location}" / xlsx="${xlsxLoc}"`);
+        console.warn('   → xlsx 위치 강제 재저장 시도...');
+        await updateXlsxLocation(gameName, location);
+      }
+    }
 
     // 3. BGG 로컬 매칭
     console.log('\n▶ 2. BGG 로컬 매칭...');
@@ -297,6 +311,9 @@ async function main() {
     // 6. Master 빌드
     runCmd('4. 마스터 빌드', 'node game-system/tools/3-build-master/build-master.js');
 
+    // 6-1. 라벨 번역 (사전 기반, API 비용 없음)
+    runCmd('4-1. 라벨 번역 (mechanics/categories)', 'node game-system/tools/4-label-translator/label-translator.js');
+
     // 7. 번역
     const gameId = getGameId(gameName);
     if (!skipTranslate) {
@@ -309,16 +326,30 @@ async function main() {
     // 완료 요약
     console.log(`\n${'─'.repeat(40)}`);
     console.log(`🎉 완료! "${gameName}" 추가됨\n`);
+
+    // xlsx 최종 확인
+    const { rows: finalXlsxRows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
+    const finalXlsxGame = finalXlsxRows.find(r => r.ownedName === gameName);
+    const xlsxFinalLoc = finalXlsxGame?.shelfGroupId || '(없음)';
+
+    // master 최종 확인
     const finalMaster = readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} });
     const finalGame = finalMaster.games?.[gameId];
+
     if (finalGame) {
-      console.log(`  BGG ID       : ${finalGame.bggId ?? '없음 (BGG 미확정)'}`);
-      console.log(`  위치         : ${finalGame.location || '미지정'}`);
-      console.log(`  추천인원     : ${formatPlayers(finalGame.recommendedPlayers)}`);
-      console.log(`  최적인원     : ${formatPlayers(finalGame.bestPlayers)}`);
-      console.log(`  체감난이도   : ${finalGame.difficulty != null ? `${finalGame.difficulty.toFixed(2)} / 5` : '없음 (BGG 데이터 없음)'}`);
-      console.log(`  descriptionKo: ${finalGame.descriptionKo ? '✅' : '❌ 미완료'}`);
-      console.log(`  summaryKo    : ${finalGame.summaryKo ? '✅' : '❌ 미완료'}`);
+      console.log(`  BGG ID         : ${finalGame.bggId ?? '없음 (BGG 미확정)'}`);
+      console.log(`  위치 (xlsx)    : ${xlsxFinalLoc}`);
+      console.log(`  위치 (master)  : ${finalGame.location || '(없음)'}`);
+      if (xlsxFinalLoc !== (finalGame.location || '(없음)')) {
+        console.warn(`  ⚠️  위치 불일치: xlsx="${xlsxFinalLoc}" / master="${finalGame.location || '(없음)'}"`);
+      }
+      console.log(`  추천인원       : ${formatPlayers(finalGame.recommendedPlayers)}`);
+      console.log(`  최적인원       : ${formatPlayers(finalGame.bestPlayers)}`);
+      console.log(`  체감난이도     : ${finalGame.difficulty != null ? `${finalGame.difficulty.toFixed(2)} / 5` : '없음'}`);
+      console.log(`  mechanicsKo    : ${finalGame.mechanicsKo?.length ? finalGame.mechanicsKo.join(', ') : '없음'}`);
+      console.log(`  categoriesKo   : ${finalGame.categoriesKo?.length ? finalGame.categoriesKo.join(', ') : '없음'}`);
+      console.log(`  descriptionKo  : ${finalGame.descriptionKo ? '✅' : '❌ 미완료'}`);
+      console.log(`  summaryKo      : ${finalGame.summaryKo ? '✅' : '❌ 미완료'}`);
     }
     console.log('');
   } finally {

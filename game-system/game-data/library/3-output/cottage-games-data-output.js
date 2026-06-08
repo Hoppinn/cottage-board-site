@@ -3102,7 +3102,7 @@ const gameData = {
     "title": {
       "display": "마헤",
       "owned": "마헤",
-      "bgg": "Marrakech"
+      "bgg": "Mahé"
     },
     "bgg": {
       "id": "3383",
@@ -3137,7 +3137,8 @@ const gameData = {
         "Dice"
       ],
       "categoriesKo": [
-        "아라비안"
+        "동물",
+        "주사위"
       ],
       "mechanics": [
         "Dice Rolling",
@@ -3145,10 +3146,9 @@ const gameData = {
         "Roll / Spin and Move"
       ],
       "mechanicsKo": [
-        "영역 지배",
-        "레이어링",
-        "굴리고 이동",
-        "타일 배치"
+        "주사위 굴리기",
+        "욕심 부리기",
+        "굴리고 이동"
       ],
       "designers": [
         "Alex Randolph"
@@ -6284,12 +6284,18 @@ const gameData = {
         "Deduction",
         "Party Game"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "추리",
+        "파티게임"
+      ],
       "mechanics": [
         "Acting",
         "Team-Based Game"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "연기",
+        "팀 게임"
+      ],
       "designers": [
         "藤田 真吾 (Shingo Fujita)",
         "Shotaro Nakashima",
@@ -9492,9 +9498,8 @@ const gameData = {
         "Murder / Mystery"
       ],
       "categoriesKo": [
-        "카드게임",
-        "판타지",
-        "격투"
+        "마피아",
+        "머더미스터리"
       ],
       "mechanics": [
         "Alliances",
@@ -9502,11 +9507,9 @@ const gameData = {
         "Negotiation"
       ],
       "mechanicsKo": [
-        "경매/입찰",
-        "덱 구성",
-        "패 관리",
-        "줄다리기",
-        "비대칭 능력"
+        "동맹",
+        "추리",
+        "협상"
       ],
       "designers": [
         "Sho Tomono"
@@ -12680,10 +12683,12 @@ const gameData = {
         "Zombies"
       ],
       "categoriesKo": [
-        "카드게임",
+        "만화",
         "격투",
+        "공포",
+        "미니어처",
         "미디어 테마",
-        "SF"
+        "좀비"
       ],
       "mechanics": [
         "Action Points",
@@ -12695,9 +12700,13 @@ const gameData = {
         "Variable Player Powers"
       ],
       "mechanicsKo": [
-        "덱/백/풀 빌딩",
-        "공개 드래프팅",
-        "줄다리기"
+        "액션 포인트",
+        "협동게임",
+        "주사위 굴리기",
+        "모듈형 보드",
+        "시나리오 게임",
+        "솔로 게임",
+        "비대칭 능력"
       ],
       "designers": [
         "Fábio Cury",
@@ -21845,10 +21854,11 @@ const gameData = {
         "Horror"
       ],
       "categoriesKo": [
-        "순발력",
-        "카드게임",
+        "추상 전략",
+        "블러핑",
         "어린이 게임",
-        "실시간"
+        "추리",
+        "공포"
       ],
       "mechanics": [
         "Grid Movement",
@@ -21859,8 +21869,12 @@ const gameData = {
         "Static Capture"
       ],
       "mechanicsKo": [
-        "패턴 인식",
-        "스피드 매칭"
+        "격자 이동",
+        "플레이어 탈락",
+        "포인트 이동",
+        "비밀 유닛 배치",
+        "사각 격자",
+        "정적 포획"
       ],
       "designers": [
         "Alex Randolph"
@@ -25817,8 +25831,9 @@ const gameData = {
         "Nautical"
       ],
       "categoriesKo": [
-        "탐험",
-        "여행"
+        "동물",
+        "교육",
+        "항해"
       ],
       "mechanics": [
         "End Game Bonuses",
@@ -25831,16 +25846,14 @@ const gameData = {
         "Tile Placement"
       ],
       "mechanicsKo": [
-        "계약",
-        "소유권",
-        "픽업 앤 딜리버",
-        "포인트 이동",
-        "세트 수집",
-        "솔로 게임",
-        "순서 선점",
-        "가변 셋업",
-        "워커 배치",
-        "다중 워커 배치"
+        "최종 보너스",
+        "격자 커버리지",
+        "레이어링",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "론델",
+        "사각 격자",
+        "타일 배치"
       ],
       "designers": [
         "Grégory Grard",
@@ -85262,62 +85275,28 @@ const gameData = {
     "title": {
       "display": "원드러스크리처",
       "owned": "원드러스크리처",
-      "bgg": "Wondrous Creatures"
+      "bgg": ""
     },
     "bgg": {
-      "id": "400366",
-      "matchStatus": "forced",
-      "year": "2024",
-      "rating": 8.05572,
-      "weight": 3.0276,
-      "minPlayers": 1,
-      "maxPlayers": 4,
-      "bestPlayers": [
-        2,
-        3
-      ],
-      "recommendedPlayers": [
-        1
-      ],
-      "notRecommendedPlayers": [
-        4,
-        4
-      ],
-      "playingTime": 80,
-      "minPlayTime": 40,
-      "maxPlayTime": 80,
-      "categories": [
-        "Fantasy"
-      ],
-      "categoriesKo": [
-        "판타지"
-      ],
-      "mechanics": [
-        "End Game Bonuses",
-        "Hand Management",
-        "Hexagon Grid",
-        "Open Drafting",
-        "Set Collection",
-        "Tags",
-        "Variable Player Powers",
-        "Worker Placement",
-        "Worker Placement, Different Worker Types"
-      ],
-      "mechanicsKo": [
-        "최종 보너스",
-        "패 관리",
-        "헥사곤 격자",
-        "공개 드래프팅",
-        "세트 수집",
-        "태그",
-        "비대칭 능력",
-        "워커 배치",
-        "다중 워커 배치"
-      ],
-      "designers": [
-        "Yeom.C.W"
-      ],
-      "description": "Welcome to the world full of fantastic creatures! You are an admirer, a creature enthusiast who will join the journey of forming the world&rsquo;s leading creature reserve.\n\nTo win Wondrous Creatures, you must create the most harmonious reserve. To do this, you will need to collect various Creature Cards and Eggs in your reserve. As each Creature Card holds its own unique ability, it's important to bring cards into your reserve that fit and synergize with your strategy. Additionally, it is very important to create a reserve that helps complete the Achievements faster than other players.\n\n\n    The worker placement mechanism provides an intriguing Hex Puzzle experience. Your deployed worker interacts with surrounding icons to bring in resources or cards, and activate special effects! \n     Your workers hold their own unique abilities. As you progress through the game, unlock their abilities and strengthen your workers!\n     As the game progresses, powerful special effects are newly placed on the map. Get creative and use these special effects to unleash your very own powerful combos! \n     Collect and combine 100+ different creature cards. Every creature holds its own distinctive ability and provides a deep strategic tableau building experience. \n\n\nThe goal of Wondrous Creatures is to be the player with the highest Victory Points (VPs) at the end of the game.\n\n--description from the publisher",
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
       "descriptionKo": "환상적인 생물로 가득한 세계에서 최고의 생물 보호구역을 만듭니다. 다양한 생물 카드와 알을 모아 시너지를 극대화하세요. 고유 능력을 가진 생물들이 서로 조화를 이루는 워커 플레이스먼트 게임."
     },
     "cottage": {
@@ -85325,43 +85304,16 @@ const gameData = {
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "heavy_mania",
-      "difficultyWeight": 3.0276,
-      "moodTags": [
-        "immersive"
-      ],
-      "playTags": [
-        "card_play",
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "long_stay",
-        "couple",
-        "group"
-      ],
-      "interactionTags": [
-        "competitive",
-        "turn_based"
-      ],
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [
-        "immersive",
-        "card_play",
-        "strategy",
-        "experienced",
-        "long_stay",
-        "couple",
-        "group",
-        "competitive",
-        "turn_based"
-      ],
-      "displayTags": [
-        "머리쓰게",
-        "빠져들게",
-        "경쟁형"
-      ],
+      "autoTags": [],
+      "displayTags": [],
       "summaryKo": "100여 종의 환상적인 생물을 모아 최고의 보호구역을 만드는 워커 플레이스먼트 게임.",
       "comment": {
         "text": "",
@@ -85379,9 +85331,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/3ue_3La0WYopTSDER3shUA__original/img/fm8i0N9fCQRGqNHgk0jh0gk01Ww=/0x0/filters:format(jpeg)/pic8389014.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/3ue_3La0WYopTSDER3shUA__small/img/4SreytxNoZL435EkTriKB08W5W0=/fit-in/200x150/filters:strip_icc()/pic8389014.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -85390,111 +85342,51 @@ const gameData = {
       "boardId": "원드러스크리처"
     }
   },
-  "맥주와빵": {
-    "id": "맥주와빵",
+  "천국과맥주": {
+    "id": "천국과맥주",
     "title": {
-      "display": "맥주와빵",
-      "owned": "맥주와빵",
-      "bgg": "Beer & Bread"
+      "display": "천국과맥주",
+      "owned": "천국과맥주",
+      "bgg": ""
     },
     "bgg": {
-      "id": "369880",
-      "matchStatus": "forced",
-      "year": "2022",
-      "rating": 7.30491,
-      "weight": 2.3493,
-      "minPlayers": 2,
-      "maxPlayers": 2,
-      "bestPlayers": [
-        2
-      ],
+      "id": "",
+      "matchStatus": "unresolved",
+      "year": "",
+      "rating": 0,
+      "weight": 0,
+      "minPlayers": 0,
+      "maxPlayers": 0,
+      "bestPlayers": [],
       "recommendedPlayers": [],
-      "notRecommendedPlayers": [
-        1,
-        2
-      ],
-      "playingTime": 45,
-      "minPlayTime": 30,
-      "maxPlayTime": 45,
-      "categories": [
-        "Card Game",
-        "Farming",
-        "Medieval"
-      ],
-      "categoriesKo": [
-        "카드게임",
-        "농업",
-        "중세"
-      ],
-      "mechanics": [
-        "Closed Drafting",
-        "Contracts",
-        "End Game Bonuses",
-        "Hand Management",
-        "Highest-Lowest Scoring",
-        "Multi-Use Cards",
-        "Neighbor Scope",
-        "Turn Order: Stat-Based",
-        "Variable Player Powers"
-      ],
-      "mechanicsKo": [
-        "비공개 드래프팅",
-        "계약",
-        "최종 보너스",
-        "패 관리",
-        "최고-최저 득점",
-        "다목적 카드",
-        "인접 범위",
-        "스탯 기반 순서",
-        "비대칭 능력"
-      ],
-      "designers": [
-        "Scott Almes"
-      ],
-      "description": "Beer & Bread is a multi-use card game for two players. Its clever structure of alternating rounds puts a fascinating twist on player interaction, card drafting, and resource management.\n\nFounded on the fruitful lands of an erstwhile monastery, two villages have held up the dual tradition of brewing beer and baking bread. While sharing fields and resources, they still find pride in their friendly rivalry of besting each other&rsquo;s produce.\n\nEach of you represents one of these villages. Over the course of six years - which alternate between fruitful and dry - you must harmonize your duties of harvesting and storing resources, producing beer and bread, selling them for coins and upgrading your facilities.\n\nHowever, in order to win, you must maintain the balance between your baked and liquid goods. Because, after the sixth year, you only score the coins collected from the type of good - beer or bread - for which you earned less. The village with the higher score wins.\n\n&mdash;description from the publisher",
-      "descriptionKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드 게임. 교대 라운드 구조로 카드 드래프팅과 자원 관리에 독특한 플레이어 상호작용을 제공합니다."
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
+      "categoriesKo": [],
+      "mechanics": [],
+      "mechanicsKo": [],
+      "designers": [],
+      "description": "",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "light_family",
-      "difficultyWeight": 2.3493,
-      "moodTags": [
-        "immersive"
-      ],
-      "playTags": [
-        "card_play",
-        "strategy"
-      ],
-      "situationTags": [
-        "experienced",
-        "beginner",
-        "couple"
-      ],
-      "interactionTags": [
-        "competitive",
-        "low_conflict"
-      ],
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [],
+      "playTags": [],
+      "situationTags": [],
+      "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [
-        "immersive",
-        "card_play",
-        "strategy",
-        "experienced",
-        "beginner",
-        "couple",
-        "competitive",
-        "low_conflict"
-      ],
-      "displayTags": [
-        "머리쓰게",
-        "빠져들게",
-        "경쟁형"
-      ],
-      "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 2인 전용 카드게임.",
+      "autoTags": [],
+      "displayTags": [],
+      "summaryKo": "",
       "comment": {
         "text": "",
         "source": "none"
@@ -85511,15 +85403,15 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__original/img/IiugqYTDlz1Rk1EAaEwDxr65YgI=/0x0/filters:format(jpeg)/pic7064178.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__small/img/x0Q2R8xgABJACUHYSCA00a7j3Cg=/fit-in/200x150/filters:strip_icc()/pic7064178.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "맥주와빵"
+      "boardId": "천국과맥주"
     }
   },
   "글렌모어연대기": {
@@ -85662,7 +85554,7 @@ const gameData = {
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unmatched",
+      "matchStatus": "unresolved",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -85730,45 +85622,107 @@ const gameData = {
     "title": {
       "display": "에이다의꿈",
       "owned": "에이다의꿈",
-      "bgg": ""
+      "bgg": "Ada's Dream"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unmatched",
-      "year": "",
-      "rating": 0,
-      "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "categoriesKo": [],
-      "mechanics": [],
-      "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "id": "413469",
+      "matchStatus": "forced",
+      "year": "2025",
+      "rating": 8.03823,
+      "weight": 3.9091,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        3
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        4
+      ],
+      "notRecommendedPlayers": [
+        4
+      ],
+      "playingTime": 120,
+      "minPlayTime": 90,
+      "maxPlayTime": 120,
+      "categories": [
+        "Dice",
+        "Industry / Manufacturing",
+        "Math"
+      ],
+      "categoriesKo": [
+        "주사위",
+        "산업",
+        "수학"
+      ],
+      "mechanics": [
+        "Dice Rolling",
+        "Hand Management",
+        "Rondel",
+        "Solo / Solitaire Game",
+        "Tech Trees / Tech Tracks"
+      ],
+      "mechanicsKo": [
+        "주사위 굴리기",
+        "패 관리",
+        "론델",
+        "솔로 게임",
+        "기술 트리"
+      ],
+      "designers": [
+        "Toni López"
+      ],
+      "description": "In Ada's Dream, work with Ada Lovelace to help build the first computer, fulfilling her dream in this alternate history Euro Game.\n\nOver the course of the game (18 turns), players take dice from the Workshop Rondel, Give Lectures in Prestigious Institutions, Travel the UK, and Complete Assignments from Ada to gather Prestige Points.\n\nPlayers add Dice, Gears, and Programs to their blueprint Board in a race to build the first Analytical Engine, using dice rondel and manipulation mechanics and literal \"engine building\". When any engine is completed, the end of the game is triggered and Prestige points are counted.  The player with the most prestige, wins.\n\n&mdash;description from the publisher",
       "descriptionKo": "증기 동력 시대 발명가들의 경쟁. 에이다 러브레이스의 꿈인 세계 최초 컴퓨터 완성을 향해 달려갑니다. 부품을 조합하고 발명품을 완성하는 전략 카드 게임."
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [],
-      "interactionTags": [],
+      "shelfGroupId": "배송중",
+      "shelfLabel": "배송중",
+      "shelfFullLabel": "배송중",
+      "difficultyId": "hardcore",
+      "difficultyWeight": 3.9091,
+      "moodTags": [
+        "funny",
+        "immersive"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
+      "situationTags": [
+        "beginner",
+        "quick_play",
+        "experienced",
+        "long_stay",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive",
+        "silent_focus"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "funny",
+        "immersive",
+        "card_play",
+        "strategy",
+        "beginner",
+        "quick_play",
+        "experienced",
+        "long_stay",
+        "group",
+        "competitive",
+        "silent_focus"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "부품을 조합해 발명품을 완성하는 증기 동력 시대의 발명가 경쟁 게임",
       "comment": {
         "text": "",
@@ -85786,9 +85740,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/i3YeleJsNmnvcKdwgW3TKA__original/img/0bHPZadTVedYlWrXsy0LKZ0Kwf8=/0x0/filters:format(jpeg)/pic8030666.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/i3YeleJsNmnvcKdwgW3TKA__small/img/PnqlbLRuC-3OB7dWtElkQkhLdxg=/fit-in/200x150/filters:strip_icc()/pic8030666.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

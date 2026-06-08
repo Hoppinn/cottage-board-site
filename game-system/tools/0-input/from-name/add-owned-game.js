@@ -17,7 +17,7 @@ function saveMaster(master) {
   );
 }
 
-async function findHeaderInfo(worksheet) {
+function findHeaderInfo(worksheet) {
   for (let rn = 1; rn <= Math.min(worksheet.rowCount, 10); rn++) {
     const row = worksheet.getRow(rn);
     let found = false;
@@ -43,36 +43,77 @@ function findCol(headerMap, candidates) {
   return null;
 }
 
+// xlsx에서 기존 행의 위치 컬럼만 수정
+async function updateXlsxLocation(ownedName, location) {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
+  const worksheet = workbook.getWorksheet("보유게임리스트") || workbook.worksheets[0];
+  if (!worksheet) {
+    console.warn("xlsx: 시트를 찾을 수 없음");
+    return false;
+  }
+
+  const headerInfo = findHeaderInfo(worksheet);
+  if (!headerInfo) {
+    console.warn("xlsx: 헤더(보유게임명)를 찾을 수 없어 위치 미저장");
+    return false;
+  }
+
+  const { headerRowNum, headerMap } = headerInfo;
+  const nameCol = findCol(headerMap, ["보유게임명", "게임명", "name", "name_kr"]);
+  const locCol  = findCol(headerMap, ["위치", "책장그룹", "shelf", "shelfGroupId"]);
+
+  if (!nameCol) { console.warn("xlsx: 게임명 컬럼 없음"); return false; }
+  if (!locCol)  { console.warn("xlsx: 위치 컬럼 없음 — 헤더목록:", Object.keys(headerMap).join(", ")); return false; }
+
+  for (let rn = headerRowNum + 1; rn <= worksheet.rowCount; rn++) {
+    const cellName = String(worksheet.getCell(rn, nameCol).value || "").trim();
+    if (cellName === ownedName) {
+      worksheet.getCell(rn, locCol).value = location || null;
+      await workbook.xlsx.writeFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
+      console.log(`xlsx 위치 저장: "${ownedName}" → "${location || '(없음)'}"`);
+      return true;
+    }
+  }
+
+  console.warn(`xlsx: "${ownedName}" 행을 찾지 못해 위치 미저장`);
+  return false;
+}
+
 async function appendLedgerRow(game, extraInfo = {}) {
   const workbook = new ExcelJS.Workbook();
-
   await workbook.xlsx.readFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
-
   const worksheet = workbook.getWorksheet("보유게임리스트");
 
   const nextRow = worksheet.rowCount + 1;
   const headerInfo = findHeaderInfo(worksheet);
 
-  if (headerInfo && headerInfo.headerMap) {
+  if (headerInfo) {
     const { headerMap } = headerInfo;
+    console.log("xlsx 헤더 발견:", Object.keys(headerMap).join(", "));
+
     const setCell = (candidates, value) => {
       const col = findCol(headerMap, candidates);
-      if (col != null) worksheet.getCell(nextRow, col).value = value;
+      if (col != null) {
+        worksheet.getCell(nextRow, col).value = value;
+      } else {
+        console.warn(`  xlsx: 컬럼 후보 [${candidates.join("/")}] 미발견`);
+      }
     };
 
     setCell(["보유게임명", "게임명", "name", "name_kr"], game.ownedName);
 
     if (extraInfo.location) {
       setCell(["위치", "책장그룹", "shelf", "shelfGroupId"], extraInfo.location);
+      console.log(`  xlsx 위치 컬럼 쓰기: "${extraInfo.location}"`);
     }
   } else {
-    // 헤더를 찾지 못한 경우 컬럼 번호 fallback
+    console.warn("xlsx: 헤더를 찾지 못해 컬럼 번호 fallback 사용");
     worksheet.getCell(nextRow, 1).value = game.ownedName;
     if (extraInfo.location) worksheet.getCell(nextRow, 2).value = extraInfo.location;
   }
 
   await workbook.xlsx.writeFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
-
   console.log("source xlsx 추가 완료:", game.ownedName);
 }
 
@@ -219,7 +260,17 @@ async function addOwnedGame(gameName, extraInfo = {}) {
   const resolvedGame = createResolvedGame(cleanName);
 
   if (master.games[resolvedGame.id]) {
-    console.log("이미 존재:", resolvedGame.id);
+    // 이미 존재: 위치가 지정된 경우 xlsx + master 둘 다 업데이트
+    if (extraInfo.location !== undefined && extraInfo.location !== "") {
+      console.log(`이미 존재: "${cleanName}" — xlsx 위치 업데이트 시도`);
+      const updated = await updateXlsxLocation(cleanName, extraInfo.location);
+      if (updated) {
+        master.games[resolvedGame.id].location = extraInfo.location;
+        saveMaster(master);
+      }
+    } else {
+      console.log("이미 존재 (변경 없음):", resolvedGame.id);
+    }
     return;
   }
 
@@ -239,4 +290,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { addOwnedGame };
+module.exports = { addOwnedGame, updateXlsxLocation };
