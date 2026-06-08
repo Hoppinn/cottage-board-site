@@ -80687,9 +80687,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송예정",
-      "shelfLabel": "배송예정",
-      "shelfFullLabel": "배송예정",
+      "shelfGroupId": "발매후 도착예정",
+      "shelfLabel": "발매후 도착예정",
+      "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.84,
       "moodTags": [
