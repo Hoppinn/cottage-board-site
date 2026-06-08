@@ -272,6 +272,8 @@
 | R | requests.html h2 1줄화 | <br> 제거 + .requests-page .about-hero h2 font-size 축소 |
 
 ### TODO (작업 안 함)
+- [ ] price-rules.html 사진 중심 재구성 (가격·규칙을 텍스트 대신 사진 위주로 안내)
+- [ ] club-rules.html 사진 중심 재구성 (동호회 회칙을 텍스트 대신 사진 위주로 안내)
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
 - [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 — 별도 세션
 - [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
@@ -299,7 +301,10 @@
 | 2026-06-08 | fix: nickToSave effectiveRealName fallback — realName null 시 data?.real_name 사용, 닉네임 초기화 방지 |
 | 2026-06-08 | feat: club.html about 섹션 사진 3장 추가 (game1/2/3.jpg, about-photo-strip 패턴) |
 | 2026-06-08 | feat: club-rules.html 하단 사진 3장 추가 (game1/2/3.jpg) |
-| 2026-06-08 | fix: 추천 필터박스 PC 중앙정렬 — .recommend-filter margin:auto 명시, 불필요 padding-left/right 제거 |
+| 2026-06-08 | fix: 추천 필터박스 PC 중앙정렬 — #recommendFilter ID 셀렉터로 margin:auto 강제, 클래스 기반 규칙 무효화 |
+| 2026-06-08 | fix: og-image.jpg 90° 회전 (System.Drawing으로 물리적 회전, EXIF 제거됨) |
+| 2026-06-08 | feat: about.html 하단 "가격&규칙 보러가기" 링크 추가 |
+| 2026-06-08 | refactor: club-rules.html 사진 추가 롤백 (사진 중심 재구성 예정) |
 | 2026-06-05 | fix: 방문횟수 — 로컬 카운터 소스 전환으로 로그인 유지 상태에서도 날짜별 정확 카운팅 |
 | 2026-06-05 | fix: 참여자 자동완성 — 칩 추가 후 input 이벤트 발생시켜 콤보 목록 즉시 갱신 |
 | 2026-06-05 | feat: 기록 입력폼 "위와 동일" 버튼 (2번째 행 이상에서 첫 행 인원수·참여자 복사) |
