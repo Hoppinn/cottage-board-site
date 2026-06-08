@@ -14,7 +14,9 @@ const {
   BGG_MATCH_MAP_PATH,
   FORCED_BGG_OVERRIDES_PATH,
   COTTAGE_OWNED_GAMES_MASTER_PATH,
+  COTTAGE_OWNED_GAMES_XLSX_PATH,
 } = require('../_core/paths');
+const { readXlsxNormalized } = require('./from-file/import-from-xlsx');
 const { addOwnedGame } = require('./from-name/add-owned-game');
 const { autoResolveBggMatches } = require('../1-matcher/b_run-local-match');
 
@@ -57,6 +59,55 @@ function saveForced(name, bggIdOrSkip) {
   const overrides = readJson(FORCED_BGG_OVERRIDES_PATH, {});
   overrides[name] = bggIdOrSkip;
   writeJson(FORCED_BGG_OVERRIDES_PATH, overrides);
+}
+
+function isSimilar(a, b) {
+  const la = a.toLowerCase().trim();
+  const lb = b.toLowerCase().trim();
+  return la !== lb && (la.includes(lb) || lb.includes(la));
+}
+
+async function selectLocation(rl) {
+  const { rows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
+  const locations = [
+    ...new Set(rows.map(r => r.shelfGroupId).filter(v => v && v.trim()))
+  ].sort();
+
+  console.log('\n📍 위치 선택:');
+  if (locations.length === 0) {
+    console.log('   (기존 위치 데이터 없음)');
+  } else {
+    locations.forEach((loc, i) => console.log(`  ${i + 1}. ${loc}`));
+  }
+  console.log(`  ${locations.length + 1}. 새 위치 직접 입력`);
+  console.log(`  0. 위치 없음 (빈칸)`);
+
+  const ans = await prompt(rl, '   번호 선택: ');
+  const choice = parseInt(ans.trim(), 10);
+
+  if (choice === 0) return '';
+
+  if (choice >= 1 && choice <= locations.length) {
+    return locations[choice - 1];
+  }
+
+  if (choice === locations.length + 1) {
+    const newLoc = await prompt(rl, '   새 위치 입력: ');
+    const trimmed = newLoc.trim();
+    if (!trimmed) return '';
+
+    const similar = locations.find(loc => isSimilar(loc, trimmed));
+    if (similar) {
+      console.log(`   ⚠️  유사한 기존 위치가 있습니다: "${similar}"`);
+      const confirm = await prompt(rl, `   기존 "${similar}" 사용? (Y) / 새 값 "${trimmed}" 유지? (n): `);
+      if (confirm.trim().toLowerCase() !== 'n') return similar;
+    }
+
+    return trimmed;
+  }
+
+  console.log('   유효하지 않은 선택. 위치 없음으로 처리.');
+  return '';
 }
 
 async function resolveBggInteractive(rl, name) {
@@ -190,7 +241,6 @@ async function runTranslation(gameId) {
     console.log('\nℹ️  descriptionKo 이미 존재, 번역 건너뜀');
   }
 
-  // summaryKo: 직전 번역으로 descriptionKo가 생성됐거나 이미 있고 summaryKo가 없을 때
   const refreshed = readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} });
   const refreshedGame = refreshed.games?.[gameId];
   if (refreshedGame?.descriptionKo && !refreshedGame?.summaryKo) {
@@ -208,6 +258,11 @@ async function runTranslation(gameId) {
   return didTranslate;
 }
 
+function formatPlayers(arr) {
+  if (!arr || arr.length === 0) return '없음';
+  return arr.map(n => `${n}인`).join(', ');
+}
+
 async function main() {
   console.log(`\n🎲 새 게임 추가: "${gameName}"\n${'─'.repeat(40)}`);
   if (skipTranslate) console.log('ℹ️  --skip-translate 옵션: 번역 단계 건너뜀\n');
@@ -215,17 +270,12 @@ async function main() {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
   try {
-    // 1. 위치 / 난이도 입력
-    const locationRaw = await prompt(rl, '📍 위치 (예: A선반, 미입력 시 빈칸): ');
-    const location = locationRaw.trim();
+    // 1. 위치 선택 (기존 목록에서 번호 선택)
+    const location = await selectLocation(rl);
 
-    const diffRaw = await prompt(rl, '⚖️  체감난이도 0~5 (미입력 시 생략): ');
-    const diffNum = parseFloat(diffRaw.trim());
-    const difficultyWeight = Number.isFinite(diffNum) ? diffNum : null;
-
-    // 2. xlsx + master에 추가
+    // 2. xlsx + master에 추가 (위치만 반영, 난이도·추천인원은 BGG 자동)
     console.log('\n▶ 1. 게임 목록 추가...');
-    await addOwnedGame(gameName, { location, difficultyWeight });
+    await addOwnedGame(gameName, { location });
     console.log('✅ 게임 목록 추가 완료');
 
     // 3. BGG 로컬 매칭
@@ -249,25 +299,26 @@ async function main() {
 
     // 7. 번역
     const gameId = getGameId(gameName);
-    let translationDone = false;
     if (!skipTranslate) {
-      translationDone = await runTranslation(gameId);
+      await runTranslation(gameId);
     }
 
-    // 8. Output 빌드 (번역 후 재빌드 포함)
+    // 8. Output 빌드
     runCmd('5. 출력 빌드', 'node game-system/tools/5-build-output/build-output.js');
 
-    console.log(`\n🎉 완료! "${gameName}" 추가됨\n`);
-
     // 완료 요약
+    console.log(`\n${'─'.repeat(40)}`);
+    console.log(`🎉 완료! "${gameName}" 추가됨\n`);
     const finalMaster = readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} });
     const finalGame = finalMaster.games?.[gameId];
     if (finalGame) {
-      console.log(`  BGG ID     : ${finalGame.bggId ?? '없음'}`);
-      console.log(`  위치       : ${finalGame.location || '미입력'}`);
-      console.log(`  체감난이도 : ${finalGame.difficultyWeight ?? '미입력'}`);
-      console.log(`  descriptionKo : ${finalGame.descriptionKo ? '✅' : '❌ 미완료'}`);
-      console.log(`  summaryKo     : ${finalGame.summaryKo ? '✅' : '❌ 미완료'}`);
+      console.log(`  BGG ID       : ${finalGame.bggId ?? '없음 (BGG 미확정)'}`);
+      console.log(`  위치         : ${finalGame.location || '미지정'}`);
+      console.log(`  추천인원     : ${formatPlayers(finalGame.recommendedPlayers)}`);
+      console.log(`  최적인원     : ${formatPlayers(finalGame.bestPlayers)}`);
+      console.log(`  체감난이도   : ${finalGame.difficulty != null ? `${finalGame.difficulty.toFixed(2)} / 5` : '없음 (BGG 데이터 없음)'}`);
+      console.log(`  descriptionKo: ${finalGame.descriptionKo ? '✅' : '❌ 미완료'}`);
+      console.log(`  summaryKo    : ${finalGame.summaryKo ? '✅' : '❌ 미완료'}`);
     }
     console.log('');
   } finally {

@@ -65,20 +65,10 @@ async function appendLedgerRow(game, extraInfo = {}) {
     if (extraInfo.location) {
       setCell(["위치", "책장그룹", "shelf", "shelfGroupId"], extraInfo.location);
     }
-
-    if (extraInfo.difficultyWeight != null) {
-      setCell(
-        ["난이도", "체감난이도", "difficulty", "difficultyWeight"],
-        extraInfo.difficultyWeight
-      );
-    }
   } else {
     // 헤더를 찾지 못한 경우 컬럼 번호 fallback
     worksheet.getCell(nextRow, 1).value = game.ownedName;
     if (extraInfo.location) worksheet.getCell(nextRow, 2).value = extraInfo.location;
-    if (extraInfo.difficultyWeight != null) {
-      worksheet.getCell(nextRow, 3).value = extraInfo.difficultyWeight;
-    }
   }
 
   await workbook.xlsx.writeFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
@@ -234,9 +224,6 @@ async function addOwnedGame(gameName, extraInfo = {}) {
   }
 
   if (extraInfo.location) resolvedGame.location = extraInfo.location;
-  if (extraInfo.difficultyWeight != null) {
-    resolvedGame.difficultyWeight = extraInfo.difficultyWeight;
-  }
 
   master.games[resolvedGame.id] = resolvedGame;
 
