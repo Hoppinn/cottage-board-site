@@ -157,108 +157,8 @@
       return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
     }
 
-    // ── 수정폼 유틸 (game-reviews.html과 동일 방식) ─────────────────────
-
-    const _PR_INITIALS = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
-    function _toInitials(str) {
-      return [...str].map(ch => {
-        const code = ch.charCodeAt(0);
-        return (code >= 0xAC00 && code <= 0xD7A3) ? _PR_INITIALS[Math.floor((code - 0xAC00) / 28 / 21)] : ch;
-      }).join('');
-    }
-    function prHangulMatch(target, query) {
-      const t = target.toLowerCase(), q = query.toLowerCase();
-      if (t.includes(q)) return true;
-      if (/^[ㄱ-ㅎ]+$/.test(q)) return _toInitials(target).includes(q);
-      return false;
-    }
-
-    function prAttachAc(input, getSuggestions, onSelect, listRef) {
-      let list, focusedIdx = -1;
-      if (listRef && listRef.classList.contains('pr-autocomplete-list')) {
-        list = listRef;
-      } else if (listRef) {
-        list = document.createElement('div'); list.className = 'pr-autocomplete-list';
-        listRef.style.position = 'relative'; listRef.appendChild(list);
-      } else {
-        const wrap = document.createElement('div'); wrap.style.cssText = 'position:relative';
-        input.parentNode.insertBefore(wrap, input); wrap.appendChild(input);
-        list = document.createElement('div'); list.className = 'pr-autocomplete-list'; wrap.appendChild(list);
-      }
-      function renderAc(matches) {
-        list.innerHTML = ''; focusedIdx = -1;
-        if (!matches.length) { list.classList.remove('is-open'); return; }
-        matches.forEach(s => {
-          const item = document.createElement('div'); item.className = 'pr-autocomplete-item'; item.textContent = s;
-          item.addEventListener('mousedown', e => { e.preventDefault(); if (onSelect) { onSelect(s); } else { input.value = s; } list.classList.remove('is-open'); });
-          list.appendChild(item);
-        });
-        list.classList.add('is-open');
-      }
-      function updateFocus() {
-        const items = [...list.querySelectorAll('.pr-autocomplete-item')];
-        items.forEach((el, i) => el.classList.toggle('is-focused', i === focusedIdx));
-        if (focusedIdx >= 0 && items[focusedIdx]) items[focusedIdx].scrollIntoView({ block: 'nearest' });
-      }
-      input.addEventListener('input', () => { const q = input.value.trim(), all = getSuggestions(); renderAc(q ? all.filter(s => prHangulMatch(s, q)) : all.slice(0, 8)); });
-      input.addEventListener('focus', () => { if (!input.value.trim()) renderAc(getSuggestions().slice(0, 8)); });
-      input.addEventListener('keydown', e => {
-        if (!list.classList.contains('is-open')) return;
-        const items = [...list.querySelectorAll('.pr-autocomplete-item')];
-        if (e.key === 'ArrowDown') { e.preventDefault(); focusedIdx = Math.min(focusedIdx + 1, items.length - 1); updateFocus(); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); focusedIdx = Math.max(focusedIdx - 1, 0); updateFocus(); }
-        else if (e.key === 'Enter' && focusedIdx >= 0) { e.preventDefault(); const s = items[focusedIdx].textContent; if (onSelect) { onSelect(s); } else { input.value = s; } list.classList.remove('is-open'); }
-        else if (e.key === 'Escape') { list.classList.remove('is-open'); }
-      });
-      input.addEventListener('blur', () => setTimeout(() => list.classList.remove('is-open'), 150));
-    }
-
-    function prInitTagInput(wrap, hidden, initialValue) {
-      if (!wrap) return;
-      const chips = wrap.querySelector('.tag-chips'), text = wrap.querySelector('.tag-text-input');
-      function updateHidden() { hidden.value = [...chips.querySelectorAll('.tag-chip')].map(c => c.dataset.val).join(', '); }
-      function addTag(val) {
-        val = val.trim(); if (!val) return;
-        const chip = document.createElement('span'); chip.className = 'tag-chip'; chip.dataset.val = val;
-        chip.innerHTML = escH(val) + '<button type="button" class="tag-chip-del">×</button>';
-        chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
-        chips.appendChild(chip); updateHidden();
-      }
-      text.setAttribute('enterkeyhint', 'done');
-      let _enterDone = false;
-      text.addEventListener('keydown', e => {
-        if (e.key === ' ' || e.key === 'Enter') {
-          e.preventDefault();
-          if (e.isComposing) { _enterDone = false; return; }
-          const v = text.value.trim(); _enterDone = !!v;
-          if (v) { addTag(v); text.value = ''; text.focus(); }
-        } else if (e.key === 'Backspace' && !text.value) { const last = chips.querySelector('.tag-chip:last-child'); if (last) { last.remove(); updateHidden(); } }
-      });
-      text.addEventListener('keyup', e => {
-        if (e.key === 'Enter' && !e.isComposing) {
-          if (_enterDone) { _enterDone = false; return; }
-          const v = text.value.trim(); if (v) { addTag(v); text.value = ''; text.focus(); }
-        }
-      });
-      text.addEventListener('blur', () => { const v = text.value.trim(); if (v) { addTag(v); text.value = ''; } });
-      wrap.addEventListener('click', () => text.focus());
-      if (initialValue) initialValue.split(',').forEach(v => addTag(v));
-    }
-
-    function prBuildPhotoItemAdder(grid, files) {
-      return async function(file) {
-        const resized = window.resizeImageFile ? await window.resizeImageFile(file) : file;
-        files.push(resized);
-        const item = document.createElement('div'); item.className = 'pr-photo-item'; item.dataset.idx = String(files.length - 1);
-        const img = document.createElement('img'); img.src = URL.createObjectURL(resized);
-        const del = document.createElement('button'); del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
-        del.addEventListener('click', () => { const i = parseInt(item.dataset.idx); files.splice(i, 1); item.remove(); grid.querySelectorAll('.pr-photo-item').forEach((el, j) => el.dataset.idx = j); });
-        item.append(img, del); grid.appendChild(item);
-      };
-    }
-
-    // parsePhotoUrls, buildPhotoHtml, openLightbox → play-records-utils.js 전역 사용
-    const prParsePhotoUrls = window.parsePhotoUrls;
+    // attachAc, initTagInput, buildPhotoItemAdder, parsePhotoUrls,
+    // buildPhotoHtml, openLightbox → play-records-utils.js 전역 사용
 
     // ── 렌더링 ────────────────────────────────────────────────────────────
 
@@ -356,7 +256,7 @@
                       r.score_note ? `🏆 ${escH(r.score_note)}` : null,
                     ].filter(Boolean);
                     const isMine = currentUser && String(r.user_id) === String(currentUser.id);
-                    const photos = prParsePhotoUrls(r.photo_url);
+                    const photos = parsePhotoUrls(r.photo_url);
                     const recJson = escAttr(JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''}));
                     return `<div class="history-record-item" data-id="${r.id}" data-record='${recJson}'>
                       <div class="history-game-row">
@@ -465,8 +365,8 @@
             <label style="font-size:11px;color:var(--muted)">후기</label>
             <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
             <label style="font-size:11px;color:var(--muted)">사진</label>
-            <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
-              ${prParsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escAttr(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
+            <div class="pie-cur-photos">
+              ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}"><img src="${escAttr(u)}" alt=""><button type="button" class="pie-existing-del">×</button></div>`).join('')}
             </div>
             <div class="pr-photo-grid pie-new-grid"></div>
             <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
@@ -476,13 +376,13 @@
           item.appendChild(form);
 
           // 게임명 자동완성
-          prAttachAc(form.querySelector('.pie-game'), () =>
+          attachAc(form.querySelector('.pie-game'), () =>
             (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean)
           );
 
           // 참여자 태그칩
-          prInitTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
-          prAttachAc(
+          initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
+          attachAc(
             form.querySelector('.pie-names-wrap .tag-text-input'),
             () => {
               const added = [...form.querySelectorAll('.pie-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
@@ -504,7 +404,7 @@
           const piePhotoFile = form.querySelector('.pie-photo-file');
           const pieNewGrid = form.querySelector('.pie-new-grid');
           const pieNewFiles = [];
-          const addPieNewItem = prBuildPhotoItemAdder(pieNewGrid, pieNewFiles);
+          const addPieNewItem = buildPhotoItemAdder(pieNewGrid, pieNewFiles);
           if (piePhotoFile) {
             piePhotoFile.addEventListener('change', async () => { for (const f of Array.from(piePhotoFile.files)) await addPieNewItem(f); piePhotoFile.value = ''; });
           }
