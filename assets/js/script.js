@@ -553,6 +553,14 @@ function getShelfSpanHtml(game){
   return label && label !== "-" ? `<span>📦 ${label}</span>` : "";
 }
 
+// 검색 자동완성용 소형 배지 (배송중/구매예정일 때만 반환)
+function getAvailBadgeHtml(game){
+  const loc = game?.cottage?.shelfGroupId || "";
+  if (loc === "배송중")   return '<span class="avail-badge-sm avail-shipping">🚚 배송중</span>';
+  if (loc === "구매예정") return '<span class="avail-badge-sm avail-pending">🛒 구매예정</span>';
+  return "";
+}
+
 // 모달용 이용 가능 상태 배지 (배송중/구매예정일 때만 반환)
 function getAvailNoticHtml(game){
   const loc = game?.cottage?.shelfGroupId || "";
@@ -899,10 +907,8 @@ if(titleChoseong.includes(queryChoseong)){
               loading="lazy"
               onerror="this.onerror=null; this.src='${DEFAULT_GAME_IMAGE}';"
             >
-
-            <strong>
-              ${detail.title}
-            </strong>
+            <strong>${detail.title}</strong>
+            ${getAvailBadgeHtml(game)}
           </button>
         `;
       })
