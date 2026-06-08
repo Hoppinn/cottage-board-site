@@ -300,6 +300,8 @@
 | 2026-06-07 | fix: 사용시간 카운팅 개선 — startSession flush + pagehide 이벤트 + localStorage 누적분 표시 |
 | 2026-06-07 | fix: upsertProfile photo_url 보존 (기존 DB 값 유지) |
 | 2026-06-07 | feat: PC 프로필 드롭다운 hover 전환 (mouseenter/mouseleave, matchMedia 감지) |
+| 2026-06-08 | fix: style.css 잔여 초록·청록 색상 제거 — history-player-header/history-record-item:hover/pr-rec-sheet-link/pr-game-group-hd/tag-chip 갈색 계열로 교체 |
+| 2026-06-08 | fix: vercel.json source → `/(index.html)?` 패턴으로 확장 (bare domain + /index.html 경로도 no-store 적용) |
 | 2026-06-08 | fix: 추천 빈메시지 PC 중앙정렬 — 글로벌 margin:0 -18px !important를 PC 미디어쿼리에서 margin:0 auto !important로 덮어쓰기 |
 | 2026-06-08 | fix: PC 닉네임 드롭다운 — mouseleave 200ms 딜레이 + dropdown 자체 mouseenter/leave 리스너 추가 (header-dropdown gap 이탈 문제) |
 | 2026-06-08 | fix: OG이미지 파일명 og-image-2.jpg로 변경 (카카오톡 CDN 캐시 강제 갱신) + photo-exteriorooo.jpg 1200×630 크롭으로 교체 |
