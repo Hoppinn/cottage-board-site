@@ -575,11 +575,15 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     const secs = _popAccumulatedSecs(userId);
     if (secs <= 0) return;
     try {
-      const { data } = await db.from('profiles').select('total_minutes').eq('user_id', userId).maybeSingle();
+      const { data } = await db.from('profiles').select('total_minutes, today_seconds, today_date').eq('user_id', userId).maybeSingle();
       if (!data) return; // row 없으면 localStorage 유지 — upsertProfile 실행 시 처리
       const newTotal = (data.total_minutes || 0) + secs;
+      const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
+      const prevToday = data.today_date === todayStr ? (data.today_seconds || 0) : 0;
       const { error } = await db.from('profiles').update({
         total_minutes: newTotal,
+        today_seconds: prevToday + secs,
+        today_date: todayStr,
         last_seen_at: new Date().toISOString(),
       }).eq('user_id', userId);
       if (!error) localStorage.removeItem(`cottage_time_sec_${userId}`);
@@ -613,7 +617,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     startSession(userId);
     try {
       const accumulated = _popAccumulatedSecs(userId);
-      const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
+      const { data } = await db.from('profiles').select('visit_count, total_minutes, today_seconds, today_date, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
       // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명과 같으면 기존 보호
       // realName이 null/empty일 때 DB의 real_name으로 fallback
@@ -625,6 +629,8 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       const newVisitCount = explicitVisitCount !== undefined
         ? Math.max(explicitVisitCount, data?.visit_count || 0)
         : (data?.visit_count || 0) + 1;
+      const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
+      const prevToday = data?.today_date === todayStr ? (data?.today_seconds || 0) : 0;
       const { error: upsertError } = await db.from('profiles').upsert({
         user_id: userId,
         nickname: nickToSave,
@@ -632,6 +638,8 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         last_seen_at: new Date().toISOString(),
         visit_count: newVisitCount,
         total_minutes: (data?.total_minutes || 0) + accumulated,
+        today_seconds: prevToday + accumulated,
+        today_date: todayStr,
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
       }, { onConflict: 'user_id' });
       if (!upsertError) localStorage.removeItem(`cottage_time_sec_${userId}`);

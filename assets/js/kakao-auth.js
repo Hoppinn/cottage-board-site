@@ -429,6 +429,17 @@ async function openProfilePanel() {
         return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
       })()}
       ${(() => {
+        const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
+        const sessionSecs = window._cottageSessionStart
+          ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
+          : 0;
+        const todaySecs = localSecs + sessionSecs;
+        const fmt = s => s >= 3600
+          ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
+          : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
+        return todaySecs > 0 ? `<li><span>오늘 이용시간</span><strong>${fmt(todaySecs)}</strong></li>` : '';
+      })()}
+      ${(() => {
         const savedSecs = stats.profile?.total_minutes || 0; // DB: 초 단위
         const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
         const sessionSecs = window._cottageSessionStart
@@ -438,7 +449,7 @@ async function openProfilePanel() {
         const fmt = s => s >= 3600
           ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
           : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
-        return `<li><span>총 이용 시간</span><strong>${fmt(total)}</strong></li>`;
+        return `<li><span>총 이용시간</span><strong>${fmt(total)}</strong></li>`;
       })()}
       ${stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : ''}
       ${stats.moimCount ? `<li><span>모임 참여</span><strong>${stats.moimCount}회</strong></li>` : ''}

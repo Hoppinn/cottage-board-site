@@ -601,3 +601,9 @@ create policy "anon_update_profiles"
   to anon
   using (true)
   with check (true);
+
+-- ── 마이그레이션: profiles 오늘 이용시간 추적 ────────────────
+alter table public.profiles
+  add column if not exists today_seconds integer default 0;
+alter table public.profiles
+  add column if not exists today_date date;

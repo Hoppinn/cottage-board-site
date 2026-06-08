@@ -256,6 +256,13 @@
           : secs >= 60
           ? `${Math.floor(secs / 60)}분`
           : `${secs}초`;
+        const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+        const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
+        const todayStr = todayS >= 3600
+          ? `${Math.floor(todayS / 3600)}시간 ${Math.floor((todayS % 3600) / 60)}분`
+          : todayS >= 60
+          ? `${Math.floor(todayS / 60)}분`
+          : `${todayS}초`;
         const displayNick = introNickMap[String(p.user_id)] || p.nickname || p.real_name || '(닉네임없음)';
         const realName = p.real_name || '';
         // 항상 닉네임(실명) 형식 — 같아도 괄호에 실명 표시
@@ -270,6 +277,7 @@
             <span>가입 ${fmtDate(p.first_seen_at)}</span>
             <span>최근 ${fmtDate(p.last_seen_at)}</span>
             <span>방문 ${p.visit_count || 1}회</span>
+            ${todayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${todayStr}</span>` : ''}
             <span>⏱ ${timeStr}</span>
             ${isMe ? '' : `<button class="admin-ban-btn ${isBanned ? 'unban' : 'ban'}" data-uid="${escH(p.user_id)}">${isBanned ? '✅ 밴 해제' : '🚫 밴'}</button>`}
           </div>
