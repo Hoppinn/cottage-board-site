@@ -5107,15 +5107,23 @@ body.sheet-open{
   justify-content:space-between;
   gap:8px;
   padding:12px 16px;
-  background:#f0f7f4;
-  border-bottom:1px solid #c0ddd6;
+  background:var(--bg,#f5f0e8);
+  border-bottom:1px solid var(--line);
+  border-left:4px solid transparent;
   cursor:pointer;
   user-select:none;
+}
+.history-session.is-open>.history-session-header{
+  background:#f5f0e8;
+  border-left-color:#9e3a2a;
 }
 .history-session-date{
   font-size:14px;
   font-weight:800;
-  color:#7a4828;
+  color:#2c3e50;
+}
+.history-session.is-open>.history-session-header .history-session-date{
+  color:#9e3a2a;
 }
 .history-copy-btn{
   font-size:11px;
