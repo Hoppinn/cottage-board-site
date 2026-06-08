@@ -575,9 +575,7 @@ function renderOwnedGameList(){
   <span>
     ⏱ ${detail.playingTimeText || "-"}
   </span>
-  <span>
-    📦 ${getGameShelfLabel(game)}
-  </span>
+  ${getShelfSpanHtml(game)}
 </div>
 
             </div>

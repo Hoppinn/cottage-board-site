@@ -23,11 +23,13 @@ const { autoResolveBggMatches } = require('../1-matcher/b_run-local-match');
 const args = process.argv.slice(2);
 const gameName = args.find(a => !a.startsWith('--'));
 const skipTranslate = args.includes('--skip-translate');
+const doRematch = args.includes('--rematch');
 
 if (!gameName) {
   console.error('❌ 게임명을 입력해주세요.');
   console.error('   예: npm run add-game "에이다의꿈"');
   console.error('   옵션: --skip-translate  번역 단계 건너뜀');
+  console.error('         --rematch         기존 게임도 BGG 재매칭 실행');
   process.exit(1);
 }
 
@@ -267,6 +269,22 @@ async function main() {
   console.log(`\n🎲 새 게임 추가: "${gameName}"\n${'─'.repeat(40)}`);
   if (skipTranslate) console.log('ℹ️  --skip-translate 옵션: 번역 단계 건너뜀\n');
 
+  // 기존 게임 여부 + BGG ID 확인
+  const gameId = getGameId(gameName);
+  const currentMaster = readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} });
+  const existingGame = currentMaster.games?.[gameId];
+  const existingBggId = existingGame?.bggId;
+  const skipBggSteps = Boolean(existingBggId && !doRematch);
+
+  if (existingBggId) {
+    if (skipBggSteps) {
+      console.log(`ℹ️  기존 게임 감지 — BGG ID: ${existingBggId}`);
+      console.log('   BGG 매칭/fetch 건너뜀. 재매칭하려면 --rematch 옵션 사용\n');
+    } else {
+      console.log(`ℹ️  --rematch: BGG 재매칭 실행 (기존 ID: ${existingBggId})\n`);
+    }
+  }
+
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
   try {
@@ -292,21 +310,25 @@ async function main() {
       }
     }
 
-    // 3. BGG 로컬 매칭
-    console.log('\n▶ 2. BGG 로컬 매칭...');
-    await autoResolveBggMatches();
-    console.log('✅ BGG 매칭 완료');
-
-    // 4. 매칭 결과 인터랙티브 처리
-    const { needsRebuild } = await resolveBggInteractive(rl, gameName);
-    if (needsRebuild) {
-      console.log('\n▶ BGG 매칭 재계산...');
+    if (!skipBggSteps) {
+      // 3. BGG 로컬 매칭
+      console.log('\n▶ 2. BGG 로컬 매칭...');
       await autoResolveBggMatches();
-      console.log('✅ 재매칭 완료');
-    }
+      console.log('✅ BGG 매칭 완료');
 
-    // 5. BGG 데이터 fetch
-    runCmd('3. BGG 데이터 fetch', 'node game-system/tools/2-fetcher/a_fetch-bgg-game-data-by-id.js');
+      // 4. 매칭 결과 인터랙티브 처리
+      const { needsRebuild } = await resolveBggInteractive(rl, gameName);
+      if (needsRebuild) {
+        console.log('\n▶ BGG 매칭 재계산...');
+        await autoResolveBggMatches();
+        console.log('✅ 재매칭 완료');
+      }
+
+      // 5. BGG 데이터 fetch
+      runCmd('3. BGG 데이터 fetch', 'node game-system/tools/2-fetcher/a_fetch-bgg-game-data-by-id.js');
+    } else {
+      console.log('\nℹ️  BGG 매칭/fetch 단계 건너뜀 (기존 BGG ID 유지)');
+    }
 
     // 6. Master 빌드
     runCmd('4. 마스터 빌드', 'node game-system/tools/3-build-master/build-master.js');
@@ -315,7 +337,6 @@ async function main() {
     runCmd('4-1. 라벨 번역 (mechanics/categories)', 'node game-system/tools/4-label-translator/label-translator.js');
 
     // 7. 번역
-    const gameId = getGameId(gameName);
     if (!skipTranslate) {
       await runTranslation(gameId);
     }

@@ -544,6 +544,25 @@ function getGameShelfLabel(game){
   );
 }
 
+// 카드용 위치 span (배송중/구매예정이면 배지, 아니면 📦 위치)
+function getShelfSpanHtml(game){
+  const loc = game?.cottage?.shelfGroupId || "";
+  if (loc === "배송중")   return '<span class="avail-shipping">🚚 배송중</span>';
+  if (loc === "구매예정") return '<span class="avail-pending">🛒 구매예정</span>';
+  const label = getGameShelfLabel(game);
+  return label && label !== "-" ? `<span>📦 ${label}</span>` : "";
+}
+
+// 모달용 이용 가능 상태 배지 (배송중/구매예정일 때만 반환)
+function getAvailNoticHtml(game){
+  const loc = game?.cottage?.shelfGroupId || "";
+  if (loc === "배송중")
+    return '<p class="sheet-avail-notice sheet-avail-notice--shipping">🚚 배송중 · 아직 매장에 입고되지 않았습니다</p>';
+  if (loc === "구매예정")
+    return '<p class="sheet-avail-notice sheet-avail-notice--pending">🛒 구매예정 · 아직 구매되지 않았습니다</p>';
+  return "";
+}
+
 function getAllGamesArray(){
   if(GameView?.getAllGamesArray){
     return GameView
@@ -1100,6 +1119,7 @@ function openGameSheet(gameKey){
         ${detail.rating ? `<div class="sheet-img-bgg">⭐ ${formatRating(detail.rating)}</div>` : ""}
       </div>
       <div class="sheet-title-block">
+        ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
           <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">

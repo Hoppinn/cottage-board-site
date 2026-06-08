@@ -2172,6 +2172,21 @@ body.sheet-open{
 .owned-game-meta .difficulty-light{background:#f5efe2;}
 .owned-game-meta .difficulty-heavy{background:#edf3f0;}
 .owned-game-meta .difficulty-hardcore{background:#f5e7df;}
+.owned-game-meta .avail-shipping{background:#dde8f7;color:#2a5a9c;border-color:#a8c4e8;}
+.owned-game-meta .avail-pending{background:#f5e0c8;color:#7a4828;border-color:#c8944a;border-style:dashed;}
+
+.sheet-avail-notice{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 12px;
+  border-radius:8px;
+  font-size:12.5px;
+  font-weight:700;
+  margin:0 0 10px;
+}
+.sheet-avail-notice--shipping{background:#dde8f7;color:#2a5a9c;border:1px solid #a8c4e8;}
+.sheet-avail-notice--pending{background:#f5e0c8;color:#7a4828;border:1px dashed #c8944a;}
 
 .owned-pagination{
   max-width:720px;
