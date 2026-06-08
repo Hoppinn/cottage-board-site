@@ -563,22 +563,21 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     window._cottageSessionStart = _sessionStart;
   }
 
-  function _popAccumulatedMinutes(userId) {
+  function _popAccumulatedSecs(userId) {
     const key = `cottage_time_sec_${userId}`;
-    const secs = parseInt(localStorage.getItem(key) || '0');
-    return Math.floor(secs / 60); // DB는 total_minutes(분) 컬럼이므로 변환
+    return parseInt(localStorage.getItem(key) || '0'); // 초 단위 그대로 반환
   }
 
   // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/beforeunload에서 호출
   async function _syncTimeToDBNow(userId) {
     if (!userId) return;
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
-    const mins = _popAccumulatedMinutes(userId);
-    if (mins <= 0) return;
+    const secs = _popAccumulatedSecs(userId);
+    if (secs <= 0) return;
     try {
       const { data } = await db.from('profiles').select('total_minutes').eq('user_id', userId).maybeSingle();
       if (!data) return; // row 없으면 localStorage 유지 — upsertProfile 실행 시 처리
-      const newTotal = (data.total_minutes || 0) + mins;
+      const newTotal = (data.total_minutes || 0) + secs;
       const { error } = await db.from('profiles').update({
         total_minutes: newTotal,
         last_seen_at: new Date().toISOString(),
@@ -613,7 +612,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   async function upsertProfile(userId, nickname, realName, explicitVisitCount) {
     startSession(userId);
     try {
-      const accumulated = _popAccumulatedMinutes(userId);
+      const accumulated = _popAccumulatedSecs(userId);
       const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
       // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명과 같으면 기존 보호

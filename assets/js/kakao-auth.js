@@ -429,13 +429,15 @@ async function openProfilePanel() {
         return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
       })()}
       ${(() => {
-        const saved = stats.profile?.total_minutes || 0;
+        const savedSecs = stats.profile?.total_minutes || 0; // DB: 초 단위
         const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
-        const sessionMins = window._cottageSessionStart
-          ? Math.floor((Date.now() - window._cottageSessionStart) / 60000)
+        const sessionSecs = window._cottageSessionStart
+          ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
           : 0;
-        const total = saved + Math.floor(localSecs / 60) + sessionMins;
-        const fmt = m => m >= 60 ? Math.floor(m/60)+'시간 '+(m%60)+'분' : m+'분';
+        const total = savedSecs + localSecs + sessionSecs;
+        const fmt = s => s >= 3600
+          ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
+          : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
         return `<li><span>총 이용 시간</span><strong>${fmt(total)}</strong></li>`;
       })()}
       ${stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : ''}
