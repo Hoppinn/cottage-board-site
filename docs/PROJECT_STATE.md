@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-06 (12차)
+최종 갱신: 2026-06-08 (13차)
 
 ---
 
@@ -275,7 +275,8 @@
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
 - [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 — 별도 세션
 - [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
-- [ ] 추천 "하나이상골라주세요" 박스 중앙정렬 — 선택 사항
+- [x] 추천 필터박스 PC 중앙정렬 수정 (`.recommend-filter` margin:auto 명시, padding-left/right 제거) ✅
+- [ ] 추천>전체더보기 하나이상골라주세요 박스 중앙정렬 — 별도 점검
 
 ### 주의사항
 - 720px 블록 기준 (min-width:720px), 900px 아님
@@ -291,6 +292,14 @@
 | 2026-06-05 | style: PC 스케일업 — hero 100svh, 바텀시트·기록보기·브레드크럼 폰트 1.2~1.3x 확대 (900px 블록) |
 | 2026-06-05 | seo: og:image 생성, sitemap 3페이지 추가, og:url 정규화 |
 | 2026-06-05 | fix: "위와 동일" 직전 행 복사로 수정 (항상 첫 행이 아닌 바로 앞 행 기준) |
+| 2026-06-07 | fix: 모바일 참여자 입력 엔터 태그 미등록 (enterkeyhint=done + isComposing + keyup 패턴, game-reviews.js + club-history.html) |
+| 2026-06-07 | fix: 사용시간 카운팅 개선 — startSession flush + pagehide 이벤트 + localStorage 누적분 표시 |
+| 2026-06-07 | fix: upsertProfile photo_url 보존 (기존 DB 값 유지) |
+| 2026-06-07 | feat: PC 프로필 드롭다운 hover 전환 (mouseenter/mouseleave, matchMedia 감지) |
+| 2026-06-08 | fix: nickToSave effectiveRealName fallback — realName null 시 data?.real_name 사용, 닉네임 초기화 방지 |
+| 2026-06-08 | feat: club.html about 섹션 사진 3장 추가 (game1/2/3.jpg, about-photo-strip 패턴) |
+| 2026-06-08 | feat: club-rules.html 하단 사진 3장 추가 (game1/2/3.jpg) |
+| 2026-06-08 | fix: 추천 필터박스 PC 중앙정렬 — .recommend-filter margin:auto 명시, 불필요 padding-left/right 제거 |
 | 2026-06-05 | fix: 방문횟수 — 로컬 카운터 소스 전환으로 로그인 유지 상태에서도 날짜별 정확 카운팅 |
 | 2026-06-05 | fix: 참여자 자동완성 — 칩 추가 후 input 이벤트 발생시켜 콤보 목록 즉시 갱신 |
 | 2026-06-05 | feat: 기록 입력폼 "위와 동일" 버튼 (2번째 행 이상에서 첫 행 인원수·참여자 복사) |

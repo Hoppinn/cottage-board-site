@@ -616,8 +616,10 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       const accumulated = _popAccumulatedMinutes(userId);
       const { data } = await db.from('profiles').select('visit_count, total_minutes, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
-      // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명(realName)과 같으면 기존 보호
-      const nickToSave = (data?.nickname && realName && data.nickname !== realName && nickname === realName)
+      // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명과 같으면 기존 보호
+      // realName이 null/empty일 때 DB의 real_name으로 fallback
+      const effectiveRealName = realName || data?.real_name || null;
+      const nickToSave = (data?.nickname && effectiveRealName && data.nickname !== effectiveRealName && nickname === effectiveRealName)
         ? data.nickname
         : nickname;
       // explicitVisitCount가 있으면 로컬 카운터 우선 — DB SELECT가 null일 때도 올바른 값 보존
