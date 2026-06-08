@@ -190,9 +190,9 @@
 ### 리팩토링 세부 계획
 - [x] game-reviews.html JS → assets/js/game-reviews.js 로 분리 ✅
 - [x] script.js → owned-games-page.js + index-page.js 분리 (3,961줄 → 2,123줄) ✅
-- [ ] addRow / renderGroupView / buildSessionBody 등 함수 모듈화
+- [ ] addRow / renderGroupView / buildSessionBody 등 함수 모듈화 (현재 미착수, game-reviews.js 960줄로 감소해 우선순위 낮음)
 - [x] CSS 인라인 → style.css 통합 (pr-* 클래스) ✅
-- [ ] initTagInput / attachAc → 별도 utils.js 분리 검토
+- [x] initTagInput / attachAc / buildPhotoItemAdder / toInitials / hangulMatch → play-records-utils.js 공유 ✅ (game-reviews.js 1200→960줄, club-history.html 중복 100줄 제거)
 
 ### PC 호환성 세부 계획
 - [x] 뷰포트 768px 이상에서 2컬럼 레이아웃 (게임 목록, 기록 허브) ✅
@@ -274,8 +274,8 @@
 ### TODO (작업 안 함)
 - [ ] price-rules.html 사진 중심 재구성 (가격·규칙을 텍스트 대신 사진 위주로 안내)
 - [ ] club-rules.html 사진 중심 재구성 (동호회 회칙을 텍스트 대신 사진 위주로 안내)
-- [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
-- [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 — 별도 세션
+- [x] 추천>전체더보기 카드 레이아웃 동기화 — game-card 클래스 통일, 그리드 오버라이드 ✅
+- [x] 동호회>모임기록 레이아웃 동기화 — 인라인 CSS 제거, history-* 누락 클래스 style.css 추가, collapse 복원 ✅
 - [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
 - [ ] **이용시간 기록 실제 확인** — page_sessions.duration_sec 및 profiles.total_minutes가 로그인 사용자 기준으로 정상 누적되는지 실사용 테스트 필요 (현재 구현은 있으나 실제 데이터가 의심됨)
 - [x] 추천 필터박스 PC 중앙정렬 수정 (`.recommend-filter` margin:auto 명시, padding-left/right 제거) ✅
@@ -322,6 +322,8 @@
 | 2026-06-05 | fix: 내 활동 이용시간 0분 — startSession을 하루 첫 방문 브랜치에서도 호출 |
 | 2026-06-05 | fix: 프로필 사진/닉네임 변경 후 햄버거+토글 유지 — stopPropagation + 동기 복원 |
 | 2026-06-05 | feat: getProfileSnapshot 추가, 닉네임도 다기기 동기화 (initKakaoAuth) |
+| 2026-06-08 | feat: 추천 오버레이 카드 game-card 동기화 + club-history 인라인 CSS 제거 및 history-* 누락 클래스 style.css 추가 |
+| 2026-06-08 | refactor: attachAc/initTagInput/buildPhotoItemAdder → play-records-utils.js 공유 (game-reviews.js 1200→960줄) |
 | 2026-06-05 | feat: play-records-utils.js 생성 — parsePhotoUrls/buildPhotoHtml/openLightbox 전역 공유 모듈 |
 | 2026-06-05 | fix: club-history 라이트박스 수정 (openLightbox 미정의 → window.openLightbox 전역 사용) |
 | 2026-06-05 | refactor: game-reviews PC 탭 전환 (2컬럼 사이드바이사이드 → 단일 패널 전체너비, max-width:760px) |
