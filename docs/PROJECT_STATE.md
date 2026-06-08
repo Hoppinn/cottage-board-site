@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-09 (18차)
+최종 갱신: 2026-06-09 (19차)
 
 ---
 
@@ -331,6 +331,9 @@
 | 2026-06-08 | feat: og-image-3.jpg 생성 + 전체 9개 HTML og:image URL 교체 (og-image-2→3, Kakao 프로덕션 캐시 강제 갱신) |
 | 2026-06-08 | feat: 추천 오버레이 카드 game-card 동기화 + club-history 인라인 CSS 제거 및 history-* 누락 클래스 style.css 추가 |
 | 2026-06-08 | refactor: attachAc/initTagInput/buildPhotoItemAdder → play-records-utils.js 공유 (game-reviews.js 1200→960줄) |
+| 2026-06-09 | feat: 발매후 도착예정 상태 추가 — 배지(카드/모달/검색자동완성), CSS 보라색 점선, shelfGroupId 기반 (style.css + script.js) |
+| 2026-06-09 | feat: add-game 단일 진입점 — BGG 맞음/틀림 확인 UX, 위치 변경, 번역 재실행 통합 (add-game.js 대규모 개편) |
+| 2026-06-09 | data: 게임 데이터 정리 — 발매후 도착예정 6개 추가/변경, 파수꾼 rename 복원, 알렉산드리아 도서관 BGG 교정(432834) + 번역 완료 |
 | 2026-06-09 | feat: 배송중/구매예정 배지 — 게임 카드 및 상세 모달에 shelfGroupId 기반 배지 표시 (style.css + script.js + owned-games-page.js) |
 | 2026-06-09 | feat: add-game BGG ID 보호 — 기존 게임에 bggId 있으면 --rematch 없이는 BGG 매칭/fetch 건너뜀 |
 | 2026-06-08 | feat: add-game CLI 인터랙티브 자동화 — 위치·체감난이도 CLI 입력, BGG 매칭 점수별 확인(80+:확인옵션/55~79:필수/실패:ID입력), forced-bgg-overrides.json 자동 저장, description-translator.js --game-id 옵션 추가, ANTHROPIC_API_KEY 있으면 번역 자동 실행(없으면 경고), --skip-translate 옵션 |

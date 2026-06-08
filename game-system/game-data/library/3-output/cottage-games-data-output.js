@@ -52971,7 +52971,7 @@ const gameData = {
         "Vital Lacerda"
       ],
       "description": "In the third century B.C., Ptolemy I envisioned the creation of the Great Library of Alexandria, a monumental repository of human knowledge housed within a space known as the Mouseion, which was dedicated to the Muses, the nine goddesses of the arts. Ptolemy's dream was to amass the world's knowledge, and the library housed countless manuscripts, reflecting his Herculean effort to collect and preserve the intellectual heritage of the ancient world and gain renown to his name. The Great Library, situated near the bustling port of Alexandria, welcomed ships carrying relics, scholars, and the wisdom of distant lands. The Chief of Librarians oversaw the organization of the vast collection. The library's shelves whispered with the rustling of ancient parchment, embodying the spirit of intellectual curiosity and cross-cultural exchange.\n\nAs players step into the sandals of Librarians in the Great Library, you take on the crucial responsibilities of leading the institution within the Mouseion, navigating the challenges and opportunities presented by this legendary center of knowledge. Amidst the relics, diverse minds, and bustling port activity, the Librarians became the primary custodians of knowledge, shaping the legacy of the Great Library and contributing to the rich tapestry of ancient history.\n\nDuring this game, you research Great Works, deliver Crafts to the kingdom, and train Scribes to translate Manuscripts. Then, you send the Manuscripts, Great Works, and Crafts to the Great Library to gain Renown, Improvements, and other benefits, and attract the great Scholars of the time to the Library to work with you. You will need to manage resources to achieve your aims, including the most important resource of all: Time.\n\nAs Scholars perform their work, Generations will pass triggering Events and the Great Library will fill. When the second Event is triggered or when 2 or fewer empty spaces remain in the Library, the end of the game is triggered and the player with the most Renown is named the Greatest Librarian and wins the game.\n\n&mdash;description from the publisher",
-      "descriptionKo": ""
+      "descriptionKo": "기원전 3세기, 프톨레마이오스 1세는 예술의 여신 뮤즈들에게 헌정된 무세이온이라는 공간에 위대한 알렉산드리아 도서관을 건설하는 꿈을 꾸었습니다. 인류의 모든 지식을 모으고자 한 그의 비전은 고대 세계의 지적 유산을 수집하고 보존하는 거대한 노력으로 실현되었습니다. 항구의 활발한 활동 속에서 도서관은 학자들과 먼 땅의 지혜로 가득 찼습니다.\n\n플레이어들은 도서관 사서의 역할을 맡아 이 전설적인 지식의 중심지를 이끌어갑니다. 게임 중 플레이어들은 위대한 저작물을 연구하고, 왕국에 공예품을 전달하며, 필사자를 훈련하여 원고를 번역합니다. 그 후 이들을 위대한 도서관에 보내 명성, 개선, 그리고 당대의 위대한 학자들을 도서관으로 초청합니다. 시간을 포함한 자원을 관리해야 합니다.\n\n학자들의 활동으로 세대가 지나가면서 사건이 발생하고 도서관이 채워집니다. 두 번째 사건이 발동되거나 도서관의 빈 공간이 2개 이하로 남으면 게임이 끝나며, 가장 많은 명성을 얻은 플레이어가 최고의"
     },
     "cottage": {
       "status": "active",
@@ -53013,7 +53013,7 @@ const gameData = {
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "",
+      "summaryKo": "고대 알렉산드리아 도서관을 이끌며 저작물 연구와 학자 초청으로 명성을 겨루는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -77153,14 +77153,14 @@ const gameData = {
     "title": {
       "display": "파수꾼",
       "owned": "파수꾼",
-      "bgg": ""
+      "bgg": "Set a Watch"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unmatched",
-      "year": "",
-      "rating": 7.2,
-      "weight": 2.43,
+      "id": "228855",
+      "matchStatus": "forced",
+      "year": "2019",
+      "rating": 7.24036,
+      "weight": 2.4275,
       "minPlayers": 1,
       "maxPlayers": 4,
       "bestPlayers": [
@@ -77172,18 +77172,32 @@ const gameData = {
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        4,
+        4
+      ],
+      "playingTime": 80,
+      "minPlayTime": 45,
+      "maxPlayTime": 80,
+      "categories": [
+        "Adventure",
+        "Card Game",
+        "Dice",
+        "Fantasy"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "던전크롤링"
+        "Cooperative Game",
+        "Dice Rolling",
+        "Solo / Solitaire Game",
+        "Variable Player Powers"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Mike Gnade",
+        "Todd Walsh"
+      ],
+      "description": "The Kingdom is in grave danger. Powerful enemies are conspiring to resurrect the vile and powerful Unhallowed that your party has just slain. Now you, the mighty adventurers of the land, must visit these summoning locations and defeat the hordes of creatures behind this evil plot. It falls to four mighty adventurers, each of whom has a unique set of skills, to band together once more to vanquish this evil before the Unhallowed consume the world in darkness.\n\nIn Set a Watch, players must band together and clear out nine locations to stop the acolytes from breaking the seals holding back the evil Unhallowed. Every round you will visit a new location and pick an adventurer to rest and take camp actions. The rest of the party will take watch and battle a line of monsters trying to make their way into camp using your dice and unique character abilities.  Manipulating the creature line is essential to solving each round&rsquo;s combat puzzle.  It is a battle to stay alive and keep the campfire burning! Use your wits and skill to fight for the light or all will perish in the darkness.\n\nIf the Adventurers on Watch all become exhausted, the game is over.  If you can survive all 9 rounds of the game and the final Horde, you win!",
       "descriptionKo": "왕국이 큰 위험에 처했습니다. 강력한 적들이 당신의 모험대가 방금 무찌른 저주받은 악의 존재를 부활시키려 음모하고 있습니다. 이제 당신들 대륙의 용맹한 모험가들은 이 소환 장소들을 방문하여 이 악의 음모 뒤에 있는 생물들의 무리를 격퇴해야 합니다. 각각 고유한 능력을 가진 네 명의 용맹한 모험가들이 다시 한 번 단합하여 저주받은 악의 존재가 세상을 어둠으로 집어삼키기 전에 이 악을 무찌르는 것이 당신들의 몫입니다.\n\n<Set a Watch>에서 플레이어들은 함께 협력하여 9개 장소를 정리하고 신봉자들이 악의 존재를 가두는 봉인을 깨뜨리는 것을 막아야 합니다. 매 라운드마다 새로운 장소를 방문하고 휴식을 취하고 진지 행동을 할 모험가를 선택합니다. 나머지 모험가들은 경계를 서며 주사위와 고유한 캐릭터 능력을 사용해 진지로 밀려오는 괴물들의 라인과 전투합니다. 괴물 라인을 조작하는 것이 각 라운드의 전투 퍼즐을 푸는 핵심입니다. 생존하고 모닥불을 지키는 것이 관건입니다! 지혜와 기술로 빛을 위해 싸우거나 모두가 어둠 속에서 멸망할 것입니다.\n\n경계를 서는 모험가들이 모두 탈진하면 게임은 끝납니다. 9라운드와 최종 괴물 무리까지 생존할 수 있다면 승리합니다!"
     },
     "cottage": {
@@ -77193,23 +77207,48 @@ const gameData = {
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "light_family",
       "difficultyWeight": 2.43,
-      "moodTags": [],
-      "playTags": [],
+      "moodTags": [
+        "immersive",
+        "funny",
+        "cozy"
+      ],
+      "playTags": [
+        "strategy",
+        "card_play"
+      ],
       "situationTags": [
         "beginner",
-        "group"
+        "group",
+        "experienced",
+        "quick_play"
       ],
       "interactionTags": [
-        "low_conflict"
+        "cooperative",
+        "low_conflict",
+        "easy_coop"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "immersive",
+        "funny",
+        "cozy",
+        "strategy",
+        "card_play",
         "beginner",
         "group",
-        "low_conflict"
+        "experienced",
+        "quick_play",
+        "cooperative",
+        "low_conflict",
+        "easy_coop"
       ],
-      "displayTags": [],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "즐기고",
+        "편안하게"
+      ],
       "summaryKo": "네 명의 모험가가 협력하여 9개 장소의 괴물을 격퇴하고 악의 존재 부활을 막는 게임.",
       "comment": {
         "text": "",
@@ -77227,9 +77266,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/E_-9WT4_6-kABS796Q-piA__original/img/b1r3xRKUZBJm7-NUjjdwcdKk2IE=/0x0/filters:format(png)/pic4162054.png",
+      "thumbnail": "https://cf.geekdo-images.com/E_-9WT4_6-kABS796Q-piA__small/img/l-LKCyGEkwhPpyW2zQCyA9Kh1SY=/fit-in/200x150/filters:strip_icc()/pic4162054.png",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

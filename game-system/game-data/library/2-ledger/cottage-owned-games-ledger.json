@@ -11880,14 +11880,14 @@
   {
     "id": "파수꾼",
     "ownedName": "파수꾼",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "unmatched",
-    "status": "pending-cache",
+    "titleEn": "Set a Watch",
+    "bggId": "228855",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "발매후 도착예정",
-    "difficulty": null,
+    "difficulty": 2.4275,
     "difficultyWeight": 2.43,
-    "rating": null,
+    "rating": 7.24036,
     "bestPlayers": [
       1
     ],

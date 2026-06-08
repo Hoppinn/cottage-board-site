@@ -4467,5 +4467,10 @@
     "status": "forced",
     "bggId": "432834",
     "bggName": "알렉산드리아 도서관"
+  },
+  "파수꾼": {
+    "status": "forced",
+    "bggId": "228855",
+    "bggName": "Set a Watch"
   }
 }
