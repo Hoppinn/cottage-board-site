@@ -241,22 +241,23 @@ function openRecommendOverlay(){
   }
 
   list.innerHTML = allFiltered.map(game => {
-    const card   = GameView.getGameCardData(game);
-    const img    = card.image || DEFAULT_GAME_IMAGE;
-    const title  = card.title || game.id;
-    const weight = card.difficultyWeight
-      ? `🧩 ${card.difficultyWeight}`
-      : "";
-    return `<button class="rec-overlay-card" type="button" data-game-key="${game.id}">
-      <img class="rec-overlay-thumb" src="${img}" alt="" loading="lazy">
-      <span class="rec-overlay-title">${title}</span>
-      <span class="rec-overlay-meta">${weight}</span>
+    const card = GameView.getGameCardData(game);
+    const difficulty = getDifficultyData(card.difficultyWeight);
+    return `<button class="game-card" type="button" data-game="${game.id}">
+      <img src="${card.image || DEFAULT_GAME_IMAGE}" alt="${card.title}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
+      <strong>${card.title}</strong>
+      <div class="game-meta">
+        <span>👥 ${formatPlayers(card.bestPlayers)}</span>
+        <span class="card-difficulty ${difficulty.className}">${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}</span>
+        <span>⏱ ${card.playingTimeText || "-"}</span>
+      </div>
+      ${card.tags?.length ? `<p class="game-card-description">${card.tags.slice(0,3).map(t=>`#${t}`).join(' ')}</p>` : ''}
     </button>`;
   }).join("");
 
-  list.querySelectorAll("[data-game-key]").forEach(btn => {
+  list.querySelectorAll(".game-card").forEach(btn => {
     btn.addEventListener("click", () => {
-      openGameSheet(btn.dataset.gameKey);
+      openGameSheet(btn.dataset.game);
     });
   });
 
