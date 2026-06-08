@@ -278,7 +278,7 @@
 - [x] 추천>전체더보기 카드 레이아웃 동기화 — game-card 클래스 통일, 그리드 오버라이드 ✅
 - [x] 동호회>모임기록 레이아웃 동기화 — 인라인 CSS 제거, history-* 누락 클래스 style.css 추가, collapse 복원 ✅
 - [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
-- [ ] **이용시간 기록 실제 확인** — page_sessions.duration_sec 및 profiles.total_minutes가 로그인 사용자 기준으로 정상 누적되는지 실사용 테스트 필요 (현재 구현은 있으나 실제 데이터가 의심됨)
+- [x] **이용시간 초 단위 전환** — total_minutes 컬럼을 초 단위로 저장, 1초 이상이면 반영. Supabase 마이그레이션 완료 (×60). 표시: 초/분/시간 단위 자동 변환 ✅
 - [x] 추천 필터박스 PC 중앙정렬 수정 (`.recommend-filter` margin:auto 명시, padding-left/right 제거) ✅
 - [x] 추천 빈메시지 박스 PC 중앙정렬 — margin:0 auto !important로 글로벌 -18px 덮어쓰기 ✅
 
@@ -302,6 +302,8 @@
 | 2026-06-07 | feat: PC 프로필 드롭다운 hover 전환 (mouseenter/mouseleave, matchMedia 감지) |
 | 2026-06-08 | fix: style.css 잔여 초록·청록 색상 제거 — history-player-header/history-record-item:hover/pr-rec-sheet-link/pr-game-group-hd/tag-chip 갈색 계열로 교체 |
 | 2026-06-08 | fix: vercel.json source → `/(index.html)?` 패턴으로 확장 (bare domain + /index.html 경로도 no-store 적용) |
+| 2026-06-08 | fix: club-history 날짜 헤더 색상 — 기본 #2c3e50(청회색), is-open 시 #9e3a2a(갈색)+border-left 강조 (game-reviews pr-sub-hd 패턴 동기화) |
+| 2026-06-08 | fix: 이용시간 초 단위 전환 — _popAccumulatedSecs, _syncTimeToDBNow threshold 1초로 낮춤, 표시 시간/분/초 자동 변환. Supabase total_minutes ×60 마이그레이션 완료 |
 | 2026-06-08 | fix: 추천 빈메시지 PC 중앙정렬 — 글로벌 margin:0 -18px !important를 PC 미디어쿼리에서 margin:0 auto !important로 덮어쓰기 |
 | 2026-06-08 | fix: PC 닉네임 드롭다운 — mouseleave 200ms 딜레이 + dropdown 자체 mouseenter/leave 리스너 추가 (header-dropdown gap 이탈 문제) |
 | 2026-06-08 | fix: OG이미지 파일명 og-image-2.jpg로 변경 (카카오톡 CDN 캐시 강제 갱신) + photo-exteriorooo.jpg 1200×630 크롭으로 교체 |
