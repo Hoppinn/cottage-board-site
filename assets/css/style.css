@@ -5735,13 +5735,13 @@ body.sheet-open{
     flex:none;
   }
 
-  /* 추천 빈 박스 중앙정렬 — .game-scroll:has()의 margin:0 -18px 재정의 */
+  /* 추천 빈 박스 중앙정렬 — .game-scroll:has()의 margin:0 -18px !important 재정의 */
   #gameScroll:has(.recommend-empty),
   .game-scroll:has(.recommend-empty){
-    display:block;
-    margin:0 auto;
-    max-width:720px;
-    padding:20px 40px;
+    display:block !important;
+    margin:0 auto !important;
+    max-width:720px !important;
+    padding:20px 40px !important;
     box-sizing:border-box;
     overflow:visible;
   }
