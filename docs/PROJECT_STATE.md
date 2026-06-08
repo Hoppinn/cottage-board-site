@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-08 (14차)
+최종 갱신: 2026-06-08 (15차)
 
 ---
 
@@ -274,6 +274,7 @@
 ### TODO (작업 안 함)
 - [ ] price-rules.html 사진 중심 재구성 (가격·규칙을 텍스트 대신 사진 위주로 안내)
 - [ ] club-rules.html 사진 중심 재구성 (동호회 회칙을 텍스트 대신 사진 위주로 안내)
+- [ ] **Kakao OG 이미지 캐시 만료 확인** — bare URL `https://cottageboard.com/` 대상, vercel.json no-store + og-image-3.jpg 적용됨. 24시간 TTL 대기 후 카카오톡에서 재확인 필요. (2026-06-08 적용, 공유 중단 권장)
 - [x] 추천>전체더보기 카드 레이아웃 동기화 — game-card 클래스 통일, 그리드 오버라이드 ✅
 - [x] 동호회>모임기록 레이아웃 동기화 — 인라인 CSS 제거, history-* 누락 클래스 style.css 추가, collapse 복원 ✅
 - [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
@@ -322,6 +323,8 @@
 | 2026-06-05 | fix: 내 활동 이용시간 0분 — startSession을 하루 첫 방문 브랜치에서도 호출 |
 | 2026-06-05 | fix: 프로필 사진/닉네임 변경 후 햄버거+토글 유지 — stopPropagation + 동기 복원 |
 | 2026-06-05 | feat: getProfileSnapshot 추가, 닉네임도 다기기 동기화 (initKakaoAuth) |
+| 2026-06-08 | feat: vercel.json 생성 — 메인페이지 Cache-Control: no-store (Vercel 엣지 캐시 방지, Kakao OG 캐시 갱신 목적) |
+| 2026-06-08 | feat: og-image-3.jpg 생성 + 전체 9개 HTML og:image URL 교체 (og-image-2→3, Kakao 프로덕션 캐시 강제 갱신) |
 | 2026-06-08 | feat: 추천 오버레이 카드 game-card 동기화 + club-history 인라인 CSS 제거 및 history-* 누락 클래스 style.css 추가 |
 | 2026-06-08 | refactor: attachAc/initTagInput/buildPhotoItemAdder → play-records-utils.js 공유 (game-reviews.js 1200→960줄) |
 | 2026-06-05 | feat: play-records-utils.js 생성 — parsePhotoUrls/buildPhotoHtml/openLightbox 전역 공유 모듈 |
