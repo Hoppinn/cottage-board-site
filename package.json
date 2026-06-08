@@ -10,8 +10,7 @@
     "fetch:bgg": "node game-system/tools/2-fetcher/a_fetch-bgg-game-data-by-id.js",
     "import:xlsx": "node game-system/tools/0-input/from-file/import-from-xlsx.js",
     "add": "node game-system/tools/0-input/from-name/add-owned-game.js",
-    "add-game": "node game-system/tools/0-input/add-game.js",
-    "update-location": "node game-system/tools/0-input/update-location.js"
+    "add-game": "node game-system/tools/0-input/add-game.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",

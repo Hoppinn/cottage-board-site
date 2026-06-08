@@ -1,8 +1,9 @@
 /**
- * 새 게임 추가 + BGG 매칭(인터랙티브) + 번역 + 빌드 자동화
- * 사용법: node game-system/tools/0-input/add-game.js "에이다의꿈"
- *        또는: npm run add-game "에이다의꿈"
- * 옵션:  --skip-translate  번역 단계 건너뜀
+ * 게임 추가 / 위치 변경 / 보정 — 단일 진입점
+ * 사용법: npm run add-game "게임명"
+ * 고급 옵션:
+ *   --skip-translate  번역 단계 건너뜀
+ *   --rematch         기존 게임 BGG 재매칭
  */
 
 const { execSync } = require('child_process');
@@ -27,9 +28,10 @@ const doRematch = args.includes('--rematch');
 
 if (!gameName) {
   console.error('❌ 게임명을 입력해주세요.');
-  console.error('   예: npm run add-game "에이다의꿈"');
-  console.error('   옵션: --skip-translate  번역 단계 건너뜀');
-  console.error('         --rematch         기존 게임도 BGG 재매칭 실행');
+  console.error('   예: npm run add-game -- "에이다의꿈"');
+  console.error('   고급 옵션:');
+  console.error('     --skip-translate  번역 건너뜀');
+  console.error('     --rematch         기존 게임 BGG 재매칭');
   process.exit(1);
 }
 
@@ -266,39 +268,61 @@ function formatPlayers(arr) {
 }
 
 async function main() {
-  console.log(`\n🎲 새 게임 추가: "${gameName}"\n${'─'.repeat(40)}`);
-  if (skipTranslate) console.log('ℹ️  --skip-translate 옵션: 번역 단계 건너뜀\n');
-
   // 기존 게임 여부 + BGG ID 확인
   const gameId = getGameId(gameName);
   const currentMaster = readJson(COTTAGE_OWNED_GAMES_MASTER_PATH, { games: {} });
   const existingGame = currentMaster.games?.[gameId];
   const existingBggId = existingGame?.bggId;
+  const isExisting = Boolean(existingGame);
   const skipBggSteps = Boolean(existingBggId && !doRematch);
 
-  if (existingBggId) {
+  const modeLabel = isExisting ? `기존 게임 보정/위치변경` : `신규 게임 추가`;
+  console.log(`\n🎲 ${modeLabel}: "${gameName}"\n${'─'.repeat(40)}`);
+  if (skipTranslate) console.log('ℹ️  --skip-translate: 번역 단계 건너뜀\n');
+
+  if (isExisting) {
+    const currentLoc = existingGame.location || '(미지정)';
+    console.log(`ℹ️  BGG ID: ${existingBggId || '없음'}`);
     if (skipBggSteps) {
-      console.log(`ℹ️  기존 게임 감지 — BGG ID: ${existingBggId}`);
-      console.log('   BGG 매칭/fetch 건너뜀. 재매칭하려면 --rematch 옵션 사용\n');
+      console.log('   BGG 매칭/fetch 건너뜀. 재매칭하려면 --rematch 옵션 사용');
     } else {
-      console.log(`ℹ️  --rematch: BGG 재매칭 실행 (기존 ID: ${existingBggId})\n`);
+      console.log(`ℹ️  --rematch: BGG 재매칭 실행 (기존 ID: ${existingBggId})`);
     }
+    console.log(`   현재 위치: ${currentLoc}\n`);
   }
 
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
   try {
-    // 1. 위치 선택 (기존 목록에서 번호 선택)
-    const location = await selectLocation(rl);
+    // 1. 위치 선택
+    let location;
+    if (isExisting && skipBggSteps) {
+      // 기존 게임: 변경 여부 먼저 확인
+      const ans = await prompt(rl, '📍 위치를 변경하시겠습니까? [y/N]: ');
+      if (ans.trim().toLowerCase() === 'y') {
+        location = await selectLocation(rl);
+      } else {
+        location = existingGame.location || '';
+        console.log(`   위치 유지: "${location || '(없음)'}"`);
+      }
+    } else {
+      // 신규 게임 (또는 --rematch): 위치 선택 필수
+      location = await selectLocation(rl);
+    }
 
-    // 2. xlsx + master에 추가 (위치만 반영, 난이도·추천인원은 BGG 자동)
-    console.log(`\n   선택된 위치값: "${location || '(없음)'}"`);
-    console.log('\n▶ 1. 게임 목록 추가...');
-    await addOwnedGame(gameName, { location });
-    console.log('✅ 게임 목록 추가 완료');
+    // 2. xlsx + master 업데이트 (위치 변경 시에만)
+    const locationChanged = location !== (existingGame?.location || '');
+    if (!isExisting || locationChanged) {
+      console.log(`\n   위치: "${location || '(없음)'}"`);
+      console.log('\n▶ 1. 게임 목록 추가/업데이트...');
+      await addOwnedGame(gameName, { location });
+      console.log('✅ 게임 목록 추가/업데이트 완료');
+    } else {
+      console.log('\nℹ️  위치 변경 없음, 게임 목록 업데이트 건너뜀');
+    }
 
-    // 위치 저장 직후 xlsx 확인
-    {
+    // 위치 저장 직후 xlsx 확인 (변경한 경우만)
+    if (!isExisting || locationChanged) {
       const { rows: xlsxRows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
       const xlsxGame = xlsxRows.find(r => r.ownedName === gameName);
       const xlsxLoc = xlsxGame?.shelfGroupId || '(없음)';
@@ -346,7 +370,8 @@ async function main() {
 
     // 완료 요약
     console.log(`\n${'─'.repeat(40)}`);
-    console.log(`🎉 완료! "${gameName}" 추가됨\n`);
+    const doneLabel = isExisting ? '업데이트' : '추가';
+    console.log(`🎉 완료! "${gameName}" ${doneLabel}됨\n`);
 
     // xlsx 최종 확인
     const { rows: finalXlsxRows } = await readXlsxNormalized(COTTAGE_OWNED_GAMES_XLSX_PATH);
