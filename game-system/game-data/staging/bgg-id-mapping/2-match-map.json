@@ -144,10 +144,7 @@
   "마헤": {
     "status": "forced",
     "bggId": "3383",
-    "ownedName": "마헤",
-    "bggName": "Marrakech",
-    "score": 113,
-    "scoreGap": 74
+    "ownedName": "마헤"
   },
   "모자가아니잖아": {
     "status": "auto-confirmed",
@@ -4340,18 +4337,135 @@
     "scoreGap": 12
   },
   "원드러스크리처": {
-    "status": "forced",
-    "bggId": "400366",
-    "ownedName": "원드러스크리처"
+    "status": "unresolved",
+    "ownedName": "원드러스크리처",
+    "reviewCandidates": [
+      {
+        "bggId": "297658",
+        "bggName": "[kosmopoli:t]",
+        "year": "2020",
+        "score": 7,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      },
+      {
+        "bggId": "161578",
+        "bggName": "[redacted]",
+        "year": "2014",
+        "score": 5,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      },
+      {
+        "bggId": "175867",
+        "bggName": "[microfilms]",
+        "year": "2015",
+        "score": 5,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      }
+    ]
+  },
+  "천국과맥주": {
+    "status": "unresolved",
+    "ownedName": "천국과맥주",
+    "reviewCandidates": [
+      {
+        "bggId": "297658",
+        "bggName": "[kosmopoli:t]",
+        "year": "2020",
+        "score": 7,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      },
+      {
+        "bggId": "161578",
+        "bggName": "[redacted]",
+        "year": "2014",
+        "score": 5,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      },
+      {
+        "bggId": "175867",
+        "bggName": "[microfilms]",
+        "year": "2015",
+        "score": 5,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      }
+    ]
   },
   "글렌모어연대기": {
     "status": "forced",
     "bggId": "265188",
     "ownedName": "글렌모어연대기"
   },
-  "맥주와빵": {
+  "딥씨크루": {
+    "status": "unresolved",
+    "ownedName": "딥씨크루",
+    "reviewCandidates": [
+      {
+        "bggId": "297658",
+        "bggName": "[kosmopoli:t]",
+        "year": "2020",
+        "score": 7,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      },
+      {
+        "bggId": "161578",
+        "bggName": "[redacted]",
+        "year": "2014",
+        "score": 5,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      },
+      {
+        "bggId": "175867",
+        "bggName": "[microfilms]",
+        "year": "2015",
+        "score": 5,
+        "reason": {
+          "nameScore": 0,
+          "matchedSearchName": "",
+          "matchedCandidateName": ""
+        }
+      }
+    ]
+  },
+  "에이다의꿈": {
     "status": "forced",
-    "bggId": "369880",
-    "ownedName": "맥주와빵"
+    "bggId": "413469",
+    "ownedName": "에이다의꿈"
+  },
+  "알렉산드리아 도서관": {
+    "status": "forced",
+    "bggId": "432834",
+    "bggName": "알렉산드리아 도서관"
   }
 }

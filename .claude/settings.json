@@ -13,7 +13,10 @@
       "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" add assets/js/script.js docs/PROJECT_STATE.md)",
       "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" add docs/PROJECT_STATE.md)",
       "Bash(git -C \"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\" rm docs/TODO.md)",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(git push)",
+      "Bash(git push *)",
+      "Bash(cd * && git push)"
     ],
     "additionalDirectories": [
       "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\pages"

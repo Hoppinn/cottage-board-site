@@ -42467,6 +42467,62 @@
       ]
     }
   },
+  "432834": {
+    "bggId": "432834",
+    "title": "The Great Library",
+    "image": "https://cf.geekdo-images.com/7lDF6X1YAxwFzBXRHxnjRA__original/img/sttavhpiCBzv69vxoIt8slQYMy0=/0x0/filters:format(jpeg)/pic8844403.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/7lDF6X1YAxwFzBXRHxnjRA__small/img/aTOzVZFgyGuRALM0rNRMaCumXmk=/fit-in/200x150/filters:strip_icc()/pic8844403.jpg",
+    "description": "In the third century B.C., Ptolemy I envisioned the creation of the Great Library of Alexandria, a monumental repository of human knowledge housed within a space known as the Mouseion, which was dedicated to the Muses, the nine goddesses of the arts. Ptolemy's dream was to amass the world's knowledge, and the library housed countless manuscripts, reflecting his Herculean effort to collect and preserve the intellectual heritage of the ancient world and gain renown to his name. The Great Library, situated near the bustling port of Alexandria, welcomed ships carrying relics, scholars, and the wisdom of distant lands. The Chief of Librarians oversaw the organization of the vast collection. The library's shelves whispered with the rustling of ancient parchment, embodying the spirit of intellectual curiosity and cross-cultural exchange.\n\nAs players step into the sandals of Librarians in the Great Library, you take on the crucial responsibilities of leading the institution within the Mouseion, navigating the challenges and opportunities presented by this legendary center of knowledge. Amidst the relics, diverse minds, and bustling port activity, the Librarians became the primary custodians of knowledge, shaping the legacy of the Great Library and contributing to the rich tapestry of ancient history.\n\nDuring this game, you research Great Works, deliver Crafts to the kingdom, and train Scribes to translate Manuscripts. Then, you send the Manuscripts, Great Works, and Crafts to the Great Library to gain Renown, Improvements, and other benefits, and attract the great Scholars of the time to the Library to work with you. You will need to manage resources to achieve your aims, including the most important resource of all: Time.\n\nAs Scholars perform their work, Generations will pass triggering Events and the Great Library will fill. When the second Event is triggered or when 2 or fewer empty spaces remain in the Library, the end of the game is triggered and the player with the most Renown is named the Greatest Librarian and wins the game.\n\n&mdash;description from the publisher",
+    "yearpublished": "2026",
+    "minplayers": "1",
+    "minage": "14",
+    "maxplayers": "4",
+    "playingtime": "180",
+    "minplaytime": "100",
+    "maxplaytime": "180",
+    "averageweight": "4.3448",
+    "average": "7.70584",
+    "bayesaverage": "5.60233",
+    "usersrated": "137",
+    "rank": "9305",
+    "designers": [
+      "Vital Lacerda"
+    ],
+    "artists": [
+      "Ian O'Toole"
+    ],
+    "publishers": [
+      "Eagle-Gryphon Games",
+      "Delta Vision Publishing",
+      "DiceTree Games",
+      "Editions Philibert",
+      "YOKA Games"
+    ],
+    "categories": [
+      "Ancient"
+    ],
+    "mechanics": [
+      "Connections",
+      "Matching",
+      "Solo / Solitaire Game",
+      "Tile Placement",
+      "Turn Order: Pass Order",
+      "Worker Placement, Different Worker Types"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        1,
+        2,
+        3
+      ],
+      "not_recommended": [
+        4
+      ]
+    }
+  },
   "433384": {
     "bggId": "433384",
     "title": "Rival Cities",

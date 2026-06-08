@@ -3912,7 +3912,7 @@
     "bggId": "367041",
     "matchStatus": "forced",
     "status": "ready",
-    "location": "배송예정",
+    "location": "발매후 도착예정",
     "difficulty": 4.127,
     "difficultyWeight": 4.13,
     "rating": 8.01704,
@@ -5183,7 +5183,7 @@
     "bggId": "448159",
     "matchStatus": "forced",
     "status": "ready",
-    "location": "배송예정",
+    "location": "발매후 도착예정",
     "difficulty": 3.1786,
     "difficultyWeight": 3.17,
     "rating": 7.78388,
@@ -8100,7 +8100,7 @@
     "bggId": "429438",
     "matchStatus": "forced",
     "status": "ready",
-    "location": "배송예정",
+    "location": "발매후 도착예정",
     "difficulty": 3.2593,
     "difficultyWeight": 3.19,
     "rating": 7.90278,
@@ -8234,18 +8234,18 @@
     ]
   },
   {
-    "id": "알렉산드리아의도서관",
-    "ownedName": "알렉산드리아의도서관",
-    "titleEn": "Biblios",
-    "bggId": "34219",
-    "matchStatus": "auto-confirmed",
+    "id": "알렉산드리아-도서관",
+    "ownedName": "알렉산드리아 도서관",
+    "titleEn": "알렉산드리아 도서관",
+    "bggId": "432834",
+    "matchStatus": "forced",
     "status": "ready",
-    "location": "배송예정",
-    "difficulty": 1.6917,
+    "location": "발매후 도착예정",
+    "difficulty": 4.3448,
     "difficultyWeight": 4.42,
-    "rating": 7.19449,
+    "rating": 7.70584,
     "bestPlayers": [
-      3
+      4
     ],
     "recommendedPlayers": [
       2,
@@ -9170,7 +9170,7 @@
     "bggId": "429405",
     "matchStatus": "auto-confirmed",
     "status": "ready",
-    "location": "배송중",
+    "location": "heavy_strategy",
     "difficulty": 3.602,
     "difficultyWeight": 3.54,
     "rating": 7.94162,
@@ -11878,16 +11878,16 @@
     ]
   },
   {
-    "id": "파수꾼들-셋어와치",
-    "ownedName": "파수꾼들 셋어와치",
-    "titleEn": "Set a Watch",
-    "bggId": "228855",
-    "matchStatus": "auto-confirmed",
-    "status": "ready",
-    "location": "배송예정",
-    "difficulty": 2.4275,
+    "id": "파수꾼",
+    "ownedName": "파수꾼",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "unmatched",
+    "status": "pending-cache",
+    "location": "발매후 도착예정",
+    "difficulty": null,
     "difficultyWeight": 2.43,
-    "rating": 7.24036,
+    "rating": null,
     "bestPlayers": [
       1
     ],
@@ -12411,7 +12411,7 @@
     "bggId": "303731",
     "matchStatus": "auto-confirmed",
     "status": "ready",
-    "location": "배송예정",
+    "location": "발매후 도착예정",
     "difficulty": 3.832,
     "difficultyWeight": 3.84,
     "rating": 8.56688,
@@ -13196,7 +13196,7 @@
     "bggId": "413469",
     "matchStatus": "forced",
     "status": "ready",
-    "location": "배송중",
+    "location": "발매후 도착예정",
     "difficulty": 3.9091,
     "difficultyWeight": 0,
     "rating": 8.03823,
@@ -13208,5 +13208,19 @@
       2,
       4
     ]
+  },
+  {
+    "id": "레지사이드-레거시",
+    "ownedName": "레지사이드 레거시",
+    "titleEn": "",
+    "bggId": null,
+    "matchStatus": "unmatched",
+    "status": "pending-cache",
+    "location": "발매후 도착예정",
+    "difficulty": null,
+    "difficultyWeight": 0,
+    "rating": null,
+    "bestPlayers": [],
+    "recommendedPlayers": []
   }
 ]
