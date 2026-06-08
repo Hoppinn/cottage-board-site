@@ -68,18 +68,30 @@ function initKakaoAuth() {
     const loginArea = btn.closest('.menu-login-area') || btn.parentElement;
     if (isHover && loginArea) {
       // PC: 마우스 올리면 열고 벗어나면 닫힘
-      loginArea.addEventListener('mouseenter', () => {
+      // 딜레이 필요: dropdown이 header 아래 absolute 위치라 gap 통과 시 mouseleave 발화
+      let _hideTimer = null;
+      const _showActions = () => {
+        clearTimeout(_hideTimer);
         if (!getKakaoUser()) return;
         const actions = document.getElementById('kakaoUserActions');
         if (!actions) return;
         btn.classList.add('is-expanded');
         actions.style.display = 'flex';
-      });
-      loginArea.addEventListener('mouseleave', () => {
-        const actions = document.getElementById('kakaoUserActions');
-        if (actions) actions.style.display = 'none';
-        btn.classList.remove('is-expanded');
-      });
+      };
+      const _scheduleHide = () => {
+        _hideTimer = setTimeout(() => {
+          const actions = document.getElementById('kakaoUserActions');
+          if (actions) actions.style.display = 'none';
+          btn.classList.remove('is-expanded');
+        }, 200);
+      };
+      loginArea.addEventListener('mouseenter', _showActions);
+      loginArea.addEventListener('mouseleave', _scheduleHide);
+      const actEl = document.getElementById('kakaoUserActions');
+      if (actEl) {
+        actEl.addEventListener('mouseenter', () => clearTimeout(_hideTimer));
+        actEl.addEventListener('mouseleave', _scheduleHide);
+      }
       btn.addEventListener('click', () => { if (!getKakaoUser()) kakaoLogin(); });
     } else {
       btn.addEventListener('click', () => {
