@@ -10,12 +10,16 @@
     "fetch:bgg": "node game-system/tools/2-fetcher/a_fetch-bgg-game-data-by-id.js",
     "import:xlsx": "node game-system/tools/0-input/from-file/import-from-xlsx.js",
     "add": "node game-system/tools/0-input/from-name/add-owned-game.js",
-    "add-game": "node game-system/tools/0-input/add-game.js"
+    "add-game": "node game-system/tools/0-input/add-game.js",
+    "update-location": "node game-system/tools/0-input/update-location.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",
     "@supabase/supabase-js": "^2.107.0",
     "exceljs": "^4.4.0",
     "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
   }
 }
