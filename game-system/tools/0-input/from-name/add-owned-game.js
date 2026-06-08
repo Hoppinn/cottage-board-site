@@ -5,7 +5,6 @@ const { readJson } = require("../../_core/file-read-writer");
 
 const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
-  COTTAGE_OWNED_GAMES_LEDGER_XLSX_PATH,
   COTTAGE_OWNED_GAMES_XLSX_PATH,
   BGG_GAME_DETAILS_PATH,
 } = require("../../_core/paths");
@@ -18,41 +17,73 @@ function saveMaster(master) {
   );
 }
 
-async function appendLedgerRow(game) {
+async function findHeaderInfo(worksheet) {
+  for (let rn = 1; rn <= Math.min(worksheet.rowCount, 10); rn++) {
+    const row = worksheet.getRow(rn);
+    let found = false;
+    row.eachCell(cell => {
+      if (String(cell.value || "").trim() === "보유게임명") found = true;
+    });
+    if (found) {
+      const headerMap = {};
+      row.eachCell((cell, colNum) => {
+        const h = String(cell.value || "").trim();
+        if (h) headerMap[h] = colNum;
+      });
+      return { headerRowNum: rn, headerMap };
+    }
+  }
+  return null;
+}
+
+function findCol(headerMap, candidates) {
+  for (const name of candidates) {
+    if (headerMap[name] != null) return headerMap[name];
+  }
+  return null;
+}
+
+async function appendLedgerRow(game, extraInfo = {}) {
   const workbook = new ExcelJS.Workbook();
 
-  // build-master가 읽는 소스 xlsx에 추가해야 반영됨
-  await workbook.xlsx.readFile(
-    COTTAGE_OWNED_GAMES_XLSX_PATH
-  );
+  await workbook.xlsx.readFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
 
   const worksheet = workbook.getWorksheet("보유게임리스트");
 
-  const nextRowNumber = worksheet.rowCount + 1;
+  const nextRow = worksheet.rowCount + 1;
+  const headerInfo = findHeaderInfo(worksheet);
 
-  worksheet.getCell(nextRowNumber, 1).value =
-    game.ownedName;
+  if (headerInfo && headerInfo.headerMap) {
+    const { headerMap } = headerInfo;
+    const setCell = (candidates, value) => {
+      const col = findCol(headerMap, candidates);
+      if (col != null) worksheet.getCell(nextRow, col).value = value;
+    };
 
-  worksheet.getCell(nextRowNumber, 2).value =
-    "-";
+    setCell(["보유게임명", "게임명", "name", "name_kr"], game.ownedName);
 
-  worksheet.getCell(nextRowNumber, 3).value =
-    "";
+    if (extraInfo.location) {
+      setCell(["위치", "책장그룹", "shelf", "shelfGroupId"], extraInfo.location);
+    }
 
-  worksheet.getCell(nextRowNumber, 4).value =
-    "";
+    if (extraInfo.difficultyWeight != null) {
+      setCell(
+        ["난이도", "체감난이도", "difficulty", "difficultyWeight"],
+        extraInfo.difficultyWeight
+      );
+    }
+  } else {
+    // 헤더를 찾지 못한 경우 컬럼 번호 fallback
+    worksheet.getCell(nextRow, 1).value = game.ownedName;
+    if (extraInfo.location) worksheet.getCell(nextRow, 2).value = extraInfo.location;
+    if (extraInfo.difficultyWeight != null) {
+      worksheet.getCell(nextRow, 3).value = extraInfo.difficultyWeight;
+    }
+  }
 
-  worksheet.getCell(nextRowNumber, 5).value =
-    0;
+  await workbook.xlsx.writeFile(COTTAGE_OWNED_GAMES_XLSX_PATH);
 
-  await workbook.xlsx.writeFile(
-    COTTAGE_OWNED_GAMES_XLSX_PATH
-  );
-
-  console.log(
-    "source xlsx 추가 완료:",
-    game.ownedName
-  );
+  console.log("source xlsx 추가 완료:", game.ownedName);
 }
 
 function createGameId(gameName) {
@@ -80,108 +111,108 @@ function createResolvedGame(gameName) {
   const bggDetail = findBggDetailByOwnedName(cleanName);
 
   return {
-  id,
-  ownedName: cleanName,
-  titleKo: cleanName,
-  titleEn:
-  bggDetail?.titleEn ||
-  bggDetail?.title ||
-  "",
+    id,
+    ownedName: cleanName,
+    titleKo: cleanName,
+    titleEn:
+      bggDetail?.titleEn ||
+      bggDetail?.title ||
+      "",
 
-  bggId: bggDetail?.bggId || null,
-  yearPublished: bggDetail?.yearpublished
-    ? Number(bggDetail.yearpublished)
-    : null,
+    bggId: bggDetail?.bggId || null,
+    yearPublished: bggDetail?.yearpublished
+      ? Number(bggDetail.yearpublished)
+      : null,
 
-  minPlayers: bggDetail?.minplayers
-    ? Number(bggDetail.minplayers)
-    : null,
+    minPlayers: bggDetail?.minplayers
+      ? Number(bggDetail.minplayers)
+      : null,
 
-  maxPlayers: bggDetail?.maxplayers
-    ? Number(bggDetail.maxplayers)
-    : null,
+    maxPlayers: bggDetail?.maxplayers
+      ? Number(bggDetail.maxplayers)
+      : null,
 
-  playingTime: bggDetail?.playingtime
-    ? Number(bggDetail.playingtime)
-    : null,
+    playingTime: bggDetail?.playingtime
+      ? Number(bggDetail.playingtime)
+      : null,
 
-  minPlayTime: bggDetail?.minplaytime
-    ? Number(bggDetail.minplaytime)
-    : null,
+    minPlayTime: bggDetail?.minplaytime
+      ? Number(bggDetail.minplaytime)
+      : null,
 
-  maxPlayTime: bggDetail?.maxplaytime
-    ? Number(bggDetail.maxplaytime)
-    : null,
+    maxPlayTime: bggDetail?.maxplaytime
+      ? Number(bggDetail.maxplaytime)
+      : null,
 
-  minAge: bggDetail?.minage
-    ? Number(bggDetail.minage)
-    : null,
+    minAge: bggDetail?.minage
+      ? Number(bggDetail.minage)
+      : null,
 
-  difficulty: bggDetail?.averageweight
-    ? Number(bggDetail.averageweight)
-    : null,
+    difficulty: bggDetail?.averageweight
+      ? Number(bggDetail.averageweight)
+      : null,
 
-  rating: bggDetail?.average
-    ? Number(bggDetail.average)
-    : null,
+    rating: bggDetail?.average
+      ? Number(bggDetail.average)
+      : null,
 
-  bayesRating: bggDetail?.bayesaverage
-    ? Number(bggDetail.bayesaverage)
-    : null,
+    bayesRating: bggDetail?.bayesaverage
+      ? Number(bggDetail.bayesaverage)
+      : null,
 
-  usersRated: bggDetail?.usersrated
-    ? Number(bggDetail.usersrated)
-    : null,
+    usersRated: bggDetail?.usersrated
+      ? Number(bggDetail.usersrated)
+      : null,
 
-  rank: bggDetail?.rank && bggDetail.rank !== "Not Ranked"
-    ? Number(bggDetail.rank)
-    : null,
+    rank: bggDetail?.rank && bggDetail.rank !== "Not Ranked"
+      ? Number(bggDetail.rank)
+      : null,
 
-  designers: bggDetail?.designers || [],
-  artists: bggDetail?.artists || [],
-  publishers: bggDetail?.publishers || [],
+    designers: bggDetail?.designers || [],
+    artists: bggDetail?.artists || [],
+    publishers: bggDetail?.publishers || [],
 
-  categories: bggDetail?.categories || [],
-  mechanics: bggDetail?.mechanics || [],
+    categories: bggDetail?.categories || [],
+    mechanics: bggDetail?.mechanics || [],
 
-  recommendedPlayers:
-    bggDetail?.suggested_numplayers?.recommended || [],
+    recommendedPlayers:
+      bggDetail?.suggested_numplayers?.recommended || [],
 
-  bestPlayers:
-    bggDetail?.suggested_numplayers?.best || [],
+    bestPlayers:
+      bggDetail?.suggested_numplayers?.best || [],
 
-  notRecommendedPlayers:
-    bggDetail?.suggested_numplayers?.not_recommended || [],
+    notRecommendedPlayers:
+      bggDetail?.suggested_numplayers?.not_recommended || [],
 
-  location: "",
-  comment: "",
-  tags: [],
+    location: "",
+    comment: "",
+    tags: [],
 
-  image: bggDetail?.image || "",
-  thumbnail: bggDetail?.thumbnail || "",
-  description: bggDetail?.description || "",
+    image: bggDetail?.image || "",
+    thumbnail: bggDetail?.thumbnail || "",
+    description: bggDetail?.description || "",
 
-  status: bggDetail ? "ready" : "pending-cache",
+    status: bggDetail ? "ready" : "pending-cache",
 
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
 
-  source: {
-    base: bggDetail ? "bgg-cache" : "manual-input",
-    overrides: [
-  "ownedName",
-  "titleKo",
-  "bestPlayers",
-  "recommendedPlayers",
-  "location",
-  "comment",
-  "tags",
-],
-  },
-};
+    source: {
+      base: bggDetail ? "bgg-cache" : "manual-input",
+      overrides: [
+        "ownedName",
+        "titleKo",
+        "bestPlayers",
+        "recommendedPlayers",
+        "location",
+        "comment",
+        "tags",
+      ],
+    },
+  };
 }
 
-async function addOwnedGame(gameName) {
+async function addOwnedGame(gameName, extraInfo = {}) {
   const cleanName = String(gameName || "").trim();
 
   if (!cleanName) {
@@ -202,14 +233,23 @@ async function addOwnedGame(gameName) {
     return;
   }
 
+  if (extraInfo.location) resolvedGame.location = extraInfo.location;
+  if (extraInfo.difficultyWeight != null) {
+    resolvedGame.difficultyWeight = extraInfo.difficultyWeight;
+  }
+
   master.games[resolvedGame.id] = resolvedGame;
 
   saveMaster(master);
-await appendLedgerRow(resolvedGame);
-  console.log("master 추가 완료:");
-  console.log(JSON.stringify(resolvedGame, null, 2));
+  await appendLedgerRow(resolvedGame, extraInfo);
+  console.log("master 추가 완료:", cleanName);
 }
 
-const gameName = process.argv[2];
+if (require.main === module) {
+  addOwnedGame(process.argv[2]).catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
+}
 
-addOwnedGame(gameName);
+module.exports = { addOwnedGame };

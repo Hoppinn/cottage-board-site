@@ -66,10 +66,12 @@ async function callApi(systemPrompt, userContent) {
 
 async function run() {
   const args = process.argv.slice(2);
-  const dryRun    = args.includes("--dry-run");
-  const isSummary = args.includes("--summary");
-  const limitIdx  = args.indexOf("--limit");
-  const limit     = limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : Infinity;
+  const dryRun      = args.includes("--dry-run");
+  const isSummary   = args.includes("--summary");
+  const limitIdx    = args.indexOf("--limit");
+  const limit       = limitIdx !== -1 ? parseInt(args[limitIdx + 1], 10) : Infinity;
+  const gameIdIdx   = args.indexOf("--game-id");
+  const targetGameId = gameIdIdx !== -1 ? args[gameIdIdx + 1] : null;
 
   if (!dryRun && !process.env.ANTHROPIC_API_KEY) {
     console.error("오류: ANTHROPIC_API_KEY 환경변수가 설정되지 않았습니다.");
@@ -84,15 +86,19 @@ async function run() {
   if (isSummary) {
     // summaryKo 생성: descriptionKo 있고 summaryKo 없는 게임
     pending = Object.values(games).filter(
-      (g) => g.descriptionKo && g.descriptionKo.trim() && !g.summaryKo
+      (g) =>
+        (!targetGameId || g.id === targetGameId) &&
+        g.descriptionKo && g.descriptionKo.trim() && !g.summaryKo
     );
-    console.log(`[summaryKo 생성 모드]`);
+    console.log(targetGameId ? `[summaryKo 생성 모드] 대상: ${targetGameId}` : `[summaryKo 생성 모드]`);
   } else {
     // descriptionKo 번역: description 있고 descriptionKo 없는 게임
     pending = Object.values(games).filter(
-      (g) => g.description && g.description.trim() && !g.descriptionKo
+      (g) =>
+        (!targetGameId || g.id === targetGameId) &&
+        g.description && g.description.trim() && !g.descriptionKo
     );
-    console.log(`[descriptionKo 번역 모드]`);
+    console.log(targetGameId ? `[descriptionKo 번역 모드] 대상: ${targetGameId}` : `[descriptionKo 번역 모드]`);
   }
 
   const target = limit < Infinity ? pending.slice(0, limit) : pending;

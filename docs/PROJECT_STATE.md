@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-08 (15차)
+최종 갱신: 2026-06-08 (17차)
 
 ---
 
@@ -331,6 +331,7 @@
 | 2026-06-08 | feat: og-image-3.jpg 생성 + 전체 9개 HTML og:image URL 교체 (og-image-2→3, Kakao 프로덕션 캐시 강제 갱신) |
 | 2026-06-08 | feat: 추천 오버레이 카드 game-card 동기화 + club-history 인라인 CSS 제거 및 history-* 누락 클래스 style.css 추가 |
 | 2026-06-08 | refactor: attachAc/initTagInput/buildPhotoItemAdder → play-records-utils.js 공유 (game-reviews.js 1200→960줄) |
+| 2026-06-08 | feat: add-game CLI 인터랙티브 자동화 — 위치·체감난이도 CLI 입력, BGG 매칭 점수별 확인(80+:확인옵션/55~79:필수/실패:ID입력), forced-bgg-overrides.json 자동 저장, description-translator.js --game-id 옵션 추가, ANTHROPIC_API_KEY 있으면 번역 자동 실행(없으면 경고), --skip-translate 옵션 |
 | 2026-06-05 | feat: play-records-utils.js 생성 — parsePhotoUrls/buildPhotoHtml/openLightbox 전역 공유 모듈 |
 | 2026-06-05 | fix: club-history 라이트박스 수정 (openLightbox 미정의 → window.openLightbox 전역 사용) |
 | 2026-06-05 | refactor: game-reviews PC 탭 전환 (2컬럼 사이드바이사이드 → 단일 패널 전체너비, max-width:760px) |
