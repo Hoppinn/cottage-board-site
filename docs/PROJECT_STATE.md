@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-08 (13차)
+최종 갱신: 2026-06-08 (14차)
 
 ---
 
@@ -277,8 +277,9 @@
 - [ ] 추천>전체더보기 카드 레이아웃을 추천페이지 카드와 동기화 (모바일 포함) — 별도 세션
 - [ ] 동호회>모임기록 페이지를 game-reviews 레이아웃과 동기화 — 별도 세션
 - [ ] 관리자 페이지 금일이용데이터 미표시 버그 — 원인 불명, 별도 조사
+- [ ] **이용시간 기록 실제 확인** — page_sessions.duration_sec 및 profiles.total_minutes가 로그인 사용자 기준으로 정상 누적되는지 실사용 테스트 필요 (현재 구현은 있으나 실제 데이터가 의심됨)
 - [x] 추천 필터박스 PC 중앙정렬 수정 (`.recommend-filter` margin:auto 명시, padding-left/right 제거) ✅
-- [ ] 추천>전체더보기 하나이상골라주세요 박스 중앙정렬 — 별도 점검
+- [x] 추천 빈메시지 박스 PC 중앙정렬 — margin:0 auto !important로 글로벌 -18px 덮어쓰기 ✅
 
 ### 주의사항
 - 720px 블록 기준 (min-width:720px), 900px 아님
@@ -298,6 +299,10 @@
 | 2026-06-07 | fix: 사용시간 카운팅 개선 — startSession flush + pagehide 이벤트 + localStorage 누적분 표시 |
 | 2026-06-07 | fix: upsertProfile photo_url 보존 (기존 DB 값 유지) |
 | 2026-06-07 | feat: PC 프로필 드롭다운 hover 전환 (mouseenter/mouseleave, matchMedia 감지) |
+| 2026-06-08 | fix: 추천 빈메시지 PC 중앙정렬 — 글로벌 margin:0 -18px !important를 PC 미디어쿼리에서 margin:0 auto !important로 덮어쓰기 |
+| 2026-06-08 | fix: PC 닉네임 드롭다운 — mouseleave 200ms 딜레이 + dropdown 자체 mouseenter/leave 리스너 추가 (header-dropdown gap 이탈 문제) |
+| 2026-06-08 | fix: OG이미지 파일명 og-image-2.jpg로 변경 (카카오톡 CDN 캐시 강제 갱신) + photo-exteriorooo.jpg 1200×630 크롭으로 교체 |
+| 2026-06-08 | feat: pages/store/requests*.html → pages/admin/ 리디렉트 파일 생성 (구 카카오톡 링크 404 방지) |
 | 2026-06-08 | fix: nickToSave effectiveRealName fallback — realName null 시 data?.real_name 사용, 닉네임 초기화 방지 |
 | 2026-06-08 | feat: club.html about 섹션 사진 3장 추가 (game1/2/3.jpg, about-photo-strip 패턴) |
 | 2026-06-08 | feat: club-rules.html 하단 사진 3장 추가 (game1/2/3.jpg) |
