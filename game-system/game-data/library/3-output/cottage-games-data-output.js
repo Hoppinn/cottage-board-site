@@ -59303,9 +59303,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송중",
-      "shelfLabel": "배송중",
-      "shelfFullLabel": "배송중",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.54,
       "moodTags": [
@@ -85678,9 +85678,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송중",
-      "shelfLabel": "배송중",
-      "shelfFullLabel": "배송중",
+      "shelfGroupId": "발매후 도착예정",
+      "shelfLabel": "발매후 도착예정",
+      "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.9091,
       "moodTags": [
