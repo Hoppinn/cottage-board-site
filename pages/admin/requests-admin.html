@@ -255,7 +255,7 @@
         <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
-            <div class="admin-section is-open" id="sectionMembers">
+            <div class="admin-section" id="sectionMembers">
               <div class="admin-section-title">👥 사용자별<span id="memberCountBadge" class="admin-section-count"></span><span class="admin-section-arrow">▾</span></div>
               <div class="admin-section-body" id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
@@ -544,7 +544,7 @@
         return subSection(
           `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
           renderUserDetail(buildUserMap(dr)),
-          i === 0
+          false
         );
       }).join('');
       const userAllDetail = renderUserDetail(buildUserMap(rows));
@@ -555,7 +555,7 @@
         return subSection(
           `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
           renderPageTable(buildPageMap(dr)),
-          i === 0
+          false
         );
       }).join('');
       const pageAllDetail = renderPageTable(buildPageMap(rows));
@@ -566,7 +566,7 @@
 
       if (membersBody) {
         membersBody.innerHTML =
-          subSection('회원 목록', memberListHtml, true) +
+          subSection('회원 목록', memberListHtml, false) +
           subSection(
             `이용 상세 <span style="font-size:11px;color:var(--muted)">(세션 기반 · 로그인 필요)</span>`,
             subSection('전체', userAllDetail, false) + userDayParts,
