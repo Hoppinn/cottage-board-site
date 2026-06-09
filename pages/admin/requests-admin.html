@@ -246,59 +246,22 @@
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id,r.is_done,r.is_planned)).join('');
 
-      // 회원 목록
-      const profiles = await window.CottageDB.getAllProfiles();
-      const memberHtml = profiles.length ? `<div class="admin-req-list">` + profiles.map(p => {
-        const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
-        const secs = p.total_minutes || 0; // DB 컬럼명은 total_minutes지만 실제 초 단위
-        const timeStr = secs >= 3600
-          ? `${Math.floor(secs / 3600)}시간 ${Math.floor((secs % 3600) / 60)}분`
-          : secs >= 60
-          ? `${Math.floor(secs / 60)}분`
-          : `${secs}초`;
-        const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-        const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
-        const todayStr = todayS >= 3600
-          ? `${Math.floor(todayS / 3600)}시간 ${Math.floor((todayS % 3600) / 60)}분`
-          : todayS >= 60
-          ? `${Math.floor(todayS / 60)}분`
-          : `${todayS}초`;
-        const displayNick = introNickMap[String(p.user_id)] || p.nickname || p.real_name || '(닉네임없음)';
-        const realName = p.real_name || '';
-        // 항상 닉네임(실명) 형식 — 같아도 괄호에 실명 표시
-        const displayName = realName
-          ? `${escH(displayNick)}<span class="admin-real-name">(${escH(realName)})</span>`
-          : escH(displayNick);
-        const isBanned = !!p.is_banned;
-        const isMe = String(p.user_id) === '4916417947';
-        return `<div class="admin-member-card${isBanned ? ' is-banned' : ''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}">
-          <div class="admin-member-name">${displayName}${isBanned ? ' <span class="admin-banned-badge">🚫 밴됨</span>' : ''}${isMe ? ' <span style="font-size:11px;color:#7a4828">👑 관리자</span>' : ''}</div>
-          <div class="admin-member-metas">
-            <span>가입 ${fmtDate(p.first_seen_at)}</span>
-            <span>최근 ${fmtDate(p.last_seen_at)}</span>
-            <span>방문 ${p.visit_count || 1}회</span>
-            ${todayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${todayStr}</span>` : ''}
-            <span>⏱ ${timeStr}</span>
-            ${isMe ? '' : `<button class="admin-ban-btn ${isBanned ? 'unban' : 'ban'}" data-uid="${escH(p.user_id)}">${isBanned ? '✅ 밴 해제' : '🚫 밴'}</button>`}
-          </div>
-        </div>`;
-      }).join('') + `</div>` : '<div class="admin-empty">회원 없음</div>';
 
       const gameCount  = (gameRes.data||[]).length;
       const snackCount = (snackRes.data||[]).length;
       const suggestCount = (suggestRes.data||[]).filter(r => !r.is_done).length;
 
       el.innerHTML = `
-        <div class="admin-group" id="groupAnalysis">
+        <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
-            <div class="admin-section" id="analyticsSection">
-              <div class="admin-section-title">📊 페이지 분석 <span style="font-size:11px;font-weight:400;color:#888">(불러오는 중...)</span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body" id="analyticsBody"></div>
+            <div class="admin-section is-open" id="sectionMembers">
+              <div class="admin-section-title">👥 사용자별<span id="memberCountBadge" class="admin-section-count"></span><span class="admin-section-arrow">▾</span></div>
+              <div class="admin-section-body" id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
-            <div class="admin-section">
-              <div class="admin-section-title">👥 회원 목록 <span class="admin-section-count">${profiles.length}명</span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body"><div class="admin-req-list">${memberHtml}</div></div>
+            <div class="admin-section" id="sectionPages">
+              <div class="admin-section-title">📄 페이지별<span class="admin-section-arrow">▾</span></div>
+              <div class="admin-section-body" id="pagesBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
           </div>
         </div>
@@ -403,81 +366,103 @@
         });
       });
 
-      // 밴/밴해제 버튼
-      el.querySelectorAll('.admin-ban-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const uid = btn.dataset.uid;
-          const isBanning = btn.classList.contains('ban');
-          const label = isBanning ? '밴' : '밴 해제';
-          if (!confirm(`이 회원을 ${label}하시겠습니까?`)) return;
-          const fn = isBanning ? window.CottageDB?.banUser : window.CottageDB?.unbanUser;
-          if (!fn) return;
-          const res = await fn(uid);
-          if (res?.error) { alert(`${label}에 실패했습니다.`); return; }
-          const card = btn.closest('.admin-member-card');
-          if (isBanning) {
-            card.classList.add('is-banned');
-            card.dataset.banned = 'true';
-            btn.classList.replace('ban', 'unban');
-            btn.textContent = '✅ 밴 해제';
-            const nameEl = card.querySelector('.admin-member-name');
-            if (nameEl && !nameEl.querySelector('.admin-banned-badge')) {
-              nameEl.insertAdjacentHTML('beforeend', ' <span class="admin-banned-badge">🚫 밴됨</span>');
-            }
-          } else {
-            card.classList.remove('is-banned');
-            card.dataset.banned = 'false';
-            btn.classList.replace('unban', 'ban');
-            btn.textContent = '🚫 밴';
-            card.querySelector('.admin-banned-badge')?.remove();
+      // 밴/밴해제 버튼 — event delegation으로 동적 생성된 카드도 처리
+      el.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.admin-ban-btn');
+        if (!btn) return;
+        const uid = btn.dataset.uid;
+        const isBanning = btn.classList.contains('ban');
+        const label = isBanning ? '밴' : '밴 해제';
+        if (!confirm(`이 회원을 ${label}하시겠습니까?`)) return;
+        const fn = isBanning ? window.CottageDB?.banUser : window.CottageDB?.unbanUser;
+        if (!fn) return;
+        const res = await fn(uid);
+        if (res?.error) { alert(`${label}에 실패했습니다.`); return; }
+        const card = btn.closest('.admin-member-card');
+        if (isBanning) {
+          card.classList.add('is-banned');
+          card.dataset.banned = 'true';
+          btn.classList.replace('ban', 'unban');
+          btn.textContent = '✅ 밴 해제';
+          const nameEl = card.querySelector('.admin-member-name');
+          if (nameEl && !nameEl.querySelector('.admin-banned-badge')) {
+            nameEl.insertAdjacentHTML('beforeend', ' <span class="admin-banned-badge">🚫 밴됨</span>');
           }
-        });
+        } else {
+          card.classList.remove('is-banned');
+          card.dataset.banned = 'false';
+          btn.classList.replace('unban', 'ban');
+          btn.textContent = '🚫 밴';
+          card.querySelector('.admin-banned-badge')?.remove();
+        }
       });
 
     }
 
     async function loadAnalytics() {
-      const body = document.getElementById('analyticsBody');
-      const titleSpan = document.querySelector('#analyticsSection .admin-section-title span');
-      if (!body || !window.CottageDB?.getPageAnalytics) return;
+      if (!window.CottageDB?.getPageAnalytics) return;
 
-      const rows = await window.CottageDB.getPageAnalytics();
-      if (titleSpan) titleSpan.remove();
-
-      if (!rows.length) {
-        body.innerHTML = '<div class="admin-empty">아직 데이터 없음 (방문 후 누적됩니다)</div>';
-        return;
-      }
-
-      const fmtSec = s => s >= 60 ? `${Math.floor(s/60)}분 ${s%60}초` : `${s}초`;
-
-      // KST 오늘 날짜
-      const todayKst = new Date(Date.now() + 9*3600000).toISOString().slice(0, 10);
-      const todayRows = rows.filter(r => (r.entered_at || '').slice(0, 10) === todayKst);
-
-      // 프로필·인트로 로드
+      // ── 데이터 로드 ────────────────────────────────────────────
+      const [rows, allProfiles] = await Promise.all([
+        window.CottageDB.getPageAnalytics(),
+        window.CottageDB.getAllProfiles(),
+      ]);
       const db2 = window._cottageSupabaseDb;
       const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
       const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
-      const allProfiles = await window.CottageDB.getAllProfiles();
-      const profilesMap = new Map(allProfiles.map(p => {
-        const uid = String(p.user_id);
-        const introNick = introNickMap.get(uid) || '';
-        const profileNick = p.nickname || '';
-        const realName = p.real_name || '';
-        const displayNick = introNick || profileNick || realName || uid.slice(0,8) + '…';
-        return [p.user_id, realName ? `${displayNick}(${realName})` : displayNick];
-      }));
 
-      // ── 집계 헬퍼 ─────────────────────────────────
+      // ── 헬퍼 ────────────────────────────────────────────────────
+      const fmtTime = s => {
+        if (!s) return '-';
+        const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+        if (h > 0) return m > 0 ? `${h}시간 ${m}분` : `${h}시간`;
+        return m > 0 ? (sec > 0 ? `${m}분 ${sec}초` : `${m}분`) : `${sec}초`;
+      };
+
+      function dispName(p) {
+        const uid = String(p.user_id);
+        const nick = introNickMap.get(uid) || p.nickname || p.real_name || uid.slice(0,8)+'…';
+        return p.real_name && nick !== p.real_name ? `${nick}(${p.real_name})` : nick;
+      }
+      const profilesMap = new Map(allProfiles.map(p => [p.user_id, dispName(p)]));
+
+      let subIdx = 0;
+      function subSection(title, content, open = false) {
+        const id = `asub${subIdx++}`;
+        return `<div class="admin-sub-section${open?' is-open':''}" id="${id}">
+          <div class="admin-sub-section-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
+            ${title}<span class="admin-sub-section-arrow">▾</span>
+          </div>
+          <div class="admin-sub-section-body">${content}</div>
+        </div>`;
+      }
+
+      // KST 날짜 범위 헬퍼
+      const DAY_MS = 86400000;
+      function kstDayBounds(daysAgo) {
+        const nowKst = Date.now() + 9 * 3600000;
+        const todayMidKst = Math.floor(nowKst / DAY_MS) * DAY_MS;
+        return [
+          new Date(todayMidKst - daysAgo * DAY_MS - 9 * 3600000).toISOString(),
+          new Date(todayMidKst - (daysAgo - 1) * DAY_MS - 9 * 3600000).toISOString(),
+        ];
+      }
+      const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+      const DAY_LABELS = ['오늘', '어제', '그제', '3일 전', '4일 전', '5일 전', '6일 전'];
+
+      function rowsForDay(daysAgo) {
+        const [s, e] = kstDayBounds(daysAgo);
+        return rows.filter(r => r.entered_at >= s && r.entered_at < e);
+      }
+
+      // ── 집계 헬퍼 ────────────────────────────────────────────
       function buildPageMap(rowset) {
         const m = new Map();
         for (const r of rowset) {
-          if (!m.has(r.page)) m.set(r.page, { visits: 0, totalSec: 0, users: new Set(), paths: new Map() });
+          if (!m.has(r.page)) m.set(r.page, { visits: 0, totalSec: 0, users: new Set() });
           const p = m.get(r.page);
           p.visits++; p.totalSec += r.duration_sec || 0;
           if (r.user_id) p.users.add(r.user_id);
-          if (r.referrer) p.paths.set(r.referrer, (p.paths.get(r.referrer) || 0) + 1);
         }
         return [...m.entries()].sort((a, b) => b[1].visits - a[1].visits);
       }
@@ -491,98 +476,108 @@
           if (!pm.has(r.page)) pm.set(r.page, { visits: 0, totalSec: 0 });
           pm.get(r.page).visits++; pm.get(r.page).totalSec += r.duration_sec || 0;
         }
-        return [...m.entries()].sort((a,b) => {
-          const tA = [...a[1].values()].reduce((s,v)=>s+v.totalSec,0);
-          const tB = [...b[1].values()].reduce((s,v)=>s+v.totalSec,0);
-          return tB - tA;
-        });
+        return [...m.entries()].sort((a,b) =>
+          [...b[1].values()].reduce((s,v)=>s+v.totalSec,0) - [...a[1].values()].reduce((s,v)=>s+v.totalSec,0)
+        );
       }
 
-      // ── 렌더 헬퍼 ─────────────────────────────────
-      function renderPageTable(sorted, showRef = false) {
+      function renderPageTable(sorted) {
         if (!sorted.length) return '<div class="admin-empty">데이터 없음</div>';
-        let h = `<table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>평균체류</th><th>로그인</th>${showRef ? '<th>주요유입</th>' : ''}</tr></thead><tbody>`;
+        let h = `<table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>총체류</th><th>평균체류</th><th>로그인</th></tr></thead><tbody>`;
         for (const [page, d] of sorted) {
           const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
-          const ref = showRef ? (() => { const t = [...d.paths.entries()].sort((a,b)=>b[1]-a[1])[0]; return t ? `<td class="anat-ref">${escH(t[0])} (${t[1]}회)</td>` : '<td>-</td>'; })() : '';
-          h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtSec(avg)}</td><td>${d.users.size}명</td>${ref}</tr>`;
-        }
-        return h + '</tbody></table>';
-      }
-
-      function renderUserSummary(sortedUsers) {
-        if (!sortedUsers.length) return '<div class="admin-empty">오늘 로그인 사용자 없음</div>';
-        let h = '<table class="admin-analytics-table"><thead><tr><th>사용자</th><th>방문페이지</th><th>총체류</th></tr></thead><tbody>';
-        for (const [uid, pm] of sortedUsers) {
-          const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
-          h += `<tr><td class="anat-page">${escH(profilesMap.get(uid) || uid.slice(0,8)+'…')}</td><td>${pm.size}페이지</td><td>${fmtSec(totalSec)}</td></tr>`;
+          h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td><td>${fmtTime(avg)}</td><td>${d.users.size}명</td></tr>`;
         }
         return h + '</tbody></table>';
       }
 
       function renderUserDetail(sortedUsers) {
-        if (!sortedUsers.length) return '<div class="admin-empty">로그인 사용자 데이터 없음</div>';
+        if (!sortedUsers.length) return '<div class="admin-empty">데이터 없음 (로그인 세션 필요)</div>';
         let h = '';
         for (const [uid, pm] of sortedUsers) {
-          const nick = profilesMap.get(uid) || uid.slice(0,8) + '…';
+          const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
           const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
           const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
           h += `<div style="margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">총 ${fmtSec(totalSec)}</span></div>
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">총 ${fmtTime(totalSec)}</span></div>
             <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>총체류</th><th>평균체류</th></tr></thead><tbody>`;
           for (const [page, d] of sortedPages) {
             const avg = d.visits ? Math.round(d.totalSec/d.visits) : 0;
-            h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtSec(d.totalSec)}</td><td>${fmtSec(avg)}</td></tr>`;
+            h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td><td>${fmtTime(avg)}</td></tr>`;
           }
           h += '</tbody></table></div>';
         }
         return h;
       }
 
-      // ── 섹션 조립 ─────────────────────────────────
-      let subIdx = 0;
-      function subSection(title, content, open = false) {
-        const id = `asub${subIdx++}`;
-        return `<div class="admin-sub-section${open?' is-open':''}" id="${id}">
-          <div class="admin-sub-section-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
-            ${escH(title)}<span class="admin-sub-section-arrow">▾</span>
-          </div>
-          <div class="admin-sub-section-body">${content}</div>
-        </div>`;
+      // ── 회원 목록 (profiles 기반) ────────────────────────────
+      const memberCountEl = document.getElementById('memberCountBadge');
+      if (memberCountEl) memberCountEl.textContent = `${allProfiles.length}명`;
+
+      const memberListHtml = allProfiles.length ? `
+        <div class="admin-req-list">${allProfiles.map(p => {
+          const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
+          const totalS = p.total_minutes || 0;
+          const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
+          const isBanned = !!p.is_banned;
+          const isMe = String(p.user_id) === '4916417947';
+          const nick = introNickMap.get(String(p.user_id)) || p.nickname || p.real_name || '(닉네임없음)';
+          const dnHtml = p.real_name
+            ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
+            : escH(nick);
+          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}">
+            <div class="admin-member-name">${dnHtml}${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}</div>
+            <div class="admin-member-metas">
+              <span>가입 ${fmtDate(p.first_seen_at)}</span>
+              <span>최근 ${fmtDate(p.last_seen_at)}</span>
+              <span>방문 ${p.visit_count || 1}회</span>
+              ${todayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${fmtTime(todayS)}</span>` : ''}
+              <span>⏱ ${fmtTime(totalS)}</span>
+              ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
+            </div>
+          </div>`;
+        }).join('')}</div>` : '<div class="admin-empty">회원 없음</div>';
+
+      // ── 사용자별 이용 상세 (page_sessions 기반, 날짜별) ─────────
+      const userDayParts = DAY_LABELS.map((label, i) => {
+        const dr = rowsForDay(i);
+        return subSection(
+          `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
+          renderUserDetail(buildUserMap(dr)),
+          i === 0
+        );
+      }).join('');
+      const userAllDetail = renderUserDetail(buildUserMap(rows));
+
+      // ── 페이지별 (날짜별) ────────────────────────────────────
+      const pageDayParts = DAY_LABELS.map((label, i) => {
+        const dr = rowsForDay(i);
+        return subSection(
+          `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
+          renderPageTable(buildPageMap(dr)),
+          i === 0
+        );
+      }).join('');
+      const pageAllDetail = renderPageTable(buildPageMap(rows));
+
+      // ── DOM 반영 ─────────────────────────────────────────────
+      const membersBody = document.getElementById('membersBody');
+      const pagesBody = document.getElementById('pagesBody');
+
+      if (membersBody) {
+        membersBody.innerHTML =
+          subSection('회원 목록', memberListHtml, true) +
+          subSection(
+            `이용 상세 <span style="font-size:11px;color:var(--muted)">(세션 기반 · 로그인 필요)</span>`,
+            subSection('전체', userAllDetail, false) + userDayParts,
+            false
+          );
       }
 
-      let periodIdx = 0;
-      function periodSection(label, content, open = false) {
-        const id = `aper${periodIdx++}`;
-        return `<div class="admin-period-section${open?' is-open':''}" id="${id}">
-          <div class="admin-period-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
-            ${label}<span class="admin-period-arrow">▾</span>
-          </div>
-          <div class="admin-period-body">${content}</div>
-        </div>`;
+      if (pagesBody) {
+        pagesBody.innerHTML =
+          subSection('전체', pageAllDetail, false) + pageDayParts;
       }
-
-      // 금일
-      const todayPageSorted = buildPageMap(todayRows);
-      const todayUserSorted = buildUserMap(todayRows);
-      const todayHtml = periodSection(
-        `📅 금일 이용 <span class="admin-section-count">${todayRows.length}세션</span>`,
-        subSection('페이지별', renderPageTable(todayPageSorted)) +
-        subSection('사용자별', renderUserDetail(todayUserSorted)),
-        true
-      );
-
-      // 전체
-      const allPageSorted = buildPageMap(rows);
-      const allUserSorted = buildUserMap(rows);
-      const allHtml = periodSection(
-        `📊 전체 이용 <span class="admin-section-count">${rows.length}세션</span>`,
-        subSection('페이지별', renderPageTable(allPageSorted, true)) +
-        subSection('사용자별 상세', renderUserDetail(allUserSorted), false),
-        false
-      );
-
-      body.innerHTML = todayHtml + allHtml;
     }
 
     let tried = false;

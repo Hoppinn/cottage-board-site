@@ -550,6 +550,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
 
   // ── 체류 시간 누적 ──────────────────────────────────────
   let _sessionStart = Date.now();
+  let _sessionEnterAt = Date.now();
   let _sessionUserId = null;
 
   function _flushTime(userId) {
@@ -571,6 +572,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/beforeunload에서 호출
   async function _syncTimeToDBNow(userId) {
     if (!userId) return;
+    const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
     const secs = _popAccumulatedSecs(userId);
     if (secs <= 0) return;
@@ -586,7 +588,17 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         today_date: todayStr,
         last_seen_at: new Date().toISOString(),
       }).eq('user_id', userId);
-      if (!error) localStorage.removeItem(`cottage_time_sec_${userId}`);
+      if (!error) {
+        localStorage.removeItem(`cottage_time_sec_${userId}`);
+        _sessionEnterAt = Date.now(); // 다음 sync용 리셋
+        const page = typeof window !== 'undefined'
+          ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
+          : 'unknown';
+        const referrer = typeof document !== 'undefined' && document.referrer
+          ? (() => { try { return new URL(document.referrer).pathname; } catch (_) { return null; } })()
+          : null;
+        db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
+      }
     } catch (_) {}
   }
 
@@ -594,7 +606,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     document.addEventListener('visibilitychange', () => {
       // 탭 숨김 시 DB에 즉시 반영 (async이므로 페이지 살아있는 동안 완료)
       if (document.hidden && _sessionUserId) _syncTimeToDBNow(_sessionUserId);
-      else { _sessionStart = Date.now(); window._cottageSessionStart = _sessionStart; }
+      else { _sessionStart = Date.now(); _sessionEnterAt = Date.now(); window._cottageSessionStart = _sessionStart; }
     });
     window.addEventListener('beforeunload', () => {
       // 페이지 종료 시 best-effort 반영 (완료 보장 불가, localStorage가 백업)
@@ -610,6 +622,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     if (_sessionUserId) _flushTime(_sessionUserId); // 이전 세션 시간 플러시 후 리셋
     _sessionUserId = userId;
     _sessionStart = Date.now();
+    _sessionEnterAt = Date.now();
     window._cottageSessionStart = _sessionStart;
   }
 
