@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-09 (21차)
+최종 갱신: 2026-06-09 (22차)
 
 ---
 
@@ -42,6 +42,9 @@
 - [x] 건의사항 관리
 - [x] 회원 목록 및 차단
 - [x] 페이지 분석 대시보드
+
+### 게임 위치
+- [x] game-location.html — 이름 검색 → 위치 코드 표시, 섹션별 게임 목록 (코드 레벨)
 
 ### 인프라
 - [x] 방문자 통계 (페이지뷰, 하루 1회 카운트)
@@ -337,6 +340,8 @@
 | 2026-06-09 | feat: 배송중/구매예정 배지 — 게임 카드 및 상세 모달에 shelfGroupId 기반 배지 표시 (style.css + script.js + owned-games-page.js) |
 | 2026-06-09 | fix: 관리자 분석 전면 재작성 — 사용자별(회원목록+이용상세·날짜별7일)/페이지별(날짜별7일), page_sessions 기록 시작(visibilitychange), 시간 포맷 통일(시/분/초), ban 이벤트 delegation 전환 |
 | 2026-06-09 | feat: 오늘 이용시간 표시 — 내활동 패널·관리자 회원카드에 추가. profiles에 today_seconds/today_date 컬럼 필요 (마이그레이션 SQL 추가됨) |
+| 2026-06-09 | feat: 게임위치 페이지 — game-location.html 코드레벨 구현 (이름 검색+섹션별 게임목록, A~F-1) |
+| 2026-06-09 | data: 선반 분류 재편 — 협력→easy_coop(B-1)/hard_coop(C-1) weight 2.5 기준, 방탈출→escape_room(F-1), murder_mystery G→F, etc_space F→G |
 | 2026-06-09 | feat: add-game BGG ID 보호 — 기존 게임에 bggId 있으면 --rematch 없이는 BGG 매칭/fetch 건너뜀 |
 | 2026-06-08 | feat: add-game CLI 인터랙티브 자동화 — 위치·체감난이도 CLI 입력, BGG 매칭 점수별 확인(80+:확인옵션/55~79:필수/실패:ID입력), forced-bgg-overrides.json 자동 저장, description-translator.js --game-id 옵션 추가, ANTHROPIC_API_KEY 있으면 번역 자동 실행(없으면 경고), --skip-translate 옵션 |
 | 2026-06-05 | feat: play-records-utils.js 생성 — parsePhotoUrls/buildPhotoHtml/openLightbox 전역 공유 모듈 |

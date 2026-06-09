@@ -54,7 +54,7 @@ const SHELF_GROUPS = [
     code: "B-1",
     label: "쉬운 협력게임",
     parentId: "light_family",
-    sourceValues: ["쉬운협력", "쉬운 협력", "협력쉬움"]
+    sourceValues: ["쉬운협력", "쉬운 협력", "협력쉬움", "coop_easy"]
   },
   {
     id: "heavy_strategy",
@@ -69,7 +69,7 @@ const SHELF_GROUPS = [
     code: "C-1",
     label: "어려운 협력게임",
     parentId: "heavy_strategy",
-    sourceValues: ["어려운협력", "어려운 협력", "협력어려움"]
+    sourceValues: ["어려운협력", "어려운 협력", "협력어려움", "coop_hard"]
   },
   {
     id: "mini_box",
@@ -88,14 +88,21 @@ const SHELF_GROUPS = [
   },
   {
     id: "murder_mystery",
-    code: "G",
+    code: "F",
     label: "머더미스터리",
     parentId: null,
     sourceValues: ["머더미", "머더미스터리", "murder_mystery", "murdermystery"]
   },
   {
+    id: "escape_room",
+    code: "F-1",
+    label: "방탈출",
+    parentId: "murder_mystery",
+    sourceValues: ["방탈출", "escape_room", "escape room"]
+  },
+  {
     id: "etc_space",
-    code: "F",
+    code: "G",
     label: "기타공간",
     parentId: null,
     sourceValues: ["기타", "기타공간", "etc"]

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -14,6 +14,113 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+  <style>
+    .loc-search-wrap { margin-bottom: 20px; }
+    .loc-search-input {
+      width: 100%;
+      padding: 13px 16px;
+      font-size: 16px;
+      border: 1.5px solid #ddd;
+      border-radius: 10px;
+      outline: none;
+      box-sizing: border-box;
+      font-family: inherit;
+      background: #fff;
+    }
+    .loc-search-input:focus { border-color: #6b4c3b; }
+
+    .loc-search-results { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+    .loc-result-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #faf7f4;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #ece6df;
+    }
+    .loc-result-item:active { background: #f0ebe4; }
+    .loc-code-badge {
+      font-weight: 800;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: #5c3d2e;
+      color: #fff;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.03em;
+    }
+    .loc-code-badge--sub { background: #8b6350; }
+    .loc-code-badge--none { background: #aaa; }
+    .loc-result-name { font-size: 14px; color: #222; flex: 1; }
+    .loc-result-section { font-size: 12px; color: #999; white-space: nowrap; }
+
+    .loc-sections { display: flex; flex-direction: column; gap: 6px; }
+    .loc-section {
+      border: 1.5px solid #e4dcd4;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .loc-section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      cursor: pointer;
+      background: #faf7f4;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .loc-section-header:active { background: #f3ede6; }
+    .loc-section-code {
+      font-size: 16px;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 7px;
+      background: #5c3d2e;
+      color: #fff;
+      min-width: 38px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .loc-section--sub .loc-section-code { background: #8b6350; }
+    .loc-section--inactive .loc-section-code { background: #bbb; }
+    .loc-section-info { flex: 1; min-width: 0; }
+    .loc-section-label { font-size: 14px; font-weight: 600; color: #222; }
+    .loc-section-count { font-size: 12px; color: #999; margin-top: 1px; }
+    .loc-section-arrow { font-size: 13px; color: #bbb; transition: transform 0.2s; flex-shrink: 0; }
+    .loc-section.is-open .loc-section-arrow { transform: rotate(180deg); }
+    .loc-section-body {
+      display: none;
+      padding: 10px 14px 14px;
+      border-top: 1px solid #e8e0d8;
+      background: #fff;
+    }
+    .loc-section.is-open .loc-section-body { display: block; }
+    .loc-game-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .loc-game-chip {
+      font-size: 13px;
+      padding: 5px 11px;
+      border-radius: 20px;
+      background: #f0ebe5;
+      color: #333;
+      cursor: pointer;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+    .loc-game-chip:active { background: #e4dcd4; }
+    .loc-empty { color: #bbb; font-size: 13px; padding: 2px 0; }
+    .loc-section-divider {
+      margin: 10px 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #bbb;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
 
 <body class="owned-page">
@@ -105,9 +212,22 @@
         <h1>게임 위치</h1>
       </div>
       <div class="inner-page-body">
-        <div class="inner-page-coming-soon">
-          곧 안내 드릴게요 🗺️
+
+        <div class="loc-search-wrap">
+          <input
+            id="locSearchInput"
+            class="loc-search-input"
+            type="search"
+            placeholder="게임 이름으로 위치 검색..."
+            autocomplete="off"
+          >
+          <div class="loc-search-results" id="locSearchResults"></div>
         </div>
+
+        <div class="loc-sections" id="locSections">
+          <div class="loc-empty" style="padding:20px 0; text-align:center; color:#bbb">불러오는 중...</div>
+        </div>
+
       </div>
     </section>
   </main>
@@ -120,6 +240,182 @@
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    const SECTIONS = [
+      { id: 'party',          code: 'A',   label: '파티게임',           sub: false },
+      { id: 'dexterity',      code: 'A-1', label: '몸으로 하는 게임',   sub: true  },
+      { id: 'puzzle_1000',    code: 'A-2', label: '1000피스 직소퍼즐',  sub: true  },
+      { id: 'toy',            code: 'A-3', label: '장난감',             sub: true  },
+      { id: 'poker_mahjong',  code: 'A-4', label: '포커칩·마작패',      sub: true  },
+      { id: 'lost_found',     code: 'A-5', label: '고객분실물',         sub: true  },
+      { id: 'light_family',   code: 'B',   label: '라이트패밀리게임',   sub: false },
+      { id: 'easy_coop',      code: 'B-1', label: '쉬운 협력게임',      sub: true  },
+      { id: 'heavy_strategy', code: 'C',   label: '헤비 전략게임',      sub: false },
+      { id: 'hard_coop',      code: 'C-1', label: '어려운 협력게임',    sub: true  },
+      { id: 'mini_box',       code: 'D',   label: '작은상자게임',       sub: false },
+      { id: 'two_player_best',code: 'E',   label: '2인 베스트게임',     sub: false },
+      { id: 'murder_mystery', code: 'F',   label: '머더미스터리',       sub: false },
+      { id: 'escape_room',    code: 'F-1', label: '방탈출',             sub: true  },
+    ];
+
+    const SECTION_MAP = {};
+    SECTIONS.forEach(s => { SECTION_MAP[s.id] = s; });
+
+    function getCode(id) {
+      return SECTION_MAP[id] ? SECTION_MAP[id].code : null;
+    }
+    function getLabel(id) {
+      return SECTION_MAP[id] ? SECTION_MAP[id].label : (id || '-');
+    }
+
+    function getActiveGames() {
+      if (!window.gameData) return [];
+      return Object.values(window.gameData).filter(g => g.cottage?.status === 'active');
+    }
+
+    function buildGroupMap(games) {
+      const map = {};
+      for (const g of games) {
+        const id = g.cottage?.shelfGroupId;
+        if (!id) continue;
+        if (!map[id]) map[id] = [];
+        map[id].push(g);
+      }
+      return map;
+    }
+
+    function sortByName(arr) {
+      return arr.slice().sort((a, b) =>
+        (a.title?.display || a.id).localeCompare(b.title?.display || b.id, 'ko')
+      );
+    }
+
+    function openGame(id) {
+      if (typeof window.openGameSheet === 'function') {
+        window.openGameSheet(decodeURIComponent(id));
+      }
+    }
+
+    window._locOpenGame = openGame;
+
+    function renderSections(groupMap) {
+      const container = document.getElementById('locSections');
+      if (!container) return;
+
+      const knownIds = new Set(SECTIONS.map(s => s.id));
+      const unknownIds = Object.keys(groupMap).filter(id => !knownIds.has(id));
+
+      let html = SECTIONS.map(s => {
+        const games = sortByName(groupMap[s.id] || []);
+        const modClass = s.sub ? 'loc-section--sub' : '';
+        const chips = games.length
+          ? games.map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('')
+          : `<span class="loc-empty">해당 게임 없음</span>`;
+
+        return `
+          <div class="loc-section ${modClass}" data-section-id="${s.id}">
+            <div class="loc-section-header" onclick="this.closest('.loc-section').classList.toggle('is-open')">
+              <span class="loc-section-code">${s.code}</span>
+              <div class="loc-section-info">
+                <div class="loc-section-label">${s.label}</div>
+                <div class="loc-section-count">${games.length}종</div>
+              </div>
+              <span class="loc-section-arrow">▾</span>
+            </div>
+            <div class="loc-section-body">
+              <div class="loc-game-list">${chips}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (unknownIds.length > 0) {
+        const otherGames = unknownIds.flatMap(id => groupMap[id] || []);
+        const chips = sortByName(otherGames)
+          .map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`)
+          .join('');
+
+        html += `
+          <div class="loc-section loc-section--inactive">
+            <div class="loc-section-header" onclick="this.closest('.loc-section').classList.toggle('is-open')">
+              <span class="loc-section-code" style="background:#bbb">기타</span>
+              <div class="loc-section-info">
+                <div class="loc-section-label">비치 위치 미정 · 카운터 문의</div>
+                <div class="loc-section-count">${otherGames.length}종</div>
+              </div>
+              <span class="loc-section-arrow">▾</span>
+            </div>
+            <div class="loc-section-body">
+              <div class="loc-game-list">${chips}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderSearch(query, games) {
+      const el = document.getElementById('locSearchResults');
+      if (!el) return;
+
+      if (!query.trim()) { el.innerHTML = ''; return; }
+
+      const q = query.trim().toLowerCase();
+      const matches = games.filter(g => {
+        const display = (g.title?.display || g.id).toLowerCase();
+        const bgg = (g.title?.bgg || '').toLowerCase();
+        return display.includes(q) || bgg.includes(q);
+      }).slice(0, 20);
+
+      if (!matches.length) {
+        el.innerHTML = `<div class="loc-empty" style="padding:10px 0">검색 결과 없음</div>`;
+        return;
+      }
+
+      el.innerHTML = matches.map(g => {
+        const id = g.cottage?.shelfGroupId;
+        const code = getCode(id);
+        const label = getLabel(id);
+        const badgeClass = code
+          ? (SECTION_MAP[id]?.sub ? 'loc-code-badge loc-code-badge--sub' : 'loc-code-badge')
+          : 'loc-code-badge loc-code-badge--none';
+        const badgeText = code || '?';
+        return `
+          <div class="loc-result-item" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">
+            <span class="${badgeClass}">${badgeText}</span>
+            <span class="loc-result-name">${g.title?.display || g.id}</span>
+            <span class="loc-result-section">${label}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function init() {
+      const games = getActiveGames();
+      const groupMap = buildGroupMap(games);
+
+      renderSections(groupMap);
+
+      const input = document.getElementById('locSearchInput');
+      if (input) {
+        input.addEventListener('input', function () {
+          renderSearch(this.value, games);
+        });
+      }
+    }
+
+    if (window.gameData) {
+      init();
+    } else {
+      window.addEventListener('DOMContentLoaded', function () {
+        if (window.gameData) init();
+      });
+    }
+  })();
+  </script>
 
   <footer class="site-footer">
     <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
