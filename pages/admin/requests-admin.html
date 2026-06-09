@@ -79,9 +79,9 @@
     .admin-sub-section-title { font-size: 12px; font-weight: 700; color: var(--text); padding: 8px 12px; background: var(--bg,#f5f0e8); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
     .admin-sub-section-title:hover { background: #ede8df; }
     .admin-sub-section-arrow { font-size: 11px; color: var(--muted); transition: transform 0.2s; }
-    .admin-sub-section.is-open .admin-sub-section-arrow { transform: rotate(180deg); }
+    .admin-sub-section.is-open > .admin-sub-section-title .admin-sub-section-arrow { transform: rotate(180deg); }
     .admin-sub-section-body { display: none; padding: 8px 0; }
-    .admin-sub-section.is-open .admin-sub-section-body { display: block; }
+    .admin-sub-section.is-open > .admin-sub-section-body { display: block; }
   </style>
 </head>
 
