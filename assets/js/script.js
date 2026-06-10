@@ -288,11 +288,25 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
 // 현재 페이지 메뉴 active 표시 + 해당 그룹 자동 펼침
 (()=>{
   const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
-  document.querySelectorAll('.header-menu a').forEach(link=>{
+  const currentHash = location.hash;
+  const allLinks = Array.from(document.querySelectorAll('.header-menu a'));
+  // hash를 가진 링크 중 현재 hash와 일치하는 것이 있으면, hash 없는 같은 path 링크는 강조 안 함
+  const hashMatchExists = allLinks.some(l=>{
+    const raw = l.getAttribute('href') || '';
+    if(raw === '#' || raw.startsWith('#')) return false;
+    const u = new URL(l.href, location.href);
+    return u.pathname.replace(/\/$/, '') === currentPath && u.hash && u.hash === currentHash;
+  });
+  allLinks.forEach(link=>{
     const rawHref = link.getAttribute('href') || '';
     if(rawHref === '#' || rawHref.startsWith('#')) return;
-    const linkPath = new URL(link.href, location.href).pathname.replace(/\/$/, '');
-    if(linkPath === currentPath){
+    const u = new URL(link.href, location.href);
+    const linkPath = u.pathname.replace(/\/$/, '');
+    const linkHash = u.hash;
+    const matches = linkHash
+      ? linkPath === currentPath && linkHash === currentHash
+      : linkPath === currentPath && !hashMatchExists;
+    if(matches){
       link.classList.add('is-current');
       const group = link.closest('.menu-group');
       if(group) group.classList.add('is-open');
