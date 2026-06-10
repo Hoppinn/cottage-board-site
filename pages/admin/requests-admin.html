@@ -120,8 +120,7 @@
         <button class="menu-group-header" type="button">동호회 <span class="menu-group-arrow">›</span></button>
         <div class="menu-group-body">
           <a href="../club/club.html">소개</a>
-          <a href="../club/club.html#club-join">가입</a>
-          <a href="../club/club.html#club-meeting">모임참여</a>
+
         </div>
       </div>
       <a href="./requests.html">요청하기</a>
@@ -461,6 +460,19 @@
       }
 
       // ── 집계 헬퍼 ────────────────────────────────────────────
+      // 같은 사람이 같은 페이지를 당일 여러 번 방문해도 1회로 카운트
+      function dedupUserPageDay(rowset) {
+        const seen = new Set();
+        const out = [];
+        for (const r of rowset) {
+          if (!r.user_id) { out.push(r); continue; }
+          const day = (r.entered_at || '').slice(0, 10);
+          const key = r.user_id + '\x00' + r.page + '\x00' + day;
+          if (!seen.has(key)) { seen.add(key); out.push(r); }
+        }
+        return out;
+      }
+
       function buildPageMap(rowset) {
         const m = new Map();
         for (const r of rowset) {
@@ -584,25 +596,25 @@
 
       // ── 사용자별 이용 상세 (page_sessions 기반, 날짜별) ─────────
       const userDayParts = DAY_LABELS.map((label, i) => {
-        const dr = rowsForDay(i);
+        const dr = dedupUserPageDay(rowsForDay(i));
         return subSection(
           `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
           renderUserDetailDay(buildUserMap(dr)),
           false
         );
       }).join('');
-      const userAllDetail = renderUserDetailAll(buildUserMap(rows));
+      const userAllDetail = renderUserDetailAll(buildUserMap(dedupUserPageDay(rows)));
 
       // ── 페이지별 (날짜별) ────────────────────────────────────
       const pageDayParts = DAY_LABELS.map((label, i) => {
-        const dr = rowsForDay(i);
+        const dr = dedupUserPageDay(rowsForDay(i));
         return subSection(
           `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
           renderPageTable(buildPageMap(dr)),
           false
         );
       }).join('');
-      const pageAllDetail = renderPageTable(buildPageMap(rows));
+      const pageAllDetail = renderPageTable(buildPageMap(dedupUserPageDay(rows)));
 
       // ── DOM 반영 ─────────────────────────────────────────────
       const membersBody = document.getElementById('membersBody');

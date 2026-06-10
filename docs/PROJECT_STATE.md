@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-10 (24차)
+최종 갱신: 2026-06-10 (25차)
 
 ---
 
@@ -340,6 +340,9 @@
 | 2026-06-09 | feat: 배송중/구매예정 배지 — 게임 카드 및 상세 모달에 shelfGroupId 기반 배지 표시 (style.css + script.js + owned-games-page.js) |
 | 2026-06-09 | fix: 관리자 분석 전면 재작성 — 사용자별(회원목록+이용상세·날짜별7일)/페이지별(날짜별7일), page_sessions 기록 시작(visibilitychange), 시간 포맷 통일(시/분/초), ban 이벤트 delegation 전환 |
 | 2026-06-09 | feat: 오늘 이용시간 표시 — 내활동 패널·관리자 회원카드에 추가. profiles에 today_seconds/today_date 컬럼 필요 (마이그레이션 SQL 추가됨) |
+| 2026-06-10 | fix: 동호회 nav 완전 정리 — 가입/모임참여 메뉴 15개 파일에서 제거, 스크롤스파이 IIFE 삭제, resetMenuGroups inline style 잔류 버그 수정, 초기 IIFE club.html 예외 제거 |
+| 2026-06-10 | feat: about.html 홈페이지 이용안내 보러가기 버튼 추가, club.html 브레드크럼 동호회 smooth-scroll |
+| 2026-06-10 | fix: 관리자 분석 카운팅 dedup — dedupUserPageDay() 함수 추가, buildPageMap/buildUserMap 호출 시 (user, page, day) 기준 중복 제거 |
 | 2026-06-10 | fix: 동호회 nav 스크롤스파이 재작성 — getActiveSection() 분리, 페이지 맨 아래 도달 시 모임참여 활성, 초기화 hash 엄격 검사로 소개+가입 동시선택 버그 근본 해결 |
 | 2026-06-10 | fix: 브레드크럼 정리 — about.html·club.html 상단 브레드크럼 제거, club.html 가입·모임참여 섹션에 개별 브레드크럼 추가, guide.html 코티지보드>홈페이지이용안내로 수정 |
 | 2026-06-10 | feat: 관리자 분석 UX 개선 — 회원목록·이용상세 전체/날짜별 최근접속순 정렬, 이용상세 닉네임별 accordion (클릭 접기/펼치기, 기본 접힘) |

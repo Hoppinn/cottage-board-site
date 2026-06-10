@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-04 (폴더 구조 개편 반영)
+최종 갱신: 2026-06-10 (guide.html 추가, 메뉴 이름 변경 반영)
 
 ---
 
@@ -15,9 +15,10 @@
 │   │   ├── owned-games.html        # 전체 게임 목록 + 필터 + 바텀시트
 │   │   ├── game-reviews.html       # 플레이 기록 허브 (핵심 기능 페이지)
 │   │   └── game-location.html      # 게임 위치 안내
-│   ├── info/                       # 코티지보드 소개
+│   ├── info/                       # 코티지보드
 │   │   ├── about.html              # 코티지보드 소개
-│   │   └── price-rules.html        # 가격 & 규칙
+│   │   ├── price-rules.html        # 가격 & 규칙
+│   │   └── guide.html              # 홈페이지 이용안내
 │   ├── club/                       # 동호회
 │   │   ├── club.html               # 동호회 소개
 │   │   ├── club-intro.html         # 동호회 멤버 소개

@@ -174,43 +174,15 @@ const menuToggle =
 const mobileMenu =
   document.querySelector('#mobileMenu');
 
-// club.html 섹션 스크롤스파이 — #club-join / #club-meeting
-// _refreshClubActive: resetMenuGroups에서 햄버거 열릴 때 스크롤 기반으로 갱신
-let _refreshClubActive = null;
-(()=>{
-  const joinEl = document.getElementById('club-join');
-  const meetEl = document.getElementById('club-meeting');
-  if(!joinEl && !meetEl) return;
-  function applyClubActive(activeHash){
-    document.querySelectorAll('.header-menu a').forEach(link=>{
-      const raw = link.getAttribute('href') || '';
-      if(!raw.includes('club.html')) return;
-      const u = new URL(link.href, location.href);
-      const isActive = u.hash ? u.hash === activeHash : activeHash === '';
-      link.classList.toggle('is-current', isActive);
-    });
-  }
-  function getActiveSection(){
-    // 페이지 맨 아래 도달 시 → 모임참여 (해당 섹션까지 스크롤 불가 케이스 대응)
-    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 60;
-    if(atBottom && meetEl) return '#club-meeting';
-    // 가입 섹션이 뷰포트 상단 40% 안에 들어오면 → 가입
-    if(joinEl && joinEl.getBoundingClientRect().top < window.innerHeight * 0.4) return '#club-join';
-    return '';
-  }
-  function updateByScroll(){
-    applyClubActive(getActiveSection());
-  }
-  _refreshClubActive = updateByScroll;
-  document.addEventListener('scroll', updateByScroll, {passive:true});
-  // 초기화: 유효한 hash면 그대로, 아니면 소개
-  const initHash = (location.hash === '#club-join' || location.hash === '#club-meeting') ? location.hash : '';
-  applyClubActive(initHash);
-})();
 
 function resetMenuGroups(){
-  // club.html에서 햄버거 열릴 때 현재 스크롤 위치 기반으로 is-current 갱신
-  if(_refreshClubActive) _refreshClubActive();
+  // 이전 resetMenuGroups 호출의 잔류 inline style 제거 (중복 선택 방지)
+  document.querySelectorAll('.header-menu a').forEach(l => {
+    l.style.removeProperty('background');
+    l.style.removeProperty('color');
+    l.style.removeProperty('font-weight');
+    l.style.removeProperty('border-radius');
+  });
   // 스크롤 위치 기반: 추천 섹션 top이 뷰포트 상반부에 들어오면 active
   const recEl = document.getElementById('recommend');
   let isRecActive = false;
@@ -339,8 +311,6 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
     const u = new URL(link.href, location.href);
     const linkPath = u.pathname.replace(/\/$/, '');
     const linkHash = u.hash;
-    // club.html 링크는 스크롤스파이가 관리
-    if(linkPath.endsWith('/club.html')) return;
     const matches = linkHash
       ? linkPath === currentPath && linkHash === currentHash
       : linkPath === currentPath && !hashMatchExists;
