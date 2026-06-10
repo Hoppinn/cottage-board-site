@@ -186,6 +186,12 @@
     function setActive(href) {
       navLinks.forEach(a => {
         const ah = a.getAttribute('href');
+        if (ah !== href) {
+          a.style.removeProperty('background');
+          a.style.removeProperty('color');
+          a.style.removeProperty('font-weight');
+          a.style.removeProperty('border-radius');
+        }
         a.classList.toggle('is-current', ah === href);
       });
     }
