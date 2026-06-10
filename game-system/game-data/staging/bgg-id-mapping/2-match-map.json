@@ -4329,43 +4329,10 @@
     "scoreGap": 12
   },
   "원드러스크리처": {
-    "status": "unresolved",
+    "status": "forced",
+    "bggId": "400366",
     "ownedName": "원드러스크리처",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
+    "bggName": "Wondrous Creatures"
   },
   "글렌모어연대기": {
     "status": "forced",

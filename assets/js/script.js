@@ -175,6 +175,8 @@ const mobileMenu =
   document.querySelector('#mobileMenu');
 
 // club.html 섹션 스크롤스파이 — #club-join / #club-meeting
+// _refreshClubActive: resetMenuGroups에서 햄버거 열릴 때 스크롤 기반으로 갱신
+let _refreshClubActive = null;
 (()=>{
   const joinEl = document.getElementById('club-join');
   const meetEl = document.getElementById('club-meeting');
@@ -188,18 +190,22 @@ const mobileMenu =
       link.classList.toggle('is-current', isActive);
     });
   }
-  document.addEventListener('scroll', ()=>{
+  function updateByScroll(){
     const threshold = window.innerHeight * 0.4;
     let activeHash = '';
     if(joinEl && joinEl.getBoundingClientRect().top < threshold) activeHash = '#club-join';
     if(meetEl && meetEl.getBoundingClientRect().top < threshold) activeHash = '#club-meeting';
     applyClubActive(activeHash);
-  }, {passive:true});
-  // location.hash로 초기화 — 스크립트 실행 시점엔 브라우저가 아직 해시 앵커로 스크롤하지 않음
+  }
+  _refreshClubActive = updateByScroll;
+  document.addEventListener('scroll', updateByScroll, {passive:true});
+  // 초기화: location.hash 기준 (브라우저가 해시 앵커로 스크롤하기 전에 스크립트 실행됨)
   applyClubActive(location.hash || '');
 })();
 
 function resetMenuGroups(){
+  // club.html에서 햄버거 열릴 때 현재 스크롤 위치 기반으로 is-current 갱신
+  if(_refreshClubActive) _refreshClubActive();
   // 스크롤 위치 기반: 추천 섹션 top이 뷰포트 상반부에 들어오면 active
   const recEl = document.getElementById('recommend');
   let isRecActive = false;

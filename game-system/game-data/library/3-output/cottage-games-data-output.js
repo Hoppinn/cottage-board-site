@@ -85260,28 +85260,50 @@ const gameData = {
     "title": {
       "display": "원드러스크리처",
       "owned": "원드러스크리처",
-      "bgg": ""
+      "bgg": "Wondrous Creatures"
     },
     "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 0,
-      "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "id": "400366",
+      "matchStatus": "forced",
+      "year": "2024",
+      "rating": 8.05572,
+      "weight": 3.0276,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        2,
+        3
+      ],
+      "recommendedPlayers": [
+        1
+      ],
+      "notRecommendedPlayers": [
+        4,
+        4
+      ],
+      "playingTime": 80,
+      "minPlayTime": 40,
+      "maxPlayTime": 80,
+      "categories": [
+        "Fantasy"
+      ],
       "categoriesKo": [],
-      "mechanics": [],
+      "mechanics": [
+        "End Game Bonuses",
+        "Hand Management",
+        "Hexagon Grid",
+        "Open Drafting",
+        "Set Collection",
+        "Tags",
+        "Variable Player Powers",
+        "Worker Placement",
+        "Worker Placement, Different Worker Types"
+      ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Yeom.C.W"
+      ],
+      "description": "Welcome to the world full of fantastic creatures! You are an admirer, a creature enthusiast who will join the journey of forming the world&rsquo;s leading creature reserve.\n\nTo win Wondrous Creatures, you must create the most harmonious reserve. To do this, you will need to collect various Creature Cards and Eggs in your reserve. As each Creature Card holds its own unique ability, it's important to bring cards into your reserve that fit and synergize with your strategy. Additionally, it is very important to create a reserve that helps complete the Achievements faster than other players.\n\n\n    The worker placement mechanism provides an intriguing Hex Puzzle experience. Your deployed worker interacts with surrounding icons to bring in resources or cards, and activate special effects! \n     Your workers hold their own unique abilities. As you progress through the game, unlock their abilities and strengthen your workers!\n     As the game progresses, powerful special effects are newly placed on the map. Get creative and use these special effects to unleash your very own powerful combos! \n     Collect and combine 100+ different creature cards. Every creature holds its own distinctive ability and provides a deep strategic tableau building experience. \n\n\nThe goal of Wondrous Creatures is to be the player with the highest Victory Points (VPs) at the end of the game.\n\n--description from the publisher",
       "descriptionKo": "환상적인 생물로 가득한 세계에서 최고의 생물 보호구역을 만듭니다. 다양한 생물 카드와 알을 모아 시너지를 극대화하세요. 고유 능력을 가진 생물들이 서로 조화를 이루는 워커 플레이스먼트 게임."
     },
     "cottage": {
@@ -85289,16 +85311,43 @@ const gameData = {
       "shelfGroupId": "",
       "shelfLabel": "-",
       "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [],
-      "interactionTags": [],
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 3.0276,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "couple",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive",
+        "turn_based"
+      ],
       "relationshipTags": [],
       "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
+      "autoTags": [
+        "immersive",
+        "card_play",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "couple",
+        "group",
+        "competitive",
+        "turn_based"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
       "summaryKo": "100여 종의 환상적인 생물을 모아 최고의 보호구역을 만드는 워커 플레이스먼트 게임.",
       "comment": {
         "text": "",
@@ -85316,9 +85365,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/3ue_3La0WYopTSDER3shUA__original/img/fm8i0N9fCQRGqNHgk0jh0gk01Ww=/0x0/filters:format(jpeg)/pic8389014.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/3ue_3La0WYopTSDER3shUA__small/img/4SreytxNoZL435EkTriKB08W5W0=/fit-in/200x150/filters:strip_icc()/pic8389014.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
