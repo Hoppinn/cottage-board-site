@@ -174,6 +174,28 @@ const menuToggle =
 const mobileMenu =
   document.querySelector('#mobileMenu');
 
+// club.html 섹션 스크롤스파이 — #club-join / #club-meeting
+(()=>{
+  const joinEl = document.getElementById('club-join');
+  const meetEl = document.getElementById('club-meeting');
+  if(!joinEl && !meetEl) return;
+  function updateClubActive(){
+    const threshold = window.innerHeight * 0.4;
+    let activeHash = '';
+    if(joinEl && joinEl.getBoundingClientRect().top < threshold) activeHash = '#club-join';
+    if(meetEl && meetEl.getBoundingClientRect().top < threshold) activeHash = '#club-meeting';
+    document.querySelectorAll('.header-menu a').forEach(link=>{
+      const href = link.getAttribute('href') || '';
+      if(!href.includes('club.html')) return;
+      const u = new URL(link.href, location.href);
+      const isActive = u.hash ? u.hash === activeHash : !activeHash;
+      link.classList.toggle('is-current', isActive);
+    });
+  }
+  document.addEventListener('scroll', updateClubActive, {passive:true});
+  updateClubActive();
+})();
+
 function resetMenuGroups(){
   // 스크롤 위치 기반: 추천 섹션 top이 뷰포트 상반부에 들어오면 active
   const recEl = document.getElementById('recommend');
