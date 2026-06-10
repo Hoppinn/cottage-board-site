@@ -3800,7 +3800,7 @@ body.sheet-open{
 .price-hero-card{
   background:linear-gradient(135deg,#4a2810 0%,#7a4828 100%);
   border-radius:20px;
-  padding:clamp(24px,6vw,36px);
+  padding:clamp(18px,5vw,28px) clamp(24px,6vw,36px);
   text-align:center;
   color:#fff;
   margin-bottom:24px;
@@ -3826,18 +3826,19 @@ body.sheet-open{
 .price-payment-methods{
   display:flex;
   justify-content:center;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:14px;
+  flex-wrap:nowrap;
+  gap:5px;
+  margin-top:12px;
 }
 .price-pay-chip{
   background:rgba(255,255,255,.18);
   border:1px solid rgba(255,255,255,.3);
   border-radius:999px;
-  padding:4px 12px;
-  font-size:12px;
+  padding:3px 9px;
+  font-size:11px;
   font-weight:900;
   color:#fff;
+  white-space:nowrap;
 }
 .price-pay-note{
   margin:10px 0 0;
@@ -6299,7 +6300,7 @@ body.sheet-open{
 
   /* ── price-rules 페이지 ── */
   .price-hero-card{
-    padding:clamp(22px,2.5vw,34px);
+    padding:clamp(18px,2vw,24px) clamp(22px,2.5vw,34px);
     border-radius:20px;
     margin-bottom:24px;
   }
@@ -6313,8 +6314,8 @@ body.sheet-open{
     font-size:14px;
   }
   .price-pay-chip{
-    font-size:13px;
-    padding:5px 13px;
+    font-size:12px;
+    padding:4px 11px;
   }
   .rules-group-title{
     font-size:19px;
