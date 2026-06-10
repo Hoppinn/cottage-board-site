@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-10 (27차)
+최종 갱신: 2026-06-10 (28차)
 
 ---
 
@@ -188,22 +188,23 @@
 
 ## 6. 장기 리팩토링 계획 (다중 세션)
 
-### 목표
-- **전체 리팩토링**: game-reviews.html이 1,400줄 이상으로 비대화. JS 분리 및 구조 개선
-- **PC 호환성**: 현재 모바일 우선 설계. PC 레이아웃(와이드 뷰), 마우스 UX, 키보드 단축키 대응
+> **현황 (2026-06-10)**: 기능 정상, 버그 없음. 추가 리팩토링은 당장 불필요.
+> 파일별 현재 줄 수: script.js 2,176 / game-reviews.js 959 / index-page.js 911 / owned-games-page.js 911 / supabase-client.js 874
 
-### 리팩토링 세부 계획
+### 리팩토링 완료 목록
 - [x] game-reviews.html JS → assets/js/game-reviews.js 로 분리 ✅
 - [x] script.js → owned-games-page.js + index-page.js 분리 (3,961줄 → 2,123줄) ✅
-- [ ] addRow / renderGroupView / buildSessionBody 등 함수 모듈화 (현재 미착수, game-reviews.js 960줄로 감소해 우선순위 낮음)
 - [x] CSS 인라인 → style.css 통합 (pr-* 클래스) ✅
-- [x] initTagInput / attachAc / buildPhotoItemAdder / toInitials / hangulMatch → play-records-utils.js 공유 ✅ (game-reviews.js 1200→960줄, club-history.html 중복 100줄 제거)
+- [x] initTagInput / attachAc / buildPhotoItemAdder / toInitials / hangulMatch → play-records-utils.js 공유 ✅
 
-### PC 호환성 세부 계획
+### 보류 (필요 시 재검토)
+- [ ] addRow / renderGroupView / buildSessionBody 등 함수 모듈화 — 기능 문제 없으므로 보류
+- [ ] 마우스 hover 상태 전반 점검 — 모바일 위주 사이트, 우선순위 낮음
+- [ ] 키보드 네비게이션 (Tab 순서, Enter 동작) — 우선순위 낮음
+
+### PC 호환성 완료 목록
 - [x] 뷰포트 768px 이상에서 2컬럼 레이아웃 (게임 목록, 기록 허브) ✅
-- [ ] 마우스 hover 상태 전반 점검
 - [x] 바텀시트 → PC에서 센터 모달 ✅
-- [ ] 키보드 네비게이션 (Tab 순서, Enter 동작)
 
 ### 세션별 진행 기록
 | 세션 | 날짜 | 작업 범위 |
