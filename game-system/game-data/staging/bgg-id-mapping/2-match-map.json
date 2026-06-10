@@ -2080,14 +2080,6 @@
     "score": 97,
     "scoreGap": 10
   },
-  "비어앤브레드": {
-    "status": "auto-confirmed",
-    "bggId": "369880",
-    "ownedName": "비어앤브레드",
-    "bggName": "Beer & Bread",
-    "score": 115,
-    "scoreGap": 28
-  },
   "비티컬처 에센셜": {
     "status": "auto-confirmed",
     "bggId": "183394",
@@ -4375,45 +4367,6 @@
       }
     ]
   },
-  "천국과맥주": {
-    "status": "unresolved",
-    "ownedName": "천국과맥주",
-    "reviewCandidates": [
-      {
-        "bggId": "297658",
-        "bggName": "[kosmopoli:t]",
-        "year": "2020",
-        "score": 7,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "161578",
-        "bggName": "[redacted]",
-        "year": "2014",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      },
-      {
-        "bggId": "175867",
-        "bggName": "[microfilms]",
-        "year": "2015",
-        "score": 5,
-        "reason": {
-          "nameScore": 0,
-          "matchedSearchName": "",
-          "matchedCandidateName": ""
-        }
-      }
-    ]
-  },
   "글렌모어연대기": {
     "status": "forced",
     "bggId": "265188",
@@ -4472,5 +4425,13 @@
     "status": "forced",
     "bggId": "228855",
     "bggName": "Set a Watch"
+  },
+  "맥주와빵": {
+    "status": "auto-confirmed",
+    "bggId": "369880",
+    "ownedName": "맥주와빵",
+    "bggName": "Beer & Bread",
+    "score": 115,
+    "scoreGap": 28
   }
 }

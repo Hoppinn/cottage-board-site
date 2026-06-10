@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>홈페이지 이용 가이드 | 코티지보드</title>
+  <meta name="description" content="코티지보드 홈페이지 이용 가이드. 게임 찾기, 플레이 기록, 카카오 로그인, 동호회 참여 방법을 안내합니다.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="홈페이지 이용 가이드 | 코티지보드">
+  <meta property="og:description" content="코티지보드 홈페이지 이용 가이드. 게임 찾기, 플레이 기록, 카카오 로그인, 동호회 참여 방법을 안내합니다.">
+  <meta property="og:image" content="https://cottageboard.com/assets/images/main/og-image-3.jpg">
+  <meta property="og:url" content="https://cottageboard.com/pages/info/guide.html">
+  <meta property="og:locale" content="ko_KR">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="owned-page">
+  <header class="site-header">
+    <a class="header-logo" href="../../index.html">
+      <img src="../../assets/images/main/logo.png" alt="코티지보드 로고">
+    </a>
+    <a class="header-center" href="../../index.html">
+      오래 머무르고 싶은, 보드게임 공간
+    </a>
+    <div class="header-actions">
+      <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
+    </div>
+    <nav class="header-menu" id="mobileMenu">
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">게임 찾기 &amp; 기록 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../../index.html#recommend">추천 게임 찾기</a>
+          <a href="../game/owned-games.html">전체 게임 보기</a>
+          <a href="../game/game-location.html">게임 위치</a>
+          <a href="../game/game-reviews.html">플레이 기록</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">코티지보드 소개 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="./about.html">소개</a>
+          <a href="./price-rules.html">가격 &amp; 규칙</a>
+          <a href="./guide.html">홈페이지 이용 가이드</a>
+        </div>
+      </div>
+      <div class="menu-group">
+        <button class="menu-group-header" type="button">동호회 <span class="menu-group-arrow">›</span></button>
+        <div class="menu-group-body">
+          <a href="../club/club.html">소개</a>
+          <a href="../club/club.html#club-join">가입</a>
+          <a href="../club/club.html#club-meeting">모임참여</a>
+        </div>
+      </div>
+      <a href="../admin/requests.html">요청하기</a>
+      <div class="menu-login-area">
+        <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
+          <img id="kakaoProfileImg" src="" alt="" style="display:none">
+          <span id="kakaoLoginText">카카오 로그인</span>
+        </button>
+        <div id="kakaoUserActions" class="menu-kakao-user-actions">
+          <button id="kakaoPhotoBtn" type="button">사진 변경</button>
+          <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>
+          <button id="kakaoLogoutBtn" type="button">로그 아웃</button>
+        </div>
+      </div>
+    </nav>
+    <div class="header-search-panel" id="headerSearchPanel">
+      <input id="headerSearchInput" type="search" placeholder="게임명을 입력하세요">
+      <p class="header-search-hint">게임명을 누르면 바로 보기 · Enter를 누르면 전체 검색</p>
+      <div class="header-search-results" id="headerSearchResults"></div>
+    </div>
+  </header>
+
+  <main>
+
+    <div class="about-hero">
+      <nav class="breadcrumb">홈페이지 이용 가이드</nav>
+      <span class="about-hero-eyebrow">코티지보드 홈페이지</span>
+      <div class="about-hero-title-row">
+        <h2>이렇게 사용하면 더 편해요</h2>
+        <p class="about-hero-sub">게임 찾기부터 플레이 기록까지<br>홈페이지 활용법을 안내합니다</p>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <p class="about-section-label">게임 찾기</p>
+      <ul class="about-for-list">
+        <li class="about-for-item">
+          <span class="about-for-icon">🎲</span>
+          <div class="about-for-text">
+            <strong>추천 게임 찾기</strong><br>
+            <span style="color:var(--muted);font-weight:400">인원, 분위기, 키워드로 오늘 딱 맞는 게임을 골라드려요. 메인 화면에서 바로 이용할 수 있어요.</span>
+          </div>
+          <a class="club-card-link" href="../../index.html#recommend" aria-label="추천 게임 찾기"></a>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">📚</span>
+          <div class="about-for-text">
+            <strong>전체 게임 보기</strong><br>
+            <span style="color:var(--muted);font-weight:400">보유한 모든 게임 목록을 확인하고, 게임 이름을 탭하면 BGG 정보와 코티지보드 코멘트를 볼 수 있어요.</span>
+          </div>
+          <a class="club-card-link" href="../game/owned-games.html" aria-label="전체 게임 보기"></a>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">🗺️</span>
+          <div class="about-for-text">
+            <strong>게임 위치</strong><br>
+            <span style="color:var(--muted);font-weight:400">게임이 어느 선반에 있는지 바로 찾을 수 있어요. 이름을 검색하면 위치 코드가 표시됩니다.</span>
+          </div>
+          <a class="club-card-link" href="../game/game-location.html" aria-label="게임 위치"></a>
+        </li>
+      </ul>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section">
+      <p class="about-section-label">플레이 기록</p>
+      <ul class="about-for-list">
+        <li class="about-for-item">
+          <span class="about-for-icon">📝</span>
+          <div class="about-for-text">
+            <strong>기록 남기기</strong><br>
+            <span style="color:var(--muted);font-weight:400">오늘 플레이한 게임을 기록해두면 날짜별·게임별로 모아볼 수 있어요. 사진도 최대 5장 첨부 가능해요.</span>
+          </div>
+          <a class="club-card-link" href="../game/game-reviews.html" aria-label="플레이 기록 남기기"></a>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">⭐</span>
+          <div class="about-for-text">
+            <strong>별점 &amp; 코멘트</strong><br>
+            <span style="color:var(--muted);font-weight:400">게임 바텀시트에서 별점을 남기거나 한줄 코멘트를 등록할 수 있어요. 카카오 로그인 시 다기기에서도 유지됩니다.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section">
+      <p class="about-section-label">카카오 로그인</p>
+      <ul class="about-for-list">
+        <li class="about-for-item">
+          <span class="about-for-icon">💛</span>
+          <div class="about-for-text">
+            <strong>로그인하면 더 편해요</strong><br>
+            <span style="color:var(--muted);font-weight:400">메뉴 하단의 카카오 로그인 버튼으로 로그인하면 별점·코멘트 기록이 어느 기기에서나 이어집니다.</span>
+          </div>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">🙋</span>
+          <div class="about-for-text">
+            <strong>닉네임 &amp; 프로필 사진 변경</strong><br>
+            <span style="color:var(--muted);font-weight:400">로그인 후 메뉴에서 닉네임과 프로필 사진을 바꿀 수 있어요. 프리셋 20종 또는 직접 사진을 올릴 수 있습니다.</span>
+          </div>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">📊</span>
+          <div class="about-for-text">
+            <strong>내 활동 보기</strong><br>
+            <span style="color:var(--muted);font-weight:400">프로필 사진을 탭하면 내 활동 패널이 열려요. 방문 횟수, 이용 시간, 내가 남긴 기록·코멘트를 확인할 수 있어요.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <hr class="about-divider">
+
+    <div class="about-section">
+      <p class="about-section-label">동호회</p>
+      <ul class="about-for-list">
+        <li class="about-for-item">
+          <span class="about-for-icon">🤝</span>
+          <div class="about-for-text">
+            <strong>동호회 가입 &amp; 모임 참여</strong><br>
+            <span style="color:var(--muted);font-weight:400">카카오 오픈채팅으로 가입하고, 일정 투표에 참여해 모임에 나올 수 있어요. 동호회 요금은 5,000원입니다.</span>
+          </div>
+          <a class="club-card-link" href="../club/club.html" aria-label="동호회 안내"></a>
+        </li>
+      </ul>
+    </div>
+
+  </main>
+
+  <script src="../../game-system/config/bgg-label-map.js"></script>
+  <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/js/game-display-adapter.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script src="../../assets/js/supabase-client.js"></script>
+  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/kakao-auth.js"></script>
+
+  <footer class="site-footer">
+    <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>
+    <p><a class="footer-tel" href="tel:050-71371-6949">050-71371-6949</a> &nbsp;<a class="footer-link" href="https://pf.kakao.com/_ExbKxan" target="_blank" rel="noopener noreferrer">← 카카오 채널 문의</a> &nbsp;<a class="footer-link" href="https://www.instagram.com/cottageboard" target="_blank" rel="noopener noreferrer">인스타그램</a></p>
+    <p>© 2026 Cottage Board. All Rights Reserved.</p>
+  </footer>
+
+</body>
+</html>

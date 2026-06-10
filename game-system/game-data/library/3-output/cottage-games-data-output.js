@@ -9295,9 +9295,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.1,
       "moodTags": [
@@ -12717,9 +12717,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.38,
       "moodTags": [
@@ -19218,9 +19218,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.2,
       "moodTags": [
@@ -23211,9 +23211,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.91,
       "moodTags": [
@@ -26381,9 +26381,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.79,
       "moodTags": [
@@ -27367,9 +27367,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.01,
       "moodTags": [
@@ -27522,9 +27522,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
@@ -27673,9 +27673,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.64,
       "moodTags": [
@@ -30033,9 +30033,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.69,
       "moodTags": [
@@ -30190,9 +30190,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.31,
       "moodTags": [
@@ -30354,9 +30354,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.47,
       "moodTags": [
@@ -32475,9 +32475,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "beginner",
       "difficultyWeight": 1.2,
       "moodTags": [
@@ -33443,9 +33443,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.82,
       "moodTags": [
@@ -39413,9 +39413,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.66,
       "moodTags": [
@@ -41661,9 +41661,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.99,
       "moodTags": [
@@ -42038,9 +42038,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.86,
       "moodTags": [
@@ -43106,9 +43106,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.09,
       "moodTags": [
@@ -44780,9 +44780,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.93,
       "moodTags": [
@@ -48054,9 +48054,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.03,
       "moodTags": [
@@ -49090,9 +49090,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.95,
       "moodTags": [
@@ -52274,9 +52274,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 3.54,
       "moodTags": [
@@ -54698,9 +54698,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.4,
       "moodTags": [
@@ -56393,9 +56393,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.5,
       "moodTags": [
@@ -56644,9 +56644,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.81,
       "moodTags": [
@@ -58209,9 +58209,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.32,
       "moodTags": [
@@ -61944,9 +61944,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.33,
       "moodTags": [
@@ -65598,9 +65598,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.07,
       "moodTags": [
@@ -66124,9 +66124,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.84,
       "moodTags": [
@@ -66650,9 +66650,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [
@@ -67064,9 +67064,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "hardcore",
       "difficultyWeight": 4.15,
       "moodTags": [
@@ -70434,9 +70434,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "beginner",
       "difficultyWeight": 1.35,
       "moodTags": [
@@ -70845,9 +70845,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [
@@ -74034,9 +74034,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.08,
       "moodTags": [
@@ -77507,9 +77507,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.08,
       "moodTags": [
@@ -77790,9 +77790,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "hard_coop",
-      "shelfLabel": "어려운 협력게임",
-      "shelfFullLabel": "헤비 전략게임 - 어려운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.63,
       "moodTags": [
@@ -78081,9 +78081,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.4,
       "moodTags": [
@@ -79491,9 +79491,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
@@ -79646,9 +79646,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 1.73,
       "moodTags": [
@@ -81703,9 +81703,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.07,
       "moodTags": [
@@ -83141,9 +83141,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
       "moodTags": [],
@@ -84815,9 +84815,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "easy_coop",
-      "shelfLabel": "쉬운 협력게임",
-      "shelfFullLabel": "라이트패밀리게임 - 쉬운 협력게임",
+      "shelfGroupId": "협력",
+      "shelfLabel": "협력",
+      "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2.17,
       "moodTags": [

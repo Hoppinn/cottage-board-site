@@ -179,11 +179,7 @@ const mobileMenu =
   const joinEl = document.getElementById('club-join');
   const meetEl = document.getElementById('club-meeting');
   if(!joinEl && !meetEl) return;
-  function updateClubActive(){
-    const threshold = window.innerHeight * 0.4;
-    let activeHash = '';
-    if(joinEl && joinEl.getBoundingClientRect().top < threshold) activeHash = '#club-join';
-    if(meetEl && meetEl.getBoundingClientRect().top < threshold) activeHash = '#club-meeting';
+  function applyClubActive(activeHash){
     document.querySelectorAll('.header-menu a').forEach(link=>{
       const href = link.getAttribute('href') || '';
       if(!href.includes('club.html')) return;
@@ -192,8 +188,15 @@ const mobileMenu =
       link.classList.toggle('is-current', isActive);
     });
   }
-  document.addEventListener('scroll', updateClubActive, {passive:true});
-  updateClubActive();
+  document.addEventListener('scroll', ()=>{
+    const threshold = window.innerHeight * 0.4;
+    let activeHash = '';
+    if(joinEl && joinEl.getBoundingClientRect().top < threshold) activeHash = '#club-join';
+    if(meetEl && meetEl.getBoundingClientRect().top < threshold) activeHash = '#club-meeting';
+    applyClubActive(activeHash);
+  }, {passive:true});
+  // location.hash로 초기화 — 스크립트 실행 시점엔 브라우저가 아직 해시 앵커로 스크롤하지 않음
+  applyClubActive(location.hash || '');
 })();
 
 function resetMenuGroups(){
@@ -308,11 +311,11 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
 });
 
 // 현재 페이지 메뉴 active 표시 + 해당 그룹 자동 펼침
+// club.html 링크는 위 스크롤스파이가 전담 — 여기서 처리 안 함
 (()=>{
   const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
   const currentHash = location.hash;
   const allLinks = Array.from(document.querySelectorAll('.header-menu a'));
-  // hash를 가진 링크 중 현재 hash와 일치하는 것이 있으면, hash 없는 같은 path 링크는 강조 안 함
   const hashMatchExists = allLinks.some(l=>{
     const raw = l.getAttribute('href') || '';
     if(raw === '#' || raw.startsWith('#')) return false;
@@ -325,6 +328,8 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
     const u = new URL(link.href, location.href);
     const linkPath = u.pathname.replace(/\/$/, '');
     const linkHash = u.hash;
+    // club.html 링크는 스크롤스파이가 관리
+    if(linkPath.endsWith('/club.html')) return;
     const matches = linkHash
       ? linkPath === currentPath && linkHash === currentHash
       : linkPath === currentPath && !hashMatchExists;
