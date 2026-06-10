@@ -169,6 +169,43 @@
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
 
+  <!-- 동호회 페이지 스크롤스파이 -->
+  <script>
+  (function () {
+    const joinEl = document.getElementById('club-join');
+    const meetEl = document.getElementById('club-meeting');
+    if (!joinEl || !meetEl) return;
+
+    const navLinks = document.querySelectorAll('.menu-group-body a[href*="club.html"]');
+    if (!navLinks.length) return;
+
+    function setActive(href) {
+      navLinks.forEach(a => {
+        const ah = a.getAttribute('href');
+        a.classList.toggle('is-current', ah === href);
+      });
+    }
+
+    function getActiveHref() {
+      const y = window.scrollY + 140;
+      const bottom = document.documentElement.scrollHeight - window.innerHeight;
+      if (bottom > 0 && window.scrollY >= bottom - 20) return './club.html#club-meeting';
+      if (meetEl.offsetTop && y >= meetEl.offsetTop) return './club.html#club-meeting';
+      if (joinEl.offsetTop && y >= joinEl.offsetTop) return './club.html#club-join';
+      return './club.html';
+    }
+
+    function updateSpy() { setActive(getActiveHref()); }
+
+    window.addEventListener('scroll', updateSpy, { passive: true });
+
+    const hash = location.hash;
+    if (hash === '#club-join') setActive('./club.html#club-join');
+    else if (hash === '#club-meeting') setActive('./club.html#club-meeting');
+    else setTimeout(updateSpy, 50);
+  })();
+  </script>
+
   <!-- 외부 링크 확인 다이얼로그 -->
   <div id="extConfirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9000;align-items:center;justify-content:center;">
     <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:280px;width:85%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);">
