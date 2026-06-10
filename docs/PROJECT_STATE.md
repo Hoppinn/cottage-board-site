@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-10 (28차)
+최종 갱신: 2026-06-10 (29차)
 
 ---
 
@@ -174,6 +174,8 @@
 - [x] `matchRecommendPlayer` → `matchBestPlayers` rename ✅
 - [x] 기존 Supabase Storage 사진 일괄 리사이즈 — 전체 20개 모두 이미 1200px 이하, 처리 불필요 ✅
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
+- [ ] **게임 위치 페이지** (game-location.html) — 책장 위치 기능 본격 구현
+- [ ] **모임 일정 페이지** — 페이지만 있는 상태, 기능 구현 필요
 - [ ] `window._cottageSessionStart` — kakao-auth.js에서 실사용 중, 제거 불가
 - [ ] `getPlayHighlights`, `getGamePlayCount` — script.js에서 호출 중, 제거 불필요
 - [x] 자동완성 화살표 선택 후 Enter — initTagInput early return + attachAc 선처리로 수정 ✅
