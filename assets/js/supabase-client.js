@@ -553,6 +553,20 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   let _sessionEnterAt = Date.now();
   let _sessionUserId = null;
 
+  // ── heartbeat: 1분 주기, 로그인+탭 활성 상태에서만 last_seen_at 갱신 ──
+  let _heartbeatTimer = null;
+  function _ensureHeartbeat() {
+    if (_heartbeatTimer) return;
+    _heartbeatTimer = setInterval(async () => {
+      if (!_sessionUserId || document.hidden) return;
+      try {
+        await db.from('profiles')
+          .update({ last_seen_at: new Date().toISOString() })
+          .eq('user_id', _sessionUserId);
+      } catch (_) {}
+    }, 60 * 1000);
+  }
+
   function _flushTime(userId) {
     if (!userId) return;
     const elapsed = Math.floor((Date.now() - _sessionStart) / 1000); // 초 단위 누적
@@ -624,6 +638,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     _sessionStart = Date.now();
     _sessionEnterAt = Date.now();
     window._cottageSessionStart = _sessionStart;
+    _ensureHeartbeat();
   }
 
   async function upsertProfile(userId, nickname, realName, explicitVisitCount) {

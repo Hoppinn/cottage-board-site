@@ -74,6 +74,9 @@
     .admin-period-section.is-open .admin-period-arrow { transform: rotate(180deg); }
     .admin-period-body { display: none; }
     .admin-period-section.is-open .admin-period-body { display: block; }
+    /* 접속 상태 배지 */
+    .admin-online-status { display: inline-block; font-size: 11px; color: var(--muted); margin-left: 6px; white-space: nowrap; }
+    .admin-online-status.is-online { color: #3d8a3d; font-weight: 600; }
     /* 분석 서브 섹션 */
     .admin-sub-section { margin: 6px 0; border: 1px solid var(--border,#e8e4dc); border-radius: 8px; overflow: hidden; }
     .admin-sub-section-title { font-size: 12px; font-weight: 700; color: var(--text); padding: 8px 12px; background: var(--bg,#f5f0e8); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; }
@@ -553,8 +556,8 @@
           const dnHtml = p.real_name
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
-          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}">
-            <div class="admin-member-name">${dnHtml}${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}</div>
+          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}">
+            <div class="admin-member-name">${dnHtml}${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
@@ -608,8 +611,56 @@
       }
     }
 
+    // ── 접속 상태 배지 ──────────────────────────────────────────
+    function fmtOnlineStatus(lastSeenAt) {
+      if (!lastSeenAt) return { text: '', online: false };
+      const diff = Date.now() - new Date(lastSeenAt).getTime();
+      const secs = Math.floor(diff / 1000);
+      if (secs < 120) return { text: '🟢 접속중', online: true };
+      const mins = Math.floor(secs / 60);
+      if (mins < 60) return { text: `⚪ ${mins}분 전`, online: false };
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return { text: `⚪ ${hrs}시간 전`, online: false };
+      return { text: `⚪ ${Math.floor(hrs / 24)}일 전`, online: false };
+    }
+
+    function refreshOnlineBadges() {
+      document.querySelectorAll('.admin-member-card[data-last-seen]').forEach(card => {
+        const lastSeen = card.dataset.lastSeen;
+        const badge = card.querySelector('.admin-online-status');
+        if (!badge) return;
+        const { text, online } = fmtOnlineStatus(lastSeen);
+        badge.textContent = text;
+        badge.classList.toggle('is-online', online);
+      });
+    }
+
+    // 30초마다 배지 표시 갱신 (DB 재조회 없이 시간 재계산)
+    setInterval(refreshOnlineBadges, 30 * 1000);
+
+    // 2분마다 DB 재조회 → data-last-seen 업데이트 후 배지 갱신
+    let _profilesCache = [];
+    async function refreshProfilesAndBadges() {
+      if (!window.CottageDB) return;
+      try {
+        _profilesCache = await window.CottageDB.getAllProfiles();
+        for (const p of _profilesCache) {
+          const card = document.querySelector(`.admin-member-card[data-uid="${p.user_id}"]`);
+          if (card && p.last_seen_at) card.dataset.lastSeen = p.last_seen_at;
+        }
+        refreshOnlineBadges();
+      } catch (_) {}
+    }
+    setInterval(refreshProfilesAndBadges, 2 * 60 * 1000);
+
     let tried = false;
-    function tryLoad() { if (tried) return; tried = true; load().then(loadAnalytics); }
+    function tryLoad() {
+      if (tried) return; tried = true;
+      load().then(loadAnalytics).then(() => {
+        // 초기 렌더 직후 배지 표시
+        setTimeout(refreshOnlineBadges, 100);
+      });
+    }
     window.addEventListener('cottage-auth-changed', tryLoad);
     setTimeout(tryLoad, 1200);
   })();
