@@ -492,7 +492,7 @@
         return h + '</tbody></table>';
       }
 
-      // 이용상세 > 전체: 방문n회(profiles.visit_count), 총체류, 오늘체류 + 페이지별 방문횟수/체류시간
+      // 이용상세 > 전체: profiles 기준 총체류+오늘체류, page_sessions는 페이지별 로그로만 표시
       function renderUserDetailAll(sortedUsers) {
         if (!sortedUsers.length) return '<div class="admin-empty">데이터 없음 (로그인 세션 필요)</div>';
         let h = '';
@@ -500,8 +500,8 @@
           const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
           const profile = profilesByUid.get(String(uid));
           const visitCount = profile?.visit_count != null ? profile.visit_count + '회' : '-';
-          const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
-          const todayS = profile?.today_date === todayKst ? (profile?.today_seconds || 0) : 0;
+          const totalSec = profile?.total_minutes || 0;           // profiles 기준
+          const todayS   = profile?.today_date === todayKst ? (profile?.today_seconds || 0) : 0;
           const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
           h += `<div style="margin-bottom:14px;">
             <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">
@@ -510,7 +510,7 @@
                 방문 ${visitCount} · 총체류 ${fmtTime(totalSec)}${todayS > 0 ? ` · 오늘 ${fmtTime(todayS)}` : ''}
               </span>
             </div>
-            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류시간</th></tr></thead><tbody>`;
+            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>`;
           for (const [page, d] of sortedPages) {
             h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`;
           }

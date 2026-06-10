@@ -429,11 +429,13 @@ async function openProfilePanel() {
         return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
       })()}
       ${(() => {
+        const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+        const dbTodaySecs = stats.profile?.today_date === todayKst ? (stats.profile?.today_seconds || 0) : 0;
         const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
         const sessionSecs = window._cottageSessionStart
           ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
           : 0;
-        const todaySecs = localSecs + sessionSecs;
+        const todaySecs = dbTodaySecs + localSecs + sessionSecs;
         const fmt = s => s >= 3600
           ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
           : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
