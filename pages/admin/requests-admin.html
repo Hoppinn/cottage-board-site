@@ -425,6 +425,7 @@
         return p.real_name && nick !== p.real_name ? `${nick}(${p.real_name})` : nick;
       }
       const profilesMap = new Map(allProfiles.map(p => [p.user_id, dispName(p)]));
+      const profilesByUid = new Map(allProfiles.map(p => [String(p.user_id), p]));
 
       let subIdx = 0;
       function subSection(title, content, open = false) {
@@ -491,7 +492,35 @@
         return h + '</tbody></table>';
       }
 
-      function renderUserDetail(sortedUsers) {
+      // 이용상세 > 전체: 방문n회(profiles.visit_count), 총체류, 오늘체류 + 페이지별 방문횟수/체류시간
+      function renderUserDetailAll(sortedUsers) {
+        if (!sortedUsers.length) return '<div class="admin-empty">데이터 없음 (로그인 세션 필요)</div>';
+        let h = '';
+        for (const [uid, pm] of sortedUsers) {
+          const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
+          const profile = profilesByUid.get(String(uid));
+          const visitCount = profile?.visit_count != null ? profile.visit_count + '회' : '-';
+          const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
+          const todayS = profile?.today_date === todayKst ? (profile?.today_seconds || 0) : 0;
+          const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
+          h += `<div style="margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">
+              ${escH(nick)}
+              <span style="font-size:11px;color:var(--muted);font-weight:400;">
+                방문 ${visitCount} · 총체류 ${fmtTime(totalSec)}${todayS > 0 ? ` · 오늘 ${fmtTime(todayS)}` : ''}
+              </span>
+            </div>
+            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류시간</th></tr></thead><tbody>`;
+          for (const [page, d] of sortedPages) {
+            h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`;
+          }
+          h += '</tbody></table></div>';
+        }
+        return h;
+      }
+
+      // 이용상세 > 날짜별: O/X 방문 여부 + 체류시간 (n회 없음)
+      function renderUserDetailDay(sortedUsers) {
         if (!sortedUsers.length) return '<div class="admin-empty">데이터 없음 (로그인 세션 필요)</div>';
         let h = '';
         for (const [uid, pm] of sortedUsers) {
@@ -499,11 +528,10 @@
           const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
           const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
           h += `<div style="margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">총 ${fmtTime(totalSec)}</span></div>
-            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>총체류</th><th>평균체류</th></tr></thead><tbody>`;
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">체류 ${fmtTime(totalSec)}</span></div>
+            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류시간</th></tr></thead><tbody>`;
           for (const [page, d] of sortedPages) {
-            const avg = d.visits ? Math.round(d.totalSec/d.visits) : 0;
-            h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td><td>${fmtTime(avg)}</td></tr>`;
+            h += `<tr><td class="anat-page">${escH(page)}</td><td style="color:#4a8c4a">O</td><td>${fmtTime(d.totalSec)}</td></tr>`;
           }
           h += '</tbody></table></div>';
         }
@@ -530,7 +558,7 @@
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
-              <span>방문 ${p.visit_count || 1}회</span>
+              <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
               ${todayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${fmtTime(todayS)}</span>` : ''}
               <span>⏱ ${fmtTime(totalS)}</span>
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
@@ -543,11 +571,11 @@
         const dr = rowsForDay(i);
         return subSection(
           `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
-          renderUserDetail(buildUserMap(dr)),
+          renderUserDetailDay(buildUserMap(dr)),
           false
         );
       }).join('');
-      const userAllDetail = renderUserDetail(buildUserMap(rows));
+      const userAllDetail = renderUserDetailAll(buildUserMap(rows));
 
       // ── 페이지별 (날짜별) ────────────────────────────────────
       const pageDayParts = DAY_LABELS.map((label, i) => {
