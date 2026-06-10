@@ -179,6 +179,10 @@
     const navLinks = document.querySelectorAll('.menu-group-body a[href*="club.html"]');
     if (!navLinks.length) return;
 
+    // 동호회 그룹 자동 펼침 (script.js가 club.html 링크를 스킵하므로 여기서 처리)
+    const clubGroup = navLinks[0]?.closest('.menu-group');
+    if (clubGroup) clubGroup.classList.add('is-open');
+
     function setActive(href) {
       navLinks.forEach(a => {
         const ah = a.getAttribute('href');
@@ -202,7 +206,7 @@
     const hash = location.hash;
     if (hash === '#club-join') setActive('./club.html#club-join');
     else if (hash === '#club-meeting') setActive('./club.html#club-meeting');
-    else setTimeout(updateSpy, 50);
+    // 해시 없이 진입: 초기 is-current 없음 — 스크롤 후 표시
   })();
   </script>
 

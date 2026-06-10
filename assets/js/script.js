@@ -311,6 +311,7 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
     const u = new URL(link.href, location.href);
     const linkPath = u.pathname.replace(/\/$/, '');
     const linkHash = u.hash;
+    if(linkPath.endsWith('/club.html')) return; // 스크롤스파이가 전담
     const matches = linkHash
       ? linkPath === currentPath && linkHash === currentHash
       : linkPath === currentPath && !hashMatchExists;
