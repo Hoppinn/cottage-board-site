@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-09 (22차)
+최종 갱신: 2026-06-10 (23차)
 
 ---
 
@@ -340,6 +340,7 @@
 | 2026-06-09 | feat: 배송중/구매예정 배지 — 게임 카드 및 상세 모달에 shelfGroupId 기반 배지 표시 (style.css + script.js + owned-games-page.js) |
 | 2026-06-09 | fix: 관리자 분석 전면 재작성 — 사용자별(회원목록+이용상세·날짜별7일)/페이지별(날짜별7일), page_sessions 기록 시작(visibilitychange), 시간 포맷 통일(시/분/초), ban 이벤트 delegation 전환 |
 | 2026-06-09 | feat: 오늘 이용시간 표시 — 내활동 패널·관리자 회원카드에 추가. profiles에 today_seconds/today_date 컬럼 필요 (마이그레이션 SQL 추가됨) |
+| 2026-06-10 | data: 맥주와빵 데이터 정합성 수정 — master/ledger/output 세 파일에서 비어앤브레드→맥주와빵 rename, 천국과맥주 빈 항목 삭제 (빌드 재실행 시 롤백 방지) |
 | 2026-06-09 | feat: 게임위치 페이지 — game-location.html 코드레벨 구현 (이름 검색+섹션별 게임목록, A~F-1) |
 | 2026-06-09 | data: 선반 분류 재편 — 협력→easy_coop(B-1)/hard_coop(C-1) weight 2.5 기준, 방탈출→escape_room(F-1), murder_mystery G→F, etc_space F→G |
 | 2026-06-09 | feat: add-game BGG ID 보호 — 기존 게임에 bggId 있으면 --rematch 없이는 BGG 매칭/fetch 건너뜀 |

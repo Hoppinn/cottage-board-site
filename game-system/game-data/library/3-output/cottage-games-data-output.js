@@ -43672,11 +43672,11 @@ const gameData = {
       "boardId": "블리츠크리그"
     }
   },
-  "비어앤브레드": {
-    "id": "비어앤브레드",
+  "맥주와빵": {
+    "id": "맥주와빵",
     "title": {
-      "display": "비어앤브레드",
-      "owned": "비어앤브레드",
+      "display": "맥주와빵",
+      "owned": "맥주와빵",
       "bgg": "Beer & Bread"
     },
     "bgg": {
@@ -43801,7 +43801,7 @@ const gameData = {
     "community": {
       "reviewEnabled": true,
       "ratingEnabled": true,
-      "boardId": "비어앤브레드"
+      "boardId": "맥주와빵"
     }
   },
   "비티컬처-에센셜": {
@@ -85325,78 +85325,6 @@ const gameData = {
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "원드러스크리처"
-    }
-  },
-  "천국과맥주": {
-    "id": "천국과맥주",
-    "title": {
-      "display": "천국과맥주",
-      "owned": "천국과맥주",
-      "bgg": ""
-    },
-    "bgg": {
-      "id": "",
-      "matchStatus": "unresolved",
-      "year": "",
-      "rating": 0,
-      "weight": 0,
-      "minPlayers": 0,
-      "maxPlayers": 0,
-      "bestPlayers": [],
-      "recommendedPlayers": [],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
-      "categoriesKo": [],
-      "mechanics": [],
-      "mechanicsKo": [],
-      "designers": [],
-      "description": "",
-      "descriptionKo": ""
-    },
-    "cottage": {
-      "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
-      "difficultyId": "",
-      "difficultyWeight": 0,
-      "moodTags": [],
-      "playTags": [],
-      "situationTags": [],
-      "interactionTags": [],
-      "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [],
-      "displayTags": [],
-      "summaryKo": "",
-      "comment": {
-        "text": "",
-        "source": "none"
-      },
-      "ruleSummary": {
-        "text": "",
-        "source": "none"
-      },
-      "recommendPoint": {
-        "text": "",
-        "source": "none"
-      },
-      "caution": "",
-      "youtubeUrl": ""
-    },
-    "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
-    },
-    "community": {
-      "reviewEnabled": true,
-      "ratingEnabled": true,
-      "boardId": "천국과맥주"
     }
   },
   "글렌모어연대기": {

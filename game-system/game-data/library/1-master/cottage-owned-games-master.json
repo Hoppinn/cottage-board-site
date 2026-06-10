@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "cottageboard-master",
-  "updatedAt": "2026-06-08T16:57:46.602Z",
+  "updatedAt": "2026-06-10T05:02:35.184Z",
   "games": {
     "7원더스": {
       "id": "7원더스",
@@ -33333,112 +33333,6 @@
         ]
       }
     },
-    "비어앤브레드": {
-      "id": "비어앤브레드",
-      "ownedName": "비어앤브레드",
-      "titleKo": "비어앤브레드",
-      "titleEn": "Beer & Bread",
-      "bggId": "369880",
-      "matchStatus": "auto-confirmed",
-      "yearPublished": 2022,
-      "minPlayers": 2,
-      "maxPlayers": 2,
-      "playingTime": 45,
-      "minPlayTime": 30,
-      "maxPlayTime": 45,
-      "minAge": 10,
-      "difficulty": 2.3493,
-      "rating": 7.30491,
-      "bayesRating": 6.8207,
-      "usersRated": 6972,
-      "rank": 730,
-      "designers": [
-        "Scott Almes"
-      ],
-      "artists": [
-        "Michael Menzel"
-      ],
-      "publishers": [
-        "Deep Print Games",
-        "999 Games",
-        "Albi",
-        "Capstone Games",
-        "CoolPlay",
-        "Fantasmagoria",
-        "Games7Days",
-        "Ghenos Games",
-        "Gigamic",
-        "Hachette Boardgames Benelux",
-        "Hobby Japan",
-        "Maldito Games",
-        "Pegasus Spiele",
-        "Vagabund"
-      ],
-      "categories": [
-        "Card Game",
-        "Farming",
-        "Medieval"
-      ],
-      "mechanics": [
-        "Closed Drafting",
-        "Contracts",
-        "End Game Bonuses",
-        "Hand Management",
-        "Highest-Lowest Scoring",
-        "Multi-Use Cards",
-        "Neighbor Scope",
-        "Turn Order: Stat-Based",
-        "Variable Player Powers"
-      ],
-      "recommendedPlayers": [],
-      "bestPlayers": [
-        2
-      ],
-      "notRecommendedPlayers": [
-        1,
-        2
-      ],
-      "image": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__original/img/IiugqYTDlz1Rk1EAaEwDxr65YgI=/0x0/filters:format(jpeg)/pic7064178.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__small/img/x0Q2R8xgABJACUHYSCA00a7j3Cg=/fit-in/200x150/filters:strip_icc()/pic7064178.jpg",
-      "description": "Beer & Bread is a multi-use card game for two players. Its clever structure of alternating rounds puts a fascinating twist on player interaction, card drafting, and resource management.\n\nFounded on the fruitful lands of an erstwhile monastery, two villages have held up the dual tradition of brewing beer and baking bread. While sharing fields and resources, they still find pride in their friendly rivalry of besting each other&rsquo;s produce.\n\nEach of you represents one of these villages. Over the course of six years - which alternate between fruitful and dry - you must harmonize your duties of harvesting and storing resources, producing beer and bread, selling them for coins and upgrading your facilities.\n\nHowever, in order to win, you must maintain the balance between your baked and liquid goods. Because, after the sixth year, you only score the coins collected from the type of good - beer or bread - for which you earned less. The village with the higher score wins.\n\n&mdash;description from the publisher",
-      "difficultyWeight": 0,
-      "location": "2인",
-      "sourceMechanism": "",
-      "sourceRating": 0,
-      "supportsLargeGroup": false,
-      "comment": "",
-      "tags": [],
-      "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 게임.",
-      "descriptionKo": "《Beer & Bread》는 2인용 멀티유즈 카드 게임입니다. 라운드가 번갈아 진행되는 영리한 구조로 플레이어 상호작용, 카드 드래프팅, 자원 관리에 흥미로운 변화를 줍니다.\n\n옛 수도원의 비옥한 땅에 세워진 두 마을은 맥주 양조와 빵 굽기의 전통을 지켜오고 있습니다. 자원을 공유하면서도 생산품의 질로 경쟁하는 우호적인 라이벌 관계를 자랑합니다.\n\n각 플레이어는 이 마을 중 하나를 대표합니다. 풍작과 흉작이 번갈아 나타나는 6년에 걸쳐 수확과 저장, 맥주와 빵 생산, 동전 판매, 시설 업그레이드를 관리해야 합니다.\n\n승리하려면 맥주와 빵의 균형을 유지해야 합니다. 6년 후 당신은 덜 번 상품(맥주 또는 빵) 중 하나에서만 수집한 동전으로 점수를 얻습니다. 더 높은 점수를 얻은 마을이 승리합니다.",
-      "categoriesKo": [
-        "카드게임",
-        "농업",
-        "중세"
-      ],
-      "mechanicsKo": [
-        "비공개 드래프팅",
-        "계약",
-        "최종 보너스",
-        "패 관리",
-        "최고-최저 득점",
-        "다목적 카드",
-        "인접 범위",
-        "스탯 기반 순서",
-        "비대칭 능력"
-      ],
-      "status": "ready",
-      "createdAt": "2026-05-23T17:43:25.683Z",
-      "updatedAt": "2026-06-08T16:57:46.608Z",
-      "source": {
-        "base": "xlsx-import",
-        "overrides": [
-          "ownedName",
-          "titleKo",
-          "bestPlayers",
-          "recommendedPlayers"
-        ]
-      }
-    },
     "비티컬처-에센셜": {
       "id": "비티컬처-에센셜",
       "ownedName": "비티컬처 에센셜",
@@ -65765,60 +65659,6 @@
         ]
       }
     },
-    "천국과맥주": {
-      "id": "천국과맥주",
-      "ownedName": "천국과맥주",
-      "titleKo": "천국과맥주",
-      "titleEn": "",
-      "bggId": null,
-      "matchStatus": "unresolved",
-      "yearPublished": null,
-      "minPlayers": null,
-      "maxPlayers": null,
-      "playingTime": null,
-      "minPlayTime": null,
-      "maxPlayTime": null,
-      "minAge": null,
-      "difficulty": null,
-      "rating": null,
-      "bayesRating": null,
-      "usersRated": null,
-      "rank": null,
-      "designers": [],
-      "artists": [],
-      "publishers": [],
-      "categories": [],
-      "mechanics": [],
-      "recommendedPlayers": [],
-      "bestPlayers": [],
-      "notRecommendedPlayers": [],
-      "image": "",
-      "thumbnail": "",
-      "description": "",
-      "difficultyWeight": 0,
-      "location": "",
-      "sourceMechanism": "",
-      "sourceRating": 0,
-      "supportsLargeGroup": false,
-      "comment": "",
-      "tags": [],
-      "summaryKo": "",
-      "descriptionKo": "",
-      "categoriesKo": [],
-      "mechanicsKo": [],
-      "status": "pending-cache",
-      "createdAt": "2026-06-08T15:10:37.257Z",
-      "updatedAt": "2026-06-08T16:57:46.611Z",
-      "source": {
-        "base": "xlsx-import",
-        "overrides": [
-          "ownedName",
-          "titleKo",
-          "bestPlayers",
-          "recommendedPlayers"
-        ]
-      }
-    },
     "글렌모어연대기": {
       "id": "글렌모어연대기",
       "ownedName": "글렌모어연대기",
@@ -66107,6 +65947,112 @@
       "status": "pending-cache",
       "createdAt": "2026-06-08T16:41:56.543Z",
       "updatedAt": "2026-06-08T16:57:46.611Z",
+      "source": {
+        "base": "xlsx-import",
+        "overrides": [
+          "ownedName",
+          "titleKo",
+          "bestPlayers",
+          "recommendedPlayers"
+        ]
+      }
+    },
+    "맥주와빵": {
+      "id": "맥주와빵",
+      "ownedName": "맥주와빵",
+      "titleKo": "맥주와빵",
+      "titleEn": "Beer & Bread",
+      "bggId": "369880",
+      "matchStatus": "auto-confirmed",
+      "yearPublished": 2022,
+      "minPlayers": 2,
+      "maxPlayers": 2,
+      "playingTime": 45,
+      "minPlayTime": 30,
+      "maxPlayTime": 45,
+      "minAge": 10,
+      "difficulty": 2.3493,
+      "rating": 7.30491,
+      "bayesRating": 6.8207,
+      "usersRated": 6972,
+      "rank": 730,
+      "designers": [
+        "Scott Almes"
+      ],
+      "artists": [
+        "Michael Menzel"
+      ],
+      "publishers": [
+        "Deep Print Games",
+        "999 Games",
+        "Albi",
+        "Capstone Games",
+        "CoolPlay",
+        "Fantasmagoria",
+        "Games7Days",
+        "Ghenos Games",
+        "Gigamic",
+        "Hachette Boardgames Benelux",
+        "Hobby Japan",
+        "Maldito Games",
+        "Pegasus Spiele",
+        "Vagabund"
+      ],
+      "categories": [
+        "Card Game",
+        "Farming",
+        "Medieval"
+      ],
+      "mechanics": [
+        "Closed Drafting",
+        "Contracts",
+        "End Game Bonuses",
+        "Hand Management",
+        "Highest-Lowest Scoring",
+        "Multi-Use Cards",
+        "Neighbor Scope",
+        "Turn Order: Stat-Based",
+        "Variable Player Powers"
+      ],
+      "recommendedPlayers": [],
+      "bestPlayers": [
+        2
+      ],
+      "notRecommendedPlayers": [
+        1,
+        2
+      ],
+      "image": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__original/img/IiugqYTDlz1Rk1EAaEwDxr65YgI=/0x0/filters:format(jpeg)/pic7064178.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/vPRTRJce1GOsUf6M_dWd-g__small/img/x0Q2R8xgABJACUHYSCA00a7j3Cg=/fit-in/200x150/filters:strip_icc()/pic7064178.jpg",
+      "description": "Beer & Bread is a multi-use card game for two players. Its clever structure of alternating rounds puts a fascinating twist on player interaction, card drafting, and resource management.\n\nFounded on the fruitful lands of an erstwhile monastery, two villages have held up the dual tradition of brewing beer and baking bread. While sharing fields and resources, they still find pride in their friendly rivalry of besting each other&rsquo;s produce.\n\nEach of you represents one of these villages. Over the course of six years - which alternate between fruitful and dry - you must harmonize your duties of harvesting and storing resources, producing beer and bread, selling them for coins and upgrading your facilities.\n\nHowever, in order to win, you must maintain the balance between your baked and liquid goods. Because, after the sixth year, you only score the coins collected from the type of good - beer or bread - for which you earned less. The village with the higher score wins.\n\n&mdash;description from the publisher",
+      "difficultyWeight": 0,
+      "location": "2인",
+      "sourceMechanism": "",
+      "sourceRating": 0,
+      "supportsLargeGroup": false,
+      "comment": "",
+      "tags": [],
+      "summaryKo": "맥주와 빵 생산의 균형을 맞춰 더 많은 동전을 모으는 게임.",
+      "descriptionKo": "《Beer & Bread》는 2인용 멀티유즈 카드 게임입니다. 라운드가 번갈아 진행되는 영리한 구조로 플레이어 상호작용, 카드 드래프팅, 자원 관리에 흥미로운 변화를 줍니다.\n\n옛 수도원의 비옥한 땅에 세워진 두 마을은 맥주 양조와 빵 굽기의 전통을 지켜오고 있습니다. 자원을 공유하면서도 생산품의 질로 경쟁하는 우호적인 라이벌 관계를 자랑합니다.\n\n각 플레이어는 이 마을 중 하나를 대표합니다. 풍작과 흉작이 번갈아 나타나는 6년에 걸쳐 수확과 저장, 맥주와 빵 생산, 동전 판매, 시설 업그레이드를 관리해야 합니다.\n\n승리하려면 맥주와 빵의 균형을 유지해야 합니다. 6년 후 당신은 덜 번 상품(맥주 또는 빵) 중 하나에서만 수집한 동전으로 점수를 얻습니다. 더 높은 점수를 얻은 마을이 승리합니다.",
+      "categoriesKo": [
+        "카드게임",
+        "농업",
+        "중세"
+      ],
+      "mechanicsKo": [
+        "비공개 드래프팅",
+        "계약",
+        "최종 보너스",
+        "패 관리",
+        "최고-최저 득점",
+        "다목적 카드",
+        "인접 범위",
+        "스탯 기반 순서",
+        "비대칭 능력"
+      ],
+      "status": "ready",
+      "createdAt": "2026-05-23T17:43:25.683Z",
+      "updatedAt": "2026-06-08T16:57:46.608Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [
