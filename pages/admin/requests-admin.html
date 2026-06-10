@@ -481,9 +481,11 @@
           if (!pm.has(r.page)) pm.set(r.page, { visits: 0, totalSec: 0 });
           pm.get(r.page).visits++; pm.get(r.page).totalSec += r.duration_sec || 0;
         }
-        return [...m.entries()].sort((a,b) =>
-          [...b[1].values()].reduce((s,v)=>s+v.totalSec,0) - [...a[1].values()].reduce((s,v)=>s+v.totalSec,0)
-        );
+        return [...m.entries()].sort((a,b) => {
+          const la = profilesByUid.get(String(a[0]))?.last_seen_at || '';
+          const lb = profilesByUid.get(String(b[0]))?.last_seen_at || '';
+          return lb.localeCompare(la);
+        });
       }
 
       function renderPageTable(sorted) {
@@ -504,21 +506,22 @@
           const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
           const profile = profilesByUid.get(String(uid));
           const visitCount = profile?.visit_count != null ? profile.visit_count + '회' : '-';
-          const totalSec = profile?.total_minutes || 0;           // profiles 기준
+          const totalSec = profile?.total_minutes || 0;
           const todayS   = profile?.today_date === todayKst ? (profile?.today_seconds || 0) : 0;
           const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
-          h += `<div style="margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">
-              ${escH(nick)}
+          h += `<div style="margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.04);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
+              <span class="acc-arr">▶ </span>${escH(nick)}
               <span style="font-size:11px;color:var(--muted);font-weight:400;">
                 방문 ${visitCount} · 총체류 ${fmtTime(totalSec)}${todayS > 0 ? ` · 오늘 ${fmtTime(todayS)}` : ''}
               </span>
             </div>
+            <div style="display:none;">
             <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>`;
           for (const [page, d] of sortedPages) {
             h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`;
           }
-          h += '</tbody></table></div>';
+          h += '</tbody></table></div></div>';
         }
         return h;
       }
@@ -531,13 +534,16 @@
           const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
           const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
           const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
-          h += `<div style="margin-bottom:14px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 0 4px;">${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">체류 ${fmtTime(totalSec)}</span></div>
+          h += `<div style="margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.04);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
+              <span class="acc-arr">▶ </span>${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">체류 ${fmtTime(totalSec)}</span>
+            </div>
+            <div style="display:none;">
             <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류시간</th></tr></thead><tbody>`;
           for (const [page, d] of sortedPages) {
             h += `<tr><td class="anat-page">${escH(page)}</td><td style="color:#4a8c4a">O</td><td>${fmtTime(d.totalSec)}</td></tr>`;
           }
-          h += '</tbody></table></div>';
+          h += '</tbody></table></div></div>';
         }
         return h;
       }
@@ -546,8 +552,14 @@
       const memberCountEl = document.getElementById('memberCountBadge');
       if (memberCountEl) memberCountEl.textContent = `${allProfiles.length}명`;
 
-      const memberListHtml = allProfiles.length ? `
-        <div class="admin-req-list">${allProfiles.map(p => {
+      const sortedProfiles = [...allProfiles].sort((a,b) => {
+        if (!a.last_seen_at && !b.last_seen_at) return 0;
+        if (!a.last_seen_at) return 1;
+        if (!b.last_seen_at) return -1;
+        return b.last_seen_at.localeCompare(a.last_seen_at);
+      });
+      const memberListHtml = sortedProfiles.length ? `
+        <div class="admin-req-list">${sortedProfiles.map(p => {
           const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
           const totalS = p.total_minutes || 0;
           const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
