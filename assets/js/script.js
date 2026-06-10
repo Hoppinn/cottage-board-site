@@ -183,24 +183,29 @@ let _refreshClubActive = null;
   if(!joinEl && !meetEl) return;
   function applyClubActive(activeHash){
     document.querySelectorAll('.header-menu a').forEach(link=>{
-      const href = link.getAttribute('href') || '';
-      if(!href.includes('club.html')) return;
+      const raw = link.getAttribute('href') || '';
+      if(!raw.includes('club.html')) return;
       const u = new URL(link.href, location.href);
-      const isActive = u.hash ? u.hash === activeHash : !activeHash;
+      const isActive = u.hash ? u.hash === activeHash : activeHash === '';
       link.classList.toggle('is-current', isActive);
     });
   }
+  function getActiveSection(){
+    // 페이지 맨 아래 도달 시 → 모임참여 (해당 섹션까지 스크롤 불가 케이스 대응)
+    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 60;
+    if(atBottom && meetEl) return '#club-meeting';
+    // 가입 섹션이 뷰포트 상단 40% 안에 들어오면 → 가입
+    if(joinEl && joinEl.getBoundingClientRect().top < window.innerHeight * 0.4) return '#club-join';
+    return '';
+  }
   function updateByScroll(){
-    const threshold = window.innerHeight * 0.4;
-    let activeHash = '';
-    if(joinEl && joinEl.getBoundingClientRect().top < threshold) activeHash = '#club-join';
-    if(meetEl && meetEl.getBoundingClientRect().top < threshold) activeHash = '#club-meeting';
-    applyClubActive(activeHash);
+    applyClubActive(getActiveSection());
   }
   _refreshClubActive = updateByScroll;
   document.addEventListener('scroll', updateByScroll, {passive:true});
-  // 초기화: location.hash 기준 (브라우저가 해시 앵커로 스크롤하기 전에 스크립트 실행됨)
-  applyClubActive(location.hash || '');
+  // 초기화: 유효한 hash면 그대로, 아니면 소개
+  const initHash = (location.hash === '#club-join' || location.hash === '#club-meeting') ? location.hash : '';
+  applyClubActive(initHash);
 })();
 
 function resetMenuGroups(){
