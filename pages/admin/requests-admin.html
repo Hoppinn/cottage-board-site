@@ -1037,13 +1037,17 @@
           const d = new Date(_navValue + 'T12:00:00Z');
           d.setUTCDate(d.getUTCDate() + dir);
           _navValue = d.toISOString().slice(0, 10);
+          if (_navValue > _today) _navValue = _today;
         } else if (_navType === 'week') {
           const { start: ws } = calcRange('week', _navValue);
           _navValue = toWeekStr(new Date(new Date(ws).getTime() + 9 * 3600000 + dir * 7 * 86400000));
+          const _thisWeek = toWeekStr(new Date());
+          if (_navValue > _thisWeek) _navValue = _thisWeek;
         } else if (_navType === 'month') {
           const [y, m] = _navValue.split('-').map(Number);
           const nd = new Date(Date.UTC(y, m - 1 + dir, 1));
           _navValue = nd.toISOString().slice(0, 7);
+          if (_navValue > _today.slice(0, 7)) _navValue = _today.slice(0, 7);
         }
         const _di = document.getElementById('chartDateInput');
         if (_di) _di.value = _navValue;
