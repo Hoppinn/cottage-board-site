@@ -980,18 +980,35 @@
         }
 
         // ── 6. 유입 경로 — page_sessions referrer hostname 기반 ─────────
+        // xn-- 퓨니코드 한글 도메인 디코더 (RFC 3492)
+        function _punycodeLabel(s) {
+          if (!s.startsWith('xn--')) return s;
+          s = s.slice(4);
+          const B=36,Tm=1,TX=26,SK=38,DM=700,B0=72,N0=128;
+          const dg=c=>c<48?B:c<58?c-22:c<65?B:c<91?c-65:c<97?B:c<123?c-97:B;
+          const ad=(d,n,f)=>{d=f?Math.floor(d/DM):d>>1;d+=Math.floor(d/n);let k=0;while(d>((B-Tm)*TX)>>1){d=Math.floor(d/(B-Tm));k+=B;}return k+Math.floor((B-Tm+1)*d/(d+SK));};
+          const out=[];const sep=s.lastIndexOf('-');
+          for(let j=0;j<(sep>0?sep:0);j++)out.push(s.charCodeAt(j));
+          let pos=sep>0?sep+1:0,n=N0,i=0,bias=B0;
+          while(pos<s.length){const oi=i;let w=1;for(let k=B;;k+=B){const d=dg(s.charCodeAt(pos++));i+=d*w;const t=k<=bias?Tm:k>=bias+TX?TX:k-bias;if(d<t)break;w*=B-t;}bias=ad(i-oi,out.length+1,oi===0);n+=Math.floor(i/(out.length+1));i%=out.length+1;out.splice(i++,0,n);}
+          return String.fromCodePoint(...out);
+        }
+        function _decodeHost(host) {
+          return host.split('.').map(_punycodeLabel).join('.');
+        }
         function categorizeRef(ref) {
           if (!ref) return '직접 방문';
           if (ref.startsWith('/')) return null; // 구버전 pathname 형식 — 무시
           try {
-            const host = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
-            if (host.includes('daangn')) return '당근마켓';
-            if (host.includes('boardlife')) return '보드라이프';
-            if (host.includes('naver')) return '네이버';
-            if (host.includes('google')) return '구글';
-            if (host.includes('kakao') || host.includes('kakaotalk')) return '카카오';
-            if (host.includes('instagram') || host.includes('ig.me')) return '인스타그램';
-            return host; // 미분류 → 실제 hostname 그대로
+            const rawHost = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
+            const host = _decodeHost(rawHost).toLowerCase();
+            if (host.includes('daangn') || host.includes('당근')) return '당근마켓';
+            if (host.includes('boardlife') || host.includes('보드라이프')) return '보드라이프';
+            if (host.includes('naver') || host.includes('네이버')) return '네이버';
+            if (host.includes('google') || host.includes('구글')) return '구글';
+            if (host.includes('kakao') || host.includes('kakaotalk') || host.includes('카카오')) return '카카오';
+            if (host.includes('instagram') || host.includes('ig.me') || host.includes('인스타')) return '인스타그램';
+            return _decodeHost(rawHost); // 미분류 → 디코딩된 hostname
           } catch (_) {
             return ref.length > 30 ? ref.slice(0, 30) + '…' : ref;
           }
