@@ -8,8 +8,13 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 모든 작업 세션 시작 전에 반드시 아래 두 문서를 먼저 읽는다.
 
-- `docs/PROJECT_STRUCTURE.md` — 페이지 구조, JS 역할, DB 테이블, 데이터 흐름
-- `docs/PROJECT_STATE.md` — 현재 완료 기능, 버그 목록, 중복 구현, 추후 작업
+- `docs/PROJECT_STRUCTURE.md` — 페이지 구조, JS 역할, 데이터 흐름 (인덱스)
+- `docs/PROJECT_STATE.md` — 현재 완료 기능, 버그 목록, 추후 작업
+
+작업에 따라 추가로 읽는다:
+- DB 작업 → `docs/db-schema.md`
+- API/함수 작업 → `docs/js-api.md`
+- localStorage/세션 작업 → `docs/ls-schema.md`
 
 ---
 
@@ -37,6 +42,38 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 커밋 전, 바뀐 운영 방식이 있으면 사용자에게 한 줄로만 물어봐라.  
 예: "TODO.md 삭제 규칙 CLAUDE.md에 추가할까요?"  
 목록 나열하거나 길게 설명하지 말 것.
+
+## Plan-Execute 기준
+
+아래 중 하나라도 해당하면 Plan을 먼저 작성하고 승인 후 실행한다:
+
+| 조건 | 이유 |
+|------|------|
+| DB 테이블/컬럼 신규 생성 또는 변경 | 되돌리기 어려움, 다른 파일 영향 큼 |
+| localStorage 키/구조 신규 생성 또는 변경 | 기존 키 재사용 가능한지 먼저 확인 필요 |
+| window.CottageDB 공개 API 추가/변경/삭제 | 다수 파일이 의존, 파급 범위 큼 |
+| 영향 파일을 PROJECT_STRUCTURE.md 보고도 즉시 판단 불가 | 읽지 않고 실행하면 중복/충돌 위험 |
+
+그 외(버그 수정, 단일 파일 변경, 스타일 수정 등)는 관련 함수/섹션만 읽고 바로 실행한다.
+
+## 신규 생성 원칙
+
+새 localStorage 키, DB 테이블, 전역 함수, CSS 클래스를 만들기 전에:
+
+1. `docs/ls-schema.md`, `docs/db-schema.md`, `docs/js-api.md`에서 동일 용도 기존 항목 검색
+2. 기존 것을 확장(컬럼 추가, 필드 추가)할 수 있으면 그 방향으로 한다
+3. 신규 생성이 불가피할 경우 이유를 Plan 또는 커밋 메시지에 명시한다
+
+## 문서 갱신 트리거
+
+| 변경 사항 | 갱신할 파일 |
+|-----------|------------|
+| DB 테이블/컬럼 추가·변경 | `docs/db-schema.md` |
+| CottageDB 함수 추가·제거·시그니처 변경 | `docs/js-api.md` |
+| localStorage 키/구조 변경 | `docs/ls-schema.md` |
+| 페이지 파일 이동/추가/삭제 | `docs/PROJECT_STRUCTURE.md` |
+| 인증·데이터 흐름 변경 | `docs/PROJECT_STRUCTURE.md` |
+| 기능 완료·버그 발견·작업 추가 | `docs/PROJECT_STATE.md` |
 
 ## 버그 수정 방식
 
