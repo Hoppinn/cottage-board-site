@@ -70,6 +70,7 @@
 - [x] **인앱 알림 시스템**: "내 활동" 버튼 빨간 배지 + 패널 내 알림 섹션
   - 트리거: 플레이 기록에 내 이름 태그됨, 궁금해요 게임 새 코멘트, 게임 구매완료
   - notifSeenAt: cottage_sess_에 추가. 패널 열 때 갱신 + 배지 제거
+  - 최근 N건 항상 조회 + isNew 플래그 방식. 배지=isNew 항목 존재 시, 패널=전체 목록 + NEW 배지 강조
 - [ ] **관리자 카카오 알림 확장**: 새 회원 가입, 모집 게시판 글 작성 시 알림 추가
 
 ### P2 — 기능 (선택)
@@ -112,6 +113,8 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-12 | feat: 관리자 비주얼 분석 — 날짜/주/월 달력 탐색(◀▶) 추가, 유입경로 실제 hostname 표시 |
+| 2026-06-12 | refactor: 인앱 알림 구조 개선 — 최근 N건 항상 조회 + isNew 플래그 방식으로 변경. 배지=isNew 존재, 패널=전체목록+NEW 강조 |
 | 2026-06-12 | feat: 인앱 알림 시스템 — "내 활동" 배지 + 패널 알림 섹션. getMyNotifications 신규, notifSeenAt cottage_sess_ 확장 |
 | 2026-06-12 | refactor: 파일 구조 정리 — scripts/ 신설(DB 운영 스크립트 5개 이동), query-hoppin-time*.js 삭제, FULL_TREE.txt 삭제(STRUCTURE.md 중복), CLAUDE.md Plan 형식 추가, pages/store 리다이렉트 문서화 |
 | 2026-06-12 | refactor: MD 리팩토링 — STRUCTURE.md 인덱스화, db-schema/js-api/ls-schema 서브파일 분리, STATE.md 정리, CLAUDE.md 규칙 추가 |

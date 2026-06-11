@@ -95,6 +95,12 @@
     .admin-chart-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 14px 10px; }
     .admin-chart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
     .admin-chart-sub { font-size: 10px; font-weight: 400; color: var(--muted); }
+    /* 날짜 탐색 */
+    .admin-date-nav { display: none; align-items: center; gap: 6px; margin-bottom: 12px; }
+    .admin-date-nav.is-visible { display: flex; }
+    .admin-date-nav-arrow { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 20px; padding: 3px 10px; cursor: pointer; font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .admin-date-nav-arrow:hover { border-color: var(--green); color: var(--green); }
+    .admin-date-nav-input { border: 1px solid var(--border,#e8e4dc); border-radius: 20px; padding: 3px 10px; font-size: 12px; color: var(--text); background: var(--card-bg,#fff); flex: 1; min-width: 0; }
     @media (max-width: 600px) { .admin-chart-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -275,6 +281,11 @@
               <button class="admin-chart-period-btn" data-days="7">7일</button>
               <button class="admin-chart-period-btn" data-days="30">30일</button>
               <button class="admin-chart-period-btn" data-days="0">전체</button>
+            </div>
+            <div class="admin-date-nav is-visible" id="chartDateNav">
+              <button class="admin-date-nav-arrow" id="chartNavPrev">◀</button>
+              <input class="admin-date-nav-input" id="chartDateInput" type="date">
+              <button class="admin-date-nav-arrow" id="chartNavNext">▶</button>
             </div>
             <div class="admin-chart-grid">
               <div class="admin-chart-card">
@@ -727,28 +738,67 @@
       function kstHour(isoStr) {
         return (new Date(isoStr).getUTCHours() + 9) % 24;
       }
-      // page_sessions용 기간 필터 (entered_at 기준)
-      function filterByDays(data, daysAgo) {
-        if (!daysAgo) return data;
-        const cutoff = calcCutoff(daysAgo);
-        return data.filter(r => r.entered_at >= cutoff);
+      function kstDateStr(date) {
+        return new Date((date ? date.getTime() : Date.now()) + 9 * 3600000).toISOString().slice(0, 10);
       }
-      // page_views용 기간 필터 (created_at 기준)
-      function filterPVByDays(data, daysAgo) {
-        if (!daysAgo) return data;
-        const cutoff = calcCutoff(daysAgo);
-        return data.filter(r => r.created_at >= cutoff);
+      function toWeekStr(date) {
+        const d = new Date(date.getTime() + 9 * 3600000);
+        d.setUTCHours(0, 0, 0, 0);
+        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        const week = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+        return `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
       }
-      function calcCutoff(daysAgo) {
-        const nowKst = Date.now() + 9 * 3600000;
-        const todayMidKst = Math.floor(nowKst / 86400000) * 86400000;
-        const offset = daysAgo === 1 ? 0 : (daysAgo - 1) * 86400000;
-        return new Date(todayMidKst - offset - 9 * 3600000).toISOString();
+      function calcRange(type, value) {
+        if (type === 'all' || !type) return { start: null, end: null };
+        if (type === 'day') {
+          const [y, m, d] = value.split('-').map(Number);
+          const s = Date.UTC(y, m - 1, d) - 9 * 3600000;
+          return { start: new Date(s).toISOString(), end: new Date(s + 86400000).toISOString() };
+        }
+        if (type === 'week') {
+          const [yearStr, weekStr] = value.split('-W');
+          const y = Number(yearStr), w = Number(weekStr);
+          const jan4 = new Date(Date.UTC(y, 0, 4));
+          const dow = (jan4.getUTCDay() + 6) % 7;
+          const weekMon = new Date(jan4.getTime() - dow * 86400000 + (w - 1) * 7 * 86400000);
+          const s = weekMon.getTime() - 9 * 3600000;
+          return { start: new Date(s).toISOString(), end: new Date(s + 7 * 86400000).toISOString() };
+        }
+        if (type === 'month') {
+          const [y, m] = value.split('-').map(Number);
+          const s = Date.UTC(y, m - 1, 1) - 9 * 3600000;
+          const e = Date.UTC(y, m, 1) - 9 * 3600000;
+          return { start: new Date(s).toISOString(), end: new Date(e).toISOString() };
+        }
+        return { start: null, end: null };
       }
-      function periodLabel(daysAgo) {
-        if (!daysAgo) return '전체';
-        if (daysAgo === 1) return '오늘';
-        return `최근 ${daysAgo}일`;
+      function filterByRange(data, start, end, field) {
+        if (!start && !end) return data;
+        return data.filter(r => {
+          const v = r[field];
+          return (!start || v >= start) && (!end || v < end);
+        });
+      }
+      function periodLabelFor(type, value) {
+        if (type === 'all' || !type) return '전체';
+        if (type === 'day') {
+          const today = kstDateStr();
+          if (value === today) return '오늘';
+          const yest = kstDateStr(new Date(Date.now() - 86400000));
+          if (value === yest) return '어제';
+          const [y, m, d] = value.split('-');
+          return `${y}년 ${Number(m)}월 ${Number(d)}일`;
+        }
+        if (type === 'week') {
+          const [y, w] = value.split('-W');
+          return `${y}년 ${w}주차`;
+        }
+        if (type === 'month') {
+          const [y, m] = value.split('-');
+          return `${y}년 ${Number(m)}월`;
+        }
+        return value;
       }
 
       function makeOrUpdate(id, type, data, options) {
@@ -760,16 +810,15 @@
         });
       }
 
-      function draw(daysAgo) {
-        const filtered = filterByDays(rows, daysAgo);
-        const label = periodLabel(daysAgo);
+      function draw(start, end, label, type) {
+        const filtered = filterByRange(rows, start, end, 'entered_at');
 
         // ── 1. 방문자 구성 도넛 ───────────────────────────────────────
         // 총 방문자: page_views (브라우저 하루 1회, 회원+비회원 포함)
         // 회원 식별: profiles.last_seen_at 기준 (page_sessions은 최근에만 기록됨)
-        const filteredPV = filterPVByDays(pageViews, daysAgo);
+        const filteredPV = filterByRange(pageViews, start, end, 'created_at');
         const totalCount = filteredPV.length;
-        const fromMs = daysAgo ? Date.now() - daysAgo * 86400000 : 0;
+        const fromMs = start ? new Date(start).getTime() : 0;
         const memberUidSet = new Set();
         for (const p of allProfiles) {
           if (!p.last_seen_at) continue;
@@ -821,12 +870,22 @@
         });
 
         // ── 3. 날짜별 방문자 — page_views 기반 (회원+비회원 실제 방문) ──
-        const numDays = !daysAgo ? 60 : Math.max(daysAgo, 1);
         const dayKeys = [], dayVis = {};
-        for (let i = numDays - 1; i >= 0; i--) {
-          const k = new Date(Date.now() + 9 * 3600000 - i * 86400000).toISOString().slice(0, 10);
-          dayKeys.push(k); dayVis[k] = 0;
+        if (!start) {
+          for (let i = 59; i >= 0; i--) {
+            const k = kstDateStr(new Date(Date.now() - i * 86400000));
+            dayKeys.push(k); dayVis[k] = 0;
+          }
+        } else {
+          const startMs = new Date(start).getTime() + 9 * 3600000;
+          const endMs = (end ? new Date(end).getTime() : Date.now() + 86400000) + 9 * 3600000;
+          const numD = Math.min(Math.round((endMs - startMs) / 86400000), 60);
+          for (let i = 0; i < numD; i++) {
+            const k = new Date(startMs + i * 86400000).toISOString().slice(0, 10);
+            dayKeys.push(k); dayVis[k] = 0;
+          }
         }
+        const numDays = dayKeys.length;
         for (const pv of filteredPV) {
           const k = kstDate(pv.created_at);
           if (k in dayVis) dayVis[k]++;
@@ -873,18 +932,18 @@
           : `${Math.floor(s/60)}분 ${s%60}초`;
         // 기간별 이용시간 집계
         let memberSecMap;
-        if (!daysAgo) {
+        const todayKst = kstDateStr();
+        if (!start) {
           // 전체: profiles.total_minutes (초 단위)
           memberSecMap = new Map(allProfiles.map(p => [p.user_id, p.total_minutes || 0]));
-        } else if (daysAgo === 1) {
+        } else if (type === 'day' && start === calcRange('day', todayKst).start) {
           // 오늘: profiles.today_seconds (heartbeat 포함 실시간)
-          const todayKst3 = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
           memberSecMap = new Map(allProfiles.map(p => [
             p.user_id,
-            p.today_date === todayKst3 ? (p.today_seconds || 0) : 0,
+            p.today_date === todayKst ? (p.today_seconds || 0) : 0,
           ]));
         } else {
-          // 7일/30일: page_sessions duration_sec 합산
+          // 날짜 범위: page_sessions duration_sec 합산
           memberSecMap = new Map();
           for (const r of filtered) {
             if (!r.user_id) continue;
@@ -924,14 +983,18 @@
         function categorizeRef(ref) {
           if (!ref) return '직접 방문';
           if (ref.startsWith('/')) return null; // 구버전 pathname 형식 — 무시
-          const h = ref.toLowerCase();
-          if (h.includes('daangn')) return '당근마켓';
-          if (h.includes('boardlife')) return '보드라이프';
-          if (h.includes('naver')) return '네이버';
-          if (h.includes('google')) return '구글';
-          if (h.includes('kakao') || h.includes('kakaotalk')) return '카카오';
-          if (h.includes('instagram') || h.includes('ig.me')) return '인스타그램';
-          return '기타';
+          try {
+            const host = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
+            if (host.includes('daangn')) return '당근마켓';
+            if (host.includes('boardlife')) return '보드라이프';
+            if (host.includes('naver')) return '네이버';
+            if (host.includes('google')) return '구글';
+            if (host.includes('kakao') || host.includes('kakaotalk')) return '카카오';
+            if (host.includes('instagram') || host.includes('ig.me')) return '인스타그램';
+            return host; // 미분류 → 실제 hostname 그대로
+          } catch (_) {
+            return ref.length > 30 ? ref.slice(0, 30) + '…' : ref;
+          }
         }
         const refMap = {};
         for (const r of filtered) {
@@ -959,20 +1022,79 @@
         }
       }
 
-      // 기본값 오늘로 첫 렌더
-      draw(1);
+      // 날짜 탐색 상태
+      let _navType = 'day';
+      let _navValue = kstDateStr();
+      const _today = kstDateStr();
+
+      function _drawForNav() {
+        const { start, end } = calcRange(_navType, _navValue);
+        draw(start, end, periodLabelFor(_navType, _navValue), _navType);
+      }
+
+      function _stepNav(dir) {
+        if (_navType === 'day') {
+          const d = new Date(_navValue + 'T12:00:00Z');
+          d.setUTCDate(d.getUTCDate() + dir);
+          _navValue = d.toISOString().slice(0, 10);
+        } else if (_navType === 'week') {
+          const { start: ws } = calcRange('week', _navValue);
+          _navValue = toWeekStr(new Date(new Date(ws).getTime() + 9 * 3600000 + dir * 7 * 86400000));
+        } else if (_navType === 'month') {
+          const [y, m] = _navValue.split('-').map(Number);
+          const nd = new Date(Date.UTC(y, m - 1 + dir, 1));
+          _navValue = nd.toISOString().slice(0, 7);
+        }
+        const _di = document.getElementById('chartDateInput');
+        if (_di) _di.value = _navValue;
+        _drawForNav();
+      }
+
+      // 기본값: 오늘
+      const _di0 = document.getElementById('chartDateInput');
+      if (_di0) { _di0.type = 'date'; _di0.value = _today; _di0.max = _today; }
+      _drawForNav();
 
       // 기간 버튼 이벤트
       const btns = document.getElementById('chartPeriodBtns');
+      const navEl = document.getElementById('chartDateNav');
       if (btns) {
         btns.addEventListener('click', e => {
           const btn = e.target.closest('.admin-chart-period-btn');
           if (!btn) return;
           btns.querySelectorAll('.admin-chart-period-btn').forEach(b => b.classList.remove('is-active'));
           btn.classList.add('is-active');
-          draw(Number(btn.dataset.days));
+          const days = Number(btn.dataset.days);
+          const di = document.getElementById('chartDateInput');
+          if (days === 0) {
+            _navType = 'all'; _navValue = '';
+            navEl?.classList.remove('is-visible');
+            draw(null, null, '전체', 'all');
+          } else if (days === 1) {
+            _navType = 'day'; _navValue = _today;
+            if (di) { di.type = 'date'; di.value = _today; di.max = _today; }
+            navEl?.classList.add('is-visible');
+            _drawForNav();
+          } else if (days === 7) {
+            _navType = 'week'; _navValue = toWeekStr(new Date());
+            if (di) { di.type = 'week'; di.value = _navValue; di.max = toWeekStr(new Date()); }
+            navEl?.classList.add('is-visible');
+            _drawForNav();
+          } else if (days === 30) {
+            _navType = 'month'; _navValue = _today.slice(0, 7);
+            if (di) { di.type = 'month'; di.value = _navValue; di.max = _today.slice(0, 7); }
+            navEl?.classList.add('is-visible');
+            _drawForNav();
+          }
         });
       }
+
+      const _diEl = document.getElementById('chartDateInput');
+      if (_diEl) _diEl.addEventListener('change', e => { _navValue = e.target.value; _drawForNav(); });
+      const _prevBtn = document.getElementById('chartNavPrev');
+      const _nextBtn = document.getElementById('chartNavNext');
+      if (_prevBtn) _prevBtn.addEventListener('click', () => _stepNav(-1));
+      if (_nextBtn) _nextBtn.addEventListener('click', () => _stepNav(1));
     }
 
     // ── 접속 상태 배지 ──────────────────────────────────────────

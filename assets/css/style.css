@@ -3452,6 +3452,8 @@ body.sheet-open{
 .profile-notif-list li{font-size:12px;color:var(--text);display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
 .profile-notif-list li span{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0;}
 .profile-notif-more{color:var(--muted);font-size:11px;}
+.profile-notif-list li.is-new{font-weight:600;}
+.profile-notif-new-badge{display:inline-block;font-size:9px;font-weight:700;color:#fff;background:#e53935;border-radius:3px;padding:1px 4px;vertical-align:middle;margin-right:2px;}
 
 /* 프로필 사진 피커 모달 */
 .photo-picker-modal{

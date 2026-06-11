@@ -16,7 +16,7 @@ async function _updateNotifBadge() {
   const sess = window._cottageSess?.get(String(user.id)) || {};
   const notifs = await window.CottageDB.getMyNotifications(String(user.id), user.nickname || null, sess.notifSeenAt || null);
   const existing = btn.querySelector('.notif-badge');
-  if (notifs.length > 0) {
+  if (notifs.some(n => n.isNew)) {
     if (!existing) {
       const b = document.createElement('span');
       b.className = 'notif-badge';
@@ -406,7 +406,7 @@ async function openProfilePanel() {
     _s.notifSeenAt = new Date().toISOString();
     window._cottageSess.set(String(user.id), _s);
   }
-  document.getElementById('kakaoProfileBtn')?.querySelector('.notif-badge')?.remove();
+  document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
   const fmtShort = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
 
@@ -447,18 +447,22 @@ async function openProfilePanel() {
   );
 
   const notifHtml = notifs.length > 0 ? (() => {
+    const newCount = notifs.filter(n => n.isNew).length;
     const items = notifs.slice(0, 5).map(n => {
+      const cls = n.isNew ? ' class="is-new"' : '';
+      const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
       if (n.type === 'tagged')
-        return `<li>🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록에 내 이름이 등록됐어요 <span>${fmtShort(n.date)}</span></li>`;
+        return `<li${cls}>${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록에 내 이름이 등록됐어요 <span>${fmtShort(n.date)}</span></li>`;
       if (n.type === 'curious_comment')
-        return `<li>🤔 궁금해요한 <strong>${escH(getGameName(n.gameKey))}</strong>에 새 코멘트가 달렸어요 <span>${fmtShort(n.date)}</span></li>`;
+        return `<li${cls}>${badge}🤔 궁금해요한 <strong>${escH(getGameName(n.gameKey))}</strong>에 새 코멘트가 달렸어요 <span>${fmtShort(n.date)}</span></li>`;
       if (n.type === 'purchased')
-        return `<li>🛒 요청한 <strong>${escH(n.gameName)}</strong> 입고됐어요! <span>${fmtShort(n.date)}</span></li>`;
+        return `<li${cls}>${badge}🛒 요청한 <strong>${escH(n.gameName)}</strong> 입고됐어요! <span>${fmtShort(n.date)}</span></li>`;
       return '';
     }).join('');
     const more = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
+    const titleText = newCount > 0 ? `🔔 새 알림 ${newCount}건` : '🔔 최근 알림';
     return `<div class="profile-notif-section">
-      <div class="profile-notif-title">🔔 새 알림 ${notifs.length}건</div>
+      <div class="profile-notif-title">${titleText}</div>
       <ul class="profile-notif-list">${items}${more}</ul>
     </div>`;
   })() : '';
