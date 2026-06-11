@@ -1316,6 +1316,7 @@ body.recommend-page main{
   text-align:left;
   scroll-snap-align:start;
   cursor:pointer;
+  position:relative;
 }
 
 .game-card.active{
@@ -1351,9 +1352,18 @@ body.recommend-page main{
 }
 
 .game-card-rating{
-  font-size:9px;
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:rgba(0,0,0,0.52);
+  color:#fff;
+  font-size:10px;
   font-weight:700;
-  color:#7a4828;
+  padding:2px 6px;
+  border-radius:6px;
+  line-height:1.5;
+  pointer-events:none;
+  white-space:nowrap;
 }
 
 .game-card-description{
