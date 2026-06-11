@@ -87,11 +87,14 @@
     .admin-sub-section-body { display: none; padding: 8px 0; }
     .admin-sub-section.is-open > .admin-sub-section-body { display: block; }
     /* 차트 그리드 */
+    .admin-chart-filter { display: flex; gap: 6px; margin-bottom: 12px; }
+    .admin-chart-period-btn { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
+    .admin-chart-period-btn.is-active { background: var(--green); color: #fff; border-color: var(--green); }
     .admin-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .admin-chart-wide { grid-column: 1 / -1; }
     .admin-chart-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 14px 10px; }
     .admin-chart-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-    .admin-chart-loading { color: var(--muted); font-size: 12px; text-align: center; padding: 40px 0; }
+    .admin-chart-sub { font-size: 10px; font-weight: 400; color: var(--muted); }
     @media (max-width: 600px) { .admin-chart-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -267,25 +270,31 @@
         <div class="admin-group is-open" id="groupCharts">
           <div class="admin-group-title">📊 비주얼 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
+            <div class="admin-chart-filter" id="chartPeriodBtns">
+              <button class="admin-chart-period-btn is-active" data-days="30">30일</button>
+              <button class="admin-chart-period-btn" data-days="7">7일</button>
+              <button class="admin-chart-period-btn" data-days="1">오늘</button>
+              <button class="admin-chart-period-btn" data-days="0">전체</button>
+            </div>
             <div class="admin-chart-grid">
               <div class="admin-chart-card">
-                <div class="admin-chart-title">방문자 구성 (회원 vs 비회원)</div>
+                <div class="admin-chart-title">방문자 구성 <span class="admin-chart-sub" id="chartRatioSub"></span></div>
                 <canvas id="chartMemberRatio"></canvas>
               </div>
               <div class="admin-chart-card">
-                <div class="admin-chart-title">페이지별 방문 횟수 (상위 8)</div>
+                <div class="admin-chart-title">페이지별 방문 (상위 8) <span class="admin-chart-sub" id="chartPagesSub"></span></div>
                 <canvas id="chartPages"></canvas>
               </div>
               <div class="admin-chart-card admin-chart-wide">
-                <div class="admin-chart-title">날짜별 방문자 수 (최근 30일)</div>
+                <div class="admin-chart-title">날짜별 방문자 수</div>
                 <canvas id="chartDaily"></canvas>
               </div>
               <div class="admin-chart-card">
-                <div class="admin-chart-title">시간대별 방문 분포 (KST)</div>
+                <div class="admin-chart-title">시간대별 방문 <span class="admin-chart-sub" id="chartHourlySub"></span></div>
                 <canvas id="chartHourly"></canvas>
               </div>
               <div class="admin-chart-card">
-                <div class="admin-chart-title">회원별 총 이용시간</div>
+                <div class="admin-chart-title">회원별 총 이용시간 <span style="font-size:10px;color:var(--muted);font-weight:400">(전체 누적)</span></div>
                 <canvas id="chartMemberTime"></canvas>
               </div>
             </div>
@@ -678,110 +687,189 @@
       if (!window.Chart) return;
 
       const C1 = '#9e3a2a', C2 = '#c4956a', C3 = '#e8c89a', CMUTED = '#c0b0a0';
+      const GRID = '#f0ebe3';
+      const _chartInstances = {};
 
-      function makeChart(id, type, data, options) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        new Chart(el.getContext('2d'), { type, data, options: { responsive: true, ...options } });
+      // ── 헬퍼 ──────────────────────────────────────────────────────────
+      function kstDate(isoStr) {
+        return new Date(new Date(isoStr).getTime() + 9 * 3600000).toISOString().slice(0, 10);
+      }
+      function kstHour(isoStr) {
+        return (new Date(isoStr).getUTCHours() + 9) % 24;
+      }
+      // 날짜별 유니크 방문자: (user_id OR 세션 식별자) + 날짜 기준 중복 제거
+      function uniqueVisitorKey(r) {
+        return (r.user_id || `anon`) + '|' + kstDate(r.entered_at);
+      }
+      // 기간 필터: daysAgo=0이면 전체, 1이면 오늘 KST 자정부터
+      function filterByDays(data, daysAgo) {
+        if (!daysAgo) return data;
+        let cutoff;
+        if (daysAgo === 1) {
+          // 오늘 KST 00:00 기준
+          const nowKst = Date.now() + 9 * 3600000;
+          const todayMidKst = Math.floor(nowKst / 86400000) * 86400000;
+          cutoff = new Date(todayMidKst - 9 * 3600000).toISOString();
+        } else {
+          // N일 전 KST 자정부터
+          const nowKst = Date.now() + 9 * 3600000;
+          const cutMidKst = Math.floor(nowKst / 86400000) * 86400000 - (daysAgo - 1) * 86400000;
+          cutoff = new Date(cutMidKst - 9 * 3600000).toISOString();
+        }
+        return data.filter(r => r.entered_at >= cutoff);
+      }
+      function periodLabel(daysAgo) {
+        if (!daysAgo) return '전체';
+        if (daysAgo === 1) return '오늘';
+        return `최근 ${daysAgo}일`;
       }
 
-      // 1. 회원/비회원 도넛
-      const memberSess = rows.filter(r => r.user_id).length;
-      const guestSess  = rows.filter(r => !r.user_id).length;
-      makeChart('chartMemberRatio', 'doughnut', {
-        labels: [`회원 (${memberSess}회)`, `비회원 (${guestSess}회)`],
-        datasets: [{ data: [memberSess, guestSess], backgroundColor: [C1, CMUTED], borderWidth: 0 }],
-      }, {
-        cutout: '60%',
-        plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
-      });
-
-      // 2. 페이지별 방문 가로 막대
-      const pageMap = {};
-      for (const r of rows) { if (r.page) pageMap[r.page] = (pageMap[r.page] || 0) + 1; }
-      const topPages = Object.entries(pageMap).sort((a, b) => b[1] - a[1]).slice(0, 8);
-      makeChart('chartPages', 'bar', {
-        labels: topPages.map(([p]) => p),
-        datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
-      }, {
-        indexAxis: 'y',
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { color: '#f0ebe3' }, ticks: { font: { size: 10 } } },
-          y: { grid: { display: false }, ticks: { font: { size: 11 } } },
-        },
-      });
-
-      // 3. 날짜별 방문자 수 (최근 30일, KST)
-      const dayKeys = [], dayVis = {};
-      for (let i = 29; i >= 0; i--) {
-        const k = new Date(Date.now() + 9 * 3600000 - i * 86400000).toISOString().slice(0, 10);
-        dayKeys.push(k); dayVis[k] = new Set();
+      function makeOrUpdate(id, type, data, options) {
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
+        if (_chartInstances[id]) { _chartInstances[id].destroy(); }
+        _chartInstances[id] = new Chart(canvas.getContext('2d'), {
+          type, data, options: { responsive: true, ...options },
+        });
       }
-      for (const r of rows) {
-        const k = new Date(new Date(r.entered_at).getTime() + 9 * 3600000).toISOString().slice(0, 10);
-        if (dayVis[k]) dayVis[k].add(r.user_id || `g${r.entered_at}`);
-      }
-      makeChart('chartDaily', 'line', {
-        labels: dayKeys.map(d => d.slice(5)),
-        datasets: [{
-          data: dayKeys.map(d => dayVis[d].size),
-          borderColor: C1, backgroundColor: 'rgba(158,58,42,0.07)',
-          fill: true, tension: 0.35, pointRadius: 3, pointBackgroundColor: C1,
-        }],
-      }, {
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { color: '#f0ebe3' }, ticks: { maxTicksLimit: 10, font: { size: 10 } } },
-          y: { beginAtZero: true, grid: { color: '#f0ebe3' }, ticks: { stepSize: 1 } },
-        },
-      });
 
-      // 4. 시간대별 방문 막대
-      const hourly = new Array(24).fill(0);
-      for (const r of rows) hourly[(new Date(r.entered_at).getUTCHours() + 9) % 24]++;
-      const hMax = Math.max(...hourly) || 1;
-      makeChart('chartHourly', 'bar', {
-        labels: Array.from({ length: 24 }, (_, i) => `${i}시`),
-        datasets: [{
-          data: hourly,
-          backgroundColor: hourly.map(v => {
-            const a = (0.25 + 0.75 * v / hMax).toFixed(2);
-            return `rgba(158,58,42,${a})`;
-          }),
-          borderRadius: 3,
-        }],
-      }, {
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 0 } },
-          y: { beginAtZero: true, grid: { color: '#f0ebe3' }, ticks: { stepSize: 1 } },
-        },
-      });
+      function draw(daysAgo) {
+        const filtered = filterByDays(rows, daysAgo);
+        const label = periodLabel(daysAgo);
 
-      // 5. 회원별 총 이용시간 가로 막대
-      const fmtHM = s => s >= 3600 ? `${Math.floor(s/3600)}h ${Math.floor((s%3600)/60)}m` : `${Math.floor(s/60)}m ${s%60}s`;
-      const topMembers = [...allProfiles]
-        .filter(p => (p.total_minutes || 0) > 0)
-        .sort((a, b) => (b.total_minutes || 0) - (a.total_minutes || 0))
-        .slice(0, 10);
-      if (topMembers.length) {
-        makeChart('chartMemberTime', 'bar', {
-          labels: topMembers.map(p => profilesMap?.get(p.user_id) || p.nickname || '?'),
-          datasets: [{
-            data: topMembers.map(p => Math.round((p.total_minutes || 0) / 60)),
-            backgroundColor: C3, borderColor: C2, borderWidth: 1, borderRadius: 4,
-          }],
+        // ── 1. 방문자 구성 도넛 — 날짜별 유니크 방문자 기준 ──────────
+        // 같은 사람이 같은 날 여러 번 방문 = 1명
+        const memberVis = new Set(), guestVis = new Set();
+        for (const r of filtered) {
+          const key = uniqueVisitorKey(r);
+          if (r.user_id) memberVis.add(key); else guestVis.add(key);
+        }
+        const mCnt = memberVis.size, gCnt = guestVis.size;
+        document.getElementById('chartRatioSub').textContent = label;
+        makeOrUpdate('chartMemberRatio', 'doughnut', {
+          labels: [`회원 (${mCnt}명)`, `비회원 (${gCnt}명)`],
+          datasets: [{ data: [mCnt, gCnt], backgroundColor: [C1, CMUTED], borderWidth: 0 }],
+        }, {
+          cutout: '60%',
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+        });
+
+        // ── 2. 페이지별 방문 — (유저+페이지+날짜) 유니크 기준 ─────────
+        const pageUniq = {};
+        const seen2 = new Set();
+        for (const r of filtered) {
+          if (!r.page) continue;
+          const key = (r.user_id || 'anon') + '|' + r.page + '|' + kstDate(r.entered_at);
+          if (seen2.has(key)) continue;
+          seen2.add(key);
+          pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
+        }
+        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        document.getElementById('chartPagesSub').textContent = label;
+        makeOrUpdate('chartPages', 'bar', {
+          labels: topPages.map(([p]) => p),
+          datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
         }, {
           indexAxis: 'y',
-          plugins: {
-            legend: { display: false },
-            tooltip: { callbacks: { label: ctx => fmtHM(topMembers[ctx.dataIndex].total_minutes || 0) } },
-          },
+          plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { color: '#f0ebe3' }, ticks: { callback: v => `${v}분`, font: { size: 10 } } },
+            x: { grid: { color: GRID }, ticks: { font: { size: 10 } } },
             y: { grid: { display: false }, ticks: { font: { size: 11 } } },
           },
+        });
+
+        // ── 3. 날짜별 방문자 — 날짜별 유니크 방문자 수 ─────────────────
+        // 기간에 따라 표시 날짜 수 결정
+        const numDays = !daysAgo ? 60 : Math.max(daysAgo, 1);
+        const dayKeys = [], dayVis = {};
+        for (let i = numDays - 1; i >= 0; i--) {
+          const k = new Date(Date.now() + 9 * 3600000 - i * 86400000).toISOString().slice(0, 10);
+          dayKeys.push(k); dayVis[k] = new Set();
+        }
+        for (const r of filtered) {
+          const k = kstDate(r.entered_at);
+          if (dayVis[k] !== undefined) dayVis[k].add(r.user_id || `anon_${Math.floor(new Date(r.entered_at)/60000)}`);
+        }
+        const maxTicks = numDays <= 7 ? numDays : numDays <= 30 ? 10 : 12;
+        makeOrUpdate('chartDaily', 'line', {
+          labels: dayKeys.map(d => d.slice(5)),
+          datasets: [{
+            data: dayKeys.map(d => dayVis[d].size),
+            borderColor: C1, backgroundColor: 'rgba(158,58,42,0.07)',
+            fill: true, tension: 0.35, pointRadius: numDays <= 14 ? 4 : 2, pointBackgroundColor: C1,
+          }],
+        }, {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: GRID }, ticks: { maxTicksLimit: maxTicks, font: { size: 10 } } },
+            y: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1 } },
+          },
+        });
+
+        // ── 4. 시간대별 — 기간 내 세션 수 (패턴 파악 목적) ─────────────
+        const hourly = new Array(24).fill(0);
+        for (const r of filtered) hourly[kstHour(r.entered_at)]++;
+        const hMax = Math.max(...hourly) || 1;
+        document.getElementById('chartHourlySub').textContent = label;
+        makeOrUpdate('chartHourly', 'bar', {
+          labels: Array.from({ length: 24 }, (_, i) => `${i}시`),
+          datasets: [{
+            data: hourly,
+            backgroundColor: hourly.map(v => `rgba(158,58,42,${(0.25 + 0.75 * v / hMax).toFixed(2)})`),
+            borderRadius: 3,
+          }],
+        }, {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 0 } },
+            y: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1 } },
+          },
+        });
+
+        // ── 5. 회원별 총 이용시간 — profiles 누적값 (기간 무관) ─────────
+        const fmtHM = s => s >= 3600
+          ? `${Math.floor(s/3600)}시간 ${Math.floor((s%3600)/60)}분`
+          : `${Math.floor(s/60)}분 ${s%60}초`;
+        const topMembers = [...allProfiles]
+          .filter(p => (p.total_minutes || 0) > 0)
+          .sort((a, b) => (b.total_minutes || 0) - (a.total_minutes || 0))
+          .slice(0, 10);
+        if (topMembers.length) {
+          makeOrUpdate('chartMemberTime', 'bar', {
+            labels: topMembers.map(p => profilesMap?.get(p.user_id) || p.nickname || '?'),
+            datasets: [{
+              data: topMembers.map(p => p.total_minutes || 0),
+              backgroundColor: C3, borderColor: C2, borderWidth: 1, borderRadius: 4,
+            }],
+          }, {
+            indexAxis: 'y',
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => fmtHM(topMembers[ctx.dataIndex].total_minutes || 0) } },
+            },
+            scales: {
+              x: {
+                grid: { color: GRID },
+                ticks: { callback: v => v >= 3600 ? `${Math.floor(v/3600)}h` : `${Math.floor(v/60)}m`, font: { size: 10 } },
+              },
+              y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            },
+          });
+        }
+      }
+
+      // 기본값 30일로 첫 렌더
+      draw(30);
+
+      // 기간 버튼 이벤트
+      const btns = document.getElementById('chartPeriodBtns');
+      if (btns) {
+        btns.addEventListener('click', e => {
+          const btn = e.target.closest('.admin-chart-period-btn');
+          if (!btn) return;
+          btns.querySelectorAll('.admin-chart-period-btn').forEach(b => b.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          draw(Number(btn.dataset.days));
         });
       }
     }
