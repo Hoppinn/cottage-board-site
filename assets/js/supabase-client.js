@@ -736,7 +736,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       const { data } = await db.from('page_sessions')
         .select('page, referrer, user_id, duration_sec, entered_at')
         .order('entered_at', { ascending: false })
-        .limit(2000);
+        .limit(5000);
       return data || [];
     } catch (_) { return []; }
   }
