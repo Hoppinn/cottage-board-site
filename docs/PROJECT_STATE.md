@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-11 (33차)
+최종 갱신: 2026-06-11 (34차)
 
 ---
 
@@ -51,6 +51,7 @@
 - [x] 체류 시간 누적 (localStorage → DB, 성공 시에만 삭제)
 - [x] 닉네임 덮어쓰기 방지 (auth-callback DB 조회 + upsertProfile 보호)
 - [x] 구형 localStorage 포맷 마이그레이션 (cottage_played_ → cottage_play_records_)
+- [x] localStorage 세션 키 8개 → `cottage_sess_{id}` 단일 JSON 통합 (`window._cottageSess`, 자동 마이그레이션)
 - [x] sitemap.xml / robots.txt 경로 현행화 (pages/game/, info/, club/, admin/)
 - [x] 업로드 전 이미지 리사이즈 (window.resizeImageFile, 1200px, JPEG 0.85)
 
@@ -389,5 +390,6 @@
 | 2026-06-04 | B-06: 이용시간 당일 반영 — _syncTimeToDBNow 추가 |
 | 2026-06-04 | D-04/D-06/D-01/D-02/D-03 리팩토링 완료 |
 | 2026-06-04 | B-01~B-04 수정 완료 |
+| 2026-06-11 | refactor: localStorage 세션 키 8개 → cottage_sess_{id} 단일 JSON 통합. window._cottageSess 유틸(supabase-client.js + kakao-auth.js 공유), 기존 기기 첫 접속 시 자동 마이그레이션 |
 | 2026-06-04 | 사진 다중 업로드 + JSON 배열 저장 |
 | 2026-06-04 | 프로필 닉네임 덮어쓰기 방지 |
