@@ -1344,7 +1344,7 @@ body.recommend-page main{
   display:block;
   margin-bottom:7px;
   color:#111;
-  font-size:16px;
+  font-size:14px;
   font-weight:800;
   line-height:1.16;
   letter-spacing:-0.5px;
@@ -1355,11 +1355,11 @@ body.recommend-page main{
   position:absolute;
   top:15px;
   left:15px;
-  background:rgba(0,0,0,0.52);
+  background:rgba(0,0,0,0.40);
   color:#fff;
   font-size:10px;
   font-weight:700;
-  padding:2px 6px;
+  padding:2px 4px;
   border-radius:6px;
   line-height:1.5;
   pointer-events:none;
@@ -1396,7 +1396,7 @@ body.recommend-page main{
   border-radius:999px;
   background:#f5efe4;
   color:#5c5447;
-  font-size:9px;
+  font-size:10px;
   font-weight:700;
   white-space:nowrap;
 }
@@ -5585,7 +5585,7 @@ body.sheet-open{
   }
 
   .game-card strong{
-    font-size:18px;
+    font-size:16px;
   }
 
   .game-card-description{
@@ -6101,7 +6101,7 @@ body.sheet-open{
     padding:11px;
   }
   #gameScroll .game-card strong{
-    font-size:14px;
+    font-size:12px;
   }
   #gameScroll .game-card-description{
     font-size:11px;
