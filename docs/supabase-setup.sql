@@ -607,3 +607,35 @@ alter table public.profiles
   add column if not exists today_seconds integer default 0;
 alter table public.profiles
   add column if not exists today_date date;
+
+
+-- ── anon_sessions (비로그인 방문자 세션 추적) ──────────────
+-- session_key: localStorage에 저장되는 UUID (cottage_session_id)
+-- 하트비트 방식으로 1분마다 last_seen_at 갱신
+create table if not exists public.anon_sessions (
+  session_key   text primary key,
+  first_seen_at timestamptz not null default now(),
+  last_seen_at  timestamptz not null default now()
+);
+
+create index if not exists anon_sessions_last_seen_idx on public.anon_sessions (last_seen_at desc);
+
+alter table public.anon_sessions enable row level security;
+
+drop policy if exists "anon_upsert_anon_sessions" on public.anon_sessions;
+create policy "anon_upsert_anon_sessions"
+  on public.anon_sessions for insert
+  to anon
+  with check (true);
+
+drop policy if exists "anon_update_anon_sessions" on public.anon_sessions;
+create policy "anon_update_anon_sessions"
+  on public.anon_sessions for update
+  to anon
+  using (true);
+
+drop policy if exists "anon_select_anon_sessions" on public.anon_sessions;
+create policy "anon_select_anon_sessions"
+  on public.anon_sessions for select
+  to anon
+  using (true);
