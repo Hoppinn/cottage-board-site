@@ -11,7 +11,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 - `docs/PROJECT_STRUCTURE.md` — 페이지 구조, JS 역할, 데이터 흐름 (인덱스)
 - `docs/PROJECT_STATE.md` — 현재 완료 기능, 버그 목록, 추후 작업
 
-작업에 따라 추가로 읽는다:
+세션 시작 시 및 **작업 주제가 바뀔 때마다** 해당 서브파일을 추가로 읽는다:
 - DB 작업 → `docs/db-schema.md`
 - API/함수/전역 변수 작업 → `docs/js-api.md` (크로스파일 의존관계 포함)
 - localStorage/세션 키 작업 → `docs/ls-schema.md`
@@ -22,10 +22,12 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 - 추후 작업 목록은 PROJECT_STATE.md에서만 관리한다. TODO.md는 사용하지 않는다.
 - docs/TODO.md가 있으면 삭제한다.
-- 커밋 전 아래 순서로 문서 갱신한다:
-  1. PROJECT_STATE.md — 오늘 변경사항 반영
-  2. 아래 "문서 갱신 트리거" 테이블을 따라 해당 서브파일 갱신
-  3. git diff로 실제 변경 여부 확인 후 커밋
+- 서브파일 갱신은 **코드 변경과 같은 커밋에 포함**시킨다. "나중에 한꺼번에" 금지 — compact 시 날아감.
+- 커밋 순서:
+  1. 코드 변경
+  2. 해당 서브파일 즉시 갱신 (아래 트리거 테이블 참조)
+  3. PROJECT_STATE.md — 변경사항 반영
+  4. git diff 확인 후 커밋 (코드 + 서브파일 + STATE.md 한 커밋)
 - 서브에이전트에 작업을 위임한 경우, 완료 후 문서 갱신 여부를 직접 확인한다.
   서브에이전트는 CLAUDE.md 규칙을 따르지 않는다.
 
@@ -74,7 +76,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | 변경 사항 | 갱신할 파일 |
 |-----------|------------|
 | DB 테이블/컬럼 추가·변경 | `docs/db-schema.md` |
-| CottageDB 함수 추가·제거·시그니처 변경 | `docs/js-api.md` |
+| CottageDB 함수 추가·제거·시그니처 변경, 또는 window.xxx 전역 변수 추가 | `docs/js-api.md` |
 | localStorage 키/구조 변경 | `docs/ls-schema.md` |
 | 페이지 파일 이동/추가/삭제 | `docs/PROJECT_STRUCTURE.md` |
 | 인증·데이터 흐름 변경 | `docs/PROJECT_STRUCTURE.md` |

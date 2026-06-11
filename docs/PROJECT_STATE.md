@@ -82,6 +82,7 @@
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html 사진 중심 재구성
 - [ ] club-rules.html 사진 중심 재구성
+- [ ] `game-system/tools/reclassify-coop.js` — 완료된 일회성 스크립트. 유사 파일이 2개 이상 생기면 `game-system/tools/data-fixes/` 폴더로 이동
 
 ---
 
