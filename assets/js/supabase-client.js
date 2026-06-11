@@ -885,7 +885,7 @@ window._cottageSess = (function () {
   }
 
   async function getMyNotifications(userId, nickname, seenAt) {
-    if (!userId) return [];
+    if (!userId || !seenAt) return [];
     try {
       const since = seenAt || '1970-01-01T00:00:00.000Z';
       const sinceDate = since.slice(0, 10);

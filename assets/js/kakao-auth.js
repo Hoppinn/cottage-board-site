@@ -11,7 +11,7 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
 async function _updateNotifBadge() {
   const user = getKakaoUser();
   if (!user || !window.CottageDB?.getMyNotifications) return;
-  const btn = document.getElementById('kakaoProfileBtn');
+  const btn = document.getElementById('kakaoLoginBtn');
   if (!btn) return;
   const sess = window._cottageSess?.get(String(user.id)) || {};
   const notifs = await window.CottageDB.getMyNotifications(String(user.id), user.nickname || null, sess.notifSeenAt || null);
