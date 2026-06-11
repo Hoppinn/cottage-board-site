@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-12 (37차 — 인앱 알림 시스템 구현)
+최종 갱신: 2026-06-12 (39차 — UTM 추적 + 단축 URL)
 
 ---
 
@@ -113,6 +113,8 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-12 | feat: 단축 URL 리다이렉트 — /kakao_club /instagram /naverplace /store /boardlife /flyer /daangn → UTM 자동 부착 (vercel.json) |
+| 2026-06-12 | feat: UTM 파라미터 유입경로 추적 — startSession에서 utm_source 우선 저장, categorizeRef UTM 브랜드명 매핑 |
 | 2026-06-12 | feat: 관리자 비주얼 분석 — 날짜/주/월 달력 탐색(◀▶) 추가, 유입경로 실제 hostname 표시 |
 | 2026-06-12 | refactor: 인앱 알림 구조 개선 — 최근 N건 항상 조회 + isNew 플래그 방식으로 변경. 배지=isNew 존재, 패널=전체목록+NEW 강조 |
 | 2026-06-12 | feat: 인앱 알림 시스템 — "내 활동" 배지 + 패널 알림 섹션. getMyNotifications 신규, notifSeenAt cottage_sess_ 확장 |

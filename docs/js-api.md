@@ -37,7 +37,7 @@
 | `toggleGameCurious(gameId, userId)` | 궁금해요 토글 → `{ curious: true/false }` |
 | `hasUserCurious(gameId, userId)` | 궁금해요 여부 확인 |
 | `getVisitorStats()` | 방문자 통계 |
-| `startSession(userId)` | 체류 세션 시작 |
+| `startSession(userId)` | 체류 세션 시작. page_sessions.referrer = URL의 `utm_source` 우선, 없으면 `document.referrer` hostname |
 | `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영 |
 | `getAllProfiles()` | 전체 프로필 (어드민용) |
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
