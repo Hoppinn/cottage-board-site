@@ -11,10 +11,16 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 - `docs/PROJECT_STRUCTURE.md` — 페이지 구조, JS 역할, 데이터 흐름 (인덱스)
 - `docs/PROJECT_STATE.md` — 현재 완료 기능, 버그 목록, 추후 작업
 
-세션 시작 시 및 **작업 주제가 바뀔 때마다** 해당 서브파일을 추가로 읽는다:
-- DB 작업 → `docs/db-schema.md`
-- API/함수/전역 변수 작업 → `docs/js-api.md` (크로스파일 의존관계 포함)
-- localStorage/세션 키 작업 → `docs/ls-schema.md`
+세션 시작 시 및 **작업 주제가 바뀔 때마다** 아래 표를 보고 해당 파일을 읽는다. **해당 파일을 읽기 전에 수정하지 않는다.**
+
+| 작업 종류 | 필독 파일 |
+|-----------|----------|
+| DB 테이블/컬럼 추가·변경 | `docs/db-schema.md` |
+| CottageDB 함수 / window 전역 API | `docs/js-api.md` (크로스파일 의존관계 포함) |
+| localStorage / 세션 키 | `docs/ls-schema.md` |
+| 인증·로그인·프로필·사진 흐름 | `docs/PROJECT_STRUCTURE.md` §3~5 |
+| 이용시간·체류 추적 | `docs/PROJECT_STRUCTURE.md` §6 |
+| 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 |
 
 ---
 
