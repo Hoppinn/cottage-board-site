@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-11 (31차)
+최종 갱신: 2026-06-11 (32차)
 
 ---
 
@@ -75,7 +75,8 @@
 | ~~B-10~~ | ~~requests-admin.html~~ | ~~kakao-auth-ready 이벤트 수신 — kakao-auth.js는 cottage-auth-changed 발행~~ → **이벤트명 통일 완료** |
 | ~~B-11~~ | ~~supabase-client.js~~ | ~~_syncTimeToDBNow update 사용 — 프로필 row 없을 때 조용히 실패 + localStorage 제거~~ → **upsert로 교체 완료** |
 | ~~B-12~~ | ~~supabase-client.js~~ | ~~updateProfilePhoto upsert — row 없을 때 INSERT로 기존 필드 null 덮어쓰기~~ → **update로 교체 완료** |
-| ~~B-07~~ | ~~kakao-auth.js~~ | ~~방문 카운트 기기별 독립~~ → **로컬 카운터 소스, DB 동기화로 전환. 기기별 독립은 유지되나 DB SELECT null이어도 정확한 값 보존** |
+| ~~B-07~~ | ~~kakao-auth.js~~ | ~~방문 카운트 기기별 독립~~ → **DB값 기준 +1 방식으로 변경. 새 기기/localStorage 초기화 시에도 DB에서 올바르게 증가** |
+| ~~B-14~~ | ~~supabase-client.js~~ | ~~visit_count Max(local, DB) 방식 — 새 기기에서 local이 DB보다 작으면 영원히 증가 안 됨~~ → **DB값 기준 +1로 수정 (dedup은 cottage_profile_visited_ 키 담당)** |
 | ~~B-13~~ | ~~game-reviews.html 수정폼~~ | ~~입력 필드 id/name 없음~~ → **레코드 id suffix로 label for + input id/name 추가 완료** |
 
 ### 하 (UX 불편)
@@ -185,6 +186,9 @@
 - [x] 참여자 순서 정규화 — player_names 저장/조회 시 이름 정렬 후 비교, 순서 달라도 동일 그룹으로 통합 (game-reviews.html 렌더링 + 그룹핑 키 모두 적용) ✅
 - [x] 홈페이지 이용안내 브레드크럼 색상 — `color:#111;opacity:1` 명시 (`.about-hero .breadcrumb span` 갈색 + `opacity:.6` 이중 오버라이드 해제) ✅
 - [x] club.html 햄버거 중복 선택 버그 — 스크롤스파이 `setActive`에서 비활성 링크의 인라인 스타일도 제거 (`removeProperty` 추가) ✅
+- [x] visit_count 기기 독립 버그 수정 — Max(local,DB) → DB기준+1 방식 전환 ✅
+- [x] 방문일수 데이터 복구 — page_sessions KST 유니크 날짜 집계로 9명 복구 (호핀 3→12일 등) ✅
+- [x] 어드민 비주얼 분석 기간 필터 순서 — 오늘/7일/30일/전체, 기본값 오늘 ✅
 
 ---
 

@@ -652,10 +652,14 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       const nickToSave = (data?.nickname && effectiveRealName && data.nickname !== effectiveRealName && nickname === effectiveRealName)
         ? data.nickname
         : nickname;
-      // explicitVisitCount가 있으면 로컬 카운터 우선 — DB SELECT가 null일 때도 올바른 값 보존
-      const newVisitCount = explicitVisitCount !== undefined
-        ? Math.max(explicitVisitCount, data?.visit_count || 0)
-        : (data?.visit_count || 0) + 1;
+      // 일일 방문 시 DB값 기준 +1 (dedup은 kakao-auth.js의 cottage_profile_visited_ 키가 담당)
+      // explicitVisitCount=undefined인 닉네임 변경 등의 호출은 visit_count를 건드리지 않음
+      const visitCountField = {};
+      if (explicitVisitCount !== undefined) {
+        visitCountField.visit_count = (!selectError && data)
+          ? (data.visit_count || 0) + 1      // DB값 기준 +1 (새 기기에서도 올바르게 증가)
+          : explicitVisitCount;               // SELECT 실패 시 localStorage 값 fallback
+      }
       const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
       const prevToday = data?.today_date === todayStr ? (data?.today_seconds || 0) : 0;
       // SELECT 실패 시 total_minutes를 upsert 대상에서 제외 — 에러로 data=null 상태에서 0으로 덮어쓰는 것 방지
@@ -669,7 +673,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         nickname: nickToSave,
         real_name: data?.real_name || realName || null,
         last_seen_at: new Date().toISOString(),
-        visit_count: newVisitCount,
+        ...visitCountField,
         ...timeFields,
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
       }, { onConflict: 'user_id' });

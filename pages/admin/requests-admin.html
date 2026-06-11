@@ -271,9 +271,9 @@
           <div class="admin-group-title">📊 비주얼 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
             <div class="admin-chart-filter" id="chartPeriodBtns">
-              <button class="admin-chart-period-btn is-active" data-days="30">30일</button>
+              <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
               <button class="admin-chart-period-btn" data-days="7">7일</button>
-              <button class="admin-chart-period-btn" data-days="1">오늘</button>
+              <button class="admin-chart-period-btn" data-days="30">30일</button>
               <button class="admin-chart-period-btn" data-days="0">전체</button>
             </div>
             <div class="admin-chart-grid">
@@ -858,8 +858,8 @@
         }
       }
 
-      // 기본값 30일로 첫 렌더
-      draw(30);
+      // 기본값 오늘로 첫 렌더
+      draw(1);
 
       // 기간 버튼 이벤트
       const btns = document.getElementById('chartPeriodBtns');
