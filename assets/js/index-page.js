@@ -147,6 +147,8 @@ if (!isMurderMystery && weight > maxWeight) {
               ${card.title}
             </strong>
 
+            ${card.rating > 0 ? `<span class="game-card-rating">★ ${card.rating.toFixed(1)}</span>` : ''}
+
             <div class="game-meta">
 
               <span>
@@ -218,6 +220,13 @@ function openRecommendOverlay(){
     return matchBestPlayers(game, _overlayPlayer) &&
       matchRecommendLevel(game, _overlayLevel) &&
       matchRecommendMood(game, recommendState.mood);
+  }).sort((a, b) => {
+    const ra = Number(GameView.getRecommendData(a).rating) || 0;
+    const rb = Number(GameView.getRecommendData(b).rating) || 0;
+    if (ra !== rb) return rb - ra;
+    const wa = Number(GameView.getRecommendData(a).difficultyWeight) || 999;
+    const wb = Number(GameView.getRecommendData(b).difficultyWeight) || 999;
+    return wa - wb;
   });
 
   // 헤더에 필터 조건 + 개수 표시
@@ -246,6 +255,7 @@ function openRecommendOverlay(){
     return `<button class="game-card" type="button" data-game="${game.id}">
       <img src="${card.image || DEFAULT_GAME_IMAGE}" alt="${card.title}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
       <strong>${card.title}</strong>
+      ${card.rating > 0 ? `<span class="game-card-rating">★ ${card.rating.toFixed(1)}</span>` : ''}
       <div class="game-meta">
         <span>👥 ${formatPlayers(card.bestPlayers)}</span>
         <span class="card-difficulty ${difficulty.className}">${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}</span>
