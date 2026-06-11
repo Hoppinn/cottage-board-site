@@ -1353,8 +1353,8 @@ body.recommend-page main{
 
 .game-card-rating{
   position:absolute;
-  top:10px;
-  left:10px;
+  top:15px;
+  left:15px;
   background:rgba(0,0,0,0.52);
   color:#fff;
   font-size:10px;
@@ -1399,6 +1399,10 @@ body.recommend-page main{
   font-size:9px;
   font-weight:700;
   white-space:nowrap;
+}
+
+.game-meta-time{
+  color:#3d2e1e;
 }
 
 .game-card em{
