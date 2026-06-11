@@ -71,6 +71,8 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 ## 신규 생성 원칙
 
+리팩토링의 목적은 분리가 아니라 규모에 맞는 구조 최적화다. 유지·통합·분리·삭제 중 가장 단순한 해결책을 우선 검토한다.
+
 새 localStorage 키, DB 테이블, 전역 함수, CSS 클래스를 만들기 전에:
 
 1. `docs/ls-schema.md`, `docs/db-schema.md`, `docs/js-api.md`에서 동일 용도 기존 항목 검색
