@@ -43,6 +43,7 @@
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
+| `getMyNotifications(userId, nickname, seenAt)` | 새 알림 목록 반환. seenAt 이후의 ①태그된 기록 ②궁금해요 게임 새 코멘트 ③구매완료. 반환: `[{type, ...}]` |
 | `getGameReviews(gameId)` | 게임 리뷰 조회 |
 | `insertGameReview(...)` | 게임 리뷰 등록 |
 | `deleteGameReview(id)` | 게임 리뷰 삭제 |

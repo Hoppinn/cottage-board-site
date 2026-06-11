@@ -884,6 +884,62 @@ window._cottageSess = (function () {
     } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null }; }
   }
 
+  async function getMyNotifications(userId, nickname, seenAt) {
+    if (!userId) return [];
+    try {
+      const since = seenAt || '1970-01-01T00:00:00.000Z';
+      const sinceDate = since.slice(0, 10);
+      const taggedPromise = nickname
+        ? db.from('game_play_records')
+            .select('id, game_id, group_name, played_at, created_at, player_names')
+            .ilike('player_names', `%${nickname}%`)
+            .neq('user_id', userId)
+            .gt('created_at', since)
+            .order('created_at', { ascending: false })
+            .limit(20)
+        : Promise.resolve({ data: [] });
+      const curiousPromise = db.from('game_curious')
+        .select('game_id')
+        .eq('user_id', userId);
+      const purchasedPromise = db.from('game_requests')
+        .select('id, game_name, purchased_at')
+        .eq('user_id', userId)
+        .eq('status', 'done')
+        .not('purchased_at', 'is', null)
+        .gte('purchased_at', sinceDate)
+        .order('purchased_at', { ascending: false })
+        .limit(10);
+      const [taggedRes, curiousRes, purchasedRes] = await Promise.all([taggedPromise, curiousPromise, purchasedPromise]);
+      const notifs = [];
+      if (nickname) {
+        for (const r of taggedRes.data || []) {
+          const names = (r.player_names || '').split(',').map(n => n.trim());
+          if (names.some(n => n.toLowerCase() === nickname.toLowerCase())) {
+            notifs.push({ type: 'tagged', gameId: r.game_id, groupName: r.group_name, date: r.played_at || r.created_at.slice(0, 10) });
+          }
+        }
+      }
+      const curiousKeys = (curiousRes.data || []).map(r => r.game_id);
+      if (curiousKeys.length > 0) {
+        const { data: newComments } = await db.from('game_comments')
+          .select('id, game_key, nickname, created_at')
+          .in('game_key', curiousKeys)
+          .neq('user_id', userId)
+          .gt('created_at', since)
+          .order('created_at', { ascending: false })
+          .limit(20);
+        for (const c of newComments || []) {
+          notifs.push({ type: 'curious_comment', gameKey: c.game_key, commenter: c.nickname, date: c.created_at });
+        }
+      }
+      for (const r of purchasedRes.data || []) {
+        notifs.push({ type: 'purchased', gameName: r.game_name, date: r.purchased_at });
+      }
+      notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      return notifs;
+    } catch (_) { return []; }
+  }
+
   window.CottageDB = {
     trackView,
     trackPageView,
@@ -919,6 +975,7 @@ window._cottageSess = (function () {
     checkNicknameAvailable,
     getPageAnalytics,
     getMyStats,
+    getMyNotifications,
     getGameReviews,
     insertGameReview,
     deleteGameReview,

@@ -32,7 +32,8 @@
   "lastSeenDt":     "2026-06-12T10:30:00.000Z",
   "prevSeenDt":     "2026-06-11T20:00:00.000Z",
   "timeSec":        0,
-  "visitCount":     5
+  "visitCount":     5,
+  "notifSeenAt":    "2026-06-12T10:30:00.000Z"
 }
 ```
 
@@ -44,6 +45,7 @@
 | `prevSeenDt` | string (ISO) | 이전 세션 시작 시각 |
 | `timeSec` | number | DB 미반영 누적 체류 시간(초). DB upsert 성공 시 0으로 초기화 |
 | `visitCount` | number | 총 방문 횟수 (로컬 카운터, DB 동기화는 upsertProfile에서) |
+| `notifSeenAt` | string (ISO) \| undefined | 마지막으로 알림 패널을 열었던 시각. 이 이후 이벤트가 "새 알림". 없으면 전체 기간 조회 |
 
 ### 마이그레이션
 

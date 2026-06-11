@@ -8,6 +8,25 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   Kakao.init(KAKAO_APP_KEY);
 }
 
+async function _updateNotifBadge() {
+  const user = getKakaoUser();
+  if (!user || !window.CottageDB?.getMyNotifications) return;
+  const btn = document.getElementById('kakaoProfileBtn');
+  if (!btn) return;
+  const sess = window._cottageSess?.get(String(user.id)) || {};
+  const notifs = await window.CottageDB.getMyNotifications(String(user.id), user.nickname || null, sess.notifSeenAt || null);
+  const existing = btn.querySelector('.notif-badge');
+  if (notifs.length > 0) {
+    if (!existing) {
+      const b = document.createElement('span');
+      b.className = 'notif-badge';
+      btn.appendChild(b);
+    }
+  } else {
+    existing?.remove();
+  }
+}
+
 function _restoreMenuExpanded() {
   setTimeout(() => {
     const menu = document.getElementById('mobileMenu');
@@ -132,6 +151,7 @@ function initKakaoAuth() {
     userActions.insertBefore(profileBtn, userActions.firstChild);
     profileBtn.addEventListener('click', openProfilePanel);
   }
+  if (getKakaoUser()) setTimeout(_updateNotifBadge, 0);
 }
 
 function kakaoLogin() {
@@ -376,7 +396,17 @@ async function openProfilePanel() {
   panel.addEventListener('click', e => { if (e.target === panel) { panel.remove(); _restoreMenuExpanded(); } });
 
   if (!window.CottageDB?.getMyStats) return;
-  const stats = await window.CottageDB.getMyStats(String(user.id), user.nickname || null);
+  const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
+  const [stats, notifs] = await Promise.all([
+    window.CottageDB.getMyStats(String(user.id), user.nickname || null),
+    window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
+  ]);
+  if (window._cottageSess) {
+    const _s = window._cottageSess.get(String(user.id));
+    _s.notifSeenAt = new Date().toISOString();
+    window._cottageSess.set(String(user.id), _s);
+  }
+  document.getElementById('kakaoProfileBtn')?.querySelector('.notif-badge')?.remove();
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
   const fmtShort = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
 
@@ -416,10 +446,28 @@ async function openProfilePanel() {
     `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
   );
 
+  const notifHtml = notifs.length > 0 ? (() => {
+    const items = notifs.slice(0, 5).map(n => {
+      if (n.type === 'tagged')
+        return `<li>🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록에 내 이름이 등록됐어요 <span>${fmtShort(n.date)}</span></li>`;
+      if (n.type === 'curious_comment')
+        return `<li>🤔 궁금해요한 <strong>${escH(getGameName(n.gameKey))}</strong>에 새 코멘트가 달렸어요 <span>${fmtShort(n.date)}</span></li>`;
+      if (n.type === 'purchased')
+        return `<li>🛒 요청한 <strong>${escH(n.gameName)}</strong> 입고됐어요! <span>${fmtShort(n.date)}</span></li>`;
+      return '';
+    }).join('');
+    const more = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
+    return `<div class="profile-notif-section">
+      <div class="profile-notif-title">🔔 새 알림 ${notifs.length}건</div>
+      <ul class="profile-notif-list">${items}${more}</ul>
+    </div>`;
+  })() : '';
+
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
+    ${notifHtml}
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>

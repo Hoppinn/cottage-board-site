@@ -3442,6 +3442,16 @@ body.sheet-open{
 .profile-more-btn-wrap{list-style:none;margin-top:2px;}
 .profile-more-btn{background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:0;text-decoration:underline;}
 .profile-more-btn:hover{color:#7a4828;}
+/* 알림 배지 */
+#kakaoProfileBtn{position:relative;}
+.notif-badge{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#e53935;pointer-events:none;}
+/* 알림 섹션 */
+.profile-notif-section{background:#fff8f0;border:1px solid #f5c89a;border-radius:10px;padding:10px 12px;margin-bottom:14px;}
+.profile-notif-title{font-size:13px;font-weight:700;color:#7a4828;margin-bottom:8px;}
+.profile-notif-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px;}
+.profile-notif-list li{font-size:12px;color:var(--text);display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
+.profile-notif-list li span{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0;}
+.profile-notif-more{color:var(--muted);font-size:11px;}
 
 /* 프로필 사진 피커 모달 */
 .photo-picker-modal{
