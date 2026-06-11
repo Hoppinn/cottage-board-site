@@ -451,11 +451,13 @@
       if (!window.CottageDB?.getPageAnalytics) return;
 
       // ── 데이터 로드 ────────────────────────────────────────────
-      const [rows, allProfiles] = await Promise.all([
+      const db2 = window._cottageSupabaseDb;
+      const [rows, allProfiles, pvResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
+        db2 ? db2.from('page_views').select('page, created_at').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
       ]);
-      const db2 = window._cottageSupabaseDb;
+      const pageViews = pvResult?.data || [];
       const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
       const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
 
@@ -680,10 +682,10 @@
           subSection('전체', pageAllDetail, false) + pageDayParts;
       }
 
-      renderCharts(rows, allProfiles, profilesMap);
+      renderCharts(rows, allProfiles, profilesMap, pageViews);
     }
 
-    function renderCharts(rows, allProfiles, profilesMap) {
+    function renderCharts(rows, allProfiles, profilesMap, pageViews = []) {
       if (!window.Chart) return;
 
       const C1 = '#9e3a2a', C2 = '#c4956a', C3 = '#e8c89a', CMUTED = '#c0b0a0';
@@ -697,26 +699,23 @@
       function kstHour(isoStr) {
         return (new Date(isoStr).getUTCHours() + 9) % 24;
       }
-      // 날짜별 유니크 방문자: (user_id OR 세션 식별자) + 날짜 기준 중복 제거
-      function uniqueVisitorKey(r) {
-        return (r.user_id || `anon`) + '|' + kstDate(r.entered_at);
-      }
-      // 기간 필터: daysAgo=0이면 전체, 1이면 오늘 KST 자정부터
+      // page_sessions용 기간 필터 (entered_at 기준)
       function filterByDays(data, daysAgo) {
         if (!daysAgo) return data;
-        let cutoff;
-        if (daysAgo === 1) {
-          // 오늘 KST 00:00 기준
-          const nowKst = Date.now() + 9 * 3600000;
-          const todayMidKst = Math.floor(nowKst / 86400000) * 86400000;
-          cutoff = new Date(todayMidKst - 9 * 3600000).toISOString();
-        } else {
-          // N일 전 KST 자정부터
-          const nowKst = Date.now() + 9 * 3600000;
-          const cutMidKst = Math.floor(nowKst / 86400000) * 86400000 - (daysAgo - 1) * 86400000;
-          cutoff = new Date(cutMidKst - 9 * 3600000).toISOString();
-        }
+        const cutoff = calcCutoff(daysAgo);
         return data.filter(r => r.entered_at >= cutoff);
+      }
+      // page_views용 기간 필터 (created_at 기준)
+      function filterPVByDays(data, daysAgo) {
+        if (!daysAgo) return data;
+        const cutoff = calcCutoff(daysAgo);
+        return data.filter(r => r.created_at >= cutoff);
+      }
+      function calcCutoff(daysAgo) {
+        const nowKst = Date.now() + 9 * 3600000;
+        const todayMidKst = Math.floor(nowKst / 86400000) * 86400000;
+        const offset = daysAgo === 1 ? 0 : (daysAgo - 1) * 86400000;
+        return new Date(todayMidKst - offset - 9 * 3600000).toISOString();
       }
       function periodLabel(daysAgo) {
         if (!daysAgo) return '전체';
@@ -737,14 +736,24 @@
         const filtered = filterByDays(rows, daysAgo);
         const label = periodLabel(daysAgo);
 
-        // ── 1. 방문자 구성 도넛 — 날짜별 유니크 방문자 기준 ──────────
-        // 같은 사람이 같은 날 여러 번 방문 = 1명
-        const memberVis = new Set(), guestVis = new Set();
+        // ── 1. 방문자 구성 도넛 ───────────────────────────────────────
+        // 총 방문자: page_views (브라우저 하루 1회, 회원+비회원 포함)
+        // 회원 식별: page_sessions 유니크 user_id + 오늘 활동한 profiles
+        const filteredPV = filterPVByDays(pageViews, daysAgo);
+        const totalCount = filteredPV.length;
+        const memberUidSet = new Set();
         for (const r of filtered) {
-          const key = uniqueVisitorKey(r);
-          if (r.user_id) memberVis.add(key); else guestVis.add(key);
+          if (r.user_id) memberUidSet.add(r.user_id);
         }
-        const mCnt = memberVis.size, gCnt = guestVis.size;
+        // 오늘 필터일 경우 heartbeat로 기록된 활성 회원도 포함
+        if (daysAgo === 1) {
+          const todayKst2 = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+          for (const p of allProfiles) {
+            if (p.today_date === todayKst2 && (p.today_seconds || 0) > 0) memberUidSet.add(p.user_id);
+          }
+        }
+        const mCnt = Math.min(memberUidSet.size, totalCount);
+        const gCnt = Math.max(0, totalCount - mCnt);
         document.getElementById('chartRatioSub').textContent = label;
         makeOrUpdate('chartMemberRatio', 'doughnut', {
           labels: [`회원 (${mCnt}명)`, `비회원 (${gCnt}명)`],
@@ -778,23 +787,22 @@
           },
         });
 
-        // ── 3. 날짜별 방문자 — 날짜별 유니크 방문자 수 ─────────────────
-        // 기간에 따라 표시 날짜 수 결정
+        // ── 3. 날짜별 방문자 — page_views 기반 (회원+비회원 실제 방문) ──
         const numDays = !daysAgo ? 60 : Math.max(daysAgo, 1);
         const dayKeys = [], dayVis = {};
         for (let i = numDays - 1; i >= 0; i--) {
           const k = new Date(Date.now() + 9 * 3600000 - i * 86400000).toISOString().slice(0, 10);
-          dayKeys.push(k); dayVis[k] = new Set();
+          dayKeys.push(k); dayVis[k] = 0;
         }
-        for (const r of filtered) {
-          const k = kstDate(r.entered_at);
-          if (dayVis[k] !== undefined) dayVis[k].add(r.user_id || `anon_${Math.floor(new Date(r.entered_at)/60000)}`);
+        for (const pv of filteredPV) {
+          const k = kstDate(pv.created_at);
+          if (k in dayVis) dayVis[k]++;
         }
         const maxTicks = numDays <= 7 ? numDays : numDays <= 30 ? 10 : 12;
         makeOrUpdate('chartDaily', 'line', {
           labels: dayKeys.map(d => d.slice(5)),
           datasets: [{
-            data: dayKeys.map(d => dayVis[d].size),
+            data: dayKeys.map(d => dayVis[d]),
             borderColor: C1, backgroundColor: 'rgba(158,58,42,0.07)',
             fill: true, tension: 0.35, pointRadius: numDays <= 14 ? 4 : 2, pointBackgroundColor: C1,
           }],
@@ -806,9 +814,9 @@
           },
         });
 
-        // ── 4. 시간대별 — 기간 내 세션 수 (패턴 파악 목적) ─────────────
+        // ── 4. 시간대별 — page_views 기반 실제 방문 시간대 패턴 ─────────
         const hourly = new Array(24).fill(0);
-        for (const r of filtered) hourly[kstHour(r.entered_at)]++;
+        for (const pv of filteredPV) hourly[kstHour(pv.created_at)]++;
         const hMax = Math.max(...hourly) || 1;
         document.getElementById('chartHourlySub').textContent = label;
         makeOrUpdate('chartHourly', 'bar', {
