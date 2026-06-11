@@ -795,10 +795,18 @@
           seen2.add(key);
           pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
         }
-        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]);
+        const PAGE_LABEL = {
+          'index': '메인', 'about': '코티지보드 소개', 'game-reviews': '기록 보기',
+          'club': '동호회', 'requests': '요청하기', 'requests-admin': '관리자',
+          'game-location': '게임 위치', 'owned-games': '보유 게임',
+          'club-history': '모임 기록', 'club-meeting': '동호회 모임',
+          'club-intro': '동호회 소개', 'club-schedule': '모임 일정',
+          'club-rules': '동호회 규칙', 'price-rules': '요금 안내', 'guide': '이용안내',
+        };
+        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
         document.getElementById('chartPagesSub').textContent = label;
         makeOrUpdate('chartPages', 'bar', {
-          labels: topPages.map(([p]) => p),
+          labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
           datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
         }, {
           indexAxis: 'y',
