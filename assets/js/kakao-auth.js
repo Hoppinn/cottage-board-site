@@ -28,13 +28,13 @@ function initKakaoAuth() {
       if (window.CottageDB && user.id) {
         const isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
         const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-        const profileKey = `cottage_profile_visited_${user.id}_${kstDate}`;
-        if (!isLocal && !localStorage.getItem(profileKey)) {
-          localStorage.setItem(profileKey, '1');
-          const vcKey = `cottage_visit_count_${user.id}`;
-          const newVisitCount = parseInt(localStorage.getItem(vcKey) || '0') + 1;
-          localStorage.setItem(vcKey, String(newVisitCount));
-          window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null, newVisitCount).catch(() => {});
+        if (!isLocal) {
+          const sess = window._cottageSess?.get(String(user.id)) || {};
+          if (sess.lastVisitDate !== kstDate) {
+            sess.visitCount = (sess.visitCount || 0) + 1;
+            window._cottageSess.set(String(user.id), sess);
+            window.CottageDB.upsertProfile(String(user.id), user.nickname || '손님', user.kakaoNickname || null, sess.visitCount).catch(() => {});
+          }
         }
         window.CottageDB.startSession?.(String(user.id));
         // 다기기 프로필 동기화 — DB photo_url/nickname이 localStorage와 다르면 갱신
@@ -417,13 +417,14 @@ async function openProfilePanel() {
   );
 
   const body = panel.querySelector('.profile-panel-body');
+  const sessData = window._cottageSess?.get(String(user.id)) || {};
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
       ${(() => {
-        const prevDt = localStorage.getItem(`cottage_prev_seen_dt_${user.id}`);
+        const prevDt = sessData.prevSeenDt;
         if (!prevDt) return '';
         const diffMs = Date.now() - new Date(prevDt).getTime();
         const diffMin = Math.floor(diffMs / 60000);
@@ -441,7 +442,7 @@ async function openProfilePanel() {
         return `<li><span>이전 방문</span><strong>${rel}</strong></li>`;
       })()}
       ${(() => {
-        const localVc = parseInt(localStorage.getItem(`cottage_visit_count_${user.id}`) || '0');
+        const localVc = sessData.visitCount || 0;
         const dbVc = stats.profile?.visit_count || 0;
         const vc = Math.max(localVc, dbVc);
         return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
@@ -449,7 +450,7 @@ async function openProfilePanel() {
       ${(() => {
         const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
         const dbTodaySecs = stats.profile?.today_date === todayKst ? (stats.profile?.today_seconds || 0) : 0;
-        const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
+        const localSecs = sessData.timeSec || 0;
         const sessionSecs = window._cottageSessionStart
           ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
           : 0;
@@ -461,7 +462,7 @@ async function openProfilePanel() {
       })()}
       ${(() => {
         const savedSecs = stats.profile?.total_minutes || 0; // DB: 초 단위
-        const localSecs = parseInt(localStorage.getItem(`cottage_time_sec_${user.id}`) || '0');
+        const localSecs = sessData.timeSec || 0;
         const sessionSecs = window._cottageSessionStart
           ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
           : 0;

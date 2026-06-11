@@ -28,6 +28,47 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   });
 };
 
+// ── 세션 데이터 통합 유틸 — supabase-client.js + kakao-auth.js 공유 ──
+window._cottageSess = (function () {
+  function _migrate(uid) {
+    const key = `cottage_sess_${uid}`;
+    if (localStorage.getItem(key)) return;
+    const d = {};
+    [
+      [`cottage_last_visit_date_${uid}`, 'lastVisitDate'],
+      [`cottage_prev_visit_date_${uid}`, 'prevVisitDate'],
+      [`cottage_last_seen_dt_${uid}`,   'lastSeenDt'],
+      [`cottage_prev_seen_dt_${uid}`,   'prevSeenDt'],
+      [`cottage_time_sec_${uid}`,       'timeSec'],
+      [`cottage_visit_count_${uid}`,    'visitCount'],
+    ].forEach(([k, f]) => {
+      const v = localStorage.getItem(k);
+      if (v !== null) {
+        d[f] = (f === 'timeSec' || f === 'visitCount') ? (parseInt(v) || 0) : v;
+        localStorage.removeItem(k);
+      }
+    });
+    const kst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    Object.keys(localStorage)
+      .filter(k => k.startsWith(`cottage_profile_visited_${uid}_`))
+      .forEach(k => {
+        if (k.endsWith(kst)) d.lastVisitDate = kst;
+        localStorage.removeItem(k);
+      });
+    localStorage.setItem(key, JSON.stringify(d));
+  }
+  return {
+    get(uid) {
+      if (!localStorage.getItem(`cottage_sess_${uid}`)) _migrate(uid);
+      try { return JSON.parse(localStorage.getItem(`cottage_sess_${uid}`) || '{}'); }
+      catch (_) { return {}; }
+    },
+    set(uid, data) {
+      localStorage.setItem(`cottage_sess_${uid}`, JSON.stringify(data));
+    },
+  };
+})();
+
 (function () {
   "use strict";
 
@@ -574,18 +615,17 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
 
   function _flushTime(userId) {
     if (!userId) return;
-    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000); // 초 단위 누적
+    const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
     if (elapsed <= 0) return;
-    const key = `cottage_time_sec_${userId}`;
-    const prev = parseInt(localStorage.getItem(key) || '0');
-    localStorage.setItem(key, String(prev + elapsed));
+    const s = window._cottageSess.get(userId);
+    s.timeSec = (s.timeSec || 0) + elapsed;
+    window._cottageSess.set(userId, s);
     _sessionStart = Date.now();
     window._cottageSessionStart = _sessionStart;
   }
 
   function _popAccumulatedSecs(userId) {
-    const key = `cottage_time_sec_${userId}`;
-    return parseInt(localStorage.getItem(key) || '0'); // 초 단위 그대로 반환
+    return window._cottageSess.get(userId).timeSec || 0;
   }
 
   // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/heartbeat에서 호출
@@ -609,8 +649,10 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         last_seen_at: new Date().toISOString(),
       }).eq('user_id', userId);
       if (!error) {
-        localStorage.removeItem(`cottage_time_sec_${userId}`);
-        _sessionEnterAt = Date.now(); // 다음 sync용 리셋
+        const s = window._cottageSess.get(userId);
+        s.timeSec = 0;
+        window._cottageSess.set(userId, s);
+        _sessionEnterAt = Date.now();
         if (insertPageSession) {
           const page = typeof window !== 'undefined'
             ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
@@ -641,21 +683,14 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   }
 
   function startSession(userId) {
-    // 새 사용자 세션 시작 시에만 이전 방문일 갱신 (같은 userId 재호출은 무시)
     if (_sessionUserId !== userId) {
-      const nowIso = new Date().toISOString();
-      const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-      const lastKey = `cottage_last_visit_date_${userId}`;
-      const prevKey = `cottage_prev_visit_date_${userId}`;
-      const lastDtKey = `cottage_last_seen_dt_${userId}`;
-      const prevDtKey = `cottage_prev_seen_dt_${userId}`;
-      const lastDate = localStorage.getItem(lastKey);
-      const lastDt = localStorage.getItem(lastDtKey);
-      if (lastDate) localStorage.setItem(prevKey, lastDate);   // 직전 방문일 → prev
-      if (lastDt)   localStorage.setItem(prevDtKey, lastDt);  // 직전 방문 datetime → prev
-      localStorage.setItem(lastKey, todayKst);
-      localStorage.setItem(lastDtKey, nowIso);
-      _stopAnonHeartbeat(); // 로그인 확인됐으므로 비로그인 heartbeat 중단
+      const s = window._cottageSess.get(userId); // 첫 호출 시 레거시 키 자동 마이그레이션
+      if (s.lastVisitDate) s.prevVisitDate = s.lastVisitDate;
+      if (s.lastSeenDt)    s.prevSeenDt    = s.lastSeenDt;
+      s.lastVisitDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+      s.lastSeenDt    = new Date().toISOString();
+      window._cottageSess.set(userId, s);
+      _stopAnonHeartbeat();
     }
     if (_sessionUserId) _flushTime(_sessionUserId);
     _sessionUserId = userId;
@@ -700,7 +735,7 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       const nickToSave = (data?.nickname && effectiveRealName && data.nickname !== effectiveRealName && nickname === effectiveRealName)
         ? data.nickname
         : nickname;
-      // 일일 방문 시 DB값 기준 +1 (dedup은 kakao-auth.js의 cottage_profile_visited_ 키가 담당)
+      // 일일 방문 시 DB값 기준 +1 (dedup은 kakao-auth.js의 sess.lastVisitDate !== kstDate 조건이 담당)
       // explicitVisitCount=undefined인 닉네임 변경 등의 호출은 visit_count를 건드리지 않음
       const visitCountField = {};
       if (explicitVisitCount !== undefined) {
@@ -725,7 +760,11 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
         ...timeFields,
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
       }, { onConflict: 'user_id' });
-      if (!upsertError && !selectError) localStorage.removeItem(`cottage_time_sec_${userId}`);
+      if (!upsertError && !selectError) {
+        const s = window._cottageSess.get(userId);
+        s.timeSec = 0;
+        window._cottageSess.set(userId, s);
+      }
     } catch (_) {}
   }
 
