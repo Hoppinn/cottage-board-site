@@ -282,7 +282,7 @@
                 <canvas id="chartMemberRatio"></canvas>
               </div>
               <div class="admin-chart-card">
-                <div class="admin-chart-title">페이지별 방문 (상위 8) <span class="admin-chart-sub" id="chartPagesSub"></span></div>
+                <div class="admin-chart-title">페이지별 방문 <span class="admin-chart-sub" id="chartPagesSub"></span></div>
                 <canvas id="chartPages"></canvas>
               </div>
               <div class="admin-chart-card admin-chart-wide">
@@ -294,7 +294,7 @@
                 <canvas id="chartHourly"></canvas>
               </div>
               <div class="admin-chart-card">
-                <div class="admin-chart-title">회원별 총 이용시간 <span style="font-size:10px;color:var(--muted);font-weight:400">(전체 누적)</span></div>
+                <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
                 <canvas id="chartMemberTime"></canvas>
               </div>
             </div>
@@ -773,7 +773,7 @@
           seen2.add(key);
           pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
         }
-        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]);
         document.getElementById('chartPagesSub').textContent = label;
         makeOrUpdate('chartPages', 'bar', {
           labels: topPages.map(([p]) => p),
@@ -834,26 +834,48 @@
           },
         });
 
-        // ── 5. 회원별 총 이용시간 — profiles 누적값 (기간 무관) ─────────
+        // ── 5. 회원별 이용시간 — 기간별 집계 ─────────────────────────
         const fmtHM = s => s >= 3600
           ? `${Math.floor(s/3600)}시간 ${Math.floor((s%3600)/60)}분`
           : `${Math.floor(s/60)}분 ${s%60}초`;
-        const topMembers = [...allProfiles]
-          .filter(p => (p.total_minutes || 0) > 0)
-          .sort((a, b) => (b.total_minutes || 0) - (a.total_minutes || 0))
+        // 기간별 이용시간 집계
+        let memberSecMap;
+        if (!daysAgo) {
+          // 전체: profiles.total_minutes (초 단위)
+          memberSecMap = new Map(allProfiles.map(p => [p.user_id, p.total_minutes || 0]));
+        } else if (daysAgo === 1) {
+          // 오늘: profiles.today_seconds (heartbeat 포함 실시간)
+          const todayKst3 = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+          memberSecMap = new Map(allProfiles.map(p => [
+            p.user_id,
+            p.today_date === todayKst3 ? (p.today_seconds || 0) : 0,
+          ]));
+        } else {
+          // 7일/30일: page_sessions duration_sec 합산
+          memberSecMap = new Map();
+          for (const r of filtered) {
+            if (!r.user_id) continue;
+            memberSecMap.set(r.user_id, (memberSecMap.get(r.user_id) || 0) + (r.duration_sec || 0));
+          }
+        }
+        document.getElementById('chartMemberTimeSub').textContent = label;
+        const topMembers = allProfiles
+          .map(p => ({ uid: p.user_id, name: profilesMap?.get(p.user_id) || p.nickname || '?', secs: memberSecMap.get(p.user_id) || 0 }))
+          .filter(m => m.secs > 0)
+          .sort((a, b) => b.secs - a.secs)
           .slice(0, 10);
         if (topMembers.length) {
           makeOrUpdate('chartMemberTime', 'bar', {
-            labels: topMembers.map(p => profilesMap?.get(p.user_id) || p.nickname || '?'),
+            labels: topMembers.map(m => m.name),
             datasets: [{
-              data: topMembers.map(p => p.total_minutes || 0),
+              data: topMembers.map(m => m.secs),
               backgroundColor: C3, borderColor: C2, borderWidth: 1, borderRadius: 4,
             }],
           }, {
             indexAxis: 'y',
             plugins: {
               legend: { display: false },
-              tooltip: { callbacks: { label: ctx => fmtHM(topMembers[ctx.dataIndex].total_minutes || 0) } },
+              tooltip: { callbacks: { label: ctx => fmtHM(topMembers[ctx.dataIndex].secs) } },
             },
             scales: {
               x: {
