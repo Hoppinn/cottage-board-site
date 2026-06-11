@@ -786,20 +786,20 @@
         if (type === 'all' || !type) return '전체';
         if (type === 'day') {
           const dow = ['일','월','화','수','목','금','토'][new Date(value + 'T12:00:00Z').getUTCDay()];
-          const today = kstDateStr();
-          if (value === today) return `오늘 (${dow})`;
-          const yest = kstDateStr(new Date(Date.now() - 86400000));
-          if (value === yest) return `어제 (${dow})`;
           const [y, m, d] = value.split('-');
-          return `${y}.${Number(m)}.${Number(d)} (${dow})`;
+          const dateStr = `${y}.${Number(m)}.${Number(d)} (${dow})`;
+          const today = kstDateStr();
+          if (value === today) return `오늘 · ${dateStr}`;
+          const yest = kstDateStr(new Date(Date.now() - 86400000));
+          if (value === yest) return `어제 · ${dateStr}`;
+          return dateStr;
         }
         if (type === 'week') {
           const { start } = calcRange('week', value);
           const mon = new Date(new Date(start).getTime() + 9 * 3600000);
           const m = mon.getUTCMonth() + 1, d = mon.getUTCDate(), y = mon.getUTCFullYear();
           const wk = Math.ceil(d / 7);
-          const yearStr = y !== new Date().getFullYear() ? `${y}년 ` : '';
-          return `${yearStr}${m}월 ${wk}째주`;
+          return `${y}년 ${m}월 ${wk}째주`;
         }
         if (type === 'month') {
           const [y, m] = value.split('-');
