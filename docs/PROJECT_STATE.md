@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-10 (29차)
+최종 갱신: 2026-06-11 (30차)
 
 ---
 
@@ -354,6 +354,7 @@
 | 2026-06-10 | feat: 홈페이지 이용 가이드 페이지 신설 — pages/info/guide.html, 전체 14개 HTML nav에 코티지보드 소개 하위메뉴로 추가 |
 | 2026-06-10 | fix: requests.html 브레드크럼 제거, club.html about-section-label(가입하기·모임참여하기) 제거, 동호회 nav 가입하기·모임참여하기 15개 파일 전체 복원, guide.html 5개 메뉴 간소화 재구성 |
 | 2026-06-11 | fix: 추천 게임 오버레이(전체 더보기) 평점순 정렬 — allFiltered에 sort 추가 (메인 카드와 동일 기준) |
+| 2026-06-11 | fix: heartbeat 이용시간 누락 — last_seen_at만 갱신하던 heartbeat를 _syncTimeToDBNow(false)로 교체, 1분마다 total_minutes 저장 |
 | 2026-06-11 | feat: 추천 게임 카드 평점 표시 — 메인 카드·오버레이 카드 제목 아래 ★ BGG 평점 추가 (.game-card-rating 스타일) |
 | 2026-06-10 | fix: 동호회 nav is-current 버그 — 스크롤스파이 초기화를 location.hash 기반으로 변경, 초기 IIFE에서 club.html 링크 제외(충돌 방지) |
 | 2026-06-10 | data: 맥주와빵 파이프라인 완전 수정 — XLSX 원본과 match-map.json까지 비어앤브레드→맥주와빵 rename + 천국과맥주 삭제, build-master+build-output 재실행 완료 (빌드 롤백 근본 해결) |
