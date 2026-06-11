@@ -553,17 +553,13 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   let _sessionEnterAt = Date.now();
   let _sessionUserId = null;
 
-  // ── heartbeat: 1분 주기, 로그인+탭 활성 상태에서만 last_seen_at 갱신 ──
+  // ── heartbeat: 1분 주기, 로그인+탭 활성 상태에서 이용시간 누적 반영 ──
   let _heartbeatTimer = null;
   function _ensureHeartbeat() {
     if (_heartbeatTimer) return;
     _heartbeatTimer = setInterval(async () => {
       if (!_sessionUserId || document.hidden) return;
-      try {
-        await db.from('profiles')
-          .update({ last_seen_at: new Date().toISOString() })
-          .eq('user_id', _sessionUserId);
-      } catch (_) {}
+      await _syncTimeToDBNow(_sessionUserId, false);
     }, 60 * 1000);
   }
 
@@ -583,8 +579,9 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     return parseInt(localStorage.getItem(key) || '0'); // 초 단위 그대로 반환
   }
 
-  // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/beforeunload에서 호출
-  async function _syncTimeToDBNow(userId) {
+  // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/heartbeat에서 호출
+  // insertPageSession: 탭 숨김처럼 실제 페이지 이탈 시에만 true
+  async function _syncTimeToDBNow(userId, insertPageSession = true) {
     if (!userId) return;
     const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
@@ -605,13 +602,15 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
       if (!error) {
         localStorage.removeItem(`cottage_time_sec_${userId}`);
         _sessionEnterAt = Date.now(); // 다음 sync용 리셋
-        const page = typeof window !== 'undefined'
-          ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
-          : 'unknown';
-        const referrer = typeof document !== 'undefined' && document.referrer
-          ? (() => { try { return new URL(document.referrer).pathname; } catch (_) { return null; } })()
-          : null;
-        db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
+        if (insertPageSession) {
+          const page = typeof window !== 'undefined'
+            ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
+            : 'unknown';
+          const referrer = typeof document !== 'undefined' && document.referrer
+            ? (() => { try { return new URL(document.referrer).pathname; } catch (_) { return null; } })()
+            : null;
+          db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
+        }
       }
     } catch (_) {}
   }
