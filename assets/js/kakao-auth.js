@@ -421,15 +421,24 @@ async function openProfilePanel() {
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
+      <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
       ${(() => {
-        const prevDate = localStorage.getItem(`cottage_prev_visit_date_${user.id}`);
-        if (!prevDate) return '';
-        const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-        const diffDays = Math.round((new Date(todayKst) - new Date(prevDate)) / 86400000);
-        const rel = diffDays === 0 ? '오늘' : diffDays === 1 ? '어제' : diffDays === 2 ? '그제' : diffDays <= 14 ? `${diffDays}일 전` : null;
-        const [y, m, d] = prevDate.split('-').map(Number);
-        const dateStr = new Date(y, m - 1, d).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-        return `<li><span>마지막 방문</span><strong>${dateStr}${rel ? ` (${rel})` : ''}</strong></li>`;
+        const prevDt = localStorage.getItem(`cottage_prev_seen_dt_${user.id}`);
+        if (!prevDt) return '';
+        const diffMs = Date.now() - new Date(prevDt).getTime();
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHour = Math.floor(diffMin / 60);
+        const diffDay = Math.floor(diffHour / 24);
+        let rel;
+        if (diffMin < 1)        rel = '방금 전';
+        else if (diffMin < 60)  rel = `${diffMin}분 전`;
+        else if (diffHour < 24) rel = `${diffHour}시간 전`;
+        else if (diffDay <= 14) rel = `${diffDay}일 전`;
+        else {
+          const d = new Date(prevDt);
+          rel = d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+        }
+        return `<li><span>이전 방문</span><strong>${rel}</strong></li>`;
       })()}
       ${(() => {
         const localVc = parseInt(localStorage.getItem(`cottage_visit_count_${user.id}`) || '0');

@@ -760,19 +760,15 @@
 
         // ── 1. 방문자 구성 도넛 ───────────────────────────────────────
         // 총 방문자: page_views (브라우저 하루 1회, 회원+비회원 포함)
-        // 회원 식별: page_sessions 유니크 user_id + 오늘 활동한 profiles
+        // 회원 식별: profiles.last_seen_at 기준 (page_sessions은 최근에만 기록됨)
         const filteredPV = filterPVByDays(pageViews, daysAgo);
         const totalCount = filteredPV.length;
+        const fromMs = daysAgo ? Date.now() - daysAgo * 86400000 : 0;
         const memberUidSet = new Set();
-        for (const r of filtered) {
-          if (r.user_id) memberUidSet.add(r.user_id);
-        }
-        // 오늘 필터일 경우 heartbeat로 기록된 활성 회원도 포함
-        if (daysAgo === 1) {
-          const todayKst2 = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-          for (const p of allProfiles) {
-            if (p.today_date === todayKst2 && (p.today_seconds || 0) > 0) memberUidSet.add(p.user_id);
-          }
+        for (const p of allProfiles) {
+          if (!p.last_seen_at) continue;
+          if (fromMs && new Date(p.last_seen_at).getTime() < fromMs) continue;
+          memberUidSet.add(p.user_id);
         }
         const mCnt = Math.min(memberUidSet.size, totalCount);
         const gCnt = Math.max(0, totalCount - mCnt);

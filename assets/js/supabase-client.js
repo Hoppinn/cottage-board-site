@@ -643,12 +643,18 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   function startSession(userId) {
     // 새 사용자 세션 시작 시에만 이전 방문일 갱신 (같은 userId 재호출은 무시)
     if (_sessionUserId !== userId) {
+      const nowIso = new Date().toISOString();
       const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
       const lastKey = `cottage_last_visit_date_${userId}`;
       const prevKey = `cottage_prev_visit_date_${userId}`;
+      const lastDtKey = `cottage_last_seen_dt_${userId}`;
+      const prevDtKey = `cottage_prev_seen_dt_${userId}`;
       const lastDate = localStorage.getItem(lastKey);
-      if (lastDate) localStorage.setItem(prevKey, lastDate); // 직전 방문일 → prev
-      localStorage.setItem(lastKey, todayKst);               // 오늘을 last로 갱신
+      const lastDt = localStorage.getItem(lastDtKey);
+      if (lastDate) localStorage.setItem(prevKey, lastDate);   // 직전 방문일 → prev
+      if (lastDt)   localStorage.setItem(prevDtKey, lastDt);  // 직전 방문 datetime → prev
+      localStorage.setItem(lastKey, todayKst);
+      localStorage.setItem(lastDtKey, nowIso);
       _stopAnonHeartbeat(); // 로그인 확인됐으므로 비로그인 heartbeat 중단
     }
     if (_sessionUserId) _flushTime(_sessionUserId);
