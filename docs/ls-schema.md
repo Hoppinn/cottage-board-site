@@ -51,19 +51,3 @@
 - 레거시 키 6개(`cottage_last_visit_date_*`, `cottage_prev_visit_date_*`, `cottage_last_seen_dt_*`, `cottage_prev_seen_dt_*`, `cottage_time_sec_*`, `cottage_visit_count_*`) 읽어 새 형식으로 통합 후 원본 삭제
 - `cottage_profile_visited_{uid}_*` 키도 읽어 lastVisitDate 설정 후 삭제
 
----
-
-## 크로스파일 의존관계
-
-| 전역 | 정의 | 사용 |
-|------|------|------|
-| `window._cottageSess` | supabase-client.js | kakao-auth.js |
-| `window.CottageDB` | supabase-client.js | script.js, kakao-auth.js, game-reviews.js, club-history.html, requests-admin.html 등 |
-| `window.escH` | supabase-client.js | 전체 |
-| `window.resizeImageFile` | supabase-client.js | game-reviews.js |
-| `window.getKakaoUser` | kakao-auth.js | script.js, game-reviews.js, requests.html 등 |
-| `window.openLightbox` | play-records-utils.js | game-reviews.js, club-history.html |
-| `window.parsePhotoUrls` | play-records-utils.js | game-reviews.js, club-history.html |
-| `window.buildPhotoHtml` | play-records-utils.js | game-reviews.js, club-history.html |
-| `window.gameData` | cottage-games-data-output.js | script.js, owned-games-page.js, index-page.js |
-| `window.COTTAGE_GAMES` | cottage-games-data-output.js | game-reviews.js |

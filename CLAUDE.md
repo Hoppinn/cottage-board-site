@@ -13,8 +13,8 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 작업에 따라 추가로 읽는다:
 - DB 작업 → `docs/db-schema.md`
-- API/함수 작업 → `docs/js-api.md`
-- localStorage/세션 작업 → `docs/ls-schema.md`
+- API/함수/전역 변수 작업 → `docs/js-api.md` (크로스파일 의존관계 포함)
+- localStorage/세션 키 작업 → `docs/ls-schema.md`
 
 ---
 
@@ -24,11 +24,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 - docs/TODO.md가 있으면 삭제한다.
 - 커밋 전 아래 순서로 문서 갱신한다:
   1. PROJECT_STATE.md — 오늘 변경사항 반영
-  2. PROJECT_STRUCTURE.md — 아래 중 하나라도 해당하면 갱신:
-     - 페이지 파일 이동/추가/삭제
-     - DB 테이블·컬럼 변경
-     - JS 전역 API(window.CottageDB, window.escH 등) 변경
-     - 인증·데이터 흐름 변경
+  2. 아래 "문서 갱신 트리거" 테이블을 따라 해당 서브파일 갱신
   3. git diff로 실제 변경 여부 확인 후 커밋
 - 서브에이전트에 작업을 위임한 경우, 완료 후 문서 갱신 여부를 직접 확인한다.
   서브에이전트는 CLAUDE.md 규칙을 따르지 않는다.

@@ -90,9 +90,9 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 ---
 
-## window.resizeImageFile (supabase-client.js 또는 script.js)
+## window.resizeImageFile (supabase-client.js)
 
-업로드 전 이미지 리사이즈. 1200px, JPEG 0.85.
+업로드 전 이미지 리사이즈. 1200px, JPEG 0.85. play-records-utils.js에서 `window.resizeImageFile?.(file)`로 optional call.
 
 ---
 
@@ -108,3 +108,49 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
 | `toInitials(name)` | 이름 이니셜 변환 | game-reviews.js |
 | `hangulMatch(query, target)` | 한글 초성 검색 | game-reviews.js |
+
+---
+
+## window.CottageGameView / window.COTTAGE_GAMES (game-display-adapter.js)
+
+| 전역 | 내용 |
+|------|------|
+| `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
+| `window.COTTAGE_GAMES` | 게임 플랫 배열 (id, name, nameKo). 게임명 자동완성용 |
+
+---
+
+## window._cottageSessionStart (supabase-client.js)
+
+현재 세션 시작 시각 (Date.now() 값). `startSession()` 및 `visibilitychange` 탭 복귀 시 set. `kakao-auth.js`의 `openProfilePanel`에서 현재 세션 경과 시간 계산에 사용.
+
+내부 cross-file 전역 — 외부 페이지에서 직접 호출하지 않음.
+
+---
+
+## 크로스파일 의존관계 (전역 변수 전체)
+
+| 전역 | 정의 파일 | 사용 파일 |
+|------|----------|----------|
+| `window.CottageDB` | supabase-client.js | script.js, kakao-auth.js, game-reviews.js, index-page.js, club-history.html, requests-admin.html 등 |
+| `window._cottageSess` | supabase-client.js | kakao-auth.js |
+| `window._cottageSessionStart` | supabase-client.js | kakao-auth.js |
+| `window.escH` | supabase-client.js | 전체 |
+| `window.resizeImageFile` | supabase-client.js | play-records-utils.js (optional) |
+| `window.getKakaoUser` | kakao-auth.js | script.js, game-reviews.js, supabase-client.js, requests.html 등 |
+| `window.kakaoLogin` | kakao-auth.js | game-reviews.js, 각 페이지 |
+| `window.kakaoLogout` | kakao-auth.js | 각 페이지 |
+| `window.promptNicknameChange` | kakao-auth.js | 각 페이지 |
+| `window.promptProfileImageChange` | kakao-auth.js | 각 페이지 |
+| `window.isOwner` | kakao-auth.js | requests-admin.html |
+| `window.parsePhotoUrls` | play-records-utils.js | game-reviews.js, club-history.html |
+| `window.buildPhotoHtml` | play-records-utils.js | game-reviews.js, club-history.html |
+| `window.openLightbox` | play-records-utils.js | game-reviews.js, club-history.html |
+| `window.attachAc` | play-records-utils.js | game-reviews.js |
+| `window.initTagInput` | play-records-utils.js | game-reviews.js |
+| `window.toInitials` | play-records-utils.js | game-reviews.js |
+| `window.hangulMatch` | play-records-utils.js | game-reviews.js |
+| `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, script.js, owned-games-page.js, index-page.js |
+| `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
+| `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |
+| `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
