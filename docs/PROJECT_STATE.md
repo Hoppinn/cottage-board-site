@@ -113,6 +113,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-12 | fix: 유입경로 차트 중복 카운팅 — user_id 기준 Set 중복 제거, UTM 캡처 시점 모듈 초기화로 이동(_sessionReferrer) |
 | 2026-06-12 | feat: 단축 URL 리다이렉트 — /kakao_club /instagram /naverplace /store /boardlife /flyer /daangn → UTM 자동 부착 (vercel.json) |
 | 2026-06-12 | feat: UTM 파라미터 유입경로 추적 — startSession에서 utm_source 우선 저장, categorizeRef UTM 브랜드명 매핑 |
 | 2026-06-12 | feat: 관리자 비주얼 분석 — 날짜/주/월 달력 탐색(◀▶) 추가, 유입경로 실제 hostname 표시 |
