@@ -452,12 +452,14 @@
 
       // ── 데이터 로드 ────────────────────────────────────────────
       const db2 = window._cottageSupabaseDb;
-      const [rows, allProfiles, pvResult] = await Promise.all([
+      const [rows, allProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
         db2 ? db2.from('page_views').select('page, created_at').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const pageViews = pvResult?.data || [];
+      const anonSessions = anonResult?.data || [];
       const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
       const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
 
@@ -667,9 +669,29 @@
       const membersBody = document.getElementById('membersBody');
       const pagesBody = document.getElementById('pagesBody');
 
+      // ── 비로그인 방문자 목록 ─────────────────────────────────
+      const anonListHtml = anonSessions.length
+        ? `<div class="admin-member-list">${anonSessions.map(a => {
+            const { text: statusText, online } = fmtOnlineStatus(a.last_seen_at);
+            const shortKey = a.session_key.slice(0, 8) + '…';
+            const firstFmt = a.first_seen_at
+              ? new Date(a.first_seen_at).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+              : '-';
+            return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" style="opacity:${online ? 1 : 0.7}">
+              <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code>
+                <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
+              </div>
+              <div class="admin-member-metas">
+                <span>첫 방문 ${firstFmt}</span>
+              </div>
+            </div>`;
+          }).join('')}</div>`
+        : '<div class="admin-empty">비로그인 방문자 없음 (anon_sessions 테이블 필요)</div>';
+
       if (membersBody) {
         membersBody.innerHTML =
           subSection('회원 목록', memberListHtml, false) +
+          subSection(`비로그인 방문자 <span style="font-size:11px;color:var(--muted)">(세션키 기반)</span>`, anonListHtml, false) +
           subSection(
             `이용 상세 <span style="font-size:11px;color:var(--muted)">(세션 기반 · 로그인 필요)</span>`,
             subSection('전체', userAllDetail, false) + userDayParts,

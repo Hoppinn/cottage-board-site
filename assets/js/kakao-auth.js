@@ -421,7 +421,16 @@ async function openProfilePanel() {
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     <ul class="profile-panel-stats">
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
-      <li><span>마지막 방문</span><strong>${fmt(stats.profile?.last_seen_at)}</strong></li>
+      ${(() => {
+        const prevDate = localStorage.getItem(`cottage_prev_visit_date_${user.id}`);
+        if (!prevDate) return '';
+        const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+        const diffDays = Math.round((new Date(todayKst) - new Date(prevDate)) / 86400000);
+        const rel = diffDays === 0 ? '오늘' : diffDays === 1 ? '어제' : diffDays === 2 ? '그제' : diffDays <= 14 ? `${diffDays}일 전` : null;
+        const [y, m, d] = prevDate.split('-').map(Number);
+        const dateStr = new Date(y, m - 1, d).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+        return `<li><span>마지막 방문</span><strong>${dateStr}${rel ? ` (${rel})` : ''}</strong></li>`;
+      })()}
       ${(() => {
         const localVc = parseInt(localStorage.getItem(`cottage_visit_count_${user.id}`) || '0');
         const dbVc = stats.profile?.visit_count || 0;

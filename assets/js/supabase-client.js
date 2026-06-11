@@ -536,12 +536,21 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
     // 로그인 여부 무관하게 카운트 — localStorage로 하루 1회만 집계
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const visitedKey = "cottage_visited_" + kstDate;
-    if (localStorage.getItem(visitedKey)) return;
-    localStorage.setItem(visitedKey, "1");
-    const page =
-      location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
-      "index";
-    trackPageView(page);
+    if (!localStorage.getItem(visitedKey)) {
+      localStorage.setItem(visitedKey, "1");
+      const page =
+        location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
+        "index";
+      trackPageView(page);
+    }
+    // 비로그인 방문자 추적 — cottage-auth-changed로 로그인 확인 후 결정
+    // kakao-auth.js가 로그인 처리 시 startSession → _stopAnonHeartbeat 호출
+    // 이벤트가 없으면 (비로그인) anon heartbeat 유지
+    window.addEventListener('cottage-auth-changed', function(e) {
+      if (!e.detail?.user) _startAnonHeartbeat(); // 비로그인 확정
+    }, { once: true });
+    // 이벤트가 500ms 내 오지 않으면 비로그인으로 간주 (kakao-auth.js 미로드 페이지 등)
+    setTimeout(() => { if (!_sessionUserId) _startAnonHeartbeat(); }, 500);
   });
 
   // ── 밴 상태 ──────────────────────────────────────────────
@@ -632,12 +641,45 @@ window.resizeImageFile = function(file, maxPx = 1200, quality = 0.85) {
   }
 
   function startSession(userId) {
-    if (_sessionUserId) _flushTime(_sessionUserId); // 이전 세션 시간 플러시 후 리셋
+    // 새 사용자 세션 시작 시에만 이전 방문일 갱신 (같은 userId 재호출은 무시)
+    if (_sessionUserId !== userId) {
+      const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+      const lastKey = `cottage_last_visit_date_${userId}`;
+      const prevKey = `cottage_prev_visit_date_${userId}`;
+      const lastDate = localStorage.getItem(lastKey);
+      if (lastDate) localStorage.setItem(prevKey, lastDate); // 직전 방문일 → prev
+      localStorage.setItem(lastKey, todayKst);               // 오늘을 last로 갱신
+      _stopAnonHeartbeat(); // 로그인 확인됐으므로 비로그인 heartbeat 중단
+    }
+    if (_sessionUserId) _flushTime(_sessionUserId);
     _sessionUserId = userId;
     _sessionStart = Date.now();
     _sessionEnterAt = Date.now();
     window._cottageSessionStart = _sessionStart;
     _ensureHeartbeat();
+  }
+
+  // ── 비로그인 방문자 heartbeat (anon_sessions 테이블) ──────────────
+  let _anonHeartbeatTimer = null;
+
+  function _stopAnonHeartbeat() {
+    if (_anonHeartbeatTimer) { clearInterval(_anonHeartbeatTimer); _anonHeartbeatTimer = null; }
+  }
+
+  function _startAnonHeartbeat() {
+    if (_anonHeartbeatTimer || _sessionUserId) return;
+    if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
+    const key = getSessionKey();
+    db.from('anon_sessions').upsert(
+      { session_key: key, last_seen_at: new Date().toISOString() },
+      { onConflict: 'session_key' }
+    ).then(() => {}).catch(() => {});
+    _anonHeartbeatTimer = setInterval(() => {
+      if (_sessionUserId) { _stopAnonHeartbeat(); return; }
+      if (document.hidden) return;
+      db.from('anon_sessions').update({ last_seen_at: new Date().toISOString() })
+        .eq('session_key', key).then(() => {}).catch(() => {});
+    }, 60 * 1000);
   }
 
   async function upsertProfile(userId, nickname, realName, explicitVisitCount) {
