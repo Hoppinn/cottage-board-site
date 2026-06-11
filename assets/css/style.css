@@ -1403,8 +1403,13 @@ body.recommend-page main{
 
 .game-meta-time{
   color:#3d2e1e;
-  width:100%;
-  justify-content:center;
+}
+
+.game-meta-break{
+  flex-basis:100%;
+  height:0;
+  padding:0;
+  background:none;
 }
 
 .game-card em{

@@ -159,6 +159,8 @@ if (!isMurderMystery && weight > maxWeight) {
                 ${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}
               </span>
 
+              <span class="game-meta-break"></span>
+
               <span class="game-meta-time">
                 ⏱ ${card.playingTimeText || "-"}
               </span>
@@ -259,6 +261,7 @@ function openRecommendOverlay(){
       <div class="game-meta">
         <span>👥 ${formatPlayers(card.bestPlayers)}</span>
         <span class="card-difficulty ${difficulty.className}">${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}</span>
+        <span class="game-meta-break"></span>
         <span class="game-meta-time">⏱ ${card.playingTimeText || "-"}</span>
       </div>
       ${card.tags?.length ? `<p class="game-card-description">${card.tags.slice(0,3).map(t=>`#${t}`).join(' ')}</p>` : ''}
