@@ -6,5 +6,14 @@
         { "key": "Cache-Control", "value": "no-store" }
       ]
     }
+  ],
+  "redirects": [
+    { "source": "/kakao",     "destination": "/?utm_source=kakao_club",   "permanent": false },
+    { "source": "/insta",     "destination": "/?utm_source=instagram",    "permanent": false },
+    { "source": "/naver",     "destination": "/?utm_source=naver_place",  "permanent": false },
+    { "source": "/boardlife", "destination": "/?utm_source=boardlife",    "permanent": false },
+    { "source": "/qr",        "destination": "/?utm_source=store_qr",     "permanent": false },
+    { "source": "/flyer",     "destination": "/?utm_source=flyer_qr",     "permanent": false },
+    { "source": "/daangn",    "destination": "/?utm_source=daangn",       "permanent": false }
   ]
 }

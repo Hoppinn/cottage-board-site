@@ -1003,7 +1003,7 @@
         function _decodeHost(host) {
           return host.split('.').map(_punycodeLabel).join('.');
         }
-        const _utmBrandMap = { kakao: '카카오', qr: 'QR', boardlife: '보드라이프', naver: '네이버', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
+        const _utmBrandMap = { kakao: '카카오', kakao_club: '카카오 동호회', qr: 'QR', store_qr: '매장 QR', flyer_qr: '전단지 QR', boardlife: '보드라이프', naver: '네이버', naver_place: '네이버 플레이스', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
         function categorizeRef(ref) {
           if (!ref) return '직접 방문';
           if (ref.startsWith('/')) return null; // 구버전 pathname 형식 — 무시
