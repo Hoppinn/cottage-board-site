@@ -1351,13 +1351,9 @@ body.recommend-page main{
 }
 
 .game-card-rating{
-  display:block;
-  text-align:center;
-  font-size:11px;
+  font-size:9px;
   font-weight:700;
   color:#7a4828;
-  margin:-3px 0 6px;
-  letter-spacing:0.2px;
 }
 
 .game-card-description{
