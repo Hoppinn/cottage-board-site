@@ -152,7 +152,7 @@ if (!isMurderMystery && weight > maxWeight) {
             <div class="game-meta">
 
               <span>
-                👥 ${formatPlayers(card.bestPlayers)}
+                👥 ${formatPlayers(card.bestPlayers).replace(/명$/, '')}
               </span>
 
               <span class="card-difficulty ${difficulty.className}">
@@ -257,7 +257,7 @@ function openRecommendOverlay(){
       ${card.rating > 0 ? `<span class="game-card-rating">⭐ ${formatRating(card.rating)}</span>` : ''}
       <strong>${card.title}</strong>
       <div class="game-meta">
-        <span>👥 ${formatPlayers(card.bestPlayers)}</span>
+        <span>👥 ${formatPlayers(card.bestPlayers).replace(/명$/, '')}</span>
         <span class="card-difficulty ${difficulty.className}">${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}</span>
         <span class="game-meta-time">⏱ ${card.playingTimeText || "-"}</span>
       </div>
