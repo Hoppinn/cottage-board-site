@@ -147,7 +147,7 @@ if (!isMurderMystery && weight > maxWeight) {
               ${card.title}
             </strong>
 
-            ${card.rating > 0 ? `<span class="game-card-rating">★ ${card.rating.toFixed(1)}</span>` : ''}
+            ${card.rating > 0 ? `<span class="game-card-rating">⭐ ${formatRating(card.rating)}</span>` : ''}
 
             <div class="game-meta">
 
@@ -255,7 +255,7 @@ function openRecommendOverlay(){
     return `<button class="game-card" type="button" data-game="${game.id}">
       <img src="${card.image || DEFAULT_GAME_IMAGE}" alt="${card.title}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
       <strong>${card.title}</strong>
-      ${card.rating > 0 ? `<span class="game-card-rating">★ ${card.rating.toFixed(1)}</span>` : ''}
+      ${card.rating > 0 ? `<span class="game-card-rating">⭐ ${formatRating(card.rating)}</span>` : ''}
       <div class="game-meta">
         <span>👥 ${formatPlayers(card.bestPlayers)}</span>
         <span class="card-difficulty ${difficulty.className}">${difficulty.icon} ${formatDifficultyWeight(card.difficultyWeight)}</span>
