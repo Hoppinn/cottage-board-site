@@ -657,9 +657,12 @@ window._cottageSess = (function () {
           const page = typeof window !== 'undefined'
             ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
             : 'unknown';
-          const referrer = typeof document !== 'undefined' && document.referrer
-            ? (() => { try { const u = new URL(document.referrer); return u.hostname !== location.hostname ? u.hostname : null; } catch (_) { return null; } })()
-            : null;
+          const _utmSource = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('utm_source') : null;
+          const referrer = _utmSource
+            ? _utmSource
+            : (typeof document !== 'undefined' && document.referrer
+              ? (() => { try { const u = new URL(document.referrer); return u.hostname !== location.hostname ? u.hostname : null; } catch (_) { return null; } })()
+              : null);
           db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
         }
       }

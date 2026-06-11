@@ -1003,9 +1003,14 @@
         function _decodeHost(host) {
           return host.split('.').map(_punycodeLabel).join('.');
         }
+        const _utmBrandMap = { kakao: '카카오', qr: 'QR', boardlife: '보드라이프', naver: '네이버', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
         function categorizeRef(ref) {
           if (!ref) return '직접 방문';
           if (ref.startsWith('/')) return null; // 구버전 pathname 형식 — 무시
+          // UTM 소스 직접 값 (점·슬래시 없는 short string)
+          if (!ref.includes('.') && !ref.includes('/')) {
+            return _utmBrandMap[ref.toLowerCase()] || null;
+          }
           try {
             const rawHost = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
             if (!rawHost.includes('.')) return null; // 점 없음 = 내부 페이지명 또는 잘못된 데이터
