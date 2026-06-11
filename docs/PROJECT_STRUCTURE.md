@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-12
+최종 갱신: 2026-06-12 (scripts/ 폴더 추가, pages/store 리다이렉트 명시, FULL_TREE.txt 삭제)
 
 ---
 
@@ -36,9 +36,18 @@
 │   │   ├── club-meeting.html       # 모임 기록
 │   │   ├── club-rules.html         # 동호회 규칙
 │   │   └── club-history.html       # 모임 기록 & 사진 (DB 연동)
-│   └── admin/                      # 요청/관리
-│       ├── requests.html           # 게임/간식 요청 (로그인 필요)
-│       └── requests-admin.html     # 요청 관리 어드민 (오너 전용)
+│   ├── admin/                      # 요청/관리
+│   │   ├── requests.html           # 게임/간식 요청 (로그인 필요)
+│   │   └── requests-admin.html     # 요청 관리 어드민 (오너 전용)
+│   └── store/                      # 구 URL 리다이렉트 shim (카카오톡 링크 404 방지)
+│       ├── requests.html           # → pages/admin/requests.html
+│       └── requests-admin.html     # → pages/admin/requests-admin.html
+├── scripts/                        # DB/운영 관련 일회성·분석 스크립트 (게임 파이프라인과 무관)
+│   ├── analyze-user-data.js        # 유저 데이터 전수 분석 (재사용 가능)
+│   ├── recover-time-data.js        # total_minutes 복구 (완료, 보관)
+│   ├── recover-user-data.js        # 유저 데이터 복구 (완료, 보관)
+│   ├── recover-visit-count.js      # visit_count 복구 (완료, 보관)
+│   └── resize-existing-photos.js  # Storage 사진 일괄 리사이즈 (완료, 보관)
 ```
 
 ### 페이지별 인증 요구

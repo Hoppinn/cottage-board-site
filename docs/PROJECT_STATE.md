@@ -110,6 +110,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-12 | refactor: 파일 구조 정리 — scripts/ 신설(DB 운영 스크립트 5개 이동), query-hoppin-time*.js 삭제, FULL_TREE.txt 삭제(STRUCTURE.md 중복), CLAUDE.md Plan 형식 추가, pages/store 리다이렉트 문서화 |
 | 2026-06-12 | refactor: MD 리팩토링 — STRUCTURE.md 인덱스화, db-schema/js-api/ls-schema 서브파일 분리, STATE.md 정리, CLAUDE.md 규칙 추가 |
 | 2026-06-11 | refactor: localStorage 세션 키 8개 → cottage_sess_{id} 단일 JSON 통합. window._cottageSess 유틸, 기존 기기 자동 마이그레이션 |
 | 2026-06-11 | fix: DB 데이터 복구 — visit_count 리셋 + total_minutes 60배 뻥튀기. page_sessions 기반 재집계로 복구 |
