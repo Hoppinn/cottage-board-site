@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-11 (30차)
+최종 갱신: 2026-06-11 (31차)
 
 ---
 
@@ -354,6 +354,8 @@
 | 2026-06-10 | feat: 홈페이지 이용 가이드 페이지 신설 — pages/info/guide.html, 전체 14개 HTML nav에 코티지보드 소개 하위메뉴로 추가 |
 | 2026-06-10 | fix: requests.html 브레드크럼 제거, club.html about-section-label(가입하기·모임참여하기) 제거, 동호회 nav 가입하기·모임참여하기 15개 파일 전체 복원, guide.html 5개 메뉴 간소화 재구성 |
 | 2026-06-11 | fix: 추천 게임 오버레이(전체 더보기) 평점순 정렬 — allFiltered에 sort 추가 (메인 카드와 동일 기준) |
+| 2026-06-11 | feat: 어드민 비주얼 분석 대시보드 — Chart.js 차트 5종 + 기간 필터(오늘/7일/30일/전체), 날짜별 유니크 방문자 카운팅, KST 자정 기준 |
+| 2026-06-11 | data: 이복규→뽁 닉네임 수정, 나나 real_name=이예지 복원, 이용시간 page_sessions 역산 복구 (호핀 65h 55m 등) |
 | 2026-06-11 | fix: 이용시간 리셋 근본 원인 제거 — upsertProfile SELECT 실패 시 data=null+accumulated=0 조합이 total_minutes를 0으로 덮어쓰던 버그. selectError 체크 추가, 에러 시 시간 필드 upsert 제외 |
 | 2026-06-11 | fix: heartbeat 이용시간 누락 — last_seen_at만 갱신하던 heartbeat를 _syncTimeToDBNow(false)로 교체, 1분마다 total_minutes 저장 |
 | 2026-06-11 | feat: 추천 게임 카드 평점 표시 — 메인 카드·오버레이 카드 제목 아래 ★ BGG 평점 추가 (.game-card-rating 스타일) |
