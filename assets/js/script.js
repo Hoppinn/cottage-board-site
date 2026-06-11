@@ -1255,7 +1255,7 @@ function openGameSheet(gameKey){
         </div>
         <div class="sheet-feedback-reactions">
           <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
-          <button class="sheet-reaction-btn" id="sheetDislikeBtn" data-game-id="${gameKey}" onclick="onSheetDislike(this)">👎 0</button>
+          <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)">🤔 0</button>
         </div>
       </div>
     </div>
@@ -1403,21 +1403,21 @@ async function initSheetLikes(gameKey) {
   if (!window.CottageDB) return;
   const user = window.getKakaoUser?.();
   const userId = user ? String(user.id) : null;
-  const [likeCount, dislikeCount, liked, disliked] = await Promise.all([
+  const [likeCount, curiousCount, liked, curious] = await Promise.all([
     window.CottageDB.getGameLikeCount(gameKey),
-    window.CottageDB.getGameDislikeCount(gameKey),
+    window.CottageDB.getGameCuriousCount(gameKey),
     userId ? window.CottageDB.hasUserLiked(gameKey, userId) : false,
-    userId ? window.CottageDB.hasUserDisliked(gameKey, userId) : false,
+    userId ? window.CottageDB.hasUserCurious(gameKey, userId) : false,
   ]);
   const likeBtn = document.getElementById('sheetLikeBtn');
   if (likeBtn) {
     likeBtn.textContent = `👍 ${likeCount}`;
     likeBtn.classList.toggle('is-active', liked);
   }
-  const dislikeBtn = document.getElementById('sheetDislikeBtn');
-  if (dislikeBtn) {
-    dislikeBtn.textContent = `👎 ${dislikeCount}`;
-    dislikeBtn.classList.toggle('is-active', disliked);
+  const curiousBtn = document.getElementById('sheetCuriousBtn');
+  if (curiousBtn) {
+    curiousBtn.textContent = `🤔 ${curiousCount}`;
+    curiousBtn.classList.toggle('is-active', curious);
   }
 }
 
@@ -1436,32 +1436,32 @@ async function onSheetLike(btn) {
         likeBtn.classList.toggle('is-active', result.liked);
       }
       if (result.liked) {
-        const dislikeCount = await window.CottageDB.getGameDislikeCount(gameKey);
-        const dislikeBtn = document.getElementById('sheetDislikeBtn');
-        if (dislikeBtn) {
-          dislikeBtn.textContent = `👎 ${dislikeCount}`;
-          dislikeBtn.classList.remove('is-active');
+        const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
+        const curiousBtn = document.getElementById('sheetCuriousBtn');
+        if (curiousBtn) {
+          curiousBtn.textContent = `🤔 ${curiousCount}`;
+          curiousBtn.classList.remove('is-active');
         }
       }
     }
   });
 }
 
-async function onSheetDislike(btn) {
+async function onSheetCurious(btn) {
   requireLogin(async () => {
     const user = window.getKakaoUser?.();
     if (!user || !window.CottageDB) return;
     const gameKey = btn?.dataset.gameId;
     if (!gameKey) return;
-    const result = await window.CottageDB.toggleGameDislike(gameKey, String(user.id));
-    if (result.disliked !== undefined) {
-      const dislikeCount = await window.CottageDB.getGameDislikeCount(gameKey);
-      const dislikeBtn = document.getElementById('sheetDislikeBtn');
-      if (dislikeBtn) {
-        dislikeBtn.textContent = `👎 ${dislikeCount}`;
-        dislikeBtn.classList.toggle('is-active', result.disliked);
+    const result = await window.CottageDB.toggleGameCurious(gameKey, String(user.id));
+    if (result.curious !== undefined) {
+      const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
+      const curiousBtn = document.getElementById('sheetCuriousBtn');
+      if (curiousBtn) {
+        curiousBtn.textContent = `🤔 ${curiousCount}`;
+        curiousBtn.classList.toggle('is-active', result.curious);
       }
-      if (result.disliked) {
+      if (result.curious) {
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');
         if (likeBtn) {

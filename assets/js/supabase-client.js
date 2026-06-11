@@ -506,42 +506,42 @@ window._cottageSess = (function () {
     }
   }
 
-  // ── 비추 (game_dislikes) ─────────────────────────────
-  async function getGameDislikeCount(gameId) {
+  // ── 궁금해요 (game_curious) ──────────────────────────
+  async function getGameCuriousCount(gameId) {
     try {
       const { count } = await db
-        .from("game_dislikes")
+        .from("game_curious")
         .select("*", { count: "exact", head: true })
         .eq("game_id", gameId);
       return count || 0;
     } catch (_) { return 0; }
   }
 
-  async function toggleGameDislike(gameId, userId) {
+  async function toggleGameCurious(gameId, userId) {
     if (!gameId || !userId) return { error: "invalid" };
     try {
       const { data: existing } = await db
-        .from("game_dislikes")
+        .from("game_curious")
         .select("id")
         .eq("game_id", gameId)
         .eq("user_id", userId)
         .maybeSingle();
       if (existing) {
-        await db.from("game_dislikes").delete().eq("id", existing.id);
-        return { disliked: false };
+        await db.from("game_curious").delete().eq("id", existing.id);
+        return { curious: false };
       } else {
         await db.from("game_likes").delete().eq("game_id", gameId).eq("user_id", userId);
-        await db.from("game_dislikes").insert({ game_id: gameId, user_id: userId });
-        return { disliked: true };
+        await db.from("game_curious").insert({ game_id: gameId, user_id: userId });
+        return { curious: true };
       }
     } catch (e) { return { error: e }; }
   }
 
-  async function hasUserDisliked(gameId, userId) {
+  async function hasUserCurious(gameId, userId) {
     if (!gameId || !userId) return false;
     try {
       const { data } = await db
-        .from("game_dislikes")
+        .from("game_curious")
         .select("id")
         .eq("game_id", gameId)
         .eq("user_id", userId)
@@ -910,9 +910,9 @@ window._cottageSess = (function () {
     getGameLikeCount,
     toggleGameLike,
     hasUserLiked,
-    getGameDislikeCount,
-    toggleGameDislike,
-    hasUserDisliked,
+    getGameCuriousCount,
+    toggleGameCurious,
+    hasUserCurious,
     startSession,
     upsertProfile,
     getAllProfiles,

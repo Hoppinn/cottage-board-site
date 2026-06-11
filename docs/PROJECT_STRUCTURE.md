@@ -83,9 +83,9 @@ assets/js/
 | `getGameLikeCount(gameId)` | 따봉 수 조회 |
 | `toggleGameLike(gameId, userId)` | 따봉 토글 |
 | `hasUserLiked(gameId, userId)` | 따봉 여부 확인 |
-| `getGameDislikeCount(gameId)` | 비추 수 조회 |
-| `toggleGameDislike(gameId, userId)` | 비추 토글 |
-| `hasUserDisliked(gameId, userId)` | 비추 여부 확인 |
+| `getGameCuriousCount(gameId)` | 궁금해요 수 조회 |
+| `toggleGameCurious(gameId, userId)` | 궁금해요 토글 |
+| `hasUserCurious(gameId, userId)` | 궁금해요 여부 확인 |
 | `getVisitorStats()` | 방문자 통계 |
 | `startSession(userId)` | 체류 세션 시작 |
 | `upsertProfile(userId, nickname, realName)` | 프로필 upsert + 방문 카운트 + 시간 반영 |
@@ -124,7 +124,7 @@ assets/js/
 | `game_views` | game_id, created_at | 조회수 트래킹 |
 | `game_ratings` | game_id, rating, session_key | 별점 |
 | `game_likes` | game_id, user_id | 따봉 |
-| `game_dislikes` | game_id, user_id | 비추 |
+| `game_curious` | game_id, user_id | 궁금해요 |
 | `game_comments` | game_key, comment_text, nickname, user_id | 코멘트 |
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, **photo_url**, review_text | 플레이 기록 |

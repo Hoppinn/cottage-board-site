@@ -210,8 +210,8 @@ create policy "anon_delete_game_likes"
   on public.game_likes for delete to anon using (true);
 
 
--- ── game_dislikes (비추) ──────────────────────────────────────
-create table if not exists public.game_dislikes (
+-- ── game_curious (궁금해요) ──────────────────────────────────
+create table if not exists public.game_curious (
   id         uuid primary key default gen_random_uuid(),
   game_id    text not null,
   user_id    text not null,
@@ -219,21 +219,21 @@ create table if not exists public.game_dislikes (
   unique (game_id, user_id)
 );
 
-create index if not exists game_dislikes_game_id_idx on public.game_dislikes (game_id);
+create index if not exists game_curious_game_id_idx on public.game_curious (game_id);
 
-alter table public.game_dislikes enable row level security;
+alter table public.game_curious enable row level security;
 
-drop policy if exists "anon_insert_game_dislikes" on public.game_dislikes;
-create policy "anon_insert_game_dislikes"
-  on public.game_dislikes for insert to anon with check (true);
+drop policy if exists "anon_insert_game_curious" on public.game_curious;
+create policy "anon_insert_game_curious"
+  on public.game_curious for insert to anon with check (true);
 
-drop policy if exists "anon_select_game_dislikes" on public.game_dislikes;
-create policy "anon_select_game_dislikes"
-  on public.game_dislikes for select to anon using (true);
+drop policy if exists "anon_select_game_curious" on public.game_curious;
+create policy "anon_select_game_curious"
+  on public.game_curious for select to anon using (true);
 
-drop policy if exists "anon_delete_game_dislikes" on public.game_dislikes;
-create policy "anon_delete_game_dislikes"
-  on public.game_dislikes for delete to anon using (true);
+drop policy if exists "anon_delete_game_curious" on public.game_curious;
+create policy "anon_delete_game_curious"
+  on public.game_curious for delete to anon using (true);
 
 
 -- ── game_reviews (게임 후기) ──────────────────────────────────
