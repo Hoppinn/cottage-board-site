@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-12 (35차 — MD 리팩토링)
+최종 갱신: 2026-06-12 (36차 — 변경이력 최근 10개로 trim)
 
 ---
 
@@ -121,26 +121,3 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 | 2026-06-11 | feat: 추천 게임 카드 BGG 평점 표시 |
 | 2026-06-11 | fix: 추천 게임 오버레이 평점순 정렬 |
 | 2026-06-11 | feat: game_curious 테이블 — 비추(game_dislikes) → 궁금해요. 버튼 👎→🤔 |
-| 2026-06-11 | fix: referrer 저장 방식 — pathname → hostname (외부 도메인만) |
-| 2026-06-10 | feat: 홈페이지 이용 가이드 페이지 신설 (pages/info/guide.html) |
-| 2026-06-10 | fix: 동호회 nav 완전 정리 — 가입/모임참여 메뉴 15개 파일, 스크롤스파이 재작성 |
-| 2026-06-10 | feat: 관리자 분석 UX — 최근접속순 정렬, 이용상세 accordion |
-| 2026-06-10 | fix: 관리자 분석 카운팅 dedup (user, page, day 기준 중복 제거) |
-| 2026-06-09 | feat: 발매후 도착예정/배송중/구매예정 배지 (shelfGroupId 기반) |
-| 2026-06-09 | feat: add-game 단일 진입점 — BGG 맞음/틀림 확인 UX, 번역 재실행 통합 |
-| 2026-06-09 | feat: 게임위치 페이지 (game-location.html) 코드레벨 구현 |
-| 2026-06-09 | fix: 관리자 분석 전면 재작성 — 사용자별/페이지별, page_sessions 기록 |
-| 2026-06-08 | feat: 이용시간 초 단위 전환 — total_minutes 컬럼 ×60 마이그레이션, 표시 시/분/초 자동 변환 |
-| 2026-06-08 | feat: vercel.json 생성, og:image 캐시 갱신 |
-| 2026-06-08 | fix: style.css 잔여 초록·청록 제거, club-history 날짜 헤더 색상 |
-| 2026-06-07 | fix: 모바일 참여자 입력 엔터 태그 미등록 (enterkeyhint=done + isComposing + keyup) |
-| 2026-06-07 | fix: 사용시간 카운팅 개선 — pagehide 이벤트, startSession flush |
-| 2026-06-05 | feat: play-records-utils.js 생성 (parsePhotoUrls/buildPhotoHtml/openLightbox 공유) |
-| 2026-06-05 | refactor: script.js → owned-games-page.js + index-page.js 분리 |
-| 2026-06-05 | refactor: game-reviews.html JS → assets/js/game-reviews.js 분리 |
-| 2026-06-05 | refactor: style.css 전역 초록→갈색, CSS 아키텍처 재구조화 |
-| 2026-06-05 | feat: PC 레이아웃 전면 적용 (768px+ 2컬럼, 바텀시트 센터 모달) |
-| 2026-06-04 | feat: 프로필 사진 DB 저장 (profiles.photo_url), 다기기 복원 |
-| 2026-06-04 | feat: 별점·코멘트 소유권 user_id 기반 전환 |
-| 2026-06-04 | refactor: 폴더 구조 개편 (pages/game/, info/, club/, admin/) |
-| 2026-06-04 | fix: 이용시간 당일 반영 (_syncTimeToDBNow), upsertProfile 버그 다수 수정 |
