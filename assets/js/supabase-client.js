@@ -658,7 +658,7 @@ window._cottageSess = (function () {
             ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
             : 'unknown';
           const referrer = typeof document !== 'undefined' && document.referrer
-            ? (() => { try { return new URL(document.referrer).pathname; } catch (_) { return null; } })()
+            ? (() => { try { const u = new URL(document.referrer); return u.hostname !== location.hostname ? u.hostname : null; } catch (_) { return null; } })()
             : null;
           db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
         }
