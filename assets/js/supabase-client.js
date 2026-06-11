@@ -602,6 +602,17 @@ window._cottageSess = (function () {
   let _sessionStart = Date.now();
   let _sessionEnterAt = Date.now();
   let _sessionUserId = null;
+  // 페이지 최초 진입 시점의 referrer 캡처 (이후 navigate하면 URL이 바뀌므로 여기서만 읽음)
+  const _sessionReferrer = (() => {
+    if (typeof location === 'undefined') return null;
+    const utm = new URLSearchParams(location.search).get('utm_source');
+    if (utm) return utm;
+    if (typeof document === 'undefined' || !document.referrer) return null;
+    try {
+      const u = new URL(document.referrer);
+      return u.hostname !== location.hostname ? u.hostname : null;
+    } catch (_) { return null; }
+  })();
 
   // ── heartbeat: 1분 주기, 로그인+탭 활성 상태에서 이용시간 누적 반영 ──
   let _heartbeatTimer = null;
@@ -657,12 +668,7 @@ window._cottageSess = (function () {
           const page = typeof window !== 'undefined'
             ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
             : 'unknown';
-          const _utmSource = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('utm_source') : null;
-          const referrer = _utmSource
-            ? _utmSource
-            : (typeof document !== 'undefined' && document.referrer
-              ? (() => { try { const u = new URL(document.referrer); return u.hostname !== location.hostname ? u.hostname : null; } catch (_) { return null; } })()
-              : null);
+          const referrer = _sessionReferrer;
           db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
         }
       }

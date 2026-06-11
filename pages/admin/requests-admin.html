@@ -1026,10 +1026,16 @@
             return null; // 파싱 실패 = 내부/잘못된 데이터
           }
         }
+        // user_id 기준 중복 제거 — 한 명이 여러 페이지 방문해도 referrer는 1회만 카운트
         const refMap = {};
+        const _seenRefUsers = new Set();
         for (const r of filtered) {
+          if (r.user_id) {
+            if (_seenRefUsers.has(r.user_id)) continue;
+            _seenRefUsers.add(r.user_id);
+          }
           const cat = categorizeRef(r.referrer);
-          if (cat === null) continue; // 구버전 pathname 형식 무시
+          if (cat === null) continue;
           refMap[cat] = (refMap[cat] || 0) + 1;
         }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
