@@ -776,12 +776,13 @@
         const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
         const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
-        const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" title="코멘트·따봉 남기기">💬👍</a>` : '';
-        const dtLine = r.play_time_min ? `${r.play_time_min}분` : '';
-        const scoreLine = r.score_note ? escH(r.score_note) : '';
-        const dateline = (dtLine || scoreLine) ? `<span class="pr-rec-dateline">${dtLine}${dtLine && scoreLine ? '<br>' : ''}<span class="pr-rec-scoreline">${scoreLine}</span></span>` : '';
-        const moreMenu = (isMine || window.isOwner?.()) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button></div></div>` : '';
-        const actionsBar = (sheetLink || moreMenu) ? `<div class="pr-rec-actions-bar">${sheetLink}${moreMenu}</div>` : '';
+        const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? escH(r.score_note) : ''].filter(Boolean);
+        const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
+        const showSheet = gameKey && isParticipant;
+        const showEdit = isMine || window.isOwner?.();
+        const sheetItem = showSheet ? `<a class="pr-rec-sheet-item" href="#" onclick="event.preventDefault();event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 코멘트 · 👍 따봉</a>` : '';
+        const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
+        const moreMenu = (showSheet || showEdit) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${sheetItem}${editItems}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
@@ -792,9 +793,9 @@
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
+            ${moreMenu ? `<div class="pr-rec-actions">${moreMenu}</div>` : ''}
           </div>
           ${photoHtml}
-          ${actionsBar}
         </div>`;
       }).join('');
     }
@@ -846,25 +847,26 @@
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
         const gameKey = getGameKey(r.game_id);
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
-        const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" title="코멘트·따봉 남기기">💬👍</a>` : '';
-        const dtParts = [
+        const dlParts2 = [
           date !== '?' ? date.replace(/-/g, '.') : '',
-          r.play_time_min ? `${r.play_time_min}분` : ''
+          r.play_time_min ? `${r.play_time_min}분` : '',
+          r.score_note ? escH(r.score_note) : ''
         ].filter(Boolean);
-        const dtLine = dtParts.join(' · ');
-        const scoreLine = r.score_note ? escH(r.score_note) : '';
-        const dateline = (dtLine || scoreLine) ? `<span class="pr-rec-dateline">${dtLine}${dtLine && scoreLine ? '<br>' : ''}<span class="pr-rec-scoreline">${scoreLine}</span></span>` : '';
-        const moreMenu2 = (isMine || window.isOwner?.()) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button></div></div>` : '';
-        const actionsBar2 = (sheetLink || moreMenu2) ? `<div class="pr-rec-actions-bar">${sheetLink}${moreMenu2}</div>` : '';
+        const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
+        const showSheet2 = gameKey && isParticipant;
+        const showEdit2 = isMine || window.isOwner?.();
+        const sheetItem2 = showSheet2 ? `<a class="pr-rec-sheet-item" href="#" onclick="event.preventDefault();event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 코멘트 · 👍 따봉</a>` : '';
+        const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
+        const moreMenu2 = (showSheet2 || showEdit2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${sheetItem2}${editItems2}</div></div>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
+            ${moreMenu2 ? `<div class="pr-rec-actions">${moreMenu2}</div>` : ''}
           </div>
           ${photoHtml}
-          ${actionsBar2}
         </div>`;
       }).join('');
 
