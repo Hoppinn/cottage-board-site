@@ -5147,7 +5147,7 @@ body.sheet-open{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:14px 16px;
+  padding:10px 14px;
   background:#3b4f3a;
   border-radius:14px;
   margin-bottom:12px;
@@ -5307,10 +5307,10 @@ body.sheet-open{
   gap:10px;
 }
 .history-game-thumb{
-  width:40px;
-  height:40px;
+  width:34px;
+  height:34px;
   object-fit:cover;
-  border-radius:6px;
+  border-radius:5px;
   flex-shrink:0;
 }
 .history-game-info{
