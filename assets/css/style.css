@@ -5442,7 +5442,7 @@ body.sheet-open{
 .pr-rec-row { display: flex; flex-direction: column; padding: 11px 16px; border-bottom: 1px solid #ece7de; gap: 0; background: #fff; }
 .pr-rec-row:last-child { border-bottom: none; }
 .pr-rec-row:hover { background: #fdfaf6; }
-.pr-rec-row-top { display: flex; align-items: center; gap: 8px; }
+.pr-rec-row-top { display: flex; align-items: flex-start; gap: 8px; }
 .pr-rec-main { flex: 1; min-width: 0; }
 .pr-rec-game { font-size: 15px; font-weight: 800; color: #1a1a1a; margin-bottom: 2px; display: block; }
 .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
