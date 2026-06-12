@@ -5429,11 +5429,11 @@ body.sheet-open{
 .pr-sub-session:first-child { border-top: none; }
 .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg,#f5f0e8); border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-sub-hd:hover { background: #ece7dc; }
-.pr-sub-session.is-open > .pr-sub-hd { background: #f5f0e8; box-shadow: inset 3px 0 0 #9e3a2a; }
+.pr-sub-session.is-open > .pr-sub-hd { background: #f5f0e8; box-shadow: inset 3px 0 0 #6a9068; }
 .pr-sub-session.is-open { margin-bottom: 14px; }
 .pr-sub-date { font-size: 14px; font-weight: 600; color: #6b5040; flex-shrink: 0; }
 .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #9e3a2a; }
-.pr-sub-summary { font-size: 12px; font-weight: 700; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr-sub-summary { font-size: 12px; font-weight: 700; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; }
 .pr-sub-arrow { font-size: 13px; color: #a09080; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
 .pr-sub-body { display: none; }
