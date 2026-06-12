@@ -135,6 +135,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-12 | refactor: 타이포 계층 + 여백 개선 — owned-games 게임명 16→17px/line-height 강화, 아이템 padding/gap 확대, recommend-section 상단 여백 12→22px |
 | 2026-06-12 | refactor: 카드 계층감 개선 — .game-card / .recommend-filter box-shadow:none → 0 2px 8px rgba(40,30,18,0.07) |
 | 2026-06-12 | refactor: 내 활동 패널 구분선 2개로 3단 구조 확정 — 누적 활동 / 최근 활동 / 계정 정보 |
 | 2026-06-12 | refactor: 내 활동 패널 정보 우선순위 개선 — 누적 성과(총 이용시간·방문일수·플레이기록) 상단, 계정 메타(가입일·상태·이전방문) 하단, 구분선 추가, 알림 텍스트 단축 |

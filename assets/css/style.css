@@ -737,7 +737,7 @@ body.recommend-page main{
 }
 
 .recommend-section{
-  padding:12px 18px 52px;
+  padding:22px 18px 52px;
   background:var(--cream);
   border-top:1px solid rgba(223,199,161,0.55);
   scroll-margin-top:calc(var(--header-total-h) + 8px);
@@ -2094,7 +2094,7 @@ body.sheet-open{
   margin:0 auto !important;
   display:flex;
   flex-direction:column;
-  gap:8px !important;
+  gap:12px !important;
 }
 
 /* 전체게임보기 빈 결과 상자: JS의 .owned-empty와 연결됨 */
@@ -2116,8 +2116,8 @@ body.sheet-open{
   width:100%;
   display:flex;
   align-items:flex-start;
-  gap:10px !important;
-  padding:10px 11px !important;
+  gap:12px !important;
+  padding:13px 16px !important;
   border:1.5px solid #e5d7bd;
   border-radius:18px !important;
   background:#fffdf8 !important;
@@ -2158,15 +2158,15 @@ body.sheet-open{
 
 .owned-game-info strong{
   display:block;
-  margin-bottom:5px !important;
+  margin-bottom:6px !important;
   color:#2f2a21;
-  font-size:16px !important;
-  line-height:1.15 !important;
+  font-size:17px !important;
+  line-height:1.25 !important;
   font-weight:900;
 }
 
 .owned-game-info p{
-  margin:0;
+  margin:3px 0 0;
   color:#6f5d43;
   font-size:13px;
   font-weight:800;
