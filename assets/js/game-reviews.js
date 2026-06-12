@@ -199,7 +199,7 @@
           </div>
           <div>
             <label class="pr-field-label">점수·메모</label>
-            <input type="text" class="pr-score" placeholder="1등: 홍길동">
+            <textarea class="pr-score" placeholder="1등: 홍길동" rows="2"></textarea>
           </div>
         </div>
         <label class="pr-photo-trigger">
@@ -316,7 +316,7 @@
           count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
           time: parseInt(row.querySelector('.pr-time').value) || null,
           names: putSelfFirst(row.querySelector('.pr-names').value.trim() || null, user.nickname),
-          score: row.querySelector('.pr-score').value.trim() || null,
+          score: row.querySelector('.pr-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
           review: row.querySelector('.pr-review').value.trim() || null,
           photoFiles: row._photoFiles || [],
         });
@@ -501,7 +501,7 @@
           <label for="pie-time-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
           <input id="pie-time-${btn.dataset.id}" name="pie-time" class="pie-time" type="number" placeholder="분" value="${escH(String(rec.time||''))}">
           <label for="pie-score-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">점수·메모</label>
-          <input id="pie-score-${btn.dataset.id}" name="pie-score" class="pie-score" placeholder="예: 83 / 75점" value="${escH(rec.score||'')}">
+          <textarea id="pie-score-${btn.dataset.id}" name="pie-score" class="pie-score" placeholder="예: 83 / 75점" rows="2">${escH(rec.score||'')}</textarea>
           <label for="pie-group-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">모임명</label>
           <input id="pie-group-${btn.dataset.id}" name="pie-group" class="pie-group" placeholder="예: 코티지보드 동호회" value="${escH(rec.group||'')}">
           <label for="pie-date-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">날짜</label>
@@ -601,7 +601,7 @@
             player_names: form.querySelector('.pie-names').value.trim() || null,
             player_count: parseInt(form.querySelector('.pie-count').value) || null,
             play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
-            score_note: form.querySelector('.pie-score').value.trim() || null,
+            score_note: form.querySelector('.pie-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
             group_name: form.querySelector('.pie-group').value.trim() || null,
             played_at: form.querySelector('.pie-date').value || null,
             review_text: form.querySelector('.pie-review').value.trim() || null,
