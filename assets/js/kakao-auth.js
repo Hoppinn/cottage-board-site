@@ -527,6 +527,7 @@ async function openProfilePanel() {
         }
         return `<li><span>이전 방문</span><strong>${rel}</strong></li>`;
       })()}
+      <li class="profile-stats-divider"></li>
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
     </ul>
