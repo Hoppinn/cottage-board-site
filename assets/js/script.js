@@ -974,12 +974,8 @@ if(headerSearchResults){
     }
 
     const gameKey = resultButton.dataset.game;
-    if(gameSheet && gameSheetContent){
-      openGameSheet(gameKey);
-    } else {
-      window.location.href =
-        `${rootPath}pages/game/owned-games.html?open=${encodeURIComponent(gameKey)}`;
-    }
+    ensureGameSheet();
+    openGameSheet(gameKey);
   });
 }
 
@@ -1042,17 +1038,30 @@ function bindGameCardEvents(){
    # GAME SHEET
 ========================= */
 
-const gameSheet =
+let gameSheet =
   document.querySelector('#gameSheet');
 
-const gameSheetContent =
+let gameSheetContent =
   document.querySelector('#gameSheetContent');
 
-const closeGameSheetButton =
+let closeGameSheetButton =
   document.querySelector('#closeGameSheetButton');
 
-const closeGameSheetDim =
+let closeGameSheetDim =
   document.querySelector('#closeGameSheetDim');
+
+function ensureGameSheet() {
+  if (document.getElementById('gameSheet')) return;
+  const wrap = document.createElement('div');
+  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim" id="closeGameSheetDim"></div><div class="game-sheet-panel"><button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div id="gameSheetContent"></div></div></div>';
+  document.body.appendChild(wrap.firstChild);
+  gameSheet          = document.getElementById('gameSheet');
+  gameSheetContent   = document.getElementById('gameSheetContent');
+  closeGameSheetButton = document.getElementById('closeGameSheetButton');
+  closeGameSheetDim  = document.getElementById('closeGameSheetDim');
+  closeGameSheetButton.addEventListener('click', closeGameSheet);
+  closeGameSheetDim.addEventListener('click', closeGameSheet);
+}
 
 let _currentSheetGameKey = null;
 
