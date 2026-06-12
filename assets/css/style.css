@@ -3608,7 +3608,7 @@ body.sheet-open{
 .about-hero{
   position:relative;
   background:linear-gradient(160deg,#3d2010 0%,#7a4828 100%);
-  margin:calc(var(--header-total-h) + 28px) 16px 0;
+  margin:calc(var(--header-total-h) + 28px) 16px 6px;
   padding:clamp(20px,4vw,28px) 20px clamp(32px,8vw,52px);
   border-radius:16px;
   text-align:center;
