@@ -898,22 +898,29 @@
 
     // GAME_ID는 game key(string). DB game_id는 numeric BGG ID → 변환 필요
     const numericGameId = window.gameData?.[GAME_ID]?.bgg?.id || GAME_ID;
-    let records = [];
+    const gameKey = getGameKey(GAME_ID) || GAME_ID;
+
+    let records = [], gameComments = [], playReviews = [];
     try {
-      const { data, error } = await db.from('game_play_records')
-        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
-        .eq('game_id', numericGameId)
-        .order('played_at', { ascending: false })
-        .order('created_at', { ascending: false })
-        .limit(50);
-      if (error) console.warn('[renderSingleGame]', error);
-      records = data || [];
+      const [recData, commData, revData] = await Promise.all([
+        db.from('game_play_records')
+          .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
+          .eq('game_id', numericGameId)
+          .order('played_at', { ascending: false })
+          .order('created_at', { ascending: false })
+          .limit(50),
+        window.CottageDB ? window.CottageDB.getGameComments(gameKey) : Promise.resolve([]),
+        window.CottageDB ? window.CottageDB.getPlayReviewsByGame(numericGameId) : Promise.resolve([]),
+      ]);
+      if (recData.error) console.warn('[renderSingleGame]', recData.error);
+      records = recData.data || [];
+      gameComments = commData || [];
+      playReviews = revData || [];
     } catch (e) { console.warn('[renderSingleGame]', e); }
 
     const user = window.getKakaoUser?.();
-    const gameKey = getGameKey(GAME_ID) || GAME_ID;
 
-    const backToSheet = `<a class="rv-back-to-sheet" href="../game/owned-games.html?open=${encodeURIComponent(gameKey)}">💬 코멘트 · 👍 따봉 남기러 가기 →</a>`;
+    const backToSheet = `<a class="rv-back-to-sheet" href="../game/owned-games.html?open=${encodeURIComponent(gameKey)}">게임 정보 · 코멘트 보기 →</a>`;
 
     const listHtml = records.length
       ? records.map(r => {
@@ -941,8 +948,29 @@
         }).join('')
       : `<p class="pr-empty">아직 이 게임의 기록이 없어요.<br><small style="color:var(--muted)">바텀시트에서 '+ 기록하기'로 추가할 수 있어요.</small></p>`;
 
+    const allComments = [...gameComments, ...playReviews];
+    const commentsHtml = allComments.length ? `
+      <div class="rv-section-title" style="margin-top:14px">코멘트 ${allComments.length}건</div>
+      <div class="rv-comments">
+        ${gameComments.map(c => {
+          const dateStr = c.created_at ? formatDate(c.created_at) : '';
+          return `<div class="sheet-comment-item">
+            <span class="sheet-comment-nickname">${escH(c.nickname || '익명')}${dateStr ? ` · <span style="font-weight:400;color:#8b8478;font-size:12px">${dateStr}</span>` : ''}</span>
+            <p class="sheet-comment-text">${escH(c.comment_text || '')}</p>
+          </div>`;
+        }).join('')}
+        ${playReviews.map(r => {
+          const dateStr = r.played_at ? r.played_at.replace(/-/g,'.') : formatDate(r.created_at);
+          return `<div class="sheet-comment-item sheet-comment-item--review">
+            <span class="sheet-comment-nickname">${escH(r.nickname || '익명')} · <span style="font-weight:400;color:#8b8478;font-size:12px">${dateStr}</span><span class="sheet-comment-review-label">🎲 플레이 감상</span></span>
+            <p class="sheet-comment-text">${escH(r.review_text || '')}</p>
+          </div>`;
+        }).join('')}
+      </div>` : '';
+
     root.innerHTML = `
       ${backToSheet}
+      ${commentsHtml}
       <div class="rv-section-title" style="margin-top:14px">플레이 기록 ${records.length}건</div>
       ${listHtml}`;
 

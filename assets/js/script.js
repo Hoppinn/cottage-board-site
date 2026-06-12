@@ -1270,9 +1270,9 @@ function openGameSheet(gameKey){
     </div>
 
     <button class="sheet-view-all-btn" style="cursor:pointer;font-family:inherit" onclick="alert('준비 중입니다.')">📚 꽂혀있는 책장 보러가기 →</button>
-    <a class="sheet-view-all-btn sheet-review-btn"
+    <a class="sheet-view-all-btn sheet-review-btn" id="sheetPlayCountLink-${gameKey}"
       href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
-    >🎲 플레이기록 보러가기 →</a>
+    >플레이 기록 보기 →</a>
 
   `;
 
@@ -1286,6 +1286,7 @@ function openGameSheet(gameKey){
   initSheetMechsToggle();
   initSheetComments(gameKey).catch(() => {});
   initSheetLikes(gameKey).catch(() => {});
+  updateSheetPlayCountLink(gameKey).catch(() => {});
 
   // ?scroll=comments → 코멘트 섹션으로 스크롤
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
@@ -1296,6 +1297,14 @@ function openGameSheet(gameKey){
       if (panel && commentsEl) panel.scrollTo({ top: commentsEl.offsetTop - 20, behavior: 'smooth' });
     }, 400);
   }
+}
+
+async function updateSheetPlayCountLink(gameKey) {
+  if (!window.CottageDB) return;
+  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+  const count = await window.CottageDB.getGamePlayCount(numericId);
+  const link = document.getElementById(`sheetPlayCountLink-${gameKey}`);
+  if (link) link.textContent = `플레이 기록 ${count}건 보기 →`;
 }
 
 function closeGameSheet(){
@@ -1799,10 +1808,11 @@ async function initPlayWidget(gameKey) {
     return;
   }
 
+  const numericGameId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
   const [playCount, highlights, allRecords] = await Promise.all([
-    window.CottageDB.getGamePlayCount(gameKey),
-    window.CottageDB.getPlayHighlights(gameKey),
-    window.CottageDB.getGamePlayRecords(gameKey),
+    window.CottageDB.getGamePlayCount(numericGameId),
+    window.CottageDB.getPlayHighlights(numericGameId),
+    window.CottageDB.getGamePlayRecords(numericGameId),
   ]);
 
   const myRecordIds = new Set(
