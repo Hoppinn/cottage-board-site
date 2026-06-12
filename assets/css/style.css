@@ -3967,6 +3967,49 @@ body.sheet-open{
   font-size:13px;
   flex-shrink:0;
 }
+.rules-plain-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.rules-plain-list li{
+  font-size:14px;
+  color:#5a4030;
+  padding-left:16px;
+  position:relative;
+  line-height:1.5;
+}
+.rules-plain-list li::before{
+  content:"•";
+  position:absolute;
+  left:0;
+  color:#9a7858;
+}
+.rules-check-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.rules-check-list li{
+  font-size:14px;
+  color:#5a4030;
+  padding-left:22px;
+  position:relative;
+  line-height:1.5;
+}
+.rules-check-list li::before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  color:#6a9060;
+  font-weight:700;
+}
 
 /* =========================
    # REQUESTS PAGE
