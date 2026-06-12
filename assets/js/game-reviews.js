@@ -776,7 +776,7 @@
         const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
         const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
-        const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? escH(r.score_note) : ''].filter(Boolean);
+        const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? escH(r.score_note).replace(/점$/, '') + '점' : ''].filter(Boolean);
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         const showSheet = gameKey && isParticipant;
         const showEdit = isMine || window.isOwner?.();
@@ -850,7 +850,7 @@
         const dlParts2 = [
           date !== '?' ? date.replace(/-/g, '.') : '',
           r.play_time_min ? `${r.play_time_min}분` : '',
-          r.score_note ? escH(r.score_note) : ''
+          r.score_note ? escH(r.score_note).replace(/점$/, '') + '점' : ''
         ].filter(Boolean);
         const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
         const showSheet2 = gameKey && isParticipant;
@@ -922,7 +922,7 @@
           const playedLabel = r.played_at ? formatKstDate(r.played_at) : formatDate(r.created_at);
           const countTag = r.player_count ? `<span class="pr-rec-tag pr-tag-count-game">${r.player_count}명</span>` : '';
           const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
-          const scoreTag = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
+          const scoreTag = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note).replace(/점$/, '') + '점'}</span>` : '';
           const groupTag = r.group_name ? `<span class="pr-rec-tag" style="background:#455a64;color:#fff;font-weight:700;">${escH(r.group_name)}</span>` : '';
           const namesTag = r.player_names ? `<span class="pr-rec-tag">${escH(r.player_names)}</span>` : '';
           const photoUrls = parsePhotoUrls(r.photo_url);
