@@ -259,12 +259,20 @@ about, price-rules 히어로↔섹션 간격, 버튼↔푸터 간격 개선 완�
 | 2026-06-12 | club-history 날짜 기본 접힘 | is-open 제거 |
 | 2026-06-12 | 썸네일 클릭 수정 | game-reviews buildSessionBody + club-history 각 1줄 onclick 추가 |
 | 2026-06-12 | 플레이 감상 코멘트 연동 | getPlayReviewsByGame API + initSheetComments 합산 렌더링 |
+| 2026-06-13 | 게임명 클릭 동작 제거 | game-reviews.js + club-history.html 게임명 a→span |
+| 2026-06-13 | 헤더 검색 바텀시트 전 페이지 | ensureGameSheet() — sheet 없는 페이지에서도 동작 |
+| 2026-06-13 | 회원 소개 카드 최종 | 세이지/웜브라운 2색 열 반복, 테두리 중립화, 닉네임 #3a2510/날짜 #8b8478 |
+| 2026-06-13 | 플레이 카운팅 전체 수정 | initPlayWidget gameKey→numericId 변환 (getGamePlayCount/Highlights/Records 0건 버그) |
+| 2026-06-13 | 바텀시트 플레이기록 건수 연동 | updateSheetPlayCountLink — '플레이 기록 N건 보기 →' |
+| 2026-06-13 | 게임기록 페이지 코멘트 표시 | 코멘트 + 플레이감상 섹션 상단 추가 |
+| 2026-06-13 | 게임기록 페이지 링크 텍스트 | '게임 정보 · 코멘트 보기 →' |
 
 ### 다음 작업 후보 (우선순위 순)
 
-1. **방문자 수 trackPageView** — RLS 의심. Supabase 대시보드에서 page_views 최신 행 확인 필요. console.warn 추가됨(f5609dd)으로 다음 방문 시 콘솔 에러 확인 가능
-2. **푸터 정보 묶음** — 주소/전화/링크/Copyright 4덩어리 시각적 분리 (낮은 우선순위)
-3. **전체 페이지 타이포+여백 잔여** — club.html, club-history.html
+1. **방문자 수 trackPageView** — RLS 의심. 브라우저 콘솔에서 `[trackPageView] insert error` 확인 필요. 에러 있으면 Supabase 정책 문제, 없으면 집계 로직 재검토
+2. **관리자 방문경로** — 별도 조사 필요 (코드 레벨인지 인프라 레벨인지 미확정). 사용자가 "나중에" 지시
+3. **푸터 정보 묶음** — 낮은 우선순위
+4. **전체 페이지 타이포+여백 잔여** — club.html, club-history.html
 
 ### 나중에 할 항목 (STATE.md P2에 등록됨)
 
