@@ -23,6 +23,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | 인증·로그인·프로필·사진 흐름 | `docs/PROJECT_STRUCTURE.md` §3~5 |
 | 이용시간·체류 추적 | `docs/PROJECT_STRUCTURE.md` §6 |
 | 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 |
+| UI/CSS 디자인 작업 | `docs/DESIGN_RULES.md` |
 
 ---
 
@@ -46,7 +47,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 작업 중 운영 방식이 바뀌면:
 - 이번 세션만 적용 → PROJECT_STATE.md에 메모
-- 앞으로 계속 적용 → CLAUDE.md 갱신
+- 앞으로 계속 적용 → CLAUDE.md 갱신 대상. 작업 권한 Yellow 절차에 따라 변경안 보고 후 승인.
 
 커밋 전, 바뀐 운영 방식이 있으면 사용자에게 한 줄로만 물어봐라.  
 예: "TODO.md 삭제 규칙 CLAUDE.md에 추가할까요?"  
@@ -62,8 +63,6 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | localStorage 키/구조 신규 생성 또는 변경 | 기존 키 재사용 가능한지 먼저 확인 필요 |
 | window.CottageDB 공개 API 추가/변경/삭제 | 다수 파일이 의존, 파급 범위 큼 |
 | 인덱스(STRUCTURE.md) 및 서브파일 확인 후에도 영향 범위 불명확 | 읽지 않고 실행하면 중복/충돌 위험 |
-
-그 외(버그 수정, 단일 파일 변경, 스타일 수정 등)는 관련 함수/섹션만 읽고 바로 실행한다.
 
 ### Plan 작성 형식
 
@@ -122,12 +121,17 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 UI/CSS 마감, 문구·오타 수정, 배너 교체, 여백 조정, PROJECT_STATE.md 사실 기록 갱신 (완료 반영, 버그 이력 등)
 
 **Yellow** — 변경안 보고 후 승인 필요  
-CLAUDE.md 수정, DESIGN_RULES.md 수정, 신규 `*.md` 생성, PROJECT_STATE.md 구조 변경 (섹션 추가·삭제, §0 항목 추가)
+CLAUDE.md 수정, DESIGN_RULES.md 수정, 신규 `*.md` 생성, PROJECT_STATE.md 구조 변경 (섹션 추가·삭제, 문서 체계 변경)
 
-**Red** — Plan 후 승인 필요  
+**Red** — Plan 후 승인 필요 (Plan 형식: Plan-Execute 기준 참조)  
 DB, 인증, 데이터 구조, 파일 삭제, 대규모 리팩토링
 
-디자인 원칙은 `docs/DESIGN_RULES.md`를 따른다.
+### 작업 완료 보고
+
+진행 중 작업이 여러 개이거나 미실행 항목이 있는 경우, 커밋 후 다음을 구분해서 보고한다:
+1. 이번에 변경된 파일/내용
+2. 미실행 항목
+3. 다음 후보 작업
 
 ## Git 작업
 
