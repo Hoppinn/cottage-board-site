@@ -787,9 +787,7 @@
           <div class="pr-rec-row-top">
             ${thumbHtml}
             <div class="pr-rec-main">
-              ${gameKey
-                ? `<a class="pr-rec-game pr-rec-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}')">${escH(getGameName(r.game_id))}</a>`
-                : `<span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>`}
+              <span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
