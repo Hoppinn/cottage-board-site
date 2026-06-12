@@ -896,12 +896,13 @@
     if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
     const db = window._cottageSupabaseDb;
 
-    // hub와 동일한 컬럼 사용 (review_text 제외 — 컬럼 유무 불확실)
+    // GAME_ID는 game key(string). DB game_id는 numeric BGG ID → 변환 필요
+    const numericGameId = window.gameData?.[GAME_ID]?.bgg?.id || GAME_ID;
     let records = [];
     try {
       const { data, error } = await db.from('game_play_records')
         .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
-        .eq('game_id', GAME_ID)
+        .eq('game_id', numericGameId)
         .order('played_at', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(50);
