@@ -4940,18 +4940,19 @@ body.sheet-open{
 }
 .intro-card-news-nickname{
   font-size:14px;
-  font-weight:900;
+  font-weight:700;
+  color:#3a2510;
   line-height:1.2;
   word-break:keep-all;
 }
 .intro-card-news-date{
-  font-size:10px;
+  font-size:12px;
   font-weight:500;
-  opacity:0.75;
+  color:#8b8478;
   margin-top:2px;
 }
 .intro-card-news-body{
-  padding:9px 12px 11px;
+  padding:14px 12px 11px;
   display:flex;
   flex-direction:column;
   gap:5px;
