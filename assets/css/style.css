@@ -1973,6 +1973,7 @@ body.sheet-open{
 }
 .page-mini-hero--price{display:none;}
 .requests-page .about-hero h2{font-size:clamp(16px,4.5vw,22px);}
+.requests-page .inner-page{padding-top:20px;}
 .page-mini-hero--club::before{
   content:"";
   position:absolute;
@@ -3888,6 +3889,19 @@ body.sheet-open{
 }
 .rules-group{
   margin-bottom:30px;
+}
+.rules-group--must{
+  background:#fdf5e4;
+  border:1.5px solid #c87820;
+  border-left:4px solid #c87820;
+  border-radius:12px;
+  padding:14px 16px;
+}
+.rules-group--must .rules-group-title{
+  color:#a06010;
+}
+.rules-group--must .price-rules-list li{
+  font-weight:700;
 }
 .rules-group-title{
   font-size:16px;

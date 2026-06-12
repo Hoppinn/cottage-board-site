@@ -56,6 +56,8 @@
 | 2026-06-12 | about 히어로↔섹션 | about-hero margin-bottom 0→6px |
 | 2026-06-12 | about 버튼↔푸터 | 버튼 컨테이너 padding-bottom 8→32px |
 | 2026-06-12 | 가격 페이지 섹션 간격 | price-hero-card, rules-group margin-bottom 24→30px |
+| 2026-06-12 | 가격 페이지 위계 재배치 | rules-group--must 강조 박스 신설 (밤 10시, 숙박 불가). "규칙" → "안내" 톤 낮춤 |
+| 2026-06-12 | 요청하기 히어로↔탭 여백 | .requests-page .inner-page padding-top 오버라이드 → 20px |
 
 ---
 
@@ -244,7 +246,7 @@ about, price-rules 히어로↔섹션 간격, 버튼↔푸터 간격 개선 완�
 ### 다음 작업 후보 (우선순위 순)
 
 1. **X 버튼 UX** — 편집 모드에서만 노출 (현재 구현됨, 검증 필요)
-2. **동호회 소개·요청하기** — 정보형 페이지 동일 여백 룰 적용 여부 검토
+2. **푸터 정보 묶음** — 주소/전화/링크/Copyright 4덩어리 시각적 분리 (낮은 우선순위)
 3. **전체 페이지 타이포+여백 잔여** — club.html, club-history.html
 
 ### 나중에 할 항목 (STATE.md P2에 등록됨)
