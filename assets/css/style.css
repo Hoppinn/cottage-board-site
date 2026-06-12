@@ -5405,7 +5405,8 @@ body.sheet-open{
 .pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-session > .pr-session-hd { background: #3b4f3a; }
 .pr-session > .pr-session-hd:hover { background: #4a6149; }
-.pr-session--bygame > .pr-session-hd { background: var(--bg,#fffdf8); border-top: 3px solid #3b4f3a; }
+.pr-session--bygame > .pr-session-hd { background: var(--bg,#fffdf8); border-top: 3px solid transparent; }
+.pr-session--bygame.is-open > .pr-session-hd { border-top-color: #3b4f3a; }
 .pr-session--bygame > .pr-session-hd:hover { background: #ece7dc; }
 .pr-session--bygame .pr-session-date { color: #2a3a28; }
 .pr-session--bygame .pr-session-summary { color: #7a9a78; background: rgba(59,79,58,0.06); }
