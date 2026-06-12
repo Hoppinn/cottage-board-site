@@ -5148,20 +5148,21 @@ body.sheet-open{
   align-items:center;
   gap:10px;
   padding:10px 14px;
-  background:#3b4f3a;
-  border-radius:14px;
+  background:var(--bg,#fffdf8);
+  border-left:4px solid #3b4f3a;
+  border-radius:0 10px 10px 0;
   margin-bottom:12px;
 }
 .history-group-name{
-  font-size:16px;
+  font-size:15px;
   font-weight:900;
-  color:#fff;
+  color:#2a3a28;
   letter-spacing:-0.3px;
 }
 .history-group-count{
   font-size:12px;
-  color:rgba(255,255,255,0.75);
-  background:rgba(255,255,255,0.13);
+  color:#3b4f3a;
+  background:rgba(59,79,58,0.10);
   border-radius:20px;
   padding:2px 9px;
   font-weight:600;
@@ -5400,14 +5401,21 @@ body.sheet-open{
 .pr-login-notice { text-align: center; padding: 36px 0; color: var(--muted); font-size: 14px; }
 
 /* records view — 3단 계층 */
-.pr-session { border: 1px solid #e8e2d8; border-radius: 14px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.pr-session { border: 1px solid #e8e2d8; border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 .pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-session > .pr-session-hd { background: #3b4f3a; }
 .pr-session > .pr-session-hd:hover { background: #4a6149; }
+.pr-session--bygame > .pr-session-hd { background: var(--bg,#fffdf8); border-top: 3px solid #3b4f3a; }
+.pr-session--bygame > .pr-session-hd:hover { background: #ece7dc; }
+.pr-session--bygame .pr-session-date { color: #2a3a28; }
+.pr-session--bygame .pr-session-summary { color: #7a9a78; background: rgba(59,79,58,0.06); }
+.pr-session--bygame .pr-session-arrow { color: #3b4f3a; }
 .pr-session-date { font-size: 16px; font-weight: 900; color: #fff; flex-shrink: 0; letter-spacing: -0.3px; }
 .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.13); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 600; }
 .pr-session-arrow { font-size: 15px; color: rgba(255,255,255,0.65); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-session-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; opacity: 0.92; }
+.pr-session-thumb--link { cursor: pointer; }
+.pr-session-thumb--link:hover { opacity: 1; }
 .pr-rec-thumb { width: 38px; height: 38px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
 .pr-session-game-link { color: inherit; text-decoration: none; }
 .pr-session-game-link:hover { text-decoration: underline; text-underline-offset: 2px; }
@@ -5442,7 +5450,7 @@ body.sheet-open{
 .pr-tag-who { background: #fdf0e8; color: #7a4828; }
 .pr-tag-who-first { border-bottom: 2px solid #7a4828 !important; padding-bottom: 1px !important; }
 .pr-tag-count-game { background: #4a6b52 !important; color: #fff !important; font-weight: 600 !important; }
-.pr-tag-time { background: #e3f2fd; color: #1565c0; }
+.pr-tag-time { background: #ede8e0; color: #6b5040; }
 .pr-tag-score { background: #f5ede4; color: #8a4a20; }
 .pr-rec-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-top: 2px; }
 .pr-rec-del { background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 2px 5px; }

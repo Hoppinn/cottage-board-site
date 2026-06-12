@@ -710,15 +710,12 @@
       const gKey = getGameKey(gameId) || gameId;
       const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
       const thumbHtml = thumbUrl
-        ? `<img class="pr-session-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        ? `<img class="pr-session-thumb pr-session-thumb--link" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" ${gKey ? `onclick="event.stopPropagation();openGameSheet('${gKey.replace(/'/g,"\\'")}')"` : ''}>`
         : '';
-      const gameHref = gKey ? `../game/owned-games.html?open=${encodeURIComponent(gKey)}` : '';
-      html += `<div class="pr-session">
+      html += `<div class="pr-session pr-session--bygame">
         <button class="pr-session-hd" type="button">
           ${thumbHtml}
-          <span class="pr-session-date">${gKey
-            ? `<a class="pr-session-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gKey.replace(/'/g,"\\'")}')">${escH(gameName)}</a>`
-            : escH(gameName)}</span>
+          <span class="pr-session-date">${escH(gameName)}</span>
           <span class="pr-session-summary" style="font-size:${Math.min(11 + recs.length, 17)}px">${recs.length}회</span>
           <span class="pr-session-arrow">▾</span>
         </button>
