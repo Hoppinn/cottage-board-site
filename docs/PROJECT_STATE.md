@@ -142,6 +142,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | feat: 게임 위치 링크 game-location.html 연결 — 📍 버튼/📚 책장 버튼 모두 game-location.html?shelf={id} 연결, 책장 버튼 상단 이동, goToShelf 제거, game-location shelf 파라미터 자동 오픈 |
 | 2026-06-13 | refactor: club.html/club-history 타이포+여백 마감 — about-for-list 간격 10→12px, about-for-item 패딩 14→16px, pr-sub-hd 12px, is-open 마진 16px |
 | 2026-06-13 | fix: 방문경로 집계 page_views 기준 통일 — trackPageView에 referrer 추가, 관리자 방문경로 차트 page_sessions→page_views 변경 |
 | 2026-06-13 | fix+feat: 바텀시트 UI 정리 — 플레이기록 링크 이번플레이됨 아래 이동, 책장 링크 최하단 이동, "따봉"→"좋아요"/궁금해요 라벨 추가, 코멘트 중복 제거(initSheetComments review_text 제거) |
