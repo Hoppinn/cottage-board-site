@@ -473,7 +473,7 @@
       const [rows, allProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
-        db2 ? db2.from('page_views').select('page, created_at').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('page_views').select('page, created_at, referrer').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const pageViews = pvResult?.data || [];
@@ -1026,14 +1026,9 @@
             return null; // 파싱 실패 = 내부/잘못된 데이터
           }
         }
-        // user_id 기준 중복 제거 — 한 명이 여러 페이지 방문해도 referrer는 1회만 카운트
+        // page_views 기준 집계 — localStorage로 하루 1회 보장, user_id 중복 제거 불필요
         const refMap = {};
-        const _seenRefUsers = new Set();
-        for (const r of filtered) {
-          if (r.user_id) {
-            if (_seenRefUsers.has(r.user_id)) continue;
-            _seenRefUsers.add(r.user_id);
-          }
+        for (const r of filteredPV) {
           const cat = categorizeRef(r.referrer);
           if (cat === null) continue;
           refMap[cat] = (refMap[cat] || 0) + 1;

@@ -217,10 +217,12 @@ window._cottageSess = (function () {
 
   // ── 페이지 뷰 트래킹 ────────────────────────────────────
 
-  async function trackPageView(page) {
+  async function trackPageView(page, referrer = null) {
     if (!page) return;
     try {
-      const { error } = await db.from("page_views").insert({ page });
+      const payload = { page };
+      if (referrer) payload.referrer = referrer;
+      const { error } = await db.from("page_views").insert(payload);
       if (error) console.warn('[trackPageView] insert error:', error.message);
     } catch (e) { console.warn('[trackPageView] exception:', e); }
   }
@@ -597,7 +599,16 @@ window._cottageSess = (function () {
       const page =
         location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
         "index";
-      trackPageView(page);
+      const referrer = (() => {
+        const utm = new URLSearchParams(location.search).get('utm_source');
+        if (utm) return utm;
+        if (!document.referrer) return null;
+        try {
+          const u = new URL(document.referrer);
+          return u.hostname !== location.hostname ? u.hostname : null;
+        } catch (_) { return null; }
+      })();
+      trackPageView(page, referrer);
     }
     // 비로그인 방문자 추적 — cottage-auth-changed로 로그인 확인 후 결정
     // kakao-auth.js가 로그인 처리 시 startSession → _stopAnonHeartbeat 호출
