@@ -485,7 +485,7 @@ body.owned-page .site-header{
 .hero{
   position:relative;
   overflow:hidden;
-  min-height:calc(100svh - var(--header-total-h) - 48px);
+  min-height:calc(100svh - var(--header-total-h) - 28px);
   margin:calc(var(--header-total-h) + 12px) 12px 16px;
   border-radius:14px;
   padding:clamp(24px,6vw,40px) var(--page-x) clamp(24px,6vw,40px);
