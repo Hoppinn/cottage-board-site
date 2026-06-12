@@ -1,6 +1,6 @@
 # DESIGN_AUDIT.md — 코티지보드 디자인 감사 & 작업 계획
 
-최종 갱신: 2026-06-12 (3차)
+최종 갱신: 2026-06-12 (4차)
 
 > compact 후 이 파일만 읽으면 현재 상태, 결정 사항, 남은 작업을 정확히 파악할 수 있도록 작성.
 
@@ -246,9 +246,23 @@ line 76:
 
 about, price-rules 히어로↔섹션 간격, 버튼↔푸터 간격 개선 완료.
 
+### 이번 세션(4차) 완료 항목
+
+| 완료 | 항목 | 내용 |
+|------|------|------|
+| 2026-06-12 | price-rules 4개 요약 카드 | 히어로+카드+꼭지켜주세요만 3단 구조. 중복 섹션 전부 제거 |
+| 2026-06-12 | club-rules 참여 안내 재구조화 | 3 인트로 카드 + 4섹션. 기본매너 4→2항목(회칙성 삭제) |
+| 2026-06-12 | about.html 대비 강화 | section-label #7a4828, feature-card border #d4b896, for-text #2a2018 |
+| 2026-06-12 | 회원 자기소개 카드 색 중간값(C안) | 헤더 bg 연파스텔(원래 30%), text 색 유지, border 각색 연한 버전 |
+| 2026-06-12 | 결제칩 브랜드 색상 rgba 뮤트 | 삼성/네이버/카카오페이 rgba 0.5~0.65 |
+| 2026-06-12 | 푸터 여백 | inner-page-body padding-bottom:36px |
+| 2026-06-12 | club-history 날짜 기본 접힘 | is-open 제거 |
+| 2026-06-12 | 썸네일 클릭 수정 | game-reviews buildSessionBody + club-history 각 1줄 onclick 추가 |
+| 2026-06-12 | 플레이 감상 코멘트 연동 | getPlayReviewsByGame API + initSheetComments 합산 렌더링 |
+
 ### 다음 작업 후보 (우선순위 순)
 
-1. **X 버튼 UX** — 편집 모드에서만 노출 (현재 구현됨, 검증 필요)
+1. **방문자 수 trackPageView** — RLS 의심. Supabase 대시보드에서 page_views 최신 행 확인 필요. console.warn 추가됨(f5609dd)으로 다음 방문 시 콘솔 에러 확인 가능
 2. **푸터 정보 묶음** — 주소/전화/링크/Copyright 4덩어리 시각적 분리 (낮은 우선순위)
 3. **전체 페이지 타이포+여백 잔여** — club.html, club-history.html
 
