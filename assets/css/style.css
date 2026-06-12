@@ -3672,10 +3672,10 @@ body.sheet-open{
 .about-section-label{
   font-size:11px;
   font-weight:900;
-  color:var(--muted);
+  color:#7a4828;
   letter-spacing:.08em;
   text-transform:uppercase;
-  margin:0 0 12px;
+  margin:0 0 16px;
 }
 .about-intro-text{
   margin:0;
@@ -3692,7 +3692,7 @@ body.sheet-open{
 }
 .about-feature-card{
   background:var(--paper);
-  border:1.5px solid var(--line);
+  border:1.5px solid #d4b896;
   border-radius:14px;
   padding:16px 14px;
   text-align:center;
@@ -3741,7 +3741,7 @@ body.sheet-open{
 .about-for-text{
   font-size:14px;
   font-weight:700;
-  color:#3a3025;
+  color:#2a2018;
   line-height:1.5;
   margin:0;
   word-break:keep-all;
@@ -4815,8 +4815,8 @@ body.sheet-open{
   flex-direction:column;
 }
 .intro-card-news-head{
-  background:var(--intro-head-bg,#ddeedd);
-  color:var(--intro-head-text,#2d5a2d);
+  background:var(--intro-head-bg,#f3ede2);
+  color:var(--intro-head-text,#5a3e18);
   padding:10px 12px 8px;
   position:relative;
 }
