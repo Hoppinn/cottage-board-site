@@ -424,6 +424,22 @@
           : btn.textContent.replace('접기 ▴', '더 보기 ▾');
       });
     });
+    panel.querySelectorAll('.pr-rec-more-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const more = btn.closest('.pr-rec-more');
+        const isOpen = more.classList.contains('is-open');
+        panel.querySelectorAll('.pr-rec-more.is-open').forEach(m => m.classList.remove('is-open'));
+        if (!isOpen) more.classList.add('is-open');
+      });
+    });
+    if (!window._prMoreOutsideClickBound) {
+      window._prMoreOutsideClickBound = true;
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.pr-rec-more.is-open').forEach(m => m.classList.remove('is-open'));
+      });
+    }
+
     panel.querySelectorAll('.pr-rec-del').forEach(btn => {
       btn.addEventListener('click', async e => {
         e.stopPropagation();
@@ -503,6 +519,7 @@
             <button class="pr-inline-save" type="button">저장</button>
           </div>`;
         row.querySelector('.pr-rec-main').appendChild(form);
+        row.classList.add('is-editing');
 
         // 게임명 자동완성 (COTTAGE_GAMES display 목록)
         attachAc(form.querySelector('.pie-game'), () =>
@@ -553,8 +570,8 @@
           });
         }
 
-        form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
-        form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => form.remove());
+        form.querySelector('.pr-inline-cancel').addEventListener('click', () => { form.remove(); row.classList.remove('is-editing'); });
+        form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => { form.remove(); row.classList.remove('is-editing'); });
         form.querySelector('.pr-inline-save').addEventListener('click', async () => {
           const saveBtn = form.querySelector('.pr-inline-save');
           saveBtn.disabled = true;
@@ -774,8 +791,7 @@
             </div>
             <div class="pr-rec-actions">
               ${sheetLink}
-              ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
-              ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+              ${(isMine || window.isOwner?.()) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button></div></div>` : ''}
             </div>
           </div>
           ${photoHtml}
@@ -810,7 +826,6 @@
       html += `<div class="pr-game-group${isFirst ? ' pr-game-group--first' : ''}">`;
       if (groupLabel || countTag || nameTags) {
         html += `<div class="pr-game-group-hd">
-          ${groupLabel ? `<span class="pr-game-group-moim">${escH(groupLabel)}</span>` : ''}
           ${countTag}${nameTags}
         </div>`;
       }
@@ -844,8 +859,7 @@
             </div>
             <div class="pr-rec-actions">
               ${sheetLink}
-              ${isMine ? `<button class="pr-rec-edit" data-id="${r.id}" type="button" title="수정">✏️</button>` : ''}
-              ${isMine ? `<button class="pr-rec-del" data-id="${r.id}" type="button" title="삭제">✕</button>` : ''}
+              ${(isMine || window.isOwner?.()) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button></div></div>` : ''}
             </div>
           </div>
           ${photoHtml}
