@@ -147,6 +147,10 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | fix+feat: 플레이 카운팅 전체 수정 — initPlayWidget gameKey→numericId 변환(getGamePlayCount/Highlights/Records 0건 버그), 바텀시트 플레이기록 건수 실시간 연동, 게임기록 페이지 코멘트+플레이감상 섹션 추가, 링크 텍스트 개선 |
+| 2026-06-13 | fix: 헤더 검색 결과 클릭 시 바텀시트 없는 페이지에서 owned-games로 이동하던 버그 — ensureGameSheet() 동적 주입으로 전 페이지 지원 |
+| 2026-06-13 | fix: 게임명 클릭 시 바텀시트 열리던 버그 제거 — 썸네일만 클릭 가능하도록 변경 |
+| 2026-06-13 | refactor: 회원 자기소개 카드 — 테두리 중립화, 닉네임/날짜 색·크기·간격 개선, 팔레트 세이지/웜브라운 2색 열 반복 |
 | 2026-06-12 | fix+feat: 썸네일 클릭 수정(game-reviews/club-history), 플레이 감상 코멘트 연동(getPlayReviewsByGame + initSheetComments), trackPageView console.warn 추가 |
 | 2026-06-12 | refactor: 색상 정리 2건 + club-rules 기본매너 슬림화 — club-intro 카드 베이지 통일/닉네임 텍스트 색 구분, about 섹션레이블 브랜드갈색/피처카드 테두리 강화/본문 대비 증가, club-rules 기본매너 4→2항목 |
 | 2026-06-12 | refactor: 히어로 그라데이션 갈색 톤으로 개선 — ::after 오버레이 검정→갈색(#3d2810) 3-stop 그라데이션, 하단 0.52 불투명도 |
