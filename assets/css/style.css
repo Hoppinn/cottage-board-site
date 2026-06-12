@@ -4815,8 +4815,8 @@ body.sheet-open{
   flex-direction:column;
 }
 .intro-card-news-head{
-  background:var(--intro-head-bg,#f3ede2);
-  color:var(--intro-head-text,#5a3e18);
+  background:var(--intro-head-bg,#f0f8f0);
+  color:var(--intro-head-text,#1e4d1e);
   padding:10px 12px 8px;
   position:relative;
 }
