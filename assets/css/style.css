@@ -5148,7 +5148,7 @@ body.sheet-open{
   align-items:center;
   gap:10px;
   padding:14px 16px;
-  background:#2c3e50;
+  background:#3b4f3a;
   border-radius:14px;
   margin-bottom:12px;
 }
@@ -5402,8 +5402,8 @@ body.sheet-open{
 /* records view — 3단 계층 */
 .pr-session { border: 1px solid #d8d0c6; border-radius: 14px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }
-.pr-session > .pr-session-hd { background: #2c3e50; }
-.pr-session > .pr-session-hd:hover { background: #34495e; }
+.pr-session > .pr-session-hd { background: #3b4f3a; }
+.pr-session > .pr-session-hd:hover { background: #4a6149; }
 .pr-session-date { font-size: 16px; font-weight: 900; color: #fff; flex-shrink: 0; letter-spacing: -0.3px; }
 .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.13); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 600; }
 .pr-session-arrow { font-size: 15px; color: rgba(255,255,255,0.65); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
@@ -5422,7 +5422,7 @@ body.sheet-open{
 .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg,#f5f0e8); border: none; border-left: 4px solid transparent; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-sub-hd:hover { background: #ece7dc; }
 .pr-sub-session.is-open > .pr-sub-hd { background: #f5f0e8; border-left-color: #9e3a2a; }
-.pr-sub-date { font-size: 15px; font-weight: 900; color: #2c3e50; flex-shrink: 0; }
+.pr-sub-date { font-size: 15px; font-weight: 900; color: #5a3a1a; flex-shrink: 0; }
 .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #9e3a2a; }
 .pr-sub-summary { font-size: 12px; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pr-sub-arrow { font-size: 13px; color: #a09080; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
@@ -5437,11 +5437,11 @@ body.sheet-open{
 .pr-rec-main { flex: 1; min-width: 0; }
 .pr-rec-game { font-size: 15px; font-weight: 800; color: #1a1a1a; margin-bottom: 2px; display: block; }
 .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-.pr-rec-review { font-size: 13px; color: var(--text); margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid #c8deda; padding-left: 10px; }
+.pr-rec-review { font-size: 13px; color: var(--text); margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid #c4d4c0; padding-left: 10px; }
 .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 6px; padding: 2px 8px; color: var(--text,#333); font-weight: 500; }
 .pr-tag-who { background: #fdf0e8; color: #7a4828; }
-.pr-tag-who-first { border-bottom: 2px solid #455a64 !important; padding-bottom: 1px !important; }
-.pr-tag-count-game { background: #607d8b !important; color: #fff !important; font-weight: 600 !important; }
+.pr-tag-who-first { border-bottom: 2px solid #7a4828 !important; padding-bottom: 1px !important; }
+.pr-tag-count-game { background: #4a6b52 !important; color: #fff !important; font-weight: 600 !important; }
 .pr-tag-time { background: #e3f2fd; color: #1565c0; }
 .pr-tag-score { background: #f5ede4; color: #8a4a20; }
 .pr-rec-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-top: 2px; }
@@ -5460,7 +5460,7 @@ body.sheet-open{
 .pr-player-header { padding: 7px 16px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-top: 1px solid #e8e4dc; background: #ece7dc; }
 .pr-player-header:first-child { border-top: none; }
 .pr-player-header .pr-rec-tag { background: #fff; color: #4a3728; font-weight: 700; font-size: 12px; border-radius: 20px; padding: 2px 9px; border: 1px solid #d8d0c6; }
-.pr-tag-count { background: #37474f !important; color: #fff !important; border-color: #37474f !important; }
+.pr-tag-count { background: #4a5a38 !important; color: #fff !important; border-color: #4a5a38 !important; }
 .pr-tag-icon { filter: brightness(0) invert(1); display: inline-block; font-size: 11px; }
 .pr-rec-sheet-link { font-size: 16px; text-decoration: none; color: var(--muted); padding: 2px 3px; border-radius: 5px; flex-shrink: 0; }
 .pr-rec-sheet-link:hover { background: #f0e8dc; }
