@@ -58,6 +58,9 @@
 | 2026-06-12 | 가격 페이지 섹션 간격 | price-hero-card, rules-group margin-bottom 24→30px |
 | 2026-06-12 | 가격 페이지 위계 재배치 | rules-group--must 강조 박스 신설 (밤 10시, 숙박 불가). "규칙" → "안내" 톤 낮춤 |
 | 2026-06-12 | 요청하기 히어로↔탭 여백 | .requests-page .inner-page padding-top 오버라이드 → 20px |
+| 2026-06-12 | price-rules 전 섹션 목록화 | 게임 이용 안내도 rules-plain-list로 전환 (카드 완전 제거) |
+| 2026-06-12 | club-rules 회칙→참여 안내 | 제목/title/breadcrumb 변경, price-rules-list→rules-plain-list 전체 교체 |
+| 2026-06-12 | club-history pr-* 클래스 통일 | history-* → pr-* 렌더 전환, game-reviews와 동일 구조·CSS·수정폼 |
 
 ---
 
