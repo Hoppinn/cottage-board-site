@@ -778,7 +778,7 @@
         const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
         const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
-        const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="../game/owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
+        const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" title="코멘트·따봉 남기기">💬👍</a>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
@@ -847,7 +847,7 @@
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
         const gameKey = getGameKey(r.game_id);
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
-        const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="../game/owned-games.html?open=${encodeURIComponent(gameKey)}&scroll=comments" title="코멘트·따봉 남기기">💬👍</a>` : '';
+        const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" title="코멘트·따봉 남기기">💬👍</a>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
