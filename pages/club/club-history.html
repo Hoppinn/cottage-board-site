@@ -164,7 +164,7 @@
           const name = getGameName(r.game_id);
           const gKey = getGameKey(r.game_id) || r.game_id;
           const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
-          const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+          const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb${gKey ? ' pr-rec-thumb--link' : ''}" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" ${gKey ? `onclick="event.stopPropagation();openGameSheet('${gKey.replace(/'/g,"\\'")}')"` : ''}>` : '';
           const photos = parsePhotoUrls(r.photo_url);
           const photoHtml = buildPhotoHtml(photos, r.id, false);
           const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()) : ''].filter(Boolean);

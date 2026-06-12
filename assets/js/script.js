@@ -1522,30 +1522,36 @@ function toggleSheetComments(gameKey) {
 async function initSheetComments(gameKey) {
   const listEl = document.getElementById(`sheetCommentsList-${gameKey}`);
   const countEl = document.getElementById(`sheetCommentsCount-${gameKey}`);
-  const arrowEl = document.getElementById(`sheetCommentsArrow-${gameKey}`);
   if (!listEl || !window.CottageDB) return;
-  const comments = await window.CottageDB.getGameComments(gameKey);
   const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
-  if (!comments.length) {
+
+  // game_comments + play_records.review_text 병렬 로드
+  const gameId = window.gameData?.[gameKey]?.bgg?.id;
+  const [comments, playReviews] = await Promise.all([
+    window.CottageDB.getGameComments(gameKey),
+    gameId ? window.CottageDB.getPlayReviewsByGame(gameId) : Promise.resolve([]),
+  ]);
+  const total = comments.length + playReviews.length;
+
+  if (!total) {
     if (countEl) countEl.textContent = "코멘트";
     if (toggleBtn) toggleBtn.style.display = "none";
     listEl.classList.remove('is-collapsed', 'has-comments');
     listEl.innerHTML = '<span class="sheet-comments-empty">코멘트가 없습니다</span>';
     return;
   }
-  if (countEl) countEl.textContent = `코멘트 ${comments.length}개`;
-  if (toggleBtn) toggleBtn.style.display = comments.length > 1 ? "" : "none";
-  // 이전에 열었으면 유지, 아니면 접힌 상태로 시작
+  if (countEl) countEl.textContent = `코멘트 ${total}개`;
+  if (toggleBtn) toggleBtn.style.display = total > 1 ? "" : "none";
   const wasOpen = listEl.dataset.open === "1";
   listEl.classList.toggle('is-collapsed', !wasOpen);
   const myIds = getMyCommentIds();
   const currentUserId = window.getKakaoUser?.()?.id || null;
   listEl.classList.add('has-comments');
-  listEl.innerHTML = comments.map(c => {
+
+  // game_comments 렌더링 (수정/삭제 가능)
+  const commentsHtml = comments.map(c => {
     const txt = c.comment_text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    // 로그인 시: user_id 기반 서버 판단만 사용 (다기기 일관성)
-    // 비로그인 시: localStorage 폴백
     const mine = currentUserId
       ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
       : myIds.includes(c.id);
@@ -1561,6 +1567,20 @@ async function initSheetComments(gameKey) {
       </div>` : ''}
     </div>`;
   }).join('');
+
+  // play_records.review_text 렌더링 (읽기 전용)
+  const reviewsHtml = playReviews.map(r => {
+    const txt = (r.review_text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const nick = (r.nickname || '익명').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const dateStr = r.played_at ? r.played_at.replace(/-/g, '.') : formatDate(r.created_at);
+    const meta = dateStr ? `${nick} · ${dateStr}` : nick;
+    return `<div class="sheet-comment-item sheet-comment-item--review">
+      <span class="sheet-comment-nickname">${meta}<span class="sheet-comment-review-label">🎲 플레이 감상</span></span>
+      <p class="sheet-comment-text">${txt}</p>
+    </div>`;
+  }).join('');
+
+  listEl.innerHTML = commentsHtml + reviewsHtml;
 }
 
 async function onDeleteComment(id, gameKey) {

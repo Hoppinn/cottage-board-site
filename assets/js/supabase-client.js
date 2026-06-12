@@ -220,8 +220,9 @@ window._cottageSess = (function () {
   async function trackPageView(page) {
     if (!page) return;
     try {
-      await db.from("page_views").insert({ page });
-    } catch (_) {}
+      const { error } = await db.from("page_views").insert({ page });
+      if (error) console.warn('[trackPageView] insert error:', error.message);
+    } catch (e) { console.warn('[trackPageView] exception:', e); }
   }
 
   // ── 플레이 기록 ─────────────────────────────────────────
@@ -399,6 +400,20 @@ window._cottageSess = (function () {
   }
 
   // ── 게임 코멘트 ─────────────────────────────────────────
+
+  async function getPlayReviewsByGame(gameId, limit = 20) {
+    if (!gameId) return [];
+    try {
+      const { data } = await db.from('game_play_records')
+        .select('id, nickname, user_id, review_text, played_at, created_at, group_name')
+        .eq('game_id', gameId)
+        .not('review_text', 'is', null)
+        .neq('review_text', '')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      return data || [];
+    } catch (_) { return []; }
+  }
 
   async function getGameComments(gameKey, limit = 10) {
     try {
@@ -963,6 +978,7 @@ window._cottageSess = (function () {
     getGamePlayCount,
     getPlayHighlights,
     getVisitorStats,
+    getPlayReviewsByGame,
     getGameComments,
     insertComment,
     deleteComment,
