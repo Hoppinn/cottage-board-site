@@ -5450,10 +5450,10 @@ body.sheet-open{
 .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 6px; padding: 2px 8px; color: var(--text,#333); font-weight: 500; }
 .pr-tag-who { background: #fdf0e8; color: #7a4828; }
 .pr-tag-who-first { border-bottom: 2px solid #7a4828 !important; padding-bottom: 1px !important; }
-.pr-tag-count-game { background: #4a6b52 !important; color: #fff !important; font-weight: 600 !important; }
+.pr-tag-count-game { background: #627a6a !important; color: #fff !important; font-weight: 600 !important; }
 .pr-tag-time { background: #ede8e0; color: #6b5040; }
 .pr-tag-score { background: #f5ede4; color: #8a4a20; }
-.pr-rec-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-top: 2px; }
+.pr-rec-actions { display: flex; align-items: center; gap: 11px; flex-shrink: 0; margin-top: 2px; }
 
 .pr-rec-edit { background: none; border: none; color: var(--text); font-size: 13px; cursor: pointer; padding: 8px 14px; display: block; width: 100%; text-align: left; font-family: inherit; }
 .pr-rec-edit:hover { background: #f5f0e8; }
@@ -5484,9 +5484,9 @@ body.sheet-open{
 .pr-game-group { border-top: 1px solid var(--border,#e8e4dc); }
 .pr-game-group:first-child { border-top: none; }
 .pr-game-group-hd { padding: 7px 14px; background: #ece7dc; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-left: 3px solid #7a4828; }
-.pr-game-group-moim { font-size: 11px; font-weight: 500; color: #9b8f84; background: none; padding: 0; border-radius: 0; width: 100%; }
+.pr-game-group-moim { font-size: 11px; font-weight: 500; color: #9b8f84; background: none; padding: 0; border-radius: 0; width: 100%; margin-bottom: 2px; }
 .pr-game-group-hd .pr-rec-tag { background: #fff; color: #455a64; font-weight: 600; border: 1px solid #cfd8dc; }
-.pr-rec-dateline { font-size: 12px; color: #9b8f84; display: block; margin-top: 2px; }
+.pr-rec-dateline { font-size: 13px; color: #6e6560; display: block; margin-top: 2px; }
 .pr-rec-game-line { display: flex; align-items: center; gap: 8px; }
 .pr-rec-inline-meta { display: flex; flex-wrap: wrap; gap: 4px; flex-shrink: 0; }
 .pr-dates-more-btn { width: 100%; padding: 8px; background: none; border: none; border-top: 1px dashed var(--border,#e8e4dc); font-size: 12px; color: var(--muted); cursor: pointer; text-align: center; }
@@ -5525,7 +5525,7 @@ body.sheet-open{
 .pie-existing-del { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
 
 /* photo thumbnails in record row */
-.pr-rec-photo-wrap { display: flex; flex-wrap: nowrap; gap: 8px; margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
+.pr-rec-photo-wrap { display: flex; flex-wrap: nowrap; gap: 8px; margin-top: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
 .pr-rec-photo-item { position: relative; flex-shrink: 0; }
 .pr-rec-photo { height: 80px; width: auto; border-radius: 6px; display: block; cursor: pointer; }
 .pr-rec-photo-del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 4px; font-size: 10px; padding: 2px 6px; cursor: pointer; display: none; }
