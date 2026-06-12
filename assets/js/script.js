@@ -1266,7 +1266,7 @@ function openGameSheet(gameKey){
           </div>
         </div>
         <div class="sheet-feedback-reactions">
-          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="따봉">👍 따봉 0</button>
+          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
           <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
         </div>
       </div>
@@ -1429,7 +1429,7 @@ async function initSheetLikes(gameKey) {
   ]);
   const likeBtn = document.getElementById('sheetLikeBtn');
   if (likeBtn) {
-    likeBtn.textContent = `👍 따봉 ${likeCount}`;
+    likeBtn.textContent = `👍 좋아요 ${likeCount}`;
     likeBtn.classList.toggle('is-active', liked);
   }
   const curiousBtn = document.getElementById('sheetCuriousBtn');
@@ -1450,7 +1450,7 @@ async function onSheetLike(btn) {
       const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
       const likeBtn = document.getElementById('sheetLikeBtn');
       if (likeBtn) {
-        likeBtn.textContent = `👍 따봉 ${likeCount}`;
+        likeBtn.textContent = `👍 좋아요 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);
       }
       if (result.liked) {
@@ -1483,7 +1483,7 @@ async function onSheetCurious(btn) {
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');
         if (likeBtn) {
-          likeBtn.textContent = `👍 따봉 ${likeCount}`;
+          likeBtn.textContent = `👍 좋아요 ${likeCount}`;
           likeBtn.classList.remove('is-active');
         }
       }
@@ -1543,13 +1543,8 @@ async function initSheetComments(gameKey) {
   if (!listEl || !window.CottageDB) return;
   const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
 
-  // game_comments + play_records.review_text 병렬 로드
-  const gameId = window.gameData?.[gameKey]?.bgg?.id;
-  const [comments, playReviews] = await Promise.all([
-    window.CottageDB.getGameComments(gameKey),
-    gameId ? window.CottageDB.getPlayReviewsByGame(gameId) : Promise.resolve([]),
-  ]);
-  const total = comments.length + playReviews.length;
+  const comments = await window.CottageDB.getGameComments(gameKey);
+  const total = comments.length;
 
   if (!total) {
     if (countEl) countEl.textContent = "코멘트";
@@ -1586,19 +1581,7 @@ async function initSheetComments(gameKey) {
     </div>`;
   }).join('');
 
-  // play_records.review_text 렌더링 (읽기 전용)
-  const reviewsHtml = playReviews.map(r => {
-    const txt = (r.review_text || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const nick = (r.nickname || '익명').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const dateStr = r.played_at ? r.played_at.replace(/-/g, '.') : formatDate(r.created_at);
-    const meta = dateStr ? `${nick} · ${dateStr}` : nick;
-    return `<div class="sheet-comment-item sheet-comment-item--review">
-      <span class="sheet-comment-nickname">${meta}<span class="sheet-comment-review-label">🎲 플레이 감상</span></span>
-      <p class="sheet-comment-text">${txt}</p>
-    </div>`;
-  }).join('');
-
-  listEl.innerHTML = commentsHtml + reviewsHtml;
+  listEl.innerHTML = commentsHtml;
 }
 
 async function onDeleteComment(id, gameKey) {
