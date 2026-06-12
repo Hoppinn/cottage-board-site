@@ -903,7 +903,7 @@
     let records = [];
     try {
       const recData = await db.from('game_play_records')
-        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
+        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at')
         .eq('game_id', numericGameId)
         .order('played_at', { ascending: false })
         .order('created_at', { ascending: false })
@@ -949,15 +949,31 @@
         }).join('')
       : `<p class="pr-empty">아직 이 게임의 기록이 없어요.<br><small style="color:var(--muted)">바텀시트에서 '+ 기록하기'로 추가할 수 있어요.</small></p>`;
 
-    const commentsHtml = comments.length
-      ? comments.map(c => {
-          const txt = escH(c.comment_text || '');
-          const nick = escH(c.nickname || '익명');
-          const dateStr = c.created_at ? c.created_at.slice(0, 10).replace(/-/g, '.') : '';
+    // 게임평 = game_comments + play records의 review_text 통합, 날짜 내림차순
+    const playReviews = records
+      .filter(r => r.review_text)
+      .map(r => ({
+        text: r.review_text,
+        nick: r.nickname || '익명',
+        date: (r.played_at || r.created_at || '').slice(0, 10).replace(/-/g, '.'),
+      }));
+    const commentReviews = comments.map(c => ({
+      text: c.comment_text,
+      nick: c.nickname || '익명',
+      date: (c.created_at || '').slice(0, 10).replace(/-/g, '.'),
+    }));
+    const allReviews = [...commentReviews, ...playReviews].sort((a, b) =>
+      (b.date || '').localeCompare(a.date || '')
+    );
+
+    const commentsHtml = allReviews.length
+      ? allReviews.map(rv => {
+          const txt = escH(rv.text || '');
+          const nick = escH(rv.nick);
           return `<div class="rv-item">
             <div class="rv-head">
               <strong class="rv-nick">${nick}</strong>
-              ${dateStr ? `<span class="rv-date">${dateStr}</span>` : ''}
+              ${rv.date ? `<span class="rv-date">${rv.date}</span>` : ''}
             </div>
             <p style="margin:4px 0 0;font-size:14px;color:#3a3025;line-height:1.6">${txt}</p>
           </div>`;
@@ -966,7 +982,7 @@
 
     root.innerHTML = `
       ${backToSheet}
-      <div class="rv-section-title" style="margin-top:14px">게임평 ${comments.length}개</div>
+      <div class="rv-section-title" style="margin-top:14px">게임평 ${allReviews.length}개</div>
       ${commentsHtml}
       <div class="rv-section-title" style="margin-top:20px">플레이 기록 ${records.length}건</div>
       ${listHtml}`;

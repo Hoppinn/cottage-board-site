@@ -1028,7 +1028,7 @@ window._cottageSess = (function () {
   async function getAllPlayRecordsForHub(limit = 200) {
     try {
       const { data } = await db.from('game_play_records')
-        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, created_at')
+        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at')
         .order('played_at', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(limit);

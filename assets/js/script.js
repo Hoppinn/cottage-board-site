@@ -1148,6 +1148,7 @@ function openGameSheet(gameKey){
       <h3 class="sheet-game-title">${detail.title}</h3>
       ${detail.bggTitle && detail.bggTitle !== detail.title
         ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
+      <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
     </div>
 
     <!-- 이미지 + 설명 -->
@@ -1177,8 +1178,6 @@ function openGameSheet(gameKey){
         </div>
       </div>
     </div>
-
-    <a class="sheet-view-all-btn sheet-shelf-btn" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
 
     <!-- 인원 · 시간 · 무게 한 줄 -->
     <div class="sheet-stats-block">
@@ -1246,34 +1245,36 @@ function openGameSheet(gameKey){
       </div>
     ` : ""}
 
-    <!-- 플레이기록 · 코멘트 · 따봉 -->
-    <div class="sheet-social-group">
-      <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
-      <a class="sheet-view-all-btn sheet-review-btn" id="sheetPlayCountLink-${gameKey}"
-        href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
-      >플레이 기록 보기 →</a>
-      <div class="sheet-reactions-footer">
-        <div class="sheet-comments-area">
-          <div class="sheet-comments-header">
-            <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">코멘트</span>
-            <div class="sheet-comments-header-right">
-              <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)" type="button">💬 남기기</button>
-              <button class="sheet-comments-toggle-btn" onclick="toggleSheetComments('${gameKey}')" type="button">
-                <span class="sheet-toggle-arrow" id="sheetCommentsArrow-${gameKey}">▾</span>
-              </button>
-            </div>
-          </div>
-          <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
-            <span class="sheet-comments-empty">코멘트가 없습니다</span>
-          </div>
-        </div>
-        <div class="sheet-feedback-reactions">
-          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
-          <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
-        </div>
-      </div>
+    <!-- 좋아요 / 궁금해요 (게임 정보 영역 끝) -->
+    <div class="sheet-feedback-reactions">
+      <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
+      <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
     </div>
 
+    <!-- 게임평 · 플레이기록 -->
+    <div class="sheet-social-group">
+      <div class="sheet-comments-area">
+        <div class="sheet-comments-header">
+          <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">게임평</span>
+          <div class="sheet-comments-header-right">
+            <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)" type="button">💬 남기기</button>
+            <button class="sheet-comments-toggle-btn" onclick="toggleSheetComments('${gameKey}')" type="button">
+              <span class="sheet-toggle-arrow" id="sheetCommentsArrow-${gameKey}">▾</span>
+            </button>
+          </div>
+        </div>
+        <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
+          <span class="sheet-comments-empty">게임평이 없습니다</span>
+        </div>
+      </div>
+      <div class="sheet-play-section">
+        <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
+        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
+        <a class="sheet-play-more-link" id="sheetPlayCountLink-${gameKey}"
+          href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
+        >플레이 기록 보기 →</a>
+      </div>
+    </div>
 
   `;
 
