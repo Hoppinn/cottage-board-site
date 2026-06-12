@@ -46,6 +46,16 @@
 | 2026-06-12 | 모임별 게임명 요약 강조 | pr-sub-summary font-weight 500→600 |
 | 2026-06-12 | 모임 카운트 배지 채도 감소 | pr-session-summary rgba 0.75/0.13 → 0.55/0.09 |
 | 2026-06-12 | club-history 블루그레이 제거 | history-session-date color #2c3e50 → #5a3a1a |
+| 2026-06-12 | 모임별 날짜 간격 | pr-sub-session.is-open margin-bottom 14px 추가 |
+| 2026-06-12 | 참여자 묶음 좌측선 | pr-game-group-hd border-left #7a4828→#6fa068 (게임별). 모임별 pr-player-header 선 없음 유지 |
+| 2026-06-12 | 날짜 헤더 is-open 좌측선 | #9e3a2a→#6fa068 (초록 실험) |
+| 2026-06-12 | 날짜 헤더 게임명 숨김 | pr-sub-summary display:none (JS 유지, CSS만) |
+| 2026-06-12 | 점수 '점' 자동 추가 | 숫자로 끝날 때만 붙임. 텍스트 끝("승","뱀")은 그대로 |
+| 2026-06-12 | 점수 입력 엔터 지원 | pie-score/pr-score input→textarea, 저장 시 \n→' / ' 정규화 |
+| 2026-06-12 | 탭↔첫 카드 여백 | pr-view-toggle margin-bottom 14→26px |
+| 2026-06-12 | about 히어로↔섹션 | about-hero margin-bottom 0→6px |
+| 2026-06-12 | about 버튼↔푸터 | 버튼 컨테이너 padding-bottom 8→32px |
+| 2026-06-12 | 가격 페이지 섹션 간격 | price-hero-card, rules-group margin-bottom 24→30px |
 
 ---
 
@@ -219,15 +229,23 @@ line 76:
 
 게임별 탭 디자인 감사 완료.
 
-### 모임별 탭 — 완료 (1차, 사용자 확인 대기)
+### 모임별 탭 — 완료 (사용자 확인)
 
-날짜 헤더 경량화, 게임명 강조, 모임 배지 채도 감소, club-history blue-grey 제거 완료.
+날짜 헤더 경량화, 날짜헤더 게임명 제거, 초록 좌측선, 섹션 간격 추가 완료.
+
+### 기능형 페이지 (game-reviews) — 완료 (사용자 확인)
+
+점수 '점' 자동 추가, 엔터 입력 지원, 탭↔카드 여백 완료.
+
+### 정보형 페이지 — 완료 (사용자 확인)
+
+about, price-rules 히어로↔섹션 간격, 버튼↔푸터 간격 개선 완료.
 
 ### 다음 작업 후보 (우선순위 순)
 
-1. **모임별 탭 사용자 확인** — 스크린샷 검토 후 추가 조정 여부 판단
-2. **X 버튼 UX** — 편집 모드에서만 노출 (현재 구현됨, 검증 필요)
-3. **전체 페이지 타이포+여백** — game-reviews 이후 about/club/price-rules
+1. **X 버튼 UX** — 편집 모드에서만 노출 (현재 구현됨, 검증 필요)
+2. **동호회 소개·요청하기** — 정보형 페이지 동일 여백 룰 적용 여부 검토
+3. **전체 페이지 타이포+여백 잔여** — club.html, club-history.html
 
 ### 나중에 할 항목 (STATE.md P2에 등록됨)
 
