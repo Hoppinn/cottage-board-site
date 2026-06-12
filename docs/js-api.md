@@ -26,6 +26,7 @@
 | `getAllPlayRecordsForHub(options)` | 기록 허브 전체 조회 |
 | `getGamePlayCount(gameId)` | 게임 플레이 건수 |
 | `getPlayHighlights(gameId)` | 플레이 하이라이트 |
+| `getPlayReviewsByGame(gameId)` | game_play_records에서 review_text IS NOT NULL인 기록 조회 (게임 상세 코멘트 연동용) |
 | `getGameComments(gameKey)` | 게임 코멘트 조회 |
 | `insertComment(...)` | 코멘트 등록 |
 | `deleteComment(id)` | 코멘트 삭제 |
