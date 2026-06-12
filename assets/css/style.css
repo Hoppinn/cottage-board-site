@@ -4397,6 +4397,14 @@ body.sheet-open{
   font-weight:700;
   color:var(--muted);
 }
+.sheet-comment-nick{
+  color:#5c3d2e;
+}
+.sheet-comment-date{
+  font-size:10px;
+  font-weight:400;
+  margin-left:3px;
+}
 .sheet-comments-list.is-collapsed .sheet-comment-item:not(:first-child){
   display:none;
 }

@@ -912,6 +912,13 @@
       records = recData.data || [];
     } catch (e) { console.warn('[renderSingleGame]', e); }
 
+    let comments = [];
+    try {
+      if (window.CottageDB?.getGameComments) {
+        comments = await window.CottageDB.getGameComments(gameKey, 20) || [];
+      }
+    } catch (e) { console.warn('[renderSingleGame] comments', e); }
+
     const user = window.getKakaoUser?.();
 
     const backToSheet = `<button class="rv-back-to-sheet" type="button" onclick="openGameSheet('${gameKey}')">게임 정보 · 코멘트 보기 →</button>`;
@@ -942,9 +949,26 @@
         }).join('')
       : `<p class="pr-empty">아직 이 게임의 기록이 없어요.<br><small style="color:var(--muted)">바텀시트에서 '+ 기록하기'로 추가할 수 있어요.</small></p>`;
 
+    const commentsHtml = comments.length
+      ? comments.map(c => {
+          const txt = escH(c.comment_text || '');
+          const nick = escH(c.nickname || '익명');
+          const dateStr = c.created_at ? c.created_at.slice(0, 10).replace(/-/g, '.') : '';
+          return `<div class="rv-item">
+            <div class="rv-head">
+              <strong class="rv-nick">${nick}</strong>
+              ${dateStr ? `<span class="rv-date">${dateStr}</span>` : ''}
+            </div>
+            <p style="margin:4px 0 0;font-size:14px;color:#3a3025;line-height:1.6">${txt}</p>
+          </div>`;
+        }).join('')
+      : `<p class="pr-empty">아직 게임평이 없어요.<br><small style="color:var(--muted)">바텀시트에서 코멘트를 남길 수 있어요.</small></p>`;
+
     root.innerHTML = `
       ${backToSheet}
-      <div class="rv-section-title" style="margin-top:14px">플레이 기록 ${records.length}건</div>
+      <div class="rv-section-title" style="margin-top:14px">게임평 ${comments.length}개</div>
+      ${commentsHtml}
+      <div class="rv-section-title" style="margin-top:20px">플레이 기록 ${records.length}건</div>
       ${listHtml}`;
 
     root.querySelectorAll('.rv-del').forEach(btn => {

@@ -1571,9 +1571,8 @@ async function initSheetComments(gameKey) {
       : myIds.includes(c.id);
     const nick = c.nickname ? c.nickname.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '익명';
     const dateStr = formatDate(c.created_at);
-    const meta = dateStr ? `${nick} · ${dateStr}` : nick;
     return `<div class="sheet-comment-item">
-      <span class="sheet-comment-nickname">${meta}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
         <button class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
