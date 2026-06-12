@@ -5483,8 +5483,9 @@ body.sheet-open{
 .pr-game-group { border-top: 1px solid var(--border,#e8e4dc); }
 .pr-game-group:first-child { border-top: none; }
 .pr-game-group-hd { padding: 7px 14px; background: #ece7dc; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-left: 3px solid #7a4828; }
-.pr-game-group-moim { font-size: 11px; font-weight: 700; color: #fff; background: #6e4a2e; border-radius: 20px; padding: 2px 9px; }
+.pr-game-group-moim { font-size: 11px; font-weight: 500; color: #9b8f84; background: none; padding: 0; border-radius: 0; width: 100%; }
 .pr-game-group-hd .pr-rec-tag { background: #fff; color: #455a64; font-weight: 600; border: 1px solid #cfd8dc; }
+.pr-rec-dateline { font-size: 12px; color: #9b8f84; display: block; margin-top: 2px; }
 .pr-rec-game-line { display: flex; align-items: center; gap: 8px; }
 .pr-rec-inline-meta { display: flex; flex-wrap: wrap; gap: 4px; flex-shrink: 0; }
 .pr-dates-more-btn { width: 100%; padding: 8px; background: none; border: none; border-top: 1px dashed var(--border,#e8e4dc); font-size: 12px; color: var(--muted); cursor: pointer; text-align: center; }
@@ -6591,6 +6592,7 @@ body.sheet-open{
   .pr-empty{ font-size:20px; }
   .pr-game-group-moim{ font-size:17px; }
   .pr-game-group-hd .pr-rec-tag{ font-size:18px; }
+  .pr-rec-dateline{ font-size:18px; }
 
 
 
@@ -6733,6 +6735,7 @@ body.sheet-open{
   .pr-empty{ font-size:12px; }
   .pr-game-group-moim{ font-size:10px; }
   .pr-game-group-hd .pr-rec-tag{ font-size:10px; }
+  .pr-rec-dateline{ font-size:10px; }
   .pr-club-link{ font-size:10px; }
   .pr-dates-more-btn{ font-size:10px; }
   /* 입력 폼 (현재 ×0.8) */

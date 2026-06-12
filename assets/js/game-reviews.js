@@ -768,8 +768,6 @@
 
       html += groupRecs.map(r => {
         const isMine = user && String(r.user_id) === String(user.id);
-        const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
-        const scoreTag = r.score_note   ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
@@ -779,6 +777,11 @@
         const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
         const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" title="코멘트·따봉 남기기">💬👍</a>` : '';
+        const dlParts = [
+          r.play_time_min ? `${r.play_time_min}분` : '',
+          r.score_note ? escH(r.score_note) : ''
+        ].filter(Boolean);
+        const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
@@ -786,7 +789,7 @@
               ${gameKey
                 ? `<a class="pr-rec-game pr-rec-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}')">${escH(getGameName(r.game_id))}</a>`
                 : `<span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>`}
-              <div class="pr-rec-meta">${timeTag}${scoreTag}</div>
+              <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
             <div class="pr-rec-actions">
@@ -826,6 +829,7 @@
       html += `<div class="pr-game-group${isFirst ? ' pr-game-group--first' : ''}">`;
       if (groupLabel || countTag || nameTags) {
         html += `<div class="pr-game-group-hd">
+          ${groupLabel ? `<span class="pr-game-group-moim">모임: ${escH(groupLabel)}</span>` : ''}
           ${countTag}${nameTags}
         </div>`;
       }
@@ -839,8 +843,6 @@
       html += sorted.map(r => {
         const isMine = user && String(r.user_id) === String(user.id);
         const date = r.played_at || r.created_at?.slice(0, 10) || '?';
-        const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
-        const scoreTag = r.score_note   ? `<span class="pr-rec-tag pr-tag-score">🏆 ${escH(r.score_note)}</span>` : '';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
@@ -848,13 +850,16 @@
         const gameKey = getGameKey(r.game_id);
         const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
         const sheetLink = (gameKey && isParticipant) ? `<a class="pr-rec-sheet-link" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" title="코멘트·따봉 남기기">💬👍</a>` : '';
+        const dlParts = [
+          date !== '?' ? date.replace(/-/g, '.') : '',
+          r.play_time_min ? `${r.play_time_min}분` : '',
+          r.score_note ? escH(r.score_note) : ''
+        ].filter(Boolean);
+        const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
-              <div class="pr-rec-meta">
-                <span class="pr-rec-tag">${escH(formatKstDate(date))}</span>
-                ${timeTag}${scoreTag}
-              </div>
+              <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
             <div class="pr-rec-actions">
