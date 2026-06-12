@@ -5433,7 +5433,7 @@ body.sheet-open{
 .pr-sub-session.is-open { margin-bottom: 14px; }
 .pr-sub-date { font-size: 14px; font-weight: 600; color: #6b5040; flex-shrink: 0; }
 .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #9e3a2a; }
-.pr-sub-summary { font-size: 12px; font-weight: 600; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr-sub-summary { font-size: 12px; font-weight: 700; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pr-sub-arrow { font-size: 13px; color: #a09080; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
 .pr-sub-body { display: none; }
