@@ -2009,6 +2009,7 @@ body.sheet-open{
 .inner-page-body{
   max-width:720px;
   margin:0 auto;
+  padding-bottom:36px;
 }
 
 .inner-page-coming-soon{
@@ -3881,15 +3882,78 @@ body.sheet-open{
   color:#fff;
   white-space:nowrap;
 }
-.price-pay-chip--samsung{ background:#1428A0; border-color:#1428A0; }
-.price-pay-chip--naver{ background:#03C75A; border-color:#03C75A; }
-.price-pay-chip--kakao{ background:#FEE500; border-color:#FEE500; color:#3c1e1e; }
+.price-pay-chip--samsung{ background:rgba(20,40,160,0.55); border-color:rgba(100,130,220,0.45); }
+.price-pay-chip--naver{ background:rgba(3,199,90,0.5); border-color:rgba(30,170,80,0.4); }
+.price-pay-chip--kakao{ background:rgba(254,229,0,0.65); border-color:rgba(200,180,0,0.4); color:rgba(60,30,30,0.9); }
 .price-pay-note{
   margin:10px 0 0;
   font-size:11px;
   color:rgba(255,255,255,.6);
   font-weight:700;
 }
+/* ── 규칙/안내 요약 카드 ── */
+.rules-summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-bottom:28px;
+}
+.rules-summary-card{
+  background:var(--paper);
+  border:1.5px solid #e0d0b8;
+  border-radius:14px;
+  padding:12px 12px 13px;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.rules-summary-icon{
+  font-size:20px;
+  line-height:1;
+  margin-bottom:2px;
+}
+.rules-summary-label{
+  font-size:10px;
+  font-weight:900;
+  color:var(--muted);
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+}
+.rules-summary-val{
+  font-size:13px;
+  font-weight:700;
+  color:#3a2a1a;
+  line-height:1.5;
+}
+
+/* ── 안내 인트로 카드 (가로형) ── */
+.rules-intro-cards{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:28px;
+}
+.rules-intro-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:var(--paper);
+  border:1.5px solid #e0d0b8;
+  border-radius:14px;
+  padding:12px 14px;
+}
+.rules-intro-icon{
+  font-size:22px;
+  flex-shrink:0;
+  line-height:1;
+}
+.rules-intro-text{
+  font-size:13px;
+  font-weight:700;
+  color:#3a2a1a;
+  line-height:1.4;
+}
+
 .rules-group{
   margin-bottom:36px;
 }

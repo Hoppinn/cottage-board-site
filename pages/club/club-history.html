@@ -229,7 +229,7 @@
 
       for (const [dateStr, recs] of Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]))) {
         const captionAttr = escAttr(buildCaption('코티지보드 동호회', dateStr, recs));
-        html += `<div class="pr-sub-session is-open">
+        html += `<div class="pr-sub-session">
           <div class="pr-sub-hd">
             <span class="pr-sub-date">${formatKstDate(dateStr)}</span>
             <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션복사</button>
