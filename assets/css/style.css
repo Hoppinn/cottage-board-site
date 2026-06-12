@@ -3843,7 +3843,7 @@ body.sheet-open{
   padding:clamp(18px,5vw,28px) clamp(24px,6vw,36px);
   text-align:center;
   color:#fff;
-  margin-bottom:24px;
+  margin-bottom:30px;
 }
 .price-amount{
   font-size:clamp(40px,12vw,60px);
@@ -3887,7 +3887,7 @@ body.sheet-open{
   font-weight:700;
 }
 .rules-group{
-  margin-bottom:24px;
+  margin-bottom:30px;
 }
 .rules-group-title{
   font-size:16px;
