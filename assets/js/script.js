@@ -1247,6 +1247,9 @@ function openGameSheet(gameKey){
     <!-- 플레이기록 · 코멘트 · 따봉 -->
     <div class="sheet-social-group">
       <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
+      <a class="sheet-view-all-btn sheet-review-btn" id="sheetPlayCountLink-${gameKey}"
+        href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
+      >플레이 기록 보기 →</a>
       <div class="sheet-reactions-footer">
         <div class="sheet-comments-area">
           <div class="sheet-comments-header">
@@ -1263,16 +1266,13 @@ function openGameSheet(gameKey){
           </div>
         </div>
         <div class="sheet-feedback-reactions">
-          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)">👍 0</button>
-          <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)">🤔 0</button>
+          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="따봉">👍 따봉 0</button>
+          <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
         </div>
       </div>
     </div>
 
     <button class="sheet-view-all-btn" style="cursor:pointer;font-family:inherit" onclick="alert('준비 중입니다.')">📚 꽂혀있는 책장 보러가기 →</button>
-    <a class="sheet-view-all-btn sheet-review-btn" id="sheetPlayCountLink-${gameKey}"
-      href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
-    >플레이 기록 보기 →</a>
 
   `;
 
@@ -1429,12 +1429,12 @@ async function initSheetLikes(gameKey) {
   ]);
   const likeBtn = document.getElementById('sheetLikeBtn');
   if (likeBtn) {
-    likeBtn.textContent = `👍 ${likeCount}`;
+    likeBtn.textContent = `👍 따봉 ${likeCount}`;
     likeBtn.classList.toggle('is-active', liked);
   }
   const curiousBtn = document.getElementById('sheetCuriousBtn');
   if (curiousBtn) {
-    curiousBtn.textContent = `🤔 ${curiousCount}`;
+    curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
     curiousBtn.classList.toggle('is-active', curious);
   }
 }
@@ -1450,14 +1450,14 @@ async function onSheetLike(btn) {
       const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
       const likeBtn = document.getElementById('sheetLikeBtn');
       if (likeBtn) {
-        likeBtn.textContent = `👍 ${likeCount}`;
+        likeBtn.textContent = `👍 따봉 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);
       }
       if (result.liked) {
         const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
         const curiousBtn = document.getElementById('sheetCuriousBtn');
         if (curiousBtn) {
-          curiousBtn.textContent = `🤔 ${curiousCount}`;
+          curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
           curiousBtn.classList.remove('is-active');
         }
       }
@@ -1476,14 +1476,14 @@ async function onSheetCurious(btn) {
       const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
       const curiousBtn = document.getElementById('sheetCuriousBtn');
       if (curiousBtn) {
-        curiousBtn.textContent = `🤔 ${curiousCount}`;
+        curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
         curiousBtn.classList.toggle('is-active', result.curious);
       }
       if (result.curious) {
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');
         if (likeBtn) {
-          likeBtn.textContent = `👍 ${likeCount}`;
+          likeBtn.textContent = `👍 따봉 ${likeCount}`;
           likeBtn.classList.remove('is-active');
         }
       }
