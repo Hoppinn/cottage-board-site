@@ -115,207 +115,168 @@
       const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(gameId) || g.id === gameId);
       return g ? (g.display || g.titleKo || g.titleEn || gameId) : gameId;
     }
-
     function getGameKey(gameId) {
       if (!gameId || !window.gameData) return null;
       if (window.gameData[gameId]) return gameId;
       const entry = Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId));
       return entry ? entry[0] : null;
     }
-
-    // KST 날짜 문자열 (YYYY-MM-DD)
     function toKstDate(isoStr) {
       const d = new Date(new Date(isoStr).getTime() + 9 * 3600000);
       return d.toISOString().slice(0, 10);
     }
-
-    // YYYY-MM-DD → 읽기 좋은 형태
     function formatKstDate(dateStr) {
       const [y, m, d] = dateStr.split('-');
       return `${y}년 ${Number(m)}월 ${Number(d)}일`;
     }
-
-    // 인스타 캡션 생성
     function buildCaption(groupName, dateStr, records) {
-      const dateLabel = formatKstDate(dateStr);
       const lines = records.map(r => {
         const name = getGameName(r.game_id);
-        const tags = [
-          r.player_count ? `${r.player_count}명` : null,
-          r.player_names || null,
-          r.play_time_min ? `${r.play_time_min}분` : null,
-          r.score_note || null,
-        ].filter(Boolean);
+        const tags = [r.player_count ? `${r.player_count}명` : null, r.player_names || null, r.play_time_min ? `${r.play_time_min}분` : null, r.score_note || null].filter(Boolean);
         return `- ${name}${tags.length ? ' · ' + tags.join(' · ') : ''}`;
       });
-      return `🎲 ${groupName} (${dateLabel})\n${lines.join('\n')}\n\n#코티지보드 #보드게임`;
+      return `🎲 ${groupName} (${formatKstDate(dateStr)})\n${lines.join('\n')}\n\n#코티지보드 #보드게임`;
     }
+    function escH(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function escAttr(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
 
-    function escH(s) {
-      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    let allRecordsData = [], currentUser = null, playerNames = [];
+
+    // ── buildBody: game-reviews.js buildSessionBody와 동일 구조, pr-* 클래스 사용 ──
+    function buildBody(recs) {
+      const playerGroups = new Map();
+      for (const r of recs) {
+        const key = `${r.player_count||''}|${(r.player_names||'').split(',').map(n=>n.trim()).sort().join(',')}`;
+        if (!playerGroups.has(key)) playerGroups.set(key, []);
+        playerGroups.get(key).push(r);
+      }
+      let html = '';
+      for (const [, grp] of playerGroups) {
+        const f = grp[0];
+        const countTag = f.player_count ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${f.player_count}명</span>` : '';
+        const nameTags = f.player_names
+          ? f.player_names.split(',').map((n, i) => { const t = n.trim(); return t ? `<span class="pr-rec-tag pr-tag-who${i===0?' pr-tag-who-first':''}">${escH(t)}</span>` : ''; }).join('')
+          : '';
+        if (countTag || nameTags) html += `<div class="pr-player-header">${countTag}${nameTags}</div>`;
+        html += grp.map(r => {
+          const isMine = currentUser && String(r.user_id) === String(currentUser.id);
+          const canEdit = isMine || window.isOwner?.();
+          const name = getGameName(r.game_id);
+          const gKey = getGameKey(r.game_id) || r.game_id;
+          const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
+          const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+          const photos = parsePhotoUrls(r.photo_url);
+          const photoHtml = buildPhotoHtml(photos, r.id, false);
+          const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()) : ''].filter(Boolean);
+          const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
+          const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
+          const editBtn = canEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button>` : '';
+          const moreMenu = editBtn ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button">···</button><div class="pr-rec-more-menu">${editBtn}</div></div>` : '';
+          const recJson = escAttr(JSON.stringify({gameId:r.game_id||'',names:r.player_names||'',count:r.player_count||'',time:r.play_time_min||'',score:r.score_note||'',review:r.review_text||'',group:r.group_name||'',date:r.played_at||'',photo:r.photo_url||''}));
+          return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${recJson}'>
+            <div class="pr-rec-row-top">
+              ${thumbHtml}
+              <div class="pr-rec-main">
+                <a class="pr-rec-game pr-rec-game-link" href="#" onclick="event.preventDefault();openGameSheet('${gKey.replace(/'/g,"\\'")}');return false">${escH(name)}</a>
+                <div class="pr-rec-meta">${dateline}</div>
+                ${reviewHtml}
+              </div>
+              ${moreMenu ? `<div class="pr-rec-actions">${moreMenu}</div>` : ''}
+            </div>
+            ${photoHtml}
+          </div>`;
+        }).join('');
+      }
+      return html;
     }
-    function escAttr(s) {
-      return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-    }
-
-    // attachAc, initTagInput, buildPhotoItemAdder, parsePhotoUrls,
-    // buildPhotoHtml, openLightbox → play-records-utils.js 전역 사용
-
-    // ── 렌더링 ────────────────────────────────────────────────────────────
-
-    let allRecordsData = [];
-    let currentUser = null;
-    let playerNames = [];
 
     async function render() {
       const root = document.getElementById('historyRoot');
       currentUser = window.getKakaoUser?.() || null;
-      if (!window.CottageDB) {
-        root.innerHTML = '<p class="history-empty">데이터를 불러올 수 없습니다.</p>';
-        return;
-      }
+      if (!window.CottageDB) { root.innerHTML = '<p class="history-empty">데이터를 불러올 수 없습니다.</p>'; return; }
 
-      // 자동완성용 참여자 이름 목록
-      if (currentUser) {
-        playerNames = await window.CottageDB.getPlayerNames?.() || [];
-      }
+      if (currentUser) playerNames = await window.CottageDB.getPlayerNames?.() || [];
 
       const records = await window.CottageDB.getAllPlayRecordsForHistory();
       allRecordsData = records;
 
       const tipHtml = `<div class="history-tip">💡 <span><a href="../game/game-reviews.html" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
 
-      if (!records.length) {
-        root.innerHTML = tipHtml + '<p class="history-empty">아직 모임 기록이 없습니다.</p>';
-        return;
-      }
-
-      // 코티지보드 동호회 기록만 필터
       const clubRecords = records.filter(r => r.group_name === '코티지보드 동호회');
-
       if (!clubRecords.length) {
         root.innerHTML = tipHtml + '<p class="history-empty">아직 동호회 모임 기록이 없습니다.</p>';
         return;
       }
 
-      // group_name → date → records[]
-      const grouped = {};
+      const byDate = {};
       for (const r of clubRecords) {
-        const g = r.group_name;
         const d = r.played_at || toKstDate(r.created_at);
-        if (!grouped[g]) grouped[g] = {};
-        if (!grouped[g][d]) grouped[g][d] = [];
-        grouped[g][d].push(r);
+        if (!byDate[d]) byDate[d] = [];
+        byDate[d].push(r);
       }
+
+      const totalSessions = Object.keys(byDate).length;
+      const totalGames = clubRecords.length;
 
       let html = tipHtml;
-      for (const [groupName, dates] of Object.entries(grouped)) {
-        const totalSessions = Object.keys(dates).length;
-        html += `<div class="history-group" data-history-group="${escAttr(groupName)}">
-          <div class="history-group-header">
-            <span class="history-group-name">${escH(groupName)}</span>
-            <span class="history-group-count">${totalSessions}회</span>
-          </div>`;
+      html += `<div class="pr-session is-open" data-history-group="코티지보드 동호회">
+        <button class="pr-session-hd" type="button">
+          <span class="pr-session-date">코티지보드 동호회</span>
+          <span class="pr-session-summary">${totalSessions}회 · ${totalGames}게임</span>
+          <span class="pr-session-arrow">▾</span>
+        </button>
+        <div class="pr-session-body">`;
 
-        for (const [dateStr, recs] of Object.entries(dates).sort((a, b) => b[0].localeCompare(a[0]))) {
-          const captionAttr = escAttr(buildCaption(groupName, dateStr, recs));
-          const gameCount = recs.length;
-          html += `<div class="history-session">
-            <div class="history-session-header">
-              <span class="history-session-date">${formatKstDate(dateStr)}</span>
-              <span class="history-session-summary">${gameCount}게임</span>
-              <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션 복사</button>
-              <span class="history-session-arrow">▾</span>
-            </div>
-            <div class="history-record-list">
-              ${(() => {
-                // 같은 인원+이름끼리 묶기
-                const playerGroups = new Map();
-                for (const r of recs) {
-                  const key = `${r.player_count||''}|${(r.player_names||'').trim()}`;
-                  if (!playerGroups.has(key)) playerGroups.set(key, []);
-                  playerGroups.get(key).push(r);
-                }
-                let out = '';
-                for (const [, grp] of playerGroups) {
-                  const f = grp[0];
-                  const pTags = [];
-                  if (f.player_count) pTags.push(`<span class="history-tag history-tag-count"><span style="filter:brightness(0)invert(1);display:inline-block;font-size:11px">👥</span> ${f.player_count}명</span>`);
-                  if (f.player_names) {
-                    f.player_names.split(',').map(n => n.trim()).filter(Boolean)
-                      .forEach(n => pTags.push(`<span class="history-tag">${escH(n)}</span>`));
-                  }
-                  if (pTags.length) {
-                    out += `<div class="history-player-header">${pTags.join('')}</div>`;
-                  }
-                  out += grp.map(r => {
-                    const name = getGameName(r.game_id);
-                    const gameKey = getGameKey(r.game_id) || r.game_id;
-                    const thumbUrl = window.gameData?.[gameKey]?.images?.thumbnail || '';
-                    const tags = [
-                      r.play_time_min ? `⏱ ${r.play_time_min}분` : null,
-                      r.score_note ? `🏆 ${escH(r.score_note)}` : null,
-                    ].filter(Boolean);
-                    const isMine = currentUser && String(r.user_id) === String(currentUser.id);
-                    const photos = parsePhotoUrls(r.photo_url);
-                    const recJson = escAttr(JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''}));
-                    return `<div class="history-record-item" data-id="${r.id}" data-record='${recJson}'>
-                      <div class="history-game-row">
-                        ${thumbUrl ? `<img class="history-game-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
-                        <div class="history-game-info">
-                          <a class="history-game-name" href="#" onclick="event.preventDefault();openGameSheet('${gameKey.replace(/'/g,"\\'")}');return false">${escH(name)}</a>
-                          ${tags.length ? `<div class="history-record-tags">${tags.map(t=>`<span class="history-tag">${t}</span>`).join('')}</div>` : ''}
-                        </div>
-                        ${isMine ? `<button class="history-edit-btn" type="button" title="수정">✏️</button>` : ''}
-                      </div>
-                      ${buildPhotoHtml(photos, r.id, false)}
-                    </div>`;
-                  }).join('');
-                }
-                return out;
-              })()}
-            </div>
-          </div>`;
-        }
-
-        html += `<a class="history-cross-link" href="../game/game-reviews.html">🎲 전체 플레이 기록 보기 →</a>`;
-        html += `</div>`;
+      for (const [dateStr, recs] of Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]))) {
+        const captionAttr = escAttr(buildCaption('코티지보드 동호회', dateStr, recs));
+        html += `<div class="pr-sub-session is-open">
+          <div class="pr-sub-hd">
+            <span class="pr-sub-date">${formatKstDate(dateStr)}</span>
+            <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션복사</button>
+            <span class="pr-sub-arrow">▾</span>
+          </div>
+          <div class="pr-sub-body">${buildBody(recs)}</div>
+        </div>`;
       }
 
+      html += `</div><a class="history-cross-link" href="../game/game-reviews.html">🎲 전체 플레이 기록 보기 →</a></div>`;
       root.innerHTML = html;
+      attachHandlers(root);
 
-      // 날짜 섹션 접기/펴기
-      root.querySelectorAll('.history-session-header').forEach(hd => {
-        hd.addEventListener('click', e => {
-          if (e.target.classList.contains('history-copy-btn')) return;
-          hd.closest('.history-session').classList.toggle('is-open');
-        });
-      });
-
-      // ?group= 파라미터로 특정 그룹 섹션 스크롤
       const groupParam = new URLSearchParams(location.search).get('group');
       if (groupParam) {
         const el = root.querySelector(`[data-history-group="${CSS.escape(groupParam)}"]`);
         if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
       }
+    }
 
-      root.querySelectorAll('.history-copy-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const caption = btn.dataset.caption;
-          navigator.clipboard.writeText(caption).then(() => {
-            btn.textContent = '복사됨!';
-            btn.classList.add('is-copied');
-            setTimeout(() => {
-              btn.textContent = '캡션 복사';
-              btn.classList.remove('is-copied');
-            }, 2000);
-          }).catch(() => {
-            prompt('아래 텍스트를 복사해주세요', caption);
-          });
+    function attachHandlers(root) {
+      root.querySelectorAll('.pr-session-hd').forEach(hd => {
+        hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
+      });
+      root.querySelectorAll('.pr-sub-hd').forEach(hd => {
+        hd.addEventListener('click', e => {
+          if (e.target.closest('.history-copy-btn')) return;
+          hd.closest('.pr-sub-session').classList.toggle('is-open');
         });
       });
-
-      // ── 사진 썸네일 라이트박스 ────────────────────────────────────────────
+      root.querySelectorAll('.pr-rec-more-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const m = btn.closest('.pr-rec-more');
+          const wasOpen = m.classList.contains('is-open');
+          root.querySelectorAll('.pr-rec-more.is-open').forEach(x => x.classList.remove('is-open'));
+          if (!wasOpen) m.classList.add('is-open');
+        });
+      });
+      root.querySelectorAll('.history-copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          navigator.clipboard.writeText(btn.dataset.caption).then(() => {
+            btn.textContent = '복사됨!'; btn.classList.add('is-copied');
+            setTimeout(() => { btn.textContent = '캡션복사'; btn.classList.remove('is-copied'); }, 2000);
+          }).catch(() => prompt('아래 텍스트를 복사해주세요', btn.dataset.caption));
+        });
+      });
       root.querySelectorAll('.pr-rec-photo').forEach(img => {
         img.addEventListener('click', e => {
           e.stopPropagation();
@@ -330,140 +291,125 @@
           try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
         });
       });
-
-      // ── 수정 버튼 핸들러 ─────────────────────────────────────────────────
-      root.querySelectorAll('.history-edit-btn').forEach(btn => {
+      root.querySelectorAll('.pr-rec-edit').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
-          const item = btn.closest('.history-record-item');
+          const item = btn.closest('.pr-rec-row');
           if (item.querySelector('.pr-inline-edit')) return;
           let rec = {};
           try { rec = JSON.parse(item.dataset.record || '{}'); } catch (_) {}
-          const currentGameDisplay = getGameName(rec.gameId || '');
-          const form = document.createElement('div');
-          form.className = 'pr-inline-edit';
-          form.innerHTML = `
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-              <span style="font-size:12px;font-weight:700;color:var(--muted)">기록 수정</span>
-              <button class="pr-inline-cancel" type="button">✕ 취소</button>
-            </div>
-            <label style="font-size:11px;color:var(--muted);font-weight:700;color:#c0392b">🎲 게임명 수정</label>
-            <input class="pie-game" placeholder="게임명 검색" value="${escH(currentGameDisplay)}" autocomplete="off" style="border-color:#c0392b">
-            <label style="font-size:11px;color:var(--muted)">참여자</label>
-            <div class="tag-input-wrap pie-names-wrap">
-              <div class="tag-chips"></div>
-              <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
-              <input type="hidden" class="pie-names">
-            </div>
-            <label style="font-size:11px;color:var(--muted)">인원수</label>
-            <input class="pie-count" type="number" placeholder="명" value="${escH(String(rec.count||''))}">
-            <label style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
-            <input class="pie-time" type="number" placeholder="분" value="${escH(String(rec.time||''))}">
-            <label style="font-size:11px;color:var(--muted)">점수·메모</label>
-            <input class="pie-score" placeholder="예: 83 / 75점" value="${escH(rec.score||'')}">
-            <label style="font-size:11px;color:var(--muted)">날짜</label>
-            <input class="pie-date" type="date" value="${escH(rec.date||'')}">
-            <label style="font-size:11px;color:var(--muted)">후기</label>
-            <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
-            <label style="font-size:11px;color:var(--muted)">사진</label>
-            <div class="pie-cur-photos">
-              ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}"><img src="${escAttr(u)}" alt=""><button type="button" class="pie-existing-del">×</button></div>`).join('')}
-            </div>
-            <div class="pr-photo-grid pie-new-grid"></div>
-            <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
-            <div class="pr-inline-edit-actions">
-              <button class="pr-inline-save" type="button">저장</button>
-            </div>`;
-          item.appendChild(form);
-
-          // 게임명 자동완성
-          attachAc(form.querySelector('.pie-game'), () =>
-            (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean)
-          );
-
-          // 참여자 태그칩
-          initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
-          attachAc(
-            form.querySelector('.pie-names-wrap .tag-text-input'),
-            () => {
-              const added = [...form.querySelectorAll('.pie-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
-              return playerNames.filter(s => !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n)));
-            },
-            s => {
-              const ti = form.querySelector('.pie-names-wrap .tag-text-input');
-              s.split(',').forEach(name => { name = name.trim(); if (!name) return; ti.value = name; ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })); });
-            },
-            form.querySelector('.pie-names-wrap')
-          );
-
-          // 기존 사진 개별 삭제
-          form.querySelectorAll('.pie-existing-del').forEach(d => {
-            d.addEventListener('click', () => d.closest('.pie-existing-item').remove());
-          });
-
-          // 새 사진 추가
-          const piePhotoFile = form.querySelector('.pie-photo-file');
-          const pieNewGrid = form.querySelector('.pie-new-grid');
-          const pieNewFiles = [];
-          const addPieNewItem = buildPhotoItemAdder(pieNewGrid, pieNewFiles);
-          if (piePhotoFile) {
-            piePhotoFile.addEventListener('change', async () => { for (const f of Array.from(piePhotoFile.files)) await addPieNewItem(f); piePhotoFile.value = ''; });
-          }
-
-          form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
-
-          form.querySelector('.pr-inline-save').addEventListener('click', async () => {
-            const saveBtn = form.querySelector('.pr-inline-save');
-            saveBtn.disabled = true;
-            // 게임명 → game_id
-            const gameDisplayInput = form.querySelector('.pie-game').value.trim();
-            let newGameId = null;
-            if (gameDisplayInput) {
-              const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
-              newGameId = found ? found.id : gameDisplayInput;
-            }
-            // 사진 처리
-            const remainingUrls = [...form.querySelectorAll('.pie-existing-item')].map(el => el.dataset.url).filter(Boolean);
-            const uploadedUrls = [];
-            let uploadErr = false;
-            for (const pf of pieNewFiles) {
-              const url = await window.CottageDB.uploadPlayPhoto(pf, currentUser.id);
-              if (url) uploadedUrls.push(url);
-              else uploadErr = true;
-            }
-            if (uploadErr) { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
-            const allPhotoUrls = [...remainingUrls, ...uploadedUrls];
-            let photoUrlUpd = null;
-            if (allPhotoUrls.length === 1) photoUrlUpd = allPhotoUrls[0];
-            else if (allPhotoUrls.length > 1) photoUrlUpd = JSON.stringify(allPhotoUrls);
-
-            const updFields = {
-              player_names: form.querySelector('.pie-names').value.trim() || null,
-              player_count: parseInt(form.querySelector('.pie-count').value) || null,
-              play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
-              score_note: form.querySelector('.pie-score').value.trim() || null,
-              played_at: form.querySelector('.pie-date').value || null,
-              review_text: form.querySelector('.pie-review').value.trim() || null,
-              ...(newGameId ? { game_id: newGameId } : {}),
-              photo_url: photoUrlUpd,
-            };
-            const res = await window.CottageDB?.updateGamePlay(item.dataset.id, updFields);
-            if (!res?.error) {
-              // 로컬 캐시 갱신 후 재렌더링
-              const idx = allRecordsData.findIndex(r => String(r.id) === String(item.dataset.id));
-              if (idx !== -1) Object.assign(allRecordsData[idx], { ...updFields, review_text: updFields.review_text });
-              form.remove();
-              render(); // 전체 재렌더링으로 최신 상태 반영
-            } else {
-              saveBtn.disabled = false;
-              alert('수정에 실패했습니다.');
-            }
-          });
+          openEditForm(item, rec);
         });
       });
     }
 
-    // 인증 상태 변경 시 재렌더링 (로그인/로그아웃)
+    function openEditForm(item, rec) {
+      const currentGameDisplay = getGameName(rec.gameId || '');
+      const form = document.createElement('div');
+      form.className = 'pr-inline-edit';
+      form.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:12px;font-weight:700;color:var(--muted)">기록 수정</span>
+          <button class="pr-inline-cancel" type="button">✕ 취소</button>
+        </div>
+        <label style="font-size:11px;font-weight:700;color:#c0392b">🎲 게임명 수정</label>
+        <input class="pie-game" placeholder="게임명 검색" value="${escH(currentGameDisplay)}" autocomplete="off" style="border-color:#c0392b">
+        <label style="font-size:11px;color:var(--muted)">참여자</label>
+        <div class="tag-input-wrap pie-names-wrap">
+          <div class="tag-chips"></div>
+          <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
+          <input type="hidden" class="pie-names">
+        </div>
+        <label style="font-size:11px;color:var(--muted)">인원수</label>
+        <input class="pie-count" type="number" placeholder="명" value="${escH(String(rec.count||''))}">
+        <label style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
+        <input class="pie-time" type="number" placeholder="분" value="${escH(String(rec.time||''))}">
+        <label style="font-size:11px;color:var(--muted)">점수·메모</label>
+        <textarea class="pie-score" placeholder="예: 83 / 75점" rows="2">${escH(rec.score||'')}</textarea>
+        <label style="font-size:11px;color:var(--muted)">날짜</label>
+        <input class="pie-date" type="date" value="${escH(rec.date||'')}">
+        <label style="font-size:11px;color:var(--muted)">후기</label>
+        <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
+        <label style="font-size:11px;color:var(--muted)">사진</label>
+        <div class="pie-cur-photos">
+          ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}"><img src="${escAttr(u)}" alt=""><button type="button" class="pie-existing-del">×</button></div>`).join('')}
+        </div>
+        <div class="pr-photo-grid pie-new-grid"></div>
+        <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
+        <div class="pr-inline-edit-actions">
+          <button class="pr-inline-save" type="button">저장</button>
+        </div>`;
+      item.appendChild(form);
+
+      attachAc(form.querySelector('.pie-game'), () => (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean));
+      initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
+      attachAc(
+        form.querySelector('.pie-names-wrap .tag-text-input'),
+        () => {
+          const added = [...form.querySelectorAll('.pie-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+          return playerNames.filter(s => !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n)));
+        },
+        s => {
+          const ti = form.querySelector('.pie-names-wrap .tag-text-input');
+          s.split(',').forEach(name => { name = name.trim(); if (!name) return; ti.value = name; ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })); });
+        },
+        form.querySelector('.pie-names-wrap')
+      );
+      form.querySelectorAll('.pie-existing-del').forEach(d => d.addEventListener('click', () => d.closest('.pie-existing-item').remove()));
+
+      const piePhotoFile = form.querySelector('.pie-photo-file');
+      const pieNewFiles = [];
+      const addPieNewItem = buildPhotoItemAdder(form.querySelector('.pie-new-grid'), pieNewFiles);
+      if (piePhotoFile) piePhotoFile.addEventListener('change', async () => { for (const f of Array.from(piePhotoFile.files)) await addPieNewItem(f); piePhotoFile.value = ''; });
+
+      form.querySelector('.pr-inline-cancel').addEventListener('click', () => form.remove());
+      form.querySelector('.pr-inline-save').addEventListener('click', async () => {
+        const saveBtn = form.querySelector('.pr-inline-save');
+        saveBtn.disabled = true;
+        const gameDisplayInput = form.querySelector('.pie-game').value.trim();
+        let newGameId = null;
+        if (gameDisplayInput) {
+          const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
+          newGameId = found ? found.id : gameDisplayInput;
+        }
+        const remainingUrls = [...form.querySelectorAll('.pie-existing-item')].map(el => el.dataset.url).filter(Boolean);
+        const uploadedUrls = [];
+        let uploadErr = false;
+        for (const pf of pieNewFiles) {
+          const url = await window.CottageDB.uploadPlayPhoto(pf, currentUser.id);
+          if (url) uploadedUrls.push(url); else uploadErr = true;
+        }
+        if (uploadErr) { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
+        const allPhotoUrls = [...remainingUrls, ...uploadedUrls];
+        const photoUrlUpd = allPhotoUrls.length === 1 ? allPhotoUrls[0] : allPhotoUrls.length > 1 ? JSON.stringify(allPhotoUrls) : null;
+        const rawScore = form.querySelector('.pie-score').value.trim();
+        const updFields = {
+          player_names: form.querySelector('.pie-names').value.trim() || null,
+          player_count: parseInt(form.querySelector('.pie-count').value) || null,
+          play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
+          score_note: rawScore.split(/\n+/).map(s => s.trim()).filter(Boolean).join(' / ') || null,
+          played_at: form.querySelector('.pie-date').value || null,
+          review_text: form.querySelector('.pie-review').value.trim() || null,
+          ...(newGameId ? { game_id: newGameId } : {}),
+          photo_url: photoUrlUpd,
+        };
+        const res = await window.CottageDB?.updateGamePlay(item.dataset.id, updFields);
+        if (!res?.error) {
+          const idx = allRecordsData.findIndex(r => String(r.id) === String(item.dataset.id));
+          if (idx !== -1) Object.assign(allRecordsData[idx], updFields);
+          form.remove();
+          render();
+        } else { saveBtn.disabled = false; alert('수정에 실패했습니다.'); }
+      });
+    }
+
+    // 더보기 메뉴 외부 클릭 시 닫기
+    document.addEventListener('click', e => {
+      document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
+        if (!m.contains(e.target)) m.classList.remove('is-open');
+      });
+    });
+
     window.addEventListener('cottage-auth-changed', () => render());
     document.addEventListener('DOMContentLoaded', () => render());
   })();
