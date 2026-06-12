@@ -3881,6 +3881,9 @@ body.sheet-open{
   color:#fff;
   white-space:nowrap;
 }
+.price-pay-chip--samsung{ background:#1428A0; border-color:#1428A0; }
+.price-pay-chip--naver{ background:#03C75A; border-color:#03C75A; }
+.price-pay-chip--kakao{ background:#FEE500; border-color:#FEE500; color:#3c1e1e; }
 .price-pay-note{
   margin:10px 0 0;
   font-size:11px;
@@ -3888,7 +3891,7 @@ body.sheet-open{
   font-weight:700;
 }
 .rules-group{
-  margin-bottom:30px;
+  margin-bottom:36px;
 }
 .rules-group--must{
   background:#fef5f4;
@@ -3907,7 +3910,7 @@ body.sheet-open{
   font-size:16px;
   font-weight:900;
   color:#7a4828;
-  margin:0 0 12px;
+  margin:0 0 14px;
   display:flex;
   align-items:center;
   gap:6px;
@@ -3973,14 +3976,14 @@ body.sheet-open{
   padding:0;
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:11px;
 }
 .rules-plain-list li{
   font-size:14px;
   color:#5a4030;
   padding-left:16px;
   position:relative;
-  line-height:1.5;
+  line-height:1.7;
 }
 .rules-plain-list li::before{
   content:"•";
@@ -3994,14 +3997,14 @@ body.sheet-open{
   padding:0;
   display:flex;
   flex-direction:column;
-  gap:9px;
+  gap:11px;
 }
 .rules-check-list li{
   font-size:14px;
   color:#5a4030;
   padding-left:22px;
   position:relative;
-  line-height:1.5;
+  line-height:1.7;
 }
 .rules-check-list li::before{
   content:"✓";
@@ -4225,6 +4228,10 @@ body.sheet-open{
   color:var(--muted);
   font-weight:500;
   margin-top:2px;
+}
+.rules-sub--em{
+  color:#b03020;
+  font-weight:700;
 }
 
 .req-list-empty{
@@ -5104,13 +5111,13 @@ body.sheet-open{
 
 /* ── 회칙 페이지 ─────────────────────────────────────── */
 .rules-block{
-  margin-bottom:22px;
+  margin-bottom:28px;
 }
 .rules-block-title{
-  font-size:13px;
+  font-size:15px;
   font-weight:800;
-  color:var(--green-2);
-  margin:0 0 8px;
+  color:#7a4828;
+  margin:0 0 12px;
 }
 .club-rules-list{
   list-style:none;
