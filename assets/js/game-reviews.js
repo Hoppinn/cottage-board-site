@@ -883,7 +883,7 @@
     document.title = `${name} 플레이 기록 | 코티지보드`;
 
     const bc = document.getElementById('pageBreadcrumb');
-    bc.innerHTML = `게임 찾기 &amp; 기록 <span>›</span> <a href="./game-reviews.html">플레이 기록</a> <span>›</span> ${escH(name)}`;
+    bc.innerHTML = `<a href="../../index.html">게임</a> <span>›</span> <a href="./game-reviews.html">플레이 기록</a> <span>›</span> ${escH(name)}`;
 
     headerEl.innerHTML = `<p class="rv-game-title">${escH(name)}</p>`;
 

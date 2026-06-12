@@ -1264,7 +1264,7 @@ function openGameSheet(gameKey){
           </div>
         </div>
         <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
-          <span class="sheet-comments-empty">게임평이 없습니다</span>
+          <span class="sheet-comments-empty">한줄평이 없습니다</span>
         </div>
       </div>
       <div class="sheet-play-section">
@@ -1545,17 +1545,25 @@ async function initSheetComments(gameKey) {
   if (!listEl || !window.CottageDB) return;
   const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
 
-  const comments = await window.CottageDB.getGameComments(gameKey);
-  const total = comments.length;
+  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+  const [comments, playReviews] = await Promise.all([
+    window.CottageDB.getGameComments(gameKey),
+    window.CottageDB.getPlayReviewsByGame(numericId),
+  ]);
+
+  const commentItems = comments.map(c => ({ type: 'comment', text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, user_id: c.user_id, raw: c }));
+  const playItems = playReviews.map(r => ({ type: 'play', text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
+  const allItems = [...commentItems, ...playItems].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const total = allItems.length;
 
   if (!total) {
-    if (countEl) countEl.textContent = "코멘트";
+    if (countEl) countEl.textContent = "게임평";
     if (toggleBtn) toggleBtn.style.display = "none";
     listEl.classList.remove('is-collapsed', 'has-comments');
-    listEl.innerHTML = '<span class="sheet-comments-empty">코멘트가 없습니다</span>';
+    listEl.innerHTML = '<span class="sheet-comments-empty">한줄평이 없습니다</span>';
     return;
   }
-  if (countEl) countEl.textContent = `코멘트 ${total}개`;
+  if (countEl) countEl.textContent = `게임평 ${total}개`;
   if (toggleBtn) toggleBtn.style.display = total > 1 ? "" : "none";
   const wasOpen = listEl.dataset.open === "1";
   listEl.classList.toggle('is-collapsed', !wasOpen);
@@ -1563,16 +1571,17 @@ async function initSheetComments(gameKey) {
   const currentUserId = window.getKakaoUser?.()?.id || null;
   listEl.classList.add('has-comments');
 
-  // game_comments 렌더링 (수정/삭제 가능)
-  const commentsHtml = comments.map(c => {
-    const txt = c.comment_text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const mine = currentUserId
-      ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
-      : myIds.includes(c.id);
-    const nick = c.nickname ? c.nickname.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '익명';
-    const dateStr = formatDate(c.created_at);
-    return `<div class="sheet-comment-item">
+  const allHtml = allItems.map(item => {
+    const txt = item.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const nick = item.nick.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const dateStr = formatDate(item.date);
+    if (item.type === 'comment') {
+      const c = item.raw;
+      const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const mine = currentUserId
+        ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
+        : myIds.includes(c.id);
+      return `<div class="sheet-comment-item">
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
@@ -1580,13 +1589,18 @@ async function initSheetComments(gameKey) {
         <button class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>
       </div>` : ''}
     </div>`;
+    }
+    return `<div class="sheet-comment-item">
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <p class="sheet-comment-text">${txt}</p>
+    </div>`;
   }).join('');
 
-  listEl.innerHTML = commentsHtml;
+  listEl.innerHTML = allHtml;
 }
 
 async function onDeleteComment(id, gameKey) {
-  if (!confirm('이 코멘트를 삭제할까요?')) return;
+  if (!confirm('이 게임평을 삭제할까요?')) return;
   if (!window.CottageDB) return;
   const result = await window.CottageDB.deleteComment(id);
   if (!result.error) {
@@ -1603,8 +1617,8 @@ function getOrCreateCommentModal() {
   modal.className = 'sheet-comment-modal';
   modal.innerHTML = `
     <div class="sheet-comment-modal-box">
-      <p class="sheet-comment-modal-title">코멘트 남기기</p>
-      <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 코멘트를 남겨보세요"></textarea>
+      <p class="sheet-comment-modal-title">게임평 남기기</p>
+      <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 한줄평을 남겨보세요"></textarea>
       <div class="sheet-comment-modal-actions">
         <button class="sheet-comment-form-cancel" onclick="onCloseCommentModal()">취소</button>
         <button class="sheet-comment-form-submit" id="sheetCommentModalSubmit" onclick="onSubmitCommentModal()">등록</button>
@@ -1624,7 +1638,7 @@ function onOpenCommentInput(btn) {
     delete modal.dataset.editId;
     const titleEl = modal.querySelector('.sheet-comment-modal-title');
     const submitEl = document.getElementById('sheetCommentModalSubmit');
-    if (titleEl) titleEl.textContent = '코멘트 남기기';
+    if (titleEl) titleEl.textContent = '게임평 남기기';
     if (submitEl) submitEl.textContent = '등록';
     document.getElementById('sheetCommentModalInput').value = '';
     modal.style.display = 'flex';
@@ -1638,7 +1652,7 @@ function onEditComment(btn) {
   modal.dataset.editId = btn.dataset.id;
   const titleEl = modal.querySelector('.sheet-comment-modal-title');
   const submitEl = document.getElementById('sheetCommentModalSubmit');
-  if (titleEl) titleEl.textContent = '코멘트 수정';
+  if (titleEl) titleEl.textContent = '게임평 수정';
   if (submitEl) submitEl.textContent = '수정 완료';
   const input = document.getElementById('sheetCommentModalInput');
   if (input) input.value = btn.dataset.text;
@@ -1845,7 +1859,6 @@ async function initPlayWidget(gameKey) {
               ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ""}
               ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
             </div>` : ""}
-          ${r.review_text ? `<p class="sheet-record-review">${escH(r.review_text)}</p>` : ""}
           </div>
           ${isMine ? `<div class="sheet-play-record-actions">
             <button class="sheet-play-edit-btn"
@@ -1853,6 +1866,7 @@ async function initPlayWidget(gameKey) {
               data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
               data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
               data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
+              data-review="${escH(r.review_text || '')}"
               type="button">수정</button>
             <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
           </div>` : ""}
@@ -1885,7 +1899,8 @@ async function initPlayWidget(gameKey) {
       Number(btn.dataset.time) || 0,
       btn.dataset.score,
       btn.dataset.group || '',
-      btn.dataset.playedAt || ''
+      btn.dataset.playedAt || '',
+      btn.dataset.review || ''
     ));
   });
 }
@@ -1937,6 +1952,8 @@ function getOrCreatePlayModal() {
           type="text" placeholder="모임명 (예: 코티지동호회)" list="sheetPlayGroupNameList" maxlength="50" autocomplete="off">
         <datalist id="sheetPlayGroupNameList"></datalist>
       </div>
+      <p class="sheet-play-modal-label" style="margin-top:8px;">💬 게임평 (선택)</p>
+      <textarea class="sheet-play-detail-input" id="sheetPlayModalReview" rows="2" placeholder="이 게임 어떠셨나요?" maxlength="200" style="resize:none;"></textarea>
       <div class="sheet-play-modal-actions">
         <button class="sheet-play-modal-cancel" onclick="onClosePlayModal()" type="button">취소</button>
         <button class="sheet-play-modal-skip" onclick="onSubmitPlayModal(true)" type="button">건너뛰기</button>
@@ -1987,6 +2004,8 @@ function onOpenPlayModal(gameKey) {
     dateInput.value = new Date().toISOString().split('T')[0];
     dateInput.max = new Date().toISOString().split('T')[0];
   }
+  const reviewInput = document.getElementById('sheetPlayModalReview');
+  if (reviewInput) reviewInput.value = '';
   modal.style.display = 'flex';
 }
 
@@ -2001,9 +2020,11 @@ function onClosePlayModal() {
   if (title) title.textContent = '플레이 기록하기';
   if (submit) submit.textContent = '기록하기';
   if (skipBtn) skipBtn.style.display = '';
+  const reviewInput = document.getElementById('sheetPlayModalReview');
+  if (reviewInput) reviewInput.value = '';
 }
 
-function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName, playedAt) {
+function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName, playedAt, reviewText) {
   const modal = getOrCreatePlayModal();
   modal.dataset.gameId = gameKey;
   modal.dataset.editId = recordId;
@@ -2052,6 +2073,9 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
   if (submit) submit.textContent = '수정하기';
   if (skipBtn) skipBtn.style.display = 'none';
 
+  const reviewInput = document.getElementById('sheetPlayModalReview');
+  if (reviewInput) reviewInput.value = reviewText || '';
+
   modal.style.display = 'flex';
 }
 
@@ -2073,6 +2097,7 @@ async function onSubmitPlayModal(skip) {
     ? document.getElementById('sheetPlayModalGroupName')?.value?.trim()
     : null) || null;
   const playedAt = document.getElementById('sheetPlayModalDate')?.value || null;
+  const reviewText = document.getElementById('sheetPlayModalReview')?.value?.trim() || null;
   const submitBtn = document.getElementById('sheetPlayModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
 
@@ -2084,6 +2109,7 @@ async function onSubmitPlayModal(skip) {
       score_note: scoreNote,
       group_name: groupName,
       played_at: playedAt,
+      review_text: reviewText,
     });
     if (!result?.error) {
       onClosePlayModal();
@@ -2102,7 +2128,7 @@ async function onSubmitPlayModal(skip) {
     const _u = window.getKakaoUser?.();
     const playResult = await window.CottageDB.recordGamePlay(
       gameKey, count, playerNames, playTimeMin, scoreNote,
-      _u?.nickname || null, _u?.id || null, groupName, playedAt
+      _u?.nickname || null, _u?.id || null, groupName, playedAt, null, reviewText
     );
     if (!playResult?.error) {
       addMyPlayRecord(gameKey, {
