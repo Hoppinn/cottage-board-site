@@ -406,6 +406,15 @@
           renderSearch(this.value, games);
         });
       }
+
+      const shelfParam = new URLSearchParams(location.search).get('shelf');
+      if (shelfParam) {
+        const el = document.querySelector(`[data-section-id="${shelfParam}"]`);
+        if (el) {
+          el.classList.add('is-open');
+          setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+        }
+      }
     }
 
     if (window.gameData) {

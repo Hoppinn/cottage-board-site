@@ -1164,9 +1164,9 @@ function openGameSheet(gameKey){
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
-          <button class="sheet-loc-btn" onclick="goToShelf('${shelfGroupId}')">
+          <a class="sheet-loc-btn" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">
             📍 ${shelfLabel}
-          </button>
+          </a>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
             onclick="return confirm('유튜브로 이동할까요?')"
@@ -1177,6 +1177,8 @@ function openGameSheet(gameKey){
         </div>
       </div>
     </div>
+
+    <a class="sheet-view-all-btn sheet-shelf-btn" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
 
     <!-- 인원 · 시간 · 무게 한 줄 -->
     <div class="sheet-stats-block">
@@ -1272,7 +1274,6 @@ function openGameSheet(gameKey){
       </div>
     </div>
 
-    <button class="sheet-view-all-btn" style="cursor:pointer;font-family:inherit" onclick="alert('준비 중입니다.')">📚 꽂혀있는 책장 보러가기 →</button>
 
   `;
 
@@ -1675,11 +1676,6 @@ async function onSubmitCommentModal() {
   if (submitBtn) submitBtn.disabled = false;
 }
 
-function goToShelf(shelfGroupId){
-  if(!shelfGroupId) return;
-  window.location.href =
-    rootPath + 'pages/game/owned-games.html?shelf=' + encodeURIComponent(shelfGroupId);
-}
 
 // ── 손님 별점 위젯 ──────────────────────────────────────
 
