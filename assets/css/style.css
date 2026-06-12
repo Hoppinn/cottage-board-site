@@ -737,7 +737,7 @@ body.recommend-page main{
 }
 
 .recommend-section{
-  padding:22px 18px 52px;
+  padding:12px 18px 52px;
   background:var(--cream);
   border-top:1px solid rgba(223,199,161,0.55);
   scroll-margin-top:calc(var(--header-total-h) + 8px);
