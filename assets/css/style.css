@@ -3891,14 +3891,14 @@ body.sheet-open{
   margin-bottom:30px;
 }
 .rules-group--must{
-  background:#fdf5e4;
-  border:1.5px solid #c87820;
-  border-left:4px solid #c87820;
+  background:#fef5f4;
+  border:1.5px solid #c0392b;
+  border-left:4px solid #c0392b;
   border-radius:12px;
   padding:14px 16px;
 }
 .rules-group--must .rules-group-title{
-  color:#a06010;
+  color:#c0392b;
 }
 .rules-group--must .price-rules-list li{
   font-weight:700;
