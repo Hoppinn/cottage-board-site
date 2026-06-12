@@ -15,7 +15,7 @@
 | `game_comments` | game_key, comment_text, nickname, user_id | 코멘트 |
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
-| `page_views` | page, created_at | 페이지 방문 |
+| `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
 | `page_sessions` | page, referrer, user_id, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date | 유저 프로필 |
 | `game_requests` | game_name, request_count, status, is_planned, user_id | 게임 요청 |
@@ -55,6 +55,7 @@
 
 ## referrer 저장 형식
 
-- `page_sessions.referrer`: 외부 도메인 hostname만 저장 (예: `"carrot.me"`, `"naver.com"`)
-- 동일 도메인 방문은 `null`
-- 직접 접속(referrer 없음)은 `null`
+- `page_views.referrer`: utm_source 값 또는 외부 도메인 hostname 저장 (예: `"kakao"`, `"naver.com"`)
+  - 방문자 수/경로 집계 기준 (관리자 방문경로 도넛 차트)
+  - 동일 도메인 방문·직접 접속은 `null` → '직접 방문'으로 분류
+- `page_sessions.referrer`: 동일 형식, 세션 분석 전용 (방문경로 집계에는 미사용)

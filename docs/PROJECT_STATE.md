@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-13 (44차 — 플레이 카운팅 전체 수정 + 게임기록 페이지 개선)
+최종 갱신: 2026-06-13 (45차 — 방문경로 집계 page_views 통일 + 바텀시트 UI 정리)
 
 ---
 
@@ -8,11 +8,8 @@
 
 - **`docs/DESIGN_AUDIT.md`** (진행 중 — 작업 재개 전 필독)
   - 2026-06 디자인 감사 / 일회성 임시 문서. 5차까지 진행.
-  - 대부분 완료. 잔여: 방문자 수 RLS 확인, 관리자 방문경로 조사, 푸터 묶음(낮음), club.html/club-history.html 타이포+여백
-  - **방문자 수 trackPageView**: 브라우저 콘솔에서 `[trackPageView] insert error` 확인 필요. 에러 있으면 Supabase RLS 정책 문제
-  - **관리자 방문경로**: 코드 vs 인프라 여부 미확정. 사용자가 나중에 재검토 지시.
-  - **first_source**: 미구현 확인. P2 유지.
-  - 작업 완료 후 결과 요약 → 이 파일에 반영 → 삭제
+  - 잔여: 푸터 묶음(낮음), club.html/club-history.html 타이포+여백
+  - 완료 후 결과 요약 → 이 파일 반영 → 삭제
 
 ---
 
@@ -148,6 +145,9 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | fix: 방문경로 집계 page_views 기준 통일 — trackPageView에 referrer 추가, 관리자 방문경로 차트 page_sessions→page_views 변경 |
+| 2026-06-13 | fix+feat: 바텀시트 UI 정리 — 플레이기록 링크 이번플레이됨 아래 이동, 책장 링크 최하단 이동, "따봉"→"좋아요"/궁금해요 라벨 추가, 코멘트 중복 제거(initSheetComments review_text 제거) |
+| 2026-06-13 | fix: 게임별 플레이기록 페이지 — 상단 코멘트 섹션 제거(카드와 중복), "게임정보·코멘트 보기→" 페이지 이동→바텀시트 직접 오픈 변경 |
 | 2026-06-13 | fix+feat: 플레이 카운팅 전체 수정 — initPlayWidget gameKey→numericId 변환(getGamePlayCount/Highlights/Records 0건 버그), 바텀시트 플레이기록 건수 실시간 연동, 게임기록 페이지 코멘트+플레이감상 섹션 추가, 링크 텍스트 개선 |
 | 2026-06-13 | fix: 헤더 검색 결과 클릭 시 바텀시트 없는 페이지에서 owned-games로 이동하던 버그 — ensureGameSheet() 동적 주입으로 전 페이지 지원 |
 | 2026-06-13 | fix: 게임명 클릭 시 바텀시트 열리던 버그 제거 — 썸네일만 클릭 가능하도록 변경 |
