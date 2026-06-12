@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-12 (41차 — 요약 카드 + 페이지 재구조화)
+최종 갱신: 2026-06-12 (42차 — 색상 정리 + club-rules 기본매너 슬림화)
 
 ---
 
@@ -153,6 +153,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-12 | refactor: 색상 정리 2건 + club-rules 기본매너 슬림화 — club-intro 카드 베이지 통일/닉네임 텍스트 색 구분, about 섹션레이블 브랜드갈색/피처카드 테두리 강화/본문 대비 증가, club-rules 기본매너 4→2항목 |
 | 2026-06-12 | refactor: 히어로 그라데이션 갈색 톤으로 개선 — ::after 오버레이 검정→갈색(#3d2810) 3-stop 그라데이션, 하단 0.52 불투명도 |
 | 2026-06-12 | refactor: 히어로 여백·뷰포트 수정 — margin-bottom 24→16px, min-height -48px→-28px(top12+bottom16) |
 | 2026-06-12 | refactor: 타이포 계층 + 여백 개선 — owned-games 게임명 16→17px/line-height 강화, 아이템 padding/gap 확대, recommend-section 상단 여백 12→22px |
