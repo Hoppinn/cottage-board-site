@@ -5223,6 +5223,24 @@ body.sheet-open{
   border-radius:8px;
   overflow:hidden;
 }
+.rules-example-details{
+  margin-top:10px;
+}
+.rules-example-details>summary{
+  font-size:12px;
+  font-weight:700;
+  color:var(--muted);
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+}
+.rules-example-details>summary::-webkit-details-marker{ display:none; }
+.rules-example-details>summary::after{ content:"▾"; font-size:10px; }
+.rules-example-details[open]>summary::after{ content:"▴"; }
+.rules-example-details .rules-example{ margin-top:8px; }
 .rules-example-label{
   font-size:11px;
   font-weight:800;
