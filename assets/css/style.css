@@ -5402,17 +5402,17 @@ body.sheet-open{
 
 /* records view — 3단 계층 */
 .pr-session { border: 1px solid #e8e2d8; border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-.pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 14px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }
+.pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-session > .pr-session-hd { background: #3b4f3a; }
 .pr-session > .pr-session-hd:hover { background: #4a6149; }
 .pr-session--bygame > .pr-session-hd { background: var(--bg,#fffdf8); border-top: 3px solid #3b4f3a; }
 .pr-session--bygame > .pr-session-hd:hover { background: #ece7dc; }
 .pr-session--bygame .pr-session-date { color: #2a3a28; }
 .pr-session--bygame .pr-session-summary { color: #7a9a78; background: rgba(59,79,58,0.06); }
-.pr-session--bygame .pr-session-arrow { color: #3b4f3a; }
+.pr-session--bygame .pr-session-arrow { color: #2a3a28; }
 .pr-session-date { font-size: 16px; font-weight: 900; color: #fff; flex-shrink: 0; letter-spacing: -0.3px; }
 .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.13); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 600; }
-.pr-session-arrow { font-size: 15px; color: rgba(255,255,255,0.65); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
+.pr-session-arrow { font-size: 17px; color: rgba(255,255,255,0.85); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-session-thumb { width: 36px; height: 36px; object-fit: cover; border-radius: 6px; flex-shrink: 0; opacity: 0.92; }
 .pr-session-thumb--link { cursor: pointer; }
 .pr-session-thumb--link:hover { opacity: 1; }
@@ -5524,7 +5524,7 @@ body.sheet-open{
 .pie-existing-del { position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; line-height: 1; }
 
 /* photo thumbnails in record row */
-.pr-rec-photo-wrap { display: flex; flex-wrap: nowrap; gap: 6px; margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
+.pr-rec-photo-wrap { display: flex; flex-wrap: nowrap; gap: 8px; margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 0; max-width: 100%; }
 .pr-rec-photo-item { position: relative; flex-shrink: 0; }
 .pr-rec-photo { height: 80px; width: auto; border-radius: 6px; display: block; cursor: pointer; }
 .pr-rec-photo-del { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 4px; font-size: 10px; padding: 2px 6px; cursor: pointer; display: none; }
@@ -6553,7 +6553,7 @@ body.sheet-open{
   .pr-field-label{ font-size:16px; }
   .pr-add-btn{ font-size:20px; }
   .pr-submit-btn{ font-size:21px; }
-  .pr-session-hd{ padding:18px 22px; }
+  .pr-session-hd{ padding:14px 22px; }
   .pr-session-date{ font-size:30px; }
   .pr-session-summary{ font-size:18px; padding:4px 14px; }
   .pr-session-arrow{ font-size:22px; }
