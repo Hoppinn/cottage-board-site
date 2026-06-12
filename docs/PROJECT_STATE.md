@@ -1,15 +1,12 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-13 (45차 — 방문경로 집계 page_views 통일 + 바텀시트 UI 정리)
+최종 갱신: 2026-06-13 (46차 — 2026-06 디자인 감사 완료 + club 여백 마감)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-- **`docs/DESIGN_AUDIT.md`** (진행 중 — 작업 재개 전 필독)
-  - 2026-06 디자인 감사 / 일회성 임시 문서. 5차까지 진행.
-  - 잔여: 푸터 묶음(낮음), club.html/club-history.html 타이포+여백
-  - 완료 후 결과 요약 → 이 파일 반영 → 삭제
+현재 진행 중 작업 없음.
 
 ---
 
@@ -145,6 +142,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | refactor: club.html/club-history 타이포+여백 마감 — about-for-list 간격 10→12px, about-for-item 패딩 14→16px, pr-sub-hd 12px, is-open 마진 16px |
 | 2026-06-13 | fix: 방문경로 집계 page_views 기준 통일 — trackPageView에 referrer 추가, 관리자 방문경로 차트 page_sessions→page_views 변경 |
 | 2026-06-13 | fix+feat: 바텀시트 UI 정리 — 플레이기록 링크 이번플레이됨 아래 이동, 책장 링크 최하단 이동, "따봉"→"좋아요"/궁금해요 라벨 추가, 코멘트 중복 제거(initSheetComments review_text 제거) |
 | 2026-06-13 | fix: 게임별 플레이기록 페이지 — 상단 코멘트 섹션 제거(카드와 중복), "게임정보·코멘트 보기→" 페이지 이동→바텀시트 직접 오픈 변경 |
