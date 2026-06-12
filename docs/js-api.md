@@ -9,7 +9,7 @@
 | 함수 | 용도 |
 |------|------|
 | `trackView(gameId)` | 게임 조회수 기록 |
-| `trackPageView(page)` | 페이지 뷰 기록 (하루 1회) |
+| `trackPageView(page, referrer = null)` | 페이지 뷰 기록 (하루 1회). referrer: utm_source 또는 외부 hostname — page_views.referrer에 저장 |
 | `getGameRating(gameId)` | 별점 평균+건수 조회 |
 | `submitRating(gameId, rating)` | 별점 제출 |
 | `getMyRating(gameId)` | 내 별점 (localStorage) |

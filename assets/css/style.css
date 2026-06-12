@@ -3577,20 +3577,6 @@ body.sheet-open{
   background:#ede8e0;
 }
 
-.sheet-view-all-btn{
-  display:block;
-  margin-top:10px;
-  padding:10px;
-  border-radius:12px;
-  border:1.5px solid #d8c4a8;
-  background:#f5ece0;
-  color:#7a4828;
-  font-size:13px;
-  font-weight:900;
-  text-align:center;
-  text-decoration:none;
-}
-
 .sheet-comment-input{
   width:100%;
   box-sizing:border-box;
