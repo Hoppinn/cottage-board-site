@@ -5475,7 +5475,7 @@ body.sheet-open{
 .pr-inline-save { font-size: 12px; background: #7a4828; color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
 .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
 
-.pr-player-header { padding: 7px 16px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-top: 1px solid #e8e4dc; background: #ece7dc; box-shadow: inset 3px 0 0 #6a9068; }
+.pr-player-header { padding: 7px 16px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-top: 1px solid #e8e4dc; background: #ece7dc; }
 .pr-player-header:first-child { border-top: none; }
 .pr-player-header .pr-rec-tag { background: #fff; color: #4a3728; font-weight: 700; font-size: 12px; border-radius: 20px; padding: 2px 9px; border: 1px solid #d8d0c6; }
 .pr-tag-count { background: #4a5a38 !important; color: #fff !important; border-color: #4a5a38 !important; }
