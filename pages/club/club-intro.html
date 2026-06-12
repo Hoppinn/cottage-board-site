@@ -163,7 +163,8 @@
     ];
 
     function applyCardColor(cardEl, colorKey, idx) {
-      const color = CARD_PALETTE.find(c => c.key === colorKey) || CARD_PALETTE[idx % CARD_PALETTE.length];
+      const checkerIdx = (Math.floor(idx / 2) + idx % 2) % CARD_PALETTE.length;
+      const color = CARD_PALETTE.find(c => c.key === colorKey) || CARD_PALETTE[checkerIdx];
       cardEl.style.setProperty('--intro-head-bg', color.bg);
       cardEl.style.setProperty('--intro-head-text', color.text);
       cardEl.style.setProperty('--intro-border', color.border);
