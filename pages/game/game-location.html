@@ -294,6 +294,7 @@
     }
 
     function openGame(id) {
+      if (typeof window.ensureGameSheet === 'function') window.ensureGameSheet();
       if (typeof window.openGameSheet === 'function') {
         window.openGameSheet(decodeURIComponent(id));
       }

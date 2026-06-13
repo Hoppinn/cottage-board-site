@@ -143,6 +143,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | fix: 게임위치 페이지 게임 클릭 시 바텀시트 열리도록 — ensureGameSheet() 호출 추가 (openGame 함수) |
 | 2026-06-13 | chore: renderSingleGame / ?game= deprecated — 기본 동선은 openGameRecordSheet 바텀시트로 대체 완료, 코드 보류(URL 공유·SEO 검토 전) |
 | 2026-06-13 | refactor: 게임평/기록 전용 바텀시트 신규(openGameRecordSheet) — 게임 상세 시트에 미리보기 1건+전체보기, 게임별 탭 미니카드로 축소, 📚 링크 위치 이동 |
 | 2026-06-13 | refactor: 바텀시트 "코멘트"→"게임평" 전면 교체, 게임평 섹션에 플레이기록 review_text 병합+작성자 표시, 플레이 모달에 게임평 입력 추가, 브레드크럼 "게임 찾기 & 기록"→"게임"(링크) |
