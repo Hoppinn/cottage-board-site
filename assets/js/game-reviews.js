@@ -874,7 +874,10 @@
   }
 
   // ══════════════════════════════════════════════════════════════
-  // SINGLE GAME VIEW (바텀시트에서 ?game=<id>로 진입)
+  // SINGLE GAME VIEW (?game=<id> 직접 URL 접근 — deprecated)
+  // 기본 동선은 openGameRecordSheet(gameKey) 바텀시트로 대체됨.
+  // 직접 URL 공유 / SEO 용도 검토 전까지 삭제 보류.
+  // TODO: renderSingleGame 제거 또는 공개 랜딩용 전환 검토
   // ══════════════════════════════════════════════════════════════
 
   function initGameView() {

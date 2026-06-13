@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-13 (49차 — 바텀시트 게임평 개편 + 플레이 모달 게임평 입력 + 기록 전용 바텀시트)
+최종 갱신: 2026-06-13 (50차 — renderSingleGame deprecated 처리 + TODO 등록)
 
 ---
 
@@ -26,7 +26,7 @@
 - [x] 기록 삭제
 - [x] 모임별 보기 (3단 계층: 그룹 > 날짜 > 게임)
 - [x] 게임별 보기 (게임 > 모임/인원 > 날짜)
-- [x] 단일 게임 플레이 기록 조회 (?game= 파라미터)
+- [x] 단일 게임 플레이 기록 조회 (?game= 파라미터) ← deprecated: 기본 동선은 openGameRecordSheet 바텀시트로 대체. URL 공유/SEO 검토 전까지 코드 보류
 - [x] 그룹명 / 게임명 / 참여자 이름 자동완성 (등록폼 + 수정폼)
 - [x] 사진 썸네일 표시 (80px, 가로 스크롤, 최대 3장 + +N장 배지, 라이트박스 연동)
 
@@ -110,6 +110,7 @@
 
 ### P3 — 인프라
 
+- [ ] **renderSingleGame / ?game= 페이지 처리**: 기본 동선 제거 완료. 코드는 deprecated 상태로 보류 중 — 직접 URL 공유·SEO 필요 여부 결정 후 삭제 또는 공개 랜딩 페이지로 전환
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html 사진 중심 재구성
 - [ ] club-rules.html 사진 중심 재구성
@@ -142,6 +143,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | chore: renderSingleGame / ?game= deprecated — 기본 동선은 openGameRecordSheet 바텀시트로 대체 완료, 코드 보류(URL 공유·SEO 검토 전) |
 | 2026-06-13 | refactor: 게임평/기록 전용 바텀시트 신규(openGameRecordSheet) — 게임 상세 시트에 미리보기 1건+전체보기, 게임별 탭 미니카드로 축소, 📚 링크 위치 이동 |
 | 2026-06-13 | refactor: 바텀시트 "코멘트"→"게임평" 전면 교체, 게임평 섹션에 플레이기록 review_text 병합+작성자 표시, 플레이 모달에 게임평 입력 추가, 브레드크럼 "게임 찾기 & 기록"→"게임"(링크) |
 | 2026-06-13 | refactor: 바텀시트 정보 위계 정립 — 📚제목 아래 이동, 좋아요/궁금해요 게임정보 끝, 게임평 먼저/플레이기록 나중, 플레이기록 링크 텍스트형. getAllPlayRecordsForHub review_text 누락 버그 수정. 게임별 페이지 게임평 = game_comments + review_text 통합+작성자 표시 |
