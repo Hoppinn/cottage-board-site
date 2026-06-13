@@ -103,6 +103,24 @@
     .admin-date-nav-label { border: 1px solid var(--border,#e8e4dc); border-radius: 20px; padding: 3px 14px; font-size: 12px; font-weight: 700; color: var(--text); background: var(--card-bg,#fff); flex: 1; min-width: 0; cursor: pointer; text-align: center; }
     .admin-date-nav-label:hover { border-color: var(--green); color: var(--green); }
     @media (max-width: 600px) { .admin-chart-grid { grid-template-columns: 1fr; } }
+    /* 요약 카드 */
+    .admin-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    .admin-summary-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 16px; }
+    .admin-summary-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.3px; margin-bottom: 5px; }
+    .admin-summary-value { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1.1; }
+    .admin-summary-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
+    .admin-summary-delta { font-size: 22px; font-weight: 900; }
+    .admin-summary-delta.up { color: #2e7d32; }
+    .admin-summary-delta.down { color: #9e3a2a; }
+    .admin-summary-delta.flat { color: var(--muted); }
+    @media (max-width: 600px) { .admin-summary-grid { grid-template-columns: repeat(2, 1fr); } }
+    /* 교차분석 */
+    .admin-cross-list { display: flex; flex-direction: column; gap: 12px; padding: 4px 0; }
+    .admin-cross-source-label { font-size: 12px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+    .admin-cross-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+    .admin-cross-chip { font-size: 11px; background: var(--bg,#f5f0e8); border-radius: 20px; padding: 3px 10px; color: var(--text); }
+    .admin-cross-chip strong { font-weight: 800; color: var(--green); }
+    .admin-cross-empty { font-size: 13px; color: var(--muted); text-align: center; padding: 20px 0; }
   </style>
 </head>
 
@@ -279,6 +297,26 @@
         <div class="admin-group is-open" id="groupCharts">
           <div class="admin-group-title">📊 비주얼 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
+            <div class="admin-summary-grid">
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">오늘 방문자</div>
+                <div class="admin-summary-value" id="sumToday">—</div>
+              </div>
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">7일 평균</div>
+                <div class="admin-summary-value" id="sumAvg">—</div>
+                <div class="admin-summary-sub" id="sumAvgSub"></div>
+              </div>
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">지난주 대비</div>
+                <div class="admin-summary-value" id="sumDelta">—</div>
+                <div class="admin-summary-sub" id="sumDeltaSub"></div>
+              </div>
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">주요 유입 (7일)</div>
+                <div class="admin-summary-value" id="sumTopRef" style="font-size:14px;margin-top:6px;font-weight:700;line-height:1.4">—</div>
+              </div>
+            </div>
             <div class="admin-chart-filter" id="chartPeriodBtns">
               <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
               <button class="admin-chart-period-btn" data-days="7">7일</button>
@@ -292,13 +330,9 @@
               <button class="admin-date-nav-arrow" id="chartNavNext">▶</button>
             </div>
             <div class="admin-chart-grid">
-              <div class="admin-chart-card">
-                <div class="admin-chart-title">방문자 구성 <span class="admin-chart-sub" id="chartRatioSub"></span></div>
-                <canvas id="chartMemberRatio"></canvas>
-              </div>
-              <div class="admin-chart-card">
-                <div class="admin-chart-title">페이지별 방문 <span class="admin-chart-sub" id="chartPagesSub"></span></div>
-                <div style="position:relative;height:220px"><canvas id="chartPages"></canvas></div>
+              <div class="admin-chart-card admin-chart-wide">
+                <div class="admin-chart-title">날짜별 방문자 수</div>
+                <canvas id="chartDaily"></canvas>
               </div>
               <div class="admin-chart-card">
                 <div class="admin-chart-title">유입 경로 <span class="admin-chart-sub" id="chartRefSub"></span></div>
@@ -307,17 +341,32 @@
                 </div>
                 <p id="chartRefEmpty" style="display:none;text-align:center;color:#aaa;font-size:12px;padding:16px 0">외부 유입 없음<br><small>당근·네이버 등 외부 링크 방문부터 기록됩니다</small></p>
               </div>
+              <div class="admin-chart-card">
+                <div class="admin-chart-title">페이지별 방문 <span class="admin-chart-sub" id="chartPagesSub"></span></div>
+                <div style="position:relative;height:220px"><canvas id="chartPages"></canvas></div>
+              </div>
               <div class="admin-chart-card admin-chart-wide">
-                <div class="admin-chart-title">날짜별 방문자 수</div>
-                <canvas id="chartDaily"></canvas>
+                <div class="admin-chart-title">유입경로 × 페이지 <span class="admin-chart-sub" id="chartCrossSub"></span></div>
+                <div id="chartCrossRef"></div>
               </div>
-              <div class="admin-chart-card">
-                <div class="admin-chart-title">시간대별 방문 <span class="admin-chart-sub" id="chartHourlySub"></span></div>
-                <canvas id="chartHourly"></canvas>
-              </div>
-              <div class="admin-chart-card">
-                <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
-                <canvas id="chartMemberTime"></canvas>
+            </div>
+            <div class="admin-sub-section" id="subAuxCharts">
+              <div class="admin-sub-section-title">보조지표 (시간대 · 회원)<span class="admin-sub-section-arrow">▾</span></div>
+              <div class="admin-sub-section-body">
+                <div class="admin-chart-grid">
+                  <div class="admin-chart-card">
+                    <div class="admin-chart-title">시간대별 방문 <span class="admin-chart-sub" id="chartHourlySub"></span></div>
+                    <canvas id="chartHourly"></canvas>
+                  </div>
+                  <div class="admin-chart-card">
+                    <div class="admin-chart-title">방문자 구성 <span class="admin-chart-sub" id="chartRatioSub"></span></div>
+                    <canvas id="chartMemberRatio"></canvas>
+                  </div>
+                  <div class="admin-chart-card admin-chart-wide">
+                    <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
+                    <canvas id="chartMemberTime"></canvas>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -823,39 +872,14 @@
 
       function draw(start, end, label, type) {
         const filtered = filterByRange(rows, start, end, 'entered_at');
-
-        // ── 1. 방문자 구성 도넛 ───────────────────────────────────────
-        // 총 방문자: page_views (브라우저 하루 1회, 회원+비회원 포함)
-        // 회원 식별: profiles.last_seen_at 기준 (page_sessions은 최근에만 기록됨)
         const filteredPV = filterByRange(pageViews, start, end, 'created_at');
-        const totalCount = filteredPV.length;
-        const fromMs = start ? new Date(start).getTime() : 0;
-        const memberUidSet = new Set();
-        for (const p of allProfiles) {
-          if (!p.last_seen_at) continue;
-          if (fromMs && new Date(p.last_seen_at).getTime() < fromMs) continue;
-          memberUidSet.add(p.user_id);
-        }
-        const mCnt = Math.min(memberUidSet.size, totalCount);
-        const gCnt = Math.max(0, totalCount - mCnt);
-        document.getElementById('chartRatioSub').textContent = label;
-        makeOrUpdate('chartMemberRatio', 'doughnut', {
-          labels: [`회원 (${mCnt}명)`, `비회원 (${gCnt}명)`],
-          datasets: [{ data: [mCnt, gCnt], backgroundColor: [C1, CMUTED], borderWidth: 0 }],
-        }, {
-          cutout: '60%',
-          plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
-        });
 
-        // ── 2. 페이지별 방문 — (유저+페이지+날짜) 유니크 기준 ─────────
-        const pageUniq = {};
-        const seen2 = new Set();
-        for (const r of filtered) {
-          if (!r.page) continue;
-          const key = (r.user_id || 'anon') + '|' + r.page + '|' + kstDate(r.entered_at);
-          if (seen2.has(key)) continue;
-          seen2.add(key);
-          pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
+        // ── 공통 헬퍼 ────────────────────────────────────────────────
+        function _addDays(dateStr, n) {
+          const [y, m, d] = dateStr.split('-').map(Number);
+          const ms = Date.UTC(y, m - 1, d) + n * 86400000;
+          const dt = new Date(ms);
+          return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;
         }
         const PAGE_LABEL = {
           'index': '메인', 'about': '코티지보드 소개', 'game-reviews': '기록 보기',
@@ -865,40 +889,94 @@
           'club-intro': '동호회 소개', 'club-schedule': '모임 일정',
           'club-rules': '동호회 규칙', 'price-rules': '요금 안내', 'guide': '이용안내',
         };
-        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
-        document.getElementById('chartPagesSub').textContent = label;
-        makeOrUpdate('chartPages', 'bar', {
-          labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
-          datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
-        }, {
-          indexAxis: 'y',
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: GRID }, ticks: { font: { size: 10 } } },
-            y: { grid: { display: false }, ticks: { font: { size: 10 }, autoSkip: false } },
-          },
-        });
+        function _punycodeLabel(s) {
+          if (!s.startsWith('xn--')) return s;
+          s = s.slice(4);
+          const B=36,Tm=1,TX=26,SK=38,DM=700,B0=72,N0=128;
+          const dg=c=>c<48?B:c<58?c-22:c<65?B:c<91?c-65:c<97?B:c<123?c-97:B;
+          const ad=(d,n,f)=>{d=f?Math.floor(d/DM):d>>1;d+=Math.floor(d/n);let k=0;while(d>((B-Tm)*TX)>>1){d=Math.floor(d/(B-Tm));k+=B;}return k+Math.floor((B-Tm+1)*d/(d+SK));};
+          const out=[];const sep=s.lastIndexOf('-');
+          for(let j=0;j<(sep>0?sep:0);j++)out.push(s.charCodeAt(j));
+          let pos=sep>0?sep+1:0,n=N0,i=0,bias=B0;
+          while(pos<s.length){const oi=i;let w=1;for(let k=B;;k+=B){const d=dg(s.charCodeAt(pos++));i+=d*w;const t=k<=bias?Tm:k>=bias+TX?TX:k-bias;if(d<t)break;w*=B-t;}bias=ad(i-oi,out.length+1,oi===0);n+=Math.floor(i/(out.length+1));i%=out.length+1;out.splice(i++,0,n);}
+          return String.fromCodePoint(...out);
+        }
+        function _decodeHost(host) { return host.split('.').map(_punycodeLabel).join('.'); }
+        const _utmBrandMap = { kakao: '카카오', kakao_club: '카카오 동호회', qr: 'QR', store_qr: '매장 QR', flyer_qr: '전단지 QR', boardlife: '보드라이프', naver: '네이버', naver_place: '네이버 플레이스', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
+        function categorizeRef(ref) {
+          if (!ref) return '직접 방문';
+          if (ref.startsWith('/')) return null;
+          if (!ref.includes('.') && !ref.includes('/')) return _utmBrandMap[ref.toLowerCase()] || null;
+          try {
+            const rawHost = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
+            if (!rawHost.includes('.')) return null;
+            const host = _decodeHost(rawHost).toLowerCase();
+            if (host.includes('daangn') || host.includes('당근')) return '당근마켓';
+            if (host.includes('boardlife') || host.includes('보드라이프')) return '보드라이프';
+            if (host.includes('naver') || host.includes('네이버')) return '네이버';
+            if (host.includes('google') || host.includes('구글')) return '구글';
+            if (host.includes('kakao') || host.includes('kakaotalk') || host.includes('카카오')) return '카카오';
+            if (host.includes('instagram') || host.includes('ig.me') || host.includes('인스타')) return '인스타그램';
+            return _decodeHost(rawHost);
+          } catch (_) { return null; }
+        }
 
-        // ── 3. 날짜별 방문자 — page_views 기반, 단위별 집계 ──
+        // ── 요약 카드 (전체 pageViews 기반, 항상 오늘 기준) ────────────
         {
-          function _addDays(dateStr, n) {
-            const [y, m, d] = dateStr.split('-').map(Number);
-            const ms = Date.UTC(y, m - 1, d) + n * 86400000;
-            const dt = new Date(ms);
-            return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;
+          const todayStr = kstDateStr();
+          const todayCnt = pageViews.filter(r => kstDate(r.created_at) === todayStr).length;
+          const thisKeySet = new Set(), prevKeySet = new Set();
+          for (let i = 6; i >= 0; i--) thisKeySet.add(_addDays(todayStr, -i));
+          for (let i = 13; i >= 7; i--) prevKeySet.add(_addDays(todayStr, -i));
+          let thisCnt7 = 0, prevCnt7 = 0;
+          for (const r of pageViews) {
+            const k = kstDate(r.created_at);
+            if (thisKeySet.has(k)) thisCnt7++;
+            if (prevKeySet.has(k)) prevCnt7++;
           }
+          const avg7 = thisCnt7 / 7;
+          let deltaHtml;
+          if (prevCnt7 === 0 && thisCnt7 === 0) {
+            deltaHtml = '<span class="admin-summary-delta flat">—</span>';
+          } else if (prevCnt7 === 0) {
+            deltaHtml = '<span class="admin-summary-delta up">신규</span>';
+          } else {
+            const pct = Math.round((thisCnt7 - prevCnt7) / prevCnt7 * 100);
+            const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
+            deltaHtml = `<span class="admin-summary-delta ${cls}">${pct > 0 ? '+' : ''}${pct}%</span>`;
+          }
+          const refCnt7 = {};
+          for (const r of pageViews) {
+            if (!thisKeySet.has(kstDate(r.created_at))) continue;
+            const cat = categorizeRef(r.referrer);
+            if (!cat || cat === '직접 방문') continue;
+            refCnt7[cat] = (refCnt7[cat] || 0) + 1;
+          }
+          const topRef7 = Object.entries(refCnt7).sort((a, b) => b[1] - a[1])[0];
+          const el_today = document.getElementById('sumToday');
+          const el_avg = document.getElementById('sumAvg');
+          const el_avgSub = document.getElementById('sumAvgSub');
+          const el_delta = document.getElementById('sumDelta');
+          const el_deltaSub = document.getElementById('sumDeltaSub');
+          const el_topRef = document.getElementById('sumTopRef');
+          if (el_today) el_today.textContent = todayCnt;
+          if (el_avg) el_avg.textContent = avg7 % 1 === 0 ? avg7 : avg7.toFixed(1);
+          if (el_avgSub) el_avgSub.textContent = `이번 7일 ${thisCnt7}명`;
+          if (el_delta) el_delta.innerHTML = deltaHtml;
+          if (el_deltaSub) el_deltaSub.textContent = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
+          if (el_topRef) el_topRef.textContent = topRef7 ? `${topRef7[0]}  ${topRef7[1]}회` : '직접방문';
+        }
+
+        // ── 1. 날짜별 방문자 — page_views 기반, 단위별 집계 ──
+        {
           const baseStr = (_navValue && type !== 'all') ? _navValue : kstDateStr();
           let chartLabels = [], thisData = [], prevDataArr = null;
 
           if (type === 'week') {
-            // 선택 주 포함 최근 4주 — 주별 집계
             const { start: wStart } = calcRange('week', baseStr);
             const wStartMs = new Date(wStart).getTime();
             const weekArr = [];
-            for (let i = 3; i >= 0; i--) {
-              weekArr.push(toWeekStr(new Date(wStartMs - i * 7 * 86400000)));
-            }
+            for (let i = 3; i >= 0; i--) weekArr.push(toWeekStr(new Date(wStartMs - i * 7 * 86400000)));
             const wVis = Object.fromEntries(weekArr.map(k => [k, 0]));
             for (const pv of pageViews) {
               const wk = toWeekStr(new Date(pv.created_at));
@@ -908,7 +986,6 @@
             thisData = weekArr.map(w => wVis[w]);
 
           } else if (type === 'month' || type === 'all') {
-            // 선택 월 포함 최근 12개월 — 월별 집계 (전체 보기도 월별)
             const base = type === 'all' ? kstDateStr().slice(0, 7) : baseStr.slice(0, 7);
             const [cy, cm] = base.split('-').map(Number);
             const monthArr = [];
@@ -926,7 +1003,6 @@
             thisData = monthArr.map(k => mVis[k]);
 
           } else {
-            // day (기본) — 선택 날짜 포함 최근 7일 + 이전 7일 비교선
             const thisKeys = [], prevKeys = [];
             const thisVis = {}, prevVisObj = {};
             for (let i = 6; i >= 0; i--) { const k = _addDays(baseStr, -i); thisKeys.push(k); thisVis[k] = 0; }
@@ -966,7 +1042,98 @@
           });
         }
 
-        // ── 4. 시간대별 — page_views 기반 실제 방문 시간대 패턴 ─────────
+        // ── 2. 유입 경로 — 수평 막대 ─────────────────────────────────
+        const refMap = {};
+        for (const r of filteredPV) {
+          const cat = categorizeRef(r.referrer);
+          if (cat === null) continue;
+          refMap[cat] = (refMap[cat] || 0) + 1;
+        }
+        const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
+        document.getElementById('chartRefSub').textContent = label;
+        const refEmpty = document.getElementById('chartRefEmpty');
+        const refCanvas = document.getElementById('chartReferrer');
+        const refWrap = document.getElementById('chartReferrerWrap');
+        if (refEntries.length) {
+          if (refEmpty) refEmpty.style.display = 'none';
+          if (refCanvas) refCanvas.style.display = '';
+          if (refWrap) refWrap.style.height = Math.max(60, refEntries.length * 36 + 16) + 'px';
+          makeOrUpdate('chartReferrer', 'bar', {
+            labels: refEntries.map(([k, v]) => `${k}  ${v}`),
+            datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE.slice(0, refEntries.length), borderRadius: 4, barThickness: 22 }],
+          }, {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => `${ctx.raw}회` } },
+            },
+            scales: {
+              x: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1, font: { size: 10 } } },
+              y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            },
+          });
+        } else {
+          if (refCanvas) refCanvas.style.display = 'none';
+          if (refWrap) refWrap.style.height = '0';
+          if (refEmpty) refEmpty.style.display = '';
+        }
+
+        // ── 3. 페이지별 방문 — (유저+페이지+날짜) 유니크 기준 ─────────
+        const pageUniq = {};
+        const seen2 = new Set();
+        for (const r of filtered) {
+          if (!r.page) continue;
+          const key = (r.user_id || 'anon') + '|' + r.page + '|' + kstDate(r.entered_at);
+          if (seen2.has(key)) continue;
+          seen2.add(key);
+          pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
+        }
+        const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
+        document.getElementById('chartPagesSub').textContent = label;
+        makeOrUpdate('chartPages', 'bar', {
+          labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
+          datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
+        }, {
+          indexAxis: 'y',
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { grid: { color: GRID }, ticks: { font: { size: 10 } } },
+            y: { grid: { display: false }, ticks: { font: { size: 10 }, autoSkip: false } },
+          },
+        });
+
+        // ── 4. 유입경로 × 페이지 교차분석 ───────────────────────────
+        {
+          const crossMap = {};
+          for (const r of filteredPV) {
+            const cat = categorizeRef(r.referrer);
+            if (!cat || cat === '직접 방문') continue;
+            const pg = PAGE_LABEL[r.page] || r.page || '?';
+            if (!crossMap[cat]) crossMap[cat] = {};
+            crossMap[cat][pg] = (crossMap[cat][pg] || 0) + 1;
+          }
+          document.getElementById('chartCrossSub').textContent = label;
+          const crossEl = document.getElementById('chartCrossRef');
+          if (crossEl) {
+            if (!Object.keys(crossMap).length) {
+              crossEl.innerHTML = '<div class="admin-cross-empty">외부 유입 데이터 없음</div>';
+            } else {
+              const sources = Object.entries(crossMap).sort((a, b) =>
+                Object.values(b[1]).reduce((s, v) => s + v, 0) - Object.values(a[1]).reduce((s, v) => s + v, 0)
+              );
+              crossEl.innerHTML = `<div class="admin-cross-list">${sources.map(([src, pages]) => {
+                const sortedPgs = Object.entries(pages).sort((a, b) => b[1] - a[1]);
+                return `<div><div class="admin-cross-source-label">${escH(src)}</div><div class="admin-cross-chips">${
+                  sortedPgs.map(([pg, cnt]) => `<span class="admin-cross-chip">${escH(pg)} <strong>${cnt}</strong></span>`).join('')
+                }</div></div>`;
+              }).join('')}</div>`;
+            }
+          }
+        }
+
+        // ── 보조: 시간대별 — page_views 기반 방문 시간대 패턴 ──────
         const hourly = new Array(24).fill(0);
         for (const pv of filteredPV) hourly[kstHour(pv.created_at)]++;
         const hMax = Math.max(...hourly) || 1;
@@ -986,24 +1153,40 @@
           },
         });
 
-        // ── 5. 회원별 이용시간 — 기간별 집계 ─────────────────────────
+        // ── 보조: 방문자 구성 도넛 ──────────────────────────────────
+        const totalCount = filteredPV.length;
+        const fromMs = start ? new Date(start).getTime() : 0;
+        const memberUidSet = new Set();
+        for (const p of allProfiles) {
+          if (!p.last_seen_at) continue;
+          if (fromMs && new Date(p.last_seen_at).getTime() < fromMs) continue;
+          memberUidSet.add(p.user_id);
+        }
+        const mCnt = Math.min(memberUidSet.size, totalCount);
+        const gCnt = Math.max(0, totalCount - mCnt);
+        document.getElementById('chartRatioSub').textContent = label;
+        makeOrUpdate('chartMemberRatio', 'doughnut', {
+          labels: [`회원 (${mCnt}명)`, `비회원 (${gCnt}명)`],
+          datasets: [{ data: [mCnt, gCnt], backgroundColor: [C1, CMUTED], borderWidth: 0 }],
+        }, {
+          cutout: '60%',
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } },
+        });
+
+        // ── 보조: 회원별 이용시간 ────────────────────────────────────
         const fmtHM = s => s >= 3600
           ? `${Math.floor(s/3600)}시간 ${Math.floor((s%3600)/60)}분`
           : `${Math.floor(s/60)}분 ${s%60}초`;
-        // 기간별 이용시간 집계
         let memberSecMap;
         const todayKst = kstDateStr();
         if (!start) {
-          // 전체: profiles.total_minutes (초 단위)
           memberSecMap = new Map(allProfiles.map(p => [p.user_id, p.total_minutes || 0]));
         } else if (type === 'day' && start === calcRange('day', todayKst).start) {
-          // 오늘: profiles.today_seconds (heartbeat 포함 실시간)
           memberSecMap = new Map(allProfiles.map(p => [
             p.user_id,
             p.today_date === todayKst ? (p.today_seconds || 0) : 0,
           ]));
         } else {
-          // 날짜 범위: page_sessions duration_sec 합산
           memberSecMap = new Map();
           for (const r of filtered) {
             if (!r.user_id) continue;
@@ -1037,83 +1220,6 @@
               y: { grid: { display: false }, ticks: { font: { size: 11 } } },
             },
           });
-        }
-
-        // ── 6. 유입 경로 — page_sessions referrer hostname 기반 ─────────
-        // xn-- 퓨니코드 한글 도메인 디코더 (RFC 3492)
-        function _punycodeLabel(s) {
-          if (!s.startsWith('xn--')) return s;
-          s = s.slice(4);
-          const B=36,Tm=1,TX=26,SK=38,DM=700,B0=72,N0=128;
-          const dg=c=>c<48?B:c<58?c-22:c<65?B:c<91?c-65:c<97?B:c<123?c-97:B;
-          const ad=(d,n,f)=>{d=f?Math.floor(d/DM):d>>1;d+=Math.floor(d/n);let k=0;while(d>((B-Tm)*TX)>>1){d=Math.floor(d/(B-Tm));k+=B;}return k+Math.floor((B-Tm+1)*d/(d+SK));};
-          const out=[];const sep=s.lastIndexOf('-');
-          for(let j=0;j<(sep>0?sep:0);j++)out.push(s.charCodeAt(j));
-          let pos=sep>0?sep+1:0,n=N0,i=0,bias=B0;
-          while(pos<s.length){const oi=i;let w=1;for(let k=B;;k+=B){const d=dg(s.charCodeAt(pos++));i+=d*w;const t=k<=bias?Tm:k>=bias+TX?TX:k-bias;if(d<t)break;w*=B-t;}bias=ad(i-oi,out.length+1,oi===0);n+=Math.floor(i/(out.length+1));i%=out.length+1;out.splice(i++,0,n);}
-          return String.fromCodePoint(...out);
-        }
-        function _decodeHost(host) {
-          return host.split('.').map(_punycodeLabel).join('.');
-        }
-        const _utmBrandMap = { kakao: '카카오', kakao_club: '카카오 동호회', qr: 'QR', store_qr: '매장 QR', flyer_qr: '전단지 QR', boardlife: '보드라이프', naver: '네이버', naver_place: '네이버 플레이스', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
-        function categorizeRef(ref) {
-          if (!ref) return '직접 방문';
-          if (ref.startsWith('/')) return null; // 구버전 pathname 형식 — 무시
-          // UTM 소스 직접 값 (점·슬래시 없는 short string)
-          if (!ref.includes('.') && !ref.includes('/')) {
-            return _utmBrandMap[ref.toLowerCase()] || null;
-          }
-          try {
-            const rawHost = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
-            if (!rawHost.includes('.')) return null; // 점 없음 = 내부 페이지명 또는 잘못된 데이터
-            const host = _decodeHost(rawHost).toLowerCase();
-            if (host.includes('daangn') || host.includes('당근')) return '당근마켓';
-            if (host.includes('boardlife') || host.includes('보드라이프')) return '보드라이프';
-            if (host.includes('naver') || host.includes('네이버')) return '네이버';
-            if (host.includes('google') || host.includes('구글')) return '구글';
-            if (host.includes('kakao') || host.includes('kakaotalk') || host.includes('카카오')) return '카카오';
-            if (host.includes('instagram') || host.includes('ig.me') || host.includes('인스타')) return '인스타그램';
-            return _decodeHost(rawHost); // 미분류 → 디코딩된 hostname
-          } catch (_) {
-            return null; // 파싱 실패 = 내부/잘못된 데이터
-          }
-        }
-        // page_views 기준 집계 — localStorage로 하루 1회 보장, user_id 중복 제거 불필요
-        const refMap = {};
-        for (const r of filteredPV) {
-          const cat = categorizeRef(r.referrer);
-          if (cat === null) continue;
-          refMap[cat] = (refMap[cat] || 0) + 1;
-        }
-        const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
-        document.getElementById('chartRefSub').textContent = label;
-        const refEmpty = document.getElementById('chartRefEmpty');
-        const refCanvas = document.getElementById('chartReferrer');
-        const refWrap = document.getElementById('chartReferrerWrap');
-        if (refEntries.length) {
-          if (refEmpty) refEmpty.style.display = 'none';
-          if (refCanvas) refCanvas.style.display = '';
-          if (refWrap) refWrap.style.height = Math.max(60, refEntries.length * 36 + 16) + 'px';
-          makeOrUpdate('chartReferrer', 'bar', {
-            labels: refEntries.map(([k]) => k),
-            datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE.slice(0, refEntries.length), borderRadius: 4, barThickness: 22 }],
-          }, {
-            indexAxis: 'y',
-            maintainAspectRatio: false,
-            plugins: {
-              legend: { display: false },
-              tooltip: { callbacks: { label: ctx => `${ctx.raw}회` } },
-            },
-            scales: {
-              x: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1, font: { size: 10 } } },
-              y: { grid: { display: false }, ticks: { font: { size: 11 } } },
-            },
-          });
-        } else {
-          if (refCanvas) refCanvas.style.display = 'none';
-          if (refWrap) refWrap.style.height = '0';
-          if (refEmpty) refEmpty.style.display = '';
         }
       }
 
