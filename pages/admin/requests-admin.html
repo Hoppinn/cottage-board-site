@@ -302,7 +302,9 @@
               </div>
               <div class="admin-chart-card">
                 <div class="admin-chart-title">유입 경로 <span class="admin-chart-sub" id="chartRefSub"></span></div>
-                <canvas id="chartReferrer"></canvas>
+                <div id="chartReferrerWrap" style="position:relative;height:80px">
+                  <canvas id="chartReferrer"></canvas>
+                </div>
                 <p id="chartRefEmpty" style="display:none;text-align:center;color:#aaa;font-size:12px;padding:16px 0">외부 유입 없음<br><small>당근·네이버 등 외부 링크 방문부터 기록됩니다</small></p>
               </div>
               <div class="admin-chart-card admin-chart-wide">
@@ -878,42 +880,91 @@
           },
         });
 
-        // ── 3. 날짜별 방문자 — page_views 기반 (회원+비회원 실제 방문) ──
-        const dayKeys = [], dayVis = {};
-        if (!start) {
-          for (let i = 59; i >= 0; i--) {
-            const k = kstDateStr(new Date(Date.now() - i * 86400000));
-            dayKeys.push(k); dayVis[k] = 0;
+        // ── 3. 날짜별 방문자 — page_views 기반, 단위별 집계 ──
+        {
+          function _addDays(dateStr, n) {
+            const [y, m, d] = dateStr.split('-').map(Number);
+            const ms = Date.UTC(y, m - 1, d) + n * 86400000;
+            const dt = new Date(ms);
+            return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;
           }
-        } else {
-          const startMs = new Date(start).getTime() + 9 * 3600000;
-          const endMs = (end ? new Date(end).getTime() : Date.now() + 86400000) + 9 * 3600000;
-          const numD = Math.min(Math.round((endMs - startMs) / 86400000), 60);
-          for (let i = 0; i < numD; i++) {
-            const k = new Date(startMs + i * 86400000).toISOString().slice(0, 10);
-            dayKeys.push(k); dayVis[k] = 0;
+          const baseStr = (_navValue && type !== 'all') ? _navValue : kstDateStr();
+          let chartLabels = [], thisData = [], prevDataArr = null;
+
+          if (type === 'week') {
+            // 선택 주 포함 최근 4주 — 주별 집계
+            const { start: wStart } = calcRange('week', baseStr);
+            const wStartMs = new Date(wStart).getTime();
+            const weekArr = [];
+            for (let i = 3; i >= 0; i--) {
+              weekArr.push(toWeekStr(new Date(wStartMs - i * 7 * 86400000)));
+            }
+            const wVis = Object.fromEntries(weekArr.map(k => [k, 0]));
+            for (const pv of pageViews) {
+              const wk = toWeekStr(new Date(pv.created_at));
+              if (wk in wVis) wVis[wk]++;
+            }
+            chartLabels = weekArr.map(w => periodLabelFor('week', w));
+            thisData = weekArr.map(w => wVis[w]);
+
+          } else if (type === 'month' || type === 'all') {
+            // 선택 월 포함 최근 12개월 — 월별 집계 (전체 보기도 월별)
+            const base = type === 'all' ? kstDateStr().slice(0, 7) : baseStr.slice(0, 7);
+            const [cy, cm] = base.split('-').map(Number);
+            const monthArr = [];
+            for (let i = 11; i >= 0; i--) {
+              let m = cm - i, y = cy;
+              while (m <= 0) { m += 12; y--; }
+              monthArr.push(`${y}-${String(m).padStart(2, '0')}`);
+            }
+            const mVis = Object.fromEntries(monthArr.map(k => [k, 0]));
+            for (const pv of pageViews) {
+              const k = kstDate(pv.created_at).slice(0, 7);
+              if (k in mVis) mVis[k]++;
+            }
+            chartLabels = monthArr.map(k => `${k.split('-')[0].slice(2)}년 ${Number(k.split('-')[1])}월`);
+            thisData = monthArr.map(k => mVis[k]);
+
+          } else {
+            // day (기본) — 선택 날짜 포함 최근 7일 + 이전 7일 비교선
+            const thisKeys = [], prevKeys = [];
+            const thisVis = {}, prevVisObj = {};
+            for (let i = 6; i >= 0; i--) { const k = _addDays(baseStr, -i); thisKeys.push(k); thisVis[k] = 0; }
+            for (let i = 13; i >= 7; i--) { const k = _addDays(baseStr, -i); prevKeys.push(k); prevVisObj[k] = 0; }
+            for (const pv of pageViews) {
+              const k = kstDate(pv.created_at);
+              if (k in thisVis) thisVis[k]++;
+              if (k in prevVisObj) prevVisObj[k]++;
+            }
+            const DOW = ['일','월','화','수','목','금','토'];
+            chartLabels = thisKeys.map(k => `${k.slice(5)} (${DOW[new Date(k + 'T12:00:00Z').getUTCDay()]})`);
+            thisData = thisKeys.map(k => thisVis[k]);
+            prevDataArr = prevKeys.map(k => prevVisObj[k]);
           }
-        }
-        const numDays = dayKeys.length;
-        for (const pv of filteredPV) {
-          const k = kstDate(pv.created_at);
-          if (k in dayVis) dayVis[k]++;
-        }
-        const maxTicks = numDays <= 7 ? numDays : numDays <= 30 ? 10 : 12;
-        makeOrUpdate('chartDaily', 'line', {
-          labels: dayKeys.map(d => d.slice(5)),
-          datasets: [{
-            data: dayKeys.map(d => dayVis[d]),
+
+          const datasets = [{
+            label: '이번 기간',
+            data: thisData,
             borderColor: C1, backgroundColor: 'rgba(158,58,42,0.07)',
-            fill: true, tension: 0.35, pointRadius: numDays <= 14 ? 4 : 2, pointBackgroundColor: C1,
-          }],
-        }, {
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: GRID }, ticks: { maxTicksLimit: maxTicks, font: { size: 10 } } },
-            y: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1 } },
-          },
-        });
+            fill: true, tension: 0.35, pointRadius: 4, pointBackgroundColor: C1, borderWidth: 2,
+          }];
+          if (prevDataArr) {
+            datasets.push({
+              label: '이전 7일',
+              data: prevDataArr,
+              borderColor: CMUTED, backgroundColor: 'transparent',
+              fill: false, tension: 0.35, pointRadius: 3, pointBackgroundColor: CMUTED,
+              borderWidth: 1.5, borderDash: [5, 4],
+            });
+          }
+          makeOrUpdate('chartDaily', 'line', { labels: chartLabels, datasets }, {
+            plugins: { legend: { display: !!prevDataArr, labels: { font: { size: 11 }, boxWidth: 24, padding: 12 } } },
+            scales: {
+              x: { grid: { color: GRID }, ticks: { font: { size: 10 } } },
+              y: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1 } },
+            },
+          });
+        }
 
         // ── 4. 시간대별 — page_views 기반 실제 방문 시간대 패턴 ─────────
         const hourly = new Array(24).fill(0);
@@ -1039,18 +1090,29 @@
         document.getElementById('chartRefSub').textContent = label;
         const refEmpty = document.getElementById('chartRefEmpty');
         const refCanvas = document.getElementById('chartReferrer');
+        const refWrap = document.getElementById('chartReferrerWrap');
         if (refEntries.length) {
           if (refEmpty) refEmpty.style.display = 'none';
           if (refCanvas) refCanvas.style.display = '';
-          makeOrUpdate('chartReferrer', 'doughnut', {
-            labels: refEntries.map(([k, v]) => `${k} (${v})`),
-            datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE, borderWidth: 0 }],
+          if (refWrap) refWrap.style.height = Math.max(60, refEntries.length * 36 + 16) + 'px';
+          makeOrUpdate('chartReferrer', 'bar', {
+            labels: refEntries.map(([k]) => k),
+            datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE.slice(0, refEntries.length), borderRadius: 4, barThickness: 22 }],
           }, {
-            cutout: '55%',
-            plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } },
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => `${ctx.raw}회` } },
+            },
+            scales: {
+              x: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1, font: { size: 10 } } },
+              y: { grid: { display: false }, ticks: { font: { size: 11 } } },
+            },
           });
         } else {
           if (refCanvas) refCanvas.style.display = 'none';
+          if (refWrap) refWrap.style.height = '0';
           if (refEmpty) refEmpty.style.display = '';
         }
       }
