@@ -227,6 +227,21 @@ window._cottageSess = (function () {
     } catch (e) { console.warn('[trackPageView] exception:', e); }
   }
 
+  // ── 이벤트 트래킹 ───────────────────────────────────────
+
+  async function trackEvent(eventType, opts = {}) {
+    if (typeof location === 'undefined') return;
+    if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
+    if (localStorage.getItem('cottage_is_admin')) return;
+    const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    const referrer = localStorage.getItem(`cottage_orig_src_${kstDate}`) || null;
+    const payload = { event_type: eventType, referrer };
+    if (opts.game_id) payload.game_id = opts.game_id;
+    try {
+      await db.from('page_events').insert(payload);
+    } catch (_) {}
+  }
+
   // ── 플레이 기록 ─────────────────────────────────────────
 
   async function uploadPlayPhoto(file, userId) {
@@ -990,6 +1005,7 @@ window._cottageSess = (function () {
   window.CottageDB = {
     trackView,
     trackPageView,
+    trackEvent,
     getGameRating,
     submitRating,
     getMyRating,

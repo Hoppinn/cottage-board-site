@@ -192,6 +192,13 @@ if (!isMurderMystery && weight > maxWeight) {
   gameScroll.innerHTML = cardsHtml + moreHtml;
 bindGameCardEvents();
 
+  // 추천 결과 게임 클릭 이벤트 (overlay · 일반 목록 카드 제외, gameScroll 스코프)
+  gameScroll.querySelectorAll('.game-card').forEach(card => {
+    card.addEventListener('click', () => {
+      window.CottageDB?.trackEvent('recommend_game_click', { game_id: card.dataset.game });
+    });
+  });
+
 gameScroll.scrollTo({
   left: 0,
   top: 0,
@@ -694,10 +701,10 @@ if(closeRecommendModalDim){
 }
 
 if(applyRecommendConditionButton){
-  applyRecommendConditionButton.addEventListener(
-    'click',
-    showRecommendResults
-  );
+  applyRecommendConditionButton.addEventListener('click', () => {
+    window.CottageDB?.trackEvent('recommend_run');
+    showRecommendResults();
+  });
 }
 
 if(backToHeroButton){

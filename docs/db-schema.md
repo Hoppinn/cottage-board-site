@@ -16,6 +16,7 @@
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
 | `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
+| `page_events` | event_type, game_id, referrer, created_at | 기능 이벤트 (recommend_run, recommend_game_click). referrer: 세션 귀속 소스 |
 | `page_sessions` | page, referrer, user_id, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date | 유저 프로필 |
 | `game_requests` | game_name, request_count, status, is_planned, user_id | 게임 요청 |

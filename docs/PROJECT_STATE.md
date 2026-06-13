@@ -53,6 +53,7 @@
 ### 인프라
 - [x] 방문자 통계 (페이지뷰, 하루 1회 카운트)
 - [x] 채널 귀속 추적 개선 — last-touch 모델, 날짜+source+page dedup, 비로그인 포함 세션 내 이동 추적
+- [x] 추천게임찾기 이벤트 추적 — page_events 테이블, recommend_run(추천 받기 버튼) / recommend_game_click(결과 게임 클릭) 별도 집계
   - `cottage_orig_src_{date}`: 외부 유입 감지 시 항상 갱신 (최초 유입 보존 아님)
   - `page_views`: source+page별 각각 기록 (이전: source당 1회 → 이후: source+page당 1회)
   - `page_sessions._sessionReferrer`: 내부 이동 시 `cottage_orig_src_{date}` fallback 적용
