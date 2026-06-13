@@ -1327,7 +1327,7 @@ function openGameRecordSheet(gameKey) {
   _currentSheetGameKey = gameKey;
 
   const game = window.gameData?.[gameKey];
-  const rawTitle = game?.titleKo || game?.title || gameKey;
+  const rawTitle = game?.title?.display || game?.title?.owned || game?.title?.bgg || gameKey;
   const safeTitle = String(rawTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   gameSheetContent.innerHTML = `
