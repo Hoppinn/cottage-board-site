@@ -52,6 +52,10 @@
 
 ### 인프라
 - [x] 방문자 통계 (페이지뷰, 하루 1회 카운트)
+- [x] 채널 귀속 추적 개선 — last-touch 모델, 날짜+source+page dedup, 비로그인 포함 세션 내 이동 추적
+  - `cottage_orig_src_{date}`: 외부 유입 감지 시 항상 갱신 (최초 유입 보존 아님)
+  - `page_views`: source+page별 각각 기록 (이전: source당 1회 → 이후: source+page당 1회)
+  - `page_sessions._sessionReferrer`: 내부 이동 시 `cottage_orig_src_{date}` fallback 적용
 - [x] 체류 시간 누적 (초 단위, localStorage → DB, 1분마다 heartbeat 반영)
 - [x] localStorage 세션 키 통합 (`cottage_sess_{id}` 단일 JSON, 자동 마이그레이션)
 - [x] 닉네임/사진 덮어쓰기 방지

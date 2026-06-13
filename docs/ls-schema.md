@@ -13,6 +13,8 @@
 | `cottage_custom_photo_{userId}` | kakao-auth.js, auth-callback.html | 커스텀 프로필 사진 (base64 또는 preset URL) | 영구 |
 | `cottage_sess_{userId}` | supabase-client.js, kakao-auth.js | 세션 통합 JSON 객체 (아래 상세) | 영구 |
 | `cottage_visited_{date}` | supabase-client.js | 당일 page_views 기록 여부 (하루 1회 중복 방지) | 날짜별 갱신 |
+| `cottage_orig_src_{date}` | supabase-client.js | 당일 마지막 외부 유입 소스 (last-touch 모델, 내부 이동 시 채널 귀속에 사용) | 날짜별 갱신, 외부 유입 감지 시 덮어씀 |
+| `cottage_pv_{date}_{source}_{page}` | supabase-client.js | 날짜+source+page 기준 page_views dedup 플래그 | 날짜별 갱신 |
 | `cottage_session_id` | supabase-client.js | 비로그인 세션 ID (별점 중복 방지, anon_sessions 연동) | 영구 |
 | `cottage_rated_{gameId}` | supabase-client.js | 게임별 별점 캐시 | 영구 |
 | `cottage_my_comments` | script.js | 내 코멘트 id 배열 (삭제 권한 확인용) | 영구 |
