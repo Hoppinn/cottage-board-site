@@ -1443,7 +1443,7 @@ async function initSheetPlayPreview(gameKey) {
   el.innerHTML = `<div class="sheet-play-preview-item">
     <div class="sheet-play-preview-meta">
       ${dateStr ? `<span class="sheet-preview-date">${dateStr}</span>` : ''}
-      ${r.group_name ? `<span class="sheet-preview-group">${esc(r.group_name)}</span>` : ''}
+      ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
     </div>
     <div class="sheet-play-info">
       ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ''}
