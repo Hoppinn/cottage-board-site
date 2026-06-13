@@ -636,6 +636,34 @@
         try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
       });
     });
+
+    // URL 딥링크: ?group=X&date=YYYY-MM-DD → 해당 그룹+날짜 자동 확장
+    if (currentView === 'group') {
+      const urlP = new URLSearchParams(location.search);
+      const urlGroup = urlP.get('group');
+      const urlDate  = urlP.get('date');
+      if (urlGroup) {
+        panel.querySelectorAll('.pr-session').forEach(session => {
+          const lbl = session.querySelector('.pr-session-date')?.textContent?.trim();
+          if (lbl !== urlGroup) return;
+          session.classList.add('is-open');
+          if (urlDate) {
+            // hidden dates("이전 N회 더 보기") 안에 있으면 먼저 펼침
+            const moreWrap = session.querySelector('.pr-dates-more');
+            if (moreWrap?.querySelector(`[data-date="${urlDate}"]`)) moreWrap.classList.add('is-open');
+            const sub = session.querySelector(`.pr-sub-session[data-date="${urlDate}"]`);
+            if (sub) {
+              sub.classList.add('is-open');
+              setTimeout(() => sub.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+            } else {
+              setTimeout(() => session.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+            }
+          } else {
+            setTimeout(() => session.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+          }
+        });
+      }
+    }
   }
 
   function bindToggle(panel) {
@@ -684,7 +712,7 @@
       const renderDateBlock = ([dateStr, recs]) => {
         const gameNames = recs.map(r => getGameName(r.game_id));
         const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
-        return `<div class="pr-sub-session">
+        return `<div class="pr-sub-session" data-date="${dateStr}">
           <button class="pr-sub-hd" type="button">
             <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
             <span class="pr-sub-summary">${escH(summaryText)}</span>

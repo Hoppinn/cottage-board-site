@@ -1178,7 +1178,6 @@ function openGameSheet(gameKey, restoreScroll = false){
         </div>
       </div>
     </div>
-    <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
 
     <!-- 인원 · 시간 · 무게 한 줄 -->
     <div class="sheet-stats-block">
@@ -1205,6 +1204,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${detail.displayTags.map(t => `<span class="sheet-dtag" style="cursor:pointer" onclick="if(confirm('책장 페이지로 이동할까요?'))alert('준비 중입니다.')">${t}</span>`).join("")}
       </div>
     ` : ""}
+    <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
 
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
@@ -1986,7 +1986,7 @@ async function initPlayWidget(gameKey) {
           ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
           : formatDate(r.created_at);
         const groupLabel = r.group_name
-          ? `<a class="sheet-history-link" href="./club/club-history.html?group=${encodeURIComponent(r.group_name)}">${escH(r.group_name)}</a>`
+          ? `<a class="sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${escH(r.group_name)}</a>`
           : null;
         const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
