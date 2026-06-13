@@ -1406,11 +1406,19 @@ async function initSheetPlayPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewPlayLabel-${gameKey}`);
   if (!el || !window.CottageDB) return;
 
-  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
-  const [records, count] = await Promise.all([
+  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
+  const numericId = bggIdP || gameKey;
+  let [records, count] = await Promise.all([
     window.CottageDB.getGamePlayRecords(numericId, 1),
     window.CottageDB.getGamePlayCount(numericId),
   ]);
+  if (count === 0 && bggIdP && bggIdP !== gameKey) {
+    const [r2, c2] = await Promise.all([
+      window.CottageDB.getGamePlayRecords(gameKey, 1),
+      window.CottageDB.getGamePlayCount(gameKey),
+    ]);
+    if (c2 > 0) { records = r2; count = c2; }
+  }
 
   if (labelEl) labelEl.textContent = count > 0 ? `플레이기록 ${count}건` : '플레이기록';
 
@@ -1916,12 +1924,22 @@ async function initPlayWidget(gameKey) {
     return;
   }
 
-  const numericGameId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
-  const [playCount, highlights, allRecords] = await Promise.all([
+  const bggId = window.gameData?.[gameKey]?.bgg?.id;
+  const numericGameId = bggId || gameKey;
+  let [playCount, highlights, allRecords] = await Promise.all([
     window.CottageDB.getGamePlayCount(numericGameId),
     window.CottageDB.getPlayHighlights(numericGameId),
     window.CottageDB.getGamePlayRecords(numericGameId),
   ]);
+  // bggId로 0건이면 Korean key로 재조회 (이전 포맷 저장 레코드 대비)
+  if (playCount === 0 && bggId && bggId !== gameKey) {
+    const [c2, h2, r2] = await Promise.all([
+      window.CottageDB.getGamePlayCount(gameKey),
+      window.CottageDB.getPlayHighlights(gameKey),
+      window.CottageDB.getGamePlayRecords(gameKey),
+    ]);
+    if (c2 > 0) { playCount = c2; highlights = h2; allRecords = r2; }
+  }
 
   const myRecordIds = new Set(
     getMyPlayRecords(gameKey).map(r => String(r.id)).filter(Boolean)
@@ -2241,8 +2259,9 @@ async function onSubmitPlayModal(skip) {
     }
   } else {
     const _u = window.getKakaoUser?.();
+    const storeGameId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
     const playResult = await window.CottageDB.recordGamePlay(
-      gameKey, count, playerNames, playTimeMin, scoreNote,
+      storeGameId, count, playerNames, playTimeMin, scoreNote,
       _u?.nickname || null, _u?.id || null, groupName, playedAt, null, reviewText
     );
     if (!playResult?.error) {
