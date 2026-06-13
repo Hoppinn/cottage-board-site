@@ -2772,7 +2772,7 @@ body.sheet-open{
   font-size:12px;
   color:#7a4828;
   text-decoration:none;
-  margin-top:5px;
+  margin:8px 0 4px;
 }
 
 .sheet-game-title{
@@ -3273,7 +3273,7 @@ body.sheet-open{
   align-items:center;
   justify-content:center;
   gap:4px;
-  padding:8px;
+  padding:7px 0;
   border:1px solid #ead8b8;
   border-radius:10px;
   background:var(--cream);

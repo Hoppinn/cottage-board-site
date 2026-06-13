@@ -1064,8 +1064,9 @@ function ensureGameSheet() {
 }
 
 let _currentSheetGameKey = null;
+let _savedSheetScrollTop = 0;
 
-function openGameSheet(gameKey){
+function openGameSheet(gameKey, restoreScroll = false){
   _currentSheetGameKey = gameKey;
   const game =
     window.gameData?.[gameKey];
@@ -1175,9 +1176,9 @@ function openGameSheet(gameKey){
             룰영상 보기
           </a>
         </div>
-        <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
       </div>
     </div>
+    <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
 
     <!-- 인원 · 시간 · 무게 한 줄 -->
     <div class="sheet-stats-block">
@@ -1275,6 +1276,9 @@ function openGameSheet(gameKey){
 
   `;
 
+  const _panel = gameSheet.querySelector('.game-sheet-panel');
+  if (_panel) _panel.scrollTop = restoreScroll ? _savedSheetScrollTop : 0;
+
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
@@ -1326,13 +1330,16 @@ function openGameRecordSheet(gameKey) {
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
 
+  const _recPanel = gameSheet.querySelector('.game-sheet-panel');
+  _savedSheetScrollTop = _recPanel ? _recPanel.scrollTop : 0;
+
   const game = window.gameData?.[gameKey];
   const rawTitle = game?.title?.display || game?.title?.owned || game?.title?.bgg || gameKey;
   const safeTitle = String(rawTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
   gameSheetContent.innerHTML = `
     <div class="sheet-record-header">
-      <button class="sheet-back-btn" type="button" onclick="openGameSheet('${gameKey}')">← 게임 정보</button>
+      <button class="sheet-back-btn" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>
       <h3 class="sheet-record-title">${safeTitle} 기록</h3>
     </div>
     <div class="sheet-social-group">
