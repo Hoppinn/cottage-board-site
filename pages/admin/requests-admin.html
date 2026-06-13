@@ -168,6 +168,7 @@
       <span class="about-hero-eyebrow">관리자 전용</span>
       <h2>요청 관리</h2>
       <p class="about-hero-sub">구매 요청 · 간식 요청 · 개선 건의</p>
+      <button id="adminExcludeToggle" type="button" onclick="toggleAdminExclude()" style="margin-top:10px;font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;border:none;cursor:pointer;"></button>
     </div>
 
     <section class="inner-page">
@@ -1198,6 +1199,25 @@
     window.addEventListener('cottage-auth-changed', tryLoad);
     setTimeout(tryLoad, 1200);
   })();
+
+  function toggleAdminExclude() {
+    const active = !!localStorage.getItem('cottage_is_admin');
+    if (active) {
+      localStorage.removeItem('cottage_is_admin');
+    } else {
+      localStorage.setItem('cottage_is_admin', '1');
+    }
+    renderAdminExcludeBtn();
+  }
+  function renderAdminExcludeBtn() {
+    const btn = document.getElementById('adminExcludeToggle');
+    if (!btn) return;
+    const active = !!localStorage.getItem('cottage_is_admin');
+    btn.textContent = active ? '내 방문 통계 제외 중 (ON)' : '내 방문 통계 포함 중 (OFF)';
+    btn.style.background = active ? '#2e7d32' : '#e8e4dc';
+    btn.style.color = active ? '#fff' : '#666';
+  }
+  renderAdminExcludeBtn();
   </script>
 
   <footer class="site-footer">
