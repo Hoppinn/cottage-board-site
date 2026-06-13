@@ -723,20 +723,19 @@
     let html = '';
     for (const [gameId, recs] of games) {
       const gameName = getGameName(gameId);
-      // 게임 썸네일 이미지
       const gKey = getGameKey(gameId) || gameId;
       const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
-      const thumbHtml = thumbUrl
-        ? `<img class="pr-session-thumb pr-session-thumb--link" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" ${gKey ? `onclick="event.stopPropagation();openGameSheet('${gKey.replace(/'/g,"\\'")}')"` : ''}>`
-        : '';
-      html += `<div class="pr-session pr-session--bygame">
-        <button class="pr-session-hd" type="button">
-          ${thumbHtml}
-          <span class="pr-session-date">${escH(gameName)}</span>
-          <span class="pr-session-summary" style="font-size:${Math.min(11 + recs.length, 17)}px">${recs.length}회</span>
-          <span class="pr-session-arrow">▾</span>
-        </button>
-        <div class="pr-session-body">${buildGameBody(recs, user)}</div>
+      const safeKey = gKey ? gKey.replace(/'/g, "\\'") : '';
+      html += `<div class="pr-game-card" role="button" tabindex="0"
+        onclick="openGameRecordSheet('${safeKey}')"
+        onkeydown="if(event.key==='Enter')openGameRecordSheet('${safeKey}')"
+      >
+        ${thumbUrl ? `<img class="pr-game-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="pr-game-card-info">
+          <span class="pr-game-card-name">${escH(gameName)}</span>
+          <span class="pr-game-card-meta">🎲 ${recs.length}회 플레이</span>
+        </div>
+        <span class="pr-game-card-arrow">›</span>
       </div>`;
     }
     return html;

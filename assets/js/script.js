@@ -1148,7 +1148,6 @@ function openGameSheet(gameKey){
       <h3 class="sheet-game-title">${detail.title}</h3>
       ${detail.bggTitle && detail.bggTitle !== detail.title
         ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
-      <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
     </div>
 
     <!-- 이미지 + 설명 -->
@@ -1176,6 +1175,7 @@ function openGameSheet(gameKey){
             룰영상 보기
           </a>
         </div>
+        <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
       </div>
     </div>
 
@@ -1251,28 +1251,25 @@ function openGameSheet(gameKey){
       <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
     </div>
 
-    <!-- 게임평 · 플레이기록 -->
-    <div class="sheet-social-group">
-      <div class="sheet-comments-area">
-        <div class="sheet-comments-header">
-          <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">게임평</span>
-          <div class="sheet-comments-header-right">
-            <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)" type="button">💬 남기기</button>
-            <button class="sheet-comments-toggle-btn" onclick="toggleSheetComments('${gameKey}')" type="button">
-              <span class="sheet-toggle-arrow" id="sheetCommentsArrow-${gameKey}">▾</span>
-            </button>
-          </div>
-        </div>
-        <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
-          <span class="sheet-comments-empty">한줄평이 없습니다</span>
-        </div>
+    <!-- 게임평 미리보기 -->
+    <div class="sheet-preview-section">
+      <div class="sheet-preview-hd">
+        <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
+        <button class="sheet-preview-more-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
       </div>
-      <div class="sheet-play-section">
-        <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
-        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
-        <a class="sheet-play-more-link" id="sheetPlayCountLink-${gameKey}"
-          href="${rootPath}pages/game/game-reviews.html?game=${encodeURIComponent(gameKey)}"
-        >플레이 기록 보기 →</a>
+      <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
+        <span class="sheet-comments-empty">불러오는 중...</span>
+      </div>
+    </div>
+
+    <!-- 플레이기록 미리보기 -->
+    <div class="sheet-preview-section">
+      <div class="sheet-preview-hd">
+        <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
+        <button class="sheet-preview-more-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
+      </div>
+      <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
+        <span class="sheet-comments-empty">불러오는 중...</span>
       </div>
     </div>
 
@@ -1283,12 +1280,11 @@ function openGameSheet(gameKey){
 
   if (window.CottageDB) window.CottageDB.trackView(gameKey);
   initStickyBar();
-  initPlayWidget(gameKey).catch(() => {});
   initSheetDescToggle();
   initSheetMechsToggle();
-  initSheetComments(gameKey).catch(() => {});
   initSheetLikes(gameKey).catch(() => {});
-  updateSheetPlayCountLink(gameKey).catch(() => {});
+  initSheetCommentsPreview(gameKey).catch(() => {});
+  initSheetPlayPreview(gameKey).catch(() => {});
 
   // ?scroll=comments → 코멘트 섹션으로 스크롤
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
@@ -1323,6 +1319,125 @@ function closeGameSheet(){
   gameSheet.classList.remove('is-active');
   document.body.classList.remove('sheet-open');
   _currentSheetGameKey = null;
+}
+
+// ── 게임평/기록 전용 바텀시트 ────────────────────────────────────────
+function openGameRecordSheet(gameKey) {
+  if (!gameSheet || !gameSheetContent) return;
+  _currentSheetGameKey = gameKey;
+
+  const game = window.gameData?.[gameKey];
+  const rawTitle = game?.titleKo || game?.title || gameKey;
+  const safeTitle = String(rawTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  gameSheetContent.innerHTML = `
+    <div class="sheet-record-header">
+      <button class="sheet-back-btn" type="button" onclick="openGameSheet('${gameKey}')">← 게임 정보</button>
+      <h3 class="sheet-record-title">${safeTitle} 기록</h3>
+    </div>
+    <div class="sheet-social-group">
+      <div class="sheet-comments-area">
+        <div class="sheet-comments-header">
+          <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">게임평</span>
+          <div class="sheet-comments-header-right">
+            <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)" type="button">💬 남기기</button>
+            <button class="sheet-comments-toggle-btn" onclick="toggleSheetComments('${gameKey}')" type="button">
+              <span class="sheet-toggle-arrow" id="sheetCommentsArrow-${gameKey}">▾</span>
+            </button>
+          </div>
+        </div>
+        <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+      <div class="sheet-play-section">
+        <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
+        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
+      </div>
+    </div>
+  `;
+
+  const panel = gameSheet.querySelector('.game-sheet-panel');
+  if (panel) panel.scrollTop = 0;
+  gameSheet.classList.add('is-active');
+  document.body.classList.add('sheet-open');
+
+  initSheetComments(gameKey).catch(() => {});
+  initPlayWidget(gameKey).catch(() => {});
+}
+
+async function initSheetCommentsPreview(gameKey) {
+  const el = document.getElementById(`sheetCommentsPreview-${gameKey}`);
+  const labelEl = document.getElementById(`sheetPreviewCommentLabel-${gameKey}`);
+  if (!el || !window.CottageDB) return;
+
+  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+  const [comments, playReviews] = await Promise.all([
+    window.CottageDB.getGameComments(gameKey, 5),
+    window.CottageDB.getPlayReviewsByGame(numericId, 5),
+  ]);
+
+  const commentItems = comments.map(c => ({ text: c.comment_text, nick: c.nickname || '익명', date: c.created_at }));
+  const playItems = playReviews.map(r => ({ text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
+  const allItems = [...commentItems, ...playItems].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const total = allItems.length;
+
+  if (labelEl) labelEl.textContent = total > 0 ? `게임평 ${total}건` : '게임평';
+
+  if (!total) {
+    el.innerHTML = '<span class="sheet-comments-empty">한줄평이 없습니다</span>';
+    return;
+  }
+
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const item = allItems[0];
+  const txt = esc(item.text);
+  const nick = esc(item.nick);
+  const dateStr = item.date ? item.date.slice(0, 10).replace(/-/g, '.') : '';
+  el.innerHTML = `<div class="sheet-comment-item">
+    <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+    <p class="sheet-comment-text">${txt}</p>
+    ${total > 1 ? `<p class="sheet-preview-more-hint">${total - 1}개 더 있음</p>` : ''}
+  </div>`;
+}
+
+async function initSheetPlayPreview(gameKey) {
+  const el = document.getElementById(`sheetPlayPreview-${gameKey}`);
+  const labelEl = document.getElementById(`sheetPreviewPlayLabel-${gameKey}`);
+  if (!el || !window.CottageDB) return;
+
+  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+  const [records, count] = await Promise.all([
+    window.CottageDB.getGamePlayRecords(numericId, 1),
+    window.CottageDB.getGamePlayCount(numericId),
+  ]);
+
+  if (labelEl) labelEl.textContent = count > 0 ? `플레이기록 ${count}건` : '플레이기록';
+
+  if (!records || !records.length) {
+    el.innerHTML = '<span class="sheet-comments-empty">아직 기록이 없습니다</span>';
+    return;
+  }
+
+  const r = records[0];
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const dateStr = r.played_at
+    ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+    : (r.created_at ? r.created_at.slice(0, 10).replace(/-/g, '.') : '');
+
+  el.innerHTML = `<div class="sheet-play-preview-item">
+    <div class="sheet-play-preview-meta">
+      ${dateStr ? `<span class="sheet-preview-date">${dateStr}</span>` : ''}
+      ${r.group_name ? `<span class="sheet-preview-group">${esc(r.group_name)}</span>` : ''}
+    </div>
+    <div class="sheet-play-info">
+      ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ''}
+      ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${esc(r.player_names)}</span>` : ''}
+      ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ''}
+      ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : ''}
+    </div>
+    ${count > 1 ? `<p class="sheet-preview-more-hint">${count - 1}건 더 있음</p>` : ''}
+  </div>`;
 }
 
 if(closeGameSheetButton){

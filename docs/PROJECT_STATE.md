@@ -142,6 +142,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-13 | refactor: 게임평/기록 전용 바텀시트 신규(openGameRecordSheet) — 게임 상세 시트에 미리보기 1건+전체보기, 게임별 탭 미니카드로 축소, 📚 링크 위치 이동 |
 | 2026-06-13 | refactor: 바텀시트 "코멘트"→"게임평" 전면 교체, 게임평 섹션에 플레이기록 review_text 병합+작성자 표시, 플레이 모달에 게임평 입력 추가, 브레드크럼 "게임 찾기 & 기록"→"게임"(링크) |
 | 2026-06-13 | refactor: 바텀시트 정보 위계 정립 — 📚제목 아래 이동, 좋아요/궁금해요 게임정보 끝, 게임평 먼저/플레이기록 나중, 플레이기록 링크 텍스트형. getAllPlayRecordsForHub review_text 누락 버그 수정. 게임별 페이지 게임평 = game_comments + review_text 통합+작성자 표시 |
 | 2026-06-13 | feat: 게임별 페이지 게임평 섹션 추가 + 바텀시트 작성자 표시 강화 — game-reviews?game=X 상단 게임평 N개, 닉네임 갈색bold/날짜 muted 분리 |
