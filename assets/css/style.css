@@ -3197,6 +3197,7 @@ body.sheet-open{
   display:flex;
   gap:8px;
   margin-top:10px;
+  margin-bottom:16px;
 }
 
 /* 게임 설명 + 더보기/접기 */
