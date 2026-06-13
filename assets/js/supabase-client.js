@@ -591,8 +591,6 @@ window._cottageSess = (function () {
   document.addEventListener("DOMContentLoaded", function () {
     // localhost 개발 환경에서는 카운팅 안 함
     if (location.hostname === "127.0.0.1" || location.hostname === "localhost") return;
-    // 관리자 본인 방문 제외 (어드민 페이지에서 토글 가능)
-    if (localStorage.getItem('cottage_is_admin')) return;
     // 유입 경로 캡처 — 같은 사람·같은 날·같은 경로는 1회만, 다른 경로면 각각 1회
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const visitedKey = "cottage_visited_" + kstDate;
@@ -608,12 +606,14 @@ window._cottageSess = (function () {
         return u.hostname !== location.hostname ? u.hostname : null;
       } catch (_) { return null; }
     })();
-    const pvSource = referrer || 'direct';
+    // 관리자는 방문자 수 포함, 유입경로만 제외
+    const isAdmin = !!localStorage.getItem('cottage_is_admin');
+    const pvSource = (isAdmin ? null : referrer) || 'direct';
     const visitedSourceKey = `cottage_pv_${kstDate}_${pvSource}`;
     if (!localStorage.getItem(visitedSourceKey)) {
       localStorage.setItem(visitedSourceKey, "1");
       if (!localStorage.getItem(visitedKey)) localStorage.setItem(visitedKey, "1");
-      trackPageView(page, referrer);
+      trackPageView(page, isAdmin ? null : referrer);
     }
     // 비로그인 방문자 추적 — cottage-auth-changed로 로그인 확인 후 결정
     // kakao-auth.js가 로그인 처리 시 startSession → _stopAnonHeartbeat 호출
