@@ -591,24 +591,28 @@ window._cottageSess = (function () {
   document.addEventListener("DOMContentLoaded", function () {
     // localhost 개발 환경에서는 카운팅 안 함
     if (location.hostname === "127.0.0.1" || location.hostname === "localhost") return;
-    // 로그인 여부 무관하게 카운트 — localStorage로 하루 1회만 집계
+    // 유입 경로 캡처 — UTM/외부 referrer는 항상 기록, 직접 방문은 하루 1회만
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const visitedKey = "cottage_visited_" + kstDate;
-    if (!localStorage.getItem(visitedKey)) {
-      localStorage.setItem(visitedKey, "1");
-      const page =
-        location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
-        "index";
-      const referrer = (() => {
-        const utm = new URLSearchParams(location.search).get('utm_source');
-        if (utm) return utm;
-        if (!document.referrer) return null;
-        try {
-          const u = new URL(document.referrer);
-          return u.hostname !== location.hostname ? u.hostname : null;
-        } catch (_) { return null; }
-      })();
+    const page =
+      location.pathname.split("/").filter(Boolean).pop()?.replace(".html", "") ||
+      "index";
+    const referrer = (() => {
+      const utm = new URLSearchParams(location.search).get('utm_source');
+      if (utm) return utm;
+      if (!document.referrer) return null;
+      try {
+        const u = new URL(document.referrer);
+        return u.hostname !== location.hostname ? u.hostname : null;
+      } catch (_) { return null; }
+    })();
+    if (referrer) {
+      // 유입 경로 있으면 visitedKey 무관하게 항상 기록
       trackPageView(page, referrer);
+    } else if (!localStorage.getItem(visitedKey)) {
+      // 직접 방문은 하루 1회만
+      localStorage.setItem(visitedKey, "1");
+      trackPageView(page, null);
     }
     // 비로그인 방문자 추적 — cottage-auth-changed로 로그인 확인 후 결정
     // kakao-auth.js가 로그인 처리 시 startSession → _stopAnonHeartbeat 호출
