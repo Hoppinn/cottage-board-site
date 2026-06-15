@@ -48,7 +48,37 @@ CREATE TABLE IF NOT EXISTS point_rewards (
 -- 5. profiles에 대표 캐릭터 컬럼 추가
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS rep_achievement_id TEXT;
 
--- 6. V1 초기 업적 데이터 (17개)
+-- 6. RLS + anon 정책 (다른 테이블과 동일 패턴)
+ALTER TABLE achievements ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_select_achievements" ON achievements;
+CREATE POLICY "anon_select_achievements"
+  ON achievements FOR SELECT TO anon USING (true);
+
+ALTER TABLE user_achievements ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_insert_user_achievements" ON user_achievements;
+CREATE POLICY "anon_insert_user_achievements"
+  ON user_achievements FOR INSERT TO anon WITH CHECK (true);
+DROP POLICY IF EXISTS "anon_select_user_achievements" ON user_achievements;
+CREATE POLICY "anon_select_user_achievements"
+  ON user_achievements FOR SELECT TO anon USING (true);
+
+ALTER TABLE points_log ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_insert_points_log" ON points_log;
+CREATE POLICY "anon_insert_points_log"
+  ON points_log FOR INSERT TO anon WITH CHECK (true);
+DROP POLICY IF EXISTS "anon_select_points_log" ON points_log;
+CREATE POLICY "anon_select_points_log"
+  ON points_log FOR SELECT TO anon USING (true);
+
+ALTER TABLE point_rewards ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "anon_insert_point_rewards" ON point_rewards;
+CREATE POLICY "anon_insert_point_rewards"
+  ON point_rewards FOR INSERT TO anon WITH CHECK (true);
+DROP POLICY IF EXISTS "anon_select_point_rewards" ON point_rewards;
+CREATE POLICY "anon_select_point_rewards"
+  ON point_rewards FOR SELECT TO anon USING (true);
+
+-- 7. V1 초기 업적 데이터 (17개)
 INSERT INTO achievements (id, name, emoji, category, threshold, points) VALUES
   -- 탐험가 계열 (토끼) — 새로운 게임 경험
   ('rabbit_first', '새싹 토끼',          '🌱', 'play_record', 1,   300),
