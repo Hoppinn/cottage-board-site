@@ -1061,6 +1061,10 @@ window._cottageSess = (function () {
     getUserPhotoCount,
     getUserRatingCount,
     getRepAchievement,
+    getPendingPointRewards,
+    approvePointReward,
+    rejectPointReward,
+    getUserPointRewardStats,
   };
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
@@ -1117,11 +1121,66 @@ window._cottageSess = (function () {
     try {
       const { error } = await db.from('user_achievements').insert({ user_id: userId, achievement_id: achievementId });
       if (error) return false; // 중복이면 UNIQUE 위반 → 조용히 false
+      // 포인트는 pending 상태로 대기 — 관리자 승인 후 points_log에 기록
       if (points > 0) {
-        await db.from('points_log').insert({ user_id: userId, delta: points, reason: `achievement:${achievementId}` });
+        await db.from('point_rewards').insert({ user_id: userId, achievement_id: achievementId, points, status: 'pending' });
       }
       return true;
     } catch (_) { return false; }
+  }
+
+  async function getPendingPointRewards() {
+    try {
+      const { data } = await db.from('point_rewards')
+        .select('id, user_id, achievement_id, points, created_at, achievements(name, emoji), profiles(nickname)')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: true });
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function approvePointReward(rewardId) {
+    try {
+      const adminId = String(window.getKakaoUser?.()?.id || '');
+      const { data: reward } = await db.from('point_rewards')
+        .select('user_id, points, achievement_id')
+        .eq('id', rewardId).maybeSingle();
+      if (!reward) return false;
+      await db.from('point_rewards').update({
+        status: 'approved',
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: adminId,
+      }).eq('id', rewardId);
+      await db.from('points_log').insert({
+        user_id: reward.user_id,
+        delta: reward.points,
+        reason: `achievement:${reward.achievement_id}`,
+      });
+      return true;
+    } catch (_) { return false; }
+  }
+
+  async function rejectPointReward(rewardId) {
+    try {
+      const adminId = String(window.getKakaoUser?.()?.id || '');
+      await db.from('point_rewards').update({
+        status: 'rejected',
+        reviewed_at: new Date().toISOString(),
+        reviewed_by: adminId,
+      }).eq('id', rewardId);
+      return true;
+    } catch (_) { return false; }
+  }
+
+  async function getUserPointRewardStats(userId) {
+    try {
+      const { data } = await db.from('point_rewards')
+        .select('points, status')
+        .eq('user_id', userId);
+      const approved = (data || []).filter(r => r.status === 'approved').reduce((s, r) => s + r.points, 0);
+      const pending = (data || []).filter(r => r.status === 'pending').reduce((s, r) => s + r.points, 0);
+      return { approved, pending };
+    } catch (_) { return { approved: 0, pending: 0 }; }
   }
 
   async function setRepAchievement(userId, achievementId) {

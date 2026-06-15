@@ -108,7 +108,7 @@
       <div class="achievement-toast-body">
         <div class="achievement-toast-title">캐릭터 해금!</div>
         <div class="achievement-toast-name">${name}</div>
-        ${points ? `<div class="achievement-toast-pts">+${points.toLocaleString()}pt</div>` : ''}
+        ${points ? `<div class="achievement-toast-pts">+${points.toLocaleString()}pt (승인 대기)</div>` : ''}
       </div>
       <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoProfileBtn')?.click()">내 활동 →</a>
     `;
@@ -190,10 +190,11 @@
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [achievements, repAch, totalPts] = await Promise.all([
+    const [achievements, repAch, totalPts, ptStats] = await Promise.all([
       db.getUserAchievements(userId),
       db.getRepAchievement(userId),
       db.getTotalPoints(userId),
+      db.getUserPointRewardStats(userId),
     ]);
 
     if (!achievements.length) return '';
@@ -202,16 +203,15 @@
       `<span class="profile-char-badge" title="${a.name}">${a.emoji} ${a.name}</span>`
     ).join('');
 
-    const repDisplay = repAch
-      ? `${repAch.emoji} ${repAch.name}`
-      : '미설정';
-
     const repOptions = achievements.map(a =>
       `<option value="${a.id}" ${repAch?.id === a.id ? 'selected' : ''}>${a.emoji} ${a.name}</option>`
     ).join('');
 
-    const ptsHtml = totalPts > 0
-      ? `<div class="profile-points-line">💎 ${totalPts.toLocaleString()}pt</div>`
+    const ptsHtml = (totalPts > 0 || ptStats.pending > 0)
+      ? `<div class="profile-points-line">
+          💎 ${totalPts.toLocaleString()}pt
+          ${ptStats.pending > 0 ? `<span class="profile-points-pending">+${ptStats.pending.toLocaleString()}pt 승인 대기</span>` : ''}
+        </div>`
       : '';
 
     return `<div class="profile-char-section">
