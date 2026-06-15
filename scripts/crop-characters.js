@@ -9,35 +9,35 @@ if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 // 출력 크기 (px): 모든 캐릭터 통일
 const SIZE = 100;
 
-// 진단으로 확정된 스프라이트 좌표 (텍스트 완전 제외)
-// 검증 방법: 각 계열의 offset/height 슬라이스로 스프라이트 영역만 확인
+// 진단으로 확정된 스프라이트 좌표 (v2 — 2026-06-16 재검증)
+// 검증 방법: 계열별 행 전체 슬라이스(height=180~230) + 캐릭터별 개별 추출로 본체 완전성 확인
 //
-// 토끼  : cells=209px, offset=+40, w=130, y=52~152  (rb_mid=스프라이트, rb_bot=텍스트)
-// 다람쥐: cells=130px, offset=+60, w=90,  y=325~425 (sq10_x60 확인, sq_bot=텍스트)
-// 고슴도치: cells=120px, offset=+45, w=90, y=775~840 (hh1_x45 확인, 라벨 y840+)
-// 햄스터: cells=131px, offset=+0,  w=90,  y=775~825 (hm_top=스프라이트, hm_mid=텍스트)
+// 토끼    : cells=209px, left+40, top=25, h=130  (헤더 아래 귀 끝~발끝 포함)
+// 다람쥐  : cells=130px, left+60, top=295, h=120
+// 고슴도치: cells=120px, left+45, top=755, h=90
+// 햄스터  : cells=131px, left+600, top=755, h=90
 
 const CHARS = [
-  { file: 'rabbit_first.png', left: 40,       top: 52,  width: 130, height: 100 },
-  { file: 'rabbit_5.png',     left: 40+209,   top: 52,  width: 130, height: 100 },
-  { file: 'rabbit_20.png',    left: 40+418,   top: 52,  width: 130, height: 100 },
-  { file: 'rabbit_50.png',    left: 40+627,   top: 52,  width: 130, height: 100 },
-  { file: 'rabbit_100.png',   left: 40+836,   top: 52,  width: 85,  height: 100 }, // 130→85: 우측 장식 프레임 제외
+  { file: 'rabbit_first.png', left: 40,       top: 25,  width: 130, height: 130 },
+  { file: 'rabbit_5.png',     left: 40+209,   top: 25,  width: 130, height: 130 },
+  { file: 'rabbit_20.png',    left: 40+418,   top: 25,  width: 130, height: 130 },
+  { file: 'rabbit_50.png',    left: 40+627,   top: 25,  width: 130, height: 130 },
+  { file: 'rabbit_100.png',   left: 40+836,   top: 25,  width: 85,  height: 130 }, // width=85: 우측 장식 프레임 제외
 
-  { file: 'squirrel_10.png',  left: 60,       top: 325, width: 90,  height: 100 },
-  { file: 'squirrel_50.png',  left: 60+130,   top: 325, width: 90,  height: 100 },
-  { file: 'squirrel_100.png', left: 60+260,   top: 325, width: 90,  height: 100 },
-  { file: 'squirrel_200.png', left: 60+390,   top: 325, width: 90,  height: 100 },
+  { file: 'squirrel_10.png',  left: 60,       top: 295, width: 90,  height: 120 },
+  { file: 'squirrel_50.png',  left: 60+130,   top: 295, width: 90,  height: 120 },
+  { file: 'squirrel_100.png', left: 60+260,   top: 295, width: 90,  height: 120 },
+  { file: 'squirrel_200.png', left: 60+390,   top: 295, width: 90,  height: 120 },
 
-  { file: 'hedgehog_1.png',   left: 45,       top: 775, width: 90,  height: 65 },
-  { file: 'hedgehog_10.png',  left: 45+120,   top: 775, width: 90,  height: 65 },
-  { file: 'hedgehog_50.png',  left: 45+240,   top: 775, width: 90,  height: 65 },
-  { file: 'hedgehog_100.png', left: 45+360,   top: 775, width: 90,  height: 65 },
+  { file: 'hedgehog_1.png',   left: 45,       top: 755, width: 90,  height: 90 },
+  { file: 'hedgehog_10.png',  left: 45+120,   top: 755, width: 90,  height: 90 },
+  { file: 'hedgehog_50.png',  left: 45+240,   top: 755, width: 90,  height: 90 },
+  { file: 'hedgehog_100.png', left: 45+360,   top: 755, width: 90,  height: 90 },
 
-  { file: 'hamster_1.png',    left: 600,      top: 775, width: 90,  height: 50 },
-  { file: 'hamster_10.png',   left: 600+131,  top: 775, width: 90,  height: 50 },
-  { file: 'hamster_50.png',   left: 600+262,  top: 775, width: 90,  height: 50 },
-  { file: 'hamster_100.png',  left: 600+393,  top: 775, width: 90,  height: 50 },
+  { file: 'hamster_1.png',    left: 600,      top: 755, width: 90,  height: 90 },
+  { file: 'hamster_10.png',   left: 600+131,  top: 755, width: 90,  height: 90 },
+  { file: 'hamster_50.png',   left: 600+262,  top: 755, width: 90,  height: 90 },
+  { file: 'hamster_100.png',  left: 600+393,  top: 755, width: 90,  height: 90 },
 ];
 
 // 배경색 제거: 첫 번째 픽셀 색상을 배경으로 간주, 유사색 → 투명
