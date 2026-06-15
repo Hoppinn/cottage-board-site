@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-15 (53차 — 업적/캐릭터/게임도감 V1)
+최종 갱신: 2026-06-16 (54차 — 포인트 승인 시스템)
 
 ---
 
@@ -44,6 +44,9 @@
   - recordGamePlay/submitRating 성공 후 자동 업적 체크
   - 내 활동 패널: 게임 도감 진행률 + 캐릭터 목록 + 대표 캐릭터 선택
   - SQL: docs/migrations/001_achievements.sql (Supabase 대시보드에서 실행 필요)
+  - point_rewards 테이블: 업적 달성 시 pending 생성 → 관리자 승인 → points_log 반영
+  - 관리자 포인트 승인 패널: 근거 보기(플레이/게임/사진/별점), 승인/거절 버튼
+  - SQL: docs/migrations/002_point_rewards.sql (Supabase 대시보드에서 실행 필요)
 - [x] 게임 바텀시트 3섹션 (게임평/플레이기록/사진) 완성
   - 사진 독립 3번째 섹션 추가 (미리보기 3장 + 전체보기 9장)
   - 게임평·플레이기록·사진 모두 작성자+날짜 표시 (통일 포맷: `6월 N일`)
