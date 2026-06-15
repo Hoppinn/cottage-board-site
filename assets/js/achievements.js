@@ -198,9 +198,14 @@
     ]);
 
     const chars = achievements.length
-      ? achievements.map(a =>
-          `<span class="profile-char-badge" title="${a.name}">${a.emoji} ${a.name}</span>`
-        ).join('')
+      ? achievements.map(a => {
+          const imgSrc = `/assets/images/characters/${a.id}.png`;
+          return `<span class="profile-char-badge" title="${a.name}">` +
+            `<img class="profile-char-img" src="${imgSrc}" alt="${a.name}" ` +
+            `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
+            `<span class="profile-char-emoji" style="display:none">${a.emoji}</span>` +
+            ` ${a.name}</span>`;
+        }).join('')
       : '<p class="profile-char-empty">아직 획득한 캐릭터가 없어요.<br><span style="font-size:11px;color:var(--muted)">게임을 플레이하면 캐릭터가 해금됩니다 🐾</span></p>';
 
     const repOptions = achievements.map(a =>

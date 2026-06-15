@@ -3609,7 +3609,8 @@ body.sheet-open{
 .profile-char-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .profile-char-count{font-size:11px;font-weight:400;color:var(--muted);}
 .profile-char-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
-.profile-char-badge{font-size:12px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:4px 10px;color:var(--text);}
+.profile-char-badge{font-size:12px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:4px 10px;color:var(--text);display:inline-flex;align-items:center;gap:5px;}
+.profile-char-img{width:28px;height:28px;object-fit:contain;flex-shrink:0;}
 .profile-char-empty{font-size:13px;color:var(--muted);margin:8px 0 4px;line-height:1.6;}
 .profile-rep-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
 .profile-rep-label{font-size:12px;font-weight:700;color:#7a4828;flex-shrink:0;}
