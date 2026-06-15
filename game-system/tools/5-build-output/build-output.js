@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const { readJson, writeJson } = require("../_core/file-read-writer");
 
@@ -6,7 +7,24 @@ const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
   COTTAGE_GAMES_DATA_JS_PATH,
   COTTAGE_GAMES_DATA_JSON_PATH,
+  LIBRARY_IMAGES_THUMB_DIR,
+  ROOT_DIR,
 } = require("../_core/paths");
+
+const THUMB_EXTS = [".png", ".jpg", ".jpeg", ".webp"];
+
+function findLocalThumb(game) {
+  const names = [game.id, game.ownedName].filter(Boolean);
+  for (const name of names) {
+    for (const ext of THUMB_EXTS) {
+      const filePath = path.join(LIBRARY_IMAGES_THUMB_DIR, name + ext);
+      if (fs.existsSync(filePath)) {
+        return path.relative(ROOT_DIR, filePath).replace(/\\/g, "/");
+      }
+    }
+  }
+  return null;
+}
 
 const { mergeCottageTags } = require("../_core/auto-tagger");
 
@@ -101,12 +119,16 @@ function buildRawGameItem(game) {
       youtubeUrl: "",
     },
 
-    images: {
-      main: game.image || "",
-      thumbnail: game.thumbnail || "",
-      source: game.image ? "bgg" : "none",
-      type: "jpg",
-    },
+    images: (() => {
+      const localThumb = findLocalThumb(game);
+      return {
+        main: localThumb || game.image || "",
+        thumbnail: localThumb || game.thumbnail || "",
+        source: localThumb ? "local" : (game.image ? "bgg" : "none"),
+        type: localThumb ? path.extname(localThumb).slice(1) : "jpg",
+        localOverride: localThumb || undefined,
+      };
+    })(),
 
     community: {
       reviewEnabled: true,

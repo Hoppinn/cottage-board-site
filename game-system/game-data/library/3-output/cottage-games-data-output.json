@@ -294,10 +294,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/5Q5YHxJeVp6PAhfv5Ct0-g__original/img/yRNioltDOtjrTRXa0HHoTTCWNf8=/0x0/filters:format(png)/pic3678404.png",
-      "thumbnail": "https://cf.geekdo-images.com/5Q5YHxJeVp6PAhfv5Ct0-g__small/img/nqo8xhGEWnqXYDEvYcVpBpABBI4=/fit-in/200x150/filters:strip_icc()/pic3678404.png",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/가짜예술가뉴욕에가다.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/가짜예술가뉴욕에가다.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/가짜예술가뉴욕에가다.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -9073,10 +9074,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/Dd94J37Oi1tgL7HAAaOfAQ__original/img/SAMxnv21q2rwvViEOu2nti4H0Is=/0x0/filters:format(jpeg)/pic8855812.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/Dd94J37Oi1tgL7HAAaOfAQ__small/img/CcgassIExgVh2dwANVY_Srp6be0=/fit-in/200x150/filters:strip_icc()/pic8855812.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/텔레스트레이션.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/텔레스트레이션.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/텔레스트레이션.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -10563,10 +10565,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/d9F0ZDqcN3J7J92WckyraQ__original/img/3OAIArHm3Z_j5bAJeJlU5LKQie0=/0x0/filters:format(jpeg)/pic7605785.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/d9F0ZDqcN3J7J92WckyraQ__small/img/8d663Cj-RQy8pA8gZOcO80xYI5I=/fit-in/200x150/filters:strip_icc()/pic7605785.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/나나.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/나나.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/나나.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -74351,10 +74354,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/탁상탐정단1.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/탁상탐정단1.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/탁상탐정단1.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -77990,10 +77994,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/xNSaIHCKr_cc7Q2rQSSJPQ__original/img/HJJdVosBV35kj8pQ6wmQMiJRhVA=/0x0/filters:format(jpeg)/pic9273518.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/xNSaIHCKr_cc7Q2rQSSJPQ__small/img/9Kf3YKiVIJxd_EbqJEJFdlGfj7I=/fit-in/200x150/filters:strip_icc()/pic9273518.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/패치워크 크리스마스에디션.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/패치워크 크리스마스에디션.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/패치워크 크리스마스에디션.png"
     },
     "community": {
       "reviewEnabled": true,
