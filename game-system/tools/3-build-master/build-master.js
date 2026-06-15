@@ -14,7 +14,7 @@ function toNumber(v, fallback = null) {
   return Number.isFinite(n) && n !== 0 ? n : fallback;
 }
 
-function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing) {
+function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGames = []) {
   const bggId = matchInfo?.bggId ? String(matchInfo.bggId) : null;
   const d = bggDetails || {};
 
@@ -79,7 +79,7 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing) {
     ...(() => {
       const bggIdChanged = existing?.bggId && bggId && existing.bggId !== bggId;
       if (bggIdChanged) {
-        console.log(`  [번역 무효화] ${xlsxRow.id}: bggId ${existing.bggId} → ${bggId}`);
+        invalidatedGames.push(xlsxRow.ownedName || xlsxRow.id);
         return { summaryKo: "", descriptionKo: "", categoriesKo: [], mechanicsKo: [] };
       }
       return {
@@ -125,6 +125,7 @@ async function buildMaster() {
 
   const games = {};
   const now = new Date().toISOString();
+  const invalidatedGames = [];
 
   for (const row of rows) {
     const matchInfo = matchMap[row.ownedName] || null;
@@ -132,7 +133,7 @@ async function buildMaster() {
     const details = bggId ? bggDetails[bggId] || {} : {};
     const existing = existingMaster.games?.[row.id] || null;
 
-    games[row.id] = buildMasterGame(row, matchInfo, details, existing);
+    games[row.id] = buildMasterGame(row, matchInfo, details, existing, invalidatedGames);
   }
 
   writeJson(COTTAGE_OWNED_GAMES_MASTER_PATH, {
@@ -149,6 +150,11 @@ async function buildMaster() {
 
   console.log("master.json built:");
   console.log({ total, ready, pendingCache: total - ready, ledger: COTTAGE_OWNED_GAMES_LEDGER_JSON_PATH });
+
+  if (invalidatedGames.length > 0) {
+    console.log(`\n[번역 재생성 필요] ${invalidatedGames.join(", ")}`);
+    console.log("▶ npm run translate && npm run translate:desc && npm run translate:summary && npm run build");
+  }
 }
 
 module.exports = { buildMaster };

@@ -31,6 +31,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | 인증·로그인·프로필·사진 흐름 | `docs/PROJECT_STRUCTURE.md` §3~5 |
 | 이용시간·체류 추적 | `docs/PROJECT_STRUCTURE.md` §6 |
 | 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 |
+| BGG ID 수정 / fetch:bgg / translate 등 파이프라인 작업 | 작업 전 `npm run check`로 필요 단계 먼저 확인 |
 | UI/CSS 디자인 작업 | `docs/DESIGN_RULES.md` |
 
 ---
