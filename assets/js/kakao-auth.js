@@ -400,8 +400,8 @@ async function openProfilePanel() {
   const [stats, notifs, codexHtml, charHtml] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
-    window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve(''),
-    window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve(''),
+    (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
   ]);
   if (window._cottageSess) {
     const _s = window._cottageSess.get(String(user.id));
