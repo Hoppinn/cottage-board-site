@@ -6094,6 +6094,60 @@
       ]
     }
   },
+  "9539": {
+    "bggId": "9539",
+    "title": "Beat the 8 Ball",
+    "image": "https://cf.geekdo-images.com/GJd_qJDrgtEbTiFzKKIoOg__original/img/UWDIJJzUb6Mff1isiGKpBj3tclA=/0x0/filters:format(jpeg)/pic7542345.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/GJd_qJDrgtEbTiFzKKIoOg__small/img/cBTR1dbvjUVIBDL9sUFfap8GVY8=/fit-in/200x150/filters:strip_icc()/pic7542345.jpg",
+    "description": "Players try to have the highest score at the end of three rounds of play or to be the first player to score ten or more points.  Each player releases their ball along the track to score points before the eight ball drops and blocks the scoring track.\n\nThe Beat The Eight Ball game from Ideal is a game of patience and skill. After the Eight Ball is set spinning in the funnel each player must decide when to release their own marble. Beating the Eight Ball at all gives you points, coming in after it takes points away. More points are given the later your ball is so it pays to take chances.\n\nFurther description given by Sam Cancilla at http://www.Samstoybox.com",
+    "yearpublished": "1975",
+    "minplayers": "2",
+    "minage": "7",
+    "maxplayers": "4",
+    "playingtime": "10",
+    "minplaytime": "10",
+    "maxplaytime": "10",
+    "averageweight": "1",
+    "average": "6.44159",
+    "bayesaverage": "5.61285",
+    "usersrated": "314",
+    "rank": "8805",
+    "designers": [
+      "Frank D. Ventura"
+    ],
+    "artists": [],
+    "publishers": [
+      "Noris Spiele",
+      "Arxon",
+      "Blue Orange Games",
+      "Broadway Toys LTD",
+      "Hanayama",
+      "Ideal",
+      "Mandoo Games",
+      "Peliko Oy"
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Children's Game",
+      "Party Game"
+    ],
+    "mechanics": [
+      "Simultaneous Action Selection"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        3
+      ],
+      "not_recommended": [
+        1,
+        2,
+        4
+      ]
+    }
+  },
   "9609": {
     "bggId": "9609",
     "title": "War of the Ring",
@@ -19914,6 +19968,63 @@
       ]
     }
   },
+  "202564": {
+    "bggId": "202564",
+    "title": "Cookie Box",
+    "image": "https://cf.geekdo-images.com/SYxaVBHoKAAh_S_lRS3kVA__original/img/o3ls9idmJNMu9P06toQSX_WidJA=/0x0/filters:format(jpeg)/pic3165677.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/SYxaVBHoKAAh_S_lRS3kVA__small/img/TTFpws-BZn3Tl9tc4vZloECbYTs=/fit-in/200x150/filters:strip_icc()/pic3165677.jpg",
+    "description": "You are working in a popular bakery where cookies sell like...well, hotcakes! With orders coming from all sides, you must be quick when making a box of nine cookies as the client ordered. Once you are done, ring the bell!\n\nIn Cookie Box, you need to rearrange cookie tokens to match the order card, then quickly ring the bell and take the order card. The first player to collect four order cards wins, but you must not make too many mistakes in your packing. If you mess up orders twice, you're eliminated from the game!",
+    "yearpublished": "2016",
+    "minplayers": "2",
+    "minage": "6",
+    "maxplayers": "4",
+    "playingtime": "20",
+    "minplaytime": "15",
+    "maxplaytime": "20",
+    "averageweight": "1",
+    "average": "6.68391",
+    "bayesaverage": "5.62563",
+    "usersrated": "345",
+    "rank": "8288",
+    "designers": [
+      "Jean-Claude Pellin"
+    ],
+    "artists": [
+      "Sunju Choi",
+      "Tony Ganem",
+      "Luna Vargas"
+    ],
+    "publishers": [
+      "Korea Boardgames",
+      "asmodee",
+      "Broadway Toys LTD",
+      "Fractal Juegos",
+      "Maldón",
+      "Piatnik"
+    ],
+    "categories": [
+      "Action / Dexterity",
+      "Memory",
+      "Real-time"
+    ],
+    "mechanics": [
+      "Memory",
+      "Pattern Recognition"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        4
+      ],
+      "recommended": [
+        2,
+        3
+      ],
+      "not_recommended": [
+        1,
+        4
+      ]
+    }
+  },
   "203417": {
     "bggId": "203417",
     "title": "EXIT: The Game – The Secret Lab",
@@ -33011,6 +33122,49 @@
         4,
         4
       ]
+    }
+  },
+  "319598": {
+    "bggId": "319598",
+    "title": "Dingo Disc",
+    "image": "https://cf.geekdo-images.com/BXn7ktmLQ2taWIpK6UQweA__original/img/rCIRa0NHp4YHOajmatTjk6q9Xdo=/0x0/filters:format(png)/pic8966742.png",
+    "thumbnail": "https://cf.geekdo-images.com/BXn7ktmLQ2taWIpK6UQweA__small/img/HV0hc9afL-zLMkRMEN9IoZGkz3c=/fit-in/200x150/filters:strip_icc()/pic8966742.png",
+    "description": "Dingo Disc is a game of skill, balance, strategy, and luck in which players must place all of their counters on a balanced disk without dropping the counters that have already been placed.\n\nOn a turn, you roll two dice: the color die determines the colored area of the disk where you must place, and the number die the location within that area. Whoever places all of their counters first wins &mdash; and any player who spills all the counters off the disk automatically loses.",
+    "yearpublished": "2013",
+    "minplayers": "2",
+    "minage": "5",
+    "maxplayers": "6",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "1",
+    "average": "6.42857",
+    "bayesaverage": "0",
+    "usersrated": "21",
+    "rank": "Not Ranked",
+    "designers": [
+      "Pierre Tessier"
+    ],
+    "artists": [
+      "Stéphane Escapa",
+      "Pierre Tessier"
+    ],
+    "publishers": [
+      "Blackrock Games",
+      "Éditions Capucine"
+    ],
+    "categories": [
+      "Abstract Strategy",
+      "Action / Dexterity",
+      "Party Game"
+    ],
+    "mechanics": [
+      "Stacking and Balancing"
+    ],
+    "suggested_numplayers": {
+      "best": [],
+      "recommended": [],
+      "not_recommended": []
     }
   },
   "321608": {

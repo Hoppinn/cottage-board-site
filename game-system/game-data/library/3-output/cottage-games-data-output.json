@@ -11513,15 +11513,12 @@
     "bgg": {
       "id": "319598",
       "matchStatus": "forced",
-      "year": "2016",
-      "rating": 6.02776,
-      "weight": 1.087,
+      "year": "2013",
+      "rating": 6.42857,
+      "weight": 1,
       "minPlayers": 2,
-      "maxPlayers": 4,
-      "bestPlayers": [
-        3,
-        4
-      ],
+      "maxPlayers": 6,
+      "bestPlayers": [],
       "recommendedPlayers": [
         2,
         3,
@@ -11529,17 +11526,14 @@
         5,
         6
       ],
-      "notRecommendedPlayers": [
-        1,
-        4
-      ],
+      "notRecommendedPlayers": [],
       "playingTime": 30,
-      "minPlayTime": 20,
+      "minPlayTime": 30,
       "maxPlayTime": 30,
       "categories": [
-        "Animals",
-        "Fantasy",
-        "Puzzle"
+        "Abstract Strategy",
+        "Action / Dexterity",
+        "Party Game"
       ],
       "categoriesKo": [
         "동물",
@@ -11547,10 +11541,7 @@
         "퍼즐"
       ],
       "mechanics": [
-        "Bingo",
-        "Modular Board",
-        "Pattern Building",
-        "Tile Placement"
+        "Stacking and Balancing"
       ],
       "mechanicsKo": [
         "빙고",
@@ -11559,9 +11550,9 @@
         "타일 배치"
       ],
       "designers": [
-        "Alf Seegert"
+        "Pierre Tessier"
       ],
-      "description": "Dingo and his friends have gotten lost on Walkabout! Visit their dreams to lead them home!\n\nDingo's Dreams is a delightful and clever family game for 2-4 players. Each player competes to be the first to successfully guide his animal through the dream world.\n\nEach player starts with a grid of 25 tiles, set up at random in a 5x5 dreamscape. Each player also starts with one extra tile, with a picture of their animal on it. The opposite side of all dreamscape tiles also has a picture of the animal. Each turn, a random card is drawn, telling players which tile they should flip. When a player flips a tile, it means their animal is traveling through a part of the dreamscape. Each player's goal is to guide their animal through the dreamscape by positioning him in a specified pattern (which is different each game).  After a card is drawn, a player takes their extra animal and slides him into the dreamscape, shifting one row or column of tiles until a new, different tile emerges from the opposite side.  The player will use this tile to shift another column or row on the next turn, and so on, until one player's dreamscape tiles match the goal.  The player then shouts their animal's name-- \"Dingo!\", for example, to win the round.\n\nAdvanced rules add Hazard Tokens which increase the challenge substantially: to complete the required dream pattern, the player may not have his animal in any of the Hazard spaces marked on the dream card.",
+      "description": "Dingo Disc is a game of skill, balance, strategy, and luck in which players must place all of their counters on a balanced disk without dropping the counters that have already been placed.\n\nOn a turn, you roll two dice: the color die determines the colored area of the disk where you must place, and the number die the location within that area. Whoever places all of their counters first wins &mdash; and any player who spills all the counters off the disk automatically loses.",
       "descriptionKo": "딩고와 친구들이 워크어바웃에서 길을 잃었어요! 그들의 꿈을 방문해 집으로 돌려보내세요!\n\n딩고의 드림은 2~4명을 위한 즐겁고 영리한 가족 게임입니다. 각 플레이어는 자신의 동물을 꿈의 세계로 안내하는 첫 번째 사람이 되기 위해 경쟁합니다.\n\n각 플레이어는 5×5 그리드로 무작위로 배열된 25장의 타일과 자신의 동물이 그려진 1장의 추가 타일로 시작합니다. 모든 드림스케이프 타일의 뒷면에도 동물 그림이 있습니다. 매 턴마다 무작위 카드를 뽑아 어느 타일을 뒤집을지 결정합니다. 타일을 뒤집으면 동물이 드림스케이프의 일부를 여행하는 것을 의미합니다. 각 플레이어의 목표는 지정된 패턴(게임마다 다름)에 맞춰 동물을 드림스케이프에 배치하는 것입니다. 카드를 뽑은 후, 플레이어는 추가 동물 타일을 드림스케이프에 밀어 넣어 한 줄이나 열을 이동시키면 반대편에서 새로운 타일이 나타납니다. 이 타일을 다음 턴에 다른 열이나 줄을 움직이는 데 사용하고, 한 플레이어의 드림스케이프 타일이 목표와 일치할 때까지 계속합니다. 그러면 플레이어가 자신의 동물 이름(예: \"딩고!\")을 외쳐 라운드에 승리합니다.\n\n고급 규칙은 해저드 토큰을 추가하여 난이도를 크게 높입니다. 필요한 드림 패턴을 완성하려면 플레이어의 동물이 드림 카드에 표시된 위험 공간에 있으면 안 됩니다."
     },
     "cottage": {
@@ -11572,40 +11563,41 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "immersive",
+        "funny",
+        "chaotic",
         "cozy"
       ],
       "playTags": [
-        "puzzle",
-        "strategy"
+        "party"
       ],
       "situationTags": [
+        "beginner",
+        "group",
+        "large_group",
         "first_game",
-        "quick_play",
-        "group"
+        "quick_play"
       ],
       "interactionTags": [
-        "competitive",
-        "silent_focus"
+        "table_talk"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "immersive",
+        "funny",
+        "chaotic",
         "cozy",
-        "puzzle",
-        "strategy",
+        "party",
+        "beginner",
+        "group",
+        "large_group",
         "first_game",
         "quick_play",
-        "group",
-        "competitive",
-        "silent_focus"
+        "table_talk"
       ],
       "displayTags": [
-        "머리쓰게",
-        "빠져들게",
+        "즐기고",
         "편안하게",
-        "경쟁형"
+        "대화하며"
       ],
       "summaryKo": "뽑은 카드에 따라 타일을 뒤집고 밀어내며 꿈의 패턴을 완성하는 게임.",
       "comment": {
@@ -11624,8 +11616,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/e3f9Uadm87fg5gxYDpslzg__original/img/4py53crlWoQEWfjEVA9omRg7YkE=/0x0/filters:format(jpeg)/pic2624852.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/e3f9Uadm87fg5gxYDpslzg__small/img/jWfP_l1QjXRj8D2ZBcv5PdIp1eU=/fit-in/200x150/filters:strip_icc()/pic2624852.jpg",
+      "main": "https://cf.geekdo-images.com/BXn7ktmLQ2taWIpK6UQweA__original/img/rCIRa0NHp4YHOajmatTjk6q9Xdo=/0x0/filters:format(png)/pic8966742.png",
+      "thumbnail": "https://cf.geekdo-images.com/BXn7ktmLQ2taWIpK6UQweA__small/img/HV0hc9afL-zLMkRMEN9IoZGkz3c=/fit-in/200x150/filters:strip_icc()/pic8966742.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -35822,48 +35814,32 @@
     "title": {
       "display": "마법사의물약(독)",
       "owned": "마법사의물약(독)",
-      "bgg": "Potion Explosion"
+      "bgg": ""
     },
     "bgg": {
       "id": "7736327",
       "matchStatus": "forced",
-      "year": "2015",
-      "rating": 7.12133,
-      "weight": 1.7809,
+      "year": "",
+      "rating": 0,
+      "weight": 1,
       "minPlayers": 2,
       "maxPlayers": 4,
-      "bestPlayers": [
-        3
-      ],
+      "bestPlayers": [],
       "recommendedPlayers": [
         2,
         3,
         4
       ],
-      "notRecommendedPlayers": [
-        1,
-        4
-      ],
-      "playingTime": 45,
-      "minPlayTime": 30,
-      "maxPlayTime": 45,
-      "categories": [
-        "Fantasy",
-        "Puzzle"
-      ],
+      "notRecommendedPlayers": [],
+      "playingTime": 0,
+      "minPlayTime": 0,
+      "maxPlayTime": 0,
+      "categories": [],
       "categoriesKo": [
         "판타지",
         "퍼즐"
       ],
-      "mechanics": [
-        "Contracts",
-        "Open Drafting",
-        "Pattern Recognition",
-        "Physical Removal",
-        "Set Collection",
-        "Take That",
-        "Variable Set-up"
-      ],
+      "mechanics": [],
       "mechanicsKo": [
         "계약",
         "공개 드래프팅",
@@ -35873,12 +35849,8 @@
         "공격형 플레이",
         "가변 셋업"
       ],
-      "designers": [
-        "Stefano Castelli",
-        "Andrea Crespi",
-        "Lorenzo Silva"
-      ],
-      "description": "Potion Explosion is a game for 2 to 4 players by Horrible Games.\nIt was designed by Lorenzo Silva, Andrea Crespi and Stefano Castelli.\n\nDear students, it's time for the final exams of the Potions class! The rules are always the same: Take an ingredient marble from the dispenser and watch the others fall. If you connect marbles of the same color, they explode and you can take them, too! Complete your potions using the marbles you collect, and drink them to unleash their magical power. Remember, though, that to win the Student of the Year award, being quick won't be enough: you'll also need to brew the most valuable potions in Potion Explosion!",
+      "designers": [],
+      "description": "",
       "descriptionKo": "포션 익스플로전은 호러블 게임즈의 2~4인용 게임입니다.\n로렌조 실바, 안드레아 크레스피, 스테파노 카스텔리가 디자인했습니다.\n\n친애하는 학생들이여, 마법약 수업의 최종 시험 시간입니다! 규칙은 항상 동일합니다: 디스펜서에서 재료 구슬 하나를 꺼내고 다른 구슬들이 떨어지는 것을 봅니다. 같은 색 구슬들을 연결시키면 폭발하고 그것들도 가져갈 수 있습니다! 수집한 구슬들을 이용해 마법약을 완성하고 마셔서 그 마법의 힘을 발휘하세요. 다만 올해의 모범생상을 받으려면 빠른 속도만으로는 부족합니다. 포션 익스플로전에서 가장 가치 있는 마법약들을 만들어야 합니다!"
     },
     "cottage": {
@@ -35889,45 +35861,24 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "chaotic",
-        "funny",
-        "immersive",
         "cozy"
       ],
-      "playTags": [
-        "puzzle",
-        "card_play",
-        "strategy"
-      ],
+      "playTags": [],
       "situationTags": [
-        "quick_play",
         "first_game",
+        "quick_play",
         "group"
       ],
-      "interactionTags": [
-        "silent_focus",
-        "competitive"
-      ],
+      "interactionTags": [],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "chaotic",
-        "funny",
-        "immersive",
         "cozy",
-        "puzzle",
-        "card_play",
-        "strategy",
-        "quick_play",
         "first_game",
-        "group",
-        "silent_focus",
-        "competitive"
+        "quick_play",
+        "group"
       ],
       "displayTags": [
-        "머리쓰게",
-        "즐기고",
-        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "디스펜서에서 구슬을 꺼내 같은 색끼리 연쇄 폭발을 일으켜 마법약을 만드는 게임.",
@@ -35947,9 +35898,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/vwjYMFporFhvAU48k73MIw__original/img/6sAfG89R42SJRv2wjiItRTMmcoQ=/0x0/filters:format(jpeg)/pic7298696.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/vwjYMFporFhvAU48k73MIw__small/img/uNBrY-gqZLq7aiv1E_pDsc3vmyE=/fit-in/200x150/filters:strip_icc()/pic7298696.jpg",
-      "source": "bgg",
+      "main": "",
+      "thumbnail": "",
+      "source": "none",
       "type": "jpg"
     },
     "community": {
@@ -47483,36 +47434,36 @@
     "bgg": {
       "id": "9539",
       "matchStatus": "forced",
-      "year": "1996",
-      "rating": 5.92553,
-      "weight": 1.1667,
+      "year": "1975",
+      "rating": 6.44159,
+      "weight": 1,
       "minPlayers": 2,
-      "maxPlayers": 6,
+      "maxPlayers": 4,
       "bestPlayers": [
-        2
+        4
       ],
       "recommendedPlayers": [
         3,
         4
       ],
       "notRecommendedPlayers": [
-        4,
-        5,
-        6
+        1,
+        2,
+        4
       ],
-      "playingTime": 20,
-      "minPlayTime": 20,
-      "maxPlayTime": 20,
+      "playingTime": 10,
+      "minPlayTime": 10,
+      "maxPlayTime": 10,
       "categories": [
-        "Action / Dexterity"
+        "Action / Dexterity",
+        "Children's Game",
+        "Party Game"
       ],
       "categoriesKo": [
         "순발력"
       ],
       "mechanics": [
-        "Auction / Bidding",
-        "Betting and Bluffing",
-        "Player Elimination"
+        "Simultaneous Action Selection"
       ],
       "mechanicsKo": [
         "경매/입찰",
@@ -47520,11 +47471,9 @@
         "플레이어 탈락"
       ],
       "designers": [
-        "Jürgen P. Grunau",
-        "Wolfgang Kramer",
-        "Hans Raggan"
+        "Frank D. Ventura"
       ],
-      "description": "The object of this game is to push different big disks lying on the board off the table.  Only when you push can you knock off disks but it costs chips in order to push and those chips are a scarce commodity. But it also costs chips to avoid pushing, so you are faced with a dilemma each turn.\nThe final objective is to be the last player with disks on the table. That player wins!",
+      "description": "Players try to have the highest score at the end of three rounds of play or to be the first player to score ten or more points.  Each player releases their ball along the track to score points before the eight ball drops and blocks the scoring track.\n\nThe Beat The Eight Ball game from Ideal is a game of patience and skill. After the Eight Ball is set spinning in the funnel each player must decide when to release their own marble. Beating the Eight Ball at all gives you points, coming in after it takes points away. More points are given the later your ball is so it pays to take chances.\n\nFurther description given by Sam Cancilla at http://www.Samstoybox.com",
       "descriptionKo": "이 게임의 목표는 테이블 위에 놓인 여러 개의 큰 디스크를 밀어서 테이블 가장자리 밖으로 떨어뜨리는 것입니다. 디스크를 밀어낼 때만 다른 디스크를 제거할 수 있지만, 밀기 위해서는 칩이 필요하고 칩은 부족한 자원입니다. 하지만 밀기를 피하는 데도 칩이 소비되므로, 매 턴마다 어려운 선택에 직면하게 됩니다.\n궁극의 목표는 테이블 위에 자신의 디스크를 가장 마지막까지 남기는 것입니다. 그 플레이어가 승리합니다!"
     },
     "cottage": {
@@ -47535,29 +47484,48 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "cozy"
+        "cozy",
+        "funny",
+        "chaotic"
       ],
-      "playTags": [],
+      "playTags": [
+        "party"
+      ],
       "situationTags": [
+        "beginner",
+        "family",
         "first_game",
-        "quick_play",
-        "couple",
         "group",
-        "large_group"
+        "large_group",
+        "quick_play"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "simultaneous",
+        "competitive",
+        "table_talk"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
+        "funny",
+        "chaotic",
+        "party",
+        "beginner",
+        "family",
         "first_game",
-        "quick_play",
-        "couple",
         "group",
-        "large_group"
+        "large_group",
+        "quick_play",
+        "simultaneous",
+        "competitive",
+        "table_talk"
       ],
       "displayTags": [
-        "편안하게"
+        "즐기고",
+        "편안하게",
+        "경쟁형",
+        "대화하며"
       ],
       "summaryKo": "제한된 칩을 사용해 상대 디스크를 밀어내고 자신의 디스크를 마지막까지 남기는 게임.",
       "comment": {
@@ -47576,8 +47544,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/35vxUSLPJ5LCrp1YPfNZGA__original/img/UUgLY2Pa8lp8yV6P-zJZHvqJrHQ=/0x0/filters:format(jpeg)/pic72804.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/35vxUSLPJ5LCrp1YPfNZGA__small/img/HAFCxXXYrnpronEVH8eQsNYhZ5o=/fit-in/200x150/filters:strip_icc()/pic72804.jpg",
+      "main": "https://cf.geekdo-images.com/GJd_qJDrgtEbTiFzKKIoOg__original/img/UWDIJJzUb6Mff1isiGKpBj3tclA=/0x0/filters:format(jpeg)/pic7542345.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/GJd_qJDrgtEbTiFzKKIoOg__small/img/cBTR1dbvjUVIBDL9sUFfap8GVY8=/fit-in/200x150/filters:strip_icc()/pic7542345.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -71075,13 +71043,13 @@
     "title": {
       "display": "쿠키박스 포켓몬",
       "owned": "쿠키박스 포켓몬",
-      "bgg": ""
+      "bgg": "Cookie Box"
     },
     "bgg": {
       "id": "202564",
       "matchStatus": "forced",
-      "year": "",
-      "rating": 6.7,
+      "year": "2016",
+      "rating": 6.68391,
       "weight": 1,
       "minPlayers": 2,
       "maxPlayers": 4,
@@ -71093,18 +71061,28 @@
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "notRecommendedPlayers": [
+        1,
+        4
+      ],
+      "playingTime": 20,
+      "minPlayTime": 15,
+      "maxPlayTime": 20,
+      "categories": [
+        "Action / Dexterity",
+        "Memory",
+        "Real-time"
+      ],
       "categoriesKo": [],
       "mechanics": [
-        "순발력"
+        "Memory",
+        "Pattern Recognition"
       ],
       "mechanicsKo": [],
-      "designers": [],
-      "description": "",
+      "designers": [
+        "Jean-Claude Pellin"
+      ],
+      "description": "You are working in a popular bakery where cookies sell like...well, hotcakes! With orders coming from all sides, you must be quick when making a box of nine cookies as the client ordered. Once you are done, ring the bell!\n\nIn Cookie Box, you need to rearrange cookie tokens to match the order card, then quickly ring the bell and take the order card. The first player to collect four order cards wins, but you must not make too many mistakes in your packing. If you mess up orders twice, you're eliminated from the game!",
       "descriptionKo": ""
     },
     "cottage": {
@@ -71115,24 +71093,45 @@
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
+        "chaotic",
+        "tense",
         "cozy"
       ],
-      "playTags": [],
+      "playTags": [
+        "puzzle",
+        "party",
+        "dexterity"
+      ],
       "situationTags": [
-        "first_game",
+        "beginner",
         "quick_play",
+        "first_game",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "silent_focus",
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
+        "chaotic",
+        "tense",
         "cozy",
-        "first_game",
+        "puzzle",
+        "party",
+        "dexterity",
+        "beginner",
         "quick_play",
-        "group"
+        "first_game",
+        "group",
+        "silent_focus",
+        "simultaneous"
       ],
       "displayTags": [
+        "머리쓰게",
+        "즐기고",
+        "빠져들게",
         "편안하게"
       ],
       "summaryKo": "",
@@ -71152,9 +71151,9 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/SYxaVBHoKAAh_S_lRS3kVA__original/img/o3ls9idmJNMu9P06toQSX_WidJA=/0x0/filters:format(jpeg)/pic3165677.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/SYxaVBHoKAAh_S_lRS3kVA__small/img/TTFpws-BZn3Tl9tc4vZloECbYTs=/fit-in/200x150/filters:strip_icc()/pic3165677.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {

@@ -1842,17 +1842,14 @@
     "id": "딩고디스크",
     "ownedName": "딩고디스크",
     "titleEn": "Dingo's Dreams",
-    "bggId": "182116",
-    "matchStatus": "auto-confirmed",
+    "bggId": "319598",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 1.087,
+    "difficulty": 1,
     "difficultyWeight": 1,
-    "rating": 6.02776,
-    "bestPlayers": [
-      3,
-      4
-    ],
+    "rating": 6.42857,
+    "bestPlayers": [],
     "recommendedPlayers": [
       2,
       3,
@@ -5631,17 +5628,15 @@
   {
     "id": "마법사의물약독",
     "ownedName": "마법사의물약(독)",
-    "titleEn": "Potion Explosion",
-    "bggId": "180974",
+    "titleEn": "",
+    "bggId": "7736327",
     "matchStatus": "forced",
-    "status": "ready",
+    "status": "pending-cache",
     "location": "파티",
-    "difficulty": 1.7809,
+    "difficulty": null,
     "difficultyWeight": 1,
-    "rating": 7.12133,
-    "bestPlayers": [
-      3
-    ],
+    "rating": null,
+    "bestPlayers": [],
     "recommendedPlayers": [
       2,
       3,
@@ -7418,15 +7413,15 @@
     "id": "스릴팡",
     "ownedName": "스릴팡",
     "titleEn": "Thrill",
-    "bggId": "2014",
-    "matchStatus": "auto-confirmed",
+    "bggId": "9539",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "몸",
-    "difficulty": 1.1667,
+    "difficulty": 1,
     "difficultyWeight": 1,
-    "rating": 5.92553,
+    "rating": 6.44159,
     "bestPlayers": [
-      2
+      4
     ],
     "recommendedPlayers": [
       3,
@@ -10967,14 +10962,14 @@
   {
     "id": "쿠키박스-포켓몬",
     "ownedName": "쿠키박스 포켓몬",
-    "titleEn": "",
-    "bggId": null,
-    "matchStatus": "no-bgg",
-    "status": "pending-cache",
+    "titleEn": "Cookie Box",
+    "bggId": "202564",
+    "matchStatus": "forced",
+    "status": "ready",
     "location": "파티",
-    "difficulty": null,
+    "difficulty": 1,
     "difficultyWeight": 1,
-    "rating": null,
+    "rating": 6.68391,
     "bestPlayers": [
       4
     ],
