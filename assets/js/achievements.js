@@ -122,24 +122,66 @@
     }, 4000);
   }
 
+  function getGameName(gameId) {
+    if (!gameId) return String(gameId);
+    if (window.gameData?.[gameId]) {
+      const g = window.gameData[gameId];
+      return g.display || g.titleKo || g.titleEn || String(gameId);
+    }
+    if (window.COTTAGE_GAMES) {
+      const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(gameId));
+      if (g) return g.display || g.titleKo || g.titleEn || String(gameId);
+    }
+    return String(gameId);
+  }
+
   // 게임 도감 섹션 HTML 빌드 — kakao-auth.js의 openProfilePanel에서 호출
   async function buildCodexSection(userId) {
     const db = window.CottageDB;
     if (!db) return '';
 
+    const [playedGames] = await Promise.all([
+      db.getUserPlayedGames(userId),
+    ]);
+
     const totalGames = window.gameData ? Object.keys(window.gameData).length : 0;
-    const playedCount = await db.getUserDistinctGameCount(userId);
+    const playedCount = playedGames.length;
     const pct = totalGames > 0 ? Math.round((playedCount / totalGames) * 100) : 0;
     const grade = getCodexGrade(pct);
     const barWidth = Math.min(pct, 100);
 
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const PREVIEW = 3;
+    const previewGames = playedGames.slice(0, PREVIEW);
+    const restGames = playedGames.slice(PREVIEW);
+
+    const previewHtml = previewGames.map(r =>
+      `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`
+    ).join('');
+
+    const restHtml = restGames.length
+      ? `<div class="profile-codex-more-wrap is-hidden">
+          <ul class="profile-codex-game-list">${restGames.map(r =>
+            `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`
+          ).join('')}</ul>
+        </div>
+        <button class="profile-codex-more-btn" type="button">전체 보기 (${restGames.length}개 더) ▾</button>`
+      : '';
+
+    const listHtml = playedCount
+      ? `<div class="profile-codex-list-section">
+          <ul class="profile-codex-game-list">${previewHtml}</ul>
+          ${restHtml}
+        </div>`
+      : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`;
+
     return `<div class="profile-codex-section">
       <div class="profile-codex-header">🎲 게임 도감</div>
-      <div class="profile-codex-progress">
-        <div class="profile-codex-count">${playedCount} <span>/ ${totalGames}</span></div>
-        <div class="profile-codex-bar-wrap"><div class="profile-codex-bar" style="width:${barWidth}%"></div></div>
-        <div class="profile-codex-grade">${grade}</div>
-      </div>
+      <div class="profile-codex-count">${playedCount} <span>/ ${totalGames}</span></div>
+      <div class="profile-codex-bar-wrap"><div class="profile-codex-bar" style="width:${barWidth}%"></div></div>
+      <div class="profile-codex-grade">${grade}</div>
+      ${listHtml}
     </div>`;
   }
 

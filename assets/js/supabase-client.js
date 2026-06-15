@@ -1057,6 +1057,7 @@ window._cottageSess = (function () {
     getTotalPoints,
     getUserPlayCount,
     getUserDistinctGameCount,
+    getUserPlayedGames,
     getUserPhotoCount,
     getUserRatingCount,
     getRepAchievement,
@@ -1149,6 +1150,21 @@ window._cottageSess = (function () {
       const { data } = await db.from('game_play_records').select('game_id').eq('user_id', userId);
       return new Set((data || []).map(r => r.game_id)).size;
     } catch (_) { return 0; }
+  }
+
+  async function getUserPlayedGames(userId) {
+    try {
+      const { data } = await db.from('game_play_records')
+        .select('game_id, played_at, created_at')
+        .eq('user_id', userId)
+        .order('played_at', { ascending: false });
+      const seen = new Set();
+      return (data || []).filter(r => {
+        if (seen.has(r.game_id)) return false;
+        seen.add(r.game_id);
+        return true;
+      });
+    } catch (_) { return []; }
   }
 
   async function getUserPhotoCount(userId) {

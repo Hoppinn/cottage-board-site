@@ -557,6 +557,16 @@ async function openProfilePanel() {
     sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
   });
 
+  body.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.previousElementSibling;
+      const isHidden = wrap.classList.toggle('is-hidden');
+      btn.textContent = isHidden
+        ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
+        : '접기 ▴';
+    });
+  });
+
   body.querySelectorAll('.profile-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
