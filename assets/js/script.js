@@ -1458,6 +1458,7 @@ async function initSheetPlayPreview(gameKey) {
 
   el.innerHTML = `<div class="sheet-play-preview-item">
     <div class="sheet-play-preview-meta">
+      ${r.nickname ? `<strong class="sheet-comment-nick">${esc(r.nickname)}</strong>` : ''}
       ${dateStr ? `<span class="sheet-preview-date">${dateStr}</span>` : ''}
       ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
     </div>
@@ -1492,7 +1493,13 @@ async function _fetchGamePhotos(gameKey) {
   if ((!records || !records.length) && bggIdP && bggIdP !== gameKey) {
     records = await window.CottageDB.getGamePlayRecords(gameKey, 50);
   }
-  return (records || []).flatMap(r => window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : []);
+  return (records || []).flatMap(r =>
+    (window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : []).map(url => ({
+      url,
+      nickname: r.nickname || '',
+      played_at: r.played_at || r.created_at || '',
+    }))
+  );
 }
 
 async function initSheetPhotoPreview(gameKey) {
@@ -1500,7 +1507,8 @@ async function initSheetPhotoPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewPhotoLabel-${gameKey}`);
   if (!el || !window.CottageDB || !window.parsePhotoUrls) return;
 
-  const allPhotos = await _fetchGamePhotos(gameKey);
+  const entries = await _fetchGamePhotos(gameKey);
+  const allPhotos = entries.map(e => e.url);
   const total = allPhotos.length;
   if (labelEl) labelEl.textContent = total > 0 ? `사진 ${total}장` : '사진';
 
@@ -1509,13 +1517,22 @@ async function initSheetPhotoPreview(gameKey) {
     return;
   }
 
+  const latest = entries[0];
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const dateStr = latest.played_at
+    ? new Date(latest.played_at.slice(0,10) + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+    : '';
+  const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
+
   const show = allPhotos.slice(0, 3);
   const more = total - 3;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-  el.innerHTML = `<div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
-    ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
-    ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
-  </div>`;
+  el.innerHTML = `
+    ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
+    <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
+      ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+      ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
+    </div>`;
   _attachPhotoLightbox(el, allPhotos);
 }
 
@@ -1524,7 +1541,8 @@ async function initSheetPhotos(gameKey) {
   const countEl = document.getElementById(`sheetPhotosCount-${gameKey}`);
   if (!el || !window.CottageDB || !window.parsePhotoUrls) return;
 
-  const allPhotos = await _fetchGamePhotos(gameKey);
+  const entries = await _fetchGamePhotos(gameKey);
+  const allPhotos = entries.map(e => e.url);
   const total = allPhotos.length;
   if (countEl) countEl.textContent = total > 0 ? `사진 ${total}장` : '사진';
 
@@ -1533,13 +1551,22 @@ async function initSheetPhotos(gameKey) {
     return;
   }
 
+  const latest = entries[0];
+  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const dateStr = latest.played_at
+    ? new Date(latest.played_at.slice(0,10) + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+    : '';
+  const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
+
   const show = allPhotos.slice(0, 9);
   const more = total - 9;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-  el.innerHTML = `<div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
-    ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
-    ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="9">+${more}장</div>` : ''}
-  </div>`;
+  el.innerHTML = `
+    ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
+    <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
+      ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+      ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="9">+${more}장</div>` : ''}
+    </div>`;
   _attachPhotoLightbox(el, allPhotos);
 }
 
