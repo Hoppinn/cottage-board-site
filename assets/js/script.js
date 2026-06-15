@@ -1274,6 +1274,17 @@ function openGameSheet(gameKey, restoreScroll = false){
       </div>
     </div>
 
+    <!-- 사진 미리보기 -->
+    <div class="sheet-preview-section">
+      <div class="sheet-preview-hd">
+        <span class="sheet-preview-label" id="sheetPreviewPhotoLabel-${gameKey}">사진</span>
+        <button class="sheet-preview-more-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
+      </div>
+      <div class="sheet-preview-body" id="sheetPhotoPreview-${gameKey}">
+        <span class="sheet-comments-empty">불러오는 중...</span>
+      </div>
+    </div>
+
   `;
 
   const _panel = gameSheet.querySelector('.game-sheet-panel');
@@ -1289,6 +1300,7 @@ function openGameSheet(gameKey, restoreScroll = false){
   initSheetLikes(gameKey).catch(() => {});
   initSheetCommentsPreview(gameKey).catch(() => {});
   initSheetPlayPreview(gameKey).catch(() => {});
+  initSheetPhotoPreview(gameKey).catch(() => {});
 
   // ?scroll=comments → 코멘트 섹션으로 스크롤
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
@@ -1361,6 +1373,10 @@ function openGameRecordSheet(gameKey) {
         <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
         <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
       </div>
+      <div class="sheet-play-section">
+        <p class="sheet-section-label" id="sheetPhotosCount-${gameKey}" style="margin-bottom:8px">사진</p>
+        <div id="sheetPhotosArea-${gameKey}"><span class="sheet-comments-empty">불러오는 중...</span></div>
+      </div>
     </div>
   `;
 
@@ -1371,6 +1387,7 @@ function openGameRecordSheet(gameKey) {
 
   initSheetComments(gameKey).catch(() => {});
   initPlayWidget(gameKey).catch(() => {});
+  initSheetPhotos(gameKey).catch(() => {});
 }
 
 async function initSheetCommentsPreview(gameKey) {
@@ -1440,9 +1457,6 @@ async function initSheetPlayPreview(gameKey) {
     ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
     : (r.created_at ? r.created_at.slice(0, 10).replace(/-/g, '.') : '');
 
-  const photos = window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : [];
-  const photoHtml = photos.length && window.buildPhotoHtml ? window.buildPhotoHtml(photos, r.id, false) : '';
-
   el.innerHTML = `<div class="sheet-play-preview-item">
     <div class="sheet-play-preview-meta">
       ${dateStr ? `<span class="sheet-preview-date">${dateStr}</span>` : ''}
@@ -1454,24 +1468,80 @@ async function initSheetPlayPreview(gameKey) {
       ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ''}
       ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : ''}
     </div>
-    ${photoHtml}
     ${count > 1 ? `<p class="sheet-preview-more-hint">${count - 1}건 더 있음</p>` : ''}
   </div>`;
+}
 
-  if (window.openLightbox) {
-    el.querySelectorAll('.pr-rec-photo').forEach(img => {
-      img.addEventListener('click', () => {
-        const wrap = img.closest('.pr-rec-photo-wrap');
-        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
-      });
+function _attachPhotoLightbox(container, allPhotos) {
+  if (!window.openLightbox) return;
+  container.querySelectorAll('.pr-rec-photo').forEach(img => {
+    img.addEventListener('click', () => {
+      try { window.openLightbox(allPhotos, Number(img.dataset.idx || 0)); } catch(_) {}
     });
-    el.querySelectorAll('.pr-rec-photo-more').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const wrap = btn.closest('.pr-rec-photo-wrap');
-        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(btn.dataset.idx || 3)); } catch(_) {}
-      });
+  });
+  container.querySelectorAll('.pr-rec-photo-more').forEach(btn => {
+    btn.addEventListener('click', () => {
+      try { window.openLightbox(allPhotos, Number(btn.dataset.idx || 0)); } catch(_) {}
     });
+  });
+}
+
+async function _fetchGamePhotos(gameKey) {
+  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
+  const numericId = bggIdP || gameKey;
+  let records = await window.CottageDB.getGamePlayRecords(numericId, 50);
+  if ((!records || !records.length) && bggIdP && bggIdP !== gameKey) {
+    records = await window.CottageDB.getGamePlayRecords(gameKey, 50);
   }
+  return (records || []).flatMap(r => window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : []);
+}
+
+async function initSheetPhotoPreview(gameKey) {
+  const el = document.getElementById(`sheetPhotoPreview-${gameKey}`);
+  const labelEl = document.getElementById(`sheetPreviewPhotoLabel-${gameKey}`);
+  if (!el || !window.CottageDB || !window.parsePhotoUrls) return;
+
+  const allPhotos = await _fetchGamePhotos(gameKey);
+  const total = allPhotos.length;
+  if (labelEl) labelEl.textContent = total > 0 ? `사진 ${total}장` : '사진';
+
+  if (!total) {
+    el.innerHTML = '<span class="sheet-comments-empty">사진이 없습니다</span>';
+    return;
+  }
+
+  const show = allPhotos.slice(0, 3);
+  const more = total - 3;
+  const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  el.innerHTML = `<div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
+    ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+    ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
+  </div>`;
+  _attachPhotoLightbox(el, allPhotos);
+}
+
+async function initSheetPhotos(gameKey) {
+  const el = document.getElementById(`sheetPhotosArea-${gameKey}`);
+  const countEl = document.getElementById(`sheetPhotosCount-${gameKey}`);
+  if (!el || !window.CottageDB || !window.parsePhotoUrls) return;
+
+  const allPhotos = await _fetchGamePhotos(gameKey);
+  const total = allPhotos.length;
+  if (countEl) countEl.textContent = total > 0 ? `사진 ${total}장` : '사진';
+
+  if (!total) {
+    el.innerHTML = '<span class="sheet-comments-empty">사진이 없습니다</span>';
+    return;
+  }
+
+  const show = allPhotos.slice(0, 9);
+  const more = total - 9;
+  const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  el.innerHTML = `<div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
+    ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+    ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="9">+${more}장</div>` : ''}
+  </div>`;
+  _attachPhotoLightbox(el, allPhotos);
 }
 
 if(closeGameSheetButton){
@@ -2009,8 +2079,6 @@ async function initPlayWidget(gameKey) {
           : null;
         const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
-        const photos = window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : [];
-        const photoHtml = photos.length && window.buildPhotoHtml ? window.buildPhotoHtml(photos, r.id, false) : '';
         return `<div class="sheet-my-record-item">
           <div class="sheet-record-info">
             ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
@@ -2020,7 +2088,6 @@ async function initPlayWidget(gameKey) {
               ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ""}
               ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
             </div>` : ""}
-            ${photoHtml}
           </div>
           ${isMine ? `<div class="sheet-play-record-actions">
             <button class="sheet-play-edit-btn"
@@ -2045,21 +2112,6 @@ async function initPlayWidget(gameKey) {
   })();
 
   widget.innerHTML = html;
-
-  if (window.openLightbox) {
-    widget.querySelectorAll('.pr-rec-photo').forEach(img => {
-      img.addEventListener('click', () => {
-        const wrap = img.closest('.pr-rec-photo-wrap');
-        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
-      });
-    });
-    widget.querySelectorAll('.pr-rec-photo-more').forEach(el => {
-      el.addEventListener('click', () => {
-        const wrap = el.closest('.pr-rec-photo-wrap');
-        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
-      });
-    });
-  }
 
   if (wasExpanded) {
     const newList = document.getElementById(listId);
