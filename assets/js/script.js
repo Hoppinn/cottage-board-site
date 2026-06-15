@@ -1990,6 +1990,8 @@ async function initPlayWidget(gameKey) {
           : null;
         const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
+        const photos = window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : [];
+        const photoHtml = photos.length && window.buildPhotoHtml ? window.buildPhotoHtml(photos, r.id, false) : '';
         return `<div class="sheet-my-record-item">
           <div class="sheet-record-info">
             ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
@@ -1999,6 +2001,7 @@ async function initPlayWidget(gameKey) {
               ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ""}
               ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
             </div>` : ""}
+            ${photoHtml}
           </div>
           ${isMine ? `<div class="sheet-play-record-actions">
             <button class="sheet-play-edit-btn"
@@ -2023,6 +2026,21 @@ async function initPlayWidget(gameKey) {
   })();
 
   widget.innerHTML = html;
+
+  if (window.openLightbox) {
+    widget.querySelectorAll('.pr-rec-photo').forEach(img => {
+      img.addEventListener('click', () => {
+        const wrap = img.closest('.pr-rec-photo-wrap');
+        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
+      });
+    });
+    widget.querySelectorAll('.pr-rec-photo-more').forEach(el => {
+      el.addEventListener('click', () => {
+        const wrap = el.closest('.pr-rec-photo-wrap');
+        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
+      });
+    });
+  }
 
   if (wasExpanded) {
     const newList = document.getElementById(listId);
