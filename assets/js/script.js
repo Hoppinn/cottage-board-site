@@ -1416,7 +1416,7 @@ async function initSheetCommentsPreview(gameKey) {
   const item = allItems[0];
   const txt = esc(item.text);
   const nick = esc(item.nick);
-  const dateStr = item.date ? item.date.slice(0, 10).replace(/-/g, '.') : '';
+  const dateStr = item.date ? new Date(item.date.slice(0, 10) + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
   el.innerHTML = `<div class="sheet-comment-item">
     <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
     <p class="sheet-comment-text">${txt}</p>
@@ -1457,11 +1457,11 @@ async function initSheetPlayPreview(gameKey) {
     : (r.created_at ? r.created_at.slice(0, 10).replace(/-/g, '.') : '');
 
   el.innerHTML = `<div class="sheet-play-preview-item">
-    <div class="sheet-play-preview-meta">
+    <span class="sheet-comment-nickname">
       ${r.nickname ? `<strong class="sheet-comment-nick">${esc(r.nickname)}</strong>` : ''}
-      ${dateStr ? `<span class="sheet-preview-date">${dateStr}</span>` : ''}
+      ${dateStr ? `<span class="sheet-comment-date">${dateStr}</span>` : ''}
       ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
-    </div>
+    </span>
     <div class="sheet-play-info">
       ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ''}
       ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${esc(r.player_names)}</span>` : ''}
