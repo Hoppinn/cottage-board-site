@@ -1416,7 +1416,7 @@ async function initSheetCommentsPreview(gameKey) {
   const item = allItems[0];
   const txt = esc(item.text);
   const nick = esc(item.nick);
-  const dateStr = item.date ? new Date(item.date.slice(0, 10) + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
+  const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
   el.innerHTML = `<div class="sheet-comment-item">
     <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
     <p class="sheet-comment-text">${txt}</p>
@@ -1453,8 +1453,8 @@ async function initSheetPlayPreview(gameKey) {
   const r = records[0];
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const dateStr = r.played_at
-    ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
-    : (r.created_at ? r.created_at.slice(0, 10).replace(/-/g, '.') : '');
+    ? r.played_at.slice(2, 10).replace(/-/g, '.')
+    : (r.created_at ? r.created_at.slice(2, 10).replace(/-/g, '.') : '');
 
   el.innerHTML = `<div class="sheet-play-preview-item">
     <span class="sheet-comment-nickname">
@@ -1520,7 +1520,7 @@ async function initSheetPhotoPreview(gameKey) {
   const latest = entries[0];
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const dateStr = latest.played_at
-    ? new Date(latest.played_at.slice(0,10) + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+    ? latest.played_at.slice(2, 10).replace(/-/g, '.')
     : '';
   const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
 
@@ -1554,7 +1554,7 @@ async function initSheetPhotos(gameKey) {
   const latest = entries[0];
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const dateStr = latest.played_at
-    ? new Date(latest.played_at.slice(0,10) + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+    ? latest.played_at.slice(2, 10).replace(/-/g, '.')
     : '';
   const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
 
