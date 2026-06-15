@@ -3465,6 +3465,7 @@ body.sheet-open{
   padding:0;
   font-weight:600;
 }
+.sheet-records-all-btn{ display:block; width:100%; text-align:right; margin-top:4px; padding:8px 0; }
 .sheet-preview-body .sheet-comment-item{ margin:0; }
 .sheet-preview-more-hint{
   font-size:11px;

@@ -1256,7 +1256,6 @@ function openGameSheet(gameKey, restoreScroll = false){
     <div class="sheet-preview-section">
       <div class="sheet-preview-hd">
         <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
-        <button class="sheet-preview-more-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
       </div>
       <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
         <span class="sheet-comments-empty">불러오는 중...</span>
@@ -1267,7 +1266,6 @@ function openGameSheet(gameKey, restoreScroll = false){
     <div class="sheet-preview-section">
       <div class="sheet-preview-hd">
         <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
-        <button class="sheet-preview-more-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
       </div>
       <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
         <span class="sheet-comments-empty">불러오는 중...</span>
@@ -1278,12 +1276,13 @@ function openGameSheet(gameKey, restoreScroll = false){
     <div class="sheet-preview-section">
       <div class="sheet-preview-hd">
         <span class="sheet-preview-label" id="sheetPreviewPhotoLabel-${gameKey}">사진</span>
-        <button class="sheet-preview-more-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
       </div>
       <div class="sheet-preview-body" id="sheetPhotoPreview-${gameKey}">
         <span class="sheet-comments-empty">불러오는 중...</span>
       </div>
     </div>
+
+    <button class="sheet-preview-more-btn sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 전체보기 →</button>
 
   `;
 
