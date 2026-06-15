@@ -397,9 +397,11 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs] = await Promise.all([
+  const [stats, notifs, codexHtml, charHtml] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
+    window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve(''),
+    window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve(''),
   ]);
   if (window._cottageSess) {
     const _s = window._cottageSess.get(String(user.id));
@@ -531,6 +533,8 @@ async function openProfilePanel() {
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
     </ul>
+    ${codexHtml}
+    ${charHtml}
     ${stats.plays.length ? `<div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-toggle-arrow">▾</span></button>
       ${playListHtml}
@@ -547,6 +551,10 @@ async function openProfilePanel() {
       const collapsed = list.classList.toggle('is-collapsed');
       arrow.textContent = collapsed ? '▾' : '▴';
     });
+  });
+
+  body.querySelectorAll('.profile-rep-select').forEach(sel => {
+    sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
   });
 
   body.querySelectorAll('.profile-more-btn').forEach(btn => {

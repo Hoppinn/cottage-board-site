@@ -3590,6 +3590,33 @@ body.sheet-open{
 .profile-notif-more{color:var(--muted);font-size:11px;}
 .profile-notif-list li.is-new{font-weight:600;}
 .profile-notif-new-badge{display:inline-block;font-size:9px;font-weight:700;color:#fff;background:#e53935;border-radius:3px;padding:1px 4px;vertical-align:middle;margin-right:2px;}
+/* 게임 도감 섹션 */
+.profile-codex-section{background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:12px 14px;margin-top:14px;}
+.profile-codex-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.profile-codex-count{font-size:22px;font-weight:900;color:#5a3418;line-height:1;}
+.profile-codex-count span{font-size:13px;font-weight:400;color:var(--muted);}
+.profile-codex-bar-wrap{height:7px;background:var(--border,#e8e4dc);border-radius:4px;margin:6px 0 4px;overflow:hidden;}
+.profile-codex-bar{height:100%;background:#7a4828;border-radius:4px;transition:width 0.6s ease;}
+.profile-codex-grade{font-size:12px;color:var(--muted);}
+/* 캐릭터 섹션 */
+.profile-char-section{margin-top:14px;}
+.profile-char-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.profile-char-count{font-size:11px;font-weight:400;color:var(--muted);}
+.profile-char-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.profile-char-badge{font-size:12px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:4px 10px;color:var(--text);}
+.profile-rep-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.profile-rep-label{font-size:12px;font-weight:700;color:#7a4828;flex-shrink:0;}
+.profile-rep-select{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:4px 8px;background:var(--card-bg,#faf9f5);color:var(--text);flex:1;min-width:0;}
+.profile-points-line{font-size:12px;color:var(--muted);margin-top:4px;}
+/* 업적 달성 토스트 */
+.achievement-toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:#fff;border:1px solid #e8e4dc;border-radius:14px;box-shadow:0 4px 20px rgba(0,0,0,0.15);padding:12px 16px;display:flex;align-items:center;gap:10px;z-index:9999;transition:opacity 0.3s,transform 0.3s;max-width:320px;width:90%;}
+.achievement-toast.is-visible{opacity:1;transform:translateX(-50%) translateY(0);}
+.achievement-toast-icon{font-size:24px;flex-shrink:0;}
+.achievement-toast-body{flex:1;min-width:0;}
+.achievement-toast-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.05em;}
+.achievement-toast-name{font-size:14px;font-weight:900;color:#5a3418;}
+.achievement-toast-pts{font-size:12px;color:#7a4828;font-weight:700;}
+.achievement-toast-link{font-size:11px;font-weight:700;color:#7a4828;text-decoration:none;white-space:nowrap;flex-shrink:0;}
 
 /* 프로필 사진 피커 모달 */
 .photo-picker-modal{

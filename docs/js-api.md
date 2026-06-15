@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-06-12
+최종 갱신: 2026-06-15 (업적/캐릭터 V1)
 
 ---
 
@@ -54,6 +54,15 @@
 | `isUserBanned()` | 현재 유저 차단 여부 |
 | `getProfilePhoto(userId)` | profiles.photo_url 단일 조회 |
 | `getProfileSnapshot(userId)` | profiles.photo_url + nickname 단일 조회 (다기기 동기화용) |
+| `getUserAchievements(userId)` | 유저가 획득한 업적(캐릭터) 목록 |
+| `grantAchievement(userId, achId, points)` | 업적 지급 + points_log 기록. 중복이면 false 반환 |
+| `setRepAchievement(userId, achId)` | 대표 캐릭터 설정 (profiles.rep_achievement_id) |
+| `getTotalPoints(userId)` | points_log 합산 포인트 |
+| `getUserPlayCount(userId)` | 플레이 기록 건수 |
+| `getUserDistinctGameCount(userId)` | 플레이한 게임 종류 수 (distinct game_id) |
+| `getUserPhotoCount(userId)` | 첨부 사진 URL 개수 합산 |
+| `getUserRatingCount(userId)` | 별점 제출 건수 |
+| `getRepAchievement(userId)` | 대표 캐릭터 객체 반환 |
 
 ---
 
@@ -153,6 +162,8 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.initTagInput` | play-records-utils.js | game-reviews.js |
 | `window.toInitials` | play-records-utils.js | game-reviews.js |
 | `window.hangulMatch` | play-records-utils.js | game-reviews.js |
+| `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
+| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드) |
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, script.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
 | `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |

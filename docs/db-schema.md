@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-06-12
+최종 갱신: 2026-06-15 (업적/캐릭터/포인트 V1)
 
 ---
 
@@ -9,6 +9,7 @@
 | 테이블 | 주요 컬럼 | 용도 |
 |--------|----------|------|
 | `game_views` | game_id, created_at | 조회수 트래킹 |
+| `profiles.rep_achievement_id` | TEXT | 대표 캐릭터 1개 (achievements.id 참조) |
 | `game_ratings` | game_id, rating, session_key | 별점 |
 | `game_likes` | game_id, user_id | 따봉 |
 | `game_curious` | game_id, user_id | 궁금해요 |
@@ -26,6 +27,9 @@
 | `game_request_votes` | request_id, user_id | 요청 투표 |
 | `member_intros` | user_id, nickname | 멤버 소개 |
 | `anon_sessions` | session_key, entered_at, duration_sec | 비로그인 세션 분석 |
+| `achievements` | id, name, emoji, category, threshold, points | 업적/캐릭터 정의 (V1: 17개) |
+| `user_achievements` | user_id, achievement_id, earned_at, UNIQUE(user_id, achievement_id) | 유저별 획득 업적 = 해금 캐릭터 |
+| `points_log` | user_id, delta, reason, created_at | 포인트 원장 (append-only) |
 
 ---
 

@@ -146,6 +146,7 @@ window._cottageSess = (function () {
         });
         if (!error) {
           localStorage.setItem(storageKey, String(rating));
+          window.checkAchievements?.('review', String(userId));
           return { success: true };
         }
         return { error };
@@ -272,6 +273,7 @@ window._cottageSess = (function () {
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
+        if (userId) window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
         return { success: true, id };
       }
       return { error };
@@ -1049,6 +1051,15 @@ window._cottageSess = (function () {
     getProfilePhoto,
     getProfileSnapshot,
     getAllPlayRecordsForHub,
+    getUserAchievements,
+    grantAchievement,
+    setRepAchievement,
+    getTotalPoints,
+    getUserPlayCount,
+    getUserDistinctGameCount,
+    getUserPhotoCount,
+    getUserRatingCount,
+    getRepAchievement,
   };
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
@@ -1087,5 +1098,87 @@ window._cottageSess = (function () {
       const { error } = await db.from('game_reviews').delete().eq('id', id);
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
+  }
+
+  // ── 업적/캐릭터 ────────────────────────────────────────────
+
+  async function getUserAchievements(userId) {
+    try {
+      const { data } = await db.from('user_achievements')
+        .select('achievement_id, earned_at, achievements(id, name, emoji, category, threshold, points)')
+        .eq('user_id', userId)
+        .order('earned_at', { ascending: true });
+      return (data || []).map(r => ({ ...r.achievements, earned_at: r.earned_at }));
+    } catch (_) { return []; }
+  }
+
+  async function grantAchievement(userId, achievementId, points) {
+    try {
+      const { error } = await db.from('user_achievements').insert({ user_id: userId, achievement_id: achievementId });
+      if (error) return false; // 중복이면 UNIQUE 위반 → 조용히 false
+      if (points > 0) {
+        await db.from('points_log').insert({ user_id: userId, delta: points, reason: `achievement:${achievementId}` });
+      }
+      return true;
+    } catch (_) { return false; }
+  }
+
+  async function setRepAchievement(userId, achievementId) {
+    try {
+      const { error } = await db.from('profiles').update({ rep_achievement_id: achievementId }).eq('user_id', userId);
+      return !error;
+    } catch (_) { return false; }
+  }
+
+  async function getTotalPoints(userId) {
+    try {
+      const { data } = await db.from('points_log').select('delta').eq('user_id', userId);
+      return (data || []).reduce((s, r) => s + (r.delta || 0), 0);
+    } catch (_) { return 0; }
+  }
+
+  async function getUserPlayCount(userId) {
+    try {
+      const { count } = await db.from('game_play_records').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      return count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function getUserDistinctGameCount(userId) {
+    try {
+      const { data } = await db.from('game_play_records').select('game_id').eq('user_id', userId);
+      return new Set((data || []).map(r => r.game_id)).size;
+    } catch (_) { return 0; }
+  }
+
+  async function getUserPhotoCount(userId) {
+    try {
+      const { data } = await db.from('game_play_records').select('photo_url').eq('user_id', userId).not('photo_url', 'is', null);
+      return (data || []).reduce((s, r) => {
+        if (!r.photo_url) return s;
+        try {
+          const parsed = JSON.parse(r.photo_url);
+          return s + (Array.isArray(parsed) ? parsed.length : 1);
+        } catch (_) {
+          return s + (r.photo_url.trim() ? 1 : 0);
+        }
+      }, 0);
+    } catch (_) { return 0; }
+  }
+
+  async function getUserRatingCount(userId) {
+    try {
+      const { count } = await db.from('game_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      return count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function getRepAchievement(userId) {
+    try {
+      const { data } = await db.from('profiles').select('rep_achievement_id').eq('user_id', userId).maybeSingle();
+      if (!data?.rep_achievement_id) return null;
+      const { data: ach } = await db.from('achievements').select('id, name, emoji').eq('id', data.rep_achievement_id).maybeSingle();
+      return ach || null;
+    } catch (_) { return null; }
   }
 })();
