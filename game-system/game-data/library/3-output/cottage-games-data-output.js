@@ -11550,7 +11550,7 @@ const gameData = {
         "Pierre Tessier"
       ],
       "description": "Dingo Disc is a game of skill, balance, strategy, and luck in which players must place all of their counters on a balanced disk without dropping the counters that have already been placed.\n\nOn a turn, you roll two dice: the color die determines the colored area of the disk where you must place, and the number die the location within that area. Whoever places all of their counters first wins &mdash; and any player who spills all the counters off the disk automatically loses.",
-      "descriptionKo": "딩고 디스크는 기술, 균형, 전략, 운이 결합된 게임으로, 플레이어들은 이미 놓인 카운터를 떨어뜨리지 않으면서 자신의 모든 카운터를 균형잡힌 디스크 위에 놓아야 합니다.\n\n턴마다 두 개의 주사위를 굴립니다. 색깔 주사위는 디스크의 어느 색깔 영역에 놓을지를 결정하고, 숫자 주사위는 그 영역 내의 위치를 결정합니다. 자신의 모든 카운터를 먼저 놓는 플레이어가 승리하며, 디스크의 카운터를 모두 떨어뜨린 플레이어는 자동으로 패배합니다."
+      "descriptionKo": "딩고 디스크는 기술, 균형, 전략, 운이 결합된 게임으로, 플레이어들은 이미 올려진 카운터를 떨어뜨리지 않으면서 자신의 모든 카운터를 균형잡힌 디스크 위에 올려놓아야 합니다.\n\n턴마다 두 개의 주사위를 굴립니다. 색상 주사위는 디스크에서 카운터를 놓을 색깔 영역을, 숫자 주사위는 그 영역 내의 위치를 결정합니다. 자신의 모든 카운터를 가장 먼저 올려놓은 플레이어가 승리합니다. 디스크에서 모든 카운터를 떨어뜨린 플레이어는 자동으로 패배합니다."
     },
     "cottage": {
       "status": "active",
@@ -11596,7 +11596,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "주사위를 굴려 정해진 위치에 카운터를 올려놓되 떨어진 것들을 떨어뜨리지 않으면서 먼저 모두 올려놓는 게임.",
+      "summaryKo": "주사위를 굴려 지정된 위치에 카운터를 올려놓되, 기존 카운터를 떨어뜨리지 않으면서 모두 올려놓는 게임",
       "comment": {
         "text": "",
         "source": "none"
