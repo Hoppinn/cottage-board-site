@@ -197,11 +197,11 @@
       db.getUserPointRewardStats(userId),
     ]);
 
-    if (!achievements.length) return '';
-
-    const chars = achievements.map(a =>
-      `<span class="profile-char-badge" title="${a.name}">${a.emoji} ${a.name}</span>`
-    ).join('');
+    const chars = achievements.length
+      ? achievements.map(a =>
+          `<span class="profile-char-badge" title="${a.name}">${a.emoji} ${a.name}</span>`
+        ).join('')
+      : '<p class="profile-char-empty">아직 획득한 캐릭터가 없어요.<br><span style="font-size:11px;color:var(--muted)">게임을 플레이하면 캐릭터가 해금됩니다 🐾</span></p>';
 
     const repOptions = achievements.map(a =>
       `<option value="${a.id}" ${repAch?.id === a.id ? 'selected' : ''}>${a.emoji} ${a.name}</option>`
@@ -214,16 +214,22 @@
         </div>`
       : '';
 
+    const repRowHtml = achievements.length
+      ? `<div class="profile-rep-row">
+          <span class="profile-rep-label">⭐ 대표</span>
+          <select class="profile-rep-select" data-user-id="${userId}">
+            <option value="">미설정</option>
+            ${repOptions}
+          </select>
+        </div>`
+      : '';
+
+    const countLabel = achievements.length ? `${achievements.length}종` : '';
+
     return `<div class="profile-char-section">
-      <div class="profile-char-header">🐾 내 캐릭터 <span class="profile-char-count">${achievements.length}종</span></div>
+      <div class="profile-char-header">🐾 내 캐릭터${countLabel ? ` <span class="profile-char-count">${countLabel}</span>` : ''}</div>
       <div class="profile-char-list">${chars}</div>
-      <div class="profile-rep-row">
-        <span class="profile-rep-label">⭐ 대표</span>
-        <select class="profile-rep-select" data-user-id="${userId}">
-          <option value="">미설정</option>
-          ${repOptions}
-        </select>
-      </div>
+      ${repRowHtml}
       ${ptsHtml}
     </div>`;
   }

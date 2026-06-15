@@ -1,5 +1,8 @@
--- V1 업적/캐릭터/포인트 시스템
--- Supabase 대시보드 SQL 에디터에서 실행
+-- 코티지보드 전체 스키마 마이그레이션
+-- Supabase 대시보드 SQL 에디터에서 전체 실행 (IF NOT EXISTS로 멱등)
+-- 파일 하나에서 모두 관리 — 새 테이블/컬럼 추가 시 하단에 이어 붙임
+
+-- ── 업적/캐릭터/포인트 V1 ──────────────────────────────────────────────
 
 -- 1. 업적 정의 (= 캐릭터 정의)
 CREATE TABLE IF NOT EXISTS achievements (
@@ -20,7 +23,7 @@ CREATE TABLE IF NOT EXISTS user_achievements (
   UNIQUE(user_id, achievement_id)
 );
 
--- 3. 포인트 원장 (append-only)
+-- 3. 포인트 원장 (append-only, 관리자 승인 후 기록)
 CREATE TABLE IF NOT EXISTS points_log (
   id BIGSERIAL PRIMARY KEY,
   user_id TEXT NOT NULL,
@@ -29,10 +32,23 @@ CREATE TABLE IF NOT EXISTS points_log (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- 4. profiles에 대표 캐릭터 컬럼 추가
+-- 4. 포인트 승인 대기 테이블
+--    업적 달성 시 point_rewards(pending) 생성 → 관리자 승인 → points_log 반영
+CREATE TABLE IF NOT EXISTS point_rewards (
+  id BIGSERIAL PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  achievement_id TEXT REFERENCES achievements(id),
+  points INT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',  -- 'pending' | 'approved' | 'rejected'
+  created_at TIMESTAMPTZ DEFAULT now(),
+  reviewed_at TIMESTAMPTZ,
+  reviewed_by TEXT
+);
+
+-- 5. profiles에 대표 캐릭터 컬럼 추가
 ALTER TABLE profiles ADD COLUMN IF NOT EXISTS rep_achievement_id TEXT;
 
--- 5. V1 초기 업적 데이터 (17개)
+-- 6. V1 초기 업적 데이터 (17개)
 INSERT INTO achievements (id, name, emoji, category, threshold, points) VALUES
   -- 탐험가 계열 (토끼) — 새로운 게임 경험
   ('rabbit_first', '새싹 토끼',          '🌱', 'play_record', 1,   300),
