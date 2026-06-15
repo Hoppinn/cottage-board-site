@@ -11536,18 +11536,15 @@ const gameData = {
         "Party Game"
       ],
       "categoriesKo": [
-        "동물",
-        "판타지",
-        "퍼즐"
+        "추상 전략",
+        "순발력",
+        "파티게임"
       ],
       "mechanics": [
         "Stacking and Balancing"
       ],
       "mechanicsKo": [
-        "빙고",
-        "모듈형 보드",
-        "패턴 만들기",
-        "타일 배치"
+        "쌓기와 균형"
       ],
       "designers": [
         "Pierre Tessier"
@@ -35814,13 +35811,13 @@ const gameData = {
     "title": {
       "display": "마법사의물약(독)",
       "owned": "마법사의물약(독)",
-      "bgg": ""
+      "bgg": "Magician's Cookbook"
     },
     "bgg": {
-      "id": "7736327",
+      "id": "95231",
       "matchStatus": "forced",
-      "year": "",
-      "rating": 0,
+      "year": "2011",
+      "rating": 5.96296,
       "weight": 1,
       "minPlayers": 2,
       "maxPlayers": 4,
@@ -35831,27 +35828,34 @@ const gameData = {
         4
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
-      "categories": [],
+      "playingTime": 25,
+      "minPlayTime": 20,
+      "maxPlayTime": 25,
+      "categories": [
+        "Children's Game",
+        "Fantasy",
+        "Real-time"
+      ],
       "categoriesKo": [
+        "어린이 게임",
         "판타지",
-        "퍼즐"
+        "실시간"
       ],
-      "mechanics": [],
+      "mechanics": [
+        "Pattern Recognition",
+        "Set Collection"
+      ],
       "mechanicsKo": [
-        "계약",
-        "공개 드래프팅",
         "패턴 인식",
-        "물리적 제거",
-        "세트 수집",
-        "공격형 플레이",
-        "가변 셋업"
+        "세트 수집"
       ],
-      "designers": [],
-      "description": "",
-      "descriptionKo": "포션 익스플로전은 호러블 게임즈의 2~4인용 게임입니다.\n로렌조 실바, 안드레아 크레스피, 스테파노 카스텔리가 디자인했습니다.\n\n친애하는 학생들이여, 마법약 수업의 최종 시험 시간입니다! 규칙은 항상 동일합니다: 디스펜서에서 재료 구슬 하나를 꺼내고 다른 구슬들이 떨어지는 것을 봅니다. 같은 색 구슬들을 연결시키면 폭발하고 그것들도 가져갈 수 있습니다! 수집한 구슬들을 이용해 마법약을 완성하고 마셔서 그 마법의 힘을 발휘하세요. 다만 올해의 모범생상을 받으려면 빠른 속도만으로는 부족합니다. 포션 익스플로전에서 가장 가치 있는 마법약들을 만들어야 합니다!"
+      "designers": [
+        "Andreas Frei",
+        "Lukas Frei",
+        "Ueli Frei"
+      ],
+      "description": "In Der verflixte Zaubertrank players are magician assistants who need to bring together the ingredients needed to complete potions &ndash; but to do this, they can use a little magic of their own to double up on ingredients they already have.\n\nEach player has four cauldron tiles &ndash; two with slits in the top, two with slits in the bottom &ndash; that can be assembled into two cauldrons; a player also has two fireplace tiles on which the completed cauldrons sit as well as eight firestones. To set up the game, 22 magic ingredient tiles that show mushrooms, spiders, frogs and the assistants themselves are shuffled, placed into two even stacks, then covered with a \"book\" cover.\n\nTo start the first round, the book cover is \"opened\" so that four ingredient tiles are revealed (the \"recipe\"). Players then race to assemble their cauldrons and place them on their fireplaces; after doing so, they then rotate the fireplaces and mark the locations from which they can see the ingredients needed to complete the potion. The cauldrons tiles have mirrors on half of them, so a mushroom on one tile might be reflected in the mirror, thus giving a player two mushrooms for a potion. Similarly, a half mushroom can be made whole with a mirror.\n\nOnce a player thinks he has marked exactly the number and type of ingredients he needs, he ends the round. If he created the potion correctly, he moves his pawn two spaces on the track; otherwise everyone else advances one space on the track. Players then disassemble their cauldrons, flip over two ingredients tiles (thereby showing a new recipe), and start the next round.\n\nIf an assistant shows up on an ingredient tile, that player advances two spaces after cooking ends that round. At a certain point in the game, a mouse comes to aide the player in last place, providing all the mushrooms that player needs.\n\nDer verflixte Zaubertrank ends when all recipes have been used or a player reaches the final space on the track. The player who advances the farthest on the track wins the game.",
+      "descriptionKo": "마법의 진탕에서 플레이어들은 마법사의 조수가 되어 마법약을 완성하는 데 필요한 재료들을 모아야 합니다. 플레이어는 자신이 이미 가진 재료를 두 배로 늘리는 자신만의 마법을 사용할 수 있습니다.\n\n각 플레이어는 위/아래에 슬릿이 있는 가마솥 타일 4개로 2개의 가마솥을 조립하고, 그 위에 올릴 벽난로 타일 2개와 불의 돌 8개를 가집니다. 버섯, 거미, 개구리, 조수들이 그려진 재료 타일 22개를 섞어 2개의 더미로 나누고 북 커버로 덮습니다.\n\n라운드를 시작하면 책 커버를 열어 4개의 재료 타일(레시피)을 공개합니다. 플레이어들은 빠르게 가마솥을 조립해 벽난로에 올린 후, 벽난로를 회전시켜 마법약 완성에 필요한 재료가 보이는 위치를 표시합니다. 가마솥 타일의 절반에는 거울이 있어서 한쪽에 버섯이 있으면 거울에 반사되어 버섯 2개가 되고, 반쪽 버섯도 거울로 완성할 수 있습니다.\n\n필요한 종류와 수량의 재료를 정확하게 표시했다고 생각하면 라운드를 종료합니다. 마법약을"
     },
     "cottage": {
       "status": "active",
@@ -35861,27 +35865,58 @@ const gameData = {
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
-        "cozy"
+        "cozy",
+        "immersive",
+        "chaotic",
+        "tense"
       ],
-      "playTags": [],
+      "playTags": [
+        "puzzle",
+        "card_play",
+        "strategy",
+        "party",
+        "dexterity"
+      ],
       "situationTags": [
-        "first_game",
         "quick_play",
+        "beginner",
+        "family",
+        "first_game",
         "group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "silent_focus",
+        "competitive",
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
-        "first_game",
+        "immersive",
+        "chaotic",
+        "tense",
+        "puzzle",
+        "card_play",
+        "strategy",
+        "party",
+        "dexterity",
         "quick_play",
-        "group"
+        "beginner",
+        "family",
+        "first_game",
+        "group",
+        "silent_focus",
+        "competitive",
+        "simultaneous"
       ],
       "displayTags": [
-        "편안하게"
+        "머리쓰게",
+        "즐기고",
+        "편안하게",
+        "빠져들게"
       ],
-      "summaryKo": "디스펜서에서 구슬을 꺼내 같은 색끼리 연쇄 폭발을 일으켜 마법약을 만드는 게임.",
+      "summaryKo": "마법사의 조수가 되어 거울 반사 원리로 재료를 모으며 마법약을 완성하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -35898,9 +35933,9 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
+      "main": "https://cf.geekdo-images.com/-U37JQbtuvuOMXdAzU5hgA__original/img/gRXYXY7em2tlHgljw3L1_K7h-oQ=/0x0/filters:format(jpeg)/pic1246879.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/-U37JQbtuvuOMXdAzU5hgA__small/img/99OI-jrmhLVqRZeh2ui7NAHiuyk=/fit-in/200x150/filters:strip_icc()/pic1246879.jpg",
+      "source": "bgg",
       "type": "jpg"
     },
     "community": {
@@ -47460,15 +47495,15 @@ const gameData = {
         "Party Game"
       ],
       "categoriesKo": [
-        "순발력"
+        "순발력",
+        "어린이 게임",
+        "파티게임"
       ],
       "mechanics": [
         "Simultaneous Action Selection"
       ],
       "mechanicsKo": [
-        "경매/입찰",
-        "배팅과 블러핑",
-        "플레이어 탈락"
+        "동시 액션 선택"
       ],
       "designers": [
         "Frank D. Ventura"
@@ -71073,12 +71108,19 @@ const gameData = {
         "Memory",
         "Real-time"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "순발력",
+        "기억력",
+        "실시간"
+      ],
       "mechanics": [
         "Memory",
         "Pattern Recognition"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "기억력",
+        "패턴 인식"
+      ],
       "designers": [
         "Jean-Claude Pellin"
       ],
@@ -77189,14 +77231,24 @@ const gameData = {
         "Dice",
         "Fantasy"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "어드벤처",
+        "카드게임",
+        "주사위",
+        "판타지"
+      ],
       "mechanics": [
         "Cooperative Game",
         "Dice Rolling",
         "Solo / Solitaire Game",
         "Variable Player Powers"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "협동게임",
+        "주사위 굴리기",
+        "솔로 게임",
+        "비대칭 능력"
+      ],
       "designers": [
         "Mike Gnade",
         "Todd Walsh"
@@ -85292,7 +85344,9 @@ const gameData = {
       "categories": [
         "Fantasy"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "판타지"
+      ],
       "mechanics": [
         "End Game Bonuses",
         "Hand Management",
@@ -85304,7 +85358,17 @@ const gameData = {
         "Worker Placement",
         "Worker Placement, Different Worker Types"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "최종 보너스",
+        "패 관리",
+        "헥사곤 격자",
+        "공개 드래프팅",
+        "세트 수집",
+        "태그",
+        "비대칭 능력",
+        "워커 배치",
+        "다중 워커 배치"
+      ],
       "designers": [
         "Yeom.C.W"
       ],
