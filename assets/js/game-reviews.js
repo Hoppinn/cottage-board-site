@@ -694,7 +694,7 @@
       return latestB - latestA;
     });
     for (const [groupName, dateMap] of sortedGroups) {
-      const label = groupName || '기타 기록';
+      const label = groupName || '모임 미기명';
       const totalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
       html += `<div class="pr-session">
         <button class="pr-session-hd" type="button">

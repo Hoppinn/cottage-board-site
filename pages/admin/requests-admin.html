@@ -1112,7 +1112,7 @@
           const crossMap = {};
           for (const r of filteredPV) {
             const cat = categorizeRef(r.referrer);
-            if (!cat || cat === '직접 방문') continue;
+            if (!cat) continue;
             const pg = PAGE_LABEL[r.page] || r.page || '?';
             if (!crossMap[cat]) crossMap[cat] = {};
             crossMap[cat][pg] = (crossMap[cat][pg] || 0) + 1;
@@ -1121,7 +1121,7 @@
           const crossEl = document.getElementById('chartCrossRef');
           if (crossEl) {
             if (!Object.keys(crossMap).length) {
-              crossEl.innerHTML = '<div class="admin-cross-empty">외부 유입 데이터 없음</div>';
+              crossEl.innerHTML = '<div class="admin-cross-empty">유입 데이터 없음</div>';
             } else {
               const sources = Object.entries(crossMap).sort((a, b) =>
                 Object.values(b[1]).reduce((s, v) => s + v, 0) - Object.values(a[1]).reduce((s, v) => s + v, 0)
