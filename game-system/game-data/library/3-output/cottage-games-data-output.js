@@ -11550,7 +11550,7 @@ const gameData = {
         "Pierre Tessier"
       ],
       "description": "Dingo Disc is a game of skill, balance, strategy, and luck in which players must place all of their counters on a balanced disk without dropping the counters that have already been placed.\n\nOn a turn, you roll two dice: the color die determines the colored area of the disk where you must place, and the number die the location within that area. Whoever places all of their counters first wins &mdash; and any player who spills all the counters off the disk automatically loses.",
-      "descriptionKo": "딩고와 친구들이 워크어바웃에서 길을 잃었어요! 그들의 꿈을 방문해 집으로 돌려보내세요!\n\n딩고의 드림은 2~4명을 위한 즐겁고 영리한 가족 게임입니다. 각 플레이어는 자신의 동물을 꿈의 세계로 안내하는 첫 번째 사람이 되기 위해 경쟁합니다.\n\n각 플레이어는 5×5 그리드로 무작위로 배열된 25장의 타일과 자신의 동물이 그려진 1장의 추가 타일로 시작합니다. 모든 드림스케이프 타일의 뒷면에도 동물 그림이 있습니다. 매 턴마다 무작위 카드를 뽑아 어느 타일을 뒤집을지 결정합니다. 타일을 뒤집으면 동물이 드림스케이프의 일부를 여행하는 것을 의미합니다. 각 플레이어의 목표는 지정된 패턴(게임마다 다름)에 맞춰 동물을 드림스케이프에 배치하는 것입니다. 카드를 뽑은 후, 플레이어는 추가 동물 타일을 드림스케이프에 밀어 넣어 한 줄이나 열을 이동시키면 반대편에서 새로운 타일이 나타납니다. 이 타일을 다음 턴에 다른 열이나 줄을 움직이는 데 사용하고, 한 플레이어의 드림스케이프 타일이 목표와 일치할 때까지 계속합니다. 그러면 플레이어가 자신의 동물 이름(예: \"딩고!\")을 외쳐 라운드에 승리합니다.\n\n고급 규칙은 해저드 토큰을 추가하여 난이도를 크게 높입니다. 필요한 드림 패턴을 완성하려면 플레이어의 동물이 드림 카드에 표시된 위험 공간에 있으면 안 됩니다."
+      "descriptionKo": "딩고 디스크는 기술, 균형, 전략, 운이 결합된 게임으로, 플레이어들은 이미 놓인 카운터를 떨어뜨리지 않으면서 자신의 모든 카운터를 균형잡힌 디스크 위에 놓아야 합니다.\n\n턴마다 두 개의 주사위를 굴립니다. 색깔 주사위는 디스크의 어느 색깔 영역에 놓을지를 결정하고, 숫자 주사위는 그 영역 내의 위치를 결정합니다. 자신의 모든 카운터를 먼저 놓는 플레이어가 승리하며, 디스크의 카운터를 모두 떨어뜨린 플레이어는 자동으로 패배합니다."
     },
     "cottage": {
       "status": "active",
@@ -11596,7 +11596,7 @@ const gameData = {
         "편안하게",
         "대화하며"
       ],
-      "summaryKo": "뽑은 카드에 따라 타일을 뒤집고 밀어내며 꿈의 패턴을 완성하는 게임.",
+      "summaryKo": "주사위를 굴려 정해진 위치에 카운터를 올려놓되 떨어진 것들을 떨어뜨리지 않으면서 먼저 모두 올려놓는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -47509,7 +47509,7 @@ const gameData = {
         "Frank D. Ventura"
       ],
       "description": "Players try to have the highest score at the end of three rounds of play or to be the first player to score ten or more points.  Each player releases their ball along the track to score points before the eight ball drops and blocks the scoring track.\n\nThe Beat The Eight Ball game from Ideal is a game of patience and skill. After the Eight Ball is set spinning in the funnel each player must decide when to release their own marble. Beating the Eight Ball at all gives you points, coming in after it takes points away. More points are given the later your ball is so it pays to take chances.\n\nFurther description given by Sam Cancilla at http://www.Samstoybox.com",
-      "descriptionKo": "이 게임의 목표는 테이블 위에 놓인 여러 개의 큰 디스크를 밀어서 테이블 가장자리 밖으로 떨어뜨리는 것입니다. 디스크를 밀어낼 때만 다른 디스크를 제거할 수 있지만, 밀기 위해서는 칩이 필요하고 칩은 부족한 자원입니다. 하지만 밀기를 피하는 데도 칩이 소비되므로, 매 턴마다 어려운 선택에 직면하게 됩니다.\n궁극의 목표는 테이블 위에 자신의 디스크를 가장 마지막까지 남기는 것입니다. 그 플레이어가 승리합니다!"
+      "descriptionKo": "플레이어들은 3라운드 동안 가장 높은 점수를 얻거나 먼저 10점 이상을 획득하는 것을 목표로 합니다. 각 플레이어는 8번 볼이 득점 트랙을 막기 전에 자신의 구슬을 트랙을 따라 굴려 점수를 얻습니다.\n\nIdeal의 '빗 더 에이트 볼' 게임은 인내심과 기술의 게임입니다. 8번 볼이 깔때기에서 회전하기 시작하면, 각 플레이어는 자신의 구슬을 언제 놓을지 결정해야 합니다. 8번 볼을 이기면 점수를 얻지만, 뒤에 도착하면 점수를 잃습니다. 구슬을 늦게 놓을수록 더 많은 점수를 얻으므로, 위험을 감수할 가치가 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -47562,7 +47562,7 @@ const gameData = {
         "경쟁형",
         "대화하며"
       ],
-      "summaryKo": "제한된 칩을 사용해 상대 디스크를 밀어내고 자신의 디스크를 마지막까지 남기는 게임.",
+      "summaryKo": "8번 볼이 도착하기 전에 구슬을 굴려 점수를 얻는 타이밍 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -71125,7 +71125,7 @@ const gameData = {
         "Jean-Claude Pellin"
       ],
       "description": "You are working in a popular bakery where cookies sell like...well, hotcakes! With orders coming from all sides, you must be quick when making a box of nine cookies as the client ordered. Once you are done, ring the bell!\n\nIn Cookie Box, you need to rearrange cookie tokens to match the order card, then quickly ring the bell and take the order card. The first player to collect four order cards wins, but you must not make too many mistakes in your packing. If you mess up orders twice, you're eliminated from the game!",
-      "descriptionKo": ""
+      "descriptionKo": "인기 있는 베이커리에서 일하고 있습니다. 쏟아지는 주문 속에서 고객이 요청한 9개의 쿠키 상자를 빠르게 만들어야 합니다. 완성되면 종을 울리세요!\n\n쿠키 박스에서는 쿠키 토큰을 재배열하여 주문 카드와 일치시킨 후, 빠르게 종을 울려 주문 카드를 가져갑니다. 먼저 4개의 주문 카드를 모으는 플레이어가 승리하지만, 포장 실수를 너무 많이 하면 안 됩니다. 2번 실수하면 게임에서 탈락됩니다!"
     },
     "cottage": {
       "status": "active",
@@ -71176,7 +71176,7 @@ const gameData = {
         "빠져들게",
         "편안하게"
       ],
-      "summaryKo": "",
+      "summaryKo": "쏟아지는 주문 속에서 쿠키를 빠르게 배열해 종을 울러 주문을 완성하는 게임",
       "comment": {
         "text": "",
         "source": "none"
