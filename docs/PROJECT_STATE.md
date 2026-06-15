@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-16 (55차 — 캐릭터 빈 상태 + SQL 통합)
+최종 갱신: 2026-06-16 (56차 — 캐릭터 이미지 17종 분리 완료)
 
 ---
 
@@ -46,7 +46,8 @@
   - point_rewards 테이블: 업적 달성 시 pending 생성 → 관리자 승인 → points_log 반영
   - 관리자 포인트 승인 패널: 근거 보기(플레이/게임/사진/별점), 승인/거절 버튼
   - 캐릭터 섹션 빈 상태 안내 문구 표시 (업적 0개여도 섹션 보임)
-  - ⚠️ SQL 미실행: docs/migrations/000_schema.sql — Supabase 대시보드에서 실행 필요
+  - 캐릭터 픽셀아트 이미지 17종 분리 완료 → assets/images/characters/ (scripts/crop-characters.js)
+  - ⚠️ SQL 미실행 확인 필요: docs/migrations/000_schema.sql — Supabase 대시보드에서 실행 후 RLS 정책 포함 적용 확인
 - [x] 게임 바텀시트 3섹션 (게임평/플레이기록/사진) 완성
   - 사진 독립 3번째 섹션 추가 (미리보기 3장 + 전체보기 9장)
   - 게임평·플레이기록·사진 모두 작성자+날짜 표시 (통일 포맷: `6월 N일`)
@@ -170,6 +171,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-16 | feat: 캐릭터 픽셀아트 이미지 17종 스프라이트시트에서 분리 (토끼5/다람쥐4/고슴도치4/햄스터4), scripts/crop-characters.js + sharp |
 | 2026-06-13 | fix: 유입 경로 추적 개선 — source별 1일 1회 기록 (cottage_pv_{date}_{source} 키). 같은 경로 재방문 무시, 다른 경로 재방문은 각각 집계 |
 | 2026-06-13 | fix: 게임위치 페이지 게임 클릭 시 바텀시트 열리도록 — ensureGameSheet() 호출 추가 (openGame 함수) |
 | 2026-06-13 | chore: renderSingleGame / ?game= deprecated — 기본 동선은 openGameRecordSheet 바텀시트로 대체 완료, 코드 보류(URL 공유·SEO 검토 전) |
