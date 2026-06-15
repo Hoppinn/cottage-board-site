@@ -1440,6 +1440,9 @@ async function initSheetPlayPreview(gameKey) {
     ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
     : (r.created_at ? r.created_at.slice(0, 10).replace(/-/g, '.') : '');
 
+  const photos = window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : [];
+  const photoHtml = photos.length && window.buildPhotoHtml ? window.buildPhotoHtml(photos, r.id, false) : '';
+
   el.innerHTML = `<div class="sheet-play-preview-item">
     <div class="sheet-play-preview-meta">
       ${dateStr ? `<span class="sheet-preview-date">${dateStr}</span>` : ''}
@@ -1451,8 +1454,24 @@ async function initSheetPlayPreview(gameKey) {
       ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ''}
       ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : ''}
     </div>
+    ${photoHtml}
     ${count > 1 ? `<p class="sheet-preview-more-hint">${count - 1}건 더 있음</p>` : ''}
   </div>`;
+
+  if (window.openLightbox) {
+    el.querySelectorAll('.pr-rec-photo').forEach(img => {
+      img.addEventListener('click', () => {
+        const wrap = img.closest('.pr-rec-photo-wrap');
+        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
+      });
+    });
+    el.querySelectorAll('.pr-rec-photo-more').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrap = btn.closest('.pr-rec-photo-wrap');
+        try { window.openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(btn.dataset.idx || 3)); } catch(_) {}
+      });
+    });
+  }
 }
 
 if(closeGameSheetButton){
