@@ -4,88 +4,89 @@ const fs = require('fs');
 
 const SRC = 'C:\\Users\\HOPPYNESS\\OneDrive\\Documents\\카카오톡 받은 파일\\KakaoTalk_20260615_193537067.png';
 const OUT = path.join(__dirname, '..', 'assets', 'images', 'characters');
-const DIAG = path.join(OUT, '_diag');
-if (!fs.existsSync(DIAG)) fs.mkdirSync(DIAG, { recursive: true });
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 
-// 1254×1254 이미지 레이아웃:
-//   y=0~155  : 토끼 행 (전체 너비, 5캐릭터 + 최종목표 칸)
-//   y=325~480: 다람쥐 행 (x=0~650, 5칸) — 진단 확인
-//   y=775~930: 고슴도치(x=0~600) + 햄스터(x=600~1254) — 동일 y 좌우 분할
+// 출력 크기 (px): 모든 캐릭터 통일
+const SIZE = 100;
+
+// 진단으로 확정된 스프라이트 좌표 (텍스트 완전 제외)
+// 검증 방법: 각 계열의 offset/height 슬라이스로 스프라이트 영역만 확인
+//
+// 토끼  : cells=209px, offset=+40, w=130, y=52~152  (rb_mid=스프라이트, rb_bot=텍스트)
+// 다람쥐: cells=130px, offset=+60, w=90,  y=325~425 (sq10_x60 확인, sq_bot=텍스트)
+// 고슴도치: cells=120px, offset=+45, w=90, y=775~840 (hh1_x45 확인, 라벨 y840+)
+// 햄스터: cells=131px, offset=+0,  w=90,  y=775~825 (hm_top=스프라이트, hm_mid=텍스트)
 
 const CHARS = [
-  // 토끼: 헤더 y=10~50, 스프라이트 y=52~182
-  // 6칸(토끼5+최종목표1)이 1254px에 균등 배치: 각 209px, 크롭은 가운데 130px
-  { file: 'rabbit_first.png', left: 40,   top: 52, width: 130, height: 130 },
-  { file: 'rabbit_5.png',     left: 249,  top: 52, width: 130, height: 130 },
-  { file: 'rabbit_20.png',    left: 458,  top: 52, width: 130, height: 130 },
-  { file: 'rabbit_50.png',    left: 667,  top: 52, width: 130, height: 130 },
-  { file: 'rabbit_100.png',   left: 876,  top: 52, width: 130, height: 130 },
+  { file: 'rabbit_first.png', left: 40,       top: 52,  width: 130, height: 100 },
+  { file: 'rabbit_5.png',     left: 40+209,   top: 52,  width: 130, height: 100 },
+  { file: 'rabbit_20.png',    left: 40+418,   top: 52,  width: 130, height: 100 },
+  { file: 'rabbit_50.png',    left: 40+627,   top: 52,  width: 130, height: 100 },
+  { file: 'rabbit_100.png',   left: 40+836,   top: 52,  width: 85,  height: 100 }, // 130→85: 우측 장식 프레임 제외
 
-  // 다람쥐: 5칸 × 130px = 650, 스프라이트가 셀 우측 치우침
-  // → 각 셀 시작에서 30px 안쪽부터 100px 크롭으로 이전 캐릭터 블리드 방지
-  { file: 'squirrel_10.png',  left: 20,  top: 325, width: 100, height: 130 },
-  { file: 'squirrel_50.png',  left: 160, top: 325, width: 100, height: 130 },
-  { file: 'squirrel_100.png', left: 290, top: 325, width: 100, height: 130 },
-  { file: 'squirrel_200.png', left: 420, top: 325, width: 100, height: 130 },
+  { file: 'squirrel_10.png',  left: 60,       top: 325, width: 90,  height: 100 },
+  { file: 'squirrel_50.png',  left: 60+130,   top: 325, width: 90,  height: 100 },
+  { file: 'squirrel_100.png', left: 60+260,   top: 325, width: 90,  height: 100 },
+  { file: 'squirrel_200.png', left: 60+390,   top: 325, width: 90,  height: 100 },
 
-  // 고슴도치: 4칸 × 150px = 600 (진단 확인)
-  { file: 'hedgehog_1.png',   left: 10,  top: 775, width: 130, height: 130 },
-  { file: 'hedgehog_10.png',  left: 160, top: 775, width: 130, height: 130 },
-  { file: 'hedgehog_50.png',  left: 310, top: 775, width: 130, height: 130 },
-  { file: 'hedgehog_100.png', left: 460, top: 775, width: 130, height: 130 },
+  { file: 'hedgehog_1.png',   left: 45,       top: 775, width: 90,  height: 65 },
+  { file: 'hedgehog_10.png',  left: 45+120,   top: 775, width: 90,  height: 65 },
+  { file: 'hedgehog_50.png',  left: 45+240,   top: 775, width: 90,  height: 65 },
+  { file: 'hedgehog_100.png', left: 45+360,   top: 775, width: 90,  height: 65 },
 
-  // 햄스터: 5칸 × 131px, x=600~1254, 스프라이트가 셀 좌측 치우침
-  // → 셀 중심 기준 ±50px (100px 크롭)
-  { file: 'hamster_1.png',    left: 615, top: 775, width: 100, height: 130 },
-  { file: 'hamster_10.png',   left: 746, top: 775, width: 100, height: 130 },
-  { file: 'hamster_50.png',   left: 877, top: 775, width: 100, height: 130 },
-  { file: 'hamster_100.png',  left: 1008, top: 775, width: 100, height: 130 },
+  { file: 'hamster_1.png',    left: 600,      top: 775, width: 90,  height: 50 },
+  { file: 'hamster_10.png',   left: 600+131,  top: 775, width: 90,  height: 50 },
+  { file: 'hamster_50.png',   left: 600+262,  top: 775, width: 90,  height: 50 },
+  { file: 'hamster_100.png',  left: 600+393,  top: 775, width: 90,  height: 50 },
 ];
+
+// 배경색 제거: 첫 번째 픽셀 색상을 배경으로 간주, 유사색 → 투명
+async function removeBg(inputBuffer, tolerance = 40) {
+  const { data, info } = await sharp(inputBuffer)
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  const pixels = Buffer.from(data);
+  // 첫 번째 픽셀을 배경색으로 사용
+  const bgR = pixels[0], bgG = pixels[1], bgB = pixels[2];
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const dr = pixels[i]   - bgR;
+    const dg = pixels[i+1] - bgG;
+    const db = pixels[i+2] - bgB;
+    const dist = Math.sqrt(dr*dr + dg*dg + db*db);
+    if (dist < tolerance) pixels[i+3] = 0; // 투명
+  }
+
+  return sharp(pixels, {
+    raw: { width: info.width, height: info.height, channels: 4 }
+  }).png().toBuffer();
+}
 
 async function cropAll() {
   for (const c of CHARS) {
-    await sharp(SRC)
+    // 1. 크롭
+    const cropped = await sharp(SRC)
       .extract({ left: c.left, top: c.top, width: c.width, height: c.height })
       .png()
+      .toBuffer();
+
+    // 2. 배경 제거
+    const noBg = await removeBg(cropped);
+
+    // 3. 100×100 정사각형으로 리사이즈 (투명 패딩, 비율 유지)
+    await sharp(noBg)
+      .resize(SIZE, SIZE, {
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 }
+      })
+      .png()
       .toFile(path.join(OUT, c.file));
+
     console.log(`✓ ${c.file}`);
   }
-  console.log('\n완료!');
+  console.log('\n완료! 모두 100×100 투명 PNG');
 }
 
-// 햄스터 셀 경계 정밀 측정 진단
-async function diagHamsterSlots() {
-  // 131px씩 5개 슬롯 — 어느 슬롯에 단일 캐릭터가 나오는지 확인
-  for (let i = 0; i < 5; i++) {
-    const left = 600 + i * 131;
-    await sharp(SRC)
-      .extract({ left, top: 775, width: 131, height: 130 })
-      .png()
-      .toFile(`${DIAG}/hamster_slot${i}.png`);
-    console.log(`hamster_slot${i}.png (left=${left})`);
-  }
-
-  // 토끼 섹션 헤더 얼마나 높은지 확인 (y=0~50 슬라이스)
-  await sharp(SRC)
-    .extract({ left: 0, top: 0, width: 1254, height: 50 })
-    .png()
-    .toFile(`${DIAG}/rabbit_header.png`);
-  console.log('rabbit_header.png (y=0~50)');
-
-  // 고슴도치 행 전체 (x=0~600, y=775~905)
-  await sharp(SRC)
-    .extract({ left: 0, top: 775, width: 600, height: 130 })
-    .png()
-    .toFile(`${DIAG}/hedgehog_full.png`);
-  console.log('hedgehog_full.png');
-
-  console.log('진단 완료');
-}
-
-const mode = process.argv[2];
-if (mode === '--diag') {
-  diagHamsterSlots().catch(console.error);
-} else {
-  cropAll().catch(console.error);
-}
+cropAll().catch(console.error);
