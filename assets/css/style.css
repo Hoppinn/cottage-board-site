@@ -3607,6 +3607,9 @@ body.sheet-open{
 .profile-notif-new-badge{display:inline-block;font-size:9px;font-weight:700;color:#fff;background:#e53935;border-radius:3px;padding:1px 4px;vertical-align:middle;margin-right:2px;}
 /* 음료교환권 공지 항목 */
 .profile-notif-voucher{display:block !important;align-items:unset !important;position:relative;}
+.profile-notif-voucher.is-seen{opacity:0.75;}
+.profile-notif-voucher.is-seen .profile-voucher-body strong{font-size:13px;font-weight:400;color:var(--muted);}
+.profile-notif-voucher.is-seen .profile-voucher-link.is-seen{font-size:11px;color:var(--muted);background:none;border:1px solid var(--border,#e8e4dc);color:var(--muted);}
 .profile-notif-voucher-date{position:absolute;top:0;right:0;font-size:11px;color:var(--muted);}
 .profile-voucher-body{display:block;margin-top:4px;}
 .profile-voucher-desc{font-size:12px;color:var(--muted);margin:4px 0 8px;font-weight:400;}

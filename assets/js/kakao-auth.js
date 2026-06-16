@@ -484,14 +484,13 @@ async function openProfilePanel() {
   const VOUCHER_NOTICE_DATE = '2026-06-16'; // 공지 생성일 고정 (캠페인 공지)
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
   // seen 여부와 무관하게 항상 표시. seen이면 읽음 스타일(NEW 배지·확인 버튼 없음).
-  const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? '' : ' is-new'}">
+  const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? ' is-seen' : ' is-new'}">
     ${voucherSeen ? '' : '<span class="profile-notif-new-badge">NEW</span>'}
     <div class="profile-voucher-body">
-      <strong>🎫 첫 플레이 기록을 남기면 음료교환권 1장을 드려요.</strong>
-      <p class="profile-voucher-desc">플레이한 게임을 기록하고, 냉장고 상품으로 교환해 보세요.</p>
+      <strong>🎫 첫 기록을 남기면 음료교환권 1장</strong>
       <div class="profile-voucher-btns">
         ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
-        <a class="profile-voucher-link" href="/pages/game/game-reviews.html">플레이 기록 남기기 →</a>
+        <a class="profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">기록 남기기</a>
       </div>
     </div>
     <span class="profile-notif-voucher-date">${escH(_voucherDateLabel)}</span>
