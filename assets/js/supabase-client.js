@@ -273,7 +273,12 @@ window._cottageSess = (function () {
       }).select("id");
       if (!error) {
         const id = data?.[0]?.id || null;
-        if (userId) window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
+        if (userId) {
+          window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
+          grantFirstPlayVoucher(userId).then(granted => {
+            if (granted) console.log('[voucher] 첫 플레이 기록 교환권 지급 완료');
+          }).catch(e => console.warn('[voucher] grantFirstPlayVoucher 오류:', e));
+        }
         return { success: true, id };
       }
       return { error };
