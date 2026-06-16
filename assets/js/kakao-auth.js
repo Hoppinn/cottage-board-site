@@ -405,11 +405,12 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, charHtml] = await Promise.all([
+  const [stats, notifs, codexHtml, charHtml, achHtml] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildAchievementsSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
   ]);
   if (window._cottageSess) {
     const _s = window._cottageSess.get(String(user.id));
@@ -494,6 +495,9 @@ async function openProfilePanel() {
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     ${notifHtml}
+    ${codexHtml}
+    ${charHtml}
+    ${achHtml}
     <ul class="profile-panel-stats">
       ${(() => {
         const savedSecs = stats.profile?.total_minutes || 0; // DB: 초 단위
@@ -553,8 +557,6 @@ async function openProfilePanel() {
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
     </ul>
-    ${codexHtml}
-    ${charHtml}
     ${stats.plays.length ? `<div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-toggle-arrow">▾</span></button>
       ${playListHtml}
@@ -576,6 +578,15 @@ async function openProfilePanel() {
   body.querySelectorAll('.profile-rep-select').forEach(sel => {
     sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
   });
+
+  const achToggleBtn = body.querySelector('.profile-ach-toggle-btn');
+  if (achToggleBtn) {
+    achToggleBtn.addEventListener('click', () => {
+      const list = body.querySelector('.profile-ach-list');
+      const hidden = list.classList.toggle('is-hidden');
+      achToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+    });
+  }
 
   body.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {

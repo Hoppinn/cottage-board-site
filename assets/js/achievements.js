@@ -233,6 +233,71 @@
     </div>`;
   }
 
+  // 업적 전체 목록 섹션 HTML 빌드 (UI 전용, checkAchievements 로직과 독립)
+  async function buildAchievementsSection(userId) {
+    const db = window.CottageDB;
+    if (!db) return '';
+
+    const ACH_DEFS = [
+      { id: 'rabbit_first',  name: '새싹 토끼 🌱',          emoji: '🌱', type: 'play',     threshold: 1   },
+      { id: 'squirrel_10',   name: '도토리 다람쥐 🌰',       emoji: '🌰', type: 'play',     threshold: 10  },
+      { id: 'squirrel_50',   name: '창고 다람쥐 📦',         emoji: '📦', type: 'play',     threshold: 50  },
+      { id: 'squirrel_100',  name: '겨울준비 다람쥐 🧺',     emoji: '🧺', type: 'play',     threshold: 100 },
+      { id: 'squirrel_200',  name: '사서 다람쥐 📖',         emoji: '📖', type: 'play',     threshold: 200 },
+      { id: 'rabbit_5',      name: '호기심 토끼 🔍',         emoji: '🔍', type: 'new_game', threshold: 5   },
+      { id: 'rabbit_20',     name: '탐험 토끼 🎒',           emoji: '🎒', type: 'new_game', threshold: 20  },
+      { id: 'rabbit_50',     name: '여행 토끼 🧭',           emoji: '🧭', type: 'new_game', threshold: 50  },
+      { id: 'rabbit_100',    name: '유랑 토끼 🗺️',           emoji: '🗺️', type: 'new_game', threshold: 100 },
+      { id: 'hedgehog_1',    name: '초보 고슴도치 📸',       emoji: '📸', type: 'photo',    threshold: 1   },
+      { id: 'hedgehog_10',   name: '기록가 고슴도치 🎞️',     emoji: '🎞️', type: 'photo',    threshold: 10  },
+      { id: 'hedgehog_50',   name: '포토마스터 고슴도치 📷', emoji: '📷', type: 'photo',    threshold: 50  },
+      { id: 'hedgehog_100',  name: '작가 고슴도치 🎨',       emoji: '🎨', type: 'photo',    threshold: 100 },
+      { id: 'hamster_1',     name: '리뷰어 햄스터 ✏️',       emoji: '✏️', type: 'review',   threshold: 1   },
+      { id: 'hamster_10',    name: '서평가 햄스터 📝',       emoji: '📝', type: 'review',   threshold: 10  },
+      { id: 'hamster_50',    name: '평론가 햄스터 📚',       emoji: '📚', type: 'review',   threshold: 50  },
+      { id: 'hamster_100',   name: '비평가 햄스터 🎓',       emoji: '🎓', type: 'review',   threshold: 100 },
+    ];
+    const TYPE_LABELS = { play: '플레이 기록', new_game: '신규 게임', photo: '사진 업로드', review: '별점 등록' };
+
+    const [earned, playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
+      db.getUserAchievements(userId),
+      db.getUserPlayCount(userId),
+      db.getUserDistinctGameCount(userId),
+      db.getUserPhotoCount(userId),
+      db.getUserRatingCount(userId),
+    ]);
+
+    const earnedIds = new Set(earned.map(a => a.id));
+    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount };
+
+    const items = ACH_DEFS.map(def => {
+      const done = earnedIds.has(def.id);
+      const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
+      const imgSrc = `/assets/images/characters/${def.id}.png`;
+      const typeLabel = TYPE_LABELS[def.type] || def.type;
+      if (done) {
+        return `<li class="profile-ach-item is-achieved">` +
+          `<img class="profile-ach-img" src="${imgSrc}" alt="${def.name}" ` +
+          `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
+          `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>` +
+          `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span><span class="profile-ach-type">${typeLabel}</span></div>` +
+          `<span class="profile-ach-status is-done">✅ 달성</span></li>`;
+      }
+      return `<li class="profile-ach-item is-locked">` +
+        `<span class="profile-ach-img-lock">${def.emoji}</span>` +
+        `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span><span class="profile-ach-type">${typeLabel}</span></div>` +
+        `<span class="profile-ach-status">${cur} / ${def.threshold}</span></li>`;
+    }).join('');
+
+    return `<div class="profile-ach-section">` +
+      `<div class="profile-ach-header">` +
+      `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
+      `<button class="profile-ach-toggle-btn" type="button">전체 보기 ▾</button>` +
+      `</div>` +
+      `<ul class="profile-ach-list is-hidden">${items}</ul>` +
+      `</div>`;
+  }
+
   // 대표 캐릭터 변경 이벤트 — 패널 내 select에서 호출
   async function handleRepSelect(select) {
     const userId = select.dataset.userId;
@@ -245,6 +310,7 @@
     checkAchievements,
     buildCodexSection,
     buildCharacterSection,
+    buildAchievementsSection,
     handleRepSelect,
   };
 
