@@ -175,6 +175,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-16 | feat: 대표 캐릭터 저장 피드백 — handleRepSelect 저장 성공(테두리 초록)/실패(복원+console.warn), data-prev-value 초기값 주입 |
 | 2026-06-16 | refactor: 메뉴 드롭다운 위계 정리 — 미니 프로필 카드 + 내 활동 강조 + 사진·닉네임 보조화 + 구분선 2개 (HTML 변경 없음) |
 | 2026-06-16 | feat: 업적 진행률 UI — 패널 순서 재배치(도감/캐릭터/업적→통계), buildAchievementsSection 신규, 달성/미달성/진행도 표시, 목록 접힘 토글 |
 | 2026-06-16 | feat: 음료교환권 공지 — 내 활동 빨간점 + 최근 알림에 공지 항목. 버튼 클릭 시 seen 처리, localStorage voucherNoticeSeen 플래그 |
