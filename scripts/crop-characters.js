@@ -9,25 +9,26 @@ if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 // 출력 크기 (px): 모든 캐릭터 통일
 const SIZE = 100;
 
-// 진단으로 확정된 스프라이트 좌표 (v2 — 2026-06-16 재검증)
-// 검증 방법: 계열별 행 전체 슬라이스(height=180~230) + 캐릭터별 개별 추출로 본체 완전성 확인
+// 진단으로 확정된 스프라이트 좌표 (v3 — 2026-06-16 헤더 텍스트 제거 확인)
+// 검증 방법: top을 35/40/45/50 비교 → top=45가 토끼 텍스트 제거 + 귀 온전
+//           다람쥐: top=305/315/320 비교 → top=305 클린, top=320 하단 텍스트 침범
 //
-// 토끼    : cells=209px, left+40, top=25, h=130  (헤더 아래 귀 끝~발끝 포함)
-// 다람쥐  : cells=130px, left+60, top=295, h=120
-// 고슴도치: cells=120px, left+45, top=755, h=90
-// 햄스터  : cells=131px, left+600, top=755, h=90
+// 토끼    : cells=209px, left+40, top=45, h=130
+// 다람쥐  : cells=130px, left+60, top=305, h=115
+// 고슴도치: cells=120px, left+45, top=755, h=90  (top=755 이미 클린 확인)
+// 햄스터  : cells=131px, left+600, top=755, h=90 (동일)
 
 const CHARS = [
-  { file: 'rabbit_first.png', left: 40,       top: 25,  width: 130, height: 130 },
-  { file: 'rabbit_5.png',     left: 40+209,   top: 25,  width: 130, height: 130 },
-  { file: 'rabbit_20.png',    left: 40+418,   top: 25,  width: 130, height: 130 },
-  { file: 'rabbit_50.png',    left: 40+627,   top: 25,  width: 130, height: 130 },
-  { file: 'rabbit_100.png',   left: 40+836,   top: 25,  width: 85,  height: 130 }, // width=85: 우측 장식 프레임 제외
+  { file: 'rabbit_first.png', left: 40,       top: 45,  width: 130, height: 130 },
+  { file: 'rabbit_5.png',     left: 40+209,   top: 45,  width: 130, height: 130 },
+  { file: 'rabbit_20.png',    left: 40+418,   top: 45,  width: 130, height: 130 },
+  { file: 'rabbit_50.png',    left: 40+627,   top: 45,  width: 130, height: 130 },
+  { file: 'rabbit_100.png',   left: 40+836,   top: 45,  width: 85,  height: 130 }, // width=85: 우측 장식 프레임 제외
 
-  { file: 'squirrel_10.png',  left: 60,       top: 295, width: 90,  height: 120 },
-  { file: 'squirrel_50.png',  left: 60+130,   top: 295, width: 90,  height: 120 },
-  { file: 'squirrel_100.png', left: 60+260,   top: 295, width: 90,  height: 120 },
-  { file: 'squirrel_200.png', left: 60+390,   top: 295, width: 90,  height: 120 },
+  { file: 'squirrel_10.png',  left: 60,       top: 305, width: 90,  height: 115 },
+  { file: 'squirrel_50.png',  left: 60+130,   top: 305, width: 90,  height: 115 },
+  { file: 'squirrel_100.png', left: 60+260,   top: 305, width: 90,  height: 115 },
+  { file: 'squirrel_200.png', left: 60+390,   top: 305, width: 90,  height: 115 },
 
   { file: 'hedgehog_1.png',   left: 45,       top: 755, width: 90,  height: 90 },
   { file: 'hedgehog_10.png',  left: 45+120,   top: 755, width: 90,  height: 90 },
@@ -40,7 +41,7 @@ const CHARS = [
   { file: 'hamster_100.png',  left: 600+393,  top: 755, width: 90,  height: 90 },
 ];
 
-// 배경색 제거: 첫 번째 픽셀 색상을 배경으로 간주, 유사색 → 투명
+// 배경색 제거: 좌상단(헤더 밴드색) + 우하단(크림색) 두 색을 동시에 제거
 async function removeBg(inputBuffer, tolerance = 40) {
   const { data, info } = await sharp(inputBuffer)
     .ensureAlpha()
@@ -48,15 +49,22 @@ async function removeBg(inputBuffer, tolerance = 40) {
     .toBuffer({ resolveWithObject: true });
 
   const pixels = Buffer.from(data);
-  // 첫 번째 픽셀을 배경색으로 사용
-  const bgR = pixels[0], bgG = pixels[1], bgB = pixels[2];
+  // bg1: 좌상단 픽셀 (헤더 밴드 색 — 초록, 갈색 등 계열별 상이)
+  const bg1 = [pixels[0], pixels[1], pixels[2]];
+  // bg2: 우하단 픽셀 (크림 배경색)
+  const lastIdx = (info.width * info.height - 1) * 4;
+  const bg2 = [pixels[lastIdx], pixels[lastIdx+1], pixels[lastIdx+2]];
+
+  function dist(r, g, b, bg) {
+    const dr = r - bg[0], dg = g - bg[1], db = b - bg[2];
+    return Math.sqrt(dr*dr + dg*dg + db*db);
+  }
 
   for (let i = 0; i < pixels.length; i += 4) {
-    const dr = pixels[i]   - bgR;
-    const dg = pixels[i+1] - bgG;
-    const db = pixels[i+2] - bgB;
-    const dist = Math.sqrt(dr*dr + dg*dg + db*db);
-    if (dist < tolerance) pixels[i+3] = 0; // 투명
+    const r = pixels[i], g = pixels[i+1], b = pixels[i+2];
+    if (dist(r, g, b, bg1) < tolerance || dist(r, g, b, bg2) < tolerance) {
+      pixels[i+3] = 0;
+    }
   }
 
   return sharp(pixels, {
