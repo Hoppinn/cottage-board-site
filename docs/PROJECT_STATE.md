@@ -1,12 +1,17 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-16 (64차 — 캐릭터 PNG 전체 교체 완료)
+최종 갱신: 2026-06-16 (65차 — 음료교환권 1~3단계 완료)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-현재 진행 중 작업 없음.
+**음료교환권 시스템 진행 중 — 4단계부터 재개**
+
+완료: 1단계(SQL), 2단계(JS API), 3단계(recordGamePlay 연동)
+대기: 4단계(내 활동 패널 UI), 5단계(관리자 UI)
+
+다음 세션 시작 시 §3 P1 음료교환권 항목 확인 후 4단계부터 진행.
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
@@ -108,6 +113,13 @@
   - 트리거: 플레이 기록에 내 이름 태그됨, 궁금해요 게임 새 코멘트, 게임 구매완료
   - notifSeenAt: cottage_sess_에 추가. 패널 열 때 갱신 + 배지 제거
   - 최근 N건 항상 조회 + isNew 플래그 방식. 배지=isNew 항목 존재 시, 패널=전체 목록 + NEW 배지 강조
+- [ ] **음료교환권 시스템** (진행 중, 4단계부터)
+  - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
+  - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
+  - [x] 3단계: recordGamePlay 성공 후 grantFirstPlayVoucher fire-and-forget 연동
+  - [ ] 4단계: 내 활동 패널 UI — 보유 N장 + 상품 목록 + [사용하기] 버튼 + confirm + 잔액 재렌더
+  - [ ] 5단계: 관리자 UI — 최근 사용내역 (닉네임/상품/일시)
+  - 정책: 계정당 1회 자동 지급, 오너 제외, 승인 없음, 사용 즉시 차감
 - [ ] **관리자 카카오 알림 확장**: 새 회원 가입, 모집 게시판 글 작성 시 알림 추가
 
 ### P2 — 기능 (선택)
