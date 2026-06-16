@@ -108,7 +108,6 @@
       <div class="achievement-toast-body">
         <div class="achievement-toast-title">캐릭터 해금!</div>
         <div class="achievement-toast-name">${name}</div>
-        ${points ? `<div class="achievement-toast-pts">+${points.toLocaleString()}pt (승인 대기)</div>` : ''}
       </div>
       <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoProfileBtn')?.click()">내 활동 →</a>
     `;
@@ -212,12 +211,7 @@
       `<option value="${a.id}" ${repAch?.id === a.id ? 'selected' : ''}>${a.emoji} ${a.name}</option>`
     ).join('');
 
-    const ptsHtml = (totalPts > 0 || ptStats.pending > 0)
-      ? `<div class="profile-points-line">
-          💎 ${totalPts.toLocaleString()}pt
-          ${ptStats.pending > 0 ? `<span class="profile-points-pending">+${ptStats.pending.toLocaleString()}pt 승인 대기</span>` : ''}
-        </div>`
-      : '';
+    const ptsHtml = '';
 
     const repRowHtml = achievements.length
       ? `<div class="profile-rep-row">
