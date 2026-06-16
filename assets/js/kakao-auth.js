@@ -152,12 +152,48 @@ function initKakaoAuth() {
 
   const userActions = document.getElementById('kakaoUserActions');
   if (userActions && !document.getElementById('kakaoProfileBtn')) {
+    const _u = getKakaoUser();
+
+    // 미니 프로필 카드 (localStorage 기반, 동기 렌더)
+    const card = document.createElement('div');
+    card.className = 'menu-user-card';
+    const cardImg = document.createElement('img');
+    cardImg.id = 'menuUserCardImg';
+    cardImg.alt = '';
+    if (_u?.profileImage) cardImg.src = _u.profileImage.replace(/^http:\/\//, 'https://');
+    else cardImg.style.display = 'none';
+    const cardNick = document.createElement('span');
+    cardNick.id = 'menuUserCardNick';
+    cardNick.className = 'menu-user-card-nick';
+    cardNick.textContent = _u?.nickname || '';
+    card.appendChild(cardImg);
+    card.appendChild(cardNick);
+    userActions.insertBefore(card, userActions.firstChild);
+
+    // 내 활동 버튼
     const profileBtn = document.createElement('button');
     profileBtn.id = 'kakaoProfileBtn';
     profileBtn.type = 'button';
     profileBtn.textContent = '내 활동';
-    userActions.insertBefore(profileBtn, userActions.firstChild);
+    userActions.insertBefore(profileBtn, card.nextSibling);
     profileBtn.addEventListener('click', openProfilePanel);
+
+    // 구분선 (내 활동 / 설정)
+    const div1 = document.createElement('div');
+    div1.className = 'menu-divider';
+    userActions.insertBefore(div1, profileBtn.nextSibling);
+
+    // 사진·닉네임 버튼 보조 스타일
+    userActions.querySelector('#kakaoPhotoBtn')?.classList.add('menu-settings-item');
+    userActions.querySelector('#kakaoNicknameBtn')?.classList.add('menu-settings-item');
+
+    // 구분선 (설정 / 로그아웃)
+    const logoutBtn = userActions.querySelector('#kakaoLogoutBtn');
+    if (logoutBtn) {
+      const div2 = document.createElement('div');
+      div2.className = 'menu-divider';
+      userActions.insertBefore(div2, logoutBtn);
+    }
   }
   if (getKakaoUser()) setTimeout(_updateNotifBadge, 0);
 }
@@ -339,6 +375,13 @@ function updateLoginUI(user) {
       }
     }
     if (loginText) loginText.textContent = user.nickname;
+    const _cardNick = document.getElementById('menuUserCardNick');
+    if (_cardNick) _cardNick.textContent = user.nickname || '';
+    const _cardImg = document.getElementById('menuUserCardImg');
+    if (_cardImg && user.profileImage) {
+      _cardImg.src = user.profileImage.replace(/^http:\/\//, 'https://');
+      _cardImg.style.display = '';
+    }
     if (userActions) {
       userActions.style.display = 'none';
       if (String(user.id) === String(OWNER_KAKAO_ID) && !userActions.querySelector('#kakaoAdminBtn')) {
