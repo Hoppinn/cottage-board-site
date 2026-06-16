@@ -48,6 +48,7 @@
 | `timeSec` | number | DB 미반영 누적 체류 시간(초). DB upsert 성공 시 0으로 초기화 |
 | `visitCount` | number | 총 방문 횟수 (로컬 카운터, DB 동기화는 upsertProfile에서) |
 | `notifSeenAt` | string (ISO) \| undefined | 마지막으로 알림 패널을 열었던 시각. 이 이후 이벤트가 "새 알림". 없으면 전체 기간 조회 |
+| `voucherNoticeSeen` | boolean \| undefined | 음료교환권 공지 확인 여부. 미설정 또는 false이면 공지 표시 + 빨간점. [확인했어요] 또는 [플레이 기록 남기기] 클릭 시 true 저장 |
 
 ### 마이그레이션
 

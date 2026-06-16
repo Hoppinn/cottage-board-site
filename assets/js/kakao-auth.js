@@ -14,6 +14,14 @@ async function _updateNotifBadge() {
   const btn = document.getElementById('kakaoLoginBtn');
   if (!btn) return;
   const sess = window._cottageSess?.get(String(user.id)) || {};
+  if (!sess.voucherNoticeSeen) {
+    if (!btn.querySelector('.notif-badge')) {
+      const b = document.createElement('span');
+      b.className = 'notif-badge';
+      btn.appendChild(b);
+    }
+    return;
+  }
   const notifs = await window.CottageDB.getMyNotifications(String(user.id), user.nickname || null, sess.notifSeenAt || null);
   const existing = btn.querySelector('.notif-badge');
   if (notifs.some(n => n.isNew)) {
@@ -448,8 +456,20 @@ async function openProfilePanel() {
     `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
   );
 
-  const notifHtml = notifs.length > 0 ? (() => {
-    const newCount = notifs.filter(n => n.isNew).length;
+  const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
+  const voucherItemHtml = !voucherSeen ? `<li class="is-new profile-notif-voucher">
+    <span class="profile-notif-new-badge">NEW</span>
+    <div class="profile-voucher-body">
+      <strong>🎫 첫 플레이 기록을 남기면 음료교환권 1장을 드려요.</strong>
+      <p class="profile-voucher-desc">플레이한 게임을 기록하고, 냉장고 상품으로 교환해 보세요.</p>
+      <div class="profile-voucher-btns">
+        <button class="profile-voucher-confirm" type="button">확인했어요</button>
+        <a class="profile-voucher-link" href="/pages/game/game-reviews.html">플레이 기록 남기기 →</a>
+      </div>
+    </div>
+  </li>` : '';
+  const notifHtml = (notifs.length > 0 || !voucherSeen) ? (() => {
+    const newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
     const items = notifs.slice(0, 5).map(n => {
       const cls = n.isNew ? ' class="is-new"' : '';
       const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
@@ -465,7 +485,7 @@ async function openProfilePanel() {
     const titleText = newCount > 0 ? `🔔 새 알림 ${newCount}건` : '🔔 최근 알림';
     return `<div class="profile-notif-section">
       <div class="profile-notif-title">${titleText}</div>
-      <ul class="profile-notif-list">${items}${more}</ul>
+      <ul class="profile-notif-list">${voucherItemHtml}${items}${more}</ul>
     </div>`;
   })() : '';
 
@@ -576,6 +596,21 @@ async function openProfilePanel() {
         : '접기';
     });
   });
+
+  function _markVoucherSeen() {
+    if (window._cottageSess) {
+      const _s = window._cottageSess.get(String(user.id));
+      _s.voucherNoticeSeen = true;
+      window._cottageSess.set(String(user.id), _s);
+    }
+    document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
+    body.querySelector('.profile-notif-voucher')?.remove();
+    const notifList = body.querySelector('.profile-notif-list');
+    if (notifList && notifList.children.length === 0) body.querySelector('.profile-notif-section')?.remove();
+  }
+
+  body.querySelector('.profile-voucher-confirm')?.addEventListener('click', _markVoucherSeen);
+  body.querySelector('.profile-voucher-link')?.addEventListener('click', _markVoucherSeen);
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
