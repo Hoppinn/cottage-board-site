@@ -13,11 +13,11 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-const SRC = 'D:\\Documents\\코티지보드\\리뉴얼\\홈페이지\\업적아이콘\\업적아이콘_preview_rev_1.png';
+const SRC = 'D:\\Documents\\코티지보드\\리뉴얼\\홈페이지\\업적아이콘\\업적아이콘 (1).png';
 const OUT = path.join(__dirname, '..', 'assets', 'images', 'characters', 'split');
 const SIZE = 100;
 const PADDING = 8;
-const MIN_AREA = 300;    // 노이즈/범례 아이콘 제거 (px²)
+const MIN_AREA = 3000;   // 노이즈/범례 아이콘 제거 (px²)
 const BG_TOLERANCE = 35;
 
 // ──────────────────────────────────────────────
@@ -144,6 +144,44 @@ function trimTopLabel(cpx, cropW, cropH) {
   }
 }
 
+/**
+ * 실제 불투명 픽셀의 bbox로 버퍼를 tight crop.
+ * trimTopLabel 이후 빈 행이 생겨 버퍼가 캐릭터보다 클 때
+ * fit:contain resize 비율이 틀어지는 문제를 방지.
+ * 반환: { data: Buffer, width, height } — 새 raw RGBA 버퍼
+ */
+function tightAlphaCrop(cpx, cropW, cropH) {
+  let minX = cropW, maxX = -1, minY = cropH, maxY = -1;
+  for (let y = 0; y < cropH; y++) {
+    for (let x = 0; x < cropW; x++) {
+      if (cpx[(y * cropW + x) * 4 + 3] > 0) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (maxX < 0) return { data: cpx, width: cropW, height: cropH }; // 전부 투명
+  if (minX === 0 && minY === 0 && maxX === cropW - 1 && maxY === cropH - 1) {
+    return { data: cpx, width: cropW, height: cropH }; // 이미 tight
+  }
+  const newW = maxX - minX + 1;
+  const newH = maxY - minY + 1;
+  const out = Buffer.alloc(newW * newH * 4);
+  for (let y = 0; y < newH; y++) {
+    for (let x = 0; x < newW; x++) {
+      const si = ((minY + y) * cropW + (minX + x)) * 4;
+      const di = (y * newW + x) * 4;
+      out[di]   = cpx[si];
+      out[di+1] = cpx[si+1];
+      out[di+2] = cpx[si+2];
+      out[di+3] = cpx[si+3];
+    }
+  }
+  return { data: out, width: newW, height: newH };
+}
+
 function colorDist(r1, g1, b1, r2, g2, b2) {
   return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
 }
@@ -255,7 +293,7 @@ async function run() {
     const w = c.maxX - c.minX + 1;
     const h = c.maxY - c.minY + 1;
     const ratio = Math.max(w, h) / Math.min(w, h);
-    return ratio < 6; // 극단적으로 가늘거나 납작한 것 제거
+    return ratio < 2.5; // 텍스트 레이블(ratio 2.5~4.3) 제거, 캐릭터는 최대 ratio ~1.5
   });
   console.log(`필터 후: ${comps.length}개`);
 
@@ -324,7 +362,10 @@ async function run() {
 
     trimTopLabel(cpx, ci.width, ci.height);
 
-    await sharp(cpx, { raw: { width: ci.width, height: ci.height, channels: 4 } })
+    // trimTopLabel로 비워진 행이 남아 fit:contain 비율이 틀어지는 문제 방지
+    const tight = tightAlphaCrop(cpx, ci.width, ci.height);
+
+    await sharp(tight.data, { raw: { width: tight.width, height: tight.height, channels: 4 } })
       .png()
       .resize(SIZE, SIZE, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .toFile(outPath);
