@@ -230,13 +230,14 @@
       if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
       const db = window._cottageSupabaseDb;
 
-      const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes] = await Promise.all([
+      const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes, voucherRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned, user_id').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname, real_name'),
         db.from('game_request_votes').select('request_id, user_id'),
         db.from('member_intros').select('user_id, nickname').not('user_id', 'is', null),
+        db.from('voucher_log').select('id, user_id, delta, reason, product_id, created_at, voucher_products(name)').eq('reason', 'redeem').order('created_at', { ascending: false }).limit(30),
       ]);
 
       // user_id → 회원자기소개 닉네임 (타입 불일치 방지용 String() 변환)
@@ -293,6 +294,21 @@
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id,r.is_done,r.is_planned)).join('');
 
+
+      if (voucherRes.error) console.warn('[voucher] 사용내역 조회 실패', voucherRes.error);
+      const voucherRows = voucherRes.data || [];
+      const fmtDt = iso => new Date(iso).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const voucherTableHtml = voucherRows.length
+        ? `<table class="admin-analytics-table">
+            <thead><tr><th>닉네임</th><th>상품</th><th>사용 장수</th><th>사용 시각</th></tr></thead>
+            <tbody>${voucherRows.map(r => `<tr>
+              <td>${escH(nick(r.user_id))}</td>
+              <td>${escH(r.voucher_products?.name || '-')}</td>
+              <td>${Math.abs(r.delta)}장</td>
+              <td>${escH(fmtDt(r.created_at))}</td>
+            </tr>`).join('')}</tbody>
+          </table>`
+        : '<div class="admin-empty">아직 사용내역이 없습니다</div>';
 
       const gameCount  = (gameRes.data||[]).length;
       const snackCount = (snackRes.data||[]).length;
@@ -395,6 +411,15 @@
             <div class="admin-section is-open">
               <div class="admin-section-title">🕐 승인 대기<span class="admin-section-arrow">▾</span></div>
               <div class="admin-section-body" id="pointPendingBody"><div class="admin-empty">불러오는 중...</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-group" id="groupVoucher">
+          <div class="admin-group-title">🎫 음료교환권 사용내역<span class="admin-section-count">${voucherRows.length ? voucherRows.length+'건' : ''}</span><span class="admin-group-arrow">▾</span></div>
+          <div class="admin-group-body">
+            <div class="admin-section is-open">
+              <div class="admin-section-title">최근 사용내역<span class="admin-section-count">${voucherRows.length}건</span><span class="admin-section-arrow">▾</span></div>
+              <div class="admin-section-body">${voucherTableHtml}</div>
             </div>
           </div>
         </div>

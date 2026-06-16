@@ -1,15 +1,14 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-16 (66차 — 음료교환권 4단계 완료)
+최종 갱신: 2026-06-16 (67차 — 음료교환권 5단계 완료)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**음료교환권 시스템 진행 중 — 5단계 남음**
+**음료교환권 시스템 완료**
 
-완료: 1단계(SQL), 2단계(JS API), 3단계(recordGamePlay 연동), 4단계(내 활동 패널 UI)
-대기: 5단계(관리자 UI)
+완료: 1~5단계 전체 (SQL/JS API/recordGamePlay 연동/내 활동 패널 UI/관리자 UI)
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
@@ -116,7 +115,7 @@
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
   - [x] 3단계: recordGamePlay 성공 후 grantFirstPlayVoucher fire-and-forget 연동
   - [x] 4단계: 내 활동 패널 UI — 보유 N장 + 상품 목록 + [사용하기] 버튼 + confirm + 잔액 재렌더
-  - [ ] 5단계: 관리자 UI — 최근 사용내역 (닉네임/상품/일시)
+  - [x] 5단계: 관리자 UI — 최근 사용내역 (닉네임/상품/일시)
   - 정책: 계정당 1회 자동 지급, 오너 제외, 승인 없음, 사용 즉시 차감
 - [ ] **관리자 카카오 알림 확장**: 새 회원 가입, 모집 게시판 글 작성 시 알림 추가
 
@@ -185,6 +184,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-16 | feat: 음료교환권 5단계 — 관리자 UI 사용내역 섹션 (닉네임/상품/사용장수/시각, 최신순 30건) |
 | 2026-06-16 | feat: 음료교환권 4단계 — 내 활동 패널 음료교환권 섹션 (보유장수/상품목록/사용하기 버튼/confirm/인라인 재렌더/사용내역) |
 | 2026-06-16 | feat: 음료교환권 3단계 — recordGamePlay 성공 후 grantFirstPlayVoucher fire-and-forget 연동 |
 | 2026-06-16 | feat: 음료교환권 2단계 — JS API 5개 (grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory) |
