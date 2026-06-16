@@ -216,7 +216,7 @@
     const repRowHtml = achievements.length
       ? `<div class="profile-rep-row">
           <span class="profile-rep-label">⭐ 대표</span>
-          <select class="profile-rep-select" data-user-id="${userId}">
+          <select class="profile-rep-select" data-user-id="${userId}" data-prev-value="${repAch?.id || ''}">
             <option value="">미설정</option>
             ${repOptions}
           </select>
@@ -303,7 +303,17 @@
     const userId = select.dataset.userId;
     const achId = select.value || null;
     if (!userId) return;
-    await window.CottageDB?.setRepAchievement(userId, achId);
+    const prev = select.dataset.prevValue ?? '';
+    select.dataset.prevValue = select.value;
+    const ok = await window.CottageDB?.setRepAchievement(userId, achId);
+    if (ok === false) {
+      console.warn('[CottageAchievements] 대표 캐릭터 저장 실패');
+      select.value = prev;
+      select.dataset.prevValue = prev;
+    } else {
+      select.style.borderColor = '#4caf50';
+      setTimeout(() => { select.style.borderColor = ''; }, 800);
+    }
   }
 
   window.CottageAchievements = {
