@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-16 (63차 — 메뉴 드롭다운 위계 정리 완료)
+최종 갱신: 2026-06-16 (64차 — 캐릭터 PNG 전체 교체 완료)
 
 ---
 
@@ -48,7 +48,7 @@
   - point_rewards 테이블: 업적 달성 시 pending 생성 → 관리자 승인 → points_log 반영
   - 관리자 포인트 승인 패널: 근거 보기(플레이/게임/사진/별점), 승인/거절 버튼
   - 캐릭터 섹션 빈 상태 안내 문구 표시 (업적 0개여도 섹션 보임)
-  - 캐릭터 픽셀아트 이미지 17종 분리 완료 → assets/images/characters/ (scripts/crop-characters.js)
+  - 캐릭터 픽셀아트 이미지 47종 분리 완료 → assets/images/characters/split/ (scripts/split-characters.js, 배경제거 소스 기반)
   - 캐릭터 배지 PNG 연동 완료 (achievements.js buildCharacterSection, /assets/images/characters/{id}.png, onerror 이모지 fallback)
   - ⚠️ SQL 미실행 확인 필요: docs/migrations/000_schema.sql — Supabase 대시보드에서 실행 후 RLS 정책 포함 적용 확인
 - [x] 게임 바텀시트 3섹션 (게임평/플레이기록/사진) 완성
@@ -141,7 +141,7 @@
 
 ### P3 — 인프라
 
-- [ ] **캐릭터 PNG 크롭 품질 개선** — 현재 토끼/다람쥐 상단에 헤더 밴드 색상 잔상 남음. 원인: 섹션 헤더 밴드가 크롭 범위에 포함되며 배경제거로 처리 안 됨. 해결 방향: `cropAll`에서 `left, top=0` 위치에서 헤더 색 먼저 샘플링 후 이중 배경제거. 스크립트: `scripts/crop-characters.js`
+- [x] **캐릭터 PNG 크롭 품질 개선** — split-characters.js + 배경제거 소스(업적아이콘 (1).png)로 전체 재추출. 구버전 crop-characters.js 및 characters/ 루트 파일 삭제 완료.
 - [ ] **renderSingleGame / ?game= 페이지 처리**: 기본 동선 제거 완료. 코드는 deprecated 상태로 보류 중 — 직접 URL 공유·SEO 필요 여부 결정 후 삭제 또는 공개 랜딩 페이지로 전환
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html 사진 중심 재구성
