@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-16 (59차 — C작업 achievements.js 연동 완료, PNG 크롭 개선 보류)
+최종 갱신: 2026-06-16 (60차 — 포인트 UI 숨김 완료)
 
 ---
 
@@ -175,6 +175,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-16 | feat: 포인트 UI 숨김 — 업적 해금 토스트 + 내 활동 패널 포인트 표시 제거 (DB/로직 유지) |
 | 2026-06-16 | feat: 캐릭터 픽셀아트 이미지 17종 스프라이트시트에서 분리 (토끼5/다람쥐4/고슴도치4/햄스터4), scripts/crop-characters.js + sharp |
 | 2026-06-13 | fix: 유입 경로 추적 개선 — source별 1일 1회 기록 (cottage_pv_{date}_{source} 키). 같은 경로 재방문 무시, 다른 경로 재방문은 각각 집계 |
 | 2026-06-13 | fix: 게임위치 페이지 게임 클릭 시 바텀시트 열리도록 — ensureGameSheet() 호출 추가 (openGame 함수) |
