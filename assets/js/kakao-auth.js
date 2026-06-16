@@ -481,18 +481,19 @@ async function openProfilePanel() {
   );
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
-  const voucherItemHtml = !voucherSeen ? `<li class="is-new profile-notif-voucher">
-    <span class="profile-notif-new-badge">NEW</span>
+  // seen 여부와 무관하게 항상 표시. seen이면 읽음 스타일(NEW 배지·확인 버튼 없음).
+  const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? '' : ' is-new'}">
+    ${voucherSeen ? '' : '<span class="profile-notif-new-badge">NEW</span>'}
     <div class="profile-voucher-body">
       <strong>🎫 첫 플레이 기록을 남기면 음료교환권 1장을 드려요.</strong>
       <p class="profile-voucher-desc">플레이한 게임을 기록하고, 냉장고 상품으로 교환해 보세요.</p>
       <div class="profile-voucher-btns">
-        <button class="profile-voucher-confirm" type="button">확인했어요</button>
+        ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
         <a class="profile-voucher-link" href="/pages/game/game-reviews.html">플레이 기록 남기기 →</a>
       </div>
     </div>
-  </li>` : '';
-  const notifHtml = (notifs.length > 0 || !voucherSeen) ? (() => {
+  </li>`;
+  const notifHtml = (notifs.length > 0 || true) ? (() => {
     const newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
     const items = notifs.slice(0, 5).map(n => {
       const cls = n.isNew ? ' class="is-new"' : '';
@@ -672,10 +673,21 @@ async function openProfilePanel() {
       _s.voucherNoticeSeen = true;
       window._cottageSess.set(String(user.id), _s);
     }
+    // 빨간점 제거
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    body.querySelector('.profile-notif-voucher')?.remove();
-    const notifList = body.querySelector('.profile-notif-list');
-    if (notifList && notifList.children.length === 0) body.querySelector('.profile-notif-section')?.remove();
+    // 공지 항목은 유지, NEW 배지와 is-new 스타일·확인 버튼만 제거
+    const voucherItem = body.querySelector('.profile-notif-voucher');
+    if (voucherItem) {
+      voucherItem.classList.remove('is-new');
+      voucherItem.querySelector('.profile-notif-new-badge')?.remove();
+      voucherItem.querySelector('.profile-voucher-confirm')?.remove();
+    }
+    // 새 알림 카운트 타이틀 갱신
+    const titleEl = body.querySelector('.profile-notif-title');
+    if (titleEl) {
+      const remaining = body.querySelectorAll('.profile-notif-list .is-new').length;
+      titleEl.textContent = remaining > 0 ? `🔔 새 알림 ${remaining}건` : '🔔 최근 알림';
+    }
   }
 
   body.querySelector('.profile-voucher-confirm')?.addEventListener('click', _markVoucherSeen);
