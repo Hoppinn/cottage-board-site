@@ -157,16 +157,25 @@ function initKakaoAuth() {
     // 미니 프로필 카드 (localStorage 기반, 동기 렌더)
     const card = document.createElement('div');
     card.className = 'menu-user-card';
+    const cardAvatarWrap = document.createElement('div');
+    cardAvatarWrap.className = 'menu-user-card-avatar';
     const cardImg = document.createElement('img');
     cardImg.id = 'menuUserCardImg';
     cardImg.alt = '';
     if (_u?.profileImage) cardImg.src = _u.profileImage.replace(/^http:\/\//, 'https://');
     else cardImg.style.display = 'none';
+    const cardRepChar = document.createElement('img');
+    cardRepChar.id = 'menuUserCardRepChar';
+    cardRepChar.alt = '';
+    cardRepChar.style.display = 'none';
+    cardRepChar.onerror = function() { this.style.display = 'none'; };
+    cardAvatarWrap.appendChild(cardImg);
+    cardAvatarWrap.appendChild(cardRepChar);
     const cardNick = document.createElement('span');
     cardNick.id = 'menuUserCardNick';
     cardNick.className = 'menu-user-card-nick';
     cardNick.textContent = _u?.nickname || '';
-    card.appendChild(cardImg);
+    card.appendChild(cardAvatarWrap);
     card.appendChild(cardNick);
     userActions.insertBefore(card, userActions.firstChild);
 
@@ -382,6 +391,12 @@ function updateLoginUI(user) {
       _cardImg.src = user.profileImage.replace(/^http:\/\//, 'https://');
       _cardImg.style.display = '';
     }
+    window.CottageDB?.getRepAchievement(String(user.id)).then(ach => {
+      const el = document.getElementById('menuUserCardRepChar');
+      if (!el) return;
+      if (ach?.id) { el.src = `/assets/images/characters/${ach.id}.png`; el.style.display = ''; }
+      else el.style.display = 'none';
+    }).catch(() => {});
     if (userActions) {
       userActions.style.display = 'none';
       if (String(user.id) === String(OWNER_KAKAO_ID) && !userActions.querySelector('#kakaoAdminBtn')) {

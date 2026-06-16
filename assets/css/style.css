@@ -1832,7 +1832,9 @@ body.sheet-open{
 
 /* 메뉴 드롭다운 위계 */
 .menu-user-card{display:flex;align-items:center;gap:8px;padding:8px 12px 6px;pointer-events:none;}
-#menuUserCardImg{width:22px;height:22px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.menu-user-card-avatar{position:relative;display:inline-flex;flex-shrink:0;}
+#menuUserCardImg{width:22px;height:22px;border-radius:50%;object-fit:cover;}
+#menuUserCardRepChar{width:14px;height:14px;position:absolute;bottom:-3px;right:-5px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 0 1.5px #e8e4dc;}
 .menu-user-card-nick{font-size:11px;color:var(--muted,#9a8878);font-weight:400;}
 #kakaoProfileBtn{color:var(--brown,#7a4828) !important;}
 .menu-settings-item{font-size:12px !important;font-weight:400 !important;color:#9a8878 !important;padding-top:6px !important;padding-bottom:6px !important;}

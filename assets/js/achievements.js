@@ -313,6 +313,11 @@
     } else {
       select.style.borderColor = '#4caf50';
       setTimeout(() => { select.style.borderColor = ''; }, 800);
+      const repCharEl = document.getElementById('menuUserCardRepChar');
+      if (repCharEl) {
+        if (achId) { repCharEl.src = `/assets/images/characters/${achId}.png`; repCharEl.style.display = ''; }
+        else repCharEl.style.display = 'none';
+      }
     }
   }
 
