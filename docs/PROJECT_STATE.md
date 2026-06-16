@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-16 (61차 — 음료교환권 공지 완료)
+최종 갱신: 2026-06-16 (62차 — 업적 진행률 UI 완료)
 
 ---
 
@@ -175,6 +175,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-16 | feat: 업적 진행률 UI — 패널 순서 재배치(도감/캐릭터/업적→통계), buildAchievementsSection 신규, 달성/미달성/진행도 표시, 목록 접힘 토글 |
 | 2026-06-16 | feat: 음료교환권 공지 — 내 활동 빨간점 + 최근 알림에 공지 항목. 버튼 클릭 시 seen 처리, localStorage voucherNoticeSeen 플래그 |
 | 2026-06-16 | feat: 포인트 UI 숨김 — 업적 해금 토스트 + 내 활동 패널 포인트 표시 제거 (DB/로직 유지) |
 | 2026-06-16 | feat: 캐릭터 픽셀아트 이미지 17종 스프라이트시트에서 분리 (토끼5/다람쥐4/고슴도치4/햄스터4), scripts/crop-characters.js + sharp |
