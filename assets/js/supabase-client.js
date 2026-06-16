@@ -1065,6 +1065,11 @@ window._cottageSess = (function () {
     approvePointReward,
     rejectPointReward,
     getUserPointRewardStats,
+    grantFirstPlayVoucher,
+    getVoucherBalance,
+    getVoucherProducts,
+    redeemVoucher,
+    getVoucherHistory,
   };
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
@@ -1255,5 +1260,62 @@ window._cottageSess = (function () {
       const { data: ach } = await db.from('achievements').select('id, name, emoji').eq('id', data.rep_achievement_id).maybeSingle();
       return ach || null;
     } catch (_) { return null; }
+  }
+
+  // ── 음료교환권 ──────────────────────────────────────────────────────────
+
+  async function grantFirstPlayVoucher(userId) {
+    const _OWNER_ID = '4916417947';
+    if (!userId || String(userId) === _OWNER_ID) return false;
+    try {
+      const { data: existing } = await db.from('voucher_log')
+        .select('id').eq('user_id', String(userId)).eq('reason', 'first_play').maybeSingle();
+      if (existing) return false; // JS 1차 방어
+      const { error } = await db.from('voucher_log')
+        .insert({ user_id: String(userId), delta: 1, reason: 'first_play' });
+      if (error) return false; // unique index 위반 포함 — DB 2차 방어
+      return true;
+    } catch (_) { return false; }
+  }
+
+  async function getVoucherBalance(userId) {
+    try {
+      const { data } = await db.from('voucher_log')
+        .select('delta').eq('user_id', String(userId));
+      return (data || []).reduce((sum, r) => sum + r.delta, 0);
+    } catch (_) { return 0; }
+  }
+
+  async function getVoucherProducts() {
+    try {
+      const { data } = await db.from('voucher_products')
+        .select('id, name, cost').eq('is_active', true).order('id');
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function redeemVoucher(userId, productId) {
+    try {
+      const { data: product } = await db.from('voucher_products')
+        .select('cost').eq('id', productId).maybeSingle();
+      if (!product) return { ok: false, reason: 'no_product' };
+      const balance = await getVoucherBalance(userId);
+      if (balance < product.cost) return { ok: false, reason: 'insufficient' };
+      const { error } = await db.from('voucher_log')
+        .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId });
+      if (error) return { ok: false, reason: 'db_error' };
+      return { ok: true };
+    } catch (_) { return { ok: false, reason: 'error' }; }
+  }
+
+  async function getVoucherHistory(userId, limit = 20) {
+    try {
+      const { data } = await db.from('voucher_log')
+        .select('id, delta, reason, created_at, voucher_products(name)')
+        .eq('user_id', String(userId))
+        .order('created_at', { ascending: false })
+        .limit(limit);
+      return data || [];
+    } catch (_) { return []; }
   }
 })();

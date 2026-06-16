@@ -63,6 +63,11 @@
 | `getUserPhotoCount(userId)` | 첨부 사진 URL 개수 합산 |
 | `getUserRatingCount(userId)` | 별점 제출 건수 |
 | `getRepAchievement(userId)` | 대표 캐릭터 객체 반환 |
+| `grantFirstPlayVoucher(userId)` | 첫 플레이 기록 보상 교환권 1장 지급. 오너/중복이면 false. DB unique index로 이중 방어 |
+| `getVoucherBalance(userId)` | voucher_log delta 합산 → 현재 보유 교환권 수 |
+| `getVoucherProducts()` | 활성 상품 목록 (`{ id, name, cost }[]`) |
+| `redeemVoucher(userId, productId)` | 교환권 사용. 잔액 부족이면 `{ ok:false, reason:'insufficient' }`. 성공 시 `{ ok:true }` |
+| `getVoucherHistory(userId, limit=20)` | 교환권 입출 내역. `voucher_products(name)` FK expand 포함 |
 
 ---
 
