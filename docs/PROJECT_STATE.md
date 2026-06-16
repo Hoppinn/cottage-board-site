@@ -175,6 +175,9 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-16 | feat: 음료교환권 3단계 — recordGamePlay 성공 후 grantFirstPlayVoucher fire-and-forget 연동 |
+| 2026-06-16 | feat: 음료교환권 2단계 — JS API 5개 (grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory) |
+| 2026-06-16 | feat: 음료교환권 1단계 — voucher_products/voucher_log 테이블 + partial unique index + RLS |
 | 2026-06-16 | feat: 대표 캐릭터 드롭다운 카드 뱃지 표시 — avatar wrap + #menuUserCardRepChar 14px overlay, 로그인 시 getRepAchievement 비동기 로드, select 변경 즉시 갱신 |
 | 2026-06-16 | feat: 대표 캐릭터 저장 피드백 — handleRepSelect 저장 성공(테두리 초록)/실패(복원+console.warn), data-prev-value 초기값 주입 |
 | 2026-06-16 | refactor: 메뉴 드롭다운 위계 정리 — 미니 프로필 카드 + 내 활동 강조 + 사진·닉네임 보조화 + 구분선 2개 (HTML 변경 없음) |
