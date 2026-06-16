@@ -3607,6 +3607,20 @@ body.sheet-open{
 .profile-voucher-btns{display:flex;gap:8px;margin-top:6px;}
 .profile-voucher-confirm{flex:1;padding:7px 0;font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:#fff;border:1px solid var(--brown,#7a4828);border-radius:6px;cursor:pointer;}
 .profile-voucher-link{flex:1;display:flex;align-items:center;justify-content:center;padding:7px 0;font-size:12px;font-weight:600;color:#fff;background:var(--brown,#7a4828);border-radius:6px;text-decoration:none;text-align:center;}
+/* 음료교환권 패널 섹션 */
+.profile-voucher-section{background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:12px 14px;margin-top:14px;}
+.profile-voucher-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.profile-voucher-balance{font-size:13px;color:var(--text);margin-bottom:8px;}
+.profile-voucher-balance strong{color:var(--brown,#7a4828);font-size:16px;}
+.profile-voucher-product-list{list-style:none;padding:0;margin:0 0 6px;display:flex;flex-direction:column;gap:6px;}
+.profile-voucher-product{display:flex;align-items:center;gap:4px;}
+.profile-voucher-pname{font-size:13px;font-weight:600;color:var(--text);}
+.profile-voucher-pcost{font-size:12px;color:var(--muted);flex:1;}
+.profile-voucher-use-btn{padding:5px 12px;font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:#fff;border:1px solid var(--brown,#7a4828);border-radius:6px;cursor:pointer;white-space:nowrap;}
+.profile-voucher-use-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.profile-voucher-note{font-size:11px;color:var(--muted);margin:4px 0 8px;}
+.profile-voucher-hist-list{list-style:none;padding:0;margin:4px 0 0;border-top:1px solid var(--border,#e8e4dc);padding-top:8px;display:flex;flex-direction:column;gap:4px;}
+.profile-voucher-hist-item{font-size:11px;color:var(--muted);}
 /* 업적 섹션 */
 .profile-ach-section{background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:12px 14px;margin-top:14px;}
 .profile-ach-header{display:flex;justify-content:space-between;align-items:center;}

@@ -463,12 +463,15 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, charHtml, achHtml] = await Promise.all([
+  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageAchievements?.buildAchievementsSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
+    (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
+    (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getVoucherHistory?.(String(user.id), 3) || Promise.resolve([])).catch(() => []),
   ]);
   if (window._cottageSess) {
     const _s = window._cottageSess.get(String(user.id));
@@ -548,6 +551,21 @@ async function openProfilePanel() {
     </div>`;
   })() : '';
 
+  function _buildVoucherInner(bal, prods, hist) {
+    const fmtDt = iso => {
+      const d = new Date(iso);
+      return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    };
+    const productHtml = prods.map(p => {
+      const dis = bal < p.cost ? ' disabled' : '';
+      return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${escH(p.name)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(p.name)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
+    }).join('');
+    const redeemHist = hist.filter(h => h.reason === 'redeem').slice(0, 3);
+    const histHtml = redeemHist.map(h => `<li class="profile-voucher-hist-item">${fmtDt(h.created_at)} · ${escH(h.voucher_products?.name || '상품')}</li>`).join('');
+    return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}`;
+  }
+  const voucherHtml = `<div class="profile-voucher-section"><div class="profile-voucher-header">🎫 음료교환권</div><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
+
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
   body.innerHTML = `
@@ -556,6 +574,7 @@ async function openProfilePanel() {
     ${codexHtml}
     ${charHtml}
     ${achHtml}
+    ${voucherHtml}
     <ul class="profile-panel-stats">
       ${(() => {
         const savedSecs = stats.profile?.total_minutes || 0; // DB: 초 단위
@@ -680,6 +699,32 @@ async function openProfilePanel() {
 
   body.querySelector('.profile-voucher-confirm')?.addEventListener('click', _markVoucherSeen);
   body.querySelector('.profile-voucher-link')?.addEventListener('click', _markVoucherSeen);
+
+  function _bindVoucher() {
+    body.querySelectorAll('.profile-voucher-use-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const pid = Number(btn.dataset.productId);
+        const pname = btn.dataset.productName;
+        const cost = Number(btn.dataset.cost);
+        if (!confirm(`${pname} (${cost}장)을 사용할까요?\n냉장고에서 직접 꺼내 드시면 됩니다.`)) return;
+        btn.disabled = true;
+        const result = await window.CottageDB?.redeemVoucher(String(user.id), pid);
+        if (result?.ok) {
+          const [nb, np, nh] = await Promise.all([
+            window.CottageDB.getVoucherBalance(String(user.id)),
+            window.CottageDB.getVoucherProducts(),
+            window.CottageDB.getVoucherHistory(String(user.id), 3),
+          ]);
+          const inner = body.querySelector('#profileVoucherInner');
+          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }
+        } else {
+          btn.disabled = false;
+          alert(result?.reason === 'insufficient' ? '보유 교환권이 부족합니다.' : '사용에 실패했습니다.');
+        }
+      });
+    });
+  }
+  _bindVoucher();
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
