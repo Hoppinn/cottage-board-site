@@ -518,9 +518,12 @@ async function openProfilePanel() {
       const d = new Date(iso);
       return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     };
+    // 상품명 → 이모지 (상품명 변경 시 여기도 함께 수정)
+    const VOUCHER_EMOJI = { '물 2병': '🥤', '홈런볼': '🍫', '캔커피': '☕' };
     const productHtml = prods.map(p => {
       const dis = bal < p.cost ? ' disabled' : '';
-      return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${escH(p.name)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(p.name)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
+      const emoji = VOUCHER_EMOJI[p.name] || '';
+      return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(p.name)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(p.name)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
     }).join('');
     const redeemHist = hist.filter(h => h.reason === 'redeem').slice(0, 3);
     const histHtml = redeemHist.map(h => `<li class="profile-voucher-hist-item">${fmtDt(h.created_at)} · ${escH(h.voucher_products?.name || '상품')}</li>`).join('');
@@ -530,6 +533,24 @@ async function openProfilePanel() {
 
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
+
+  // 통계 요약줄 계산
+  const _statsSavedSecs = stats.profile?.total_minutes || 0;
+  const _statsLocalSecs = sessData.timeSec || 0;
+  const _statsSessionSecs = window._cottageSessionStart
+    ? Math.floor((Date.now() - window._cottageSessionStart) / 1000) : 0;
+  const _statsTotalSecs = _statsSavedSecs + _statsLocalSecs + _statsSessionSecs;
+  const _statsFmt = s => s >= 3600
+    ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
+    : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
+  const _statsVc = Math.max(sessData.visitCount||0, stats.profile?.visit_count||0);
+  const _summaryParts = [
+    _statsTotalSecs > 0 ? _statsFmt(_statsTotalSecs) : null,
+    _statsVc > 0 ? `${_statsVc}일 방문` : null,
+    stats.plays.length > 0 ? `${stats.plays.length}기록` : null,
+  ].filter(Boolean);
+  const _statsSummary = _summaryParts.length ? _summaryParts.join(' · ') : '활동 없음';
+
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     ${notifHtml}
@@ -537,23 +558,14 @@ async function openProfilePanel() {
     ${charHtml}
     ${achHtml}
     ${voucherHtml}
-    <ul class="profile-panel-stats">
+    <div class="profile-stats-wrap">
+      <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
+      <ul class="profile-panel-stats is-collapsed">
       ${(() => {
-        const savedSecs = stats.profile?.total_minutes || 0; // DB: 초 단위
-        const localSecs = sessData.timeSec || 0;
-        const sessionSecs = window._cottageSessionStart
-          ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
-          : 0;
-        const total = savedSecs + localSecs + sessionSecs;
-        const fmt = s => s >= 3600
-          ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
-          : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
-        return `<li><span>총 이용시간</span><strong>${fmt(total)}</strong></li>`;
+        return `<li><span>총 이용시간</span><strong>${_statsFmt(_statsTotalSecs)}</strong></li>`;
       })()}
       ${(() => {
-        const localVc = sessData.visitCount || 0;
-        const dbVc = stats.profile?.visit_count || 0;
-        const vc = Math.max(localVc, dbVc);
+        const vc = _statsVc;
         return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
       })()}
       ${stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : ''}
@@ -595,7 +607,7 @@ async function openProfilePanel() {
       <li class="profile-stats-divider"></li>
       <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
-    </ul>
+    </ul></div>
     ${stats.plays.length ? `<div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-toggle-arrow">▾</span></button>
       ${playListHtml}
@@ -604,6 +616,13 @@ async function openProfilePanel() {
       <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-toggle-arrow">▾</span></button>
       ${commentListHtml}
     </div>` : ''}`;
+
+  body.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
+    const list = body.querySelector('.profile-panel-stats');
+    const arrow = this.querySelector('.profile-toggle-arrow');
+    const collapsed = list.classList.toggle('is-collapsed');
+    arrow.textContent = collapsed ? '▾' : '▴';
+  });
 
   body.querySelectorAll('.profile-activity-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
