@@ -481,6 +481,8 @@ async function openProfilePanel() {
   );
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
+  const VOUCHER_NOTICE_DATE = '2026-06-16'; // 공지 생성일 고정 (캠페인 공지)
+  const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
   // seen 여부와 무관하게 항상 표시. seen이면 읽음 스타일(NEW 배지·확인 버튼 없음).
   const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? '' : ' is-new'}">
     ${voucherSeen ? '' : '<span class="profile-notif-new-badge">NEW</span>'}
@@ -492,6 +494,7 @@ async function openProfilePanel() {
         <a class="profile-voucher-link" href="/pages/game/game-reviews.html">플레이 기록 남기기 →</a>
       </div>
     </div>
+    <span class="profile-notif-voucher-date">${escH(_voucherDateLabel)}</span>
   </li>`;
   const notifHtml = (notifs.length > 0 || true) ? (() => {
     const newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
