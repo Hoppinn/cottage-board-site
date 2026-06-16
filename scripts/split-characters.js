@@ -97,6 +97,53 @@ const NAME_MAP = [
 
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 
+/**
+ * 상단 레이블 배지 제거
+ * 원본 이미지에서 "시즌 캐릭터" 같은 레이블이 캐릭터에 붙어 있을 때
+ * 레이블(고밀도 가로 블록) → 갭(저밀도) → 캐릭터(재상승) 패턴을 찾아 레이블 구간을 투명화.
+ * 갭이 없으면(일반 캐릭터) 아무것도 건드리지 않음.
+ */
+function trimTopLabel(cpx, cropW, cropH) {
+  const density = [];
+  for (let y = 0; y < cropH; y++) {
+    let cnt = 0;
+    for (let x = 0; x < cropW; x++) {
+      if (cpx[(y * cropW + x) * 4 + 3] > 0) cnt++;
+    }
+    density.push(cnt);
+  }
+
+  const H_LABEL = 25; // 레이블 행: ≥25px
+  const H_GAP   = 18; // 갭 행:    <18px
+  const H_CHAR  = 17; // 캐릭터 재시작: ≥17px
+  let labelStart = -1, gapStart = -1, charStart = -1;
+
+  // 1. 상위 35% 안에서 레이블 시작 찾기
+  for (let y = 0; y < Math.floor(cropH * 0.35); y++) {
+    if (density[y] >= H_LABEL) { labelStart = y; break; }
+  }
+  if (labelStart < 0) return;
+
+  // 2. 레이블 이후 갭 찾기
+  for (let y = labelStart + 4; y < Math.floor(cropH * 0.65); y++) {
+    if (density[y] < H_GAP) { gapStart = y; break; }
+  }
+  if (gapStart < 0) return; // 갭 없음 → 일반 캐릭터, 자르지 않음
+
+  // 3. 갭 이후 캐릭터 본체 시작 찾기
+  for (let y = gapStart; y < Math.floor(cropH * 0.85); y++) {
+    if (density[y] >= H_CHAR) { charStart = y; break; }
+  }
+  if (charStart < 0) return;
+
+  // 4. 레이블+갭 구간 투명화
+  for (let y = 0; y < charStart; y++) {
+    for (let x = 0; x < cropW; x++) {
+      cpx[(y * cropW + x) * 4 + 3] = 0;
+    }
+  }
+}
+
 function colorDist(r1, g1, b1, r2, g2, b2) {
   return Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
 }
@@ -142,7 +189,8 @@ function findComponents(mask, width, height) {
       components.push(comp);
     }
   }
-  return components;
+  // labels 배열도 반환 — 추출 시 마스킹에 사용
+  return { components, labels };
 }
 
 async function run() {
@@ -198,7 +246,7 @@ async function run() {
   }
 
   console.log('Connected component 탐지 중...');
-  const all = findComponents(mask, width, height);
+  const { components: all, labels } = findComponents(mask, width, height);
   console.log(`전체 component: ${all.length}개`);
 
   // 필터: 최소 면적, 최대 종횡비 (텍스트/점선 제거)
@@ -263,7 +311,18 @@ async function run() {
         }
       }
     }
-    // 투명배경 모드는 alpha가 이미 올바름 — 추가 처리 불필요
+    // 이 컴포넌트 레이블에 속하지 않는 픽셀의 알파를 0으로
+    // → 인접 캐릭터 픽셀·레이블 텍스트 등 PADDING 영역에 포함된 이물질 제거
+    for (let ly = 0; ly < cropH; ly++) {
+      for (let lx = 0; lx < cropW; lx++) {
+        const globalIdx = (padTop + ly) * width + (padLeft + lx);
+        if (labels[globalIdx] !== c.label) {
+          cpx[(ly * cropW + lx) * 4 + 3] = 0;
+        }
+      }
+    }
+
+    trimTopLabel(cpx, ci.width, ci.height);
 
     await sharp(cpx, { raw: { width: ci.width, height: ci.height, channels: 4 } })
       .png()
