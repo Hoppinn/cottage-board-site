@@ -383,7 +383,7 @@ function updateLoginUI(user) {
         profileImg.style.display = 'none';
       }
     }
-    if (loginText) loginText.textContent = user.nickname;
+    if (loginText) { loginText.textContent = user.nickname; loginText.style.display = 'none'; }
     const _cardNick = document.getElementById('menuUserCardNick');
     if (_cardNick) _cardNick.textContent = user.nickname || '';
     const _cardImg = document.getElementById('menuUserCardImg');
@@ -413,7 +413,7 @@ function updateLoginUI(user) {
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
-    if (loginText) loginText.textContent = '카카오 로그인';
+    if (loginText) { loginText.textContent = '카카오 로그인'; loginText.style.display = ''; }
     if (userActions) userActions.style.display = 'none';
   }
 
