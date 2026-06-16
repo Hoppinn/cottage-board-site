@@ -511,7 +511,7 @@ async function openProfilePanel() {
     const more = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
     const titleText = newCount > 0 ? `🔔 새 알림 ${newCount}건` : '🔔 최근 알림';
     return `<div class="profile-notif-section">
-      <div class="profile-notif-title">${titleText}</div>
+      <button class="profile-notif-toggle" type="button"><span class="profile-notif-title">${titleText}</span><span class="profile-toggle-arrow">▴</span></button>
       <ul class="profile-notif-list">${voucherItemHtml}${items}${more}</ul>
     </div>`;
   })() : '';
@@ -532,7 +532,7 @@ async function openProfilePanel() {
     const histHtml = redeemHist.map(h => `<li class="profile-voucher-hist-item">${fmtDt(h.created_at)} · ${escH(h.voucher_products?.name || '상품')}</li>`).join('');
     return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}`;
   }
-  const voucherHtml = `<div class="profile-voucher-section"><div class="profile-voucher-header">🎫 음료교환권</div><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
+  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권</span><span class="profile-toggle-arrow">▴</span></button><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
 
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
@@ -619,6 +619,20 @@ async function openProfilePanel() {
       <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-toggle-arrow">▾</span></button>
       ${commentListHtml}
     </div>` : ''}`;
+
+  body.querySelector('.profile-notif-toggle')?.addEventListener('click', function() {
+    const list = body.querySelector('.profile-notif-list');
+    const arrow = this.querySelector('.profile-toggle-arrow');
+    const collapsed = list.classList.toggle('is-collapsed');
+    arrow.textContent = collapsed ? '▾' : '▴';
+  });
+
+  body.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
+    const inner = body.querySelector('#profileVoucherInner');
+    const arrow = this.querySelector('.profile-toggle-arrow');
+    const collapsed = inner.classList.toggle('is-collapsed');
+    arrow.textContent = collapsed ? '▾' : '▴';
+  });
 
   body.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
     const list = body.querySelector('.profile-panel-stats');
