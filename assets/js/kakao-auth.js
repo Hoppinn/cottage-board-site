@@ -140,10 +140,7 @@ function initKakaoAuth() {
     nicknameBtn.addEventListener('click', promptNicknameChange);
   }
 
-  const photoBtn = document.getElementById('kakaoPhotoBtn');
-  if (photoBtn) {
-    photoBtn.addEventListener('click', promptProfileImageChange);
-  }
+
 
   const logoutBtn = document.getElementById('kakaoLogoutBtn');
   if (logoutBtn) {
@@ -152,7 +149,9 @@ function initKakaoAuth() {
 
   const userActions = document.getElementById('kakaoUserActions');
   if (userActions && !document.getElementById('kakaoProfileBtn')) {
-    const _u = getKakaoUser();
+    // 사진변경·닉네임변경 버튼 드롭다운에서 제거 (내 보드 패널 프로필 영역으로 이동)
+    userActions.querySelector('#kakaoPhotoBtn')?.remove();
+    userActions.querySelector('#kakaoNicknameBtn')?.remove();
 
     // 내 보드 버튼
     const profileBtn = document.createElement('button');
@@ -161,23 +160,6 @@ function initKakaoAuth() {
     profileBtn.textContent = '내 보드';
     userActions.insertBefore(profileBtn, userActions.firstChild);
     profileBtn.addEventListener('click', openProfilePanel);
-
-    // 구분선 (내 활동 / 설정)
-    const div1 = document.createElement('div');
-    div1.className = 'menu-divider';
-    userActions.insertBefore(div1, profileBtn.nextSibling);
-
-    // 사진·닉네임 버튼 보조 스타일
-    userActions.querySelector('#kakaoPhotoBtn')?.classList.add('menu-settings-item');
-    userActions.querySelector('#kakaoNicknameBtn')?.classList.add('menu-settings-item');
-
-    // 구분선 (설정 / 로그아웃)
-    const logoutBtn = userActions.querySelector('#kakaoLogoutBtn');
-    if (logoutBtn) {
-      const div2 = document.createElement('div');
-      div2.className = 'menu-divider';
-      userActions.insertBefore(div2, logoutBtn);
-    }
   }
   if (getKakaoUser()) setTimeout(_updateNotifBadge, 0);
 }
@@ -197,104 +179,6 @@ function kakaoLogout() {
   updateLoginUI(null);
 }
 
-function genPresetAvatar(emoji, bg) {
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = 64;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = bg;
-  ctx.beginPath();
-  ctx.arc(32, 32, 32, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.font = '28px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(emoji, 32, 34);
-  return canvas.toDataURL();
-}
-
-const PRESET_AVATAR_CONFIGS = [
-  { emoji: '🎲', bg: '#F0A820' },
-  { emoji: '🃏', bg: '#5B7ED7' },
-  { emoji: '♟️', bg: '#5A8A4A' },
-  { emoji: '🎯', bg: '#D04040' },
-  { emoji: '🌲', bg: '#4A7D5A' },
-  { emoji: '🏡', bg: '#8B6B4A' },
-  { emoji: '🦊', bg: '#E8813A' },
-  { emoji: '🐻', bg: '#9B7B5A' },
-  { emoji: '🐱', bg: '#E8C55A' },
-  { emoji: '🐸', bg: '#5DB85D' },
-  { emoji: '🦝', bg: '#8888AA' },
-  { emoji: '🐧', bg: '#5599CC' },
-  { emoji: '🌙', bg: '#5C4A8A' },
-  { emoji: '⭐', bg: '#D4A820' },
-  { emoji: '🌈', bg: '#6AAED6' },
-  { emoji: '🍀', bg: '#4A9A5A' },
-  { emoji: '🎮', bg: '#4455AA' },
-  { emoji: '🏆', bg: '#C8952A' },
-  { emoji: '🎨', bg: '#CC5577' },
-  { emoji: '🔮', bg: '#7755BB' },
-];
-
-function promptProfileImageChange() {
-  const user = getKakaoUser();
-  if (!user) return;
-
-  const presets = PRESET_AVATAR_CONFIGS.map(c => genPresetAvatar(c.emoji, c.bg));
-
-  const modal = document.createElement('div');
-  modal.className = 'photo-picker-modal';
-  modal.innerHTML = `
-    <div class="photo-picker-panel">
-      <p class="photo-picker-title">프로필 사진 변경</p>
-      <div class="photo-picker-presets">
-        ${presets.map((url, i) => `<button class="photo-preset-btn" data-idx="${i}" type="button"><img src="${url}" alt="프리셋 ${i + 1}"></button>`).join('')}
-      </div>
-      <label class="photo-upload-btn">
-        📁 내 사진 업로드
-        <input type="file" accept="image/*" style="display:none" id="photoFileInput">
-      </label>
-      ${user.kakaoProfileImage ? `<button class="photo-kakao-reset-btn" type="button">카카오 사진으로 돌아가기</button>` : ''}
-      <button class="photo-picker-close" type="button">취소</button>
-    </div>
-  `;
-  document.body.appendChild(modal);
-
-  function applyAndClose(imgSrc) {
-    user.profileImage = imgSrc;
-    localStorage.setItem(`cottage_custom_photo_${user.id}`, imgSrc);
-    localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
-    updateLoginUI(user);
-    modal.remove();
-    _restoreMenuExpanded();
-    if (window.CottageDB?.updateProfilePhoto) {
-      window.CottageDB.updateProfilePhoto(String(user.id), imgSrc)
-        .then(() => console.log('[프로필사진] DB 저장 성공'))
-        .catch(e => console.warn('[프로필사진] DB 저장 실패', e));
-    } else {
-      console.warn('[프로필사진] CottageDB.updateProfilePhoto 없음 — localStorage만 저장됨');
-    }
-  }
-
-  modal.querySelector('#photoFileInput').addEventListener('change', e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => applyAndClose(ev.target.result);
-    reader.readAsDataURL(file);
-  });
-
-  modal.querySelectorAll('.photo-preset-btn').forEach((btn, i) => {
-    btn.addEventListener('click', e => { e.stopPropagation(); applyAndClose(presets[i]); });
-  });
-
-  const resetBtn = modal.querySelector('.photo-kakao-reset-btn');
-  if (resetBtn) {
-    resetBtn.addEventListener('click', e => { e.stopPropagation(); applyAndClose(user.kakaoProfileImage || ''); });
-  }
-
-  modal.querySelector('.photo-picker-close').addEventListener('click', () => { modal.remove(); _restoreMenuExpanded(); });
-  modal.addEventListener('click', e => { if (e.target === modal) { modal.remove(); _restoreMenuExpanded(); } });
-}
 
 async function promptNicknameChange() {
   const user = getKakaoUser();
@@ -359,19 +243,7 @@ function updateLoginUI(user) {
       }
     }
     if (loginText) loginText.textContent = user.nickname;
-    if (userActions) {
-      userActions.style.display = 'none';
-      if (String(user.id) === String(OWNER_KAKAO_ID) && !userActions.querySelector('#kakaoAdminBtn')) {
-        const adminBtn = document.createElement('button');
-        adminBtn.id = 'kakaoAdminBtn';
-        adminBtn.type = 'button';
-        adminBtn.textContent = '🔧 관리자';
-        adminBtn.addEventListener('click', () => {
-          window.location.href = window.location.origin + '/pages/admin/requests-admin.html';
-        });
-        userActions.appendChild(adminBtn);
-      }
-    }
+    if (userActions) userActions.style.display = 'none';
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
@@ -387,7 +259,6 @@ if (typeof window !== 'undefined') {
   window.kakaoLogin = kakaoLogin;
   window.kakaoLogout = kakaoLogout;
   window.promptNicknameChange = promptNicknameChange;
-  window.promptProfileImageChange = promptProfileImageChange;
 
   window.isOwner = function () {
     if (!OWNER_KAKAO_ID) return false;
@@ -415,8 +286,6 @@ async function openProfilePanel() {
       <button class="profile-panel-close" type="button">✕</button>
     </div>
     <div class="profile-panel-body">
-      <p class="profile-panel-nick">${String(user.nickname || '손님').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
-      ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
       <p class="profile-panel-loading">불러오는 중...</p>
     </div>
   </div>`;
@@ -426,7 +295,7 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory] = await Promise.all([
+  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -435,6 +304,7 @@ async function openProfilePanel() {
     (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getRepAchievement?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
   ]);
   // seen 처리는 알림 섹션을 펼칠 때로 이동 (아래 toggle 핸들러)
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
@@ -634,9 +504,24 @@ async function openProfilePanel() {
   const _voucherCardSummary = `${voucherBalance}장 보유`;
   const _usageCardSummary = _statsSummary;
 
-  // ── 메인 패널: 4축 레이아웃 ─────────────────────────────────
+  // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
+  const _repImgHtml = repData?.id
+    ? `<img class="profile-panel-avatar" src="/assets/images/characters/characters_basic/${repData.id}.png" alt="${escH(repData.name || '')}">`
+    : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`;
+  const _repLabel = repData?.name ? escH(repData.name) : '대표 캐릭터 없음';
+  const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   body.innerHTML = `
-    <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
+    <div class="profile-panel-profile">
+      ${_repImgHtml}
+      <div class="profile-panel-profile-info">
+        <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
+        <span class="profile-panel-rep-name">${_repLabel}</span>
+        <div class="profile-panel-sub-actions">
+          <button class="profile-panel-rep-btn" type="button">${_repBtnLabel}</button>
+          <button class="profile-panel-nick-btn" type="button">닉네임 변경</button>
+        </div>
+      </div>
+    </div>
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
     <button class="profile-card profile-card--notif${_newCount > 0 ? ' has-badge' : ''}" data-subsheet="notif" type="button">
       <span class="profile-card-icon">🔔</span>
@@ -865,6 +750,11 @@ async function openProfilePanel() {
       }
     });
   });
+
+  // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
+  body.querySelector('.profile-panel-avatar')?.addEventListener('click', () => body.querySelector('[data-subsheet="growth"]')?.click());
+  body.querySelector('.profile-panel-rep-btn')?.addEventListener('click', () => body.querySelector('[data-subsheet="growth"]')?.click());
+  body.querySelector('.profile-panel-nick-btn')?.addEventListener('click', () => promptNicknameChange());
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

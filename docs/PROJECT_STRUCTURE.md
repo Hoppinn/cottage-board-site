@@ -109,12 +109,6 @@ kakao-auth.js: initKakaoAuth()
   → localStorage 갱신 (kakao_user + cottage_custom_nick_{id})
   → upsertProfile()로 DB도 갱신
 
-[프로필 사진 변경]
-  promptProfileImageChange()
-  → localStorage 갱신 (kakao_user + cottage_custom_photo_{id})
-  → DB profiles.photo_url도 저장 (updateProfilePhoto)
-  → 다기기 복원: initKakaoAuth 시 getProfileSnapshot()으로 DB에서 불러옴
-
 [로그아웃]
   kakaoLogout()
   → localStorage.kakao_user 삭제

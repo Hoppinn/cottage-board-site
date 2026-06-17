@@ -92,7 +92,6 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 | `kakaoLogin()` | 카카오 OAuth 리다이렉트 |
 | `kakaoLogout()` | 로그아웃 (localStorage 삭제) |
 | `promptNicknameChange()` | 닉네임 변경 다이얼로그 |
-| `promptProfileImageChange()` | 프로필 사진 변경 (프리셋 or 업로드) |
 | `isOwner()` | OWNER_KAKAO_ID와 일치 여부 |
 
 ---
@@ -158,7 +157,6 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.kakaoLogin` | kakao-auth.js | game-reviews.js, 각 페이지 |
 | `window.kakaoLogout` | kakao-auth.js | 각 페이지 |
 | `window.promptNicknameChange` | kakao-auth.js | 각 페이지 |
-| `window.promptProfileImageChange` | kakao-auth.js | 각 페이지 |
 | `window.isOwner` | kakao-auth.js | requests-admin.html |
 | `window.parsePhotoUrls` | play-records-utils.js | game-reviews.js, club-history.html |
 | `window.buildPhotoHtml` | play-records-utils.js | game-reviews.js, club-history.html |

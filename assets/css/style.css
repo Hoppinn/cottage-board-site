@@ -3565,7 +3565,15 @@ body.sheet-open{
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .profile-panel-title{font-size:16px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
-.profile-panel-nick{font-size:18px;font-weight:900;color:#5a3418;margin:0 0 10px;}
+.profile-panel-profile{display:flex;align-items:center;gap:14px;padding:4px 0 16px;}
+.profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;cursor:pointer;flex-shrink:0;}
+.profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;cursor:pointer;flex-shrink:0;}
+.profile-panel-profile-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.profile-panel-nick{font-size:17px;font-weight:900;color:#5a3418;margin:0;}
+.profile-panel-rep-name{font-size:12px;color:#8c7a6b;}
+.profile-panel-sub-actions{display:flex;gap:10px;margin-top:5px;}
+.profile-panel-sub-actions button{font-size:12px;color:#8c7a6b;background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+.profile-panel-sub-actions button:hover{color:#5a3418;}
 .profile-admin-link{display:block;text-align:center;margin:0 0 14px;padding:9px;background:#7a4828;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
 .profile-admin-link:hover{opacity:0.85;}
 .profile-stats-wrap{border:1px solid var(--border,#e8e4dc);border-radius:10px;overflow:hidden;margin-top:14px;}
