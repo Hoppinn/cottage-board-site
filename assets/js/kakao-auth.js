@@ -39,10 +39,8 @@ function _restoreMenuExpanded() {
   setTimeout(() => {
     const menu = document.getElementById('mobileMenu');
     const loginBtn = document.getElementById('kakaoLoginBtn');
-    const userActions = document.getElementById('kakaoUserActions');
     if (menu) menu.classList.add('active');
     if (loginBtn) loginBtn.classList.add('is-expanded');
-    if (userActions) userActions.style.display = 'flex';
   }, 30);
 }
 
@@ -115,6 +113,7 @@ function initKakaoAuth() {
   if (userActions) {
     userActions.querySelector('#kakaoPhotoBtn')?.remove();
     userActions.querySelector('#kakaoNicknameBtn')?.remove();
+    userActions.querySelector('#kakaoLogoutBtn')?.remove();
   }
   if (getKakaoUser()) setTimeout(_updateNotifBadge, 0);
 }
