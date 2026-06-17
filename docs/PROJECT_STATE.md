@@ -14,17 +14,16 @@
 
 **다음 작업 후보 (89차 이후, 우선순위 순)**
 
-1. **칭호 시스템 SQL 실행 확인** — Supabase 대시보드에서 `ALTER TABLE profiles ADD COLUMN rep_title_id TEXT` 실행 필요
-   - DB: user_titles 테이블, profiles.rep_title_id 컬럼
-   - API: grantTitle / getUserTitles / setRepTitle / getRepTitle (4개)
-   - UI: 프로필 영역 칭호 표시 + 대표 칭호 변경 버튼 + 성장 보드 내 칭호 섹션
-   - 네이밍 최종 확정 (기록/탐험/사진/리뷰/방문 5계열) — 아래 표 참조
+1. **칭호 시스템 SQL 실행** — Supabase 대시보드에서 아래 실행 후 테스트
+   ```sql
+   ALTER TABLE profiles ADD COLUMN rep_title_id TEXT;
+   ```
+   코드는 89차에 완료. SQL 전까지는 대표 칭호 저장만 실패(no-op), 나머지 정상.
 
-3. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+2. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
    - cottage_sess_에 seenNotifIds: string[] 추가
    - getMyNotifications 반환에 uid 필드 추가
    - 각 알림 아이템에 개별 확인 버튼
-   - 우선 "알림 클릭 → 이동"이 먼저, 개별 확인은 그 다음
 
 ---
 
@@ -210,41 +209,11 @@
     - JS: VOUCHER_EMOJI 10종으로 업데이트 (음료/생수/곤약젤리/스니커즈/참크래커/예감/홈런볼/버터와플/카스타드/촉촉한초코칩)
     - 1장: 음료·생수·곤약젤리·스니커즈·참크래커·예감·홈런볼·버터와플 / 2장: 카스타드 / 3장: 촉촉한초코칩
 - [x] **칭호 시스템 V1** (89차 구현 완료)
-  - 구조: 업적 달성 → 캐릭터(선택) + 칭호(선택) + 교환권(선택) 분리
-  - 캐릭터=수집품, 칭호=장착품(대표 1개 선택), 종합등급=자동계산 별도
-  - ACH_DEFS에 title_id 선택 필드 추가 → checkAchievements에서 grantTitle 호출 방식
-  - 신규 DB: user_titles(user_id, title_id, earned_at), profiles.rep_title_id 컬럼
-  - 신규 API: grantTitle / getUserTitles / setRepTitle / getRepTitle (4개)
-  - 방문 계열·희귀 칭호는 현재 17개 외 신규 트리거 추가 필요
-  - 구현 시 Red → Plan 필수
-
-  **칭호 네이밍 최종안 (2026-06-18 확정)**
-
-  | 계열 | 단계 | 칭호 | 이모지 | 희귀도 | 업적ID |
-  |------|------|------|--------|--------|--------|
-  | 기록 | 10회 | 첫 페이지 | 📝 | 일반 | squirrel_10 |
-  | 기록 | 50회 | 이야기 수집가 | 📖 | 고급 | squirrel_50 |
-  | 기록 | 100회 | 코티지 연대기 작가 | 📚 | 희귀 | squirrel_100 |
-  | 기록 | 200회 | 코티지 사서 | 🏛 | 전설 | squirrel_200 |
-  | 탐험 | 20종 | 탐험가 | 🗺 | 일반 | rabbit_20 |
-  | 탐험 | 50종 | 개척자 | ⛺ | 희귀 | rabbit_50 |
-  | 탐험 | 100종 | 코티지 유랑자 | 🚂 | 전설 | rabbit_100 |
-  | 사진 | 1장 | 첫 셔터 | 📸 | 일반 | hedgehog_1 |
-  | 사진 | 10장 | 순간 수집가 | 🎞 | 고급 | hedgehog_10 |
-  | 사진 | 50장 | 기억 포착자 | 📷 | 희귀 | hedgehog_50 |
-  | 사진 | 100장 | 코티지 사진사 | 🎨 | 전설 | hedgehog_100 |
-  | 리뷰 | 1개 | 첫 감상가 | ✍ | 일반 | hamster_1 |
-  | 리뷰 | 10개 | 취향 기록자 | 📖 | 고급 | hamster_10 |
-  | 리뷰 | 50개 | 코티지 안내자 | 📚 | 희귀 | hamster_50 |
-  | 리뷰 | 100개 | 코티지 큐레이터 | 🏛 | 전설 | hamster_100 |
-  | 방문(V2) | 10회 | 코티지 단골 | ☕ | 일반 | — |
-  | 방문(V2) | 30회 | 코티지 이웃 | 🏡 | 고급 | — |
-  | 방문(V2) | 50회 | 코티지 주민 | 🔥 | 희귀 | — |
-  | 방문(V2) | 100회 | 터줏대감 | 🌳 | 영웅 | — |
-  | 방문(V2) | 300회 | 코티지 원로 | 👑 | 전설 | — |
-  | 첫 기록 | 1회 | first_play (별도) | 🌱 | 일반 | rabbit_first |
-
-  희귀도 체계: 일반 → 고급 → 희귀 → 영웅(방문계열만) → 전설
+  - TITLE_DEFS 20종: 기록(4)/탐험(3)/사진(4)/리뷰(4)/방문(5) 계열
+  - user_achievements 기반 파생 (업적계열) + profiles.visit_count 기반 (방문계열)
+  - profiles.rep_title_id TEXT 컬럼 추가 필요 (SQL 미실행 시 저장만 실패, 나머지 정상)
+  - setRepTitle API, buildTitleSection({html,earnedIds}), getTitleById 헬퍼 노출
+  - 성장 보드: 캐릭터→칭호→업적→도감 순, 미획득 카드 클릭 가능(저장만 차단)
 
 - [ ] **관리자 카카오 알림 확장**: 새 회원 가입, 모집 게시판 글 작성 시 알림 추가
   - ⚠️ 현재 코드베이스에 카톡 알림 전송 코드 없음. 사용자에게 기능 위치/구현 방식 재확인 필요
