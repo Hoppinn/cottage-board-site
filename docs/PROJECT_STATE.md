@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (69차 — achievements.js 누락 9개 페이지 복구)
+최종 갱신: 2026-06-17 (70차 — 파비콘 수정 + DEV 교환권 버튼 추가)
 
 ---
 
@@ -186,6 +186,8 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-17 | feat: 음료교환권 DEV 테스트 지급 버튼 (localhost/OWNER 전용, reason=dev_test, 운영 노출 없음) |
+| 2026-06-17 | fix: 파비콘 찌부 수정 — favicon-square.png 생성(1024x1024 center crop), 전체 18개 HTML 교체 |
 | 2026-06-17 | fix: achievements.js 누락 9개 페이지 추가 — 도감/캐릭터/업적 섹션 복구 (info/3, club/5, admin/requests) |
 | 2026-06-17 | feat: 내 활동 패널 알림·교환권 섹션 토글 추가 (기본 펼침, 클릭 접기/펴기) |
 | 2026-06-17 | fix: 음료교환권 공지 카드 텍스트 단순화 (문장 축약, 설명문 제거, 버튼 문구 단축) |
