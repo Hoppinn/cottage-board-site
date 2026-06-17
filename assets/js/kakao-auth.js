@@ -91,75 +91,30 @@ function initKakaoAuth() {
 
   const btn = document.getElementById('kakaoLoginBtn');
   if (btn) {
-    const isHover = window.matchMedia?.('(hover: hover) and (pointer: fine)').matches;
     const loginArea = btn.closest('.menu-login-area') || btn.parentElement;
-    if (isHover && loginArea) {
-      // PC: 마우스 올리면 열고 벗어나면 닫힘
-      // 딜레이 필요: dropdown이 header 아래 absolute 위치라 gap 통과 시 mouseleave 발화
-      let _hideTimer = null;
-      const _showActions = () => {
-        clearTimeout(_hideTimer);
-        if (!getKakaoUser()) return;
-        const actions = document.getElementById('kakaoUserActions');
-        if (!actions) return;
-        btn.classList.add('is-expanded');
-        actions.style.display = 'flex';
-      };
-      const _scheduleHide = () => {
-        _hideTimer = setTimeout(() => {
-          const actions = document.getElementById('kakaoUserActions');
-          if (actions) actions.style.display = 'none';
-          btn.classList.remove('is-expanded');
-        }, 200);
-      };
-      loginArea.addEventListener('mouseenter', _showActions);
-      loginArea.addEventListener('mouseleave', _scheduleHide);
-      const actEl = document.getElementById('kakaoUserActions');
-      if (actEl) {
-        actEl.addEventListener('mouseenter', () => clearTimeout(_hideTimer));
-        actEl.addEventListener('mouseleave', _scheduleHide);
-      }
-      btn.addEventListener('click', () => { if (!getKakaoUser()) kakaoLogin(); });
-    } else {
-      btn.addEventListener('click', () => {
-        if (!getKakaoUser()) {
-          kakaoLogin();
-        } else {
-          const actions = document.getElementById('kakaoUserActions');
-          if (!actions) return;
-          const opening = !btn.classList.contains('is-expanded');
-          btn.classList.toggle('is-expanded', opening);
-          actions.style.display = opening ? 'flex' : 'none';
-        }
-      });
+    // 프로필 버튼 클릭 → 직접 내 보드 열기 (드롭다운 없앰)
+    btn.addEventListener('click', () => {
+      if (!getKakaoUser()) kakaoLogin();
+      else openProfilePanel();
+    });
+    // 로그아웃 아이콘 버튼 삽입
+    if (loginArea && !document.getElementById('kakaoLogoutIconBtn')) {
+      const logoutIconBtn = document.createElement('button');
+      logoutIconBtn.id = 'kakaoLogoutIconBtn';
+      logoutIconBtn.className = 'header-logout-icon';
+      logoutIconBtn.type = 'button';
+      logoutIconBtn.setAttribute('aria-label', '로그아웃');
+      logoutIconBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`;
+      logoutIconBtn.addEventListener('click', e => { e.stopPropagation(); kakaoLogout(); });
+      loginArea.appendChild(logoutIconBtn);
     }
   }
 
-  const nicknameBtn = document.getElementById('kakaoNicknameBtn');
-  if (nicknameBtn) {
-    nicknameBtn.addEventListener('click', promptNicknameChange);
-  }
-
-
-
-  const logoutBtn = document.getElementById('kakaoLogoutBtn');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', kakaoLogout);
-  }
-
+  // HTML 내 사진변경·닉네임변경 버튼 제거 (15개 파일 수정 대신 JS 처리)
   const userActions = document.getElementById('kakaoUserActions');
-  if (userActions && !document.getElementById('kakaoProfileBtn')) {
-    // 사진변경·닉네임변경 버튼 드롭다운에서 제거 (내 보드 패널 프로필 영역으로 이동)
+  if (userActions) {
     userActions.querySelector('#kakaoPhotoBtn')?.remove();
     userActions.querySelector('#kakaoNicknameBtn')?.remove();
-
-    // 내 보드 버튼
-    const profileBtn = document.createElement('button');
-    profileBtn.id = 'kakaoProfileBtn';
-    profileBtn.type = 'button';
-    profileBtn.textContent = '내 보드';
-    userActions.insertBefore(profileBtn, userActions.firstChild);
-    profileBtn.addEventListener('click', openProfilePanel);
   }
   if (getKakaoUser()) setTimeout(_updateNotifBadge, 0);
 }
@@ -201,13 +156,6 @@ async function promptNicknameChange() {
   localStorage.setItem(`cottage_custom_nick_${user.id}`, trimmed);
   localStorage.setItem(KAKAO_USER_KEY, JSON.stringify(user));
   updateLoginUI(user);
-  // 동기적으로 즉시 복원 (setTimeout 의존 제거)
-  const _ua = document.getElementById('kakaoUserActions');
-  const _lb = document.getElementById('kakaoLoginBtn');
-  const _mm = document.getElementById('mobileMenu');
-  if (_ua) _ua.style.display = 'flex';
-  if (_lb) _lb.classList.add('is-expanded');
-  if (_mm) _mm.classList.add('active');
   window.CottageDB?.upsertProfile(String(user.id), trimmed, user.kakaoNickname || null).catch(() => {});
 }
 
@@ -232,6 +180,7 @@ function updateLoginUI(user) {
 
   if (!btn) return;
 
+  const logoutIconBtn = document.getElementById('kakaoLogoutIconBtn');
   if (user) {
     btn.classList.add('is-logged-in');
     if (profileImg) {
@@ -244,11 +193,13 @@ function updateLoginUI(user) {
     }
     if (loginText) loginText.textContent = user.nickname;
     if (userActions) userActions.style.display = 'none';
+    if (logoutIconBtn) logoutIconBtn.classList.add('is-visible');
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
     if (loginText) loginText.textContent = '카카오 로그인';
     if (userActions) userActions.style.display = 'none';
+    if (logoutIconBtn) logoutIconBtn.classList.remove('is-visible');
   }
 
   window.dispatchEvent(new CustomEvent('cottage-auth-changed', { detail: { user } }));
@@ -383,7 +334,7 @@ async function openProfilePanel() {
       return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     };
     // 상품명 → 이모지 (상품명 변경 시 여기도 함께 수정)
-    const VOUCHER_EMOJI = { '물 2병': '🥤', '홈런볼': '🍫', '캔커피': '☕' };
+    const VOUCHER_EMOJI = { '음료': '🥤', '생수': '💧', '곤약젤리': '🍮', '스니커즈': '🍫', '참크래커': '🍘', '예감': '🥨', '홈런볼': '⚾', '버터와플': '🧇', '카스타드': '🧁', '촉촉한초코칩': '🍪' };
     const productHtml = prods.map(p => {
       const dis = bal < p.cost ? ' disabled' : '';
       const emoji = VOUCHER_EMOJI[p.name] || '';
