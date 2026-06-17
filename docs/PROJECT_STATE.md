@@ -1,18 +1,10 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (71차 — 세션 마무리 정리)
+최종 갱신: 2026-06-17 (72차)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
-
-**⚠️ Supabase SQL 실행 필요** (DEV 교환권 버튼 활성화):
-```sql
-ALTER TABLE voucher_log DROP CONSTRAINT IF EXISTS voucher_log_reason_check;
-ALTER TABLE voucher_log ADD CONSTRAINT voucher_log_reason_check
-  CHECK (reason IN ('first_play', 'redeem', 'dev_test'));
-```
-→ 실행 전까지 🔧 테스트 교환권 지급 버튼 클릭 시 실패
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요, 다음 세션에)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
@@ -195,6 +187,9 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 |------|------|
 | 2026-06-17 | fix: 파비콘 여백 최소화 — 투명 영역 감지 후 8px만 남기고 512x512 꽉 채움 |
 | 2026-06-17 | fix: 파비콘 이미지 교체 — 글씨없는버전 노여백 로고 전용 아이콘으로 변경 |
+| 2026-06-17 | refactor: requests-admin 1차 바텀시트 개편 — 포인트승인/교환권로그/요청관리 바텀시트화, 메뉴카드 그리드 도입. 차트 섹션 기존 유지 |
+| 2026-06-17 | feat: 음료교환권 지급+사용 통합 로그 — delta 기반 +/- 표시, reason별 문구, 지급=초록/사용=기본. 관리자 페이지도 전체 로그 표시 |
+| 2026-06-17 | fix: 새 게임 알림 "입고됐어요" → "추가됐어요" |
 | 2026-06-17 | fix: DEV 교환권 버튼 — reason CHECK에 dev_test 추가, 실패 시 alert+console.error |
 | 2026-06-17 | feat: 음료교환권 DEV 테스트 지급 버튼 (localhost/OWNER 전용, reason=dev_test, 운영 노출 없음) |
 | 2026-06-17 | fix: 파비콘 찌부 수정 — favicon-square.png 생성(1024x1024 center crop), 전체 18개 HTML 교체 |

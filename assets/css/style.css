@@ -3639,6 +3639,10 @@ body.sheet-open{
 .profile-voucher-dev-btn:hover{opacity:1;}
 .profile-voucher-hist-list{list-style:none;padding:0;margin:4px 0 0;border-top:1px solid var(--border,#e8e4dc);padding-top:8px;display:flex;flex-direction:column;gap:4px;}
 .profile-voucher-hist-item{font-size:11px;color:var(--muted);}
+.profile-voucher-hist-grant{color:#2e7d32;}
+.profile-voucher-hist-redeem{color:var(--text);}
+.profile-voucher-hist-prefix{font-weight:700;margin-right:2px;}
+.profile-voucher-hist-dt{color:var(--muted);font-size:10px;margin-left:4px;}
 /* 업적 섹션 */
 .profile-ach-section{background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:12px 14px;margin-top:14px;}
 .profile-ach-header{display:flex;justify-content:space-between;align-items:center;}

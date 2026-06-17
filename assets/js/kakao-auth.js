@@ -434,7 +434,7 @@ async function openProfilePanel() {
     (window.CottageAchievements?.buildAchievementsSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getVoucherHistory?.(String(user.id), 3) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
   ]);
   if (window._cottageSess) {
     const _s = window._cottageSess.get(String(user.id));
@@ -506,7 +506,7 @@ async function openProfilePanel() {
       if (n.type === 'curious_comment')
         return `<li${cls}>${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
       if (n.type === 'purchased')
-        return `<li${cls}>${badge}🛒 <strong>${escH(n.gameName)}</strong> 입고됐어요 <span>${fmtShort(n.date)}</span></li>`;
+        return `<li${cls}>${badge}🛒 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
       return '';
     }).join('');
     const more = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
@@ -529,8 +529,13 @@ async function openProfilePanel() {
       const emoji = VOUCHER_EMOJI[p.name] || '';
       return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(p.name)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(p.name)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
     }).join('');
-    const redeemHist = hist.filter(h => h.reason === 'redeem').slice(0, 3);
-    const histHtml = redeemHist.map(h => `<li class="profile-voucher-hist-item">${fmtDt(h.created_at)} · ${escH(h.voucher_products?.name || '상품')}</li>`).join('');
+    const histHtml = hist.slice(0, 5).map(h => {
+      const isGrant = h.delta > 0;
+      const label = isGrant
+        ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
+        : escH(h.voucher_products?.name || '사용');
+      return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span></li>`;
+    }).join('');
     const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
     return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
   }
@@ -724,7 +729,7 @@ async function openProfilePanel() {
           const [nb, np, nh] = await Promise.all([
             window.CottageDB.getVoucherBalance(String(user.id)),
             window.CottageDB.getVoucherProducts(),
-            window.CottageDB.getVoucherHistory(String(user.id), 3),
+            window.CottageDB.getVoucherHistory(String(user.id), 5),
           ]);
           const inner = body.querySelector('#profileVoucherInner');
           if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }
@@ -743,7 +748,7 @@ async function openProfilePanel() {
           const [nb, np, nh] = await Promise.all([
             window.CottageDB.getVoucherBalance(String(user.id)),
             window.CottageDB.getVoucherProducts(),
-            window.CottageDB.getVoucherHistory(String(user.id), 3),
+            window.CottageDB.getVoucherHistory(String(user.id), 5),
           ]);
           const inner = body.querySelector('#profileVoucherInner');
           if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }

@@ -125,6 +125,19 @@
     .admin-cross-chip { font-size: 11px; background: var(--bg,#f5f0e8); border-radius: 20px; padding: 3px 10px; color: var(--text); }
     .admin-cross-chip strong { font-weight: 800; color: var(--green); }
     .admin-cross-empty { font-size: 13px; color: var(--muted); text-align: center; padding: 20px 0; }
+    /* 관리자 메뉴 카드 */
+    .admin-menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px; }
+    .admin-menu-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 14px; padding: 18px 12px 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; font-weight: 700; color: var(--text); text-align: center; line-height: 1.3; }
+    .admin-menu-card:hover { border-color: var(--green); color: var(--green); }
+    .admin-menu-icon { font-size: 26px; line-height: 1; }
+    .admin-menu-badge { display: inline-block; background: var(--green); color: #fff; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 1px 6px; vertical-align: middle; margin-left: 4px; }
+    /* 바텀시트 */
+    .admin-bs-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9200; align-items: flex-end; justify-content: center; }
+    .admin-bs-panel { background: #fff; border-radius: 18px 18px 0 0; width: 100%; max-width: 600px; max-height: 88vh; display: flex; flex-direction: column; }
+    .admin-bs-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px; border-bottom: 1px solid var(--border,#e8e4dc); flex-shrink: 0; }
+    .admin-bs-title { font-size: 16px; font-weight: 800; color: var(--text); }
+    .admin-bs-close { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; padding: 2px 6px; line-height: 1; }
+    .admin-bs-body { overflow-y: auto; padding: 16px; flex: 1; -webkit-overflow-scrolling: touch; }
   </style>
 </head>
 
@@ -237,7 +250,7 @@
         db.from('profiles').select('user_id, nickname, real_name'),
         db.from('game_request_votes').select('request_id, user_id'),
         db.from('member_intros').select('user_id, nickname').not('user_id', 'is', null),
-        db.from('voucher_log').select('id, user_id, delta, reason, product_id, created_at, voucher_products(name)').eq('reason', 'redeem').order('created_at', { ascending: false }).limit(30),
+        db.from('voucher_log').select('id, user_id, delta, reason, product_id, created_at, voucher_products(name)').order('created_at', { ascending: false }).limit(50),
       ]);
 
       // user_id → 회원자기소개 닉네임 (타입 불일치 방지용 String() 변환)
@@ -295,26 +308,40 @@
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id,r.is_done,r.is_planned)).join('');
 
 
-      if (voucherRes.error) console.warn('[voucher] 사용내역 조회 실패', voucherRes.error);
+      if (voucherRes.error) console.warn('[voucher] 로그 조회 실패', voucherRes.error);
       const voucherRows = voucherRes.data || [];
       const fmtDt = iso => new Date(iso).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
       const voucherTableHtml = voucherRows.length
         ? `<table class="admin-analytics-table">
-            <thead><tr><th>닉네임</th><th>상품</th><th>사용 장수</th><th>사용 시각</th></tr></thead>
-            <tbody>${voucherRows.map(r => `<tr>
-              <td>${escH(nick(r.user_id))}</td>
-              <td>${escH(r.voucher_products?.name || '-')}</td>
-              <td>${Math.abs(r.delta)}장</td>
-              <td>${escH(fmtDt(r.created_at))}</td>
-            </tr>`).join('')}</tbody>
+            <thead><tr><th>닉네임</th><th>내역</th><th>장수</th><th>시각</th></tr></thead>
+            <tbody>${voucherRows.map(r => {
+              const isGrant = r.delta > 0;
+              const label = isGrant
+                ? (r.reason === 'first_play' ? '첫 기록 보상' : r.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
+                : escH(r.voucher_products?.name || '사용');
+              const deltaStr = (isGrant ? '+' : '-') + Math.abs(r.delta) + '장';
+              return `<tr style="color:${isGrant?'#2e7d32':'inherit'}">
+                <td>${escH(nick(r.user_id))}</td>
+                <td>${label}</td>
+                <td>${deltaStr}</td>
+                <td>${escH(fmtDt(r.created_at))}</td>
+              </tr>`;
+            }).join('')}</tbody>
           </table>`
-        : '<div class="admin-empty">아직 사용내역이 없습니다</div>';
+        : '<div class="admin-empty">아직 내역이 없습니다</div>';
 
       const gameCount  = (gameRes.data||[]).length;
       const snackCount = (snackRes.data||[]).length;
       const suggestCount = (suggestRes.data||[]).filter(r => !r.is_done).length;
 
       el.innerHTML = `
+        <div class="admin-menu-grid">
+          <button class="admin-menu-card" data-scroll="groupCharts" type="button"><span class="admin-menu-icon">📊</span><span>비주얼 분석</span></button>
+          <button class="admin-menu-card" data-scroll="groupAnalysis" type="button"><span class="admin-menu-icon">📈</span><span>페이지·회원</span></button>
+          <button class="admin-menu-card" data-bs="bsPoints" type="button"><span class="admin-menu-icon">💎</span><span>포인트 승인 <span class="admin-menu-badge" id="pointPendingBadge" style="display:none"></span></span></button>
+          <button class="admin-menu-card" data-bs="bsVoucher" type="button"><span class="admin-menu-icon">🎫</span><span>교환권 로그</span></button>
+          <button class="admin-menu-card" data-bs="bsRequests" type="button"><span class="admin-menu-icon">📝</span><span>요청관리</span></button>
+        </div>
         <div class="admin-group is-open" id="groupCharts">
           <div class="admin-group-title">📊 비주얼 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
@@ -405,41 +432,62 @@
             </div>
           </div>
         </div>
-        <div class="admin-group is-open" id="groupPoints">
-          <div class="admin-group-title">💎 포인트 승인<span class="admin-section-count" id="pointPendingBadge"></span><span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div class="admin-section is-open">
-              <div class="admin-section-title">🕐 승인 대기<span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body" id="pointPendingBody"><div class="admin-empty">불러오는 중...</div></div>
-            </div>
+        <div class="admin-bs-overlay" id="bsPoints">
+          <div class="admin-bs-panel">
+            <div class="admin-bs-header"><span class="admin-bs-title">💎 포인트 승인</span><button class="admin-bs-close" type="button">✕</button></div>
+            <div class="admin-bs-body" id="pointPendingBody"><div class="admin-empty">불러오는 중...</div></div>
           </div>
         </div>
-        <div class="admin-group" id="groupVoucher">
-          <div class="admin-group-title">🎫 음료교환권 사용내역<span class="admin-section-count">${voucherRows.length ? voucherRows.length+'건' : ''}</span><span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div class="admin-section is-open">
-              <div class="admin-section-title">최근 사용내역<span class="admin-section-count">${voucherRows.length}건</span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body">${voucherTableHtml}</div>
-            </div>
+        <div class="admin-bs-overlay" id="bsVoucher">
+          <div class="admin-bs-panel">
+            <div class="admin-bs-header"><span class="admin-bs-title">🎫 교환권 로그 <span style="font-size:12px;font-weight:400;color:var(--muted)">${voucherRows.length}건</span></span><button class="admin-bs-close" type="button">✕</button></div>
+            <div class="admin-bs-body">${voucherTableHtml}</div>
           </div>
         </div>
-        <div class="admin-group" id="groupRequests">
-          <div class="admin-group-title">📋 요청관리<span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div class="admin-section">
-              <div class="admin-section-title">🎲 게임 구매 요청 <span class="admin-section-count">${gameCount}건</span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body"><div class="admin-req-list">${gameHtml||'<div class="admin-empty">없음</div>'}</div></div>
-            </div>
-            <div class="admin-section">
-              <div class="admin-section-title">🍿 간식·음료 요청 <span class="admin-section-count">${snackCount}건</span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body"><div class="admin-req-list">${snackHtml||'<div class="admin-empty">없음</div>'}</div></div>
-            </div>
-            <div class="admin-section">
-              <div class="admin-section-title">💬 개선 건의 <span class="admin-section-count">${suggestCount}건 미완료</span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body"><div class="admin-req-list">${suggestHtml||'<div class="admin-empty">없음</div>'}</div></div>
+        <div class="admin-bs-overlay" id="bsRequests">
+          <div class="admin-bs-panel">
+            <div class="admin-bs-header"><span class="admin-bs-title">📝 요청관리</span><button class="admin-bs-close" type="button">✕</button></div>
+            <div class="admin-bs-body">
+              <div class="admin-section is-open">
+                <div class="admin-section-title">🎲 게임 구매 요청 <span class="admin-section-count">${gameCount}건</span><span class="admin-section-arrow">▾</span></div>
+                <div class="admin-section-body"><div class="admin-req-list">${gameHtml||'<div class="admin-empty">없음</div>'}</div></div>
+              </div>
+              <div class="admin-section">
+                <div class="admin-section-title">🍿 간식·음료 요청 <span class="admin-section-count">${snackCount}건</span><span class="admin-section-arrow">▾</span></div>
+                <div class="admin-section-body"><div class="admin-req-list">${snackHtml||'<div class="admin-empty">없음</div>'}</div></div>
+              </div>
+              <div class="admin-section">
+                <div class="admin-section-title">💬 개선 건의 <span class="admin-section-count">${suggestCount}건 미완료</span><span class="admin-section-arrow">▾</span></div>
+                <div class="admin-section-body"><div class="admin-req-list">${suggestHtml||'<div class="admin-empty">없음</div>'}</div></div>
+              </div>
             </div>
           </div>
         </div>`;
+
+      // 바텀시트 open/close
+      function openAdminBS(id) {
+        el.querySelectorAll('.admin-bs-overlay').forEach(o => { o.style.display = 'none'; });
+        const overlay = document.getElementById(id);
+        if (overlay) overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+      function closeAdminBS() {
+        el.querySelectorAll('.admin-bs-overlay').forEach(o => { o.style.display = 'none'; });
+        document.body.style.overflow = '';
+      }
+      el.querySelectorAll('.admin-menu-card[data-bs]').forEach(card => {
+        card.addEventListener('click', () => openAdminBS(card.dataset.bs));
+      });
+      el.querySelectorAll('.admin-menu-card[data-scroll]').forEach(card => {
+        card.addEventListener('click', () => {
+          const target = document.getElementById(card.dataset.scroll);
+          if (target) { target.classList.add('is-open'); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+      });
+      el.querySelectorAll('.admin-bs-close').forEach(btn => btn.addEventListener('click', closeAdminBS));
+      el.querySelectorAll('.admin-bs-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => { if (e.target === overlay) closeAdminBS(); });
+      });
 
       // 그룹 접기/펴기
       el.querySelectorAll('.admin-group-title').forEach(title => {
@@ -566,7 +614,10 @@
       if (!body) return;
 
       const rewards = await db.getPendingPointRewards();
-      if (badge) badge.textContent = rewards.length ? ` ${rewards.length}건` : '';
+      if (badge) {
+        if (rewards.length) { badge.textContent = `${rewards.length}건`; badge.style.display = ''; }
+        else { badge.style.display = 'none'; }
+      }
 
       if (!rewards.length) {
         body.innerHTML = '<div class="admin-empty">승인 대기 없음</div>';
