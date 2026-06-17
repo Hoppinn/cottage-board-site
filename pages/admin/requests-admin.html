@@ -860,21 +860,31 @@
         return h;
       }
 
-      // ── 회원 목록 (profiles 기반) ────────────────────────────
+      // ── 요약 카드 + 통합 방문자 목록 ───────────────────────────
       const memberCountEl = document.getElementById('memberCountBadge');
       if (memberCountEl) memberCountEl.textContent = `${allProfiles.length}명`;
 
-      const sortedProfiles = [...allProfiles].sort((a,b) => {
-        if (!a.last_seen_at && !b.last_seen_at) return 0;
-        if (!a.last_seen_at) return 1;
-        if (!b.last_seen_at) return -1;
-        return b.last_seen_at.localeCompare(a.last_seen_at);
-      });
-      const memberListHtml = sortedProfiles.length ? `
-        <div class="admin-req-list">${sortedProfiles.map(p => {
+      const _now = Date.now();
+      const cnt24h = pageViews.filter(r => _now - new Date(r.created_at).getTime() < 86400000).length;
+      const cnt7d = pageViews.filter(r => _now - new Date(r.created_at).getTime() < 7 * 86400000).length;
+      const cnt30dNew = allProfiles.filter(p => p.first_seen_at && _now - new Date(p.first_seen_at).getTime() < 30 * 86400000).length;
+      const summaryCardsHtml = `<div class="admin-summary-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">
+        <div class="admin-summary-card"><div class="admin-summary-label">24시간 방문</div><div class="admin-summary-value">${cnt24h}</div></div>
+        <div class="admin-summary-card"><div class="admin-summary-label">7일 방문</div><div class="admin-summary-value">${cnt7d}</div></div>
+        <div class="admin-summary-card"><div class="admin-summary-label">30일 신규</div><div class="admin-summary-value">${cnt30dNew}</div></div>
+      </div>`;
+
+      const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
+      const unified = [
+        ...allProfiles.map(p => ({ _type: 'member', _last: p.last_seen_at || '', ...p })),
+        ...anonSessions.map(a => ({ _type: 'anon', _last: a.last_seen_at || '', ...a }))
+      ].sort((a, b) => b._last.localeCompare(a._last));
+
+      const unifiedHtml = unified.length ? `<div class="admin-req-list">${unified.map(u => {
+        if (u._type === 'member') {
+          const p = u;
           const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
           const totalS = p.total_minutes || 0;
-          const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
           const isBanned = !!p.is_banned;
           const isMe = String(p.user_id) === '4916417947';
           const nick = introNickMap.get(String(p.user_id)) || p.nickname || p.real_name || '(닉네임없음)';
@@ -882,7 +892,7 @@
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
           return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}">
-            <div class="admin-member-name">${dnHtml}${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
+            <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
@@ -892,7 +902,18 @@
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
             </div>
           </div>`;
-        }).join('')}</div>` : '<div class="admin-empty">회원 없음</div>';
+        } else {
+          const a = u;
+          const { text: statusText, online } = fmtOnlineStatus(a.last_seen_at);
+          const shortKey = a.session_key.slice(0, 8) + '…';
+          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" style="opacity:${online ? 1 : 0.7}">
+            <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:#f5f0e8;color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
+              <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
+            </div>
+            <div class="admin-member-metas"><span>첫 방문 ${fmtDate(a.first_seen_at)}</span></div>
+          </div>`;
+        }
+      }).join('')}</div>` : '<div class="admin-empty">방문자 없음</div>';
 
       // ── 사용자별 이용 상세 (page_sessions 기반, 날짜별) ─────────
       const userDayParts = DAY_LABELS.map((label, i) => {
@@ -920,29 +941,10 @@
       const membersBody = document.getElementById('membersBody');
       const pagesBody = document.getElementById('pagesBody');
 
-      // ── 비로그인 방문자 목록 ─────────────────────────────────
-      const anonListHtml = anonSessions.length
-        ? `<div class="admin-member-list">${anonSessions.map(a => {
-            const { text: statusText, online } = fmtOnlineStatus(a.last_seen_at);
-            const shortKey = a.session_key.slice(0, 8) + '…';
-            const firstFmt = a.first_seen_at
-              ? new Date(a.first_seen_at).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
-              : '-';
-            return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" style="opacity:${online ? 1 : 0.7}">
-              <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code>
-                <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
-              </div>
-              <div class="admin-member-metas">
-                <span>첫 방문 ${firstFmt}</span>
-              </div>
-            </div>`;
-          }).join('')}</div>`
-        : '<div class="admin-empty">비로그인 방문자 없음 (anon_sessions 테이블 필요)</div>';
-
       if (membersBody) {
         membersBody.innerHTML =
-          subSection('회원 목록', memberListHtml, false) +
-          subSection(`비로그인 방문자 <span style="font-size:11px;color:var(--muted)">(세션키 기반)</span>`, anonListHtml, false) +
+          summaryCardsHtml +
+          subSection(`방문자 목록 <span style="font-size:11px;color:var(--muted)">${unified.length}명</span>`, unifiedHtml, false) +
           subSection(
             `이용 상세 <span style="font-size:11px;color:var(--muted)">(세션 기반 · 로그인 필요)</span>`,
             subSection('전체', userAllDetail, false) + userDayParts,
