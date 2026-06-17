@@ -1,29 +1,41 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (89차)
+최종 갱신: 2026-06-18 (90차)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요, 다음 세션에)
+**보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
 - 목표: Discord webhook으로 교체 (HTTP 2 토큰발급 모듈 삭제, HTTP 3 URL 교체)
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**다음 작업 후보 (89차 이후, 우선순위 순)**
+**다음 작업 후보 (90차 이후, 우선순위 순)**
 
-1. **칭호 시스템 SQL 실행** — Supabase 대시보드에서 아래 실행 후 테스트
+1. **칭호 시스템 SQL 실행** — Supabase 대시보드에서 실행 후 테스트
    ```sql
-   ALTER TABLE profiles ADD COLUMN rep_title_id TEXT;
+   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS rep_title_id TEXT;
    ```
    코드는 89차에 완료. SQL 전까지는 대표 칭호 저장만 실패(no-op), 나머지 정상.
 
-2. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
-   - cottage_sess_에 seenNotifIds: string[] 추가
-   - getMyNotifications 반환에 uid 필드 추가
-   - 각 알림 아이템에 개별 확인 버튼
+2. **[B1] 주문됐어요 용어 정리** — Green, Plan 완료, 바로 구현 가능
+   - supabase-client.js: type `'purchased'` → `'ordered'`
+   - kakao-auth.js: 타입 체크 + 표시 문구 "구매됐어요" → "주문됐어요"
+   - DB 컬럼 `purchased_at`은 유지 (의미: 주문 시점)
+
+3. **[B2] 추가됐어요 전체 알림** — Red, Plan 완료, SQL 먼저 실행 필요
+   ```sql
+   ALTER TABLE game_requests ADD COLUMN IF NOT EXISTS added_at DATE;
+   ```
+   - getMyNotifications에 newGameSeenAt 파라미터 추가, type:'new_game' 쿼리 추가 (전체 회원 대상)
+   - kakao-auth.js: newGameSeenAt 읽기/쓰기, new_game 렌더 ("추가됐어요")
+   - requests-admin.html: "추가됨" 버튼 추가 (added_at = today 설정)
+   - ls-schema.md: newGameSeenAt 키 추가
+   - ⚠️ game_requests 없이 직접 추가된 게임은 added_at 미설정 → 알림 미발송 (운영 주의)
+
+4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 
