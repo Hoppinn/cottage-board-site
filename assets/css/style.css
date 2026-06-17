@@ -3678,9 +3678,8 @@ body.sheet-open{
 .profile-ach-img{width:28px;height:28px;object-fit:contain;flex-shrink:0;}
 .profile-ach-img-fallback{font-size:20px;flex-shrink:0;}
 .profile-ach-img-lock{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;filter:grayscale(1);}
-.profile-ach-info{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0;}
+.profile-ach-info{flex:1;display:flex;min-width:0;}
 .profile-ach-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.profile-ach-type{font-size:11px;color:var(--muted);}
 .profile-ach-status{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
 .profile-ach-status.is-done{color:#4caf50;font-weight:700;font-size:12px;}
 /* 게임 도감 섹션 */
@@ -3756,12 +3755,14 @@ body.sheet-open{
 .profile-char-empty{font-size:12px;color:var(--muted);margin:0 0 8px;line-height:1.5;}
 /* 캐릭터 그리드 (4열 정사각형 카드) */
 .profile-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:4px 0 6px;}
-.profile-char-card{aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;align-items:center;justify-content:center;padding:6px;}
-.profile-char-card img{width:100%;height:100%;object-fit:contain;}
+.profile-char-card{border-radius:8px;overflow:hidden;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4px 4px 5px;}
+.profile-char-card img{width:100%;height:58px;object-fit:contain;flex-shrink:0;}
 .profile-char-card.is-locked img{filter:grayscale(1) opacity(0.3);}
 .profile-char-card:not(.is-locked){cursor:pointer;}
 .profile-char-card.is-rep{border:2px solid #7a4828;box-shadow:0 0 0 1px #7a4828;}
 .profile-char-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
+.profile-char-card-name{font-size:10px;line-height:1.2;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;margin-top:2px;}
+.profile-char-card.is-locked .profile-char-card-name{opacity:0.4;}
 .profile-rep-action-row{display:flex;gap:8px;margin-top:8px;justify-content:flex-end;}
 .profile-rep-change-btn{font-size:13px;font-weight:700;padding:5px 14px;background:#7a4828;color:#fff;border:none;border-radius:8px;cursor:pointer;}
 .profile-rep-change-btn:hover{background:#5a3418;}

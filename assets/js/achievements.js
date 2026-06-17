@@ -112,6 +112,15 @@
       const granted = await db.grantAchievement(userId, id, POINTS[id] || 0);
       if (granted) {
         showAchievementToast(NAMES[id] || id, POINTS[id] || 0);
+        // rabbit_first 신규 달성 시 rep가 null이면 자동 대표 설정 (덮어쓰기 금지)
+        if (id === 'rabbit_first') {
+          const currentRep = await db.getRepAchievement?.(userId).catch(() => null);
+          if (!currentRep?.id) {
+            await db.setRepAchievement?.(userId, 'rabbit_first').catch(() => {});
+            const menuImg = document.getElementById('kakaoProfileImg');
+            if (menuImg) menuImg.src = '/assets/images/characters/characters_basic/rabbit_first.png';
+          }
+        }
       }
     }
   }
@@ -237,6 +246,7 @@
         `<img src="${imgSrc}" alt="${def.name}" ` +
         `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">` +
         `<span class="profile-char-emoji-fallback" style="display:none">${def.emoji}</span>` +
+        `<span class="profile-char-card-name">${def.name}</span>` +
         `</button>`;
     }).join('');
 
@@ -293,13 +303,13 @@
           `<img class="profile-ach-img" src="${imgSrc}" alt="${def.name}" ` +
           `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
           `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>` +
-          `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span><span class="profile-ach-type">${typeLabel}</span></div>` +
-          `<span class="profile-ach-status is-done">✓ ${cur}/${def.threshold}</span></li>`;
+          `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span></div>` +
+          `<span class="profile-ach-status is-done">✓ ${typeLabel} · ${cur}/${def.threshold}</span></li>`;
       }
       return `<li class="profile-ach-item is-locked">` +
         `<span class="profile-ach-img-lock">${def.emoji}</span>` +
-        `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span><span class="profile-ach-type">${typeLabel}</span></div>` +
-        `<span class="profile-ach-status">${cur} / ${def.threshold}</span></li>`;
+        `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span></div>` +
+        `<span class="profile-ach-status">${typeLabel} · ${cur}/${def.threshold}</span></li>`;
     }).join('');
 
     return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}">` +
@@ -328,6 +338,9 @@
       // 패널 상단 아바타 갱신
       const panelAvatar = document.querySelector('#profilePanel .profile-panel-avatar');
       if (panelAvatar && achId) panelAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
+      // 메뉴 하단 프로필 이미지 즉시 갱신
+      const menuAvatar = document.getElementById('kakaoProfileImg');
+      if (menuAvatar && achId) menuAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
     }
   }
 

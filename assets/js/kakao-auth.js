@@ -81,6 +81,13 @@ function initKakaoAuth() {
             updateLoginUI(user);
           }
         }).catch(() => {});
+        // 메뉴 프로필 이미지 → 대표 캐릭터로 교체 (rabbit_first가 기본값, rep 있으면 덮어씀)
+        window.CottageDB.getRepAchievement?.(String(user.id)).then(rep => {
+          if (rep?.id) {
+            const img = document.getElementById('kakaoProfileImg');
+            if (img) img.src = `/assets/images/characters/characters_basic/${rep.id}.png`;
+          }
+        }).catch(() => {});
       }
     } catch (e) {
       localStorage.removeItem(KAKAO_USER_KEY);
@@ -184,12 +191,8 @@ function updateLoginUI(user) {
   if (user) {
     btn.classList.add('is-logged-in');
     if (profileImg) {
-      if (user.profileImage) {
-        profileImg.src = user.profileImage.replace(/^http:\/\//, 'https://');
-        profileImg.style.display = 'inline-block';
-      } else {
-        profileImg.style.display = 'none';
-      }
+      profileImg.src = '/assets/images/characters/characters_basic/rabbit_first.png';
+      profileImg.style.display = 'inline-block';
     }
     if (loginText) loginText.textContent = user.nickname;
     if (userActions) userActions.style.display = 'none';
