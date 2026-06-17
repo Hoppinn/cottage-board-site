@@ -3561,7 +3561,7 @@ body.sheet-open{
 
 /* 내 활동 프로필 패널 */
 .profile-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9100;display:flex;align-items:flex-end;justify-content:center;}
-.profile-panel-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;padding:24px 20px 32px;max-height:85vh;overflow-y:auto;}
+.profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:24px 20px 32px;max-height:85vh;overflow-y:auto;margin:0 10px 20px;}
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .profile-panel-title{font-size:16px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
@@ -3684,18 +3684,27 @@ body.sheet-open{
 .profile-codex-more-btn{margin-top:8px;width:100%;background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:5px;font-size:11px;color:var(--muted);cursor:pointer;}
 .profile-codex-empty{font-size:12px;color:var(--muted);margin:8px 0 0;}
 /* 내 보드 카드 (메인 패널 → 서브시트 진입) */
-.profile-card{width:100%;display:flex;align-items:center;gap:10px;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:12px 14px;margin-top:10px;cursor:pointer;text-align:left;}
-.profile-card:hover{background:#ede8df;}
+.profile-card{width:100%;display:flex;align-items:center;gap:8px;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;box-sizing:border-box;}
+.profile-card:active{background:#ede8df;}
 .profile-card-icon{font-size:18px;flex-shrink:0;}
-.profile-card-content{flex:1;min-width:0;}
 .profile-card-label{display:block;font-size:13px;font-weight:700;color:var(--text);}
-.profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.profile-card-arrow{font-size:18px;color:var(--muted);flex-shrink:0;}
+.profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;}
+.profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
-.profile-card.has-badge::after{content:'';position:absolute;top:10px;right:36px;width:8px;height:8px;background:#e53935;border-radius:50%;}
+.profile-card.has-badge::after{content:'';position:absolute;top:10px;right:32px;width:7px;height:7px;background:#e53935;border-radius:50%;}
+/* 알림 행 (얇은 가로형) */
+.profile-card--notif{padding:9px 12px;margin-top:0;margin-bottom:10px;}
+.profile-card--notif .profile-card-icon{font-size:15px;}
+.profile-card--notif .profile-card-label{font-size:12px;font-weight:600;}
+.profile-card--notif.has-badge::after{top:9px;right:30px;}
+/* 2열 그리드 */
+.profile-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.profile-card-grid .profile-card{flex-direction:column;align-items:flex-start;gap:4px;padding:14px 12px;min-height:90px;}
+.profile-card-grid .profile-card-icon{font-size:20px;}
+.profile-card-grid .profile-card-arrow{display:none;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;}
-.profile-subsheet-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;}
+.profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;margin:0 10px 20px;}
 .profile-subsheet-header{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border,#e8e4dc);flex-shrink:0;}
 .profile-subsheet-back{background:none;border:none;font-size:14px;font-weight:600;color:var(--brown,#7a4828);cursor:pointer;padding:2px 8px 2px 0;flex-shrink:0;}
 .profile-subsheet-title{flex:1;font-size:15px;font-weight:700;color:var(--text);text-align:center;}

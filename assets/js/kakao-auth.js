@@ -632,30 +632,23 @@ async function openProfilePanel() {
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
-    <button class="profile-card${_newCount > 0 ? ' has-badge' : ''}" data-subsheet="notif" type="button">
+    <button class="profile-card profile-card--notif${_newCount > 0 ? ' has-badge' : ''}" data-subsheet="notif" type="button">
       <span class="profile-card-icon">🔔</span>
-      <div class="profile-card-content">
-        <span class="profile-card-label">최근 알림</span>
-        <span class="profile-card-summary">${_newCount > 0 ? `새 알림 ${_newCount}건` : '최근 알림'}</span>
-      </div>
+      <span class="profile-card-label">${_newCount > 0 ? `새 알림 ${_newCount}건` : '최근 알림'}</span>
       <span class="profile-card-arrow">›</span>
     </button>
-    <button class="profile-card" data-subsheet="growth" type="button">
-      <span class="profile-card-icon">🌱</span>
-      <div class="profile-card-content">
+    <div class="profile-card-grid">
+      <button class="profile-card" data-subsheet="growth" type="button">
+        <span class="profile-card-icon">🌱</span>
         <span class="profile-card-label">성장 보드</span>
         <span class="profile-card-summary">${escH(_growthSummary)}</span>
-      </div>
-      <span class="profile-card-arrow">›</span>
-    </button>
-    <button class="profile-card" data-subsheet="activity" type="button">
-      <span class="profile-card-icon">📋</span>
-      <div class="profile-card-content">
+      </button>
+      <button class="profile-card" data-subsheet="activity" type="button">
+        <span class="profile-card-icon">📋</span>
         <span class="profile-card-label">이용·혜택</span>
         <span class="profile-card-summary">${escH(_actSummary)}</span>
-      </div>
-      <span class="profile-card-arrow">›</span>
-    </button>`;
+      </button>
+    </div>`;
 
   // ── 서브시트 헬퍼 ─────────────────────────────────────────────
   function _openSubSheet(title, contentHtml, afterRender) {
