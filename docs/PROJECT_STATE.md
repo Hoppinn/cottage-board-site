@@ -309,6 +309,20 @@
 - [ ] club-rules.html 사진 중심 재구성
 - [ ] `game-system/tools/reclassify-coop.js` — 완료된 일회성 스크립트. 유사 파일이 2개 이상 생기면 `game-system/tools/data-fixes/` 폴더로 이동
 
+### V4 아이디어 (장기, 구현 미정)
+
+데이터 축적 후 가능한 기능들. 현재 추가 구현 없음, 아이디어 기록용.
+
+| # | 기능 | 필요한 데이터 |
+|---|------|--------------|
+| 1 | **게이머 성향 분석** — 플레이 패턴으로 "전략형/파티형/탐험형" 등 분류 | game_play_records(장르/난이도/인원), 게임별 메타(tags, difficulty) |
+| 2 | **연말 플레이 리포트** — "올해 N종 탐험, 가장 많이 플레이한 게임" 등 | game_play_records(연도별 집계), game_play_records.played_at |
+| 3 | **유저 취향 매칭** — 비슷한 플레이 패턴의 다른 유저 추천 | game_play_records(user_id × game_id 매트릭스), game_ratings |
+| 4 | **개인화 게임 추천** — 내가 좋아한 게임과 유사한 미플레이 게임 추천 | game_ratings(사용자 별점), game_curious, 게임 태그/장르 유사도 |
+| 5 | **모임 추천** — 내 플레이 성향과 맞는 모임/그룹 추천 | game_play_records.group_name, player_names, 성향 분석 결과 |
+
+공통 전제: 유저당 플레이 기록 20건 이상 누적 시 의미있는 분석 가능.
+
 ---
 
 ## 4. 위험한 데이터 흐름
