@@ -3682,7 +3682,7 @@ body.sheet-open{
 .profile-ach-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .profile-ach-type{font-size:11px;color:var(--muted);}
 .profile-ach-status{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
-.profile-ach-status.is-done{color:#4caf50;font-weight:700;font-size:15px;}
+.profile-ach-status.is-done{color:#4caf50;font-weight:700;font-size:12px;}
 /* 게임 도감 섹션 */
 .profile-codex-section{background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:10px 14px;margin-top:14px;}
 .profile-codex-header{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:4px;}

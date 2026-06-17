@@ -294,7 +294,7 @@
           `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
           `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>` +
           `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span><span class="profile-ach-type">${typeLabel}</span></div>` +
-          `<span class="profile-ach-status is-done">✓</span></li>`;
+          `<span class="profile-ach-status is-done">✓ ${cur}/${def.threshold}</span></li>`;
       }
       return `<li class="profile-ach-item is-locked">` +
         `<span class="profile-ach-img-lock">${def.emoji}</span>` +
