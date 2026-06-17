@@ -1,15 +1,22 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (70차 — 파비콘 수정 + DEV 교환권 버튼 추가)
+최종 갱신: 2026-06-17 (71차 — 세션 마무리 정리)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**미확인: 카카오 알림 경로 변경 요청**
-- 사용자가 "내 대화방 → 코티지 관리자 알림방"으로 경로 변경 요청
-- 코드베이스 전체 검색 결과 카톡 알림 전송 코드(Kakao.API.request, sendMessage 등) 없음
-- 다음 세션 시작 시 사용자에게 해당 기능이 어디 있는지(외부 툴/미구현/다른 파일) 재확인 필요
+**⚠️ Supabase SQL 실행 필요** (DEV 교환권 버튼 활성화):
+```sql
+ALTER TABLE voucher_log DROP CONSTRAINT IF EXISTS voucher_log_reason_check;
+ALTER TABLE voucher_log ADD CONSTRAINT voucher_log_reason_check
+  CHECK (reason IN ('first_play', 'redeem', 'dev_test'));
+```
+→ 실행 전까지 🔧 테스트 교환권 지급 버튼 클릭 시 실패
+
+**보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요, 다음 세션에)
+- 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
+- 목표: Discord webhook으로 교체 (HTTP 2 토큰발급 모듈 삭제, HTTP 3 URL 교체)
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
@@ -186,6 +193,9 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-17 | fix: 파비콘 여백 최소화 — 투명 영역 감지 후 8px만 남기고 512x512 꽉 채움 |
+| 2026-06-17 | fix: 파비콘 이미지 교체 — 글씨없는버전 노여백 로고 전용 아이콘으로 변경 |
+| 2026-06-17 | fix: DEV 교환권 버튼 — reason CHECK에 dev_test 추가, 실패 시 alert+console.error |
 | 2026-06-17 | feat: 음료교환권 DEV 테스트 지급 버튼 (localhost/OWNER 전용, reason=dev_test, 운영 노출 없음) |
 | 2026-06-17 | fix: 파비콘 찌부 수정 — favicon-square.png 생성(1024x1024 center crop), 전체 18개 HTML 교체 |
 | 2026-06-17 | fix: achievements.js 누락 9개 페이지 추가 — 도감/캐릭터/업적 섹션 복구 (info/3, club/5, admin/requests) |
