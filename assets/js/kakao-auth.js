@@ -529,12 +529,13 @@ async function openProfilePanel() {
       const emoji = VOUCHER_EMOJI[p.name] || '';
       return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(p.name)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(p.name)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
     }).join('');
-    const histHtml = hist.slice(0, 5).map(h => {
+    const histHtml = hist.slice(0, 5).map((h, i, arr) => {
       const isGrant = h.delta > 0;
       const label = isGrant
         ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
         : escH(h.voucher_products?.name || '사용');
-      return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span></li>`;
+      const balAfter = bal - arr.slice(0, i).reduce((s, e) => s + e.delta, 0);
+      return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span><span class="profile-voucher-hist-bal">→ ${balAfter}장</span></li>`;
     }).join('');
     const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
     return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;

@@ -250,7 +250,7 @@
         db.from('profiles').select('user_id, nickname, real_name'),
         db.from('game_request_votes').select('request_id, user_id'),
         db.from('member_intros').select('user_id, nickname').not('user_id', 'is', null),
-        db.from('voucher_log').select('id, user_id, delta, reason, product_id, created_at, voucher_products(name)').order('created_at', { ascending: false }).limit(50),
+        db.from('voucher_log').select('id, user_id, delta, reason, product_id, created_at, voucher_products(name)').order('created_at', { ascending: true }),
       ]);
 
       // user_id → 회원자기소개 닉네임 (타입 불일치 방지용 String() 변환)
@@ -309,21 +309,33 @@
 
 
       if (voucherRes.error) console.warn('[voucher] 로그 조회 실패', voucherRes.error);
-      const voucherRows = voucherRes.data || [];
+      const voucherRowsAsc = voucherRes.data || [];
       const fmtDt = iso => new Date(iso).toLocaleString('ko-KR', { month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+      // user별 누적 잔액 계산 (ASC 기준 순차 처리)
+      const _userBalMap = new Map();
+      const voucherRowsWithBal = voucherRowsAsc.map(r => {
+        const uid = String(r.user_id);
+        const balAfter = (_userBalMap.get(uid) || 0) + r.delta;
+        _userBalMap.set(uid, balAfter);
+        return { ...r, balAfter };
+      });
+      const voucherRows = [...voucherRowsWithBal].reverse();
+
       const voucherTableHtml = voucherRows.length
         ? `<table class="admin-analytics-table">
-            <thead><tr><th>닉네임</th><th>내역</th><th>장수</th><th>시각</th></tr></thead>
+            <thead><tr><th>닉네임</th><th>내역</th><th>장수</th><th>잔액</th><th>시각</th></tr></thead>
             <tbody>${voucherRows.map(r => {
               const isGrant = r.delta > 0;
               const label = isGrant
                 ? (r.reason === 'first_play' ? '첫 기록 보상' : r.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
                 : escH(r.voucher_products?.name || '사용');
-              const deltaStr = (isGrant ? '+' : '-') + Math.abs(r.delta) + '장';
+              const deltaStr = (isGrant ? '+' : '') + r.delta + '장';
               return `<tr style="color:${isGrant?'#2e7d32':'inherit'}">
                 <td>${escH(nick(r.user_id))}</td>
                 <td>${label}</td>
                 <td>${deltaStr}</td>
+                <td style="color:var(--muted)">${r.balAfter}장</td>
                 <td>${escH(fmtDt(r.created_at))}</td>
               </tr>`;
             }).join('')}</tbody>
