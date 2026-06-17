@@ -421,8 +421,8 @@ async function openProfilePanel() {
     </div>
   </div>`;
   document.body.appendChild(panel);
-  panel.querySelector('.profile-panel-close').addEventListener('click', () => { panel.remove(); _restoreMenuExpanded(); });
-  panel.addEventListener('click', e => { if (e.target === panel) { panel.remove(); _restoreMenuExpanded(); } });
+  panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); });
+  panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); } });
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
@@ -491,27 +491,21 @@ async function openProfilePanel() {
     </div>
     <span class="profile-notif-voucher-date">${escH(_voucherDateLabel)}</span>
   </li>`;
-  const notifHtml = (notifs.length > 0 || true) ? (() => {
-    const newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
-    const items = notifs.slice(0, 5).map(n => {
-      const cls = n.isNew ? ' class="is-new"' : '';
-      const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
-      if (n.type === 'tagged')
-        return `<li${cls}>${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록 태그됨 <span>${fmtShort(n.date)}</span></li>`;
-      if (n.type === 'curious_comment')
-        return `<li${cls}>${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
-      if (n.type === 'purchased')
-        return `<li${cls}>${badge}🛒 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
-      return '';
-    }).join('');
-    const more = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
-    const confirmBtn = newCount > 0 ? `<li class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 확인</button></li>` : '';
-    const titleText = newCount > 0 ? `🔔 새 알림 ${newCount}건` : '🔔 최근 알림';
-    return `<div class="profile-notif-section">
-      <button class="profile-notif-toggle" type="button"><span class="profile-notif-title">${titleText}</span><span class="profile-toggle-arrow">▾</span></button>
-      <ul class="profile-notif-list is-collapsed">${voucherItemHtml}${items}${more}${confirmBtn}</ul>
-    </div>`;
-  })() : '';
+  const _newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
+  const _notifItems = notifs.slice(0, 5).map(n => {
+    const cls = n.isNew ? ' class="is-new"' : '';
+    const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
+    if (n.type === 'tagged')
+      return `<li${cls}>${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록 태그됨 <span>${fmtShort(n.date)}</span></li>`;
+    if (n.type === 'curious_comment')
+      return `<li${cls}>${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
+    if (n.type === 'purchased')
+      return `<li${cls}>${badge}🛒 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
+    return '';
+  }).join('');
+  const _notifMore = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
+  const _notifConfirmBtn = _newCount > 0 ? `<li class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 확인</button></li>` : '';
+  const _notifInnerHtml = `<ul class="profile-notif-list">${voucherItemHtml}${_notifItems}${_notifMore}${_notifConfirmBtn}</ul>`;
 
   function _buildVoucherInner(bal, prods, hist) {
     const fmtDt = iso => {
@@ -617,183 +611,96 @@ async function openProfilePanel() {
     ].join('');
   })();
 
+  // ── 성장 보드 / 이용·혜택 서브시트 콘텐츠 ───────────────────
+  const _growthInnerHtml = `${charHtml}${codexHtml}${achHtml}`;
+  const _activityInnerHtml = `
+    ${voucherHtml}
+    <div class="profile-stats-wrap">
+      <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
+      <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
+    </div>
+    ${stats.plays.length ? `<div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
+      ${playListHtml}
+    </div>` : ''}
+    ${stats.comments.length ? `<div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
+      ${commentListHtml}
+    </div>` : ''}`;
+
+  // ── 메인 패널: 카드 3개 ──────────────────────────────────────
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
-    ${notifHtml}
+    ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
+    <button class="profile-card${_newCount > 0 ? ' has-badge' : ''}" data-subsheet="notif" type="button">
+      <span class="profile-card-icon">🔔</span>
+      <div class="profile-card-content">
+        <span class="profile-card-label">최근 알림</span>
+        <span class="profile-card-summary">${_newCount > 0 ? `새 알림 ${_newCount}건` : '최근 알림'}</span>
+      </div>
+      <span class="profile-card-arrow">›</span>
+    </button>
+    <button class="profile-card" data-subsheet="growth" type="button">
+      <span class="profile-card-icon">🌱</span>
+      <div class="profile-card-content">
+        <span class="profile-card-label">성장 보드</span>
+        <span class="profile-card-summary">${escH(_growthSummary)}</span>
+      </div>
+      <span class="profile-card-arrow">›</span>
+    </button>
+    <button class="profile-card" data-subsheet="activity" type="button">
+      <span class="profile-card-icon">📋</span>
+      <div class="profile-card-content">
+        <span class="profile-card-label">이용·혜택</span>
+        <span class="profile-card-summary">${escH(_actSummary)}</span>
+      </div>
+      <span class="profile-card-arrow">›</span>
+    </button>`;
 
-    <div class="profile-group profile-group-growth">
-      <div class="profile-group-header">
-        <span class="profile-group-title">🌱 성장 보드</span>
-        <span class="profile-group-summary">${escH(_growthSummary)}</span>
-        <button class="profile-group-toggle" type="button">▾</button>
-      </div>
-      <div class="profile-group-body is-hidden">
-        ${charHtml}
-        ${codexHtml}
-        ${achHtml}
-      </div>
-    </div>
-
-    <div class="profile-group profile-group-activity">
-      <div class="profile-group-header">
-        <span class="profile-group-title">📋 이용/혜택</span>
-        <span class="profile-group-summary">${escH(_actSummary)}</span>
-        <button class="profile-group-toggle" type="button">▾</button>
-      </div>
-      <div class="profile-group-body is-hidden">
-        ${voucherHtml}
-        <div class="profile-stats-wrap">
-          <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
-          <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
+  // ── 서브시트 헬퍼 ─────────────────────────────────────────────
+  function _openSubSheet(title, contentHtml, afterRender) {
+    document.getElementById('profileSubSheet')?.remove();
+    const sub = document.createElement('div');
+    sub.id = 'profileSubSheet';
+    sub.className = 'profile-subsheet';
+    sub.innerHTML = `
+      <div class="profile-subsheet-box">
+        <div class="profile-subsheet-header">
+          <button class="profile-subsheet-back" type="button">‹ 내 보드</button>
+          <span class="profile-subsheet-title">${title}</span>
+          <button class="profile-subsheet-close" type="button">✕</button>
         </div>
-        ${stats.plays.length ? `<div class="profile-activity-group">
-          <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-          ${playListHtml}
-        </div>` : ''}
-        ${stats.comments.length ? `<div class="profile-activity-group">
-          <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-          ${commentListHtml}
-        </div>` : ''}
-      </div>
-    </div>`;
-
-  // 성장 보드 / 이용·혜택 그룹 토글
-  body.querySelectorAll('.profile-group-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const groupBody = btn.closest('.profile-group').querySelector('.profile-group-body');
-      const hidden = groupBody.classList.toggle('is-hidden');
-      btn.textContent = hidden ? '▾' : '▴';
-    });
-  });
-
-  body.querySelector('.profile-notif-toggle')?.addEventListener('click', function() {
-    const list = body.querySelector('.profile-notif-list');
-    const arrow = this.querySelector('.profile-toggle-arrow');
-    const collapsed = list.classList.toggle('is-collapsed');
-    arrow.textContent = collapsed ? '▾' : '▴';
-  });
-
-  body.querySelector('.profile-notif-confirm-all')?.addEventListener('click', function() {
-    if (window._cottageSess) {
-      const _s = window._cottageSess.get(String(user.id));
-      _s.notifSeenAt = new Date().toISOString();
-      _s.voucherNoticeSeen = true;
-      window._cottageSess.set(String(user.id), _s);
-    }
-    document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    const list = body.querySelector('.profile-notif-list');
-    list?.querySelectorAll('.is-new').forEach(el => {
-      el.classList.remove('is-new');
-      el.querySelectorAll('.profile-notif-new-badge').forEach(b => b.remove());
-      el.querySelector('.profile-voucher-confirm')?.remove();
-    });
-    this.closest('.profile-notif-confirm-row')?.remove();
-    const titleEl = body.querySelector('.profile-notif-title');
-    if (titleEl) titleEl.textContent = '🔔 최근 알림';
-  });
-
-  body.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
-    const inner = body.querySelector('#profileVoucherInner');
-    const arrow = this.querySelector('.profile-toggle-arrow');
-    const collapsed = inner.classList.toggle('is-collapsed');
-    arrow.textContent = collapsed ? '▾' : '▴';
-  });
-
-  body.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
-    const list = body.querySelector('.profile-panel-stats');
-    const arrow = this.querySelector('.profile-toggle-arrow');
-    const collapsed = list.classList.toggle('is-collapsed');
-    arrow.textContent = collapsed ? '▾' : '▴';
-  });
-
-  body.querySelectorAll('.profile-activity-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const list = btn.nextElementSibling;
-      const arrow = btn.querySelector('.profile-toggle-arrow');
-      const collapsed = list.classList.toggle('is-collapsed');
-      arrow.textContent = collapsed ? '▾' : '▴';
-    });
-  });
-
-  body.querySelectorAll('.profile-rep-select').forEach(sel => {
-    sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
-  });
-
-  const charToggleBtn = body.querySelector('.profile-char-toggle-btn');
-  if (charToggleBtn) {
-    charToggleBtn.addEventListener('click', () => {
-      const charBody = body.querySelector('.profile-char-body');
-      const hidden = charBody.classList.toggle('is-hidden');
-      charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-    });
+        <div class="profile-subsheet-body">${contentHtml}</div>
+      </div>`;
+    document.body.appendChild(sub);
+    sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
+    sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); _restoreMenuExpanded(); });
+    sub.addEventListener('click', e => { if (e.target === sub) sub.remove(); });
+    if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));
   }
 
-  const codexToggleBtn = body.querySelector('.profile-codex-toggle-btn');
-  if (codexToggleBtn) {
-    codexToggleBtn.addEventListener('click', () => {
-      const codexBody = body.querySelector('.profile-codex-body');
-      const hidden = codexBody.classList.toggle('is-hidden');
-      codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-    });
-  }
-
-  const achToggleBtn = body.querySelector('.profile-ach-toggle-btn');
-  if (achToggleBtn) {
-    achToggleBtn.addEventListener('click', () => {
-      const list = body.querySelector('.profile-ach-list');
-      const hidden = list.classList.toggle('is-hidden');
-      achToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-    });
-  }
-
-  body.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const wrap = btn.previousElementSibling;
-      const isHidden = wrap.classList.toggle('is-hidden');
-      btn.textContent = isHidden
-        ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
-        : '접기 ▴';
-    });
-  });
-
-  body.querySelectorAll('.profile-more-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
-      const isHidden = wrap.classList.toggle('is-hidden');
-      btn.textContent = isHidden
-        ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
-        : '접기';
-    });
-  });
-
-  function _markVoucherSeen() {
+  // ── _markVoucherSeen (컨테이너 파라미터, 기본값 = body) ──────
+  function _markVoucherSeen(container = body) {
     if (window._cottageSess) {
       const _s = window._cottageSess.get(String(user.id));
       _s.voucherNoticeSeen = true;
       window._cottageSess.set(String(user.id), _s);
     }
-    // 빨간점 제거
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    // 공지 항목은 유지, NEW 배지와 is-new 스타일·확인 버튼만 제거
-    const voucherItem = body.querySelector('.profile-notif-voucher');
+    body.querySelector('.profile-card[data-subsheet="notif"]')?.classList.remove('has-badge');
+    const voucherItem = container.querySelector('.profile-notif-voucher');
     if (voucherItem) {
       voucherItem.classList.remove('is-new');
       voucherItem.querySelector('.profile-notif-new-badge')?.remove();
       voucherItem.querySelector('.profile-voucher-confirm')?.remove();
     }
-    // 새 알림 카운트 타이틀 갱신
-    const titleEl = body.querySelector('.profile-notif-title');
-    if (titleEl) {
-      const remaining = body.querySelectorAll('.profile-notif-list .is-new').length;
-      titleEl.textContent = remaining > 0 ? `🔔 새 알림 ${remaining}건` : '🔔 최근 알림';
-    }
+    const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
+    if (remaining === 0) body.querySelector('.profile-card[data-subsheet="notif"]')?.classList.remove('has-badge');
   }
 
-  body.querySelector('.profile-voucher-confirm')?.addEventListener('click', _markVoucherSeen);
-  body.querySelector('.profile-voucher-link')?.addEventListener('click', _markVoucherSeen);
-
-  function _bindVoucher() {
-    body.querySelectorAll('.profile-voucher-use-btn').forEach(btn => {
+  // ── _bindVoucher (컨테이너 파라미터화, 기본값 = body) ────────
+  function _bindVoucher(container = body) {
+    container.querySelectorAll('.profile-voucher-use-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const pid = Number(btn.dataset.productId);
         const pname = btn.dataset.productName;
@@ -807,15 +714,15 @@ async function openProfilePanel() {
             window.CottageDB.getVoucherProducts(),
             window.CottageDB.getVoucherHistory(String(user.id), 5),
           ]);
-          const inner = body.querySelector('#profileVoucherInner');
-          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }
+          const inner = container.querySelector('#profileVoucherInner');
+          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(container); }
         } else {
           btn.disabled = false;
           alert(result?.reason === 'insufficient' ? '보유 교환권이 부족합니다.' : '사용에 실패했습니다.');
         }
       });
     });
-    const devBtn = body.querySelector('.profile-voucher-dev-btn');
+    const devBtn = container.querySelector('.profile-voucher-dev-btn');
     if (devBtn) {
       devBtn.addEventListener('click', async () => {
         devBtn.disabled = true;
@@ -826,8 +733,8 @@ async function openProfilePanel() {
             window.CottageDB.getVoucherProducts(),
             window.CottageDB.getVoucherHistory(String(user.id), 5),
           ]);
-          const inner = body.querySelector('#profileVoucherInner');
-          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }
+          const inner = container.querySelector('#profileVoucherInner');
+          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(container); }
         } else {
           devBtn.disabled = false;
           console.error('[DEV] grantDevVoucher 실패 — DB CHECK 제약 또는 네트워크 오류. voucher_log.reason에 dev_test 허용 여부 확인.');
@@ -836,7 +743,120 @@ async function openProfilePanel() {
       });
     }
   }
-  _bindVoucher();
+
+  // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
+  body.querySelectorAll('.profile-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const type = card.dataset.subsheet;
+
+      if (type === 'notif') {
+        _openSubSheet('최근 알림', _notifInnerHtml, subBody => {
+          subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', function() {
+            if (window._cottageSess) {
+              const _s = window._cottageSess.get(String(user.id));
+              _s.notifSeenAt = new Date().toISOString();
+              _s.voucherNoticeSeen = true;
+              window._cottageSess.set(String(user.id), _s);
+            }
+            document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
+            body.querySelector('.profile-card[data-subsheet="notif"]')?.classList.remove('has-badge');
+            const list = subBody.querySelector('.profile-notif-list');
+            list?.querySelectorAll('.is-new').forEach(el => {
+              el.classList.remove('is-new');
+              el.querySelectorAll('.profile-notif-new-badge').forEach(b => b.remove());
+              el.querySelector('.profile-voucher-confirm')?.remove();
+            });
+            this.closest('.profile-notif-confirm-row')?.remove();
+          });
+          subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
+          subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
+        });
+
+      } else if (type === 'growth') {
+        _openSubSheet('성장 보드', _growthInnerHtml, subBody => {
+          subBody.querySelectorAll('.profile-rep-select').forEach(sel => {
+            sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
+          });
+          const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
+          if (charToggleBtn) {
+            charToggleBtn.addEventListener('click', () => {
+              const charBody = subBody.querySelector('.profile-char-body');
+              const hidden = charBody.classList.toggle('is-hidden');
+              charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+            });
+          }
+          const codexToggleBtn = subBody.querySelector('.profile-codex-toggle-btn');
+          if (codexToggleBtn) {
+            codexToggleBtn.addEventListener('click', () => {
+              const codexBody = subBody.querySelector('.profile-codex-body');
+              const hidden = codexBody.classList.toggle('is-hidden');
+              codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+            });
+          }
+          const achToggleBtn = subBody.querySelector('.profile-ach-toggle-btn');
+          if (achToggleBtn) {
+            achToggleBtn.addEventListener('click', () => {
+              const list = subBody.querySelector('.profile-ach-list');
+              const hidden = list.classList.toggle('is-hidden');
+              achToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+            });
+          }
+          subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const wrap = btn.previousElementSibling;
+              const isHidden = wrap.classList.toggle('is-hidden');
+              btn.textContent = isHidden
+                ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
+                : '접기 ▴';
+            });
+          });
+          subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+              const isHidden = wrap.classList.toggle('is-hidden');
+              btn.textContent = isHidden
+                ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
+                : '접기';
+            });
+          });
+        }); // end growth afterRender
+
+      } else if (type === 'activity') {
+        _openSubSheet('이용·혜택', _activityInnerHtml, subBody => {
+          subBody.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
+            const inner = subBody.querySelector('#profileVoucherInner');
+            const arrow = this.querySelector('.profile-toggle-arrow');
+            const collapsed = inner.classList.toggle('is-collapsed');
+            arrow.textContent = collapsed ? '▾' : '▴';
+          });
+          subBody.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
+            const list = subBody.querySelector('.profile-panel-stats');
+            const arrow = this.querySelector('.profile-toggle-arrow');
+            const collapsed = list.classList.toggle('is-collapsed');
+            arrow.textContent = collapsed ? '▾' : '▴';
+          });
+          subBody.querySelectorAll('.profile-activity-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const list = btn.nextElementSibling;
+              const arrow = btn.querySelector('.profile-toggle-arrow');
+              const collapsed = list.classList.toggle('is-collapsed');
+              arrow.textContent = collapsed ? '▾' : '▴';
+            });
+          });
+          subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+              const isHidden = wrap.classList.toggle('is-hidden');
+              btn.textContent = isHidden
+                ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
+                : '접기';
+            });
+          });
+          _bindVoucher(subBody);
+        }); // end activity afterRender
+      }
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
