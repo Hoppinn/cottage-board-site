@@ -483,10 +483,10 @@ async function openProfilePanel() {
   const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? ' is-seen' : ' is-new'}">
     ${voucherSeen ? '' : '<span class="profile-notif-new-badge">NEW</span>'}
     <div class="profile-voucher-body">
-      <strong>🎫 첫 기록을 남기면 음료교환권 1장</strong>
+      <strong>🎫 첫 게임평을 남기면 음료교환권 1장을 받을 수 있어요</strong>
       <div class="profile-voucher-btns">
         ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
-        <a class="profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">기록 남기기</a>
+        <a class="profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">게임 기록하기</a>
       </div>
     </div>
     <span class="profile-notif-voucher-date">${escH(_voucherDateLabel)}</span>
@@ -676,6 +676,15 @@ async function openProfilePanel() {
   body.querySelectorAll('.profile-rep-select').forEach(sel => {
     sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
   });
+
+  const charToggleBtn = body.querySelector('.profile-char-toggle-btn');
+  if (charToggleBtn) {
+    charToggleBtn.addEventListener('click', () => {
+      const charBody = body.querySelector('.profile-char-body');
+      const hidden = charBody.classList.toggle('is-hidden');
+      charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+    });
+  }
 
   const achToggleBtn = body.querySelector('.profile-ach-toggle-btn');
   if (achToggleBtn) {

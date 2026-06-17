@@ -107,9 +107,10 @@
 ### P1 — 기능 (중요)
 
 - [x] **인앱 알림 시스템**: "내 활동" 버튼 빨간 배지 + 패널 내 알림 섹션
-  - 트리거: 플레이 기록에 내 이름 태그됨, 궁금해요 게임 새 코멘트, 게임 구매완료
-  - notifSeenAt: cottage_sess_에 추가. 패널 열 때 갱신 + 배지 제거
-  - 최근 N건 항상 조회 + isNew 플래그 방식. 배지=isNew 항목 존재 시, 패널=전체 목록 + NEW 배지 강조
+  - 트리거: 플레이 기록 태그, 궁금해요 게임 새 코멘트, 게임 구매완료
+  - 알림 섹션 기본 접힘. [모두 확인] 버튼 클릭 시만 seen 처리 (펼치기는 읽음 아님)
+  - 신규 가입자 기본 알림: "첫 게임평을 남기면 음료교환권 1장을 받을 수 있어요" (voucherNoticeSeen 기반, 항상 표시)
+  - 캐릭터 섹션 기본 접힘 + "N종" 헤더. 업적 섹션 기본 접힘 + "N/17" 헤더 (기존)
 - [ ] **음료교환권 시스템** (진행 중)
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory

@@ -226,10 +226,12 @@
     const countLabel = achievements.length ? `${achievements.length}종` : '';
 
     return `<div class="profile-char-section">
-      <div class="profile-char-header">🐾 내 캐릭터${countLabel ? ` <span class="profile-char-count">${countLabel}</span>` : ''}</div>
-      <div class="profile-char-list">${chars}</div>
-      ${repRowHtml}
-      ${ptsHtml}
+      <div class="profile-char-header">🐾 내 캐릭터${countLabel ? ` <span class="profile-char-count">${countLabel}</span>` : ''}<button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
+      <div class="profile-char-body is-hidden">
+        <div class="profile-char-list">${chars}</div>
+        ${repRowHtml}
+        ${ptsHtml}
+      </div>
     </div>`;
   }
 
