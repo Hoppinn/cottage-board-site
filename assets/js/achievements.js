@@ -196,7 +196,7 @@
         </div>`
       : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`;
 
-    return `<div class="profile-codex-section">
+    return `<div class="profile-codex-section" data-played-count="${playedCount}" data-total-games="${totalGames}">
       <div class="profile-codex-header">
         🎲 게임 도감 <span class="profile-codex-summary">${playedCount} / ${totalGames}</span>
         <button class="profile-codex-toggle-btn" type="button">전체 보기 ▾</button>
@@ -253,7 +253,7 @@
       ? '<p class="profile-char-empty">게임을 플레이하면 캐릭터가 해금됩니다 🐾</p>'
       : '';
 
-    return `<div class="profile-char-section">
+    return `<div class="profile-char-section" data-char-count="${earnedCount}">
       <div class="profile-char-header">🐾 내 캐릭터 <span class="profile-char-count">${earnedCount} / ${ACH_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
       <div class="profile-char-body is-hidden">
         ${emptyHint}
@@ -301,7 +301,7 @@
         `<span class="profile-ach-status">${cur} / ${def.threshold}</span></li>`;
     }).join('');
 
-    return `<div class="profile-ach-section">` +
+    return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}">` +
       `<div class="profile-ach-header">` +
       `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
       `<button class="profile-ach-toggle-btn" type="button">전체 보기 ▾</button>` +

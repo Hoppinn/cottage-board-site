@@ -536,7 +536,7 @@ async function openProfilePanel() {
     const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
     return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
   }
-  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▴</span></button><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
+  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
 
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
@@ -558,71 +558,113 @@ async function openProfilePanel() {
   ].filter(Boolean);
   const _statsSummary = _summaryParts.length ? _summaryParts.join(' · ') : '활동 없음';
 
+  // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback
+  function _safeInt(html, pattern, fallback) {
+    try { const m = html.match(pattern); return m ? parseInt(m[1], 10) : fallback; } catch(e) { return fallback; }
+  }
+  const _charCount   = _safeInt(charHtml,  /data-char-count="(\d+)"/,   0);
+  const _codexPlayed = _safeInt(codexHtml, /data-played-count="(\d+)"/, 0);
+  const _codexTotal  = _safeInt(codexHtml, /data-total-games="(\d+)"/,  641);
+  const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
+
+  const _growthSummary = `캐릭터 ${_charCount}/17 · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/17`;
+
+  const _actParts = [
+    `교환권 ${voucherBalance}장`,
+    _statsTotalSecs > 0 ? _statsFmt(_statsTotalSecs) : null,
+    _statsVc > 0 ? `${_statsVc}회 방문` : null,
+    stats.plays.length > 0 ? `플레이 ${stats.plays.length}건` : null,
+  ].filter(Boolean);
+  const _actSummary = _actParts.join(' · ');
+
+  // 통계 상세 목록 HTML
+  const _statsListHtml = (() => {
+    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    const dbTodaySecs = stats.profile?.today_date === todayKst ? (stats.profile?.today_seconds || 0) : 0;
+    const localSecs = sessData.timeSec || 0;
+    const sessionSecs = window._cottageSessionStart
+      ? Math.floor((Date.now() - window._cottageSessionStart) / 1000) : 0;
+    const todaySecs = dbTodaySecs + localSecs + sessionSecs;
+    const fmtT = s => s >= 3600
+      ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
+      : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
+    const prevDt = sessData.prevSeenDt;
+    let prevRel = '';
+    if (prevDt) {
+      const diffMs = Date.now() - new Date(prevDt).getTime();
+      const diffMin = Math.floor(diffMs / 60000);
+      const diffHour = Math.floor(diffMin / 60);
+      const diffDay = Math.floor(diffHour / 24);
+      if (diffMin < 1)        prevRel = '방금 전';
+      else if (diffMin < 60)  prevRel = `${diffMin}분 전`;
+      else if (diffHour < 24) prevRel = `${diffHour}시간 전`;
+      else if (diffDay <= 14) prevRel = `${diffDay}일 전`;
+      else prevRel = new Date(prevDt).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+    }
+    return [
+      `<li><span>총 이용시간</span><strong>${_statsFmt(_statsTotalSecs)}</strong></li>`,
+      _statsVc ? `<li><span>방문 일수</span><strong>${_statsVc}일</strong></li>` : '',
+      stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : '',
+      stats.moimCount ? `<li><span>모임 참여</span><strong>${stats.moimCount}회</strong></li>` : '',
+      stats.comments.length ? `<li><span>코멘트</span><strong>${stats.comments.length}건</strong></li>` : '',
+      stats.suggestions ? `<li><span>건의하기</span><strong>${stats.suggestions}건</strong></li>` : '',
+      '<li class="profile-stats-divider"></li>',
+      todaySecs > 0 ? `<li><span>오늘 이용시간</span><strong>${fmtT(todaySecs)}</strong></li>` : '',
+      prevDt ? `<li><span>이전 방문</span><strong>${prevRel}</strong></li>` : '',
+      '<li class="profile-stats-divider"></li>',
+      `<li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>`,
+      `<li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>`,
+    ].join('');
+  })();
+
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     ${notifHtml}
-    ${charHtml}
-    ${codexHtml}
-    ${achHtml}
-    ${voucherHtml}
-    <div class="profile-stats-wrap">
-      <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
-      <ul class="profile-panel-stats is-collapsed">
-      ${(() => {
-        return `<li><span>총 이용시간</span><strong>${_statsFmt(_statsTotalSecs)}</strong></li>`;
-      })()}
-      ${(() => {
-        const vc = _statsVc;
-        return vc ? `<li><span>방문 일수</span><strong>${vc}일</strong></li>` : '';
-      })()}
-      ${stats.plays.length ? `<li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>` : ''}
-      ${stats.moimCount ? `<li><span>모임 참여</span><strong>${stats.moimCount}회</strong></li>` : ''}
-      ${stats.comments.length ? `<li><span>코멘트</span><strong>${stats.comments.length}건</strong></li>` : ''}
-      ${stats.suggestions ? `<li><span>건의하기</span><strong>${stats.suggestions}건</strong></li>` : ''}
-      <li class="profile-stats-divider"></li>
-      ${(() => {
-        const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-        const dbTodaySecs = stats.profile?.today_date === todayKst ? (stats.profile?.today_seconds || 0) : 0;
-        const localSecs = sessData.timeSec || 0;
-        const sessionSecs = window._cottageSessionStart
-          ? Math.floor((Date.now() - window._cottageSessionStart) / 1000)
-          : 0;
-        const todaySecs = dbTodaySecs + localSecs + sessionSecs;
-        const fmt = s => s >= 3600
-          ? Math.floor(s/3600)+'시간 '+Math.floor((s%3600)/60)+'분'
-          : s >= 60 ? Math.floor(s/60)+'분' : s+'초';
-        return todaySecs > 0 ? `<li><span>오늘 이용시간</span><strong>${fmt(todaySecs)}</strong></li>` : '';
-      })()}
-      ${(() => {
-        const prevDt = sessData.prevSeenDt;
-        if (!prevDt) return '';
-        const diffMs = Date.now() - new Date(prevDt).getTime();
-        const diffMin = Math.floor(diffMs / 60000);
-        const diffHour = Math.floor(diffMin / 60);
-        const diffDay = Math.floor(diffHour / 24);
-        let rel;
-        if (diffMin < 1)        rel = '방금 전';
-        else if (diffMin < 60)  rel = `${diffMin}분 전`;
-        else if (diffHour < 24) rel = `${diffHour}시간 전`;
-        else if (diffDay <= 14) rel = `${diffDay}일 전`;
-        else {
-          const d = new Date(prevDt);
-          rel = d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
-        }
-        return `<li><span>이전 방문</span><strong>${rel}</strong></li>`;
-      })()}
-      <li class="profile-stats-divider"></li>
-      <li><span>가입일</span><strong>${fmt(stats.profile?.first_seen_at)}</strong></li>
-      <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
-    </ul></div>
-    ${stats.plays.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-      ${playListHtml}
-    </div>` : ''}
-    ${stats.comments.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-      ${commentListHtml}
-    </div>` : ''}`;
+
+    <div class="profile-group profile-group-growth">
+      <div class="profile-group-header">
+        <span class="profile-group-title">🌱 성장 보드</span>
+        <span class="profile-group-summary">${escH(_growthSummary)}</span>
+        <button class="profile-group-toggle" type="button">▾</button>
+      </div>
+      <div class="profile-group-body is-hidden">
+        ${charHtml}
+        ${codexHtml}
+        ${achHtml}
+      </div>
+    </div>
+
+    <div class="profile-group profile-group-activity">
+      <div class="profile-group-header">
+        <span class="profile-group-title">📋 이용/혜택</span>
+        <span class="profile-group-summary">${escH(_actSummary)}</span>
+        <button class="profile-group-toggle" type="button">▾</button>
+      </div>
+      <div class="profile-group-body is-hidden">
+        ${voucherHtml}
+        <div class="profile-stats-wrap">
+          <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
+          <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
+        </div>
+        ${stats.plays.length ? `<div class="profile-activity-group">
+          <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
+          ${playListHtml}
+        </div>` : ''}
+        ${stats.comments.length ? `<div class="profile-activity-group">
+          <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
+          ${commentListHtml}
+        </div>` : ''}
+      </div>
+    </div>`;
+
+  // 성장 보드 / 이용·혜택 그룹 토글
+  body.querySelectorAll('.profile-group-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const groupBody = btn.closest('.profile-group').querySelector('.profile-group-body');
+      const hidden = groupBody.classList.toggle('is-hidden');
+      btn.textContent = hidden ? '▾' : '▴';
+    });
+  });
 
   body.querySelector('.profile-notif-toggle')?.addEventListener('click', function() {
     const list = body.querySelector('.profile-notif-list');

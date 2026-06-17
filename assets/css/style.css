@@ -3683,6 +3683,20 @@ body.sheet-open{
 .profile-codex-more-wrap.is-hidden{display:none;}
 .profile-codex-more-btn{margin-top:8px;width:100%;background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:5px;font-size:11px;color:var(--muted);cursor:pointer;}
 .profile-codex-empty{font-size:12px;color:var(--muted);margin:8px 0 0;}
+/* 성장 보드 / 이용·혜택 그룹 박스 */
+.profile-group{margin-top:14px;border:1px solid var(--border,#e8e4dc);border-radius:10px;background:var(--card-bg,#faf9f5);overflow:hidden;}
+.profile-group-header{display:flex;align-items:center;gap:6px;padding:11px 14px;cursor:default;}
+.profile-group-title{font-size:13px;font-weight:700;color:var(--text);flex-shrink:0;}
+.profile-group-summary{font-size:11px;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.profile-group-toggle{font-size:13px;font-weight:700;color:var(--brown,#7a4828);background:none;border:none;cursor:pointer;flex-shrink:0;padding:2px 0;line-height:1;}
+.profile-group-body{padding:0 10px 12px;}
+.profile-group-body.is-hidden{display:none;}
+.profile-group-body>*:first-child{margin-top:0;}
+/* 그룹 안 내부 섹션 사이 간격 조정 */
+.profile-group-body .profile-char-section,.profile-group-body .profile-codex-section,.profile-group-body .profile-ach-section{margin-top:8px;}
+.profile-group-body .profile-voucher-section{margin-top:0;}
+.profile-group-body .profile-stats-wrap{margin-top:10px;}
+.profile-group-body .profile-activity-group{margin-top:8px;}
 /* 캐릭터 섹션 */
 .profile-char-section{margin-top:14px;}
 .profile-char-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
