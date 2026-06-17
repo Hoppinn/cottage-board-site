@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (79차)
+최종 갱신: 2026-06-17 (80차)
 
 ---
 
@@ -152,6 +152,17 @@
   - 홈페이지 이용 기록 서브시트: 통계+플레이한 게임+코멘트 통합
   - 서브시트 높이 calc(100vh - 48px)로 전체화면 수준 확장
   - Playwright 검증: 카드 4개 / 성장보드 height 796px / 섹션순서(char→ach→codex) 모두 통과
+- [x] **홈페이지 이용안내 카드 개편** (80차)
+  - 카드 2열 그리드 구조 (추천게임찾기/플레이기록/내 보드/동호회/요청하기)
+  - 카카오 로그인 카드 제거 → 내 보드 카드로 교체
+  - 마지막 카드(요청하기) grid-column:1/-1로 2열 span
+  - CSS: .about-for-list--grid 수식자 추가 (about.html, club.html 영향 없음)
+
+- [ ] **드롭다운 완전 제거 + 직접 내 보드 열기** (Plan 80차, 승인 대기)
+  - 프로필 버튼 클릭 → openProfilePanel() 직접 호출 (드롭다운 없앰)
+  - 로그아웃 아이콘 버튼 헤더 actions 영역에 JS로 삽입, stopPropagation
+  - HTML 15개 파일 수정 없음
+
 - [ ] **음료교환권 시스템** (진행 중)
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
@@ -163,6 +174,9 @@
     - 관리자 패널: limit 제거 + ASC → user별 Map 누적합 → DESC 재정렬 → "잔액" 컬럼
     - ⚠️ 추후 로그 대량 누적 시: `balance_after` 컬럼 또는 RPC 방식으로 전환 검토 (현재 전체 조회)
   - 정책: 계정당 1회 자동 지급, 오너 제외, 승인 없음, 사용 즉시 차감
+  - [ ] 7단계: 실제 매장 상품으로 교체 (Plan 80차, 상품 목록 확인 대기)
+    - DB: 기존 더미 상품 is_active=false, 실제 상품 INSERT (스키마 변경 없음)
+    - JS: VOUCHER_EMOJI 실제 상품명으로 업데이트
 - [ ] **관리자 카카오 알림 확장**: 새 회원 가입, 모집 게시판 글 작성 시 알림 추가
   - ⚠️ 현재 코드베이스에 카톡 알림 전송 코드 없음. 사용자에게 기능 위치/구현 방식 재확인 필요
 

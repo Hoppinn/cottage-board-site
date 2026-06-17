@@ -4043,6 +4043,13 @@ body.sheet-open{
   border-color:var(--green);
   background:#f5f9ee;
 }
+.about-for-list--grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.about-for-list--grid .about-for-item:last-child{
+  grid-column:1 / -1;
+}
 .about-for-icon{
   font-size:20px;
   flex-shrink:0;
