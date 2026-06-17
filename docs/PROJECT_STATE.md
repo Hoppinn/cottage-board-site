@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (74차)
+최종 갱신: 2026-06-17 (75차)
 
 ---
 
@@ -120,6 +120,15 @@
   - 교환권 헤더에 "N장 보유" 잔액 표시
   - 플레이한 게임/코멘트 헤더에 건수 표시
   - 보류: 프로필사진/닉네임 통합, 대표캐릭터=프로필 연동, 도감 산정기준 변경
+- [x] **내 보드 3묶음 재구성** (선공개 전 완료)
+  - 1묶음: 알림 (기존 그대로)
+  - 2묶음: 성장 보드 (.profile-group-growth) — 캐릭터+도감+업적, 헤더 요약 "캐릭터 N/17 · 도감 N/641 · 업적 N/17", 기본 접힘
+  - 3묶음: 이용/혜택 (.profile-group-activity) — 교환권+통계+활동기록, 헤더 요약 "교환권 N장 · 이용시간 · 방문 · 플레이 N건", 기본 접힘
+  - _safeInt() regex fallback 헬퍼 — charHtml/codexHtml/achHtml 빈 문자열이어도 화면 불깨짐
+  - achievements.js root div data attribute로 카운트 전달 (data-char-count/data-played-count/data-total-games/data-ach-count)
+  - 교환권 재렌더 시 is-collapsed 클래스 유지 확인 (innerHTML 교체는 element 자체 클래스 무영향)
+  - Playwright 검증: 그룹 2개 구조/기본 접힘/그룹 토글/교환권 초기접힘/열기/닫기 모두 OK
+  - ⚠️ 알려진 제한: 교환권 사용/DEV 지급 후 outer 헤더 "N장 보유" 미갱신 (inner 상세만 재렌더, outer 버튼은 패널 재오픈 시 갱신)
 - [ ] **음료교환권 시스템** (진행 중)
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
@@ -215,6 +224,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-17 | feat: 내 보드 3묶음 재구성 — 성장 보드(캐릭터+도감+업적)/이용·혜택(교환권+통계+활동기록) 그룹 박스, 기본 접힘, 헤더 요약 표시 |
 | 2026-06-17 | fix: 파비콘 여백 최소화 — 투명 영역 감지 후 8px만 남기고 512x512 꽉 채움 |
 | 2026-06-17 | fix: 파비콘 이미지 교체 — 글씨없는버전 노여백 로고 전용 아이콘으로 변경 |
 | 2026-06-17 | refactor: 업적 UI — "✅ 달성" → "✓" (크기 15px/굵게, 도감 느낌 강화) |
