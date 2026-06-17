@@ -154,11 +154,11 @@ function initKakaoAuth() {
   if (userActions && !document.getElementById('kakaoProfileBtn')) {
     const _u = getKakaoUser();
 
-    // 내 활동 버튼
+    // 내 보드 버튼
     const profileBtn = document.createElement('button');
     profileBtn.id = 'kakaoProfileBtn';
     profileBtn.type = 'button';
-    profileBtn.textContent = '내 활동';
+    profileBtn.textContent = '내 보드';
     userActions.insertBefore(profileBtn, userActions.firstChild);
     profileBtn.addEventListener('click', openProfilePanel);
 
@@ -411,7 +411,7 @@ async function openProfilePanel() {
   const adminOrigin = window.location.origin;
   panel.innerHTML = `<div class="profile-panel-box">
     <div class="profile-panel-header">
-      <span class="profile-panel-title">내 활동</span>
+      <span class="profile-panel-title">내 보드</span>
       <button class="profile-panel-close" type="button">✕</button>
     </div>
     <div class="profile-panel-body">
