@@ -12,6 +12,26 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
+**다음 작업 후보 (87차 이후, 우선순위 순)**
+
+1. **알림 클릭 액션** — Green, Plan 완료, 승인 대기
+   - tagged: gameId → gameKey 변환 → openGameSheet
+   - curious_comment: gameKey 직접 사용 → openGameSheet
+   - purchased: gameName 이름 매칭 best effort → openGameSheet (불일치 시 no-op)
+   - 변경 파일: kakao-auth.js만 (_notifItems li에 data 속성 + afterRender 핸들러)
+
+2. **칭호 시스템 V1** — Red, Plan 완료, 승인 대기
+   - DB: user_titles 테이블, profiles.rep_title_id 컬럼
+   - API: grantTitle / getUserTitles / setRepTitle / getRepTitle (4개)
+   - UI: 프로필 영역 칭호 표시 + 대표 칭호 변경 버튼 + 성장 보드 내 칭호 섹션
+   - 네이밍 최종 확정 (기록/탐험/사진/리뷰/방문 5계열) — 아래 표 참조
+
+3. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+   - cottage_sess_에 seenNotifIds: string[] 추가
+   - getMyNotifications 반환에 uid 필드 추가
+   - 각 알림 아이템에 개별 확인 버튼
+   - 우선 "알림 클릭 → 이동"이 먼저, 개별 확인은 그 다음
+
 ---
 
 ## 1. 현재 완료 기능
