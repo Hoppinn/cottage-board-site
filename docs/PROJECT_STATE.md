@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (83차)
+최종 갱신: 2026-06-18 (85차)
 
 ---
 
@@ -166,6 +166,13 @@
   - HTML 15개 파일 수정 없음
   - (82차) _restoreMenuExpanded()에서 userActions 복원 코드 제거 (패널 닫기 시 구 드롭다운 복원 버그 수정)
   - (82차) initKakaoAuth()에서 kakaoLogoutBtn도 JS remove()
+- [x] **push 전 잔버그 4건** (84차)
+  - 알림 공지 날짜·본문 텍스트 겹침 → `.profile-notif-voucher`에 `padding-right:48px`
+  - 로그아웃 아이콘 버튼 미표시 → `appendChild` 직후 `is-visible` 즉시 추가 (타이밍 버그)
+  - 내 보드 패널 높이 서브시트보다 48px 작음 → `height:calc(100vh-48px)` (서브시트와 동일값으로 통일)
+  - 생수·곤약젤리 표시명에 "2개" 미표시 → `VOUCHER_DISPLAY_NAME` 오버라이드 맵 추가 (DB 변경 없음)
+  - 관리자 페이지 음료교환권 로그에도 표시명 반영
+
 - [x] **대표 캐릭터 카드 선택 UI + 알림 배지 수정 + 패널 높이** (83차)
   - 캐릭터 카드 select→button 전환 (접근성), is-rep(갈색)/is-selected(초록) 테두리 구분
   - 변경/취소 버튼: 선택이 origRepId와 다를 때만 표시, 성공 시 is-rep 이동
@@ -291,6 +298,8 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | fix: 달성 업적 진행도 표시 추가 — `✓ N/N` 형식, is-done 폰트 15px→12px |
+| 2026-06-18 | fix: push 전 잔버그 4건 — 알림날짜 겹침/로그아웃버튼/패널높이/생수곤약젤리 표시명 |
 | 2026-06-18 | feat: 대표 캐릭터 카드 선택 UI — select 제거, button 카드(is-rep/is-selected), 변경/취소, 패널 아바타 갱신 |
 | 2026-06-18 | fix: 알림 isNew 판정 — notifSeenAt=null 시 true로 수정 (신규 가입자 배지 미표시 버그) |
 | 2026-06-18 | fix: 모두 확인 버튼 조건 개선 + 확인 후 _updateNotifBadge() 재호출 |
