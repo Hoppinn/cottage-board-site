@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (81차)
+최종 갱신: 2026-06-18 (83차)
 
 ---
 
@@ -158,12 +158,20 @@
   - 마지막 카드(요청하기) grid-column:1/-1로 2열 span
   - CSS: .about-for-list--grid 수식자 추가 (about.html, club.html 영향 없음)
 
-- [x] **드롭다운 완전 제거 + 직접 내 보드 열기** (81차)
+- [x] **드롭다운 완전 제거 + 직접 내 보드 열기** (81차→82차)
   - 프로필 버튼 클릭 → openProfilePanel() 직접 호출 (드롭다운 없앰)
   - 로그아웃 아이콘 버튼(#kakaoLogoutIconBtn) .menu-login-area에 JS로 삽입, stopPropagation
   - updateLoginUI에서 is-visible 토글로 로그인/로그아웃 상태 반영
   - promptNicknameChange에서 드롭다운 복원 코드 제거 (이제 패널 내에서만 호출)
   - HTML 15개 파일 수정 없음
+  - (82차) _restoreMenuExpanded()에서 userActions 복원 코드 제거 (패널 닫기 시 구 드롭다운 복원 버그 수정)
+  - (82차) initKakaoAuth()에서 kakaoLogoutBtn도 JS remove()
+- [x] **대표 캐릭터 카드 선택 UI + 알림 배지 수정 + 패널 높이** (83차)
+  - 캐릭터 카드 select→button 전환 (접근성), is-rep(갈색)/is-selected(초록) 테두리 구분
+  - 변경/취소 버튼: 선택이 origRepId와 다를 때만 표시, 성공 시 is-rep 이동
+  - 알림 isNew: notifSeenAt=null이면 true (신규/미확인 상태 배지 표시 버그 수정)
+  - "모두 확인" 버튼 알림 1건 이상일 때만 표시, 확인 후 _updateNotifBadge() 재호출
+  - profile-panel-box min-height:calc(100vh - 96px) (서브시트와 크기감 통일)
 
 - [ ] **음료교환권 시스템** (진행 중)
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
@@ -283,6 +291,11 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | feat: 대표 캐릭터 카드 선택 UI — select 제거, button 카드(is-rep/is-selected), 변경/취소, 패널 아바타 갱신 |
+| 2026-06-18 | fix: 알림 isNew 판정 — notifSeenAt=null 시 true로 수정 (신규 가입자 배지 미표시 버그) |
+| 2026-06-18 | fix: 모두 확인 버튼 조건 개선 + 확인 후 _updateNotifBadge() 재호출 |
+| 2026-06-18 | fix: profile-panel-box min-height:calc(100vh-96px) — 서브시트와 크기감 통일 |
+| 2026-06-18 | fix: 패널 닫기 시 구 드롭다운 복원 버그 (_restoreMenuExpanded userActions 제거) |
 | 2026-06-17 | feat: 내 보드 화면 목적지 정리 — 내 캐릭터/교환권/이용기록 기본 펼침, 패널 92vh, _afterGrowthRender(expandChar) 헬퍼 |
 | 2026-06-17 | feat: 내 보드 프로필 영역 + 드롭다운 정리 — 대표캐릭터 아바타/닉네임/칭호/변경버튼, 드롭다운=내보드+로그아웃, 카카오사진 폐기 |
 | 2026-06-17 | feat: 내 보드 4축 구조 + 서브시트 전체높이 — 최근알림/성장보드/음료교환권/이용기록 카드, height:calc(100vh-48px), 성장보드 헤더 대표캐릭터 아이콘 |
