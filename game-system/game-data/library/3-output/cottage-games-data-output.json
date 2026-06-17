@@ -85909,9 +85909,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
+      "shelfGroupId": "배송중",
+      "shelfLabel": "배송중",
+      "shelfFullLabel": "배송중",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
@@ -86053,9 +86053,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
+      "shelfGroupId": "배송중",
+      "shelfLabel": "배송중",
+      "shelfFullLabel": "배송중",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
