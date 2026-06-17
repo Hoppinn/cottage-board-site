@@ -536,7 +536,7 @@ async function openProfilePanel() {
     const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
     return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
   }
-  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권</span><span class="profile-toggle-arrow">▴</span></button><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
+  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▴</span></button><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
 
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
@@ -561,8 +561,8 @@ async function openProfilePanel() {
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     ${notifHtml}
-    ${codexHtml}
     ${charHtml}
+    ${codexHtml}
     ${achHtml}
     ${voucherHtml}
     <div class="profile-stats-wrap">
@@ -616,11 +616,11 @@ async function openProfilePanel() {
       <li><span>상태</span><strong style="color:#4caf50">● 접속중</strong></li>
     </ul></div>
     ${stats.plays.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-toggle-arrow">▾</span></button>
+      <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
       ${playListHtml}
     </div>` : ''}
     ${stats.comments.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-toggle-arrow">▾</span></button>
+      <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
       ${commentListHtml}
     </div>` : ''}`;
 
@@ -683,6 +683,15 @@ async function openProfilePanel() {
       const charBody = body.querySelector('.profile-char-body');
       const hidden = charBody.classList.toggle('is-hidden');
       charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+    });
+  }
+
+  const codexToggleBtn = body.querySelector('.profile-codex-toggle-btn');
+  if (codexToggleBtn) {
+    codexToggleBtn.addEventListener('click', () => {
+      const codexBody = body.querySelector('.profile-codex-body');
+      const hidden = codexBody.classList.toggle('is-hidden');
+      codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
     });
   }
 
