@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (73차)
+최종 갱신: 2026-06-17 (74차)
 
 ---
 
@@ -110,8 +110,16 @@
   - 트리거: 플레이 기록 태그, 궁금해요 게임 새 코멘트, 게임 구매완료
   - 알림 섹션 기본 접힘. [모두 확인] 버튼 클릭 시만 seen 처리 (펼치기는 읽음 아님)
   - 신규 가입자 기본 알림: "첫 게임평을 남기면 음료교환권 1장을 받을 수 있어요" (voucherNoticeSeen 기반, 항상 표시)
-  - 캐릭터 섹션 기본 접힘 + "N종" 헤더. 업적 섹션 기본 접힘 + "N/17" 헤더 (기존)
+  - 캐릭터 섹션 기본 접힘 + "N/17종" 헤더. 업적 섹션 기본 접힘 + "N/17" 헤더
   - 패널 버튼/제목 "내 활동" → "내 보드" 변경 완료. Playwright 브라우저 검증 완료.
+- [x] **내 보드 P2 구조 정리** (선공개 전 완료)
+  - 게임 도감: 접힘 기본, 헤더에 "N/641" 표시, 본문(바/등급/목록) 펼침 토글
+  - 캐릭터: 17종 전체 정사각형 그리드(4열), 획득=컬러/미획득=grayscale
+  - ACH_DEFS IIFE 스코프 호이스팅 (buildChar/buildAch 공유, 중복 제거)
+  - 섹션 순서: 알림→캐릭터→도감→업적→교환권→통계→활동
+  - 교환권 헤더에 "N장 보유" 잔액 표시
+  - 플레이한 게임/코멘트 헤더에 건수 표시
+  - 보류: 프로필사진/닉네임 통합, 대표캐릭터=프로필 연동, 도감 산정기준 변경
 - [ ] **음료교환권 시스템** (진행 중)
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
