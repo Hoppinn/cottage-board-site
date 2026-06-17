@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-17 (72차)
+최종 갱신: 2026-06-17 (73차)
 
 ---
 
@@ -20,7 +20,7 @@
 - [x] 카카오 OAuth 로그인/로그아웃
 - [x] 닉네임 변경 (localStorage + DB 저장)
 - [x] 프로필 사진 변경 (프리셋 20종 + 파일 업로드, localStorage + DB 저장, 다기기 복원)
-- [x] 내 활동 패널 (플레이 기록, 코멘트, 모임 참석 통계)
+- [x] 내 보드 패널 (플레이 기록, 코멘트, 모임 참석 통계)
 - [x] 유저 차단/해제 (어드민)
 
 ### 게임 기록
@@ -106,11 +106,12 @@
 
 ### P1 — 기능 (중요)
 
-- [x] **인앱 알림 시스템**: "내 활동" 버튼 빨간 배지 + 패널 내 알림 섹션
+- [x] **인앱 알림 시스템**: "내 보드" 버튼 빨간 배지 + 패널 내 알림 섹션
   - 트리거: 플레이 기록 태그, 궁금해요 게임 새 코멘트, 게임 구매완료
   - 알림 섹션 기본 접힘. [모두 확인] 버튼 클릭 시만 seen 처리 (펼치기는 읽음 아님)
   - 신규 가입자 기본 알림: "첫 게임평을 남기면 음료교환권 1장을 받을 수 있어요" (voucherNoticeSeen 기반, 항상 표시)
   - 캐릭터 섹션 기본 접힘 + "N종" 헤더. 업적 섹션 기본 접힘 + "N/17" 헤더 (기존)
+  - 패널 버튼/제목 "내 활동" → "내 보드" 변경 완료. Playwright 브라우저 검증 완료.
 - [ ] **음료교환권 시스템** (진행 중)
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
