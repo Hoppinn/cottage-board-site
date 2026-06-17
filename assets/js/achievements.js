@@ -253,8 +253,11 @@
       ? '<p class="profile-char-empty">게임을 플레이하면 캐릭터가 해금됩니다 🐾</p>'
       : '';
 
+    const _repIconHtml = repAch?.id
+      ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${repAch.id}.png" alt="">`
+      : '';
     return `<div class="profile-char-section" data-char-count="${earnedCount}">
-      <div class="profile-char-header">🐾 내 캐릭터 <span class="profile-char-count">${earnedCount} / ${ACH_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
+      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${ACH_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
       <div class="profile-char-body is-hidden">
         ${emptyHint}
         <div class="profile-char-grid">${gridCards}</div>

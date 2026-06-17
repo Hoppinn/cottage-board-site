@@ -3561,7 +3561,7 @@ body.sheet-open{
 
 /* 내 활동 프로필 패널 */
 .profile-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9100;display:flex;align-items:flex-end;justify-content:center;}
-.profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:24px 20px 32px;max-height:85vh;overflow-y:auto;margin:0 10px 20px;}
+.profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:24px 20px 32px;max-height:85vh;overflow-y:auto;margin:0 10px 30px;}
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .profile-panel-title{font-size:16px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
@@ -3704,7 +3704,7 @@ body.sheet-open{
 .profile-card-grid .profile-card-arrow{display:none;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;}
-.profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;margin:0 10px 20px;}
+.profile-subsheet-box{background:#fff;border-radius:24px 24px 18px 18px;width:100%;max-width:480px;height:calc(100vh - 48px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
 .profile-subsheet-header{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border,#e8e4dc);flex-shrink:0;}
 .profile-subsheet-back{background:none;border:none;font-size:14px;font-weight:600;color:var(--brown,#7a4828);cursor:pointer;padding:2px 8px 2px 0;flex-shrink:0;}
 .profile-subsheet-title{flex:1;font-size:15px;font-weight:700;color:var(--text);text-align:center;}
@@ -3732,6 +3732,7 @@ body.sheet-open{
 .profile-char-toggle-btn{font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:none;border:none;cursor:pointer;padding:0;margin-left:auto;}
 .profile-char-body.is-hidden{display:none;}
 .profile-char-count{font-size:11px;font-weight:400;color:var(--muted);}
+.profile-char-rep-icon{width:22px;height:22px;object-fit:contain;border-radius:4px;vertical-align:middle;flex-shrink:0;}
 .profile-char-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
 .profile-char-badge{font-size:12px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:4px 10px;color:var(--text);display:inline-flex;align-items:center;gap:5px;}
 .profile-char-img{width:28px;height:28px;object-fit:contain;flex-shrink:0;}

@@ -611,10 +611,13 @@ async function openProfilePanel() {
     ].join('');
   })();
 
-  // ── 성장 보드 / 이용·혜택 서브시트 콘텐츠 ───────────────────
-  const _growthInnerHtml = `${charHtml}${codexHtml}${achHtml}`;
-  const _activityInnerHtml = `
-    ${voucherHtml}
+  // ── 서브시트 콘텐츠 변수 (4축) ───────────────────────────────
+  // 성장 보드: 캐릭터 → 업적 → 게임 도감 순
+  const _growthInnerHtml = `${charHtml}${achHtml}${codexHtml}`;
+  // 음료교환권: voucherHtml 단독
+  const _voucherInnerHtml = voucherHtml;
+  // 홈페이지 이용 기록: 통계 + 플레이한 게임 + 코멘트
+  const _usageInnerHtml = `
     <div class="profile-stats-wrap">
       <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
       <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
@@ -627,8 +630,11 @@ async function openProfilePanel() {
       <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
       ${commentListHtml}
     </div>` : ''}`;
+  // 카드 요약
+  const _voucherCardSummary = `${voucherBalance}장 보유`;
+  const _usageCardSummary = _statsSummary;
 
-  // ── 메인 패널: 카드 3개 ──────────────────────────────────────
+  // ── 메인 패널: 4축 레이아웃 ─────────────────────────────────
   body.innerHTML = `
     <p class="profile-panel-nick">${escH(user.nickname || '손님')}</p>
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
@@ -643,12 +649,17 @@ async function openProfilePanel() {
         <span class="profile-card-label">성장 보드</span>
         <span class="profile-card-summary">${escH(_growthSummary)}</span>
       </button>
-      <button class="profile-card" data-subsheet="activity" type="button">
-        <span class="profile-card-icon">📋</span>
-        <span class="profile-card-label">이용·혜택</span>
-        <span class="profile-card-summary">${escH(_actSummary)}</span>
+      <button class="profile-card" data-subsheet="voucher" type="button">
+        <span class="profile-card-icon">🎫</span>
+        <span class="profile-card-label">음료교환권</span>
+        <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
       </button>
-    </div>`;
+    </div>
+    <button class="profile-card profile-card--notif" data-subsheet="usage" type="button">
+      <span class="profile-card-icon">📊</span>
+      <span class="profile-card-label">${escH(_usageCardSummary)}</span>
+      <span class="profile-card-arrow">›</span>
+    </button>`;
 
   // ── 서브시트 헬퍼 ─────────────────────────────────────────────
   function _openSubSheet(title, contentHtml, afterRender) {
@@ -814,14 +825,19 @@ async function openProfilePanel() {
           });
         }); // end growth afterRender
 
-      } else if (type === 'activity') {
-        _openSubSheet('이용·혜택', _activityInnerHtml, subBody => {
+      } else if (type === 'voucher') {
+        _openSubSheet('음료교환권', _voucherInnerHtml, subBody => {
           subBody.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
             const inner = subBody.querySelector('#profileVoucherInner');
             const arrow = this.querySelector('.profile-toggle-arrow');
             const collapsed = inner.classList.toggle('is-collapsed');
             arrow.textContent = collapsed ? '▾' : '▴';
           });
+          _bindVoucher(subBody);
+        }); // end voucher afterRender
+
+      } else if (type === 'usage') {
+        _openSubSheet('이용 기록', _usageInnerHtml, subBody => {
           subBody.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
             const list = subBody.querySelector('.profile-panel-stats');
             const arrow = this.querySelector('.profile-toggle-arrow');
@@ -845,8 +861,7 @@ async function openProfilePanel() {
                 : '접기';
             });
           });
-          _bindVoucher(subBody);
-        }); // end activity afterRender
+        }); // end usage afterRender
       }
     });
   });
