@@ -389,22 +389,29 @@
     const earnedIds = new Set(earned.map(a => a.id));
     const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount };
 
+    const VOUCHER_ACH_IDS = new Set(['rabbit_first']);
     const items = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
       const imgSrc = `/assets/images/characters/characters_basic/${def.id}.png`;
       const typeLabel = TYPE_LABELS[def.type] || def.type;
+      const titleReward = TITLE_DEFS.find(t => t.achId === def.id);
+      const hasVoucher = VOUCHER_ACH_IDS.has(def.id);
+      const rewardParts = ['🐾 캐릭터'];
+      if (titleReward) rewardParts.push('🏷 칭호');
+      if (hasVoucher) rewardParts.push('🥤 교환권');
+      const rewardHtml = `<span class="profile-ach-reward">${done ? '획득한 보상' : '받을 보상'}: ${rewardParts.join(' · ')}</span>`;
       if (done) {
         return `<li class="profile-ach-item is-achieved">` +
           `<img class="profile-ach-img" src="${imgSrc}" alt="${def.name}" ` +
           `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
           `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>` +
-          `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span></div>` +
+          `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
           `<span class="profile-ach-status is-done">✓ ${typeLabel} · ${cur}/${def.threshold}</span></li>`;
       }
       return `<li class="profile-ach-item is-locked">` +
         `<span class="profile-ach-img-lock">${def.emoji}</span>` +
-        `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span></div>` +
+        `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
         `<span class="profile-ach-status">${typeLabel} · ${cur}/${def.threshold}</span></li>`;
     }).join('');
 
