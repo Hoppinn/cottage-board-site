@@ -505,10 +505,11 @@ async function openProfilePanel() {
       return '';
     }).join('');
     const more = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
+    const confirmBtn = newCount > 0 ? `<li class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 확인</button></li>` : '';
     const titleText = newCount > 0 ? `🔔 새 알림 ${newCount}건` : '🔔 최근 알림';
     return `<div class="profile-notif-section">
       <button class="profile-notif-toggle" type="button"><span class="profile-notif-title">${titleText}</span><span class="profile-toggle-arrow">▾</span></button>
-      <ul class="profile-notif-list is-collapsed">${voucherItemHtml}${items}${more}</ul>
+      <ul class="profile-notif-list is-collapsed">${voucherItemHtml}${items}${more}${confirmBtn}</ul>
     </div>`;
   })() : '';
 
@@ -628,23 +629,25 @@ async function openProfilePanel() {
     const arrow = this.querySelector('.profile-toggle-arrow');
     const collapsed = list.classList.toggle('is-collapsed');
     arrow.textContent = collapsed ? '▾' : '▴';
-    if (!collapsed) {
-      // 섹션 펼칠 때 seen 처리
-      if (window._cottageSess) {
-        const _s = window._cottageSess.get(String(user.id));
-        _s.notifSeenAt = new Date().toISOString();
-        _s.voucherNoticeSeen = true;
-        window._cottageSess.set(String(user.id), _s);
-      }
-      document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-      list.querySelectorAll('.is-new').forEach(el => {
-        el.classList.remove('is-new');
-        el.querySelectorAll('.profile-notif-new-badge').forEach(b => b.remove());
-        el.querySelector('.profile-voucher-confirm')?.remove();
-      });
-      const titleEl = this.querySelector('.profile-notif-title');
-      if (titleEl) titleEl.textContent = '🔔 최근 알림';
+  });
+
+  body.querySelector('.profile-notif-confirm-all')?.addEventListener('click', function() {
+    if (window._cottageSess) {
+      const _s = window._cottageSess.get(String(user.id));
+      _s.notifSeenAt = new Date().toISOString();
+      _s.voucherNoticeSeen = true;
+      window._cottageSess.set(String(user.id), _s);
     }
+    document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
+    const list = body.querySelector('.profile-notif-list');
+    list?.querySelectorAll('.is-new').forEach(el => {
+      el.classList.remove('is-new');
+      el.querySelectorAll('.profile-notif-new-badge').forEach(b => b.remove());
+      el.querySelector('.profile-voucher-confirm')?.remove();
+    });
+    this.closest('.profile-notif-confirm-row')?.remove();
+    const titleEl = body.querySelector('.profile-notif-title');
+    if (titleEl) titleEl.textContent = '🔔 최근 알림';
   });
 
   body.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
