@@ -334,15 +334,31 @@ async function openProfilePanel() {
     <span class="profile-notif-voucher-date">${escH(_voucherDateLabel)}</span>
   </li>`;
   const _newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
+  function _getGameKeyById(gameId) {
+    if (!gameId || !window.gameData) return null;
+    if (window.gameData[gameId]) return gameId;
+    const entry = Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId));
+    return entry ? entry[0] : null;
+  }
+  function _getGameKeyByName(name) {
+    if (!name || !window.COTTAGE_GAMES || !window.gameData) return null;
+    const found = window.COTTAGE_GAMES.find(g =>
+      (g.display || g.titleKo || g.titleEn || '').trim() === name.trim()
+    );
+    if (!found) return null;
+    return _getGameKeyById(String(found.bggId));
+  }
+
   const _notifItems = notifs.slice(0, 5).map(n => {
-    const cls = n.isNew ? ' class="is-new"' : '';
+    const clsList = ['is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
+    const cls = ` class="${clsList}"`;
     const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
     if (n.type === 'tagged')
-      return `<li${cls}>${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록 태그됨 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li${cls} data-game-id="${escH(String(n.gameId))}">${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록 태그됨 <span>${fmtShort(n.date)}</span></li>`;
     if (n.type === 'curious_comment')
-      return `<li${cls}>${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li${cls} data-game-key="${escH(String(n.gameKey))}">${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
     if (n.type === 'purchased')
-      return `<li${cls}>${badge}🛒 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li${cls} data-game-name="${escH(String(n.gameName))}">${badge}🛒 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
     return '';
   }).join('');
   const _notifMore = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
@@ -722,6 +738,16 @@ async function openProfilePanel() {
           });
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
+          subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
+            li.addEventListener('click', e => {
+              if (e.target.closest('button, a')) return;
+              let key = null;
+              if (li.dataset.gameKey) key = li.dataset.gameKey;
+              else if (li.dataset.gameId) key = _getGameKeyById(li.dataset.gameId);
+              else if (li.dataset.gameName) key = _getGameKeyByName(li.dataset.gameName);
+              if (key && window.openGameSheet) window.openGameSheet(key);
+            });
+          });
         });
 
       } else if (type === 'growth') {

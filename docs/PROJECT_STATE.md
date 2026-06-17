@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (87차)
+최종 갱신: 2026-06-18 (88차)
 
 ---
 
@@ -12,15 +12,9 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**다음 작업 후보 (87차 이후, 우선순위 순)**
+**다음 작업 후보 (88차 이후, 우선순위 순)**
 
-1. **알림 클릭 액션** — Green, Plan 완료, 승인 대기
-   - tagged: gameId → gameKey 변환 → openGameSheet
-   - curious_comment: gameKey 직접 사용 → openGameSheet
-   - purchased: gameName 이름 매칭 best effort → openGameSheet (불일치 시 no-op)
-   - 변경 파일: kakao-auth.js만 (_notifItems li에 data 속성 + afterRender 핸들러)
-
-2. **칭호 시스템 V1** — Red, Plan 완료, 승인 대기
+1. **칭호 시스템 V1** — Red, Plan 완료, 승인 대기
    - DB: user_titles 테이블, profiles.rep_title_id 컬럼
    - API: grantTitle / getUserTitles / setRepTitle / getRepTitle (4개)
    - UI: 프로필 영역 칭호 표시 + 대표 칭호 변경 버튼 + 성장 보드 내 칭호 섹션
@@ -342,8 +336,10 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | feat: 알림 클릭 액션 — 알림 li 클릭 시 게임 상세 열기. tagged(gameId→key변환)/curious_comment(gameKey직접)/purchased(이름매칭 best effort). is-clickable CSS, _getGameKeyById/_getGameKeyByName 헬퍼 |
 | 2026-06-18 | feat: N번째 플레이 표시 — 내 보드 플레이한 게임 목록 + game-reviews 모임별 보기에서 2번째 이상 플레이 시 "(N번째 플레이)" 표시 |
 | 2026-06-18 | fix: 알림 UI 3건 — 모두 확인 후 알림 카드 라벨 "최근 알림" 갱신, 서브시트 제목 "최근 알림 N건", 교환권 개별 확인 후 _updateNotifBadge 재호출 |
+| 2026-06-18 | feat: 게임 2개 추가 — 사라진속옷과 하늘을나는물고기 (BGG 350586), 로나에나: 재앙의 선물 (BGG 350585). 총 643종 |
 | 2026-06-18 | feat: 메뉴 프로필 이미지 → 대표 캐릭터 전환. 기본값 rabbit_first, rep 있으면 교체. 변경 시 즉시 갱신. rabbit_first 첫 달성 시 rep null이면 자동 대표 설정 |
 | 2026-06-18 | feat: 캐릭터 카드 하단 이름 상시 표시 (획득/미획득 모두, 미획득 opacity:0.4) |
 | 2026-06-18 | refactor: 업적 목록 1행 압축 — typeLabel 오른쪽 이동, "✓ 플레이 기록 · 10/10" / "플레이 기록 · 25/50" 형식 |
