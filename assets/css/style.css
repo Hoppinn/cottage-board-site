@@ -3635,6 +3635,8 @@ body.sheet-open{
 .profile-voucher-use-btn{padding:5px 12px;font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:#fff;border:1px solid var(--brown,#7a4828);border-radius:6px;cursor:pointer;white-space:nowrap;}
 .profile-voucher-use-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .profile-voucher-note{font-size:11px;color:var(--muted);margin:4px 0 8px;}
+.profile-voucher-dev-btn{display:block;width:100%;margin-top:10px;padding:6px;font-size:11px;color:#fff;background:#c0392b;border:none;border-radius:6px;cursor:pointer;opacity:0.75;}
+.profile-voucher-dev-btn:hover{opacity:1;}
 .profile-voucher-hist-list{list-style:none;padding:0;margin:4px 0 0;border-top:1px solid var(--border,#e8e4dc);padding-top:8px;display:flex;flex-direction:column;gap:4px;}
 .profile-voucher-hist-item{font-size:11px;color:var(--muted);}
 /* 업적 섹션 */

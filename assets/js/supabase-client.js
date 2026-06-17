@@ -1071,6 +1071,7 @@ window._cottageSess = (function () {
     rejectPointReward,
     getUserPointRewardStats,
     grantFirstPlayVoucher,
+    grantDevVoucher,
     getVoucherBalance,
     getVoucherProducts,
     redeemVoucher,
@@ -1280,6 +1281,14 @@ window._cottageSess = (function () {
         .insert({ user_id: String(userId), delta: 1, reason: 'first_play' });
       if (error) return false; // unique index 위반 포함 — DB 2차 방어
       return true;
+    } catch (_) { return false; }
+  }
+
+  async function grantDevVoucher(userId) {
+    try {
+      const { error } = await db.from('voucher_log')
+        .insert({ user_id: String(userId), delta: 1, reason: 'dev_test' });
+      return !error;
     } catch (_) { return false; }
   }
 

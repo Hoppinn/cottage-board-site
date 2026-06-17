@@ -407,6 +407,7 @@ async function openProfilePanel() {
   panel.id = 'profilePanel';
   panel.className = 'profile-panel';
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
+  const isDevMode = location.hostname === 'localhost' || isOwnerUser;
   const adminOrigin = window.location.origin;
   panel.innerHTML = `<div class="profile-panel-box">
     <div class="profile-panel-header">
@@ -530,7 +531,8 @@ async function openProfilePanel() {
     }).join('');
     const redeemHist = hist.filter(h => h.reason === 'redeem').slice(0, 3);
     const histHtml = redeemHist.map(h => `<li class="profile-voucher-hist-item">${fmtDt(h.created_at)} · ${escH(h.voucher_products?.name || '상품')}</li>`).join('');
-    return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}`;
+    const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
+    return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
   }
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권</span><span class="profile-toggle-arrow">▴</span></button><div id="profileVoucherInner">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
 
@@ -732,6 +734,24 @@ async function openProfilePanel() {
         }
       });
     });
+    const devBtn = body.querySelector('.profile-voucher-dev-btn');
+    if (devBtn) {
+      devBtn.addEventListener('click', async () => {
+        devBtn.disabled = true;
+        const ok = await window.CottageDB?.grantDevVoucher(String(user.id));
+        if (ok) {
+          const [nb, np, nh] = await Promise.all([
+            window.CottageDB.getVoucherBalance(String(user.id)),
+            window.CottageDB.getVoucherProducts(),
+            window.CottageDB.getVoucherHistory(String(user.id), 3),
+          ]);
+          const inner = body.querySelector('#profileVoucherInner');
+          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }
+        } else {
+          devBtn.disabled = false;
+        }
+      });
+    }
   }
   _bindVoucher();
 }
