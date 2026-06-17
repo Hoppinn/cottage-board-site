@@ -16,10 +16,34 @@
       "Bash(git mv *)",
       "Bash(git push)",
       "Bash(git push *)",
-      "Bash(cd * && git push)"
+      "Bash(cd * && git push)",
+      "PowerShell(python -c \"from PIL import Image; img = Image.open\\(r'C:\\\\Users\\\\HOPPYNESS\\\\OneDrive\\\\Documents\\\\īī���� ���� ����\\\\KakaoTalk_20260615_193537067.png'\\); print\\(img.size\\)\")",
+      "PowerShell(Get-Command python3, python, py -ErrorAction SilentlyContinue)",
+      "PowerShell(py --version 2>&1)",
+      "PowerShell(python --version 2>&1)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(npm list -g sharp 2>$null)",
+      "PowerShell(npm list -g jimp 2>$null)",
+      "Bash(node scripts/crop-characters.js 2>&1 | head -3; ls \"C:/Users/HOPPYNESS/OneDrive/Documents/카카오톡 받은 파일/\" 2>/dev/null | head -5)",
+      "Read(//c/Users/HOPPYNESS/OneDrive/Documents/카카오톡 받은 파일/**)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Bash(npx --yes serve . -p 4321)",
+      "Bash('#kakaoLoginBtn')",
+      "Bash(echo \"exit: $?\")",
+      "Bash(npx wrangler *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4321)",
+      "Bash(ls \"D:/Documents/코티지보드/리뉴얼/홈페이지/업적아이콘/\" 2>/dev/null || echo \"not found\" *)",
+      "Read(//d/Documents/코티지보드/리뉴얼/홈페이지/업적아이콘/**)",
+      "Read(//c/Users/HOPPYNESS/OneDrive/Documents/**)",
+      "Read(//d/Documents/��Ƽ������/������/Ȩ������/cottage-board-site/assets/images/**)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\"d:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site\\\\assets\\\\images\\\\main\\\\hero.png\"\\); Write-Host \"크기: $\\($img.Width\\) x $\\($img.Height\\)\"; Write-Host \"비율: $\\([math]::Round\\($img.Width/$img.Height, 2\\)\\)\"; Write-Host \"정사각형: $\\($img.Width -eq $img.Height\\)\"; $img.Dispose\\(\\))"
     ],
     "additionalDirectories": [
-      "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\pages"
+      "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\pages",
+      "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\assets\\images\\characters\\split",
+      "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\assets\\images\\characters"
     ]
   }
 }
