@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS voucher_log (
   id         BIGSERIAL PRIMARY KEY,
   user_id    TEXT      NOT NULL,
   delta      INT       NOT NULL,
-  reason     TEXT      NOT NULL CHECK (reason IN ('first_play', 'redeem')),
+  reason     TEXT      NOT NULL CHECK (reason IN ('first_play', 'redeem', 'dev_test')),
   product_id INT       REFERENCES voucher_products(id),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

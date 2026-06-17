@@ -749,6 +749,8 @@ async function openProfilePanel() {
           if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(); }
         } else {
           devBtn.disabled = false;
+          console.error('[DEV] grantDevVoucher 실패 — DB CHECK 제약 또는 네트워크 오류. voucher_log.reason에 dev_test 허용 여부 확인.');
+          alert('[DEV] 교환권 지급 실패. 콘솔 확인.');
         }
       });
     }
