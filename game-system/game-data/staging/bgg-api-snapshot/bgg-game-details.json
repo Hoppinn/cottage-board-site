@@ -35394,6 +35394,98 @@
       ]
     }
   },
+  "350585": {
+    "bggId": "350585",
+    "title": "ロナエナ ―厄災のギフト (Ronaena: Gift of Disaster)",
+    "image": "https://cf.geekdo-images.com/kVl9WsfzufsYF8K5UxbGdA__original/img/45xMtdnXlwzIlPfG6wbQ3rZ3ZNs=/0x0/filters:format(jpeg)/pic6489319.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/kVl9WsfzufsYF8K5UxbGdA__small/img/-R9Vo4fehVgA7NXM49VXoyQ7ZBw=/fit-in/200x150/filters:strip_icc()/pic6489319.jpg",
+    "description": "This game is called Murder Mystery. The player becomes one of the characters in the story and searches for the culprit of the incident that occurs in the story. Since the criminal is also one of the players, the purpose is that the player who became the criminal does not know that he is the criminal.\nEach player has his or her own purpose other than searching for the criminal or not knowing it, and each player aims to achieve multiple goals and win the points obtained by achieving them.\n\n\"Ronaena -Gift of Disaster-\" is a story about searching for the murderer of the murder case that occurs at the research school facility \"Ronaena\" in the near future in 2025.\n\n&mdash;description from the designer",
+    "yearpublished": "2021",
+    "minplayers": "5",
+    "minage": "15",
+    "maxplayers": "5",
+    "playingtime": "90",
+    "minplaytime": "60",
+    "maxplaytime": "90",
+    "averageweight": "0",
+    "average": "6",
+    "bayesaverage": "0",
+    "usersrated": "3",
+    "rank": "Not Ranked",
+    "designers": [
+      "Masashi Kawaguchi"
+    ],
+    "artists": [
+      "Koji Ogata"
+    ],
+    "publishers": [
+      "Arclight Games",
+      "IFROM Games"
+    ],
+    "categories": [
+      "Murder / Mystery"
+    ],
+    "mechanics": [
+      "Hidden Movement",
+      "Hidden Roles",
+      "Hidden Victory Points",
+      "Narrative Choice / Paragraph",
+      "Negotiation",
+      "Semi-Cooperative Game",
+      "Storytelling",
+      "Traitor Game"
+    ],
+    "suggested_numplayers": {
+      "best": [],
+      "recommended": [],
+      "not_recommended": []
+    }
+  },
+  "350586": {
+    "bggId": "350586",
+    "title": "消えたパンツと空飛ぶサカナ (Kieta Pantsu To Soratobu SAKANA)",
+    "image": "https://cf.geekdo-images.com/ucAqL4BVnUSW7cZ1VZBqzQ__original/img/JlaVF9SNQpcEQyNzitvNe6rCeCY=/0x0/filters:format(png)/pic6489321.png",
+    "thumbnail": "https://cf.geekdo-images.com/ucAqL4BVnUSW7cZ1VZBqzQ__small/img/ca7-2f9yZcp2l4IK8cJ1WWFWN2M=/fit-in/200x150/filters:strip_icc()/pic6489321.png",
+    "description": "This game is called Murder Mystery. The player becomes one of the characters in the story and searches for the culprit of the incident that occurs in the story. Since the criminal is also one of the players, the purpose is that the player who became the criminal does not know that he is the criminal.\nEach player has his or her own purpose other than searching for the criminal or not knowing it, and each player aims to achieve multiple goals and win the points obtained by achieving them.\n\n\"Kieta Pantsu To Soratobu SAKANA -Lost Panties And Fish Fly In The Sky-\" is a Murder mystery where five friends living in a share house search for the whereabouts of their lost panties. This story has a shocking impact on everyone.\n\n&mdash;description from the designer",
+    "yearpublished": "2020",
+    "minplayers": "5",
+    "minage": "15",
+    "maxplayers": "5",
+    "playingtime": "90",
+    "minplaytime": "60",
+    "maxplaytime": "90",
+    "averageweight": "0",
+    "average": "7",
+    "bayesaverage": "0",
+    "usersrated": "3",
+    "rank": "Not Ranked",
+    "designers": [
+      "Masashi Kawaguchi"
+    ],
+    "artists": [],
+    "publishers": [
+      "Arclight Games",
+      "IFROM Games"
+    ],
+    "categories": [
+      "Murder / Mystery"
+    ],
+    "mechanics": [
+      "Hidden Movement",
+      "Hidden Roles",
+      "Hidden Victory Points",
+      "Narrative Choice / Paragraph",
+      "Negotiation",
+      "Semi-Cooperative Game",
+      "Storytelling",
+      "Traitor Game"
+    ],
+    "suggested_numplayers": {
+      "best": [],
+      "recommended": [],
+      "not_recommended": []
+    }
+  },
   "351040": {
     "bggId": "351040",
     "title": "Ready Set Bet",

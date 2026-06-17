@@ -1066,6 +1066,7 @@ window._cottageSess = (function () {
     getUserPhotoCount,
     getUserRatingCount,
     getRepAchievement,
+    setRepTitle,
     getPendingPointRewards,
     approvePointReward,
     rejectPointReward,
@@ -1266,6 +1267,13 @@ window._cottageSess = (function () {
       const { data: ach } = await db.from('achievements').select('id, name, emoji').eq('id', data.rep_achievement_id).maybeSingle();
       return ach || null;
     } catch (_) { return null; }
+  }
+
+  async function setRepTitle(userId, titleId) {
+    try {
+      const { error } = await db.from('profiles').update({ rep_title_id: titleId || null }).eq('user_id', userId);
+      return !error;
+    } catch (_) { return false; }
   }
 
   // ── 음료교환권 ──────────────────────────────────────────────────────────

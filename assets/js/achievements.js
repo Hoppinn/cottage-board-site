@@ -23,6 +23,30 @@
     { id: 'hamster_100',   name: '비평가 햄스터 🎓',       emoji: '🎓', type: 'review',   threshold: 100 },
   ];
 
+  // 칭호 정의 — achId: user_achievements 기반 / visitThreshold: profiles.visit_count 기반
+  const TITLE_DEFS = [
+    { id: 'title_squirrel_10',  name: '첫 페이지',          emoji: '📝', rarity: '일반', achId: 'squirrel_10'  },
+    { id: 'title_squirrel_50',  name: '이야기 수집가',       emoji: '📖', rarity: '고급', achId: 'squirrel_50'  },
+    { id: 'title_squirrel_100', name: '코티지 연대기 작가',  emoji: '📚', rarity: '희귀', achId: 'squirrel_100' },
+    { id: 'title_squirrel_200', name: '코티지 사서',         emoji: '🏛', rarity: '전설', achId: 'squirrel_200' },
+    { id: 'title_rabbit_20',    name: '탐험가',              emoji: '🗺', rarity: '일반', achId: 'rabbit_20'    },
+    { id: 'title_rabbit_50',    name: '개척자',              emoji: '⛺', rarity: '희귀', achId: 'rabbit_50'    },
+    { id: 'title_rabbit_100',   name: '코티지 유랑자',       emoji: '🚂', rarity: '전설', achId: 'rabbit_100'   },
+    { id: 'title_hedgehog_1',   name: '첫 셔터',             emoji: '📸', rarity: '일반', achId: 'hedgehog_1'   },
+    { id: 'title_hedgehog_10',  name: '순간 수집가',         emoji: '🎞', rarity: '고급', achId: 'hedgehog_10'  },
+    { id: 'title_hedgehog_50',  name: '기억 포착자',         emoji: '📷', rarity: '희귀', achId: 'hedgehog_50'  },
+    { id: 'title_hedgehog_100', name: '코티지 사진사',       emoji: '🎨', rarity: '전설', achId: 'hedgehog_100' },
+    { id: 'title_hamster_1',    name: '첫 감상가',           emoji: '✍', rarity: '일반', achId: 'hamster_1'    },
+    { id: 'title_hamster_10',   name: '취향 기록자',         emoji: '📖', rarity: '고급', achId: 'hamster_10'   },
+    { id: 'title_hamster_50',   name: '코티지 안내자',       emoji: '📚', rarity: '희귀', achId: 'hamster_50'   },
+    { id: 'title_hamster_100',  name: '코티지 큐레이터',     emoji: '🏛', rarity: '전설', achId: 'hamster_100'  },
+    { id: 'title_visit_10',  name: '코티지 단골', emoji: '☕', rarity: '일반', visitThreshold: 10  },
+    { id: 'title_visit_30',  name: '코티지 이웃', emoji: '🏡', rarity: '고급', visitThreshold: 30  },
+    { id: 'title_visit_50',  name: '코티지 주민', emoji: '🔥', rarity: '희귀', visitThreshold: 50  },
+    { id: 'title_visit_100', name: '터줏대감',    emoji: '🌳', rarity: '영웅', visitThreshold: 100 },
+    { id: 'title_visit_300', name: '코티지 원로', emoji: '👑', rarity: '전설', visitThreshold: 300 },
+  ];
+
   // 도감 등급표
   const CODEX_GRADES = [
     { min: 100, label: '👑 코티지 마스터' },
@@ -162,6 +186,78 @@
       if (g) return g.display || g.titleKo || g.titleEn || String(gameId);
     }
     return String(gameId);
+  }
+
+  // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
+  async function buildTitleSection(userId, repTitleId, visitCount) {
+    const db = window.CottageDB;
+    if (!db) return { html: '', earnedIds: new Set() };
+    try {
+      const achievements = await db.getUserAchievements(userId);
+      const earnedAchIds = new Set(achievements.map(a => a.id));
+      const vc = Number(visitCount) || 0;
+
+      const earnedIds = new Set();
+      TITLE_DEFS.forEach(def => {
+        const earned = def.achId ? earnedAchIds.has(def.achId) : vc >= (def.visitThreshold || Infinity);
+        if (earned) earnedIds.add(def.id);
+      });
+
+      const RARITY_COLOR = { '일반': '#888', '고급': '#4caf50', '희귀': '#2196f3', '영웅': '#9c27b0', '전설': '#ff9800' };
+
+      const cards = TITLE_DEFS.map(def => {
+        const earned = earnedIds.has(def.id);
+        const isRep = earned && repTitleId === def.id;
+        let cls = 'profile-title-card';
+        if (!earned) cls += ' is-locked';
+        if (isRep) cls += ' is-rep';
+        const rarityColor = RARITY_COLOR[def.rarity] || '#888';
+        return `<button class="${cls}" data-title-id="${def.id}" data-earned="${earned}" type="button">` +
+          `<span class="profile-title-emoji">${def.emoji}</span>` +
+          `<span class="profile-title-name">${def.name}</span>` +
+          `<span class="profile-title-rarity" style="color:${rarityColor}">${earned ? def.rarity : '???'}</span>` +
+          `</button>`;
+      }).join('');
+
+      const repActionHtml = earnedIds.size
+        ? `<div class="profile-title-action-row" id="profileTitleActionRow" data-user-id="${userId}" data-orig-rep-id="${repTitleId || ''}" style="display:none">` +
+          `<button class="profile-title-change-btn" type="button">변경</button>` +
+          `<button class="profile-title-cancel-btn" type="button">취소</button>` +
+          `</div>`
+        : '';
+
+      const html = `<div class="profile-title-section" data-earned-count="${earnedIds.size}">` +
+        `<div class="profile-title-header">🏷 칭호 <span class="profile-title-count">${earnedIds.size} / ${TITLE_DEFS.length}종</span>` +
+        `<button class="profile-title-toggle-btn" type="button">전체 보기 ▾</button></div>` +
+        `<div class="profile-title-body is-hidden">` +
+        `${earnedIds.size === 0 ? '<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>' : ''}` +
+        `<div class="profile-title-grid">${cards}</div>` +
+        `${repActionHtml}` +
+        `</div></div>`;
+
+      return { html, earnedIds };
+    } catch (_) { return { html: '', earnedIds: new Set() }; }
+  }
+
+  // 대표 칭호 변경 핸들러
+  async function handleRepTitleSelect(userId, titleId, origId, titleBody) {
+    if (!userId || !titleId) return;
+    // earned 방어: data-earned 속성 확인은 호출부에서 이미 처리됨
+    const ok = await window.CottageDB?.setRepTitle?.(userId, titleId);
+    if (ok === false) {
+      console.warn('[CottageAchievements] 대표 칭호 저장 실패');
+      titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
+      if (origId) titleBody.querySelector(`.profile-title-card[data-title-id="${origId}"]`)?.classList.add('is-selected');
+    } else {
+      titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-rep', 'is-selected'));
+      if (titleId) titleBody.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.classList.add('is-rep');
+      const actionRow = titleBody.querySelector('#profileTitleActionRow');
+      if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = titleId || ''; }
+      // 패널 상단 칭호 라인 즉시 갱신
+      const titleDef = TITLE_DEFS.find(t => t.id === titleId);
+      const panelTitleEl = document.querySelector('#profilePanel .profile-panel-title-name');
+      if (panelTitleEl && titleDef) panelTitleEl.textContent = `${titleDef.emoji} ${titleDef.name}`;
+    }
   }
 
   // 게임 도감 섹션 HTML 빌드 — kakao-auth.js의 openProfilePanel에서 호출
@@ -350,6 +446,9 @@
     buildCharacterSection,
     buildAchievementsSection,
     handleRepCardSelect,
+    buildTitleSection,
+    handleRepTitleSelect,
+    getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
   };
 
   // supabase-client.js에서 호출하는 전역 함수

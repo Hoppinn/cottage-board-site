@@ -19,7 +19,7 @@
 | `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
 | `page_events` | event_type, game_id, referrer, created_at | 기능 이벤트 (recommend_run, recommend_game_click). referrer: 세션 귀속 소스 |
 | `page_sessions` | page, referrer, user_id, duration_sec, entered_at | 세션 분석 |
-| `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date | 유저 프로필 |
+| `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id | 유저 프로필 |
 | `game_requests` | game_name, request_count, status, is_planned, user_id | 게임 요청 |
 | `snack_requests` | item_name, request_count, user_id | 간식 요청 |
 | `suggestions` | content, user_id, is_done, is_planned | 건의사항 |

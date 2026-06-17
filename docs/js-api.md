@@ -63,6 +63,7 @@
 | `getUserPhotoCount(userId)` | 첨부 사진 URL 개수 합산 |
 | `getUserRatingCount(userId)` | 별점 제출 건수 |
 | `getRepAchievement(userId)` | 대표 캐릭터 객체 반환 |
+| `setRepTitle(userId, titleId)` | 대표 칭호 설정 (profiles.rep_title_id). 성공 true, 실패 false |
 | `grantFirstPlayVoucher(userId)` | 첫 플레이 기록 보상 교환권 1장 지급. 오너/중복이면 false. DB unique index로 이중 방어 |
 | `getVoucherBalance(userId)` | voucher_log delta 합산 → 현재 보유 교환권 수 |
 | `getVoucherProducts()` | 활성 상품 목록 (`{ id, name, cost }[]`) |
@@ -166,7 +167,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.toInitials` | play-records-utils.js | game-reviews.js |
 | `window.hangulMatch` | play-records-utils.js | game-reviews.js |
 | `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
-| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드) |
+| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection, buildCharacterSection, buildAchievementsSection, handleRepCardSelect, buildTitleSection (→ `{html,earnedIds}`), handleRepTitleSelect, getTitleById(id) |
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, script.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
 | `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |

@@ -11508,7 +11508,7 @@
     "title": {
       "display": "딩고디스크",
       "owned": "딩고디스크",
-      "bgg": "Dingo's Dreams"
+      "bgg": "Dingo Disc"
     },
     "bgg": {
       "id": "319598",
@@ -43671,7 +43671,7 @@
     },
     "bgg": {
       "id": "369880",
-      "matchStatus": "auto-confirmed",
+      "matchStatus": "forced",
       "year": "2022",
       "rating": 7.30491,
       "weight": 2.3493,
@@ -47464,7 +47464,7 @@
     "title": {
       "display": "스릴팡",
       "owned": "스릴팡",
-      "bgg": "Thrill"
+      "bgg": "Beat the 8 Ball"
     },
     "bgg": {
       "id": "9539",
@@ -52928,7 +52928,7 @@
     "title": {
       "display": "알렉산드리아 도서관",
       "owned": "알렉산드리아 도서관",
-      "bgg": "알렉산드리아 도서관"
+      "bgg": "The Great Library"
     },
     "bgg": {
       "id": "432834",
@@ -85791,7 +85791,7 @@
     },
     "bgg": {
       "id": "",
-      "matchStatus": "unmatched",
+      "matchStatus": "unresolved",
       "year": "",
       "rating": 0,
       "weight": 0,
@@ -85852,6 +85852,294 @@
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "레지사이드-레거시"
+    }
+  },
+  "사라진속옷과-하늘을나는물고기": {
+    "id": "사라진속옷과-하늘을나는물고기",
+    "title": {
+      "display": "사라진속옷과 하늘을나는물고기",
+      "owned": "사라진속옷과 하늘을나는물고기",
+      "bgg": "消えたパンツと空飛ぶサカナ (Kieta Pantsu To Soratobu SAKANA)"
+    },
+    "bgg": {
+      "id": "350586",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 7,
+      "weight": 0,
+      "minPlayers": 5,
+      "maxPlayers": 5,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 90,
+      "minPlayTime": 60,
+      "maxPlayTime": 90,
+      "categories": [
+        "Murder / Mystery"
+      ],
+      "categoriesKo": [
+        "머더미스터리"
+      ],
+      "mechanics": [
+        "Hidden Movement",
+        "Hidden Roles",
+        "Hidden Victory Points",
+        "Narrative Choice / Paragraph",
+        "Negotiation",
+        "Semi-Cooperative Game",
+        "Storytelling",
+        "Traitor Game"
+      ],
+      "mechanicsKo": [
+        "숨은 이동",
+        "숨겨진 역할",
+        "숨겨진 승리 점수",
+        "선택형 서사",
+        "협상",
+        "반협동게임",
+        "스토리텔링",
+        "배신자 게임"
+      ],
+      "designers": [
+        "Masashi Kawaguchi"
+      ],
+      "description": "This game is called Murder Mystery. The player becomes one of the characters in the story and searches for the culprit of the incident that occurs in the story. Since the criminal is also one of the players, the purpose is that the player who became the criminal does not know that he is the criminal.\nEach player has his or her own purpose other than searching for the criminal or not knowing it, and each player aims to achieve multiple goals and win the points obtained by achieving them.\n\n\"Kieta Pantsu To Soratobu SAKANA -Lost Panties And Fish Fly In The Sky-\" is a Murder mystery where five friends living in a share house search for the whereabouts of their lost panties. This story has a shocking impact on everyone.\n\n&mdash;description from the designer",
+      "descriptionKo": "이 게임은 뮤더 미스터리입니다. 플레이어는 스토리의 등장인물이 되어 발생한 사건의 범인을 찾습니다. 범인도 플레이어 중 한 명이기 때문에, 범인이 된 플레이어가 자신이 범인임을 모르는 것이 목표입니다.\n\n각 플레이어는 범인을 찾거나 들키지 않는 것 외에 자신만의 목표를 가지고 있으며, 여러 목표를 달성하여 얻은 포인트로 승리를 목표로 합니다.\n\n\"사라진 팬티와 하늘을 나는 생선 -Lost Panties And Fish Fly In The Sky-\"은 셰어하우스에 사는 다섯 친구가 잃어버린 팬티의 행방을 찾는 뮤더 미스터리입니다. 이 스토리는 모두에게 충격적인 임팩트를 줍니다."
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [
+        "tense",
+        "chaotic",
+        "cozy",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction",
+        "bluffing",
+        "storytelling",
+        "party",
+        "murder_mystery"
+      ],
+      "situationTags": [
+        "group",
+        "large_group",
+        "beginner",
+        "long_stay"
+      ],
+      "interactionTags": [
+        "hidden_role",
+        "betrayal",
+        "team",
+        "social",
+        "table_talk",
+        "competitive"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "tense",
+        "chaotic",
+        "cozy",
+        "immersive",
+        "deduction",
+        "bluffing",
+        "storytelling",
+        "party",
+        "murder_mystery",
+        "group",
+        "large_group",
+        "beginner",
+        "long_stay",
+        "hidden_role",
+        "betrayal",
+        "team",
+        "social",
+        "table_talk",
+        "competitive"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "대화하며",
+        "빠져들게",
+        "즐기고"
+      ],
+      "summaryKo": "범인이 된 플레이어가 들키지 않으면서 자신의 목표를 달성하는 뮤더 미스터리 게임.",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "https://cf.geekdo-images.com/ucAqL4BVnUSW7cZ1VZBqzQ__original/img/JlaVF9SNQpcEQyNzitvNe6rCeCY=/0x0/filters:format(png)/pic6489321.png",
+      "thumbnail": "https://cf.geekdo-images.com/ucAqL4BVnUSW7cZ1VZBqzQ__small/img/ca7-2f9yZcp2l4IK8cJ1WWFWN2M=/fit-in/200x150/filters:strip_icc()/pic6489321.png",
+      "source": "bgg",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "사라진속옷과-하늘을나는물고기"
+    }
+  },
+  "로나에나-재앙의-선물": {
+    "id": "로나에나-재앙의-선물",
+    "title": {
+      "display": "로나에나: 재앙의 선물",
+      "owned": "로나에나: 재앙의 선물",
+      "bgg": "ロナエナ ―厄災のギフト (Ronaena: Gift of Disaster)"
+    },
+    "bgg": {
+      "id": "350585",
+      "matchStatus": "forced",
+      "year": "2021",
+      "rating": 6,
+      "weight": 0,
+      "minPlayers": 5,
+      "maxPlayers": 5,
+      "bestPlayers": [],
+      "recommendedPlayers": [],
+      "notRecommendedPlayers": [],
+      "playingTime": 90,
+      "minPlayTime": 60,
+      "maxPlayTime": 90,
+      "categories": [
+        "Murder / Mystery"
+      ],
+      "categoriesKo": [
+        "머더미스터리"
+      ],
+      "mechanics": [
+        "Hidden Movement",
+        "Hidden Roles",
+        "Hidden Victory Points",
+        "Narrative Choice / Paragraph",
+        "Negotiation",
+        "Semi-Cooperative Game",
+        "Storytelling",
+        "Traitor Game"
+      ],
+      "mechanicsKo": [
+        "숨은 이동",
+        "숨겨진 역할",
+        "숨겨진 승리 점수",
+        "선택형 서사",
+        "협상",
+        "반협동게임",
+        "스토리텔링",
+        "배신자 게임"
+      ],
+      "designers": [
+        "Masashi Kawaguchi"
+      ],
+      "description": "This game is called Murder Mystery. The player becomes one of the characters in the story and searches for the culprit of the incident that occurs in the story. Since the criminal is also one of the players, the purpose is that the player who became the criminal does not know that he is the criminal.\nEach player has his or her own purpose other than searching for the criminal or not knowing it, and each player aims to achieve multiple goals and win the points obtained by achieving them.\n\n\"Ronaena -Gift of Disaster-\" is a story about searching for the murderer of the murder case that occurs at the research school facility \"Ronaena\" in the near future in 2025.\n\n&mdash;description from the designer",
+      "descriptionKo": "이 게임은 미스터리 수사 게임입니다. 플레이어는 이야기 속 등장인물이 되어 사건의 범인을 찾아냅니다. 범인도 플레이어 중 한 명이기 때문에, 자신이 범인임을 모르도록 하는 것이 목표입니다.\n\n각 플레이어는 범인을 찾거나 범인임을 숨기는 것 외에 개별적인 목적을 가지고 있으며, 여러 목표를 달성하여 그에 따른 점수를 얻기를 목표로 합니다.\n\n\"로나에나 -재앙의 선물-\"은 2025년 근미래를 배경으로 하는 연구 학교 시설 '로나에나'에서 발생한 살인 사건의 범인을 찾아내는 이야기입니다."
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "",
+      "difficultyWeight": 0,
+      "moodTags": [
+        "tense",
+        "chaotic",
+        "cozy",
+        "immersive"
+      ],
+      "playTags": [
+        "deduction",
+        "bluffing",
+        "storytelling",
+        "party",
+        "murder_mystery"
+      ],
+      "situationTags": [
+        "group",
+        "large_group",
+        "beginner",
+        "long_stay"
+      ],
+      "interactionTags": [
+        "hidden_role",
+        "betrayal",
+        "team",
+        "social",
+        "table_talk",
+        "competitive"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "tense",
+        "chaotic",
+        "cozy",
+        "immersive",
+        "deduction",
+        "bluffing",
+        "storytelling",
+        "party",
+        "murder_mystery",
+        "group",
+        "large_group",
+        "beginner",
+        "long_stay",
+        "hidden_role",
+        "betrayal",
+        "team",
+        "social",
+        "table_talk",
+        "competitive"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "대화하며",
+        "빠져들게",
+        "즐기고"
+      ],
+      "summaryKo": "한 명의 숨겨진 범인을 찾으면서 동시에 자신의 정체를 숨기고 개인 목표를 달성하는 미스터리 수사 게임",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "https://cf.geekdo-images.com/kVl9WsfzufsYF8K5UxbGdA__original/img/45xMtdnXlwzIlPfG6wbQ3rZ3ZNs=/0x0/filters:format(jpeg)/pic6489319.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/kVl9WsfzufsYF8K5UxbGdA__small/img/-R9Vo4fehVgA7NXM49VXoyQ7ZBw=/fit-in/200x150/filters:strip_icc()/pic6489319.jpg",
+      "source": "bgg",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "로나에나-재앙의-선물"
     }
   }
 }

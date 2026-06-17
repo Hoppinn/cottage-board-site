@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (88차)
+최종 갱신: 2026-06-18 (89차)
 
 ---
 
@@ -12,9 +12,9 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**다음 작업 후보 (88차 이후, 우선순위 순)**
+**다음 작업 후보 (89차 이후, 우선순위 순)**
 
-1. **칭호 시스템 V1** — Red, Plan 완료, 승인 대기
+1. **칭호 시스템 SQL 실행 확인** — Supabase 대시보드에서 `ALTER TABLE profiles ADD COLUMN rep_title_id TEXT` 실행 필요
    - DB: user_titles 테이블, profiles.rep_title_id 컬럼
    - API: grantTitle / getUserTitles / setRepTitle / getRepTitle (4개)
    - UI: 프로필 영역 칭호 표시 + 대표 칭호 변경 버튼 + 성장 보드 내 칭호 섹션
@@ -209,7 +209,7 @@
     - DB: 기존 더미 상품 is_active=false → 실제 상품 INSERT SQL 아래 제공 (스키마 변경 없음)
     - JS: VOUCHER_EMOJI 10종으로 업데이트 (음료/생수/곤약젤리/스니커즈/참크래커/예감/홈런볼/버터와플/카스타드/촉촉한초코칩)
     - 1장: 음료·생수·곤약젤리·스니커즈·참크래커·예감·홈런볼·버터와플 / 2장: 카스타드 / 3장: 촉촉한초코칩
-- [ ] **칭호 시스템 V1** (네이밍 확정, 미구현)
+- [x] **칭호 시스템 V1** (89차 구현 완료)
   - 구조: 업적 달성 → 캐릭터(선택) + 칭호(선택) + 교환권(선택) 분리
   - 캐릭터=수집품, 칭호=장착품(대표 1개 선택), 종합등급=자동계산 별도
   - ACH_DEFS에 title_id 선택 필드 추가 → checkAchievements에서 grantTitle 호출 방식
@@ -350,6 +350,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | feat: 칭호 시스템 V1 — TITLE_DEFS 20종, buildTitleSection(earnedIds반환), handleRepTitleSelect, setRepTitle API, 프로필 칭호 라인+버튼, 성장보드 칭호 섹션(캐릭터→칭호→업적→도감). SQL: ALTER TABLE profiles ADD COLUMN rep_title_id TEXT |
 | 2026-06-18 | feat: 알림 클릭 액션 — 알림 li 클릭 시 게임 상세 열기. tagged(gameId→key변환)/curious_comment(gameKey직접)/purchased(이름매칭 best effort). is-clickable CSS, _getGameKeyById/_getGameKeyByName 헬퍼 |
 | 2026-06-18 | feat: N번째 플레이 표시 — 내 보드 플레이한 게임 목록 + game-reviews 모임별 보기에서 2번째 이상 플레이 시 "(N번째 플레이)" 표시 |
 | 2026-06-18 | fix: 알림 UI 3건 — 모두 확인 후 알림 카드 라벨 "최근 알림" 갱신, 서브시트 제목 "최근 알림 N건", 교환권 개별 확인 후 _updateNotifBadge 재호출 |

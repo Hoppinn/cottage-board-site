@@ -3580,7 +3580,9 @@ body.sheet-open{
 .profile-panel-profile-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
 .profile-panel-nick{font-size:17px;font-weight:900;color:#5a3418;margin:0;}
 .profile-panel-rep-name{font-size:12px;color:#8c7a6b;}
-.profile-panel-sub-actions{display:flex;gap:10px;margin-top:5px;}
+.profile-panel-title-name{font-size:12px;color:#7a4828;font-weight:600;}
+.profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;}
+.profile-panel-sub-actions{display:flex;flex-wrap:wrap;gap:8px 10px;margin-top:5px;}
 .profile-panel-sub-actions button{font-size:12px;color:#8c7a6b;background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
 .profile-panel-sub-actions button:hover{color:#5a3418;}
 .profile-admin-link{display:block;text-align:center;margin:0 0 14px;padding:9px;background:#7a4828;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
@@ -3771,8 +3773,29 @@ body.sheet-open{
 .profile-rep-cancel-btn{font-size:13px;padding:5px 14px;background:none;color:var(--muted);border:1px solid var(--border,#e8e4dc);border-radius:8px;cursor:pointer;}
 .profile-rep-cancel-btn:hover{background:#f5f0e8;}
 .profile-char-emoji-fallback{font-size:22px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
-/* 캐릭터+도감+업적 묶음 — 사이 간격 축소 */
-.profile-char-section+.profile-codex-section,.profile-codex-section+.profile-ach-section{margin-top:6px;}
+/* 칭호 섹션 */
+.profile-title-section{margin-top:14px;}
+.profile-title-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.profile-title-count{font-size:11px;color:var(--muted);font-weight:400;}
+.profile-title-toggle-btn{margin-left:auto;font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;}
+.profile-title-body{padding:4px 0 6px;}
+.profile-title-body.is-hidden{display:none;}
+.profile-title-empty{font-size:12px;color:var(--muted);margin:4px 0 8px;}
+.profile-title-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:4px 0 6px;}
+.profile-title-card{border-radius:8px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 7px;gap:3px;cursor:pointer;}
+.profile-title-card.is-locked{opacity:0.4;cursor:default;}
+.profile-title-card.is-rep{border:2px solid #7a4828;box-shadow:0 0 0 1px #7a4828;}
+.profile-title-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
+.profile-title-emoji{font-size:22px;line-height:1;}
+.profile-title-name{font-size:10px;line-height:1.3;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
+.profile-title-rarity{font-size:9px;font-weight:700;}
+.profile-title-action-row{display:flex;gap:8px;margin-top:8px;justify-content:flex-end;}
+.profile-title-change-btn{font-size:13px;padding:5px 16px;background:#7a4828;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;}
+.profile-title-change-btn:hover{background:#5a3418;}
+.profile-title-cancel-btn{font-size:13px;padding:5px 14px;background:none;color:var(--muted);border:1px solid var(--border,#e8e4dc);border-radius:8px;cursor:pointer;}
+.profile-title-cancel-btn:hover{background:#f5f0e8;}
+/* 캐릭터+칭호+업적+도감 묶음 — 사이 간격 축소 */
+.profile-char-section+.profile-title-section,.profile-title-section+.profile-ach-section,.profile-char-section+.profile-codex-section,.profile-codex-section+.profile-ach-section{margin-top:6px;}
 .profile-rep-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;margin-top:6px;}
 .profile-rep-label{font-size:12px;font-weight:700;color:#7a4828;flex-shrink:0;}
 .profile-rep-select{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:4px 8px;background:var(--card-bg,#faf9f5);color:var(--text);flex:1;min-width:0;}

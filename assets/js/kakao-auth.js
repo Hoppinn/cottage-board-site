@@ -260,6 +260,12 @@ async function openProfilePanel() {
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getRepAchievement?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
   ]);
+  // 칭호 섹션: stats.profile.rep_title_id + visit_count 확정 후 별도 await (SQL 미실행 시 rep_title_id=undefined → null 처리)
+  const _repTitleId = stats?.profile?.rep_title_id || null;
+  const _visitCount = stats?.profile?.visit_count || 0;
+  const _titleResult = await (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount) || Promise.resolve({ html: '', earnedIds: new Set() })).catch(() => ({ html: '', earnedIds: new Set() }));
+  const titleHtml = _titleResult?.html || '';
+  const _earnedTitleIds = _titleResult?.earnedIds || new Set();
   // seen 처리는 알림 섹션을 펼칠 때로 이동 (아래 toggle 핸들러)
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
   const fmtShort = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
@@ -473,8 +479,8 @@ async function openProfilePanel() {
   })();
 
   // ── 서브시트 콘텐츠 변수 (4축) ───────────────────────────────
-  // 성장 보드: 캐릭터 → 업적 → 게임 도감 순
-  const _growthInnerHtml = `${charHtml}${achHtml}${codexHtml}`;
+  // 성장 보드: 캐릭터 → 칭호 → 업적 → 게임 도감 순
+  const _growthInnerHtml = `${charHtml}${titleHtml}${achHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
   // 홈페이지 이용 기록: 통계 + 플레이한 게임 + 코멘트
@@ -501,14 +507,24 @@ async function openProfilePanel() {
     : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`;
   const _repLabel = repData?.name ? escH(repData.name) : '대표 캐릭터 없음';
   const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
+  // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
+  const _validRepTitle = (_repTitleId && _earnedTitleIds.has(_repTitleId))
+    ? (window.CottageAchievements?.getTitleById?.(_repTitleId) || null)
+    : null;
+  const _titleLineHtml = _validRepTitle
+    ? `<span class="profile-panel-title-name">${_validRepTitle.emoji} ${escH(_validRepTitle.name)}</span>`
+    : `<span class="profile-panel-title-name is-empty">칭호 없음</span>`;
+  const _titleBtnLabel = _validRepTitle ? '대표 칭호 변경' : '대표 칭호 설정하기';
   body.innerHTML = `
     <div class="profile-panel-profile">
       ${_repImgHtml}
       <div class="profile-panel-profile-info">
         <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
         <span class="profile-panel-rep-name">${_repLabel}</span>
+        ${_titleLineHtml}
         <div class="profile-panel-sub-actions">
           <button class="profile-panel-rep-btn" type="button">${_repBtnLabel}</button>
+          <button class="profile-panel-title-btn" type="button">${_titleBtnLabel}</button>
           <button class="profile-panel-nick-btn" type="button">닉네임 변경</button>
         </div>
       </div>
@@ -671,6 +687,48 @@ async function openProfilePanel() {
         charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
       });
     }
+    // ── 칭호 섹션 ──
+    const _titleBody = subBody.querySelector('.profile-title-body');
+    if (_titleBody) {
+      _titleBody.querySelectorAll('.profile-title-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const earned = card.dataset.earned === 'true';
+          if (!earned) return; // 미획득 카드: 클릭 허용이지만 선택/저장 없음
+          const titleId = card.dataset.titleId || '';
+          const actionRow = _titleBody.querySelector('#profileTitleActionRow');
+          const origRepId = actionRow?.dataset.origRepId || '';
+          _titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
+          if (titleId !== origRepId) card.classList.add('is-selected');
+          if (actionRow) actionRow.style.display = titleId !== origRepId ? 'flex' : 'none';
+        });
+      });
+      _titleBody.querySelector('.profile-title-change-btn')?.addEventListener('click', () => {
+        const actionRow = _titleBody.querySelector('#profileTitleActionRow');
+        const userId = actionRow?.dataset.userId || '';
+        const origRepId = actionRow?.dataset.origRepId || '';
+        const selectedCard = _titleBody.querySelector('.profile-title-card.is-selected');
+        // earned 방어: is-selected는 earned 카드에만 설정되므로 data-earned 추가 확인
+        if (selectedCard?.dataset.earned !== 'true') return;
+        const titleId = selectedCard?.dataset.titleId || '';
+        if (titleId && userId) window.CottageAchievements?.handleRepTitleSelect?.(userId, titleId, origRepId, _titleBody);
+      });
+      _titleBody.querySelector('.profile-title-cancel-btn')?.addEventListener('click', () => {
+        const actionRow = _titleBody.querySelector('#profileTitleActionRow');
+        const origRepId = actionRow?.dataset.origRepId || '';
+        _titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
+        if (origRepId) _titleBody.querySelector(`.profile-title-card[data-title-id="${origRepId}"]`)?.classList.add('is-rep');
+        if (actionRow) actionRow.style.display = 'none';
+      });
+    }
+    const titleToggleBtn = subBody.querySelector('.profile-title-toggle-btn');
+    if (titleToggleBtn) {
+      const titleBody = subBody.querySelector('.profile-title-body');
+      titleToggleBtn.addEventListener('click', () => {
+        const hidden = titleBody.classList.toggle('is-hidden');
+        titleToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+      });
+    }
+
     const codexToggleBtn = subBody.querySelector('.profile-codex-toggle-btn');
     if (codexToggleBtn) {
       codexToggleBtn.addEventListener('click', () => {
@@ -805,6 +863,7 @@ async function openProfilePanel() {
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
   body.querySelector('.profile-panel-avatar')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
   body.querySelector('.profile-panel-rep-btn')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
+  body.querySelector('.profile-panel-title-btn')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody)));
   body.querySelector('.profile-panel-nick-btn')?.addEventListener('click', () => promptNicknameChange());
 }
 
