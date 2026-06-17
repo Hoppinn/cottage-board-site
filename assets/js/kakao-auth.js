@@ -633,6 +633,59 @@ async function openProfilePanel() {
     }
   }
 
+  // ── 성장 보드 afterRender (expandChar=true 시 내 캐릭터 기본 펼침) ──
+  function _afterGrowthRender(subBody, expandChar = false) {
+    subBody.querySelectorAll('.profile-rep-select').forEach(sel => {
+      sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
+    });
+    const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
+    if (charToggleBtn) {
+      const charBody = subBody.querySelector('.profile-char-body');
+      if (expandChar) {
+        charBody?.classList.remove('is-hidden');
+        charToggleBtn.textContent = '접기 ▴';
+      }
+      charToggleBtn.addEventListener('click', () => {
+        const hidden = charBody.classList.toggle('is-hidden');
+        charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+      });
+    }
+    const codexToggleBtn = subBody.querySelector('.profile-codex-toggle-btn');
+    if (codexToggleBtn) {
+      codexToggleBtn.addEventListener('click', () => {
+        const codexBody = subBody.querySelector('.profile-codex-body');
+        const hidden = codexBody.classList.toggle('is-hidden');
+        codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+      });
+    }
+    const achToggleBtn = subBody.querySelector('.profile-ach-toggle-btn');
+    if (achToggleBtn) {
+      achToggleBtn.addEventListener('click', () => {
+        const list = subBody.querySelector('.profile-ach-list');
+        const hidden = list.classList.toggle('is-hidden');
+        achToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+      });
+    }
+    subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrap = btn.previousElementSibling;
+        const isHidden = wrap.classList.toggle('is-hidden');
+        btn.textContent = isHidden
+          ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
+          : '접기 ▴';
+      });
+    });
+    subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+        const isHidden = wrap.classList.toggle('is-hidden');
+        btn.textContent = isHidden
+          ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
+          : '접기';
+      });
+    });
+  }
+
   // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
   body.querySelectorAll('.profile-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -662,56 +715,14 @@ async function openProfilePanel() {
         });
 
       } else if (type === 'growth') {
-        _openSubSheet('성장 보드', _growthInnerHtml, subBody => {
-          subBody.querySelectorAll('.profile-rep-select').forEach(sel => {
-            sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
-          });
-          const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
-          if (charToggleBtn) {
-            charToggleBtn.addEventListener('click', () => {
-              const charBody = subBody.querySelector('.profile-char-body');
-              const hidden = charBody.classList.toggle('is-hidden');
-              charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-            });
-          }
-          const codexToggleBtn = subBody.querySelector('.profile-codex-toggle-btn');
-          if (codexToggleBtn) {
-            codexToggleBtn.addEventListener('click', () => {
-              const codexBody = subBody.querySelector('.profile-codex-body');
-              const hidden = codexBody.classList.toggle('is-hidden');
-              codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-            });
-          }
-          const achToggleBtn = subBody.querySelector('.profile-ach-toggle-btn');
-          if (achToggleBtn) {
-            achToggleBtn.addEventListener('click', () => {
-              const list = subBody.querySelector('.profile-ach-list');
-              const hidden = list.classList.toggle('is-hidden');
-              achToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-            });
-          }
-          subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const wrap = btn.previousElementSibling;
-              const isHidden = wrap.classList.toggle('is-hidden');
-              btn.textContent = isHidden
-                ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
-                : '접기 ▴';
-            });
-          });
-          subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
-              const isHidden = wrap.classList.toggle('is-hidden');
-              btn.textContent = isHidden
-                ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
-                : '접기';
-            });
-          });
-        }); // end growth afterRender
+        _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody));
 
       } else if (type === 'voucher') {
         _openSubSheet('음료교환권', _voucherInnerHtml, subBody => {
+          // 기본 펼침
+          subBody.querySelector('#profileVoucherInner')?.classList.remove('is-collapsed');
+          const _va = subBody.querySelector('.profile-voucher-toggle .profile-toggle-arrow');
+          if (_va) _va.textContent = '▴';
           subBody.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
             const inner = subBody.querySelector('#profileVoucherInner');
             const arrow = this.querySelector('.profile-toggle-arrow');
@@ -723,6 +734,10 @@ async function openProfilePanel() {
 
       } else if (type === 'usage') {
         _openSubSheet('이용 기록', _usageInnerHtml, subBody => {
+          // 통계 기본 펼침
+          subBody.querySelector('.profile-panel-stats')?.classList.remove('is-collapsed');
+          const _sa = subBody.querySelector('.profile-stats-toggle .profile-toggle-arrow');
+          if (_sa) _sa.textContent = '▴';
           subBody.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
             const list = subBody.querySelector('.profile-panel-stats');
             const arrow = this.querySelector('.profile-toggle-arrow');
@@ -752,8 +767,8 @@ async function openProfilePanel() {
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar')?.addEventListener('click', () => body.querySelector('[data-subsheet="growth"]')?.click());
-  body.querySelector('.profile-panel-rep-btn')?.addEventListener('click', () => body.querySelector('[data-subsheet="growth"]')?.click());
+  body.querySelector('.profile-panel-avatar')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
+  body.querySelector('.profile-panel-rep-btn')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
   body.querySelector('.profile-panel-nick-btn')?.addEventListener('click', () => promptNicknameChange());
 }
 
