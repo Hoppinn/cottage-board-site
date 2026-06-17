@@ -324,7 +324,8 @@ async function openProfilePanel() {
     return '';
   }).join('');
   const _notifMore = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
-  const _notifConfirmBtn = _newCount > 0 ? `<li class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 확인</button></li>` : '';
+  const _notifHasItems = notifs.length > 0 || !voucherSeen;
+  const _notifConfirmBtn = _notifHasItems ? `<li class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 확인</button></li>` : '';
   const _notifInnerHtml = `<ul class="profile-notif-list">${voucherItemHtml}${_notifItems}${_notifMore}${_notifConfirmBtn}</ul>`;
 
   function _buildVoucherInner(bal, prods, hist) {
@@ -585,9 +586,33 @@ async function openProfilePanel() {
 
   // ── 성장 보드 afterRender (expandChar=true 시 내 캐릭터 기본 펼침) ──
   function _afterGrowthRender(subBody, expandChar = false) {
-    subBody.querySelectorAll('.profile-rep-select').forEach(sel => {
-      sel.addEventListener('change', () => window.CottageAchievements?.handleRepSelect(sel));
-    });
+    const _charBody = subBody.querySelector('.profile-char-body');
+    if (_charBody) {
+      _charBody.querySelectorAll('.profile-char-card:not(.is-locked)').forEach(card => {
+        card.addEventListener('click', () => {
+          const achId = card.dataset.achId || '';
+          const actionRow = _charBody.querySelector('#profileRepActionRow');
+          const origRepId = actionRow?.dataset.origRepId || '';
+          _charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
+          if (achId !== origRepId) card.classList.add('is-selected');
+          if (actionRow) actionRow.style.display = achId !== origRepId ? 'flex' : 'none';
+        });
+      });
+      _charBody.querySelector('.profile-rep-change-btn')?.addEventListener('click', () => {
+        const actionRow = _charBody.querySelector('#profileRepActionRow');
+        const userId = actionRow?.dataset.userId || '';
+        const origRepId = actionRow?.dataset.origRepId || '';
+        const selectedCard = _charBody.querySelector('.profile-char-card.is-selected');
+        const achId = selectedCard?.dataset.achId || '';
+        if (achId && userId) window.CottageAchievements?.handleRepCardSelect(userId, achId, origRepId, _charBody);
+      });
+      _charBody.querySelector('.profile-rep-cancel-btn')?.addEventListener('click', () => {
+        const actionRow = _charBody.querySelector('#profileRepActionRow');
+        const origRepId = actionRow?.dataset.origRepId || '';
+        _charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
+        if (actionRow) actionRow.style.display = 'none';
+      });
+    }
     const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
     if (charToggleBtn) {
       const charBody = subBody.querySelector('.profile-char-body');
@@ -659,6 +684,7 @@ async function openProfilePanel() {
               el.querySelector('.profile-voucher-confirm')?.remove();
             });
             this.closest('.profile-notif-confirm-row')?.remove();
+            _updateNotifBadge();
           });
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));

@@ -3570,7 +3570,7 @@ body.sheet-open{
 
 /* 내 활동 프로필 패널 */
 .profile-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9100;display:flex;align-items:flex-end;justify-content:center;}
-.profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:24px 20px 32px;max-height:92vh;overflow-y:auto;margin:0 10px 16px;}
+.profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:24px 20px 32px;min-height:calc(100vh - 96px);max-height:92vh;overflow-y:auto;margin:0 10px 16px;}
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .profile-panel-title{font-size:16px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
@@ -3759,6 +3759,14 @@ body.sheet-open{
 .profile-char-card{aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;align-items:center;justify-content:center;padding:6px;}
 .profile-char-card img{width:100%;height:100%;object-fit:contain;}
 .profile-char-card.is-locked img{filter:grayscale(1) opacity(0.3);}
+.profile-char-card:not(.is-locked){cursor:pointer;}
+.profile-char-card.is-rep{border:2px solid #7a4828;box-shadow:0 0 0 1px #7a4828;}
+.profile-char-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
+.profile-rep-action-row{display:flex;gap:8px;margin-top:8px;justify-content:flex-end;}
+.profile-rep-change-btn{font-size:13px;font-weight:700;padding:5px 14px;background:#7a4828;color:#fff;border:none;border-radius:8px;cursor:pointer;}
+.profile-rep-change-btn:hover{background:#5a3418;}
+.profile-rep-cancel-btn{font-size:13px;padding:5px 14px;background:none;color:var(--muted);border:1px solid var(--border,#e8e4dc);border-radius:8px;cursor:pointer;}
+.profile-rep-cancel-btn:hover{background:#f5f0e8;}
 .profile-char-emoji-fallback{font-size:22px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
 /* 캐릭터+도감+업적 묶음 — 사이 간격 축소 */
 .profile-char-section+.profile-codex-section,.profile-codex-section+.profile-ach-section{margin-top:6px;}

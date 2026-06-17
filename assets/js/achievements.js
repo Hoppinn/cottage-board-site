@@ -223,29 +223,27 @@
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
 
-    // 17종 전체 그리드 — 획득: 컬러, 미획득: grayscale
+    // 17종 전체 그리드 — 획득: 컬러(is-rep=현재대표), 미획득: grayscale+disabled
     const gridCards = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
+      const isRep = repAch?.id === def.id;
       const imgSrc = `/assets/images/characters/characters_basic/${def.id}.png`;
-      return `<div class="profile-char-card${done ? '' : ' is-locked'}" title="${def.name}">` +
+      let cls = 'profile-char-card';
+      if (!done) cls += ' is-locked';
+      if (isRep) cls += ' is-rep';
+      const dataAttr = done ? ` data-ach-id="${def.id}"` : '';
+      const disabledAttr = done ? '' : ' disabled';
+      return `<button class="${cls}" title="${def.name}" type="button"${dataAttr}${disabledAttr}>` +
         `<img src="${imgSrc}" alt="${def.name}" ` +
         `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">` +
         `<span class="profile-char-emoji-fallback" style="display:none">${def.emoji}</span>` +
-        `</div>`;
+        `</button>`;
     }).join('');
 
-    const repOptions = ACH_DEFS
-      .filter(def => earnedIds.has(def.id))
-      .map(def => `<option value="${def.id}" ${repAch?.id === def.id ? 'selected' : ''}>${def.emoji} ${def.name}</option>`)
-      .join('');
-
-    const repRowHtml = earnedCount
-      ? `<div class="profile-rep-row">
-          <span class="profile-rep-label">⭐ 대표</span>
-          <select class="profile-rep-select" data-user-id="${userId}" data-prev-value="${repAch?.id || ''}">
-            <option value="">미설정</option>
-            ${repOptions}
-          </select>
+    const repActionHtml = earnedCount
+      ? `<div class="profile-rep-action-row" id="profileRepActionRow" data-user-id="${userId}" data-orig-rep-id="${repAch?.id || ''}" style="display:none">
+          <button class="profile-rep-change-btn" type="button">변경</button>
+          <button class="profile-rep-cancel-btn" type="button">취소</button>
         </div>`
       : '';
 
@@ -261,7 +259,7 @@
       <div class="profile-char-body is-hidden">
         ${emptyHint}
         <div class="profile-char-grid">${gridCards}</div>
-        ${repRowHtml}
+        ${repActionHtml}
       </div>
     </div>`;
   }
@@ -313,26 +311,23 @@
       `</div>`;
   }
 
-  // 대표 캐릭터 변경 이벤트 — 패널 내 select에서 호출
-  async function handleRepSelect(select) {
-    const userId = select.dataset.userId;
-    const achId = select.value || null;
+  // 대표 캐릭터 변경 — 카드 클릭 UI에서 호출 (setRepAchievement 흐름 재사용)
+  async function handleRepCardSelect(userId, achId, origId, charBody) {
     if (!userId) return;
-    const prev = select.dataset.prevValue ?? '';
-    select.dataset.prevValue = select.value;
-    const ok = await window.CottageDB?.setRepAchievement(userId, achId);
+    const ok = await window.CottageDB?.setRepAchievement(userId, achId || null);
     if (ok === false) {
       console.warn('[CottageAchievements] 대표 캐릭터 저장 실패');
-      select.value = prev;
-      select.dataset.prevValue = prev;
+      charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
+      if (origId) charBody.querySelector(`.profile-char-card[data-ach-id="${origId}"]`)?.classList.add('is-selected');
     } else {
-      select.style.borderColor = '#4caf50';
-      setTimeout(() => { select.style.borderColor = ''; }, 800);
-      const repCharEl = document.getElementById('menuUserCardRepChar');
-      if (repCharEl) {
-        if (achId) { repCharEl.src = `/assets/images/characters/characters_basic/${achId}.png`; repCharEl.style.display = ''; }
-        else repCharEl.style.display = 'none';
-      }
+      // 성공: is-rep 이동, is-selected 제거, 변경/취소 버튼 숨김
+      charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-rep', 'is-selected'));
+      if (achId) charBody.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.classList.add('is-rep');
+      const actionRow = charBody.querySelector('#profileRepActionRow');
+      if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = achId || ''; }
+      // 패널 상단 아바타 갱신
+      const panelAvatar = document.querySelector('#profilePanel .profile-panel-avatar');
+      if (panelAvatar && achId) panelAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
     }
   }
 
@@ -341,7 +336,7 @@
     buildCodexSection,
     buildCharacterSection,
     buildAchievementsSection,
-    handleRepSelect,
+    handleRepCardSelect,
   };
 
   // supabase-client.js에서 호출하는 전역 함수

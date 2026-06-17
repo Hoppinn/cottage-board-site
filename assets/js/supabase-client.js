@@ -980,7 +980,7 @@ window._cottageSess = (function () {
           const names = (r.player_names || '').split(',').map(n => n.trim());
           if (names.some(n => n.toLowerCase() === nickname.toLowerCase())) {
             const date = r.played_at || r.created_at.slice(0, 10);
-            const isNew = notifSeenAt ? r.created_at > notifSeenAt : false;
+            const isNew = notifSeenAt ? r.created_at > notifSeenAt : true;
             notifs.push({ type: 'tagged', gameId: r.game_id, groupName: r.group_name, date, isNew });
           }
         }
@@ -994,12 +994,12 @@ window._cottageSess = (function () {
           .order('created_at', { ascending: false })
           .limit(20);
         for (const c of recentComments || []) {
-          const isNew = notifSeenAt ? c.created_at > notifSeenAt : false;
+          const isNew = notifSeenAt ? c.created_at > notifSeenAt : true;
           notifs.push({ type: 'curious_comment', gameKey: c.game_key, commenter: c.nickname, date: c.created_at, isNew });
         }
       }
       for (const r of purchasedRes.data || []) {
-        const isNew = notifSeenAt ? r.purchased_at > notifSeenAt.slice(0, 10) : false;
+        const isNew = notifSeenAt ? r.purchased_at > notifSeenAt.slice(0, 10) : true;
         notifs.push({ type: 'purchased', gameName: r.game_name, date: r.purchased_at, isNew });
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
