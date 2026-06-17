@@ -327,9 +327,11 @@
             <thead><tr><th>닉네임</th><th>내역</th><th>장수</th><th>잔액</th><th>시각</th></tr></thead>
             <tbody>${voucherRows.map(r => {
               const isGrant = r.delta > 0;
+              const _vDisp = { '생수': '생수 2개', '곤약젤리': '곤약젤리 2개' };
+              const _vn = r.voucher_products?.name || '';
               const label = isGrant
                 ? (r.reason === 'first_play' ? '첫 기록 보상' : r.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
-                : escH(r.voucher_products?.name || '사용');
+                : escH(_vDisp[_vn] || _vn || '사용');
               const deltaStr = (isGrant ? '+' : '') + r.delta + '장';
               return `<tr style="color:${isGrant?'#2e7d32':'inherit'}">
                 <td>${escH(nick(r.user_id))}</td>

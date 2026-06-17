@@ -105,6 +105,7 @@ function initKakaoAuth() {
       logoutIconBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`;
       logoutIconBtn.addEventListener('click', e => { e.stopPropagation(); kakaoLogout(); });
       loginArea.appendChild(logoutIconBtn);
+      if (getKakaoUser()) logoutIconBtn.classList.add('is-visible');
     }
   }
 
@@ -333,12 +334,14 @@ async function openProfilePanel() {
       const d = new Date(iso);
       return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
     };
-    // 상품명 → 이모지 (상품명 변경 시 여기도 함께 수정)
+    // 상품명 → 이모지 / 표시명 오버라이드 (DB 이름 변경 없이 표시명만 수정)
     const VOUCHER_EMOJI = { '음료': '🥤', '생수': '💧', '곤약젤리': '🍮', '스니커즈': '🍫', '참크래커': '🍘', '예감': '🥨', '홈런볼': '⚾', '버터와플': '🧇', '카스타드': '🧁', '촉촉한초코칩': '🍪' };
+    const VOUCHER_DISPLAY_NAME = { '생수': '생수 2개', '곤약젤리': '곤약젤리 2개' };
     const productHtml = prods.map(p => {
       const dis = bal < p.cost ? ' disabled' : '';
       const emoji = VOUCHER_EMOJI[p.name] || '';
-      return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(p.name)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(p.name)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
+      const dispName = VOUCHER_DISPLAY_NAME[p.name] || p.name;
+      return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(dispName)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(dispName)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
     }).join('');
     const histHtml = hist.slice(0, 5).map((h, i, arr) => {
       const isGrant = h.delta > 0;
