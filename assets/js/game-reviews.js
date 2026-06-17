@@ -676,6 +676,22 @@
   }
 
   function renderGroupView(data, user) {
+    // 전체 기록 기준 game_id별 날짜순 누적 플레이 순서 계산
+    const _orderMap = new Map();
+    {
+      const _cnt = {};
+      [...data]
+        .sort((a, b) => {
+          const da = a.played_at || (a.created_at || '').slice(0, 10);
+          const db = b.played_at || (b.created_at || '').slice(0, 10);
+          return da < db ? -1 : da > db ? 1 : 0;
+        })
+        .forEach(r => {
+          if (!r.game_id) return;
+          _cnt[r.game_id] = (_cnt[r.game_id] || 0) + 1;
+          _orderMap.set(r.id, _cnt[r.game_id]);
+        });
+    }
     // group_name → date → records[]
     const groups = new Map();
     for (const r of data) {
@@ -718,7 +734,7 @@
             <span class="pr-sub-summary">${escH(summaryText)}</span>
             <span class="pr-sub-arrow">▾</span>
           </button>
-          <div class="pr-sub-body">${buildSessionBody(recs, user)}</div>
+          <div class="pr-sub-body">${buildSessionBody(recs, user, _orderMap)}</div>
         </div>`;
       };
 
@@ -769,7 +785,7 @@
     return html;
   }
 
-  function buildSessionBody(recs, user) {
+  function buildSessionBody(recs, user, orderMap = new Map()) {
     // 참여자(인원+이름) 기준으로 묶기
     const playerGroups = new Map();
     for (const r of recs) {
@@ -814,7 +830,7 @@
           <div class="pr-rec-row-top">
             ${thumbHtml}
             <div class="pr-rec-main">
-              <span class="pr-rec-game">${escH(getGameName(r.game_id))}</span>
+              <span class="pr-rec-game">${escH(getGameName(r.game_id))}${orderMap.get(r.id) >= 2 ? `<span class="pr-play-order"> (${orderMap.get(r.id)}번째 플레이)</span>` : ''}</span>
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>

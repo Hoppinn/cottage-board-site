@@ -291,9 +291,27 @@ async function openProfilePanel() {
     </ul>`;
   }
 
+  // game_id별 날짜순 누적 플레이 순서 계산 (표시용)
+  const _playOrderMap = new Map();
+  {
+    const _cnt = {};
+    [...stats.plays]
+      .sort((a, b) => {
+        const da = a.played_at || (a.created_at || '').slice(0, 10);
+        const db = b.played_at || (b.created_at || '').slice(0, 10);
+        return da < db ? -1 : da > db ? 1 : 0;
+      })
+      .forEach(r => {
+        if (!r.game_id) return;
+        _cnt[r.game_id] = (_cnt[r.game_id] || 0) + 1;
+        _playOrderMap.set(r.id, _cnt[r.game_id]);
+      });
+  }
   const playListHtml = buildActivityList(stats.plays, r => {
     const date = r.played_at || (r.created_at||'').slice(0,10);
-    return `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(date)}</span></li>`;
+    const pn = _playOrderMap.get(r.id);
+    const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
+    return `<li>${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(date)}</span></li>`;
   });
 
   const commentListHtml = buildActivityList(stats.comments, r =>
@@ -541,7 +559,13 @@ async function openProfilePanel() {
       voucherItem.querySelector('.profile-voucher-confirm')?.remove();
     }
     const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
-    if (remaining === 0) body.querySelector('.profile-card[data-subsheet="notif"]')?.classList.remove('has-badge');
+    if (remaining === 0) {
+      const _nc = body.querySelector('.profile-card[data-subsheet="notif"]');
+      _nc?.classList.remove('has-badge');
+      const _nl = _nc?.querySelector('.profile-card-label');
+      if (_nl) _nl.textContent = '최근 알림';
+    }
+    _updateNotifBadge();
   }
 
   // ── _bindVoucher (컨테이너 파라미터화, 기본값 = body) ────────
@@ -673,7 +697,8 @@ async function openProfilePanel() {
       const type = card.dataset.subsheet;
 
       if (type === 'notif') {
-        _openSubSheet('최근 알림', _notifInnerHtml, subBody => {
+        const _notifTitle = _newCount > 0 ? `최근 알림 <span class="profile-subsheet-badge">${_newCount}건</span>` : '최근 알림';
+        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => {
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', function() {
             if (window._cottageSess) {
               const _s = window._cottageSess.get(String(user.id));
@@ -682,7 +707,10 @@ async function openProfilePanel() {
               window._cottageSess.set(String(user.id), _s);
             }
             document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-            body.querySelector('.profile-card[data-subsheet="notif"]')?.classList.remove('has-badge');
+            const _nc = body.querySelector('.profile-card[data-subsheet="notif"]');
+            _nc?.classList.remove('has-badge');
+            const _nl = _nc?.querySelector('.profile-card-label');
+            if (_nl) _nl.textContent = '최근 알림';
             const list = subBody.querySelector('.profile-notif-list');
             list?.querySelectorAll('.is-new').forEach(el => {
               el.classList.remove('is-new');
