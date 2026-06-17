@@ -50,8 +50,8 @@
   - point_rewards 테이블: 업적 달성 시 pending 생성 → 관리자 승인 → points_log 반영
   - 관리자 포인트 승인 패널: 근거 보기(플레이/게임/사진/별점), 승인/거절 버튼
   - 캐릭터 섹션 빈 상태 안내 문구 표시 (업적 0개여도 섹션 보임)
-  - 캐릭터 픽셀아트 이미지 47종 분리 완료 → assets/images/characters/split/ (scripts/split-characters.js, 배경제거 소스 기반)
-  - 캐릭터 배지 PNG 연동 완료 (achievements.js buildCharacterSection, /assets/images/characters/{id}.png, onerror 이모지 fallback)
+  - 캐릭터 픽셀아트 이미지 47종 → assets/images/characters/characters_basic/{id}.png
+  - 캐릭터 배지 PNG 연동 완료 (achievements.js, characters_basic/ 경로, onerror 이모지 fallback)
   - ⚠️ SQL 미실행 확인 필요: docs/migrations/000_schema.sql — Supabase 대시보드에서 실행 후 RLS 정책 포함 적용 확인
 - [x] 게임 바텀시트 3섹션 (게임평/플레이기록/사진) 완성
   - 사진 독립 3번째 섹션 추가 (미리보기 3장 + 전체보기 9장)

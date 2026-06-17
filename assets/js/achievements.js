@@ -198,7 +198,7 @@
 
     const chars = achievements.length
       ? achievements.map(a => {
-          const imgSrc = `/assets/images/characters/${a.id}.png`;
+          const imgSrc = `/assets/images/characters/characters_basic/${a.id}.png`;
           return `<span class="profile-char-badge" title="${a.name}">` +
             `<img class="profile-char-img" src="${imgSrc}" alt="${a.name}" ` +
             `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
@@ -273,7 +273,7 @@
     const items = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
-      const imgSrc = `/assets/images/characters/${def.id}.png`;
+      const imgSrc = `/assets/images/characters/characters_basic/${def.id}.png`;
       const typeLabel = TYPE_LABELS[def.type] || def.type;
       if (done) {
         return `<li class="profile-ach-item is-achieved">` +
@@ -315,7 +315,7 @@
       setTimeout(() => { select.style.borderColor = ''; }, 800);
       const repCharEl = document.getElementById('menuUserCardRepChar');
       if (repCharEl) {
-        if (achId) { repCharEl.src = `/assets/images/characters/${achId}.png`; repCharEl.style.display = ''; }
+        if (achId) { repCharEl.src = `/assets/images/characters/characters_basic/${achId}.png`; repCharEl.style.display = ''; }
         else repCharEl.style.display = 'none';
       }
     }
