@@ -521,8 +521,8 @@ async function openProfilePanel() {
   })();
 
   // ── 서브시트 콘텐츠 변수 (4축) ───────────────────────────────
-  // 성장 보드: 캐릭터 → 칭호 → 업적 → 게임 도감 순
-  const _growthInnerHtml = `${charHtml}${titleHtml}${achHtml}${codexHtml}`;
+  // 성장 보드: 업적 → 캐릭터 → 칭호 → 게임 도감 순
+  const _growthInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
   // 홈페이지 이용 기록: 통계 + 플레이한 게임 + 코멘트
