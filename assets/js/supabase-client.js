@@ -599,6 +599,22 @@ window._cottageSess = (function () {
     } catch (_) { return false; }
   }
 
+  async function getUserLikedGames(userId) {
+    if (!userId) return [];
+    try {
+      const { data } = await db.from('game_likes').select('game_id').eq('user_id', userId);
+      return (data || []).map(r => r.game_id);
+    } catch (_) { return []; }
+  }
+
+  async function getUserCuriousGames(userId) {
+    if (!userId) return [];
+    try {
+      const { data } = await db.from('game_curious').select('game_id').eq('user_id', userId);
+      return (data || []).map(r => r.game_id);
+    } catch (_) { return []; }
+  }
+
   // ── 방문자 통계 ─────────────────────────────────────
 
   async function getVisitorStats() {
@@ -1108,6 +1124,8 @@ window._cottageSess = (function () {
     getVoucherProducts,
     redeemVoucher,
     getVoucherHistory,
+    getUserLikedGames,
+    getUserCuriousGames,
   };
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)

@@ -3580,8 +3580,9 @@ body.sheet-open{
 .profile-panel-profile-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
 .profile-panel-nick-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
 .profile-panel-nick{font-size:17px;font-weight:900;color:#5a3418;margin:0;}
-.profile-panel-notif-btn{font-size:11px;font-weight:600;color:#7a4828;background:none;border:none;padding:0;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.profile-panel-notif-btn{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#7a4828;background:none;border:none;padding:0;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .profile-panel-notif-btn:hover{text-decoration:underline;}
+.notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
 .profile-panel-rep-name{font-size:12px;color:#8c7a6b;}
 .profile-panel-title-name{font-size:12px;color:#7a4828;font-weight:600;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;}
@@ -3728,6 +3729,15 @@ body.sheet-open{
 .profile-card-grid .profile-card{flex-direction:column;align-items:flex-start;gap:4px;padding:14px 12px;min-height:90px;}
 .profile-card-grid .profile-card-icon{font-size:20px;}
 .profile-card-grid .profile-card-arrow{display:none;}
+/* 게임 목록 서브시트 */
+.profile-gamelist{list-style:none;padding:0;margin:0;}
+.profile-gamelist-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0ebe5;cursor:pointer;}
+.profile-gamelist-item:last-child{border-bottom:none;}
+.profile-gamelist-item:hover .profile-gamelist-name{text-decoration:underline;}
+.profile-gamelist-thumb{width:44px;height:44px;object-fit:contain;border-radius:5px;flex-shrink:0;background:#f5f0eb;}
+.profile-gamelist-thumb-empty{width:44px;height:44px;background:#f0ebe5;border-radius:5px;flex-shrink:0;}
+.profile-gamelist-name{font-size:13px;color:#5a3418;font-weight:500;}
+.profile-gamelist-empty{color:#b0a090;font-size:13px;text-align:center;padding:30px 0;margin:0;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;}
 .profile-subsheet-box{background:#fff;border-radius:24px 24px 18px 18px;width:100%;max-width:480px;height:calc(100vh - 48px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}

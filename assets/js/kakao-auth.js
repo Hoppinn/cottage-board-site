@@ -280,7 +280,7 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData] = await Promise.all([
+  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData, likedGameIds, curiousGameIds] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -290,6 +290,8 @@ async function openProfilePanel() {
     (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getRepAchievement?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
+    (window.CottageDB?.getUserLikedGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getUserCuriousGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
   ]);
   // 칭호 섹션: stats.profile.rep_title_id + visit_count 확정 후 별도 await (SQL 미실행 시 rep_title_id=undefined → null 처리)
   const _repTitleId = stats?.profile?.rep_title_id || null;
@@ -575,7 +577,7 @@ async function openProfilePanel() {
       <div class="profile-panel-profile-info">
         <div class="profile-panel-nick-row">
           <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
-          ${_newCount > 0 ? `<button class="profile-panel-notif-btn" data-subsheet="notif" type="button">🔔 새 알림 ${_newCount}건</button>` : ''}
+          ${_newCount > 0 ? `<button class="profile-panel-notif-btn" data-subsheet="notif" type="button"><span class="notif-red-dot"></span>🔔 새 알림 ${_newCount}건</button>` : ''}
         </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
         ${_titleLineHtml}
@@ -599,12 +601,35 @@ async function openProfilePanel() {
         <span class="profile-card-label">음료교환권</span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
       </button>
+      <button class="profile-card" data-subsheet="liked" type="button">
+        <span class="profile-card-icon">❤️</span>
+        <span class="profile-card-label">좋아하는 게임</span>
+        <span class="profile-card-summary">${likedGameIds.length}개</span>
+      </button>
+      <button class="profile-card" data-subsheet="curious" type="button">
+        <span class="profile-card-icon">🤔</span>
+        <span class="profile-card-label">해보고 싶은 게임</span>
+        <span class="profile-card-summary">${curiousGameIds.length}개</span>
+      </button>
     </div>
     <button class="profile-card profile-card--notif" data-subsheet="usage" type="button">
       <span class="profile-card-icon">📊</span>
       <span class="profile-card-label">${escH(_usageCardSummary)}</span>
       <span class="profile-card-arrow">›</span>
     </button>`;
+
+  function _buildGameListHtml(gameIds, emptyMsg) {
+    if (!gameIds.length) return `<p class="profile-gamelist-empty">${emptyMsg}</p>`;
+    return `<ul class="profile-gamelist">${gameIds.map(id => {
+      const g = window.gameData?.[id];
+      const name = g?.display || g?.titleKo || g?.titleEn || id;
+      const thumb = g?.images?.thumbnail || '';
+      return `<li class="profile-gamelist-item" data-game-key="${escH(id)}">
+        ${thumb ? `<img src="${escH(thumb)}" class="profile-gamelist-thumb" alt="">` : '<span class="profile-gamelist-thumb-empty"></span>'}
+        <span class="profile-gamelist-name">${escH(name)}</span>
+      </li>`;
+    }).join('')}</ul>`;
+  }
 
   // ── 서브시트 헬퍼 ─────────────────────────────────────────────
   function _openSubSheet(title, contentHtml, afterRender) {
@@ -877,6 +902,24 @@ async function openProfilePanel() {
           });
           _bindVoucher(subBody);
         }); // end voucher afterRender
+
+      } else if (type === 'liked') {
+        _openSubSheet('좋아하는 게임', _buildGameListHtml(likedGameIds, '좋아하는 게임을 추가해보세요'), subBody => {
+          subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
+            li.addEventListener('click', () => {
+              if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
+            });
+          });
+        });
+
+      } else if (type === 'curious') {
+        _openSubSheet('해보고 싶은 게임', _buildGameListHtml(curiousGameIds, '해보고 싶은 게임을 추가해보세요'), subBody => {
+          subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
+            li.addEventListener('click', () => {
+              if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
+            });
+          });
+        });
 
       } else if (type === 'usage') {
         _openSubSheet('이용 기록', _usageInnerHtml, subBody => {

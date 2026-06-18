@@ -70,6 +70,8 @@
 | `getVoucherProducts()` | 활성 상품 목록 (`{ id, name, cost }[]`) |
 | `redeemVoucher(userId, productId)` | 교환권 사용. 잔액 부족이면 `{ ok:false, reason:'insufficient' }`. 성공 시 `{ ok:true }` |
 | `getVoucherHistory(userId, limit=20)` | 교환권 입출 내역. `voucher_products(name)` FK expand 포함 |
+| `getUserLikedGames(userId)` | 유저가 따봉(❤️)한 game_id 배열 반환 |
+| `getUserCuriousGames(userId)` | 유저가 궁금해요(🤔)한 game_id 배열 반환 |
 
 ---
 
