@@ -457,12 +457,17 @@ async function openProfilePanel() {
   function _safeInt(html, pattern, fallback) {
     try { const m = html.match(pattern); return m ? parseInt(m[1], 10) : fallback; } catch(e) { return fallback; }
   }
-  const _charCount   = _safeInt(charHtml,  /data-char-count="(\d+)"/,   0);
+  const _charCount   = _safeInt(charHtml,  /data-char-count="(\d+)"/,    0);
+  const _charTotal   = _safeInt(charHtml,  /data-char-total="(\d+)"/,    47);
+  const _titleCount  = _safeInt(titleHtml, /data-earned-count="(\d+)"/,  0);
+  const _titleTotal  = _safeInt(titleHtml, /data-title-total="(\d+)"/,   33);
   const _codexPlayed = _safeInt(codexHtml, /data-played-count="(\d+)"/, 0);
   const _codexTotal  = _safeInt(codexHtml, /data-total-games="(\d+)"/,  641);
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
+  const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    37);
 
-  const _growthSummary = `캐릭터 ${_charCount}/17 · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/17`;
+  const _growthSummary = `캐릭터 ${_charCount}/${_charTotal} · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/${_achTotal}`;
+  const _growthBadge = `<div class="profile-growth-badge">🌱 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 업적 ${_achCount}/${_achTotal} · 도감 ${_codexPlayed}/${_codexTotal}</div>`;
 
   const _actParts = [
     `교환권 ${voucherBalance}장`,
@@ -556,6 +561,7 @@ async function openProfilePanel() {
         <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
         <span class="profile-panel-rep-name">${_repLabel}</span>
         ${_titleLineHtml}
+        ${_growthBadge}
         <div class="profile-panel-sub-actions">
           <button class="profile-panel-rep-btn" type="button">${_repBtnLabel}</button>
           <button class="profile-panel-title-btn" type="button">${_titleBtnLabel}</button>

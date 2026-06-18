@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (106차)
+최종 갱신: 2026-06-18 (107차)
 
 ---
 
@@ -48,7 +48,7 @@
 - [x] 따봉/궁금해요 토글
 - [x] 추천 게임 인원 필터 (1~4인 정확 매칭, 단체 5인+, 개별 5~9인+)
 - [x] 업적/캐릭터/게임도감 V1
-  - achievements 테이블 (17개 초기 데이터), user_achievements, points_log 신규 생성
+  - achievements 테이블 (17개 초기 데이터 → 107차 ACH_DEFS 80개로 확장, JS 전용), user_achievements, points_log 신규 생성
   - profiles.rep_achievement_id 컬럼 추가 (대표 캐릭터 1개)
   - achievements.js: 체크 로직 + 토스트 + 내 활동 패널 렌더링
   - recordGamePlay/submitRating 성공 후 자동 업적 체크
