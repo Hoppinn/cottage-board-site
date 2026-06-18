@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (105차)
+최종 갱신: 2026-06-18 (106차)
 
 ---
 
@@ -203,6 +203,7 @@
   - [x] 1단계: DB — voucher_products/voucher_log + partial unique index (`docs/migrations/001_vouchers.sql`)
   - [x] 2단계: JS API — grantFirstPlayVoucher/getVoucherBalance/getVoucherProducts/redeemVoucher/getVoucherHistory
   - [x] 3단계: recordGamePlay 성공 후 grantFirstPlayVoucher fire-and-forget 연동
+    - 지급 성공 시 4.5초 딜레이 후 교환권 토스트 표시 + voucherNoticeSeen 자동 설정 (106차)
   - [x] 4단계: 내 활동 패널 UI — 보유 N장 + 상품 목록 + [사용하기] 버튼 + confirm + 잔액 재렌더
   - [x] 5단계: 관리자 UI — 전체 지급/사용 로그 (닉네임/내역/장수/시각), delta 기반 색상 구분
   - [x] 6단계: 로그 항목에 당시 잔액 표시 (`bal` 역산 방식, 사용자 패널 + 관리자 패널 양쪽)

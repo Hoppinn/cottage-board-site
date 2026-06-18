@@ -35,6 +35,36 @@ async function _updateNotifBadge() {
   }
 }
 
+function _showVoucherGrantToast() {
+  const user = getKakaoUser();
+  if (user?.id && window._cottageSess) {
+    const s = window._cottageSess.get(String(user.id));
+    s.voucherNoticeSeen = true;
+    window._cottageSess.set(String(user.id), s);
+  }
+  const existing = document.getElementById('voucherGrantToast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'voucherGrantToast';
+  toast.className = 'achievement-toast';
+  toast.innerHTML = `
+    <div class="achievement-toast-icon">🎫</div>
+    <div class="achievement-toast-body">
+      <div class="achievement-toast-title">음료교환권 지급!</div>
+      <div class="achievement-toast-name">교환권 1장을 받았어요</div>
+    </div>
+    <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoLoginBtn')?.click()">내 보드 →</a>
+  `;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('is-visible'));
+  setTimeout(() => {
+    toast.classList.remove('is-visible');
+    setTimeout(() => toast.remove(), 400);
+  }, 4000);
+  setTimeout(_updateNotifBadge, 200);
+}
+window._onVoucherGranted = _showVoucherGrantToast;
+
 function _restoreMenuExpanded() {
   setTimeout(() => {
     const menu = document.getElementById('mobileMenu');

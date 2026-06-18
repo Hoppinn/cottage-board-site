@@ -276,7 +276,10 @@ window._cottageSess = (function () {
         if (userId) {
           window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
           grantFirstPlayVoucher(userId).then(granted => {
-            if (granted) console.log('[voucher] 첫 플레이 기록 교환권 지급 완료');
+            if (granted) {
+              console.log('[voucher] 첫 플레이 기록 교환권 지급 완료');
+              setTimeout(() => window._onVoucherGranted?.(), 4500);
+            }
           }).catch(e => console.warn('[voucher] grantFirstPlayVoucher 오류:', e));
         }
         return { success: true, id };
