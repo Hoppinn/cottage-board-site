@@ -185,6 +185,20 @@
       localStorage.setItem(k, JSON.stringify([...set]));
     }
 
+    // 페이지 로드/로그인 시 game_request_votes DB에서 myVotes 초기화 (localStorage 의존 제거)
+    async function initMyVotesFromDB() {
+      const u = getCurrentUser();
+      if (!u?.id) return;
+      try {
+        const { data } = await getDb().from('game_request_votes').select('request_id').eq('user_id', u.id);
+        if (data) {
+          saveMyVotes(new Set(data.map(r => r.request_id)));
+          const rk = removedVoteKey();
+          if (rk) localStorage.removeItem(rk);
+        }
+      } catch (_) {}
+    }
+
     function updateAdminBadge() {
       const existing = document.querySelector('.req-admin-badge');
       if (isAdmin()) {
@@ -201,8 +215,7 @@
 
     window.addEventListener('cottage-auth-changed', () => {
       updateAdminBadge();
-      loadGameRequests();
-      loadSnackRequests();
+      initMyVotesFromDB().then(() => { loadGameRequests(); loadSnackRequests(); });
     });
     updateAdminBadge();
 
@@ -268,7 +281,6 @@
 
     // ── 게임 요청 ────────────────────────────────────────
     async function loadGameRequests() {
-      syncSubmittedToVotes(MY_GAME_KEY);
       const el = document.getElementById('gameRequestList');
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
@@ -433,7 +445,6 @@
     }
 
     async function loadSnackRequests() {
-      syncSubmittedToVotes(MY_SNACK_KEY);
       const el = document.getElementById('snackRequestList');
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
@@ -639,8 +650,7 @@
       input.addEventListener('keydown', e => { if (e.key === 'Enter') saveEdit(); if (e.key === 'Escape') li.querySelector('.req-edit-cancel').click(); });
     }
 
-    loadGameRequests();
-    loadSnackRequests();
+    initMyVotesFromDB().then(() => { loadGameRequests(); loadSnackRequests(); });
   })();
   </script>
 
