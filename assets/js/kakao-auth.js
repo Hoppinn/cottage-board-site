@@ -576,17 +576,12 @@ async function openProfilePanel() {
       ${_repImgHtml}
       <div class="profile-panel-profile-info">
         <div class="profile-panel-nick-row">
-          <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
+          <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} ✏️</button>
           ${_newCount > 0 ? `<button class="profile-panel-notif-btn" data-subsheet="notif" type="button"><span class="notif-red-dot"></span>🔔 새 알림 ${_newCount}건</button>` : ''}
         </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
-        ${_titleLineHtml}
+        <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} ▼` : '칭호 없음 ▼'}</button>
         ${_growthBadge}
-        <div class="profile-panel-sub-actions">
-          <button class="profile-panel-rep-btn" type="button">${_repBtnLabel}</button>
-          <button class="profile-panel-title-btn" type="button">${_titleBtnLabel}</button>
-          <button class="profile-panel-nick-btn" type="button">닉네임 변경</button>
-        </div>
       </div>
     </div>
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
@@ -603,18 +598,26 @@ async function openProfilePanel() {
       </button>
       <button class="profile-card" data-subsheet="liked" type="button">
         <span class="profile-card-icon">❤️</span>
-        <span class="profile-card-label">좋아하는 게임</span>
+        <span class="profile-card-label">좋아한 게임</span>
         <span class="profile-card-summary">${likedGameIds.length}개</span>
       </button>
       <button class="profile-card" data-subsheet="curious" type="button">
-        <span class="profile-card-icon">🤔</span>
-        <span class="profile-card-label">해보고 싶은 게임</span>
+        <span class="profile-card-icon">👀</span>
+        <span class="profile-card-label">관심있는 게임</span>
         <span class="profile-card-summary">${curiousGameIds.length}개</span>
+      </button>
+      <button class="profile-card profile-card--span2" data-subsheet="reviews" type="button">
+        <span class="profile-card-icon">✍️</span>
+        <span class="profile-card-label">게임평</span>
+        <span class="profile-card-summary">${stats.reviewCount}개</span>
       </button>
     </div>
     <button class="profile-card profile-card--notif" data-subsheet="usage" type="button">
       <span class="profile-card-icon">📊</span>
-      <span class="profile-card-label">${escH(_usageCardSummary)}</span>
+      <div class="profile-card-usage-info">
+        <span class="profile-card-label">내 활동</span>
+        ${_summaryParts.length ? `<span class="profile-card-usage-detail">${escH(_statsSummary)}</span>` : ''}
+      </div>
       <span class="profile-card-arrow">›</span>
     </button>`;
 
@@ -904,7 +907,7 @@ async function openProfilePanel() {
         }); // end voucher afterRender
 
       } else if (type === 'liked') {
-        _openSubSheet('좋아하는 게임', _buildGameListHtml(likedGameIds, '좋아하는 게임을 추가해보세요'), subBody => {
+        _openSubSheet('좋아한 게임', _buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요'), subBody => {
           subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
             li.addEventListener('click', () => {
               if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
@@ -913,13 +916,17 @@ async function openProfilePanel() {
         });
 
       } else if (type === 'curious') {
-        _openSubSheet('해보고 싶은 게임', _buildGameListHtml(curiousGameIds, '해보고 싶은 게임을 추가해보세요'), subBody => {
+        _openSubSheet('관심있는 게임', _buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요'), subBody => {
           subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
             li.addEventListener('click', () => {
               if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
             });
           });
         });
+
+      } else if (type === 'reviews') {
+        _openSubSheet('게임평', `<p class="profile-gamelist-empty">게임 기록 페이지에서 게임평을 남겨보세요</p>`);
+
 
       } else if (type === 'usage') {
         _openSubSheet('이용 기록', _usageInnerHtml, subBody => {
@@ -956,10 +963,9 @@ async function openProfilePanel() {
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
-  body.querySelector('.profile-panel-rep-btn')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
-  body.querySelector('.profile-panel-title-btn')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
-  body.querySelector('.profile-panel-nick-btn')?.addEventListener('click', () => promptNicknameChange());
+  body.querySelector('.profile-panel-avatar, .profile-panel-avatar--empty')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
+  body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
+  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

@@ -619,7 +619,7 @@ window._cottageSess = (function () {
 
   async function getVisitorStats() {
     try {
-      const { data } = await db.from("page_views").select("created_at");
+      const { data } = await db.from("page_views").select("created_at").eq("page", "__visitor__");
       if (!data) return null;
       // KST(UTC+9) 기준 오늘 날짜
       const kstNow = new Date(Date.now() + 9 * 3600000);
@@ -664,7 +664,11 @@ window._cottageSess = (function () {
     const visitedSourceKey = `cottage_pv_${kstDate}_${effectiveSource}_${page}`;
     if (!localStorage.getItem(visitedSourceKey)) {
       localStorage.setItem(visitedSourceKey, "1");
-      if (!localStorage.getItem(visitedKey)) localStorage.setItem(visitedKey, "1");
+      // 하루 첫 방문: 방문자 카운트용 마커 삽입 (getVisitorStats는 이것만 카운트)
+      if (!localStorage.getItem(visitedKey)) {
+        localStorage.setItem(visitedKey, "1");
+        trackPageView('__visitor__', effectiveSource === 'direct' ? null : effectiveSource);
+      }
       trackPageView(page, effectiveSource === 'direct' ? null : effectiveSource);
     }
     // 비로그인 방문자 추적 — cottage-auth-changed로 로그인 확인 후 결정
@@ -950,6 +954,7 @@ window._cottageSess = (function () {
         db.from('game_comments').select('id, game_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
+        db.from('game_reviews').select('*', { count: 'exact', head: true }).eq('user_id', userId),
       ];
       if (nickname) {
         queries.push(
@@ -960,7 +965,7 @@ window._cottageSess = (function () {
             .order('created_at', { ascending: false })
         );
       }
-      const [playRes, commentRes, suggestRes, profile, taggedRes] = await Promise.all(queries);
+      const [playRes, commentRes, suggestRes, profile, reviewRes, taggedRes] = await Promise.all(queries);
       const ownPlays = playRes.data || [];
       const taggedPlays = taggedRes?.data || [];
       // 중복 제거 후 합치기 (내 기록 우선)
@@ -980,8 +985,9 @@ window._cottageSess = (function () {
         suggestions: suggestRes.count || 0,
         moimCount: moimSessions.size,
         profile: profile.data || null,
+        reviewCount: reviewRes?.count || 0,
       };
-    } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null }; }
+    } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
   }
 
   async function getMyNotifications(userId, nickname, notifSeenAt, newGameSeenAt) {
