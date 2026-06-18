@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (96차)
+최종 갱신: 2026-06-18 (97차)
 
 ---
 
@@ -14,12 +14,7 @@
 
 **다음 작업 후보 (97차 이후, 우선순위 순)**
 
-1. **[B1] 주문됐어요 용어 정리** — Green, Plan 완료, 바로 구현 가능
-   - supabase-client.js: type `'purchased'` → `'ordered'`
-   - kakao-auth.js: 타입 체크 + 표시 문구 "구매됐어요" → "주문됐어요"
-   - DB 컬럼 `purchased_at`은 유지 (의미: 주문 시점)
-
-3. **[B2] 추가됐어요 전체 알림** — Red, Plan 완료, SQL 먼저 실행 필요
+1. **[B2] 추가됐어요 전체 알림** — Red, Plan 완료, SQL 먼저 실행 필요
    ```sql
    ALTER TABLE game_requests ADD COLUMN IF NOT EXISTS added_at DATE;
    ```
@@ -331,6 +326,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | fix: 구매희망 알림 type 'purchased'→'ordered', 표시 문구 "추가됐어요"→"주문됐어요" (97차) |
 | 2026-06-18 | fix: 투표 상태 DB 기준 초기화 — initMyVotesFromDB 도입, syncSubmittedToVotes 근본 제거. myVotes는 game_request_votes를 source of truth로 사용 (96차) |
 | 2026-06-18 | fix: 구매희망 토글 영구 -1 버그 — removedVotes localStorage set 추가, syncSubmittedToVotes에서 명시 제거된 항목 제외 처리 (95차) |
 | 2026-06-18 | feat: 업적/칭호 시스템 V2 — ACH_DEFS rewards 구조, 방문 업적 5종, hedgehog threshold 조정, 미해금 카드 진행도 표시, upsertProfile visit 트리거, getUserVisitCount API 추가 (94차) |

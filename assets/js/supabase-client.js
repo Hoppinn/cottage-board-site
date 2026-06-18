@@ -1004,7 +1004,7 @@ window._cottageSess = (function () {
       }
       for (const r of purchasedRes.data || []) {
         const isNew = notifSeenAt ? r.purchased_at > notifSeenAt.slice(0, 10) : true;
-        notifs.push({ type: 'purchased', gameName: r.game_name, date: r.purchased_at, isNew });
+        notifs.push({ type: 'ordered', gameName: r.game_name, date: r.purchased_at, isNew });
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       return notifs;
