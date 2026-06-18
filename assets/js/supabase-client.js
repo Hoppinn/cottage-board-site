@@ -274,14 +274,14 @@ window._cottageSess = (function () {
       if (!error) {
         const id = data?.[0]?.id || null;
         if (userId) {
-          window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
+          window.checkAchievements?.('record', userId, { gameId, hasPhoto: !!photoUrl });
           getUserFirstRecordCount(userId).then(frc => {
             window.checkAchievements?.('first_record', userId, { firstRecordCount: frc });
           }).catch(() => {});
           const _nick = window.getKakaoUser?.()?.nickname;
           if (_nick) {
             getUserParticipationCount(userId, _nick).then(pc => {
-              window.checkAchievements?.('participated', userId, { participationCount: pc });
+              window.checkAchievements?.('play', userId, { participationCount: pc });
             }).catch(() => {});
           }
           grantFirstPlayVoucher(userId).then(granted => {

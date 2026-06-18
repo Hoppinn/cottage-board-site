@@ -111,11 +111,12 @@ function initKakaoAuth() {
             updateLoginUI(user);
           }
         }).catch(() => {});
-        // 메뉴 프로필 이미지 → 대표 캐릭터로 교체 (rabbit_first가 기본값, rep 있으면 덮어씀)
+        // 메뉴 프로필 이미지 → 대표 캐릭터로 교체 (squirrel_lv1이 기본값, rep 있으면 덮어씀)
         window.CottageDB.getRepAchievement?.(String(user.id)).then(rep => {
           if (rep?.id) {
             const img = document.getElementById('kakaoProfileImg');
-            if (img) img.src = `/assets/images/characters/characters_basic/${rep.id}.png`;
+            const _path = window.CottageAchievements?.getCharacterPath?.(rep.id);
+            if (img && _path) img.src = _path;
           }
         }).catch(() => {});
       }
@@ -221,7 +222,7 @@ function updateLoginUI(user) {
   if (user) {
     btn.classList.add('is-logged-in');
     if (profileImg) {
-      profileImg.src = '/assets/images/characters/characters_basic/rabbit_first.png';
+      profileImg.src = '/assets/images/characters/characters_basic/squirrel_lv1.png';
       profileImg.style.display = 'inline-block';
     }
     if (loginText) loginText.textContent = user.nickname;
@@ -541,8 +542,11 @@ async function openProfilePanel() {
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
-  const _repImgHtml = repData?.id
-    ? `<img class="profile-panel-avatar" src="/assets/images/characters/characters_basic/${repData.id}.png" alt="${escH(repData.name || '')}">`
+  const _repCharPath = repData?.id
+    ? (window.CottageAchievements?.getCharacterPath?.(repData.id) || null)
+    : null;
+  const _repImgHtml = _repCharPath
+    ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(repData?.name || '')}">`
     : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`;
   const _repLabel = repData?.name ? escH(repData.name) : '대표 캐릭터 없음';
   const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
@@ -561,7 +565,7 @@ async function openProfilePanel() {
   }).catch(() => {});
   if (user.nickname) {
     window.CottageDB?.getUserParticipationCount?.(String(user.id), user.nickname).then(pc => {
-      window.checkAchievements?.('participated', String(user.id), { participationCount: pc });
+      window.checkAchievements?.('play', String(user.id), { participationCount: pc });
     }).catch(() => {});
   }
 

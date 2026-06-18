@@ -4,120 +4,119 @@
 (function () {
   const ACH_DEFS = [
     // 플레이 기록 작성 계열 — 작성자(user_id) 기준 (1→3→5→8→10→15→20→30→40→50→75→100→125→150→200→250→300→400→500)
-    { id: 'rabbit_first',  name: '기록의 시작',        emoji: '🌱', type: 'play', threshold: 1,
-      rewards: { character: 'rabbit_first', char_name: '새싹 토끼', voucher: true } },
-    { id: 'play_3',        name: '세 번의 기록',        emoji: '🐾', type: 'play', threshold: 3,   rewards: {} },
-    { id: 'play_5',        name: '다섯 번의 기록',      emoji: '🐻', type: 'play', threshold: 5,
-      rewards: { character: 'bear_10', char_name: '단골 곰' } },
-    { id: 'play_8',        name: '코티지의 밤',         emoji: '🌙', type: 'play', threshold: 8,
+    { id: 'record_1',   name: '기록의 시작',        emoji: '🌱', type: 'record', threshold: 1,
+      rewards: { character: 'squirrel_lv1', char_name: '새싹 다람쥐', voucher: true } },
+    { id: 'record_3',   name: '세 번의 기록',        emoji: '🐾', type: 'record', threshold: 3,   rewards: {} },
+    { id: 'record_5',   name: '다섯 번의 기록',      emoji: '🐻', type: 'record', threshold: 5,
+      rewards: { character: 'bear_lv1', char_name: '단골 곰' } },
+    { id: 'record_8',   name: '코티지의 밤',         emoji: '🌙', type: 'record', threshold: 8,
       rewards: { character: 'rare_night', char_name: '밤의 곰' } },
-    { id: 'squirrel_10',   name: '열 번의 기록',        emoji: '🌰', type: 'play', threshold: 10,
-      rewards: { character: 'squirrel_10', char_name: '도토리 다람쥐', title: 'title_squirrel_10' } },
-    { id: 'play_15',       name: '고수의 길',           emoji: '🐾', type: 'play', threshold: 15,  rewards: {} },
-    { id: 'play_20',       name: '스무 번의 기록',      emoji: '🐻', type: 'play', threshold: 20,
-      rewards: { character: 'bear_50', char_name: '활발한 곰' } },
-    { id: 'bear_30',       name: '서른 번의 기록',      emoji: '🐻', type: 'play', threshold: 30,
-      rewards: { character: 'bear_30', char_name: '놀이 곰돌이', title: 'title_bear_30' } },
-    { id: 'play_40',       name: '꾸준한 플레이어',     emoji: '🏃', type: 'play', threshold: 40,  rewards: {} },
-    { id: 'squirrel_50',   name: '쉰 번의 기록',        emoji: '📦', type: 'play', threshold: 50,
-      rewards: { character: 'squirrel_50', char_name: '창고 다람쥐', title: 'title_squirrel_50' } },
-    { id: 'play_75',       name: '장인 게이머',          emoji: '⚒️', type: 'play', threshold: 75,  rewards: {} },
-    { id: 'squirrel_100',  name: '백 번의 기록',         emoji: '🧺', type: 'play', threshold: 100,
-      rewards: { character: 'squirrel_100', char_name: '겨울준비 다람쥐', title: 'title_squirrel_100' } },
-    { id: 'play_125',      name: '코티지 베테랑',        emoji: '🏅', type: 'play', threshold: 125, rewards: {} },
-    { id: 'bear_100',      name: '백오십 번의 기록',     emoji: '🏠', type: 'play', threshold: 150,
-      rewards: { character: 'bear_100', char_name: '코티지 곰', title: 'title_bear_100' } },
-    { id: 'squirrel_200',  name: '이백 번의 기록',       emoji: '📖', type: 'play', threshold: 200,
-      rewards: { character: 'squirrel_200', char_name: '사서 다람쥐', title: 'title_squirrel_200' } },
-    { id: 'play_250',      name: '봄의 전령',            emoji: '🌸', type: 'play', threshold: 250,
+    { id: 'record_10',  name: '열 번의 기록',        emoji: '🌰', type: 'record', threshold: 10,
+      rewards: { character: 'squirrel_lv2', char_name: '도토리 다람쥐', title: 'title_squirrel_10' } },
+    { id: 'record_15',  name: '고수의 길',           emoji: '🐾', type: 'record', threshold: 15,  rewards: {} },
+    { id: 'record_20',  name: '스무 번의 기록',      emoji: '🐻', type: 'record', threshold: 20,
+      rewards: { character: 'bear_lv2', char_name: '활발한 곰' } },
+    { id: 'record_30',  name: '서른 번의 기록',      emoji: '🐻', type: 'record', threshold: 30,
+      rewards: { character: 'bear_lv3', char_name: '놀이 곰돌이', title: 'title_bear_30' } },
+    { id: 'record_40',  name: '꾸준한 플레이어',     emoji: '🏃', type: 'record', threshold: 40,  rewards: {} },
+    { id: 'record_50',  name: '쉰 번의 기록',        emoji: '📦', type: 'record', threshold: 50,
+      rewards: { character: 'squirrel_lv3', char_name: '창고 다람쥐', title: 'title_squirrel_50' } },
+    { id: 'record_75',  name: '장인 게이머',          emoji: '⚒️', type: 'record', threshold: 75,  rewards: {} },
+    { id: 'record_100', name: '백 번의 기록',         emoji: '🧺', type: 'record', threshold: 100,
+      rewards: { character: 'squirrel_lv4', char_name: '겨울준비 다람쥐', title: 'title_squirrel_100' } },
+    { id: 'record_125', name: '코티지 베테랑',        emoji: '🏅', type: 'record', threshold: 125, rewards: {} },
+    { id: 'record_150', name: '백오십 번의 기록',     emoji: '🏠', type: 'record', threshold: 150,
+      rewards: { character: 'bear_lv4', char_name: '코티지 곰', title: 'title_bear_100' } },
+    { id: 'record_200', name: '이백 번의 기록',       emoji: '📖', type: 'record', threshold: 200,
+      rewards: { character: 'squirrel_lv5', char_name: '사서 다람쥐', title: 'title_squirrel_200' } },
+    { id: 'record_250', name: '봄의 전령',            emoji: '🌸', type: 'record', threshold: 250,
       rewards: { character: 'season_spring', char_name: '봄 토끼' } },
-    { id: 'bear_300',      name: '삼백 번의 기록',       emoji: '🌙', type: 'play', threshold: 300,
-      rewards: { character: 'bear_300', char_name: '동면 곰', title: 'title_bear_300' } },
-    { id: 'play_400',      name: '여름의 플레이어',      emoji: '☀️', type: 'play', threshold: 400,
+    { id: 'record_300', name: '삼백 번의 기록',       emoji: '🌙', type: 'record', threshold: 300,
+      rewards: { character: 'bear_lv5', char_name: '동면 곰', title: 'title_bear_300' } },
+    { id: 'record_400', name: '여름의 플레이어',      emoji: '☀️', type: 'record', threshold: 400,
       rewards: { character: 'season_summer', char_name: '여름 곰' } },
-    { id: 'cottage_master', name: '코티지 마스터',       emoji: '✨', type: 'play', threshold: 500,
+    { id: 'record_500', name: '코티지 마스터',        emoji: '✨', type: 'record', threshold: 500,
       rewards: { character: 'cottage_master', char_name: '코티지 마스터', title: 'title_cottage_master' } },
     // 새 게임 탐험 계열 — 작성자 기준 (1→3→5→7→10→15→20→30→40→50→75→100→125→150→200→250→300)
     { id: 'new_game_1',    name: '첫 탐험',              emoji: '✨', type: 'new_game', threshold: 1,
-      rewards: { character: 'rare_new_game', char_name: '탐험 토끼' } },
+      rewards: { character: 'rabbit_lv1', char_name: '탐험 토끼' } },
     { id: 'new_game_3',    name: '게임 입문',             emoji: '🎮', type: 'new_game', threshold: 3,  rewards: {} },
     { id: 'rabbit_5',      name: '다섯 번째 탐험',        emoji: '🔍', type: 'new_game', threshold: 5,
-      rewards: { character: 'rabbit_5', char_name: '호기심 토끼' } },
+      rewards: { character: 'rabbit_lv2', char_name: '호기심 토끼' } },
     { id: 'new_game_7',    name: '다양한 취향',           emoji: '🌈', type: 'new_game', threshold: 7,  rewards: {} },
-    { id: 'owl_10',        name: '열 가지 탐험',          emoji: '🦉', type: 'new_game', threshold: 10,
-      rewards: { character: 'owl_10', char_name: '탐구 올빼미' } },
+    { id: 'owl_10',        name: '열 가지 탐험',          emoji: '🦉', type: 'new_game', threshold: 10, rewards: {} },
     { id: 'new_game_15',   name: '게임 수집가',           emoji: '🎲', type: 'new_game', threshold: 15, rewards: {} },
     { id: 'rabbit_20',     name: '스무 가지 탐험',        emoji: '🎒', type: 'new_game', threshold: 20,
-      rewards: { character: 'rabbit_20', char_name: '탐험 토끼', title: 'title_rabbit_20' } },
+      rewards: { character: 'rabbit_lv3', char_name: '탐험 토끼', title: 'title_rabbit_20' } },
     { id: 'owl_30',        name: '서른 가지 탐험',        emoji: '🦉', type: 'new_game', threshold: 30,
-      rewards: { character: 'owl_30', char_name: '연구 올빼미', title: 'title_owl_30' } },
+      rewards: { title: 'title_owl_30' } },
     { id: 'new_game_40',   name: '게임 전도사',           emoji: '📢', type: 'new_game', threshold: 40, rewards: {} },
     { id: 'rabbit_50',     name: '오십 종 탐험',          emoji: '🧭', type: 'new_game', threshold: 50,
-      rewards: { character: 'rabbit_50', char_name: '여행 토끼', title: 'title_rabbit_50' } },
+      rewards: { character: 'rabbit_lv4', char_name: '여행 토끼', title: 'title_rabbit_50' } },
     { id: 'new_game_75',   name: '장르 탐험자',           emoji: '🗺️', type: 'new_game', threshold: 75, rewards: {} },
     { id: 'rabbit_100',    name: '백 종 탐험',            emoji: '🗺️', type: 'new_game', threshold: 100,
-      rewards: { character: 'rabbit_100', char_name: '유랑 토끼', title: 'title_rabbit_100' } },
+      rewards: { character: 'rabbit_lv5', char_name: '유랑 토끼', title: 'title_rabbit_100' } },
     { id: 'new_game_125',  name: '게임계 여행자',         emoji: '✈️', type: 'new_game', threshold: 125, rewards: {} },
     { id: 'rabbit_200',    name: '백오십 종 탐험',        emoji: '🧳', type: 'new_game', threshold: 150,
-      rewards: { character: 'rabbit_200', char_name: '방랑 토끼', title: 'title_rabbit_200' } },
+      rewards: { character: 'rabbit_lv6', char_name: '방랑 토끼', title: 'title_rabbit_200' } },
     { id: 'owl_200',       name: '이백 종 탐험',          emoji: '📚', type: 'new_game', threshold: 200,
-      rewards: { character: 'owl_100', char_name: '박학 올빼미', title: 'title_owl_200' } },
+      rewards: { title: 'title_owl_200' } },
     { id: 'new_game_250',  name: '핼러윈 수집가',         emoji: '🎃', type: 'new_game', threshold: 250,
       rewards: { character: 'season_halloween', char_name: '핼러윈 올빼미' } },
     { id: 'owl_300',       name: '삼백 종 탐험',          emoji: '🦉', type: 'new_game', threshold: 300,
-      rewards: { character: 'owl_300', char_name: '전설 올빼미', title: 'title_owl_300' } },
+      rewards: { title: 'title_owl_300' } },
     // 사진 계열 (1→2→3→5→10→20→30→50→75→100→150→200)
     { id: 'hedgehog_1',    name: '첫 사진',               emoji: '📸', type: 'photo', threshold: 1,
-      rewards: { character: 'hedgehog_1', char_name: '초보 고슴도치', title: 'title_hedgehog_1' } },
+      rewards: { character: 'hedgehog_lv1', char_name: '초보 고슴도치', title: 'title_hedgehog_1' } },
     { id: 'photo_2',       name: '두 번째 사진',           emoji: '📸', type: 'photo', threshold: 2,  rewards: {} },
     { id: 'photo_3',       name: '세 번의 추억',           emoji: '✨', type: 'photo', threshold: 3,
-      rewards: { character: 'rare_first_record', char_name: '기록 고슴도치' } },
+      rewards: { character: 'hedgehog_lv2', char_name: '기록 고슴도치' } },
     { id: 'photo_5',       name: '사진사 지망생',          emoji: '🤳', type: 'photo', threshold: 5,  rewards: {} },
     { id: 'photo_10',      name: '순간 수집',              emoji: '🖼️', type: 'photo', threshold: 10, rewards: {} },
     { id: 'hedgehog_10',   name: '스무 장의 기록',         emoji: '🎞️', type: 'photo', threshold: 20,
-      rewards: { character: 'hedgehog_10', char_name: '기록가 고슴도치', title: 'title_hedgehog_10' } },
+      rewards: { character: 'hedgehog_lv3', char_name: '기록가 고슴도치', title: 'title_hedgehog_10' } },
     { id: 'photo_30',      name: '사진 작가',              emoji: '📷', type: 'photo', threshold: 30, rewards: {} },
     { id: 'photo_50',      name: '기억 포착',              emoji: '🎞️', type: 'photo', threshold: 50, rewards: {} },
     { id: 'photo_75',      name: '필름 요정',              emoji: '🧚', type: 'photo', threshold: 75, rewards: {} },
     { id: 'hedgehog_50',   name: '백 장의 기억',           emoji: '📷', type: 'photo', threshold: 100,
-      rewards: { character: 'hedgehog_50', char_name: '포토마스터 고슴도치', title: 'title_hedgehog_50' } },
+      rewards: { character: 'hedgehog_lv4', char_name: '포토마스터 고슴도치', title: 'title_hedgehog_50' } },
     { id: 'photo_150',     name: '사진 마스터',            emoji: '🎨', type: 'photo', threshold: 150, rewards: {} },
     { id: 'hedgehog_100',  name: '이백 장의 추억',         emoji: '🎨', type: 'photo', threshold: 200,
-      rewards: { character: 'hedgehog_100', char_name: '작가 고슴도치', title: 'title_hedgehog_100' } },
+      rewards: { character: 'hedgehog_lv5', char_name: '작가 고슴도치', title: 'title_hedgehog_100' } },
     // 게임평 계열 (1→2→3→5→8→10→15→20→25→40→50→75→100→150→200→300)
     { id: 'hamster_1',     name: '첫 게임평',             emoji: '✏️', type: 'review', threshold: 1,
-      rewards: { character: 'hamster_1', char_name: '리뷰어 햄스터', title: 'title_hamster_1' } },
+      rewards: { character: 'hamster_lv1', char_name: '리뷰어 햄스터', title: 'title_hamster_1' } },
     { id: 'review_2',      name: '첫 분석',               emoji: '🔍', type: 'review', threshold: 2,  rewards: {} },
     { id: 'review_3',      name: '감상 시작',             emoji: '✍️', type: 'review', threshold: 3,  rewards: {} },
     { id: 'fox_5',         name: '다섯 번의 감상',        emoji: '🦊', type: 'review', threshold: 5,
-      rewards: { character: 'fox_10', char_name: '감상 여우' } },
+      rewards: { character: 'fox_lv1', char_name: '감상 여우' } },
     { id: 'review_8',      name: '번개 리뷰어',           emoji: '⚡', type: 'review', threshold: 8,
       rewards: { character: 'rare_lightning', char_name: '번개 햄스터' } },
     { id: 'hamster_10',    name: '열 번의 감상',          emoji: '📝', type: 'review', threshold: 10,
-      rewards: { character: 'hamster_10', char_name: '서평가 햄스터', title: 'title_hamster_10' } },
+      rewards: { character: 'hamster_lv2', char_name: '서평가 햄스터', title: 'title_hamster_10' } },
     { id: 'review_15',     name: '이야기꾼',              emoji: '✨', type: 'review', threshold: 15,
       rewards: { character: 'rare_storyteller', char_name: '이야기꾼 토끼' } },
     { id: 'review_20',     name: '코티지 논객',           emoji: '🗣️', type: 'review', threshold: 20, rewards: {} },
     { id: 'fox_25',        name: '스물다섯 감상',         emoji: '🦊', type: 'review', threshold: 25,
-      rewards: { character: 'fox_30', char_name: '취향 여우', title: 'title_fox_25' } },
+      rewards: { character: 'fox_lv2', char_name: '취향 여우', title: 'title_fox_25' } },
     { id: 'review_40',     name: '리뷰 마니아',           emoji: '📋', type: 'review', threshold: 40, rewards: {} },
     { id: 'hamster_50',    name: '쉰 번의 감상',          emoji: '📚', type: 'review', threshold: 50,
-      rewards: { character: 'hamster_50', char_name: '평론가 햄스터', title: 'title_hamster_50' } },
+      rewards: { character: 'hamster_lv3', char_name: '평론가 햄스터', title: 'title_hamster_50' } },
     { id: 'review_75',     name: '비평 전문가',           emoji: '🎓', type: 'review', threshold: 75, rewards: {} },
     { id: 'hamster_100',   name: '백 번의 감상',          emoji: '🎓', type: 'review', threshold: 100,
-      rewards: { character: 'hamster_100', char_name: '비평가 햄스터', title: 'title_hamster_100' } },
+      rewards: { character: 'hamster_lv4', char_name: '비평가 햄스터', title: 'title_hamster_100' } },
     { id: 'hamster_200',   name: '백오십 번의 감상',      emoji: '🏆', type: 'review', threshold: 150,
-      rewards: { character: 'hamster_300', char_name: '마스터 햄스터', title: 'title_hamster_200' } },
+      rewards: { character: 'hamster_lv5', char_name: '마스터 햄스터', title: 'title_hamster_200' } },
     { id: 'review_200',    name: '이백 번의 감상',        emoji: '🦊', type: 'review', threshold: 200,
-      rewards: { character: 'fox_100', char_name: '박식한 여우' } },
+      rewards: { character: 'fox_lv3', char_name: '박식한 여우' } },
     { id: 'fox_300',       name: '삼백 번의 감상',        emoji: '🦊', type: 'review', threshold: 300,
-      rewards: { character: 'fox_300', char_name: '코티지 여우', title: 'title_fox_300' } },
+      rewards: { character: 'fox_lv4', char_name: '코티지 여우', title: 'title_fox_300' } },
     // 방문 계열 (3→5→10→15→20→25→30→40→50→75→100→150→200→300→400→500)
     { id: 'visit_3',   name: '코티지 방문객',  emoji: '✨', type: 'visit', threshold: 3,
-      rewards: { character: 'rare_friend', char_name: '방문 참새' } },
+      rewards: { character: 'sparrow_lv1', char_name: '방문 참새' } },
     { id: 'visit_5',   name: '코티지 친구',    emoji: '🤗', type: 'visit', threshold: 5,  rewards: {} },
     { id: 'visit_10',  name: '코티지 단골',    emoji: '☕', type: 'visit', threshold: 10,
-      rewards: { character: 'sparrow_10', char_name: '단골 참새', title: 'title_visit_10' } },
+      rewards: { character: 'sparrow_lv2', char_name: '단골 참새', title: 'title_visit_10' } },
     { id: 'visit_15',  name: '코티지 팬',      emoji: '💙', type: 'visit', threshold: 15, rewards: {} },
     { id: 'visit_20',  name: '코티지 단골 Lv2', emoji: '☕', type: 'visit', threshold: 20, rewards: {} },
     { id: 'visit_25',  name: '코티지의 기둥',  emoji: '🏛️', type: 'visit', threshold: 25, rewards: {} },
@@ -125,37 +124,41 @@
       rewards: { title: 'title_visit_30' } },
     { id: 'visit_40',  name: '오랜 인연',       emoji: '🤝', type: 'visit', threshold: 40, rewards: {} },
     { id: 'visit_50',  name: '코티지 주민',     emoji: '🔥', type: 'visit', threshold: 50,
-      rewards: { character: 'sparrow_50', char_name: '주민 참새', title: 'title_visit_50' } },
+      rewards: { character: 'sparrow_lv3', char_name: '주민 참새', title: 'title_visit_50' } },
     { id: 'visit_75',  name: '코티지 충성단',   emoji: '⚔️', type: 'visit', threshold: 75, rewards: {} },
     { id: 'visit_100', name: '터줏대감',        emoji: '🌳', type: 'visit', threshold: 100,
       rewards: { title: 'title_visit_100' } },
     { id: 'visit_150', name: '코티지 수호자',   emoji: '🛡️', type: 'visit', threshold: 150, rewards: {} },
     { id: 'visit_200', name: '코티지의 오랜 친구', emoji: '🐦', type: 'visit', threshold: 200,
-      rewards: { character: 'sparrow_200', char_name: '코티지 참새', title: 'title_visit_200' } },
+      rewards: { character: 'sparrow_lv4', char_name: '코티지 참새', title: 'title_visit_200' } },
     { id: 'visit_300', name: '코티지 원로',     emoji: '👑', type: 'visit', threshold: 300,
       rewards: { title: 'title_visit_300' } },
     { id: 'visit_400', name: '코티지의 산타',   emoji: '🎄', type: 'visit', threshold: 400,
       rewards: { character: 'season_christmas', char_name: '산타 참새' } },
     { id: 'visit_500', name: '전설의 방문자',   emoji: '🐦', type: 'visit', threshold: 500,
-      rewards: { character: 'sparrow_1000', char_name: '전설 참새', title: 'title_visit_500' } },
+      rewards: { character: 'sparrow_lv5', char_name: '전설 참새', title: 'title_visit_500' } },
     // 코티지 최초 기록 계열 — 해당 game_id 최초 기록 작성자 기준 (1→3→5→10→20→50)
-    { id: 'first_record_1',  name: '첫 개척',         emoji: '🗺️', type: 'first_record', threshold: 1,  rewards: {} },
+    { id: 'first_record_1',  name: '첫 개척',         emoji: '🗺️', type: 'first_record', threshold: 1,
+      rewards: { character: 'owl_lv1', char_name: '탐구 올빼미' } },
     { id: 'first_record_3',  name: '세 게임 개척',    emoji: '⛺', type: 'first_record', threshold: 3,  rewards: {} },
-    { id: 'first_record_5',  name: '다섯 게임 개척',  emoji: '🧭', type: 'first_record', threshold: 5,  rewards: {} },
-    { id: 'first_record_10', name: '개척자',           emoji: '🌟', type: 'first_record', threshold: 10, rewards: {} },
+    { id: 'first_record_5',  name: '다섯 게임 개척',  emoji: '🧭', type: 'first_record', threshold: 5,
+      rewards: { character: 'owl_lv2', char_name: '연구 올빼미' } },
+    { id: 'first_record_10', name: '개척자',           emoji: '🌟', type: 'first_record', threshold: 10,
+      rewards: { character: 'owl_lv3', char_name: '박학 올빼미' } },
     { id: 'first_record_20', name: '코티지 개척단',   emoji: '🏅', type: 'first_record', threshold: 20, rewards: {} },
-    { id: 'first_record_50', name: '전설의 개척자',   emoji: '✨', type: 'first_record', threshold: 50, rewards: {} },
+    { id: 'first_record_50', name: '전설의 개척자',   emoji: '✨', type: 'first_record', threshold: 50,
+      rewards: { character: 'owl_lv4', char_name: '전설 올빼미' } },
     // 플레이 참여 계열 — 보조 업적, player_names 닉네임 기반 (닉네임 변경 시 과거 기록 누락 가능) — 5→10→20→30→50→100→150→200→300→500
-    { id: 'participated_5',   name: '게임 친구',       emoji: '🤝', type: 'participated', threshold: 5,   rewards: {} },
-    { id: 'participated_10',  name: '활발한 참여자',   emoji: '🎮', type: 'participated', threshold: 10,  rewards: {} },
-    { id: 'participated_20',  name: '게임 동반자',     emoji: '🎲', type: 'participated', threshold: 20,  rewards: {} },
-    { id: 'participated_30',  name: '코티지 플레이어', emoji: '🎯', type: 'participated', threshold: 30,  rewards: {} },
-    { id: 'participated_50',  name: '코티지 피플',     emoji: '🌟', type: 'participated', threshold: 50,  rewards: {} },
-    { id: 'participated_100', name: '백전노장',         emoji: '🏆', type: 'participated', threshold: 100, rewards: {} },
-    { id: 'participated_150', name: '코티지 레전드',   emoji: '⚜️', type: 'participated', threshold: 150, rewards: {} },
-    { id: 'participated_200', name: '게임왕',           emoji: '👑', type: 'participated', threshold: 200, rewards: {} },
-    { id: 'participated_300', name: '코티지 신화',     emoji: '🌙', type: 'participated', threshold: 300, rewards: {} },
-    { id: 'participated_500', name: '전설의 게이머',   emoji: '✨', type: 'participated', threshold: 500, rewards: {} },
+    { id: 'play_5',   name: '게임 친구',       emoji: '🤝', type: 'play', threshold: 5,   rewards: {} },
+    { id: 'play_10',  name: '활발한 참여자',   emoji: '🎮', type: 'play', threshold: 10,  rewards: {} },
+    { id: 'play_20',  name: '게임 동반자',     emoji: '🎲', type: 'play', threshold: 20,  rewards: {} },
+    { id: 'play_30',  name: '코티지 플레이어', emoji: '🎯', type: 'play', threshold: 30,  rewards: {} },
+    { id: 'play_50',  name: '코티지 피플',     emoji: '🌟', type: 'play', threshold: 50,  rewards: {} },
+    { id: 'play_100', name: '백전노장',         emoji: '🏆', type: 'play', threshold: 100, rewards: {} },
+    { id: 'play_150', name: '코티지 레전드',   emoji: '⚜️', type: 'play', threshold: 150, rewards: {} },
+    { id: 'play_200', name: '게임왕',           emoji: '👑', type: 'play', threshold: 200, rewards: {} },
+    { id: 'play_300', name: '코티지 신화',     emoji: '🌙', type: 'play', threshold: 300, rewards: {} },
+    { id: 'play_500', name: '전설의 게이머',   emoji: '✨', type: 'play', threshold: 500, rewards: {} },
   ];
 
   // 칭호 정의 — 연결 관계는 ACH_DEFS.rewards.title이 담당 (역참조 필드 없음)
@@ -224,16 +227,16 @@
     return '🌱 새싹';
   }
 
-  const TYPE_LABELS = { play: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', first_record: '코티지 최초 기록', participated: '플레이 참여 (보조)' };
-  const SHORT_TYPE_LABELS = { play: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', first_record: '최초 기록', participated: '참여' };
+  const TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', first_record: '코티지 최초 기록', play: '플레이 참여 (보조)' };
+  const SHORT_TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', first_record: '최초 기록', play: '참여' };
 
   const POINTS = {
-    // 플레이
-    rabbit_first: 300, play_3: 100, play_5: 200, play_8: 300,
-    squirrel_10: 500, play_15: 300, play_20: 500, bear_30: 500, play_40: 500,
-    squirrel_50: 1000, play_75: 1000, squirrel_100: 2000, play_125: 1000,
-    bear_100: 1500, squirrel_200: 5000, play_250: 2000, bear_300: 3000,
-    play_400: 3000, cottage_master: 10000,
+    // 기록 작성
+    record_1: 300, record_3: 100, record_5: 200, record_8: 300,
+    record_10: 500, record_15: 300, record_20: 500, record_30: 500, record_40: 500,
+    record_50: 1000, record_75: 1000, record_100: 2000, record_125: 1000,
+    record_150: 1500, record_200: 5000, record_250: 2000, record_300: 3000,
+    record_400: 3000, record_500: 10000,
     // 새 게임
     new_game_1: 200, new_game_3: 100, rabbit_5: 300, new_game_7: 200,
     owl_10: 300, new_game_15: 300, rabbit_20: 1000, owl_30: 500,
@@ -256,10 +259,10 @@
     // 코티지 최초 기록
     first_record_1: 300, first_record_3: 500, first_record_5: 800,
     first_record_10: 1500, first_record_20: 3000, first_record_50: 8000,
-    // 참여 (보조)
-    participated_5: 200, participated_10: 300, participated_20: 500, participated_30: 500,
-    participated_50: 1000, participated_100: 2000, participated_150: 1500,
-    participated_200: 3000, participated_300: 5000, participated_500: 10000,
+    // 플레이 참여 (보조)
+    play_5: 200, play_10: 300, play_20: 500, play_30: 500,
+    play_50: 1000, play_100: 2000, play_150: 1500,
+    play_200: 3000, play_300: 5000, play_500: 10000,
   };
 
   // 업적 체크 진입점 — supabase-client.js에서 호출
@@ -268,35 +271,35 @@
     const db = window.CottageDB;
 
     const [playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
-      (category === 'play' || category === 'review') ? db.getUserPlayCount(userId) : Promise.resolve(null),
-      category === 'play' ? db.getUserDistinctGameCount(userId) : Promise.resolve(null),
-      category === 'play' ? db.getUserPhotoCount(userId) : Promise.resolve(null),
+      (category === 'record' || category === 'review') ? db.getUserPlayCount(userId) : Promise.resolve(null),
+      category === 'record' ? db.getUserDistinctGameCount(userId) : Promise.resolve(null),
+      category === 'record' ? db.getUserPhotoCount(userId) : Promise.resolve(null),
       category === 'review' ? db.getUserRatingCount(userId) : Promise.resolve(null),
     ]);
 
     const checks = [];
 
-    if (category === 'play') {
+    if (category === 'record') {
       checks.push(
-        { id: 'rabbit_first', v: playCount, t: 1 },
-        { id: 'play_3',       v: playCount, t: 3 },
-        { id: 'play_5',       v: playCount, t: 5 },
-        { id: 'play_8',       v: playCount, t: 8 },
-        { id: 'squirrel_10',  v: playCount, t: 10 },
-        { id: 'play_15',      v: playCount, t: 15 },
-        { id: 'play_20',      v: playCount, t: 20 },
-        { id: 'bear_30',      v: playCount, t: 30 },
-        { id: 'play_40',      v: playCount, t: 40 },
-        { id: 'squirrel_50',  v: playCount, t: 50 },
-        { id: 'play_75',      v: playCount, t: 75 },
-        { id: 'squirrel_100', v: playCount, t: 100 },
-        { id: 'play_125',     v: playCount, t: 125 },
-        { id: 'bear_100',     v: playCount, t: 150 },
-        { id: 'squirrel_200', v: playCount, t: 200 },
-        { id: 'play_250',     v: playCount, t: 250 },
-        { id: 'bear_300',     v: playCount, t: 300 },
-        { id: 'play_400',     v: playCount, t: 400 },
-        { id: 'cottage_master', v: playCount, t: 500 },
+        { id: 'record_1',   v: playCount, t: 1 },
+        { id: 'record_3',   v: playCount, t: 3 },
+        { id: 'record_5',   v: playCount, t: 5 },
+        { id: 'record_8',   v: playCount, t: 8 },
+        { id: 'record_10',  v: playCount, t: 10 },
+        { id: 'record_15',  v: playCount, t: 15 },
+        { id: 'record_20',  v: playCount, t: 20 },
+        { id: 'record_30',  v: playCount, t: 30 },
+        { id: 'record_40',  v: playCount, t: 40 },
+        { id: 'record_50',  v: playCount, t: 50 },
+        { id: 'record_75',  v: playCount, t: 75 },
+        { id: 'record_100', v: playCount, t: 100 },
+        { id: 'record_125', v: playCount, t: 125 },
+        { id: 'record_150', v: playCount, t: 150 },
+        { id: 'record_200', v: playCount, t: 200 },
+        { id: 'record_250', v: playCount, t: 250 },
+        { id: 'record_300', v: playCount, t: 300 },
+        { id: 'record_400', v: playCount, t: 400 },
+        { id: 'record_500', v: playCount, t: 500 },
         { id: 'new_game_1',   v: distinctCount, t: 1 },
         { id: 'new_game_3',   v: distinctCount, t: 3 },
         { id: 'rabbit_5',     v: distinctCount, t: 5 },
@@ -384,19 +387,19 @@
       );
     }
 
-    if (category === 'participated') {
+    if (category === 'play') {
       const pc = opts.participationCount || 0;
       checks.push(
-        { id: 'participated_5',   v: pc, t: 5 },
-        { id: 'participated_10',  v: pc, t: 10 },
-        { id: 'participated_20',  v: pc, t: 20 },
-        { id: 'participated_30',  v: pc, t: 30 },
-        { id: 'participated_50',  v: pc, t: 50 },
-        { id: 'participated_100', v: pc, t: 100 },
-        { id: 'participated_150', v: pc, t: 150 },
-        { id: 'participated_200', v: pc, t: 200 },
-        { id: 'participated_300', v: pc, t: 300 },
-        { id: 'participated_500', v: pc, t: 500 },
+        { id: 'play_5',   v: pc, t: 5 },
+        { id: 'play_10',  v: pc, t: 10 },
+        { id: 'play_20',  v: pc, t: 20 },
+        { id: 'play_30',  v: pc, t: 30 },
+        { id: 'play_50',  v: pc, t: 50 },
+        { id: 'play_100', v: pc, t: 100 },
+        { id: 'play_150', v: pc, t: 150 },
+        { id: 'play_200', v: pc, t: 200 },
+        { id: 'play_300', v: pc, t: 300 },
+        { id: 'play_500', v: pc, t: 500 },
       );
     }
 
@@ -408,12 +411,12 @@
       const granted = await db.grantAchievement(userId, id, POINTS[id] || 0);
       if (granted) {
         showAchievementToast(def?.name || id, POINTS[id] || 0);
-        if (id === 'rabbit_first') {
+        if (id === 'record_1') {
           const currentRep = await db.getRepAchievement?.(userId).catch(() => null);
           if (!currentRep?.id) {
-            await db.setRepAchievement?.(userId, 'rabbit_first').catch(() => {});
+            await db.setRepAchievement?.(userId, 'record_1').catch(() => {});
             const menuImg = document.getElementById('kakaoProfileImg');
-            if (menuImg) menuImg.src = '/assets/images/characters/characters_basic/rabbit_first.png';
+            if (menuImg) menuImg.src = '/assets/images/characters/characters_basic/squirrel_lv1.png';
           }
         }
       }
@@ -458,6 +461,13 @@
     return String(gameId);
   }
 
+  // achId → 캐릭터 이미지 경로 (외부에서 접근 가능)
+  function getCharacterPath(achId) {
+    const def = ACH_DEFS.find(d => d.id === achId);
+    if (!def?.rewards?.character) return null;
+    return `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+  }
+
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
   async function buildTitleSection(userId, repTitleId, visitCount, nickname) {
     const db = window.CottageDB;
@@ -474,7 +484,7 @@
       ]);
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
-      const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, first_record: firstRecordCount, participated: participationCount };
+      const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, first_record: firstRecordCount, play: participationCount };
 
       // ACH_DEFS.rewards.title 정참조 기준으로 획득 여부 판단
       const earnedIds = new Set();
@@ -646,9 +656,9 @@
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
-    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, participated: participationCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount };
 
-    // CHAR_DEFS: 캐릭터 보상 있는 17종만 그리드에 표시
+    // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시
     const gridCards = CHAR_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const isRep = repAch?.id === def.id;
@@ -682,8 +692,9 @@
       ? '<p class="profile-char-empty">게임을 플레이하면 캐릭터가 해금됩니다 🐾</p>'
       : '';
 
-    const _repIconHtml = repAch?.id
-      ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${repAch.id}.png" alt="">`
+    const _repCharDef = repAch?.id ? CHAR_DEFS.find(d => d.id === repAch.id) : null;
+    const _repIconHtml = _repCharDef
+      ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${_repCharDef.rewards.character}.png" alt="">`
       : '';
 
     const _earnedCharList = CHAR_DEFS.filter(d => earnedIds.has(d.id));
@@ -727,7 +738,7 @@
     ]);
 
     const earnedIds = new Set(earned.map(a => a.id));
-    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, participated: participationCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount };
 
     const items = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
@@ -797,10 +808,14 @@
       if (achId) charBody.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.classList.add('is-rep');
       const actionRow = charBody.querySelector('#profileRepActionRow');
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = achId || ''; }
+      const _repDef = achId ? ACH_DEFS.find(d => d.id === achId) : null;
+      const _repCharPath = _repDef?.rewards?.character
+        ? `/assets/images/characters/characters_basic/${_repDef.rewards.character}.png`
+        : null;
       const panelAvatar = document.querySelector('#profilePanel .profile-panel-avatar');
-      if (panelAvatar && achId) panelAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
+      if (panelAvatar && _repCharPath) panelAvatar.src = _repCharPath;
       const menuAvatar = document.getElementById('kakaoProfileImg');
-      if (menuAvatar && achId) menuAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
+      if (menuAvatar && _repCharPath) menuAvatar.src = _repCharPath;
     }
   }
 
@@ -813,6 +828,7 @@
     buildTitleSection,
     handleRepTitleSelect,
     getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
+    getCharacterPath,
   };
 
   window.checkAchievements = checkAchievements;

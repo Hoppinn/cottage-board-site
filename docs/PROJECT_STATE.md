@@ -1,16 +1,15 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (109차)
+최종 갱신: 2026-06-18 (110차)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**진행 중**: 업적/캐릭터 ID 전면 리네임 — `docs/ACHIEVEMENT_RENAME_CHECKPOINT.md`
-- 승인 완료, 미실행
-- 세션 시작 시 해당 체크포인트 먼저 읽고 진행
-
-
+**완료**: 업적/캐릭터 ID 전면 리네임 (110차) — `docs/ACHIEVEMENT_RENAME_CHECKPOINT.md`
+- JS 코드 완료, PNG 39개 rename 완료
+- DB SQL은 사용자가 Supabase 대시보드에서 직접 실행 필요 (체크포인트 §6 참조)
+- 체크포인트 문서는 DB SQL 실행 후 삭제 가능
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
