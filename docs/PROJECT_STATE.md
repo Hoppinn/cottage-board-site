@@ -6,6 +6,12 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
+**진행 중**: 업적/캐릭터 ID 전면 리네임 — `docs/ACHIEVEMENT_RENAME_CHECKPOINT.md`
+- 승인 완료, 미실행
+- 세션 시작 시 해당 체크포인트 먼저 읽고 진행
+
+
+
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
 - 목표: Discord webhook으로 교체 (HTTP 2 토큰발급 모듈 삭제, HTTP 3 URL 교체)
