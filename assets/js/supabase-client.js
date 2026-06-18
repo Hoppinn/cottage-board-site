@@ -275,6 +275,9 @@ window._cottageSess = (function () {
         const id = data?.[0]?.id || null;
         if (userId) {
           window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
+          getUserFirstRecordCount(userId).then(frc => {
+            window.checkAchievements?.('first_record', userId, { firstRecordCount: frc });
+          }).catch(() => {});
           const _nick = window.getKakaoUser?.()?.nickname;
           if (_nick) {
             getUserParticipationCount(userId, _nick).then(pc => {
@@ -1092,6 +1095,7 @@ window._cottageSess = (function () {
     getUserRatingCount,
     getUserVisitCount,
     getUserParticipationCount,
+    getUserFirstRecordCount,
     getRepAchievement,
     setRepTitle,
     getPendingPointRewards,
@@ -1302,6 +1306,36 @@ window._cottageSess = (function () {
         .select('id', { count: 'exact', head: true })
         .ilike('player_names', `%${nickname}%`);
       return count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function getUserFirstRecordCount(userId) {
+    try {
+      // 내가 작성한 기록들의 game_id를 가져옴
+      const { data: myRecords } = await db.from('game_play_records')
+        .select('game_id, created_at')
+        .eq('user_id', String(userId));
+      if (!myRecords || myRecords.length === 0) return 0;
+
+      const myGameIds = [...new Set(myRecords.map(r => r.game_id))];
+
+      // 해당 game_id들의 전체 기록 중 각 game_id별 가장 오래된 기록 조회
+      const { data: allRecords } = await db.from('game_play_records')
+        .select('game_id, user_id, created_at')
+        .in('game_id', myGameIds)
+        .order('created_at', { ascending: true });
+
+      if (!allRecords) return 0;
+
+      // game_id별 최초 기록자 추출 (order ascending이므로 첫 번째가 최초)
+      const firstByGame = {};
+      for (const r of allRecords) {
+        if (!firstByGame[r.game_id]) firstByGame[r.game_id] = r;
+      }
+
+      return Object.values(firstByGame)
+        .filter(r => String(r.user_id) === String(userId))
+        .length;
     } catch (_) { return 0; }
   }
 

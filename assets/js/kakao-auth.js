@@ -464,7 +464,7 @@ async function openProfilePanel() {
   const _codexPlayed = _safeInt(codexHtml, /data-played-count="(\d+)"/, 0);
   const _codexTotal  = _safeInt(codexHtml, /data-total-games="(\d+)"/,  641);
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
-  const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    90);
+  const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    96);
 
   const _growthSummary = `캐릭터 ${_charCount}/${_charTotal} · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/${_achTotal}`;
   const _growthBadge = `<div class="profile-growth-badge">🌱 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 업적 ${_achCount}/${_achTotal} · 도감 ${_codexPlayed}/${_codexTotal}</div>`;
@@ -555,7 +555,10 @@ async function openProfilePanel() {
     : `<span class="profile-panel-title-name is-empty">칭호 없음</span>`;
   const _titleBtnLabel = _validRepTitle ? '대표 칭호 변경' : '대표 칭호 설정하기';
 
-  // 플레이 참여 업적 lazy check (프로필 열릴 때마다 백그라운드 확인)
+  // 코티지 최초 기록 + 플레이 참여 업적 lazy check (프로필 열릴 때마다 백그라운드 확인)
+  window.CottageDB?.getUserFirstRecordCount?.(String(user.id)).then(frc => {
+    window.checkAchievements?.('first_record', String(user.id), { firstRecordCount: frc });
+  }).catch(() => {});
   if (user.nickname) {
     window.CottageDB?.getUserParticipationCount?.(String(user.id), user.nickname).then(pc => {
       window.checkAchievements?.('participated', String(user.id), { participationCount: pc });

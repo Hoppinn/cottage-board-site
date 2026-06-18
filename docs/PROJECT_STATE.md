@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (108차)
+최종 갱신: 2026-06-18 (109차)
 
 ---
 
@@ -61,6 +61,8 @@
   - ⚠️ SQL 미실행 확인 필요: docs/migrations/000_schema.sql — Supabase 대시보드에서 실행 후 RLS 정책 포함 적용 확인
   - 107차: ACH_DEFS 80개로 확장, buildCharacterSection visitCount 연동, 섹션 미리보기(one-line preview) 추가
   - 108차: 플레이 참여 축(participated) 추가 — ACH_DEFS 90개, getUserParticipationCount, 3 build함수 nickname 파라미터, lazy check(프로필 열릴 때)
+  - 109차: 업적명/캐릭터명 분리(rewards.char_name), first_record 축 6개 추가(96개), getUserFirstRecordCount, participated 보조 업적으로 명시
+  - ⚠️ participated 축 한계: player_names는 닉네임 텍스트 저장 — 닉네임 변경 시 과거 참여 기록 카운트 누락 가능. user_id 기반 개선은 스키마 변경 필요(보류)
 - [x] 게임 바텀시트 3섹션 (게임평/플레이기록/사진) 완성
   - 사진 독립 3번째 섹션 추가 (미리보기 3장 + 전체보기 9장)
   - 게임평·플레이기록·사진 모두 작성자+날짜 표시 (통일 포맷: `6월 N일`)
