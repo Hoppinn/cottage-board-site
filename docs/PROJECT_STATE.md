@@ -337,6 +337,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | fix: 교환권 공지 문구 오류 — "첫 게임평" → "첫 플레이기록". 업적 TYPE_LABELS review "별점 등록" → "게임 별점" |
 | 2026-06-18 | fix: 구매희망 토글 차감 오류 — li._voting 락 + li.dataset.count 즉시 갱신으로 연타 stale read 방지 (게임/간식 양쪽) |
 | 2026-06-18 | feat: 업적 카드 보상 표시 — 달성 전 "받을 보상" / 달성 후 "획득한 보상". 캐릭터 항상 표시, 칭호(TITLE_DEFS.achId 역참조)/교환권(rabbit_first 하드코딩) 존재 시 추가 표시. profile-ach-info column 레이아웃 전환 |
 | 2026-06-18 | feat: 칭호 시스템 V1 — TITLE_DEFS 20종, buildTitleSection(earnedIds반환), handleRepTitleSelect, setRepTitle API, 프로필 칭호 라인+버튼, 성장보드 칭호 섹션(캐릭터→칭호→업적→도감). SQL: ALTER TABLE profiles ADD COLUMN rep_title_id TEXT |

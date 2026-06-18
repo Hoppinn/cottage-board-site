@@ -376,7 +376,7 @@
     if (!db) return '';
 
     // ACH_DEFS는 IIFE 스코프에서 공유
-    const TYPE_LABELS = { play: '플레이 기록', new_game: '신규 게임', photo: '사진 업로드', review: '별점 등록' };
+    const TYPE_LABELS = { play: '플레이 기록', new_game: '신규 게임', photo: '사진 업로드', review: '게임 별점' };
 
     const [earned, playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
       db.getUserAchievements(userId),

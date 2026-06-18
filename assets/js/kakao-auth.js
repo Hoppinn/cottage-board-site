@@ -331,7 +331,7 @@ async function openProfilePanel() {
   const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? ' is-seen' : ' is-new'}">
     ${voucherSeen ? '' : '<span class="profile-notif-new-badge">NEW</span>'}
     <div class="profile-voucher-body">
-      <strong>🎫 첫 게임평을 남기면 음료교환권 1장을 받을 수 있어요</strong>
+      <strong>🎫 첫 플레이기록을 남기면 음료교환권 1장을 받을 수 있어요</strong>
       <div class="profile-voucher-btns">
         ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
         <a class="profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">게임 기록하기</a>
