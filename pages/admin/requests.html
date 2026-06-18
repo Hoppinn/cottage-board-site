@@ -317,14 +317,15 @@
         const countLabel = voted
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
-        const addedBtn = isAdmin()
-          ? (r.added_at
-            ? `<button class="req-added-btn req-added-btn--on" type="button" data-id="${r.id}" data-added="${r.added_at}">📦 추가됨 · ${r.added_at}</button>`
-            : `<button class="req-added-btn" type="button" data-id="${r.id}" data-added="">📦 추가됨</button>`)
-          : '';
+        const fmtAdded = ts => { const d = new Date(ts); return `${d.getMonth()+1}월${d.getDate()}일`; };
+        const addedEl = r.added_at
+          ? (isAdmin()
+            ? `<button class="req-added-btn req-added-btn--on" type="button" data-id="${r.id}" data-added="${r.added_at}">📦 ${fmtAdded(r.added_at)} 추가됨</button>`
+            : `<span class="req-status-badge req-added-badge">📦 추가됨</span>`)
+          : (isAdmin() ? `<button class="req-added-btn" type="button" data-id="${r.id}" data-added="">📦 추가됨</button>` : '');
         return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
-          <span class="req-list-name">${escHtml(r.game_name)}</span>
-          <span class="req-list-right">${countLabel}${statusBadgeEl}${addedBtn}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
+          <span class="req-list-top"><span class="req-list-name">${escHtml(r.game_name)}</span>${countLabel}</span>
+          <span class="req-list-meta">${statusBadgeEl}${addedEl}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
         </li>`;
       }
 
@@ -391,8 +392,7 @@
           if (isOn) {
             await getDb().from('game_requests').update({ added_at: null }).eq('id', id);
           } else {
-            const today = new Date().toISOString().slice(0, 10);
-            await getDb().from('game_requests').update({ added_at: today }).eq('id', id);
+            await getDb().from('game_requests').update({ added_at: new Date().toISOString() }).eq('id', id);
           }
           loadGameRequests();
         });
@@ -482,7 +482,7 @@
         const countLabel = voted
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
-        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-list-name">${escHtml(r.item_name)}</span><span class="req-list-right">${countLabel}${can ? editBtn('snack_requests', r.id, r.item_name) + delBtn('snack_requests', r.id, r.request_count) : ''}</span></li>`;
+        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-list-top"><span class="req-list-name">${escHtml(r.item_name)}</span>${countLabel}</span><span class="req-list-meta">${can ? editBtn('snack_requests', r.id, r.item_name) + delBtn('snack_requests', r.id, r.request_count) : ''}</span></li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));

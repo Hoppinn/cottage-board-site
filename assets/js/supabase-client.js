@@ -977,9 +977,11 @@ window._cottageSess = (function () {
         .not('purchased_at', 'is', null)
         .order('purchased_at', { ascending: false })
         .limit(10);
+      const oneMinAgo = new Date(Date.now() - 60000).toISOString();
       const newGamePromise = db.from('game_requests')
         .select('id, game_name, added_at')
         .not('added_at', 'is', null)
+        .lt('added_at', oneMinAgo)
         .order('added_at', { ascending: false })
         .limit(10);
       const [taggedRes, curiousRes, purchasedRes, newGameRes] = await Promise.all([taggedPromise, curiousPromise, purchasedPromise, newGamePromise]);
@@ -1012,7 +1014,7 @@ window._cottageSess = (function () {
         notifs.push({ type: 'ordered', gameName: r.game_name, date: r.purchased_at, isNew });
       }
       for (const r of newGameRes.data || []) {
-        const isNew = newGameSeenAt ? r.added_at > newGameSeenAt.slice(0, 10) : true;
+        const isNew = newGameSeenAt ? new Date(r.added_at) > new Date(newGameSeenAt) : true;
         notifs.push({ type: 'new_game', gameName: r.game_name, date: r.added_at, isNew });
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
