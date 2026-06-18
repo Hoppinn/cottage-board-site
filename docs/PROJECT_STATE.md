@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (116차)
+최종 갱신: 2026-06-19 (117차)
 
 ---
 
@@ -114,6 +114,15 @@
 ## 2. 현재 버그
 
 현재 알려진 버그 없음.
+
+⚠️ **방문자 카운팅 SQL 재실행 필요** — 아래 SQL을 Supabase 대시보드에서 실행해야 오늘 방문자 수가 1로 표시됨 (현재 page_view 수만큼 잘못 집계 중):
+```sql
+DELETE FROM page_views WHERE page = '__visitor__';
+INSERT INTO page_views (page, referrer, created_at)
+SELECT '__visitor__', null, MIN(created_at)
+FROM page_views WHERE page != '__visitor__'
+GROUP BY (created_at AT TIME ZONE 'Asia/Seoul')::date;
+```
 
 ### 최근 수정 버그
 
@@ -336,6 +345,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-19 | fix+feat: 내 보드 UX 개선 — 취향보드 토글(기본닫힘), 기록보드 플레이기록/게임평 토글+데이터, 플레이기록 usage→records 이동, "내 활동"→"함께한 시간", 요청 실제게임 클릭 투표 버그 수정, guide.html button.club-card-link 투명 배경 버그 수정, 칭호 전체보기 CSS 통일 (117차) |
 | 2026-06-18 | feat: 게임 요청에 실제 게임 이름 입력 — actual_games JSONB, 초성검색 자동완성, 추가됨 알림에 실제 게임명 표시 (103차) |
 | 2026-06-18 | fix: 완료된 게임 섹션 복구 — purchased_at OR added_at 기준 필터 (102차) |
 | 2026-06-18 | fix: 추가된 게임 30일 필터, 구매완료 날짜 클릭 편집, 액션 버튼 confirm 메시지 (101차) |

@@ -526,34 +526,38 @@ async function openProfilePanel() {
   const _growthInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
-  // 취향 보드: 좋아하는 + 해보고싶은 합산
+  // 취향 보드: 좋아하는 + 해보고싶은 합산 (기본 닫힘 토글)
   const _tasteInnerHtml = `
     <div class="profile-gamelist-section">
-      <div class="profile-gamelist-section-title">❤️ 좋아하는 게임 <span class="profile-activity-count">${likedGameIds.length}개</span></div>
-      ${_buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요')}
+      <button class="profile-gamelist-section-toggle" type="button">❤️ 좋아하는 게임 <span class="profile-activity-count">${likedGameIds.length}개</span><span class="profile-toggle-arrow">▾</span></button>
+      <div class="profile-gamelist-body is-hidden">${_buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요')}</div>
     </div>
     <div class="profile-gamelist-section">
-      <div class="profile-gamelist-section-title">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span></div>
-      ${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}
+      <button class="profile-gamelist-section-toggle" type="button">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span><span class="profile-toggle-arrow">▾</span></button>
+      <div class="profile-gamelist-body is-hidden">${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}</div>
     </div>`;
-  // 기록 보드: 플레이기록 + 게임평 + 사진 요약
+  // 기록 보드: 요약 + 플레이기록/게임평/사진 토글 (기본 닫힘)
   const _recordInnerHtml = `
     <ul class="profile-record-stats">
       <li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>
       <li><span>게임평</span><strong>${stats.reviewCount}개</strong></li>
       <li><span>사진</span><strong>${photoCount}장</strong></li>
     </ul>
+    ${stats.plays.length ? `<div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
+      ${playListHtml}
+    </div>` : ''}
+    ${stats.comments.length ? `<div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${stats.comments.length}개</span><span class="profile-toggle-arrow">▾</span></button>
+      ${commentListHtml}
+    </div>` : ''}
     <a class="profile-record-link" href="/pages/game/game-reviews.html">기록 페이지 바로 가기 →</a>`;
-  // 홈페이지 이용 기록: 통계 + 플레이한 게임 + 코멘트
+  // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
   const _usageInnerHtml = `
     <div class="profile-stats-wrap">
       <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
       <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
     </div>
-    ${stats.plays.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이한 게임 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-      ${playListHtml}
-    </div>` : ''}
     ${stats.comments.length ? `<div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
       ${commentListHtml}
@@ -631,7 +635,7 @@ async function openProfilePanel() {
     <button class="profile-card profile-card--notif" data-subsheet="usage" type="button">
       <span class="profile-card-icon">📊</span>
       <div class="profile-card-usage-info">
-        <span class="profile-card-label">내 활동</span>
+        <span class="profile-card-label">함께한 시간</span>
         ${_summaryParts.length ? `<span class="profile-card-usage-detail">${escH(_statsSummary)}</span>` : ''}
       </div>
       <span class="profile-card-arrow">›</span>
@@ -924,19 +928,48 @@ async function openProfilePanel() {
 
       } else if (type === 'taste') {
         _openSubSheet('취향 보드', _tasteInnerHtml, subBody => {
+          subBody.querySelectorAll('.profile-gamelist-section-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const body = btn.nextElementSibling;
+              const arrow = btn.querySelector('.profile-toggle-arrow');
+              const hidden = body.classList.toggle('is-hidden');
+              arrow.textContent = hidden ? '▾' : '▴';
+            });
+          });
           subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
             li.addEventListener('click', () => {
-              if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
+              const key = li.dataset.gameKey;
+              if (!key) return;
+              if (window.openGameSheet) window.openGameSheet(key);
+              else if (window.ensureGameSheet) window.ensureGameSheet(() => window.openGameSheet?.(key));
             });
           });
         });
 
       } else if (type === 'records') {
-        _openSubSheet('기록 보드', _recordInnerHtml);
+        _openSubSheet('기록 보드', _recordInnerHtml, subBody => {
+          subBody.querySelectorAll('.profile-activity-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const list = btn.nextElementSibling;
+              const arrow = btn.querySelector('.profile-toggle-arrow');
+              const collapsed = list.classList.toggle('is-collapsed');
+              arrow.textContent = collapsed ? '▾' : '▴';
+            });
+          });
+          subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+              const isHidden = wrap.classList.toggle('is-hidden');
+              btn.textContent = isHidden
+                ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
+                : '접기';
+            });
+          });
+        });
 
 
       } else if (type === 'usage') {
-        _openSubSheet('이용 기록', _usageInnerHtml, subBody => {
+        _openSubSheet('함께한 시간', _usageInnerHtml, subBody => {
           // 통계 기본 펼침
           subBody.querySelector('.profile-panel-stats')?.classList.remove('is-collapsed');
           const _sa = subBody.querySelector('.profile-stats-toggle .profile-toggle-arrow');

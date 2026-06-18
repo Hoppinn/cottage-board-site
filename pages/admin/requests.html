@@ -412,7 +412,7 @@
       // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1, 로그인 필요)
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
-          if (e.target.closest('button, input, a, .req-edit-wrap, [data-action]')) return;
+          if (e.target.closest('button, input, a, details, .req-edit-wrap, [data-action]')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           if (li._voting) return; // 연타 방지
           li._voting = true;
@@ -618,7 +618,7 @@
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
-          if (e.target.closest('button, input, a, .req-edit-wrap, [data-action]')) return;
+          if (e.target.closest('button, input, a, details, .req-edit-wrap, [data-action]')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           if (li._voting) return; // 연타 방지
           li._voting = true;

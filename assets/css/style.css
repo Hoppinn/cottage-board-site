@@ -3741,8 +3741,10 @@ body.sheet-open{
 .profile-gamelist-thumb-empty{width:44px;height:44px;background:#f0ebe5;border-radius:5px;flex-shrink:0;}
 .profile-gamelist-name{font-size:13px;color:#5a3418;font-weight:500;}
 .profile-gamelist-empty{color:#b0a090;font-size:13px;text-align:center;padding:30px 0;margin:0;}
-.profile-gamelist-section{margin-bottom:20px;}
+.profile-gamelist-section{margin-bottom:4px;}
 .profile-gamelist-section-title{font-size:13px;font-weight:700;color:#5a3418;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border,#e8e4dc);}
+.profile-gamelist-section-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;text-align:left;gap:6px;margin-bottom:8px;}
+.profile-gamelist-body.is-hidden{display:none;}
 .profile-record-stats{list-style:none;padding:0;margin:0 0 20px;}
 .profile-record-stats li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border,#e8e4dc);font-size:14px;}
 .profile-record-stats li span{color:var(--muted);}
@@ -3806,7 +3808,7 @@ body.sheet-open{
 .profile-title-section{margin-top:14px;}
 .profile-title-header{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .profile-title-count{font-size:11px;color:var(--muted);font-weight:400;}
-.profile-title-toggle-btn{margin-left:auto;font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;}
+.profile-title-toggle-btn{margin-left:auto;font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:none;border:none;cursor:pointer;padding:0;}
 .profile-title-body{padding:4px 0 6px;}
 .profile-title-body.is-hidden{display:none;}
 .profile-title-empty{font-size:12px;color:var(--muted);margin:4px 0 8px;}
@@ -4224,6 +4226,9 @@ body.sheet-open{
   position:absolute;
   inset:0;
   border-radius:inherit;
+  background:transparent;
+  border:none;
+  cursor:pointer;
 }
 
 /* =========================
