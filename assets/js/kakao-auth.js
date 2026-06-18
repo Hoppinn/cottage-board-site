@@ -598,12 +598,12 @@ async function openProfilePanel() {
       </button>
       <button class="profile-card" data-subsheet="liked" type="button">
         <span class="profile-card-icon">❤️</span>
-        <span class="profile-card-label">좋아한 게임</span>
+        <span class="profile-card-label">좋아하는 게임</span>
         <span class="profile-card-summary">${likedGameIds.length}개</span>
       </button>
       <button class="profile-card" data-subsheet="curious" type="button">
         <span class="profile-card-icon">👀</span>
-        <span class="profile-card-label">관심있는 게임</span>
+        <span class="profile-card-label">해보고 싶은 게임</span>
         <span class="profile-card-summary">${curiousGameIds.length}개</span>
       </button>
       <button class="profile-card profile-card--span2" data-subsheet="reviews" type="button">
@@ -907,7 +907,7 @@ async function openProfilePanel() {
         }); // end voucher afterRender
 
       } else if (type === 'liked') {
-        _openSubSheet('좋아한 게임', _buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요'), subBody => {
+        _openSubSheet('좋아하는 게임', _buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요'), subBody => {
           subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
             li.addEventListener('click', () => {
               if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
@@ -916,7 +916,7 @@ async function openProfilePanel() {
         });
 
       } else if (type === 'curious') {
-        _openSubSheet('관심있는 게임', _buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요'), subBody => {
+        _openSubSheet('해보고 싶은 게임', _buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요'), subBody => {
           subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
             li.addEventListener('click', () => {
               if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
