@@ -293,8 +293,9 @@
       }
 
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
-      const active = data.filter(r => !r.added_at || new Date(r.added_at) < cutoff);
-      const recentAdded = data.filter(r => r.added_at && new Date(r.added_at) >= cutoff);
+      const completedDate = r => r.added_at || r.purchased_at;
+      const active = data.filter(r => !r.purchased_at && !r.added_at);
+      const recentAdded = data.filter(r => { const d = completedDate(r); return d && new Date(d) >= cutoff; });
 
       const fmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
 
@@ -357,7 +358,7 @@
 
       if (recentAdded.length) {
         html += `<div class="req-purchased-section">
-          <p class="req-purchased-title">추가된 게임 <span class="req-purchased-note">· 게임 추가 후 30일간 표시됩니다</span></p>
+          <p class="req-purchased-title">완료된 게임 <span class="req-purchased-note">· 구매 또는 추가 후 30일간 표시됩니다</span></p>
           <ul class="req-list req-list-purchased">${recentAdded.map(buildRow).join('')}</ul>
         </div>`;
       }
