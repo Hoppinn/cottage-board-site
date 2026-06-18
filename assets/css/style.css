@@ -4533,6 +4533,7 @@ body.sheet-open{
 .req-item-votable:hover{background:var(--bg,#f5f0e8);}
 .req-count-voted{color:#fff;font-weight:700;}
 .req-added-badge{background:#fff8e1;color:#e65100;border-color:#ffe082;}
+.req-date-edit{cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;}
 .req-action-btn{font-size:11px;border:1px solid var(--border,#e8e4dc);border-radius:4px;padding:2px 8px;background:var(--bg,#fff);color:var(--muted);cursor:pointer;white-space:nowrap;}
 .req-action-plan{background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7;}
 .req-action-done{background:#e3f2fd;color:#1565c0;border-color:#90caf9;}

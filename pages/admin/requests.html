@@ -293,8 +293,8 @@
       }
 
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
-      const active = data.filter(r => !r.purchased_at);
-      const purchased = data.filter(r => r.purchased_at && new Date(r.purchased_at) >= cutoff);
+      const active = data.filter(r => !r.added_at || new Date(r.added_at) < cutoff);
+      const recentAdded = data.filter(r => r.added_at && new Date(r.added_at) >= cutoff);
 
       const fmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
 
@@ -308,9 +308,12 @@
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
 
-        // 구매완료/구매예정 배지: 모든 유저 표시
+        // 구매완료/구매예정 배지: 모든 유저 표시. 관리자는 날짜 클릭 편집 가능
+        const purchasedDateEl = isAdmin()
+          ? `<span class="req-date-edit" data-action="edit-purchased-date" data-id="${r.id}" data-date="${r.purchased_at}">${fmtDate(r.purchased_at)}</span>`
+          : fmtDate(r.purchased_at);
         const statusBadge = r.purchased_at
-          ? `<span class="req-status-badge req-status-done">구매 완료 · ${fmtDate(r.purchased_at)}</span>`
+          ? `<span class="req-status-badge req-status-done">구매 완료 · ${purchasedDateEl}</span>`
           : r.is_planned
             ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
             : '';
@@ -352,10 +355,10 @@
         ? '<ul class="req-list">' + active.map(buildRow).join('') + '</ul>'
         : '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>';
 
-      if (purchased.length) {
+      if (recentAdded.length) {
         html += `<div class="req-purchased-section">
-          <p class="req-purchased-title">구매 완료 <span class="req-purchased-note">· 구매 후 30일간 표시됩니다</span></p>
-          <ul class="req-list req-list-purchased">${purchased.map(buildRow).join('')}</ul>
+          <p class="req-purchased-title">추가된 게임 <span class="req-purchased-note">· 게임 추가 후 30일간 표시됩니다</span></p>
+          <ul class="req-list req-list-purchased">${recentAdded.map(buildRow).join('')}</ul>
         </div>`;
       }
 
@@ -366,7 +369,7 @@
       // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1, 로그인 필요)
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
-          if (e.target.closest('button, input, a, .req-edit-wrap')) return;
+          if (e.target.closest('button, input, a, .req-edit-wrap, [data-action]')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           if (li._voting) return; // 연타 방지
           li._voting = true;
@@ -409,17 +412,26 @@
           const id = btn.dataset.id;
           const action = btn.dataset.action;
           if (action === 'set-planned') {
+            if (!confirm('구매 예정으로 등록할까요?')) return;
             await getDb().from('game_requests').update({ is_planned: true }).eq('id', id);
           } else if (action === 'unset-planned') {
             if (!confirm('구매 예정을 해제할까요?')) return;
             await getDb().from('game_requests').update({ is_planned: false }).eq('id', id);
           } else if (action === 'set-purchased') {
+            if (!confirm('구매 완료로 등록할까요?')) return;
             const today = new Date().toISOString().slice(0, 10);
             await getDb().from('game_requests').update({ is_planned: false, purchased_at: today, status: 'done' }).eq('id', id);
           } else if (action === 'unset-purchased') {
             if (!confirm('구매 완료를 해제할까요?')) return;
             await getDb().from('game_requests').update({ purchased_at: null, is_planned: false, status: 'pending' }).eq('id', id);
+          } else if (action === 'edit-purchased-date') {
+            const cur = btn.dataset.date ? new Date(btn.dataset.date).toISOString().slice(0, 10) : '';
+            const newDate = prompt('구매 완료 날짜 (YYYY-MM-DD)', cur);
+            if (!newDate || newDate === cur) return;
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(newDate)) { alert('날짜 형식이 올바르지 않습니다 (YYYY-MM-DD)'); return; }
+            await getDb().from('game_requests').update({ purchased_at: newDate }).eq('id', id);
           } else if (action === 'set-added') {
+            if (!confirm('📦 추가됐어요 알림을 등록할까요?\n1분 후 전체 회원에게 알림이 전송됩니다.')) return;
             await getDb().from('game_requests').update({ added_at: new Date().toISOString() }).eq('id', id);
           } else if (action === 'unset-added') {
             if (!confirm('추가됨을 해제할까요?\n이미 1분 이상 지났다면 알림이 발송됐을 수 있습니다.')) return;
@@ -500,7 +512,7 @@
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
-          if (e.target.closest('button, input, a, .req-edit-wrap')) return;
+          if (e.target.closest('button, input, a, .req-edit-wrap, [data-action]')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           if (li._voting) return; // 연타 방지
           li._voting = true;
