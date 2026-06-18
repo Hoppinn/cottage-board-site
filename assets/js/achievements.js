@@ -508,7 +508,7 @@
         const _pAchDef = _pAchId ? ACH_DEFS.find(a => a.id === _pAchId) : null;
         if (_pAchDef) {
           const cur = COUNTS[_pAchDef.type] || 0;
-          progressHtml = `<span class="profile-title-progress">${cur}/${_pAchDef.threshold}</span>`;
+          progressHtml = `<span class="profile-title-progress">${SHORT_TYPE_LABELS[_pAchDef.type] || _pAchDef.type} ${cur}/${_pAchDef.threshold}</span>`;
         }
 
         return `<button class="${cls}" data-title-id="${def.id}" data-earned="${earned}" type="button">` +
@@ -543,7 +543,6 @@
       const html = `<div class="profile-title-section" data-earned-count="${earnedIds.size}" data-title-total="${TITLE_DEFS.length}">` +
         `<div class="profile-title-header">🏷 칭호 <span class="profile-title-count">${earnedIds.size} / ${TITLE_DEFS.length}종</span>` +
         `<button class="profile-title-toggle-btn" type="button">전체 보기 ▾</button></div>` +
-        `${_titlePreviewHtml}` +
         `<div class="profile-title-body is-hidden">` +
         `${earnedIds.size === 0 ? '<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>' : ''}` +
         `<div class="profile-title-grid">${cards}</div>` +
@@ -707,12 +706,8 @@
       const _nc = COUNTS[_nextChar.type] || 0;
       _charPreviewParts.push(`→ ${_nextChar.emoji} ${_charName(_nextChar)} (${SHORT_TYPE_LABELS[_nextChar.type] || _nextChar.type} ${_nc}/${_nextChar.threshold})`);
     }
-    const _charPreviewHtml = _charPreviewParts.length
-      ? `<div class="profile-section-preview">${_charPreviewParts.join('  ')}</div>` : '';
-
     return `<div class="profile-char-section" data-char-count="${earnedCount}" data-char-total="${CHAR_DEFS.length}">
       <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
-      ${_charPreviewHtml}
       <div class="profile-char-body is-hidden">
         ${emptyHint}
         <div class="profile-char-grid">${gridCards}</div>
@@ -782,15 +777,11 @@
       const _nc = COUNTS[_nextAch.type] || 0;
       _achPreviewParts.push(`→ ${_nextAch.name} (${SHORT_TYPE_LABELS[_nextAch.type] || _nextAch.type} ${_nc}/${_nextAch.threshold})`);
     }
-    const _achPreviewHtml = _achPreviewParts.length
-      ? `<div class="profile-section-preview">${_achPreviewParts.join('  ')}</div>` : '';
-
     return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}" data-ach-total="${ACH_DEFS.length}">` +
       `<div class="profile-ach-header">` +
       `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
       `<button class="profile-ach-toggle-btn" type="button">전체 보기 ▾</button>` +
       `</div>` +
-      `${_achPreviewHtml}` +
       `<ul class="profile-ach-list is-hidden">${items}</ul>` +
       `</div>`;
   }

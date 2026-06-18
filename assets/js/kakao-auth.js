@@ -573,7 +573,10 @@ async function openProfilePanel() {
     <div class="profile-panel-profile">
       ${_repImgHtml}
       <div class="profile-panel-profile-info">
-        <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
+        <div class="profile-panel-nick-row">
+          <span class="profile-panel-nick">${escH(user.nickname || '손님')}</span>
+          ${_newCount > 0 ? `<button class="profile-panel-notif-btn" data-subsheet="notif" type="button">🔔 새 알림 ${_newCount}건</button>` : ''}
+        </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
         ${_titleLineHtml}
         ${_growthBadge}
@@ -585,11 +588,6 @@ async function openProfilePanel() {
       </div>
     </div>
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
-    <button class="profile-card profile-card--notif${_newCount > 0 ? ' has-badge' : ''}" data-subsheet="notif" type="button">
-      <span class="profile-card-icon">🔔</span>
-      <span class="profile-card-label">${_newCount > 0 ? `새 알림 ${_newCount}건` : '최근 알림'}</span>
-      <span class="profile-card-arrow">›</span>
-    </button>
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="growth" type="button">
         <span class="profile-card-icon">🌱</span>
@@ -638,7 +636,7 @@ async function openProfilePanel() {
       window._cottageSess.set(String(user.id), _s);
     }
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    body.querySelector('.profile-card[data-subsheet="notif"]')?.classList.remove('has-badge');
+    body.querySelector('.profile-panel-notif-btn')?.remove();
     const voucherItem = container.querySelector('.profile-notif-voucher');
     if (voucherItem) {
       voucherItem.classList.remove('is-new');
@@ -647,10 +645,7 @@ async function openProfilePanel() {
     }
     const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
     if (remaining === 0) {
-      const _nc = body.querySelector('.profile-card[data-subsheet="notif"]');
-      _nc?.classList.remove('has-badge');
-      const _nl = _nc?.querySelector('.profile-card-label');
-      if (_nl) _nl.textContent = '최근 알림';
+      body.querySelector('.profile-panel-notif-btn')?.remove();
     }
     _updateNotifBadge();
   }
@@ -825,7 +820,7 @@ async function openProfilePanel() {
   }
 
   // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
-  body.querySelectorAll('.profile-card').forEach(card => {
+  body.querySelectorAll('.profile-card, .profile-panel-notif-btn').forEach(card => {
     card.addEventListener('click', () => {
       const type = card.dataset.subsheet;
 
@@ -841,10 +836,7 @@ async function openProfilePanel() {
               window._cottageSess.set(String(user.id), _s);
             }
             document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-            const _nc = body.querySelector('.profile-card[data-subsheet="notif"]');
-            _nc?.classList.remove('has-badge');
-            const _nl = _nc?.querySelector('.profile-card-label');
-            if (_nl) _nl.textContent = '최근 알림';
+            body.querySelector('.profile-panel-notif-btn')?.remove();
             const list = subBody.querySelector('.profile-notif-list');
             list?.querySelectorAll('.is-new').forEach(el => {
               el.classList.remove('is-new');
