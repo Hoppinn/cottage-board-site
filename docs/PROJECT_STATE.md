@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (94차)
+최종 갱신: 2026-06-18 (96차)
 
 ---
 
@@ -12,7 +12,20 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**다음 작업 후보 (94차 이후, 우선순위 순)**
+**대기 중: 투표 count 복구 SQL** — 96차 initMyVotesFromDB로 로직은 수정됨. DB count가 game_request_votes 실제 행 수보다 낮은 항목 보정 필요.
+```sql
+UPDATE game_requests
+SET request_count = (
+  SELECT COUNT(*) FROM game_request_votes WHERE request_id = game_requests.id
+)
+WHERE request_count < (
+  SELECT COUNT(*) FROM game_request_votes WHERE request_id = game_requests.id
+);
+UPDATE game_requests SET request_count = 1 WHERE request_count < 1;
+UPDATE snack_requests SET request_count = 1 WHERE request_count < 1;
+```
+
+**다음 작업 후보 (96차 이후, 우선순위 순)**
 
 0. **[A] 업적 구조 마이그레이션 SQL 실행 대기** — Supabase에서 실행 필요
    ```sql
@@ -354,6 +367,8 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | fix: 투표 상태 DB 기준 초기화 — initMyVotesFromDB 도입, syncSubmittedToVotes 근본 제거. myVotes는 game_request_votes를 source of truth로 사용 (96차) |
+| 2026-06-18 | fix: 구매희망 토글 영구 -1 버그 — removedVotes localStorage set 추가, syncSubmittedToVotes에서 명시 제거된 항목 제외 처리 (95차) |
 | 2026-06-18 | feat: 업적/칭호 시스템 V2 — ACH_DEFS rewards 구조, 방문 업적 5종, hedgehog threshold 조정, 미해금 카드 진행도 표시, upsertProfile visit 트리거, getUserVisitCount API 추가 (94차) |
 | 2026-06-18 | fix: 교환권 공지 문구 오류 — "첫 게임평" → "첫 플레이기록". 업적 TYPE_LABELS review "게임 별점"→"게임평" (93차 재정정) |
 | 2026-06-18 | fix: 구매희망 토글 차감 오류 — li._voting 락 + li.dataset.count 즉시 갱신으로 연타 stale read 방지 (게임/간식 양쪽) |
