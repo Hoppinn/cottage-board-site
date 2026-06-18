@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (113차)
+최종 갱신: 2026-06-19 (116차)
 
 ---
 
@@ -27,7 +27,10 @@
 - [x] 카카오 OAuth 로그인/로그아웃
 - [x] 닉네임 변경 (localStorage + DB 저장)
 - [x] 프로필 사진 변경 (프리셋 20종 + 파일 업로드, localStorage + DB 저장, 다기기 복원)
-- [x] 내 보드 패널 (플레이 기록, 코멘트, 모임 참석 통계)
+- [x] 내 보드 패널 — 카드 구조 재정리 (116차)
+  - 🌱 성장 보드 / ❤️ 취향 보드 (좋아하는+해보고싶은 통합) / 📝 기록 보드 (기록·게임평·사진 요약) / 🎫 음료교환권 → 2×2 그리드
+  - 📊 내 활동 전폭 유지
+  - getUserPhotoCount 병렬 로드 추가
 - [x] 유저 차단/해제 (어드민)
 
 ### 게임 기록
@@ -71,14 +74,15 @@
   - play-records-utils.js 로드 추가 (index.html, owned-games.html, game-location.html)
 
 ### 어드민
-- [x] 게임/간식 요청 관리 — 통합 상태 시스템 (104차)
+- [x] 게임/간식 요청 관리 — 통합 상태 시스템 (104차, 116차 개선)
   - purchase_status(구매예정/선주문완료/배송중/추가됨) + status_date 컬럼
-  - "상태 설정 ▾" 드롭다운 피커 → confirm → 날짜 자동 기록
+  - "상태 설정 ▾" 드롭다운 피커 항상 표시 (상태 유무 무관) + 드롭다운 내 "해제" 추가 (116차)
   - 상태 배지 모든 유저 표시 / 날짜 클릭 편집 (관리자)
   - 추가됨 선택 시 added_at 자동 기록 (1분 딜레이 알림 유지)
   - 구매완료 게임 섹션 (30일 표시)
   - 관리자 신규 게임 등록 시 상태 선택 → 즉시 구매완료 섹션 이동
   - ⚠️ SQL 필요: `ALTER TABLE game_requests ADD COLUMN IF NOT EXISTS purchase_status TEXT; ADD COLUMN IF NOT EXISTS status_date DATE;`
+  - CSS 버그 수정: `.req-status-picker[hidden]{display:none}` — `display:flex`가 HTML `hidden` 속성 오버라이드하던 문제
 - [x] 건의사항 관리
 - [x] 회원 목록 및 차단
 - [x] 페이지 분석 대시보드 — 홍보 실험 판단판으로 전면 개편

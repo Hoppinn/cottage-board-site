@@ -3741,6 +3741,14 @@ body.sheet-open{
 .profile-gamelist-thumb-empty{width:44px;height:44px;background:#f0ebe5;border-radius:5px;flex-shrink:0;}
 .profile-gamelist-name{font-size:13px;color:#5a3418;font-weight:500;}
 .profile-gamelist-empty{color:#b0a090;font-size:13px;text-align:center;padding:30px 0;margin:0;}
+.profile-gamelist-section{margin-bottom:20px;}
+.profile-gamelist-section-title{font-size:13px;font-weight:700;color:#5a3418;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border,#e8e4dc);}
+.profile-record-stats{list-style:none;padding:0;margin:0 0 20px;}
+.profile-record-stats li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border,#e8e4dc);font-size:14px;}
+.profile-record-stats li span{color:var(--muted);}
+.profile-record-stats li strong{color:#5a3418;font-weight:700;}
+.profile-record-link{display:block;text-align:center;background:#f5f0e8;color:#7a4828;border-radius:10px;padding:12px;font-size:13px;font-weight:600;text-decoration:none;}
+.profile-record-link:hover{background:#ece7df;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;}
 .profile-subsheet-box{background:#fff;border-radius:24px 24px 18px 18px;width:100%;max-width:480px;height:calc(100vh - 48px);max-height:calc(100vh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
@@ -4575,8 +4583,10 @@ body.sheet-open{
 .req-action-status{background:#f3e5f5;color:#6a1b9a;border-color:#ce93d8;}
 .req-status-picker-wrap{position:relative;display:inline-block;}
 .req-status-picker{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--border,#e8e4dc);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:200;min-width:120px;padding:4px 0;display:flex;flex-direction:column;}
+.req-status-picker[hidden]{display:none;}
 .req-status-option{font-size:12px;padding:7px 14px;cursor:pointer;background:none;border:none;text-align:left;color:var(--text);white-space:nowrap;}
 .req-status-option:hover{background:var(--paper,#f9f6f1);}
+.req-status-option--unset{color:#c62828;border-top:1px solid var(--border,#e8e4dc);margin-top:2px;padding-top:9px;}
 .req-admin-status-row{display:flex;align-items:center;gap:8px;margin-top:6px;padding:0 2px;}
 .req-admin-status-label{font-size:12px;color:var(--muted);white-space:nowrap;}
 .req-admin-status-select{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:4px 8px;background:var(--bg,#fff);color:var(--text);flex:1;}

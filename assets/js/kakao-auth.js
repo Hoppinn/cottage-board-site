@@ -280,7 +280,7 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData, likedGameIds, curiousGameIds] = await Promise.all([
+  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData, likedGameIds, curiousGameIds, photoCount] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -292,6 +292,7 @@ async function openProfilePanel() {
     (window.CottageDB?.getRepAchievement?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
     (window.CottageDB?.getUserLikedGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getUserCuriousGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getUserPhotoCount?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
   ]);
   // 칭호 섹션: stats.profile.rep_title_id + visit_count 확정 후 별도 await (SQL 미실행 시 rep_title_id=undefined → null 처리)
   const _repTitleId = stats?.profile?.rep_title_id || null;
@@ -520,11 +521,29 @@ async function openProfilePanel() {
     ].join('');
   })();
 
-  // ── 서브시트 콘텐츠 변수 (4축) ───────────────────────────────
+  // ── 서브시트 콘텐츠 변수 ──────────────────────────────────────
   // 성장 보드: 업적 → 캐릭터 → 칭호 → 게임 도감 순
   const _growthInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
+  // 취향 보드: 좋아하는 + 해보고싶은 합산
+  const _tasteInnerHtml = `
+    <div class="profile-gamelist-section">
+      <div class="profile-gamelist-section-title">❤️ 좋아하는 게임 <span class="profile-activity-count">${likedGameIds.length}개</span></div>
+      ${_buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요')}
+    </div>
+    <div class="profile-gamelist-section">
+      <div class="profile-gamelist-section-title">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span></div>
+      ${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}
+    </div>`;
+  // 기록 보드: 플레이기록 + 게임평 + 사진 요약
+  const _recordInnerHtml = `
+    <ul class="profile-record-stats">
+      <li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>
+      <li><span>게임평</span><strong>${stats.reviewCount}개</strong></li>
+      <li><span>사진</span><strong>${photoCount}장</strong></li>
+    </ul>
+    <a class="profile-record-link" href="/pages/game/game-reviews.html">기록 페이지 바로 가기 →</a>`;
   // 홈페이지 이용 기록: 통계 + 플레이한 게임 + 코멘트
   const _usageInnerHtml = `
     <div class="profile-stats-wrap">
@@ -541,6 +560,8 @@ async function openProfilePanel() {
     </div>` : ''}`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
+  const _tasteCardSummary = `❤️ ${likedGameIds.length}개 · 👀 ${curiousGameIds.length}개`;
+  const _recordCardSummary = `기록 ${stats.plays.length}건 · 게임평 ${stats.reviewCount}개 · 사진 ${photoCount}장`;
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
@@ -591,25 +612,20 @@ async function openProfilePanel() {
         <span class="profile-card-label">성장 보드</span>
         <span class="profile-card-summary">${escH(_growthSummary)}</span>
       </button>
+      <button class="profile-card" data-subsheet="taste" type="button">
+        <span class="profile-card-icon">❤️</span>
+        <span class="profile-card-label">취향 보드</span>
+        <span class="profile-card-summary">${escH(_tasteCardSummary)}</span>
+      </button>
+      <button class="profile-card" data-subsheet="records" type="button">
+        <span class="profile-card-icon">📝</span>
+        <span class="profile-card-label">기록 보드</span>
+        <span class="profile-card-summary">${escH(_recordCardSummary)}</span>
+      </button>
       <button class="profile-card" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
         <span class="profile-card-label">음료교환권</span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
-      </button>
-      <button class="profile-card" data-subsheet="liked" type="button">
-        <span class="profile-card-icon">❤️</span>
-        <span class="profile-card-label">좋아하는 게임</span>
-        <span class="profile-card-summary">${likedGameIds.length}개</span>
-      </button>
-      <button class="profile-card" data-subsheet="curious" type="button">
-        <span class="profile-card-icon">👀</span>
-        <span class="profile-card-label">해보고 싶은 게임</span>
-        <span class="profile-card-summary">${curiousGameIds.length}개</span>
-      </button>
-      <button class="profile-card profile-card--span2" data-subsheet="reviews" type="button">
-        <span class="profile-card-icon">✍️</span>
-        <span class="profile-card-label">게임평</span>
-        <span class="profile-card-summary">${stats.reviewCount}개</span>
       </button>
     </div>
     <button class="profile-card profile-card--notif" data-subsheet="usage" type="button">
@@ -906,8 +922,8 @@ async function openProfilePanel() {
           _bindVoucher(subBody);
         }); // end voucher afterRender
 
-      } else if (type === 'liked') {
-        _openSubSheet('좋아하는 게임', _buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요'), subBody => {
+      } else if (type === 'taste') {
+        _openSubSheet('취향 보드', _tasteInnerHtml, subBody => {
           subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
             li.addEventListener('click', () => {
               if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
@@ -915,17 +931,8 @@ async function openProfilePanel() {
           });
         });
 
-      } else if (type === 'curious') {
-        _openSubSheet('해보고 싶은 게임', _buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요'), subBody => {
-          subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
-            li.addEventListener('click', () => {
-              if (li.dataset.gameKey && window.openGameSheet) window.openGameSheet(li.dataset.gameKey);
-            });
-          });
-        });
-
-      } else if (type === 'reviews') {
-        _openSubSheet('게임평', `<p class="profile-gamelist-empty">게임 기록 페이지에서 게임평을 남겨보세요</p>`);
+      } else if (type === 'records') {
+        _openSubSheet('기록 보드', _recordInnerHtml);
 
 
       } else if (type === 'usage') {

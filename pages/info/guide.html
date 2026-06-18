@@ -103,12 +103,13 @@
           </div>
           <a class="club-card-link" href="../game/game-reviews.html" aria-label="플레이기록"></a>
         </li>
-        <li class="about-for-item">
+        <li class="about-for-item" id="guideMyBoardItem">
           <span class="about-for-icon">📊</span>
           <div class="about-for-text">
             <strong>내 보드</strong><br>
             <span style="color:var(--muted);font-weight:400">내 기록·업적·교환권 모아보기</span>
           </div>
+          <button type="button" class="club-card-link" id="guideOpenBoardBtn" aria-label="내 보드 열기"></button>
         </li>
         <li class="about-for-item">
           <span class="about-for-icon">🤝</span>
@@ -140,6 +141,12 @@
   <script src="../../assets/js/achievements.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
+  <script>
+    document.getElementById('guideOpenBoardBtn').addEventListener('click', function() {
+      if (typeof getKakaoUser === 'function' && getKakaoUser()) openProfilePanel();
+      else if (typeof kakaoLogin === 'function') kakaoLogin();
+    });
+  </script>
 
   <footer class="site-footer">
     <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>

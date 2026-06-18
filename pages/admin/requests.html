@@ -337,18 +337,10 @@
           statusBadge = `<span class="req-status-badge req-status-planned">구매 예정</span>`;
         }
 
-        // 관리자 액션: 상태 없으면 피커, 있으면 해제 버튼
+        // 관리자 액션: 항상 상태 설정 피커 표시 (해제 포함)
         let adminActions = '';
         if (isAdmin()) {
-          if (r.purchase_status) {
-            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-status" data-id="${r.id}">해제</button>`;
-          } else if (r.purchased_at) {
-            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-purchased" data-id="${r.id}">구매완료 해제</button>`;
-          } else if (r.is_planned) {
-            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-planned" data-id="${r.id}">예정 해제</button>`;
-          } else {
-            adminActions += `<span class="req-status-picker-wrap"><button class="req-action-btn req-action-status req-status-picker-btn" type="button" data-id="${r.id}">상태 설정 ▾</button><div class="req-status-picker" hidden><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매예정">구매 예정</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="선주문완료">선주문 완료</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="배송중">배송중</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="추가됨">📦 추가됨</button></div></span>`;
-          }
+          adminActions += `<span class="req-status-picker-wrap"><button class="req-action-btn req-action-status req-status-picker-btn" type="button" data-id="${r.id}">상태 설정 ▾</button><div class="req-status-picker" hidden><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매예정">구매 예정</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="선주문완료">선주문 완료</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="배송중">배송중</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="추가됨">📦 추가됨</button><button type="button" class="req-status-option req-status-option--unset" data-action="unset-all" data-id="${r.id}">해제</button></div></span>`;
         }
 
         const badgesHtml = statusBadge ? `<span class="req-card-badges">${statusBadge}</span>` : '';
@@ -486,6 +478,9 @@
           } else if (action === 'unset-planned') {
             if (!confirm('상태를 해제할까요?')) return;
             await getDb().from('game_requests').update({ is_planned: false }).eq('id', id);
+          } else if (action === 'unset-all') {
+            if (!confirm('상태를 해제할까요?')) return;
+            await getDb().from('game_requests').update({ purchase_status: null, status_date: null, is_planned: false, added_at: null, purchased_at: null, status: 'pending' }).eq('id', id);
           } else if (action === 'unset-purchased') {
             if (!confirm('구매 완료를 해제할까요?')) return;
             await getDb().from('game_requests').update({ purchased_at: null, is_planned: false, status: 'pending' }).eq('id', id);
