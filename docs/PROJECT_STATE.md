@@ -12,45 +12,9 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**대기 중: 투표 count 복구 SQL** — 96차 initMyVotesFromDB로 로직은 수정됨. DB count가 game_request_votes 실제 행 수보다 낮은 항목 보정 필요.
-```sql
-UPDATE game_requests
-SET request_count = (
-  SELECT COUNT(*) FROM game_request_votes WHERE request_id = game_requests.id
-)
-WHERE request_count < (
-  SELECT COUNT(*) FROM game_request_votes WHERE request_id = game_requests.id
-);
-UPDATE game_requests SET request_count = 1 WHERE request_count < 1;
-UPDATE snack_requests SET request_count = 1 WHERE request_count < 1;
-```
+**다음 작업 후보 (97차 이후, 우선순위 순)**
 
-**다음 작업 후보 (96차 이후, 우선순위 순)**
-
-0. **[A] 업적 구조 마이그레이션 SQL 실행 대기** — Supabase에서 실행 필요
-   ```sql
-   -- 방문 업적 INSERT (achievements 테이블에 FK 선행 필요)
-   INSERT INTO achievements (id, name, description, points) VALUES
-     ('visit_10',  '코티지 단골 ☕',  '홈페이지 10회 방문', 300),
-     ('visit_30',  '코티지 이웃 🏡',  '홈페이지 30회 방문', 500),
-     ('visit_50',  '코티지 주민 🔥',  '홈페이지 50회 방문', 1000),
-     ('visit_100', '터줏대감 🌳',      '홈페이지 100회 방문', 2000),
-     ('visit_300', '코티지 원로 👑',  '홈페이지 300회 방문', 5000)
-   ON CONFLICT (id) DO NOTHING;
-   -- 사진 threshold 갱신 (hedgehog_10=20, hedgehog_50=100, hedgehog_100=200)
-   UPDATE achievements SET points=500 WHERE id='hedgehog_10';
-   UPDATE achievements SET points=1000 WHERE id='hedgehog_50';
-   UPDATE achievements SET points=3000 WHERE id='hedgehog_100';
-   ```
-   JS 구현(94차)은 완료. SQL 실행 전까지 visit_10~300 업적 grant 안 됨(FK 위반).
-
-1. **칭호 시스템 SQL 실행** — Supabase 대시보드에서 실행 후 테스트
-   ```sql
-   ALTER TABLE profiles ADD COLUMN IF NOT EXISTS rep_title_id TEXT;
-   ```
-   코드는 89차에 완료. SQL 전까지는 대표 칭호 저장만 실패(no-op), 나머지 정상.
-
-2. **[B1] 주문됐어요 용어 정리** — Green, Plan 완료, 바로 구현 가능
+1. **[B1] 주문됐어요 용어 정리** — Green, Plan 완료, 바로 구현 가능
    - supabase-client.js: type `'purchased'` → `'ordered'`
    - kakao-auth.js: 타입 체크 + 표시 문구 "구매됐어요" → "주문됐어요"
    - DB 컬럼 `purchased_at`은 유지 (의미: 주문 시점)
