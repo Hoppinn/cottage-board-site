@@ -286,16 +286,21 @@
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
       const { data, error } = await getDb().from('game_requests')
-        .select('id, game_name, request_count, user_id, is_planned, purchased_at, added_at, actual_games')
+        .select('id, game_name, request_count, user_id, is_planned, purchased_at, added_at, actual_games, purchase_status, status_date')
         .order('request_count', { ascending: false }).limit(50);
       if (error || !data?.length) {
         el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>'; return;
       }
 
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
-      const completedDate = r => r.added_at || r.purchased_at;
-      const active = data.filter(r => !r.purchased_at && !r.added_at);
-      const recentAdded = data.filter(r => { const d = completedDate(r); return d && new Date(d) >= cutoff; });
+      const active = data.filter(r => !r.purchase_status && !r.purchased_at && !r.is_planned && !r.added_at);
+      const recentAdded = data.filter(r => {
+        if (r.purchase_status) { const d = r.status_date ? new Date(r.status_date) : new Date(); return d >= cutoff; }
+        if (r.purchased_at) return new Date(r.purchased_at) >= cutoff;
+        if (r.added_at) return new Date(r.added_at) >= cutoff;
+        if (r.is_planned) return true;
+        return false;
+      });
 
       const fmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
 
@@ -309,40 +314,44 @@
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
 
-        // 구매완료/구매예정 배지: 모든 유저 표시. 관리자는 날짜 클릭 편집 가능
-        const purchasedDateEl = isAdmin()
-          ? `<span class="req-date-edit" data-action="edit-purchased-date" data-id="${r.id}" data-date="${r.purchased_at}">${fmtDate(r.purchased_at)}</span>`
-          : fmtDate(r.purchased_at);
-        const statusBadge = r.purchased_at
-          ? `<span class="req-status-badge req-status-done">구매 완료 · ${purchasedDateEl}</span>`
-          : r.is_planned
-            ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
-            : '';
+        // 상태 배지: 모든 유저 표시 (purchase_status 우선, legacy 호환)
+        const STATUS_LABEL = { '구매예정': '구매 예정', '선주문완료': '선주문 완료', '배송중': '배송중', '추가됨': '추가됨' };
+        const STATUS_CLASS = { '구매예정': 'req-status-planned', '선주문완료': 'req-status-ordered', '배송중': 'req-status-shipping', '추가됨': 'req-status-added' };
+        let statusBadge = '';
+        if (r.purchase_status) {
+          const label = STATUS_LABEL[r.purchase_status] || r.purchase_status;
+          const cls = STATUS_CLASS[r.purchase_status] || 'req-status-planned';
+          let dateEl = '';
+          if (r.status_date) {
+            dateEl = isAdmin()
+              ? ` · <span class="req-date-edit" data-action="edit-status-date" data-id="${r.id}" data-date="${r.status_date}">${fmtDate(r.status_date)}</span>`
+              : ` · ${fmtDate(r.status_date)}`;
+          }
+          statusBadge = `<span class="req-status-badge ${cls}">${label}${dateEl}</span>`;
+        } else if (r.purchased_at) {
+          const purchasedDateEl = isAdmin()
+            ? `<span class="req-date-edit" data-action="edit-purchased-date" data-id="${r.id}" data-date="${r.purchased_at}">${fmtDate(r.purchased_at)}</span>`
+            : fmtDate(r.purchased_at);
+          statusBadge = `<span class="req-status-badge req-status-done">구매 완료 · ${purchasedDateEl}</span>`;
+        } else if (r.is_planned) {
+          statusBadge = `<span class="req-status-badge req-status-planned">구매 예정</span>`;
+        }
 
-        // 추가됨 배지: 관리자만 표시
-        const addedBadge = isAdmin() && r.added_at
-          ? `<span class="req-status-badge req-added-badge">📦 ${fmtDate(r.added_at)} 추가됨</span>`
-          : '';
-
-        // 관리자 액션: 상태 없을 때만 설정 버튼, 있으면 해제 버튼 (confirm 필수)
+        // 관리자 액션: 상태 없으면 피커, 있으면 해제 버튼
         let adminActions = '';
         if (isAdmin()) {
-          if (r.purchased_at) {
+          if (r.purchase_status) {
+            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-status" data-id="${r.id}">해제</button>`;
+          } else if (r.purchased_at) {
             adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-purchased" data-id="${r.id}">구매완료 해제</button>`;
           } else if (r.is_planned) {
-            adminActions += `<button class="req-action-btn req-action-done" type="button" data-action="set-purchased" data-id="${r.id}">구매 완료</button>`;
             adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-planned" data-id="${r.id}">예정 해제</button>`;
           } else {
-            adminActions += `<button class="req-action-btn req-action-plan" type="button" data-action="set-planned" data-id="${r.id}">구매 예정</button>`;
-          }
-          if (r.added_at) {
-            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-added" data-id="${r.id}">추가됨 해제</button>`;
-          } else {
-            adminActions += `<button class="req-action-btn req-action-add" type="button" data-action="set-added" data-id="${r.id}">📦 추가됨</button>`;
+            adminActions += `<span class="req-status-picker-wrap"><button class="req-action-btn req-action-status req-status-picker-btn" type="button" data-id="${r.id}">상태 설정 ▾</button><div class="req-status-picker" hidden><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매예정">구매 예정</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="선주문완료">선주문 완료</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="배송중">배송중</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="추가됨">📦 추가됨</button></div></span>`;
           }
         }
 
-        const badgesHtml = (statusBadge || addedBadge) ? `<span class="req-card-badges">${statusBadge}${addedBadge}</span>` : '';
+        const badgesHtml = statusBadge ? `<span class="req-card-badges">${statusBadge}</span>` : '';
         const actionsHtml = (adminActions || can) ? `<span class="req-card-actions">${adminActions}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>` : '';
 
         const actualList = Array.isArray(r.actual_games) ? r.actual_games : [];
@@ -371,7 +380,7 @@
 
       if (recentAdded.length) {
         html += `<div class="req-purchased-section">
-          <p class="req-purchased-title">완료된 게임 <span class="req-purchased-note">· 구매 또는 추가 후 30일간 표시됩니다</span></p>
+          <p class="req-purchased-title">구매완료 게임 <span class="req-purchased-note">· 상태 등록 후 30일간 표시됩니다</span></p>
           <ul class="req-list req-list-purchased">${recentAdded.map(buildRow).join('')}</ul>
         </div>`;
       }
@@ -379,6 +388,34 @@
       el.innerHTML = html;
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
+
+      // 관리자: 상태 설정 피커 토글
+      el.querySelectorAll('.req-status-picker-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const picker = btn.nextElementSibling;
+          el.querySelectorAll('.req-status-picker').forEach(p => { if (p !== picker) p.hidden = true; });
+          picker.hidden = !picker.hidden;
+        });
+      });
+      if (!window._reqStatusPickerCloseHandler) {
+        window._reqStatusPickerCloseHandler = () => {
+          document.querySelectorAll('.req-status-picker').forEach(p => { p.hidden = true; });
+        };
+        document.addEventListener('click', window._reqStatusPickerCloseHandler);
+      }
+
+      // 관리자: 신규 게임 입력 시 상태 선택 행 (1회 주입)
+      if (isAdmin() && !document.getElementById('gameAdminStatusRow')) {
+        const inputRow = document.querySelector('#tab-game .req-input-row');
+        if (inputRow) {
+          const row = document.createElement('div');
+          row.id = 'gameAdminStatusRow';
+          row.className = 'req-admin-status-row';
+          row.innerHTML = `<span class="req-admin-status-label">게임 상태</span><select id="gameAdminStatus" class="req-admin-status-select"><option value="">상태 없음 (희망 요청으로만 추가)</option><option value="구매예정">구매 예정</option><option value="선주문완료">선주문 완료</option><option value="배송중">배송중</option></select>`;
+          inputRow.insertAdjacentElement('afterend', row);
+        }
+      }
 
       // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1, 로그인 필요)
       el.querySelectorAll('.req-item-votable').forEach(li => {
@@ -425,16 +462,30 @@
           e.stopPropagation();
           const id = btn.dataset.id;
           const action = btn.dataset.action;
-          if (action === 'set-planned') {
-            if (!confirm('구매 예정으로 등록할까요?')) return;
-            await getDb().from('game_requests').update({ is_planned: true }).eq('id', id);
-          } else if (action === 'unset-planned') {
-            if (!confirm('구매 예정을 해제할까요?')) return;
-            await getDb().from('game_requests').update({ is_planned: false }).eq('id', id);
-          } else if (action === 'set-purchased') {
-            if (!confirm('구매 완료로 등록할까요?')) return;
+          if (action === 'set-status') {
+            const status = btn.dataset.status;
+            const statusLabels = { '구매예정': '구매 예정', '선주문완료': '선주문 완료', '배송중': '배송중', '추가됨': '📦 추가됨' };
+            if (!confirm(`"${statusLabels[status] || status}"으로 등록할까요?`)) return;
             const today = new Date().toISOString().slice(0, 10);
-            await getDb().from('game_requests').update({ is_planned: false, purchased_at: today, status: 'done' }).eq('id', id);
+            const updates = { purchase_status: status, status_date: today };
+            if (status === '구매예정') updates.is_planned = true;
+            if (status === '추가됨') updates.added_at = new Date().toISOString();
+            await getDb().from('game_requests').update(updates).eq('id', id);
+          } else if (action === 'unset-status') {
+            if (!confirm('상태를 해제할까요?')) return;
+            const item = data.find(r => String(r.id) === String(id));
+            const updates = { purchase_status: null, status_date: null, is_planned: false };
+            if (item?.purchase_status === '추가됨') updates.added_at = null;
+            await getDb().from('game_requests').update(updates).eq('id', id);
+          } else if (action === 'edit-status-date') {
+            const cur = btn.dataset.date || '';
+            const newDate = prompt('날짜 (YYYY-MM-DD)', cur);
+            if (!newDate || newDate === cur) return;
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(newDate)) { alert('날짜 형식이 올바르지 않습니다 (YYYY-MM-DD)'); return; }
+            await getDb().from('game_requests').update({ status_date: newDate }).eq('id', id);
+          } else if (action === 'unset-planned') {
+            if (!confirm('상태를 해제할까요?')) return;
+            await getDb().from('game_requests').update({ is_planned: false }).eq('id', id);
           } else if (action === 'unset-purchased') {
             if (!confirm('구매 완료를 해제할까요?')) return;
             await getDb().from('game_requests').update({ purchased_at: null, is_planned: false, status: 'pending' }).eq('id', id);
@@ -444,12 +495,6 @@
             if (!newDate || newDate === cur) return;
             if (!/^\d{4}-\d{2}-\d{2}$/.test(newDate)) { alert('날짜 형식이 올바르지 않습니다 (YYYY-MM-DD)'); return; }
             await getDb().from('game_requests').update({ purchased_at: newDate }).eq('id', id);
-          } else if (action === 'set-added') {
-            if (!confirm('📦 추가됐어요 알림을 등록할까요?\n1분 후 전체 회원에게 알림이 전송됩니다.')) return;
-            await getDb().from('game_requests').update({ added_at: new Date().toISOString() }).eq('id', id);
-          } else if (action === 'unset-added') {
-            if (!confirm('추가됨을 해제할까요?\n이미 1분 이상 지났다면 알림이 발송됐을 수 있습니다.')) return;
-            await getDb().from('game_requests').update({ added_at: null }).eq('id', id);
           } else if (action === 'remove-actual-game') {
             const game = btn.dataset.game;
             const details = btn.closest('.req-actual-wrap');
@@ -509,6 +554,7 @@
         btn.disabled = true;
         const db = getDb();
         const u = getCurrentUser();
+        const adminStatus = isAdmin() ? (document.getElementById('gameAdminStatus')?.value || '') : '';
         const { data: existing } = await db.from('game_requests').select('id, request_count').ilike('game_name', name).maybeSingle();
         if (existing) {
           await Promise.all([
@@ -517,11 +563,19 @@
           ]);
           saveMyId(MY_GAME_KEY, existing.id);
         } else {
-          const { data: ins } = await db.from('game_requests').insert({ game_name: name, request_count: 1, status: 'pending', user_id: u?.id || null }).select('id');
+          const today = new Date().toISOString().slice(0, 10);
+          const insertData = { game_name: name, request_count: 1, status: 'pending', user_id: u?.id || null };
+          if (adminStatus) {
+            insertData.purchase_status = adminStatus;
+            insertData.status_date = today;
+            if (adminStatus === '구매예정') insertData.is_planned = true;
+          }
+          const { data: ins } = await db.from('game_requests').insert(insertData).select('id');
           if (ins?.[0]?.id) {
             saveMyId(MY_GAME_KEY, ins[0].id);
             if (u?.id) await db.from('game_request_votes').upsert({ request_id: ins[0].id, user_id: u.id }, { onConflict: 'request_id,user_id' });
           }
+          if (adminStatus) document.getElementById('gameAdminStatus').value = '';
         }
         input.value = ''; btn.disabled = false;
         const msg = document.getElementById('gameSuccessMsg');

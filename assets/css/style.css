@@ -4525,6 +4525,9 @@ body.sheet-open{
 .req-status-badge{font-size:11px;border-radius:4px;padding:1px 7px;font-weight:700;white-space:nowrap;}
 .req-status-planned{background:#e8f5e9;color:#2e7d32;}
 .req-status-done{background:#e3f2fd;color:#1565c0;}
+.req-status-ordered{background:#e8eaf6;color:#283593;}
+.req-status-shipping{background:#fff3e0;color:#e65100;}
+.req-status-added{background:#fff8e1;color:#e65100;}
 .req-purchased-section{margin-top:18px;border-top:1px dashed var(--border,#e8e4dc);padding-top:12px;}
 .req-purchased-title{font-size:13px;font-weight:700;color:var(--text);margin:0 0 8px;}
 .req-purchased-note{font-size:11px;color:var(--muted);font-weight:400;}
@@ -4532,7 +4535,6 @@ body.sheet-open{
 .req-item-votable{cursor:pointer;}
 .req-item-votable:hover{background:var(--bg,#f5f0e8);}
 .req-count-voted{color:#fff;font-weight:700;}
-.req-added-badge{background:#fff8e1;color:#e65100;border-color:#ffe082;}
 .req-date-edit{cursor:pointer;text-decoration:underline dotted;text-underline-offset:2px;}
 .req-actual-wrap{margin-top:4px;border-top:1px solid var(--border,#e8e4dc);padding-top:6px;}
 .req-actual-toggle{font-size:11px;color:var(--muted);cursor:pointer;list-style:none;user-select:none;}
@@ -4552,6 +4554,14 @@ body.sheet-open{
 .req-action-done{background:#e3f2fd;color:#1565c0;border-color:#90caf9;}
 .req-action-add{background:#fff8e1;color:#e65100;border-color:#ffe082;}
 .req-action-unset{background:#fce4ec;color:#c62828;border-color:#ef9a9a;}
+.req-action-status{background:#f3e5f5;color:#6a1b9a;border-color:#ce93d8;}
+.req-status-picker-wrap{position:relative;display:inline-block;}
+.req-status-picker{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1px solid var(--border,#e8e4dc);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:200;min-width:120px;padding:4px 0;display:flex;flex-direction:column;}
+.req-status-option{font-size:12px;padding:7px 14px;cursor:pointer;background:none;border:none;text-align:left;color:var(--text);white-space:nowrap;}
+.req-status-option:hover{background:var(--paper,#f9f6f1);}
+.req-admin-status-row{display:flex;align-items:center;gap:8px;margin-top:6px;padding:0 2px;}
+.req-admin-status-label{font-size:12px;color:var(--muted);white-space:nowrap;}
+.req-admin-status-select{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:4px 8px;background:var(--bg,#fff);color:var(--text);flex:1;}
 .req-purchase-form{display:flex;gap:6px;align-items:center;padding:6px 14px 8px;flex-wrap:wrap;}
 .req-purchase-date{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:3px 7px;}
 .req-purchase-confirm{font-size:12px;background:var(--green);color:#fff;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;}
