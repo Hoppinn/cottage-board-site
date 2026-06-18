@@ -3,79 +3,127 @@
 
 (function () {
   const ACH_DEFS = [
-    // 플레이 기록 계열
-    { id: 'rabbit_first',  name: '새싹 토끼 🌱',          emoji: '🌱', type: 'play',     threshold: 1,
+    // 플레이 기록 계열 (1→10→30→50→100→150→200→300→500)
+    { id: 'rabbit_first',  name: '새싹 토끼 🌱',          emoji: '🌱', type: 'play', threshold: 1,
       rewards: { character: 'rabbit_first', voucher: true } },
-    { id: 'squirrel_10',   name: '도토리 다람쥐 🌰',       emoji: '🌰', type: 'play',     threshold: 10,
-      rewards: { character: 'squirrel_10', title: 'title_squirrel_10' } },
-    { id: 'squirrel_50',   name: '창고 다람쥐 📦',         emoji: '📦', type: 'play',     threshold: 50,
-      rewards: { character: 'squirrel_50', title: 'title_squirrel_50' } },
-    { id: 'squirrel_100',  name: '겨울준비 다람쥐 🧺',     emoji: '🧺', type: 'play',     threshold: 100,
+    { id: 'squirrel_10',   name: '도토리 다람쥐 🌰',       emoji: '🌰', type: 'play', threshold: 10,
+      rewards: { character: 'squirrel_10',  title: 'title_squirrel_10' } },
+    { id: 'bear_30',       name: '놀이 곰돌이 🐻',         emoji: '🐻', type: 'play', threshold: 30,
+      rewards: { character: 'bear_30',      title: 'title_bear_30' } },
+    { id: 'squirrel_50',   name: '창고 다람쥐 📦',         emoji: '📦', type: 'play', threshold: 50,
+      rewards: { character: 'squirrel_50',  title: 'title_squirrel_50' } },
+    { id: 'squirrel_100',  name: '겨울준비 다람쥐 🧺',     emoji: '🧺', type: 'play', threshold: 100,
       rewards: { character: 'squirrel_100', title: 'title_squirrel_100' } },
-    { id: 'squirrel_200',  name: '사서 다람쥐 📖',         emoji: '📖', type: 'play',     threshold: 200,
+    { id: 'bear_100',      name: '코티지 곰 🏠',           emoji: '🏠', type: 'play', threshold: 150,
+      rewards: { character: 'bear_100',     title: 'title_bear_100' } },
+    { id: 'squirrel_200',  name: '사서 다람쥐 📖',         emoji: '📖', type: 'play', threshold: 200,
       rewards: { character: 'squirrel_200', title: 'title_squirrel_200' } },
-    // 새 게임 탐험 계열
+    { id: 'bear_300',      name: '동면 곰 🌙',             emoji: '🌙', type: 'play', threshold: 300,
+      rewards: { character: 'bear_300',     title: 'title_bear_300' } },
+    { id: 'cottage_master', name: '코티지 마스터 ✨',      emoji: '✨', type: 'play', threshold: 500,
+      rewards: { character: 'cottage_master', title: 'title_cottage_master' } },
+    // 새 게임 탐험 계열 (5→10→20→30→50→100→150→200→300)
     { id: 'rabbit_5',      name: '호기심 토끼 🔍',         emoji: '🔍', type: 'new_game', threshold: 5,
       rewards: { character: 'rabbit_5' } },
+    { id: 'owl_10',        name: '탐구 올빼미 🦉',         emoji: '🦉', type: 'new_game', threshold: 10,
+      rewards: { character: 'owl_10' } },
     { id: 'rabbit_20',     name: '탐험 토끼 🎒',           emoji: '🎒', type: 'new_game', threshold: 20,
-      rewards: { character: 'rabbit_20', title: 'title_rabbit_20' } },
+      rewards: { character: 'rabbit_20',  title: 'title_rabbit_20' } },
+    { id: 'owl_30',        name: '연구 올빼미 🦉',         emoji: '🦉', type: 'new_game', threshold: 30,
+      rewards: { character: 'owl_30',     title: 'title_owl_30' } },
     { id: 'rabbit_50',     name: '여행 토끼 🧭',           emoji: '🧭', type: 'new_game', threshold: 50,
-      rewards: { character: 'rabbit_50', title: 'title_rabbit_50' } },
+      rewards: { character: 'rabbit_50',  title: 'title_rabbit_50' } },
     { id: 'rabbit_100',    name: '유랑 토끼 🗺️',           emoji: '🗺️', type: 'new_game', threshold: 100,
       rewards: { character: 'rabbit_100', title: 'title_rabbit_100' } },
-    // 사진 계열 — threshold 1/20/100/200
-    { id: 'hedgehog_1',    name: '초보 고슴도치 📸',       emoji: '📸', type: 'photo',    threshold: 1,
-      rewards: { character: 'hedgehog_1', title: 'title_hedgehog_1' } },
-    { id: 'hedgehog_10',   name: '기록가 고슴도치 🎞️',     emoji: '🎞️', type: 'photo',    threshold: 20,
-      rewards: { character: 'hedgehog_10', title: 'title_hedgehog_10' } },
-    { id: 'hedgehog_50',   name: '포토마스터 고슴도치 📷', emoji: '📷', type: 'photo',    threshold: 100,
-      rewards: { character: 'hedgehog_50', title: 'title_hedgehog_50' } },
-    { id: 'hedgehog_100',  name: '작가 고슴도치 🎨',       emoji: '🎨', type: 'photo',    threshold: 200,
+    { id: 'rabbit_200',    name: '방랑 토끼 🧳',           emoji: '🧳', type: 'new_game', threshold: 150,
+      rewards: { character: 'rabbit_200', title: 'title_rabbit_200' } },
+    { id: 'owl_200',       name: '박학 올빼미 📚',         emoji: '📚', type: 'new_game', threshold: 200,
+      rewards: { character: 'owl_100',    title: 'title_owl_200' } },
+    { id: 'owl_300',       name: '전설 올빼미 🦉',         emoji: '🦉', type: 'new_game', threshold: 300,
+      rewards: { character: 'owl_300',    title: 'title_owl_300' } },
+    // 사진 계열 (1→20→100→200)
+    { id: 'hedgehog_1',    name: '초보 고슴도치 📸',       emoji: '📸', type: 'photo', threshold: 1,
+      rewards: { character: 'hedgehog_1',   title: 'title_hedgehog_1' } },
+    { id: 'hedgehog_10',   name: '기록가 고슴도치 🎞️',     emoji: '🎞️', type: 'photo', threshold: 20,
+      rewards: { character: 'hedgehog_10',  title: 'title_hedgehog_10' } },
+    { id: 'hedgehog_50',   name: '포토마스터 고슴도치 📷', emoji: '📷', type: 'photo', threshold: 100,
+      rewards: { character: 'hedgehog_50',  title: 'title_hedgehog_50' } },
+    { id: 'hedgehog_100',  name: '작가 고슴도치 🎨',       emoji: '🎨', type: 'photo', threshold: 200,
       rewards: { character: 'hedgehog_100', title: 'title_hedgehog_100' } },
-    // 게임평 계열
-    { id: 'hamster_1',     name: '리뷰어 햄스터 ✏️',       emoji: '✏️', type: 'review',   threshold: 1,
-      rewards: { character: 'hamster_1', title: 'title_hamster_1' } },
-    { id: 'hamster_10',    name: '서평가 햄스터 📝',       emoji: '📝', type: 'review',   threshold: 10,
-      rewards: { character: 'hamster_10', title: 'title_hamster_10' } },
-    { id: 'hamster_50',    name: '평론가 햄스터 📚',       emoji: '📚', type: 'review',   threshold: 50,
-      rewards: { character: 'hamster_50', title: 'title_hamster_50' } },
-    { id: 'hamster_100',   name: '비평가 햄스터 🎓',       emoji: '🎓', type: 'review',   threshold: 100,
+    // 게임평 계열 (1→5→10→25→50→100→150→300)
+    { id: 'hamster_1',     name: '리뷰어 햄스터 ✏️',       emoji: '✏️', type: 'review', threshold: 1,
+      rewards: { character: 'hamster_1',   title: 'title_hamster_1' } },
+    { id: 'fox_5',         name: '감상 여우 🦊',           emoji: '🦊', type: 'review', threshold: 5,
+      rewards: { character: 'fox_10' } },
+    { id: 'hamster_10',    name: '서평가 햄스터 📝',       emoji: '📝', type: 'review', threshold: 10,
+      rewards: { character: 'hamster_10',  title: 'title_hamster_10' } },
+    { id: 'fox_25',        name: '취향 여우 🦊',           emoji: '🦊', type: 'review', threshold: 25,
+      rewards: { character: 'fox_30',      title: 'title_fox_25' } },
+    { id: 'hamster_50',    name: '평론가 햄스터 📚',       emoji: '📚', type: 'review', threshold: 50,
+      rewards: { character: 'hamster_50',  title: 'title_hamster_50' } },
+    { id: 'hamster_100',   name: '비평가 햄스터 🎓',       emoji: '🎓', type: 'review', threshold: 100,
       rewards: { character: 'hamster_100', title: 'title_hamster_100' } },
-    // 방문 계열 — 칭호 전용 (캐릭터 없음)
+    { id: 'hamster_200',   name: '마스터 햄스터 🏆',       emoji: '🏆', type: 'review', threshold: 150,
+      rewards: { character: 'hamster_300', title: 'title_hamster_200' } },
+    { id: 'fox_300',       name: '코티지 여우 🦊',         emoji: '🦊', type: 'review', threshold: 300,
+      rewards: { character: 'fox_300',     title: 'title_fox_300' } },
+    // 방문 계열 (10→30→50→100→200→300→500) — 참새 캐릭터 포함
     { id: 'visit_10',  name: '코티지 단골 ☕', emoji: '☕', type: 'visit', threshold: 10,
-      rewards: { title: 'title_visit_10' } },
+      rewards: { character: 'sparrow_10',  title: 'title_visit_10' } },
     { id: 'visit_30',  name: '코티지 이웃 🏡', emoji: '🏡', type: 'visit', threshold: 30,
       rewards: { title: 'title_visit_30' } },
     { id: 'visit_50',  name: '코티지 주민 🔥', emoji: '🔥', type: 'visit', threshold: 50,
-      rewards: { title: 'title_visit_50' } },
+      rewards: { character: 'sparrow_50',  title: 'title_visit_50' } },
     { id: 'visit_100', name: '터줏대감 🌳',    emoji: '🌳', type: 'visit', threshold: 100,
       rewards: { title: 'title_visit_100' } },
+    { id: 'visit_200', name: '코티지 참새 🐦', emoji: '🐦', type: 'visit', threshold: 200,
+      rewards: { character: 'sparrow_200', title: 'title_visit_200' } },
     { id: 'visit_300', name: '코티지 원로 👑', emoji: '👑', type: 'visit', threshold: 300,
       rewards: { title: 'title_visit_300' } },
+    { id: 'visit_500', name: '전설 참새 🐦',  emoji: '🐦', type: 'visit', threshold: 500,
+      rewards: { character: 'sparrow_1000', title: 'title_visit_500' } },
   ];
 
   // 칭호 정의 — 연결 관계는 ACH_DEFS.rewards.title이 담당 (역참조 필드 없음)
   const TITLE_DEFS = [
-    { id: 'title_squirrel_10',  name: '첫 페이지',          emoji: '📝', rarity: '일반' },
-    { id: 'title_squirrel_50',  name: '이야기 수집가',       emoji: '📖', rarity: '고급' },
-    { id: 'title_squirrel_100', name: '코티지 연대기 작가',  emoji: '📚', rarity: '희귀' },
-    { id: 'title_squirrel_200', name: '코티지 사서',         emoji: '🏛', rarity: '전설' },
-    { id: 'title_rabbit_20',    name: '탐험가',              emoji: '🗺', rarity: '일반' },
-    { id: 'title_rabbit_50',    name: '개척자',              emoji: '⛺', rarity: '희귀' },
-    { id: 'title_rabbit_100',   name: '코티지 유랑자',       emoji: '🚂', rarity: '전설' },
-    { id: 'title_hedgehog_1',   name: '첫 셔터',             emoji: '📸', rarity: '일반' },
-    { id: 'title_hedgehog_10',  name: '순간 수집가',         emoji: '🎞', rarity: '고급' },
-    { id: 'title_hedgehog_50',  name: '기억 포착자',         emoji: '📷', rarity: '희귀' },
-    { id: 'title_hedgehog_100', name: '코티지 사진사',       emoji: '🎨', rarity: '전설' },
-    { id: 'title_hamster_1',    name: '첫 감상가',           emoji: '✍', rarity: '일반' },
-    { id: 'title_hamster_10',   name: '취향 기록자',         emoji: '📖', rarity: '고급' },
-    { id: 'title_hamster_50',   name: '코티지 안내자',       emoji: '📚', rarity: '희귀' },
-    { id: 'title_hamster_100',  name: '코티지 큐레이터',     emoji: '🏛', rarity: '전설' },
-    { id: 'title_visit_10',  name: '코티지 단골', emoji: '☕', rarity: '일반' },
-    { id: 'title_visit_30',  name: '코티지 이웃', emoji: '🏡', rarity: '고급' },
-    { id: 'title_visit_50',  name: '코티지 주민', emoji: '🔥', rarity: '희귀' },
-    { id: 'title_visit_100', name: '터줏대감',    emoji: '🌳', rarity: '영웅' },
-    { id: 'title_visit_300', name: '코티지 원로', emoji: '👑', rarity: '전설' },
+    // 플레이 계열
+    { id: 'title_squirrel_10',   name: '첫 페이지',          emoji: '📝', rarity: '일반' },
+    { id: 'title_bear_30',       name: '놀이쟁이',           emoji: '🐻', rarity: '일반' },
+    { id: 'title_squirrel_50',   name: '이야기 수집가',      emoji: '📖', rarity: '고급' },
+    { id: 'title_squirrel_100',  name: '코티지 연대기 작가', emoji: '📚', rarity: '희귀' },
+    { id: 'title_bear_100',      name: '코티지 단골손님',    emoji: '🏠', rarity: '고급' },
+    { id: 'title_squirrel_200',  name: '코티지 사서',        emoji: '🏛', rarity: '전설' },
+    { id: 'title_bear_300',      name: '코티지 골수팬',      emoji: '💪', rarity: '희귀' },
+    { id: 'title_cottage_master', name: '코티지 마스터',     emoji: '✨', rarity: '전설' },
+    // 새 게임 탐험 계열
+    { id: 'title_rabbit_20',     name: '탐험가',             emoji: '🗺', rarity: '일반' },
+    { id: 'title_owl_30',        name: '게임 사냥꾼',        emoji: '🎯', rarity: '일반' },
+    { id: 'title_rabbit_50',     name: '개척자',             emoji: '⛺', rarity: '희귀' },
+    { id: 'title_rabbit_100',    name: '코티지 유랑자',      emoji: '🚂', rarity: '전설' },
+    { id: 'title_rabbit_200',    name: '게임 방랑자',        emoji: '🧳', rarity: '고급' },
+    { id: 'title_owl_200',       name: '게임 학자',          emoji: '📚', rarity: '희귀' },
+    { id: 'title_owl_300',       name: '전설 탐험가',        emoji: '🗺', rarity: '전설' },
+    // 사진 계열
+    { id: 'title_hedgehog_1',    name: '첫 셔터',            emoji: '📸', rarity: '일반' },
+    { id: 'title_hedgehog_10',   name: '순간 수집가',        emoji: '🎞', rarity: '고급' },
+    { id: 'title_hedgehog_50',   name: '기억 포착자',        emoji: '📷', rarity: '희귀' },
+    { id: 'title_hedgehog_100',  name: '코티지 사진사',      emoji: '🎨', rarity: '전설' },
+    // 게임평 계열
+    { id: 'title_hamster_1',     name: '첫 감상가',          emoji: '✍', rarity: '일반' },
+    { id: 'title_hamster_10',    name: '취향 기록자',        emoji: '📖', rarity: '고급' },
+    { id: 'title_fox_25',        name: '취향 분석가',        emoji: '🔍', rarity: '일반' },
+    { id: 'title_hamster_50',    name: '코티지 안내자',      emoji: '📚', rarity: '희귀' },
+    { id: 'title_hamster_100',   name: '코티지 큐레이터',    emoji: '🏛', rarity: '전설' },
+    { id: 'title_hamster_200',   name: '코티지 비평가',      emoji: '🖊', rarity: '고급' },
+    { id: 'title_fox_300',       name: '전설의 리뷰어',      emoji: '🏅', rarity: '전설' },
+    // 방문 계열
+    { id: 'title_visit_10',  name: '코티지 단골',    emoji: '☕', rarity: '일반' },
+    { id: 'title_visit_30',  name: '코티지 이웃',    emoji: '🏡', rarity: '고급' },
+    { id: 'title_visit_50',  name: '코티지 주민',    emoji: '🔥', rarity: '희귀' },
+    { id: 'title_visit_100', name: '터줏대감',       emoji: '🌳', rarity: '영웅' },
+    { id: 'title_visit_200', name: '오랜 친구',      emoji: '🤝', rarity: '고급' },
+    { id: 'title_visit_300', name: '코티지 원로',    emoji: '👑', rarity: '전설' },
+    { id: 'title_visit_500', name: '코티지 전설',    emoji: '🌟', rarity: '전설' },
   ];
 
   // titleId → achId 역방향 맵 (빌드 시 1회 생성)
@@ -103,13 +151,18 @@
   }
 
   const TYPE_LABELS = { play: '플레이 기록', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문' };
+  const SHORT_TYPE_LABELS = { play: '플레이', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문' };
 
   const POINTS = {
-    rabbit_first: 300, rabbit_5: 500, rabbit_20: 1000, rabbit_50: 2000, rabbit_100: 3000,
-    squirrel_10: 500, squirrel_50: 1000, squirrel_100: 2000, squirrel_200: 5000,
+    rabbit_first: 300, squirrel_10: 500,  bear_30: 500,  squirrel_50: 1000,
+    squirrel_100: 2000, bear_100: 1500,   squirrel_200: 5000, bear_300: 3000, cottage_master: 10000,
+    rabbit_5: 300,  owl_10: 300,  rabbit_20: 1000, owl_30: 500,
+    rabbit_50: 2000, rabbit_100: 3000, rabbit_200: 2500, owl_200: 3000, owl_300: 5000,
     hedgehog_1: 300, hedgehog_10: 500, hedgehog_50: 1000, hedgehog_100: 3000,
-    hamster_1: 300, hamster_10: 500, hamster_50: 1000, hamster_100: 3000,
-    visit_10: 300, visit_30: 500, visit_50: 1000, visit_100: 2000, visit_300: 5000,
+    hamster_1: 300, fox_5: 300, hamster_10: 500, fox_25: 500,
+    hamster_50: 1000, hamster_100: 2000, hamster_200: 2500, fox_300: 5000,
+    visit_10: 300, visit_30: 500, visit_50: 1000, visit_100: 2000,
+    visit_200: 3000, visit_300: 5000, visit_500: 10000,
   };
 
   // 업적 체크 진입점 — supabase-client.js에서 호출
@@ -130,13 +183,22 @@
       checks.push(
         { id: 'rabbit_first',  v: playCount,     t: 1 },
         { id: 'squirrel_10',   v: playCount,     t: 10 },
+        { id: 'bear_30',       v: playCount,     t: 30 },
         { id: 'squirrel_50',   v: playCount,     t: 50 },
         { id: 'squirrel_100',  v: playCount,     t: 100 },
+        { id: 'bear_100',      v: playCount,     t: 150 },
         { id: 'squirrel_200',  v: playCount,     t: 200 },
+        { id: 'bear_300',      v: playCount,     t: 300 },
+        { id: 'cottage_master', v: playCount,    t: 500 },
         { id: 'rabbit_5',      v: distinctCount, t: 5 },
+        { id: 'owl_10',        v: distinctCount, t: 10 },
         { id: 'rabbit_20',     v: distinctCount, t: 20 },
+        { id: 'owl_30',        v: distinctCount, t: 30 },
         { id: 'rabbit_50',     v: distinctCount, t: 50 },
         { id: 'rabbit_100',    v: distinctCount, t: 100 },
+        { id: 'rabbit_200',    v: distinctCount, t: 150 },
+        { id: 'owl_200',       v: distinctCount, t: 200 },
+        { id: 'owl_300',       v: distinctCount, t: 300 },
         { id: 'hedgehog_1',    v: photoCount,    t: 1 },
         { id: 'hedgehog_10',   v: photoCount,    t: 20 },
         { id: 'hedgehog_50',   v: photoCount,    t: 100 },
@@ -147,9 +209,13 @@
     if (category === 'review') {
       checks.push(
         { id: 'hamster_1',   v: ratingCount, t: 1 },
+        { id: 'fox_5',       v: ratingCount, t: 5 },
         { id: 'hamster_10',  v: ratingCount, t: 10 },
+        { id: 'fox_25',      v: ratingCount, t: 25 },
         { id: 'hamster_50',  v: ratingCount, t: 50 },
         { id: 'hamster_100', v: ratingCount, t: 100 },
+        { id: 'hamster_200', v: ratingCount, t: 150 },
+        { id: 'fox_300',     v: ratingCount, t: 300 },
       );
     }
 
@@ -160,7 +226,9 @@
         { id: 'visit_30',  v: vc, t: 30 },
         { id: 'visit_50',  v: vc, t: 50 },
         { id: 'visit_100', v: vc, t: 100 },
+        { id: 'visit_200', v: vc, t: 200 },
         { id: 'visit_300', v: vc, t: 300 },
+        { id: 'visit_500', v: vc, t: 500 },
       );
     }
 
@@ -256,13 +324,11 @@
         const rarityColor = RARITY_COLOR[def.rarity] || '#888';
 
         let progressHtml = '';
-        if (!earned) {
-          const achId = _titleToAchId[def.id];
-          const achDef = achId ? ACH_DEFS.find(a => a.id === achId) : null;
-          if (achDef) {
-            const cur = Math.min(COUNTS[achDef.type] || 0, achDef.threshold);
-            progressHtml = `<span class="profile-title-progress">${cur}/${achDef.threshold}</span>`;
-          }
+        const _pAchId = _titleToAchId[def.id];
+        const _pAchDef = _pAchId ? ACH_DEFS.find(a => a.id === _pAchId) : null;
+        if (_pAchDef) {
+          const cur = COUNTS[_pAchDef.type] || 0;
+          progressHtml = `<span class="profile-title-progress">${cur}/${_pAchDef.threshold}</span>`;
         }
 
         return `<button class="${cls}" data-title-id="${def.id}" data-earned="${earned}" type="button">` +
@@ -396,8 +462,8 @@
       const dataAttr = done ? ` data-ach-id="${def.id}"` : '';
       const disabledAttr = done ? '' : ' disabled';
 
-      const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
-      const progressLabel = done ? '' : `<span class="profile-char-card-progress">${cur}/${def.threshold}</span>`;
+      const cur = COUNTS[def.type] || 0;
+      const progressLabel = `<span class="profile-char-card-progress">${SHORT_TYPE_LABELS[def.type] || def.type} ${cur}/${def.threshold}</span>`;
 
       return `<button class="${cls}" title="${def.name}" type="button"${dataAttr}${disabledAttr}>` +
         `<img src="${imgSrc}" alt="${def.name}" ` +
