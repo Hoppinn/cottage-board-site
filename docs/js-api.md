@@ -62,6 +62,7 @@
 | `getUserDistinctGameCount(userId)` | 플레이한 게임 종류 수 (distinct game_id) |
 | `getUserPhotoCount(userId)` | 첨부 사진 URL 개수 합산 |
 | `getUserRatingCount(userId)` | 별점 제출 건수 |
+| `getUserVisitCount(userId)` | profiles.visit_count 조회. 방문 업적 체크·진행도 표시에 사용 |
 | `getRepAchievement(userId)` | 대표 캐릭터 객체 반환 |
 | `setRepTitle(userId, titleId)` | 대표 칭호 설정 (profiles.rep_title_id). 성공 true, 실패 false |
 | `grantFirstPlayVoucher(userId)` | 첫 플레이 기록 보상 교환권 1장 지급. 오너/중복이면 false. DB unique index로 이중 방어 |

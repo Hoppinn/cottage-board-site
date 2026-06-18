@@ -3769,6 +3769,7 @@ body.sheet-open{
 .profile-char-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
 .profile-char-card-name{font-size:10px;line-height:1.2;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;margin-top:2px;}
 .profile-char-card.is-locked .profile-char-card-name{opacity:0.4;}
+.profile-char-card-progress{font-size:9px;color:var(--muted);text-align:center;width:100%;line-height:1;margin-top:1px;}
 .profile-rep-action-row{display:flex;gap:8px;margin-top:8px;justify-content:flex-end;}
 .profile-rep-change-btn{font-size:13px;font-weight:700;padding:5px 14px;background:#7a4828;color:#fff;border:none;border-radius:8px;cursor:pointer;}
 .profile-rep-change-btn:hover{background:#5a3418;}
@@ -3785,12 +3786,13 @@ body.sheet-open{
 .profile-title-empty{font-size:12px;color:var(--muted);margin:4px 0 8px;}
 .profile-title-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:4px 0 6px;}
 .profile-title-card{border-radius:8px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 7px;gap:3px;cursor:pointer;}
-.profile-title-card.is-locked{opacity:0.4;cursor:default;}
+.profile-title-card.is-locked{opacity:0.6;cursor:default;}
 .profile-title-card.is-rep{border:2px solid #7a4828;box-shadow:0 0 0 1px #7a4828;}
 .profile-title-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
 .profile-title-emoji{font-size:22px;line-height:1;}
 .profile-title-name{font-size:10px;line-height:1.3;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
 .profile-title-rarity{font-size:9px;font-weight:700;}
+.profile-title-progress{font-size:9px;color:var(--muted);font-weight:600;}
 .profile-title-action-row{display:flex;gap:8px;margin-top:8px;justify-content:flex-end;}
 .profile-title-change-btn{font-size:13px;padding:5px 16px;background:#7a4828;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;}
 .profile-title-change-btn:hover{background:#5a3418;}

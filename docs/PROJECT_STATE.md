@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (90차)
+최종 갱신: 2026-06-18 (94차)
 
 ---
 
@@ -12,7 +12,24 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**다음 작업 후보 (90차 이후, 우선순위 순)**
+**다음 작업 후보 (94차 이후, 우선순위 순)**
+
+0. **[A] 업적 구조 마이그레이션 SQL 실행 대기** — Supabase에서 실행 필요
+   ```sql
+   -- 방문 업적 INSERT (achievements 테이블에 FK 선행 필요)
+   INSERT INTO achievements (id, name, description, points) VALUES
+     ('visit_10',  '코티지 단골 ☕',  '홈페이지 10회 방문', 300),
+     ('visit_30',  '코티지 이웃 🏡',  '홈페이지 30회 방문', 500),
+     ('visit_50',  '코티지 주민 🔥',  '홈페이지 50회 방문', 1000),
+     ('visit_100', '터줏대감 🌳',      '홈페이지 100회 방문', 2000),
+     ('visit_300', '코티지 원로 👑',  '홈페이지 300회 방문', 5000)
+   ON CONFLICT (id) DO NOTHING;
+   -- 사진 threshold 갱신 (hedgehog_10=20, hedgehog_50=100, hedgehog_100=200)
+   UPDATE achievements SET points=500 WHERE id='hedgehog_10';
+   UPDATE achievements SET points=1000 WHERE id='hedgehog_50';
+   UPDATE achievements SET points=3000 WHERE id='hedgehog_100';
+   ```
+   JS 구현(94차)은 완료. SQL 실행 전까지 visit_10~300 업적 grant 안 됨(FK 위반).
 
 1. **칭호 시스템 SQL 실행** — Supabase 대시보드에서 실행 후 테스트
    ```sql
@@ -337,6 +354,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | feat: 업적/칭호 시스템 V2 — ACH_DEFS rewards 구조, 방문 업적 5종, hedgehog threshold 조정, 미해금 카드 진행도 표시, upsertProfile visit 트리거, getUserVisitCount API 추가 (94차) |
 | 2026-06-18 | fix: 교환권 공지 문구 오류 — "첫 게임평" → "첫 플레이기록". 업적 TYPE_LABELS review "게임 별점"→"게임평" (93차 재정정) |
 | 2026-06-18 | fix: 구매희망 토글 차감 오류 — li._voting 락 + li.dataset.count 즉시 갱신으로 연타 stale read 방지 (게임/간식 양쪽) |
 | 2026-06-18 | feat: 업적 카드 보상 표시 — 달성 전 "받을 보상" / 달성 후 "획득한 보상". 캐릭터 항상 표시, 칭호(TITLE_DEFS.achId 역참조)/교환권(rabbit_first 하드코딩) 존재 시 추가 표시. profile-ach-info column 레이아웃 전환 |

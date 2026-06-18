@@ -1,51 +1,89 @@
-// 업적/캐릭터 시스템 V1
-// 트리거: recordGamePlay 성공 후 ('play'), submitRating 성공 후 ('review')
+// 업적/캐릭터/칭호 시스템 V2
+// rewards 객체로 보상 정참조. ACH_DEFS는 캐릭터·칭호·교환권 개수와 무관하게 독립 확장 가능.
 
 (function () {
-  // 캐릭터/업적 정의 — buildCharacterSection·buildAchievementsSection에서 공유
   const ACH_DEFS = [
-    { id: 'rabbit_first',  name: '새싹 토끼 🌱',          emoji: '🌱', type: 'play',     threshold: 1   },
-    { id: 'squirrel_10',   name: '도토리 다람쥐 🌰',       emoji: '🌰', type: 'play',     threshold: 10  },
-    { id: 'squirrel_50',   name: '창고 다람쥐 📦',         emoji: '📦', type: 'play',     threshold: 50  },
-    { id: 'squirrel_100',  name: '겨울준비 다람쥐 🧺',     emoji: '🧺', type: 'play',     threshold: 100 },
-    { id: 'squirrel_200',  name: '사서 다람쥐 📖',         emoji: '📖', type: 'play',     threshold: 200 },
-    { id: 'rabbit_5',      name: '호기심 토끼 🔍',         emoji: '🔍', type: 'new_game', threshold: 5   },
-    { id: 'rabbit_20',     name: '탐험 토끼 🎒',           emoji: '🎒', type: 'new_game', threshold: 20  },
-    { id: 'rabbit_50',     name: '여행 토끼 🧭',           emoji: '🧭', type: 'new_game', threshold: 50  },
-    { id: 'rabbit_100',    name: '유랑 토끼 🗺️',           emoji: '🗺️', type: 'new_game', threshold: 100 },
-    { id: 'hedgehog_1',    name: '초보 고슴도치 📸',       emoji: '📸', type: 'photo',    threshold: 1   },
-    { id: 'hedgehog_10',   name: '기록가 고슴도치 🎞️',     emoji: '🎞️', type: 'photo',    threshold: 10  },
-    { id: 'hedgehog_50',   name: '포토마스터 고슴도치 📷', emoji: '📷', type: 'photo',    threshold: 50  },
-    { id: 'hedgehog_100',  name: '작가 고슴도치 🎨',       emoji: '🎨', type: 'photo',    threshold: 100 },
-    { id: 'hamster_1',     name: '리뷰어 햄스터 ✏️',       emoji: '✏️', type: 'review',   threshold: 1   },
-    { id: 'hamster_10',    name: '서평가 햄스터 📝',       emoji: '📝', type: 'review',   threshold: 10  },
-    { id: 'hamster_50',    name: '평론가 햄스터 📚',       emoji: '📚', type: 'review',   threshold: 50  },
-    { id: 'hamster_100',   name: '비평가 햄스터 🎓',       emoji: '🎓', type: 'review',   threshold: 100 },
+    // 플레이 기록 계열
+    { id: 'rabbit_first',  name: '새싹 토끼 🌱',          emoji: '🌱', type: 'play',     threshold: 1,
+      rewards: { character: 'rabbit_first', voucher: true } },
+    { id: 'squirrel_10',   name: '도토리 다람쥐 🌰',       emoji: '🌰', type: 'play',     threshold: 10,
+      rewards: { character: 'squirrel_10', title: 'title_squirrel_10' } },
+    { id: 'squirrel_50',   name: '창고 다람쥐 📦',         emoji: '📦', type: 'play',     threshold: 50,
+      rewards: { character: 'squirrel_50', title: 'title_squirrel_50' } },
+    { id: 'squirrel_100',  name: '겨울준비 다람쥐 🧺',     emoji: '🧺', type: 'play',     threshold: 100,
+      rewards: { character: 'squirrel_100', title: 'title_squirrel_100' } },
+    { id: 'squirrel_200',  name: '사서 다람쥐 📖',         emoji: '📖', type: 'play',     threshold: 200,
+      rewards: { character: 'squirrel_200', title: 'title_squirrel_200' } },
+    // 새 게임 탐험 계열
+    { id: 'rabbit_5',      name: '호기심 토끼 🔍',         emoji: '🔍', type: 'new_game', threshold: 5,
+      rewards: { character: 'rabbit_5' } },
+    { id: 'rabbit_20',     name: '탐험 토끼 🎒',           emoji: '🎒', type: 'new_game', threshold: 20,
+      rewards: { character: 'rabbit_20', title: 'title_rabbit_20' } },
+    { id: 'rabbit_50',     name: '여행 토끼 🧭',           emoji: '🧭', type: 'new_game', threshold: 50,
+      rewards: { character: 'rabbit_50', title: 'title_rabbit_50' } },
+    { id: 'rabbit_100',    name: '유랑 토끼 🗺️',           emoji: '🗺️', type: 'new_game', threshold: 100,
+      rewards: { character: 'rabbit_100', title: 'title_rabbit_100' } },
+    // 사진 계열 — threshold 1/20/100/200
+    { id: 'hedgehog_1',    name: '초보 고슴도치 📸',       emoji: '📸', type: 'photo',    threshold: 1,
+      rewards: { character: 'hedgehog_1', title: 'title_hedgehog_1' } },
+    { id: 'hedgehog_10',   name: '기록가 고슴도치 🎞️',     emoji: '🎞️', type: 'photo',    threshold: 20,
+      rewards: { character: 'hedgehog_10', title: 'title_hedgehog_10' } },
+    { id: 'hedgehog_50',   name: '포토마스터 고슴도치 📷', emoji: '📷', type: 'photo',    threshold: 100,
+      rewards: { character: 'hedgehog_50', title: 'title_hedgehog_50' } },
+    { id: 'hedgehog_100',  name: '작가 고슴도치 🎨',       emoji: '🎨', type: 'photo',    threshold: 200,
+      rewards: { character: 'hedgehog_100', title: 'title_hedgehog_100' } },
+    // 게임평 계열
+    { id: 'hamster_1',     name: '리뷰어 햄스터 ✏️',       emoji: '✏️', type: 'review',   threshold: 1,
+      rewards: { character: 'hamster_1', title: 'title_hamster_1' } },
+    { id: 'hamster_10',    name: '서평가 햄스터 📝',       emoji: '📝', type: 'review',   threshold: 10,
+      rewards: { character: 'hamster_10', title: 'title_hamster_10' } },
+    { id: 'hamster_50',    name: '평론가 햄스터 📚',       emoji: '📚', type: 'review',   threshold: 50,
+      rewards: { character: 'hamster_50', title: 'title_hamster_50' } },
+    { id: 'hamster_100',   name: '비평가 햄스터 🎓',       emoji: '🎓', type: 'review',   threshold: 100,
+      rewards: { character: 'hamster_100', title: 'title_hamster_100' } },
+    // 방문 계열 — 칭호 전용 (캐릭터 없음)
+    { id: 'visit_10',  name: '코티지 단골 ☕', emoji: '☕', type: 'visit', threshold: 10,
+      rewards: { title: 'title_visit_10' } },
+    { id: 'visit_30',  name: '코티지 이웃 🏡', emoji: '🏡', type: 'visit', threshold: 30,
+      rewards: { title: 'title_visit_30' } },
+    { id: 'visit_50',  name: '코티지 주민 🔥', emoji: '🔥', type: 'visit', threshold: 50,
+      rewards: { title: 'title_visit_50' } },
+    { id: 'visit_100', name: '터줏대감 🌳',    emoji: '🌳', type: 'visit', threshold: 100,
+      rewards: { title: 'title_visit_100' } },
+    { id: 'visit_300', name: '코티지 원로 👑', emoji: '👑', type: 'visit', threshold: 300,
+      rewards: { title: 'title_visit_300' } },
   ];
 
-  // 칭호 정의 — achId: user_achievements 기반 / visitThreshold: profiles.visit_count 기반
+  // 칭호 정의 — 연결 관계는 ACH_DEFS.rewards.title이 담당 (역참조 필드 없음)
   const TITLE_DEFS = [
-    { id: 'title_squirrel_10',  name: '첫 페이지',          emoji: '📝', rarity: '일반', achId: 'squirrel_10'  },
-    { id: 'title_squirrel_50',  name: '이야기 수집가',       emoji: '📖', rarity: '고급', achId: 'squirrel_50'  },
-    { id: 'title_squirrel_100', name: '코티지 연대기 작가',  emoji: '📚', rarity: '희귀', achId: 'squirrel_100' },
-    { id: 'title_squirrel_200', name: '코티지 사서',         emoji: '🏛', rarity: '전설', achId: 'squirrel_200' },
-    { id: 'title_rabbit_20',    name: '탐험가',              emoji: '🗺', rarity: '일반', achId: 'rabbit_20'    },
-    { id: 'title_rabbit_50',    name: '개척자',              emoji: '⛺', rarity: '희귀', achId: 'rabbit_50'    },
-    { id: 'title_rabbit_100',   name: '코티지 유랑자',       emoji: '🚂', rarity: '전설', achId: 'rabbit_100'   },
-    { id: 'title_hedgehog_1',   name: '첫 셔터',             emoji: '📸', rarity: '일반', achId: 'hedgehog_1'   },
-    { id: 'title_hedgehog_10',  name: '순간 수집가',         emoji: '🎞', rarity: '고급', achId: 'hedgehog_10'  },
-    { id: 'title_hedgehog_50',  name: '기억 포착자',         emoji: '📷', rarity: '희귀', achId: 'hedgehog_50'  },
-    { id: 'title_hedgehog_100', name: '코티지 사진사',       emoji: '🎨', rarity: '전설', achId: 'hedgehog_100' },
-    { id: 'title_hamster_1',    name: '첫 감상가',           emoji: '✍', rarity: '일반', achId: 'hamster_1'    },
-    { id: 'title_hamster_10',   name: '취향 기록자',         emoji: '📖', rarity: '고급', achId: 'hamster_10'   },
-    { id: 'title_hamster_50',   name: '코티지 안내자',       emoji: '📚', rarity: '희귀', achId: 'hamster_50'   },
-    { id: 'title_hamster_100',  name: '코티지 큐레이터',     emoji: '🏛', rarity: '전설', achId: 'hamster_100'  },
-    { id: 'title_visit_10',  name: '코티지 단골', emoji: '☕', rarity: '일반', visitThreshold: 10  },
-    { id: 'title_visit_30',  name: '코티지 이웃', emoji: '🏡', rarity: '고급', visitThreshold: 30  },
-    { id: 'title_visit_50',  name: '코티지 주민', emoji: '🔥', rarity: '희귀', visitThreshold: 50  },
-    { id: 'title_visit_100', name: '터줏대감',    emoji: '🌳', rarity: '영웅', visitThreshold: 100 },
-    { id: 'title_visit_300', name: '코티지 원로', emoji: '👑', rarity: '전설', visitThreshold: 300 },
+    { id: 'title_squirrel_10',  name: '첫 페이지',          emoji: '📝', rarity: '일반' },
+    { id: 'title_squirrel_50',  name: '이야기 수집가',       emoji: '📖', rarity: '고급' },
+    { id: 'title_squirrel_100', name: '코티지 연대기 작가',  emoji: '📚', rarity: '희귀' },
+    { id: 'title_squirrel_200', name: '코티지 사서',         emoji: '🏛', rarity: '전설' },
+    { id: 'title_rabbit_20',    name: '탐험가',              emoji: '🗺', rarity: '일반' },
+    { id: 'title_rabbit_50',    name: '개척자',              emoji: '⛺', rarity: '희귀' },
+    { id: 'title_rabbit_100',   name: '코티지 유랑자',       emoji: '🚂', rarity: '전설' },
+    { id: 'title_hedgehog_1',   name: '첫 셔터',             emoji: '📸', rarity: '일반' },
+    { id: 'title_hedgehog_10',  name: '순간 수집가',         emoji: '🎞', rarity: '고급' },
+    { id: 'title_hedgehog_50',  name: '기억 포착자',         emoji: '📷', rarity: '희귀' },
+    { id: 'title_hedgehog_100', name: '코티지 사진사',       emoji: '🎨', rarity: '전설' },
+    { id: 'title_hamster_1',    name: '첫 감상가',           emoji: '✍', rarity: '일반' },
+    { id: 'title_hamster_10',   name: '취향 기록자',         emoji: '📖', rarity: '고급' },
+    { id: 'title_hamster_50',   name: '코티지 안내자',       emoji: '📚', rarity: '희귀' },
+    { id: 'title_hamster_100',  name: '코티지 큐레이터',     emoji: '🏛', rarity: '전설' },
+    { id: 'title_visit_10',  name: '코티지 단골', emoji: '☕', rarity: '일반' },
+    { id: 'title_visit_30',  name: '코티지 이웃', emoji: '🏡', rarity: '고급' },
+    { id: 'title_visit_50',  name: '코티지 주민', emoji: '🔥', rarity: '희귀' },
+    { id: 'title_visit_100', name: '터줏대감',    emoji: '🌳', rarity: '영웅' },
+    { id: 'title_visit_300', name: '코티지 원로', emoji: '👑', rarity: '전설' },
   ];
+
+  // titleId → achId 역방향 맵 (빌드 시 1회 생성)
+  const _titleToAchId = {};
+  ACH_DEFS.forEach(d => { if (d.rewards?.title) _titleToAchId[d.rewards.title] = d.id; });
+
+  // 캐릭터 보상 있는 업적만 (buildCharacterSection 그리드용)
+  const CHAR_DEFS = ACH_DEFS.filter(d => d.rewards?.character);
 
   // 도감 등급표
   const CODEX_GRADES = [
@@ -64,13 +102,23 @@
     return '🌱 새싹';
   }
 
+  const TYPE_LABELS = { play: '플레이 기록', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문' };
+
+  const POINTS = {
+    rabbit_first: 300, rabbit_5: 500, rabbit_20: 1000, rabbit_50: 2000, rabbit_100: 3000,
+    squirrel_10: 500, squirrel_50: 1000, squirrel_100: 2000, squirrel_200: 5000,
+    hedgehog_1: 300, hedgehog_10: 500, hedgehog_50: 1000, hedgehog_100: 3000,
+    hamster_1: 300, hamster_10: 500, hamster_50: 1000, hamster_100: 3000,
+    visit_10: 300, visit_30: 500, visit_50: 1000, visit_100: 2000, visit_300: 5000,
+  };
+
   // 업적 체크 진입점 — supabase-client.js에서 호출
   async function checkAchievements(category, userId, opts = {}) {
     if (!userId || !window.CottageDB) return;
     const db = window.CottageDB;
 
     const [playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
-      category === 'play' || category === 'review' ? db.getUserPlayCount(userId) : Promise.resolve(null),
+      (category === 'play' || category === 'review') ? db.getUserPlayCount(userId) : Promise.resolve(null),
       category === 'play' ? db.getUserDistinctGameCount(userId) : Promise.resolve(null),
       category === 'play' ? db.getUserPhotoCount(userId) : Promise.resolve(null),
       category === 'review' ? db.getUserRatingCount(userId) : Promise.resolve(null),
@@ -79,23 +127,20 @@
     const checks = [];
 
     if (category === 'play') {
-      // play_record 계열 (새싹 토끼 포함)
       checks.push(
-        { id: 'rabbit_first',   v: playCount,    t: 1 },
-        { id: 'squirrel_10',    v: playCount,    t: 10 },
-        { id: 'squirrel_50',    v: playCount,    t: 50 },
-        { id: 'squirrel_100',   v: playCount,    t: 100 },
-        { id: 'squirrel_200',   v: playCount,    t: 200 },
-        // new_game 계열
-        { id: 'rabbit_5',       v: distinctCount, t: 5 },
-        { id: 'rabbit_20',      v: distinctCount, t: 20 },
-        { id: 'rabbit_50',      v: distinctCount, t: 50 },
-        { id: 'rabbit_100',     v: distinctCount, t: 100 },
-        // photo 계열
-        { id: 'hedgehog_1',     v: photoCount,   t: 1 },
-        { id: 'hedgehog_10',    v: photoCount,   t: 10 },
-        { id: 'hedgehog_50',    v: photoCount,   t: 50 },
-        { id: 'hedgehog_100',   v: photoCount,   t: 100 },
+        { id: 'rabbit_first',  v: playCount,     t: 1 },
+        { id: 'squirrel_10',   v: playCount,     t: 10 },
+        { id: 'squirrel_50',   v: playCount,     t: 50 },
+        { id: 'squirrel_100',  v: playCount,     t: 100 },
+        { id: 'squirrel_200',  v: playCount,     t: 200 },
+        { id: 'rabbit_5',      v: distinctCount, t: 5 },
+        { id: 'rabbit_20',     v: distinctCount, t: 20 },
+        { id: 'rabbit_50',     v: distinctCount, t: 50 },
+        { id: 'rabbit_100',    v: distinctCount, t: 100 },
+        { id: 'hedgehog_1',    v: photoCount,    t: 1 },
+        { id: 'hedgehog_10',   v: photoCount,    t: 20 },
+        { id: 'hedgehog_50',   v: photoCount,    t: 100 },
+        { id: 'hedgehog_100',  v: photoCount,    t: 200 },
       );
     }
 
@@ -108,35 +153,25 @@
       );
     }
 
-    // threshold 도달한 것만 grant 시도
+    if (category === 'visit') {
+      const vc = opts.visitCount || 0;
+      checks.push(
+        { id: 'visit_10',  v: vc, t: 10 },
+        { id: 'visit_30',  v: vc, t: 30 },
+        { id: 'visit_50',  v: vc, t: 50 },
+        { id: 'visit_100', v: vc, t: 100 },
+        { id: 'visit_300', v: vc, t: 300 },
+      );
+    }
+
     const achieved = checks.filter(c => c.v !== null && c.v >= c.t);
     if (!achieved.length) return;
 
-    // achievements 정의 가져오기 (points 확인용)
-    const allDefs = await db.getUserAchievements(userId).then(() => null).catch(() => null);
-    // points는 SQL INSERT에서 achievements 테이블로 직접 조회하지 않고 하드코딩 매핑
-    const POINTS = {
-      rabbit_first: 300, rabbit_5: 500, rabbit_20: 1000, rabbit_50: 2000, rabbit_100: 3000,
-      squirrel_10: 500, squirrel_50: 1000, squirrel_100: 2000, squirrel_200: 5000,
-      hedgehog_1: 300, hedgehog_10: 500, hedgehog_50: 1000, hedgehog_100: 3000,
-      hamster_1: 300, hamster_10: 500, hamster_50: 1000, hamster_100: 3000,
-    };
-    const NAMES = {
-      rabbit_first: '새싹 토끼 🌱', rabbit_5: '호기심 토끼 🔍', rabbit_20: '탐험 토끼 🎒',
-      rabbit_50: '여행 토끼 🧭', rabbit_100: '유랑 토끼 🗺️',
-      squirrel_10: '도토리 다람쥐 🌰', squirrel_50: '창고 다람쥐 📦',
-      squirrel_100: '겨울준비 다람쥐 🧺', squirrel_200: '사서 다람쥐 📖',
-      hedgehog_1: '초보 고슴도치 📸', hedgehog_10: '기록가 고슴도치 🎞️',
-      hedgehog_50: '포토마스터 고슴도치 📷', hedgehog_100: '작가 고슴도치 🎨',
-      hamster_1: '리뷰어 햄스터 ✏️', hamster_10: '서평가 햄스터 📝',
-      hamster_50: '평론가 햄스터 📚', hamster_100: '비평가 햄스터 🎓',
-    };
-
     for (const { id } of achieved) {
+      const def = ACH_DEFS.find(d => d.id === id);
       const granted = await db.grantAchievement(userId, id, POINTS[id] || 0);
       if (granted) {
-        showAchievementToast(NAMES[id] || id, POINTS[id] || 0);
-        // rabbit_first 신규 달성 시 rep가 null이면 자동 대표 설정 (덮어쓰기 금지)
+        showAchievementToast(def?.name || id, POINTS[id] || 0);
         if (id === 'rabbit_first') {
           const currentRep = await db.getRepAchievement?.(userId).catch(() => null);
           if (!currentRep?.id) {
@@ -167,7 +202,6 @@
     `;
     document.body.appendChild(toast);
 
-    // 등장 애니메이션
     requestAnimationFrame(() => toast.classList.add('is-visible'));
     setTimeout(() => {
       toast.classList.remove('is-visible');
@@ -193,14 +227,22 @@
     const db = window.CottageDB;
     if (!db) return { html: '', earnedIds: new Set() };
     try {
-      const achievements = await db.getUserAchievements(userId);
+      const [achievements, playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
+        db.getUserAchievements(userId),
+        db.getUserPlayCount(userId),
+        db.getUserDistinctGameCount(userId),
+        db.getUserPhotoCount(userId),
+        db.getUserRatingCount(userId),
+      ]);
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
+      const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc };
 
+      // ACH_DEFS.rewards.title 정참조 기준으로 획득 여부 판단
       const earnedIds = new Set();
       TITLE_DEFS.forEach(def => {
-        const earned = def.achId ? earnedAchIds.has(def.achId) : vc >= (def.visitThreshold || Infinity);
-        if (earned) earnedIds.add(def.id);
+        const achId = _titleToAchId[def.id];
+        if (achId && earnedAchIds.has(achId)) earnedIds.add(def.id);
       });
 
       const RARITY_COLOR = { '일반': '#888', '고급': '#4caf50', '희귀': '#2196f3', '영웅': '#9c27b0', '전설': '#ff9800' };
@@ -212,10 +254,22 @@
         if (!earned) cls += ' is-locked';
         if (isRep) cls += ' is-rep';
         const rarityColor = RARITY_COLOR[def.rarity] || '#888';
+
+        let progressHtml = '';
+        if (!earned) {
+          const achId = _titleToAchId[def.id];
+          const achDef = achId ? ACH_DEFS.find(a => a.id === achId) : null;
+          if (achDef) {
+            const cur = Math.min(COUNTS[achDef.type] || 0, achDef.threshold);
+            progressHtml = `<span class="profile-title-progress">${cur}/${achDef.threshold}</span>`;
+          }
+        }
+
         return `<button class="${cls}" data-title-id="${def.id}" data-earned="${earned}" type="button">` +
           `<span class="profile-title-emoji">${def.emoji}</span>` +
           `<span class="profile-title-name">${def.name}</span>` +
           `<span class="profile-title-rarity" style="color:${rarityColor}">${earned ? def.rarity : '???'}</span>` +
+          `${progressHtml}` +
           `</button>`;
       }).join('');
 
@@ -242,7 +296,6 @@
   // 대표 칭호 변경 핸들러
   async function handleRepTitleSelect(userId, titleId, origId, titleBody) {
     if (!userId || !titleId) return;
-    // earned 방어: data-earned 속성 확인은 호출부에서 이미 처리됨
     const ok = await window.CottageDB?.setRepTitle?.(userId, titleId);
     if (ok === false) {
       console.warn('[CottageAchievements] 대표 칭호 저장 실패');
@@ -253,14 +306,13 @@
       if (titleId) titleBody.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.classList.add('is-rep');
       const actionRow = titleBody.querySelector('#profileTitleActionRow');
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = titleId || ''; }
-      // 패널 상단 칭호 라인 즉시 갱신
       const titleDef = TITLE_DEFS.find(t => t.id === titleId);
       const panelTitleEl = document.querySelector('#profilePanel .profile-panel-title-name');
       if (panelTitleEl && titleDef) panelTitleEl.textContent = `${titleDef.emoji} ${titleDef.name}`;
     }
   }
 
-  // 게임 도감 섹션 HTML 빌드 — kakao-auth.js의 openProfilePanel에서 호출
+  // 게임 도감 섹션 HTML 빌드
   async function buildCodexSection(userId) {
     const db = window.CottageDB;
     if (!db) return '';
@@ -320,29 +372,39 @@
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [achievements, repAch] = await Promise.all([
+    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getRepAchievement(userId),
+      db.getUserPlayCount(userId),
+      db.getUserDistinctGameCount(userId),
+      db.getUserPhotoCount(userId),
+      db.getUserRatingCount(userId),
     ]);
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
+    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount };
 
-    // 17종 전체 그리드 — 획득: 컬러(is-rep=현재대표), 미획득: grayscale+disabled
-    const gridCards = ACH_DEFS.map(def => {
+    // CHAR_DEFS: 캐릭터 보상 있는 17종만 그리드에 표시
+    const gridCards = CHAR_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const isRep = repAch?.id === def.id;
-      const imgSrc = `/assets/images/characters/characters_basic/${def.id}.png`;
+      const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
       let cls = 'profile-char-card';
       if (!done) cls += ' is-locked';
       if (isRep) cls += ' is-rep';
       const dataAttr = done ? ` data-ach-id="${def.id}"` : '';
       const disabledAttr = done ? '' : ' disabled';
+
+      const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
+      const progressLabel = done ? '' : `<span class="profile-char-card-progress">${cur}/${def.threshold}</span>`;
+
       return `<button class="${cls}" title="${def.name}" type="button"${dataAttr}${disabledAttr}>` +
         `<img src="${imgSrc}" alt="${def.name}" ` +
         `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">` +
         `<span class="profile-char-emoji-fallback" style="display:none">${def.emoji}</span>` +
         `<span class="profile-char-card-name">${def.name}</span>` +
+        `${progressLabel}` +
         `</button>`;
     }).join('');
 
@@ -360,8 +422,9 @@
     const _repIconHtml = repAch?.id
       ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${repAch.id}.png" alt="">`
       : '';
+
     return `<div class="profile-char-section" data-char-count="${earnedCount}">
-      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${ACH_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
+      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
       <div class="profile-char-body is-hidden">
         ${emptyHint}
         <div class="profile-char-grid">${gridCards}</div>
@@ -370,49 +433,53 @@
     </div>`;
   }
 
-  // 업적 전체 목록 섹션 HTML 빌드 (UI 전용, checkAchievements 로직과 독립)
+  // 업적 전체 목록 섹션 HTML 빌드
   async function buildAchievementsSection(userId) {
     const db = window.CottageDB;
     if (!db) return '';
 
-    // ACH_DEFS는 IIFE 스코프에서 공유
-    const TYPE_LABELS = { play: '플레이 기록', new_game: '신규 게임', photo: '사진 업로드', review: '게임평' };
-
-    const [earned, playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
+    const [earned, playCount, distinctCount, photoCount, ratingCount, visitCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getUserPlayCount(userId),
       db.getUserDistinctGameCount(userId),
       db.getUserPhotoCount(userId),
       db.getUserRatingCount(userId),
+      db.getUserVisitCount(userId),
     ]);
 
     const earnedIds = new Set(earned.map(a => a.id));
-    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount };
+    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount };
 
-    const VOUCHER_ACH_IDS = new Set(['rabbit_first']);
     const items = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
-      const imgSrc = `/assets/images/characters/characters_basic/${def.id}.png`;
       const typeLabel = TYPE_LABELS[def.type] || def.type;
-      const titleReward = TITLE_DEFS.find(t => t.achId === def.id);
-      const hasVoucher = VOUCHER_ACH_IDS.has(def.id);
-      const rewardParts = ['🐾 캐릭터'];
-      if (titleReward) rewardParts.push('🏷 칭호');
-      if (hasVoucher) rewardParts.push('🥤 교환권');
-      const rewardHtml = `<span class="profile-ach-reward">${done ? '획득한 보상' : '받을 보상'}: ${rewardParts.join(' · ')}</span>`;
-      if (done) {
-        return `<li class="profile-ach-item is-achieved">` +
-          `<img class="profile-ach-img" src="${imgSrc}" alt="${def.name}" ` +
+
+      const rewardParts = [];
+      if (def.rewards?.character) rewardParts.push('🐾 캐릭터');
+      if (def.rewards?.title) rewardParts.push('🏷 칭호');
+      if (def.rewards?.voucher) rewardParts.push('🥤 교환권');
+      const rewardHtml = rewardParts.length
+        ? `<span class="profile-ach-reward">${done ? '획득한 보상' : '받을 보상'}: ${rewardParts.join(' · ')}</span>`
+        : '';
+
+      let iconHtml;
+      if (def.rewards?.character && done) {
+        const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+        iconHtml = `<img class="profile-ach-img" src="${imgSrc}" alt="${def.name}" ` +
           `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
-          `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>` +
-          `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
-          `<span class="profile-ach-status is-done">✓ ${typeLabel} · ${cur}/${def.threshold}</span></li>`;
+          `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>`;
+      } else {
+        iconHtml = `<span class="profile-ach-img-lock">${def.emoji}</span>`;
       }
-      return `<li class="profile-ach-item is-locked">` +
-        `<span class="profile-ach-img-lock">${def.emoji}</span>` +
+
+      const statusCls = done ? ' is-done' : '';
+      const statusText = done ? `✓ ${typeLabel} · ${def.threshold}` : `${typeLabel} · ${cur}/${def.threshold}`;
+
+      return `<li class="profile-ach-item${done ? ' is-achieved' : ' is-locked'}">` +
+        `${iconHtml}` +
         `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
-        `<span class="profile-ach-status">${typeLabel} · ${cur}/${def.threshold}</span></li>`;
+        `<span class="profile-ach-status${statusCls}">${statusText}</span></li>`;
     }).join('');
 
     return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}">` +
@@ -424,7 +491,7 @@
       `</div>`;
   }
 
-  // 대표 캐릭터 변경 — 카드 클릭 UI에서 호출 (setRepAchievement 흐름 재사용)
+  // 대표 캐릭터 변경 핸들러
   async function handleRepCardSelect(userId, achId, origId, charBody) {
     if (!userId) return;
     const ok = await window.CottageDB?.setRepAchievement(userId, achId || null);
@@ -433,15 +500,12 @@
       charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
       if (origId) charBody.querySelector(`.profile-char-card[data-ach-id="${origId}"]`)?.classList.add('is-selected');
     } else {
-      // 성공: is-rep 이동, is-selected 제거, 변경/취소 버튼 숨김
       charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-rep', 'is-selected'));
       if (achId) charBody.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.classList.add('is-rep');
       const actionRow = charBody.querySelector('#profileRepActionRow');
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = achId || ''; }
-      // 패널 상단 아바타 갱신
       const panelAvatar = document.querySelector('#profilePanel .profile-panel-avatar');
       if (panelAvatar && achId) panelAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
-      // 메뉴 하단 프로필 이미지 즉시 갱신
       const menuAvatar = document.getElementById('kakaoProfileImg');
       if (menuAvatar && achId) menuAvatar.src = `/assets/images/characters/characters_basic/${achId}.png`;
     }
@@ -458,6 +522,5 @@
     getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
   };
 
-  // supabase-client.js에서 호출하는 전역 함수
   window.checkAchievements = checkAchievements;
 })();

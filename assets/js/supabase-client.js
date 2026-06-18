@@ -833,6 +833,10 @@ window._cottageSess = (function () {
         s.timeSec = 0;
         window._cottageSess.set(userId, s);
       }
+      if (!upsertError && explicitVisitCount !== undefined) {
+        const newVisitCount = visitCountField.visit_count;
+        window.checkAchievements?.('visit', userId, { visitCount: newVisitCount });
+      }
     } catch (_) {}
   }
 
@@ -1065,6 +1069,7 @@ window._cottageSess = (function () {
     getUserPlayedGames,
     getUserPhotoCount,
     getUserRatingCount,
+    getUserVisitCount,
     getRepAchievement,
     setRepTitle,
     getPendingPointRewards,
@@ -1257,6 +1262,13 @@ window._cottageSess = (function () {
     try {
       const { count } = await db.from('game_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId);
       return count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function getUserVisitCount(userId) {
+    try {
+      const { data } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
+      return data?.visit_count || 0;
     } catch (_) { return 0; }
   }
 
