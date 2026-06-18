@@ -22,7 +22,7 @@ async function _updateNotifBadge() {
     }
     return;
   }
-  const notifs = await window.CottageDB.getMyNotifications(String(user.id), user.nickname || null, sess.notifSeenAt || null);
+  const notifs = await window.CottageDB.getMyNotifications(String(user.id), user.nickname || null, sess.notifSeenAt || null, sess.newGameSeenAt || null);
   const existing = btn.querySelector('.notif-badge');
   if (notifs.some(n => n.isNew)) {
     if (!existing) {
@@ -251,7 +251,7 @@ async function openProfilePanel() {
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
   const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
-    window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null) || Promise.resolve([]),
+    window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageAchievements?.buildAchievementsSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -365,6 +365,8 @@ async function openProfilePanel() {
       return `<li${cls} data-game-key="${escH(String(n.gameKey))}">${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
     if (n.type === 'ordered')
       return `<li${cls} data-game-name="${escH(String(n.gameName))}">${badge}🛒 <strong>${escH(n.gameName)}</strong> 주문됐어요 <span>${fmtShort(n.date)}</span></li>`;
+    if (n.type === 'new_game')
+      return `<li${cls}>${badge}🎉 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
     return '';
   }).join('');
   const _notifMore = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
@@ -777,6 +779,7 @@ async function openProfilePanel() {
             if (window._cottageSess) {
               const _s = window._cottageSess.get(String(user.id));
               _s.notifSeenAt = new Date().toISOString();
+              _s.newGameSeenAt = new Date().toISOString();
               _s.voucherNoticeSeen = true;
               window._cottageSess.set(String(user.id), _s);
             }

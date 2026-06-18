@@ -4548,6 +4548,8 @@ body.sheet-open{
 .req-badge-clickable{cursor:pointer;}
 .req-badge-clickable:hover{filter:brightness(0.92);}
 .req-status-none{background:var(--border,#e8e4dc);color:var(--muted);min-width:20px;display:inline-block;}
+.req-added-btn{font-size:11px;border:1px solid var(--border,#e8e4dc);border-radius:4px;padding:1px 7px;background:var(--bg,#fff);color:var(--muted);cursor:pointer;margin-left:5px;white-space:nowrap;}
+.req-added-btn--on{background:#fff8e1;color:#e65100;border-color:#ffe082;font-weight:700;}
 .req-purchase-form{display:flex;gap:6px;align-items:center;padding:6px 14px 8px;flex-wrap:wrap;}
 .req-purchase-date{font-size:12px;border:1px solid var(--border,#e8e4dc);border-radius:5px;padding:3px 7px;}
 .req-purchase-confirm{font-size:12px;background:var(--green);color:#fff;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;}

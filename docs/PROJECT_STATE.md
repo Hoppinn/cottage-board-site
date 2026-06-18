@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (97차)
+최종 갱신: 2026-06-18 (98차)
 
 ---
 
@@ -12,19 +12,9 @@
 
 **보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
 
-**다음 작업 후보 (97차 이후, 우선순위 순)**
+**다음 작업 후보 (98차 이후, 우선순위 순)**
 
-1. **[B2] 추가됐어요 전체 알림** — Red, Plan 완료, SQL 먼저 실행 필요
-   ```sql
-   ALTER TABLE game_requests ADD COLUMN IF NOT EXISTS added_at DATE;
-   ```
-   - getMyNotifications에 newGameSeenAt 파라미터 추가, type:'new_game' 쿼리 추가 (전체 회원 대상)
-   - kakao-auth.js: newGameSeenAt 읽기/쓰기, new_game 렌더 ("추가됐어요")
-   - requests-admin.html: "추가됨" 버튼 추가 (added_at = today 설정)
-   - ls-schema.md: newGameSeenAt 키 추가
-   - ⚠️ game_requests 없이 직접 추가된 게임은 added_at 미설정 → 알림 미발송 (운영 주의)
-
-4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 
@@ -326,6 +316,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | feat: 추가됐어요 전체 알림 — game_requests.added_at, getMyNotifications newGameSeenAt 파라미터, new_game 알림 렌더, 관리자 추가됨 버튼 (98차) |
 | 2026-06-18 | fix: 구매희망 알림 type 'purchased'→'ordered', 표시 문구 "추가됐어요"→"주문됐어요" (97차) |
 | 2026-06-18 | fix: 투표 상태 DB 기준 초기화 — initMyVotesFromDB 도입, syncSubmittedToVotes 근본 제거. myVotes는 game_request_votes를 source of truth로 사용 (96차) |
 | 2026-06-18 | fix: 구매희망 토글 영구 -1 버그 — removedVotes localStorage set 추가, syncSubmittedToVotes에서 명시 제거된 항목 제외 처리 (95차) |

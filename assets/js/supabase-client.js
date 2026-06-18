@@ -956,7 +956,7 @@ window._cottageSess = (function () {
     } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null }; }
   }
 
-  async function getMyNotifications(userId, nickname, notifSeenAt) {
+  async function getMyNotifications(userId, nickname, notifSeenAt, newGameSeenAt) {
     if (!userId) return [];
     try {
       const taggedPromise = nickname
@@ -977,7 +977,12 @@ window._cottageSess = (function () {
         .not('purchased_at', 'is', null)
         .order('purchased_at', { ascending: false })
         .limit(10);
-      const [taggedRes, curiousRes, purchasedRes] = await Promise.all([taggedPromise, curiousPromise, purchasedPromise]);
+      const newGamePromise = db.from('game_requests')
+        .select('id, game_name, added_at')
+        .not('added_at', 'is', null)
+        .order('added_at', { ascending: false })
+        .limit(10);
+      const [taggedRes, curiousRes, purchasedRes, newGameRes] = await Promise.all([taggedPromise, curiousPromise, purchasedPromise, newGamePromise]);
       const notifs = [];
       if (nickname) {
         for (const r of taggedRes.data || []) {
@@ -1005,6 +1010,10 @@ window._cottageSess = (function () {
       for (const r of purchasedRes.data || []) {
         const isNew = notifSeenAt ? r.purchased_at > notifSeenAt.slice(0, 10) : true;
         notifs.push({ type: 'ordered', gameName: r.game_name, date: r.purchased_at, isNew });
+      }
+      for (const r of newGameRes.data || []) {
+        const isNew = newGameSeenAt ? r.added_at > newGameSeenAt.slice(0, 10) : true;
+        notifs.push({ type: 'new_game', gameName: r.game_name, date: r.added_at, isNew });
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       return notifs;
