@@ -317,27 +317,35 @@
         li.addEventListener('click', async e => {
           if (e.target.closest('button, input, a, .req-edit-wrap, .req-badge-clickable')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
-          const id = li.dataset.id;
-          const count = parseInt(li.dataset.count);
-          const userId = getCurrentUser().id;
-          const myVotes = getMyVotes();
-          const voted = myVotes.has(id);
-          if (voted) {
-            if (count <= 1) return;
-            await Promise.all([
-              getDb().from('game_requests').update({ request_count: count - 1 }).eq('id', id),
-              getDb().from('game_request_votes').delete().eq('request_id', id).eq('user_id', userId),
-            ]);
-            myVotes.delete(id);
-          } else {
-            await Promise.all([
-              getDb().from('game_requests').update({ request_count: count + 1 }).eq('id', id),
-              getDb().from('game_request_votes').upsert({ request_id: id, user_id: userId }, { onConflict: 'request_id,user_id' }),
-            ]);
-            myVotes.add(id);
+          if (li._voting) return; // 연타 방지
+          li._voting = true;
+          try {
+            const id = li.dataset.id;
+            const count = parseInt(li.dataset.count);
+            const userId = getCurrentUser().id;
+            const myVotes = getMyVotes();
+            const voted = myVotes.has(id);
+            if (voted) {
+              if (count <= 1) return;
+              li.dataset.count = count - 1; // 즉시 갱신 — stale read 방지
+              await Promise.all([
+                getDb().from('game_requests').update({ request_count: count - 1 }).eq('id', id),
+                getDb().from('game_request_votes').delete().eq('request_id', id).eq('user_id', userId),
+              ]);
+              myVotes.delete(id);
+            } else {
+              li.dataset.count = count + 1; // 즉시 갱신
+              await Promise.all([
+                getDb().from('game_requests').update({ request_count: count + 1 }).eq('id', id),
+                getDb().from('game_request_votes').upsert({ request_id: id, user_id: userId }, { onConflict: 'request_id,user_id' }),
+              ]);
+              myVotes.add(id);
+            }
+            saveMyVotes(myVotes);
+            loadGameRequests();
+          } finally {
+            li._voting = false;
           }
-          saveMyVotes(myVotes);
-          loadGameRequests();
         });
       });
 
@@ -434,20 +442,28 @@
         li.addEventListener('click', async e => {
           if (e.target.closest('button, input, a, .req-edit-wrap')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
-          const id = li.dataset.id;
-          const count = parseInt(li.dataset.count);
-          const votes = getSnackVotes();
-          const voted = votes.has(id);
-          if (voted) {
-            if (count <= 1) return;
-            await getDb().from('snack_requests').update({ request_count: count - 1 }).eq('id', id);
-            votes.delete(id);
-          } else {
-            await getDb().from('snack_requests').update({ request_count: count + 1 }).eq('id', id);
-            votes.add(id);
+          if (li._voting) return; // 연타 방지
+          li._voting = true;
+          try {
+            const id = li.dataset.id;
+            const count = parseInt(li.dataset.count);
+            const votes = getSnackVotes();
+            const voted = votes.has(id);
+            if (voted) {
+              if (count <= 1) return;
+              li.dataset.count = count - 1;
+              await getDb().from('snack_requests').update({ request_count: count - 1 }).eq('id', id);
+              votes.delete(id);
+            } else {
+              li.dataset.count = count + 1;
+              await getDb().from('snack_requests').update({ request_count: count + 1 }).eq('id', id);
+              votes.add(id);
+            }
+            saveSnackVotes(votes);
+            loadSnackRequests();
+          } finally {
+            li._voting = false;
           }
-          saveSnackVotes(votes);
-          loadSnackRequests();
         });
       });
     }
