@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (103차)
+최종 갱신: 2026-06-18 (104차)
 
 ---
 
@@ -64,7 +64,14 @@
   - play-records-utils.js 로드 추가 (index.html, owned-games.html, game-location.html)
 
 ### 어드민
-- [x] 게임/간식 요청 관리 (계획/완료 처리)
+- [x] 게임/간식 요청 관리 — 통합 상태 시스템 (104차)
+  - purchase_status(구매예정/선주문완료/배송중/추가됨) + status_date 컬럼
+  - "상태 설정 ▾" 드롭다운 피커 → confirm → 날짜 자동 기록
+  - 상태 배지 모든 유저 표시 / 날짜 클릭 편집 (관리자)
+  - 추가됨 선택 시 added_at 자동 기록 (1분 딜레이 알림 유지)
+  - 구매완료 게임 섹션 (30일 표시)
+  - 관리자 신규 게임 등록 시 상태 선택 → 즉시 구매완료 섹션 이동
+  - ⚠️ SQL 필요: `ALTER TABLE game_requests ADD COLUMN IF NOT EXISTS purchase_status TEXT; ADD COLUMN IF NOT EXISTS status_date DATE;`
 - [x] 건의사항 관리
 - [x] 회원 목록 및 차단
 - [x] 페이지 분석 대시보드 — 홍보 실험 판단판으로 전면 개편
