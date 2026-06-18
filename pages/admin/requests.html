@@ -286,7 +286,7 @@
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
       const { data, error } = await getDb().from('game_requests')
-        .select('id, game_name, request_count, user_id, is_planned, purchased_at, added_at')
+        .select('id, game_name, request_count, user_id, is_planned, purchased_at, added_at, actual_games')
         .order('request_count', { ascending: false }).limit(50);
       if (error || !data?.length) {
         el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>'; return;
@@ -345,10 +345,23 @@
         const badgesHtml = (statusBadge || addedBadge) ? `<span class="req-card-badges">${statusBadge}${addedBadge}</span>` : '';
         const actionsHtml = (adminActions || can) ? `<span class="req-card-actions">${adminActions}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>` : '';
 
+        const actualList = Array.isArray(r.actual_games) ? r.actual_games : [];
+        const actualGamesHtml = isAdmin() ? `
+          <details class="req-actual-wrap" data-id="${r.id}" data-games="${escHtml(JSON.stringify(actualList))}">
+            <summary class="req-actual-toggle">실제 게임${actualList.length ? ` <span class="req-actual-count">${actualList.length}개</span>` : ''}</summary>
+            <div class="req-actual-body">
+              <div class="req-actual-tags">${actualList.map(g => `<span class="req-actual-tag">${escHtml(g)}<button class="req-actual-remove" type="button" data-action="remove-actual-game" data-id="${r.id}" data-game="${escHtml(g)}">×</button></span>`).join('')}</div>
+              <div class="req-actual-input-wrap">
+                <input type="text" class="req-actual-input" placeholder="초성 검색..." autocomplete="off" data-req-id="${r.id}">
+                <ul class="req-actual-dropdown" hidden></ul>
+              </div>
+            </div>
+          </details>` : '';
+
         return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
           <span class="req-card-name">${escHtml(r.game_name)}</span>
           <span class="req-card-count">${countLabel}</span>
-          ${badgesHtml}${actionsHtml}
+          ${badgesHtml}${actionsHtml}${actualGamesHtml}
         </li>`;
       }
 
@@ -437,9 +450,52 @@
           } else if (action === 'unset-added') {
             if (!confirm('추가됨을 해제할까요?\n이미 1분 이상 지났다면 알림이 발송됐을 수 있습니다.')) return;
             await getDb().from('game_requests').update({ added_at: null }).eq('id', id);
+          } else if (action === 'remove-actual-game') {
+            const game = btn.dataset.game;
+            const details = btn.closest('.req-actual-wrap');
+            let cur = []; try { cur = JSON.parse(details?.dataset.games || '[]'); } catch {}
+            await getDb().from('game_requests').update({ actual_games: cur.filter(g => g !== game) }).eq('id', id);
           }
           loadGameRequests();
         });
+      });
+
+      // 관리자: 실제 게임 초성 검색 자동완성
+      function _choMatch(q, t) {
+        const CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+        const cho = s => [...s].map(c => { const n = c.charCodeAt(0); return n >= 0xAC00 && n <= 0xD7A3 ? CHO[Math.floor((n - 0xAC00) / 588)] : c; }).join('');
+        const tl = t.toLowerCase(); const ql = q.toLowerCase();
+        return tl.includes(ql) || cho(t).includes(ql) || cho(t).includes(cho(q));
+      }
+      el.querySelectorAll('.req-actual-input').forEach(input => {
+        const dd = input.nextElementSibling;
+        const reqId = input.dataset.reqId;
+        input.addEventListener('input', () => {
+          const q = input.value.trim();
+          dd.innerHTML = '';
+          if (!q) { dd.hidden = true; return; }
+          const matches = (window.COTTAGE_GAMES || []).filter(g => _choMatch(q, g.display || '')).slice(0, 8);
+          if (!matches.length) { dd.hidden = true; return; }
+          matches.forEach(g => {
+            const li = document.createElement('li');
+            li.className = 'req-actual-option';
+            li.textContent = g.display;
+            li.addEventListener('mousedown', async e => {
+              e.preventDefault();
+              const details = input.closest('.req-actual-wrap');
+              let cur = []; try { cur = JSON.parse(details?.dataset.games || '[]'); } catch {}
+              if (!cur.includes(g.display)) {
+                cur.push(g.display);
+                await getDb().from('game_requests').update({ actual_games: cur }).eq('id', reqId);
+                loadGameRequests();
+              }
+              input.value = ''; dd.hidden = true;
+            });
+            dd.appendChild(li);
+          });
+          dd.hidden = false;
+        });
+        input.addEventListener('blur', () => { setTimeout(() => { dd.hidden = true; }, 150); });
       });
     }
 

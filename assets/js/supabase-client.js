@@ -979,7 +979,7 @@ window._cottageSess = (function () {
         .limit(10);
       const oneMinAgo = new Date(Date.now() - 60000).toISOString();
       const newGamePromise = db.from('game_requests')
-        .select('id, game_name, added_at')
+        .select('id, game_name, added_at, actual_games')
         .not('added_at', 'is', null)
         .lt('added_at', oneMinAgo)
         .order('added_at', { ascending: false })
@@ -1015,7 +1015,8 @@ window._cottageSess = (function () {
       }
       for (const r of newGameRes.data || []) {
         const isNew = newGameSeenAt ? new Date(r.added_at) > new Date(newGameSeenAt) : true;
-        notifs.push({ type: 'new_game', gameName: r.game_name, date: r.added_at, isNew });
+        const actualGames = Array.isArray(r.actual_games) && r.actual_games.length ? r.actual_games : null;
+        notifs.push({ type: 'new_game', gameName: r.game_name, actualGames, date: r.added_at, isNew });
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       return notifs;

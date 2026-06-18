@@ -365,8 +365,10 @@ async function openProfilePanel() {
       return `<li${cls} data-game-key="${escH(String(n.gameKey))}">${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
     if (n.type === 'ordered')
       return `<li${cls} data-game-name="${escH(String(n.gameName))}">${badge}🛒 <strong>${escH(n.gameName)}</strong> 주문됐어요 <span>${fmtShort(n.date)}</span></li>`;
-    if (n.type === 'new_game')
-      return `<li${cls}>${badge}🎉 <strong>${escH(n.gameName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
+    if (n.type === 'new_game') {
+      const displayName = n.actualGames?.length ? n.actualGames.join(', ') : n.gameName;
+      return `<li${cls}>${badge}🎉 <strong>${escH(displayName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
+    }
     return '';
   }).join('');
   const _notifMore = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';

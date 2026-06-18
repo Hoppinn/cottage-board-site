@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (100차)
+최종 갱신: 2026-06-18 (103차)
 
 ---
 
@@ -316,6 +316,9 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | feat: 게임 요청에 실제 게임 이름 입력 — actual_games JSONB, 초성검색 자동완성, 추가됨 알림에 실제 게임명 표시 (103차) |
+| 2026-06-18 | fix: 완료된 게임 섹션 복구 — purchased_at OR added_at 기준 필터 (102차) |
+| 2026-06-18 | fix: 추가된 게임 30일 필터, 구매완료 날짜 클릭 편집, 액션 버튼 confirm 메시지 (101차) |
 | 2026-06-18 | refactor: 요청 목록 2열 카드 그리드, 구매/추가됨 설정·해제 분리+confirm, 추가됨 배지 관리자 전용 (100차) |
 | 2026-06-18 | fix: 요청 목록 레이아웃 2행, 추가됨 배지 일반 유저 표시, added_at TIMESTAMPTZ + 1분 딜레이 필터 (99차) |
 | 2026-06-18 | feat: 추가됐어요 전체 알림 — game_requests.added_at, getMyNotifications newGameSeenAt 파라미터, new_game 알림 렌더, 관리자 추가됨 버튼 (98차) |
