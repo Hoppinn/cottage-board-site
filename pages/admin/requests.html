@@ -172,6 +172,18 @@
       const k = voteKey(); if (!k) return;
       localStorage.setItem(k, JSON.stringify([...set]));
     }
+    function removedVoteKey() {
+      const u = getCurrentUser();
+      return u ? `cottage_req_removed_${u.id}` : null;
+    }
+    function getRemovedVotes() {
+      const k = removedVoteKey(); if (!k) return new Set();
+      try { return new Set(JSON.parse(localStorage.getItem(k) || '[]')); } catch { return new Set(); }
+    }
+    function saveRemovedVotes(set) {
+      const k = removedVoteKey(); if (!k) return;
+      localStorage.setItem(k, JSON.stringify([...set]));
+    }
 
     function updateAdminBadge() {
       const existing = document.querySelector('.req-admin-badge');
@@ -241,13 +253,15 @@
     }
 
     // 내가 직접 제출한 항목은 이미 내 1표 → myVotes에 자동 등록
+    // 단, 사용자가 명시적으로 취소한 항목(removedVotes)은 재추가 안 함
     function syncSubmittedToVotes(storageKey) {
       try {
         const submitted = JSON.parse(localStorage.getItem(storageKey) || '[]');
         if (!submitted.length) return;
         const myVotes = getMyVotes();
+        const removed = getRemovedVotes();
         let changed = false;
-        submitted.forEach(id => { if (!myVotes.has(id)) { myVotes.add(id); changed = true; } });
+        submitted.forEach(id => { if (!myVotes.has(id) && !removed.has(id)) { myVotes.add(id); changed = true; } });
         if (changed) saveMyVotes(myVotes);
       } catch (_) {}
     }
@@ -333,6 +347,7 @@
                 getDb().from('game_request_votes').delete().eq('request_id', id).eq('user_id', userId),
               ]);
               myVotes.delete(id);
+              const rv = getRemovedVotes(); rv.add(id); saveRemovedVotes(rv);
             } else {
               li.dataset.count = count + 1; // 즉시 갱신
               await Promise.all([
@@ -340,6 +355,7 @@
                 getDb().from('game_request_votes').upsert({ request_id: id, user_id: userId }, { onConflict: 'request_id,user_id' }),
               ]);
               myVotes.add(id);
+              const rv = getRemovedVotes(); rv.delete(id); saveRemovedVotes(rv);
             }
             saveMyVotes(myVotes);
             loadGameRequests();
