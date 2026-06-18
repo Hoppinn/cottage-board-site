@@ -296,36 +296,55 @@
       const active = data.filter(r => !r.purchased_at);
       const purchased = data.filter(r => r.purchased_at && new Date(r.purchased_at) >= cutoff);
 
+      const fmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
+
       function buildRow(r) {
         const can = canManage(r, MY_GAME_KEY);
-        const statusBadge = r.purchased_at
-          ? `<span class="req-status-badge req-status-done">구매 완료 · ${r.purchased_at}</span>`
-          : r.is_planned
-            ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
-            : '';
         const myVotes = getMyVotes();
         const voted = myVotes.has(r.id);
         const liClass = 'req-list-item req-item-votable' + (voted ? ' req-item-voted' : '');
-        // 관리자: 배지에 상태 순환 data 속성
-        const badgeAttr = isAdmin() ? ` class="req-status-badge req-status-planned req-badge-clickable" data-id="${r.id}" data-planned="1" data-purchased=""` : ' class="req-status-badge req-status-planned"';
-        const doneBadgeAttr = isAdmin() ? ` class="req-status-badge req-status-done req-badge-clickable" data-id="${r.id}" data-planned="0" data-purchased="${r.purchased_at}"` : ' class="req-status-badge req-status-done"';
-        const statusBadgeEl = r.purchased_at
-          ? `<span${doneBadgeAttr}>구매 완료 · ${r.purchased_at}</span>`
-          : r.is_planned
-            ? `<span${badgeAttr}>구매 예정</span>`
-            : (isAdmin() ? `<span class="req-status-badge req-status-none req-badge-clickable" data-id="${r.id}" data-planned="0" data-purchased=""> </span>` : '');
+
         const countLabel = voted
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
-        const fmtAdded = ts => { const d = new Date(ts); return `${d.getMonth()+1}월${d.getDate()}일`; };
-        const addedEl = r.added_at
-          ? (isAdmin()
-            ? `<button class="req-added-btn req-added-btn--on" type="button" data-id="${r.id}" data-added="${r.added_at}">📦 ${fmtAdded(r.added_at)} 추가됨</button>`
-            : `<span class="req-status-badge req-added-badge">📦 추가됨</span>`)
-          : (isAdmin() ? `<button class="req-added-btn" type="button" data-id="${r.id}" data-added="">📦 추가됨</button>` : '');
+
+        // 구매완료/구매예정 배지: 모든 유저 표시
+        const statusBadge = r.purchased_at
+          ? `<span class="req-status-badge req-status-done">구매 완료 · ${fmtDate(r.purchased_at)}</span>`
+          : r.is_planned
+            ? `<span class="req-status-badge req-status-planned">구매 예정</span>`
+            : '';
+
+        // 추가됨 배지: 관리자만 표시
+        const addedBadge = isAdmin() && r.added_at
+          ? `<span class="req-status-badge req-added-badge">📦 ${fmtDate(r.added_at)} 추가됨</span>`
+          : '';
+
+        // 관리자 액션: 상태 없을 때만 설정 버튼, 있으면 해제 버튼 (confirm 필수)
+        let adminActions = '';
+        if (isAdmin()) {
+          if (r.purchased_at) {
+            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-purchased" data-id="${r.id}">구매완료 해제</button>`;
+          } else if (r.is_planned) {
+            adminActions += `<button class="req-action-btn req-action-done" type="button" data-action="set-purchased" data-id="${r.id}">구매 완료</button>`;
+            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-planned" data-id="${r.id}">예정 해제</button>`;
+          } else {
+            adminActions += `<button class="req-action-btn req-action-plan" type="button" data-action="set-planned" data-id="${r.id}">구매 예정</button>`;
+          }
+          if (r.added_at) {
+            adminActions += `<button class="req-action-btn req-action-unset" type="button" data-action="unset-added" data-id="${r.id}">추가됨 해제</button>`;
+          } else {
+            adminActions += `<button class="req-action-btn req-action-add" type="button" data-action="set-added" data-id="${r.id}">📦 추가됨</button>`;
+          }
+        }
+
+        const badgesHtml = (statusBadge || addedBadge) ? `<span class="req-card-badges">${statusBadge}${addedBadge}</span>` : '';
+        const actionsHtml = (adminActions || can) ? `<span class="req-card-actions">${adminActions}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>` : '';
+
         return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
-          <span class="req-list-top"><span class="req-list-name">${escHtml(r.game_name)}</span>${countLabel}</span>
-          <span class="req-list-meta">${statusBadgeEl}${addedEl}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>
+          <span class="req-card-name">${escHtml(r.game_name)}</span>
+          <span class="req-card-count">${countLabel}</span>
+          ${badgesHtml}${actionsHtml}
         </li>`;
       }
 
@@ -347,7 +366,7 @@
       // 모두: 박스 클릭 → 희망 카운트 ±1 토글 (최소 1, 로그인 필요)
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
-          if (e.target.closest('button, input, a, .req-edit-wrap, .req-badge-clickable')) return;
+          if (e.target.closest('button, input, a, .req-edit-wrap')) return;
           if (!getCurrentUser()) { requireLoginForReq(() => {}); return; }
           if (li._voting) return; // 연타 방지
           li._voting = true;
@@ -383,35 +402,28 @@
         });
       });
 
-      // 관리자: 추가됨 버튼 토글 (added_at 설정/해제)
-      el.querySelectorAll('.req-added-btn').forEach(btn => {
+      // 관리자: 액션 버튼 (설정/해제 분리, confirm 필수)
+      el.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', async e => {
           e.stopPropagation();
           const id = btn.dataset.id;
-          const isOn = !!btn.dataset.added;
-          if (isOn) {
-            await getDb().from('game_requests').update({ added_at: null }).eq('id', id);
-          } else {
-            await getDb().from('game_requests').update({ added_at: new Date().toISOString() }).eq('id', id);
-          }
-          loadGameRequests();
-        });
-      });
-
-      // 관리자: 배지 클릭 → 대기 → 구매예정 → 구매완료 → 대기 순환
-      el.querySelectorAll('.req-badge-clickable').forEach(badge => {
-        badge.addEventListener('click', async e => {
-          e.stopPropagation();
-          const id = badge.dataset.id;
-          const isPurchased = !!badge.dataset.purchased;
-          const isPlanned = badge.dataset.planned === '1';
-          if (isPurchased) {
-            await getDb().from('game_requests').update({ purchased_at: null, is_planned: false, status: 'pending' }).eq('id', id);
-          } else if (isPlanned) {
-            const today = new Date().toISOString().slice(0, 10);
-            await getDb().from('game_requests').update({ is_planned: false, purchased_at: today }).eq('id', id);
-          } else {
+          const action = btn.dataset.action;
+          if (action === 'set-planned') {
             await getDb().from('game_requests').update({ is_planned: true }).eq('id', id);
+          } else if (action === 'unset-planned') {
+            if (!confirm('구매 예정을 해제할까요?')) return;
+            await getDb().from('game_requests').update({ is_planned: false }).eq('id', id);
+          } else if (action === 'set-purchased') {
+            const today = new Date().toISOString().slice(0, 10);
+            await getDb().from('game_requests').update({ is_planned: false, purchased_at: today, status: 'done' }).eq('id', id);
+          } else if (action === 'unset-purchased') {
+            if (!confirm('구매 완료를 해제할까요?')) return;
+            await getDb().from('game_requests').update({ purchased_at: null, is_planned: false, status: 'pending' }).eq('id', id);
+          } else if (action === 'set-added') {
+            await getDb().from('game_requests').update({ added_at: new Date().toISOString() }).eq('id', id);
+          } else if (action === 'unset-added') {
+            if (!confirm('추가됨을 해제할까요?\n이미 1분 이상 지났다면 알림이 발송됐을 수 있습니다.')) return;
+            await getDb().from('game_requests').update({ added_at: null }).eq('id', id);
           }
           loadGameRequests();
         });
@@ -482,7 +494,7 @@
         const countLabel = voted
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
-        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-list-top"><span class="req-list-name">${escHtml(r.item_name)}</span>${countLabel}</span><span class="req-list-meta">${can ? editBtn('snack_requests', r.id, r.item_name) + delBtn('snack_requests', r.id, r.request_count) : ''}</span></li>`;
+        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-card-name">${escHtml(r.item_name)}</span><span class="req-card-count">${countLabel}</span>${can ? `<span class="req-card-actions">${editBtn('snack_requests', r.id, r.item_name)}${delBtn('snack_requests', r.id, r.request_count)}</span>` : ''}</li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));

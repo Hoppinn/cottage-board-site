@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-18 (99차)
+최종 갱신: 2026-06-18 (100차)
 
 ---
 
@@ -316,6 +316,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-18 | refactor: 요청 목록 2열 카드 그리드, 구매/추가됨 설정·해제 분리+confirm, 추가됨 배지 관리자 전용 (100차) |
 | 2026-06-18 | fix: 요청 목록 레이아웃 2행, 추가됨 배지 일반 유저 표시, added_at TIMESTAMPTZ + 1분 딜레이 필터 (99차) |
 | 2026-06-18 | feat: 추가됐어요 전체 알림 — game_requests.added_at, getMyNotifications newGameSeenAt 파라미터, new_game 알림 렌더, 관리자 추가됨 버튼 (98차) |
 | 2026-06-18 | fix: 구매희망 알림 type 'purchased'→'ordered', 표시 문구 "추가됐어요"→"주문됐어요" (97차) |
