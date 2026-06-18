@@ -283,8 +283,8 @@ async function openProfilePanel() {
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
-    (window.CottageAchievements?.buildCharacterSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
-    (window.CottageAchievements?.buildAchievementsSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null) || Promise.resolve('')).catch(() => ''),
     (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
@@ -293,7 +293,7 @@ async function openProfilePanel() {
   // 칭호 섹션: stats.profile.rep_title_id + visit_count 확정 후 별도 await (SQL 미실행 시 rep_title_id=undefined → null 처리)
   const _repTitleId = stats?.profile?.rep_title_id || null;
   const _visitCount = stats?.profile?.visit_count || 0;
-  const _titleResult = await (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount) || Promise.resolve({ html: '', earnedIds: new Set() })).catch(() => ({ html: '', earnedIds: new Set() }));
+  const _titleResult = await (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null) || Promise.resolve({ html: '', earnedIds: new Set() })).catch(() => ({ html: '', earnedIds: new Set() }));
   const titleHtml = _titleResult?.html || '';
   const _earnedTitleIds = _titleResult?.earnedIds || new Set();
   // seen 처리는 알림 섹션을 펼칠 때로 이동 (아래 toggle 핸들러)
@@ -464,7 +464,7 @@ async function openProfilePanel() {
   const _codexPlayed = _safeInt(codexHtml, /data-played-count="(\d+)"/, 0);
   const _codexTotal  = _safeInt(codexHtml, /data-total-games="(\d+)"/,  641);
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
-  const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    37);
+  const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    90);
 
   const _growthSummary = `캐릭터 ${_charCount}/${_charTotal} · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/${_achTotal}`;
   const _growthBadge = `<div class="profile-growth-badge">🌱 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 업적 ${_achCount}/${_achTotal} · 도감 ${_codexPlayed}/${_codexTotal}</div>`;
@@ -554,6 +554,14 @@ async function openProfilePanel() {
     ? `<span class="profile-panel-title-name">${_validRepTitle.emoji} ${escH(_validRepTitle.name)}</span>`
     : `<span class="profile-panel-title-name is-empty">칭호 없음</span>`;
   const _titleBtnLabel = _validRepTitle ? '대표 칭호 변경' : '대표 칭호 설정하기';
+
+  // 플레이 참여 업적 lazy check (프로필 열릴 때마다 백그라운드 확인)
+  if (user.nickname) {
+    window.CottageDB?.getUserParticipationCount?.(String(user.id), user.nickname).then(pc => {
+      window.checkAchievements?.('participated', String(user.id), { participationCount: pc });
+    }).catch(() => {});
+  }
+
   body.innerHTML = `
     <div class="profile-panel-profile">
       ${_repImgHtml}

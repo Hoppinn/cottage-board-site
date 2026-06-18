@@ -275,6 +275,12 @@ window._cottageSess = (function () {
         const id = data?.[0]?.id || null;
         if (userId) {
           window.checkAchievements?.('play', userId, { gameId, hasPhoto: !!photoUrl });
+          const _nick = window.getKakaoUser?.()?.nickname;
+          if (_nick) {
+            getUserParticipationCount(userId, _nick).then(pc => {
+              window.checkAchievements?.('participated', userId, { participationCount: pc });
+            }).catch(() => {});
+          }
           grantFirstPlayVoucher(userId).then(granted => {
             if (granted) {
               console.log('[voucher] 첫 플레이 기록 교환권 지급 완료');
@@ -1085,6 +1091,7 @@ window._cottageSess = (function () {
     getUserPhotoCount,
     getUserRatingCount,
     getUserVisitCount,
+    getUserParticipationCount,
     getRepAchievement,
     setRepTitle,
     getPendingPointRewards,
@@ -1284,6 +1291,17 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
       return data?.visit_count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function getUserParticipationCount(userId, nickname) {
+    if (!nickname) return 0;
+    try {
+      // 내 닉네임이 player_names에 포함된 기록 수 (내가 쓴 기록 포함)
+      const { count } = await db.from('game_play_records')
+        .select('id', { count: 'exact', head: true })
+        .ilike('player_names', `%${nickname}%`);
+      return count || 0;
     } catch (_) { return 0; }
   }
 

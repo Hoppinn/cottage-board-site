@@ -138,6 +138,17 @@
       rewards: { character: 'season_christmas' } },
     { id: 'visit_500', name: '전설 참새 🐦',   emoji: '🐦', type: 'visit', threshold: 500,
       rewards: { character: 'sparrow_1000', title: 'title_visit_500' } },
+    // 플레이 참여 계열 (player_names에 이름 등장 횟수) — 5→10→20→30→50→100→150→200→300→500
+    { id: 'participated_5',   name: '게임 친구',       emoji: '🤝', type: 'participated', threshold: 5,   rewards: {} },
+    { id: 'participated_10',  name: '활발한 참여자',    emoji: '🎮', type: 'participated', threshold: 10,  rewards: {} },
+    { id: 'participated_20',  name: '게임 동반자',      emoji: '🎲', type: 'participated', threshold: 20,  rewards: {} },
+    { id: 'participated_30',  name: '코티지 플레이어',  emoji: '🎯', type: 'participated', threshold: 30,  rewards: {} },
+    { id: 'participated_50',  name: '코티지 피플',      emoji: '🌟', type: 'participated', threshold: 50,  rewards: {} },
+    { id: 'participated_100', name: '백전노장',          emoji: '🏆', type: 'participated', threshold: 100, rewards: {} },
+    { id: 'participated_150', name: '코티지 레전드',    emoji: '⚜️', type: 'participated', threshold: 150, rewards: {} },
+    { id: 'participated_200', name: '게임왕',            emoji: '👑', type: 'participated', threshold: 200, rewards: {} },
+    { id: 'participated_300', name: '코티지 신화',       emoji: '🌙', type: 'participated', threshold: 300, rewards: {} },
+    { id: 'participated_500', name: '전설의 게이머',     emoji: '✨', type: 'participated', threshold: 500, rewards: {} },
   ];
 
   // 칭호 정의 — 연결 관계는 ACH_DEFS.rewards.title이 담당 (역참조 필드 없음)
@@ -206,8 +217,8 @@
     return '🌱 새싹';
   }
 
-  const TYPE_LABELS = { play: '플레이 기록', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문' };
-  const SHORT_TYPE_LABELS = { play: '플레이', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문' };
+  const TYPE_LABELS = { play: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', participated: '플레이 참여' };
+  const SHORT_TYPE_LABELS = { play: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', participated: '참여' };
 
   const POINTS = {
     // 플레이
@@ -235,6 +246,10 @@
     visit_20: 300, visit_25: 300, visit_30: 500, visit_40: 500,
     visit_50: 1000, visit_75: 1000, visit_100: 2000, visit_150: 1000,
     visit_200: 3000, visit_300: 5000, visit_400: 3000, visit_500: 10000,
+    // 참여
+    participated_5: 200, participated_10: 300, participated_20: 500, participated_30: 500,
+    participated_50: 1000, participated_100: 2000, participated_150: 1500,
+    participated_200: 3000, participated_300: 5000, participated_500: 10000,
   };
 
   // 업적 체크 진입점 — supabase-client.js에서 호출
@@ -347,6 +362,22 @@
       );
     }
 
+    if (category === 'participated') {
+      const pc = opts.participationCount || 0;
+      checks.push(
+        { id: 'participated_5',   v: pc, t: 5 },
+        { id: 'participated_10',  v: pc, t: 10 },
+        { id: 'participated_20',  v: pc, t: 20 },
+        { id: 'participated_30',  v: pc, t: 30 },
+        { id: 'participated_50',  v: pc, t: 50 },
+        { id: 'participated_100', v: pc, t: 100 },
+        { id: 'participated_150', v: pc, t: 150 },
+        { id: 'participated_200', v: pc, t: 200 },
+        { id: 'participated_300', v: pc, t: 300 },
+        { id: 'participated_500', v: pc, t: 500 },
+      );
+    }
+
     const achieved = checks.filter(c => c.v !== null && c.v >= c.t);
     if (!achieved.length) return;
 
@@ -406,20 +437,21 @@
   }
 
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
-  async function buildTitleSection(userId, repTitleId, visitCount) {
+  async function buildTitleSection(userId, repTitleId, visitCount, nickname) {
     const db = window.CottageDB;
     if (!db) return { html: '', earnedIds: new Set() };
     try {
-      const [achievements, playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
+      const [achievements, playCount, distinctCount, photoCount, ratingCount, participationCount] = await Promise.all([
         db.getUserAchievements(userId),
         db.getUserPlayCount(userId),
         db.getUserDistinctGameCount(userId),
         db.getUserPhotoCount(userId),
         db.getUserRatingCount(userId),
+        nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
       ]);
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
-      const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc };
+      const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, participated: participationCount };
 
       // ACH_DEFS.rewards.title 정참조 기준으로 획득 여부 판단
       const earnedIds = new Set();
@@ -570,11 +602,11 @@
   }
 
   // 캐릭터/대표 캐릭터 섹션 HTML 빌드
-  async function buildCharacterSection(userId) {
+  async function buildCharacterSection(userId, nickname) {
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount] = await Promise.all([
+    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getRepAchievement(userId),
       db.getUserPlayCount(userId),
@@ -582,11 +614,12 @@
       db.getUserPhotoCount(userId),
       db.getUserRatingCount(userId),
       db.getUserVisitCount(userId),
+      nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
     ]);
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
-    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount };
+    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, participated: participationCount };
 
     // CHAR_DEFS: 캐릭터 보상 있는 17종만 그리드에 표시
     const gridCards = CHAR_DEFS.map(def => {
@@ -651,21 +684,22 @@
   }
 
   // 업적 전체 목록 섹션 HTML 빌드
-  async function buildAchievementsSection(userId) {
+  async function buildAchievementsSection(userId, nickname) {
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [earned, playCount, distinctCount, photoCount, ratingCount, visitCount] = await Promise.all([
+    const [earned, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getUserPlayCount(userId),
       db.getUserDistinctGameCount(userId),
       db.getUserPhotoCount(userId),
       db.getUserRatingCount(userId),
       db.getUserVisitCount(userId),
+      nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
     ]);
 
     const earnedIds = new Set(earned.map(a => a.id));
-    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount };
+    const COUNTS = { play: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, participated: participationCount };
 
     const items = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
