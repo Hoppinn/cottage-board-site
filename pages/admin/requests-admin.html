@@ -89,6 +89,9 @@
     .admin-sub-section.is-open > .admin-sub-section-title .admin-sub-section-arrow { transform: rotate(180deg); }
     .admin-sub-section-body { display: none; padding: 8px 0; }
     .admin-sub-section.is-open > .admin-sub-section-body { display: block; }
+    .admin-visitor-filter { display: flex; gap: 6px; margin-bottom: 10px; }
+    .admin-visitor-filter-btn { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
+    .admin-visitor-filter-btn.is-active { background: #7a4828; color: #fff; border-color: #7a4828; }
     /* 차트 그리드 */
     .admin-chart-filter { display: flex; gap: 6px; margin-bottom: 12px; }
     .admin-chart-period-btn { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
@@ -715,7 +718,7 @@
       const [rows, allProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
-        db2 ? db2.from('page_views').select('page, created_at, referrer').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('page_views').select('page, created_at, referrer, user_id').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const pageViews = pvResult?.data || [];
@@ -927,7 +930,14 @@
         ...anonSessions.map(a => ({ _type: 'anon', _last: a.last_seen_at || '', ...a }))
       ].sort((a, b) => b._last.localeCompare(a._last));
 
-      const unifiedHtml = unified.length ? `<div class="admin-req-list">${unified.map(u => {
+      const memberCount = allProfiles.length;
+      const anonCount = anonSessions.length;
+      const visitorFilterBar = `<div class="admin-visitor-filter" id="visitorFilterBar">
+        <button class="admin-visitor-filter-btn is-active" data-filter="all" onclick="document.querySelectorAll('#visitorList .admin-member-card').forEach(c=>c.style.display='');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">전체 (${unified.length})</button>
+        <button class="admin-visitor-filter-btn" data-filter="member" onclick="document.querySelectorAll('#visitorList .admin-member-card').forEach(c=>c.style.display=c.dataset.visitorType==='member'?'':'none');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">회원 (${memberCount})</button>
+        <button class="admin-visitor-filter-btn" data-filter="anon" onclick="document.querySelectorAll('#visitorList .admin-member-card').forEach(c=>c.style.display=c.dataset.visitorType==='anon'?'':'none');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">비회원 (${anonCount})</button>
+      </div>`;
+      const unifiedHtml = unified.length ? visitorFilterBar + `<div class="admin-req-list" id="visitorList">${unified.map(u => {
         if (u._type === 'member') {
           const p = u;
           const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
@@ -938,7 +948,7 @@
           const dnHtml = p.real_name
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
-          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}">
+          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member">
             <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
@@ -953,7 +963,7 @@
           const a = u;
           const { text: statusText, online } = fmtOnlineStatus(a.last_seen_at);
           const shortKey = a.session_key.slice(0, 8) + '…';
-          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" style="opacity:${online ? 1 : 0.7}">
+          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" style="opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:#f5f0e8;color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
             </div>
@@ -961,6 +971,7 @@
           </div>`;
         }
       }).join('')}</div>` : '<div class="admin-empty">방문자 없음</div>';
+
 
       // ── 사용자별 이용 상세 (page_sessions 기반, 날짜별) ─────────
       const userDayParts = DAY_LABELS.map((label, i) => {
@@ -1117,6 +1128,9 @@
           'club-history': '모임 기록', 'club-meeting': '동호회 모임',
           'club-intro': '동호회 소개', 'club-schedule': '모임 일정',
           'club-rules': '동호회 규칙', 'price-rules': '요금 안내', 'guide': '이용안내',
+          'my-board': '내 보드', 'my-board-growth': '내 보드 > 수집보드',
+          'my-board-taste': '내 보드 > 취향보드', 'my-board-records': '내 보드 > 기록보드',
+          'my-board-voucher': '내 보드 > 교환권', 'my-board-notif': '내 보드 > 소식',
         };
         function _punycodeLabel(s) {
           if (!s.startsWith('xn--')) return s;
@@ -1317,6 +1331,15 @@
         for (const r of filtered) {
           if (!r.page) continue;
           const key = (r.user_id || 'anon') + '|' + r.page + '|' + kstDate(r.entered_at);
+          if (seen2.has(key)) continue;
+          seen2.add(key);
+          pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
+        }
+        // 내 보드 가상 페이지 — page_views에서 추가 (page_sessions 미기록)
+        const VIRTUAL_PAGE_PREFIX = 'my-board';
+        for (const r of filteredPV) {
+          if (!r.page?.startsWith(VIRTUAL_PAGE_PREFIX)) continue;
+          const key = (r.user_id || 'pv') + '|' + r.page + '|' + kstDate(r.created_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
           pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
