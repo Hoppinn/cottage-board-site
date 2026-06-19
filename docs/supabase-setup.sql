@@ -588,7 +588,15 @@ alter table public.profiles add column if not exists rep_title_id text;
 -- user_achievements: FK 제거 (행동축 기반 신규 ID는 achievements 테이블 행 없이 직접 삽입)
 alter table public.user_achievements drop constraint if exists user_achievements_achievement_id_fkey;
 
--- voucher_log: reason 체크 제약 갱신 (dev_test 추가)
+-- voucher_log: note 컬럼 추가 (어떤 업적 교환권인지 저장)
+alter table public.voucher_log add column if not exists note text;
+
+-- voucher_log: reason 체크 제약 갱신 (dev_test, achievement 추가)
 alter table public.voucher_log drop constraint if exists voucher_log_reason_check;
 alter table public.voucher_log add constraint voucher_log_reason_check
-  check (reason in ('first_play', 'redeem', 'dev_test'));
+  check (reason in ('first_play', 'redeem', 'dev_test', 'achievement'));
+
+-- voucher_log: 업적별 1회 지급 보장
+create unique index if not exists voucher_log_achievement_unique
+  on public.voucher_log (user_id, note)
+  where reason = 'achievement';

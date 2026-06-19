@@ -75,14 +75,14 @@ ClaudeCode는 본 문서와 충돌하는 해석을 새로 만들지 않는다.
 
 | type | 의미 | 캐릭터 |
 |--------|--------|--------|
-| record | 기록 작성 | 다람쥐 |
+| record | 플레이기록 작성 | 다람쥐 |
 | new_game | 새 게임 경험 | 토끼 |
 | photo | 사진 업로드 | 고슴도치 |
 | review | 게임평 작성 | 햄스터 |
-| visit | 방문 | 참새 |
-| play | 플레이 참여 | 곰 |
+| visit | 홈페이지 탐방 | 참새 |
+| play | 플레이 | 곰 |
 | first_record | 최초 기록 | 부엉이 |
-| balance | 균형 성장 | 여우 |
+| balance | 함께한 날 | 여우 |
 
 ---
 
@@ -210,26 +210,40 @@ points 필드 제거 또는 미사용.
 
 ---
 
-# Balance(여우)
+# Balance(여우) — 함께한 날
 
 여우는 게임평 축이 아니다.
 
-여우는 균형 성장 축이다.
+여우는 함께한 날 축이다.
 
-조건 계산 축
+## 정의
 
-record
-new_game
-photo
-review
-visit
-play
+코티지보드 매장에 함께한 고유 날짜 수.
 
-총 6개
+- 하루에 여러 기록이 있어도 1일
+- 날짜 기준: played_at 우선, 없으면 created_at KST 변환
+- 카운팅 대상: user_id 작성자 + player_names에 닉네임이 포함된 참여자
 
-first_record 제외
+## 판정 한계 (임시 방식)
 
-보상
+현재 함께한 날 / 플레이 참여자 판정은 player_names 텍스트 기반 보조 판정이 포함되어 있어,
+닉네임 변경 / 동명이인 / 부분매칭 오탐 가능성이 있다.
+
+장기적으로 game_play_participants 테이블로 전환할 것.
+
+권장 구조:
+```
+game_play_participants
+- id
+- record_id (game_play_records.id)
+- user_id
+- nickname_snapshot
+- created_at
+```
+
+이렇게 되면 플레이 / 함께한 날 / 새게임 카운팅을 모두 user_id 기준으로 정확히 계산 가능.
+
+## 보상
 
 balance_10 → fox_lv1
 

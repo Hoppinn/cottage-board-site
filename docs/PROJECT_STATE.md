@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (131차)
+최종 갱신: 2026-06-19 (132차)
 
 ---
 
@@ -20,6 +20,8 @@
 **완료 (129차)**: 알림 패널 카드형 레이아웃 1차 개선.
 
 **완료 (130차)**: 알림 2차 개선 — 날짜 위치(desc 하단), 빈 상태 조건 수정(=== 0), 좌측 unread 바, 보상 카드 강조(gradient, box-shadow), 페이지 명칭 "최근 소식" 변경.
+
+**완료 (132차)**: 교환권 지급 구현(grantAchievementVoucher), 함께한 날(balance) 재정의 및 checkAchievements 구현, 메뉴명 변경(record/play/visit/balance), 약식 카드 클릭→변경 기능. docs/migrations/003_voucher_achievement.sql 신규.
 
 **완료 (131차)**: 업적/캐릭터/칭호 0개 버그 수정 — `getUserAchievements`가 FK join(achievements 테이블) 결과를 스프레드하다 FK 삭제 후 null 반환. `achievement_id → id` 직접 매핑으로 교체. `getRepAchievement`도 동일 원인, achievements 테이블 2차 조회 제거.
 

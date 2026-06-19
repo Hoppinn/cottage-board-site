@@ -173,7 +173,8 @@
       rewards: { character: 'bear_lv4', char_name: '코티지 곰' } },
     { id: 'play_500', name: '코티지 마스터',   emoji: '✨', type: 'play', threshold: 500,
       rewards: { character: 'bear_lv5', char_name: '동면 곰', title: 'title_play_500' } },
-    // ── balance (여우) ── 균형 성장 축. 정의만 생성. checkAchievements 미구현, 계산 방식 추후 확정.
+    // ── balance (여우) ── 함께한 날. 매장에 함께한 고유 날짜 수. user_id 작성자 + player_names 참여자 병행.
+    // [임시] player_names 텍스트 기반 보조 판정. 장기적으로 game_play_participants 테이블로 전환 예정.
     { id: 'balance_10',  name: '다재다능',      emoji: '🦊', type: 'balance', threshold: 10,
       rewards: { character: 'fox_lv1', char_name: '감상 여우' } },
     { id: 'balance_30',  name: '균형의 시작',   emoji: '🦊', type: 'balance', threshold: 30,
@@ -259,8 +260,8 @@
     return '🌱 새싹';
   }
 
-  const TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', first_record: '코티지 최초 기록', play: '플레이 참여 (보조)' };
-  const SHORT_TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '방문', first_record: '최초 기록', play: '참여' };
+  const TYPE_LABELS = { record: '플레이기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '홈페이지 탐방', first_record: '코티지 최초 기록', play: '플레이', balance: '함께한 날' };
+  const SHORT_TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '홈페이지', first_record: '최초 기록', play: '플레이', balance: '함께한 날' };
 
   const POINTS = {
     // record
@@ -445,6 +446,18 @@
       );
     }
 
+    if (category === 'balance') {
+      const dc = opts.visitingDayCount || 0;
+      checks.push(
+        { id: 'balance_10',  v: dc, t: 10  },
+        { id: 'balance_30',  v: dc, t: 30  },
+        { id: 'balance_50',  v: dc, t: 50  },
+        { id: 'balance_100', v: dc, t: 100 },
+        { id: 'balance_200', v: dc, t: 200 },
+        { id: 'balance_300', v: dc, t: 300 },
+      );
+    }
+
     const achieved = checks.filter(c => c.v !== null && c.v >= c.t);
     if (!achieved.length) return;
 
@@ -460,6 +473,10 @@
             const menuImg = document.getElementById('kakaoProfileImg');
             if (menuImg) menuImg.src = '/assets/images/characters/characters_basic/squirrel_lv1.png';
           }
+        }
+        // record_1은 grantFirstPlayVoucher 경로 사용. 나머지 voucher 업적은 여기서 지급.
+        if (def?.rewards?.voucher && id !== 'record_1') {
+          db.grantAchievementVoucher?.(userId, id).catch(() => {});
         }
       }
     }
@@ -515,7 +532,7 @@
     const db = window.CottageDB;
     if (!db) return { html: '', earnedIds: new Set() };
     try {
-      const [achievements, playCount, distinctCount, photoCount, ratingCount, participationCount, firstRecordCount] = await Promise.all([
+      const [achievements, playCount, distinctCount, photoCount, ratingCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
         db.getUserAchievements(userId),
         db.getUserPlayCount(userId),
         db.getUserDistinctGameCount(userId),
@@ -523,10 +540,11 @@
         db.getUserRatingCount(userId),
         nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
         db.getUserFirstRecordCount(userId),
+        db.getUserUniqueDayCount(userId, nickname),
       ]);
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
-      const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, first_record: firstRecordCount, play: participationCount };
+      const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
       // ACH_DEFS.rewards.title 정참조 기준으로 획득 여부 판단
       const earnedIds = new Set();
@@ -671,7 +689,7 @@
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount] = await Promise.all([
+    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getRepAchievement(userId),
       db.getUserPlayCount(userId),
@@ -681,11 +699,12 @@
       db.getUserVisitCount(userId),
       nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
       db.getUserFirstRecordCount(userId),
+      db.getUserUniqueDayCount(userId, nickname),
     ]);
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
-    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
     // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시
     const gridCardsAll = CHAR_DEFS.map(def => {
@@ -756,7 +775,7 @@
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [earned, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount] = await Promise.all([
+    const [earned, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getUserPlayCount(userId),
       db.getUserDistinctGameCount(userId),
@@ -765,10 +784,11 @@
       db.getUserVisitCount(userId),
       nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
       db.getUserFirstRecordCount(userId),
+      db.getUserUniqueDayCount(userId, nickname),
     ]);
 
     const earnedIds = new Set(earned.map(a => a.id));
-    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
     const itemsAll = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
@@ -807,9 +827,10 @@
       { type: 'new_game', emoji: '🐰', label: '새게임', unit: '종' },
       { type: 'photo', emoji: '🦔', label: '사진', unit: '장' },
       { type: 'review', emoji: '🐹', label: '게임평', unit: '개' },
-      { type: 'visit', emoji: '🐦', label: '방문', unit: '회' },
-      { type: 'play', emoji: '🐻', label: '참여', unit: '회' },
+      { type: 'visit', emoji: '🐦', label: '홈페이지', unit: '일' },
+      { type: 'play', emoji: '🐻', label: '플레이', unit: '회' },
       { type: 'first_record', emoji: '🦉', label: '최초기록', unit: '종' },
+      { type: 'balance', emoji: '🦊', label: '함께한 날', unit: '일' },
     ];
     const _goalsHtml = _GOAL_AXES.map(({ type, emoji, label, unit }) => {
       const cur = COUNTS[type] || 0;

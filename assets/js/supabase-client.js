@@ -283,6 +283,9 @@ window._cottageSess = (function () {
             getUserParticipationCount(userId, _nick).then(pc => {
               window.checkAchievements?.('play', userId, { participationCount: pc });
             }).catch(() => {});
+            getUserUniqueDayCount(userId, _nick).then(dc => {
+              window.checkAchievements?.('balance', userId, { visitingDayCount: dc });
+            }).catch(() => {});
           }
           grantFirstPlayVoucher(userId).then(granted => {
             if (granted) {
@@ -1125,6 +1128,8 @@ window._cottageSess = (function () {
     rejectPointReward,
     getUserPointRewardStats,
     grantFirstPlayVoucher,
+    grantAchievementVoucher,
+    getUserUniqueDayCount,
     grantDevVoucher,
     getVoucherBalance,
     getVoucherProducts,
@@ -1379,6 +1384,47 @@ window._cottageSess = (function () {
   }
 
   // ── 음료교환권 ──────────────────────────────────────────────────────────
+
+  // 업적 달성 교환권 지급 (record_1 제외 — grantFirstPlayVoucher 경로 사용)
+  // [임시] player_names 텍스트 기반 보조 판정 포함. 닉네임 변경/동명이인/부분매칭 오탐 가능성 있음.
+  async function grantAchievementVoucher(userId, achievementId) {
+    const _OWNER_ID = '4916417947';
+    if (!userId || String(userId) === _OWNER_ID) return false;
+    try {
+      const { data: existing } = await db.from('voucher_log')
+        .select('id').eq('user_id', String(userId)).eq('reason', 'achievement').eq('note', achievementId).maybeSingle();
+      if (existing) return false; // JS 1차 방어
+      const { error } = await db.from('voucher_log')
+        .insert({ user_id: String(userId), delta: 1, reason: 'achievement', note: achievementId });
+      if (error) return false; // partial unique index 위반 포함 — DB 2차 방어
+      return true;
+    } catch (_) { return false; }
+  }
+
+  // 함께한 날 카운팅 — 매장에 함께한 고유 날짜 수
+  // 기준: played_at 우선, 없으면 created_at KST 변환
+  // [임시] user_id 작성자 + player_names 닉네임 보조 병행 판정.
+  //        닉네임 변경/동명이인/부분매칭 오탐 가능성 있음.
+  //        장기적으로 game_play_participants 테이블 전환 예정.
+  async function getUserUniqueDayCount(userId, nickname) {
+    try {
+      const toDateStr = r => {
+        if (r.played_at) return r.played_at;
+        const d = new Date(r.created_at);
+        d.setHours(d.getHours() + 9);
+        return d.toISOString().slice(0, 10);
+      };
+      const { data: authorRows } = await db.from('game_play_records')
+        .select('played_at, created_at').eq('user_id', userId);
+      const dateSet = new Set((authorRows || []).map(toDateStr));
+      if (nickname) {
+        const { data: participantRows } = await db.from('game_play_records')
+          .select('played_at, created_at').ilike('player_names', `%${nickname}%`);
+        (participantRows || []).forEach(r => dateSet.add(toDateStr(r)));
+      }
+      return dateSet.size;
+    } catch (_) { return 0; }
+  }
 
   async function grantFirstPlayVoucher(userId) {
     const _OWNER_ID = '4916417947';

@@ -829,6 +829,17 @@ async function openProfilePanel() {
         if (charPreview) charPreview.classList.toggle('is-hidden', !hidden);
         charToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
       });
+      // 약식 카드 클릭 → 전체보기 전환 후 해당 카드 선택
+      subBody.querySelectorAll('.profile-char-preview .profile-char-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const achId = card.dataset.achId;
+          if (!achId) return;
+          charBody?.classList.remove('is-hidden');
+          charPreview?.classList.add('is-hidden');
+          charToggleBtn.textContent = '접기 ▴';
+          charBody?.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.click();
+        });
+      });
     }
     // ── 칭호 섹션 ──
     const _titleBody = subBody.querySelector('.profile-title-body');
@@ -876,6 +887,17 @@ async function openProfilePanel() {
         const hidden = titleBody.classList.toggle('is-hidden');
         if (titlePreview) titlePreview.classList.toggle('is-hidden', !hidden);
         titleToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+      });
+      // 약식 칭호 카드 클릭 → 전체보기 전환 후 해당 카드 선택
+      subBody.querySelectorAll('.profile-title-preview .profile-title-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const titleId = card.dataset.titleId;
+          if (!titleId) return;
+          titleBody?.classList.remove('is-hidden');
+          titlePreview?.classList.add('is-hidden');
+          titleToggleBtn.textContent = '접기 ▴';
+          titleBody?.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.click();
+        });
       });
     }
 
