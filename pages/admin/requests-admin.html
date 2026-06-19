@@ -810,6 +810,9 @@
       }
 
       // 비회원 통계 — session_key 기반, page_sessions에서 파생
+      function _toKstDate(isoStr) {
+        return new Date(new Date(isoStr).getTime() + 9 * 3600000).toISOString().slice(0, 10);
+      }
       function buildAnonUserMap(rowset) {
         const m = new Map(); // session_key → { pm, days, todaySec, lastAt }
         for (const r of rowset) {
@@ -819,7 +822,7 @@
           if (!entry.pm.has(r.page)) entry.pm.set(r.page, { visits: 0, totalSec: 0 });
           entry.pm.get(r.page).visits++; entry.pm.get(r.page).totalSec += r.duration_sec || 0;
           if (r.entered_at) {
-            const dayKst = kstDate(r.entered_at);
+            const dayKst = _toKstDate(r.entered_at);
             entry.days.add(dayKst);
             if (dayKst === todayKst) entry.todaySec += r.duration_sec || 0;
             if (r.entered_at > entry.lastAt) entry.lastAt = r.entered_at;

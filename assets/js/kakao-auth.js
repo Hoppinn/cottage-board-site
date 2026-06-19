@@ -363,7 +363,7 @@ async function openProfilePanel() {
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
   // seen 여부와 무관하게 항상 표시. seen이면 읽음 스타일(NEW 배지·확인 버튼 없음).
   const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? ' is-seen' : ' is-new'}">
-    ${voucherSeen ? '' : '<span class="profile-notif-new-badge">NEW</span>'}
+    ${voucherSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}
     <div class="profile-voucher-body">
       <strong>🎫 첫 플레이기록을 남기면 음료교환권 1장을 받을 수 있어요</strong>
       <div class="profile-voucher-btns">
@@ -392,7 +392,7 @@ async function openProfilePanel() {
   function _renderNotifItem(n) {
     const clsList = ['is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
     const cls = ` class="${clsList}"`;
-    const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
+    const badge = n.isNew ? '<span class="profile-notif-new-badge" style="color:#fff">NEW</span> ' : '';
     if (n.type === 'tagged')
       return `<li${cls} data-game-id="${escH(String(n.gameId))}">${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록 태그됨 <span>${fmtShort(n.date)}</span></li>`;
     if (n.type === 'curious_comment')
