@@ -560,9 +560,14 @@ function getGameKey(game){
 }
 
 function getGameShelfLabel(game){
+  const id = game?.cottage?.shelfGroupId;
+  if (id === '협력') {
+    const w = game?.bgg?.weight;
+    return (w && w >= 2.5) ? '어려운 협력게임' : '쉬운 협력게임';
+  }
   return (
     game?.cottage?.shelfLabel ||
-    game?.cottage?.shelfGroupId ||
+    id ||
     "-"
   );
 }

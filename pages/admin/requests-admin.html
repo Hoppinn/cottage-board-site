@@ -718,8 +718,8 @@
       const [rows, allProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
-        db2 ? db2.from('page_views').select('page, created_at, referrer, user_id').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
-        db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('page_views').select('page, created_at, referrer').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('anon_sessions').select('session_key, last_seen_at').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const pageViews = pvResult?.data || [];
       const anonSessions = anonResult?.data || [];
@@ -1146,6 +1146,7 @@
         }
         function _decodeHost(host) { return host.split('.').map(_punycodeLabel).join('.'); }
         const _utmBrandMap = { kakao: '카카오', kakao_club: '카카오 동호회', qr: 'QR', store_qr: '매장 QR', flyer_qr: '전단지 QR', boardlife: '보드라이프', naver: '네이버', naver_place: '네이버 플레이스', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
+        const _siteHost = window.location.hostname.replace(/^www\./, '');
         function categorizeRef(ref) {
           if (!ref) return '직접 방문';
           if (ref.startsWith('/')) return null;
@@ -1153,6 +1154,7 @@
           try {
             const rawHost = new URL(ref.startsWith('http') ? ref : 'https://' + ref).hostname.replace(/^www\./, '');
             if (!rawHost.includes('.')) return null;
+            if (rawHost === _siteHost) return null;
             const host = _decodeHost(rawHost).toLowerCase();
             if (host.includes('daangn') || host.includes('당근')) return '당근마켓';
             if (host.includes('boardlife') || host.includes('보드라이프')) return '보드라이프';
@@ -1192,7 +1194,7 @@
             deltaHtml = `<span class="admin-summary-delta ${cls}">${pct > 0 ? '+' : ''}${pct}%</span>`;
           }
           const refCnt7 = {};
-          for (const r of pageViews) {
+          for (const r of pageViews.filter(x => x.page !== '__visitor__')) {
             if (!thisKeySet.has(kstDate(r.created_at))) continue;
             const cat = categorizeRef(r.referrer);
             if (!cat || cat === '직접 방문') continue;
