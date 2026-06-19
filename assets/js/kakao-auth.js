@@ -536,22 +536,21 @@ async function openProfilePanel() {
       <button class="profile-gamelist-section-toggle" type="button">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span><span class="profile-toggle-arrow">▾</span></button>
       <div class="profile-gamelist-body is-hidden">${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}</div>
     </div>`;
-  // 기록 보드: 요약 + 플레이기록/게임평/사진 토글 (기본 닫힘)
+  // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 닫힘)
+  const _emptyList = msg => `<ul class="profile-activity-list is-collapsed"><li class="profile-gamelist-empty">${msg}</li></ul>`;
   const _recordInnerHtml = `
-    <ul class="profile-record-stats">
-      <li><span>플레이 기록</span><strong>${stats.plays.length}건</strong></li>
-      <li><span>게임평</span><strong>${stats.reviewCount}개</strong></li>
-      <li><span>사진</span><strong>${photoCount}장</strong></li>
-    </ul>
-    ${stats.plays.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-      ${playListHtml}
-    </div>` : ''}
-    ${stats.comments.length ? `<div class="profile-activity-group">
+    <div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">🎲 플레이기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
+      ${stats.plays.length ? playListHtml : _emptyList('아직 플레이 기록이 없어요')}
+    </div>
+    <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${stats.comments.length}개</span><span class="profile-toggle-arrow">▾</span></button>
-      ${commentListHtml}
-    </div>` : ''}
-    <a class="profile-record-link" href="/pages/game/game-reviews.html">기록 페이지 바로 가기 →</a>`;
+      ${stats.comments.length ? commentListHtml : _emptyList('아직 게임평이 없어요')}
+    </div>
+    <div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
+      ${_emptyList('사진 목록은 기록 페이지에서 확인할 수 있어요')}
+    </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
   const _usageInnerHtml = `
     <div class="profile-stats-wrap">
@@ -940,8 +939,8 @@ async function openProfilePanel() {
             li.addEventListener('click', () => {
               const key = li.dataset.gameKey;
               if (!key) return;
-              if (window.openGameSheet) window.openGameSheet(key);
-              else if (window.ensureGameSheet) window.ensureGameSheet(() => window.openGameSheet?.(key));
+              window.ensureGameSheet?.();
+              window.openGameSheet?.(key);
             });
           });
         });
