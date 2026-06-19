@@ -246,7 +246,7 @@
       const db = window._cottageSupabaseDb;
 
       const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes, voucherRes] = await Promise.all([
-        db.from('game_requests').select('id, game_name, request_count, status, purchased_at, is_planned, user_id').order('request_count', { ascending: false }),
+        db.from('game_requests').select('id, game_name, request_count, purchase_status, status_date, purchased_at, is_planned, added_at, user_id').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname, real_name'),
@@ -305,7 +305,7 @@
         </div>`;
       }
 
-      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.status==='done'),r.user_id,r.is_planned)).join('');
+      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.purchase_status==='추가됨' || r.added_at),r.user_id,r.is_planned)).join('');
       const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id,r.is_done,r.is_planned)).join('');
 
@@ -1101,7 +1101,7 @@
 
       function draw(start, end, label, type) {
         const filtered = filterByRange(rows, start, end, 'entered_at');
-        const filteredPV = filterByRange(pageViews, start, end, 'created_at');
+        const filteredPV = filterByRange(pageViews, start, end, 'created_at').filter(r => r.page !== '__visitor__');
 
         // ── 공통 헬퍼 ────────────────────────────────────────────────
         function _addDays(dateStr, n) {

@@ -287,12 +287,24 @@
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
-      const { data, error } = await getDb().from('game_requests')
-        .select('id, game_name, request_count, user_id, is_planned, purchased_at, added_at, actual_games, purchase_status, status_date')
-        .order('request_count', { ascending: false }).limit(50);
+      const [reqRes, votesRes, profilesRes] = await Promise.all([
+        getDb().from('game_requests')
+          .select('id, game_name, request_count, user_id, is_planned, purchased_at, added_at, actual_games, purchase_status, status_date')
+          .order('request_count', { ascending: false }).limit(50),
+        getDb().from('game_request_votes').select('request_id, user_id'),
+        getDb().from('profiles').select('user_id, nickname'),
+      ]);
+      const data = reqRes.data, error = reqRes.error;
       if (error || !data?.length) {
         el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 첫 번째로 요청해보세요!</div>'; return;
       }
+      const _profileMap = {};
+      (profilesRes.data || []).forEach(p => { _profileMap[String(p.user_id)] = p.nickname || '?'; });
+      const voterMap = {};
+      (votesRes.data || []).forEach(v => {
+        if (!voterMap[v.request_id]) voterMap[v.request_id] = [];
+        voterMap[v.request_id].push(_profileMap[String(v.user_id)] || '?');
+      });
 
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
       const active = data.filter(r => !r.purchase_status && !r.purchased_at && !r.is_planned && !r.added_at);
@@ -348,6 +360,9 @@
         const badgesHtml = statusBadge ? `<span class="req-card-badges">${statusBadge}</span>` : '';
         const actionsHtml = (adminActions || can) ? `<span class="req-card-actions">${adminActions}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>` : '';
 
+        const _voters = voterMap[r.id] || [];
+        const votersHtml = _voters.length ? `<span class="req-voters-names">${_voters.map(escHtml).join(', ')}</span>` : '';
+
         const actualList = Array.isArray(r.actual_games) ? r.actual_games : [];
         const actualGamesHtml = isAdmin() ? `
           <details class="req-actual-wrap" data-id="${r.id}" data-games="${escHtml(JSON.stringify(actualList))}">
@@ -364,6 +379,7 @@
         return `<li class="${liClass}" data-id="${r.id}" data-table="game_requests" data-name="${escHtml(r.game_name)}" data-count="${r.request_count}">
           <span class="req-card-name">${escHtml(r.game_name)}</span>
           <span class="req-card-count">${countLabel}</span>
+          ${votersHtml}
           ${badgesHtml}${actionsHtml}${actualGamesHtml}
         </li>`;
       }
