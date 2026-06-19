@@ -351,11 +351,11 @@ async function openProfilePanel() {
     const date = r.played_at || (r.created_at||'').slice(0,10);
     const pn = _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li>${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(date)}</span></li>`;
+    return `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(date)}</span></li>`;
   });
 
   const commentListHtml = buildActivityList(stats.comments, r =>
-    `<li>${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
+    `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
   );
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
@@ -433,7 +433,7 @@ async function openProfilePanel() {
       return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span><span class="profile-voucher-hist-bal">→ ${balAfter}장</span></li>`;
     }).join('');
     const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
-    return `<div class="profile-voucher-balance">보유 <strong>${bal}장</strong></div>${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
+    return `${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
   }
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
 
@@ -564,17 +564,19 @@ async function openProfilePanel() {
     </div>` : ''}`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _tasteCardSummary = `❤️ ${likedGameIds.length}개 · 👀 ${curiousGameIds.length}개`;
-  const _recordCardSummary = `기록 ${stats.plays.length}건 · 게임평 ${stats.reviewCount}개 · 사진 ${photoCount}장`;
+  const _tasteCardSummary = `❤️ 좋아요 ${likedGameIds.length}개\n👀 관심게임 ${curiousGameIds.length}개`;
+  const _recordCardSummary = `플레이기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${photoCount}장`;
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
   const _repCharPath = repData?.id
     ? (window.CottageAchievements?.getCharacterPath?.(repData.id) || null)
     : null;
-  const _repImgHtml = _repCharPath
-    ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(repData?.name || '')}">`
-    : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`;
+  const _repImgHtml = `<div class="profile-panel-avatar-wrap">${
+    _repCharPath
+      ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(repData?.name || '')}">`
+      : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`
+  }<span class="profile-panel-avatar-edit">✏</span></div>`;
   const _repLabel = repData?.name ? escH(repData.name) : '대표 캐릭터 없음';
   const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
@@ -981,6 +983,15 @@ async function openProfilePanel() {
                 : '접기';
             });
           });
+          subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
+            const gameId = li.dataset.gameId;
+            if (!gameId) return;
+            li.style.cursor = 'pointer';
+            li.addEventListener('click', () => {
+              const key = _getGameKeyById(gameId);
+              if (key && window.openGameSheet) window.openGameSheet(key);
+            });
+          });
         });
 
 
@@ -1019,7 +1030,7 @@ async function openProfilePanel() {
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar, .profile-panel-avatar--empty')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
+  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
   body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
   body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
 }

@@ -3575,8 +3575,10 @@ body.sheet-open{
 .profile-panel-title{font-size:16px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
 .profile-panel-profile{display:flex;align-items:center;gap:14px;padding:4px 0 16px;}
-.profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;cursor:pointer;flex-shrink:0;}
-.profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;cursor:pointer;flex-shrink:0;}
+.profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}
+.profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;}
+.profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;flex-shrink:0;}
+.profile-panel-avatar-edit{position:absolute;top:-1px;right:-1px;font-size:10px;background:#fff;border:1px solid #e8ddd4;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;pointer-events:none;line-height:1;}
 .profile-panel-profile-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
 .profile-panel-nick-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
 .profile-panel-nick{font-size:17px;font-weight:900;color:#5a3418;margin:0;background:none;border:none;padding:0;cursor:pointer;text-align:left;}
@@ -3599,7 +3601,7 @@ body.sheet-open{
 .profile-panel-stats.is-collapsed{display:none;}
 .profile-panel-stats li{display:flex;justify-content:space-between;align-items:center;font-size:14px;border-bottom:1px solid var(--border);padding-bottom:8px;}
 .profile-panel-stats li:last-child{border-bottom:none;padding-bottom:0;}
-.profile-stats-divider{border:none!important;padding:0!important;height:0;margin:2px 0;border-top:1px solid var(--border)!important;}
+.profile-stats-divider{border:none!important;border-bottom:none!important;padding:4px 0 0!important;height:0;margin:2px 0;border-top:1px solid var(--border,#e8e4dc)!important;}
 .profile-panel-stats span{color:var(--muted);}
 .profile-panel-stats strong{color:var(--text);font-weight:700;}
 .profile-panel-loading{font-size:14px;color:var(--muted);}
@@ -3720,7 +3722,7 @@ body.sheet-open{
 .profile-card:active{background:#ede8df;}
 .profile-card-icon{font-size:18px;flex-shrink:0;}
 .profile-card-label{display:block;font-size:13px;font-weight:700;color:var(--text);}
-.profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;}
+.profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
 .profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
 .profile-card.has-badge::after{content:'';position:absolute;top:10px;right:32px;width:7px;height:7px;background:#e53935;border-radius:50%;}
