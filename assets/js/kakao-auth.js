@@ -977,7 +977,7 @@ async function openProfilePanel() {
             li.style.cursor = 'pointer';
             li.addEventListener('click', () => {
               const key = _getGameKeyById(gameId);
-              if (key) location.href = `/pages/game/game-reviews.html?game=${encodeURIComponent(key)}`;
+              if (key && window.openGameSheet) window.openGameSheet(key);
             });
           });
         });
