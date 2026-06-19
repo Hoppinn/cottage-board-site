@@ -281,10 +281,19 @@
       return Object.values(window.gameData).filter(g => g.cottage?.status === 'active');
     }
 
+    function resolveShelfId(g) {
+      const id = g.cottage?.shelfGroupId;
+      if (id === '협력') {
+        const w = g.bgg?.weight;
+        return (w && w >= 2.5) ? 'hard_coop' : 'easy_coop';
+      }
+      return id;
+    }
+
     function buildGroupMap(games) {
       const map = {};
       for (const g of games) {
-        const id = g.cottage?.shelfGroupId;
+        const id = resolveShelfId(g);
         if (!id) continue;
         if (!map[id]) map[id] = [];
         map[id].push(g);
@@ -383,7 +392,7 @@
       }
 
       el.innerHTML = matches.map(g => {
-        const id = g.cottage?.shelfGroupId;
+        const id = resolveShelfId(g);
         const code = getCode(id);
         const label = getLabel(id);
         const badgeClass = code
