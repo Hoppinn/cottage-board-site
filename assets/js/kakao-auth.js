@@ -389,7 +389,7 @@ async function openProfilePanel() {
     return _getGameKeyById(String(found.bggId));
   }
 
-  const _notifItems = notifs.slice(0, 5).map(n => {
+  function _renderNotifItem(n) {
     const clsList = ['is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
     const cls = ` class="${clsList}"`;
     const badge = n.isNew ? '<span class="profile-notif-new-badge">NEW</span> ' : '';
@@ -404,11 +404,18 @@ async function openProfilePanel() {
       return `<li${cls}>${badge}🎉 <strong>${escH(displayName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
     }
     return '';
-  }).join('');
-  const _notifMore = notifs.length > 5 ? `<li class="profile-notif-more">외 ${notifs.length - 5}건 더</li>` : '';
-  const _notifHasItems = notifs.length > 0 || !voucherSeen;
-  const _notifConfirmBtn = _notifHasItems ? `<li class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 확인</button></li>` : '';
-  const _notifInnerHtml = `<ul class="profile-notif-list">${voucherItemHtml}${_notifItems}${_notifMore}${_notifConfirmBtn}</ul>`;
+  }
+  const _newGameNotifs = notifs.filter(n => n.type === 'new_game');
+  const _otherNotifs = notifs.filter(n => n.type !== 'new_game');
+  const _inboxGroupHtml = _newGameNotifs.length
+    ? `<li class="profile-notif-group-header">📦 입고 알림</li>${_newGameNotifs.map(_renderNotifItem).join('')}`
+    : '';
+  const _otherItemsHtml = _otherNotifs.slice(0, 5).map(_renderNotifItem).join('');
+  const _notifMore = _otherNotifs.length > 5 ? `<li class="profile-notif-more">외 ${_otherNotifs.length - 5}건 더</li>` : '';
+  const _notifEmptyHtml = (notifs.length === 0 && voucherSeen)
+    ? `<li class="profile-notif-empty"><span class="profile-notif-empty-icon">📭</span><span>새로운 알림이 없습니다</span></li>`
+    : '';
+  const _notifInnerHtml = `<ul class="profile-notif-list"><li class="profile-notif-group-header">🎉 보상</li>${voucherItemHtml}${_inboxGroupHtml}${_otherItemsHtml}${_notifMore}${_notifEmptyHtml}</ul>`;
 
   function _buildVoucherInner(bal, prods, hist) {
     const fmtDt = iso => {
@@ -541,7 +548,7 @@ async function openProfilePanel() {
   const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
   const _recordInnerHtml = `
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
+      <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
@@ -565,7 +572,7 @@ async function openProfilePanel() {
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
   const _tasteCardSummary = `❤️ 좋아요 ${likedGameIds.length}개\n👀 관심게임 ${curiousGameIds.length}개`;
-  const _recordCardSummary = `플레이기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${photoCount}장`;
+  const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${photoCount}장`;
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
@@ -576,7 +583,7 @@ async function openProfilePanel() {
     _repCharPath
       ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(repData?.name || '')}">`
       : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`
-  }<span class="profile-panel-avatar-edit">✏</span></div>`;
+  }<span class="profile-panel-avatar-edit">⚙</span></div>`;
   const _repLabel = repData?.name ? escH(repData.name) : '대표 캐릭터 없음';
   const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
@@ -603,11 +610,11 @@ async function openProfilePanel() {
       ${_repImgHtml}
       <div class="profile-panel-profile-info">
         <div class="profile-panel-nick-row">
-          <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} ✏️</button>
+          <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} <span class="profile-nick-edit">✏️</span></button>
           ${_newCount > 0 ? `<button class="profile-panel-notif-btn" data-subsheet="notif" type="button"><span class="notif-red-dot"></span>🔔 새 알림 ${_newCount}건</button>` : ''}
         </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
-        <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} ▼` : '칭호 없음 ▼'}</button>
+        <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
         ${_growthBadge}
       </div>
     </div>
@@ -615,7 +622,7 @@ async function openProfilePanel() {
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="growth" type="button">
         <span class="profile-card-icon">🌱</span>
-        <span class="profile-card-label">성장 보드</span>
+        <span class="profile-card-label">수집 보드</span>
         <span class="profile-card-summary">${escH(_growthSummary)}</span>
       </button>
       <button class="profile-card" data-subsheet="taste" type="button">
@@ -883,27 +890,8 @@ async function openProfilePanel() {
       const type = card.dataset.subsheet;
 
       if (type === 'notif') {
-        const _notifTitle = _newCount > 0 ? `최근 알림 <span class="profile-subsheet-badge">${_newCount}건</span>` : '최근 알림';
+        const _notifTitle = '최근 알림';
         _openSubSheet(_notifTitle, _notifInnerHtml, subBody => {
-          subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', function() {
-            if (window._cottageSess) {
-              const _s = window._cottageSess.get(String(user.id));
-              _s.notifSeenAt = new Date().toISOString();
-              _s.newGameSeenAt = new Date().toISOString();
-              _s.voucherNoticeSeen = true;
-              window._cottageSess.set(String(user.id), _s);
-            }
-            document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-            body.querySelector('.profile-panel-notif-btn')?.remove();
-            const list = subBody.querySelector('.profile-notif-list');
-            list?.querySelectorAll('.is-new').forEach(el => {
-              el.classList.remove('is-new');
-              el.querySelectorAll('.profile-notif-new-badge').forEach(b => b.remove());
-              el.querySelector('.profile-voucher-confirm')?.remove();
-            });
-            this.closest('.profile-notif-confirm-row')?.remove();
-            _updateNotifBadge();
-          });
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
@@ -919,7 +907,7 @@ async function openProfilePanel() {
         });
 
       } else if (type === 'growth') {
-        _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody));
+        _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody));
 
       } else if (type === 'voucher') {
         _openSubSheet('음료교환권', _voucherInnerHtml, subBody => {
@@ -989,7 +977,7 @@ async function openProfilePanel() {
             li.style.cursor = 'pointer';
             li.addEventListener('click', () => {
               const key = _getGameKeyById(gameId);
-              if (key && window.openGameSheet) window.openGameSheet(key);
+              if (key) location.href = `/pages/game/game-reviews.html?game=${encodeURIComponent(key)}`;
             });
           });
         });
@@ -1030,9 +1018,9 @@ async function openProfilePanel() {
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
+  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
   body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
-  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => _openSubSheet('성장 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
+  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

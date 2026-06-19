@@ -3583,6 +3583,8 @@ body.sheet-open{
 .profile-panel-nick-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
 .profile-panel-nick{font-size:17px;font-weight:900;color:#5a3418;margin:0;background:none;border:none;padding:0;cursor:pointer;text-align:left;}
 .profile-panel-nick:hover{text-decoration:underline;}
+.profile-nick-edit{font-size:11px;opacity:0.6;vertical-align:middle;}
+.profile-title-edit{font-size:10px;opacity:0.7;}
 .profile-panel-notif-btn{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#7a4828;background:none;border:none;padding:0;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .profile-panel-notif-btn:hover{text-decoration:underline;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
@@ -3632,6 +3634,9 @@ body.sheet-open{
 .profile-notif-list li{font-size:12px;color:var(--text);display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
 .profile-notif-list li span{color:var(--muted);font-size:11px;white-space:nowrap;flex-shrink:0;}
 .profile-notif-more{color:var(--muted);font-size:11px;}
+.profile-notif-group-header{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:0.02em;padding:4px 0 2px;border-bottom:1px solid var(--border,#e8e4dc);margin-top:4px;justify-content:flex-start!important;}
+.profile-notif-group-header:first-child{margin-top:0;}
+.profile-notif-empty{justify-content:flex-start!important;gap:8px;color:var(--muted);font-size:12px;padding:6px 0;}
 .profile-notif-list li.is-new{font-weight:600;}
 .profile-notif-list li.is-clickable{cursor:pointer;}
 .profile-notif-new-badge{display:inline-block;font-size:9px;font-weight:700;color:#fff;background:#e53935;border-radius:3px;padding:1px 4px;vertical-align:middle;margin-right:2px;}
@@ -3650,8 +3655,8 @@ body.sheet-open{
 .profile-voucher-link{flex:1;display:flex;align-items:center;justify-content:center;padding:7px 0;font-size:12px;font-weight:600;color:#fff;background:var(--brown,#7a4828);border-radius:6px;text-decoration:none;text-align:center;}
 /* 음료교환권 패널 섹션 */
 .profile-voucher-section{background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:10px;overflow:hidden;margin-top:14px;}
-.profile-voucher-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:none;border:none;cursor:pointer;}
-.profile-voucher-toggle:hover{background:rgba(0,0,0,0.03);}
+.profile-voucher-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--bg,#f5f0e8);border:none;cursor:pointer;border-bottom:1px solid var(--border,#e8e4dc);}
+.profile-voucher-toggle:hover{background:#ede8df;}
 .profile-voucher-header{font-size:13px;font-weight:700;color:var(--text);}
 .profile-voucher-bal-label{font-size:12px;font-weight:400;color:var(--muted);margin-left:4px;}
 #profileVoucherInner{padding:0 14px 12px;}
@@ -3801,7 +3806,7 @@ body.sheet-open{
 .profile-char-grid>.profile-more-wrap{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;flex-direction:unset;}
 .profile-char-grid>.profile-more-btn-wrap{grid-column:1/-1;display:flex;}
 .profile-char-card{border-radius:8px;overflow:hidden;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4px 4px 5px;}
-.profile-char-card img{width:100%;height:58px;object-fit:contain;flex-shrink:0;}
+.profile-char-card img{width:100%;height:48px;object-fit:contain;flex-shrink:0;}
 .profile-char-card.is-locked img{filter:grayscale(1) opacity(0.3);}
 .profile-char-card:not(.is-locked){cursor:pointer;}
 .profile-char-card.is-rep{border:2px solid #7a4828;box-shadow:0 0 0 1px #7a4828;}
