@@ -359,20 +359,22 @@ async function openProfilePanel() {
   );
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
-  const VOUCHER_NOTICE_DATE = '2026-06-16'; // 공지 생성일 고정 (캠페인 공지)
+  const VOUCHER_NOTICE_DATE = '2026-06-16';
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
-  // seen 여부와 무관하게 항상 표시. seen이면 읽음 스타일(NEW 배지·확인 버튼 없음).
-  const voucherItemHtml = `<li class="profile-notif-voucher${voucherSeen ? ' is-seen' : ' is-new'}">
-    ${voucherSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}
-    <div class="profile-voucher-body">
-      <strong>🎫 첫 플레이기록을 남기면 음료교환권 1장을 받을 수 있어요</strong>
-      <div class="profile-voucher-btns">
-        ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
-        <a class="profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">게임 기록하기</a>
+  const voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? ' is-seen' : ' is-new'}">
+    <div class="notif-reward-row">
+      <div class="notif-reward-icon-col">🎫</div>
+      <div class="notif-reward-body">
+        <div class="notif-reward-title">첫 기록 보상 도착 ${voucherSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}</div>
+        <div class="notif-reward-desc">첫 플레이기록을 남기면 음료교환권 1장을 받을 수 있어요</div>
       </div>
+      <span class="notif-card-date">${escH(_voucherDateLabel)}</span>
     </div>
-    <span class="profile-notif-voucher-date">${escH(_voucherDateLabel)}</span>
-  </li>`;
+    <div class="notif-reward-actions">
+      <a class="notif-reward-btn profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">게임 기록하기</a>
+      ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
+    </div>
+  </div>`;
   const _newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
   function _getGameKeyById(gameId) {
     if (!gameId || !window.gameData) return null;
@@ -390,36 +392,28 @@ async function openProfilePanel() {
   }
 
   function _renderNotifItem(n) {
-    const clsList = ['is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
-    const cls = ` class="${clsList}"`;
-    const badge = n.isNew ? '<span class="profile-notif-new-badge" style="color:#fff">NEW</span> ' : '';
+    const cls = ['notif-card', 'is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
+    const badge = n.isNew ? '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>' : '';
+    const dt = `<span class="notif-card-date">${fmtShort(n.date)}</span>`;
     if (n.type === 'tagged')
-      return `<li${cls} data-game-id="${escH(String(n.gameId))}">${badge}🎲 <strong>${escH(getGameName(n.gameId))}</strong> 기록 태그됨 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}"><div class="notif-card-icon">🎲</div><div class="notif-card-body"><div class="notif-card-title">${escH(getGameName(n.gameId))} 기록 태그 ${badge}</div><div class="notif-card-desc">새 기록에 내 닉네임이 태그됐어요</div></div>${dt}</li>`;
     if (n.type === 'curious_comment')
-      return `<li${cls} data-game-key="${escH(String(n.gameKey))}">${badge}🤔 <strong>${escH(getGameName(n.gameKey))}</strong> 새 코멘트 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}"><div class="notif-card-icon">🤔</div><div class="notif-card-body"><div class="notif-card-title">${escH(getGameName(n.gameKey))} 새 코멘트 ${badge}</div><div class="notif-card-desc">궁금해요 게임에 코멘트가 달렸어요</div></div>${dt}</li>`;
     if (n.type === 'ordered')
-      return `<li${cls} data-game-name="${escH(String(n.gameName))}">${badge}🛒 <strong>${escH(n.gameName)}</strong> 주문됐어요 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}"><div class="notif-card-icon">🛒</div><div class="notif-card-body"><div class="notif-card-title">${escH(n.gameName)} 주문 완료 ${badge}</div><div class="notif-card-desc">게임 요청이 접수/주문되었습니다</div></div>${dt}</li>`;
     if (n.type === 'new_game') {
       const displayName = n.actualGames?.length ? n.actualGames.join(', ') : n.gameName;
-      return `<li${cls}>${badge}🎉 <strong>${escH(displayName)}</strong> 추가됐어요 <span>${fmtShort(n.date)}</span></li>`;
+      return `<li class="${cls}"><div class="notif-card-icon">📦</div><div class="notif-card-body"><div class="notif-card-title">${escH(displayName)} 입고 ${badge}</div><div class="notif-card-desc">새 게임이 추가됐어요</div></div>${dt}</li>`;
     }
     return '';
   }
-  const _newGameNotifs = notifs.filter(n => n.type === 'new_game');
-  const _otherNotifs = notifs.filter(n => n.type !== 'new_game');
-  const _inboxGroupHtml = _newGameNotifs.length
-    ? `<li class="profile-notif-group-header">📦 입고 알림</li>${_newGameNotifs.map(_renderNotifItem).join('')}`
-    : '';
-  const _otherItemsHtml = _otherNotifs.slice(0, 5).map(_renderNotifItem).join('');
-  const _notifMore = _otherNotifs.length > 5 ? `<li class="profile-notif-more">외 ${_otherNotifs.length - 5}건 더</li>` : '';
-  const _notifEmptyHtml = (notifs.length === 0 && voucherSeen)
-    ? `<li class="profile-notif-empty"><span class="profile-notif-empty-icon">📭</span><span>새로운 알림이 없습니다</span></li>`
-    : '';
   const _hasAnyNew = _newCount > 0;
-  const _markAllBtnHtml = _hasAnyNew
-    ? `<div class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 읽기</button></div>`
+  const _allNotifItems = notifs.slice(0, 8).map(_renderNotifItem).join('');
+  const _notifMore = notifs.length > 8 ? `<li class="profile-notif-more">외 ${notifs.length - 8}건 더 있어요</li>` : '';
+  const _notifHelpHtml = notifs.length < 3
+    ? `<div class="notif-help">새 알림이 없으면 여기에서 보상, 게임 요청, 업적 달성 소식을 확인할 수 있어요.</div>`
     : '';
-  const _notifInnerHtml = `${_markAllBtnHtml}<ul class="profile-notif-list"><li class="profile-notif-group-header">🎉 보상</li>${voucherItemHtml}${_inboxGroupHtml}${_otherItemsHtml}${_notifMore}${_notifEmptyHtml}</ul>`;
+  const _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${voucherCardHtml}<ul class="profile-notif-list">${_allNotifItems}${_notifMore}</ul>${_notifHelpHtml}`;
 
   function _buildVoucherInner(bal, prods, hist) {
     const fmtDt = iso => {
@@ -704,9 +698,16 @@ async function openProfilePanel() {
     container.querySelectorAll('.profile-notif-list .is-new').forEach(li => {
       li.classList.remove('is-new');
       li.querySelector('.profile-notif-new-badge')?.remove();
-      li.querySelector('.profile-voucher-confirm')?.remove();
     });
-    container.querySelector('.profile-notif-confirm-row')?.remove();
+    const _rewardCard = container.querySelector('.notif-reward-card');
+    if (_rewardCard) {
+      _rewardCard.classList.remove('is-new');
+      _rewardCard.classList.add('is-seen');
+      _rewardCard.querySelector('.profile-notif-new-badge')?.remove();
+      _rewardCard.querySelector('.profile-voucher-confirm')?.remove();
+      _rewardCard.querySelector('.notif-reward-btn')?.classList.add('is-seen');
+    }
+    container.querySelector('.profile-notif-confirm-all')?.remove();
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
     body.querySelector('.profile-panel-notif-btn')?.remove();
     _updateNotifBadge();
@@ -721,15 +722,18 @@ async function openProfilePanel() {
     }
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
     body.querySelector('.profile-panel-notif-btn')?.remove();
-    const voucherItem = container.querySelector('.profile-notif-voucher');
-    if (voucherItem) {
-      voucherItem.classList.remove('is-new');
-      voucherItem.querySelector('.profile-notif-new-badge')?.remove();
-      voucherItem.querySelector('.profile-voucher-confirm')?.remove();
+    const _vCard = container.querySelector('.notif-reward-card');
+    if (_vCard) {
+      _vCard.classList.remove('is-new');
+      _vCard.classList.add('is-seen');
+      _vCard.querySelector('.profile-notif-new-badge')?.remove();
+      _vCard.querySelector('.profile-voucher-confirm')?.remove();
+      _vCard.querySelector('.notif-reward-btn')?.classList.add('is-seen');
     }
     const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
     if (remaining === 0) {
       body.querySelector('.profile-panel-notif-btn')?.remove();
+      container.querySelector('.profile-notif-confirm-all')?.remove();
     }
     _updateNotifBadge();
   }
