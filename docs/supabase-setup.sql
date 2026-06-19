@@ -548,3 +548,47 @@ language sql security definer stable as $$
   from public.game_ratings
   group by game_id;
 $$;
+
+
+-- ── 이후 마이그레이션 (ALTER / 신규 테이블) ──────────────────
+-- 아래 항목은 초기 배포 후 순차적으로 추가된 컬럼/테이블.
+-- IF NOT EXISTS 보장 → 재실행 안전.
+
+-- page_views: 유입경로 추적 컬럼
+alter table public.page_views add column if not exists referrer text;
+
+-- page_sessions: 비회원 추적용 세션키
+alter table public.page_sessions add column if not exists session_key text;
+
+-- page_events (추천게임찾기 이벤트 추적)
+create table if not exists public.page_events (
+  id         bigint generated always as identity primary key,
+  event_type text        not null,
+  game_id    text,
+  referrer   text,
+  created_at timestamptz not null default now()
+);
+alter table public.page_events enable row level security;
+drop policy if exists "anon_insert_page_events" on public.page_events;
+create policy "anon_insert_page_events"
+  on public.page_events for insert to anon with check (true);
+drop policy if exists "auth_select_page_events" on public.page_events;
+create policy "auth_select_page_events"
+  on public.page_events for select to authenticated using (true);
+
+-- game_requests: 구매상태 / 날짜 / 실제추가게임 컬럼
+alter table public.game_requests add column if not exists added_at     timestamptz;
+alter table public.game_requests add column if not exists actual_games jsonb default '[]';
+alter table public.game_requests add column if not exists purchase_status text;
+alter table public.game_requests add column if not exists status_date  date;
+
+-- profiles: 대표 칭호 컬럼
+alter table public.profiles add column if not exists rep_title_id text;
+
+-- user_achievements: FK 제거 (행동축 기반 신규 ID는 achievements 테이블 행 없이 직접 삽입)
+alter table public.user_achievements drop constraint if exists user_achievements_achievement_id_fkey;
+
+-- voucher_log: reason 체크 제약 갱신 (dev_test 추가)
+alter table public.voucher_log drop constraint if exists voucher_log_reason_check;
+alter table public.voucher_log add constraint voucher_log_reason_check
+  check (reason in ('first_play', 'redeem', 'dev_test'));

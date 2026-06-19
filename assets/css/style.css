@@ -3652,25 +3652,26 @@ body.sheet-open{
 .notif-list-header{display:flex;justify-content:flex-end;padding-bottom:8px;min-height:10px;}
 .profile-notif-confirm-all{font-size:11px;font-weight:600;color:var(--brown,#7a4828);background:none;border:1px solid var(--brown,#7a4828);border-radius:6px;padding:4px 10px;cursor:pointer;}
 .profile-notif-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
-.notif-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#fff;border:1px solid var(--border,#e8e4dc);border-radius:10px;}
-.notif-card.is-new{background:#fff8f0;border-color:#f5c89a;}
+.notif-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#fff;border:1px solid var(--border,#e8e4dc);border-radius:10px;border-left:3px solid transparent;}
+.notif-card.is-new{background:#fff8f0;border-color:#f5c89a;border-left-color:#e09a3c;}
 .notif-card.is-clickable{cursor:pointer;}
 .notif-card-icon{font-size:20px;flex-shrink:0;line-height:1.1;}
 .notif-card-body{flex:1;min-width:0;}
 .notif-card-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.4;display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
 .notif-card-desc{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4;}
-.notif-card-date{font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;padding-top:2px;}
-/* ── 보상 카드 ── */
-.notif-reward-card{background:#fff8f0;border:1px solid #f5c89a;border-radius:10px;padding:14px;margin-bottom:10px;}
-.notif-reward-card.is-seen{background:#faf9f5;border-color:var(--border,#e8e4dc);opacity:0.85;}
+.notif-card-date{font-size:11px;color:var(--muted);margin-top:5px;}
+/* ── 보상 카드 (강조) ── */
+.notif-reward-card{background:linear-gradient(135deg,#fff8ee,#fffaf3);border:1.5px solid #e8c070;border-radius:12px;padding:16px;margin-bottom:10px;box-shadow:0 1px 4px rgba(160,100,20,0.08);}
+.notif-reward-card.is-seen{background:#faf9f5;border:1px solid var(--border,#e8e4dc);box-shadow:none;opacity:0.85;}
 .notif-reward-row{display:flex;align-items:flex-start;gap:10px;}
-.notif-reward-icon-col{font-size:20px;flex-shrink:0;line-height:1.1;}
+.notif-reward-icon-col{font-size:22px;flex-shrink:0;line-height:1.1;}
 .notif-reward-body{flex:1;min-width:0;}
-.notif-reward-title{font-size:13px;font-weight:700;color:#7a4828;display:flex;align-items:center;gap:5px;flex-wrap:wrap;line-height:1.4;}
-.notif-reward-card.is-seen .notif-reward-title{color:var(--text);font-weight:600;}
-.notif-reward-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4;}
-.notif-reward-actions{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
-.notif-reward-btn{display:block;width:100%;padding:10px;font-size:13px;font-weight:700;color:#fff;background:var(--brown,#7a4828);border-radius:10px;text-align:center;text-decoration:none;box-sizing:border-box;}
+.notif-reward-title{font-size:14px;font-weight:800;color:#7a4828;display:flex;align-items:center;gap:5px;flex-wrap:wrap;line-height:1.4;}
+.notif-reward-card.is-seen .notif-reward-title{font-size:13px;font-weight:600;color:var(--text);}
+.notif-reward-desc{font-size:13px;color:#8a6040;margin-top:4px;line-height:1.5;}
+.notif-reward-card.is-seen .notif-reward-desc{font-size:12px;color:var(--muted);}
+.notif-reward-actions{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.notif-reward-btn{display:block;width:100%;padding:11px;font-size:13px;font-weight:700;color:#fff;background:var(--brown,#7a4828);border-radius:10px;text-align:center;text-decoration:none;box-sizing:border-box;}
 .notif-reward-btn.is-seen{font-size:12px;font-weight:400;color:var(--muted);background:none;border:1px solid var(--border,#e8e4dc);padding:7px;border-radius:8px;}
 .notif-reward-card .profile-voucher-confirm{width:100%;padding:7px;font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:#fff;border:1px solid var(--brown,#7a4828);border-radius:8px;cursor:pointer;box-sizing:border-box;}
 .notif-help{margin-top:10px;padding:14px;background:#faf9f5;border:1px dashed var(--border,#e8e4dc);border-radius:10px;font-size:12px;color:var(--muted);line-height:1.5;text-align:center;}

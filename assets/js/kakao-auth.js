@@ -367,8 +367,8 @@ async function openProfilePanel() {
       <div class="notif-reward-body">
         <div class="notif-reward-title">첫 기록 보상 도착 ${voucherSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}</div>
         <div class="notif-reward-desc">첫 플레이기록을 남기면 음료교환권 1장을 받을 수 있어요</div>
+        <div class="notif-card-date">${escH(_voucherDateLabel)}</div>
       </div>
-      <span class="notif-card-date">${escH(_voucherDateLabel)}</span>
     </div>
     <div class="notif-reward-actions">
       <a class="notif-reward-btn profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">게임 기록하기</a>
@@ -394,23 +394,25 @@ async function openProfilePanel() {
   function _renderNotifItem(n) {
     const cls = ['notif-card', 'is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
     const badge = n.isNew ? '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>' : '';
-    const dt = `<span class="notif-card-date">${fmtShort(n.date)}</span>`;
+    const dt = `<div class="notif-card-date">${fmtShort(n.date)}</div>`;
+    const _card = (icon, title, desc) =>
+      `<div class="notif-card-icon">${icon}</div><div class="notif-card-body"><div class="notif-card-title">${title} ${badge}</div><div class="notif-card-desc">${desc}</div>${dt}</div>`;
     if (n.type === 'tagged')
-      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}"><div class="notif-card-icon">🎲</div><div class="notif-card-body"><div class="notif-card-title">${escH(getGameName(n.gameId))} 기록 태그 ${badge}</div><div class="notif-card-desc">새 기록에 내 닉네임이 태그됐어요</div></div>${dt}</li>`;
+      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요')}</li>`;
     if (n.type === 'curious_comment')
-      return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}"><div class="notif-card-icon">🤔</div><div class="notif-card-body"><div class="notif-card-title">${escH(getGameName(n.gameKey))} 새 코멘트 ${badge}</div><div class="notif-card-desc">궁금해요 게임에 코멘트가 달렸어요</div></div>${dt}</li>`;
+      return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}">${_card('🤔', escH(getGameName(n.gameKey)) + ' 새 코멘트', '궁금해요 게임에 코멘트가 달렸어요')}</li>`;
     if (n.type === 'ordered')
-      return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}"><div class="notif-card-icon">🛒</div><div class="notif-card-body"><div class="notif-card-title">${escH(n.gameName)} 주문 완료 ${badge}</div><div class="notif-card-desc">게임 요청이 접수/주문되었습니다</div></div>${dt}</li>`;
+      return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}">${_card('🛒', escH(n.gameName) + ' 주문 완료', '게임 요청이 접수/주문되었습니다')}</li>`;
     if (n.type === 'new_game') {
       const displayName = n.actualGames?.length ? n.actualGames.join(', ') : n.gameName;
-      return `<li class="${cls}"><div class="notif-card-icon">📦</div><div class="notif-card-body"><div class="notif-card-title">${escH(displayName)} 입고 ${badge}</div><div class="notif-card-desc">새 게임이 추가됐어요</div></div>${dt}</li>`;
+      return `<li class="${cls}">${_card('📦', escH(displayName) + ' 입고', '새 게임이 추가됐어요')}</li>`;
     }
     return '';
   }
   const _hasAnyNew = _newCount > 0;
   const _allNotifItems = notifs.slice(0, 8).map(_renderNotifItem).join('');
   const _notifMore = notifs.length > 8 ? `<li class="profile-notif-more">외 ${notifs.length - 8}건 더 있어요</li>` : '';
-  const _notifHelpHtml = notifs.length < 3
+  const _notifHelpHtml = notifs.length === 0
     ? `<div class="notif-help">새 알림이 없으면 여기에서 보상, 게임 요청, 업적 달성 소식을 확인할 수 있어요.</div>`
     : '';
   const _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${voucherCardHtml}<ul class="profile-notif-list">${_allNotifItems}${_notifMore}</ul>${_notifHelpHtml}`;
@@ -918,7 +920,7 @@ async function openProfilePanel() {
       const type = card.dataset.subsheet;
 
       if (type === 'notif') {
-        const _notifTitle = '최근 알림';
+        const _notifTitle = '최근 소식';
         _openSubSheet(_notifTitle, _notifInnerHtml, subBody => {
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));

@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (128차)
+최종 갱신: 2026-06-19 (130차)
 
 ---
 
@@ -11,16 +11,24 @@
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
 - 목표: Discord webhook으로 교체 (HTTP 2 토큰발급 모듈 삭제, HTTP 3 URL 교체)
 
-**완료**: ACH_DEFS/TITLE_DEFS 전면 SSOT 재정의 (127차) — 업적 ID 행동축 기준으로 전환, balance 축 추가, POINTS/checkAchievements 모두 갱신. DB 마이그레이션(FK 제거, 구ID→신ID INSERT/NULL 처리) 완료. 소급 부여 SQL 별도 실행 필요.
+**완료 (128차)**: 비주얼 분석 페이지 `kstDate is not defined` 버그 수정 — `buildAnonUserMap` 스코프 문제, `_toKstDate` 인라인 헬퍼 추가.
 
-**보류**: 소급 업적 부여 — ACH_DEFS 마이그레이션 완료 후 실행 대기 중. record/new_game/photo/review/visit/first_record 축 대상 SELECT→INSERT ON CONFLICT DO NOTHING. play/balance 제외.
+**완료 (128차)**: 관리자 페이지 링크 내 보드 맨 아래(함께한 시간 하단)로 이동.
+
+**완료 (128차+129차)**: 업적 소급 부여 SQL(`docs/migrations/002_sogeup_achievements.sql`) 생성 및 Supabase 실행 완료.
+
+**완료 (129차)**: 알림 패널 카드형 레이아웃 1차 개선.
+
+**완료 (130차)**: 알림 2차 개선 — 날짜 위치(desc 하단), 빈 상태 조건 수정(=== 0), 좌측 unread 바, 보상 카드 강조(gradient, box-shadow), 페이지 명칭 "최근 소식" 변경.
+
+**완료 (130차)**: `docs/supabase-setup.sql` 누락 항목 추가 — page_views.referrer, page_sessions.session_key, page_events 테이블, game_requests 신규 컬럼(added_at/actual_games/purchase_status/status_date), profiles.rep_title_id, user_achievements FK 제거, voucher_log dev_test 허용.
 
 **다음 작업 후보**
 
-1. **업적 소급 부여 SQL 실행** — 위 [2] SQL (SELECT 확인 → INSERT) Supabase 실행
-2. **page_sessions.session_key 컬럼 확인** — [5] 비회원 통계가 DB에 session_key가 있어야 동작. Supabase에서 `SELECT session_key FROM page_sessions LIMIT 1;` 확인 필요
-3. **104차 상태 시스템 테스트** — SQL(purchase_status, status_date 컬럼) 실행 후 기능 확인
-4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **balance 축 checkAchievements 구현** — ACH_DEFS에 정의됐으나 JS checkAchievements에 case 없음. 계산 방식(play 대비 리뷰율 등) 먼저 결정 필요.
+2. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 SQL 실행 후 requests-admin.html 기능 확인
+3. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+4. **Discord 전환** — Make 시나리오 5213346 수정 (보류 중)
 
 ---
 
