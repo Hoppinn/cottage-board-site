@@ -1116,7 +1116,7 @@ function openGameSheet(gameKey, restoreScroll = false){
     : detail.playerRangeText || "-";
 
   const shelfGroupId = game.cottage?.shelfGroupId || "";
-  const shelfLabel   = game.cottage?.shelfLabel   || "-";
+  const shelfLabel   = getGameShelfLabel(game);
   const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
   const categoriesDisplay = (detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories) || [];
 
