@@ -3686,7 +3686,9 @@ body.sheet-open{
 .profile-ach-title{font-size:13px;font-weight:700;color:var(--text);}
 .profile-ach-count{color:var(--brown,#7a4828);}
 .profile-ach-toggle-btn{font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:none;border:none;cursor:pointer;padding:0;}
-.profile-ach-goals{list-style:none;padding:6px 0 8px;margin:4px 0 0;border-top:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;gap:3px;}
+.profile-ach-goals-wrap{border-top:1px solid var(--border,#e8e4dc);margin-top:4px;padding-top:6px;}
+.profile-ach-goals-header{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:0.03em;display:block;margin-bottom:4px;}
+.profile-ach-goals{list-style:none;padding:0 0 8px;margin:0;display:flex;flex-direction:column;gap:3px;}
 .profile-ach-goal-item{display:flex;align-items:center;gap:6px;font-size:12px;padding:1px 0;}
 .profile-ach-goal-axis{color:var(--text);font-weight:600;min-width:68px;}
 .profile-ach-goal-progress{color:var(--muted);}

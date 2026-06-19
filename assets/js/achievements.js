@@ -779,7 +779,7 @@
       const progressText = allDone ? `${cur}${unit}` : (nextDef ? `${cur}/${nextDef.threshold}${unit}` : `${cur}${unit}`);
       return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="${allDone ? 'profile-ach-goal-done' : 'profile-ach-goal-progress'}">${progressText}</span></li>`;
     }).join('');
-    const _goalsDiv = `<ul class="profile-ach-goals">${_goalsHtml}</ul>`;
+    const _goalsDiv = `<div class="profile-ach-goals-wrap"><span class="profile-ach-goals-header">🎯 다음 업적</span><ul class="profile-ach-goals">${_goalsHtml}</ul></div>`;
     const _achListHtml = `<ul class="profile-ach-list is-hidden">${itemsAll.join('')}</ul>`;
     return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}" data-ach-total="${ACH_DEFS.length}">` +
       `<div class="profile-ach-header">` +
