@@ -3722,6 +3722,7 @@ body.sheet-open{
 .profile-ach-goal-progress{color:var(--muted);}
 .profile-ach-goal-reward{color:#b0a090;margin-left:2px;}
 .profile-ach-goal-done{color:#4caf50;font-size:11px;}
+.profile-ach-goal-divider{height:1px;background:var(--border,#e8e4dc);margin:3px 0;padding:0;list-style:none;}
 .profile-ach-list{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:8px;}
 .profile-ach-list.is-hidden{display:none;}
 .profile-ach-item{display:flex;align-items:center;gap:8px;}
