@@ -14,7 +14,7 @@
 INSERT INTO user_achievements (user_id, achievement_id, earned_at)
 SELECT s.user_id, ach.id, NOW()
 FROM (
-  SELECT user_id, COUNT(id) AS cnt FROM game_play_records GROUP BY user_id
+  SELECT user_id, COUNT(id) AS cnt FROM game_play_records WHERE user_id IS NOT NULL GROUP BY user_id
 ) s
 CROSS JOIN (VALUES
   ('record_1',1),('record_3',3),('record_5',5),('record_8',8),
@@ -33,7 +33,7 @@ AND NOT EXISTS (
 INSERT INTO user_achievements (user_id, achievement_id, earned_at)
 SELECT s.user_id, ach.id, NOW()
 FROM (
-  SELECT user_id, COUNT(DISTINCT game_id) AS cnt FROM game_play_records GROUP BY user_id
+  SELECT user_id, COUNT(DISTINCT game_id) AS cnt FROM game_play_records WHERE user_id IS NOT NULL GROUP BY user_id
 ) s
 CROSS JOIN (VALUES
   ('new_game_1',1),('new_game_3',3),('new_game_5',5),('new_game_7',7),
@@ -59,7 +59,7 @@ FROM (
       END
     ) AS cnt
   FROM game_play_records
-  WHERE photo_url IS NOT NULL AND photo_url <> '' AND photo_url <> '[]'
+  WHERE user_id IS NOT NULL AND photo_url IS NOT NULL AND photo_url <> '' AND photo_url <> '[]'
   GROUP BY user_id
 ) s
 CROSS JOIN (VALUES
@@ -77,7 +77,7 @@ AND NOT EXISTS (
 INSERT INTO user_achievements (user_id, achievement_id, earned_at)
 SELECT s.user_id, ach.id, NOW()
 FROM (
-  SELECT user_id, COUNT(id) AS cnt FROM game_ratings GROUP BY user_id
+  SELECT user_id, COUNT(id) AS cnt FROM game_ratings WHERE user_id IS NOT NULL GROUP BY user_id
 ) s
 CROSS JOIN (VALUES
   ('review_1',1),('review_2',2),('review_3',3),('review_5',5),('review_8',8),
@@ -95,7 +95,7 @@ AND NOT EXISTS (
 INSERT INTO user_achievements (user_id, achievement_id, earned_at)
 SELECT s.user_id, ach.id, NOW()
 FROM (
-  SELECT user_id, visit_count AS cnt FROM profiles WHERE visit_count > 0
+  SELECT user_id, visit_count AS cnt FROM profiles WHERE user_id IS NOT NULL AND visit_count > 0
 ) s
 CROSS JOIN (VALUES
   ('visit_3',3),('visit_5',5),('visit_10',10),('visit_15',15),('visit_20',20),('visit_25',25),
@@ -115,7 +115,7 @@ FROM (
   SELECT r.user_id, COUNT(DISTINCT r.game_id) AS cnt
   FROM game_play_records r
   INNER JOIN (
-    SELECT game_id, MIN(created_at) AS first_at FROM game_play_records GROUP BY game_id
+    SELECT game_id, MIN(created_at) AS first_at FROM game_play_records WHERE user_id IS NOT NULL GROUP BY game_id
   ) f ON f.game_id = r.game_id AND r.created_at = f.first_at
   GROUP BY r.user_id
 ) s
