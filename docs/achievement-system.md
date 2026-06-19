@@ -10,6 +10,7 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 
 포인트 누적이 아니라 코티지 이용의 다양한 흔적을 수집하는 성장 시스템.
 첫 행동 유도 → 재방문 유도 → 성장 시각화(캐릭터/칭호/도감) → 다양한 활동 장려.
+게임을 많이 한 사람보다 코티지에 다양하게 기여한 사람을 높게 평가한다.
 
 ---
 
@@ -55,6 +56,8 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 
 보상 순서 원칙: 캐릭터 → 칭호 → 캐릭터 → 칭호 교차를 가능한 한 유지. 완벽한 대칭 강제 안 함.
 
+⚠️ 이 문서는 보상이 있는 임계값만 기재한다. 보상 없는 중간 업적(예: record_3, record_5…)의 전체 목록은 `achievements.js ACH_DEFS` 기준이다.
+
 ---
 
 # 교환권 지급 규칙
@@ -89,7 +92,13 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 
 # 희귀 캐릭터
 
-`rare_lightning` / `rare_storyteller` / `rare_night`
+일반 성장선과 분리. 특수 조건 보상. 수정 시 아래 축 보상 테이블도 함께 확인할 것.
+
+| 캐릭터 | 획득 업적 | 축 |
+|--------|-----------|-----|
+| `rare_lightning` | `review_8` | review |
+| `rare_storyteller` | `review_15` | review |
+| `rare_night` | `play_100` | play |
 
 ---
 
@@ -182,7 +191,9 @@ photo_500 → hedgehog_lv5
 # Review (햄스터)
 
 review_1 → hamster_lv1
+review_8 → rare_lightning
 review_10 → title_review_10
+review_15 → rare_storyteller
 review_20 → hamster_lv2
 review_50 → title_review_50
 review_100 → hamster_lv3 + 교환권
