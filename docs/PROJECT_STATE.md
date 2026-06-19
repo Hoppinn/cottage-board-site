@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (124차)
+최종 갱신: 2026-06-19 (127차)
 
 ---
 
@@ -11,7 +11,9 @@
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
 - 목표: Discord webhook으로 교체 (HTTP 2 토큰발급 모듈 삭제, HTTP 3 URL 교체)
 
-**보류**: 기존 플레이 기록에 대한 업적 수동 부여 (SQL 실행됨 확인, 새싹 토끼 1개 지급됨)
+**완료**: ACH_DEFS/TITLE_DEFS 전면 SSOT 재정의 (127차) — 업적 ID 행동축 기준으로 전환, balance 축 추가, POINTS/checkAchievements 모두 갱신. DB 마이그레이션(FK 제거, 구ID→신ID INSERT/NULL 처리) 완료. 소급 부여 SQL 별도 실행 필요.
+
+**보류**: 소급 업적 부여 — ACH_DEFS 마이그레이션 완료 후 실행 대기 중. record/new_game/photo/review/visit/first_record 축 대상 SELECT→INSERT ON CONFLICT DO NOTHING. play/balance 제외.
 
 **다음 작업 후보**
 
