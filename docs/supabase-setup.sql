@@ -72,10 +72,6 @@ drop policy if exists "anon_select_game_ratings" on public.game_ratings;
 create policy "anon_select_game_ratings"
   on public.game_ratings for select to anon using (true);
 
--- 기존 DB에 user_id 컬럼 없을 경우 추가
-alter table public.game_ratings add column if not exists user_id text;
-create index if not exists game_ratings_user_id_idx on public.game_ratings (user_id);
-
 
 -- ── game_play_records (플레이 기록) ──────────────────────────
 create table if not exists public.game_play_records (
@@ -417,16 +413,18 @@ create policy "anon_all_req_votes"
 -- ⚠ visit_count / total_minutes 등 집계 컬럼은 이 파일에서 절대 UPDATE하지 않는다.
 --    이 파일은 테이블/컬럼/정책 구조만 설정하며 기존 데이터를 건드리지 않는다.
 create table if not exists public.profiles (
-  user_id       text        primary key,
-  nickname      text,
-  photo_url     text,
-  first_seen_at timestamptz default now(),
-  last_seen_at  timestamptz default now(),
-  visit_count   int         default 1,
-  total_minutes int         default 0,
-  today_seconds integer     default 0,
-  today_date    date,
-  is_banned     boolean     default false
+  user_id            text        primary key,
+  nickname           text,
+  photo_url          text,
+  first_seen_at      timestamptz default now(),
+  last_seen_at       timestamptz default now(),
+  visit_count        int         default 1,
+  total_minutes      int         default 0,
+  today_seconds      integer     default 0,
+  today_date         date,
+  is_banned          boolean     default false,
+  rep_achievement_id text,
+  rep_title_id       text
 );
 
 create index if not exists profiles_user_id_idx on public.profiles (user_id);
@@ -446,11 +444,13 @@ create policy "anon_update_profiles"
   on public.profiles for update to anon using (true) with check (true);
 
 -- 기존 DB에 컬럼 없을 경우 추가
-alter table public.profiles add column if not exists photo_url     text;
-alter table public.profiles add column if not exists total_minutes int     default 0;
-alter table public.profiles add column if not exists today_seconds integer default 0;
-alter table public.profiles add column if not exists today_date    date;
-alter table public.profiles add column if not exists is_banned     boolean default false;
+alter table public.profiles add column if not exists photo_url          text;
+alter table public.profiles add column if not exists total_minutes       int     default 0;
+alter table public.profiles add column if not exists today_seconds       integer default 0;
+alter table public.profiles add column if not exists today_date          date;
+alter table public.profiles add column if not exists is_banned           boolean default false;
+alter table public.profiles add column if not exists rep_achievement_id  text;
+alter table public.profiles add column if not exists rep_title_id        text;
 
 
 -- ── page_sessions (페이지별 체류시간 트래킹) ─────────────────
@@ -550,6 +550,140 @@ language sql security definer stable as $$
 $$;
 
 
+-- ── achievements (업적 정의 · legacy) ──────────────────────────
+-- [legacy] 구 동물명 기반 ID 체계(V1). 현재 업적은 ACH_DEFS(JS) 기준으로 관리.
+-- 이 테이블은 하위 호환성 유지용. 신규 데이터 INSERT 불필요.
+create table if not exists public.achievements (
+  id        text primary key,
+  name      text not null,
+  emoji     text,
+  category  text,
+  threshold int,
+  points    int  default 0
+);
+
+alter table public.achievements enable row level security;
+drop policy if exists "anon_select_achievements" on public.achievements;
+create policy "anon_select_achievements"
+  on public.achievements for select to anon using (true);
+
+
+-- ── user_achievements (유저별 획득 업적) ─────────────────────
+-- achievement_id FK 없음 — 131차 이후 행동축 기반 ID는 achievements 테이블 행 없이 직접 삽입
+create table if not exists public.user_achievements (
+  id             bigserial   primary key,
+  user_id        text        not null,
+  achievement_id text,
+  earned_at      timestamptz default now(),
+  unique (user_id, achievement_id)
+);
+
+alter table public.user_achievements enable row level security;
+drop policy if exists "anon_insert_user_achievements" on public.user_achievements;
+create policy "anon_insert_user_achievements"
+  on public.user_achievements for insert to anon with check (true);
+drop policy if exists "anon_select_user_achievements" on public.user_achievements;
+create policy "anon_select_user_achievements"
+  on public.user_achievements for select to anon using (true);
+
+
+-- ── points_log (포인트 원장 · append-only) ───────────────────
+create table if not exists public.points_log (
+  id         bigserial   primary key,
+  user_id    text        not null,
+  delta      int         not null,
+  reason     text,
+  created_at timestamptz default now()
+);
+
+alter table public.points_log enable row level security;
+drop policy if exists "anon_insert_points_log" on public.points_log;
+create policy "anon_insert_points_log"
+  on public.points_log for insert to anon with check (true);
+drop policy if exists "anon_select_points_log" on public.points_log;
+create policy "anon_select_points_log"
+  on public.points_log for select to anon using (true);
+
+
+-- ── point_rewards (포인트 승인 대기 · 비활성화) ──────────────
+-- [legacy] 포인트 UI 숨김 상태. DB 구조는 유지하나 현재 미사용.
+create table if not exists public.point_rewards (
+  id             bigserial   primary key,
+  user_id        text        not null,
+  achievement_id text,
+  points         int         not null,
+  status         text        not null default 'pending',
+  created_at     timestamptz default now(),
+  reviewed_at    timestamptz,
+  reviewed_by    text
+);
+
+alter table public.point_rewards enable row level security;
+drop policy if exists "anon_insert_point_rewards" on public.point_rewards;
+create policy "anon_insert_point_rewards"
+  on public.point_rewards for insert to anon with check (true);
+drop policy if exists "anon_select_point_rewards" on public.point_rewards;
+create policy "anon_select_point_rewards"
+  on public.point_rewards for select to anon using (true);
+
+
+-- ── voucher_products (교환권 상품 카탈로그) ──────────────────
+create table if not exists public.voucher_products (
+  id        serial  primary key,
+  name      text    not null,
+  cost      int     not null,
+  is_active boolean not null default true
+);
+
+alter table public.voucher_products enable row level security;
+drop policy if exists "anon_select_voucher_products" on public.voucher_products;
+create policy "anon_select_voucher_products"
+  on public.voucher_products for select to anon using (true);
+
+-- ⚠ 더미 데이터 (is_active=false). 실제 운영 상품은 Supabase에서 별도 INSERT 필요.
+insert into public.voucher_products (id, name, cost, is_active) values
+  (1, '물 2병',  1, false),
+  (2, '홈런볼',  1, false),
+  (3, '캔커피',  2, false)
+on conflict (id) do nothing;
+
+
+-- ── voucher_log (교환권 원장 · append-only) ──────────────────
+-- delta > 0: 지급 (first_play / achievement) · delta < 0: 사용 (redeem)
+-- 001_vouchers + 003_voucher_achievement 통합 최종 스키마
+create table if not exists public.voucher_log (
+  id         bigserial   primary key,
+  user_id    text        not null,
+  delta      int         not null,
+  reason     text        not null
+               check (reason in ('first_play', 'redeem', 'dev_test', 'achievement')),
+  product_id int         references public.voucher_products(id),
+  note       text,
+  created_at timestamptz not null default now()
+);
+
+-- first_play 중복 방지 (user당 1회)
+create unique index if not exists voucher_log_first_play_unique
+  on public.voucher_log (user_id)
+  where reason = 'first_play';
+
+-- achievement 중복 방지 (user + achId 조합 1회)
+create unique index if not exists voucher_log_achievement_unique
+  on public.voucher_log (user_id, note)
+  where reason = 'achievement';
+
+-- 잔액 집계 성능용
+create index if not exists voucher_log_user_idx on public.voucher_log (user_id);
+
+alter table public.voucher_log enable row level security;
+drop policy if exists "anon_insert_voucher_log" on public.voucher_log;
+create policy "anon_insert_voucher_log"
+  on public.voucher_log for insert to anon with check (true);
+drop policy if exists "anon_select_voucher_log" on public.voucher_log;
+create policy "anon_select_voucher_log"
+  on public.voucher_log for select to anon using (true);
+
+
 -- ── 이후 마이그레이션 (ALTER / 신규 테이블) ──────────────────
 -- 아래 항목은 초기 배포 후 순차적으로 추가된 컬럼/테이블.
 -- IF NOT EXISTS 보장 → 재실행 안전.
@@ -582,21 +716,3 @@ alter table public.game_requests add column if not exists actual_games jsonb def
 alter table public.game_requests add column if not exists purchase_status text;
 alter table public.game_requests add column if not exists status_date  date;
 
--- profiles: 대표 칭호 컬럼
-alter table public.profiles add column if not exists rep_title_id text;
-
--- user_achievements: FK 제거 (행동축 기반 신규 ID는 achievements 테이블 행 없이 직접 삽입)
-alter table public.user_achievements drop constraint if exists user_achievements_achievement_id_fkey;
-
--- voucher_log: note 컬럼 추가 (어떤 업적 교환권인지 저장)
-alter table public.voucher_log add column if not exists note text;
-
--- voucher_log: reason 체크 제약 갱신 (dev_test, achievement 추가)
-alter table public.voucher_log drop constraint if exists voucher_log_reason_check;
-alter table public.voucher_log add constraint voucher_log_reason_check
-  check (reason in ('first_play', 'redeem', 'dev_test', 'achievement'));
-
--- voucher_log: 업적별 1회 지급 보장
-create unique index if not exists voucher_log_achievement_unique
-  on public.voucher_log (user_id, note)
-  where reason = 'achievement';
