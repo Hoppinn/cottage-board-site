@@ -3729,6 +3729,7 @@ body.sheet-open{
 .profile-ach-img{width:28px;height:28px;object-fit:contain;flex-shrink:0;}
 .profile-ach-img-fallback{font-size:20px;flex-shrink:0;}
 .profile-ach-img-lock{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;filter:grayscale(1);}
+.profile-ach-item.is-achieved .profile-ach-img-lock{filter:none;}
 .profile-ach-info{flex:1;display:flex;flex-direction:column;min-width:0;}
 .profile-ach-name{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .profile-ach-reward{font-size:10px;color:var(--muted);margin-top:1px;}

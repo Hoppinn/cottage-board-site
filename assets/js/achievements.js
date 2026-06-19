@@ -34,6 +34,19 @@
       rewards: { character: 'squirrel_lv5', char_name: '사서 다람쥐' } },
     { id: 'record_500', name: '코티지 마스터',       emoji: '✨', type: 'record', threshold: 500,
       rewards: { character: 'cottage_master', char_name: '코티지 마스터', title: 'title_record_500' } },
+    // ── first_record (부엉이) ── 해당 game_id 최초 기록 작성자 기준
+    { id: 'first_record_1',  name: '첫 개척',         emoji: '🗺️', type: 'first_record', threshold: 1,
+      rewards: { character: 'owl_lv1', char_name: '탐구 올빼미' } },
+    { id: 'first_record_3',  name: '세 게임 개척',    emoji: '⛺', type: 'first_record', threshold: 3,
+      rewards: { title: 'title_first_record_3' } },
+    { id: 'first_record_5',  name: '다섯 게임 개척',  emoji: '🧭', type: 'first_record', threshold: 5,
+      rewards: { character: 'owl_lv2', char_name: '연구 올빼미' } },
+    { id: 'first_record_10', name: '개척자',          emoji: '🌟', type: 'first_record', threshold: 10,
+      rewards: { title: 'title_first_record_10' } },
+    { id: 'first_record_20', name: '코티지 개척단',   emoji: '🏅', type: 'first_record', threshold: 20,
+      rewards: { character: 'owl_lv3', char_name: '박학 올빼미' } },
+    { id: 'first_record_50', name: '전설의 개척자',   emoji: '✨', type: 'first_record', threshold: 50,
+      rewards: { character: 'owl_lv4', char_name: '전설 올빼미', title: 'title_first_record_50', voucher: true } },
     // ── new_game (토끼) ── 작성자 기준 새 게임 탐험
     { id: 'new_game_1',   name: '첫 탐험',           emoji: '✨', type: 'new_game', threshold: 1,
       rewards: { character: 'rabbit_lv1', char_name: '탐험 토끼' } },
@@ -41,11 +54,11 @@
     { id: 'new_game_5',   name: '다섯 번째 탐험',    emoji: '🔍', type: 'new_game', threshold: 5,
       rewards: { character: 'rabbit_lv2', char_name: '호기심 토끼' } },
     { id: 'new_game_7',   name: '다양한 취향',       emoji: '🌈', type: 'new_game', threshold: 7,   rewards: {} },
-    { id: 'new_game_10',  name: '열 가지 탐험',      emoji: '🦉', type: 'new_game', threshold: 10,  rewards: {} },
-    { id: 'new_game_15',  name: '게임 수집가',       emoji: '🎲', type: 'new_game', threshold: 15,  rewards: {} },
+    { id: 'new_game_10',  name: '열 가지 탐험',      emoji: '🎲', type: 'new_game', threshold: 10,  rewards: {} },
+    { id: 'new_game_15',  name: '게임 수집가',       emoji: '🐰', type: 'new_game', threshold: 15,  rewards: {} },
     { id: 'new_game_20',  name: '스무 가지 탐험',    emoji: '🎒', type: 'new_game', threshold: 20,
       rewards: { character: 'rabbit_lv3', char_name: '모험 토끼', voucher: true } },
-    { id: 'new_game_30',  name: '서른 가지 탐험',    emoji: '🦉', type: 'new_game', threshold: 30,
+    { id: 'new_game_30',  name: '서른 가지 탐험',    emoji: '🗺️', type: 'new_game', threshold: 30,
       rewards: { title: 'title_new_game_30' } },
     { id: 'new_game_40',  name: '게임 전도사',       emoji: '📢', type: 'new_game', threshold: 40,  rewards: {} },
     { id: 'new_game_50',  name: '오십 종 탐험',      emoji: '🧭', type: 'new_game', threshold: 50,
@@ -59,8 +72,28 @@
     { id: 'new_game_200', name: '이백 종 탐험',      emoji: '📚', type: 'new_game', threshold: 200,
       rewards: { title: 'title_new_game_200' } },
     { id: 'new_game_250', name: '핼러윈 수집가',     emoji: '🎃', type: 'new_game', threshold: 250, rewards: {} },
-    { id: 'new_game_300', name: '삼백 종 탐험',      emoji: '🦉', type: 'new_game', threshold: 300,
+    { id: 'new_game_300', name: '삼백 종 탐험',      emoji: '🌍', type: 'new_game', threshold: 300,
       rewards: { character: 'rabbit_lv6', char_name: '방랑 토끼', title: 'title_new_game_300' } },
+    // ── play (곰) ── player_names 닉네임 기반 보조 업적
+    { id: 'play_5',   name: '게임 친구',       emoji: '🤝', type: 'play', threshold: 5,   rewards: {} },
+    { id: 'play_10',  name: '활발한 참여자',   emoji: '🎮', type: 'play', threshold: 10,
+      rewards: { character: 'bear_lv1', char_name: '단골 곰' } },
+    { id: 'play_20',  name: '게임 동반자',     emoji: '🎲', type: 'play', threshold: 20,
+      rewards: { title: 'title_play_20' } },
+    { id: 'play_30',  name: '코티지 플레이어', emoji: '🎯', type: 'play', threshold: 30,  rewards: {} },
+    { id: 'play_50',  name: '코티지 피플',     emoji: '🌟', type: 'play', threshold: 50,
+      rewards: { character: 'bear_lv2', char_name: '활발한 곰' } },
+    { id: 'play_100', name: '백전노장',        emoji: '🏆', type: 'play', threshold: 100,
+      rewards: { character: 'rare_night', char_name: '밤의 올빼미', voucher: true } },
+    { id: 'play_150', name: '코티지 레전드',   emoji: '⚜️', type: 'play', threshold: 150,
+      rewards: { character: 'bear_lv3', char_name: '놀이 곰돌이' } },
+    { id: 'play_200', name: '게임왕',          emoji: '👑', type: 'play', threshold: 200,
+      rewards: { title: 'title_play_200' } },
+    { id: 'play_300', name: '코티지 신화',     emoji: '🌙', type: 'play', threshold: 300, rewards: {} },
+    { id: 'play_400', name: '전설의 게이머',   emoji: '✨', type: 'play', threshold: 400,
+      rewards: { character: 'bear_lv4', char_name: '코티지 곰' } },
+    { id: 'play_500', name: '코티지 마스터',   emoji: '✨', type: 'play', threshold: 500,
+      rewards: { character: 'bear_lv5', char_name: '동면 곰', title: 'title_play_500' } },
     // ── photo (고슴도치)
     { id: 'photo_1',   name: '첫 사진',           emoji: '📸', type: 'photo', threshold: 1,
       rewards: { character: 'hedgehog_lv1', char_name: '초보 고슴도치' } },
@@ -90,7 +123,7 @@
       rewards: { character: 'hamster_lv1', char_name: '리뷰어 햄스터' } },
     { id: 'review_2',   name: '첫 분석',            emoji: '🔍', type: 'review', threshold: 2,   rewards: {} },
     { id: 'review_3',   name: '감상 시작',          emoji: '✍️', type: 'review', threshold: 3,   rewards: {} },
-    { id: 'review_5',   name: '다섯 번의 감상',     emoji: '🦊', type: 'review', threshold: 5,   rewards: {} },
+    { id: 'review_5',   name: '다섯 번의 감상',     emoji: '✍️', type: 'review', threshold: 5,   rewards: {} },
     { id: 'review_8',   name: '번개 리뷰어',        emoji: '⚡', type: 'review', threshold: 8,
       rewards: { character: 'rare_lightning', char_name: '번개 토끼' } },
     { id: 'review_10',  name: '열 번의 감상',       emoji: '📝', type: 'review', threshold: 10,
@@ -99,7 +132,7 @@
       rewards: { character: 'rare_storyteller', char_name: '이야기꾼 여우' } },
     { id: 'review_20',  name: '코티지 논객',        emoji: '🗣️', type: 'review', threshold: 20,
       rewards: { character: 'hamster_lv2', char_name: '서평가 햄스터' } },
-    { id: 'review_25',  name: '스물다섯 감상',      emoji: '🦊', type: 'review', threshold: 25,  rewards: {} },
+    { id: 'review_25',  name: '스물다섯 감상',      emoji: '📋', type: 'review', threshold: 25,  rewards: {} },
     { id: 'review_40',  name: '리뷰 마니아',        emoji: '📋', type: 'review', threshold: 40,  rewards: {} },
     { id: 'review_50',  name: '쉰 번의 감상',       emoji: '📚', type: 'review', threshold: 50,
       rewards: { title: 'title_review_50' } },
@@ -110,7 +143,7 @@
       rewards: { title: 'title_review_150' } },
     { id: 'review_200', name: '이백 번의 감상',     emoji: '📝', type: 'review', threshold: 200,
       rewards: { character: 'hamster_lv4', char_name: '비평가 햄스터' } },
-    { id: 'review_300', name: '삼백 번의 감상',     emoji: '🦊', type: 'review', threshold: 300,
+    { id: 'review_300', name: '삼백 번의 감상',     emoji: '🏆', type: 'review', threshold: 300,
       rewards: { title: 'title_review_300' } },
     { id: 'review_500', name: '전설의 리뷰어',      emoji: '✨', type: 'review', threshold: 500,
       rewards: { character: 'hamster_lv5', char_name: '마스터 햄스터' } },
@@ -140,39 +173,6 @@
     { id: 'visit_400', name: '코티지의 산타',      emoji: '🎄', type: 'visit', threshold: 400, rewards: {} },
     { id: 'visit_500', name: '전설의 방문자',      emoji: '🐦', type: 'visit', threshold: 500,
       rewards: { character: 'sparrow_lv5', char_name: '전설 참새', title: 'title_visit_500' } },
-    // ── first_record (부엉이) ── 해당 game_id 최초 기록 작성자 기준
-    { id: 'first_record_1',  name: '첫 개척',         emoji: '🗺️', type: 'first_record', threshold: 1,
-      rewards: { character: 'owl_lv1', char_name: '탐구 올빼미' } },
-    { id: 'first_record_3',  name: '세 게임 개척',    emoji: '⛺', type: 'first_record', threshold: 3,
-      rewards: { title: 'title_first_record_3' } },
-    { id: 'first_record_5',  name: '다섯 게임 개척',  emoji: '🧭', type: 'first_record', threshold: 5,
-      rewards: { character: 'owl_lv2', char_name: '연구 올빼미' } },
-    { id: 'first_record_10', name: '개척자',          emoji: '🌟', type: 'first_record', threshold: 10,
-      rewards: { title: 'title_first_record_10' } },
-    { id: 'first_record_20', name: '코티지 개척단',   emoji: '🏅', type: 'first_record', threshold: 20,
-      rewards: { character: 'owl_lv3', char_name: '박학 올빼미' } },
-    { id: 'first_record_50', name: '전설의 개척자',   emoji: '✨', type: 'first_record', threshold: 50,
-      rewards: { character: 'owl_lv4', char_name: '전설 올빼미', title: 'title_first_record_50', voucher: true } },
-    // ── play (곰) ── player_names 닉네임 기반 보조 업적
-    { id: 'play_5',   name: '게임 친구',       emoji: '🤝', type: 'play', threshold: 5,   rewards: {} },
-    { id: 'play_10',  name: '활발한 참여자',   emoji: '🎮', type: 'play', threshold: 10,
-      rewards: { character: 'bear_lv1', char_name: '단골 곰' } },
-    { id: 'play_20',  name: '게임 동반자',     emoji: '🎲', type: 'play', threshold: 20,
-      rewards: { title: 'title_play_20' } },
-    { id: 'play_30',  name: '코티지 플레이어', emoji: '🎯', type: 'play', threshold: 30,  rewards: {} },
-    { id: 'play_50',  name: '코티지 피플',     emoji: '🌟', type: 'play', threshold: 50,
-      rewards: { character: 'bear_lv2', char_name: '활발한 곰' } },
-    { id: 'play_100', name: '백전노장',        emoji: '🏆', type: 'play', threshold: 100,
-      rewards: { character: 'rare_night', char_name: '밤의 올빼미', voucher: true } },
-    { id: 'play_150', name: '코티지 레전드',   emoji: '⚜️', type: 'play', threshold: 150,
-      rewards: { character: 'bear_lv3', char_name: '놀이 곰돌이' } },
-    { id: 'play_200', name: '게임왕',          emoji: '👑', type: 'play', threshold: 200,
-      rewards: { title: 'title_play_200' } },
-    { id: 'play_300', name: '코티지 신화',     emoji: '🌙', type: 'play', threshold: 300, rewards: {} },
-    { id: 'play_400', name: '전설의 게이머',   emoji: '✨', type: 'play', threshold: 400,
-      rewards: { character: 'bear_lv4', char_name: '코티지 곰' } },
-    { id: 'play_500', name: '코티지 마스터',   emoji: '✨', type: 'play', threshold: 500,
-      rewards: { character: 'bear_lv5', char_name: '동면 곰', title: 'title_play_500' } },
     // ── balance (여우) ── 함께한 날. 매장에 함께한 고유 날짜 수. user_id 작성자 + player_names 참여자 병행.
     // [임시] player_names 텍스트 기반 보조 판정. 장기적으로 game_play_participants 테이블로 전환 예정.
     { id: 'balance_10',  name: '다재다능',      emoji: '🦊', type: 'balance', threshold: 10,
@@ -586,7 +586,7 @@
           `</div>`
         : '';
 
-      const _TITLE_AXES = ['record', 'new_game', 'photo', 'review', 'visit', 'play', 'first_record', 'balance'];
+      const _TITLE_AXES = ['record', 'first_record', 'new_game', 'play', 'photo', 'review', 'visit', 'balance'];
       const _topTitlePerAxis = _TITLE_AXES.map(axis => {
         const axisTitles = TITLE_DEFS.filter(def => {
           const achId = _titleToAchId[def.id];
@@ -728,9 +728,9 @@
         `${progressLabel}` +
         `</button>`;
     });
-    const _CHAR_AXES = ['record', 'new_game', 'photo', 'review', 'visit', 'play', 'first_record', 'balance'];
+    const _CHAR_AXES = ['record', 'first_record', 'new_game', 'play', 'photo', 'review', 'visit', 'balance'];
     const _topCharPerAxis = _CHAR_AXES.map(axis => {
-      const earnedAxis = CHAR_DEFS.filter(d => d.type === axis && earnedIds.has(d.id));
+      const earnedAxis = CHAR_DEFS.filter(d => d.type === axis && earnedIds.has(d.id) && !d.rewards.character.startsWith('rare_'));
       return earnedAxis.length ? earnedAxis[earnedAxis.length - 1] : null;
     }).filter(Boolean);
 
@@ -823,14 +823,14 @@
     });
 
     const _GOAL_AXES = [
-      { type: 'record', emoji: '🐿', label: '기록', unit: '회' },
-      { type: 'new_game', emoji: '🐰', label: '새게임', unit: '종' },
-      { type: 'photo', emoji: '🦔', label: '사진', unit: '장' },
-      { type: 'review', emoji: '🐹', label: '게임평', unit: '개' },
-      { type: 'visit', emoji: '🐦', label: '홈페이지', unit: '일' },
-      { type: 'play', emoji: '🐻', label: '플레이', unit: '회' },
-      { type: 'first_record', emoji: '🦉', label: '최초기록', unit: '종' },
-      { type: 'balance', emoji: '🦊', label: '함께한 날', unit: '일' },
+      { type: 'record',       emoji: '🐿', label: '기록',      unit: '회' },
+      { type: 'first_record', emoji: '🦉', label: '최초기록',  unit: '종' },
+      { type: 'new_game',     emoji: '🐰', label: '새게임',    unit: '종' },
+      { type: 'play',         emoji: '🐻', label: '플레이',    unit: '회' },
+      { type: 'photo',        emoji: '🦔', label: '사진',      unit: '장' },
+      { type: 'review',       emoji: '🐹', label: '게임평',    unit: '개' },
+      { type: 'visit',        emoji: '🐦', label: '홈페이지',  unit: '일' },
+      { type: 'balance',      emoji: '🦊', label: '함께한 날', unit: '일' },
     ];
     const _goalsHtml = _GOAL_AXES.map(({ type, emoji, label, unit }) => {
       const cur = COUNTS[type] || 0;
