@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (130차)
+최종 갱신: 2026-06-19 (131차)
 
 ---
 
@@ -20,6 +20,8 @@
 **완료 (129차)**: 알림 패널 카드형 레이아웃 1차 개선.
 
 **완료 (130차)**: 알림 2차 개선 — 날짜 위치(desc 하단), 빈 상태 조건 수정(=== 0), 좌측 unread 바, 보상 카드 강조(gradient, box-shadow), 페이지 명칭 "최근 소식" 변경.
+
+**완료 (131차)**: 업적/캐릭터/칭호 0개 버그 수정 — `getUserAchievements`가 FK join(achievements 테이블) 결과를 스프레드하다 FK 삭제 후 null 반환. `achievement_id → id` 직접 매핑으로 교체. `getRepAchievement`도 동일 원인, achievements 테이블 2차 조회 제거.
 
 **완료 (130차)**: `docs/supabase-setup.sql` 누락 항목 추가 — page_views.referrer, page_sessions.session_key, page_events 테이블, game_requests 신규 컬럼(added_at/actual_games/purchase_status/status_date), profiles.rep_title_id, user_achievements FK 제거, voucher_log dev_test 허용.
 

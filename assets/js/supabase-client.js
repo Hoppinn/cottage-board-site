@@ -1177,10 +1177,10 @@ window._cottageSess = (function () {
   async function getUserAchievements(userId) {
     try {
       const { data } = await db.from('user_achievements')
-        .select('achievement_id, earned_at, achievements(id, name, emoji, category, threshold, points)')
+        .select('achievement_id, earned_at')
         .eq('user_id', userId)
         .order('earned_at', { ascending: true });
-      return (data || []).map(r => ({ ...r.achievements, earned_at: r.earned_at }));
+      return (data || []).map(r => ({ id: r.achievement_id, earned_at: r.earned_at }));
     } catch (_) { return []; }
   }
 
@@ -1367,8 +1367,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('profiles').select('rep_achievement_id').eq('user_id', userId).maybeSingle();
       if (!data?.rep_achievement_id) return null;
-      const { data: ach } = await db.from('achievements').select('id, name, emoji').eq('id', data.rep_achievement_id).maybeSingle();
-      return ach || null;
+      return { id: data.rep_achievement_id };
     } catch (_) { return null; }
   }
 
