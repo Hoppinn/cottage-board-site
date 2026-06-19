@@ -977,7 +977,9 @@ async function openProfilePanel() {
             li.style.cursor = 'pointer';
             li.addEventListener('click', () => {
               const key = _getGameKeyById(gameId);
-              if (key && window.openGameSheet) window.openGameSheet(key);
+              if (!key) return;
+              if (typeof ensureGameSheet === 'function') ensureGameSheet();
+              if (typeof openGameRecordSheet === 'function') openGameRecordSheet(key);
             });
           });
         });
