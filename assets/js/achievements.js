@@ -498,7 +498,7 @@
 
       const RARITY_COLOR = { '일반': '#888', '고급': '#4caf50', '희귀': '#2196f3', '영웅': '#9c27b0', '전설': '#ff9800' };
 
-      const cards = TITLE_DEFS.map(def => {
+      const cardsAll = TITLE_DEFS.map(def => {
         const earned = earnedIds.has(def.id);
         const isRep = earned && repTitleId === def.id;
         let cls = 'profile-title-card';
@@ -520,7 +520,7 @@
           `<span class="profile-title-rarity" style="color:${rarityColor}">${earned ? def.rarity : '???'}</span>` +
           `${progressHtml}` +
           `</button>`;
-      }).join('');
+      });
 
       const repActionHtml = earnedIds.size
         ? `<div class="profile-title-action-row" id="profileTitleActionRow" data-user-id="${userId}" data-orig-rep-id="${repTitleId || ''}" style="display:none">` +
@@ -529,26 +529,15 @@
           `</div>`
         : '';
 
-      const _earnedTitleList = TITLE_DEFS.filter(t => earnedIds.has(t.id));
-      const _unearnedTitleList = TITLE_DEFS.filter(t => !earnedIds.has(t.id));
-      let _titlePreviewHtml = '';
-      if (_earnedTitleList.length > 0) {
-        const _shown = _earnedTitleList.slice(-3);
-        _titlePreviewHtml = `<div class="profile-section-preview">${_shown.map(t => `${t.emoji} ${t.name}`).join(' · ')}</div>`;
-      } else if (_unearnedTitleList.length > 0) {
-        const _nt = _unearnedTitleList[0];
-        const _ntAchId = _titleToAchId[_nt.id];
-        const _ntAchDef = _ntAchId ? ACH_DEFS.find(a => a.id === _ntAchId) : null;
-        const _ntCur = _ntAchDef ? (COUNTS[_ntAchDef.type] || 0) : 0;
-        _titlePreviewHtml = `<div class="profile-section-preview">다음: ${_nt.emoji} ${_nt.name} (${_ntAchDef ? `${SHORT_TYPE_LABELS[_ntAchDef.type] || _ntAchDef.type} ${_ntCur}/${_ntAchDef.threshold}` : ''})</div>`;
-      }
-
+      const PREV_TITLE = 6;
+      const _hasMoreTitle = cardsAll.length > PREV_TITLE;
+      const _titleGridHtml = `<div class="profile-title-grid">${cardsAll.slice(0, PREV_TITLE).join('')}${_hasMoreTitle ? `<div class="profile-more-wrap is-hidden">${cardsAll.slice(PREV_TITLE).join('')}</div><div class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${cardsAll.length - PREV_TITLE}" type="button">더 보기 (${cardsAll.length - PREV_TITLE}건 더)</button></div>` : ''}</div>`;
       const html = `<div class="profile-title-section" data-earned-count="${earnedIds.size}" data-title-total="${TITLE_DEFS.length}">` +
         `<div class="profile-title-header">🏷 칭호 <span class="profile-title-count">${earnedIds.size} / ${TITLE_DEFS.length}종</span>` +
-        `<button class="profile-title-toggle-btn" type="button">전체 보기 ▾</button></div>` +
-        `<div class="profile-title-body is-hidden">` +
+        `<button class="profile-title-toggle-btn" type="button">접기 ▴</button></div>` +
+        `<div class="profile-title-body">` +
         `${earnedIds.size === 0 ? '<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>' : ''}` +
-        `<div class="profile-title-grid">${cards}</div>` +
+        `${_titleGridHtml}` +
         `${repActionHtml}` +
         `</div></div>`;
 
@@ -661,7 +650,7 @@
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount };
 
     // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시
-    const gridCards = CHAR_DEFS.map(def => {
+    const gridCardsAll = CHAR_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const isRep = repAch?.id === def.id;
       const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
@@ -681,7 +670,10 @@
         `<span class="profile-char-card-name">${_charName(def)}</span>` +
         `${progressLabel}` +
         `</button>`;
-    }).join('');
+    });
+    const PREV_CHAR = 6;
+    const _hasMoreChar = gridCardsAll.length > PREV_CHAR;
+    const _charGridHtml = `<div class="profile-char-grid">${gridCardsAll.slice(0, PREV_CHAR).join('')}${_hasMoreChar ? `<div class="profile-more-wrap is-hidden">${gridCardsAll.slice(PREV_CHAR).join('')}</div><div class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${gridCardsAll.length - PREV_CHAR}" type="button">더 보기 (${gridCardsAll.length - PREV_CHAR}건 더)</button></div>` : ''}</div>`;
 
     const repActionHtml = earnedCount
       ? `<div class="profile-rep-action-row" id="profileRepActionRow" data-user-id="${userId}" data-orig-rep-id="${repAch?.id || ''}" style="display:none">
@@ -699,21 +691,11 @@
       ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${_repCharDef.rewards.character}.png" alt="">`
       : '';
 
-    const _earnedCharList = CHAR_DEFS.filter(d => earnedIds.has(d.id));
-    const _unearnedCharList = CHAR_DEFS.filter(d => !earnedIds.has(d.id));
-    const _lastEarnedChar = _earnedCharList[_earnedCharList.length - 1];
-    const _nextChar = _unearnedCharList.find(d => (COUNTS[d.type] || 0) < d.threshold) || _unearnedCharList[0];
-    const _charPreviewParts = [];
-    if (_lastEarnedChar) _charPreviewParts.push(`✓ ${_lastEarnedChar.emoji} ${_charName(_lastEarnedChar)}`);
-    if (_nextChar) {
-      const _nc = COUNTS[_nextChar.type] || 0;
-      _charPreviewParts.push(`→ ${_nextChar.emoji} ${_charName(_nextChar)} (${SHORT_TYPE_LABELS[_nextChar.type] || _nextChar.type} ${_nc}/${_nextChar.threshold})`);
-    }
     return `<div class="profile-char-section" data-char-count="${earnedCount}" data-char-total="${CHAR_DEFS.length}">
-      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체 보기 ▾</button></div>
-      <div class="profile-char-body is-hidden">
+      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">접기 ▴</button></div>
+      <div class="profile-char-body">
         ${emptyHint}
-        <div class="profile-char-grid">${gridCards}</div>
+        ${_charGridHtml}
         ${repActionHtml}
       </div>
     </div>`;
@@ -738,7 +720,7 @@
     const earnedIds = new Set(earned.map(a => a.id));
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount };
 
-    const items = ACH_DEFS.map(def => {
+    const itemsAll = ACH_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
       const typeLabel = TYPE_LABELS[def.type] || def.type;
@@ -768,24 +750,35 @@
         `${iconHtml}` +
         `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
         `<span class="profile-ach-status${statusCls}">${statusText}</span></li>`;
-    }).join('');
+    });
 
-    const _earnedAchList = ACH_DEFS.filter(d => earnedIds.has(d.id));
-    const _unearnedAchList = ACH_DEFS.filter(d => !earnedIds.has(d.id));
-    const _lastEarnedAch = _earnedAchList[_earnedAchList.length - 1];
-    const _nextAch = _unearnedAchList.find(d => (COUNTS[d.type] || 0) < d.threshold) || _unearnedAchList[0];
-    const _achPreviewParts = [];
-    if (_lastEarnedAch) _achPreviewParts.push(`✓ ${_lastEarnedAch.name}`);
-    if (_nextAch) {
-      const _nc = COUNTS[_nextAch.type] || 0;
-      _achPreviewParts.push(`→ ${_nextAch.name} (${SHORT_TYPE_LABELS[_nextAch.type] || _nextAch.type} ${_nc}/${_nextAch.threshold})`);
-    }
+    const _GOAL_AXES = [
+      { type: 'record', emoji: '🐿', label: '기록' },
+      { type: 'new_game', emoji: '🐰', label: '새 게임' },
+      { type: 'photo', emoji: '🦔', label: '사진' },
+      { type: 'review', emoji: '🐹', label: '게임평' },
+      { type: 'visit', emoji: '🐦', label: '방문' },
+      { type: 'play', emoji: '🐻', label: '참여' },
+      { type: 'first_record', emoji: '🦉', label: '최초기록' },
+    ];
+    const _goalsHtml = _GOAL_AXES.map(({ type, emoji, label }) => {
+      const cur = COUNTS[type] || 0;
+      const next = ACH_DEFS.filter(d => d.type === type).sort((a, b) => a.threshold - b.threshold).find(d => !earnedIds.has(d.id));
+      if (!next) return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="profile-ach-goal-done">완성!</span></li>`;
+      const reward = next.rewards?.character ? '🐾' : next.rewards?.title ? '🏷' : next.rewards?.voucher ? '🥤' : '';
+      return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="profile-ach-goal-progress">${cur}/${next.threshold}</span>${reward ? `<span class="profile-ach-goal-reward">${reward}</span>` : ''}</li>`;
+    }).join('');
+    const _goalsDiv = `<ul class="profile-ach-goals">${_goalsHtml}</ul>`;
+    const PREV_ACH = 5;
+    const _hasMoreAch = itemsAll.length > PREV_ACH;
+    const _achListHtml = `<ul class="profile-ach-list">${itemsAll.slice(0, PREV_ACH).join('')}${_hasMoreAch ? `<div class="profile-more-wrap is-hidden">${itemsAll.slice(PREV_ACH).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${itemsAll.length - PREV_ACH}" type="button">더 보기 (${itemsAll.length - PREV_ACH}건 더)</button></li>` : ''}</ul>`;
     return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}" data-ach-total="${ACH_DEFS.length}">` +
       `<div class="profile-ach-header">` +
       `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
-      `<button class="profile-ach-toggle-btn" type="button">전체 보기 ▾</button>` +
+      `<button class="profile-ach-toggle-btn" type="button">접기 ▴</button>` +
       `</div>` +
-      `<ul class="profile-ach-list is-hidden">${items}</ul>` +
+      `${_goalsDiv}` +
+      `${_achListHtml}` +
       `</div>`;
   }
 

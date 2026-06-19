@@ -526,29 +526,30 @@ async function openProfilePanel() {
   const _growthInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
-  // 취향 보드: 좋아하는 + 해보고싶은 합산 (기본 닫힘 토글)
+  // 취향 보드: 좋아하는 + 해보고싶은 합산 (기본 열림 토글)
   const _tasteInnerHtml = `
     <div class="profile-gamelist-section">
-      <button class="profile-gamelist-section-toggle" type="button">❤️ 좋아하는 게임 <span class="profile-activity-count">${likedGameIds.length}개</span><span class="profile-toggle-arrow">▾</span></button>
-      <div class="profile-gamelist-body is-hidden">${_buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요')}</div>
+      <button class="profile-gamelist-section-toggle" type="button">❤️ 좋아하는 게임 <span class="profile-activity-count">${likedGameIds.length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      <div class="profile-gamelist-body">${_buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요')}</div>
     </div>
     <div class="profile-gamelist-section">
-      <button class="profile-gamelist-section-toggle" type="button">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span><span class="profile-toggle-arrow">▾</span></button>
-      <div class="profile-gamelist-body is-hidden">${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}</div>
+      <button class="profile-gamelist-section-toggle" type="button">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      <div class="profile-gamelist-body">${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}</div>
     </div>`;
-  // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 닫힘)
-  const _emptyList = msg => `<ul class="profile-activity-list is-collapsed"><li class="profile-gamelist-empty">${msg}</li></ul>`;
+  // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
+  const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
+  const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
   const _recordInnerHtml = `
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-      ${stats.plays.length ? playListHtml : _emptyList('아직 플레이 기록이 없어요')}
+      <button class="profile-activity-toggle" type="button">🎲 플레이기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
+      ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${stats.comments.length}개</span><span class="profile-toggle-arrow">▾</span></button>
-      ${stats.comments.length ? commentListHtml : _emptyList('아직 게임평이 없어요')}
+      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${stats.comments.length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      ${stats.comments.length ? _openActivityList(commentListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
+      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>
       ${_emptyList('사진 목록은 기록 페이지에서 확인할 수 있어요')}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
@@ -642,7 +643,8 @@ async function openProfilePanel() {
 
   function _buildGameListHtml(gameIds, emptyMsg) {
     if (!gameIds.length) return `<p class="profile-gamelist-empty">${emptyMsg}</p>`;
-    return `<ul class="profile-gamelist">${gameIds.map(id => {
+    const PREV_GAME = 3;
+    const allItems = gameIds.map(id => {
       const g = window.gameData?.[id];
       const name = g?.display || g?.titleKo || g?.titleEn || id;
       const thumb = g?.images?.thumbnail || '';
@@ -650,7 +652,9 @@ async function openProfilePanel() {
         ${thumb ? `<img src="${escH(thumb)}" class="profile-gamelist-thumb" alt="">` : '<span class="profile-gamelist-thumb-empty"></span>'}
         <span class="profile-gamelist-name">${escH(name)}</span>
       </li>`;
-    }).join('')}</ul>`;
+    });
+    const hasMore = allItems.length > PREV_GAME;
+    return `<ul class="profile-gamelist">${allItems.slice(0, PREV_GAME).join('')}${hasMore ? `<div class="profile-more-wrap is-hidden">${allItems.slice(PREV_GAME).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${allItems.length - PREV_GAME}" type="button">더 보기 (${allItems.length - PREV_GAME}개 더)</button></li>` : ''}</ul>`;
   }
 
   // ── 서브시트 헬퍼 ─────────────────────────────────────────────
@@ -857,11 +861,10 @@ async function openProfilePanel() {
     });
     subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+        const wrap = btn.closest('.profile-more-btn-wrap')?.previousElementSibling;
+        if (!wrap) return;
         const isHidden = wrap.classList.toggle('is-hidden');
-        btn.textContent = isHidden
-          ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
-          : '접기';
+        btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}건 더)` : '접기';
       });
     });
   }
@@ -941,6 +944,14 @@ async function openProfilePanel() {
               if (!key) return;
               window.ensureGameSheet?.();
               window.openGameSheet?.(key);
+            });
+          });
+          subBody.querySelectorAll('.profile-gamelist .profile-more-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const wrap = btn.closest('.profile-more-btn-wrap')?.previousElementSibling;
+              if (!wrap) return;
+              const isHidden = wrap.classList.toggle('is-hidden');
+              btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}개 더)` : '접기';
             });
           });
         });
