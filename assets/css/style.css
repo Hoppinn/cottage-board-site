@@ -3703,12 +3703,12 @@ body.sheet-open{
 .profile-codex-header{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:4px;}
 .profile-codex-summary{font-size:12px;font-weight:400;color:var(--muted);}
 .profile-codex-toggle-btn{font-size:12px;font-weight:600;color:var(--brown,#7a4828);background:none;border:none;cursor:pointer;padding:0;margin-left:auto;}
-.profile-codex-body{padding-top:8px;}
+.profile-codex-preview{padding:6px 0 4px;}
+.profile-codex-preview-stat{display:flex;align-items:baseline;gap:8px;margin-bottom:5px;}
+.profile-codex-body{padding-top:4px;}
 .profile-codex-count{font-size:22px;font-weight:900;color:#5a3418;line-height:1;}
 .profile-codex-count span{font-size:13px;font-weight:400;color:var(--muted);}
-.profile-codex-bar-wrap{height:7px;background:var(--border,#e8e4dc);border-radius:4px;margin:6px 0 4px;overflow:hidden;}
-.profile-codex-bar{height:100%;background:#7a4828;border-radius:4px;transition:width 0.6s ease;}
-.profile-codex-grade{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.profile-codex-grade{font-size:12px;color:var(--muted);}
 .profile-codex-list-section{border-top:1px solid var(--border,#e8e4dc);padding-top:8px;}
 .profile-codex-game-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px;}
 .profile-codex-game-item{font-size:12px;color:var(--text);}
@@ -3795,7 +3795,8 @@ body.sheet-open{
 .profile-char-empty{font-size:12px;color:var(--muted);margin:0 0 8px;line-height:1.5;}
 /* 캐릭터 그리드 (4열 정사각형 카드) */
 .profile-char-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:4px 0 6px;}
-.profile-char-grid>.profile-more-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;flex-direction:unset;}
+.profile-char-preview,.profile-title-preview{padding:4px 0 6px;}
+.profile-char-grid>.profile-more-wrap{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:7px;flex-direction:unset;}
 .profile-char-grid>.profile-more-btn-wrap{grid-column:1/-1;display:flex;}
 .profile-char-card{border-radius:8px;overflow:hidden;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4px 4px 5px;}
 .profile-char-card img{width:100%;height:58px;object-fit:contain;flex-shrink:0;}
@@ -3821,7 +3822,7 @@ body.sheet-open{
 .profile-title-body.is-hidden{display:none;}
 .profile-title-empty{font-size:12px;color:var(--muted);margin:4px 0 8px;}
 .profile-title-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:4px 0 6px;}
-.profile-title-grid>.profile-more-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex-direction:unset;}
+.profile-title-grid>.profile-more-wrap{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex-direction:unset;}
 .profile-title-grid>.profile-more-btn-wrap{grid-column:1/-1;display:flex;}
 .profile-title-card{border-radius:8px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 7px;gap:3px;cursor:pointer;}
 .profile-title-card.is-locked{opacity:0.6;cursor:default;}

@@ -779,13 +779,16 @@ async function openProfilePanel() {
     const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
     if (charToggleBtn) {
       const charBody = subBody.querySelector('.profile-char-body');
+      const charPreview = subBody.querySelector('.profile-char-preview');
       if (expandChar) {
         charBody?.classList.remove('is-hidden');
+        charPreview?.classList.add('is-hidden');
         charToggleBtn.textContent = '접기 ▴';
       }
       charToggleBtn.addEventListener('click', () => {
         const hidden = charBody.classList.toggle('is-hidden');
-        charToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+        if (charPreview) charPreview.classList.toggle('is-hidden', !hidden);
+        charToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
       });
     }
     // ── 칭호 섹션 ──
@@ -824,13 +827,16 @@ async function openProfilePanel() {
     const titleToggleBtn = subBody.querySelector('.profile-title-toggle-btn');
     if (titleToggleBtn) {
       const titleBody = subBody.querySelector('.profile-title-body');
+      const titlePreview = subBody.querySelector('.profile-title-preview');
       if (expandTitle) {
         titleBody?.classList.remove('is-hidden');
+        titlePreview?.classList.add('is-hidden');
         titleToggleBtn.textContent = '접기 ▴';
       }
       titleToggleBtn.addEventListener('click', () => {
         const hidden = titleBody.classList.toggle('is-hidden');
-        titleToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+        if (titlePreview) titlePreview.classList.toggle('is-hidden', !hidden);
+        titleToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
       });
     }
 
@@ -847,7 +853,7 @@ async function openProfilePanel() {
       achToggleBtn.addEventListener('click', () => {
         const list = subBody.querySelector('.profile-ach-list');
         const hidden = list.classList.toggle('is-hidden');
-        achToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+        achToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
       });
     }
     subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {

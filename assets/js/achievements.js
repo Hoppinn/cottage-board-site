@@ -529,15 +529,32 @@
           `</div>`
         : '';
 
-      const PREV_TITLE = 6;
-      const _hasMoreTitle = cardsAll.length > PREV_TITLE;
-      const _titleGridHtml = `<div class="profile-title-grid">${cardsAll.slice(0, PREV_TITLE).join('')}${_hasMoreTitle ? `<div class="profile-more-wrap is-hidden">${cardsAll.slice(PREV_TITLE).join('')}</div><div class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${cardsAll.length - PREV_TITLE}" type="button">더 보기 (${cardsAll.length - PREV_TITLE}건 더)</button></div>` : ''}</div>`;
+      const _TITLE_AXES = ['record', 'new_game', 'photo', 'review', 'visit'];
+      const _topTitlePerAxis = _TITLE_AXES.map(axis => {
+        const axisTitles = TITLE_DEFS.filter(def => {
+          const achId = _titleToAchId[def.id];
+          return achId ? ACH_DEFS.find(a => a.id === achId)?.type === axis : false;
+        }).sort((a, b) => (ACH_DEFS.find(x => x.id === _titleToAchId[a.id])?.threshold || 0) - (ACH_DEFS.find(x => x.id === _titleToAchId[b.id])?.threshold || 0));
+        const earned = axisTitles.filter(d => earnedIds.has(d.id));
+        return earned.length ? earned[earned.length - 1] : null;
+      }).filter(Boolean);
+      const _titlePreviewHtml = _topTitlePerAxis.length
+        ? `<div class="profile-title-preview"><div class="profile-title-grid">${_topTitlePerAxis.map(def => {
+            const isRep = repTitleId === def.id;
+            const rarityColor = RARITY_COLOR[def.rarity] || '#888';
+            return `<button class="profile-title-card${isRep ? ' is-rep' : ''}" data-title-id="${def.id}" data-earned="true" type="button">` +
+              `<span class="profile-title-emoji">${def.emoji}</span>` +
+              `<span class="profile-title-name">${def.name}</span>` +
+              `<span class="profile-title-rarity" style="color:${rarityColor}">${def.rarity}</span>` +
+              `</button>`;
+          }).join('')}</div></div>`
+        : `<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>`;
       const html = `<div class="profile-title-section" data-earned-count="${earnedIds.size}" data-title-total="${TITLE_DEFS.length}">` +
         `<div class="profile-title-header">🏷 칭호 <span class="profile-title-count">${earnedIds.size} / ${TITLE_DEFS.length}종</span>` +
-        `<button class="profile-title-toggle-btn" type="button">접기 ▴</button></div>` +
-        `<div class="profile-title-body">` +
-        `${earnedIds.size === 0 ? '<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>' : ''}` +
-        `${_titleGridHtml}` +
+        `<button class="profile-title-toggle-btn" type="button">전체보기 ▾</button></div>` +
+        `${_titlePreviewHtml}` +
+        `<div class="profile-title-body is-hidden">` +
+        `<div class="profile-title-grid">${cardsAll.join('')}</div>` +
         `${repActionHtml}` +
         `</div></div>`;
 
@@ -581,46 +598,28 @@
 
     const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-    const PREVIEW = 3;
-    const previewGames = playedGames.slice(0, PREVIEW);
-    const restGames = playedGames.slice(PREVIEW);
-
-    const previewHtml = previewGames.map(r =>
-      `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`
-    ).join('');
-
-    const restHtml = restGames.length
-      ? `<div class="profile-codex-more-wrap is-hidden">
-          <ul class="profile-codex-game-list">${restGames.map(r =>
-            `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`
-          ).join('')}</ul>
-        </div>
-        <button class="profile-codex-more-btn" type="button">전체 보기 (${restGames.length}개 더) ▾</button>`
-      : '';
-
-    const listHtml = playedCount
-      ? `<div class="profile-codex-list-section">
-          <ul class="profile-codex-game-list">${previewHtml}</ul>
-          ${restHtml}
-        </div>`
+    const _recentGames = playedGames.slice(0, 3);
+    const _codexPreviewHtml = `<div class="profile-codex-preview">` +
+      `<div class="profile-codex-preview-stat">` +
+      `<span class="profile-codex-count">${playedCount} <span>/ ${totalGames}</span></span>` +
+      `<span class="profile-codex-grade">${grade}</span>` +
+      `</div>` +
+      (_recentGames.length
+        ? `<ul class="profile-codex-game-list">${_recentGames.map(r => `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`).join('')}</ul>`
+        : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`) +
+      `</div>`;
+    const _fullListHtml = playedCount
+      ? `<ul class="profile-codex-game-list">${playedGames.map(r => `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`).join('')}</ul>`
       : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`;
-
-    const _codexPreviewGames = playedGames.slice(0, 2);
-    const _codexPreviewHtml = _codexPreviewGames.length
-      ? `<div class="profile-section-preview">${_codexPreviewGames.map(r => `✅ ${esc(getGameName(r.game_id))}`).join(' · ')}${playedGames.length > 2 ? ` 외 ${playedGames.length - 2}종` : ''}</div>`
-      : `<div class="profile-section-preview">아직 수집한 게임이 없어요</div>`;
 
     return `<div class="profile-codex-section" data-played-count="${playedCount}" data-total-games="${totalGames}">
       <div class="profile-codex-header">
         🎲 게임 도감 <span class="profile-codex-summary">${playedCount} / ${totalGames}</span>
-        <button class="profile-codex-toggle-btn" type="button">전체 보기 ▾</button>
+        <button class="profile-codex-toggle-btn" type="button">전체보기 ▾</button>
       </div>
       ${_codexPreviewHtml}
       <div class="profile-codex-body is-hidden">
-        <div class="profile-codex-count">${playedCount} <span>/ ${totalGames}</span></div>
-        <div class="profile-codex-bar-wrap"><div class="profile-codex-bar" style="width:${barWidth}%"></div></div>
-        <div class="profile-codex-grade">${grade}</div>
-        ${listHtml}
+        ${_fullListHtml}
       </div>
     </div>`;
   }
@@ -671,9 +670,11 @@
         `${progressLabel}` +
         `</button>`;
     });
-    const PREV_CHAR = 6;
-    const _hasMoreChar = gridCardsAll.length > PREV_CHAR;
-    const _charGridHtml = `<div class="profile-char-grid">${gridCardsAll.slice(0, PREV_CHAR).join('')}${_hasMoreChar ? `<div class="profile-more-wrap is-hidden">${gridCardsAll.slice(PREV_CHAR).join('')}</div><div class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${gridCardsAll.length - PREV_CHAR}" type="button">더 보기 (${gridCardsAll.length - PREV_CHAR}건 더)</button></div>` : ''}</div>`;
+    const _CHAR_AXES = ['record', 'new_game', 'photo', 'review', 'visit', 'play', 'first_record'];
+    const _topCharPerAxis = _CHAR_AXES.map(axis => {
+      const earnedAxis = CHAR_DEFS.filter(d => d.type === axis && earnedIds.has(d.id));
+      return earnedAxis.length ? earnedAxis[earnedAxis.length - 1] : null;
+    }).filter(Boolean);
 
     const repActionHtml = earnedCount
       ? `<div class="profile-rep-action-row" id="profileRepActionRow" data-user-id="${userId}" data-orig-rep-id="${repAch?.id || ''}" style="display:none">
@@ -691,11 +692,21 @@
       ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${_repCharDef.rewards.character}.png" alt="">`
       : '';
 
+    const _charPreviewHtml = `<div class="profile-char-preview"><div class="profile-char-grid">${_topCharPerAxis.map(def => {
+      const isRep = repAch?.id === def.id;
+      const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+      return `<button class="profile-char-card${isRep ? ' is-rep' : ''}" title="${_charName(def)}" type="button" data-ach-id="${def.id}">` +
+        `<img src="${imgSrc}" alt="${_charName(def)}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">` +
+        `<span class="profile-char-emoji-fallback" style="display:none">${def.emoji}</span>` +
+        `<span class="profile-char-card-name">${_charName(def)}</span>` +
+        `</button>`;
+    }).join('')}</div></div>`;
     return `<div class="profile-char-section" data-char-count="${earnedCount}" data-char-total="${CHAR_DEFS.length}">
-      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">접기 ▴</button></div>
-      <div class="profile-char-body">
+      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체보기 ▾</button></div>
+      ${_charPreviewHtml}
+      <div class="profile-char-body is-hidden">
         ${emptyHint}
-        ${_charGridHtml}
+        <div class="profile-char-grid">${gridCardsAll.join('')}</div>
         ${repActionHtml}
       </div>
     </div>`;
@@ -753,29 +764,25 @@
     });
 
     const _GOAL_AXES = [
-      { type: 'record', emoji: '🐿', label: '기록' },
-      { type: 'new_game', emoji: '🐰', label: '새 게임' },
-      { type: 'photo', emoji: '🦔', label: '사진' },
-      { type: 'review', emoji: '🐹', label: '게임평' },
-      { type: 'visit', emoji: '🐦', label: '방문' },
-      { type: 'play', emoji: '🐻', label: '참여' },
-      { type: 'first_record', emoji: '🦉', label: '최초기록' },
+      { type: 'record', emoji: '🐿', label: '기록', unit: '회' },
+      { type: 'new_game', emoji: '🐰', label: '새게임', unit: '종' },
+      { type: 'photo', emoji: '🦔', label: '사진', unit: '장' },
+      { type: 'review', emoji: '🐹', label: '게임평', unit: '개' },
+      { type: 'visit', emoji: '🐦', label: '방문', unit: '회' },
+      { type: 'play', emoji: '🐻', label: '참여', unit: '회' },
+      { type: 'first_record', emoji: '🦉', label: '최초기록', unit: '종' },
     ];
-    const _goalsHtml = _GOAL_AXES.map(({ type, emoji, label }) => {
+    const _goalsHtml = _GOAL_AXES.map(({ type, emoji, label, unit }) => {
       const cur = COUNTS[type] || 0;
-      const next = ACH_DEFS.filter(d => d.type === type).sort((a, b) => a.threshold - b.threshold).find(d => !earnedIds.has(d.id));
-      if (!next) return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="profile-ach-goal-done">완성!</span></li>`;
-      const reward = next.rewards?.character ? '🐾' : next.rewards?.title ? '🏷' : next.rewards?.voucher ? '🥤' : '';
-      return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="profile-ach-goal-progress">${cur}/${next.threshold}</span>${reward ? `<span class="profile-ach-goal-reward">${reward}</span>` : ''}</li>`;
+      const allDone = ACH_DEFS.filter(d => d.type === type).every(d => earnedIds.has(d.id));
+      return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="${allDone ? 'profile-ach-goal-done' : 'profile-ach-goal-progress'}">${cur}${unit}</span></li>`;
     }).join('');
     const _goalsDiv = `<ul class="profile-ach-goals">${_goalsHtml}</ul>`;
-    const PREV_ACH = 5;
-    const _hasMoreAch = itemsAll.length > PREV_ACH;
-    const _achListHtml = `<ul class="profile-ach-list">${itemsAll.slice(0, PREV_ACH).join('')}${_hasMoreAch ? `<div class="profile-more-wrap is-hidden">${itemsAll.slice(PREV_ACH).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${itemsAll.length - PREV_ACH}" type="button">더 보기 (${itemsAll.length - PREV_ACH}건 더)</button></li>` : ''}</ul>`;
+    const _achListHtml = `<ul class="profile-ach-list is-hidden">${itemsAll.join('')}</ul>`;
     return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}" data-ach-total="${ACH_DEFS.length}">` +
       `<div class="profile-ach-header">` +
       `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
-      `<button class="profile-ach-toggle-btn" type="button">접기 ▴</button>` +
+      `<button class="profile-ach-toggle-btn" type="button">전체보기 ▾</button>` +
       `</div>` +
       `${_goalsDiv}` +
       `${_achListHtml}` +
