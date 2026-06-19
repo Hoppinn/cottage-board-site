@@ -3832,7 +3832,7 @@ body.sheet-open{
 .profile-title-grid>.profile-more-wrap{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex-direction:unset;}
 .profile-title-grid>.profile-more-btn-wrap{grid-column:1/-1;display:flex;}
 .profile-title-card{border-radius:8px;background:var(--bg,#f5f0e8);border:1px solid var(--border,#e8e4dc);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px 7px;gap:3px;cursor:pointer;}
-.profile-title-card.is-locked{opacity:0.6;cursor:default;}
+.profile-title-card.is-locked{filter:grayscale(1);opacity:0.45;cursor:default;}
 .profile-title-card.is-rep{border:2px solid #7a4828;box-shadow:0 0 0 1px #7a4828;}
 .profile-title-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
 .profile-title-emoji{font-size:22px;line-height:1;}
@@ -5989,6 +5989,7 @@ body.sheet-open{
 .pr-same-as-above-btn:hover { background: #ecddd4; }
 .pr-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .pr-detail-grid input { border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; background: var(--bg,#f5f0e8); width: 100%; box-sizing: border-box; }
+.pr-score,.pie-score { width: 100%; box-sizing: border-box; border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; background: var(--bg,#f5f0e8); resize: none; display: block; }
 .pr-review-ta { width: 100%; box-sizing: border-box; border: 1px solid var(--border,#e8e4dc); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 52px; margin-top: 6px; background: var(--bg,#f5f0e8); }
 .pr-submit-btn { width: 100%; background: #7a4828; color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
 .pr-submit-btn:disabled { opacity: 0.5; }
@@ -7183,6 +7184,7 @@ body.sheet-open{
   .pr-game-row{ padding:16px; }
   .pr-row-head input{ font-size:19px; padding:10px 13px; }
   .pr-detail-grid input{ font-size:18px; padding:10px 11px; }
+  .pr-score,.pie-score{ font-size:18px; padding:10px 11px; }
   .pr-review-ta{ font-size:18px; padding:10px 11px; }
   .pr-count-btn{ font-size:18px; padding:9px 14px; }
   .pr-photo-trigger{ font-size:18px; padding:10px 14px; }
@@ -7347,6 +7349,7 @@ body.sheet-open{
   .pr-submit-btn{ font-size:14px; }
   .pr-row-head input{ font-size:12px; }
   .pr-detail-grid input{ font-size:11px; }
+  .pr-score,.pie-score{ font-size:11px; }
   .pr-review-ta{ font-size:11px; }
   .pr-count-btn{ font-size:10px; }
   .pr-photo-trigger{ font-size:10px; }

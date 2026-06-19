@@ -775,7 +775,9 @@
     const _goalsHtml = _GOAL_AXES.map(({ type, emoji, label, unit }) => {
       const cur = COUNTS[type] || 0;
       const allDone = ACH_DEFS.filter(d => d.type === type).every(d => earnedIds.has(d.id));
-      return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="${allDone ? 'profile-ach-goal-done' : 'profile-ach-goal-progress'}">${cur}${unit}</span></li>`;
+      const nextDef = allDone ? null : ACH_DEFS.filter(d => d.type === type && !earnedIds.has(d.id)).sort((a, b) => a.threshold - b.threshold)[0];
+      const progressText = allDone ? `${cur}${unit}` : (nextDef ? `${cur}/${nextDef.threshold}${unit}` : `${cur}${unit}`);
+      return `<li class="profile-ach-goal-item"><span class="profile-ach-goal-axis">${emoji} ${label}</span><span class="${allDone ? 'profile-ach-goal-done' : 'profile-ach-goal-progress'}">${progressText}</span></li>`;
     }).join('');
     const _goalsDiv = `<ul class="profile-ach-goals">${_goalsHtml}</ul>`;
     const _achListHtml = `<ul class="profile-ach-list is-hidden">${itemsAll.join('')}</ul>`;
