@@ -622,7 +622,6 @@ async function openProfilePanel() {
         ${_growthBadge}
       </div>
     </div>
-    ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="growth" type="button">
         <span class="profile-card-icon">🌱</span>
@@ -652,7 +651,8 @@ async function openProfilePanel() {
         ${_summaryParts.length ? `<span class="profile-card-usage-detail">${escH(_statsSummary)}</span>` : ''}
       </div>
       <span class="profile-card-arrow">›</span>
-    </button>`;
+    </button>
+    ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}`;
 
   function _buildGameListHtml(gameIds, emptyMsg) {
     if (!gameIds.length) return `<p class="profile-gamelist-empty">${emptyMsg}</p>`;
