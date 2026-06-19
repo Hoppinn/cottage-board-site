@@ -33,6 +33,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 |
 | BGG ID 수정 / fetch:bgg / translate 등 파이프라인 작업 | 작업 전 `npm run check`로 필요 단계 먼저 확인 |
 | UI/CSS 디자인 작업 | `docs/DESIGN_RULES.md` |
+| 업적/칭호/캐릭터/교환권/성장보드 | `docs/achievement-system.md` (SSOT) |
 
 ---
 
@@ -115,6 +116,25 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | 페이지 파일 이동/추가/삭제 | `docs/PROJECT_STRUCTURE.md` |
 | 인증·데이터 흐름 변경 | `docs/PROJECT_STRUCTURE.md` |
 | 기능 완료·버그 발견·작업 추가 | `docs/PROJECT_STATE.md` |
+
+## 작업 모드 분리
+
+작업 시작 전 완료 조건을 한 문장으로 정의한다.  
+예: "취향보드 게임 카드 클릭 시 바텀시트가 열린다." — 이 조건이 만족되면 완료.
+
+### BUG FIX MODE
+버그 수정 중 아래를 금지한다.
+- 리팩토링, 구조 개선, 파일/함수 분리, 명명 변경, CSS 정리
+- 다른 문제 수정 (발견하면 보고만 하고 넘어간다)
+
+### REFACTOR MODE
+리팩토링 중 아래를 금지한다.
+- 신규 기능 추가, UI 변경, 요구사항 변경
+
+## WIP 제한
+
+활성 작업(WIP)은 동시에 3개를 초과하지 않는다.  
+작업 중 떠오른 새 아이디어는 PROJECT_STATE.md 다음 작업 후보에 기록만 한다. 즉시 구현하지 않는다.
 
 ## 버그 수정 방식
 
