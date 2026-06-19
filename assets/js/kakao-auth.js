@@ -415,7 +415,11 @@ async function openProfilePanel() {
   const _notifEmptyHtml = (notifs.length === 0 && voucherSeen)
     ? `<li class="profile-notif-empty"><span class="profile-notif-empty-icon">📭</span><span>새로운 알림이 없습니다</span></li>`
     : '';
-  const _notifInnerHtml = `<ul class="profile-notif-list"><li class="profile-notif-group-header">🎉 보상</li>${voucherItemHtml}${_inboxGroupHtml}${_otherItemsHtml}${_notifMore}${_notifEmptyHtml}</ul>`;
+  const _hasAnyNew = _newCount > 0;
+  const _markAllBtnHtml = _hasAnyNew
+    ? `<div class="profile-notif-confirm-row"><button class="profile-notif-confirm-all" type="button">모두 읽기</button></div>`
+    : '';
+  const _notifInnerHtml = `${_markAllBtnHtml}<ul class="profile-notif-list"><li class="profile-notif-group-header">🎉 보상</li>${voucherItemHtml}${_inboxGroupHtml}${_otherItemsHtml}${_notifMore}${_notifEmptyHtml}</ul>`;
 
   function _buildVoucherInner(bal, prods, hist) {
     const fmtDt = iso => {
@@ -688,6 +692,26 @@ async function openProfilePanel() {
     if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));
   }
 
+  // ── _markAllNotifSeen ─────────────────────────────────────────
+  function _markAllNotifSeen(container = body) {
+    if (window._cottageSess) {
+      const _s = window._cottageSess.get(String(user.id));
+      _s.notifSeenAt = new Date().toISOString();
+      _s.newGameSeenAt = new Date().toISOString();
+      _s.voucherNoticeSeen = true;
+      window._cottageSess.set(String(user.id), _s);
+    }
+    container.querySelectorAll('.profile-notif-list .is-new').forEach(li => {
+      li.classList.remove('is-new');
+      li.querySelector('.profile-notif-new-badge')?.remove();
+      li.querySelector('.profile-voucher-confirm')?.remove();
+    });
+    container.querySelector('.profile-notif-confirm-row')?.remove();
+    document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
+    body.querySelector('.profile-panel-notif-btn')?.remove();
+    _updateNotifBadge();
+  }
+
   // ── _markVoucherSeen (컨테이너 파라미터, 기본값 = body) ──────
   function _markVoucherSeen(container = body) {
     if (window._cottageSess) {
@@ -892,6 +916,7 @@ async function openProfilePanel() {
       if (type === 'notif') {
         const _notifTitle = '최근 알림';
         _openSubSheet(_notifTitle, _notifInnerHtml, subBody => {
+          subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {

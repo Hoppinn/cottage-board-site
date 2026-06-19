@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-19 (127차)
+최종 갱신: 2026-06-19 (128차)
 
 ---
 
@@ -17,9 +17,10 @@
 
 **다음 작업 후보**
 
-1. **104차 상태 시스템 테스트** — SQL(purchase_status, status_date 컬럼) 실행 후 기능 확인
-2. **requests.html 실제 게임명 → 바텀시트 정보보기** — actual_games에 등록된 게임명과 COTTAGE_GAMES 매칭 시 "정보보기" 버튼 표시, 미매칭 게임은 버튼 없음
-3. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **업적 소급 부여 SQL 실행** — 위 [2] SQL (SELECT 확인 → INSERT) Supabase 실행
+2. **page_sessions.session_key 컬럼 확인** — [5] 비회원 통계가 DB에 session_key가 있어야 동작. Supabase에서 `SELECT session_key FROM page_sessions LIMIT 1;` 확인 필요
+3. **104차 상태 시스템 테스트** — SQL(purchase_status, status_date 컬럼) 실행 후 기능 확인
+4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 

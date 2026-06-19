@@ -6,7 +6,7 @@
   <link rel="icon" href="/assets/images/main/favicon-square.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/main/favicon-square.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>요청 관리 | 코티지보드</title>
+  <title>관리자 페이지 | 코티지보드</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
@@ -203,8 +203,8 @@
     <div class="about-hero">
       <a class="admin-back" href="./requests.html">← 요청하기로 돌아가기</a>
       <span class="about-hero-eyebrow">관리자 전용</span>
-      <h2>요청 관리</h2>
-      <p class="about-hero-sub">구매 요청 · 간식 요청 · 개선 건의</p>
+      <h2>관리자 페이지</h2>
+      <p class="about-hero-sub">비주얼 분석 · 요청 관리</p>
     </div>
 
     <section class="inner-page">
@@ -354,8 +354,7 @@
         <div class="admin-menu-grid">
           <button class="admin-menu-card" data-scroll="groupCharts" type="button"><span class="admin-menu-icon">📊</span><span>비주얼 분석</span></button>
           <button class="admin-menu-card" data-scroll="groupAnalysis" type="button"><span class="admin-menu-icon">📈</span><span>페이지·회원</span></button>
-          <button class="admin-menu-card" data-bs="bsPoints" type="button"><span class="admin-menu-icon">💎</span><span>포인트 승인 <span class="admin-menu-badge" id="pointPendingBadge" style="display:none"></span></span></button>
-          <button class="admin-menu-card" data-bs="bsVoucher" type="button"><span class="admin-menu-icon">🎫</span><span>교환권 로그</span></button>
+          <button class="admin-menu-card" data-bs="bsVoucher" type="button"><span class="admin-menu-icon">🎫</span><span>교환권 관리</span></button>
           <button class="admin-menu-card" data-bs="bsRequests" type="button"><span class="admin-menu-icon">📝</span><span>요청관리</span></button>
         </div>
         <div class="admin-group is-open" id="groupCharts">
@@ -446,12 +445,6 @@
               <div class="admin-section-title">📄 페이지별<span class="admin-section-arrow">▾</span></div>
               <div class="admin-section-body" id="pagesBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
-          </div>
-        </div>
-        <div class="admin-bs-overlay" id="bsPoints">
-          <div class="admin-bs-panel">
-            <div class="admin-bs-header"><span class="admin-bs-title">💎 포인트 승인</span><button class="admin-bs-close" type="button">✕</button></div>
-            <div class="admin-bs-body" id="pointPendingBody"><div class="admin-empty">불러오는 중...</div></div>
           </div>
         </div>
         <div class="admin-bs-overlay" id="bsVoucher">
@@ -816,6 +809,25 @@
         });
       }
 
+      // 비회원 통계 — session_key 기반, page_sessions에서 파생
+      function buildAnonUserMap(rowset) {
+        const m = new Map(); // session_key → { pm, days, todaySec, lastAt }
+        for (const r of rowset) {
+          if (r.user_id || !r.session_key) continue;
+          if (!m.has(r.session_key)) m.set(r.session_key, { pm: new Map(), days: new Set(), todaySec: 0, lastAt: '' });
+          const entry = m.get(r.session_key);
+          if (!entry.pm.has(r.page)) entry.pm.set(r.page, { visits: 0, totalSec: 0 });
+          entry.pm.get(r.page).visits++; entry.pm.get(r.page).totalSec += r.duration_sec || 0;
+          if (r.entered_at) {
+            const dayKst = kstDate(r.entered_at);
+            entry.days.add(dayKst);
+            if (dayKst === todayKst) entry.todaySec += r.duration_sec || 0;
+            if (r.entered_at > entry.lastAt) entry.lastAt = r.entered_at;
+          }
+        }
+        return [...m.entries()].sort((a, b) => b[1].lastAt.localeCompare(a[1].lastAt));
+      }
+
       function renderPageTable(sorted) {
         if (!sorted.length) return '<div class="admin-empty">데이터 없음</div>';
         let h = `<table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>총체류</th><th>평균체류</th><th>로그인</th></tr></thead><tbody>`;
@@ -826,18 +838,16 @@
         return h + '</tbody></table>';
       }
 
-      // 이용상세 > 전체: profiles 기준 총체류+오늘체류, page_sessions는 페이지별 로그로만 표시
-      function renderUserDetailAll(sortedUsers) {
-        if (!sortedUsers.length) return '<div class="admin-empty">데이터 없음 (로그인 세션 필요)</div>';
-        let h = '';
-        for (const [uid, pm] of sortedUsers) {
+      // 이용상세 > 전체: 로그인 회원 + 비회원 통합 표시
+      function renderUserDetailAll(sortedUsers, anonMap = []) {
+        const memberHtml = sortedUsers.map(([uid, pm]) => {
           const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
           const profile = profilesByUid.get(String(uid));
           const visitCount = profile?.visit_count != null ? profile.visit_count + '회' : '-';
           const totalSec = profile?.total_minutes || 0;
           const todayS   = profile?.today_date === todayKst ? (profile?.today_seconds || 0) : 0;
           const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
-          h += `<div style="margin-bottom:6px;">
+          return `<div style="margin-bottom:6px;">
             <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.04);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
               <span class="acc-arr">▶ </span>${escH(nick)}
               <span style="font-size:11px;color:var(--muted);font-weight:400;">
@@ -845,13 +855,31 @@
               </span>
             </div>
             <div style="display:none;">
-            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>`;
-          for (const [page, d] of sortedPages) {
-            h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`;
-          }
-          h += '</tbody></table></div></div>';
-        }
-        return h;
+            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>
+            ${sortedPages.map(([page, d]) => `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`).join('')}
+            </tbody></table></div></div>`;
+        }).join('');
+
+        const anonHtml = anonMap.map(([sk, entry]) => {
+          const shortKey = sk.slice(0, 8) + '…';
+          const visitCount = entry.days.size + '회';
+          const totalSec = [...entry.pm.values()].reduce((s, v) => s + v.totalSec, 0);
+          const sortedPages = [...entry.pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
+          return `<div style="margin-bottom:6px;">
+            <div style="font-size:13px;font-weight:700;color:var(--muted);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.03);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
+              <span class="acc-arr">▶ </span>비회원 <code style="font-size:10px">${escH(shortKey)}</code>
+              <span style="font-size:11px;color:var(--muted);font-weight:400;">
+                방문 ${visitCount} · 총체류 ${fmtTime(totalSec)}${entry.todaySec > 0 ? ` · 오늘 ${fmtTime(entry.todaySec)}` : ''}
+              </span>
+            </div>
+            <div style="display:none;">
+            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>
+            ${sortedPages.map(([page, d]) => `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`).join('')}
+            </tbody></table></div></div>`;
+        }).join('');
+
+        if (!sortedUsers.length && !anonMap.length) return '<div class="admin-empty">데이터 없음</div>';
+        return memberHtml + (anonHtml ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border,#e8e4dc);"><div style="font-size:11px;color:var(--muted);padding:4px 0 6px;font-weight:600;">비로그인 방문자</div>${anonHtml}</div>` : '');
       }
 
       // 이용상세 > 날짜별: O/X 방문 여부 + 체류시간 (n회 없음)
@@ -940,7 +968,7 @@
           false
         );
       }).join('');
-      const userAllDetail = renderUserDetailAll(buildUserMap(dedupUserPageDay(rows)));
+      const userAllDetail = renderUserDetailAll(buildUserMap(dedupUserPageDay(rows)), buildAnonUserMap(rows));
 
       // ── 페이지별 (날짜별) ────────────────────────────────────
       const pageDayParts = DAY_LABELS.map((label, i) => {
@@ -1119,15 +1147,18 @@
           } catch (_) { return null; }
         }
 
-        // ── 요약 카드 (전체 pageViews 기반, 항상 오늘 기준) ────────────
+        // __visitor__ 마커 행만: 히어로 페이지와 동일 방식으로 방문자 집계
+        const visitorRows = pageViews.filter(r => r.page === '__visitor__');
+
+        // ── 요약 카드 (__visitor__ 마커 기준) ───────────────────────────
         {
           const todayStr = kstDateStr();
-          const todayCnt = pageViews.filter(r => kstDate(r.created_at) === todayStr).length;
+          const todayCnt = visitorRows.filter(r => kstDate(r.created_at) === todayStr).length;
           const thisKeySet = new Set(), prevKeySet = new Set();
           for (let i = 6; i >= 0; i--) thisKeySet.add(_addDays(todayStr, -i));
           for (let i = 13; i >= 7; i--) prevKeySet.add(_addDays(todayStr, -i));
           let thisCnt7 = 0, prevCnt7 = 0;
-          for (const r of pageViews) {
+          for (const r of visitorRows) {
             const k = kstDate(r.created_at);
             if (thisKeySet.has(k)) thisCnt7++;
             if (prevKeySet.has(k)) prevCnt7++;
@@ -1165,7 +1196,7 @@
           if (el_topRef) el_topRef.textContent = topRef7 ? `${topRef7[0]}  ${topRef7[1]}회` : '직접방문';
         }
 
-        // ── 1. 날짜별 방문자 — page_views 기반, 단위별 집계 ──
+        // ── 1. 날짜별 방문자 — __visitor__ 마커 기준, 단위별 집계 ──
         {
           const baseStr = (_navValue && type !== 'all') ? _navValue : kstDateStr();
           let chartLabels = [], thisData = [], prevDataArr = null;
@@ -1176,7 +1207,7 @@
             const weekArr = [];
             for (let i = 3; i >= 0; i--) weekArr.push(toWeekStr(new Date(wStartMs - i * 7 * 86400000)));
             const wVis = Object.fromEntries(weekArr.map(k => [k, 0]));
-            for (const pv of pageViews) {
+            for (const pv of visitorRows) {
               const wk = toWeekStr(new Date(pv.created_at));
               if (wk in wVis) wVis[wk]++;
             }
@@ -1193,7 +1224,7 @@
               monthArr.push(`${y}-${String(m).padStart(2, '0')}`);
             }
             const mVis = Object.fromEntries(monthArr.map(k => [k, 0]));
-            for (const pv of pageViews) {
+            for (const pv of visitorRows) {
               const k = kstDate(pv.created_at).slice(0, 7);
               if (k in mVis) mVis[k]++;
             }
@@ -1205,7 +1236,7 @@
             const thisVis = {}, prevVisObj = {};
             for (let i = 6; i >= 0; i--) { const k = _addDays(baseStr, -i); thisKeys.push(k); thisVis[k] = 0; }
             for (let i = 13; i >= 7; i--) { const k = _addDays(baseStr, -i); prevKeys.push(k); prevVisObj[k] = 0; }
-            for (const pv of pageViews) {
+            for (const pv of visitorRows) {
               const k = kstDate(pv.created_at);
               if (k in thisVis) thisVis[k]++;
               if (k in prevVisObj) prevVisObj[k]++;
@@ -1562,7 +1593,7 @@
     let tried = false;
     function tryLoad() {
       if (tried) return; tried = true;
-      load().then(loadAnalytics).then(loadPointRewards).then(() => {
+      load().then(loadAnalytics).then(() => {
         // 초기 렌더 직후 배지 표시
         setTimeout(refreshOnlineBadges, 100);
       });
