@@ -918,6 +918,7 @@
     handleRepTitleSelect,
     getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
     getCharacterPath,
+    getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
   };
 
   window.checkAchievements = checkAchievements;

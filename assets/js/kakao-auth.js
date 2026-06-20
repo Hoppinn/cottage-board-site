@@ -584,12 +584,15 @@ async function openProfilePanel() {
   const _repCharPath = repData?.id
     ? (window.CottageAchievements?.getCharacterPath?.(repData.id) || null)
     : null;
+  const _repName = repData?.id
+    ? (window.CottageAchievements?.getCharacterName?.(repData.id) || null)
+    : null;
   const _repImgHtml = `<div class="profile-panel-avatar-wrap">${
     _repCharPath
-      ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(repData?.name || '')}">`
+      ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(_repName || '')}">`
       : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`
   }<span class="profile-panel-avatar-edit">⚙</span></div>`;
-  const _repLabel = repData?.name ? escH(repData.name) : '대표 캐릭터 없음';
+  const _repLabel = _repName ? escH(_repName) : '대표 캐릭터 없음';
   const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
   const _validRepTitle = (_repTitleId && _earnedTitleIds.has(_repTitleId))
