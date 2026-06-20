@@ -137,6 +137,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 |------|------|
 | `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
 | `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn}`. 게임명 자동완성용 |
+| `window.getAllGamesArray` | `getAllGamesArray(gameData)` 직접 참조용 편의 노출. index-page.js / owned-games-page.js가 전역으로 직접 호출. `CottageGameView.getAllGamesArray`와 동일 함수 |
 
 ---
 
@@ -174,4 +175,5 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, script.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
 | `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |
+| `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
