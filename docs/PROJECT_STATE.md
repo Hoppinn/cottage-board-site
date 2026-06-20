@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-20 (134차)
+최종 갱신: 2026-06-20 (135차)
 
 ---
 
@@ -14,8 +14,9 @@
 
 1. **docs/PROJECT_STRUCTURE.md 리팩토링** — MD 리팩토링 시리즈 4번째, 다음 세션 시작 과제
 2. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
-3. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
-4. **방문자 통계 데이터 복구** — 118차 bugfix로 __visitor__ 중복 제거 완료, 실제 데이터 값 검증 필요
+3. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
+4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+5. **방문자 통계 데이터 복구** — 118차 bugfix로 __visitor__ 중복 제거 완료, 실제 데이터 값 검증 필요
 
 ---
 
@@ -81,6 +82,13 @@
 ## 2. 현재 버그
 
 현재 알려진 버그 없음.
+
+**135차 수정 내역 (2026-06-20):**
+- [x] 게임 위치 변경 — 사라진속옷과하늘을나는물고기, 로나에나:재앙의선물 `배송중` → `머더미스터리` (master.json + build)
+- [x] 비회원 고유 ID — `page_sessions`에 `session_key` 컬럼 추가 (SQL: supabase-setup.sql line 695), 비로그인 방문 시 INSERT, `getPageAnalytics` SELECT 포함, 관리자 명 집계 session_key 반영
+- [x] 알림 new_game 바텀시트 — 단일 게임 `data-game-name`, 복수 게임 개별 클릭 span, 클릭핸들러 `closest('[data-game-name]')` 우선 탐색
+- [x] localhost page_sessions 기록 차단 — `_syncTimeToDBNow`에 localhost guard 추가 (회<명 역전 근본 원인 제거)
+- [x] admin 명 집계 보완 — refUsers7, refUserMap, buildPageMap, pageUniq 모두 anon session_key 반영
 
 **134차 수정 내역 (2026-06-20):**
 - [x] 협력게임 책장 라벨 — script.js `getGameShelfLabel`에 weight 분류 추가. 바텀시트에서 "협력" → "쉬운/어려운 협력게임" 표시
