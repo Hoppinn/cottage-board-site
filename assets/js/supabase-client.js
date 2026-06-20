@@ -90,6 +90,11 @@ window._cottageSess = (function () {
   }
   const db = window._cottageSupabaseDb;
 
+  // LIKE 패턴에서 와일드카드 문자 제거 — ilike() 호출 시 닉네임 안전화
+  function _escapeLike(str) {
+    return String(str || '').replace(/[%_]/g, '');
+  }
+
   // ── 세션 키 (익명 중복 방지용) ──────────────────────────
 
   function getSessionKey() {
@@ -975,7 +980,7 @@ window._cottageSess = (function () {
         queries.push(
           db.from('game_play_records')
             .select('id, game_id, played_at, created_at, group_name')
-            .ilike('player_names', `%${nickname}%`)
+            .ilike('player_names', `%${_escapeLike(nickname)}%`)
             .neq('user_id', userId)
             .order('created_at', { ascending: false })
         );
@@ -1011,7 +1016,7 @@ window._cottageSess = (function () {
       const taggedPromise = nickname
         ? db.from('game_play_records')
             .select('id, game_id, group_name, played_at, created_at, player_names')
-            .ilike('player_names', `%${nickname}%`)
+            .ilike('player_names', `%${_escapeLike(nickname)}%`)
             .neq('user_id', userId)
             .order('created_at', { ascending: false })
             .limit(20)
@@ -1275,7 +1280,7 @@ window._cottageSess = (function () {
       // 내 닉네임이 player_names에 포함된 기록 수 (내가 쓴 기록 포함)
       const { count } = await db.from('game_play_records')
         .select('id', { count: 'exact', head: true })
-        .ilike('player_names', `%${nickname}%`);
+        .ilike('player_names', `%${_escapeLike(nickname)}%`);
       return count || 0;
     } catch (_) { return 0; }
   }
@@ -1361,7 +1366,7 @@ window._cottageSess = (function () {
       const dateSet = new Set((authorRows || []).map(toDateStr));
       if (nickname) {
         const { data: participantRows } = await db.from('game_play_records')
-          .select('played_at, created_at').ilike('player_names', `%${nickname}%`);
+          .select('played_at, created_at').ilike('player_names', `%${_escapeLike(nickname)}%`);
         (participantRows || []).forEach(r => dateSet.add(toDateStr(r)));
       }
       return dateSet.size;
