@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-12 (scripts/ 폴더 추가, pages/store 리다이렉트 명시, FULL_TREE.txt 삭제)
+최종 갱신: 2026-06-20 (JS 파일 목록 보완, scripts/ 갱신, 비로그인 추적 흐름 추가)
 
 ---
 
@@ -43,12 +43,20 @@
 │   └── store/                      # 구 URL 리다이렉트 shim (카카오톡 링크 404 방지)
 │       ├── requests.html           # → pages/admin/requests.html
 │       └── requests-admin.html     # → pages/admin/requests-admin.html
-├── scripts/                        # DB/운영 관련 일회성·분석 스크립트 (게임 파이프라인과 무관)
+├── scripts/                        # DB/운영/분석 스크립트 (게임 파이프라인과 무관)
 │   ├── analyze-user-data.js        # 유저 데이터 전수 분석 (재사용 가능)
 │   ├── recover-time-data.js        # total_minutes 복구 (완료, 보관)
 │   ├── recover-user-data.js        # 유저 데이터 복구 (완료, 보관)
 │   ├── recover-visit-count.js      # visit_count 복구 (완료, 보관)
-│   └── resize-existing-photos.js  # Storage 사진 일괄 리사이즈 (완료, 보관)
+│   ├── resize-existing-photos.js   # Storage 사진 일괄 리사이즈 (완료, 보관)
+│   ├── crop-characters.js          # 캐릭터 스프라이트 크롭 (완료, 보관)
+│   ├── split-characters.js         # 캐릭터 시트 분할 (완료, 보관)
+│   ├── split-seasons.js            # 시즌 캐릭터 시트 분할 (완료, 보관)
+│   ├── test-subsheet.js            # 서브시트 레이아웃 테스트
+│   ├── test-profile-area.js        # 프로필 영역 테스트
+│   ├── ss_subsheet/                # 서브시트 스크린샷 (비교용 이미지)
+│   ├── ss_4axis/                   # 4축 UI 스크린샷
+│   └── ss_profile/                 # 프로필 패널 스크린샷
 ```
 
 ### 페이지별 인증 요구
@@ -70,10 +78,17 @@
 assets/js/
 ├── supabase-config.js          # Supabase URL + anonKey 설정 (window.SUPABASE_CONFIG)
 ├── supabase-client.js          # DB 접근 모듈 (window.CottageDB, window._cottageSess, window.escH 노출)
-├── kakao-auth.js               # 카카오 로그인/로그아웃, 프로필, 세션 (window.getKakaoUser 등 노출)
+│                               # 방문자 추적(__visitor__), 체류시간, 비로그인 heartbeat 포함
+├── kakao-auth.js               # 카카오 로그인/로그아웃, 프로필 패널, 알림, 교환권
+│                               # (window.getKakaoUser / openProfilePanel 노출)
 ├── script.js                   # 게임 바텀시트, 검색, 필터, 별점 위젯, 코멘트
-├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (CottageGameView)
-└── play-records-utils.js       # parsePhotoUrls / buildPhotoHtml / openLightbox / attachAc / initTagInput 등 공유
+├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (window.COTTAGE_GAMES 생성)
+├── game-reviews.js             # 플레이기록 허브 (game-reviews.html 전용)
+│                               # 기록 등록·수정·삭제, 모임/게임별 보기, 사진 업로드
+├── achievements.js             # 업적·캐릭터·칭호 체크 및 지급 (window.checkAchievements 노출)
+├── index-page.js               # 메인 페이지 전용 (추천게임, 인기게임)
+├── owned-games-page.js         # owned-games.html 전용 (게임 목록 필터·렌더)
+└── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
 ```
 
 함수 목록 → [docs/js-api.md](js-api.md)
@@ -183,39 +198,44 @@ game-reviews.html — 기록 입력 탭
 
 ---
 
-## 6. 이용시간 흐름
+## 6. 이용시간 / 방문자 추적 흐름
 
 ```
-[세션 시작]
+[로그인 세션 시작]
   startSession(userId) ← initKakaoAuth()에서 호출
   _sessionStart = Date.now()
   _sessionUserId = userId
 
 [시간 누적 (로컬)]
   visibilitychange → 탭 숨김: _flushTime()
-  beforeunload → 페이지 이탈: _flushTime()
-  pagehide → 모바일 이탈: _flushTime()
+  beforeunload / pagehide → 이탈: _flushTime()
 
   _flushTime():
-    elapsed = Math.floor((Date.now() - _sessionStart) / 1000)  ← 초 단위
-    if (elapsed <= 0) return
-    s = _cottageSess.get(userId)
-    s.timeSec = (s.timeSec || 0) + elapsed
-    _cottageSess.set(userId, s)
-    _sessionStart 리셋
+    elapsed = Date.now() - _sessionStart (초 단위)
+    cottageSess.timeSec += elapsed
 
-[DB 반영 (즉시)]
-  _syncTimeToDBNow() ← visibilitychange/beforeunload/pagehide/heartbeat(1분)
-    timeSec = _cottageSess.get(userId).timeSec
-    if (timeSec < 1) return
-    DB upsert 성공 시에만 s.timeSec = 0 초기화
+[DB 반영]
+  _syncTimeToDBNow() ← visibilitychange/beforeunload/heartbeat(1분)
+    localhost 방문 시 즉시 return (dev 환경 카운팅 제외)
+    profiles.total_minutes / today_seconds UPDATE
+    page_sessions INSERT (page, user_id, session_key, duration_sec, entered_at, referrer)
 
-[heartbeat]
-  1분마다 _syncTimeToDBNow(false) 호출 → 탭 열려있는 동안 주기적 DB 반영
+[비로그인 방문자 추적]
+  cottage-auth-changed 이벤트 없거나 user=null → _startAnonHeartbeat()
+    localhost 방문 시 즉시 return
+    anon_sessions UPSERT (session_key, last_seen_at) — 1분 주기 갱신
+    page_sessions INSERT (user_id: null, session_key, page, referrer) — 입장 1회
 
-[결과]
-  당일 시간이 즉시 DB에 반영됨
-  1초 미만만 폐기, 나머지 전부 누적
+[방문자 마커 (__visitor__)]
+  DOMContentLoaded → localhost/admin 제외
+  하루 첫 방문 (cottage_visited_{date} 미존재) 시:
+    page_views INSERT (page: '__visitor__', referrer: effectiveSource or null)
+  관리자 페이지 분석에서 __visitor__ 행 = 유니크 유저-day 카운트 기준
+
+[session_key]
+  getSessionKey() ← localStorage.cottage_session_id (없으면 생성)
+  로그인/비로그인 모두 동일 키 사용
+  비로그인 명 집계 = page_sessions.session_key WHERE user_id IS NULL
 ```
 
 ---
