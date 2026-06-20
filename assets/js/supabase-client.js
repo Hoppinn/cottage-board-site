@@ -626,16 +626,16 @@ window._cottageSess = (function () {
 
   async function getVisitorStats() {
     try {
-      const { data } = await db.from("page_views").select("created_at").eq("page", "__visitor__");
-      if (!data) return null;
-      // KST(UTC+9) 기준 오늘 날짜
       const kstNow = new Date(Date.now() + 9 * 3600000);
       const todayKst = kstNow.toISOString().slice(0, 10);
-      const todayCount = data.filter(r =>
-        r.created_at && (new Date(r.created_at).getTime() + 9 * 3600000 >= new Date(todayKst + "T00:00:00Z").getTime())
-          && (new Date(r.created_at).getTime() + 9 * 3600000 < new Date(todayKst + "T00:00:00Z").getTime() + 86400000)
-      ).length;
-      return { total: data.length, today: todayCount };
+      const todayStart = new Date(todayKst + 'T00:00:00+09:00').toISOString();
+      const todayEnd   = new Date(todayKst + 'T23:59:59+09:00').toISOString();
+      const [totalRes, todayRes] = await Promise.all([
+        db.from('page_views').select('id', { count: 'exact', head: true }).eq('page', '__visitor__'),
+        db.from('page_views').select('id', { count: 'exact', head: true })
+          .eq('page', '__visitor__').gte('created_at', todayStart).lte('created_at', todayEnd),
+      ]);
+      return { total: totalRes.count || 0, today: todayRes.count || 0 };
     } catch (_) {
       return null;
     }
@@ -1299,7 +1299,8 @@ window._cottageSess = (function () {
       const { data: allRecords } = await db.from('game_play_records')
         .select('game_id, user_id, created_at')
         .in('game_id', myGameIds)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: true })
+        .limit(2000);
 
       if (!allRecords) return 0;
 
