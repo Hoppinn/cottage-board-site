@@ -249,7 +249,7 @@
       const db = window._cottageSupabaseDb;
 
       const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes, voucherRes] = await Promise.all([
-        db.from('game_requests').select('id, game_name, request_count, purchase_status, status_date, purchased_at, is_planned, added_at, user_id').order('request_count', { ascending: false }),
+        db.from('game_requests').select('id, game_name, request_count, purchase_status, status_date, purchased_at, is_planned, added_at, actual_games, user_id').order('request_count', { ascending: false }),
         db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname, real_name'),
@@ -284,17 +284,63 @@
         return `<span class="admin-req-requester">${escH(nick(userId))}</span>`;
       }
 
-      function reqItem(id, name, count, table, done, userId, planned) {
-        const statusBtns = table === 'game_requests' ? `
-          <button class="admin-req-plan${planned?' is-planned':''}" type="button">${planned?'예정됨':'구매예정'}</button>
-          <button class="admin-req-done${done?' is-done':''}" type="button">${done?'완료됨':'구매완료'}</button>` : '';
-        return `<div class="admin-req-item${done?' is-done':planned?' is-planned':''}" data-id="${id}" data-table="${table}">
-          <span class="admin-req-name">${escH(name)}</span>
-          <span class="admin-req-meta">${count}명</span>
-          ${votersTag(id)}
-          ${statusBtns}
-          <button class="admin-req-del" type="button">삭제</button>
-        </div>`;
+      const STATUS_LABEL = { '구매예정':'구매 예정', '선주문완료':'선주문 완료', '배송중':'배송중', '추가됨':'추가됨' };
+      const STATUS_CLASS = { '구매예정':'req-status-planned', '선주문완료':'req-status-ordered', '배송중':'req-status-shipping', '추가됨':'req-status-added' };
+      const fmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
+
+      function gameReqItem(r) {
+        const done = !!(r.purchased_at || r.purchase_status === '추가됨' || r.added_at);
+        const planned = !!r.is_planned;
+        let statusBadge = '';
+        if (r.purchase_status) {
+          const lbl = STATUS_LABEL[r.purchase_status] || r.purchase_status;
+          const cls = STATUS_CLASS[r.purchase_status] || 'req-status-planned';
+          const dateEl = r.status_date ? ` · <span class="req-date-edit" data-action="edit-status-date" data-id="${r.id}" data-date="${r.status_date}">${fmtDate(r.status_date)}</span>` : '';
+          statusBadge = `<span class="req-status-badge ${cls}">${lbl}${dateEl}</span>`;
+        } else if (r.purchased_at) {
+          statusBadge = `<span class="req-status-badge req-status-done">구매 완료 · <span class="req-date-edit" data-action="edit-purchased-date" data-id="${r.id}" data-date="${r.purchased_at}">${fmtDate(r.purchased_at)}</span></span>`;
+        } else if (r.is_planned) {
+          statusBadge = `<span class="req-status-badge req-status-planned">구매 예정</span>`;
+        }
+        const statusPicker = `<span class="req-status-picker-wrap">
+          <button class="req-action-btn req-action-status req-status-picker-btn" type="button" data-id="${r.id}">상태 설정 ▾</button>
+          <div class="req-status-picker" hidden>
+            <button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매예정">구매 예정</button>
+            <button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="선주문완료">선주문 완료</button>
+            <button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="배송중">배송중</button>
+            <button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="추가됨">📦 추가됨</button>
+            <button type="button" class="req-status-option req-status-option--unset" data-action="unset-all" data-id="${r.id}">해제</button>
+          </div>
+        </span>`;
+        const voters = voteMap[r.id] || [];
+        const votersHtml = voters.length ? `<span class="req-voters-names">${voters.map(n => escH(n)).join(', ')}</span>` : '';
+        const actualList = Array.isArray(r.actual_games) ? r.actual_games : [];
+        const actualHtml = `<details class="req-actual-wrap" data-id="${r.id}" data-games="${escH(JSON.stringify(actualList))}">
+          <summary class="req-actual-toggle">실제 게임${actualList.length ? ` <span class="req-actual-count">${actualList.length}개</span>` : ''}</summary>
+          <div class="req-actual-body">
+            <div class="req-actual-tags">${actualList.map(g=>`<span class="req-actual-tag">${escH(g)}<button class="req-actual-remove" type="button" data-action="remove-actual-game" data-id="${r.id}" data-game="${escH(g)}">×</button></span>`).join('')}</div>
+            <div class="req-actual-input-wrap"><input type="text" class="req-actual-input" placeholder="초성 검색..." autocomplete="off" data-req-id="${r.id}"><ul class="req-actual-dropdown" hidden></ul></div>
+          </div>
+        </details>`;
+        return `<li class="req-list-item${done?' req-item-done':''}${planned&&!done?' req-item-planned':''}" data-id="${r.id}" data-table="game_requests" data-name="${escH(r.game_name)}" data-count="${r.request_count}">
+          <span class="req-card-name">${escH(r.game_name)}</span>
+          <span class="req-card-count"><span class="req-list-count">${r.request_count}명 희망</span></span>
+          ${votersHtml}
+          ${statusBadge ? `<span class="req-card-badges">${statusBadge}</span>` : ''}
+          <span class="req-card-actions">${statusPicker}<button class="req-action-btn admin-req-del" type="button" data-id="${r.id}" data-table="game_requests">삭제</button></span>
+          ${actualHtml}
+        </li>`;
+      }
+
+      function snackReqItem(r) {
+        const voters = voteMap[r.id] || [];
+        const votersHtml = voters.length ? `<span class="req-voters-names">${voters.map(n => escH(n)).join(', ')}</span>` : '';
+        return `<li class="req-list-item" data-id="${r.id}" data-table="snack_requests" data-name="${escH(r.item_name)}" data-count="${r.request_count}">
+          <span class="req-card-name">${escH(r.item_name)}</span>
+          <span class="req-card-count"><span class="req-list-count">${r.request_count}명 희망</span></span>
+          ${votersHtml}
+          <span class="req-card-actions"><button class="req-action-btn admin-req-del" type="button" data-id="${r.id}" data-table="snack_requests">삭제</button></span>
+        </li>`;
       }
 
       function suggestItem(id, content, date, userId, isDone, isPlanned) {
@@ -304,12 +350,12 @@
           ${requesterTag(userId)}
           <button class="admin-suggest-plan${isPlanned?' is-planned':''}" type="button">${isPlanned?'예정됨':'예정'}</button>
           <button class="admin-suggest-done${isDone?' is-done':''}" type="button">${isDone?'완료됨':'완료'}</button>
-          <button class="admin-req-del" type="button">삭제</button>
+          <button class="admin-req-del" type="button" data-id="${id}" data-table="suggestions">삭제</button>
         </div>`;
       }
 
-      const gameHtml = (gameRes.data||[]).map(r=>reqItem(r.id,r.game_name,r.request_count,'game_requests',!!(r.purchased_at || r.purchase_status==='추가됨' || r.added_at),r.user_id,r.is_planned)).join('');
-      const snackHtml = (snackRes.data||[]).map(r=>reqItem(r.id,r.item_name,r.request_count,'snack_requests',false,r.user_id)).join('');
+      const gameHtml = (gameRes.data||[]).map(r => gameReqItem(r)).join('');
+      const snackHtml = (snackRes.data||[]).map(r => snackReqItem(r)).join('');
       const suggestHtml = (suggestRes.data||[]).map(r=>suggestItem(r.id,r.content,r.created_at,r.user_id,r.is_done,r.is_planned)).join('');
 
 
@@ -462,11 +508,11 @@
             <div class="admin-bs-body">
               <div class="admin-section is-open">
                 <div class="admin-section-title">🎲 게임 구매 요청 <span class="admin-section-count">${gameCount}건</span><span class="admin-section-arrow">▾</span></div>
-                <div class="admin-section-body"><div class="admin-req-list">${gameHtml||'<div class="admin-empty">없음</div>'}</div></div>
+                <div class="admin-section-body">${gameHtml ? `<ul class="req-list">${gameHtml}</ul>` : '<div class="admin-empty">없음</div>'}</div>
               </div>
               <div class="admin-section">
                 <div class="admin-section-title">🍿 간식·음료 요청 <span class="admin-section-count">${snackCount}건</span><span class="admin-section-arrow">▾</span></div>
-                <div class="admin-section-body"><div class="admin-req-list">${snackHtml||'<div class="admin-empty">없음</div>'}</div></div>
+                <div class="admin-section-body">${snackHtml ? `<ul class="req-list">${snackHtml}</ul>` : '<div class="admin-empty">없음</div>'}</div>
               </div>
               <div class="admin-section">
                 <div class="admin-section-title">💬 개선 건의 <span class="admin-section-count">${suggestCount}건 미완료</span><span class="admin-section-arrow">▾</span></div>
@@ -514,30 +560,57 @@
         });
       });
 
+      // 삭제 버튼 (게임요청·간식·건의 공통)
       el.querySelectorAll('.admin-req-del').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const item = btn.closest('.admin-req-item');
+          const item = btn.closest('[data-table]');
           if (!confirm('삭제할까요?')) return;
-          await db.from(item.dataset.table).delete().eq('id', item.dataset.id);
-          item.remove();
+          const table = btn.dataset.table || item?.dataset.table;
+          const id = btn.dataset.id || item?.dataset.id;
+          await db.from(table).delete().eq('id', id);
+          item?.remove();
         });
       });
 
-      el.querySelectorAll('.admin-req-plan').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const item = btn.closest('.admin-req-item');
-          const isPlanned = btn.classList.contains('is-planned');
-          await db.from('game_requests').update(isPlanned
-            ? { is_planned: false }
-            : { is_planned: true, purchased_at: null, status: 'pending' }
-          ).eq('id', item.dataset.id);
-          btn.classList.toggle('is-planned', !isPlanned);
-          btn.textContent = isPlanned ? '구매예정' : '예정됨';
-          item.classList.toggle('is-planned', !isPlanned);
-          if (!isPlanned) item.classList.remove('is-done');
+      // 게임요청 상태 피커
+      el.querySelectorAll('.req-status-picker-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const picker = btn.nextElementSibling;
+          el.querySelectorAll('.req-status-picker').forEach(p => { if (p !== picker) p.hidden = true; });
+          picker.hidden = !picker.hidden;
         });
       });
+      el.querySelectorAll('.req-status-option').forEach(opt => {
+        opt.addEventListener('click', async e => {
+          e.stopPropagation();
+          const id = opt.dataset.id;
+          const li = opt.closest('li[data-id]');
+          const picker = opt.closest('.req-status-picker');
+          if (picker) picker.hidden = true;
+          const today = new Date().toISOString().slice(0, 10);
+          if (opt.dataset.action === 'unset-all') {
+            await db.from('game_requests').update({ purchase_status: null, status_date: null, purchased_at: null, is_planned: false }).eq('id', id);
+            if (li) { li.classList.remove('req-item-done', 'req-item-planned'); li.querySelector('.req-card-badges')?.remove(); }
+          } else if (opt.dataset.action === 'set-status') {
+            const status = opt.dataset.status;
+            const isDone = status === '추가됨';
+            const isPlanned = status === '구매예정';
+            await db.from('game_requests').update({ purchase_status: status, status_date: today, purchased_at: null, is_planned: isPlanned }).eq('id', id);
+            if (li) {
+              li.classList.toggle('req-item-done', isDone);
+              li.classList.toggle('req-item-planned', isPlanned && !isDone);
+              let badges = li.querySelector('.req-card-badges');
+              if (!badges) { badges = document.createElement('span'); badges.className = 'req-card-badges'; li.querySelector('.req-card-count').after(badges); }
+              const cls = STATUS_CLASS[status] || 'req-status-planned';
+              badges.innerHTML = `<span class="req-status-badge ${cls}">${STATUS_LABEL[status] || status} · ${fmtDate(today)}</span>`;
+            }
+          }
+        });
+      });
+      document.addEventListener('click', () => el.querySelectorAll('.req-status-picker').forEach(p => { p.hidden = true; }));
 
+      // 건의사항 상태 버튼
       el.querySelectorAll('.admin-suggest-plan').forEach(btn => {
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
@@ -548,7 +621,6 @@
           item.className = `admin-req-item${!isPlanned?' is-planned':''}`;
         });
       });
-
       el.querySelectorAll('.admin-suggest-done').forEach(btn => {
         btn.addEventListener('click', async () => {
           const item = btn.closest('.admin-req-item');
@@ -557,31 +629,59 @@
           btn.classList.toggle('is-done', !isDone);
           btn.textContent = isDone ? '완료' : '완료됨';
           item.className = `admin-req-item${!isDone?' is-done':''}`;
-          if (!isDone) {
-            const planBtn = item.querySelector('.admin-suggest-plan');
-            if (planBtn) { planBtn.classList.remove('is-planned'); planBtn.textContent = '예정'; }
-          }
+          if (!isDone) { const p = item.querySelector('.admin-suggest-plan'); if (p) { p.classList.remove('is-planned'); p.textContent = '예정'; } }
         });
       });
 
-      el.querySelectorAll('.admin-req-done').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const item = btn.closest('.admin-req-item');
-          const isDone = btn.classList.contains('is-done');
-          const today = new Date().toISOString().slice(0, 10);
-          await db.from('game_requests').update(isDone
-            ? { purchased_at: null, is_planned: false, status: 'pending' }
-            : { purchased_at: today, is_planned: false, status: 'done' }
-          ).eq('id', item.dataset.id);
-          btn.classList.toggle('is-done', !isDone);
-          btn.textContent = isDone ? '구매완료' : '완료됨';
-          item.classList.toggle('is-done', !isDone);
-          if (!isDone) {
-            item.classList.remove('is-planned');
-            const planBtn = item.querySelector('.admin-req-plan');
-            if (planBtn) { planBtn.classList.remove('is-planned'); planBtn.textContent = '구매예정'; }
-          }
+      // 실제 게임명 삭제
+      el.querySelectorAll('.req-actual-remove').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.stopPropagation();
+          const id = btn.dataset.id, game = btn.dataset.game;
+          const wrap = btn.closest('.req-actual-wrap');
+          let cur = []; try { cur = JSON.parse(wrap?.dataset.games || '[]'); } catch {}
+          cur = cur.filter(g => g !== game);
+          await db.from('game_requests').update({ actual_games: cur }).eq('id', id);
+          if (wrap) { wrap.dataset.games = JSON.stringify(cur); btn.closest('.req-actual-tag')?.remove(); const cnt = wrap.querySelector('.req-actual-count'); if (cnt) cnt.textContent = cur.length ? `${cur.length}개` : ''; }
         });
+      });
+
+      // 실제 게임명 추가 (초성 검색)
+      function _choMatch(q, t) { const tl = t.toLowerCase(), ql = q.toLowerCase(); const cho = s => [...s].map(c => { const n = c.charCodeAt(0); return n >= 0xAC00 ? 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'[Math.floor((n-0xAC00)/28/21)] : c; }).join(''); return tl.includes(ql) || cho(t).includes(ql); }
+      el.querySelectorAll('.req-actual-input').forEach(input => {
+        const dd = input.nextElementSibling;
+        const reqId = input.dataset.reqId;
+        input.addEventListener('input', () => {
+          const q = input.value.trim(); dd.innerHTML = '';
+          if (!q) { dd.hidden = true; return; }
+          const matches = (window.COTTAGE_GAMES || []).filter(g => _choMatch(q, g.display || '')).slice(0, 8);
+          if (!matches.length) { dd.hidden = true; return; }
+          matches.forEach(g => {
+            const li = document.createElement('li'); li.className = 'req-actual-option'; li.textContent = g.display;
+            li.addEventListener('mousedown', async e => {
+              e.preventDefault();
+              const wrap = input.closest('.req-actual-wrap');
+              let cur = []; try { cur = JSON.parse(wrap?.dataset.games || '[]'); } catch {}
+              if (!cur.includes(g.display)) {
+                cur.push(g.display);
+                await db.from('game_requests').update({ actual_games: cur }).eq('id', reqId);
+                if (wrap) {
+                  wrap.dataset.games = JSON.stringify(cur);
+                  const tagsEl = wrap.querySelector('.req-actual-tags');
+                  const newTag = document.createElement('span'); newTag.className = 'req-actual-tag';
+                  newTag.innerHTML = `${escH(g.display)}<button class="req-actual-remove" type="button" data-action="remove-actual-game" data-id="${reqId}" data-game="${escH(g.display)}">×</button>`;
+                  newTag.querySelector('.req-actual-remove').addEventListener('click', async ev => { ev.stopPropagation(); cur = cur.filter(x => x !== g.display); await db.from('game_requests').update({ actual_games: cur }).eq('id', reqId); wrap.dataset.games = JSON.stringify(cur); newTag.remove(); const cnt = wrap.querySelector('.req-actual-count'); if (cnt) cnt.textContent = cur.length ? `${cur.length}개` : ''; });
+                  tagsEl?.appendChild(newTag);
+                  const cnt = wrap.querySelector('.req-actual-count'); if (cnt) cnt.textContent = `${cur.length}개`; else { const sum = wrap.querySelector('.req-actual-toggle'); if (sum) { const s = document.createElement('span'); s.className = 'req-actual-count'; s.textContent = `${cur.length}개`; sum.appendChild(s); } }
+                }
+              }
+              input.value = ''; dd.hidden = true;
+            });
+            dd.appendChild(li);
+          });
+          dd.hidden = false;
+        });
+        input.addEventListener('blur', () => setTimeout(() => { dd.hidden = true; }, 150));
       });
 
       // 밴/밴해제 버튼 — event delegation으로 동적 생성된 카드도 처리
