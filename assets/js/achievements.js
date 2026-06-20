@@ -737,6 +737,16 @@
     </div>`;
   }
 
+  // 소급 업적 지급 — 카운트 기준은 충족했으나 트리거가 누락된 업적을 DB에 기록
+  async function _grantRetroAchievements(db, userId, earnedIds, COUNTS) {
+    const missed = ACH_DEFS.filter(d => !earnedIds.has(d.id) && (COUNTS[d.type] || 0) >= d.threshold);
+    if (!missed.length) return;
+    await Promise.all(missed.map(async def => {
+      const ok = await db.grantAchievement(userId, def.id).catch(() => false);
+      if (ok) earnedIds.add(def.id);
+    }));
+  }
+
   // 업적 전체 목록 섹션 HTML 빌드
   async function buildAchievementsSection(userId, nickname) {
     const db = window.CottageDB;
@@ -757,14 +767,7 @@
     const earnedIds = new Set(earned.map(a => a.id));
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
-    // 소급 업적 체크: 카운트 >= 임계값인데 미수여된 업적을 자동 부여 (balance 등 트리거 누락 케이스)
-    const _retroMissed = ACH_DEFS.filter(d => !earnedIds.has(d.id) && (COUNTS[d.type] || 0) >= d.threshold);
-    if (_retroMissed.length) {
-      await Promise.all(_retroMissed.map(async def => {
-        const ok = await db.grantAchievement(userId, def.id).catch(() => false);
-        if (ok) earnedIds.add(def.id);
-      }));
-    }
+    await _grantRetroAchievements(db, userId, earnedIds, COUNTS);
 
     const _ACH_TYPE_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
     const _ACH_DIVIDER_AFTER = new Set(['new_game', 'first_record']);
