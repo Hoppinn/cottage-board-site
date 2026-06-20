@@ -281,24 +281,25 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, charHtml, achHtml, voucherBalance, voucherProducts, voucherHistory, repData, likedGameIds, curiousGameIds, photoCount] = await Promise.all([
+  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGameIds, curiousGameIds] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
-    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null) || Promise.resolve('')).catch(() => ''),
-    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.fetchUserStats?.(String(user.id), user.nickname || null) || Promise.resolve(null)).catch(() => null),
     (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getRepAchievement?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
     (window.CottageDB?.getUserLikedGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getUserCuriousGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getUserPhotoCount?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
   ]);
-  // 칭호 섹션: stats.profile.rep_title_id + visit_count 확정 후 별도 await (SQL 미실행 시 rep_title_id=undefined → null 처리)
+  // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
   const _visitCount = stats?.profile?.visit_count || 0;
-  const _titleResult = await (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null) || Promise.resolve({ html: '', earnedIds: new Set() })).catch(() => ({ html: '', earnedIds: new Set() }));
+  const [charHtml, achHtml, _titleResult] = await Promise.all([
+    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null, userStats) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null, userStats) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null, userStats) || Promise.resolve({ html: '', earnedIds: new Set() })).catch(() => ({ html: '', earnedIds: new Set() })),
+  ]);
   const titleHtml = _titleResult?.html || '';
   const _earnedTitleIds = _titleResult?.earnedIds || new Set();
   // seen 처리는 알림 섹션을 펼칠 때로 이동 (아래 toggle 핸들러)
@@ -561,7 +562,7 @@ async function openProfilePanel() {
       ${stats.comments.length ? _openActivityList(commentListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>
+      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${userStats?.photoCount || 0}장</span><span class="profile-toggle-arrow">▴</span></button>
       ${_emptyList('사진 목록은 기록 페이지에서 확인할 수 있어요')}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
@@ -577,15 +578,15 @@ async function openProfilePanel() {
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
   const _tasteCardSummary = `❤️ 좋아요 ${likedGameIds.length}개\n👀 관심게임 ${curiousGameIds.length}개`;
-  const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${photoCount}장`;
+  const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
   // ── 메인 패널: 프로필 영역 + 4축 레이아웃 ──────────────────
-  const _repCharPath = repData?.id
-    ? (window.CottageAchievements?.getCharacterPath?.(repData.id) || null)
+  const _repCharPath = userStats?.repAch?.id
+    ? (window.CottageAchievements?.getCharacterPath?.(userStats.repAch.id) || null)
     : null;
-  const _repName = repData?.id
-    ? (window.CottageAchievements?.getCharacterName?.(repData.id) || null)
+  const _repName = userStats?.repAch?.id
+    ? (window.CottageAchievements?.getCharacterName?.(userStats.repAch.id) || null)
     : null;
   const _repImgHtml = `<div class="profile-panel-avatar-wrap">${
     _repCharPath
@@ -593,7 +594,7 @@ async function openProfilePanel() {
       : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`
   }<span class="profile-panel-avatar-edit">⚙</span></div>`;
   const _repLabel = _repName ? escH(_repName) : '대표 캐릭터 없음';
-  const _repBtnLabel = repData?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
+  const _repBtnLabel = userStats?.repAch?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
   const _validRepTitle = (_repTitleId && _earnedTitleIds.has(_repTitleId))
     ? (window.CottageAchievements?.getTitleById?.(_repTitleId) || null)

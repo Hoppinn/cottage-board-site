@@ -487,20 +487,12 @@
   }
 
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
-  async function buildTitleSection(userId, repTitleId, visitCount, nickname) {
+  async function buildTitleSection(userId, repTitleId, visitCount, nickname, preStats = null) {
     const db = window.CottageDB;
     if (!db) return { html: '', earnedIds: new Set() };
     try {
-      const [achievements, playCount, distinctCount, photoCount, ratingCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
-        db.getUserAchievements(userId),
-        db.getUserPlayCount(userId),
-        db.getUserDistinctGameCount(userId),
-        db.getUserPhotoCount(userId),
-        db.getUserRatingCount(userId),
-        nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
-        db.getUserFirstRecordCount(userId),
-        db.getUserUniqueDayCount(userId, nickname),
-      ]);
+      const s = preStats || await _fetchUserStats(db, userId, nickname);
+      const { achievements, playCount, distinctCount, photoCount, ratingCount, participationCount, firstRecordCount, uniqueDayCount } = s;
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
       const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
@@ -650,22 +642,12 @@
     return `/assets/images/characters/characters_basic/${isRare ? 'rare/' : ''}${character}.png`;
   }
 
-  async function buildCharacterSection(userId, nickname) {
+  async function buildCharacterSection(userId, nickname, preStats = null) {
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
-      db.getUserAchievements(userId),
-      db.getRepAchievement(userId),
-      db.getUserPlayCount(userId),
-      db.getUserDistinctGameCount(userId),
-      db.getUserPhotoCount(userId),
-      db.getUserRatingCount(userId),
-      db.getUserVisitCount(userId),
-      nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
-      db.getUserFirstRecordCount(userId),
-      db.getUserUniqueDayCount(userId, nickname),
-    ]);
+    const s = preStats || await _fetchUserStats(db, userId, nickname);
+    const { achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
@@ -737,6 +719,23 @@
     </div>`;
   }
 
+  // 패널 오픈 시 공유 DB 조회 — 세 섹션(캐릭터/업적/칭호)이 동일 데이터를 재사용
+  async function _fetchUserStats(db, userId, nickname) {
+    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
+      db.getUserAchievements(userId),
+      db.getRepAchievement(userId),
+      db.getUserPlayCount(userId),
+      db.getUserDistinctGameCount(userId),
+      db.getUserPhotoCount(userId),
+      db.getUserRatingCount(userId),
+      db.getUserVisitCount(userId),
+      nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
+      db.getUserFirstRecordCount(userId),
+      db.getUserUniqueDayCount(userId, nickname),
+    ]);
+    return { achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount };
+  }
+
   // 소급 업적 지급 — 카운트 기준은 충족했으나 트리거가 누락된 업적을 DB에 기록
   async function _grantRetroAchievements(db, userId, earnedIds, COUNTS) {
     const missed = ACH_DEFS.filter(d => !earnedIds.has(d.id) && (COUNTS[d.type] || 0) >= d.threshold);
@@ -748,21 +747,12 @@
   }
 
   // 업적 전체 목록 섹션 HTML 빌드
-  async function buildAchievementsSection(userId, nickname) {
+  async function buildAchievementsSection(userId, nickname, preStats = null) {
     const db = window.CottageDB;
     if (!db) return '';
 
-    const [earned, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
-      db.getUserAchievements(userId),
-      db.getUserPlayCount(userId),
-      db.getUserDistinctGameCount(userId),
-      db.getUserPhotoCount(userId),
-      db.getUserRatingCount(userId),
-      db.getUserVisitCount(userId),
-      nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
-      db.getUserFirstRecordCount(userId),
-      db.getUserUniqueDayCount(userId, nickname),
-    ]);
+    const s = preStats || await _fetchUserStats(db, userId, nickname);
+    const { achievements: earned, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
 
     const earnedIds = new Set(earned.map(a => a.id));
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
@@ -881,6 +871,7 @@
     getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
     getCharacterPath,
     getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
+    fetchUserStats: (userId, nickname) => _fetchUserStats(window.CottageDB, userId, nickname),
   };
 
   window.checkAchievements = checkAchievements;
