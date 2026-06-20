@@ -1,14 +1,16 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-20 (136차-2)
+최종 갱신: 2026-06-20 (136차-3)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**진행 중**: 전체 리팩토링 Phase 1 감사 완료 → Phase 2 (JS/CSS 감사) 대기 중
-- 감사 결과: `docs/REFACTOR_CHECKPOINT.md` (P0 이슈 2개 포함)
-- Phase 2 대상: play-records-utils.js → game-display-adapter.js → achievements.js → ... → style.css 순
+**Phase 2 JS/CSS 감사 완료** — 결과: `docs/REFACTOR_CHECKPOINT.md`
+- 총 발견: Green 6개 / Yellow 5개 / Red 9개
+- 즉시 수정 후보: ACH4, PU1, ACH8, GDA1, KA8, CSS3 (코드 변경 없거나 범위 명확)
+- 보류: SC2(대표캐릭터 이름), SC3(like삭제 의도), GR1(deprecated 코드), CSS1(.sheet-section 이중)
+- 주요 버그: SC1(LIKE 와일드카드), SC2(대표캐릭터 이름 미표시), ACH5(buildAchievementsSection 사이드이펙트)
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
@@ -16,10 +18,10 @@
 
 **다음 작업 후보**
 
-1. ~~**MD 7개 즉시 수정**~~ — **완료** (db-schema/js-api/ls-schema/DESIGN_RULES Green 9개)
-2. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
-3. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
-4. **Phase 2 JS 감사** — play-records-utils.js부터 순서대로
+1. **REFACTOR Green 처리** — ACH4/PU1/ACH8/GDA1/KA8/CSS3 (범위 좁고 빠름)
+2. **SC2 수정** — `getRepAchievement`에 name 필드 추가 (대표 캐릭터 이름 미표시 버그)
+3. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
+4. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
 5. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
