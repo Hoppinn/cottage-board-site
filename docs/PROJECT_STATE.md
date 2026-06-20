@@ -1,10 +1,14 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-20 (135차)
+최종 갱신: 2026-06-20 (136차)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
+
+**진행 중**: 전체 리팩토링 Phase 1 감사 완료 → Phase 2 (JS/CSS 감사) 대기 중
+- 감사 결과: `docs/REFACTOR_CHECKPOINT.md` (P0 이슈 2개 포함)
+- Phase 2 대상: play-records-utils.js → game-display-adapter.js → achievements.js → ... → style.css 순
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
@@ -12,11 +16,11 @@
 
 **다음 작업 후보**
 
-1. **docs/PROJECT_STRUCTURE.md 리팩토링** — MD 리팩토링 시리즈 4번째, 다음 세션 시작 과제
+1. **MD 7개 즉시 수정** — REFACTOR_CHECKPOINT.md Green 항목 9개 수정 (db-schema/js-api/ls-schema/DESIGN_RULES)
 2. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
 3. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
-4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
-5. **방문자 통계 데이터 복구** — 118차 bugfix로 __visitor__ 중복 제거 완료, 실제 데이터 값 검증 필요
+4. **Phase 2 JS 감사** — play-records-utils.js부터 순서대로
+5. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 
