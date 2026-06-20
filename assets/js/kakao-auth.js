@@ -252,6 +252,219 @@ if (typeof window !== 'undefined') {
   };
 }
 
+function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
+  const _charBody = subBody.querySelector('.profile-char-body');
+  if (_charBody) {
+    _charBody.querySelectorAll('.profile-char-card:not(.is-locked)').forEach(card => {
+      card.addEventListener('click', () => {
+        const achId = card.dataset.achId || '';
+        const actionRow = _charBody.querySelector('#profileRepActionRow');
+        const origRepId = actionRow?.dataset.origRepId || '';
+        _charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
+        if (achId !== origRepId) card.classList.add('is-selected');
+        if (actionRow) actionRow.style.display = achId !== origRepId ? 'flex' : 'none';
+      });
+    });
+    _charBody.querySelector('.profile-rep-change-btn')?.addEventListener('click', () => {
+      const actionRow = _charBody.querySelector('#profileRepActionRow');
+      const userId = actionRow?.dataset.userId || '';
+      const origRepId = actionRow?.dataset.origRepId || '';
+      const selectedCard = _charBody.querySelector('.profile-char-card.is-selected');
+      const achId = selectedCard?.dataset.achId || '';
+      if (achId && userId) window.CottageAchievements?.handleRepCardSelect(userId, achId, origRepId, _charBody);
+    });
+    _charBody.querySelector('.profile-rep-cancel-btn')?.addEventListener('click', () => {
+      const actionRow = _charBody.querySelector('#profileRepActionRow');
+      const origRepId = actionRow?.dataset.origRepId || '';
+      _charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
+      if (actionRow) actionRow.style.display = 'none';
+    });
+  }
+  const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
+  if (charToggleBtn) {
+    const charBody = subBody.querySelector('.profile-char-body');
+    const charPreview = subBody.querySelector('.profile-char-preview');
+    if (expandChar) {
+      charBody?.classList.remove('is-hidden');
+      charPreview?.classList.add('is-hidden');
+      charToggleBtn.textContent = '접기 ▴';
+      setTimeout(() => {
+        const sec = subBody.querySelector('.profile-char-section');
+        if (sec) subBody.scrollTop = sec.offsetTop;
+      }, 50);
+    }
+    charToggleBtn.addEventListener('click', () => {
+      const hidden = charBody.classList.toggle('is-hidden');
+      if (charPreview) charPreview.classList.toggle('is-hidden', !hidden);
+      charToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+    });
+    subBody.querySelectorAll('.profile-char-preview .profile-char-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const achId = card.dataset.achId;
+        if (!achId) return;
+        charBody?.classList.remove('is-hidden');
+        charPreview?.classList.add('is-hidden');
+        charToggleBtn.textContent = '접기 ▴';
+        charBody?.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.click();
+      });
+    });
+  }
+  const _titleBody = subBody.querySelector('.profile-title-body');
+  if (_titleBody) {
+    _titleBody.querySelectorAll('.profile-title-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const earned = card.dataset.earned === 'true';
+        if (!earned) return;
+        const titleId = card.dataset.titleId || '';
+        const actionRow = _titleBody.querySelector('#profileTitleActionRow');
+        const origRepId = actionRow?.dataset.origRepId || '';
+        _titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
+        if (titleId !== origRepId) card.classList.add('is-selected');
+        if (actionRow) actionRow.style.display = titleId !== origRepId ? 'flex' : 'none';
+      });
+    });
+    _titleBody.querySelector('.profile-title-change-btn')?.addEventListener('click', () => {
+      const actionRow = _titleBody.querySelector('#profileTitleActionRow');
+      const userId = actionRow?.dataset.userId || '';
+      const origRepId = actionRow?.dataset.origRepId || '';
+      const selectedCard = _titleBody.querySelector('.profile-title-card.is-selected');
+      if (selectedCard?.dataset.earned !== 'true') return;
+      const titleId = selectedCard?.dataset.titleId || '';
+      if (titleId && userId) window.CottageAchievements?.handleRepTitleSelect?.(userId, titleId, origRepId, _titleBody);
+    });
+    _titleBody.querySelector('.profile-title-cancel-btn')?.addEventListener('click', () => {
+      const actionRow = _titleBody.querySelector('#profileTitleActionRow');
+      const origRepId = actionRow?.dataset.origRepId || '';
+      _titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
+      if (origRepId) _titleBody.querySelector(`.profile-title-card[data-title-id="${origRepId}"]`)?.classList.add('is-rep');
+      if (actionRow) actionRow.style.display = 'none';
+    });
+  }
+  const titleToggleBtn = subBody.querySelector('.profile-title-toggle-btn');
+  if (titleToggleBtn) {
+    const titleBody = subBody.querySelector('.profile-title-body');
+    const titlePreview = subBody.querySelector('.profile-title-preview');
+    if (expandTitle) {
+      titleBody?.classList.remove('is-hidden');
+      titlePreview?.classList.add('is-hidden');
+      titleToggleBtn.textContent = '접기 ▴';
+      setTimeout(() => {
+        const sec = subBody.querySelector('.profile-title-section');
+        if (sec) subBody.scrollTop = sec.offsetTop;
+      }, 50);
+    }
+    titleToggleBtn.addEventListener('click', () => {
+      const hidden = titleBody.classList.toggle('is-hidden');
+      if (titlePreview) titlePreview.classList.toggle('is-hidden', !hidden);
+      titleToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+    });
+    subBody.querySelectorAll('.profile-title-preview .profile-title-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const titleId = card.dataset.titleId;
+        if (!titleId) return;
+        titleBody?.classList.remove('is-hidden');
+        titlePreview?.classList.add('is-hidden');
+        titleToggleBtn.textContent = '접기 ▴';
+        titleBody?.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.click();
+      });
+    });
+  }
+  const codexToggleBtn = subBody.querySelector('.profile-codex-toggle-btn');
+  if (codexToggleBtn) {
+    codexToggleBtn.addEventListener('click', () => {
+      const codexBody = subBody.querySelector('.profile-codex-body');
+      const hidden = codexBody.classList.toggle('is-hidden');
+      codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
+    });
+  }
+  const achToggleBtn = subBody.querySelector('.profile-ach-toggle-btn');
+  if (achToggleBtn) {
+    achToggleBtn.addEventListener('click', () => {
+      const list = subBody.querySelector('.profile-ach-list');
+      const hidden = list.classList.toggle('is-hidden');
+      achToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
+    });
+  }
+  subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.previousElementSibling;
+      const isHidden = wrap.classList.toggle('is-hidden');
+      btn.textContent = isHidden
+        ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
+        : '접기 ▴';
+    });
+  });
+  subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.closest('.profile-more-btn-wrap')?.previousElementSibling;
+      if (!wrap) return;
+      const isHidden = wrap.classList.toggle('is-hidden');
+      btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}건 더)` : '접기';
+    });
+  });
+}
+
+function _buildVoucherInner(bal, prods, hist, isDevMode) {
+  const fmtDt = iso => {
+    const d = new Date(iso);
+    return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  };
+  const VOUCHER_EMOJI = { '음료': '🥤', '생수': '💧', '곤약젤리': '🍮', '스니커즈': '🍫', '참크래커': '🍘', '예감': '🥨', '홈런볼': '⚾', '버터와플': '🧇', '카스타드': '🧁', '촉촉한초코칩': '🍪' };
+  const VOUCHER_DISPLAY_NAME = { '생수': '생수 2개', '곤약젤리': '곤약젤리 2개' };
+  const productHtml = prods.map(p => {
+    const dis = bal < p.cost ? ' disabled' : '';
+    const emoji = VOUCHER_EMOJI[p.name] || '';
+    const dispName = VOUCHER_DISPLAY_NAME[p.name] || p.name;
+    return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(dispName)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(dispName)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
+  }).join('');
+  const histHtml = hist.slice(0, 5).map((h, i, arr) => {
+    const isGrant = h.delta > 0;
+    const label = isGrant
+      ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
+      : escH(h.voucher_products?.name || '사용');
+    const balAfter = bal - arr.slice(0, i).reduce((s, e) => s + e.delta, 0);
+    return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span><span class="profile-voucher-hist-bal">→ ${balAfter}장</span></li>`;
+  }).join('');
+  const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
+  return `${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
+}
+
+function _buildGameListHtml(gameIds, emptyMsg) {
+  if (!gameIds.length) return `<p class="profile-gamelist-empty">${emptyMsg}</p>`;
+  const PREV_GAME = 3;
+  const allItems = gameIds.map(id => {
+    const g = window.gameData?.[id];
+    const name = g?.display || g?.titleKo || g?.titleEn || id;
+    const thumb = g?.images?.thumbnail || '';
+    return `<li class="profile-gamelist-item" data-game-key="${escH(id)}">
+        ${thumb ? `<img src="${escH(thumb)}" class="profile-gamelist-thumb" alt="">` : '<span class="profile-gamelist-thumb-empty"></span>'}
+        <span class="profile-gamelist-name">${escH(name)}</span>
+      </li>`;
+  });
+  const hasMore = allItems.length > PREV_GAME;
+  return `<ul class="profile-gamelist">${allItems.slice(0, PREV_GAME).join('')}${hasMore ? `<div class="profile-more-wrap is-hidden">${allItems.slice(PREV_GAME).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${allItems.length - PREV_GAME}" type="button">더 보기 (${allItems.length - PREV_GAME}개 더)</button></li>` : ''}</ul>`;
+}
+
+function _bindActivityTogglesAndMore(subBody) {
+  subBody.querySelectorAll('.profile-activity-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const list = btn.nextElementSibling;
+      const arrow = btn.querySelector('.profile-toggle-arrow');
+      const collapsed = list.classList.toggle('is-collapsed');
+      arrow.textContent = collapsed ? '▾' : '▴';
+    });
+  });
+  subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
+      const isHidden = wrap.classList.toggle('is-hidden');
+      btn.textContent = isHidden
+        ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
+        : '접기';
+    });
+  });
+}
+
 async function openProfilePanel() {
   const user = getKakaoUser();
   if (!user) return;
@@ -423,32 +636,7 @@ async function openProfilePanel() {
     : '';
   const _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${voucherCardHtml}<ul class="profile-notif-list">${_allNotifItems}${_notifMore}</ul>${_notifHelpHtml}`;
 
-  function _buildVoucherInner(bal, prods, hist) {
-    const fmtDt = iso => {
-      const d = new Date(iso);
-      return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
-    };
-    // 상품명 → 이모지 / 표시명 오버라이드 (DB 이름 변경 없이 표시명만 수정)
-    const VOUCHER_EMOJI = { '음료': '🥤', '생수': '💧', '곤약젤리': '🍮', '스니커즈': '🍫', '참크래커': '🍘', '예감': '🥨', '홈런볼': '⚾', '버터와플': '🧇', '카스타드': '🧁', '촉촉한초코칩': '🍪' };
-    const VOUCHER_DISPLAY_NAME = { '생수': '생수 2개', '곤약젤리': '곤약젤리 2개' };
-    const productHtml = prods.map(p => {
-      const dis = bal < p.cost ? ' disabled' : '';
-      const emoji = VOUCHER_EMOJI[p.name] || '';
-      const dispName = VOUCHER_DISPLAY_NAME[p.name] || p.name;
-      return `<li class="profile-voucher-product"><span class="profile-voucher-pname">${emoji} ${escH(dispName)}</span><span class="profile-voucher-pcost"> · ${p.cost}장</span><button class="profile-voucher-use-btn" data-product-id="${p.id}" data-product-name="${escH(dispName)}" data-cost="${p.cost}"${dis} type="button">사용하기</button></li>`;
-    }).join('');
-    const histHtml = hist.slice(0, 5).map((h, i, arr) => {
-      const isGrant = h.delta > 0;
-      const label = isGrant
-        ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
-        : escH(h.voucher_products?.name || '사용');
-      const balAfter = bal - arr.slice(0, i).reduce((s, e) => s + e.delta, 0);
-      return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span><span class="profile-voucher-hist-bal">→ ${balAfter}장</span></li>`;
-    }).join('');
-    const devBtnHtml = isDevMode ? `<button class="profile-voucher-dev-btn" type="button">🔧 테스트 교환권 지급 [DEV]</button>` : '';
-    return `${prods.length ? `<ul class="profile-voucher-product-list">${productHtml}</ul><p class="profile-voucher-note">냉장고에서 직접 꺼내주세요 🧊</p>` : ''}${histHtml ? `<ul class="profile-voucher-hist-list">${histHtml}</ul>` : ''}${devBtnHtml}`;
-  }
-  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory)}</div></div>`;
+  const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;
 
   const body = panel.querySelector('.profile-panel-body');
   const sessData = window._cottageSess?.get(String(user.id)) || {};
@@ -659,23 +847,7 @@ async function openProfilePanel() {
     </button>
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}`;
 
-  function _buildGameListHtml(gameIds, emptyMsg) {
-    if (!gameIds.length) return `<p class="profile-gamelist-empty">${emptyMsg}</p>`;
-    const PREV_GAME = 3;
-    const allItems = gameIds.map(id => {
-      const g = window.gameData?.[id];
-      const name = g?.display || g?.titleKo || g?.titleEn || id;
-      const thumb = g?.images?.thumbnail || '';
-      return `<li class="profile-gamelist-item" data-game-key="${escH(id)}">
-        ${thumb ? `<img src="${escH(thumb)}" class="profile-gamelist-thumb" alt="">` : '<span class="profile-gamelist-thumb-empty"></span>'}
-        <span class="profile-gamelist-name">${escH(name)}</span>
-      </li>`;
-    });
-    const hasMore = allItems.length > PREV_GAME;
-    return `<ul class="profile-gamelist">${allItems.slice(0, PREV_GAME).join('')}${hasMore ? `<div class="profile-more-wrap is-hidden">${allItems.slice(PREV_GAME).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${allItems.length - PREV_GAME}" type="button">더 보기 (${allItems.length - PREV_GAME}개 더)</button></li>` : ''}</ul>`;
-  }
-
-  // ── 서브시트 헬퍼 ─────────────────────────────────────────────
+  // ── 서브시트 헬퍼 ──────────────────────────────────────────────
   function _openSubSheet(title, contentHtml, afterRender) {
     document.getElementById('profileSubSheet')?.remove();
     const sub = document.createElement('div');
@@ -766,7 +938,7 @@ async function openProfilePanel() {
             window.CottageDB.getVoucherHistory(String(user.id), 5),
           ]);
           const inner = container.querySelector('#profileVoucherInner');
-          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(container); }
+          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh, isDevMode); _bindVoucher(container); }
         } else {
           btn.disabled = false;
           alert(result?.reason === 'insufficient' ? '보유 교환권이 부족합니다.' : '사용에 실패했습니다.');
@@ -785,7 +957,7 @@ async function openProfilePanel() {
             window.CottageDB.getVoucherHistory(String(user.id), 5),
           ]);
           const inner = container.querySelector('#profileVoucherInner');
-          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh); _bindVoucher(container); }
+          if (inner) { inner.innerHTML = _buildVoucherInner(nb, np, nh, isDevMode); _bindVoucher(container); }
         } else {
           devBtn.disabled = false;
           console.error('[DEV] grantDevVoucher 실패 — DB CHECK 제약 또는 네트워크 오류. voucher_log.reason에 dev_test 허용 여부 확인.');
@@ -793,164 +965,6 @@ async function openProfilePanel() {
         }
       });
     }
-  }
-
-  // ── 성장 보드 afterRender (expandChar: 캐릭터 펼침, expandTitle: 칭호 펼침) ──
-  function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
-    const _charBody = subBody.querySelector('.profile-char-body');
-    if (_charBody) {
-      _charBody.querySelectorAll('.profile-char-card:not(.is-locked)').forEach(card => {
-        card.addEventListener('click', () => {
-          const achId = card.dataset.achId || '';
-          const actionRow = _charBody.querySelector('#profileRepActionRow');
-          const origRepId = actionRow?.dataset.origRepId || '';
-          _charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
-          if (achId !== origRepId) card.classList.add('is-selected');
-          if (actionRow) actionRow.style.display = achId !== origRepId ? 'flex' : 'none';
-        });
-      });
-      _charBody.querySelector('.profile-rep-change-btn')?.addEventListener('click', () => {
-        const actionRow = _charBody.querySelector('#profileRepActionRow');
-        const userId = actionRow?.dataset.userId || '';
-        const origRepId = actionRow?.dataset.origRepId || '';
-        const selectedCard = _charBody.querySelector('.profile-char-card.is-selected');
-        const achId = selectedCard?.dataset.achId || '';
-        if (achId && userId) window.CottageAchievements?.handleRepCardSelect(userId, achId, origRepId, _charBody);
-      });
-      _charBody.querySelector('.profile-rep-cancel-btn')?.addEventListener('click', () => {
-        const actionRow = _charBody.querySelector('#profileRepActionRow');
-        const origRepId = actionRow?.dataset.origRepId || '';
-        _charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
-        if (actionRow) actionRow.style.display = 'none';
-      });
-    }
-    const charToggleBtn = subBody.querySelector('.profile-char-toggle-btn');
-    if (charToggleBtn) {
-      const charBody = subBody.querySelector('.profile-char-body');
-      const charPreview = subBody.querySelector('.profile-char-preview');
-      if (expandChar) {
-        charBody?.classList.remove('is-hidden');
-        charPreview?.classList.add('is-hidden');
-        charToggleBtn.textContent = '접기 ▴';
-        setTimeout(() => {
-          const sec = subBody.querySelector('.profile-char-section');
-          if (sec) subBody.scrollTop = sec.offsetTop;
-        }, 50);
-      }
-      charToggleBtn.addEventListener('click', () => {
-        const hidden = charBody.classList.toggle('is-hidden');
-        if (charPreview) charPreview.classList.toggle('is-hidden', !hidden);
-        charToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
-      });
-      // 약식 카드 클릭 → 전체보기 전환 후 해당 카드 선택
-      subBody.querySelectorAll('.profile-char-preview .profile-char-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const achId = card.dataset.achId;
-          if (!achId) return;
-          charBody?.classList.remove('is-hidden');
-          charPreview?.classList.add('is-hidden');
-          charToggleBtn.textContent = '접기 ▴';
-          charBody?.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.click();
-        });
-      });
-    }
-    // ── 칭호 섹션 ──
-    const _titleBody = subBody.querySelector('.profile-title-body');
-    if (_titleBody) {
-      _titleBody.querySelectorAll('.profile-title-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const earned = card.dataset.earned === 'true';
-          if (!earned) return; // 미획득 카드: 클릭 허용이지만 선택/저장 없음
-          const titleId = card.dataset.titleId || '';
-          const actionRow = _titleBody.querySelector('#profileTitleActionRow');
-          const origRepId = actionRow?.dataset.origRepId || '';
-          _titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
-          if (titleId !== origRepId) card.classList.add('is-selected');
-          if (actionRow) actionRow.style.display = titleId !== origRepId ? 'flex' : 'none';
-        });
-      });
-      _titleBody.querySelector('.profile-title-change-btn')?.addEventListener('click', () => {
-        const actionRow = _titleBody.querySelector('#profileTitleActionRow');
-        const userId = actionRow?.dataset.userId || '';
-        const origRepId = actionRow?.dataset.origRepId || '';
-        const selectedCard = _titleBody.querySelector('.profile-title-card.is-selected');
-        // earned 방어: is-selected는 earned 카드에만 설정되므로 data-earned 추가 확인
-        if (selectedCard?.dataset.earned !== 'true') return;
-        const titleId = selectedCard?.dataset.titleId || '';
-        if (titleId && userId) window.CottageAchievements?.handleRepTitleSelect?.(userId, titleId, origRepId, _titleBody);
-      });
-      _titleBody.querySelector('.profile-title-cancel-btn')?.addEventListener('click', () => {
-        const actionRow = _titleBody.querySelector('#profileTitleActionRow');
-        const origRepId = actionRow?.dataset.origRepId || '';
-        _titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
-        if (origRepId) _titleBody.querySelector(`.profile-title-card[data-title-id="${origRepId}"]`)?.classList.add('is-rep');
-        if (actionRow) actionRow.style.display = 'none';
-      });
-    }
-    const titleToggleBtn = subBody.querySelector('.profile-title-toggle-btn');
-    if (titleToggleBtn) {
-      const titleBody = subBody.querySelector('.profile-title-body');
-      const titlePreview = subBody.querySelector('.profile-title-preview');
-      if (expandTitle) {
-        titleBody?.classList.remove('is-hidden');
-        titlePreview?.classList.add('is-hidden');
-        titleToggleBtn.textContent = '접기 ▴';
-        setTimeout(() => {
-          const sec = subBody.querySelector('.profile-title-section');
-          if (sec) subBody.scrollTop = sec.offsetTop;
-        }, 50);
-      }
-      titleToggleBtn.addEventListener('click', () => {
-        const hidden = titleBody.classList.toggle('is-hidden');
-        if (titlePreview) titlePreview.classList.toggle('is-hidden', !hidden);
-        titleToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
-      });
-      // 약식 칭호 카드 클릭 → 전체보기 전환 후 해당 카드 선택
-      subBody.querySelectorAll('.profile-title-preview .profile-title-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const titleId = card.dataset.titleId;
-          if (!titleId) return;
-          titleBody?.classList.remove('is-hidden');
-          titlePreview?.classList.add('is-hidden');
-          titleToggleBtn.textContent = '접기 ▴';
-          titleBody?.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.click();
-        });
-      });
-    }
-
-    const codexToggleBtn = subBody.querySelector('.profile-codex-toggle-btn');
-    if (codexToggleBtn) {
-      codexToggleBtn.addEventListener('click', () => {
-        const codexBody = subBody.querySelector('.profile-codex-body');
-        const hidden = codexBody.classList.toggle('is-hidden');
-        codexToggleBtn.textContent = hidden ? '전체 보기 ▾' : '접기 ▴';
-      });
-    }
-    const achToggleBtn = subBody.querySelector('.profile-ach-toggle-btn');
-    if (achToggleBtn) {
-      achToggleBtn.addEventListener('click', () => {
-        const list = subBody.querySelector('.profile-ach-list');
-        const hidden = list.classList.toggle('is-hidden');
-        achToggleBtn.textContent = hidden ? '전체보기 ▾' : '접기 ▴';
-      });
-    }
-    subBody.querySelectorAll('.profile-codex-more-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const wrap = btn.previousElementSibling;
-        const isHidden = wrap.classList.toggle('is-hidden');
-        btn.textContent = isHidden
-          ? `전체 보기 (${wrap.querySelectorAll('li').length}개 더) ▾`
-          : '접기 ▴';
-      });
-    });
-    subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const wrap = btn.closest('.profile-more-btn-wrap')?.previousElementSibling;
-        if (!wrap) return;
-        const isHidden = wrap.classList.toggle('is-hidden');
-        btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}건 더)` : '접기';
-      });
-    });
   }
 
   // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
@@ -1030,23 +1044,7 @@ async function openProfilePanel() {
       } else if (type === 'records') {
         window.CottageDB?.trackPageView('my-board-records');
         _openSubSheet('기록 보드', _recordInnerHtml, subBody => {
-          subBody.querySelectorAll('.profile-activity-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const list = btn.nextElementSibling;
-              const arrow = btn.querySelector('.profile-toggle-arrow');
-              const collapsed = list.classList.toggle('is-collapsed');
-              arrow.textContent = collapsed ? '▾' : '▴';
-            });
-          });
-          subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
-              const isHidden = wrap.classList.toggle('is-hidden');
-              btn.textContent = isHidden
-                ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
-                : '접기';
-            });
-          });
+          _bindActivityTogglesAndMore(subBody);
           subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
             const gameId = li.dataset.gameId;
             if (!gameId) return;
@@ -1073,23 +1071,7 @@ async function openProfilePanel() {
             const collapsed = list.classList.toggle('is-collapsed');
             arrow.textContent = collapsed ? '▾' : '▴';
           });
-          subBody.querySelectorAll('.profile-activity-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const list = btn.nextElementSibling;
-              const arrow = btn.querySelector('.profile-toggle-arrow');
-              const collapsed = list.classList.toggle('is-collapsed');
-              arrow.textContent = collapsed ? '▾' : '▴';
-            });
-          });
-          subBody.querySelectorAll('.profile-more-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const wrap = btn.closest('.profile-activity-list').querySelector('.profile-more-wrap');
-              const isHidden = wrap.classList.toggle('is-hidden');
-              btn.textContent = isHidden
-                ? `더 보기 (${wrap.querySelectorAll('li').length}건 더)`
-                : '접기';
-            });
-          });
+          _bindActivityTogglesAndMore(subBody);
         }); // end usage afterRender
       }
     });
