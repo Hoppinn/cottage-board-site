@@ -824,6 +824,10 @@ async function openProfilePanel() {
         charBody?.classList.remove('is-hidden');
         charPreview?.classList.add('is-hidden');
         charToggleBtn.textContent = '접기 ▴';
+        setTimeout(() => {
+          const sec = subBody.querySelector('.profile-char-section');
+          if (sec) subBody.scrollTop = sec.offsetTop;
+        }, 50);
       }
       charToggleBtn.addEventListener('click', () => {
         const hidden = charBody.classList.toggle('is-hidden');
@@ -883,6 +887,10 @@ async function openProfilePanel() {
         titleBody?.classList.remove('is-hidden');
         titlePreview?.classList.add('is-hidden');
         titleToggleBtn.textContent = '접기 ▴';
+        setTimeout(() => {
+          const sec = subBody.querySelector('.profile-title-section');
+          if (sec) subBody.scrollTop = sec.offsetTop;
+        }, 50);
       }
       titleToggleBtn.addEventListener('click', () => {
         const hidden = titleBody.classList.toggle('is-hidden');
