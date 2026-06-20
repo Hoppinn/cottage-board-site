@@ -234,6 +234,7 @@
       const del = document.createElement('button');
       del.type = 'button'; del.className = 'pr-photo-item-del'; del.textContent = '×';
       del.addEventListener('click', () => {
+        URL.revokeObjectURL(img.src);
         const i = parseInt(item.dataset.idx);
         files.splice(i, 1); item.remove();
         grid.querySelectorAll('.pr-photo-item').forEach((el, j) => el.dataset.idx = j);
