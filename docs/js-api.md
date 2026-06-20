@@ -55,9 +55,8 @@
 | `getProfilePhoto(userId)` | profiles.photo_url 단일 조회 |
 | `getProfileSnapshot(userId)` | profiles.photo_url + nickname 단일 조회 (다기기 동기화용) |
 | `getUserAchievements(userId)` | 유저가 획득한 업적(캐릭터) 목록 |
-| `grantAchievement(userId, achId, points)` | 업적 지급 + points_log 기록. 중복이면 false 반환 |
+| `grantAchievement(userId, achId)` | 업적 지급. 중복이면 false 반환 |
 | `setRepAchievement(userId, achId)` | 대표 캐릭터 설정 (profiles.rep_achievement_id) |
-| `getTotalPoints(userId)` | points_log 합산 포인트 |
 | `getUserPlayCount(userId)` | 플레이 기록 건수 |
 | `getUserDistinctGameCount(userId)` | 플레이한 게임 종류 수 (distinct game_id) |
 | `getUserPhotoCount(userId)` | 첨부 사진 URL 개수 합산 |

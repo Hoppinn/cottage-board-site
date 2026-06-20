@@ -263,47 +263,6 @@
   const TYPE_LABELS = { record: '플레이기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '홈페이지 탐방', first_record: '코티지 최초 기록', play: '플레이', balance: '함께한 날' };
   const SHORT_TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '홈페이지', first_record: '최초 기록', play: '플레이', balance: '함께한 날' };
 
-  const POINTS = {
-    // record
-    record_1: 300, record_3: 100, record_5: 200, record_8: 300,
-    record_10: 500, record_15: 300, record_20: 500, record_30: 500, record_40: 500,
-    record_50: 1000, record_75: 1000, record_100: 2000, record_125: 1000,
-    record_150: 1500, record_200: 5000, record_250: 2000, record_300: 3000,
-    record_400: 3000, record_500: 10000,
-    // new_game
-    new_game_1: 200, new_game_3: 100, new_game_5: 300, new_game_7: 200,
-    new_game_10: 300, new_game_15: 300, new_game_20: 1000, new_game_30: 500,
-    new_game_40: 500, new_game_50: 2000, new_game_75: 1000, new_game_100: 3000,
-    new_game_125: 1000, new_game_150: 2500, new_game_200: 3000, new_game_250: 2000,
-    new_game_300: 5000,
-    // photo
-    photo_1: 300, photo_2: 100, photo_3: 300, photo_5: 200,
-    photo_10: 300, photo_20: 500, photo_30: 500, photo_50: 500,
-    photo_75: 1000, photo_100: 1000, photo_150: 1000, photo_200: 3000,
-    photo_300: 3000, photo_500: 8000,
-    // review
-    review_1: 300, review_2: 100, review_3: 100, review_5: 300,
-    review_8: 300, review_10: 500, review_15: 500, review_20: 500,
-    review_25: 500, review_40: 500, review_50: 1000, review_75: 1000,
-    review_100: 2000, review_150: 2500, review_200: 2000, review_300: 5000,
-    review_500: 10000,
-    // visit
-    visit_3: 200, visit_5: 200, visit_10: 300, visit_15: 300,
-    visit_20: 300, visit_25: 300, visit_30: 500, visit_40: 500,
-    visit_50: 1000, visit_75: 1000, visit_100: 2000, visit_150: 1000,
-    visit_200: 3000, visit_300: 5000, visit_400: 3000, visit_500: 10000,
-    // first_record
-    first_record_1: 300, first_record_3: 500, first_record_5: 800,
-    first_record_10: 1500, first_record_20: 3000, first_record_50: 8000,
-    // play
-    play_5: 200, play_10: 300, play_20: 500, play_30: 500,
-    play_50: 1000, play_100: 2000, play_150: 1500,
-    play_200: 3000, play_300: 5000, play_400: 5000, play_500: 10000,
-    // balance (정의만, 지급 미구현)
-    balance_10: 500, balance_30: 1000, balance_50: 2000,
-    balance_100: 3000, balance_200: 5000, balance_300: 10000,
-  };
-
   // 업적 체크 진입점 — supabase-client.js에서 호출
   async function checkAchievements(category, userId, opts = {}) {
     if (!userId || !window.CottageDB) return;
@@ -463,9 +422,9 @@
 
     for (const { id } of achieved) {
       const def = ACH_DEFS.find(d => d.id === id);
-      const granted = await db.grantAchievement(userId, id, POINTS[id] || 0);
+      const granted = await db.grantAchievement(userId, id);
       if (granted) {
-        showAchievementToast(def?.name || id, POINTS[id] || 0);
+        showAchievementToast(def?.name || id);
         if (id === 'record_1') {
           const currentRep = await db.getRepAchievement?.(userId).catch(() => null);
           if (!currentRep?.id) {
@@ -483,7 +442,7 @@
   }
 
   // 달성 토스트
-  function showAchievementToast(name, points) {
+  function showAchievementToast(name) {
     const existing = document.getElementById('achievementToast');
     if (existing) existing.remove();
 
@@ -802,7 +761,7 @@
     const _retroMissed = ACH_DEFS.filter(d => !earnedIds.has(d.id) && (COUNTS[d.type] || 0) >= d.threshold);
     if (_retroMissed.length) {
       await Promise.all(_retroMissed.map(async def => {
-        const ok = await db.grantAchievement(userId, def.id, 0).catch(() => false);
+        const ok = await db.grantAchievement(userId, def.id).catch(() => false);
         if (ok) earnedIds.add(def.id);
       }));
     }
