@@ -180,6 +180,7 @@
     }
     function addTag(val) {
       val = val.trim(); if (!val) return;
+      if ([...chips.querySelectorAll('.tag-chip')].some(c => c.dataset.val.trim().toLowerCase() === val.toLowerCase())) return;
       const chip = document.createElement('span');
       chip.className = 'tag-chip'; chip.dataset.val = val;
       chip.innerHTML = _escH(val) + '<button type="button" class="tag-chip-del">×</button>';
