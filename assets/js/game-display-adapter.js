@@ -1,5 +1,5 @@
 /**
- * game-view-utils.js
+ * game-display-adapter.js
  *
  * 역할:
  * - nested gameData 구조를 화면 출력용 데이터로 변환한다.

@@ -471,7 +471,7 @@
           if (!currentRep?.id) {
             await db.setRepAchievement?.(userId, 'record_1').catch(() => {});
             const menuImg = document.getElementById('kakaoProfileImg');
-            if (menuImg) menuImg.src = '/assets/images/characters/characters_basic/squirrel_lv1.png';
+            if (menuImg) menuImg.src = _charImgPath('squirrel_lv1');
           }
         }
         // record_1은 grantFirstPlayVoucher 경로 사용. 나머지 voucher 업적은 여기서 지급.

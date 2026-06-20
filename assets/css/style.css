@@ -5,7 +5,7 @@
    주석 포함 재정리본
 
    기준
-   - 현재 owned-games.html / script.js 구조 기준
+   - 전 페이지 공통 스타일 (index / owned-games / game-reviews / profile / admin 등)
    - 정렬·필터 compact toolbar 구조 유지
    - 추천게임 / 전체게임 / 검색 / 상세시트 동작 선택자 유지
    - 기존 임시 복구 코드는 정식 섹션에 반영

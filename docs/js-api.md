@@ -124,7 +124,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `parsePhotoUrls(raw)` | photo_url 문자열 → URL 배열 | game-reviews.js, club-history.html |
 | `buildPhotoHtml(urls)` | 사진 썸네일 HTML 생성 | 동일 |
 | `openLightbox(urls, idx)` | 전체화면 라이트박스 | 동일 |
-| `attachAc(input, items, onSelect)` | 자동완성 드롭다운 연결 | game-reviews.js |
+| `attachAc(input, getSuggestions, onSelect, listRef)` | 자동완성 드롭다운 연결. getSuggestions=후보 배열 반환 함수, listRef=드롭다운 삽입 기준 DOM(없으면 input을 새 div로 감쌈) | game-reviews.js |
 | `initTagInput(wrap, hidden, initialValue, onAdd)` | 태그칩 입력 컴포넌트. wrap=컨테이너, hidden=값 동기화할 hidden input, initialValue=초기값 배열, onAdd=태그 추가 콜백 | game-reviews.js |
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
 | `toInitials(name)` | 이름 이니셜 변환 | game-reviews.js |
@@ -171,7 +171,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.toInitials` | play-records-utils.js | game-reviews.js |
 | `window.hangulMatch` | play-records-utils.js | game-reviews.js |
 | `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
-| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection, buildCharacterSection, buildAchievementsSection, handleRepCardSelect, buildTitleSection (→ `{html,earnedIds}`), handleRepTitleSelect, getTitleById(id) |
+| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection, buildCharacterSection, buildAchievementsSection, handleRepCardSelect, buildTitleSection (→ `{html,earnedIds}`), handleRepTitleSelect, getTitleById(id), getCharacterPath(achId) |
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, script.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
 | `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |

@@ -1050,8 +1050,8 @@ async function openProfilePanel() {
             li.addEventListener('click', () => {
               const key = _getGameKeyById(gameId);
               if (!key) return;
-              if (typeof ensureGameSheet === 'function') ensureGameSheet();
-              if (typeof openGameRecordSheet === 'function') openGameRecordSheet(key);
+              window.ensureGameSheet?.();
+              window.openGameRecordSheet?.(key);
             });
           });
         });
