@@ -1170,9 +1170,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
-          <a class="sheet-loc-btn" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">
-            📍 ${shelfLabel}
-          </a>
+          <a class="sheet-loc-btn" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📍 ${shelfLabel}</a>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
             onclick="return confirm('유튜브로 이동할까요?')"

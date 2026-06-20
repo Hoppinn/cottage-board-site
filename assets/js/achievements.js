@@ -712,8 +712,10 @@
     const earnedCount = earnedIds.size;
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
-    // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시
-    const gridCardsAll = CHAR_DEFS.map(def => {
+    // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시 (balance(여우)부터 시작하는 축 순서로 정렬)
+    const _CHAR_SORT_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
+    const _sortedCharDefs = [...CHAR_DEFS].sort((a, b) => _CHAR_SORT_ORDER.indexOf(a.type) - _CHAR_SORT_ORDER.indexOf(b.type));
+    const gridCardsAll = _sortedCharDefs.map(def => {
       const done = earnedIds.has(def.id);
       const isRep = repAch?.id === def.id;
       const imgSrc = _charImgPath(def.rewards.character);
@@ -795,6 +797,15 @@
 
     const earnedIds = new Set(earned.map(a => a.id));
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+
+    // 소급 업적 체크: 카운트 >= 임계값인데 미수여된 업적을 자동 부여 (balance 등 트리거 누락 케이스)
+    const _retroMissed = ACH_DEFS.filter(d => !earnedIds.has(d.id) && (COUNTS[d.type] || 0) >= d.threshold);
+    if (_retroMissed.length) {
+      await Promise.all(_retroMissed.map(async def => {
+        const ok = await db.grantAchievement(userId, def.id, 0).catch(() => false);
+        if (ok) earnedIds.add(def.id);
+      }));
+    }
 
     const _ACH_TYPE_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
     const _ACH_DIVIDER_AFTER = new Set(['new_game', 'first_record']);
