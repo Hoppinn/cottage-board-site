@@ -277,4 +277,5 @@
 |------|------|------|
 | Green | ACH4, PU1, ACH8, GDA1, KA8, CSS3 | ✅ 완료 |
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
-| Red | SC1, PU2, GDA2, ACH5, ACH3, KA1, SC4/SC5, CSS2 | ⏳ 미처리 |
+| Red | ACH3, KA1, CSS2 | ✅ 완료 (137차) |
+| Red | SC1, PU2, GDA2, ACH5, SC4/SC5 | ⏳ 미처리 |

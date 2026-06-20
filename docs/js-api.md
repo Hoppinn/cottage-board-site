@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-06-20 (136차: initTagInput 시그니처, COTTAGE_GAMES 필드, getMyNotifications new_game, openProfilePanel 추가)
+최종 갱신: 2026-06-21 (137차: findNextAchievement 추가)
 
 ---
 
