@@ -19,7 +19,8 @@
 
 **다음 작업 후보**
 
-1. **REFACTOR Green 처리** — ACH4/PU1/ACH8/GDA1/KA8/CSS3 (범위 좁고 빠름)
+1. **성장도 뱃지 다음 업적 표시** — `🌱 코티지 성장도 13%` 아래에 `🐿️ 다람쥐 마스터까지 2개 남음` 형식으로 가장 임박한 미획득 업적 표시. `achievements.js`에 `findNextAchievement(userStats)` 추가 필요 (ACH_DEFS + COUNTS 비교해 threshold 미달 중 가장 적게 남은 항목 반환).
+2. **REFACTOR Green 처리** — ACH4/PU1/ACH8/GDA1/KA8/CSS3 (범위 좁고 빠름)
 2. **SC2 수정** — `getRepAchievement`에 name 필드 추가 (대표 캐릭터 이름 미표시 버그)
 3. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
 4. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
