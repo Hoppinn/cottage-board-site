@@ -85909,9 +85909,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송중",
-      "shelfLabel": "배송중",
-      "shelfFullLabel": "배송중",
+      "shelfGroupId": "murder_mystery",
+      "shelfLabel": "머더미스터리",
+      "shelfFullLabel": "머더미스터리",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
@@ -86053,9 +86053,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송중",
-      "shelfLabel": "배송중",
-      "shelfFullLabel": "배송중",
+      "shelfGroupId": "murder_mystery",
+      "shelfLabel": "머더미스터리",
+      "shelfFullLabel": "머더미스터리",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
