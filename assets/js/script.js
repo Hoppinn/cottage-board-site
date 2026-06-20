@@ -1411,7 +1411,7 @@ async function initSheetCommentsPreview(gameKey) {
   if (labelEl) labelEl.textContent = total > 0 ? `게임평 ${total}건` : '게임평';
 
   if (!total) {
-    el.innerHTML = '<span class="sheet-comments-empty">한줄평이 없습니다</span>';
+    el.innerHTML = '<span class="sheet-comments-empty">게임평이 없습니다</span>';
     return;
   }
 
@@ -1808,7 +1808,7 @@ async function initSheetComments(gameKey) {
     if (countEl) countEl.textContent = "게임평";
     if (toggleBtn) toggleBtn.style.display = "none";
     listEl.classList.remove('is-collapsed', 'has-comments');
-    listEl.innerHTML = '<span class="sheet-comments-empty">한줄평이 없습니다</span>';
+    listEl.innerHTML = '<span class="sheet-comments-empty">게임평이 없습니다</span>';
     return;
   }
   if (countEl) countEl.textContent = `게임평 ${total}개`;

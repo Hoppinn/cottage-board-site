@@ -252,6 +252,15 @@ if (typeof window !== 'undefined') {
   };
 }
 
+// 패널/서브시트 trackPageView 중복 방지 — 하루 1회 per 페이지명
+function _trackPvOnce(pageName) {
+  const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+  const key = `cottage_pv_${kstDate}_${pageName}`;
+  if (localStorage.getItem(key)) return;
+  localStorage.setItem(key, '1');
+  window.CottageDB?.trackPageView(pageName);
+}
+
 function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
   const _charBody = subBody.querySelector('.profile-char-body');
   if (_charBody) {
@@ -488,7 +497,7 @@ async function openProfilePanel() {
     </div>
   </div>`;
   document.body.appendChild(panel);
-  window.CottageDB?.trackPageView('my-board');
+  _trackPvOnce('my-board');
   panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); });
   panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); } });
 
@@ -976,7 +985,7 @@ async function openProfilePanel() {
       const type = card.dataset.subsheet;
 
       if (type === 'notif') {
-        window.CottageDB?.trackPageView('my-board-notif');
+        _trackPvOnce('my-board-notif');
         const _notifTitle = '최근 소식';
         _openSubSheet(_notifTitle, _notifInnerHtml, subBody => {
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
@@ -996,11 +1005,11 @@ async function openProfilePanel() {
         });
 
       } else if (type === 'growth') {
-        window.CottageDB?.trackPageView('my-board-growth');
+        _trackPvOnce('my-board-growth');
         _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody));
 
       } else if (type === 'voucher') {
-        window.CottageDB?.trackPageView('my-board-voucher');
+        _trackPvOnce('my-board-voucher');
         _openSubSheet('음료교환권', _voucherInnerHtml, subBody => {
           // 기본 펼침
           subBody.querySelector('#profileVoucherInner')?.classList.remove('is-collapsed');
@@ -1016,7 +1025,7 @@ async function openProfilePanel() {
         }); // end voucher afterRender
 
       } else if (type === 'taste') {
-        window.CottageDB?.trackPageView('my-board-taste');
+        _trackPvOnce('my-board-taste');
         _openSubSheet('취향 보드', _tasteInnerHtml, subBody => {
           subBody.querySelectorAll('.profile-gamelist-section-toggle').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1045,7 +1054,7 @@ async function openProfilePanel() {
         });
 
       } else if (type === 'records') {
-        window.CottageDB?.trackPageView('my-board-records');
+        _trackPvOnce('my-board-records');
         _openSubSheet('기록 보드', _recordInnerHtml, subBody => {
           _bindActivityTogglesAndMore(subBody);
           subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
