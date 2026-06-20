@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-06-15 (업적/캐릭터 V1)
+최종 갱신: 2026-06-20 (136차: initTagInput 시그니처, COTTAGE_GAMES 필드, getMyNotifications new_game, openProfilePanel 추가)
 
 ---
 
@@ -45,7 +45,7 @@
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
-| `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10). notifSeenAt=null이면 isNew=false. 반환: `[{type, ..., isNew}]` |
+| `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임). notifSeenAt=null이면 isNew=true(전체 기간). 반환: `[{type, ..., isNew}]` |
 | `getGameReviews(gameId)` | 게임 리뷰 조회 |
 | `insertGameReview(...)` | 게임 리뷰 등록 |
 | `deleteGameReview(id)` | 게임 리뷰 삭제 |
@@ -97,6 +97,7 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 | `kakaoLogout()` | 로그아웃 (localStorage 삭제) |
 | `promptNicknameChange()` | 닉네임 변경 다이얼로그 |
 | `isOwner()` | OWNER_KAKAO_ID와 일치 여부 |
+| `openProfilePanel()` | 내 활동 패널 열기 (로그인 상태에서만 동작) |
 
 ---
 
@@ -124,7 +125,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `buildPhotoHtml(urls)` | 사진 썸네일 HTML 생성 | 동일 |
 | `openLightbox(urls, idx)` | 전체화면 라이트박스 | 동일 |
 | `attachAc(input, items, onSelect)` | 자동완성 드롭다운 연결 | game-reviews.js |
-| `initTagInput(wrap, onUpdate)` | 태그칩 입력 컴포넌트 | game-reviews.js |
+| `initTagInput(wrap, hidden, initialValue, onAdd)` | 태그칩 입력 컴포넌트. wrap=컨테이너, hidden=값 동기화할 hidden input, initialValue=초기값 배열, onAdd=태그 추가 콜백 | game-reviews.js |
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
 | `toInitials(name)` | 이름 이니셜 변환 | game-reviews.js |
 | `hangulMatch(query, target)` | 한글 초성 검색 | game-reviews.js |
@@ -136,7 +137,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | 전역 | 내용 |
 |------|------|
 | `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
-| `window.COTTAGE_GAMES` | 게임 플랫 배열 (id, name, nameKo). 게임명 자동완성용 |
+| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn}`. 게임명 자동완성용 |
 
 ---
 

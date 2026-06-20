@@ -3,6 +3,8 @@
 생성: 2026-06-20  
 목적: Phase 1 감사 — 파일 수정 없이 문제 후보만 기록. 즉시 수정 / 보류 / 위험 구분.
 
+**Green 9개 수정 완료 (136차)**: db-schema.md, js-api.md, ls-schema.md, DESIGN_RULES.md
+
 ---
 
 ## Phase 1: MD 7개 감사 결과

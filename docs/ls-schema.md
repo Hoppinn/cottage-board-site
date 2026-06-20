@@ -1,6 +1,6 @@
 # localStorage 스키마 — 코티지보드
 
-최종 갱신: 2026-06-12
+최종 갱신: 2026-06-20 (136차: cottage_is_admin 추가)
 
 ---
 
@@ -20,6 +20,7 @@
 | `cottage_my_comments` | script.js | 내 코멘트 id 배열 (삭제 권한 확인용) | 영구 |
 | `cottage_play_records_{gameKey}` | script.js | 바텀시트용 로컬 플레이 기록 | 영구 |
 | `cottage_played_{gameKey}` | script.js | 구형 단일 포맷 (마이그레이션 완료, 신규 저장 없음) | 레거시 |
+| `cottage_is_admin` | requests-admin.html | 관리자 페이지 로드 시 set. supabase-client.js의 page_views/__visitor__ 기록에서 admin 세션 필터링에 사용 | 영구 |
 
 ---
 

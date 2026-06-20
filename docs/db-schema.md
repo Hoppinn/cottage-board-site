@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-06-15 (업적/캐릭터/포인트 V1)
+최종 갱신: 2026-06-20 (136차: anon_sessions 컬럼 정정, page_sessions session_key 추가, game_requests 컬럼 보완)
 
 ---
 
@@ -9,7 +9,6 @@
 | 테이블 | 주요 컬럼 | 용도 |
 |--------|----------|------|
 | `game_views` | game_id, created_at | 조회수 트래킹 |
-| `profiles.rep_achievement_id` | TEXT | 대표 캐릭터 1개 (achievements.id 참조) |
 | `game_ratings` | game_id, rating, session_key | 별점 |
 | `game_likes` | game_id, user_id | 따봉 |
 | `game_curious` | game_id, user_id | 궁금해요 |
@@ -18,15 +17,15 @@
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
 | `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
 | `page_events` | event_type, game_id, referrer, created_at | 기능 이벤트 (recommend_run, recommend_game_click). referrer: 세션 귀속 소스 |
-| `page_sessions` | page, referrer, user_id, duration_sec, entered_at | 세션 분석 |
+| `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id | 유저 프로필 |
-| `game_requests` | game_name, request_count, status, is_planned, user_id | 게임 요청 |
+| `game_requests` | game_name, request_count, status, is_planned, user_id, purchase_status, status_date, purchased_at, actual_games, added_at | 게임 요청 |
 | `snack_requests` | item_name, request_count, user_id | 간식 요청 |
 | `suggestions` | content, user_id, is_done, is_planned | 건의사항 |
 | `play_highlights` | game_id, highlight_text | 플레이 하이라이트 |
 | `game_request_votes` | request_id, user_id | 요청 투표 |
 | `member_intros` | user_id, nickname | 멤버 소개 |
-| `anon_sessions` | session_key, entered_at, duration_sec | 비로그인 세션 분석 |
+| `anon_sessions` | session_key, last_seen_at | 비로그인 세션 분석 (1분 주기 upsert) |
 | `achievements` | id, name, emoji, category, threshold, points | 업적/캐릭터 정의 (V1: 17개) |
 | `user_achievements` | user_id, achievement_id, earned_at, UNIQUE(user_id, achievement_id) | 유저별 획득 업적 = 해금 캐릭터 |
 | `points_log` | user_id, delta, reason, created_at | 포인트 원장 (append-only) |
