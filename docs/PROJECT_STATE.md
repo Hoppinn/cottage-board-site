@@ -6,11 +6,10 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**Phase 2 JS/CSS 감사 완료** — 결과: `docs/REFACTOR_CHECKPOINT.md`
-- 총 발견: Green 6개 / Yellow 5개 / Red 9개
-- 즉시 수정 후보: ACH4, PU1, ACH8, GDA1, KA8, CSS3 (코드 변경 없거나 범위 명확)
-- 보류: SC2(대표캐릭터 이름), SC3(like삭제 의도), GR1(deprecated 코드), CSS1(.sheet-section 이중)
-- 주요 버그: SC1(LIKE 와일드카드), SC2(대표캐릭터 이름 미표시), ACH5(buildAchievementsSection 사이드이펙트)
+**리팩토링 진행 중** — 결과: `docs/REFACTOR_CHECKPOINT.md`
+- 완료: Green 6개 + SC2(대표캐릭터 이름) + SC3(like 삭제) + CSS1(.sheet-section 중복)
+- 진행 예정: GR1+GR2(deprecated 제거), ACH9(포인트 제도 삭제) — Plan 필요
+- 남은 Red: SC1(LIKE 와일드카드), ACH5(buildAchievementsSection 사이드이펙트) 등
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)

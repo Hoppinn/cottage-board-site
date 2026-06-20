@@ -582,7 +582,6 @@ window._cottageSess = (function () {
         await db.from("game_curious").delete().eq("id", existing.id);
         return { curious: false };
       } else {
-        await db.from("game_likes").delete().eq("game_id", gameId).eq("user_id", userId);
         await db.from("game_curious").insert({ game_id: gameId, user_id: userId });
         return { curious: true };
       }

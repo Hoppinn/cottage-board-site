@@ -1698,6 +1698,7 @@ body.sheet-open{
 
 .sheet-section{
   margin-top:18px;
+  margin-bottom:14px;
   padding:18px;
   border:1.5px solid #ead8b8;
   border-radius:20px;
@@ -2873,11 +2874,6 @@ body.sheet-open{
   color:#7a4828;
   font-size:11px;
   font-weight:900;
-}
-
-/* 섹션 래퍼 */
-.sheet-section{
-  margin-bottom:14px;
 }
 
 .sheet-section-label{
