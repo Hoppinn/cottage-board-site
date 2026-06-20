@@ -9,12 +9,10 @@
 **리팩토링 진행 중** — 결과: `docs/REFACTOR_CHECKPOINT.md`
 - Green 6개 완료: ACH4, PU1, ACH8, GDA1, KA8, CSS3
 - Yellow 5개 완료: SC2(대표캐릭터 이름), SC3(좋아요/궁금해요 독립), CSS1(.sheet-section 중복), GR1+GR2(deprecated 경로 삭제), ACH9(포인트 제도 삭제)
-- Red 4개 완료: PU2, SC1, GDA2, ACH5
-- **남은 Red 4개**:
-  1. SC4/SC5 — 성능 개선 limit/RPC (supabase-client.js, 중)
-  2. ACH3 — 패널 오픈 시 3중 DB 쿼리 통합 (achievements.js, 상)
-  3. KA1 — openProfilePanel 843줄 분리 (kakao-auth.js, 상)
-  4. CSS2 — !important 196개 정리 (style.css, 상)
+- Red 6개 완료: PU2, SC1, GDA2, ACH5, SC4/SC5, ACH3
+- **남은 Red 2개**:
+  1. KA1 — openProfilePanel 843줄 분리 (kakao-auth.js, 상)
+  2. CSS2 — !important 196개 정리 (style.css, 상)
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
