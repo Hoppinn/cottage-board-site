@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-20 (136차-8)
+최종 갱신: 2026-06-21 (137차)
 
 ---
 
@@ -9,10 +9,9 @@
 **리팩토링 진행 중** — 결과: `docs/REFACTOR_CHECKPOINT.md`
 - Green 6개 완료: ACH4, PU1, ACH8, GDA1, KA8, CSS3
 - Yellow 5개 완료: SC2(대표캐릭터 이름), SC3(좋아요/궁금해요 독립), CSS1(.sheet-section 중복), GR1+GR2(deprecated 경로 삭제), ACH9(포인트 제도 삭제)
-- Red 6개 완료: PU2, SC1, GDA2, ACH5, SC4/SC5, ACH3
-- **남은 Red 2개**:
-  1. KA1 — openProfilePanel 843줄 분리 (kakao-auth.js, 상)
-  2. CSS2 — !important 196개 정리 (style.css, 상)
+- Red 7개 완료: PU2, SC1, GDA2, ACH5, SC4/SC5, ACH3, KA1(848줄→616줄)
+- **남은 Red 1개**:
+  1. CSS2 — !important 196개 정리 (style.css, 상) — 단계적 교체 진행 중
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
