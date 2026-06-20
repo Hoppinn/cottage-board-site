@@ -10,8 +10,7 @@
 - Green 6개 완료: ACH4, PU1, ACH8, GDA1, KA8, CSS3
 - Yellow 5개 완료: SC2(대표캐릭터 이름), SC3(좋아요/궁금해요 독립), CSS1(.sheet-section 중복), GR1+GR2(deprecated 경로 삭제), ACH9(포인트 제도 삭제)
 - Red 7개 완료: PU2, SC1, GDA2, ACH5, SC4/SC5, ACH3, KA1(848줄→616줄)
-- **남은 Red 1개**:
-  1. CSS2 — !important 196개 정리 (style.css, 상) — 단계적 교체 진행 중
+- **모든 Red 완료** (CSS2 196→18 완료, 나머지 18개는 정당한 사유로 유지)
 
 **보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
 - 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
@@ -19,7 +18,7 @@
 
 **다음 작업 후보**
 
-1. **성장도 뱃지 다음 업적 표시** — `🌱 코티지 성장도 13%` 아래에 `🐿️ 다람쥐 마스터까지 2개 남음` 형식으로 가장 임박한 미획득 업적 표시. `achievements.js`에 `findNextAchievement(userStats)` 추가 필요 (ACH_DEFS + COUNTS 비교해 threshold 미달 중 가장 적게 남은 항목 반환).
+1. **성장도 뱃지 다음 업적 표시** ✅ 완료 — 프로필 패널 성장도 뱃지 아래 가장 임박한 미획득 업적 표시. `findNextAchievement(preStats)` → `{emoji,name,gap,unit}` (137차-13)
 2. **REFACTOR Green 처리** — ACH4/PU1/ACH8/GDA1/KA8/CSS3 (범위 좁고 빠름)
 2. **SC2 수정** — `getRepAchievement`에 name 필드 추가 (대표 캐릭터 이름 미표시 버그)
 3. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인

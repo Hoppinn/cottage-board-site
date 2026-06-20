@@ -673,7 +673,9 @@ async function openProfilePanel() {
 
   const _growthSummary = `캐릭터 ${_charCount}/${_charTotal} · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/${_achTotal}`;
   const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
-  const _growthBadge = `<div class="profile-growth-badge">🌱 코티지 성장도 ${_growthPct}%</div>`;
+  const _nextAch = userStats ? window.CottageAchievements?.findNextAchievement?.(userStats) : null;
+  const _growthBadge = `<div class="profile-growth-badge">🌱 코티지 성장도 ${_growthPct}%</div>` +
+    (_nextAch ? `<div class="profile-growth-next">${_nextAch.emoji} ${escH(_nextAch.name)}까지 ${_nextAch.gap}${_nextAch.unit} 남음</div>` : '');
 
   const _actParts = [
     `교환권 ${voucherBalance}장`,

@@ -860,6 +860,29 @@
     }
   }
 
+  const _NEXT_ACH_META = {
+    balance: { emoji: '🦊', unit: '일' }, play: { emoji: '🐻', unit: '회' },
+    new_game: { emoji: '🐰', unit: '종' }, record: { emoji: '🐿', unit: '회' },
+    photo: { emoji: '🦔', unit: '장' }, review: { emoji: '🐹', unit: '개' },
+    first_record: { emoji: '🦉', unit: '종' }, visit: { emoji: '🐦', unit: '일' },
+  };
+
+  function findNextAchievement(preStats) {
+    if (!preStats) return null;
+    const { achievements, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = preStats;
+    const earnedIds = new Set((achievements || []).map(a => a.id));
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+    let best = null, bestGap = Infinity;
+    for (const def of ACH_DEFS) {
+      if (earnedIds.has(def.id)) continue;
+      const gap = def.threshold - (COUNTS[def.type] || 0);
+      if (gap > 0 && gap < bestGap) { bestGap = gap; best = def; }
+    }
+    if (!best) return null;
+    const { emoji, unit } = _NEXT_ACH_META[best.type] || { emoji: '🏆', unit: '개' };
+    return { emoji, name: best.name, gap: bestGap, unit };
+  }
+
   window.CottageAchievements = {
     checkAchievements,
     buildCodexSection,
@@ -872,6 +895,7 @@
     getCharacterPath,
     getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
     fetchUserStats: (userId, nickname) => _fetchUserStats(window.CottageDB, userId, nickname),
+    findNextAchievement,
   };
 
   window.checkAchievements = checkAchievements;

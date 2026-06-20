@@ -3579,6 +3579,7 @@ body.sheet-open{
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;}
 .profile-growth-badge{font-size:10.5px;color:#7a6a5a;background:#f5f0ea;border:1px solid #e8e0d4;border-radius:6px;padding:3px 7px;margin-top:3px;line-height:1.5;}
+.profile-growth-next{font-size:10px;color:#9a8a7a;margin-top:2px;line-height:1.5;}
 .profile-admin-link{display:block;text-align:center;margin:0 0 14px;padding:9px;background:#7a4828;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
 .profile-admin-link:hover{opacity:0.85;}
 .profile-stats-wrap{border:1px solid var(--border,#e8e4dc);border-radius:10px;overflow:hidden;margin-top:14px;}
