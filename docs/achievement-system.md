@@ -94,13 +94,16 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 
 # 희귀 캐릭터
 
-일반 성장선과 분리. 특수 조건 보상. 수정 시 아래 축 보상 테이블도 함께 확인할 것.
+일반 성장선과 분리. ACH_DEFS 보상에 포함하지 않는다. 획득 조건 추후 설계.
 
-| 캐릭터 ID | 캐릭터이름 | 획득 업적 | 업적이름 | 축 |
-|-----------|-----------|-----------|----------|-----|
-| `rare_lightning` | 번개 토끼 | `review_8` | 번개 리뷰어 | review |
-| `rare_storyteller` | 이야기꾼 여우 | `review_15` | 이야기꾼 | review |
-| `rare_night` | 밤의 순찰자 | `play_100` | 백전노장 | play |
+| 캐릭터 ID | 캐릭터이름 | 획득 조건 |
+|-----------|-----------|-----------|
+| `rare_lightning` | 번개 토끼 | 미정 |
+| `rare_storyteller` | 이야기꾼 여우 | 미정 |
+| `rare_night` | 밤의 순찰자 | 미정 |
+| `rare_neoguri_1` | 미정 | 미정 |
+| `rare_neoguri_2` | 미정 | 미정 |
+| `rare_friend_rich` | 미정 | 미정 |
 
 ---
 
@@ -203,9 +206,9 @@ game_play_participants
 | 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
 |---------|---------|------|----------------------|
 | review_1 | 첫 게임평 | hamster_lv1 | 리뷰어 햄스터 |
-| review_8 | 번개 리뷰어 | rare_lightning | 번개 토끼 |
+| review_8 | 번개 리뷰어 | (보상 없음) | — |
 | review_10 | 열 번의 감상 | title_review_10 | 취향 기록자 |
-| review_15 | 이야기꾼 | rare_storyteller | 이야기꾼 여우 |
+| review_15 | 이야기꾼 | (보상 없음) | — |
 | review_20 | 코티지 논객 | hamster_lv2 | 서평가 햄스터 |
 | review_50 | 쉰 번의 감상 | title_review_50 | 코티지 안내자 |
 | review_100 | 백 번의 감상 | hamster_lv3 + 교환권 | 평론가 햄스터 |
@@ -239,7 +242,7 @@ game_play_participants
 | play_10 | 활발한 참여자 | bear_lv1 | 손님 곰 |
 | play_20 | 게임 동반자 | title_play_20 | 게임 동료 |
 | play_50 | 코티지 피플 | bear_lv2 | 주민 곰 |
-| play_100 | 백전노장 | rare_night + 교환권 | 밤의 순찰자 |
+| play_100 | 백전노장 | 교환권 | — |
 | play_150 | 코티지 레전드 | bear_lv3 | 단골 곰 |
 | play_200 | 게임왕 | title_play_200 | 코티지 플레이어 |
 | play_400 | 전설의 게이머 | bear_lv4 | 터줏대감 곰 |
