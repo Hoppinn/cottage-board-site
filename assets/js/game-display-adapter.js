@@ -15,6 +15,8 @@
  * - window.gameData가 먼저 로드되어 있어야 한다.
  */
 
+(function () {
+
 function safeArray(value) {
   return Array.isArray(value) ? value : [];
 }
@@ -537,4 +539,9 @@ if (typeof window !== "undefined") {
     titleKo: g.title?.owned || g.title?.display || '',
     titleEn: g.title?.bgg || '',
   }));
+
+  // index-page.js / owned-games-page.js 등 외부 직접 참조용
+  window.getAllGamesArray = getAllGamesArray;
 }
+
+})();
