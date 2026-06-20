@@ -524,7 +524,7 @@
   function getCharacterPath(achId) {
     const def = ACH_DEFS.find(d => d.id === achId);
     if (!def?.rewards?.character) return null;
-    return `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+    return _charImgPath(def.rewards.character);
   }
 
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
@@ -684,6 +684,12 @@
   // 캐릭터/대표 캐릭터 섹션 HTML 빌드
   // 캐릭터 표시명: char_name 필드 우선, 없으면 name 폴백
   function _charName(def) { return def.rewards?.char_name || def.name; }
+  // rare/, season_, cottage_master는 rare/ 서브폴더에 있음
+  function _charImgPath(character) {
+    if (!character) return null;
+    const isRare = /^(rare_|season_|cottage_master)/.test(character);
+    return `/assets/images/characters/characters_basic/${isRare ? 'rare/' : ''}${character}.png`;
+  }
 
   async function buildCharacterSection(userId, nickname) {
     const db = window.CottageDB;
@@ -710,7 +716,7 @@
     const gridCardsAll = CHAR_DEFS.map(def => {
       const done = earnedIds.has(def.id);
       const isRep = repAch?.id === def.id;
-      const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+      const imgSrc = _charImgPath(def.rewards.character);
       let cls = 'profile-char-card';
       if (!done) cls += ' is-locked';
       if (isRep) cls += ' is-rep';
@@ -747,12 +753,12 @@
 
     const _repCharDef = repAch?.id ? CHAR_DEFS.find(d => d.id === repAch.id) : null;
     const _repIconHtml = _repCharDef
-      ? `<img class="profile-char-rep-icon" src="/assets/images/characters/characters_basic/${_repCharDef.rewards.character}.png" alt="">`
+      ? `<img class="profile-char-rep-icon" src="${_charImgPath(_repCharDef.rewards.character)}" alt="">`
       : '';
 
     const _charPreviewHtml = `<div class="profile-char-preview"><div class="profile-char-grid">${_topCharPerAxis.map(def => {
       const isRep = repAch?.id === def.id;
-      const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+      const imgSrc = _charImgPath(def.rewards.character);
       return `<button class="profile-char-card${isRep ? ' is-rep' : ''}" title="${_charName(def)}" type="button" data-ach-id="${def.id}">` +
         `<img src="${imgSrc}" alt="${_charName(def)}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">` +
         `<span class="profile-char-emoji-fallback" style="display:none">${def.emoji}</span>` +
@@ -805,7 +811,7 @@
         : '';
       let iconHtml;
       if (def.rewards?.character && done) {
-        const imgSrc = `/assets/images/characters/characters_basic/${def.rewards.character}.png`;
+        const imgSrc = _charImgPath(def.rewards.character);
         iconHtml = `<img class="profile-ach-img" src="${imgSrc}" alt="${def.name}" ` +
           `onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='inline'">` +
           `<span class="profile-ach-img-fallback" style="display:none">${def.emoji}</span>`;
@@ -882,7 +888,7 @@
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = achId || ''; }
       const _repDef = achId ? ACH_DEFS.find(d => d.id === achId) : null;
       const _repCharPath = _repDef?.rewards?.character
-        ? `/assets/images/characters/characters_basic/${_repDef.rewards.character}.png`
+        ? _charImgPath(_repDef.rewards.character)
         : null;
       const panelAvatar = document.querySelector('#profilePanel .profile-panel-avatar');
       if (panelAvatar && _repCharPath) panelAvatar.src = _repCharPath;
