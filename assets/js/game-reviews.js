@@ -281,9 +281,11 @@
           };
 
           if (sameBtn.classList.contains('pr-last-record-btn')) {
-            // 행 1: 가장 최신 기록에서 인원·참여자 가져오기
+            // 행 1: 가장 최신 기록에서 그룹명·인원·참여자 가져오기
             const rec = window._prLatestRecord;
             if (!rec) return;
+            const grpInput = document.getElementById('prGroup');
+            if (grpInput && rec.group) grpInput.value = rec.group;
             fillCountAndNames(rec.count, rec.names);
           } else {
             // 행 2+: 바로 위 행에서 복사
@@ -393,7 +395,7 @@
       const _myLatest = _uid ? (recordsData || [])
         .filter(r => String(r.user_id) === _uid)
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0] : null;
-      window._prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names } : null;
+      window._prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names, group: _myLatest.group_name } : null;
       renderRecords(recordsData);
     } catch (err) {
       console.error(err);
