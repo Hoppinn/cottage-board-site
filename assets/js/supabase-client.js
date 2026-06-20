@@ -737,6 +737,7 @@ window._cottageSess = (function () {
   // insertPageSession: 탭 숨김처럼 실제 페이지 이탈 시에만 true
   async function _syncTimeToDBNow(userId, insertPageSession = true) {
     if (!userId) return;
+    if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
     const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
     const secs = _popAccumulatedSecs(userId);

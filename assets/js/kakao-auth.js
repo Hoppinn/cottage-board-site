@@ -405,8 +405,12 @@ async function openProfilePanel() {
     if (n.type === 'ordered')
       return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}">${_card('🛒', escH(n.gameName) + ' 주문 완료', '게임 요청이 접수/주문되었습니다')}</li>`;
     if (n.type === 'new_game') {
-      const displayName = n.actualGames?.length ? n.actualGames.join(', ') : n.gameName;
-      return `<li class="${cls}">${_card('📦', escH(displayName) + ' 입고', '새 게임이 추가됐어요')}</li>`;
+      const games = n.actualGames?.length ? n.actualGames : [n.gameName].filter(Boolean);
+      if (games.length === 1) {
+        return `<li class="${cls}" data-game-name="${escH(games[0])}">${_card('📦', escH(games[0]) + ' 입고', '새 게임이 추가됐어요')}</li>`;
+      }
+      const gameLinks = games.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
+      return `<li class="${cls}">${_card('📦', gameLinks + ' 입고', '새 게임이 추가됐어요')}</li>`;
     }
     return '';
   }
@@ -961,9 +965,10 @@ async function openProfilePanel() {
             li.addEventListener('click', e => {
               if (e.target.closest('button, a')) return;
               let key = null;
-              if (li.dataset.gameKey) key = li.dataset.gameKey;
+              const gameLink = e.target.closest('[data-game-name]');
+              if (gameLink) key = _getGameKeyByName(gameLink.dataset.gameName);
+              else if (li.dataset.gameKey) key = li.dataset.gameKey;
               else if (li.dataset.gameId) key = _getGameKeyById(li.dataset.gameId);
-              else if (li.dataset.gameName) key = _getGameKeyByName(li.dataset.gameName);
               if (key && window.openGameSheet) window.openGameSheet(key);
             });
           });
