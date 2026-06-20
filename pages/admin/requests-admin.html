@@ -1193,14 +1193,21 @@
             const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
             deltaHtml = `<span class="admin-summary-delta ${cls}">${pct > 0 ? '+' : ''}${pct}%</span>`;
           }
-          const refCnt7 = {};
-          for (const r of pageViews.filter(x => x.page !== '__visitor__')) {
+          // 주요 유입: 회(__visitor__ unique user-day) + 명(page_sessions unique user_id)
+          const refSessions7 = {}, refUsers7 = {};
+          for (const r of visitorRows) {
             if (!thisKeySet.has(kstDate(r.created_at))) continue;
-            const cat = categorizeRef(r.referrer);
-            if (!cat || cat === '직접 방문') continue;
-            refCnt7[cat] = (refCnt7[cat] || 0) + 1;
+            const cat = categorizeRef(r.referrer) || '직접 방문';
+            refSessions7[cat] = (refSessions7[cat] || 0) + 1;
           }
-          const topRef7 = Object.entries(refCnt7).sort((a, b) => b[1] - a[1])[0];
+          for (const r of rows) {
+            if (!r.user_id || !thisKeySet.has(kstDate(r.entered_at))) continue;
+            const cat = categorizeRef(r.referrer);
+            if (cat === null) continue;
+            if (!refUsers7[cat]) refUsers7[cat] = new Set();
+            refUsers7[cat].add(r.user_id);
+          }
+          const topRef7Entries = Object.entries(refSessions7).sort((a, b) => b[1] - a[1]);
           const el_today = document.getElementById('sumToday');
           const el_avg = document.getElementById('sumAvg');
           const el_avgSub = document.getElementById('sumAvgSub');
@@ -1212,7 +1219,9 @@
           if (el_avgSub) el_avgSub.textContent = `이번 7일 ${thisCnt7}명`;
           if (el_delta) el_delta.innerHTML = deltaHtml;
           if (el_deltaSub) el_deltaSub.textContent = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
-          if (el_topRef) el_topRef.textContent = topRef7 ? `${topRef7[0]}  ${topRef7[1]}회` : '직접방문';
+          if (el_topRef) el_topRef.innerHTML = topRef7Entries.length
+            ? topRef7Entries.map(([cat, cnt]) => `${cat} ${cnt}회 (${refUsers7[cat]?.size ?? '?'}명)`).join('<br>')
+            : '—';
         }
 
         // ── 1. 날짜별 방문자 — __visitor__ 마커 기준, 단위별 집계 ──
@@ -1290,12 +1299,19 @@
           });
         }
 
-        // ── 2. 유입 경로 — 수평 막대 ─────────────────────────────────
-        const refMap = {};
-        for (const r of filteredPV) {
+        // ── 2. 유입 경로 — 수평 막대 (__visitor__ 기준 회, page_sessions 기준 명) ──
+        const filteredVisitor = filterByRange(visitorRows, start, end, 'created_at');
+        const refMap = {}, refUserMap = {};
+        for (const r of filteredVisitor) {
+          const cat = categorizeRef(r.referrer) || '직접 방문';
+          refMap[cat] = (refMap[cat] || 0) + 1;
+        }
+        for (const r of filtered) {
+          if (!r.user_id) continue;
           const cat = categorizeRef(r.referrer);
           if (cat === null) continue;
-          refMap[cat] = (refMap[cat] || 0) + 1;
+          if (!refUserMap[cat]) refUserMap[cat] = new Set();
+          refUserMap[cat].add(r.user_id);
         }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
         document.getElementById('chartRefSub').textContent = label;
@@ -1307,7 +1323,7 @@
           if (refCanvas) refCanvas.style.display = '';
           if (refWrap) refWrap.style.height = Math.max(60, refEntries.length * 36 + 16) + 'px';
           makeOrUpdate('chartReferrer', 'bar', {
-            labels: refEntries.map(([k, v]) => `${k}  ${v}`),
+            labels: refEntries.map(([k, v]) => `${k}  ${v}회 (${refUserMap[k]?.size ?? '?'}명)`),
             datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE.slice(0, refEntries.length), borderRadius: 4, barThickness: 22 }],
           }, {
             indexAxis: 'y',
