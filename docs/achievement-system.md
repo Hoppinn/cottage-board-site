@@ -18,14 +18,16 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 
 | type | 의미 | 캐릭터 |
 |------|------|--------|
-| record | 플레이기록 작성 | 다람쥐 |
+| balance | 함께한 날 | 여우 |
+| play | 플레이 참여 | 곰 |
 | new_game | 새 게임 경험 | 토끼 |
+| record | 플레이기록 작성 | 다람쥐 |
 | photo | 사진 업로드 | 고슴도치 |
 | review | 게임평 작성 | 햄스터 |
-| visit | 홈페이지 탐방 | 참새 |
-| play | 플레이 참여 | 곰 |
 | first_record | 코티지 최초 기록 | 부엉이 |
-| balance | 함께한 날 | 여우 |
+| visit | 홈페이지 탐방 | 참새 |
+
+표시 순서: balance → play → new_game / (구분선) / record → photo → review → first_record / (구분선) / visit
 
 ---
 
@@ -94,11 +96,11 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 
 일반 성장선과 분리. 특수 조건 보상. 수정 시 아래 축 보상 테이블도 함께 확인할 것.
 
-| 캐릭터 | 획득 업적 | 축 |
-|--------|-----------|-----|
-| `rare_lightning` | `review_8` | review |
-| `rare_storyteller` | `review_15` | review |
-| `rare_night` | `play_100` | play |
+| 캐릭터 ID | 캐릭터이름 | 획득 업적 | 업적이름 | 축 |
+|-----------|-----------|-----------|----------|-----|
+| `rare_lightning` | 번개 토끼 | `review_8` | 번개 리뷰어 | review |
+| `rare_storyteller` | 이야기꾼 여우 | `review_15` | 이야기꾼 | review |
+| `rare_night` | 밤의 순찰자 | `play_100` | 백전노장 | play |
 
 ---
 
@@ -135,109 +137,141 @@ game_play_participants
 
 ## 보상
 
-balance_10 → fox_lv1
-balance_30 → title_balance_30
-balance_50 → fox_lv2
-balance_100 → title_balance_100
-balance_200 → fox_lv3
-balance_300 → fox_lv4 + title_balance_300
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| balance_10 | 다재다능 | fox_lv1 | 수습 여우 |
+| balance_30 | 균형의 시작 | title_balance_30 | 코티지 올라운더 |
+| balance_50 | 올라운더 | fox_lv2 | 탐정 여우 |
+| balance_100 | 균형의 달인 | title_balance_100 | 균형의 달인 |
+| balance_200 | 박식한 여우 | fox_lv3 | 명탐정 여우 |
+| balance_300 | 코티지의 전설 | fox_lv4 + title_balance_300 | 전설의 탐정 여우 / 코티지의 전설 |
 
 ---
 
 # Record (다람쥐)
 
-record_1 → squirrel_lv1 + 교환권
-record_10 → title_record_10
-record_30 → squirrel_lv2
-record_50 → title_record_50
-record_75 → squirrel_lv3
-record_100 → title_record_100
-record_150 → squirrel_lv4
-record_200 → title_record_200
-record_300 → title_record_300
-record_400 → squirrel_lv5
-record_500 → cottage_master + title_record_500
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| record_1 | 기록의 시작 | squirrel_lv1 + 교환권 | 새싹 다람쥐 |
+| record_10 | 열 번의 기록 | title_record_10 | 첫 페이지 |
+| record_30 | 서른 번의 기록 | squirrel_lv2 | 도토리 다람쥐 |
+| record_50 | 쉰 번의 기록 | title_record_50 | 이야기 수집가 |
+| record_75 | 장인 게이머 | squirrel_lv3 | 창고 다람쥐 |
+| record_100 | 백 번의 기록 | title_record_100 | 코티지 연대기 작가 |
+| record_150 | 백오십 번의 기록 | squirrel_lv4 | 겨울준비 다람쥐 |
+| record_200 | 이백 번의 기록 | title_record_200 | 코티지 사서 |
+| record_300 | 삼백 번의 기록 | title_record_300 | 코티지 골수팬 |
+| record_400 | 여름의 플레이어 | squirrel_lv5 | 사서 다람쥐 |
+| record_500 | 코티지 마스터 | cottage_master + title_record_500 | 코티지 마스터 / 코티지 마스터 |
 
 ---
 
 # New Game (토끼)
 
-new_game_1 → rabbit_lv1
-new_game_5 → rabbit_lv2
-new_game_20 → rabbit_lv3 + 교환권
-new_game_30 → title_new_game_30
-new_game_50 → rabbit_lv4
-new_game_100 → title_new_game_100
-new_game_150 → rabbit_lv5
-new_game_200 → title_new_game_200
-new_game_300 → rabbit_lv6 + title_new_game_300
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| new_game_1 | 첫 탐험 | rabbit_lv1 | 새싹 토끼 |
+| new_game_5 | 다섯 번째 탐험 | rabbit_lv2 | 호기심 토끼 |
+| new_game_20 | 스무 가지 탐험 | rabbit_lv3 + 교환권 | 탐험 토끼 |
+| new_game_30 | 서른 가지 탐험 | title_new_game_30 | 게임 사냥꾼 |
+| new_game_50 | 오십 종 탐험 | rabbit_lv4 | 여행 토끼 |
+| new_game_100 | 백 종 탐험 | title_new_game_100 | 코티지 유랑자 |
+| new_game_150 | 백오십 종 탐험 | rabbit_lv5 | 유랑 토끼 |
+| new_game_200 | 이백 종 탐험 | title_new_game_200 | 게임 학자 |
+| new_game_300 | 삼백 종 탐험 | rabbit_lv6 + title_new_game_300 | 전설의 토끼 / 전설 탐험가 |
 
 ---
 
 # Photo (고슴도치)
 
-photo_1 → hedgehog_lv1
-photo_10 → title_photo_10
-photo_20 → hedgehog_lv2
-photo_50 → title_photo_50
-photo_100 → hedgehog_lv3 + 교환권
-photo_150 → title_photo_150
-photo_200 → hedgehog_lv4
-photo_300 → title_photo_300
-photo_500 → hedgehog_lv5
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| photo_1 | 첫 사진 | hedgehog_lv1 | 초보 고슴도치 |
+| photo_10 | 순간 수집 | title_photo_10 | 순간 수집가 |
+| photo_20 | 스무 장의 기록 | hedgehog_lv2 | 기록가 고슴도치 |
+| photo_50 | 기억 포착 | title_photo_50 | 기억 포착자 |
+| photo_100 | 백 장의 기억 | hedgehog_lv3 + 교환권 | 포토마스터 고슴도치 |
+| photo_150 | 사진 마스터 | title_photo_150 | 코티지 사진사 |
+| photo_200 | 이백 장의 추억 | hedgehog_lv4 | 작가 고슴도치 |
+| photo_300 | 사진 예술가 | title_photo_300 | 사진 마스터 |
+| photo_500 | 전설의 사진가 | hedgehog_lv5 ⚠️미완성 | 작가 고슴도치 (lv5 파일 미제작) |
 
 ---
 
 # Review (햄스터)
 
-review_1 → hamster_lv1
-review_8 → rare_lightning
-review_10 → title_review_10
-review_15 → rare_storyteller
-review_20 → hamster_lv2
-review_50 → title_review_50
-review_100 → hamster_lv3 + 교환권
-review_150 → title_review_150
-review_200 → hamster_lv4
-review_300 → title_review_300
-review_500 → hamster_lv5
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| review_1 | 첫 게임평 | hamster_lv1 | 리뷰어 햄스터 |
+| review_8 | 번개 리뷰어 | rare_lightning | 번개 토끼 |
+| review_10 | 열 번의 감상 | title_review_10 | 취향 기록자 |
+| review_15 | 이야기꾼 | rare_storyteller | 이야기꾼 여우 |
+| review_20 | 코티지 논객 | hamster_lv2 | 서평가 햄스터 |
+| review_50 | 쉰 번의 감상 | title_review_50 | 코티지 안내자 |
+| review_100 | 백 번의 감상 | hamster_lv3 + 교환권 | 평론가 햄스터 |
+| review_150 | 백오십 번의 감상 | title_review_150 | 코티지 비평가 |
+| review_200 | 이백 번의 감상 | hamster_lv4 | 비평가 햄스터 |
+| review_300 | 삼백 번의 감상 | title_review_300 | 전설의 리뷰어 |
+| review_500 | 전설의 리뷰어 | hamster_lv5 | 전설의 평론가 햄스터 |
 
 ---
 
 # Visit (참새)
 
-visit_3 → sparrow_lv1
-visit_10 → title_visit_10
-visit_20 → sparrow_lv2
-visit_30 → title_visit_30
-visit_50 → sparrow_lv3
-visit_100 → title_visit_100
-visit_200 → sparrow_lv4 + 교환권
-visit_300 → title_visit_300
-visit_500 → sparrow_lv5 + title_visit_500
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| visit_3 | 코티지 방문객 | sparrow_lv1 | 공감받는 참새 |
+| visit_10 | 코티지 단골 | title_visit_10 | 코티지 단골 |
+| visit_20 | 코티지 단골 Lv2 | sparrow_lv2 | 인기 참새 |
+| visit_30 | 코티지 이웃 | title_visit_30 | 코티지 이웃 |
+| visit_50 | 코티지 주민 | sparrow_lv3 | 스타 참새 |
+| visit_100 | 터줏대감 | title_visit_100 | 터줏대감 |
+| visit_200 | 코티지의 오랜 친구 | sparrow_lv4 + 교환권 | 전설의 참새 |
+| visit_300 | 코티지 원로 | title_visit_300 | 코티지 원로 |
+| visit_500 | 전설의 방문자 | sparrow_lv5 ⚠️미완성 + title_visit_500 | 전설 참새 / 코티지 전설 (lv5 파일 미제작) |
 
 ---
 
 # Play (곰)
 
-play_10 → bear_lv1
-play_20 → title_play_20
-play_50 → bear_lv2
-play_100 → rare_night + 교환권
-play_150 → bear_lv3
-play_200 → title_play_200
-play_400 → bear_lv4
-play_500 → bear_lv5 + title_play_500
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| play_10 | 활발한 참여자 | bear_lv1 | 손님 곰 |
+| play_20 | 게임 동반자 | title_play_20 | 게임 동료 |
+| play_50 | 코티지 피플 | bear_lv2 | 주민 곰 |
+| play_100 | 백전노장 | rare_night + 교환권 | 밤의 순찰자 |
+| play_150 | 코티지 레전드 | bear_lv3 | 단골 곰 |
+| play_200 | 게임왕 | title_play_200 | 코티지 플레이어 |
+| play_400 | 전설의 게이머 | bear_lv4 | 터줏대감 곰 |
+| play_500 | 코티지 마스터 | bear_lv5 + title_play_500 | 숲의 전설 곰 / 게임왕 |
 
 ---
 
 # First Record (부엉이)
 
-first_record_1 → owl_lv1
-first_record_3 → title_first_record_3
-first_record_5 → owl_lv2
-first_record_10 → title_first_record_10
-first_record_20 → owl_lv3
-first_record_50 → owl_lv4 + title_first_record_50 + 교환권
+| 업적 ID | 업적이름 | 보상 | 캐릭터이름 / 칭호이름 |
+|---------|---------|------|----------------------|
+| first_record_1 | 첫 개척 | owl_lv1 | 새내기 부엉이 |
+| first_record_3 | 세 게임 개척 | title_first_record_3 | 첫 개척자 |
+| first_record_5 | 다섯 게임 개척 | owl_lv2 | 지혜로운 부엉이 |
+| first_record_10 | 개척자 | title_first_record_10 | 코티지 탐구자 |
+| first_record_20 | 코티지 개척단 | owl_lv3 | 현자 부엉이 |
+| first_record_50 | 전설의 개척자 | owl_lv4 + title_first_record_50 + 교환권 | 대현자 부엉이 / 전설의 개척자 |
 
 ---
+
+# 미완성 항목
+
+| 항목 | 내용 |
+|------|------|
+| hedgehog_lv5.png | photo_500 보상 파일 미제작. 달성자 발생 전 추가 필요. |
+| sparrow_lv5.png | visit_500 보상 파일 미제작. 달성자 발생 전 추가 필요. |
+
+---
+
+# 고아 칭호 (TITLE_DEFS에 정의됐으나 ACH_DEFS에서 미참조)
+
+| 칭호 ID | 칭호이름 | 비고 |
+|---------|---------|------|
+| title_record_150 | 코티지 단골손님 | record_150는 squirrel_lv4만 지급. 향후 추가 예정인지 확인 필요. |
+| title_review_500 | 코티지의 감식가 | review_500은 hamster_lv5만 지급. 향후 추가 예정인지 확인 필요. |
