@@ -177,7 +177,7 @@
           </div>
           <button class="pr-rm-btn" type="button" title="삭제">✕</button>
         </div>
-        ${rowIdx > 1 ? `<button class="pr-same-as-above-btn" type="button">↑ 위와 동일 (인원·참여자)</button>` : ''}
+        <button class="pr-same-as-above-btn${rowIdx === 1 ? ' pr-last-record-btn' : ''}" type="button">${rowIdx === 1 ? '↑ 최신 기록 (인원·참여자)' : '↑ 위와 동일 (인원·참여자)'}</button>
         <div class="pr-detail-grid">
           <div>
             <label class="pr-field-label">인원수</label>
@@ -235,7 +235,11 @@
         photoInput.value = '';
       });
 
-      initTagInput(div.querySelector('.pr-names-wrap'), div.querySelector('.pr-names'));
+      initTagInput(div.querySelector('.pr-names-wrap'), div.querySelector('.pr-names'), undefined, name => {
+        if (window._prPlayerNames && !window._prPlayerNames.includes(name)) {
+          window._prPlayerNames.push(name);
+        }
+      });
 
       // 참여자 이름 자동완성 — 콤마 구분 조합 선택 시 개별 칩으로 분리
       attachAc(
@@ -261,29 +265,34 @@
       const sameBtn = div.querySelector('.pr-same-as-above-btn');
       if (sameBtn) {
         sameBtn.addEventListener('click', () => {
-          const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
-          const curIdx = allRows.indexOf(div);
-          if (curIdx <= 0) return;
-          const firstRow = allRows[curIdx - 1];
-          const activeCountBtn = firstRow.querySelector('.pr-count-btn.is-on');
-          div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
-          if (activeCountBtn) {
-            const matchBtn = div.querySelector(`.pr-count-btn[data-n="${activeCountBtn.dataset.n}"]`);
-            if (matchBtn) matchBtn.classList.add('is-on');
-          }
-          const firstNames = firstRow.querySelector('.pr-names').value;
-          const chipsWrap = div.querySelector('.tag-chips');
-          const textInput = div.querySelector('.tag-text-input');
-          const hiddenInput = div.querySelector('.pr-names');
-          chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
-          hiddenInput.value = '';
-          if (firstNames) {
-            firstNames.split(',').forEach(name => {
-              name = name.trim();
-              if (!name) return;
+          const fillCountAndNames = (count, namesStr) => {
+            div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
+            if (count) div.querySelector(`.pr-count-btn[data-n="${count}"]`)?.classList.add('is-on');
+            const chipsWrap = div.querySelector('.tag-chips');
+            const textInput = div.querySelector('.tag-text-input');
+            const hiddenInput = div.querySelector('.pr-names');
+            chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
+            hiddenInput.value = '';
+            (namesStr || '').split(',').forEach(name => {
+              name = name.trim(); if (!name) return;
               textInput.value = name;
               textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
             });
+          };
+
+          if (sameBtn.classList.contains('pr-last-record-btn')) {
+            // 행 1: 가장 최신 기록에서 인원·참여자 가져오기
+            const rec = window._prLatestRecord;
+            if (!rec) return;
+            fillCountAndNames(rec.count, rec.names);
+          } else {
+            // 행 2+: 바로 위 행에서 복사
+            const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
+            const curIdx = allRows.indexOf(div);
+            if (curIdx <= 0) return;
+            const aboveRow = allRows[curIdx - 1];
+            const activeCountBtn = aboveRow.querySelector('.pr-count-btn.is-on');
+            fillCountAndNames(activeCountBtn?.dataset.n, aboveRow.querySelector('.pr-names').value);
           }
         });
       }
@@ -380,6 +389,11 @@
 
     try {
       recordsData = await window.CottageDB.getAllPlayRecordsForHub();
+      const _uid = String(window.getKakaoUser?.()?.id || '');
+      const _myLatest = _uid ? (recordsData || [])
+        .filter(r => String(r.user_id) === _uid)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0] : null;
+      window._prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names } : null;
       renderRecords(recordsData);
     } catch (err) {
       console.error(err);

@@ -171,7 +171,7 @@
   }
 
   // 공용 태그칩 입력 초기화
-  function initTagInput(wrap, hidden, initialValue) {
+  function initTagInput(wrap, hidden, initialValue, onAdd) {
     if (!wrap) return;
     const chips = wrap.querySelector('.tag-chips');
     const text = wrap.querySelector('.tag-text-input');
@@ -185,6 +185,7 @@
       chip.innerHTML = _escH(val) + '<button type="button" class="tag-chip-del">×</button>';
       chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
       chips.appendChild(chip); updateHidden();
+      if (onAdd) onAdd(val);
     }
     function triggerRefresh() { text.dispatchEvent(new Event('input', { bubbles: true })); }
     text.setAttribute('enterkeyhint', 'done');
