@@ -892,6 +892,7 @@
           const p = m.get(r.page);
           p.visits++; p.totalSec += r.duration_sec || 0;
           if (r.user_id) p.users.add(r.user_id);
+          else if (r.session_key) p.users.add(`anon:${r.session_key}`);
         }
         return [...m.entries()].sort((a, b) => b[1].visits - a[1].visits);
       }
@@ -1293,7 +1294,7 @@
             const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
             deltaHtml = `<span class="admin-summary-delta ${cls}">${pct > 0 ? '+' : ''}${pct}%</span>`;
           }
-          // 주요 유입: 회(__visitor__ unique user-day) + 명(page_sessions unique user_id)
+          // 주요 유입: 회(__visitor__ unique user-day) + 명(page_sessions unique user_id + anon session_key)
           const refSessions7 = {}, refUsers7 = {};
           for (const r of visitorRows) {
             if (!thisKeySet.has(kstDate(r.created_at))) continue;
@@ -1301,11 +1302,12 @@
             refSessions7[cat] = (refSessions7[cat] || 0) + 1;
           }
           for (const r of rows) {
-            if (!r.user_id || !thisKeySet.has(kstDate(r.entered_at))) continue;
+            if (!thisKeySet.has(kstDate(r.entered_at))) continue;
+            if (!r.user_id && !r.session_key) continue;
             const cat = categorizeRef(r.referrer);
             if (cat === null) continue;
             if (!refUsers7[cat]) refUsers7[cat] = new Set();
-            refUsers7[cat].add(r.user_id);
+            refUsers7[cat].add(r.user_id || `anon:${r.session_key}`);
           }
           const topRef7Entries = Object.entries(refSessions7).sort((a, b) => b[1] - a[1]);
           const el_today = document.getElementById('sumToday');
@@ -1407,11 +1409,11 @@
           refMap[cat] = (refMap[cat] || 0) + 1;
         }
         for (const r of filtered) {
-          if (!r.user_id) continue;
+          if (!r.user_id && !r.session_key) continue;
           const cat = categorizeRef(r.referrer);
           if (cat === null) continue;
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
-          refUserMap[cat].add(r.user_id);
+          refUserMap[cat].add(r.user_id || `anon:${r.session_key}`);
         }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
         document.getElementById('chartRefSub').textContent = label;
@@ -1448,7 +1450,7 @@
         const seen2 = new Set();
         for (const r of filtered) {
           if (!r.page) continue;
-          const key = (r.user_id || 'anon') + '|' + r.page + '|' + kstDate(r.entered_at);
+          const key = (r.user_id || (r.session_key ? `anon:${r.session_key}` : 'anon')) + '|' + r.page + '|' + kstDate(r.entered_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
           pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;

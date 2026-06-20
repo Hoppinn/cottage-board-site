@@ -763,7 +763,7 @@ window._cottageSess = (function () {
             ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
             : 'unknown';
           const referrer = _sessionReferrer;
-          db.from('page_sessions').insert({ page, user_id: userId, duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
+          db.from('page_sessions').insert({ page, user_id: userId, session_key: getSessionKey(), duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
         }
       }
     } catch (_) {}
@@ -818,6 +818,18 @@ window._cottageSess = (function () {
       { session_key: key, last_seen_at: new Date().toISOString() },
       { onConflict: 'session_key' }
     ).then(() => {}).catch(() => {});
+    // 비로그인 방문자도 page_sessions에 기록 (명 집계용); 실패해도 anon_sessions 영향 없음
+    try {
+      const page = window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
+      db.from('page_sessions').insert({
+        page,
+        user_id: null,
+        session_key: key,
+        duration_sec: 0,
+        entered_at: new Date().toISOString(),
+        referrer: _sessionReferrer
+      }).then(() => {}).catch(() => {});
+    } catch (_) {}
     _anonHeartbeatTimer = setInterval(() => {
       if (_sessionUserId) { _stopAnonHeartbeat(); return; }
       if (document.hidden) return;
@@ -932,7 +944,7 @@ window._cottageSess = (function () {
   async function getPageAnalytics() {
     try {
       const { data } = await db.from('page_sessions')
-        .select('page, referrer, user_id, duration_sec, entered_at')
+        .select('page, referrer, user_id, session_key, duration_sec, entered_at')
         .order('entered_at', { ascending: false })
         .limit(5000);
       return data || [];
