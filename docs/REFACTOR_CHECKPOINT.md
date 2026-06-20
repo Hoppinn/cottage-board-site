@@ -265,6 +265,16 @@
 | ACH3 | achievements.js | 패널 open 시 3중 DB 쿼리 통합 | 세 빌드 함수의 DB 쿼리 공유는 인터페이스 재설계 필요 |
 | KA1 | kakao-auth.js | `openProfilePanel` 843줄 분리 | 프로젝트 내 최대 함수 — 부분 수정도 회귀 위험 높음 |
 | PU2 | play-records-utils.js | blob URL 누수 수정 | `buildPhotoItemAdder` 수명주기 추적 필요 |
-| GR2 | game-reviews.js | `renderSingleGame` CottageDB 전환 | deprecated 경로이므로 제거가 더 안전 (GR1과 연동) |
+| ~~GR2~~ | ~~game-reviews.js~~ | ~~`renderSingleGame` CottageDB 전환~~ | ✅ GR1과 함께 삭제 완료 (136차-7) |
 | SC4/SC5 | supabase-client.js | 성능 개선 (getVisitorStats, getUserFirstRecordCount) | DB RPC 추가 또는 쿼리 재설계 필요 |
 | CSS2 | style.css | !important 196개 특이성 정리 | 전체 레이아웃 영향, 단계적 교체만 가능 |
+
+---
+
+## 처리 현황 (136차 기준)
+
+| 분류 | 항목 | 상태 |
+|------|------|------|
+| Green | ACH4, PU1, ACH8, GDA1, KA8, CSS3 | ✅ 완료 |
+| Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
+| Red | SC1, PU2, GDA2, ACH5, ACH3, KA1, SC4/SC5, CSS2 | ⏳ 미처리 |
