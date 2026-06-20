@@ -74,33 +74,37 @@
 
 ---
 
-## Phase 2 감사 대상 (미착수)
+## Phase 2: JS 감사 결과
 
-Phase 1 완료 후 아래 순서로 진행:
+### 2-1. play-records-utils.js (254줄, 8함수)
 
-| 순서 | 파일 | 비고 |
-|------|------|------|
-| 2-1 | `play-records-utils.js` | initTagInput 등 공유 유틸 |
-| 2-2 | `game-display-adapter.js` | COTTAGE_GAMES 생성 |
-| 2-3 | `achievements.js` | ACH_DEFS, _charImgPath |
-| 2-4 | `game-reviews.js` | 플레이기록 허브 |
-| 2-5 | `index-page.js`, `owned-games-page.js` | 페이지 전용 JS |
-| 2-6 | `kakao-auth.js` | 인증·알림·프로필 |
-| 2-7 | `supabase-client.js` | 핵심 DB 레이어 (마지막) |
-| 2-8 | `style.css` | 마지막. 범위 가장 넓음 |
+**상태**: 감사 완료
+
+| # | 위험도 | 분류 | 이슈 | 상세 |
+|---|--------|------|------|------|
+| PU1 | **P1** | 문서 불일치 | `attachAc` 시그니처 오기재 (js-api.md에 미수정) | 문서: `(input, items, onSelect)` → 실제: `(input, getSuggestions, onSelect, listRef)`. 2번째 인자가 배열이 아닌 **함수**임. 4번째 `listRef`도 누락. J1과 같은 유형, Green 수정 시 누락된 건. |
+| PU2 | **P1** | 메모리 누수 | `buildPhotoItemAdder`: blob URL 미해제 | line 227: `URL.createObjectURL(resized)` 후 `URL.revokeObjectURL()` 없음. 기록 수정 반복 시 blob URL 페이지 내 무한 누적. 탭 닫힐 때까지 해제 안 됨. |
+| PU3 | **P1** | 사이드이펙트 | `attachAc`: `listRef` 없을 때 input의 DOM 위치 변경 | line 119-127: input을 새 `div.wrap`으로 이동시킴. 호출 측 CSS 셀렉터나 이벤트 리스너가 input 부모를 참조하면 깨짐. `listRef`를 전달하는 호출은 안전. |
+| PU4 | **P2** | 중복 코드 | `_escH` (line 89) ↔ `window.escH` (supabase-client.js) 거의 동일 | `_escH`: `& < >` 이스케이프. `window.escH`: `& < > "` 이스케이프. 기능 95% 동일. supabase-client.js가 항상 먼저 로드되므로 `window.escH` 재사용 가능. 단, `"` 이스케이프 여부 차이 있으므로 단순 치환은 불가 (용도 확인 필요). |
+| PU5 | **P2** | 파일 헤더 불일치 | 상단 주석이 8개 전역 중 3개만 기재 | line 3: `parsePhotoUrls / buildPhotoHtml / openLightbox`만 언급. `toInitials, hangulMatch, attachAc, initTagInput, buildPhotoItemAdder` 5개 누락. |
+| PU6 | **P2** | 복잡도 | `attachAc`(61줄), `openLightbox`(56줄) 과대 함수 | 단일 책임은 명확하나 각각 테스트 불가 구조. 리팩토링 시 우선 분리 후보. |
+| PU7 | **P2** | 암묵적 제약 | `initTagInput` 쉼표 포함 이름 불가 | line 215: `initialValue.split(',')` — 쉼표가 포함된 플레이어 이름은 분리됨. 문서화되지 않은 제약. 실제 오탐 가능성 낮음. |
+
+**즉시 수정 가능 (Green)**: PU1 (js-api.md에서 attachAc 시그니처 수정), PU5 (파일 헤더 주석)  
+**수정 시 검증 필요 (Yellow)**: PU3 (listRef 없는 호출처 확인 후), PU4 (_escH 용도 확인 후)  
+**코드 수정 필요 (Red)**: PU2 (blob URL 누수 — buildPhotoItemAdder 수정)
 
 ---
 
-## 수정 우선순위 요약
+## Phase 2 감사 대상
 
-| 즉시 수정 (Green) | 보류/확인 (Yellow) |
-|-------------------|--------------------|
-| D1 anon_sessions 컬럼 완전 오기재 | A1 sparrow/squirrel_lv5 삭제 여부 |
-| D2 page_sessions session_key 누락 | A2~A3 rare/ 이미지 경로 체계 미반영 |
-| D3 game_requests 컬럼 4개 누락 | A4 고아 칭호 의도 확인 |
-| J1 initTagInput 시그니처 오기재 | S1 session_key 내러티브 혼란 |
-| J2 COTTAGE_GAMES 필드 오기재 | PS2 scripts/ untracked 항목 |
-| J3 new_game 타입 누락 | |
-| J4 openProfilePanel 누락 | |
-| L1 cottage_is_admin 누락 | |
-| DR1 DESIGN_AUDIT.md broken reference | |
+| 순서 | 파일 | 상태 |
+|------|------|------|
+| 2-1 | `play-records-utils.js` | ✅ 완료 |
+| 2-2 | `game-display-adapter.js` | 대기 |
+| 2-3 | `achievements.js` | 대기 |
+| 2-4 | `game-reviews.js` | 대기 |
+| 2-5 | `index-page.js`, `owned-games-page.js` | 대기 |
+| 2-6 | `kakao-auth.js` | 대기 |
+| 2-7 | `supabase-client.js` | 대기 (마지막) |
+| 2-8 | `style.css` | 대기 (마지막) |
