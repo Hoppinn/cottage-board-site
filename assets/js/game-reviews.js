@@ -78,9 +78,9 @@
   const root = document.getElementById('reviewRoot');
 
   let tried = false;
-  function tryInit() { if (tried) return; tried = true; GAME_ID ? initGameView() : initHub(); }
+  function tryInit() { if (tried) return; tried = true; initHub(); }
   window.addEventListener('kakao-auth-ready', tryInit);
-  window.addEventListener('cottage-auth-changed', () => { if (!GAME_ID) renderInputPanel(); });
+  window.addEventListener('cottage-auth-changed', () => { renderInputPanel(); });
   setTimeout(tryInit, 1200);
 
   // ══════════════════════════════════════════════════════════════
@@ -931,147 +931,6 @@
       isFirst = false;
     }
     return html;
-  }
-
-  // ══════════════════════════════════════════════════════════════
-  // SINGLE GAME VIEW (?game=<id> 직접 URL 접근 — deprecated)
-  // 기본 동선은 openGameRecordSheet(gameKey) 바텀시트로 대체됨.
-  // 직접 URL 공유 / SEO 용도 검토 전까지 삭제 보류.
-  // TODO: renderSingleGame 제거 또는 공개 랜딩용 전환 검토
-  // ══════════════════════════════════════════════════════════════
-
-  function initGameView() {
-    const name = getGameName(GAME_ID);
-    document.title = `${name} 플레이 기록 | 코티지보드`;
-
-    const bc = document.getElementById('pageBreadcrumb');
-    bc.innerHTML = `<a href="../../index.html">게임</a> <span>›</span> <a href="./game-reviews.html">플레이 기록</a> <span>›</span> ${escH(name)}`;
-
-    headerEl.innerHTML = `<p class="rv-game-title">${escH(name)}</p>`;
-
-    renderSingleGame();
-  }
-
-  async function renderSingleGame() {
-    const cfg = window.SUPABASE_CONFIG;
-    if (!cfg || !window.supabase) { root.innerHTML = '<p class="pr-empty">DB 연결 실패</p>'; return; }
-    if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
-    const db = window._cottageSupabaseDb;
-
-    // GAME_ID는 game key(string). DB game_id는 numeric BGG ID → 변환 필요
-    const numericGameId = window.gameData?.[GAME_ID]?.bgg?.id || GAME_ID;
-    const gameKey = getGameKey(GAME_ID) || GAME_ID;
-
-    let records = [];
-    try {
-      const recData = await db.from('game_play_records')
-        .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at')
-        .eq('game_id', numericGameId)
-        .order('played_at', { ascending: false })
-        .order('created_at', { ascending: false })
-        .limit(50);
-      if (recData.error) console.warn('[renderSingleGame]', recData.error);
-      records = recData.data || [];
-    } catch (e) { console.warn('[renderSingleGame]', e); }
-
-    let comments = [];
-    try {
-      if (window.CottageDB?.getGameComments) {
-        comments = await window.CottageDB.getGameComments(gameKey, 20) || [];
-      }
-    } catch (e) { console.warn('[renderSingleGame] comments', e); }
-
-    const user = window.getKakaoUser?.();
-
-    const backToSheet = `<button class="rv-back-to-sheet" type="button" onclick="openGameSheet('${gameKey}')">게임 정보 · 코멘트 보기 →</button>`;
-
-    const listHtml = records.length
-      ? records.map(r => {
-          const isMine = user && String(r.user_id) === String(user.id);
-          const playedLabel = r.played_at ? formatKstDate(r.played_at) : formatDate(r.created_at);
-          const countTag = r.player_count ? `<span class="pr-rec-tag pr-tag-count-game">${r.player_count}명</span>` : '';
-          const timeTag  = r.play_time_min ? `<span class="pr-rec-tag pr-tag-time">⏱ ${r.play_time_min}분</span>` : '';
-          const scoreTag = r.score_note ? `<span class="pr-rec-tag pr-tag-score">🏆 ${(s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd())}</span>` : '';
-          const groupTag = r.group_name ? `<span class="pr-rec-tag" style="background:#455a64;color:#fff;font-weight:700;">${escH(r.group_name)}</span>` : '';
-          const namesTag = r.player_names ? `<span class="pr-rec-tag">${escH(r.player_names)}</span>` : '';
-          const photoUrls = parsePhotoUrls(r.photo_url);
-          const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-          const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
-          return `<div class="rv-item" data-id="${r.id}">
-            <div class="rv-head">
-              <span class="rv-nick">${escH(r.nickname || '익명')}</span>
-              <span style="display:flex;align-items:center;gap:6px">
-                <span class="rv-date">${playedLabel}</span>
-                ${isMine ? `<button class="rv-del" type="button">삭제</button>` : ''}
-              </span>
-            </div>
-            <div class="pr-rec-meta" style="margin-bottom:4px">${groupTag}${countTag}${timeTag}${scoreTag}${namesTag}</div>
-            ${photoHtml}
-          </div>`;
-        }).join('')
-      : `<p class="pr-empty">아직 이 게임의 기록이 없어요.<br><small style="color:var(--muted)">바텀시트에서 '+ 기록하기'로 추가할 수 있어요.</small></p>`;
-
-    // 게임평 = game_comments + play records의 review_text 통합, 날짜 내림차순
-    const playReviews = records
-      .filter(r => r.review_text)
-      .map(r => ({
-        text: r.review_text,
-        nick: r.nickname || '익명',
-        date: (r.played_at || r.created_at || '').slice(0, 10).replace(/-/g, '.'),
-      }));
-    const commentReviews = comments.map(c => ({
-      text: c.comment_text,
-      nick: c.nickname || '익명',
-      date: (c.created_at || '').slice(0, 10).replace(/-/g, '.'),
-    }));
-    const allReviews = [...commentReviews, ...playReviews].sort((a, b) =>
-      (b.date || '').localeCompare(a.date || '')
-    );
-
-    const commentsHtml = allReviews.length
-      ? allReviews.map(rv => {
-          const txt = escH(rv.text || '');
-          const nick = escH(rv.nick);
-          return `<div class="rv-item">
-            <div class="rv-head">
-              <strong class="rv-nick">${nick}</strong>
-              ${rv.date ? `<span class="rv-date">${rv.date}</span>` : ''}
-            </div>
-            <p style="margin:4px 0 0;font-size:14px;color:#3a3025;line-height:1.6">${txt}</p>
-          </div>`;
-        }).join('')
-      : `<p class="pr-empty">아직 게임평이 없어요.<br><small style="color:var(--muted)">바텀시트에서 코멘트를 남길 수 있어요.</small></p>`;
-
-    root.innerHTML = `
-      ${backToSheet}
-      <div class="rv-section-title" style="margin-top:14px">게임평 ${allReviews.length}개</div>
-      ${commentsHtml}
-      <div class="rv-section-title" style="margin-top:20px">플레이 기록 ${records.length}건</div>
-      ${listHtml}`;
-
-    root.querySelectorAll('.rv-del').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const item = btn.closest('.rv-item');
-        if (!confirm('이 기록을 삭제할까요?')) return;
-        const res = await window.CottageDB?.deleteGamePlay(item.dataset.id);
-        if (!res?.error) item.remove();
-      });
-    });
-
-    root.querySelectorAll('.pr-rec-photo').forEach(img => {
-      img.addEventListener('click', e => {
-        e.stopPropagation();
-        const wrap = img.closest('.pr-rec-photo-wrap');
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
-      });
-    });
-    root.querySelectorAll('.pr-rec-photo-more').forEach(el => {
-      el.addEventListener('click', e => {
-        e.stopPropagation();
-        const wrap = el.closest('.pr-rec-photo-wrap');
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
-      });
-    });
   }
 
 })();
