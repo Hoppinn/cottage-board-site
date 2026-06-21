@@ -172,10 +172,10 @@
     const SECTIONS = [
       { id: 'party',          code: 'A',   label: '파티게임',           sub: false },
       { id: 'dexterity',      code: 'A-1', label: '몸으로 하는 게임',   sub: true  },
-      { id: 'puzzle_1000',    code: 'A-2', label: '1000피스 직소퍼즐',  sub: true  },
-      { id: 'toy',            code: 'A-3', label: '장난감',             sub: true  },
-      { id: 'poker_mahjong',  code: 'A-4', label: '포커칩·마작패',      sub: true  },
-      { id: 'lost_found',     code: 'A-5', label: '고객분실물',         sub: true  },
+      { id: 'puzzle_1000',    code: 'A-2', label: '1000피스 직소퍼즐',  sub: true,  items: [] },
+      { id: 'toy',            code: 'A-3', label: '장난감',             sub: true,  items: [] },
+      { id: 'poker_mahjong',  code: 'A-4', label: '포커칩·마작패',      sub: true,  items: [] },
+      { id: 'lost_found',     code: 'A-5', label: '고객분실물',         sub: true,  items: [] },
       { id: 'light_family',   code: 'B',   label: '라이트패밀리게임',   sub: false },
       { id: 'easy_coop',      code: 'B-1', label: '쉬운 협력게임',      sub: true  },
       { id: 'heavy_strategy', code: 'C',   label: '헤비 전략게임',      sub: false },
@@ -245,11 +245,13 @@
 
       let html = SECTIONS.map(s => {
         const games = sortByName(groupMap[s.id] || []);
-        if (games.length === 0) return '';
+        const manualItems = s.items || [];
         const modClass = s.sub ? 'loc-section--sub' : '';
-        const chips = games.length
-          ? games.map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('')
-          : `<span class="loc-empty">해당 게임 없음</span>`;
+        const gameChips = games.map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('');
+        const manualChips = manualItems.map(name => `<span class="loc-game-chip" style="cursor:default">${name}</span>`).join('');
+        const chips = (gameChips || manualChips)
+          ? (gameChips + manualChips)
+          : `<span class="loc-empty">매장 내 확인 바랍니다</span>`;
 
         return `
           <div class="loc-section ${modClass}" data-section-id="${s.id}">
@@ -257,7 +259,7 @@
               <span class="loc-section-code">${s.code}</span>
               <div class="loc-section-info">
                 <div class="loc-section-label">${s.label}</div>
-                <div class="loc-section-count">${games.length}종</div>
+                <div class="loc-section-count">${games.length + manualItems.length > 0 ? (games.length + manualItems.length) + '종' : '매장 내 확인'}</div>
               </div>
               <span class="loc-section-arrow">▾</span>
             </div>
