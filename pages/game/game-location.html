@@ -245,6 +245,7 @@
 
       let html = SECTIONS.map(s => {
         const games = sortByName(groupMap[s.id] || []);
+        if (games.length === 0) return '';
         const modClass = s.sub ? 'loc-section--sub' : '';
         const chips = games.length
           ? games.map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('')
