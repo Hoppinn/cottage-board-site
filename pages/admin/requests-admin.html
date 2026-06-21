@@ -726,7 +726,7 @@
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
         db2 ? db2.from('page_views').select('page, created_at, referrer').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
-        db2 ? db2.from('anon_sessions').select('session_key, last_seen_at').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const pageViews = pvResult?.data || [];
       const anonSessions = anonResult?.data || [];
@@ -971,11 +971,18 @@
           const a = u;
           const { text: statusText, online } = fmtOnlineStatus(a.last_seen_at);
           const shortKey = a.session_key.slice(0, 8) + '…';
+          const anonVisitCount = a.visit_count != null ? a.visit_count + '회' : '-';
+          const anonTodayS = a.today_date === todayKst ? (a.today_seconds || 0) : 0;
           return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" style="opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:#f5f0e8;color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
             </div>
-            <div class="admin-member-metas"><span>첫 방문 ${fmtDate(a.first_seen_at)}</span></div>
+            <div class="admin-member-metas">
+              <span>첫 방문 ${fmtDate(a.first_seen_at)}</span>
+              <span>최근 ${fmtDate(a.last_seen_at)}</span>
+              <span>방문 ${anonVisitCount}</span>
+              ${anonTodayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
+            </div>
           </div>`;
         }
       }).join('')}</div>` : '<div class="admin-empty">방문자 없음</div>';

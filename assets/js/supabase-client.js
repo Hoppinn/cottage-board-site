@@ -815,31 +815,47 @@ window._cottageSess = (function () {
     if (_anonHeartbeatTimer) { clearInterval(_anonHeartbeatTimer); _anonHeartbeatTimer = null; }
   }
 
-  function _startAnonHeartbeat() {
+  async function _startAnonHeartbeat() {
     if (_anonHeartbeatTimer || _sessionUserId) return;
     if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
     const key = getSessionKey();
-    db.from('anon_sessions').upsert(
-      { session_key: key, last_seen_at: new Date().toISOString() },
-      { onConflict: 'session_key' }
-    ).then(() => {}).catch(() => {});
+    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    let _anonTodaySec = 0;
+    try {
+      const { data: existing } = await db.from('anon_sessions')
+        .select('visit_count, today_date, today_seconds')
+        .eq('session_key', key).maybeSingle();
+      if (!existing) {
+        await db.from('anon_sessions').insert({
+          session_key: key, last_seen_at: new Date().toISOString(),
+          first_seen_at: new Date().toISOString(),
+          visit_count: 1, today_seconds: 0, today_date: todayKst
+        });
+      } else {
+        const isNewDay = existing.today_date !== todayKst;
+        _anonTodaySec = isNewDay ? 0 : (existing.today_seconds || 0);
+        await db.from('anon_sessions').update({
+          last_seen_at: new Date().toISOString(),
+          visit_count: (existing.visit_count || 0) + (isNewDay ? 1 : 0),
+          today_seconds: _anonTodaySec, today_date: todayKst
+        }).eq('session_key', key);
+      }
+    } catch (_) {}
     // 비로그인 방문자도 page_sessions에 기록 (명 집계용); 실패해도 anon_sessions 영향 없음
     try {
       const page = window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
       db.from('page_sessions').insert({
-        page,
-        user_id: null,
-        session_key: key,
-        duration_sec: 0,
-        entered_at: new Date().toISOString(),
-        referrer: _sessionReferrer
+        page, user_id: null, session_key: key,
+        duration_sec: 0, entered_at: new Date().toISOString(), referrer: _sessionReferrer
       }).then(() => {}).catch(() => {});
     } catch (_) {}
     _anonHeartbeatTimer = setInterval(() => {
       if (_sessionUserId) { _stopAnonHeartbeat(); return; }
       if (document.hidden) return;
-      db.from('anon_sessions').update({ last_seen_at: new Date().toISOString() })
-        .eq('session_key', key).then(() => {}).catch(() => {});
+      _anonTodaySec += 60;
+      db.from('anon_sessions').update({
+        last_seen_at: new Date().toISOString(), today_seconds: _anonTodaySec
+      }).eq('session_key', key).then(() => {}).catch(() => {});
     }, 60 * 1000);
   }
 

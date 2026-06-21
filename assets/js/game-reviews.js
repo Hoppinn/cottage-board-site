@@ -1,6 +1,4 @@
 (function () {
-  const params = new URLSearchParams(location.search);
-  const GAME_ID = params.get('game') || '';
 
   // ── helpers ─────────────────────────────────────────────────────
 
