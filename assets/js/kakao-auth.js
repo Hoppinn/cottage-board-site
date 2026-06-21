@@ -503,7 +503,7 @@ async function openProfilePanel() {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGameIds, curiousGameIds] = await Promise.all([
+  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -511,8 +511,8 @@ async function openProfilePanel() {
     (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getUserLikedGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getUserCuriousGames?.(String(user.id)) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getUserLikedGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getUserCuriousGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
   ]);
   // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
@@ -745,15 +745,64 @@ async function openProfilePanel() {
   const _growthInnerHtml = `${achHtml}${charHtml}${titleHtml}${codexHtml}`;
   // 음료교환권: voucherHtml 단독
   const _voucherInnerHtml = voucherHtml;
-  // 취향 보드: 좋아하는 + 해보고싶은 합산 (기본 열림 토글)
+
+  // 취향 보드
+  const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
+  const _bio = stats?.profile?.bio || '';
+  const _avoidTags = stats?.profile?.avoid_tags || [];
+
+  function _buildTasteGameItems(games) {
+    if (!games.length) return '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+    return games.map(g => {
+      const name = g.game_id
+        ? (window.gameData?.[g.game_id]?.display || window.gameData?.[g.game_id]?.titleKo || String(g.game_id))
+        : (g.custom_name || '');
+      const thumb = g.game_id && window.gameData?.[g.game_id]?.images?.thumbnail
+        ? `<img class="taste-game-thumb" src="${escH(window.gameData[g.game_id].images.thumbnail)}" alt="">`
+        : `<span class="taste-game-thumb-empty"></span>`;
+      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
+      const cnAttr = g.custom_name ? ` data-custom-name="${escH(g.custom_name)}"` : '';
+      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
+      return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span><button class="taste-game-del" type="button" title="삭제">✕</button></div>`;
+    }).join('');
+  }
+
   const _tasteInnerHtml = `
-    <div class="profile-gamelist-section">
-      <button class="profile-gamelist-section-toggle" type="button">❤️ 좋아하는 게임 <span class="profile-activity-count">${likedGameIds.length}개</span><span class="profile-toggle-arrow">▴</span></button>
-      <div class="profile-gamelist-body">${_buildGameListHtml(likedGameIds, '게임 페이지에서 ❤️를 눌러 추가해보세요')}</div>
+    <div class="taste-bio-section">
+      <div class="taste-section-label">한줄 소개</div>
+      <div class="taste-bio-row">
+        <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bio ? escH(_bio) : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>'}</span>
+        <button class="taste-bio-edit-btn" type="button" title="편집">✏️</button>
+      </div>
+      <div class="taste-bio-edit-wrap" style="display:none">
+        <textarea class="taste-bio-textarea" maxlength="100" placeholder="한줄 소개를 입력해주세요 (최대 100자)"></textarea>
+        <div class="taste-bio-actions">
+          <button class="taste-bio-save-btn" type="button">저장</button>
+          <button class="taste-bio-cancel-btn" type="button">취소</button>
+        </div>
+      </div>
     </div>
-    <div class="profile-gamelist-section">
-      <button class="profile-gamelist-section-toggle" type="button">👀 해보고 싶은 게임 <span class="profile-activity-count">${curiousGameIds.length}개</span><span class="profile-toggle-arrow">▴</span></button>
-      <div class="profile-gamelist-body">${_buildGameListHtml(curiousGameIds, '게임 페이지에서 👀를 눌러 추가해보세요')}</div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span></div>
+      <div class="taste-game-list" id="tastelikedList">${_buildTasteGameItems(likedGames)}</div>
+      <button class="taste-add-btn" id="tastelikedAddBtn" type="button">+ 게임 추가</button>
+      <div class="taste-search-wrap" id="tastelikedSearch" style="display:none">
+        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
+        <div class="taste-search-results"></div>
+      </div>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span></div>
+      <div class="taste-game-list" id="tastecuriousList">${_buildTasteGameItems(curiousGames)}</div>
+      <button class="taste-add-btn" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>
+      <div class="taste-search-wrap" id="tastecuriousSearch" style="display:none">
+        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
+        <div class="taste-search-results"></div>
+      </div>
+    </div>
+    <div class="taste-avoid-section">
+      <div class="taste-section-label">🚫 피하는 유형</div>
+      <div class="taste-tag-grid">${AVOID_TAGS.map(t => `<button class="taste-tag${_avoidTags.includes(t) ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${escH(t)}</button>`).join('')}</div>
     </div>`;
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
@@ -783,7 +832,7 @@ async function openProfilePanel() {
     </div>` : ''}`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _tasteCardSummary = `❤️ 좋아요 ${likedGameIds.length}개\n👀 관심게임 ${curiousGameIds.length}개`;
+  const _tasteCardSummary = `❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개`;
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
@@ -1033,28 +1082,163 @@ async function openProfilePanel() {
       } else if (type === 'taste') {
         _trackPvOnce('my-board-taste');
         _openSubSheet('취향 보드', _tasteInnerHtml, subBody => {
-          subBody.querySelectorAll('.profile-gamelist-section-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const body = btn.nextElementSibling;
-              const arrow = btn.querySelector('.profile-toggle-arrow');
-              const hidden = body.classList.toggle('is-hidden');
-              arrow.textContent = hidden ? '▾' : '▴';
-            });
+          const userId = String(user.id);
+
+          // ── 한줄 소개 ──
+          const bioRow = subBody.querySelector('.taste-bio-row');
+          const bioDisplay = subBody.querySelector('.taste-bio-display');
+          const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
+          const bioTextarea = subBody.querySelector('.taste-bio-textarea');
+          subBody.querySelector('.taste-bio-edit-btn')?.addEventListener('click', () => {
+            bioRow.style.display = 'none';
+            bioEditWrap.style.display = '';
+            bioTextarea.value = bioDisplay.dataset.bio || '';
+            bioTextarea.focus();
           });
-          subBody.querySelectorAll('.profile-gamelist-item').forEach(li => {
-            li.addEventListener('click', () => {
-              const key = li.dataset.gameKey;
-              if (!key) return;
-              window.ensureGameSheet?.();
-              window.openGameSheet?.(key);
-            });
+          subBody.querySelector('.taste-bio-cancel-btn')?.addEventListener('click', () => {
+            bioRow.style.display = '';
+            bioEditWrap.style.display = 'none';
           });
-          subBody.querySelectorAll('.profile-gamelist .profile-more-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const wrap = btn.closest('.profile-more-btn-wrap')?.previousElementSibling;
-              if (!wrap) return;
-              const isHidden = wrap.classList.toggle('is-hidden');
-              btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}개 더)` : '접기';
+          subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
+            const newBio = bioTextarea.value.trim().slice(0, 100);
+            await window.CottageDB?.updateUserBio?.(userId, newBio);
+            bioDisplay.dataset.bio = newBio;
+            bioDisplay.innerHTML = newBio ? escH(newBio) : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
+            bioRow.style.display = '';
+            bioEditWrap.style.display = 'none';
+          });
+
+          // ── 게임 목록 (좋아요·관심) ──
+          for (const listType of ['liked', 'curious']) {
+            const table = listType === 'liked' ? 'game_likes' : 'game_curious';
+            const listEl = subBody.querySelector(`#taste${listType}List`);
+            const addBtn = subBody.querySelector(`#taste${listType}AddBtn`);
+            const searchWrap = subBody.querySelector(`#taste${listType}Search`);
+            const searchInput = searchWrap?.querySelector('.taste-search-input');
+            const searchResults = searchWrap?.querySelector('.taste-search-results');
+            const countEl = subBody.querySelector(`#taste${listType}Count`);
+
+            // 기존 카탈로그 아이템 클릭 → 게임 시트
+            listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
+              item.addEventListener('click', e => {
+                if (e.target.closest('.taste-game-del')) return;
+                window.ensureGameSheet?.();
+                window.openGameSheet?.(item.dataset.gameId);
+              });
+            });
+
+            // 삭제 (이벤트 위임)
+            listEl?.addEventListener('click', async e => {
+              const delBtn = e.target.closest('.taste-game-del');
+              if (!delBtn) return;
+              const item = delBtn.closest('.taste-game-item');
+              const gameId = item?.dataset.gameId ? Number(item.dataset.gameId) : null;
+              const customName = item?.dataset.customName || null;
+              await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
+              item.remove();
+              if (!listEl.querySelector('.taste-game-item')) {
+                listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+              }
+              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+            });
+
+            // 추가 버튼 → 검색 토글
+            addBtn?.addEventListener('click', () => {
+              const showing = searchWrap.style.display !== 'none';
+              searchWrap.style.display = showing ? 'none' : '';
+              if (!showing) searchInput?.focus();
+            });
+
+            // 검색 입력
+            let _searchTimer = null;
+            searchInput?.addEventListener('input', () => {
+              clearTimeout(_searchTimer);
+              _searchTimer = setTimeout(async () => {
+                const q = searchInput.value.trim();
+                if (!q) { searchResults.innerHTML = ''; return; }
+
+                const catalogItems = Object.entries(window.gameData || {})
+                  .filter(([, g]) => {
+                    const name = g.display || g.titleKo || g.titleEn || '';
+                    return name.toLowerCase().includes(q.toLowerCase());
+                  })
+                  .slice(0, 6)
+                  .map(([id, g]) => {
+                    const name = escH(g.display || g.titleKo || g.titleEn || String(id));
+                    return `<button class="taste-search-item" data-game-id="${id}" type="button">${name}</button>`;
+                  });
+
+                const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
+                const customItems = suggestions
+                  .filter(n => n.toLowerCase().includes(q.toLowerCase()))
+                  .slice(0, 3)
+                  .map(n => `<button class="taste-search-item" data-custom-name="${escH(n)}" type="button">${escH(n)} <span class="taste-search-custom-label">직접입력</span></button>`);
+
+                const directItem = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 추가</button>`;
+
+                searchResults.innerHTML = [...catalogItems, ...customItems, directItem].join('');
+
+                searchResults.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn => {
+                  btn.addEventListener('click', async () => {
+                    const gameId = btn.dataset.gameId ? Number(btn.dataset.gameId) : null;
+                    const customName = btn.dataset.customName || null;
+
+                    // 중복 방지
+                    if (gameId && listEl.querySelector(`[data-game-id="${gameId}"]`)) return;
+                    if (customName) {
+                      const existing = [...listEl.querySelectorAll('[data-custom-name]')];
+                      if (existing.some(el => el.dataset.customName === customName)) return;
+                    }
+
+                    await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
+
+                    const name = gameId
+                      ? (window.gameData?.[gameId]?.display || window.gameData?.[gameId]?.titleKo || String(gameId))
+                      : (customName || '');
+                    const thumb = gameId && window.gameData?.[gameId]?.images?.thumbnail
+                      ? `<img class="taste-game-thumb" src="${escH(window.gameData[gameId].images.thumbnail)}" alt="">`
+                      : `<span class="taste-game-thumb-empty"></span>`;
+
+                    listEl.querySelector('.taste-game-empty')?.remove();
+
+                    const newItem = document.createElement('div');
+                    newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
+                    if (gameId) newItem.dataset.gameId = gameId;
+                    if (customName) newItem.dataset.customName = customName;
+                    newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="taste-game-del" type="button" title="삭제">✕</button>`;
+                    if (gameId) {
+                      newItem.addEventListener('click', e => {
+                        if (e.target.closest('.taste-game-del')) return;
+                        window.ensureGameSheet?.();
+                        window.openGameSheet?.(String(gameId));
+                      });
+                    }
+                    listEl.appendChild(newItem);
+
+                    if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+                    searchWrap.style.display = 'none';
+                    searchInput.value = '';
+                    searchResults.innerHTML = '';
+                  });
+                });
+              }, 200);
+            });
+          }
+
+          // ── 피하는 유형 태그 ──
+          let currentAvoidTags = [...(_avoidTags)];
+          subBody.querySelectorAll('.taste-tag').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const tag = btn.dataset.tag;
+              const idx = currentAvoidTags.indexOf(tag);
+              if (idx >= 0) {
+                currentAvoidTags.splice(idx, 1);
+                btn.classList.remove('is-active');
+              } else {
+                currentAvoidTags.push(tag);
+                btn.classList.add('is-active');
+              }
+              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
             });
           });
         });

@@ -69,8 +69,15 @@
 | `getVoucherProducts()` | 활성 상품 목록 (`{ id, name, cost }[]`) |
 | `redeemVoucher(userId, productId)` | 교환권 사용. 잔액 부족이면 `{ ok:false, reason:'insufficient' }`. 성공 시 `{ ok:true }` |
 | `getVoucherHistory(userId, limit=20)` | 교환권 입출 내역. `voucher_products(name)` FK expand 포함 |
-| `getUserLikedGames(userId)` | 유저가 따봉(❤️)한 game_id 배열 반환 |
-| `getUserCuriousGames(userId)` | 유저가 궁금해요(🤔)한 game_id 배열 반환 |
+| `getUserLikedGames(userId)` | 유저가 따봉(❤️)한 game_id 배열 반환 (카탈로그 전용, 하위호환) |
+| `getUserCuriousGames(userId)` | 유저가 궁금해요(🤔)한 game_id 배열 반환 (카탈로그 전용, 하위호환) |
+| `getUserLikedGamesAll(userId)` | 취향보드용: `[{game_id, custom_name}]` 반환. custom_name은 직접입력 게임 |
+| `getUserCuriousGamesAll(userId)` | 취향보드용: `[{game_id, custom_name}]` 반환 |
+| `addGamePref(userId, gameId, customName, table)` | 취향보드: game_likes 또는 game_curious에 항목 추가. gameId/customName 중 하나만 필요 |
+| `removeGamePref(userId, gameId, customName, table)` | 취향보드: 항목 삭제 |
+| `getCustomPrefSuggestions()` | 취향보드: 두 테이블 전체에서 distinct custom_name 목록 반환 |
+| `updateUserBio(userId, bio)` | profiles.bio 업데이트 |
+| `updateUserAvoidTags(userId, tags)` | profiles.avoid_tags (text[]) 업데이트 |
 | `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD' |
 | `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert |
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소 |

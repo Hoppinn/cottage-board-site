@@ -1661,6 +1661,20 @@ function showLoginToast() {
   toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 3000);
 }
 
+function showActionToast(msg) {
+  let toast = document.getElementById('actionToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'actionToast';
+    toast.className = 'login-toast';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('is-visible');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 2500);
+}
+
 function requireLogin(action) {
   const user = window.getKakaoUser?.();
   if (user) { action(); return; }
@@ -1703,6 +1717,7 @@ async function onSheetLike(btn) {
         likeBtn.textContent = `👍 좋아요 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);
       }
+      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요');
       if (result.liked) {
         const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
         const curiousBtn = document.getElementById('sheetCuriousBtn');
@@ -1729,6 +1744,7 @@ async function onSheetCurious(btn) {
         curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
         curiousBtn.classList.toggle('is-active', result.curious);
       }
+      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요');
       if (result.curious) {
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');

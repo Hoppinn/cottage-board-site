@@ -3778,6 +3778,44 @@ body.sheet-open{
 .profile-gamelist-section-title{font-size:13px;font-weight:700;color:#5a3418;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border,#e8e4dc);}
 .profile-gamelist-section-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;text-align:left;gap:6px;margin-bottom:8px;}
 .profile-gamelist-body.is-hidden{display:none;}
+/* 취향 보드 */
+.taste-bio-section,.taste-game-section,.taste-avoid-section{margin-bottom:20px;}
+.taste-section-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.taste-count{font-weight:400;color:var(--muted);}
+.taste-bio-row{display:flex;align-items:flex-start;gap:8px;}
+.taste-bio-display{flex:1;font-size:14px;color:var(--text);line-height:1.5;}
+.taste-bio-placeholder{color:var(--muted);font-style:italic;}
+.taste-bio-edit-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:0;color:var(--muted);flex-shrink:0;}
+.taste-bio-edit-wrap{margin-top:6px;}
+.taste-bio-textarea{width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--border,#e8e4dc);border-radius:8px;font-size:14px;resize:none;height:64px;font-family:inherit;}
+.taste-bio-actions{display:flex;gap:8px;margin-top:6px;}
+.taste-bio-save-btn,.taste-bio-cancel-btn{padding:6px 14px;border-radius:7px;font-size:13px;cursor:pointer;border:1px solid var(--border,#e8e4dc);}
+.taste-bio-save-btn{background:var(--green,#4caf50);color:#fff;border-color:var(--green,#4caf50);font-weight:700;}
+.taste-bio-cancel-btn{background:#fff;color:var(--muted);}
+.taste-game-list{display:flex;flex-direction:column;gap:2px;margin-bottom:8px;}
+.taste-game-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border,#e8e4dc);}
+.taste-game-item:last-child{border-bottom:none;}
+.taste-game-item--clickable{cursor:pointer;}
+.taste-game-item--clickable:hover .taste-game-name{text-decoration:underline;}
+.taste-game-thumb{width:36px;height:36px;object-fit:contain;border-radius:5px;flex-shrink:0;background:#f5f0eb;}
+.taste-game-thumb-empty{width:36px;height:36px;background:#f0ebe5;border-radius:5px;flex-shrink:0;}
+.taste-game-name{flex:1;font-size:13px;color:var(--text);}
+.taste-game-del{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:2px 4px;flex-shrink:0;border-radius:4px;}
+.taste-game-del:hover{color:var(--text);}
+.taste-game-empty{font-size:13px;color:var(--muted);text-align:center;padding:16px 0;margin:0;}
+.taste-add-btn{background:none;border:1px dashed var(--border,#e8e4dc);border-radius:8px;padding:7px 14px;font-size:13px;color:var(--muted);cursor:pointer;width:100%;}
+.taste-add-btn:hover{border-color:var(--text);color:var(--text);}
+.taste-search-wrap{margin-top:6px;}
+.taste-search-input{width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--border,#e8e4dc);border-radius:8px;font-size:14px;font-family:inherit;}
+.taste-search-results{margin-top:4px;display:flex;flex-direction:column;gap:2px;}
+.taste-search-item,.taste-search-direct{background:#fff;border:1px solid var(--border,#e8e4dc);border-radius:7px;padding:7px 10px;font-size:13px;text-align:left;cursor:pointer;width:100%;display:flex;align-items:center;gap:6px;}
+.taste-search-item:hover,.taste-search-direct:hover{background:var(--card-bg,#faf9f5);}
+.taste-search-direct{color:var(--muted);border-style:dashed;}
+.taste-search-custom-label{font-size:11px;color:var(--muted);background:#f0ebe5;padding:1px 5px;border-radius:4px;flex-shrink:0;}
+.taste-tag-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.taste-tag{padding:6px 12px;border:1px solid var(--border,#e8e4dc);border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:var(--text);}
+.taste-tag.is-active{background:var(--text);color:#fff;border-color:var(--text);}
+.taste-tag:hover:not(.is-active){background:var(--card-bg,#faf9f5);}
 .profile-record-stats{list-style:none;padding:0;margin:0 0 20px;}
 .profile-record-stats li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border,#e8e4dc);font-size:14px;}
 .profile-record-stats li span{color:var(--muted);}

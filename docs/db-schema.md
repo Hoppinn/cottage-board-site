@@ -10,15 +10,15 @@
 |--------|----------|------|
 | `game_views` | game_id, created_at | 조회수 트래킹 |
 | `game_ratings` | game_id, rating, session_key | 별점 |
-| `game_likes` | game_id, user_id | 따봉 |
-| `game_curious` | game_id, user_id | 궁금해요 |
+| `game_likes` | game_id (nullable), user_id, custom_name (nullable text) | 따봉. custom_name은 직접입력 게임명 (game_id IS NULL일 때 사용) |
+| `game_curious` | game_id (nullable), user_id, custom_name (nullable text) | 궁금해요. 동일 구조 |
 | `game_comments` | game_key, comment_text, nickname, user_id | 코멘트 |
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
 | `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
 | `page_events` | event_type, game_id, referrer, created_at | 기능 이벤트 (recommend_run, recommend_game_click). referrer: 세션 귀속 소스 |
 | `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
-| `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source | 유저 프로필 |
+| `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]) | 유저 프로필. bio: 한줄소개, avoid_tags: 피하는 유형 태그 배열 |
 | `game_requests` | game_name, request_count, status, is_planned, user_id, purchase_status, status_date, purchased_at, actual_games, added_at | 게임 요청 |
 | `snack_requests` | item_name, request_count, user_id | 간식 요청 |
 | `suggestions` | content, user_id, is_done, is_planned | 건의사항 |

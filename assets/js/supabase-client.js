@@ -622,6 +622,73 @@ window._cottageSess = (function () {
     } catch (_) { return []; }
   }
 
+  // ── 취향보드 (game_likes / game_curious with custom_name) ────────────
+
+  async function getUserLikedGamesAll(userId) {
+    if (!userId) return [];
+    try {
+      const { data } = await db.from('game_likes').select('game_id, custom_name').eq('user_id', userId);
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function getUserCuriousGamesAll(userId) {
+    if (!userId) return [];
+    try {
+      const { data } = await db.from('game_curious').select('game_id, custom_name').eq('user_id', userId);
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function addGamePref(userId, gameId, customName, table) {
+    if (!userId || (!gameId && !customName)) return { error: 'invalid' };
+    try {
+      const row = { user_id: userId };
+      if (gameId) row.game_id = gameId;
+      if (customName) row.custom_name = customName;
+      const { error } = await db.from(table).insert(row);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function removeGamePref(userId, gameId, customName, table) {
+    if (!userId) return { error: 'invalid' };
+    try {
+      let q = db.from(table).delete().eq('user_id', userId);
+      if (gameId) q = q.eq('game_id', gameId);
+      else if (customName) q = q.eq('custom_name', customName).is('game_id', null);
+      const { error } = await q;
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function getCustomPrefSuggestions() {
+    try {
+      const [l, c] = await Promise.all([
+        db.from('game_likes').select('custom_name').not('custom_name', 'is', null),
+        db.from('game_curious').select('custom_name').not('custom_name', 'is', null),
+      ]);
+      const names = new Set([...(l.data || []), ...(c.data || [])].map(r => r.custom_name).filter(Boolean));
+      return [...names].sort();
+    } catch (_) { return []; }
+  }
+
+  async function updateUserBio(userId, bio) {
+    if (!userId) return { error: 'invalid' };
+    try {
+      const { error } = await db.from('profiles').update({ bio: bio || null }).eq('user_id', userId);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function updateUserAvoidTags(userId, tags) {
+    if (!userId) return { error: 'invalid' };
+    try {
+      const { error } = await db.from('profiles').update({ avoid_tags: tags }).eq('user_id', userId);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
   // ── 방문자 통계 ─────────────────────────────────────
 
   async function getVisitorStats() {
@@ -1202,6 +1269,13 @@ window._cottageSess = (function () {
     getVoucherHistory,
     getUserLikedGames,
     getUserCuriousGames,
+    getUserLikedGamesAll,
+    getUserCuriousGamesAll,
+    addGamePref,
+    removeGamePref,
+    getCustomPrefSuggestions,
+    updateUserBio,
+    updateUserAvoidTags,
     getMeetingVotes,
     upsertMeetingVote,
     deleteMeetingVote,
