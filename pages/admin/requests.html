@@ -732,7 +732,11 @@
         if (!error) { removeMyId(storageKey, id); }
       } else {
         if (!confirm('내 요청을 취소할까요? (희망 수가 1 줄어요)')) return;
-        const { error } = await getDb().from(table).update({ request_count: count - 1 }).eq('id', id);
+        const userId = getCurrentUser()?.id;
+        const [{ error }] = await Promise.all([
+          getDb().from(table).update({ request_count: count - 1 }).eq('id', id),
+          userId ? getDb().from('game_request_votes').delete().eq('request_id', id).eq('user_id', userId) : Promise.resolve({}),
+        ]);
         if (!error) { removeMyId(storageKey, id); }
       }
       if (table === 'game_requests') await loadGameRequests();
