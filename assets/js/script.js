@@ -1254,6 +1254,7 @@ function openGameSheet(gameKey, restoreScroll = false){
       <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
       <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
     </div>
+    <div class="sheet-reaction-users" id="sheetReactionUsers"></div>
 
     <!-- 게임평 미리보기 -->
     <div class="sheet-preview-section">
@@ -1661,7 +1662,7 @@ function showLoginToast() {
   toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 3000);
 }
 
-function showActionToast(msg) {
+function showActionToast(msg, linkLabel, linkAction) {
   let toast = document.getElementById('actionToast');
   if (!toast) {
     toast = document.createElement('div');
@@ -1669,10 +1670,15 @@ function showActionToast(msg) {
     toast.className = 'login-toast';
     document.body.appendChild(toast);
   }
-  toast.textContent = msg;
+  if (linkLabel && linkAction) {
+    toast.innerHTML = `<span>${msg}</span><button type="button">${linkLabel}</button>`;
+    toast.querySelector('button').onclick = () => { linkAction(); toast.classList.remove('is-visible'); };
+  } else {
+    toast.textContent = msg;
+  }
   toast.classList.add('is-visible');
   clearTimeout(toast._timer);
-  toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 2500);
+  toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 3000);
 }
 
 function requireLogin(action) {
@@ -1681,15 +1687,24 @@ function requireLogin(action) {
   showLoginToast();
 }
 
+function _reactionUserChip(u) {
+  const thumb = u.photo_url
+    ? `<img class="sheet-liker-avatar" src="${u.photo_url}" alt="">`
+    : `<span class="sheet-liker-avatar sheet-liker-avatar--empty">${(u.nickname || '?')[0]}</span>`;
+  return `<span class="sheet-liker-chip">${thumb}<span class="sheet-liker-name">${String(u.nickname || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></span>`;
+}
+
 async function initSheetLikes(gameKey) {
   if (!window.CottageDB) return;
   const user = window.getKakaoUser?.();
   const userId = user ? String(user.id) : null;
-  const [likeCount, curiousCount, liked, curious] = await Promise.all([
+  const [likeCount, curiousCount, liked, curious, likers, curiousUsers] = await Promise.all([
     window.CottageDB.getGameLikeCount(gameKey),
     window.CottageDB.getGameCuriousCount(gameKey),
     userId ? window.CottageDB.hasUserLiked(gameKey, userId) : false,
     userId ? window.CottageDB.hasUserCurious(gameKey, userId) : false,
+    window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]),
+    window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]),
   ]);
   const likeBtn = document.getElementById('sheetLikeBtn');
   if (likeBtn) {
@@ -1700,6 +1715,13 @@ async function initSheetLikes(gameKey) {
   if (curiousBtn) {
     curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
     curiousBtn.classList.toggle('is-active', curious);
+  }
+  const usersEl = document.getElementById('sheetReactionUsers');
+  if (usersEl) {
+    let html = '';
+    if (likers.length) html += `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
+    if (curiousUsers.length) html += `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
+    usersEl.innerHTML = html;
   }
 }
 
@@ -1717,7 +1739,7 @@ async function onSheetLike(btn) {
         likeBtn.textContent = `👍 좋아요 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);
       }
-      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요');
+      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => window.openProfilePanel?.() : null);
       if (result.liked) {
         const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
         const curiousBtn = document.getElementById('sheetCuriousBtn');
@@ -1725,6 +1747,17 @@ async function onSheetLike(btn) {
           curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
           curiousBtn.classList.remove('is-active');
         }
+      }
+      const likers = await (window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]));
+      const usersEl = document.getElementById('sheetReactionUsers');
+      if (usersEl) {
+        const rows = usersEl.querySelectorAll('.sheet-liker-row');
+        const likeRow = [...rows].find(r => r.querySelector('.sheet-liker-label')?.textContent === '❤️');
+        if (likers.length) {
+          const newRow = `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
+          if (likeRow) likeRow.outerHTML = newRow;
+          else usersEl.insertAdjacentHTML('afterbegin', newRow);
+        } else if (likeRow) likeRow.remove();
       }
     }
   });
@@ -1744,7 +1777,7 @@ async function onSheetCurious(btn) {
         curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
         curiousBtn.classList.toggle('is-active', result.curious);
       }
-      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요');
+      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => window.openProfilePanel?.() : null);
       if (result.curious) {
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');
@@ -1752,6 +1785,17 @@ async function onSheetCurious(btn) {
           likeBtn.textContent = `👍 좋아요 ${likeCount}`;
           likeBtn.classList.remove('is-active');
         }
+      }
+      const curiousUsers = await (window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]));
+      const usersEl = document.getElementById('sheetReactionUsers');
+      if (usersEl) {
+        const rows = usersEl.querySelectorAll('.sheet-liker-row');
+        const curiousRow = [...rows].find(r => r.querySelector('.sheet-liker-label')?.textContent === '👀');
+        if (curiousUsers.length) {
+          const newRow = `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
+          if (curiousRow) curiousRow.outerHTML = newRow;
+          else usersEl.insertAdjacentHTML('beforeend', newRow);
+        } else if (curiousRow) curiousRow.remove();
       }
     }
   });

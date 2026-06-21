@@ -3296,6 +3296,13 @@ body.sheet-open{
   border-color:#d4a878;
   color:#7a4828;
 }
+.sheet-reaction-users{display:flex;flex-direction:column;gap:4px;margin-top:6px;min-height:0;}
+.sheet-liker-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.sheet-liker-label{font-size:13px;flex-shrink:0;}
+.sheet-liker-chip{display:flex;align-items:center;gap:4px;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:3px 8px 3px 4px;font-size:12px;color:var(--text);}
+.sheet-liker-avatar{width:20px;height:20px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.sheet-liker-avatar--empty{display:inline-flex;align-items:center;justify-content:center;background:#e0d8cc;font-size:10px;font-weight:700;color:#7a6850;}
+.sheet-liker-name{font-size:12px;color:var(--text);}
 
 .sheet-comment-item{
   cursor:default;

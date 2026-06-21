@@ -622,6 +622,19 @@ window._cottageSess = (function () {
     } catch (_) { return []; }
   }
 
+  async function _getReactionUsers(table, gameId, limit) {
+    try {
+      const { data: rows } = await db.from(table).select('user_id').eq('game_id', gameId).limit(limit);
+      if (!rows?.length) return [];
+      const ids = rows.map(r => r.user_id);
+      const { data: profs } = await db.from('profiles').select('user_id, nickname, photo_url').in('user_id', ids);
+      return profs || [];
+    } catch (_) { return []; }
+  }
+
+  function getGameLikers(gameId, limit = 6) { return _getReactionUsers('game_likes', gameId, limit); }
+  function getGameCuriousUsers(gameId, limit = 6) { return _getReactionUsers('game_curious', gameId, limit); }
+
   // ── 취향보드 (game_likes / game_curious with custom_name) ────────────
 
   async function getUserLikedGamesAll(userId) {
@@ -1228,6 +1241,8 @@ window._cottageSess = (function () {
     getGameCuriousCount,
     toggleGameCurious,
     hasUserCurious,
+    getGameLikers,
+    getGameCuriousUsers,
     startSession,
     upsertProfile,
     getAllProfiles,
