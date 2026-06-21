@@ -24,7 +24,7 @@
 | `suggestions` | content, user_id, is_done, is_planned | 건의사항 |
 | `play_highlights` | game_id, highlight_text | 플레이 하이라이트 |
 | `game_request_votes` | request_id, user_id | 요청 투표 |
-| `member_intros` | user_id, nickname | 멤버 소개 |
+| `member_intros` | id, user_id, nickname, favorite_games, available, location, card_color, created_at | 멤버 소개 |
 | `anon_sessions` | session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date | 비로그인 세션 분석 (1분 주기 upsert, profiles와 동일 구조) |
 | `achievements` | id, name, emoji, category, threshold | 업적/캐릭터 정의 (V1: 17개) |
 | `user_achievements` | user_id, achievement_id, earned_at, UNIQUE(user_id, achievement_id) | 유저별 획득 업적 = 해금 캐릭터 |

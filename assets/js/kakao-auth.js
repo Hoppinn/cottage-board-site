@@ -635,6 +635,12 @@ async function openProfilePanel() {
       const gameLinks = games.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
       return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}</li>`;
     }
+    if (n.type === 'new_intro') {
+      const desc = n.count === 1
+        ? `${escH(n.names[0])}님이 소개글을 올렸어요`
+        : `${escH(n.names[0])} 외 ${n.count - 1}명이 소개글을 올렸어요`;
+      return `<li class="${cls}">${_card('👋', '동호회 소개글', desc)}</li>`;
+    }
     return '';
   }
   const _hasAnyNew = _newCount > 0;

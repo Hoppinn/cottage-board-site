@@ -1054,7 +1054,17 @@ window._cottageSess = (function () {
         .lt('added_at', oneMinAgo)
         .order('added_at', { ascending: false })
         .limit(10);
-      const [taggedRes, curiousRes, purchasedRes, newGameRes] = await Promise.all([taggedPromise, curiousPromise, purchasedPromise, newGamePromise]);
+      // 동호회 소개글: 본인 글 존재 여부 + 타인 최근 소개글
+      const myIntroPromise = db.from('member_intros').select('id').eq('user_id', userId).limit(1);
+      const introListPromise = db.from('member_intros')
+        .select('id, nickname, created_at')
+        .neq('user_id', userId)
+        .not('user_id', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(20);
+      const [taggedRes, curiousRes, purchasedRes, newGameRes, myIntroRes, introListRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, myIntroPromise, introListPromise
+      ]);
       const notifs = [];
       if (nickname) {
         for (const r of taggedRes.data || []) {
@@ -1087,6 +1097,29 @@ window._cottageSess = (function () {
         const isNew = newGameSeenAt ? new Date(r.added_at) > new Date(newGameSeenAt) : true;
         const actualGames = Array.isArray(r.actual_games) && r.actual_games.length ? r.actual_games : null;
         notifs.push({ type: 'new_game', gameName: r.game_name, actualGames, date: r.added_at, isNew });
+      }
+      // 동호회 소개글 알림: 본인 글이 있는 회원에게만, 새 소개글 N개 묶음
+      if ((myIntroRes.data || []).length > 0) {
+        const allIntros = introListRes.data || [];
+        const newIntros = allIntros.filter(r => notifSeenAt ? r.created_at > notifSeenAt : true);
+        if (newIntros.length > 0) {
+          notifs.push({
+            type: 'new_intro',
+            count: newIntros.length,
+            names: newIntros.map(r => r.nickname),
+            date: newIntros[0].created_at,
+            isNew: true,
+          });
+        } else if (allIntros.length > 0) {
+          // 이미 본 소개글 — 최신 1건만 기록용으로 표시
+          notifs.push({
+            type: 'new_intro',
+            count: 1,
+            names: [allIntros[0].nickname],
+            date: allIntros[0].created_at,
+            isNew: false,
+          });
+        }
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       return notifs;
