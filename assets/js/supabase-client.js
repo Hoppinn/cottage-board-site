@@ -887,6 +887,7 @@ window._cottageSess = (function () {
         today_seconds: prevToday + accumulated,
         today_date: todayStr,
       } : {};
+      const isNewUser = !selectError && !data;
       const { error: upsertError } = await db.from('profiles').upsert({
         user_id: userId,
         nickname: nickToSave,
@@ -895,6 +896,7 @@ window._cottageSess = (function () {
         ...visitCountField,
         ...timeFields,
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
+        ...(isNewUser ? { first_source: _sessionReferrer || null } : {}),
       }, { onConflict: 'user_id' });
       if (!upsertError && !selectError) {
         const s = window._cottageSess.get(userId);

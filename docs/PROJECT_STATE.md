@@ -131,8 +131,7 @@
 - [ ] **관심 기반 묶음 알림** (Red, Plan 필수)
   - 개별 알림 → 유형별 묶음 방식 전환
   - notifSeenAt → `{ tagged, review, play_record, purchased }` 확장
-- [ ] **유입 경로 first_source 저장** — profiles.first_source TEXT 컬럼, 최초 로그인 시 1회 저장
-  - 어드민 대시보드 채널별 재방문 분포 활용 목적
+- [x] **유입 경로 first_source 저장** — profiles.first_source TEXT, 신규 유저 upsert 시 _sessionReferrer 1회 저장 (140차)
 
 ### P3 — 인프라
 
