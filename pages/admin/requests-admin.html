@@ -880,6 +880,9 @@
       </div>`;
 
       const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
+      // page_sessions 기반 비회원 집계 (방문일수·오늘초·총초) — DB 컬럼보다 정확한 역사 데이터
+      const anonPageMap = new Map(buildAnonUserMap(rows));
+
       const unified = [
         ...allProfiles.map(p => ({ _type: 'member', _last: p.last_seen_at || '', ...p })),
         ...anonSessions.map(a => ({ _type: 'anon', _last: a.last_seen_at || '', ...a }))
@@ -918,8 +921,10 @@
           const a = u;
           const { text: statusText, online } = fmtOnlineStatus(a.last_seen_at);
           const shortKey = a.session_key.slice(0, 8) + '…';
-          const anonVisitCount = a.visit_count != null ? a.visit_count + '회' : '-';
-          const anonTodayS = a.today_date === todayKst ? (a.today_seconds || 0) : 0;
+          const ent = anonPageMap.get(a.session_key);
+          const anonVisitCount = ent ? ent.days.size + '회' : (a.visit_count != null ? a.visit_count + '회' : '-');
+          const anonTodayS = ent ? ent.todaySec : (a.today_date === todayKst ? (a.today_seconds || 0) : 0);
+          const anonTotalS = ent ? [...ent.pm.values()].reduce((s, v) => s + v.totalSec, 0) : 0;
           return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" style="opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:#f5f0e8;color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
@@ -929,6 +934,7 @@
               <span>최근 ${fmtDate(a.last_seen_at)}</span>
               <span>방문 ${anonVisitCount}</span>
               ${anonTodayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
+              ${anonTotalS > 0 ? `<span>⏱ ${fmtTime(anonTotalS)}</span>` : ''}
             </div>
           </div>`;
         }
