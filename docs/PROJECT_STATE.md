@@ -136,8 +136,8 @@
 
 ### P3 — 인프라
 
-- [ ] **로그인 메뉴 HTML 공통화** — 현재 HTML 15개 파일 직접 수정 방식. JS 생성 방식으로 전환 검토
-- [ ] **renderSingleGame / ?game= 처리** — deprecated 보류. URL 공유·SEO 필요 여부 결정 후 삭제 또는 전환
+- [x] **로그인 메뉴 HTML 공통화** — assets/js/header.js 생성, 15개 HTML 파일 script 태그로 교체 (137차)
+- [x] **renderSingleGame / ?game= 처리** — game-reviews.js dead code(GAME_ID) 삭제 완료 (137차)
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html / club-rules.html 사진 중심 재구성
 
