@@ -18,10 +18,8 @@
 
 **다음 작업 후보**
 
-1. **SC2 수정** — `getRepAchievement`에 name 필드 추가 (대표 캐릭터 이름 미표시 버그)
-2. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
-3. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
-4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
+2. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 
