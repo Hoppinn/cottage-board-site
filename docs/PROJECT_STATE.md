@@ -1,12 +1,12 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-21 (137차)
+최종 갱신: 2026-06-22 (137차)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**리팩토링 진행 중** — 결과: `docs/REFACTOR_CHECKPOINT.md`
+**리팩토링 완료** — 결과: `docs/REFACTOR_CHECKPOINT.md`
 - Green 6개 완료: ACH4, PU1, ACH8, GDA1, KA8, CSS3
 - Yellow 5개 완료: SC2(대표캐릭터 이름), SC3(좋아요/궁금해요 독립), CSS1(.sheet-section 중복), GR1+GR2(deprecated 경로 삭제), ACH9(포인트 제도 삭제)
 - Red 7개 완료: PU2, SC1, GDA2, ACH5, SC4/SC5, ACH3, KA1(848줄→616줄)
@@ -18,12 +18,10 @@
 
 **다음 작업 후보**
 
-1. **성장도 뱃지 다음 업적 표시** ✅ 완료 — 프로필 패널 성장도 뱃지 아래 가장 임박한 미획득 업적 표시. `findNextAchievement(preStats)` → `{emoji,name,gap,unit}` (137차-13)
-2. **REFACTOR Green 처리** — ACH4/PU1/ACH8/GDA1/KA8/CSS3 (범위 좁고 빠름)
-2. **SC2 수정** — `getRepAchievement`에 name 필드 추가 (대표 캐릭터 이름 미표시 버그)
-3. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
-4. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
-5. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **SC2 수정** — `getRepAchievement`에 name 필드 추가 (대표 캐릭터 이름 미표시 버그)
+2. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
+3. **비회원 고유 ID SQL 실행 + 동작 확인** — `ALTER TABLE public.page_sessions ADD COLUMN IF NOT EXISTS session_key TEXT;` Supabase 실행 후 시크릿 창 테스트
+4. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 
