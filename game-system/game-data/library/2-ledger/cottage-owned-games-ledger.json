@@ -6447,14 +6447,14 @@
   {
     "id": "보타닉가든",
     "ownedName": "보타닉가든",
-    "titleEn": "Garden",
-    "bggId": "453894",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Verdant",
+    "bggId": "334065",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "가족",
-    "difficulty": null,
+    "difficulty": 2.0765,
     "difficultyWeight": 2.05,
-    "rating": 7.66667,
+    "rating": 7.26101,
     "bestPlayers": [
       2,
       3
@@ -9123,16 +9123,16 @@
   {
     "id": "오라파마인",
     "ownedName": "오라파마인",
-    "titleEn": "Ora et Labora",
-    "bggId": "70149",
+    "titleEn": "Orapa Mine",
+    "bggId": "424152",
     "matchStatus": "forced",
     "status": "ready",
     "location": "작은",
-    "difficulty": 3.8857,
+    "difficulty": 1.9268,
     "difficultyWeight": 1.92,
-    "rating": 7.67436,
+    "rating": 7.45061,
     "bestPlayers": [
-      3
+      2
     ],
     "recommendedPlayers": [
       2
@@ -13236,5 +13236,25 @@
     "rating": 6,
     "bestPlayers": [],
     "recommendedPlayers": []
+  },
+  {
+    "id": "아르낙의잊혀진유적",
+    "ownedName": "아르낙의잊혀진유적",
+    "titleEn": "Lost Ruins of Arnak",
+    "bggId": "312484",
+    "matchStatus": "forced",
+    "status": "ready",
+    "location": "",
+    "difficulty": 2.9319,
+    "difficultyWeight": 0,
+    "rating": 8.0827,
+    "bestPlayers": [
+      3
+    ],
+    "recommendedPlayers": [
+      1,
+      2,
+      4
+    ]
   }
 ]

@@ -41227,15 +41227,15 @@
     "title": {
       "display": "보타닉가든",
       "owned": "보타닉가든",
-      "bgg": "Garden"
+      "bgg": "Verdant"
     },
     "bgg": {
-      "id": "453894",
-      "matchStatus": "auto-confirmed",
-      "year": "2025",
-      "rating": 7.66667,
-      "weight": 2.05,
-      "minPlayers": 2,
+      "id": "334065",
+      "matchStatus": "forced",
+      "year": "2022",
+      "rating": 7.26101,
+      "weight": 2.0765,
+      "minPlayers": 1,
       "maxPlayers": 5,
       "bestPlayers": [
         2,
@@ -41247,27 +41247,38 @@
         3,
         4
       ],
-      "notRecommendedPlayers": [],
-      "playingTime": 15,
-      "minPlayTime": 15,
-      "maxPlayTime": 15,
+      "notRecommendedPlayers": [
+        5,
+        5
+      ],
+      "playingTime": 60,
+      "minPlayTime": 45,
+      "maxPlayTime": 60,
       "categories": [
-        "Card Game"
+        "Card Game",
+        "Environmental",
+        "Puzzle"
       ],
-      "categoriesKo": [
-        "카드게임"
-      ],
+      "categoriesKo": [],
       "mechanics": [
-        "Set Collection"
+        "Increase Value of Unchosen Resources",
+        "Open Drafting",
+        "Pattern Building",
+        "Set Collection",
+        "Solo / Solitaire Game",
+        "Tile Placement",
+        "Variable Set-up"
       ],
-      "mechanicsKo": [
-        "세트 수집"
-      ],
+      "mechanicsKo": [],
       "designers": [
-        "Tobia Botta"
+        "Molly Johnson",
+        "Robert Melvin",
+        "Aaron Mesburne",
+        "Kevin Russ",
+        "Shawn Stankewich"
       ],
-      "description": "In Garden, players compete to collect the most beautiful flowers and create the most harmonious bouquet. Each choice is as delicate as a petal: you will need to balance colours and shapes to win.\n\nA column of 12 flower cards is placed between each pair of players. In turn, each player can choose whether to collect the card at the bottom of the left or right column. The collected cards are placed in front of the player, forming their personal bouquet of flowers, which is always visible to everyone.\n\nWhen all the columns are empty, each player will have a bouquet of 12 flowers. The final score depends on two factors:\nColours: having three or more cards of the same colour earns positive points, while one or two earns negative points.\nShapes: having three or more cards of the same shape earns positive points, while one or two earns penalties.\n\nThe points from colours and shapes are added up: the player with the highest score is the winner.\n\n&mdash;description from the publisher",
-      "descriptionKo": "《가든》에서 플레이어들은 가장 아름다운 꽃을 모아 조화로운 부케를 만드는 것을 경쟁합니다. 모든 선택이 섬세합니다. 색상과 모양의 균형을 맞춰야 승리할 수 있습니다.\n\n각 플레이어 쌍 사이에 12장의 꽃 카드 열 2개가 놓입니다. 돌아가며 각 플레이어는 왼쪽 또는 오른쪽 열의 맨 아래 카드를 수집할지 선택합니다. 수집한 카드는 플레이어 앞에 놓여 개인의 부케를 형성하며, 모든 플레이어에게 항상 공개됩니다.\n\n모든 열이 비워지면 각 플레이어는 12개의 꽃을 가진 부케를 갖게 됩니다. 최종 점수는 두 가지 요소에 따라 결정됩니다.\n\n색상: 같은 색 카드 3장 이상은 양의 점수를, 1~2장은 감점입니다.\n모양: 같은 모양 카드 3장 이상은 양의 점수를, 1~2장은 감점입니다.\n\n색상과 모양의 점수를 합산하여 가장 높은 점수를 얻은 플레이어가 승자입니다."
+      "description": "Verdant is a puzzly spatial card game for 1 to 5 players. You take on the role of a houseplant enthusiast trying to create the coziest interior space by collecting and arranging houseplants and other objects within your home. You must position your plants so that they are provided the most suitable light conditions and take care of them to create the most verdant collection.\n\nEach turn, you select an adjacent pair of a card and token, then use those items to build an ever-expanding tableau of cards that represents your home. You need to keep various objectives in mind as you attempt to increase plant verdancy by making spatial matches and using item tokens to take various nurture actions. You can also build your \"green thumb\" skills, which allows you to take additional actions to care for your plants and create the coziest space!\n\n&mdash;description from the designer",
+      "descriptionKo": "버던트는 1~5명이 즐기는 퍼즐 같은 공간 배치 카드게임입니다. 실내 식물 애호가가 되어 관엽식물과 여러 물건을 수집하고 배치하면서 가장 아늑한 실내공간을 만드는 게임입니다. 식물이 적절한 채광 조건을 받도록 배치하고 관리하여 가장 풍성한 식물 컬렉션을 만들어야 합니다.\n\n매 턴 카드와 토큰 인접 쌍을 선택한 후, 이를 사용하여 자신의 집을 나타내는 계속 확장되는 테이블로를 구축합니다. 공간 매칭으로 식물의 생기를 높이고 물건 토큰으로 다양한 관리 액션을 수행하면서 여러 목표를 염두에 두어야 합니다. \"초록 손가락\" 기술을 개발하여 추가 액션을 얻고 식물을 더 잘 돌보며 가장 아늑한 공간을 만들 수 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -41279,17 +41290,18 @@
       "moodTags": [],
       "playTags": [
         "card_play",
-        "strategy"
+        "strategy",
+        "puzzle"
       ],
       "situationTags": [
         "beginner",
         "couple",
         "group",
-        "large_group",
-        "quick_play"
+        "large_group"
       ],
       "interactionTags": [
         "competitive",
+        "silent_focus",
         "low_conflict"
       ],
       "relationshipTags": [],
@@ -41297,19 +41309,20 @@
       "autoTags": [
         "card_play",
         "strategy",
+        "puzzle",
         "beginner",
         "couple",
         "group",
         "large_group",
-        "quick_play",
         "competitive",
+        "silent_focus",
         "low_conflict"
       ],
       "displayTags": [
         "머리쓰게",
         "경쟁형"
       ],
-      "summaryKo": "색상과 모양의 균형을 맞춰 가장 아름다운 부케를 만드는 게임",
+      "summaryKo": "관엽식물을 배치하고 관리하면서 가장 아늑한 실내공간을 꾸미는 퍼즐형 카드게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -41326,8 +41339,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/bFXCXtd6fl3DmyX2z5MUeQ__original/img/V-qZr40f0Yg2epJT65v8Edn9k8E=/0x0/filters:format(jpeg)/pic9092191.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/bFXCXtd6fl3DmyX2z5MUeQ__small/img/QV_RNuH53KNTUlZhQB1-OMR4XHU=/fit-in/200x150/filters:strip_icc()/pic9092191.jpg",
+      "main": "https://cf.geekdo-images.com/c1XGn5ryzbqgMOHzObZpQw__original/img/RWppBKjLU5v6Pl-uW6IIxkCD4U4=/0x0/filters:format(png)/pic6094080.png",
+      "thumbnail": "https://cf.geekdo-images.com/c1XGn5ryzbqgMOHzObZpQw__small/img/QJq-vJsWq6D0DMrDFVno-0Lu00o=/fit-in/200x150/filters:strip_icc()/pic6094080.png",
       "source": "bgg",
       "type": "jpg"
     },
@@ -58971,63 +58984,48 @@
     "title": {
       "display": "오라파마인",
       "owned": "오라파마인",
-      "bgg": "Ora et Labora"
+      "bgg": "Orapa Mine"
     },
     "bgg": {
-      "id": "70149",
+      "id": "424152",
       "matchStatus": "forced",
-      "year": "2011",
-      "rating": 7.67436,
-      "weight": 3.8857,
-      "minPlayers": 1,
-      "maxPlayers": 4,
+      "year": "2024",
+      "rating": 7.45061,
+      "weight": 1.9268,
+      "minPlayers": 2,
+      "maxPlayers": 5,
       "bestPlayers": [
-        3
+        2
       ],
       "recommendedPlayers": [
         2
       ],
       "notRecommendedPlayers": [
-        4
+        1,
+        3,
+        4,
+        5,
+        5
       ],
-      "playingTime": 180,
-      "minPlayTime": 60,
-      "maxPlayTime": 180,
+      "playingTime": 30,
+      "minPlayTime": 20,
+      "maxPlayTime": 30,
       "categories": [
-        "City Building",
-        "Economic",
-        "Industry / Manufacturing",
-        "Medieval",
-        "Religious",
-        "Territory Building"
+        "Deduction",
+        "Puzzle"
       ],
-      "categoriesKo": [
-        "도시 건설",
-        "경제",
-        "산업",
-        "중세",
-        "종교",
-        "영토 건설"
-      ],
+      "categoriesKo": [],
       "mechanics": [
-        "Increase Value of Unchosen Resources",
-        "Modular Board",
-        "Network and Route Building",
-        "Worker Placement",
-        "Worker Placement, Different Worker Types"
+        "Deduction",
+        "Paper-and-Pencil"
       ],
-      "mechanicsKo": [
-        "미선택 자원 가치 증가",
-        "모듈형 보드",
-        "네트워크/루트 건설",
-        "워커 배치",
-        "다중 워커 배치"
-      ],
+      "mechanicsKo": [],
       "designers": [
-        "Uwe Rosenberg"
+        "Junghee Choi",
+        "Wanjin Gill"
       ],
-      "description": "In Ora et Labora (Latin for 'Pray and work'), each player is head of a monastery in the Medieval era who acquires land and constructs buildings &ndash; little enterprises that will gain resources and profit. The goal is to build a working infrastructure and manufacture prestigious items &ndash; such as books, ceramics, ornaments, and relics &ndash; to gain the most victory points at the end of the game.\n\nOra et Labora, Uwe Rosenberg's fifth \"big\" game, has game play mechanisms similar to his Le Havre, such as two-sided resource tiles that can be upgraded from a basic item to something more useful. Instead of adding resources to the board turn by turn as in Agricola and Le Havre, Ora et Labora uses a numbered rondel to show how many of each resource is available at any time. At the beginning of each round, players turn the rondel by one segment, adjusting the counts of all resources at the same time.\n\nEach player has a personal game board. New buildings enter the game from time to time, and players can construct them on their game boards with the building materials they gather, with some terrain restrictions on what can be built where. Some spaces start with trees or moors on them, as in Agricola: Farmers of the Moor, so they hinder development until a player clears the land, but they provide resources when they are removed. Clever building on your personal game board will impact your final score, and players can buy additional terrain during the game, if needed.\n\nPlayers also have three workers who can enter buildings to take the action associated with that location. Workers must stay in place until you've placed all three. You can enter your own buildings with these workers, but to enter and use another player's buildings, you must pay that player an entry fee so that he'll move one of his workers into that building to do the work for you.\n\nOra et Labora features two variants: France and Ireland.",
-      "descriptionKo": "오라 에트 라보라(라틴어로 '기도하고 일한다'는 뜻)는 플레이어가 중세 수도원의 원장이 되어 토지를 획득하고 건물을 짓는 게임입니다. 이 건물들은 자원과 이득을 가져오는 작은 사업체로 기능합니다. 목표는 효율적인 인프라를 구축하고 책, 도자기, 장식품, 유물 같은 명성 높은 아이템을 제조하여 게임 종료 시 가장 많은 승리점을 획득하는 것입니다.\n\n우베 로젠베르크의 다섯 번째 '대형' 게임인 오라 에트 라보라는 르 하브르와 유사한 게임플레이 메커니즘을 가지고 있으며, 양면 자원 타일을 기본 아이템에서 더 유용한 것으로 업그레이드할 수 있습니다. 아그리콜라와 르 하브르처럼 매 턴마다 자원을 추가하는 대신, 오라 에트 라보라는 번호 매겨진 론델을 사용하여 언제든 각 자원의 가용량을 표시합니다. 각 라운드 시작 시 플레이어들은 론델을 한 칸 회전시켜 모든 자원의 수를 동시에 조정합니다.\n\n각 플레이어는 개인 게임보드를 가지고 있습니다. 새로운 건물들이 계속 나타나고, 플레이어들은 수집한 건축 자재로 자신의 보드에 건설할 수 있지만 지형 제약이 있습니다. 일부 공간에는 처음부터 나무나 황무지가 있어서 개발을 방해하지만, 제거하면 자원을 제공합니다. 개인 보드에 대한 영리한 건설은 최종 점수에 영향을 미치며, 플레이어들은 필요시 추가 지형을 구매할 수 있습니다.\n\n플레이어는 건물에 배치하여 그 장소와 연관된 액션을 수행할 수 있는 워커 3명을 가지고 있습니다. 워커는 3명 모두를 배치할 때까지 제자리에 머물러야 합니다. 자신의 건물에는 자유롭게 워커를 배치할 수 있지만, 다른 플레이어의 건물을 이용하려면 그 플레이어에게 입장료를 지불하여 그 플레이어가 워커 1명을 그 건물에 배치하도록 해야 합니다.\n\n오라 에트 라보라는 프랑스와 아일랜드, 두 가지 변형 규칙을 제공합니다."
+      "description": "Choose one person as the problem presenter. The presenter will be the director of the Orapamine, and the remaining players will become mineral explorers.\nThe player who correctly identifies the positions of the minerals (Tangram pieces) placed by the director wins. Players take turns starting with the player seated to the left of the director, proceeding clockwise.\n\nElastic Wave Shooting\nOn the solution sheet, there is a grid of 10 x 8 cells. Choose one of the numbers (1-18) or letters (A-R) along the outer edge of the grid to shoot an elastic wave. The elastic wave travels horizontally or vertically from the fired position, bouncing off each mineral at right angles or horizontally and vertically until it exits the mine.\nThe director must answer where the elastic wave exits and in what color. Upon hearing the answer, explorers record it on their solution sheets.\n\nThe player who first correctly identifies the positions and colors of all minerals wins. Players can guess the answer even when it&rsquo;s not their turn\n\n&mdash;description from the publisher",
+      "descriptionKo": "한 명을 문제 제시자로 정합니다. 제시자는 오라파민 광산의 감독이 되고, 나머지 플레이어들은 광물 탐사꾼이 됩니다.\n감독이 배치한 광물(탄그램 조각)의 위치를 정확히 파악하는 플레이어가 승리합니다. 감독의 왼쪽에 앉은 플레이어부터 시작하여 시계 방향으로 진행합니다.\n\n**탄성파 발사**\n풀이 시트의 10×8 칸 격자에서 외곽 가장자리의 숫자(1-18) 또는 문자(A-R) 중 하나를 선택해 탄성파를 발사합니다. 탄성파는 발사 위치에서 수평 또는 수직으로 이동하며, 각 광물에서 직각으로 반사되어 광산을 빠져나올 때까지 계속 이동합니다.\n감독은 탄성파가 어디로 빠져나가는지, 그리고 어떤 색상인지 답변해야 합니다. 답변을 들은 탐사꾼들은 자신의 풀이 시트에 기록합니다.\n\n모든 광물의 위치와 색상을 가장 먼저 정확히 파악하는 플레이어가 승리합니다. 플레이어들은 자신의 차례가 아닐 때도 답을 맞힐 수 있습니다."
     },
     "cottage": {
       "status": "active",
@@ -59037,41 +59035,43 @@
       "difficultyId": "light_family",
       "difficultyWeight": 1.92,
       "moodTags": [
-        "immersive"
+        "tense"
       ],
       "playTags": [
-        "strategy"
+        "deduction",
+        "puzzle"
       ],
       "situationTags": [
-        "experienced",
-        "long_stay",
         "beginner",
-        "group"
+        "couple",
+        "group",
+        "large_group"
       ],
       "interactionTags": [
-        "competitive",
-        "turn_based",
+        "social",
+        "silent_focus",
         "low_conflict"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "immersive",
-        "strategy",
-        "experienced",
-        "long_stay",
+        "tense",
+        "deduction",
+        "puzzle",
         "beginner",
+        "couple",
         "group",
-        "competitive",
-        "turn_based",
+        "large_group",
+        "social",
+        "silent_focus",
         "low_conflict"
       ],
       "displayTags": [
         "머리쓰게",
         "빠져들게",
-        "경쟁형"
+        "대화하며"
       ],
-      "summaryKo": "중세 수도원의 원장이 되어 토지와 건물을 개발하고 명성 높은 아이템을 제조하여 승리점을 겨루는 게임.",
+      "summaryKo": "탄성파를 발사해 반사 위치와 색상으로 숨겨진 광물의 위치를 맞히는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -59088,8 +59088,8 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/MLvyN4VJ3QNXBKxli8XLiA__original/img/eDqWAa7vUdsYE6_LXVNzIdClbhw=/0x0/filters:format(jpeg)/pic5089618.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/MLvyN4VJ3QNXBKxli8XLiA__small/img/mvTvon7ry-QKtYenVgg0LYUtdRc=/fit-in/200x150/filters:strip_icc()/pic5089618.jpg",
+      "main": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -86140,6 +86140,134 @@
       "reviewEnabled": true,
       "ratingEnabled": true,
       "boardId": "로나에나-재앙의-선물"
+    }
+  },
+  "아르낙의잊혀진유적": {
+    "id": "아르낙의잊혀진유적",
+    "title": {
+      "display": "아르낙의잊혀진유적",
+      "owned": "아르낙의잊혀진유적",
+      "bgg": "Lost Ruins of Arnak"
+    },
+    "bgg": {
+      "id": "312484",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 8.0827,
+      "weight": 2.9319,
+      "minPlayers": 1,
+      "maxPlayers": 4,
+      "bestPlayers": [
+        3
+      ],
+      "recommendedPlayers": [
+        1,
+        2,
+        4
+      ],
+      "notRecommendedPlayers": [
+        4
+      ],
+      "playingTime": 120,
+      "minPlayTime": 30,
+      "maxPlayTime": 120,
+      "categories": [
+        "Adventure",
+        "Card Game",
+        "Exploration",
+        "Fantasy"
+      ],
+      "categoriesKo": [],
+      "mechanics": [
+        "Area Movement",
+        "Contracts",
+        "Deck, Bag, and Pool Building",
+        "Delayed Purchase",
+        "End Game Bonuses",
+        "Hand Management",
+        "Multi-Use Cards",
+        "Once-Per-Game Abilities",
+        "Open Drafting",
+        "Resource to Move",
+        "Solo / Solitaire Game",
+        "Track Movement",
+        "Turn Order: Progressive",
+        "Worker Placement"
+      ],
+      "mechanicsKo": [],
+      "designers": [
+        "Elwen",
+        "Mín"
+      ],
+      "description": "On an uninhabited island in uncharted seas, explorers have found traces of a great civilization. Now you will lead an expedition to explore the island, find lost artifacts, and face fearsome guardians, all in a quest to learn the island's secrets.\n\nLost Ruins of Arnak combines deck-building and worker placement in a game of exploration, resource management, and discovery. In addition to traditional deck-builder effects, cards can also be used to place workers, and new worker actions become available as players explore the island. Some of these actions require resources instead of workers, so building a solid resource base will be essential. You are limited to only one action per turn, so make your choice carefully... what action will benefit you most now? And what can you afford to do later... assuming someone else doesn't take the action first!?\n\nDecks are small, and randomness in the game is heavily mitigated by the wealth of tactical decisions offered on the game board. With a variety of worker actions, artifacts, and equipment cards, the set-up for each game will be unique, encouraging players to explore new strategies to meet the challenge.\n\nDiscover the Lost Ruins of Arnak!\n\n&mdash;description from the publisher",
+      "descriptionKo": "미지의 바다에 있는 무인도에서 탐험가들이 위대한 문명의 흔적을 발견했습니다. 이제 당신은 원정대를 이끌고 섬을 탐험하며 잃어버린 유물을 찾고, 무서운 수호자들을 맞닥뜨리며 섬의 비밀을 파헤쳐야 합니다.\n\n아르낙의 잃어버린 유적은 덱 구축과 워커 플레이스먼트를 결합한 탐험, 자원 관리, 발견의 게임입니다. 전통적인 덱 빌더 효과 외에도 카드를 워커 배치에 사용할 수 있으며, 플레이어들이 섬을 탐험하면서 새로운 워커 액션이 해금됩니다. 일부 액션은 워커 대신 자원을 필요로 하므로, 견고한 자원 기반 구축이 필수적입니다. 매 턴마다 단 하나의 액션만 수행할 수 있으므로 신중하게 선택해야 합니다. 지금 당신에게 가장 유리한 액션은 무엇일까요? 그리고 나중에 할 수 있는 액션은 무엇일까요(다른 플레이어가 먼저 가져가지 않는다면요!).\n\n소규모 덱과 풍부한 전술적 선택지로 무작위성을 최소화했습니다. 다양한 워커 액션, 유물, 장비 카드로 매 게임마다 독특한 구성"
+    },
+    "cottage": {
+      "status": "active",
+      "shelfGroupId": "",
+      "shelfLabel": "-",
+      "shelfFullLabel": "-",
+      "difficultyId": "heavy_mania",
+      "difficultyWeight": 2.9319,
+      "moodTags": [
+        "immersive"
+      ],
+      "playTags": [
+        "card_play",
+        "strategy"
+      ],
+      "situationTags": [
+        "experienced",
+        "long_stay",
+        "group"
+      ],
+      "interactionTags": [
+        "competitive",
+        "turn_based"
+      ],
+      "relationshipTags": [],
+      "manualTags": [],
+      "autoTags": [
+        "immersive",
+        "card_play",
+        "strategy",
+        "experienced",
+        "long_stay",
+        "group",
+        "competitive",
+        "turn_based"
+      ],
+      "displayTags": [
+        "머리쓰게",
+        "빠져들게",
+        "경쟁형"
+      ],
+      "summaryKo": "덱 구축과 워커 배치를 활용해 무인도를 탐험하며 유물을 발견하는 게임.",
+      "comment": {
+        "text": "",
+        "source": "none"
+      },
+      "ruleSummary": {
+        "text": "",
+        "source": "none"
+      },
+      "recommendPoint": {
+        "text": "",
+        "source": "none"
+      },
+      "caution": "",
+      "youtubeUrl": ""
+    },
+    "images": {
+      "main": "https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__original/img/CXqwimJPonWy1oyXEMgPN_ZVmUI=/0x0/filters:format(jpeg)/pic5674958.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__small/img/J8SVmGOJXZGxNjkT3xYNQU7Haxg=/fit-in/200x150/filters:strip_icc()/pic5674958.jpg",
+      "source": "bgg",
+      "type": "jpg"
+    },
+    "community": {
+      "reviewEnabled": true,
+      "ratingEnabled": true,
+      "boardId": "아르낙의잊혀진유적"
     }
   }
 }

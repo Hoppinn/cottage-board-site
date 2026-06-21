@@ -630,10 +630,10 @@ async function openProfilePanel() {
     if (n.type === 'new_game') {
       const games = n.actualGames?.length ? n.actualGames : [n.gameName].filter(Boolean);
       if (games.length === 1) {
-        return `<li class="${cls}" data-game-name="${escH(games[0])}">${_card('📦', escH(games[0]) + ' 입고', '새 게임이 추가됐어요')}</li>`;
+        return `<li class="${cls}" data-game-name="${escH(games[0])}">${_card('📦', escH(games[0]), '새 게임이 추가됐어요')}</li>`;
       }
       const gameLinks = games.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
-      return `<li class="${cls}">${_card('📦', gameLinks + ' 입고', '새 게임이 추가됐어요')}</li>`;
+      return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}</li>`;
     }
     return '';
   }

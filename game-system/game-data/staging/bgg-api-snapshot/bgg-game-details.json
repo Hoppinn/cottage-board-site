@@ -32433,6 +32433,97 @@
       ]
     }
   },
+  "312484": {
+    "bggId": "312484",
+    "title": "Lost Ruins of Arnak",
+    "image": "https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__original/img/CXqwimJPonWy1oyXEMgPN_ZVmUI=/0x0/filters:format(jpeg)/pic5674958.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/6GqH14TJJhza86BX5HCLEQ__small/img/J8SVmGOJXZGxNjkT3xYNQU7Haxg=/fit-in/200x150/filters:strip_icc()/pic5674958.jpg",
+    "description": "On an uninhabited island in uncharted seas, explorers have found traces of a great civilization. Now you will lead an expedition to explore the island, find lost artifacts, and face fearsome guardians, all in a quest to learn the island's secrets.\n\nLost Ruins of Arnak combines deck-building and worker placement in a game of exploration, resource management, and discovery. In addition to traditional deck-builder effects, cards can also be used to place workers, and new worker actions become available as players explore the island. Some of these actions require resources instead of workers, so building a solid resource base will be essential. You are limited to only one action per turn, so make your choice carefully... what action will benefit you most now? And what can you afford to do later... assuming someone else doesn't take the action first!?\n\nDecks are small, and randomness in the game is heavily mitigated by the wealth of tactical decisions offered on the game board. With a variety of worker actions, artifacts, and equipment cards, the set-up for each game will be unique, encouraging players to explore new strategies to meet the challenge.\n\nDiscover the Lost Ruins of Arnak!\n\n&mdash;description from the publisher",
+    "yearpublished": "2020",
+    "minplayers": "1",
+    "minage": "12",
+    "maxplayers": "4",
+    "playingtime": "120",
+    "minplaytime": "30",
+    "maxplaytime": "120",
+    "averageweight": "2.9319",
+    "average": "8.0827",
+    "bayesaverage": "7.91625",
+    "usersrated": "57425",
+    "rank": "30",
+    "designers": [
+      "Elwen",
+      "Mín"
+    ],
+    "artists": [
+      "Ondřej Hrdina",
+      "Jiří Kůs",
+      "Filip Murmak",
+      "Jakub Politzer",
+      "František Sedláček",
+      "Milan Vavroň"
+    ],
+    "publishers": [
+      "Czech Games Edition (CGE)",
+      "Brädspel.se",
+      "Cranio Creations",
+      "Devir",
+      "DiceTree Games",
+      "Fantasmagoria",
+      "GaGa Games",
+      "Games4you",
+      "Gémklub",
+      "Goblin Gaming",
+      "HeidelBÄR Games",
+      "Hobby Japan",
+      "IELLO",
+      "Kaissa Chess & Games",
+      "Lautapelit.fi",
+      "Lex Games",
+      "Lord of Boards",
+      "MINDOK",
+      "More Fun Co., Ltd.",
+      "One Moment Games",
+      "Rebel Sp. z o.o.",
+      "Spilbræt.dk",
+      "White Goblin Games"
+    ],
+    "categories": [
+      "Adventure",
+      "Card Game",
+      "Exploration",
+      "Fantasy"
+    ],
+    "mechanics": [
+      "Area Movement",
+      "Contracts",
+      "Deck, Bag, and Pool Building",
+      "Delayed Purchase",
+      "End Game Bonuses",
+      "Hand Management",
+      "Multi-Use Cards",
+      "Once-Per-Game Abilities",
+      "Open Drafting",
+      "Resource to Move",
+      "Solo / Solitaire Game",
+      "Track Movement",
+      "Turn Order: Progressive",
+      "Worker Placement"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        3
+      ],
+      "recommended": [
+        1,
+        2,
+        4
+      ],
+      "not_recommended": [
+        4
+      ]
+    }
+  },
   "313261": {
     "bggId": "313261",
     "title": "Oriflamme: Ablaze",
@@ -34330,6 +34421,79 @@
       "not_recommended": [
         1,
         2
+      ]
+    }
+  },
+  "334065": {
+    "bggId": "334065",
+    "title": "Verdant",
+    "image": "https://cf.geekdo-images.com/c1XGn5ryzbqgMOHzObZpQw__original/img/RWppBKjLU5v6Pl-uW6IIxkCD4U4=/0x0/filters:format(png)/pic6094080.png",
+    "thumbnail": "https://cf.geekdo-images.com/c1XGn5ryzbqgMOHzObZpQw__small/img/QJq-vJsWq6D0DMrDFVno-0Lu00o=/fit-in/200x150/filters:strip_icc()/pic6094080.png",
+    "description": "Verdant is a puzzly spatial card game for 1 to 5 players. You take on the role of a houseplant enthusiast trying to create the coziest interior space by collecting and arranging houseplants and other objects within your home. You must position your plants so that they are provided the most suitable light conditions and take care of them to create the most verdant collection.\n\nEach turn, you select an adjacent pair of a card and token, then use those items to build an ever-expanding tableau of cards that represents your home. You need to keep various objectives in mind as you attempt to increase plant verdancy by making spatial matches and using item tokens to take various nurture actions. You can also build your \"green thumb\" skills, which allows you to take additional actions to care for your plants and create the coziest space!\n\n&mdash;description from the designer",
+    "yearpublished": "2022",
+    "minplayers": "1",
+    "minage": "10",
+    "maxplayers": "5",
+    "playingtime": "60",
+    "minplaytime": "45",
+    "maxplaytime": "60",
+    "averageweight": "2.0765",
+    "average": "7.26101",
+    "bayesaverage": "6.7967",
+    "usersrated": "7439",
+    "rank": "760",
+    "designers": [
+      "Molly Johnson",
+      "Robert Melvin",
+      "Aaron Mesburne",
+      "Kevin Russ",
+      "Shawn Stankewich"
+    ],
+    "artists": [
+      "Beth Sobel"
+    ],
+    "publishers": [
+      "Flatout Games",
+      "Alderac Entertainment Group",
+      "Arclight Games",
+      "CMON Global Limited",
+      "CrowD Games",
+      "Gémklub",
+      "Korea Boardgames",
+      "KOSMOS",
+      "Lucky Duck Games",
+      "Ludofy Creative",
+      "Maldito Games",
+      "MINDOK",
+      "Regatul Jocurilor",
+      "White Goblin Games"
+    ],
+    "categories": [
+      "Card Game",
+      "Environmental",
+      "Puzzle"
+    ],
+    "mechanics": [
+      "Increase Value of Unchosen Resources",
+      "Open Drafting",
+      "Pattern Building",
+      "Set Collection",
+      "Solo / Solitaire Game",
+      "Tile Placement",
+      "Variable Set-up"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2,
+        3
+      ],
+      "recommended": [
+        1,
+        4
+      ],
+      "not_recommended": [
+        5,
+        5
       ]
     }
   },
@@ -42330,6 +42494,61 @@
         1,
         2,
         6
+      ]
+    }
+  },
+  "424152": {
+    "bggId": "424152",
+    "title": "Orapa Mine",
+    "image": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__original/img/pY5DDByB6SA60PwWuuzWgFG2soc=/0x0/filters:format(jpeg)/pic8307047.jpg",
+    "thumbnail": "https://cf.geekdo-images.com/AA9S_-ZXnIFS0ABiFxmZ9w__small/img/7rgnYRe9NpOSpixs0FXmEGkKfxU=/fit-in/200x150/filters:strip_icc()/pic8307047.jpg",
+    "description": "Choose one person as the problem presenter. The presenter will be the director of the Orapamine, and the remaining players will become mineral explorers.\nThe player who correctly identifies the positions of the minerals (Tangram pieces) placed by the director wins. Players take turns starting with the player seated to the left of the director, proceeding clockwise.\n\nElastic Wave Shooting\nOn the solution sheet, there is a grid of 10 x 8 cells. Choose one of the numbers (1-18) or letters (A-R) along the outer edge of the grid to shoot an elastic wave. The elastic wave travels horizontally or vertically from the fired position, bouncing off each mineral at right angles or horizontally and vertically until it exits the mine.\nThe director must answer where the elastic wave exits and in what color. Upon hearing the answer, explorers record it on their solution sheets.\n\nThe player who first correctly identifies the positions and colors of all minerals wins. Players can guess the answer even when it&rsquo;s not their turn\n\n&mdash;description from the publisher",
+    "yearpublished": "2024",
+    "minplayers": "2",
+    "minage": "8",
+    "maxplayers": "5",
+    "playingtime": "30",
+    "minplaytime": "20",
+    "maxplaytime": "30",
+    "averageweight": "1.9268",
+    "average": "7.45061",
+    "bayesaverage": "6.30275",
+    "usersrated": "1668",
+    "rank": "1865",
+    "designers": [
+      "Junghee Choi",
+      "Wanjin Gill"
+    ],
+    "artists": [
+      "Wanjin Gill"
+    ],
+    "publishers": [
+      "Playte",
+      "Crafty Games",
+      "Ghenos Games",
+      "Miraludo",
+      "Nice Game Publishing",
+      "Old Dawg"
+    ],
+    "categories": [
+      "Deduction",
+      "Puzzle"
+    ],
+    "mechanics": [
+      "Deduction",
+      "Paper-and-Pencil"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        2
+      ],
+      "recommended": [],
+      "not_recommended": [
+        1,
+        3,
+        4,
+        5,
+        5
       ]
     }
   },
