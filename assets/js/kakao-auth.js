@@ -474,7 +474,7 @@ function _bindActivityTogglesAndMore(subBody) {
   });
 }
 
-async function openProfilePanel() {
+async function openProfilePanel(autoSubsheet = null) {
   const user = getKakaoUser();
   if (!user) return;
 
@@ -1283,6 +1283,10 @@ async function openProfilePanel() {
   body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
   body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
   body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
+
+  if (autoSubsheet) {
+    body.querySelector(`[data-subsheet="${autoSubsheet}"]`)?.click();
+  }
 }
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
