@@ -10,79 +10,39 @@
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
   <style>
-    /* ── 달력 ─────────────────────────────────────── */
-    .sched-month-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-    .sched-month-label {
-      font-size: 16px;
+    /* ── 4주 뷰 ─────────────────────────────────────── */
+    .sched-week-section { margin-bottom: 22px; }
+    .sched-week-label {
+      font-size: 12px;
       font-weight: 700;
-      color: var(--text);
+      color: var(--muted);
+      letter-spacing: .04em;
+      margin-bottom: 8px;
     }
-    .sched-month-btn {
-      background: none;
-      border: none;
-      font-size: 22px;
-      color: var(--green);
-      cursor: pointer;
-      padding: 4px 12px;
-      line-height: 1;
-    }
-    .sched-month-btn:disabled { opacity: 0.3; cursor: default; }
-
-    .sched-cal-grid {
+    .sched-week-row {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 3px;
     }
-    .sched-dow {
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      padding: 2px 0 8px;
-    }
-    .sched-dow-sat { color: #5080e0; }
-    .sched-dow-sun { color: #e05050; }
-
-    .sched-date-cell {
-      min-height: 54px;
-      padding: 6px 2px 4px;
+    .sched-day-card {
+      padding: 7px 2px 6px;
       border-radius: 8px;
       text-align: center;
-      cursor: pointer;
       background: #faf8f5;
+      cursor: pointer;
+      min-height: 64px;
     }
-    .sched-date-cell:hover { background: #f0ebe0; }
-    .sched-date-cell.is-today {
-      background: #f5ece0;
-      outline: 1.5px solid var(--green);
-    }
-    .sched-date-cell.is-past { opacity: 0.38; cursor: default; }
-    .sched-date-cell.is-past:hover { background: #faf8f5; }
-    .sched-date-cell.is-empty { background: transparent; cursor: default; }
-    .sched-date-cell.is-empty:hover { background: transparent; }
-
-    .sched-date-num {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1;
-    }
-    .sched-date-cell.is-sat .sched-date-num { color: #5080e0; }
-    .sched-date-cell.is-sun .sched-date-num { color: #e05050; }
-
-    .sched-count-badge {
-      display: block;
-      margin-top: 5px;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--green);
-      line-height: 1;
-    }
+    .sched-day-card:hover { background: #f0ebe0; }
+    .sched-day-card.is-today { background: #f5ece0; outline: 1.5px solid var(--green); }
+    .sched-day-card.is-past { opacity: 0.3; cursor: default; pointer-events: none; }
+    .sdc-dow { font-size: 10px; color: var(--muted); line-height: 1; margin-bottom: 3px; }
+    .sdc-date { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1; }
+    .sched-day-card.is-sat .sdc-dow,
+    .sched-day-card.is-sat .sdc-date { color: #5080e0; }
+    .sched-day-card.is-sun .sdc-dow,
+    .sched-day-card.is-sun .sdc-date { color: #e05050; }
+    .sdc-count { font-size: 10px; font-weight: 700; color: var(--green); margin-top: 4px; line-height: 1; }
+    .sdc-overlap { font-size: 9px; color: var(--muted); margin-top: 2px; line-height: 1.2; }
 
     /* ── 날짜 상세 ────────────────────────────────── */
     .sched-back-btn {
@@ -458,14 +418,9 @@
 
         <div class="sched-loading" id="mainLoading">불러오는 중...</div>
 
-        <!-- 달력 뷰 -->
+        <!-- 4주 뷰 -->
         <div id="viewCalendar" style="display:none">
-          <div class="sched-month-nav">
-            <button class="sched-month-btn" id="btnPrevMonth">‹</button>
-            <span class="sched-month-label" id="monthLabel"></span>
-            <button class="sched-month-btn" id="btnNextMonth">›</button>
-          </div>
-          <div class="sched-cal-grid" id="calGrid"></div>
+          <div id="weekView"></div>
         </div>
 
         <!-- 날짜 상세 뷰 -->
@@ -515,8 +470,6 @@
 
     let allVotes = [];
     let currentDate = null;
-    let viewYear = TODAY.getFullYear();
-    let viewMonth = TODAY.getMonth();
     let sliderMode = false;
     let sliderStart = 10, sliderEnd = 22;
 
@@ -524,9 +477,8 @@
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
-    function toDateStr(y, m, d) {
-      // m: 0-indexed
-      return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    function toDateStr(date) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
     }
 
     function parseDate(s) {
@@ -568,45 +520,54 @@
       return blocks.sort((a, b) => b.count - a.count || (b.end - b.start) - (a.end - a.start));
     }
 
-    // ── 달력 렌더 ─────────────────────────────────────────────
+    // ── 4주 뷰 렌더 ──────────────────────────────────────────
     function renderCalendar() {
-      const todayBase = TODAY.getFullYear() * 12 + TODAY.getMonth();
-      const curBase = viewYear * 12 + viewMonth;
-      document.getElementById('monthLabel').textContent = `${viewYear}년 ${viewMonth + 1}월`;
-      document.getElementById('btnPrevMonth').disabled = curBase <= todayBase;
-      document.getElementById('btnNextMonth').disabled = curBase >= todayBase + 2;
+      // 이번 주 월요일 기준 4주
+      const todayDow = TODAY.getDay();
+      const daysToMon = todayDow === 0 ? -6 : -(todayDow - 1);
+      const weekStart = new Date(TODAY);
+      weekStart.setDate(TODAY.getDate() + daysToMon);
 
-      const firstDow = new Date(viewYear, viewMonth, 1).getDay();
-      const offset = firstDow === 0 ? 6 : firstDow - 1;
-      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-
-      const countByDate = {};
+      const countByDate = {}, votesByDate = {};
       for (const v of allVotes) {
         if (!countByDate[v.vote_date]) countByDate[v.vote_date] = new Set();
         countByDate[v.vote_date].add(v.user_id);
+        if (!votesByDate[v.vote_date]) votesByDate[v.vote_date] = [];
+        votesByDate[v.vote_date].push(v);
       }
 
-      let html = ['월','화','수','목','금','토','일'].map((d, i) =>
-        `<div class="sched-dow${i===5?' sched-dow-sat':i===6?' sched-dow-sun':''}">${d}</div>`
-      ).join('');
-
-      for (let i = 0; i < offset; i++) html += '<div class="sched-date-cell is-empty"></div>';
-
-      for (let d = 1; d <= daysInMonth; d++) {
-        const ds = toDateStr(viewYear, viewMonth, d);
-        const dow = new Date(viewYear, viewMonth, d).getDay();
-        const past = isPast(ds), tod = isToday(ds);
-        const cnt = countByDate[ds]?.size || 0;
-        const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
-        let cls = `sched-date-cell${dowCls}${past ? ' is-past' : ''}${tod ? ' is-today' : ''}`;
-        const badge = cnt ? `<span class="sched-count-badge">${cnt}명</span>` : '';
-        html += `<div class="${cls}" data-date="${ds}"><div class="sched-date-num">${d}</div>${badge}</div>`;
+      const weekLabels = ['이번 주', '다음 주', '2주 뒤', '3주 뒤'];
+      let html = '';
+      for (let w = 0; w < 4; w++) {
+        html += `<div class="sched-week-section">
+          <div class="sched-week-label">${weekLabels[w]}</div>
+          <div class="sched-week-row">`;
+        for (let d = 0; d < 7; d++) {
+          const date = new Date(weekStart);
+          date.setDate(weekStart.getDate() + w * 7 + d);
+          const ds = toDateStr(date);
+          const dow = date.getDay();
+          const past = date < TODAY, tod = date.getTime() === TODAY.getTime();
+          const cnt = countByDate[ds]?.size || 0;
+          const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
+          const countHtml = cnt ? `<div class="sdc-count">${cnt}명</div>` : '';
+          let overlapHtml = '';
+          if (cnt >= 2 && votesByDate[ds]) {
+            const top = calcOverlap(votesByDate[ds])[0];
+            if (top) overlapHtml = `<div class="sdc-overlap">${top.start}~${top.end}시</div>`;
+          }
+          html += `<div class="sched-day-card${dowCls}${past?' is-past':''}${tod?' is-today':''}" data-date="${ds}">
+            <div class="sdc-dow">${DOW[dow]}</div>
+            <div class="sdc-date">${date.getMonth()+1}/${date.getDate()}</div>
+            ${countHtml}${overlapHtml}
+          </div>`;
+        }
+        html += '</div></div>';
       }
-
-      const grid = document.getElementById('calGrid');
-      grid.innerHTML = html;
-      grid.querySelectorAll('.sched-date-cell:not(.is-empty):not(.is-past)').forEach(el => {
-        el.addEventListener('click', () => openDay(el.dataset.date));
+      const el = document.getElementById('weekView');
+      el.innerHTML = html;
+      el.querySelectorAll('.sched-day-card:not(.is-past)').forEach(card => {
+        card.addEventListener('click', () => openDay(card.dataset.date));
       });
     }
 
@@ -808,7 +769,8 @@
         renderDayDetail(ds);
       } else {
         if (btn) btn.disabled = false;
-        alert('저장 중 오류가 발생했어요. 다시 시도해주세요.');
+        const msg = result?.error?.message || '알 수 없는 오류';
+        alert(`저장 오류: ${msg}`);
       }
     }
 
@@ -829,7 +791,7 @@
 
     // ── 프로필 시트 ───────────────────────────────────────────
     function openProfileSheet(uid, nickname) {
-      const todayStr = toDateStr(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+      const todayStr = toDateStr(TODAY);
       const userVotes = allVotes
         .filter(v => String(v.user_id) === uid && v.vote_date >= todayStr)
         .sort((a, b) => a.vote_date.localeCompare(b.vote_date));
@@ -854,10 +816,10 @@
 
     // ── 초기화 ────────────────────────────────────────────────
     async function init() {
-      const todayStr = toDateStr(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+      const todayStr = toDateStr(TODAY);
       const end = new Date(TODAY);
-      end.setDate(end.getDate() + 62);
-      const endStr = toDateStr(end.getFullYear(), end.getMonth(), end.getDate());
+      end.setDate(end.getDate() + 32);
+      const endStr = toDateStr(end);
 
       allVotes = await window.CottageDB?.getMeetingVotes(todayStr, endStr) || [];
 
@@ -866,22 +828,6 @@
       renderCalendar();
     }
 
-    document.getElementById('btnPrevMonth').addEventListener('click', () => {
-      const todayBase = TODAY.getFullYear() * 12 + TODAY.getMonth();
-      const curBase = viewYear * 12 + viewMonth;
-      if (curBase > todayBase) {
-        if (--viewMonth < 0) { viewMonth = 11; viewYear--; }
-        renderCalendar();
-      }
-    });
-    document.getElementById('btnNextMonth').addEventListener('click', () => {
-      const todayBase = TODAY.getFullYear() * 12 + TODAY.getMonth();
-      const curBase = viewYear * 12 + viewMonth;
-      if (curBase < todayBase + 2) {
-        if (++viewMonth > 11) { viewMonth = 0; viewYear++; }
-        renderCalendar();
-      }
-    });
     document.getElementById('btnBackCal').addEventListener('click', () => {
       sliderMode = false;
       currentDate = null;
