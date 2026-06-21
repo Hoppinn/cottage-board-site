@@ -18,8 +18,7 @@
 
 **다음 작업 후보**
 
-1. **게임요청 상태 시스템 테스트** — purchase_status/status_date 컬럼 적용 후 requests-admin.html 기능 확인
-2. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
 
 ---
 
