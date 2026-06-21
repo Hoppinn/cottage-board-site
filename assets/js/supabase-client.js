@@ -964,10 +964,12 @@ window._cottageSess = (function () {
 
   async function getPageAnalytics() {
     try {
+      const since = new Date(Date.now() - 90 * 24 * 3600 * 1000).toISOString();
       const { data } = await db.from('page_sessions')
         .select('page, referrer, user_id, session_key, duration_sec, entered_at')
+        .gte('entered_at', since)
         .order('entered_at', { ascending: false })
-        .limit(5000);
+        .limit(20000);
       return data || [];
     } catch (_) { return []; }
   }
