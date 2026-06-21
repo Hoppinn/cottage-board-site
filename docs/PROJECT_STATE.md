@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-22 (139차)
+최종 갱신: 2026-06-22 (140차)
 
 ---
 
@@ -113,7 +113,7 @@
 
 ### P1 — 기능 (중요)
 
-- [ ] **관리자 카카오 알림 확장** — 새 회원 가입, 모집 게시판 글 작성 시 알림 추가 (코드베이스에 전송 코드 없음, 구현 방식 설계 필요)
+- [x] **관리자 카카오 알림 확장** — 신규 회원 가입(profiles INSERT) + 교환권 사용(voucher_log INSERT) 시 카톡 알림. Supabase DB webhook → Make.com 시나리오 5213346 Router 3개 분기 (140차)
 - [x] **업적 8축 순서 재배열** — record→first_record→new_game→play→photo→review→visit→balance (118차)
 - [x] **달성 업적 아이콘 컬러 적용** — .is-achieved .profile-ach-img-lock { filter: none } 추가 (118차)
 - [x] **업적명·내용·아이콘 불일치 수정** — new_game_10/30/300 🦉→게임이모지, review_5/25/300 🦊→글쓰기이모지 (118차)
