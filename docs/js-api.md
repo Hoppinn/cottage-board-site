@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-06-21 (137차: findNextAchievement 추가)
+최종 갱신: 2026-06-22 (141차: 모임 플래너 API 3개 추가)
 
 ---
 
@@ -71,6 +71,9 @@
 | `getVoucherHistory(userId, limit=20)` | 교환권 입출 내역. `voucher_products(name)` FK expand 포함 |
 | `getUserLikedGames(userId)` | 유저가 따봉(❤️)한 game_id 배열 반환 |
 | `getUserCuriousGames(userId)` | 유저가 궁금해요(🤔)한 game_id 배열 반환 |
+| `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD' |
+| `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert |
+| `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소 |
 
 ---
 

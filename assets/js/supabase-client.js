@@ -1202,6 +1202,9 @@ window._cottageSess = (function () {
     getVoucherHistory,
     getUserLikedGames,
     getUserCuriousGames,
+    getMeetingVotes,
+    upsertMeetingVote,
+    deleteMeetingVote,
   };
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
@@ -1488,5 +1491,41 @@ window._cottageSess = (function () {
         .limit(limit);
       return data || [];
     } catch (_) { return []; }
+  }
+
+  // ── 모임 플래너 ────────────────────────────────────────────
+
+  async function getMeetingVotes(startDate, endDate) {
+    try {
+      const { data } = await db.from('meeting_votes')
+        .select('vote_date, user_id, nickname, time_start, time_end')
+        .gte('vote_date', startDate)
+        .lte('vote_date', endDate)
+        .order('vote_date');
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd) {
+    try {
+      const { error } = await db.from('meeting_votes').upsert({
+        vote_date: voteDate,
+        user_id: String(userId),
+        nickname,
+        time_start: timeStart,
+        time_end: timeEnd,
+      }, { onConflict: 'vote_date,user_id' });
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function deleteMeetingVote(userId, voteDate) {
+    try {
+      const { error } = await db.from('meeting_votes')
+        .delete()
+        .eq('vote_date', voteDate)
+        .eq('user_id', String(userId));
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
   }
 })();

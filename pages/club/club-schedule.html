@@ -6,9 +6,388 @@
   <link rel="icon" href="/assets/images/main/favicon-square.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/main/favicon-square.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>일정 투표 & 확인 | 코티지보드</title>
+  <title>모임 플래너 | 코티지보드 동호회</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
+  <style>
+    /* ── 달력 ─────────────────────────────────────── */
+    .sched-month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sched-month-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .sched-month-btn {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: var(--green);
+      cursor: pointer;
+      padding: 4px 12px;
+      line-height: 1;
+    }
+    .sched-month-btn:disabled { opacity: 0.3; cursor: default; }
+
+    .sched-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+    .sched-dow {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 2px 0 8px;
+    }
+    .sched-dow-sat { color: #5080e0; }
+    .sched-dow-sun { color: #e05050; }
+
+    .sched-date-cell {
+      min-height: 54px;
+      padding: 6px 2px 4px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      background: #faf8f5;
+    }
+    .sched-date-cell:hover { background: #f0ebe0; }
+    .sched-date-cell.is-today {
+      background: #f5ece0;
+      outline: 1.5px solid var(--green);
+    }
+    .sched-date-cell.is-past { opacity: 0.38; cursor: default; }
+    .sched-date-cell.is-past:hover { background: #faf8f5; }
+    .sched-date-cell.is-empty { background: transparent; cursor: default; }
+    .sched-date-cell.is-empty:hover { background: transparent; }
+
+    .sched-date-num {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1;
+    }
+    .sched-date-cell.is-sat .sched-date-num { color: #5080e0; }
+    .sched-date-cell.is-sun .sched-date-num { color: #e05050; }
+
+    .sched-count-badge {
+      display: block;
+      margin-top: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+    }
+
+    /* ── 날짜 상세 ────────────────────────────────── */
+    .sched-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 10px;
+    }
+    .sched-day-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0 0 18px;
+    }
+
+    /* 섹션 레이블 */
+    .sched-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    /* 겹침 카드 */
+    .sched-overlap-section { margin-bottom: 22px; }
+    .sched-overlap-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      background: #f5ece0;
+      margin-bottom: 6px;
+    }
+    .sched-overlap-emoji { font-size: 20px; flex-shrink: 0; }
+    .sched-overlap-info { flex: 1; min-width: 0; }
+    .sched-overlap-time { font-size: 16px; font-weight: 700; color: var(--text); }
+    .sched-overlap-who {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sched-overlap-count {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .sched-overlap-count span { font-size: 13px; font-weight: 600; }
+
+    .sched-no-votes {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px 0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* 막대 그래프 */
+    .sched-bar-section { margin-bottom: 22px; }
+    .sched-bar-axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      padding-left: 60px;
+    }
+    .sched-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .sched-bar-name {
+      font-size: 12px;
+      color: var(--text);
+      width: 52px;
+      flex-shrink: 0;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .sched-bar-name:hover { color: var(--green); text-decoration: underline; }
+    .sched-bar-track {
+      flex: 1;
+      height: 24px;
+      background: #ede8e0;
+      border-radius: 5px;
+      position: relative;
+    }
+    .sched-bar-fill {
+      position: absolute;
+      top: 0; bottom: 0;
+      background: var(--green);
+      border-radius: 5px;
+      opacity: 0.72;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      min-width: 32px;
+      overflow: hidden;
+    }
+    .sched-bar-fill.is-mine { background: #c0843a; opacity: 0.9; }
+    .sched-bar-time {
+      font-size: 10px;
+      color: white;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* 내 등록 */
+    .sched-my-section {
+      border-top: 1px solid #ede8e0;
+      padding-top: 18px;
+      margin-top: 4px;
+    }
+    .sched-register-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .sched-register-btn:hover { opacity: 0.88; }
+    .sched-login-hint {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 10px 0;
+    }
+    .sched-my-current {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f0ece0;
+      border-radius: 10px;
+      padding: 13px 14px;
+      margin-bottom: 0;
+    }
+    .sched-my-time { font-size: 16px; font-weight: 700; color: var(--text); }
+    .sched-my-actions { display: flex; gap: 8px; }
+    .sched-action-btn {
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid;
+    }
+    .sched-action-btn--edit { border-color: var(--green); color: var(--green); background: white; }
+    .sched-action-btn--del { border-color: #d0c8bc; color: var(--muted); background: white; }
+    .sched-action-btn--del:hover { border-color: #e05050; color: #e05050; }
+
+    /* 슬라이더 */
+    .sched-slider-wrap { margin-bottom: 16px; }
+    .sched-slider-times {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .sched-slider-time-val { font-size: 26px; font-weight: 800; color: var(--green); }
+    .sched-slider-sep { font-size: 16px; color: var(--muted); }
+
+    .sched-dual-range {
+      position: relative;
+      height: 40px;
+      margin: 0 4px;
+    }
+    .sched-range-track {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      left: 0; right: 0;
+      height: 6px;
+      background: #ddd8cc;
+      border-radius: 3px;
+    }
+    .sched-range-fill {
+      position: absolute;
+      height: 100%;
+      background: var(--green);
+      border-radius: 3px;
+    }
+    input.sched-range-input {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 100%; margin: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      pointer-events: none;
+      height: 40px;
+    }
+    input.sched-range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      pointer-events: all;
+      border: 3px solid white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.28);
+    }
+    input.sched-range-input::-moz-range-thumb {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      pointer-events: all;
+      border: 3px solid white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.28);
+    }
+    .sched-range-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .sched-confirm-row { display: flex; gap: 8px; margin-top: 14px; }
+    .sched-confirm-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: var(--green);
+      color: white;
+    }
+    .sched-discard-btn {
+      padding: 12px 16px;
+      border-radius: 9px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1.5px solid #d0c8bc;
+      background: white;
+      color: var(--muted);
+    }
+
+    /* 프로필 바텀시트 */
+    .sched-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+    }
+    .sched-sheet {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px 16px 0 0;
+      padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+      max-height: 65vh;
+      overflow-y: auto;
+    }
+    .sched-sheet-handle {
+      width: 40px; height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      margin: 0 auto 18px;
+    }
+    .sched-profile-nick {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .sched-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid #f0ebe0;
+    }
+    .sched-profile-date { font-size: 13px; color: var(--muted); width: 88px; flex-shrink: 0; }
+    .sched-profile-time { font-size: 14px; font-weight: 700; color: var(--text); }
+
+    .sched-loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
+  </style>
 </head>
 
 <body class="owned-page">
@@ -16,18 +395,46 @@
 
   <main>
     <section class="inner-page">
-      <nav class="breadcrumb owned-page-breadcrumb"><a href="./club.html#club-meeting">동호회</a> <span>›</span> 일정 투표 &amp; 확인</nav>
+      <nav class="breadcrumb owned-page-breadcrumb">
+        <a href="./club.html#club-meeting">동호회</a> <span>›</span> 모임 플래너
+      </nav>
       <div class="page-mini-hero page-mini-hero--club">
-        <h1>일정 투표 &amp; 확인</h1>
+        <h1>모임 플래너</h1>
       </div>
       <div class="inner-page-body">
-        <div class="inner-page-coming-soon">
-          준비 중이에요 🗓️<br>
-          <small style="color:var(--muted);margin-top:8px;display:block;">모임 날짜를 투표하고 확인할 수 있는 기능이 곧 추가됩니다</small>
+
+        <div class="sched-loading" id="mainLoading">불러오는 중...</div>
+
+        <!-- 달력 뷰 -->
+        <div id="viewCalendar" style="display:none">
+          <div class="sched-month-nav">
+            <button class="sched-month-btn" id="btnPrevMonth">‹</button>
+            <span class="sched-month-label" id="monthLabel"></span>
+            <button class="sched-month-btn" id="btnNextMonth">›</button>
+          </div>
+          <div class="sched-cal-grid" id="calGrid"></div>
         </div>
+
+        <!-- 날짜 상세 뷰 -->
+        <div id="viewDay" style="display:none">
+          <button class="sched-back-btn" id="btnBackCal">← 달력으로</button>
+          <h2 class="sched-day-title" id="dayTitle"></h2>
+          <div id="overlapSection"></div>
+          <div id="barSection"></div>
+          <div id="myVoteSection"></div>
+        </div>
+
       </div>
     </section>
   </main>
+
+  <!-- 프로필 바텀시트 -->
+  <div class="sched-sheet-backdrop" id="sheetBackdrop" style="display:none" onclick="schedCloseSheet()">
+    <div class="sched-sheet" onclick="event.stopPropagation()">
+      <div class="sched-sheet-handle"></div>
+      <div id="sheetContent"></div>
+    </div>
+  </div>
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
@@ -38,6 +445,397 @@
   <script src="../../assets/js/achievements.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
+
+  <script>
+  (function () {
+    const MIN_H = 9, MAX_H = 23;
+    const DOW = ['일','월','화','수','목','금','토'];
+    const TODAY = new Date();
+    TODAY.setHours(0, 0, 0, 0);
+
+    let allVotes = [];
+    let currentDate = null;
+    let viewYear = TODAY.getFullYear();
+    let viewMonth = TODAY.getMonth();
+    let sliderMode = false;
+    let sliderStart = 10, sliderEnd = 22;
+
+    function esc(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function toDateStr(y, m, d) {
+      // m: 0-indexed
+      return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    }
+
+    function parseDate(s) {
+      const [y, m, d] = s.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function formatLabel(s) {
+      const d = parseDate(s);
+      return `${d.getMonth()+1}월 ${d.getDate()}일 (${DOW[d.getDay()]})`;
+    }
+
+    function isPast(s) { return parseDate(s) < TODAY; }
+    function isToday(s) { return parseDate(s).getTime() === TODAY.getTime(); }
+
+    // ── 겹침 계산 ─────────────────────────────────────────────
+    function calcOverlap(votes) {
+      if (!votes.length) return [];
+      const slots = [];
+      for (let h = MIN_H; h < MAX_H; h++) {
+        slots.push({
+          h,
+          names: votes.filter(v => v.time_start <= h && v.time_end > h).map(v => v.nickname)
+        });
+      }
+      const blocks = [];
+      let i = 0;
+      while (i < slots.length) {
+        const names = slots[i].names;
+        const key = [...names].sort().join('§');
+        let j = i + 1;
+        while (j < slots.length && [...slots[j].names].sort().join('§') === key) j++;
+        if (names.length > 0) {
+          const endH = j < slots.length ? slots[j].h : MAX_H;
+          blocks.push({ start: slots[i].h, end: endH, count: names.length, names: [...names] });
+        }
+        i = j;
+      }
+      return blocks.sort((a, b) => b.count - a.count || (b.end - b.start) - (a.end - a.start));
+    }
+
+    // ── 달력 렌더 ─────────────────────────────────────────────
+    function renderCalendar() {
+      const todayBase = TODAY.getFullYear() * 12 + TODAY.getMonth();
+      const curBase = viewYear * 12 + viewMonth;
+      document.getElementById('monthLabel').textContent = `${viewYear}년 ${viewMonth + 1}월`;
+      document.getElementById('btnPrevMonth').disabled = curBase <= todayBase;
+      document.getElementById('btnNextMonth').disabled = curBase >= todayBase + 2;
+
+      const firstDow = new Date(viewYear, viewMonth, 1).getDay();
+      const offset = firstDow === 0 ? 6 : firstDow - 1;
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+      const countByDate = {};
+      for (const v of allVotes) {
+        if (!countByDate[v.vote_date]) countByDate[v.vote_date] = new Set();
+        countByDate[v.vote_date].add(v.user_id);
+      }
+
+      let html = ['월','화','수','목','금','토','일'].map((d, i) =>
+        `<div class="sched-dow${i===5?' sched-dow-sat':i===6?' sched-dow-sun':''}">${d}</div>`
+      ).join('');
+
+      for (let i = 0; i < offset; i++) html += '<div class="sched-date-cell is-empty"></div>';
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const ds = toDateStr(viewYear, viewMonth, d);
+        const dow = new Date(viewYear, viewMonth, d).getDay();
+        const past = isPast(ds), tod = isToday(ds);
+        const cnt = countByDate[ds]?.size || 0;
+        const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
+        let cls = `sched-date-cell${dowCls}${past ? ' is-past' : ''}${tod ? ' is-today' : ''}`;
+        const badge = cnt ? `<span class="sched-count-badge">${cnt}명</span>` : '';
+        html += `<div class="${cls}" data-date="${ds}"><div class="sched-date-num">${d}</div>${badge}</div>`;
+      }
+
+      const grid = document.getElementById('calGrid');
+      grid.innerHTML = html;
+      grid.querySelectorAll('.sched-date-cell:not(.is-empty):not(.is-past)').forEach(el => {
+        el.addEventListener('click', () => openDay(el.dataset.date));
+      });
+    }
+
+    // ── 날짜 상세 ─────────────────────────────────────────────
+    function openDay(ds) {
+      currentDate = ds;
+      sliderMode = false;
+      document.getElementById('viewCalendar').style.display = 'none';
+      document.getElementById('viewDay').style.display = '';
+      document.getElementById('dayTitle').textContent = formatLabel(ds);
+      renderDayDetail(ds);
+    }
+
+    function renderDayDetail(ds) {
+      const dayVotes = allVotes.filter(v => v.vote_date === ds);
+      const user = window.getKakaoUser?.();
+      const myVote = dayVotes.find(v => user && String(v.user_id) === String(user.id));
+      renderOverlap(dayVotes);
+      renderBars(dayVotes, myVote);
+      renderMyVote(ds, myVote);
+    }
+
+    function renderOverlap(votes) {
+      const el = document.getElementById('overlapSection');
+      if (!votes.length) {
+        el.innerHTML = '<div class="sched-no-votes">아직 등록된 일정이 없어요.<br>첫 번째로 등록해보세요!</div>';
+        return;
+      }
+      const blocks = calcOverlap(votes);
+      const emojis = ['🔥','😊','📌'];
+      el.innerHTML = `<div class="sched-overlap-section">
+        <div class="sched-section-label">가장 많이 겹치는 시간</div>
+        ${blocks.length ? blocks.slice(0, 3).map((b, i) => `
+          <div class="sched-overlap-card">
+            <span class="sched-overlap-emoji">${emojis[i] || '·'}</span>
+            <div class="sched-overlap-info">
+              <div class="sched-overlap-time">${b.start}:00 ~ ${b.end}:00</div>
+              <div class="sched-overlap-who">${b.names.map(n => esc(n)).join(' · ')}</div>
+            </div>
+            <div class="sched-overlap-count">${b.count}<span>명</span></div>
+          </div>`).join('') : '<div style="color:var(--muted);font-size:13px;padding:4px 0">겹치는 시간이 없어요.</div>'}
+      </div>`;
+    }
+
+    function renderBars(votes, myVote) {
+      const el = document.getElementById('barSection');
+      if (!votes.length) { el.innerHTML = ''; return; }
+      const range = MAX_H - MIN_H;
+      const rows = votes.map(v => {
+        const left = ((v.time_start - MIN_H) / range * 100).toFixed(1);
+        const width = ((v.time_end - v.time_start) / range * 100).toFixed(1);
+        const mine = myVote && String(v.user_id) === String(myVote.user_id);
+        return `<div class="sched-bar-row">
+          <span class="sched-bar-name" data-uid="${esc(v.user_id)}" data-nick="${esc(v.nickname)}">${esc(v.nickname)}</span>
+          <div class="sched-bar-track">
+            <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
+              <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+      el.innerHTML = `<div class="sched-bar-section">
+        <div class="sched-section-label">참여 가능 시간</div>
+        <div class="sched-bar-axis">
+          <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
+        </div>
+        ${rows}
+      </div>`;
+
+      el.querySelectorAll('.sched-bar-name').forEach(n => {
+        n.addEventListener('click', () => openProfileSheet(n.dataset.uid, n.dataset.nick));
+      });
+    }
+
+    function renderMyVote(ds, myVote) {
+      const el = document.getElementById('myVoteSection');
+      const user = window.getKakaoUser?.();
+
+      if (!user) {
+        el.innerHTML = `<div class="sched-my-section">
+          <div class="sched-login-hint">가능 시간을 등록하려면 카카오 로그인이 필요해요.</div>
+        </div>`;
+        return;
+      }
+
+      if (sliderMode) {
+        renderSlider(el, ds, myVote);
+        return;
+      }
+
+      if (myVote) {
+        el.innerHTML = `<div class="sched-my-section">
+          <div class="sched-section-label">내 등록</div>
+          <div class="sched-my-current">
+            <span class="sched-my-time">${myVote.time_start}:00 ~ ${myVote.time_end}:00</span>
+            <div class="sched-my-actions">
+              <button class="sched-action-btn sched-action-btn--edit" id="btnEdit">수정</button>
+              <button class="sched-action-btn sched-action-btn--del" id="btnDel">취소</button>
+            </div>
+          </div>
+        </div>`;
+        document.getElementById('btnEdit').addEventListener('click', () => {
+          sliderStart = myVote.time_start;
+          sliderEnd = myVote.time_end;
+          sliderMode = true;
+          renderMyVote(ds, myVote);
+        });
+        document.getElementById('btnDel').addEventListener('click', () => removeVote(ds));
+      } else {
+        el.innerHTML = `<div class="sched-my-section">
+          <button class="sched-register-btn" id="btnRegister">나도 등록하기</button>
+        </div>`;
+        document.getElementById('btnRegister').addEventListener('click', () => {
+          sliderStart = 10; sliderEnd = 22;
+          sliderMode = true;
+          renderMyVote(ds, myVote);
+        });
+      }
+    }
+
+    function renderSlider(container, ds, myVote) {
+      const range = MAX_H - MIN_H;
+      container.innerHTML = `<div class="sched-my-section">
+        <div class="sched-section-label">가능 시간 선택</div>
+        <div class="sched-slider-wrap">
+          <div class="sched-slider-times">
+            <span class="sched-slider-time-val" id="lblS">${sliderStart}시</span>
+            <span class="sched-slider-sep">~</span>
+            <span class="sched-slider-time-val" id="lblE">${sliderEnd}시</span>
+          </div>
+          <div class="sched-dual-range">
+            <div class="sched-range-track">
+              <div class="sched-range-fill" id="rangeFill"></div>
+            </div>
+            <input type="range" class="sched-range-input" id="rS"
+              min="${MIN_H}" max="${MAX_H - 1}" step="1" value="${sliderStart}">
+            <input type="range" class="sched-range-input" id="rE"
+              min="${MIN_H + 1}" max="${MAX_H}" step="1" value="${sliderEnd}">
+          </div>
+          <div class="sched-range-axis">
+            <span>${MIN_H}시</span>
+            <span>${Math.round((MIN_H + MAX_H) / 2)}시</span>
+            <span>${MAX_H}시</span>
+          </div>
+        </div>
+        <div class="sched-confirm-row">
+          <button class="sched-confirm-btn" id="btnSave">등록</button>
+          <button class="sched-discard-btn" id="btnDiscardSlider">닫기</button>
+        </div>
+      </div>`;
+
+      const rS = document.getElementById('rS');
+      const rE = document.getElementById('rE');
+      const fill = document.getElementById('rangeFill');
+      const lblS = document.getElementById('lblS');
+      const lblE = document.getElementById('lblE');
+
+      function sync() {
+        const s = parseInt(rS.value), e = parseInt(rE.value);
+        fill.style.left = ((s - MIN_H) / range * 100) + '%';
+        fill.style.width = ((e - s) / range * 100) + '%';
+        lblS.textContent = s + '시';
+        lblE.textContent = e + '시';
+        sliderStart = s; sliderEnd = e;
+      }
+      rS.addEventListener('input', () => {
+        if (parseInt(rS.value) >= parseInt(rE.value)) rS.value = parseInt(rE.value) - 1;
+        sync();
+      });
+      rE.addEventListener('input', () => {
+        if (parseInt(rE.value) <= parseInt(rS.value)) rE.value = parseInt(rS.value) + 1;
+        sync();
+      });
+      sync();
+
+      document.getElementById('btnSave').addEventListener('click', () => saveVote(ds));
+      document.getElementById('btnDiscardSlider').addEventListener('click', () => {
+        sliderMode = false;
+        renderMyVote(ds, myVote);
+      });
+    }
+
+    async function saveVote(ds) {
+      const user = window.getKakaoUser?.();
+      if (!user) return;
+      const btn = document.getElementById('btnSave');
+      if (btn) btn.disabled = true;
+
+      const result = await window.CottageDB?.upsertMeetingVote(
+        String(user.id), user.nickname || '익명', ds, sliderStart, sliderEnd
+      );
+
+      if (result?.success) {
+        allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
+        allVotes.push({ vote_date: ds, user_id: String(user.id), nickname: user.nickname || '익명', time_start: sliderStart, time_end: sliderEnd });
+        sliderMode = false;
+        renderCalendar();
+        renderDayDetail(ds);
+      } else {
+        if (btn) btn.disabled = false;
+        alert('저장 중 오류가 발생했어요. 다시 시도해주세요.');
+      }
+    }
+
+    async function removeVote(ds) {
+      if (!confirm('참여를 취소할까요?')) return;
+      const user = window.getKakaoUser?.();
+      if (!user) return;
+
+      const result = await window.CottageDB?.deleteMeetingVote(String(user.id), ds);
+      if (result?.success) {
+        allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
+        renderCalendar();
+        renderDayDetail(ds);
+      } else {
+        alert('취소 중 오류가 발생했어요.');
+      }
+    }
+
+    // ── 프로필 시트 ───────────────────────────────────────────
+    function openProfileSheet(uid, nickname) {
+      const todayStr = toDateStr(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+      const userVotes = allVotes
+        .filter(v => String(v.user_id) === uid && v.vote_date >= todayStr)
+        .sort((a, b) => a.vote_date.localeCompare(b.vote_date));
+
+      const rows = userVotes.length
+        ? userVotes.map(v => `<div class="sched-profile-row">
+            <span class="sched-profile-date">${formatLabel(v.vote_date)}</span>
+            <span class="sched-profile-time">${v.time_start}:00 ~ ${v.time_end}:00</span>
+          </div>`).join('')
+        : '<div style="color:var(--muted);font-size:13px;padding:8px 0">등록된 일정이 없어요.</div>';
+
+      document.getElementById('sheetContent').innerHTML = `
+        <div class="sched-profile-nick">${esc(nickname)}</div>
+        <div class="sched-section-label" style="margin-bottom:8px">이달의 참여 일정</div>
+        ${rows}`;
+      document.getElementById('sheetBackdrop').style.display = 'flex';
+    }
+
+    window.schedCloseSheet = function () {
+      document.getElementById('sheetBackdrop').style.display = 'none';
+    };
+
+    // ── 초기화 ────────────────────────────────────────────────
+    async function init() {
+      const todayStr = toDateStr(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+      const end = new Date(TODAY);
+      end.setDate(end.getDate() + 62);
+      const endStr = toDateStr(end.getFullYear(), end.getMonth(), end.getDate());
+
+      allVotes = await window.CottageDB?.getMeetingVotes(todayStr, endStr) || [];
+
+      document.getElementById('mainLoading').style.display = 'none';
+      document.getElementById('viewCalendar').style.display = '';
+      renderCalendar();
+    }
+
+    document.getElementById('btnPrevMonth').addEventListener('click', () => {
+      const todayBase = TODAY.getFullYear() * 12 + TODAY.getMonth();
+      const curBase = viewYear * 12 + viewMonth;
+      if (curBase > todayBase) {
+        if (--viewMonth < 0) { viewMonth = 11; viewYear--; }
+        renderCalendar();
+      }
+    });
+    document.getElementById('btnNextMonth').addEventListener('click', () => {
+      const todayBase = TODAY.getFullYear() * 12 + TODAY.getMonth();
+      const curBase = viewYear * 12 + viewMonth;
+      if (curBase < todayBase + 2) {
+        if (++viewMonth > 11) { viewMonth = 0; viewYear++; }
+        renderCalendar();
+      }
+    });
+    document.getElementById('btnBackCal').addEventListener('click', () => {
+      sliderMode = false;
+      currentDate = null;
+      document.getElementById('viewDay').style.display = 'none';
+      document.getElementById('viewCalendar').style.display = '';
+    });
+
+    window.addEventListener('cottage-auth-changed', () => {
+      if (currentDate) renderDayDetail(currentDate);
+    });
+
+    init();
+  })();
+  </script>
 
   <footer class="site-footer">
     <p>경기도 용인시 처인구 명지로 60번길 39-21 1층 &nbsp;<a class="footer-link" href="https://naver.me/FRLnf1up" target="_blank" rel="noopener noreferrer">← 지도 보기</a></p>

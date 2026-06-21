@@ -30,6 +30,11 @@
 | `user_achievements` | user_id, achievement_id, earned_at, UNIQUE(user_id, achievement_id) | 유저별 획득 업적 = 해금 캐릭터 |
 | `voucher_products` | id, name, cost, is_active | 교환 가능 상품 카탈로그 (물 2병/홈런볼/캔커피) |
 | `voucher_log` | user_id, delta, reason, product_id, created_at | 교환권 원장 (append-only). delta>0=지급, delta<0=사용. reason='first_play' 시 UNIQUE INDEX로 중복 방지 |
+| `meeting_votes` | vote_date, user_id, nickname, time_start, time_end, created_at | 모임 플래너 가능 시간 등록. UNIQUE(vote_date, user_id). time_start/end: 정수(시 단위, 9~23) |
+| `club_polls` | id, week_label, question, is_active | (club-meeting.html) 투표 |
+| `club_poll_options` | id, poll_id, option_text, sort_order | (club-meeting.html) 투표 선택지 |
+| `club_poll_votes` | id, poll_id, option_id, user_id | (club-meeting.html) 투표 결과 |
+| `club_meeting_comments` | id, nickname, user_id, content, created_at | (club-meeting.html) 자유 댓글 |
 
 ---
 
