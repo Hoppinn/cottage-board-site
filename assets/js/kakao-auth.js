@@ -832,7 +832,8 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>` : ''}`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _tasteCardSummary = `❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개`;
+  const _bioPreview = _bio ? `"${_bio.length > 28 ? _bio.slice(0, 28) + '…' : _bio}"\n` : '';
+  const _tasteCardSummary = `${_bioPreview}❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개`;
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
