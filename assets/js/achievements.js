@@ -651,6 +651,7 @@
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
+    const earnedCharCount = CHAR_DEFS.filter(d => earnedIds.has(d.id)).length;
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
     // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시 (balance(여우)부터 시작하는 축 순서로 정렬)
@@ -683,14 +684,14 @@
       return earnedAxis.length ? earnedAxis[earnedAxis.length - 1] : null;
     }).filter(Boolean);
 
-    const repActionHtml = earnedCount
+    const repActionHtml = earnedCharCount
       ? `<div class="profile-rep-action-row" id="profileRepActionRow" data-user-id="${userId}" data-orig-rep-id="${repAch?.id || ''}" style="display:none">
           <button class="profile-rep-change-btn" type="button">변경</button>
           <button class="profile-rep-cancel-btn" type="button">취소</button>
         </div>`
       : '';
 
-    const emptyHint = earnedCount === 0
+    const emptyHint = earnedCharCount === 0
       ? '<p class="profile-char-empty">게임을 플레이하면 캐릭터가 해금됩니다 🐾</p>'
       : '';
 
@@ -708,8 +709,8 @@
         `<span class="profile-char-card-name">${_charName(def)}</span>` +
         `</button>`;
     }).join('')}</div></div>`;
-    return `<div class="profile-char-section" data-char-count="${earnedCount}" data-char-total="${CHAR_DEFS.length}">
-      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체보기 ▾</button></div>
+    return `<div class="profile-char-section" data-char-count="${earnedCharCount}" data-char-total="${CHAR_DEFS.length}">
+      <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCharCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체보기 ▾</button></div>
       ${_charPreviewHtml}
       <div class="profile-char-body is-hidden">
         ${emptyHint}
