@@ -86204,9 +86204,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "",
-      "shelfLabel": "-",
-      "shelfFullLabel": "-",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 2.9319,
       "moodTags": [
