@@ -2425,7 +2425,7 @@ async function onSubmitPlayModal(skip) {
     '/pages/club/club.html': '동호회 소개',
     '/pages/club/club-history.html': '모임 기록',
     '/pages/club/club-intro.html': '회원 자기소개',
-    '/pages/club/club-schedule.html': '일정 투표',
+    '/pages/club/club-schedule.html': '모임 플래너',
     '/pages/admin/requests.html': '요청하기',
     '/pages/admin/requests-admin.html': '관리자',
   };

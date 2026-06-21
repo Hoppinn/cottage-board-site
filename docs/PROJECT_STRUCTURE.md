@@ -33,8 +33,8 @@
 │   ├── club/                       # 동호회
 │   │   ├── club.html               # 동호회 소개
 │   │   ├── club-intro.html         # 동호회 멤버 소개
-│   │   ├── club-schedule.html      # 일정 투표 & 확인
-│   │   ├── club-meeting.html       # 모임 기록
+│   │   ├── club-schedule.html      # 모임 플래너 (달력, 가능 시간 등록, 겹침 계산, 자유 댓글)
+│   │   ├── club-meeting.html       # → club-schedule.html 리다이렉트 (구 투표 페이지)
 │   │   ├── club-rules.html         # 동호회 규칙
 │   │   └── club-history.html       # 모임 기록 & 사진 (DB 연동)
 │   ├── admin/                      # 요청/관리

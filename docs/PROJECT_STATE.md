@@ -126,7 +126,7 @@
 - [x] **페이지별방문 내 보드 + 서브시트 카운팅** — trackPageView('my-board*') + admin 가상페이지 집계 (118차)
 - [x] **방문자목록 회원/비회원 분류 버튼** — 전체/회원/비회원 토글 버튼 추가 (118차)
 - [x] **게임 위치 0종 카테고리 숨기기** — games.length === 0 시 렌더 스킵 (140차)
-- [x] **모임 일정 페이지** — 모임 플래너 구현 완료 (141차). DB: meeting_votes. 달력(2개월)+날짜 상세+겹침 계산+막대 그래프+슬라이더 등록+프로필 시트. ⚠️ Supabase에 meeting_votes 테이블 생성 필요 (SQL 별도 제공)
+- [x] **모임 일정 페이지** — club-schedule.html로 통합 완료 (141차). 달력+겹침계산+슬라이더+자유댓글. club-meeting.html → redirect. ⚠️ Supabase meeting_votes 테이블 생성 필요
 - [ ] **동호회 가입 추적** — page_sessions 데이터 활용
 - [ ] **관심 기반 묶음 알림** (Red, Plan 필수)
   - 개별 알림 → 유형별 묶음 방식 전환
