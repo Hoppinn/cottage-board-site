@@ -529,7 +529,7 @@
       return blocks.sort((a, b) => b.count - a.count || (b.end - b.start) - (a.end - a.start));
     }
 
-    // ── 4주 뷰 렌더 (오늘부터 시작) ───────────────────────────
+    // ── 4주 뷰 렌더 (이번 주 포함 월~일 고정) ─────────────────
     function renderCalendar() {
       const countByDate = {}, votesByDate = {};
       for (const v of allVotes) {
@@ -539,55 +539,43 @@
         votesByDate[v.vote_date].push(v);
       }
 
-      // 이번 주: 오늘 ~ 이번 주 일요일
+      // 이번 주 월요일
       const todayDow = TODAY.getDay(); // 0=Sun
-      const offsetInWeek = todayDow === 0 ? 6 : todayDow - 1; // Mon=0, Sun=6
-      const daysLeftThisWeek = 7 - offsetInWeek;
-
-      // 다음 주 월요일
-      const nextMonday = new Date(TODAY);
-      nextMonday.setDate(TODAY.getDate() + daysLeftThisWeek);
+      const daysToMon = todayDow === 0 ? -6 : -(todayDow - 1);
+      const thisMonday = new Date(TODAY);
+      thisMonday.setDate(TODAY.getDate() + daysToMon);
 
       function buildCard(date) {
         const ds = toDateStr(date);
         const dow = date.getDay();
         const tod = date.getTime() === TODAY.getTime();
+        const past = date < TODAY;
         const cnt = countByDate[ds]?.size || 0;
         const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
-        const countHtml = cnt ? `<div class="sdc-count">${cnt}명</div>` : '';
+        const pastCls = past ? ' is-past' : '';
+        const todayCls = tod ? ' is-today' : '';
+        const countHtml = (!past && cnt) ? `<div class="sdc-count">${cnt}명</div>` : '';
         let overlapHtml = '';
-        if (cnt >= 2 && votesByDate[ds]) {
+        if (!past && cnt >= 2 && votesByDate[ds]) {
           const top = calcOverlap(votesByDate[ds])[0];
           if (top) overlapHtml = `<div class="sdc-overlap">${top.start}~${top.end}시</div>`;
         }
         const todayLabel = tod ? '<div class="sdc-today-label">오늘</div>' : '';
-        return `<div class="sched-day-card${dowCls}${tod?' is-today':''}" data-date="${ds}">
+        return `<div class="sched-day-card${dowCls}${pastCls}${todayCls}" data-date="${ds}">
           ${todayLabel}<div class="sdc-dow">${DOW[dow]}</div>
           <div class="sdc-date">${date.getMonth()+1}/${date.getDate()}</div>
           ${countHtml}${overlapHtml}
         </div>`;
       }
 
-      // 이번 주 섹션 (월요일 위치까지 빈 칸, 오늘부터 일요일까지)
-      let html = '<div class="sched-week-section is-this-week">';
-      html += '<div class="sched-week-label">이번 주</div>';
-      html += '<div class="sched-week-row">';
-      for (let i = 0; i < offsetInWeek; i++) {
-        html += '<div class="sched-day-card is-empty"></div>';
-      }
-      for (let i = 0; i < daysLeftThisWeek; i++) {
-        const d = new Date(TODAY); d.setDate(TODAY.getDate() + i);
-        html += buildCard(d);
-      }
-      html += '</div></div>';
-
-      // 다음 주 ~ 3주 뒤
-      const laterLabels = ['다음 주', '2주 뒤', '3주 뒤'];
-      for (let w = 0; w < 3; w++) {
-        html += `<div class="sched-week-section"><div class="sched-week-label">${laterLabels[w]}</div><div class="sched-week-row">`;
+      const sectionLabels = ['이번 주', '다음 주', '2주 뒤', '3주 뒤'];
+      let html = '';
+      for (let w = 0; w < 4; w++) {
+        const thisCls = w === 0 ? ' is-this-week' : '';
+        html += `<div class="sched-week-section${thisCls}"><div class="sched-week-label">${sectionLabels[w]}</div><div class="sched-week-row">`;
         for (let d = 0; d < 7; d++) {
-          const date = new Date(nextMonday);
-          date.setDate(nextMonday.getDate() + w * 7 + d);
+          const date = new Date(thisMonday);
+          date.setDate(thisMonday.getDate() + w * 7 + d);
           html += buildCard(date);
         }
         html += '</div></div>';
@@ -595,7 +583,7 @@
 
       const el = document.getElementById('weekView');
       el.innerHTML = html;
-      el.querySelectorAll('.sched-day-card:not(.is-empty)').forEach(card => {
+      el.querySelectorAll('.sched-day-card:not(.is-past)').forEach(card => {
         card.addEventListener('click', () => openDay(card.dataset.date));
       });
     }
