@@ -358,7 +358,9 @@
         }
 
         const badgesHtml = statusBadge ? `<span class="req-card-badges">${statusBadge}</span>` : '';
-        const actionsHtml = (adminActions || can) ? `<span class="req-card-actions">${adminActions}${can ? editBtn('game_requests', r.id, r.game_name) + delBtn('game_requests', r.id, r.request_count) : ''}</span>` : '';
+        const canEdit = can && r.request_count <= 1;
+        const canDel  = isAdmin() || (can && r.request_count <= 1);
+        const actionsHtml = (adminActions || canEdit || canDel) ? `<span class="req-card-actions">${adminActions}${canEdit ? editBtn('game_requests', r.id, r.game_name) : ''}${canDel ? delBtn('game_requests', r.id, r.request_count) : ''}</span>` : '';
 
         const _voters = voterMap[r.id] || [];
         const votersHtml = _voters.length ? `<span class="req-voters-names">${_voters.map(escHtml).join(', ')}</span>` : '';
@@ -630,7 +632,9 @@
         const countLabel = voted
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
-        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-card-name">${escHtml(r.item_name)}</span><span class="req-card-count">${countLabel}</span>${can ? `<span class="req-card-actions">${editBtn('snack_requests', r.id, r.item_name)}${delBtn('snack_requests', r.id, r.request_count)}</span>` : ''}</li>`;
+        const canEdit = can && r.request_count <= 1;
+        const canDel  = isAdmin() || (can && r.request_count <= 1);
+        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-card-name">${escHtml(r.item_name)}</span><span class="req-card-count">${countLabel}</span>${(canEdit || canDel) ? `<span class="req-card-actions">${canEdit ? editBtn('snack_requests', r.id, r.item_name) : ''}${canDel ? delBtn('snack_requests', r.id, r.request_count) : ''}</span>` : ''}</li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
