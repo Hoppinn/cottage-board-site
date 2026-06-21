@@ -21,37 +21,72 @@
     }
     .sched-week-row {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    @media (min-width: 520px) {
+      .sched-week-row { grid-template-columns: repeat(4, 1fr); }
     }
     .sched-day-card {
-      padding: 7px 2px 6px;
-      border-radius: 8px;
-      text-align: center;
+      padding: 10px 10px 10px;
+      border-radius: 10px;
       background: #faf8f5;
       cursor: pointer;
-      min-height: 64px;
+      min-height: 80px;
     }
     .sched-day-card:hover { background: #f0ebe0; }
-    .sched-day-card.is-today { background: #f5ece0; outline: 1.5px solid var(--green); }
-    .sched-day-card.is-past { opacity: 0.3; cursor: default; pointer-events: none; }
-    .sdc-dow { font-size: 10px; color: var(--muted); line-height: 1; margin-bottom: 3px; }
-    .sdc-date { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1; }
+    .sched-day-card.is-today { background: #f5ece0; outline: 2px solid var(--green); }
+    .sched-day-card.is-past { opacity: 0.28; cursor: default; pointer-events: none; }
+    .sched-day-card.is-empty { background: transparent; border: 1px dashed #e8e0d4; cursor: default; pointer-events: none; opacity: 0.35; }
+    .sdc-header { display: flex; align-items: baseline; gap: 5px; margin-bottom: 5px; }
+    .sdc-dow { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1; }
+    .sdc-date { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1; }
     .sched-day-card.is-sat .sdc-dow,
     .sched-day-card.is-sat .sdc-date { color: #5080e0; }
     .sched-day-card.is-sun .sdc-dow,
     .sched-day-card.is-sun .sdc-date { color: #e05050; }
-    .sdc-count { font-size: 10px; font-weight: 700; color: var(--green); margin-top: 4px; line-height: 1; }
-    .sdc-overlap { font-size: 9px; color: var(--muted); margin-top: 2px; line-height: 1.2; }
-    .sdc-today-label { font-size: 9px; font-weight: 800; color: var(--green); line-height: 1; margin-bottom: 1px; }
-    .sched-day-card.is-today { background: #f5ece0; outline: 2px solid var(--green); }
-    .sched-day-card.is-empty { background: transparent; cursor: default; pointer-events: none; }
+    .sdc-today-label { font-size: 9px; font-weight: 800; color: var(--green); background: #e6f4e8; border-radius: 4px; padding: 1px 5px; line-height: 1.5; }
+    .sdc-count { font-size: 13px; font-weight: 800; color: var(--green); margin-bottom: 3px; }
+    .sdc-time-row { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .sdc-time-row strong { color: var(--text); font-weight: 700; }
+    .sdc-names { font-size: 11px; color: var(--muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sdc-no-overlap { color: #e05050 !important; }
     .sched-week-section.is-this-week {
       background: #faf5ec;
       border-radius: 10px;
-      padding: 10px 8px 12px;
+      padding: 10px 10px 12px;
       margin: 0 -8px 20px;
     }
+
+    /* ── 날짜 상세 요약 ──────────────────────────────── */
+    .sched-summary-card {
+      background: #f5ece0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 14px;
+    }
+    .sched-summary-item { flex: 1; text-align: center; }
+    .sched-summary-lbl { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .03em; margin-bottom: 3px; }
+    .sched-summary-val { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.2; }
+    .sched-summary-val.is-green { color: var(--green); }
+
+    /* ── 시간대별 인원 ───────────────────────────────── */
+    .sched-hrly-section { margin-bottom: 22px; }
+    .sched-hrly-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+    .sched-hrly-time { font-size: 11px; color: var(--muted); width: 64px; flex-shrink: 0; text-align: right; }
+    .sched-hrly-bar-wrap { flex: 1; height: 16px; background: #ede8e0; border-radius: 4px; overflow: hidden; }
+    .sched-hrly-bar { height: 100%; background: var(--green); border-radius: 4px; opacity: 0.55; transition: width 0.2s; }
+    .sched-hrly-row.is-peak .sched-hrly-bar { opacity: 1; }
+    .sched-hrly-row.is-peak .sched-hrly-time { color: var(--text); font-weight: 700; }
+    .sched-hrly-count { font-size: 11px; font-weight: 700; color: var(--muted); width: 24px; flex-shrink: 0; }
+    .sched-hrly-row.is-peak .sched-hrly-count { color: var(--green); }
 
     /* ── 날짜 상세 ────────────────────────────────── */
     .sched-back-btn {
@@ -503,6 +538,23 @@
     function isPast(s) { return parseDate(s) < TODAY; }
     function isToday(s) { return parseDate(s).getTime() === TODAY.getTime(); }
 
+    // ── 날짜별 요약 계산 ─────────────────────────────────────
+    function calcSummary(votes) {
+      if (!votes.length) return null;
+      const totalStart = Math.min(...votes.map(v => v.time_start));
+      const totalEnd = Math.max(...votes.map(v => v.time_end));
+      const blocks = calcOverlap(votes);
+      const top = blocks[0] || null;
+      return {
+        count: votes.length,
+        totalStart, totalEnd,
+        overlapStart: top?.start,
+        overlapEnd: top?.end,
+        overlapCount: top?.count,
+        names: votes.map(v => v.nickname),
+      };
+    }
+
     // ── 겹침 계산 ─────────────────────────────────────────────
     function calcOverlap(votes) {
       if (!votes.length) return [];
@@ -550,21 +602,31 @@
         const dow = date.getDay();
         const tod = date.getTime() === TODAY.getTime();
         const past = date < TODAY;
+        const dayVotes = votesByDate[ds] || [];
         const cnt = countByDate[ds]?.size || 0;
         const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
         const pastCls = past ? ' is-past' : '';
         const todayCls = tod ? ' is-today' : '';
-        const countHtml = (!past && cnt) ? `<div class="sdc-count">${cnt}명</div>` : '';
-        let overlapHtml = '';
-        if (!past && cnt >= 2 && votesByDate[ds]) {
-          const top = calcOverlap(votesByDate[ds])[0];
-          if (top) overlapHtml = `<div class="sdc-overlap">${top.start}~${top.end}시</div>`;
+        const todayLabel = tod ? '<span class="sdc-today-label">오늘</span>' : '';
+
+        let infoHtml = '';
+        if (!past && cnt > 0) {
+          const s = calcSummary(dayVotes);
+          const nameStr = s.names.length <= 2
+            ? s.names.map(n => esc(n)).join(', ')
+            : `${esc(s.names[0])} 외 ${s.names.length - 1}명`;
+          const overlapLine = s.overlapStart != null
+            ? `겹침 <strong>${s.overlapStart}~${s.overlapEnd}</strong>`
+            : `<span class="sdc-no-overlap">겹침 없음</span>`;
+          infoHtml = `<div class="sdc-count">${cnt}명</div>
+            <div class="sdc-time-row">전체 <strong>${s.totalStart}~${s.totalEnd}</strong></div>
+            <div class="sdc-time-row">${overlapLine}</div>
+            <div class="sdc-names">${nameStr}</div>`;
         }
-        const todayLabel = tod ? '<div class="sdc-today-label">오늘</div>' : '';
+
         return `<div class="sched-day-card${dowCls}${pastCls}${todayCls}" data-date="${ds}">
-          ${todayLabel}<div class="sdc-dow">${DOW[dow]}</div>
-          <div class="sdc-date">${date.getMonth()+1}/${date.getDate()}</div>
-          ${countHtml}${overlapHtml}
+          <div class="sdc-header">${todayLabel}<span class="sdc-dow">${DOW[dow]}</span><span class="sdc-date">${date.getMonth()+1}/${date.getDate()}</span></div>
+          ${infoHtml}
         </div>`;
       }
 
@@ -607,25 +669,78 @@
       renderMyVote(ds, myVote);
     }
 
+    function renderHourlyBreakdown(votes) {
+      if (votes.length < 2) return '';
+      const hourCounts = [];
+      for (let h = MIN_H; h < MAX_H; h++) {
+        const cnt = votes.filter(v => v.time_start <= h && v.time_end > h).length;
+        if (cnt > 0) hourCounts.push({ h, cnt });
+      }
+      if (!hourCounts.length) return '';
+      const groups = [];
+      let i = 0;
+      while (i < hourCounts.length) {
+        const cnt = hourCounts[i].cnt;
+        let j = i + 1;
+        while (j < hourCounts.length && hourCounts[j].cnt === cnt) j++;
+        const endH = j < hourCounts.length ? hourCounts[j].h : MAX_H;
+        groups.push({ start: hourCounts[i].h, end: endH, cnt });
+        i = j;
+      }
+      const maxCnt = Math.max(...groups.map(g => g.cnt));
+      const rows = groups.map(g => {
+        const pct = (g.cnt / votes.length * 100).toFixed(0);
+        const peak = g.cnt === maxCnt;
+        return `<div class="sched-hrly-row${peak ? ' is-peak' : ''}">
+          <span class="sched-hrly-time">${g.start}~${g.end}시</span>
+          <div class="sched-hrly-bar-wrap"><div class="sched-hrly-bar" style="width:${pct}%"></div></div>
+          <span class="sched-hrly-count">${g.cnt}명</span>
+        </div>`;
+      }).join('');
+      return `<div class="sched-hrly-section">
+        <div class="sched-section-label">시간대별 인원</div>
+        ${rows}
+      </div>`;
+    }
+
     function renderOverlap(votes) {
       const el = document.getElementById('overlapSection');
       if (!votes.length) {
         el.innerHTML = '<div class="sched-no-votes">아직 등록된 일정이 없어요.<br>첫 번째로 등록해보세요!</div>';
         return;
       }
+      const s = calcSummary(votes);
       const blocks = calcOverlap(votes);
+      const top = blocks[0];
+      const summaryHtml = `<div class="sched-summary-card">
+        <div class="sched-summary-item">
+          <div class="sched-summary-lbl">참여</div>
+          <div class="sched-summary-val is-green">${s.count}명</div>
+        </div>
+        <div class="sched-summary-item">
+          <div class="sched-summary-lbl">전체 시간</div>
+          <div class="sched-summary-val">${s.totalStart}~${s.totalEnd}시</div>
+        </div>
+        <div class="sched-summary-item">
+          <div class="sched-summary-lbl">최대 겹침</div>
+          <div class="sched-summary-val${top ? ' is-green' : ''}">${top ? `${top.start}~${top.end}시` : '없음'}</div>
+        </div>
+      </div>`;
       const emojis = ['🔥','😊','📌'];
+      const blocksHtml = blocks.length ? blocks.slice(0, 3).map((b, i) => `
+        <div class="sched-overlap-card">
+          <span class="sched-overlap-emoji">${emojis[i] || '·'}</span>
+          <div class="sched-overlap-info">
+            <div class="sched-overlap-time">${b.start}:00 ~ ${b.end}:00</div>
+            <div class="sched-overlap-who">${b.names.map(n => esc(n)).join(' · ')}</div>
+          </div>
+          <div class="sched-overlap-count">${b.count}<span>명</span></div>
+        </div>`).join('') : '<div style="color:var(--muted);font-size:13px;padding:4px 0">겹치는 시간이 없어요.</div>';
       el.innerHTML = `<div class="sched-overlap-section">
-        <div class="sched-section-label">가장 많이 겹치는 시간</div>
-        ${blocks.length ? blocks.slice(0, 3).map((b, i) => `
-          <div class="sched-overlap-card">
-            <span class="sched-overlap-emoji">${emojis[i] || '·'}</span>
-            <div class="sched-overlap-info">
-              <div class="sched-overlap-time">${b.start}:00 ~ ${b.end}:00</div>
-              <div class="sched-overlap-who">${b.names.map(n => esc(n)).join(' · ')}</div>
-            </div>
-            <div class="sched-overlap-count">${b.count}<span>명</span></div>
-          </div>`).join('') : '<div style="color:var(--muted);font-size:13px;padding:4px 0">겹치는 시간이 없어요.</div>'}
+        ${summaryHtml}
+        <div class="sched-section-label">겹치는 시간대</div>
+        ${blocksHtml}
+        ${renderHourlyBreakdown(votes)}
       </div>`;
     }
 
