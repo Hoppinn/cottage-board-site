@@ -751,9 +751,9 @@ async function openProfilePanel(autoSubsheet = null) {
   const _bio = stats?.profile?.bio || '';
   const _avoidTags = stats?.profile?.avoid_tags || [];
 
-  function _buildTasteGameItems(games) {
+  function _buildTasteGameItems(games, maxInitial = 5) {
     if (!games.length) return '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
-    return games.map(g => {
+    const renderItem = g => {
       const _gd = g.game_id ? window.gameData?.[g.game_id] : null;
       const name = _gd
         ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(g.game_id))
@@ -765,7 +765,10 @@ async function openProfilePanel(autoSubsheet = null) {
       const cnAttr = g.custom_name ? ` data-custom-name="${escH(g.custom_name)}"` : '';
       const clickable = g.game_id ? ' taste-game-item--clickable' : '';
       return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span><button class="taste-game-del" type="button" title="삭제">✕</button></div>`;
-    }).join('');
+    };
+    if (games.length <= maxInitial) return games.map(renderItem).join('');
+    const restCount = games.length - maxInitial;
+    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
   const _tasteInnerHtml = `
@@ -803,11 +806,24 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
     <div class="taste-avoid-section">
       <div class="taste-section-label">🚫 피하는 유형</div>
-      <div class="taste-tag-grid">${AVOID_TAGS.map(t => `<button class="taste-tag${_avoidTags.includes(t) ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${escH(t)}</button>`).join('')}</div>
+      <p class="taste-avoid-desc">선택한 유형은 가급적 피하고 싶어요 <span class="taste-avoid-desc-hint">· 선택 안 하면 제한 없음</span></p>
+      <div class="taste-tag-grid">${AVOID_TAGS.map(t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; }).join('')}</div>
     </div>`;
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
   const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
+  // 최근 사진 최대 4장 추출 (photo_url: JSON 배열 or 단일 URL)
+  const _recentPhotos = [];
+  for (const p of stats.plays) {
+    if (!p.photo_url) continue;
+    const parsed = window.parsePhotoUrls ? window.parsePhotoUrls(p.photo_url) : [p.photo_url];
+    _recentPhotos.push(...parsed);
+    if (_recentPhotos.length >= 4) break;
+  }
+  const _photoCount = userStats?.photoCount || 0;
+  const _recentPhotoHtml = _recentPhotos.length
+    ? `<div class="record-photo-grid">${_recentPhotos.slice(0, 4).map((url, i) => `<img class="record-photo-thumb" src="${escH(url)}" alt="" data-photo-idx="${i}">`).join('')}${_photoCount > 4 ? `<span class="record-photo-more-badge">+${_photoCount - 4}</span>` : ''}</div>`
+    : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
     <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
@@ -818,8 +834,8 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.comments.length ? _openActivityList(commentListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${userStats?.photoCount || 0}장</span><span class="profile-toggle-arrow">▴</span></button>
-      ${_emptyList('사진 목록은 기록 페이지에서 확인할 수 있어요')}
+      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>
+      ${_recentPhotoHtml}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
   const _usageInnerHtml = `
@@ -1129,12 +1145,24 @@ async function openProfilePanel(autoSubsheet = null) {
               });
             });
 
-            // 삭제 (이벤트 위임)
+            // 삭제 및 더보기 (이벤트 위임)
             listEl?.addEventListener('click', async e => {
+              // 더보기/접기
+              const moreBtn = e.target.closest('.taste-more-btn');
+              if (moreBtn) {
+                const wrap = moreBtn.previousElementSibling;
+                if (wrap?.classList.contains('taste-game-more-wrap')) {
+                  const hidden = wrap.hidden;
+                  wrap.hidden = !hidden;
+                  const restCount = wrap.querySelectorAll('.taste-game-item').length;
+                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${restCount}개 더)`;
+                }
+                return;
+              }
               const delBtn = e.target.closest('.taste-game-del');
               if (!delBtn) return;
               const item = delBtn.closest('.taste-game-item');
-              const gameId = item?.dataset.gameId ? Number(item.dataset.gameId) : null;
+              const gameId = item?.dataset.gameId || null;
               const customName = item?.dataset.customName || null;
               await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
               item.remove();
@@ -1246,9 +1274,11 @@ async function openProfilePanel(autoSubsheet = null) {
               if (idx >= 0) {
                 currentAvoidTags.splice(idx, 1);
                 btn.classList.remove('is-active');
+                btn.textContent = tag;
               } else {
                 currentAvoidTags.push(tag);
                 btn.classList.add('is-active');
+                btn.textContent = `🚫 ${tag}`;
               }
               await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
             });
@@ -1270,6 +1300,16 @@ async function openProfilePanel(autoSubsheet = null) {
               window.openGameRecordSheet?.(key);
             });
           });
+          // 최근 사진 클릭 → 라이트박스
+          if (window.openLightbox && _recentPhotos.length) {
+            subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
+              img.style.cursor = 'pointer';
+              img.addEventListener('click', () => {
+                const idx = parseInt(img.dataset.photoIdx || '0', 10);
+                window.openLightbox(_recentPhotos, idx);
+              });
+            });
+          }
         });
 
 

@@ -3296,6 +3296,10 @@ body.sheet-open{
   border-color:#d4a878;
   color:#7a4828;
 }
+.sheet-reaction-summary{margin-top:6px;}
+.sheet-reaction-toggle{background:none;border:none;padding:0;font-size:12px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;gap:3px;}
+.sheet-reaction-toggle:hover{color:var(--text);}
+.sheet-toggle-arrow{font-size:10px;}
 .sheet-reaction-users{display:flex;flex-direction:column;gap:4px;margin-top:6px;min-height:0;}
 .sheet-liker-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .sheet-liker-label{font-size:13px;flex-shrink:0;}
@@ -3822,10 +3826,17 @@ body.sheet-open{
 .taste-search-added-label{font-size:11px;color:#4caf50;margin-left:4px;}
 .taste-search-item.is-added{opacity:0.6;cursor:default;}
 .taste-search-item.is-added:hover{background:#fff;}
+.taste-avoid-desc{font-size:12px;color:var(--muted);margin:0 0 10px;}
+.taste-avoid-desc-hint{opacity:0.7;}
 .taste-tag-grid{display:flex;flex-wrap:wrap;gap:7px;}
-.taste-tag{padding:6px 12px;border:1px solid var(--border,#e8e4dc);border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:var(--text);}
-.taste-tag.is-active{background:var(--text);color:#fff;border-color:var(--text);}
-.taste-tag:hover:not(.is-active){background:var(--card-bg,#faf9f5);}
+.taste-tag{padding:6px 12px;border:1px dashed #ccc;border-radius:20px;font-size:13px;cursor:pointer;background:#f7f7f5;color:#aaa;}
+.taste-tag.is-active{background:#fff0f0;border:1.5px solid #e57373;color:#c62828;font-weight:600;}
+.taste-tag:hover:not(.is-active){background:#f0ede8;color:#888;}
+.taste-more-btn{margin-top:6px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:2px 0;text-decoration:underline;}
+.taste-more-btn:hover{color:var(--text);}
+.record-photo-grid{display:flex;gap:6px;flex-wrap:wrap;padding:6px 0;}
+.record-photo-thumb{width:72px;height:72px;object-fit:cover;border-radius:8px;flex-shrink:0;}
+.record-photo-more-badge{display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:8px;background:#e8e4dc;font-size:13px;font-weight:700;color:var(--muted);flex-shrink:0;}
 .profile-record-stats{list-style:none;padding:0;margin:0 0 20px;}
 .profile-record-stats li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border,#e8e4dc);font-size:14px;}
 .profile-record-stats li span{color:var(--muted);}

@@ -1254,7 +1254,8 @@ function openGameSheet(gameKey, restoreScroll = false){
       <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
       <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
     </div>
-    <div class="sheet-reaction-users" id="sheetReactionUsers"></div>
+    <div class="sheet-reaction-summary" id="sheetReactionSummary"></div>
+    <div class="sheet-reaction-users" id="sheetReactionUsers" style="display:none"></div>
 
     <!-- 게임평 미리보기 -->
     <div class="sheet-preview-section">
@@ -1694,6 +1695,38 @@ function _reactionUserChip(u) {
   return `<span class="sheet-liker-chip">${thumb}<span class="sheet-liker-name">${String(u.nickname || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></span>`;
 }
 
+function _updateReactionSection(likers, curiousUsers) {
+  const summaryEl = document.getElementById('sheetReactionSummary');
+  const usersEl = document.getElementById('sheetReactionUsers');
+  if (!summaryEl || !usersEl) return;
+
+  // 유저 패널 내용 갱신
+  let usersHtml = '';
+  if (likers.length) usersHtml += `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
+  if (curiousUsers.length) usersHtml += `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
+  usersEl.innerHTML = usersHtml;
+
+  // 요약 토글 갱신 (이미 열려 있으면 열린 상태 유지)
+  const wasOpen = usersEl.dataset.open === '1';
+  const parts = [];
+  if (likers.length) parts.push(`❤️ ${likers.length}명`);
+  if (curiousUsers.length) parts.push(`👀 ${curiousUsers.length}명`);
+  if (parts.length) {
+    summaryEl.innerHTML = `<button class="sheet-reaction-toggle" type="button">${parts.join(' · ')} <span class="sheet-toggle-arrow">${wasOpen ? '▴' : '▾'}</span></button>`;
+    usersEl.style.display = wasOpen ? '' : 'none';
+    summaryEl.querySelector('.sheet-reaction-toggle').addEventListener('click', () => {
+      const open = usersEl.style.display === 'none';
+      usersEl.style.display = open ? '' : 'none';
+      usersEl.dataset.open = open ? '1' : '';
+      summaryEl.querySelector('.sheet-toggle-arrow').textContent = open ? '▴' : '▾';
+    });
+  } else {
+    summaryEl.innerHTML = '';
+    usersEl.style.display = 'none';
+    usersEl.dataset.open = '';
+  }
+}
+
 async function initSheetLikes(gameKey) {
   if (!window.CottageDB) return;
   const user = window.getKakaoUser?.();
@@ -1716,13 +1749,7 @@ async function initSheetLikes(gameKey) {
     curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
     curiousBtn.classList.toggle('is-active', curious);
   }
-  const usersEl = document.getElementById('sheetReactionUsers');
-  if (usersEl) {
-    let html = '';
-    if (likers.length) html += `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
-    if (curiousUsers.length) html += `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
-    usersEl.innerHTML = html;
-  }
+  _updateReactionSection(likers, curiousUsers);
 }
 
 async function onSheetLike(btn) {
@@ -1748,17 +1775,11 @@ async function onSheetLike(btn) {
           curiousBtn.classList.remove('is-active');
         }
       }
-      const likers = await (window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]));
-      const usersEl = document.getElementById('sheetReactionUsers');
-      if (usersEl) {
-        const rows = usersEl.querySelectorAll('.sheet-liker-row');
-        const likeRow = [...rows].find(r => r.querySelector('.sheet-liker-label')?.textContent === '❤️');
-        if (likers.length) {
-          const newRow = `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
-          if (likeRow) likeRow.outerHTML = newRow;
-          else usersEl.insertAdjacentHTML('afterbegin', newRow);
-        } else if (likeRow) likeRow.remove();
-      }
+      const [likers, curiousUsers] = await Promise.all([
+        window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]),
+        window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]),
+      ]);
+      _updateReactionSection(likers, curiousUsers);
     }
   });
 }
@@ -1786,17 +1807,11 @@ async function onSheetCurious(btn) {
           likeBtn.classList.remove('is-active');
         }
       }
-      const curiousUsers = await (window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]));
-      const usersEl = document.getElementById('sheetReactionUsers');
-      if (usersEl) {
-        const rows = usersEl.querySelectorAll('.sheet-liker-row');
-        const curiousRow = [...rows].find(r => r.querySelector('.sheet-liker-label')?.textContent === '👀');
-        if (curiousUsers.length) {
-          const newRow = `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
-          if (curiousRow) curiousRow.outerHTML = newRow;
-          else usersEl.insertAdjacentHTML('beforeend', newRow);
-        } else if (curiousRow) curiousRow.remove();
-      }
+      const [likers, curiousUsers] = await Promise.all([
+        window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]),
+        window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]),
+      ]);
+      _updateReactionSection(likers, curiousUsers);
     }
   });
 }

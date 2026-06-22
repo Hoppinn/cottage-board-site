@@ -1070,7 +1070,7 @@ window._cottageSess = (function () {
   async function getMyStats(userId, nickname) {
     try {
       const queries = [
-        db.from('game_play_records').select('id, game_id, played_at, created_at, group_name').eq('user_id', userId).order('created_at', { ascending: false }),
+        db.from('game_play_records').select('id, game_id, played_at, created_at, group_name, photo_url').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('game_comments').select('id, game_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
