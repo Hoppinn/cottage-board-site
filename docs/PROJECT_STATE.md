@@ -1,24 +1,80 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-22 (142차-11)
+최종 갱신: 2026-06-22 (142차-12)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**리팩토링 완료** — 결과: `docs/REFACTOR_CHECKPOINT.md`
-- Green 6개 완료: ACH4, PU1, ACH8, GDA1, KA8, CSS3
-- Yellow 5개 완료: SC2(대표캐릭터 이름), SC3(좋아요/궁금해요 독립), CSS1(.sheet-section 중복), GR1+GR2(deprecated 경로 삭제), ACH9(포인트 제도 삭제)
-- Red 7개 완료: PU2, SC1, GDA2, ACH5, SC4/SC5, ACH3, KA1(848줄→616줄)
-- **모든 Red 완료** (CSS2 196→18 완료, 나머지 18개는 정당한 사유로 유지)
+### 142차 완료 항목 (2026-06-22)
 
-**보류**: 카카오 알림 → Discord 전환 (Make 시나리오 5213346 수정 필요)
-- 현재: kapi.kakao.com/v2/api/talk/memo/default/send (내 대화방, 알림 안 옴)
-- 목표: Discord webhook으로 교체 (HTTP 2 토큰발급 모듈 삭제, HTTP 3 URL 교체)
+| # | 내용 | 커밋 |
+|---|------|------|
+| 취향보드 Phase 1 전체 | 한줄소개·게임목록(추가/삭제/직접입력)·피하는유형 | 142차-1 |
+| 게임시트 양방향 연결 | 좋아요/궁금해요 유저 아바타 → 접기/펼치기 (N명▾) | 142차-2, 8 |
+| 토스트 → 취향보드 직접 진입 | `openProfilePanel('taste')` | 142차-3 |
+| fix: gameData 필드 경로 | `g.display` → `g.title?.display` | 142차-5 |
+| 검색 UX | ESC 닫기, 이미추가됨 표시 | 142차-6 |
+| 취향보드 UX 개선 | 게임목록 더보기/접기, 피하는유형 UX(🚫/빨간), bio 예시 칩 | 142차-8,11 |
+| 기록보드 사진 표시 | 최근 4장 썸네일 + 클릭→라이트박스 | 142차-8 |
+| guide.html 오버레이 | 링크 클릭 → 인앱 iframe 시트 (✕ 닫기) | 142차-9 |
+| 모임플래너 개선 | 자유댓글 제거, 참여자 클릭 → 아바타+bio+일정 시트 | 142차-10 |
+| fix: 삭제 핸들러 Number() | `Number(gameId)` → `gameId || null` (한글 키 대응) | 142차-8 |
+| fix: 신규 게임 삽입 위치 | `appendChild` → `insertBefore(more-wrap)` | 142차-12 |
+
+### 142차 테스트 목록 (미테스트 — SQL 실행 후 진행)
+
+**SQL 먼저 실행 필요 (Supabase SQL Editor):**
+```sql
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS bio text;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avoid_tags text[];
+ALTER TABLE game_likes ADD COLUMN IF NOT EXISTS custom_name text;
+ALTER TABLE game_likes ALTER COLUMN game_id DROP NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS uq_game_likes_custom ON game_likes (user_id, custom_name) WHERE custom_name IS NOT NULL;
+ALTER TABLE game_curious ADD COLUMN IF NOT EXISTS custom_name text;
+ALTER TABLE game_curious ALTER COLUMN game_id DROP NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS uq_game_curious_custom ON game_curious (user_id, custom_name) WHERE custom_name IS NOT NULL;
+```
+
+**테스트 체크리스트:**
+- [ ] 취향보드: 한줄소개 편집→예시 칩 표시→클릭→저장
+- [ ] 취향보드: 게임 검색 추가/삭제 (카탈로그 & 직접입력)
+- [ ] 취향보드: 6개 초과 시 "더 보기 (N개 더)" 표시 + 펼치기
+- [ ] 취향보드: 검색 후 추가된 아이템이 "더 보기" 위에 삽입되는지 확인
+- [ ] 취향보드: 피하는 유형 클릭→🚫 빨간, 재클릭→해제
+- [ ] 게임시트: 좋아요 후 토스트 "취향 보드 →" 클릭 → 취향보드 직접 열림
+- [ ] 게임시트: 좋아요/궁금해요 "N명 ▾" → 클릭 시 아바타 펼침
+- [ ] 기록보드: 사진 섹션에 최근 사진 썸네일 표시 (사진 있는 유저)
+- [ ] 기록보드: 사진 클릭 → 라이트박스
+- [ ] guide.html: 플레이기록/동호회/요청하기/추천게임찾기 클릭 → 오버레이 시트
+- [ ] 모임플래너: 참여자 이름에 점선 밑줄 표시 + 클릭 → 아바타+소개+일정 시트
+- [ ] 모임플래너: 자유댓글 섹션 미표시 확인
+
+### 142차 보류 항목
+
+| 항목 | 사유 |
+|------|------|
+| 한줄소개 GPT 연동 | 이전 기획 내용 복원 불가 — 사용자가 다시 공유 필요 |
+| 모임플래너 참여자 UI 추가 개선 | 방향 논의 필요 (현재: 이름 클릭→프로필 시트) |
+| 모임 플래너 Phase 3 게임 투표 | Red — Plan 필수, meeting_vote_games 테이블 신규 |
+| 취향보드 Phase 2 (성향 5축) | Phase 1 테스트 후 진행 |
+
+### 이전 보류
+**카카오 알림 → Discord 전환** (Make 시나리오 5213346)
+- 현재: kapi.kakao.com 내 대화방 전송 (알림 안 옴)
+- 목표: Discord webhook (HTTP 2 토큰모듈 삭제, HTTP 3 URL 교체)
 
 **다음 작업 후보**
-
 1. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+2. **취향보드 Phase 2** — 성향 5축 (Phase 1 테스트 완료 후)
+
+---
+
+### 코드 품질 주석 (리팩토링 참고용)
+
+- `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
+- `club-schedule.html` `openProfileSheet`: 인라인 Supabase 클라이언트(`_cottageSupabaseDb`) 사용 — `window.CottageDB`와 별개. 통합 검토.
+- `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 
 ---
 

@@ -1262,7 +1262,10 @@ async function openProfilePanel(autoSubsheet = null) {
                         window.openGameSheet?.(String(gameId));
                       });
                     }
-                    listEl.appendChild(newItem);
+                    // more-wrap 앞에 삽입해야 새 항목이 보이는 영역에 위치함
+                    const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
+                    if (insertBefore) listEl.insertBefore(newItem, insertBefore);
+                    else listEl.appendChild(newItem);
 
                     if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
                     searchWrap.style.display = 'none';
