@@ -754,11 +754,12 @@ async function openProfilePanel(autoSubsheet = null) {
   function _buildTasteGameItems(games) {
     if (!games.length) return '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
     return games.map(g => {
-      const name = g.game_id
-        ? (window.gameData?.[g.game_id]?.display || window.gameData?.[g.game_id]?.titleKo || String(g.game_id))
-        : (g.custom_name || '');
-      const thumb = g.game_id && window.gameData?.[g.game_id]?.images?.thumbnail
-        ? `<img class="taste-game-thumb" src="${escH(window.gameData[g.game_id].images.thumbnail)}" alt="">`
+      const _gd = g.game_id ? window.gameData?.[g.game_id] : null;
+      const name = _gd
+        ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(g.game_id))
+        : (g.custom_name || String(g.game_id || ''));
+      const thumb = _gd?.images?.thumbnail
+        ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
         : `<span class="taste-game-thumb-empty"></span>`;
       const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
       const cnAttr = g.custom_name ? ` data-custom-name="${escH(g.custom_name)}"` : '';
@@ -1160,13 +1161,13 @@ async function openProfilePanel(autoSubsheet = null) {
 
                 const catalogItems = Object.entries(window.gameData || {})
                   .filter(([, g]) => {
-                    const name = g.display || g.titleKo || g.titleEn || '';
+                    const name = g.title?.display || g.title?.owned || g.title?.bgg || '';
                     return name.toLowerCase().includes(q.toLowerCase());
                   })
                   .slice(0, 6)
                   .map(([id, g]) => {
-                    const name = escH(g.display || g.titleKo || g.titleEn || String(id));
-                    return `<button class="taste-search-item" data-game-id="${id}" type="button">${name}</button>`;
+                    const name = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
+                    return `<button class="taste-search-item" data-game-id="${escH(id)}" type="button">${name}</button>`;
                   });
 
                 const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
@@ -1181,7 +1182,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
                 searchResults.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn => {
                   btn.addEventListener('click', async () => {
-                    const gameId = btn.dataset.gameId ? Number(btn.dataset.gameId) : null;
+                    const gameId = btn.dataset.gameId || null;
                     const customName = btn.dataset.customName || null;
 
                     // 중복 방지
@@ -1193,11 +1194,12 @@ async function openProfilePanel(autoSubsheet = null) {
 
                     await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
 
-                    const name = gameId
-                      ? (window.gameData?.[gameId]?.display || window.gameData?.[gameId]?.titleKo || String(gameId))
+                    const _gd2 = gameId ? window.gameData?.[gameId] : null;
+                    const name = _gd2
+                      ? (_gd2.title?.display || _gd2.title?.owned || _gd2.title?.bgg || String(gameId))
                       : (customName || '');
-                    const thumb = gameId && window.gameData?.[gameId]?.images?.thumbnail
-                      ? `<img class="taste-game-thumb" src="${escH(window.gameData[gameId].images.thumbnail)}" alt="">`
+                    const thumb = _gd2?.images?.thumbnail
+                      ? `<img class="taste-game-thumb" src="${escH(_gd2.images.thumbnail)}" alt="">`
                       : `<span class="taste-game-thumb-empty"></span>`;
 
                     listEl.querySelector('.taste-game-empty')?.remove();
