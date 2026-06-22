@@ -3819,6 +3819,9 @@ body.sheet-open{
 .taste-search-item:hover,.taste-search-direct:hover{background:var(--card-bg,#faf9f5);}
 .taste-search-direct{color:var(--muted);border-style:dashed;}
 .taste-search-custom-label{font-size:11px;color:var(--muted);background:#f0ebe5;padding:1px 5px;border-radius:4px;flex-shrink:0;}
+.taste-search-added-label{font-size:11px;color:#4caf50;margin-left:4px;}
+.taste-search-item.is-added{opacity:0.6;cursor:default;}
+.taste-search-item.is-added:hover{background:#fff;}
 .taste-tag-grid{display:flex;flex-wrap:wrap;gap:7px;}
 .taste-tag{padding:6px 12px;border:1px solid var(--border,#e8e4dc);border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:var(--text);}
 .taste-tag.is-active{background:var(--text);color:#fff;border-color:var(--text);}

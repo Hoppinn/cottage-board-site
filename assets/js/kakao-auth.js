@@ -1150,6 +1150,14 @@ async function openProfilePanel(autoSubsheet = null) {
               searchWrap.style.display = showing ? 'none' : '';
               if (!showing) searchInput?.focus();
             });
+            // ESC로 검색 닫기
+            searchInput?.addEventListener('keydown', e => {
+              if (e.key === 'Escape') {
+                searchWrap.style.display = 'none';
+                searchInput.value = '';
+                searchResults.innerHTML = '';
+              }
+            });
 
             // 검색 입력
             let _searchTimer = null;
@@ -1167,7 +1175,8 @@ async function openProfilePanel(autoSubsheet = null) {
                   .slice(0, 6)
                   .map(([id, g]) => {
                     const name = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
-                    return `<button class="taste-search-item" data-game-id="${escH(id)}" type="button">${name}</button>`;
+                    const alreadyAdded = !!listEl.querySelector(`[data-game-id="${id}"]`);
+                    return `<button class="taste-search-item${alreadyAdded ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${name}${alreadyAdded ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
                   });
 
                 const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
