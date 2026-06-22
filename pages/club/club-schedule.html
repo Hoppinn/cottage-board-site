@@ -183,6 +183,8 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
+      text-decoration: underline dotted;
+      text-underline-offset: 2px;
     }
     .sched-bar-name:hover { color: var(--green); text-decoration: underline; }
     .sched-bar-track {
@@ -374,11 +376,15 @@
       border-radius: 2px;
       margin: 0 auto 18px;
     }
+    .sched-profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .sched-profile-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .sched-profile-avatar--empty { display: flex; align-items: center; justify-content: center; background: #e0d8cc; font-size: 18px; font-weight: 700; color: #7a6850; }
+    .sched-profile-bio { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
     .sched-profile-nick {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 800;
       color: var(--text);
-      margin-bottom: 16px;
+      margin-bottom: 0;
     }
     .sched-profile-row {
       display: flex;
@@ -392,58 +398,6 @@
 
     .sched-loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
-    /* ── 자유 댓글 ───────────────────────────────── */
-    .sched-comment-section {
-      border-top: 1px solid #ede8e0;
-      padding-top: 24px;
-      margin-top: 8px;
-    }
-    .comment-write {
-      margin-bottom: 16px;
-    }
-    .comment-input {
-      width: 100%;
-      border: 1.5px solid #ddd8cc;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 14px;
-      font-family: inherit;
-      resize: none;
-      background: #faf8f5;
-      box-sizing: border-box;
-    }
-    .comment-input:focus { outline: none; border-color: var(--green); }
-    .comment-submit-row { display: flex; justify-content: flex-end; margin-top: 6px; }
-    .comment-submit-btn {
-      padding: 7px 16px;
-      background: var(--green);
-      color: white;
-      border: none;
-      border-radius: 7px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .comment-item {
-      padding: 10px 0;
-      border-bottom: 1px solid #f0ebe0;
-      position: relative;
-    }
-    .comment-meta { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-    .comment-text { font-size: 14px; color: var(--text); line-height: 1.5; }
-    .comment-del-btn {
-      position: absolute;
-      top: 10px; right: 0;
-      background: none;
-      border: none;
-      color: #ccc;
-      font-size: 14px;
-      cursor: pointer;
-      padding: 2px 4px;
-    }
-    .comment-del-btn:hover { color: #e05050; }
-    .comment-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 20px 0; }
-    .comment-login-hint { text-align: center; font-size: 13px; color: var(--muted); padding: 8px 0 16px; }
   </style>
 </head>
 
@@ -479,13 +433,6 @@
       </div>
     </section>
   </main>
-
-  <!-- 자유 댓글 -->
-  <div class="sched-comment-section inner-page-body" id="commentSection" style="display:none">
-    <div class="sched-section-label" style="margin-bottom:12px">자유 댓글</div>
-    <div id="commentWriteArea"></div>
-    <div id="commentList"><div class="sched-loading">불러오는 중...</div></div>
-  </div>
 
   <!-- 프로필 바텀시트 -->
   <div class="sched-sheet-backdrop" id="sheetBackdrop" style="display:none" onclick="schedCloseSheet()">
@@ -922,12 +869,30 @@
     }
 
     // ── 프로필 시트 ───────────────────────────────────────────
-    function openProfileSheet(uid, nickname) {
+    async function openProfileSheet(uid, nickname) {
+      const sheetContent = document.getElementById('sheetContent');
+      document.getElementById('sheetBackdrop').style.display = 'flex';
+      sheetContent.innerHTML = '<div class="sched-loading">불러오는 중...</div>';
+
+      // 프로필 (아바타/bio) 조회
+      const cfg = window.SUPABASE_CONFIG;
+      if (!window._cottageSupabaseDb && cfg?.url) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
+      const db = window._cottageSupabaseDb;
+      let photoUrl = null, bio = null;
+      if (db) {
+        const { data: prof } = await db.from('profiles').select('photo_url, bio').eq('user_id', uid).maybeSingle().catch(() => ({ data: null }));
+        photoUrl = prof?.photo_url || null;
+        bio = prof?.bio || null;
+      }
+
+      const avatarHtml = photoUrl
+        ? `<img class="sched-profile-avatar" src="${esc(photoUrl)}" alt="">`
+        : `<div class="sched-profile-avatar sched-profile-avatar--empty">${(nickname || '?')[0]}</div>`;
+
       const todayStr = toDateStr(TODAY);
       const userVotes = allVotes
         .filter(v => String(v.user_id) === uid && v.vote_date >= todayStr)
         .sort((a, b) => a.vote_date.localeCompare(b.vote_date));
-
       const rows = userVotes.length
         ? userVotes.map(v => `<div class="sched-profile-row">
             <span class="sched-profile-date">${formatLabel(v.vote_date)}</span>
@@ -935,11 +900,16 @@
           </div>`).join('')
         : '<div style="color:var(--muted);font-size:13px;padding:8px 0">등록된 일정이 없어요.</div>';
 
-      document.getElementById('sheetContent').innerHTML = `
-        <div class="sched-profile-nick">${esc(nickname)}</div>
+      sheetContent.innerHTML = `
+        <div class="sched-profile-header">
+          ${avatarHtml}
+          <div>
+            <div class="sched-profile-nick">${esc(nickname)}</div>
+            ${bio ? `<div class="sched-profile-bio">${esc(bio)}</div>` : ''}
+          </div>
+        </div>
         <div class="sched-section-label" style="margin-bottom:8px">이달의 참여 일정</div>
         ${rows}`;
-      document.getElementById('sheetBackdrop').style.display = 'flex';
     }
 
     window.schedCloseSheet = function () {
@@ -973,98 +943,6 @@
 
     init();
 
-    // ── 자유 댓글 ─────────────────────────────────────────────
-    const MY_CMT_KEY = 'cottage_my_meeting_cmts';
-    function getMyCmtIds() { try { return JSON.parse(localStorage.getItem(MY_CMT_KEY) || '[]'); } catch { return []; } }
-    function saveMyCmtId(id) { const ids = getMyCmtIds(); if (!ids.includes(id)) { ids.push(id); localStorage.setItem(MY_CMT_KEY, JSON.stringify(ids)); } }
-    function removeMyCmtId(id) { localStorage.setItem(MY_CMT_KEY, JSON.stringify(getMyCmtIds().filter(x => x !== id))); }
-
-    function formatCmtDate(iso) {
-      if (!iso) return '';
-      const d = new Date(new Date(iso).getTime() + 9 * 3600000);
-      return `${d.getUTCFullYear().toString().slice(2)}.${String(d.getUTCMonth()+1).padStart(2,'0')}.${String(d.getUTCDate()).padStart(2,'0')}(${DOW[d.getUTCDay()]})`;
-    }
-
-    function canDelCmt(c) {
-      if (window.isOwner?.()) return true;
-      const u = window.getKakaoUser?.();
-      if (u && c.user_id && String(c.user_id) === String(u.id)) return true;
-      return getMyCmtIds().includes(c.id);
-    }
-
-    async function loadComments() {
-      const cfg = window.SUPABASE_CONFIG;
-      if (!cfg?.url || !window.supabase) return;
-      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
-      const db = window._cottageSupabaseDb;
-
-      const section = document.getElementById('commentSection');
-      const writeArea = document.getElementById('commentWriteArea');
-      const list = document.getElementById('commentList');
-      if (!section) return;
-      section.style.display = '';
-
-      const u = window.getKakaoUser?.();
-      if (u) {
-        writeArea.innerHTML = `<div class="comment-write">
-          <textarea class="comment-input" id="cmtInput" rows="2" placeholder="자유롭게 댓글을 남겨보세요"></textarea>
-          <div class="comment-submit-row"><button class="comment-submit-btn" id="cmtSubmit">등록</button></div>
-        </div>`;
-        document.getElementById('cmtSubmit').addEventListener('click', submitComment);
-      } else {
-        writeArea.innerHTML = '<div class="comment-login-hint">댓글을 남기려면 카카오 로그인이 필요해요.</div>';
-      }
-
-      const { data } = await db.from('club_meeting_comments')
-        .select('id, nickname, user_id, content, created_at')
-        .order('created_at', { ascending: false })
-        .limit(100);
-
-      if (!data?.length) {
-        list.innerHTML = '<div class="comment-empty">아직 댓글이 없어요. 첫 번째로 남겨보세요!</div>';
-        return;
-      }
-      list.innerHTML = data.map(c => {
-        const del = canDelCmt(c) ? `<button class="comment-del-btn" data-id="${c.id}" title="삭제">✕</button>` : '';
-        return `<div class="comment-item">${del}
-          <div class="comment-meta">${esc(c.nickname)} · ${formatCmtDate(c.created_at)}</div>
-          <p class="comment-text">${esc(c.content)}</p>
-        </div>`;
-      }).join('');
-      list.querySelectorAll('.comment-del-btn').forEach(btn => {
-        btn.addEventListener('click', () => deleteComment(btn.dataset.id));
-      });
-    }
-
-    async function submitComment() {
-      const cfg = window.SUPABASE_CONFIG;
-      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
-      const db = window._cottageSupabaseDb;
-      const u = window.getKakaoUser?.();
-      if (!u) return;
-      const input = document.getElementById('cmtInput');
-      const content = input?.value?.trim();
-      if (!content) return;
-      const btn = document.getElementById('cmtSubmit');
-      btn.disabled = true;
-      const { data, error } = await db.from('club_meeting_comments').insert({
-        nickname: u.nickname || '익명', user_id: String(u.id), content,
-      }).select('id');
-      btn.disabled = false;
-      if (!error) { if (data?.[0]?.id) saveMyCmtId(data[0].id); if (input) input.value = ''; await loadComments(); }
-    }
-
-    async function deleteComment(id) {
-      if (!confirm('댓글을 삭제할까요?')) return;
-      const cfg = window.SUPABASE_CONFIG;
-      if (!window._cottageSupabaseDb) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
-      const db = window._cottageSupabaseDb;
-      const { error } = await db.from('club_meeting_comments').delete().eq('id', id);
-      if (!error) { removeMyCmtId(id); await loadComments(); }
-    }
-
-    window.addEventListener('cottage-auth-changed', loadComments);
-    loadComments();
   })();
   </script>
 
