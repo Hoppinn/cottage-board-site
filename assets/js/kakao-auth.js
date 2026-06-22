@@ -779,6 +779,9 @@ async function openProfilePanel(autoSubsheet = null) {
         <button class="taste-bio-edit-btn" type="button" title="편집">✏️</button>
       </div>
       <div class="taste-bio-edit-wrap" style="display:none">
+        <div class="taste-bio-chips">
+          ${['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요'].map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
+        </div>
         <textarea class="taste-bio-textarea" maxlength="100" placeholder="한줄 소개를 입력해주세요 (최대 100자)"></textarea>
         <div class="taste-bio-actions">
           <button class="taste-bio-save-btn" type="button">저장</button>
@@ -1112,6 +1115,12 @@ async function openProfilePanel(autoSubsheet = null) {
             bioEditWrap.style.display = '';
             bioTextarea.value = bioDisplay.dataset.bio || '';
             bioTextarea.focus();
+          });
+          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+              bioTextarea.value = chip.textContent;
+              bioTextarea.focus();
+            });
           });
           subBody.querySelector('.taste-bio-cancel-btn')?.addEventListener('click', () => {
             bioRow.style.display = '';
