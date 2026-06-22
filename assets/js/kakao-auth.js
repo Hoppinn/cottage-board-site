@@ -808,9 +808,9 @@ async function openProfilePanel(autoSubsheet = null) {
       </div>
     </div>
     <div class="taste-avoid-section">
-      <div class="taste-section-label">🚫 피하는 유형</div>
+      <div class="taste-section-label">🚫 피하는 유형 <span class="taste-avoid-count">${_avoidTags.length > 0 ? `${_avoidTags.length}개 선택됨` : ''}</span></div>
       <p class="taste-avoid-desc">선택한 유형은 가급적 피하고 싶어요 <span class="taste-avoid-desc-hint">· 선택 안 하면 제한 없음</span></p>
-      <div class="taste-tag-grid">${AVOID_TAGS.map(t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; }).join('')}</div>
+      <div class="taste-tag-grid">${AVOID_TAGS.slice(0, 4).map(t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; }).join('')}${AVOID_TAGS.length > 4 ? `<div class="taste-avoid-more-wrap" hidden>${AVOID_TAGS.slice(4).map(t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; }).join('')}</div><button class="taste-more-btn taste-avoid-more-btn" type="button">더 보기 (${AVOID_TAGS.length - 4}개 더)</button>` : ''}</div>
     </div>`;
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
@@ -825,7 +825,7 @@ async function openProfilePanel(autoSubsheet = null) {
   }
   const _photoCount = userStats?.photoCount || 0;
   const _recentPhotoHtml = _recentPhotos.length
-    ? `<div class="record-photo-grid">${_recentPhotos.slice(0, 4).map((url, i) => `<img class="record-photo-thumb" src="${escH(url)}" alt="" data-photo-idx="${i}">`).join('')}${_photoCount > 4 ? `<span class="record-photo-more-badge">+${_photoCount - 4}</span>` : ''}</div>`
+    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_recentPhotos.slice(0, 4).map((url, i) => `<img class="record-photo-thumb" src="${escH(url)}" alt="" data-photo-idx="${i}">`).join('')}${_photoCount > 4 ? `<span class="record-photo-more-badge">+${_photoCount - 4}</span>` : ''}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
     <div class="profile-activity-group">
@@ -1279,6 +1279,10 @@ async function openProfilePanel(autoSubsheet = null) {
 
           // ── 피하는 유형 태그 ──
           let currentAvoidTags = [...(_avoidTags)];
+          const _avoidCountEl = subBody.querySelector('.taste-avoid-count');
+          const _updateAvoidCount = () => {
+            if (_avoidCountEl) _avoidCountEl.textContent = currentAvoidTags.length > 0 ? `${currentAvoidTags.length}개 선택됨` : '';
+          };
           subBody.querySelectorAll('.taste-tag').forEach(btn => {
             btn.addEventListener('click', async () => {
               const tag = btn.dataset.tag;
@@ -1292,8 +1296,17 @@ async function openProfilePanel(autoSubsheet = null) {
                 btn.classList.add('is-active');
                 btn.textContent = `🚫 ${tag}`;
               }
+              _updateAvoidCount();
               await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
             });
+          });
+          // 피하는 유형 더보기 버튼
+          subBody.querySelector('.taste-avoid-more-btn')?.addEventListener('click', function() {
+            const wrap = subBody.querySelector('.taste-avoid-more-wrap');
+            if (!wrap) return;
+            const isHidden = wrap.hasAttribute('hidden');
+            if (isHidden) { wrap.removeAttribute('hidden'); this.textContent = '접기'; }
+            else { wrap.setAttribute('hidden', ''); this.textContent = `더 보기 (${wrap.querySelectorAll('.taste-tag').length}개 더)`; }
           });
         });
 

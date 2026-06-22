@@ -370,11 +370,30 @@
       max-height: 65vh;
       overflow-y: auto;
     }
+    .sched-sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 18px;
+    }
     .sched-sheet-handle {
       width: 40px; height: 4px;
       background: #ddd;
       border-radius: 2px;
-      margin: 0 auto 18px;
+    }
+    .sched-sheet-close {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #999;
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
     }
     .sched-profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
     .sched-profile-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
@@ -437,7 +456,10 @@
   <!-- 프로필 바텀시트 -->
   <div class="sched-sheet-backdrop" id="sheetBackdrop" style="display:none" onclick="schedCloseSheet()">
     <div class="sched-sheet" onclick="event.stopPropagation()">
-      <div class="sched-sheet-handle"></div>
+      <div class="sched-sheet-header">
+        <div class="sched-sheet-handle"></div>
+        <button class="sched-sheet-close" onclick="schedCloseSheet()" aria-label="닫기">✕</button>
+      </div>
       <div id="sheetContent"></div>
     </div>
   </div>
