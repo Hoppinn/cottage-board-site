@@ -151,7 +151,6 @@ window._cottageSess = (function () {
         });
         if (!error) {
           localStorage.setItem(storageKey, String(rating));
-          window.checkAchievements?.('review', String(userId));
           return { success: true };
         }
         return { error };
@@ -484,6 +483,7 @@ window._cottageSess = (function () {
         })
         .select("id");
       if (error) return { error };
+      if (userId) window.checkAchievements?.('review', String(userId));
       return { success: true, id: data?.[0]?.id };
     } catch (e) {
       return { error: e };
@@ -1344,6 +1344,7 @@ window._cottageSess = (function () {
     getUserPlayedGames,
     getUserPhotoCount,
     getUserRatingCount,
+    getUserCommentCount,
     getUserVisitCount,
     getUserParticipationCount,
     getUserFirstRecordCount,
@@ -1494,6 +1495,13 @@ window._cottageSess = (function () {
   async function getUserRatingCount(userId) {
     try {
       const { count } = await db.from('game_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      return count || 0;
+    } catch (_) { return 0; }
+  }
+
+  async function getUserCommentCount(userId) {
+    try {
+      const { count } = await db.from('game_comments').select('id', { count: 'exact', head: true }).eq('user_id', userId);
       return count || 0;
     } catch (_) { return 0; }
   }

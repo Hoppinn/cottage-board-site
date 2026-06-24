@@ -268,11 +268,11 @@
     if (!userId || !window.CottageDB) return;
     const db = window.CottageDB;
 
-    const [playCount, distinctCount, photoCount, ratingCount] = await Promise.all([
+    const [playCount, distinctCount, photoCount, commentCount] = await Promise.all([
       (category === 'record' || category === 'review') ? db.getUserPlayCount(userId) : Promise.resolve(null),
       category === 'record' ? db.getUserDistinctGameCount(userId) : Promise.resolve(null),
       category === 'record' ? db.getUserPhotoCount(userId) : Promise.resolve(null),
-      category === 'review' ? db.getUserRatingCount(userId) : Promise.resolve(null),
+      category === 'review' ? db.getUserCommentCount(userId) : Promise.resolve(null),
     ]);
 
     const checks = [];
@@ -334,23 +334,23 @@
 
     if (category === 'review') {
       checks.push(
-        { id: 'review_1',   v: ratingCount, t: 1 },
-        { id: 'review_2',   v: ratingCount, t: 2 },
-        { id: 'review_3',   v: ratingCount, t: 3 },
-        { id: 'review_5',   v: ratingCount, t: 5 },
-        { id: 'review_8',   v: ratingCount, t: 8 },
-        { id: 'review_10',  v: ratingCount, t: 10 },
-        { id: 'review_15',  v: ratingCount, t: 15 },
-        { id: 'review_20',  v: ratingCount, t: 20 },
-        { id: 'review_25',  v: ratingCount, t: 25 },
-        { id: 'review_40',  v: ratingCount, t: 40 },
-        { id: 'review_50',  v: ratingCount, t: 50 },
-        { id: 'review_75',  v: ratingCount, t: 75 },
-        { id: 'review_100', v: ratingCount, t: 100 },
-        { id: 'review_150', v: ratingCount, t: 150 },
-        { id: 'review_200', v: ratingCount, t: 200 },
-        { id: 'review_300', v: ratingCount, t: 300 },
-        { id: 'review_500', v: ratingCount, t: 500 },
+        { id: 'review_1',   v: commentCount, t: 1 },
+        { id: 'review_2',   v: commentCount, t: 2 },
+        { id: 'review_3',   v: commentCount, t: 3 },
+        { id: 'review_5',   v: commentCount, t: 5 },
+        { id: 'review_8',   v: commentCount, t: 8 },
+        { id: 'review_10',  v: commentCount, t: 10 },
+        { id: 'review_15',  v: commentCount, t: 15 },
+        { id: 'review_20',  v: commentCount, t: 20 },
+        { id: 'review_25',  v: commentCount, t: 25 },
+        { id: 'review_40',  v: commentCount, t: 40 },
+        { id: 'review_50',  v: commentCount, t: 50 },
+        { id: 'review_75',  v: commentCount, t: 75 },
+        { id: 'review_100', v: commentCount, t: 100 },
+        { id: 'review_150', v: commentCount, t: 150 },
+        { id: 'review_200', v: commentCount, t: 200 },
+        { id: 'review_300', v: commentCount, t: 300 },
+        { id: 'review_500', v: commentCount, t: 500 },
       );
     }
 
