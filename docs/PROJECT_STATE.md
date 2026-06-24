@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-24 (142차-19)
+최종 갱신: 2026-06-24 (142차-25)
 
 ---
 
@@ -25,19 +25,10 @@
 | 버그 3종 + UI (142차-18) | 게임카드 스크롤 peek(@media 158px 오버라이드 제거), 이미지 경로 서브페이지 깨짐(normalizeImagePath), 다크율에 속죄를 제목 수정, 처음이시면 문구 추가, 게임 위치 전시된게임(G) 추가 | 142차-18 |
 | 알림 4종 개선 (142차-19) | 교환권 지급/사용 관리자 알림패널 표시, 알림 개별 읽음 버튼, 알림 0건에도 버튼 표시, 후기→게임평 텍스트 변경. 카카오 알림 webhook 인프라 추가(adminWebhookUrl 설정 필요) | 142차-19 |
 
-### 142차 테스트 목록 (미테스트 — SQL 실행 후 진행)
+### 142차 테스트 목록
 
-**SQL 먼저 실행 필요 (Supabase SQL Editor):**
-```sql
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS bio text;
-ALTER TABLE profiles ADD COLUMN IF NOT EXISTS avoid_tags text[];
-ALTER TABLE game_likes ADD COLUMN IF NOT EXISTS custom_name text;
-ALTER TABLE game_likes ALTER COLUMN game_id DROP NOT NULL;
-CREATE UNIQUE INDEX IF NOT EXISTS uq_game_likes_custom ON game_likes (user_id, custom_name) WHERE custom_name IS NOT NULL;
-ALTER TABLE game_curious ADD COLUMN IF NOT EXISTS custom_name text;
-ALTER TABLE game_curious ALTER COLUMN game_id DROP NOT NULL;
-CREATE UNIQUE INDEX IF NOT EXISTS uq_game_curious_custom ON game_curious (user_id, custom_name) WHERE custom_name IS NOT NULL;
-```
+✅ SQL 실행 완료 (2026-06-24)
+✅ 카카오 알림 webhook 연결 완료 (supabase-config.js adminWebhookUrl, Make 시나리오 5213346, 142차-25)
 
 **테스트 체크리스트:**
 - [ ] 취향보드: 한줄소개 편집→예시 칩 표시→클릭→저장
@@ -67,15 +58,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_game_curious_custom ON game_curious (user_i
 | 모임 플래너 Phase 3 게임 투표 | Red — Plan 필수, meeting_vote_games 테이블 신규 |
 | 취향보드 Phase 2 (성향 5축) | Phase 1 테스트 후 진행 |
 
-### 이전 보류
-**카카오 알림 → Discord 전환** (Make 시나리오 5213346)
-- 현재: kapi.kakao.com 내 대화방 전송 (알림 안 옴)
-- 목표: Discord webhook (HTTP 2 토큰모듈 삭제, HTTP 3 URL 교체)
-
 **다음 작업 후보**
-1. **카카오 알림 webhook 연결** — `supabase-config.js`의 `adminWebhookUrl`에 Make.com 신규 webhook URL 입력 필요. Make.com에서 새 시나리오(Custom Webhook → Kakao 메시지) 생성 후 URL 기입.
-2. **취향보드 Phase 2** — 성향 5축 (Phase 1 테스트 완료 후)
-3. **Discord 알림 전환** — Make 시나리오 5213346 수정 (기존 게임요청 알림도 Discord로)
+1. **취향보드 Phase 2** — 성향 5축 (Phase 1 테스트 완료 후)
+2. **모임 플래너 Phase 3 게임 투표** — Plan 필요 (meeting_vote_games 테이블 신규)
+
+> Discord 알림 전환 폐기 — 카카오 개인 알림으로 유지 (142차-25)
 
 ---
 
