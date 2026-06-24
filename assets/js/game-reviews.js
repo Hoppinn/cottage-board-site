@@ -64,8 +64,25 @@
   function showToast(msg) {
     const t = document.getElementById('prToast');
     t.textContent = msg;
+    t.classList.remove('has-action');
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  function _showCuriousPlayedToast(gameName, gameId, userId, onDone) {
+    const t = document.getElementById('prToast');
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    t.innerHTML = `🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br>궁금해요가 취소됐어요. <button class="pr-toast-action-btn">👍 좋아요</button>`;
+    t.classList.add('show', 'has-action');
+    let resolved = false;
+    const resolve = () => { if (!resolved) { resolved = true; t.classList.remove('show', 'has-action'); onDone?.(); } };
+    t.querySelector('.pr-toast-action-btn')?.addEventListener('click', async () => {
+      await window.CottageDB?.toggleGameLike(gameId, userId);
+      t.innerHTML = '👍 좋아요를 눌렀어요!';
+      t.classList.remove('has-action');
+      setTimeout(resolve, 1500);
+    });
+    setTimeout(resolve, 6000);
   }
 
 
@@ -324,6 +341,7 @@
         const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
         entries.push({
           id: gameIdByName(name),
+          label: name,
           count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
           time: parseInt(row.querySelector('.pr-time').value) || null,
           names: putSelfFirst(row.querySelector('.pr-names').value.trim() || null, user.nickname),
@@ -368,6 +386,28 @@
         recordsLoaded = false;
         const recTab = root.querySelector('[data-tab="records"]');
         if (recTab) recTab.click();
+
+        if (user) {
+          const userId = String(user.id);
+          const curiousHits = [];
+          for (const e of entries) {
+            if (!e.id) continue;
+            const isCurious = await window.CottageDB.hasUserCurious(e.id, userId);
+            if (isCurious) {
+              await window.CottageDB.toggleGameCurious(e.id, userId);
+              curiousHits.push({ label: e.label, id: e.id });
+            }
+          }
+          if (curiousHits.length) {
+            let idx = 0;
+            const showNext = () => {
+              if (idx >= curiousHits.length) return;
+              const g = curiousHits[idx++];
+              _showCuriousPlayedToast(g.label, g.id, userId, showNext);
+            };
+            setTimeout(showNext, 2400);
+          }
+        }
       } else {
         alert('일부 저장에 실패했어요. 다시 시도해주세요.');
       }

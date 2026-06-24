@@ -631,6 +631,8 @@ async function openProfilePanel(autoSubsheet = null) {
       return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요')}${readBtn}</li>`;
     if (n.type === 'curious_comment')
       return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}">${_card('🤔', escH(getGameName(n.gameKey)) + ' 새 코멘트', '궁금해요 게임에 코멘트가 달렸어요')}${readBtn}</li>`;
+    if (n.type === 'curious_play')
+      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 플레이됐어요', '궁금해요 게임을 누군가 플레이했어요')}${readBtn}</li>`;
     if (n.type === 'ordered')
       return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}">${_card('🛒', escH(n.gameName) + ' 주문 완료', '게임 요청이 접수/주문되었습니다')}${readBtn}</li>`;
     if (n.type === 'new_game') {

@@ -1187,15 +1187,30 @@ window._cottageSess = (function () {
       }
       const curiousKeys = (curiousRes.data || []).map(r => r.game_id);
       if (curiousKeys.length > 0) {
-        const { data: recentComments } = await db.from('game_comments')
-          .select('id, game_key, nickname, created_at')
-          .in('game_key', curiousKeys)
-          .neq('user_id', userId)
-          .order('created_at', { ascending: false })
-          .limit(20);
+        const [{ data: recentComments }, { data: playRecords }] = await Promise.all([
+          db.from('game_comments')
+            .select('id, game_key, nickname, created_at')
+            .in('game_key', curiousKeys)
+            .neq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .limit(20),
+          db.from('game_play_records')
+            .select('id, game_id, created_at')
+            .in('game_id', curiousKeys)
+            .neq('user_id', userId)
+            .order('created_at', { ascending: false })
+            .limit(20),
+        ]);
         for (const c of recentComments || []) {
           const isNew = effectiveSeenAt ? c.created_at > effectiveSeenAt : true;
           notifs.push({ type: 'curious_comment', gameKey: c.game_key, commenter: c.nickname, date: c.created_at, isNew });
+        }
+        const seenPlayGameIds = new Set();
+        for (const r of playRecords || []) {
+          if (seenPlayGameIds.has(r.game_id)) continue;
+          seenPlayGameIds.add(r.game_id);
+          const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
+          notifs.push({ type: 'curious_play', gameId: r.game_id, date: r.created_at, isNew });
         }
       }
       for (const r of purchasedRes.data || []) {
