@@ -1710,12 +1710,9 @@ function requireLogin(action) {
 }
 
 function _reactionUserChip(u) {
-  const charPath = u.rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(u.rep_achievement_id) : null;
-  const imgSrc = charPath || u.photo_url;
   const uid = u.user_id ? ` data-user-id="${u.user_id}"` : '';
-  const avatarHtml = imgSrc ? `<img class="sheet-liker-avatar" src="${imgSrc}" alt="">` : '';
   const name = String(u.nickname || '(알 수 없음)').replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  return `<span class="sheet-liker-chip"${uid}>${avatarHtml}<span class="sheet-liker-name">${name}</span></span>`;
+  return `<span class="sheet-liker-chip"${uid}><span class="sheet-liker-name">${name}</span></span>`;
 }
 
 function _updateReactionSection(likers, curiousUsers) {

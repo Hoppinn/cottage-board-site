@@ -3205,7 +3205,7 @@ body.sheet-open{
 .sheet-reaction-btn-wrap .sheet-reaction-btn{border:none;border-radius:0;background:transparent;flex:1;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn:hover{background:#ead8b8;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn.is-active{background:#fbecd8;color:#7a4828;}
-.sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:transparent;border:none;border-left:1px solid #ead8b8;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
+.sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:transparent;border:none;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
 .sheet-reaction-expand-btn:hover{background:#ead8b8;color:var(--text);}
 .sheet-reaction-btn-wrap.has-users .sheet-reaction-expand-btn{display:flex;}
 .sheet-reaction-users-panel{display:none;flex-wrap:wrap;gap:4px;padding:6px 8px 8px;}
@@ -3298,11 +3298,10 @@ body.sheet-open{
 .sheet-reaction-btn.is-active{background:#fbecd8;color:#7a4828;}
 .sheet-liker-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;}
 .sheet-liker-label{font-size:13px;flex-shrink:0;}
-.sheet-liker-chip{display:flex;align-items:center;gap:5px;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:4px 10px 4px 4px;font-size:12px;color:var(--text);cursor:pointer;transition:background .15s;}
-.sheet-liker-chip:hover{background:#f0ebe3;}
-.sheet-liker-avatar{width:28px;height:28px;border-radius:50%;object-fit:contain;flex-shrink:0;background:#f5f0eb;}
-.sheet-liker-avatar--empty{display:inline-flex;align-items:center;justify-content:center;background:#e0d8cc;font-size:12px;font-weight:700;color:#7a6850;}
-.sheet-liker-name{font-size:12px;font-weight:600;color:var(--text);}
+.sheet-liker-chip{display:inline-flex;align-items:center;background:#f5f0e8;border:1px solid #e8dfd0;border-radius:12px;padding:2px 8px;font-size:11px;color:#5a4535;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.sheet-liker-chip:hover{background:#ead8b8;}
+.sheet-liker-name{font-size:11px;font-weight:600;color:inherit;}
+.sheet-reaction-users-panel{gap:4px;padding:6px 8px 8px;flex-wrap:wrap;}
 
 .sheet-comment-item{
   cursor:default;
