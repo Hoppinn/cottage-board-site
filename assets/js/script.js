@@ -1696,8 +1696,10 @@ function requireLogin(action) {
 }
 
 function _reactionUserChip(u) {
-  const thumb = u.photo_url
-    ? `<img class="sheet-liker-avatar" src="${u.photo_url}" alt="">`
+  const charPath = u.rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(u.rep_achievement_id) : null;
+  const imgSrc = charPath || u.photo_url;
+  const thumb = imgSrc
+    ? `<img class="sheet-liker-avatar" src="${imgSrc}" alt="">`
     : `<span class="sheet-liker-avatar sheet-liker-avatar--empty">${(u.nickname || '?')[0]}</span>`;
   const uid = u.user_id ? ` data-user-id="${u.user_id}"` : '';
   return `<span class="sheet-liker-chip"${uid}>${thumb}<span class="sheet-liker-name">${String(u.nickname || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></span>`;

@@ -627,7 +627,7 @@ window._cottageSess = (function () {
       const { data: rows } = await db.from(table).select('user_id').eq('game_id', gameId).limit(limit);
       if (!rows?.length) return [];
       const ids = rows.map(r => r.user_id);
-      const { data: profs } = await db.from('profiles').select('user_id, nickname, photo_url').in('user_id', ids);
+      const { data: profs } = await db.from('profiles').select('user_id, nickname, photo_url, rep_achievement_id').in('user_id', ids);
       return profs || [];
     } catch (_) { return []; }
   }
@@ -657,14 +657,14 @@ window._cottageSess = (function () {
     if (!userId) return null;
     try {
       const [profileRes, introRes, likedGames, curiousGames] = await Promise.all([
-        db.from('profiles').select('nickname, photo_url, bio, avoid_tags').eq('user_id', userId).maybeSingle(),
+        db.from('profiles').select('nickname, photo_url, bio, avoid_tags, rep_achievement_id').eq('user_id', userId).maybeSingle(),
         db.from('member_intros').select('nickname').eq('user_id', userId).maybeSingle(),
         getUserLikedGamesAll(userId),
         getUserCuriousGamesAll(userId),
       ]);
       const profile = profileRes.data || {};
       const nickname = introRes.data?.nickname || profile.nickname || '(알 수 없음)';
-      return { nickname, photo_url: profile.photo_url, bio: profile.bio, avoid_tags: profile.avoid_tags || [], likedGames, curiousGames };
+      return { nickname, photo_url: profile.photo_url, rep_achievement_id: profile.rep_achievement_id, bio: profile.bio, avoid_tags: profile.avoid_tags || [], likedGames, curiousGames };
     } catch (_) { return null; }
   }
 

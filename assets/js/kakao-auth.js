@@ -1566,11 +1566,13 @@ async function openOtherProfileSheet(userId) {
     return;
   }
 
-  const { nickname, photo_url, bio, avoid_tags, likedGames, curiousGames } = data;
+  const { nickname, photo_url, rep_achievement_id, bio, avoid_tags, likedGames, curiousGames } = data;
   const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-  const avatarHtml = photo_url
-    ? `<img class="other-profile-avatar" src="${_e(photo_url)}" alt="">`
+  const charPath = rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(rep_achievement_id) : null;
+  const avatarSrc = charPath || photo_url;
+  const avatarHtml = avatarSrc
+    ? `<img class="other-profile-avatar" src="${_e(avatarSrc)}" alt="">`
     : `<span class="other-profile-avatar other-profile-avatar--empty">${(nickname || '?')[0]}</span>`;
 
   const bioTags = bio ? bio.split(',').map(t => t.trim()).filter(Boolean) : [];
