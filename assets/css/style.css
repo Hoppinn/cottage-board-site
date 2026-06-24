@@ -3609,6 +3609,9 @@ body.sheet-open{
 .profile-activity-list.is-collapsed{display:none;}
 .profile-activity-list li{font-size:13px;color:var(--text);display:flex;justify-content:space-between;}
 .profile-activity-list li span{color:var(--muted);font-size:12px;}
+.profile-activity-item--review{display:block !important;}
+.profile-review-header{display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
+.profile-review-text{display:block;font-style:italic;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5;}
 .profile-more{color:var(--muted);font-size:12px;}
 .profile-more-wrap{display:flex;flex-direction:column;gap:7px;}
 .profile-more-wrap.is-hidden{display:none;}

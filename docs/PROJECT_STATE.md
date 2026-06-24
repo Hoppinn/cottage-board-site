@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-25 (142차-32)
+최종 갱신: 2026-06-25 (142차-35)
 
 ---
 
@@ -69,6 +69,19 @@
 4. **좋아하는 게임 drag reorder + 대분류** — Red, Plan 필수 (game_likes.sort_order 컬럼 신규)
 5. **취향보드 Phase 2** — 성향 5축 (Phase 1 테스트 완료 후)
 6. **모임 플래너 Phase 3 게임 투표** — Plan 필요 (meeting_vote_games 테이블 신규)
+7. **게임평/사진 통합 (linked_record_id)** — 🔴 Red, Plan 확정 (2026-06-25)
+   - game_play_records에 linked_record_id (nullable FK → game_play_records.id) 추가
+   - 게임상세시트: 게임평 남기기 / 사진 추가 / 플레이 기록하기 버튼 3개 통합
+   - 저장 시 "기존 기록에 추가" 선택 옵션 (같은 게임 최근 기록 목록)
+   - 기록 전체보기 카드: 연결된 항목들 닉네임 붙여 합산 표시 (호핀: "~", 나나: "~")
+   - game_comments는 유지(기존 호환), 신규 입력은 game_play_records로 통일
+   - 영향 파일: supabase-client.js, script.js, game-reviews.js
+8. **이번달참여일정 — 함께한 시간 카드 통합** — 🟡 Yellow (2026-06-25 기획 확정)
+   - 새 카드 생성 X, 함께한 시간 카드 하단에 일정 섹션 확장
+   - 최대 2개 표시, 3개 이상이면 마지막 줄에 "외 N건"
+   - 4개 메인 카드(수집/취향/기록/교환권) 상하 패딩 10~15% 축소
+   - 표시 형식: "6/27 정기모임 / 6/29 전략게임모임"
+   - 영향 파일: kakao-auth.js (함께한 시간 섹션), style.css (카드 패딩)
 
 > Discord 알림 전환 폐기 — 카카오 개인 알림으로 유지 (142차-25)
 

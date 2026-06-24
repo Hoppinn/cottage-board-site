@@ -581,9 +581,11 @@ async function openProfilePanel(autoSubsheet = null) {
   });
 
   const _playsWithReview = stats.plays.filter(r => r.review_text);
-  const reviewListHtml = buildActivityList(_playsWithReview, r =>
-    `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))} <em style="color:var(--muted);font-size:12px">"${escH(r.review_text.slice(0, 30))}${r.review_text.length > 30 ? '…' : ''}"</em> <span>${fmtShort(r.played_at || r.created_at)}</span></li>`
-  );
+  const reviewListHtml = buildActivityList(_playsWithReview, r => {
+    const pn = _playOrderMap.get(r.id);
+    const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
+    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><em class="profile-review-text">"${escH(r.review_text)}"</em></li>`;
+  });
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
   const VOUCHER_NOTICE_DATE = '2026-06-16';
