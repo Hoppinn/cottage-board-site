@@ -81,7 +81,7 @@ assets/js/
 │                               # 방문자 추적(__visitor__), 체류시간, 비로그인 heartbeat 포함
 ├── kakao-auth.js               # 카카오 로그인/로그아웃, 프로필 패널, 알림, 교환권
 │                               # (window.getKakaoUser / openProfilePanel 노출)
-├── script.js                   # 게임 바텀시트, 검색, 필터, 별점 위젯, 코멘트
+├── script.js                   # 게임 바텀시트, 검색, 필터, 별점 위젯, 게임평
 ├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (window.COTTAGE_GAMES 생성)
 ├── game-reviews.js             # 플레이기록 허브 (game-reviews.html 전용)
 │                               # 기록 등록·수정·삭제, 모임/게임별 보기, 사진 업로드
