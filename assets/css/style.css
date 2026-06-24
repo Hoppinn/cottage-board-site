@@ -3199,11 +3199,15 @@ body.sheet-open{
   margin-top:10px;
   margin-bottom:16px;
 }
-.sheet-reaction-group{display:flex;flex-direction:column;gap:6px;flex:1;}
-.sheet-reaction-avatars{display:flex;flex-wrap:wrap;gap:4px;min-height:0;}
-.sheet-reaction-avatar{width:30px;height:30px;border-radius:50%;object-fit:contain;background:#f5f0eb;cursor:pointer;flex-shrink:0;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.12);}
-.sheet-reaction-avatar--empty{display:inline-flex;align-items:center;justify-content:center;background:#e0d8cc;font-size:12px;font-weight:700;color:#7a6850;cursor:pointer;}
-.sheet-reaction-avatar:hover{transform:scale(1.1);transition:transform .15s;}
+.sheet-reaction-group{display:flex;flex-direction:column;gap:0;flex:1;}
+.sheet-reaction-btn-wrap{display:flex;align-items:stretch;}
+.sheet-reaction-btn-wrap .sheet-reaction-btn{border-radius:10px;flex:1;}
+.sheet-reaction-btn-wrap.has-users .sheet-reaction-btn{border-radius:10px 0 0 10px;border-right:none;}
+.sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:var(--cream);border:1px solid #ead8b8;border-left:none;border-radius:0 10px 10px 0;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
+.sheet-reaction-expand-btn:hover{background:#ead8b8;color:var(--text);}
+.sheet-reaction-btn-wrap.has-users .sheet-reaction-expand-btn{display:flex;}
+.sheet-reaction-users-panel{display:none;flex-wrap:wrap;gap:4px;padding-top:6px;}
+.sheet-reaction-users-panel.is-open{display:flex;}
 
 /* 게임 설명 + 더보기/접기 */
 .sheet-desc-wrap{

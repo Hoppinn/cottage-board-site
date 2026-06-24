@@ -1252,12 +1252,18 @@ function openGameSheet(gameKey, restoreScroll = false){
     <!-- 좋아요 / 궁금해요 (게임 정보 영역 끝) -->
     <div class="sheet-feedback-reactions">
       <div class="sheet-reaction-group">
-        <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
-        <div class="sheet-reaction-avatars" id="sheetLikerAvatars"></div>
+        <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
+          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
+          <button class="sheet-reaction-expand-btn" id="sheetLikeExpandBtn" type="button" aria-label="좋아요한 사람 보기">▾</button>
+        </div>
+        <div class="sheet-reaction-users-panel" id="sheetLikerPanel"></div>
       </div>
       <div class="sheet-reaction-group">
-        <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
-        <div class="sheet-reaction-avatars" id="sheetCuriousAvatars"></div>
+        <div class="sheet-reaction-btn-wrap" id="sheetCuriousBtnWrap">
+          <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
+          <button class="sheet-reaction-expand-btn" id="sheetCuriousExpandBtn" type="button" aria-label="궁금해요한 사람 보기">▾</button>
+        </div>
+        <div class="sheet-reaction-users-panel" id="sheetCuriousPanel"></div>
       </div>
     </div>
 
@@ -1699,29 +1705,42 @@ function requireLogin(action) {
   showLoginToast();
 }
 
-function _reactionAvatarChip(u) {
+function _reactionUserChip(u) {
   const charPath = u.rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(u.rep_achievement_id) : null;
   const imgSrc = charPath || u.photo_url;
   const uid = u.user_id ? ` data-user-id="${u.user_id}"` : '';
-  const tip = u.nickname ? ` title="${String(u.nickname).replace(/"/g,'&quot;')}"` : '';
-  return imgSrc
-    ? `<img class="sheet-reaction-avatar"${uid}${tip} src="${imgSrc}" alt="${u.nickname || ''}">`
-    : `<span class="sheet-reaction-avatar sheet-reaction-avatar--empty"${uid}${tip}>${(u.nickname || '?')[0]}</span>`;
+  const avatarHtml = imgSrc ? `<img class="sheet-liker-avatar" src="${imgSrc}" alt="">` : '';
+  const name = String(u.nickname || '(알 수 없음)').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  return `<span class="sheet-liker-chip"${uid}>${avatarHtml}<span class="sheet-liker-name">${name}</span></span>`;
 }
 
 function _updateReactionSection(likers, curiousUsers) {
-  const likerEl = document.getElementById('sheetLikerAvatars');
-  const curiousEl = document.getElementById('sheetCuriousAvatars');
-  if (!likerEl || !curiousEl) return;
+  function setupGroup(users, wrapId, expandBtnId, panelId) {
+    const wrap = document.getElementById(wrapId);
+    const expandBtn = document.getElementById(expandBtnId);
+    const panel = document.getElementById(panelId);
+    if (!wrap || !expandBtn || !panel) return;
 
-  likerEl.innerHTML = likers.map(_reactionAvatarChip).join('');
-  curiousEl.innerHTML = curiousUsers.map(_reactionAvatarChip).join('');
-
-  [likerEl, curiousEl].forEach(el => {
-    el.querySelectorAll('[data-user-id]').forEach(chip => {
+    panel.innerHTML = users.map(_reactionUserChip).join('');
+    panel.querySelectorAll('[data-user-id]').forEach(chip => {
       chip.addEventListener('click', () => window.openOtherProfileSheet?.(chip.dataset.userId));
     });
-  });
+
+    if (users.length) {
+      wrap.classList.add('has-users');
+      expandBtn.onclick = () => {
+        const isOpen = panel.classList.contains('is-open');
+        panel.classList.toggle('is-open', !isOpen);
+        expandBtn.textContent = isOpen ? '▾' : '▴';
+      };
+    } else {
+      wrap.classList.remove('has-users');
+      panel.classList.remove('is-open');
+    }
+  }
+
+  setupGroup(likers, 'sheetLikeBtnWrap', 'sheetLikeExpandBtn', 'sheetLikerPanel');
+  setupGroup(curiousUsers, 'sheetCuriousBtnWrap', 'sheetCuriousExpandBtn', 'sheetCuriousPanel');
 }
 
 async function initSheetLikes(gameKey) {
