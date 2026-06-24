@@ -628,7 +628,7 @@ async function openProfilePanel(autoSubsheet = null) {
     const _card = (icon, title, desc) =>
       `<div class="notif-card-icon">${icon}</div><div class="notif-card-body"><div class="notif-card-title">${title} ${badge}</div><div class="notif-card-desc">${desc}</div>${dt}</div>`;
     if (n.type === 'tagged')
-      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요')}${readBtn}</li>`;
+      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요 · <a class="notif-inline-link" href="/pages/game/game-reviews.html" onclick="event.stopPropagation()">게임평 쓰러 가기 →</a>')}${readBtn}</li>`;
     if (n.type === 'curious_comment')
       return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}">${_card('🤔', escH(getGameName(n.gameKey)) + ' 새 코멘트', '궁금해요 게임에 코멘트가 달렸어요')}${readBtn}</li>`;
     if (n.type === 'curious_play')
