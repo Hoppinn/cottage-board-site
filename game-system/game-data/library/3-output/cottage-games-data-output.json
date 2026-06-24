@@ -85909,9 +85909,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "shipping",
-      "shelfLabel": "배송중",
-      "shelfFullLabel": "발매후 도착예정 - 배송중",
+      "shelfGroupId": "murder_mystery",
+      "shelfLabel": "머더미스터리",
+      "shelfFullLabel": "머더미스터리",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
@@ -86053,9 +86053,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "shipping",
-      "shelfLabel": "배송중",
-      "shelfFullLabel": "발매후 도착예정 - 배송중",
+      "shelfGroupId": "murder_mystery",
+      "shelfLabel": "머더미스터리",
+      "shelfFullLabel": "머더미스터리",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
