@@ -1699,7 +1699,8 @@ function _reactionUserChip(u) {
   const thumb = u.photo_url
     ? `<img class="sheet-liker-avatar" src="${u.photo_url}" alt="">`
     : `<span class="sheet-liker-avatar sheet-liker-avatar--empty">${(u.nickname || '?')[0]}</span>`;
-  return `<span class="sheet-liker-chip">${thumb}<span class="sheet-liker-name">${String(u.nickname || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></span>`;
+  const uid = u.user_id ? ` data-user-id="${u.user_id}"` : '';
+  return `<span class="sheet-liker-chip"${uid}>${thumb}<span class="sheet-liker-name">${String(u.nickname || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></span>`;
 }
 
 function _updateReactionSection(likers, curiousUsers) {
@@ -1712,6 +1713,12 @@ function _updateReactionSection(likers, curiousUsers) {
   if (likers.length) usersHtml += `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
   if (curiousUsers.length) usersHtml += `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
   usersEl.innerHTML = usersHtml;
+
+  // 칩 클릭 → 다른 플레이어 취향보드 시트
+  usersEl.querySelectorAll('.sheet-liker-chip[data-user-id]').forEach(chip => {
+    chip.style.cursor = 'pointer';
+    chip.addEventListener('click', () => window.openOtherProfileSheet?.(chip.dataset.userId));
+  });
 
   // 요약 토글 갱신 (이미 열려 있으면 열린 상태 유지)
   const wasOpen = usersEl.dataset.open === '1';

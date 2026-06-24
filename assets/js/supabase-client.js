@@ -653,6 +653,21 @@ window._cottageSess = (function () {
     } catch (_) { return []; }
   }
 
+  async function getUserTasteProfile(userId) {
+    if (!userId) return null;
+    try {
+      const [profileRes, introRes, likedGames, curiousGames] = await Promise.all([
+        db.from('profiles').select('nickname, photo_url, bio, avoid_tags').eq('user_id', userId).maybeSingle(),
+        db.from('member_intros').select('nickname').eq('user_id', userId).maybeSingle(),
+        getUserLikedGamesAll(userId),
+        getUserCuriousGamesAll(userId),
+      ]);
+      const profile = profileRes.data || {};
+      const nickname = introRes.data?.nickname || profile.nickname || '(알 수 없음)';
+      return { nickname, photo_url: profile.photo_url, bio: profile.bio, avoid_tags: profile.avoid_tags || [], likedGames, curiousGames };
+    } catch (_) { return null; }
+  }
+
   async function addGamePref(userId, gameId, customName, table) {
     if (!userId || (!gameId && !customName)) return { error: 'invalid' };
     try {
@@ -1346,6 +1361,7 @@ window._cottageSess = (function () {
     getUserCuriousGames,
     getUserLikedGamesAll,
     getUserCuriousGamesAll,
+    getUserTasteProfile,
     addGamePref,
     removeGamePref,
     getCustomPrefSuggestions,

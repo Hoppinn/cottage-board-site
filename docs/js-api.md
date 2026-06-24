@@ -75,6 +75,7 @@
 | `getUserCuriousGames(userId)` | 유저가 궁금해요(🤔)한 game_id 배열 반환 (카탈로그 전용, 하위호환) |
 | `getUserLikedGamesAll(userId)` | 취향보드용: `[{game_id, custom_name}]` 반환. custom_name은 직접입력 게임 |
 | `getUserCuriousGamesAll(userId)` | 취향보드용: `[{game_id, custom_name}]` 반환 |
+| `getUserTasteProfile(userId)` | `{nickname, photo_url, bio, avoid_tags, likedGames, curiousGames}` — 다른 플레이어 취향보드 시트용 |
 | `addGamePref(userId, gameId, customName, table)` | 취향보드: game_likes 또는 game_curious에 항목 추가. gameId/customName 중 하나만 필요 |
 | `removeGamePref(userId, gameId, customName, table)` | 취향보드: 항목 삭제 |
 | `getCustomPrefSuggestions()` | 취향보드: 두 테이블 전체에서 distinct custom_name 목록 반환 |

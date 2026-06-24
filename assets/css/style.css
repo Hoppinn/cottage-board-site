@@ -3561,6 +3561,16 @@ body.sheet-open{
 .pr-game-card-arrow{ font-size:18px; color:var(--muted); flex-shrink:0; }
 
 /* 내 활동 프로필 패널 */
+.other-profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;}
+.other-profile-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;padding:20px 20px 32px;max-height:85vh;max-height:85dvh;overflow-y:auto;}
+.other-profile-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.other-profile-title{font-size:15px;font-weight:700;color:var(--text);}
+.other-profile-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
+.other-profile-hero{display:flex;align-items:center;gap:14px;padding:0 0 16px;border-bottom:1px solid var(--border,#e8e4dc);margin-bottom:16px;}
+.other-profile-avatar{width:56px;height:56px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;}
+.other-profile-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:24px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:56px;height:56px;flex-shrink:0;}
+.other-profile-name{font-size:17px;font-weight:800;color:#5a3418;}
+.other-profile-loading,.other-profile-empty{padding:32px 0;text-align:center;color:var(--muted);font-size:14px;}
 .profile-panel{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9100;display:flex;align-items:flex-end;justify-content:center;}
 .profile-panel-box{background:#fff;border-radius:18px;width:100%;max-width:480px;padding:24px 20px 32px;height:calc(100vh - 48px);height:calc(100dvh - 48px);max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);overflow-y:auto;margin:0 10px 16px;}
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}

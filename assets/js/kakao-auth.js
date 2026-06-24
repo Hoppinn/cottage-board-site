@@ -1531,4 +1531,110 @@ async function openProfilePanel(autoSubsheet = null) {
   }
 }
 
+// ── 다른 플레이어 취향보드 시트 ───────────────────────────────
+async function openOtherProfileSheet(userId) {
+  if (!userId) return;
+
+  // 본인 프로필이면 내 보드 취향탭으로
+  const self = getKakaoUser();
+  if (self && String(self.id) === String(userId)) {
+    openProfilePanel('taste');
+    return;
+  }
+
+  document.getElementById('otherProfileSheet')?.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'otherProfileSheet';
+  overlay.className = 'other-profile-overlay';
+  overlay.innerHTML = `<div class="other-profile-box">
+    <div class="other-profile-header">
+      <span class="other-profile-title">취향 보드</span>
+      <button class="other-profile-close" type="button">✕</button>
+    </div>
+    <div class="other-profile-body"><div class="other-profile-loading">불러오는 중…</div></div>
+  </div>`;
+  document.body.appendChild(overlay);
+
+  overlay.querySelector('.other-profile-close').addEventListener('click', () => overlay.remove());
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+  const data = await window.CottageDB?.getUserTasteProfile?.(userId);
+  const body = overlay.querySelector('.other-profile-body');
+  if (!data) {
+    body.innerHTML = '<div class="other-profile-empty">프로필을 불러올 수 없어요</div>';
+    return;
+  }
+
+  const { nickname, photo_url, bio, avoid_tags, likedGames, curiousGames } = data;
+  const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  const avatarHtml = photo_url
+    ? `<img class="other-profile-avatar" src="${_e(photo_url)}" alt="">`
+    : `<span class="other-profile-avatar other-profile-avatar--empty">${(nickname || '?')[0]}</span>`;
+
+  const bioTags = bio ? bio.split(',').map(t => t.trim()).filter(Boolean) : [];
+  const bioHtml = bioTags.length
+    ? bioTags.map(t => `<span class="taste-bio-tag">${_e(t)}</span>`).join('')
+    : '<span class="taste-bio-placeholder">소개 없음</span>';
+
+  const buildReadOnlyGames = (games, max = 5) => {
+    if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
+    const items = games.map(g => {
+      const gd = g.game_id ? window.gameData?.[g.game_id] : null;
+      const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
+      const thumb = gd?.images?.thumbnail
+        ? `<img class="taste-game-thumb" src="${_e(gd.images.thumbnail)}" alt="">`
+        : `<span class="taste-game-thumb-empty"></span>`;
+      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
+      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
+      return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${_e(name)}</span></div>`;
+    });
+    if (items.length <= max) return items.join('');
+    const rest = items.length - max;
+    return `${items.slice(0, max).join('')}<div class="taste-game-more-wrap" hidden>${items.slice(max).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${rest}개 더)</button>`;
+  };
+
+  body.innerHTML = `
+    <div class="other-profile-hero">
+      ${avatarHtml}
+      <span class="other-profile-name">${_e(nickname)}</span>
+    </div>
+    ${bioTags.length ? `<div class="taste-bio-section">
+      <div class="taste-section-label">한줄 소개</div>
+      <div class="taste-bio-row">${bioHtml}</div>
+    </div>` : ''}
+    <div class="taste-game-section">
+      <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count">${likedGames.length}개</span></div>
+      <div class="taste-game-list">${buildReadOnlyGames(likedGames)}</div>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">🤔 해보고싶은 게임 <span class="taste-count">${curiousGames.length}개</span></div>
+      <div class="taste-game-list">${buildReadOnlyGames(curiousGames)}</div>
+    </div>
+    ${avoid_tags.length ? `<div class="taste-avoid-section">
+      <div class="taste-section-label">🚫 피하는 유형</div>
+      <div class="taste-tag-grid">${avoid_tags.map(t => `<span class="taste-avoid-tag is-active" style="pointer-events:none">${_e(t)}</span>`).join('')}</div>
+    </div>` : ''}
+  `;
+
+  body.querySelectorAll('.taste-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const wrap = btn.previousElementSibling;
+      if (!wrap) return;
+      const hiding = !wrap.hidden;
+      wrap.hidden = hiding;
+      btn.textContent = hiding ? `더 보기 (${wrap.querySelectorAll('.taste-game-item').length}개 더)` : '접기';
+    });
+  });
+
+  body.querySelectorAll('.taste-game-item--clickable').forEach(item => {
+    item.addEventListener('click', () => {
+      const gid = item.dataset.gameId;
+      if (gid && window.openGameSheet) { overlay.remove(); window.openGameSheet(gid); }
+    });
+  });
+}
+window.openOtherProfileSheet = openOtherProfileSheet;
+
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
