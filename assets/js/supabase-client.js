@@ -1126,12 +1126,6 @@ window._cottageSess = (function () {
     } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
   }
 
-  function _notifyAdminWebhook(payload) {
-    const url = window.SUPABASE_CONFIG?.adminWebhookUrl;
-    if (!url) return;
-    const nickname = window.getKakaoUser?.()?.nickname || null;
-    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, nickname }) }).catch(() => {});
-  }
 
   async function getMyNotifications(userId, nickname, notifSeenAt, newGameSeenAt) {
     if (!userId) return [];
@@ -1547,10 +1541,10 @@ window._cottageSess = (function () {
       const { data: existing } = await db.from('voucher_log')
         .select('id').eq('user_id', String(userId)).eq('reason', 'achievement').eq('note', achievementId).maybeSingle();
       if (existing) return false; // JS 1차 방어
+      const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
-        .insert({ user_id: String(userId), delta: 1, reason: 'achievement', note: achievementId });
+        .insert({ user_id: String(userId), delta: 1, reason: 'achievement', note: achievementId, nickname });
       if (error) return false; // partial unique index 위반 포함 — DB 2차 방어
-      _notifyAdminWebhook({ type: '교환권_지급', reason: '업적_달성', achievementId, userId: String(userId), ts: new Date().toISOString() });
       return true;
     } catch (_) { return false; }
   }
@@ -1587,10 +1581,10 @@ window._cottageSess = (function () {
       const { data: existing } = await db.from('voucher_log')
         .select('id').eq('user_id', String(userId)).eq('reason', 'first_play').maybeSingle();
       if (existing) return false; // JS 1차 방어
+      const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
-        .insert({ user_id: String(userId), delta: 1, reason: 'first_play' });
+        .insert({ user_id: String(userId), delta: 1, reason: 'first_play', nickname });
       if (error) return false; // unique index 위반 포함 — DB 2차 방어
-      _notifyAdminWebhook({ type: '교환권_지급', reason: '첫_기록', userId: String(userId), ts: new Date().toISOString() });
       return true;
     } catch (_) { return false; }
   }
@@ -1626,10 +1620,10 @@ window._cottageSess = (function () {
       if (!product) return { ok: false, reason: 'no_product' };
       const balance = await getVoucherBalance(userId);
       if (balance < product.cost) return { ok: false, reason: 'insufficient' };
+      const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
-        .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId });
+        .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId, nickname });
       if (error) return { ok: false, reason: 'db_error' };
-      _notifyAdminWebhook({ type: '교환권_사용', userId: String(userId), productId, ts: new Date().toISOString() });
       return { ok: true };
     } catch (_) { return { ok: false, reason: 'error' }; }
   }
