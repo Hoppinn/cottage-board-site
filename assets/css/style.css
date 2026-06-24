@@ -3818,6 +3818,10 @@ body.sheet-open{
 .taste-bio-save-btn,.taste-bio-cancel-btn{padding:6px 14px;border-radius:7px;font-size:13px;cursor:pointer;border:1px solid var(--border,#e8e4dc);}
 .taste-bio-save-btn{background:var(--green,#4caf50);color:#fff;border-color:var(--green,#4caf50);font-weight:700;}
 .taste-bio-cancel-btn{background:#fff;color:var(--muted);}
+.taste-avoid-custom-wrap{display:flex;gap:6px;margin-top:10px;}
+.taste-avoid-custom-input{flex:1;padding:6px 10px;border:1px solid var(--border,#e8e4dc);border-radius:8px;font-size:13px;font-family:inherit;}
+.taste-avoid-custom-add{padding:6px 12px;border:1px solid var(--border,#e8e4dc);border-radius:8px;background:var(--bg2,#f5f1eb);font-size:14px;cursor:pointer;}
+.taste-avoid-custom-add:hover{background:#e8e4dc;}
 .taste-game-list{display:flex;flex-direction:column;gap:2px;margin-bottom:8px;}
 .taste-game-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border,#e8e4dc);}
 .taste-game-item:last-child{border-bottom:none;}

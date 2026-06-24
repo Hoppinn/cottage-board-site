@@ -503,7 +503,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames] = await Promise.all([
+  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -513,6 +513,8 @@ async function openProfilePanel(autoSubsheet = null) {
     (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getUserLikedGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getUserCuriousGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
   ]);
   // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
@@ -758,6 +760,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
   // 취향 보드
   const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
+  const _BIO_PREDEFINED = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요'];
   const _bio = stats?.profile?.bio || '';
   const _bioTags = _bio ? _bio.split(',').map(t => t.trim()).filter(Boolean) : [];
   let _currentBio = _bio;
@@ -826,7 +829,16 @@ async function openProfilePanel(autoSubsheet = null) {
     <div class="taste-avoid-section">
       <div class="taste-section-label">🚫 피하는 유형 <span class="taste-avoid-count">${_avoidTags.length > 0 ? `${_avoidTags.length}개 선택됨` : ''}</span></div>
       <p class="taste-avoid-desc">선택한 유형은 가급적 피하고 싶어요 <span class="taste-avoid-desc-hint">· 선택 안 하면 제한 없음</span></p>
-      <div class="taste-tag-grid">${AVOID_TAGS.slice(0, 4).map(t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; }).join('')}${AVOID_TAGS.length > 4 ? `<div class="taste-avoid-more-wrap" hidden>${AVOID_TAGS.slice(4).map(t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; }).join('')}</div><button class="taste-more-btn taste-avoid-more-btn" type="button">더 보기 (${AVOID_TAGS.length - 4}개 더)</button>` : ''}</div>
+      ${(() => {
+        const _avoidRender = t => { const active = _avoidTags.includes(t); return `<button class="taste-tag${active ? ' is-active' : ''}" data-tag="${escH(t)}" type="button">${active ? '🚫 ' : ''}${escH(t)}</button>`; };
+        const _communityAvoid = (allAvoidSuggestions || []).filter(t => !AVOID_TAGS.includes(t));
+        const _overflow = [...AVOID_TAGS.slice(4), ..._communityAvoid];
+        return `<div class="taste-tag-grid">${AVOID_TAGS.slice(0, 4).map(_avoidRender).join('')}${_overflow.length ? `<div class="taste-avoid-more-wrap" hidden>${_overflow.map(_avoidRender).join('')}</div><button class="taste-more-btn taste-avoid-more-btn" type="button">더 보기 (${_overflow.length}개 더)</button>` : ''}</div>`;
+      })()}
+      <div class="taste-avoid-custom-wrap">
+        <input type="text" class="taste-avoid-custom-input" maxlength="15" placeholder="직접 입력 후 Enter">
+        <button class="taste-avoid-custom-add" type="button">+</button>
+      </div>
     </div>`;
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
@@ -1151,7 +1163,7 @@ async function openProfilePanel(autoSubsheet = null) {
           const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
           const bioCustomInput = subBody.querySelector('.taste-bio-custom-input');
           const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
-          const _PREDEFINED_CHIPS = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요'];
+          const _PREDEFINED_CHIPS = _BIO_PREDEFINED;
 
           // 재진입 시 _currentBio 클로저 값으로 display 갱신
           const _syncBioTags = _currentBio ? _currentBio.split(',').map(t => t.trim()).filter(Boolean) : [];
@@ -1396,6 +1408,60 @@ async function openProfilePanel(autoSubsheet = null) {
             if (isHidden) { wrap.removeAttribute('hidden'); this.textContent = '접기'; }
             else { wrap.setAttribute('hidden', ''); this.textContent = `더 보기 (${wrap.querySelectorAll('.taste-tag').length}개 더)`; }
           });
+
+          // ── 피하는 유형 직접입력 ──
+          const avoidCustomInput = subBody.querySelector('.taste-avoid-custom-input');
+          function _attachAvoidTagBtn(btn, tag) {
+            btn.addEventListener('click', async () => {
+              const idx = currentAvoidTags.indexOf(tag);
+              if (idx >= 0) { currentAvoidTags.splice(idx, 1); btn.classList.remove('is-active'); btn.textContent = tag; }
+              else { currentAvoidTags.push(tag); btn.classList.add('is-active'); btn.textContent = `🚫 ${tag}`; }
+              _updateAvoidCount();
+              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
+            });
+          }
+          async function _addCustomAvoidTag() {
+            const val = avoidCustomInput.value.trim();
+            if (!val || subBody.querySelector(`.taste-tag[data-tag="${CSS.escape(val)}"]`)) { avoidCustomInput.value = ''; return; }
+            currentAvoidTags.push(val);
+            const btn = document.createElement('button');
+            btn.className = 'taste-tag is-active';
+            btn.dataset.tag = val;
+            btn.type = 'button';
+            btn.textContent = `🚫 ${val}`;
+            _attachAvoidTagBtn(btn, val);
+            let moreWrap = subBody.querySelector('.taste-avoid-more-wrap');
+            if (moreWrap) {
+              moreWrap.appendChild(btn);
+              moreWrap.removeAttribute('hidden');
+              const moreBtn = subBody.querySelector('.taste-avoid-more-btn');
+              if (moreBtn) moreBtn.textContent = '접기';
+            } else {
+              subBody.querySelector('.taste-tag-grid')?.appendChild(btn);
+            }
+            _updateAvoidCount();
+            await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
+            avoidCustomInput.value = '';
+          }
+          avoidCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomAvoidTag(); } });
+          subBody.querySelector('.taste-avoid-custom-add')?.addEventListener('click', _addCustomAvoidTag);
+
+          // ── 커뮤니티 bio 칩 동적 추가 ──
+          const _communityBioChips = (allBioSuggestions || []).filter(t => !_PREDEFINED_CHIPS.includes(t));
+          if (_communityBioChips.length > 0) {
+            const _chipsContainer = subBody.querySelector('.taste-bio-chips');
+            if (_chipsContainer) {
+              _communityBioChips.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = 'taste-bio-chip';
+                btn.type = 'button';
+                btn.textContent = t;
+                if ((_currentBio || '').split(',').map(s => s.trim()).includes(t)) btn.classList.add('is-selected');
+                btn.addEventListener('click', () => btn.classList.toggle('is-selected'));
+                _chipsContainer.appendChild(btn);
+              });
+            }
+          }
         });
 
       } else if (type === 'records') {

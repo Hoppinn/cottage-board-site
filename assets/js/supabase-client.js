@@ -694,6 +694,22 @@ window._cottageSess = (function () {
     } catch (e) { return { error: e }; }
   }
 
+  async function getAllBioTagSuggestions() {
+    try {
+      const { data } = await db.from('profiles').select('bio').not('bio', 'is', null);
+      const allTags = (data || []).flatMap(r => (r.bio || '').split(',').map(t => t.trim()).filter(Boolean));
+      return [...new Set(allTags)].sort();
+    } catch (_) { return []; }
+  }
+
+  async function getAllAvoidTagSuggestions() {
+    try {
+      const { data } = await db.from('profiles').select('avoid_tags').not('avoid_tags', 'is', null);
+      const allTags = (data || []).flatMap(r => r.avoid_tags || []);
+      return [...new Set(allTags)].sort();
+    } catch (_) { return []; }
+  }
+
   async function updateUserAvoidTags(userId, tags) {
     if (!userId) return { error: 'invalid' };
     try {
@@ -1325,6 +1341,8 @@ window._cottageSess = (function () {
     getCustomPrefSuggestions,
     updateUserBio,
     updateUserAvoidTags,
+    getAllBioTagSuggestions,
+    getAllAvoidTagSuggestions,
     getMeetingVotes,
     upsertMeetingVote,
     deleteMeetingVote,
