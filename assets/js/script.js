@@ -1760,11 +1760,13 @@ async function initSheetLikes(gameKey) {
   if (likeBtn) {
     likeBtn.textContent = `👍 좋아요 ${likeCount}`;
     likeBtn.classList.toggle('is-active', liked);
+    document.getElementById('sheetLikeBtnWrap')?.classList.toggle('is-active', liked);
   }
   const curiousBtn = document.getElementById('sheetCuriousBtn');
   if (curiousBtn) {
     curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
     curiousBtn.classList.toggle('is-active', curious);
+    document.getElementById('sheetCuriousBtnWrap')?.classList.toggle('is-active', curious);
   }
   _updateReactionSection(likers, curiousUsers);
 }
@@ -1781,8 +1783,17 @@ async function onSheetLike(btn) {
         const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
         if (result.liked !== undefined) {
           const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
-          if (likeBtn) { likeBtn.textContent = `👍 좋아요 ${likeCount}`; likeBtn.classList.remove('is-active'); }
+          if (likeBtn) {
+            likeBtn.textContent = `👍 좋아요 ${likeCount}`;
+            likeBtn.classList.remove('is-active');
+            document.getElementById('sheetLikeBtnWrap')?.classList.remove('is-active');
+          }
           showActionToast('좋아요를 취소했어요');
+          const [likers, curiousUsers] = await Promise.all([
+            window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]),
+            window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]),
+          ]);
+          _updateReactionSection(likers, curiousUsers);
         }
       });
       return;
@@ -1793,6 +1804,7 @@ async function onSheetLike(btn) {
       if (likeBtn) {
         likeBtn.textContent = `👍 좋아요 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);
+        document.getElementById('sheetLikeBtnWrap')?.classList.toggle('is-active', result.liked);
       }
       showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => window.openProfilePanel?.('taste') : null);
       if (result.liked) {
@@ -1801,6 +1813,7 @@ async function onSheetLike(btn) {
         if (curiousBtn) {
           curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
           curiousBtn.classList.remove('is-active');
+          document.getElementById('sheetCuriousBtnWrap')?.classList.remove('is-active');
         }
       }
       const [likers, curiousUsers] = await Promise.all([
@@ -1825,6 +1838,7 @@ async function onSheetCurious(btn) {
       if (curiousBtn) {
         curiousBtn.textContent = `🤔 궁금해요 ${curiousCount}`;
         curiousBtn.classList.toggle('is-active', result.curious);
+        document.getElementById('sheetCuriousBtnWrap')?.classList.toggle('is-active', result.curious);
       }
       showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => window.openProfilePanel?.('taste') : null);
       if (result.curious) {
@@ -1833,6 +1847,7 @@ async function onSheetCurious(btn) {
         if (likeBtn) {
           likeBtn.textContent = `👍 좋아요 ${likeCount}`;
           likeBtn.classList.remove('is-active');
+          document.getElementById('sheetLikeBtnWrap')?.classList.remove('is-active');
         }
       }
       const [likers, curiousUsers] = await Promise.all([

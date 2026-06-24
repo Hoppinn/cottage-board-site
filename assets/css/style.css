@@ -3204,7 +3204,10 @@ body.sheet-open{
 .sheet-reaction-btn-row{display:flex;align-items:stretch;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn{border:none;border-radius:0;background:transparent;flex:1;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn:hover{background:#ead8b8;}
-.sheet-reaction-btn-wrap .sheet-reaction-btn.is-active{background:#fbecd8;color:#7a4828;}
+.sheet-reaction-btn-wrap.is-active{background:#fbecd8;border-color:#d4a878;}
+.sheet-reaction-btn-wrap.is-active .sheet-reaction-btn,
+.sheet-reaction-btn-wrap.is-active .sheet-reaction-expand-btn{color:#7a4828;}
+.sheet-reaction-btn.is-active{background:transparent;color:#7a4828;}
 .sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:transparent;border:none;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
 .sheet-reaction-expand-btn:hover{background:#ead8b8;color:var(--text);}
 .sheet-reaction-btn-wrap.has-users .sheet-reaction-expand-btn{display:flex;}
@@ -3562,8 +3565,8 @@ body.sheet-open{
 
 /* 내 활동 프로필 패널 */
 @keyframes slideUpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.other-profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;}
-.other-profile-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;padding:20px 20px 32px;max-height:85vh;max-height:85dvh;overflow-y:auto;animation:slideUpSheet 0.25s ease-out;}
+.other-profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+.other-profile-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;padding:20px 20px 32px;max-height:85vh;max-height:85dvh;overflow-y:auto;animation:slideUpSheet 0.3s ease-out both;}
 .other-profile-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
 .other-profile-title{font-size:15px;font-weight:700;color:var(--text);}
 .other-profile-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
