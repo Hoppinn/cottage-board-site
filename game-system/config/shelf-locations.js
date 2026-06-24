@@ -36,8 +36,15 @@ const SHELF_GROUPS = [
     sourceValues: ["포커", "마작", "칩", "코인"]
   },
   {
-    id: "lost_found",
+    id: "popular",
     code: "A-5",
+    label: "대중적인 게임",
+    parentId: "party",
+    sourceValues: ["대중", "대중적인게임", "대중게임", "popular"]
+  },
+  {
+    id: "lost_found",
+    code: "A-6",
     label: "고객분실물",
     parentId: "party",
     sourceValues: ["분실물"]
@@ -101,11 +108,32 @@ const SHELF_GROUPS = [
     sourceValues: ["방탈출", "escape_room", "escape room"]
   },
   {
-    id: "etc_space",
+    id: "display",
     code: "G",
-    label: "기타공간",
+    label: "전시된 게임",
     parentId: null,
-    sourceValues: ["기타", "기타공간", "etc"]
+    sourceValues: ["전시", "전시된게임", "전시게임", "display"]
+  },
+  {
+    id: "incoming",
+    code: "Z",
+    label: "발매후 도착예정",
+    parentId: null,
+    sourceValues: ["발매후도착예정", "발매후 도착예정", "발매예정", "incoming"]
+  },
+  {
+    id: "shipping",
+    code: "Z-1",
+    label: "배송중",
+    parentId: "incoming",
+    sourceValues: ["배송중", "배송", "shipping"]
+  },
+  {
+    id: "to_buy",
+    code: "Z-2",
+    label: "구매예정",
+    parentId: "incoming",
+    sourceValues: ["구매예정", "구매", "to_buy"]
   }
 ];
 

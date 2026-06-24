@@ -2346,8 +2346,8 @@
   "디셉션": {
     "id": "디셉션",
     "title": {
-      "display": "디셉션",
-      "owned": "디셉션",
+      "display": "디셉션:홍콩살인사건",
+      "owned": "디셉션:홍콩살인사건",
       "bgg": "Deception: Murder in Hong Kong"
     },
     "bgg": {
@@ -2422,9 +2422,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -3561,9 +3561,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -4169,9 +4169,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -4495,9 +4495,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -5587,9 +5587,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
       "moodTags": [
@@ -7342,9 +7342,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.51,
       "moodTags": [
@@ -8410,9 +8410,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
       "moodTags": [
@@ -10776,9 +10776,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
@@ -11045,9 +11045,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -11554,9 +11554,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -13106,9 +13106,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "popular",
+      "shelfLabel": "대중적인 게임",
+      "shelfFullLabel": "파티게임 - 대중적인 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
       "moodTags": [
@@ -18001,9 +18001,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -23606,9 +23606,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "mini_box",
+      "shelfLabel": "작은상자에 담긴 게임",
+      "shelfFullLabel": "작은상자에 담긴 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
       "moodTags": [],
@@ -23877,9 +23877,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -24005,9 +24005,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -24484,7 +24484,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "hardcore",
@@ -29232,9 +29232,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -32882,7 +32882,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "heavy_mania",
@@ -35322,9 +35322,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
@@ -36773,9 +36773,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.55,
       "moodTags": [
@@ -37822,9 +37822,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "popular",
+      "shelfLabel": "대중적인 게임",
+      "shelfFullLabel": "파티게임 - 대중적인 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [],
@@ -41923,9 +41923,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "popular",
+      "shelfLabel": "대중적인 게임",
+      "shelfFullLabel": "파티게임 - 대중적인 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -44119,9 +44119,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.88,
       "moodTags": [],
@@ -51863,9 +51863,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -52007,7 +52007,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "heavy_mania",
@@ -52995,7 +52995,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "hardcore",
@@ -62090,9 +62090,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "light_family",
-      "shelfLabel": "라이트패밀리게임",
-      "shelfFullLabel": "라이트패밀리게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -77258,7 +77258,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "light_family",
@@ -79038,9 +79038,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "전시",
-      "shelfLabel": "전시",
-      "shelfFullLabel": "전시",
+      "shelfGroupId": "display",
+      "shelfLabel": "전시된 게임",
+      "shelfFullLabel": "전시된 게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],
@@ -80729,7 +80729,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "hardcore",
@@ -82951,9 +82951,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -85135,9 +85135,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "구매예정",
+      "shelfGroupId": "to_buy",
       "shelfLabel": "구매예정",
-      "shelfFullLabel": "구매예정",
+      "shelfFullLabel": "발매후 도착예정 - 구매예정",
       "difficultyId": "light_family",
       "difficultyWeight": 1.8193,
       "moodTags": [],
@@ -85709,7 +85709,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "hardcore",
@@ -85813,7 +85813,7 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "발매후 도착예정",
+      "shelfGroupId": "incoming",
       "shelfLabel": "발매후 도착예정",
       "shelfFullLabel": "발매후 도착예정",
       "difficultyId": "",
@@ -85909,9 +85909,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송중",
+      "shelfGroupId": "shipping",
       "shelfLabel": "배송중",
-      "shelfFullLabel": "배송중",
+      "shelfFullLabel": "발매후 도착예정 - 배송중",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
@@ -86053,9 +86053,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "배송중",
+      "shelfGroupId": "shipping",
       "shelfLabel": "배송중",
-      "shelfFullLabel": "배송중",
+      "shelfFullLabel": "발매후 도착예정 - 배송중",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
