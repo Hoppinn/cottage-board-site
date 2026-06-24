@@ -792,7 +792,7 @@ async function openProfilePanel(autoSubsheet = null) {
       </div>
       <div class="taste-bio-edit-wrap" style="display:none">
         <div class="taste-bio-chips">
-          ${['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요'].map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
+          ${['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요'].map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
         </div>
         <div class="taste-bio-custom-wrap">
           <input type="text" class="taste-bio-custom-input" maxlength="20" placeholder="직접 입력 후 Enter">
@@ -1151,7 +1151,7 @@ async function openProfilePanel(autoSubsheet = null) {
           const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
           const bioCustomInput = subBody.querySelector('.taste-bio-custom-input');
           const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
-          const _PREDEFINED_CHIPS = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요'];
+          const _PREDEFINED_CHIPS = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요'];
 
           // 재진입 시 _currentBio 클로저 값으로 display 갱신
           const _syncBioTags = _currentBio ? _currentBio.split(',').map(t => t.trim()).filter(Boolean) : [];

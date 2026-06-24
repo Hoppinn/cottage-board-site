@@ -1113,7 +1113,8 @@ window._cottageSess = (function () {
   function _notifyAdminWebhook(payload) {
     const url = window.SUPABASE_CONFIG?.adminWebhookUrl;
     if (!url) return;
-    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(() => {});
+    const nickname = window.getKakaoUser?.()?.nickname || null;
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, nickname }) }).catch(() => {});
   }
 
   async function getMyNotifications(userId, nickname, notifSeenAt, newGameSeenAt) {
