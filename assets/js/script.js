@@ -1085,7 +1085,13 @@ function openShelfSheet(url) {
       <iframe class="shelf-sheet-iframe" src="${url}"></iframe>
     </div>`;
   document.body.appendChild(overlay);
-  overlay.querySelector('.shelf-sheet-back').addEventListener('click', () => overlay.remove());
+
+  // ← 뒤로가기: 선반 닫고 직전 게임시트 복원
+  const prevGameKey = (typeof _currentSheetGameKey !== 'undefined') ? _currentSheetGameKey : null;
+  overlay.querySelector('.shelf-sheet-back').addEventListener('click', () => {
+    overlay.remove();
+    if (prevGameKey) openGameSheet(prevGameKey);
+  });
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 
   function registerMsg() { window.addEventListener('message', handleShelfMsg); }
@@ -1093,12 +1099,10 @@ function openShelfSheet(url) {
     if (e.data?.action !== 'openGame' || !e.data?.gameId) return;
     window.removeEventListener('message', handleShelfMsg);
 
-    // 선반 오버레이는 숨기고 게임시트를 위로 띄움
     overlay.style.zIndex = '0';
     overlay.style.pointerEvents = 'none';
     openGameSheet(decodeURIComponent(e.data.gameId));
 
-    // 게임시트 닫히면 선반 복원
     const gsEl = document.getElementById('gameSheet');
     if (gsEl) {
       const obs = new MutationObserver(() => {
