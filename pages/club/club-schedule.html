@@ -902,9 +902,11 @@
       const db = window._cottageSupabaseDb;
       let photoUrl = null, bio = null;
       if (db) {
-        const { data: prof } = await db.from('profiles').select('photo_url, bio').eq('user_id', uid).maybeSingle().catch(() => ({ data: null }));
-        photoUrl = prof?.photo_url || null;
-        bio = prof?.bio || null;
+        try {
+          const { data: prof } = await db.from('profiles').select('photo_url, bio').eq('user_id', uid).maybeSingle();
+          photoUrl = prof?.photo_url || null;
+          bio = prof?.bio || null;
+        } catch (_) {}
       }
 
       const avatarHtml = photoUrl

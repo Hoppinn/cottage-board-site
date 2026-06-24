@@ -580,8 +580,8 @@ async function openProfilePanel(autoSubsheet = null) {
     return `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(date)}</span></li>`;
   });
 
-  const commentListHtml = buildActivityList(stats.comments, r =>
-    `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))} <span>${fmtShort(r.created_at)}</span></li>`
+  const reviewListHtml = buildActivityList(stats.reviews || [], r =>
+    `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))}${r.review_text ? ` <em style="color:var(--muted);font-size:12px">"${escH(r.review_text.slice(0, 30))}${r.review_text.length > 30 ? '…' : ''}"</em>` : ''} <span>${fmtShort(r.created_at)}</span></li>`
   );
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
@@ -843,13 +843,14 @@ async function openProfilePanel(autoSubsheet = null) {
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
   const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
-  // 최근 사진 최대 4장 추출 (photo_url: JSON 배열 or 단일 URL)
+  // 최근 사진 최대 4장 추출 + 전체 목록 (photo_url: JSON 배열 or 단일 URL)
   const _recentPhotos = [];
+  const _allPhotos = [];
   for (const p of stats.plays) {
     if (!p.photo_url) continue;
     const parsed = window.parsePhotoUrls ? window.parsePhotoUrls(p.photo_url) : [p.photo_url];
-    _recentPhotos.push(...parsed);
-    if (_recentPhotos.length >= 4) break;
+    _allPhotos.push(...parsed);
+    if (_recentPhotos.length < 4) _recentPhotos.push(...parsed.slice(0, 4 - _recentPhotos.length));
   }
   const _photoCount = userStats?.photoCount || 0;
   const _recentPhotoHtml = _recentPhotos.length
@@ -861,8 +862,8 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${stats.comments.length}개</span><span class="profile-toggle-arrow">▴</span></button>
-      ${stats.comments.length ? _openActivityList(commentListHtml) : _emptyList('아직 게임평이 없어요')}
+      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${(stats.reviews || []).length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      ${(stats.reviews || []).length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>
@@ -1485,9 +1486,14 @@ async function openProfilePanel(autoSubsheet = null) {
               img.style.cursor = 'pointer';
               img.addEventListener('click', () => {
                 const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                window.openLightbox(_recentPhotos, idx);
+                window.openLightbox(_allPhotos.length ? _allPhotos : _recentPhotos, idx);
               });
             });
+            const moreBadge = subBody.querySelector('.record-photo-more-badge');
+            if (moreBadge && _allPhotos.length > 4) {
+              moreBadge.style.cursor = 'pointer';
+              moreBadge.addEventListener('click', () => window.openLightbox(_allPhotos, 4));
+            }
           }
         });
 

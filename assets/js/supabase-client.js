@@ -1090,7 +1090,7 @@ window._cottageSess = (function () {
         db.from('game_comments').select('id, game_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
-        db.from('game_reviews').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+        db.from('game_reviews').select('id, game_id, review_text, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
       ];
       if (nickname) {
         queries.push(
@@ -1121,9 +1121,10 @@ window._cottageSess = (function () {
         suggestions: suggestRes.count || 0,
         moimCount: moimSessions.size,
         profile: profile.data || null,
-        reviewCount: reviewRes?.count || 0,
+        reviews: reviewRes?.data || [],
+        reviewCount: reviewRes?.data?.length || 0,
       };
-    } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
+    } catch (_) { return { plays: [], comments: [], reviews: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
   }
 
 
