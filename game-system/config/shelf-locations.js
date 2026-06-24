@@ -15,39 +15,39 @@ const SHELF_GROUPS = [
     sourceValues: ["몸", "몸으로 하는 게임", "덱스터리티", "dexterity"]
   },
   {
-    id: "puzzle_1000",
-    code: "A-2",
-    label: "1000피스 직소퍼즐",
-    parentId: "party",
-    sourceValues: ["퍼즐", "직소퍼즐", "1000피스"]
-  },
-  {
-    id: "toy",
-    code: "A-3",
-    label: "장난감",
-    parentId: "party",
-    sourceValues: ["장난감", "toy"]
-  },
-  {
-    id: "poker_mahjong",
-    code: "A-4",
-    label: "범용코인 · 포커칩 · 마작패",
-    parentId: "party",
-    sourceValues: ["포커", "마작", "칩", "코인"]
-  },
-  {
     id: "popular",
-    code: "A-5",
+    code: "A-2",
     label: "대중적인 게임",
     parentId: "party",
     sourceValues: ["대중", "대중적인게임", "대중게임", "popular"]
   },
   {
+    id: "poker_mahjong",
+    code: "A-3",
+    label: "범용코인 · 포커칩 · 마작패",
+    parentId: "party",
+    sourceValues: ["포커", "마작", "칩", "코인"]
+  },
+  {
     id: "display",
-    code: "A-6",
+    code: "A-4",
     label: "전시된 게임",
     parentId: "party",
     sourceValues: ["전시", "전시된게임", "전시게임", "display"]
+  },
+  {
+    id: "toy",
+    code: "A-5",
+    label: "장난감",
+    parentId: "party",
+    sourceValues: ["장난감", "toy"]
+  },
+  {
+    id: "puzzle_1000",
+    code: "A-6",
+    label: "1000피스 직소퍼즐",
+    parentId: "party",
+    sourceValues: ["퍼즐", "직소퍼즐", "1000피스"]
   },
   {
     id: "lost_found",

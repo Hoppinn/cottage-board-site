@@ -85252,9 +85252,9 @@
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "x",
-      "shelfLabel": "x",
-      "shelfFullLabel": "x",
+      "shelfGroupId": "to_buy",
+      "shelfLabel": "구매예정",
+      "shelfFullLabel": "발매후 도착예정 - 구매예정",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [],

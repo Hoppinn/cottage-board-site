@@ -88,7 +88,18 @@
       text-align: center;
       flex-shrink: 0;
     }
-    .loc-section--sub .loc-section-code { background: #8b6350; }
+    .loc-series-A .loc-section-code        { background: #c0632a; }
+    .loc-series-A.loc-section--sub .loc-section-code { background: #d4845a; }
+    .loc-series-B .loc-section-code        { background: #3a7a52; }
+    .loc-series-B.loc-section--sub .loc-section-code { background: #5a9a72; }
+    .loc-series-C .loc-section-code        { background: #2d5c9c; }
+    .loc-series-C.loc-section--sub .loc-section-code { background: #4d7cbc; }
+    .loc-series-D .loc-section-code        { background: #4a7a6a; }
+    .loc-series-E .loc-section-code        { background: #8c3a6a; }
+    .loc-series-F .loc-section-code        { background: #7c2020; }
+    .loc-series-F.loc-section--sub .loc-section-code { background: #9c4040; }
+    .loc-series-Z .loc-section-code        { background: #525270; }
+    .loc-series-Z.loc-section--sub .loc-section-code { background: #727290; }
     .loc-section--inactive .loc-section-code { background: #bbb; }
     .loc-section-info { flex: 1; min-width: 0; }
     .loc-section-label { font-size: 14px; font-weight: 600; color: #222; }
@@ -172,11 +183,11 @@
     const SECTIONS = [
       { id: 'party',          code: 'A',   label: '파티게임',           sub: false },
       { id: 'dexterity',      code: 'A-1', label: '몸으로 하는 게임',   sub: true  },
-      { id: 'puzzle_1000',    code: 'A-2', label: '1000피스 직소퍼즐',  sub: true,  items: [] },
-      { id: 'toy',            code: 'A-3', label: '장난감',             sub: true,  items: [] },
-      { id: 'poker_mahjong',  code: 'A-4', label: '포커칩·마작패',      sub: true,  items: [] },
-      { id: 'popular',         code: 'A-5', label: '대중적인 게임',       sub: true  },
-      { id: 'display',        code: 'A-6', label: '전시된 게임',         sub: true  },
+      { id: 'popular',        code: 'A-2', label: '대중적인 게임',       sub: true  },
+      { id: 'poker_mahjong',  code: 'A-3', label: '포커칩·마작패',      sub: true,  items: [] },
+      { id: 'display',        code: 'A-4', label: '전시된 게임',         sub: true  },
+      { id: 'toy',            code: 'A-5', label: '장난감',             sub: true,  items: [] },
+      { id: 'puzzle_1000',    code: 'A-6', label: '1000피스 직소퍼즐',  sub: true,  items: [] },
       { id: 'lost_found',     code: 'A-7', label: '고객분실물',         sub: true,  items: [] },
       { id: 'light_family',   code: 'B',   label: '라이트패밀리게임',   sub: false },
       { id: 'easy_coop',      code: 'B-1', label: '쉬운 협력게임',      sub: true  },
@@ -252,6 +263,7 @@
         const games = sortByName(groupMap[s.id] || []);
         const manualItems = s.items || [];
         const modClass = s.sub ? 'loc-section--sub' : '';
+        const series = s.code.split('-')[0];
         const gameChips = games.map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('');
         const manualChips = manualItems.map(name => `<span class="loc-game-chip" style="cursor:default">${name}</span>`).join('');
         const chips = (gameChips || manualChips)
@@ -259,7 +271,7 @@
           : `<span class="loc-empty">매장 내 확인 바랍니다</span>`;
 
         return `
-          <div class="loc-section ${modClass}" data-section-id="${s.id}">
+          <div class="loc-section ${modClass} loc-series-${series}" data-section-id="${s.id}">
             <div class="loc-section-header" onclick="this.closest('.loc-section').classList.toggle('is-open')">
               <span class="loc-section-code">${s.code}</span>
               <div class="loc-section-info">

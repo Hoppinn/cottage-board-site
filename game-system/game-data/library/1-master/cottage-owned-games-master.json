@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": "cottageboard-master",
-  "updatedAt": "2026-06-24T07:08:56.186Z",
+  "updatedAt": "2026-06-24T07:16:31.795Z",
   "games": {
     "7원더스": {
       "id": "7원더스",
@@ -65686,7 +65686,7 @@
       "thumbnail": "https://cf.geekdo-images.com/T4EH02wIepQC4DzyEEY1MQ__small/img/oQ0IlYEVkHSnCPvoORuPAjzCCy8=/fit-in/200x150/filters:strip_icc()/pic2723204.jpg",
       "description": "Thebes is a game of competitive archeology. Players are archaeologists who must travel around Europe, northern Africa, and the Middle East to acquire knowledge about five ancient civilizations -- the Greeks, the Cretans, the Egyptians, the Palestinians, and the Mesopotamians -- and then must use this knowledge to excavate historical sites in the areas of these civilizations. Through the course of the game, expositions are revealed, and an archaeologist who has treasures from the requisite civilizations may claim the prize (this is a change from the first edition's handling of exhibitions). The archaeologist who learns the most about the civilizations, claims the greatest-valued artifacts, and collects the most exhibitions will win out over his or her colleagues.\n\nThe key element to the game is that it is played out over a period of two (or three) years, and each action a player performs takes a certain amount of time -- traveling is a week between cities, gathering knowledge takes time for the level of the knowledge, and actually digging at a cultural site takes time to yield a certain number of artifact tiles. The game uses a novel mechanism to keep track of this. There is a track of 52 spaces around the outside of the board. Each time a player moves and takes an action, he or she moves their player token forward in time. Players take turns based on being the one who is furthest back in \"time\". So, a player can go to an excavation site and spend 10 weeks digging for artifacts, but that will also mean that the other players will likely be taking several actions in the interim while that player waits for the \"time\" to catch up.\n\nIn addition, the artifact tiles for each civilization are drawn from a bag that also contains dirt.  When a player excavates a site, that player pulls tiles from the bag, but some may only be worthless dirt instead of valuable treasure. That dirt is then returned to the bag, making the first draw more likely to provide useful tiles.\n\nThis is the new entry for the Queen printing of Jenseits von Theben.  As the new game changes several mechanisms of the original, and is available in a much wider release, the two games should be regarded as separate entities.\n\nRe-implements:\n\n    Jenseits von Theben",
       "difficultyWeight": 2.16,
-      "location": "x",
+      "location": "to_buy",
       "sourceMechanism": "",
       "sourceRating": 0,
       "supportsLargeGroup": false,
