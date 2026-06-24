@@ -3476,6 +3476,18 @@ body.embed-mode .site-footer { display: none !important; }
   font-weight:700;
   color:var(--text);
 }
+.sheet-write-btns{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
+}
+.sheet-write-btns .sheet-played-btn{
+  flex:1;
+}
+.sheet-write-btns .sheet-comment-write-btn{
+  flex:1;
+  justify-content:center;
+}
 .sheet-preview-more-btn{
   background:none;
   border:none;
@@ -5096,7 +5108,7 @@ body.embed-mode .site-footer { display: none !important; }
   display:none;
   position:fixed;
   inset:0;
-  z-index:2200;
+  z-index:9700;
   background:rgba(0,0,0,0.5);
   align-items:center;
   justify-content:center;
@@ -5147,7 +5159,7 @@ body.embed-mode .site-footer { display: none !important; }
   display:none;
   position:fixed;
   inset:0;
-  z-index:2200;
+  z-index:9700;
   background:rgba(0,0,0,0.5);
   align-items:center;
   justify-content:center;

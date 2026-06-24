@@ -1351,6 +1351,10 @@ function openGameSheet(gameKey, restoreScroll = false){
       </div>
     </div>
 
+    <div class="sheet-write-btns">
+      <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 남기기</button>
+      <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 플레이기록하기</button>
+    </div>
     <button class="sheet-preview-more-btn sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 전체보기 →</button>
 
   `;
