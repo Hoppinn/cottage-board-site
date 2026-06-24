@@ -4287,6 +4287,15 @@ body.sheet-open{
   font-weight:700;
   cursor:pointer;
 }
+.login-toast-close{
+  background:transparent !important;
+  color:rgba(255,255,255,0.6) !important;
+  padding:2px 4px !important;
+  font-size:14px !important;
+  border-radius:4px !important;
+  line-height:1;
+  flex-shrink:0;
+}
 
 /* =========================
    # CLUB PAGE

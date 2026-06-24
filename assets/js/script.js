@@ -1671,16 +1671,19 @@ function showActionToast(msg, linkLabel, linkAction, linkLabel2, linkAction2) {
     toast.className = 'login-toast';
     document.body.appendChild(toast);
   }
+  const closeToast = () => { clearTimeout(toast._timer); toast.classList.remove('is-visible'); };
+  const closeBtn = `<button type="button" class="login-toast-close" aria-label="닫기">✕</button>`;
   if (linkLabel && linkAction) {
     const btn2Html = (linkLabel2 && linkAction2) ? `<button type="button" class="toast-btn-2">${linkLabel2}</button>` : '';
-    toast.innerHTML = `<span>${msg}</span><button type="button">${linkLabel}</button>${btn2Html}`;
-    toast.querySelector('button').onclick = () => { linkAction(); toast.classList.remove('is-visible'); };
+    toast.innerHTML = `<span>${msg}</span><button type="button">${linkLabel}</button>${btn2Html}${closeBtn}`;
+    toast.querySelector('button').onclick = () => { linkAction(); closeToast(); };
     if (linkLabel2 && linkAction2) {
-      toast.querySelector('.toast-btn-2').onclick = () => { linkAction2(); toast.classList.remove('is-visible'); };
+      toast.querySelector('.toast-btn-2').onclick = () => { linkAction2(); closeToast(); };
     }
   } else {
-    toast.textContent = msg;
+    toast.innerHTML = `<span>${msg}</span>${closeBtn}`;
   }
+  toast.querySelector('.login-toast-close').onclick = closeToast;
   toast.classList.add('is-visible');
   clearTimeout(toast._timer);
   toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 5000);
