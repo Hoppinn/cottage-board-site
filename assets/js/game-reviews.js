@@ -399,7 +399,9 @@
         .sort((a, b) => {
           const da = a.played_at || a.created_at.slice(0, 10);
           const db = b.played_at || b.created_at.slice(0, 10);
-          return new Date(db) - new Date(da);
+          const diff = new Date(db) - new Date(da);
+          if (diff !== 0) return diff;
+          return new Date(b.created_at) - new Date(a.created_at);
         })[0] : null;
       window._prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names, group: _myLatest.group_name } : null;
       renderRecords(recordsData);
