@@ -1662,8 +1662,8 @@ const gameData = {
   "다크율": {
     "id": "다크율",
     "title": {
-      "display": "다크율",
-      "owned": "다크율",
+      "display": "다크율에 속죄를",
+      "owned": "다크율에 속죄를",
       "bgg": "ダークユールに贖いを(Redemption on Dark Yule)"
     },
     "bgg": {

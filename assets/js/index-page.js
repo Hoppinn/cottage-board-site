@@ -25,7 +25,7 @@ const moodValue = recommendState.mood;
   return;
 }
 
-  gameScroll.style.removeProperty('display');
+  gameScroll.style.cssText = '';
 
   
 
@@ -504,6 +504,7 @@ ${levelValue !== "hardcore"
   : ""}
   ${renderInlineOption("level", "", "상관없음", levelValue)}
         </div>
+        <p class="modal-level-note">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
       </div>
 
       <div class="recommend-step" data-filter-group="mood">

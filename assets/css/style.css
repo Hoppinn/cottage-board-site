@@ -1304,8 +1304,8 @@ body.recommend-page main{
 
 .game-card{
   flex:0 0 auto;
-  width:138px;
-  min-width:138px;
+  width:112px;
+  min-width:112px;
   min-height:auto;
   padding:10px;
   border:1.5px solid #ece1cf;
@@ -2603,11 +2603,6 @@ body.sheet-open{
   .modal-option{
     padding:9px 12px;
     font-size:13.5px;
-  }
-
-  .game-card{
-    width:158px;
-    min-width:158px;
   }
 }
 
@@ -6019,6 +6014,7 @@ body.sheet-open{
 .dg-card.dg-heavy   {background:#ffccbc;}.dg-card.dg-heavy    .dg-name{color:#bf360c;}
 .dg-card.dg-hardcore{background:#1a1a1a;}.dg-card.dg-hardcore .dg-name{color:#fff;}.dg-card.dg-hardcore .dg-range{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);}.dg-card.dg-hardcore .dg-desc{color:rgba(255,255,255,0.65);}
 .dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
+.modal-level-note{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;padding:6px 10px;background:rgba(245,240,232,0.7);border-radius:8px;line-height:1.5;}
 
 /* =========================
    # PC LAYOUT ENLARGEMENTS (720px+)

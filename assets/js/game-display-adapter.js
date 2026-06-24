@@ -63,19 +63,23 @@ function getBggTitle(game) {
   return safeText(game?.title?.bgg);
 }
 
+function normalizeImagePath(path) {
+  if (!path) return "";
+  if (path.startsWith("http") || path.startsWith("/") || path.startsWith("data:")) return path;
+  return "/" + path;
+}
+
 function getGameImage(game) {
-  return (
+  return normalizeImagePath(
     safeText(game?.images?.thumbnail) ||
-    safeText(game?.images?.main) ||
-    ""
+    safeText(game?.images?.main)
   );
 }
 
 function getGameMainImage(game) {
-  return (
+  return normalizeImagePath(
     safeText(game?.images?.main) ||
-    safeText(game?.images?.thumbnail) ||
-    ""
+    safeText(game?.images?.thumbnail)
   );
 }
 

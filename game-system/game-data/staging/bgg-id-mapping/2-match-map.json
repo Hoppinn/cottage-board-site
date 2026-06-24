@@ -1938,12 +1938,9 @@
     "ownedName": "보랏못리라이트 (머더미스터리미니)"
   },
   "보타닉가든": {
-    "status": "auto-confirmed",
-    "bggId": "453894",
-    "ownedName": "보타닉가든",
-    "bggName": "Garden",
-    "score": 87,
-    "scoreGap": 62
+    "status": "forced",
+    "bggId": "334065",
+    "ownedName": "보타닉가든"
   },
   "보틀임프": {
     "status": "forced",
@@ -2893,7 +2890,7 @@
   },
   "오라파마인": {
     "status": "forced",
-    "bggId": "70149",
+    "bggId": "424152",
     "ownedName": "오라파마인"
   },
   "오를레앙+확장2": {
@@ -4424,5 +4421,10 @@
     "status": "forced",
     "bggId": "350585",
     "ownedName": "로나에나: 재앙의 선물"
+  },
+  "아르낙의잊혀진유적": {
+    "status": "forced",
+    "bggId": "312484",
+    "ownedName": "아르낙의잊혀진유적"
   }
 }
