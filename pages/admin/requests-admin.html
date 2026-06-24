@@ -92,6 +92,8 @@
     .admin-visitor-filter { display: flex; gap: 6px; margin-bottom: 10px; }
     .admin-visitor-filter-btn { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
     .admin-visitor-filter-btn.is-active { background: #7a4828; color: #fff; border-color: #7a4828; }
+    .admin-visitor-more-btn { display: block; width: 100%; margin-top: 8px; padding: 8px; font-size: 13px; font-weight: 600; color: var(--green); background: transparent; border: 1px dashed var(--border,#e8e4dc); border-radius: 8px; cursor: pointer; text-align: center; }
+    .admin-visitor-more-btn:hover { background: #f5f0e8; }
     /* 차트 그리드 */
     .admin-chart-filter { display: flex; gap: 6px; margin-bottom: 12px; }
     .admin-chart-period-btn { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
@@ -433,7 +435,7 @@
         <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
-            <div class="admin-section" id="sectionMembers">
+            <div class="admin-section is-open" id="sectionMembers">
               <div class="admin-section-title">👥 사용자별<span id="memberCountBadge" class="admin-section-count"></span><span class="admin-section-arrow">▾</span></div>
               <div class="admin-section-body" id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
@@ -870,13 +872,9 @@
       if (memberCountEl) memberCountEl.textContent = `${allProfiles.length}명`;
 
       const _now = Date.now();
-      const cnt24h = pageViews.filter(r => _now - new Date(r.created_at).getTime() < 86400000).length;
-      const cnt7d = pageViews.filter(r => _now - new Date(r.created_at).getTime() < 7 * 86400000).length;
       const cnt30dNew = allProfiles.filter(p => p.first_seen_at && _now - new Date(p.first_seen_at).getTime() < 30 * 86400000).length;
-      const summaryCardsHtml = `<div class="admin-summary-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:12px">
-        <div class="admin-summary-card"><div class="admin-summary-label">24시간 방문</div><div class="admin-summary-value">${cnt24h}</div></div>
-        <div class="admin-summary-card"><div class="admin-summary-label">7일 방문</div><div class="admin-summary-value">${cnt7d}</div></div>
-        <div class="admin-summary-card"><div class="admin-summary-label">30일 신규</div><div class="admin-summary-value">${cnt30dNew}</div></div>
+      const summaryCardsHtml = `<div class="admin-summary-grid" style="grid-template-columns:1fr;margin-bottom:12px">
+        <div class="admin-summary-card"><div class="admin-summary-label">30일 신규</div><div class="admin-summary-value">${cnt30dNew}명</div></div>
       </div>`;
 
       const fmtDate = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '-';
@@ -895,7 +893,7 @@
         <button class="admin-visitor-filter-btn" data-filter="member" onclick="document.querySelectorAll('#visitorList .admin-member-card').forEach(c=>c.style.display=c.dataset.visitorType==='member'?'':'none');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">회원 (${memberCount})</button>
         <button class="admin-visitor-filter-btn" data-filter="anon" onclick="document.querySelectorAll('#visitorList .admin-member-card').forEach(c=>c.style.display=c.dataset.visitorType==='anon'?'':'none');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">비회원 (${anonCount})</button>
       </div>`;
-      const unifiedHtml = unified.length ? visitorFilterBar + `<div class="admin-req-list" id="visitorList">${unified.map(u => {
+      const _renderVisitorCard = u => {
         if (u._type === 'member') {
           const p = u;
           const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
@@ -938,7 +936,17 @@
             </div>
           </div>`;
         }
-      }).join('')}</div>` : '<div class="admin-empty">방문자 없음</div>';
+      };
+      const _visFirst = unified.slice(0, 3);
+      const _visExtra = unified.slice(3);
+      const unifiedHtml = unified.length ? (
+        visitorFilterBar +
+        `<div class="admin-req-list" id="visitorList">${_visFirst.map(_renderVisitorCard).join('')}</div>` +
+        (_visExtra.length
+          ? `<div id="visitorExtras" style="display:none"><div class="admin-req-list">${_visExtra.map(_renderVisitorCard).join('')}</div></div>
+             <button class="admin-visitor-more-btn" onclick="var e=document.getElementById('visitorExtras');var show=e.style.display==='none';e.style.display=show?'block':'none';this.textContent=show?'닫기 ▲':'더보기 (${_visExtra.length}명 더) ▾'">더보기 (${_visExtra.length}명 더) ▾</button>`
+          : '')
+      ) : '<div class="admin-empty">방문자 없음</div>';
 
 
       // ── 사용자별 이용 상세 (page_sessions 기반, 날짜별) ─────────
@@ -970,12 +978,7 @@
       if (membersBody) {
         membersBody.innerHTML =
           summaryCardsHtml +
-          subSection(`방문자 목록 <span style="font-size:11px;color:var(--muted)">${unified.length}명</span>`, unifiedHtml, false) +
-          subSection(
-            `이용 상세 <span style="font-size:11px;color:var(--muted)">(세션 기반 · 로그인 필요)</span>`,
-            subSection('전체', userAllDetail, false) + userDayParts,
-            false
-          );
+          subSection(`방문자 목록 <span style="font-size:11px;color:var(--muted)">${unified.length}명</span>`, unifiedHtml, true);
       }
 
       if (pagesBody) {
@@ -1189,7 +1192,7 @@
           if (el_delta) el_delta.innerHTML = deltaHtml;
           if (el_deltaSub) el_deltaSub.textContent = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
           if (el_topRef) el_topRef.innerHTML = topRef7Entries.length
-            ? topRef7Entries.map(([cat, cnt]) => `${cat} ${cnt}회 (${refUsers7[cat]?.size ?? '?'}명)`).join('<br>')
+            ? topRef7Entries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <b>${refUsers7[cat]?.size ?? '?'}명</b> <span style="opacity:.7">(${cnt}회)</span></span>`).join('')
             : '—';
         }
 
@@ -1341,7 +1344,7 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { color: GRID }, ticks: { font: { size: 10 } } },
+            x: { grid: { color: GRID }, ticks: { font: { size: 10 }, stepSize: 1, precision: 0 } },
             y: { grid: { display: false }, ticks: { font: { size: 10 }, autoSkip: false } },
           },
         });
@@ -1349,9 +1352,13 @@
         // ── 4. 유입경로 × 페이지 교차분석 ───────────────────────────
         {
           const crossMap = {};
+          const crossUserMap = {};
           for (const r of filteredPV) {
-            const cat = categorizeRef(r.referrer);
-            if (!cat) continue;
+            const cat = categorizeRef(r.referrer) || '직접 방문';
+            if (r.page === '__visitor__') {
+              crossUserMap[cat] = (crossUserMap[cat] || 0) + 1;
+              continue;
+            }
             const pg = PAGE_LABEL[r.page] || r.page || '?';
             if (!crossMap[cat]) crossMap[cat] = {};
             crossMap[cat][pg] = (crossMap[cat][pg] || 0) + 1;
@@ -1368,8 +1375,9 @@
               crossEl.innerHTML = `<div class="admin-cross-list">${sources.map(([src, pages]) => {
                 const sortedPgs = Object.entries(pages).sort((a, b) => b[1] - a[1]);
                 const total = Object.values(pages).reduce((s, v) => s + v, 0);
+                const uCnt = crossUserMap[src] || 0;
                 return `<div class="admin-cross-row">
-                  <div class="admin-cross-source">${escH(src)}<span class="admin-cross-total">${total}회</span></div>
+                  <div class="admin-cross-source">${escH(src)}<span class="admin-cross-total">${uCnt}명 (${total}회)</span></div>
                   <div class="admin-cross-chips">${
                     sortedPgs.map(([pg, cnt]) => `<span class="admin-cross-chip">${escH(pg)} <strong>${cnt}</strong></span>`).join('')
                   }</div>
