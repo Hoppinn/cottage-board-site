@@ -1616,13 +1616,13 @@ window._cottageSess = (function () {
   async function redeemVoucher(userId, productId) {
     try {
       const { data: product } = await db.from('voucher_products')
-        .select('cost').eq('id', productId).maybeSingle();
+        .select('cost, name').eq('id', productId).maybeSingle();
       if (!product) return { ok: false, reason: 'no_product' };
       const balance = await getVoucherBalance(userId);
       if (balance < product.cost) return { ok: false, reason: 'insufficient' };
       const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
-        .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId, nickname });
+        .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId, nickname, note: product.name });
       if (error) return { ok: false, reason: 'db_error' };
       return { ok: true };
     } catch (_) { return { ok: false, reason: 'error' }; }
