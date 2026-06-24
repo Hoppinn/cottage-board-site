@@ -760,6 +760,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
   const _bio = stats?.profile?.bio || '';
   const _bioTags = _bio ? _bio.split(',').map(t => t.trim()).filter(Boolean) : [];
+  let _currentBio = _bio;
   const _avoidTags = stats?.profile?.avoid_tags || [];
 
   function _buildTasteGameItems(games, maxInitial = 5) {
@@ -1152,6 +1153,13 @@ async function openProfilePanel(autoSubsheet = null) {
           const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
           const _PREDEFINED_CHIPS = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요'];
 
+          // 재진입 시 _currentBio 클로저 값으로 display 갱신
+          const _syncBioTags = _currentBio ? _currentBio.split(',').map(t => t.trim()).filter(Boolean) : [];
+          bioDisplay.dataset.bio = _currentBio;
+          bioDisplay.innerHTML = _syncBioTags.length
+            ? _syncBioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
+            : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
+
           function _renderBioDisplay(tags) {
             bioDisplay.innerHTML = tags.length
               ? tags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
@@ -1208,6 +1216,7 @@ async function openProfilePanel(autoSubsheet = null) {
             const allTags = [...selectedChips, ...customTags].slice(0, 6);
             const newBio = allTags.join(',');
             await window.CottageDB?.updateUserBio?.(userId, newBio);
+            _currentBio = newBio;
             bioDisplay.dataset.bio = newBio;
             _renderBioDisplay(allTags);
             bioRow.style.display = '';
