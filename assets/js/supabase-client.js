@@ -1146,16 +1146,20 @@ window._cottageSess = (function () {
         .not('user_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(20);
-      const [taggedRes, curiousRes, purchasedRes, newGameRes, myIntroRes, introListRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, myIntroPromise, introListPromise
+      const profileSeenPromise = db.from('profiles').select('notif_seen_at').eq('user_id', userId).maybeSingle();
+      const [taggedRes, curiousRes, purchasedRes, newGameRes, myIntroRes, introListRes, profileSeenRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, myIntroPromise, introListPromise, profileSeenPromise
       ]);
+      const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
+      const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
+      const effectiveNewGameSeenAt = [newGameSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
       const notifs = [];
       if (nickname) {
         for (const r of taggedRes.data || []) {
           const names = (r.player_names || '').split(',').map(n => n.trim());
           if (names.some(n => n.toLowerCase() === nickname.toLowerCase())) {
             const date = r.played_at || r.created_at.slice(0, 10);
-            const isNew = notifSeenAt ? r.created_at > notifSeenAt : true;
+            const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
             notifs.push({ type: 'tagged', gameId: r.game_id, groupName: r.group_name, date, isNew });
           }
         }
@@ -1169,23 +1173,23 @@ window._cottageSess = (function () {
           .order('created_at', { ascending: false })
           .limit(20);
         for (const c of recentComments || []) {
-          const isNew = notifSeenAt ? c.created_at > notifSeenAt : true;
+          const isNew = effectiveSeenAt ? c.created_at > effectiveSeenAt : true;
           notifs.push({ type: 'curious_comment', gameKey: c.game_key, commenter: c.nickname, date: c.created_at, isNew });
         }
       }
       for (const r of purchasedRes.data || []) {
-        const isNew = notifSeenAt ? r.purchased_at > notifSeenAt.slice(0, 10) : true;
+        const isNew = effectiveSeenAt ? new Date(r.purchased_at) > new Date(effectiveSeenAt) : true;
         notifs.push({ type: 'ordered', gameName: r.game_name, date: r.purchased_at, isNew });
       }
       for (const r of newGameRes.data || []) {
-        const isNew = newGameSeenAt ? new Date(r.added_at) > new Date(newGameSeenAt) : true;
+        const isNew = effectiveNewGameSeenAt ? new Date(r.added_at) > new Date(effectiveNewGameSeenAt) : true;
         const actualGames = Array.isArray(r.actual_games) && r.actual_games.length ? r.actual_games : null;
         notifs.push({ type: 'new_game', gameName: r.game_name, actualGames, date: r.added_at, isNew });
       }
       // 동호회 소개글 알림: 본인 글이 있는 회원에게만, 새 소개글 N개 묶음
       if ((myIntroRes.data || []).length > 0) {
         const allIntros = introListRes.data || [];
-        const newIntros = allIntros.filter(r => notifSeenAt ? r.created_at > notifSeenAt : true);
+        const newIntros = allIntros.filter(r => effectiveSeenAt ? r.created_at > effectiveSeenAt : true);
         if (newIntros.length > 0) {
           notifs.push({
             type: 'new_intro',
@@ -1294,7 +1298,15 @@ window._cottageSess = (function () {
     getMeetingVotes,
     upsertMeetingVote,
     deleteMeetingVote,
+    updateNotifSeenAt,
   };
+
+  async function updateNotifSeenAt(userId, timestamp) {
+    if (!userId || !timestamp) return;
+    try {
+      await db.from('profiles').update({ notif_seen_at: timestamp }).eq('user_id', userId);
+    } catch (_) {}
+  }
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
   async function getAllPlayRecordsForHub(limit = 200) {

@@ -961,10 +961,12 @@ async function openProfilePanel(autoSubsheet = null) {
   function _markAllNotifSeen(container = body) {
     if (window._cottageSess) {
       const _s = window._cottageSess.get(String(user.id));
-      _s.notifSeenAt = new Date().toISOString();
-      _s.newGameSeenAt = new Date().toISOString();
+      const _now = new Date().toISOString();
+      _s.notifSeenAt = _now;
+      _s.newGameSeenAt = _now;
       _s.voucherNoticeSeen = true;
       window._cottageSess.set(String(user.id), _s);
+      window.CottageDB?.updateNotifSeenAt?.(String(user.id), _now);
     }
     container.querySelectorAll('.profile-notif-list .is-new').forEach(li => {
       li.classList.remove('is-new');
