@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-25 (142차-61)
+최종 갱신: 2026-06-25 (142차-62)
 
 ---
 
@@ -37,6 +37,7 @@
 | 관리자 섹션 재정렬 (142차-58) | groupCharts: 요약+날짜별 차트만 / groupReferrer(신규): 유입경로 차트+보조지표 / groupAnalysis 중간 배치 / 유입경로 메뉴 버튼 추가 | 142차-58 |
 | 게임평 업적 버그 수정 (142차-59) | review 업적 카운트: 별점(game_ratings) → 게임평 텍스트(game_comments) / insertComment 후 checkAchievements('review') 트리거 추가 / getUserCommentCount 함수 신규 | 142차-59 |
 | 게임시트 버튼 + 모달 z-index + 변수화 (142차-60~61) | 게임상세시트 게임평/플레이기록 섹션 헤더에 남기기/기록하기 버튼 추가 / 모달 z-index 2200→9700 / style.css z-index 전체 변수화: --z-profile(9100) --z-subsheet(9200) --z-sheet(9500) --z-shelf(9600) --z-sheet-modal(9700) --z-top(9999) | 142차-60~61 |
+| 메인 게임시트 게임평 제출 후 미리보기 갱신 (142차-62) | onSubmitCommentModal에 initSheetCommentsPreview 추가 — 기존 initSheetComments(기록전체보기용)만 호출해 메인시트 미리보기가 갱신 안 되던 버그 수정 | 142차-62 |
 
 ### 142차 테스트 목록
 
@@ -78,7 +79,7 @@
 4. **좋아하는 게임 drag reorder + 대분류** — Red, Plan 필수 (game_likes.sort_order 컬럼 신규)
 5. **취향보드 Phase 2** — 성향 5축 (Phase 1 테스트 완료 후)
 6. **모임 플래너 Phase 3 게임 투표** — Plan 필요 (meeting_vote_games 테이블 신규)
-7. **게임평/사진 통합 (linked_record_id)** — 🔴 Red, Plan 확정 (2026-06-25)
+7. **게임평/사진 통합 (linked_record_id)** — 🔴 Red, Plan 확정 (2026-06-25) ← "기존 플레이기록에 추가하시겠어요?" 프롬프트 포함, 미구현
    - game_play_records에 linked_record_id (nullable FK → game_play_records.id) 추가
    - 게임상세시트: 게임평 남기기 / 사진 추가 / 플레이 기록하기 버튼 3개 통합
    - 저장 시 "기존 기록에 추가" 선택 옵션 (같은 게임 최근 기록 목록)
