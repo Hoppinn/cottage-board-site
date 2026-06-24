@@ -253,15 +253,20 @@
     }
 
     function openGame(id) {
+      const decoded = decodeURIComponent(id);
+      if (window.parent !== window) {
+        window.parent.postMessage({ action: 'openGame', gameId: decoded }, '*');
+        return;
+      }
       if (typeof window.ensureGameSheet === 'function') window.ensureGameSheet();
       if (typeof window.openGameSheet === 'function') {
-        window.openGameSheet(decodeURIComponent(id));
+        window.openGameSheet(decoded);
       }
     }
 
     window._locOpenGame = openGame;
 
-    function renderSections(groupMap) {
+    function renderSections(groupMap, highlightId) {
       const container = document.getElementById('locSections');
       if (!container) return;
 
@@ -269,7 +274,11 @@
       const unknownIds = Object.keys(groupMap).filter(id => !knownIds.has(id));
 
       let html = SECTIONS.map(s => {
-        const games = sortByName(groupMap[s.id] || []);
+        let games = sortByName(groupMap[s.id] || []);
+        if (highlightId) {
+          const hi = games.find(g => g.id === highlightId);
+          if (hi) games = [hi, ...games.filter(g => g.id !== hi.id)];
+        }
         const manualItems = s.items || [];
         const modClass = s.sub ? 'loc-section--sub' : '';
         const series = s.code.split('-')[0];
@@ -363,8 +372,9 @@
     function init() {
       const games = getActiveGames();
       const groupMap = buildGroupMap(games);
+      const highlightId = params.get('highlight') ? decodeURIComponent(params.get('highlight')) : null;
 
-      renderSections(groupMap);
+      renderSections(groupMap, highlightId);
 
       const input = document.getElementById('locSearchInput');
       if (input) {
@@ -382,9 +392,8 @@
         }
       }
 
-      const highlightParam = params.get('highlight');
-      if (highlightParam) {
-        const chip = document.querySelector(`.loc-game-chip[data-game-id="${encodeURIComponent(highlightParam)}"]`);
+      if (highlightId) {
+        const chip = document.querySelector(`.loc-game-chip[data-game-id="${encodeURIComponent(highlightId)}"]`);
         if (chip) chip.classList.add('loc-game-chip--highlight');
       }
     }

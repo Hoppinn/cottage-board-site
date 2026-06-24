@@ -1079,14 +1079,23 @@ function openShelfSheet(url) {
   overlay.innerHTML = `
     <div class="shelf-sheet-box">
       <div class="shelf-sheet-header">
+        <button class="shelf-sheet-back" type="button">&#8592;</button>
         <span class="shelf-sheet-title">게임 위치</span>
-        <button class="shelf-sheet-close" type="button">✕</button>
       </div>
       <iframe class="shelf-sheet-iframe" src="${url}"></iframe>
     </div>`;
   document.body.appendChild(overlay);
-  overlay.querySelector('.shelf-sheet-close').addEventListener('click', () => overlay.remove());
+  overlay.querySelector('.shelf-sheet-back').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+  // iframe에서 게임 클릭 시: 오버레이 닫고 해당 게임 시트로 전환
+  window.addEventListener('message', function _shelfMsg(e) {
+    if (e.data?.action === 'openGame' && e.data?.gameId) {
+      overlay.remove();
+      window.removeEventListener('message', _shelfMsg);
+      openGameSheet(decodeURIComponent(e.data.gameId));
+    }
+  });
 }
 
 function openGameSheet(gameKey, restoreScroll = false){
