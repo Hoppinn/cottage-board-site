@@ -760,7 +760,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
   // 취향 보드
   const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
-  const _BIO_PREDEFINED = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요'];
+  const _BIO_PREDEFINED = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요', '한 게임을 진득하게 파는 걸 좋아해요', '전략을 분석하는 게 좋아요', '창의적인 플레이가 좋아요', '함께 교류하는 걸 좋아해요'];
   const _bio = stats?.profile?.bio || '';
   const _bioTags = _bio ? _bio.split(',').map(t => t.trim()).filter(Boolean) : [];
   let _currentBio = _bio;
@@ -795,7 +795,7 @@ async function openProfilePanel(autoSubsheet = null) {
       </div>
       <div class="taste-bio-edit-wrap" style="display:none">
         <div class="taste-bio-chips">
-          ${['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요'].map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
+          ${_BIO_PREDEFINED.map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
         </div>
         <div class="taste-bio-custom-wrap">
           <input type="text" class="taste-bio-custom-input" maxlength="20" placeholder="직접 입력 후 Enter">
