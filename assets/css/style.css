@@ -3579,6 +3579,7 @@ body.sheet-open{
 .profile-title-edit{font-size:10px;opacity:0.7;}
 .profile-panel-notif-btn{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:#7a4828;background:none;border:none;padding:0;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .profile-panel-notif-btn:hover{text-decoration:underline;}
+.profile-panel-notif-btn.is-zero{color:var(--muted,#9b8b7a);font-weight:400;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
 .profile-panel-rep-name{font-size:12px;color:#8c7a6b;}
 .profile-panel-title-name{font-size:12px;color:#7a4828;font-weight:600;background:none;border:none;padding:0;cursor:pointer;text-align:left;}
@@ -3647,6 +3648,8 @@ body.sheet-open{
 .profile-notif-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;}
 .notif-card{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#fff;border:1px solid var(--border,#e8e4dc);border-radius:10px;border-left:3px solid transparent;}
 .notif-card.is-new{background:#fff8f0;border-color:#f5c89a;border-left-color:#e09a3c;}
+.notif-read-one-btn{flex-shrink:0;align-self:flex-start;font-size:11px;color:var(--muted,#9b8b7a);background:none;border:1px solid var(--border,#e8e4dc);border-radius:4px;padding:2px 7px;cursor:pointer;line-height:1.5;white-space:nowrap;}
+.notif-read-one-btn:hover{background:var(--bg2,#f5f1eb);}
 .notif-card.is-clickable{cursor:pointer;}
 .notif-card-icon{font-size:20px;flex-shrink:0;line-height:1.1;}
 .notif-card-body{flex:1;min-width:0;}

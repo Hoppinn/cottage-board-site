@@ -1110,6 +1110,12 @@ window._cottageSess = (function () {
     } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
   }
 
+  function _notifyAdminWebhook(payload) {
+    const url = window.SUPABASE_CONFIG?.adminWebhookUrl;
+    if (!url) return;
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(() => {});
+  }
+
   async function getMyNotifications(userId, nickname, notifSeenAt, newGameSeenAt) {
     if (!userId) return [];
     try {
@@ -1147,8 +1153,12 @@ window._cottageSess = (function () {
         .order('created_at', { ascending: false })
         .limit(20);
       const profileSeenPromise = db.from('profiles').select('notif_seen_at').eq('user_id', userId).maybeSingle();
-      const [taggedRes, curiousRes, purchasedRes, newGameRes, myIntroRes, introListRes, profileSeenRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, myIntroPromise, introListPromise, profileSeenPromise
+      const _ADMIN_ID = '4916417947';
+      const voucherEventsPromise = String(userId) === _ADMIN_ID
+        ? db.from('voucher_log').select('id, user_id, delta, reason, created_at').order('created_at', { ascending: false }).limit(30)
+        : Promise.resolve({ data: [] });
+      const [taggedRes, curiousRes, purchasedRes, newGameRes, myIntroRes, introListRes, profileSeenRes, voucherEventsRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, myIntroPromise, introListPromise, profileSeenPromise, voucherEventsPromise
       ]);
       const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
       const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
@@ -1207,6 +1217,25 @@ window._cottageSess = (function () {
             date: allIntros[0].created_at,
             isNew: false,
           });
+        }
+      }
+      if (String(userId) === _ADMIN_ID) {
+        const voucherData = voucherEventsRes.data || [];
+        if (voucherData.length > 0) {
+          const userIds = [...new Set(voucherData.map(r => r.user_id))];
+          const { data: profData } = await db.from('profiles').select('user_id, nickname').in('user_id', userIds);
+          const nickMap = Object.fromEntries((profData || []).map(p => [p.user_id, p.nickname || p.user_id]));
+          for (const r of voucherData) {
+            const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
+            notifs.push({
+              type: r.delta > 0 ? 'voucher_granted' : 'voucher_used',
+              nickname: nickMap[r.user_id] || '사용자',
+              reason: r.reason,
+              delta: r.delta,
+              date: r.created_at,
+              isNew,
+            });
+          }
         }
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -1502,6 +1531,7 @@ window._cottageSess = (function () {
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: 1, reason: 'achievement', note: achievementId });
       if (error) return false; // partial unique index 위반 포함 — DB 2차 방어
+      _notifyAdminWebhook({ type: '교환권_지급', reason: '업적_달성', achievementId, userId: String(userId), ts: new Date().toISOString() });
       return true;
     } catch (_) { return false; }
   }
@@ -1541,6 +1571,7 @@ window._cottageSess = (function () {
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: 1, reason: 'first_play' });
       if (error) return false; // unique index 위반 포함 — DB 2차 방어
+      _notifyAdminWebhook({ type: '교환권_지급', reason: '첫_기록', userId: String(userId), ts: new Date().toISOString() });
       return true;
     } catch (_) { return false; }
   }
@@ -1579,6 +1610,7 @@ window._cottageSess = (function () {
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId });
       if (error) return { ok: false, reason: 'db_error' };
+      _notifyAdminWebhook({ type: '교환권_사용', userId: String(userId), productId, ts: new Date().toISOString() });
       return { ok: true };
     } catch (_) { return { ok: false, reason: 'error' }; }
   }

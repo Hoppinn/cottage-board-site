@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-24 (142차-18)
+최종 갱신: 2026-06-24 (142차-19)
 
 ---
 
@@ -23,6 +23,7 @@
 | fix: 신규 게임 삽입 위치 | `appendChild` → `insertBefore(more-wrap)` | 142차-12 |
 | UX 5종 (142차-16) | 기록보드 사진 토글 버그, 피하는유형 기본접힘+count, 모임시트 닫기버튼, 가이드 ESC/배경 닫기 | 142차-16 |
 | 버그 3종 + UI (142차-18) | 게임카드 스크롤 peek(@media 158px 오버라이드 제거), 이미지 경로 서브페이지 깨짐(normalizeImagePath), 다크율에 속죄를 제목 수정, 처음이시면 문구 추가, 게임 위치 전시된게임(G) 추가 | 142차-18 |
+| 알림 4종 개선 (142차-19) | 교환권 지급/사용 관리자 알림패널 표시, 알림 개별 읽음 버튼, 알림 0건에도 버튼 표시, 후기→게임평 텍스트 변경. 카카오 알림 webhook 인프라 추가(adminWebhookUrl 설정 필요) | 142차-19 |
 
 ### 142차 테스트 목록 (미테스트 — SQL 실행 후 진행)
 
@@ -72,8 +73,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_game_curious_custom ON game_curious (user_i
 - 목표: Discord webhook (HTTP 2 토큰모듈 삭제, HTTP 3 URL 교체)
 
 **다음 작업 후보**
-1. **개별 알림 확인 (seenNotifIds)** — Red, 설계 완료, 우선순위 낮음
+1. **카카오 알림 webhook 연결** — `supabase-config.js`의 `adminWebhookUrl`에 Make.com 신규 webhook URL 입력 필요. Make.com에서 새 시나리오(Custom Webhook → Kakao 메시지) 생성 후 URL 기입.
 2. **취향보드 Phase 2** — 성향 5축 (Phase 1 테스트 완료 후)
+3. **Discord 알림 전환** — Make 시나리오 5213346 수정 (기존 게임요청 알림도 Discord로)
 
 ---
 

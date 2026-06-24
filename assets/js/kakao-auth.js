@@ -619,28 +619,35 @@ async function openProfilePanel(autoSubsheet = null) {
     const cls = ['notif-card', 'is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
     const badge = n.isNew ? '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>' : '';
     const dt = `<div class="notif-card-date">${fmtShort(n.date)}</div>`;
+    const readBtn = n.isNew ? '<button class="notif-read-one-btn" type="button">읽음</button>' : '';
     const _card = (icon, title, desc) =>
       `<div class="notif-card-icon">${icon}</div><div class="notif-card-body"><div class="notif-card-title">${title} ${badge}</div><div class="notif-card-desc">${desc}</div>${dt}</div>`;
     if (n.type === 'tagged')
-      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요')}</li>`;
+      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요')}${readBtn}</li>`;
     if (n.type === 'curious_comment')
-      return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}">${_card('🤔', escH(getGameName(n.gameKey)) + ' 새 코멘트', '궁금해요 게임에 코멘트가 달렸어요')}</li>`;
+      return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}">${_card('🤔', escH(getGameName(n.gameKey)) + ' 새 코멘트', '궁금해요 게임에 코멘트가 달렸어요')}${readBtn}</li>`;
     if (n.type === 'ordered')
-      return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}">${_card('🛒', escH(n.gameName) + ' 주문 완료', '게임 요청이 접수/주문되었습니다')}</li>`;
+      return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}">${_card('🛒', escH(n.gameName) + ' 주문 완료', '게임 요청이 접수/주문되었습니다')}${readBtn}</li>`;
     if (n.type === 'new_game') {
       const games = n.actualGames?.length ? n.actualGames : [n.gameName].filter(Boolean);
       if (games.length === 1) {
-        return `<li class="${cls}" data-game-name="${escH(games[0])}">${_card('📦', escH(games[0]), '새 게임이 추가됐어요')}</li>`;
+        return `<li class="${cls}" data-game-name="${escH(games[0])}">${_card('📦', escH(games[0]), '새 게임이 추가됐어요')}${readBtn}</li>`;
       }
       const gameLinks = games.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
-      return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}</li>`;
+      return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}${readBtn}</li>`;
     }
     if (n.type === 'new_intro') {
       const desc = n.count === 1
         ? `${escH(n.names[0])}님이 소개글을 올렸어요`
         : `${escH(n.names[0])} 외 ${n.count - 1}명이 소개글을 올렸어요`;
-      return `<li class="${cls}">${_card('👋', '동호회 소개글', desc)}</li>`;
+      return `<li class="${cls}">${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
+    if (n.type === 'voucher_granted') {
+      const reasonLabel = n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
+      return `<li class="${cls}">${_card('🎫', escH(n.nickname) + ' 교환권 획득', reasonLabel)}${readBtn}</li>`;
+    }
+    if (n.type === 'voucher_used')
+      return `<li class="${cls}">${_card('🎫', escH(n.nickname) + ' 교환권 사용', '음료 교환권 사용')}${readBtn}</li>`;
     return '';
   }
   const _hasAnyNew = _newCount > 0;
@@ -896,7 +903,7 @@ async function openProfilePanel(autoSubsheet = null) {
       <div class="profile-panel-profile-info">
         <div class="profile-panel-nick-row">
           <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} <span class="profile-nick-edit">✏️</span></button>
-          ${_newCount > 0 ? `<button class="profile-panel-notif-btn" data-subsheet="notif" type="button"><span class="notif-red-dot"></span>🔔 새 알림 ${_newCount}건</button>` : ''}
+          <button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>
         </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
         <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
@@ -982,7 +989,8 @@ async function openProfilePanel(autoSubsheet = null) {
     }
     container.querySelector('.profile-notif-confirm-all')?.remove();
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    body.querySelector('.profile-panel-notif-btn')?.remove();
+    const _nBtn = body.querySelector('.profile-panel-notif-btn');
+    if (_nBtn) { _nBtn.innerHTML = '🔔 알림'; _nBtn.classList.add('is-zero'); }
     _updateNotifBadge();
   }
 
@@ -994,7 +1002,6 @@ async function openProfilePanel(autoSubsheet = null) {
       window._cottageSess.set(String(user.id), _s);
     }
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    body.querySelector('.profile-panel-notif-btn')?.remove();
     const _vCard = container.querySelector('.notif-reward-card');
     if (_vCard) {
       _vCard.classList.remove('is-new');
@@ -1005,7 +1012,8 @@ async function openProfilePanel(autoSubsheet = null) {
     }
     const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
     if (remaining === 0) {
-      body.querySelector('.profile-panel-notif-btn')?.remove();
+      const _nvBtn = body.querySelector('.profile-panel-notif-btn');
+      if (_nvBtn) { _nvBtn.innerHTML = '🔔 알림'; _nvBtn.classList.add('is-zero'); }
       container.querySelector('.profile-notif-confirm-all')?.remove();
     }
     _updateNotifBadge();
@@ -1069,6 +1077,9 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
+          subBody.querySelectorAll('.notif-read-one-btn').forEach(btn => {
+            btn.addEventListener('click', e => { e.stopPropagation(); _markAllNotifSeen(subBody); });
+          });
           subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
             li.addEventListener('click', e => {
               if (e.target.closest('button, a')) return;

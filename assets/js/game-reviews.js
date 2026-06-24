@@ -205,7 +205,7 @@
           <input type="file" class="pr-photo" accept="image/*" multiple style="display:none">
         </label>
         <div class="pr-photo-grid"></div>
-        <textarea class="pr-review-ta pr-review" placeholder="후기 (선택)" rows="2"></textarea>`;
+        <textarea class="pr-review-ta pr-review" placeholder="게임평 (선택)" rows="2"></textarea>`;
 
       // 게임명 자동완성
       attachAc(
@@ -520,8 +520,8 @@
           <input id="pie-group-${btn.dataset.id}" name="pie-group" class="pie-group" placeholder="예: 코티지보드 동호회" value="${escH(rec.group||'')}">
           <label for="pie-date-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">날짜</label>
           <input id="pie-date-${btn.dataset.id}" name="pie-date" class="pie-date" type="date" value="${escH(rec.date||'')}">
-          <label for="pie-review-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">후기</label>
-          <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
+          <label for="pie-review-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">게임평</label>
+          <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="게임평">${escH(rec.review||'')}</textarea>
           <label style="font-size:11px;color:var(--muted)">사진</label>
           <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
             ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}

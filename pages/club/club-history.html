@@ -277,8 +277,8 @@
         <textarea class="pie-score" placeholder="예: 83 / 75점" rows="2">${escH(rec.score||'')}</textarea>
         <label style="font-size:11px;color:var(--muted)">날짜</label>
         <input class="pie-date" type="date" value="${escH(rec.date||'')}">
-        <label style="font-size:11px;color:var(--muted)">후기</label>
-        <textarea class="pie-review" placeholder="후기">${escH(rec.review||'')}</textarea>
+        <label style="font-size:11px;color:var(--muted)">게임평</label>
+        <textarea class="pie-review" placeholder="게임평">${escH(rec.review||'')}</textarea>
         <label style="font-size:11px;color:var(--muted)">사진</label>
         <div class="pie-cur-photos">
           ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}"><img src="${escAttr(u)}" alt=""><button type="button" class="pie-existing-del">×</button></div>`).join('')}
