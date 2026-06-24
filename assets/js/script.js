@@ -1251,11 +1251,15 @@ function openGameSheet(gameKey, restoreScroll = false){
 
     <!-- 좋아요 / 궁금해요 (게임 정보 영역 끝) -->
     <div class="sheet-feedback-reactions">
-      <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
-      <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
+      <div class="sheet-reaction-group">
+        <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
+        <div class="sheet-reaction-avatars" id="sheetLikerAvatars"></div>
+      </div>
+      <div class="sheet-reaction-group">
+        <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
+        <div class="sheet-reaction-avatars" id="sheetCuriousAvatars"></div>
+      </div>
     </div>
-    <div class="sheet-reaction-summary" id="sheetReactionSummary"></div>
-    <div class="sheet-reaction-users" id="sheetReactionUsers" style="display:none"></div>
 
     <!-- 게임평 미리보기 -->
     <div class="sheet-preview-section">
@@ -1695,52 +1699,29 @@ function requireLogin(action) {
   showLoginToast();
 }
 
-function _reactionUserChip(u) {
+function _reactionAvatarChip(u) {
   const charPath = u.rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(u.rep_achievement_id) : null;
   const imgSrc = charPath || u.photo_url;
-  const thumb = imgSrc
-    ? `<img class="sheet-liker-avatar" src="${imgSrc}" alt="">`
-    : `<span class="sheet-liker-avatar sheet-liker-avatar--empty">${(u.nickname || '?')[0]}</span>`;
   const uid = u.user_id ? ` data-user-id="${u.user_id}"` : '';
-  return `<span class="sheet-liker-chip"${uid}>${thumb}<span class="sheet-liker-name">${String(u.nickname || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span></span>`;
+  const tip = u.nickname ? ` title="${String(u.nickname).replace(/"/g,'&quot;')}"` : '';
+  return imgSrc
+    ? `<img class="sheet-reaction-avatar"${uid}${tip} src="${imgSrc}" alt="${u.nickname || ''}">`
+    : `<span class="sheet-reaction-avatar sheet-reaction-avatar--empty"${uid}${tip}>${(u.nickname || '?')[0]}</span>`;
 }
 
 function _updateReactionSection(likers, curiousUsers) {
-  const summaryEl = document.getElementById('sheetReactionSummary');
-  const usersEl = document.getElementById('sheetReactionUsers');
-  if (!summaryEl || !usersEl) return;
+  const likerEl = document.getElementById('sheetLikerAvatars');
+  const curiousEl = document.getElementById('sheetCuriousAvatars');
+  if (!likerEl || !curiousEl) return;
 
-  // 유저 패널 내용 갱신
-  let usersHtml = '';
-  if (likers.length) usersHtml += `<div class="sheet-liker-row"><span class="sheet-liker-label">❤️</span>${likers.map(_reactionUserChip).join('')}</div>`;
-  if (curiousUsers.length) usersHtml += `<div class="sheet-liker-row"><span class="sheet-liker-label">👀</span>${curiousUsers.map(_reactionUserChip).join('')}</div>`;
-  usersEl.innerHTML = usersHtml;
+  likerEl.innerHTML = likers.map(_reactionAvatarChip).join('');
+  curiousEl.innerHTML = curiousUsers.map(_reactionAvatarChip).join('');
 
-  // 칩 클릭 → 다른 플레이어 취향보드 시트
-  usersEl.querySelectorAll('.sheet-liker-chip[data-user-id]').forEach(chip => {
-    chip.style.cursor = 'pointer';
-    chip.addEventListener('click', () => window.openOtherProfileSheet?.(chip.dataset.userId));
-  });
-
-  // 요약 토글 갱신 (이미 열려 있으면 열린 상태 유지)
-  const wasOpen = usersEl.dataset.open === '1';
-  const parts = [];
-  if (likers.length) parts.push(`❤️ ${likers.length}명`);
-  if (curiousUsers.length) parts.push(`👀 ${curiousUsers.length}명`);
-  if (parts.length) {
-    summaryEl.innerHTML = `<button class="sheet-reaction-toggle" type="button">${parts.join(' · ')} <span class="sheet-toggle-arrow">${wasOpen ? '▴' : '▾'}</span></button>`;
-    usersEl.style.display = wasOpen ? '' : 'none';
-    summaryEl.querySelector('.sheet-reaction-toggle').addEventListener('click', () => {
-      const open = usersEl.style.display === 'none';
-      usersEl.style.display = open ? '' : 'none';
-      usersEl.dataset.open = open ? '1' : '';
-      summaryEl.querySelector('.sheet-toggle-arrow').textContent = open ? '▴' : '▾';
+  [likerEl, curiousEl].forEach(el => {
+    el.querySelectorAll('[data-user-id]').forEach(chip => {
+      chip.addEventListener('click', () => window.openOtherProfileSheet?.(chip.dataset.userId));
     });
-  } else {
-    summaryEl.innerHTML = '';
-    usersEl.style.display = 'none';
-    usersEl.dataset.open = '';
-  }
+  });
 }
 
 async function initSheetLikes(gameKey) {
