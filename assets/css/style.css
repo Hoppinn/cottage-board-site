@@ -6118,6 +6118,7 @@ body.sheet-open{
 .pr-tag-count-game { background: #627a6a !important; color: #fff !important; font-weight: 600 !important; }
 .pr-tag-time { background: #ede8e0; color: #6b5040; }
 .pr-tag-score { background: #f5ede4; color: #8a4a20; }
+.pr-rec-recorder { flex-shrink: 0; font-size: 11px; color: var(--muted, #9b8b7a); white-space: nowrap; }
 .pr-rec-actions { display: flex; align-items: center; gap: 11px; flex-shrink: 0; margin-top: 2px; }
 .pr-rec-actions-bar { display: flex; justify-content: flex-end; align-items: center; gap: 11px; padding: 6px 14px 4px; border-top: 1px solid #f0ece4; margin-top: 8px; }
 

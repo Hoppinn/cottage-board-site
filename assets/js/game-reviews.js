@@ -205,7 +205,8 @@
           <input type="file" class="pr-photo" accept="image/*" multiple style="display:none">
         </label>
         <div class="pr-photo-grid"></div>
-        <textarea class="pr-review-ta pr-review" placeholder="게임평 (선택)" rows="2"></textarea>`;
+        <label class="pr-field-label">게임평 (선택)</label>
+        <textarea class="pr-review-ta pr-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요." rows="2"></textarea>`;
 
       // 게임명 자동완성
       attachAc(
@@ -858,6 +859,7 @@
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
+            ${r.nickname ? `<span class="pr-rec-recorder">📝 ${escH(r.nickname)}</span>` : ''}
             ${moreMenu ? `<div class="pr-rec-actions">${moreMenu}</div>` : ''}
           </div>
           ${photoHtml}
@@ -929,6 +931,7 @@
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
+            ${r.nickname ? `<span class="pr-rec-recorder">📝 ${escH(r.nickname)}</span>` : ''}
             ${moreMenu2 ? `<div class="pr-rec-actions">${moreMenu2}</div>` : ''}
           </div>
           ${photoHtml}
