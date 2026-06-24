@@ -146,12 +146,14 @@
       if (focusedIdx >= 0 && items[focusedIdx]) items[focusedIdx].scrollIntoView({ block: 'nearest' });
     }
     input.addEventListener('input', () => {
-      const q = input.value.trim(), all = getSuggestions();
-      render(q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 8));
+      const q = input.value.trim();
+      if (!q) { render([]); return; }
+      render(getSuggestions().filter(s => hangulMatch(s, q)));
     });
     input.addEventListener('focus', () => {
-      const q = input.value.trim(), all = getSuggestions();
-      render(q ? all.filter(s => hangulMatch(s, q)) : all.slice(0, 8));
+      const q = input.value.trim();
+      if (!q) return;
+      render(getSuggestions().filter(s => hangulMatch(s, q)));
     });
     input.addEventListener('keydown', e => {
       if (!list.classList.contains('is-open')) return;
