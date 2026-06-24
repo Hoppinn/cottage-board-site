@@ -5261,9 +5261,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "별도",
-      "shelfLabel": "별도",
-      "shelfFullLabel": "별도",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.04,
       "moodTags": [
@@ -18001,9 +18001,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "popular",
+      "shelfLabel": "대중적인 게임",
+      "shelfFullLabel": "파티게임 - 대중적인 게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -24611,9 +24611,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "별도",
-      "shelfLabel": "별도",
-      "shelfFullLabel": "별도",
+      "shelfGroupId": "display",
+      "shelfLabel": "전시된 게임",
+      "shelfFullLabel": "파티게임 - 전시된 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -29115,9 +29115,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "따로",
-      "shelfLabel": "따로",
-      "shelfFullLabel": "따로",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -42309,9 +42309,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "따로",
-      "shelfLabel": "따로",
-      "shelfFullLabel": "따로",
+      "shelfGroupId": "heavy_strategy",
+      "shelfLabel": "헤비 전략게임",
+      "shelfFullLabel": "헤비 전략게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
       "moodTags": [],
@@ -53509,9 +53509,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "따로",
-      "shelfLabel": "따로",
-      "shelfFullLabel": "따로",
+      "shelfGroupId": "dexterity",
+      "shelfLabel": "몸으로 하는 게임",
+      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -79040,7 +79040,7 @@ const gameData = {
       "status": "active",
       "shelfGroupId": "display",
       "shelfLabel": "전시된 게임",
-      "shelfFullLabel": "전시된 게임",
+      "shelfFullLabel": "파티게임 - 전시된 게임",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [],

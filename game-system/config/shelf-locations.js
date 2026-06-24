@@ -43,8 +43,15 @@ const SHELF_GROUPS = [
     sourceValues: ["대중", "대중적인게임", "대중게임", "popular"]
   },
   {
-    id: "lost_found",
+    id: "display",
     code: "A-6",
+    label: "전시된 게임",
+    parentId: "party",
+    sourceValues: ["전시", "전시된게임", "전시게임", "display"]
+  },
+  {
+    id: "lost_found",
+    code: "A-7",
     label: "고객분실물",
     parentId: "party",
     sourceValues: ["분실물"]
@@ -106,13 +113,6 @@ const SHELF_GROUPS = [
     label: "방탈출",
     parentId: "murder_mystery",
     sourceValues: ["방탈출", "escape_room", "escape room"]
-  },
-  {
-    id: "display",
-    code: "G",
-    label: "전시된 게임",
-    parentId: null,
-    sourceValues: ["전시", "전시된게임", "전시게임", "display"]
   },
   {
     id: "incoming",
