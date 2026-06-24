@@ -352,6 +352,7 @@
         <div class="admin-menu-grid">
           <button class="admin-menu-card" data-scroll="groupCharts" type="button"><span class="admin-menu-icon">📊</span><span>비주얼 분석</span></button>
           <button class="admin-menu-card" data-scroll="groupAnalysis" type="button"><span class="admin-menu-icon">📈</span><span>페이지·회원</span></button>
+          <button class="admin-menu-card" data-scroll="groupReferrer" type="button"><span class="admin-menu-icon">🔗</span><span>유입경로</span></button>
           <button class="admin-menu-card" data-bs="bsVoucher" type="button"><span class="admin-menu-icon">🎫</span><span>교환권 관리</span></button>
           <button class="admin-menu-card" data-bs="bsRequests" type="button"><span class="admin-menu-icon">📝</span><span>요청관리</span></button>
         </div>
@@ -395,6 +396,26 @@
                 <div class="admin-chart-title">날짜별 방문자 수</div>
                 <canvas id="chartDaily"></canvas>
               </div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-group is-open" id="groupAnalysis">
+          <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
+          <div class="admin-group-body">
+            <div class="admin-section is-open" id="sectionMembers">
+              <div class="admin-section-title">👥 사용자별<span id="memberCountBadge" class="admin-section-count"></span><span class="admin-section-arrow">▾</span></div>
+              <div class="admin-section-body" id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
+            </div>
+            <div class="admin-section" id="sectionPages">
+              <div class="admin-section-title">📄 페이지별<span class="admin-section-arrow">▾</span></div>
+              <div class="admin-section-body" id="pagesBody"><div class="admin-empty">불러오는 중...</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="admin-group is-open" id="groupReferrer">
+          <div class="admin-group-title">🔗 유입경로 분석<span class="admin-group-arrow">▾</span></div>
+          <div class="admin-group-body">
+            <div class="admin-chart-grid">
               <div class="admin-chart-card">
                 <div class="admin-chart-title">유입 경로별 페이지뷰 <span class="admin-chart-sub" id="chartRefSub"></span></div>
                 <div id="chartReferrerWrap" style="position:relative;height:80px">
@@ -429,19 +450,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="admin-group is-open" id="groupAnalysis">
-          <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div class="admin-section is-open" id="sectionMembers">
-              <div class="admin-section-title">👥 사용자별<span id="memberCountBadge" class="admin-section-count"></span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body" id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
-            </div>
-            <div class="admin-section" id="sectionPages">
-              <div class="admin-section-title">📄 페이지별<span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body" id="pagesBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
           </div>
         </div>
