@@ -1828,26 +1828,6 @@ async function onSheetLike(btn) {
     const gameKey = btn?.dataset.gameId;
     if (!gameKey) return;
     const likeBtn = document.getElementById('sheetLikeBtn');
-    if (likeBtn?.classList.contains('is-active')) {
-      showActionToast('이미 좋아하는 게임이에요 ❤️', '취향 보드 →', () => window.openProfilePanel?.('taste'), '좋아요 취소', async () => {
-        const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
-        if (result.liked !== undefined) {
-          const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
-          if (likeBtn) {
-            likeBtn.textContent = `👍 좋아요 ${likeCount}`;
-            likeBtn.classList.remove('is-active');
-            document.getElementById('sheetLikeBtnWrap')?.classList.remove('is-active');
-          }
-          showActionToast('좋아요를 취소했어요');
-          const [likers, curiousUsers] = await Promise.all([
-            window.CottageDB.getGameLikers?.(gameKey) || Promise.resolve([]),
-            window.CottageDB.getGameCuriousUsers?.(gameKey) || Promise.resolve([]),
-          ]);
-          _updateReactionSection(likers, curiousUsers);
-        }
-      });
-      return;
-    }
     const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
     if (result.liked !== undefined) {
       const likeCount = await window.CottageDB.getGameLikeCount(gameKey);

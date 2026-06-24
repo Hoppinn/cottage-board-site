@@ -1885,6 +1885,10 @@ body.sheet-open{
   color: #7a2a1e;
 }
 
+/* embed-mode: header.js가 embed=1 감지 시 body에 추가 */
+body.embed-mode .site-header,
+body.embed-mode .site-footer { display: none !important; }
+
 /* =========================
    # 6-A. SITE FOOTER
 ========================= */

@@ -118,7 +118,13 @@
       var title = document.getElementById('guideIframeTitle');
       if (!overlay) return;
       overlay.style.display = 'flex';
-      if (iframe) iframe.src = href;
+      if (iframe) {
+        var hashIdx = href.indexOf('#');
+        var embedHref = hashIdx !== -1
+          ? href.slice(0, hashIdx) + (href.slice(0, hashIdx).includes('?') ? '&' : '?') + 'embed=1' + href.slice(hashIdx)
+          : href + (href.includes('?') ? '&' : '?') + 'embed=1';
+        iframe.src = embedHref;
+      }
       if (title) title.textContent = label || '';
       document.body.style.overflow = 'hidden';
     }

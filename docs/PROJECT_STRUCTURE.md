@@ -95,6 +95,39 @@ assets/js/
 
 ---
 
+## 2-A. 인앱 iframe 시트 패턴
+
+### embed 모드 (`?embed=1`)
+
+URL에 `embed=1` 파라미터가 있으면 `header.js`가 `body.embed-mode` 클래스 추가 후 헤더 미삽입.  
+`style.css`에 전역 규칙 → `body.embed-mode .site-header, .site-footer { display:none }`
+
+사용 페이지:
+- `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
+- `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
+
+### openShelfSheet (script.js)
+
+게임 상세시트 위에 게임위치 페이지를 바텀시트로 표시하는 스택 내비게이션.
+
+```
+게임시트(A) 열림
+  → openShelfSheet(?embed=1&highlight=A) 호출
+  → 선반 오버레이(z:9600) 표시 — 선반에서 게임 칩 클릭
+  → postMessage({ action:'openGame', gameId }) 수신
+  → 선반 z:0 + pointerEvents:none (숨김)
+  → openGameSheet(B) 호출
+  → MutationObserver: #gameSheet.is-active 제거 감지 → 선반 복원
+  → ← 뒤로가기 클릭 → overlay.remove() + openGameSheet(prevGameKey)
+```
+
+### openGuideOverlay (pages/info/guide.html)
+
+이용안내 카드 클릭 → 해당 페이지를 인앱 iframe 오버레이(z:9000, 92dvh)로 표시.  
+`?embed=1` 자동 추가 → 로드된 페이지의 헤더/푸터 자동 숨김.
+
+---
+
 ## 3. 인증 흐름
 
 ```

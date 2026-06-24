@@ -1,4 +1,8 @@
 (function () {
+  if (new URLSearchParams(location.search).get('embed') === '1') {
+    document.body.classList.add('embed-mode');
+    return;
+  }
   const _s = document.currentScript;
   const isIndex = _s && _s.dataset.index === 'true';
   const root = isIndex ? './' : '../../';

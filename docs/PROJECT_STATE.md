@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-25 (142차-51)
+최종 갱신: 2026-06-25 (142차-57)
 
 ---
 
@@ -32,6 +32,8 @@
 | 어드민 비주얼 분석 UI 개선 (142차-42~43) | 유입경로×페이지 N명(M회) / 차트 정수 눈금 / 주요유입 명 먼저 / 사용자별 기본 열림 / 30일 신규 카드만 / 방문자 3명 기본+더보기 / 관리자 방문 통계 미포함+crossUserMap 버그 수정 | 142차-42~43 |
 | 다른 플레이어 프로필 보기 (142차-44) | 좋아요/궁금해요 칩 클릭 → 읽기전용 취향보드 시트 / getUserTasteProfile API 추가 / 본인 클릭 시 내 보드 취향탭으로 | 142차-44 |
 | 리액션 칩 개선 (142차-45~51) | rep_achievement_id 코티지 캐릭터 이미지 우선 / 시트 슬라이드업 애니메이션(overflow:hidden+fill-mode:both) / 칩 구조 개선(버튼 안 ▾ 토글, 이름만 소형 태그) / is-active 시각 효과 제거(베이지 유지) / 취소 시 즉시 칩 반영(취소 분기에 _updateReactionSection 추가) | 142차-45~51 |
+| 게임 위치 바텀시트 (142차-52~56) | openShelfSheet: 게임상세 위에 게임위치 iframe 시트 (z:9600) / embed=1 파라미터로 헤더·푸터 숨김 / highlight 칩 강조+섹션 맨 앞 정렬 / ← 뒤로가기 버튼 + 이전 게임시트 복원 / 게임 클릭 시 스택 (선반 숨김→게임B→닫으면 선반 복원, MutationObserver) / displayTags onclick 제거 / Z시리즈 0→없음, 종→개, 특수섹션 0개 표시 | 142차-52~56 |
+| 리액션 토스트 통일 + 이용안내 embed (142차-57) | 좋아요 재클릭 확인 토스트 제거 → 직접 토글(궁금해요 방식으로 통일) / header.js embed=1 감지 → body.embed-mode + 헤더 미삽입 / guide.html openGuideOverlay에 ?embed=1 자동 추가 | 142차-57 |
 
 ### 142차 테스트 목록
 
@@ -96,7 +98,7 @@
 - `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
 - `club-schedule.html` `openProfileSheet`: 인라인 Supabase 클라이언트(`_cottageSupabaseDb`) 사용 — `window.CottageDB`와 별개. 통합 검토.
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
-- `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 4곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장.
+- `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
 
 ---
 
