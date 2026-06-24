@@ -126,6 +126,12 @@
     }
     .loc-game-chip:active { background: #e4dcd4; }
     .loc-empty { color: #bbb; font-size: 13px; padding: 2px 0; }
+    .loc-game-chip--highlight { background: #fbecd8; color: #7a4828; font-weight: 700; border: 1.5px solid #d4a878; }
+    body.embed-mode .site-header,
+    body.embed-mode .owned-page-breadcrumb,
+    body.embed-mode .page-mini-hero,
+    body.embed-mode .site-footer { display: none !important; }
+    body.embed-mode .inner-page { padding-top: 8px; }
     .loc-section-divider {
       margin: 10px 0 6px;
       font-size: 11px;
@@ -180,6 +186,9 @@
 
   <script>
   (function () {
+    const params = new URLSearchParams(location.search);
+    if (params.get('embed') === '1') document.body.classList.add('embed-mode');
+
     const SECTIONS = [
       { id: 'party',          code: 'A',   label: '파티게임',           sub: false },
       { id: 'dexterity',      code: 'A-1', label: '몸으로 하는 게임',   sub: true  },
@@ -264,11 +273,13 @@
         const manualItems = s.items || [];
         const modClass = s.sub ? 'loc-section--sub' : '';
         const series = s.code.split('-')[0];
-        const gameChips = games.map(g => `<span class="loc-game-chip" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('');
+        const Z_EMPTY = { incoming: '현재 발매후 도착예정인 게임이 없습니다.', shipping: '현재 배송중인 게임이 없습니다.', to_buy: '현재 구매예정인 게임이 없습니다.' };
+        const gameChips = games.map(g => `<span class="loc-game-chip" data-game-id="${encodeURIComponent(g.id)}" onclick="window._locOpenGame('${encodeURIComponent(g.id)}')">${g.title?.display || g.id}</span>`).join('');
         const manualChips = manualItems.map(name => `<span class="loc-game-chip" style="cursor:default">${name}</span>`).join('');
+        const emptyMsg = Z_EMPTY[s.id] || '매장 내 확인 바랍니다';
         const chips = (gameChips || manualChips)
           ? (gameChips + manualChips)
-          : `<span class="loc-empty">매장 내 확인 바랍니다</span>`;
+          : `<span class="loc-empty">${emptyMsg}</span>`;
 
         return `
           <div class="loc-section ${modClass} loc-series-${series}" data-section-id="${s.id}">
@@ -276,7 +287,7 @@
               <span class="loc-section-code">${s.code}</span>
               <div class="loc-section-info">
                 <div class="loc-section-label">${s.label}</div>
-                <div class="loc-section-count">${games.length + manualItems.length > 0 ? (games.length + manualItems.length) + '종' : '매장 내 확인'}</div>
+                <div class="loc-section-count">${games.length + manualItems.length > 0 ? (games.length + manualItems.length) + '종' : (Z_EMPTY[s.id] ? '0종' : '매장 내 확인')}</div>
               </div>
               <span class="loc-section-arrow">▾</span>
             </div>
@@ -362,13 +373,19 @@
         });
       }
 
-      const shelfParam = new URLSearchParams(location.search).get('shelf');
+      const shelfParam = params.get('shelf');
       if (shelfParam) {
         const el = document.querySelector(`[data-section-id="${shelfParam}"]`);
         if (el) {
           el.classList.add('is-open');
           setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
         }
+      }
+
+      const highlightParam = params.get('highlight');
+      if (highlightParam) {
+        const chip = document.querySelector(`.loc-game-chip[data-game-id="${encodeURIComponent(highlightParam)}"]`);
+        if (chip) chip.classList.add('loc-game-chip--highlight');
       }
     }
 

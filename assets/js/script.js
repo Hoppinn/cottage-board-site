@@ -1188,7 +1188,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
-          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}')">📍 ${shelfLabel}</button>
+          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfGroupId ? 'shelf=' + encodeURIComponent(shelfGroupId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel}</button>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
             onclick="return confirm('유튜브로 이동할까요?')"
@@ -1225,7 +1225,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${detail.displayTags.map(t => `<span class="sheet-dtag" style="cursor:pointer" onclick="if(confirm('책장 페이지로 이동할까요?'))alert('준비 중입니다.')">${t}</span>`).join("")}
       </div>
     ` : ""}
-    <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}')">📚 꽂혀있는 책장 보러가기 →</button>
+    <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfGroupId ? 'shelf=' + encodeURIComponent(shelfGroupId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📚 꽂혀있는 책장 보러가기 →</button>
 
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
