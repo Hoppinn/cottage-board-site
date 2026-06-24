@@ -1304,8 +1304,8 @@ body.recommend-page main{
 
 .game-card{
   flex:0 0 auto;
-  width:140px;
-  min-width:140px;
+  width:136px;
+  min-width:136px;
   min-height:auto;
   padding:10px;
   border:1.5px solid #ece1cf;
