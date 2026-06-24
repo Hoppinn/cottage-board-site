@@ -2083,7 +2083,8 @@ async function onSubmitCommentModal() {
   }
   if (!result.error) {
     onCloseCommentModal();
-    await initSheetComments(gameKey);
+    await initSheetComments(gameKey);         // 기록전체보기 시트용
+    await initSheetCommentsPreview(gameKey);  // 메인 게임시트 미리보기용
   }
   if (submitBtn) submitBtn.disabled = false;
 }
