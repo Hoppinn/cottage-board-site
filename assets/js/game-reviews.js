@@ -24,7 +24,7 @@
       const label = g.display || g.titleKo || g.titleEn || '';
       return label.trim() === name.trim();
     });
-    return found ? String(found.bggId) : name;
+    return found ? found.id : name;
   }
 
   function formatDate(iso) {

@@ -456,14 +456,14 @@
         <div class="achievement-toast-name">${name}</div>
       </div>
       <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoProfileBtn')?.click()">내 보드 →</a>
+      <button class="achievement-toast-close" type="button" aria-label="닫기">✕</button>
     `;
     document.body.appendChild(toast);
-
-    requestAnimationFrame(() => toast.classList.add('is-visible'));
-    setTimeout(() => {
+    toast.querySelector('.achievement-toast-close').addEventListener('click', () => {
       toast.classList.remove('is-visible');
       setTimeout(() => toast.remove(), 400);
-    }, 4000);
+    });
+    requestAnimationFrame(() => toast.classList.add('is-visible'));
   }
 
   function getGameName(gameId) {

@@ -54,13 +54,14 @@ function _showVoucherGrantToast() {
       <div class="achievement-toast-name">교환권 1장을 받았어요</div>
     </div>
     <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoLoginBtn')?.click()">내 보드 →</a>
+    <button class="achievement-toast-close" type="button" aria-label="닫기">✕</button>
   `;
   document.body.appendChild(toast);
-  requestAnimationFrame(() => toast.classList.add('is-visible'));
-  setTimeout(() => {
+  toast.querySelector('.achievement-toast-close').addEventListener('click', () => {
     toast.classList.remove('is-visible');
     setTimeout(() => toast.remove(), 400);
-  }, 4000);
+  });
+  requestAnimationFrame(() => toast.classList.add('is-visible'));
   setTimeout(_updateNotifBadge, 200);
 }
 window._onVoucherGranted = _showVoucherGrantToast;
