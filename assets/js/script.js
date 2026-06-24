@@ -1663,7 +1663,7 @@ function showLoginToast() {
   toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 3000);
 }
 
-function showActionToast(msg, linkLabel, linkAction) {
+function showActionToast(msg, linkLabel, linkAction, linkLabel2, linkAction2) {
   let toast = document.getElementById('actionToast');
   if (!toast) {
     toast = document.createElement('div');
@@ -1672,14 +1672,18 @@ function showActionToast(msg, linkLabel, linkAction) {
     document.body.appendChild(toast);
   }
   if (linkLabel && linkAction) {
-    toast.innerHTML = `<span>${msg}</span><button type="button">${linkLabel}</button>`;
+    const btn2Html = (linkLabel2 && linkAction2) ? `<button type="button" class="toast-btn-2">${linkLabel2}</button>` : '';
+    toast.innerHTML = `<span>${msg}</span><button type="button">${linkLabel}</button>${btn2Html}`;
     toast.querySelector('button').onclick = () => { linkAction(); toast.classList.remove('is-visible'); };
+    if (linkLabel2 && linkAction2) {
+      toast.querySelector('.toast-btn-2').onclick = () => { linkAction2(); toast.classList.remove('is-visible'); };
+    }
   } else {
     toast.textContent = msg;
   }
   toast.classList.add('is-visible');
   clearTimeout(toast._timer);
-  toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 3000);
+  toast._timer = setTimeout(() => toast.classList.remove('is-visible'), 5000);
 }
 
 function requireLogin(action) {
@@ -1758,10 +1762,21 @@ async function onSheetLike(btn) {
     if (!user || !window.CottageDB) return;
     const gameKey = btn?.dataset.gameId;
     if (!gameKey) return;
+    const likeBtn = document.getElementById('sheetLikeBtn');
+    if (likeBtn?.classList.contains('is-active')) {
+      showActionToast('이미 좋아하는 게임이에요 ❤️', '취향 보드 →', () => window.openProfilePanel?.('taste'), '좋아요 취소', async () => {
+        const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
+        if (result.liked !== undefined) {
+          const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
+          if (likeBtn) { likeBtn.textContent = `👍 좋아요 ${likeCount}`; likeBtn.classList.remove('is-active'); }
+          showActionToast('좋아요를 취소했어요');
+        }
+      });
+      return;
+    }
     const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
     if (result.liked !== undefined) {
       const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
-      const likeBtn = document.getElementById('sheetLikeBtn');
       if (likeBtn) {
         likeBtn.textContent = `👍 좋아요 ${likeCount}`;
         likeBtn.classList.toggle('is-active', result.liked);

@@ -759,6 +759,7 @@ async function openProfilePanel(autoSubsheet = null) {
   // 취향 보드
   const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
   const _bio = stats?.profile?.bio || '';
+  const _bioTags = _bio ? _bio.split(',').map(t => t.trim()).filter(Boolean) : [];
   const _avoidTags = stats?.profile?.avoid_tags || [];
 
   function _buildTasteGameItems(games, maxInitial = 5) {
@@ -785,14 +786,18 @@ async function openProfilePanel(autoSubsheet = null) {
     <div class="taste-bio-section">
       <div class="taste-section-label">한줄 소개</div>
       <div class="taste-bio-row">
-        <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bio ? escH(_bio) : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>'}</span>
+        <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bioTags.length ? _bioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('') : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>'}</span>
         <button class="taste-bio-edit-btn" type="button" title="편집">✏️</button>
       </div>
       <div class="taste-bio-edit-wrap" style="display:none">
         <div class="taste-bio-chips">
           ${['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요'].map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
         </div>
-        <textarea class="taste-bio-textarea" maxlength="100" placeholder="한줄 소개를 입력해주세요 (최대 100자)"></textarea>
+        <div class="taste-bio-custom-wrap">
+          <input type="text" class="taste-bio-custom-input" maxlength="20" placeholder="직접 입력 후 Enter">
+          <button class="taste-bio-custom-add" type="button">+</button>
+        </div>
+        <div class="taste-bio-custom-tags"></div>
         <div class="taste-bio-actions">
           <button class="taste-bio-save-btn" type="button">저장</button>
           <button class="taste-bio-cancel-btn" type="button">취소</button>
@@ -862,7 +867,7 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>` : ''}`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _bioPreview = _bio ? `"${_bio.length > 28 ? _bio.slice(0, 28) + '…' : _bio}"\n` : '';
+  const _bioPreview = _bioTags.length ? `${_bioTags.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTags.length > 2 ? ` +${_bioTags.length - 2}` : ''}\n` : '';
   const _tasteCardSummary = `${_bioPreview}❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개`;
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
@@ -1143,28 +1148,68 @@ async function openProfilePanel(autoSubsheet = null) {
           const bioRow = subBody.querySelector('.taste-bio-row');
           const bioDisplay = subBody.querySelector('.taste-bio-display');
           const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
-          const bioTextarea = subBody.querySelector('.taste-bio-textarea');
+          const bioCustomInput = subBody.querySelector('.taste-bio-custom-input');
+          const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
+          const _PREDEFINED_CHIPS = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요'];
+
+          function _renderBioDisplay(tags) {
+            bioDisplay.innerHTML = tags.length
+              ? tags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
+              : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
+          }
+
+          function _renderCustomTags(customTags) {
+            bioCustomTagsWrap.innerHTML = customTags.map(t =>
+              `<span class="taste-bio-tag-edit" data-tag="${escH(t)}">${escH(t)}<button class="taste-bio-tag-remove" type="button" aria-label="삭제">✕</button></span>`
+            ).join('');
+            bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-remove').forEach(btn => {
+              btn.addEventListener('click', () => { btn.closest('.taste-bio-tag-edit').remove(); });
+            });
+          }
+
           subBody.querySelector('.taste-bio-edit-btn')?.addEventListener('click', () => {
             bioRow.style.display = 'none';
             bioEditWrap.style.display = '';
-            bioTextarea.value = bioDisplay.dataset.bio || '';
-            bioTextarea.focus();
-          });
-          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-              bioTextarea.value = chip.textContent;
-              bioTextarea.focus();
+            const currentTags = (bioDisplay.dataset.bio || '').split(',').map(t => t.trim()).filter(Boolean);
+            subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+              chip.classList.toggle('is-selected', currentTags.includes(chip.textContent.trim()));
             });
+            const customTags = currentTags.filter(t => !_PREDEFINED_CHIPS.includes(t));
+            _renderCustomTags(customTags);
+            bioCustomInput.value = '';
+            bioCustomInput.focus();
           });
+
+          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+            chip.addEventListener('click', () => { chip.classList.toggle('is-selected'); });
+          });
+
+          function _addCustomTag() {
+            const val = bioCustomInput.value.trim();
+            if (!val) return;
+            const existing = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
+            if (!existing.includes(val)) {
+              _renderCustomTags([...existing, val]);
+            }
+            bioCustomInput.value = '';
+            bioCustomInput.focus();
+          }
+          bioCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomTag(); } });
+          subBody.querySelector('.taste-bio-custom-add')?.addEventListener('click', _addCustomTag);
+
           subBody.querySelector('.taste-bio-cancel-btn')?.addEventListener('click', () => {
             bioRow.style.display = '';
             bioEditWrap.style.display = 'none';
           });
+
           subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
-            const newBio = bioTextarea.value.trim().slice(0, 100);
+            const selectedChips = [...subBody.querySelectorAll('.taste-bio-chip.is-selected')].map(c => c.textContent.trim());
+            const customTags = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
+            const allTags = [...selectedChips, ...customTags].slice(0, 6);
+            const newBio = allTags.join(',');
             await window.CottageDB?.updateUserBio?.(userId, newBio);
             bioDisplay.dataset.bio = newBio;
-            bioDisplay.innerHTML = newBio ? escH(newBio) : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
+            _renderBioDisplay(allTags);
             bioRow.style.display = '';
             bioEditWrap.style.display = 'none';
           });
