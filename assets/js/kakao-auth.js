@@ -652,11 +652,14 @@ async function openProfilePanel(autoSubsheet = null) {
   }
   const _hasAnyNew = _newCount > 0;
   const _allNotifItems = notifs.slice(0, 8).map(_renderNotifItem).join('');
-  const _notifMore = notifs.length > 8 ? `<li class="profile-notif-more">외 ${notifs.length - 8}건 더 있어요</li>` : '';
+  const _hiddenNotifCount = Math.max(0, notifs.length - 8);
+  const _hiddenNotifHtml = _hiddenNotifCount > 0
+    ? `<button class="profile-notif-more-btn" type="button" data-more="${_hiddenNotifCount}">외 ${_hiddenNotifCount}건 더 보기 ▾</button><ul class="profile-notif-more-list is-hidden">${notifs.slice(8).map(_renderNotifItem).join('')}</ul>`
+    : '';
   const _notifHelpHtml = notifs.length === 0
     ? `<div class="notif-help">새 알림이 없으면 여기에서 보상, 게임 요청, 업적 달성 소식을 확인할 수 있어요.</div>`
     : '';
-  const _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${voucherCardHtml}<ul class="profile-notif-list">${_allNotifItems}${_notifMore}</ul>${_notifHelpHtml}`;
+  let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${voucherCardHtml}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_notifHelpHtml}`;
 
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;
 
@@ -991,6 +994,12 @@ async function openProfilePanel(autoSubsheet = null) {
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
     const _nBtn = body.querySelector('.profile-panel-notif-btn');
     if (_nBtn) { _nBtn.innerHTML = '🔔 알림'; _nBtn.classList.add('is-zero'); }
+    _notifInnerHtml = _notifInnerHtml
+      .replace(/\bis-new\b/g, '')
+      .replace(/<span class="profile-notif-new-badge"[^>]*>NEW<\/span>/g, '')
+      .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
+      .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
+      .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
     _updateNotifBadge();
   }
 
@@ -1015,6 +1024,12 @@ async function openProfilePanel(autoSubsheet = null) {
       const _nvBtn = body.querySelector('.profile-panel-notif-btn');
       if (_nvBtn) { _nvBtn.innerHTML = '🔔 알림'; _nvBtn.classList.add('is-zero'); }
       container.querySelector('.profile-notif-confirm-all')?.remove();
+      _notifInnerHtml = _notifInnerHtml
+        .replace(/\bis-new\b/g, '')
+        .replace(/<span class="profile-notif-new-badge"[^>]*>NEW<\/span>/g, '')
+        .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
+        .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
+        .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
     }
     _updateNotifBadge();
   }
@@ -1079,6 +1094,12 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelectorAll('.notif-read-one-btn').forEach(btn => {
             btn.addEventListener('click', e => { e.stopPropagation(); _markAllNotifSeen(subBody); });
+          });
+          subBody.querySelector('.profile-notif-more-btn')?.addEventListener('click', function() {
+            const moreList = subBody.querySelector('.profile-notif-more-list');
+            if (!moreList) return;
+            const isHidden = moreList.classList.toggle('is-hidden');
+            this.textContent = isHidden ? `외 ${this.dataset.more}건 더 보기 ▾` : '접기 ▴';
           });
           subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
             li.addEventListener('click', e => {

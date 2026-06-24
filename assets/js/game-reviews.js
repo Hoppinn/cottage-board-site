@@ -277,6 +277,7 @@
               textInput.value = name;
               textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
             });
+            div.querySelector('.pr-names-wrap .pr-autocomplete-list')?.classList.remove('is-open');
           };
 
           if (sameBtn.classList.contains('pr-last-record-btn')) {
@@ -308,7 +309,7 @@
 
     addRow(false);
 
-    document.getElementById('prAddBtn').addEventListener('click', () => addRow(true));
+    document.getElementById('prAddBtn').addEventListener('click', () => addRow(false));
 
     document.getElementById('prSaveBtn').addEventListener('click', async () => {
       if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
@@ -531,8 +532,8 @@
           <input id="pie-group-${btn.dataset.id}" name="pie-group" class="pie-group" placeholder="예: 코티지보드 동호회" value="${escH(rec.group||'')}">
           <label for="pie-date-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">날짜</label>
           <input id="pie-date-${btn.dataset.id}" name="pie-date" class="pie-date" type="date" value="${escH(rec.date||'')}">
-          <label for="pie-review-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">게임평</label>
-          <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="게임평">${escH(rec.review||'')}</textarea>
+          <label for="pie-review-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">게임평 (선택)</label>
+          <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요.">${escH(rec.review||'')}</textarea>
           <label style="font-size:11px;color:var(--muted)">사진</label>
           <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
             ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
@@ -823,10 +824,11 @@
     for (const [, groupRecs] of playerGroups) {
       const first = groupRecs[0];
       const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${first.player_count}명</span>` : '';
+      const recorderNicks = new Set(groupRecs.map(r => (r.nickname || '').toLowerCase()).filter(Boolean));
       const nameTags = first.player_names
-        ? first.player_names.split(',').map((n, i) => {
+        ? first.player_names.split(',').map(n => {
             const t = n.trim();
-            return `<span class="pr-rec-tag pr-tag-who${i === 0 ? ' pr-tag-who-first' : ''}">${escH(t)}</span>`;
+            return `<span class="pr-rec-tag pr-tag-who${recorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}">${escH(t)}</span>`;
           }).join('')
         : '';
 
@@ -859,7 +861,6 @@
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
-            ${r.nickname ? `<span class="pr-rec-recorder">📝 ${escH(r.nickname)}</span>` : ''}
             ${moreMenu ? `<div class="pr-rec-actions">${moreMenu}</div>` : ''}
           </div>
           ${photoHtml}
@@ -884,10 +885,11 @@
       const f = grp[0];
       const groupLabel = f.group_name || '';
       const countTag = f.player_count ? `<span class="pr-rec-tag pr-tag-count-game">${f.player_count}명</span>` : '';
+      const grpRecorderNicks = new Set(grp.map(r => (r.nickname || '').toLowerCase()).filter(Boolean));
       const nameTags = f.player_names
-        ? f.player_names.split(',').map((n, i) => {
+        ? f.player_names.split(',').map(n => {
             const t = n.trim();
-            return `<span class="pr-rec-tag pr-tag-who${i === 0 ? ' pr-tag-who-first' : ''}">${escH(t)}</span>`;
+            return `<span class="pr-rec-tag pr-tag-who${grpRecorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}">${escH(t)}</span>`;
           }).join('')
         : '';
 
@@ -931,7 +933,6 @@
               <div class="pr-rec-meta">${dateline}</div>
               ${reviewHtml}
             </div>
-            ${r.nickname ? `<span class="pr-rec-recorder">📝 ${escH(r.nickname)}</span>` : ''}
             ${moreMenu2 ? `<div class="pr-rec-actions">${moreMenu2}</div>` : ''}
           </div>
           ${photoHtml}
