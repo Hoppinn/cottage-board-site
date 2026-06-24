@@ -3204,10 +3204,7 @@ body.sheet-open{
 .sheet-reaction-btn-row{display:flex;align-items:stretch;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn{border:none;border-radius:0;background:transparent;flex:1;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn:hover{background:#ead8b8;}
-.sheet-reaction-btn-wrap.is-active{background:#fbecd8;border-color:#d4a878;}
-.sheet-reaction-btn-wrap.is-active .sheet-reaction-btn,
-.sheet-reaction-btn-wrap.is-active .sheet-reaction-expand-btn{color:#7a4828;}
-.sheet-reaction-btn.is-active{background:transparent;color:#7a4828;}
+/* is-active는 JS 상태 추적용 — 시각적 변화 없음 */
 .sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:transparent;border:none;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
 .sheet-reaction-expand-btn:hover{background:#ead8b8;color:var(--text);}
 .sheet-reaction-btn-wrap.has-users .sheet-reaction-expand-btn{display:flex;}
@@ -3298,7 +3295,6 @@ body.sheet-open{
   transition:background .15s;
 }
 .sheet-reaction-btn:hover{background:#ead8b8;}
-.sheet-reaction-btn.is-active{background:#fbecd8;color:#7a4828;}
 .sheet-liker-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;}
 .sheet-liker-label{font-size:13px;flex-shrink:0;}
 .sheet-liker-chip{display:inline-flex;align-items:center;background:#f5f0e8;border:1px solid #e8dfd0;border-radius:12px;padding:2px 8px;font-size:11px;color:#5a4535;cursor:pointer;transition:background .15s;white-space:nowrap;}
