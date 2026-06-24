@@ -580,8 +580,9 @@ async function openProfilePanel(autoSubsheet = null) {
     return `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(date)}</span></li>`;
   });
 
-  const reviewListHtml = buildActivityList(stats.reviews || [], r =>
-    `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))}${r.review_text ? ` <em style="color:var(--muted);font-size:12px">"${escH(r.review_text.slice(0, 30))}${r.review_text.length > 30 ? '…' : ''}"</em>` : ''} <span>${fmtShort(r.created_at)}</span></li>`
+  const _playsWithReview = stats.plays.filter(r => r.review_text);
+  const reviewListHtml = buildActivityList(_playsWithReview, r =>
+    `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))} <em style="color:var(--muted);font-size:12px">"${escH(r.review_text.slice(0, 30))}${r.review_text.length > 30 ? '…' : ''}"</em> <span>${fmtShort(r.played_at || r.created_at)}</span></li>`
   );
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
@@ -862,8 +863,8 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${(stats.reviews || []).length}개</span><span class="profile-toggle-arrow">▴</span></button>
-      ${(stats.reviews || []).length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
+      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_playsWithReview.length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      ${_playsWithReview.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>
