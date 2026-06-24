@@ -459,11 +459,10 @@
       <button class="achievement-toast-close" type="button" aria-label="닫기">✕</button>
     `;
     document.body.appendChild(toast);
-    toast.querySelector('.achievement-toast-close').addEventListener('click', () => {
-      toast.classList.remove('is-visible');
-      setTimeout(() => toast.remove(), 400);
-    });
+    const _closeToast = () => { toast.classList.remove('is-visible'); setTimeout(() => toast.remove(), 400); };
+    toast.querySelector('.achievement-toast-close').addEventListener('click', _closeToast);
     requestAnimationFrame(() => toast.classList.add('is-visible'));
+    setTimeout(_closeToast, 8000);
   }
 
   function getGameName(gameId) {

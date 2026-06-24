@@ -72,17 +72,29 @@
   function _showCuriousPlayedToast(gameName, gameId, userId, onDone) {
     const t = document.getElementById('prToast');
     const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    t.innerHTML = `<button class="pr-toast-close-btn" type="button">✕</button>🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br>궁금해요가 취소됐어요.<br><button class="pr-toast-action-btn">👍 좋아요</button>`;
-    t.classList.add('show', 'has-action');
     let resolved = false;
     const resolve = () => { if (!resolved) { resolved = true; t.classList.remove('show', 'has-action'); onDone?.(); } };
-    t.querySelector('.pr-toast-action-btn')?.addEventListener('click', async () => {
-      await window.CottageDB?.toggleGameLike(gameId, userId);
-      t.classList.remove('has-action');
-      t.textContent = '👍 좋아요를 눌렀어요!';
-      setTimeout(resolve, 1500);
-    });
-    t.querySelector('.pr-toast-close-btn')?.addEventListener('click', resolve);
+
+    const showMain = () => {
+      t.innerHTML = `<button class="pr-toast-close-btn" type="button">✕</button>🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br><span style="font-size:12px;opacity:.85">궁금해요가 취소됐어요.</span><br><button class="pr-toast-action-btn">좋아하는 게임으로 추가하기</button>`;
+      t.classList.add('show', 'has-action');
+      t.querySelector('.pr-toast-action-btn')?.addEventListener('click', showConfirm);
+      t.querySelector('.pr-toast-close-btn')?.addEventListener('click', resolve);
+    };
+
+    const showConfirm = () => {
+      t.innerHTML = `<button class="pr-toast-close-btn" type="button">✕</button><span style="font-size:13px"><b>${esc(gameName)}</b>을<br>좋아하는 게임에 추가할까요?</span><br><button class="pr-toast-action-btn">✓ 추가하기</button> <button class="pr-toast-cancel-btn" type="button">취소</button>`;
+      t.querySelector('.pr-toast-action-btn')?.addEventListener('click', async () => {
+        await window.CottageDB?.toggleGameLike(gameId, userId);
+        t.classList.remove('has-action');
+        t.textContent = '❤️ 좋아하는 게임에 추가됐어요!';
+        setTimeout(resolve, 2000);
+      });
+      t.querySelector('.pr-toast-cancel-btn')?.addEventListener('click', resolve);
+      t.querySelector('.pr-toast-close-btn')?.addEventListener('click', resolve);
+    };
+
+    showMain();
   }
 
 

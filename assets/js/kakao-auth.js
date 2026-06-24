@@ -57,11 +57,10 @@ function _showVoucherGrantToast() {
     <button class="achievement-toast-close" type="button" aria-label="닫기">✕</button>
   `;
   document.body.appendChild(toast);
-  toast.querySelector('.achievement-toast-close').addEventListener('click', () => {
-    toast.classList.remove('is-visible');
-    setTimeout(() => toast.remove(), 400);
-  });
+  const _closeVToast = () => { toast.classList.remove('is-visible'); setTimeout(() => toast.remove(), 400); };
+  toast.querySelector('.achievement-toast-close').addEventListener('click', _closeVToast);
   requestAnimationFrame(() => toast.classList.add('is-visible'));
+  setTimeout(_closeVToast, 8000);
   setTimeout(_updateNotifBadge, 200);
 }
 window._onVoucherGranted = _showVoucherGrantToast;
