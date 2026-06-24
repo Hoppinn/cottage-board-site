@@ -390,9 +390,17 @@
     try {
       recordsData = await window.CottageDB.getAllPlayRecordsForHub();
       const _uid = String(window.getKakaoUser?.()?.id || '');
+      const _myNick = window.getKakaoUser?.()?.nickname?.toLowerCase() || '';
       const _myLatest = _uid ? (recordsData || [])
-        .filter(r => String(r.user_id) === _uid)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0] : null;
+        .filter(r =>
+          String(r.user_id) === _uid ||
+          (_myNick && (r.player_names || '').split(',').some(n => n.trim().toLowerCase() === _myNick))
+        )
+        .sort((a, b) => {
+          const da = a.played_at || a.created_at.slice(0, 10);
+          const db = b.played_at || b.created_at.slice(0, 10);
+          return new Date(db) - new Date(da);
+        })[0] : null;
       window._prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names, group: _myLatest.group_name } : null;
       renderRecords(recordsData);
     } catch (err) {
