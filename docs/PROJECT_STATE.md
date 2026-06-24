@@ -83,6 +83,11 @@
    - game_comments는 유지(기존 호환), 신규 입력은 game_play_records로 통일
    - 영향 파일: supabase-client.js, script.js, game-reviews.js
 8. **이번달참여일정 — 함께한 시간 카드 통합** — 🟡 Yellow (2026-06-25 기획 확정)
+9. **관리자 페이지 섹션 재정렬** — 🟡 Yellow, HTML ~20줄 (단일 파일, JS 무관)
+   - groupCharts: summary카드 + 날짜별 방문자 수만 남김
+   - groupReferrer (신규): 유입경로별/페이지별방문/유입경로×페이지 + subAuxCharts
+   - groupAnalysis를 groupCharts-groupReferrer 사이로 이동
+   - 위험: groupReferrer is-open 기본값 설정 필요, 기간필터는 groupCharts에 유지
    - 새 카드 생성 X, 함께한 시간 카드 하단에 일정 섹션 확장
    - 최대 2개 줄 표시, 3개 이상이면 마지막 줄에 "외 N건"
    - 표시 형식: 각 줄에 "6/27 정기모임" (슬래시 구분 아닌 줄바꿈)
