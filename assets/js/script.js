@@ -1088,14 +1088,33 @@ function openShelfSheet(url) {
   overlay.querySelector('.shelf-sheet-back').addEventListener('click', () => overlay.remove());
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 
-  // iframe에서 게임 클릭 시: 오버레이 닫고 해당 게임 시트로 전환
-  window.addEventListener('message', function _shelfMsg(e) {
-    if (e.data?.action === 'openGame' && e.data?.gameId) {
+  function registerMsg() { window.addEventListener('message', handleShelfMsg); }
+  function handleShelfMsg(e) {
+    if (e.data?.action !== 'openGame' || !e.data?.gameId) return;
+    window.removeEventListener('message', handleShelfMsg);
+
+    // 선반 오버레이는 숨기고 게임시트를 위로 띄움
+    overlay.style.zIndex = '0';
+    overlay.style.pointerEvents = 'none';
+    openGameSheet(decodeURIComponent(e.data.gameId));
+
+    // 게임시트 닫히면 선반 복원
+    const gsEl = document.getElementById('gameSheet');
+    if (gsEl) {
+      const obs = new MutationObserver(() => {
+        if (!gsEl.classList.contains('is-active')) {
+          obs.disconnect();
+          overlay.style.zIndex = '9600';
+          overlay.style.pointerEvents = '';
+          registerMsg();
+        }
+      });
+      obs.observe(gsEl, { attributes: true, attributeFilter: ['class'] });
+    } else {
       overlay.remove();
-      window.removeEventListener('message', _shelfMsg);
-      openGameSheet(decodeURIComponent(e.data.gameId));
     }
-  });
+  }
+  registerMsg();
 }
 
 function openGameSheet(gameKey, restoreScroll = false){
@@ -1231,7 +1250,7 @@ function openGameSheet(gameKey, restoreScroll = false){
     <!-- 분위기 태그 -->
     ${detail.displayTags?.length ? `
       <div class="sheet-dtags">
-        ${detail.displayTags.map(t => `<span class="sheet-dtag" style="cursor:pointer" onclick="if(confirm('책장 페이지로 이동할까요?'))alert('준비 중입니다.')">${t}</span>`).join("")}
+        ${detail.displayTags.map(t => `<span class="sheet-dtag">${t}</span>`).join("")}
       </div>
     ` : ""}
     <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfGroupId ? 'shelf=' + encodeURIComponent(shelfGroupId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📚 꽂혀있는 책장 보러가기 →</button>
