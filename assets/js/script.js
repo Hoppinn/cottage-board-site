@@ -1253,17 +1253,21 @@ function openGameSheet(gameKey, restoreScroll = false){
     <div class="sheet-feedback-reactions">
       <div class="sheet-reaction-group">
         <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
-          <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
-          <button class="sheet-reaction-expand-btn" id="sheetLikeExpandBtn" type="button" aria-label="좋아요한 사람 보기">▾</button>
+          <div class="sheet-reaction-btn-row">
+            <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
+            <button class="sheet-reaction-expand-btn" id="sheetLikeExpandBtn" type="button" aria-label="좋아요한 사람 보기">▾</button>
+          </div>
+          <div class="sheet-reaction-users-panel" id="sheetLikerPanel"></div>
         </div>
-        <div class="sheet-reaction-users-panel" id="sheetLikerPanel"></div>
       </div>
       <div class="sheet-reaction-group">
         <div class="sheet-reaction-btn-wrap" id="sheetCuriousBtnWrap">
-          <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
-          <button class="sheet-reaction-expand-btn" id="sheetCuriousExpandBtn" type="button" aria-label="궁금해요한 사람 보기">▾</button>
+          <div class="sheet-reaction-btn-row">
+            <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
+            <button class="sheet-reaction-expand-btn" id="sheetCuriousExpandBtn" type="button" aria-label="궁금해요한 사람 보기">▾</button>
+          </div>
+          <div class="sheet-reaction-users-panel" id="sheetCuriousPanel"></div>
         </div>
-        <div class="sheet-reaction-users-panel" id="sheetCuriousPanel"></div>
       </div>
     </div>
 

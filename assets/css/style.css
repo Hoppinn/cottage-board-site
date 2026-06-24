@@ -3199,15 +3199,17 @@ body.sheet-open{
   margin-top:10px;
   margin-bottom:16px;
 }
-.sheet-reaction-group{display:flex;flex-direction:column;gap:0;flex:1;}
-.sheet-reaction-btn-wrap{display:flex;align-items:stretch;}
-.sheet-reaction-btn-wrap .sheet-reaction-btn{border-radius:10px;flex:1;}
-.sheet-reaction-btn-wrap.has-users .sheet-reaction-btn{border-radius:10px 0 0 10px;border-right:none;}
-.sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:var(--cream);border:1px solid #ead8b8;border-left:none;border-radius:0 10px 10px 0;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
+.sheet-reaction-group{display:flex;flex-direction:column;flex:1;}
+.sheet-reaction-btn-wrap{border:1px solid #ead8b8;border-radius:10px;overflow:hidden;background:var(--cream);}
+.sheet-reaction-btn-row{display:flex;align-items:stretch;}
+.sheet-reaction-btn-wrap .sheet-reaction-btn{border:none;border-radius:0;background:transparent;flex:1;}
+.sheet-reaction-btn-wrap .sheet-reaction-btn:hover{background:#ead8b8;}
+.sheet-reaction-btn-wrap .sheet-reaction-btn.is-active{background:#fbecd8;color:#7a4828;}
+.sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:transparent;border:none;border-left:1px solid #ead8b8;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
 .sheet-reaction-expand-btn:hover{background:#ead8b8;color:var(--text);}
 .sheet-reaction-btn-wrap.has-users .sheet-reaction-expand-btn{display:flex;}
-.sheet-reaction-users-panel{display:none;flex-wrap:wrap;gap:4px;padding-top:6px;}
-.sheet-reaction-users-panel.is-open{display:flex;}
+.sheet-reaction-users-panel{display:none;flex-wrap:wrap;gap:4px;padding:6px 8px 8px;}
+.sheet-reaction-users-panel.is-open{display:flex;border-top:1px solid #ead8b8;}
 
 /* 게임 설명 + 더보기/접기 */
 .sheet-desc-wrap{
@@ -3283,23 +3285,17 @@ body.sheet-open{
   justify-content:center;
   gap:4px;
   padding:7px 0;
-  border:1px solid #ead8b8;
-  border-radius:10px;
-  background:var(--cream);
+  border:none;
+  border-radius:0;
+  background:transparent;
   font-size:14px;
   font-weight:700;
   color:#3a3025;
   cursor:pointer;
   transition:background .15s;
 }
-.sheet-reaction-btn:hover{
-  background:#ead8b8;
-}
-.sheet-reaction-btn.is-active{
-  background:#fbecd8;
-  border-color:#d4a878;
-  color:#7a4828;
-}
+.sheet-reaction-btn:hover{background:#ead8b8;}
+.sheet-reaction-btn.is-active{background:#fbecd8;color:#7a4828;}
 .sheet-liker-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;}
 .sheet-liker-label{font-size:13px;flex-shrink:0;}
 .sheet-liker-chip{display:flex;align-items:center;gap:5px;background:var(--card-bg,#faf9f5);border:1px solid var(--border,#e8e4dc);border-radius:20px;padding:4px 10px 4px 4px;font-size:12px;color:var(--text);cursor:pointer;transition:background .15s;}
