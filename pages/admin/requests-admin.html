@@ -992,6 +992,9 @@
     function renderCharts(rows, allProfiles, profilesMap, pageViews = []) {
       if (!window.Chart) return;
 
+      const ADMIN_UID = '4916417947';
+      rows = rows.filter(r => String(r.user_id) !== ADMIN_UID);
+
       const C1 = '#9e3a2a', C2 = '#c4956a', C3 = '#e8c89a', CMUTED = '#c0b0a0';
       const GRID = '#f0ebe3';
       const PALETTE = [C1, C2, '#b5886e', C3, CMUTED, '#7a5c48', '#d4a878', '#e8d5bb'];
@@ -1352,13 +1355,14 @@
         // ── 4. 유입경로 × 페이지 교차분석 ───────────────────────────
         {
           const crossMap = {};
+          // 명 카운트: filteredVisitor(__visitor__ 행) 기준
           const crossUserMap = {};
+          for (const r of filteredVisitor) {
+            const cat = categorizeRef(r.referrer) || '직접 방문';
+            crossUserMap[cat] = (crossUserMap[cat] || 0) + 1;
+          }
           for (const r of filteredPV) {
             const cat = categorizeRef(r.referrer) || '직접 방문';
-            if (r.page === '__visitor__') {
-              crossUserMap[cat] = (crossUserMap[cat] || 0) + 1;
-              continue;
-            }
             const pg = PAGE_LABEL[r.page] || r.page || '?';
             if (!crossMap[cat]) crossMap[cat] = {};
             crossMap[cat][pg] = (crossMap[cat][pg] || 0) + 1;

@@ -757,13 +757,14 @@ window._cottageSess = (function () {
         return u.hostname !== location.hostname ? u.hostname : null;
       } catch (_) { return null; }
     })();
-    // 관리자는 방문자 수 포함, 유입경로만 제외
+    // 관리자 접속은 방문자 통계 전체 미포함
     const isAdmin = !!localStorage.getItem('cottage_is_admin');
+    if (isAdmin) return;
     // 외부 유입 감지 시 당일 소스 갱신 (last-touch 모델 — 채널 효과 측정 목적)
     const origSrcKey = `cottage_orig_src_${kstDate}`;
-    if (!isAdmin && referrer) localStorage.setItem(origSrcKey, referrer);
+    if (referrer) localStorage.setItem(origSrcKey, referrer);
     // 유효 소스: 현재 외부 > 당일 마지막 외부 유입 > 'direct'
-    const effectiveSource = (!isAdmin && (referrer || localStorage.getItem(origSrcKey))) || 'direct';
+    const effectiveSource = referrer || localStorage.getItem(origSrcKey) || 'direct';
     const visitedSourceKey = `cottage_pv_${kstDate}_${effectiveSource}_${page}`;
     if (!localStorage.getItem(visitedSourceKey)) {
       localStorage.setItem(visitedSourceKey, "1");
