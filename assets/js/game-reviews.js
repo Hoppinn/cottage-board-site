@@ -72,17 +72,17 @@
   function _showCuriousPlayedToast(gameName, gameId, userId, onDone) {
     const t = document.getElementById('prToast');
     const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    t.innerHTML = `🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br>궁금해요가 취소됐어요. <button class="pr-toast-action-btn">👍 좋아요</button>`;
+    t.innerHTML = `<button class="pr-toast-close-btn" type="button">✕</button>🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br>궁금해요가 취소됐어요.<br><button class="pr-toast-action-btn">👍 좋아요</button>`;
     t.classList.add('show', 'has-action');
     let resolved = false;
     const resolve = () => { if (!resolved) { resolved = true; t.classList.remove('show', 'has-action'); onDone?.(); } };
     t.querySelector('.pr-toast-action-btn')?.addEventListener('click', async () => {
       await window.CottageDB?.toggleGameLike(gameId, userId);
-      t.innerHTML = '👍 좋아요를 눌렀어요!';
       t.classList.remove('has-action');
+      t.textContent = '👍 좋아요를 눌렀어요!';
       setTimeout(resolve, 1500);
     });
-    setTimeout(resolve, 6000);
+    t.querySelector('.pr-toast-close-btn')?.addEventListener('click', resolve);
   }
 
 

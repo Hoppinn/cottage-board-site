@@ -6256,8 +6256,9 @@ body.sheet-open{
 /* toast */
 .pr-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--green); color: #fff; border-radius: 22px; padding: 10px 24px; font-size: 14px; font-weight: 700; z-index: 9999; opacity: 0; transition: opacity 0.25s; pointer-events: none; white-space: nowrap; }
 .pr-toast.show { opacity: 1; }
-.pr-toast.has-action { white-space: normal; pointer-events: auto; text-align: center; max-width: min(320px, 90vw); line-height: 1.5; }
+.pr-toast.has-action { position: relative; white-space: normal; pointer-events: auto; text-align: center; max-width: min(320px, 90vw); line-height: 1.5; padding-top: 18px; }
 .pr-toast-action-btn { display: inline-block; margin: 6px 0 0; background: #fff; color: var(--green); border: none; border-radius: 14px; padding: 4px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.pr-toast-close-btn { position: absolute; top: 6px; right: 10px; background: none; border: none; color: rgba(255,255,255,0.8); font-size: 14px; cursor: pointer; padding: 2px 4px; line-height: 1; }
 
 .pr-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 36px 0; }
 
