@@ -1071,6 +1071,24 @@ function ensureGameSheet() {
 let _currentSheetGameKey = null;
 let _savedSheetScrollTop = 0;
 
+function openShelfSheet(url) {
+  document.getElementById('shelfSheetOverlay')?.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'shelfSheetOverlay';
+  overlay.className = 'shelf-sheet-overlay';
+  overlay.innerHTML = `
+    <div class="shelf-sheet-box">
+      <div class="shelf-sheet-header">
+        <span class="shelf-sheet-title">게임 위치</span>
+        <button class="shelf-sheet-close" type="button">✕</button>
+      </div>
+      <iframe class="shelf-sheet-iframe" src="${url}"></iframe>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('.shelf-sheet-close').addEventListener('click', () => overlay.remove());
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+}
+
 function openGameSheet(gameKey, restoreScroll = false){
   _currentSheetGameKey = gameKey;
   const game =
@@ -1170,7 +1188,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
-          <a class="sheet-loc-btn" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📍 ${shelfLabel}</a>
+          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}')">📍 ${shelfLabel}</button>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
             onclick="return confirm('유튜브로 이동할까요?')"
@@ -1207,7 +1225,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${detail.displayTags.map(t => `<span class="sheet-dtag" style="cursor:pointer" onclick="if(confirm('책장 페이지로 이동할까요?'))alert('준비 중입니다.')">${t}</span>`).join("")}
       </div>
     ` : ""}
-    <a class="sheet-shelf-title-link" href="${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}">📚 꽂혀있는 책장 보러가기 →</a>
+    <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html${shelfGroupId ? '?shelf=' + encodeURIComponent(shelfGroupId) : ''}')">📚 꽂혀있는 책장 보러가기 →</button>
 
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `

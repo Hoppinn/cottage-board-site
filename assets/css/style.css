@@ -2715,6 +2715,7 @@ body.sheet-open{
 .sheet-loc-btn{
   background:#f0e4d4;
   color:#7a4828;
+  cursor:pointer;
 }
 
 .sheet-yt-btn{
@@ -2778,6 +2779,11 @@ body.sheet-open{
   color:#7a4828;
   text-decoration:none;
   margin:3px 0 14px;
+  background:none;
+  border:none;
+  padding:0;
+  cursor:pointer;
+  text-align:left;
 }
 
 .sheet-game-title{
@@ -3561,6 +3567,12 @@ body.sheet-open{
 
 /* 내 활동 프로필 패널 */
 @keyframes slideUpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.shelf-sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9100;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
+.shelf-sheet-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;height:90vh;height:90dvh;display:flex;flex-direction:column;animation:slideUpSheet 0.3s ease-out both;}
+.shelf-sheet-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;border-bottom:1px solid var(--border,#e8e4dc);flex-shrink:0;}
+.shelf-sheet-title{font-size:16px;font-weight:700;color:#5a3418;}
+.shelf-sheet-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--muted,#8c7b6a);padding:4px 6px;}
+.shelf-sheet-iframe{flex:1;width:100%;border:none;}
 .other-profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9200;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;}
 .other-profile-box{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:480px;padding:20px 20px 32px;max-height:85vh;max-height:85dvh;overflow-y:auto;animation:slideUpSheet 0.3s ease-out both;}
 .other-profile-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
