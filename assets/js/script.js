@@ -1672,7 +1672,7 @@ async function initSheetPhotos(gameKey) {
     : '';
   const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
 
-  const SHOW_FIRST = 3;
+  const SHOW_FIRST = 4;
   const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
