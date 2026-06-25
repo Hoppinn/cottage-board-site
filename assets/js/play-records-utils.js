@@ -83,7 +83,11 @@
     if (opts?.caption) {
       const cap = document.createElement('div');
       cap.className = 'pr-lightbox-caption';
-      cap.textContent = opts.caption;
+      if (opts.link) {
+        cap.innerHTML = `${_escAttr(opts.caption)} <a class="pr-lightbox-link" href="${_escAttr(opts.link)}">원 게시글 보기 →</a>`;
+      } else {
+        cap.textContent = opts.caption;
+      }
       lb.appendChild(cap);
     }
     document.body.appendChild(lb);

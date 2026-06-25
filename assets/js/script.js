@@ -1323,10 +1323,7 @@ function openGameSheet(gameKey, restoreScroll = false){
 
     <!-- 기록 섹션 그룹 -->
     <div class="sheet-records-group">
-      <div class="sheet-records-group-hd">
-        <span class="sheet-records-group-title">기록</span>
-        <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 & 기록하기 →</button>
-      </div>
+      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 전체보기 & 남기기 →</button>
 
       <!-- 게임평 미리보기 -->
       <div class="sheet-preview-section">
@@ -1493,21 +1490,11 @@ async function initSheetCommentsPreview(gameKey) {
   const txt = esc(item.text);
   const nick = esc(item.nick);
   const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
-  const isMine = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
-  let editBtns = '';
-  if (isMine) {
-    if (item.source === 'comment') {
-      editBtns = `<div class="sheet-comment-actions">
-        <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
-        <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
-      </div>`;
-    } else {
-      editBtns = `<div class="sheet-comment-actions">
-        <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditPlayReview(this)" type="button">수정</button>
-        <button class="sheet-comment-del-btn" data-id="${item.id}" data-game="${esc(gameKey)}" onclick="onDeletePlayReview(this)" type="button">삭제</button>
-      </div>`;
-    }
-  }
+  const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
+  const editBtns = isMine ? `<div class="sheet-comment-actions">
+    <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
+    <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
+  </div>` : '';
   el.innerHTML = `<div class="sheet-comment-item">
     <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
     <p class="sheet-comment-text">${txt}</p>
@@ -1564,16 +1551,30 @@ async function initSheetPlayPreview(gameKey) {
   </div>`;
 }
 
-function _attachPhotoLightbox(container, allPhotos) {
+function _attachPhotoLightbox(container, allPhotos, entries) {
   if (!window.openLightbox) return;
+  function _photoOpts(idx) {
+    const e = entries?.[idx];
+    if (!e) return {};
+    const parts = [e.nickname, e.played_at ? e.played_at.slice(0, 10) : ''].filter(Boolean);
+    const params = [];
+    if (e.group_name) params.push('group=' + encodeURIComponent(e.group_name));
+    if (e.played_at) params.push('date=' + encodeURIComponent(e.played_at.slice(0, 10)));
+    const link = params.length
+      ? rootPath + 'pages/game/game-reviews.html?' + params.join('&')
+      : null;
+    return { caption: parts.join(' · '), link };
+  }
   container.querySelectorAll('.pr-rec-photo').forEach(img => {
     img.addEventListener('click', () => {
-      try { window.openLightbox(allPhotos, Number(img.dataset.idx || 0)); } catch(_) {}
+      const idx = Number(img.dataset.idx || 0);
+      try { window.openLightbox(allPhotos, idx, _photoOpts(idx)); } catch(_) {}
     });
   });
   container.querySelectorAll('.pr-rec-photo-more').forEach(btn => {
     btn.addEventListener('click', () => {
-      try { window.openLightbox(allPhotos, Number(btn.dataset.idx || 0)); } catch(_) {}
+      const idx = Number(btn.dataset.idx || 0);
+      try { window.openLightbox(allPhotos, idx, _photoOpts(idx)); } catch(_) {}
     });
   });
 }
@@ -1590,6 +1591,7 @@ async function _fetchGamePhotos(gameKey) {
       url,
       nickname: r.nickname || '',
       played_at: r.played_at || r.created_at || '',
+      group_name: r.group_name || '',
     }))
   );
 }
@@ -1625,7 +1627,7 @@ async function initSheetPhotoPreview(gameKey) {
       ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
     </div>`;
-  _attachPhotoLightbox(el, allPhotos);
+  _attachPhotoLightbox(el, allPhotos, entries);
 }
 
 async function initSheetPhotos(gameKey) {
@@ -1659,7 +1661,7 @@ async function initSheetPhotos(gameKey) {
       ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="9">+${more}장</div>` : ''}
     </div>`;
-  _attachPhotoLightbox(el, allPhotos);
+  _attachPhotoLightbox(el, allPhotos, entries);
 }
 
 if(closeGameSheetButton){
