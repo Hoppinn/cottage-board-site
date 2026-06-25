@@ -3491,7 +3491,47 @@ body.embed-mode .site-footer { display: none !important; }
   padding:0;
   font-weight:600;
 }
-.sheet-records-all-btn{ display:block; width:100%; text-align:center; margin-top:12px; padding:10px 0; background:var(--bg,#f5f0e8); border:1px solid var(--border,#e8e4dc); border-radius:8px; font-size:13px; font-weight:700; color:#7a4828; }
+.sheet-records-group{
+  border:1.5px solid #ead8b8;
+  border-radius:14px;
+  padding:12px 14px;
+  background:var(--paper);
+  margin-bottom:10px;
+}
+.sheet-records-group-hd{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+  padding-bottom:8px;
+  border-bottom:1px solid #ead8b8;
+}
+.sheet-records-group-title{
+  font-size:15px;
+  font-weight:700;
+  color:var(--text);
+}
+.sheet-records-all-btn{
+  background:none;
+  border:none;
+  font-size:13px;
+  font-weight:700;
+  color:#7a4828;
+  cursor:pointer;
+  padding:0;
+}
+.sheet-records-group .sheet-preview-section{
+  border:none;
+  border-radius:0;
+  padding:10px 0;
+  margin-bottom:0;
+  background:transparent;
+  border-bottom:1px solid #ead8b8;
+}
+.sheet-records-group .sheet-preview-section:last-child{
+  border-bottom:none;
+  padding-bottom:0;
+}
 .sheet-preview-body .sheet-comment-item{ margin:0; }
 .sheet-comment-actions{display:flex;gap:8px;margin-top:6px;}
 .sheet-comment-edit-btn,.sheet-comment-del-btn{background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;}
