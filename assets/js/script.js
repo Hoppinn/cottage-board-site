@@ -1167,6 +1167,14 @@ function openGameSheet(gameKey, restoreScroll = false){
 
   const shelfGroupId = game.cottage?.shelfGroupId || "";
   const shelfLabel   = getGameShelfLabel(game);
+  // game-location.html 섹션 ID: '협력'은 weight 기준으로 hard_coop / easy_coop으로 분기
+  const shelfSectionId = (() => {
+    if (shelfGroupId === '협력') {
+      const w = game.bgg?.weight;
+      return (w && w >= 2.5) ? 'hard_coop' : 'easy_coop';
+    }
+    return shelfGroupId;
+  })();
   const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
   const categoriesDisplay = (detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories) || [];
 
@@ -1220,7 +1228,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-action-btns">
-          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfGroupId ? 'shelf=' + encodeURIComponent(shelfGroupId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel}</button>
+          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel}</button>
           <a class="sheet-yt-btn"
             href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
             onclick="return confirm('유튜브로 이동할까요?')"
@@ -1257,7 +1265,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         ${detail.displayTags.map(t => `<span class="sheet-dtag">${t}</span>`).join("")}
       </div>
     ` : ""}
-    <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfGroupId ? 'shelf=' + encodeURIComponent(shelfGroupId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📚 꽂혀있는 책장 보러가기 →</button>
+    <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📚 꽂혀있는 책장 보러가기 →</button>
 
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
@@ -2035,7 +2043,17 @@ async function initSheetComments(gameKey) {
     </div>`;
   }).join('');
 
-  listEl.innerHTML = allHtml;
+  const htmlArr = allHtml.split(/(?=<div class="sheet-comment-item">)/).filter(Boolean);
+  const restHtml = htmlArr.slice(1).join('');
+  const moreCount = total - 1;
+  listEl.innerHTML = htmlArr[0] +
+    (moreCount > 0 ? `<div class="sheet-list-rest" style="display:none">${restHtml}</div><button class="sheet-list-more-btn" type="button">${moreCount}건 더보기 ▾</button>` : '');
+  if (moreCount > 0) {
+    listEl.querySelector('.sheet-list-more-btn')?.addEventListener('click', function() {
+      listEl.querySelector('.sheet-list-rest').style.display = '';
+      this.remove();
+    });
+  }
 }
 
 async function onDeleteComment(id, gameKey) {
@@ -2102,12 +2120,22 @@ function getOrCreateCommentModal() {
     <div class="sheet-comment-modal-box">
       <p class="sheet-comment-modal-title">게임평 남기기</p>
       <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 한줄평을 남겨보세요"></textarea>
+      <div class="sheet-comment-play-link" id="sheetCommentPlayLink" style="display:none;">
+        <label class="sheet-comment-play-link-label">
+          <input type="checkbox" id="sheetCommentLinkCheck">
+          <span>내 플레이 기록에 추가</span>
+        </label>
+        <select class="sheet-comment-play-select" id="sheetCommentPlaySelect" style="display:none;"></select>
+      </div>
       <div class="sheet-comment-modal-actions">
         <button class="sheet-comment-form-cancel" onclick="onCloseCommentModal()">취소</button>
         <button class="sheet-comment-form-submit" id="sheetCommentModalSubmit" onclick="onSubmitCommentModal()">등록</button>
       </div>
     </div>
   `;
+  modal.querySelector('#sheetCommentLinkCheck').addEventListener('change', e => {
+    document.getElementById('sheetCommentPlaySelect').style.display = e.target.checked ? 'block' : 'none';
+  });
   modal.addEventListener('click', (e) => { if (e.target === modal) onCloseCommentModal(); });
   document.body.appendChild(modal);
   return modal;
@@ -2115,7 +2143,7 @@ function getOrCreateCommentModal() {
 
 function onOpenCommentInput(btn) {
   const gameKey = btn.dataset.gameId;
-  requireLogin(() => {
+  requireLogin(async () => {
     const modal = getOrCreateCommentModal();
     modal.dataset.gameId = gameKey;
     delete modal.dataset.editId;
@@ -2124,6 +2152,34 @@ function onOpenCommentInput(btn) {
     if (titleEl) titleEl.textContent = '게임평 남기기';
     if (submitEl) submitEl.textContent = '등록';
     document.getElementById('sheetCommentModalInput').value = '';
+
+    // 플레이기록 연동: 내 기록 중 게임평 없는 것 조회
+    const linkWrap = document.getElementById('sheetCommentPlayLink');
+    const linkCheck = document.getElementById('sheetCommentLinkCheck');
+    const linkSelect = document.getElementById('sheetCommentPlaySelect');
+    if (linkWrap && linkCheck && linkSelect) {
+      linkCheck.checked = false;
+      linkSelect.style.display = 'none';
+      linkSelect.innerHTML = '';
+      linkWrap.style.display = 'none';
+      const _cu = window.getKakaoUser?.();
+      if (_cu?.id && window.CottageDB) {
+        const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+        const records = await window.CottageDB.getGamePlayRecords(numericId);
+        const mine = records.filter(r => String(r.user_id) === String(_cu.id) && !r.review_text);
+        if (mine.length) {
+          mine.forEach(r => {
+            const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
+            linkSelect.appendChild(opt);
+          });
+          linkWrap.style.display = 'block';
+        }
+      }
+    }
+
     modal.style.display = 'flex';
     document.getElementById('sheetCommentModalInput')?.focus();
   });
@@ -2174,9 +2230,16 @@ async function onSubmitCommentModal() {
   if (editId) {
     result = await window.CottageDB.updateComment(editId, text);
   } else {
-    const _cu = window.getKakaoUser?.();
-    result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null);
-    if (!result.error && result.id) saveMyCommentId(result.id);
+    const linkCheck = document.getElementById('sheetCommentLinkCheck');
+    const linkSelect = document.getElementById('sheetCommentPlaySelect');
+    const linkedRecId = linkCheck?.checked ? linkSelect?.value : null;
+    if (linkedRecId) {
+      result = await window.CottageDB.updateGamePlay(linkedRecId, { review_text: text });
+    } else {
+      const _cu = window.getKakaoUser?.();
+      result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null);
+      if (!result.error && result.id) saveMyCommentId(result.id);
+    }
   }
   if (!result.error) {
     onCloseCommentModal();
@@ -2331,70 +2394,77 @@ async function initPlayWidget(gameKey) {
 
   const listId = `sheetAllRecords-${gameKey}`;
 
-  // 플레이 박스 (헤더 + 기록 목록 하나의 카드)
-  html += `<div class="sheet-play-box">`;
-  html += `<div class="sheet-play-record">
-    <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
-    <div class="sheet-play-record-btns">
-      <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
-      ${allRecords.length > 1 ? `<button class="sheet-records-toggle-btn" onclick="togglePlayRecords('${listId}')" type="button"><span class="sheet-toggle-arrow" id="${listId}-arrow">▾</span></button>` : ""}
-    </div>
-  </div>`;
-
-  // 전체 플레이 기록 목록 (접기/펼치기)
-  if (allRecords.length) {
-    html += `<div class="sheet-my-records-list is-collapsed" id="${listId}">
-      ${allRecords.map(r => {
-        const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
-          || (r.id && myRecordIds.has(String(r.id)));
-        const showNick = !r.player_names && r.nickname;
-        const dateStr = r.played_at
-          ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
-          : formatDate(r.created_at);
-        const groupLabel = r.group_name
-          ? `<a class="sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${escH(r.group_name)}</a>`
-          : null;
-        const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
-        const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
-        return `<div class="sheet-my-record-item">
-          <div class="sheet-record-header-row">
-            ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
-            ${isMine ? `<div class="sheet-play-record-actions">
-              <button class="sheet-play-edit-btn"
-                data-game="${gameKey}" data-id="${r.id}"
-                data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
-                data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
-                data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
-                data-review="${escH(r.review_text || '')}"
-                type="button">수정</button>
-              <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
-            </div>` : ""}
-          </div>
-          ${hasDetail ? `<div class="sheet-play-info">
-            ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
-            ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
-            ${r.play_time_min ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">⏱ ${r.play_time_min}분</span>` : ""}
-            ${r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">🏆 ${escH(r.score_note)}</span>` : ""}
-          </div>` : ""}
-        </div>`;
-      }).join("")}
+  function buildRecordItemHtml(r) {
+    const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
+      || (r.id && myRecordIds.has(String(r.id)));
+    const showNick = !r.player_names && r.nickname;
+    const dateStr = r.played_at
+      ? new Date(r.played_at + 'T00:00:00').toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' })
+      : formatDate(r.created_at);
+    const groupLabel = r.group_name
+      ? `<a class="sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${escH(r.group_name)}</a>`
+      : null;
+    const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
+    const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
+    return `<div class="sheet-my-record-item">
+      <div class="sheet-record-header-row">
+        ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
+        ${isMine ? `<div class="sheet-play-record-actions">
+          <button class="sheet-play-edit-btn"
+            data-game="${gameKey}" data-id="${r.id}"
+            data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
+            data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
+            data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
+            data-review="${escH(r.review_text || '')}"
+            type="button">수정</button>
+          <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
+        </div>` : ""}
+      </div>
+      ${hasDetail ? `<div class="sheet-play-info">
+        ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
+        ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
+        ${r.play_time_min ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">⏱ ${r.play_time_min}분</span>` : ""}
+        ${r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">🏆 ${escH(r.score_note)}</span>` : ""}
+      </div>` : ""}
     </div>`;
   }
 
-  html += `</div>`; // .sheet-play-box 닫기
+  // 플레이 박스 (헤더 + 기록 목록)
+  html += `<div class="sheet-play-box">`;
+  html += `<div class="sheet-play-record">
+    <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
+    <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
+  </div>`;
 
-  const wasExpanded = (() => {
-    const prev = document.getElementById(listId);
-    return prev ? !prev.classList.contains('is-collapsed') : false;
-  })();
+  if (allRecords.length) {
+    const firstItem = buildRecordItemHtml(allRecords[0]);
+    const restItems = allRecords.slice(1).map(buildRecordItemHtml).join('');
+    const moreCount = allRecords.length - 1;
+    html += `<div class="sheet-my-records-list" id="${listId}">
+      ${firstItem}
+      ${moreCount > 0 ? `<div class="sheet-list-rest" id="${listId}-rest" style="display:none">${restItems}</div>
+      <button class="sheet-list-more-btn" id="${listId}-more" type="button">${moreCount}건 더보기 ▾</button>` : ''}
+    </div>`;
+  }
+
+  html += `</div>`;
 
   widget.innerHTML = html;
 
-  if (wasExpanded) {
-    const newList = document.getElementById(listId);
-    const newArrow = document.getElementById(`${listId}-arrow`);
-    if (newList) newList.classList.remove('is-collapsed');
-    if (newArrow) newArrow.textContent = '▴';
+  const moreBtn = document.getElementById(`${listId}-more`);
+  if (moreBtn) {
+    moreBtn.addEventListener('click', () => {
+      document.getElementById(`${listId}-rest`).style.display = '';
+      moreBtn.remove();
+      widget.querySelectorAll('.sheet-list-rest .sheet-play-edit-btn').forEach(b => {
+        b.addEventListener('click', () => onOpenEditPlayModal(
+          b.dataset.game, b.dataset.id,
+          Number(b.dataset.count) || 0, b.dataset.names,
+          Number(b.dataset.time) || 0, b.dataset.score,
+          b.dataset.group || '', b.dataset.playedAt || '', b.dataset.review || ''
+        ));
+      });
+    });
   }
 
   widget.querySelectorAll('.sheet-play-edit-btn').forEach(btn => {
