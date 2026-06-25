@@ -872,9 +872,8 @@
       el.addEventListener('click', e => {
         e.stopPropagation();
         const wrap = el.closest('.pr-rec-photo-wrap');
-        const row = el.closest('.pr-rec-row');
-        let rec = {}; try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (_) {}
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3), { caption: _recCaption(rec) }); } catch(_) {}
+        wrap.querySelectorAll('.sheet-photo-hidden').forEach(item => item.classList.remove('sheet-photo-hidden'));
+        el.remove();
       });
     });
 

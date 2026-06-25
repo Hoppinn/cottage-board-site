@@ -17,12 +17,12 @@
 
   function buildPhotoHtml(photoUrls, recordId, canDelPhoto) {
     if (!photoUrls.length) return '';
-    const show = photoUrls.slice(0, 3);
-    const more = photoUrls.length - 3;
+    const SHOW = 3;
+    const more = photoUrls.length - SHOW;
     const allAttr = _escAttr(JSON.stringify(photoUrls));
     return `<div class="pr-rec-photo-wrap" data-urls="${allAttr}">
-      ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${_escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${_escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
-      ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
+      ${photoUrls.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${_escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${_escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
+      ${more > 0 ? `<div class="pr-rec-photo-more">+${more}장</div>` : ''}
     </div>`;
   }
 
