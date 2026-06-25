@@ -3502,17 +3502,17 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-records-all-btn{
   display:block;
   width:calc(100% + 28px);
-  margin:-12px -14px 12px;
+  margin:12px -14px -12px;
   padding:10px 14px;
   background:var(--cream);
   border:none;
-  border-bottom:1px solid #ead8b8;
-  border-radius:12px 12px 0 0;
+  border-top:1px solid #ead8b8;
+  border-radius:0 0 12px 12px;
   font-size:14px;
   font-weight:700;
   color:#7a4828;
   cursor:pointer;
-  text-align:left;
+  text-align:center;
 }
 .sheet-records-group .sheet-preview-section{
   border:none;

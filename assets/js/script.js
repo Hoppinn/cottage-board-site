@@ -1323,7 +1323,6 @@ function openGameSheet(gameKey, restoreScroll = false){
 
     <!-- 기록 섹션 그룹 -->
     <div class="sheet-records-group">
-      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 전체보기 & 남기기 →</button>
 
       <!-- 게임평 미리보기 -->
       <div class="sheet-preview-section">
@@ -1354,6 +1353,8 @@ function openGameSheet(gameKey, restoreScroll = false){
           <span class="sheet-comments-empty">불러오는 중...</span>
         </div>
       </div>
+
+      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 전체보기 & 남기기 →</button>
     </div>
 
   `;
@@ -1556,14 +1557,13 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
   function _photoOpts(idx) {
     const e = entries?.[idx];
     if (!e) return {};
-    const parts = [e.nickname, e.played_at ? e.played_at.slice(0, 10) : ''].filter(Boolean);
-    const params = [];
-    if (e.group_name) params.push('group=' + encodeURIComponent(e.group_name));
-    if (e.played_at) params.push('date=' + encodeURIComponent(e.played_at.slice(0, 10)));
-    const link = params.length
-      ? rootPath + 'pages/game/game-reviews.html?' + params.join('&')
-      : null;
-    return { caption: parts.join(' · '), link };
+    const parts = [];
+    if (e.group_name) parts.push(e.group_name);
+    if (e.played_at) parts.push(e.played_at.slice(2, 10).replace(/-/g, '.'));
+    if (e.player_count) parts.push(e.player_count + '명');
+    if (e.player_names) parts.push(e.player_names);
+    if (e.score_note) parts.push(e.score_note);
+    return parts.length ? { caption: parts.join(' · ') } : {};
   }
   container.querySelectorAll('.pr-rec-photo').forEach(img => {
     img.addEventListener('click', () => {
@@ -1592,6 +1592,9 @@ async function _fetchGamePhotos(gameKey) {
       nickname: r.nickname || '',
       played_at: r.played_at || r.created_at || '',
       group_name: r.group_name || '',
+      player_count: r.player_count || null,
+      player_names: r.player_names || '',
+      score_note: r.score_note || '',
     }))
   );
 }
