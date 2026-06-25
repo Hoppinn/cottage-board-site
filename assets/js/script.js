@@ -1465,11 +1465,15 @@ async function initSheetCommentsPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewCommentLabel-${gameKey}`);
   if (!el || !window.CottageDB) return;
 
-  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
-  const [comments, playReviews] = await Promise.all([
+  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
+  const numericId = bggIdP || gameKey;
+  let [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey, 5),
     window.CottageDB.getPlayReviewsByGame(numericId, 5),
   ]);
+  if (!playReviews.length && bggIdP && String(bggIdP) !== String(gameKey)) {
+    playReviews = await window.CottageDB.getPlayReviewsByGame(gameKey, 5);
+  }
 
   const currentUser = window.getKakaoUser?.();
   const commentItems = comments.map(c => ({ id: c.id, user_id: c.user_id, text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, source: 'comment' }));
@@ -1950,11 +1954,15 @@ async function initSheetComments(gameKey) {
   if (!listEl || !window.CottageDB) return;
   const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
 
-  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
-  const [comments, playReviews] = await Promise.all([
+  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
+  const numericId = bggIdP || gameKey;
+  let [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey),
     window.CottageDB.getPlayReviewsByGame(numericId),
   ]);
+  if (!playReviews.length && bggIdP && String(bggIdP) !== String(gameKey)) {
+    playReviews = await window.CottageDB.getPlayReviewsByGame(gameKey);
+  }
 
   const commentItems = comments.map(c => ({ type: 'comment', text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, user_id: c.user_id, raw: c }));
   const playItems = playReviews.map(r => ({ type: 'play', text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
