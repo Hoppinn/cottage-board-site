@@ -2468,7 +2468,6 @@ function getOrCreatePlayModal() {
       </div>
       <div class="sheet-play-modal-actions">
         <button class="sheet-play-modal-cancel" onclick="onClosePlayModal()" type="button">취소</button>
-        <button class="sheet-play-modal-skip" onclick="onSubmitPlayModal(true)" type="button">건너뛰기</button>
         <button class="sheet-play-modal-submit" id="sheetPlayModalSubmit" onclick="onSubmitPlayModal(false)" type="button">기록하기</button>
       </div>
     </div>
@@ -2539,10 +2538,8 @@ function onClosePlayModal() {
   delete modal.dataset.editId;
   const title = modal.querySelector('.sheet-play-modal-title');
   const submit = document.getElementById('sheetPlayModalSubmit');
-  const skipBtn = modal.querySelector('.sheet-play-modal-skip');
   if (title) title.textContent = '플레이 기록하기';
   if (submit) submit.textContent = '기록하기';
-  if (skipBtn) skipBtn.style.display = '';
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = '';
   modal._photoFiles = [];
@@ -2594,10 +2591,8 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
 
   const title = modal.querySelector('.sheet-play-modal-title');
   const submit = document.getElementById('sheetPlayModalSubmit');
-  const skipBtn = modal.querySelector('.sheet-play-modal-skip');
   if (title) title.textContent = '플레이 기록 수정';
   if (submit) submit.textContent = '수정하기';
-  if (skipBtn) skipBtn.style.display = 'none';
 
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = reviewText || '';
@@ -2605,19 +2600,16 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
   modal.style.display = 'flex';
 }
 
-async function onSubmitPlayModal(skip) {
+async function onSubmitPlayModal() {
   const modal = document.getElementById('sheetPlayModal');
   const gameKey = modal?.dataset.gameId;
   const editId = modal?.dataset.editId || null;
   if (!gameKey || !window.CottageDB) return;
   const count = parseInt(modal?.dataset.count || "0", 10);
-  let playerNames = null, playTimeMin = null, scoreNote = null;
-  if (!skip) {
-    playerNames = document.getElementById('sheetPlayModalNames')?.value?.trim() || null;
-    const tv = document.getElementById('sheetPlayModalTime')?.value;
-    playTimeMin = tv ? parseInt(tv, 10) : null;
-    scoreNote = document.getElementById('sheetPlayModalScore')?.value?.trim() || null;
-  }
+  const playerNames = document.getElementById('sheetPlayModalNames')?.value?.trim() || null;
+  const tv = document.getElementById('sheetPlayModalTime')?.value;
+  const playTimeMin = tv ? parseInt(tv, 10) : null;
+  const scoreNote = document.getElementById('sheetPlayModalScore')?.value?.trim() || null;
   const groupCheck = document.getElementById('sheetPlayModalGroupCheck');
   const groupName = (groupCheck?.checked
     ? document.getElementById('sheetPlayModalGroupName')?.value?.trim()
