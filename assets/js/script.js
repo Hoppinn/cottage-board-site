@@ -1582,12 +1582,6 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
       try { window.openLightbox(allPhotos, idx, lbOpts); } catch(_) {}
     });
   });
-  container.querySelectorAll('.pr-rec-photo-more').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = Number(btn.dataset.idx || 0);
-      try { window.openLightbox(allPhotos, idx, lbOpts); } catch(_) {}
-    });
-  });
 }
 
 async function _fetchGamePhotos(gameKey) {
@@ -1628,15 +1622,24 @@ async function initSheetPhotoPreview(gameKey) {
     : '';
   const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
 
-  const show = allPhotos.slice(0, 3);
-  const more = total - 3;
+  const SHOW_FIRST = 3;
+  const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
-      ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
-      ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="3">+${more}장</div>` : ''}
+      ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+      ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="${SHOW_FIRST}">+${more}장</div>` : ''}
     </div>`;
+  const expandBtn = el.querySelector('.pr-rec-photo-more');
+  if (expandBtn) {
+    expandBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const wrap = expandBtn.closest('.pr-rec-photo-wrap');
+      wrap.querySelectorAll('.sheet-photo-hidden').forEach(item => item.classList.remove('sheet-photo-hidden'));
+      expandBtn.remove();
+    });
+  }
   _attachPhotoLightbox(el, allPhotos, entries);
 }
 
