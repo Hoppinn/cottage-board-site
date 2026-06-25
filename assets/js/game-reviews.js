@@ -465,6 +465,28 @@
     }
   }
 
+  function _saveViewState(panel) {
+    const _openSess = new Set(
+      [...panel.querySelectorAll('.pr-session.is-open')]
+        .map(el => el.querySelector('.pr-session-date')?.textContent?.trim()).filter(Boolean)
+    );
+    const _openSub = new Set(
+      [...panel.querySelectorAll('.pr-sub-session.is-open')]
+        .map(el => el.dataset.date).filter(Boolean)
+    );
+    return { _openSess, _openSub, _sy: window.scrollY };
+  }
+
+  function _restoreViewState(panel, _openSess, _openSub, _sy) {
+    panel.querySelectorAll('.pr-session').forEach(el => {
+      if (_openSess.has(el.querySelector('.pr-session-date')?.textContent?.trim())) el.classList.add('is-open');
+    });
+    panel.querySelectorAll('.pr-sub-session').forEach(el => {
+      if (_openSub.has(el.dataset.date)) el.classList.add('is-open');
+    });
+    setTimeout(() => window.scrollTo(0, _sy), 0);
+  }
+
   function renderRecords(data) {
     const panel = document.getElementById('prPanelRecords');
     const user = window.getKakaoUser?.();
@@ -525,9 +547,9 @@
         const res = await window.CottageDB?.deleteGamePlay(btn.dataset.id);
         if (!res?.error) {
           recordsData = recordsData.filter(r => String(r.id) !== String(btn.dataset.id));
-          const _sy = window.scrollY;
+          const { _openSess, _openSub, _sy } = _saveViewState(panel);
           renderRecords(recordsData);
-          requestAnimationFrame(() => window.scrollTo(0, _sy));
+          _restoreViewState(panel, _openSess, _openSub, _sy);
         }
       });
     });
@@ -547,9 +569,9 @@
         const res = await window.CottageDB?.updateGamePlay(recId, { photo_url: newPhotoUrl });
         if (!res?.error) {
           recordsData[idx].photo_url = newPhotoUrl;
-          const _sy = window.scrollY;
+          const { _openSess, _openSub, _sy } = _saveViewState(panel);
           renderRecords(recordsData);
-          requestAnimationFrame(() => window.scrollTo(0, _sy));
+          _restoreViewState(panel, _openSess, _openSub, _sy);
         }
       });
     });
@@ -694,9 +716,9 @@
           if (!res?.error) {
             const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
             if (idx !== -1) Object.assign(recordsData[idx], updFields);
-            const _sy = window.scrollY;
+            const { _openSess, _openSub, _sy } = _saveViewState(panel);
             renderRecords(recordsData); window._refreshAutocompleteLists?.();
-            requestAnimationFrame(() => window.scrollTo(0, _sy));
+            _restoreViewState(panel, _openSess, _openSub, _sy);
           } else {
             saveBtn.disabled = false;
             alert('수정에 실패했습니다.');
@@ -710,14 +732,20 @@
       img.addEventListener('click', e => {
         e.stopPropagation();
         const wrap = img.closest('.pr-rec-photo-wrap');
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
+        const row = img.closest('.pr-rec-row');
+        let rec = {}; try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (_) {}
+        const cap = [getGameName(rec.gameId || ''), rec.played_at || ''].filter(Boolean).join(' · ');
+        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0), { caption: cap }); } catch(_) {}
       });
     });
     panel.querySelectorAll('.pr-rec-photo-more').forEach(el => {
       el.addEventListener('click', e => {
         e.stopPropagation();
         const wrap = el.closest('.pr-rec-photo-wrap');
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
+        const row = el.closest('.pr-rec-row');
+        let rec = {}; try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (_) {}
+        const cap = [getGameName(rec.gameId || ''), rec.played_at || ''].filter(Boolean).join(' · ');
+        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3), { caption: cap }); } catch(_) {}
       });
     });
 

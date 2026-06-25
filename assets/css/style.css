@@ -3493,6 +3493,9 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-records-all-btn{ display:block; width:100%; text-align:center; margin-top:12px; padding:10px 0; background:var(--bg,#f5f0e8); border:1px solid var(--border,#e8e4dc); border-radius:8px; font-size:13px; font-weight:700; color:#7a4828; }
 .sheet-preview-body .sheet-comment-item{ margin:0; }
+.sheet-comment-actions{display:flex;gap:8px;margin-top:6px;}
+.sheet-comment-edit-btn,.sheet-comment-del-btn{background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;}
+.sheet-comment-del-btn{color:#c0392b;border-color:#f5c6c6;}
 .sheet-preview-more-hint{
   font-size:11px;
   color:var(--muted);
@@ -6320,6 +6323,7 @@ body.embed-mode .site-footer { display: none !important; }
 .pr-lightbox-prev { left: 10px; }
 .pr-lightbox-next { right: 10px; }
 .pr-lightbox-counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 13px; pointer-events: none; }
+.pr-lightbox-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; padding: 8px 16px; text-align: center; pointer-events: none; }
 
 /* =========================
    # PC LAYOUT (min-width: 720px)

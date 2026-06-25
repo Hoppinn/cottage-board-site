@@ -26,7 +26,7 @@
     </div>`;
   }
 
-  function openLightbox(urls, startIdx) {
+  function openLightbox(urls, startIdx, opts) {
     if (!urls || !urls.length) return;
     let cur = ((startIdx || 0) + urls.length) % urls.length;
 
@@ -80,6 +80,12 @@
     document.addEventListener('keydown', onKey);
 
     lb.append(close, prev, img, next, counter);
+    if (opts?.caption) {
+      const cap = document.createElement('div');
+      cap.className = 'pr-lightbox-caption';
+      cap.textContent = opts.caption;
+      lb.appendChild(cap);
+    }
     document.body.appendChild(lb);
     show(cur);
   }

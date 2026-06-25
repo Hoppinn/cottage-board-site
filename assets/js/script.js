@@ -1471,8 +1471,9 @@ async function initSheetCommentsPreview(gameKey) {
     window.CottageDB.getPlayReviewsByGame(numericId, 5),
   ]);
 
-  const commentItems = comments.map(c => ({ text: c.comment_text, nick: c.nickname || '익명', date: c.created_at }));
-  const playItems = playReviews.map(r => ({ text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
+  const currentUser = window.getKakaoUser?.();
+  const commentItems = comments.map(c => ({ id: c.id, user_id: c.user_id, text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, source: 'comment' }));
+  const playItems = playReviews.map(r => ({ text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || ''), source: 'play' }));
   const allItems = [...commentItems, ...playItems].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   const total = allItems.length;
 
@@ -1488,9 +1489,15 @@ async function initSheetCommentsPreview(gameKey) {
   const txt = esc(item.text);
   const nick = esc(item.nick);
   const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
+  const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
+  const editBtns = isMine ? `<div class="sheet-comment-actions">
+    <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
+    <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
+  </div>` : '';
   el.innerHTML = `<div class="sheet-comment-item">
     <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
     <p class="sheet-comment-text">${txt}</p>
+    ${editBtns}
     ${total > 1 ? `<p class="sheet-preview-more-hint">${total - 1}개 더 있음</p>` : ''}
   </div>`;
 }
@@ -2061,6 +2068,18 @@ function onEditComment(btn) {
 function onCloseCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
   if (modal) { modal.style.display = 'none'; delete modal.dataset.editId; }
+}
+
+async function onDeleteCommentPreview(btn) {
+  if (!confirm('게임평을 삭제할까요?')) return;
+  const result = await window.CottageDB?.deleteComment?.(btn.dataset.id);
+  if (!result?.error) {
+    const gameKey = btn.dataset.gameKey;
+    if (gameKey) {
+      await initSheetComments(gameKey);
+      await initSheetCommentsPreview(gameKey);
+    }
+  }
 }
 
 async function onSubmitCommentModal() {
