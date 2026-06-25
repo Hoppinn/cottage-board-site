@@ -2459,6 +2459,13 @@ function getOrCreatePlayModal() {
       </div>
       <p class="sheet-play-modal-label" style="margin-top:8px;">💬 게임평 (선택)</p>
       <textarea class="sheet-play-detail-input" id="sheetPlayModalReview" rows="2" placeholder="이 게임 어떠셨나요?" maxlength="200" style="resize:none;"></textarea>
+      <div class="sheet-play-photo-row">
+        <div class="sheet-play-photo-grid" id="sheetPlayModalPhotoGrid"></div>
+        <label class="sheet-play-photo-add-btn" id="sheetPlayModalPhotoAddBtn">
+          📷
+          <input type="file" accept="image/*" multiple id="sheetPlayModalPhotoInput" style="display:none;">
+        </label>
+      </div>
       <div class="sheet-play-modal-actions">
         <button class="sheet-play-modal-cancel" onclick="onClosePlayModal()" type="button">취소</button>
         <button class="sheet-play-modal-skip" onclick="onSubmitPlayModal(true)" type="button">건너뛰기</button>
@@ -2478,6 +2485,14 @@ function getOrCreatePlayModal() {
   modal.querySelector('#sheetPlayModalGroupCheck').addEventListener('change', e => {
     document.getElementById('sheetPlayModalGroupNameWrap').style.display = e.target.checked ? 'block' : 'none';
     if (!e.target.checked) document.getElementById('sheetPlayModalGroupName').value = '';
+  });
+  modal._photoFiles = [];
+  modal.querySelector('#sheetPlayModalPhotoInput').addEventListener('change', async e => {
+    const grid = document.getElementById('sheetPlayModalPhotoGrid');
+    const adder = window.buildPhotoItemAdder?.(grid, modal._photoFiles, 5);
+    if (!adder) return;
+    for (const f of Array.from(e.target.files || [])) await adder(f);
+    e.target.value = '';
   });
   document.body.appendChild(modal);
 
@@ -2511,6 +2526,9 @@ function onOpenPlayModal(gameKey) {
   }
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = '';
+  modal._photoFiles = [];
+  const photoGrid = document.getElementById('sheetPlayModalPhotoGrid');
+  if (photoGrid) photoGrid.innerHTML = '';
   modal.style.display = 'flex';
 }
 
@@ -2527,6 +2545,9 @@ function onClosePlayModal() {
   if (skipBtn) skipBtn.style.display = '';
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = '';
+  modal._photoFiles = [];
+  const photoGrid = document.getElementById('sheetPlayModalPhotoGrid');
+  if (photoGrid) photoGrid.innerHTML = '';
 }
 
 function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName, playedAt, reviewText) {
@@ -2632,9 +2653,20 @@ async function onSubmitPlayModal(skip) {
   } else {
     const _u = window.getKakaoUser?.();
     const storeGameId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+    let photoUrl = null;
+    const photoFiles = modal?._photoFiles || [];
+    if (photoFiles.length && _u?.id) {
+      const uploaded = [];
+      for (const pf of photoFiles) {
+        const url = await window.CottageDB.uploadPlayPhoto(pf, _u.id);
+        if (url) uploaded.push(url);
+      }
+      if (uploaded.length === 1) photoUrl = uploaded[0];
+      else if (uploaded.length > 1) photoUrl = JSON.stringify(uploaded);
+    }
     const playResult = await window.CottageDB.recordGamePlay(
       storeGameId, count, playerNames, playTimeMin, scoreNote,
-      _u?.nickname || null, _u?.id || null, groupName, playedAt, null, reviewText
+      _u?.nickname || null, _u?.id || null, groupName, playedAt, photoUrl, reviewText
     );
     if (!playResult?.error) {
       addMyPlayRecord(gameKey, {
