@@ -1487,22 +1487,23 @@ async function initSheetCommentsPreview(gameKey) {
   }
 
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const item = allItems[0];
-  const txt = esc(item.text);
-  const nick = esc(item.nick);
-  const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
-  const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
-  const _isMineAny = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
-  const editBtns = isMine ? `<div class="sheet-comment-actions">
-    <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
-    <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
-  </div>` : '';
-  el.innerHTML = `<div class="sheet-comment-item">
-    <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
-    <p class="sheet-comment-text">${txt}</p>
-    ${editBtns}
-    ${total > 1 ? `<p class="sheet-preview-more-hint">${total - 1}개 더 있음</p>` : ''}
-  </div>`;
+  const cards = allItems.map(item => {
+    const txt = esc(item.text);
+    const nick = esc(item.nick);
+    const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
+    const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
+    const _isMineAny = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
+    const editBtns = isMine ? `<div class="sheet-comment-actions">
+      <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
+      <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
+    </div>` : '';
+    return `<div class="sheet-play-scroll-card">
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <p class="sheet-comment-text">${txt}</p>
+      ${editBtns}
+    </div>`;
+  }).join('');
+  el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
 }
 
 async function initSheetPlayPreview(gameKey) {
