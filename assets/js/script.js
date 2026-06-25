@@ -1393,10 +1393,15 @@ function openGameSheet(gameKey, restoreScroll = false){
   }
 }
 
+function _gameIds(gameKey) {
+  const bggId = window.gameData?.[gameKey]?.bgg?.id;
+  if (!bggId || String(bggId) === gameKey) return [gameKey];
+  return [gameKey, String(bggId)];
+}
+
 async function updateSheetPlayCountLink(gameKey) {
   if (!window.CottageDB) return;
-  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
-  const count = await window.CottageDB.getGamePlayCount(numericId);
+  const count = await window.CottageDB.getGamePlayCount(_gameIds(gameKey));
   const link = document.getElementById(`sheetPlayCountLink-${gameKey}`);
   if (link) link.textContent = `플레이 기록 ${count}건 보기 →`;
 }
@@ -1475,10 +1480,9 @@ async function initSheetCommentsPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewCommentLabel-${gameKey}`);
   if (!el || !window.CottageDB) return;
 
-  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
   const [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey, 5),
-    window.CottageDB.getPlayReviewsByGame(numericId, 5),
+    window.CottageDB.getPlayReviewsByGame(_gameIds(gameKey), 5),
   ]);
 
   const currentUser = window.getKakaoUser?.();
@@ -1519,19 +1523,10 @@ async function initSheetPlayPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewPlayLabel-${gameKey}`);
   if (!el || !window.CottageDB) return;
 
-  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
-  const numericId = bggIdP || gameKey;
-  let [records, count] = await Promise.all([
-    window.CottageDB.getGamePlayRecords(numericId, 5),
-    window.CottageDB.getGamePlayCount(numericId),
+  const [records, count] = await Promise.all([
+    window.CottageDB.getGamePlayRecords(_gameIds(gameKey), 5),
+    window.CottageDB.getGamePlayCount(_gameIds(gameKey)),
   ]);
-  if (count === 0 && bggIdP && bggIdP !== gameKey) {
-    const [r2, c2] = await Promise.all([
-      window.CottageDB.getGamePlayRecords(gameKey, 5),
-      window.CottageDB.getGamePlayCount(gameKey),
-    ]);
-    if (c2 > 0) { records = r2; count = c2; }
-  }
 
   if (labelEl) labelEl.textContent = count > 0 ? `플레이기록 ${count}건` : '플레이기록';
 
@@ -1596,18 +1591,7 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
 }
 
 async function _fetchGamePhotos(gameKey) {
-  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
-  const queries = [window.CottageDB.getGamePlayRecords(gameKey, 50)];
-  if (bggIdP && String(bggIdP) !== gameKey) {
-    queries.push(window.CottageDB.getGamePlayRecords(bggIdP, 50));
-  }
-  const results = await Promise.all(queries);
-  const seenIds = new Set();
-  const records = results.flat().filter(r => {
-    if (!r?.id || seenIds.has(r.id)) return false;
-    seenIds.add(r.id);
-    return true;
-  });
+  const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey), 50);
   return records.flatMap(r =>
     (window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : []).map(url => ({
       url,
@@ -2008,10 +1992,9 @@ async function initSheetComments(gameKey) {
   if (!listEl || !window.CottageDB) return;
   const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
 
-  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
   const [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey),
-    window.CottageDB.getPlayReviewsByGame(numericId),
+    window.CottageDB.getPlayReviewsByGame(_gameIds(gameKey)),
   ]);
 
   const commentItems = comments.map(c => ({ type: 'comment', text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, user_id: c.user_id, raw: c }));
@@ -2385,22 +2368,11 @@ async function initPlayWidget(gameKey) {
     return;
   }
 
-  const bggId = window.gameData?.[gameKey]?.bgg?.id;
-  const numericGameId = bggId || gameKey;
-  let [playCount, highlights, allRecords] = await Promise.all([
-    window.CottageDB.getGamePlayCount(numericGameId),
-    window.CottageDB.getPlayHighlights(numericGameId),
-    window.CottageDB.getGamePlayRecords(numericGameId),
+  const [playCount, highlights, allRecords] = await Promise.all([
+    window.CottageDB.getGamePlayCount(_gameIds(gameKey)),
+    window.CottageDB.getPlayHighlights(_gameIds(gameKey)),
+    window.CottageDB.getGamePlayRecords(_gameIds(gameKey)),
   ]);
-  // bggId로 0건이면 Korean key로 재조회 (이전 포맷 저장 레코드 대비)
-  if (playCount === 0 && bggId && bggId !== gameKey) {
-    const [c2, h2, r2] = await Promise.all([
-      window.CottageDB.getGamePlayCount(gameKey),
-      window.CottageDB.getPlayHighlights(gameKey),
-      window.CottageDB.getGamePlayRecords(gameKey),
-    ]);
-    if (c2 > 0) { playCount = c2; highlights = h2; allRecords = r2; }
-  }
 
   const myRecordIds = new Set(
     getMyPlayRecords(gameKey).map(r => String(r.id)).filter(Boolean)

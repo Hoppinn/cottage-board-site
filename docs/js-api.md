@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-06-22 (141차: 모임 플래너 API 3개 추가)
+최종 갱신: 2026-06-25 (142차: game_id 배열 지원)
 
 ---
 
@@ -20,14 +20,14 @@
 | `recordGamePlay(...)` | 플레이 기록 저장 |
 | `deleteGamePlay(id)` | 플레이 기록 삭제 |
 | `updateGamePlay(id, fields)` | 플레이 기록 수정 |
-| `getGamePlayRecords(gameId)` | 단일 게임 플레이 기록 조회 |
+| `getGamePlayRecords(gameId, limit)` | 게임 플레이 기록 조회. `gameId`는 단일 값 또는 배열 (배열 시 `.in()` 쿼리) |
 | `getGroupNames()` | 그룹명 목록 조회 |
 | `getPlayerNames()` | 참여자 이름 목록 조회 (조합+개별) |
 | `getAllPlayRecordsForHistory(limit)` | 모임별 기록 전체 조회 |
 | `getAllPlayRecordsForHub(options)` | 기록 허브 전체 조회 |
-| `getGamePlayCount(gameId)` | 게임 플레이 건수 |
-| `getPlayHighlights(gameId)` | 플레이 하이라이트 |
-| `getPlayReviewsByGame(gameId)` | game_play_records에서 review_text IS NOT NULL인 기록 조회 (게임 상세 코멘트 연동용) |
+| `getGamePlayCount(gameId)` | 게임 플레이 건수. `gameId` 배열 지원 |
+| `getPlayHighlights(gameId)` | 플레이 하이라이트. `gameId` 배열 지원 |
+| `getPlayReviewsByGame(gameId, limit)` | game_play_records에서 review_text IS NOT NULL인 기록. `gameId` 배열 지원 |
 | `getGameComments(gameKey)` | 게임 코멘트 조회 |
 | `insertComment(...)` | 코멘트 등록 |
 | `deleteComment(id)` | 코멘트 삭제 |
@@ -141,6 +141,15 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
 | `toInitials(name)` | 이름 이니셜 변환 | game-reviews.js |
 | `hangulMatch(query, target)` | 한글 초성 검색 | game-reviews.js |
+
+---
+
+## script.js 내부 헬퍼
+
+| 함수 | 용도 |
+|------|------|
+| `_gameIds(gameKey)` | gameKey → `[gameKey]` 또는 `[gameKey, bggId]` 배열 반환. game_id가 gameKey와 BGG ID 두 가지로 저장될 수 있어 CottageDB 조회 시 배열로 전달하여 `.in()` 쿼리 처리 |
+| `_fetchGamePhotos(gameKey)` | 해당 게임 플레이 기록에서 사진 URL 목록 추출 |
 
 ---
 

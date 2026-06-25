@@ -308,10 +308,10 @@ window._cottageSess = (function () {
 
   async function getGamePlayRecords(gameId, limit = 30) {
     try {
-      const { data } = await db
-        .from("game_play_records")
-        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at")
-        .eq("game_id", gameId)
+      const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
+      const base = db.from("game_play_records")
+        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at");
+      const { data } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
         .order("created_at", { ascending: false })
         .limit(limit);
       return data || [];
@@ -414,10 +414,9 @@ window._cottageSess = (function () {
 
   async function getGamePlayCount(gameId) {
     try {
-      const { count } = await db
-        .from("game_play_records")
-        .select("*", { count: "exact", head: true })
-        .eq("game_id", gameId);
+      const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
+      const base = db.from("game_play_records").select("*", { count: "exact", head: true });
+      const { count } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]));
       return count || 0;
     } catch (_) {
       return 0;
@@ -428,10 +427,9 @@ window._cottageSess = (function () {
 
   async function getPlayHighlights(gameId) {
     try {
-      const { data } = await db
-        .from("play_highlights")
-        .select("highlight_text, created_at")
-        .eq("game_id", gameId)
+      const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
+      const base = db.from("play_highlights").select("highlight_text, created_at");
+      const { data } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
         .order("created_at", { ascending: false })
         .limit(3);
       return data || [];
@@ -445,13 +443,14 @@ window._cottageSess = (function () {
   async function getPlayReviewsByGame(gameId, limit = 20) {
     if (!gameId) return [];
     try {
-      const { data } = await db.from('game_play_records')
+      const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
+      const base = db.from('game_play_records')
         .select('id, nickname, user_id, review_text, played_at, created_at, group_name')
-        .eq('game_id', gameId)
         .not('review_text', 'is', null)
         .neq('review_text', '')
         .order('created_at', { ascending: false })
         .limit(limit);
+      const { data } = await (ids.length > 1 ? base.in('game_id', ids) : base.eq('game_id', ids[0]));
       return data || [];
     } catch (_) { return []; }
   }

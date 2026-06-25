@@ -24,7 +24,7 @@
       const label = g.display || g.titleKo || g.titleEn || '';
       return label.trim() === name.trim();
     });
-    return found ? found.id : name;
+    return found ? (found.bggId || found.id) : name;
   }
 
   function formatDate(iso) {
@@ -747,14 +747,24 @@
     });
 
     // 기록 사진 라이트박스
+    function _recCaption(rec) {
+      const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const lines = [];
+      const dateStr = rec.date ? rec.date.slice(2, 10).replace(/-/g, '.') : '';
+      const line1 = [rec.group, dateStr].filter(Boolean).join(' · ');
+      if (line1) lines.push(esc(line1));
+      const line2 = [rec.count ? rec.count + '명' : '', rec.names, rec.time ? rec.time + '분' : ''].filter(Boolean).join(' · ');
+      if (line2) lines.push(esc(line2));
+      if (rec.score) lines.push(esc(rec.score));
+      return lines.join('<br>');
+    }
     panel.querySelectorAll('.pr-rec-photo').forEach(img => {
       img.addEventListener('click', e => {
         e.stopPropagation();
         const wrap = img.closest('.pr-rec-photo-wrap');
         const row = img.closest('.pr-rec-row');
         let rec = {}; try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (_) {}
-        const cap = [getGameName(rec.gameId || ''), rec.played_at || ''].filter(Boolean).join(' · ');
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0), { caption: cap }); } catch(_) {}
+        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0), { caption: _recCaption(rec) }); } catch(_) {}
       });
     });
     panel.querySelectorAll('.pr-rec-photo-more').forEach(el => {
@@ -763,8 +773,7 @@
         const wrap = el.closest('.pr-rec-photo-wrap');
         const row = el.closest('.pr-rec-row');
         let rec = {}; try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (_) {}
-        const cap = [getGameName(rec.gameId || ''), rec.played_at || ''].filter(Boolean).join(' · ');
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3), { caption: cap }); } catch(_) {}
+        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3), { caption: _recCaption(rec) }); } catch(_) {}
       });
     });
 
