@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-25 (142차-95)
+최종 갱신: 2026-06-25 (142차-96)
 
 ---
 
@@ -48,6 +48,7 @@
 | fix: 바텀시트 사진 미리보기 +N장 가로펼침 (142차-93) | initSheetPhotoPreview: 전체 사진 렌더링+앞 3장만 표시, +N장 클릭 시 가로 펼침. _attachPhotoLightbox에서 .pr-rec-photo-more 라이트박스 바인딩 제거 | 142차-93 |
 | fix: PC 게임위치 시트 전폭 (142차-94) | .shelf-sheet-box max-width:480px 제거 → 게임시트와 동일한 전체 화면 폭 | 142차-94 |
 | design: 플레이기록 카드 개별 박스 디자인 (142차-95) | sheet-my-record-item: border→radius+배경+gap 개별 카드 스타일 적용 | 142차-95 |
+| fix/feat: 게임평·사진 작성자 표시 + 모임연동 버그수정 (142차-96) | Item2: onOpenCommentInput _gameIds 적용(기존 모임 연동 미노출 수정) / Item3: placeholder 텍스트 변경 / Item5: 라이트박스 캡션 닉네임 추가 / Item6: 전체사진 헤더 N명의 사진+그리드 개별 작성자명 / Item7: 게임평 앞 작성자 이름 표시 | 142차-96 |
 
 ### 142차 테스트 목록
 
@@ -83,9 +84,11 @@
 | 취향보드 Phase 2 (성향 5축) | Phase 1 테스트 후 진행 |
 
 **다음 작업 후보 (우선)**
-- **전체기록시트 플레이기록 카드 디자인 개선** — 현재 3건이 구분 없이 나열됨. 방안 A(개별 카드, 게임기록게시판 스타일)/B(구분선)/C(타임라인) 중 선택 후 구현. game-reviews.js 스타일 참고.
-- **PC버전 게임위치 시트 크기** — openShelfSheet가 iframe 삽입, 현재 모바일 사이즈로 뜸. PC에서는 기존 게임상세 바텀시트 너비에 맞는 사이즈로 조정 필요. openShelfSheet CSS/JS 수정.
+- ~~**전체기록시트 플레이기록 카드 디자인 개선**~~ — 완료 (142차-95)
+- ~~**PC버전 게임위치 시트 크기**~~ — 완료 (142차-94)
 - **기록게시판 사진 미리보기 "+N장" 토글** — buildPhotoHtml(play-records-utils.js)의 "+N장" 클릭 시 나머지 사진을 가로(pr-rec-photo-wrap 안)로 펼치고, "접기" 클릭 시 다시 숨기는 토글. 현재는 lightbox로 연결됨(_attachPhotoLightbox 또는 game-reviews.js 핸들러). pr-rec-photo-wrap은 flex nowrap+overflow-x:auto → 펼치면 가로스크롤로 자연스럽게 확장.
+- **기록게시판 사진 기록하기 버튼** — game-reviews.html에 "사진 추가" 버튼. 방안 A(팝업+기존기록 선택) vs 방안 B(기존 수정폼(PIE) 재활용) 결정 대기. 사진만 올리거나 기존 기록에 추가 가능하게.
+- **카베르나 게임평 나나 명의 문제 (Item4)** — DB에서 해당 review_text가 나나 기록에 연결돼 있는지 확인 필요. Supabase 대시보드에서 game_play_records 검색하거나 어드민에서 수정.
 
 **다음 작업 후보**
 1. ~~**다른 플레이어 프로필 보기**~~ — 완료 (142차-44)
