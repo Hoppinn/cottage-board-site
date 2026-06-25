@@ -1560,7 +1560,7 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
     const lines = [];
     const line1 = [e.group_name, e.played_at ? e.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
     if (line1) lines.push(esc(line1));
-    const line2 = [e.player_count ? e.player_count + '명' : '', e.player_names].filter(Boolean).join(' · ');
+    const line2 = [e.player_count ? e.player_count + '명' : '', e.player_names, e.play_time_min ? e.play_time_min + '분' : ''].filter(Boolean).join(' · ');
     if (line2) lines.push(esc(line2));
     if (e.score_note) lines.push(esc(e.score_note));
     return lines.join('<br>');
@@ -1596,6 +1596,7 @@ async function _fetchGamePhotos(gameKey) {
       group_name: r.group_name || '',
       player_count: r.player_count || null,
       player_names: r.player_names || '',
+      play_time_min: r.play_time_min || null,
       score_note: r.score_note || '',
     }))
   );
