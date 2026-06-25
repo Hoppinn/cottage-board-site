@@ -1597,12 +1597,18 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
 
 async function _fetchGamePhotos(gameKey) {
   const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
-  const numericId = bggIdP || gameKey;
-  let records = await window.CottageDB.getGamePlayRecords(numericId, 50);
-  if ((!records || !records.length) && bggIdP && bggIdP !== gameKey) {
-    records = await window.CottageDB.getGamePlayRecords(gameKey, 50);
+  const queries = [window.CottageDB.getGamePlayRecords(gameKey, 50)];
+  if (bggIdP && String(bggIdP) !== gameKey) {
+    queries.push(window.CottageDB.getGamePlayRecords(bggIdP, 50));
   }
-  return (records || []).flatMap(r =>
+  const results = await Promise.all(queries);
+  const seenIds = new Set();
+  const records = results.flat().filter(r => {
+    if (!r?.id || seenIds.has(r.id)) return false;
+    seenIds.add(r.id);
+    return true;
+  });
+  return records.flatMap(r =>
     (window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : []).map(url => ({
       url,
       nickname: r.nickname || '',

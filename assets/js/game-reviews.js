@@ -953,14 +953,11 @@
         const gameKey = getGameKey(r.game_id);
         const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
         const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" ${gameKey ? `onclick="event.stopPropagation();openGameSheet('${gameKey.replace(/'/g,"\\'")}')"` : ''}>` : '';
-        const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
         const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()) : ''].filter(Boolean);
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
-        const showSheet = gameKey && isParticipant;
         const showEdit = isMine || window.isOwner?.();
-        const sheetItem = showSheet ? `<button class="pr-rec-sheet-item" type="button" onclick="event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 👍</button>` : '';
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
-        const moreMenu = (showSheet || showEdit) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${sheetItem}${editItems}</div></div>` : '';
+        const moreMenu = showEdit ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editItems}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
@@ -1026,18 +1023,15 @@
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
         const gameKey = getGameKey(r.game_id);
-        const isParticipant = user && (String(r.user_id) === String(user.id) || (r.player_names || '').split(',').map(n => n.trim()).some(n => n && n.toLowerCase() === (user.nickname || '').toLowerCase()));
         const dlParts2 = [
           date !== '?' ? date.replace(/-/g, '.') : '',
           r.play_time_min ? `${r.play_time_min}분` : '',
           r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()) : ''
         ].filter(Boolean);
         const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
-        const showSheet2 = gameKey && isParticipant;
         const showEdit2 = isMine || window.isOwner?.();
-        const sheetItem2 = showSheet2 ? `<button class="pr-rec-sheet-item" type="button" onclick="event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 👍</button>` : '';
         const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
-        const moreMenu2 = (showSheet2 || showEdit2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${sheetItem2}${editItems2}</div></div>` : '';
+        const moreMenu2 = showEdit2 ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editItems2}</div></div>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
