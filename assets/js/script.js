@@ -2356,8 +2356,6 @@ async function initPlayWidget(gameKey) {
           : null;
         const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
         const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
-        const photoUrls = window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : [];
-        const photoHtml = photoUrls.length ? `<div class="sheet-rec-photos">${photoUrls.slice(0,3).map((u,i) => `<img class="sheet-rec-thumb" src="${escH(u)}" data-idx="${i}" alt="">`).join('')}${photoUrls.length > 3 ? `<span class="sheet-rec-photo-more">+${photoUrls.length - 3}</span>` : ''}</div>` : '';
         return `<div class="sheet-my-record-item">
           <div class="sheet-record-header-row">
             ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
@@ -2375,11 +2373,9 @@ async function initPlayWidget(gameKey) {
           ${hasDetail ? `<div class="sheet-play-info">
             ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
             ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
-            ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ""}
-            ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : ""}
+            ${r.play_time_min ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">⏱ ${r.play_time_min}분</span>` : ""}
+            ${r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">🏆 ${escH(r.score_note)}</span>` : ""}
           </div>` : ""}
-          ${r.review_text ? `<p class="sheet-rec-review">${escH(r.review_text)}</p>` : ""}
-          ${photoHtml}
         </div>`;
       }).join("")}
     </div>`;
@@ -2412,14 +2408,6 @@ async function initPlayWidget(gameKey) {
       btn.dataset.playedAt || '',
       btn.dataset.review || ''
     ));
-  });
-  widget.querySelectorAll('.sheet-rec-thumb').forEach(img => {
-    img.addEventListener('click', () => {
-      const wrap = img.closest('.sheet-rec-photos');
-      const allImgs = [...wrap.querySelectorAll('.sheet-rec-thumb')];
-      const urls = allImgs.map(i => i.src);
-      window.openLightbox?.(urls, allImgs.indexOf(img));
-    });
   });
 }
 
