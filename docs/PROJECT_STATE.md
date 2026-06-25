@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-25 (142차-86)
+최종 갱신: 2026-06-25 (142차-87 예정)
 
 ---
 
@@ -78,6 +78,7 @@
 **다음 작업 후보 (우선)**
 - **전체기록시트 플레이기록 카드 디자인 개선** — 현재 3건이 구분 없이 나열됨. 방안 A(개별 카드, 게임기록게시판 스타일)/B(구분선)/C(타임라인) 중 선택 후 구현. game-reviews.js 스타일 참고.
 - **PC버전 게임위치 시트 크기** — openShelfSheet가 iframe 삽입, 현재 모바일 사이즈로 뜸. PC에서는 기존 게임상세 바텀시트 너비에 맞는 사이즈로 조정 필요. openShelfSheet CSS/JS 수정.
+- **기록게시판 사진 미리보기 "+N장" 토글** — buildPhotoHtml(play-records-utils.js)의 "+N장" 클릭 시 나머지 사진을 가로(pr-rec-photo-wrap 안)로 펼치고, "접기" 클릭 시 다시 숨기는 토글. 현재는 lightbox로 연결됨(_attachPhotoLightbox 또는 game-reviews.js 핸들러). pr-rec-photo-wrap은 flex nowrap+overflow-x:auto → 펼치면 가로스크롤로 자연스럽게 확장.
 
 **다음 작업 후보**
 1. ~~**다른 플레이어 프로필 보기**~~ — 완료 (142차-44)
