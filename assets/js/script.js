@@ -1467,13 +1467,14 @@ async function initSheetCommentsPreview(gameKey) {
 
   const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
   const numericId = bggIdP || gameKey;
-  let [comments, playReviews] = await Promise.all([
+  const needsBothIds = bggIdP && String(bggIdP) !== String(gameKey);
+  const [comments, playReviewsA, playReviewsB] = await Promise.all([
     window.CottageDB.getGameComments(gameKey, 5),
     window.CottageDB.getPlayReviewsByGame(numericId, 5),
+    needsBothIds ? window.CottageDB.getPlayReviewsByGame(gameKey, 5) : Promise.resolve([]),
   ]);
-  if (!playReviews.length && bggIdP && String(bggIdP) !== String(gameKey)) {
-    playReviews = await window.CottageDB.getPlayReviewsByGame(gameKey, 5);
-  }
+  const _seen = new Set(playReviewsA.map(r => r.id));
+  const playReviews = [...playReviewsA, ...playReviewsB.filter(r => !_seen.has(r.id))].slice(0, 5);
 
   const currentUser = window.getKakaoUser?.();
   const commentItems = comments.map(c => ({ id: c.id, user_id: c.user_id, text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, source: 'comment' }));
@@ -1956,13 +1957,14 @@ async function initSheetComments(gameKey) {
 
   const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
   const numericId = bggIdP || gameKey;
-  let [comments, playReviews] = await Promise.all([
+  const needsBothIds = bggIdP && String(bggIdP) !== String(gameKey);
+  const [comments, playReviewsA, playReviewsB] = await Promise.all([
     window.CottageDB.getGameComments(gameKey),
     window.CottageDB.getPlayReviewsByGame(numericId),
+    needsBothIds ? window.CottageDB.getPlayReviewsByGame(gameKey) : Promise.resolve([]),
   ]);
-  if (!playReviews.length && bggIdP && String(bggIdP) !== String(gameKey)) {
-    playReviews = await window.CottageDB.getPlayReviewsByGame(gameKey);
-  }
+  const _seenIds = new Set(playReviewsA.map(r => r.id));
+  const playReviews = [...playReviewsA, ...playReviewsB.filter(r => !_seenIds.has(r.id))];
 
   const commentItems = comments.map(c => ({ type: 'comment', text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, user_id: c.user_id, raw: c }));
   const playItems = playReviews.map(r => ({ type: 'play', text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
