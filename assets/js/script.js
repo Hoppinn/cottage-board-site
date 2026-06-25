@@ -1435,6 +1435,10 @@ function openGameRecordSheet(gameKey) {
       <h3 class="sheet-record-title">${safeTitle} 기록</h3>
     </div>
     <div class="sheet-social-group">
+      <div class="sheet-play-section">
+        <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
+        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
+      </div>
       <div class="sheet-comments-area">
         <div class="sheet-comments-header">
           <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">게임평</span>
@@ -1448,10 +1452,6 @@ function openGameRecordSheet(gameKey) {
         <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
           <span class="sheet-comments-empty">불러오는 중...</span>
         </div>
-      </div>
-      <div class="sheet-play-section">
-        <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
-        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
       </div>
       <div class="sheet-play-section">
         <p class="sheet-section-label" id="sheetPhotosCount-${gameKey}" style="margin-bottom:8px">사진</p>
@@ -1672,15 +1672,25 @@ async function initSheetPhotos(gameKey) {
     : '';
   const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
 
-  const show = allPhotos.slice(0, 9);
-  const more = total - 9;
+  const SHOW_FIRST = 3;
+  const firstPhotos = allPhotos.slice(0, SHOW_FIRST);
+  const restPhotos = allPhotos.slice(SHOW_FIRST);
+  const more = restPhotos.length;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
-      ${show.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
-      ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="9">+${more}장</div>` : ''}
-    </div>`;
+      ${firstPhotos.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+      ${more > 0 ? `<div class="sheet-photo-rest" style="display:none">${restPhotos.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${SHOW_FIRST + i}"></div>`).join('')}</div>` : ''}
+    </div>
+    ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
+  const morePhotoBtn = el.querySelector('.sheet-photo-more-btn');
+  if (morePhotoBtn) {
+    morePhotoBtn.addEventListener('click', () => {
+      el.querySelector('.sheet-photo-rest').style.display = '';
+      morePhotoBtn.remove();
+    });
+  }
   _attachPhotoLightbox(el, allPhotos, entries);
 }
 
@@ -2123,7 +2133,7 @@ function getOrCreateCommentModal() {
       <div class="sheet-comment-play-link" id="sheetCommentPlayLink" style="display:none;">
         <label class="sheet-comment-play-link-label">
           <input type="checkbox" id="sheetCommentLinkCheck">
-          <span>내 플레이 기록에 추가</span>
+          <span>기존 플레이 기록에 연동</span>
         </label>
         <select class="sheet-comment-play-select" id="sheetCommentPlaySelect" style="display:none;"></select>
       </div>
@@ -2407,24 +2417,24 @@ async function initPlayWidget(gameKey) {
     const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
     const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
     return `<div class="sheet-my-record-item">
-      <div class="sheet-record-header-row">
+      <div class="sheet-record-info">
         ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
-        ${isMine ? `<div class="sheet-play-record-actions">
-          <button class="sheet-play-edit-btn"
-            data-game="${gameKey}" data-id="${r.id}"
-            data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
-            data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
-            data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
-            data-review="${escH(r.review_text || '')}"
-            type="button">수정</button>
-          <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
+        ${hasDetail ? `<div class="sheet-play-info">
+          ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
+          ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
+          ${r.play_time_min ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">⏱ ${r.play_time_min}분</span>` : ""}
+          ${r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">🏆 ${escH(r.score_note)}</span>` : ""}
         </div>` : ""}
       </div>
-      ${hasDetail ? `<div class="sheet-play-info">
-        ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
-        ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
-        ${r.play_time_min ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">⏱ ${r.play_time_min}분</span>` : ""}
-        ${r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">🏆 ${escH(r.score_note)}</span>` : ""}
+      ${isMine ? `<div class="sheet-play-record-actions">
+        <button class="sheet-play-edit-btn"
+          data-game="${gameKey}" data-id="${r.id}"
+          data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
+          data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
+          data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
+          data-review="${escH(r.review_text || '')}"
+          type="button">수정</button>
+        <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
       </div>` : ""}
     </div>`;
   }
