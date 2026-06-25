@@ -525,7 +525,9 @@
         const res = await window.CottageDB?.deleteGamePlay(btn.dataset.id);
         if (!res?.error) {
           recordsData = recordsData.filter(r => String(r.id) !== String(btn.dataset.id));
+          const _sy = window.scrollY;
           renderRecords(recordsData);
+          requestAnimationFrame(() => window.scrollTo(0, _sy));
         }
       });
     });
@@ -545,7 +547,9 @@
         const res = await window.CottageDB?.updateGamePlay(recId, { photo_url: newPhotoUrl });
         if (!res?.error) {
           recordsData[idx].photo_url = newPhotoUrl;
+          const _sy = window.scrollY;
           renderRecords(recordsData);
+          requestAnimationFrame(() => window.scrollTo(0, _sy));
         }
       });
     });
@@ -690,7 +694,9 @@
           if (!res?.error) {
             const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
             if (idx !== -1) Object.assign(recordsData[idx], updFields);
+            const _sy = window.scrollY;
             renderRecords(recordsData); window._refreshAutocompleteLists?.();
+            requestAnimationFrame(() => window.scrollTo(0, _sy));
           } else {
             saveBtn.disabled = false;
             alert('수정에 실패했습니다.');
