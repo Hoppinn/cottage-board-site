@@ -3502,8 +3502,10 @@ body.embed-mode .site-footer { display: none !important; }
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:10px;
-  padding-bottom:8px;
+  margin:-12px -14px 12px;
+  padding:10px 14px;
+  background:#f0e4d0;
+  border-radius:12px 12px 0 0;
   border-bottom:1px solid #ead8b8;
 }
 .sheet-records-group-title{
@@ -3534,6 +3536,12 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-preview-body .sheet-comment-item{ margin:0; }
 .sheet-comment-actions{display:flex;gap:8px;margin-top:6px;}
+.sheet-review-edit-wrap{margin:4px 0;}
+.sheet-review-edit-area{width:100%;box-sizing:border-box;padding:8px;border:1px solid #ead8b8;border-radius:8px;font-size:13px;resize:vertical;}
+.sheet-review-edit-row{display:flex;gap:8px;margin-top:6px;}
+.sheet-review-save-btn,.sheet-review-cancel-btn{padding:4px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #ead8b8;}
+.sheet-review-save-btn{background:var(--green,#5a8a5a);color:#fff;border-color:var(--green,#5a8a5a);}
+.sheet-review-cancel-btn{background:var(--paper);color:var(--text);}
 .sheet-comment-edit-btn,.sheet-comment-del-btn{background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;}
 .sheet-comment-del-btn{color:#c0392b;border-color:#f5c6c6;}
 .sheet-preview-more-hint{

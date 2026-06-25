@@ -1325,7 +1325,7 @@ function openGameSheet(gameKey, restoreScroll = false){
     <div class="sheet-records-group">
       <div class="sheet-records-group-hd">
         <span class="sheet-records-group-title">기록</span>
-        <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 →</button>
+        <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">전체보기 & 기록하기 →</button>
       </div>
 
       <!-- 게임평 미리보기 -->
@@ -1469,20 +1469,15 @@ async function initSheetCommentsPreview(gameKey) {
   const labelEl = document.getElementById(`sheetPreviewCommentLabel-${gameKey}`);
   if (!el || !window.CottageDB) return;
 
-  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
-  const numericId = bggIdP || gameKey;
-  const needsBothIds = bggIdP && String(bggIdP) !== String(gameKey);
-  const [comments, playReviewsA, playReviewsB] = await Promise.all([
+  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+  const [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey, 5),
     window.CottageDB.getPlayReviewsByGame(numericId, 5),
-    needsBothIds ? window.CottageDB.getPlayReviewsByGame(gameKey, 5) : Promise.resolve([]),
   ]);
-  const _seen = new Set(playReviewsA.map(r => r.id));
-  const playReviews = [...playReviewsA, ...playReviewsB.filter(r => !_seen.has(r.id))].slice(0, 5);
 
   const currentUser = window.getKakaoUser?.();
   const commentItems = comments.map(c => ({ id: c.id, user_id: c.user_id, text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, source: 'comment' }));
-  const playItems = playReviews.map(r => ({ text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || ''), source: 'play' }));
+  const playItems = playReviews.map(r => ({ id: r.id, user_id: r.user_id, text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || ''), source: 'play' }));
   const allItems = [...commentItems, ...playItems].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   const total = allItems.length;
 
@@ -1498,11 +1493,21 @@ async function initSheetCommentsPreview(gameKey) {
   const txt = esc(item.text);
   const nick = esc(item.nick);
   const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
-  const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
-  const editBtns = isMine ? `<div class="sheet-comment-actions">
-    <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
-    <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
-  </div>` : '';
+  const isMine = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
+  let editBtns = '';
+  if (isMine) {
+    if (item.source === 'comment') {
+      editBtns = `<div class="sheet-comment-actions">
+        <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
+        <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
+      </div>`;
+    } else {
+      editBtns = `<div class="sheet-comment-actions">
+        <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditPlayReview(this)" type="button">수정</button>
+        <button class="sheet-comment-del-btn" data-id="${item.id}" data-game="${esc(gameKey)}" onclick="onDeletePlayReview(this)" type="button">삭제</button>
+      </div>`;
+    }
+  }
   el.innerHTML = `<div class="sheet-comment-item">
     <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
     <p class="sheet-comment-text">${txt}</p>
@@ -1959,19 +1964,14 @@ async function initSheetComments(gameKey) {
   if (!listEl || !window.CottageDB) return;
   const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
 
-  const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
-  const numericId = bggIdP || gameKey;
-  const needsBothIds = bggIdP && String(bggIdP) !== String(gameKey);
-  const [comments, playReviewsA, playReviewsB] = await Promise.all([
+  const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+  const [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey),
     window.CottageDB.getPlayReviewsByGame(numericId),
-    needsBothIds ? window.CottageDB.getPlayReviewsByGame(gameKey) : Promise.resolve([]),
   ]);
-  const _seenIds = new Set(playReviewsA.map(r => r.id));
-  const playReviews = [...playReviewsA, ...playReviewsB.filter(r => !_seenIds.has(r.id))];
 
   const commentItems = comments.map(c => ({ type: 'comment', text: c.comment_text, nick: c.nickname || '익명', date: c.created_at, user_id: c.user_id, raw: c }));
-  const playItems = playReviews.map(r => ({ type: 'play', text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
+  const playItems = playReviews.map(r => ({ type: 'play', id: r.id, user_id: r.user_id, text: r.review_text, nick: r.nickname || '익명', date: r.played_at ? r.played_at + 'T00:00:00' : (r.created_at || '') }));
   const allItems = [...commentItems, ...playItems].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
   const total = allItems.length;
 
@@ -2009,9 +2009,15 @@ async function initSheetComments(gameKey) {
       </div>` : ''}
     </div>`;
     }
+    const textAttr = item.text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const mine = currentUserId && item.user_id && String(item.user_id) === String(currentUserId);
     return `<div class="sheet-comment-item">
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
+      ${mine ? `<div class="sheet-comment-actions">
+        <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${gameKey}" data-text="${textAttr}" onclick="onEditPlayReview(this)" type="button">✏️</button>
+        <button class="sheet-comment-delete-btn" data-id="${item.id}" data-game="${gameKey}" onclick="onDeletePlayReview(this)" type="button">✕</button>
+      </div>` : ''}
     </div>`;
   }).join('');
 
@@ -2026,6 +2032,50 @@ async function onDeleteComment(id, gameKey) {
     removeMyCommentId(id);
     await initSheetComments(gameKey);
   }
+}
+
+function onEditPlayReview(btn) {
+  const itemEl = btn.closest('.sheet-comment-item');
+  if (!itemEl) return;
+  const textEl = itemEl.querySelector('.sheet-comment-text');
+  const actionsEl = itemEl.querySelector('.sheet-comment-actions');
+  const origText = btn.dataset.text;
+  const recId = btn.dataset.id;
+  const gameKey = btn.dataset.game;
+
+  const editDiv = document.createElement('div');
+  editDiv.className = 'sheet-review-edit-wrap';
+  editDiv.innerHTML = `<textarea class="sheet-review-edit-area" rows="3"></textarea>
+    <div class="sheet-review-edit-row">
+      <button class="sheet-review-save-btn" type="button">저장</button>
+      <button class="sheet-review-cancel-btn" type="button">취소</button>
+    </div>`;
+  editDiv.querySelector('textarea').value = origText;
+  textEl.style.display = 'none';
+  textEl.after(editDiv);
+  if (actionsEl) actionsEl.style.display = 'none';
+
+  editDiv.querySelector('.sheet-review-save-btn').onclick = async () => {
+    const newText = editDiv.querySelector('textarea').value.trim();
+    if (!newText) return;
+    await window.CottageDB?.updateGamePlay?.(recId, { review_text: newText });
+    await initSheetComments(gameKey);
+    await initSheetCommentsPreview(gameKey);
+  };
+  editDiv.querySelector('.sheet-review-cancel-btn').onclick = () => {
+    editDiv.remove();
+    textEl.style.display = '';
+    if (actionsEl) actionsEl.style.display = '';
+  };
+}
+
+async function onDeletePlayReview(btn) {
+  if (!confirm('게임평을 삭제할까요?')) return;
+  const recId = btn.dataset.id;
+  const gameKey = btn.dataset.game;
+  await window.CottageDB?.updateGamePlay?.(recId, { review_text: '' });
+  await initSheetComments(gameKey);
+  await initSheetCommentsPreview(gameKey);
 }
 
 function getOrCreateCommentModal() {

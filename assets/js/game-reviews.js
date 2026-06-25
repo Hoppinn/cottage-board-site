@@ -684,7 +684,7 @@
           let newGameId = null;
           if (gameDisplayInput) {
             const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
-            newGameId = found ? found.id : gameDisplayInput;
+            newGameId = found ? (found.bggId || found.id) : gameDisplayInput;
           }
           // 사진 처리 — 남은 기존 URL + 새 업로드 URL 합산
           const remainingUrls = [...form.querySelectorAll('.pie-existing-item')].map(el => el.dataset.url).filter(Boolean);
