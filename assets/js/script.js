@@ -1567,6 +1567,7 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
     if (!e) return '';
     const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const lines = [];
+    if (e.nickname) lines.push(esc(e.nickname));
     const line1 = [e.group_name, e.played_at ? e.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
     if (line1) lines.push(esc(line1));
     const line2 = [e.player_count ? e.player_count + '명' : '', e.player_names, e.play_time_min ? e.play_time_min + '분' : ''].filter(Boolean).join(' · ');
@@ -1615,12 +1616,11 @@ async function initSheetPhotoPreview(gameKey) {
     return;
   }
 
-  const latest = entries[0];
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const dateStr = latest.played_at
-    ? latest.played_at.slice(2, 10).replace(/-/g, '.')
-    : '';
-  const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
+  const uniqueNicks1 = new Set(entries.map(e => e.nickname).filter(Boolean));
+  const headerName1 = uniqueNicks1.size > 1 ? uniqueNicks1.size + '명의 사진' : (entries[0].nickname ? esc(entries[0].nickname) : '');
+  const headerDate1 = uniqueNicks1.size > 1 ? '' : (entries[0].played_at ? entries[0].played_at.slice(2, 10).replace(/-/g, '.') : '');
+  const metaParts = [headerName1, headerDate1].filter(Boolean);
 
   const SHOW_FIRST = 3;
   const more = total - SHOW_FIRST;
@@ -1658,12 +1658,12 @@ async function initSheetPhotos(gameKey) {
     return;
   }
 
-  const latest = entries[0];
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const dateStr = latest.played_at
-    ? latest.played_at.slice(2, 10).replace(/-/g, '.')
-    : '';
-  const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
+  const uniqueNicks = new Set(entries.map(e => e.nickname).filter(Boolean));
+  const multiUploader = uniqueNicks.size > 1;
+  const headerName = multiUploader ? uniqueNicks.size + '명의 사진' : (entries[0].nickname ? esc(entries[0].nickname) : '');
+  const headerDate = multiUploader ? '' : (entries[0].played_at ? entries[0].played_at.slice(2, 10).replace(/-/g, '.') : '');
+  const metaParts = [headerName, headerDate].filter(Boolean);
 
   const SHOW_FIRST = 4;
   const more = total - SHOW_FIRST;
@@ -1671,7 +1671,7 @@ async function initSheetPhotos(gameKey) {
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="sheet-photo-grid" data-urls="${dataUrls}">
-      ${allPhotos.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+      ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}">${multiUploader ? `<span class="sheet-photo-author">${esc(e.nickname)}</span>` : ''}</div>`).join('')}
     </div>
     ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
   const morePhotoBtn = el.querySelector('.sheet-photo-more-btn');
@@ -2130,7 +2130,7 @@ function getOrCreateCommentModal() {
   modal.innerHTML = `
     <div class="sheet-comment-modal-box">
       <p class="sheet-comment-modal-title">게임평 남기기</p>
-      <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 한줄평을 남겨보세요"></textarea>
+      <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 평가를 남겨주세요"></textarea>
       <div class="sheet-comment-play-link" id="sheetCommentPlayLink" style="display:none;">
         <label class="sheet-comment-play-link-label">
           <input type="checkbox" id="sheetCommentLinkCheck">
@@ -2175,8 +2175,7 @@ function onOpenCommentInput(btn) {
       linkWrap.style.display = 'none';
       const _cu = window.getKakaoUser?.();
       if (_cu?.id && window.CottageDB) {
-        const numericId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
-        const records = await window.CottageDB.getGamePlayRecords(numericId);
+            const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
         const mine = records.filter(r => String(r.user_id) === String(_cu.id) && !r.review_text);
         if (mine.length) {
           mine.forEach(r => {

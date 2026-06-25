@@ -750,6 +750,7 @@
     function _recCaption(rec) {
       const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       const lines = [];
+      if (rec.nick) lines.push(esc(rec.nick));
       const dateStr = rec.date ? rec.date.slice(2, 10).replace(/-/g, '.') : '';
       const line1 = [rec.group, dateStr].filter(Boolean).join(' · ');
       if (line1) lines.push(esc(line1));
@@ -955,7 +956,7 @@
           (r.user_id && String(r.user_id) === String(user.id)) ||
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
         );
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
+        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer">${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
@@ -967,7 +968,7 @@
         const showEdit = isMine || window.isOwner?.();
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const moreMenu = showEdit ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editItems}</div></div>` : '';
-        return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
+        return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
             <div class="pr-rec-main">
@@ -1027,7 +1028,7 @@
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
         );
         const date = r.played_at || r.created_at?.slice(0, 10) || '?';
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
+        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer">${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
@@ -1041,7 +1042,7 @@
         const showEdit2 = isMine || window.isOwner?.();
         const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const moreMenu2 = showEdit2 ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editItems2}</div></div>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
+        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
               <div class="pr-rec-meta">${dateline}</div>
