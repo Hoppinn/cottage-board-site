@@ -529,14 +529,33 @@
         e.stopPropagation();
         const more = btn.closest('.pr-rec-more');
         const isOpen = more.classList.contains('is-open');
-        panel.querySelectorAll('.pr-rec-more.is-open').forEach(m => m.classList.remove('is-open'));
-        if (!isOpen) more.classList.add('is-open');
+        document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
+          m.classList.remove('is-open');
+          const mm = m.querySelector('.pr-rec-more-menu');
+          if (mm) mm.removeAttribute('style');
+        });
+        if (!isOpen) {
+          more.classList.add('is-open');
+          const rect = btn.getBoundingClientRect();
+          const menu = more.querySelector('.pr-rec-more-menu');
+          if (menu) {
+            menu.style.position = 'fixed';
+            menu.style.top = (rect.bottom + 4) + 'px';
+            menu.style.right = (window.innerWidth - rect.right) + 'px';
+            menu.style.left = 'auto';
+            menu.style.zIndex = '9999';
+          }
+        }
       });
     });
     if (!window._prMoreOutsideClickBound) {
       window._prMoreOutsideClickBound = true;
       document.addEventListener('click', () => {
-        document.querySelectorAll('.pr-rec-more.is-open').forEach(m => m.classList.remove('is-open'));
+        document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
+          m.classList.remove('is-open');
+          const mm = m.querySelector('.pr-rec-more-menu');
+          if (mm) mm.removeAttribute('style');
+        });
       });
     }
 
@@ -923,7 +942,10 @@
       }
 
       html += groupRecs.map(r => {
-        const isMine = user && String(r.user_id) === String(user.id);
+        const isMine = user && (
+          (r.user_id && String(r.user_id) === String(user.id)) ||
+          (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
+        );
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
@@ -936,7 +958,7 @@
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         const showSheet = gameKey && isParticipant;
         const showEdit = isMine || window.isOwner?.();
-        const sheetItem = showSheet ? `<a class="pr-rec-sheet-item" href="#" onclick="event.preventDefault();event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 👍</a>` : '';
+        const sheetItem = showSheet ? `<button class="pr-rec-sheet-item" type="button" onclick="event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 👍</button>` : '';
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const moreMenu = (showSheet || showEdit) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${sheetItem}${editItems}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
@@ -994,7 +1016,10 @@
       });
 
       html += sorted.map(r => {
-        const isMine = user && String(r.user_id) === String(user.id);
+        const isMine = user && (
+          (r.user_id && String(r.user_id) === String(user.id)) ||
+          (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
+        );
         const date = r.played_at || r.created_at?.slice(0, 10) || '?';
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
@@ -1010,7 +1035,7 @@
         const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
         const showSheet2 = gameKey && isParticipant;
         const showEdit2 = isMine || window.isOwner?.();
-        const sheetItem2 = showSheet2 ? `<a class="pr-rec-sheet-item" href="#" onclick="event.preventDefault();event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 👍</a>` : '';
+        const sheetItem2 = showSheet2 ? `<button class="pr-rec-sheet-item" type="button" onclick="event.stopPropagation();openGameSheet('${gameKey.replace(/'/g, "\\'")}')" >💬 👍</button>` : '';
         const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const moreMenu2 = (showSheet2 || showEdit2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${sheetItem2}${editItems2}</div></div>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>

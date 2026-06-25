@@ -533,7 +533,14 @@ async function openProfilePanel(autoSubsheet = null) {
   const _earnedTitleIds = _titleResult?.earnedIds || new Set();
   // seen 처리는 알림 섹션을 펼칠 때로 이동 (아래 toggle 핸들러)
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
-  const fmtShort = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) : '';
+  const fmtShort = iso => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const base = d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    return `${base} ${hh}:${mm}`;
+  };
 
   function getGameName(gameId) {
     if (window.gameData?.[gameId]) {
@@ -671,7 +678,8 @@ async function openProfilePanel(autoSubsheet = null) {
   const _notifHelpHtml = notifs.length === 0
     ? `<div class="notif-help">새 알림이 없으면 여기에서 보상, 게임 요청, 업적 달성 소식을 확인할 수 있어요.</div>`
     : '';
-  let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${voucherCardHtml}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_notifHelpHtml}`;
+  const _voucherFirst = !voucherSeen;
+  let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_notifHelpHtml}`;
 
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;
 
