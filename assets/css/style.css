@@ -3808,9 +3808,11 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-card--notif.has-badge::after{top:9px;right:30px;}
 /* 2열 그리드 */
 .profile-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.profile-card-grid .profile-card{flex-direction:column;align-items:flex-start;gap:4px;padding:14px 12px;min-height:90px;}
+.profile-card-grid .profile-card{flex-direction:column;align-items:flex-start;gap:4px;padding:12px 12px;min-height:80px;}
 .profile-card-grid .profile-card-icon{font-size:20px;}
 .profile-card-grid .profile-card-arrow{display:none;}
+/* 이번달 참여일정 */
+.profile-card-schedule{display:block;font-size:10px;color:var(--green,#3a7d44);margin-top:4px;line-height:1.6;}
 .profile-card--span2{grid-column:span 2;}
 /* 통계 카드 내부 레이아웃 */
 .profile-card-usage-info{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}

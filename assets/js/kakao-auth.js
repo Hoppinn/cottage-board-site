@@ -503,7 +503,11 @@ async function openProfilePanel(autoSubsheet = null) {
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
-  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions] = await Promise.all([
+  const _now = new Date();
+  const _monthStart = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-01`;
+  const _monthEnd   = new Date(_now.getFullYear(), _now.getMonth()+1, 0);
+  const _monthEndStr = `${_monthEnd.getFullYear()}-${String(_monthEnd.getMonth()+1).padStart(2,'0')}-${String(_monthEnd.getDate()).padStart(2,'0')}`;
+  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -515,6 +519,7 @@ async function openProfilePanel(autoSubsheet = null) {
     (window.CottageDB?.getUserCuriousGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
   ]);
   // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
@@ -689,6 +694,20 @@ async function openProfilePanel(autoSubsheet = null) {
     stats.plays.length > 0 ? `${stats.plays.length}기록` : null,
   ].filter(Boolean);
   const _statsSummary = _summaryParts.length ? _summaryParts.join(' · ') : '활동 없음';
+
+  // 이번달 참여 일정 (내가 투표한 날짜)
+  const _myVoteDates = (_thisMonthVotes || [])
+    .filter(v => String(v.user_id) === String(user.id))
+    .map(v => v.vote_date)
+    .sort();
+  let _scheduleHtml = '';
+  if (_myVoteDates.length) {
+    const _fmtDate = ds => { const [,m,d] = ds.split('-'); return `${parseInt(m,10)}/${parseInt(d,10)} 정기모임`; };
+    const _show = _myVoteDates.slice(0, 2).map(_fmtDate);
+    const _extra = _myVoteDates.length - 2;
+    if (_extra > 0) _show.push(`외 ${_extra}건`);
+    _scheduleHtml = `<span class="profile-card-schedule">${_show.map(l => escH(l)).join('<br>')}</span>`;
+  }
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback
   function _safeInt(html, pattern, fallback) {
@@ -964,6 +983,7 @@ async function openProfilePanel(autoSubsheet = null) {
       <div class="profile-card-usage-info">
         <span class="profile-card-label">함께한 시간</span>
         ${_summaryParts.length ? `<span class="profile-card-usage-detail">${escH(_statsSummary)}</span>` : ''}
+        ${_scheduleHtml}
       </div>
       <span class="profile-card-arrow">›</span>
     </button>
