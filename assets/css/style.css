@@ -3528,6 +3528,9 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-preview-body .sheet-comment-item{ margin:0; }
 .sheet-mine-mark{font-size:10px;color:var(--green,#5a8a5a);vertical-align:middle;}
+.sheet-play-scroll{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;}
+.sheet-play-scroll::-webkit-scrollbar{display:none;}
+.sheet-play-scroll-card{flex:0 0 88%;scroll-snap-align:start;}
 .sheet-comment-actions{display:flex;gap:8px;margin-top:6px;}
 .sheet-review-edit-wrap{margin:4px 0;}
 .sheet-review-edit-area{width:100%;box-sizing:border-box;padding:8px;border:1px solid #ead8b8;border-radius:8px;font-size:13px;resize:vertical;}

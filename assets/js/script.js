@@ -1354,7 +1354,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         </div>
       </div>
 
-      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 남기기 & 전체보기 →</button>
+      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 페이지에서 보기 & 남기기 →</button>
     </div>
 
   `;
@@ -1513,12 +1513,12 @@ async function initSheetPlayPreview(gameKey) {
   const bggIdP = window.gameData?.[gameKey]?.bgg?.id;
   const numericId = bggIdP || gameKey;
   let [records, count] = await Promise.all([
-    window.CottageDB.getGamePlayRecords(numericId, 1),
+    window.CottageDB.getGamePlayRecords(numericId, 5),
     window.CottageDB.getGamePlayCount(numericId),
   ]);
   if (count === 0 && bggIdP && bggIdP !== gameKey) {
     const [r2, c2] = await Promise.all([
-      window.CottageDB.getGamePlayRecords(gameKey, 1),
+      window.CottageDB.getGamePlayRecords(gameKey, 5),
       window.CottageDB.getGamePlayCount(gameKey),
     ]);
     if (c2 > 0) { records = r2; count = c2; }
@@ -1531,28 +1531,30 @@ async function initSheetPlayPreview(gameKey) {
     return;
   }
 
-  const r = records[0];
   const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const dateStr = r.played_at
-    ? r.played_at.slice(2, 10).replace(/-/g, '.')
-    : (r.created_at ? r.created_at.slice(2, 10).replace(/-/g, '.') : '');
   const _me = window.getKakaoUser?.();
-  const _isMinePlay = _me && r.user_id && String(r.user_id) === String(_me.id);
 
-  el.innerHTML = `<div class="sheet-play-preview-item">
-    <span class="sheet-comment-nickname">
-      ${r.nickname ? `<strong class="sheet-comment-nick">${_isMinePlay ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
-      ${dateStr ? `<span class="sheet-comment-date">${dateStr}</span>` : ''}
-      ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
-    </span>
-    <div class="sheet-play-info">
-      ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ''}
-      ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${esc(r.player_names)}</span>` : ''}
-      ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ''}
-      ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : ''}
-    </div>
-    ${count > 1 ? `<p class="sheet-preview-more-hint">${count - 1}건 더 있음</p>` : ''}
-  </div>`;
+  const cards = records.map(r => {
+    const dateStr = r.played_at
+      ? r.played_at.slice(2, 10).replace(/-/g, '.')
+      : (r.created_at ? r.created_at.slice(2, 10).replace(/-/g, '.') : '');
+    const isMine = _me && r.user_id && String(r.user_id) === String(_me.id);
+    return `<div class="sheet-play-scroll-card">
+      <span class="sheet-comment-nickname">
+        ${r.nickname ? `<strong class="sheet-comment-nick">${isMine ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
+        ${dateStr ? `<span class="sheet-comment-date">${dateStr}</span>` : ''}
+        ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
+      </span>
+      <div class="sheet-play-info">
+        ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ''}
+        ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${esc(r.player_names)}</span>` : ''}
+        ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ''}
+        ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
 }
 
 function _attachPhotoLightbox(container, allPhotos, entries) {
