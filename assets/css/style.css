@@ -6194,6 +6194,17 @@ body.embed-mode .site-footer { display: none !important; }
 .pr-submit-btn:disabled { opacity: 0.5; }
 .pr-login-notice { text-align: center; padding: 36px 0; color: var(--muted); font-size: 14px; }
 
+/* 사진 추가 탭 */
+.pr-photo-add-wrap { display: flex; flex-direction: column; gap: 20px; }
+.pr-form-section { display: flex; flex-direction: column; gap: 6px; }
+.pr-form-label { font-size: 13px; font-weight: 700; color: var(--muted,#888); }
+.pr-photo-add-select { width: 100%; border: 1px solid var(--border,#e8e4dc); border-radius: 8px; padding: 9px 10px; font-size: 13px; font-family: inherit; background: var(--bg,#f5f0e8); }
+.pr-photo-area { display: flex; flex-direction: column; gap: 8px; }
+.pr-photo-label { display: inline-block; padding: 8px 16px; background: var(--bg,#f5f0e8); border: 1px solid var(--border,#e8e4dc); border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600; }
+.pr-photo-input-hidden { display: none; }
+.pr-save-btn { width: 100%; background: #7a4828; color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
+.pr-save-btn:disabled { opacity: 0.5; }
+
 /* records view — 3단 계층 */
 .pr-session { border: 1px solid #e8e2d8; border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 .pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }

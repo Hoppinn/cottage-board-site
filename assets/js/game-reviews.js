@@ -122,9 +122,11 @@
       <div class="pr-tabs">
         <button class="pr-tab is-active" data-tab="records">기록 보기</button>
         <button class="pr-tab" data-tab="input">기록 입력</button>
+        <button class="pr-tab" data-tab="photo">사진 추가</button>
       </div>
       <div id="prPanelInput" class="pr-panel"></div>
-      <div id="prPanelRecords" class="pr-panel is-active"></div>`;
+      <div id="prPanelRecords" class="pr-panel is-active"></div>
+      <div id="prPanelPhoto" class="pr-panel"></div>`;
 
     root.querySelectorAll('.pr-tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -133,6 +135,7 @@
         tab.classList.add('is-active');
         document.getElementById('prPanel' + cap(tab.dataset.tab)).classList.add('is-active');
         if (tab.dataset.tab === 'records') loadRecords();
+        if (tab.dataset.tab === 'photo') renderPhotoPanel();
       });
     });
 
@@ -426,7 +429,104 @@
     });
   }
 
-  // ── 기록 보기 탭 ─────────────────────────────────────────────
+  // ── 사진 추가 탭 ─────────────────────────────────────────────
+
+  async function renderPhotoPanel() {
+    const panel = document.getElementById('prPanelPhoto');
+    if (!panel || panel.dataset.rendered) return;
+
+    const user = window.getKakaoUser?.();
+    if (!user) {
+      panel.innerHTML = `<div class="pr-login-notice">
+        <p>로그인하면 사진을 추가할 수 있어요.</p>
+        <button class="btn primary-btn" style="margin-top:14px;font-size:13px;padding:8px 18px;min-width:0" onclick="window.kakaoLogin?.()">카카오 로그인</button>
+      </div>`;
+      return;
+    }
+
+    panel.dataset.rendered = '1';
+    panel.innerHTML = '<p class="pr-empty">불러오는 중...</p>';
+
+    const allRecords = recordsData || await window.CottageDB.getAllPlayRecordsForHub();
+    const sorted = [...allRecords].sort((a, b) => {
+      const da = a.played_at || a.created_at?.slice(0, 10) || '';
+      const db = b.played_at || b.created_at?.slice(0, 10) || '';
+      return db.localeCompare(da);
+    });
+
+    const photoFiles = [];
+
+    panel.innerHTML = `<div class="pr-photo-add-wrap">
+      <div class="pr-form-section">
+        <label class="pr-form-label">어떤 기록에 추가할까요?</label>
+        <select class="pr-photo-add-select" id="prPhotoRecordSelect">
+          <option value="">기록 선택...</option>
+          ${sorted.map(r => {
+            const dateStr = (r.played_at || r.created_at?.slice(0, 10) || '').slice(2, 10).replace(/-/g, '.');
+            const gameName = getGameName(r.game_id);
+            const parts = [dateStr, r.group_name, gameName, r.player_count ? r.player_count + '명' : ''].filter(Boolean);
+            return `<option value="${r.id}" data-photo="${escH(r.photo_url || '')}">${escH(parts.join(' · '))}</option>`;
+          }).join('')}
+        </select>
+      </div>
+      <div class="pr-form-section">
+        <label class="pr-form-label">사진 선택</label>
+        <div class="pr-photo-area">
+          <label class="pr-photo-label" for="prPhotoAddInput">📷 사진 선택하기</label>
+          <input type="file" id="prPhotoAddInput" accept="image/*" multiple class="pr-photo-input-hidden">
+          <div class="pr-photo-grid" id="prPhotoAddGrid"></div>
+        </div>
+      </div>
+      <button class="pr-save-btn" id="prPhotoAddSubmit" type="button">추가하기</button>
+    </div>`;
+
+    const photoInput = panel.querySelector('#prPhotoAddInput');
+    const photoGrid = panel.querySelector('#prPhotoAddGrid');
+    const addPhotoItem = buildPhotoItemAdder(photoGrid, photoFiles, 10);
+
+    photoInput.addEventListener('change', async () => {
+      for (const f of Array.from(photoInput.files)) await addPhotoItem(f);
+      photoInput.value = '';
+    });
+
+    panel.querySelector('#prPhotoAddSubmit').addEventListener('click', async () => {
+      if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
+      const select = panel.querySelector('#prPhotoRecordSelect');
+      const recordId = select.value;
+      if (!recordId) { showToast('기록을 먼저 선택해주세요.'); return; }
+      if (!photoFiles.length) { showToast('사진을 선택해주세요.'); return; }
+
+      const btn = panel.querySelector('#prPhotoAddSubmit');
+      btn.disabled = true; btn.textContent = '업로드 중...';
+
+      const uploaded = [];
+      for (const pf of photoFiles) {
+        const url = await window.CottageDB.uploadPlayPhoto(pf, user.id);
+        if (url) uploaded.push(url);
+        else showToast('⚠️ 사진 업로드 실패');
+      }
+
+      if (!uploaded.length) { btn.disabled = false; btn.textContent = '추가하기'; return; }
+
+      const currentPhotoUrl = select.selectedOptions[0]?.dataset.photo || '';
+      const existing = parsePhotoUrls(currentPhotoUrl);
+      const allUrls = [...existing, ...uploaded];
+      const newPhotoUrl = allUrls.length === 1 ? allUrls[0] : JSON.stringify(allUrls);
+
+      const res = await window.CottageDB.updateGamePlay(recordId, { photo_url: newPhotoUrl });
+      btn.disabled = false; btn.textContent = '추가하기';
+
+      if (res?.error) { showToast('⚠️ 저장에 실패했어요.'); return; }
+
+      showToast('사진이 추가됐어요!');
+      recordsLoaded = false;
+      delete panel.dataset.rendered;
+      panel.innerHTML = '';
+      renderPhotoPanel();
+    });
+  }
+
+    // ── 기록 보기 탭 ─────────────────────────────────────────────
 
   let recordsLoaded = false;
   let recordsData = null;
