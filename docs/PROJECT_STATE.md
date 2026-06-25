@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-25 (142차-62)
+최종 갱신: 2026-06-25 (142차-64)
 
 ---
 
@@ -38,6 +38,8 @@
 | 게임평 업적 버그 수정 (142차-59) | review 업적 카운트: 별점(game_ratings) → 게임평 텍스트(game_comments) / insertComment 후 checkAchievements('review') 트리거 추가 / getUserCommentCount 함수 신규 | 142차-59 |
 | 게임시트 버튼 + 모달 z-index + 변수화 (142차-60~61) | 게임상세시트 게임평/플레이기록 섹션 헤더에 남기기/기록하기 버튼 추가 / 모달 z-index 2200→9700 / style.css z-index 전체 변수화: --z-profile(9100) --z-subsheet(9200) --z-sheet(9500) --z-shelf(9600) --z-sheet-modal(9700) --z-top(9999) | 142차-60~61 |
 | 메인 게임시트 게임평 제출 후 미리보기 갱신 (142차-62) | onSubmitCommentModal에 initSheetCommentsPreview 추가 — 기존 initSheetComments(기록전체보기용)만 호출해 메인시트 미리보기가 갱신 안 되던 버그 수정 | 142차-62 |
+| 플레이기록 수정 후 스크롤 유지 (142차-63) | renderRecords 재렌더 전후 scrollY 저장/복원(rAF) — 수정/삭제/사진삭제 3곳 | 142차-63 |
+| 이번달 참여일정 카드 통합 (142차-64) | 함께한 시간 카드에 이번달 meeting_votes(내 투표) 표시 / 최대 2줄+"외 N건" / "M/D 정기모임" 형식 / 카드 패딩 축소 | 142차-64 |
 
 ### 142차 테스트 목록
 
@@ -86,7 +88,7 @@
    - 기록 전체보기 카드: 연결된 항목들 닉네임 붙여 합산 표시 (호핀: "~", 나나: "~")
    - game_comments는 유지(기존 호환), 신규 입력은 game_play_records로 통일
    - 영향 파일: supabase-client.js, script.js, game-reviews.js
-8. **이번달참여일정 — 함께한 시간 카드 통합** — 🟡 Yellow (2026-06-25 기획 확정)
+8. ~~**이번달참여일정 — 함께한 시간 카드 통합**~~ — 완료 (142차-64)
 9. ~~**관리자 페이지 섹션 재정렬**~~ — 완료 (142차-58)
    - groupCharts: summary카드 + 날짜별 방문자 수만 남김
    - groupReferrer (신규): 유입경로별/페이지별방문/유입경로×페이지 + subAuxCharts
