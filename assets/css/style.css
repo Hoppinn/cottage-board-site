@@ -6363,7 +6363,7 @@ body.embed-mode .site-footer { display: none !important; }
 .pr-lightbox-prev { left: 10px; }
 .pr-lightbox-next { right: 10px; }
 .pr-lightbox-counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.7); font-size: 13px; pointer-events: none; }
-.pr-lightbox-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; padding: 8px 16px; text-align: center; }
+.pr-lightbox-caption { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.55); color: #fff; font-size: 12px; padding: 8px 16px; text-align: center; line-height: 1.8; }
 .pr-lightbox-link { color: #ffe08a; text-decoration: underline; margin-left: 8px; }
 
 /* =========================

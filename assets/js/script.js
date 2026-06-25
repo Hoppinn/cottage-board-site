@@ -1354,7 +1354,7 @@ function openGameSheet(gameKey, restoreScroll = false){
         </div>
       </div>
 
-      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 전체보기 & 남기기 →</button>
+      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 남기기 & 전체보기 →</button>
     </div>
 
   `;
@@ -1554,27 +1554,29 @@ async function initSheetPlayPreview(gameKey) {
 
 function _attachPhotoLightbox(container, allPhotos, entries) {
   if (!window.openLightbox) return;
-  function _photoOpts(idx) {
-    const e = entries?.[idx];
-    if (!e) return {};
-    const parts = [];
-    if (e.group_name) parts.push(e.group_name);
-    if (e.played_at) parts.push(e.played_at.slice(2, 10).replace(/-/g, '.'));
-    if (e.player_count) parts.push(e.player_count + '명');
-    if (e.player_names) parts.push(e.player_names);
-    if (e.score_note) parts.push(e.score_note);
-    return parts.length ? { caption: parts.join(' · ') } : {};
+  function _buildCaption(e) {
+    if (!e) return '';
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const lines = [];
+    const line1 = [e.group_name, e.played_at ? e.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
+    if (line1) lines.push(esc(line1));
+    const line2 = [e.player_count ? e.player_count + '명' : '', e.player_names].filter(Boolean).join(' · ');
+    if (line2) lines.push(esc(line2));
+    if (e.score_note) lines.push(esc(e.score_note));
+    return lines.join('<br>');
   }
+  const captions = entries ? entries.map(_buildCaption) : null;
+  const lbOpts = captions ? { captions } : {};
   container.querySelectorAll('.pr-rec-photo').forEach(img => {
     img.addEventListener('click', () => {
       const idx = Number(img.dataset.idx || 0);
-      try { window.openLightbox(allPhotos, idx, _photoOpts(idx)); } catch(_) {}
+      try { window.openLightbox(allPhotos, idx, lbOpts); } catch(_) {}
     });
   });
   container.querySelectorAll('.pr-rec-photo-more').forEach(btn => {
     btn.addEventListener('click', () => {
       const idx = Number(btn.dataset.idx || 0);
-      try { window.openLightbox(allPhotos, idx, _photoOpts(idx)); } catch(_) {}
+      try { window.openLightbox(allPhotos, idx, lbOpts); } catch(_) {}
     });
   });
 }

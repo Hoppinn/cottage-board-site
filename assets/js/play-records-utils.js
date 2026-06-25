@@ -49,6 +49,9 @@
     const counter = document.createElement('div');
     counter.className = 'pr-lightbox-counter';
 
+    const cap = (opts?.captions || opts?.caption) ? document.createElement('div') : null;
+    if (cap) cap.className = 'pr-lightbox-caption';
+
     function show(idx) {
       cur = ((idx % urls.length) + urls.length) % urls.length;
       img.src = urls[cur];
@@ -56,6 +59,10 @@
       prev.style.display = multi ? '' : 'none';
       next.style.display = multi ? '' : 'none';
       counter.textContent = multi ? `${cur + 1} / ${urls.length}` : '';
+      if (cap) {
+        const text = opts.captions ? (opts.captions[cur] || '') : (opts.caption || '');
+        cap.innerHTML = text;
+      }
     }
 
     function closeLb() { document.removeEventListener('keydown', onKey); lb.remove(); }
@@ -80,16 +87,7 @@
     document.addEventListener('keydown', onKey);
 
     lb.append(close, prev, img, next, counter);
-    if (opts?.caption) {
-      const cap = document.createElement('div');
-      cap.className = 'pr-lightbox-caption';
-      if (opts.link) {
-        cap.innerHTML = `${_escAttr(opts.caption)} <a class="pr-lightbox-link" href="${_escAttr(opts.link)}">원 게시글 보기 →</a>`;
-      } else {
-        cap.textContent = opts.caption;
-      }
-      lb.appendChild(cap);
-    }
+    if (cap) lb.appendChild(cap);
     document.body.appendChild(lb);
     show(cur);
   }
