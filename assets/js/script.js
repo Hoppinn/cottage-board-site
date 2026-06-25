@@ -1677,7 +1677,7 @@ async function initSheetPhotos(gameKey) {
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
-    <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
+    <div class="sheet-photo-grid" data-urls="${dataUrls}">
       ${allPhotos.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
     </div>
     ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
