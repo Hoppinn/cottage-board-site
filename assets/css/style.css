@@ -2997,6 +2997,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-play-info-tag--secondary{opacity:0.65;font-weight:400;}
 .sheet-list-more-btn{display:block;width:100%;padding:8px;background:none;border:none;border-top:1px solid #f0e8d8;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;}
+.sheet-photo-hidden{display:none;}
 .sheet-comment-play-link{margin:8px 0 4px;font-size:13px;}
 .sheet-comment-play-link-label{display:flex;align-items:center;gap:6px;cursor:pointer;}
 .sheet-comment-play-select{display:block;width:100%;margin-top:6px;padding:6px 8px;border:1px solid #ead8b8;border-radius:8px;font-size:12px;background:#fff;}

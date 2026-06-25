@@ -1673,22 +1673,28 @@ async function initSheetPhotos(gameKey) {
   const metaParts = [latest.nickname ? esc(latest.nickname) : '', dateStr].filter(Boolean);
 
   const SHOW_FIRST = 3;
-  const firstPhotos = allPhotos.slice(0, SHOW_FIRST);
-  const restPhotos = allPhotos.slice(SHOW_FIRST);
-  const more = restPhotos.length;
+  const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
-      ${firstPhotos.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
-      ${more > 0 ? `<div class="sheet-photo-rest" style="display:none">${restPhotos.map((u, i) => `<div class="pr-rec-photo-item"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${SHOW_FIRST + i}"></div>`).join('')}</div>` : ''}
+      ${allPhotos.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${u}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
     </div>
     ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
   const morePhotoBtn = el.querySelector('.sheet-photo-more-btn');
   if (morePhotoBtn) {
     morePhotoBtn.addEventListener('click', () => {
-      el.querySelector('.sheet-photo-rest').style.display = '';
-      morePhotoBtn.remove();
+      const hidden = el.querySelectorAll('.sheet-photo-hidden');
+      const isCollapsed = hidden[0]?.style.display !== 'none' && hidden[0]?.classList.contains('sheet-photo-hidden');
+      if (isCollapsed || hidden.length) {
+        hidden.forEach(item => item.classList.remove('sheet-photo-hidden'));
+        morePhotoBtn.textContent = '접기 ▴';
+      } else {
+        el.querySelectorAll('.pr-rec-photo-item').forEach((item, i) => {
+          if (i >= SHOW_FIRST) item.classList.add('sheet-photo-hidden');
+        });
+        morePhotoBtn.textContent = `${more}장 더보기 ▾`;
+      }
     });
   }
   _attachPhotoLightbox(el, allPhotos, entries);
@@ -2059,9 +2065,12 @@ async function initSheetComments(gameKey) {
   listEl.innerHTML = htmlArr[0] +
     (moreCount > 0 ? `<div class="sheet-list-rest" style="display:none">${restHtml}</div><button class="sheet-list-more-btn" type="button">${moreCount}건 더보기 ▾</button>` : '');
   if (moreCount > 0) {
-    listEl.querySelector('.sheet-list-more-btn')?.addEventListener('click', function() {
-      listEl.querySelector('.sheet-list-rest').style.display = '';
-      this.remove();
+    const moreBtn = listEl.querySelector('.sheet-list-more-btn');
+    const restEl = listEl.querySelector('.sheet-list-rest');
+    moreBtn?.addEventListener('click', () => {
+      const isExpanded = restEl.style.display !== 'none';
+      restEl.style.display = isExpanded ? 'none' : '';
+      moreBtn.textContent = isExpanded ? `${moreCount}건 더보기 ▾` : '접기 ▴';
     });
   }
 }
@@ -2463,17 +2472,27 @@ async function initPlayWidget(gameKey) {
 
   const moreBtn = document.getElementById(`${listId}-more`);
   if (moreBtn) {
+    const restEl = document.getElementById(`${listId}-rest`);
     moreBtn.addEventListener('click', () => {
-      document.getElementById(`${listId}-rest`).style.display = '';
-      moreBtn.remove();
-      widget.querySelectorAll('.sheet-list-rest .sheet-play-edit-btn').forEach(b => {
-        b.addEventListener('click', () => onOpenEditPlayModal(
-          b.dataset.game, b.dataset.id,
-          Number(b.dataset.count) || 0, b.dataset.names,
-          Number(b.dataset.time) || 0, b.dataset.score,
-          b.dataset.group || '', b.dataset.playedAt || '', b.dataset.review || ''
-        ));
-      });
+      const isExpanded = restEl.style.display !== 'none';
+      if (isExpanded) {
+        restEl.style.display = 'none';
+        moreBtn.textContent = `${allRecords.length - 1}건 더보기 ▾`;
+      } else {
+        restEl.style.display = '';
+        moreBtn.textContent = '접기 ▴';
+        restEl.querySelectorAll('.sheet-play-edit-btn').forEach(b => {
+          if (!b._editBound) {
+            b._editBound = true;
+            b.addEventListener('click', () => onOpenEditPlayModal(
+              b.dataset.game, b.dataset.id,
+              Number(b.dataset.count) || 0, b.dataset.names,
+              Number(b.dataset.time) || 0, b.dataset.score,
+              b.dataset.group || '', b.dataset.playedAt || '', b.dataset.review || ''
+            ));
+          }
+        });
+      }
     });
   }
 
