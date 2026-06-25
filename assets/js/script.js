@@ -1324,22 +1324,22 @@ function openGameSheet(gameKey, restoreScroll = false){
     <!-- 기록 섹션 그룹 -->
     <div class="sheet-records-group">
 
-      <!-- 게임평 미리보기 -->
-      <div class="sheet-preview-section">
-        <div class="sheet-preview-hd">
-          <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
-        </div>
-        <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
-          <span class="sheet-comments-empty">불러오는 중...</span>
-        </div>
-      </div>
-
       <!-- 플레이기록 미리보기 -->
       <div class="sheet-preview-section">
         <div class="sheet-preview-hd">
           <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
         </div>
         <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <!-- 게임평 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
           <span class="sheet-comments-empty">불러오는 중...</span>
         </div>
       </div>
@@ -1492,12 +1492,13 @@ async function initSheetCommentsPreview(gameKey) {
   const nick = esc(item.nick);
   const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
   const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
+  const _isMineAny = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
   const editBtns = isMine ? `<div class="sheet-comment-actions">
     <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
     <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
   </div>` : '';
   el.innerHTML = `<div class="sheet-comment-item">
-    <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+    <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
     <p class="sheet-comment-text">${txt}</p>
     ${editBtns}
     ${total > 1 ? `<p class="sheet-preview-more-hint">${total - 1}개 더 있음</p>` : ''}
@@ -1535,10 +1536,12 @@ async function initSheetPlayPreview(gameKey) {
   const dateStr = r.played_at
     ? r.played_at.slice(2, 10).replace(/-/g, '.')
     : (r.created_at ? r.created_at.slice(2, 10).replace(/-/g, '.') : '');
+  const _me = window.getKakaoUser?.();
+  const _isMinePlay = _me && r.user_id && String(r.user_id) === String(_me.id);
 
   el.innerHTML = `<div class="sheet-play-preview-item">
     <span class="sheet-comment-nickname">
-      ${r.nickname ? `<strong class="sheet-comment-nick">${esc(r.nickname)}</strong>` : ''}
+      ${r.nickname ? `<strong class="sheet-comment-nick">${_isMinePlay ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
       ${dateStr ? `<span class="sheet-comment-date">${dateStr}</span>` : ''}
       ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
     </span>

@@ -3527,6 +3527,7 @@ body.embed-mode .site-footer { display: none !important; }
   padding-bottom:0;
 }
 .sheet-preview-body .sheet-comment-item{ margin:0; }
+.sheet-mine-mark{font-size:10px;color:var(--green,#5a8a5a);vertical-align:middle;}
 .sheet-comment-actions{display:flex;gap:8px;margin-top:6px;}
 .sheet-review-edit-wrap{margin:4px 0;}
 .sheet-review-edit-area{width:100%;box-sizing:border-box;padding:8px;border:1px solid #ead8b8;border-radius:8px;font-size:13px;resize:vertical;}
