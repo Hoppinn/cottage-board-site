@@ -1426,6 +1426,8 @@ function closeGameSheet(){
 function openGameRecordSheet(gameKey) {
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
+  const _existModal = document.getElementById('sheetCommentModal');
+  if (_existModal) _existModal.style.display = 'none';
 
   const _recPanel = gameSheet.querySelector('.game-sheet-panel');
   _savedSheetScrollTop = _recPanel ? _recPanel.scrollTop : 0;
@@ -1472,7 +1474,11 @@ function openGameRecordSheet(gameKey) {
 
   initSheetComments(gameKey).catch(() => {});
   initPlayWidget(gameKey).catch(() => {});
-  initSheetPhotos(gameKey).catch(() => {});
+  initSheetPhotos(gameKey).catch(err => {
+    const _el = document.getElementById(`sheetPhotosArea-${gameKey}`);
+    if (_el) _el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
+    console.error('[initSheetPhotos]', err);
+  });
 }
 
 async function initSheetCommentsPreview(gameKey) {
@@ -1604,8 +1610,9 @@ async function _fetchGamePhotos(gameKey) {
 async function initSheetPhotoPreview(gameKey) {
   const el = document.getElementById(`sheetPhotoPreview-${gameKey}`);
   const labelEl = document.getElementById(`sheetPreviewPhotoLabel-${gameKey}`);
-  if (!el || !window.CottageDB || !window.parsePhotoUrls) return;
+  if (!el || !window.CottageDB) return;
 
+  try {
   const entries = await _fetchGamePhotos(gameKey);
   const allPhotos = entries.map(e => e.url);
   const total = allPhotos.length;
@@ -1641,13 +1648,18 @@ async function initSheetPhotoPreview(gameKey) {
     });
   }
   _attachPhotoLightbox(el, allPhotos, entries);
+  } catch (err) {
+    el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
+    console.error('[initSheetPhotoPreview]', err);
+  }
 }
 
 async function initSheetPhotos(gameKey) {
   const el = document.getElementById(`sheetPhotosArea-${gameKey}`);
   const countEl = document.getElementById(`sheetPhotosCount-${gameKey}`);
-  if (!el || !window.CottageDB || !window.parsePhotoUrls) return;
+  if (!el || !window.CottageDB) return;
 
+  try {
   const entries = await _fetchGamePhotos(gameKey);
   const allPhotos = entries.map(e => e.url);
   const total = allPhotos.length;
@@ -1691,6 +1703,10 @@ async function initSheetPhotos(gameKey) {
     });
   }
   _attachPhotoLightbox(el, allPhotos, entries);
+  } catch (err) {
+    el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
+    console.error('[initSheetPhotos]', err);
+  }
 }
 
 if(closeGameSheetButton){
