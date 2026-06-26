@@ -5118,7 +5118,7 @@ body.embed-mode .site-footer { display: none !important; }
   background:#fff0ee;
 }
 
-.sheet-comment-actions{
+.sheet-comment-item .sheet-comment-actions{
   display:flex;
   flex-shrink:0;
   gap:2px;
