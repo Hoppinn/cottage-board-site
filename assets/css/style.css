@@ -611,7 +611,7 @@ body.owned-page .site-header{
 }
 
 .hero h1{
-  margin:0 0 clamp(22px,4vw,32px);
+  margin:0 0 clamp(28px,5vw,40px);
   color:#fff;
   font-size:clamp(26px,7.2vw,52px);
   line-height:1.22;
@@ -631,7 +631,7 @@ body.owned-page .site-header{
 }
 
 .desc{
-  margin:0 0 clamp(32px,5.5vw,48px);
+  margin:0 0 clamp(20px,3.5vw,30px);
   color:rgba(255,255,255,0.92);
   font-size:clamp(14px,3.8vw,22px);
   line-height:1.45;
@@ -669,12 +669,12 @@ body.owned-page .site-header{
 .primary-btn{background:#7a4828;color:#fff;}
 .secondary-btn{background:#fffaf0;color:#7a4828;}
 
-/* 히어로 전용 버튼 — 베이지 채움(Primary) / 브라운 아웃라인(Secondary) */
+/* 히어로 전용 버튼 — 갈색 채움(Primary) / 아이보리 아웃라인(Secondary) */
 .hero .btn{padding:clamp(12px,3.5vw,16px) clamp(14px,4.5vw,22px);}
-.hero .primary-btn{background:#fffaf0;color:#7a4828;border-color:#fffaf0;box-shadow:0 4px 16px rgba(0,0,0,0.28);}
-.hero .primary-btn:hover{background:#f5ede0;border-color:#f5ede0;box-shadow:0 4px 20px rgba(0,0,0,0.35);}
-.hero .secondary-btn{background:transparent;color:#fff;border:2.5px solid rgba(255,255,255,0.85);font-weight:800;backdrop-filter:blur(4px);}
-.hero .secondary-btn:hover{background:rgba(255,255,255,0.15);border-color:#fff;}
+.hero .primary-btn{background:var(--green);color:#fff;border-color:var(--green);}
+.hero .primary-btn:hover{background:#6a3a1e;border-color:#6a3a1e;}
+.hero .secondary-btn{background:#fffaf0;color:var(--green);border-color:#5a2e14;}
+.hero .secondary-btn:hover{background:#fff3e0;}
 
 .hero-club-link{display:block;margin-top:14px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;}
 .hero-club-link:hover{color:var(--green);}
