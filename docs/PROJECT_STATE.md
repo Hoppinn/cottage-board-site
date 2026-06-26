@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-26 (142차-100)
+최종 갱신: 2026-06-26 (142차-101)
 
 ---
 
@@ -104,7 +104,7 @@
 - ~~**[1] 142차-97 롤백**~~ — 완료 (142차-99)
 - **[2] 게임시트 사진 남기기 버튼** — 게임 바텀시트 사진 섹션에 "+사진 남기기" 버튼 추가. 게임평 남기기 모달과 동일 패턴(기존 플레이기록에 연동 옵션)
 - **[3] 게임상세시트 플레이 기록하기 플레이어 자동완성** — 게임시트 플레이기록 입력 폼의 이름 칸에 기록게시판과 동일한 태그칩 자동완성 시스템 적용
-- ~~**[4] 모임별 바텀시트 게임평수정 겹침 버그**~~ — 근본 원인 수정 완료 (142차-100). onOpenCommentInput의 await 이전에 modal.style.display='flex' 이동 → 모달 열린 뒤 navigating하면 onCloseCommentModal()이 실제로 닫을 수 있게 됨
+- ~~**[4] 모임별 바텀시트 게임평수정 겹침 버그**~~ — 근본 원인 수정 완료 (142차-100,101). (1) onOpenCommentInput await 이전 modal 표시로 race condition 수정. (2) pr-rec-more-menu가 z-index:9999 fixed로 열린 채 썸네일 stopPropagation으로 document.click이 막혀 게임시트(z-index:9500) 위에 잔류 → openGameSheet/openGameRecordSheet 시작 시 _closeAllMoreMenus() 호출로 수정
 - ~~**[5] 방문자목록 회원탭 표시 개선**~~ — 완료 (142차-99, applyVisitorFilter/expandVisitorMore 함수)
 - ~~**[6] 비주얼분석 날짜 필터 → 상단 지표 동기화**~~ — 완료 (142차-99, draw() 내 기간 연동)
 - **[7] 페이지/회원 분석 기간 필터 개편** — 기본값 최근1주일, 대분류 "최근1주일/전체" 추가, 각 대분류 아래 전체/회원/비회원 서브탭 유지

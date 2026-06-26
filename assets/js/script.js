@@ -1135,6 +1135,7 @@ function openGameSheet(gameKey, restoreScroll = false){
   }
 
   onCloseCommentModal();
+  _closeAllMoreMenus();
 
   const detail =
     GameView.getGameDetailData(game);
@@ -1459,6 +1460,7 @@ function openGameRecordSheet(gameKey) {
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
   onCloseCommentModal();
+  _closeAllMoreMenus();
 
   const _recPanel = gameSheet.querySelector('.game-sheet-panel');
   _savedSheetScrollTop = _recPanel ? _recPanel.scrollTop : 0;
@@ -2260,6 +2262,14 @@ function onEditComment(btn) {
 function onCloseCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
   if (modal) { modal.style.display = 'none'; delete modal.dataset.editId; }
+}
+
+function _closeAllMoreMenus() {
+  document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
+    m.classList.remove('is-open');
+    const mm = m.querySelector('.pr-rec-more-menu');
+    if (mm) mm.removeAttribute('style');
+  });
 }
 
 async function onDeleteCommentPreview(btn) {
