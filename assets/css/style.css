@@ -321,7 +321,7 @@ textarea{
 
 /* 서브메뉴 active */
 .menu-group-body a.is-current{
-  background:#7a4828;
+  background:#8a5e42;
   color:#fff;
   font-weight:900;
 }
