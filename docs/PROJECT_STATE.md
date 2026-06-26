@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-27 (142차-123)
+최종 갱신: 2026-06-27 (142차-133)
 
 ---
 
@@ -52,6 +52,8 @@
 | feat: 기록게시판 사진 추가 탭 (142차-97) | 세 번째 탭 "사진 추가" — 전체 기록 목록에서 원하는 기록 선택 후 사진 업로드, 타인 기록에도 추가 가능 | 142차-97 |
 | fix: 게임 바텀시트 코너 삐져나옴 근본 수정 (142차-118) | `.game-sheet-panel` overflow:hidden(외부 클리핑) + `.game-sheet-scroll` overflow-y:auto(내부 스크롤) 분리. JS scroll 참조 5곳 `.game-sheet-panel` → `.game-sheet-scroll` 변경. **3세션 소요 근본 원인: Chrome GPU 컴포지터가 overflow-y:auto+border-radius 동일 요소에서 배경 클리핑을 직각으로 렌더링하는 버그.** DESIGN_RULES.md §6 참조 | 142차-118 |
 | 내 보드 모임 플래너 연동 + 모임페이지 로그인 버튼 (142차-123) | 함께한 시간 서브시트 상단에 "📅 모임 플래너 바로가기 →" 초록 버튼 추가 (경로: index.html/서브페이지 공용). 모임 플래너 날짜 상세 뷰에서 로그인 힌트가 텍스트만 있던 문제 → 실제 카카오 로그인 버튼으로 교체. | 142차-123 |
+| 디자인 시스템 정보성 텍스트 색·굵기 통일 (142차-124~133) | 페이지별 순차 적용: `--text-info(#505050)+500` 원칙. about.html, price-rules.html, club-rules.html, guide.html, game-reviews.html, owned-games.html, 요청하기, 내보드 패널 완료. 갈색 배너 12% 연하게(#7a4828→#8a5e42 등). club.html·club-schedule.html은 이미 CSS변수 사용으로 패스. | 142차-124~133 |
+| 수집보드 카드 3줄 표시 + 취향보드 카드 간격 (142차-133) | 캐릭터·도감·업적을 1줄(·구분)→개행(\n) 3줄 표시. 취향보드 카드 #태그 bio-row/games-row 분리, margin-top:3px. | 142차-133 |
 
 ### 142차 테스트 목록
 
