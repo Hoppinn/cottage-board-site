@@ -4251,9 +4251,9 @@ body.embed-mode .site-footer { display: none !important; }
 ========================= */
 .about-hero{
   position:relative;
-  background:linear-gradient(160deg,#3d2010 0%,#7a4828 100%);
+  background:linear-gradient(160deg,#543b2d 0%,#8a5e42 100%);
   margin:calc(var(--header-total-h) + 28px) 16px 6px;
-  padding:clamp(20px,4vw,28px) 20px clamp(32px,8vw,52px);
+  padding:clamp(20px,5vw,32px) 20px clamp(20px,5vw,32px);
   border-radius:16px;
   text-align:center;
   color:#fff;
@@ -4501,22 +4501,22 @@ body.embed-mode .site-footer { display: none !important; }
    # PRICE-RULES PAGE
 ========================= */
 .price-hero-card{
-  background:linear-gradient(135deg,#4a2810 0%,#7a4828 100%);
+  background:linear-gradient(135deg,#60422d 0%,#8a5e42 100%);
   border-radius:20px;
-  padding:clamp(18px,5vw,28px) clamp(24px,6vw,36px);
+  padding:clamp(15px,4vw,24px) clamp(20px,5vw,30px);
   text-align:center;
   color:#fff;
   margin-bottom:30px;
 }
 .price-amount{
-  font-size:clamp(40px,12vw,60px);
+  font-size:clamp(35px,10.5vw,52px);
   font-weight:900;
   color:#fff;
   line-height:1;
   margin:0 0 4px;
 }
 .price-amount span{
-  font-size:clamp(20px,5vw,28px);
+  font-size:clamp(18px,4.5vw,24px);
   color:#fff;
   opacity:.85;
 }
@@ -4582,8 +4582,8 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .rules-summary-val{
   font-size:13px;
-  font-weight:700;
-  color:#3a2a1a;
+  font-weight:500;
+  color:var(--text-info);
   line-height:1.5;
 }
 
@@ -4610,8 +4610,8 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .rules-intro-text{
   font-size:13px;
-  font-weight:700;
-  color:#3a2a1a;
+  font-weight:500;
+  color:var(--text-info);
   line-height:1.4;
 }
 
@@ -4657,8 +4657,8 @@ body.embed-mode .site-footer { display: none !important; }
   border:1.5px solid var(--line);
   border-radius:10px;
   font-size:13px;
-  font-weight:700;
-  color:#3a3025;
+  font-weight:500;
+  color:var(--text-info);
   line-height:1.5;
   word-break:keep-all;
 }
@@ -4705,7 +4705,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .rules-plain-list li{
   font-size:14px;
-  color:#5a4030;
+  color:var(--text-info);
   padding-left:16px;
   position:relative;
   line-height:1.7;
@@ -4726,7 +4726,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .rules-check-list li{
   font-size:14px;
-  color:#5a4030;
+  color:var(--text-info);
   padding-left:22px;
   position:relative;
   line-height:1.7;
