@@ -20,7 +20,7 @@ const moodValue = recommendState.mood;
   !moodValue
 ){
   gameScroll.style.cssText = 'max-width:720px;margin:0 auto;padding:20px 40px;box-sizing:border-box;display:block;';
-  gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">인원, 난이도, 게임 방식 중<br>하나 이상을 골라주세요.</p>`;
+  gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">하나만 선택해도 추천해드려요.</p>`;
 
   return;
 }
