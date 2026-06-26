@@ -52,6 +52,13 @@
     const cap = (opts?.captions || opts?.caption) ? document.createElement('div') : null;
     if (cap) cap.className = 'pr-lightbox-caption';
 
+    const delBtn = opts?.onDelete ? document.createElement('button') : null;
+    if (delBtn) {
+      delBtn.className = 'pr-lightbox-del';
+      delBtn.type = 'button';
+      delBtn.textContent = '삭제';
+    }
+
     function show(idx) {
       cur = ((idx % urls.length) + urls.length) % urls.length;
       img.src = urls[cur];
@@ -63,10 +70,20 @@
         const text = opts.captions ? (opts.captions[cur] || '') : (opts.caption || '');
         cap.innerHTML = text;
       }
+      if (delBtn) {
+        const canDel = !opts.deletable || opts.deletable[cur];
+        delBtn.style.display = canDel ? '' : 'none';
+      }
     }
 
     function closeLb() { document.removeEventListener('keydown', onKey); lb.remove(); }
 
+    if (delBtn) {
+      delBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (confirm('이 사진을 삭제할까요?')) { opts.onDelete(cur); closeLb(); }
+      });
+    }
     prev.addEventListener('click', e => { e.stopPropagation(); show(cur - 1); });
     next.addEventListener('click', e => { e.stopPropagation(); show(cur + 1); });
     close.addEventListener('click', closeLb);
@@ -88,6 +105,7 @@
 
     lb.append(close, prev, img, next, counter);
     if (cap) lb.appendChild(cap);
+    if (delBtn) lb.appendChild(delBtn);
     document.body.appendChild(lb);
     show(cur);
   }

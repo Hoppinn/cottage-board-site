@@ -1609,7 +1609,7 @@ async function initSheetPlayPreview(gameKey) {
   el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
 }
 
-function _attachPhotoLightbox(container, allPhotos, entries) {
+function _attachPhotoLightbox(container, allPhotos, entries, deleteOpts) {
   if (!window.openLightbox) return;
   function _buildCaption(e) {
     if (!e) return '';
@@ -1625,6 +1625,10 @@ function _attachPhotoLightbox(container, allPhotos, entries) {
   }
   const captions = entries ? entries.map(_buildCaption) : null;
   const lbOpts = captions ? { captions } : {};
+  if (deleteOpts) {
+    lbOpts.deletable = deleteOpts.deletable;
+    lbOpts.onDelete = deleteOpts.onDelete;
+  }
   container.querySelectorAll('.pr-rec-photo').forEach(img => {
     img.addEventListener('click', () => {
       const idx = Number(img.dataset.idx || 0);
@@ -1724,17 +1728,10 @@ async function initSheetPhotos(gameKey) {
   const SHOW_FIRST = 4;
   const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
-  const _myId = window.getKakaoUser?.()?.id || null;
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="sheet-photo-grid" data-urls="${dataUrls}">
-      ${entries.map((e, i) => {
-        const canDel = _myId && e.user_id && String(e.user_id) === String(_myId);
-        return `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}">
-          <img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}">
-          ${canDel ? `<button class="sheet-photo-del-btn" data-record-id="${e.record_id}" data-url="${esc(e.url)}" type="button">✕</button>` : ''}
-        </div>`;
-      }).join('')}
+      ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
     </div>
     ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
   const morePhotoBtn = el.querySelector('.sheet-photo-more-btn');
@@ -1753,23 +1750,26 @@ async function initSheetPhotos(gameKey) {
       }
     });
   }
-  _attachPhotoLightbox(el, allPhotos, entries);
 
-  el.querySelectorAll('.sheet-photo-del-btn').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      e.stopPropagation();
-      if (!confirm('이 사진을 삭제할까요?')) return;
-      const recId = btn.dataset.recordId;
-      const delUrl = btn.dataset.url;
+  const _myId = window.getKakaoUser?.()?.id || null;
+  const _isOwner = window.isOwner?.() || false;
+  const deletable = entries.map(e => _isOwner || (_myId && e.user_id && String(e.user_id) === String(_myId)));
+  const anyDeletable = deletable.some(Boolean);
+  const deleteOpts = anyDeletable ? {
+    deletable,
+    onDelete: async (idx) => {
+      const e = entries[idx];
+      if (!e) return;
       const allRecs = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
-      const rec = allRecs.find(r => String(r.id) === String(recId));
+      const rec = allRecs.find(r => String(r.id) === String(e.record_id));
       if (!rec) return;
-      const remaining = (window.parsePhotoUrls?.(rec.photo_url) || []).filter(u => u !== delUrl);
+      const remaining = (window.parsePhotoUrls?.(rec.photo_url) || []).filter(u => u !== e.url);
       const newPhotoUrl = remaining.length === 0 ? null : remaining.length === 1 ? remaining[0] : JSON.stringify(remaining);
-      await window.CottageDB.updateGamePlay(recId, { photo_url: newPhotoUrl });
+      await window.CottageDB.updateGamePlay(e.record_id, { photo_url: newPhotoUrl });
       await initSheetPhotos(gameKey);
-    });
-  });
+    }
+  } : null;
+  _attachPhotoLightbox(el, allPhotos, entries, deleteOpts);
   } catch (err) {
     el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
     console.error('[initSheetPhotos]', err);
