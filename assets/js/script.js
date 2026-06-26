@@ -1134,6 +1134,9 @@ function openGameSheet(gameKey, restoreScroll = false){
     return;
   }
 
+  const _modal = document.getElementById('sheetCommentModal');
+  if (_modal) _modal.style.display = 'none';
+
   const detail =
     GameView.getGameDetailData(game);
 
@@ -1691,6 +1694,7 @@ async function initSheetPhotos(gameKey) {
 
   try {
   const entries = await _fetchGamePhotos(gameKey);
+  console.log('[initSheetPhotos]', gameKey, 'entries:', entries.length);
   const allPhotos = entries.map(e => e.url);
   const total = allPhotos.length;
   if (countEl) countEl.textContent = total > 0 ? `사진 ${total}장` : '사진';
