@@ -1121,7 +1121,7 @@ function openShelfSheet(url) {
   registerMsg();
 }
 
-function openGameSheet(gameKey, restoreScroll = false){
+function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   _currentSheetGameKey = gameKey;
   const game =
     window.gameData?.[gameKey];
@@ -1218,7 +1218,8 @@ function openGameSheet(gameKey, restoreScroll = false){
           const _img = getGameDetailImage(_g);
           const _safeTitle = String(_title).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
           const _safeKey = String(_k).replace(/'/g,"\\'");
-          return `<button class="sheet-same-design-card" type="button" onclick="openGameSheet('${_safeKey}')">
+          const _safeFromKey = String(gameKey).replace(/'/g,"\\'");
+          return `<button class="sheet-same-design-card" type="button" onclick="openGameSheet('${_safeKey}', false, '${_safeFromKey}')">
             <img class="sheet-same-design-thumb" src="${_img}" alt="${_safeTitle}" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
             <span class="sheet-same-design-title">${_safeTitle}</span>
           </button>`;
@@ -1226,7 +1227,12 @@ function openGameSheet(gameKey, restoreScroll = false){
       </div>
     </div>` : '';
 
+  const _safeFromKey = fromKey ? String(fromKey).replace(/'/g,"\\'") : null;
+  const _fromGame = fromKey ? window.gameData?.[fromKey] : null;
+  const _fromTitle = _fromGame ? (_fromGame.title?.display || _fromGame.title?.owned || fromKey) : null;
+
   gameSheetContent.innerHTML = `
+    ${_safeFromKey ? `<button class="sheet-back-btn" type="button" onclick="openGameSheet('${_safeFromKey}')">← ${_fromTitle ? String(_fromTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
 
     <!-- sticky bar (스크롤 시 표시) -->
     <div class="sheet-sticky-bar" id="sheetStickyBar">
