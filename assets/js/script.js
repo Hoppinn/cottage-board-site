@@ -2215,6 +2215,9 @@ function onOpenCommentInput(btn) {
     const linkWrap = document.getElementById('sheetCommentPlayLink');
     const linkCheck = document.getElementById('sheetCommentLinkCheck');
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
+    modal.style.display = 'flex';
+    document.getElementById('sheetCommentModalInput')?.focus();
+
     if (linkWrap && linkCheck && linkSelect) {
       linkCheck.checked = false;
       linkSelect.style.display = 'none';
@@ -2222,7 +2225,8 @@ function onOpenCommentInput(btn) {
       linkWrap.style.display = 'none';
       const _cu = window.getKakaoUser?.();
       if (_cu?.id && window.CottageDB) {
-            const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
+        const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
+        if (modal.style.display === 'none') return;
         const mine = records.filter(r => String(r.user_id) === String(_cu.id) && !r.review_text);
         if (mine.length) {
           mine.forEach(r => {
@@ -2236,9 +2240,6 @@ function onOpenCommentInput(btn) {
         }
       }
     }
-
-    modal.style.display = 'flex';
-    document.getElementById('sheetCommentModalInput')?.focus();
   });
 }
 
