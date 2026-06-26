@@ -80,11 +80,11 @@
 
           <h1>오래 머무르고 싶은,<br>보드게임 공간</h1>
 
-          <p class="desc">게임을 몰라도 괜찮아요.<br>추천게임으로 편하게 시작해보세요.</p>
+          <p class="desc">오늘은 무슨 게임을 플레이해볼까요?</p>
 
           <div class="buttons">
             <button class="btn primary-btn" id="openRecommendModal" type="button">추천 게임 찾기</button>
-            <a class="btn secondary-btn" href="./pages/game/owned-games.html">전체 게임 보기</a>
+            <a class="btn secondary-btn" href="./pages/game/game-reviews.html">플레이 기록 남기기</a>
           </div>
 
         </div>
@@ -92,7 +92,8 @@
 
       <!-- 방문자수 하단 오버레이 -->
       <div class="hero-visitor-bar">
-        <p class="hero-visitor-count" id="heroVisitorCount"></p>
+        <p class="hero-visitor-count" id="heroRecommendCount"></p>
+        <p class="hero-visitor-count" id="heroPlayCount"></p>
       </div>
 
     </section>
@@ -245,8 +246,9 @@
       <div class="recommend-modal-header">
 
         <h3>
-        🍀 오늘은 어떤 게임이 어울릴까요?
+        🍀 나에게 맞는 게임을 찾아드릴게요
         </h3>
+        <p class="modal-sub-desc">하나만 선택해도 추천해드려요.</p>
 
 
         <button

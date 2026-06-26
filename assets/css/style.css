@@ -1126,6 +1126,11 @@ body.recommend-page main{
   letter-spacing:-1px;
   text-align:left;
 }
+.modal-sub-desc{
+  margin:6px 0 0;
+  font-size:13px;
+  color:var(--muted);
+}
 
 .modal-close-btn{
   flex:0 0 auto;

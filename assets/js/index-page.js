@@ -911,13 +911,12 @@ if (recommendTitle && recommendSection) {
 
 }
 
-(async function initVisitorCount() {
-  const el = document.getElementById("heroVisitorCount");
-  if (!el || !window.CottageDB) return;
-  const stats = await window.CottageDB.getVisitorStats();
-  if (!stats) return;
-  const fmt = n => Number(n).toLocaleString("ko-KR");
-  el.textContent = `오늘 ${fmt(stats.today)}명 · 누적 ${fmt(stats.total)}명이 함께했어요`;
+(async function initHeroStats() {
+  const recEl = document.getElementById("heroRecommendCount");
+  const playEl = document.getElementById("heroPlayCount");
+  // TODO: 실제 카운팅 연동 (추천게임 클릭수 / 플레이기록 작성수)
+  if (recEl) recEl.textContent = `오늘 0명이 0개의 추천게임을 찾았어요.`;
+  if (playEl) playEl.textContent = `오늘 0명이 0개의 플레이기록을 작성했어요.`;
 })();
 
 /* =========================
