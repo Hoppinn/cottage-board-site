@@ -3548,6 +3548,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-records-group{
   border:1.5px solid #ead8b8;
+  border-radius:14px;
   padding:12px 14px;
   background:var(--paper);
   margin-bottom:10px;
