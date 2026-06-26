@@ -3726,12 +3726,12 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-panel-notif-btn:hover{text-decoration:underline;}
 .profile-panel-notif-btn.is-zero{color:var(--muted,#9b8b7a);font-weight:400;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
-.profile-panel-rep-name{font-size:12px;color:#8c7a6b;}
+.profile-panel-rep-name{font-size:12px;color:var(--text-info);}
 .profile-panel-title-name{font-size:12px;color:#7a4828;font-weight:600;background:none;border:none;padding:0;cursor:pointer;text-align:left;}
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;}
-.profile-growth-badge{font-size:10.5px;color:#7a6a5a;background:#f5f0ea;border:1px solid #e8e0d4;border-radius:6px;padding:3px 7px;margin-top:3px;line-height:1.5;}
-.profile-growth-next{font-size:10px;color:#9a8a7a;margin-top:2px;line-height:1.5;}
+.profile-growth-badge{font-size:10.5px;color:var(--text-info);background:#f5f0ea;border:1px solid #e8e0d4;border-radius:6px;padding:3px 7px;margin-top:3px;line-height:1.5;}
+.profile-growth-next{font-size:10px;color:var(--text-info);margin-top:2px;line-height:1.5;}
 .profile-admin-link{display:block;text-align:center;margin:0 0 14px;padding:9px;background:#7a4828;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
 .profile-admin-link:hover{opacity:0.85;}
 .profile-meeting-btn{display:block;width:100%;padding:13px 16px;background:#4e8a24;color:#fff;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;margin-bottom:10px;}
@@ -3817,7 +3817,7 @@ body.embed-mode .site-footer { display: none !important; }
 .notif-reward-body{flex:1;min-width:0;}
 .notif-reward-title{font-size:14px;font-weight:800;color:#7a4828;display:flex;align-items:center;gap:5px;flex-wrap:wrap;line-height:1.4;}
 .notif-reward-card.is-seen .notif-reward-title{font-size:13px;font-weight:600;color:var(--text);}
-.notif-reward-desc{font-size:13px;color:#8a6040;margin-top:4px;line-height:1.5;}
+.notif-reward-desc{font-size:13px;color:var(--text-info);margin-top:4px;line-height:1.5;}
 .notif-reward-card.is-seen .notif-reward-desc{font-size:12px;color:var(--muted);}
 .notif-reward-actions{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
 .notif-reward-btn{display:block;width:100%;padding:11px;font-size:13px;font-weight:700;color:#fff;background:var(--brown,#7a4828);border-radius:10px;text-align:center;text-decoration:none;box-sizing:border-box;}
@@ -3931,7 +3931,7 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-card--span2{grid-column:span 2;}
 /* 통계 카드 내부 레이아웃 */
 .profile-card-usage-info{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
-.profile-card-usage-detail{font-size:11px;color:#8c7a6b;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-card-usage-detail{font-size:11px;color:var(--text-info);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 /* 게임 목록 서브시트 */
 .profile-gamelist{list-style:none;padding:0;margin:0;}
 .profile-gamelist-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0ebe5;cursor:pointer;}
