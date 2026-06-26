@@ -1151,10 +1151,18 @@
         // __visitor__ 마커 행만: 히어로 페이지와 동일 방식으로 방문자 집계
         const visitorRows = pageViews.filter(r => r.page === '__visitor__');
 
-        // ── 요약 카드 (__visitor__ 마커 기준) ───────────────────────────
+        // ── 요약 카드 (__visitor__ 마커 기준, 기간 연동) ───────────────
         {
           const todayStr = kstDateStr();
-          const todayCnt = visitorRows.filter(r => kstDate(r.created_at) === todayStr).length;
+          const periodVis = (start || end) ? filterByRange(visitorRows, start, end, 'created_at') : visitorRows;
+          const periodCnt = periodVis.length;
+
+          let prevCnt = 0;
+          if (start && type !== 'all') {
+            const spanMs = new Date(end) - new Date(start);
+            prevCnt = filterByRange(visitorRows, new Date(new Date(start) - spanMs).toISOString(), start, 'created_at').length;
+          }
+
           const thisKeySet = new Set(), prevKeySet = new Set();
           for (let i = 6; i >= 0; i--) thisKeySet.add(_addDays(todayStr, -i));
           for (let i = 13; i >= 7; i--) prevKeySet.add(_addDays(todayStr, -i));
@@ -1164,47 +1172,80 @@
             if (thisKeySet.has(k)) thisCnt7++;
             if (prevKeySet.has(k)) prevCnt7++;
           }
-          const avg7 = thisCnt7 / 7;
-          let deltaHtml;
-          if (prevCnt7 === 0 && thisCnt7 === 0) {
-            deltaHtml = '<span class="admin-summary-delta flat">—</span>';
-          } else if (prevCnt7 === 0) {
-            deltaHtml = '<span class="admin-summary-delta up">신규</span>';
-          } else {
-            const pct = Math.round((thisCnt7 - prevCnt7) / prevCnt7 * 100);
+
+          const makeDeltaHtml = (cur, prev) => {
+            if (cur === 0 && prev === 0) return '<span class="admin-summary-delta flat">—</span>';
+            if (prev === 0) return '<span class="admin-summary-delta up">신규</span>';
+            const pct = Math.round((cur - prev) / prev * 100);
             const cls = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat';
-            deltaHtml = `<span class="admin-summary-delta ${cls}">${pct > 0 ? '+' : ''}${pct}%</span>`;
-          }
-          // 주요 유입: 회(__visitor__ unique user-day) + 명(page_sessions unique user_id + anon session_key)
-          const refSessions7 = {}, refUsers7 = {};
-          for (const r of visitorRows) {
-            if (!thisKeySet.has(kstDate(r.created_at))) continue;
+            return `<span class="admin-summary-delta ${cls}">${pct > 0 ? '+' : ''}${pct}%</span>`;
+          };
+
+          const refSessions = {}, refUsers = {};
+          for (const r of periodVis) {
             const cat = categorizeRef(r.referrer) || '직접 방문';
-            refSessions7[cat] = (refSessions7[cat] || 0) + 1;
+            refSessions[cat] = (refSessions[cat] || 0) + 1;
           }
           for (const r of rows) {
-            if (!thisKeySet.has(kstDate(r.entered_at))) continue;
+            const entered = r.entered_at;
+            if ((start && entered < start) || (end && entered >= end)) continue;
             if (!r.user_id && !r.session_key) continue;
             const cat = categorizeRef(r.referrer);
             if (cat === null) continue;
-            if (!refUsers7[cat]) refUsers7[cat] = new Set();
-            refUsers7[cat].add(r.user_id || `anon:${r.session_key}`);
+            if (!refUsers[cat]) refUsers[cat] = new Set();
+            refUsers[cat].add(r.user_id || `anon:${r.session_key}`);
           }
-          const topRef7Entries = Object.entries(refSessions7).sort((a, b) => b[1] - a[1]);
+          const topRefEntries = Object.entries(refSessions).sort((a, b) => b[1] - a[1]);
+          const topRefHtml = topRefEntries.length
+            ? topRefEntries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <b>${refUsers[cat]?.size ?? '?'}명</b> <span style="opacity:.7">(${cnt}회)</span></span>`).join('')
+            : '—';
+
+          let lToday, vToday, lAvg, vAvg, vAvgSub, lDelta, vDeltaHtml, vDeltaSub, lTopRef;
+
+          if (type === 'day' || !type) {
+            const dateStr = _navValue || todayStr;
+            const dayCnt = visitorRows.filter(r => kstDate(r.created_at) === dateStr).length;
+            lToday = '방문자'; vToday = dayCnt;
+            lAvg = '7일 평균'; vAvg = thisCnt7 / 7; vAvgSub = `이번 7일 ${thisCnt7}명`;
+            lDelta = '지난주 대비'; vDeltaHtml = makeDeltaHtml(thisCnt7, prevCnt7); vDeltaSub = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
+            lTopRef = '주요 유입 (7일)';
+          } else if (type === 'week') {
+            lToday = '이번 주'; vToday = periodCnt;
+            lAvg = '일 평균'; vAvg = periodCnt / 7; vAvgSub = `기간 합계 ${periodCnt}명`;
+            lDelta = '전주 대비'; vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt); vDeltaSub = `이번 ${periodCnt} / 이전 ${prevCnt}`;
+            lTopRef = '주요 유입 (이번주)';
+          } else if (type === 'month') {
+            const days = start ? Math.round((new Date(end) - new Date(start)) / 86400000) : 30;
+            lToday = '이번 달'; vToday = periodCnt;
+            lAvg = '일 평균'; vAvg = periodCnt / days; vAvgSub = `기간 합계 ${periodCnt}명`;
+            lDelta = '전달 대비'; vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt); vDeltaSub = `이번 ${periodCnt} / 이전 ${prevCnt}`;
+            lTopRef = '주요 유입 (이번달)';
+          } else {
+            const months = visitorRows.reduce((s, r) => { const m = kstDate(r.created_at)?.slice(0,7); if(m) s.add(m); return s; }, new Set()).size || 1;
+            lToday = '전체 방문자'; vToday = periodCnt;
+            lAvg = '월 평균'; vAvg = Math.round(periodCnt / months); vAvgSub = `${months}개월 합산`;
+            lDelta = '전기간 대비'; vDeltaHtml = '<span class="admin-summary-delta flat">—</span>'; vDeltaSub = '';
+            lTopRef = '주요 유입 (전체)';
+          }
+
+          const summaryCards = document.querySelectorAll('.admin-summary-card');
+          if (summaryCards[0]) summaryCards[0].querySelector('.admin-summary-label').textContent = lToday;
+          if (summaryCards[1]) summaryCards[1].querySelector('.admin-summary-label').textContent = lAvg;
+          if (summaryCards[2]) summaryCards[2].querySelector('.admin-summary-label').textContent = lDelta;
+          if (summaryCards[3]) summaryCards[3].querySelector('.admin-summary-label').textContent = lTopRef;
+
           const el_today = document.getElementById('sumToday');
           const el_avg = document.getElementById('sumAvg');
           const el_avgSub = document.getElementById('sumAvgSub');
           const el_delta = document.getElementById('sumDelta');
           const el_deltaSub = document.getElementById('sumDeltaSub');
           const el_topRef = document.getElementById('sumTopRef');
-          if (el_today) el_today.textContent = todayCnt;
-          if (el_avg) el_avg.textContent = avg7 % 1 === 0 ? avg7 : avg7.toFixed(1);
-          if (el_avgSub) el_avgSub.textContent = `이번 7일 ${thisCnt7}명`;
-          if (el_delta) el_delta.innerHTML = deltaHtml;
-          if (el_deltaSub) el_deltaSub.textContent = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
-          if (el_topRef) el_topRef.innerHTML = topRef7Entries.length
-            ? topRef7Entries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <b>${refUsers7[cat]?.size ?? '?'}명</b> <span style="opacity:.7">(${cnt}회)</span></span>`).join('')
-            : '—';
+          if (el_today) el_today.textContent = vToday;
+          if (el_avg) el_avg.textContent = vAvg % 1 === 0 ? vAvg : vAvg.toFixed(1);
+          if (el_avgSub) el_avgSub.textContent = vAvgSub;
+          if (el_delta) el_delta.innerHTML = vDeltaHtml;
+          if (el_deltaSub) el_deltaSub.textContent = vDeltaSub;
+          if (el_topRef) el_topRef.innerHTML = topRefHtml;
         }
 
         // ── 1. 날짜별 방문자 — __visitor__ 마커 기준, 단위별 집계 ──
