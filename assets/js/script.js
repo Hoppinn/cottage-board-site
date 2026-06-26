@@ -1638,6 +1638,8 @@ async function _fetchGamePhotos(gameKey) {
   return records.flatMap(r =>
     (window.parsePhotoUrls ? window.parsePhotoUrls(r.photo_url) : []).map(url => ({
       url,
+      record_id: r.id,
+      user_id: r.user_id || null,
       nickname: r.nickname || '',
       played_at: r.played_at || r.created_at || '',
       group_name: r.group_name || '',
@@ -1722,10 +1724,17 @@ async function initSheetPhotos(gameKey) {
   const SHOW_FIRST = 4;
   const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+  const _myId = window.getKakaoUser?.()?.id || null;
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="sheet-photo-grid" data-urls="${dataUrls}">
-      ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
+      ${entries.map((e, i) => {
+        const canDel = _myId && e.user_id && String(e.user_id) === String(_myId);
+        return `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}">
+          <img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}">
+          ${canDel ? `<button class="sheet-photo-del-btn" data-record-id="${e.record_id}" data-url="${esc(e.url)}" type="button">✕</button>` : ''}
+        </div>`;
+      }).join('')}
     </div>
     ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
   const morePhotoBtn = el.querySelector('.sheet-photo-more-btn');
@@ -1745,6 +1754,22 @@ async function initSheetPhotos(gameKey) {
     });
   }
   _attachPhotoLightbox(el, allPhotos, entries);
+
+  el.querySelectorAll('.sheet-photo-del-btn').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.stopPropagation();
+      if (!confirm('이 사진을 삭제할까요?')) return;
+      const recId = btn.dataset.recordId;
+      const delUrl = btn.dataset.url;
+      const allRecs = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
+      const rec = allRecs.find(r => String(r.id) === String(recId));
+      if (!rec) return;
+      const remaining = (window.parsePhotoUrls?.(rec.photo_url) || []).filter(u => u !== delUrl);
+      const newPhotoUrl = remaining.length === 0 ? null : remaining.length === 1 ? remaining[0] : JSON.stringify(remaining);
+      await window.CottageDB.updateGamePlay(recId, { photo_url: newPhotoUrl });
+      await initSheetPhotos(gameKey);
+    });
+  });
   } catch (err) {
     el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
     console.error('[initSheetPhotos]', err);
@@ -2222,8 +2247,9 @@ function onOpenCommentInput(btn) {
       linkWrap.style.display = 'none';
       const _cu = window.getKakaoUser?.();
       if (_cu?.id && window.CottageDB) {
+        modal._opening = true;
         const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
-        if (modal.style.display === 'none') return;
+        if (!modal._opening) return;
         const mine = records.filter(r => String(r.user_id) === String(_cu.id) && !r.review_text);
         if (mine.length) {
           mine.forEach(r => {
@@ -2256,7 +2282,7 @@ function onEditComment(btn) {
 
 function onCloseCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
-  if (modal) { modal.style.display = 'none'; delete modal.dataset.editId; }
+  if (modal) { modal._opening = false; modal.style.display = 'none'; delete modal.dataset.editId; }
 }
 
 /* ─── 사진 남기기 모달 ────────────────────────────────────── */
@@ -2323,8 +2349,9 @@ function onOpenPhotoInput(btn) {
       linkWrap.style.display = 'none';
       const _cu = window.getKakaoUser?.();
       if (_cu?.id && window.CottageDB) {
+        modal._opening = true;
         const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
-        if (modal.style.display === 'none') return;
+        if (!modal._opening) return;
         const mine = records.filter(r => String(r.user_id) === String(_cu.id));
         if (mine.length) {
           mine.forEach(r => {
@@ -2345,7 +2372,7 @@ function onOpenPhotoInput(btn) {
 
 function onClosePhotoModal() {
   const modal = document.getElementById('sheetPhotoModal');
-  if (modal) modal.style.display = 'none';
+  if (modal) { modal._opening = false; modal.style.display = 'none'; }
 }
 
 async function onSubmitPhotoModal() {
@@ -2616,8 +2643,8 @@ async function initPlayWidget(gameKey) {
           data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
           data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
           data-review="${escH(r.review_text || '')}"
-          type="button">수정</button>
-        <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">취소</button>
+          type="button">✏️</button>
+        <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">✕</button>
       </div>` : ""}
     </div>`;
   }
@@ -2626,7 +2653,7 @@ async function initPlayWidget(gameKey) {
   html += `<div class="sheet-play-box">`;
   html += `<div class="sheet-play-record">
     <span class="sheet-play-count">플레이기록 ${playCount}건</span>
-    <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
+    <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 남기기</button>
   </div>`;
 
   if (allRecords.length) {
@@ -2712,7 +2739,11 @@ function getOrCreatePlayModal() {
         ${[1,2,3,4,5,6,7,8].map(n => `<button class="sheet-player-select-btn" data-count="${n}" type="button">${n}명</button>`).join("")}
       </div>
       <div class="sheet-play-modal-details" id="sheetPlayModalDetails" style="display:none;">
-        <input class="sheet-play-detail-input" id="sheetPlayModalNames" type="text" placeholder="플레이어 이름 (선택, 예: 김철수, 이영희)" maxlength="100">
+        <div class="tag-input-wrap sheet-play-names-wrap" id="sheetPlayModalNamesWrap">
+          <div class="tag-chips"></div>
+          <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터" autocomplete="off">
+          <input type="hidden" id="sheetPlayModalNames">
+        </div>
         <div class="sheet-play-detail-row">
           <input class="sheet-play-detail-input is-half" id="sheetPlayModalTime" type="number" placeholder="플레이 시간(분)" min="1" max="999">
           <input class="sheet-play-detail-input is-half" id="sheetPlayModalScore" type="text" placeholder="점수 메모 (선택)" maxlength="100">
@@ -2742,7 +2773,7 @@ function getOrCreatePlayModal() {
       </div>
       <div class="sheet-play-modal-actions">
         <button class="sheet-play-modal-cancel" onclick="onClosePlayModal()" type="button">취소</button>
-        <button class="sheet-play-modal-submit" id="sheetPlayModalSubmit" onclick="onSubmitPlayModal(false)" type="button">기록하기</button>
+        <button class="sheet-play-modal-submit" id="sheetPlayModalSubmit" onclick="onSubmitPlayModal(false)" type="button">남기기</button>
       </div>
     </div>
   `;
@@ -2769,6 +2800,31 @@ function getOrCreatePlayModal() {
   });
   document.body.appendChild(modal);
 
+  // 참여자 이름 태그칩 + 자동완성
+  const _namesWrap = modal.querySelector('#sheetPlayModalNamesWrap');
+  const _namesHidden = modal.querySelector('#sheetPlayModalNames');
+  if (_namesWrap && window.initTagInput) {
+    window.initTagInput(_namesWrap, _namesHidden);
+    window.attachAc?.(
+      _namesWrap.querySelector('.tag-text-input'),
+      () => {
+        const added = [..._namesWrap.querySelectorAll('.tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+        return (window._prPlayerNames || []).filter(s =>
+          !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
+        );
+      },
+      s => {
+        const ti = _namesWrap.querySelector('.tag-text-input');
+        s.split(',').forEach(name => {
+          name = name.trim(); if (!name) return;
+          ti.value = name;
+          ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+        });
+      },
+      _namesWrap
+    );
+  }
+
   if (window.CottageDB) {
     window.CottageDB.getGroupNames().then(names => {
       const dl = document.getElementById('sheetPlayGroupNameList');
@@ -2785,7 +2841,11 @@ function onOpenPlayModal(gameKey) {
   delete modal.dataset.count;
   modal.querySelectorAll('.sheet-player-select-btn').forEach(b => b.classList.remove('is-selected'));
   document.getElementById('sheetPlayModalDetails').style.display = 'none';
+  // 태그칩 초기화
+  const _nw = document.getElementById('sheetPlayModalNamesWrap');
+  if (_nw) { _nw.querySelectorAll('.tag-chip').forEach(c => c.remove()); const _ti = _nw.querySelector('.tag-text-input'); if (_ti) _ti.value = ''; }
   document.getElementById('sheetPlayModalNames').value = '';
+  if (!window._prPlayerNames) window.CottageDB?.getPlayerNames?.().then(n => { window._prPlayerNames = n || []; });
   document.getElementById('sheetPlayModalTime').value = '';
   document.getElementById('sheetPlayModalScore').value = '';
   const groupCheck = document.getElementById('sheetPlayModalGroupCheck');
@@ -2813,7 +2873,7 @@ function onClosePlayModal() {
   const title = modal.querySelector('.sheet-play-modal-title');
   const submit = document.getElementById('sheetPlayModalSubmit');
   if (title) title.textContent = '플레이 기록하기';
-  if (submit) submit.textContent = '기록하기';
+  if (submit) submit.textContent = '남기기';
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = '';
   modal._photoFiles = [];
@@ -2837,7 +2897,23 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
   }
   document.getElementById('sheetPlayModalDetails').style.display = 'block';
 
-  document.getElementById('sheetPlayModalNames').value = playerNames || '';
+  // 태그칩으로 playerNames 채우기
+  const _nw2 = document.getElementById('sheetPlayModalNamesWrap');
+  if (_nw2) {
+    _nw2.querySelectorAll('.tag-chip').forEach(c => c.remove());
+    const _ti2 = _nw2.querySelector('.tag-text-input');
+    const _hi2 = document.getElementById('sheetPlayModalNames');
+    if (_ti2 && _hi2) {
+      _hi2.value = '';
+      (playerNames || '').split(',').forEach(name => {
+        name = name.trim(); if (!name) return;
+        _ti2.value = name;
+        _ti2.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+      });
+    }
+  } else {
+    document.getElementById('sheetPlayModalNames').value = playerNames || '';
+  }
   document.getElementById('sheetPlayModalTime').value = playTimeMin || '';
   document.getElementById('sheetPlayModalScore').value = scoreNote || '';
 

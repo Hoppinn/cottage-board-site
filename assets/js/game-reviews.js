@@ -967,7 +967,9 @@
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         const showEdit = isMine || window.isOwner?.();
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
-        const moreMenu = showEdit ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editItems}</div></div>` : '';
+        const _safeGKey = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
+        const addItems = _safeGKey ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
+        const moreMenu = (addItems || editItems) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${addItems}${editItems}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
@@ -1041,7 +1043,9 @@
         const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
         const showEdit2 = isMine || window.isOwner?.();
         const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
-        const moreMenu2 = showEdit2 ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editItems2}</div></div>` : '';
+        const _safeGKey2 = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
+        const addItems2 = _safeGKey2 ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey2}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey2}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
+        const moreMenu2 = (addItems2 || editItems2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${addItems2}${editItems2}</div></div>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
