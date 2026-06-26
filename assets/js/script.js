@@ -2265,10 +2265,12 @@ function onCloseCommentModal() {
 }
 
 function _closeAllMoreMenus() {
-  document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
+  document.querySelectorAll('.pr-rec-more').forEach(m => {
     m.classList.remove('is-open');
-    const mm = m.querySelector('.pr-rec-more-menu');
-    if (mm) mm.removeAttribute('style');
+  });
+  document.querySelectorAll('.pr-rec-more-menu').forEach(mm => {
+    mm.removeAttribute('style');
+    mm.style.display = 'none';
   });
 }
 

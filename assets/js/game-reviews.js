@@ -539,6 +539,7 @@
           const rect = btn.getBoundingClientRect();
           const menu = more.querySelector('.pr-rec-more-menu');
           if (menu) {
+            menu.style.display = '';
             menu.style.position = 'fixed';
             menu.style.top = (rect.bottom + 4) + 'px';
             menu.style.right = (window.innerWidth - rect.right) + 'px';
