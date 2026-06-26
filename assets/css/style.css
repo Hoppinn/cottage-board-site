@@ -3473,8 +3473,8 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-info-group{
   border:1.5px solid #ead8b8;
   border-radius:12px;
-  padding:12px 14px;
-  margin-bottom:12px;
+  padding:10px 14px;
+  margin-bottom:8px;
   background:var(--paper);
 }
 .sheet-info-group .sheet-mechs-wrap{
