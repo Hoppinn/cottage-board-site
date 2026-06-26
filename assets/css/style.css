@@ -3733,6 +3733,8 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-growth-next{font-size:10px;color:#9a8a7a;margin-top:2px;line-height:1.5;}
 .profile-admin-link{display:block;text-align:center;margin:0 0 14px;padding:9px;background:#7a4828;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
 .profile-admin-link:hover{opacity:0.85;}
+.profile-meeting-btn{display:block;width:100%;padding:13px 16px;background:#4e8a24;color:#fff;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;text-align:center;margin-bottom:10px;}
+.profile-meeting-btn:hover{background:#3d7219;color:#fff;}
 .profile-stats-wrap{border:1px solid var(--border,#e8e4dc);border-radius:10px;overflow:hidden;margin-top:14px;}
 .profile-stats-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--text);background:var(--bg,#f5f0e8);border:none;cursor:pointer;text-align:left;}
 .profile-stats-toggle:hover{background:#ede8df;}

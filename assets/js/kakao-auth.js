@@ -903,7 +903,13 @@ async function openProfilePanel(autoSubsheet = null) {
       ${_recentPhotoHtml}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
+  const _clubPath = (() => {
+    const p = window.location.pathname;
+    if (p.includes('/pages/')) return '../club/club-schedule.html';
+    return './pages/club/club-schedule.html';
+  })();
   const _usageInnerHtml = `
+    <a class="profile-meeting-btn" href="${_clubPath}">📅 모임 플래너 바로가기 →</a>
     <div class="profile-stats-wrap">
       <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
       <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>

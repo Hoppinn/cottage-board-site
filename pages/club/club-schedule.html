@@ -750,7 +750,8 @@
 
       if (!user) {
         el.innerHTML = `<div class="sched-my-section">
-          <div class="sched-login-hint">가능 시간을 등록하려면 카카오 로그인이 필요해요.</div>
+          <div class="sched-login-hint">가능 시간을 등록하려면 로그인이 필요해요.</div>
+          <button class="sched-register-btn" onclick="document.getElementById('kakaoLoginBtn')?.click()" type="button">카카오 로그인</button>
         </div>`;
         return;
       }
