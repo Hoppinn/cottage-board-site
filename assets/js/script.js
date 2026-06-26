@@ -2032,21 +2032,10 @@ function formatDate(isoStr) {
   return `${yy}.${mm}.${dd}(${day})`;
 }
 
-function toggleSheetComments(gameKey) {
-  const list = document.getElementById(`sheetCommentsList-${gameKey}`);
-  const arrow = document.getElementById(`sheetCommentsArrow-${gameKey}`);
-  if (!list) return;
-  const collapsed = list.classList.toggle('is-collapsed');
-  list.dataset.open = collapsed ? "0" : "1";
-  if (arrow) arrow.textContent = collapsed ? "▾" : "▴";
-}
-
 async function initSheetComments(gameKey) {
   const listEl = document.getElementById(`sheetCommentsList-${gameKey}`);
   const countEl = document.getElementById(`sheetCommentsCount-${gameKey}`);
   if (!listEl || !window.CottageDB) return;
-  const toggleBtn = document.getElementById(`sheetCommentsArrow-${gameKey}`)?.closest('.sheet-comments-toggle-btn');
-
   const [comments, playReviews] = await Promise.all([
     window.CottageDB.getGameComments(gameKey),
     window.CottageDB.getPlayReviewsByGame(_gameIds(gameKey)),
@@ -2059,15 +2048,12 @@ async function initSheetComments(gameKey) {
 
   if (!total) {
     if (countEl) countEl.textContent = "게임평";
-    if (toggleBtn) toggleBtn.style.display = "none";
-    listEl.classList.remove('is-collapsed', 'has-comments');
+    listEl.classList.remove('has-comments');
     listEl.innerHTML = '<span class="sheet-comments-empty">게임평이 없습니다</span>';
     return;
   }
   if (countEl) countEl.textContent = `게임평 ${total}개`;
-  if (toggleBtn) toggleBtn.style.display = total > 1 ? "" : "none";
-  const wasOpen = listEl.dataset.open === "1";
-  listEl.classList.toggle('is-collapsed', !wasOpen);
+  listEl.classList.remove('is-collapsed');
   const myIds = getMyCommentIds();
   const currentUserId = window.getKakaoUser?.()?.id || null;
   listEl.classList.add('has-comments');

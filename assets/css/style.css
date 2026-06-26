@@ -3432,13 +3432,6 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-my-records-list.is-collapsed .sheet-my-record-item:not(:first-child){
   display:none;
 }
-.sheet-toggle-arrow{
-  font-size:16px;
-  color:var(--green-2);
-  opacity:1;
-  line-height:1;
-}
-
 /* 코멘트 헤더 */
 .sheet-comments-header{
   display:flex;
@@ -3460,19 +3453,6 @@ body.embed-mode .site-footer { display: none !important; }
   align-items:center;
   gap:2px;
 }
-.sheet-comments-toggle-btn{
-  border:none;
-  background:none;
-  padding:4px 6px;
-  cursor:pointer;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1;
-}
-.sheet-comments-toggle-btn:hover{
-  color:#3a3025;
-}
-
 /* 게임 정보 그룹 (메커니즘 + 디자이너) */
 .sheet-info-group{
   border:1.5px solid #ead8b8;
@@ -5086,9 +5066,6 @@ body.embed-mode .site-footer { display: none !important; }
   font-size:10px;
   font-weight:400;
   margin-left:3px;
-}
-.sheet-comments-list.is-collapsed .sheet-comment-item:not(:first-child){
-  display:none;
 }
 
 .sheet-comment-item--review{
