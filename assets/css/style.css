@@ -2982,6 +2982,8 @@ body.embed-mode .site-footer { display: none !important; }
   justify-content:space-between;
   gap:8px;
   padding:8px 12px;
+  background:var(--cream);
+  border-radius:6px;
 }
 .sheet-play-box .sheet-my-records-list{
   padding:8px 0 4px;
@@ -3444,6 +3446,8 @@ body.embed-mode .site-footer { display: none !important; }
   justify-content:space-between;
   gap:6px;
   padding:8px 12px 6px;
+  background:var(--cream);
+  border-radius:6px;
 }
 .sheet-comments-count-label{
   font-size:12px;
@@ -3509,6 +3513,11 @@ body.embed-mode .site-footer { display: none !important; }
   border-top:1px solid #e8ddc8;
   margin-top:14px;
 }
+.sheet-social-group > .sheet-play-section:first-child{
+  border-top:none;
+  margin-top:0;
+  padding-top:0;
+}
 .sheet-play-more-link{
   display:block;
   font-size:13px;
@@ -3548,7 +3557,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-records-group{
   border:1.5px solid #ead8b8;
-  border-radius:0 0 14px 14px;
+  border-radius:14px;
   padding:12px 14px;
   background:var(--paper);
   margin-bottom:10px;

@@ -1480,7 +1480,6 @@ function openGameRecordSheet(gameKey) {
     </div>
     <div class="sheet-social-group">
       <div class="sheet-play-section">
-        <p class="sheet-section-label" style="margin-bottom:8px">플레이기록</p>
         <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
       </div>
       <div class="sheet-comments-area">
@@ -1488,9 +1487,6 @@ function openGameRecordSheet(gameKey) {
           <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">게임평</span>
           <div class="sheet-comments-header-right">
             <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenCommentInput(this)" type="button">💬 남기기</button>
-            <button class="sheet-comments-toggle-btn" onclick="toggleSheetComments('${gameKey}')" type="button">
-              <span class="sheet-toggle-arrow" id="sheetCommentsArrow-${gameKey}">▾</span>
-            </button>
           </div>
         </div>
         <div class="sheet-comments-list" id="sheetCommentsList-${gameKey}">
@@ -2637,7 +2633,7 @@ async function initPlayWidget(gameKey) {
   // 플레이 박스 (헤더 + 기록 목록)
   html += `<div class="sheet-play-box">`;
   html += `<div class="sheet-play-record">
-    <span class="sheet-play-count">🎲 ${playCount}번 플레이됨</span>
+    <span class="sheet-play-count">플레이기록 ${playCount}건</span>
     <button class="sheet-played-btn" data-game-id="${gameKey}" type="button">+ 기록하기</button>
   </div>`;
 
