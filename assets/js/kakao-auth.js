@@ -731,7 +731,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
   const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    96);
 
-  const _growthSummary = `캐릭터 ${_charCount}/${_charTotal} · 도감 ${_codexPlayed}/${_codexTotal} · 업적 ${_achCount}/${_achTotal}`;
+  const _growthSummary = `캐릭터 ${_charCount}/${_charTotal}\n도감 ${_codexPlayed}/${_codexTotal}\n업적 ${_achCount}/${_achTotal}`;
   const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
   const _nextAch = userStats ? window.CottageAchievements?.findNextAchievement?.(userStats) : null;
   const _growthBadge = `<div class="profile-growth-badge">🌱 코티지 성장도 ${_growthPct}%</div>` +
@@ -920,8 +920,9 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>` : ''}`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _bioPreview = _bioTags.length ? `${_bioTags.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTags.length > 2 ? ` +${_bioTags.length - 2}` : ''}\n` : '';
-  const _tasteCardSummary = `${_bioPreview}❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개`;
+  const _bioPreview = _bioTags.length ? `${_bioTags.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTags.length > 2 ? ` +${_bioTags.length - 2}` : ''}` : '';
+  const _tasteCardSummaryHtml = (_bioPreview ? `<span class="profile-card-bio-row">${escH(_bioPreview)}</span>` : '') +
+    `<span class="profile-card-games-row">❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개</span>`;
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
@@ -980,7 +981,7 @@ async function openProfilePanel(autoSubsheet = null) {
       <button class="profile-card" data-subsheet="taste" type="button">
         <span class="profile-card-icon">❤️</span>
         <span class="profile-card-label">취향 보드</span>
-        <span class="profile-card-summary">${escH(_tasteCardSummary)}</span>
+        <span class="profile-card-summary">${_tasteCardSummaryHtml}</span>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
         <span class="profile-card-icon">📝</span>

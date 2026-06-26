@@ -3913,6 +3913,8 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-card-icon{font-size:18px;flex-shrink:0;}
 .profile-card-label{display:block;font-size:13px;font-weight:700;color:var(--text);}
 .profile-card-summary{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5;word-break:keep-all;white-space:pre-line;}
+.profile-card-bio-row{display:block;}
+.profile-card-games-row{display:block;margin-top:3px;white-space:pre-line;}
 .profile-card-arrow{font-size:16px;color:var(--muted);flex-shrink:0;margin-left:auto;}
 .profile-card.has-badge{position:relative;}
 .profile-card.has-badge::after{content:'';position:absolute;top:10px;right:32px;width:7px;height:7px;background:#e53935;border-radius:50%;}
