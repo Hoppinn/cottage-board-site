@@ -1400,11 +1400,13 @@ function openGameSheet(gameKey, restoreScroll = false){
 
   `;
 
-  const _panel = gameSheet.querySelector('.game-sheet-panel');
-  if (_panel) _panel.scrollTop = restoreScroll ? _savedSheetScrollTop : 0;
-
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
+
+  const _panel = gameSheet.querySelector('.game-sheet-panel');
+  requestAnimationFrame(() => {
+    if (_panel) _panel.scrollTop = restoreScroll ? _savedSheetScrollTop : 0;
+  });
 
   if (window.CottageDB) window.CottageDB.trackView(gameKey);
   initStickyBar();
