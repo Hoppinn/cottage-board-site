@@ -44,6 +44,7 @@
 | `getAllProfiles()` | 전체 프로필 (어드민용) |
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |
+| `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 `[{event_type, created_at}]`. admin/localhost 제외 없음(쿼리 전용) |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
 | `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임). notifSeenAt=null이면 isNew=true(전체 기간). 반환: `[{type, ..., isNew}]` |
 | `getGameReviews(gameId)` | 게임 리뷰 조회 |

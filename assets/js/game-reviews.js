@@ -392,6 +392,7 @@
 
       if (ok) {
         showToast('저장됐어요!'); window._refreshAutocompleteLists?.();
+        window.CottageDB?.trackEvent('record_complete');
         document.getElementById('prGameRows').innerHTML = '';
         addRow(false);
         if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);

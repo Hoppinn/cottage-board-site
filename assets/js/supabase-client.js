@@ -1087,6 +1087,17 @@ window._cottageSess = (function () {
     } catch (_) { return []; }
   }
 
+  async function getEventCounts(eventTypes, daysBack = 7) {
+    try {
+      const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
+      const { data } = await db.from('page_events')
+        .select('event_type, created_at')
+        .in('event_type', eventTypes)
+        .gte('created_at', since);
+      return data || [];
+    } catch (_) { return []; }
+  }
+
   async function checkNicknameAvailable(nickname, currentUserId) {
     try {
       const { data } = await db.from('profiles')
@@ -1322,6 +1333,7 @@ window._cottageSess = (function () {
     getAllProfiles,
     checkNicknameAvailable,
     getPageAnalytics,
+    getEventCounts,
     getMyStats,
     getMyNotifications,
     getGameReviews,

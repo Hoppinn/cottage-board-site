@@ -138,6 +138,14 @@
     .admin-menu-card:hover { border-color: var(--green); color: var(--green); }
     .admin-menu-icon { font-size: 26px; line-height: 1; }
     .admin-menu-badge { display: inline-block; background: var(--green); color: #fff; border-radius: 20px; font-size: 10px; font-weight: 700; padding: 1px 6px; vertical-align: middle; margin-left: 4px; }
+    /* 이벤트 퍼널 */
+    .admin-event-funnel { display: flex; flex-direction: column; gap: 6px; }
+    .admin-event-section-title { font-size: 12px; font-weight: 800; color: var(--muted); letter-spacing: 0.3px; margin-top: 4px; padding: 4px 0; }
+    .admin-event-row { display: flex; align-items: center; gap: 10px; background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 10px 14px; }
+    .admin-event-label { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; min-width: 0; }
+    .admin-event-today, .admin-event-week { font-size: 18px; font-weight: 900; color: var(--text); min-width: 52px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+    .admin-event-today small, .admin-event-week small { font-size: 10px; font-weight: 500; color: var(--muted); }
+    .admin-event-week { color: var(--muted); font-size: 15px; }
     /* 바텀시트 */
     .admin-bs-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9200; align-items: flex-end; justify-content: center; }
     .admin-bs-panel { background: #fff; border-radius: 18px 18px 0 0; width: 100%; max-width: 600px; max-height: 88vh; display: flex; flex-direction: column; }
@@ -351,6 +359,7 @@
       el.innerHTML = `
         <div class="admin-menu-grid">
           <button class="admin-menu-card" data-scroll="groupCharts" type="button"><span class="admin-menu-icon">📊</span><span>비주얼 분석</span></button>
+          <button class="admin-menu-card" data-scroll="groupEvents" type="button"><span class="admin-menu-icon">🎯</span><span>이벤트 퍼널</span></button>
           <button class="admin-menu-card" data-scroll="groupAnalysis" type="button"><span class="admin-menu-icon">📈</span><span>페이지·회원</span></button>
           <button class="admin-menu-card" data-scroll="groupReferrer" type="button"><span class="admin-menu-icon">🔗</span><span>유입경로</span></button>
           <button class="admin-menu-card" data-bs="bsVoucher" type="button"><span class="admin-menu-icon">🎫</span><span>교환권 관리</span></button>
@@ -453,6 +462,14 @@
             </div>
           </div>
         </div>
+
+        <div class="admin-group is-open" id="groupEvents">
+          <div class="admin-group-title">🎯 이벤트 퍼널<span class="admin-group-arrow">▾</span></div>
+          <div class="admin-group-body">
+            <div id="eventFunnelBody"><div class="admin-empty">불러오는 중...</div></div>
+          </div>
+        </div>
+
         <div class="admin-bs-overlay" id="bsVoucher">
           <div class="admin-bs-panel">
             <div class="admin-bs-header"><span class="admin-bs-title">🎫 교환권 로그 <span style="font-size:12px;font-weight:400;color:var(--muted)">${voucherRows.length}건</span></span><button class="admin-bs-close" type="button">✕</button></div>
@@ -1664,10 +1681,55 @@
     }
     setInterval(refreshProfilesAndBadges, 2 * 60 * 1000);
 
+    async function loadEventStats() {
+      const el = document.getElementById('eventFunnelBody');
+      if (!el || !window.CottageDB?.getEventCounts) return;
+      try {
+        const events = await window.CottageDB.getEventCounts(
+          ['hero_recommend_click','recommend_complete','hero_record_click','record_complete'], 30
+        );
+        const todayKst = new Date(Date.now() + 9*3600000).toISOString().slice(0,10);
+        function countDay(type, daysAgo) {
+          const dt = new Date(Date.now() + 9*3600000 - daysAgo*86400000).toISOString().slice(0,10);
+          return events.filter(e => e.event_type === type && (e.created_at||'').slice(0,10) === dt).length;
+        }
+        function count7(type) {
+          return events.filter(e => {
+            const d = (e.created_at||'').slice(0,10);
+            return e.event_type === type && d <= todayKst && d >= new Date(Date.now()+9*3600000-6*86400000).toISOString().slice(0,10);
+          }).length;
+        }
+        function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
+        const hr0=countDay('hero_recommend_click',0), rc0=countDay('recommend_complete',0),
+              hg0=countDay('hero_record_click',0),   rd0=countDay('record_complete',0);
+        const hr7=count7('hero_recommend_click'), rc7=count7('recommend_complete'),
+              hg7=count7('hero_record_click'),   rd7=count7('record_complete');
+        function funnelRow(label, todayN, weekN, prevN) {
+          const conv = prevN !== null ? `<span style="font-size:11px;color:var(--muted);margin-left:6px">${pct(todayN,prevN)}</span>` : '';
+          return `<div class="admin-event-row">
+            <span class="admin-event-label">${label}</span>
+            <span class="admin-event-today">${todayN}<small>오늘</small>${conv}</span>
+            <span class="admin-event-week">${weekN}<small>7일</small></span>
+          </div>`;
+        }
+        el.innerHTML = `
+          <div class="admin-event-funnel">
+            <div class="admin-event-section-title">🎲 추천게임 퍼널</div>
+            ${funnelRow('Hero 버튼 클릭', hr0, hr7, null)}
+            ${funnelRow('추천 결과 완료', rc0, rc7, hr0)}
+            <div class="admin-event-section-title" style="margin-top:16px">📝 플레이기록 퍼널</div>
+            ${funnelRow('Hero 기록 버튼 클릭', hg0, hg7, null)}
+            ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
+          </div>`;
+      } catch(e) {
+        el.innerHTML = '<div class="admin-empty">이벤트 데이터 없음</div>';
+      }
+    }
+
     let tried = false;
     function tryLoad() {
       if (tried) return; tried = true;
-      load().then(loadAnalytics).then(() => {
+      load().then(loadAnalytics).then(loadEventStats).then(() => {
         // 초기 렌더 직후 배지 표시
         setTimeout(refreshOnlineBadges, 100);
       });

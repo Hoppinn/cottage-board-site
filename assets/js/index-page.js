@@ -104,6 +104,8 @@ if (!isMurderMystery && weight > maxWeight) {
     return;
   }
 
+  window.CottageDB?.trackEvent('recommend_complete');
+
   const MAX_CARDS = window.innerWidth >= 720 ? 4 : 5;
   const seenBaseTitles = new Set();
   const dedupedGames = filteredGames.filter(game => {
@@ -914,9 +916,32 @@ if (recommendTitle && recommendSection) {
 (async function initHeroStats() {
   const recEl = document.getElementById("heroRecommendCount");
   const playEl = document.getElementById("heroPlayCount");
-  // TODO: 실제 카운팅 연동 (추천게임 클릭수 / 플레이기록 작성수)
-  if (recEl) recEl.textContent = `오늘 0명이 0개의 추천게임을 찾았어요.`;
-  if (playEl) playEl.textContent = `오늘 0명이 0개의 플레이기록을 작성했어요.`;
+  if (!recEl && !playEl) return;
+  try {
+    const events = await window.CottageDB?.getEventCounts(
+      ['recommend_complete', 'record_complete'], 1
+    );
+    if (!events) return;
+    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    const recCount = events.filter(e =>
+      e.event_type === 'recommend_complete' &&
+      (e.created_at || '').slice(0, 10) === todayKst
+    ).length;
+    const playCount = events.filter(e =>
+      e.event_type === 'record_complete' &&
+      (e.created_at || '').slice(0, 10) === todayKst
+    ).length;
+    if (recEl) {
+      recEl.textContent = recCount > 0
+        ? `오늘 ${recCount}번의 추천게임이 완료됐어요. 🎲`
+        : '';
+    }
+    if (playEl) {
+      playEl.textContent = playCount > 0
+        ? `오늘 ${playCount}개의 플레이기록이 작성됐어요. 📝`
+        : '';
+    }
+  } catch (_) {}
 })();
 
 /* =========================
