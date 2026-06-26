@@ -442,7 +442,7 @@ const moodValue = recommendState.mood;
     <div class="recommend-filter-card recommend-filter-card-v3">
 
       <h2 class="recommend-filter-main-title">
-        오늘은 어떤 게임이 어울릴까요?
+        나에게 맞는 게임을 찾아드릴게요
       </h2>
 
       
