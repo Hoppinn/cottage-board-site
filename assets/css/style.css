@@ -6320,6 +6320,7 @@ body.embed-mode .site-footer { display: none !important; }
 .pr-rec-sheet-item { display: block; width: 100%; padding: 8px 14px; font-size: 13px; color: var(--text); text-decoration: none; box-sizing: border-box; border-bottom: 1px solid #f0ece4; background: none; border-left: none; border-right: none; border-top: none; text-align: left; font-family: inherit; cursor: pointer; }
 .pr-rec-sheet-item:hover { background: #f5f0e8; }
 .pr-rec-more.is-open .pr-rec-more-menu { display: block; }
+.sheet-open .pr-rec-more-menu { display: none !important; }
 .pr-rec-del { background: none; border: none; color: #c0392b; font-size: 13px; cursor: pointer; padding: 8px 14px; display: block; width: 100%; text-align: left; font-family: inherit; }
 .pr-rec-del:hover { background: #fdf0ed; }
 
