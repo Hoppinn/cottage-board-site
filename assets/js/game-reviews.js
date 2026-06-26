@@ -543,7 +543,7 @@
             menu.style.top = (rect.bottom + 4) + 'px';
             menu.style.right = (window.innerWidth - rect.right) + 'px';
             menu.style.left = 'auto';
-            menu.style.zIndex = '9999';
+            menu.style.zIndex = '9400';
           }
         }
       });
