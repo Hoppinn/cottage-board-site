@@ -922,7 +922,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _voucherCardSummary = `${voucherBalance}장 보유`;
   const _bioPreview = _bioTags.length ? `${_bioTags.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTags.length > 2 ? ` +${_bioTags.length - 2}` : ''}` : '';
   const _tasteCardSummaryHtml = (_bioPreview ? `<span class="profile-card-bio-row">${escH(_bioPreview)}</span>` : '') +
-    `<span class="profile-card-games-row">❤️ 좋아요 ${likedGames.length}개\n👀 관심게임 ${curiousGames.length}개</span>`;
+    `<span class="profile-card-games-row">❤️ 좋아하는 게임 ${likedGames.length}개\n👀 해보고싶은 게임 ${curiousGames.length}개</span>`;
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
