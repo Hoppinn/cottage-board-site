@@ -3004,7 +3004,7 @@ body.embed-mode .site-footer { display: none !important; }
   gap:8px;
 }
 .sheet-play-box .sheet-my-record-item{
-  padding:10px 12px;
+  padding:10px 44px 10px 12px;
   background:var(--paper,#faf7f2);
   border:1px solid #ede8df;
   border-radius:10px;
@@ -3070,39 +3070,38 @@ body.embed-mode .site-footer { display: none !important; }
 
 .sheet-play-record-actions{
   display:flex;
-  gap:4px;
-  flex-shrink:0;
+  gap:2px;
+  position:absolute;
+  top:6px;
+  right:8px;
 }
 .sheet-play-edit-btn{
   background:none;
-  border:1px solid #ddd;
-  border-radius:999px;
-  font-size:11px;
-  color:var(--muted);
+  border:none;
+  font-size:12px;
   cursor:pointer;
-  padding:2px 8px;
-  line-height:1.4;
+  padding:1px 3px;
+  line-height:1;
+  border-radius:4px;
+  opacity:0.6;
 }
 .sheet-play-edit-btn:hover{
-  border-color:var(--green);
-  color:var(--green);
-  background:#f5f9ee;
+  opacity:1;
+  background:#f0ede8;
 }
 .sheet-play-cancel-btn{
   background:none;
-  border:1px solid #ddd;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:700;
-  color:#aaa;
+  border:none;
+  font-size:12px;
   cursor:pointer;
-  padding:2px 8px;
-  line-height:1.4;
+  padding:1px 3px;
+  line-height:1;
+  border-radius:4px;
+  opacity:0.6;
 }
 .sheet-play-cancel-btn:hover{
-  border-color:#c0392b;
-  color:#c0392b;
-  background:#fff0ee;
+  opacity:1;
+  background:#f0ede8;
 }
 
 /* 플레이 기록 상세 정보 */
@@ -3413,11 +3412,11 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-my-record-item{
   display:flex;
-  align-items:center;
-  justify-content:space-between;
+  align-items:flex-start;
   gap:6px;
   padding:5px 0;
   border-bottom:1px solid #f0e8d8;
+  position:relative;
 }
 .sheet-my-record-item:last-child{
   border-bottom:none;
