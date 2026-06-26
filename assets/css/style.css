@@ -46,6 +46,7 @@
   --brown:#74451f;
   --ink:#2f2a21;
   --muted:#6f5d43;
+  --text-info:#505050;
 
   --selected-pill-bg:#fdf0e4;
   --selected-pill-border:#d4a878;
@@ -1131,7 +1132,7 @@ body.recommend-page main{
 .modal-sub-desc{
   margin:6px 0 0;
   font-size:13px;
-  color:var(--muted);
+  color:var(--text-info);
 }
 
 .modal-close-btn{
@@ -1919,7 +1920,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 
 .footer-link{
-  color:#7a6848;
+  color:var(--text-info);
   text-decoration:underline;
   text-underline-offset:2px;
 }
@@ -1929,7 +1930,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 
 .footer-tel{
-  color:#7a6848;
+  color:var(--text-info);
   text-decoration:none;
   font-weight:700;
 }
@@ -1940,7 +1941,7 @@ body.embed-mode .site-footer { display: none !important; }
 
 .site-footer p{
   margin:0;
-  color:#7a6848;
+  color:var(--text-info);
   font-size:12px;
   font-weight:500;
   line-height:1.8;
@@ -4311,8 +4312,8 @@ body.embed-mode .site-footer { display: none !important; }
   .about-photo-strip-item:last-child{grid-column:1/-1;}
 }
 .about-section-label{
-  font-size:11px;
-  font-weight:900;
+  font-size:13px;
+  font-weight:700;
   color:#7a4828;
   letter-spacing:.08em;
   text-transform:uppercase;
@@ -4322,8 +4323,8 @@ body.embed-mode .site-footer { display: none !important; }
   margin:0;
   font-size:clamp(14px,3.5vw,16px);
   line-height:1.75;
-  color:#3a3025;
-  font-weight:700;
+  color:var(--text-info);
+  font-weight:500;
   word-break:keep-all;
 }
 .about-feature-grid{
@@ -4345,8 +4346,8 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .about-feature-label{
   font-size:13px;
-  font-weight:900;
-  color:#7a4828;
+  font-weight:500;
+  color:var(--text-info);
   margin:0;
   word-break:keep-all;
 }
@@ -4388,8 +4389,8 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .about-for-text{
   font-size:14px;
-  font-weight:700;
-  color:#2a2018;
+  font-weight:500;
+  color:var(--text-info);
   line-height:1.5;
   margin:0;
   word-break:keep-all;
@@ -6183,21 +6184,21 @@ body.embed-mode .site-footer { display: none !important; }
 
 /* ── DIFFICULTY GUIDE ── */
 .difficulty-guide{margin:20px 0 0;padding:20px 16px;border-top:1px solid var(--border,#e8e4dc);}
-.dg-title{font-size:15px;font-weight:900;text-align:center;margin:0 0 4px;color:var(--text);}
-.dg-subtitle{font-size:12px;color:var(--muted);text-align:center;margin:0 0 16px;}
+.dg-title{font-size:15px;font-weight:900;text-align:center;margin:0 0 4px;color:var(--ink);}
+.dg-subtitle{font-size:12px;color:var(--text-info);text-align:center;margin:0 0 16px;}
 .dg-cards{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;overflow-x:visible;padding-bottom:0;align-items:stretch;}
 .dg-card{flex:0 0 calc((100% - 16px) / 3);min-width:0;border-radius:14px;padding:14px 8px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;}
 .dg-icon{font-size:26px;line-height:1;margin-bottom:4px;}
 .dg-name{font-size:12px;font-weight:800;margin:0;}
 .dg-range{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.65);margin:4px 0;}
-.dg-desc{font-size:10.5px;color:var(--muted);line-height:1.5;margin:0;}
+.dg-desc{font-size:10.5px;color:var(--text-info);line-height:1.5;margin:0;}
 .dg-card.dg-kids    {background:#c8e6c9;}.dg-card.dg-kids     .dg-name{color:#1b5e20;}
 .dg-card.dg-beginner{background:#bbdefb;}.dg-card.dg-beginner .dg-name{color:#0d47a1;}
 .dg-card.dg-light   {background:#fff9c4;}.dg-card.dg-light    .dg-name{color:#f57f17;}
 .dg-card.dg-heavy   {background:#ffccbc;}.dg-card.dg-heavy    .dg-name{color:#bf360c;}
 .dg-card.dg-hardcore{background:#1a1a1a;}.dg-card.dg-hardcore .dg-name{color:#fff;}.dg-card.dg-hardcore .dg-range{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.9);}.dg-card.dg-hardcore .dg-desc{color:rgba(255,255,255,0.65);}
-.dg-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
-.modal-level-note{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;padding:6px 10px;background:rgba(245,240,232,0.7);border-radius:8px;line-height:1.5;}
+.dg-note{font-size:11px;color:var(--text-info);text-align:center;margin-top:14px;padding:8px 12px;background:var(--bg,#f5f0e8);border-radius:8px;line-height:1.5;}
+.modal-level-note{font-size:11px;color:var(--text-info);text-align:center;margin-top:10px;padding:6px 10px;background:rgba(245,240,232,0.7);border-radius:8px;line-height:1.5;}
 
 /* =========================
    # PC LAYOUT ENLARGEMENTS (720px+)
