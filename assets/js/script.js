@@ -1134,8 +1134,7 @@ function openGameSheet(gameKey, restoreScroll = false){
     return;
   }
 
-  const _modal = document.getElementById('sheetCommentModal');
-  if (_modal) _modal.style.display = 'none';
+  onCloseCommentModal();
 
   const detail =
     GameView.getGameDetailData(game);
@@ -1209,7 +1208,7 @@ function openGameSheet(gameKey, restoreScroll = false){
     }
   }
   const _sameDesignHtml = _sameDesignGames.length ? `
-    <div class="sheet-same-designer">
+    <div class="sheet-same-designer sheet-info-group">
       <p class="sheet-meta-label" style="margin-bottom:8px">같은 디자이너의 다른 게임</p>
       <div class="sheet-same-design-scroll">
         ${_sameDesignGames.map(({ key: _k, g: _g }) => {
@@ -1459,8 +1458,7 @@ function closeGameSheet(){
 function openGameRecordSheet(gameKey) {
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
-  const _existModal = document.getElementById('sheetCommentModal');
-  if (_existModal) _existModal.style.display = 'none';
+  onCloseCommentModal();
 
   const _recPanel = gameSheet.querySelector('.game-sheet-panel');
   _savedSheetScrollTop = _recPanel ? _recPanel.scrollTop : 0;
@@ -1694,7 +1692,6 @@ async function initSheetPhotos(gameKey) {
 
   try {
   const entries = await _fetchGamePhotos(gameKey);
-  console.log('[initSheetPhotos]', gameKey, 'entries:', entries.length);
   const allPhotos = entries.map(e => e.url);
   const total = allPhotos.length;
   if (countEl) countEl.textContent = total > 0 ? `사진 ${total}장` : '사진';

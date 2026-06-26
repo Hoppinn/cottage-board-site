@@ -3219,10 +3219,7 @@ body.embed-mode .site-footer { display: none !important; }
   margin-bottom:8px;
 }
 
-/* 같은 디자이너 다른 게임 */
-.sheet-same-designer{
-  margin-bottom:14px;
-}
+/* 같은 디자이너 다른 게임 — sheet-info-group과 함께 사용 */
 .sheet-same-design-scroll{
   display:flex;
   gap:10px;

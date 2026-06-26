@@ -228,6 +228,7 @@ function updateLoginUI(user) {
     if (loginText) loginText.textContent = user.nickname;
     if (userActions) userActions.style.display = 'none';
     if (logoutIconBtn) logoutIconBtn.classList.add('is-visible');
+    if (String(user.id) === String(OWNER_KAKAO_ID)) localStorage.setItem('cottage_is_admin', '1');
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
