@@ -897,9 +897,9 @@
       const memberCount = allProfiles.length;
       const anonCount = anonSessions.length;
       const visitorFilterBar = `<div class="admin-visitor-filter" id="visitorFilterBar">
-        <button class="admin-visitor-filter-btn is-active" data-filter="all" onclick="document.querySelectorAll('#visitorList .admin-member-card,#visitorExtras .admin-member-card').forEach(c=>c.style.display='');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">전체 (${unified.length})</button>
-        <button class="admin-visitor-filter-btn" data-filter="member" onclick="document.querySelectorAll('#visitorList .admin-member-card,#visitorExtras .admin-member-card').forEach(c=>c.style.display=c.dataset.visitorType==='member'?'':'none');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">회원 (${memberCount})</button>
-        <button class="admin-visitor-filter-btn" data-filter="anon" onclick="document.querySelectorAll('#visitorList .admin-member-card,#visitorExtras .admin-member-card').forEach(c=>c.style.display=c.dataset.visitorType==='anon'?'':'none');document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b=>b.classList.remove('is-active'));this.classList.add('is-active')">비회원 (${anonCount})</button>
+        <button class="admin-visitor-filter-btn is-active" data-filter="all" onclick="applyVisitorFilter('all',this)">전체 (${unified.length})</button>
+        <button class="admin-visitor-filter-btn" data-filter="member" onclick="applyVisitorFilter('member',this)">회원 (${memberCount})</button>
+        <button class="admin-visitor-filter-btn" data-filter="anon" onclick="applyVisitorFilter('anon',this)">비회원 (${anonCount})</button>
       </div>`;
       const _renderVisitorCard = u => {
         if (u._type === 'member') {
@@ -952,7 +952,7 @@
         `<div class="admin-req-list" id="visitorList">${_visFirst.map(_renderVisitorCard).join('')}</div>` +
         (_visExtra.length
           ? `<div id="visitorExtras" style="display:none"><div class="admin-req-list">${_visExtra.map(_renderVisitorCard).join('')}</div></div>
-             <button class="admin-visitor-more-btn" onclick="var e=document.getElementById('visitorExtras');var show=e.style.display==='none';e.style.display=show?'block':'none';this.textContent=show?'닫기 ▲':'더보기 (${_visExtra.length}명 더) ▾'">더보기 (${_visExtra.length}명 더) ▾</button>`
+             <button class="admin-visitor-more-btn" id="visitorMoreBtn" onclick="expandVisitorMore()">더보기 (${_visExtra.length}명 더) ▾</button>`
           : '')
       ) : '<div class="admin-empty">방문자 없음</div>';
 
@@ -1634,6 +1634,50 @@
     window.addEventListener('cottage-auth-changed', tryLoad);
     setTimeout(tryLoad, 1200);
   })();
+
+  function applyVisitorFilter(type, btn) {
+    document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b => b.classList.remove('is-active'));
+    if (btn) btn.classList.add('is-active');
+    const extrasEl = document.getElementById('visitorExtras');
+    if (extrasEl) extrasEl.style.display = 'block';
+    document.getElementById('visitorCloseBtn')?.remove();
+    const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
+    const matched = type === 'all' ? allCards : allCards.filter(c => c.dataset.visitorType === type);
+    allCards.forEach(c => c.style.display = 'none');
+    matched.slice(0, 3).forEach(c => c.style.display = '');
+    const moreBtn = document.getElementById('visitorMoreBtn');
+    const hiddenCount = matched.length - 3;
+    if (moreBtn) {
+      if (hiddenCount > 0) {
+        moreBtn.style.display = '';
+        moreBtn.textContent = '더보기 (' + hiddenCount + '명 더) ▾';
+        moreBtn.onclick = () => expandVisitorMore();
+      } else {
+        moreBtn.style.display = 'none';
+      }
+    }
+  }
+
+  function expandVisitorMore() {
+    const activeFilter = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active')?.dataset.filter || 'all';
+    const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
+    const matched = activeFilter === 'all' ? allCards : allCards.filter(c => c.dataset.visitorType === activeFilter);
+    matched.forEach(c => c.style.display = '');
+    const moreBtn = document.getElementById('visitorMoreBtn');
+    if (moreBtn) moreBtn.style.display = 'none';
+    const thirdCard = matched[2];
+    if (thirdCard) {
+      const closeBtn = document.createElement('button');
+      closeBtn.id = 'visitorCloseBtn';
+      closeBtn.className = 'admin-visitor-more-btn';
+      closeBtn.textContent = '닫기 ▲';
+      closeBtn.onclick = () => {
+        const ab = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active');
+        applyVisitorFilter(ab?.dataset.filter || 'all', ab);
+      };
+      thirdCard.insertAdjacentElement('afterend', closeBtn);
+    }
+  }
 
   </script>
 
