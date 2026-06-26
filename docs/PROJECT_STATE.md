@@ -50,6 +50,7 @@
 | design: 플레이기록 카드 개별 박스 디자인 (142차-95) | sheet-my-record-item: border→radius+배경+gap 개별 카드 스타일 적용 | 142차-95 |
 | fix/feat: 게임평·사진 작성자 표시 + 모임연동 버그수정 (142차-96) | Item2: onOpenCommentInput _gameIds 적용(기존 모임 연동 미노출 수정) / Item3: placeholder 텍스트 변경 / Item5: 라이트박스 캡션 닉네임 추가 / Item6: 전체사진 헤더 N명의 사진+그리드 개별 작성자명 / Item7: 게임평 앞 작성자 이름 표시 | 142차-96 |
 | feat: 기록게시판 사진 추가 탭 (142차-97) | 세 번째 탭 "사진 추가" — 전체 기록 목록에서 원하는 기록 선택 후 사진 업로드, 타인 기록에도 추가 가능 | 142차-97 |
+| fix: 게임 바텀시트 코너 삐져나옴 근본 수정 (142차-118) | `.game-sheet-panel` overflow:hidden(외부 클리핑) + `.game-sheet-scroll` overflow-y:auto(내부 스크롤) 분리. JS scroll 참조 5곳 `.game-sheet-panel` → `.game-sheet-scroll` 변경. **3세션 소요 근본 원인: Chrome GPU 컴포지터가 overflow-y:auto+border-radius 동일 요소에서 배경 클리핑을 직각으로 렌더링하는 버그.** DESIGN_RULES.md §6 참조 | 142차-118 |
 
 ### 142차 테스트 목록
 
@@ -107,6 +108,7 @@
 - **[3] 게임상세시트 플레이 기록하기 플레이어 자동완성** — 게임시트 플레이기록 입력 폼의 이름 칸에 기록게시판과 동일한 태그칩 자동완성 시스템 적용
 - ~~**[4] 게임 상세시트 수정/삭제 버튼 top-right 탈출 버그 + 관련 수정**~~ — CSS 스코프 수정 (142차-106), 섹션 복구 (142차-108). .sheet-comment-actions의 position:absolute를 .sheet-comment-item 컨텍스트로 스코프 축소. initSheetPhotos 사진 그리드에서 작성자 닉네임 표시 제거 (라이트박스 캡션에만 유지, 142차-108).
 - ~~**[이전 세션 발생 버그 3개 수정]**~~ — (142차-113) 귀 현상은 이미 해결(142차-111, border-radius 제거). 외부박스 복구(border-radius 없이), 게임평 미리보기 수정/삭제 버튼 숨김(.sheet-play-scroll-card .sheet-comment-actions{display:none}), 게임시트 스크롤 리셋 개선(is-active 이후 rAF로 scrollTop 설정).
+- ~~**[바텀시트 코너 삐져나옴 3세션 시행착오 기록]**~~ — (142차-118) **근본 원인:** `overflow-y:auto`+`border-radius`를 `.game-sheet-panel` 단일 요소에 함께 사용 → Chrome 컴포지터가 GPU 레이어로 승격 시 배경을 직각으로 렌더링, 라운딩 밖으로 크림색 사각형이 튀어나와 보임. **이전 세션 시행착오:** ① `.sheet-records-group` 카드 스타일 제거 시도(142차-109, revert) — 엉뚱한 요소 타깃. ② `border-radius` 자체를 제거(142차-111) — 현상을 숨겼을 뿐 근본 해결 아님, 이후 복구(142차-113). ③ `-webkit-overflow-scrolling:touch` 제거 — 원인 아님. ④ 코드 전체 탐색 방향 없이 반복 read — 토큰 낭비. **올바른 진단법:** DevTools Elements 탭에서 해당 코너 클릭 → `.game-sheet-dim`이 선택됨(어두운 오버레이) → 그 뒤에 `.game-sheet-panel` 배경이 직각으로 렌더링돼 보이는 것. **해결:** outer(`.game-sheet-panel`) `overflow:hidden`만, inner(`.game-sheet-scroll`) `overflow-y:auto` 분리. JS scroll 참조 5곳 변경. DESIGN_RULES.md §6 참조.
 - ~~**[5] 방문자목록 회원탭 표시 개선**~~ — 완료 (142차-99, applyVisitorFilter/expandVisitorMore 함수)
 - ~~**[6] 비주얼분석 날짜 필터 → 상단 지표 동기화**~~ — 완료 (142차-99, draw() 내 기간 연동)
 - **[7] 페이지/회원 분석 기간 필터 개편** — 기본값 최근1주일, 대분류 "최근1주일/전체" 추가, 각 대분류 아래 전체/회원/비회원 서브탭 유지

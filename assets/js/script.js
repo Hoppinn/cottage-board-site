@@ -1058,7 +1058,7 @@ let closeGameSheetDim =
 function ensureGameSheet() {
   if (document.getElementById('gameSheet')) return;
   const wrap = document.createElement('div');
-  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim" id="closeGameSheetDim"></div><div class="game-sheet-panel"><button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div id="gameSheetContent"></div></div></div>';
+  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim" id="closeGameSheetDim"></div><div class="game-sheet-panel"><button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div class="game-sheet-scroll"><div id="gameSheetContent"></div></div></div></div>';
   document.body.appendChild(wrap.firstChild);
   gameSheet          = document.getElementById('gameSheet');
   gameSheetContent   = document.getElementById('gameSheetContent');
@@ -1404,7 +1404,7 @@ function openGameSheet(gameKey, restoreScroll = false){
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
-  const _panel = gameSheet.querySelector('.game-sheet-panel');
+  const _panel = gameSheet.querySelector('.game-sheet-scroll');
   requestAnimationFrame(() => {
     if (_panel) _panel.scrollTop = restoreScroll ? _savedSheetScrollTop : 0;
   });
@@ -1422,7 +1422,7 @@ function openGameSheet(gameKey, restoreScroll = false){
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
   if (_scrollParam === 'comments') {
     setTimeout(() => {
-      const panel = gameSheet.querySelector('.game-sheet-panel');
+      const panel = gameSheet.querySelector('.game-sheet-scroll');
       const commentsEl = document.getElementById(`sheetCommentsList-${gameKey}`);
       if (panel && commentsEl) panel.scrollTo({ top: commentsEl.offsetTop - 20, behavior: 'smooth' });
     }, 400);
@@ -1447,7 +1447,7 @@ function closeGameSheet(){
     return;
   }
 
-  const panel = gameSheet.querySelector('.game-sheet-panel');
+  const panel = gameSheet.querySelector('.game-sheet-scroll');
   if (panel?._stickyCleanup) {
     panel._stickyCleanup();
     delete panel._stickyCleanup;
@@ -1466,7 +1466,7 @@ function openGameRecordSheet(gameKey) {
   onClosePhotoModal();
   _closeAllMoreMenus();
 
-  const _recPanel = gameSheet.querySelector('.game-sheet-panel');
+  const _recPanel = gameSheet.querySelector('.game-sheet-scroll');
   _savedSheetScrollTop = _recPanel ? _recPanel.scrollTop : 0;
 
   const game = window.gameData?.[gameKey];
@@ -1503,7 +1503,7 @@ function openGameRecordSheet(gameKey) {
     </div>
   `;
 
-  const panel = gameSheet.querySelector('.game-sheet-panel');
+  const panel = gameSheet.querySelector('.game-sheet-scroll');
   if (panel) panel.scrollTop = 0;
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
@@ -1789,7 +1789,7 @@ function initSheetMechsToggle() {
 }
 
 function initStickyBar() {
-  const panel = gameSheet?.querySelector('.game-sheet-panel');
+  const panel = gameSheet?.querySelector('.game-sheet-scroll');
   const bar   = document.getElementById('sheetStickyBar');
   if (!panel || !bar) return;
   function onScroll() {

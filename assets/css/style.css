@@ -1582,13 +1582,18 @@ body.recommend-page main{
   right:0;
   top:72px;
   bottom:0;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:22px 20px 120px;
+  overflow:hidden;
   border-radius:28px 28px 0 0;
   background:var(--paper-2);
   box-shadow:0 -10px 30px rgba(100,72,38,0.16);
   animation:sheetUp .22s ease;
+}
+.game-sheet-scroll{
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  height:100%;
+  padding:22px 20px 120px;
+  box-sizing:border-box;
 }
 
 body.sheet-open{
@@ -7527,6 +7532,8 @@ body.embed-mode .site-footer { display: none !important; }
     transform: translateX(-50%);
     border-radius: 20px;
     animation: sheetModalIn .22s ease;
+  }
+  .game-sheet-scroll {
     padding: 28px 32px 60px;
   }
   @keyframes sheetModalIn {
