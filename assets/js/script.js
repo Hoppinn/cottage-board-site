@@ -1135,6 +1135,7 @@ function openGameSheet(gameKey, restoreScroll = false){
   }
 
   onCloseCommentModal();
+  onClosePhotoModal();
   _closeAllMoreMenus();
 
   const detail =
@@ -1462,6 +1463,7 @@ function openGameRecordSheet(gameKey) {
   if (!gameSheet || !gameSheetContent) return;
   _currentSheetGameKey = gameKey;
   onCloseCommentModal();
+  onClosePhotoModal();
   _closeAllMoreMenus();
 
   const _recPanel = gameSheet.querySelector('.game-sheet-panel');
@@ -1496,7 +1498,10 @@ function openGameRecordSheet(gameKey) {
         </div>
       </div>
       <div class="sheet-play-section">
-        <p class="sheet-section-label" id="sheetPhotosCount-${gameKey}" style="margin-bottom:8px">사진</p>
+        <div class="sheet-comments-header">
+          <span class="sheet-comments-count-label" id="sheetPhotosCount-${gameKey}">사진</span>
+          <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenPhotoInput(this)" type="button">📷 남기기</button>
+        </div>
         <div id="sheetPhotosArea-${gameKey}"><span class="sheet-comments-empty">불러오는 중...</span></div>
       </div>
     </div>
@@ -2264,6 +2269,145 @@ function onEditComment(btn) {
 function onCloseCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
   if (modal) { modal.style.display = 'none'; delete modal.dataset.editId; }
+}
+
+/* ─── 사진 남기기 모달 ────────────────────────────────────── */
+function getOrCreatePhotoModal() {
+  let modal = document.getElementById('sheetPhotoModal');
+  if (modal) return modal;
+  modal = document.createElement('div');
+  modal.id = 'sheetPhotoModal';
+  modal.className = 'sheet-comment-modal';
+  modal.innerHTML = `
+    <div class="sheet-comment-modal-box">
+      <p class="sheet-comment-modal-title">사진 남기기</p>
+      <div class="sheet-play-photo-row" style="margin-bottom:8px;">
+        <div class="sheet-play-photo-grid" id="sheetPhotoModalGrid"></div>
+        <label class="sheet-play-photo-add-btn" id="sheetPhotoModalAddBtn">
+          📷
+          <input type="file" accept="image/*" multiple id="sheetPhotoModalInput" style="display:none;">
+        </label>
+      </div>
+      <div class="sheet-comment-play-link" id="sheetPhotoPlayLink" style="display:none;">
+        <label class="sheet-comment-play-link-label">
+          <input type="checkbox" id="sheetPhotoLinkCheck">
+          <span>기존 플레이 기록에 연동</span>
+        </label>
+        <select class="sheet-comment-play-select" id="sheetPhotoPlaySelect" style="display:none;"></select>
+      </div>
+      <div class="sheet-comment-modal-actions">
+        <button class="sheet-comment-form-cancel" onclick="onClosePhotoModal()">취소</button>
+        <button class="sheet-comment-form-submit" id="sheetPhotoModalSubmit" onclick="onSubmitPhotoModal()">등록</button>
+      </div>
+    </div>
+  `;
+  modal._photoFiles = [];
+  modal.querySelector('#sheetPhotoModalInput').addEventListener('change', async e => {
+    const grid = document.getElementById('sheetPhotoModalGrid');
+    const adder = window.buildPhotoItemAdder?.(grid, modal._photoFiles, 5);
+    if (!adder) return;
+    for (const f of Array.from(e.target.files || [])) await adder(f);
+    e.target.value = '';
+  });
+  modal.querySelector('#sheetPhotoLinkCheck').addEventListener('change', e => {
+    document.getElementById('sheetPhotoPlaySelect').style.display = e.target.checked ? 'block' : 'none';
+  });
+  modal.addEventListener('click', e => { if (e.target === modal) onClosePhotoModal(); });
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function onOpenPhotoInput(btn) {
+  const gameKey = btn.dataset.gameId;
+  requireLogin(async () => {
+    const modal = getOrCreatePhotoModal();
+    modal.dataset.gameId = gameKey;
+    modal._photoFiles = [];
+    const grid = document.getElementById('sheetPhotoModalGrid');
+    if (grid) grid.innerHTML = '';
+    const linkWrap = document.getElementById('sheetPhotoPlayLink');
+    const linkCheck = document.getElementById('sheetPhotoLinkCheck');
+    const linkSelect = document.getElementById('sheetPhotoPlaySelect');
+    if (linkWrap && linkCheck && linkSelect) {
+      linkCheck.checked = false;
+      linkSelect.style.display = 'none';
+      linkSelect.innerHTML = '';
+      linkWrap.style.display = 'none';
+      const _cu = window.getKakaoUser?.();
+      if (_cu?.id && window.CottageDB) {
+        const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
+        if (modal.style.display === 'none') return;
+        const mine = records.filter(r => String(r.user_id) === String(_cu.id));
+        if (mine.length) {
+          mine.forEach(r => {
+            const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.dataset.photoUrl = r.photo_url || '';
+            opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
+            linkSelect.appendChild(opt);
+          });
+          linkWrap.style.display = 'block';
+        }
+      }
+    }
+    modal.style.display = 'flex';
+  });
+}
+
+function onClosePhotoModal() {
+  const modal = document.getElementById('sheetPhotoModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function onSubmitPhotoModal() {
+  const modal = document.getElementById('sheetPhotoModal');
+  const gameKey = modal?.dataset.gameId;
+  if (!gameKey || !window.CottageDB) return;
+  const photoFiles = modal?._photoFiles || [];
+  if (!photoFiles.length) { alert('사진을 선택해 주세요.'); return; }
+  const submitBtn = document.getElementById('sheetPhotoModalSubmit');
+  if (submitBtn) submitBtn.disabled = true;
+  const _u = window.getKakaoUser?.();
+  if (!_u?.id) { if (submitBtn) submitBtn.disabled = false; return; }
+
+  const uploaded = [];
+  for (const pf of photoFiles) {
+    const url = await window.CottageDB.uploadPlayPhoto(pf, _u.id);
+    if (url) uploaded.push(url);
+  }
+  if (!uploaded.length) {
+    alert('사진 업로드에 실패했습니다. 다시 시도해 주세요.');
+    if (submitBtn) submitBtn.disabled = false;
+    return;
+  }
+
+  const linkCheck = document.getElementById('sheetPhotoLinkCheck');
+  const linkSelect = document.getElementById('sheetPhotoPlaySelect');
+  const linked = linkCheck?.checked && linkSelect?.value;
+
+  let err = null;
+  if (linked) {
+    const selectedOpt = linkSelect.options[linkSelect.selectedIndex];
+    const existingUrls = window.parsePhotoUrls ? window.parsePhotoUrls(selectedOpt.dataset.photoUrl) : [];
+    const allUrls = [...existingUrls, ...uploaded];
+    const newPhotoUrl = allUrls.length === 1 ? allUrls[0] : JSON.stringify(allUrls);
+    const result = await window.CottageDB.updateGamePlay(linkSelect.value, { photo_url: newPhotoUrl });
+    if (result?.error) err = result.error;
+  } else {
+    const storeGameId = window.gameData?.[gameKey]?.bgg?.id || gameKey;
+    const newPhotoUrl = uploaded.length === 1 ? uploaded[0] : JSON.stringify(uploaded);
+    const result = await window.CottageDB.recordGamePlay(
+      storeGameId, null, null, null, null,
+      _u.nickname || null, _u.id, null, null, newPhotoUrl, null
+    );
+    if (result?.error) err = result.error;
+  }
+
+  if (submitBtn) submitBtn.disabled = false;
+  if (err) { alert('등록에 실패했습니다. 다시 시도해 주세요.'); return; }
+  onClosePhotoModal();
+  await initSheetPhotos(gameKey);
 }
 
 function _closeAllMoreMenus() {
