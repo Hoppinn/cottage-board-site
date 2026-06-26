@@ -1544,14 +1544,9 @@ async function initSheetCommentsPreview(gameKey) {
     const dateStr = item.date ? item.date.slice(2, 10).replace(/-/g, '.') : '';
     const isMine = item.source === 'comment' && currentUser && String(item.user_id) === String(currentUser.id);
     const _isMineAny = currentUser && item.user_id && String(item.user_id) === String(currentUser.id);
-    const editBtns = isMine ? `<div class="sheet-comment-actions">
-      <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${esc(gameKey)}" data-text="${esc(item.text)}" onclick="onEditComment(this)" type="button">수정</button>
-      <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
-    </div>` : '';
     return `<div class="sheet-play-scroll-card">
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
-      ${editBtns}
     </div>`;
   }).join('');
   el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
@@ -1666,7 +1661,6 @@ async function initSheetPhotoPreview(gameKey) {
   const more = total - SHOW_FIRST;
   const dataUrls = JSON.stringify(allPhotos).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   el.innerHTML = `
-    ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="pr-rec-photo-wrap" data-urls="${dataUrls}">
       ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more" data-idx="${SHOW_FIRST}">+${more}장</div>` : ''}
