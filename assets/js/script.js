@@ -1362,7 +1362,41 @@ function openGameSheet(gameKey, restoreScroll = false){
       </div>
     </div>
 
-    <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 보기 &amp; 남기기 →</button>
+    <!-- 기록 섹션 그룹 -->
+    <div class="sheet-records-group">
+
+      <!-- 플레이기록 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <!-- 게임평 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <!-- 사진 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewPhotoLabel-${gameKey}">사진</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetPhotoPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 페이지에서 보기 &amp; 남기기 →</button>
+    </div>
 
   `;
 
@@ -1377,6 +1411,9 @@ function openGameSheet(gameKey, restoreScroll = false){
   initSheetDescToggle();
   initSheetMechsToggle();
   initSheetLikes(gameKey).catch(() => {});
+  initSheetCommentsPreview(gameKey).catch(() => {});
+  initSheetPlayPreview(gameKey).catch(() => {});
+  initSheetPhotoPreview(gameKey).catch(() => {});
 
   // ?scroll=comments → 코멘트 섹션으로 스크롤
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
@@ -1679,7 +1716,7 @@ async function initSheetPhotos(gameKey) {
   el.innerHTML = `
     ${metaParts.length ? `<span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${metaParts[0]}</strong>${metaParts[1] ? ` <span class="sheet-comment-date">${metaParts[1]}</span>` : ''}</span>` : ''}
     <div class="sheet-photo-grid" data-urls="${dataUrls}">
-      ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}">${multiUploader ? `<span class="sheet-photo-author">${esc(e.nickname)}</span>` : ''}</div>`).join('')}
+      ${entries.map((e, i) => `<div class="pr-rec-photo-item${i >= SHOW_FIRST ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${esc(e.url)}" alt="사진" loading="lazy" data-idx="${i}"></div>`).join('')}
     </div>
     ${more > 0 ? `<button class="sheet-list-more-btn sheet-photo-more-btn" type="button">${more}장 더보기 ▾</button>` : ''}`;
   const morePhotoBtn = el.querySelector('.sheet-photo-more-btn');
