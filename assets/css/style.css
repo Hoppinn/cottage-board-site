@@ -908,6 +908,57 @@ body.recommend-page main{
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
 }
 
+/* ── 추천 필터 한 줄 버튼 레이아웃 ── */
+.recommend-steps-row{
+  display:flex;
+  gap:8px;
+  margin-top:4px;
+}
+.recommend-steps-row .recommend-step{
+  flex:1;
+  padding:0;
+  border-top:0;
+}
+.recommend-steps-row .recommend-step-head{
+  width:100%;
+  padding:10px 6px;
+  border:1.5px solid #e2d4bb;
+  border-radius:14px;
+  background:#f8f4ec;
+  font-size:13px;
+  font-weight:500;
+  color:#9a907f;
+  justify-content:center;
+  gap:0;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.recommend-steps-row .recommend-step-head.is-selected{
+  background:#f0e8d4;
+  border-color:#c8a870;
+  color:#3d3228;
+  font-weight:600;
+}
+.recommend-steps-row .recommend-step.is-open .recommend-step-head{
+  border-color:#b89060;
+  background:#ead8ba;
+  color:#3d3228;
+}
+.recommend-options-area{
+  display:none;
+  flex-wrap:wrap;
+  gap:9px;
+  padding:10px 0 4px;
+  justify-content:center;
+}
+.recommend-options-area .modal-level-note{ width:100%; }
+.recommend-filter-card-v3:has(.recommend-step[data-filter-group="players"].is-open) .recommend-options-area[data-options-group="players"],
+.recommend-filter-card-v3:has(.recommend-step[data-filter-group="level"].is-open) .recommend-options-area[data-options-group="level"],
+.recommend-filter-card-v3:has(.recommend-step[data-filter-group="mood"].is-open) .recommend-options-area[data-options-group="mood"]{
+  display:flex;
+}
+
 .recommend-step{
   padding:8px 0;
   border-top:1px dashed #e0d2ba;

@@ -431,6 +431,14 @@ const moodTextMap = {
   team:   "⚔️ 팀 대항전"
 };
 
+const levelShortMap = {
+  kids: "😊 아이도", beginner: "🌱 입문", light: "🏡 라이트", heavy: "🧠 헤비", hardcore: "😈 하드코어"
+};
+const moodShortMap = {
+  talk: "💬 말·이야기", luck: "🍀 운", guess: "🎯 추론", bluff: "🃏 심리전",
+  active: "⚡ 몸", dice: "🎲 주사위", card: "🎴 카드", brain: "🧠 전략", coop: "🤝 협력", team: "⚔️ 팀"
+};
+
 function updateRecommendFilterText(){
   if(!recommendFilter){
     return;
@@ -447,89 +455,62 @@ const moodValue = recommendState.mood;
         나에게 맞는 게임을 찾아드릴게요
       </h2>
 
-      
-
-      <div class="recommend-step" data-filter-group="players">
-        <button class="recommend-step-head" type="button" data-toggle-filter="players">
-          <span><b>1</b> 인원</span>
-          <strong class="${playerValue ? '' : 'is-placeholder'}">
-            ${playerValue ? playerTextMap[playerValue] : '인원 선택'} ▾
-          </strong>
-        </button>
-
-        <div class="recommend-step-options">
-
-${ ['group','5','6','7','8','9+'].includes(playerValue)
-  ? `${renderInlineOption("players", "", "← 뒤로", playerValue)}
-     ${renderInlineOption("players","5","5인",playerValue)}
-     ${renderInlineOption("players","6","6인",playerValue)}
-     ${renderInlineOption("players","7","7인",playerValue)}
-     ${renderInlineOption("players","8","8인",playerValue)}
-     ${renderInlineOption("players","9+","9인+",playerValue)}`
-  : `${playerValue !== "2" ? renderInlineOption("players", "2", "2인", playerValue) : ""}
-     ${playerValue !== "3" ? renderInlineOption("players", "3", "3인", playerValue) : ""}
-     ${playerValue !== "4" ? renderInlineOption("players", "4", "4인", playerValue) : ""}
-     ${playerValue !== "group" ? renderInlineOption("players", "group", "단체", playerValue) : ""}
-     ${playerValue !== "1" ? renderInlineOption("players", "1", "1인", playerValue) : ""}
-     ${renderInlineOption("players", "", "상관없음", playerValue)}` }
-
-          </div>
+      <div class="recommend-steps-row">
+        <div class="recommend-step" data-filter-group="players">
+          <button class="recommend-step-head${playerValue ? ' is-selected' : ''}" type="button" data-toggle-filter="players">
+            ${playerValue ? playerTextMap[playerValue] : '인원'} ▾
+          </button>
+        </div>
+        <div class="recommend-step" data-filter-group="level">
+          <button class="recommend-step-head${levelValue ? ' is-selected' : ''}" type="button" data-toggle-filter="level">
+            ${levelValue ? levelShortMap[levelValue] : '난이도'} ▾
+          </button>
+        </div>
+        <div class="recommend-step" data-filter-group="mood">
+          <button class="recommend-step-head${moodValue ? ' is-selected' : ''}" type="button" data-toggle-filter="mood">
+            ${moodValue ? moodShortMap[moodValue] : '게임방식'} ▾
+          </button>
+        </div>
       </div>
 
-      <div class="recommend-step" data-filter-group="level">
-        <button class="recommend-step-head" type="button" data-toggle-filter="level">
-          <span><b>2</b> 난이도</span>
-          <strong class="${levelValue ? '' : 'is-placeholder'}">
-            ${levelValue ? levelTextMap[levelValue] : '난이도 선택'} ▾
-          </strong>
-        </button>
+      <div class="recommend-options-area" data-options-group="players">
+        ${ ['group','5','6','7','8','9+'].includes(playerValue)
+          ? `${renderInlineOption("players", "", "← 뒤로", playerValue)}
+             ${renderInlineOption("players","5","5인",playerValue)}
+             ${renderInlineOption("players","6","6인",playerValue)}
+             ${renderInlineOption("players","7","7인",playerValue)}
+             ${renderInlineOption("players","8","8인",playerValue)}
+             ${renderInlineOption("players","9+","9인+",playerValue)}`
+          : `${playerValue !== "2" ? renderInlineOption("players", "2", "2인", playerValue) : ""}
+             ${playerValue !== "3" ? renderInlineOption("players", "3", "3인", playerValue) : ""}
+             ${playerValue !== "4" ? renderInlineOption("players", "4", "4인", playerValue) : ""}
+             ${playerValue !== "group" ? renderInlineOption("players", "group", "단체", playerValue) : ""}
+             ${playerValue !== "1" ? renderInlineOption("players", "1", "1인", playerValue) : ""}
+             ${renderInlineOption("players", "", "상관없음", playerValue)}` }
+      </div>
 
-        <div class="recommend-step-options">
-          ${levelValue !== "kids"
-  ? renderInlineOption("level", "kids", "아이도 가능", levelValue)
-  : ""}
-
-${levelValue !== "beginner"
-  ? renderInlineOption("level", "beginner", "입문 추천", levelValue)
-  : ""}
-
-${levelValue !== "light"
-  ? renderInlineOption("level", "light", "라이트·패밀리", levelValue)
-  : ""}
-
-${levelValue !== "heavy"
-  ? renderInlineOption("level", "heavy", "헤비·매니아", levelValue)
-  : ""}
-
-${levelValue !== "hardcore"
-  ? renderInlineOption("level", "hardcore", "하드코어", levelValue)
-  : ""}
-  ${renderInlineOption("level", "", "상관없음", levelValue)}
-        </div>
+      <div class="recommend-options-area" data-options-group="level">
+        ${levelValue !== "kids"     ? renderInlineOption("level", "kids",     "아이도 가능",  levelValue) : ""}
+        ${levelValue !== "beginner" ? renderInlineOption("level", "beginner", "입문 추천",    levelValue) : ""}
+        ${levelValue !== "light"    ? renderInlineOption("level", "light",    "라이트·패밀리",levelValue) : ""}
+        ${levelValue !== "heavy"    ? renderInlineOption("level", "heavy",    "헤비·매니아",  levelValue) : ""}
+        ${levelValue !== "hardcore" ? renderInlineOption("level", "hardcore", "하드코어",     levelValue) : ""}
+        ${renderInlineOption("level", "", "상관없음", levelValue)}
         <p class="modal-level-note">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
       </div>
 
-      <div class="recommend-step" data-filter-group="mood">
-        <button class="recommend-step-head" type="button" data-toggle-filter="mood">
-          <span><b>3</b> 게임 방식</span>
-          <strong class="${moodValue ? '' : 'is-placeholder'}">
-            ${moodValue ? moodTextMap[moodValue] : '게임 방식 선택'} ▾
-          </strong>
-        </button>
-
-        <div class="recommend-step-options">
-          ${moodValue !== "talk"   ? renderInlineOption("mood", "talk",   "💬 말·이야기 게임",    moodValue) : ""}
-${moodValue !== "luck"   ? renderInlineOption("mood", "luck",   "🍀 운 게임",            moodValue) : ""}
-${moodValue !== "guess"  ? renderInlineOption("mood", "guess",  "🎯 맞추기·추론",       moodValue) : ""}
-${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
-${moodValue !== "active" ? renderInlineOption("mood", "active", "⚡ 몸·반응속도",       moodValue) : ""}
-${moodValue !== "dice"   ? renderInlineOption("mood", "dice",   "🎲 가벼운 주사위게임", moodValue) : ""}
-${moodValue !== "card"   ? renderInlineOption("mood", "card",   "🎴 가벼운 카드게임",   moodValue) : ""}
-${moodValue !== "brain"  ? renderInlineOption("mood", "brain",  "🧠 전략·두뇌",         moodValue) : ""}
-${moodValue !== "coop"   ? renderInlineOption("mood", "coop",   "🤝 협력 게임",         moodValue) : ""}
-${moodValue !== "team"   ? renderInlineOption("mood", "team",   "⚔️ 팀 대항전",         moodValue) : ""}
-  ${renderInlineOption("mood", "", "상관없어요", moodValue)}
-        </div>
+      <div class="recommend-options-area" data-options-group="mood">
+        ${moodValue !== "talk"   ? renderInlineOption("mood", "talk",   "💬 말·이야기 게임",    moodValue) : ""}
+        ${moodValue !== "luck"   ? renderInlineOption("mood", "luck",   "🍀 운 게임",            moodValue) : ""}
+        ${moodValue !== "guess"  ? renderInlineOption("mood", "guess",  "🎯 맞추기·추론",       moodValue) : ""}
+        ${moodValue !== "bluff"  ? renderInlineOption("mood", "bluff",  "🃏 속이기·심리전",     moodValue) : ""}
+        ${moodValue !== "active" ? renderInlineOption("mood", "active", "⚡ 몸·반응속도",       moodValue) : ""}
+        ${moodValue !== "dice"   ? renderInlineOption("mood", "dice",   "🎲 가벼운 주사위게임", moodValue) : ""}
+        ${moodValue !== "card"   ? renderInlineOption("mood", "card",   "🎴 가벼운 카드게임",   moodValue) : ""}
+        ${moodValue !== "brain"  ? renderInlineOption("mood", "brain",  "🧠 전략·두뇌",         moodValue) : ""}
+        ${moodValue !== "coop"   ? renderInlineOption("mood", "coop",   "🤝 협력 게임",         moodValue) : ""}
+        ${moodValue !== "team"   ? renderInlineOption("mood", "team",   "⚔️ 팀 대항전",         moodValue) : ""}
+        ${renderInlineOption("mood", "", "상관없어요", moodValue)}
       </div>
 
     </div>
