@@ -598,28 +598,25 @@ async function openProfilePanel(autoSubsheet = null) {
   const _sortedPlayDates = [..._playGroups.keys()].sort((a,b) => b.localeCompare(a));
   const _playDateLabel = key => { const [,m,d] = key.split('-').map(Number); return `${m}월 ${d}일`; };
 
-  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0, _visGroupCount = 0, _hidGroupCount = 0;
+  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0, _lastVisDate = null;
   for (const dateKey of _sortedPlayDates) {
     const groupItems = _playGroups.get(dateKey);
-    const dateLabel = _playDateLabel(dateKey);
-    const visGroup = [], hidGroup = [];
-    for (const r of groupItems) {
+    for (let gi = 0; gi < groupItems.length; gi++) {
+      const r = groupItems[gi];
       const pn = _playOrderMap.get(r.id);
       const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-      const itemHtml = `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</li>`;
-      if (_playVisCnt < PREVIEW) { visGroup.push(itemHtml); _playVisCnt++; }
-      else hidGroup.push(itemHtml);
-    }
-    if (visGroup.length) {
-      const sep = _visGroupCount > 0 ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
-      _playVisHtml += `${sep}<li class="profile-date-header">${dateLabel}</li>${visGroup.join('')}`;
-      _visGroupCount++;
-    }
-    if (hidGroup.length) {
-      const needsHeader = visGroup.length === 0;
-      const sep = (_hidGroupCount > 0 || _visGroupCount > 0) ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
-      _playHidHtml += `${sep}${needsHeader ? `<li class="profile-date-header">${dateLabel}</li>` : ''}${hidGroup.join('')}`;
-      _hidGroupCount++;
+      const isFirst = gi === 0;
+      const date = (r.played_at || (r.created_at||'').slice(0,10)).slice(0,10);
+      const dateHtml = isFirst ? `<span class="profile-play-date">${_playDateLabel(dateKey)}</span>` : '';
+      const itemHtml = `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}${dateHtml}</li>`;
+      if (_playVisCnt < PREVIEW) {
+        if (isFirst && _lastVisDate !== null) _playVisHtml += '<li class="profile-date-group-sep" aria-hidden="true"></li>';
+        _playVisHtml += itemHtml;
+        _playVisCnt++;
+        if (isFirst) _lastVisDate = dateKey;
+      } else {
+        _playHidHtml += itemHtml;
+      }
     }
   }
   const _playHasMore = stats.plays.length > PREVIEW;
@@ -941,11 +938,11 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-sub-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▾</span></button>
+      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▾</span></button>
       ${_allReviews.length ? reviewListHtml : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-sub-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
+      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
       ${_recentPhotoHtml}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
