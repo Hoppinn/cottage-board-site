@@ -1628,6 +1628,7 @@ body.sheet-open{
   background:#f1e7d4;
   font-size:18px;
   cursor:pointer;
+  z-index:10;
 }
 
 .sheet-image img{
@@ -3627,9 +3628,13 @@ body.embed-mode .site-footer { display: none !important; }
 
 /* 기록 전용 바텀시트 헤더 */
 .sheet-record-header{
-  padding:4px 0 14px;
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:var(--paper-2);
+  margin:0 -20px 14px;
+  padding:14px 20px;
   border-bottom:1.5px solid #e8ddc8;
-  margin-bottom:14px;
 }
 .sheet-back-btn{
   background:none;
@@ -7576,6 +7581,12 @@ body.embed-mode .site-footer { display: none !important; }
   }
   .game-sheet-scroll {
     padding: 28px 32px 60px;
+  }
+  .sheet-record-header {
+    margin-left: -32px;
+    margin-right: -32px;
+    padding-left: 32px;
+    padding-right: 32px;
   }
   @keyframes sheetModalIn {
     from { opacity: 0; transform: translateX(-50%) translateY(14px); }

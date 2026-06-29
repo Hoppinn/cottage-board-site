@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-29 (143차-150)
+최종 갱신: 2026-06-29 (143차-151)
 
 ---
 
@@ -59,6 +59,7 @@
 | feat: 내보드 사진 3열 그리드+캡션+삭제 / 정리법 버튼 (143차-137) | BUG-A완성: 3열 CSS grid, 캡션(작성자/모임/날짜/인원/시간/점수), 본인 사진 삭제. 정리법: _ORGANIZER_GAMES 오브젝트+버튼+폴더 인프라(게임명 등록 후 활성화) | 143차-137 |
 | fix: 게임시트 열림 불가 버그 (143차-148) | _getOrganizerPhotos에서 getGameName 직접 호출 → game-reviews.html에서 ReferenceError. window.getGameName?.()으로 수정 | 143차-148 |
 | design: 섹션 순서·굵기 전반 개선 (143차-149) | 게임평→사진→플레이기록 순서 통일(게임시트/기록시트/기록보드). 게임평 PREVIEW 3. 전역 font-weight 일반화(검색/게임정보/기록/보드 항목 500으로) | 143차-149 |
+| design: 기록시트 고정헤더 (143차-151) | .sheet-record-header position:sticky+top:0, 배경색, 음수마진으로 full-width. .game-sheet-close z-index:10 보강. PC 32px 패딩 대응 반응형 오버라이드 추가 | 143차-151 |
 | design: font-weight 일반화 2차 (143차-150) | items 13~30 A그룹. 필터칩/게임카드제목/소유게임제목/히어로텍스트/버튼(.btn)/검색입력/페이지네이션/about·club소개/모임기록게임명/게임평내용/요청카드명 → 500. 게임정보 진행·테마·디자이너 레이블(.sheet-mechs-label/.sheet-meta-label) 700 복원. 19=이미완료. B그룹(23/24/26/27) 미실행 | 143차-150 |
 
 ### 142차 테스트 목록
