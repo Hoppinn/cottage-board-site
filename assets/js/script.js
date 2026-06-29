@@ -2012,6 +2012,11 @@ async function onSheetLike(btn) {
       }
       showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => window.openProfilePanel?.('taste') : null);
       if (result.liked) {
+        const wasCurious = await window.CottageDB.hasUserCurious(gameKey, String(user.id));
+        if (wasCurious) {
+          await window.CottageDB.toggleGameCurious(gameKey, String(user.id));
+          showActionToast('😊 궁금해요가 취소됐어요');
+        }
         const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
         const curiousBtn = document.getElementById('sheetCuriousBtn');
         if (curiousBtn) {

@@ -405,10 +405,11 @@
           const curiousHits = [];
           for (const e of entries) {
             if (!e.id) continue;
-            const isCurious = await window.CottageDB.hasUserCurious(e.id, userId);
+            const _gid = String(e.id);
+            const isCurious = await window.CottageDB.hasUserCurious(_gid, userId);
             if (isCurious) {
-              await window.CottageDB.toggleGameCurious(e.id, userId);
-              curiousHits.push({ label: e.label, id: e.id });
+              await window.CottageDB.toggleGameCurious(_gid, userId);
+              curiousHits.push({ label: e.label, id: _gid });
             }
           }
           if (curiousHits.length) {
@@ -1093,6 +1094,14 @@ async function onPrMenuLike(btn) {
     if (!result?.error) {
       const more = btn.closest('.pr-rec-more');
       more?.querySelectorAll('.pr-rec-like-action').forEach(b => { b.textContent = result.liked ? '👍 좋아요 취소' : '👍 좋아요'; });
+      if (result.liked) {
+        const wasCurious = await window.CottageDB.hasUserCurious(gameKey, String(user.id));
+        if (wasCurious) {
+          await window.CottageDB.toggleGameCurious(gameKey, String(user.id));
+          more?.querySelectorAll('.pr-rec-curious-action').forEach(b => { b.textContent = '🤔 궁금해요'; });
+          showToast('😊 궁금해요가 취소됐어요');
+        }
+      }
     }
   });
 }

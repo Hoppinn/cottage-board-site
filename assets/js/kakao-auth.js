@@ -590,7 +590,7 @@ async function openProfilePanel(autoSubsheet = null) {
     const date = r.played_at || (r.created_at||'').slice(0,10);
     const pn = _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(date)}</span></li>`;
+    return `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel} <span>${fmtShort(date)}</span></li>`;
   });
 
   const _playsWithReview = stats.plays.filter(r => r.review_text);
@@ -606,7 +606,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const reviewListHtml = buildActivityList(_allReviews, r => {
     const pn = r._isComment ? 0 : _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><em class="profile-review-text">"${escH(r.review_text)}"</em></li>`;
+    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><em class="profile-review-text">"${escH(r.review_text)}"</em></li>`;
   });
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
@@ -895,8 +895,9 @@ async function openProfilePanel(autoSubsheet = null) {
     if (_recentPhotos.length < 4) _recentPhotos.push(...parsed.slice(0, 4 - _recentPhotos.length));
   }
   const _photoCount = userStats?.photoCount || 0;
-  const _recentPhotoHtml = _recentPhotos.length
-    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_recentPhotos.slice(0, 4).map((url, i) => `<img class="record-photo-thumb" src="${escH(url)}" alt="" data-photo-idx="${i}">`).join('')}${_photoCount > 4 ? `<span class="record-photo-more-badge">+${_photoCount - 4}</span>` : ''}</div></li></ul>`
+  const _PHOTO_SHOW = 4;
+  const _recentPhotoHtml = _allPhotos.length
+    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotos.map((url, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotos.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">+${_allPhotos.length - _PHOTO_SHOW}장</button>` : ''}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
     <div class="profile-activity-group">
@@ -1519,11 +1520,11 @@ async function openProfilePanel(autoSubsheet = null) {
         _trackPvOnce('my-board-records');
         _openSubSheet('기록 보드', _recordInnerHtml, subBody => {
           _bindActivityTogglesAndMore(subBody);
-          subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
-            const gameId = li.dataset.gameId;
+          subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
+            const li = btn.closest('[data-game-id]');
+            const gameId = li?.dataset.gameId;
             if (!gameId) return;
-            li.style.cursor = 'pointer';
-            li.addEventListener('click', () => {
+            btn.addEventListener('click', () => {
               const key = _getGameKeyById(gameId);
               if (!key) return;
               window.ensureGameSheet?.();
@@ -1540,9 +1541,12 @@ async function openProfilePanel(autoSubsheet = null) {
               });
             });
             const moreBadge = subBody.querySelector('.record-photo-more-badge');
-            if (moreBadge && _allPhotos.length > 4) {
-              moreBadge.style.cursor = 'pointer';
-              moreBadge.addEventListener('click', () => window.openLightbox(_allPhotos, 4));
+            if (moreBadge) {
+              moreBadge.addEventListener('click', e => {
+                e.stopPropagation();
+                subBody.querySelectorAll('.record-photo-hidden').forEach(img => img.classList.remove('record-photo-hidden'));
+                moreBadge.remove();
+              });
             }
           }
         });
