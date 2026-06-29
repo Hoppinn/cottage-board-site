@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-27 (142차-133)
+최종 갱신: 2026-06-29 (142차-136)
 
 ---
 
@@ -54,6 +54,7 @@
 | 내 보드 모임 플래너 연동 + 모임페이지 로그인 버튼 (142차-123) | 함께한 시간 서브시트 상단에 "📅 모임 플래너 바로가기 →" 초록 버튼 추가 (경로: index.html/서브페이지 공용). 모임 플래너 날짜 상세 뷰에서 로그인 힌트가 텍스트만 있던 문제 → 실제 카카오 로그인 버튼으로 교체. | 142차-123 |
 | 디자인 시스템 정보성 텍스트 색·굵기 통일 (142차-124~133) | 페이지별 순차 적용: `--text-info(#505050)+500` 원칙. about.html, price-rules.html, club-rules.html, guide.html, game-reviews.html, owned-games.html, 요청하기, 내보드 패널 완료. 갈색 배너 12% 연하게(#7a4828→#8a5e42 등). club.html·club-schedule.html은 이미 CSS변수 사용으로 패스. | 142차-124~133 |
 | 수집보드 카드 3줄 표시 + 취향보드 카드 간격 (142차-133) | 캐릭터·도감·업적을 1줄(·구분)→개행(\n) 3줄 표시. 취향보드 카드 #태그 bio-row/games-row 분리, margin-top:3px. | 142차-133 |
+| fix BUG-B + 추가 기능 (142차-136) | BUG-B: getGameComments 배열 지원(_gameIds 전달), getMyStats game_key 컬럼 수정, profile 게임평에 game_comments 통합. 추가1: 기록 페이지 상단 좋아요/궁금해요 추가. 추가2: game-reviews ··· 메뉴에 좋아요/궁금해요 + lazy load 상태 | 142차-136 |
 
 ### 142차 테스트 목록
 
@@ -234,6 +235,12 @@
 ## 2. 현재 버그
 
 ### 기록보드(내보드) 버그 3건 (2026-06-27 발견)
+
+**[BUG-B] 기록보드 게임평 미표시 → 수정 완료 (142차-136)**
+- 원인 1: `getGameComments(gameKey)`가 단일 키만 조회 → 배열 지원 + `_gameIds` 전달로 한글명/BGG ID 둘 다 조회
+- 원인 2: `getMyStats`에서 `game_comments.game_id`(없는 컬럼) 조회 → `game_key, comment_text`로 수정
+- 원인 3: profile panel "게임평" 섹션이 `review_text`(game_play_records)만 표시 → `game_comments`도 통합
+- `commentListHtml` 변수 미정의 버그도 함께 수정
 
 **[BUG-A] 기록보드 사진 +N 토글 오작동**
 - 증상: 사진보기 `+72` 버튼 누르면 3열 펼침이 아닌 "전체사진" 뷰가 열림. 카드도 3열 기준으로 채워져야 함.

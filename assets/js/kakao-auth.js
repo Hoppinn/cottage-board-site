@@ -594,8 +594,17 @@ async function openProfilePanel(autoSubsheet = null) {
   });
 
   const _playsWithReview = stats.plays.filter(r => r.review_text);
-  const reviewListHtml = buildActivityList(_playsWithReview, r => {
-    const pn = _playOrderMap.get(r.id);
+  // game_comments도 게임평 섹션에 통합 (game_key = 한글명 또는 BGG ID 모두 getGameName으로 처리)
+  const _commentsAsReviews = stats.comments.map(c => ({
+    _isComment: true, game_id: c.game_key, review_text: c.comment_text,
+    played_at: null, created_at: c.created_at,
+  }));
+  const _allReviews = [..._playsWithReview, ..._commentsAsReviews].sort((a, b) =>
+    (b.played_at || b.created_at || '').localeCompare(a.played_at || a.created_at || '')
+  );
+  const commentListHtml = ''; // game_comments는 게임평 섹션에 통합됨
+  const reviewListHtml = buildActivityList(_allReviews, r => {
+    const pn = r._isComment ? 0 : _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
     return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header">${escH(getGameName(r.game_id))}${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><em class="profile-review-text">"${escH(r.review_text)}"</em></li>`;
   });
@@ -895,8 +904,8 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_playsWithReview.length}개</span><span class="profile-toggle-arrow">▴</span></button>
-      ${_playsWithReview.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
+      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▴</span></button>
+      ${_allReviews.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>

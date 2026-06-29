@@ -457,12 +457,13 @@ window._cottageSess = (function () {
 
   async function getGameComments(gameKey, limit = 10) {
     try {
-      const { data } = await db
+      const keys = Array.isArray(gameKey) ? gameKey.map(String) : [String(gameKey)];
+      const base = db
         .from("game_comments")
         .select("id, comment_text, nickname, user_id, created_at")
-        .eq("game_key", gameKey)
         .order("created_at", { ascending: false })
         .limit(limit);
+      const { data } = await (keys.length > 1 ? base.in('game_key', keys) : base.eq('game_key', keys[0]));
       return data || [];
     } catch (_) {
       return [];
@@ -1113,7 +1114,7 @@ window._cottageSess = (function () {
     try {
       const queries = [
         db.from('game_play_records').select('id, game_id, played_at, created_at, group_name, photo_url, review_text').eq('user_id', userId).order('created_at', { ascending: false }),
-        db.from('game_comments').select('id, game_id, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
+        db.from('game_comments').select('id, game_key, comment_text, created_at').eq('user_id', userId).order('created_at', { ascending: false }),
         db.from('suggestions').select('*', { count: 'exact', head: true }).eq('user_id', userId),
         db.from('profiles').select('*').eq('user_id', userId).maybeSingle(),
         db.from('game_reviews').select('*', { count: 'exact', head: true }).eq('user_id', userId),

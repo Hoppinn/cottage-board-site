@@ -1500,6 +1500,26 @@ function openGameRecordSheet(gameKey) {
       <button class="sheet-back-btn" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>
       <h3 class="sheet-record-title">${safeTitle} 기록</h3>
     </div>
+    <div class="sheet-feedback-reactions">
+      <div class="sheet-reaction-group">
+        <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
+          <div class="sheet-reaction-btn-row">
+            <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
+            <button class="sheet-reaction-expand-btn" id="sheetLikeExpandBtn" type="button" aria-label="좋아요한 사람 보기">▾</button>
+          </div>
+          <div class="sheet-reaction-users-panel" id="sheetLikerPanel"></div>
+        </div>
+      </div>
+      <div class="sheet-reaction-group">
+        <div class="sheet-reaction-btn-wrap" id="sheetCuriousBtnWrap">
+          <div class="sheet-reaction-btn-row">
+            <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
+            <button class="sheet-reaction-expand-btn" id="sheetCuriousExpandBtn" type="button" aria-label="궁금해요한 사람 보기">▾</button>
+          </div>
+          <div class="sheet-reaction-users-panel" id="sheetCuriousPanel"></div>
+        </div>
+      </div>
+    </div>
     <div class="sheet-social-group">
       <div class="sheet-play-section">
         <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
@@ -1531,6 +1551,7 @@ function openGameRecordSheet(gameKey) {
   document.body.classList.add('sheet-open');
 
   initSheetComments(gameKey).catch(() => {});
+  initSheetLikes(gameKey).catch(() => {});
   initPlayWidget(gameKey).catch(() => {});
   initSheetPhotos(gameKey).catch(err => {
     const _el = document.getElementById(`sheetPhotosArea-${gameKey}`);
@@ -1545,7 +1566,7 @@ async function initSheetCommentsPreview(gameKey) {
   if (!el || !window.CottageDB) return;
 
   const [comments, playReviews] = await Promise.all([
-    window.CottageDB.getGameComments(gameKey, 5),
+    window.CottageDB.getGameComments(_gameIds(gameKey), 5),
     window.CottageDB.getPlayReviewsByGame(_gameIds(gameKey), 5),
   ]);
 
@@ -2084,7 +2105,7 @@ async function initSheetComments(gameKey) {
   const countEl = document.getElementById(`sheetCommentsCount-${gameKey}`);
   if (!listEl || !window.CottageDB) return;
   const [comments, playReviews] = await Promise.all([
-    window.CottageDB.getGameComments(gameKey),
+    window.CottageDB.getGameComments(_gameIds(gameKey)),
     window.CottageDB.getPlayReviewsByGame(_gameIds(gameKey)),
   ]);
 

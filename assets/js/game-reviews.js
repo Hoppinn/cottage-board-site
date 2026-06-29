@@ -537,6 +537,20 @@
         });
         if (!isOpen) {
           more.classList.add('is-open');
+          // 좋아요/궁금해요 상태 lazy load
+          const _gkForState = more.querySelector('[data-game-id]')?.dataset.gameId;
+          if (_gkForState && window.CottageDB) {
+            const _cu = window.getKakaoUser?.();
+            if (_cu?.id) {
+              Promise.all([
+                window.CottageDB.hasUserLiked(_gkForState, String(_cu.id)),
+                window.CottageDB.hasUserCurious(_gkForState, String(_cu.id)),
+              ]).then(([liked, curious]) => {
+                more.querySelectorAll('.pr-rec-like-action').forEach(b => { b.textContent = liked ? '👍 좋아요 취소' : '👍 좋아요'; });
+                more.querySelectorAll('.pr-rec-curious-action').forEach(b => { b.textContent = curious ? '🤔 궁금해요 취소' : '🤔 궁금해요'; });
+              });
+            }
+          }
           const rect = btn.getBoundingClientRect();
           const menu = more.querySelector('.pr-rec-more-menu');
           if (menu) {
@@ -969,8 +983,9 @@
         const showEdit = isMine || window.isOwner?.();
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const _safeGKey = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
+        const likeItems = _safeGKey ? `<button class="pr-rec-add-action pr-rec-like-action" data-game-id="${_safeGKey}" onclick="onPrMenuLike(this)" type="button">👍 좋아요</button><button class="pr-rec-add-action pr-rec-curious-action" data-game-id="${_safeGKey}" onclick="onPrMenuCurious(this)" type="button">🤔 궁금해요</button>` : '';
         const addItems = _safeGKey ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
-        const moreMenu = (addItems || editItems) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${addItems}${editItems}</div></div>` : '';
+        const moreMenu = (likeItems || addItems || editItems) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems}${addItems}${editItems}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
@@ -1045,8 +1060,9 @@
         const showEdit2 = isMine || window.isOwner?.();
         const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const _safeGKey2 = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
+        const likeItems2 = _safeGKey2 ? `<button class="pr-rec-add-action pr-rec-like-action" data-game-id="${_safeGKey2}" onclick="onPrMenuLike(this)" type="button">👍 좋아요</button><button class="pr-rec-add-action pr-rec-curious-action" data-game-id="${_safeGKey2}" onclick="onPrMenuCurious(this)" type="button">🤔 궁금해요</button>` : '';
         const addItems2 = _safeGKey2 ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey2}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey2}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
-        const moreMenu2 = (addItems2 || editItems2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${addItems2}${editItems2}</div></div>` : '';
+        const moreMenu2 = (likeItems2 || addItems2 || editItems2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems2}${addItems2}${editItems2}</div></div>` : '';
         return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
           <div class="pr-rec-row-top">
             <div class="pr-rec-main">
@@ -1066,3 +1082,31 @@
   }
 
 })();
+
+async function onPrMenuLike(btn) {
+  const gameKey = btn.dataset.gameId;
+  if (!gameKey || !window.CottageDB) return;
+  requireLogin(async () => {
+    const user = window.getKakaoUser?.();
+    if (!user?.id) return;
+    const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
+    if (!result?.error) {
+      const more = btn.closest('.pr-rec-more');
+      more?.querySelectorAll('.pr-rec-like-action').forEach(b => { b.textContent = result.liked ? '👍 좋아요 취소' : '👍 좋아요'; });
+    }
+  });
+}
+
+async function onPrMenuCurious(btn) {
+  const gameKey = btn.dataset.gameId;
+  if (!gameKey || !window.CottageDB) return;
+  requireLogin(async () => {
+    const user = window.getKakaoUser?.();
+    if (!user?.id) return;
+    const result = await window.CottageDB.toggleGameCurious(gameKey, String(user.id));
+    if (!result?.error) {
+      const more = btn.closest('.pr-rec-more');
+      more?.querySelectorAll('.pr-rec-curious-action').forEach(b => { b.textContent = result.curious ? '🤔 궁금해요 취소' : '🤔 궁금해요'; });
+    }
+  });
+}
