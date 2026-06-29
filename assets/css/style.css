@@ -1792,7 +1792,7 @@ body.sheet-open{
 .sheet-section{
   margin-top:18px;
   margin-bottom:14px;
-  padding:18px;
+  padding:12px 18px 18px;
   border:1.5px solid #ead8b8;
   border-radius:20px;
   background:var(--paper);
@@ -3562,7 +3562,7 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-info-group{
   border:1.5px solid #ead8b8;
   border-radius:12px;
-  padding:7px 14px 10px;
+  padding:4px 14px 10px;
   margin-bottom:8px;
   background:var(--paper);
 }
