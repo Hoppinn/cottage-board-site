@@ -2961,6 +2961,7 @@ body.embed-mode .site-footer { display: none !important; }
   display:flex;
   flex-wrap:wrap;
   gap:5px;
+  margin-top:-4px;
   margin-bottom:14px;
 }
 
