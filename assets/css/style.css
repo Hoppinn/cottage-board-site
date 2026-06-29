@@ -860,15 +860,21 @@ body.recommend-page main{
   max-width:720px;
 }
 
+.game-scroll:not(:has(.recommend-empty)){
+  padding-top:10px;
+}
 .game-scroll:has(.recommend-empty){
   display:block;
-  padding:0 18px 2px;
+  padding:0 18px 0;
   margin:0 -18px;
 }
 
 .game-scroll .recommend-empty{
   width:100%;
-  margin:5px 0;
+  margin:3px 0;
+}
+.game-scroll:has(.recommend-empty) + .difficulty-guide{
+  margin-top:3px;
 }
 
 /* =========================
