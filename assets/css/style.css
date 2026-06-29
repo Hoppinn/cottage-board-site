@@ -1674,7 +1674,7 @@ body.recommend-page main{
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   height:100%;
-  padding:22px 20px 120px;
+  padding:14px 20px 120px;
   box-sizing:border-box;
 }
 
@@ -3726,10 +3726,10 @@ body.embed-mode .site-footer { display: none !important; }
 /* 기록 전용 바텀시트 헤더 */
 .sheet-record-header{
   position:sticky;
-  top:-22px;
+  top:-14px;
   z-index:5;
   background:var(--paper-2);
-  margin:-22px -20px 14px;
+  margin:-14px -20px 14px;
   padding:14px 20px;
   border-bottom:1.5px solid #e8ddc8;
 }
