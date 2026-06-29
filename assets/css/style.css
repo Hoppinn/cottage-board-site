@@ -848,7 +848,7 @@ body.recommend-page main{
   background:#fffdf8;
   color:#6f5d43;
   font-size:15px;
-  font-weight:800;
+  font-weight:700;
   line-height:1.5;
   text-align:center;
 }
@@ -1472,7 +1472,7 @@ body.recommend-page main{
 }
 .recommend-overlay-title{
   font-size:16px;
-  font-weight:900;
+  font-weight:700;
   color:#111;
 }
 .recommend-overlay-close{
@@ -3089,7 +3089,7 @@ body.embed-mode .site-footer { display: none !important; }
   padding:1px 3px;
   line-height:1;
   border-radius:4px;
-  opacity:0.6;
+  opacity:0.3;
 }
 .sheet-play-edit-btn:hover{
   opacity:1;
@@ -3103,7 +3103,7 @@ body.embed-mode .site-footer { display: none !important; }
   padding:1px 3px;
   line-height:1;
   border-radius:4px;
-  opacity:0.6;
+  opacity:0.3;
 }
 .sheet-play-cancel-btn:hover{
   opacity:1;
@@ -3124,6 +3124,9 @@ body.embed-mode .site-footer { display: none !important; }
   background:#fbecd8;
   border-radius:999px;
   padding:3px 9px;
+}
+.sheet-play-info-tag:not(.sheet-play-info-tag--secondary){
+  font-weight:600;
 }
 
 /* 플레이 상세 입력 폼 */
