@@ -2889,10 +2889,7 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-org-btn{font-size:12px;font-weight:700;color:#7a4828;background:none;border:1px solid #c8a882;border-radius:4px;padding:2px 8px;cursor:pointer;white-space:nowrap;}
 
 .sheet-links-block{display:flex;flex-direction:column;gap:5px;margin:6px 0 14px;}
-.sheet-links-block .sheet-loc-btn{width:100%;border-radius:8px;justify-content:flex-start;font-size:12px;}
 .sheet-links-row2{display:flex;gap:5px;}
-.sheet-links-row2 .sheet-yt-btn,
-.sheet-links-row2 .sheet-org-btn{flex:1;justify-content:center;}
 
 .sheet-game-title{
   margin:0 0 2px;
