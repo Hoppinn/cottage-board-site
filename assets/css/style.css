@@ -2823,6 +2823,7 @@ body.embed-mode .site-footer { display: none !important; }
 
 /* 인원·시간·무게 한 줄 */
 .sheet-stats-block{
+  margin-top:-4px;
   margin-bottom:14px;
 }
 
