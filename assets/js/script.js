@@ -1652,6 +1652,9 @@ async function initSheetPlayPreview(gameKey) {
       ? r.played_at.slice(2, 10).replace(/-/g, '.')
       : (r.created_at ? r.created_at.slice(2, 10).replace(/-/g, '.') : '');
     const isMine = _me && r.user_id && String(r.user_id) === String(_me.id);
+    const _ip = [r.player_count ? `${r.player_count}명` : null, r.player_names ? esc(r.player_names) : null, r.play_time_min ? `${r.play_time_min}분` : null].filter(Boolean);
+    const _infoTag = _ip.length ? `<span class="sheet-play-info-tag sheet-play-info-tag--block">${_ip.join(' / ')}</span>` : '';
+    const _scoreTag = r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">점수 ${esc(r.score_note)}</span>` : '';
     return `<div class="sheet-play-scroll-card">
       <span class="sheet-comment-nickname">
         ${r.nickname ? `<strong class="sheet-comment-nick">${isMine ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
@@ -1659,10 +1662,7 @@ async function initSheetPlayPreview(gameKey) {
         ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
       </span>
       <div class="sheet-play-info">
-        ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ''}
-        ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${esc(r.player_names)}</span>` : ''}
-        ${r.play_time_min ? `<span class="sheet-play-info-tag">⏱ ${r.play_time_min}분</span>` : ''}
-        ${r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : ''}
+        ${_infoTag}${_scoreTag}
       </div>
     </div>`;
   }).join('');
@@ -2691,15 +2691,15 @@ async function initPlayWidget(gameKey) {
       ? `<a class="sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${escH(r.group_name)}</a>`
       : null;
     const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
+    const _ip2 = [r.player_count ? `${r.player_count}명` : null, r.player_names ? escH(r.player_names) : null, r.play_time_min ? `${r.play_time_min}분` : null].filter(Boolean);
+    const _infoTag2 = _ip2.length ? `<span class="sheet-play-info-tag sheet-play-info-tag--block">${_ip2.join(' / ')}</span>` : '';
+    const _scoreTag2 = r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">점수 ${escH(r.score_note)}</span>` : '';
     const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
     return `<div class="sheet-my-record-item">
       <div class="sheet-record-info">
         ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
         ${hasDetail ? `<div class="sheet-play-info">
-          ${r.player_count ? `<span class="sheet-play-info-tag">👥 ${r.player_count}명</span>` : ""}
-          ${r.player_names ? `<span class="sheet-play-info-tag">🎮 ${escH(r.player_names)}</span>` : ""}
-          ${r.play_time_min ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">⏱ ${r.play_time_min}분</span>` : ""}
-          ${r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">🏆 ${escH(r.score_note)}</span>` : ""}
+          ${_infoTag2}${_scoreTag2}
         </div>` : ""}
       </div>
       ${isMine ? `<div class="sheet-play-record-actions">

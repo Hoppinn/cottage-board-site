@@ -450,11 +450,6 @@ const moodValue = recommendState.mood;
 
   recommendFilter.innerHTML = `
     <div class="recommend-filter-card recommend-filter-card-v3">
-
-      <h2 class="recommend-filter-main-title">
-        나에게 맞는 게임을 찾아드릴게요
-      </h2>
-
       <div class="recommend-steps-row">
         <div class="recommend-step" data-filter-group="players">
           <button class="recommend-step-head${playerValue ? ' is-selected' : ''}" type="button" data-toggle-filter="players">
@@ -472,6 +467,7 @@ const moodValue = recommendState.mood;
           </button>
         </div>
       </div>
+      <p class="recommend-filter-hint">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
 
       <div class="recommend-options-area" data-options-group="players">
         ${ ['group','5','6','7','8','9+'].includes(playerValue)
@@ -496,7 +492,6 @@ const moodValue = recommendState.mood;
         ${levelValue !== "heavy"    ? renderInlineOption("level", "heavy",    "헤비·매니아",  levelValue) : ""}
         ${levelValue !== "hardcore" ? renderInlineOption("level", "hardcore", "하드코어",     levelValue) : ""}
         ${renderInlineOption("level", "", "상관없음", levelValue)}
-        <p class="modal-level-note">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
       </div>
 
       <div class="recommend-options-area" data-options-group="mood">
@@ -530,7 +525,9 @@ if(recommendFilter){
           toggleButton.closest('.recommend-step');
 
         if(group){
-          group.classList.toggle('is-open');
+          const wasOpen = group.classList.contains('is-open');
+          recommendFilter.querySelectorAll('.recommend-step.is-open').forEach(s => s.classList.remove('is-open'));
+          if(!wasOpen) group.classList.add('is-open');
         }
 
         return;

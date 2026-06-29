@@ -841,8 +841,8 @@ body.recommend-page main{
 /* 추천 영역 빈 상태 */
 .recommend-empty{
   width:100%;
-  margin:10px 18px;
-  padding:24px 18px;
+  margin:4px 18px;
+  padding:10px 18px;
   border:1.5px dashed #d9c9aa;
   border-radius:22px;
   background:#fffdf8;
@@ -885,12 +885,17 @@ body.recommend-page main{
   box-shadow:0 2px 8px rgba(40,30,18,0.10);
 }
 
-.recommend-filter-card,
-.recommend-filter-card-v3{
+.recommend-filter-card{
   padding:12px 14px;
   border:1.5px solid #e2d4bb;
   border-radius:26px;
   background:#fffdf8;
+}
+.recommend-filter-card-v3{
+  padding:0;
+  border:none;
+  border-radius:0;
+  background:transparent;
 }
 
 .recommend-filter-main-title{
@@ -906,6 +911,21 @@ body.recommend-page main{
 .recommend-filter-main-title .emoji-clover{
   display:inline-block;
   filter:sepia(0.8) saturate(1.6) hue-rotate(10deg) brightness(0.85);
+}
+.recommend-header-sub{
+  margin:3px 0 0;
+  color:rgba(255,255,255,0.88);
+  font-size:13px;
+  font-weight:500;
+  text-align:center;
+  text-shadow:0 1px 8px rgba(60,35,10,0.65);
+}
+.recommend-filter-hint{
+  margin:7px 0 2px;
+  font-size:12px;
+  color:#7a6a55;
+  text-align:center;
+  font-weight:500;
 }
 
 /* ── 추천 필터 한 줄 버튼 레이아웃 ── */
@@ -1046,7 +1066,7 @@ body.recommend-page main{
   background:#fffdf8;
   color:#3d3528;
   font-size:14px;
-  font-weight:800;
+  font-weight:500;
   letter-spacing:-0.4px;
   cursor:pointer;
   filter:grayscale(1);
@@ -3171,13 +3191,16 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-play-info-tag{
   font-size:12px;
   font-weight:500;
-  color:#7a4828;
-  background:#fbecd8;
+  color:#1e1a16;
+  background:#e8e4da;
   border-radius:999px;
   padding:3px 9px;
 }
 .sheet-play-info-tag:not(.sheet-play-info-tag--secondary){
   font-weight:600;
+}
+.sheet-play-info-tag--block{
+  flex-basis:100%;
 }
 
 /* 플레이 상세 입력 폼 */
