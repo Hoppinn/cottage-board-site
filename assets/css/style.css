@@ -6122,7 +6122,7 @@ body.embed-mode .site-footer { display: none !important; }
 .history-record-item:first-of-type{border-top:none;}
 .history-record-item:hover{background:#fdf5e9;}
 .history-game-name{
-  font-weight:500;
+  font-weight:700;
   color:var(--text);
   text-decoration:none;
 }
@@ -6456,7 +6456,7 @@ body.embed-mode .site-footer { display: none !important; }
 .rv-write-actions { display: flex; justify-content: flex-end; margin-top: 8px; }
 .rv-submit-btn { background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
 .rv-submit-btn:disabled { opacity: 0.5; }
-.rv-game-title { font-size: 18px; font-weight: 500; color: var(--green); margin: 0 0 4px; }
+.rv-game-title { font-size: 18px; font-weight: 700; color: var(--green); margin: 0 0 4px; }
 .rv-section-title { font-size: 14px; font-weight: 700; color: var(--muted); margin: 0 0 12px; }
 .rv-back-to-sheet { display: block; width: 100%; text-align: center; background: var(--bg,#f5f0e8); border: 1px solid var(--border,#e8e4dc); border-radius: 10px; padding: 11px 14px; font-size: 14px; font-weight: 700; color: var(--green); text-decoration: none; cursor: pointer; font-family: inherit; box-sizing: border-box; }
 .rv-back-to-sheet:hover { background: #ede8df; }
