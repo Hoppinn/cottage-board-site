@@ -536,8 +536,10 @@ async function openProfilePanel(autoSubsheet = null) {
   const fmt = iso => iso ? new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
   const fmtShort = iso => {
     if (!iso) return '';
+    const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(String(iso).trim());
     const d = new Date(iso);
     const base = d.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' });
+    if (isDateOnly) return base;
     const hh = String(d.getHours()).padStart(2, '0');
     const mm = String(d.getMinutes()).padStart(2, '0');
     return `${base} ${hh}:${mm}`;
@@ -1571,9 +1573,19 @@ async function openProfilePanel(autoSubsheet = null) {
             if (moreBadge) {
               moreBadge.addEventListener('click', e => {
                 e.stopPropagation();
-                subBody.querySelectorAll('.record-photo-hidden').forEach(img => img.classList.remove('record-photo-hidden'));
-                moreBadge.remove();
-              });
+                const hiddenImgs = [...subBody.querySelectorAll('.record-photo-hidden')];
+                hiddenImgs.forEach(img => img.classList.remove('record-photo-hidden'));
+                moreBadge.textContent = '▲ 접기';
+                moreBadge.addEventListener('click', ev => {
+                  ev.stopPropagation();
+                  let rehideCount = 0;
+                  subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
+                    const idx = parseInt(img.dataset.photoIdx || '0', 10);
+                    if (idx >= _PHOTO_SHOW) { img.classList.add('record-photo-hidden'); rehideCount++; }
+                  });
+                  moreBadge.textContent = `+${rehideCount}장`;
+                }, { once: true });
+              }, { once: true });
             }
           }
         });
