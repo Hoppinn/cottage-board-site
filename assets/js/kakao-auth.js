@@ -598,25 +598,21 @@ async function openProfilePanel(autoSubsheet = null) {
   const _sortedPlayDates = [..._playGroups.keys()].sort((a,b) => b.localeCompare(a));
   const _playDateLabel = key => { const [,m,d] = key.split('-').map(Number); return `${m}월 ${d}일`; };
 
-  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0, _lastVisDate = null;
+  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0, _lastDate = null;
   for (const dateKey of _sortedPlayDates) {
     const groupItems = _playGroups.get(dateKey);
+    const newGroup = _lastDate !== null;
+    _lastDate = dateKey;
     for (let gi = 0; gi < groupItems.length; gi++) {
       const r = groupItems[gi];
       const pn = _playOrderMap.get(r.id);
       const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
       const isFirst = gi === 0;
-      const date = (r.played_at || (r.created_at||'').slice(0,10)).slice(0,10);
       const dateHtml = isFirst ? `<span class="profile-play-date">${_playDateLabel(dateKey)}</span>` : '';
-      const itemHtml = `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}${dateHtml}</li>`;
-      if (_playVisCnt < PREVIEW) {
-        if (isFirst && _lastVisDate !== null) _playVisHtml += '<li class="profile-date-group-sep" aria-hidden="true"></li>';
-        _playVisHtml += itemHtml;
-        _playVisCnt++;
-        if (isFirst) _lastVisDate = dateKey;
-      } else {
-        _playHidHtml += itemHtml;
-      }
+      const sepHtml = (isFirst && newGroup) ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
+      const itemHtml = `${sepHtml}<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}${dateHtml}</li>`;
+      if (_playVisCnt < PREVIEW) { _playVisHtml += itemHtml; _playVisCnt++; }
+      else _playHidHtml += itemHtml;
     }
   }
   const _playHasMore = stats.plays.length > PREVIEW;
