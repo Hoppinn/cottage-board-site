@@ -1079,7 +1079,7 @@ const _ORGANIZER_GAMES = {
 };
 
 function _getOrganizerPhotos(gameKey) {
-  const name = getGameName(gameKey) || String(gameKey);
+  const name = (window.getGameName?.(gameKey)) || String(gameKey);
   const count = _ORGANIZER_GAMES[name] || 0;
   if (!count) return [];
   return Array.from({ length: count }, (_, i) =>
