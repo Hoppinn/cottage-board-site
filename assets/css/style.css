@@ -3562,7 +3562,7 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-info-group{
   border:1.5px solid #ead8b8;
   border-radius:12px;
-  padding:10px 14px;
+  padding:7px 14px 10px;
   margin-bottom:8px;
   background:var(--paper);
 }
