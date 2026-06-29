@@ -598,7 +598,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _sortedPlayDates = [..._playGroups.keys()].sort((a,b) => b.localeCompare(a));
   const _playDateLabel = key => { const [,m,d] = key.split('-').map(Number); return `${m}월 ${d}일`; };
 
-  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0;
+  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0, _visGroupCount = 0, _hidGroupCount = 0;
   for (const dateKey of _sortedPlayDates) {
     const groupItems = _playGroups.get(dateKey);
     const dateLabel = _playDateLabel(dateKey);
@@ -610,9 +610,16 @@ async function openProfilePanel(autoSubsheet = null) {
       if (_playVisCnt < PREVIEW) { visGroup.push(itemHtml); _playVisCnt++; }
       else hidGroup.push(itemHtml);
     }
-    if (visGroup.length) _playVisHtml += `<li class="profile-date-header">${dateLabel}</li>${visGroup.join('')}`;
+    if (visGroup.length) {
+      const sep = _visGroupCount > 0 ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
+      _playVisHtml += `${sep}<li class="profile-date-header">${dateLabel}</li>${visGroup.join('')}`;
+      _visGroupCount++;
+    }
     if (hidGroup.length) {
-      _playHidHtml += (visGroup.length === 0 ? `<li class="profile-date-header">${dateLabel}</li>` : '') + hidGroup.join('');
+      const needsHeader = visGroup.length === 0;
+      const sep = (_hidGroupCount > 0 || _visGroupCount > 0) ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
+      _playHidHtml += `${sep}${needsHeader ? `<li class="profile-date-header">${dateLabel}</li>` : ''}${hidGroup.join('')}`;
+      _hidGroupCount++;
     }
   }
   const _playHasMore = stats.plays.length > PREVIEW;
@@ -635,7 +642,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const reviewListHtml = buildActivityList(_allReviews, r => {
     const pn = r._isComment ? 0 : _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><button class="profile-game-link profile-game-link--review" type="button">${escH(getGameName(r.game_id))}</button>${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
+    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
   });
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
