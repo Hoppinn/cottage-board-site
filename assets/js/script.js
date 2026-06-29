@@ -2034,7 +2034,7 @@ async function onSheetLike(btn) {
         likeBtn.classList.toggle('is-active', result.liked);
         document.getElementById('sheetLikeBtnWrap')?.classList.toggle('is-active', result.liked);
       }
-      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => window.openProfilePanel?.('taste') : null);
+      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => { closeGameSheet(); window.openProfilePanel?.('taste'); } : null);
       if (result.liked) {
         const wasCurious = await window.CottageDB.hasUserCurious(gameKey, String(user.id));
         if (wasCurious) {
@@ -2073,7 +2073,7 @@ async function onSheetCurious(btn) {
         curiousBtn.classList.toggle('is-active', result.curious);
         document.getElementById('sheetCuriousBtnWrap')?.classList.toggle('is-active', result.curious);
       }
-      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => window.openProfilePanel?.('taste') : null);
+      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste'); } : null);
       if (result.curious) {
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');

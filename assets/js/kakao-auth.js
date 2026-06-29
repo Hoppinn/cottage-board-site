@@ -588,12 +588,39 @@ async function openProfilePanel(autoSubsheet = null) {
         _playOrderMap.set(r.id, _cnt[r.game_id]);
       });
   }
-  const playListHtml = buildActivityList(stats.plays, r => {
-    const date = r.played_at || (r.created_at||'').slice(0,10);
-    const pn = _playOrderMap.get(r.id);
-    const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel} <span>${fmtShort(date)}</span></li>`;
-  });
+  // 플레이기록 날짜 그룹화
+  const _playGroups = new Map();
+  for (const r of stats.plays) {
+    const key = (r.played_at || (r.created_at||'').slice(0,10)).slice(0,10);
+    if (!_playGroups.has(key)) _playGroups.set(key, []);
+    _playGroups.get(key).push(r);
+  }
+  const _sortedPlayDates = [..._playGroups.keys()].sort((a,b) => b.localeCompare(a));
+  const _playDateLabel = key => { const [,m,d] = key.split('-').map(Number); return `${m}월 ${d}일`; };
+
+  let _playVisHtml = '', _playHidHtml = '', _playVisCnt = 0;
+  for (const dateKey of _sortedPlayDates) {
+    const groupItems = _playGroups.get(dateKey);
+    const dateLabel = _playDateLabel(dateKey);
+    const visGroup = [], hidGroup = [];
+    for (const r of groupItems) {
+      const pn = _playOrderMap.get(r.id);
+      const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
+      const itemHtml = `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</li>`;
+      if (_playVisCnt < PREVIEW) { visGroup.push(itemHtml); _playVisCnt++; }
+      else hidGroup.push(itemHtml);
+    }
+    if (visGroup.length) _playVisHtml += `<li class="profile-date-header">${dateLabel}</li>${visGroup.join('')}`;
+    if (hidGroup.length) {
+      _playHidHtml += (visGroup.length === 0 ? `<li class="profile-date-header">${dateLabel}</li>` : '') + hidGroup.join('');
+    }
+  }
+  const _playHasMore = stats.plays.length > PREVIEW;
+  const playListHtml = `<ul class="profile-activity-list is-collapsed">
+    ${_playVisHtml}
+    ${_playHasMore ? `<div class="profile-more-wrap is-hidden">${_playHidHtml}</div>
+      <li class="profile-more-btn-wrap"><button class="profile-more-btn" type="button">더 보기 (${stats.plays.length - PREVIEW}건 더)</button></li>` : ''}
+  </ul>`;
 
   const _playsWithReview = stats.plays.filter(r => r.review_text);
   // game_comments도 게임평 섹션에 통합 (game_key = 한글명 또는 BGG ID 모두 getGameName으로 처리)
@@ -608,7 +635,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const reviewListHtml = buildActivityList(_allReviews, r => {
     const pn = r._isComment ? 0 : _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><em class="profile-review-text">"${escH(r.review_text)}"</em></li>`;
+    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><button class="profile-game-link profile-game-link--review" type="button">${escH(getGameName(r.game_id))}</button>${pLabel} <span>${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
   });
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;

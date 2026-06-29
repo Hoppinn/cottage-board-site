@@ -3758,11 +3758,13 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-activity-list.is-collapsed{display:none;}
 .profile-activity-list li{font-size:13px;color:var(--text);display:flex;justify-content:space-between;}
 .profile-activity-list li span{color:var(--muted);font-size:12px;}
+.profile-date-header{font-size:12px;font-weight:700;color:#7a4828;padding:4px 0 1px;display:block !important;border-bottom:1px solid #ede9e2;margin-bottom:1px;}
 .profile-activity-item--review{display:block !important;}
 .profile-game-link{background:none;border:none;padding:0;font:inherit;color:inherit;font-weight:700;cursor:pointer;text-align:left;}
 .profile-game-link:hover{text-decoration:underline;text-underline-offset:2px;}
+.profile-game-link--review{color:#7a4828;}
 .profile-review-header{display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
-.profile-review-text{display:block;font-style:italic;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5;}
+.profile-review-text{display:block;font-style:normal;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .profile-more{color:var(--muted);font-size:12px;}
 .profile-more-wrap{display:flex;flex-direction:column;gap:7px;}
 .profile-more-wrap.is-hidden{display:none;}
