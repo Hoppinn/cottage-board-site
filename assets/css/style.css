@@ -437,7 +437,7 @@ textarea{
   min-width:0;
   color:#2f2a21;
   font-size:14px;
-  font-weight:500;
+  font-weight:700;
   line-height:1.25;
 }
 
@@ -2729,7 +2729,7 @@ body.embed-mode .site-footer { display: none !important; }
   border:none;
   border-radius:999px;
   font-size:11px;
-  font-weight:500;
+  font-weight:700;
   white-space:nowrap;
   cursor:pointer;
   text-decoration:none;
@@ -2768,7 +2768,7 @@ body.embed-mode .site-footer { display: none !important; }
 
 .sheet-stats-main{
   font-size:14px;
-  font-weight:500;
+  font-weight:700;
   color:#3a3025;
   white-space:nowrap;
 }
@@ -2780,7 +2780,7 @@ body.embed-mode .site-footer { display: none !important; }
 
 .sheet-stats-dot{
   font-size:14px;
-  font-weight:500;
+  font-weight:700;
   color:#c4b49a;
   padding-top:2px;
   flex-shrink:0;
@@ -2789,7 +2789,7 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-stats-sub{
   font-size:11px;
   color:var(--muted);
-  font-weight:500;
+  font-weight:700;
   text-align:center;
 }
 
@@ -2801,6 +2801,7 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-shelf-title-link{
   display:block;
   font-size:12px;
+  font-weight:700;
   color:#7a4828;
   text-decoration:none;
   margin:0;
@@ -2810,7 +2811,7 @@ body.embed-mode .site-footer { display: none !important; }
   cursor:pointer;
   text-align:left;
 }
-.sheet-org-btn{font-size:12px;color:#7a4828;background:none;border:1px solid #c8a882;border-radius:4px;padding:2px 8px;cursor:pointer;white-space:nowrap;}
+.sheet-org-btn{font-size:12px;font-weight:700;color:#7a4828;background:none;border:1px solid #c8a882;border-radius:4px;padding:2px 8px;cursor:pointer;white-space:nowrap;}
 
 .sheet-game-title{
   margin:0 0 2px;
@@ -2890,7 +2891,7 @@ body.embed-mode .site-footer { display: none !important; }
   background:#f0e4d4;
   color:#7a4828;
   font-size:11px;
-  font-weight:500;
+  font-weight:700;
 }
 
 .sheet-section-label{
@@ -3690,7 +3691,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .pr-game-card-name{
   font-size:15px;
-  font-weight:500;
+  font-weight:700;
   color:var(--text);
   white-space:nowrap;
   overflow:hidden;
