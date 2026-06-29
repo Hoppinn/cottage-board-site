@@ -885,19 +885,18 @@ async function openProfilePanel(autoSubsheet = null) {
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
   const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
-  // 최근 사진 최대 4장 추출 + 전체 목록 (photo_url: JSON 배열 or 단일 URL)
-  const _recentPhotos = [];
-  const _allPhotos = [];
+  // 사진 전체 목록 (photo_url: JSON 배열 or 단일 URL) — record 컨텍스트 포함
+  const _allPhotoData = [];
   for (const p of stats.plays) {
     if (!p.photo_url) continue;
     const parsed = window.parsePhotoUrls ? window.parsePhotoUrls(p.photo_url) : [p.photo_url];
-    _allPhotos.push(...parsed);
-    if (_recentPhotos.length < 4) _recentPhotos.push(...parsed.slice(0, 4 - _recentPhotos.length));
+    for (const url of parsed) {
+      _allPhotoData.push({ url, record_id: p.id, user_id: p.user_id, nickname: p.nickname || '', played_at: p.played_at || p.created_at?.slice(0,10) || '', group_name: p.group_name || '', player_count: p.player_count || null, player_names: p.player_names || '', play_time_min: p.play_time_min || null, score_note: p.score_note || '' });
+    }
   }
-  const _photoCount = userStats?.photoCount || 0;
-  const _PHOTO_SHOW = 4;
-  const _recentPhotoHtml = _allPhotos.length
-    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotos.map((url, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotos.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">+${_allPhotos.length - _PHOTO_SHOW}장</button>` : ''}</div></li></ul>`
+  const _PHOTO_SHOW = 6;
+  const _recentPhotoHtml = _allPhotoData.length
+    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">+${_allPhotoData.length - _PHOTO_SHOW}장</button>` : ''}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
     <div class="profile-activity-group">
@@ -1531,13 +1530,40 @@ async function openProfilePanel(autoSubsheet = null) {
               window.openGameRecordSheet?.(key);
             });
           });
-          // 최근 사진 클릭 → 라이트박스
-          if (window.openLightbox && _recentPhotos.length) {
+          // 사진 클릭 → 라이트박스 (캡션+삭제 포함)
+          if (window.openLightbox && _allPhotoData.length) {
+            const _myId = String(window.getKakaoUser?.()?.id || '');
+            const _escC = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+            const _buildPhotoCaption = d => {
+              const lines = [];
+              if (d.nickname) lines.push(_escC(d.nickname));
+              const l1 = [d.group_name, d.played_at ? d.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
+              if (l1) lines.push(l1);
+              const l2 = [d.player_count ? d.player_count+'명' : '', d.player_names, d.play_time_min ? d.play_time_min+'분' : ''].filter(Boolean).join(' · ');
+              if (l2) lines.push(l2);
+              if (d.score_note) lines.push(_escC(d.score_note));
+              return lines.join('<br>');
+            };
+            const _photoUrls = _allPhotoData.map(d => d.url);
+            const _photoCaptions = _allPhotoData.map(_buildPhotoCaption);
+            const _deletable = _allPhotoData.map(d => !!(_myId && d.user_id && String(d.user_id) === _myId));
+            const _lbOpts = { captions: _photoCaptions };
+            if (_deletable.some(Boolean)) {
+              _lbOpts.deletable = _deletable;
+              _lbOpts.onDelete = async delIdx => {
+                const d = _allPhotoData[delIdx];
+                if (!d || !window.CottageDB) return;
+                const forRec = _allPhotoData.filter(x => x.record_id === d.record_id);
+                const rem = forRec.filter(x => x !== d).map(x => x.url);
+                const newUrl = rem.length === 0 ? null : rem.length === 1 ? rem[0] : JSON.stringify(rem);
+                await window.CottageDB.updateGamePlay(d.record_id, { photo_url: newUrl });
+                _allPhotoData.splice(delIdx, 1);
+              };
+            }
             subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
-              img.style.cursor = 'pointer';
               img.addEventListener('click', () => {
                 const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                window.openLightbox(_allPhotos.length ? _allPhotos : _recentPhotos, idx);
+                window.openLightbox(_photoUrls, idx, _lbOpts);
               });
             });
             const moreBadge = subBody.querySelector('.record-photo-more-badge');

@@ -1073,6 +1073,26 @@ let _savedSheetScrollTop = 0;
 let _gameSheetHistory = [];
 let _gameSheetNavBack = false;
 
+// 게임 정리법 사진 데이터 — { '게임명': 사진장수 }
+// 사진 경로: /game-system/game-data/library/images/organizer/게임명/1.jpg, 2.jpg, ...
+const _ORGANIZER_GAMES = {
+};
+
+function _getOrganizerPhotos(gameKey) {
+  const name = getGameName(gameKey) || String(gameKey);
+  const count = _ORGANIZER_GAMES[name] || 0;
+  if (!count) return [];
+  return Array.from({ length: count }, (_, i) =>
+    `/game-system/game-data/library/images/organizer/${encodeURIComponent(name)}/${i + 1}.jpg`
+  );
+}
+
+function _openOrganizerLightbox(urls, gameName) {
+  if (!urls?.length || !window.openLightbox) return;
+  const captions = urls.map(() => `${gameName} 정리법`);
+  window.openLightbox(urls, 0, { captions });
+}
+
 function openShelfSheet(url) {
   document.getElementById('shelfSheetOverlay')?.remove();
   const overlay = document.createElement('div');
@@ -1197,6 +1217,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   })();
   const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
   const categoriesDisplay = (detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories) || [];
+  const _orgPhotos = _getOrganizerPhotos(gameKey);
 
   // 인원 정보
   const bestDisplayMain = bestText !== "-"
@@ -1319,7 +1340,10 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
         ${detail.displayTags.map(t => `<span class="sheet-dtag">${t}</span>`).join("")}
       </div>
     ` : ""}
-    <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📚 꽂혀있는 책장 보러가기 →</button>
+    <div class="sheet-shelf-link-row">
+      <button class="sheet-shelf-title-link" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📚 꽂혀있는 책장 보러가기 →</button>
+      ${_orgPhotos.length ? `<button class="sheet-org-btn" type="button" onclick="_openOrganizerLightbox(${JSON.stringify(_orgPhotos)}, '${esc(getGameName(gameKey) || String(gameKey))}')">📦 정리법 확인하기</button>` : ''}
+    </div>
 
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
