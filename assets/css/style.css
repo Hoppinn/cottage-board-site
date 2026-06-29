@@ -2829,8 +2829,8 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-stats-row{
   display:flex;
   align-items:flex-start;
-  gap:6px;
-  flex-wrap:wrap;
+  gap:4px;
+  flex-wrap:nowrap;
 }
 
 .sheet-stats-item{
@@ -2838,10 +2838,11 @@ body.embed-mode .site-footer { display: none !important; }
   flex-direction:column;
   gap:1px;
   align-items:center;
+  flex:1;
 }
 
 .sheet-stats-main{
-  font-size:14px;
+  font-size:15px;
   font-weight:700;
   color:#3a3025;
   white-space:nowrap;
@@ -2861,7 +2862,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 
 .sheet-stats-sub{
-  font-size:11px;
+  font-size:12px;
   color:var(--muted);
   font-weight:700;
   text-align:center;
