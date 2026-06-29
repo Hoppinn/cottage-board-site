@@ -456,7 +456,7 @@ function _buildGameListHtml(gameIds, emptyMsg) {
 }
 
 function _bindActivityTogglesAndMore(subBody) {
-  subBody.querySelectorAll('.profile-activity-toggle').forEach(btn => {
+  subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const list = btn.nextElementSibling;
       const arrow = btn.querySelector('.profile-toggle-arrow');
@@ -934,11 +934,11 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▴</span></button>
-      ${_allReviews.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
+      <button class="profile-sub-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▾</span></button>
+      ${_allReviews.length ? reviewListHtml : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▴</span></button>
+      <button class="profile-sub-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
       ${_recentPhotoHtml}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
@@ -1554,7 +1554,7 @@ async function openProfilePanel(autoSubsheet = null) {
             container.querySelectorAll('.profile-review-text').forEach(el => {
               if (el.dataset.toggleBound) return;
               el.dataset.toggleBound = '1';
-              const needsToggle = el.textContent.length > 45 || el.scrollHeight > el.clientHeight + 3;
+              const needsToggle = el.scrollHeight > el.clientHeight + 3;
               if (!needsToggle) return;
               const btn = document.createElement('button');
               btn.className = 'profile-review-toggle-btn'; btn.type = 'button'; btn.textContent = '더보기';
@@ -1570,7 +1570,7 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.addEventListener('click', e => {
             if (e.target.classList.contains('profile-more-btn')) setTimeout(() => _bindReviewToggles(subBody), 0);
           });
-          subBody.querySelectorAll('.profile-activity-toggle').forEach(toggle => {
+          subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(toggle => {
             toggle.addEventListener('click', () => setTimeout(() => _bindReviewToggles(subBody), 0));
           });
           subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
