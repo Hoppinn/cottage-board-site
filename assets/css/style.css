@@ -3898,7 +3898,7 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-ach-goals-header{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:0.03em;display:block;margin-bottom:4px;}
 .profile-ach-goals{list-style:none;padding:0 0 8px;margin:0;display:flex;flex-direction:column;gap:3px;}
 .profile-ach-goal-item{display:flex;align-items:center;gap:6px;font-size:12px;padding:1px 0;}
-.profile-ach-goal-axis{color:var(--text);font-weight:600;min-width:68px;}
+.profile-ach-goal-axis{color:var(--text);font-weight:500;min-width:68px;}
 .profile-ach-goal-progress{color:var(--muted);}
 .profile-ach-goal-reward{color:#b0a090;margin-left:2px;}
 .profile-ach-goal-done{color:#4caf50;font-size:11px;}
