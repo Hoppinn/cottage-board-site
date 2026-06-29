@@ -467,7 +467,6 @@ const moodValue = recommendState.mood;
           </button>
         </div>
       </div>
-      <p class="recommend-filter-hint">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
 
       <div class="recommend-options-area" data-options-group="players">
         ${ ['group','5','6','7','8','9+'].includes(playerValue)
@@ -508,6 +507,7 @@ const moodValue = recommendState.mood;
         ${renderInlineOption("mood", "", "상관없어요", moodValue)}
       </div>
 
+      <p class="recommend-filter-hint">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
     </div>
   `;
 }
