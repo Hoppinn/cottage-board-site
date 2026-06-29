@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-29 (143차-153)
+최종 갱신: 2026-06-29 (143차-154)
 
 ---
 
@@ -59,6 +59,7 @@
 | feat: 내보드 사진 3열 그리드+캡션+삭제 / 정리법 버튼 (143차-137) | BUG-A완성: 3열 CSS grid, 캡션(작성자/모임/날짜/인원/시간/점수), 본인 사진 삭제. 정리법: _ORGANIZER_GAMES 오브젝트+버튼+폴더 인프라(게임명 등록 후 활성화) | 143차-137 |
 | fix: 게임시트 열림 불가 버그 (143차-148) | _getOrganizerPhotos에서 getGameName 직접 호출 → game-reviews.html에서 ReferenceError. window.getGameName?.()으로 수정 | 143차-148 |
 | design: 섹션 순서·굵기 전반 개선 (143차-149) | 게임평→사진→플레이기록 순서 통일(게임시트/기록시트/기록보드). 게임평 PREVIEW 3. 전역 font-weight 일반화(검색/게임정보/기록/보드 항목 500으로) | 143차-149 |
+| design: 관리자 분석 섹션 고정헤더+클릭이동 (143차-154) | .admin-group-title position:sticky+top:--header-total-h+배경색 추가. .admin-group scroll-margin-top 추가로 menu-card 클릭 이동 시 헤더 가림 방지 | 143차-154 |
 | design: 플레이기록 인원/시간/점수 칩 가독성 (143차-153) | .sheet-play-info-tag font-size 11→12px, font-weight 700→500, padding 2px 8px→3px 9px | 143차-153 |
 | design: 좋아요/궁금해요 본인 표시 (143차-152) | #sheetLikeBtnWrap.is-active → 초록 테두리+배경, #sheetCuriousBtnWrap.is-active → 앰버 테두리+배경. JS에서 is-active 클래스 이미 설정 중, CSS 스타일만 추가 | 143차-152 |
 | design: 기록시트 고정헤더 (143차-151) | .sheet-record-header position:sticky+top:0, 배경색, 음수마진으로 full-width. .game-sheet-close z-index:10 보강. PC 32px 패딩 대응 반응형 오버라이드 추가 | 143차-151 |
