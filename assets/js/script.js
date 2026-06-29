@@ -1332,7 +1332,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
       </div>
     ` : ""}
     <div class="sheet-links-block">
-      <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel} · 꽂혀있는 책장 보기 →</button>
+      <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel} ← 꽂혀있는 책장 보기</button>
       <div class="sheet-links-row2">
         <a class="sheet-yt-btn"
           href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
