@@ -894,6 +894,7 @@ async function openProfilePanel(autoSubsheet = null) {
       _allPhotoData.push({ url, record_id: p.id, user_id: p.user_id, nickname: p.nickname || '', played_at: p.played_at || p.created_at?.slice(0,10) || '', group_name: p.group_name || '', player_count: p.player_count || null, player_names: p.player_names || '', play_time_min: p.play_time_min || null, score_note: p.score_note || '' });
     }
   }
+  const _photoCount = userStats?.photoCount || 0;
   const _PHOTO_SHOW = 6;
   const _recentPhotoHtml = _allPhotoData.length
     ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">+${_allPhotoData.length - _PHOTO_SHOW}장</button>` : ''}</div></li></ul>`
