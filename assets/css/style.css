@@ -878,11 +878,7 @@ body.recommend-page main{
 .recommend-filter{
   max-width:720px;
   margin:0 auto 18px;
-  padding:12px 14px;
-  border:1.5px solid var(--line);
-  border-radius:22px;
-  background:var(--paper);
-  box-shadow:0 2px 8px rgba(40,30,18,0.10);
+  padding:0 14px;
 }
 
 .recommend-filter-card{
@@ -942,9 +938,10 @@ body.recommend-page main{
 .recommend-steps-row .recommend-step-head{
   width:100%;
   padding:10px 6px;
-  border:1.5px solid #e2d4bb;
+  border:1.5px solid var(--line);
   border-radius:14px;
-  background:#f8f4ec;
+  background:var(--paper);
+  box-shadow:0 1px 5px rgba(40,30,18,0.09);
   font-size:13px;
   font-weight:500;
   color:#9a907f;
@@ -955,7 +952,7 @@ body.recommend-page main{
   text-overflow:ellipsis;
 }
 .recommend-steps-row .recommend-step-head.is-selected{
-  background:#f0e8d4;
+  background:#fdf6ec;
   border-color:#c8a870;
   color:#3d3228;
   font-weight:600;
@@ -3086,7 +3083,7 @@ body.embed-mode .site-footer { display: none !important; }
   border:1px solid #ede8df;
   border-radius:10px;
 }
-.sheet-play-info-tag--secondary{opacity:0.65;font-weight:400;}
+.sheet-play-info-tag--secondary{font-weight:600;}
 .sheet-list-more-btn{display:block;width:100%;padding:8px;background:none;border:none;border-top:1px solid #f0e8d8;font-size:12px;color:var(--muted);cursor:pointer;text-align:center;}
 .sheet-photo-hidden{display:none;}
 .sheet-photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;}
@@ -3184,23 +3181,18 @@ body.embed-mode .site-footer { display: none !important; }
 /* 플레이 기록 상세 정보 */
 .sheet-play-info{
   display:flex;
-  flex-wrap:wrap;
+  flex-direction:column;
+  align-items:flex-start;
   gap:4px;
   margin-top:4px;
 }
 .sheet-play-info-tag{
   font-size:12px;
-  font-weight:500;
+  font-weight:600;
   color:#1e1a16;
-  background:#e8e4da;
+  background:#f5e2d0;
   border-radius:999px;
   padding:3px 9px;
-}
-.sheet-play-info-tag:not(.sheet-play-info-tag--secondary){
-  font-weight:600;
-}
-.sheet-play-info-tag--block{
-  flex-basis:100%;
 }
 
 /* 플레이 상세 입력 폼 */

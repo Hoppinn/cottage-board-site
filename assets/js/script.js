@@ -1654,7 +1654,7 @@ async function initSheetPlayPreview(gameKey) {
     const isMine = _me && r.user_id && String(r.user_id) === String(_me.id);
     const _ip = [r.player_count ? `${r.player_count}명` : null, r.player_names ? esc(r.player_names) : null, r.play_time_min ? `${r.play_time_min}분` : null].filter(Boolean);
     const _infoTag = _ip.length ? `<span class="sheet-play-info-tag sheet-play-info-tag--block">${_ip.join(' / ')}</span>` : '';
-    const _scoreTag = r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">점수 ${esc(r.score_note)}</span>` : '';
+    const _scoreTag = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note)}</span>` : '';
     return `<div class="sheet-play-scroll-card">
       <span class="sheet-comment-nickname">
         ${r.nickname ? `<strong class="sheet-comment-nick">${isMine ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
@@ -2693,7 +2693,7 @@ async function initPlayWidget(gameKey) {
     const header = [showNick ? escH(r.nickname) : null, dateStr, groupLabel].filter(Boolean).join(" · ");
     const _ip2 = [r.player_count ? `${r.player_count}명` : null, r.player_names ? escH(r.player_names) : null, r.play_time_min ? `${r.play_time_min}분` : null].filter(Boolean);
     const _infoTag2 = _ip2.length ? `<span class="sheet-play-info-tag sheet-play-info-tag--block">${_ip2.join(' / ')}</span>` : '';
-    const _scoreTag2 = r.score_note ? `<span class="sheet-play-info-tag sheet-play-info-tag--secondary">점수 ${escH(r.score_note)}</span>` : '';
+    const _scoreTag2 = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note)}</span>` : '';
     const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
     return `<div class="sheet-my-record-item">
       <div class="sheet-record-info">
