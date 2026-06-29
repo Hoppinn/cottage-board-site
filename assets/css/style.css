@@ -3729,7 +3729,7 @@ body.embed-mode .site-footer { display: none !important; }
   top:-22px;
   z-index:5;
   background:var(--paper-2);
-  margin:-22px -20px 14px;
+  margin:-2px -20px 14px;
   padding:14px 20px;
   border-bottom:1.5px solid #e8ddc8;
 }
