@@ -3117,12 +3117,12 @@ body.embed-mode .site-footer { display: none !important; }
   margin-top:4px;
 }
 .sheet-play-info-tag{
-  font-size:11px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:500;
   color:#7a4828;
   background:#fbecd8;
   border-radius:999px;
-  padding:2px 8px;
+  padding:3px 9px;
 }
 
 /* 플레이 상세 입력 폼 */
