@@ -1790,9 +1790,9 @@ body.sheet-open{
 }
 
 .sheet-section{
-  margin-top:18px;
+  margin-top:24px;
   margin-bottom:14px;
-  padding:8px 18px 18px;
+  padding:12px 18px 18px;
   border:1.5px solid #ead8b8;
   border-radius:20px;
   background:var(--paper);
@@ -3371,7 +3371,7 @@ body.embed-mode .site-footer { display: none !important; }
   display:flex;
   gap:8px;
   margin-top:10px;
-  margin-bottom:16px;
+  margin-bottom:10px;
 }
 .sheet-reaction-group{display:flex;flex-direction:column;flex:1;}
 .sheet-reaction-btn-wrap{border:1px solid #ead8b8;border-radius:10px;overflow:hidden;background:var(--cream);}
@@ -3392,7 +3392,7 @@ body.embed-mode .site-footer { display: none !important; }
 /* 게임 설명 + 더보기/접기 */
 .sheet-desc-wrap{
   margin-top:8px;
-  margin-bottom:8px;
+  margin-bottom:4px;
 }
 
 /* specificity 올려서 .sheet-section p(17px) 덮어쓰기 */
@@ -3563,12 +3563,15 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-info-group{
   border:1.5px solid #ead8b8;
   border-radius:12px;
-  padding:8px 14px 10px;
+  padding:12px 14px 12px;
   margin-bottom:8px;
   background:var(--paper);
 }
 .sheet-info-group:not(.sheet-same-designer){
-  margin-top:10px;
+  margin-top:20px;
+}
+.sheet-same-designer.sheet-info-group{
+  margin-top:20px;
 }
 .sheet-info-group .sheet-mechs-wrap{
   margin-bottom:0;
@@ -3620,7 +3623,7 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-preview-section{
   border:1.5px solid #ead8b8;
   border-radius:12px;
-  padding:12px 14px;
+  padding:12px 14px 14px;
   margin-bottom:10px;
   background:var(--paper);
 }
