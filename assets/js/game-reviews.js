@@ -979,7 +979,7 @@
         const gameKey = getGameKey(r.game_id);
         const thumbUrl = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
         const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" ${gameKey ? `onclick="event.stopPropagation();openGameRecordSheet('${gameKey.replace(/'/g,"\\'")}')"` : ''}>` : '';
-        const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()) : ''].filter(Boolean);
+        const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()).replace(/\s*\/\s*/g,' | ') : ''].filter(Boolean);
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         const showEdit = isMine || window.isOwner?.();
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
@@ -1055,7 +1055,7 @@
         const dlParts2 = [
           date !== '?' ? date.replace(/-/g, '.') : '',
           r.play_time_min ? `${r.play_time_min}분` : '',
-          r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()) : ''
+          r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()).replace(/\s*\/\s*/g,' | ') : ''
         ].filter(Boolean);
         const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
         const showEdit2 = isMine || window.isOwner?.();
