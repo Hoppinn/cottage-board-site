@@ -671,7 +671,7 @@ body.owned-page .site-header{
 .secondary-btn{background:#fffaf0;color:#7a4828;}
 
 /* 히어로 전용 버튼 — 크림 채움(Primary) / 크림 아웃라인(Secondary) */
-.hero .btn{padding:clamp(12px,3.5vw,16px) clamp(14px,4.5vw,22px);}
+.hero .btn{padding:clamp(12px,3.5vw,16px) clamp(14px,4.5vw,22px);font-weight:600;}
 .hero .primary-btn{background:#e8d9c0;color:#3d2810;border-color:#e8d9c0;}
 .hero .primary-btn:hover{background:#ddc9a8;border-color:#ddc9a8;}
 .hero .secondary-btn{background:transparent;color:#e8d9c0;border-color:#e8d9c0;}
