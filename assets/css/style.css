@@ -3294,7 +3294,11 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-reaction-btn-row{display:flex;align-items:stretch;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn{border:none;border-radius:0;background:transparent;flex:1;}
 .sheet-reaction-btn-wrap .sheet-reaction-btn:hover{background:#ead8b8;}
-/* is-active는 JS 상태 추적용 — 시각적 변화 없음 */
+/* is-active: 본인이 누른 상태 */
+#sheetLikeBtnWrap.is-active{border-color:#4a7c59;background:#e8f3ec;}
+#sheetLikeBtnWrap.is-active .sheet-reaction-btn{color:#2d5c3a;}
+#sheetCuriousBtnWrap.is-active{border-color:#b07f4a;background:#fef6e8;}
+#sheetCuriousBtnWrap.is-active .sheet-reaction-btn{color:#7a4828;}
 .sheet-reaction-expand-btn{display:none;align-items:center;justify-content:center;background:transparent;border:none;padding:0 10px;font-size:12px;color:var(--muted);cursor:pointer;transition:background .15s;}
 .sheet-reaction-expand-btn:hover{background:#ead8b8;color:var(--text);}
 .sheet-reaction-btn-wrap.has-users .sheet-reaction-expand-btn{display:flex;}
