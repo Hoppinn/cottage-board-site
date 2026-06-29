@@ -1792,7 +1792,7 @@ body.sheet-open{
 .sheet-section{
   margin-top:18px;
   margin-bottom:14px;
-  padding:12px 18px 18px;
+  padding:8px 18px 18px;
   border:1.5px solid #ead8b8;
   border-radius:20px;
   background:var(--paper);
@@ -3562,15 +3562,12 @@ body.embed-mode .site-footer { display: none !important; }
 .sheet-info-group{
   border:1.5px solid #ead8b8;
   border-radius:12px;
-  padding:4px 14px 10px;
+  padding:8px 14px 10px;
   margin-bottom:8px;
   background:var(--paper);
 }
 .sheet-info-group:not(.sheet-same-designer){
   margin-top:10px;
-}
-.sheet-same-designer.sheet-info-group{
-  padding-top:2px;
 }
 .sheet-info-group .sheet-mechs-wrap{
   margin-bottom:0;
