@@ -1549,6 +1549,30 @@ async function openProfilePanel(autoSubsheet = null) {
         _trackPvOnce('my-board-records');
         _openSubSheet('기록 보드', _recordInnerHtml, subBody => {
           _bindActivityTogglesAndMore(subBody);
+          // 게임평 더보기/닫기 — 토글 클릭으로 activity list 열린 후 측정
+          const _bindReviewToggles = container => {
+            container.querySelectorAll('.profile-review-text').forEach(el => {
+              if (el.dataset.toggleBound) return;
+              el.dataset.toggleBound = '1';
+              const needsToggle = el.textContent.length > 45 || el.scrollHeight > el.clientHeight + 3;
+              if (!needsToggle) return;
+              const btn = document.createElement('button');
+              btn.className = 'profile-review-toggle-btn'; btn.type = 'button'; btn.textContent = '더보기';
+              el.after(btn);
+              btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const exp = el.classList.toggle('is-expanded');
+                btn.textContent = exp ? '접기' : '더보기';
+              });
+            });
+          };
+          _bindReviewToggles(subBody);
+          subBody.addEventListener('click', e => {
+            if (e.target.classList.contains('profile-more-btn')) setTimeout(() => _bindReviewToggles(subBody), 0);
+          });
+          subBody.querySelectorAll('.profile-activity-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => setTimeout(() => _bindReviewToggles(subBody), 0));
+          });
           subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
             const li = btn.closest('[data-game-id]');
             const gameId = li?.dataset.gameId;

@@ -3764,7 +3764,9 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-game-link:hover{text-decoration:underline;text-underline-offset:2px;}
 .profile-game-link--review{color:#7a4828;}
 .profile-review-header{display:flex;justify-content:space-between;align-items:baseline;gap:6px;}
-.profile-review-text{display:block;font-style:normal;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.profile-review-text{display:-webkit-box;font-style:normal;color:var(--muted);font-size:12px;margin-top:2px;line-height:1.5;overflow:hidden;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.profile-review-text.is-expanded{-webkit-line-clamp:unset;overflow:visible;display:block;}
+.profile-review-toggle-btn{background:none;border:none;padding:0;color:#7a4828;font-size:11px;cursor:pointer;margin-top:1px;text-decoration:underline;text-underline-offset:2px;}
 .profile-more{color:var(--muted);font-size:12px;}
 .profile-more-wrap{display:flex;flex-direction:column;gap:7px;}
 .profile-more-wrap.is-hidden{display:none;}
