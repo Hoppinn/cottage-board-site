@@ -3566,6 +3566,12 @@ body.embed-mode .site-footer { display: none !important; }
   margin-bottom:8px;
   background:var(--paper);
 }
+.sheet-info-group:not(.sheet-same-designer){
+  margin-top:10px;
+}
+.sheet-same-designer.sheet-info-group{
+  padding-top:2px;
+}
 .sheet-info-group .sheet-mechs-wrap{
   margin-bottom:0;
 }
