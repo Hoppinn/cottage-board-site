@@ -1072,6 +1072,7 @@ let _currentSheetGameKey = null;
 let _savedSheetScrollTop = 0;
 let _gameSheetHistory = [];
 let _gameSheetNavBack = false;
+let _savedBodyScrollY = 0;
 
 // 게임 정리법 사진 데이터 — { '게임명': 사진장수 }
 // 사진 경로: /game-system/game-data/library/images/organizer/게임명/1.jpg, 2.jpg, ...
@@ -1447,6 +1448,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
 
   `;
 
+  _savedBodyScrollY = window.scrollY;
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
@@ -1501,6 +1503,7 @@ function closeGameSheet(){
 
   gameSheet.classList.remove('is-active');
   document.body.classList.remove('sheet-open');
+  window.scrollTo(0, _savedBodyScrollY);
   _currentSheetGameKey = null;
 }
 
@@ -1571,6 +1574,7 @@ function openGameRecordSheet(gameKey) {
 
   const panel = gameSheet.querySelector('.game-sheet-scroll');
   if (panel) panel.scrollTop = 0;
+  _savedBodyScrollY = window.scrollY;
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
