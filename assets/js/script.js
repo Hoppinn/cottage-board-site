@@ -1303,6 +1303,19 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
       <div class="sheet-title-block">
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
+        <div class="sheet-links-block">
+          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel} ← 꽂혀있는 책장 보기</button>
+          <div class="sheet-links-row2">
+            <a class="sheet-yt-btn"
+              href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
+              onclick="return confirm('유튜브로 이동할까요?')"
+              target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+              룰영상 보기
+            </a>
+            ${_orgPhotos.length ? `<button class="sheet-org-btn" type="button" onclick="_openOrganizerLightbox(${JSON.stringify(_orgPhotos)}, '${esc(getGameName(gameKey) || String(gameKey))}')">📦 정리법 보기</button>` : ''}
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1331,20 +1344,6 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
         ${detail.displayTags.map(t => `<span class="sheet-dtag">${t}</span>`).join("")}
       </div>
     ` : ""}
-    <div class="sheet-links-block">
-      <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel} ← 꽂혀있는 책장 보기</button>
-      <div class="sheet-links-row2">
-        <a class="sheet-yt-btn"
-          href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
-          onclick="return confirm('유튜브로 이동할까요?')"
-          target="_blank" rel="noopener noreferrer">
-          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
-          룰영상 보기
-        </a>
-        ${_orgPhotos.length ? `<button class="sheet-org-btn" type="button" onclick="_openOrganizerLightbox(${JSON.stringify(_orgPhotos)}, '${esc(getGameName(gameKey) || String(gameKey))}')">📦 정리법 보기</button>` : ''}
-      </div>
-    </div>
-
     <!-- 게임 설명 (한국어 소스만 표시) -->
     ${(detail.bgg.descriptionKo || detail.commentSource !== 'bgg') && detail.comment ? `
       <div class="sheet-section">
