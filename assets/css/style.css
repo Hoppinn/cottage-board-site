@@ -2824,7 +2824,7 @@ body.embed-mode .site-footer { display: none !important; }
 /* 인원·시간·무게 한 줄 */
 .sheet-stats-block{
   margin-top:-4px;
-  margin-bottom:14px;
+  margin-bottom:10px;
 }
 
 .sheet-stats-row{
@@ -2966,12 +2966,12 @@ body.embed-mode .site-footer { display: none !important; }
 }
 
 .sheet-dtag{
-  padding:3px 9px;
+  padding:2px 7px;
   border-radius:999px;
   background:#f0e4d4;
   color:#7a4828;
   font-size:11px;
-  font-weight:700;
+  font-weight:500;
 }
 
 .sheet-section-label{
