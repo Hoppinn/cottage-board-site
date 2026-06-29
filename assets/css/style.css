@@ -636,7 +636,7 @@ body.owned-page .site-header{
   color:rgba(255,255,255,0.92);
   font-size:clamp(14px,3.8vw,22px);
   line-height:1.45;
-  font-weight:500;
+  font-weight:700;
   text-shadow:0 1px 14px rgba(0,0,0,0.7), 0 0 35px rgba(0,0,0,0.45);
 }
 
@@ -2862,7 +2862,7 @@ body.embed-mode .site-footer { display: none !important; }
   flex:1;
   min-width:0;
   font-size:14px;
-  font-weight:900;
+  font-weight:700;
   color:#5a3418;
   overflow:hidden;
   text-overflow:ellipsis;
@@ -2871,7 +2871,7 @@ body.embed-mode .site-footer { display: none !important; }
 
 .sheet-sticky-bgg{
   font-size:12px;
-  font-weight:900;
+  font-weight:700;
   color:#7a4828;
   white-space:nowrap;
   flex-shrink:0;
@@ -3653,7 +3653,7 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .sheet-record-title{
   font-size:17px;
-  font-weight:900;
+  font-weight:700;
   color:var(--text);
   margin:0;
   letter-spacing:-0.3px;
