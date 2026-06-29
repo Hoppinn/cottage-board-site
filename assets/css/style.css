@@ -6333,7 +6333,7 @@ body.embed-mode .site-footer { display: none !important; }
 .pr-rec-row:hover { background: #fdfaf6; }
 .pr-rec-row-top { display: flex; align-items: flex-start; gap: 8px; }
 .pr-rec-main { flex: 1; min-width: 0; }
-.pr-rec-game { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 2px; display: block; }
+.pr-rec-game { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; display: block; }
 .pr-play-order{font-size:11px;color:var(--muted,#888);font-weight:400;}
 .pr-rec-meta { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
 .pr-rec-review { font-size: 13px; color: var(--text); margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid #c4d4c0; padding-left: 10px; }
