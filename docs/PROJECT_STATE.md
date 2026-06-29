@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-29 (143차-137)
+최종 갱신: 2026-06-29 (143차-149)
 
 ---
 
@@ -57,6 +57,8 @@
 | fix BUG-B + 추가 기능 (142차-136) | BUG-B: getGameComments 배열 지원(_gameIds 전달), getMyStats game_key 컬럼 수정, profile 게임평에 game_comments 통합. 추가1: 기록 페이지 상단 좋아요/궁금해요 추가. 추가2: game-reviews ··· 메뉴에 좋아요/궁금해요 + lazy load 상태 | 142차-136 |
 | fix BUG-A/C + 궁금해요 자동취소 (143차-136) | BUG-C: profile-game-link 버튼만 클릭 가능. BUG-A: +N 클릭 시 인라인 확장(라이트박스→그리드). 궁금해요 취소 토스트 String() 타입 수정. 좋아요 클릭 시 궁금해요 자동취소(onSheetLike/onPrMenuLike) | 143차-136 |
 | feat: 내보드 사진 3열 그리드+캡션+삭제 / 정리법 버튼 (143차-137) | BUG-A완성: 3열 CSS grid, 캡션(작성자/모임/날짜/인원/시간/점수), 본인 사진 삭제. 정리법: _ORGANIZER_GAMES 오브젝트+버튼+폴더 인프라(게임명 등록 후 활성화) | 143차-137 |
+| fix: 게임시트 열림 불가 버그 (143차-148) | _getOrganizerPhotos에서 getGameName 직접 호출 → game-reviews.html에서 ReferenceError. window.getGameName?.()으로 수정 | 143차-148 |
+| design: 섹션 순서·굵기 전반 개선 (143차-149) | 게임평→사진→플레이기록 순서 통일(게임시트/기록시트/기록보드). 게임평 PREVIEW 3. 전역 font-weight 일반화(검색/게임정보/기록/보드 항목 500으로) | 143차-149 |
 
 ### 142차 테스트 목록
 

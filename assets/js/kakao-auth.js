@@ -559,15 +559,15 @@ async function openProfilePanel(autoSubsheet = null) {
 
   const PREVIEW = 5;
 
-  function buildActivityList(items, renderFn) {
-    const preview = items.slice(0, PREVIEW).map(renderFn).join('');
-    const rest = items.slice(PREVIEW).map(renderFn).join('');
-    const hasMore = items.length > PREVIEW;
+  function buildActivityList(items, renderFn, previewCount = PREVIEW) {
+    const preview = items.slice(0, previewCount).map(renderFn).join('');
+    const rest = items.slice(previewCount).map(renderFn).join('');
+    const hasMore = items.length > previewCount;
     return `<ul class="profile-activity-list is-collapsed">
       ${preview}
       ${hasMore ? `<div class="profile-more-wrap is-hidden">${rest}</div>
         <li class="profile-more-btn-wrap">
-          <button class="profile-more-btn" type="button">더 보기 (${items.length - PREVIEW}건 더)</button>
+          <button class="profile-more-btn" type="button">더 보기 (${items.length - previewCount}건 더)</button>
         </li>` : ''}
     </ul>`;
   }
@@ -636,7 +636,7 @@ async function openProfilePanel(autoSubsheet = null) {
     const pn = r._isComment ? 0 : _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
     return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
-  });
+  }, 3);
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
   const VOUCHER_NOTICE_DATE = '2026-06-16';
@@ -930,16 +930,16 @@ async function openProfilePanel(autoSubsheet = null) {
     : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
     <div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
-      ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
-    </div>
-    <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▴</span></button>
       ${_allReviews.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
     <div class="profile-activity-group">
       <button class="profile-activity-toggle" type="button">📸 사진 <span class="profile-activity-count">${_photoCount}장</span><span class="profile-toggle-arrow">▾</span></button>
       ${_recentPhotoHtml}
+    </div>
+    <div class="profile-activity-group">
+      <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
+      ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
   const _clubPath = (() => {

@@ -1412,16 +1412,6 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
     <!-- 기록 섹션 그룹 -->
     <div class="sheet-records-group">
 
-      <!-- 플레이기록 미리보기 -->
-      <div class="sheet-preview-section">
-        <div class="sheet-preview-hd">
-          <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
-        </div>
-        <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
-          <span class="sheet-comments-empty">불러오는 중...</span>
-        </div>
-      </div>
-
       <!-- 게임평 미리보기 -->
       <div class="sheet-preview-section">
         <div class="sheet-preview-hd">
@@ -1438,6 +1428,16 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
           <span class="sheet-preview-label" id="sheetPreviewPhotoLabel-${gameKey}">사진</span>
         </div>
         <div class="sheet-preview-body" id="sheetPhotoPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <!-- 플레이기록 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
           <span class="sheet-comments-empty">불러오는 중...</span>
         </div>
       </div>
@@ -1545,9 +1545,6 @@ function openGameRecordSheet(gameKey) {
       </div>
     </div>
     <div class="sheet-social-group">
-      <div class="sheet-play-section">
-        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
-      </div>
       <div class="sheet-comments-area">
         <div class="sheet-comments-header">
           <span class="sheet-comments-count-label" id="sheetCommentsCount-${gameKey}">게임평</span>
@@ -1565,6 +1562,9 @@ function openGameRecordSheet(gameKey) {
           <button class="sheet-comment-write-btn" data-game-id="${gameKey}" onclick="onOpenPhotoInput(this)" type="button">📷 남기기</button>
         </div>
         <div id="sheetPhotosArea-${gameKey}"><span class="sheet-comments-empty">불러오는 중...</span></div>
+      </div>
+      <div class="sheet-play-section">
+        <div class="sheet-play-widget" id="sheetPlayWidget-${gameKey}"></div>
       </div>
     </div>
   `;
