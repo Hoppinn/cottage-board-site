@@ -1110,7 +1110,7 @@ async function openProfilePanel(autoSubsheet = null) {
     sub.innerHTML = `
       <div class="profile-subsheet-box">
         <div class="profile-subsheet-header">
-          <button class="profile-subsheet-back" type="button">‹ 내 보드</button>
+          <button class="profile-subsheet-back" type="button">‹ ${escH(user.nickname || '손님')}의 내 보드</button>
           <span class="profile-subsheet-title">${title}</span>
           <button class="profile-subsheet-close" type="button">✕</button>
         </div>
