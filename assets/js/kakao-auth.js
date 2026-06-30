@@ -788,7 +788,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
   const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    96);
 
-  const _growthSummary = `캐릭터 ${_charCount}/${_charTotal}\n도감 ${_codexPlayed}/${_codexTotal}\n업적 ${_achCount}/${_achTotal}`;
+  const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
   const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
   const _nextAch = userStats ? window.CottageAchievements?.findNextAchievement?.(userStats) : null;
   const _growthBadge = `<div class="profile-growth-badge">🌱 코티지 성장도 ${_growthPct}%</div>` +
@@ -1027,15 +1027,11 @@ async function openProfilePanel(autoSubsheet = null) {
         </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
         <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
+        <button class="profile-growth-line" type="button">${escH(_growthLine)}</button>
         ${_growthBadge}
       </div>
     </div>
     <div class="profile-card-grid">
-      <button class="profile-card" data-subsheet="growth" type="button">
-        <span class="profile-card-icon">🌱</span>
-        <span class="profile-card-label">수집 보드</span>
-        <span class="profile-card-summary">${escH(_growthSummary)}</span>
-      </button>
       <button class="profile-card" data-subsheet="taste" type="button">
         <span class="profile-card-icon">❤️</span>
         <span class="profile-card-label">취향 보드</span>
@@ -1046,21 +1042,22 @@ async function openProfilePanel(autoSubsheet = null) {
         <span class="profile-card-label">기록 보드</span>
         <span class="profile-card-summary">${escH(_recordCardSummary)}</span>
       </button>
-      <button class="profile-card" data-subsheet="voucher" type="button">
+      <button class="profile-card" data-subsheet="usage" type="button">
+        <span class="profile-card-icon">📊</span>
+        <span class="profile-card-label">함께한 시간</span>
+        <span class="profile-card-summary">${escH(_statsSummary)}</span>
+      </button>
+      <a class="profile-card" href="${_clubPath}">
+        <span class="profile-card-icon">📅</span>
+        <span class="profile-card-label">모임 보드</span>
+        <span class="profile-card-summary"><span class="profile-card-meeting-cta">모임 플래너 보기</span>${_scheduleHtml || '<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>'}</span>
+      </a>
+      <button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
         <span class="profile-card-label">음료교환권</span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
       </button>
-    </div>
-    <button class="profile-card profile-card--notif" data-subsheet="usage" type="button">
-      <span class="profile-card-icon">📊</span>
-      <div class="profile-card-usage-info">
-        <span class="profile-card-label">함께한 시간</span>
-        ${_summaryParts.length ? `<span class="profile-card-usage-detail">${escH(_statsSummary)}</span>` : ''}
-        ${_scheduleHtml}
-      </div>
-      <span class="profile-card-arrow">›</span>
-    </button>`;
+    </div>`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
   function _openSubSheet(title, contentHtml, afterRender, bodyClass = '') {
@@ -1676,9 +1673,10 @@ async function openProfilePanel(autoSubsheet = null) {
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)));
+  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)); });
   body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
-  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)));
+  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)); });
+  body.querySelector('.profile-growth-line')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody)); });
 
   if (autoSubsheet) {
     body.querySelector(`[data-subsheet="${autoSubsheet}"]`)?.click();
