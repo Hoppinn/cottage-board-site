@@ -105,7 +105,7 @@
   const root = document.getElementById('reviewRoot');
 
   let tried = false;
-  function tryInit() { if (tried) return; tried = true; initHub(); }
+  function tryInit() { if (tried) return; tried = true; window.CottageDB?.trackEvent('record_start'); initHub(); }
   window.addEventListener('kakao-auth-ready', tryInit);
   window.addEventListener('cottage-auth-changed', () => { renderInputPanel(); });
   setTimeout(tryInit, 1200);

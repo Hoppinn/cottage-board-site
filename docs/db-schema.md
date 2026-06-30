@@ -16,7 +16,7 @@
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
 | `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
-| `page_events` | event_type, game_id, referrer, created_at | 기능 이벤트 (recommend_run, recommend_game_click). referrer: 세션 귀속 소스 |
+| `page_events` | event_type, game_id, referrer, session_key, user_id, created_at | 기능 이벤트(hero_recommend_click, recommend_start, recommend_complete, hero_record_click, record_start, record_complete, signup_complete 등). referrer: 세션 귀속 소스. session_key/user_id는 143차-160(2026-06-30)에 추가 — **그 이전 행은 NULL이라 unique 집계는 추가 시점 이후 데이터부터만 정확** |
 | `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]), notif_seen_at (timestamptz) | 유저 프로필. bio: 한줄소개, avoid_tags: 피하는 유형 태그 배열, notif_seen_at: 알림 마지막 읽은 시각 (기기 간 동기화용) |
 | `game_requests` | game_name, request_count, status, is_planned, user_id, purchase_status, status_date, purchased_at, actual_games, added_at | 게임 요청 |

@@ -181,6 +181,7 @@
   <script src="../../assets/js/supabase-config.js"></script>
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/achievements.js"></script>
+  <script src="../../assets/js/page-labels.js"></script>
   <script src="../../assets/js/script.js"></script>
   <script src="../../assets/js/play-records-utils.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
@@ -1121,17 +1122,7 @@
           const dt = new Date(ms);
           return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;
         }
-        const PAGE_LABEL = {
-          'index': '메인', 'about': '코티지가 만들어진 이유', 'game-reviews': '기록 보기',
-          'club': '동호회', 'requests': '요청하기', 'requests-admin': '관리자',
-          'game-location': '게임 위치', 'owned-games': '보유 게임',
-          'club-history': '모임 기록', 'club-meeting': '동호회 모임',
-          'club-intro': '동호회 소개', 'club-schedule': '모임 일정',
-          'club-rules': '동호회 규칙', 'price-rules': '가격·이용안내', 'guide': '홈페이지 기능',
-          'my-board': '내 보드', 'my-board-growth': '내 보드 > 수집보드',
-          'my-board-taste': '내 보드 > 취향보드', 'my-board-records': '내 보드 > 기록보드',
-          'my-board-voucher': '내 보드 > 교환권', 'my-board-notif': '내 보드 > 소식',
-        };
+        const PAGE_LABEL = window.COTTAGE_PAGE_LABELS || {};
         function _punycodeLabel(s) {
           if (!s.startsWith('xn--')) return s;
           s = s.slice(4);
@@ -1689,18 +1680,25 @@
         const events = await window.CottageDB.getEventCounts(
           ['hero_recommend_click','recommend_complete','hero_record_click','record_complete'], 30
         );
+        // "메인 방문" 단계 — page_events가 아니라 page_views(페이지 진입 로그) 기준 집계임에 유의
+        const pageViews = window.CottageDB.getPageViewCounts
+          ? await window.CottageDB.getPageViewCounts('index', 30)
+          : [];
         const todayKst = new Date(Date.now() + 9*3600000).toISOString().slice(0,10);
-        function countDay(type, daysAgo) {
+        function countDayIn(rows, daysAgo) {
           const dt = new Date(Date.now() + 9*3600000 - daysAgo*86400000).toISOString().slice(0,10);
-          return events.filter(e => e.event_type === type && (e.created_at||'').slice(0,10) === dt).length;
+          return rows.filter(r => (r.created_at||'').slice(0,10) === dt).length;
         }
-        function count7(type) {
-          return events.filter(e => {
-            const d = (e.created_at||'').slice(0,10);
-            return e.event_type === type && d <= todayKst && d >= new Date(Date.now()+9*3600000-6*86400000).toISOString().slice(0,10);
+        function count7In(rows) {
+          return rows.filter(r => {
+            const d = (r.created_at||'').slice(0,10);
+            return d <= todayKst && d >= new Date(Date.now()+9*3600000-6*86400000).toISOString().slice(0,10);
           }).length;
         }
+        function countDay(type, daysAgo) { return countDayIn(events.filter(e => e.event_type === type), daysAgo); }
+        function count7(type) { return count7In(events.filter(e => e.event_type === type)); }
         function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
+        const pv0 = countDayIn(pageViews, 0), pv7 = count7In(pageViews);
         const hr0=countDay('hero_recommend_click',0), rc0=countDay('recommend_complete',0),
               hg0=countDay('hero_record_click',0),   rd0=countDay('record_complete',0);
         const hr7=count7('hero_recommend_click'), rc7=count7('recommend_complete'),
@@ -1716,10 +1714,12 @@
         el.innerHTML = `
           <div class="admin-event-funnel">
             <div class="admin-event-section-title">🎲 추천게임 퍼널</div>
-            ${funnelRow('Hero 버튼 클릭', hr0, hr7, null)}
+            ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
+            ${funnelRow('Hero 버튼 클릭', hr0, hr7, pv0)}
             ${funnelRow('추천 결과 완료', rc0, rc7, hr0)}
             <div class="admin-event-section-title" style="margin-top:16px">📝 플레이기록 퍼널</div>
-            ${funnelRow('Hero 기록 버튼 클릭', hg0, hg7, null)}
+            ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
+            ${funnelRow('Hero 기록 버튼 클릭', hg0, hg7, pv0)}
             ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
           </div>`;
       } catch(e) {

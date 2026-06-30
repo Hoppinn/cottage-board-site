@@ -10,7 +10,7 @@
 |------|------|
 | `trackView(gameId)` | 게임 조회수 기록 |
 | `trackPageView(page, referrer = null)` | 페이지 뷰 기록 (하루 1회). referrer: utm_source 또는 외부 hostname — page_views.referrer에 저장 |
-| `trackEvent(eventType, opts = {})` | 이벤트 기록 — page_events 테이블 insert. admin/localhost 자동 제외, referrer는 `cottage_orig_src_{date}`에서 자동 읽음. opts: `{ game_id? }` |
+| `trackEvent(eventType, opts = {})` | 이벤트 기록 — page_events 테이블 insert. admin/localhost 자동 제외, referrer는 `cottage_orig_src_{date}`에서 자동 읽음. session_key(getSessionKey())/user_id(_sessionUserId)도 함께 저장(143차-160). opts: `{ game_id? }` |
 | `getGameRating(gameId)` | 별점 평균+건수 조회 |
 | `submitRating(gameId, rating)` | 별점 제출 |
 | `getMyRating(gameId)` | 내 별점 (localStorage) |
@@ -45,6 +45,7 @@
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |
 | `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 `[{event_type, created_at}]`. admin/localhost 제외 없음(쿼리 전용) |
+| `getPageViewCounts(page, daysBack=7)` | page_views에서 특정 page의 최근 N일 로우 반환 `[{created_at}]`. 관리자 이벤트 퍼널의 "메인 방문" 단계용(143차-160) — page_events가 아니라 page_views 기준임에 유의 |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
 | `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임). notifSeenAt=null이면 isNew=true(전체 기간). 반환: `[{type, ..., isNew}]` |
 | `getGameReviews(gameId)` | 게임 리뷰 조회 |

@@ -2,6 +2,12 @@
 
 > 저장일: 2026-06-27. 다음 세션 시작 시 검토 후 진행.
 
+## 진행 상태 (2026-06-30, 143차-161)
+
+**1단계 완료** — 이벤트 7개 전부 연결(hero_recommend_click, hero_record_click, recommend_start, recommend_complete, record_start, record_complete, signup_complete), page_events에 session_key/user_id 컬럼 추가, 관리자 이벤트 퍼널에 "메인 방문" 단계 추가.
+
+**2단계(보류)** — §2(Hero 하단 실시간 문구 교체), §3(분석 대상 탭 UI), §5~7의 unique 카운트 기반 전환율/차트/추천조건 통계/회원가입 퍼널은 미착수. session_key 기반 unique 카운팅은 2026-06-30 이후 데이터부터만 가능(과거 행 NULL).
+
 ## 목표
 
 현재 관리페이지는 **페이지 방문(Page View)** 위주 분석만 제공합니다.

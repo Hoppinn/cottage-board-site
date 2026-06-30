@@ -341,6 +341,8 @@ function openRecommendModal(){
     return;
   }
 
+  _recommendStartFired = false; // 모달 열 때마다 다음 선택 1회를 다시 추적
+
   // playerSubRow/playerMainRow 상태 보존 — 모달 재열기 시 초기화 방지
   const _subD  = playerSubRow  ? playerSubRow.style.display  : null;
   const _mainD = playerMainRow ? playerMainRow.style.display : null;
@@ -389,6 +391,13 @@ function renderInlineOption(type, value, label, selectedValue){
       ${label}
     </button>
   `;
+}
+
+let _recommendStartFired = false;
+function _fireRecommendStart() {
+  if (_recommendStartFired) return;
+  _recommendStartFired = true;
+  window.CottageDB?.trackEvent('recommend_start');
 }
 
 const recommendState = {
@@ -810,6 +819,7 @@ if(playerMainRow){
         showGroupSub();
       } else {
         recommendState.players = btn.dataset.players || "";
+        _fireRecommendStart();
       }
     });
   });
@@ -821,6 +831,7 @@ if(playerSubRow){
       playerSubRow.querySelectorAll('.modal-option--sub').forEach(b => b.classList.remove('is-selected'));
       btn.classList.add('is-selected');
       recommendState.players = btn.dataset.players || "";
+      _fireRecommendStart();
       showRecommendResults(); // 서브버튼 선택 → 필터 적용 + 드롭다운 닫힘
     });
   });
@@ -851,6 +862,7 @@ levelOptions.forEach(option=>{
       });
 
       option.classList.add('is-selected');
+      _fireRecommendStart();
     }
   );
 });
@@ -864,6 +876,7 @@ moodOptions.forEach(option=>{
       });
 
       option.classList.add('is-selected');
+      _fireRecommendStart();
     }
   );
 });

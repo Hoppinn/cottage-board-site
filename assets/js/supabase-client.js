@@ -240,7 +240,7 @@ window._cottageSess = (function () {
     if (localStorage.getItem('cottage_is_admin')) return;
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const referrer = localStorage.getItem(`cottage_orig_src_${kstDate}`) || null;
-    const payload = { event_type: eventType, referrer };
+    const payload = { event_type: eventType, referrer, session_key: getSessionKey(), user_id: _sessionUserId || null };
     if (opts.game_id) payload.game_id = opts.game_id;
     try {
       await db.from('page_events').insert(payload);
@@ -1010,6 +1010,7 @@ window._cottageSess = (function () {
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
         ...(isNewUser ? { first_source: _sessionReferrer || null } : {}),
       }, { onConflict: 'user_id' });
+      if (!upsertError && isNewUser) trackEvent('signup_complete');
       if (!upsertError && !selectError) {
         const s = window._cottageSess.get(userId);
         s.timeSec = 0;
@@ -1094,6 +1095,18 @@ window._cottageSess = (function () {
       const { data } = await db.from('page_events')
         .select('event_type, created_at')
         .in('event_type', eventTypes)
+        .gte('created_at', since);
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  // 관리자 이벤트 퍼널 "메인 방문" 단계용 — page_events가 아니라 page_views(페이지 진입 로그) 기준
+  async function getPageViewCounts(page, daysBack = 7) {
+    try {
+      const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
+      const { data } = await db.from('page_views')
+        .select('created_at')
+        .eq('page', page)
         .gte('created_at', since);
       return data || [];
     } catch (_) { return []; }
@@ -1335,6 +1348,7 @@ window._cottageSess = (function () {
     checkNicknameAvailable,
     getPageAnalytics,
     getEventCounts,
+    getPageViewCounts,
     getMyStats,
     getMyNotifications,
     getGameReviews,
