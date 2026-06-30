@@ -788,11 +788,10 @@ async function openProfilePanel(autoSubsheet = null) {
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
   const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    96);
 
-  const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal}\n칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
+  const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
   const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
   const _nextAch = userStats ? window.CottageAchievements?.findNextAchievement?.(userStats) : null;
-  const _growthBadge = `<div class="profile-growth-badge">🌱 코티지 성장도 ${_growthPct}%</div>` +
-    (_nextAch ? `<div class="profile-growth-next">${_nextAch.emoji} ${escH(_nextAch.name)}까지 ${_nextAch.gap}${_nextAch.unit} 남음</div>` : '');
+  const _growthBadge = `<div class="profile-growth-badge">🌱 성장도 ${_growthPct}%${_nextAch ? ` · ${_nextAch.emoji}까지 ${escH(_nextAch.label)} ${_nextAch.gap}${_nextAch.unit} 남음` : ''}</div>`;
 
   const _actParts = [
     `교환권 ${voucherBalance}장`,
@@ -961,13 +960,7 @@ async function openProfilePanel(autoSubsheet = null) {
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>`;
   // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
-  const _clubPath = (() => {
-    const p = window.location.pathname;
-    if (p.includes('/pages/')) return '../club/club-schedule.html';
-    return './pages/club/club-schedule.html';
-  })();
   const _usageInnerHtml = `
-    <a class="profile-meeting-btn" href="${_clubPath}">📅 모임 플래너 바로가기 →</a>
     <div class="profile-stats-wrap">
       <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
       <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
@@ -1017,6 +1010,52 @@ async function openProfilePanel(autoSubsheet = null) {
     }).catch(() => {});
   }
 
+  // 모임 보드: 이번 모임 준비 정보 (디자인/레이아웃 우선 구현 — 데이터 저장은 추후 연결)
+  const _meetingStyleTags = ['전략게임', '파티게임', '협력게임', '초보환영', '장시간게임', '짧은게임'];
+  const _meetingPlayerCounts = ['2인', '3인', '4인', '5인+'];
+  const _relDay = iso => {
+    if (!iso) return '';
+    const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(iso)) ? iso + 'T00:00:00' : iso);
+    const diffDay = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (diffDay <= 0) return '오늘';
+    return `${diffDay}일 전`;
+  };
+  const _recentPlays = [...stats.plays].sort((a, b) => {
+    const da = a.played_at || (a.created_at || '').slice(0, 10);
+    const db = b.played_at || (b.created_at || '').slice(0, 10);
+    return da < db ? 1 : da > db ? -1 : 0;
+  }).slice(0, 5);
+  const _recentPlaysHtml = _recentPlays.length
+    ? `<ul class="profile-activity-list">${_recentPlays.map(r => `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`).join('')}</ul>`
+    : _emptyList('아직 플레이 기록이 없어요');
+  const _meetingInnerHtml = `
+    <div class="taste-game-section">
+      <div class="taste-section-label">🎯 이번에 하고 싶은 게임 <span class="taste-count">0개</span></div>
+      <div class="taste-game-list">${_buildTasteGameItems([])}</div>
+      <button class="taste-add-btn" type="button">+ 게임 추가</button>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">📖 룰 설명 가능한 게임 <span class="taste-count">0개</span></div>
+      <div class="taste-game-list">${_buildTasteGameItems([])}</div>
+      <button class="taste-add-btn" type="button">+ 게임 추가</button>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">👥 인원수별 하고 싶은 게임</div>
+      <ul class="meeting-playercount-list">${_meetingPlayerCounts.map(label => `<li class="meeting-playercount-item"><span class="meeting-playercount-label">${label}</span><span class="meeting-playercount-game">미정</span></li>`).join('')}</ul>
+    </div>
+    <div class="taste-avoid-section">
+      <div class="taste-section-label">🎨 모임 스타일</div>
+      <div class="taste-bio-chips">${_meetingStyleTags.map(t => `<button class="taste-bio-chip" type="button">${escH(t)}</button>`).join('')}</div>
+    </div>
+    <div class="taste-bio-section">
+      <div class="taste-section-label">📝 모임 메모</div>
+      <textarea class="meeting-memo-textarea" rows="3" placeholder="이번 모임에 하고 싶은 말을 남겨보세요 (예: 이번엔 브라스 꼭 하고 싶어요)"></textarea>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">🕐 최근 플레이</div>
+      ${_recentPlaysHtml}
+    </div>`;
+
   body.innerHTML = `
     <div class="profile-panel-profile">
       <div class="profile-panel-profile-top">
@@ -1054,11 +1093,11 @@ async function openProfilePanel(autoSubsheet = null) {
         <span class="profile-card-label">함께한 시간</span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
       </button>
-      <a class="profile-card" href="${_clubPath}">
+      <button class="profile-card" data-subsheet="meeting" type="button">
         <span class="profile-card-icon">📅</span>
         <span class="profile-card-label">모임 보드</span>
-        <span class="profile-card-summary"><span class="profile-card-meeting-cta">모임 플래너 보기</span>${_scheduleHtml || '<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>'}</span>
-      </a>
+        <span class="profile-card-summary"><span class="profile-card-meeting-cta">이번 모임 준비하기</span>${_scheduleHtml || '<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>'}</span>
+      </button>
       <button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
         <span class="profile-card-label">음료교환권</span>
@@ -1675,6 +1714,25 @@ async function openProfilePanel(autoSubsheet = null) {
           });
           _bindActivityTogglesAndMore(subBody);
         }); // end usage afterRender
+
+      } else if (type === 'meeting') {
+        _trackPvOnce('my-board-meeting');
+        _openSubSheet('모임 보드', _meetingInnerHtml, subBody => {
+          // 모임 스타일 칩 — 시각적 토글만 (저장은 추후 연결)
+          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+            chip.addEventListener('click', () => chip.classList.toggle('is-selected'));
+          });
+          // 최근 플레이 → 게임시트 열기
+          subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
+            const li = btn.closest('[data-game-id]');
+            const gameId = li?.dataset.gameId;
+            if (!gameId) return;
+            btn.addEventListener('click', () => {
+              const key = _getGameKeyById(gameId);
+              if (key && window.openGameSheet) window.openGameSheet(key);
+            });
+          });
+        }); // end meeting afterRender
       }
     });
   });

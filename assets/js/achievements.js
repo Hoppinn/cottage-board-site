@@ -861,10 +861,10 @@
   }
 
   const _NEXT_ACH_META = {
-    balance: { emoji: '🦊', unit: '일' }, play: { emoji: '🐻', unit: '회' },
-    new_game: { emoji: '🐰', unit: '종' }, record: { emoji: '🐿', unit: '회' },
-    photo: { emoji: '🦔', unit: '장' }, review: { emoji: '🐹', unit: '개' },
-    first_record: { emoji: '🦉', unit: '종' }, visit: { emoji: '🐦', unit: '일' },
+    balance: { emoji: '🦊', unit: '일', label: '함께한 날' }, play: { emoji: '🐻', unit: '회', label: '참여' },
+    new_game: { emoji: '🐰', unit: '종', label: '신규 게임' }, record: { emoji: '🐿', unit: '회', label: '플레이 기록' },
+    photo: { emoji: '🦔', unit: '장', label: '사진' }, review: { emoji: '🐹', unit: '개', label: '게임평' },
+    first_record: { emoji: '🦉', unit: '종', label: '첫 기록' }, visit: { emoji: '🐦', unit: '일', label: '방문' },
   };
 
   function findNextAchievement(preStats) {
@@ -879,8 +879,8 @@
       if (gap > 0 && gap < bestGap) { bestGap = gap; best = def; }
     }
     if (!best) return null;
-    const { emoji, unit } = _NEXT_ACH_META[best.type] || { emoji: '🏆', unit: '개' };
-    return { emoji, name: best.name, gap: bestGap, unit };
+    const { emoji, unit, label } = _NEXT_ACH_META[best.type] || { emoji: '🏆', unit: '개', label: '업적' };
+    return { emoji, name: best.name, gap: bestGap, unit, label };
   }
 
   window.CottageAchievements = {
