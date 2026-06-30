@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-30 (143차-162)
+최종 갱신: 2026-06-30 (143차-163)
 
 ---
 
@@ -184,7 +184,8 @@
 
 > Discord 알림 전환 폐기 — 카카오 개인 알림으로 유지 (142차-25)
 
-10. **about.html 제약 2x2 카드 사진 교체** — 시간/공간/시작/함께하는 제약 카드 각각에 임시 플레이스홀더 이미지(exterior/shelves/interior/collage) 적용됨(143차-160). 사용자가 4개 항목용 실제 사진을 재구성할 예정 — 받으면 `.about-constraint-photo img` src만 교체.
+10. **about.html HOW 섹션 사진 교체** — 카드형→섹션형 레이아웃 전환(143차-163) 후 시간/공간/함께하는 제약은 적절한 임시 사진(exterior/interior/collage) 적용됨. **시작의 제약 사진은 홈페이지 기능 캡처로 교체 예정** — 현재는 photo-shelves.jpg 임시 대체 중, 실제 캡처 이미지 받으면 `.about-constraint-photo--sm img` 중 3번째(시작의 제약) src만 교체.
+11. **about.html/price-rules.html 파일명 리네임 보류** — about.html→story.html, price-rules.html→pricing.html 의미상 후보였으나(143차-162 논의), 외부 공유 링크/SEO 인덱스/카카오톡 링크/QR 가능성 대비 이득이 작아 보류. 재검토 시 redirect shim(`pages/store/` 패턴) 동반 필요.
 
 ---
 
@@ -391,6 +392,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-30 | design: about.html HOW 섹션 카드형(2x2 그리드) → 섹션형 리스트로 전환 — 텍스트(아이콘+제목+키워드+설명) 우선, 사진은 보조 역할로 140px 축소+섹션 끝에 배치, hr 구분선. 항목별 키워드 라인 신규 추가(무제한·24시간 / 700여 종·밝은 조명·넓은 테이블 / 추천 시스템·룰 영상·위치 안내 / 동호회 운영). 사진 역할 분리(시간=외관/공간=내부/함께=동호회), 시작의 제약은 홈페이지 캡처 이미지 부재로 photo-shelves.jpg 임시 대체(추후 교체 필요) (143차-163) |
 | 2026-06-30 | fix+refactor: 헤더 메뉴 글자크기 통일(.menu-link-home 14px), about.html WHY1 마무리 문단 추가, 변경된 페이지명(about/price-rules/guide) title·meta·breadcrumb 전체 동기화. refactor: PAGE_LABEL 중복 제거 — script.js PAGE_LABELS(pathname 키)와 requests-admin.html PAGE_LABEL(slug 키)이 같은 목적의 별도 하드코딩이라 about.html 개명 시 드리프트 발생했던 것을 assets/js/page-labels.js 단일 소스로 통합(값 100% 동일 유지, script.js 로드 직전 위치 — 14개 HTML 전체 적용) (143차-162) |
 | 2026-06-30 | feat: 퍼널 분석 1단계(PLAN_funnel_analytics.md) — page_events에 session_key/user_id 컬럼 추가(SQL 직접 실행), trackEvent()가 함께 저장하도록 수정. 누락 이벤트 3개 연결: recommend_start(추천 조건 실제 선택 시 1회, 모달 오픈 아님), record_start(game-reviews.js 진입 시 1회), signup_complete(upsertProfile의 기존 isNewUser 조건 그대로 사용). getPageViewCounts() 신규 — 관리자 이벤트 퍼널에 "메인 방문(page_views 기준)" 단계 추가. **주의: session_key/user_id는 이 시점 이전 행에는 없음(NULL) — unique 집계는 2026-06-30 이후 데이터부터만 정확.** 관리자 UI 구조/분석탭 재설계는 범위 밖(보류) (143차-161) |
 | 2026-06-30 | content: about.html → "코티지가 만들어진 이유" 브랜드 스토리 페이지로 전면 재구성 (Hero 1줄+서브타이틀 → WHY1/WHY2(텍스트+사진) → 제약 2x2 카드(각 카드 사진 슬롯 추가, 임시 플레이스홀더) → WHY 회수 → 버튼). 기존 소개문단/사진3장/특징카드5/대상자안내4 제거(중복). 헤더 메뉴 구조 개편: "코티지보드"+"동호회" 그룹 폐지 → "코티지를 만든 이유"(about.html 직접링크) + "코티지 이용"(가격·이용안내/홈페이지 기능/동호회/요청하기) 신설. price-rules.html을 이용요금→운영시간(신규)→이용 약속→음식 안내 순으로 재배치, 상단 안내문구 추가. guide.html/price-rules.html breadcrumb를 변경된 메뉴 그룹명에 맞춰 갱신 (143차-160) |
