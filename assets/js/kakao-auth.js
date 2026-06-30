@@ -142,7 +142,7 @@ function initKakaoAuth() {
       logoutIconBtn.setAttribute('aria-label', '로그아웃');
       logoutIconBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`;
       logoutIconBtn.addEventListener('click', e => { e.stopPropagation(); kakaoLogout(); });
-      loginArea.appendChild(logoutIconBtn);
+      btn.insertAdjacentElement('afterend', logoutIconBtn);
       if (getKakaoUser()) logoutIconBtn.classList.add('is-visible');
     }
   }
@@ -788,7 +788,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
   const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    96);
 
-  const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
+  const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal}\n칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
   const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
   const _nextAch = userStats ? window.CottageAchievements?.findNextAchievement?.(userStats) : null;
   const _growthBadge = `<div class="profile-growth-badge">🌱 코티지 성장도 ${_growthPct}%</div>` +
@@ -1027,8 +1027,13 @@ async function openProfilePanel(autoSubsheet = null) {
         </div>
         <span class="profile-panel-rep-name">${_repLabel}</span>
         <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
-        <button class="profile-growth-line" type="button">${escH(_growthLine)}</button>
-        ${_growthBadge}
+        <button class="profile-growth-link" type="button">
+          <span class="profile-growth-summary-row">
+            <span class="profile-growth-summary-text">${escH(_growthLine)}</span>
+            <span class="profile-growth-summary-arrow">›</span>
+          </span>
+          ${_growthBadge}
+        </button>
       </div>
     </div>
     <div class="profile-card-grid">

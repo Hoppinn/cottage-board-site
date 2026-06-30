@@ -15,7 +15,7 @@
     .admin-group { margin-bottom: 32px; scroll-margin-top: calc(var(--header-total-h) + 8px); }
     .admin-group + .admin-group { margin-top: 8px; }
     .admin-group .admin-section-title { border-bottom: none; }
-    .admin-group-title { font-size: 16px; font-weight: 900; color: #2c3e50; padding: 10px 2px; border-bottom: 3px solid #2c3e50; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; position: sticky; top: var(--header-total-h); background: var(--bg, #f5f0e8); z-index: 5; }
+    .admin-group-title { font-size: 16px; font-weight: 700; color: #2c3e50; padding: 10px 2px; border-bottom: 3px solid #2c3e50; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; position: sticky; top: var(--header-total-h); background: var(--bg, #f5f0e8); z-index: 5; }
     .admin-group-title:hover { color: var(--green); border-bottom-color: var(--green); }
     .admin-group-arrow { font-size: 13px; color: var(--muted); transition: transform 0.2s; }
     .admin-group.is-open .admin-group-arrow { transform: rotate(180deg); }
@@ -94,6 +94,16 @@
     .admin-visitor-filter-btn.is-active { background: #7a4828; color: #fff; border-color: #7a4828; }
     .admin-visitor-more-btn { display: block; width: 100%; margin-top: 8px; padding: 8px; font-size: 13px; font-weight: 600; color: var(--green); background: transparent; border: 1px dashed var(--border,#e8e4dc); border-radius: 8px; cursor: pointer; text-align: center; }
     .admin-visitor-more-btn:hover { background: #f5f0e8; }
+    /* 분석 탭 (방문/회원/유입/페이지/이벤트) */
+    .admin-analysis-tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 2px solid var(--border,#e8e4dc); overflow-x: auto; }
+    .admin-analysis-tab { flex-shrink: 0; font-size: 13px; font-weight: 700; padding: 8px 14px; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+    .admin-analysis-tab.is-active { color: var(--green); border-bottom-color: var(--green); }
+    .admin-analysis-subtabs { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+    .admin-analysis-subtab { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
+    .admin-analysis-subtab.is-active { background: #5a3418; color: #fff; border-color: #5a3418; }
+    .admin-analysis-subtab:disabled { opacity: .45; cursor: not-allowed; }
+    .admin-tab-panel { display: none; }
+    .admin-tab-panel.is-active { display: block; }
     /* 차트 그리드 */
     .admin-chart-filter { display: flex; gap: 6px; margin-bottom: 12px; }
     .admin-chart-period-btn { font-size: 12px; font-weight: 600; padding: 4px 14px; border-radius: 20px; border: 1px solid var(--border,#e8e4dc); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
@@ -361,15 +371,12 @@
 
       el.innerHTML = `
         <div class="admin-menu-grid">
-          <button class="admin-menu-card" data-scroll="groupCharts" type="button"><span class="admin-menu-icon">📊</span><span>비주얼 분석</span></button>
-          <button class="admin-menu-card" data-scroll="groupEvents" type="button"><span class="admin-menu-icon">🎯</span><span>이벤트 퍼널</span></button>
-          <button class="admin-menu-card" data-scroll="groupAnalysis" type="button"><span class="admin-menu-icon">📈</span><span>페이지·회원</span></button>
-          <button class="admin-menu-card" data-scroll="groupReferrer" type="button"><span class="admin-menu-icon">🔗</span><span>유입경로</span></button>
+          <button class="admin-menu-card" data-scroll="groupAnalysis" type="button"><span class="admin-menu-icon">📊</span><span>분석</span></button>
           <button class="admin-menu-card" data-bs="bsVoucher" type="button"><span class="admin-menu-icon">🎫</span><span>교환권 관리</span></button>
           <button class="admin-menu-card" data-bs="bsRequests" type="button"><span class="admin-menu-icon">📝</span><span>요청관리</span></button>
         </div>
-        <div class="admin-group is-open" id="groupCharts">
-          <div class="admin-group-title">📊 비주얼 분석<span class="admin-group-arrow">▾</span></div>
+        <div class="admin-group is-open" id="groupAnalysis">
+          <div class="admin-group-title">📊 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
             <div class="admin-summary-grid">
               <div class="admin-summary-card">
@@ -391,6 +398,15 @@
                 <div class="admin-summary-value" id="sumTopRef" style="font-size:14px;margin-top:6px;font-weight:700;line-height:1.4">—</div>
               </div>
             </div>
+
+            <div class="admin-analysis-tabs" id="analysisTabs">
+              <button class="admin-analysis-tab is-active" data-tab="visit" type="button">방문</button>
+              <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
+              <button class="admin-analysis-tab" data-tab="referrer" type="button">유입</button>
+              <button class="admin-analysis-tab" data-tab="page" type="button">페이지</button>
+              <button class="admin-analysis-tab" data-tab="event" type="button">이벤트</button>
+            </div>
+
             <div class="admin-chart-filter" id="chartPeriodBtns">
               <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
               <button class="admin-chart-period-btn" data-days="7">7일</button>
@@ -403,31 +419,37 @@
               <input class="admin-date-nav-input" id="chartDateInput" type="date" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0;">
               <button class="admin-date-nav-arrow" id="chartNavNext">▶</button>
             </div>
-            <div class="admin-chart-grid">
+
+            <div class="admin-tab-panel is-active" id="tabPanelVisit" data-panel="visit">
               <div class="admin-chart-card admin-chart-wide">
                 <div class="admin-chart-title">날짜별 방문자 수</div>
                 <canvas id="chartDaily"></canvas>
               </div>
+              <div class="admin-analysis-subtabs">
+                <button class="admin-analysis-subtab is-active" data-subtab="hourly" type="button">시간대</button>
+                <button class="admin-analysis-subtab" data-subtab="ratio" type="button">회원·비회원</button>
+                <button class="admin-analysis-subtab" data-subtab="weekday" type="button" disabled title="준비 중">요일</button>
+                <button class="admin-analysis-subtab" data-subtab="retention" type="button" disabled title="준비 중">재방문율</button>
+              </div>
+              <div class="admin-chart-card" id="visitSubPanelHourly" data-subpanel="hourly">
+                <div class="admin-chart-title">시간대별 방문 <span class="admin-chart-sub" id="chartHourlySub"></span></div>
+                <canvas id="chartHourly"></canvas>
+              </div>
+              <div class="admin-chart-card" id="visitSubPanelRatio" data-subpanel="ratio" style="display:none">
+                <div class="admin-chart-title">방문자 구성 <span class="admin-chart-sub" id="chartRatioSub"></span></div>
+                <canvas id="chartMemberRatio"></canvas>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="admin-group is-open" id="groupAnalysis">
-          <div class="admin-group-title">📱 페이지/회원 분석<span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div class="admin-section is-open" id="sectionMembers">
-              <div class="admin-section-title">👥 사용자별<span id="memberCountBadge" class="admin-section-count"></span><span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body" id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
+
+            <div class="admin-tab-panel" id="tabPanelMember" data-panel="member">
+              <div id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
+              <div class="admin-chart-card admin-chart-wide" style="margin-top:10px">
+                <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
+                <canvas id="chartMemberTime"></canvas>
+              </div>
             </div>
-            <div class="admin-section" id="sectionPages">
-              <div class="admin-section-title">📄 페이지별<span class="admin-section-arrow">▾</span></div>
-              <div class="admin-section-body" id="pagesBody"><div class="admin-empty">불러오는 중...</div></div>
-            </div>
-          </div>
-        </div>
-        <div class="admin-group is-open" id="groupReferrer">
-          <div class="admin-group-title">🔗 유입경로 분석<span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div class="admin-chart-grid">
+
+            <div class="admin-tab-panel" id="tabPanelReferrer" data-panel="referrer">
               <div class="admin-chart-card">
                 <div class="admin-chart-title">유입 경로별 페이지뷰 <span class="admin-chart-sub" id="chartRefSub"></span></div>
                 <div id="chartReferrerWrap" style="position:relative;height:80px">
@@ -435,41 +457,32 @@
                 </div>
                 <p id="chartRefEmpty" style="display:none;text-align:center;color:#aaa;font-size:12px;padding:16px 0">외부 유입 없음<br><small>당근·네이버 등 외부 링크 방문부터 기록됩니다</small></p>
               </div>
+              <div class="admin-sub-section" id="referrerDetailSection">
+                <div class="admin-sub-section-title" onclick="document.getElementById('referrerDetailSection').classList.toggle('is-open')">상세 (유입 → 페이지 이동)<span class="admin-sub-section-arrow">▾</span></div>
+                <div class="admin-sub-section-body">
+                  <div class="admin-chart-title">유입경로 × 페이지 <span class="admin-chart-sub" id="chartCrossSub"></span></div>
+                  <div id="chartCrossRef"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-tab-panel" id="tabPanelPage" data-panel="page">
               <div class="admin-chart-card">
                 <div class="admin-chart-title">페이지별 방문 <span class="admin-chart-sub" id="chartPagesSub"></span></div>
                 <div style="position:relative;height:220px"><canvas id="chartPages"></canvas></div>
               </div>
-              <div class="admin-chart-card admin-chart-wide">
-                <div class="admin-chart-title">유입경로 × 페이지 <span class="admin-chart-sub" id="chartCrossSub"></span></div>
-                <div id="chartCrossRef"></div>
-              </div>
+              <div id="pagesBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
-            <div class="admin-sub-section" id="subAuxCharts">
-              <div class="admin-sub-section-title">보조지표 (시간대 · 회원)<span class="admin-sub-section-arrow">▾</span></div>
-              <div class="admin-sub-section-body">
-                <div class="admin-chart-grid">
-                  <div class="admin-chart-card">
-                    <div class="admin-chart-title">시간대별 방문 <span class="admin-chart-sub" id="chartHourlySub"></span></div>
-                    <canvas id="chartHourly"></canvas>
-                  </div>
-                  <div class="admin-chart-card">
-                    <div class="admin-chart-title">방문자 구성 <span class="admin-chart-sub" id="chartRatioSub"></span></div>
-                    <canvas id="chartMemberRatio"></canvas>
-                  </div>
-                  <div class="admin-chart-card admin-chart-wide">
-                    <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
-                    <canvas id="chartMemberTime"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="admin-group is-open" id="groupEvents">
-          <div class="admin-group-title">🎯 이벤트 퍼널<span class="admin-group-arrow">▾</span></div>
-          <div class="admin-group-body">
-            <div id="eventFunnelBody"><div class="admin-empty">불러오는 중...</div></div>
+            <div class="admin-tab-panel" id="tabPanelEvent" data-panel="event">
+              <div class="admin-analysis-subtabs">
+                <button class="admin-analysis-subtab is-active" data-event="recommend" type="button">추천게임</button>
+                <button class="admin-analysis-subtab" data-event="record" type="button">플레이기록</button>
+                <button class="admin-analysis-subtab" data-event="signup" type="button" disabled title="준비 중">회원가입</button>
+                <button class="admin-analysis-subtab" data-event="codex" type="button" disabled title="준비 중">도감</button>
+              </div>
+              <div id="eventFunnelBody"><div class="admin-empty">불러오는 중...</div></div>
+            </div>
           </div>
         </div>
 
@@ -536,6 +549,56 @@
           title.closest('.admin-section').classList.toggle('is-open');
         });
       });
+
+      // 분석 탭 전환 (방문/회원/유입/페이지/이벤트) — 패널만 교체, 데이터는 이미 로드되어 있음
+      const analysisTabs = document.getElementById('analysisTabs');
+      if (analysisTabs) {
+        analysisTabs.addEventListener('click', e => {
+          const btn = e.target.closest('.admin-analysis-tab');
+          if (!btn || btn.disabled) return;
+          const tab = btn.dataset.tab;
+          analysisTabs.querySelectorAll('.admin-analysis-tab').forEach(b => b.classList.toggle('is-active', b === btn));
+          el.querySelectorAll('.admin-tab-panel').forEach(p => {
+            p.classList.toggle('is-active', p.dataset.panel === tab);
+          });
+          // 방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
+          const usesDateFilter = tab === 'visit' || tab === 'referrer' || tab === 'page';
+          const periodBtns = document.getElementById('chartPeriodBtns');
+          const dateNav = document.getElementById('chartDateNav');
+          if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
+          if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
+        });
+      }
+
+      // 방문 탭 서브탭 (시간대 / 회원·비회원)
+      const tabPanelVisit = document.getElementById('tabPanelVisit');
+      if (tabPanelVisit) {
+        tabPanelVisit.querySelectorAll('.admin-analysis-subtab[data-subtab]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            const sub = btn.dataset.subtab;
+            tabPanelVisit.querySelectorAll('.admin-analysis-subtab[data-subtab]').forEach(b => b.classList.toggle('is-active', b === btn));
+            tabPanelVisit.querySelectorAll('[data-subpanel]').forEach(p => {
+              p.style.display = p.dataset.subpanel === sub ? '' : 'none';
+            });
+          });
+        });
+      }
+
+      // 이벤트 탭 서브탭 (추천게임 / 플레이기록)
+      const tabPanelEvent = document.getElementById('tabPanelEvent');
+      if (tabPanelEvent) {
+        tabPanelEvent.querySelectorAll('.admin-analysis-subtab[data-event]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            const ev = btn.dataset.event;
+            tabPanelEvent.querySelectorAll('.admin-analysis-subtab[data-event]').forEach(b => b.classList.toggle('is-active', b === btn));
+            tabPanelEvent.querySelectorAll('[data-event-panel]').forEach(p => {
+              p.style.display = p.dataset.eventPanel === ev ? '' : 'none';
+            });
+          });
+        });
+      }
 
       // 삭제 버튼 (게임요청·간식·건의 공통)
       el.querySelectorAll('.admin-req-del').forEach(btn => {
@@ -1004,9 +1067,7 @@
       const pagesBody = document.getElementById('pagesBody');
 
       if (membersBody) {
-        membersBody.innerHTML =
-          summaryCardsHtml +
-          subSection(`방문자 목록 <span style="font-size:11px;color:var(--muted)">${unified.length}명</span>`, unifiedHtml, true);
+        membersBody.innerHTML = summaryCardsHtml + unifiedHtml;
       }
 
       if (pagesBody) {
@@ -1713,12 +1774,12 @@
           </div>`;
         }
         el.innerHTML = `
-          <div class="admin-event-funnel">
-            <div class="admin-event-section-title">🎲 추천게임 퍼널</div>
+          <div class="admin-event-funnel" data-event-panel="recommend">
             ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
             ${funnelRow('Hero 버튼 클릭', hr0, hr7, pv0)}
             ${funnelRow('추천 결과 완료', rc0, rc7, hr0)}
-            <div class="admin-event-section-title" style="margin-top:16px">📝 플레이기록 퍼널</div>
+          </div>
+          <div class="admin-event-funnel" data-event-panel="record" style="display:none">
             ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
             ${funnelRow('Hero 기록 버튼 클릭', hg0, hg7, pv0)}
             ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
