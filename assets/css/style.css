@@ -1674,7 +1674,7 @@ body.recommend-page main{
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   height:100%;
-  padding:2px 20px 120px;
+  padding:0 20px 120px;
   box-sizing:border-box;
 }
 
@@ -2904,9 +2904,9 @@ body.embed-mode .site-footer { display: none !important; }
 /* Sticky bar — 숨김 시 패널 배경색과 동일(투명하게 보임), 표시 시 상단 고정 */
 .sheet-sticky-bar{
   position:sticky;
-  top:-22px;
+  top:0;
   z-index:20;
-  margin:-2px -20px 14px;
+  margin:0 -20px 14px;
   padding:10px 20px;
   border-radius:28px 28px 0 0;
   display:flex;
@@ -3729,7 +3729,7 @@ body.embed-mode .site-footer { display: none !important; }
   top:0;
   z-index:5;
   background:var(--paper-2);
-  margin:-2px -20px 14px;
+  margin:0 -20px 14px;
   padding:14px 20px;
   border-bottom:1.5px solid #e8ddc8;
 }
