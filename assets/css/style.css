@@ -1892,8 +1892,8 @@ body.sheet-open{
 .menu-admin-link {
   flex: 0 0 100%;
   padding: 0 12px 8px;
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 900;
   color: #5a3418;
   text-decoration: none;
 }
@@ -1910,8 +1910,8 @@ body.sheet-open{
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 900;
   color: #c0426e;
   display: flex;
   align-items: center;
@@ -6978,10 +6978,16 @@ body.embed-mode .site-footer { display: none !important; }
   /* 로그인/프로필 버튼 */
   .menu-kakao-login-btn{
     width:auto;
-    font-size:14px;
+    font-size:13px;
+    font-weight:900;
     padding:4px 12px;
     border-radius:20px;
     position:relative; /* 드롭다운 기준점 */
+  }
+
+  .menu-admin-link{
+    font-size:13px;
+    font-weight:900;
   }
 
   .menu-kakao-login-btn.is-logged-in::after{
