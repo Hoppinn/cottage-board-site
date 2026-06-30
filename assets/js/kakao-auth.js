@@ -545,6 +545,13 @@ async function openProfilePanel(autoSubsheet = null) {
     return `${base} ${hh}:${mm}`;
   };
 
+  function _getGameThumbKey(gameId) {
+    if (!gameId || !window.gameData) return null;
+    if (window.gameData[gameId]) return gameId;
+    const entry = Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId));
+    return entry ? entry[0] : null;
+  }
+
   function getGameName(gameId) {
     if (window.gameData?.[gameId]) {
       const g = window.gameData[gameId];
@@ -610,7 +617,12 @@ async function openProfilePanel(autoSubsheet = null) {
       const isFirst = gi === 0;
       const dateHtml = isFirst ? `<span class="profile-play-date">${_playDateLabel(dateKey)}</span>` : '';
       const sepHtml = (isFirst && newGroup) ? '<li class="profile-date-group-sep" aria-hidden="true"></li>' : '';
-      const itemHtml = `${sepHtml}<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}${dateHtml}</li>`;
+      const _thumbKey = _getGameThumbKey(r.game_id);
+      const _thumbUrl = _thumbKey ? window.gameData[_thumbKey]?.images?.thumbnail : null;
+      const _thumbHtml = _thumbUrl
+        ? `<img class="profile-record-thumb" src="${escH(_thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : `<span class="profile-record-thumb-empty"></span>`;
+      const itemHtml = `${sepHtml}<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}">${_thumbHtml}<button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}${dateHtml}</li>`;
       if (_playVisCnt < PREVIEW) { _playVisHtml += itemHtml; _playVisCnt++; }
       else _playHidHtml += itemHtml;
     }
@@ -635,7 +647,12 @@ async function openProfilePanel(autoSubsheet = null) {
   const reviewListHtml = buildActivityList(_allReviews, r => {
     const pn = r._isComment ? 0 : _playOrderMap.get(r.id);
     const pLabel = pn >= 2 ? ` <span class="pr-play-order">(${pn}번째 플레이)</span>` : '';
-    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left"><button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
+    const _thumbKey = _getGameThumbKey(r.game_id);
+    const _thumbUrl = _thumbKey ? window.gameData[_thumbKey]?.images?.thumbnail : null;
+    const _thumbHtml = _thumbUrl
+      ? `<img class="profile-record-thumb profile-record-thumb--review" src="${escH(_thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : `<span class="profile-record-thumb-empty profile-record-thumb--review"></span>`;
+    return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left">${_thumbHtml}<button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
   }, 3);
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
@@ -929,7 +946,7 @@ async function openProfilePanel(autoSubsheet = null) {
     ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">+${_allPhotoData.length - _PHOTO_SHOW}장</button>` : ''}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
-    <div class="profile-activity-group">
+    <div class="profile-activity-group profile-activity-group--review">
       <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▴</span></button>
       ${_allReviews.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
     </div>
@@ -1622,21 +1639,17 @@ async function openProfilePanel(autoSubsheet = null) {
             });
             const moreBadge = subBody.querySelector('.record-photo-more-badge');
             if (moreBadge) {
+              const _hiddenTotal = _allPhotoData.length - _PHOTO_SHOW;
+              let _photoExpanded = false;
               moreBadge.addEventListener('click', e => {
                 e.stopPropagation();
-                const hiddenImgs = [...subBody.querySelectorAll('.record-photo-hidden')];
-                hiddenImgs.forEach(img => img.classList.remove('record-photo-hidden'));
-                moreBadge.textContent = '▲ 접기';
-                moreBadge.addEventListener('click', ev => {
-                  ev.stopPropagation();
-                  let rehideCount = 0;
-                  subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
-                    const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                    if (idx >= _PHOTO_SHOW) { img.classList.add('record-photo-hidden'); rehideCount++; }
-                  });
-                  moreBadge.textContent = `+${rehideCount}장`;
-                }, { once: true });
-              }, { once: true });
+                _photoExpanded = !_photoExpanded;
+                subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
+                  const idx = parseInt(img.dataset.photoIdx || '0', 10);
+                  if (idx >= _PHOTO_SHOW) img.classList.toggle('record-photo-hidden', !_photoExpanded);
+                });
+                moreBadge.textContent = _photoExpanded ? '▲ 접기' : `+${_hiddenTotal}장`;
+              });
             }
           }
         });

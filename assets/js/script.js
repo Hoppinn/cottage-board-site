@@ -1270,7 +1270,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   const _prevHistTitle = _prevHistGame ? (_prevHistGame.title?.display || _prevHistGame.title?.owned || _prevHistKey) : null;
 
   gameSheetContent.innerHTML = `
-    ${_prevHistKey ? `<button class="sheet-back-btn" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? String(_prevHistTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
+    ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? String(_prevHistTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
 
     <!-- sticky bar (스크롤 시 표시) -->
     <div class="sheet-sticky-bar" id="sheetStickyBar">
