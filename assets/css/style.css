@@ -684,7 +684,7 @@ body.owned-page .site-header{
 .breadcrumb{font-size:12px;font-weight:600;color:var(--muted);margin-bottom:14px;display:block;letter-spacing:.01em;}
 .breadcrumb a{color:var(--green);text-decoration:none;}
 .breadcrumb a:hover{text-decoration:underline;}
-.breadcrumb span{margin:0 5px;opacity:.6;}
+.breadcrumb span:first-of-type{margin:0 5px;opacity:.6;}
 /* breadcrumb: about-hero 카드 위로 절대배치 (모바일·PC 공통) */
 .about-hero .breadcrumb{position:absolute;top:-24px;left:0;color:#8c6a4a;font-size:12px;font-weight:600;margin-bottom:0;}
 .about-hero .breadcrumb a{color:#8c6a4a;}
