@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-30 (헤더 메뉴 구조 개편, about.html/price-rules.html 재구성 반영)
+최종 갱신: 2026-06-30 (헤더 메뉴 구조 개편, about.html/price-rules.html 재구성, page-labels.js 통합 반영)
 
 ---
 
@@ -109,7 +109,9 @@ assets/js/
 ├── achievements.js             # 업적·캐릭터·칭호 체크 및 지급 (window.checkAchievements 노출)
 ├── index-page.js               # 메인 페이지 전용 (추천게임, 인기게임)
 ├── owned-games-page.js         # owned-games.html 전용 (게임 목록 필터·렌더)
-└── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
+├── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
+└── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
+                                 # script.js를 로드하는 모든 페이지에서 script.js 직전 로드 필수
 ```
 
 함수 목록 → [docs/js-api.md](js-api.md)

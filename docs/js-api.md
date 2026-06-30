@@ -165,6 +165,19 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 ---
 
+## window.COTTAGE_PAGE_LABELS / window.COTTAGE_PAGE_LABELS_BY_PATH (page-labels.js)
+
+페이지 경로 → 한글 라벨 매핑 단일 소스. script.js의 PAGE_LABELS(pathname 키, 세션 트래커용)와 requests-admin.html의 PAGE_LABEL(slug 키, 분석 대시보드 표시용)이 별도 하드코딩이라 about.html 개명 시 드리프트가 발생했던 것을 통합(143차-161).
+
+| 전역 | 키 형식 | 용도 |
+|------|--------|------|
+| `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | requests-admin.html — `page_views.page`(slug 저장) 표시용 |
+| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname (예: `'/pages/info/about.html'`) | script.js — `page_sessions.page`에 저장될 한글 라벨 자체를 동기 평가로 만들 때 사용 |
+
+두 맵은 같은 페이지라도 값이 다를 수 있음(예: `game-reviews`는 "플레이 기록" vs "기록 보기") — 기존부터 그랬던 것이라 통합 시에도 의도적으로 보존함. **`script.js`가 로드 시점에 동기 평가하므로, page-labels.js는 반드시 script.js 로드 직전에 위치해야 함** (script.js를 로드하는 14개 HTML 전체 적용 완료).
+
+---
+
 ## window._cottageSessionStart (supabase-client.js)
 
 현재 세션 시작 시각 (Date.now() 값). `startSession()` 및 `visibilitychange` 탭 복귀 시 set. `kakao-auth.js`의 `openProfilePanel`에서 현재 세션 경과 시간 계산에 사용.
@@ -201,3 +214,4 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |
 | `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
+| `window.COTTAGE_PAGE_LABELS` / `window.COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script.js, requests-admin.html (script.js 로드 직전 필수) |

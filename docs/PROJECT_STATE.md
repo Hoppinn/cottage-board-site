@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-30 (143차-160)
+최종 갱신: 2026-06-30 (143차-162)
 
 ---
 
@@ -391,6 +391,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-30 | fix+refactor: 헤더 메뉴 글자크기 통일(.menu-link-home 14px), about.html WHY1 마무리 문단 추가, 변경된 페이지명(about/price-rules/guide) title·meta·breadcrumb 전체 동기화. refactor: PAGE_LABEL 중복 제거 — script.js PAGE_LABELS(pathname 키)와 requests-admin.html PAGE_LABEL(slug 키)이 같은 목적의 별도 하드코딩이라 about.html 개명 시 드리프트 발생했던 것을 assets/js/page-labels.js 단일 소스로 통합(값 100% 동일 유지, script.js 로드 직전 위치 — 14개 HTML 전체 적용) (143차-162) |
 | 2026-06-30 | feat: 퍼널 분석 1단계(PLAN_funnel_analytics.md) — page_events에 session_key/user_id 컬럼 추가(SQL 직접 실행), trackEvent()가 함께 저장하도록 수정. 누락 이벤트 3개 연결: recommend_start(추천 조건 실제 선택 시 1회, 모달 오픈 아님), record_start(game-reviews.js 진입 시 1회), signup_complete(upsertProfile의 기존 isNewUser 조건 그대로 사용). getPageViewCounts() 신규 — 관리자 이벤트 퍼널에 "메인 방문(page_views 기준)" 단계 추가. **주의: session_key/user_id는 이 시점 이전 행에는 없음(NULL) — unique 집계는 2026-06-30 이후 데이터부터만 정확.** 관리자 UI 구조/분석탭 재설계는 범위 밖(보류) (143차-161) |
 | 2026-06-30 | content: about.html → "코티지가 만들어진 이유" 브랜드 스토리 페이지로 전면 재구성 (Hero 1줄+서브타이틀 → WHY1/WHY2(텍스트+사진) → 제약 2x2 카드(각 카드 사진 슬롯 추가, 임시 플레이스홀더) → WHY 회수 → 버튼). 기존 소개문단/사진3장/특징카드5/대상자안내4 제거(중복). 헤더 메뉴 구조 개편: "코티지보드"+"동호회" 그룹 폐지 → "코티지를 만든 이유"(about.html 직접링크) + "코티지 이용"(가격·이용안내/홈페이지 기능/동호회/요청하기) 신설. price-rules.html을 이용요금→운영시간(신규)→이용 약속→음식 안내 순으로 재배치, 상단 안내문구 추가. guide.html/price-rules.html breadcrumb를 변경된 메뉴 그룹명에 맞춰 갱신 (143차-160) |
 | 2026-06-30 | fix: play-records-utils.js가 9개 페이지(about/guide/club-schedule/price-rules/club/club-rules/club-intro/requests/requests-admin)에 누락되어 parsePhotoUrls·openLightbox 미정의 — 다중사진 기록 이미지 깨짐 + 사진 더보기 버튼 무반응 버그. 9개 페이지에 스크립트 추가, game-reviews.html 로드순서 정정, 더보기 토글을 openLightbox 의존 블록에서 분리. 기록보드 기본 펼침 축소(게임평1/사진3) + 더보기 문구 통일. 내 보드 메인 패널 헤더 sticky화 + padding-top:0 (143차-159) |
