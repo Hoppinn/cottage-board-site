@@ -388,6 +388,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-30 | fix: 게임정보 시트 타이틀 위 공백 축소(.sheet-title-row margin-top:-32px) — sticky-bar 자체에 음수 margin 주면 sticky 깨짐 확인, sticky-bar는 안정값(margin-bottom:14px) 유지하고 sticky와 무관한 .sheet-title-row만 조정. sheet-record-header도 top:-22px→0, margin-top 0으로 통일해 뒤로가기 버튼 잘림 버그 해결 (143차-157) |
 | 2026-06-19 | feat: 교환권 업적 지급(grantAchievementVoucher), 함께한 날(balance) 구현(getUserUniqueDayCount), 메뉴명 변경(record/play/visit/balance), 약식 카드 클릭→변경. 003_voucher_achievement.sql 실행 (132차) |
 | 2026-06-19 | fix: 업적/캐릭터/칭호 0개 버그 — getUserAchievements FK join null → achievement_id 직접 매핑, getRepAchievement 2차 조회 제거 (131차) |
 | 2026-06-19 | feat: 알림 2차 개선(날짜 위치/빈상태 조건/unread 좌측바/보상카드 강조/명칭 "최근 소식"). supabase-setup.sql 누락 항목 추가 (130차) |
