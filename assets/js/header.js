@@ -34,7 +34,7 @@
         <a href="${p}game/game-reviews.html">플레이 기록</a>
       </div>
     </div>
-    <a href="${p}info/about.html" class="menu-link-home">코티지가 만들어진 이유</a>
+    <a href="${p}info/about.html" class="menu-link-home">코티지를 만든 이유</a>
     <div class="menu-group">
       <button class="menu-group-header" type="button">코티지 이용 <span class="menu-group-arrow">›</span></button>
       <div class="menu-group-body">
