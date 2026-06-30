@@ -49,6 +49,7 @@
         <img id="kakaoProfileImg" src="" alt="" style="display:none">
         <span id="kakaoLoginText">카카오 로그인</span>
       </button>
+      <a id="menuAdminLink" class="menu-admin-link" href="/pages/admin/requests-admin.html" style="display:none;">🔧 관리자 페이지</a>
       <div id="kakaoUserActions" class="menu-kakao-user-actions">
         <button id="kakaoPhotoBtn" type="button">사진 변경</button>
         <button id="kakaoNicknameBtn" type="button">닉네임 변경</button>

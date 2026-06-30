@@ -1886,6 +1886,20 @@ body.sheet-open{
   padding-top: 2px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.menu-admin-link {
+  flex: 0 0 100%;
+  padding: 0 12px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5a3418;
+  text-decoration: none;
+}
+
+.menu-admin-link:hover {
+  text-decoration: underline;
 }
 
 .menu-kakao-login-btn {

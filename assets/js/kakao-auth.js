@@ -219,6 +219,7 @@ function updateLoginUI(user) {
   if (!btn) return;
 
   const logoutIconBtn = document.getElementById('kakaoLogoutIconBtn');
+  const adminLink = document.getElementById('menuAdminLink');
   if (user) {
     btn.classList.add('is-logged-in');
     if (profileImg) {
@@ -229,12 +230,14 @@ function updateLoginUI(user) {
     if (userActions) userActions.style.display = 'none';
     if (logoutIconBtn) logoutIconBtn.classList.add('is-visible');
     if (String(user.id) === String(OWNER_KAKAO_ID)) localStorage.setItem('cottage_is_admin', '1');
+    if (adminLink) adminLink.style.display = String(user.id) === String(OWNER_KAKAO_ID) ? '' : 'none';
   } else {
     btn.classList.remove('is-logged-in');
     if (profileImg) profileImg.style.display = 'none';
     if (loginText) loginText.textContent = '카카오 로그인';
     if (userActions) userActions.style.display = 'none';
     if (logoutIconBtn) logoutIconBtn.classList.remove('is-visible');
+    if (adminLink) adminLink.style.display = 'none';
   }
 
   window.dispatchEvent(new CustomEvent('cottage-auth-changed', { detail: { user } }));
@@ -487,7 +490,6 @@ async function openProfilePanel(autoSubsheet = null) {
   panel.className = 'profile-panel';
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
-  const adminOrigin = window.location.origin;
   panel.innerHTML = `<div class="profile-panel-box">
     <div class="profile-panel-header">
       <span class="profile-panel-title">내 보드</span>
@@ -1058,8 +1060,7 @@ async function openProfilePanel(autoSubsheet = null) {
         ${_scheduleHtml}
       </div>
       <span class="profile-card-arrow">›</span>
-    </button>
-    ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}`;
+    </button>`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
   function _openSubSheet(title, contentHtml, afterRender, bodyClass = '') {
