@@ -2906,7 +2906,7 @@ body.embed-mode .site-footer { display: none !important; }
   position:sticky;
   top:0;
   z-index:20;
-  margin:0 -20px 14px;
+  margin:0 -20px -44px;
   padding:10px 20px;
   border-radius:28px 28px 0 0;
   display:flex;
