@@ -104,7 +104,7 @@ if (!isMurderMystery && weight > maxWeight) {
     return;
   }
 
-  window.CottageDB?.trackEvent('recommend_complete');
+  _fireRecommendComplete();
 
   const MAX_CARDS = window.innerWidth >= 720 ? 4 : 5;
   const seenBaseTitles = new Set();
@@ -342,6 +342,7 @@ function openRecommendModal(){
   }
 
   _recommendStartFired = false; // 모달 열 때마다 다음 선택 1회를 다시 추적
+  _recommendCompleteFired = false; // 모달 열 때마다 다음 결과 표시 1회를 다시 추적
 
   // playerSubRow/playerMainRow 상태 보존 — 모달 재열기 시 초기화 방지
   const _subD  = playerSubRow  ? playerSubRow.style.display  : null;
@@ -398,6 +399,13 @@ function _fireRecommendStart() {
   if (_recommendStartFired) return;
   _recommendStartFired = true;
   window.CottageDB?.trackEvent('recommend_start');
+}
+
+let _recommendCompleteFired = false;
+function _fireRecommendComplete() {
+  if (_recommendCompleteFired) return;
+  _recommendCompleteFired = true;
+  window.CottageDB?.trackEvent('recommend_complete');
 }
 
 const recommendState = {
