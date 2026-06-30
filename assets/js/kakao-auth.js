@@ -653,7 +653,7 @@ async function openProfilePanel(autoSubsheet = null) {
       ? `<img class="profile-record-thumb profile-record-thumb--review" src="${escH(_thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
       : `<span class="profile-record-thumb-empty profile-record-thumb--review"></span>`;
     return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left">${_thumbHtml}<button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
-  }, 3);
+  }, 1);
 
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
   const VOUCHER_NOTICE_DATE = '2026-06-16';
@@ -941,9 +941,9 @@ async function openProfilePanel(autoSubsheet = null) {
     }
   }
   const _photoCount = userStats?.photoCount || 0;
-  const _PHOTO_SHOW = 6;
+  const _PHOTO_SHOW = 3;
   const _recentPhotoHtml = _allPhotoData.length
-    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">+${_allPhotoData.length - _PHOTO_SHOW}장</button>` : ''}</div></li></ul>`
+    ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">더 보기 (${_allPhotoData.length - _PHOTO_SHOW}장 더)</button>` : ''}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
   const _recordInnerHtml = `
     <div class="profile-activity-group profile-activity-group--review">
@@ -1062,7 +1062,7 @@ async function openProfilePanel(autoSubsheet = null) {
     ${isOwnerUser ? `<a href="${adminOrigin}/pages/admin/requests-admin.html" class="profile-admin-link">🔧 관리자 페이지</a>` : ''}`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
-  function _openSubSheet(title, contentHtml, afterRender) {
+  function _openSubSheet(title, contentHtml, afterRender, bodyClass = '') {
     document.getElementById('profileSubSheet')?.remove();
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
@@ -1074,7 +1074,7 @@ async function openProfilePanel(autoSubsheet = null) {
           <span class="profile-subsheet-title">${title}</span>
           <button class="profile-subsheet-close" type="button">✕</button>
         </div>
-        <div class="profile-subsheet-body">${contentHtml}</div>
+        <div class="profile-subsheet-body${bodyClass ? ' ' + bodyClass : ''}">${contentHtml}</div>
       </div>`;
     document.body.appendChild(sub);
     sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
@@ -1601,6 +1601,21 @@ async function openProfilePanel(autoSubsheet = null) {
               window.openGameRecordSheet?.(key);
             });
           });
+          // 더보기/접기 — 라이트박스 기능(play-records-utils.js) 유무와 무관하게 항상 동작
+          const _moreBadge = subBody.querySelector('.record-photo-more-badge');
+          if (_moreBadge) {
+            const _hiddenTotal = _allPhotoData.length - _PHOTO_SHOW;
+            let _photoExpanded = false;
+            _moreBadge.addEventListener('click', e => {
+              e.stopPropagation();
+              _photoExpanded = !_photoExpanded;
+              subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
+                const idx = parseInt(img.dataset.photoIdx || '0', 10);
+                if (idx >= _PHOTO_SHOW) img.classList.toggle('record-photo-hidden', !_photoExpanded);
+              });
+              _moreBadge.textContent = _photoExpanded ? '접기' : `더 보기 (${_hiddenTotal}장 더)`;
+            });
+          }
           // 사진 클릭 → 라이트박스 (캡션+삭제 포함)
           if (window.openLightbox && _allPhotoData.length) {
             const _myId = String(window.getKakaoUser?.()?.id || '');
@@ -1637,22 +1652,8 @@ async function openProfilePanel(autoSubsheet = null) {
                 window.openLightbox(_photoUrls, idx, _lbOpts);
               });
             });
-            const moreBadge = subBody.querySelector('.record-photo-more-badge');
-            if (moreBadge) {
-              const _hiddenTotal = _allPhotoData.length - _PHOTO_SHOW;
-              let _photoExpanded = false;
-              moreBadge.addEventListener('click', e => {
-                e.stopPropagation();
-                _photoExpanded = !_photoExpanded;
-                subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
-                  const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                  if (idx >= _PHOTO_SHOW) img.classList.toggle('record-photo-hidden', !_photoExpanded);
-                });
-                moreBadge.textContent = _photoExpanded ? '▲ 접기' : `+${_hiddenTotal}장`;
-              });
-            }
           }
-        });
+        }, 'profile-subsheet-body--records');
 
 
       } else if (type === 'usage') {
