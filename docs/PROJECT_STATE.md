@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-30 (143차-156)
+최종 갱신: 2026-06-30 (143차-160)
 
 ---
 
@@ -183,6 +183,8 @@
    - 영향 파일: kakao-auth.js (함께한 시간 섹션), style.css (카드 패딩)
 
 > Discord 알림 전환 폐기 — 카카오 개인 알림으로 유지 (142차-25)
+
+10. **about.html 제약 2x2 카드 사진 교체** — 시간/공간/시작/함께하는 제약 카드 각각에 임시 플레이스홀더 이미지(exterior/shelves/interior/collage) 적용됨(143차-160). 사용자가 4개 항목용 실제 사진을 재구성할 예정 — 받으면 `.about-constraint-photo img` src만 교체.
 
 ---
 
@@ -389,6 +391,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-30 | content: about.html → "코티지가 만들어진 이유" 브랜드 스토리 페이지로 전면 재구성 (Hero 1줄+서브타이틀 → WHY1/WHY2(텍스트+사진) → 제약 2x2 카드(각 카드 사진 슬롯 추가, 임시 플레이스홀더) → WHY 회수 → 버튼). 기존 소개문단/사진3장/특징카드5/대상자안내4 제거(중복). 헤더 메뉴 구조 개편: "코티지보드"+"동호회" 그룹 폐지 → "코티지를 만든 이유"(about.html 직접링크) + "코티지 이용"(가격·이용안내/홈페이지 기능/동호회/요청하기) 신설. price-rules.html을 이용요금→운영시간(신규)→이용 약속→음식 안내 순으로 재배치, 상단 안내문구 추가. guide.html/price-rules.html breadcrumb를 변경된 메뉴 그룹명에 맞춰 갱신 (143차-160) |
 | 2026-06-30 | fix: play-records-utils.js가 9개 페이지(about/guide/club-schedule/price-rules/club/club-rules/club-intro/requests/requests-admin)에 누락되어 parsePhotoUrls·openLightbox 미정의 — 다중사진 기록 이미지 깨짐 + 사진 더보기 버튼 무반응 버그. 9개 페이지에 스크립트 추가, game-reviews.html 로드순서 정정, 더보기 토글을 openLightbox 의존 블록에서 분리. 기록보드 기본 펼침 축소(게임평1/사진3) + 더보기 문구 통일. 내 보드 메인 패널 헤더 sticky화 + padding-top:0 (143차-159) |
 | 2026-06-30 | feat+fix: 기록보드(내보드>기록보드) 게임평/플레이기록 썸네일 추가(_getGameThumbKey bgg.id fallback) + 게임평 폰트/공백 조정 + 사진 더보기 토글 버그 수정 + 게임평/사진/플레이기록 섹션별 sticky 헤더 + .sheet-back-btn--hist modifier 분리(이전게임 히스토리 vs 기록시트 복귀 버튼 공유 클래스 충돌로 타이틀이 백버튼 덮던 버그) (143차-158) |
 | 2026-06-30 | fix: 게임정보 시트 타이틀 위 공백 축소(.sheet-title-row margin-top:-32px) — sticky-bar 자체에 음수 margin 주면 sticky 깨짐 확인, sticky-bar는 안정값(margin-bottom:14px) 유지하고 sticky와 무관한 .sheet-title-row만 조정. sheet-record-header도 top:-22px→0, margin-top 0으로 통일해 뒤로가기 버튼 잘림 버그 해결 (143차-157) |

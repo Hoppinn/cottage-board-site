@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-20 (JS 파일 목록 보완, scripts/ 갱신, 비로그인 추적 흐름 추가)
+최종 갱신: 2026-06-30 (헤더 메뉴 구조 개편, about.html/price-rules.html 재구성 반영)
 
 ---
 
@@ -27,9 +27,9 @@
 │   │   ├── game-reviews.html       # 플레이 기록 허브 (핵심 기능 페이지)
 │   │   └── game-location.html      # 게임 위치 안내
 │   ├── info/                       # 코티지보드 소개
-│   │   ├── about.html              # 코티지보드 소개
-│   │   ├── price-rules.html        # 가격 & 규칙
-│   │   └── guide.html              # 홈페이지 이용안내
+│   │   ├── about.html              # 코티지가 만들어진 이유 (브랜드 스토리: Hero→WHY1→WHY2→제약 2x2 카드→WHY 회수→버튼)
+│   │   ├── price-rules.html        # 가격·이용안내 (이용요금→운영시간→이용 약속→음식 안내)
+│   │   └── guide.html              # 홈페이지 기능 안내
 │   ├── club/                       # 동호회
 │   │   ├── club.html               # 동호회 소개
 │   │   ├── club-intro.html         # 동호회 멤버 소개
@@ -58,6 +58,27 @@
 │   ├── ss_4axis/                   # 4축 UI 스크린샷
 │   └── ss_profile/                 # 프로필 패널 스크린샷
 ```
+
+### 헤더 메뉴 구조 (assets/js/header.js)
+
+```
+게임
+ ├ 추천 게임 찾기
+ ├ 전체 게임 보기
+ ├ 게임 위치
+ └ 플레이 기록
+
+코티지를 만든 이유   ← 직접 링크 (드롭다운 아님), info/about.html
+                      페이지 내 타이틀은 "코티지가 만들어진 이유"
+
+코티지 이용
+ ├ 가격 · 이용안내    (info/price-rules.html)
+ ├ 홈페이지 기능      (info/guide.html)
+ ├ 동호회             (club/club.html, 단일 링크)
+ └ 요청하기           (admin/requests.html)
+```
+
+`코티지보드` 그룹과 `동호회` 그룹은 폐지되어 `코티지 이용` 그룹으로 흡수됨 (143차-157 전후). `.menu-link-home` 클래스로 직접 링크 스타일(그룹 헤더와 동일 색상) 적용.
 
 ### 페이지별 인증 요구
 
