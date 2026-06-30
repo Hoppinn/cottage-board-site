@@ -34,23 +34,16 @@
         <a href="${p}game/game-reviews.html">플레이 기록</a>
       </div>
     </div>
+    <a href="${p}info/about.html" class="menu-link-home">코티지가 만들어진 이유</a>
     <div class="menu-group">
-      <button class="menu-group-header" type="button">코티지보드 <span class="menu-group-arrow">›</span></button>
+      <button class="menu-group-header" type="button">코티지 이용 <span class="menu-group-arrow">›</span></button>
       <div class="menu-group-body">
-        <a href="${p}info/about.html">코티지보드가 만들어진 이유</a>
-        <a href="${p}info/price-rules.html">가격 &amp; 규칙</a>
-        <a href="${p}info/guide.html">홈페이지 이용안내</a>
+        <a href="${p}info/price-rules.html">가격 · 이용안내</a>
+        <a href="${p}info/guide.html">홈페이지 기능</a>
+        <a href="${p}club/club.html">동호회</a>
+        <a href="${p}admin/requests.html">요청하기</a>
       </div>
     </div>
-    <div class="menu-group">
-      <button class="menu-group-header" type="button">동호회 <span class="menu-group-arrow">›</span></button>
-      <div class="menu-group-body">
-        <a href="${p}club/club.html">소개</a>
-        <a href="${p}club/club.html#club-join">가입하기</a>
-        <a href="${p}club/club.html#club-meeting">모임참여하기</a>
-      </div>
-    </div>
-    <a href="${p}admin/requests.html">요청하기</a>
     <div class="menu-login-area">
       <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
         <img id="kakaoProfileImg" src="" alt="" style="display:none">
