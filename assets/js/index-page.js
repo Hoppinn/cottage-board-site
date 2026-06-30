@@ -780,16 +780,6 @@ document.addEventListener(
   }
 );
 
-/* =========================
-   # URL HASH
-========================= */
-
-if(window.location.hash === "#recommend"){
-  setTimeout(()=>{
-    showRecommendResults();
-  }, 200);
-}
-
 
 /* =========================
    # INIT
@@ -915,8 +905,8 @@ if (recommendTitle && recommendSection) {
 (async function initHeroStats() {
   const recEl = document.getElementById("heroRecommendCount");
   const playEl = document.getElementById("heroPlayCount");
-  if (!recEl && !playEl) return;
   try {
+    if (!recEl && !playEl) return;
     const events = await window.CottageDB?.getEventCounts(
       ['recommend_complete', 'record_complete'], 1
     );
@@ -940,13 +930,13 @@ if (recommendTitle && recommendSection) {
         ? `오늘 ${playCount}개의 플레이기록이 작성됐어요. 📝`
         : '';
     }
-  } catch (_) {}
+  } catch (_) {
+  } finally {
+    // index.html#recommend 로 직접 진입 시 추천 섹션 자동 열기.
+    // 히어로 통계 텍스트가 늦게 채워지며 #recommend 위쪽 높이가 바뀌므로,
+    // 통계 반영(성공/실패 무관)이 끝난 뒤에 스크롤 위치를 계산해야 정확하다.
+    if (location.hash === '#recommend' && document.getElementById('recommend')) {
+      showRecommendResults();
+    }
+  }
 })();
-
-/* =========================
-   # HASH-BASED RECOMMEND OPEN
-   index.html#recommend 로 직접 진입 시 추천 섹션 자동 열기
-========================= */
-if(location.hash === '#recommend' && document.getElementById('recommend')){
-  showRecommendResults();
-}
