@@ -399,6 +399,25 @@
               </div>
             </div>
 
+            <div class="admin-summary-grid" style="margin-top:8px">
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">전체 방문자<span style="font-weight:400;opacity:.7"> (봇 제외)</span></div>
+                <div class="admin-summary-value" id="sumVisitorTotal">—</div>
+              </div>
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">회원 방문자</div>
+                <div class="admin-summary-value" id="sumVisitorMember">—</div>
+              </div>
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">비회원 방문자</div>
+                <div class="admin-summary-value" id="sumVisitorGuest">—</div>
+              </div>
+              <div class="admin-summary-card">
+                <div class="admin-summary-label">봇 방문자</div>
+                <div class="admin-summary-value" id="sumVisitorBot">—</div>
+              </div>
+            </div>
+
             <div class="admin-analysis-tabs" id="analysisTabs">
               <button class="admin-analysis-tab is-active" data-tab="visit" type="button">방문</button>
               <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
@@ -765,7 +784,7 @@
       const [rows, allProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
-        db2 ? db2.from('page_views').select('page, created_at, referrer').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
+        db2 ? db2.from('page_views').select('page, created_at, referrer, is_bot, user_id').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const pageViews = pvResult?.data || [];
@@ -1220,7 +1239,11 @@
         }
 
         // __visitor__ 마커 행만: 히어로 페이지와 동일 방식으로 방문자 집계
-        const visitorRows = pageViews.filter(r => r.page === '__visitor__');
+        // "전체 방문자"는 봇 제외가 기준 — is_bot=true 행은 visitorRows에서 빠지고 botVisitorRows로 별도 집계
+        // (is_bot/user_id 컬럼은 143차-178부터 추가돼 그 이전 데이터는 전부 is_bot=false/user_id=null로 채워짐)
+        const visitorRowsAll = pageViews.filter(r => r.page === '__visitor__');
+        const visitorRows = visitorRowsAll.filter(r => !r.is_bot);
+        const botVisitorRows = visitorRowsAll.filter(r => r.is_bot);
 
         // ── 요약 카드 (__visitor__ 마커 기준, 기간 연동) ───────────────
         {
@@ -1317,6 +1340,22 @@
           if (el_delta) el_delta.innerHTML = vDeltaHtml;
           if (el_deltaSub) el_deltaSub.textContent = vDeltaSub;
           if (el_topRef) el_topRef.innerHTML = topRefHtml;
+        }
+
+        // ── 회원/비회원/봇 방문자 요약 카드 (143차-178, is_bot/user_id 컬럼 기반) ──
+        {
+          const periodVisForBreakdown = (start || end) ? filterByRange(visitorRows, start, end, 'created_at') : visitorRows;
+          const memberCnt = periodVisForBreakdown.filter(r => r.user_id).length;
+          const guestCnt = periodVisForBreakdown.length - memberCnt;
+          const botCnt = ((start || end) ? filterByRange(botVisitorRows, start, end, 'created_at') : botVisitorRows).length;
+          const elTotal = document.getElementById('sumVisitorTotal');
+          const elMember = document.getElementById('sumVisitorMember');
+          const elGuest = document.getElementById('sumVisitorGuest');
+          const elBot = document.getElementById('sumVisitorBot');
+          if (elTotal) elTotal.textContent = periodVisForBreakdown.length;
+          if (elMember) elMember.textContent = memberCnt;
+          if (elGuest) elGuest.textContent = guestCnt;
+          if (elBot) elBot.textContent = botCnt;
         }
 
         // ── 1. 날짜별 방문자 — __visitor__ 마커 기준, 단위별 집계 ──

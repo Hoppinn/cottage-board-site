@@ -222,14 +222,26 @@ window._cottageSess = (function () {
 
   // ── 페이지 뷰 트래킹 ────────────────────────────────────
 
-  async function trackPageView(page, referrer = null) {
+  async function trackPageView(page, referrer = null, extra = {}) {
     if (!page) return;
     try {
-      const payload = { page };
+      const payload = { page, ...extra };
       if (referrer) payload.referrer = referrer;
       const { error } = await db.from("page_views").insert(payload);
       if (error) console.warn('[trackPageView] insert error:', error.message);
     } catch (e) { console.warn('[trackPageView] exception:', e); }
+  }
+
+  // 알려진 크롤러/봇 User-Agent 패턴만 매칭 (완전 차단이 아닌 "알려진 봇 제외" 수준)
+  const BOT_UA_PATTERN = /bot|crawl|spider|slurp|googlebot|bingbot|yandex|baiduspider|duckduckbot|facebookexternalhit|twitterbot|slackbot|telegrambot|whatsapp|kakaotalk-scrap|naverbot|daumoa|ahrefsbot|semrushbot|mj12bot|dotbot|petalbot|bytespider|ia_archiver|linkedinbot|discordbot|embedly|pinterest/i;
+  function _isBotUA() {
+    return typeof navigator !== 'undefined' && BOT_UA_PATTERN.test(navigator.userAgent || '');
+  }
+  function _currentVisitorUserId() {
+    try {
+      const u = JSON.parse(localStorage.getItem('kakao_user') || 'null');
+      return u?.id ? String(u.id) : null;
+    } catch (_) { return null; }
   }
 
   // ── 이벤트 트래킹 ───────────────────────────────────────
@@ -890,7 +902,10 @@ window._cottageSess = (function () {
       // 하루 첫 방문: 방문자 카운트용 마커 삽입 (getVisitorStats는 이것만 카운트)
       if (!localStorage.getItem(visitedKey)) {
         localStorage.setItem(visitedKey, "1");
-        trackPageView('__visitor__', effectiveSource === 'direct' ? null : effectiveSource);
+        trackPageView('__visitor__', effectiveSource === 'direct' ? null : effectiveSource, {
+          is_bot: _isBotUA(),
+          user_id: _currentVisitorUserId(),
+        });
       }
       trackPageView(page, effectiveSource === 'direct' ? null : effectiveSource);
     }

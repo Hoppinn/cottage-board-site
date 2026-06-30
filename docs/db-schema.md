@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-06-30 (143차: member_intros 확장(travel_range/meeting_style/UNIQUE user_id) + meeting_game_prefs 신규 — 회원 자기소개 ↔ 모임 보드 연동)
+최종 갱신: 2026-07-01 (143차-178: page_views.is_bot/user_id 추가 — 봇 제외 + 회원/비회원 방문자 트래킹)
 
 ---
 
@@ -15,7 +15,7 @@
 | `game_comments` | game_key, comment_text, nickname, user_id | 코멘트 |
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
-| `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
+| `page_views` | page, created_at, referrer, is_bot (boolean, default false), user_id (text, nullable) | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname). is_bot/user_id는 143차-178부터 추가 — `__visitor__` 마커 삽입 시점에 navigator.userAgent로 알려진 크롤러 패턴 매칭 시 is_bot=true, 로그인 상태면 user_id 채움(회원/비회원 구분용). **과거 데이터는 소급 보정 안 됨**(is_bot=false/user_id=null로 일괄 채워짐) |
 | `page_events` | event_type, game_id, referrer, session_key, user_id, created_at | 기능 이벤트(hero_recommend_click, recommend_start, recommend_complete, hero_record_click, record_start, record_complete, signup_complete 등). referrer: 세션 귀속 소스. session_key/user_id는 143차-160(2026-06-30)에 추가 — **그 이전 행은 NULL이라 unique 집계는 추가 시점 이후 데이터부터만 정확** |
 | `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]), notif_seen_at (timestamptz) | 유저 프로필. **bio: 한줄소개 SSOT** — 취향보드/회원 자기소개(club-intro.html)/모임 보드 3곳이 동일 컬럼을 공유 읽기·쓰기(`updateUserBio`). 한쪽에서 수정하면 나머지에도 즉시 반영됨(의도된 동작). avoid_tags: 피하는 유형 태그 배열, notif_seen_at: 알림 마지막 읽은 시각 (기기 간 동기화용) |
