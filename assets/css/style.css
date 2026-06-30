@@ -4787,39 +4787,59 @@ body.embed-mode .site-footer { display: none !important; }
   color:rgba(255,255,255,.6);
   font-weight:700;
 }
-/* ── 규칙/안내 요약 카드 ── */
-.rules-summary-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-bottom:28px;
-}
-.rules-summary-card{
-  background:var(--paper);
-  border:1.5px solid #e0d0b8;
-  border-radius:14px;
-  padding:12px 12px 13px;
+/* ── 이용 약속 섹션형 리스트 ── */
+.rules-line-list{
   display:flex;
   flex-direction:column;
-  gap:4px;
 }
-.rules-summary-icon{
-  font-size:20px;
+.rules-line-item{
+  padding:14px 0;
+  border-top:1px solid var(--line);
+}
+.rules-line-item:first-child{
+  border-top:none;
+  padding-top:0;
+}
+.rules-line-item:last-child{
+  padding-bottom:0;
+}
+.rules-line-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:4px;
+}
+.rules-line-icon{
+  font-size:18px;
   line-height:1;
-  margin-bottom:2px;
 }
-.rules-summary-label{
-  font-size:10px;
-  font-weight:900;
-  color:var(--muted);
-  letter-spacing:0.04em;
-  text-transform:uppercase;
+.rules-line-title{
+  font-size:14px;
+  font-weight:700;
+  color:#3a2a1f;
+  margin:0;
 }
-.rules-summary-val{
+.rules-line-desc{
   font-size:13px;
-  font-weight:500;
+  line-height:1.6;
   color:var(--text-info);
-  line-height:1.5;
+  font-weight:500;
+  margin:0;
+  word-break:keep-all;
+}
+.rules-line-list--sm .rules-line-icon{ font-size:16px; }
+.rules-line-list--sm .rules-line-title{ font-size:13px; }
+.rules-line-list--sm .rules-line-desc{ font-size:12px; }
+.rules-group-title--muted{
+  font-size:13px;
+  color:var(--muted);
+}
+.rules-keywords{
+  font-size:13px;
+  font-weight:700;
+  color:#7a4828;
+  margin:8px 0 0;
+  word-break:keep-all;
 }
 
 /* ── 안내 인트로 카드 (가로형) ── */
@@ -4861,8 +4881,8 @@ body.embed-mode .site-footer { display: none !important; }
   margin-bottom:36px;
 }
 .rules-group--must{
-  background:#fef5f4;
-  border:1.5px solid #c0392b;
+  background:rgba(192,57,43,0.04);
+  border:1px solid rgba(192,57,43,0.25);
   border-left:4px solid #c0392b;
   border-radius:12px;
   padding:14px 16px;
@@ -4872,6 +4892,9 @@ body.embed-mode .site-footer { display: none !important; }
 }
 .rules-group--must .price-rules-list li{
   font-weight:700;
+  background:transparent;
+  border:none;
+  padding:6px 4px;
 }
 .rules-group-title{
   font-size:16px;

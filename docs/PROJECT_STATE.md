@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-06-30 (143차-163)
+최종 갱신: 2026-06-30 (143차-164)
 
 ---
 
@@ -392,6 +392,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-06-30 | design: price-rules.html 레이아웃 다듬기 — 운영시간에 키워드 라인 추가, 이용 약속을 카드 그리드→박스 없는 섹션 리스트로 전환, "꼭 지켜주세요" 박스 배경/내부 카드 완화(테두리·제목 색은 유지), 음식 안내를 더 작은 라인 스타일로 재조정. breadcrumb 상위 항목을 이동 링크가 아닌 현재 위치 텍스트로 전환 — 실제 허브 페이지가 없는 "게임"(owned-games/game-reviews/game-location)과 "코티지 이용"(price-rules/guide) breadcrumb root를 plain text로 변경, club 계열은 club.html이 실제 허브 페이지라 링크 유지 (143차-164) |
 | 2026-06-30 | design: about.html HOW 섹션 카드형(2x2 그리드) → 섹션형 리스트로 전환 — 텍스트(아이콘+제목+키워드+설명) 우선, 사진은 보조 역할로 140px 축소+섹션 끝에 배치, hr 구분선. 항목별 키워드 라인 신규 추가(무제한·24시간 / 700여 종·밝은 조명·넓은 테이블 / 추천 시스템·룰 영상·위치 안내 / 동호회 운영). 사진 역할 분리(시간=외관/공간=내부/함께=동호회), 시작의 제약은 홈페이지 캡처 이미지 부재로 photo-shelves.jpg 임시 대체(추후 교체 필요) (143차-163) |
 | 2026-06-30 | fix+refactor: 헤더 메뉴 글자크기 통일(.menu-link-home 14px), about.html WHY1 마무리 문단 추가, 변경된 페이지명(about/price-rules/guide) title·meta·breadcrumb 전체 동기화. refactor: PAGE_LABEL 중복 제거 — script.js PAGE_LABELS(pathname 키)와 requests-admin.html PAGE_LABEL(slug 키)이 같은 목적의 별도 하드코딩이라 about.html 개명 시 드리프트 발생했던 것을 assets/js/page-labels.js 단일 소스로 통합(값 100% 동일 유지, script.js 로드 직전 위치 — 14개 HTML 전체 적용) (143차-162) |
 | 2026-06-30 | feat: 퍼널 분석 1단계(PLAN_funnel_analytics.md) — page_events에 session_key/user_id 컬럼 추가(SQL 직접 실행), trackEvent()가 함께 저장하도록 수정. 누락 이벤트 3개 연결: recommend_start(추천 조건 실제 선택 시 1회, 모달 오픈 아님), record_start(game-reviews.js 진입 시 1회), signup_complete(upsertProfile의 기존 isNewUser 조건 그대로 사용). getPageViewCounts() 신규 — 관리자 이벤트 퍼널에 "메인 방문(page_views 기준)" 단계 추가. **주의: session_key/user_id는 이 시점 이전 행에는 없음(NULL) — unique 집계는 2026-06-30 이후 데이터부터만 정확.** 관리자 UI 구조/분석탭 재설계는 범위 밖(보류) (143차-161) |
