@@ -60,7 +60,9 @@ Chrome 컴포지터는 `overflow-y:auto` 요소를 GPU 레이어로 승격할 �
 }
 ```
 
-**이 프로젝트 적용 위치:** `.game-sheet-panel` (outer) + `.game-sheet-scroll` (inner)
+**이 프로젝트 적용 위치:** `.game-sheet-panel` (outer) + `.game-sheet-scroll` (inner), `.profile-panel-box` (outer) + `.profile-panel-body` (inner, 143차-179 — 모바일 스크롤 체이닝 버그로 발견)
+
+`overscroll-behavior:contain`을 함께 쓸 때는 **실제 스크롤되는 inner 요소**에 둬야 한다. outer(overflow:hidden)에 두면 애초에 스크롤 컨테이너가 아니라서 효과가 없다(143차-179 시행착오).
 
 **증상으로 오해하기 쉬운 형태:**
 - "바텀시트 코너에 크림색 사각형이 삐져나와 보인다"
