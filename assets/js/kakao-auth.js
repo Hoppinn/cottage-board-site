@@ -492,7 +492,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
   panel.innerHTML = `<div class="profile-panel-box">
     <div class="profile-panel-header">
-      <span class="profile-panel-title">내 보드</span>
+      <span class="profile-panel-title">${escH(user.nickname || '손님')}의 내 보드</span>
       <button class="profile-panel-close" type="button">✕</button>
     </div>
     <div class="profile-panel-body">
