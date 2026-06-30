@@ -1019,22 +1019,24 @@ async function openProfilePanel(autoSubsheet = null) {
 
   body.innerHTML = `
     <div class="profile-panel-profile">
-      ${_repImgHtml}
-      <div class="profile-panel-profile-info">
-        <div class="profile-panel-nick-row">
-          <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} <span class="profile-nick-edit">✏️</span></button>
-          <button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>
+      <div class="profile-panel-profile-top">
+        ${_repImgHtml}
+        <div class="profile-panel-profile-info">
+          <div class="profile-panel-nick-row">
+            <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} <span class="profile-nick-edit">✏️</span></button>
+            <button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>
+          </div>
+          <span class="profile-panel-rep-name">${_repLabel}</span>
+          <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
         </div>
-        <span class="profile-panel-rep-name">${_repLabel}</span>
-        <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
-        <button class="profile-growth-link" type="button">
-          <span class="profile-growth-summary-row">
-            <span class="profile-growth-summary-text">${escH(_growthLine)}</span>
-            <span class="profile-growth-summary-arrow">›</span>
-          </span>
-          ${_growthBadge}
-        </button>
       </div>
+      <button class="profile-growth-link" type="button">
+        <span class="profile-growth-summary-row">
+          <span class="profile-growth-summary-text">${escH(_growthLine)}</span>
+          <span class="profile-growth-summary-arrow">›</span>
+        </span>
+        ${_growthBadge}
+      </button>
     </div>
     <div class="profile-card-grid">
       <button class="profile-card" data-subsheet="taste" type="button">

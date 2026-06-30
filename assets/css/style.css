@@ -2022,6 +2022,11 @@ body.sheet-open{
 /* embed-mode: header.js가 embed=1 감지 시 body에 추가 */
 body.embed-mode .site-header,
 body.embed-mode .site-footer { display: none !important; }
+/* 헤더가 아예 렌더링되지 않으므로 헤더 높이를 전제로 한 상단 여백(calc(var(--header-total-h)+...))이 전부 빈 공백으로 남는 문제 — 변수 자체를 0으로 재정의해 모든 calc() 계산에 일괄 반영 */
+body.embed-mode {
+  --header-h: 0px;
+  --safe-top: 0px;
+}
 
 /* =========================
    # 6-A. SITE FOOTER
@@ -3861,7 +3866,8 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 16px;position:sticky;top:0;z-index:5;background:#fff;padding:14px 20px;border-bottom:1px solid var(--border,#e8e4dc);}
 .profile-panel-title{font-size:15px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
-.profile-panel-profile{display:flex;align-items:center;gap:14px;padding:4px 0 16px;}
+.profile-panel-profile{display:flex;flex-direction:column;padding:4px 0 16px;}
+.profile-panel-profile-top{display:flex;align-items:flex-start;gap:14px;}
 .profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}
 .profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;}
 .profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;flex-shrink:0;}
@@ -4918,6 +4924,9 @@ body.embed-mode .site-footer { display: none !important; }
 
 .rules-group{
   margin-bottom:36px;
+}
+.rules-group:last-child{
+  margin-bottom:0;
 }
 .rules-group--must{
   background:rgba(192,57,43,0.04);
