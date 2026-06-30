@@ -1,6 +1,19 @@
 (function () {
   if (new URLSearchParams(location.search).get('embed') === '1') {
     document.body.classList.add('embed-mode');
+    document.addEventListener('click', function (e) {
+      const a = e.target.closest('a[href]');
+      if (!a || a.target === '_blank') return;
+      const href = a.getAttribute('href');
+      if (!href || /^(#|mailto:|tel:|javascript:)/.test(href)) return;
+      let url;
+      try { url = new URL(href, location.href); } catch (err) { return; }
+      if (url.origin !== location.origin || !url.pathname.endsWith('.html')) return;
+      if (url.searchParams.get('embed') === '1') return;
+      url.searchParams.set('embed', '1');
+      e.preventDefault();
+      location.href = url.toString();
+    });
     return;
   }
   const _s = document.currentScript;

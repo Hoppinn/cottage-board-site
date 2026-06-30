@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-30 (헤더 메뉴 구조 개편, about.html/price-rules.html 재구성, page-labels.js 통합 반영)
+최종 갱신: 2026-06-30 (embed 모드 내부 링크 자동 embed=1 전파, 143차-176)
 
 ---
 
@@ -124,6 +124,8 @@ assets/js/
 
 URL에 `embed=1` 파라미터가 있으면 `header.js`가 `body.embed-mode` 클래스 추가 후 헤더 미삽입.  
 `style.css`에 전역 규칙 → `body.embed-mode .site-header, .site-footer { display:none }`
+
+embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.html` 링크 클릭 시 `embed=1`을 자동으로 붙여 재이동시킨다(143차-176) — 시트 안에서 다른 내부 링크(브레드크럼, 카드 등)를 눌러도 헤더가 다시 삽입되지 않도록 하는 단일 진입점. 외부 링크·`target="_blank"`·`#`/`mailto:`/`tel:`/`javascript:` 링크는 제외.
 
 사용 페이지:
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
