@@ -48,6 +48,7 @@
       <button id="kakaoLoginBtn" class="menu-kakao-login-btn" type="button">
         <img id="kakaoProfileImg" src="" alt="" style="display:none">
         <span id="kakaoLoginText">카카오 로그인</span>
+        <span class="menu-login-arrow" aria-hidden="true">›</span>
       </button>
       <a id="menuAdminLink" class="menu-admin-link" href="/pages/admin/requests-admin.html" style="display:none;">🔧 관리자 페이지</a>
       <div id="kakaoUserActions" class="menu-kakao-user-actions">
