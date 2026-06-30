@@ -3105,21 +3105,7 @@ async function onSubmitPlayModal() {
    페이지별 체류 시간 + 유입 경로 기록 → page_sessions 테이블
 ========================= */
 (function() {
-  const PAGE_LABELS = {
-    '/': '메인',
-    '/index.html': '메인',
-    '/pages/game/owned-games.html': '게임 목록',
-    '/pages/game/game-reviews.html': '플레이 기록',
-    '/pages/game/game-location.html': '게임 위치',
-    '/pages/info/about.html': '코티지가 만들어진 이유',
-    '/pages/info/price-rules.html': '가격·이용안내',
-    '/pages/club/club.html': '동호회 소개',
-    '/pages/club/club-history.html': '모임 기록',
-    '/pages/club/club-intro.html': '회원 자기소개',
-    '/pages/club/club-schedule.html': '모임 플래너',
-    '/pages/admin/requests.html': '요청하기',
-    '/pages/admin/requests-admin.html': '관리자',
-  };
+  const PAGE_LABELS = window.COTTAGE_PAGE_LABELS_BY_PATH || {};
 
   const _entryTime = Date.now();
   const _page = PAGE_LABELS[location.pathname] || location.pathname;
