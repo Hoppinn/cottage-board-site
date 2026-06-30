@@ -3860,9 +3860,13 @@ body.embed-mode .site-footer { display: none !important; }
 .profile-panel-title-name{font-size:12px;color:#7a4828;font-weight:600;background:none;border:none;padding:0;cursor:pointer;text-align:left;}
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;}
-.profile-growth-line{font-size:11px;color:var(--text-info);font-weight:500;background:none;border:none;padding:0;margin-top:2px;cursor:pointer;text-align:left;}
-.profile-growth-line:hover{text-decoration:underline;}
-.profile-growth-badge{font-size:10.5px;color:var(--text-info);background:#f5f0ea;border:1px solid #e8e0d4;border-radius:6px;padding:3px 7px;margin-top:3px;line-height:1.5;}
+.profile-growth-link{display:block;width:100%;background:#f5f0ea;border:1px solid #e8e0d4;border-radius:8px;padding:8px 10px;margin-top:4px;cursor:pointer;text-align:left;box-sizing:border-box;transition:background .15s;}
+.profile-growth-link:hover{background:#ede4d6;}
+.profile-growth-link:active{background:#e5dac8;}
+.profile-growth-summary-row{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.profile-growth-summary-text{font-size:11px;color:var(--text-info);font-weight:500;line-height:1.5;white-space:pre-line;}
+.profile-growth-summary-arrow{font-size:15px;color:var(--muted);flex-shrink:0;}
+.profile-growth-badge{font-size:10.5px;color:var(--text-info);margin-top:4px;line-height:1.5;}
 .profile-growth-next{font-size:10px;color:var(--text-info);margin-top:2px;line-height:1.5;}
 .profile-admin-link{display:block;text-align:center;margin:0 0 14px;padding:9px;background:#7a4828;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;}
 .profile-admin-link:hover{opacity:0.85;}
@@ -4074,6 +4078,10 @@ body.embed-mode .site-footer { display: none !important; }
 /* 이번달 참여일정 / 모임 보드 카드 */
 .profile-card-schedule{display:block;font-size:10px;color:var(--green,#3a7d44);margin-top:4px;line-height:1.6;}
 .profile-card--span2{grid-column:span 2;}
+.profile-card-grid .profile-card--span2{flex-direction:row;align-items:center;gap:10px;min-height:0;padding:11px 14px;}
+.profile-card-grid .profile-card--span2 .profile-card-icon{font-size:18px;}
+.profile-card-grid .profile-card--span2 .profile-card-label{flex-shrink:0;}
+.profile-card-grid .profile-card--span2 .profile-card-summary{margin-top:0;margin-left:auto;text-align:right;}
 .profile-card-meeting-cta{display:block;font-weight:600;color:#4e8a24;}
 .profile-card-meeting-empty{display:block;font-size:10px;color:var(--muted);margin-top:4px;}
 /* 게임 목록 서브시트 */

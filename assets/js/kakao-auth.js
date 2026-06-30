@@ -1681,7 +1681,7 @@ async function openProfilePanel(autoSubsheet = null) {
   body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)); });
   body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
   body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)); });
-  body.querySelector('.profile-growth-line')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody)); });
+  body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody)); });
 
   if (autoSubsheet) {
     body.querySelector(`[data-subsheet="${autoSubsheet}"]`)?.click();
