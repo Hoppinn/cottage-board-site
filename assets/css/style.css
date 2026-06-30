@@ -1889,7 +1889,7 @@ body.sheet-open{
   flex-wrap: wrap;
 }
 
-.menu-admin-link {
+.header-menu a.menu-admin-link {
   flex: 0 0 100%;
   padding: 0 12px 8px;
   font-size: 14px;
@@ -1912,7 +1912,7 @@ body.sheet-open{
   cursor: pointer;
   font-size: 14px;
   font-weight: 900;
-  color: #c0426e;
+  color: #7a4828;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -6985,7 +6985,7 @@ body.embed-mode .site-footer { display: none !important; }
     position:relative; /* 드롭다운 기준점 */
   }
 
-  .menu-admin-link{
+  .header-menu a.menu-admin-link{
     font-size:13px;
     font-weight:900;
   }
