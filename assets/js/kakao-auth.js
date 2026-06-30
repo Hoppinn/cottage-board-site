@@ -959,16 +959,12 @@ async function openProfilePanel(autoSubsheet = null) {
       <button class="profile-activity-toggle" type="button">🎲 플레이 기록 <span class="profile-activity-count">${stats.plays.length}건</span><span class="profile-toggle-arrow">▴</span></button>
       ${stats.plays.length ? _openActivityList(playListHtml) : _emptyList('아직 플레이 기록이 없어요')}
     </div>`;
-  // 함께한 시간: 통계 + 코멘트한 게임 (플레이 기록은 기록 보드로 이동)
+  // 함께한 시간: 통계만 (플레이 기록·코멘트는 기록 보드에서 확인)
   const _usageInnerHtml = `
     <div class="profile-stats-wrap">
       <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
       <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
-    </div>
-    ${stats.comments.length ? `<div class="profile-activity-group">
-      <button class="profile-activity-toggle" type="button">💬 코멘트한 게임 <span class="profile-activity-count">${stats.comments.length}건</span><span class="profile-toggle-arrow">▾</span></button>
-      ${commentListHtml}
-    </div>` : ''}`;
+    </div>`;
   // 카드 요약
   const _voucherCardSummary = `${voucherBalance}장 보유`;
   const _bioPreview = _bioTags.length ? `${_bioTags.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTags.length > 2 ? ` +${_bioTags.length - 2}` : ''}` : '';
