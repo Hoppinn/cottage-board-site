@@ -37,7 +37,7 @@
     <div class="menu-group">
       <button class="menu-group-header" type="button">코티지보드 <span class="menu-group-arrow">›</span></button>
       <div class="menu-group-body">
-        <a href="${p}info/about.html">소개</a>
+        <a href="${p}info/about.html">코티지보드가 만들어진 이유</a>
         <a href="${p}info/price-rules.html">가격 &amp; 규칙</a>
         <a href="${p}info/guide.html">홈페이지 이용안내</a>
       </div>
