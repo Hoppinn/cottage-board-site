@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-06-25 (142차: game_id 배열 지원)
+최종 갱신: 2026-06-30 (143차: 회원 자기소개 ↔ 모임 보드 연동 — getMeetingProfile 등 신규 함수, openOtherMeetingSheet)
 
 ---
 
@@ -81,11 +81,15 @@
 | `addGamePref(userId, gameId, customName, table)` | 취향보드: game_likes 또는 game_curious에 항목 추가. gameId/customName 중 하나만 필요 |
 | `removeGamePref(userId, gameId, customName, table)` | 취향보드: 항목 삭제 |
 | `getCustomPrefSuggestions()` | 취향보드: 두 테이블 전체에서 distinct custom_name 목록 반환 |
-| `updateUserBio(userId, bio)` | profiles.bio 업데이트 |
+| `updateUserBio(userId, bio)` | profiles.bio 업데이트 — 취향보드/회원 자기소개/모임 보드가 공유하는 한줄소개 SSOT. 한쪽에서 호출하면 나머지 모든 화면에 즉시 반영됨 |
 | `updateUserAvoidTags(userId, tags)` | profiles.avoid_tags (text[]) 업데이트 |
 | `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD' |
 | `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert |
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소 |
+| `getMeetingProfile(userId)` | 모임 보드/자기소개 편집용. profiles.bio + member_intros + meeting_game_prefs(want_this_time, can_explain_rules) 통합 조회 → `{bio, nickname, location, available, travelRange, meetingStyle, favoriteGames, cardColor, wantGames, ruleGames}` |
+| `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회 (`openOtherMeetingSheet`용). getUserTasteProfile과 동일 패턴 |
+| `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |
+| `addMeetingGamePref(userId, listType, gameId, customName)` / `removeMeetingGamePref(...)` | meeting_game_prefs 추가/삭제. listType: `'want_this_time'` \| `'can_explain_rules'`. addGamePref/removeGamePref와 동일 구조 |
 
 ---
 
@@ -111,7 +115,9 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 | `kakaoLogout()` | 로그아웃 (localStorage 삭제) |
 | `promptNicknameChange()` | 닉네임 변경 다이얼로그 |
 | `isOwner()` | OWNER_KAKAO_ID와 일치 여부 |
-| `openProfilePanel()` | 내 활동 패널 열기 (로그인 상태에서만 동작) |
+| `openProfilePanel(autoSubsheet?)` | 내 활동 패널 열기 (로그인 상태에서만 동작). autoSubsheet: `'taste'\|'records'\|'usage'\|'meeting'\|'voucher'` |
+| `openOtherProfileSheet(userId)` | 다른 유저 취향 보드 읽기 전용 시트 (142차-44) |
+| `openOtherMeetingSheet(userId)` | 다른 유저 모임 보드 읽기 전용 시트. 회원 자기소개(club-intro.html) 카드 클릭 시 진입점. 본인 `.profile-panel`/`.profile-subsheet`와 동일 마크업의 읽기 전용 메인패널+서브시트 2단 구조 — 뒤로가기로 그 유저의 "내 보드" 메인 패널(취향보드/모임보드 카드만 노출) 확인 가능, ✕로 전체 닫기. 본인 클릭 시 `openProfilePanel('meeting')`으로 위임 |
 
 ---
 

@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-06-22 (141차: meeting_votes 추가, club_polls unused 표기. 136차: anon_sessions 컬럼 정정, page_sessions session_key 추가, game_requests 컬럼 보완)
+최종 갱신: 2026-06-30 (143차: member_intros 확장(travel_range/meeting_style/UNIQUE user_id) + meeting_game_prefs 신규 — 회원 자기소개 ↔ 모임 보드 연동)
 
 ---
 
@@ -18,13 +18,14 @@
 | `page_views` | page, created_at, referrer | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname) |
 | `page_events` | event_type, game_id, referrer, session_key, user_id, created_at | 기능 이벤트(hero_recommend_click, recommend_start, recommend_complete, hero_record_click, record_start, record_complete, signup_complete 등). referrer: 세션 귀속 소스. session_key/user_id는 143차-160(2026-06-30)에 추가 — **그 이전 행은 NULL이라 unique 집계는 추가 시점 이후 데이터부터만 정확** |
 | `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
-| `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]), notif_seen_at (timestamptz) | 유저 프로필. bio: 한줄소개, avoid_tags: 피하는 유형 태그 배열, notif_seen_at: 알림 마지막 읽은 시각 (기기 간 동기화용) |
+| `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]), notif_seen_at (timestamptz) | 유저 프로필. **bio: 한줄소개 SSOT** — 취향보드/회원 자기소개(club-intro.html)/모임 보드 3곳이 동일 컬럼을 공유 읽기·쓰기(`updateUserBio`). 한쪽에서 수정하면 나머지에도 즉시 반영됨(의도된 동작). avoid_tags: 피하는 유형 태그 배열, notif_seen_at: 알림 마지막 읽은 시각 (기기 간 동기화용) |
 | `game_requests` | game_name, request_count, status, is_planned, user_id, purchase_status, status_date, purchased_at, actual_games, added_at | 게임 요청 |
 | `snack_requests` | item_name, request_count, user_id | 간식 요청 |
 | `suggestions` | content, user_id, is_done, is_planned | 건의사항 |
 | `play_highlights` | game_id, highlight_text | 플레이 하이라이트 |
 | `game_request_votes` | request_id, user_id | 요청 투표 |
-| `member_intros` | id, user_id, nickname, favorite_games, available, location, card_color, created_at | 멤버 소개 |
+| `member_intros` | id, user_id (**UNIQUE**), nickname, favorite_games, available, location, travel_range, meeting_style (text[]), card_color, created_at | 회원 자기소개 + 모임 보드 공유 프로필. user_id당 1행(143차, 마이그레이션 004) — 로그인 필수로 작성, upsert로 갱신. 2026-05-27 이전 작성된 일부 행은 user_id가 NULL인 레거시(로그인 비강제 시절) — 연동 대상에서 제외(클릭 불가). available: 참여 가능 시간, location: 활동 지역(시 단위, 정확한 주소 아님), travel_range: 이동 가능 범위, meeting_style: 선호 게임/모임 스타일 태그 |
+| `meeting_game_prefs` | id, user_id, list_type (`want_this_time`\|`can_explain_rules`), game_id (nullable), custom_name (nullable), created_at | 모임 보드: "이번에 하고 싶은 게임" / "룰 설명 가능한 게임". game_likes/game_curious와 동일한 행 구조 + list_type 구분 (143차, 마이그레이션 004). **RLS 비활성화**(005) — 이 프로젝트는 카카오 로그인 기반이라 Supabase Auth RLS가 적용되지 않음, 다른 테이블과 동일하게 anon key 직접 접근 |
 | `anon_sessions` | session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date | 비로그인 세션 분석 (1분 주기 upsert, profiles와 동일 구조) |
 | `achievements` | id, name, emoji, category, threshold | 업적/캐릭터 정의 (V1: 17개) |
 | `user_achievements` | user_id, achievement_id, earned_at, UNIQUE(user_id, achievement_id) | 유저별 획득 업적 = 해금 캐릭터 |

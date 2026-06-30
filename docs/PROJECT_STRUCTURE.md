@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-30 (embed 모드 내부 링크 자동 embed=1 전파, 143차-176)
+최종 갱신: 2026-06-30 (143차: 회원 자기소개 ↔ 모임 보드 데이터 연동. embed 모드 내부 링크 자동 embed=1 전파, 143차-176)
 
 ---
 
@@ -252,6 +252,15 @@ game-reviews.html — 기록 입력 탭
   - getMyStats()로 플레이 기록, 코멘트, 건의, 모임 참석 집계
   - player_names ILIKE '%nickname%'로 참여 기록도 병합
   - _cottageSess에서 visitCount, timeSec, prevSeenDt 표시
+
+[모임 보드 ↔ 회원 자기소개 연동 (143차)]
+  - SSOT: profiles.bio(한줄소개) + member_intros(활동지역/참여시간/이동범위/모임스타일, user_id당 1행)
+    + meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임)
+  - 내 보드 > 모임 보드(kakao-auth.js openProfilePanel('meeting'))와
+    회원 자기소개(club-intro.html)가 동일 테이블/컬럼을 읽고 씀 — 한쪽 수정이 다른 쪽에 즉시 반영
+  - 자기소개 작성은 로그인 필수(member_intros.user_id 기준 upsert, 유저당 1행)
+  - 회원 자기소개 카드 클릭 → openOtherMeetingSheet(userId) — 본인 .profile-panel/.profile-subsheet와
+    동일 마크업의 읽기 전용 메인패널+서브시트. 본인 카드 클릭 시 openProfilePanel('meeting')으로 위임
 ```
 
 ---

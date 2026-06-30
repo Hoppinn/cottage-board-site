@@ -3885,6 +3885,7 @@ body.embed-mode {
 .profile-panel-notif-btn.is-zero{color:var(--muted,#9b8b7a);font-weight:400;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
 .profile-panel-rep-name{font-size:12px;color:var(--text-info);}
+.profile-panel-readonly-hint{font-size:12px;color:var(--muted,#9b8b7a);}
 .profile-panel-title-name{font-size:12px;color:#7a4828;font-weight:600;background:none;border:none;padding:0;cursor:pointer;text-align:left;}
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;}
@@ -4188,13 +4189,16 @@ body.embed-mode {
 .taste-tag:hover:not(.is-active){background:#f0ede8;color:#888;}
 .taste-more-btn{margin-top:6px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:2px 0;text-decoration:underline;}
 .taste-more-btn:hover{color:var(--text);}
-/* 모임 보드 — 인원수별 게임 / 메모 */
-.meeting-playercount-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;}
-.meeting-playercount-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg2,#f5f1eb);border:1px solid var(--border,#e8e4dc);border-radius:10px;}
-.meeting-playercount-label{font-size:12px;font-weight:700;color:var(--text);}
-.meeting-playercount-game{font-size:12px;color:var(--muted);}
-.meeting-memo-textarea{width:100%;box-sizing:border-box;resize:vertical;border:1px solid var(--border,#e8e4dc);border-radius:10px;padding:10px 12px;font-size:13px;font-family:inherit;color:var(--text);background:#faf9f5;}
-.meeting-memo-textarea:focus{outline:none;border-color:var(--brown,#7a4828);}
+/* 모임 보드 — 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) */
+.meeting-profile-section{margin-bottom:20px;}
+.meeting-profile-display{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+.meeting-profile-row{display:flex;align-items:baseline;gap:6px;font-size:13px;}
+.meeting-profile-label{color:var(--muted);flex-shrink:0;}
+.meeting-profile-val{color:var(--text);font-weight:600;}
+.meeting-profile-val.is-empty{color:var(--muted);font-weight:400;font-style:italic;}
+.meeting-profile-style-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
+.meeting-profile-edit-wrap{margin-top:8px;}
+.meeting-profile-edit-wrap .intro-field{margin-bottom:10px;}
 .record-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 0;}
 .record-photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;display:block;}
 .record-photo-more-badge{grid-column:1/-1;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px 0 0;text-decoration:underline;text-align:left;}
@@ -5747,6 +5751,14 @@ body.embed-mode {
   text-align:left;
 }
 .intro-form-toggle:hover{background:#faf6f0;}
+.intro-login-msg{
+  margin:0;
+  padding:14px 16px 4px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.5;
+}
+#introLoginPrompt .intro-submit-btn{margin:6px 16px 16px;width:calc(100% - 32px);}
 .intro-form-toggle-arrow{
   font-size:16px;
   color:var(--green-2);
@@ -5979,6 +5991,25 @@ body.embed-mode {
   color:#3a3025;
   font-weight:600;
   word-break:keep-all;
+}
+/* 클릭 가능 카드 (→ 해당 회원 모임 보드) — hover 떠오름 + 우측 하단 안내 텍스트 */
+.intro-card-news--clickable{
+  cursor:pointer;
+  transition:transform 0.15s ease, box-shadow 0.15s ease;
+}
+.intro-card-news--clickable:hover{
+  transform:translateY(-3px);
+  box-shadow:0 6px 16px rgba(0,0,0,0.1);
+}
+.intro-card-news--clickable:active{
+  transform:translateY(-1px);
+}
+.intro-card-news-cta{
+  padding:0 12px 10px;
+  font-size:11px;
+  font-weight:700;
+  color:var(--brown,#7a4828);
+  text-align:right;
 }
 
 /* ── 모임참여 페이지 ───────────────────────────────────── */

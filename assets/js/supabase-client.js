@@ -701,10 +701,114 @@ window._cottageSess = (function () {
     } catch (_) { return []; }
   }
 
+  // profiles.bio는 "한줄소개" SSOT다. 취향보드(taste board)와 자기소개(member_intros)
+  // 양쪽이 이 함수로 동일 컬럼을 읽고/쓴다 — 한쪽에서 수정하면 다른 쪽에도 즉시 반영된다.
   async function updateUserBio(userId, bio) {
     if (!userId) return { error: 'invalid' };
     try {
       const { error } = await db.from('profiles').update({ bio: bio || null }).eq('user_id', userId);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  // ── 모임 보드 / 회원 자기소개 공유 프로필 ──────────────────
+  // member_intros: 유저당 1행(UNIQUE user_id) — 활동지역/참여시간/이동범위/모임스타일
+  // profiles.bio: 한줄소개 SSOT (updateUserBio 재사용, 취향보드와 공유)
+  // meeting_game_prefs: list_type으로 "이번에 하고 싶은 게임" / "룰 설명 가능한 게임" 구분
+
+  async function getMeetingGamePrefs(userId, listType) {
+    if (!userId) return [];
+    try {
+      const { data } = await db.from('meeting_game_prefs')
+        .select('id, game_id, custom_name')
+        .eq('user_id', userId)
+        .eq('list_type', listType);
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function addMeetingGamePref(userId, listType, gameId, customName) {
+    if (!userId || (!gameId && !customName)) return { error: 'invalid' };
+    try {
+      const row = { user_id: userId, list_type: listType };
+      if (gameId) row.game_id = gameId;
+      if (customName) row.custom_name = customName;
+      const { error } = await db.from('meeting_game_prefs').insert(row);
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function removeMeetingGamePref(userId, listType, gameId, customName) {
+    if (!userId) return { error: 'invalid' };
+    try {
+      let q = db.from('meeting_game_prefs').delete().eq('user_id', userId).eq('list_type', listType);
+      if (gameId) q = q.eq('game_id', gameId);
+      else if (customName) q = q.eq('custom_name', customName).is('game_id', null);
+      const { error } = await q;
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  // 본인 모임 보드 / 자기소개 편집용 — profiles.bio + member_intros + meeting_game_prefs 통합 조회
+  async function getMeetingProfile(userId) {
+    if (!userId) return null;
+    try {
+      const [profileRes, introRes, wantGames, ruleGames] = await Promise.all([
+        db.from('profiles').select('bio').eq('user_id', userId).maybeSingle(),
+        db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
+        getMeetingGamePrefs(userId, 'want_this_time'),
+        getMeetingGamePrefs(userId, 'can_explain_rules'),
+      ]);
+      const intro = introRes.data || {};
+      return {
+        bio: profileRes.data?.bio || '',
+        nickname: intro.nickname || '',
+        location: intro.location || '',
+        available: intro.available || '',
+        travelRange: intro.travel_range || '',
+        meetingStyle: intro.meeting_style || [],
+        favoriteGames: intro.favorite_games || '',
+        cardColor: intro.card_color || '',
+        wantGames,
+        ruleGames,
+      };
+    } catch (_) { return null; }
+  }
+
+  // 다른 유저 모임 보드 읽기 전용 조회 (openOtherMeetingSheet 용, getUserTasteProfile과 동일 패턴)
+  async function getUserMeetingProfile(userId) {
+    if (!userId) return null;
+    try {
+      const [profileRes, introRes, wantGames, ruleGames] = await Promise.all([
+        db.from('profiles').select('nickname, photo_url, bio, rep_achievement_id').eq('user_id', userId).maybeSingle(),
+        db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
+        getMeetingGamePrefs(userId, 'want_this_time'),
+        getMeetingGamePrefs(userId, 'can_explain_rules'),
+      ]);
+      const profile = profileRes.data || {};
+      const intro = introRes.data || {};
+      const nickname = intro.nickname || profile.nickname || '(알 수 없음)';
+      return {
+        nickname,
+        photo_url: profile.photo_url,
+        rep_achievement_id: profile.rep_achievement_id,
+        bio: profile.bio || '',
+        location: intro.location || '',
+        available: intro.available || '',
+        travelRange: intro.travel_range || '',
+        meetingStyle: intro.meeting_style || [],
+        wantGames,
+        ruleGames,
+      };
+    } catch (_) { return null; }
+  }
+
+  // member_intros upsert — 유저당 1행(UNIQUE user_id), 자기소개/모임보드 양쪽에서 호출
+  async function upsertMeetingIntro(userId, fields) {
+    if (!userId) return { error: 'invalid' };
+    try {
+      const row = { user_id: userId, ...fields };
+      const { error } = await db.from('member_intros').upsert(row, { onConflict: 'user_id' });
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
   }
@@ -1400,6 +1504,11 @@ window._cottageSess = (function () {
     upsertMeetingVote,
     deleteMeetingVote,
     updateNotifSeenAt,
+    getMeetingProfile,
+    getUserMeetingProfile,
+    upsertMeetingIntro,
+    addMeetingGamePref,
+    removeMeetingGamePref,
   };
 
   async function updateNotifSeenAt(userId, timestamp) {

@@ -26,8 +26,14 @@
       </div>
       <div class="inner-page-body">
 
-        <!-- 입력 폼 -->
-        <div class="intro-form-card">
+        <!-- 비로그인 안내 -->
+        <div class="intro-form-card" id="introLoginPrompt" style="display:none">
+          <p class="intro-login-msg">자기소개를 남기려면 로그인이 필요해요. (모임 보드와 정보가 함께 연동돼요)</p>
+          <button class="intro-submit-btn" onclick="document.getElementById('kakaoLoginBtn')?.click()" type="button">카카오 로그인</button>
+        </div>
+
+        <!-- 입력 폼 (로그인 시에만 노출) -->
+        <div class="intro-form-card" id="introFormCard" style="display:none">
           <button class="intro-form-toggle" id="introFormToggle" type="button">
             반갑습니다! 간단히 소개해주세요 👋
             <span class="intro-form-toggle-arrow" id="introFormArrow">▾</span>
@@ -39,6 +45,10 @@
                 <input class="intro-input" id="introNickname" type="text" placeholder="단톡방 닉네임" maxlength="20">
               </div>
               <div class="intro-field">
+                <label class="intro-label" for="introBio">한줄소개</label>
+                <input class="intro-input" id="introBio" type="text" placeholder="나를 짧게 소개해보세요 (모임 보드와 공유돼요)" maxlength="60">
+              </div>
+              <div class="intro-field">
                 <label class="intro-label" for="introGames">좋아하는 게임</label>
                 <input class="intro-input" id="introGames" type="text" placeholder="ex. 윙스팬, 아줄, 코드네임" maxlength="100">
               </div>
@@ -47,8 +57,12 @@
                 <input class="intro-input" id="introAvailable" type="text" placeholder="ex. 주말 오후, 평일 저녁 가능" maxlength="100">
               </div>
               <div class="intro-field">
-                <label class="intro-label" for="introLocation">사시는 곳</label>
-                <input class="intro-input" id="introLocation" type="text" placeholder="ex. 용인 기흥구" maxlength="50">
+                <label class="intro-label" for="introLocation">활동 지역</label>
+                <input class="intro-input" id="introLocation" type="text" placeholder="ex. 용인, 수원, 성남, 서울 남부" maxlength="50">
+              </div>
+              <div class="intro-field">
+                <label class="intro-label" for="introTravel">이동 가능 범위</label>
+                <input class="intro-input" id="introTravel" type="text" placeholder="ex. 차로 30분 이내" maxlength="50">
               </div>
             </div>
             <button class="intro-submit-btn" id="introSubmitBtn" type="button">인사 남기기</button>
@@ -129,6 +143,13 @@
     function isAdmin() { return window.isOwner?.() || false; }
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
 
+    // 자기소개 작성은 로그인 필수 (모임 보드와 user_id 기준으로 연동되기 때문)
+    function _syncLoginUI() {
+      const loggedIn = !!getCurrentUser();
+      document.getElementById('introLoginPrompt').style.display = loggedIn ? 'none' : '';
+      document.getElementById('introFormCard').style.display = loggedIn ? '' : 'none';
+    }
+
     function getMyIds() {
       try { return JSON.parse(localStorage.getItem(MY_KEY) || '[]'); } catch { return []; }
     }
@@ -166,6 +187,10 @@
             <input class="intro-input" id="editNick_${id}" type="text" value="${escHtml(r.nickname)}" maxlength="20">
           </div>
           <div class="intro-field">
+            <label class="intro-label">한줄소개</label>
+            <input class="intro-input" id="editBio_${id}" type="text" value="${escHtml(r._bio || '')}" maxlength="60" placeholder="모임 보드와 공유돼요">
+          </div>
+          <div class="intro-field">
             <label class="intro-label">좋아하는 게임</label>
             <input class="intro-input" id="editGames_${id}" type="text" value="${escHtml(r.favorite_games || '')}" maxlength="100">
           </div>
@@ -174,8 +199,12 @@
             <input class="intro-input" id="editAvail_${id}" type="text" value="${escHtml(r.available || '')}" maxlength="100">
           </div>
           <div class="intro-field">
-            <label class="intro-label">사시는 곳</label>
+            <label class="intro-label">활동 지역</label>
             <input class="intro-input" id="editLoc_${id}" type="text" value="${escHtml(r.location || '')}" maxlength="50">
+          </div>
+          <div class="intro-field">
+            <label class="intro-label">이동 가능 범위</label>
+            <input class="intro-input" id="editTravel_${id}" type="text" value="${escHtml(r.travel_range || '')}" maxlength="50">
           </div>
           <div class="intro-edit-btns">
             <button class="intro-edit-save-btn" type="button">저장</button>
@@ -195,12 +224,18 @@
         const saveBtn = cardEl.querySelector('.intro-edit-save-btn');
         saveBtn.disabled = true;
         saveBtn.textContent = '저장 중...';
+        const newBio = cardEl.querySelector(`#editBio_${id}`).value.trim();
         const { error } = await db.from('member_intros').update({
           nickname,
           favorite_games: cardEl.querySelector(`#editGames_${id}`).value.trim() || null,
           available: cardEl.querySelector(`#editAvail_${id}`).value.trim() || null,
           location: cardEl.querySelector(`#editLoc_${id}`).value.trim() || null,
+          travel_range: cardEl.querySelector(`#editTravel_${id}`).value.trim() || null,
         }).eq('id', id);
+        // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT — 여기서 저장하면 모임 보드/취향보드에도 즉시 반영됨
+        if (!error && r.user_id) {
+          await window.CottageDB?.updateUserBio?.(r.user_id, newBio);
+        }
         if (!error) {
           await loadIntros();
         } else {
@@ -213,6 +248,7 @@
     }
 
     async function loadIntros() {
+      _syncLoginUI();
       const el = document.getElementById('introList');
       if (!getCurrentUser()) {
         el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1;text-align:center;padding:32px 0">🔒 카카오 로그인 후 열람할 수 있습니다.</p>';
@@ -226,23 +262,37 @@
         el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">아직 인사가 없어요. 첫 번째로 남겨보세요!</p>';
         return;
       }
+
+      // profiles.bio(한줄소개 SSOT) 일괄 조회 — 취향보드/모임보드와 공유하는 값을 카드에도 표시
+      const userIds = [...new Set(data.map(r => r.user_id).filter(Boolean))];
+      let bioByUser = {};
+      if (userIds.length) {
+        const { data: profilesData } = await db.from('profiles').select('user_id, bio').in('user_id', userIds);
+        bioByUser = Object.fromEntries((profilesData || []).map(p => [p.user_id, p.bio || '']));
+      }
+      data.forEach(r => { r._bio = r.user_id ? (bioByUser[r.user_id] || '') : ''; });
+
       el.innerHTML = data.map((r, idx) => {
         const canAct = canDelete(r);
         const del    = canAct ? `<button class="intro-card-del"       data-id="${r.id}" type="button" title="삭제">✕</button>` : '';
         const edit   = canAct ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정">✎</button>` : '';
         const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경">🎨</button>` : '';
+        const clickable = !!r.user_id;
         return `
-        <div class="intro-card-news" data-id="${r.id}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
+        <div class="intro-card-news${clickable ? ' intro-card-news--clickable' : ''}" data-id="${r.id}" data-user-id="${escHtml(r.user_id || '')}" data-color="${escHtml(r.card_color||'')}" data-idx="${idx}">
           <div class="intro-card-news-head" style="position:relative">
             ${color}${edit}${del}
             <div class="intro-card-news-nickname">${escHtml(r.nickname)}</div>
             <div class="intro-card-news-date">${formatDate(r.created_at)}</div>
           </div>
           <div class="intro-card-news-body">
+            ${r._bio ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📝</span><span class="intro-card-news-val">${escHtml(r._bio)}</span></div>` : ''}
             ${r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : ''}
             ${r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : ''}
             ${r.location ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📍</span><span class="intro-card-news-val">${escHtml(r.location)}</span></div>` : ''}
+            ${r.travel_range ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🚗</span><span class="intro-card-news-val">${escHtml(r.travel_range)}</span></div>` : ''}
           </div>
+          ${clickable ? '<div class="intro-card-news-cta">모임 보드 보기 ›</div>' : ''}
         </div>`;
       }).join('');
 
@@ -251,13 +301,22 @@
         applyCardColor(card, card.dataset.color, Number(card.dataset.idx));
       });
 
+      // 카드 클릭 → 해당 회원의 모임 보드 (액션 버튼 클릭은 제외)
+      el.querySelectorAll('.intro-card-news--clickable').forEach(card => {
+        card.addEventListener('click', e => {
+          if (e.target.closest('.intro-card-news-head button') || e.target.closest('.intro-edit-form')) return;
+          const uid = card.dataset.userId;
+          if (uid) window.openOtherMeetingSheet?.(uid);
+        });
+      });
+
       el.querySelectorAll('.intro-card-del').forEach(btn => {
-        btn.addEventListener('click', () => deleteIntro(btn.dataset.id));
+        btn.addEventListener('click', e => { e.stopPropagation(); deleteIntro(btn.dataset.id); });
       });
       el.querySelectorAll('.intro-card-edit').forEach(btn => {
         const id = btn.dataset.id;
         const r  = data.find(x => String(x.id) === String(id));
-        btn.addEventListener('click', () => editIntro(id, r));
+        btn.addEventListener('click', e => { e.stopPropagation(); editIntro(id, r); });
       });
 
       // 컬러 피커
@@ -302,11 +361,21 @@
     }
 
     document.getElementById('introSubmitBtn').addEventListener('click', async () => {
+      const u = getCurrentUser();
+      const msg = document.getElementById('introSubmitMsg');
+      if (!u?.id) {
+        msg.textContent = '로그인 후 작성할 수 있어요.';
+        msg.style.color = '#c0392b';
+        msg.style.display = 'block';
+        return;
+      }
+
       const nickname = document.getElementById('introNickname').value.trim();
+      const bio      = document.getElementById('introBio').value.trim();
       const games    = document.getElementById('introGames').value.trim();
       const avail    = document.getElementById('introAvailable').value.trim();
       const loc      = document.getElementById('introLocation').value.trim();
-      const msg      = document.getElementById('introSubmitMsg');
+      const travel   = document.getElementById('introTravel').value.trim();
 
       if (!nickname) {
         msg.textContent = '닉네임을 입력해주세요.';
@@ -320,14 +389,18 @@
       btn.disabled = true;
       btn.textContent = '등록 중...';
 
-      const u = getCurrentUser();
-      const { data: ins, error } = await db.from('member_intros').insert({
+      // member_intros: 유저당 1행(UNIQUE user_id) — 재작성 시 upsert로 기존 행 갱신
+      const { data: ins, error } = await db.from('member_intros').upsert({
         nickname,
         favorite_games: games || null,
         available: avail || null,
         location: loc || null,
-        user_id: u?.id ? String(u.id) : null,
-      }).select('id');
+        travel_range: travel || null,
+        user_id: String(u.id),
+      }, { onConflict: 'user_id' }).select('id');
+
+      // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT
+      if (!error) await window.CottageDB?.updateUserBio?.(String(u.id), bio);
 
       btn.disabled = false;
       btn.textContent = '인사 남기기';
@@ -341,7 +414,7 @@
 
       if (ins?.[0]?.id) saveMyId(ins[0].id);
 
-      ['introNickname','introGames','introAvailable','introLocation'].forEach(id => {
+      ['introNickname','introBio','introGames','introAvailable','introLocation','introTravel'].forEach(id => {
         document.getElementById(id).value = '';
       });
       msg.textContent = '인사를 남겼어요!';
@@ -351,15 +424,16 @@
       await loadIntros();
     });
 
-    ['introNickname','introGames','introAvailable','introLocation'].forEach(id => {
+    ['introNickname','introBio','introGames','introAvailable','introLocation','introTravel'].forEach(id => {
       document.getElementById(id).addEventListener('keydown', e => {
         if (e.key === 'Enter') document.getElementById('introSubmitBtn').click();
       });
     });
 
-    // 로그인/로그아웃 시 삭제 버튼 표시 여부 갱신
+    // 로그인/로그아웃 시 폼 표시 + 삭제 버튼 표시 여부 갱신
     window.addEventListener('cottage-auth-changed', loadIntros);
 
+    _syncLoginUI();
     loadIntros();
   })();
   </script>

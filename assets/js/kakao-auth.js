@@ -510,7 +510,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _monthStart = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-01`;
   const _monthEnd   = new Date(_now.getFullYear(), _now.getMonth()+1, 0);
   const _monthEndStr = `${_monthEnd.getFullYear()}-${String(_monthEnd.getMonth()+1).padStart(2,'0')}-${String(_monthEnd.getDate()).padStart(2,'0')}`;
-  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes] = await Promise.all([
+  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
@@ -523,6 +523,7 @@ async function openProfilePanel(autoSubsheet = null) {
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
+    (window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
   ]);
   // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
@@ -1006,9 +1007,10 @@ async function openProfilePanel(autoSubsheet = null) {
     }).catch(() => {});
   }
 
-  // 모임 보드: 이번 모임 준비 정보 (디자인/레이아웃 우선 구현 — 데이터 저장은 추후 연결)
+  // 모임 보드: 회원 자기소개(member_intros) + profiles.bio(한줄소개, 취향보드와 공유 SSOT) +
+  // meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임) 연동. 자기소개 페이지와 동일 데이터 공유.
   const _meetingStyleTags = ['전략게임', '파티게임', '협력게임', '초보환영', '장시간게임', '짧은게임'];
-  const _meetingPlayerCounts = ['2인', '3인', '4인', '5인+'];
+  const _meeting = meetingProfile || { bio: '', location: '', available: '', travelRange: '', meetingStyle: [], wantGames: [], ruleGames: [] };
   const _relDay = iso => {
     if (!iso) return '';
     const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(iso)) ? iso + 'T00:00:00' : iso);
@@ -1024,31 +1026,73 @@ async function openProfilePanel(autoSubsheet = null) {
   const _recentPlaysHtml = _recentPlays.length
     ? `<ul class="profile-activity-list">${_recentPlays.map(r => `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`).join('')}</ul>`
     : _emptyList('아직 플레이 기록이 없어요');
+
+  function _meetingProfileRowHtml(label, val) {
+    return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
+  }
+
   const _meetingInnerHtml = `
-    <div class="taste-game-section">
-      <div class="taste-section-label">🎯 이번에 하고 싶은 게임 <span class="taste-count">0개</span></div>
-      <div class="taste-game-list">${_buildTasteGameItems([])}</div>
-      <button class="taste-add-btn" type="button">+ 게임 추가</button>
+    <div class="meeting-profile-section">
+      <div class="taste-section-label">📍 모임 프로필</div>
+      <div class="meeting-profile-display">
+        ${_meetingProfileRowHtml('📍 활동 지역', _meeting.location)}
+        ${_meetingProfileRowHtml('🕐 참여 가능 시간', _meeting.available)}
+        ${_meetingProfileRowHtml('🚗 이동 가능 범위', _meeting.travelRange)}
+        ${_meetingProfileRowHtml('📝 한줄소개', _meeting.bio)}
+        <div class="meeting-profile-style-row">${
+          _meeting.meetingStyle.length
+            ? _meeting.meetingStyle.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
+            : '<span class="taste-bio-placeholder">선호 스타일 미입력</span>'
+        }</div>
+      </div>
+      <button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
+      <div class="meeting-profile-edit-wrap" style="display:none">
+        <div class="intro-field">
+          <label class="intro-label">활동 지역</label>
+          <input class="intro-input meeting-edit-location" type="text" placeholder="예: 용인, 수원, 성남, 서울 남부" maxlength="50" value="${escH(_meeting.location)}">
+        </div>
+        <div class="intro-field">
+          <label class="intro-label">참여 가능 시간</label>
+          <input class="intro-input meeting-edit-available" type="text" placeholder="예: 주말 오후, 평일 저녁 가능" maxlength="100" value="${escH(_meeting.available)}">
+        </div>
+        <div class="intro-field">
+          <label class="intro-label">이동 가능 범위</label>
+          <input class="intro-input meeting-edit-travel" type="text" placeholder="예: 차로 30분 이내" maxlength="50" value="${escH(_meeting.travelRange)}">
+        </div>
+        <div class="intro-field">
+          <label class="intro-label">한줄소개</label>
+          <input class="intro-input meeting-edit-bio" type="text" placeholder="나를 짧게 소개해보세요" maxlength="60" value="${escH(_meeting.bio)}">
+        </div>
+        <div class="intro-field">
+          <label class="intro-label">선호 게임/모임 스타일</label>
+          <div class="taste-bio-chips meeting-style-chips">${_meetingStyleTags.map(t => `<button class="taste-bio-chip${_meeting.meetingStyle.includes(t) ? ' is-selected' : ''}" type="button">${escH(t)}</button>`).join('')}</div>
+        </div>
+        <div class="taste-bio-actions">
+          <button class="meeting-profile-save-btn taste-bio-save-btn" type="button">저장</button>
+          <button class="meeting-profile-cancel-btn taste-bio-cancel-btn" type="button">취소</button>
+        </div>
+      </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">📖 룰 설명 가능한 게임 <span class="taste-count">0개</span></div>
-      <div class="taste-game-list">${_buildTasteGameItems([])}</div>
-      <button class="taste-add-btn" type="button">+ 게임 추가</button>
+      <div class="taste-section-label">🎯 이번에 하고 싶은 게임 <span class="taste-count" id="meetingwantCount">${_meeting.wantGames.length}개</span></div>
+      <div class="taste-game-list" id="meetingwantList">${_buildTasteGameItems(_meeting.wantGames)}</div>
+      <button class="taste-add-btn" id="meetingwantAddBtn" type="button">+ 게임 추가</button>
+      <div class="taste-search-wrap" id="meetingwantSearch" style="display:none">
+        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
+        <div class="taste-search-results"></div>
+      </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">👥 인원수별 하고 싶은 게임</div>
-      <ul class="meeting-playercount-list">${_meetingPlayerCounts.map(label => `<li class="meeting-playercount-item"><span class="meeting-playercount-label">${label}</span><span class="meeting-playercount-game">미정</span></li>`).join('')}</ul>
-    </div>
-    <div class="taste-avoid-section">
-      <div class="taste-section-label">🎨 모임 스타일</div>
-      <div class="taste-bio-chips">${_meetingStyleTags.map(t => `<button class="taste-bio-chip" type="button">${escH(t)}</button>`).join('')}</div>
-    </div>
-    <div class="taste-bio-section">
-      <div class="taste-section-label">📝 모임 메모</div>
-      <textarea class="meeting-memo-textarea" rows="3" placeholder="이번 모임에 하고 싶은 말을 남겨보세요 (예: 이번엔 브라스 꼭 하고 싶어요)"></textarea>
+      <div class="taste-section-label">📖 룰 설명 가능한 게임 <span class="taste-count" id="meetingruleCount">${_meeting.ruleGames.length}개</span></div>
+      <div class="taste-game-list" id="meetingruleList">${_buildTasteGameItems(_meeting.ruleGames)}</div>
+      <button class="taste-add-btn" id="meetingruleAddBtn" type="button">+ 게임 추가</button>
+      <div class="taste-search-wrap" id="meetingruleSearch" style="display:none">
+        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
+        <div class="taste-search-results"></div>
+      </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">🕐 최근 플레이</div>
+      <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
       ${_recentPlaysHtml}
     </div>`;
 
@@ -1714,11 +1758,188 @@ async function openProfilePanel(autoSubsheet = null) {
       } else if (type === 'meeting') {
         _trackPvOnce('my-board-meeting');
         _openSubSheet('모임 보드', _meetingInnerHtml, subBody => {
-          // 모임 스타일 칩 — 시각적 토글만 (저장은 추후 연결)
-          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+          const userId = String(user.id);
+
+          // ── 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) 편집 ──
+          const displayWrap = subBody.querySelector('.meeting-profile-display');
+          const editWrap = subBody.querySelector('.meeting-profile-edit-wrap');
+
+          subBody.querySelector('.meeting-profile-edit-btn')?.addEventListener('click', () => {
+            displayWrap.style.display = 'none';
+            editWrap.style.display = '';
+          });
+          subBody.querySelector('.meeting-profile-cancel-btn')?.addEventListener('click', () => {
+            displayWrap.style.display = '';
+            editWrap.style.display = 'none';
+          });
+          // 모임 스타일 칩 (편집폼 안에서만) — 다중 선택 토글
+          subBody.querySelectorAll('.meeting-style-chips .taste-bio-chip').forEach(chip => {
             chip.addEventListener('click', () => chip.classList.toggle('is-selected'));
           });
-          // 최근 플레이 → 게임시트 열기
+
+          subBody.querySelector('.meeting-profile-save-btn')?.addEventListener('click', async () => {
+            const location = subBody.querySelector('.meeting-edit-location').value.trim();
+            const available = subBody.querySelector('.meeting-edit-available').value.trim();
+            const travelRange = subBody.querySelector('.meeting-edit-travel').value.trim();
+            const newBio = subBody.querySelector('.meeting-edit-bio').value.trim();
+            const meetingStyle = [...subBody.querySelectorAll('.meeting-style-chips .taste-bio-chip.is-selected')].map(c => c.textContent.trim());
+
+            await Promise.all([
+              // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT — 여기서 저장하면 취향보드에도 즉시 반영됨
+              window.CottageDB?.updateUserBio?.(userId, newBio),
+              window.CottageDB?.upsertMeetingIntro?.(userId, {
+                // 자기소개 페이지에서 설정한 닉네임(단톡방 닉네임 등 카카오 닉네임과 다를 수 있음)이 있으면 보존
+                nickname: _meeting.nickname || user.nickname || '',
+                location: location || null,
+                available: available || null,
+                travel_range: travelRange || null,
+                meeting_style: meetingStyle,
+              }),
+            ]);
+            _currentBio = newBio;
+
+            displayWrap.innerHTML = `
+              ${_meetingProfileRowHtml('📍 활동 지역', location)}
+              ${_meetingProfileRowHtml('🕐 참여 가능 시간', available)}
+              ${_meetingProfileRowHtml('🚗 이동 가능 범위', travelRange)}
+              ${_meetingProfileRowHtml('📝 한줄소개', newBio)}
+              <div class="meeting-profile-style-row">${
+                meetingStyle.length
+                  ? meetingStyle.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
+                  : '<span class="taste-bio-placeholder">선호 스타일 미입력</span>'
+              }</div>`;
+            displayWrap.style.display = '';
+            editWrap.style.display = 'none';
+          });
+
+          // ── 게임 목록 (이번에 하고싶은 게임 / 룰 설명 가능한 게임) ──
+          for (const listKey of ['want', 'rule']) {
+            const listType = listKey === 'want' ? 'want_this_time' : 'can_explain_rules';
+            const listEl = subBody.querySelector(`#meeting${listKey}List`);
+            const addBtn = subBody.querySelector(`#meeting${listKey}AddBtn`);
+            const searchWrap = subBody.querySelector(`#meeting${listKey}Search`);
+            const searchInput = searchWrap?.querySelector('.taste-search-input');
+            const searchResults = searchWrap?.querySelector('.taste-search-results');
+            const countEl = subBody.querySelector(`#meeting${listKey}Count`);
+
+            listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
+              item.addEventListener('click', e => {
+                if (e.target.closest('.taste-game-del')) return;
+                window.ensureGameSheet?.();
+                window.openGameSheet?.(item.dataset.gameId);
+              });
+            });
+
+            listEl?.addEventListener('click', async e => {
+              const moreBtn = e.target.closest('.taste-more-btn');
+              if (moreBtn) {
+                const wrap = moreBtn.previousElementSibling;
+                if (wrap?.classList.contains('taste-game-more-wrap')) {
+                  const hidden = wrap.hidden;
+                  wrap.hidden = !hidden;
+                  const restCount = wrap.querySelectorAll('.taste-game-item').length;
+                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${restCount}개 더)`;
+                }
+                return;
+              }
+              const delBtn = e.target.closest('.taste-game-del');
+              if (!delBtn) return;
+              const item = delBtn.closest('.taste-game-item');
+              const gameId = item?.dataset.gameId || null;
+              const customName = item?.dataset.customName || null;
+              await window.CottageDB?.removeMeetingGamePref?.(userId, listType, gameId, customName);
+              item.remove();
+              if (!listEl.querySelector('.taste-game-item')) {
+                listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+              }
+              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+            });
+
+            addBtn?.addEventListener('click', () => {
+              const showing = searchWrap.style.display !== 'none';
+              searchWrap.style.display = showing ? 'none' : '';
+              if (!showing) searchInput?.focus();
+            });
+            searchInput?.addEventListener('keydown', e => {
+              if (e.key === 'Escape') {
+                searchWrap.style.display = 'none';
+                searchInput.value = '';
+                searchResults.innerHTML = '';
+              }
+            });
+
+            let _searchTimer = null;
+            searchInput?.addEventListener('input', () => {
+              clearTimeout(_searchTimer);
+              _searchTimer = setTimeout(async () => {
+                const q = searchInput.value.trim();
+                if (!q) { searchResults.innerHTML = ''; return; }
+
+                const catalogItems = Object.entries(window.gameData || {})
+                  .filter(([, g]) => {
+                    const name = g.title?.display || g.title?.owned || g.title?.bgg || '';
+                    return name.toLowerCase().includes(q.toLowerCase());
+                  })
+                  .slice(0, 6)
+                  .map(([id, g]) => {
+                    const name = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
+                    const alreadyAdded = !!listEl.querySelector(`[data-game-id="${id}"]`);
+                    return `<button class="taste-search-item${alreadyAdded ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${name}${alreadyAdded ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
+                  });
+
+                const directItem = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 추가</button>`;
+                searchResults.innerHTML = [...catalogItems, directItem].join('');
+
+                searchResults.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn => {
+                  btn.addEventListener('click', async () => {
+                    const gameId = btn.dataset.gameId || null;
+                    const customName = btn.dataset.customName || null;
+
+                    if (gameId && listEl.querySelector(`[data-game-id="${gameId}"]`)) return;
+                    if (customName) {
+                      const existing = [...listEl.querySelectorAll('[data-custom-name]')];
+                      if (existing.some(el => el.dataset.customName === customName)) return;
+                    }
+
+                    await window.CottageDB?.addMeetingGamePref?.(userId, listType, gameId, customName);
+
+                    const _gd2 = gameId ? window.gameData?.[gameId] : null;
+                    const name = _gd2
+                      ? (_gd2.title?.display || _gd2.title?.owned || _gd2.title?.bgg || String(gameId))
+                      : (customName || '');
+                    const thumb = _gd2?.images?.thumbnail
+                      ? `<img class="taste-game-thumb" src="${escH(_gd2.images.thumbnail)}" alt="">`
+                      : `<span class="taste-game-thumb-empty"></span>`;
+
+                    listEl.querySelector('.taste-game-empty')?.remove();
+
+                    const newItem = document.createElement('div');
+                    newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
+                    if (gameId) newItem.dataset.gameId = gameId;
+                    if (customName) newItem.dataset.customName = customName;
+                    newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="taste-game-del" type="button" title="삭제">✕</button>`;
+                    if (gameId) {
+                      newItem.addEventListener('click', e => {
+                        if (e.target.closest('.taste-game-del')) return;
+                        window.ensureGameSheet?.();
+                        window.openGameSheet?.(String(gameId));
+                      });
+                    }
+                    const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
+                    if (insertBefore) listEl.insertBefore(newItem, insertBefore);
+                    else listEl.appendChild(newItem);
+
+                    if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+                    searchWrap.style.display = 'none';
+                    searchInput.value = '';
+                    searchResults.innerHTML = '';
+                  });
+                });
+              }, 200);
+            });
+          }
+
+          // 최근 모임 참여 → 게임시트 열기
           subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
             const li = btn.closest('[data-game-id]');
             const gameId = li?.dataset.gameId;
@@ -1851,5 +2072,143 @@ async function openOtherProfileSheet(userId) {
   });
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
+
+// ── 다른 유저 모임 보드 시트 (읽기 전용) ───────────────────────
+// 회원 자기소개 카드 클릭 시 진입. 본인 내 보드(openProfilePanel)와 동일한 .profile-panel +
+// .profile-subsheet 마크업을 그대로 사용 — 뒤로가기 시 그 유저의 "내 보드" 메인 패널(읽기 전용)이
+// 보이고, ✕는 전체 닫기. 공개 범위는 자기소개 페이지에서 보이는 수준으로 한정
+// (최근 플레이 등 개인 활동 이력은 포함하지 않음).
+async function openOtherMeetingSheet(userId) {
+  if (!userId) return;
+
+  const self = getKakaoUser();
+  if (self && String(self.id) === String(userId)) {
+    openProfilePanel('meeting');
+    return;
+  }
+
+  document.getElementById('otherMainPanel')?.remove();
+  document.getElementById('otherMeetingSheet')?.remove();
+
+  const data = await window.CottageDB?.getUserMeetingProfile?.(userId);
+  const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  if (!data) {
+    window.showToast?.('프로필을 불러올 수 없어요', { type: 'error' }) || alert('프로필을 불러올 수 없어요');
+    return;
+  }
+
+  const { nickname, photo_url, rep_achievement_id } = data;
+  const charPath = rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(rep_achievement_id) : null;
+  const avatarSrc = charPath || photo_url;
+  const avatarHtml = avatarSrc
+    ? `<img class="profile-panel-avatar" src="${_e(avatarSrc)}" alt="">`
+    : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`;
+
+  // 본인 내 보드(openProfilePanel)와 동일한 .profile-panel 메인 패널 — 읽기 전용(수정 불가)
+  const mainPanel = document.createElement('div');
+  mainPanel.id = 'otherMainPanel';
+  mainPanel.className = 'profile-panel';
+  mainPanel.innerHTML = `<div class="profile-panel-box">
+    <div class="profile-panel-header">
+      <span class="profile-panel-title">${_e(nickname)}의 내 보드</span>
+      <button class="profile-panel-close" type="button">✕</button>
+    </div>
+    <div class="profile-panel-body">
+      <div class="profile-panel-profile">
+        <div class="profile-panel-profile-top">
+          <div class="profile-panel-avatar-wrap">${avatarHtml}</div>
+          <div class="profile-panel-profile-info">
+            <span class="profile-panel-nick-row"><span class="profile-panel-nick">${_e(nickname)}</span></span>
+            <span class="profile-panel-readonly-hint">읽기 전용으로 보고 있어요</span>
+          </div>
+        </div>
+      </div>
+      <div class="profile-card-grid">
+        <button class="profile-card" data-other-subsheet="taste" type="button">
+          <span class="profile-card-icon">❤️</span>
+          <span class="profile-card-label">취향 보드</span>
+        </button>
+        <button class="profile-card" data-other-subsheet="meeting" type="button">
+          <span class="profile-card-icon">📅</span>
+          <span class="profile-card-label">모임 보드</span>
+        </button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(mainPanel);
+  mainPanel.querySelector('.profile-panel-close').addEventListener('click', () => mainPanel.remove());
+  mainPanel.addEventListener('click', e => { if (e.target === mainPanel) mainPanel.remove(); });
+  mainPanel.querySelector('[data-other-subsheet="taste"]').addEventListener('click', () => window.openOtherProfileSheet?.(userId));
+  mainPanel.querySelector('[data-other-subsheet="meeting"]').addEventListener('click', () => _openOtherMeetingSubSheet(userId, nickname, data));
+
+  await _openOtherMeetingSubSheet(userId, nickname, data);
+}
+
+async function _openOtherMeetingSubSheet(userId, nickname, data) {
+  document.getElementById('otherMeetingSheet')?.remove();
+  const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const { bio, location, available, travelRange, meetingStyle, wantGames, ruleGames } = data;
+
+  const buildReadOnlyGames = (games) => {
+    if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
+    return games.map(g => {
+      const gd = g.game_id ? window.gameData?.[g.game_id] : null;
+      const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
+      const thumb = gd?.images?.thumbnail
+        ? `<img class="taste-game-thumb" src="${_e(gd.images.thumbnail)}" alt="">`
+        : `<span class="taste-game-thumb-empty"></span>`;
+      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
+      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
+      return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${_e(name)}</span></div>`;
+    }).join('');
+  };
+
+  const contentHtml = `
+    <div class="meeting-profile-section">
+      <div class="taste-section-label">📍 모임 프로필</div>
+      <div class="meeting-profile-display">
+        <div class="meeting-profile-row"><span class="meeting-profile-label">📍 활동 지역</span><span class="meeting-profile-val${location ? '' : ' is-empty'}">${location ? _e(location) : '미입력'}</span></div>
+        <div class="meeting-profile-row"><span class="meeting-profile-label">🕐 참여 가능 시간</span><span class="meeting-profile-val${available ? '' : ' is-empty'}">${available ? _e(available) : '미입력'}</span></div>
+        <div class="meeting-profile-row"><span class="meeting-profile-label">🚗 이동 가능 범위</span><span class="meeting-profile-val${travelRange ? '' : ' is-empty'}">${travelRange ? _e(travelRange) : '미입력'}</span></div>
+        <div class="meeting-profile-row"><span class="meeting-profile-label">📝 한줄소개</span><span class="meeting-profile-val${bio ? '' : ' is-empty'}">${bio ? _e(bio) : '미입력'}</span></div>
+        <div class="meeting-profile-style-row">${meetingStyle.length ? meetingStyle.map(t => `<span class="taste-bio-tag">${_e(t)}</span>`).join('') : '<span class="taste-bio-placeholder">선호 스타일 미입력</span>'}</div>
+      </div>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">🎯 이번에 하고 싶은 게임 <span class="taste-count">${wantGames.length}개</span></div>
+      <div class="taste-game-list">${buildReadOnlyGames(wantGames)}</div>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">📖 룰 설명 가능한 게임 <span class="taste-count">${ruleGames.length}개</span></div>
+      <div class="taste-game-list">${buildReadOnlyGames(ruleGames)}</div>
+    </div>`;
+
+  // 본인 내 보드의 _openSubSheet와 동일한 .profile-subsheet 마크업 — 뒤로가기는 메인 패널만 노출
+  const sub = document.createElement('div');
+  sub.id = 'otherMeetingSheet';
+  sub.className = 'profile-subsheet';
+  sub.innerHTML = `
+    <div class="profile-subsheet-box">
+      <div class="profile-subsheet-header">
+        <button class="profile-subsheet-back" type="button">‹ ${_e(nickname)}의 내 보드</button>
+        <span class="profile-subsheet-title">모임 보드</span>
+        <button class="profile-subsheet-close" type="button">✕</button>
+      </div>
+      <div class="profile-subsheet-body">${contentHtml}</div>
+    </div>`;
+  document.body.appendChild(sub);
+  sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
+  sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); document.getElementById('otherMainPanel')?.remove(); });
+  sub.addEventListener('click', e => { if (e.target === sub) sub.remove(); });
+
+  sub.querySelectorAll('.taste-game-item--clickable').forEach(item => {
+    item.addEventListener('click', () => {
+      const gid = item.dataset.gameId;
+      if (gid && window.openGameSheet) { sub.remove(); document.getElementById('otherMainPanel')?.remove(); window.openGameSheet(gid); }
+    });
+  });
+}
+window.openOtherMeetingSheet = openOtherMeetingSheet;
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);
