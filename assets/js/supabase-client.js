@@ -1765,8 +1765,7 @@ window._cottageSess = (function () {
   }
 
   async function grantFirstPlayVoucher(userId) {
-    const _OWNER_ID = '4916417947';
-    if (!userId || String(userId) === _OWNER_ID) return false;
+    if (!userId) return false;
     try {
       const { data: existing } = await db.from('voucher_log')
         .select('id').eq('user_id', String(userId)).eq('reason', 'first_play').maybeSingle();

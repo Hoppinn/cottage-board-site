@@ -6998,7 +6998,8 @@ body.embed-mode {
   /* 드롭다운: hover 갭 없애기 — padding-top으로 시각적 여백만 */
   .menu-group{
     position:relative;
-    padding-bottom:8px; /* hover 영역 확장 */
+    padding-bottom:0; /* 세로 정렬 통일: padding-bottom 제거 (body가 top:100%라 hover gap 없음) */
+    width:auto; /* mobile width:100% 오버라이드 */
   }
 
   .menu-group-body{

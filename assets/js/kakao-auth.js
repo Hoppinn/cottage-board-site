@@ -663,9 +663,8 @@ async function openProfilePanel(autoSubsheet = null) {
   const VOUCHER_NOTICE_DATE = '2026-06-16';
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
   let voucherCardHtml = '';
-  if (!isOwnerUser) {
-    if (_hasFirstPlayVoucher) {
-      voucherCardHtml = `<div class="notif-reward-card is-seen">
+  if (_hasFirstPlayVoucher) {
+    voucherCardHtml = `<div class="notif-reward-card is-seen">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
@@ -675,8 +674,8 @@ async function openProfilePanel(autoSubsheet = null) {
       </div>
     </div>
   </div>`;
-    } else {
-      voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? ' is-seen' : ' is-new'}">
+  } else {
+    voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? ' is-seen' : ' is-new'}">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
@@ -690,9 +689,8 @@ async function openProfilePanel(autoSubsheet = null) {
       ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
     </div>
   </div>`;
-    }
   }
-  const _effectiveVoucherSeen = isOwnerUser || _hasFirstPlayVoucher || voucherSeen;
+  const _effectiveVoucherSeen = _hasFirstPlayVoucher || voucherSeen;
   const _newCount = notifs.filter(n => n.isNew).length + (_effectiveVoucherSeen ? 0 : 1);
   function _getGameKeyById(gameId) {
     if (!gameId || !window.gameData) return null;
