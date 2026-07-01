@@ -224,6 +224,7 @@ window._cottageSess = (function () {
 
   async function trackPageView(page, referrer = null, extra = {}) {
     if (!page) return;
+    if (_shouldSkipAnalytics()) return;
     try {
       const payload = { page, ...extra };
       if (referrer) payload.referrer = referrer;
@@ -243,13 +244,24 @@ window._cottageSess = (function () {
       return u?.id ? String(u.id) : null;
     } catch (_) { return null; }
   }
+  const _ADMIN_USER_ID = '4916417947';
+  function _isLocalhost() {
+    return typeof location !== 'undefined' && (location.hostname === '127.0.0.1' || location.hostname === 'localhost');
+  }
+  function _isAdminVisitor() {
+    try {
+      return !!localStorage.getItem('cottage_is_admin') || _currentVisitorUserId() === _ADMIN_USER_ID;
+    } catch (_) { return false; }
+  }
+  function _shouldSkipAnalytics() {
+    return _isLocalhost() || _isAdminVisitor();
+  }
 
   // ── 이벤트 트래킹 ───────────────────────────────────────
 
   async function trackEvent(eventType, opts = {}) {
     if (typeof location === 'undefined') return;
-    if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
-    if (localStorage.getItem('cottage_is_admin')) return;
+    if (_shouldSkipAnalytics()) return;
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const referrer = localStorage.getItem(`cottage_orig_src_${kstDate}`) || null;
     const payload = { event_type: eventType, referrer, session_key: getSessionKey(), user_id: _sessionUserId || null };
@@ -872,7 +884,7 @@ window._cottageSess = (function () {
 
   document.addEventListener("DOMContentLoaded", function () {
     // localhost 개발 환경에서는 카운팅 안 함
-    if (location.hostname === "127.0.0.1" || location.hostname === "localhost") return;
+    if (_shouldSkipAnalytics()) return;
     // 유입 경로 캡처 — 날짜+source+page 기준 1회 dedup, 채널별 페이지 이동 각각 기록
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const visitedKey = "cottage_visited_" + kstDate;
@@ -889,8 +901,7 @@ window._cottageSess = (function () {
       } catch (_) { return null; }
     })();
     // 관리자 접속은 방문자 통계 전체 미포함
-    const isAdmin = !!localStorage.getItem('cottage_is_admin');
-    if (isAdmin) return;
+    if (_shouldSkipAnalytics()) return;
     // 외부 유입 감지 시 당일 소스 갱신 (last-touch 모델 — 채널 효과 측정 목적)
     const origSrcKey = `cottage_orig_src_${kstDate}`;
     if (referrer) localStorage.setItem(origSrcKey, referrer);
@@ -972,7 +983,7 @@ window._cottageSess = (function () {
   // insertPageSession: 탭 숨김처럼 실제 페이지 이탈 시에만 true
   async function _syncTimeToDBNow(userId, insertPageSession = true) {
     if (!userId) return;
-    if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
+    if (_shouldSkipAnalytics()) return;
     const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
     const secs = _popAccumulatedSecs(userId);
@@ -1048,7 +1059,7 @@ window._cottageSess = (function () {
 
   async function _startAnonHeartbeat() {
     if (_anonHeartbeatTimer || _sessionUserId) return;
-    if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') return;
+    if (_shouldSkipAnalytics()) return;
     const key = getSessionKey();
     const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     let _anonTodaySec = 0;
@@ -1093,7 +1104,8 @@ window._cottageSess = (function () {
   async function upsertProfile(userId, nickname, realName, explicitVisitCount) {
     startSession(userId);
     try {
-      const accumulated = _popAccumulatedSecs(userId);
+      const skipAnalyticsForUser = _shouldSkipAnalytics() && String(userId) === _ADMIN_USER_ID;
+      const accumulated = skipAnalyticsForUser ? 0 : _popAccumulatedSecs(userId);
       const { data, error: selectError } = await db.from('profiles').select('visit_count, total_minutes, today_seconds, today_date, real_name, is_banned, nickname, photo_url').eq('user_id', userId).maybeSingle();
       _isBanned = !!data?.is_banned;
       // DB에 이미 커스텀 닉네임이 있고 새로 들어온 값이 Kakao 기본명과 같으면 기존 보호
@@ -1105,7 +1117,7 @@ window._cottageSess = (function () {
       // 일일 방문 시 DB값 기준 +1 (dedup은 kakao-auth.js의 sess.lastVisitDate !== kstDate 조건이 담당)
       // explicitVisitCount=undefined인 닉네임 변경 등의 호출은 visit_count를 건드리지 않음
       const visitCountField = {};
-      if (explicitVisitCount !== undefined) {
+      if (explicitVisitCount !== undefined && !skipAnalyticsForUser) {
         visitCountField.visit_count = (!selectError && data)
           ? (data.visit_count || 0) + 1      // DB값 기준 +1 (새 기기에서도 올바르게 증가)
           : explicitVisitCount;               // SELECT 실패 시 localStorage 값 fallback
@@ -1113,7 +1125,7 @@ window._cottageSess = (function () {
       const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
       const prevToday = data?.today_date === todayStr ? (data?.today_seconds || 0) : 0;
       // SELECT 실패 시 total_minutes를 upsert 대상에서 제외 — 에러로 data=null 상태에서 0으로 덮어쓰는 것 방지
-      const timeFields = !selectError ? {
+      const timeFields = !selectError && !skipAnalyticsForUser ? {
         total_minutes: (data?.total_minutes || 0) + accumulated,
         today_seconds: prevToday + accumulated,
         today_date: todayStr,
@@ -1135,7 +1147,7 @@ window._cottageSess = (function () {
         s.timeSec = 0;
         window._cottageSess.set(userId, s);
       }
-      if (!upsertError && explicitVisitCount !== undefined) {
+      if (!upsertError && explicitVisitCount !== undefined && !skipAnalyticsForUser) {
         const newVisitCount = visitCountField.visit_count;
         window.checkAchievements?.('visit', userId, { visitCount: newVisitCount });
       }

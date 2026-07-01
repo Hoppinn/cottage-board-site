@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-01 (143차-188)
+최종 갱신: 2026-07-02 (143차-189)
 
 ---
 
@@ -342,6 +342,7 @@
 
 | 항목 | 내용 |
 |------|------|
+| 관리자/로컬 카운팅 제외 기준 통합 (2026-07-02) | 143차-189에서 localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID=4916417947)는 `page_views`, `page_events`, `page_sessions`, `anon_sessions`, `profiles.visit_count/total_minutes/today_seconds` 누적에서 제외하도록 통합. 관리자 분석 화면도 관리자 user_id가 붙은 rows/pageViews/profiles를 표시 집계에서 제외. 과거에 user_id 없이 쌓인 관리자 추정 page_views는 식별 불가하므로 삭제/소급 보정하지 않음. |
 | 방문자 통계 명/회 역전 (2026-07-01) | 관리자 유입/방문 분석에서 “회”는 `page_views`의 `__visitor__` 마커 수, “명”은 `page_sessions`의 `user_id || session_key` 고유값으로 집계되어 같은 기기·같은 날짜에 여러 사용자가 방문하거나 로그인 타이밍이 늦으면 `3명 1회`처럼 표시될 수 있음. `page_views`에 `session_key`가 없고 `cottage_visited_{date}`가 날짜 단위로만 중복 방지하는 구조라 표시 보정보다 트래킹/집계 기준 재정의 Plan 필요 |
 | 기록보드 플레이기록 시간 | 기록보드에 표시되는 플레이기록 시간이 전부 09:00으로 표시됨. 원인 미확인 |
 | 서브시트(취향보드 등) 상단 모서리 음영 (2026-06-30) | 사용자가 스크린샷으로 보고한 모서리 음영 — 시도한 가설 3건 모두 효과 없음: ①`.profile-activity-toggle` 상단 radius 제거, ②`.profile-subsheet-header` radius를 box와 맞춤(overflow:hidden이라 무의미함 확인), ③`.profile-subsheet-header`에 `background:#fff` 추가(외부 GPT 의견, 적용했으나 미해결). 다음 시도 전 확대 스크린샷으로 정확한 형태 확인 필요 |
@@ -427,6 +428,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-07-02 | fix: 관리자 분석/카운팅 기준 통합. `supabase-client.js`에 localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID=4916417947) 제외 공통 기준을 두고 `trackPageView`, `trackEvent`, `__visitor__` 마커, 로그인 체류시간/page_sessions, 비회원 anon_sessions/page_sessions, profiles 방문수/체류시간 누적에 적용. `script.js`의 구형 직접 page_sessions 전송 경로에도 동일 제외 기준 추가. 관리자 분석 페이지는 로드 직후 관리자 user_id가 붙은 rows/pageViews/profiles를 집계에서 제외하고, 방문자 구성 도넛을 일반 page_views가 아니라 전체 방문자 카드와 동일한 `__visitor__` 기준으로 변경해 총합 불일치(예: 전체 13명 vs 비회원 24명)를 방지. 방문자 더보기/닫기 최초 클릭이 먹히지 않던 문제는 숨겨진 `visitorExtras` 부모를 먼저 열도록 수정. (143차-189) |
 | 2026-07-01 | fix: 교환권 알림 카드 혼합 상태 제거 — 미수령(`_hasFirstPlayVoucher=false`)일 때 `is-seen` 클래스 적용 금지. 이전에 "확인했어요" 클릭(voucherSeen=true)해도 카드는 중립(클래스 없음) 상태로 표시, "게임 기록하기" 링크 항상 노출. `is-seen`은 실제 수령 완료 케이스에서만 사용해 미수령/수령완료 두 상태만 보이도록 보장. `grantFirstPlayVoucher`에서 관리자 예외 제거(일반 사용자와 동일 처리). (143차-188) |
 | 2026-07-01 | fix/design: about.html 구분선이 여전히 푸른색처럼 보이는 원인을 `<hr>` 기본 테두리로 보고 `.about-divider`의 border를 제거하고 실제 표시 선을 더 명확한 베이지/브라운(`#c8ad83`)으로 조정. 플레이 기록 입력 탭 보상 안내는 기존 교환권 내역의 `first_play` 지급 기록이 있는 사용자에게 숨기고, 미수령 사용자에게만 느낌표가 붙은 안내 문구를 문구 크기 박스로 중앙 표시하도록 변경. (143차-186) |
 | 2026-07-01 | design: 사용자 테스트 피드백 반영 — 메인 Hero `기록 남기기` 버튼 강조(브라운 테두리/900 굵기)는 기존 크림 아웃라인 스타일이 더 자연스럽다고 판단해 롤백. about.html 구분선이 화면에서 푸른 회색처럼 보여 `.about-divider`를 브랜드 브라운 투명선(`rgba(122,72,40,0.26)`)으로 재조정. (143차-185) |

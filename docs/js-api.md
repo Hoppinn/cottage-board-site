@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-01 (143차-178: trackPageView extra 파라미터 추가 — 봇/회원 트래킹)
+최종 갱신: 2026-07-02 (143차-189: 관리자/로컬 분석 카운팅 제외 기준 통합)
 
 ---
 
@@ -9,8 +9,8 @@
 | 함수 | 용도 |
 |------|------|
 | `trackView(gameId)` | 게임 조회수 기록 |
-| `trackPageView(page, referrer = null, extra = {})` | 페이지 뷰 기록 (하루 1회). referrer: utm_source 또는 외부 hostname — page_views.referrer에 저장. extra: `{is_bot, user_id}` 등 추가 컬럼 병합 (143차-178, `__visitor__` 마커 삽입 시 사용) |
-| `trackEvent(eventType, opts = {})` | 이벤트 기록 — page_events 테이블 insert. admin/localhost 자동 제외, referrer는 `cottage_orig_src_{date}`에서 자동 읽음. session_key(getSessionKey())/user_id(_sessionUserId)도 함께 저장(143차-160). opts: `{ game_id? }` |
+| `trackPageView(page, referrer = null, extra = {})` | 페이지 뷰 기록 (하루 1회). referrer: utm_source 또는 외부 hostname — page_views.referrer에 저장. extra: `{is_bot, user_id}` 등 추가 컬럼 병합. localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID)는 자동 제외 |
+| `trackEvent(eventType, opts = {})` | 이벤트 기록 — page_events 테이블 insert. localhost/127.0.0.1 및 관리자 자동 제외, referrer는 `cottage_orig_src_{date}`에서 자동 읽음. session_key(getSessionKey())/user_id(_sessionUserId)도 함께 저장(143차-160). opts: `{ game_id? }` |
 | `getGameRating(gameId)` | 별점 평균+건수 조회 |
 | `submitRating(gameId, rating)` | 별점 제출 |
 | `getMyRating(gameId)` | 내 별점 (localStorage) |

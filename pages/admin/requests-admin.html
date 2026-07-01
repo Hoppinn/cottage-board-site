@@ -781,13 +781,16 @@
 
       // ── 데이터 로드 ────────────────────────────────────────────
       const db2 = window._cottageSupabaseDb;
-      const [rows, allProfiles, pvResult, anonResult] = await Promise.all([
+      const [rawRows, rawProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
         db2 ? db2.from('page_views').select('page, created_at, referrer, is_bot, user_id').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
-      const pageViews = pvResult?.data || [];
+      const ADMIN_UID = '4916417947';
+      const rows = (rawRows || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
+      const allProfiles = (rawProfiles || []).filter(p => String(p.user_id || '') !== ADMIN_UID);
+      const pageViews = (pvResult?.data || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
       const anonSessions = anonResult?.data || [];
       const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
       const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
@@ -1448,7 +1451,8 @@
           refUserMap[cat].add(r.user_id || `anon:${r.session_key}`);
         }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
-        document.getElementById('chartRefSub').textContent = label;
+        const chartRefSub = document.getElementById('chartRefSub');
+        if (chartRefSub) chartRefSub.textContent = label;
         const refEmpty = document.getElementById('chartRefEmpty');
         const refCanvas = document.getElementById('chartReferrer');
         const refWrap = document.getElementById('chartReferrerWrap');
@@ -1497,7 +1501,8 @@
           pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
         }
         const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
-        document.getElementById('chartPagesSub').textContent = label;
+        const chartPagesSub = document.getElementById('chartPagesSub');
+        if (chartPagesSub) chartPagesSub.textContent = label;
         makeOrUpdate('chartPages', 'bar', {
           labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
           datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
@@ -1526,7 +1531,8 @@
             if (!crossMap[cat]) crossMap[cat] = {};
             crossMap[cat][pg] = (crossMap[cat][pg] || 0) + 1;
           }
-          document.getElementById('chartCrossSub').textContent = label;
+          const chartCrossSub = document.getElementById('chartCrossSub');
+          if (chartCrossSub) chartCrossSub.textContent = label;
           const crossEl = document.getElementById('chartCrossRef');
           if (crossEl) {
             if (!Object.keys(crossMap).length) {
@@ -1554,7 +1560,8 @@
         const hourly = new Array(24).fill(0);
         for (const pv of filteredPV) hourly[kstHour(pv.created_at)]++;
         const hMax = Math.max(...hourly) || 1;
-        document.getElementById('chartHourlySub').textContent = label;
+        const chartHourlySub = document.getElementById('chartHourlySub');
+        if (chartHourlySub) chartHourlySub.textContent = label;
         makeOrUpdate('chartHourly', 'bar', {
           labels: Array.from({ length: 24 }, (_, i) => `${i}시`),
           datasets: [{
@@ -1571,17 +1578,12 @@
         });
 
         // ── 보조: 방문자 구성 도넛 ──────────────────────────────────
-        const totalCount = filteredPV.length;
-        const fromMs = start ? new Date(start).getTime() : 0;
-        const memberUidSet = new Set();
-        for (const p of allProfiles) {
-          if (!p.last_seen_at) continue;
-          if (fromMs && new Date(p.last_seen_at).getTime() < fromMs) continue;
-          memberUidSet.add(p.user_id);
-        }
-        const mCnt = Math.min(memberUidSet.size, totalCount);
-        const gCnt = Math.max(0, totalCount - mCnt);
-        document.getElementById('chartRatioSub').textContent = label;
+        const ratioVisitors = filteredVisitor;
+        const memberUidSet = new Set(ratioVisitors.map(r => r.user_id).filter(Boolean));
+        const mCnt = memberUidSet.size;
+        const gCnt = Math.max(0, ratioVisitors.length - mCnt);
+        const chartRatioSub = document.getElementById('chartRatioSub');
+        if (chartRatioSub) chartRatioSub.textContent = label;
         makeOrUpdate('chartMemberRatio', 'doughnut', {
           labels: [`회원 (${mCnt}명)`, `비회원 (${gCnt}명)`],
           datasets: [{ data: [mCnt, gCnt], backgroundColor: [C1, CMUTED], borderWidth: 0 }],
@@ -1610,7 +1612,8 @@
             memberSecMap.set(r.user_id, (memberSecMap.get(r.user_id) || 0) + (r.duration_sec || 0));
           }
         }
-        document.getElementById('chartMemberTimeSub').textContent = label;
+        const chartMemberTimeSub = document.getElementById('chartMemberTimeSub');
+        if (chartMemberTimeSub) chartMemberTimeSub.textContent = label;
         const topMembers = allProfiles
           .map(p => ({ uid: p.user_id, name: profilesMap?.get(p.user_id) || p.nickname || '?', secs: memberSecMap.get(p.user_id) || 0 }))
           .filter(m => m.secs > 0)
@@ -1865,6 +1868,8 @@
 
   function expandVisitorMore() {
     const activeFilter = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active')?.dataset.filter || 'all';
+    const extrasEl = document.getElementById('visitorExtras');
+    if (extrasEl) extrasEl.style.display = 'block';
     const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
     const matched = activeFilter === 'all' ? allCards : allCards.filter(c => c.dataset.visitorType === activeFilter);
     matched.forEach(c => c.style.display = '');

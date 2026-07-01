@@ -3112,10 +3112,22 @@ async function onSubmitPlayModal() {
   const _ref = document.referrer
     ? (PAGE_LABELS[new URL(document.referrer).pathname] || new URL(document.referrer).pathname)
     : '';
+  const ADMIN_UID = '4916417947';
 
   function _getUid() {
     try { return JSON.parse(localStorage.getItem('kakao_user') || 'null')?.id || null; } catch(_) { return null; }
   }
+  function _isLocalhost() {
+    return location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  }
+  function _isAdminVisitor() {
+    try { return !!localStorage.getItem('cottage_is_admin') || String(_getUid() || '') === ADMIN_UID; } catch(_) { return false; }
+  }
+  function _shouldSkipSessionTracking() {
+    return _isLocalhost() || _isAdminVisitor();
+  }
+  if (_shouldSkipSessionTracking()) return;
+
   function _getSk() {
     let k = localStorage.getItem('cottage_session_id');
     if (!k) { k = Date.now().toString(36) + Math.random().toString(36).slice(2); localStorage.setItem('cottage_session_id', k); }
@@ -3125,6 +3137,7 @@ async function onSubmitPlayModal() {
   let _sent = false;
   function _send() {
     if (_sent) return;
+    if (_shouldSkipSessionTracking()) return;
     const cfg = window.SUPABASE_CONFIG;
     if (!cfg?.url || !cfg?.anonKey) return;
     const dur = Math.round((Date.now() - _entryTime) / 1000);

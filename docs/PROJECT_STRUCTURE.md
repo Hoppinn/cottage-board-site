@@ -307,6 +307,12 @@ game-reviews.html — 기록 입력 탭
 
 ---
 
+### 6-1. 관리자/로컬 카운팅 제외
+
+2026-07-02부터 localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID=4916417947)는
+`page_views`, `page_events`, `page_sessions`, `anon_sessions`, `profiles.visit_count/total_minutes/today_seconds`
+누적에서 제외한다. 관리자 분석 화면도 관리자 `user_id`가 붙은 `rows/pageViews/profiles`를 표시 집계에서 제외한다.
+
 ## 7. 게임 데이터 시스템 game-system/
 
 ```
