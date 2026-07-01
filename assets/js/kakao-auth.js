@@ -675,7 +675,9 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
   </div>`;
   } else {
-    voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? ' is-seen' : ' is-new'}">
+    // 미수령: voucherSeen 여부와 무관하게 is-seen 사용 금지 (수령완료와 혼동 방지)
+    // voucherSeen은 NEW 배지·확인했어요 버튼·카드 위치만 제어
+    voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? '' : ' is-new'}">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
@@ -685,7 +687,7 @@ async function openProfilePanel(autoSubsheet = null) {
       </div>
     </div>
     <div class="notif-reward-actions">
-      <a class="notif-reward-btn profile-voucher-link${voucherSeen ? ' is-seen' : ''}" href="/pages/game/game-reviews.html">게임 기록하기</a>
+      <a class="notif-reward-btn profile-voucher-link" href="/pages/game/game-reviews.html">게임 기록하기</a>
       ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
     </div>
   </div>`;
