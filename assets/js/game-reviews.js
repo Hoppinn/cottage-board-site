@@ -161,6 +161,8 @@
     if (!groups.includes('코티지보드 동호회')) groups.unshift('코티지보드 동호회');
     window._prGroups = groups;
     window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
+    const voucherHistory = await window.CottageDB?.getVoucherHistory?.(String(user.id), 1000) || [];
+    const hasFirstPlayVoucher = voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
 
     async function refreshAutocompleteLists() {
       const fresh = await window.CottageDB?.getGroupNames() || [];
@@ -172,7 +174,7 @@
     window._refreshAutocompleteLists = refreshAutocompleteLists;
 
     panel.innerHTML = `
-      <p class="pr-reward-note">🎁 첫 플레이 기록 작성 시 음료 교환권 1장 지급</p>
+      ${hasFirstPlayVoucher ? '' : '<p class="pr-reward-note">🎁 첫 플레이 기록 작성 시 음료 교환권 1장 지급!</p>'}
       <div class="pr-meta-grid">
         <div>
           <label class="pr-field-label">날짜</label>
