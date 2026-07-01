@@ -172,6 +172,7 @@
     window._refreshAutocompleteLists = refreshAutocompleteLists;
 
     panel.innerHTML = `
+      <p class="pr-reward-note">🎁 첫 플레이 기록 작성 시 음료 교환권 1장 지급</p>
       <div class="pr-meta-grid">
         <div>
           <label class="pr-field-label">날짜</label>
