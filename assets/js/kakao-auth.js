@@ -658,10 +658,25 @@ async function openProfilePanel(autoSubsheet = null) {
     return `<li class="profile-activity-item profile-activity-item--review" data-game-id="${escH(String(r.game_id || ''))}"><div class="profile-review-header"><span class="profile-review-left">${_thumbHtml}<button class="profile-game-link" type="button">${escH(getGameName(r.game_id))}</button>${pLabel}</span><span class="profile-review-date">${fmtShort(r.played_at || r.created_at)}</span></div><p class="profile-review-text">${escH(r.review_text)}</p></li>`;
   }, 1);
 
+  const _hasFirstPlayVoucher = voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
   const VOUCHER_NOTICE_DATE = '2026-06-16';
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
-  const voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? ' is-seen' : ' is-new'}">
+  let voucherCardHtml = '';
+  if (!isOwnerUser) {
+    if (_hasFirstPlayVoucher) {
+      voucherCardHtml = `<div class="notif-reward-card is-seen">
+    <div class="notif-reward-row">
+      <div class="notif-reward-icon-col">🎫</div>
+      <div class="notif-reward-body">
+        <div class="notif-reward-title">첫 기록 보상 수령 완료</div>
+        <div class="notif-reward-desc">첫 플레이기록 보상으로 음료교환권 1장을 받으셨어요 ✓</div>
+        <div class="notif-card-date">${escH(_voucherDateLabel)}</div>
+      </div>
+    </div>
+  </div>`;
+    } else {
+      voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? ' is-seen' : ' is-new'}">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
@@ -675,7 +690,10 @@ async function openProfilePanel(autoSubsheet = null) {
       ${voucherSeen ? '' : '<button class="profile-voucher-confirm" type="button">확인했어요</button>'}
     </div>
   </div>`;
-  const _newCount = notifs.filter(n => n.isNew).length + (!voucherSeen ? 1 : 0);
+    }
+  }
+  const _effectiveVoucherSeen = isOwnerUser || _hasFirstPlayVoucher || voucherSeen;
+  const _newCount = notifs.filter(n => n.isNew).length + (_effectiveVoucherSeen ? 0 : 1);
   function _getGameKeyById(gameId) {
     if (!gameId || !window.gameData) return null;
     if (window.gameData[gameId]) return gameId;
@@ -737,7 +755,7 @@ async function openProfilePanel(autoSubsheet = null) {
   const _notifHelpHtml = notifs.length === 0
     ? `<div class="notif-help">새 알림이 없으면 여기에서 보상, 게임 요청, 업적 달성 소식을 확인할 수 있어요.</div>`
     : '';
-  const _voucherFirst = !voucherSeen;
+  const _voucherFirst = !_effectiveVoucherSeen;
   let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_notifHelpHtml}`;
 
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;

@@ -7040,6 +7040,17 @@ body.embed-mode {
   .header-menu a.menu-admin-link{
     font-size:13px;
     font-weight:900;
+    flex:0 0 auto;
+    padding:0 7px;
+  }
+
+  /* PC에서 로그인 영역 한 줄로 강제 — admin link flex:0 0 100%로 인한 줄바꿈 방지 */
+  .menu-login-area{
+    flex-wrap:nowrap;
+  }
+
+  .menu-login-area .menu-kakao-login-btn{
+    flex:0 0 auto;
   }
 
   .menu-kakao-login-btn.is-logged-in::after{

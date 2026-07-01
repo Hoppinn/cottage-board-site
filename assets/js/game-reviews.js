@@ -162,7 +162,8 @@
     window._prGroups = groups;
     window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
     const voucherHistory = await window.CottageDB?.getVoucherHistory?.(String(user.id), 1000) || [];
-    const hasFirstPlayVoucher = voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
+    const _isAdmin = localStorage.getItem('cottage_is_admin') === '1';
+    const hasFirstPlayVoucher = _isAdmin || voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
 
     async function refreshAutocompleteLists() {
       const fresh = await window.CottageDB?.getGroupNames() || [];
