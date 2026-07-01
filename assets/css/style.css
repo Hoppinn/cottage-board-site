@@ -4604,7 +4604,7 @@ body.embed-mode {
 .about-for-text strong{display:block;margin-bottom:8px;}
 .about-divider{
   height:1px;
-  background:var(--line);
+  background:rgba(223,199,161,0.55);
   margin:0;
 }
 .about-why-block{
