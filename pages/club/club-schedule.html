@@ -217,9 +217,15 @@
 
     /* 내 등록 */
     .sched-my-section {
-      border-top: 1px solid #ede8e0;
-      padding-top: 18px;
-      margin-top: 4px;
+      border-bottom: 1px solid #ede8e0;
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+    .sched-my-status {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 8px;
     }
     .sched-register-btn {
       width: 100%;
@@ -381,9 +387,9 @@
         <div id="viewDay" style="display:none">
           <button class="sched-back-btn" id="btnBackCal">← 달력으로</button>
           <h2 class="sched-day-title" id="dayTitle"></h2>
+          <div id="myVoteSection"></div>
           <div id="overlapSection"></div>
           <div id="barSection"></div>
-          <div id="myVoteSection"></div>
         </div>
 
       </div>
@@ -562,9 +568,9 @@
       const dayVotes = allVotes.filter(v => v.vote_date === ds);
       const user = window.getKakaoUser?.();
       const myVote = dayVotes.find(v => user && String(v.user_id) === String(user.id));
+      renderMyVote(ds, myVote);
       renderOverlap(dayVotes);
       renderBars(dayVotes, myVote);
-      renderMyVote(ds, myVote);
     }
 
     function renderHourlyBreakdown(votes) {
@@ -612,15 +618,15 @@
       const top = blocks[0];
       const summaryHtml = `<div class="sched-summary-card">
         <div class="sched-summary-item">
-          <div class="sched-summary-lbl">참여</div>
+          <div class="sched-summary-lbl">👥 참여</div>
           <div class="sched-summary-val is-green">${s.count}명</div>
         </div>
         <div class="sched-summary-item">
-          <div class="sched-summary-lbl">전체 시간</div>
+          <div class="sched-summary-lbl">⏰ 전체</div>
           <div class="sched-summary-val">${s.totalStart}~${s.totalEnd}시</div>
         </div>
         <div class="sched-summary-item">
-          <div class="sched-summary-lbl">최대 겹침</div>
+          <div class="sched-summary-lbl">🔥 겹침</div>
           <div class="sched-summary-val${top ? ' is-green' : ''}">${top ? `${top.start}~${top.end}시` : '없음'}</div>
         </div>
       </div>`;
@@ -636,7 +642,7 @@
         </div>`).join('') : '<div style="color:var(--muted);font-size:13px;padding:4px 0">겹치는 시간이 없어요.</div>';
       el.innerHTML = `<div class="sched-overlap-section">
         ${summaryHtml}
-        <div class="sched-section-label">겹치는 시간대</div>
+        <div class="sched-section-label">🔥 모두 가능한 시간</div>
         ${blocksHtml}
         ${renderHourlyBreakdown(votes)}
       </div>`;
@@ -692,12 +698,12 @@
 
       if (myVote) {
         el.innerHTML = `<div class="sched-my-section">
-          <div class="sched-section-label">내 등록</div>
+          <div class="sched-my-status">✅ 참여중</div>
           <div class="sched-my-current">
             <span class="sched-my-time">${myVote.time_start}:00 ~ ${myVote.time_end}:00</span>
             <div class="sched-my-actions">
-              <button class="sched-action-btn sched-action-btn--edit" id="btnEdit">수정</button>
-              <button class="sched-action-btn sched-action-btn--del" id="btnDel">취소</button>
+              <button class="sched-action-btn sched-action-btn--edit" id="btnEdit">시간 변경</button>
+              <button class="sched-action-btn sched-action-btn--del" id="btnDel">참여 취소</button>
             </div>
           </div>
         </div>`;
