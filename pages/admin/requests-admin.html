@@ -95,7 +95,7 @@
     .admin-visitor-more-btn { display: block; width: 100%; margin-top: 8px; padding: 8px; font-size: 13px; font-weight: 600; color: var(--green); background: transparent; border: 1px dashed var(--border,#e8e4dc); border-radius: 8px; cursor: pointer; text-align: center; }
     .admin-visitor-more-btn:hover { background: #f5f0e8; }
     /* 분석 탭 (방문/회원/유입/페이지/이벤트) */
-    .admin-analysis-tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 2px solid var(--border,#e8e4dc); overflow-x: auto; }
+    .admin-analysis-tabs { display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 2px solid var(--border,#e8e4dc); overflow-x: auto; position: sticky; top: calc(var(--header-total-h) + 43px); z-index: 4; background: var(--bg,#f5f0e8); padding-top: 2px; }
     .admin-analysis-tab { flex-shrink: 0; font-size: 13px; font-weight: 700; padding: 8px 14px; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
     .admin-analysis-tab.is-active { color: var(--green); border-bottom-color: var(--green); }
     .admin-analysis-subtabs { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
