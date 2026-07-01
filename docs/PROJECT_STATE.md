@@ -6,6 +6,24 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
+### 🔵 CHECKPOINT: 리팩토링 및 점검 작업 계획 (2026-07-02 시작)
+
+**문서**: `docs/PLAN_refactor_audit_workflow.md`
+
+**현재 목표**: 전체 리팩토링을 한 번에 하지 않고, 문서-코드 싱크 점검 → 안전한 Green 정리 → Yellow 버그 후보 검증 → Red 작업 별도 Plan 순서로 진행한다.
+
+**보류 항목**:
+- `style.css`, `kakao-auth.js`, `requests-admin.html` 같은 큰 파일 즉시 분리 — 영향 범위가 넓어 사전 감사 후 진행.
+- DB/localStorage/window 전역 API 변경 — 별도 Plan과 승인 전까지 보류.
+- 관리자 분석 페이지 전체 재구성 — 카운팅 기준 안정화 후 필요할 때 별도 진행.
+
+**미실행 항목**:
+- `docs/REFACTOR_CHECKPOINT.md` Green 항목 현재 유효성 재검증
+- 문서만 고칠 수 있는 항목 1~2개 처리
+- 이후 Yellow 버그 후보별 증상/호출처/검증 방법 작성
+
+**다음 작업 후보**: `docs/PLAN_refactor_audit_workflow.md` 1단계부터 시작. 우선 `js-api.md`, `ls-schema.md`, `REFACTOR_CHECKPOINT.md`의 불일치 후보를 재검증한다.
+
 ### 🔵 CHECKPOINT: 관리자 분석 카운팅 기준 통합 (2026-07-02 시작)
 
 **문서**: `docs/PLAN_admin_analytics_counting.md`
@@ -444,9 +462,11 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-07-02 | design: 모임플래너 상세 UI 1차 개선. myVoteSection을 날짜 제목 바로 아래 최상단으로 이동(overlapSection 앞). 등록된 경우 '내 등록' 레이블 → '✅ 참여중' 상태 배지로 교체. 버튼 텍스트 '수정'→'시간 변경', '취소'→'참여 취소'. 통계 카드 라벨 아이콘 추가(👥 참여/⏰ 전체/🔥 겹침). 겹치는 시간대 섹션 레이블 → '🔥 모두 가능한 시간'. 슬라이더 로직·DB 구조 미수정. (143차-189) |
 | 2026-07-02 | fix: 관리자 분석/카운팅 기준 통합. `supabase-client.js`에 localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID=4916417947) 제외 공통 기준을 두고 `trackPageView`, `trackEvent`, `__visitor__` 마커, 로그인 체류시간/page_sessions, 비회원 anon_sessions/page_sessions, profiles 방문수/체류시간 누적에 적용. `script.js`의 구형 직접 page_sessions 전송 경로에도 동일 제외 기준 추가. 관리자 분석 페이지는 로드 직후 관리자 user_id가 붙은 rows/pageViews/profiles를 집계에서 제외하고, 방문자 구성 도넛을 일반 page_views가 아니라 전체 방문자 카드와 동일한 `__visitor__` 기준으로 변경해 총합 불일치(예: 전체 13명 vs 비회원 24명)를 방지. 방문자 더보기/닫기 최초 클릭이 먹히지 않던 문제는 숨겨진 `visitorExtras` 부모를 먼저 열도록 수정. (143차-189) |
 | 2026-07-02 | fix/plan: 관리자 분석 `명/회` 기준 통합 1단계. `docs/PLAN_admin_analytics_counting.md` 생성 후 `page_views.session_key` 마이그레이션(`007_page_views_session_key.sql`) 작성, `trackPageView`가 기본으로 `session_key`를 저장하도록 수정. 관리자 분석의 주요유입/유입 차트/유입×페이지 상세는 `page_sessions`와 섞지 않고 `__visitor__` 행의 `user_id || session_key` 기준으로 명을 계산한다. `session_key` 컬럼 미적용 DB에서는 관리자 화면이 기존 컬럼 조회로 fallback. (143차-190) |
 | 2026-07-02 | design: 관리자 분석 탭 sticky 적용. 사용자 제안의 3단 고정헤더(분석 제목 + 상위 탭 + 방문 하위 탭)는 모바일 차트 영역을 과하게 줄이고 top/z-index 충돌 위험이 높다고 판단해 보류. 대신 `방문/회원/유입/페이지/이벤트` 상위 탭만 `.admin-group-title` 아래에 sticky로 고정하고, 날짜 필터와 방문 하위 탭(`시간대/회원·비회원/...`)은 기존 흐름 유지. (143차-191) |
+| 2026-07-02 | docs/refactor: 리팩토링 및 점검 작업 계획(`PLAN_refactor_audit_workflow.md`) 작성. 기존 `REFACTOR_CHECKPOINT.md`를 재검증 입력으로 삼고, 문서-코드 싱크 → 안전한 Green 정리 → Yellow 버그 후보 검증 → Red 별도 Plan 순서로 진행하기로 정리. 1차 점검에서 `initTagInput` 시그니처, `CottageAchievements.getCharacterPath`, `cottage_is_admin` 문서 누락 후보는 이미 해결됨을 확인하고, `club-intro.html`/`requests.html` 계열 localStorage 키 누락을 `ls-schema.md`에 보강. (143차-192) |
 | 2026-07-01 | fix: 교환권 알림 카드 혼합 상태 제거 — 미수령(`_hasFirstPlayVoucher=false`)일 때 `is-seen` 클래스 적용 금지. 이전에 "확인했어요" 클릭(voucherSeen=true)해도 카드는 중립(클래스 없음) 상태로 표시, "게임 기록하기" 링크 항상 노출. `is-seen`은 실제 수령 완료 케이스에서만 사용해 미수령/수령완료 두 상태만 보이도록 보장. `grantFirstPlayVoucher`에서 관리자 예외 제거(일반 사용자와 동일 처리). (143차-188) |
 | 2026-07-01 | fix/design: about.html 구분선이 여전히 푸른색처럼 보이는 원인을 `<hr>` 기본 테두리로 보고 `.about-divider`의 border를 제거하고 실제 표시 선을 더 명확한 베이지/브라운(`#c8ad83`)으로 조정. 플레이 기록 입력 탭 보상 안내는 기존 교환권 내역의 `first_play` 지급 기록이 있는 사용자에게 숨기고, 미수령 사용자에게만 느낌표가 붙은 안내 문구를 문구 크기 박스로 중앙 표시하도록 변경. (143차-186) |
 | 2026-07-01 | design: 사용자 테스트 피드백 반영 — 메인 Hero `기록 남기기` 버튼 강조(브라운 테두리/900 굵기)는 기존 크림 아웃라인 스타일이 더 자연스럽다고 판단해 롤백. about.html 구분선이 화면에서 푸른 회색처럼 보여 `.about-divider`를 브랜드 브라운 투명선(`rgba(122,72,40,0.26)`)으로 재조정. (143차-185) |
