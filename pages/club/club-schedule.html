@@ -827,6 +827,66 @@
     }
 
 
+    // ── [DEV] 개발/검증용 더미 데이터 헬퍼 ──────────────────────
+    // 실 DB 완전 무관 — allVotes 메모리에만 추가.
+    // URL ?dev 파라미터가 없으면 절대 호출되지 않음.
+    function _injectDevVotes(scenario) {
+      const user   = window.getKakaoUser?.();
+      const myId   = user ? String(user.id) : '__dev_me__';
+      const myNick = user ? (user.nickname || '나') : '나';
+
+      // 내일 날짜를 더미 대상 날짜로 사용
+      const d = new Date(TODAY);
+      d.setDate(TODAY.getDate() + 1);
+      const tgt = toDateStr(d);
+
+      const DUMMY = {
+        // 3명: 대부분 시간이 겹치는 경우 (11~19 전원 겹침)
+        '3': [
+          { vote_date: tgt, user_id: myId,     nickname: myNick, time_start: 10, time_end: 20 },
+          { vote_date: tgt, user_id: 'dev_u2', nickname: '서연', time_start: 11, time_end: 19 },
+          { vote_date: tgt, user_id: 'dev_u3', nickname: '지호', time_start: 10, time_end: 22 },
+        ],
+        // 5명: 오전팀·오후팀 갈리고 중간 겹침 구간 존재
+        '5': [
+          { vote_date: tgt, user_id: myId,     nickname: myNick, time_start: 10, time_end: 15 },
+          { vote_date: tgt, user_id: 'dev_u2', nickname: '서연', time_start: 10, time_end: 14 },
+          { vote_date: tgt, user_id: 'dev_u3', nickname: '지호', time_start: 14, time_end: 22 },
+          { vote_date: tgt, user_id: 'dev_u4', nickname: '유나', time_start: 13, time_end: 21 },
+          { vote_date: tgt, user_id: 'dev_u5', nickname: '현우', time_start: 11, time_end: 17 },
+        ],
+        // 8명: 이른 오전~저녁까지 넓게 분산, 최대 겹침 낮음
+        '8': [
+          { vote_date: tgt, user_id: myId,     nickname: myNick, time_start: 10, time_end: 15 },
+          { vote_date: tgt, user_id: 'dev_u2', nickname: '서연', time_start:  9, time_end: 12 },
+          { vote_date: tgt, user_id: 'dev_u3', nickname: '지호', time_start: 12, time_end: 17 },
+          { vote_date: tgt, user_id: 'dev_u4', nickname: '유나', time_start: 14, time_end: 19 },
+          { vote_date: tgt, user_id: 'dev_u5', nickname: '현우', time_start: 16, time_end: 21 },
+          { vote_date: tgt, user_id: 'dev_u6', nickname: '채원', time_start: 18, time_end: 23 },
+          { vote_date: tgt, user_id: 'dev_u7', nickname: '도현', time_start:  9, time_end: 23 },
+          { vote_date: tgt, user_id: 'dev_u8', nickname: '수아', time_start: 11, time_end: 16 },
+        ],
+      };
+
+      const entries = DUMMY[scenario];
+      if (!entries) return;
+      allVotes.push(...entries);
+
+      // init() 시점에 로그인 미완료인 경우: cottage-auth-changed 후 __dev_me__ 교체
+      if (myId === '__dev_me__') {
+        window.addEventListener('cottage-auth-changed', () => {
+          const u = window.getKakaoUser?.();
+          if (!u) return;
+          allVotes.forEach(v => {
+            if (v.user_id === '__dev_me__') {
+              v.user_id   = String(u.id);
+              v.nickname  = u.nickname || v.nickname;
+            }
+          });
+        }, { once: true });
+      }
+    }
+
     // ── 초기화 ────────────────────────────────────────────────
     async function init() {
       const todayStr = toDateStr(TODAY);
@@ -835,6 +895,10 @@
       const endStr = toDateStr(end);
 
       allVotes = await window.CottageDB?.getMeetingVotes(todayStr, endStr) || [];
+
+      // [DEV] 개발/검증용 더미 데이터 주입 — URL ?dev=3/5/8 에서만 실행
+      const _devScenario = new URLSearchParams(location.search).get('dev');
+      if (_devScenario) _injectDevVotes(_devScenario);
 
       document.getElementById('mainLoading').style.display = 'none';
       document.getElementById('viewCalendar').style.display = '';
