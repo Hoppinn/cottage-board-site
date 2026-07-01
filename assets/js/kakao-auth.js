@@ -681,7 +681,7 @@ async function openProfilePanel(autoSubsheet = null) {
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
-        <div class="notif-reward-title">첫 기록하면 음료교환권 드려요 ${voucherSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}</div>
+        <div class="notif-reward-title">첫 기록 보상 안내 ${voucherSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}</div>
         <div class="notif-reward-desc">첫 플레이기록을 남기면 음료교환권 1장을 받을 수 있어요</div>
         <div class="notif-card-date">${escH(_voucherDateLabel)}</div>
       </div>
