@@ -351,69 +351,6 @@
       color: var(--muted);
     }
 
-    /* 프로필 바텀시트 */
-    .sched-sheet-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 1000;
-      display: flex;
-      align-items: flex-end;
-    }
-    .sched-sheet {
-      width: 100%;
-      max-width: 480px;
-      margin: 0 auto;
-      background: white;
-      border-radius: 16px 16px 0 0;
-      padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
-      max-height: 65vh;
-      overflow-y: auto;
-    }
-    .sched-sheet-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      margin-bottom: 18px;
-    }
-    .sched-sheet-handle {
-      width: 40px; height: 4px;
-      background: #ddd;
-      border-radius: 2px;
-    }
-    .sched-sheet-close {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 18px;
-      color: #999;
-      cursor: pointer;
-      padding: 4px 8px;
-      line-height: 1;
-    }
-    .sched-profile-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .sched-profile-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-    .sched-profile-avatar--empty { display: flex; align-items: center; justify-content: center; background: #e0d8cc; font-size: 18px; font-weight: 700; color: #7a6850; }
-    .sched-profile-bio { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
-    .sched-profile-nick {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 0;
-    }
-    .sched-profile-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 9px 0;
-      border-bottom: 1px solid #f0ebe0;
-    }
-    .sched-profile-date { font-size: 13px; color: var(--muted); width: 88px; flex-shrink: 0; }
-    .sched-profile-time { font-size: 14px; font-weight: 700; color: var(--text); }
 
     .sched-loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
@@ -453,16 +390,6 @@
     </section>
   </main>
 
-  <!-- 프로필 바텀시트 -->
-  <div class="sched-sheet-backdrop" id="sheetBackdrop" style="display:none" onclick="schedCloseSheet()">
-    <div class="sched-sheet" onclick="event.stopPropagation()">
-      <div class="sched-sheet-header">
-        <div class="sched-sheet-handle"></div>
-        <button class="sched-sheet-close" onclick="schedCloseSheet()" aria-label="닫기">✕</button>
-      </div>
-      <div id="sheetContent"></div>
-    </div>
-  </div>
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
@@ -742,7 +669,7 @@
       </div>`;
 
       el.querySelectorAll('.sched-bar-name').forEach(n => {
-        n.addEventListener('click', () => openProfileSheet(n.dataset.uid, n.dataset.nick));
+        n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid));
       });
     }
 
@@ -893,55 +820,6 @@
       }
     }
 
-    // ── 프로필 시트 ───────────────────────────────────────────
-    async function openProfileSheet(uid, nickname) {
-      const sheetContent = document.getElementById('sheetContent');
-      document.getElementById('sheetBackdrop').style.display = 'flex';
-      sheetContent.innerHTML = '<div class="sched-loading">불러오는 중...</div>';
-
-      // 프로필 (아바타/bio) 조회
-      const cfg = window.SUPABASE_CONFIG;
-      if (!window._cottageSupabaseDb && cfg?.url) window._cottageSupabaseDb = window.supabase.createClient(cfg.url, cfg.anonKey);
-      const db = window._cottageSupabaseDb;
-      let photoUrl = null, bio = null;
-      if (db) {
-        try {
-          const { data: prof } = await db.from('profiles').select('photo_url, bio').eq('user_id', uid).maybeSingle();
-          photoUrl = prof?.photo_url || null;
-          bio = prof?.bio || null;
-        } catch (_) {}
-      }
-
-      const avatarHtml = photoUrl
-        ? `<img class="sched-profile-avatar" src="${esc(photoUrl)}" alt="">`
-        : `<div class="sched-profile-avatar sched-profile-avatar--empty">${(nickname || '?')[0]}</div>`;
-
-      const todayStr = toDateStr(TODAY);
-      const userVotes = allVotes
-        .filter(v => String(v.user_id) === uid && v.vote_date >= todayStr)
-        .sort((a, b) => a.vote_date.localeCompare(b.vote_date));
-      const rows = userVotes.length
-        ? userVotes.map(v => `<div class="sched-profile-row">
-            <span class="sched-profile-date">${formatLabel(v.vote_date)}</span>
-            <span class="sched-profile-time">${v.time_start}:00 ~ ${v.time_end}:00</span>
-          </div>`).join('')
-        : '<div style="color:var(--muted);font-size:13px;padding:8px 0">등록된 일정이 없어요.</div>';
-
-      sheetContent.innerHTML = `
-        <div class="sched-profile-header">
-          ${avatarHtml}
-          <div>
-            <div class="sched-profile-nick">${esc(nickname)}</div>
-            ${bio ? `<div class="sched-profile-bio">${esc(bio)}</div>` : ''}
-          </div>
-        </div>
-        <div class="sched-section-label" style="margin-bottom:8px">이달의 참여 일정</div>
-        ${rows}`;
-    }
-
-    window.schedCloseSheet = function () {
-      document.getElementById('sheetBackdrop').style.display = 'none';
-    };
 
     // ── 초기화 ────────────────────────────────────────────────
     async function init() {

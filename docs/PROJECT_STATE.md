@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-01 (143차-179)
+최종 갱신: 2026-07-01 (143차-180)
 
 ---
 
@@ -226,7 +226,6 @@
 ### 코드 품질 주석 (리팩토링 참고용)
 
 - `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
-- `club-schedule.html` `openProfileSheet`: 인라인 Supabase 클라이언트(`_cottageSupabaseDb`) 사용 — `window.CottageDB`와 별개. 통합 검토.
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
 
@@ -426,6 +425,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 
 | 날짜 | 내용 |
 |------|------|
+| 2026-07-01 | fix: 모임 플래너 참여자 이름 클릭 시 임시 프로필 바텀시트(`openProfileSheet`) 대신 기존 읽기 전용 모임 보드(`openOtherMeetingSheet`)를 열도록 연결. `club-schedule.html` 내부 임시 프로필 시트 DOM/CSS/인라인 Supabase 조회 함수를 제거해 사람 보기 진입점을 모임 보드로 통일. (143차-180) |
 | 2026-06-30 | feat: 모임 보드 서브시트 신규 추가(디자인/레이아웃 우선, 데이터 저장은 추후 연결) — 이번에 하고 싶은 게임/룰 설명 가능한 게임(취향보드 게임목록 UI 재사용)/인원수별 하고 싶은 게임(레이아웃만)/모임 스타일 칩(취향보드 bio-chip 재사용, 토글만)/모임 메모(textarea)/최근 플레이(실데이터). "모임 보드" 카드를 club-schedule.html 직접 이동(`<a>`) → 바텀시트 진입(`<button data-subsheet="meeting">`)으로 변경. "함께한 시간" 서브시트의 "모임 플래너 바로가기" 버튼 제거. 성장요약을 2줄로 압축(업적·캐릭터·칭호·도감 한 줄 / 성장도·다음업적 한 줄), 다음 업적 텍스트를 이름 대신 타입 라벨로 표시("코티지 피플까지" → "🐻까지 참여 N회 남음") — achievements.js _NEXT_ACH_META에 label 필드 추가 (143차-172) |
 | 2026-06-30 | refactor: 관리자 분석 페이지 4그룹(비주얼분석/이벤트퍼널/페이지·회원/유입경로) → 탭 5개(방문/회원/유입/페이지/이벤트) 통합 1단계(구조). 캔버스 id 유지로 차트 로직 무수정, membersBody의 불필요한 subSection 래퍼 제거(최근3건+더보기는 기존 내장 로직 그대로), 메뉴카드 6→3개 축소. 요일·재방문율·회원가입퍼널·도감퍼널은 2단계(트래킹 설계 필요)로 보류 (143차-166) |
 | 2026-06-30 | design: price-rules.html 레이아웃 다듬기 — 운영시간에 키워드 라인 추가, 이용 약속을 카드 그리드→박스 없는 섹션 리스트로 전환, "꼭 지켜주세요" 박스 배경/내부 카드 완화(테두리·제목 색은 유지), 음식 안내를 더 작은 라인 스타일로 재조정. breadcrumb 상위 항목을 이동 링크가 아닌 현재 위치 텍스트로 전환 — 실제 허브 페이지가 없는 "게임"(owned-games/game-reviews/game-location)과 "코티지 이용"(price-rules/guide) breadcrumb root를 plain text로 변경, club 계열은 club.html이 실제 허브 페이지라 링크 유지 (143차-164) |
