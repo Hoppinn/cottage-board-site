@@ -4582,7 +4582,7 @@ body.embed-mode {
 .about-for-list--grid .about-for-item{padding:12px 8px;gap:6px;}
 .about-for-list--grid .about-for-item:last-child{
   grid-column:1 / -1;
-  max-width:calc(50% - 6px);
+  max-width:min(360px, 100%);
   justify-self:center;
   justify-content:center;
   text-align:center;
