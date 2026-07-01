@@ -57,4 +57,8 @@
 `cottage_sess_{uid}` 키가 없으면 `_migrate(uid)` 자동 실행:
 - 레거시 키 6개(`cottage_last_visit_date_*`, `cottage_prev_visit_date_*`, `cottage_last_seen_dt_*`, `cottage_prev_seen_dt_*`, `cottage_time_sec_*`, `cottage_visit_count_*`) 읽어 새 형식으로 통합 후 원본 삭제
 - `cottage_profile_visited_{uid}_*` 키도 읽어 lastVisitDate 설정 후 삭제
+## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
+
+- `cottage_session_id`는 `anon_sessions`, `page_sessions`뿐 아니라 `page_views.session_key`에도 저장된다.
+- 같은 기기+브라우저+브라우저 프로필+localStorage 유지 시 같은 비회원으로 집계된다.
 

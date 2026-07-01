@@ -221,3 +221,8 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
 | `window.COTTAGE_PAGE_LABELS` / `window.COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script.js, requests-admin.html (script.js 로드 직전 필수) |
+## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
+
+- 143차-190부터 `trackPageView(page, referrer, extra={})`는 기본 payload에 `session_key: getSessionKey()`를 포함한다.
+- extra로 전달한 `session_key`가 있으면 기존 병합 규칙에 따라 override된다.
+- 관리자/로컬 제외 기준은 유지한다.

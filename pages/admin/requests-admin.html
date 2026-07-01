@@ -781,10 +781,25 @@
 
       // ── 데이터 로드 ────────────────────────────────────────────
       const db2 = window._cottageSupabaseDb;
+      async function fetchPageViewsForAnalytics() {
+        if (!db2) return { data: [] };
+        const withSession = await db2
+          .from('page_views')
+          .select('page, created_at, referrer, is_bot, user_id, session_key')
+          .order('created_at', { ascending: false })
+          .limit(10000);
+        if (!withSession.error) return withSession;
+        if (!String(withSession.error.message || '').includes('session_key')) return withSession;
+        return db2
+          .from('page_views')
+          .select('page, created_at, referrer, is_bot, user_id')
+          .order('created_at', { ascending: false })
+          .limit(10000);
+      }
       const [rawRows, rawProfiles, pvResult, anonResult] = await Promise.all([
         window.CottageDB.getPageAnalytics(),
         window.CottageDB.getAllProfiles(),
-        db2 ? db2.from('page_views').select('page, created_at, referrer, is_bot, user_id').order('created_at', { ascending: false }).limit(10000) : Promise.resolve({ data: [] }),
+        fetchPageViewsForAnalytics(),
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const ADMIN_UID = '4916417947';
@@ -1240,6 +1255,11 @@
             return _decodeHost(rawHost);
           } catch (_) { return null; }
         }
+        function visitorKey(row, idx, prefix = 'visitor') {
+          if (row.user_id) return `user:${row.user_id}`;
+          if (row.session_key) return `anon:${row.session_key}`;
+          return `${prefix}:legacy:${idx}`;
+        }
 
         // __visitor__ 마커 행만: 히어로 페이지와 동일 방식으로 방문자 집계
         // "전체 방문자"는 봇 제외가 기준 — is_bot=true 행은 visitorRows에서 빠지고 botVisitorRows로 별도 집계
@@ -1279,19 +1299,12 @@
           };
 
           const refSessions = {}, refUsers = {};
-          for (const r of periodVis) {
+          periodVis.forEach((r, idx) => {
             const cat = categorizeRef(r.referrer) || '직접 방문';
             refSessions[cat] = (refSessions[cat] || 0) + 1;
-          }
-          for (const r of rows) {
-            const entered = r.entered_at;
-            if ((start && entered < start) || (end && entered >= end)) continue;
-            if (!r.user_id && !r.session_key) continue;
-            const cat = categorizeRef(r.referrer);
-            if (cat === null) continue;
             if (!refUsers[cat]) refUsers[cat] = new Set();
-            refUsers[cat].add(r.user_id || `anon:${r.session_key}`);
-          }
+            refUsers[cat].add(visitorKey(r, idx, cat));
+          });
           const topRefEntries = Object.entries(refSessions).sort((a, b) => b[1] - a[1]);
           const topRefHtml = topRefEntries.length
             ? topRefEntries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span style="opacity:.7">(${cnt}회)</span></span>`).join('')
@@ -1436,20 +1449,15 @@
           });
         }
 
-        // ── 2. 유입 경로 — 수평 막대 (__visitor__ 기준 회, page_sessions 기준 명) ──
+        // ── 2. 유입 경로 — 수평 막대 (__visitor__ 기준 명/회) ──
         const filteredVisitor = filterByRange(visitorRows, start, end, 'created_at');
         const refMap = {}, refUserMap = {};
-        for (const r of filteredVisitor) {
+        filteredVisitor.forEach((r, idx) => {
           const cat = categorizeRef(r.referrer) || '직접 방문';
           refMap[cat] = (refMap[cat] || 0) + 1;
-        }
-        for (const r of filtered) {
-          if (!r.user_id && !r.session_key) continue;
-          const cat = categorizeRef(r.referrer);
-          if (cat === null) continue;
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
-          refUserMap[cat].add(r.user_id || `anon:${r.session_key}`);
-        }
+          refUserMap[cat].add(visitorKey(r, idx, cat));
+        });
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
         const chartRefSub = document.getElementById('chartRefSub');
         if (chartRefSub) chartRefSub.textContent = label;
@@ -1521,10 +1529,11 @@
           const crossMap = {};
           // 명 카운트: filteredVisitor(__visitor__ 행) 기준
           const crossUserMap = {};
-          for (const r of filteredVisitor) {
+          filteredVisitor.forEach((r, idx) => {
             const cat = categorizeRef(r.referrer) || '직접 방문';
-            crossUserMap[cat] = (crossUserMap[cat] || 0) + 1;
-          }
+            if (!crossUserMap[cat]) crossUserMap[cat] = new Set();
+            crossUserMap[cat].add(visitorKey(r, idx, cat));
+          });
           for (const r of filteredPV) {
             const cat = categorizeRef(r.referrer) || '직접 방문';
             const pg = PAGE_LABEL[r.page] || r.page || '?';
@@ -1544,7 +1553,7 @@
               crossEl.innerHTML = `<div class="admin-cross-list">${sources.map(([src, pages]) => {
                 const sortedPgs = Object.entries(pages).sort((a, b) => b[1] - a[1]);
                 const total = Object.values(pages).reduce((s, v) => s + v, 0);
-                const uCnt = crossUserMap[src] || 0;
+                  const uCnt = crossUserMap[src]?.size || 0;
                 return `<div class="admin-cross-row">
                   <div class="admin-cross-source">${escH(src)}<span class="admin-cross-total">${uCnt}명 (${total}회)</span></div>
                   <div class="admin-cross-chips">${

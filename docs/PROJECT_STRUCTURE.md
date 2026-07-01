@@ -356,3 +356,7 @@ node game-system/tools/5-build-output/build-output.js
 ```
 
 핵심 원칙: BGG API는 실시간 호출하지 않는다. source → staging → library → output 레이어 분리. output만 사이트에서 읽는다.
+## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
+
+- 방문자 마커(`page_views.page='__visitor__'`)는 `session_key`, `user_id`, `is_bot`을 함께 저장하는 기준으로 정리한다.
+- 관리자 분석의 유입 `명/회`는 `page_sessions`와 섞지 않고 `__visitor__` 행 안에서 계산한다.

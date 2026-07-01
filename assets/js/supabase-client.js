@@ -226,9 +226,15 @@ window._cottageSess = (function () {
     if (!page) return;
     if (_shouldSkipAnalytics()) return;
     try {
-      const payload = { page, ...extra };
+      const payload = { page, session_key: getSessionKey(), ...extra };
       if (referrer) payload.referrer = referrer;
       const { error } = await db.from("page_views").insert(payload);
+      if (error && String(error.message || '').includes('session_key')) {
+        delete payload.session_key;
+        const retry = await db.from("page_views").insert(payload);
+        if (retry.error) console.warn('[trackPageView] insert error:', retry.error.message);
+        return;
+      }
       if (error) console.warn('[trackPageView] insert error:', error.message);
     } catch (e) { console.warn('[trackPageView] exception:', e); }
   }
@@ -916,6 +922,7 @@ window._cottageSess = (function () {
         trackPageView('__visitor__', effectiveSource === 'direct' ? null : effectiveSource, {
           is_bot: _isBotUA(),
           user_id: _currentVisitorUserId(),
+          session_key: getSessionKey(),
         });
       }
       trackPageView(page, effectiveSource === 'direct' ? null : effectiveSource);

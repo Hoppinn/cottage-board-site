@@ -70,3 +70,9 @@
   - 방문자 수/경로 집계 기준 (관리자 방문경로 도넛 차트)
   - 동일 도메인 방문·직접 접속은 `null` → '직접 방문'으로 분류
 - `page_sessions.referrer`: 동일 형식, 세션 분석 전용 (방문경로 집계에는 미사용)
+## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
+
+- 143차-190에서 `page_views.session_key`를 추가한다.
+- 신규 방문 기록은 `trackPageView()`가 `cottage_session_id` 값을 함께 저장한다.
+- 관리자 분석에서는 `__visitor__` 행의 `user_id || session_key`를 기준으로 유입별 `명`을 계산한다.
+- 과거 행은 `session_key`가 NULL일 수 있으며, 소급 보정하지 않는다.
