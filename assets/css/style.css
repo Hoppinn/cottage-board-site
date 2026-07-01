@@ -676,8 +676,8 @@ body.owned-page .site-header{
 .hero .btn{padding:clamp(12px,3.5vw,16px) clamp(14px,4.5vw,22px);font-weight:800;}
 .hero .primary-btn{background:#e8d9c0;color:#3d2810;border-color:#e8d9c0;}
 .hero .primary-btn:hover{background:#ddc9a8;border-color:#ddc9a8;}
-.hero .secondary-btn{background:transparent;color:#f1ddbd;border-color:#c69a68;border-width:2px;font-weight:900;}
-.hero .secondary-btn:hover{background:rgba(198,154,104,0.15);border-color:#e8d9c0;}
+.hero .secondary-btn{background:transparent;color:#e8d9c0;border-color:#e8d9c0;}
+.hero .secondary-btn:hover{background:rgba(232,217,192,0.15);}
 
 .hero-club-link{display:block;margin-top:14px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;}
 .hero-club-link:hover{color:var(--green);}
@@ -4604,7 +4604,7 @@ body.embed-mode {
 .about-for-text strong{display:block;margin-bottom:8px;}
 .about-divider{
   height:1px;
-  background:rgba(223,199,161,0.55);
+  background:rgba(122,72,40,0.26);
   margin:0;
 }
 .about-why-block{
