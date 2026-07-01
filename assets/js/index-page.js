@@ -643,14 +643,21 @@ function showRecommendResults(){
 function backToHero(){
   setRecommendMenuActive(false);
 
+  const recommendWasOpen =
+    recommendSection && !recommendSection.classList.contains('is-hidden');
+
   if(recommendSection){
     recommendSection.classList.add('is-hidden');
   }
 
+  if(!recommendWasOpen && window.scrollY <= 2){
+    return;
+  }
+
   if(heroSection){
-    heroSection.scrollIntoView({
+    window.scrollTo({
+      top: 0,
       behavior: 'smooth',
-      block: 'start'
     });
   }
 }
