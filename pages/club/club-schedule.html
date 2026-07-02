@@ -515,22 +515,24 @@
       text-align: left;
     }
     .sched-card-del-dd:hover { background: #fff5f5; }
-    /* 시간 등록/수정 바텀시트 */
+    /* 시간 등록/수정 센터 모달 */
     .sched-sheet-overlay {
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,.45);
       z-index: 200;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
     .sched-sheet {
-      width: 100%;
+      width: calc(100% - 40px);
+      max-width: 360px;
       background: #fff;
-      border-radius: 20px 20px 0 0;
-      padding: 20px 20px 36px;
-      max-width: 480px;
-      margin: 0 auto;
+      border-radius: 20px;
+      padding: 20px 20px 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.20);
     }
     .sched-sheet-header {
       display: flex;
