@@ -101,7 +101,7 @@
 | 취향보드 UX 개선 | 게임목록 더보기/접기, 피하는유형 UX(🚫/빨간), bio 예시 칩 | 142차-8,11 |
 | 기록보드 사진 표시 | 최근 4장 썸네일 + 클릭→라이트박스 | 142차-8 |
 | guide.html 오버레이 | 링크 클릭 → 인앱 iframe 시트 (✕ 닫기) | 142차-9 |
-| fix: 홈페이지 기능 iframe 시트 여백 (Codex) | `guide.html` 카드 클릭 iframe 오버레이를 `width:calc(100% - 20px)`, `margin:0 10px 12px`, `height:calc(100dvh - 102px)`, 하단 라운딩 18px로 조정해 게임위치 시트 여백 규격과 맞춤 | Codex |
+| fix: 홈페이지 기능 iframe 시트 여백 (Codex) | `guide.html` 카드 클릭 iframe 오버레이를 `width:calc(100% - 20px)`, `margin:0 10px 12px`, `height:calc(100dvh - 48px)`, `border-radius:18px`로 조정해 게임정보/내 보드 시트 여백 규격과 맞춤 | Codex |
 | 모임플래너 개선 | 자유댓글 제거, 참여자 클릭 → 아바타+bio+일정 시트 | 142차-10 |
 | fix: 삭제 핸들러 Number() | `Number(gameId)` → `gameId || null` (한글 키 대응) | 142차-8 |
 | fix: 신규 게임 삽입 위치 | `appendChild` → `insertBefore(more-wrap)` | 142차-12 |
