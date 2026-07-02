@@ -2282,27 +2282,10 @@
         n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid));
       });
 
-      // 막대 클릭 → 일정 상세 모달
+      // 막대 클릭 → 일정 상세 모달 (통계 포함)
       el.querySelectorAll('.sched-bar-track[data-date]').forEach(track => {
         track.addEventListener('click', () => {
-          const date = track.dataset.date;
-          const uid  = track.dataset.uid;
-          const vote = allVotes.find(v => v.vote_date === date && String(v.user_id) === uid);
-          if (!vote) return;
-          const vGames = allVoteGames.filter(g => g.vote_date === date && String(g.user_id) === uid);
-          const resolveFullName = g => {
-            if (g.custom_name) return g.custom_name;
-            const obj = (window.COTTAGE_GAMES || []).find(c => c.bggId === String(g.game_id));
-            return obj?.display || `#${g.game_id}`;
-          };
-          window.openDayDetailModal?.({
-            nickname:   vote.nickname,
-            date,
-            timeStart:  vote.time_start,
-            timeEnd:    vote.time_end,
-            wantGames:  vGames.filter(g => g.list_type === 'want').map(resolveFullName),
-            learnGames: vGames.filter(g => g.list_type === 'learn').map(resolveFullName),
-          });
+          window.openDateScheduleModal?.(track.dataset.uid, track.dataset.date);
         });
       });
 

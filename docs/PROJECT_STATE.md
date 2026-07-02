@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-02 (143차-190)
+최종 갱신: 2026-07-02 (143차-194)
 
 ---
 
@@ -18,12 +18,19 @@
 - [x] **Phase D: 멀티스텝 바텀시트** — `initMultiSheet()` 구현: Step1(요일선택)→Step2(시간)→Step3(게임입력). 상단 [모임 등록] 버튼 + 카드 [+ 등록]/[✎] 진입 (커밋: 143차-192)
 - [x] **Phase E: 카드 미리보기** — `sched-bar-games` 구조 구현 완료, Phase D 저장 데이터 자동 표시
 - [x] **Phase F: 가져오기 연결** — Step3에 "취향보드에서 ▾ / 모임보드에서 ▾" 피커 추가 (커밋: 143차-193). 게임 lazy fetch + 캐시. 중복 추가 방지. 직접 입력 유지. 모임보드 can_explain_rules → "룰 설명 가능" 레이블 분리 표시
+- [x] **Step 3 제거 + Step 2 인라인 게임 추가** — Step 3(게임 가져오기 전용 화면) 완전 제거. Step 2에 하고 싶은 게임(🎲)/배우고 싶은 게임(📖) 토글 섹션 통합. 직접 입력 + 피커 공존. 역연동 confirm (addGamePref) + 다중날짜 propagation confirm. isDup trim 비교 버그 수정. 배지 항상 (N) 표시 (커밋: 143차-194)
+- [x] **게임시트 top 36px + sm-body/footer padding 축소** — profile-panel-box 시각 top(32px) 기준으로 36px 맞춤. Step 2 내용 높이에 맞게 padding 줄여 시트 압축감 개선 (커밋: 143차-193 포함)
 
 **확정 설계 결정**:
 - `meeting_game_prefs`(모임 보드 주간 선호) vs `meeting_vote_games`(플래너 날짜별): 별개 유지
 - 날짜 카드 [+ 등록]/[수정]: 해당 날짜 시간+게임 입력으로 바로 진입
 - 겹치는 게임 표시 단위: 요일별 (카드별)
-- 역방향 연결(취향/모임보드 → 플래너): 2차
+- 역방향 연결(취향/모임보드 → 플래너): Step 2 addGameStep2() isManualInput=true 경로로 구현 완료
+- 모임플래너 = 입력, 모임보드 = 보기(읽기전용), DateScheduleModal = 날짜 상세
+
+**남은 작업 (이 CHECKPOINT 안에서)**:
+- [ ] **② DateScheduleModal 확장** — 현재 `openDayDetailModal(opts)` 시그니처를 `openDateScheduleModal(userId, voteDate)`로 변경. 👥 같은날 N명 / ⏱ 겹침 N명 / 🎲 게임겹침 N명 통계 3종 추가. 막대 클릭 + 모임보드 [자세히] 양쪽에서 호출
+- [ ] **③ 모임보드 리디자인** — 미니 시간막대 + 4섹션(이번주일정/모임프로필/취향요약/활동요약) + [자세히]→DateScheduleModal + 본인 보드에만 [모임플래너에서 수정하기] CTA
 
 ---
 
