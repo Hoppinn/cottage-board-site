@@ -14,9 +14,9 @@
 - [x] **달력 요약** — `mcal-mine-dot` 추가, "N명" 표기, fetch 범위 62일 확장 (커밋: 143차-190)
 - [x] **Phase A: DB** — `docs/migrations/008_meeting_vote_games.sql` 작성, `db-schema.md` 갱신 (커밋: 143차-190) ⚠️ **Supabase SQL Editor에서 직접 실행 필요**
 - [x] **Phase B: API** — `getMeetingVoteGames`, `addMeetingVoteGame`, `removeMeetingVoteGame` 3개 함수 (supabase-client.js, js-api.md 갱신) (커밋: 143차-191)
-- [ ] **Phase C: 기존 화면 검증** — API 추가 후 기존 동작 깨지지 않는지 확인
-- [ ] **Phase D: 멀티스텝 바텀시트** — 날짜 카드 [+ 등록] → 시간+게임 통합 시트 / 상단 [모임 등록] → 3단계 흐름
-- [ ] **Phase E: 카드 미리보기** — 요일별 2명+ 겹치는 게임 카드 하단 표시
+- [x] **Phase C: 기존 화면 검증** — 사용자 직접 확인 완료
+- [x] **Phase D: 멀티스텝 바텀시트** — `initMultiSheet()` 구현: Step1(요일선택)→Step2(시간)→Step3(게임입력). 상단 [모임 등록] 버튼 + 카드 [+ 등록]/[✎] 진입 (커밋: 143차-192)
+- [ ] **Phase E: 카드 미리보기** — 요일별 2명+ 겹치는 게임 카드 하단 표시 (구조 구현 완료, 데이터는 Phase D 입력 후 자동 표시)
 - [ ] **Phase F: 가져오기 연결** — 취향보드/모임보드 게임 불러오기
 
 **확정 설계 결정**:
