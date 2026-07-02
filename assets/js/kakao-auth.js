@@ -1060,6 +1060,10 @@ async function openProfilePanel(autoSubsheet = null) {
   }
 
   const _meetingInnerHtml = `
+    <div class="taste-game-section" id="mbWeekSection">
+      <div class="taste-section-label">📅 이번 주 일정</div>
+      <p class="taste-game-empty">불러오는 중…</p>
+    </div>
     <div class="meeting-profile-section">
       <div class="taste-section-label">📍 모임 프로필</div>
       <div class="meeting-profile-display">
@@ -1977,6 +1981,19 @@ async function openProfilePanel(autoSubsheet = null) {
               if (key && window.openGameSheet) window.openGameSheet(key);
             });
           });
+
+          // 이번 주 일정 — mini bar (async)
+          ;(async () => {
+            const weekEl = subBody.querySelector('#mbWeekSection');
+            if (!weekEl) return;
+            const [wStart, wEnd] = _thisWeekRange();
+            const allV = await (window.CottageDB?.getMeetingVotes?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]));
+            const myVotes = allV.filter(v => String(v.user_id) === userId);
+            weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정</div>` + _buildMiniBarWeekHtml(myVotes, userId, true);
+            weekEl.querySelectorAll('.mb-detail-btn').forEach(btn =>
+              btn.addEventListener('click', () => window.openDateScheduleModal?.(btn.dataset.uid, btn.dataset.date))
+            );
+          })();
         }); // end meeting afterRender
       }
     });
@@ -2101,6 +2118,43 @@ async function openOtherProfileSheet(userId) {
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
 
+// ── 모임보드 이번주 일정 공용 헬퍼 ──────────────────────────────
+function _thisWeekRange() {
+  const today = new Date();
+  const dow = today.getDay();
+  const mon = new Date(today); mon.setDate(today.getDate() + (dow === 0 ? -6 : 1 - dow));
+  const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+  return [mon.toISOString().slice(0, 10), sun.toISOString().slice(0, 10)];
+}
+
+function _buildMiniBarWeekHtml(myVotes, userId, isOwner) {
+  const _days = ['일','월','화','수','목','금','토'];
+  const fmtVD = ds => {
+    const d = new Date(ds + 'T00:00:00');
+    return _days[d.getDay()] + ' ' + (d.getMonth()+1) + '/' + d.getDate();
+  };
+  const rows = myVotes.map(v => {
+    const total = 14; // 9~23시
+    const left  = ((v.time_start - 9) / total * 100).toFixed(1);
+    const width = ((v.time_end - v.time_start) / total * 100).toFixed(1);
+    return `<div class="mb-week-row">
+      <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
+      <div class="mb-mini-bar-wrap"><div class="mb-mini-bar-fill" style="left:${left}%;width:${width}%"></div></div>
+      <span class="mb-week-time">${v.time_start}~${v.time_end}시</span>
+      <button class="mb-detail-btn" data-uid="${escH(String(userId))}" data-date="${escH(v.vote_date)}" type="button">자세히</button>
+    </div>`;
+  }).join('');
+  const bodyHtml = myVotes.length
+    ? `<div class="mb-week-list">${rows}</div>`
+    : '<p class="taste-game-empty">이번 주 참여 등록 없어요</p>';
+  if (!isOwner) return bodyHtml;
+  const p = window.location.pathname;
+  const href = p.includes('/pages/club/') ? 'club-schedule.html'
+             : p.includes('/pages/')      ? '../club/club-schedule.html'
+             :                              'pages/club/club-schedule.html';
+  return bodyHtml + `<a href="${href}" class="mb-planner-cta">📅 모임 플래너에서 수정하기 →</a>`;
+}
+
 // ── 다른 유저 모임 보드 시트 (읽기 전용) ───────────────────────
 // 회원 자기소개 카드 클릭 시 진입. 본인 내 보드(openProfilePanel)와 동일한 .profile-panel +
 // .profile-subsheet 마크업을 그대로 사용 — 뒤로가기 시 그 유저의 "내 보드" 메인 패널(읽기 전용)이
@@ -2187,46 +2241,13 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
   _sun.setDate(_mon.getDate() + 6);
   const _wStart = _mon.toISOString().slice(0, 10);
   const _wEnd   = _sun.toISOString().slice(0, 10);
-  const [_allVotes, _allVGames] = await Promise.all([
-    window.CottageDB?.getMeetingVotes?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || [],
-    window.CottageDB?.getMeetingVoteGames?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || [],
-  ]);
+  const _allVotes = await (window.CottageDB?.getMeetingVotes?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]));
   const _myVotes = (_allVotes || []).filter(v => String(v.user_id) === String(userId));
-  const _myVGames = (_allVGames || []).filter(g => String(g.user_id) === String(userId));
 
-  function _resolveVoteGameName(g) {
-    if (g.custom_name) return g.custom_name;
-    if (g.game_id) {
-      const cg = (window.COTTAGE_GAMES || []).find(c => c.bggId === String(g.game_id));
-      if (cg?.display) return cg.display;
-      const gd = window.gameData?.[g.game_id];
-      if (gd) return gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id);
-      return `#${g.game_id}`;
-    }
-    return '?';
-  }
-
-  const _weekSectionHtml = (() => {
-    if (!_myVotes.length) {
-      return `<div class="taste-game-section">
-        <div class="taste-section-label">📅 이번 주 참여</div>
-        <p class="taste-game-empty">이번 주 참여 등록 없어요</p>
-      </div>`;
-    }
-    const render = window.renderDayDetailHTML;
-    const blocks = _myVotes.map(v => {
-      const vg = _myVGames.filter(g => g.vote_date === v.vote_date);
-      const want  = vg.filter(g => g.list_type === 'want').map(_resolveVoteGameName);
-      const learn = vg.filter(g => g.list_type === 'learn').map(_resolveVoteGameName);
-      return render
-        ? render({ date: v.vote_date, timeStart: v.time_start, timeEnd: v.time_end, wantGames: want, learnGames: learn })
-        : `<div class="dd-block"><div class="dd-date">${_e(v.vote_date)}</div><div class="dd-time">${v.time_start}~${v.time_end}시</div></div>`;
-    }).join('');
-    return `<div class="taste-game-section">
-      <div class="taste-section-label">📅 이번 주 참여</div>
-      ${blocks}
-    </div>`;
-  })();
+  const _weekSectionHtml = `<div class="taste-game-section">
+    <div class="taste-section-label">📅 이번 주 일정</div>
+    ${_buildMiniBarWeekHtml(_myVotes, userId, false)}
+  </div>`;
 
   const buildReadOnlyGames = (games) => {
     if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
@@ -2280,6 +2301,10 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
   sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
   sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); document.getElementById('otherMainPanel')?.remove(); });
   sub.addEventListener('click', e => { if (e.target === sub) sub.remove(); });
+
+  sub.querySelectorAll('.mb-detail-btn').forEach(btn =>
+    btn.addEventListener('click', () => window.openDateScheduleModal?.(btn.dataset.uid, btn.dataset.date))
+  );
 
   sub.querySelectorAll('.taste-game-item--clickable').forEach(item => {
     item.addEventListener('click', () => {
