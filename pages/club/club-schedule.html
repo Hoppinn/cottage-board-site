@@ -643,20 +643,21 @@
     }
     .sched-sheet-footer .sched-confirm-btn { flex: 1; }
     .sched-sheet-footer .sched-discard-btn { flex: 0 0 72px; }
+    .sched-sheet-prevweek-row {
+      text-align: right;
+      margin-bottom: 2px;
+    }
     .sched-sheet-prevweek-btn {
-      display: block;
-      width: 100%;
-      margin: 10px 0 0;
-      padding: 8px 0;
       background: none;
-      border: 1px solid #d8d0c4;
-      border-radius: 8px;
-      font-size: 13px;
+      border: none;
+      padding: 0;
+      font-size: 12px;
       color: var(--muted);
       cursor: pointer;
-      text-align: center;
+      text-decoration: underline;
+      text-underline-offset: 2px;
     }
-    .sched-sheet-prevweek-btn:hover { border-color: var(--green); color: var(--green); }
+    .sched-sheet-prevweek-btn:hover { color: var(--green); }
     /* 토스트 */
     .sched-toast {
       position: fixed;
@@ -1188,6 +1189,9 @@
           <button class="sched-sheet-close-btn" id="ssClose" type="button">✕</button>
         </div>
         <div class="sched-sheet-body">
+          <div class="sched-sheet-prevweek-row" id="ssPrevWeekRow">
+            <button class="sched-sheet-prevweek-btn" id="ssPrevWeek" type="button"></button>
+          </div>
           <div class="sched-sheet-time-display">
             <span class="sched-slider-time-val" id="ssLblS">10시</span>
             <span class="sched-slider-sep">~</span>
@@ -1206,7 +1210,6 @@
             </div>
           </div>
         </div>
-        <button class="sched-sheet-prevweek-btn" id="ssPrevWeek" type="button">지난주와 동일</button>
         <div class="sched-sheet-footer">
           <button class="sched-confirm-btn" id="ssSave" type="button">등록</button>
           <button class="sched-discard-btn" id="ssDiscard" type="button">닫기</button>
@@ -1286,6 +1289,21 @@
       document.getElementById('ssRangeFill').style.width = ((initE - initS) / range * 100) + '%';
       document.getElementById('ssLblS').textContent = initS + '시';
       document.getElementById('ssLblE').textContent = initE + '시';
+
+      // 지난주 버튼: 데이터 있으면 시간 표시, 없으면 row 숨김
+      const _user = window.getKakaoUser?.();
+      const prevDs = toDateStr(new Date(y, m - 1, d - 7));
+      const prevVote = _user
+        ? allVotes.find(v => v.vote_date === prevDs && String(v.user_id) === String(_user.id))
+        : null;
+      const rowPrev = document.getElementById('ssPrevWeekRow');
+      if (prevVote) {
+        document.getElementById('ssPrevWeek').textContent =
+          `지난주 ${prevVote.time_start}~${prevVote.time_end} 적용`;
+        rowPrev.style.display = '';
+      } else {
+        rowPrev.style.display = 'none';
+      }
 
       document.getElementById('schedSheetOverlay').style.display = '';
 
