@@ -411,6 +411,7 @@ textarea{
   border-radius:0 0 18px 18px;
   background:linear-gradient(to bottom,rgba(255,253,248,0),rgba(255,250,240,0.95));
 }
+.header-search-panel:has(.header-search-results:empty)::after{display:none;}
 
 .header-search-result{
   width:100%;
