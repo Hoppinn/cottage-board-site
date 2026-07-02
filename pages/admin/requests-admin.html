@@ -386,6 +386,7 @@
         <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📊 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
+            <div id="analysisControlsAnchor"></div>
             <div class="admin-analysis-controls" id="analysisControls">
               <div class="admin-analysis-tabs" id="analysisTabs">
                 <button class="admin-analysis-tab is-active" data-tab="summary" type="button">요약</button>
@@ -602,12 +603,10 @@
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            const controls = document.getElementById('analysisControls');
-            if (!controls) return;
+            const anchor = document.getElementById('analysisControlsAnchor');
+            if (!anchor) return;
             const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            let controlsTop = 0;
-            for (let node = controls; node; node = node.offsetParent) controlsTop += node.offsetTop;
-            const targetY = controlsTop - headerH;
+            const targetY = window.scrollY + anchor.getBoundingClientRect().top - headerH;
             window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
           }));
         });
