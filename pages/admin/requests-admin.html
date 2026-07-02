@@ -386,6 +386,7 @@
         <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📊 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
+            <div id="analysisControlsAnchor"></div>
             <div class="admin-analysis-controls" id="analysisControls">
               <div class="admin-analysis-tabs" id="analysisTabs">
                 <button class="admin-analysis-tab is-active" data-tab="summary" type="button">요약</button>
@@ -592,9 +593,7 @@
           if (!btn || btn.disabled) return;
           const tab = btn.dataset.tab;
           analysisTabs.querySelectorAll('.admin-analysis-tab').forEach(b => b.classList.toggle('is-active', b === btn));
-          let activePanel = null;
           el.querySelectorAll('.admin-tab-panel').forEach(p => {
-            if (p.dataset.panel === tab) activePanel = p;
             p.classList.toggle('is-active', p.dataset.panel === tab);
           });
           // 요약/방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
@@ -604,13 +603,11 @@
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            if (!activePanel) return;
-            const controls = document.getElementById('analysisControls');
-            const firstBlock = activePanel.querySelector('.admin-summary-grid, .admin-chart-card, .admin-analysis-subtabs');
-            if (!controls || !firstBlock) return;
-            const gap = 10;
-            const delta = firstBlock.getBoundingClientRect().top - controls.getBoundingClientRect().bottom - gap;
-            if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: 'auto' });
+            const anchor = document.getElementById('analysisControlsAnchor');
+            if (!anchor) return;
+            const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
+            const targetY = window.scrollY + anchor.getBoundingClientRect().top - headerH;
+            window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
           }));
         });
       }
