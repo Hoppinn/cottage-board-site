@@ -397,7 +397,7 @@
                 <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
               </div>
 
-              <div class="admin-date-controls">
+              <div class="admin-date-controls" id="analysisDateControls">
                 <div class="admin-chart-filter" id="chartPeriodBtns">
                   <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
                   <button class="admin-chart-period-btn" data-days="7">7일</button>
@@ -603,7 +603,9 @@
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            const anchor = document.getElementById('analysisControlsAnchor');
+            const anchor = usesDateFilter
+              ? document.getElementById('analysisDateControls')
+              : document.getElementById('analysisControlsAnchor');
             if (!anchor) return;
             const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
             const targetY = window.scrollY + anchor.getBoundingClientRect().top - headerH;
