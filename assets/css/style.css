@@ -1662,12 +1662,12 @@ body.recommend-page main{
 
 .game-sheet-panel{
   position:absolute;
-  left:0;
-  right:0;
-  top:72px;
-  bottom:0;
-  overflow:hidden;
-  border-radius:28px 28px 0 0;
+  left:10px;
+  right:10px;
+  top:52px;
+  bottom:12px;
+  overflow:hidden;             /* 라운딩 클리핑만. 스크롤은 .game-sheet-scroll */
+  border-radius:18px;          /* 네 귀퉁이 모두 */
   background:var(--paper-2);
   box-shadow:0 -10px 30px rgba(100,72,38,0.16);
   animation:sheetUp .22s ease;

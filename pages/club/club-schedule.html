@@ -687,7 +687,7 @@
       display: flex; align-items: flex-end;
     }
     .sched-multi-sheet {
-      width: 100%; max-height: 85vh;
+      width: 100%; max-height: 72vh;
       background: #fff;
       border-radius: 18px 18px 0 0;
       box-shadow: 0 -4px 24px rgba(0,0,0,.15);
@@ -695,7 +695,7 @@
     }
     .sm-hdr {
       display: flex; align-items: center;
-      padding: 14px 16px 12px;
+      padding: 10px 14px 10px;
       border-bottom: 1px solid #ede8de;
       flex-shrink: 0;
     }
@@ -760,6 +760,30 @@
     .sm-tab.is-active { border-color: var(--green); background: var(--green); color: white; }
     /* Step 2 */
     .sm-prevweek-row { text-align: right; margin-bottom: 4px; }
+    .sm-freqtime-row { text-align: right; margin-bottom: 4px; position: relative; }
+    .sm-freqtime-btn {
+      background: none; border: none;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; padding: 0;
+      text-decoration: underline dotted;
+      text-underline-offset: 2px;
+    }
+    .sm-freqtime-btn:hover { color: var(--green); }
+    .sm-freqtime-menu {
+      position: absolute; right: 0; top: calc(100% + 4px);
+      background: #fff; border: 1px solid #ede8de;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      z-index: 20; min-width: 120px;
+      overflow: hidden;
+    }
+    .sm-freqtime-opt {
+      display: block; width: 100%;
+      background: none; border: none;
+      padding: 9px 14px; text-align: left;
+      font-size: 13px; cursor: pointer; color: var(--text);
+    }
+    .sm-freqtime-opt:hover { background: #f5efe6; }
     /* Step 3: 게임 선택 */
     .sm-games-wrap { display: flex; flex-direction: column; gap: 20px; }
     .sm-games-lbl { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
@@ -1618,16 +1642,28 @@
 
         const t = _timeMap[_activeDay] || {s:10, e:22};
         const user = window.getKakaoUser?.();
-        const [y,m,d] = _activeDay.split('-').map(Number);
-        const prevDs = toDateStr(new Date(y, m-1, d-7));
-        const prevVote = user ? allVotes.find(v => v.vote_date===prevDs && String(v.user_id)===String(user.id)) : null;
+
+        // 자주 사용한 시간: 내 allVotes 전체에서 빈도 집계
+        const myVotes = user ? allVotes.filter(v => String(v.user_id) === String(user.id)) : [];
+        const freq = {};
+        myVotes.forEach(v => {
+          const key = `${v.time_start}-${v.time_end}`;
+          if (!freq[key]) freq[key] = { s: v.time_start, e: v.time_end, count: 0 };
+          freq[key].count++;
+        });
+        const topTimes = Object.values(freq).sort((a, b) => b.count - a.count).slice(0, 4);
 
         const tabsHtml = _days.length > 1 ? `<div class="sm-tabs">${buildTabs()}</div>` : '';
-        const prevHtml = prevVote
-          ? `<div class="sm-prevweek-row"><button class="sched-sheet-prevweek-btn" id="smPrevBtn" type="button">지난주 ${prevVote.time_start}~${prevVote.time_end} 적용</button></div>`
+        const freqHtml = topTimes.length
+          ? `<div class="sm-freqtime-row">
+              <button class="sm-freqtime-btn" id="smFreqBtn" type="button">자주 사용한 시간 ▾</button>
+              <div class="sm-freqtime-menu" id="smFreqMenu" style="display:none">
+                ${topTimes.map(t => `<button class="sm-freqtime-opt" data-s="${t.s}" data-e="${t.e}" type="button">${t.s}~${t.e}시</button>`).join('')}
+              </div>
+            </div>`
           : '';
 
-        $s('smBody').innerHTML = `${tabsHtml}${prevHtml}
+        $s('smBody').innerHTML = `${tabsHtml}${freqHtml}
           <div class="sched-sheet-time-display">
             <span class="sched-slider-time-val" id="smLblS">${t.s}시</span>
             <span class="sched-slider-sep">~</span>
@@ -1663,9 +1699,20 @@
           syncMs();
         });
 
-        if (prevVote) {
-          $s('smPrevBtn').addEventListener('click', () => {
-            $s('smRS').value = prevVote.time_start; $s('smRE').value = prevVote.time_end; syncMs();
+        if (topTimes.length) {
+          const freqBtn  = $s('smFreqBtn');
+          const freqMenu = $s('smFreqMenu');
+          freqBtn.addEventListener('click', () => {
+            const isOpen = freqMenu.style.display !== 'none';
+            freqMenu.style.display = isOpen ? 'none' : '';
+          });
+          freqMenu.querySelectorAll('.sm-freqtime-opt').forEach(opt => {
+            opt.addEventListener('click', () => {
+              $s('smRS').value = opt.dataset.s;
+              $s('smRE').value = opt.dataset.e;
+              syncMs();
+              freqMenu.style.display = 'none';
+            });
           });
         }
 
