@@ -619,9 +619,11 @@
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
             const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            function getDocTop(el) { let t = 0; while (el) { t += el.offsetTop; el = el.offsetParent; } return t; }
             const ctrl = document.getElementById('analysisControls');
-            if (ctrl) window.scrollTo({ top: Math.max(0, getDocTop(ctrl) - headerH), behavior: 'smooth' });
+            if (ctrl) {
+              const delta = ctrl.getBoundingClientRect().top - headerH;
+              if (Math.abs(delta) > 2) window.scrollBy({ top: delta, behavior: 'smooth' });
+            }
           }));
         });
 
