@@ -128,7 +128,7 @@
     .admin-summary-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 16px; min-width: 0; }
     .admin-summary-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.3px; margin-bottom: 5px; }
     .admin-summary-value { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1.1; }
-    .admin-summary-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
+    .admin-summary-sub { font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 5px; line-height: 1.5; }
     .admin-summary-delta { font-size: 22px; font-weight: 900; }
     .admin-summary-delta.up { color: #2e7d32; }
     .admin-summary-delta.down { color: #9e3a2a; }
@@ -444,17 +444,17 @@
                 <!-- 주요 유입 -->
                 <div class="admin-summary-card admin-period-summary-card">
                   <div class="admin-summary-label">주요 유입 (7일)</div>
-                  <div class="admin-summary-value" id="sumTopRef" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
+                  <div class="admin-summary-sub" id="sumTopRef">—</div>
                 </div>
                 <!-- 페이지 (클릭 → 페이지 탭) -->
                 <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="page">
                   <div class="admin-summary-label">페이지 (7일)</div>
-                  <div class="admin-summary-value" id="sumPageCount" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
+                  <div class="admin-summary-sub" id="sumPageCount">—</div>
                 </div>
                 <!-- 이벤트 (클릭 → 이벤트 탭) -->
                 <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="event">
                   <div class="admin-summary-label">이벤트 (7일)</div>
-                  <div class="admin-summary-value" id="sumEventCount" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
+                  <div class="admin-summary-sub" id="sumEventCount">—</div>
                 </div>
                 <!-- 회원 (클릭 → 회원 탭) -->
                 <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="member">
