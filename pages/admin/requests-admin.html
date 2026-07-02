@@ -95,8 +95,8 @@
     .admin-visitor-more-btn { display: block; width: 100%; margin-top: 8px; padding: 8px; font-size: 13px; font-weight: 600; color: var(--green); background: transparent; border: 1px dashed var(--border,#e8e4dc); border-radius: 8px; cursor: pointer; text-align: center; }
     .admin-visitor-more-btn:hover { background: #f5f0e8; }
     /* 분석 탭 (방문/회원/유입/페이지/이벤트) */
-    .admin-analysis-controls { position: sticky; top: var(--header-total-h); z-index: 5; background: var(--bg,#f5f0e8); padding: 2px 0 8px; margin-bottom: 12px; }
-    .admin-analysis-tabs { display: flex; gap: 4px; margin-bottom: 8px; border-bottom: 2px solid var(--border,#e8e4dc); overflow-x: auto; }
+    .admin-analysis-controls { position: sticky; top: var(--header-total-h); z-index: 5; background: var(--bg,#f5f0e8); padding: 0 0 8px; margin-bottom: 12px; }
+    .admin-analysis-tabs { display: flex; gap: 4px; margin-bottom: 8px; border-bottom: 2px solid var(--border,#e8e4dc); overflow-x: auto; background: var(--bg,#f5f0e8); padding-top: 2px; }
     .admin-analysis-tab { flex-shrink: 0; font-size: 13px; font-weight: 700; padding: 8px 14px; border: none; background: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
     .admin-analysis-tab.is-active { color: var(--green); border-bottom-color: var(--green); }
     .admin-analysis-subtabs { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
@@ -124,7 +124,7 @@
     .admin-date-nav-label:hover { border-color: var(--green); color: var(--green); }
     @media (max-width: 600px) { .admin-chart-grid { grid-template-columns: 1fr; } }
     /* 요약 카드 */
-    .admin-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    .admin-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
     .admin-summary-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 16px; }
     .admin-summary-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.3px; margin-bottom: 5px; }
     .admin-summary-value { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1.1; }
@@ -135,7 +135,10 @@
     .admin-summary-delta.flat { color: var(--muted); }
     .admin-visitor-summary-card { margin-top: 0; }
     .admin-visitor-summary-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
-    .admin-visitor-breakdown { display: flex; flex-wrap: nowrap; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border,#e8e4dc); white-space: nowrap; }
+    .admin-visitor-breakdown { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-top: 6px; white-space: nowrap; }
+    .admin-visitor-breakdown .admin-summary-delta { font-size: 10px; font-weight: 700; }
+    .admin-nav-summary-card { cursor: pointer; transition: box-shadow 0.15s; }
+    .admin-nav-summary-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
     .admin-visitor-breakdown-item { display: inline-flex; align-items: baseline; gap: 3px; min-width: 0; }
     .admin-visitor-breakdown-label,
     .admin-visitor-breakdown-value { display: inline; font-size: 10px; font-weight: 400; color: var(--muted); line-height: 1.2; }
@@ -387,16 +390,15 @@
           <div class="admin-group-title">📊 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
             <div id="analysisControlsAnchor"></div>
+            <div class="admin-analysis-tabs" id="analysisTabs">
+              <button class="admin-analysis-tab is-active" data-tab="summary" type="button">요약</button>
+              <button class="admin-analysis-tab" data-tab="visit" type="button">방문</button>
+              <button class="admin-analysis-tab" data-tab="referrer" type="button">유입</button>
+              <button class="admin-analysis-tab" data-tab="page" type="button">페이지</button>
+              <button class="admin-analysis-tab" data-tab="event" type="button">이벤트</button>
+              <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
+            </div>
             <div class="admin-analysis-controls" id="analysisControls">
-              <div class="admin-analysis-tabs" id="analysisTabs">
-                <button class="admin-analysis-tab is-active" data-tab="summary" type="button">요약</button>
-                <button class="admin-analysis-tab" data-tab="visit" type="button">방문</button>
-                <button class="admin-analysis-tab" data-tab="referrer" type="button">유입</button>
-                <button class="admin-analysis-tab" data-tab="page" type="button">페이지</button>
-                <button class="admin-analysis-tab" data-tab="event" type="button">이벤트</button>
-                <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
-              </div>
-
               <div class="admin-date-controls" id="analysisDateControls">
                 <div class="admin-chart-filter" id="chartPeriodBtns">
                   <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
@@ -415,14 +417,11 @@
 
             <div class="admin-tab-panel is-active" id="tabPanelSummary" data-panel="summary">
               <div class="admin-summary-grid">
+                <!-- 방문자 (7일 평균·전주대비 통합) -->
                 <div class="admin-summary-card admin-visitor-summary-card">
-                  <div class="admin-visitor-summary-main">
-                    <div>
-                      <div class="admin-summary-label">방문자</div>
-                      <div class="admin-summary-value" id="sumVisitorTotal">—</div>
-                    </div>
-                    <div class="admin-summary-sub">봇 제외</div>
-                  </div>
+                  <div class="admin-summary-label">방문자</div>
+                  <div class="admin-summary-value" id="sumVisitorTotal">—</div>
+                  <div class="admin-summary-sub">봇 제외</div>
                   <div class="admin-visitor-breakdown">
                     <div class="admin-visitor-breakdown-item">
                       <span class="admin-visitor-breakdown-label">회원</span>
@@ -436,21 +435,35 @@
                       <span class="admin-visitor-breakdown-label">봇</span>
                       <span class="admin-visitor-breakdown-value" id="sumVisitorBot">—</span>
                     </div>
+                    <div class="admin-visitor-breakdown-item">
+                      <span class="admin-visitor-breakdown-label">평균</span>
+                      <span class="admin-visitor-breakdown-value" id="sumAvg">—</span>명
+                    </div>
+                    <div class="admin-visitor-breakdown-item" id="sumDelta">—</div>
                   </div>
                 </div>
-                <div class="admin-summary-card admin-period-summary-card">
-                  <div class="admin-summary-label">7일 평균</div>
-                  <div class="admin-summary-value" id="sumAvg">—</div>
-                  <div class="admin-summary-sub" id="sumAvgSub"></div>
-                </div>
-                <div class="admin-summary-card admin-period-summary-card">
-                  <div class="admin-summary-label">지난주 대비</div>
-                  <div class="admin-summary-value" id="sumDelta">—</div>
-                  <div class="admin-summary-sub" id="sumDeltaSub"></div>
-                </div>
+                <!-- 주요 유입 -->
                 <div class="admin-summary-card admin-period-summary-card">
                   <div class="admin-summary-label">주요 유입 (7일)</div>
                   <div class="admin-summary-value" id="sumTopRef" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
+                </div>
+                <!-- 페이지 (클릭 → 페이지 탭) -->
+                <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="page">
+                  <div class="admin-summary-label">페이지</div>
+                  <div class="admin-summary-value" id="sumPageCount">—</div>
+                  <div class="admin-summary-sub">페이지 종류</div>
+                </div>
+                <!-- 이벤트 (클릭 → 이벤트 탭) -->
+                <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="event">
+                  <div class="admin-summary-label">이벤트</div>
+                  <div class="admin-summary-value" id="sumEventCount">—</div>
+                  <div class="admin-summary-sub">7일 추천·기록</div>
+                </div>
+                <!-- 회원 (클릭 → 회원 탭) -->
+                <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="member">
+                  <div class="admin-summary-label">회원</div>
+                  <div class="admin-summary-value" id="sumMemberTotal">—</div>
+                  <div class="admin-summary-sub" id="sumMemberNew"></div>
                 </div>
               </div>
             </div>
@@ -604,18 +617,20 @@
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
             const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            // offsetTop 체인: sticky 포지셔닝에 영향받지 않는 실제 document 위치
-            function getDocTop(el) {
-              let t = 0; while (el) { t += el.offsetTop; el = el.offsetParent; } return t;
-            }
-            // 두번째 헤더(날짜필터) 상단 기준 — usesDateFilter면 #analysisDateControls, 아니면 탭 행 하단
-            const dateCtrl = document.getElementById('analysisDateControls');
-            const tabs     = document.getElementById('analysisTabs');
-            const targetDocTop = (usesDateFilter && dateCtrl)
-              ? getDocTop(dateCtrl)
-              : (tabs ? getDocTop(tabs) + tabs.offsetHeight : 0);
-            if (targetDocTop) window.scrollTo({ top: Math.max(0, targetDocTop - headerH), behavior: 'smooth' });
+            function getDocTop(el) { let t = 0; while (el) { t += el.offsetTop; el = el.offsetParent; } return t; }
+            // #analysisTabs는 sticky 컨테이너 밖으로 이동됨 → #analysisControls 기준으로 스크롤
+            // 탭 행은 헤더 뒤로 사라지고, 날짜 필터가 헤더 바로 아래에 위치
+            const ctrl = document.getElementById('analysisControls');
+            if (ctrl) window.scrollTo({ top: Math.max(0, getDocTop(ctrl) - headerH), behavior: 'smooth' });
           }));
+        });
+
+        // 요약 카드 → 탭 이동 (data-nav-tab 속성)
+        el.querySelectorAll('.admin-nav-summary-card[data-nav-tab]').forEach(card => {
+          card.addEventListener('click', () => {
+            const btn = analysisTabs.querySelector(`.admin-analysis-tab[data-tab="${card.dataset.navTab}"]`);
+            if (btn) btn.click();
+          });
         });
       }
 
@@ -1031,6 +1046,10 @@
 
       const _now = Date.now();
       const cnt30dNew = allProfiles.filter(p => p.first_seen_at && _now - new Date(p.first_seen_at).getTime() < 30 * 86400000).length;
+      const _sumMemberTotal = document.getElementById('sumMemberTotal');
+      if (_sumMemberTotal) _sumMemberTotal.textContent = allProfiles.length + '명';
+      const _sumMemberNew = document.getElementById('sumMemberNew');
+      if (_sumMemberNew) _sumMemberNew.textContent = '신규 ' + cnt30dNew + '명 (30일)';
       const summaryCardsHtml = `<div class="admin-summary-grid" style="grid-template-columns:1fr;margin-bottom:12px">
         <div class="admin-summary-card"><div class="admin-summary-label">30일 신규</div><div class="admin-summary-value">${cnt30dNew}명</div></div>
       </div>`;
@@ -1140,6 +1159,12 @@
       if (pagesBody) {
         pagesBody.innerHTML =
           subSection('전체', pageAllDetail, false) + pageDayParts;
+      }
+
+      const _sumPageCount = document.getElementById('sumPageCount');
+      if (_sumPageCount) {
+        const _pm = buildPageMap(dedupUserPageDay(rows));
+        _sumPageCount.textContent = Object.keys(_pm).length + '개';
       }
 
       renderCharts(rows, allProfiles, profilesMap, pageViews);
@@ -1424,22 +1449,15 @@
             lTopRef = '주요 유입 (전체)';
           }
 
+          // summaryCards[0] = 주요유입 카드 (7일평균/지난주대비 카드 제거됨)
           const summaryCards = document.querySelectorAll('.admin-period-summary-card');
-          if (summaryCards[0]) summaryCards[0].querySelector('.admin-summary-label').textContent = lAvg;
-          if (summaryCards[1]) summaryCards[1].querySelector('.admin-summary-label').textContent = lDelta;
-          if (summaryCards[2]) summaryCards[2].querySelector('.admin-summary-label').textContent = lTopRef;
+          if (summaryCards[0]) summaryCards[0].querySelector('.admin-summary-label').textContent = lTopRef;
 
-          const el_today = document.getElementById('sumToday');
           const el_avg = document.getElementById('sumAvg');
-          const el_avgSub = document.getElementById('sumAvgSub');
           const el_delta = document.getElementById('sumDelta');
-          const el_deltaSub = document.getElementById('sumDeltaSub');
           const el_topRef = document.getElementById('sumTopRef');
-          if (el_today) el_today.textContent = vToday;
           if (el_avg) el_avg.textContent = vAvg % 1 === 0 ? vAvg : vAvg.toFixed(1);
-          if (el_avgSub) el_avgSub.textContent = vAvgSub;
           if (el_delta) el_delta.innerHTML = vDeltaHtml;
-          if (el_deltaSub) el_deltaSub.textContent = vDeltaSub;
           if (el_topRef) el_topRef.innerHTML = topRefHtml;
         }
 
@@ -1922,6 +1940,8 @@
             ${funnelRow('Hero 기록 버튼 클릭', hg0, hg7, pv0)}
             ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
           </div>`;
+        const _sumEventCount = document.getElementById('sumEventCount');
+        if (_sumEventCount) _sumEventCount.textContent = (rc7 + rd7) + '건';
       } catch(e) {
         el.innerHTML = '<div class="admin-empty">이벤트 데이터 없음</div>';
       }
