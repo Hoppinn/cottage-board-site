@@ -134,10 +134,10 @@
     .admin-summary-delta.flat { color: var(--muted); }
     .admin-visitor-summary-card { margin-top: 0; }
     .admin-visitor-summary-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
-    .admin-visitor-breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border,#e8e4dc); }
-    .admin-visitor-breakdown-item { min-width: 0; }
-    .admin-visitor-breakdown-label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
-    .admin-visitor-breakdown-value { display: block; font-size: 16px; font-weight: 900; color: var(--text); line-height: 1.1; }
+    .admin-visitor-breakdown { display: flex; flex-wrap: nowrap; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border,#e8e4dc); white-space: nowrap; }
+    .admin-visitor-breakdown-item { display: inline-flex; align-items: baseline; gap: 3px; min-width: 0; }
+    .admin-visitor-breakdown-label,
+    .admin-visitor-breakdown-value { display: inline; font-size: 10px; font-weight: 400; color: var(--muted); line-height: 1.2; }
     @media (max-width: 600px) { .admin-summary-grid { grid-template-columns: repeat(2, 1fr); } }
     /* 교차분석 */
     .admin-cross-list { display: flex; flex-direction: column; gap: 0; padding: 4px 0; }
@@ -1380,9 +1380,9 @@
           const elGuest = document.getElementById('sumVisitorGuest');
           const elBot = document.getElementById('sumVisitorBot');
           if (elTotal) elTotal.textContent = periodVisForBreakdown.length;
-          if (elMember) elMember.textContent = memberCnt;
-          if (elGuest) elGuest.textContent = guestCnt;
-          if (elBot) elBot.textContent = botCnt;
+          if (elMember) elMember.textContent = `${memberCnt}명`;
+          if (elGuest) elGuest.textContent = `${guestCnt}명`;
+          if (elBot) elBot.textContent = `${botCnt}명`;
         }
 
         // ── 1. 날짜별 방문자 — __visitor__ 마커 기준, 단위별 집계 ──
