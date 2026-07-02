@@ -3868,7 +3868,7 @@ body.embed-mode {
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 2px;position:sticky;top:0;z-index:5;background:#fff;padding:6px 20px;border-bottom:1px solid var(--border,#e8e4dc);cursor:pointer;}
 .profile-panel-title{font-size:14px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
-.profile-panel-profile{display:flex;flex-direction:column;padding:4px 0 16px;}
+.profile-panel-profile{display:flex;flex-direction:column;padding:14px 0 16px;}
 .profile-panel-profile-top{display:flex;align-items:flex-start;gap:14px;}
 .profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}
 .profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;}
