@@ -360,6 +360,71 @@
 
     .sched-loading { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
+    /* ── 주간 뷰 (Phase 1) ──────────────────────────────────── */
+    .sched-week-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .sched-week-nav-btn {
+      background: none;
+      border: none;
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 6px;
+    }
+    .sched-week-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .sched-toggle-cal-btn {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      background: none;
+      border: 1px solid #e0d8cc;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .sched-toggle-cal-btn:hover { background: #faf5ec; }
+    .sched-toggle-cal-btn.is-open { color: var(--green); border-color: var(--green); }
+    .sched-wday-card {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #faf8f5;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .sched-wday-card:hover { background: #f0ebe0; }
+    .sched-wday-card.is-past { opacity: 0.3; cursor: default; pointer-events: none; }
+    .sched-wday-card.is-today { background: #f5ece0; outline: 2px solid var(--green); }
+    .sched-wday-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sched-wday-dow {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .sched-wday-dow.is-sat { color: #5080e0; }
+    .sched-wday-dow.is-sun { color: #e05050; }
+    .sched-wday-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+      margin-left: auto;
+    }
+
   </style>
 </head>
 
@@ -378,14 +443,25 @@
 
         <div class="sched-loading" id="mainLoading">불러오는 중...</div>
 
-        <!-- 4주 뷰 -->
-        <div id="viewCalendar" style="display:none">
-          <div id="weekView"></div>
+        <!-- 주간 뷰 (Phase 1) ─ 기본 화면 -->
+        <div id="viewWeek" style="display:none">
+          <div class="sched-week-nav">
+            <button class="sched-week-nav-btn" id="btnPrevWeek">← 이전 주</button>
+            <span class="sched-week-title" id="weekTitle"></span>
+            <button class="sched-week-nav-btn" id="btnNextWeek">다음 주 →</button>
+          </div>
+          <button class="sched-toggle-cal-btn" id="btnToggleCal">달력 보기 ▾</button>
+          <!-- 4주 달력 (토글, 기존 viewCalendar 이동) -->
+          <div id="viewCalendar" style="display:none">
+            <div id="weekView"></div>
+          </div>
+          <!-- 주간 날짜 카드 리스트 -->
+          <div id="weekDayList"></div>
         </div>
 
-        <!-- 날짜 상세 뷰 -->
+        <!-- 날짜 상세 뷰 (기존 유지) -->
         <div id="viewDay" style="display:none">
-          <button class="sched-back-btn" id="btnBackCal">← 달력으로</button>
+          <button class="sched-back-btn" id="btnBackCal">← 주간으로</button>
           <h2 class="sched-day-title" id="dayTitle"></h2>
           <div id="myVoteSection"></div>
           <div id="overlapSection"></div>
@@ -420,6 +496,7 @@
     let currentDate = null;
     let sliderMode = false;
     let sliderStart = 10, sliderEnd = 22;
+    let weekOffset = 0;
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -558,7 +635,7 @@
     function openDay(ds) {
       currentDate = ds;
       sliderMode = false;
-      document.getElementById('viewCalendar').style.display = 'none';
+      document.getElementById('viewWeek').style.display = 'none';
       document.getElementById('viewDay').style.display = '';
       document.getElementById('dayTitle').textContent = formatLabel(ds);
       renderDayDetail(ds);
@@ -827,6 +904,66 @@
     }
 
 
+    // ── 주간 뷰 헬퍼 / 렌더러 (Phase 1) ──────────────────────────
+    function getWeekTitle(monday) {
+      // 목요일 기준으로 해당 월·주차 결정 (월경계 주 처리)
+      const thu = new Date(monday);
+      thu.setDate(monday.getDate() + 3);
+      const m = thu.getMonth() + 1;
+      const weekNum = Math.ceil(thu.getDate() / 7);
+      const ord = ['첫째','둘째','셋째','넷째','다섯째'];
+      return `${m}월 ${ord[weekNum - 1] || weekNum + '번째'} 주`;
+    }
+
+    function renderWeekView(offset) {
+      weekOffset = offset;
+
+      // 이번 주 월요일 계산 (offset 주 이동)
+      const todayDow = TODAY.getDay();
+      const daysToMon = todayDow === 0 ? -6 : 1 - todayDow;
+      const monday = new Date(TODAY);
+      monday.setDate(TODAY.getDate() + daysToMon + offset * 7);
+
+      document.getElementById('weekTitle').textContent = getWeekTitle(monday);
+
+      // 날짜별 참여자 수 집계 (중복 user_id 제거)
+      const cntByDate = {};
+      for (const v of allVotes) {
+        if (!cntByDate[v.vote_date]) cntByDate[v.vote_date] = new Set();
+        cntByDate[v.vote_date].add(v.user_id);
+      }
+
+      const el = document.getElementById('weekDayList');
+      let html = '';
+      for (let d = 0; d < 7; d++) {
+        const date = new Date(monday);
+        date.setDate(monday.getDate() + d);
+        const ds = toDateStr(date);
+        const dow = date.getDay();
+        const past = date < TODAY;
+        const tod = date.getTime() === TODAY.getTime();
+        const cnt = cntByDate[ds]?.size || 0;
+
+        const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
+        const pastCls = past ? ' is-past' : '';
+        const todCls = tod ? ' is-today' : '';
+        const todayBadge = tod ? '<span class="sdc-today-label">오늘</span>' : '';
+
+        html += `<div class="sched-wday-card${pastCls}${todCls}" data-date="${ds}">
+          <div class="sched-wday-header">
+            <span class="sched-wday-dow${dowCls}">${DOW[dow]} ${date.getMonth()+1}/${date.getDate()}</span>
+            ${todayBadge}
+            ${cnt > 0 ? `<span class="sched-wday-count">👥 ${cnt}명</span>` : ''}
+          </div>
+        </div>`;
+      }
+      el.innerHTML = html;
+
+      el.querySelectorAll('.sched-wday-card:not(.is-past)').forEach(card => {
+        card.addEventListener('click', () => openDay(card.dataset.date));
+      });
+    }
+
     // ── [DEV] 개발/검증용 더미 데이터 헬퍼 ──────────────────────
     // 실 DB 완전 무관 — allVotes 메모리에만 추가.
     // URL ?dev 파라미터가 없으면 절대 호출되지 않음.
@@ -901,15 +1038,28 @@
       if (_devScenario) _injectDevVotes(_devScenario);
 
       document.getElementById('mainLoading').style.display = 'none';
-      document.getElementById('viewCalendar').style.display = '';
-      renderCalendar();
+      document.getElementById('viewWeek').style.display = '';
+      renderWeekView(0);
     }
 
     document.getElementById('btnBackCal').addEventListener('click', () => {
       sliderMode = false;
       currentDate = null;
       document.getElementById('viewDay').style.display = 'none';
-      document.getElementById('viewCalendar').style.display = '';
+      document.getElementById('viewWeek').style.display = '';
+      renderWeekView(weekOffset);
+    });
+
+    document.getElementById('btnPrevWeek').addEventListener('click', () => renderWeekView(weekOffset - 1));
+    document.getElementById('btnNextWeek').addEventListener('click', () => renderWeekView(weekOffset + 1));
+    document.getElementById('btnToggleCal').addEventListener('click', () => {
+      const cal = document.getElementById('viewCalendar');
+      const btn = document.getElementById('btnToggleCal');
+      const isOpen = cal.style.display !== 'none';
+      cal.style.display = isOpen ? 'none' : '';
+      btn.textContent = isOpen ? '달력 보기 ▾' : '달력 닫기 ▴';
+      btn.classList.toggle('is-open', !isOpen);
+      if (!isOpen) renderCalendar();
     });
 
     window.addEventListener('cottage-auth-changed', () => {
