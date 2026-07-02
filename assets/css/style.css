@@ -398,6 +398,7 @@ textarea{
   padding-right:2px;
   padding-bottom:10px;
 }
+.header-search-results:empty{display:none;}
 
 .header-search-panel::after{
   content:"";
