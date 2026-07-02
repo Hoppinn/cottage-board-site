@@ -1676,7 +1676,7 @@ body.recommend-page main{
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
   height:100%;
-  padding:0 20px 120px;
+  padding:0 20px 24px;
   box-sizing:border-box;
 }
 
@@ -1685,7 +1685,7 @@ body.sheet-open{
 }
 
 #gameSheetContent{
-  padding-bottom:120px;
+  padding-bottom:0;
 }
 
 @keyframes sheetUp{
