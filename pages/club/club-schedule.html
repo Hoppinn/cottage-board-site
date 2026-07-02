@@ -445,6 +445,30 @@
       text-align: center;
     }
     .sched-card-more-btn:hover { color: var(--green); }
+    /* Phase 3: 카드 푸터 */
+    .sched-card-footer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ede8e0;
+    }
+    .sched-card-reg-btn {
+      display: block;
+      width: 100%;
+      padding: 8px 0;
+      background: none;
+      border: 1.5px dashed #c8bfb0;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+    }
+    .sched-card-reg-btn:hover { border-color: var(--green); color: var(--green); }
+    .sched-card-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .sched-card-slider { }
 
   </style>
 </head>
@@ -518,6 +542,7 @@
     let sliderMode = false;
     let sliderStart = 10, sliderEnd = 22;
     let weekOffset = 0;
+    let sliderDate = null;   // Phase 3: 열려있는 카드 슬라이더 날짜 (null = 닫힘)
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -925,6 +950,125 @@
     }
 
 
+    // ── 주간 카드 등록/변경/취소 (Phase 3) ──────────────────────────
+
+    function attachCardFooter(cardEl, ds, user) {
+      if (!user) return;
+      const dayVotes = allVotes.filter(v => v.vote_date === ds);
+      const myVote   = dayVotes.find(v => String(v.user_id) === String(user.id));
+
+      const footer = document.createElement('div');
+      footer.className = 'sched-card-footer';
+      cardEl.appendChild(footer);
+
+      if (sliderDate === ds) {
+        const initS = myVote?.time_start ?? 10;
+        const initE = myVote?.time_end ?? 22;
+        const range = MAX_H - MIN_H;
+        footer.innerHTML = `<div class="sched-card-slider">
+          <div class="sched-slider-wrap">
+            <div class="sched-slider-times">
+              <span class="sched-slider-time-val"></span>
+              <span class="sched-slider-sep">~</span>
+              <span class="sched-slider-time-val"></span>
+            </div>
+            <div class="sched-dual-range">
+              <div class="sched-range-track"><div class="sched-range-fill"></div></div>
+              <input type="range" class="sched-range-input"
+                min="${MIN_H}" max="${MAX_H - 1}" step="1" value="${initS}">
+              <input type="range" class="sched-range-input"
+                min="${MIN_H + 1}" max="${MAX_H}" step="1" value="${initE}">
+            </div>
+            <div class="sched-range-axis">
+              <span>${MIN_H}시</span><span>${Math.round((MIN_H+MAX_H)/2)}시</span><span>${MAX_H}시</span>
+            </div>
+          </div>
+          <div class="sched-confirm-row">
+            <button class="sched-confirm-btn" type="button">등록</button>
+            <button class="sched-discard-btn" type="button">닫기</button>
+          </div>
+        </div>`;
+
+        const inputs  = footer.querySelectorAll('input.sched-range-input');
+        const rS = inputs[0], rE = inputs[1];
+        const fill    = footer.querySelector('.sched-range-fill');
+        const [lblS, lblE] = footer.querySelectorAll('.sched-slider-time-val');
+        const btnSave = footer.querySelector('.sched-confirm-btn');
+        const btnCancel = footer.querySelector('.sched-discard-btn');
+        let localS = initS, localE = initE;
+
+        function sync() {
+          const s = parseInt(rS.value), e = parseInt(rE.value);
+          fill.style.left  = ((s - MIN_H) / range * 100) + '%';
+          fill.style.width = ((e - s)     / range * 100) + '%';
+          lblS.textContent = s + '시';
+          lblE.textContent = e + '시';
+          localS = s; localE = e;
+        }
+        rS.addEventListener('input', () => {
+          if (parseInt(rS.value) >= parseInt(rE.value)) rS.value = parseInt(rE.value) - 1;
+          sync();
+        });
+        rE.addEventListener('input', () => {
+          if (parseInt(rE.value) <= parseInt(rS.value)) rE.value = parseInt(rS.value) + 1;
+          sync();
+        });
+        sync();
+        btnSave.addEventListener('click', () => saveVoteForDate(ds, localS, localE, btnSave));
+        btnCancel.addEventListener('click', () => { sliderDate = null; renderWeekView(weekOffset); });
+        return;
+      }
+
+      if (myVote) {
+        footer.innerHTML = `<div class="sched-card-actions">
+          <button class="sched-action-btn sched-action-btn--edit" type="button">시간 변경</button>
+          <button class="sched-action-btn sched-action-btn--del" type="button">참여 취소</button>
+        </div>`;
+        footer.querySelector('.sched-action-btn--edit').addEventListener('click', () => {
+          sliderDate = ds; renderWeekView(weekOffset);
+        });
+        footer.querySelector('.sched-action-btn--del').addEventListener('click', () => removeVoteForDate(ds));
+      } else {
+        footer.innerHTML = `<button class="sched-card-reg-btn" type="button">내 시간 등록하기</button>`;
+        footer.querySelector('.sched-card-reg-btn').addEventListener('click', () => {
+          sliderDate = ds; renderWeekView(weekOffset);
+        });
+      }
+    }
+
+    async function saveVoteForDate(ds, start, end, btnSave) {
+      const user = window.getKakaoUser?.();
+      if (!user) return;
+      if (btnSave) btnSave.disabled = true;
+
+      const result = await window.CottageDB?.upsertMeetingVote(
+        String(user.id), user.nickname || '익명', ds, start, end
+      );
+      if (result?.success) {
+        allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
+        allVotes.push({ vote_date: ds, user_id: String(user.id), nickname: user.nickname || '익명', time_start: start, time_end: end });
+        sliderDate = null;
+        renderWeekView(weekOffset);
+      } else {
+        if (btnSave) btnSave.disabled = false;
+        alert(`저장 오류: ${result?.error?.message || '알 수 없는 오류'}`);
+      }
+    }
+
+    async function removeVoteForDate(ds) {
+      if (!confirm('참여를 취소할까요?')) return;
+      const user = window.getKakaoUser?.();
+      if (!user) return;
+      const result = await window.CottageDB?.deleteMeetingVote(String(user.id), ds);
+      if (result?.success) {
+        allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
+        sliderDate = null;
+        renderWeekView(weekOffset);
+      } else {
+        alert('취소 중 오류가 발생했어요.');
+      }
+    }
+
     // ── 주간 뷰 헬퍼 / 렌더러 (Phase 1+2) ────────────────────────
     function getWeekTitle(monday) {
       // 목요일 기준으로 해당 월·주차 결정 (월경계 주 처리)
@@ -1033,6 +1177,11 @@
           btn.textContent = isExpanded ? `+${hiddenCnt}명 더보기` : '접기 ▴';
         });
       });
+
+      // 카드 푸터: 등록/변경/취소/슬라이더 (Phase 3)
+      el.querySelectorAll('.sched-wday-card:not(.is-past)').forEach(cardEl => {
+        attachCardFooter(cardEl, cardEl.dataset.date, user);
+      });
     }
 
     // ── [DEV] 개발/검증용 더미 데이터 헬퍼 ──────────────────────
@@ -1121,8 +1270,8 @@
       renderWeekView(weekOffset);
     });
 
-    document.getElementById('btnPrevWeek').addEventListener('click', () => renderWeekView(weekOffset - 1));
-    document.getElementById('btnNextWeek').addEventListener('click', () => renderWeekView(weekOffset + 1));
+    document.getElementById('btnPrevWeek').addEventListener('click', () => { sliderDate = null; renderWeekView(weekOffset - 1); });
+    document.getElementById('btnNextWeek').addEventListener('click', () => { sliderDate = null; renderWeekView(weekOffset + 1); });
     document.getElementById('btnToggleCal').addEventListener('click', () => {
       const cal = document.getElementById('viewCalendar');
       const btn = document.getElementById('btnToggleCal');
