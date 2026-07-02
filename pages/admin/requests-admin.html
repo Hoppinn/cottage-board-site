@@ -1160,7 +1160,7 @@
         const _topPages = _pm.slice(0, 4);
         _sumPageCount.innerHTML = _topPages.length
           ? _topPages.map(([p, data]) => {
-              const name = p.replace(/^\//, '').replace(/\/(index\.html)?$/, '') || '홈';
+              const name = (window.COTTAGE_PAGE_LABELS && window.COTTAGE_PAGE_LABELS[p]) || p || '홈';
               return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(name)} <span style="opacity:.7">(${data.visits}회)</span></span>`;
             }).join('')
           : '—';
