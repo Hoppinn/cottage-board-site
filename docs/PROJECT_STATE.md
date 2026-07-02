@@ -16,8 +16,8 @@
 - [x] **Phase B: API** — `getMeetingVoteGames`, `addMeetingVoteGame`, `removeMeetingVoteGame` 3개 함수 (supabase-client.js, js-api.md 갱신) (커밋: 143차-191)
 - [x] **Phase C: 기존 화면 검증** — 사용자 직접 확인 완료
 - [x] **Phase D: 멀티스텝 바텀시트** — `initMultiSheet()` 구현: Step1(요일선택)→Step2(시간)→Step3(게임입력). 상단 [모임 등록] 버튼 + 카드 [+ 등록]/[✎] 진입 (커밋: 143차-192)
-- [ ] **Phase E: 카드 미리보기** — 요일별 2명+ 겹치는 게임 카드 하단 표시 (구조 구현 완료, 데이터는 Phase D 입력 후 자동 표시)
-- [ ] **Phase F: 가져오기 연결** — 취향보드/모임보드 게임 불러오기
+- [x] **Phase E: 카드 미리보기** — `sched-bar-games` 구조 구현 완료, Phase D 저장 데이터 자동 표시
+- [x] **Phase F: 가져오기 연결** — Step3에 "취향보드에서 ▾ / 모임보드에서 ▾" 피커 추가 (커밋: 143차-193). 게임 lazy fetch + 캐시. 중복 추가 방지. 직접 입력 유지. 모임보드 can_explain_rules → "룰 설명 가능" 레이블 분리 표시
 
 **확정 설계 결정**:
 - `meeting_game_prefs`(모임 보드 주간 선호) vs `meeting_vote_games`(플래너 날짜별): 별개 유지
