@@ -175,19 +175,20 @@
       position: relative;
     }
     /* sched-bar-group 제거됨 — sched-bar-row에 margin-bottom 직접 적용 */
-    /* 주간 카드: 축 padding-left 0 (바가 전체 폭 사용) */
-    .sched-card-bars .sched-bar-axis { padding-left: 0; }
-    /* 주간 카드 bar item — 닉네임이 위, 막대가 아래 */
-    .sched-bar-item { margin-bottom: 10px; }
-    .sched-bar-hdr {
-      display: flex; align-items: center; gap: 5px;
-      margin-bottom: 3px;
+    /* 주간 카드 bar item — 닉네임(좌 52px) · 막대(우 1fr) grid */
+    .sched-bar-item {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    .sched-bar-hdr .sched-bar-name {
-      width: auto; text-align: left; /* viewDay 52px·right 오버라이드 */
+    .sched-bar-left {
+      display: flex; flex-direction: column;
+      align-items: flex-end; justify-content: space-between;
+      padding: 3px 0;
     }
     .sched-bar-actions {
-      display: flex; gap: 2px; flex-shrink: 0;
+      display: flex; gap: 2px;
     }
     .sched-bar-edit-btn,
     .sched-bar-del-btn {
@@ -217,14 +218,13 @@
     }
     .sched-bar-name:hover { color: var(--green); text-decoration: underline; }
     .sched-bar-track {
-      flex: 1;
-      height: 24px;
+      flex: 1; /* viewDay sched-bar-row 호환 */
+      min-height: 24px;
       background: #ede8e0;
       border-radius: 5px;
       position: relative;
-      transition: height .15s;
     }
-    .sched-bar-track.has-games { height: 40px; }
+    .sched-bar-track.has-games { min-height: 40px; }
     .sched-bar-fill {
       position: absolute;
       top: 0; bottom: 0;
@@ -2063,16 +2063,17 @@
       const LIMIT = 3;
       const range = MAX_H - MIN_H;
 
-      // 게임명 앞 4글자 잘라 공백 구분, 초과 시 +N
+      // 게임명: 3글자 이하 전체, 4글자 이상 앞 2글자. · 구분, 초과 시 +N
       function gameNames(voteDate, userId) {
         const games = allVoteGames.filter(g =>
           g.vote_date === voteDate && String(g.user_id) === String(userId)
         );
         if (!games.length) return '';
         const MAX_SHOW = 3;
-        const all = games.map(g => esc((g.custom_name || `#${g.game_id}`).slice(0, 4)));
-        if (all.length <= MAX_SHOW) return all.join(' ');
-        return all.slice(0, MAX_SHOW).join(' ') + ` +${all.length - MAX_SHOW}`;
+        const trunc = name => name.length <= 3 ? name : name.slice(0, 2);
+        const all = games.map(g => esc(trunc(g.custom_name || `#${g.game_id}`)));
+        if (all.length <= MAX_SHOW) return all.join('·');
+        return all.slice(0, MAX_SHOW).join('·') + `+${all.length - MAX_SHOW}`;
       }
 
       function barRow(v) {
@@ -2087,7 +2088,7 @@
             </div>`
           : '';
         return `<div class="sched-bar-item">
-          <div class="sched-bar-hdr">
+          <div class="sched-bar-left">
             <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
             ${actions}
           </div>
