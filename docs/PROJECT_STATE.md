@@ -445,6 +445,11 @@
   - notifSeenAt → `{ tagged, review, play_record, purchased }` 확장
 - [x] **유입 경로 first_source 저장** — profiles.first_source TEXT, 신규 유저 upsert 시 _sessionReferrer 1회 저장 (140차)
 
+### P2-admin — 관리자 분석 페이지 추가 작업
+
+- [ ] **유입 차트 바 안에 시간 표시** — `chartReferrer` 수평 막대 안에 총체류/평균체류 텍스트 삽입. 페이지 탭과 동일한 `afterDatasetsDraw` 커스텀 플러그인 방식 사용. `makeOrUpdate` 5번째 인수(plugins 배열)로 전달. `refSecMap`에서 총/평균 계산.
+- [ ] **방문 탭 차트들 시간 표시** — `chartDaily`(날짜별 라인), `chartHourly`(시간대별 바) 등 가능한 곳에 총체류 추가. (날짜별은 line 차트라 바 내부 불가, 툴팁 또는 데이터레이블로 대체 검토)
+
 ### P3 — 인프라
 
 - [x] **로그인 메뉴 HTML 공통화** — assets/js/header.js 생성, 15개 HTML 파일 script 태그로 교체 (137차)

@@ -1645,9 +1645,9 @@
               ctx.save();
               ctx.font = '9px sans-serif';
               ctx.fillStyle = 'rgba(255,255,255,0.92)';
-              ctx.textAlign = 'right';
+              ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText(text, barRight - 5, bar.y);
+              ctx.fillText(text, x0 + barWidth / 2, bar.y);
               ctx.restore();
             });
           },
