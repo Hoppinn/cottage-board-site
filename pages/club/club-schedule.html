@@ -187,21 +187,24 @@
     }
     .sched-bar-edit-btn,
     .sched-bar-del-btn {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       background: none;
       border: none;
-      border-radius: 6px;
-      font-size: 13px;
+      border-radius: 50%;
+      font-size: 15px;
       cursor: pointer;
-      color: var(--muted);
+      color: #b8b0a4;
       padding: 0;
+      transition: background .15s, color .15s;
     }
-    .sched-bar-edit-btn:hover { background: #f0ebe0; color: var(--green); }
-    .sched-bar-del-btn:hover { background: #fff5f5; color: #e05050; }
+    .sched-bar-edit-btn:hover,
+    .sched-bar-edit-btn:active { background: #ede8de; color: var(--green); }
+    .sched-bar-del-btn:hover,
+    .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
     .sched-bar-name {
       font-size: 12px;
       color: var(--text);
@@ -1438,8 +1441,8 @@
         const mine  = myVote && String(v.user_id) === String(myVote.user_id);
         const actions = mine
           ? `<div class="sched-bar-actions">
-              <button class="sched-bar-edit-btn" type="button" title="수정">✏</button>
-              <button class="sched-bar-del-btn" type="button" title="참여 취소">✕</button>
+              <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
+              <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
             </div>`
           : '';
         return `<div class="sched-bar-row">
