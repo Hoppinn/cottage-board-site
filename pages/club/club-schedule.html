@@ -409,7 +409,13 @@
     .sched-wday-header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+    }
+    .sched-wday-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
     }
     .sched-wday-dow {
       font-size: 15px;
@@ -419,10 +425,9 @@
     .sched-wday-dow.is-sat { color: #5080e0; }
     .sched-wday-dow.is-sun { color: #e05050; }
     .sched-wday-count {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--green);
-      margin-left: auto;
     }
     /* Phase 2: 카드 내 시간 바 */
     .sched-wday-card { cursor: default; }
@@ -480,6 +485,16 @@
       cursor: pointer;
     }
     .sched-card-edit-hdr:hover { border-color: var(--green); color: var(--green); }
+    .sched-card-reg-hdr {
+      padding: 2px 8px;
+      background: none;
+      border: 1px solid #c8bfb0;
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .sched-card-reg-hdr:hover { border-color: var(--green); color: var(--green); }
     .sched-card-menu-wrap { position: relative; }
     .sched-card-menu-btn {
       padding: 2px 6px;
@@ -1002,12 +1017,11 @@
     // ── 주간 카드 등록/변경/취소 (Phase 3) ──────────────────────────
 
     function attachCardFooter(cardEl, ds, user) {
-      if (!user) return;
+      // 슬라이더가 열린 카드만 푸터 렌더 — 등록/수정/취소는 헤더 버튼으로 처리
+      if (!user || sliderDate !== ds) return;
+
       const dayVotes = allVotes.filter(v => v.vote_date === ds);
       const myVote   = dayVotes.find(v => String(v.user_id) === String(user.id));
-
-      // myVote 있고 슬라이더도 아닌 경우: 수정/⋯ 버튼은 헤더에 이미 있음 — 푸터 불필요
-      if (myVote && sliderDate !== ds) return;
 
       const footer = document.createElement('div');
       footer.className = 'sched-card-footer';
@@ -1071,11 +1085,6 @@
         return;
       }
 
-      // !myVote: 등록 버튼 (myVote 있으면 헤더 버튼만 사용, 여기까지 못 옴)
-      footer.innerHTML = `<button class="sched-card-reg-btn" type="button">내 시간 등록하기</button>`;
-      footer.querySelector('.sched-card-reg-btn').addEventListener('click', () => {
-        sliderDate = ds; renderWeekView(weekOffset);
-      });
     }
 
     async function saveVoteForDate(ds, start, end, btnSave) {
@@ -1188,21 +1197,32 @@
         const todCls  = tod  ? ' is-today' : '';
         const todayBadge = tod ? '<span class="sdc-today-label">오늘</span>' : '';
 
-        const headerBtns = (user && myVote && !past) ? `<div class="sched-card-header-actions">
-          <button class="sched-card-edit-hdr" type="button">수정</button>
-          <div class="sched-card-menu-wrap">
-            <button class="sched-card-menu-btn" type="button">⋯</button>
-            <div class="sched-card-menu-dropdown">
-              <button class="sched-card-del-dd" type="button">참여 취소</button>
-            </div>
-          </div>
-        </div>` : '';
+        let headerBtns = '';
+        if (user && !past) {
+          if (myVote) {
+            headerBtns = `<div class="sched-card-header-actions">
+              <button class="sched-card-edit-hdr" type="button">수정</button>
+              <div class="sched-card-menu-wrap">
+                <button class="sched-card-menu-btn" type="button">⋯</button>
+                <div class="sched-card-menu-dropdown">
+                  <button class="sched-card-del-dd" type="button">참여 취소</button>
+                </div>
+              </div>
+            </div>`;
+          } else {
+            headerBtns = `<div class="sched-card-header-actions">
+              <button class="sched-card-reg-hdr" type="button">등록</button>
+            </div>`;
+          }
+        }
 
         html += `<div class="sched-wday-card${pastCls}${todCls}" data-date="${ds}">
           <div class="sched-wday-header" data-date="${ds}">
-            <span class="sched-wday-dow${dowCls}">${DOW[dow]} ${date.getMonth()+1}/${date.getDate()}</span>
-            ${todayBadge}
-            ${cnt > 0 ? `<span class="sched-wday-count">👥 ${cnt}명</span>` : ''}
+            <div class="sched-wday-left">
+              <span class="sched-wday-dow${dowCls}">${DOW[dow]} ${date.getMonth()+1}/${date.getDate()}</span>
+              ${todayBadge}
+              <span class="sched-wday-count">👥 ${cnt}명</span>
+            </div>
             ${headerBtns}
           </div>
           ${buildBarsInCard(dayVotes, myVote)}
@@ -1231,7 +1251,16 @@
         });
       });
 
-      // 수정 버튼 (헤더 우상단) — stopPropagation으로 openDay 방지
+      // 등록 버튼 (헤더 우상단, 미등록)
+      el.querySelectorAll('.sched-card-reg-hdr').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          sliderDate = btn.closest('.sched-wday-card').dataset.date;
+          renderWeekView(weekOffset);
+        });
+      });
+
+      // 수정 버튼 (헤더 우상단, 등록됨) — stopPropagation으로 openDay 방지
       el.querySelectorAll('.sched-card-edit-hdr').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
