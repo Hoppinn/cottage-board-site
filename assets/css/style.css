@@ -2819,8 +2819,8 @@ body.embed-mode {
 .sheet-en-title{
   margin:0 0 10px;
   font-size:13px;
-  color:#a89a8a;
-  font-weight:400;
+  color:#7a6e64;
+  font-weight:500;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -3779,7 +3779,7 @@ body.embed-mode {
   color:#7a4828;
   cursor:pointer;
   padding:0 0 8px;
-  font-weight:600;
+  font-weight:500;
   display:block;
 }
 
