@@ -1523,7 +1523,7 @@
         const list = _gameMap[_activeDay]?.[section] || [];
         return list.some(g =>
           (g.game_id && item.game_id && String(g.game_id) === String(item.game_id)) ||
-          (g.custom_name && item.custom_name && g.custom_name === item.custom_name)
+          (g.custom_name && item.custom_name && g.custom_name.trim() === item.custom_name.trim())
         );
       }
 
@@ -1771,10 +1771,9 @@
           const count = (_gameMap[_activeDay]?.[type] || []).length;
           const source = type === 'want' ? 'like' : 'curious';
 
-          let btnLabel;
-          if (open)        btnLabel = `${icon} ${label} ▲`;
-          else if (count)  btnLabel = `${icon} ${label} (${count}개) ▾`;
-          else             btnLabel = `${icon} ${label} 추가 ＋`;
+          const btnLabel = open
+            ? `${icon} ${label} (${count}) ▲`
+            : `${icon} ${label} (${count}) ▾`;
 
           if (!open) return `<button class="sm-game-toggle" data-gtoggle="${type}" type="button">${btnLabel}</button>`;
           return `<button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
@@ -1872,7 +1871,7 @@
         if (!Array.isArray(cached)) return;
         const alreadyIn = cached.some(g =>
           (gameId && g.game_id && String(g.game_id) === String(gameId)) ||
-          (g.custom_name && g.custom_name === name)
+          (g.custom_name && g.custom_name.trim() === name.trim())
         );
         if (alreadyIn) return;
         const boardLabel = type === 'want' ? '좋아요한 게임' : '궁금한 게임';
