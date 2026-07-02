@@ -2276,6 +2276,41 @@
       if (!entries) return;
       allVotes.push(...entries);
 
+      // 게임 더미 데이터 (allVoteGames)
+      const DUMMY_GAMES = {
+        '3': [
+          { vote_date: tgt, user_id: myId,     list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: myId,     list_type: 'want',  game_id: null, custom_name: '원더랜드 워' },
+          { vote_date: tgt, user_id: myId,     list_type: 'learn', game_id: null, custom_name: '윙스팬' },
+          { vote_date: tgt, user_id: 'dev_u2', list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: 'dev_u3', list_type: 'want',  game_id: null, custom_name: '에버델' },
+          { vote_date: tgt, user_id: 'dev_u3', list_type: 'learn', game_id: null, custom_name: '아르낙' },
+        ],
+        '5': [
+          { vote_date: tgt, user_id: myId,     list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: myId,     list_type: 'learn', game_id: null, custom_name: '글룸헤이븐' },
+          { vote_date: tgt, user_id: 'dev_u2', list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: 'dev_u2', list_type: 'want',  game_id: null, custom_name: '원더랜드 워' },
+          { vote_date: tgt, user_id: 'dev_u4', list_type: 'want',  game_id: null, custom_name: '에버델' },
+          { vote_date: tgt, user_id: 'dev_u4', list_type: 'learn', game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: 'dev_u5', list_type: 'want',  game_id: null, custom_name: '원더랜드 워' },
+        ],
+        '8': [
+          { vote_date: tgt, user_id: myId,     list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: myId,     list_type: 'want',  game_id: null, custom_name: '원더랜드 워' },
+          { vote_date: tgt, user_id: myId,     list_type: 'learn', game_id: null, custom_name: '글룸헤이븐' },
+          { vote_date: tgt, user_id: 'dev_u2', list_type: 'want',  game_id: null, custom_name: '윙스팬' },
+          { vote_date: tgt, user_id: 'dev_u3', list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: 'dev_u3', list_type: 'want',  game_id: null, custom_name: '에버델' },
+          { vote_date: tgt, user_id: 'dev_u5', list_type: 'learn', game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: 'dev_u7', list_type: 'want',  game_id: null, custom_name: '원더랜드 워' },
+          { vote_date: tgt, user_id: 'dev_u7', list_type: 'want',  game_id: null, custom_name: '아르낙' },
+          { vote_date: tgt, user_id: 'dev_u7', list_type: 'want',  game_id: null, custom_name: '에버델' },
+        ],
+      };
+      const gameEntries = DUMMY_GAMES[scenario];
+      if (gameEntries) allVoteGames.push(...gameEntries);
+
       // init() 시점에 로그인 미완료인 경우: cottage-auth-changed 후 __dev_me__ 교체
       if (myId === '__dev_me__') {
         window.addEventListener('cottage-auth-changed', () => {
@@ -2286,6 +2321,9 @@
               v.user_id   = String(u.id);
               v.nickname  = u.nickname || v.nickname;
             }
+          });
+          allVoteGames.forEach(g => {
+            if (g.user_id === '__dev_me__') g.user_id = String(u.id);
           });
         }, { once: true });
       }
