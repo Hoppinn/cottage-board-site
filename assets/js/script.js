@@ -1279,6 +1279,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
       >
       <span class="sheet-sticky-title">${detail.title}</span>
       ${detail.rating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(detail.rating)}</span>` : ""}
+      <button class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
     </div>
 
     <!-- 뒤로가기 (게임→게임 이동 시) -->
@@ -1531,6 +1532,7 @@ function openGameRecordSheet(gameKey) {
       >
       <span class="sheet-sticky-title">${safeTitle} 기록</span>
       ${_recRating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(_recRating)}</span>` : ""}
+      <button class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
     </div>
 
     <!-- 뒤로가기 -->
