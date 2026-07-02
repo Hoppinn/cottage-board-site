@@ -386,7 +386,6 @@
         <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📊 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
-            <div id="analysisControlsAnchor"></div>
             <div class="admin-analysis-controls" id="analysisControls">
               <div class="admin-analysis-tabs" id="analysisTabs">
                 <button class="admin-analysis-tab is-active" data-tab="summary" type="button">요약</button>
@@ -593,7 +592,9 @@
           if (!btn || btn.disabled) return;
           const tab = btn.dataset.tab;
           analysisTabs.querySelectorAll('.admin-analysis-tab').forEach(b => b.classList.toggle('is-active', b === btn));
+          let activePanel = null;
           el.querySelectorAll('.admin-tab-panel').forEach(p => {
+            if (p.dataset.panel === tab) activePanel = p;
             p.classList.toggle('is-active', p.dataset.panel === tab);
           });
           // 요약/방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
@@ -603,11 +604,13 @@
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            const anchor = document.getElementById('analysisControlsAnchor');
-            if (!anchor) return;
-            const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            const targetY = window.scrollY + anchor.getBoundingClientRect().top - headerH;
-            window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+            if (!activePanel) return;
+            const controls = document.getElementById('analysisControls');
+            const firstBlock = activePanel.querySelector('.admin-summary-grid, .admin-chart-card, .admin-analysis-subtabs');
+            if (!controls || !firstBlock) return;
+            const gap = 10;
+            const delta = firstBlock.getBoundingClientRect().top - controls.getBoundingClientRect().bottom - gap;
+            if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: 'auto' });
           }));
         });
       }
@@ -1267,6 +1270,40 @@
           return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;
         }
         const PAGE_LABEL = window.COTTAGE_PAGE_LABELS || {};
+        const PAGE_KEY_ALIASES = {
+          '/': 'index',
+          '/index.html': 'index',
+          index: 'index',
+          '메인': 'index',
+          '게임 목록': 'owned-games',
+          '보유 게임': 'owned-games',
+          '플레이 기록': 'game-reviews',
+          '기록 보기': 'game-reviews',
+          '게임 위치': 'game-location',
+          '코티지가 만들어진 이유': 'about',
+          '가격·이용안내': 'price-rules',
+          '홈페이지 기능': 'guide',
+          '동호회 소개': 'club',
+          '회원 자기소개': 'club-intro',
+          '모임 플래너': 'club-schedule',
+          '모임 일정': 'club-schedule',
+          '모임 기록': 'club-history',
+          '동호회 규칙': 'club-rules',
+          '요청하기': 'requests',
+          '관리자': 'requests-admin',
+        };
+        function normalizePageKey(page) {
+          if (!page) return page;
+          let key = String(page);
+          try {
+            if (key.startsWith('http')) key = new URL(key).pathname;
+          } catch (_) {}
+          key = key.replace(/^https?:\/\/[^/]+/, '');
+          if (key.startsWith('/pages/')) key = key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
+          if (key.startsWith('/')) key = key === '/' ? '/' : key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
+          key = key.replace(/\.html$/, '');
+          return PAGE_KEY_ALIASES[key] || key;
+        }
         function _punycodeLabel(s) {
           if (!s.startsWith('xn--')) return s;
           s = s.slice(4);
@@ -1538,19 +1575,21 @@
         const seen2 = new Set();
         for (const r of filtered) {
           if (!r.page) continue;
-          const key = (r.user_id || (r.session_key ? `anon:${r.session_key}` : 'anon')) + '|' + r.page + '|' + kstDate(r.entered_at);
+          const pageKey = normalizePageKey(r.page);
+          const key = (r.user_id || (r.session_key ? `anon:${r.session_key}` : 'anon')) + '|' + pageKey + '|' + kstDate(r.entered_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
-          pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
+          pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
         }
         // 내 보드 가상 페이지 — page_views에서 추가 (page_sessions 미기록)
         const VIRTUAL_PAGE_PREFIX = 'my-board';
         for (const r of filteredPV) {
-          if (!r.page?.startsWith(VIRTUAL_PAGE_PREFIX)) continue;
-          const key = (r.user_id || 'pv') + '|' + r.page + '|' + kstDate(r.created_at);
+          const pageKey = normalizePageKey(r.page);
+          if (!pageKey?.startsWith(VIRTUAL_PAGE_PREFIX)) continue;
+          const key = (r.user_id || 'pv') + '|' + pageKey + '|' + kstDate(r.created_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
-          pageUniq[r.page] = (pageUniq[r.page] || 0) + 1;
+          pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
         }
         const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
         const chartPagesSub = document.getElementById('chartPagesSub');

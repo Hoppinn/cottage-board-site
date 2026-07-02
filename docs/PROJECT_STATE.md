@@ -421,6 +421,8 @@
 
 ### P2 — 기능 (선택)
 
+- [ ] **게임 검색 영어 제목 인식** — 검색창에서 영어로 입력 시 `bggTitle`로도 매칭. 게임정보 시트 영어제목 독립 표시 작업 이후 자연스러운 연계.
+
 - [x] **게임 위치 페이지** (game-location.html) — 책장 위치 기능 구현 완료 (이전 세션)
 - [x] **게임위치 협력게임 난이도 분류** — bgg.weight >= 2.5 → 어려운 협력(C-1), 미만 → 쉬운 협력(B-1), 41종 자동 분류 (118차). script.js 바텀시트도 동일 로직 적용 (134차)
 - [x] **페이지별방문 내 보드 + 서브시트 카운팅** — trackPageView('my-board*') + admin 가상페이지 집계 (118차)
@@ -498,6 +500,7 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 | 2026-07-02 | fix/design: 관리자 분석 날짜 이동 라벨 조정 및 탭 스크롤 위치 보정. 7일 단위 라벨은 `6-1`이 월/주 의미를 바로 알기 어려워 `6월 1주` 형식으로 변경. 상위 탭(`방문/유입/페이지/이벤트/회원`) 클릭 시 패널 내부가 조금 내려간 상태로 보이던 문제는 패널 시작점이 아니라 고정 탭·날짜 컨트롤 시작점으로 스크롤 기준을 바꿔 보정. (143차-200) |
 | 2026-07-02 | design: 관리자 분석 날짜 컨트롤 폭 보정. 7일 단위 `6월 1주`가 `6월 ...`처럼 말줄임 처리되지 않도록 날짜줄의 gap, 기간 버튼 padding/font-size, 화살표 padding/font-size를 소폭 줄이고 날짜 라벨 최소폭을 넓힘. (143차-201) |
 | 2026-07-02 | fix: 관리자 분석 탭 클릭 스크롤 보정 재수정. sticky 상태의 `analysisControls` 자체를 기준으로 삼으면 이미 화면 상단에 붙어 있을 때 현재 스크롤 위치가 유지될 수 있어, sticky 요소 바로 앞에 `analysisControlsAnchor`를 두고 탭 클릭 시 그 고정되지 않는 기준점으로 이동하도록 변경. (143차-202) |
+| 2026-07-02 | fix: 관리자 분석 탭 진입 위치 및 페이지별 방문 중복 개선. 탭 클릭 스크롤은 좌표 anchor 방식 대신, 탭 전환 후 첫 카드(`admin-summary-grid`/`admin-chart-card`)가 sticky 탭+날짜줄 바로 아래에 오도록 화면 기준으로 보정. 페이지별 방문은 `page_sessions`의 한글 라벨(`메인`)과 slug(`index`)가 화면에서 모두 `메인`으로 보이던 중복 원인을 확인하고, 관리자 집계 단계에서 `메인`/`index`/경로형 값을 canonical page key로 정규화해 합산. DB 데이터는 수정하지 않음. (143차-203) |
 | 2026-07-02 | docs/refactor: 리팩토링 및 점검 작업 계획(`PLAN_refactor_audit_workflow.md`) 작성. 기존 `REFACTOR_CHECKPOINT.md`를 재검증 입력으로 삼고, 문서-코드 싱크 → 안전한 Green 정리 → Yellow 버그 후보 검증 → Red 별도 Plan 순서로 진행하기로 정리. 1차 점검에서 `initTagInput` 시그니처, `CottageAchievements.getCharacterPath`, `cottage_is_admin` 문서 누락 후보는 이미 해결됨을 확인하고, `club-intro.html`/`requests.html` 계열 localStorage 키 누락을 `ls-schema.md`에 보강. (143차-192) |
 | 2026-07-01 | fix: 교환권 알림 카드 혼합 상태 제거 — 미수령(`_hasFirstPlayVoucher=false`)일 때 `is-seen` 클래스 적용 금지. 이전에 "확인했어요" 클릭(voucherSeen=true)해도 카드는 중립(클래스 없음) 상태로 표시, "게임 기록하기" 링크 항상 노출. `is-seen`은 실제 수령 완료 케이스에서만 사용해 미수령/수령완료 두 상태만 보이도록 보장. `grantFirstPlayVoucher`에서 관리자 예외 제거(일반 사용자와 동일 처리). (143차-188) |
 | 2026-07-01 | fix/design: about.html 구분선이 여전히 푸른색처럼 보이는 원인을 `<hr>` 기본 테두리로 보고 `.about-divider`의 border를 제거하고 실제 표시 선을 더 명확한 베이지/브라운(`#c8ad83`)으로 조정. 플레이 기록 입력 탭 보상 안내는 기존 교환권 내역의 `first_play` 지급 기록이 있는 사용자에게 숨기고, 미수령 사용자에게만 느낌표가 붙은 안내 문구를 문구 크기 박스로 중앙 표시하도록 변경. (143차-186) |
