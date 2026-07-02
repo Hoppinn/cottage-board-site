@@ -379,62 +379,23 @@
         <div class="admin-group is-open" id="groupAnalysis">
           <div class="admin-group-title">📊 분석<span class="admin-group-arrow">▾</span></div>
           <div class="admin-group-body">
-            <div class="admin-summary-grid">
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">오늘 방문자</div>
-                <div class="admin-summary-value" id="sumToday">—</div>
-              </div>
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">7일 평균</div>
-                <div class="admin-summary-value" id="sumAvg">—</div>
-                <div class="admin-summary-sub" id="sumAvgSub"></div>
-              </div>
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">지난주 대비</div>
-                <div class="admin-summary-value" id="sumDelta">—</div>
-                <div class="admin-summary-sub" id="sumDeltaSub"></div>
-              </div>
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">주요 유입 (7일)</div>
-                <div class="admin-summary-value" id="sumTopRef" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
-              </div>
-            </div>
-
-            <div class="admin-summary-grid" style="margin-top:8px">
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">전체 방문자<span style="font-weight:400;opacity:.7"> (봇 제외)</span></div>
-                <div class="admin-summary-value" id="sumVisitorTotal">—</div>
-              </div>
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">회원 방문자</div>
-                <div class="admin-summary-value" id="sumVisitorMember">—</div>
-              </div>
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">비회원 방문자</div>
-                <div class="admin-summary-value" id="sumVisitorGuest">—</div>
-              </div>
-              <div class="admin-summary-card">
-                <div class="admin-summary-label">봇 방문자</div>
-                <div class="admin-summary-value" id="sumVisitorBot">—</div>
-              </div>
-            </div>
-
             <div class="admin-analysis-controls" id="analysisControls">
               <div class="admin-analysis-tabs" id="analysisTabs">
-                <button class="admin-analysis-tab is-active" data-tab="visit" type="button">방문</button>
-                <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
+                <button class="admin-analysis-tab is-active" data-tab="summary" type="button">요약</button>
+                <button class="admin-analysis-tab" data-tab="visit" type="button">방문</button>
                 <button class="admin-analysis-tab" data-tab="referrer" type="button">유입</button>
                 <button class="admin-analysis-tab" data-tab="page" type="button">페이지</button>
                 <button class="admin-analysis-tab" data-tab="event" type="button">이벤트</button>
+                <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
               </div>
 
-              <div class="admin-chart-filter" id="chartPeriodBtns">
+              <div class="admin-chart-filter" id="chartPeriodBtns" style="display:none">
                 <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
                 <button class="admin-chart-period-btn" data-days="7">7일</button>
                 <button class="admin-chart-period-btn" data-days="30">30일</button>
                 <button class="admin-chart-period-btn" data-days="0">전체</button>
               </div>
-              <div class="admin-date-nav is-visible" id="chartDateNav">
+              <div class="admin-date-nav is-visible" id="chartDateNav" style="display:none">
                 <button class="admin-date-nav-arrow" id="chartNavPrev">◀</button>
                 <button class="admin-date-nav-label" id="chartDateLabel">오늘</button>
                 <input class="admin-date-nav-input" id="chartDateInput" type="date" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0;">
@@ -442,7 +403,49 @@
               </div>
             </div>
 
-            <div class="admin-tab-panel is-active" id="tabPanelVisit" data-panel="visit">
+            <div class="admin-tab-panel is-active" id="tabPanelSummary" data-panel="summary">
+              <div class="admin-summary-grid">
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">오늘 방문자</div>
+                  <div class="admin-summary-value" id="sumToday">—</div>
+                </div>
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">7일 평균</div>
+                  <div class="admin-summary-value" id="sumAvg">—</div>
+                  <div class="admin-summary-sub" id="sumAvgSub"></div>
+                </div>
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">지난주 대비</div>
+                  <div class="admin-summary-value" id="sumDelta">—</div>
+                  <div class="admin-summary-sub" id="sumDeltaSub"></div>
+                </div>
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">주요 유입 (7일)</div>
+                  <div class="admin-summary-value" id="sumTopRef" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
+                </div>
+              </div>
+
+              <div class="admin-summary-grid" style="margin-top:8px">
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">전체 방문자<span style="font-weight:400;opacity:.7"> (봇 제외)</span></div>
+                  <div class="admin-summary-value" id="sumVisitorTotal">—</div>
+                </div>
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">회원 방문자</div>
+                  <div class="admin-summary-value" id="sumVisitorMember">—</div>
+                </div>
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">비회원 방문자</div>
+                  <div class="admin-summary-value" id="sumVisitorGuest">—</div>
+                </div>
+                <div class="admin-summary-card">
+                  <div class="admin-summary-label">봇 방문자</div>
+                  <div class="admin-summary-value" id="sumVisitorBot">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-tab-panel" id="tabPanelVisit" data-panel="visit">
               <div class="admin-chart-card admin-chart-wide">
                 <div class="admin-chart-title">날짜별 방문자 수</div>
                 <canvas id="chartDaily"></canvas>
@@ -460,14 +463,6 @@
               <div class="admin-chart-card" id="visitSubPanelRatio" data-subpanel="ratio" style="display:none">
                 <div class="admin-chart-title">방문자 구성 <span class="admin-chart-sub" id="chartRatioSub"></span></div>
                 <canvas id="chartMemberRatio"></canvas>
-              </div>
-            </div>
-
-            <div class="admin-tab-panel" id="tabPanelMember" data-panel="member">
-              <div id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
-              <div class="admin-chart-card admin-chart-wide" style="margin-top:10px">
-                <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
-                <canvas id="chartMemberTime"></canvas>
               </div>
             </div>
 
@@ -504,6 +499,14 @@
                 <button class="admin-analysis-subtab" data-event="codex" type="button" disabled title="준비 중">도감</button>
               </div>
               <div id="eventFunnelBody"><div class="admin-empty">불러오는 중...</div></div>
+            </div>
+
+            <div class="admin-tab-panel" id="tabPanelMember" data-panel="member">
+              <div id="membersBody"><div class="admin-empty">불러오는 중...</div></div>
+              <div class="admin-chart-card admin-chart-wide" style="margin-top:10px">
+                <div class="admin-chart-title">회원별 이용시간 <span class="admin-chart-sub" id="chartMemberTimeSub"></span></div>
+                <canvas id="chartMemberTime"></canvas>
+              </div>
             </div>
           </div>
         </div>
