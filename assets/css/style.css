@@ -1664,7 +1664,7 @@ body.recommend-page main{
   position:absolute;
   left:10px;
   right:10px;
-  top:52px;
+  top:36px;
   bottom:12px;
   overflow:hidden;             /* 라운딩 클리핑만. 스크롤은 .game-sheet-scroll */
   border-radius:18px;          /* 네 귀퉁이 모두 */
