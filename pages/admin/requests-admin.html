@@ -125,7 +125,7 @@
     @media (max-width: 600px) { .admin-chart-grid { grid-template-columns: 1fr; } }
     /* 요약 카드 */
     .admin-summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
-    .admin-summary-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 16px; }
+    .admin-summary-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e8e4dc); border-radius: 12px; padding: 14px 16px; min-width: 0; }
     .admin-summary-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: 0.3px; margin-bottom: 5px; }
     .admin-summary-value { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1.1; }
     .admin-summary-sub { font-size: 10px; color: var(--muted); margin-top: 5px; }
@@ -1162,11 +1162,11 @@
       const _sumPageCount = document.getElementById('sumPageCount');
       if (_sumPageCount) {
         const _pm = buildPageMap(dedupUserPageDay(rows));
-        const _topPages = Object.entries(_pm).sort((a, b) => b[1] - a[1]).slice(0, 4);
+        const _topPages = _pm.slice(0, 4);
         _sumPageCount.innerHTML = _topPages.length
-          ? _topPages.map(([p, c]) => {
+          ? _topPages.map(([p, data]) => {
               const name = p.replace(/^\//, '').replace(/\/(index\.html)?$/, '') || '홈';
-              return `<span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)} <span style="font-weight:700">${c}회</span></span>`;
+              return `<span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)} <span style="font-weight:700">${data.visits}회</span></span>`;
             }).join('')
           : '—';
       }
