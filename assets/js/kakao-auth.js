@@ -513,6 +513,7 @@ async function openProfilePanel(autoSubsheet = null) {
   _trackPvOnce('my-board');
   panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); });
   panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); } });
+  panel.querySelector('.profile-panel-header').addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
@@ -1196,6 +1197,7 @@ async function openProfilePanel(autoSubsheet = null) {
     sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
     sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); _restoreMenuExpanded(); });
     sub.addEventListener('click', e => { if (e.target === sub) sub.remove(); });
+    sub.querySelector('.profile-subsheet-header').addEventListener('click', e => { if (!e.target.closest('button')) sub.querySelector('.profile-subsheet-body')?.scrollTo({top:0,behavior:'smooth'}); });
     if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));
   }
 

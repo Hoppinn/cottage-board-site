@@ -1271,7 +1271,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
 
   gameSheetContent.innerHTML = `
     <!-- 고정 헤더 (진입 시부터 표시) -->
-    <div class="sheet-sticky-bar" id="sheetStickyBar">
+    <div class="sheet-sticky-bar" id="sheetStickyBar" onclick="if(!event.target.closest('button')){const p=gameSheet?.querySelector('.game-sheet-scroll');if(p)p.scrollTo({top:0,behavior:'smooth'});}">
       <img class="sheet-sticky-thumb"
         src="${detail.image || DEFAULT_GAME_IMAGE}"
         alt="${detail.title}"
@@ -1524,7 +1524,7 @@ function openGameRecordSheet(gameKey) {
 
   gameSheetContent.innerHTML = `
     <!-- 고정 헤더 -->
-    <div class="sheet-sticky-bar">
+    <div class="sheet-sticky-bar" onclick="if(!event.target.closest('button')){const p=gameSheet?.querySelector('.game-sheet-scroll');if(p)p.scrollTo({top:0,behavior:'smooth'});}">
       <img class="sheet-sticky-thumb"
         src="${_recImg}"
         alt="${safeTitle}"

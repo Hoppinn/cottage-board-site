@@ -32,7 +32,7 @@
   <a class="header-logo" href="${homeHref}"${logoId}>
     <img src="${root}assets/images/main/logo.png" alt="코티지보드 로고">
   </a>
-  <a class="header-center" href="${homeHref}"${centerId}>오래 머무르고 싶은, 보드게임 공간</a>
+  <a class="header-center" href="${homeHref}"${centerId} onclick="event.preventDefault();window.scrollTo({top:0,behavior:'smooth'});">오래 머무르고 싶은, 보드게임 공간</a>
   <div class="header-actions">
     <button class="header-search" id="headerSearchButton" type="button" aria-label="게임 검색 열기"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></button>
     <button class="menu-toggle" id="menuToggle" type="button" aria-label="메뉴 열기">☰</button>
