@@ -1175,6 +1175,9 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   onClosePhotoModal();
   _closeAllMoreMenus();
 
+  const _closeBtn = gameSheet?.querySelector('.game-sheet-close');
+  if (_closeBtn) _closeBtn.style.display = '';
+
   const detail =
     GameView.getGameDetailData(game);
 
@@ -1517,12 +1520,27 @@ function openGameRecordSheet(gameKey) {
   const game = window.gameData?.[gameKey];
   const rawTitle = game?.title?.display || game?.title?.owned || game?.title?.bgg || gameKey;
   const safeTitle = String(rawTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const _recDetail = game ? GameView?.getGameDetailData(game) : null;
+  const _recImg = _recDetail?.image || DEFAULT_GAME_IMAGE;
+  const _recRating = _recDetail?.rating;
+
+  const _closeBtn = gameSheet?.querySelector('.game-sheet-close');
+  if (_closeBtn) _closeBtn.style.display = 'none';
 
   gameSheetContent.innerHTML = `
-    <div class="sheet-record-header">
-      <button class="sheet-back-btn" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>
-      <h3 class="sheet-record-title">${safeTitle} 기록</h3>
+    <!-- 고정 헤더 -->
+    <div class="sheet-sticky-bar">
+      <img class="sheet-sticky-thumb"
+        src="${_recImg}"
+        alt="${safeTitle}"
+        onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
+      >
+      <span class="sheet-sticky-title">${safeTitle} 기록</span>
+      ${_recRating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(_recRating)}</span>` : ""}
     </div>
+
+    <!-- 뒤로가기 -->
+    <button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>
     <div class="sheet-feedback-reactions">
       <div class="sheet-reaction-group">
         <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
