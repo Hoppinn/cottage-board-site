@@ -175,27 +175,29 @@
       position: relative;
     }
     /* sched-bar-group 제거됨 — sched-bar-row에 margin-bottom 직접 적용 */
-    /* 주간 카드 bar item — 닉네임(좌 52px) · 막대(우 1fr) grid */
+    /* 주간 카드 bar item — 닉네임(좌 40px) · 막대(우 1fr) grid */
     .sched-bar-item {
       display: grid;
-      grid-template-columns: 52px 1fr;
-      gap: 8px;
+      grid-template-columns: 40px 1fr;
+      gap: 6px;
       margin-bottom: 8px;
     }
+    /* 주간 카드 축: 40px 컬럼 + 6px gap = 46px */
+    .sched-card-bars .sched-bar-axis { padding-left: 46px; }
     .sched-bar-left {
       display: flex; flex-direction: column;
       align-items: flex-end; justify-content: space-between;
       padding: 3px 0;
     }
     .sched-bar-actions {
-      display: flex; gap: 2px;
+      display: flex; gap: 0;
     }
     .sched-bar-edit-btn,
     .sched-bar-del-btn {
-      width: 22px; height: 22px;
+      width: 18px; height: 18px;
       display: flex; align-items: center; justify-content: center;
-      background: none; border: none; border-radius: 50%;
-      font-size: 13px; cursor: pointer;
+      background: none; border: none; border-radius: 4px;
+      font-size: 11px; cursor: pointer;
       color: #b8b0a4; padding: 0;
       transition: background .15s, color .15s;
     }
@@ -204,9 +206,9 @@
     .sched-bar-del-btn:hover,
     .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
     .sched-bar-name {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text);
-      width: 52px;
+      width: 52px; /* viewDay sched-bar-row 기준. weekView는 컬럼이 제어 */
       flex-shrink: 0;
       text-align: right;
       overflow: hidden;
@@ -898,6 +900,7 @@
 
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
+  <script src="../../assets/data/game-short-names.js"></script>
   <script src="../../assets/js/game-display-adapter.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="../../assets/js/supabase-config.js"></script>
@@ -2063,15 +2066,31 @@
       const LIMIT = 3;
       const range = MAX_H - MIN_H;
 
-      // 게임명: 3글자 이하 전체, 4글자 이상 앞 2글자. · 구분, 초과 시 +N
+      // 게임명: alias 우선, 없으면 3글자 이하 전체 / 4글자+ 앞 2글자. · 구분
       function gameNames(voteDate, userId) {
         const games = allVoteGames.filter(g =>
           g.vote_date === voteDate && String(g.user_id) === String(userId)
         );
         if (!games.length) return '';
         const MAX_SHOW = 3;
+        const ALIASES = window.GAME_SHORT_NAMES || {};
         const trunc = name => name.length <= 3 ? name : name.slice(0, 2);
-        const all = games.map(g => esc(trunc(g.custom_name || `#${g.game_id}`)));
+
+        function shortName(g) {
+          if (g.game_id) {
+            const id = String(g.game_id);
+            if (ALIASES[id]) return ALIASES[id];
+            const obj = (window.COTTAGE_GAMES || []).find(c => c.bggId === id);
+            return trunc(obj?.display || `#${id}`);
+          }
+          if (g.custom_name) {
+            if (ALIASES[g.custom_name]) return ALIASES[g.custom_name];
+            return trunc(g.custom_name);
+          }
+          return '?';
+        }
+
+        const all = games.map(g => esc(shortName(g)));
         if (all.length <= MAX_SHOW) return all.join('·');
         return all.slice(0, MAX_SHOW).join('·') + `+${all.length - MAX_SHOW}`;
       }
