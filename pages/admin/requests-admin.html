@@ -901,9 +901,15 @@
         const seen = new Set();
         const out = [];
         for (const r of rowset) {
-          if (!r.user_id) { out.push(r); continue; }
           const day = (r.entered_at || '').slice(0, 10);
-          const key = r.user_id + '\x00' + r.page + '\x00' + day;
+          let key;
+          if (r.user_id) {
+            key = 'u:' + r.user_id + '\x00' + r.page + '\x00' + day;
+          } else if (r.session_key) {
+            key = 's:' + r.session_key + '\x00' + r.page + '\x00' + day;
+          } else {
+            out.push(r); continue;
+          }
           if (!seen.has(key)) { seen.add(key); out.push(r); }
         }
         return out;
@@ -959,15 +965,6 @@
         return [...m.entries()].sort((a, b) => b[1].lastAt.localeCompare(a[1].lastAt));
       }
 
-      function renderPageTable(sorted) {
-        if (!sorted.length) return '<div class="admin-empty">데이터 없음</div>';
-        let h = `<table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>총체류</th><th>평균체류</th><th>로그인</th></tr></thead><tbody>`;
-        for (const [page, d] of sorted) {
-          const avg = d.visits ? Math.round(d.totalSec / d.visits) : 0;
-          h += `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td><td>${fmtTime(avg)}</td><td>${d.users.size}명</td></tr>`;
-        }
-        return h + '</tbody></table>';
-      }
 
       // 이용상세 > 전체: 로그인 회원 + 비회원 통합 표시
       function renderUserDetailAll(sortedUsers, anonMap = []) {
@@ -1132,17 +1129,6 @@
       }).join('');
       const userAllDetail = renderUserDetailAll(buildUserMap(dedupUserPageDay(rows)), buildAnonUserMap(rows));
 
-      // ── 페이지별 (날짜별) ────────────────────────────────────
-      const pageDayParts = DAY_LABELS.map((label, i) => {
-        const dr = dedupUserPageDay(rowsForDay(i));
-        return subSection(
-          `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
-          renderPageTable(buildPageMap(dr)),
-          false
-        );
-      }).join('');
-      const pageAllDetail = renderPageTable(buildPageMap(dedupUserPageDay(rows)));
-
       // ── DOM 반영 ─────────────────────────────────────────────
       const membersBody = document.getElementById('membersBody');
       const pagesBody = document.getElementById('pagesBody');
@@ -1151,10 +1137,7 @@
         membersBody.innerHTML = summaryCardsHtml + unifiedHtml;
       }
 
-      if (pagesBody) {
-        pagesBody.innerHTML =
-          subSection('전체', pageAllDetail, false) + pageDayParts;
-      }
+      if (pagesBody) pagesBody.innerHTML = '';
 
       const _sumPageCount = document.getElementById('sumPageCount');
       if (_sumPageCount) {
@@ -1554,12 +1537,13 @@
 
         // ── 2. 유입 경로 — 수평 막대 (__visitor__ 기준 명/회) ──
         const filteredVisitor = filterByRange(visitorRows, start, end, 'created_at');
-        const refMap = {}, refUserMap = {};
+        const refMap = {}, refUserMap = {}, refSecMap = {};
         filteredVisitor.forEach((r, idx) => {
           const cat = categorizeRef(r.referrer) || '직접 방문';
           refMap[cat] = (refMap[cat] || 0) + 1;
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
           refUserMap[cat].add(visitorKey(r, idx, cat));
+          refSecMap[cat] = (refSecMap[cat] || 0) + (r.duration_sec || 0);
         });
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
         const chartRefSub = document.getElementById('chartRefSub');
@@ -1572,7 +1556,13 @@
           if (refCanvas) refCanvas.style.display = '';
           if (refWrap) refWrap.style.height = Math.max(60, refEntries.length * 36 + 16) + 'px';
           makeOrUpdate('chartReferrer', 'bar', {
-            labels: refEntries.map(([k, v]) => `${k}  ${v}회 (${refUserMap[k]?.size ?? '?'}명)`),
+            labels: refEntries.map(([k, v]) => {
+              const totS = refSecMap[k] || 0;
+              const uCnt = refUserMap[k]?.size ?? '?';
+              const avgS = typeof uCnt === 'number' && uCnt > 0 ? Math.round(totS / uCnt) : 0;
+              const t = totS > 0 ? `  총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
+              return `${k}  ${v}회 (${uCnt}명)${t}`;
+            }),
             datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE.slice(0, refEntries.length), borderRadius: 4, barThickness: 22 }],
           }, {
             indexAxis: 'y',
@@ -1594,10 +1584,12 @@
 
         // ── 3. 페이지별 방문 — (유저+페이지+날짜) 유니크 기준 ─────────
         const pageUniq = {};
+        const pageTotSec = {};
         const seen2 = new Set();
         for (const r of filtered) {
           if (!r.page) continue;
           const pageKey = normalizePageKey(r.page);
+          pageTotSec[pageKey] = (pageTotSec[pageKey] || 0) + (r.duration_sec || 0);
           const key = (r.user_id || (r.session_key ? `anon:${r.session_key}` : 'anon')) + '|' + pageKey + '|' + kstDate(r.entered_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
@@ -1617,7 +1609,12 @@
         const chartPagesSub = document.getElementById('chartPagesSub');
         if (chartPagesSub) chartPagesSub.textContent = label;
         makeOrUpdate('chartPages', 'bar', {
-          labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
+          labels: topPages.map(([p, v]) => {
+            const totS = pageTotSec[p] || 0;
+            const avgS = v > 0 ? Math.round(totS / v) : 0;
+            const t = totS > 0 ? ` 총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
+            return (PAGE_LABEL[p] || p) + t;
+          }),
           datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
         }, {
           indexAxis: 'y',
@@ -1714,11 +1711,6 @@
         const todayKst = kstDateStr();
         if (!start) {
           memberSecMap = new Map(allProfiles.map(p => [p.user_id, p.total_minutes || 0]));
-        } else if (type === 'day' && start === calcRange('day', todayKst).start) {
-          memberSecMap = new Map(allProfiles.map(p => [
-            p.user_id,
-            p.today_date === todayKst ? (p.today_seconds || 0) : 0,
-          ]));
         } else {
           memberSecMap = new Map();
           for (const r of filtered) {
