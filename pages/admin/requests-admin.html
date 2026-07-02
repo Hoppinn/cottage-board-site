@@ -483,8 +483,8 @@
                 </div>
                 <p id="chartRefEmpty" style="display:none;text-align:center;color:#aaa;font-size:12px;padding:16px 0">외부 유입 없음<br><small>당근·네이버 등 외부 링크 방문부터 기록됩니다</small></p>
               </div>
-              <div class="admin-sub-section" id="referrerDetailSection">
-                <div class="admin-sub-section-title" onclick="document.getElementById('referrerDetailSection').classList.toggle('is-open')">상세 (유입 → 페이지 이동)<span class="admin-sub-section-arrow">▾</span></div>
+              <div class="admin-sub-section is-open" id="referrerDetailSection">
+                <div class="admin-sub-section-title" onclick="document.getElementById('referrerDetailSection').classList.toggle('is-open')">유입별 이동 페이지<span class="admin-sub-section-arrow">▾</span></div>
                 <div class="admin-sub-section-body">
                   <div class="admin-chart-title">유입경로 × 페이지 <span class="admin-chart-sub" id="chartCrossSub"></span></div>
                   <div id="chartCrossRef"></div>
@@ -1226,6 +1226,28 @@
         return value;
       }
 
+      function compactPeriodLabelFor(type, value) {
+        if (type === 'day') {
+          const [y, m, d] = value.split('-').map(Number);
+          if (!y || !m || !d) return value;
+          const dow = ['일', '월', '화', '수', '목', '금', '토'][new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+          return `${m}/${d}(${dow})`;
+        }
+        if (type === 'week') {
+          const { start } = calcRange('week', value);
+          if (!start) return value;
+          const mon = new Date(new Date(start).getTime() + 9 * 3600000);
+          const month = mon.getUTCMonth() + 1;
+          const weekOfMonth = Math.floor((mon.getUTCDate() - 1) / 7) + 1;
+          return `${month}-${weekOfMonth}`;
+        }
+        if (type === 'month') {
+          const [, m] = value.split('-').map(Number);
+          return m ? `${m}월` : value;
+        }
+        return periodLabelFor(type, value);
+      }
+
       function makeOrUpdate(id, type, data, options) {
         const canvas = document.getElementById(id);
         if (!canvas) return;
@@ -1683,7 +1705,7 @@
 
       function _updateNavLabel() {
         const lbl = document.getElementById('chartDateLabel');
-        if (lbl) lbl.textContent = _navType === 'all' ? '' : periodLabelFor(_navType, _navValue);
+        if (lbl) lbl.textContent = _navType === 'all' ? '' : compactPeriodLabelFor(_navType, _navValue);
       }
 
       function _drawForNav() {
