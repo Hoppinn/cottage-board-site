@@ -1162,7 +1162,7 @@
         const _topPages = _pm.slice(0, 4);
         _sumPageCount.innerHTML = _topPages.length
           ? _topPages.map(([p, data]) =>
-              `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span style="opacity:.7">(${data.visits}회)</span></span>`
+              `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span>(${data.visits}회)</span></span>`
             ).join('')
           : '—';
       }
@@ -1418,7 +1418,7 @@
           });
           const topRefEntries = Object.entries(refSessions).sort((a, b) => b[1] - a[1]);
           const topRefHtml = topRefEntries.length
-            ? topRefEntries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span style="opacity:.7">(${cnt}회)</span></span>`).join('')
+            ? topRefEntries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span>(${cnt}회)</span></span>`).join('')
             : '—';
 
           let lToday, vToday, lAvg, vAvg, vAvgSub, lDelta, vDeltaHtml, vDeltaSub, lTopRef;
@@ -1941,7 +1941,7 @@
             ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
           </div>`;
         const _sumEventCount = document.getElementById('sumEventCount');
-        if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span style="opacity:.7">(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span style="opacity:.7">(${rd7}건)</span></span>`;
+        if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span>(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span>(${rd7}건)</span></span>`;
       } catch(e) {
         el.innerHTML = '<div class="admin-empty">이벤트 데이터 없음</div>';
       }
