@@ -1212,6 +1212,7 @@
           <button class="sched-discard-btn" id="ssDiscard" type="button">닫기</button>
         </div>
       </div>`;
+      overlay.style.display = 'none';
       document.body.appendChild(overlay);
 
       const ssRS = document.getElementById('ssRS');
@@ -1460,7 +1461,7 @@
       const monday = new Date(TODAY);
       monday.setDate(TODAY.getDate() + daysToMon + offset * 7);
 
-      const _relLabel = offset === 0 ? '이번 주' : offset === -1 ? '저번 주' : offset === 1 ? '다음 주' : null;
+      const _relLabel = offset === 0 ? '이번 주' : offset === -1 ? '지난 주' : offset === 1 ? '다음 주' : null;
       document.getElementById('weekTitle').textContent = getWeekTitle(monday) + (_relLabel ? ` (${_relLabel})` : '');
 
       const user = window.getKakaoUser?.();
