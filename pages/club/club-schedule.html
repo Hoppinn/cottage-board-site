@@ -464,11 +464,60 @@
       text-align: center;
     }
     .sched-card-reg-btn:hover { border-color: var(--green); color: var(--green); }
-    .sched-card-actions {
+    /* 헤더 우상단 수정/⋯ */
+    .sched-card-header-actions {
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: 4px;
     }
-    .sched-card-slider { }
+    .sched-card-edit-hdr {
+      padding: 2px 8px;
+      background: none;
+      border: 1px solid #c8bfb0;
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .sched-card-edit-hdr:hover { border-color: var(--green); color: var(--green); }
+    .sched-card-menu-wrap { position: relative; }
+    .sched-card-menu-btn {
+      padding: 2px 6px;
+      background: none;
+      border: 1px solid #c8bfb0;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .sched-card-menu-btn:hover { border-color: #999; color: var(--text); }
+    .sched-card-menu-dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 4px);
+      background: #fff;
+      border: 1px solid #e0d8cc;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.10);
+      min-width: 100px;
+      z-index: 10;
+      overflow: hidden;
+    }
+    .sched-card-menu-dropdown.is-open { display: block; }
+    .sched-card-del-dd {
+      display: block;
+      width: 100%;
+      padding: 10px 14px;
+      background: none;
+      border: none;
+      font-size: 13px;
+      color: #e05050;
+      cursor: pointer;
+      text-align: left;
+    }
+    .sched-card-del-dd:hover { background: #fff5f5; }
 
   </style>
 </head>
@@ -957,6 +1006,9 @@
       const dayVotes = allVotes.filter(v => v.vote_date === ds);
       const myVote   = dayVotes.find(v => String(v.user_id) === String(user.id));
 
+      // myVote 있고 슬라이더도 아닌 경우: 수정/⋯ 버튼은 헤더에 이미 있음 — 푸터 불필요
+      if (myVote && sliderDate !== ds) return;
+
       const footer = document.createElement('div');
       footer.className = 'sched-card-footer';
       cardEl.appendChild(footer);
@@ -1019,21 +1071,11 @@
         return;
       }
 
-      if (myVote) {
-        footer.innerHTML = `<div class="sched-card-actions">
-          <button class="sched-action-btn sched-action-btn--edit" type="button">시간 변경</button>
-          <button class="sched-action-btn sched-action-btn--del" type="button">참여 취소</button>
-        </div>`;
-        footer.querySelector('.sched-action-btn--edit').addEventListener('click', () => {
-          sliderDate = ds; renderWeekView(weekOffset);
-        });
-        footer.querySelector('.sched-action-btn--del').addEventListener('click', () => removeVoteForDate(ds));
-      } else {
-        footer.innerHTML = `<button class="sched-card-reg-btn" type="button">내 시간 등록하기</button>`;
-        footer.querySelector('.sched-card-reg-btn').addEventListener('click', () => {
-          sliderDate = ds; renderWeekView(weekOffset);
-        });
-      }
+      // !myVote: 등록 버튼 (myVote 있으면 헤더 버튼만 사용, 여기까지 못 옴)
+      footer.innerHTML = `<button class="sched-card-reg-btn" type="button">내 시간 등록하기</button>`;
+      footer.querySelector('.sched-card-reg-btn').addEventListener('click', () => {
+        sliderDate = ds; renderWeekView(weekOffset);
+      });
     }
 
     async function saveVoteForDate(ds, start, end, btnSave) {
@@ -1146,11 +1188,22 @@
         const todCls  = tod  ? ' is-today' : '';
         const todayBadge = tod ? '<span class="sdc-today-label">오늘</span>' : '';
 
+        const headerBtns = (user && myVote && !past) ? `<div class="sched-card-header-actions">
+          <button class="sched-card-edit-hdr" type="button">수정</button>
+          <div class="sched-card-menu-wrap">
+            <button class="sched-card-menu-btn" type="button">⋯</button>
+            <div class="sched-card-menu-dropdown">
+              <button class="sched-card-del-dd" type="button">참여 취소</button>
+            </div>
+          </div>
+        </div>` : '';
+
         html += `<div class="sched-wday-card${pastCls}${todCls}" data-date="${ds}">
           <div class="sched-wday-header" data-date="${ds}">
             <span class="sched-wday-dow${dowCls}">${DOW[dow]} ${date.getMonth()+1}/${date.getDate()}</span>
             ${todayBadge}
             ${cnt > 0 ? `<span class="sched-wday-count">👥 ${cnt}명</span>` : ''}
+            ${headerBtns}
           </div>
           ${buildBarsInCard(dayVotes, myVote)}
         </div>`;
@@ -1178,7 +1231,43 @@
         });
       });
 
-      // 카드 푸터: 등록/변경/취소/슬라이더 (Phase 3)
+      // 수정 버튼 (헤더 우상단) — stopPropagation으로 openDay 방지
+      el.querySelectorAll('.sched-card-edit-hdr').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          sliderDate = btn.closest('.sched-wday-card').dataset.date;
+          renderWeekView(weekOffset);
+        });
+      });
+
+      // ⋯ 메뉴 토글
+      el.querySelectorAll('.sched-card-menu-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const dd = btn.nextElementSibling;
+          const wasOpen = dd.classList.contains('is-open');
+          el.querySelectorAll('.sched-card-menu-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
+          if (!wasOpen) {
+            dd.classList.add('is-open');
+            setTimeout(() => {
+              document.addEventListener('click', function closeDD() {
+                dd.classList.remove('is-open');
+                document.removeEventListener('click', closeDD);
+              });
+            }, 0);
+          }
+        });
+      });
+
+      // 드롭다운: 참여 취소
+      el.querySelectorAll('.sched-card-del-dd').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          removeVoteForDate(btn.closest('.sched-wday-card').dataset.date);
+        });
+      });
+
+      // 카드 푸터: 슬라이더 + 미등록 버튼 (Phase 3)
       el.querySelectorAll('.sched-wday-card:not(.is-past)').forEach(cardEl => {
         attachCardFooter(cardEl, cardEl.dataset.date, user);
       });
