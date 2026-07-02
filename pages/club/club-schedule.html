@@ -515,6 +515,75 @@
       text-align: left;
     }
     .sched-card-del-dd:hover { background: #fff5f5; }
+    /* 월간 달력 */
+    .mcal-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0 10px;
+    }
+    .mcal-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .mcal-nav-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0 6px;
+      line-height: 1;
+    }
+    .mcal-nav-btn:hover { color: var(--text); }
+    .mcal-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding-bottom: 4px;
+    }
+    .mcal-header .is-sat { color: #5080e0; }
+    .mcal-header .is-sun { color: #e05050; }
+    .mcal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .mcal-cell {
+      min-height: 42px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 2px 2px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .mcal-empty { cursor: default; }
+    .mcal-cell.is-past { opacity: .4; cursor: default; pointer-events: none; }
+    .mcal-cell:not(.is-past):not(.mcal-empty):hover { background: #f0ebe0; }
+    .mcal-cell.is-mine { background: #f5f0e8; }
+    .mcal-day {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .mcal-cell.is-sat .mcal-day { color: #5080e0; }
+    .mcal-cell.is-sun .mcal-day { color: #e05050; }
+    .mcal-cell.is-today .mcal-day {
+      background: var(--green);
+      color: #fff;
+    }
+    .mcal-cnt {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--green);
+      margin-top: 2px;
+    }
     /* 시간 등록/수정 컴팩트 바텀시트 */
     .sched-sheet-overlay {
       position: fixed;
@@ -681,7 +750,8 @@
     let currentDate = null;
     let sliderMode = false;
     let sliderStart = 10, sliderEnd = 22;
-    let weekOffset = 0;
+    let weekOffset    = 0;
+    let calMonthDate  = new Date(TODAY.getFullYear(), TODAY.getMonth(), 1);
     let _sheetDs   = null;   // 바텀시트 대상 날짜 (null = 닫힘)
     let _syncSheet = null;   // initScheduleSheet에서 주입되는 슬라이더 sync 함수
 
@@ -1273,6 +1343,69 @@
       }
     }
 
+    // ── 월간 달력 (달력보기 토글) ────────────────────────────────────
+    function renderMonthCalendar() {
+      const cal = document.getElementById('viewCalendar');
+      const y   = calMonthDate.getFullYear();
+      const m   = calMonthDate.getMonth();
+      const MONTH_NAMES = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+
+      const firstDow  = new Date(y, m, 1).getDay();
+      const lastDate  = new Date(y, m + 1, 0).getDate();
+      const startOff  = firstDow === 0 ? 6 : firstDow - 1; // 0=월 기준
+
+      const cntByDate = {};
+      const myDates   = new Set();
+      const user      = window.getKakaoUser?.();
+      const todayStr  = toDateStr(TODAY);
+      for (const v of allVotes) {
+        if (!cntByDate[v.vote_date]) cntByDate[v.vote_date] = 0;
+        cntByDate[v.vote_date]++;
+        if (user && String(v.user_id) === String(user.id)) myDates.add(v.vote_date);
+      }
+
+      const totalCells = Math.ceil((startOff + lastDate) / 7) * 7;
+      let cells = '';
+      for (let i = 0; i < totalCells; i++) {
+        const day = i - startOff + 1;
+        if (day < 1 || day > lastDate) { cells += '<div class="mcal-cell mcal-empty"></div>'; continue; }
+        const ds     = `${y}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const cnt    = cntByDate[ds] || 0;
+        const past   = ds < todayStr;
+        const tod    = ds === todayStr;
+        const mine   = myDates.has(ds);
+        const dow    = (startOff + day - 1) % 7;  // 0=월..4=금,5=토,6=일
+        const clsList = ['mcal-cell',
+          past ? 'is-past' : '', tod ? 'is-today' : '',
+          mine ? 'is-mine' : '', dow === 5 ? 'is-sat' : '', dow === 6 ? 'is-sun' : ''
+        ].filter(Boolean).join(' ');
+
+        cells += `<div class="${clsList}" data-date="${ds}">
+          <span class="mcal-day">${day}</span>
+          ${cnt > 0 ? `<span class="mcal-cnt">${cnt}</span>` : ''}
+        </div>`;
+      }
+
+      cal.innerHTML = `
+        <div class="mcal-nav">
+          <button class="mcal-nav-btn" id="calPrev" type="button">‹</button>
+          <span class="mcal-title">${y}년 ${MONTH_NAMES[m]}</span>
+          <button class="mcal-nav-btn" id="calNext" type="button">›</button>
+        </div>
+        <div class="mcal-header"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="is-sat">토</span><span class="is-sun">일</span></div>
+        <div class="mcal-grid">${cells}</div>`;
+
+      document.getElementById('calPrev').addEventListener('click', () => {
+        calMonthDate = new Date(y, m - 1, 1); renderMonthCalendar();
+      });
+      document.getElementById('calNext').addEventListener('click', () => {
+        calMonthDate = new Date(y, m + 1, 1); renderMonthCalendar();
+      });
+      cal.querySelectorAll('.mcal-cell[data-date]:not(.is-past)').forEach(cell => {
+        cell.addEventListener('click', () => openDay(cell.dataset.date));
+      });
+    }
+
     // ── 주간 뷰 헬퍼 / 렌더러 (Phase 1+2) ────────────────────────
     function getWeekTitle(monday) {
       // 목요일 기준으로 해당 월·주차 결정 (월경계 주 처리)
@@ -1327,7 +1460,8 @@
       const monday = new Date(TODAY);
       monday.setDate(TODAY.getDate() + daysToMon + offset * 7);
 
-      document.getElementById('weekTitle').textContent = getWeekTitle(monday);
+      const _relLabel = offset === 0 ? '이번 주' : offset === -1 ? '저번 주' : offset === 1 ? '다음 주' : null;
+      document.getElementById('weekTitle').textContent = getWeekTitle(monday) + (_relLabel ? ` (${_relLabel})` : '');
 
       const user = window.getKakaoUser?.();
       const el   = document.getElementById('weekDayList');
@@ -1550,7 +1684,7 @@
       cal.style.display = isOpen ? 'none' : '';
       btn.textContent = isOpen ? '달력 보기 ▾' : '달력 닫기 ▴';
       btn.classList.toggle('is-open', !isOpen);
-      if (!isOpen) renderCalendar();
+      if (!isOpen) renderMonthCalendar();
     });
 
     window.addEventListener('cottage-auth-changed', () => {
