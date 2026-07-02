@@ -172,7 +172,36 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 7px;
+      position: relative;
     }
+    /* 내 행이 있을 때: 모든 바+축을 동일 너비로 맞추고 오른쪽 60px에 버튼 공간 확보 */
+    .sched-card-bars.has-mine .sched-bar-axis { padding-right: 60px; }
+    .sched-card-bars.has-mine .sched-bar-track { margin-right: 60px; }
+    .sched-bar-actions {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 2px;
+    }
+    .sched-bar-edit-btn,
+    .sched-bar-del-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0;
+    }
+    .sched-bar-edit-btn:hover { background: #f0ebe0; color: var(--green); }
+    .sched-bar-del-btn:hover { background: #fff5f5; color: #e05050; }
     .sched-bar-name {
       font-size: 12px;
       color: var(--text);
@@ -457,16 +486,6 @@
       align-items: center;
       gap: 4px;
     }
-    .sched-card-edit-hdr {
-      padding: 2px 8px;
-      background: none;
-      border: 1px solid #c8bfb0;
-      border-radius: 6px;
-      font-size: 11px;
-      color: var(--muted);
-      cursor: pointer;
-    }
-    .sched-card-edit-hdr:hover { border-color: var(--green); color: var(--green); }
     .sched-card-reg-hdr {
       padding: 2px 8px;
       background: none;
@@ -477,44 +496,6 @@
       cursor: pointer;
     }
     .sched-card-reg-hdr:hover { border-color: var(--green); color: var(--green); }
-    .sched-card-menu-wrap { position: relative; }
-    .sched-card-menu-btn {
-      padding: 2px 6px;
-      background: none;
-      border: 1px solid #c8bfb0;
-      border-radius: 6px;
-      font-size: 13px;
-      color: var(--muted);
-      cursor: pointer;
-      line-height: 1.2;
-    }
-    .sched-card-menu-btn:hover { border-color: #999; color: var(--text); }
-    .sched-card-menu-dropdown {
-      display: none;
-      position: absolute;
-      right: 0;
-      top: calc(100% + 4px);
-      background: #fff;
-      border: 1px solid #e0d8cc;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.10);
-      min-width: 100px;
-      z-index: 10;
-      overflow: hidden;
-    }
-    .sched-card-menu-dropdown.is-open { display: block; }
-    .sched-card-del-dd {
-      display: block;
-      width: 100%;
-      padding: 10px 14px;
-      background: none;
-      border: none;
-      font-size: 13px;
-      color: #e05050;
-      cursor: pointer;
-      text-align: left;
-    }
-    .sched-card-del-dd:hover { background: #fff5f5; }
     /* 월간 달력 */
     .mcal-nav {
       display: flex;
@@ -1449,11 +1430,18 @@
       if (!dayVotes.length) return '';
       const LIMIT = 3;
       const range = MAX_H - MIN_H;
+      const hasMine = !!myVote;
 
       function barRow(v) {
         const left  = ((v.time_start - MIN_H) / range * 100).toFixed(1);
         const width = ((v.time_end - v.time_start) / range * 100).toFixed(1);
         const mine  = myVote && String(v.user_id) === String(myVote.user_id);
+        const actions = mine
+          ? `<div class="sched-bar-actions">
+              <button class="sched-bar-edit-btn" type="button" title="수정">✏</button>
+              <button class="sched-bar-del-btn" type="button" title="참여 취소">✕</button>
+            </div>`
+          : '';
         return `<div class="sched-bar-row">
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
           <div class="sched-bar-track">
@@ -1461,6 +1449,7 @@
               <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
             </div>
           </div>
+          ${actions}
         </div>`;
       }
 
@@ -1471,7 +1460,7 @@
            <button class="sched-card-more-btn" type="button">+${hidden.length}명 더보기</button>`
         : '';
 
-      return `<div class="sched-card-bars">
+      return `<div class="sched-card-bars${hasMine ? ' has-mine' : ''}">
         <div class="sched-bar-axis">
           <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
         </div>
@@ -1512,22 +1501,10 @@
         const todayBadge = tod ? '<span class="sdc-today-label">오늘</span>' : '';
 
         let headerBtns = '';
-        if (user && !past) {
-          if (myVote) {
-            headerBtns = `<div class="sched-card-header-actions">
-              <button class="sched-card-edit-hdr" type="button">수정</button>
-              <div class="sched-card-menu-wrap">
-                <button class="sched-card-menu-btn" type="button">⋯</button>
-                <div class="sched-card-menu-dropdown">
-                  <button class="sched-card-del-dd" type="button">참여 취소</button>
-                </div>
-              </div>
-            </div>`;
-          } else {
-            headerBtns = `<div class="sched-card-header-actions">
-              <button class="sched-card-reg-hdr" type="button">+ 등록</button>
-            </div>`;
-          }
+        if (user && !past && !myVote) {
+          headerBtns = `<div class="sched-card-header-actions">
+            <button class="sched-card-reg-hdr" type="button">+ 등록</button>
+          </div>`;
         }
 
         html += `<div class="sched-wday-card${pastCls}${todCls}" data-date="${ds}">
@@ -1573,8 +1550,8 @@
         });
       });
 
-      // 수정 버튼 (헤더 우상단, 등록됨) → 바텀시트 열기 (기존 시간 초기값)
-      el.querySelectorAll('.sched-card-edit-hdr').forEach(btn => {
+      // ✏ 수정 (내 막대 행) → 바텀시트 열기
+      el.querySelectorAll('.sched-bar-edit-btn').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
           const ds = btn.closest('.sched-wday-card').dataset.date;
@@ -1583,27 +1560,8 @@
         });
       });
 
-      // ⋯ 메뉴 토글
-      el.querySelectorAll('.sched-card-menu-btn').forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.stopPropagation();
-          const dd = btn.nextElementSibling;
-          const wasOpen = dd.classList.contains('is-open');
-          el.querySelectorAll('.sched-card-menu-dropdown.is-open').forEach(d => d.classList.remove('is-open'));
-          if (!wasOpen) {
-            dd.classList.add('is-open');
-            setTimeout(() => {
-              document.addEventListener('click', function closeDD() {
-                dd.classList.remove('is-open');
-                document.removeEventListener('click', closeDD);
-              });
-            }, 0);
-          }
-        });
-      });
-
-      // 드롭다운: 참여 취소
-      el.querySelectorAll('.sched-card-del-dd').forEach(btn => {
+      // ✕ 참여 취소 (내 막대 행)
+      el.querySelectorAll('.sched-bar-del-btn').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
           removeVoteForDate(btn.closest('.sched-wday-card').dataset.date);
