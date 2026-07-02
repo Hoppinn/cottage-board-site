@@ -519,10 +519,11 @@
     .sched-sheet-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.25);
+      background: rgba(0,0,0,.15);
       z-index: 200;
       display: flex;
       align-items: flex-end;
+      pointer-events: none;   /* dim만 표시, 배경 스크롤 통과 */
     }
     .sched-sheet {
       width: 100%;
@@ -530,6 +531,7 @@
       border-radius: 18px 18px 0 0;
       padding: 16px 16px 28px;
       box-shadow: 0 -4px 20px rgba(0,0,0,.12);
+      pointer-events: auto;   /* 시트 본체만 인터랙션 */
     }
     .sched-sheet-header {
       display: flex;
@@ -1121,7 +1123,7 @@
       });
       document.getElementById('ssDiscard').addEventListener('click', closeScheduleSheet);
       document.getElementById('ssClose').addEventListener('click', closeScheduleSheet);
-      overlay.addEventListener('click', e => { if (e.target === overlay) closeScheduleSheet(); });
+      // 바깥 클릭 닫기는 openScheduleSheet에서 document 레벨로 등록
     }
 
     function openScheduleSheet(ds, myVote) {
@@ -1149,12 +1151,27 @@
       document.getElementById('ssLblE').textContent = initE + '시';
 
       document.getElementById('schedSheetOverlay').style.display = '';
-      document.body.style.overflow = 'hidden';
+
+      // 마지막 카드가 시트에 가려지지 않도록 여백 추가
+      const listEl = document.getElementById('weekDayList');
+      if (listEl) listEl.style.paddingBottom = '260px';
+
+      // 바깥 클릭 → 닫기 (열기 클릭이 즉시 발동하지 않도록 setTimeout)
+      setTimeout(() => {
+        document.addEventListener('click', _closeSheetOnOutsideClick);
+      }, 0);
+    }
+
+    function _closeSheetOnOutsideClick(e) {
+      const sheet = document.querySelector('.sched-sheet');
+      if (sheet && !sheet.contains(e.target)) closeScheduleSheet();
     }
 
     function closeScheduleSheet() {
       document.getElementById('schedSheetOverlay').style.display = 'none';
-      document.body.style.overflow = '';
+      const listEl = document.getElementById('weekDayList');
+      if (listEl) listEl.style.paddingBottom = '';
+      document.removeEventListener('click', _closeSheetOnOutsideClick);
       _sheetDs = null;
     }
 
