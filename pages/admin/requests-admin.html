@@ -606,8 +606,8 @@
           el.querySelectorAll('.admin-tab-panel').forEach(p => {
             p.classList.toggle('is-active', p.dataset.panel === tab);
           });
-          // 요약/방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
-          const usesDateFilter = tab === 'summary' || tab === 'visit' || tab === 'referrer' || tab === 'page';
+          // 요약/방문/유입/페이지/회원 탭만 날짜 필터 사용 — 이벤트는 숨김
+          const usesDateFilter = tab === 'summary' || tab === 'visit' || tab === 'referrer' || tab === 'page' || tab === 'member';
           const periodBtns = document.getElementById('chartPeriodBtns');
           const dateNav = document.getElementById('chartDateNav');
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
@@ -1163,6 +1163,12 @@
       const GRID = '#f0ebe3';
       const PALETTE = [C1, C2, '#b5886e', C3, CMUTED, '#7a5c48', '#d4a878', '#e8d5bb'];
       const _chartInstances = {};
+      const fmtTime = s => {
+        if (!s) return '-';
+        const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+        if (h > 0) return m > 0 ? `${h}시간 ${m}분` : `${h}시간`;
+        return m > 0 ? (sec > 0 ? `${m}분 ${sec}초` : `${m}분`) : `${sec}초`;
+      };
 
       // ── 헬퍼 ──────────────────────────────────────────────────────────
       function kstDate(isoStr) {
