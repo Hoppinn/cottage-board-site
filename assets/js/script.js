@@ -1523,6 +1523,7 @@ function openGameRecordSheet(gameKey) {
   const _recRating = _recDetail?.rating;
 
   gameSheetContent.innerHTML = `
+    <div class="sheet-top-spacer"></div>
     <!-- 고정 헤더 -->
     <div class="sheet-sticky-bar" onclick="if(!event.target.closest('button')){const p=gameSheet?.querySelector('.game-sheet-scroll');if(p)p.scrollTo({top:0,behavior:'smooth'});}">
       <img class="sheet-sticky-thumb"
