@@ -313,7 +313,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
       charToggleBtn.textContent = '접기 ▴';
       setTimeout(() => {
         const sec = subBody.querySelector('.profile-char-section');
-        if (sec) subBody.scrollTop = sec.offsetTop;
+        if (sec) subBody.scrollTop = sec.getBoundingClientRect().top - subBody.getBoundingClientRect().top + subBody.scrollTop;
       }, 50);
     }
     charToggleBtn.addEventListener('click', () => {
@@ -373,7 +373,7 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
       titleToggleBtn.textContent = '접기 ▴';
       setTimeout(() => {
         const sec = subBody.querySelector('.profile-title-section');
-        if (sec) subBody.scrollTop = sec.offsetTop;
+        if (sec) subBody.scrollTop = sec.getBoundingClientRect().top - subBody.getBoundingClientRect().top + subBody.scrollTop;
       }, 50);
     }
     titleToggleBtn.addEventListener('click', () => {
@@ -2003,6 +2003,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
   body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)); });
+  body.querySelector('.profile-panel-rep-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)); });
   body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
   body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)); });
   body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody)); });
