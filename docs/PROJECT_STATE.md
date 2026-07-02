@@ -29,8 +29,8 @@
 - 모임플래너 = 입력, 모임보드 = 보기(읽기전용), DateScheduleModal = 날짜 상세
 
 **남은 작업 (이 CHECKPOINT 안에서)**:
-- [ ] **② DateScheduleModal 확장** — 현재 `openDayDetailModal(opts)` 시그니처를 `openDateScheduleModal(userId, voteDate)`로 변경. 👥 같은날 N명 / ⏱ 겹침 N명 / 🎲 게임겹침 N명 통계 3종 추가. 막대 클릭 + 모임보드 [자세히] 양쪽에서 호출
-- [ ] **③ 모임보드 리디자인** — 미니 시간막대 + 4섹션(이번주일정/모임프로필/취향요약/활동요약) + [자세히]→DateScheduleModal + 본인 보드에만 [모임플래너에서 수정하기] CTA
+- [x] **② DateScheduleModal 확장** — `openDateScheduleModal(userId, voteDate)` async 함수 추가. 👥같은날 N명 / ⏱시간겹침 N명 / 🎲게임겹침 N명 통계 칩. 로딩 상태 먼저 표시. 기존 `openDayDetailModal` 레거시 유지. 막대 클릭 → 새 함수로 교체 (커밋: 143차-195)
+- [x] **③ 모임보드 리디자인** — 이번주일정 섹션: 미니 시간막대(9~23시 범위) + [자세히]→openDateScheduleModal. 본인 보드에만 "모임 플래너에서 수정하기" CTA. 타인 보드: renderDayDetailHTML 블록 제거, 미니막대로 교체. _buildMiniBarWeekHtml/_thisWeekRange 모듈 헬퍼 추가 (커밋: 143차-196)
 
 ---
 
