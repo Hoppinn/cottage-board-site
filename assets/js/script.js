@@ -1270,9 +1270,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   const _prevHistTitle = _prevHistGame ? (_prevHistGame.title?.display || _prevHistGame.title?.owned || _prevHistKey) : null;
 
   gameSheetContent.innerHTML = `
-    ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? String(_prevHistTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
-
-    <!-- sticky bar (스크롤 시 표시) -->
+    <!-- 고정 헤더 (진입 시부터 표시) -->
     <div class="sheet-sticky-bar" id="sheetStickyBar">
       <img class="sheet-sticky-thumb"
         src="${detail.image || DEFAULT_GAME_IMAGE}"
@@ -1283,12 +1281,12 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
       ${detail.rating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(detail.rating)}</span>` : ""}
     </div>
 
-    <!-- 제목 행 -->
-    <div class="sheet-title-row">
-      <h3 class="sheet-game-title">${detail.title}</h3>
-      ${detail.bggTitle && detail.bggTitle !== detail.title
-        ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
-    </div>
+    <!-- 뒤로가기 (게임→게임 이동 시) -->
+    ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? String(_prevHistTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
+
+    <!-- 영어 제목 -->
+    ${detail.bggTitle && detail.bggTitle !== detail.title
+      ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
 
     <!-- 이미지 + 설명 -->
     <div class="sheet-header">
@@ -1888,7 +1886,7 @@ function initStickyBar() {
   const bar   = document.getElementById('sheetStickyBar');
   if (!panel || !bar) return;
   function onScroll() {
-    bar.classList.toggle('is-visible', panel.scrollTop > 80);
+    bar.classList.toggle('is-visible', panel.scrollTop > 60);
   }
   panel.addEventListener('scroll', onScroll);
   panel._stickyCleanup = () => panel.removeEventListener('scroll', onScroll);
