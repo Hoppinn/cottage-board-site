@@ -90,6 +90,9 @@
 | `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회 (`openOtherMeetingSheet`용). getUserTasteProfile과 동일 패턴 |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |
 | `addMeetingGamePref(userId, listType, gameId, customName)` / `removeMeetingGamePref(...)` | meeting_game_prefs 추가/삭제. listType: `'want_this_time'` \| `'can_explain_rules'`. addGamePref/removeGamePref와 동일 구조 |
+| `getMeetingVoteGames(startDate, endDate)` | 모임 플래너 날짜별 게임 선호 조회. → `[{vote_date, user_id, list_type, game_id, custom_name}]`. getMeetingVotes와 동일 패턴 |
+| `addMeetingVoteGame(userId, voteDate, listType, gameId, customName)` | meeting_vote_games 추가. listType: `'want'`\|`'learn'`. 중복(23505) 성공 처리. addMeetingGamePref와 동일 구조 + voteDate |
+| `removeMeetingVoteGame(userId, voteDate, listType, gameId, customName)` | meeting_vote_games 삭제. removeMeetingGamePref와 동일 구조 + voteDate |
 
 ---
 

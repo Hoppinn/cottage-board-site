@@ -1543,6 +1543,9 @@ window._cottageSess = (function () {
     upsertMeetingIntro,
     addMeetingGamePref,
     removeMeetingGamePref,
+    getMeetingVoteGames,
+    addMeetingVoteGame,
+    removeMeetingVoteGame,
   };
 
   async function updateNotifSeenAt(userId, timestamp) {
@@ -1879,6 +1882,45 @@ window._cottageSess = (function () {
         .delete()
         .eq('vote_date', voteDate)
         .eq('user_id', String(userId));
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  // ── 모임 플래너 날짜별 게임 선호 (meeting_vote_games) ─────────────
+  async function getMeetingVoteGames(startDate, endDate) {
+    try {
+      const { data } = await db.from('meeting_vote_games')
+        .select('vote_date, user_id, list_type, game_id, custom_name')
+        .gte('vote_date', startDate)
+        .lte('vote_date', endDate)
+        .order('vote_date');
+      return data || [];
+    } catch (_) { return []; }
+  }
+
+  async function addMeetingVoteGame(userId, voteDate, listType, gameId, customName) {
+    if (!userId || !voteDate || (!gameId && !customName)) return { error: 'invalid' };
+    try {
+      const row = { user_id: String(userId), vote_date: voteDate, list_type: listType };
+      if (gameId) row.game_id = gameId;
+      if (customName) row.custom_name = customName;
+      const { error } = await db.from('meeting_vote_games').insert(row);
+      // 중복(23505)은 이미 등록된 것으로 간주해 성공 처리
+      if (error && error.code === '23505') return { success: true };
+      return error ? { error } : { success: true };
+    } catch (e) { return { error: e }; }
+  }
+
+  async function removeMeetingVoteGame(userId, voteDate, listType, gameId, customName) {
+    if (!userId || !voteDate) return { error: 'invalid' };
+    try {
+      let q = db.from('meeting_vote_games').delete()
+        .eq('user_id', String(userId))
+        .eq('vote_date', voteDate)
+        .eq('list_type', listType);
+      if (gameId) q = q.eq('game_id', gameId);
+      else if (customName) q = q.eq('custom_name', customName).is('game_id', null);
+      const { error } = await q;
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
   }
