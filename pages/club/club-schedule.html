@@ -584,6 +584,13 @@
       color: var(--green);
       margin-top: 2px;
     }
+    .mcal-mine-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #c0843a;
+      margin-top: 2px;
+    }
     /* 시간 등록/수정 컴팩트 바텀시트 */
     .sched-sheet-overlay {
       position: fixed;
@@ -1401,7 +1408,8 @@
 
         cells += `<div class="${clsList}" data-date="${ds}">
           <span class="mcal-day">${day}</span>
-          ${cnt > 0 ? `<span class="mcal-cnt">${cnt}</span>` : ''}
+          ${cnt > 0 ? `<span class="mcal-cnt">${cnt}명</span>` : ''}
+          ${mine ? `<span class="mcal-mine-dot"></span>` : ''}
         </div>`;
       }
 
@@ -1669,7 +1677,7 @@
       initScheduleSheet();
       const todayStr = toDateStr(TODAY);
       const end = new Date(TODAY);
-      end.setDate(end.getDate() + 32);
+      end.setDate(end.getDate() + 62); // 달력 다음달 이동까지 커버
       const endStr = toDateStr(end);
 
       // 지난주와 동일 기능을 위해 7일 전부터 fetch
