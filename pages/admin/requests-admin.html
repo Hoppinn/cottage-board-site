@@ -592,9 +592,7 @@
           if (!btn || btn.disabled) return;
           const tab = btn.dataset.tab;
           analysisTabs.querySelectorAll('.admin-analysis-tab').forEach(b => b.classList.toggle('is-active', b === btn));
-          let activePanel = null;
           el.querySelectorAll('.admin-tab-panel').forEach(p => {
-            if (p.dataset.panel === tab) activePanel = p;
             p.classList.toggle('is-active', p.dataset.panel === tab);
           });
           // 요약/방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
@@ -603,14 +601,15 @@
           const dateNav = document.getElementById('chartDateNav');
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
-          requestAnimationFrame(() => {
-            if (!activePanel) return;
+          requestAnimationFrame(() => requestAnimationFrame(() => {
             const controls = document.getElementById('analysisControls');
+            if (!controls) return;
             const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            const controlsH = controls?.offsetHeight || 0;
-            const targetY = window.scrollY + activePanel.getBoundingClientRect().top - headerH - controlsH - 8;
+            let controlsTop = 0;
+            for (let node = controls; node; node = node.offsetParent) controlsTop += node.offsetTop;
+            const targetY = controlsTop - headerH;
             window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
-          });
+          }));
         });
       }
 
@@ -1239,7 +1238,7 @@
           const mon = new Date(new Date(start).getTime() + 9 * 3600000);
           const month = mon.getUTCMonth() + 1;
           const weekOfMonth = Math.floor((mon.getUTCDate() - 1) / 7) + 1;
-          return `${month}-${weekOfMonth}`;
+          return `${month}월 ${weekOfMonth}주`;
         }
         if (type === 'month') {
           const [, m] = value.split('-').map(Number);
