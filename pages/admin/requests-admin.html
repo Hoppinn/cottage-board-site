@@ -419,13 +419,8 @@
               <div class="admin-summary-grid">
                 <!-- 방문자 (7일 평균·전주대비 통합) -->
                 <div class="admin-summary-card admin-visitor-summary-card">
-                  <div class="admin-visitor-summary-main">
-                    <div>
-                      <div class="admin-summary-label">방문자</div>
-                      <div class="admin-summary-value" id="sumVisitorTotal">—</div>
-                    </div>
-                    <div class="admin-summary-sub">봇 제외</div>
-                  </div>
+                  <div class="admin-summary-label">방문자</div>
+                  <div class="admin-summary-value" id="sumVisitorTotal">—</div>
                   <div class="admin-visitor-breakdown">
                     <div class="admin-visitor-breakdown-item">
                       <span class="admin-visitor-breakdown-label">회원</span>
@@ -441,7 +436,7 @@
                     </div>
                     <div class="admin-visitor-breakdown-item">
                       <span class="admin-visitor-breakdown-label">평균</span>
-                      <span class="admin-visitor-breakdown-value" id="sumAvg">—</span>명
+                      <span class="admin-visitor-breakdown-value" id="sumAvg">—</span><span class="admin-visitor-breakdown-value">명</span>
                     </div>
                     <div class="admin-visitor-breakdown-item" id="sumDelta">—</div>
                   </div>
@@ -1166,7 +1161,7 @@
         _sumPageCount.innerHTML = _topPages.length
           ? _topPages.map(([p, data]) => {
               const name = p.replace(/^\//, '').replace(/\/(index\.html)?$/, '') || '홈';
-              return `<span style="display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escH(name)} <span style="font-weight:700">${data.visits}회</span></span>`;
+              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(name)} <span style="opacity:.7">(${data.visits}회)</span></span>`;
             }).join('')
           : '—';
       }
@@ -1945,7 +1940,7 @@
             ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
           </div>`;
         const _sumEventCount = document.getElementById('sumEventCount');
-        if (_sumEventCount) _sumEventCount.innerHTML = `<span style="display:block">추천완료 ${rc7}건</span><span style="display:block">기록완료 ${rd7}건</span>`;
+        if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span style="opacity:.7">(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span style="opacity:.7">(${rd7}건)</span></span>`;
       } catch(e) {
         el.innerHTML = '<div class="admin-empty">이벤트 데이터 없음</div>';
       }
