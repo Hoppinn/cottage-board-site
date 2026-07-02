@@ -841,7 +841,9 @@
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const ADMIN_UID = '4916417947';
-      const rows = (rawRows || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
+      const _pageLabels = window.COTTAGE_PAGE_LABELS || {};
+      const rows = (rawRows || []).filter(r => String(r.user_id || '') !== ADMIN_UID)
+        .map(r => ({ ...r, page: _pageLabels[r.page] || r.page }));
       const allProfiles = (rawProfiles || []).filter(p => String(p.user_id || '') !== ADMIN_UID);
       const pageViews = (pvResult?.data || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
       const anonSessions = anonResult?.data || [];
@@ -1157,15 +1159,10 @@
       const _sumPageCount = document.getElementById('sumPageCount');
       if (_sumPageCount) {
         const _pm = buildPageMap(dedupUserPageDay(rows));
-        const _labelMap = {};
-        for (const [p, data] of _pm) {
-          const name = (window.COTTAGE_PAGE_LABELS && window.COTTAGE_PAGE_LABELS[p]) || p || '홈';
-          _labelMap[name] = (_labelMap[name] || 0) + data.visits;
-        }
-        const _topPages = Object.entries(_labelMap).sort((a, b) => b[1] - a[1]).slice(0, 4);
+        const _topPages = _pm.slice(0, 4);
         _sumPageCount.innerHTML = _topPages.length
-          ? _topPages.map(([name, visits]) =>
-              `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(name)} <span style="opacity:.7">(${visits}회)</span></span>`
+          ? _topPages.map(([p, data]) =>
+              `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span style="opacity:.7">(${data.visits}회)</span></span>`
             ).join('')
           : '—';
       }
