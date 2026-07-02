@@ -91,8 +91,8 @@
   <script src="../../assets/js/play-records-utils.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
   <!-- 페이지 오버레이 시트 -->
-  <div id="guideIframeOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);align-items:flex-end;">
-    <div style="width:100%;height:92dvh;background:#fff;border-radius:18px 18px 0 0;display:flex;flex-direction:column;overflow:hidden;">
+  <div id="guideIframeOverlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.5);align-items:flex-end;justify-content:center;overflow:hidden;">
+    <div style="width:calc(100% - 20px);height:calc(100vh - 102px);height:calc(100dvh - 102px);background:#fff;border-radius:28px 28px 18px 18px;margin:0 10px 12px;display:flex;flex-direction:column;overflow:hidden;">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid #e8e4dc;flex-shrink:0;">
         <span id="guideIframeTitle" style="font-size:15px;font-weight:700;color:#2c2c2c;"></span>
         <button onclick="closeGuideOverlay()" style="background:none;border:none;font-size:22px;color:#888;cursor:pointer;padding:0 4px;line-height:1;">✕</button>
