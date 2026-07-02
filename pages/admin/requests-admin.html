@@ -132,6 +132,12 @@
     .admin-summary-delta.up { color: #2e7d32; }
     .admin-summary-delta.down { color: #9e3a2a; }
     .admin-summary-delta.flat { color: var(--muted); }
+    .admin-visitor-summary-card { margin-top: 8px; }
+    .admin-visitor-summary-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+    .admin-visitor-breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border,#e8e4dc); }
+    .admin-visitor-breakdown-item { min-width: 0; }
+    .admin-visitor-breakdown-label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
+    .admin-visitor-breakdown-value { display: block; font-size: 16px; font-weight: 900; color: var(--text); line-height: 1.1; }
     @media (max-width: 600px) { .admin-summary-grid { grid-template-columns: repeat(2, 1fr); } }
     /* 교차분석 */
     .admin-cross-list { display: flex; flex-direction: column; gap: 0; padding: 4px 0; }
@@ -389,13 +395,13 @@
                 <button class="admin-analysis-tab" data-tab="member" type="button">회원</button>
               </div>
 
-              <div class="admin-chart-filter" id="chartPeriodBtns" style="display:none">
+              <div class="admin-chart-filter" id="chartPeriodBtns">
                 <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
                 <button class="admin-chart-period-btn" data-days="7">7일</button>
                 <button class="admin-chart-period-btn" data-days="30">30일</button>
                 <button class="admin-chart-period-btn" data-days="0">전체</button>
               </div>
-              <div class="admin-date-nav is-visible" id="chartDateNav" style="display:none">
+              <div class="admin-date-nav is-visible" id="chartDateNav">
                 <button class="admin-date-nav-arrow" id="chartNavPrev">◀</button>
                 <button class="admin-date-nav-label" id="chartDateLabel">오늘</button>
                 <input class="admin-date-nav-input" id="chartDateInput" type="date" style="position:absolute;opacity:0;pointer-events:none;width:0;height:0;">
@@ -425,22 +431,27 @@
                 </div>
               </div>
 
-              <div class="admin-summary-grid" style="margin-top:8px">
-                <div class="admin-summary-card">
-                  <div class="admin-summary-label">전체 방문자<span style="font-weight:400;opacity:.7"> (봇 제외)</span></div>
-                  <div class="admin-summary-value" id="sumVisitorTotal">—</div>
+              <div class="admin-summary-card admin-visitor-summary-card">
+                <div class="admin-visitor-summary-main">
+                  <div>
+                    <div class="admin-summary-label">방문자</div>
+                    <div class="admin-summary-value" id="sumVisitorTotal">—</div>
+                  </div>
+                  <div class="admin-summary-sub">봇 제외</div>
                 </div>
-                <div class="admin-summary-card">
-                  <div class="admin-summary-label">회원 방문자</div>
-                  <div class="admin-summary-value" id="sumVisitorMember">—</div>
-                </div>
-                <div class="admin-summary-card">
-                  <div class="admin-summary-label">비회원 방문자</div>
-                  <div class="admin-summary-value" id="sumVisitorGuest">—</div>
-                </div>
-                <div class="admin-summary-card">
-                  <div class="admin-summary-label">봇 방문자</div>
-                  <div class="admin-summary-value" id="sumVisitorBot">—</div>
+                <div class="admin-visitor-breakdown">
+                  <div class="admin-visitor-breakdown-item">
+                    <span class="admin-visitor-breakdown-label">회원</span>
+                    <span class="admin-visitor-breakdown-value" id="sumVisitorMember">—</span>
+                  </div>
+                  <div class="admin-visitor-breakdown-item">
+                    <span class="admin-visitor-breakdown-label">비회원</span>
+                    <span class="admin-visitor-breakdown-value" id="sumVisitorGuest">—</span>
+                  </div>
+                  <div class="admin-visitor-breakdown-item">
+                    <span class="admin-visitor-breakdown-label">봇</span>
+                    <span class="admin-visitor-breakdown-value" id="sumVisitorBot">—</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -586,8 +597,8 @@
           el.querySelectorAll('.admin-tab-panel').forEach(p => {
             p.classList.toggle('is-active', p.dataset.panel === tab);
           });
-          // 방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
-          const usesDateFilter = tab === 'visit' || tab === 'referrer' || tab === 'page';
+          // 요약/방문/유입/페이지 탭만 날짜 필터 사용 — 회원/이벤트는 숨김
+          const usesDateFilter = tab === 'summary' || tab === 'visit' || tab === 'referrer' || tab === 'page';
           const periodBtns = document.getElementById('chartPeriodBtns');
           const dateNav = document.getElementById('chartDateNav');
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
