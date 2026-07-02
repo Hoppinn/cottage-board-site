@@ -1175,9 +1175,6 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   onClosePhotoModal();
   _closeAllMoreMenus();
 
-  const _closeBtn = gameSheet?.querySelector('.game-sheet-close');
-  if (_closeBtn) _closeBtn.style.display = '';
-
   const detail =
     GameView.getGameDetailData(game);
 
@@ -1523,9 +1520,6 @@ function openGameRecordSheet(gameKey) {
   const _recDetail = game ? GameView?.getGameDetailData(game) : null;
   const _recImg = _recDetail?.image || DEFAULT_GAME_IMAGE;
   const _recRating = _recDetail?.rating;
-
-  const _closeBtn = gameSheet?.querySelector('.game-sheet-close');
-  if (_closeBtn) _closeBtn.style.display = 'none';
 
   gameSheetContent.innerHTML = `
     <!-- 고정 헤더 -->
