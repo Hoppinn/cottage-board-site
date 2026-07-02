@@ -574,6 +574,41 @@
     }
     .sched-sheet-footer .sched-confirm-btn { flex: 1; }
     .sched-sheet-footer .sched-discard-btn { flex: 0 0 72px; }
+    .sched-sheet-prevweek-btn {
+      display: block;
+      width: 100%;
+      margin: 10px 0 0;
+      padding: 8px 0;
+      background: none;
+      border: 1px solid #d8d0c4;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+    }
+    .sched-sheet-prevweek-btn:hover { border-color: var(--green); color: var(--green); }
+    /* 토스트 */
+    .sched-toast {
+      position: fixed;
+      bottom: 260px;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: rgba(0,0,0,.72);
+      color: #fff;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      z-index: 210;
+      opacity: 0;
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .sched-toast.is-show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
   </style>
 </head>
@@ -647,7 +682,8 @@
     let sliderMode = false;
     let sliderStart = 10, sliderEnd = 22;
     let weekOffset = 0;
-    let _sheetDs = null;     // 바텀시트 대상 날짜 (null = 닫힘)
+    let _sheetDs   = null;   // 바텀시트 대상 날짜 (null = 닫힘)
+    let _syncSheet = null;   // initScheduleSheet에서 주입되는 슬라이더 sync 함수
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -1057,6 +1093,18 @@
 
     // ── 주간 카드 등록/변경/취소 (Phase 3) ──────────────────────────
 
+    function showToast(msg) {
+      const t = document.createElement('div');
+      t.className = 'sched-toast';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      requestAnimationFrame(() => t.classList.add('is-show'));
+      setTimeout(() => {
+        t.classList.remove('is-show');
+        setTimeout(() => t.remove(), 280);
+      }, 2200);
+    }
+
     // ── 시간 등록/수정 바텀시트 ──────────────────────────────────────
 
     function initScheduleSheet() {
@@ -1088,6 +1136,7 @@
             </div>
           </div>
         </div>
+        <button class="sched-sheet-prevweek-btn" id="ssPrevWeek" type="button">지난주와 동일</button>
         <div class="sched-sheet-footer">
           <button class="sched-confirm-btn" id="ssSave" type="button">등록</button>
           <button class="sched-discard-btn" id="ssDiscard" type="button">닫기</button>
@@ -1108,6 +1157,8 @@
         lblS.textContent = s + '시';
         lblE.textContent = e + '시';
       }
+      _syncSheet = syncSheet;  // 외부(지난주와 동일 버튼)에서 호출 가능하도록 노출
+
       ssRS.addEventListener('input', () => {
         if (parseInt(ssRS.value) >= parseInt(ssRE.value)) ssRS.value = parseInt(ssRE.value) - 1;
         syncSheet();
@@ -1123,6 +1174,21 @@
       });
       document.getElementById('ssDiscard').addEventListener('click', closeScheduleSheet);
       document.getElementById('ssClose').addEventListener('click', closeScheduleSheet);
+
+      // 지난주와 동일: 같은 요일 7일 전 내 투표 → 슬라이더 이동 (자동저장 없음)
+      document.getElementById('ssPrevWeek').addEventListener('click', () => {
+        if (!_sheetDs) return;
+        const user = window.getKakaoUser?.();
+        if (!user) { showToast('로그인이 필요합니다.'); return; }
+        const [y, m, d] = _sheetDs.split('-').map(Number);
+        const prevDs = toDateStr(new Date(y, m - 1, d - 7));
+        const prev   = allVotes.find(v => v.vote_date === prevDs && String(v.user_id) === String(user.id));
+        if (!prev) { showToast('지난주 기록이 없습니다.'); return; }
+        ssRS.value = prev.time_start;
+        ssRE.value = prev.time_end;
+        if (_syncSheet) _syncSheet();
+      });
+
       // 바깥 클릭 닫기는 openScheduleSheet에서 document 레벨로 등록
     }
 
@@ -1453,7 +1519,10 @@
       end.setDate(end.getDate() + 32);
       const endStr = toDateStr(end);
 
-      allVotes = await window.CottageDB?.getMeetingVotes(todayStr, endStr) || [];
+      // 지난주와 동일 기능을 위해 7일 전부터 fetch
+      const fetchStart = new Date(TODAY);
+      fetchStart.setDate(TODAY.getDate() - 7);
+      allVotes = await window.CottageDB?.getMeetingVotes(toDateStr(fetchStart), endStr) || [];
 
       // [DEV] 개발/검증용 더미 데이터 주입 — URL ?dev=3/5/8 에서만 실행
       const _devScenario = new URLSearchParams(location.search).get('dev');
