@@ -4220,7 +4220,7 @@ body.embed-mode {
 .profile-record-link:hover{background:#ece7df;}
 /* 서브시트 (profile-subsheet) — profile 전용, gameSheet 계열과 무관 */
 .profile-subsheet{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:var(--z-subsheet);display:flex;align-items:flex-end;justify-content:center;}
-.profile-subsheet-box{background:#fff;border-radius:18px;width:100%;max-width:480px;height:calc(100vh - var(--header-total-h) - 12px);height:calc(100dvh - var(--header-total-h) - 12px);max-height:calc(100vh - var(--header-total-h) - 12px);max-height:calc(100dvh - var(--header-total-h) - 12px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 12px;}
+.profile-subsheet-box{background:#fff;border-radius:24px 24px 18px 18px;width:100%;max-width:480px;height:calc(100vh - 48px);height:calc(100dvh - 48px);display:flex;flex-direction:column;overflow:hidden;margin:0 10px 16px;}
 .profile-subsheet-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border,#e8e4dc);flex-shrink:0;background:#fff;cursor:pointer;}
 .profile-subsheet-back{justify-self:start;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:none;border:none;font-size:13px;font-weight:600;color:var(--brown,#7a4828);cursor:pointer;padding:2px 8px 2px 0;}
 .profile-subsheet-title{grid-column:2;font-size:15px;font-weight:700;color:var(--text);text-align:center;white-space:nowrap;}
