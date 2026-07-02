@@ -132,7 +132,7 @@
     .admin-summary-delta.up { color: #2e7d32; }
     .admin-summary-delta.down { color: #9e3a2a; }
     .admin-summary-delta.flat { color: var(--muted); }
-    .admin-visitor-summary-card { margin-top: 8px; }
+    .admin-visitor-summary-card { margin-top: 0; }
     .admin-visitor-summary-main { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
     .admin-visitor-breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border,#e8e4dc); }
     .admin-visitor-breakdown-item { min-width: 0; }
@@ -411,47 +411,42 @@
 
             <div class="admin-tab-panel is-active" id="tabPanelSummary" data-panel="summary">
               <div class="admin-summary-grid">
-                <div class="admin-summary-card">
-                  <div class="admin-summary-label">오늘 방문자</div>
-                  <div class="admin-summary-value" id="sumToday">—</div>
+                <div class="admin-summary-card admin-visitor-summary-card">
+                  <div class="admin-visitor-summary-main">
+                    <div>
+                      <div class="admin-summary-label">방문자</div>
+                      <div class="admin-summary-value" id="sumVisitorTotal">—</div>
+                    </div>
+                    <div class="admin-summary-sub">봇 제외</div>
+                  </div>
+                  <div class="admin-visitor-breakdown">
+                    <div class="admin-visitor-breakdown-item">
+                      <span class="admin-visitor-breakdown-label">회원</span>
+                      <span class="admin-visitor-breakdown-value" id="sumVisitorMember">—</span>
+                    </div>
+                    <div class="admin-visitor-breakdown-item">
+                      <span class="admin-visitor-breakdown-label">비회원</span>
+                      <span class="admin-visitor-breakdown-value" id="sumVisitorGuest">—</span>
+                    </div>
+                    <div class="admin-visitor-breakdown-item">
+                      <span class="admin-visitor-breakdown-label">봇</span>
+                      <span class="admin-visitor-breakdown-value" id="sumVisitorBot">—</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="admin-summary-card">
+                <div class="admin-summary-card admin-period-summary-card">
                   <div class="admin-summary-label">7일 평균</div>
                   <div class="admin-summary-value" id="sumAvg">—</div>
                   <div class="admin-summary-sub" id="sumAvgSub"></div>
                 </div>
-                <div class="admin-summary-card">
+                <div class="admin-summary-card admin-period-summary-card">
                   <div class="admin-summary-label">지난주 대비</div>
                   <div class="admin-summary-value" id="sumDelta">—</div>
                   <div class="admin-summary-sub" id="sumDeltaSub"></div>
                 </div>
-                <div class="admin-summary-card">
+                <div class="admin-summary-card admin-period-summary-card">
                   <div class="admin-summary-label">주요 유입 (7일)</div>
                   <div class="admin-summary-value" id="sumTopRef" style="font-size:11px;margin-top:6px;font-weight:500;line-height:1.5">—</div>
-                </div>
-              </div>
-
-              <div class="admin-summary-card admin-visitor-summary-card">
-                <div class="admin-visitor-summary-main">
-                  <div>
-                    <div class="admin-summary-label">방문자</div>
-                    <div class="admin-summary-value" id="sumVisitorTotal">—</div>
-                  </div>
-                  <div class="admin-summary-sub">봇 제외</div>
-                </div>
-                <div class="admin-visitor-breakdown">
-                  <div class="admin-visitor-breakdown-item">
-                    <span class="admin-visitor-breakdown-label">회원</span>
-                    <span class="admin-visitor-breakdown-value" id="sumVisitorMember">—</span>
-                  </div>
-                  <div class="admin-visitor-breakdown-item">
-                    <span class="admin-visitor-breakdown-label">비회원</span>
-                    <span class="admin-visitor-breakdown-value" id="sumVisitorGuest">—</span>
-                  </div>
-                  <div class="admin-visitor-breakdown-item">
-                    <span class="admin-visitor-breakdown-label">봇</span>
-                    <span class="admin-visitor-breakdown-value" id="sumVisitorBot">—</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1355,11 +1350,10 @@
             lTopRef = '주요 유입 (전체)';
           }
 
-          const summaryCards = document.querySelectorAll('.admin-summary-card');
-          if (summaryCards[0]) summaryCards[0].querySelector('.admin-summary-label').textContent = lToday;
-          if (summaryCards[1]) summaryCards[1].querySelector('.admin-summary-label').textContent = lAvg;
-          if (summaryCards[2]) summaryCards[2].querySelector('.admin-summary-label').textContent = lDelta;
-          if (summaryCards[3]) summaryCards[3].querySelector('.admin-summary-label').textContent = lTopRef;
+          const summaryCards = document.querySelectorAll('.admin-period-summary-card');
+          if (summaryCards[0]) summaryCards[0].querySelector('.admin-summary-label').textContent = lAvg;
+          if (summaryCards[1]) summaryCards[1].querySelector('.admin-summary-label').textContent = lDelta;
+          if (summaryCards[2]) summaryCards[2].querySelector('.admin-summary-label').textContent = lTopRef;
 
           const el_today = document.getElementById('sumToday');
           const el_avg = document.getElementById('sumAvg');
