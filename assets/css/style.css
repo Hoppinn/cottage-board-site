@@ -2960,12 +2960,12 @@ body.embed-mode {
   top:0;
   z-index:20;
   margin:0 -20px 14px;
-  padding:8px 20px;
+  padding:10px 20px;
   border-radius:28px 28px 0 0;
   display:flex;
   align-items:center;
   gap:10px;
-  min-height:44px;
+  min-height:48px;
   background:#fffaf0;
   border-bottom:1px solid #ead8b8;
   cursor:pointer;
