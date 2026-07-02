@@ -2137,7 +2137,7 @@ body.embed-mode {
 .page-mini-hero--price{display:none;}
 .requests-page .about-hero h2{font-size:clamp(16px,4.5vw,22px);}
 .requests-page .inner-page{padding-top:20px;}
-.page-mini-hero--sm{height:80px;}
+.page-mini-hero--sm{height:80px;margin-top:4px;margin-bottom:6px;}
 .page-mini-hero--club::before{
   content:"";
   position:absolute;
