@@ -424,6 +424,27 @@
       color: var(--green);
       margin-left: auto;
     }
+    /* Phase 2: 카드 내 시간 바 */
+    .sched-wday-card { cursor: default; }
+    .sched-wday-header { cursor: pointer; }
+    .sched-card-bars {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #ede8e0;
+    }
+    .sched-card-more-btn {
+      display: block;
+      width: 100%;
+      margin-top: 6px;
+      padding: 4px 0;
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+    }
+    .sched-card-more-btn:hover { color: var(--green); }
 
   </style>
 </head>
@@ -904,7 +925,7 @@
     }
 
 
-    // ── 주간 뷰 헬퍼 / 렌더러 (Phase 1) ──────────────────────────
+    // ── 주간 뷰 헬퍼 / 렌더러 (Phase 1+2) ────────────────────────
     function getWeekTitle(monday) {
       // 목요일 기준으로 해당 월·주차 결정 (월경계 주 처리)
       const thu = new Date(monday);
@@ -915,10 +936,44 @@
       return `${m}월 ${ord[weekNum - 1] || weekNum + '번째'} 주`;
     }
 
+    // 카드 내 시간 바 HTML 빌더 — renderBars() 미수정, 독립 함수
+    function buildBarsInCard(dayVotes, myVote) {
+      if (!dayVotes.length) return '';
+      const LIMIT = 3;
+      const range = MAX_H - MIN_H;
+
+      function barRow(v) {
+        const left  = ((v.time_start - MIN_H) / range * 100).toFixed(1);
+        const width = ((v.time_end - v.time_start) / range * 100).toFixed(1);
+        const mine  = myVote && String(v.user_id) === String(myVote.user_id);
+        return `<div class="sched-bar-row">
+          <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
+          <div class="sched-bar-track">
+            <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
+              <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
+            </div>
+          </div>
+        </div>`;
+      }
+
+      const shown  = dayVotes.slice(0, LIMIT);
+      const hidden = dayVotes.slice(LIMIT);
+      const moreHtml = hidden.length
+        ? `<div class="sched-card-hidden-rows" style="display:none">${hidden.map(barRow).join('')}</div>
+           <button class="sched-card-more-btn" type="button">+${hidden.length}명 더보기</button>`
+        : '';
+
+      return `<div class="sched-card-bars">
+        <div class="sched-bar-axis">
+          <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
+        </div>
+        ${shown.map(barRow).join('')}
+        ${moreHtml}
+      </div>`;
+    }
+
     function renderWeekView(offset) {
       weekOffset = offset;
-
-      // 이번 주 월요일 계산 (offset 주 이동)
       const todayDow = TODAY.getDay();
       const daysToMon = todayDow === 0 ? -6 : 1 - todayDow;
       const monday = new Date(TODAY);
@@ -926,41 +981,57 @@
 
       document.getElementById('weekTitle').textContent = getWeekTitle(monday);
 
-      // 날짜별 참여자 수 집계 (중복 user_id 제거)
-      const cntByDate = {};
-      for (const v of allVotes) {
-        if (!cntByDate[v.vote_date]) cntByDate[v.vote_date] = new Set();
-        cntByDate[v.vote_date].add(v.user_id);
-      }
-
-      const el = document.getElementById('weekDayList');
+      const user = window.getKakaoUser?.();
+      const el   = document.getElementById('weekDayList');
       let html = '';
+
       for (let d = 0; d < 7; d++) {
         const date = new Date(monday);
         date.setDate(monday.getDate() + d);
-        const ds = toDateStr(date);
+        const ds  = toDateStr(date);
         const dow = date.getDay();
         const past = date < TODAY;
-        const tod = date.getTime() === TODAY.getTime();
-        const cnt = cntByDate[ds]?.size || 0;
+        const tod  = date.getTime() === TODAY.getTime();
 
-        const dowCls = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
+        const dayVotes = allVotes.filter(v => v.vote_date === ds);
+        const myVote   = dayVotes.find(v => user && String(v.user_id) === String(user.id));
+        const cnt      = new Set(dayVotes.map(v => v.user_id)).size;
+
+        const dowCls  = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
         const pastCls = past ? ' is-past' : '';
-        const todCls = tod ? ' is-today' : '';
+        const todCls  = tod  ? ' is-today' : '';
         const todayBadge = tod ? '<span class="sdc-today-label">오늘</span>' : '';
 
         html += `<div class="sched-wday-card${pastCls}${todCls}" data-date="${ds}">
-          <div class="sched-wday-header">
+          <div class="sched-wday-header" data-date="${ds}">
             <span class="sched-wday-dow${dowCls}">${DOW[dow]} ${date.getMonth()+1}/${date.getDate()}</span>
             ${todayBadge}
             ${cnt > 0 ? `<span class="sched-wday-count">👥 ${cnt}명</span>` : ''}
           </div>
+          ${buildBarsInCard(dayVotes, myVote)}
         </div>`;
       }
       el.innerHTML = html;
 
-      el.querySelectorAll('.sched-wday-card:not(.is-past)').forEach(card => {
-        card.addEventListener('click', () => openDay(card.dataset.date));
+      // 헤더 클릭만 상세(등록) 화면 이동 — 바 영역 클릭은 이동 없음
+      el.querySelectorAll('.sched-wday-header[data-date]').forEach(hdr => {
+        hdr.addEventListener('click', () => openDay(hdr.dataset.date));
+      });
+
+      // 이름 클릭 → 해당 유저 모임 보드
+      el.querySelectorAll('.sched-bar-name').forEach(n => {
+        n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid));
+      });
+
+      // +N명 더보기 토글
+      el.querySelectorAll('.sched-card-more-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const hiddenEl  = btn.previousElementSibling;
+          const isExpanded = hiddenEl.style.display !== 'none';
+          hiddenEl.style.display = isExpanded ? 'none' : '';
+          const hiddenCnt = hiddenEl.querySelectorAll('.sched-bar-row').length;
+          btn.textContent = isExpanded ? `+${hiddenCnt}명 더보기` : '접기 ▴';
+        });
       });
     }
 
@@ -1064,6 +1135,7 @@
 
     window.addEventListener('cottage-auth-changed', () => {
       if (currentDate) renderDayDetail(currentDate);
+      else renderWeekView(weekOffset);  // 주간 뷰에서 로그인 시 is-mine 갱신
     });
 
     init();
