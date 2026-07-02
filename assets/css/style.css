@@ -358,7 +358,7 @@ textarea{
   left:12px;
   right:12px;
   display:none;
-  padding:12px;
+  padding:12px 12px 6px;
   border:1px solid rgba(223,199,161,0.7);
   border-radius:18px;
   background:var(--paper-2);
@@ -404,7 +404,7 @@ textarea{
   position:absolute;
   left:14px;
   right:14px;
-  bottom:10px;
+  bottom:4px;
   height:28px;
   pointer-events:none;
   border-radius:0 0 18px 18px;
@@ -4457,7 +4457,7 @@ body.embed-mode {
 .about-hero{
   position:relative;
   background:linear-gradient(160deg,#543b2d 0%,#8a5e42 100%);
-  margin:calc(var(--header-total-h) + 28px) 16px 6px;
+  margin:calc(var(--header-total-h) + 46px) 16px 6px;
   padding:clamp(17px,4.3vw,28px) 20px clamp(17px,4.3vw,28px);
   border-radius:16px;
   text-align:center;
