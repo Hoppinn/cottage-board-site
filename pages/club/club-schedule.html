@@ -175,31 +175,27 @@
       position: relative;
     }
     /* sched-bar-group 제거됨 — sched-bar-row에 margin-bottom 직접 적용 */
-    /* 내 행이 있을 때: 모든 바+축을 동일 너비로 맞추고 오른쪽 60px에 버튼 공간 확보 */
-    .sched-card-bars.has-mine .sched-bar-axis { padding-right: 60px; }
-    .sched-card-bars.has-mine .sched-bar-track { margin-right: 60px; }
+    /* 주간 카드: 축 padding-left 0 (바가 전체 폭 사용) */
+    .sched-card-bars .sched-bar-axis { padding-left: 0; }
+    /* 주간 카드 bar item — 닉네임이 위, 막대가 아래 */
+    .sched-bar-item { margin-bottom: 10px; }
+    .sched-bar-hdr {
+      display: flex; align-items: center; gap: 5px;
+      margin-bottom: 3px;
+    }
+    .sched-bar-hdr .sched-bar-name {
+      width: auto; text-align: left; /* viewDay 52px·right 오버라이드 */
+    }
     .sched-bar-actions {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      gap: 2px;
+      display: flex; gap: 2px; flex-shrink: 0;
     }
     .sched-bar-edit-btn,
     .sched-bar-del-btn {
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      border-radius: 50%;
-      font-size: 15px;
-      cursor: pointer;
-      color: #b8b0a4;
-      padding: 0;
+      width: 22px; height: 22px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; border-radius: 50%;
+      font-size: 13px; cursor: pointer;
+      color: #b8b0a4; padding: 0;
       transition: background .15s, color .15s;
     }
     .sched-bar-edit-btn:hover,
@@ -2066,43 +2062,41 @@
       if (!dayVotes.length) return '';
       const LIMIT = 3;
       const range = MAX_H - MIN_H;
-      const hasMine = !!myVote;
 
-      function gameLineText(voteDate, userId) {
-        function fmt(listType, icon) {
-          const list = allVoteGames.filter(g =>
-            g.vote_date === voteDate && String(g.user_id) === String(userId) && g.list_type === listType
-          );
-          if (!list.length) return '';
-          const first = esc(list[0].custom_name || `#${list[0].game_id}`);
-          return list.length === 1 ? `${icon} ${first}` : `${icon} ${first} 외 ${list.length - 1}`;
-        }
-        const wantStr  = fmt('want',  '🎲');
-        const learnStr = fmt('learn', '📖');
-        if (wantStr && learnStr) return `${wantStr} · ${learnStr}`;
-        return wantStr || learnStr;
+      // 게임명 앞 4글자 잘라 공백 구분, 초과 시 +N
+      function gameNames(voteDate, userId) {
+        const games = allVoteGames.filter(g =>
+          g.vote_date === voteDate && String(g.user_id) === String(userId)
+        );
+        if (!games.length) return '';
+        const MAX_SHOW = 3;
+        const all = games.map(g => esc((g.custom_name || `#${g.game_id}`).slice(0, 4)));
+        if (all.length <= MAX_SHOW) return all.join(' ');
+        return all.slice(0, MAX_SHOW).join(' ') + ` +${all.length - MAX_SHOW}`;
       }
 
       function barRow(v) {
         const left  = ((v.time_start - MIN_H) / range * 100).toFixed(1);
         const width = ((v.time_end - v.time_start) / range * 100).toFixed(1);
         const mine  = myVote && String(v.user_id) === String(myVote.user_id);
-        const gameLine = gameLineText(v.vote_date, v.user_id);
+        const gameLine = gameNames(v.vote_date, v.user_id);
         const actions = mine
           ? `<div class="sched-bar-actions">
               <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
               <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
             </div>`
           : '';
-        return `<div class="sched-bar-row">
-          <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
+        return `<div class="sched-bar-item">
+          <div class="sched-bar-hdr">
+            <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
+            ${actions}
+          </div>
           <div class="sched-bar-track${gameLine ? ' has-games' : ''}">
             <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
               <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
               ${gameLine ? `<span class="sched-bar-game-line">${gameLine}</span>` : ''}
             </div>
           </div>
-          ${actions}
         </div>`;
       }
 
@@ -2113,7 +2107,7 @@
            <button class="sched-card-more-btn" type="button">+${hidden.length}명 더보기</button>`
         : '';
 
-      return `<div class="sched-card-bars${hasMine ? ' has-mine' : ''}">
+      return `<div class="sched-card-bars">
         <div class="sched-bar-axis">
           <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
         </div>
@@ -2199,7 +2193,7 @@
           const hiddenEl  = btn.previousElementSibling;
           const isExpanded = hiddenEl.style.display !== 'none';
           hiddenEl.style.display = isExpanded ? 'none' : '';
-          const hiddenCnt = hiddenEl.querySelectorAll('.sched-bar-row').length;
+          const hiddenCnt = hiddenEl.querySelectorAll('.sched-bar-item').length;
           btn.textContent = isExpanded ? `+${hiddenCnt}명 더보기` : '접기 ▴';
         });
       });
