@@ -1523,7 +1523,6 @@ function openGameRecordSheet(gameKey) {
   const _recRating = _recDetail?.rating;
 
   gameSheetContent.innerHTML = `
-    <div class="sheet-top-spacer"></div>
     <!-- 고정 헤더 -->
     <div class="sheet-sticky-bar" onclick="if(!event.target.closest('button')){const p=gameSheet?.querySelector('.game-sheet-scroll');if(p)p.scrollTo({top:0,behavior:'smooth'});}">
       <img class="sheet-sticky-thumb"
@@ -1538,6 +1537,7 @@ function openGameRecordSheet(gameKey) {
 
     <!-- 뒤로가기 -->
     <button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>
+    <div class="sheet-top-spacer"></div>
     <div class="sheet-feedback-reactions">
       <div class="sheet-reaction-group">
         <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
