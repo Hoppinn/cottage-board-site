@@ -515,24 +515,21 @@
       text-align: left;
     }
     .sched-card-del-dd:hover { background: #fff5f5; }
-    /* 시간 등록/수정 센터 모달 */
+    /* 시간 등록/수정 컴팩트 바텀시트 */
     .sched-sheet-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.45);
+      background: rgba(0,0,0,.25);
       z-index: 200;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      align-items: flex-end;
     }
     .sched-sheet {
-      width: calc(100% - 40px);
-      max-width: 360px;
+      width: 100%;
       background: #fff;
-      border-radius: 20px;
-      padding: 20px 20px 24px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.20);
+      border-radius: 18px 18px 0 0;
+      padding: 16px 16px 28px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,.12);
     }
     .sched-sheet-header {
       display: flex;
@@ -556,22 +553,22 @@
     }
     .sched-sheet-time-display {
       text-align: center;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
     }
     .sched-sheet-time-display .sched-slider-time-val {
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--text);
     }
     .sched-sheet-time-display .sched-slider-sep {
-      font-size: 22px;
+      font-size: 18px;
       color: var(--muted);
-      margin: 0 8px;
+      margin: 0 6px;
     }
     .sched-sheet-footer {
       display: flex;
       gap: 8px;
-      margin-top: 20px;
+      margin-top: 14px;
     }
     .sched-sheet-footer .sched-confirm-btn { flex: 1; }
     .sched-sheet-footer .sched-discard-btn { flex: 0 0 72px; }
