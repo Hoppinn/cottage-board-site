@@ -1267,12 +1267,12 @@
         return periodLabelFor(type, value);
       }
 
-      function makeOrUpdate(id, type, data, options) {
+      function makeOrUpdate(id, type, data, options, plugins = []) {
         const canvas = document.getElementById(id);
         if (!canvas) return;
         if (_chartInstances[id]) { _chartInstances[id].destroy(); }
         _chartInstances[id] = new Chart(canvas.getContext('2d'), {
-          type, data, options: { responsive: true, ...options },
+          type, data, options: { responsive: true, ...options }, plugins,
         });
       }
 
@@ -1614,13 +1614,13 @@
         const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
         const chartPagesSub = document.getElementById('chartPagesSub');
         if (chartPagesSub) chartPagesSub.textContent = label;
+        const pageTimeStrs = topPages.map(([p, v]) => {
+          const totS = pageTotSec[p] || 0;
+          const avgS = v > 0 ? Math.round(totS / v) : 0;
+          return totS > 0 ? `총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
+        });
         makeOrUpdate('chartPages', 'bar', {
-          labels: topPages.map(([p, v]) => {
-            const totS = pageTotSec[p] || 0;
-            const avgS = v > 0 ? Math.round(totS / v) : 0;
-            const t = totS > 0 ? ` 총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
-            return (PAGE_LABEL[p] || p) + t;
-          }),
+          labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
           datasets: [{ data: topPages.map(([, v]) => v), backgroundColor: C2, borderRadius: 4 }],
         }, {
           indexAxis: 'y',
@@ -1630,7 +1630,28 @@
             x: { grid: { color: GRID }, ticks: { font: { size: 10 }, stepSize: 1, precision: 0 } },
             y: { grid: { display: false }, ticks: { font: { size: 10 }, autoSkip: false } },
           },
-        });
+        }, [{
+          id: 'pageTimeLabelPlugin',
+          afterDatasetsDraw(chart) {
+            const ctx = chart.ctx;
+            const meta = chart.getDatasetMeta(0);
+            const x0 = chart.scales.x.getPixelForValue(0);
+            meta.data.forEach((bar, i) => {
+              const text = pageTimeStrs[i];
+              if (!text) return;
+              const barRight = bar.x;
+              const barWidth = barRight - x0;
+              if (barWidth < 50) return;
+              ctx.save();
+              ctx.font = '9px sans-serif';
+              ctx.fillStyle = 'rgba(255,255,255,0.92)';
+              ctx.textAlign = 'right';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(text, barRight - 5, bar.y);
+              ctx.restore();
+            });
+          },
+        }]);
 
         // ── 4. 유입경로 × 페이지 교차분석 ───────────────────────────
         {
