@@ -1881,16 +1881,7 @@ function initSheetMechsToggle() {
   if (!needsToggle) toggle.style.display = 'none';
 }
 
-function initStickyBar() {
-  const panel = gameSheet?.querySelector('.game-sheet-scroll');
-  const bar   = document.getElementById('sheetStickyBar');
-  if (!panel || !bar) return;
-  function onScroll() {
-    bar.classList.toggle('is-visible', panel.scrollTop > 60);
-  }
-  panel.addEventListener('scroll', onScroll);
-  panel._stickyCleanup = () => panel.removeEventListener('scroll', onScroll);
-}
+function initStickyBar() {}
 
 function loginFromSheet() {
   if (typeof Kakao === 'undefined' || typeof kakaoLogin !== 'function') return;

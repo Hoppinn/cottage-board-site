@@ -2818,9 +2818,9 @@ body.embed-mode {
 
 .sheet-en-title{
   margin:0 0 10px;
-  font-size:14px;
-  color:#5a3e28;
-  font-weight:600;
+  font-size:13px;
+  color:#a89a8a;
+  font-weight:400;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -2965,10 +2965,7 @@ body.embed-mode {
   border-bottom:1px solid #ead8b8;
 }
 
-.sheet-sticky-bar.is-visible{
-  background:rgba(255,251,244,0.97);
-  backdrop-filter:blur(4px);
-}
+.sheet-sticky-bar.is-visible{}
 
 .sheet-sticky-thumb{
   width:30px;
@@ -3789,8 +3786,8 @@ body.embed-mode {
 .sheet-back-btn--hist{
   margin-top:0;
   margin-bottom:4px;
-  font-size:12px;
-  color:#8d8478;
+  font-size:13px;
+  color:#7a4828;
 }
 .sheet-record-title{
   font-size:17px;
@@ -7786,7 +7783,7 @@ body.embed-mode {
   .sheet-thumb{ width:90px; height:90px; }
   .sheet-img-bgg{ font-size:13px; }
   .sheet-game-title{ font-size:23px; }
-  .sheet-en-title{ font-size:15px; }
+  .sheet-en-title{ font-size:13px; }
   .sheet-summary{ font-size:14px; }
   .sheet-loc-btn,
   .sheet-yt-btn{ font-size:13px; }
