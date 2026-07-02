@@ -618,12 +618,8 @@
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            const ctrl = document.getElementById('analysisControls');
-            if (ctrl) {
-              const delta = ctrl.getBoundingClientRect().top - headerH;
-              if (Math.abs(delta) > 2) window.scrollBy({ top: delta, behavior: 'smooth' });
-            }
+            const anchor = document.getElementById('analysisControlsAnchor');
+            if (anchor) anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }));
         });
 
