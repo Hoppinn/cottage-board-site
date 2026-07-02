@@ -901,6 +901,7 @@
   <script src="../../game-system/config/bgg-label-map.js"></script>
   <script src="../../game-system/game-data/library/3-output/cottage-games-data-output.js"></script>
   <script src="../../assets/data/game-short-names.js"></script>
+  <script src="../../assets/js/day-detail.js"></script>
   <script src="../../assets/js/game-display-adapter.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="../../assets/js/supabase-config.js"></script>
@@ -2111,7 +2112,7 @@
             <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
             ${actions}
           </div>
-          <div class="sched-bar-track${gameLine ? ' has-games' : ''}">
+          <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
             <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
               <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
               ${gameLine ? `<span class="sched-bar-game-line">${gameLine}</span>` : ''}
@@ -2205,6 +2206,30 @@
       // 이름 클릭 → 해당 유저 모임 보드
       el.querySelectorAll('.sched-bar-name').forEach(n => {
         n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid));
+      });
+
+      // 막대 클릭 → 일정 상세 모달
+      el.querySelectorAll('.sched-bar-track[data-date]').forEach(track => {
+        track.addEventListener('click', () => {
+          const date = track.dataset.date;
+          const uid  = track.dataset.uid;
+          const vote = allVotes.find(v => v.vote_date === date && String(v.user_id) === uid);
+          if (!vote) return;
+          const vGames = allVoteGames.filter(g => g.vote_date === date && String(g.user_id) === uid);
+          const resolveFullName = g => {
+            if (g.custom_name) return g.custom_name;
+            const obj = (window.COTTAGE_GAMES || []).find(c => c.bggId === String(g.game_id));
+            return obj?.display || `#${g.game_id}`;
+          };
+          window.openDayDetailModal?.({
+            nickname:   vote.nickname,
+            date,
+            timeStart:  vote.time_start,
+            timeEnd:    vote.time_end,
+            wantGames:  vGames.filter(g => g.list_type === 'want').map(resolveFullName),
+            learnGames: vGames.filter(g => g.list_type === 'learn').map(resolveFullName),
+          });
+        });
       });
 
       // +N명 더보기 토글

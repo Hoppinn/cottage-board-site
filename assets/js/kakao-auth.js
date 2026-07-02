@@ -8,6 +8,16 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   Kakao.init(KAKAO_APP_KEY);
 }
 
+// day-detail.js를 kakao-auth.js와 같은 디렉터리에서 동적 로드 (모든 페이지 대응)
+(function () {
+  const cs = document.currentScript;
+  if (cs && !document.getElementById('__dayDetailCSS')) {
+    const s = document.createElement('script');
+    s.src = cs.src.replace('kakao-auth.js', 'day-detail.js');
+    document.head.appendChild(s);
+  }
+})();
+
 async function _updateNotifBadge() {
   const user = getKakaoUser();
   if (!user || !window.CottageDB?.getMyNotifications) return;
@@ -2168,6 +2178,56 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
   const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const { bio, location, available, travelRange, meetingStyle, wantGames, ruleGames } = data;
 
+  // 이번 주 참여 일정 fetch
+  const _today = new Date();
+  const _dow = _today.getDay();
+  const _mon = new Date(_today);
+  _mon.setDate(_today.getDate() + (_dow === 0 ? -6 : 1 - _dow));
+  const _sun = new Date(_mon);
+  _sun.setDate(_mon.getDate() + 6);
+  const _wStart = _mon.toISOString().slice(0, 10);
+  const _wEnd   = _sun.toISOString().slice(0, 10);
+  const [_allVotes, _allVGames] = await Promise.all([
+    window.CottageDB?.getMeetingVotes?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || [],
+    window.CottageDB?.getMeetingVoteGames?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || [],
+  ]);
+  const _myVotes = (_allVotes || []).filter(v => String(v.user_id) === String(userId));
+  const _myVGames = (_allVGames || []).filter(g => String(g.user_id) === String(userId));
+
+  function _resolveVoteGameName(g) {
+    if (g.custom_name) return g.custom_name;
+    if (g.game_id) {
+      const cg = (window.COTTAGE_GAMES || []).find(c => c.bggId === String(g.game_id));
+      if (cg?.display) return cg.display;
+      const gd = window.gameData?.[g.game_id];
+      if (gd) return gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id);
+      return `#${g.game_id}`;
+    }
+    return '?';
+  }
+
+  const _weekSectionHtml = (() => {
+    if (!_myVotes.length) {
+      return `<div class="taste-game-section">
+        <div class="taste-section-label">📅 이번 주 참여</div>
+        <p class="taste-game-empty">이번 주 참여 등록 없어요</p>
+      </div>`;
+    }
+    const render = window.renderDayDetailHTML;
+    const blocks = _myVotes.map(v => {
+      const vg = _myVGames.filter(g => g.vote_date === v.vote_date);
+      const want  = vg.filter(g => g.list_type === 'want').map(_resolveVoteGameName);
+      const learn = vg.filter(g => g.list_type === 'learn').map(_resolveVoteGameName);
+      return render
+        ? render({ date: v.vote_date, timeStart: v.time_start, timeEnd: v.time_end, wantGames: want, learnGames: learn })
+        : `<div class="dd-block"><div class="dd-date">${_e(v.vote_date)}</div><div class="dd-time">${v.time_start}~${v.time_end}시</div></div>`;
+    }).join('');
+    return `<div class="taste-game-section">
+      <div class="taste-section-label">📅 이번 주 참여</div>
+      ${blocks}
+    </div>`;
+  })();
+
   const buildReadOnlyGames = (games) => {
     if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
     return games.map(g => {
@@ -2183,6 +2243,7 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
   };
 
   const contentHtml = `
+    ${_weekSectionHtml}
     <div class="meeting-profile-section">
       <div class="taste-section-label">📍 모임 프로필</div>
       <div class="meeting-profile-display">
