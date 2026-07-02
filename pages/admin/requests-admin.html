@@ -603,13 +603,18 @@
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
           if (dateNav) dateNav.style.display = usesDateFilter && dateNav.classList.contains('is-visible') ? '' : 'none';
           requestAnimationFrame(() => requestAnimationFrame(() => {
-            const anchor = usesDateFilter
-              ? document.getElementById('analysisDateControls')
-              : document.getElementById('analysisControlsAnchor');
-            if (!anchor) return;
             const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-total-h')) || 0;
-            const targetY = window.scrollY + anchor.getBoundingClientRect().top - headerH;
-            window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+            // offsetTop 체인: sticky 포지셔닝에 영향받지 않는 실제 document 위치
+            function getDocTop(el) {
+              let t = 0; while (el) { t += el.offsetTop; el = el.offsetParent; } return t;
+            }
+            // 두번째 헤더(날짜필터) 상단 기준 — usesDateFilter면 #analysisDateControls, 아니면 탭 행 하단
+            const dateCtrl = document.getElementById('analysisDateControls');
+            const tabs     = document.getElementById('analysisTabs');
+            const targetDocTop = (usesDateFilter && dateCtrl)
+              ? getDocTop(dateCtrl)
+              : (tabs ? getDocTop(tabs) + tabs.offsetHeight : 0);
+            if (targetDocTop) window.scrollTo({ top: Math.max(0, targetDocTop - headerH), behavior: 'smooth' });
           }));
         });
       }
