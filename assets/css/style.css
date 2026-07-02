@@ -4228,7 +4228,8 @@ body.embed-mode {
 .profile-subsheet-close{justify-self:end;background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 0 2px 8px;flex-shrink:0;}
 .profile-subsheet-body{padding:16px 18px 32px;overflow-y:auto;flex:1;}
 .profile-subsheet-body>*:first-child{margin-top:0;}
-.profile-subsheet-body--records{padding-top:0;}
+.profile-subsheet-body--records{padding-top:8px;}
+.profile-subsheet-body--records .profile-activity-toggle{top:8px;}
 /* 기존 그룹 박스 — DOM에서 제거됨, CSS 보류 */
 /* 성장 보드 / 이용·혜택 그룹 박스 */
 .profile-group{margin-top:14px;border:1px solid var(--border,#e8e4dc);border-radius:10px;background:var(--card-bg,#faf9f5);overflow:hidden;}
