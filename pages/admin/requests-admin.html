@@ -1157,12 +1157,16 @@
       const _sumPageCount = document.getElementById('sumPageCount');
       if (_sumPageCount) {
         const _pm = buildPageMap(dedupUserPageDay(rows));
-        const _topPages = _pm.slice(0, 4);
+        const _labelMap = {};
+        for (const [p, data] of _pm) {
+          const name = (window.COTTAGE_PAGE_LABELS && window.COTTAGE_PAGE_LABELS[p]) || p || '홈';
+          _labelMap[name] = (_labelMap[name] || 0) + data.visits;
+        }
+        const _topPages = Object.entries(_labelMap).sort((a, b) => b[1] - a[1]).slice(0, 4);
         _sumPageCount.innerHTML = _topPages.length
-          ? _topPages.map(([p, data]) => {
-              const name = (window.COTTAGE_PAGE_LABELS && window.COTTAGE_PAGE_LABELS[p]) || p || '홈';
-              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(name)} <span style="opacity:.7">(${data.visits}회)</span></span>`;
-            }).join('')
+          ? _topPages.map(([name, visits]) =>
+              `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(name)} <span style="opacity:.7">(${visits}회)</span></span>`
+            ).join('')
           : '—';
       }
 
