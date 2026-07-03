@@ -1150,8 +1150,7 @@
           ? _topPages.map(([p, data]) => {
               const totS = _allPageSec[p] || 0;
               const timeStr = totS > 0 ? `·${fmtTime(totS)}` : '';
-              const shortP = p.length > 11 ? p.slice(0, 10) + '…' : p;
-              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(shortP)} <span>(${data.visits}회${timeStr})</span></span>`;
+              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span>(${data.visits}회${timeStr})</span></span>`;
             }).join('')
           : '—';
       }
@@ -1405,20 +1404,15 @@
           };
 
           const refSessions = {}, refUsers = {};
-          const _sumRefCat = new Map();
           periodVis.forEach((r, idx) => {
             const cat = categorizeRef(r.referrer) || '직접 방문';
             refSessions[cat] = (refSessions[cat] || 0) + 1;
             if (!refUsers[cat]) refUsers[cat] = new Set();
             refUsers[cat].add(visitorKey(r, idx, cat));
-            if (r.session_key) _sumRefCat.set('s:' + r.session_key, cat);
-            if (r.user_id) _sumRefCat.set('u:' + String(r.user_id) + '|' + kstDate(r.created_at), cat);
           });
           const sumRefSec = {};
           for (const r of filtered) {
-            let cat = r.session_key ? _sumRefCat.get('s:' + r.session_key) : null;
-            if (!cat && r.user_id) cat = _sumRefCat.get('u:' + String(r.user_id) + '|' + kstDate(r.entered_at));
-            if (!cat) continue;
+            const cat = categorizeRef(r.referrer) || '직접 방문';
             sumRefSec[cat] = (sumRefSec[cat] || 0) + (r.duration_sec || 0);
           }
           const topRefEntries = Object.entries(refSessions).sort((a, b) => b[1] - a[1]);
@@ -1570,18 +1564,10 @@
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
           refUserMap[cat].add(visitorKey(r, idx, cat));
         });
-        // session_key + user_id+day 양쪽으로 page_sessions에서 유입경로별 duration 집계
-        const _visRefCat = new Map();
-        filteredVisitor.forEach(r => {
-          const cat = categorizeRef(r.referrer) || '직접 방문';
-          if (r.session_key) _visRefCat.set('s:' + r.session_key, cat);
-          if (r.user_id) _visRefCat.set('u:' + String(r.user_id) + '|' + kstDate(r.created_at), cat);
-        });
+        // page_sessions에 referrer 컬럼이 있으므로 직접 집계 (join 불필요)
         const refSecMap = {};
         for (const r of filtered) {
-          let cat = r.session_key ? _visRefCat.get('s:' + r.session_key) : null;
-          if (!cat && r.user_id) cat = _visRefCat.get('u:' + String(r.user_id) + '|' + kstDate(r.entered_at));
-          if (!cat) continue;
+          const cat = categorizeRef(r.referrer) || '직접 방문';
           refSecMap[cat] = (refSecMap[cat] || 0) + (r.duration_sec || 0);
         }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
