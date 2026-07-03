@@ -1025,14 +1025,22 @@ if (recommendTitle && recommendSection) {
 ========================= */
 
 (function initDgToggle() {
-  const btn  = document.getElementById('dgToggle');
-  const body = document.getElementById('dgBody');
+  const btn     = document.getElementById('dgToggle');
+  const body    = document.getElementById('dgBody');
+  const section = document.getElementById('recommend');
   if (!btn || !body) return;
+
+  function syncOpen(open) {
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    body.hidden = !open;
+    if (section) section.classList.toggle('dg-open', open);
+  }
+
   btn.addEventListener('click', () => {
-    const open = btn.getAttribute('aria-expanded') === 'true';
-    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
-    body.hidden = open;
+    syncOpen(btn.getAttribute('aria-expanded') !== 'true');
   });
+
+  syncOpen(false); // 초기 접힘
 })();
 
 
