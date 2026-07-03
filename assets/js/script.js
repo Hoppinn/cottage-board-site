@@ -1092,7 +1092,7 @@ function _openCoverModal(src) {
   document.getElementById('coverModal')?.remove();
   const m = document.createElement('div');
   m.id = 'coverModal';
-  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;';
+  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;';
   m.innerHTML = `<img src="${src}" style="max-width:90%;max-height:85vh;object-fit:contain;border-radius:12px;" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
     <button onclick="document.getElementById('coverModal')?.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
   m.addEventListener('click', e => { if (e.target === m) m.remove(); });
@@ -1306,7 +1306,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-links-block">
           <div class="sheet-links-row2">
-            <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 꽂혀있는 책장 보기</button>
+            <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel} ← 꽂혀있는 책장 보기</button>
             <a class="sheet-yt-btn"
               href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
               onclick="return confirm('유튜브로 이동할까요?')"
