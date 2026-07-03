@@ -241,6 +241,64 @@ function resetMenuGroups(){
   }
 }
 
+// 메뉴 열린 상태에서 스크롤 시 실시간 active 갱신
+function refreshMenuActive() {
+  if (!mobileMenu || !mobileMenu.classList.contains('active')) return;
+
+  const halfH = window.innerHeight * 0.5;
+  const isIndex = /\/(index\.html)?$/.test(location.pathname);
+
+  // preview-active 초기화
+  document.querySelectorAll('.header-menu a.preview-active').forEach(l => l.classList.remove('preview-active'));
+
+  // recommend is-current + 인라인 스타일 초기화
+  const recommendLink = document.querySelector('#openRecommendMenu');
+  if (recommendLink) {
+    recommendLink.classList.remove('is-current');
+    ['background','color','font-weight','border-radius'].forEach(p => recommendLink.style.removeProperty(p));
+  }
+
+  // 그룹 닫기 후 재계산
+  document.querySelectorAll('.menu-group').forEach(g => g.classList.remove('is-open'));
+
+  let previewShown = false;
+  if (isIndex) {
+    [
+      { id: 'recent-play', match: 'game-reviews.html' },
+      { id: 'meeting',     match: 'club.html' },
+    ].forEach(({ id, match }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        previewShown = true;
+        const link = document.querySelector(`.header-menu a[href*="${match}"]`);
+        if (link) {
+          link.classList.add('preview-active');
+          const group = link.closest('.menu-group');
+          if (group) group.classList.add('is-open');
+        }
+      }
+    });
+  }
+
+  const recEl = document.getElementById('recommend');
+  if (recEl && recommendLink) {
+    const isRecActive = !previewShown && recEl.getBoundingClientRect().top < halfH;
+    recommendLink.classList.toggle('is-current', isRecActive);
+    if (isRecActive) {
+      recommendLink.style.setProperty('background', '#7a4828', 'important');
+      recommendLink.style.setProperty('color', '#fff', 'important');
+      recommendLink.style.setProperty('font-weight', '900', 'important');
+      recommendLink.style.setProperty('border-radius', '8px', 'important');
+      const group = recommendLink.closest('.menu-group');
+      if (group) group.classList.add('is-open');
+    }
+  }
+}
+
+window.addEventListener('scroll', refreshMenuActive, { passive: true });
+
 function toggleMenu(){
   if(!mobileMenu){ return; }
   const isOpening = !mobileMenu.classList.contains('active');
