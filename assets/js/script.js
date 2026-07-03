@@ -298,9 +298,21 @@ function refreshMenuActive() {
     }
   }
 
-  // 현재 페이지 is-current 링크 그룹 유지
+  // 현재 페이지 is-current 링크 — 그룹 유지 + 인라인 스타일 동기화
   const currentLink = document.querySelector('.header-menu a.is-current');
   if (currentLink) {
+    document.querySelectorAll('.header-menu a').forEach(l => {
+      if (l !== currentLink && l !== recommendLink) {
+        l.style.removeProperty('background');
+        l.style.removeProperty('color');
+        l.style.removeProperty('font-weight');
+        l.style.removeProperty('border-radius');
+      }
+    });
+    currentLink.style.setProperty('background', '#7a4828', 'important');
+    currentLink.style.setProperty('color', '#fff', 'important');
+    currentLink.style.setProperty('font-weight', '900', 'important');
+    currentLink.style.setProperty('border-radius', '8px', 'important');
     const activeGroup = currentLink.closest('.menu-group');
     if (activeGroup) activeGroup.classList.add('is-open');
   }
