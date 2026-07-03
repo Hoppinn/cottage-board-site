@@ -41,6 +41,13 @@
     return `${y}년 ${Number(m)}월 ${Number(day)}일`;
   }
 
+  function formatKstDateWithDay(d) {
+    if (!d || d === '?') return d;
+    const [y, m, day] = d.split('-');
+    const weekday = ['일','월','화','수','목','금','토'][new Date(`${y}-${m}-${day}T00:00:00`).getDay()];
+    return `${Number(m)}월 ${Number(day)}일 (${weekday})`;
+  }
+
   // toInitials, hangulMatch, attachAc, initTagInput, buildPhotoItemAdder,
   // parsePhotoUrls, buildPhotoHtml, openLightbox → play-records-utils.js 전역 사용
 
@@ -451,7 +458,7 @@
 
   let recordsLoaded = false;
   let recordsData = null;
-  let currentView = 'group';
+  let currentView = 'date';
 
   async function loadRecords() {
     if (recordsLoaded && recordsData !== null) {
@@ -495,16 +502,25 @@
       [...panel.querySelectorAll('.pr-sub-session.is-open')]
         .map(el => el.dataset.date).filter(Boolean)
     );
-    return { _openSess, _openSub, _sy: window.scrollY };
+    const _openMonth = new Set(
+      [...panel.querySelectorAll('.pr-month-session.is-open')]
+        .map(el => el.querySelector('.pr-month-label')?.textContent?.trim()).filter(Boolean)
+    );
+    return { _openSess, _openSub, _openMonth, _sy: window.scrollY };
   }
 
-  function _restoreViewState(panel, _openSess, _openSub, _sy) {
+  function _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth) {
     panel.querySelectorAll('.pr-session').forEach(el => {
       if (_openSess.has(el.querySelector('.pr-session-date')?.textContent?.trim())) el.classList.add('is-open');
     });
     panel.querySelectorAll('.pr-sub-session').forEach(el => {
       if (_openSub.has(el.dataset.date)) el.classList.add('is-open');
     });
+    if (_openMonth) {
+      panel.querySelectorAll('.pr-month-session').forEach(el => {
+        if (_openMonth.has(el.querySelector('.pr-month-label')?.textContent?.trim())) el.classList.add('is-open');
+      });
+    }
     setTimeout(() => window.scrollTo(0, _sy), 0);
   }
 
@@ -513,6 +529,7 @@
     const user = window.getKakaoUser?.();
 
     const toggleHtml = `<div class="pr-view-toggle">
+      <button class="pr-vt-btn ${currentView === 'date' ? 'is-active' : ''}" data-view="date">날짜별</button>
       <button class="pr-vt-btn ${currentView === 'group' ? 'is-active' : ''}" data-view="group">모임별</button>
       <button class="pr-vt-btn ${currentView === 'game' ? 'is-active' : ''}" data-view="game">게임별</button>
     </div>`;
@@ -523,15 +540,20 @@
       return;
     }
 
-    const contentHtml = currentView === 'group'
-      ? renderGroupView(data, user)
-      : renderGameView(data, user);
+    const contentHtml = currentView === 'date'
+      ? renderDateView(data, user)
+      : currentView === 'group'
+        ? renderGroupView(data, user)
+        : renderGameView(data, user);
 
     panel.innerHTML = toggleHtml + contentHtml;
     bindToggle(panel);
 
     panel.querySelectorAll('.pr-session-hd').forEach(hd => {
       hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
+    });
+    panel.querySelectorAll('.pr-month-hd').forEach(hd => {
+      hd.addEventListener('click', () => hd.closest('.pr-month-session').classList.toggle('is-open'));
     });
     panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
       hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
@@ -602,9 +624,9 @@
         const res = await window.CottageDB?.deleteGamePlay(btn.dataset.id);
         if (!res?.error) {
           recordsData = recordsData.filter(r => String(r.id) !== String(btn.dataset.id));
-          const { _openSess, _openSub, _sy } = _saveViewState(panel);
+          const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
           renderRecords(recordsData);
-          _restoreViewState(panel, _openSess, _openSub, _sy);
+          _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
         }
       });
     });
@@ -624,9 +646,9 @@
         const res = await window.CottageDB?.updateGamePlay(recId, { photo_url: newPhotoUrl });
         if (!res?.error) {
           recordsData[idx].photo_url = newPhotoUrl;
-          const { _openSess, _openSub, _sy } = _saveViewState(panel);
+          const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
           renderRecords(recordsData);
-          _restoreViewState(panel, _openSess, _openSub, _sy);
+          _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
         }
       });
     });
@@ -771,9 +793,9 @@
           if (!res?.error) {
             const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
             if (idx !== -1) Object.assign(recordsData[idx], updFields);
-            const { _openSess, _openSub, _sy } = _saveViewState(panel);
+            const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
             renderRecords(recordsData); window._refreshAutocompleteLists?.();
-            _restoreViewState(panel, _openSess, _openSub, _sy);
+            _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
           } else {
             saveBtn.disabled = false;
             alert('수정에 실패했습니다.');
@@ -868,63 +890,173 @@
           _orderMap.set(r.id, _cnt[r.game_id]);
         });
     }
-    // group_name → date → records[]
+    // group_name → ym → date → records[]
     const groups = new Map();
     for (const r of data) {
       const g = r.group_name || '';
       const d = r.played_at || r.created_at?.slice(0, 10) || '?';
+      const ym = d.length >= 7 ? d.slice(0, 7) : '?';
       if (!groups.has(g)) groups.set(g, new Map());
-      const dateMap = groups.get(g);
+      const ymMap = groups.get(g);
+      if (!ymMap.has(ym)) ymMap.set(ym, new Map());
+      const dateMap = ymMap.get(ym);
       if (!dateMap.has(d)) dateMap.set(d, []);
       dateMap.get(d).push(r);
     }
 
     let html = '';
     const sortedGroups = [...groups.entries()].sort((a, b) => {
-      const latestA = Math.max(...[...a[1].keys()].map(d => new Date(d).getTime() || 0));
-      const latestB = Math.max(...[...b[1].keys()].map(d => new Date(d).getTime() || 0));
+      const latestA = Math.max(...[...a[1].values()].flatMap(dm => [...dm.keys()]).map(d => new Date(d).getTime() || 0));
+      const latestB = Math.max(...[...b[1].values()].flatMap(dm => [...dm.keys()]).map(d => new Date(d).getTime() || 0));
       return latestB - latestA;
     });
-    for (const [groupName, dateMap] of sortedGroups) {
+
+    for (const [groupName, ymMap] of sortedGroups) {
       const label = groupName || '모임 미선택';
-      const totalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
+      const totalGames = [...ymMap.values()].reduce((s, dm) => s + [...dm.values()].reduce((s2, recs) => s2 + recs.length, 0), 0);
+      const totalDates = [...ymMap.values()].reduce((s, dm) => s + dm.size, 0);
+
       html += `<div class="pr-session">
         <button class="pr-session-hd" type="button">
           <span class="pr-session-date">${escH(label)}</span>
-          <span class="pr-session-summary">${dateMap.size}회 · ${totalGames}게임</span>
+          <span class="pr-session-summary">${totalDates}회 · ${totalGames}게임</span>
           <span class="pr-session-arrow">▾</span>
         </button>
         <div class="pr-session-body">`;
 
-      const MAX_DATES = 3;
-      const sortedDates = [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
-      const visibleDates = sortedDates.slice(0, MAX_DATES);
-      const hiddenDates = sortedDates.slice(MAX_DATES);
+      const sortedYms = [...ymMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+      const latestYm = sortedYms[0]?.[0];
 
-      const renderDateBlock = ([dateStr, recs]) => {
-        const gameNames = recs.map(r => getGameName(r.game_id));
-        const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
-        return `<div class="pr-sub-session" data-date="${dateStr}">
-          <button class="pr-sub-hd" type="button">
-            <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
-            <span class="pr-sub-summary">${escH(summaryText)}</span>
-            <span class="pr-sub-arrow">▾</span>
+      for (const [ym, dateMap] of sortedYms) {
+        const [y, m] = ym === '?' ? ['', ''] : ym.split('-');
+        const ymLabel = ym === '?' ? '날짜 미지정' : `${y}년 ${Number(m)}월`;
+        const ymTotalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
+        const isLatestYm = ym === latestYm;
+
+        html += `<div class="pr-month-session${isLatestYm ? ' is-open' : ''}">
+          <button class="pr-month-hd" type="button">
+            <span class="pr-month-label">${escH(ymLabel)}</span>
+            <span class="pr-month-summary">${dateMap.size}회 · ${ymTotalGames}게임</span>
+            <span class="pr-month-arrow">▾</span>
           </button>
-          <div class="pr-sub-body">${buildSessionBody(recs, user, _orderMap)}</div>
-        </div>`;
-      };
+          <div class="pr-month-body">`;
 
-      html += visibleDates.map(renderDateBlock).join('');
+        const MAX_DATES = 3;
+        const sortedDates = [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+        const visibleDates = sortedDates.slice(0, MAX_DATES);
+        const hiddenDates = sortedDates.slice(MAX_DATES);
 
-      if (hiddenDates.length > 0) {
-        html += `<div class="pr-dates-more">
-          <div class="pr-dates-more-body">${hiddenDates.map(renderDateBlock).join('')}</div>
-          <button class="pr-dates-more-btn" type="button">이전 ${hiddenDates.length}회 더 보기 ▾</button>
-        </div>`;
+        const renderDateBlock = ([dateStr, recs]) => {
+          const gameNames = recs.map(r => getGameName(r.game_id));
+          const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
+          return `<div class="pr-sub-session" data-date="${dateStr}">
+            <button class="pr-sub-hd" type="button">
+              <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
+              <span class="pr-sub-summary">${escH(summaryText)}</span>
+              <span class="pr-sub-arrow">▾</span>
+            </button>
+            <div class="pr-sub-body">${buildSessionBody(recs, user, _orderMap)}</div>
+          </div>`;
+        };
+
+        html += visibleDates.map(renderDateBlock).join('');
+
+        if (hiddenDates.length > 0) {
+          html += `<div class="pr-dates-more">
+            <div class="pr-dates-more-body">${hiddenDates.map(renderDateBlock).join('')}</div>
+            <button class="pr-dates-more-btn" type="button">이전 ${hiddenDates.length}회 더 보기 ▾</button>
+          </div>`;
+        }
+
+        html += `</div></div>`;
       }
 
       if (groupName === '코티지보드 동호회') {
         html += `<div class="pr-club-link-row"><a class="pr-club-link" href="../club/club-history.html">📸 동호회 기록 &amp; 사진 게시판에서 보러가기 →</a></div>`;
+      }
+
+      html += `</div></div>`;
+    }
+    return html;
+  }
+
+  function renderDateView(data, user) {
+    // 전체 기록 기준 game_id별 날짜순 누적 플레이 순서 계산
+    const _orderMap = new Map();
+    {
+      const _cnt = {};
+      [...data]
+        .sort((a, b) => {
+          const da = a.played_at || (a.created_at || '').slice(0, 10);
+          const db = b.played_at || (b.created_at || '').slice(0, 10);
+          return da < db ? -1 : da > db ? 1 : 0;
+        })
+        .forEach(r => {
+          if (!r.game_id) return;
+          _cnt[r.game_id] = (_cnt[r.game_id] || 0) + 1;
+          _orderMap.set(r.id, _cnt[r.game_id]);
+        });
+    }
+
+    // year/month → date → group_name → records[]
+    const months = new Map();
+    for (const r of data) {
+      const d = r.played_at || r.created_at?.slice(0, 10) || '?';
+      const ym = d.length >= 7 ? d.slice(0, 7) : '?';
+      const g = r.group_name || '';
+      if (!months.has(ym)) months.set(ym, new Map());
+      const dateMap = months.get(ym);
+      if (!dateMap.has(d)) dateMap.set(d, new Map());
+      const groupMap = dateMap.get(d);
+      if (!groupMap.has(g)) groupMap.set(g, []);
+      groupMap.get(g).push(r);
+    }
+
+    const sortedMonths = [...months.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+    const latestYm = sortedMonths[0]?.[0];
+
+    let html = '';
+    for (const [ym, dateMap] of sortedMonths) {
+      const [y, m] = ym === '?' ? ['', ''] : ym.split('-');
+      const monthLabel = ym === '?' ? '날짜 미지정' : `${y}년 ${Number(m)}월`;
+      const totalGames = [...dateMap.values()].reduce((s, gm) => s + [...gm.values()].reduce((s2, recs) => s2 + recs.length, 0), 0);
+      const isLatestMonth = ym === latestYm;
+
+      html += `<div class="pr-session pr-session--bydate${isLatestMonth ? ' is-open' : ''}">
+        <button class="pr-session-hd" type="button">
+          <span class="pr-session-date">${monthLabel}</span>
+          <span class="pr-session-summary">${dateMap.size}일 · ${totalGames}게임</span>
+          <span class="pr-session-arrow">▾</span>
+        </button>
+        <div class="pr-session-body">`;
+
+      const sortedDates = [...dateMap.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+      const latestDate = sortedDates[0]?.[0];
+
+      for (const [dateStr, groupMap] of sortedDates) {
+        const isLatestDate = dateStr === latestDate && isLatestMonth;
+        const totalDateGames = [...groupMap.values()].reduce((s, recs) => s + recs.length, 0);
+        const dateLabel = formatKstDateWithDay(dateStr);
+
+        html += `<div class="pr-sub-session${isLatestDate ? ' is-open' : ''}" data-date="${dateStr}">
+          <button class="pr-sub-hd" type="button">
+            <span class="pr-sub-date">${escH(dateLabel)}</span>
+            <span class="pr-sub-summary pr-sub-summary--date">${totalDateGames}게임</span>
+            <span class="pr-sub-arrow">▾</span>
+          </button>
+          <div class="pr-sub-body">`;
+
+        const sortedGroupEntries = [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ko'));
+        const multiGroup = sortedGroupEntries.length > 1;
+
+        for (const [groupName, recs] of sortedGroupEntries) {
+          if (multiGroup) {
+            html += `<div class="pr-date-group-label">${escH(groupName || '모임 미선택')}</div>`;
+          }
+          html += buildSessionBody(recs, user, _orderMap);
+        }
+
+        html += `</div></div>`;
       }
 
       html += `</div></div>`;

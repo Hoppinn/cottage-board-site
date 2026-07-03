@@ -6760,6 +6760,9 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session--bygame .pr-session-date { color: #2a3a28; }
 .pr-session--bygame .pr-session-summary { color: #7a9a78; background: rgba(59,79,58,0.06); }
 .pr-session--bygame .pr-session-arrow { color: #2a3a28; }
+.pr-session--bydate > .pr-session-hd { background: #7a4828; }
+.pr-session--bydate > .pr-session-hd:hover { background: #8a5838; }
+.pr-session--bydate .pr-sub-summary--date { display: block; }
 .pr-session-date { font-size: 16px; font-weight: 500; color: #fff; flex-shrink: 0; letter-spacing: -0.3px; }
 .pr-session-summary { font-size: 12px; color: rgba(255,255,255,0.55); background: rgba(255,255,255,0.09); border-radius: 20px; padding: 2px 9px; flex-shrink: 0; white-space: nowrap; font-weight: 500; }
 .pr-session-arrow { font-size: 17px; color: rgba(255,255,255,0.85); flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
@@ -6776,6 +6779,19 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
 .pr-session-body { display: none; background: var(--bg,#f5f0e8); }
 .pr-session.is-open .pr-session-body { display: block; }
+
+.pr-month-session { border-top: 1px solid #e0dbd0; }
+.pr-month-session:first-child { border-top: none; }
+.pr-month-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 16px; background: #ede8de; border: none; cursor: pointer; text-align: left; font-family: inherit; }
+.pr-month-hd:hover { background: #e6e0d4; }
+.pr-month-session.is-open > .pr-month-hd { background: #e8e0d2; box-shadow: inset 3px 0 0 #b8825a; }
+.pr-month-label { font-size: 13px; font-weight: 600; color: #5a3820; flex-shrink: 0; }
+.pr-month-summary { font-size: 11px; color: #9a7a60; flex: 1; }
+.pr-month-arrow { font-size: 12px; color: #8a6850; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
+.pr-month-session.is-open .pr-month-arrow { transform: rotate(180deg); }
+.pr-month-body { display: none; }
+.pr-month-session.is-open .pr-month-body { display: block; }
+.pr-date-group-label { font-size: 11px; font-weight: 600; color: #9a7a60; padding: 6px 16px 2px; background: #f5f0e8; letter-spacing: 0.2px; }
 
 .pr-sub-session { border-top: 1px solid #e8e4dc; background: var(--bg,#f5f0e8); }
 .pr-sub-session:first-child { border-top: none; }
