@@ -417,6 +417,23 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
       if(group) group.classList.add('is-open');
     }
   });
+
+  // 정확한 매칭 없으면 같은 디렉토리 링크를 current로 표시 (서브페이지 지원)
+  if(!document.querySelector('.header-menu a.is-current')){
+    const currentDir = currentPath.replace(/\/[^/]+$/, '/');
+    allLinks.forEach(link=>{
+      const rawHref = link.getAttribute('href') || '';
+      if(rawHref === '#' || rawHref.startsWith('#')) return;
+      const u = new URL(link.href, location.href);
+      if(u.hash) return; // hash 링크는 디렉토리 매칭 제외
+      const linkDir = u.pathname.replace(/\/[^/]+$/, '/');
+      if(linkDir === currentDir){
+        link.classList.add('is-current');
+        const group = link.closest('.menu-group');
+        if(group) group.classList.add('is-open');
+      }
+    });
+  }
 })();
 
 
