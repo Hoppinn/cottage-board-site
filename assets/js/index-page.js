@@ -950,6 +950,78 @@ if (recommendTitle && recommendSection) {
 
 
 /* =========================
+   # HERO RECORD BUTTON
+========================= */
+
+(function initHeroRecordBtn() {
+  const btn = document.getElementById('heroRecordBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const section = document.getElementById('recent-play');
+    if (!section) return;
+    const header = document.querySelector('.site-header');
+    const headerH = header ? header.offsetHeight : 0;
+    window.scrollTo({ top: section.offsetTop - headerH - 8, behavior: 'smooth' });
+  });
+})();
+
+
+/* =========================
+   # RECENT PLAY SECTION
+========================= */
+
+(async function initRecentPlay() {
+  const body = document.getElementById('recentPlayBody');
+  if (!body) return;
+
+  function getGameTitle(id) {
+    if (!id) return '알 수 없는 게임';
+    if (window.COTTAGE_GAMES) {
+      const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(id) || g.id === id);
+      if (g) return g.display || g.titleKo || g.titleEn || String(id);
+    }
+    return String(id);
+  }
+
+  function fmtPlayDate(played_at, created_at) {
+    const iso = played_at || (created_at || '').slice(0, 10);
+    if (!iso) return '';
+    const [, m, d] = iso.split('-');
+    return `${Number(m)}/${Number(d)}`;
+  }
+
+  try {
+    const records = await window.CottageDB?.getAllPlayRecordsForHub(6);
+    if (!records || records.length === 0) {
+      body.innerHTML = '<p class="rp-empty">아직 기록된 플레이가 없어요.</p>';
+      return;
+    }
+
+    body.innerHTML = `<div class="rp-list">${records.map(r => {
+      const title   = getGameTitle(r.game_id);
+      const date    = fmtPlayDate(r.played_at, r.created_at);
+      const who     = r.nickname || '';
+      const players = r.player_count ? `${r.player_count}명` : '';
+      const meta    = [who, players].filter(Boolean).join(' · ');
+      const review  = r.review_text
+        ? `<p class="rp-review">"${r.review_text.slice(0, 60)}${r.review_text.length > 60 ? '…' : ''}"</p>`
+        : '';
+      return `<div class="rp-card">
+        <div class="rp-card-header">
+          <span class="rp-game">${title}</span>
+          <span class="rp-date">${date}</span>
+        </div>
+        ${meta ? `<p class="rp-meta">${meta}</p>` : ''}
+        ${review}
+      </div>`;
+    }).join('')}</div>`;
+  } catch (_) {
+    body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
+  }
+})();
+
+
+/* =========================
    # DIFFICULTY GUIDE TOGGLE
 ========================= */
 
