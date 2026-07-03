@@ -6829,6 +6829,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-rec-tag { font-size: 12px; background: var(--bg,#f5f0e8); border-radius: 6px; padding: 2px 8px; color: var(--text-info); font-weight: 500; }
 .pr-tag-who { background: #fdf0e8; color: #7a4828; }
 .pr-tag-who-first { border-bottom: 2px solid #7a4828 !important; padding-bottom: 1px !important; }
+/* pr-player-header 안에서 덮어씀 (아래 규칙 우선) */
 .pr-tag-count-game { background: #627a6a !important; color: #fff !important; font-weight: 600 !important; }
 .pr-tag-time { background: #ede8e0; color: #6b5040; }
 .pr-tag-score { background: #f5ede4; color: #8a4a20; }
@@ -6858,11 +6859,14 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-inline-save { font-size: 12px; background: #7a4828; color: #fff; border: none; border-radius: 5px; padding: 4px 12px; cursor: pointer; }
 .pr-inline-cancel { font-size: 12px; background: none; border: 1px solid var(--border,#e8e4dc); border-radius: 5px; padding: 4px 10px; cursor: pointer; color: var(--muted); }
 
-.pr-player-header { padding: 7px 16px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-top: 1px solid #e8e4dc; background: #ece7dc; }
+.pr-player-header { padding: 5px 16px; display: flex; flex-wrap: wrap; gap: 3px 0; align-items: center; border-top: 1px solid #ece8e0; background: #f8f5f1; }
 .pr-player-header:first-child { border-top: none; }
-.pr-player-header .pr-rec-tag { background: #fff; color: #4a3728; font-weight: 500; font-size: 12px; border-radius: 20px; padding: 2px 9px; border: 1px solid #d8d0c6; }
-.pr-tag-count { background: #4a5a38 !important; color: #fff !important; border-color: #4a5a38 !important; }
-.pr-tag-icon { filter: brightness(0) invert(1); display: inline-block; font-size: 11px; }
+.pr-player-header .pr-rec-tag { background: transparent; color: #8a7868; font-weight: 400; font-size: 12px; border-radius: 0; padding: 0 4px; border: none; }
+.pr-tag-count { background: transparent !important; color: #5c7048 !important; border: none !important; font-weight: 600 !important; padding: 0 6px 0 0 !important; }
+.pr-tag-who { background: transparent; color: #8a7868; }
+.pr-tag-who + .pr-tag-who::before { content: "·"; margin-right: 3px; color: #c4b4a4; }
+.pr-tag-who-first { color: #5a4030 !important; border-bottom: none !important; font-weight: 500 !important; padding-bottom: 0 !important; }
+.pr-tag-icon { display: inline-block; font-size: 11px; }
 .pr-rec-sheet-link { font-size: 16px; text-decoration: none; color: var(--muted); padding: 2px 3px; border-radius: 5px; flex-shrink: 0; }
 .pr-rec-sheet-link:hover { background: #f0e8dc; }
 .pr-rec-row--game { padding-left: 14px; }
