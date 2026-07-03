@@ -297,6 +297,13 @@ function refreshMenuActive() {
       if (group) group.classList.add('is-open');
     }
   }
+
+  // 현재 페이지 is-current 링크 그룹 유지
+  const currentLink = document.querySelector('.header-menu a.is-current');
+  if (currentLink) {
+    const activeGroup = currentLink.closest('.menu-group');
+    if (activeGroup) activeGroup.classList.add('is-open');
+  }
 }
 
 window.addEventListener('scroll', refreshMenuActive, { passive: true });
