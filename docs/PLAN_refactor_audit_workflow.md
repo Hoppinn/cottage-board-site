@@ -259,6 +259,24 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 
 ---
 
+## 6차 점검 결과 (2026-07-03)
+
+### ACH9 — POINTS 맵 vs 포인트 비활성화 정책 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` ACH9. 처리 현황 표에 "✅ 완료" 묶음에 있으나 이 흐름에서 독립 재검증 안 됨.
+
+**확인 결과**:
+- `achievements.js` 전체에서 `POINTS`, `points`, `point` 키워드 **없음**.
+- `supabase-client.js:1608` — `grantAchievement(userId, achievementId)` 파라미터 2개, points 없음.
+- DB INSERT: `user_achievements`에 `user_id`, `achievement_id`만 씀. points 컬럼 접근 없음.
+- 호출부 `achievements.js:425` — `db.grantAchievement(userId, id)` points 안 넘김.
+- `showAchievementToast(name)` — name만 받음. points 파라미터 없음.
+- `achievement-system.md:57`: "포인트 제도 삭제됨 — 음료교환권(voucher)으로 대체. `points` 필드 사용 금지." 명시.
+
+**판단**: POINTS 맵과 points 전달 경로 모두 코드에서 제거된 상태. 문서 정책과 코드가 일치. 코드 수정 불필요.
+
+---
+
 ## 보류
 
 - 관리자 분석 페이지 전체 재구성: 현재는 카운팅 기준 안정화와 상위 탭 sticky만 적용. 큰 UI 재구성은 보류.

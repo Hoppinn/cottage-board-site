@@ -129,10 +129,10 @@
 | ACH6 | **P2** | 중복 코드 | `esc` 함수 (line 656) — `window.escH`의 세 번째 복사본 | `buildCodexSection` 내부 로컬 `esc` 함수 = play-records-utils.js의 `_escH`와 동일 패턴. `window.escH`로 대체 가능. |
 | ACH7 | **P2** | 미사용 파라미터 | `showAchievementToast(name, points)` — `points` 받지만 HTML에 미출력 | line 370+: toast HTML에 `name`만 표시, `points` 변수는 함수 내에서 사용되지 않음. 포인트 비활성화 결정이 반영된 것이면 파라미터 정리 필요. |
 | ACH8 | **P2** | 문서 불일치 | `getCharacterPath` js-api.md 미기재 | `window.CottageAchievements.getCharacterPath`가 공개 API인데 js-api.md의 `CottageAchievements` 노출 목록에 없음. kakao-auth.js line 118에서 외부 사용 확인. |
-| ACH9 | **P2** | 불일치 | `POINTS` 맵이 "포인트 비활성화" 문서와 충돌 | achievement-system.md에 "포인트 비활성화" 언급이 있으나 `grantAchievement(userId, id, points)` 호출 시 여전히 POINTS 값 전달. 비활성화 의도라면 0 전달 또는 파라미터 제거 필요. |
+| ~~ACH9~~ | ~~**P2**~~ | ~~불일치~~ | ~~`POINTS` 맵이 "포인트 비활성화" 문서와 충돌~~ | **✅ 해결됨** — 2026-07-03 재검증: POINTS 맵 없음, `grantAchievement(userId, achievementId)` points 인자 없음, `showAchievementToast(name)` points 인자 없음, achievement-system.md에 "포인트 제도 삭제됨" 명시. 코드 수정 불필요. |
 
 **즉시 수정 가능 (Green)**: ACH4 (하드코딩 경로 → `_charImgPath` 호출로 교체), ACH8 (js-api.md에 `getCharacterPath` 추가)  
-**수정 시 검증 필요 (Yellow)**: ACH1 (중복 상수 통합 — 4곳 호출처 동시 변경), ACH9 (포인트 비활성화 의도 재확인)  
+**수정 시 검증 필요 (Yellow)**: ACH1 (중복 상수 통합 — 4곳 호출처 동시 변경), ~~ACH9 (포인트 비활성화 의도 재확인)~~ → **✅ 해결됨** (2026-07-03 재검증: 코드 이미 정리됨)  
 **구조 변경 필요 (Red)**: ACH5 (buildAchievementsSection 사이드이펙트 분리), ACH3 (DB 쿼리 통합)
 
 ---
@@ -251,7 +251,7 @@
 |---|------|------|--------------|
 | SC2 | supabase-client.js | `getRepAchievement` name 누락 | 대표 캐릭터 이름이 어디서 표시되는지 실제 확인 |
 | SC3 | supabase-client.js | `toggleGameCurious`에서 like 삭제 | 의도적인 동작인지 확인 후 문서화 또는 제거 |
-| ACH9 | achievements.js | POINTS 맵 vs 포인트 비활성화 | 현재 포인트 정책 최종 결정 후 정리 |
+| ~~ACH9~~ | ~~achievements.js~~ | ~~POINTS 맵 vs 포인트 비활성화~~ | **✅ 해결됨** — 2026-07-03 재검증: POINTS 맵 없음, grantAchievement points 인자 없음, achievement-system.md에 삭제 정책 명시. 코드 수정 불필요 |
 | ~~GR1~~ | ~~game-reviews.js~~ | ~~deprecated `renderSingleGame` 유지 여부~~ | **✅ 해결됨** — 2026-07-03 재검증: 함수 없음, 호출처 없음, 직접 Supabase 접근 없음, 코드 수정 불필요 |
 | ~~CSS1~~ | ~~style.css~~ | ~~`.sheet-section` 이중 정의~~ | **✅ 해결됨** — 2026-07-03 재검증: 두 번째 정의 없음, 코드 수정 불필요 |
 
