@@ -116,15 +116,18 @@
 
   function initHub() {
     document.title = '플레이 기록 | 코티지보드';
-    // h1은 static HTML에 있음
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('embed') === 'true') document.body.classList.add('is-embedded');
+    const startInput = params.get('tab') === 'input';
 
     root.innerHTML = `
       <div class="pr-tabs">
-        <button class="pr-tab is-active" data-tab="records">기록 보기</button>
-        <button class="pr-tab" data-tab="input">기록 입력</button>
+        <button class="pr-tab${startInput ? '' : ' is-active'}" data-tab="records">기록 보기</button>
+        <button class="pr-tab${startInput ? ' is-active' : ''}" data-tab="input">기록 입력</button>
       </div>
-      <div id="prPanelInput" class="pr-panel"></div>
-      <div id="prPanelRecords" class="pr-panel is-active"></div>`;
+      <div id="prPanelInput" class="pr-panel${startInput ? ' is-active' : ''}"></div>
+      <div id="prPanelRecords" class="pr-panel${startInput ? '' : ' is-active'}"></div>`;
 
     root.querySelectorAll('.pr-tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -137,14 +140,7 @@
     });
 
     renderInputPanel();
-    loadRecords();
-
-    const params = new URLSearchParams(location.search);
-    if (params.get('embed') === 'true') document.body.classList.add('is-embedded');
-    if (params.get('tab') === 'input') {
-      const inputTab = root.querySelector('[data-tab="input"]');
-      if (inputTab) inputTab.click();
-    }
+    if (!startInput) loadRecords();
   }
 
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
