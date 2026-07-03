@@ -332,7 +332,7 @@ textarea{
   width:5px;
   height:5px;
   border-radius:50%;
-  background:var(--green);
+  background:#2f9e44;
   margin-left:6px;
   vertical-align:middle;
   position:relative;
