@@ -1150,7 +1150,7 @@
         _sumPageCount.innerHTML = _topPages.length
           ? _topPages.map(([p, data]) => {
               const totS = _allPageSec[p] || 0;
-              const timeStr = totS > 0 ? `·${fmtTime(totS)}` : '';
+              const timeStr = totS > 0 ? ` · ${fmtTime(totS)}` : '';
               const label = _PAGE_SHORT[p] || p;
               return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(label)} <span>(${data.visits}회${timeStr})</span></span>`;
             }).join('')
@@ -1421,7 +1421,7 @@
           const topRefHtml = topRefEntries.length
             ? topRefEntries.map(([cat, cnt]) => {
                 const totS = sumRefSec[cat] || 0;
-                const timeStr = totS > 0 ? `·${fmtTime(totS)}` : '';
+                const timeStr = totS > 0 ? ` · ${fmtTime(totS)}` : '';
                 return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span>(${cnt}회${timeStr})</span></span>`;
               }).join('')
             : '—';
