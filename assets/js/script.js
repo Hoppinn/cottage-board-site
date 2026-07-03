@@ -373,7 +373,6 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
 });
 
 // 현재 페이지 메뉴 active 표시 + 해당 그룹 자동 펼침
-// club.html 링크는 위 스크롤스파이가 전담 — 여기서 처리 안 함
 (()=>{
   const currentPath = location.pathname.replace(/\/$/, '') || '/index.html';
   const currentHash = location.hash;
@@ -390,7 +389,6 @@ document.querySelectorAll('.menu-group-header').forEach(btn=>{
     const u = new URL(link.href, location.href);
     const linkPath = u.pathname.replace(/\/$/, '');
     const linkHash = u.hash;
-    if(linkPath.endsWith('/club.html')) return; // 스크롤스파이가 전담
     const matches = linkHash
       ? linkPath === currentPath && linkHash === currentHash
       : linkPath === currentPath && !hashMatchExists;
