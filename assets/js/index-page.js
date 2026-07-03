@@ -1033,7 +1033,8 @@ if (recommendTitle && recommendSection) {
   const loader   = document.getElementById('recordIframeLoader');
   if (!modal || !openBtn) return;
 
-  let frameLoaded = false;
+  // preload iframe on page ready so first open is instant
+  frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
 
   function openModal() {
     modal.setAttribute('aria-hidden', 'false');
@@ -1041,15 +1042,10 @@ if (recommendTitle && recommendSection) {
     document.body.style.overflow = 'hidden';
 
     if (frame.classList.contains('is-ready')) {
-      // iframe already initialized — just switch to input tab
       frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab: 'input' }, '*');
-    } else if (!frameLoaded) {
-      // first open: start loading
-      frameLoaded = true;
+    } else {
       if (loader) loader.style.display = 'flex';
-      frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
     }
-    // else: loading already in progress, loader is visible — just wait
   }
   function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
