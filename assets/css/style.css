@@ -6763,7 +6763,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session--bydate > .pr-session-hd { background: #3b4f3a; }
 .pr-session--bydate > .pr-session-hd:hover { background: #4a6149; }
 .pr-month-body .pr-sub-summary,
-.pr-session--bydate .pr-sub-summary { display: block; font-size: 11px; font-weight: 400; color: #9a7a60; }
+.pr-session--bydate .pr-sub-summary { display: block; font-size: 11px; font-weight: 500; color: #7a6252; }
 .pr-month-body .pr-sub-hd,
 .pr-session--bydate .pr-sub-hd { padding-left: 28px; background: #fdfaf5; }
 .pr-month-body .pr-sub-hd:hover,
@@ -6792,6 +6792,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
 .pr-session-body { display: none; background: var(--bg,#f5f0e8); }
 .pr-session.is-open .pr-session-body { display: block; }
+.pr-session--bydate.is-open > .pr-session-body { padding-top: 6px; }
 
 .pr-month-session { border-top: 1px solid #e0dbd0; }
 .pr-month-session:first-child { border-top: none; }
@@ -6803,7 +6804,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-month-arrow { font-size: 12px; color: #8a6850; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-month-session.is-open .pr-month-arrow { transform: rotate(180deg); }
 .pr-month-body { display: none; }
-.pr-month-session.is-open .pr-month-body { display: block; }
+.pr-month-session.is-open .pr-month-body { display: block; padding-top: 6px; }
 .pr-date-group-label { font-size: 11px; font-weight: 600; color: #9a7a60; padding: 6px 16px 2px; background: #f5f0e8; letter-spacing: 0.2px; }
 
 .pr-sub-session { border-top: 1px solid #e8e4dc; background: var(--bg,#f5f0e8); }

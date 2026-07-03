@@ -524,9 +524,19 @@
     setTimeout(() => window.scrollTo(0, _sy), 0);
   }
 
+  let _nickUserMap = new Map();
+
   function renderRecords(data) {
     const panel = document.getElementById('prPanelRecords');
     const user = window.getKakaoUser?.();
+
+    // 닉네임 → userId 맵 (recordsData의 recorder 정보 기반)
+    if (data?.length) {
+      _nickUserMap = new Map();
+      for (const r of data) {
+        if (r.user_id && r.nickname) _nickUserMap.set(r.nickname.trim().toLowerCase(), String(r.user_id));
+      }
+    }
 
     const toggleHtml = `<div class="pr-view-toggle">
       <button class="pr-vt-btn ${currentView === 'date' ? 'is-active' : ''}" data-view="date">날짜별</button>
@@ -558,6 +568,22 @@
     panel.querySelectorAll('.pr-sub-hd').forEach(hd => {
       hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
     });
+
+    // 참여자 이름 클릭 → 해당 회원 보드 열기
+    panel.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
+      const userId = _nickUserMap.get((span.dataset.nick || '').toLowerCase());
+      if (!userId) return;
+      span.style.cursor = 'pointer';
+      span.addEventListener('click', e => {
+        e.stopPropagation();
+        if (user && String(user.id) === userId) {
+          window.openProfilePanel?.('taste');
+        } else {
+          window.openOtherProfileSheet?.(userId);
+        }
+      });
+    });
+
     panel.querySelectorAll('.pr-dates-more-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const wrap = btn.closest('.pr-dates-more');
@@ -1105,7 +1131,7 @@
       const nameTags = first.player_names
         ? first.player_names.split(',').map(n => {
             const t = n.trim();
-            return `<span class="pr-rec-tag pr-tag-who${recorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}">${escH(t)}</span>`;
+            return `<span class="pr-rec-tag pr-tag-who${recorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}" data-nick="${escH(t)}">${escH(t)}</span>`;
           }).join('')
         : '';
 
