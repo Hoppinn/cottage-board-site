@@ -6609,6 +6609,24 @@ body.embed-mode {
 .home-section-title{font-size:16px;font-weight:900;color:var(--ink);margin:0;}
 .home-section-more{font-size:12px;font-weight:700;color:var(--green);text-decoration:none;}
 .home-section-more:hover{text-decoration:underline;}
+button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
+.rp-header-actions{display:flex;align-items:center;gap:10px;}
+.rp-header-actions .home-section-more + .home-section-more::before{content:"·";margin-right:10px;color:var(--border);font-weight:400;}
+
+/* ── 기록 남기기 센터모달 ── */
+.record-iframe-modal{display:none;position:fixed;inset:0;z-index:900;}
+.record-iframe-modal.is-open{display:flex;align-items:center;justify-content:center;}
+.record-iframe-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
+.record-iframe-panel{position:relative;width:min(480px,94vw);height:85dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
+.record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
+.record-iframe-frame{width:100%;flex:1;border:none;}
+
+/* embedded 모드: 헤더·푸터·브레드크럼·페이지히어로 숨김 */
+body.is-embedded .site-header,
+body.is-embedded footer,
+body.is-embedded .breadcrumb,
+body.is-embedded .page-mini-hero{display:none!important;}
+body.is-embedded .inner-page{padding-top:16px;}
 .home-section-desc{font-size:13px;color:var(--text-info);margin:0 0 12px;line-height:1.6;}
 .home-section-cta{
   display:inline-block;margin-top:16px;

@@ -138,6 +138,13 @@
 
     renderInputPanel();
     loadRecords();
+
+    const params = new URLSearchParams(location.search);
+    if (params.get('embed') === 'true') document.body.classList.add('is-embedded');
+    if (params.get('tab') === 'input') {
+      const inputTab = root.querySelector('[data-tab="input"]');
+      if (inputTab) inputTab.click();
+    }
   }
 
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }

@@ -218,13 +218,15 @@
       <div class="home-section-inner">
         <div class="home-section-header">
           <h2 class="home-section-title">최근 플레이</h2>
-          <a class="home-section-more" href="./pages/game/game-reviews.html">기록 보기 →</a>
+          <div class="rp-header-actions">
+            <a class="home-section-more" href="./pages/game/game-reviews.html">기록 더보기</a>
+            <button class="home-section-more rp-write-btn" id="openRecordModalBtn" type="button">기록 남기기</button>
+          </div>
         </div>
         <p class="home-section-desc">최근 기록을 확인하거나 직접 남겨보세요.</p>
         <div class="recent-play-body" id="recentPlayBody">
           <!-- JS 데이터 연동 예정 -->
         </div>
-        <a class="home-section-cta" href="./pages/game/game-reviews.html">📝 기록 남기기 →</a>
       </div>
     </section>
 
@@ -252,7 +254,14 @@
 
   </main>
 
-
+  <!-- 기록 남기기 센터모달 -->
+  <div class="record-iframe-modal" id="recordIframeModal" aria-hidden="true">
+    <div class="record-iframe-dim" id="recordIframeDim"></div>
+    <div class="record-iframe-panel">
+      <button class="record-iframe-close" id="recordIframeClose" type="button">✕</button>
+      <iframe class="record-iframe-frame" id="recordIframeFrame" src="" title="기록 남기기"></iframe>
+    </div>
+  </div>
 
 
 

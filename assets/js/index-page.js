@@ -990,7 +990,7 @@ if (recommendTitle && recommendSection) {
   }
 
   try {
-    const records = await window.CottageDB?.getAllPlayRecordsForHub(6);
+    const records = await window.CottageDB?.getAllPlayRecordsForHub(3);
     if (!records || records.length === 0) {
       body.innerHTML = '<p class="rp-empty">아직 기록된 플레이가 없어요.</p>';
       return;
@@ -1017,6 +1017,38 @@ if (recommendTitle && recommendSection) {
   } catch (_) {
     body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
   }
+})();
+
+
+/* =========================
+   # RECORD MODAL
+========================= */
+
+(function initRecordModal() {
+  const modal   = document.getElementById('recordIframeModal');
+  const frame   = document.getElementById('recordIframeFrame');
+  const dim     = document.getElementById('recordIframeDim');
+  const closeBtn = document.getElementById('recordIframeClose');
+  const openBtn  = document.getElementById('openRecordModalBtn');
+  if (!modal || !openBtn) return;
+
+  function openModal() {
+    frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    frame.src = '';
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openModal);
+  dim.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 })();
 
 
