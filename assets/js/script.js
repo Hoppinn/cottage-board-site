@@ -193,8 +193,7 @@ function resetMenuGroups(){
   const isIndex = /\/(index\.html)?$/.test(location.pathname);
   const halfH = window.innerHeight * 0.5;
 
-  // recent-play / meeting 뷰포트 진입 여부 먼저 확인
-  let previewShown = false;
+  // 각 섹션 독립 체크 — 겹치는 영역에서는 둘 다 동시 표시, 그룹도 동시 열림
   if (isIndex) {
     [
       { id: 'recent-play', match: 'game-reviews.html' },
@@ -204,7 +203,6 @@ function resetMenuGroups(){
       if (!el) return;
       const r = el.getBoundingClientRect();
       if (r.top < halfH && r.bottom > 0) {
-        previewShown = true;
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
@@ -215,11 +213,11 @@ function resetMenuGroups(){
     });
   }
 
-  // 추천 섹션: recent-play/meeting이 뷰포트에 없을 때만 is-current
+  // 추천 섹션: 독립적으로 체크 — 다른 섹션과 겹쳐도 둘 다 active 가능
   const recEl = document.getElementById('recommend');
   const recommendLink = document.querySelector('#openRecommendMenu');
   if (recEl && recommendLink) {
-    const isRecActive = !previewShown && recEl.getBoundingClientRect().top < halfH;
+    const isRecActive = recEl.getBoundingClientRect().top < halfH;
     recommendLink.classList.toggle('is-current', isRecActive);
   }
 
