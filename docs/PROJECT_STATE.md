@@ -18,6 +18,7 @@
 | (문서) | GR1+GR2 재검증: deprecated 단건 게임 경로(initGameView/renderSingleGame) 제거 완료, 직접 Supabase 접근 없음, 코드 수정 불필요 |
 | (운영 원칙) | 작업기록 동기화 실패 방지 원칙 추가 — 해결된 항목은 원문서/PLAN/STATE 상태를 함께 닫고, 커밋 전 항목 ID 검색으로 낡은 미해결 기록 확인 |
 | (문서) | ACH9 재검증: POINTS 맵 없음, grantAchievement/showAchievementToast points 인자 없음, achievement-system.md 삭제 정책 명시 — 코드 수정 불필요 |
+| (문서) | ACH7 재검증: showAchievementToast points 파라미터 제거 완료, 호출부도 name만 전달 — 코드 수정 불필요 |
 
 ---
 

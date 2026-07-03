@@ -277,6 +277,21 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 
 ---
 
+## 7차 점검 결과 (2026-07-03)
+
+### ACH7 — showAchievementToast points 미사용 파라미터 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` ACH7. 체크포인트 작성 당시 `showAchievementToast(name, points)`에서 points 미사용 문제.
+
+**확인 결과**:
+- `achievements.js:445` — `function showAchievementToast(name)` 파라미터 1개, points 없음.
+- 함수 내부: `name`만 사용. points 변수 없음.
+- 호출부 `achievements.js:427` — `showAchievementToast(def?.name || id)` name만 전달.
+
+**판단**: ACH9와 동일한 정리 시점에 points 파라미터가 함께 제거된 상태. 코드 수정 불필요.
+
+---
+
 ## 보류
 
 - 관리자 분석 페이지 전체 재구성: 현재는 카운팅 기준 안정화와 상위 탭 sticky만 적용. 큰 UI 재구성은 보류.

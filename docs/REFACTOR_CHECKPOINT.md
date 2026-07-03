@@ -127,7 +127,7 @@
 | ACH4 | **P1** | 하드코딩 이미지 경로 | `checkAchievements` line 474에 직접 경로 기재 | `'/assets/images/characters/characters_basic/squirrel_lv1.png'` 하드코딩. `_charImgPath('squirrel_lv1')` 함수가 있음에도 미사용 — 경로 체계 변경 시 이 경로만 깨짐. |
 | ACH5 | **P1** | 숨은 사이드이펙트 | `buildAchievementsSection` 이름과 달리 소급 업적 지급 실행 | lines 801-808: `_retroMissed` 루프에서 `db.grantAchievement()` 호출. "build" 이름이 read-only를 암시하나 실제로는 write 발생. 외부 호출자는 이 부수효과를 예측하기 어려움. |
 | ACH6 | **P2** | 중복 코드 | `esc` 함수 (line 656) — `window.escH`의 세 번째 복사본 | `buildCodexSection` 내부 로컬 `esc` 함수 = play-records-utils.js의 `_escH`와 동일 패턴. `window.escH`로 대체 가능. |
-| ACH7 | **P2** | 미사용 파라미터 | `showAchievementToast(name, points)` — `points` 받지만 HTML에 미출력 | line 370+: toast HTML에 `name`만 표시, `points` 변수는 함수 내에서 사용되지 않음. 포인트 비활성화 결정이 반영된 것이면 파라미터 정리 필요. |
+| ~~ACH7~~ | ~~**P2**~~ | ~~미사용 파라미터~~ | ~~`showAchievementToast(name, points)` — `points` 받지만 HTML에 미출력~~ | **✅ 해결됨** — 2026-07-03 재검증: `showAchievementToast(name)` points 파라미터 없음, 호출부도 name만 전달, 함수 내 points 변수 없음. 코드 수정 불필요. |
 | ACH8 | **P2** | 문서 불일치 | `getCharacterPath` js-api.md 미기재 | `window.CottageAchievements.getCharacterPath`가 공개 API인데 js-api.md의 `CottageAchievements` 노출 목록에 없음. kakao-auth.js line 118에서 외부 사용 확인. |
 | ~~ACH9~~ | ~~**P2**~~ | ~~불일치~~ | ~~`POINTS` 맵이 "포인트 비활성화" 문서와 충돌~~ | **✅ 해결됨** — 2026-07-03 재검증: POINTS 맵 없음, `grantAchievement(userId, achievementId)` points 인자 없음, `showAchievementToast(name)` points 인자 없음, achievement-system.md에 "포인트 제도 삭제됨" 명시. 코드 수정 불필요. |
 
