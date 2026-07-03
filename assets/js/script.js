@@ -185,22 +185,17 @@ function resetMenuGroups(){
     l.classList.remove('preview-active');
   });
 
-  // 스크롤 위치 기반: 추천 섹션 top이 뷰포트 상반부에 들어오면 active (원복)
-  const recEl = document.getElementById('recommend');
-  const recommendLink = document.querySelector('#openRecommendMenu');
-  if (recEl && recommendLink) {
-    const isRecActive = recEl.getBoundingClientRect().top < window.innerHeight * 0.5;
-    recommendLink.classList.toggle('is-current', isRecActive);
-  }
-
   document.querySelectorAll('.menu-group').forEach(g=>{
     g.classList.remove('is-open');
   });
 
-  // index.html: recent-play/meeting 뷰포트 진입 시 초록 점 + 상위 메뉴 그룹 자동 열기
+  // index.html: 섹션별 스크롤 표시
   const isIndex = /\/(index\.html)?$/.test(location.pathname);
+  const halfH = window.innerHeight * 0.5;
+
+  // recent-play / meeting 뷰포트 진입 여부 먼저 확인
+  let previewShown = false;
   if (isIndex) {
-    const halfH = window.innerHeight * 0.5;
     [
       { id: 'recent-play', match: 'game-reviews.html' },
       { id: 'meeting',     match: 'club.html' },
@@ -209,6 +204,7 @@ function resetMenuGroups(){
       if (!el) return;
       const r = el.getBoundingClientRect();
       if (r.top < halfH && r.bottom > 0) {
+        previewShown = true;
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
@@ -217,6 +213,14 @@ function resetMenuGroups(){
         }
       }
     });
+  }
+
+  // 추천 섹션: recent-play/meeting이 뷰포트에 없을 때만 is-current
+  const recEl = document.getElementById('recommend');
+  const recommendLink = document.querySelector('#openRecommendMenu');
+  if (recEl && recommendLink) {
+    const isRecActive = !previewShown && recEl.getBoundingClientRect().top < halfH;
+    recommendLink.classList.toggle('is-current', isRecActive);
   }
 
   const loginBtn = document.getElementById('kakaoLoginBtn');
