@@ -947,3 +947,104 @@ if (recommendTitle && recommendSection) {
     }
   }
 })();
+
+
+/* =========================
+   # DIFFICULTY GUIDE TOGGLE
+========================= */
+
+(function initDgToggle() {
+  const btn  = document.getElementById('dgToggle');
+  const body = document.getElementById('dgBody');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+    body.hidden = open;
+  });
+})();
+
+
+/* =========================
+   # HERO MEETING BUTTON
+========================= */
+
+(function initHeroMeetingBtn() {
+  const btn = document.getElementById('heroMeetingBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const section = document.getElementById('meeting');
+    if (!section) return;
+    const header = document.querySelector('.site-header');
+    const headerH = header ? header.offsetHeight : 0;
+    window.scrollTo({ top: section.offsetTop - headerH - 8, behavior: 'smooth' });
+  });
+})();
+
+
+/* =========================
+   # MEETING SECTION
+========================= */
+
+(async function initMeetingSection() {
+  const statusEl = document.getElementById('meetingStatusMsg');
+  const daysEl   = document.getElementById('meetingDays');
+  if (!statusEl || !daysEl) return;
+
+  function getThisWeekRange() {
+    const now = new Date();
+    const day = now.getDay(); // 0=일,1=월...6=토
+    const diffToMon = day === 0 ? -6 : 1 - day;
+    const mon = new Date(now);
+    mon.setDate(now.getDate() + diffToMon);
+    const sun = new Date(mon);
+    sun.setDate(mon.getDate() + 6);
+    const fmt = d => d.toISOString().slice(0, 10);
+    return { start: fmt(mon), end: fmt(sun), monDate: mon };
+  }
+
+  function getMeetingStatusMsg(count) {
+    if (count === 0) return '🎲 이번 주 모임 모집 중';
+    if (count === 1) return '🙋 1명이 기다리고 있어요';
+    if (count === 2) return '👥 2명이 기다리고 있어요';
+    if (count === 3) return '🎲 3명이 모였어요';
+    return '🔥 이번 주 모임 진행 중';
+  }
+
+  const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
+
+  try {
+    const { start, end, monDate } = getThisWeekRange();
+    const votes = await window.CottageDB?.getMeetingVotes(start, end);
+    if (!votes) return;
+
+    // 날짜별 고유 user_id 집계
+    const byDate = {};
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monDate);
+      d.setDate(monDate.getDate() + i);
+      byDate[d.toISOString().slice(0, 10)] = new Set();
+    }
+    votes.forEach(v => {
+      if (byDate[v.vote_date]) byDate[v.vote_date].add(v.user_id);
+    });
+
+    // 이번 주 전체 고유 user_id 수
+    const allUsers = new Set(votes.map(v => v.user_id));
+    statusEl.textContent = getMeetingStatusMsg(allUsers.size);
+
+    // 날짜 칩 렌더
+    const dateKeys = Object.keys(byDate).sort();
+    daysEl.innerHTML = dateKeys.map((dateStr, i) => {
+      const cnt = byDate[dateStr].size;
+      const hasVote = cnt > 0;
+      return `<div class="meeting-day-chip${hasVote ? ' has-vote' : ''}">
+        <span class="mdc-day">${DAY_LABELS[i]}</span>
+        <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
+      </div>`;
+    }).join('');
+
+  } catch (_) {
+    statusEl.textContent = '🎲 이번 주 모임 모집 중';
+  }
+})();

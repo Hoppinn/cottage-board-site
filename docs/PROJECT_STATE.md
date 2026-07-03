@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-03 (관리자 분석 페이지 개선)
+최종 갱신: 2026-07-03 (메인페이지 라이브 콘텐츠 강화 1차)
 
 ---
 
@@ -8,6 +8,7 @@
 
 | 커밋 | 내용 |
 |------|------|
+| (이번) | 메인페이지 라이브 콘텐츠 1차: Hero deco-2/3 제거, 우하단 모임 버튼, 난이도 안내 기본접힘, #recent-play 섹션 껍데기, #meeting 섹션(getMeetingVotes 연동, 상태메시지+날짜칩) |
 | 39fe161 | 배너 타이틀 중앙정렬(.page-mini-hero h1 margin:0 !important) + 게임시트 상단 개편(본문 표지 제거, 영문제목 이동, 버튼 2열, 썸네일 클릭 모달) |
 | c15d215 | play-records-utils.js 상단 주석 window 노출 8개로 갱신 |
 | b4e7078 | SC2 재검증 결과 PLAN_refactor_audit_workflow.md 기록 (getRepAchievement name 누락 → 이미 getCharacterName 경로로 해결됨) |
@@ -19,6 +20,14 @@
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
+
+### 메인페이지 라이브 콘텐츠 강화 — 다음 작업
+
+- [ ] **#recent-play 데이터 연동** — `getAllPlayRecordsForHub(6)` 호출 후 게임명+날짜+리뷰 미리보기 카드 렌더. 현재는 안내 문구+링크만 있는 껍데기.
+- [ ] **Hero 기록하기 버튼 → #recent-play 스크롤** — #recent-play에 실제 데이터 붙은 뒤 전환. 현재 `<a href="game-reviews.html">` 유지.
+- [ ] **이번 주 모임 섹션 추가 기획** — 날짜별 미니 막대 상세화, 모임 참여 버튼 연결, 시간 겹침 표시 등.
+
+---
 
 ### 🔵 CHECKPOINT: 모임 플래너 Phase 확장 (2026-07-02 시작)
 

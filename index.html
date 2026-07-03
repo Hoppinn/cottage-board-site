@@ -63,14 +63,6 @@
         ⌇
       </div>
 
-      <div class="hero-deco deco-2">
-        🌱
-      </div>
-
-      <div class="hero-deco deco-3">
-        🌿
-      </div>
-
 
 
       <div class="hero-inner">
@@ -89,6 +81,9 @@
 
         </div>
       </div>
+
+      <!-- 모임 바로가기 버튼 -->
+      <button class="hero-meeting-btn" id="heroMeetingBtn" type="button">👥 모임</button>
 
       <!-- 방문자수 하단 오버레이 -->
       <div class="hero-visitor-bar">
@@ -171,6 +166,10 @@
 
       <!-- 난이도 안내 -->
       <div class="difficulty-guide">
+        <button class="dg-toggle" id="dgToggle" type="button" aria-expanded="false">
+          난이도 기준 보기 <span class="dg-toggle-icon">▾</span>
+        </button>
+        <div class="dg-body" id="dgBody" hidden>
         <p class="dg-title">보드게임 난이도 안내</p>
         <div class="dg-cards">
           <div class="dg-card dg-kids">
@@ -205,9 +204,52 @@
           </div>
         </div>
         <p class="dg-note">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
+        </div><!-- /.dg-body -->
       </div>
 
     </section>
+
+
+
+    <!-- =========================
+         # RECENT PLAY SECTION
+    ========================== -->
+
+    <section class="home-section" id="recent-play">
+      <div class="home-section-inner">
+        <div class="home-section-header">
+          <h2 class="home-section-title">최근 플레이</h2>
+          <a class="home-section-more" href="./pages/game/game-reviews.html">기록 보기 →</a>
+        </div>
+        <p class="home-section-desc">최근 기록을 확인하거나 직접 남겨보세요.</p>
+        <div class="recent-play-body" id="recentPlayBody">
+          <!-- JS 데이터 연동 예정 -->
+        </div>
+        <a class="home-section-cta" href="./pages/game/game-reviews.html">📝 기록 남기기 →</a>
+      </div>
+    </section>
+
+
+
+    <!-- =========================
+         # MEETING SECTION
+    ========================== -->
+
+    <section class="home-section" id="meeting">
+      <div class="home-section-inner">
+        <div class="home-section-header">
+          <h2 class="home-section-title">이번 주 모임</h2>
+          <a class="home-section-more" href="./pages/club/club-schedule.html">플래너 보기 →</a>
+        </div>
+        <div class="meeting-status" id="meetingStatus">
+          <span class="meeting-status-msg" id="meetingStatusMsg">불러오는 중...</span>
+        </div>
+        <div class="meeting-days" id="meetingDays"></div>
+        <a class="home-section-cta" href="./pages/club/club-schedule.html">🗓 모임 플래너 →</a>
+      </div>
+    </section>
+
+
 
   </main>
 
