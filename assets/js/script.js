@@ -202,7 +202,7 @@ function resetMenuGroups(){
       const el = document.getElementById(id);
       if (!el) return;
       const r = el.getBoundingClientRect();
-      if (r.top < halfH && r.bottom > 0) {
+      if (r.top < window.innerHeight && r.bottom > 0) {
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
