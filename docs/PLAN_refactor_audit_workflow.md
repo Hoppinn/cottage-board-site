@@ -228,6 +228,20 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 
 ---
 
+### SC3 — `toggleGameCurious` game_likes 삭제 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` SC3. `toggleGameCurious` 내부에서 game_likes를 삭제한다는 체크포인트 항목.
+
+**확인 결과**:
+- `supabase-client.js` `toggleGameCurious`: game_likes 삭제 로직 **없음**. curious 상태만 토글.
+- 좋아요↔궁금해요 상호배타 처리는 abe774b(2026-07-03)에서 호출부(`onSheetCurious`, `onPrMenuCurious`)에서 `hasUserLiked` 확인 후 `toggleGameLike` 호출하는 방식으로 대칭 구현됨.
+
+**판단**: toggleGameCurious 자체의 사이드이펙트 없음. 상호배타 동작은 호출부에서 명시적으로 처리 완료. 코드 수정 불필요.
+
+**REFACTOR_CHECKPOINT.md 상태 동기화**: SC2/SC3 메인 표·Yellow 목록·보류 표 모두 해결됨으로 갱신 완료.
+
+---
+
 ## 4차 점검 결과 (2026-07-03)
 
 ### CSS1 — `.sheet-section` 중복 정의 재검증

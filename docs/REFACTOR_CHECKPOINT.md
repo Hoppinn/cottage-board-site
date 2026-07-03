@@ -186,8 +186,8 @@
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
 | SC1 | **P1** | SQL LIKE 와일드카드 | `ilike('%${nickname}%')` 4곳에서 닉네임 미이스케이프 | `getMyStats`(line 979), `getMyNotifications`(line 1015), `getUserParticipationCount`(line 1349), `getUserUniqueDayCount`(line 1435). 닉네임에 `%` 또는 `_` 포함 시 LIKE 패턴으로 해석 → 타인 기록 포함되거나 자기 기록 미조회. 현재 닉네임은 안전하나 닉네임 제약이 느슨해지면 오탐. |
-| SC2 | **P1** | 기능 버그 | `getRepAchievement` 반환 `{ id }` 만 — `name` 없음 | kakao-auth.js line 592: `repData?.name` 참조 → 항상 undefined → 대표 캐릭터 설정해도 이름 라벨이 '대표 캐릭터 없음'으로 표시됨. |
-| SC3 | **P1** | 숨은 사이드이펙트 | `toggleGameCurious` (line 585): 궁금해요 추가 시 game_likes도 삭제 | `await db.from("game_likes").delete()...` — 유저의 ❤️가 사라짐. 의도적이라면 js-api.md에 명시 필요. |
+| ~~SC2~~ | ~~**P1**~~ | ~~기능 버그~~ | ~~`getRepAchievement` 반환 `{ id }` 만 — `name` 없음~~ | **✅ 해결됨** — 2026-07-03 재검증: `kakao-auth.js`에 `repData?.name` 참조 없음. 이름 조회는 `CottageAchievements.getCharacterName(repAch.id)` → 로컬 ACH_DEFS 경로로 교체됨. 코드 수정 불필요. |
+| ~~SC3~~ | ~~**P1**~~ | ~~숨은 사이드이펙트~~ | ~~`toggleGameCurious` (line 585): 궁금해요 추가 시 game_likes도 삭제~~ | **✅ 해결됨** — 2026-07-03 재검증: `toggleGameCurious` 자체는 game_likes 삭제 안 함. 좋아요↔궁금해요 상호배타 처리는 abe774b에서 호출부(`onSheetCurious`, `onPrMenuCurious`)에서 대칭 처리. 코드 수정 불필요(이미 수정됨). |
 | SC4 | **P1** | 성능 | `getVisitorStats`: `page_views.__visitor__` 전체 조회 (limit 없음) | 데이터 증가 시 수천~수만 행 클라이언트 반환. DB 집계 함수나 limit 추가 필요. |
 | SC5 | **P1** | 성능 | `getUserFirstRecordCount`: 유저 플레이 게임 전체에 대해 모든 기록 조회 | line 1365: `in('game_id', myGameIds)` — 인기 게임 포함 시 수백~수천 행 반환. RPC 또는 범위 제한 필요. |
 | SC6 | **P1** | TOCTOU | `redeemVoucher`: 잔액 확인 → insert 사이 race 가능 | DB 레벨 잔액 >= 0 constraint 없으면 동시 요청 시 음수 잔액 가능. 단일 사용자 패턴상 현실적 위험은 낮음. |
@@ -195,7 +195,7 @@
 | SC8 | **P2** | 구조 | `window.CottageDB = {...}` (line 1076) 이후 함수 정의 (lines 1155-1503) | 호이스팅으로 동작하나 50개 함수 중 절반이 CottageDB 선언 아래에 있어 가독성 혼란. 실제 버그 없음. |
 
 **즉시 수정 가능 (Green)**: SC7 (중복 상수 통합)  
-**수정 시 검증 필요 (Yellow)**: SC2 (`getRepAchievement`에 name 추가 — DB join 또는 클라이언트 resolve), SC3 (game_likes 삭제 의도 확인 후 문서화 또는 제거)  
+**수정 시 검증 필요 (Yellow)**: ~~SC2 (`getRepAchievement`에 name 추가 — DB join 또는 클라이언트 resolve)~~ → **✅ 해결됨**, ~~SC3 (game_likes 삭제 의도 확인 후 문서화 또는 제거)~~ → **✅ 해결됨**  
 **구조 변경 필요 (Red)**: SC1 (LIKE 이스케이프 — 4곳 동시 수정, PostgreSQL ilike 이스케이프 방식 확인 필요), SC4/SC5 (성능 개선 — DB RPC 또는 limit 도입)
 
 ---
@@ -249,8 +249,8 @@
 
 | # | 파일 | 항목 | 확인 필요 사항 |
 |---|------|------|--------------|
-| SC2 | supabase-client.js | `getRepAchievement` name 누락 | 대표 캐릭터 이름이 어디서 표시되는지 실제 확인 |
-| SC3 | supabase-client.js | `toggleGameCurious`에서 like 삭제 | 의도적인 동작인지 확인 후 문서화 또는 제거 |
+| ~~SC2~~ | ~~supabase-client.js~~ | ~~`getRepAchievement` name 누락~~ | **✅ 해결됨** — 2026-07-03 재검증: repData?.name 참조 없음, getCharacterName 경로로 교체됨. 코드 수정 불필요 |
+| ~~SC3~~ | ~~supabase-client.js~~ | ~~`toggleGameCurious`에서 like 삭제~~ | **✅ 해결됨** — 2026-07-03 재검증: toggleGameCurious 자체는 game_likes 삭제 안 함. abe774b에서 호출부 대칭 처리 완료 |
 | ~~ACH9~~ | ~~achievements.js~~ | ~~POINTS 맵 vs 포인트 비활성화~~ | **✅ 해결됨** — 2026-07-03 재검증: POINTS 맵 없음, grantAchievement points 인자 없음, achievement-system.md에 삭제 정책 명시. 코드 수정 불필요 |
 | ~~GR1~~ | ~~game-reviews.js~~ | ~~deprecated `renderSingleGame` 유지 여부~~ | **✅ 해결됨** — 2026-07-03 재검증: 함수 없음, 호출처 없음, 직접 Supabase 접근 없음, 코드 수정 불필요 |
 | ~~CSS1~~ | ~~style.css~~ | ~~`.sheet-section` 이중 정의~~ | **✅ 해결됨** — 2026-07-03 재검증: 두 번째 정의 없음, 코드 수정 불필요 |
