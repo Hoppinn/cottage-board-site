@@ -1033,10 +1033,18 @@ if (recommendTitle && recommendSection) {
   const loader   = document.getElementById('recordIframeLoader');
   if (!modal || !openBtn) return;
 
-  // preload iframe on page ready so first open is instant
-  frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+  let preloaded = false;
+
+  function preloadIfLoggedIn() {
+    if (preloaded || !window.getKakaoUser?.()) return;
+    preloaded = true;
+    frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+  }
+  window.addEventListener('kakao-auth-ready', preloadIfLoggedIn);
+  window.addEventListener('cottage-auth-changed', preloadIfLoggedIn);
 
   function openModal() {
+    if (!window.getKakaoUser?.()) { window.kakaoLogin?.(); return; }
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
@@ -1051,7 +1059,6 @@ if (recommendTitle && recommendSection) {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
-    // keep frame.src intact so next open is instant
   }
 
   window.addEventListener('message', e => {
