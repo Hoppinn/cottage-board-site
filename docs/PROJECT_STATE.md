@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-03 (메인페이지 라이브 콘텐츠 강화 1차)
+최종 갱신: 2026-07-03 (메인페이지 UI 개편 + 햄버거 메뉴 스크롤 표시)
 
 ---
 
@@ -8,6 +8,10 @@
 
 | 커밋 | 내용 |
 |------|------|
+| c2b91bc | 햄버거 메뉴 스크롤 표시 정책: 추천게임찾기 full-active 유지, recent-play/meeting 진입 시 갈색 점+그룹 자동 열림, 겹침 구간 동시 표시, 실시간 scroll 반영(refreshMenuActive) |
+| 23c789d | 최근 플레이 섹션 개편: 3개 표시, 우상단 기록 더보기·기록 남기기, 좌하단 CTA 제거, 기록 남기기 → iframe 센터모달 |
+| 7018aaa | 난이도 토글 레이블 변경(난이도 기준 보기→보드게임 난이도 안내), 중복 타이틀 제거, 카드 공백 축소 |
+| adec443 | 게임카드↔가로선 사이 공백 축소(game-scroll padding-bottom 18→8px, difficulty-guide margin-top 20→8px) |
 | (이번) | 메인페이지 라이브 콘텐츠 2차: #recent-play getAllPlayRecordsForHub(6) 연동(게임명/날짜/닉네임/리뷰미리보기 카드), Hero 기록하기 버튼 → #recent-play 스크롤 전환 |
 | 74d1294 | 메인페이지 라이브 콘텐츠 1차: Hero deco-2/3 제거, 우하단 모임 버튼, 난이도 안내 기본접힘, #recent-play 섹션 껍데기, #meeting 섹션(getMeetingVotes 연동, 상태메시지+날짜칩) |
 | 39fe161 | 배너 타이틀 중앙정렬(.page-mini-hero h1 margin:0 !important) + 게임시트 상단 개편(본문 표지 제거, 영문제목 이동, 버튼 2열, 썸네일 클릭 모달) |
