@@ -1088,6 +1088,17 @@ function _getOrganizerPhotos(gameKey) {
   );
 }
 
+function _openCoverModal(src) {
+  document.getElementById('coverModal')?.remove();
+  const m = document.createElement('div');
+  m.id = 'coverModal';
+  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;';
+  m.innerHTML = `<img src="${src}" style="max-width:90%;max-height:85vh;object-fit:contain;border-radius:12px;" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
+    <button onclick="document.getElementById('coverModal')?.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
+  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+  document.body.appendChild(m);
+}
+
 function _openOrganizerLightbox(urls, gameName) {
   if (!urls?.length || !window.openLightbox) return;
   const captions = urls.map(() => `${gameName} 정리법`);
@@ -1271,11 +1282,13 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
 
   gameSheetContent.innerHTML = `
     <!-- 고정 헤더 (진입 시부터 표시) -->
-    <div class="sheet-sticky-bar" id="sheetStickyBar" onclick="if(!event.target.closest('button')){const p=gameSheet?.querySelector('.game-sheet-scroll');if(p)p.scrollTo({top:0,behavior:'smooth'});}">
+    <div class="sheet-sticky-bar" id="sheetStickyBar" onclick="if(!event.target.closest('button,img')){const p=gameSheet?.querySelector('.game-sheet-scroll');if(p)p.scrollTo({top:0,behavior:'smooth'});}">
       <img class="sheet-sticky-thumb"
         src="${detail.image || DEFAULT_GAME_IMAGE}"
         alt="${detail.title}"
         onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
+        onclick="event.stopPropagation();_openCoverModal('${(detail.image || DEFAULT_GAME_IMAGE).replace(/'/g,"\\'")}');"
+        style="cursor:pointer;"
       >
       <span class="sheet-sticky-title">${detail.title}</span>
       ${detail.rating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(detail.rating)}</span>` : ""}
@@ -1285,26 +1298,15 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
     <!-- 뒤로가기 (게임→게임 이동 시) -->
     ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? String(_prevHistTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
 
-    <!-- 영어 제목 -->
-    ${detail.bggTitle && detail.bggTitle !== detail.title
-      ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
-
-    <!-- 이미지 + 설명 -->
+    <!-- 설명 + 버튼 -->
     <div class="sheet-header">
-      <div class="sheet-img-col">
-        <img class="sheet-thumb"
-          src="${detail.image || DEFAULT_GAME_IMAGE}"
-          alt="${detail.title}"
-          onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';"
-        >
-        ${detail.rating ? `<div class="sheet-img-bgg">⭐ ${formatRating(detail.rating)}</div>` : ""}
-      </div>
       <div class="sheet-title-block">
+        ${detail.bggTitle && detail.bggTitle !== detail.title ? `<p class="sheet-en-title">${detail.bggTitle}</p>` : ""}
         ${getAvailNoticHtml(game)}
         ${detail.summaryKo ? `<p class="sheet-summary">${detail.summaryKo}</p>` : ""}
         <div class="sheet-links-block">
-          <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 ${shelfLabel} ← 꽂혀있는 책장 보기</button>
           <div class="sheet-links-row2">
+            <button class="sheet-loc-btn" type="button" onclick="openShelfSheet('${rootPath}pages/game/game-location.html?${shelfSectionId ? 'shelf=' + encodeURIComponent(shelfSectionId) + '&' : ''}embed=1&highlight=${encodeURIComponent(gameKey)}')">📍 꽂혀있는 책장 보기</button>
             <a class="sheet-yt-btn"
               href="${detail.youtubeUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(cleanTitleForYoutubeSearch(detail.title) + ' 보드게임')}`}"
               onclick="return confirm('유튜브로 이동할까요?')"
@@ -1312,8 +1314,8 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
               <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
               룰영상 보기
             </a>
-            ${_orgPhotos.length ? `<button class="sheet-org-btn" type="button" onclick="_openOrganizerLightbox(${JSON.stringify(_orgPhotos)}, '${esc(getGameName(gameKey) || String(gameKey))}')">📦 정리법 보기</button>` : ''}
           </div>
+          ${_orgPhotos.length ? `<button class="sheet-org-btn" type="button" onclick="_openOrganizerLightbox(${JSON.stringify(_orgPhotos)}, '${esc(getGameName(gameKey) || String(gameKey))}')">📦 정리법 보기</button>` : ''}
         </div>
       </div>
     </div>
