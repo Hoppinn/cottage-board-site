@@ -677,10 +677,11 @@ body.owned-page .site-header{
 
 /* 히어로 전용 버튼 — 크림 채움(Primary) / 크림 아웃라인(Secondary) */
 .hero .btn{padding:clamp(12px,3.5vw,16px) clamp(14px,4.5vw,22px);font-weight:800;}
+.hero .buttons{margin-bottom:8px;}
 .hero .primary-btn{background:#e8d9c0;color:#3d2810;border-color:#e8d9c0;}
 .hero .primary-btn:hover{background:#ddc9a8;border-color:#ddc9a8;}
-.hero .secondary-btn{background:transparent;color:#e8d9c0;border-color:#e8d9c0;}
-.hero .secondary-btn:hover{background:rgba(232,217,192,0.15);}
+.hero .secondary-btn{background:rgba(232,217,192,0.08);color:#ede5d5;border-color:#e8d9c0;}
+.hero .secondary-btn:hover{background:rgba(232,217,192,0.2);}
 
 .hero-club-link{display:block;margin-top:14px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;}
 .hero-club-link:hover{color:var(--green);}
@@ -691,21 +692,21 @@ body.owned-page .site-header{
 /* Hero 우하단 모임 버튼 */
 .hero-meeting-btn{
   position:absolute;
-  bottom:52px;right:16px;
+  bottom:60px;right:20px;
   z-index:3;
-  padding:7px 14px;
+  padding:9px 15px;
   border-radius:20px;
-  border:1.5px solid rgba(232,217,192,0.6);
-  background:rgba(30,15,5,0.45);
+  border:1.5px solid rgba(232,217,192,0.75);
+  background:rgba(30,15,5,0.55);
   backdrop-filter:blur(6px);
-  color:rgba(232,217,192,0.92);
-  font-size:13px;
+  color:rgba(232,217,192,0.95);
+  font-size:14px;
   font-weight:700;
   cursor:pointer;
   line-height:1;
   transition:background .15s;
 }
-.hero-meeting-btn:hover{background:rgba(30,15,5,0.65);}
+.hero-meeting-btn:hover{background:rgba(30,15,5,0.72);}
 .breadcrumb .bc-sep{margin:0 5px;opacity:.6;}
 /* breadcrumb: about-hero 카드 위로 절대배치 (모바일·PC 공통) */
 .about-hero .breadcrumb{position:absolute;top:-24px;left:0;color:#8c6a4a;font-size:12px;font-weight:600;margin-bottom:0;}
