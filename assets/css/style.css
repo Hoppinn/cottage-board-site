@@ -6862,7 +6862,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-player-header { padding: 5px 16px; display: flex; flex-wrap: wrap; gap: 3px 0; align-items: center; border-top: 1px solid #ece8e0; background: #f8f5f1; }
 .pr-player-header:first-child { border-top: none; }
 .pr-player-header .pr-rec-tag { background: transparent; color: #8a7868; font-weight: 400; font-size: 12px; border-radius: 0; padding: 0 4px; border: none; }
-.pr-tag-count { background: transparent !important; color: #5c7048 !important; border: none !important; font-weight: 600 !important; padding: 0 6px 0 0 !important; }
+.pr-tag-count { background: transparent !important; color: #3d5230 !important; border: none !important; font-weight: 600 !important; padding: 0 6px 0 0 !important; }
 .pr-tag-who { background: transparent; color: #8a7868; }
 .pr-tag-who + .pr-tag-who::before { content: "·"; margin-right: 3px; color: #c4b4a4; }
 .pr-tag-who-first { color: #5a4030 !important; border-bottom: none !important; font-weight: 500 !important; padding-bottom: 0 !important; }
