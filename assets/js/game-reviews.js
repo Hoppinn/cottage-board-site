@@ -933,7 +933,7 @@
         const ymTotalGames = [...dateMap.values()].reduce((s, recs) => s + recs.length, 0);
         const isLatestYm = ym === latestYm;
 
-        html += `<div class="pr-month-session${isLatestYm ? ' is-open' : ''}">
+        html += `<div class="pr-month-session">
           <button class="pr-month-hd" type="button">
             <span class="pr-month-label">${escH(ymLabel)}</span>
             <span class="pr-month-summary">${dateMap.size}회 · ${ymTotalGames}게임</span>
@@ -1022,7 +1022,7 @@
       const totalGames = [...dateMap.values()].reduce((s, gm) => s + [...gm.values()].reduce((s2, recs) => s2 + recs.length, 0), 0);
       const isLatestMonth = ym === latestYm;
 
-      html += `<div class="pr-session pr-session--bydate${isLatestMonth ? ' is-open' : ''}">
+      html += `<div class="pr-session pr-session--bydate">
         <button class="pr-session-hd" type="button">
           <span class="pr-session-date">${monthLabel}</span>
           <span class="pr-session-summary">${dateMap.size}일 · ${totalGames}게임</span>
@@ -1038,7 +1038,7 @@
         const totalDateGames = [...groupMap.values()].reduce((s, recs) => s + recs.length, 0);
         const dateLabel = formatKstDateWithDay(dateStr);
 
-        html += `<div class="pr-sub-session${isLatestDate ? ' is-open' : ''}" data-date="${dateStr}">
+        html += `<div class="pr-sub-session" data-date="${dateStr}">
           <button class="pr-sub-hd" type="button">
             <span class="pr-sub-date">${escH(dateLabel)}</span>
             <span class="pr-sub-summary pr-sub-summary--date">${totalDateGames}게임</span>
