@@ -692,7 +692,7 @@ body.owned-page .site-header{
 /* Hero 우하단 모임 버튼 */
 .hero-meeting-btn{
   position:absolute;
-  bottom:60px;right:20px;
+  bottom:52px;right:20px;
   z-index:3;
   padding:9px 15px;
   border-radius:20px;
