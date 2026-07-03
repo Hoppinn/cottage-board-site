@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-03
+최종 갱신: 2026-07-03 (관리자 분석 페이지 개선)
 
 ---
 
@@ -101,6 +101,27 @@
   - 2단계에서 만든 데이터를 탭에 연결, 빈 데이터/로딩/예외 처리
 
 **위험요소**: 관리자 전용 페이지라 일반 사용자 영향 없음. 단일 파일(1700+줄) 대규모 재구성이라 세션을 나눠 진행 중 — 1단계 완료 후 git diff로 기존 차트/통계 수치가 동일하게 나오는지 반드시 확인.
+
+### 143차-197~214 완료 항목 (2026-07-03) — 관리자 분석 페이지 개선
+
+| # | 내용 | 비고 |
+|---|------|------|
+| 비로그인 중복집계 수정 | `dedupUserPageDay`: anon도 `session_key+page+day` 기준 dedup | |
+| 오늘 이용시간 수정 | member 차트 "오늘" 분기에서 stale `profiles.today_date` 제거 → `filtered` rows 기준 | |
+| 페이지 상세 테이블 제거 | `renderPageTable` 함수 + `pagesBody` 주입 제거 | |
+| 페이지 차트 바 안에 시간 표시 | `afterDatasetsDraw` 커스텀 플러그인, 가운데 정렬 | |
+| 유입 차트 바 안에 시간 표시 | 동일 플러그인, `page_sessions.referrer` 직접 집계 | |
+| `makeOrUpdate` plugins 파라미터 추가 | 5번째 인수로 Chart.js inline plugins 전달 | |
+| `fmtTime` scope 버그 수정 | `loadAnalytics()` 내부에만 있던 것 → `renderCharts()` 에도 추가 | |
+| 회원 탭 날짜 헤더 추가 | `usesDateFilter`에 `member` 포함 (이벤트는 고정 30일이라 제외) | |
+| 요약 탭 페이지 카드 시간 추가 | 전체 rows(non-dedup) 기준 totalSec, `(N회 · N시간)` 형태 | |
+| 요약 탭 유입 카드 시간 추가 | `page_sessions.referrer` 직접 집계 | |
+| 페이지 카드 짧은 이름 alias | `코티지가 만들어진 이유 → 소개`, `홈페이지 기능 → 기능안내` | |
+
+**미해결 (설계 한계)**:
+- 단기 방문(heartbeat 전 종료)은 `duration_sec=0` → 시간 표시 안 됨. 추적 로직 변경 필요, 별도 작업.
+
+---
 
 ### 142차 완료 항목 (2026-06-22)
 
