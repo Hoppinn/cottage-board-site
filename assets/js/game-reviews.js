@@ -947,12 +947,10 @@
         const hiddenDates = sortedDates.slice(MAX_DATES);
 
         const renderDateBlock = ([dateStr, recs]) => {
-          const gameNames = recs.map(r => getGameName(r.game_id));
-          const summaryText = gameNames.slice(0, 3).join(', ') + (gameNames.length > 3 ? ` 외 ${gameNames.length - 3}개` : '');
           return `<div class="pr-sub-session" data-date="${dateStr}">
             <button class="pr-sub-hd" type="button">
               <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
-              <span class="pr-sub-summary">${escH(summaryText)}</span>
+              <span class="pr-sub-summary">${recs.length}게임</span>
               <span class="pr-sub-arrow">▾</span>
             </button>
             <div class="pr-sub-body">${buildSessionBody(recs, user, _orderMap)}</div>
@@ -1041,7 +1039,7 @@
         html += `<div class="pr-sub-session" data-date="${dateStr}">
           <button class="pr-sub-hd" type="button">
             <span class="pr-sub-date">${escH(dateLabel)}</span>
-            <span class="pr-sub-summary pr-sub-summary--date">${totalDateGames}게임</span>
+            <span class="pr-sub-summary">${totalDateGames}게임</span>
             <span class="pr-sub-arrow">▾</span>
           </button>
           <div class="pr-sub-body">`;
