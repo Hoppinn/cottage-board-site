@@ -203,8 +203,9 @@ function resetMenuGroups(){
       const el = document.getElementById(id);
       if (!el) return;
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) {
-        previewShown = true;
+      const inView = r.top < window.innerHeight && r.bottom > 0;
+      if (r.top < halfH && r.bottom > 0) previewShown = true; // recommend 해제는 상단 50% 진입 시만
+      if (inView) {
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
@@ -270,8 +271,9 @@ function refreshMenuActive() {
       const el = document.getElementById(id);
       if (!el) return;
       const r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) {
-        previewShown = true;
+      const inView = r.top < window.innerHeight && r.bottom > 0;
+      if (r.top < halfH && r.bottom > 0) previewShown = true; // recommend 해제는 상단 50% 진입 시만
+      if (inView) {
         const link = document.querySelector(`.header-menu a[href*="${match}"]`);
         if (link) {
           link.classList.add('preview-active');
