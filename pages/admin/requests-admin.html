@@ -1146,11 +1146,13 @@
         // 시간은 dedup 없이 전체 rows에서 집계 (dedup이 duration_sec=0인 행을 잡을 수 있음)
         const _allPageSec = {};
         for (const r of rows) { if (r.page) _allPageSec[r.page] = (_allPageSec[r.page] || 0) + (r.duration_sec || 0); }
+        const _PAGE_SHORT = { '코티지가 만들어진 이유': '소개', '홈페이지 기능': '기능안내', '동호회 소개': '동호회' };
         _sumPageCount.innerHTML = _topPages.length
           ? _topPages.map(([p, data]) => {
               const totS = _allPageSec[p] || 0;
               const timeStr = totS > 0 ? `·${fmtTime(totS)}` : '';
-              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span>(${data.visits}회${timeStr})</span></span>`;
+              const label = _PAGE_SHORT[p] || p;
+              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(label)} <span>(${data.visits}회${timeStr})</span></span>`;
             }).join('')
           : '—';
       }
