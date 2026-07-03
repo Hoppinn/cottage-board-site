@@ -775,6 +775,9 @@ body.recommend-page main{
   border-top:1px solid rgba(223,199,161,0.55);
   scroll-margin-top:calc(var(--header-total-h) + 8px);
 }
+.recommend-section:has(#dgToggle[aria-expanded="false"]){
+  padding-bottom:14px;
+}
 
 .recommend-header--photo{
   position:relative;
