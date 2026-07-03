@@ -14,6 +14,7 @@
 | abe774b | 궁금해요 추가 시 좋아요 DB 제거 (onSheetCurious, onPrMenuCurious) — 좋아요↔궁금해요 상호배타 비대칭 버그 수정 |
 | (문서) | CSS1 재검증: .sheet-section 중복 정의 없음, 코드 수정 불필요 — REFACTOR_CHECKPOINT.md·PLAN_refactor_audit_workflow.md 반영 |
 | (문서) | GR1+GR2 재검증: deprecated 단건 게임 경로(initGameView/renderSingleGame) 제거 완료, 직접 Supabase 접근 없음, 코드 수정 불필요 |
+| (운영 원칙) | 작업기록 동기화 실패 방지 원칙 추가 — 해결된 항목은 원문서/PLAN/STATE 상태를 함께 닫고, 커밋 전 항목 ID 검색으로 낡은 미해결 기록 확인 |
 
 ---
 
