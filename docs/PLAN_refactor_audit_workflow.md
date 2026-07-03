@@ -206,6 +206,28 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 - 주석 정리 중 함수명 변경 필요가 생긴다고 판단되는 경우
 - 실제 전역 노출 목록과 `docs/js-api.md`가 다르게 보이는 경우
 
+## 3차 점검 결과 (2026-07-03)
+
+### SC2 — `getRepAchievement` name 누락 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` SC2. 처리 현황 표에 "✅ 완료"로 기록되어 있으나 완료 사유가 없어 재검증.
+
+**확인 내용**:
+
+- `supabase-client.js` `getRepAchievement` 반환값: `{ id: data.rep_achievement_id }` 만 반환. `name` 필드 없음 — SC2 원래 진단 그대로.
+- `kakao-auth.js` 내 `repData?.name` 참조: **파일에 없음**. 체크포인트가 적은 "line 592: `repData?.name`"은 이미 제거된 구 코드.
+- 현재 대표 캐릭터 이름 조회 흐름:
+  1. `achievements.js` `_fetchUserStats` → `db.getRepAchievement(userId)` → `repAch = { id }`
+  2. `kakao-auth.js` `_repName = CottageAchievements.getCharacterName(repAch.id)` (line 1010)
+  3. `achievements.js` `getCharacterName` → `ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name` (line 896)
+  - DB 반환값의 `name` 필드와 무관하게 로컬 정의에서 이름을 가져옴.
+
+**판단**: 버그 없음. `getRepAchievement`의 반환 구조는 그대로지만, 이름 조회 경로가 DB → 로컬 ACH_DEFS 로 교체되어 동작상 완전히 해결된 상태.
+
+**수정 필요 여부**: 코드 수정 불필요. 문서상 해결됨으로 분류.
+
+---
+
 ## 보류
 
 - 관리자 분석 페이지 전체 재구성: 현재는 카운팅 기준 안정화와 상위 탭 sticky만 적용. 큰 UI 재구성은 보류.
