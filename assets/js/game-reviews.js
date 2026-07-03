@@ -141,6 +141,11 @@
 
     renderInputPanel();
     if (!startInput) loadRecords();
+
+    // embedded modal: notify parent that tabs are rendered (hides loading state)
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'cottage-hub-ready' }, '*');
+    }
   }
 
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }

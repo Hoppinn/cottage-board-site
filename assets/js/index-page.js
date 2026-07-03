@@ -1025,14 +1025,17 @@ if (recommendTitle && recommendSection) {
 ========================= */
 
 (function initRecordModal() {
-  const modal   = document.getElementById('recordIframeModal');
-  const frame   = document.getElementById('recordIframeFrame');
-  const dim     = document.getElementById('recordIframeDim');
+  const modal    = document.getElementById('recordIframeModal');
+  const frame    = document.getElementById('recordIframeFrame');
+  const dim      = document.getElementById('recordIframeDim');
   const closeBtn = document.getElementById('recordIframeClose');
   const openBtn  = document.getElementById('openRecordModalBtn');
+  const loader   = document.getElementById('recordIframeLoader');
   if (!modal || !openBtn) return;
 
   function openModal() {
+    frame.classList.remove('is-ready');
+    if (loader) loader.style.display = 'flex';
     frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
@@ -1042,8 +1045,16 @@ if (recommendTitle && recommendSection) {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     frame.src = '';
+    frame.classList.remove('is-ready');
     document.body.style.overflow = '';
   }
+
+  window.addEventListener('message', e => {
+    if (e.data?.type === 'cottage-hub-ready') {
+      frame.classList.add('is-ready');
+      if (loader) loader.style.display = 'none';
+    }
+  });
 
   openBtn.addEventListener('click', openModal);
   dim.addEventListener('click', closeModal);
