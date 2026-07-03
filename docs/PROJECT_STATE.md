@@ -431,43 +431,7 @@
 
 ### P2 — 기능 (선택)
 
-- [ ] **게임시트 상단 레이아웃 개편** (Yellow, JS+CSS) — 아래 상세 스펙 참조.
-
----
-
-## Next Task — 게임정보 시트 상단 레이아웃 개선
-
-목표: 첫 화면의 정보 밀도를 높이고, 중복 요소를 제거한다. 디자인 스타일은 유지하고 배치만 개선한다.
-
-### 1. 본문 표지 제거
-- 본문에 있는 큰 게임 표지(`sheet-img-col` 전체) 제거
-- 이유: 고정헤더에 항상 게임 썸네일이 표시되므로 중복. 본문 공간 확보해 설명과 버튼을 더 위로 올린다.
-
-### 2. 영문 제목 위치 변경
-- 현재: `sheet-en-title`이 `sheet-header` 바깥 위에 독립 배치
-- 변경: `sheet-title-block` 최상단으로 이동 (설명 바로 위)
-
-### 3. 별점 중복 제거
-- `sheet-img-bgg`(썸네일 아래 별점) 제거
-- 고정헤더 우측 별점(`sheet-sticky-bgg`)만 유지
-
-### 4. 버튼 재배치
-- 현재: `[📍 A-1 ← 꽂혀있는 책장 보기  전체폭]` / `[룰영상 보기][정리법 보기]`
-- 변경: `[📍 꽂혀있는 책장 보기]  [룰영상 보기]` 한 줄 / 정리법 보기는 있으면 그 아래
-- 문구는 현재 유지. 공간 부족 시에만 `📍 책장 보기`로 축약 검토.
-
-### 5. 헤더 썸네일 확대 기능
-- 고정헤더(`sheet-sticky-bar`)의 썸네일(`sheet-sticky-thumb`) 클릭 → 표지 확대 모달
-- 헤더 나머지 영역 클릭 → 기존처럼 페이지 최상단 이동 유지
-- `event.stopPropagation()`으로 썸네일 클릭이 헤더 클릭과 중복 실행되지 않도록 처리
-- 모달: 검은 반투명 배경, 표지만 크게 표시, 바깥 터치 또는 X로 닫기, 확대/축소 없음
-
-### 관련 파일
-- `assets/js/script.js` ~L1272~1320 (HTML 생성부)
-- `assets/css/style.css` `.sheet-en-title` / `.sheet-img-col` / `.sheet-loc-btn` / `.sheet-links-block`
-
-### 절대 변경 금지
-디자인 스타일·색상·폰트·여백 전체 리디자인·다른 섹션 레이아웃. 이번 작업은 **상단 영역 정보 재배치 + 표지 확대 UX 추가만** 수행한다.
+- [x] **게임시트 상단 레이아웃 개편** (커밋: 39fe161) — sheet-img-col 제거, sheet-en-title을 sheet-title-block 최상단으로 이동, 버튼 한 줄 배치([꽂혀있는 책장 보기][룰영상 보기]), 헤더 썸네일 클릭 시 _openCoverModal() 표지 확대 모달.
 
 ---
 
@@ -604,3 +568,30 @@ _syncTimeToDBNow 성공 시에만 timeSec=0. upsertProfile selectError 시 시�
 | 2026-06-12 | refactor: localStorage 세션 키 8개 → cottage_sess_{id} 단일 JSON 통합 |
 | 2026-06-11 | fix: DB 데이터 복구 — visit_count 리셋 + total_minutes 60배, page_sessions 기반 재집계 |
 | 2026-06-11 | fix: heartbeat 이용시간 누락(_syncTimeToDBNow), upsertProfile selectError 시 0 덮어쓰기 방지 |
+
+## 2026-07-03 CSS/sticky 버그 회고
+
+이번 세션의 버그 1~5는 대부분 "값이 조금 틀림"이 아니라 "어떤 영역이 고정되고 어떤 영역이 스크롤되는지"를 잘못 해석해서 생긴 문제였다.
+
+### 공통 실패 원인
+
+- 최근 수정값을 기준으로 삼고, 사용자가 말한 비교 대상 컴포넌트를 다시 확인하지 않았다.
+- 공백을 만들 때 그 공백이 scroll body 안에 있는지 sticky/fixed 영역에 있는지 구분하지 않았다.
+- 같은 현상을 여러 번 값만 바꿔 고치려 했고, 2회 실패 후 런타임 값/DOM 구조 확인으로 전환하지 않았다.
+- 커밋 전 diff에서 선택자 이름까지 확인하지 않으면 엉뚱한 비슷한 속성이 함께 바뀔 수 있다.
+
+### 버그별 진짜 원인과 해결
+
+- 버그1: 내 보드 메인 고정헤더가 큰 이유는 패널 위치/height가 아니라 `.profile-panel-header`의 세로 padding과 아래 margin이 함께 고정 영역처럼 보였기 때문. 패널 위치와 height는 그대로 두고 header padding/margin만 줄였다.
+- 버그2: 기록보드에서 `기록보드 헤더 + 공백 + 게임평 헤더`가 함께 고정되어야 했는데, 공백을 `.profile-subsheet-body--records`의 scroll padding으로 만들어 본문이 그 틈으로 지나갔다. `::before` sticky 덮개로 공백 자체를 고정 영역에 포함했다.
+- 버그3: 게임위치 바텀시트는 `align-items:flex-end` 구조라 `height:calc(100dvh - Npx)`가 상단 여백을 결정한다. 좌우/아래/radius/overflow는 유지하고 height 값만 조정했다.
+- 버그4: 홈페이지 기능 iframe 시트는 "게임정보/내 보드 시트와 동일"이 기준이었는데, 직전 게임위치 시트의 `102px` 기준을 복사해 상단 여백이 과해졌다. `height:calc(100dvh - 48px)` + `margin-bottom:12px`로 게임정보/내 보드 계열 기준에 맞췄다.
+- 버그5: 초기 렌더 버그는 재현되지 않아 구조 수정 대신 고정헤더 높이만 줄였다. position/top/height는 유지하고 padding/min-height 값만 조정했다. 작업 중 의도 밖 `.hero-visitor-bar` 변경을 diff에서 발견해 커밋 전 원복했다.
+
+### 다음 작업 원칙
+
+- sticky/scroll/fixed/iframe/bottom sheet 문제는 먼저 DOM 구조와 고정 영역 범위를 말로 정의한다.
+- 공백이 필요하면 "스크롤되는 공백"인지 "고정되는 공백"인지 먼저 결정한다.
+- 2회 이상 같은 증상이 반복되면 값 추측을 멈추고 `getBoundingClientRect()`, `getComputedStyle()`, `offsetHeight`, `clientHeight`로 실제 런타임 값을 확인한다.
+- CSS 변수에 `calc()`, `var()`, `env()`가 섞이면 `parseFloat()`로 처리하지 않는다. 실제 DOM 크기를 측정하거나 CSS에 맡긴다.
+- 커밋 전 diff에서 파일뿐 아니라 선택자 이름까지 확인한다.
