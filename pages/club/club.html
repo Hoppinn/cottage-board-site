@@ -124,47 +124,49 @@
   <!-- 동호회 페이지 스크롤스파이 -->
   <script>
   (function () {
+    const navLinks = document.querySelectorAll('.menu-group-body a[href*="club.html"]');
+    if (!navLinks.length) return;
+
+    // 햄버거 메뉴에 #hash 서브링크가 있을 때만 스크롤스파이 실행
+    // 서브링크 없으면 script.js IIFE의 URL 매칭으로 is-current 처리됨
+    const hasSubLinks = Array.from(navLinks).some(a => a.getAttribute('href').includes('#'));
+    if (!hasSubLinks) return;
+
     const joinEl = document.getElementById('club-join');
     const meetEl = document.getElementById('club-meeting');
     if (!joinEl || !meetEl) return;
 
-    const navLinks = document.querySelectorAll('.menu-group-body a[href*="club.html"]');
-    if (!navLinks.length) return;
+    const joinLink = Array.from(navLinks).find(a => a.getAttribute('href').includes('#club-join'));
+    const meetLink = Array.from(navLinks).find(a => a.getAttribute('href').includes('#club-meeting'));
+    const baseHref = navLinks[0]?.getAttribute('href') || '';
 
-    // 동호회 그룹 자동 펼침 (script.js가 club.html 링크를 스킵하므로 여기서 처리)
-    const clubGroup = navLinks[0]?.closest('.menu-group');
-    if (clubGroup) clubGroup.classList.add('is-open');
-
-    function setActive(href) {
+    function setActive(targetHref) {
       navLinks.forEach(a => {
         const ah = a.getAttribute('href');
-        if (ah !== href) {
+        if (ah !== targetHref) {
           a.style.removeProperty('background');
           a.style.removeProperty('color');
           a.style.removeProperty('font-weight');
           a.style.removeProperty('border-radius');
         }
-        a.classList.toggle('is-current', ah === href);
+        a.classList.toggle('is-current', ah === targetHref);
       });
     }
 
     function getActiveHref() {
       const y = window.scrollY + 140;
       const bottom = document.documentElement.scrollHeight - window.innerHeight;
-      if (bottom > 0 && window.scrollY >= bottom - 20) return './club.html#club-meeting';
-      if (meetEl.offsetTop && y >= meetEl.offsetTop) return './club.html#club-meeting';
-      if (joinEl.offsetTop && y >= joinEl.offsetTop) return './club.html#club-join';
-      return './club.html';
+      if (meetLink && bottom > 0 && window.scrollY >= bottom - 20) return meetLink.getAttribute('href');
+      if (meetLink && meetEl.offsetTop && y >= meetEl.offsetTop) return meetLink.getAttribute('href');
+      if (joinLink && joinEl.offsetTop && y >= joinEl.offsetTop) return joinLink.getAttribute('href');
+      return baseHref;
     }
 
-    function updateSpy() { setActive(getActiveHref()); }
-
-    window.addEventListener('scroll', updateSpy, { passive: true });
+    window.addEventListener('scroll', () => setActive(getActiveHref()), { passive: true });
 
     const hash = location.hash;
-    if (hash === '#club-join') setActive('./club.html#club-join');
-    else if (hash === '#club-meeting') setActive('./club.html#club-meeting');
-    // 해시 없이 진입: 초기 is-current 없음 — 스크롤 후 표시
+    if (hash === '#club-join' && joinLink) setActive(joinLink.getAttribute('href'));
+    else if (hash === '#club-meeting' && meetLink) setActive(meetLink.getAttribute('href'));
   })();
   </script>
 
