@@ -727,7 +727,6 @@ body.owned-page .site-header{
 #recommend,
 body.recommend-page #recommend{
   display:block !important;
-  min-height:calc(100svh - var(--header-total-h));
   padding-top:24px;
   scroll-margin-top:var(--header-total-h);
 }
@@ -770,7 +769,7 @@ body.recommend-page main{
 }
 
 .recommend-section{
-  padding:12px 18px 6px;
+  padding:12px 18px 20px;
   background:var(--cream);
   border-top:1px solid rgba(223,199,161,0.55);
   scroll-margin-top:calc(var(--header-total-h) + 8px);
@@ -6617,7 +6616,7 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .record-iframe-modal{display:none;position:fixed;inset:0;z-index:900;}
 .record-iframe-modal.is-open{display:flex;align-items:center;justify-content:center;}
 .record-iframe-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
-.record-iframe-panel{position:relative;width:min(480px,94vw);height:85dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
+.record-iframe-panel{position:relative;width:min(480px,94vw);height:min(400px,68dvh);background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .record-iframe-frame{width:100%;flex:1;border:none;}
 
