@@ -1144,9 +1144,10 @@
         const _pm = buildPageMap(dedupUserPageDay(rows));
         const _topPages = _pm.slice(0, 4);
         _sumPageCount.innerHTML = _topPages.length
-          ? _topPages.map(([p, data]) =>
-              `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span>(${data.visits}회)</span></span>`
-            ).join('')
+          ? _topPages.map(([p, data]) => {
+              const timeStr = data.totalSec > 0 ? `·${fmtTime(data.totalSec)}` : '';
+              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(p)} <span>(${data.visits}회${timeStr})</span></span>`;
+            }).join('')
           : '—';
       }
 
@@ -1399,15 +1400,27 @@
           };
 
           const refSessions = {}, refUsers = {};
+          const _sumRefCat = new Map();
           periodVis.forEach((r, idx) => {
             const cat = categorizeRef(r.referrer) || '직접 방문';
             refSessions[cat] = (refSessions[cat] || 0) + 1;
             if (!refUsers[cat]) refUsers[cat] = new Set();
             refUsers[cat].add(visitorKey(r, idx, cat));
+            if (r.session_key) _sumRefCat.set(r.session_key, cat);
           });
+          const sumRefSec = {};
+          for (const r of filtered) {
+            const cat = r.session_key ? _sumRefCat.get(r.session_key) : null;
+            if (!cat) continue;
+            sumRefSec[cat] = (sumRefSec[cat] || 0) + (r.duration_sec || 0);
+          }
           const topRefEntries = Object.entries(refSessions).sort((a, b) => b[1] - a[1]);
           const topRefHtml = topRefEntries.length
-            ? topRefEntries.map(([cat, cnt]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span>(${cnt}회)</span></span>`).join('')
+            ? topRefEntries.map(([cat, cnt]) => {
+                const totS = sumRefSec[cat] || 0;
+                const timeStr = totS > 0 ? `·${fmtTime(totS)}` : '';
+                return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span>(${cnt}회${timeStr})</span></span>`;
+              }).join('')
             : '—';
 
           let lToday, vToday, lAvg, vAvg, vAvgSub, lDelta, vDeltaHtml, vDeltaSub, lTopRef;
@@ -1543,14 +1556,22 @@
 
         // ── 2. 유입 경로 — 수평 막대 (__visitor__ 기준 명/회) ──
         const filteredVisitor = filterByRange(visitorRows, start, end, 'created_at');
-        const refMap = {}, refUserMap = {}, refSecMap = {};
+        const refMap = {}, refUserMap = {};
         filteredVisitor.forEach((r, idx) => {
           const cat = categorizeRef(r.referrer) || '직접 방문';
           refMap[cat] = (refMap[cat] || 0) + 1;
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
           refUserMap[cat].add(visitorKey(r, idx, cat));
-          refSecMap[cat] = (refSecMap[cat] || 0) + (r.duration_sec || 0);
         });
+        // session_key로 page_sessions duration_sec를 유입경로별로 집계
+        const _visRefCat = new Map();
+        filteredVisitor.forEach(r => { if (r.session_key) _visRefCat.set(r.session_key, categorizeRef(r.referrer) || '직접 방문'); });
+        const refSecMap = {};
+        for (const r of filtered) {
+          const cat = r.session_key ? _visRefCat.get(r.session_key) : null;
+          if (!cat) continue;
+          refSecMap[cat] = (refSecMap[cat] || 0) + (r.duration_sec || 0);
+        }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
         const chartRefSub = document.getElementById('chartRefSub');
         if (chartRefSub) chartRefSub.textContent = label;
