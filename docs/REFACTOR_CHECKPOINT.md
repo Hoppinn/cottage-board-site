@@ -206,13 +206,13 @@
 
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
-| CSS1 | **P1** | 중복 정의 충돌 | `.sheet-section` 두 번 정의 — 의도치 않은 cascade | line 1699: 카드형 스타일 (`padding:18px; border:1.5px solid; border-radius:20px; background:var(--paper)`) vs line 2879: Sheet v2 스타일 (`margin-bottom:14px`만). 첫 번째 `margin-top:18px`와 두 번째 `margin-bottom:14px` 공존. card 속성들이 Sheet v2에서도 의도치 않게 적용됨. |
+| CSS1 | **P1** | 중복 정의 충돌 | ~~`.sheet-section` 두 번 정의 — 의도치 않은 cascade~~ **✅ 해결됨** | ~~line 1699: 카드형 스타일 vs line 2879: margin-bottom:14px만.~~ 2026-07-03 재검증: 두 번째 정의 제거·통합 완료. 현재 line 1797에 단일 정의만 존재(margin-top:24px/margin-bottom:14px 통합). 사용처도 script.js:1350 게임시트 게임설명 섹션 1곳뿐. 충돌 없음, 코드 수정 불필요. |
 | CSS2 | **P2** | 과잉 !important | `!important` 196회 사용 | 특히 `# 8. OWNED SEARCH + SORT/FILTER TOOLBAR` 섹션 집중. 특이성 전쟁의 결과물. 새 스타일 추가 시 `!important` 없이는 덮어쓰기 어려운 구조. |
 | CSS3 | **P2** | 파일 헤더 오기재 | line 8: `owned-games.html / script.js 구조 기준` 언급 | style.css는 전 페이지 공통 파일인데 특정 페이지 기준으로 작성된 것처럼 표기됨. |
 | CSS4 | **P2** | 파일 크기 | 단일 파일 7395줄 | 페이지별 분리 없음. 현재 구조에서는 불가피하나 장기 유지보수 비용 높음. |
 
 **즉시 수정 가능 (Green)**: CSS3 (파일 헤더 주석 수정)  
-**수정 시 검증 필요 (Yellow)**: CSS1 (`.sheet-section` 두 번째 정의의 의도 확인 — 별도 컨텍스트용인지 실수인지)  
+**수정 시 검증 필요 (Yellow)**: ~~CSS1~~ (2026-07-03 재검증으로 해결됨 확인)  
 **구조 변경 필요 (Red)**: CSS2 (특이성 정리 — 영향 범위 넓어 전면 재검토 필요)
 
 ---
@@ -253,7 +253,7 @@
 | SC3 | supabase-client.js | `toggleGameCurious`에서 like 삭제 | 의도적인 동작인지 확인 후 문서화 또는 제거 |
 | ACH9 | achievements.js | POINTS 맵 vs 포인트 비활성화 | 현재 포인트 정책 최종 결정 후 정리 |
 | GR1 | game-reviews.js | deprecated `renderSingleGame` 유지 여부 | SEO/직접링크 사용 여부 확인 후 제거 결정 |
-| CSS1 | style.css | `.sheet-section` 이중 정의 | Sheet v2 이후 첫 번째 정의 의도 확인 |
+| ~~CSS1~~ | ~~style.css~~ | ~~`.sheet-section` 이중 정의~~ | **✅ 해결됨** — 2026-07-03 재검증: 두 번째 정의 없음, 코드 수정 불필요 |
 
 ### 건드리면 위험한 것 (Red — Plan + 승인 필요)
 

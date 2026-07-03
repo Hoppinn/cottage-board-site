@@ -72,9 +72,9 @@
 - 수정 전후 동작을 최소 1개 테스트로 확인한다.
 
 첫 후보:
-- `supabase-client.js` `getRepAchievement` 반환값에 이름 누락 여부 확인
-- `toggleGameCurious`가 좋아요를 지우는 동작이 의도인지 확인
-- `.sheet-section` CSS 중복 정의가 실제 충돌인지 확인
+- `supabase-client.js` `getRepAchievement` 반환값에 이름 누락 여부 확인 → **재검증 완료**: SC2 해결됨 (getCharacterName 경로로 교체)
+- `toggleGameCurious`가 좋아요를 지우는 동작이 의도인지 확인 → **수정 완료**: 궁금해요 추가 시 좋아요 DB 제거 대칭 처리 (abe774b)
+- ~~`.sheet-section` CSS 중복 정의가 실제 충돌인지 확인~~ → **재검증 완료**: CSS1 해결됨 (정의 1곳, 사용처 1곳, 충돌 없음)
 
 ### 4단계: 큰 파일 분리 준비
 
@@ -225,6 +225,22 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 **판단**: 버그 없음. `getRepAchievement`의 반환 구조는 그대로지만, 이름 조회 경로가 DB → 로컬 ACH_DEFS 로 교체되어 동작상 완전히 해결된 상태.
 
 **수정 필요 여부**: 코드 수정 불필요. 문서상 해결됨으로 분류.
+
+---
+
+## 4차 점검 결과 (2026-07-03)
+
+### CSS1 — `.sheet-section` 중복 정의 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` CSS1. 처리 현황 표에 "✅ 완료"로 기록되어 있으나 완료 사유 없어 재검증.
+
+**확인 결과**:
+- `style.css`에서 `.sheet-section{` 정의는 **line 1797 단 1곳**. 체크포인트가 기록한 "line 2879 두 번째 정의"는 현재 파일에 없음.
+- 현재 정의: `margin-top:24px; margin-bottom:14px; padding:12px 18px 18px; border:1.5px solid #ead8b8; border-radius:20px; background:var(--paper)` — 두 정의가 통합된 형태.
+- 실제 사용처: `script.js:1350` 게임시트 "게임 설명" 섹션 **1곳만**.
+- `.sheet-section .sheet-desc { font-size:13px }` (line 3444)는 `.sheet-section p { font-size:17px }` 덮어쓰기용으로 주석에 명시되어 있어 의도적 패턴.
+
+**판단**: 중복 없음, 충돌 없음. 코드 수정 불필요.
 
 ---
 
