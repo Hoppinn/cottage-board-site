@@ -899,7 +899,7 @@ body.recommend-page main{
   margin:3px 0;
 }
 .game-scroll:has(.recommend-empty) + .difficulty-guide{
-  margin-top:3px;
+  margin-top:8px;
 }
 
 /* =========================
@@ -908,7 +908,7 @@ body.recommend-page main{
 
 .recommend-filter{
   max-width:720px;
-  margin:0 auto 2px;
+  margin:0 auto 6px;
   padding:0 14px;
 }
 

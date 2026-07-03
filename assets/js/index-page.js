@@ -19,7 +19,7 @@ const moodValue = recommendState.mood;
   !levelValue &&
   !moodValue
 ){
-  gameScroll.style.cssText = 'max-width:720px;margin:0 auto;padding:20px 40px;box-sizing:border-box;display:block;';
+  gameScroll.style.cssText = 'max-width:720px;margin:0 auto;padding:10px 16px;box-sizing:border-box;display:block;';
   gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">하나만 선택해도 추천해드려요.</p>`;
 
   return;
@@ -524,7 +524,6 @@ const moodValue = recommendState.mood;
         ${renderInlineOption("mood", "", "상관없어요", moodValue)}
       </div>
 
-      <p class="recommend-filter-hint">처음이시면 🌱 입문·추천 난이도로 시작하시면 됩니다^^</p>
     </div>
   `;
 }
