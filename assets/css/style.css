@@ -776,7 +776,7 @@ body.recommend-page main{
   scroll-margin-top:calc(var(--header-total-h) + 8px);
 }
 .recommend-section.dg-open{
-  padding-bottom:52px;
+  padding-bottom:14px;
 }
 
 .recommend-header--photo{
