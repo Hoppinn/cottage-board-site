@@ -176,29 +176,36 @@ const mobileMenu =
 
 
 function resetMenuGroups(){
-  // 이전 resetMenuGroups 호출의 잔류 inline style 제거 (중복 선택 방지)
+  // 잔류 inline style 및 preview-active 초기화
   document.querySelectorAll('.header-menu a').forEach(l => {
     l.style.removeProperty('background');
     l.style.removeProperty('color');
     l.style.removeProperty('font-weight');
     l.style.removeProperty('border-radius');
+    l.classList.remove('preview-active');
   });
-  // 스크롤 위치 기반: 추천 섹션 top이 뷰포트 상반부에 들어오면 active
-  const recEl = document.getElementById('recommend');
-  let isRecActive = false;
-  if(recEl){
-    const rect = recEl.getBoundingClientRect();
-    isRecActive = rect.top < window.innerHeight * 0.5;
+
+  // index.html: recommend는 active 없음, recent-play/meeting은 preview-active 점만 표시
+  const isIndex = /\/(index\.html)?$/.test(location.pathname);
+  if (isIndex) {
+    const halfH = window.innerHeight * 0.5;
+    [
+      { id: 'recent-play', match: 'game-reviews.html' },
+      { id: 'meeting',     match: 'club.html' },
+    ].forEach(({ id, match }) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (r.top < halfH && r.bottom > 0) {
+        const link = document.querySelector(`.header-menu a[href*="${match}"]`);
+        if (link) link.classList.add('preview-active');
+      }
+    });
   }
 
+  // recommend 링크는 index에서 is-current 부여하지 않음
   const recommendLink = document.querySelector('#openRecommendMenu');
-  if(recommendLink){
-    recommendLink.classList.toggle('is-current', isRecActive);
-    recommendLink.style.background = '';
-    recommendLink.style.color = '';
-    recommendLink.style.fontWeight = '';
-    recommendLink.style.borderRadius = '';
-  }
+  if (recommendLink) recommendLink.classList.remove('is-current');
 
   document.querySelectorAll('.menu-group').forEach(g=>{
     g.classList.remove('is-open');

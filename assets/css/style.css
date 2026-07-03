@@ -325,6 +325,20 @@ textarea{
   border-radius:10px;
 }
 
+/* index.html 스크롤 미리보기 — 갈색 점만, 배경/색상 변경 없음 */
+.header-menu a.preview-active::after{
+  content:'';
+  display:inline-block;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#8c6a4a;
+  margin-left:6px;
+  vertical-align:middle;
+  position:relative;
+  top:-1px;
+}
+
 /* 서브메뉴 active */
 .menu-group-body a.is-current{
   background:#8a5e42;
