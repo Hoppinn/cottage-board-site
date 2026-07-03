@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-Claude Code가 이 프로젝트에서 따라야 할 규칙.
+Codex가 이 프로젝트에서 따라야 할 규칙.
 
 ---
 
@@ -63,11 +63,11 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
   3. PROJECT_STATE.md — 변경사항 반영
   4. git diff 확인 후 커밋 (코드 + 서브파일 + STATE.md 한 커밋)
 - 서브에이전트에 작업을 위임한 경우, 완료 후 문서 갱신 여부를 직접 확인한다.
-  서브에이전트는 CLAUDE.md 규칙을 따르지 않는다.
+  서브에이전트는 AGENTS.md 규칙을 따르지 않는다.
 
 ## 외부 의견 수렴 원칙
 
-사용자가 GPT, Claude, Gemini 등 외부 AI 또는 제3자 의견을 가져올 경우:
+사용자가 GPT, Codex, Gemini 등 외부 AI 또는 제3자 의견을 가져올 경우:
 - 해당 의견을 즉시 정답으로 간주하지 않는다.
 - 현재 프로젝트의 코드, 문서, DB 구조를 기준으로 재검증한다.
 - 외부 의견과 현재 구조가 다를 경우 차이점을 먼저 보고하고 사용자 승인을 받는다.
@@ -81,10 +81,10 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 작업 중 운영 방식이 바뀌면:
 - 이번 세션만 적용 → PROJECT_STATE.md에 메모
-- 앞으로 계속 적용 → CLAUDE.md 갱신 대상. 작업 권한 Yellow 절차에 따라 변경안 보고 후 승인.
+- 앞으로 계속 적용 → AGENTS.md 갱신 대상. 작업 권한 Yellow 절차에 따라 변경안 보고 후 승인.
 
 커밋 전, 바뀐 운영 방식이 있으면 사용자에게 한 줄로만 물어봐라.  
-예: "TODO.md 삭제 규칙 CLAUDE.md에 추가할까요?"  
+예: "TODO.md 삭제 규칙 AGENTS.md에 추가할까요?"  
 목록 나열하거나 길게 설명하지 말 것.
 
 ## Plan-Execute 기준
@@ -198,64 +198,9 @@ Grep으로 줄번호를 먼저 확인한 뒤 해당 줄 ±30줄 범위만 Read�
 
 사용자 승인 전에는 파일을 수정하지 않는다.
 
-### 런타임 값 검증 원칙
-
-레이아웃, 스크롤, sticky, position, offset, CSS 변수와 관련된 버그는 추론으로 수정하지 않는다.
-
-수정 전에 반드시 실제 런타임 값을 확인한다.
-
-```
-console.log() / getComputedStyle() / getBoundingClientRect() / offsetHeight / clientHeight
-```
-
-실제 값이 예상과 다르면 원인을 먼저 찾고 수정한다.
-
-**CSS 변수 사용 주의**: JS에서 CSS 변수를 숫자로 사용할 경우 반드시 값이 숫자인지 먼저 검증한다.  
-`calc(...)` / `var(...)` / `env(...)` 가 포함된 CSS 변수는 `parseFloat()` 결과가 NaN일 수 있다.  
-이 경우 실제 DOM 크기를 직접 측정하거나, CSS가 담당하도록 설계한다.
-
-**2회 실패 → 런타임 확인 의무**: 같은 버그를 2회 수정했는데 해결되지 않으면 추측으로 수정하지 않는다.  
-반드시 런타임 값 확인 → 실제 DOM 구조 확인 → 원인 확인 후 다시 수정한다.
-
 **완료 기준**: "수정 완료"라고 말하려면 실제 재현 확인 결과를 함께 제시한다. 재현 확인을 못 했으면 "완료"라고 말하지 않는다.
 
 **브라우저/CSS 렌더링 버그**: 값만 바꾸지 말고 구조 분리 가능성을 먼저 검토한다.
-
-### CSS/sticky 버그 교훈 (2026-07-03)
-
-아래 유형은 단순 수치 조정처럼 보여도 실제 원인은 레이아웃 구조인 경우가 많다.
-
-- sticky / scroll / bottom sheet / fixed header / iframe sheet / border-radius / overflow
-
-원칙:
-
-1. **사용자가 말한 기준 컴포넌트를 다시 확인한다.**
-   - "게임정보 시트와 동일"과 "게임위치 시트와 동일"은 다르다.
-   - 최근에 수정한 값을 기준으로 삼지 말고, 현재 요청의 비교 대상을 다시 확인한다.
-
-2. **공백이 스크롤 영역인지 고정 영역인지 먼저 구분한다.**
-   - 기록보드 버그의 핵심은 `padding-top` 값이 아니라, 공백이 scroll body 안에 있어 내용이 그 틈으로 지나간 것이었다.
-   - `헤더1 + 공백 + 헤더2`가 함께 고정돼야 하면 공백도 sticky/fixed 영역에 포함되어야 한다.
-
-3. **패널 시작 위치, height, sticky top을 건드리지 말라는 요청은 그대로 지킨다.**
-   - 그런 요청에서는 header padding/margin 같은 "고정되는 영역 자체"만 줄인다.
-   - 패널 위치를 내리거나 height를 바꾸면 겉으로 비슷해 보여도 다른 버그를 만든다.
-
-4. **같은 선택자를 2번 이상 건드려도 안 되면 값 추측을 멈춘다.**
-   - DevTools 또는 런타임 값으로 `getBoundingClientRect()`, `getComputedStyle()`, `offsetHeight`, `clientHeight`를 확인한다.
-   - `calc()`, `var()`, `env()`가 섞인 CSS 변수는 `parseFloat()`로 숫자화하지 않는다. 실제 DOM 크기를 재거나 CSS가 처리하게 둔다.
-
-5. **diff를 보고 의도 밖 선택자가 바뀌었는지 확인한다.**
-   - 2026-07-03 버그5 작업 중 `sheet-sticky-bar`가 아니라 `hero-visitor-bar` padding이 먼저 잡힌 적이 있었다.
-   - 커밋 전 diff에서 대상 선택자 이름까지 확인한다.
-
-이번 사례:
-
-- 버그1: 내 보드 고정헤더 영역 과대. 원인은 header 자체 padding + 아래 margin이 함께 sticky 영역처럼 보인 것. 패널 top/height는 건드리지 않고 `.profile-panel-header` padding/margin만 줄였다.
-- 버그2: 기록보드 헤더 사이 공백으로 본문이 지나감. 원인은 공백을 scroll padding으로 만든 것. `.profile-subsheet-body--records::before` sticky 덮개로 공백을 고정 영역에 포함했다.
-- 버그3: 게임위치 바텀시트 상단 여백. 원인은 `height: calc(100dvh - Npx)`가 상단 여백을 결정하는 구조. 좌우/아래/radius/overflow는 유지하고 height 값만 조정했다.
-- 버그4: 홈페이지 기능 iframe 시트 여백. 실패 원인은 게임정보/내 보드 기준이어야 하는데 직전 게임위치 시트의 `102px` 기준을 복사한 것. 실제 기준은 `height: calc(100dvh - 48px)` + 아래 margin 12px이었다.
-- 버그5: 고정헤더 높이 축소. 위치 구조 변경 없이 padding/min-height 값만 줄였다. diff 확인 중 의도 밖 선택자 변경을 발견해 커밋 전 원복했다.
 
 ## 커밋 전 검증 (필수)
 
@@ -303,7 +248,7 @@ CSS 값 변경 (color, padding, margin, font-size 등 수치·값만), 문구·�
 **CSS 구조 변경은 Yellow**: 선택자 스코프 변경, 클래스 추가·제거, `position`·`z-index`·`display` 변경, 선택자 신규 추가·삭제 → 변경안 보고 후 승인 필요.
 
 **Yellow** — 변경안 보고 후 승인 필요  
-CLAUDE.md 수정, DESIGN_RULES.md 수정, 신규 `*.md` 생성, PROJECT_STATE.md 구조 변경 (섹션 추가·삭제, 문서 체계 변경)
+AGENTS.md 수정, DESIGN_RULES.md 수정, 신규 `*.md` 생성, PROJECT_STATE.md 구조 변경 (섹션 추가·삭제, 문서 체계 변경)
 
 **Red** — Plan 후 승인 필요 (Plan 형식: Plan-Execute 기준 참조)  
 DB, 인증, 데이터 구조, 파일 삭제, 대규모 리팩토링
@@ -319,3 +264,41 @@ DB, 인증, 데이터 구조, 파일 삭제, 대규모 리팩토링
 
 - 작업이 완료될 때마다 자동으로 커밋한다.
 - commit 후 자동으로 push하지 않는다. push는 사용자가 명시적으로 요청할 때만 한다.
+
+---
+
+## CSS/sticky 버그 교훈 (2026-07-03)
+
+아래 유형은 단순 수치 조정처럼 보여도 실제 원인은 레이아웃 구조인 경우가 많다.
+
+- sticky / scroll / bottom sheet / fixed header / iframe sheet / border-radius / overflow
+
+### 원칙
+
+1. **사용자가 말한 기준 컴포넌트를 다시 확인한다.**
+   - "게임정보 시트와 동일"과 "게임위치 시트와 동일"은 다르다.
+   - 최근에 수정한 값을 기준으로 삼지 말고, 현재 요청의 비교 대상을 다시 확인한다.
+
+2. **공백이 스크롤 영역인지 고정 영역인지 먼저 구분한다.**
+   - 기록보드 버그의 핵심은 `padding-top` 값이 아니라, 공백이 scroll body 안에 있어 내용이 그 틈으로 지나간 것이었다.
+   - `헤더1 + 공백 + 헤더2`가 함께 고정돼야 하면 공백도 sticky/fixed 영역에 포함되어야 한다.
+
+3. **패널 시작 위치, height, sticky top을 건드리지 말라는 요청은 그대로 지킨다.**
+   - 그런 요청에서는 header padding/margin 같은 "고정되는 영역 자체"만 줄인다.
+   - 패널 위치를 내리거나 height를 바꾸면 겉으로 비슷해 보여도 다른 버그를 만든다.
+
+4. **같은 선택자를 2번 이상 건드려도 안 되면 값 추측을 멈춘다.**
+   - DevTools 또는 런타임 값으로 `getBoundingClientRect()`, `getComputedStyle()`, `offsetHeight`, `clientHeight`를 확인한다.
+   - `calc()`, `var()`, `env()`가 섞인 CSS 변수는 `parseFloat()`로 숫자화하지 않는다. 실제 DOM 크기를 재거나 CSS가 처리하게 둔다.
+
+5. **diff를 보고 의도 밖 선택자가 바뀌었는지 확인한다.**
+   - 2026-07-03 버그5 작업 중 `sheet-sticky-bar`가 아니라 `hero-visitor-bar` padding이 먼저 잡힌 적이 있었다.
+   - 커밋 전 diff에서 대상 선택자 이름까지 확인한다.
+
+### 이번 사례별 메모
+
+- 버그1: 내 보드 고정헤더 영역 과대. 원인은 header 자체 padding + 아래 margin이 함께 sticky 영역처럼 보인 것. 패널 top/height는 건드리지 않고 `.profile-panel-header` padding/margin만 줄였다.
+- 버그2: 기록보드 헤더 사이 공백으로 본문이 지나감. 원인은 공백을 scroll padding으로 만든 것. `.profile-subsheet-body--records::before` sticky 덮개로 공백을 고정 영역에 포함했다.
+- 버그3: 게임위치 바텀시트 상단 여백. 원인은 `height: calc(100dvh - Npx)`가 상단 여백을 결정하는 구조. 좌우/아래/radius/overflow는 유지하고 height 값만 조정했다.
+- 버그4: 홈페이지 기능 iframe 시트 여백. 실패 원인은 게임정보/내 보드 기준이어야 하는데 직전 게임위치 시트의 `102px` 기준을 복사한 것. 실제 기준은 `height: calc(100dvh - 48px)` + 아래 margin 12px이었다.
+- 버그5: 고정헤더 높이 축소. 위치 구조 변경 없이 padding/min-height 값만 줄였다. diff 확인 중 의도 밖 선택자 변경을 발견해 커밋 전 원복했다.

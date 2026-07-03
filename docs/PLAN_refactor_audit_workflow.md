@@ -12,6 +12,8 @@
 - 큰 파일은 바로 분리하지 않고, 위험한 부분과 안전한 부분을 구분한다.
 - 한 작업 단위는 가능하면 파일 1~2개, 검증 1개로 제한한다.
 - DB/localStorage/window 전역 API 변경은 별도 Plan과 승인 후 진행한다.
+- Codex는 감사/설계/작업 지시서 작성과 결과 리뷰를 맡고, Claude Code는 반복 구현/기계적 정리를 맡긴다.
+- Claude Code에 맡길 때는 "목표, 수정 가능 파일, 금지 파일/금지 변경, 검증 방법, 커밋 대상"을 한 묶음으로 전달한다.
 
 ## 참고 문서
 
@@ -104,6 +106,43 @@
 1. `docs/REFACTOR_CHECKPOINT.md`의 Green 항목이 현재도 유효한지 재검증
 2. 문서만 고쳐도 되는 항목 1~2개 처리
 3. `PROJECT_STATE.md`에 처리 결과 기록
+
+## Codex ↔ Claude Code 협업 방식 (2026-07-03 확정)
+
+목표: Codex 토큰을 원인 분석과 리뷰에 쓰고, Claude Code는 반복 구현에만 사용한다.
+
+### Codex가 먼저 할 일
+
+1. 관련 문서와 실제 코드 위치를 확인한다.
+2. 리팩토링 후보를 "버그 위험 / 단순 중복 / 문서 불일치 / 대형 분리 후보"로 분류한다.
+3. Claude Code에 넘길 작업 지시서를 작성한다.
+4. Claude Code 결과를 받으면 diff를 기준으로 리뷰한다.
+
+### Claude Code에 넘길 지시서 형식
+
+```
+목표:
+수정 가능 파일:
+수정 금지:
+절대 바꾸면 안 되는 동작:
+확인할 기존 패턴:
+검증 방법:
+커밋에 포함할 파일:
+의심되면 멈출 조건:
+```
+
+### 우선 감사 순서
+
+1. `docs/REFACTOR_CHECKPOINT.md` 남은 Green 후보 재검증
+2. `docs/js-api.md`, `docs/ls-schema.md`, `docs/db-schema.md`와 실제 코드 불일치 점검
+3. `assets/css/style.css`의 중복/충돌 후보를 "값만 정리 가능"과 "구조 변경 필요"로 분류
+4. `assets/js/script.js`의 게임시트 관련 함수 묶음 감사
+5. `assets/js/kakao-auth.js`의 내 보드/알림/모임보드 책임 분리 후보 감사
+6. `pages/admin/requests-admin.html`은 관리자 분석 카운팅 안정화 후 별도 감사
+
+### 첫 번째 Claude Code 위임 후보
+
+아직 바로 위임하지 않는다. 먼저 Codex가 `REFACTOR_CHECKPOINT.md`의 남은 Green 후보 1개를 실제 코드로 재검증하고, 위 지시서 형식으로 샘플 작업서를 만든다.
 
 ## 1차 점검 결과 (2026-07-02)
 
