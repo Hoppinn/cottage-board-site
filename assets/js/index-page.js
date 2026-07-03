@@ -1033,20 +1033,29 @@ if (recommendTitle && recommendSection) {
   const loader   = document.getElementById('recordIframeLoader');
   if (!modal || !openBtn) return;
 
+  let frameLoaded = false;
+
   function openModal() {
-    frame.classList.remove('is-ready');
-    if (loader) loader.style.display = 'flex';
-    frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+
+    if (frame.classList.contains('is-ready')) {
+      // iframe already initialized — just switch to input tab
+      frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab: 'input' }, '*');
+    } else if (!frameLoaded) {
+      // first open: start loading
+      frameLoaded = true;
+      if (loader) loader.style.display = 'flex';
+      frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+    }
+    // else: loading already in progress, loader is visible — just wait
   }
   function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
-    frame.src = '';
-    frame.classList.remove('is-ready');
     document.body.style.overflow = '';
+    // keep frame.src intact so next open is instant
   }
 
   window.addEventListener('message', e => {

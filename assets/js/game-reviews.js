@@ -110,6 +110,14 @@
   window.addEventListener('cottage-auth-changed', () => { renderInputPanel(); });
   setTimeout(tryInit, 1200);
 
+  // embedded modal: switch tab on demand from parent
+  window.addEventListener('message', e => {
+    if (e.data?.type === 'cottage-switch-tab' && e.data.tab && root) {
+      const tab = root.querySelector(`.pr-tab[data-tab="${e.data.tab}"]`);
+      if (tab && !tab.classList.contains('is-active')) tab.click();
+    }
+  });
+
   // ══════════════════════════════════════════════════════════════
   // HUB MODE (메인 플레이 기록 허브)
   // ══════════════════════════════════════════════════════════════
