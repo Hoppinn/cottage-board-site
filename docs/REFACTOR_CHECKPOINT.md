@@ -143,8 +143,8 @@
 
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
-| GR1 | **P1** | 데드코드 | `initGameView` + `renderSingleGame` (133줄) deprecated 명시 | line 937-941 주석: "기본 동선은 바텀시트로 대체됨. 직접 URL 공유/SEO 용도 검토 전까지 삭제 보류." TODO 존재. 두 번째 Supabase 클라이언트 직접 생성 포함 (GR2). |
-| GR2 | **P1** | Supabase 직접 접근 | `renderSingleGame` line 958: `window.supabase.createClient()` 직접 호출 | `window.CottageDB` 추상화 레이어 우회. RLS, 설정, 에러 핸들링 모두 미적용. 프로젝트 전체에서 유일한 예외 경로. |
+| GR1 | **P1** | 데드코드 | ~~`initGameView` + `renderSingleGame` (133줄) deprecated 명시~~ **✅ 해결됨** | ~~line 937-941 주석: "기본 동선은 바텀시트로 대체됨."~~ 2026-07-03 재검증: `initGameView`/`renderSingleGame` 모두 game-reviews.js에 없음. 호출처도 없음. 136차-7 삭제 완료 확인. |
+| GR2 | **P1** | Supabase 직접 접근 | ~~`renderSingleGame` line 958: `window.supabase.createClient()` 직접 호출~~ **✅ 해결됨** | ~~`window.CottageDB` 추상화 레이어 우회.~~ 2026-07-03 재검증: `window.supabase.createClient()` game-reviews.js에 없음. GR1 함수 삭제와 함께 제거 완료. |
 | GR3 | **P1** | 과대 함수 | `renderRecords`(277줄), `renderInputPanel`(255줄), `addRow`(137줄) | 렌더링·이벤트 바인딩·저장 로직이 단일 함수에 혼합. 테스트 불가 구조. |
 | GR4 | **P2** | 중복 로직 | `isParticipant` 계산, `score_note` 포맷팅이 `buildSessionBody`/`buildGameBody`에 각각 동일 코드 | 같은 6~7줄 로직이 두 함수에 그대로 복사됨. |
 | GR5 | **P2** | 중복 로직 | 참여자 자동완성 `onSelect → Enter 디스패치` 패턴 2중 구현 | 신규 입력 폼(lines 252-263)과 수정 폼(lines 558-568)에 동일 코드. initTagInput과의 간접 결합 패턴. |
@@ -152,8 +152,8 @@
 | GR7 | **P2** | 깨지기 쉬운 결합 | 자동완성 선택 시 `KeyboardEvent('keydown', Enter)` 디스패치로 `initTagInput` 간접 트리거 | initTagInput 내부 구현 변경 시 연쇄 파괴. |
 
 **즉시 수정 가능 (Green)**: 없음  
-**수정 시 검증 필요 (Yellow)**: GR1 (deprecated 경로 제거 전 SEO/직접링크 사용 여부 확인)  
-**구조 변경 필요 (Red)**: GR2 (CottageDB 추상화로 교체), GR3 (과대 함수 분리)
+**수정 시 검증 필요 (Yellow)**: ~~GR1~~ (2026-07-03 재검증으로 해결됨 확인)  
+**구조 변경 필요 (Red)**: ~~GR2~~ (2026-07-03 재검증으로 해결됨 확인), GR3 (과대 함수 분리)
 
 ---
 
@@ -252,7 +252,7 @@
 | SC2 | supabase-client.js | `getRepAchievement` name 누락 | 대표 캐릭터 이름이 어디서 표시되는지 실제 확인 |
 | SC3 | supabase-client.js | `toggleGameCurious`에서 like 삭제 | 의도적인 동작인지 확인 후 문서화 또는 제거 |
 | ACH9 | achievements.js | POINTS 맵 vs 포인트 비활성화 | 현재 포인트 정책 최종 결정 후 정리 |
-| GR1 | game-reviews.js | deprecated `renderSingleGame` 유지 여부 | SEO/직접링크 사용 여부 확인 후 제거 결정 |
+| ~~GR1~~ | ~~game-reviews.js~~ | ~~deprecated `renderSingleGame` 유지 여부~~ | **✅ 해결됨** — 2026-07-03 재검증: 함수 없음, 호출처 없음, 직접 Supabase 접근 없음, 코드 수정 불필요 |
 | ~~CSS1~~ | ~~style.css~~ | ~~`.sheet-section` 이중 정의~~ | **✅ 해결됨** — 2026-07-03 재검증: 두 번째 정의 없음, 코드 수정 불필요 |
 
 ### 건드리면 위험한 것 (Red — Plan + 승인 필요)

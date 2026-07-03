@@ -13,6 +13,7 @@
 | b4e7078 | SC2 재검증 결과 PLAN_refactor_audit_workflow.md 기록 (getRepAchievement name 누락 → 이미 getCharacterName 경로로 해결됨) |
 | abe774b | 궁금해요 추가 시 좋아요 DB 제거 (onSheetCurious, onPrMenuCurious) — 좋아요↔궁금해요 상호배타 비대칭 버그 수정 |
 | (문서) | CSS1 재검증: .sheet-section 중복 정의 없음, 코드 수정 불필요 — REFACTOR_CHECKPOINT.md·PLAN_refactor_audit_workflow.md 반영 |
+| (문서) | GR1+GR2 재검증: deprecated 단건 게임 경로(initGameView/renderSingleGame) 제거 완료, 직접 Supabase 접근 없음, 코드 수정 불필요 |
 
 ---
 

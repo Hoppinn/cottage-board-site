@@ -244,6 +244,21 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 
 ---
 
+## 5차 점검 결과 (2026-07-03)
+
+### GR1+GR2 — deprecated 단건 게임 경로 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` GR1+GR2. 처리 현황 표에 "✅ 완료"로 기록되어 있으나 GR1 보류 표 행에 취소선 없어 재검증.
+
+**확인 결과**:
+- `initGameView`, `renderSingleGame` — game-reviews.js에 **없음**. 호출처도 없음.
+- `window.supabase.createClient()` 직접 접근 — game-reviews.js에 **없음**.
+- `URLSearchParams` 는 존재하나 `?group=`/`?date=` 딥링크 처리용으로 `?game=` 단건 경로와 무관.
+
+**판단**: GR1+GR2 모두 136차-7에서 함께 제거된 상태. 보류 표의 GR1 행 미정리만 남아 있었을 뿐 실제 코드 수정 불필요.
+
+---
+
 ## 보류
 
 - 관리자 분석 페이지 전체 재구성: 현재는 카운팅 기준 안정화와 상위 탭 sticky만 적용. 큰 UI 재구성은 보류.
