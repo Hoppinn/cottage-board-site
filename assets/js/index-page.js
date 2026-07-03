@@ -1029,9 +1029,10 @@ if (recommendTitle && recommendSection) {
   const frame    = document.getElementById('recordIframeFrame');
   const dim      = document.getElementById('recordIframeDim');
   const closeBtn = document.getElementById('recordIframeClose');
-  const openBtn  = document.getElementById('openRecordModalBtn');
-  const loader   = document.getElementById('recordIframeLoader');
-  if (!modal || !openBtn) return;
+  const openBtn     = document.getElementById('openRecordModalBtn');
+  const openViewBtn = document.getElementById('openRecordViewBtn');
+  const loader      = document.getElementById('recordIframeLoader');
+  if (!modal || (!openBtn && !openViewBtn)) return;
 
   let preloaded = false;
 
@@ -1043,14 +1044,14 @@ if (recommendTitle && recommendSection) {
   window.addEventListener('kakao-auth-ready', preloadIfLoggedIn);
   window.addEventListener('cottage-auth-changed', preloadIfLoggedIn);
 
-  function openModal() {
+  function openModal(tab) {
     if (!window.getKakaoUser?.()) { window.kakaoLogin?.(); return; }
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
 
     if (frame.classList.contains('is-ready')) {
-      frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab: 'input' }, '*');
+      frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab }, '*');
     } else {
       if (loader) loader.style.display = 'flex';
     }
@@ -1068,7 +1069,8 @@ if (recommendTitle && recommendSection) {
     }
   });
 
-  openBtn.addEventListener('click', openModal);
+  openBtn?.addEventListener('click', () => openModal('input'));
+  openViewBtn?.addEventListener('click', () => openModal('records'));
   dim.addEventListener('click', closeModal);
   closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
