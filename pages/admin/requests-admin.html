@@ -1561,14 +1561,14 @@
           if (refEmpty) refEmpty.style.display = 'none';
           if (refCanvas) refCanvas.style.display = '';
           if (refWrap) refWrap.style.height = Math.max(60, refEntries.length * 36 + 16) + 'px';
+          const refTimeStrs = refEntries.map(([k]) => {
+            const totS = refSecMap[k] || 0;
+            const uCnt = refUserMap[k]?.size ?? 0;
+            const avgS = uCnt > 0 ? Math.round(totS / uCnt) : 0;
+            return totS > 0 ? `총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
+          });
           makeOrUpdate('chartReferrer', 'bar', {
-            labels: refEntries.map(([k, v]) => {
-              const totS = refSecMap[k] || 0;
-              const uCnt = refUserMap[k]?.size ?? '?';
-              const avgS = typeof uCnt === 'number' && uCnt > 0 ? Math.round(totS / uCnt) : 0;
-              const t = totS > 0 ? `  총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
-              return `${k}  ${v}회 (${uCnt}명)${t}`;
-            }),
+            labels: refEntries.map(([k, v]) => `${k}  ${v}회 (${refUserMap[k]?.size ?? '?'}명)`),
             datasets: [{ data: refEntries.map(([, v]) => v), backgroundColor: PALETTE.slice(0, refEntries.length), borderRadius: 4, barThickness: 22 }],
           }, {
             indexAxis: 'y',
@@ -1581,7 +1581,27 @@
               x: { beginAtZero: true, grid: { color: GRID }, ticks: { stepSize: 1, font: { size: 10 } } },
               y: { grid: { display: false }, ticks: { font: { size: 11, weight: '700' } } },
             },
-          });
+          }, [{
+            id: 'refTimeLabelPlugin',
+            afterDatasetsDraw(chart) {
+              const ctx = chart.ctx;
+              const meta = chart.getDatasetMeta(0);
+              const x0 = chart.scales.x.getPixelForValue(0);
+              meta.data.forEach((bar, i) => {
+                const text = refTimeStrs[i];
+                if (!text) return;
+                const barWidth = bar.x - x0;
+                if (barWidth < 50) return;
+                ctx.save();
+                ctx.font = '9px sans-serif';
+                ctx.fillStyle = 'rgba(255,255,255,0.92)';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, x0 + barWidth / 2, bar.y);
+                ctx.restore();
+              });
+            },
+          }]);
         } else {
           if (refCanvas) refCanvas.style.display = 'none';
           if (refWrap) refWrap.style.height = '0';
