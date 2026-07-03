@@ -20,6 +20,7 @@
 | (문서) | ACH9 재검증: POINTS 맵 없음, grantAchievement/showAchievementToast points 인자 없음, achievement-system.md 삭제 정책 명시 — 코드 수정 불필요 |
 | (문서) | ACH7 재검증: showAchievementToast points 파라미터 제거 완료, 호출부도 name만 전달 — 코드 수정 불필요 |
 | (문서) | SC2/SC3 체크포인트 문서 상태 동기화: 메인 표·Yellow 목록·보류 표 해결됨 갱신, PLAN SC3 재검증 기록 추가 |
+| (문서) | PU3/PU4 재검증: 실제 버그 없음, 잠재 리팩토링 후보로 유지 |
 
 ---
 

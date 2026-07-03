@@ -306,6 +306,41 @@ Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드�
 
 ---
 
+## 8차 점검 결과 (2026-07-03)
+
+### PU3/PU4 — attachAc listRef 사이드이펙트 / _escH 중복 재검증
+
+**검증 대상**: `REFACTOR_CHECKPOINT.md` PU3, PU4.
+
+#### PU3 — attachAc listRef 미전달 호출처
+
+**전체 호출처 8곳** (실제 코드 기준):
+
+| 호출 위치 | listRef 전달 여부 |
+|-----------|-----------------|
+| game-reviews.js:244 — 등록폼 게임명 | `.pr-autocomplete-list` ✅ |
+| game-reviews.js:276 — 등록폼 참여자 | `.pr-names-wrap` ✅ |
+| game-reviews.js:340 — 그룹명 | `#prGroupAcList` ✅ |
+| game-reviews.js:668 — 수정폼 게임명 | ❌ 미전달 |
+| game-reviews.js:673 — 수정폼 모임명 | ❌ 미전달 |
+| game-reviews.js:677 — 수정폼 참여자 | `.pie-names-wrap` ✅ |
+| club-history.html:296 — 수정폼 게임명 | ❌ 미전달 |
+| club-history.html:298 — 수정폼 참여자 | `.pie-names-wrap` ✅ |
+
+미전달 3곳 모두 호출 직전 동적 생성한 form 내부 input. 외부 CSS 셀렉터·이벤트 리스너가 input 부모를 참조하는 코드 없음 → 현재 실제 버그 없음.
+
+**판단**: 잠재 위험 유지. 신규 호출처 작성 시 listRef 전달 권장. 코드 수정 불필요.
+
+#### PU4 — _escH vs window.escH 중복
+
+- `_escH`: `& < >` 3종 이스케이프. 사용처 1곳(태그 칩 innerHTML).
+- `window.escH`: `& < > "` 4종 이스케이프.
+- `"` 처리 차이로 단순 치환 불가. 현재 용도에서 실제 버그 없음.
+
+**판단**: 리팩토링 후보 유지. 코드 수정 불필요.
+
+---
+
 ## 보류
 
 - 관리자 분석 페이지 전체 재구성: 현재는 카운팅 기준 안정화와 상위 탭 sticky만 적용. 큰 UI 재구성은 보류.

@@ -84,8 +84,8 @@
 |---|--------|------|------|------|
 | PU1 | **P1** | 문서 불일치 | `attachAc` 시그니처 오기재 (js-api.md에 미수정) | 문서: `(input, items, onSelect)` → 실제: `(input, getSuggestions, onSelect, listRef)`. 2번째 인자가 배열이 아닌 **함수**임. 4번째 `listRef`도 누락. J1과 같은 유형, Green 수정 시 누락된 건. |
 | PU2 | **P1** | 메모리 누수 | `buildPhotoItemAdder`: blob URL 미해제 | line 227: `URL.createObjectURL(resized)` 후 `URL.revokeObjectURL()` 없음. 기록 수정 반복 시 blob URL 페이지 내 무한 누적. 탭 닫힐 때까지 해제 안 됨. |
-| PU3 | **P1** | 사이드이펙트 | `attachAc`: `listRef` 없을 때 input의 DOM 위치 변경 | line 119-127: input을 새 `div.wrap`으로 이동시킴. 호출 측 CSS 셀렉터나 이벤트 리스너가 input 부모를 참조하면 깨짐. `listRef`를 전달하는 호출은 안전. |
-| PU4 | **P2** | 중복 코드 | `_escH` (line 89) ↔ `window.escH` (supabase-client.js) 거의 동일 | `_escH`: `& < >` 이스케이프. `window.escH`: `& < > "` 이스케이프. 기능 95% 동일. supabase-client.js가 항상 먼저 로드되므로 `window.escH` 재사용 가능. 단, `"` 이스케이프 여부 차이 있으므로 단순 치환은 불가 (용도 확인 필요). |
+| PU3 | **P1** | 사이드이펙트 | `attachAc`: `listRef` 없을 때 input의 DOM 위치 변경 | line 119-127: input을 새 `div.wrap`으로 이동시킴. 호출 측 CSS 셀렉터나 이벤트 리스너가 input 부모를 참조하면 깨짐. `listRef`를 전달하는 호출은 안전. ▶ **2026-07-03 재검증**: 전체 호출처 8곳 확인. listRef 미전달 3곳(game-reviews.js 수정폼 게임명·모임명, club-history.html 수정폼 게임명) 모두 동적 생성 폼 내부 — 현재 실제 버그 없음. 신규 호출처엔 listRef 전달 권장. **잠재 위험 유지, 코드 수정 불필요.** |
+| PU4 | **P2** | 중복 코드 | `_escH` (line 89) ↔ `window.escH` (supabase-client.js) 거의 동일 | `_escH`: `& < >` 이스케이프. `window.escH`: `& < > "` 이스케이프. 기능 95% 동일. supabase-client.js가 항상 먼저 로드되므로 `window.escH` 재사용 가능. 단, `"` 이스케이프 여부 차이 있으므로 단순 치환은 불가 (용도 확인 필요). ▶ **2026-07-03 재검증**: `_escH` 사용처 1곳(칩 innerHTML). `"` 미처리는 이론적 개선점이나 현재 실제 버그 없음. **리팩토링 후보 유지, 코드 수정 불필요.** |
 | PU5 | **P2** | 파일 헤더 불일치 | 상단 주석이 8개 전역 중 3개만 기재 | line 3: `parsePhotoUrls / buildPhotoHtml / openLightbox`만 언급. `toInitials, hangulMatch, attachAc, initTagInput, buildPhotoItemAdder` 5개 누락. |
 | PU6 | **P2** | 복잡도 | `attachAc`(61줄), `openLightbox`(56줄) 과대 함수 | 단일 책임은 명확하나 각각 테스트 불가 구조. 리팩토링 시 우선 분리 후보. |
 | PU7 | **P2** | 암묵적 제약 | `initTagInput` 쉼표 포함 이름 불가 | line 215: `initialValue.split(',')` — 쉼표가 포함된 플레이어 이름은 분리됨. 문서화되지 않은 제약. 실제 오탐 가능성 낮음. |
