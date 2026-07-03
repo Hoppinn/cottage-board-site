@@ -1,6 +1,8 @@
 // play-records-utils.js
 // game-reviews.html, club-history.html 공통 유틸
-// window.parsePhotoUrls / window.buildPhotoHtml / window.openLightbox 전역 노출
+// 전역 노출: window.parsePhotoUrls / window.buildPhotoHtml / window.openLightbox
+//            window.toInitials / window.hangulMatch / window.attachAc
+//            window.initTagInput / window.buildPhotoItemAdder
 
 (function () {
   function _escAttr(s) {

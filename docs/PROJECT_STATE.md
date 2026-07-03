@@ -45,9 +45,11 @@
 - DB/localStorage/window 전역 API 변경 — 별도 Plan과 승인 전까지 보류.
 - 관리자 분석 페이지 전체 재구성 — 카운팅 기준 안정화 후 필요할 때 별도 진행.
 
+**완료 항목**:
+- [x] `play-records-utils.js` 상단 주석 — 실제 window 노출 8개와 일치시킴 (3개만 나열돼 있던 것: toInitials / hangulMatch / attachAc / initTagInput / buildPhotoItemAdder 추가)
+
 **미실행 항목**:
 - `docs/REFACTOR_CHECKPOINT.md` Green 항목 현재 유효성 재검증
-- 문서만 고칠 수 있는 항목 1~2개 처리
 - 이후 Yellow 버그 후보별 증상/호출처/검증 방법 작성
 
 **다음 작업 후보**: `docs/PLAN_refactor_audit_workflow.md` 1단계부터 시작. 우선 `js-api.md`, `ls-schema.md`, `REFACTOR_CHECKPOINT.md`의 불일치 후보를 재검증한다.
