@@ -770,16 +770,13 @@ body.recommend-page main{
 }
 
 .recommend-section{
-  padding:12px 18px 52px;
+  padding:12px 18px 14px;
   background:var(--cream);
   border-top:1px solid rgba(223,199,161,0.55);
   scroll-margin-top:calc(var(--header-total-h) + 8px);
 }
 .recommend-section.dg-open{
   padding-bottom:52px;
-}
-.recommend-section:not(.dg-open){
-  padding-bottom:14px;
 }
 
 .recommend-header--photo{
@@ -6595,7 +6592,7 @@ body.embed-mode {
 .dg-toggle:hover{color:var(--green);}
 .dg-toggle-icon{display:inline-block;transition:transform .2s;}
 .dg-toggle[aria-expanded="true"] .dg-toggle-icon{transform:rotate(180deg);}
-.dg-body{margin-top:4px;}
+.dg-body{margin-top:0;}
 
 /* =========================
    # HOME SECTIONS (최근플레이 / 이번주모임)
