@@ -1047,12 +1047,9 @@
           <div class="pr-sub-body">`;
 
         const sortedGroupEntries = [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ko'));
-        const multiGroup = sortedGroupEntries.length > 1;
 
         for (const [groupName, recs] of sortedGroupEntries) {
-          if (multiGroup) {
-            html += `<div class="pr-date-group-label">${escH(groupName || '모임 미선택')}</div>`;
-          }
+          html += `<div class="pr-date-group-label">${escH(groupName || '모임 미선택')}</div>`;
           html += buildSessionBody(recs, user, _orderMap);
         }
 
