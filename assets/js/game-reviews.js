@@ -576,11 +576,7 @@
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => {
         e.stopPropagation();
-        if (user && String(user.id) === userId) {
-          window.openProfilePanel?.('taste');
-        } else {
-          window.openOtherProfileSheet?.(userId);
-        }
+        window.openOtherMeetingSheet?.(userId);
       });
     });
 
