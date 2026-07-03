@@ -1119,6 +1119,13 @@ async function onPrMenuCurious(btn) {
     if (!result?.error) {
       const more = btn.closest('.pr-rec-more');
       more?.querySelectorAll('.pr-rec-curious-action').forEach(b => { b.textContent = result.curious ? '🤔 궁금해요 취소' : '🤔 궁금해요'; });
+      if (result.curious) {
+        const wasLiked = await window.CottageDB.hasUserLiked(gameKey, String(user.id));
+        if (wasLiked) {
+          await window.CottageDB.toggleGameLike(gameKey, String(user.id));
+          more?.querySelectorAll('.pr-rec-like-action').forEach(b => { b.textContent = '👍 좋아요'; });
+        }
+      }
     }
   });
 }

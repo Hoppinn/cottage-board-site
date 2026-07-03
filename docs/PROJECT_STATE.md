@@ -1,6 +1,17 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-02 (143차-194)
+최종 갱신: 2026-07-03
+
+---
+
+## 최근 완료 (2026-07-03)
+
+| 커밋 | 내용 |
+|------|------|
+| 39fe161 | 배너 타이틀 중앙정렬(.page-mini-hero h1 margin:0 !important) + 게임시트 상단 개편(본문 표지 제거, 영문제목 이동, 버튼 2열, 썸네일 클릭 모달) |
+| c15d215 | play-records-utils.js 상단 주석 window 노출 8개로 갱신 |
+| b4e7078 | SC2 재검증 결과 PLAN_refactor_audit_workflow.md 기록 (getRepAchievement name 누락 → 이미 getCharacterName 경로로 해결됨) |
+| (이번) | 궁금해요 추가 시 좋아요 DB 제거 (onSheetCurious, onPrMenuCurious) — 좋아요↔궁금해요 상호배타 비대칭 버그 수정 |
 
 ---
 

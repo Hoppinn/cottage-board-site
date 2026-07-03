@@ -2084,6 +2084,8 @@ async function onSheetCurious(btn) {
       }
       showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste'); } : null);
       if (result.curious) {
+        const wasLiked = await window.CottageDB.hasUserLiked(gameKey, String(user.id));
+        if (wasLiked) await window.CottageDB.toggleGameLike(gameKey, String(user.id));
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');
         if (likeBtn) {
