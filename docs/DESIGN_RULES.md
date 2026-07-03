@@ -73,3 +73,42 @@ Chrome 컴포지터는 `overflow-y:auto` 요소를 GPU 레이어로 승격할 �
 - `border-radius` 제거로 임시처방 (현상 숨길 뿐, 근본 해결 아님)
 - `-webkit-overflow-scrolling:touch` 제거 (원인 아님)
 - `overflow:hidden`만 추가 (스크롤이 죽음)
+
+## 7. sticky 헤더 / bottom-sheet 높이 조정 원칙 ⚠️
+
+**sticky 헤더를 줄일 때는 `top`·`height`·패널 위치를 건드리지 않고, 헤더 자체의 `padding`/`margin`만 줄인다.** bottom-sheet 상단 여백은 `height: calc(100dvh - Npx)`에서 Npx가 결정하므로, height 값만 조정하고 `border-radius`/`overflow`/`margin`은 건드리지 않는다.
+
+**sticky 헤더 사이 공백으로 본문이 지나가는 패턴:**
+
+`헤더1 + 공백 + 헤더2`가 함께 고정돼야 할 때 공백이 scroll body 안에 있으면, 본문 콘텐츠가 그 공백 위치를 통과해 올라간다.
+
+```css
+/* ❌ 잘못된 패턴 — 공백이 scroll body 안 (padding-top) */
+.subsheet-body { padding-top: 48px; }
+
+/* ✅ 올바른 패턴 — ::before sticky 덮개로 공백을 고정 영역에 포함 */
+.subsheet-body--records::before {
+  content: '';
+  display: block;
+  position: sticky;
+  top: 0;
+  height: 8px;
+  background: var(--bg);
+  z-index: 1;
+}
+```
+
+**이 프로젝트 적용 위치:**
+- `.profile-panel-header` padding 조정 — top/height 변경 없이 패딩만 (버그1, 2026-07-03)
+- `.profile-subsheet-body--records::before` sticky 덮개 — 헤더 간 공백 고정 (버그2, 2026-07-03)
+- 게임위치 바텀시트 `height: calc(100dvh - 102px)` — 값만 조정, 구조 유지 (버그3, 2026-07-03)
+
+**증상으로 오해하기 쉬운 형태:**
+- "sticky 헤더 고정 영역이 너무 크다" → `top`·`min-height` 줄이지 말고 header padding만 줄인다
+- "헤더 아래 공백으로 본문이 보인다" → scroll body의 `padding-top`이 아니라 `::before` sticky 덮개로 해결
+- "바텀시트 상단 여백이 너무 크다" → `height: calc(100dvh - Npx)` 의 Npx 값만 늘린다
+
+**절대 하지 말 것:**
+- sticky 헤더 축소 목적으로 `top`, `min-height`, `position` 변경
+- 공백을 scroll body의 `padding-top`으로 만들고 본문이 그 틈으로 올라가는 구조 방치
+- bottom-sheet 상단 여백 조정을 위해 `border-radius`, `margin`, `overflow` 변경
