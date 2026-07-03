@@ -156,6 +156,56 @@
 - `style.css` 파일 헤더 설명 정리 가능 여부 확인.
 - `supabase-client.js`의 `getRepAchievement` name 누락 후보가 현재도 재현되는지 확인.
 
+## 2차 점검 결과 (2026-07-03)
+
+Codex가 `docs/REFACTOR_CHECKPOINT.md`의 Green 후보 일부를 실제 코드로 재검증했다.
+
+이미 해결된 항목:
+- PU1: `docs/js-api.md`의 `attachAc(input, getSuggestions, onSelect, listRef)` 시그니처는 실제 `assets/js/play-records-utils.js`와 일치.
+- GDA1: `assets/js/game-display-adapter.js` 상단 주석은 현재 실제 파일명과 일치.
+- CSS3: `assets/css/style.css` 상단 주석은 현재 전 페이지 공통 스타일 기준으로 정리되어 있음.
+- ACH4: `assets/js/achievements.js`의 `squirrel_lv1` 대표 이미지 설정은 `_charImgPath('squirrel_lv1')` 사용 중.
+- ACH8: `docs/js-api.md`의 `window.CottageAchievements` 노출 목록에 `getCharacterPath(achId)` 포함.
+- KA8: `assets/js/kakao-auth.js`의 `ensureGameSheet` 호출은 현재 `window.ensureGameSheet?.()` 패턴으로 통일되어 있음.
+
+아직 유효한 Green 후보:
+- PU5: `assets/js/play-records-utils.js` 상단 주석이 `parsePhotoUrls / buildPhotoHtml / openLightbox` 3개만 전역 노출로 적고 있으나, 실제 전역 노출은 `parsePhotoUrls`, `buildPhotoHtml`, `openLightbox`, `toInitials`, `hangulMatch`, `attachAc`, `initTagInput`, `buildPhotoItemAdder` 8개.
+
+### Claude Code 위임 작업서 1
+
+목표:
+- `assets/js/play-records-utils.js` 상단 파일 주석을 실제 전역 노출 목록과 일치시킨다.
+
+수정 가능 파일:
+- `assets/js/play-records-utils.js`
+- `docs/PROJECT_STATE.md` (작업 완료 로그 1줄)
+
+수정 금지:
+- JS 함수 본문
+- 전역 노출 방식
+- HTML/CSS
+- package 파일
+
+절대 바꾸면 안 되는 동작:
+- `window.parsePhotoUrls`, `window.buildPhotoHtml`, `window.openLightbox`, `window.toInitials`, `window.hangulMatch`, `window.attachAc`, `window.initTagInput`, `window.buildPhotoItemAdder` 이름과 할당 위치
+- `window.resizeImageFile` optional call
+
+확인할 기존 패턴:
+- 파일 하단 `window.xxx = ...` 목록
+- `docs/js-api.md` 공유 유틸 표
+
+검증 방법:
+- `git diff -- assets/js/play-records-utils.js docs/PROJECT_STATE.md`에서 주석과 로그 외 변경이 없는지 확인
+- 함수 본문 diff가 생기면 중단
+
+커밋에 포함할 파일:
+- `assets/js/play-records-utils.js`
+- `docs/PROJECT_STATE.md`
+
+의심되면 멈출 조건:
+- 주석 정리 중 함수명 변경 필요가 생긴다고 판단되는 경우
+- 실제 전역 노출 목록과 `docs/js-api.md`가 다르게 보이는 경우
+
 ## 보류
 
 - 관리자 분석 페이지 전체 재구성: 현재는 카운팅 기준 안정화와 상위 탭 sticky만 적용. 큰 UI 재구성은 보류.
