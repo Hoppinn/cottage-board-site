@@ -1,6 +1,6 @@
 # localStorage 스키마 — 코티지보드
 
-최종 갱신: 2026-06-20 (136차: cottage_is_admin 추가)
+최종 갱신: 2026-07-05 (143차-190: cottage_session_id가 page_views.session_key에도 저장됨 반영; 추가 기록 섹션 본문 흡수)
 
 ---
 
@@ -15,7 +15,7 @@
 | `cottage_visited_{date}` | supabase-client.js | 당일 page_views 기록 여부 (하루 1회 중복 방지) | 날짜별 갱신 |
 | `cottage_orig_src_{date}` | supabase-client.js | 당일 마지막 외부 유입 소스 (last-touch 모델, 내부 이동 시 채널 귀속에 사용) | 날짜별 갱신, 외부 유입 감지 시 덮어씀 |
 | `cottage_pv_{date}_{source}_{page}` | supabase-client.js | 날짜+source+page 기준 page_views dedup 플래그 | 날짜별 갱신 |
-| `cottage_session_id` | supabase-client.js | 비로그인 세션 ID (별점 중복 방지, anon_sessions 연동) | 영구 |
+| `cottage_session_id` | supabase-client.js | 비로그인 세션 ID (별점 중복 방지, anon_sessions·page_sessions·page_views.session_key 연동). 143차-190부터 trackPageView()가 이 값을 page_views.session_key에도 저장 — 같은 기기+브라우저+localStorage 유지 시 같은 비회원으로 집계됨 | 영구 |
 | `cottage_rated_{gameId}` | supabase-client.js | 게임별 별점 캐시 | 영구 |
 | `cottage_my_comments` | game-sheet.js | 내 코멘트 id 배열 (삭제 권한 확인용) | 영구 |
 | `cottage_my_intros` | club-intro.html | 내가 작성한 회원 자기소개 id 배열 (레거시/삭제 권한 보조) | 영구 |
@@ -63,7 +63,3 @@
 `cottage_sess_{uid}` 키가 없으면 `_migrate(uid)` 자동 실행:
 - 레거시 키 6개(`cottage_last_visit_date_*`, `cottage_prev_visit_date_*`, `cottage_last_seen_dt_*`, `cottage_prev_seen_dt_*`, `cottage_time_sec_*`, `cottage_visit_count_*`) 읽어 새 형식으로 통합 후 원본 삭제
 - `cottage_profile_visited_{uid}_*` 키도 읽어 lastVisitDate 설정 후 삭제
-## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
-
-- `cottage_session_id`는 `anon_sessions`, `page_sessions`뿐 아니라 `page_views.session_key`에도 저장된다.
-- 같은 기기+브라우저+브라우저 프로필+localStorage 유지 시 같은 비회원으로 집계된다.

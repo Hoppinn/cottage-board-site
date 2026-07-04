@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-02 (143차-189: 관리자/로컬 분석 카운팅 제외 기준 통합)
+최종 갱신: 2026-07-05 (day-detail.js 함수 추가; trackPageView session_key 기본 포함 반영; 추가 기록 섹션 본문 흡수)
 
 ---
 
@@ -9,7 +9,7 @@
 | 함수 | 용도 |
 |------|------|
 | `trackView(gameId)` | 게임 조회수 기록 |
-| `trackPageView(page, referrer = null, extra = {})` | 페이지 뷰 기록 (하루 1회). referrer: utm_source 또는 외부 hostname — page_views.referrer에 저장. extra: `{is_bot, user_id}` 등 추가 컬럼 병합. localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID)는 자동 제외 |
+| `trackPageView(page, referrer = null, extra = {})` | 페이지 뷰 기록 (하루 1회). referrer: utm_source 또는 외부 hostname — page_views.referrer에 저장. extra: `{is_bot, user_id}` 등 추가 컬럼 병합. 143차-190부터 기본 payload에 `session_key: getSessionKey()`를 포함(extra로 session_key 전달 시 override). localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID)는 자동 제외 |
 | `trackEvent(eventType, opts = {})` | 이벤트 기록 — page_events 테이블 insert. localhost/127.0.0.1 및 관리자 자동 제외, referrer는 `cottage_orig_src_{date}`에서 자동 읽음. session_key(getSessionKey())/user_id(_sessionUserId)도 함께 저장(143차-160). opts: `{ game_id? }` |
 | `getGameRating(gameId)` | 별점 평균+건수 조회 |
 | `submitRating(gameId, rating)` | 별점 제출 |
@@ -176,7 +176,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 ## window.COTTAGE_PAGE_LABELS / window.COTTAGE_PAGE_LABELS_BY_PATH (page-labels.js)
 
-페이지 경로 → 한글 라벨 매핑 단일 소스. script.js의 PAGE_LABELS(pathname 키, 세션 트래커용)와 requests-admin.html의 PAGE_LABEL(slug 키, 분석 대시보드 표시용)이 별도 하드코딩이라 about.html 개명 시 드리프트가 발생했던 것을 통합(143차-161).
+페이지 경로 → 한글 라벨 매핑 단일 소스. 구 script.js(현 script-nav.js)의 PAGE_LABELS(pathname 키, 세션 트래커용)와 requests-admin.html의 PAGE_LABEL(slug 키, 분석 대시보드 표시용)이 별도 하드코딩이라 about.html 개명 시 드리프트가 발생했던 것을 통합(143차-161).
 
 | 전역 | 키 형식 | 용도 |
 |------|--------|------|
@@ -228,8 +228,4 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.openDayDetailModal` | day-detail.js | 레거시 — 직접 데이터 전달 방식으로 개인 일정 모달 열기 `(opts)`. |
 | `window.openDateScheduleModal` | day-detail.js | 막대 클릭 → DB 조회 후 개인 일정 모달 `(userId, voteDate)`. club-schedule.html에서 호출. |
 | `window.openDateMeetingModal` | day-detail.js | 날짜 전체 집계 모달 `(voteDate, votes, voteGames, opts?)`. 홈 미리보기 카드 클릭 시 index-page.js에서 호출. |
-## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
-
-- 143차-190부터 `trackPageView(page, referrer, extra={})`는 기본 payload에 `session_key: getSessionKey()`를 포함한다.
-- extra로 전달한 `session_key`가 있으면 기존 병합 규칙에 따라 override된다.
 - 관리자/로컬 제외 기준은 유지한다.

@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-07-01 (143차-178: page_views.is_bot/user_id 추가 — 봇 제외 + 회원/비회원 방문자 트래킹)
+최종 갱신: 2026-07-05 (143차-190: page_views.session_key 추가; 추가 기록 섹션 본문 흡수)
 
 ---
 
@@ -15,7 +15,7 @@
 | `game_comments` | game_key, comment_text, nickname, user_id | 코멘트 |
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
-| `page_views` | page, created_at, referrer, is_bot (boolean, default false), user_id (text, nullable) | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname). is_bot/user_id는 143차-178부터 추가 — `__visitor__` 마커 삽입 시점에 navigator.userAgent로 알려진 크롤러 패턴 매칭 시 is_bot=true, 로그인 상태면 user_id 채움(회원/비회원 구분용). **과거 데이터는 소급 보정 안 됨**(is_bot=false/user_id=null로 일괄 채워짐) |
+| `page_views` | page, created_at, referrer, is_bot (boolean, default false), user_id (text, nullable), session_key (text, nullable) | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname). is_bot/user_id는 143차-178부터 추가 — `__visitor__` 마커 삽입 시점에 navigator.userAgent로 알려진 크롤러 패턴 매칭 시 is_bot=true, 로그인 상태면 user_id 채움(회원/비회원 구분용). session_key는 143차-190부터 추가 — `trackPageView()`가 `cottage_session_id` 값을 함께 저장. **과거 행은 session_key=NULL이며 소급 보정하지 않음** |
 | `page_events` | event_type, game_id, referrer, session_key, user_id, created_at | 기능 이벤트. referrer: 세션 귀속 소스. session_key/user_id는 143차-160(2026-06-30)에 추가 — **그 이전 행은 NULL이라 unique 집계는 추가 시점 이후 데이터부터만 정확**. 이벤트 타입 목록: hero_recommend_click, recommend_start, recommend_complete, hero_record_click, record_start, record_complete, signup_complete, home_recommend_game_detail_click, home_recommend_all_click, home_recommend_main_click, recommend_run, home_record_main_click, home_record_write_click, home_record_more_click, home_meeting_main_click, home_meeting_planner_click, home_meeting_date_preview_click(홈 날짜 칩 클릭), home_meeting_preview_card_click(홈 미리보기 카드→날짜집계모달), meeting_planner_bar_click(플래너 막대→개인일정모달), meeting_profile_click(플래너·일별뷰 닉네임 클릭) |
 | `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]), notif_seen_at (timestamptz) | 유저 프로필. **bio: 한줄소개 SSOT** — 취향보드/회원 자기소개(club-intro.html)/모임 보드 3곳이 동일 컬럼을 공유 읽기·쓰기(`updateUserBio`). 한쪽에서 수정하면 나머지에도 즉시 반영됨(의도된 동작). avoid_tags: 피하는 유형 태그 배열, notif_seen_at: 알림 마지막 읽은 시각 (기기 간 동기화용) |
@@ -70,10 +70,5 @@
 - `page_views.referrer`: utm_source 값 또는 외부 도메인 hostname 저장 (예: `"kakao"`, `"naver.com"`)
   - 방문자 수/경로 집계 기준 (관리자 방문경로 도넛 차트)
   - 동일 도메인 방문·직접 접속은 `null` → '직접 방문'으로 분류
+  - 관리자 분석에서 유입 `명` 집계는 `__visitor__` 행의 `user_id || session_key` 기준. `page_sessions`와 섞지 않음
 - `page_sessions.referrer`: 동일 형식, 세션 분석 전용 (방문경로 집계에는 미사용)
-## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
-
-- 143차-190에서 `page_views.session_key`를 추가한다.
-- 신규 방문 기록은 `trackPageView()`가 `cottage_session_id` 값을 함께 저장한다.
-- 관리자 분석에서는 `__visitor__` 행의 `user_id || session_key`를 기준으로 유입별 `명`을 계산한다.
-- 과거 행은 `session_key`가 NULL일 수 있으며, 소급 보정하지 않는다.

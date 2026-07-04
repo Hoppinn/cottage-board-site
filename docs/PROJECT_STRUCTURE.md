@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-06-30 (143차: 회원 자기소개 ↔ 모임 보드 데이터 연동. embed 모드 내부 링크 자동 embed=1 전파, 143차-176)
+최종 갱신: 2026-07-05 (day-detail.js 추가; __visitor__ 마커 집계 기준 본문 흡수; 추가 기록 섹션 정리)
 
 ---
 
@@ -307,8 +307,10 @@ game-reviews.html — 기록 입력 탭
 [방문자 마커 (__visitor__)]
   DOMContentLoaded → localhost/admin 제외
   하루 첫 방문 (cottage_visited_{date} 미존재) 시:
-    page_views INSERT (page: '__visitor__', referrer: effectiveSource or null)
-  관리자 페이지 분석에서 __visitor__ 행 = 유니크 유저-day 카운트 기준
+    page_views INSERT (page: '__visitor__', referrer: effectiveSource or null,
+                       session_key, user_id, is_bot)  ← 143차-178/190부터
+  관리자 분석에서 유입 명/회 집계 = __visitor__ 행의 user_id || session_key 기준
+  (page_sessions와 섞지 않음)
 
 [session_key]
   getSessionKey() ← localStorage.cottage_session_id (없으면 생성)
@@ -367,7 +369,3 @@ node game-system/tools/5-build-output/build-output.js
 ```
 
 핵심 원칙: BGG API는 실시간 호출하지 않는다. source → staging → library → output 레이어 분리. output만 사이트에서 읽는다.
-## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
-
-- 방문자 마커(`page_views.page='__visitor__'`)는 `session_key`, `user_id`, `is_bot`을 함께 저장하는 기준으로 정리한다.
-- 관리자 분석의 유입 `명/회`는 `page_sessions`와 섞지 않고 `__visitor__` 행 안에서 계산한다.
