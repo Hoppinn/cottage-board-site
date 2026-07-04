@@ -122,6 +122,8 @@
     if (e.data?.type === 'cottage-switch-tab' && e.data.tab && root) {
       const tab = root.querySelector(`.pr-tab[data-tab="${e.data.tab}"]`);
       if (tab && !tab.classList.contains('is-active')) tab.click();
+    } else if (e.data?.type === 'cottage-close-lightbox') {
+      document.querySelectorAll('.pr-lightbox').forEach(el => el.remove());
     }
   });
 

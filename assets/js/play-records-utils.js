@@ -78,7 +78,11 @@
       }
     }
 
-    function closeLb() { document.removeEventListener('keydown', onKey); lb.remove(); }
+    function closeLb() {
+      document.removeEventListener('keydown', onKey);
+      lb.remove();
+      if (window.parent !== window) window.parent.postMessage({ type: 'cottage-lightbox-close' }, '*');
+    }
 
     if (delBtn) {
       delBtn.addEventListener('click', e => {
@@ -109,6 +113,7 @@
     if (cap) lb.appendChild(cap);
     if (delBtn) lb.appendChild(delBtn);
     document.body.appendChild(lb);
+    if (window.parent !== window) window.parent.postMessage({ type: 'cottage-lightbox-open' }, '*');
     show(cur);
   }
 

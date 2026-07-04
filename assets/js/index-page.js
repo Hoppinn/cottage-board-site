@@ -1083,6 +1083,7 @@ if (recommendTitle && recommendSection) {
 
   let preloaded = false;
   let pendingTab = null;
+  let iframeLightboxOpen = false;
 
   function preloadIfLoggedIn() {
     if (preloaded || !window.getKakaoUser?.()) return;
@@ -1108,6 +1109,8 @@ if (recommendTitle && recommendSection) {
     }
   }
   function closeModal() {
+    frame.contentWindow?.postMessage({ type: 'cottage-close-lightbox' }, '*');
+    iframeLightboxOpen = false;
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
@@ -1121,12 +1124,23 @@ if (recommendTitle && recommendSection) {
         frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab: pendingTab }, '*');
         pendingTab = null;
       }
+    } else if (e.data?.type === 'cottage-lightbox-open') {
+      iframeLightboxOpen = true;
+    } else if (e.data?.type === 'cottage-lightbox-close') {
+      iframeLightboxOpen = false;
     }
   });
 
   openBtn?.addEventListener('click', () => { window.CottageDB?.trackEvent('home_record_write_click'); openModal('input'); });
   openViewBtn?.addEventListener('click', () => { window.CottageDB?.trackEvent('home_record_more_click'); openModal('records'); });
-  dim.addEventListener('click', closeModal);
+  dim.addEventListener('click', () => {
+    if (iframeLightboxOpen) {
+      frame.contentWindow?.postMessage({ type: 'cottage-close-lightbox' }, '*');
+      iframeLightboxOpen = false;
+    } else {
+      closeModal();
+    }
+  });
   closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 })();
