@@ -973,7 +973,7 @@ if (recommendTitle && recommendSection) {
   const body = document.getElementById('recentPlayBody');
   if (!body) return;
 
-  function getGameTitle(id) {
+  function rpGameName(id) {
     if (!id) return '알 수 없는 게임';
     if (window.COTTAGE_GAMES) {
       const g = window.COTTAGE_GAMES.find(g => String(g.bggId) === String(id) || g.id === id);
@@ -982,38 +982,81 @@ if (recommendTitle && recommendSection) {
     return String(id);
   }
 
-  function fmtPlayDate(played_at, created_at) {
+  function rpThumb(gameId) {
+    if (!gameId || !window.gameData) return '';
+    const key = window.gameData[gameId]
+      ? gameId
+      : (Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId)) || [])[0];
+    return key ? (window.gameData[key]?.images?.thumbnail || '') : '';
+  }
+
+  function rpDate(played_at, created_at) {
     const iso = played_at || (created_at || '').slice(0, 10);
     if (!iso) return '';
-    const [, m, d] = iso.split('-');
-    return `${Number(m)}/${Number(d)}`;
+    const [y, m, d] = iso.split('-');
+    const wd = ['일','월','화','수','목','금','토'][new Date(`${y}-${m}-${d}T00:00:00`).getDay()];
+    return `${Number(m)}월 ${Number(d)}일 (${wd})`;
   }
 
   try {
-    const records = await window.CottageDB?.getAllPlayRecordsForHub(3);
+    const records = await window.CottageDB?.getAllPlayRecordsForHub(1);
     if (!records || records.length === 0) {
       body.innerHTML = '<p class="rp-empty">아직 기록된 플레이가 없어요.</p>';
       return;
     }
 
-    body.innerHTML = `<div class="rp-list">${records.map(r => {
-      const title   = getGameTitle(r.game_id);
-      const date    = fmtPlayDate(r.played_at, r.created_at);
-      const who     = r.nickname || '';
-      const players = r.player_count ? `${r.player_count}명` : '';
-      const meta    = [who, players].filter(Boolean).join(' · ');
-      const review  = r.review_text
-        ? `<p class="rp-review">"${r.review_text.slice(0, 60)}${r.review_text.length > 60 ? '…' : ''}"</p>`
-        : '';
-      return `<div class="rp-card">
-        <div class="rp-card-header">
-          <span class="rp-game">${title}</span>
-          <span class="rp-date">${date}</span>
+    const r = records[0];
+    const name  = rpGameName(r.game_id);
+    const thumb = rpThumb(r.game_id);
+    const date  = rpDate(r.played_at, r.created_at);
+
+    const thumbHtml = thumb
+      ? `<img class="pr-rec-thumb" src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : '';
+
+    const countTag = r.player_count
+      ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${r.player_count}명</span>`
+      : '';
+    const nameTags = r.player_names
+      ? r.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${n.trim()}</span>`).join('')
+      : '';
+    const playerHtml = (countTag || nameTags)
+      ? `<div class="pr-player-header">${countTag}${nameTags}</div>`
+      : '';
+
+    const timeParts = [
+      r.play_time_min ? `${r.play_time_min}분` : '',
+      r.score_note || '',
+    ].filter(Boolean);
+    const metaHtml = timeParts.length
+      ? `<div class="pr-rec-meta"><span class="pr-rec-dateline">${timeParts.join(' · ')}</span></div>`
+      : '';
+
+    const reviewHtml = r.review_text
+      ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer">${r.nickname}</span> ` : ''}${r.review_text}</p>`
+      : '';
+
+    const photoUrls = window.parsePhotoUrls?.(r.photo_url) || [];
+    const photoHtml = photoUrls.length
+      ? (window.buildPhotoHtml?.(photoUrls, r.id, false) || '')
+      : '';
+
+    body.innerHTML = `
+      <div class="rp-rich-card">
+        <div class="rp-rich-date">${date}</div>
+        <div class="pr-rec-row pr-rec-row--game">
+          <div class="pr-rec-row-top">
+            ${thumbHtml}
+            <div class="pr-rec-main">
+              <span class="pr-rec-game">${name}</span>
+              ${playerHtml}
+              ${metaHtml}
+              ${reviewHtml}
+            </div>
+          </div>
+          ${photoHtml}
         </div>
-        ${meta ? `<p class="rp-meta">${meta}</p>` : ''}
-        ${review}
       </div>`;
-    }).join('')}</div>`;
   } catch (_) {
     body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
   }
