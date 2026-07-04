@@ -6794,7 +6794,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session.is-open .pr-session-arrow { transform: rotate(180deg); }
 .pr-session-body { display: none; background: var(--bg,#f5f0e8); }
 .pr-session.is-open .pr-session-body { display: block; }
-.pr-session--bydate > .pr-session-body > .pr-sub-session:first-child.is-open { margin-top: 16px; }
+.pr-session--bydate > .pr-session-body > .pr-sub-session:first-child.is-open { margin-top: 8px; }
 
 .pr-month-session { border-top: 1px solid #e0dbd0; }
 .pr-month-session:first-child { border-top: none; }
@@ -6807,7 +6807,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-month-session.is-open .pr-month-arrow { transform: rotate(180deg); }
 .pr-month-body { display: none; }
 .pr-month-session.is-open .pr-month-body { display: block; }
-.pr-month-body > .pr-sub-session:first-child.is-open { margin-top: 16px; }
+.pr-month-body > .pr-sub-session:first-child.is-open { margin-top: 8px; }
 .pr-date-group-label { font-size: 11px; font-weight: 500; color: #7a6a58; padding: 6px 16px 2px; letter-spacing: 0.2px; }
 
 .pr-sub-session { border-top: 1px solid #e8e4dc; background: var(--bg,#f5f0e8); }
