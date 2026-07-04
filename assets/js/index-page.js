@@ -197,7 +197,9 @@ bindGameCardEvents();
   // 추천 결과 게임 클릭 이벤트 (overlay · 일반 목록 카드 제외, gameScroll 스코프)
   gameScroll.querySelectorAll('.game-card').forEach(card => {
     card.addEventListener('click', () => {
-      window.CottageDB?.trackEvent('recommend_game_click', { game_id: card.dataset.game });
+      const _gid = card.dataset.game;
+      const _gname = window.COTTAGE_GAMES?.find(g => String(g.bggId) === String(_gid) || g.id === _gid)?.display || _gid;
+      window.CottageDB?.trackEvent('home_recommend_game_detail_click', { game_id: _gid, game_name: _gname, source: 'home_recommend' });
     });
   });
 
@@ -209,6 +211,7 @@ gameScroll.scrollTo({
 }
 
 function openRecommendOverlay(){
+  window.CottageDB?.trackEvent('home_recommend_all_click');
   const overlay = document.getElementById("recommendOverlay");
   const list    = document.getElementById("recommendOverlayList");
   if(!overlay || !list) return;
@@ -667,10 +670,10 @@ function backToHero(){
 ========================= */
 
 if(openRecommendModalButton){
-  openRecommendModalButton.addEventListener(
-    'click',
-    showRecommendResults
-  );
+  openRecommendModalButton.addEventListener('click', () => {
+    window.CottageDB?.trackEvent('home_recommend_main_click');
+    showRecommendResults();
+  });
 }
 
 if(openRecommendMenuButton){
@@ -956,6 +959,7 @@ if (recommendTitle && recommendSection) {
   const btn = document.getElementById('heroRecordBtn');
   if (!btn) return;
   btn.addEventListener('click', () => {
+    window.CottageDB?.trackEvent('home_record_main_click');
     const section = document.getElementById('recent-play');
     if (!section) return;
     const header = document.querySelector('.site-header');
@@ -1112,8 +1116,8 @@ if (recommendTitle && recommendSection) {
     }
   });
 
-  openBtn?.addEventListener('click', () => openModal('input'));
-  openViewBtn?.addEventListener('click', () => openModal('records'));
+  openBtn?.addEventListener('click', () => { window.CottageDB?.trackEvent('home_record_write_click'); openModal('input'); });
+  openViewBtn?.addEventListener('click', () => { window.CottageDB?.trackEvent('home_record_more_click'); openModal('records'); });
   dim.addEventListener('click', closeModal);
   closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
@@ -1152,6 +1156,7 @@ if (recommendTitle && recommendSection) {
   const btn = document.getElementById('heroMeetingBtn');
   if (!btn) return;
   btn.addEventListener('click', () => {
+    window.CottageDB?.trackEvent('home_meeting_main_click');
     const section = document.getElementById('meeting');
     if (!section) return;
     const header = document.querySelector('.site-header');
@@ -1207,7 +1212,7 @@ if (recommendTitle && recommendSection) {
     }
   });
 
-  openBtn.addEventListener('click', openModal);
+  openBtn.addEventListener('click', () => { window.CottageDB?.trackEvent('home_meeting_planner_click'); openModal(); });
   dim.addEventListener('click', closeModal);
   closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });

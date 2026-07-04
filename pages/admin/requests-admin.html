@@ -515,6 +515,7 @@
               <div class="admin-analysis-subtabs">
                 <button class="admin-analysis-subtab is-active" data-event="recommend" type="button">추천게임</button>
                 <button class="admin-analysis-subtab" data-event="record" type="button">플레이기록</button>
+                <button class="admin-analysis-subtab" data-event="meeting" type="button">모임</button>
                 <button class="admin-analysis-subtab" data-event="signup" type="button" disabled title="준비 중">회원가입</button>
                 <button class="admin-analysis-subtab" data-event="codex" type="button" disabled title="준비 중">도감</button>
               </div>
@@ -1956,7 +1957,9 @@
       if (!el || !window.CottageDB?.getEventCounts) return;
       try {
         const events = await window.CottageDB.getEventCounts(
-          ['hero_recommend_click','recommend_complete','hero_record_click','record_complete'], 30
+          ['home_recommend_main_click','home_recommend_game_detail_click','home_recommend_all_click','recommend_complete',
+           'home_record_main_click','home_record_write_click','home_record_more_click','record_complete',
+           'home_meeting_main_click','home_meeting_planner_click'], 30
         );
         // "메인 방문" 단계 — page_events가 아니라 page_views(페이지 진입 로그) 기준 집계임에 유의
         const pageViews = window.CottageDB.getPageViewCounts
@@ -1977,10 +1980,19 @@
         function count7(type) { return count7In(events.filter(e => e.event_type === type)); }
         function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
         const pv0 = countDayIn(pageViews, 0), pv7 = count7In(pageViews);
-        const hr0=countDay('hero_recommend_click',0), rc0=countDay('recommend_complete',0),
-              hg0=countDay('hero_record_click',0),   rd0=countDay('record_complete',0);
-        const hr7=count7('hero_recommend_click'), rc7=count7('recommend_complete'),
-              hg7=count7('hero_record_click'),   rd7=count7('record_complete');
+        // 추천게임 퍼널
+        const hr0=countDay('home_recommend_main_click',0), rc0=countDay('recommend_complete',0),
+              rgd0=countDay('home_recommend_game_detail_click',0), rall0=countDay('home_recommend_all_click',0);
+        const hr7=count7('home_recommend_main_click'), rc7=count7('recommend_complete'),
+              rgd7=count7('home_recommend_game_detail_click'), rall7=count7('home_recommend_all_click');
+        // 플레이기록 퍼널
+        const hg0=countDay('home_record_main_click',0), rd0=countDay('record_complete',0),
+              rw0=countDay('home_record_write_click',0), rm0=countDay('home_record_more_click',0);
+        const hg7=count7('home_record_main_click'), rd7=count7('record_complete'),
+              rw7=count7('home_record_write_click'), rm7=count7('home_record_more_click');
+        // 모임 퍼널
+        const mt0=countDay('home_meeting_main_click',0), mp0=countDay('home_meeting_planner_click',0);
+        const mt7=count7('home_meeting_main_click'), mp7=count7('home_meeting_planner_click');
         function funnelRow(label, todayN, weekN, prevN) {
           const conv = prevN !== null ? `<span style="font-size:11px;color:var(--muted);margin-left:6px">${pct(todayN,prevN)}</span>` : '';
           return `<div class="admin-event-row">
@@ -1992,13 +2004,22 @@
         el.innerHTML = `
           <div class="admin-event-funnel" data-event-panel="recommend">
             ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
-            ${funnelRow('Hero 버튼 클릭', hr0, hr7, pv0)}
+            ${funnelRow('Hero 추천게임 클릭', hr0, hr7, pv0)}
+            ${funnelRow('게임 카드 상세 클릭', rgd0, rgd7, hr0)}
+            ${funnelRow('전체보기 클릭', rall0, rall7, hr0)}
             ${funnelRow('추천 결과 완료', rc0, rc7, hr0)}
           </div>
           <div class="admin-event-funnel" data-event-panel="record" style="display:none">
             ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
-            ${funnelRow('Hero 기록 버튼 클릭', hg0, hg7, pv0)}
-            ${funnelRow('플레이기록 저장 완료', rd0, rd7, hg0)}
+            ${funnelRow('Hero 기록남기기 클릭', hg0, hg7, pv0)}
+            ${funnelRow('섹션 기록 남기기 클릭', rw0, rw7, hg0)}
+            ${funnelRow('기록 더보기 클릭', rm0, rm7, hg0)}
+            ${funnelRow('플레이기록 저장 완료', rd0, rd7, null)}
+          </div>
+          <div class="admin-event-funnel" data-event-panel="meeting" style="display:none">
+            ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
+            ${funnelRow('Hero 모임 클릭', mt0, mt7, pv0)}
+            ${funnelRow('플래너 보기 클릭', mp0, mp7, mt0)}
           </div>`;
         const _sumEventCount = document.getElementById('sumEventCount');
         if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span>(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span>(${rd7}건)</span></span>`;
