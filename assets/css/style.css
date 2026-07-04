@@ -6883,7 +6883,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 
 .pr-game-group { border-top: 1px solid var(--border,#e8e4dc); }
 .pr-game-group:first-child { border-top: none; }
-.pr-game-group-hd { padding: 7px 14px; background: #ece7dc; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-left: 3px solid #6fa068; }
+.pr-game-group-hd { padding: 7px 14px; background: #ece7dc; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-left: 3px solid #a06040; }
 .pr-game-group-moim { font-size: 11px; font-weight: 500; color: #9b8f84; background: none; padding: 0; border-radius: 0; width: 100%; margin-bottom: 2px; }
 .pr-game-group-hd .pr-rec-tag { background: #fff; color: #455a64; font-weight: 600; border: 1px solid #cfd8dc; }
 .pr-rec-dateline { font-size: 13px; color: var(--text-info); display: block; margin-top: 2px; }
