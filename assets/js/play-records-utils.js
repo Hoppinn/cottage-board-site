@@ -93,7 +93,6 @@
     prev.addEventListener('click', e => { e.stopPropagation(); show(cur - 1); });
     next.addEventListener('click', e => { e.stopPropagation(); show(cur + 1); });
     close.addEventListener('click', closeLb);
-    lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
 
     let touchStartX = 0;
     lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
