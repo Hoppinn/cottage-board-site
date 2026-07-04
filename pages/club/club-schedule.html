@@ -874,6 +874,10 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    body.is-embedded .site-footer,
+    body.is-embedded .header-bar,
+    body.is-embedded .owned-page-nav { display: none !important; }
+    body.is-embedded { overflow-x: hidden; }
   </style>
 </head>
 
@@ -2477,6 +2481,12 @@
     });
 
     init();
+
+    // embed 모드: 부모 프레임에 ready 신호
+    if (new URLSearchParams(location.search).get('embed') === 'true') {
+      document.body.classList.add('is-embedded');
+      window.parent.postMessage({ type: 'cottage-planner-ready' }, '*');
+    }
 
   })();
   </script>

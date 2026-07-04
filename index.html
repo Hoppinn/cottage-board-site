@@ -240,15 +240,25 @@
       <div class="home-section-inner">
         <div class="home-section-header">
           <h2 class="home-section-title">이번 주 모임</h2>
-          <a class="home-section-more" href="./pages/club/club-schedule.html">플래너 보기 →</a>
+          <button class="home-section-more" id="openPlannerBtn" type="button">플래너 보기 →</button>
         </div>
         <div class="meeting-status" id="meetingStatus">
           <span class="meeting-status-msg" id="meetingStatusMsg">불러오는 중...</span>
         </div>
         <div class="meeting-days" id="meetingDays"></div>
-        <a class="home-section-cta" href="./pages/club/club-schedule.html">🗓 모임 플래너 →</a>
+        <div id="meetingPreview"></div>
       </div>
     </section>
+
+  <!-- 플래너 바텀시트 -->
+  <div class="planner-sheet-modal" id="plannerSheetModal" aria-hidden="true">
+    <div class="planner-sheet-dim" id="plannerSheetDim"></div>
+    <div class="planner-sheet-panel">
+      <button class="planner-sheet-close" id="plannerSheetClose" type="button">✕</button>
+      <div class="planner-sheet-loader" id="plannerSheetLoader" aria-hidden="true"></div>
+      <iframe class="planner-sheet-frame" id="plannerSheetFrame" src="" title="모임 플래너"></iframe>
+    </div>
+  </div>
 
 
 

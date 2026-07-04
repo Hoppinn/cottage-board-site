@@ -1165,6 +1165,55 @@ if (recommendTitle && recommendSection) {
    # MEETING SECTION
 ========================= */
 
+(function initPlannerModal() {
+  const modal    = document.getElementById('plannerSheetModal');
+  const frame    = document.getElementById('plannerSheetFrame');
+  const dim      = document.getElementById('plannerSheetDim');
+  const closeBtn = document.getElementById('plannerSheetClose');
+  const openBtn  = document.getElementById('openPlannerBtn');
+  const loader   = document.getElementById('plannerSheetLoader');
+  if (!modal || !openBtn) return;
+
+  let preloaded = false;
+
+  function preload() {
+    if (preloaded) return;
+    preloaded = true;
+    frame.src = './pages/club/club-schedule.html?embed=true';
+  }
+  window.addEventListener('kakao-auth-ready', preload);
+
+  function openModal() {
+    modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    if (frame.classList.contains('is-ready')) {
+      // already loaded
+    } else {
+      if (loader) loader.style.display = 'flex';
+      if (!preloaded) preload();
+    }
+  }
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  window.addEventListener('message', e => {
+    if (e.data?.type === 'cottage-planner-ready') {
+      frame.classList.add('is-ready');
+      if (loader) loader.style.display = 'none';
+    }
+  });
+
+  openBtn.addEventListener('click', openModal);
+  dim.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+})();
+
+
 (async function initMeetingSection() {
   const statusEl = document.getElementById('meetingStatusMsg');
   const daysEl   = document.getElementById('meetingDays');
@@ -1222,6 +1271,36 @@ if (recommendTitle && recommendSection) {
         <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
       </div>`;
     }).join('');
+
+    // 다가오는 모임 미리보기 (오늘 이후 가장 빠른 투표 날짜)
+    const previewEl = document.getElementById('meetingPreview');
+    if (previewEl && votes.length > 0) {
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const upcomingDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0);
+      if (upcomingDate) {
+        const dayVotes = votes.filter(v => v.vote_date === upcomingDate);
+        const dateObj = new Date(upcomingDate + 'T00:00:00');
+        const dayIdx = ((dateObj.getDay() + 6) % 7); // 월=0
+        const month = dateObj.getMonth() + 1;
+        const date  = dateObj.getDate();
+        const names = [...new Set(dayVotes.map(v => v.nickname))];
+
+        // 가장 많이 겹치는 시간대 (1시간 단위)
+        const MIN_H = 10, MAX_H = 24;
+        let bestHour = -1, bestCnt = 0;
+        for (let h = MIN_H; h < MAX_H; h++) {
+          const cnt = dayVotes.filter(v => v.time_start <= h && v.time_end > h).length;
+          if (cnt > bestCnt) { bestCnt = cnt; bestHour = h; }
+        }
+        const timeStr = bestHour >= 0 ? `${bestHour}:00~${bestHour + 1}:00+ (${bestCnt}명 공통)` : '';
+
+        previewEl.innerHTML = `<div class="meeting-preview-card">
+          <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]})</div>
+          <div class="mpc-names">${names.map(n => `<span class="mpc-name">${n}</span>`).join('')}</div>
+          ${timeStr ? `<div class="mpc-time">${timeStr}</div>` : ''}
+        </div>`;
+      }
+    }
 
   } catch (_) {
     statusEl.textContent = '🎲 이번 주 모임 모집 중';
