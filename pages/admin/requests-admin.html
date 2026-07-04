@@ -512,13 +512,6 @@
             </div>
 
             <div class="admin-tab-panel" id="tabPanelEvent" data-panel="event">
-              <div class="admin-analysis-subtabs">
-                <button class="admin-analysis-subtab is-active" data-event="recommend" type="button">추천게임</button>
-                <button class="admin-analysis-subtab" data-event="record" type="button">플레이기록</button>
-                <button class="admin-analysis-subtab" data-event="meeting" type="button">모임</button>
-                <button class="admin-analysis-subtab" data-event="signup" type="button" disabled title="준비 중">회원가입</button>
-                <button class="admin-analysis-subtab" data-event="codex" type="button" disabled title="준비 중">도감</button>
-              </div>
               <div id="eventFunnelBody"><div class="admin-empty">불러오는 중...</div></div>
             </div>
 
@@ -1998,34 +1991,40 @@
         // 모임 퍼널
         const mt0=countDay('home_meeting_main_click',0), mp0=countDay('home_meeting_planner_click',0);
         const mt7=count7('home_meeting_main_click'), mp7=count7('home_meeting_planner_click');
-        function funnelRow(label, todayN, weekN, prevN) {
-          const conv = prevN !== null ? `<span style="font-size:11px;color:var(--muted);margin-left:6px">${pct(todayN,prevN)}</span>` : '';
+        function stepRow(badge, label, todayN, weekN, prevN) {
+          const conv = prevN !== null && prevN > 0
+            ? `<span style="font-size:11px;color:var(--accent,#7a4828);font-weight:700;margin-left:4px">${pct(todayN,prevN)}</span>` : '';
+          const badgeHtml = badge
+            ? `<span style="font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;min-width:26px">${badge}</span>` : '';
           return `<div class="admin-event-row">
-            <span class="admin-event-label">${label}</span>
+            ${badgeHtml}
+            <span class="admin-event-label" style="font-size:12px">${label}</span>
             <span class="admin-event-today">${todayN}<small>오늘</small>${conv}</span>
             <span class="admin-event-week">${weekN}<small>7일</small></span>
           </div>`;
         }
-        el.innerHTML = `
-          <div class="admin-event-funnel" data-event-panel="recommend">
-            ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
-            ${funnelRow('Hero 추천게임 클릭', hr0, hr7, pv0)}
-            ${funnelRow('게임 카드 상세 클릭', rgd0, rgd7, hr0)}
-            ${funnelRow('전체보기 클릭', rall0, rall7, hr0)}
-            ${funnelRow('추천 결과 완료', rc0, rc7, hr0)}
-          </div>
-          <div class="admin-event-funnel" data-event-panel="record" style="display:none">
-            ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
-            ${funnelRow('Hero 기록남기기 클릭', hg0, hg7, pv0)}
-            ${funnelRow('섹션 기록 남기기 클릭', rw0, rw7, hg0)}
-            ${funnelRow('기록 더보기 클릭', rm0, rm7, hg0)}
-            ${funnelRow('플레이기록 저장 완료', rd0, rd7, null)}
-          </div>
-          <div class="admin-event-funnel" data-event-panel="meeting" style="display:none">
-            ${funnelRow('메인 방문 (page_views 기준)', pv0, pv7, null)}
-            ${funnelRow('Hero 모임 클릭', mt0, mt7, pv0)}
-            ${funnelRow('플래너 보기 클릭', mp0, mp7, mt0)}
+        function axisCard(emoji, title, content) {
+          return `<div style="border:1px solid var(--border,#e8e4dc);border-radius:12px;padding:12px 14px;background:var(--card-bg,#fff)">
+            <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px;letter-spacing:0.3px">${emoji} ${title}</div>
+            <div style="display:flex;flex-direction:column;gap:4px">${content}</div>
           </div>`;
+        }
+        el.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
+          ${axisCard('🔍', '추천게임 찾기', `
+            ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr0, hr7, pv0)}
+            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd0, rgd7, hr0)}
+            ${stepRow('', '추천 섹션 전체보기 클릭', rall0, rall7, hr0)}
+          `)}
+          ${axisCard('📋', '플레이 기록', `
+            ${stepRow('2-1', '히어로 기록남기기 클릭', hg0, hg7, pv0)}
+            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm0, rm7, hg0)}
+            ${stepRow('', '최근 플레이 기록 남기기 클릭', rw0, rw7, hg0)}
+          `)}
+          ${axisCard('🤝', '모임', `
+            ${stepRow('3-1', '히어로 모임 클릭', mt0, mt7, pv0)}
+            ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp0, mp7, mt0)}
+          `)}
+        </div>`;
         const _sumEventCount = document.getElementById('sumEventCount');
         if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span>(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span>(${rd7}건)</span></span>`;
       } catch(e) {
