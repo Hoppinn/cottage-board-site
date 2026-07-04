@@ -1003,13 +1003,13 @@ if (recommendTitle && recommendSection) {
   }
 
   try {
-    const records = await window.CottageDB?.getAllPlayRecordsForHub(1);
+    const records = await window.CottageDB?.getAllPlayRecordsForHub(50);
     if (!records || records.length === 0) {
       body.innerHTML = '<p class="rp-empty">아직 기록된 플레이가 없어요.</p>';
       return;
     }
 
-    const r = records[0];
+    const r = records.find(rec => rec.review_text?.trim() && rec.photo_url?.trim()) || records[0];
     const name  = rpGameName(r.game_id);
     const thumb = rpThumb(r.game_id);
     const date  = rpDate(r.played_at, r.created_at);
