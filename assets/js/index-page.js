@@ -1082,6 +1082,7 @@ if (recommendTitle && recommendSection) {
   if (!modal || (!openBtn && !openViewBtn)) return;
 
   let preloaded = false;
+  let pendingTab = null;
 
   function preloadIfLoggedIn() {
     if (preloaded || !window.getKakaoUser?.()) return;
@@ -1093,14 +1094,17 @@ if (recommendTitle && recommendSection) {
 
   function openModal(tab) {
     if (!window.getKakaoUser?.()) { window.kakaoLogin?.(); return; }
+    pendingTab = tab;
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
 
     if (frame.classList.contains('is-ready')) {
-      frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab }, '*');
+      if (tab) frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab }, '*');
+      pendingTab = null;
     } else {
       if (loader) loader.style.display = 'flex';
+      if (!preloaded) preloadIfLoggedIn();
     }
   }
   function closeModal() {
@@ -1113,6 +1117,10 @@ if (recommendTitle && recommendSection) {
     if (e.data?.type === 'cottage-hub-ready') {
       frame.classList.add('is-ready');
       if (loader) loader.style.display = 'none';
+      if (pendingTab) {
+        frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab: pendingTab }, '*');
+        pendingTab = null;
+      }
     }
   });
 
