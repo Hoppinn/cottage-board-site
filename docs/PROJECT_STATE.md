@@ -74,6 +74,25 @@
 | `916b6f5` | 이벤트 탭 3축 카드 뷰로 전면 개편 |
 | `780752b` | 이벤트 퍼널 디자인 개선 (번호 소형화, 라벨-숫자 계층, ↓전환율, 플로우 도트) |
 
+### CSS 변수화 전체 3차 (2026-07-05)
+
+script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → 변수화 1~3차.
+
+| 커밋 | 내용 |
+|------|------|
+| `65e015a` | refactor: script.js → script-nav.js + game-sheet.js 분리 (14개 페이지) |
+| `7c3a681` | docs: CLAUDE.md 병렬세션금지·feat+refactor혼합금지 규칙 추가 |
+| `62cdf27` | refactor(css): :root 신규 변수 7개 선언 (--border, --card-bg, --review-accent, --line-soft, --text-dark, --bg-soft, --req-accent) |
+| `6a43620` | refactor(css): 기존 :root 변수와 동일값 하드코딩 치환 (42건) |
+| `8d86388` | refactor(css): 신설 변수와 동일값 하드코딩 치환 (115건) |
+| `f0ccc3d` | docs: DESIGN_RULES.md §1 hex 하드코딩 금지 규칙 추가 |
+| `b43c249` | refactor(css): style.css #7a4828 → var(--green) 치환 (101+1건, 구역별) |
+| `07d27a7` | refactor(css): requests-admin.html style블록 변수화 (#e8e4dc 22건, #f5f0e8 11건, #7a4828 6건) |
+| `d2ee5c8` | refactor(css): 죽은 폴백·중첩 폴백 제거 (var(--brown,#7a4828)→var(--brown) 23건, 자기참조·중첩 폴백 전수 정리) |
+| `31bec88` | refactor(css): requests-admin.html 인라인 style 속성 치환 (JS 템플릿 내 6건) |
+
+**잔여**: `var(--accent,#7a4828)` 1건(requests-admin.html:2050, --accent 미선언 폴백), `var(--card-bg,#fff)` 8건(폴백값 #fff ≠ --card-bg 실제값, 의도적 유지). memory/project_refactor_candidates.md 갱신 완료.
+
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
