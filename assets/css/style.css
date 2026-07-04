@@ -52,6 +52,14 @@
   --selected-pill-border:#d4a878;
   --selected-pill-text:#7a4828;
 
+  --border:#e8e4dc;          /* 구분선·테두리 (var(--border,#e8e4dc) 93건 폴백 즉시 전환) */
+  --card-bg:#faf9f5;         /* 카드·섹션 배경 (var(--card-bg,#faf9f5) 47건 폴백 즉시 전환) */
+  --review-accent:#c8b49a;   /* 게임평·코멘트 왼쪽 강조선 */
+  --line-soft:#ead8b8;       /* 중간 강도 구분선 */
+  --text-dark:#3a3025;       /* 짙은 갈색 텍스트 (--ink보다 약간 밝은 변주) */
+  --bg-soft:#f5f0e8;         /* 연한 크림 배경 */
+  --req-accent:#9e3a2a;      /* 요청 페이지 강조색 (붉은 갈색) */
+
   --overlay-z:2000;
   --z-profile:9100;      /* 내 보드 패널 */
   --z-subsheet:9200;     /* 서브시트, 다른 프로필 오버레이 */
