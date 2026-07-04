@@ -2047,7 +2047,7 @@
         }
         function convArrow(fromN, toN) {
           const c = fromN > 0 ? pct(toN, fromN) : '-';
-          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1">↓ <span style="color:var(--accent,#7a4828);font-weight:700">${c}</span></div>`;
+          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1">↓ <span style="color:var(--green);font-weight:700">${c}</span></div>`;
         }
         function axisCard(emoji, title, steps, nDots) {
           const dots = Array.from({length: nDots}, (_, i) =>
