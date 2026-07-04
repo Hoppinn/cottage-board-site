@@ -90,8 +90,10 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 | `07d27a7` | refactor(css): requests-admin.html style블록 변수화 (#e8e4dc 22건, #f5f0e8 11건, #7a4828 6건) |
 | `d2ee5c8` | refactor(css): 죽은 폴백·중첩 폴백 제거 (var(--brown,#7a4828)→var(--brown) 23건, 자기참조·중첩 폴백 전수 정리) |
 | `31bec88` | refactor(css): requests-admin.html 인라인 style 속성 치환 (JS 템플릿 내 6건) |
+| `a0214d0` | refactor(css): var(--accent,#7a4828) → var(--green) (유령 변수 제거, --accent 미선언) |
+| `f99c962` | refactor(css): --brown을 --green으로 통일 (사용자 DevTools 비교 후 구분 불가 확인·승인, 23건) |
 
-**잔여**: `var(--accent,#7a4828)` 1건(requests-admin.html:2050, --accent 미선언 폴백), `var(--card-bg,#fff)` 8건(폴백값 #fff ≠ --card-bg 실제값, 의도적 유지). memory/project_refactor_candidates.md 갱신 완료.
+**CSS 변수화 전체 완료.** 잔여: `var(--card-bg,#fff)` 8건(폴백값 #fff ≠ --card-bg 실제값, 의도적 유지).
 
 ---
 
