@@ -6773,7 +6773,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-month-body .pr-sub-session.is-open > .pr-sub-hd,
 .pr-session--bydate .pr-sub-session.is-open > .pr-sub-hd { background: #f8f3ec; box-shadow: none; position: relative; }
 .pr-month-body .pr-sub-session.is-open > .pr-sub-hd::before,
-.pr-session--bydate .pr-sub-session.is-open > .pr-sub-hd::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; background: #c49a72; pointer-events: none; }
+.pr-session--bydate .pr-sub-session.is-open > .pr-sub-hd::before { content: ''; position: absolute; left: 8px; top: 0; bottom: -3px; width: 3px; background: #a06040; pointer-events: none; }
 .pr-month-body .pr-date-group-label,
 .pr-session--bydate .pr-date-group-label { padding-left: 36px; }
 .pr-month-body .pr-player-header,
@@ -6816,7 +6816,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-sub-session:first-child { border-top: none; }
 .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--bg,#f5f0e8); border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-sub-hd:hover { background: #ece7dc; }
-.pr-sub-session.is-open > .pr-sub-hd { background: #f5f0e8; box-shadow: inset 3px 0 0 #c49a72; }
+.pr-sub-session.is-open > .pr-sub-hd { background: #f5f0e8; box-shadow: inset 3px 0 0 #a06040; }
 .pr-sub-session.is-open { margin-bottom: 16px; }
 .pr-sub-date { font-size: 14px; font-weight: 600; color: #6b5040; flex-shrink: 0; }
 .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #8a4028; }
