@@ -132,39 +132,6 @@ const DEFAULT_GAME_IMAGE =
 
 
 /* =========================
-   # PAGE MODE
-========================= */
-
-function showRecommendPage(){
-  document.body.classList.add("recommend-page");
-
-  const recommendSection = document.getElementById("recommend");
-  if(recommendSection){
-    recommendSection.classList.remove("is-hidden");
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-function showHomePage(){
-  document.body.classList.remove("recommend-page");
-
-  const recommendSection = document.getElementById("recommend");
-  if(recommendSection){
-    recommendSection.classList.add("is-hidden");
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-
-/* =========================
    # MOBILE MENU
 ========================= */
 
