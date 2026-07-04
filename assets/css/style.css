@@ -6628,7 +6628,7 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 
 /* ── 기록 남기기 센터모달 ── */
 .record-iframe-modal{display:none;position:fixed;inset:0;z-index:900;}
-.record-iframe-modal.is-open{display:flex;align-items:center;justify-content:center;}
+.record-iframe-modal.is-open{display:flex;align-items:flex-end;justify-content:center;padding-bottom:5dvh;}
 .record-iframe-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
 .record-iframe-panel{position:relative;width:min(480px,94vw);height:min(600px,82dvh);background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
