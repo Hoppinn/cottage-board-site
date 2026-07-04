@@ -443,17 +443,17 @@
                 </div>
                 <!-- 주요 유입 -->
                 <div class="admin-summary-card admin-period-summary-card">
-                  <div class="admin-summary-label">주요 유입 (7일)</div>
+                  <div class="admin-summary-label">주요 유입</div>
                   <div class="admin-summary-sub" id="sumTopRef">—</div>
                 </div>
                 <!-- 페이지 (클릭 → 페이지 탭) -->
                 <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="page">
-                  <div class="admin-summary-label">페이지 (7일)</div>
+                  <div class="admin-summary-label">페이지</div>
                   <div class="admin-summary-sub" id="sumPageCount">—</div>
                 </div>
                 <!-- 이벤트 (클릭 → 이벤트 탭) -->
                 <div class="admin-summary-card admin-nav-summary-card" data-nav-tab="event">
-                  <div class="admin-summary-label">이벤트 (7일)</div>
+                  <div class="admin-summary-label">이벤트</div>
                   <div class="admin-summary-sub" id="sumEventCount">—</div>
                 </div>
                 <!-- 회원 (클릭 → 회원 탭) -->
@@ -1133,24 +1133,6 @@
 
       if (pagesBody) pagesBody.innerHTML = '';
 
-      const _sumPageCount = document.getElementById('sumPageCount');
-      if (_sumPageCount) {
-        const _pm = buildPageMap(dedupUserPageDay(rows));
-        const _topPages = _pm.slice(0, 4);
-        // 시간은 dedup 없이 전체 rows에서 집계 (dedup이 duration_sec=0인 행을 잡을 수 있음)
-        const _allPageSec = {};
-        for (const r of rows) { if (r.page) _allPageSec[r.page] = (_allPageSec[r.page] || 0) + (r.duration_sec || 0); }
-        const _PAGE_SHORT = { '코티지가 만들어진 이유': '소개', '홈페이지 기능': '기능안내', '동호회 소개': '동호회' };
-        _sumPageCount.innerHTML = _topPages.length
-          ? _topPages.map(([p, data]) => {
-              const totS = _allPageSec[p] || 0;
-              const timeStr = totS > 0 ? ` · ${fmtTime(totS)}` : '';
-              const label = _PAGE_SHORT[p] || p;
-              return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(label)} <span>(${data.visits}회${timeStr})</span></span>`;
-            }).join('')
-          : '—';
-      }
-
       renderCharts(rows, allProfiles, profilesMap, pageViews);
     }
 
@@ -1159,6 +1141,9 @@
 
       const ADMIN_UID = '4916417947';
       rows = rows.filter(r => String(r.user_id) !== ADMIN_UID);
+
+      let _cachedEvents = null;
+      window._adminSetEvents = (evts) => { _cachedEvents = evts; };
 
       const C1 = '#9e3a2a', C2 = '#c4956a', C3 = '#e8c89a', CMUTED = '#c0b0a0';
       const GRID = '#f0ebe3';
@@ -1814,6 +1799,56 @@
             delete _chartInstances['chartMemberTime'];
           }
         }
+
+        // ── 요약: 페이지 카드 (날짜 연동) ───────────────────────────────
+        {
+          const _src = start ? filtered : rows;
+          const _pageC = {};
+          for (const r of _src) { if (r.page) _pageC[r.page] = (_pageC[r.page] || 0) + 1; }
+          const _PAGE_SHORT = { '코티지가 만들어진 이유': '소개', '홈페이지 기능': '기능안내', '동호회 소개': '동호회' };
+          const _topP = Object.entries(_pageC).sort((a, b) => b[1] - a[1]).slice(0, 4);
+          const _sumPage = document.getElementById('sumPageCount');
+          if (_sumPage) {
+            _sumPage.innerHTML = _topP.length
+              ? _topP.map(([p, n]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(_PAGE_SHORT[p] || p)} <span>(${n}회)</span></span>`).join('')
+              : '—';
+          }
+        }
+
+        // ── 요약: 이벤트 카드 (날짜 연동, loadEventStats 이후 갱신됨) ────
+        if (_cachedEvents !== null) {
+          const _EVT_LBL = {
+            home_recommend_main_click: '추천게임찾기 클릭',
+            home_recommend_game_detail_click: '게임정보 클릭',
+            home_recommend_all_click: '추천 전체보기',
+            home_record_main_click: '기록남기기 클릭',
+            home_record_more_click: '기록 더보기',
+            home_record_write_click: '기록 남기기',
+            home_meeting_main_click: '모임 클릭',
+            home_meeting_planner_click: '플래너 보기',
+          };
+          const evts = (start || end) ? filterByRange(_cachedEvents, start, end, 'created_at') : _cachedEvents;
+          const evtC = {};
+          for (const e of evts) if (_EVT_LBL[e.event_type]) evtC[e.event_type] = (evtC[e.event_type] || 0) + 1;
+          const top4 = Object.entries(evtC).sort((a, b) => b[1] - a[1]).slice(0, 4);
+          const _sumEvt = document.getElementById('sumEventCount');
+          if (_sumEvt) {
+            _sumEvt.innerHTML = top4.length
+              ? top4.map(([t, n]) => `<span style="white-space:nowrap;display:block">${escH(_EVT_LBL[t])} <span>(${n})</span></span>`).join('')
+              : '—';
+          }
+        }
+
+        // ── 회원 탭: 날짜 필터 적용 ──────────────────────────────────────
+        {
+          document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card').forEach(c => {
+            const ls = c.dataset.lastSeen;
+            const inDate = !start || !ls || (ls >= start && (!end || ls < end));
+            c.dataset.dateHidden = inDate ? '0' : '1';
+          });
+          const _activeBtn = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active');
+          applyVisitorFilter(_activeBtn?.dataset.filter || 'all', _activeBtn);
+        }
       }
 
       // 날짜 탐색 상태
@@ -1831,6 +1866,7 @@
         draw(start, end, periodLabelFor(_navType, _navValue), _navType);
         _updateNavLabel();
       }
+      window._adminRedrawForNav = _drawForNav;
 
       function _stepNav(dir) {
         if (_navType === 'day') {
@@ -2045,8 +2081,8 @@
             ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp0, mp7)}
           `, 2)}
         </div>`;
-        const _sumEventCount = document.getElementById('sumEventCount');
-        if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span>(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span>(${rd7}건)</span></span>`;
+        window._adminSetEvents && window._adminSetEvents(events);
+        window._adminRedrawForNav && window._adminRedrawForNav();
       } catch(e) {
         el.innerHTML = '<div class="admin-empty">이벤트 데이터 없음</div>';
       }
@@ -2071,7 +2107,8 @@
     if (extrasEl) extrasEl.style.display = 'block';
     document.getElementById('visitorCloseBtn')?.remove();
     const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
-    const matched = type === 'all' ? allCards : allCards.filter(c => c.dataset.visitorType === type);
+    const dateVisible = allCards.filter(c => c.dataset.dateHidden !== '1');
+    const matched = type === 'all' ? dateVisible : dateVisible.filter(c => c.dataset.visitorType === type);
     allCards.forEach(c => c.style.display = 'none');
     matched.slice(0, 3).forEach(c => c.style.display = '');
     const moreBtn = document.getElementById('visitorMoreBtn');
@@ -2092,7 +2129,8 @@
     const extrasEl = document.getElementById('visitorExtras');
     if (extrasEl) extrasEl.style.display = 'block';
     const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
-    const matched = activeFilter === 'all' ? allCards : allCards.filter(c => c.dataset.visitorType === activeFilter);
+    const dateVisible = allCards.filter(c => c.dataset.dateHidden !== '1');
+    const matched = activeFilter === 'all' ? dateVisible : dateVisible.filter(c => c.dataset.visitorType === activeFilter);
     matched.forEach(c => c.style.display = '');
     const moreBtn = document.getElementById('visitorMoreBtn');
     if (moreBtn) moreBtn.style.display = 'none';
