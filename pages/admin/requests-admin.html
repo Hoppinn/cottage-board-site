@@ -1002,7 +1002,7 @@
         }).join('');
 
         if (!sortedUsers.length && !anonMap.length) return '<div class="admin-empty">데이터 없음</div>';
-        return memberHtml + (anonHtml ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border,#e8e4dc);"><div style="font-size:11px;color:var(--muted);padding:4px 0 6px;font-weight:600;">비로그인 방문자</div>${anonHtml}</div>` : '');
+        return memberHtml + (anonHtml ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);padding:4px 0 6px;font-weight:600;">비로그인 방문자</div>${anonHtml}</div>` : '');
       }
 
       // 이용상세 > 날짜별: O/X 방문 여부 + 체류시간 (n회 없음)
@@ -1069,12 +1069,12 @@
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
           return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member">
-            <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:#7a4828">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
+            <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
-              ${todayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${fmtTime(todayS)}</span>` : ''}
+              ${todayS > 0 ? `<span style="color:var(--green);font-weight:600">오늘 ${fmtTime(todayS)}</span>` : ''}
               <span>⏱ ${fmtTime(totalS)}</span>
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
             </div>
@@ -1088,14 +1088,14 @@
           const anonTodayS = ent ? ent.todaySec : (a.today_date === todayKst ? (a.today_seconds || 0) : 0);
           const anonTotalS = ent ? [...ent.pm.values()].reduce((s, v) => s + v.totalSec, 0) : 0;
           return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" style="opacity:${online ? 1 : 0.7}">
-            <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:#f5f0e8;color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
+            <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:var(--bg-soft);color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
             </div>
             <div class="admin-member-metas">
               <span>첫 방문 ${fmtDate(a.first_seen_at)}</span>
               <span>최근 ${fmtDate(a.last_seen_at)}</span>
               <span>방문 ${anonVisitCount}</span>
-              ${anonTodayS > 0 ? `<span style="color:#7a4828;font-weight:600">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
+              ${anonTodayS > 0 ? `<span style="color:var(--green);font-weight:600">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
               ${anonTotalS > 0 ? `<span>⏱ ${fmtTime(anonTotalS)}</span>` : ''}
             </div>
           </div>`;
@@ -2053,7 +2053,7 @@
           const dots = Array.from({length: nDots}, (_, i) =>
             `<span style="font-size:7px">●</span>${i < nDots-1 ? '<span style="font-size:9px;margin:0 1px">─</span>' : ''}`
           ).join('');
-          return `<div style="border:1px solid var(--border,#e8e4dc);border-radius:12px;padding:12px 14px;background:var(--card-bg,#fff)">
+          return `<div style="border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:var(--card-bg,#fff)">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
               <div style="font-size:13px;font-weight:800;color:var(--text)">${emoji} ${title}</div>
               <div style="color:var(--muted)">${dots}</div>
