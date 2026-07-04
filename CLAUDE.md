@@ -184,3 +184,5 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 
 - 작업이 완료될 때마다 자동으로 커밋한다.
 - commit 후 자동으로 push하지 않는다. push는 사용자가 명시적으로 요청할 때만 한다.
+- 이 저장소에는 Claude Code 세션을 동시에 하나만 돌린다 (병렬 세션 금지).
+- 한 커밋에 feat와 refactor 변경을 섞지 않는다.
