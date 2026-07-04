@@ -1,8 +1,20 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-03 (플레이기록 게시판 날짜별 탭 신설 + 모임별 탭 연월 계층 추가)
+최종 갱신: 2026-07-04 (메인페이지 바텀시트 2종·CTA 트래킹·라이트박스 독립화)
 
 ---
+
+## 최근 완료 (2026-07-04)
+
+| 커밋 | 내용 |
+|------|------|
+| fc0ef5e | 이번 주 모임 → 플래너 바텀시트 전환: initPlannerModal(로그인 무관 preload, cottage-planner-ready postMessage), initMeetingSection 다가오는 모임 미리보기(참여자·공통시간), club-schedule.html ?embed=true 감지(header/footer 숨김) |
+| 559b6d0 | CTA 트래킹 3세트 정리: home_recommend_main/game_detail/all_click, home_record_main/write/more_click, home_meeting_main/planner_click. 기존 hero_recommend/hero_record onclick 제거(중복 발화 차단). 관리자 이벤트탭 모임 서브탭 추가, 퍼널 3개 반영 |
+| 9c39790 | 바텀시트 우하단 "↗ 페이지로 이동" 링크 추가(기록→game-reviews.html, 플래너→club-schedule.html). 플래너 보기 화살표 제거 |
+| bfe512a | fix: 기록더보기 최초진입 시 input탭 고정 버그 — pendingTab 변수로 tab 파라미터 저장, cottage-hub-ready 수신 시 전환 |
+| 283a925 | fix: 최근플레이 게임평+사진 모두 있는 기록 우선 표시(50개 중 find), 섹션 설명 문구 변경 |
+| a9c7c59 | fix: 바텀시트 라이트박스 독립 닫기 — iframeLightboxOpen 상태 추적, dim 클릭 시 라이트박스만 닫기, closeModal 시 강제 닫기, play-records-utils cottage-lightbox-open/close postMessage, game-reviews.js cottage-close-lightbox 수신 |
+| c153bbf | fix: 라이트박스 검은 배경 클릭 닫힘 제거(X버튼·외부 dim만 닫기) |
 
 ## 최근 완료 (2026-07-03)
 
@@ -13,7 +25,7 @@
 | 23c789d | 최근 플레이 섹션 개편: 3개 표시, 우상단 기록 더보기·기록 남기기, 좌하단 CTA 제거, 기록 남기기 → iframe 센터모달 |
 | 7018aaa | 난이도 토글 레이블 변경(난이도 기준 보기→보드게임 난이도 안내), 중복 타이틀 제거, 카드 공백 축소 |
 | adec443 | 게임카드↔가로선 사이 공백 축소(game-scroll padding-bottom 18→8px, difficulty-guide margin-top 20→8px) |
-| (이번) | 메인페이지 라이브 콘텐츠 2차: #recent-play getAllPlayRecordsForHub(6) 연동(게임명/날짜/닉네임/리뷰미리보기 카드), Hero 기록하기 버튼 → #recent-play 스크롤 전환 |
+| (이전) | 메인페이지 라이브 콘텐츠 2차: #recent-play getAllPlayRecordsForHub(6) 연동(게임명/날짜/닉네임/리뷰미리보기 카드), Hero 기록하기 버튼 → #recent-play 스크롤 전환 |
 | 74d1294 | 메인페이지 라이브 콘텐츠 1차: Hero deco-2/3 제거, 우하단 모임 버튼, 난이도 안내 기본접힘, #recent-play 섹션 껍데기, #meeting 섹션(getMeetingVotes 연동, 상태메시지+날짜칩) |
 | 39fe161 | 배너 타이틀 중앙정렬(.page-mini-hero h1 margin:0 !important) + 게임시트 상단 개편(본문 표지 제거, 영문제목 이동, 버튼 2열, 썸네일 클릭 모달) |
 | c15d215 | play-records-utils.js 상단 주석 window 노출 8개로 갱신 |
@@ -33,9 +45,11 @@
 
 ### 메인페이지 라이브 콘텐츠 강화 — 다음 작업
 
-- [x] **#recent-play 데이터 연동** — `getAllPlayRecordsForHub(6)` 게임명+날짜+닉네임+리뷰미리보기 카드 렌더. 완료.
-- [x] **Hero 기록하기 버튼 → #recent-play 스크롤** — `<button id="heroRecordBtn">` 전환, smooth scroll. 완료.
-- [ ] **이번 주 모임 섹션 추가 기획** — 날짜별 미니 막대 상세화, 모임 참여 버튼 연결, 시간 겹침 표시 등.
+- [x] **#recent-play 데이터 연동** — `getAllPlayRecordsForHub` 게임평+사진 있는 기록 1개 리치카드 렌더. 완료.
+- [x] **Hero 기록하기 버튼 → #recent-play 스크롤** — smooth scroll. 완료.
+- [x] **기록 더보기·기록 남기기 → 바텀시트** — records/input 탭 전환, pendingTab 저장, preload(로그인 시). 완료.
+- [x] **이번 주 모임 → 플래너 바텀시트** — initPlannerModal, 다가오는 모임 미리보기, club-schedule.html embed 지원. 완료.
+- [ ] **이번 주 모임 섹션 추가 기획** — 날짜별 미니 막대 상세화, 모임 참여 버튼 연결 (낮은 우선순위).
 
 ---
 
