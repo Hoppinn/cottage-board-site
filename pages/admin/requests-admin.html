@@ -1991,39 +1991,59 @@
         // 모임 퍼널
         const mt0=countDay('home_meeting_main_click',0), mp0=countDay('home_meeting_planner_click',0);
         const mt7=count7('home_meeting_main_click'), mp7=count7('home_meeting_planner_click');
-        function stepRow(badge, label, todayN, weekN, prevN) {
-          const conv = prevN !== null && prevN > 0
-            ? `<span style="font-size:11px;color:var(--accent,#7a4828);font-weight:700;margin-left:4px">${pct(todayN,prevN)}</span>` : '';
-          const badgeHtml = badge
-            ? `<span style="font-size:10px;font-weight:800;color:var(--muted);flex-shrink:0;min-width:26px">${badge}</span>` : '';
-          return `<div class="admin-event-row">
+        function stepRow(badge, label, todayN, weekN) {
+          const badgeHtml = `<span style="font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0;width:22px;line-height:1">${badge}</span>`;
+          return `<div style="display:flex;align-items:center;gap:8px">
             ${badgeHtml}
-            <span class="admin-event-label" style="font-size:12px">${label}</span>
-            <span class="admin-event-today">${todayN}<small>오늘</small>${conv}</span>
-            <span class="admin-event-week">${weekN}<small>7일</small></span>
+            <span style="font-size:12px;color:var(--muted);font-weight:500;flex:1;min-width:0;line-height:1.3">${label}</span>
+            <div style="display:flex;gap:10px;flex-shrink:0">
+              <div style="text-align:center;min-width:28px">
+                <div style="font-size:9px;color:var(--muted);font-weight:500;margin-bottom:1px">오늘</div>
+                <div style="font-size:17px;font-weight:900;color:var(--text);line-height:1">${todayN}</div>
+              </div>
+              <div style="text-align:center;min-width:28px">
+                <div style="font-size:9px;color:var(--muted);font-weight:500;margin-bottom:1px">7일</div>
+                <div style="font-size:14px;font-weight:700;color:var(--muted);line-height:1">${weekN}</div>
+              </div>
+            </div>
           </div>`;
         }
-        function axisCard(emoji, title, content) {
+        function convArrow(fromN, toN) {
+          const c = fromN > 0 ? pct(toN, fromN) : '-';
+          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1">↓ <span style="color:var(--accent,#7a4828);font-weight:700">${c}</span></div>`;
+        }
+        function axisCard(emoji, title, steps, nDots) {
+          const dots = Array.from({length: nDots}, (_, i) =>
+            `<span style="font-size:7px">●</span>${i < nDots-1 ? '<span style="font-size:9px;margin:0 1px">─</span>' : ''}`
+          ).join('');
           return `<div style="border:1px solid var(--border,#e8e4dc);border-radius:12px;padding:12px 14px;background:var(--card-bg,#fff)">
-            <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px;letter-spacing:0.3px">${emoji} ${title}</div>
-            <div style="display:flex;flex-direction:column;gap:4px">${content}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+              <div style="font-size:13px;font-weight:800;color:var(--text)">${emoji} ${title}</div>
+              <div style="color:var(--muted)">${dots}</div>
+            </div>
+            <div style="display:flex;flex-direction:column">${steps}</div>
           </div>`;
         }
-        el.innerHTML = `<div style="display:flex;flex-direction:column;gap:10px">
+        el.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px">
           ${axisCard('🔍', '추천게임 찾기', `
-            ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr0, hr7, pv0)}
-            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd0, rgd7, hr0)}
-            ${stepRow('', '추천 섹션 전체보기 클릭', rall0, rall7, hr0)}
-          `)}
+            ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr0, hr7)}
+            ${convArrow(hr0, rgd0)}
+            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd0, rgd7)}
+            ${convArrow(rgd0, rall0)}
+            ${stepRow('1-3', '추천 섹션 전체보기 클릭', rall0, rall7)}
+          `, 3)}
           ${axisCard('📋', '플레이 기록', `
-            ${stepRow('2-1', '히어로 기록남기기 클릭', hg0, hg7, pv0)}
-            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm0, rm7, hg0)}
-            ${stepRow('', '최근 플레이 기록 남기기 클릭', rw0, rw7, hg0)}
-          `)}
+            ${stepRow('2-1', '히어로 기록남기기 클릭', hg0, hg7)}
+            ${convArrow(hg0, rm0)}
+            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm0, rm7)}
+            ${convArrow(rm0, rw0)}
+            ${stepRow('2-3', '최근 플레이 기록 남기기 클릭', rw0, rw7)}
+          `, 3)}
           ${axisCard('🤝', '모임', `
-            ${stepRow('3-1', '히어로 모임 클릭', mt0, mt7, pv0)}
-            ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp0, mp7, mt0)}
-          `)}
+            ${stepRow('3-1', '히어로 모임 클릭', mt0, mt7)}
+            ${convArrow(mt0, mp0)}
+            ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp0, mp7)}
+          `, 2)}
         </div>`;
         const _sumEventCount = document.getElementById('sumEventCount');
         if (_sumEventCount) _sumEventCount.innerHTML = `<span style="white-space:nowrap;display:block">추천완료 <span>(${rc7}건)</span></span><span style="white-space:nowrap;display:block">기록완료 <span>(${rd7}건)</span></span>`;
