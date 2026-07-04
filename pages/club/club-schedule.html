@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -940,7 +940,8 @@
   <script src="../../assets/js/supabase-client.js"></script>
   <script src="../../assets/js/achievements.js"></script>
   <script src="../../assets/js/page-labels.js"></script>
-  <script src="../../assets/js/script.js"></script>
+  <script src="../../assets/js/script-nav.js"></script>
+  <script src="../../assets/js/game-sheet.js"></script>
   <script src="../../assets/js/play-records-utils.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
 
@@ -1216,7 +1217,10 @@
       </div>`;
 
       el.querySelectorAll('.sched-bar-name').forEach(n => {
-        n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid));
+        n.addEventListener('click', () => {
+          window.CottageDB?.trackEvent('meeting_profile_click');
+          window.openOtherMeetingSheet?.(n.dataset.uid);
+        });
       });
     }
 
@@ -2145,33 +2149,24 @@
       const LIMIT = 3;
       const range = MAX_H - MIN_H;
 
-      // 게임명: alias 우선, 없으면 3글자 이하 전체 / 4글자+ 앞 2글자. · 구분
+      // 게임명 — 1개: 전체명, 여러 개: "첫번째 외 N"
       function gameNames(voteDate, userId) {
         const games = allVoteGames.filter(g =>
           g.vote_date === voteDate && String(g.user_id) === String(userId)
         );
         if (!games.length) return '';
-        const MAX_SHOW = 3;
-        const ALIASES = window.GAME_SHORT_NAMES || {};
-        const trunc = name => name.length <= 3 ? name : name.slice(0, 2);
 
-        function shortName(g) {
+        function displayName(g) {
           if (g.game_id) {
-            const id = String(g.game_id);
-            if (ALIASES[id]) return ALIASES[id];
-            const obj = (window.COTTAGE_GAMES || []).find(c => c.bggId === id);
-            return trunc(obj?.display || `#${id}`);
+            const obj = (window.COTTAGE_GAMES || []).find(c => c.bggId === String(g.game_id));
+            return obj?.display || obj?.name || `#${g.game_id}`;
           }
-          if (g.custom_name) {
-            if (ALIASES[g.custom_name]) return ALIASES[g.custom_name];
-            return trunc(g.custom_name);
-          }
-          return '?';
+          return g.custom_name || '?';
         }
 
-        const all = games.map(g => esc(shortName(g)));
-        if (all.length <= MAX_SHOW) return all.join('·');
-        return all.slice(0, MAX_SHOW).join('·') + `+${all.length - MAX_SHOW}`;
+        const names = games.map(g => esc(displayName(g)));
+        if (names.length === 1) return names[0];
+        return `${names[0]} 외 ${names.length - 1}`;
       }
 
       function barRow(v) {
@@ -2179,6 +2174,7 @@
         const width = ((v.time_end - v.time_start) / range * 100).toFixed(1);
         const mine  = myVote && String(v.user_id) === String(myVote.user_id);
         const gameLine = gameNames(v.vote_date, v.user_id);
+        const timeLabel = gameLine ? `${v.time_start}~${v.time_end} · ${gameLine}` : `${v.time_start}~${v.time_end}`;
         const actions = mine
           ? `<div class="sched-bar-actions">
               <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
@@ -2190,10 +2186,9 @@
             <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
             ${actions}
           </div>
-          <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
+          <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
             <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
-              <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
-              ${gameLine ? `<span class="sched-bar-game-line">${gameLine}</span>` : ''}
+              <span class="sched-bar-time">${timeLabel}</span>
             </div>
           </div>
         </div>`;
@@ -2283,12 +2278,16 @@
 
       // 이름 클릭 → 해당 유저 모임 보드
       el.querySelectorAll('.sched-bar-name').forEach(n => {
-        n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid));
+        n.addEventListener('click', () => {
+          window.CottageDB?.trackEvent('meeting_profile_click');
+          window.openOtherMeetingSheet?.(n.dataset.uid);
+        });
       });
 
       // 막대 클릭 → 일정 상세 모달 (통계 포함)
       el.querySelectorAll('.sched-bar-track[data-date]').forEach(track => {
         track.addEventListener('click', () => {
+          window.CottageDB?.trackEvent('meeting_planner_bar_click');
           window.openDateScheduleModal?.(track.dataset.uid, track.dataset.date);
         });
       });

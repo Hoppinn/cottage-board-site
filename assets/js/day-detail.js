@@ -93,6 +93,13 @@
       font-size: 13px; color: var(--muted, #9e8e7e);
       text-align: center; padding: 20px 0;
     }
+
+    /* 홈 미리보기 모달 — 플래너 보기 버튼 */
+    .dd-green-btn {
+      background: var(--green, #7a4828);
+      color: white;
+    }
+    .dd-green-btn:active { background: #5a3318; }
   `;
   document.head.appendChild(s);
 
@@ -236,5 +243,87 @@
     const close = () => el.remove();
     el.querySelector('.dd-close-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
+  };
+  /**
+   * 날짜 전체 모임 모달 (홈 미리보기 카드 클릭 — 유저 비중심, 날짜 집계 뷰)
+   * @param {string} voteDate — 'YYYY-MM-DD'
+   * @param {Array}  votes    — 해당 날짜의 meeting_votes 배열 (사전 패치)
+   * @param {Array}  voteGames — 해당 날짜의 meeting_vote_games 배열 (사전 패치)
+   * @param {{ onPlannerClick?: () => void }} [opts]
+   */
+  window.openDateMeetingModal = function (voteDate, votes, voteGames, opts = {}) {
+    document.getElementById('__ddModal')?.remove();
+    const el = document.createElement('div');
+    el.id = '__ddModal';
+    el.className = 'dd-overlay';
+
+    const uniqueVotes = [...new Map(votes.map(v => [String(v.user_id), v])).values()];
+    const count = uniqueVotes.length;
+
+    // 최대 동시 참여 가능 인원 (1시간 단위 슬롯)
+    const MIN_H = 10, MAX_H = 24;
+    let peakCnt = 0;
+    for (let h = MIN_H; h < MAX_H; h++) {
+      const c = votes.filter(v => v.time_start <= h && v.time_end > h).length;
+      if (c > peakCnt) peakCnt = c;
+    }
+
+    // 2명 이상이 원하는 공통 게임
+    const gkCount = {};
+    const gkMeta  = {};
+    voteGames.forEach(g => {
+      const k = g.game_id ? `id:${g.game_id}` : `name:${(g.custom_name || '').trim().toLowerCase()}`;
+      gkCount[k] = (gkCount[k] || 0) + 1;
+      if (!gkMeta[k]) gkMeta[k] = g;
+    });
+    const commonGames = Object.entries(gkCount)
+      .filter(([, c]) => c >= 2)
+      .map(([k]) => esc(resolveGameName(gkMeta[k])));
+
+    const statsHtml = `<div class="dd-stats-row">
+      <span class="dd-stat-chip">👥 ${count}명 참여</span>
+      ${peakCnt >= 2 ? `<span class="dd-stat-chip is-match">⏱ 최대 ${peakCnt}명 겹침</span>` : ''}
+      ${commonGames.length ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${commonGames.length}종</span>` : ''}
+    </div>`;
+
+    const commonGamesHtml = commonGames.length
+      ? `<div class="dd-section" style="margin-bottom:12px">
+          <span class="dd-section-label">🎲 함께 하고 싶은 게임</span>
+          <ul class="dd-game-list">${commonGames.map(n => `<li>${n}</li>`).join('')}</ul>
+        </div>`
+      : '';
+
+    const participantsHtml = uniqueVotes.map(v => {
+      const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
+      const wantNames  = myGames.filter(g => g.list_type === 'want').map(g => esc(resolveGameName(g)));
+      const learnNames = myGames.filter(g => g.list_type === 'learn').map(g => esc(resolveGameName(g)));
+      const wantHtml  = wantNames.length  ? `<ul class="dd-game-list">${wantNames.map(n => `<li>${n}</li>`).join('')}</ul>` : '';
+      const learnHtml = learnNames.length ? `<ul class="dd-game-list">${learnNames.map(n => `<li>${n}</li>`).join('')}</ul>` : '';
+      return `<div class="dd-block">
+        <div class="dd-modal-nick" style="font-size:13px">${esc(v.nickname)}</div>
+        <div class="dd-time">${v.time_start}~${v.time_end}시</div>
+        ${wantNames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
+        ${learnNames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
+      </div>`;
+    }).join('');
+
+    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+      <div class="dd-modal-scroll">
+        <div class="dd-date">${fmtDate(voteDate)}</div>
+        ${statsHtml}
+        ${commonGamesHtml}
+        ${participantsHtml || '<div class="dd-empty">참여자가 없습니다.</div>'}
+      </div>
+      <div class="dd-close-row" style="gap:8px">
+        <button class="dd-close-btn dd-green-btn" type="button">플래너 보기</button>
+        <button class="dd-close-btn" type="button">닫기</button>
+      </div>
+    </div>`;
+
+    document.body.appendChild(el);
+    const [plannerBtn, closeBtn] = el.querySelectorAll('.dd-close-btn');
+    plannerBtn.addEventListener('click', () => { el.remove(); opts.onPlannerClick?.(); });
+    closeBtn.addEventListener('click', () => el.remove());
+    el.addEventListener('click', e => { if (e.target === el) el.remove(); });
   };
 })();

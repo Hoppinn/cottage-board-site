@@ -1244,11 +1244,12 @@ if (recommendTitle && recommendSection) {
 (async function initMeetingSection() {
   const statusEl = document.getElementById('meetingStatusMsg');
   const daysEl   = document.getElementById('meetingDays');
+  const previewEl = document.getElementById('meetingPreview');
   if (!statusEl || !daysEl) return;
 
   function getThisWeekRange() {
     const now = new Date();
-    const day = now.getDay(); // 0=일,1=월...6=토
+    const day = now.getDay();
     const diffToMon = day === 0 ? -6 : 1 - day;
     const mon = new Date(now);
     mon.setDate(now.getDate() + diffToMon);
@@ -1267,10 +1268,70 @@ if (recommendTitle && recommendSection) {
   }
 
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
+  const MIN_H = 10, MAX_H = 24;
+
+  function escH(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // 해당 날짜 미리보기 카드 렌더 (프리뷰 영역)
+  function renderPreview(dateStr, dayVotes, dayGames) {
+    if (!previewEl) return;
+
+    if (!dayVotes.length) {
+      previewEl.innerHTML = `<div class="meeting-preview-empty">
+        <div class="mpe-msg">등록된 일정이 없어요</div>
+        <button class="mpe-link" type="button" id="mpeGoPlanner">+ 플래너에서 등록하기</button>
+      </div>`;
+      document.getElementById('mpeGoPlanner')?.addEventListener('click', () => {
+        window.CottageDB?.trackEvent('home_meeting_planner_click');
+        document.getElementById('openPlannerBtn')?.click();
+      });
+      return;
+    }
+
+    const dateObj = new Date(dateStr + 'T00:00:00');
+    const dayIdx  = ((dateObj.getDay() + 6) % 7);
+    const month   = dateObj.getMonth() + 1;
+    const date    = dateObj.getDate();
+    const names   = [...new Set(dayVotes.map(v => v.nickname))];
+
+    // 가장 많이 겹치는 시간대
+    let bestHour = -1, bestCnt = 0;
+    for (let h = MIN_H; h < MAX_H; h++) {
+      const cnt = dayVotes.filter(v => v.time_start <= h && v.time_end > h).length;
+      if (cnt > bestCnt) { bestCnt = cnt; bestHour = h; }
+    }
+    const timeStr = bestHour >= 0 && bestCnt >= 2
+      ? `⏱ ${bestHour}~${bestHour + 1}시 (${bestCnt}명 공통)`
+      : '';
+
+    previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
+      <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${names.length}명</div>
+      <div class="mpc-names">${names.map(n => `<span class="mpc-name">${escH(n)}</span>`).join('')}</div>
+      ${timeStr ? `<div class="mpc-time">${timeStr}</div>` : ''}
+      <div class="mpc-hint">탭하면 상세 보기 →</div>
+    </div>`;
+
+    previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', () => {
+      window.CottageDB?.trackEvent('home_meeting_preview_card_click');
+      window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
+        onPlannerClick: () => {
+          window.CottageDB?.trackEvent('home_meeting_planner_click');
+          document.getElementById('openPlannerBtn')?.click();
+        },
+      });
+    });
+  }
 
   try {
     const { start, end, monDate } = getThisWeekRange();
-    const votes = await window.CottageDB?.getMeetingVotes(start, end);
+    const todayStr = new Date().toISOString().slice(0, 10);
+
+    const [votes, voteGames] = await Promise.all([
+      window.CottageDB?.getMeetingVotes(start, end) ?? [],
+      window.CottageDB?.getMeetingVoteGames(start, end) ?? [],
+    ]);
     if (!votes) return;
 
     // 날짜별 고유 user_id 집계
@@ -1288,46 +1349,52 @@ if (recommendTitle && recommendSection) {
     const allUsers = new Set(votes.map(v => v.user_id));
     statusEl.textContent = getMeetingStatusMsg(allUsers.size);
 
-    // 날짜 칩 렌더
     const dateKeys = Object.keys(byDate).sort();
-    daysEl.innerHTML = dateKeys.map((dateStr, i) => {
-      const cnt = byDate[dateStr].size;
-      const hasVote = cnt > 0;
-      return `<div class="meeting-day-chip${hasVote ? ' has-vote' : ''}">
-        <span class="mdc-day">${DAY_LABELS[i]}</span>
-        <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
-      </div>`;
-    }).join('');
 
-    // 다가오는 모임 미리보기 (오늘 이후 가장 빠른 투표 날짜)
-    const previewEl = document.getElementById('meetingPreview');
-    if (previewEl && votes.length > 0) {
-      const todayStr = new Date().toISOString().slice(0, 10);
-      const upcomingDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0);
-      if (upcomingDate) {
-        const dayVotes = votes.filter(v => v.vote_date === upcomingDate);
-        const dateObj = new Date(upcomingDate + 'T00:00:00');
-        const dayIdx = ((dateObj.getDay() + 6) % 7); // 월=0
-        const month = dateObj.getMonth() + 1;
-        const date  = dateObj.getDate();
-        const names = [...new Set(dayVotes.map(v => v.nickname))];
+    // 초기 선택: 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
+    let selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0)
+      || dateKeys.find(d => d >= todayStr)
+      || dateKeys[0];
 
-        // 가장 많이 겹치는 시간대 (1시간 단위)
-        const MIN_H = 10, MAX_H = 24;
-        let bestHour = -1, bestCnt = 0;
-        for (let h = MIN_H; h < MAX_H; h++) {
-          const cnt = dayVotes.filter(v => v.time_start <= h && v.time_end > h).length;
-          if (cnt > bestCnt) { bestCnt = cnt; bestHour = h; }
-        }
-        const timeStr = bestHour >= 0 ? `${bestHour}:00~${bestHour + 1}:00+ (${bestCnt}명 공통)` : '';
-
-        previewEl.innerHTML = `<div class="meeting-preview-card">
-          <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]})</div>
-          <div class="mpc-names">${names.map(n => `<span class="mpc-name">${n}</span>`).join('')}</div>
-          ${timeStr ? `<div class="mpc-time">${timeStr}</div>` : ''}
+    // 날짜 칩 렌더
+    function renderChips() {
+      daysEl.innerHTML = dateKeys.map((dateStr, i) => {
+        const cnt = byDate[dateStr].size;
+        const hasVote  = cnt > 0;
+        const isPast   = dateStr < todayStr;
+        const isSelected = dateStr === selectedDate;
+        let cls = 'meeting-day-chip';
+        if (hasVote)    cls += ' has-vote';
+        if (isPast)     cls += ' is-past';
+        if (isSelected) cls += ' is-selected';
+        return `<div class="${cls}" data-date="${dateStr}">
+          <span class="mdc-day">${DAY_LABELS[i]}</span>
+          <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
         </div>`;
-      }
+      }).join('');
+
+      daysEl.querySelectorAll('.meeting-day-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          window.CottageDB?.trackEvent('home_meeting_date_preview_click');
+          selectedDate = chip.dataset.date;
+          daysEl.querySelectorAll('.meeting-day-chip').forEach(c =>
+            c.classList.toggle('is-selected', c.dataset.date === selectedDate)
+          );
+          renderPreview(
+            selectedDate,
+            votes.filter(v => v.vote_date === selectedDate),
+            voteGames.filter(g => g.vote_date === selectedDate),
+          );
+        });
+      });
     }
+
+    renderChips();
+    renderPreview(
+      selectedDate,
+      votes.filter(v => v.vote_date === selectedDate),
+      voteGames.filter(g => g.vote_date === selectedDate),
+    );
 
   } catch (_) {
     statusEl.textContent = '🎲 이번 주 모임 모집 중';
