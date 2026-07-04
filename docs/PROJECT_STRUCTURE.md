@@ -102,7 +102,8 @@ assets/js/
 │                               # 방문자 추적(__visitor__), 체류시간, 비로그인 heartbeat 포함
 ├── kakao-auth.js               # 카카오 로그인/로그아웃, 프로필 패널, 알림, 교환권
 │                               # (window.getKakaoUser / openProfilePanel 노출)
-├── script.js                   # 게임 바텀시트, 검색, 필터, 별점 위젯, 게임평
+├── script-nav.js               # 한글 검색 유틸, rootPath, 모바일 메뉴/스크롤스파이, 헤더 검색, 카드 이벤트, 세션 트래커
+├── game-sheet.js               # GameView, 난이도 시스템, 게임 데이터 포매터, 게임시트, 플레이 모달, 코멘트·사진 모달
 ├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (window.COTTAGE_GAMES 생성)
 ├── game-reviews.js             # 플레이기록 허브 (game-reviews.html 전용)
 │                               # 기록 등록·수정·삭제, 모임/게임별 보기, 사진 업로드
@@ -111,7 +112,8 @@ assets/js/
 ├── owned-games-page.js         # owned-games.html 전용 (게임 목록 필터·렌더)
 ├── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
 └── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
-                                 # script.js를 로드하는 모든 페이지에서 script.js 직전 로드 필수
+                                 # script-nav.js를 로드하는 모든 페이지에서 script-nav.js 직전 로드 필수
+                                 # 로드 순서: page-labels.js → script-nav.js → game-sheet.js → 페이지별 JS
 ```
 
 함수 목록 → [docs/js-api.md](js-api.md)
@@ -131,7 +133,7 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
 - `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
 
-### openShelfSheet (script.js)
+### openShelfSheet (game-sheet.js)
 
 게임 상세시트 위에 게임위치 페이지를 바텀시트로 표시하는 스택 내비게이션.
 

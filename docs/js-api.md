@@ -155,7 +155,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 ---
 
-## script.js 내부 헬퍼
+## game-sheet.js 내부 헬퍼
 
 | 함수 | 용도 |
 |------|------|
@@ -181,9 +181,9 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | 전역 | 키 형식 | 용도 |
 |------|--------|------|
 | `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | requests-admin.html — `page_views.page`(slug 저장) 표시용 |
-| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname (예: `'/pages/info/about.html'`) | script.js — `page_sessions.page`에 저장될 한글 라벨 자체를 동기 평가로 만들 때 사용 |
+| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname (예: `'/pages/info/about.html'`) | script-nav.js — `page_sessions.page`에 저장될 한글 라벨 자체를 동기 평가로 만들 때 사용 |
 
-두 맵은 같은 페이지라도 값이 다를 수 있음(예: `game-reviews`는 "플레이 기록" vs "기록 보기") — 기존부터 그랬던 것이라 통합 시에도 의도적으로 보존함. **`script.js`가 로드 시점에 동기 평가하므로, page-labels.js는 반드시 script.js 로드 직전에 위치해야 함** (script.js를 로드하는 14개 HTML 전체 적용 완료).
+두 맵은 같은 페이지라도 값이 다를 수 있음(예: `game-reviews`는 "플레이 기록" vs "기록 보기") — 기존부터 그랬던 것이라 통합 시에도 의도적으로 보존함. **`script-nav.js`가 로드 시점에 동기 평가하므로, page-labels.js는 반드시 script-nav.js 로드 직전에 위치해야 함** (14개 HTML 전체 적용 완료).
 
 ---
 
@@ -199,12 +199,12 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 | 전역 | 정의 파일 | 사용 파일 |
 |------|----------|----------|
-| `window.CottageDB` | supabase-client.js | script.js, kakao-auth.js, game-reviews.js, index-page.js, club-history.html, requests-admin.html 등 |
+| `window.CottageDB` | supabase-client.js | script-nav.js, game-sheet.js, kakao-auth.js, game-reviews.js, index-page.js, club-history.html, requests-admin.html 등 |
 | `window._cottageSess` | supabase-client.js | kakao-auth.js |
 | `window._cottageSessionStart` | supabase-client.js | kakao-auth.js |
 | `window.escH` | supabase-client.js | 전체 |
 | `window.resizeImageFile` | supabase-client.js | play-records-utils.js (optional) |
-| `window.getKakaoUser` | kakao-auth.js | script.js, game-reviews.js, supabase-client.js, requests.html 등 |
+| `window.getKakaoUser` | kakao-auth.js | script-nav.js, game-sheet.js, game-reviews.js, supabase-client.js, requests.html 등 |
 | `window.kakaoLogin` | kakao-auth.js | game-reviews.js, 각 페이지 |
 | `window.kakaoLogout` | kakao-auth.js | 각 페이지 |
 | `window.promptNicknameChange` | kakao-auth.js | 각 페이지 |
@@ -218,12 +218,12 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.hangulMatch` | play-records-utils.js | game-reviews.js |
 | `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
 | `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection, buildCharacterSection, buildAchievementsSection, handleRepCardSelect, buildTitleSection (→ `{html,earnedIds}`), handleRepTitleSelect, getTitleById(id), getCharacterPath(achId), getCharacterName(achId), fetchUserStats(userId, nickname), findNextAchievement(preStats) → `{emoji,name,gap,unit}` or null |
-| `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, script.js, owned-games-page.js, index-page.js |
+| `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, game-sheet.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
-| `window.CottageGameView` | game-display-adapter.js | script.js, owned-games-page.js, index-page.js |
+| `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js |
 | `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
-| `window.COTTAGE_PAGE_LABELS` / `window.COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script.js, requests-admin.html (script.js 로드 직전 필수) |
+| `window.COTTAGE_PAGE_LABELS` / `window.COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script-nav.js, requests-admin.html (script-nav.js 로드 직전 필수) |
 ## 추가 기록: 2026-07-02 관리자 분석 카운팅 기준
 
 - 143차-190부터 `trackPageView(page, referrer, extra={})`는 기본 payload에 `session_key: getSessionKey()`를 포함한다.

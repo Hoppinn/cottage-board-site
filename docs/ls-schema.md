@@ -17,15 +17,15 @@
 | `cottage_pv_{date}_{source}_{page}` | supabase-client.js | 날짜+source+page 기준 page_views dedup 플래그 | 날짜별 갱신 |
 | `cottage_session_id` | supabase-client.js | 비로그인 세션 ID (별점 중복 방지, anon_sessions 연동) | 영구 |
 | `cottage_rated_{gameId}` | supabase-client.js | 게임별 별점 캐시 | 영구 |
-| `cottage_my_comments` | script.js | 내 코멘트 id 배열 (삭제 권한 확인용) | 영구 |
+| `cottage_my_comments` | game-sheet.js | 내 코멘트 id 배열 (삭제 권한 확인용) | 영구 |
 | `cottage_my_intros` | club-intro.html | 내가 작성한 회원 자기소개 id 배열 (레거시/삭제 권한 보조) | 영구 |
 | `cottage_my_game_reqs` | requests.html | 내가 등록한 게임 요청 id 배열 (삭제/표시 보조) | 영구 |
 | `cottage_my_snack_reqs` | requests.html | 내가 등록한 간식 요청 id 배열 (삭제/표시 보조) | 영구 |
 | `cottage_req_votes_{userId}` | requests.html | 게임 요청 투표 id 배열 | 영구 |
 | `cottage_req_removed_{userId}` | requests.html | 취소/숨김 처리한 게임 요청 id 배열 | 영구 |
 | `cottage_snack_votes_{userId}` | requests.html | 간식 요청 투표 id 배열 | 영구 |
-| `cottage_play_records_{gameKey}` | script.js | 바텀시트용 로컬 플레이 기록 | 영구 |
-| `cottage_played_{gameKey}` | script.js | 구형 단일 포맷 (마이그레이션 완료, 신규 저장 없음) | 레거시 |
+| `cottage_play_records_{gameKey}` | game-sheet.js | 바텀시트용 로컬 플레이 기록 | 영구 |
+| `cottage_played_{gameKey}` | game-sheet.js | 구형 단일 포맷 (마이그레이션 완료, 신규 저장 없음) | 레거시 |
 | `cottage_is_admin` | requests-admin.html | 관리자 페이지 로드 시 set. supabase-client.js의 page_views/__visitor__ 기록에서 admin 세션 필터링에 사용 | 영구 |
 
 ---
