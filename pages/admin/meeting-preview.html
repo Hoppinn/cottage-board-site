@@ -166,6 +166,13 @@
   </select>
   <button id="reloadBtn">다시 불러오기</button>
 </div>
+<div class="ctrl" style="margin-top:-12px">
+  <label>더미 추가</label>
+  <button onclick="location.search='?dev=3'">+3명</button>
+  <button onclick="location.search='?dev=5'">+5명</button>
+  <button onclick="location.search='?dev=8'">+8명</button>
+  <button onclick="location.search=''">실 데이터만</button>
+</div>
 
 <div id="loading">불러오는 중…</div>
 <div id="output" style="display:none"></div>
@@ -212,10 +219,28 @@
     document.getElementById('meta').textContent =
       `${fmt(start)} ~ ${fmt(end)} 기준`;
 
-    const [votes, voteGames] = await Promise.all([
+    let [votes, voteGames] = await Promise.all([
       window.CottageDB?.getMeetingVotes(fmt(start), fmt(end)) ?? [],
       window.CottageDB?.getMeetingVoteGames(fmt(start), fmt(end)) ?? [],
     ]);
+
+    // ?dev=3/5/8 — 메모리 전용 더미 주입 (DB 무관)
+    const devN = parseInt(new URLSearchParams(location.search).get('dev') || '0');
+    if (devN >= 2) {
+      const tgt = fmt(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
+      const NAMES = ['서연','지호','유나','현우','채원','도현','수아','민재'];
+      const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23],[11,16]];
+      const WANT  = ['아르낙','윙스팬','에버델','원더랜드 워','글룸헤이븐','브라스','파운더스','테라포밍'];
+      const LEARN = ['글룸헤이븐','루트','추산도','퀄라나리','팬데믹','윙스팬','아크노바'];
+      for (let i = 0; i < Math.min(devN - 1, NAMES.length); i++) {
+        const uid = `dev_u${i+2}`;
+        votes = [...votes, { vote_date: tgt, user_id: uid, nickname: NAMES[i], time_start: TIMES[i][0], time_end: TIMES[i][1] }];
+        if (WANT[i])  voteGames = [...voteGames, { vote_date: tgt, user_id: uid, list_type: 'want',  game_id: null, custom_name: WANT[i] }];
+        if (LEARN[i]) voteGames = [...voteGames, { vote_date: tgt, user_id: uid, list_type: 'learn', game_id: null, custom_name: LEARN[i] }];
+        if (WANT[i+1]) voteGames = [...voteGames, { vote_date: tgt, user_id: uid, list_type: 'want', game_id: null, custom_name: WANT[i+1] }];
+      }
+      document.getElementById('meta').textContent += `  ⚠️ DEV 모드: ${devN}명 더미 추가됨 (내일 날짜)`;
+    }
 
     document.getElementById('loading').style.display = 'none';
     document.getElementById('output').style.display  = '';
