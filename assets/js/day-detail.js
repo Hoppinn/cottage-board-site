@@ -178,6 +178,8 @@
       color: white;
       font-weight: 700;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       text-align: center;
       line-height: 1.4;
     }
@@ -208,6 +210,25 @@
       text-align: center;
     }
     .sched-card-more-btn:hover { color: var(--green); }
+    .sched-game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
+    }
+    .sched-game-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+    .sched-game-tag--want { background: var(--bg-soft); color: var(--green); }
+    .sched-game-tag--learn { background: var(--line); color: var(--muted); }
   `;
   document.head.appendChild(s);
 
@@ -447,23 +468,30 @@
     const MIN_H = 9, MAX_H = 23, LIMIT = 3;
     const range = MAX_H - MIN_H;
 
-    function gameNames(voteDate, userId) {
+    function resolveGameAbbr(g) {
+      if (g.game_id && window.COTTAGE_GAMES) {
+        const found = window.COTTAGE_GAMES.find(c => c.bggId === String(g.game_id));
+        if (found && found.abbr) return found.abbr;
+        if (found) return (found.titleKo || found.display || '').slice(0, 2);
+      }
+      return (g.custom_name || '').slice(0, 2);
+    }
+
+    function gameAbbrs(voteDate, userId) {
       const games = voteGames.filter(g =>
         g.vote_date === voteDate && String(g.user_id) === String(userId)
       );
       if (!games.length) return '';
-      const names = games.map(g => esc(resolveGameName(g)));
-      return names.length === 1 ? names[0] : `${names[0]} 외 ${names.length - 1}`;
+      const abbrs = games.map(g => esc(resolveGameAbbr(g)));
+      if (abbrs.length <= 2) return abbrs.join(' · ');
+      return abbrs.slice(0, 2).join(' · ') + ` +${abbrs.length - 2}`;
     }
 
     function barRow(v) {
       const left     = ((v.time_start - MIN_H) / range * 100).toFixed(1);
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
-      const gameLine = gameNames(v.vote_date, v.user_id);
-      const timeLabel = gameLine
-        ? `${v.time_start}~${v.time_end} · ${gameLine}`
-        : `${v.time_start}~${v.time_end}`;
+      const gameLine = gameAbbrs(v.vote_date, v.user_id);
       const actions = mine
         ? `<div class="sched-bar-actions">
             <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
@@ -475,14 +503,42 @@
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
           ${actions}
         </div>
-        <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
+        <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
           <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
-            <span class="sched-bar-time">${timeLabel}</span>
+            <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
+            ${gameLine ? `<span class="sched-bar-game-line">${gameLine}</span>` : ''}
           </div>
         </div>
       </div>`;
     }
 
+    function buildGameTags(voteDate) {
+      const dateGames = voteGames.filter(g => g.vote_date === voteDate);
+      if (!dateGames.length) return '';
+
+      const counts = {}, meta = {};
+      dateGames.forEach(g => {
+        const name = g.game_id
+          ? (window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id))?.display || g.custom_name || `#${g.game_id}`)
+          : (g.custom_name || '?');
+        const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
+        counts[key] = (counts[key] || 0) + 1;
+        if (!meta[key]) meta[key] = { name, type: g.list_type };
+      });
+
+      const chips = Object.entries(counts)
+        .map(([key, count]) => ({ ...meta[key], count }))
+        .sort((a, b) => a.type !== b.type ? (a.type === 'want' ? -1 : 1) : b.count - a.count)
+        .map(({ name, type, count }) => {
+          const icon = type === 'want' ? '🎲' : '📖';
+          const suffix = count > 1 ? ` ·${count}` : '';
+          return `<span class="sched-game-tag sched-game-tag--${type}">${icon} ${esc(name)}${suffix}</span>`;
+        }).join('');
+
+      return `<div class="sched-game-tags">${chips}</div>`;
+    }
+
+    const voteDate = dayVotes[0].vote_date;
     const shown  = dayVotes.slice(0, LIMIT);
     const hidden = dayVotes.slice(LIMIT);
     const moreHtml = hidden.length
@@ -496,6 +552,7 @@
       </div>
       ${shown.map(barRow).join('')}
       ${moreHtml}
+      ${buildGameTags(voteDate)}
     </div>`;
   };
 })();

@@ -1339,15 +1339,25 @@ if (recommendTitle && recommendSection) {
       const tgtStr = tgt.toISOString().slice(0, 10);
       const NAMES = ['더미1','더미2','더미3','더미4','더미5','더미6','더미7'];
       const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23]];
-      const WANT  = ['아르낙','윙스팬','에버델','원더랜드 워','글룸헤이븐','브라스','파운더스'];
+      // {name, id}: id가 있으면 COTTAGE_GAMES 경유 약칭 (원워 검증용)
+      const WANT  = [
+        { name: '아르낙',     id: null },
+        { name: '윙스팬',     id: null },
+        { name: '에버델',     id: null },
+        { name: null,        id: '227935' },  // 원더랜드 워 → abbr: 원워
+        { name: '글룸헤이븐', id: null },
+        { name: '브라스',     id: null },
+        { name: '파운더스',   id: null },
+      ];
       const LEARN = ['글룸헤이븐','루트','추산도','퀄라나리','팬데믹','윙스팬','아크노바'];
       for (let _i = 0; _i < Math.min(_devN - 1, NAMES.length); _i++) {
         const uid = `dev_u${_i + 2}`;
         votes = [...votes, { vote_date: tgtStr, user_id: uid, nickname: NAMES[_i], time_start: TIMES[_i][0], time_end: TIMES[_i][1] }];
+        const w0 = WANT[_i], w1 = WANT[_i + 1];
         voteGames = [...voteGames,
-          { vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: null, custom_name: WANT[_i] },
-          ...(LEARN[_i]     ? [{ vote_date: tgtStr, user_id: uid, list_type: 'learn', game_id: null, custom_name: LEARN[_i] }]     : []),
-          ...(WANT[_i + 1]  ? [{ vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: null, custom_name: WANT[_i + 1] }]  : []),
+          { vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: w0.id,  custom_name: w0.name },
+          ...(LEARN[_i] ? [{ vote_date: tgtStr, user_id: uid, list_type: 'learn', game_id: null, custom_name: LEARN[_i] }] : []),
+          ...(w1        ? [{ vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: w1.id, custom_name: w1.name }]  : []),
         ];
       }
     }
