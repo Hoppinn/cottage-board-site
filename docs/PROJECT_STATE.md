@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-04 (메인페이지 바텀시트 2종·CTA 트래킹·라이트박스 독립화)
+최종 갱신: 2026-07-05 (관리자 이벤트 top4 누락 버그 수정, CSS 변수화 완료 기록)
 
 ---
 
@@ -94,6 +94,14 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 | `f99c962` | refactor(css): --brown을 --green으로 통일 (사용자 DevTools 비교 후 구분 불가 확인·승인, 23건) |
 
 **CSS 변수화 전체 완료.** 잔여: `var(--card-bg,#fff)` 8건(폴백값 #fff ≠ --card-bg 실제값, 의도적 유지).
+
+### 관리자 이벤트 top4 누락 버그 수정 (2026-07-05)
+
+| 커밋 | 내용 |
+|------|------|
+| (이 세션) | requests-admin.html `_EVT_LBL` 맵에 모임 이벤트 4종 추가: `home_meeting_date_preview_click`, `home_meeting_preview_card_click`, `meeting_planner_bar_click`, `meeting_profile_click`. 01aea34/71baf5c에서 신규 trackEvent 추가 후 _EVT_LBL 미등록으로 top4에서 집계 제외됐던 버그. 기능 감사에서 발견 → 라벨 등록으로 해결. |
+
+**다음 작업 후보 메모**: `홈 모임 미리보기(index-page.js renderPreview)는 플래너 카드와 별도 구현 — 플래너 하루치 카드 구조 변경 시 홈 미리보기 동반 확인 필요.`
 
 ---
 
