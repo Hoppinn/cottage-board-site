@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-05 (관리자 이벤트 top4 누락 버그 수정, CSS 변수화 완료 기록)
+최종 갱신: 2026-07-05 (게임별 탭 정렬 버그 수정)
 
 ---
 
@@ -100,6 +100,15 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 | 커밋 | 내용 |
 |------|------|
 | (이 세션) | game-reviews.js `initHub()` 내 `if (!startInput) loadRecords()` → `loadRecords()`. 홈 `#openRecordModalBtn`(기록 남기기) → iframe `?tab=input` 진입 시 `loadRecords()`가 건너뛰어져 `window._prLatestRecord`가 undefined → "↑ 최신 기록(인원·참여자)" 버튼 무동작. `loadRecords()`를 항상 실행하도록 수정. "기록 보기" 탭 클릭 시에는 캐시 재사용(early return)으로 추가 비용 없음. |
+
+### 게임별 탭 게임 목록 정렬 버그 수정 (2026-07-05)
+
+| 커밋 | 내용 |
+|------|------|
+| (이 세션) | game-reviews.js `renderGameView()` Map 구성 후 게임 단위 명시적 정렬 추가. 원인: `getAllPlayRecordsForHub()`가 `ORDER BY played_at DESC`로 정렬 반환 시 PostgreSQL NULLS FIRST 동작으로 `played_at = NULL` 기록이 배열 앞에 위치 → Map 삽입 순서 = 렌더 순서가 되어 played_at NULL 기록을 가진 게임(킹덤오브다이스·더루프·멘네페르·벚꽃)이 항상 최상단 고정. 수정: Map 완성 후 각 게임 그룹의 `max(played_at \|\| created_at)` 기준 내림차순 정렬(sortedGames) 후 렌더. 쿼리 변경 없음(렌더 단 수정). |
+
+**다음 작업 후보 메모** (게임별 탭 버그 관련):
+- `played_at NULL 기록이 위 4개 게임에 존재 — 정상 데이터인지(날짜 미입력 허용 시절?) 소급 보정 대상인지 별도 판단 필요. 신규 기록 입력에서 played_at NULL 저장이 지금도 가능한지도 확인 대상.`
 
 ### 관리자 이벤트 top4 누락 버그 수정 (2026-07-05)
 

@@ -1091,8 +1091,12 @@
       games.get(r.game_id).push(r);
     }
 
+    // played_at NULL 기록이 Postgres NULLS FIRST로 앞에 오는 문제 → 렌더 단에서 정렬
+    const latestOf = recs => Math.max(...recs.map(r => new Date(r.played_at || r.created_at).getTime()));
+    const sortedGames = [...games.entries()].sort(([, a], [, b]) => latestOf(b) - latestOf(a));
+
     let html = '';
-    for (const [gameId, recs] of games) {
+    for (const [gameId, recs] of sortedGames) {
       const gameName = getGameName(gameId);
       const gKey = getGameKey(gameId) || gameId;
       const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
