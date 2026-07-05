@@ -157,7 +157,7 @@
     });
 
     renderInputPanel();
-    if (!startInput) loadRecords();
+    loadRecords();
 
     // embedded modal: notify parent that tabs are rendered (hides loading state)
     if (window.parent !== window) {

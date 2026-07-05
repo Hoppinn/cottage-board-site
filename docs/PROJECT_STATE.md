@@ -95,6 +95,12 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **CSS 변수화 전체 완료.** 잔여: `var(--card-bg,#fff)` 8건(폴백값 #fff ≠ --card-bg 실제값, 의도적 유지).
 
+### 홈 기록 입력 최근인원불러오기 무동작 수정 (2026-07-05)
+
+| 커밋 | 내용 |
+|------|------|
+| (이 세션) | game-reviews.js `initHub()` 내 `if (!startInput) loadRecords()` → `loadRecords()`. 홈 `#openRecordModalBtn`(기록 남기기) → iframe `?tab=input` 진입 시 `loadRecords()`가 건너뛰어져 `window._prLatestRecord`가 undefined → "↑ 최신 기록(인원·참여자)" 버튼 무동작. `loadRecords()`를 항상 실행하도록 수정. "기록 보기" 탭 클릭 시에는 캐시 재사용(early return)으로 추가 비용 없음. |
+
 ### 관리자 이벤트 top4 누락 버그 수정 (2026-07-05)
 
 | 커밋 | 내용 |
