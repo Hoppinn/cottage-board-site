@@ -100,6 +100,114 @@
       color: white;
     }
     .dd-green-btn:active { background: #5a3318; }
+
+    /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
+    .sched-bar-axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      padding-left: 60px;
+    }
+    .sched-bar-item {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .sched-card-bars .sched-bar-axis { padding-left: 46px; }
+    .sched-bar-left {
+      display: flex; flex-direction: column;
+      align-items: flex-end; justify-content: space-between;
+      padding: 3px 0;
+    }
+    .sched-bar-actions { display: flex; gap: 0; }
+    .sched-bar-edit-btn,
+    .sched-bar-del-btn {
+      width: 18px; height: 18px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; border-radius: 4px;
+      font-size: 11px; cursor: pointer;
+      color: #b8b0a4; padding: 0;
+      transition: background .15s, color .15s;
+    }
+    .sched-bar-edit-btn:hover,
+    .sched-bar-edit-btn:active { background: #ede8de; color: var(--green); }
+    .sched-bar-del-btn:hover,
+    .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
+    .sched-bar-name {
+      font-size: 11px;
+      color: var(--text);
+      width: 52px;
+      flex-shrink: 0;
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      cursor: pointer;
+      text-decoration: underline dotted;
+      text-underline-offset: 2px;
+    }
+    .sched-bar-name:hover { color: var(--green); text-decoration: underline; }
+    .sched-bar-track {
+      flex: 1;
+      min-height: 24px;
+      background: #ede8e0;
+      border-radius: 5px;
+      position: relative;
+    }
+    .sched-bar-track.has-games { min-height: 40px; }
+    .sched-bar-fill {
+      position: absolute;
+      top: 0; bottom: 0;
+      background: var(--green);
+      border-radius: 5px;
+      opacity: 0.72;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      padding: 2px 6px;
+      min-width: 32px;
+      overflow: hidden;
+    }
+    .sched-bar-fill.is-mine { background: #c0843a; opacity: 0.9; }
+    .sched-bar-time {
+      font-size: 10px;
+      color: white;
+      font-weight: 700;
+      white-space: nowrap;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .sched-bar-game-line {
+      font-size: 9px;
+      color: rgba(255,255,255,0.88);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .sched-card-bars {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #ede8e0;
+    }
+    .sched-card-more-btn {
+      display: block;
+      width: 100%;
+      margin-top: 6px;
+      padding: 4px 0;
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+    }
+    .sched-card-more-btn:hover { color: var(--green); }
   `;
   document.head.appendChild(s);
 
@@ -325,5 +433,69 @@
     plannerBtn.addEventListener('click', () => { el.remove(); opts.onPlannerClick?.(); });
     closeBtn.addEventListener('click', () => el.remove());
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+  };
+
+  /**
+   * 주간 카드/홈 미리보기 시간 막대 HTML 반환 (club-schedule + index-page 공용)
+   * @param {Array}       dayVotes  — 해당 날짜 meeting_votes
+   * @param {Array}       voteGames — 해당 날짜(또는 전체)의 meeting_vote_games
+   * @param {Object|null} myVote    — 내 vote (is-mine 강조·수정삭제 버튼), 홈에서는 null
+   * @returns {string} HTML string
+   */
+  window.buildBarsInCard = function (dayVotes, voteGames, myVote) {
+    if (!dayVotes.length) return '';
+    const MIN_H = 9, MAX_H = 23, LIMIT = 3;
+    const range = MAX_H - MIN_H;
+
+    function gameNames(voteDate, userId) {
+      const games = voteGames.filter(g =>
+        g.vote_date === voteDate && String(g.user_id) === String(userId)
+      );
+      if (!games.length) return '';
+      const names = games.map(g => esc(resolveGameName(g)));
+      return names.length === 1 ? names[0] : `${names[0]} 외 ${names.length - 1}`;
+    }
+
+    function barRow(v) {
+      const left     = ((v.time_start - MIN_H) / range * 100).toFixed(1);
+      const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
+      const mine     = myVote && String(v.user_id) === String(myVote.user_id);
+      const gameLine = gameNames(v.vote_date, v.user_id);
+      const timeLabel = gameLine
+        ? `${v.time_start}~${v.time_end} · ${gameLine}`
+        : `${v.time_start}~${v.time_end}`;
+      const actions = mine
+        ? `<div class="sched-bar-actions">
+            <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
+            <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
+          </div>`
+        : '';
+      return `<div class="sched-bar-item">
+        <div class="sched-bar-left">
+          <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
+          ${actions}
+        </div>
+        <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
+          <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
+            <span class="sched-bar-time">${timeLabel}</span>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    const shown  = dayVotes.slice(0, LIMIT);
+    const hidden = dayVotes.slice(LIMIT);
+    const moreHtml = hidden.length
+      ? `<div class="sched-card-hidden-rows" style="display:none">${hidden.map(barRow).join('')}</div>
+         <button class="sched-card-more-btn" type="button">+${hidden.length}명 더보기</button>`
+      : '';
+
+    return `<div class="sched-card-bars">
+      <div class="sched-bar-axis">
+        <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
+      </div>
+      ${shown.map(barRow).join('')}
+      ${moreHtml}
+    </div>`;
   };
 })();

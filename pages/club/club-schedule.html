@@ -159,14 +159,6 @@
 
     /* 막대 그래프 */
     .sched-bar-section { margin-bottom: 22px; }
-    .sched-bar-axis {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      padding-left: 60px;
-    }
     .sched-bar-row {
       display: flex;
       align-items: center;
@@ -175,90 +167,7 @@
       position: relative;
     }
     /* sched-bar-group 제거됨 — sched-bar-row에 margin-bottom 직접 적용 */
-    /* 주간 카드 bar item — 닉네임(좌 40px) · 막대(우 1fr) grid */
-    .sched-bar-item {
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-    /* 주간 카드 축: 40px 컬럼 + 6px gap = 46px */
-    .sched-card-bars .sched-bar-axis { padding-left: 46px; }
-    .sched-bar-left {
-      display: flex; flex-direction: column;
-      align-items: flex-end; justify-content: space-between;
-      padding: 3px 0;
-    }
-    .sched-bar-actions {
-      display: flex; gap: 0;
-    }
-    .sched-bar-edit-btn,
-    .sched-bar-del-btn {
-      width: 18px; height: 18px;
-      display: flex; align-items: center; justify-content: center;
-      background: none; border: none; border-radius: 4px;
-      font-size: 11px; cursor: pointer;
-      color: #b8b0a4; padding: 0;
-      transition: background .15s, color .15s;
-    }
-    .sched-bar-edit-btn:hover,
-    .sched-bar-edit-btn:active { background: #ede8de; color: var(--green); }
-    .sched-bar-del-btn:hover,
-    .sched-bar-del-btn:active { background: #fdecea; color: #d94f4f; }
-    .sched-bar-name {
-      font-size: 11px;
-      color: var(--text);
-      width: 52px; /* viewDay sched-bar-row 기준. weekView는 컬럼이 제어 */
-      flex-shrink: 0;
-      text-align: right;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      cursor: pointer;
-      text-decoration: underline dotted;
-      text-underline-offset: 2px;
-    }
-    .sched-bar-name:hover { color: var(--green); text-decoration: underline; }
-    .sched-bar-track {
-      flex: 1; /* viewDay sched-bar-row 호환 */
-      min-height: 24px;
-      background: #ede8e0;
-      border-radius: 5px;
-      position: relative;
-    }
-    .sched-bar-track.has-games { min-height: 40px; }
-    .sched-bar-fill {
-      position: absolute;
-      top: 0; bottom: 0;
-      background: var(--green);
-      border-radius: 5px;
-      opacity: 0.72;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: stretch;
-      padding: 2px 6px;
-      min-width: 32px;
-      overflow: hidden;
-    }
-    .sched-bar-fill.is-mine { background: #c0843a; opacity: 0.9; }
-    .sched-bar-time {
-      font-size: 10px;
-      color: white;
-      font-weight: 700;
-      white-space: nowrap;
-      text-align: center;
-      line-height: 1.4;
-    }
-    .sched-bar-game-line {
-      font-size: 9px;
-      color: rgba(255,255,255,0.88);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center;
-      line-height: 1.4;
-    }
+    /* sched-bar-axis·item·fill 등 공용 CSS → day-detail.js */
 
     /* 내 등록 */
     .sched-my-section {
@@ -477,24 +386,7 @@
     /* Phase 2: 카드 내 시간 바 */
     .sched-wday-card { cursor: default; }
     .sched-wday-header { cursor: pointer; }
-    .sched-card-bars {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #ede8e0;
-    }
-    .sched-card-more-btn {
-      display: block;
-      width: 100%;
-      margin-top: 6px;
-      padding: 4px 0;
-      background: none;
-      border: none;
-      font-size: 12px;
-      color: var(--muted);
-      cursor: pointer;
-      text-align: center;
-    }
-    .sched-card-more-btn:hover { color: var(--green); }
+    /* sched-card-bars·sched-card-more-btn → day-detail.js */
     /* Phase 3: 카드 푸터 */
     /* 헤더 우상단 수정/⋯ */
     .sched-card-header-actions {
@@ -2143,73 +2035,6 @@
       return `${m}월 ${ord[weekNum - 1] || weekNum + '번째'} 주`;
     }
 
-    // 카드 내 시간 바 HTML 빌더 — renderBars() 미수정, 독립 함수
-    function buildBarsInCard(dayVotes, myVote) {
-      if (!dayVotes.length) return '';
-      const LIMIT = 3;
-      const range = MAX_H - MIN_H;
-
-      // 게임명 — 1개: 전체명, 여러 개: "첫번째 외 N"
-      function gameNames(voteDate, userId) {
-        const games = allVoteGames.filter(g =>
-          g.vote_date === voteDate && String(g.user_id) === String(userId)
-        );
-        if (!games.length) return '';
-
-        function displayName(g) {
-          if (g.game_id) {
-            const obj = (window.COTTAGE_GAMES || []).find(c => c.bggId === String(g.game_id));
-            return obj?.display || obj?.name || `#${g.game_id}`;
-          }
-          return g.custom_name || '?';
-        }
-
-        const names = games.map(g => esc(displayName(g)));
-        if (names.length === 1) return names[0];
-        return `${names[0]} 외 ${names.length - 1}`;
-      }
-
-      function barRow(v) {
-        const left  = ((v.time_start - MIN_H) / range * 100).toFixed(1);
-        const width = ((v.time_end - v.time_start) / range * 100).toFixed(1);
-        const mine  = myVote && String(v.user_id) === String(myVote.user_id);
-        const gameLine = gameNames(v.vote_date, v.user_id);
-        const timeLabel = gameLine ? `${v.time_start}~${v.time_end} · ${gameLine}` : `${v.time_start}~${v.time_end}`;
-        const actions = mine
-          ? `<div class="sched-bar-actions">
-              <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
-              <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>
-            </div>`
-          : '';
-        return `<div class="sched-bar-item">
-          <div class="sched-bar-left">
-            <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
-            ${actions}
-          </div>
-          <div class="sched-bar-track" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
-            <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
-              <span class="sched-bar-time">${timeLabel}</span>
-            </div>
-          </div>
-        </div>`;
-      }
-
-      const shown  = dayVotes.slice(0, LIMIT);
-      const hidden = dayVotes.slice(LIMIT);
-      const moreHtml = hidden.length
-        ? `<div class="sched-card-hidden-rows" style="display:none">${hidden.map(barRow).join('')}</div>
-           <button class="sched-card-more-btn" type="button">+${hidden.length}명 더보기</button>`
-        : '';
-
-      return `<div class="sched-card-bars">
-        <div class="sched-bar-axis">
-          <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
-        </div>
-        ${shown.map(barRow).join('')}
-        ${moreHtml}
-      </div>`;
-    }
-
     function renderWeekView(offset) {
       weekOffset = offset;
       const todayDow = TODAY.getDay();
@@ -2266,7 +2091,7 @@
             </div>
             ${headerBtns}
           </div>
-          ${buildBarsInCard(dayVotes, myVote)}
+          ${window.buildBarsInCard(dayVotes, allVoteGames, myVote)}
         </div>`;
       }
       el.innerHTML = html;
