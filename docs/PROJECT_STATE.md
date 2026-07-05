@@ -153,7 +153,9 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **진행 현황**:
 - [x] **1단계: 게임 약칭 소스** — game-abbr.json 생성, build-output abbr 병합, COTTAGE_GAMES abbr 필드 추가
-- [ ] **2단계: 막대 2줄 표기** — buildBarsInCard + CSS (1 의존)
+- [x] **2단계: 막대 2줄 표기** — buildBarsInCard 시간/약칭 2줄, has-games CSS, sched-bar-time ellipsis
+- [ ] **2.5단계: 하루 카드 게임 태그 줄** — buildBarsInCard 하단 flex-wrap 칩 (want 🎲 / learn 📖)
+- [ ] **2.7단계: 대표 게임** — Red, DB Plan 필수 (마이그레이션 009 통합)
 - [ ] **3단계: 센터모달 재정의** — day-detail.js (Yellow)
 - [ ] **4단계: 룰렛** — 센터모달 안 (3 의존)
 - [ ] **5단계: 모임보드 이번주 섹션** — 독립
