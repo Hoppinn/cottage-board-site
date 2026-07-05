@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-05 (day-detail.js 추가; __visitor__ 마커 집계 기준 본문 흡수; 추가 기록 섹션 정리)
+최종 갱신: 2026-07-05 (day-detail.js window.buildBarsInCard 추가 반영)
 
 ---
 
@@ -108,9 +108,10 @@ assets/js/
 ├── game-reviews.js             # 플레이기록 허브 (game-reviews.html 전용)
 │                               # 기록 등록·수정·삭제, 모임/게임별 보기, 사진 업로드
 ├── achievements.js             # 업적·캐릭터·칭호 체크 및 지급 (window.checkAchievements 노출)
-├── day-detail.js               # 일정 상세 모달 컴포넌트 (즉시실행 IIFE, CSS 자기주입)
+├── day-detail.js               # 일정 상세 모달 + 막대 공용 컴포넌트 (즉시실행 IIFE, CSS 자기주입)
 │                               # window 노출: renderDayDetailHTML / openDayDetailModal /
-│                               #   openDateScheduleModal / openDateMeetingModal
+│                               #   openDateScheduleModal / openDateMeetingModal /
+│                               #   buildBarsInCard(dayVotes, voteGames, myVote)
 │                               # 로드 페이지: index.html, club-schedule.html
 │                               # 의존: window.CottageDB (getMeetingVotes, getMeetingVoteGames),
 │                               #   window.COTTAGE_GAMES (게임명 해석, optional)

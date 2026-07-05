@@ -117,8 +117,17 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 | (이 세션) | requests-admin.html `_EVT_LBL` 맵에 모임 이벤트 4종 추가: `home_meeting_date_preview_click`, `home_meeting_preview_card_click`, `meeting_planner_bar_click`, `meeting_profile_click`. 01aea34/71baf5c에서 신규 trackEvent 추가 후 _EVT_LBL 미등록으로 top4에서 집계 제외됐던 버그. 기능 감사에서 발견 → 라벨 등록으로 해결. |
 
 **다음 작업 후보 메모**:
-- `홈 모임 미리보기(index-page.js renderPreview)는 플래너 카드와 별도 구현 — 플래너 하루치 카드 구조 변경 시 홈 미리보기 동반 확인 필요.`
 - `kakao-auth-ready 이벤트 미발화 확인됨(game-reviews.js·index-page.js 두 곳이 수신 등록하지만 실제 발화 파일 없음) — initHub()는 항상 setTimeout(tryInit, 1200) 폴백으로만 실행. 발화가 필요하면 kakao-auth.js의 cottage-auth-changed 발화 시점에 함께 dispatch 추가 검토.`
+
+### 홈 모임 미리보기 막대 공용화 (2026-07-05)
+
+| 커밋 | 내용 |
+|------|------|
+| 6f9178d | day-detail.js에 `window.buildBarsInCard(dayVotes, voteGames, myVote)` 추가 + sched-bar-* CSS 이동. club-schedule.html에서 함수 정의 제거 → `window.buildBarsInCard` 호출로 교체. |
+| (이 세션) | index-page.js `renderPreview()`의 이름칩·공통시간 독자 렌더를 `window.buildBarsInCard` 호출로 교체. 더보기 버튼 stopPropagation 추가. |
+
+**다음 작업 후보 메모** (홈 미리보기 막대 관련):
+- `홈 미리보기 막대에 본인 강조(is-mine) 적용 여부 판단 — 현재 myVote=null로 호출해 강조 없음.`
 
 ---
 

@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-05 (day-detail.js 함수 추가; trackPageView session_key 기본 포함 반영; 추가 기록 섹션 본문 흡수)
+최종 갱신: 2026-07-05 (window.buildBarsInCard 추가)
 
 ---
 
@@ -228,4 +228,5 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.openDayDetailModal` | day-detail.js | 레거시 — 직접 데이터 전달 방식으로 개인 일정 모달 열기 `(opts)`. |
 | `window.openDateScheduleModal` | day-detail.js | 막대 클릭 → DB 조회 후 개인 일정 모달 `(userId, voteDate)`. club-schedule.html에서 호출. |
 | `window.openDateMeetingModal` | day-detail.js | 날짜 전체 집계 모달 `(voteDate, votes, voteGames, opts?)`. 홈 미리보기 카드 클릭 시 index-page.js에서 호출. |
+| `window.buildBarsInCard` | day-detail.js | 주간 카드/홈 미리보기 시간 막대 HTML 반환 `(dayVotes, voteGames, myVote)`. myVote=null이면 is-mine 강조·수정삭제 버튼 없음. club-schedule.html·index-page.js에서 호출. |
 - 관리자/로컬 제외 기준은 유지한다.

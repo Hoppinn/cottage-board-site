@@ -1268,11 +1268,6 @@ if (recommendTitle && recommendSection) {
   }
 
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
-  const MIN_H = 10, MAX_H = 24;
-
-  function escH(s) {
-    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
 
   // 해당 날짜 미리보기 카드 렌더 (프리뷰 영역)
   function renderPreview(dateStr, dayVotes, dayGames) {
@@ -1294,24 +1289,25 @@ if (recommendTitle && recommendSection) {
     const dayIdx  = ((dateObj.getDay() + 6) % 7);
     const month   = dateObj.getMonth() + 1;
     const date    = dateObj.getDate();
-    const names   = [...new Set(dayVotes.map(v => v.nickname))];
-
-    // 가장 많이 겹치는 시간대
-    let bestHour = -1, bestCnt = 0;
-    for (let h = MIN_H; h < MAX_H; h++) {
-      const cnt = dayVotes.filter(v => v.time_start <= h && v.time_end > h).length;
-      if (cnt > bestCnt) { bestCnt = cnt; bestHour = h; }
-    }
-    const timeStr = bestHour >= 0 && bestCnt >= 2
-      ? `⏱ ${bestHour}~${bestHour + 1}시 (${bestCnt}명 공통)`
-      : '';
+    const count   = new Set(dayVotes.map(v => v.user_id)).size;
 
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
-      <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${names.length}명</div>
-      <div class="mpc-names">${names.map(n => `<span class="mpc-name">${escH(n)}</span>`).join('')}</div>
-      ${timeStr ? `<div class="mpc-time">${timeStr}</div>` : ''}
+      <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${count}명</div>
+      ${window.buildBarsInCard(dayVotes, dayGames, null)}
       <div class="mpc-hint">탭하면 상세 보기 →</div>
     </div>`;
+
+    // 더보기 버튼 — stopPropagation으로 카드 클릭(모달)과 분리
+    previewEl.querySelectorAll('.sched-card-more-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const hiddenEl   = btn.previousElementSibling;
+        const isExpanded = hiddenEl.style.display !== 'none';
+        hiddenEl.style.display = isExpanded ? 'none' : '';
+        const hiddenCnt  = hiddenEl.querySelectorAll('.sched-bar-item').length;
+        btn.textContent  = isExpanded ? `+${hiddenCnt}명 더보기` : '접기 ▴';
+      });
+    });
 
     previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', () => {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
