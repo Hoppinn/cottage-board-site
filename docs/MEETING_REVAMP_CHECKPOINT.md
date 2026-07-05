@@ -58,7 +58,7 @@
 2. [x] 막대 2줄 표기 (1 의존) — buildBarsInCard + CSS — 완료
 2.5. [ ] 하루 카드 게임 태그 줄 — buildBarsInCard 하단 flex-wrap 칩
 2.7. [ ] 대표 게임 (Red — DB Plan 필수, 마이그레이션 009 통합)
-3. [ ] 센터모달 재정의 (Yellow) — day-detail.js
+3. [x] 센터모달 재정의 (Yellow) — day-detail.js
 4. [ ] 룰렛 (3 의존)
 5. [ ] 모임보드 이번주 섹션 (독립)
 6. [ ] 등록 모달 다주치 (Yellow, club-schedule.html 대수정)

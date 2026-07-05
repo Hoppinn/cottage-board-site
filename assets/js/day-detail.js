@@ -101,6 +101,29 @@
     }
     .dd-green-btn:active { background: #5a3318; }
 
+    /* ── 날짜 집계 모달 — 게임 집계 + 참여자 토글 ── */
+    .dd-game-aggr-section { margin-bottom: 12px; }
+    .dd-game-aggr { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .dd-game-chip {
+      display: inline-flex; align-items: center;
+      font-size: 11px; padding: 3px 9px;
+      border-radius: 12px; white-space: nowrap;
+    }
+    .dd-game-chip--want { background: var(--bg-soft); color: var(--green); }
+    .dd-game-chip--learn { background: var(--line); color: var(--muted); }
+    .dd-participants-toggle {
+      margin-top: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+    .dd-participants-toggle > summary {
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; list-style: none;
+      padding: 4px 0; user-select: none;
+    }
+    .dd-participants-toggle > summary::-webkit-details-marker { display: none; }
+    .dd-participants-toggle[open] > summary { margin-bottom: 8px; }
+
     /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
     .sched-bar-axis {
       display: flex;
@@ -397,32 +420,43 @@
       if (c > peakCnt) peakCnt = c;
     }
 
-    // 2명 이상이 원하는 공통 게임
+    // 공통 게임 수 (통계 칩용 — count ≥ 2인 게임만)
     const gkCount = {};
-    const gkMeta  = {};
     voteGames.forEach(g => {
       const k = g.game_id ? `id:${g.game_id}` : `name:${(g.custom_name || '').trim().toLowerCase()}`;
       gkCount[k] = (gkCount[k] || 0) + 1;
-      if (!gkMeta[k]) gkMeta[k] = g;
     });
-    const commonGames = Object.entries(gkCount)
-      .filter(([, c]) => c >= 2)
-      .map(([k]) => esc(resolveGameName(gkMeta[k])));
+    const sharedGameCnt = Object.values(gkCount).filter(c => c >= 2).length;
 
     const statsHtml = `<div class="dd-stats-row">
       <span class="dd-stat-chip">👥 ${count}명 참여</span>
       ${peakCnt >= 2 ? `<span class="dd-stat-chip is-match">⏱ 최대 ${peakCnt}명 겹침</span>` : ''}
-      ${commonGames.length ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${commonGames.length}종</span>` : ''}
+      ${sharedGameCnt ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${sharedGameCnt}종</span>` : ''}
     </div>`;
 
-    const commonGamesHtml = commonGames.length
-      ? `<div class="dd-section" style="margin-bottom:12px">
-          <span class="dd-section-label">🎲 함께 하고 싶은 게임</span>
-          <ul class="dd-game-list">${commonGames.map(n => `<li>${n}</li>`).join('')}</ul>
+    // 전체 게임 집계 (want/learn 분리, 투표수 내림차순)
+    const aggrMap = {}, aggrMeta = {};
+    voteGames.forEach(g => {
+      const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
+      aggrMap[key] = (aggrMap[key] || 0) + 1;
+      if (!aggrMeta[key]) aggrMeta[key] = { name: resolveGameName(g), type: g.list_type };
+    });
+    const aggrItems = Object.entries(aggrMap)
+      .map(([key, count]) => ({ ...aggrMeta[key], count }))
+      .sort((a, b) => a.type !== b.type ? (a.type === 'want' ? -1 : 1) : b.count - a.count);
+
+    const gameAggrHtml = aggrItems.length
+      ? `<div class="dd-section dd-game-aggr-section">
+          <span class="dd-section-label">그날의 게임</span>
+          <div class="dd-game-aggr">${aggrItems.map(({ name, type, count }) => {
+            const icon = type === 'want' ? '🎲' : '📖';
+            const suffix = count > 1 ? ` ·${count}` : '';
+            return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}</span>`;
+          }).join('')}</div>
         </div>`
       : '';
 
-    const participantsHtml = uniqueVotes.map(v => {
+    const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
       const wantNames  = myGames.filter(g => g.list_type === 'want').map(g => esc(resolveGameName(g)));
       const learnNames = myGames.filter(g => g.list_type === 'learn').map(g => esc(resolveGameName(g)));
@@ -436,15 +470,23 @@
       </div>`;
     }).join('');
 
+    const plannerBtnLabel = opts.fromHome ? '전체 일정 보기' : '플래너 보기';
+
     el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
       <div class="dd-modal-scroll">
         <div class="dd-date">${fmtDate(voteDate)}</div>
         ${statsHtml}
-        ${commonGamesHtml}
-        ${participantsHtml || '<div class="dd-empty">참여자가 없습니다.</div>'}
+        ${gameAggrHtml}
+        ${participantsBody
+          ? `<details class="dd-participants-toggle">
+              <summary>참여자별 보기</summary>
+              <div class="dd-participants-body">${participantsBody}</div>
+            </details>`
+          : '<div class="dd-empty">참여자가 없습니다.</div>'
+        }
       </div>
       <div class="dd-close-row" style="gap:8px">
-        <button class="dd-close-btn dd-green-btn" type="button">플래너 보기</button>
+        <button class="dd-close-btn dd-green-btn" type="button">${plannerBtnLabel}</button>
         <button class="dd-close-btn" type="button">닫기</button>
       </div>
     </div>`;
