@@ -9,7 +9,10 @@ const {
   COTTAGE_GAMES_DATA_JSON_PATH,
   LIBRARY_IMAGES_THUMB_DIR,
   ROOT_DIR,
+  SOURCE_DIR,
 } = require("../_core/paths");
+
+const GAME_ABBR_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr.json");
 
 const THUMB_EXTS = [".png", ".jpg", ".jpeg", ".webp"];
 
@@ -151,11 +154,15 @@ function buildCottageGameData() {
     process.exit(1);
   }
 
+  const abbrMap = readJson(GAME_ABBR_PATH, {});
+
   const gameData = {};
 
   masterGames.forEach((game) => {
     if (!game.id || !game.ownedName) return;
-    gameData[game.id] = buildGameItem(game);
+    const item = buildGameItem(game);
+    item.abbr = abbrMap[String(game.bggId || "")] || (game.ownedName || "").slice(0, 2);
+    gameData[game.id] = item;
   });
 
   writeJson(COTTAGE_GAMES_DATA_JSON_PATH, gameData);

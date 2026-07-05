@@ -169,7 +169,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | 전역 | 내용 |
 |------|------|
 | `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
-| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn}`. 게임명 자동완성용 |
+| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn, abbr}`. 게임명 자동완성용. `abbr` = 빌드 시 병합(source/3-abbr/game-abbr.json BGG ID 키), 미등록 시 titleKo 앞 2글자 폴백 |
 | `window.getAllGamesArray` | `getAllGamesArray(gameData)` 직접 참조용 편의 노출. index-page.js / owned-games-page.js가 전역으로 직접 호출. `CottageGameView.getAllGamesArray`와 동일 함수 |
 
 ---

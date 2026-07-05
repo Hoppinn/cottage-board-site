@@ -542,6 +542,7 @@ if (typeof window !== "undefined") {
     display: g.title?.display || g.title?.owned || g.title?.bgg || g.id,
     titleKo: g.title?.owned || g.title?.display || '',
     titleEn: g.title?.bgg || '',
+    abbr: g.abbr || '',
   }));
 
   // index-page.js / owned-games-page.js 등 외부 직접 참조용

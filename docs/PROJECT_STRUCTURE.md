@@ -338,6 +338,9 @@ game-system/
     tags/                         ← 태그 시스템 기준 정의
   game-data/
     source/                       ← 원본 입력 (수동 관리)
+      1-bgg/csv/                  ← BGG 랭킹 CSV
+      2-cottage-manual/           ← cottage-owned-games.xlsx
+      3-abbr/game-abbr.json       ← BGG ID → 약칭 매핑 (수동 관리, 미등록 시 titleKo 앞 2글자 폴백)
     staging/                      ← 자동 생성 중간물 (재생성 가능)
     library/                      ← 최종 정제물 (사이트가 읽는 데이터)
   tools/                          ← 빌드/관리 스크립트
