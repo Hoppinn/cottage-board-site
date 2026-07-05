@@ -147,6 +147,21 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 ---
 
+### 🔵 CHECKPOINT: 모임 기능 개편 (2026-07-05 시작)
+
+**문서**: `docs/MEETING_REVAMP_CHECKPOINT.md`
+
+**진행 현황**:
+- [x] **1단계: 게임 약칭 소스** — game-abbr.json 생성, build-output abbr 병합, COTTAGE_GAMES abbr 필드 추가
+- [ ] **2단계: 막대 2줄 표기** — buildBarsInCard + CSS (1 의존)
+- [ ] **3단계: 센터모달 재정의** — day-detail.js (Yellow)
+- [ ] **4단계: 룰렛** — 센터모달 안 (3 의존)
+- [ ] **5단계: 모임보드 이번주 섹션** — 독립
+- [ ] **6단계: 등록 모달 다주치** — club-schedule.html 대수정 (Yellow)
+- [ ] **7단계: 인원 조건부 선호** — DB Plan 필수 (Red)
+
+---
+
 ### 🔵 CHECKPOINT: 모임 플래너 Phase 확장 (2026-07-02 시작)
 
 **목표**: 모임 플래너에 요일별 게임 선호(want/learn) 추가, 달력 요약 표시, 멀티스텝 바텀시트
