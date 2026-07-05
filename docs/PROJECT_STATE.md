@@ -157,6 +157,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [x] **2.5단계: 하루 카드 게임 태그 줄** — buildBarsInCard 하단 flex-wrap 칩 (want 🎲 / learn 📖, ·N 합산, 전량 표시)
 - [ ] **2.7단계: 대표 게임** — Red, DB Plan 필수 (마이그레이션 009 통합)
 - [x] **3단계: 센터모달 재정의** — openDateMeetingModal 게임 집계 상단, 참여자별 접힘, fromHome 버튼 문구
+- [x] **3단계(홈 클릭 분화)** — index-page.js .sched-bar-track 클릭 → openDateScheduleModal, fromHome:true 전달
 - [ ] **4단계: 룰렛** — 센터모달 안 (3 의존)
 - [ ] **5단계: 모임보드 이번주 섹션** — 독립
 - [ ] **6단계: 등록 모달 다주치** — club-schedule.html 대수정 (Yellow)

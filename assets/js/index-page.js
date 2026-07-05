@@ -1309,9 +1309,21 @@ if (recommendTitle && recommendSection) {
       });
     });
 
+    // 막대 클릭 → 해당 유저 개인 일정 모달 (stopPropagation으로 카드 클릭 방지)
+    previewEl.querySelectorAll('.sched-bar-track').forEach(track => {
+      track.addEventListener('click', e => {
+        e.stopPropagation();
+        const uid  = track.dataset.uid;
+        const date = track.dataset.date;
+        window.CottageDB?.trackEvent('meeting_planner_bar_click', { date, user_id: uid });
+        window.openDateScheduleModal?.(uid, date);
+      });
+    });
+
     previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', () => {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
       window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
+        fromHome: true,
         onPlannerClick: () => {
           window.CottageDB?.trackEvent('home_meeting_planner_click');
           document.getElementById('openPlannerBtn')?.click();
