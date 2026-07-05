@@ -2171,27 +2171,27 @@
         // 3명: 대부분 시간이 겹치는 경우 (11~19 전원 겹침)
         '3': [
           { vote_date: tgt, user_id: myId,     nickname: myNick, time_start: 10, time_end: 20 },
-          { vote_date: tgt, user_id: 'dev_u2', nickname: '서연', time_start: 11, time_end: 19 },
-          { vote_date: tgt, user_id: 'dev_u3', nickname: '지호', time_start: 10, time_end: 22 },
+          { vote_date: tgt, user_id: 'dev_u2', nickname: '더미1', time_start: 11, time_end: 19 },
+          { vote_date: tgt, user_id: 'dev_u3', nickname: '더미2', time_start: 10, time_end: 22 },
         ],
         // 5명: 오전팀·오후팀 갈리고 중간 겹침 구간 존재
         '5': [
           { vote_date: tgt, user_id: myId,     nickname: myNick, time_start: 10, time_end: 15 },
-          { vote_date: tgt, user_id: 'dev_u2', nickname: '서연', time_start: 10, time_end: 14 },
-          { vote_date: tgt, user_id: 'dev_u3', nickname: '지호', time_start: 14, time_end: 22 },
-          { vote_date: tgt, user_id: 'dev_u4', nickname: '유나', time_start: 13, time_end: 21 },
-          { vote_date: tgt, user_id: 'dev_u5', nickname: '현우', time_start: 11, time_end: 17 },
+          { vote_date: tgt, user_id: 'dev_u2', nickname: '더미1', time_start: 10, time_end: 14 },
+          { vote_date: tgt, user_id: 'dev_u3', nickname: '더미2', time_start: 14, time_end: 22 },
+          { vote_date: tgt, user_id: 'dev_u4', nickname: '더미3', time_start: 13, time_end: 21 },
+          { vote_date: tgt, user_id: 'dev_u5', nickname: '더미4', time_start: 11, time_end: 17 },
         ],
         // 8명: 이른 오전~저녁까지 넓게 분산, 최대 겹침 낮음
         '8': [
           { vote_date: tgt, user_id: myId,     nickname: myNick, time_start: 10, time_end: 15 },
-          { vote_date: tgt, user_id: 'dev_u2', nickname: '서연', time_start:  9, time_end: 12 },
-          { vote_date: tgt, user_id: 'dev_u3', nickname: '지호', time_start: 12, time_end: 17 },
-          { vote_date: tgt, user_id: 'dev_u4', nickname: '유나', time_start: 14, time_end: 19 },
-          { vote_date: tgt, user_id: 'dev_u5', nickname: '현우', time_start: 16, time_end: 21 },
-          { vote_date: tgt, user_id: 'dev_u6', nickname: '채원', time_start: 18, time_end: 23 },
-          { vote_date: tgt, user_id: 'dev_u7', nickname: '도현', time_start:  9, time_end: 23 },
-          { vote_date: tgt, user_id: 'dev_u8', nickname: '수아', time_start: 11, time_end: 16 },
+          { vote_date: tgt, user_id: 'dev_u2', nickname: '더미1', time_start:  9, time_end: 12 },
+          { vote_date: tgt, user_id: 'dev_u3', nickname: '더미2', time_start: 12, time_end: 17 },
+          { vote_date: tgt, user_id: 'dev_u4', nickname: '더미3', time_start: 14, time_end: 19 },
+          { vote_date: tgt, user_id: 'dev_u5', nickname: '더미4', time_start: 16, time_end: 21 },
+          { vote_date: tgt, user_id: 'dev_u6', nickname: '더미5', time_start: 18, time_end: 23 },
+          { vote_date: tgt, user_id: 'dev_u7', nickname: '더미6', time_start:  9, time_end: 23 },
+          { vote_date: tgt, user_id: 'dev_u8', nickname: '더미7', time_start: 11, time_end: 16 },
         ],
       };
 
@@ -2270,8 +2270,9 @@
         window.CottageDB?.getMeetingVoteGames(startStr, endStr) || Promise.resolve([])
       ]).then(([v, g]) => [v || [], g || []]);
 
-      // [DEV] 개발/검증용 더미 데이터 주입 — URL ?dev=3/5/8 에서만 실행
-      const _devScenario = new URLSearchParams(location.search).get('dev');
+      // [DEV] 개발/검증용 더미 데이터 주입 — localhost + URL ?dev=3/5/8 에서만 실행
+      const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const _devScenario = _isLocal ? new URLSearchParams(location.search).get('dev') : null;
       if (_devScenario) _injectDevVotes(_devScenario);
 
       document.getElementById('mainLoading').style.display = 'none';

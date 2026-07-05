@@ -1324,11 +1324,33 @@ if (recommendTitle && recommendSection) {
     const { start, end, monDate } = getThisWeekRange();
     const todayStr = new Date().toISOString().slice(0, 10);
 
-    const [votes, voteGames] = await Promise.all([
+    let [votes, voteGames] = await Promise.all([
       window.CottageDB?.getMeetingVotes(start, end) ?? [],
       window.CottageDB?.getMeetingVoteGames(start, end) ?? [],
     ]);
     if (!votes) return;
+
+    // [DEV] localhost ?dev=N — 메모리 더미 주입 (DB 무관, localhost만)
+    const _devN = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+      ? parseInt(new URLSearchParams(location.search).get('dev') || '0') : 0;
+    if (_devN >= 2) {
+      const tgt = new Date(monDate);
+      tgt.setDate(monDate.getDate() + 1); // 이번 주 화요일 고정
+      const tgtStr = tgt.toISOString().slice(0, 10);
+      const NAMES = ['더미1','더미2','더미3','더미4','더미5','더미6','더미7'];
+      const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23]];
+      const WANT  = ['아르낙','윙스팬','에버델','원더랜드 워','글룸헤이븐','브라스','파운더스'];
+      const LEARN = ['글룸헤이븐','루트','추산도','퀄라나리','팬데믹','윙스팬','아크노바'];
+      for (let _i = 0; _i < Math.min(_devN - 1, NAMES.length); _i++) {
+        const uid = `dev_u${_i + 2}`;
+        votes = [...votes, { vote_date: tgtStr, user_id: uid, nickname: NAMES[_i], time_start: TIMES[_i][0], time_end: TIMES[_i][1] }];
+        voteGames = [...voteGames,
+          { vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: null, custom_name: WANT[_i] },
+          ...(LEARN[_i]     ? [{ vote_date: tgtStr, user_id: uid, list_type: 'learn', game_id: null, custom_name: LEARN[_i] }]     : []),
+          ...(WANT[_i + 1]  ? [{ vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: null, custom_name: WANT[_i + 1] }]  : []),
+        ];
+      }
+    }
 
     // 날짜별 고유 user_id 집계
     const byDate = {};
