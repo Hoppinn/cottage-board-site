@@ -558,23 +558,30 @@
       const dateGames = voteGames.filter(g => g.vote_date === voteDate);
       if (!dateGames.length) return '';
 
-      const counts = {}, meta = {};
+      const nameMap = {}, wantCnt = {}, learnCnt = {};
       dateGames.forEach(g => {
         const name = g.game_id
           ? (window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id))?.display || g.custom_name || `#${g.game_id}`)
           : (g.custom_name || '?');
-        const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
-        counts[key] = (counts[key] || 0) + 1;
-        if (!meta[key]) meta[key] = { name, type: g.list_type };
+        const key = g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`;
+        if (!nameMap[key]) nameMap[key] = name;
+        if (g.list_type === 'want')  wantCnt[key]  = (wantCnt[key]  || 0) + 1;
+        if (g.list_type === 'learn') learnCnt[key] = (learnCnt[key] || 0) + 1;
       });
 
-      const chips = Object.entries(counts)
-        .map(([key, count]) => ({ ...meta[key], count }))
-        .sort((a, b) => a.type !== b.type ? (a.type === 'want' ? -1 : 1) : b.count - a.count)
-        .map(({ name, type, count }) => {
-          const icon = type === 'want' ? '🎲' : '📖';
-          const suffix = count > 1 ? ` ·${count}` : '';
-          return `<span class="sched-game-tag sched-game-tag--${type}">${icon} ${esc(name)}${suffix}</span>`;
+      const chips = Object.keys(nameMap)
+        .sort((a, b) => {
+          const wd = (wantCnt[b] || 0) - (wantCnt[a] || 0);
+          return wd !== 0 ? wd : (learnCnt[b] || 0) - (learnCnt[a] || 0);
+        })
+        .map(key => {
+          const w = wantCnt[key] || 0;
+          const l = learnCnt[key] || 0;
+          const parts = [];
+          if (w > 0) parts.push(`🎲${w > 1 ? w : ''}`);
+          if (l > 0) parts.push(`📖${l > 1 ? l : ''}`);
+          const tone = w > 0 ? 'want' : 'learn';
+          return `<span class="sched-game-tag sched-game-tag--${tone}">${esc(nameMap[key])} ${parts.join(' ')}</span>`;
         }).join('');
 
       return `<div class="sched-game-tags">${chips}</div>`;
