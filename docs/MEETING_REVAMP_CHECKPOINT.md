@@ -35,6 +35,17 @@
   (openDateScheduleModal 재사용, stopPropagation, 이벤트는 기존
   meeting_planner_bar_click 재사용). 그 외 영역 클릭은 기존대로
   날짜 집계 모달.
+- 홈 미리보기 닉네임 클릭: .sched-bar-name[data-uid] 클릭 →
+  openOtherMeetingSheet(uid), stopPropagation, 이벤트 meeting_profile_click 재사용.
+  더미 유저 클릭 시 기존 null 처리("프로필을 불러올 수 없어요" 토스트).
+- 홈 주 네비게이션 라벨: '날짜범위 · 이번 주/지난 주/다음 주/N주 전/N주 후'.
+  offset 0=이번 주, +1=다음 주, -1=지난 주, |offset|>1은 N주 후/전.
+- 5단계 모임보드 이번주 섹션: 내 보드(openProfilePanel) + 읽기전용
+  (openOtherMeetingSheet) 양쪽에 동일 섹션. 해당 유저의 이번주
+  meeting_votes + meeting_vote_games 조회, 날짜별로
+  "화 7/7 · 10~22시 · 🎲아르낙 📖루트" 식 행. 게임명 = COTTAGE_GAMES
+  display(약칭 아님). 등록 없으면 '이번 주 등록된 일정이 없어요.'
+  _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) 시그니처 확장.
 - 룰렛: 센터모달 안, 해당 날짜 want 게임(중복 제거) 2개 이상일 때
   "🎡 룰렛으로 정하기" 버튼. 원판 애니메이션+결과. DB 변경 없음.
   기본 후보 = 대표 게임(없으면 want 전체), 돌리기 전 후보 칩 탭으로
