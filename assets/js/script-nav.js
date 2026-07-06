@@ -520,6 +520,7 @@ function matchRecommendMood(game, moodValue){
     card:   ["card_play"],
     dice:   ["dice_rolling", "re_rolling_and_locking", "die_icon_resolution"],
     active: ["dexterity", "chaotic", "quick_play"],
+    murder: ["murder_mystery"],
   };
 
   const targetTags =

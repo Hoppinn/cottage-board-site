@@ -456,7 +456,8 @@ const levelShortMap = {
 };
 const moodShortMap = {
   talk: "💬 말·이야기", luck: "🍀 운", guess: "🎯 추론", bluff: "🃏 심리전",
-  active: "⚡ 몸", dice: "🎲 주사위", card: "🎴 카드", brain: "🧠 전략", coop: "🤝 협력", team: "⚔️ 팀"
+  active: "⚡ 몸", dice: "🎲 주사위", card: "🎴 카드", brain: "🧠 전략", coop: "🤝 협력", team: "⚔️ 팀",
+  murder: "🔍 머더미스터리"
 };
 
 function updateRecommendFilterText(){
