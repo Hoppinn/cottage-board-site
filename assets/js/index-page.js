@@ -1338,9 +1338,14 @@ if (recommendTitle && recommendSection) {
     const { start, end } = getWeekRange(weekOffset);
     const s = start.slice(5).replace('-', '/');
     const e = end.slice(5).replace('-', '/');
+    const suffix = weekOffset === 0  ? '이번 주'
+                 : weekOffset === 1  ? '다음 주'
+                 : weekOffset === -1 ? '지난 주'
+                 : weekOffset > 0   ? `${weekOffset}주 후`
+                 :                    `${Math.abs(weekOffset)}주 전`;
     navEl.innerHTML = `
       <button class="mwn-btn" type="button" data-dir="prev">◀ 이전주</button>
-      <span class="mwn-label">${s} ~ ${e}</span>
+      <span class="mwn-label">${s} ~ ${e} · ${suffix}</span>
       <button class="mwn-btn" type="button" data-dir="next">다음주 ▶</button>
     `;
     navEl.querySelectorAll('.mwn-btn').forEach(btn => {
