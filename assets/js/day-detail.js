@@ -629,7 +629,7 @@
         const active = state.filter(g => g.active);
         const n = active.length;
         if (!n) return;
-        const cx = 70, cy = 70, r = 62, textR = 40;
+        const cx = 70, cy = 70, r = 70, textR = 45;
         const toRad = deg => (deg - 90) * Math.PI / 180;
         const fs = n <= 3 ? 11 : n <= 6 ? 9 : 7;
 
