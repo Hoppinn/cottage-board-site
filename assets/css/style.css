@@ -6724,13 +6724,16 @@ body.is-embedded .inner-page{padding-top:16px;}
 .meeting-day-chip .mdc-count{font-size:13px;font-weight:800;color:var(--ink);}
 .meeting-day-chip.has-vote .mdc-day{color:#388e3c;}
 .meeting-day-chip.has-vote .mdc-count{color:#1b5e20;}
-.meeting-preview-card{margin-top:14px;background:#faf7f4;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;cursor:pointer;}
+.meeting-preview-card{margin-top:14px;background:#faf7f4;border-radius:10px;padding:12px 14px 0;display:flex;flex-direction:column;gap:6px;cursor:pointer;}
 .meeting-preview-card:hover{background:#f5f0eb;}
+.meeting-preview-card:active{background:#ede8e2;}
 .mpc-date{font-size:13px;font-weight:700;color:var(--green);}
 .mpc-names{display:flex;flex-wrap:wrap;gap:5px;}
 .mpc-name{font-size:12px;background:#f0e9e0;color:#5a3520;border-radius:20px;padding:2px 9px;}
 .mpc-time{font-size:12px;color:var(--text-info);}
-.mpc-hint{font-size:11px;color:var(--text-info);}
+.mpc-detail-btn{display:block;width:calc(100% + 28px);margin:4px -14px 0;padding:8px 0;background:none;border:none;border-top:1px solid #e8e0d8;border-radius:0 0 10px 10px;font-size:12px;color:var(--text-info);cursor:pointer;text-align:center;}
+.mpc-detail-btn:hover{color:var(--green);background:#f0ece6;}
+.mpc-detail-btn:active{color:var(--green);}
 .meeting-preview-empty{margin-top:14px;padding:12px 14px;text-align:center;}
 .meeting-preview-empty .mpe-msg{font-size:13px;color:var(--text-info);margin-bottom:8px;}
 .meeting-preview-empty .mpe-link{font-size:12px;color:var(--green);font-weight:700;border:none;background:none;cursor:pointer;padding:0;text-decoration:underline;}

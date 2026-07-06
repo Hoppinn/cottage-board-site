@@ -1292,8 +1292,20 @@ if (recommendTitle && recommendSection) {
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
       <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${count}명</div>
       ${window.buildBarsInCard(dayVotes, dayGames, null)}
-      <div class="mpc-hint">탭하면 상세 보기 →</div>
+      <button class="mpc-detail-btn" type="button">이날 모임 한눈에 보기 →</button>
     </div>`;
+
+    previewEl.querySelector('.mpc-detail-btn')?.addEventListener('click', e => {
+      e.stopPropagation();
+      window.CottageDB?.trackEvent('home_meeting_preview_card_click');
+      window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
+        fromHome: true,
+        onPlannerClick: () => {
+          window.CottageDB?.trackEvent('home_meeting_planner_click');
+          document.getElementById('openPlannerBtn')?.click();
+        },
+      });
+    });
 
     previewEl.querySelectorAll('.sched-card-more-btn').forEach(btn => {
       btn.addEventListener('click', e => {
