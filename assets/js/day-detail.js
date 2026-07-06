@@ -279,6 +279,7 @@
       width: 100%; height: 100%; border-radius: 50%;
       border: 3px solid var(--green, #7a4828);
       box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      overflow: hidden;
     }
     .dd-roulette-chips {
       display: flex; flex-wrap: wrap; gap: 6px;
@@ -497,14 +498,22 @@
       ${sharedGameCnt ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${sharedGameCnt}종</span>` : ''}
     </div>`;
 
-    // 룰렛 후보: want 게임 중복 제거
+    // 룰렛 후보: want 게임 중복 제거, 약칭 포함
     const wantGameMap = new Map();
     voteGames.forEach(g => {
       if (g.list_type !== 'want') return;
       const key = g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`;
-      if (!wantGameMap.has(key)) wantGameMap.set(key, resolveGameName(g));
+      if (!wantGameMap.has(key)) {
+        const name = resolveGameName(g);
+        let abbr = name.slice(0, 2);
+        if (g.game_id && window.COTTAGE_GAMES) {
+          const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === String(g.game_id));
+          if (cg) abbr = cg.abbr || (cg.titleKo || cg.display || name).slice(0, 2);
+        }
+        wantGameMap.set(key, { name, abbr });
+      }
     });
-    const rouletteGames = [...wantGameMap.entries()].map(([key, name]) => ({ key, name }));
+    const rouletteGames = [...wantGameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
 
     // 전체 게임 집계 (want/learn 분리, 투표수 내림차순)
     const aggrMap = {}, aggrMeta = {};
@@ -605,9 +614,31 @@
       function buildWheel() {
         const active = state.filter(g => g.active);
         const n = active.length;
-        const seg = 360 / n;
-        const stops = active.map((g, i) => `${g.color} ${(i * seg).toFixed(2)}deg ${((i + 1) * seg).toFixed(2)}deg`);
-        wheelEl.style.background = `conic-gradient(${stops.join(',')})`;
+        if (!n) return;
+        const cx = 70, cy = 70, r = 62, textR = 40;
+        const toRad = deg => (deg - 90) * Math.PI / 180;
+        const fs = n <= 3 ? 11 : n <= 6 ? 9 : 7;
+
+        let svg = '<svg viewBox="0 0 140 140" style="width:100%;height:100%;display:block;">';
+        if (n === 1) {
+          svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${active[0].color}"/>`;
+          svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="middle" font-size="${fs}" font-weight="600" fill="#5a3318">${esc(active[0].abbr)}</text>`;
+        } else {
+          const segDeg = 360 / n;
+          active.forEach((g, i) => {
+            const s = i * segDeg, e = (i + 1) * segDeg, mid = s + segDeg / 2;
+            const sr = toRad(s), er = toRad(e), mr = toRad(mid);
+            const sx = cx + r * Math.cos(sr), sy = cy + r * Math.sin(sr);
+            const ex = cx + r * Math.cos(er), ey = cy + r * Math.sin(er);
+            const tx = cx + textR * Math.cos(mr), ty = cy + textR * Math.sin(mr);
+            const rot = (mid > 90 && mid < 270) ? mid + 180 : mid;
+            svg += `<path d="M${cx},${cy} L${sx.toFixed(1)},${sy.toFixed(1)} A${r},${r} 0 ${segDeg > 180 ? 1 : 0},1 ${ex.toFixed(1)},${ey.toFixed(1)} Z" fill="${g.color}" stroke="#fff8f0" stroke-width="1.5"/>`;
+            svg += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${fs}" font-weight="600" fill="#5a3318" transform="rotate(${rot.toFixed(1)},${tx.toFixed(1)},${ty.toFixed(1)})">${esc(g.abbr)}</text>`;
+          });
+        }
+        svg += '</svg>';
+        wheelEl.innerHTML = svg;
+        wheelEl.style.background = '';
       }
 
       function buildChips() {
