@@ -756,10 +756,13 @@
         wheelEl.style.transform = `rotate(${spinTotal}deg)`;
 
         setTimeout(() => {
-          resultEl.textContent = `🎲 ${active[winnerIdx].name}`;
+          const winner = active[winnerIdx];
+          resultEl.textContent = `🎲 ${winner.name}`;
           spinning = false;
           spinBtn.disabled = false;
           spinBtn.textContent = '다시 돌리기 🎡';
+          const gameId = winner.key.startsWith('id:') ? winner.key.slice(3) : null;
+          window.CottageDB?.trackEvent('roulette_spin', { game_id: gameId });
         }, 3600);
       });
     }
