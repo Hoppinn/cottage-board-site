@@ -160,7 +160,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [x] **3단계(홈 클릭 분화)** — index-page.js .sched-bar-track 클릭 → openDateScheduleModal, fromHome:true 전달
 - [x] **3.5단계: 칩 병합 + 홈 주 네비게이션** — buildGameTags want/learn 단일 칩 병합, initMeetingSection ◀이전주/다음주▶ 주별 재조회, 홈 닉네임 클릭 → openOtherMeetingSheet
 - [x] **홈 카드 진입점 명확화** — mpc-hint → mpc-detail-btn 풀폭 행 버튼, 카드 :active 추가
-- [ ] **4단계: 룰렛** — 센터모달 안 (3 의존)
+- [x] **4단계: 룰렛** — openDateMeetingModal 내 want 2개↑ 시 원판+칩토글+결과, 균등확률
 - [x] **5단계: 모임보드 이번주 섹션** — _buildMiniBarWeekHtml(+voteGames), want/learn 게임 표시
 - [ ] **6단계: 등록 모달 다주치** — club-schedule.html 대수정 (Yellow)
 - [ ] **7단계: 인원 조건부 선호** — DB Plan 필수 (Red)

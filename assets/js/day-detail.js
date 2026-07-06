@@ -252,6 +252,69 @@
     }
     .sched-game-tag--want { background: var(--bg-soft); color: var(--green); }
     .sched-game-tag--learn { background: var(--line); color: var(--muted); }
+
+    /* ── 룰렛 패널 ── */
+    .dd-roulette-open-btn {
+      display: block; width: 100%; margin: 8px 0 4px;
+      background: #f5ede3; border: none; border-radius: 20px;
+      padding: 8px 0; font-size: 13px; font-weight: 600;
+      color: var(--green, #7a4828); cursor: pointer; text-align: center;
+    }
+    .dd-roulette-open-btn:active { background: #ede5d8; }
+    .dd-roulette-panel {
+      overflow-y: auto; max-height: 80svh;
+      padding: 16px 20px 4px;
+    }
+    .dd-roulette-wheel-wrap {
+      position: relative; width: 140px; height: 140px;
+      margin: 0 auto 14px;
+    }
+    .dd-roulette-ptr {
+      position: absolute; top: -14px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px; line-height: 1;
+      color: var(--green, #7a4828); z-index: 1;
+    }
+    .dd-roulette-wheel {
+      width: 100%; height: 100%; border-radius: 50%;
+      border: 3px solid var(--green, #7a4828);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .dd-roulette-chips {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      justify-content: center; margin-bottom: 12px;
+    }
+    .dd-roulette-chip {
+      font-size: 12px; padding: 4px 11px; border-radius: 14px;
+      border: 1.5px solid transparent;
+      color: var(--green, #7a4828); font-weight: 600;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .dd-roulette-chip.is-excluded {
+      opacity: 0.3; text-decoration: line-through;
+      background: #f0ece6 !important; border-color: #e0d8cc !important;
+    }
+    .dd-roulette-result {
+      min-height: 26px; text-align: center;
+      font-size: 15px; font-weight: 700; color: var(--green, #7a4828);
+      margin-bottom: 10px;
+    }
+    .dd-roulette-spin-btn {
+      display: block; width: 100%;
+      background: var(--green, #7a4828); color: white;
+      border: none; border-radius: 20px;
+      padding: 9px 0; font-size: 14px; font-weight: 700;
+      cursor: pointer; margin-bottom: 8px;
+    }
+    .dd-roulette-spin-btn:not(:disabled):active { background: #5a3318; }
+    .dd-roulette-spin-btn:disabled { opacity: 0.45; cursor: default; }
+    .dd-roulette-back-btn {
+      display: block; width: 100%; background: none;
+      border: 1px solid #e0d8cc; border-radius: 20px;
+      padding: 7px 0; font-size: 12px; color: var(--muted, #9e8e7e);
+      cursor: pointer;
+    }
+    .dd-roulette-back-btn:active { background: #f5f0eb; }
   `;
   document.head.appendChild(s);
 
@@ -434,6 +497,15 @@
       ${sharedGameCnt ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${sharedGameCnt}종</span>` : ''}
     </div>`;
 
+    // 룰렛 후보: want 게임 중복 제거
+    const wantGameMap = new Map();
+    voteGames.forEach(g => {
+      if (g.list_type !== 'want') return;
+      const key = g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`;
+      if (!wantGameMap.has(key)) wantGameMap.set(key, resolveGameName(g));
+    });
+    const rouletteGames = [...wantGameMap.entries()].map(([key, name]) => ({ key, name }));
+
     // 전체 게임 집계 (want/learn 분리, 투표수 내림차순)
     const aggrMap = {}, aggrMeta = {};
     voteGames.forEach(g => {
@@ -471,12 +543,28 @@
     }).join('');
 
     const plannerBtnLabel = opts.fromHome ? '전체 일정 보기' : '플래너 보기';
+    const rouletteBtnHtml = rouletteGames.length >= 2
+      ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
+      : '';
+    const roulettePanelHtml = rouletteGames.length >= 2
+      ? `<div class="dd-roulette-panel" id="__ddRoulettePanel" style="display:none">
+          <div class="dd-roulette-wheel-wrap">
+            <div class="dd-roulette-ptr">▼</div>
+            <div class="dd-roulette-wheel" id="__rrWheel"></div>
+          </div>
+          <div class="dd-roulette-chips" id="__rrChips"></div>
+          <div class="dd-roulette-result" id="__rrResult"></div>
+          <button class="dd-roulette-spin-btn" id="__rrSpin" type="button">돌리기 🎡</button>
+          <button class="dd-roulette-back-btn" id="__rrBack" type="button">← 목록으로</button>
+        </div>`
+      : '';
 
     el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
-      <div class="dd-modal-scroll">
+      <div class="dd-modal-scroll" id="__ddMainScroll">
         <div class="dd-date">${fmtDate(voteDate)}</div>
         ${statsHtml}
         ${gameAggrHtml}
+        ${rouletteBtnHtml}
         ${participantsBody
           ? `<details class="dd-participants-toggle">
               <summary>참여자별 보기</summary>
@@ -485,6 +573,7 @@
           : '<div class="dd-empty">참여자가 없습니다.</div>'
         }
       </div>
+      ${roulettePanelHtml}
       <div class="dd-close-row" style="gap:8px">
         <button class="dd-close-btn dd-green-btn" type="button">${plannerBtnLabel}</button>
         <button class="dd-close-btn" type="button">닫기</button>
@@ -496,6 +585,98 @@
     plannerBtn.addEventListener('click', () => { el.remove(); opts.onPlannerClick?.(); });
     closeBtn.addEventListener('click', () => el.remove());
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+
+    // 룰렛 로직
+    if (rouletteGames.length >= 2) {
+      const COLORS = ['#e8d8c0','#ddc8a8','#f0e5d4','#d4c0a0','#e4d4bc','#cdb898','#ecddd0','#c8ac8c'];
+      const state = rouletteGames.map((g, i) => ({ ...g, active: true, color: COLORS[i % COLORS.length] }));
+      let spinTotal = 0;
+      let spinning = false;
+
+      const mainScroll    = el.querySelector('#__ddMainScroll');
+      const roulettePanel = el.querySelector('#__ddRoulettePanel');
+      const openBtn       = el.querySelector('.dd-roulette-open-btn');
+      const wheelEl       = el.querySelector('#__rrWheel');
+      const chipsEl       = el.querySelector('#__rrChips');
+      const resultEl      = el.querySelector('#__rrResult');
+      const spinBtn       = el.querySelector('#__rrSpin');
+      const backBtn       = el.querySelector('#__rrBack');
+
+      function buildWheel() {
+        const active = state.filter(g => g.active);
+        const n = active.length;
+        const seg = 360 / n;
+        const stops = active.map((g, i) => `${g.color} ${(i * seg).toFixed(2)}deg ${((i + 1) * seg).toFixed(2)}deg`);
+        wheelEl.style.background = `conic-gradient(${stops.join(',')})`;
+      }
+
+      function buildChips() {
+        chipsEl.innerHTML = state.map(g =>
+          `<button class="dd-roulette-chip${g.active ? '' : ' is-excluded'}"
+            style="${g.active ? `background:${g.color};border-color:${g.color}` : ''}"
+            data-key="${esc(g.key)}" type="button">${esc(g.name)}</button>`
+        ).join('');
+        chipsEl.querySelectorAll('.dd-roulette-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            if (spinning) return;
+            const item = state.find(g => g.key === chip.dataset.key);
+            if (!item) return;
+            if (item.active && state.filter(g => g.active).length <= 1) return;
+            item.active = !item.active;
+            buildChips();
+            buildWheel();
+            updateSpinBtn();
+          });
+        });
+      }
+
+      function updateSpinBtn() {
+        spinBtn.disabled = state.filter(g => g.active).length < 2 || spinning;
+      }
+
+      openBtn.addEventListener('click', () => {
+        mainScroll.style.display = 'none';
+        roulettePanel.style.display = '';
+        buildWheel();
+        buildChips();
+        updateSpinBtn();
+      });
+
+      backBtn.addEventListener('click', () => {
+        roulettePanel.style.display = 'none';
+        mainScroll.style.display = '';
+        resultEl.textContent = '';
+      });
+
+      spinBtn.addEventListener('click', () => {
+        if (spinning) return;
+        const active = state.filter(g => g.active);
+        if (active.length < 2) return;
+        spinning = true;
+        spinBtn.disabled = true;
+        resultEl.textContent = '';
+
+        const n = active.length;
+        const winnerIdx = Math.floor(Math.random() * n);
+        const segDeg = 360 / n;
+        const winnerCenter = winnerIdx * segDeg + segDeg / 2;
+        const targetAngle = (360 - winnerCenter + 360) % 360;
+        const currentMod = spinTotal % 360;
+        let delta = (targetAngle - currentMod + 360) % 360;
+        if (delta === 0) delta = 360;
+        spinTotal += 5 * 360 + delta;
+
+        wheelEl.style.transition = 'transform 3.5s cubic-bezier(0.2, 0.8, 0.15, 1)';
+        wheelEl.style.transform = `rotate(${spinTotal}deg)`;
+
+        setTimeout(() => {
+          resultEl.textContent = `🎲 ${active[winnerIdx].name}`;
+          spinning = false;
+          spinBtn.disabled = false;
+          spinBtn.textContent = '다시 돌리기 🎡';
+        }, 3600);
+      });
+    }
   };
 
   /**

@@ -83,7 +83,7 @@
 3.5. [x] 칩 병합 + 홈 주 네비게이션 — 완료
   - [x] ① 게임 태그 칩 병합: want/learn 같은 게임 → 단일 칩 "아르낙 🎲📖" — 완료
   - [x] ② 홈 미리보기 ◀이전주/다음주▶ 주 네비게이션 (주별 재조회) — 완료
-4. [ ] 룰렛 (3 의존)
+4. [x] 룰렛 — day-detail.js openDateMeetingModal, want 2개 이상 시 버튼, CSS 원판+칩 토글+결과
 5. [x] 모임보드 이번주 섹션 — _buildMiniBarWeekHtml(+voteGames), want/learn 게임 행 — 완료
 6. [ ] 등록 모달 다주치 (Yellow, club-schedule.html 대수정)
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
