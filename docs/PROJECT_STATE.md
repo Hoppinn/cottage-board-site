@@ -1,8 +1,18 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-06 (플래너 과거 날짜 보기 허용, 등록만 차단)
+최종 갱신: 2026-07-07 (룰렛 원판 약칭·커스텀 추가, 머더미스터리 필터)
 
 ---
+
+## 최근 완료 (2026-07-07)
+
+| 커밋 | 내용 |
+|------|------|
+| fb38ef8 | 홈 미리보기 카드 하단 "이날 모임 한눈에 보기 →" 풀폭 행 버튼 (mpc-detail-btn), 카드 :active 추가 |
+| 8a99827 | 4단계 룰렛: openDateMeetingModal 내 want 2개↑ 시 SVG 원판+칩 토글+결과, 균등확률 |
+| b3d350d | 룰렛 원판 조각에 게임 약칭(abbr) 표시 (SVG text, 반지름 방향, 폰트 3단계) |
+| 85a14fa | 룰렛 "+ 게임 추가" attachAc 자동완성+직접입력, 세션 임시, 점선 칩, 중복 강조 |
+| 635ed11 | 게임방식 필터에 머더미스터리 항목 추가 (index-page.js moodTagMap·moodShortMap, script-nav.js, index.html, owned-games.html) |
 
 ## 최근 완료 (2026-07-04)
 
@@ -160,7 +170,9 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [x] **3단계(홈 클릭 분화)** — index-page.js .sched-bar-track 클릭 → openDateScheduleModal, fromHome:true 전달
 - [x] **3.5단계: 칩 병합 + 홈 주 네비게이션** — buildGameTags want/learn 단일 칩 병합, initMeetingSection ◀이전주/다음주▶ 주별 재조회, 홈 닉네임 클릭 → openOtherMeetingSheet
 - [x] **홈 카드 진입점 명확화** — mpc-hint → mpc-detail-btn 풀폭 행 버튼, 카드 :active 추가
-- [x] **4단계: 룰렛** — openDateMeetingModal 내 want 2개↑ 시 원판+칩토글+결과, 균등확률
+- [x] **4단계: 룰렛** — openDateMeetingModal 내 want 2개↑ 시 SVG 원판+칩토글+결과, 균등확률
+  - 원판 각 조각에 게임 약칭(abbr) 표시, 반지름 방향 회전, 폰트 3단계 자동 축소
+  - "+ 게임 추가" attachAc 자동완성+직접입력, 세션 임시(DB 없음), 점선 칩 구분, 중복 강조
 - [x] **5단계: 모임보드 이번주 섹션** — _buildMiniBarWeekHtml(+voteGames), want/learn 게임 표시
 - [ ] **6단계: 등록 모달 다주치** — club-schedule.html 대수정 (Yellow)
 - [ ] **7단계: 인원 조건부 선호** — DB Plan 필수 (Red)
