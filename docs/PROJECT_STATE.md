@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-05 (게임별 탭 정렬 버그 수정)
+최종 갱신: 2026-07-06 (3.5단계 칩 병합 + 홈 주 네비게이션 완료)
 
 ---
 
@@ -158,6 +158,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [ ] **2.7단계: 대표 게임** — Red, DB Plan 필수 (마이그레이션 009 통합)
 - [x] **3단계: 센터모달 재정의** — openDateMeetingModal 게임 집계 상단, 참여자별 접힘, fromHome 버튼 문구
 - [x] **3단계(홈 클릭 분화)** — index-page.js .sched-bar-track 클릭 → openDateScheduleModal, fromHome:true 전달
+- [x] **3.5단계: 칩 병합 + 홈 주 네비게이션** — buildGameTags want/learn 단일 칩 병합, initMeetingSection ◀이전주/다음주▶ 주별 재조회
 - [ ] **4단계: 룰렛** — 센터모달 안 (3 의존)
 - [ ] **5단계: 모임보드 이번주 섹션** — 독립
 - [ ] **6단계: 등록 모달 다주치** — club-schedule.html 대수정 (Yellow)

@@ -1242,17 +1242,18 @@ if (recommendTitle && recommendSection) {
 
 
 (async function initMeetingSection() {
-  const statusEl = document.getElementById('meetingStatusMsg');
-  const daysEl   = document.getElementById('meetingDays');
+  const statusEl  = document.getElementById('meetingStatusMsg');
+  const daysEl    = document.getElementById('meetingDays');
   const previewEl = document.getElementById('meetingPreview');
   if (!statusEl || !daysEl) return;
 
-  function getThisWeekRange() {
+  function getWeekRange(offset) {
     const now = new Date();
     const day = now.getDay();
     const diffToMon = day === 0 ? -6 : 1 - day;
     const mon = new Date(now);
-    mon.setDate(now.getDate() + diffToMon);
+    mon.setDate(now.getDate() + diffToMon + offset * 7);
+    mon.setHours(0, 0, 0, 0);
     const sun = new Date(mon);
     sun.setDate(mon.getDate() + 6);
     const fmt = d => d.toISOString().slice(0, 10);
@@ -1269,10 +1270,8 @@ if (recommendTitle && recommendSection) {
 
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 
-  // 해당 날짜 미리보기 카드 렌더 (프리뷰 영역)
   function renderPreview(dateStr, dayVotes, dayGames) {
     if (!previewEl) return;
-
     if (!dayVotes.length) {
       previewEl.innerHTML = `<div class="meeting-preview-empty">
         <div class="mpe-msg">등록된 일정이 없어요</div>
@@ -1284,7 +1283,6 @@ if (recommendTitle && recommendSection) {
       });
       return;
     }
-
     const dateObj = new Date(dateStr + 'T00:00:00');
     const dayIdx  = ((dateObj.getDay() + 6) % 7);
     const month   = dateObj.getMonth() + 1;
@@ -1297,7 +1295,6 @@ if (recommendTitle && recommendSection) {
       <div class="mpc-hint">탭하면 상세 보기 →</div>
     </div>`;
 
-    // 더보기 버튼 — stopPropagation으로 카드 클릭(모달)과 분리
     previewEl.querySelectorAll('.sched-card-more-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -1309,7 +1306,6 @@ if (recommendTitle && recommendSection) {
       });
     });
 
-    // 막대 클릭 → 해당 유저 개인 일정 모달 (stopPropagation으로 카드 클릭 방지)
     previewEl.querySelectorAll('.sched-bar-track').forEach(track => {
       track.addEventListener('click', e => {
         e.stopPropagation();
@@ -1332,111 +1328,138 @@ if (recommendTitle && recommendSection) {
     });
   }
 
-  try {
-    const { start, end, monDate } = getThisWeekRange();
+  // 주 네비게이션 상태 및 UI
+  let weekOffset = 0;
+  const navEl = document.createElement('div');
+  navEl.className = 'meeting-week-nav';
+  daysEl.parentNode.insertBefore(navEl, daysEl);
+
+  function updateNav() {
+    const { start, end } = getWeekRange(weekOffset);
+    const s = start.slice(5).replace('-', '/');
+    const e = end.slice(5).replace('-', '/');
+    navEl.innerHTML = `
+      <button class="mwn-btn" type="button" data-dir="prev">◀ 이전주</button>
+      <span class="mwn-label">${s} ~ ${e}</span>
+      <button class="mwn-btn" type="button" data-dir="next">다음주 ▶</button>
+    `;
+    navEl.querySelectorAll('.mwn-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dir = btn.dataset.dir;
+        weekOffset += dir === 'next' ? 1 : -1;
+        window.CottageDB?.trackEvent('home_meeting_week_nav', { direction: dir, offset: weekOffset });
+        loadWeek();
+      });
+    });
+  }
+
+  async function loadWeek() {
+    updateNav();
+    const { start, end, monDate } = getWeekRange(weekOffset);
     const todayStr = new Date().toISOString().slice(0, 10);
 
-    let [votes, voteGames] = await Promise.all([
-      window.CottageDB?.getMeetingVotes(start, end) ?? [],
-      window.CottageDB?.getMeetingVoteGames(start, end) ?? [],
-    ]);
-    if (!votes) return;
+    statusEl.textContent = '불러오는 중...';
+    daysEl.innerHTML = '';
+    if (previewEl) previewEl.innerHTML = '';
 
-    // [DEV] localhost ?dev=N — 메모리 더미 주입 (DB 무관, localhost만)
-    const _devN = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-      ? parseInt(new URLSearchParams(location.search).get('dev') || '0') : 0;
-    if (_devN >= 2) {
-      const tgt = new Date(monDate);
-      tgt.setDate(monDate.getDate() + 1); // 이번 주 화요일 고정
-      const tgtStr = tgt.toISOString().slice(0, 10);
-      const NAMES = ['더미1','더미2','더미3','더미4','더미5','더미6','더미7'];
-      const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23]];
-      // {name, id}: id가 있으면 COTTAGE_GAMES 경유 약칭 (원워 검증용)
-      const WANT  = [
-        { name: '아르낙',     id: null },
-        { name: '윙스팬',     id: null },
-        { name: '에버델',     id: null },
-        { name: null,        id: '227935' },  // 원더랜드 워 → abbr: 원워
-        { name: '글룸헤이븐', id: null },
-        { name: '브라스',     id: null },
-        { name: '파운더스',   id: null },
-      ];
-      const LEARN = ['글룸헤이븐','루트','추산도','퀄라나리','팬데믹','윙스팬','아크노바'];
-      for (let _i = 0; _i < Math.min(_devN - 1, NAMES.length); _i++) {
-        const uid = `dev_u${_i + 2}`;
-        votes = [...votes, { vote_date: tgtStr, user_id: uid, nickname: NAMES[_i], time_start: TIMES[_i][0], time_end: TIMES[_i][1] }];
-        const w0 = WANT[_i], w1 = WANT[_i + 1];
-        voteGames = [...voteGames,
-          { vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: w0.id,  custom_name: w0.name },
-          ...(LEARN[_i] ? [{ vote_date: tgtStr, user_id: uid, list_type: 'learn', game_id: null, custom_name: LEARN[_i] }] : []),
-          ...(w1        ? [{ vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: w1.id, custom_name: w1.name }]  : []),
+    try {
+      let [votes, voteGames] = await Promise.all([
+        window.CottageDB?.getMeetingVotes(start, end) ?? [],
+        window.CottageDB?.getMeetingVoteGames(start, end) ?? [],
+      ]);
+      if (!votes) { statusEl.textContent = '🎲 이번 주 모임 모집 중'; return; }
+
+      // [DEV] localhost ?dev=N — 메모리 더미 주입 (이번 주만)
+      const _devN = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+        ? parseInt(new URLSearchParams(location.search).get('dev') || '0') : 0;
+      if (_devN >= 2 && weekOffset === 0) {
+        const tgt = new Date(monDate);
+        tgt.setDate(monDate.getDate() + 1); // 이번 주 화요일 고정
+        const tgtStr = tgt.toISOString().slice(0, 10);
+        const NAMES = ['더미1','더미2','더미3','더미4','더미5','더미6','더미7'];
+        const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23]];
+        const WANT  = [
+          { name: '아르낙',     id: null },
+          { name: '윙스팬',     id: null },
+          { name: '에버델',     id: null },
+          { name: null,        id: '227935' },
+          { name: '글룸헤이븐', id: null },
+          { name: '브라스',     id: null },
+          { name: '파운더스',   id: null },
         ];
+        const LEARN = ['글룸헤이븐','루트','추산도','퀄라나리','팬데믹','윙스팬','아크노바'];
+        for (let _i = 0; _i < Math.min(_devN - 1, NAMES.length); _i++) {
+          const uid = `dev_u${_i + 2}`;
+          votes = [...votes, { vote_date: tgtStr, user_id: uid, nickname: NAMES[_i], time_start: TIMES[_i][0], time_end: TIMES[_i][1] }];
+          const w0 = WANT[_i], w1 = WANT[_i + 1];
+          voteGames = [...voteGames,
+            { vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: w0.id,  custom_name: w0.name },
+            ...(LEARN[_i] ? [{ vote_date: tgtStr, user_id: uid, list_type: 'learn', game_id: null, custom_name: LEARN[_i] }] : []),
+            ...(w1        ? [{ vote_date: tgtStr, user_id: uid, list_type: 'want',  game_id: w1.id, custom_name: w1.name }]  : []),
+          ];
+        }
       }
-    }
 
-    // 날짜별 고유 user_id 집계
-    const byDate = {};
-    for (let i = 0; i < 7; i++) {
-      const d = new Date(monDate);
-      d.setDate(monDate.getDate() + i);
-      byDate[d.toISOString().slice(0, 10)] = new Set();
-    }
-    votes.forEach(v => {
-      if (byDate[v.vote_date]) byDate[v.vote_date].add(v.user_id);
-    });
+      const byDate = {};
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(monDate);
+        d.setDate(monDate.getDate() + i);
+        byDate[d.toISOString().slice(0, 10)] = new Set();
+      }
+      votes.forEach(v => { if (byDate[v.vote_date]) byDate[v.vote_date].add(v.user_id); });
 
-    // 이번 주 전체 고유 user_id 수
-    const allUsers = new Set(votes.map(v => v.user_id));
-    statusEl.textContent = getMeetingStatusMsg(allUsers.size);
+      const allUsers = new Set(votes.map(v => v.user_id));
+      statusEl.textContent = getMeetingStatusMsg(allUsers.size);
 
-    const dateKeys = Object.keys(byDate).sort();
+      const dateKeys = Object.keys(byDate).sort();
 
-    // 초기 선택: 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
-    let selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0)
-      || dateKeys.find(d => d >= todayStr)
-      || dateKeys[0];
+      // 초기 선택: 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
+      let selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0)
+        || dateKeys.find(d => d >= todayStr)
+        || dateKeys[0];
 
-    // 날짜 칩 렌더
-    function renderChips() {
-      daysEl.innerHTML = dateKeys.map((dateStr, i) => {
-        const cnt = byDate[dateStr].size;
-        const hasVote  = cnt > 0;
-        const isPast   = dateStr < todayStr;
-        const isSelected = dateStr === selectedDate;
-        let cls = 'meeting-day-chip';
-        if (hasVote)    cls += ' has-vote';
-        if (isPast)     cls += ' is-past';
-        if (isSelected) cls += ' is-selected';
-        return `<div class="${cls}" data-date="${dateStr}">
-          <span class="mdc-day">${DAY_LABELS[i]}</span>
-          <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
-        </div>`;
-      }).join('');
+      function renderChips() {
+        daysEl.innerHTML = dateKeys.map((ds, i) => {
+          const cnt = byDate[ds].size;
+          const hasVote  = cnt > 0;
+          const isPast   = ds < todayStr;
+          const isSelected = ds === selectedDate;
+          let cls = 'meeting-day-chip';
+          if (hasVote)    cls += ' has-vote';
+          if (isPast)     cls += ' is-past';
+          if (isSelected) cls += ' is-selected';
+          return `<div class="${cls}" data-date="${ds}">
+            <span class="mdc-day">${DAY_LABELS[i]}</span>
+            <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
+          </div>`;
+        }).join('');
 
-      daysEl.querySelectorAll('.meeting-day-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          window.CottageDB?.trackEvent('home_meeting_date_preview_click');
-          selectedDate = chip.dataset.date;
-          daysEl.querySelectorAll('.meeting-day-chip').forEach(c =>
-            c.classList.toggle('is-selected', c.dataset.date === selectedDate)
-          );
-          renderPreview(
-            selectedDate,
-            votes.filter(v => v.vote_date === selectedDate),
-            voteGames.filter(g => g.vote_date === selectedDate),
-          );
+        daysEl.querySelectorAll('.meeting-day-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            window.CottageDB?.trackEvent('home_meeting_date_preview_click');
+            selectedDate = chip.dataset.date;
+            daysEl.querySelectorAll('.meeting-day-chip').forEach(c =>
+              c.classList.toggle('is-selected', c.dataset.date === selectedDate)
+            );
+            renderPreview(
+              selectedDate,
+              votes.filter(v => v.vote_date === selectedDate),
+              voteGames.filter(g => g.vote_date === selectedDate),
+            );
+          });
         });
-      });
+      }
+
+      renderChips();
+      renderPreview(
+        selectedDate,
+        votes.filter(v => v.vote_date === selectedDate),
+        voteGames.filter(g => g.vote_date === selectedDate),
+      );
+    } catch (_) {
+      statusEl.textContent = '🎲 이번 주 모임 모집 중';
     }
-
-    renderChips();
-    renderPreview(
-      selectedDate,
-      votes.filter(v => v.vote_date === selectedDate),
-      voteGames.filter(g => g.vote_date === selectedDate),
-    );
-
-  } catch (_) {
-    statusEl.textContent = '🎲 이번 주 모임 모집 중';
   }
+
+  await loadWeek();
 })();
