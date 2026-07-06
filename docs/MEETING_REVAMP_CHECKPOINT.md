@@ -17,9 +17,11 @@
   아이콘+숫자, 1인이면 숫자 생략, 0인 쪽 아이콘 전체 생략). 정렬: want수
   내림차순→learn수 내림차순. 칩 톤: want 포함 시 --want, 아니면 --learn.
   카드 태그 줄·센터모달 집계에서 대표 지정 게임에 ⭐ 병기 (2.7 이후 활성).
-- is-past 원칙: 홈 미리보기 날짜 칩 is-past = opacity:0.45 시각만, pointer-events
-  차단 없음 (클릭 허용 — 지난 날 일정도 조회 가능). 플래너 카드의 is-past에
-  pointer-events:none 있음은 플래너 전용(등록 방지) 의도적 동작, 홈과 다른 컨텍스트.
+- is-past 원칙: 홈·플래너 공통으로 opacity 시각만. pointer-events:none 차단 없음.
+  클릭 → 보기(막대·겹침·상세) 허용. 등록 행동만 JS 레벨에서 차단:
+  홈 날짜 칩은 클릭 허용(모달 조회), 플래너 renderMyVote에서 과거 날짜 시
+  등록/수정/취소 버튼 숨기고 읽기 전용 표시. 멀티스텝 Step1 날짜 칩은 기존
+  disabled 속성 유지.
 - 약칭 소스: game-system source 레이어에 BGG ID→약칭 매핑,
   build-output이 gameData에 abbr 병합. 폴백 = titleKo 앞 2글자.
   직접입력 게임은 폴백만.

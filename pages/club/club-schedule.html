@@ -36,7 +36,7 @@
     }
     .sched-day-card:hover { background: #f0ebe0; }
     .sched-day-card.is-today { background: #f5ece0; outline: 2px solid var(--green); }
-    .sched-day-card.is-past { opacity: 0.28; cursor: default; pointer-events: none; }
+    .sched-day-card.is-past { opacity: 0.28; cursor: pointer; }
     .sched-day-card.is-empty { background: transparent; border: 1px dashed #e8e0d4; cursor: default; pointer-events: none; opacity: 0.35; }
     .sdc-header { display: flex; align-items: baseline; gap: 5px; margin-bottom: 5px; }
     .sdc-dow { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1; }
@@ -358,7 +358,7 @@
       cursor: pointer;
     }
     .sched-wday-card:hover { background: #f0ebe0; }
-    .sched-wday-card.is-past { opacity: 0.3; cursor: default; pointer-events: none; }
+    .sched-wday-card.is-past { opacity: 0.3; cursor: pointer; }
     .sched-wday-card.is-today { background: #f5ece0; outline: 2px solid var(--green); }
     .sched-wday-header {
       display: flex;
@@ -447,7 +447,7 @@
       cursor: pointer;
     }
     .mcal-empty { cursor: default; }
-    .mcal-cell.is-past { opacity: .4; cursor: default; pointer-events: none; }
+    .mcal-cell.is-past { opacity: .4; cursor: pointer; }
     .mcal-cell:not(.is-past):not(.mcal-empty):hover { background: #f0ebe0; }
     .mcal-cell.is-mine { background: #f5f0e8; }
     .mcal-day {
@@ -983,7 +983,7 @@
 
       const el = document.getElementById('weekView');
       el.innerHTML = html;
-      el.querySelectorAll('.sched-day-card:not(.is-past)').forEach(card => {
+      el.querySelectorAll('.sched-day-card[data-date]').forEach(card => {
         card.addEventListener('click', () => openDay(card.dataset.date));
       });
     }
@@ -1125,6 +1125,20 @@
           <div class="sched-login-hint">가능 시간을 등록하려면 로그인이 필요해요.</div>
           <button class="sched-register-btn" onclick="document.getElementById('kakaoLoginBtn')?.click()" type="button">카카오 로그인</button>
         </div>`;
+        return;
+      }
+
+      if (ds < toDateStr(TODAY)) {
+        el.innerHTML = myVote
+          ? `<div class="sched-my-section">
+               <div class="sched-my-status">✅ 참여했어요</div>
+               <div class="sched-my-current">
+                 <span class="sched-my-time">${myVote.time_start}:00 ~ ${myVote.time_end}:00</span>
+               </div>
+             </div>`
+          : `<div class="sched-my-section">
+               <div class="sched-login-hint">지난 날짜에는 등록할 수 없어요.</div>
+             </div>`;
         return;
       }
 
@@ -2019,7 +2033,7 @@
       document.getElementById('calNext').addEventListener('click', () => {
         calMonthDate = new Date(y, m + 1, 1); renderMonthCalendar();
       });
-      cal.querySelectorAll('.mcal-cell[data-date]:not(.is-past)').forEach(cell => {
+      cal.querySelectorAll('.mcal-cell[data-date]').forEach(cell => {
         cell.addEventListener('click', () => openDay(cell.dataset.date));
       });
     }
