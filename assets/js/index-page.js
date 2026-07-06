@@ -1316,6 +1316,15 @@ if (recommendTitle && recommendSection) {
       });
     });
 
+    previewEl.querySelectorAll('.sched-bar-name[data-uid]').forEach(nameEl => {
+      nameEl.addEventListener('click', e => {
+        e.stopPropagation();
+        const uid = nameEl.dataset.uid;
+        window.CottageDB?.trackEvent('meeting_profile_click', { user_id: uid });
+        window.openOtherMeetingSheet?.(uid);
+      });
+    });
+
     previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', () => {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
       window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
