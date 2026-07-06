@@ -1989,9 +1989,13 @@ async function openProfilePanel(autoSubsheet = null) {
             const weekEl = subBody.querySelector('#mbWeekSection');
             if (!weekEl) return;
             const [wStart, wEnd] = _thisWeekRange();
-            const allV = await (window.CottageDB?.getMeetingVotes?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]));
-            const myVotes = allV.filter(v => String(v.user_id) === userId);
-            weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정</div>` + _buildMiniBarWeekHtml(myVotes, userId, true);
+            const [allV, allVG] = await Promise.all([
+              window.CottageDB?.getMeetingVotes?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+              window.CottageDB?.getMeetingVoteGames?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+            ]);
+            const myVotes    = allV.filter(v => String(v.user_id) === userId);
+            const myVoteGames = allVG.filter(g => String(g.user_id) === userId);
+            weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정</div>` + _buildMiniBarWeekHtml(myVotes, myVoteGames, userId, true);
             weekEl.querySelectorAll('.mb-detail-btn').forEach(btn =>
               btn.addEventListener('click', () => window.openDateScheduleModal?.(btn.dataset.uid, btn.dataset.date))
             );
@@ -2130,8 +2134,18 @@ function _thisWeekRange() {
   return [mon.toISOString().slice(0, 10), sun.toISOString().slice(0, 10)];
 }
 
-function _buildMiniBarWeekHtml(myVotes, userId, isOwner) {
+function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
   const _days = ['일','월','화','수','목','금','토'];
+  const _vg = Array.isArray(voteGames) ? voteGames : [];
+
+  function _gameName(gameId, customName) {
+    if (gameId && window.COTTAGE_GAMES) {
+      const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === String(gameId));
+      if (cg) return cg.display;
+    }
+    return customName || (gameId ? `#${gameId}` : '?');
+  }
+
   const fmtVD = ds => {
     const d = new Date(ds + 'T00:00:00');
     return _days[d.getDay()] + ' ' + (d.getMonth()+1) + '/' + d.getDate();
@@ -2140,16 +2154,25 @@ function _buildMiniBarWeekHtml(myVotes, userId, isOwner) {
     const total = 14; // 9~23시
     const left  = ((v.time_start - 9) / total * 100).toFixed(1);
     const width = ((v.time_end - v.time_start) / total * 100).toFixed(1);
-    return `<div class="mb-week-row">
-      <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
-      <div class="mb-mini-bar-wrap"><div class="mb-mini-bar-fill" style="left:${left}%;width:${width}%"></div></div>
-      <span class="mb-week-time">${v.time_start}~${v.time_end}시</span>
-      <button class="mb-detail-btn" data-uid="${escH(String(userId))}" data-date="${escH(v.vote_date)}" type="button">자세히</button>
+    const dayGames = _vg.filter(g => g.vote_date === v.vote_date && String(g.user_id) === String(userId));
+    const gameParts = [
+      ...dayGames.filter(g => g.list_type === 'want').map(g => `🎲${escH(_gameName(g.game_id, g.custom_name))}`),
+      ...dayGames.filter(g => g.list_type === 'learn').map(g => `📖${escH(_gameName(g.game_id, g.custom_name))}`),
+    ];
+    const gamesHtml = gameParts.length ? `<div class="mb-week-games">${gameParts.join(' ')}</div>` : '';
+    return `<div class="mb-week-entry">
+      <div class="mb-week-row">
+        <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
+        <div class="mb-mini-bar-wrap"><div class="mb-mini-bar-fill" style="left:${left}%;width:${width}%"></div></div>
+        <span class="mb-week-time">${v.time_start}~${v.time_end}시</span>
+        <button class="mb-detail-btn" data-uid="${escH(String(userId))}" data-date="${escH(v.vote_date)}" type="button">자세히</button>
+      </div>
+      ${gamesHtml}
     </div>`;
   }).join('');
   const bodyHtml = myVotes.length
     ? `<div class="mb-week-list">${rows}</div>`
-    : '<p class="taste-game-empty">이번 주 참여 등록 없어요</p>';
+    : '<p class="taste-game-empty">이번 주 등록된 일정이 없어요.</p>';
   if (!isOwner) return bodyHtml;
   const p = window.location.pathname;
   const href = p.includes('/pages/club/') ? 'club-schedule.html'
@@ -2244,12 +2267,16 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
   _sun.setDate(_mon.getDate() + 6);
   const _wStart = _mon.toISOString().slice(0, 10);
   const _wEnd   = _sun.toISOString().slice(0, 10);
-  const _allVotes = await (window.CottageDB?.getMeetingVotes?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]));
-  const _myVotes = (_allVotes || []).filter(v => String(v.user_id) === String(userId));
+  const [_allVotes, _allVoteGames] = await Promise.all([
+    window.CottageDB?.getMeetingVotes?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+    window.CottageDB?.getMeetingVoteGames?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+  ]);
+  const _myVotes     = (_allVotes     || []).filter(v => String(v.user_id) === String(userId));
+  const _myVoteGames = (_allVoteGames || []).filter(g => String(g.user_id) === String(userId));
 
   const _weekSectionHtml = `<div class="taste-game-section">
     <div class="taste-section-label">📅 이번 주 일정</div>
-    ${_buildMiniBarWeekHtml(_myVotes, userId, false)}
+    ${_buildMiniBarWeekHtml(_myVotes, _myVoteGames, userId, false)}
   </div>`;
 
   const buildReadOnlyGames = (games) => {

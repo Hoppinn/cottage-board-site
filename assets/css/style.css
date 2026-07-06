@@ -4233,7 +4233,9 @@ body.embed-mode {
 /* 모임 보드 — 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) */
 /* ── 모임보드 이번주 일정 미니막대 ── */
 .mb-week-list{display:flex;flex-direction:column;gap:8px;margin-bottom:4px;}
+.mb-week-entry{display:flex;flex-direction:column;gap:3px;}
 .mb-week-row{display:grid;grid-template-columns:42px 1fr 48px 44px;align-items:center;gap:6px;}
+.mb-week-games{font-size:11px;color:var(--text-info);padding-left:48px;line-height:1.6;}
 .mb-week-date{font-size:11px;color:var(--muted,#9e8e7e);white-space:nowrap;}
 .mb-mini-bar-wrap{position:relative;height:8px;background:#ede8e0;border-radius:4px;overflow:hidden;}
 .mb-mini-bar-fill{position:absolute;top:0;height:100%;background:var(--green,#3a7d44);border-radius:4px;}
