@@ -165,7 +165,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [x] **1단계: 게임 약칭 소스** — game-abbr.json 생성, build-output abbr 병합, COTTAGE_GAMES abbr 필드 추가
 - [x] **2단계: 막대 2줄 표기** — buildBarsInCard 시간/약칭 2줄, has-games CSS, sched-bar-time ellipsis
 - [x] **2.5단계: 하루 카드 게임 태그 줄** — buildBarsInCard 하단 flex-wrap 칩 (want 🎲 / learn 📖, ·N 합산, 전량 표시)
-- [ ] **2.7단계: 대표 게임** — Red, DB Plan 필수 (마이그레이션 009 통합)
+- [ ] **2.7단계: 대표 게임** — ① DB 레이어 완료 (getMeetingVoteGames 필드 확장 + setMeetingVoteGamePriority 신설, 7/7 검증 통과). ② UI 레이어 미착수
 - [x] **3단계: 센터모달 재정의** — openDateMeetingModal 게임 집계 상단, 참여자별 접힘, fromHome 버튼 문구
 - [x] **3단계(홈 클릭 분화)** — index-page.js .sched-bar-track 클릭 → openDateScheduleModal, fromHome:true 전달
 - [x] **3.5단계: 칩 병합 + 홈 주 네비게이션** — buildGameTags want/learn 단일 칩 병합, initMeetingSection ◀이전주/다음주▶ 주별 재조회, 홈 닉네임 클릭 → openOtherMeetingSheet
@@ -179,7 +179,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
   - [x] ②-c: 홈 등록 직행 (c289793 + 31e6568→30f96b9→63b41d0→e2cd0c2→3676131→b93aaeb 안정화)
   - [x] ③: Step3 게임 선택 분리 + "건너뛰고 저장" + 본인 기등록 날짜 disabled
   - [ ] **④ 후보: 내 등록 관리 동선** — 등록은 홈 직행 가능하나 수정·삭제는 플래너 수동 탐색 필요. 방향: Step 1 "등록됨" 칩 클릭 → 해당 날짜 편집 모드(시간/게임 수정 + 삭제). 009 unique 제약·upsert 경로 충돌은 009 Plan에서 선확인.
-- [ ] **[Red] 마이그레이션 009 — SQL 작성 완료, Supabase SQL Editor 실행 필요**: A(is_priority) · B(player_condition) · C(unique 제약 조건부 — DO 블록으로 NOTICE 확인) → `docs/migrations/009_meeting_vote_games_expand.sql`. D(RLS)는 이번 제외 — auth.uid() 불가, Edge Function 설계 후 별도 010 마이그레이션.
+- [x] **[Red] 마이그레이션 009 — 실행 완료**: A(is_priority) · B(player_condition) · C(unique 제약) · RLS DISABLE (Supabase 자동 활성화 → 명시적 해제, meeting_votes와 동일)
 - [ ] **7단계: 인원 조건부 선호** — DB Plan 필수 (마이그레이션 009 이후)
 
 ---

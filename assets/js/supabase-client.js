@@ -1546,6 +1546,7 @@ window._cottageSess = (function () {
     getMeetingVoteGames,
     addMeetingVoteGame,
     removeMeetingVoteGame,
+    setMeetingVoteGamePriority,
   };
 
   async function updateNotifSeenAt(userId, timestamp) {
@@ -1889,13 +1890,14 @@ window._cottageSess = (function () {
   // ── 모임 플래너 날짜별 게임 선호 (meeting_vote_games) ─────────────
   async function getMeetingVoteGames(startDate, endDate) {
     try {
-      const { data } = await db.from('meeting_vote_games')
-        .select('vote_date, user_id, list_type, game_id, custom_name')
+      const { data, error } = await db.from('meeting_vote_games')
+        .select('vote_date, user_id, list_type, game_id, custom_name, is_priority, player_condition')
         .gte('vote_date', startDate)
         .lte('vote_date', endDate)
         .order('vote_date');
+      if (error) { console.error('[getMeetingVoteGames] DB error:', error); return []; }
       return data || [];
-    } catch (_) { return []; }
+    } catch (e) { console.error('[getMeetingVoteGames] exception:', e); return []; }
   }
 
   async function addMeetingVoteGame(userId, voteDate, listType, gameId, customName) {
@@ -1909,6 +1911,47 @@ window._cottageSess = (function () {
       if (error && error.code === '23505') return { success: true };
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
+  }
+
+  async function setMeetingVoteGamePriority(userId, voteDate, gameId, customName, isPriority) {
+    if (!userId || !voteDate || (!gameId && !customName)) return { ok: false, reason: 'invalid' };
+    try {
+      // 1. 대상 행 존재 확인
+      let existQ = db.from('meeting_vote_games').select('id')
+        .eq('user_id', String(userId)).eq('vote_date', voteDate).eq('list_type', 'want');
+      if (gameId) existQ = existQ.eq('game_id', gameId);
+      else existQ = existQ.is('game_id', null).eq('custom_name', customName);
+      const { data: existRows, error: existErr } = await existQ;
+      if (existErr) return { ok: false, reason: 'db_error' };
+      if (!existRows || existRows.length === 0) return { ok: false, reason: 'not_found' };
+
+      // 2. max_priority 체크
+      if (isPriority) {
+        const { data: rows, error: cntErr } = await db.from('meeting_vote_games')
+          .select('id')
+          .eq('user_id', String(userId))
+          .eq('vote_date', voteDate)
+          .eq('list_type', 'want')
+          .eq('is_priority', true);
+        if (cntErr) return { ok: false, reason: 'db_error' };
+        if ((rows || []).length >= 2) return { ok: false, reason: 'max_priority' };
+      }
+
+      // 3. UPDATE
+      let q = db.from('meeting_vote_games')
+        .update({ is_priority: isPriority })
+        .eq('user_id', String(userId))
+        .eq('vote_date', voteDate)
+        .eq('list_type', 'want')
+        .select('id');
+      if (gameId) q = q.eq('game_id', gameId);
+      else q = q.is('game_id', null).eq('custom_name', customName);
+
+      const { data, error } = await q;
+      if (error) return { ok: false, reason: 'db_error' };
+      if (!data || data.length === 0) return { ok: false, reason: 'not_found' };
+      return { ok: true };
+    } catch (e) { return { ok: false, reason: 'exception' }; }
   }
 
   async function removeMeetingVoteGame(userId, voteDate, listType, gameId, customName) {

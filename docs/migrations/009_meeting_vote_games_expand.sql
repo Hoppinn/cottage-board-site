@@ -88,3 +88,8 @@ BEGIN
     RAISE NOTICE 'meeting_votes UNIQUE(vote_date, user_id) 이미 존재 — 스킵';
   END IF;
 END $$;
+
+-- ── RLS 비활성화 ───────────────────────────────────────────────────────────────
+-- Supabase가 테이블 생성 시 RLS를 자동 활성화함 — meeting_votes와 동일하게 명시적 해제
+-- 카카오 OAuth 구조상 auth.uid() 불가, anon key로 직접 read/write (UNRESTRICTED 의도)
+ALTER TABLE meeting_vote_games DISABLE ROW LEVEL SECURITY;
