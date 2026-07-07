@@ -912,6 +912,10 @@ if (recommendTitle && recommendSection) {
 
 }
 
+function toDateStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
 (async function initHeroStats() {
   const recEl = document.getElementById("heroRecommendCount");
   const playEl = document.getElementById("heroPlayCount");
@@ -921,7 +925,7 @@ if (recommendTitle && recommendSection) {
       ['recommend_complete', 'record_complete'], 1
     );
     if (!events) return;
-    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    const todayKst = toDateStr(new Date());
     const recCount = events.filter(e =>
       e.event_type === 'recommend_complete' &&
       (e.created_at || '').slice(0, 10) === todayKst
@@ -1271,7 +1275,7 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
     mon.setHours(0, 0, 0, 0);
     const sun = new Date(mon);
     sun.setDate(mon.getDate() + 6);
-    const fmt = d => d.toISOString().slice(0, 10);
+    const fmt = d => toDateStr(d);
     return { start: fmt(mon), end: fmt(sun), monDate: mon };
   }
 
@@ -1403,7 +1407,7 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
   async function loadWeek() {
     updateNav();
     const { start, end, monDate } = getWeekRange(weekOffset);
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = toDateStr(new Date());
 
     statusEl.textContent = '불러오는 중...';
     daysEl.innerHTML = '';
@@ -1422,7 +1426,7 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
       if (_devN >= 2 && weekOffset === 0) {
         const tgt = new Date(monDate);
         tgt.setDate(monDate.getDate() + 1); // 이번 주 화요일 고정
-        const tgtStr = tgt.toISOString().slice(0, 10);
+        const tgtStr = toDateStr(tgt);
         const NAMES = ['더미1','더미2','더미3','더미4','더미5','더미6','더미7'];
         const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23]];
         const WANT  = [
@@ -1451,7 +1455,7 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
       for (let i = 0; i < 7; i++) {
         const d = new Date(monDate);
         d.setDate(monDate.getDate() + i);
-        byDate[d.toISOString().slice(0, 10)] = new Set();
+        byDate[toDateStr(d)] = new Set();
       }
       votes.forEach(v => { if (byDate[v.vote_date]) byDate[v.vote_date].add(v.user_id); });
 
