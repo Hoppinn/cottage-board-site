@@ -2436,6 +2436,11 @@
     });
 
     window.addEventListener('message', e => {
+      if (e.data?.type === 'cottage-reset-week') {
+        weekOffset = e.data.offset ?? 0;
+        if (_initDone) renderWeekView(weekOffset);
+        return;
+      }
       if (e.data?.type !== 'cottage-register') return;
       const ds = e.data.date;
       if (!ds) return;

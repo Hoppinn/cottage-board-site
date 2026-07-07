@@ -1225,7 +1225,7 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
     if (frame.classList.contains('is-ready')) {
-      // already loaded
+      frame.contentWindow?.postMessage({ type: 'cottage-reset-week', offset: 0 }, '*');
     } else {
       if (loader) loader.style.display = 'flex';
       if (!preloaded) preload();
@@ -1235,8 +1235,6 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
-    frame.classList.remove('is-ready');
-    frame.src = './pages/club/club-schedule.html?embed=true';
   }
 
   window.addEventListener('message', e => {
