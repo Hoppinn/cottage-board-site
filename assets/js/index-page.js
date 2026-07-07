@@ -1115,6 +1115,9 @@ if (recommendTitle && recommendSection) {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
+    pendingTab = null;
+    frame.classList.remove('is-ready');
+    frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
   }
 
   window.addEventListener('message', e => {
@@ -1228,6 +1231,8 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
+    frame.classList.remove('is-ready');
+    frame.src = './pages/club/club-schedule.html?embed=true';
   }
 
   window.addEventListener('message', e => {
