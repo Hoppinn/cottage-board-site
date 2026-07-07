@@ -110,8 +110,8 @@
          - 3676131: 직행 경로에서 reset이 pending date를 덮는 회귀 fix
                    (_openMultiSheet가 dates 주차 직접 계산해 weekOffset 무관)
          - b93aaeb: reset-week 핸들러에 뷰 모드 포함 (달력/상세 페이지 잔류 버그)
-   - [ ] ③ Step3 게임 선택 분리 (날짜별 탭 + "건너뛰고 저장")
-         + 다중 날짜 경로 Step3 필수 + 본인 기등록 날짜 선택 차단
+   - [x] ③ Step3 게임 선택 분리 — renderStep3() 신규, 날짜별 sm-tabs, "건너뛰고 저장"+"저장",
+         Step2 footer → "다음 →", 본인 기등록 날짜 is-registered+disabled
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,

@@ -614,6 +614,15 @@
       flex-shrink: 0;
     }
     .sm-footer .sched-confirm-btn { width: 100%; }
+    .sm-footer-row { display: flex; gap: 8px; }
+    .sm-footer-row .sched-confirm-btn { flex: 1; width: auto; }
+    .sm-skip-btn {
+      flex: 1; padding: 12px; border: 1.5px solid #d0c8bc;
+      border-radius: 12px; font-size: 15px; font-weight: 600;
+      color: var(--muted); background: white; cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .sm-skip-btn:hover { border-color: var(--green); color: var(--green); }
     /* Step 1: 요일 선택 */
     .sm-hint { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
     .sm-day-chips {
@@ -633,9 +642,10 @@
     .sm-dc-dow { font-size: 13px; font-weight: 600; color: var(--text); }
     .sm-dc-date { font-size: 10px; color: var(--muted); }
     .sm-dc-mine {
-      position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
-      width: 4px; height: 4px; border-radius: 50%; background: #c0843a;
+      position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+      font-size: 8px; line-height: 1; color: #c0843a; white-space: nowrap;
     }
+    .sm-day-chip.is-registered { opacity: .5; cursor: default; border-color: #d8b88a; }
     .sm-dc-cnt { font-size: 9px; color: #b0a090; line-height: 1; }
     /* Step 1: 주 네비게이션 */
     .sm-week-nav {
@@ -1577,12 +1587,12 @@
           const sel  = _days.includes(ds);
           const mine = user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
           const cnt  = allVotes.filter(v => v.vote_date === ds).length;
-          return `<button class="sm-day-chip${sel?' is-sel':''}${past?' is-past':''}${tod?' is-today':''}"
-            data-ds="${ds}" type="button"${past?' disabled':''}>
+          return `<button class="sm-day-chip${sel?' is-sel':''}${past?' is-past':''}${tod?' is-today':''}${mine?' is-registered':''}"
+            data-ds="${ds}" type="button"${(past||mine)?' disabled':''}>
             <span class="sm-dc-dow">${DOW_KR[d.getDay()]}</span>
             <span class="sm-dc-date">${d.getMonth()+1}/${d.getDate()}</span>
             ${cnt > 0 ? `<span class="sm-dc-cnt">${cnt}명</span>` : ''}
-            ${mine?'<span class="sm-dc-mine"></span>':''}
+            ${mine?'<span class="sm-dc-mine">등록됨</span>':''}
           </button>`;
         }).join('');
 
@@ -1686,7 +1696,7 @@
         }).join('');
 
         $s('smBody').innerHTML = rowsHtml;
-        $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smSave" type="button">저장</button>`;
+        $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smNext2" type="button">다음 →</button>`;
 
         _days.forEach(ds => {
           const rsEl = $s(`smRS_${ds}`);
@@ -1724,7 +1734,7 @@
           });
         });
 
-        $s('smSave').addEventListener('click', () => saveAll());
+        $s('smNext2').addEventListener('click', () => renderStep3());
       }
 
       // ── Step 2 게임 섹션 렌더 ────────────────────────────────────
@@ -1847,6 +1857,41 @@
             addGameStep2(type, resolveGameName(item), item.game_id ? Number(item.game_id) : null, false);
           });
         });
+      }
+
+      // ── Step 3: 게임 선택 ───────────────────────────────────────
+      function renderStep3() {
+        _step = 3;
+        if (!_activeDay || !_days.includes(_activeDay)) _activeDay = _days[0];
+        $s('smTitle').textContent = '게임 선택';
+        $s('smBack').style.visibility = 'visible';
+        $s('smBack').textContent = '← 시간 수정';
+
+        const tabsHtml = _days.length > 1
+          ? `<div class="sm-tabs" id="smGameTabs">${buildTabs()}</div>` : '';
+        $s('smBody').innerHTML =
+          `${tabsHtml}<p class="sm-hint">선택 사항이에요 — 없으면 건너뛰세요.</p><div id="smGameSections"></div>`;
+        $s('smFooter').innerHTML =
+          `<div class="sm-footer-row">
+             <button class="sm-skip-btn" id="smSkipSave" type="button">건너뛰고 저장</button>
+             <button class="sched-confirm-btn" id="smSave" type="button">저장</button>
+           </div>`;
+
+        renderStep2Games();
+
+        if (_days.length > 1) {
+          document.getElementById('smGameTabs')?.querySelectorAll('.sm-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+              _activeDay = tab.dataset.ds;
+              document.getElementById('smGameTabs').querySelectorAll('.sm-tab').forEach(t =>
+                t.classList.toggle('is-active', t.dataset.ds === _activeDay));
+              renderStep2Games();
+            });
+          });
+        }
+
+        $s('smSkipSave').addEventListener('click', () => saveAll());
+        $s('smSave').addEventListener('click', () => saveAll());
       }
 
       // ── 게임 추가 + 역연동 + 다중날짜 전파 ──────────────────────
