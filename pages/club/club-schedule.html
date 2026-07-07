@@ -1212,9 +1212,7 @@
           <button class="sched-register-btn" id="btnRegister">나도 등록하기</button>
         </div>`;
         document.getElementById('btnRegister').addEventListener('click', () => {
-          sliderStart = 10; sliderEnd = 22;
-          sliderMode = true;
-          renderMyVote(ds, myVote);
+          _openMultiSheet?.({ startStep: 1, dates: [ds] });
         });
       }
     }
