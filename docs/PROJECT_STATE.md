@@ -179,7 +179,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
   - [x] ②-c: 홈 등록 직행 (c289793 + 31e6568→30f96b9→63b41d0→e2cd0c2→3676131→b93aaeb 안정화)
   - [x] ③: Step3 게임 선택 분리 + "건너뛰고 저장" + 본인 기등록 날짜 disabled
   - [ ] **④ 후보: 내 등록 관리 동선** — 등록은 홈 직행 가능하나 수정·삭제는 플래너 수동 탐색 필요. 방향: Step 1 "등록됨" 칩 클릭 → 해당 날짜 편집 모드(시간/게임 수정 + 삭제). 009 unique 제약·upsert 경로 충돌은 009 Plan에서 선확인.
-- [ ] **[Red] 마이그레이션 009 묶음 — 다음 작업**: 2.7 대표 게임(is_priority) + 7단계 인원 조건 컬럼 + meeting 계열 unique 제약 + RLS 활성화. 중복 row 없음 확인됨, 정리 선행 불필요.
+- [ ] **[Red] 마이그레이션 009 — SQL 작성 완료, Supabase SQL Editor 실행 필요**: A(is_priority) · B(player_condition) · C(unique 제약 조건부 — DO 블록으로 NOTICE 확인) → `docs/migrations/009_meeting_vote_games_expand.sql`. D(RLS)는 이번 제외 — auth.uid() 불가, Edge Function 설계 후 별도 010 마이그레이션.
 - [ ] **7단계: 인원 조건부 선호** — DB Plan 필수 (마이그레이션 009 이후)
 
 ---
@@ -672,6 +672,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html / club-rules.html 사진 중심 재구성
 - [ ] **기록게시판 디자인 개선** — 현재 너무 밋밋, 전반적 비주얼 리뉴얼 필요
+- [ ] **[보안] meeting 계열 쓰기 보호** — `meeting_votes` / `meeting_vote_games` / `meeting_game_prefs` 전체 현재 UNRESTRICTED (anon 키로 전체 읽기/쓰기/삭제 가능). auth.uid() 불가(카카오 OAuth 구조상 Supabase Auth 세션 없음 = uid() NULL). 방향: Edge Function 경유 write (서버에서 카카오 토큰 검증 후 service_role로 write), 별도 설계 세션 필요. RLS UNRESTRICTED 배지는 그때까지 의도적 유지. 마이그레이션 010으로 분리.
 
 ### V4 아이디어 (장기, 구현 미정)
 

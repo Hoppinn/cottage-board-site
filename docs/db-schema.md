@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-07-05 (143차-190: page_views.session_key 추가; 추가 기록 섹션 본문 흡수)
+최종 갱신: 2026-07-08 (009: meeting_vote_games is_priority·player_condition 컬럼 추가; RLS 미적용 사유 명기)
 
 ---
 
@@ -32,7 +32,7 @@
 | `voucher_products` | id, name, cost, is_active | 교환 가능 상품 카탈로그 (물 2병/홈런볼/캔커피) |
 | `voucher_log` | user_id, delta, reason, product_id, nickname, created_at | 교환권 원장 (append-only). delta>0=지급, delta<0=사용. reason='first_play' 시 UNIQUE INDEX로 중복 방지. nickname: Supabase DB webhook payload에 포함돼 Make.com 알림에 표시 |
 | `meeting_votes` | vote_date, user_id, nickname, time_start, time_end, created_at | 모임 플래너 가능 시간 등록. UNIQUE(vote_date, user_id). time_start/end: 정수(시 단위, 9~23) |
-| `meeting_vote_games` | id, vote_date, user_id, list_type (`want`\|`learn`), game_id (nullable), custom_name (nullable), created_at | 모임 플래너 날짜별 게임 선호. `meeting_game_prefs`(모임 보드 상시 선호)와 분리. game_id IS NULL일 때 custom_name 사용(직접입력). partial unique index 2개로 중복 방지. **마이그레이션 008** — Supabase SQL Editor에서 실행 필요 |
+| `meeting_vote_games` | id, vote_date, user_id, list_type (`want`\|`learn`), game_id (nullable), custom_name (nullable), **is_priority** (boolean, default false), **player_condition** (text, default 'any', check: any/best/recommended/2/3/4/5+), created_at | 모임 플래너 날짜별 게임 선호. `meeting_game_prefs`(모임 보드 상시 선호)와 분리. game_id IS NULL일 때 custom_name 사용(직접입력). partial unique index 2개로 중복 방지. **마이그레이션 008·009** — is_priority: 대표 게임 플래그(유저당·날짜당 최대 2개, application 강제). player_condition: 인원 조건(2.7·7단계 UI에서 활성). **쓰기 보호 RLS 미적용** — auth.uid() 불가(카카오 OAuth 구조), meeting_votes와 동일하게 UNRESTRICTED 의도적 유지. Edge Function 경유 write 설계 후 별도 마이그레이션(010). |
 | `club_meeting_comments` | id, nickname, user_id, content, created_at | 자유 댓글 (club-schedule.html 하단) |
 | `club_polls` | id, week_label, question, is_active | ⚠️ UNUSED — 구 week_label 방식 투표 (club-meeting.html 폐기로 미사용) |
 | `club_poll_options` | id, poll_id, option_text, sort_order | ⚠️ UNUSED |
