@@ -2450,6 +2450,14 @@
     window.addEventListener('message', e => {
       if (e.data?.type === 'cottage-reset-week') {
         weekOffset = e.data.offset ?? 0;
+        sliderMode = false;
+        currentDate = null;
+        document.getElementById('viewDay').style.display = 'none';
+        document.getElementById('viewWeek').style.display = '';
+        const _cal = document.getElementById('viewCalendar');
+        const _calBtn = document.getElementById('btnToggleCal');
+        if (_cal) _cal.style.display = 'none';
+        if (_calBtn) { _calBtn.textContent = '달력 보기 ▾'; _calBtn.classList.remove('is-open'); }
         if (_initDone) renderWeekView(weekOffset);
         return;
       }
