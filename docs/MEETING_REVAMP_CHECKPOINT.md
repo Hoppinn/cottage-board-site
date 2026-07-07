@@ -88,7 +88,7 @@
    - "+ 게임 추가" 입력 (attachAc 자동완성, 직접입력 Enter 포함), 세션 임시(DB 없음)
    - 추가 칩 점선 테두리(is-custom), 중복 시 해당 칩 outline 강조
 5. [x] 모임보드 이번주 섹션 — _buildMiniBarWeekHtml(+voteGames), want/learn 게임 행 — 완료
-6. [ ] 등록 모달 다주치 (Yellow, club-schedule.html 대수정)
+6. [x] 등록 모달 다주치 (Yellow, club-schedule.html 대수정) — 전체 완료, QA 통과
    커밋 순서: ①→②→②-a→②-b→②-c→③
    - [x] ① Step1 주 네비게이션 + 선택 요약 (31c10f5)
    - [x] ② Step2 재설계: 날짜별 시간 행 + 프리셋 칩 + _historicalVotes 8주 조회 (fb5819b)
@@ -110,8 +110,11 @@
          - 3676131: 직행 경로에서 reset이 pending date를 덮는 회귀 fix
                    (_openMultiSheet가 dates 주차 직접 계산해 weekOffset 무관)
          - b93aaeb: reset-week 핸들러에 뷰 모드 포함 (달력/상세 페이지 잔류 버그)
-   - [x] ③ Step3 게임 선택 분리 — renderStep3() 신규, 날짜별 sm-tabs, "건너뛰고 저장"+"저장",
-         Step2 footer → "다음 →", 본인 기등록 날짜 is-registered+disabled
+   - [x] ③ Step3 게임 선택 분리 — QA 통과 (e796f7c→9dfce77→c0a495c→2276522)
+         e796f7c: renderStep3() 신규, 날짜별 sm-tabs, 기등록 날짜 is-registered+disabled
+         9dfce77: 저장 버튼 통합 — 게임 0개↔1개↑ 라벨 전환 (renderStep2Games 끝 갱신)
+         c0a495c: buildBarsInCard 태그 약칭 # 제거 후 slice (day-detail.js)
+         2276522: index-page.js 날짜 문자열 5지점 로컬 기준 통일 (toISOString 제거)
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
