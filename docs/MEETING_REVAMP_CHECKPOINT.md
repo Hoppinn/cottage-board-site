@@ -117,6 +117,7 @@
          9dfce77: 저장 버튼 통합 — 게임 0개↔1개↑ 라벨 전환 (renderStep2Games 끝 갱신)
          c0a495c: buildBarsInCard 태그 약칭 # 제거 후 slice (day-detail.js)
          2276522: index-page.js 날짜 문자열 5지점 로컬 기준 통일 (toISOString 제거)
+   - [ ] **④ 홈 미리보기 카드 직접 수정 진입 (미구현)** — 현재 `renderPreview()`에서 `buildBarsInCard(dayVotes, dayGames, null)` 호출(myVote=null → 편집 버튼 없음). 개선 방향: 본인 vote 있을 시 myVote를 전달해 is-mine 막대에 [수정] 버튼 노출 → 플래너 해당 날짜 편집 모드(startStep:2) 직행. PROJECT_STATE ④후보(Step1 "등록됨" 칩 클릭 편집 모드)와 병행 검토 필요.
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
