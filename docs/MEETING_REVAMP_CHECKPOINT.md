@@ -126,6 +126,11 @@
    - 공유 유지: calcSummary, calcOverlap, .sched-confirm-btn, .sched-bar-name, .sched-register-btn, .sched-discard-btn CSS
    - ⚠️ 이식 후보: "모두 가능한 시간(겹침 슬롯+이름)" — 집계 모달 개편 시 git 커밋 8cdc4df 직전
      club-schedule.html의 renderHourlyBreakdown(lines 1060-1092), renderOverlap(lines 1094-1133) 참조
+6.95. [x] **주차 라벨 KS 표준 확인 (검증 완료, 수정 없음)**
+   - `getWeekTitle(monday)` (club-schedule.html): 이미 목요일(과반) 기준 — `thu = monday + 3일`의 달·주차 사용
+   - 검증: 7/27주→7월 다섯째, 8/3주→8월 첫째, 8/31주→9월 첫째 (월요일 기준이었으면 8월 다섯째로 나왔을 것)
+   - 홈 미리보기·멀티스텝 모달: "M/D~M/D · 이번주" 형식, 월 귀속 계산 없음 → 통일 대상 아님
+   - ✅ 8/1(토)이 7월 다섯째 주 토요일인 것은 의도된 동작 — 버그 아님
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
