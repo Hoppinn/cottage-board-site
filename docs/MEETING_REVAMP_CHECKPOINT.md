@@ -100,13 +100,18 @@
          renderMyVote #btnRegister → _openMultiSheet({ startStep:1, dates:[ds] })
          .sched-bar-edit-btn(수정)은 startStep:2 유지.
          구 renderSlider 코드는 #btnEdit 경로에서 여전히 사용, 제거는 별도 리팩 커밋.
-   - [ ] ②-c 홈 "플래너에서 등록하기" → 등록 모달 직행:
-         결정: postMessage 방식 (iframe이므로 URL 파라미터 불가).
-         index-page.js mpeGoPlanner 클릭 → openPlannerBtn.click() + frame.contentWindow.postMessage({type:'cottage-register', date:dateStr}).
-         club-schedule.html: message 리스너 추가(_initDone 체크, 미완료 시 _pendingRegister 큐), init() 완료 후 pending 처리.
-         과거 날짜 ds < toDateStr(TODAY) 시 무시(안내 없음).
-         새로고침 재오픈 없음(postMessage는 1회성).
-   - [ ] ③ Step3 게임 분리 (날짜별 탭 + "건너뛰고 저장")
+   - [x] ②-c 홈 "플래너에서 등록하기" → 등록 모달 직행 — 완료:
+         c289793 구현, 이후 안정화 클러스터:
+         - 31e6568: 직행 postMessage 프레임 미로드 시 증발 → _plannerPendingDate 대기
+         - 30f96b9: 기록/플래너 모달 재오픈 시 직전 상태 유지 fix (close 시 src 리셋)
+         - 63b41d0: 무조건 재로드가 프리로드 무력화 → contentWindow.location 조건부 재로드
+         - e2cd0c2: close 청소 방식 폐기, open 시 cottage-reset-week(0) 선언으로 전환
+                   + _openMultiSheet dates 있으면 첫 날짜 주차 자동 계산
+         - 3676131: 직행 경로에서 reset이 pending date를 덮는 회귀 fix
+                   (_openMultiSheet가 dates 주차 직접 계산해 weekOffset 무관)
+         - b93aaeb: reset-week 핸들러에 뷰 모드 포함 (달력/상세 페이지 잔류 버그)
+   - [ ] ③ Step3 게임 선택 분리 (날짜별 탭 + "건너뛰고 저장")
+         + 다중 날짜 경로 Step3 필수 + 본인 기등록 날짜 선택 차단
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
