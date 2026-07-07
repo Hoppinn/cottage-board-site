@@ -1193,6 +1193,8 @@ if (recommendTitle && recommendSection) {
    # MEETING SECTION
 ========================= */
 
+let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 대기 날짜
+
 (function initPlannerModal() {
   const modal    = document.getElementById('plannerSheetModal');
   const frame    = document.getElementById('plannerSheetFrame');
@@ -1232,6 +1234,11 @@ if (recommendTitle && recommendSection) {
     if (e.data?.type === 'cottage-planner-ready') {
       frame.classList.add('is-ready');
       if (loader) loader.style.display = 'none';
+      if (_plannerPendingDate) {
+        const ds = _plannerPendingDate;
+        _plannerPendingDate = null;
+        frame.contentWindow?.postMessage({ type: 'cottage-register', date: ds }, '*');
+      }
     }
   });
 
@@ -1282,7 +1289,11 @@ if (recommendTitle && recommendSection) {
         window.CottageDB?.trackEvent('home_meeting_planner_click');
         document.getElementById('openPlannerBtn')?.click();
         const frame = document.getElementById('plannerSheetFrame');
-        frame?.contentWindow?.postMessage({ type: 'cottage-register', date: dateStr }, '*');
+        if (frame?.classList.contains('is-ready')) {
+          frame.contentWindow?.postMessage({ type: 'cottage-register', date: dateStr }, '*');
+        } else {
+          _plannerPendingDate = dateStr; // 프레임 로드 완료 시 cottage-planner-ready 핸들러에서 전송
+        }
       });
       return;
     }
