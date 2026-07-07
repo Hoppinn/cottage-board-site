@@ -614,15 +614,6 @@
       flex-shrink: 0;
     }
     .sm-footer .sched-confirm-btn { width: 100%; }
-    .sm-footer-row { display: flex; gap: 8px; }
-    .sm-footer-row .sched-confirm-btn { flex: 1; width: auto; }
-    .sm-skip-btn {
-      flex: 1; padding: 12px; border: 1.5px solid #d0c8bc;
-      border-radius: 12px; font-size: 15px; font-weight: 600;
-      color: var(--muted); background: white; cursor: pointer;
-      transition: border-color .15s, color .15s;
-    }
-    .sm-skip-btn:hover { border-color: var(--green); color: var(--green); }
     /* Step 1: 요일 선택 */
     .sm-hint { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
     .sm-day-chips {
@@ -1857,6 +1848,14 @@
             addGameStep2(type, resolveGameName(item), item.game_id ? Number(item.game_id) : null, false);
           });
         });
+
+        if (_step === 3) {
+          const btn = $s('smSave');
+          if (btn) {
+            const total = _days.reduce((n, ds) => n + (_gameMap[ds]?.want?.length||0) + (_gameMap[ds]?.learn?.length||0), 0);
+            btn.textContent = total > 0 ? '저장' : '건너뛰고 저장';
+          }
+        }
       }
 
       // ── Step 3: 게임 선택 ───────────────────────────────────────
@@ -1872,10 +1871,7 @@
         $s('smBody').innerHTML =
           `${tabsHtml}<p class="sm-hint">선택 사항이에요 — 없으면 건너뛰세요.</p><div id="smGameSections"></div>`;
         $s('smFooter').innerHTML =
-          `<div class="sm-footer-row">
-             <button class="sm-skip-btn" id="smSkipSave" type="button">건너뛰고 저장</button>
-             <button class="sched-confirm-btn" id="smSave" type="button">저장</button>
-           </div>`;
+          `<button class="sched-confirm-btn" id="smSave" type="button">건너뛰고 저장</button>`;
 
         renderStep2Games();
 
@@ -1890,7 +1886,6 @@
           });
         }
 
-        $s('smSkipSave').addEventListener('click', () => saveAll());
         $s('smSave').addEventListener('click', () => saveAll());
       }
 
