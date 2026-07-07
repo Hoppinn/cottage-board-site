@@ -118,6 +118,14 @@
          c0a495c: buildBarsInCard 태그 약칭 # 제거 후 slice (day-detail.js)
          2276522: index-page.js 날짜 문자열 5지점 로컬 기준 통일 (toISOString 제거)
    - [ ] **④ 홈 미리보기 카드 직접 수정 진입 (미구현)** — 현재 `renderPreview()`에서 `buildBarsInCard(dayVotes, dayGames, null)` 호출(myVote=null → 편집 버튼 없음). 개선 방향: 본인 vote 있을 시 myVote를 전달해 is-mine 막대에 [수정] 버튼 노출 → 플래너 해당 날짜 편집 모드(startStep:2) 직행. PROJECT_STATE ④후보(Step1 "등록됨" 칩 클릭 편집 모드)와 병행 검토 필요.
+6.9. [x] **일별 뷰 제거 + 달력 날짜 클릭 → 해당 주차 이동 (완료)**
+   - 근거: "날짜별 상세는 안 만들고 센터모달로 가벼운 상세만" 원칙
+   - 제거 실적: renderCalendar(dead code)+openDay~removeVote (~359줄), #viewDay HTML, btnBackCal, renderCalendar CSS, 일별뷰 전용 CSS ~230줄
+   - 진입점 2곳(renderWeekView 헤더, renderMonthCalendar 셀) → navigateToDate(ds) 로 교체
+     (renderCalendar는 saveVote/removeVote에서만 호출 → 함께 dead code로 제거됨)
+   - 공유 유지: calcSummary, calcOverlap, .sched-confirm-btn, .sched-bar-name, .sched-register-btn, .sched-discard-btn CSS
+   - ⚠️ 이식 후보: "모두 가능한 시간(겹침 슬롯+이름)" — 집계 모달 개편 시 git 커밋 [TODO: 커밋 해시] 직전
+     club-schedule.html의 renderHourlyBreakdown(lines 1060-1092), renderOverlap(lines 1094-1133) 참조
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
