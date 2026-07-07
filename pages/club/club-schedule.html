@@ -1954,7 +1954,19 @@
       // ── 외부 진입점 ────────────────────────────────────────────
       _openMultiSheet = function({ startStep=1, dates=[] } = {}) {
         _fromStep1 = startStep === 1;
-        _modalWeekOffset = weekOffset;
+        if (dates.length > 0) {
+          // 첫 날짜의 주차로 _modalWeekOffset 계산 (reset-week 등 외부 상태 무관)
+          const d = parseDate(dates[0]);
+          const dow = TODAY.getDay();
+          const curMon = new Date(TODAY);
+          curMon.setDate(TODAY.getDate() + (dow === 0 ? -6 : 1 - dow));
+          const tdow = d.getDay();
+          const tgtMon = new Date(d);
+          tgtMon.setDate(d.getDate() + (tdow === 0 ? -6 : 1 - tdow));
+          _modalWeekOffset = Math.round((tgtMon - curMon) / 6048e5);
+        } else {
+          _modalWeekOffset = weekOffset;
+        }
         _historicalVotes = null;
         _days = [...dates].sort();
         _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
