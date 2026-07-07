@@ -124,6 +124,8 @@ GPT·Gemini 등 외부 AI/제3자 의견은 구현 지시가 아니라 감사 �
 
 **3회차부터 코드 수정 금지.** 원인 가설 / 검증 방법 / 변경 예정 파일 / 롤백 방법 먼저 보고, 승인 후 수정.
 
+검증·테스트 스크립트에도 동일 적용: 같은 스크립트를 2회 이상 수정해도 실패가 반복되면 스크립트가 아닌 구현 로직·환경 전제를 의심하고 먼저 보고.
+
 ### 런타임 값 검증
 
 레이아웃·스크롤·sticky·position·offset·CSS 변수 관련 버그는 추론으로 수정하지 않는다. 수정 전 실제 런타임 값 확인: `getComputedStyle()`, `getBoundingClientRect()`, `offsetHeight`, `clientHeight`, `console.log()`.
@@ -150,6 +152,12 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 1. **open 시점에 목표 상태 전체를 선언한다.** 뷰 모드·주차·목적지 등 원하는 최종 상태를 postMessage 하나로 선언. close 시 청소나 부분 상태만의 리셋은 누락 경로(ESC·백드롭 등)가 생긴다.
 2. **src 속성 비교로 재로드 스킵 금지.** iframe 내부 탐색 시 src 속성값은 바뀌지 않는다. 실제 현재 위치 확인은 `contentWindow.location.pathname` 사용.
 3. **조건부 재로드.** 같은 페이지에 머물렀으면 postMessage로 탭/상태 전환, 다른 페이지로 이탈했으면 src 재설정.
+
+### DB 함수 에러 처리 (2026-07-08 교훈)
+
+- `catch` 블록에서 에러를 삼키지 않는다. `catch (_) { return []; }` 패턴 금지. 최소한 `console.error('[함수명]', e)` 후 반환.
+- **reason 정확성**: 구체적 실패(not_found, invalid 등)를 일반적 실패(max_priority 등)보다 먼저 검사한다. 순서가 뒤바뀌면 잘못된 reason이 반환되어 UI 분기가 오동작한다.
+- **Supabase RLS**: 테이블 생성 시 항상 RLS 상태를 명시한다. 이 프로젝트 기본은 `DISABLE`(카카오 OAuth 구조상 auth.uid() 불가, anon 키 직접 read/write). Supabase는 신규 테이블에 RLS를 자동 활성화하므로 마이그레이션 SQL에 `ALTER TABLE {name} DISABLE ROW LEVEL SECURITY;` 포함. 실행 직후 anon 키 SELECT로 접근 확인.
 
 ## 커밋 전 검증 (필수)
 
