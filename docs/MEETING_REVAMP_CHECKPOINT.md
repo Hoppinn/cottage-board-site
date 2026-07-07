@@ -124,7 +124,7 @@
    - 진입점 2곳(renderWeekView 헤더, renderMonthCalendar 셀) → navigateToDate(ds) 로 교체
      (renderCalendar는 saveVote/removeVote에서만 호출 → 함께 dead code로 제거됨)
    - 공유 유지: calcSummary, calcOverlap, .sched-confirm-btn, .sched-bar-name, .sched-register-btn, .sched-discard-btn CSS
-   - ⚠️ 이식 후보: "모두 가능한 시간(겹침 슬롯+이름)" — 집계 모달 개편 시 git 커밋 [TODO: 커밋 해시] 직전
+   - ⚠️ 이식 후보: "모두 가능한 시간(겹침 슬롯+이름)" — 집계 모달 개편 시 git 커밋 8cdc4df 직전
      club-schedule.html의 renderHourlyBreakdown(lines 1060-1092), renderOverlap(lines 1094-1133) 참조
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
