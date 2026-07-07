@@ -786,7 +786,7 @@
         if (found && found.abbr) return found.abbr;
         if (found) return (found.titleKo || found.display || '').slice(0, 2);
       }
-      return (g.custom_name || '').slice(0, 2);
+      return (g.custom_name || '').replace(/^#/, '').slice(0, 2);
     }
 
     function gameAbbrs(voteDate, userId) {
