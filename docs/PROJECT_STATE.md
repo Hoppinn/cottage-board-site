@@ -1,8 +1,14 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-07 (6단계 ③ QA 완료, 다음 작업 = 마이그레이션 009 Red 묶음)
+최종 갱신: 2026-07-08 (2.7단계 Step3 ⭐ 지정 완료)
 
 ---
+
+## 최근 완료 (2026-07-08)
+
+| 커밋 | 내용 |
+|------|------|
+| (이번) | 2.7단계 Step3 ⭐ 지정 — club-schedule.html: initDay에 is_priority 복사, addGameStep2 기본값 false, gameListHtml want칩에 ☆/⭐ 버튼, 로컬 토글 핸들러(최대 2개 초과 시 showToast), saveAll INSERT 후 setMeetingVoteGamePriority 호출, allVoteGames 메모리에 is_priority 포함. CSS .sm-game-star 신규 1개 |
 
 ## 최근 완료 (2026-07-07)
 

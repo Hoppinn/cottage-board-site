@@ -79,6 +79,8 @@
 2. [x] 막대 2줄 표기 (1 의존) — buildBarsInCard + CSS — 완료
 2.5. [x] 하루 카드 게임 태그 줄 — buildBarsInCard 하단 flex-wrap 칩 — 완료
 2.7. [ ] 대표 게임 (Red — DB Plan 필수, 마이그레이션 009 통합)
+   - [x] Step 3 ⭐ 지정 — club-schedule.html 로컬 토글 + saveAll is_priority 반영 (2026-07-08)
+   - [ ] 표시/집계 반영 — buildBarsInCard 대표 우선, 센터모달 대표수 집계·칩 ⭐ 병기
 3. [x] 센터모달 재정의 (Yellow) — day-detail.js — 완료
 3.5. [x] 칩 병합 + 홈 주 네비게이션 — 완료
   - [x] ① 게임 태그 칩 병합: want/learn 같은 게임 → 단일 칩 "아르낙 🎲📖" — 완료
