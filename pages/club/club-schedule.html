@@ -636,6 +636,7 @@
       position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
       width: 4px; height: 4px; border-radius: 50%; background: #c0843a;
     }
+    .sm-dc-cnt { font-size: 9px; color: #b0a090; line-height: 1; }
     /* Step 1: 주 네비게이션 */
     .sm-week-nav {
       display: flex; align-items: center; gap: 4px; margin-bottom: 12px;
@@ -1575,10 +1576,12 @@
           const tod  = d.getTime() === TODAY.getTime();
           const sel  = _days.includes(ds);
           const mine = user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
+          const cnt  = allVotes.filter(v => v.vote_date === ds).length;
           return `<button class="sm-day-chip${sel?' is-sel':''}${past?' is-past':''}${tod?' is-today':''}"
             data-ds="${ds}" type="button"${past?' disabled':''}>
             <span class="sm-dc-dow">${DOW_KR[d.getDay()]}</span>
             <span class="sm-dc-date">${d.getMonth()+1}/${d.getDate()}</span>
+            ${cnt > 0 ? `<span class="sm-dc-cnt">${cnt}명</span>` : ''}
             ${mine?'<span class="sm-dc-mine"></span>':''}
           </button>`;
         }).join('');
