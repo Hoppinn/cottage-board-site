@@ -1116,8 +1116,12 @@ if (recommendTitle && recommendSection) {
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
     pendingTab = null;
-    frame.classList.remove('is-ready');
-    frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+    // 내부 탐색으로 game-reviews에서 이탈한 경우에만 재로드 (src 속성은 내부 탐색 시 불변)
+    const curPath = frame.contentWindow?.location?.pathname ?? '';
+    if (!curPath.endsWith('game-reviews.html')) {
+      frame.classList.remove('is-ready');
+      frame.src = './pages/game/game-reviews.html?embed=true&tab=input';
+    }
   }
 
   window.addEventListener('message', e => {
