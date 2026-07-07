@@ -696,7 +696,28 @@
       font-size: 13px; cursor: pointer; color: var(--text);
     }
     .sm-freqtime-opt:hover { background: #f5efe6; }
-    /* 게임 추가 섹션 (Step 2 하단) */
+    /* Step 2: 날짜별 시간 행 */
+    .sm-time-row {
+      margin-bottom: 16px; padding-bottom: 16px;
+      border-bottom: 1px solid #ede8de;
+    }
+    .sm-time-row:last-child { border-bottom: none; margin-bottom: 0; }
+    .sm-time-row-hdr {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 8px;
+    }
+    .sm-time-row-label { font-size: 14px; font-weight: 700; color: var(--text); }
+    .sm-time-row-val { font-size: 14px; font-weight: 600; color: var(--green); }
+    .sm-time-preset-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .sm-time-preset-chip {
+      padding: 4px 12px; border-radius: 14px;
+      border: 1.5px solid #d0c8bc; background: white;
+      font-size: 12px; color: var(--muted);
+      cursor: pointer; transition: border-color .15s, color .15s, background .15s;
+    }
+    .sm-time-preset-chip:hover { border-color: var(--green); color: var(--green); }
+    .sm-time-preset-chip.is-active { border-color: var(--green); background: var(--green); color: white; }
+    /* 게임 추가 섹션 (Step 3 이동 후 유지) */
     .sm-game-toggle-wrap { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
     .sm-game-toggle {
       width: 100%; padding: 10px 14px;
@@ -1414,6 +1435,7 @@
       let _pickerOpen  = null; // 미사용(Step3 제거), 호환용 유지
       let _gameOpen    = {want:false, learn:false}; // 게임 섹션 열림 상태
       let _modalWeekOffset = 0;
+      let _historicalVotes = null; // 8주 이력 조회 결과 (프리셋·초기값용)
 
       const overlay = document.createElement('div');
       overlay.className = 'sched-multi-overlay';
@@ -1435,13 +1457,14 @@
       function close() {
         overlay.style.display = 'none';
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
-        _modalWeekOffset = 0;
+        _modalWeekOffset = 0; _historicalVotes = null;
       }
       $s('smClose').addEventListener('click', close);
       overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 
       $s('smBack').addEventListener('click', () => {
-        if (_step === 2) { if (_fromStep1) renderStep1(); else close(); }
+        if (_step === 2) renderStep1();
+        else if (_step === 3) renderStep2();
       });
 
       // ── 헬퍼 ──────────────────────────────────────────────────
@@ -1600,95 +1623,105 @@
         });
       }
 
-      // ── Step 2: 시간 · 게임 설정 ──────────────────────────────
+      // ── Step 2: 시간 설정 (날짜별 행) ────────────────────────
       function renderStep2() {
         _step = 2;
         if (!_activeDay || !_days.includes(_activeDay)) _activeDay = _days[0];
         $s('smTitle').textContent = '시간 설정';
-        $s('smBack').style.visibility = _fromStep1 ? 'visible' : 'hidden';
+        $s('smBack').style.visibility = 'visible';
+        $s('smBack').textContent = '← 날짜 더 선택';
 
-        const t = _timeMap[_activeDay] || {s:10, e:22};
+        const DOW_KR = ['일','월','화','수','목','금','토'];
         const user = window.getKakaoUser?.();
+        const R = MAX_H - MIN_H;
 
-        const myVotes = user ? allVotes.filter(v => String(v.user_id) === String(user.id)) : [];
+        // 프리셋: allVotes + _historicalVotes 합산, 빈도 상위 3개
+        const combined = [
+          ...(user ? allVotes.filter(v => String(v.user_id) === String(user.id)) : []),
+          ...(_historicalVotes && user ? _historicalVotes.filter(v => String(v.user_id) === String(user.id)) : [])
+        ];
         const freq = {};
-        myVotes.forEach(v => {
+        combined.forEach(v => {
           const key = `${v.time_start}-${v.time_end}`;
-          if (!freq[key]) freq[key] = { s: v.time_start, e: v.time_end, count: 0 };
+          if (!freq[key]) freq[key] = { s: v.time_start, e: v.time_end, count: 0, latest: v.vote_date || '' };
           freq[key].count++;
+          if ((v.vote_date || '') > freq[key].latest) freq[key].latest = v.vote_date;
         });
-        const topTimes = Object.values(freq).sort((a, b) => b.count - a.count).slice(0, 4);
+        const presets = Object.values(freq)
+          .sort((a, b) => b.count - a.count || b.latest.localeCompare(a.latest))
+          .slice(0, 3);
 
-        const tabsHtml = _days.length > 1 ? `<div class="sm-tabs">${buildTabs()}</div>` : '';
-        const freqHtml = topTimes.length
-          ? `<div class="sm-freqtime-row">
-              <button class="sm-freqtime-btn" id="smFreqBtn" type="button">자주 사용한 시간 ▾</button>
-              <div class="sm-freqtime-menu" id="smFreqMenu" style="display:none">
-                ${topTimes.map(t => `<button class="sm-freqtime-opt" data-s="${t.s}" data-e="${t.e}" type="button">${t.s}~${t.e}시</button>`).join('')}
+        const rowsHtml = _days.map(ds => {
+          const d = parseDate(ds);
+          const t = _timeMap[ds] || { s: 10, e: 22 };
+          const label = `${DOW_KR[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
+          const fl = ((t.s - MIN_H) / R * 100).toFixed(1);
+          const fw = ((t.e - t.s) / R * 100).toFixed(1);
+          const chipsHtml = presets.map(p =>
+            `<button class="sm-time-preset-chip${t.s===p.s&&t.e===p.e?' is-active':''}"
+             data-ds="${esc(ds)}" data-s="${p.s}" data-e="${p.e}" type="button">${p.s}~${p.e}시</button>`
+          ).join('');
+          return `<div class="sm-time-row">
+            <div class="sm-time-row-hdr">
+              <span class="sm-time-row-label">${esc(label)}</span>
+              <span class="sm-time-row-val" id="smTV_${ds}">${t.s}~${t.e}시</span>
+            </div>
+            ${chipsHtml ? `<div class="sm-time-preset-chips">${chipsHtml}</div>` : ''}
+            <div class="sm-time-slider-wrap">
+              <div class="sched-dual-range">
+                <div class="sched-range-track">
+                  <div class="sched-range-fill" id="smF_${ds}" style="left:${fl}%;width:${fw}%"></div>
+                </div>
+                <input type="range" class="sched-range-input" id="smRS_${ds}" min="${MIN_H}" max="${MAX_H-1}" step="1" value="${t.s}">
+                <input type="range" class="sched-range-input" id="smRE_${ds}" min="${MIN_H+1}" max="${MAX_H}" step="1" value="${t.e}">
               </div>
-            </div>`
-          : '';
-
-        $s('smBody').innerHTML = `${tabsHtml}${freqHtml}
-          <div class="sched-sheet-time-display">
-            <span class="sched-slider-time-val" id="smLblS">${t.s}시</span>
-            <span class="sched-slider-sep">~</span>
-            <span class="sched-slider-time-val" id="smLblE">${t.e}시</span>
-          </div>
-          <div class="sched-slider-wrap">
-            <div class="sched-dual-range">
-              <div class="sched-range-track"><div class="sched-range-fill" id="smFill"></div></div>
-              <input type="range" class="sched-range-input" id="smRS" min="${MIN_H}" max="${MAX_H-1}" step="1" value="${t.s}" aria-label="시작 시간">
-              <input type="range" class="sched-range-input" id="smRE" min="${MIN_H+1}" max="${MAX_H}" step="1" value="${t.e}" aria-label="종료 시간">
+              <div class="sched-range-axis">
+                <span>${MIN_H}시</span><span>${Math.round((MIN_H+MAX_H)/2)}시</span><span>${MAX_H}시</span>
+              </div>
             </div>
-            <div class="sched-range-axis">
-              <span>${MIN_H}시</span><span>${Math.round((MIN_H+MAX_H)/2)}시</span><span>${MAX_H}시</span>
-            </div>
-          </div>
-          <div id="smGameSections"></div>`;
+          </div>`;
+        }).join('');
 
+        $s('smBody').innerHTML = rowsHtml;
         $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smSave" type="button">저장</button>`;
 
-        function syncMs() {
-          const s=parseInt($s('smRS').value), e=parseInt($s('smRE').value), r=MAX_H-MIN_H;
-          $s('smFill').style.left=((s-MIN_H)/r*100)+'%';
-          $s('smFill').style.width=((e-s)/r*100)+'%';
-          $s('smLblS').textContent=s+'시'; $s('smLblE').textContent=e+'시';
-        }
-        syncMs();
+        _days.forEach(ds => {
+          const rsEl = $s(`smRS_${ds}`);
+          const reEl = $s(`smRE_${ds}`);
+          const fillEl = $s(`smF_${ds}`);
+          const valEl = $s(`smTV_${ds}`);
+          if (!rsEl || !reEl) return;
 
-        $s('smRS').addEventListener('input', () => {
-          if (parseInt($s('smRS').value) >= parseInt($s('smRE').value)) $s('smRS').value = parseInt($s('smRE').value)-1;
-          syncMs();
-        });
-        $s('smRE').addEventListener('input', () => {
-          if (parseInt($s('smRE').value) <= parseInt($s('smRS').value)) $s('smRE').value = parseInt($s('smRS').value)+1;
-          syncMs();
-        });
+          function syncRow() {
+            const s = parseInt(rsEl.value), e = parseInt(reEl.value);
+            fillEl.style.left = ((s-MIN_H)/R*100) + '%';
+            fillEl.style.width = ((e-s)/R*100) + '%';
+            valEl.textContent = `${s}~${e}시`;
+            _timeMap[ds] = { s, e };
+            $s('smBody').querySelectorAll(`.sm-time-preset-chip[data-ds="${ds}"]`).forEach(c => {
+              c.classList.toggle('is-active', parseInt(c.dataset.s)===s && parseInt(c.dataset.e)===e);
+            });
+          }
 
-        if (topTimes.length) {
-          const freqBtn  = $s('smFreqBtn');
-          const freqMenu = $s('smFreqMenu');
-          freqBtn.addEventListener('click', () => {
-            freqMenu.style.display = freqMenu.style.display !== 'none' ? 'none' : '';
+          rsEl.addEventListener('input', () => {
+            if (parseInt(rsEl.value) >= parseInt(reEl.value)) rsEl.value = parseInt(reEl.value) - 1;
+            syncRow();
           });
-          freqMenu.querySelectorAll('.sm-freqtime-opt').forEach(opt => {
-            opt.addEventListener('click', () => {
-              $s('smRS').value = opt.dataset.s;
-              $s('smRE').value = opt.dataset.e;
-              syncMs();
-              freqMenu.style.display = 'none';
+          reEl.addEventListener('input', () => {
+            if (parseInt(reEl.value) <= parseInt(rsEl.value)) reEl.value = parseInt(rsEl.value) + 1;
+            syncRow();
+          });
+
+          $s('smBody').querySelectorAll(`.sm-time-preset-chip[data-ds="${ds}"]`).forEach(chip => {
+            chip.addEventListener('click', () => {
+              rsEl.value = chip.dataset.s;
+              reEl.value = chip.dataset.e;
+              syncRow();
             });
           });
-        }
-
-        $s('smBody').querySelectorAll('.sm-tab').forEach(tab => {
-          tab.addEventListener('click', () => { saveCurrentTime(); _activeDay = tab.dataset.ds; renderStep2(); });
         });
 
-        $s('smSave').addEventListener('click', () => { saveCurrentTime(); saveAll(); });
-
-        renderStep2Games();
+        $s('smSave').addEventListener('click', () => saveAll());
       }
 
       // ── Step 2 게임 섹션 렌더 ────────────────────────────────────
@@ -1919,12 +1952,36 @@
       _openMultiSheet = function({ startStep=1, dates=[] } = {}) {
         _fromStep1 = startStep === 1;
         _modalWeekOffset = weekOffset;
+        _historicalVotes = null;
         _days = [...dates].sort();
         _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
         if (startStep === 2) renderStep2();
         else renderStep1();
+
+        // 8주 이력 비차단 조회 — Step2 프리셋·초기값 반영
+        const _histUser = window.getKakaoUser?.();
+        if (_histUser) {
+          const past = new Date(TODAY);
+          past.setDate(TODAY.getDate() - 56);
+          window.CottageDB?.getMeetingVotes(toDateStr(past), toDateStr(TODAY))
+            .then(votes => {
+              _historicalVotes = votes || [];
+              const myPast = _historicalVotes
+                .filter(v => String(v.user_id) === String(_histUser.id))
+                .sort((a, b) => b.vote_date.localeCompare(a.vote_date));
+              if (!myPast.length) return;
+              const recent = myPast[0];
+              _days.forEach(ds => {
+                const hasExisting = allVotes.some(v => v.vote_date === ds && String(v.user_id) === String(_histUser.id));
+                if (!hasExisting && _timeMap[ds] && _timeMap[ds].s === 10 && _timeMap[ds].e === 22) {
+                  _timeMap[ds] = { s: recent.time_start, e: recent.time_end };
+                }
+              });
+            })
+            .catch(() => { _historicalVotes = []; });
+        }
       };
     }
 

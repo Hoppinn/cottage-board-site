@@ -89,6 +89,18 @@
    - 추가 칩 점선 테두리(is-custom), 중복 시 해당 칩 outline 강조
 5. [x] 모임보드 이번주 섹션 — _buildMiniBarWeekHtml(+voteGames), want/learn 게임 행 — 완료
 6. [ ] 등록 모달 다주치 (Yellow, club-schedule.html 대수정)
+   커밋 순서: ①→②→②-a→②-b→③
+   - [x] ① Step1 주 네비게이션 + 선택 요약 (31c10f5)
+   - [ ] ② Step2 재설계: 날짜별 시간 행 + 프리셋 칩 + _historicalVotes 8주 조회
+   - [ ] ②-a Step1 날짜 칩 참여 인원 표시 (allVotes 재사용, 다른 주는 조회)
+   - [ ] ②-b 날짜별 등록 진입 통합:
+         .sched-card-reg-hdr: startStep:2 직행 유지(빠른 경로 보존),
+           대신 Step 2 "← 날짜 더 선택" 뒤로 버튼 항상 노출 → renderStep1(사전선택 유지)
+           (smBack 핸들러를 _fromStep1 조건 없이 step 기반으로 변경)
+         renderMyVote #btnRegister → _openMultiSheet({ startStep:1, dates:[ds] })
+         .sched-bar-edit-btn(수정)은 startStep:2 유지.
+         구 renderSlider 코드는 #btnEdit 경로에서 여전히 사용, 제거는 별도 리팩 커밋.
+   - [ ] ③ Step3 게임 분리 (날짜별 탭 + "건너뛰고 저장")
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
