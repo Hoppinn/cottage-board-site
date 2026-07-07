@@ -1205,6 +1205,8 @@ function toDateStr(d) {
 ========================= */
 
 let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 대기 날짜
+let _meetingDirty  = false;    // 플래너에서 저장 완료 신호 수신 → closeModal 시 재조회
+let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주입
 
 (function initPlannerModal() {
   const modal    = document.getElementById('plannerSheetModal');
@@ -1239,6 +1241,7 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
+    if (_meetingDirty) { _meetingDirty = false; _meetingReload?.(); }
   }
 
   window.addEventListener('message', e => {
@@ -1250,6 +1253,9 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
         _plannerPendingDate = null;
         frame.contentWindow?.postMessage({ type: 'cottage-register', date: ds }, '*');
       }
+    }
+    if (e.data?.type === 'cottage-meeting-saved') {
+      _meetingDirty = true;
     }
   });
 
@@ -1512,5 +1518,6 @@ let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 
     }
   }
 
+  _meetingReload = loadWeek;
   await loadWeek();
 })();

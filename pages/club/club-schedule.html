@@ -1301,6 +1301,7 @@
         allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
         allVotes.push({ vote_date: ds, user_id: String(user.id), nickname: user.nickname || '익명', time_start: sliderStart, time_end: sliderEnd });
         sliderMode = false;
+        _notifyParentSaved();
         renderCalendar();
         renderDayDetail(ds);
       } else {
@@ -1318,6 +1319,7 @@
       const result = await window.CottageDB?.deleteMeetingVote(String(user.id), ds);
       if (result?.success) {
         allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
+        _notifyParentSaved();
         renderCalendar();
         renderDayDetail(ds);
       } else {
@@ -1338,6 +1340,12 @@
         t.classList.remove('is-show');
         setTimeout(() => t.remove(), 280);
       }, 2200);
+    }
+
+    function _notifyParentSaved() {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'cottage-meeting-saved' }, '*');
+      }
     }
 
     // ── 시간 등록/수정 바텀시트 ──────────────────────────────────────
@@ -2012,6 +2020,7 @@
           }
           close();
           renderWeekView(weekOffset);
+          _notifyParentSaved();
           showToast('저장되었습니다!');
         } catch(err) {
           console.error(err);
@@ -2144,6 +2153,7 @@
       if (result?.success) {
         allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
         allVotes.push({ vote_date: ds, user_id: String(user.id), nickname: user.nickname || '익명', time_start: start, time_end: end });
+        _notifyParentSaved();
         closeScheduleSheet();
         renderWeekView(weekOffset);
       } else {
@@ -2159,6 +2169,7 @@
       const result = await window.CottageDB?.deleteMeetingVote(String(user.id), ds);
       if (result?.success) {
         allVotes = allVotes.filter(v => !(v.vote_date === ds && String(v.user_id) === String(user.id)));
+        _notifyParentSaved();
         renderWeekView(weekOffset);
       } else {
         alert('취소 중 오류가 발생했어요.');
