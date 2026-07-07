@@ -89,17 +89,23 @@
    - 추가 칩 점선 테두리(is-custom), 중복 시 해당 칩 outline 강조
 5. [x] 모임보드 이번주 섹션 — _buildMiniBarWeekHtml(+voteGames), want/learn 게임 행 — 완료
 6. [ ] 등록 모달 다주치 (Yellow, club-schedule.html 대수정)
-   커밋 순서: ①→②→②-a→②-b→③
+   커밋 순서: ①→②→②-a→②-b→②-c→③
    - [x] ① Step1 주 네비게이션 + 선택 요약 (31c10f5)
-   - [ ] ② Step2 재설계: 날짜별 시간 행 + 프리셋 칩 + _historicalVotes 8주 조회
-   - [ ] ②-a Step1 날짜 칩 참여 인원 표시 (allVotes 재사용, 다른 주는 조회)
-   - [ ] ②-b 날짜별 등록 진입 통합:
+   - [x] ② Step2 재설계: 날짜별 시간 행 + 프리셋 칩 + _historicalVotes 8주 조회 (fb5819b)
+   - [x] ②-a Step1 날짜 칩 참여 인원 표시 (8dcd56c)
+   - [x] ②-b 날짜별 등록 진입 통합 (c152859):
          .sched-card-reg-hdr: startStep:2 직행 유지(빠른 경로 보존),
            대신 Step 2 "← 날짜 더 선택" 뒤로 버튼 항상 노출 → renderStep1(사전선택 유지)
            (smBack 핸들러를 _fromStep1 조건 없이 step 기반으로 변경)
          renderMyVote #btnRegister → _openMultiSheet({ startStep:1, dates:[ds] })
          .sched-bar-edit-btn(수정)은 startStep:2 유지.
          구 renderSlider 코드는 #btnEdit 경로에서 여전히 사용, 제거는 별도 리팩 커밋.
+   - [ ] ②-c 홈 "플래너에서 등록하기" → 등록 모달 직행:
+         결정: postMessage 방식 (iframe이므로 URL 파라미터 불가).
+         index-page.js mpeGoPlanner 클릭 → openPlannerBtn.click() + frame.contentWindow.postMessage({type:'cottage-register', date:dateStr}).
+         club-schedule.html: message 리스너 추가(_initDone 체크, 미완료 시 _pendingRegister 큐), init() 완료 후 pending 처리.
+         과거 날짜 ds < toDateStr(TODAY) 시 무시(안내 없음).
+         새로고침 재오픈 없음(postMessage는 1회성).
    - [ ] ③ Step3 게임 분리 (날짜별 탭 + "건너뛰고 저장")
 7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
 

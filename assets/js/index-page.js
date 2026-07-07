@@ -1281,6 +1281,8 @@ if (recommendTitle && recommendSection) {
       document.getElementById('mpeGoPlanner')?.addEventListener('click', () => {
         window.CottageDB?.trackEvent('home_meeting_planner_click');
         document.getElementById('openPlannerBtn')?.click();
+        const frame = document.getElementById('plannerSheetFrame');
+        frame?.contentWindow?.postMessage({ type: 'cottage-register', date: dateStr }, '*');
       });
       return;
     }

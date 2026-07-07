@@ -896,6 +896,8 @@
     let _sheetDs   = null;   // 바텀시트 대상 날짜 (null = 닫힘)
     let _syncSheet = null;   // initScheduleSheet에서 주입되는 슬라이더 sync 함수
     let _openMultiSheet = null; // initMultiSheet에서 주입되는 외부 진입점
+    let _initDone       = false;
+    let _pendingRegister = null; // 홈 등록하기 버튼 → init 완료 전 도착한 date
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -2400,6 +2402,12 @@
       document.getElementById('mainLoading').style.display = 'none';
       document.getElementById('viewWeek').style.display = '';
       renderWeekView(0);
+      _initDone = true;
+      if (_pendingRegister) {
+        const ds = _pendingRegister;
+        _pendingRegister = null;
+        if (ds >= toDateStr(TODAY)) _openMultiSheet?.({ startStep: 1, dates: [ds] });
+      }
     }
 
     document.getElementById('btnBackCal').addEventListener('click', () => {
@@ -2425,6 +2433,17 @@
     window.addEventListener('cottage-auth-changed', () => {
       if (currentDate) renderDayDetail(currentDate);
       else renderWeekView(weekOffset);  // 주간 뷰에서 로그인 시 is-mine 갱신
+    });
+
+    window.addEventListener('message', e => {
+      if (e.data?.type !== 'cottage-register') return;
+      const ds = e.data.date;
+      if (!ds) return;
+      if (_initDone) {
+        if (ds >= toDateStr(TODAY)) _openMultiSheet?.({ startStep: 1, dates: [ds] });
+      } else {
+        _pendingRegister = ds;
+      }
     });
 
     init();
