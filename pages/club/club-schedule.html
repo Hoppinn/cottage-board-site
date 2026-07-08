@@ -1281,10 +1281,30 @@
           el.addEventListener('keydown', e => {
             if (e.key !== 'Enter') return;
             e.preventDefault();
+            const acList = el.closest('div')?.querySelector('.pr-autocomplete-list');
+            if (acList?.classList.contains('is-open')) return;
             const val = el.value.trim();
             if (val) { addGameStep2(type, val, null, true); el.value = ''; }
           });
         });
+
+        // 자동완성 (전체 게임 목록)
+        if (window.attachAc) {
+          ['want','learn'].forEach(type => {
+            const el = document.getElementById(`sm_${type}_input`);
+            if (!el) return;
+            window.attachAc(
+              el,
+              () => (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean),
+              (selected) => {
+                const cg = (window.COTTAGE_GAMES || []).find(g => g.display === selected);
+                const gameId = cg?.bggId && !isNaN(Number(cg.bggId)) ? Number(cg.bggId) : null;
+                addGameStep2(type, selected, gameId, false);
+                el.value = '';
+              }
+            );
+          });
+        }
 
         // 삭제
         wrap.querySelectorAll('.sm-game-del').forEach(btn => {
