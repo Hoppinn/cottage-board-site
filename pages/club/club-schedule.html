@@ -474,6 +474,20 @@
       font-size: 16px; line-height: 1; color: inherit;
       padding: 4px 6px; margin: -4px 0;
     }
+    .sm-cond-row {
+      display: flex; flex-wrap: wrap; gap: 4px;
+      padding: 6px 10px 8px; border-top: 1px solid #e8e4dc;
+    }
+    .sm-cond-chip {
+      padding: 3px 9px; border-radius: 20px; border: 1.5px solid #d0c8bc;
+      background: #f8f5f0; color: var(--muted); font-size: 12px;
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .sm-cond-chip.is-active {
+      border-color: var(--green); background: var(--green);
+      color: white; font-weight: 600;
+    }
+    .sm-cond-chip:disabled { opacity: .35; cursor: default; }
     .sm-game-input-row { display: flex; gap: 8px; margin-top: 4px; }
     .sm-game-input {
       flex: 1; padding: 9px 12px;
@@ -903,8 +917,8 @@
           const user = window.getKakaoUser?.();
           const uid = user ? String(user.id) : null;
           _gameMap[ds] = {
-            want:  uid ? allVoteGames.filter(g => g.vote_date===ds && String(g.user_id)===uid && g.list_type==='want') .map(g=>({game_id:g.game_id, custom_name:g.custom_name, is_priority:g.is_priority??false})) : [],
-            learn: uid ? allVoteGames.filter(g => g.vote_date===ds && String(g.user_id)===uid && g.list_type==='learn').map(g=>({game_id:g.game_id, custom_name:g.custom_name})) : []
+            want:  uid ? allVoteGames.filter(g => g.vote_date===ds && String(g.user_id)===uid && g.list_type==='want') .map(g=>({game_id:g.game_id, custom_name:g.custom_name, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'})) : [],
+            learn: uid ? allVoteGames.filter(g => g.vote_date===ds && String(g.user_id)===uid && g.list_type==='learn').map(g=>({game_id:g.game_id, custom_name:g.custom_name, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'})) : []
           };
         }
       }
@@ -1096,13 +1110,25 @@
         if (!_gameMap[_activeDay]) _gameMap[_activeDay] = {want:[], learn:[]};
 
         function gameListHtml(type) {
-          return (_gameMap[_activeDay][type] || []).map((g, i) =>
-            `<div class="sm-game-item">
+          const COND_OPTS = [
+            {val:'any',label:'무관'},{val:'best',label:'베스트'},{val:'recommended',label:'추천'},
+            {val:'2',label:'2인'},{val:'3',label:'3인'},{val:'4',label:'4인'},{val:'5+',label:'5인+'}
+          ];
+          return (_gameMap[_activeDay][type] || []).map((g, i) => {
+            const cond = g.player_condition ?? 'any';
+            const isManual = g.game_id === null;
+            const condChips = COND_OPTS.map(o => {
+              const dis = isManual && (o.val === 'best' || o.val === 'recommended') ? ' disabled' : '';
+              const act = cond === o.val ? ' is-active' : '';
+              return `<button class="sm-cond-chip${act}" data-cctype="${type}" data-ccidx="${i}" data-ccval="${o.val}" type="button"${dis}>${o.label}</button>`;
+            }).join('');
+            return `<div class="sm-game-item" style="flex-wrap:wrap;padding-bottom:0">
               <span class="sm-game-name">${esc(g.custom_name || resolveGameName(g))}</span>
-              ${type === 'want' ? `<button class="sm-game-star" data-type="want" data-idx="${i}" type="button" aria-pressed="${g.is_priority ? 'true' : 'false'}" aria-label="대표 게임 지정">${g.is_priority ? '⭐' : '☆'}</button>` : ''}
+              <button class="sm-game-star" data-type="${type}" data-idx="${i}" type="button" aria-pressed="${g.is_priority ? 'true' : 'false'}" aria-label="대표 게임 지정">${g.is_priority ? '⭐' : '☆'}</button>
               <button class="sm-game-del" data-type="${type}" data-idx="${i}" type="button" aria-label="삭제">✕</button>
-            </div>`
-          ).join('');
+              <div class="sm-cond-row" style="width:100%">${condChips}</div>
+            </div>`;
+          }).join('');
         }
 
         function pickerHtml(type) {
@@ -1199,18 +1225,32 @@
           });
         });
 
-        // ⭐ 대표 게임 토글 (로컬 — DB 호출 없음)
+        // ⭐ 대표 게임 토글 (로컬 — DB 호출 없음), want+learn 합산 최대 2개
         wrap.querySelectorAll('.sm-game-star').forEach(btn => {
           btn.addEventListener('click', () => {
+            const type = btn.dataset.type;
             const idx = parseInt(btn.dataset.idx);
-            const games = _gameMap[_activeDay].want;
-            const g = games[idx];
+            const day = _gameMap[_activeDay];
+            const g = (day[type] || [])[idx];
             if (!g) return;
             if (!g.is_priority) {
-              const starred = games.filter(x => x.is_priority).length;
-              if (starred >= 2) { showToast('대표 게임은 최대 2개까지 지정할 수 있어요'); return; }
+              const starred = [...(day.want||[]), ...(day.learn||[])].filter(x => x.is_priority).length;
+              if (starred >= 2) { showToast('대표 게임은 최대 2개까지 지정할 수 있어요 (want+learn 합산)'); return; }
             }
             g.is_priority = !g.is_priority;
+            renderStep2Games();
+          });
+        });
+
+        // 인원 조건 칩 선택
+        wrap.querySelectorAll('.sm-cond-chip:not([disabled])').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.dataset.cctype;
+            const idx  = parseInt(btn.dataset.ccidx);
+            const val  = btn.dataset.ccval;
+            const g = (_gameMap[_activeDay]?.[type] || [])[idx];
+            if (!g) return;
+            g.player_condition = val;
             renderStep2Games();
           });
         });
@@ -1270,7 +1310,7 @@
       // ── 게임 추가 + 역연동 + 다중날짜 전파 ──────────────────────
       async function addGameStep2(type, name, gameId, isManualInput) {
         if (!_gameMap[_activeDay]) _gameMap[_activeDay] = {want:[], learn:[]};
-        const entry = {custom_name: name, game_id: gameId ?? null, is_priority: false};
+        const entry = {custom_name: name, game_id: gameId ?? null, is_priority: false, player_condition: 'any'};
         if (isDup(type, entry)) return;
 
         _gameMap[_activeDay][type].push(entry);
@@ -1347,11 +1387,17 @@
             for (const g of dayGames.learn) {
               if (g.custom_name || g.game_id) await window.CottageDB?.addMeetingVoteGame(String(user.id), ds, 'learn', g.game_id??null, g.custom_name??null);
             }
-            // INSERT 직후 is_priority 반영 (true인 want 항목만)
-            for (const g of dayGames.want) {
-              if ((g.custom_name || g.game_id) && g.is_priority) {
-                const r = await window.CottageDB?.setMeetingVoteGamePriority(String(user.id), ds, g.game_id??null, g.custom_name??null, true);
-                if (r && !r.ok) console.error('[setMeetingVoteGamePriority]', r);
+            // INSERT 직후 is_priority + player_condition 반영 (want+learn 모두, 항상 전송)
+            for (const [listType, list] of [['want', dayGames.want], ['learn', dayGames.learn]]) {
+              for (const g of list) {
+                if (!(g.custom_name || g.game_id)) continue;
+                if (g.is_priority) {
+                  const r = await window.CottageDB?.setMeetingVoteGamePriority(String(user.id), ds, g.game_id??null, g.custom_name??null, listType, true);
+                  if (r && !r.ok) console.error('[setMeetingVoteGamePriority]', r);
+                }
+                const cond = g.player_condition ?? 'any';
+                const rc = await window.CottageDB?.setMeetingVoteGameCondition(String(user.id), ds, g.game_id??null, g.custom_name??null, listType, cond);
+                if (rc && !rc.ok) console.error('[setMeetingVoteGameCondition]', rc);
               }
             }
 
@@ -1360,10 +1406,10 @@
             allVotes.push({vote_date:ds, user_id:String(user.id), nickname:user.nickname||'익명', time_start:t.s, time_end:t.e});
             allVoteGames = allVoteGames.filter(g => !(g.vote_date===ds && String(g.user_id)===String(user.id)));
             for (const g of dayGames.want) {
-              if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'want', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false});
+              if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'want', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'});
             }
             for (const g of dayGames.learn) {
-              if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'learn', game_id:g.game_id??null, custom_name:g.custom_name??null});
+              if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'learn', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'});
             }
           }
           close();
