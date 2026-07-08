@@ -443,13 +443,13 @@
       const me = window.getKakaoUser?.();
       const isMine = !!(me && String(me.id) === String(userId));
 
-      const wantGameObjs = myGames.filter(g => g.list_type === 'want');
-      const learnGames   = myGames.filter(g => g.list_type === 'learn').map(resolveGameName);
+      const wantGameObjs  = myGames.filter(g => g.list_type === 'want');
+      const learnGameObjs = myGames.filter(g => g.list_type === 'learn');
 
       const COND_LABELS = { any:'무관', best:'베스트', recommended:'추천', '2':'2인', '3':'3인', '4':'4인', '5+':'5인+' };
-      function buildWantSection() {
-        if (!wantGameObjs.length) return '';
-        const items = wantGameObjs.map(g => {
+      function buildGameSection(gameObjs, icon, label) {
+        if (!gameObjs.length) return '';
+        const items = gameObjs.map(g => {
           const name = esc(resolveGameName(g));
           const key  = gameKey(g);
           if (isMine) {
@@ -457,24 +457,16 @@
             const curCond = g.player_condition || 'any';
             const selectOpts = Object.entries(COND_LABELS)
               .map(([v, l]) => `<option value="${v}"${v === curCond ? ' selected' : ''}>${l}</option>`).join('');
-            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" data-listtype="${g.list_type}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           return `<li>${name}</li>`;
         }).join('');
         const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
         return `<div class="dd-section">
-          <span class="dd-section-label">🎲 하고 싶은 게임</span>
+          <span class="dd-section-label">${icon} ${label}</span>
           <ul class="${ulCls}">${items}</ul>
-          ${isMine ? '<p class="dd-star-notice" style="display:none"></p>' : ''}
         </div>`;
       }
-
-      const learnSection = learnGames.length
-        ? `<div class="dd-section">
-            <span class="dd-section-label">📖 배우고 싶은 게임</span>
-            <ul class="dd-game-list">${learnGames.map(n => `<li>${esc(n)}</li>`).join('')}</ul>
-          </div>`
-        : '';
 
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
@@ -482,8 +474,9 @@
         <div class="dd-block">
           <div class="dd-date">${fmtDate(voteDate)}</div>
           <div class="dd-time">${myVote.time_start}~${myVote.time_end}시</div>
-          ${buildWantSection()}
-          ${learnSection}
+          ${buildGameSection(wantGameObjs, '🎲', '하고 싶은 게임')}
+          ${buildGameSection(learnGameObjs, '📖', '배우고 싶은 게임')}
+          ${isMine ? '<p class="dd-star-notice" style="display:none"></p>' : ''}
         </div>
       `);
 
@@ -492,14 +485,15 @@
           btn.addEventListener('click', async () => {
             if (btn.disabled) return;
             const key = btn.dataset.key;
+            const listType = btn.dataset.listtype;
             const curPriority = btn.dataset.priority === 'true';
             const newPriority = !curPriority;
-            const gameObj = wantGameObjs.find(g => gameKey(g) === key);
+            const gameObj = myGames.find(g => gameKey(g) === key && g.list_type === listType);
             if (!gameObj) return;
 
             btn.disabled = true;
             const result = await window.CottageDB?.setMeetingVoteGamePriority(
-              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, newPriority
+              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, gameObj.list_type, newPriority
             );
             btn.disabled = false;
 
@@ -525,13 +519,14 @@
           sel.dataset.prev = sel.value;
           sel.addEventListener('change', async () => {
             const key = sel.dataset.key;
+            const listType = sel.dataset.listtype;
             const newCond = sel.value;
             const prevCond = sel.dataset.prev;
-            const gameObj = wantGameObjs.find(g => gameKey(g) === key);
+            const gameObj = myGames.find(g => gameKey(g) === key && g.list_type === listType);
             if (!gameObj) return;
             sel.disabled = true;
             const result = await window.CottageDB?.setMeetingVoteGameCondition(
-              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, newCond
+              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, gameObj.list_type, newCond
             );
             sel.disabled = false;
             if (!result || !result.ok) {
@@ -635,7 +630,7 @@
       const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
       aggrMap[key] = (aggrMap[key] || 0) + 1;
       if (!aggrMeta[key]) aggrMeta[key] = { name: resolveGameName(g), type: g.list_type };
-      if (g.list_type === 'want' && g.is_priority) aggrPriority[key] = (aggrPriority[key] || 0) + 1;
+      if (g.is_priority) aggrPriority[key] = (aggrPriority[key] || 0) + 1;
     });
     const aggrItems = Object.entries(aggrMap)
       .map(([key, count]) => ({ ...aggrMeta[key], count, priority: aggrPriority[key] || 0 }))
@@ -651,7 +646,7 @@
           <div class="dd-game-aggr">${aggrItems.map(({ name, type, count, priority }) => {
             const icon = type === 'want' ? '🎲' : '📖';
             const suffix = count > 1 ? ` ·${count}` : '';
-            const star = (type === 'want' && priority >= 1) ? ` ⭐${priority}` : '';
+            const star = priority >= 1 ? ` ⭐${priority}` : '';
             return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}${star}</span>`;
           }).join('')}</div>
         </div>`
@@ -904,8 +899,8 @@
       );
       if (!games.length) return '';
       const sorted = [...games].sort((a, b) => {
-        const ta = a.list_type === 'want' ? (a.is_priority ? 0 : 1) : 2;
-        const tb = b.list_type === 'want' ? (b.is_priority ? 0 : 1) : 2;
+        const ta = a.is_priority ? 0 : (a.list_type === 'want' ? 1 : 2);
+        const tb = b.is_priority ? 0 : (b.list_type === 'want' ? 1 : 2);
         return ta - tb;
       });
       const abbrs = sorted.map(g => esc(resolveGameAbbr(g)));

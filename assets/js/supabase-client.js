@@ -1914,25 +1914,24 @@ window._cottageSess = (function () {
     } catch (e) { return { error: e }; }
   }
 
-  async function setMeetingVoteGamePriority(userId, voteDate, gameId, customName, isPriority) {
-    if (!userId || !voteDate || (!gameId && !customName)) return { ok: false, reason: 'invalid' };
+  async function setMeetingVoteGamePriority(userId, voteDate, gameId, customName, listType, isPriority) {
+    if (!userId || !voteDate || (!gameId && !customName) || !listType) return { ok: false, reason: 'invalid' };
     try {
-      // 1. 대상 행 존재 확인
+      // 1. 대상 행 존재 확인 (list_type 가드)
       let existQ = db.from('meeting_vote_games').select('id')
-        .eq('user_id', String(userId)).eq('vote_date', voteDate).eq('list_type', 'want');
+        .eq('user_id', String(userId)).eq('vote_date', voteDate).eq('list_type', listType);
       if (gameId) existQ = existQ.eq('game_id', gameId);
       else existQ = existQ.is('game_id', null).eq('custom_name', customName);
       const { data: existRows, error: existErr } = await existQ;
       if (existErr) return { ok: false, reason: 'db_error' };
       if (!existRows || existRows.length === 0) return { ok: false, reason: 'not_found' };
 
-      // 2. max_priority 체크
+      // 2. max_priority 체크 (want+learn 합산)
       if (isPriority) {
         const { data: rows, error: cntErr } = await db.from('meeting_vote_games')
           .select('id')
           .eq('user_id', String(userId))
           .eq('vote_date', voteDate)
-          .eq('list_type', 'want')
           .eq('is_priority', true);
         if (cntErr) return { ok: false, reason: 'db_error' };
         if ((rows || []).length >= 2) return { ok: false, reason: 'max_priority' };
@@ -1943,7 +1942,7 @@ window._cottageSess = (function () {
         .update({ is_priority: isPriority })
         .eq('user_id', String(userId))
         .eq('vote_date', voteDate)
-        .eq('list_type', 'want')
+        .eq('list_type', listType)
         .select('id');
       if (gameId) q = q.eq('game_id', gameId);
       else q = q.is('game_id', null).eq('custom_name', customName);
@@ -1955,12 +1954,12 @@ window._cottageSess = (function () {
     } catch (e) { return { ok: false, reason: 'exception' }; }
   }
 
-  async function setMeetingVoteGameCondition(userId, voteDate, gameId, customName, condition) {
-    if (!userId || !voteDate || (!gameId && !customName) || !condition) return { ok: false, reason: 'invalid' };
+  async function setMeetingVoteGameCondition(userId, voteDate, gameId, customName, listType, condition) {
+    if (!userId || !voteDate || (!gameId && !customName) || !listType || !condition) return { ok: false, reason: 'invalid' };
     try {
-      // 1. 대상 행 존재 확인 (list_type='want' 가드)
+      // 1. 대상 행 존재 확인 (list_type 가드)
       let existQ = db.from('meeting_vote_games').select('id')
-        .eq('user_id', String(userId)).eq('vote_date', voteDate).eq('list_type', 'want');
+        .eq('user_id', String(userId)).eq('vote_date', voteDate).eq('list_type', listType);
       if (gameId) existQ = existQ.eq('game_id', gameId);
       else existQ = existQ.is('game_id', null).eq('custom_name', customName);
       const { data: existRows, error: existErr } = await existQ;
@@ -1972,7 +1971,7 @@ window._cottageSess = (function () {
         .update({ player_condition: condition })
         .eq('user_id', String(userId))
         .eq('vote_date', voteDate)
-        .eq('list_type', 'want')
+        .eq('list_type', listType)
         .select('id');
       if (gameId) q = q.eq('game_id', gameId);
       else q = q.is('game_id', null).eq('custom_name', customName);

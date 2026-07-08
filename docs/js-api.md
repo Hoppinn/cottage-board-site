@@ -93,8 +93,8 @@
 | `getMeetingVoteGames(startDate, endDate)` | 모임 플래너 날짜별 게임 선호 조회. → `[{vote_date, user_id, list_type, game_id, custom_name, is_priority, player_condition}]`. getMeetingVotes와 동일 패턴 |
 | `addMeetingVoteGame(userId, voteDate, listType, gameId, customName)` | meeting_vote_games 추가. listType: `'want'`\|`'learn'`. 중복(23505) 성공 처리. addMeetingGamePref와 동일 구조 + voteDate |
 | `removeMeetingVoteGame(userId, voteDate, listType, gameId, customName)` | meeting_vote_games 삭제. removeMeetingGamePref와 동일 구조 + voteDate |
-| `setMeetingVoteGamePriority(userId, voteDate, gameId, customName, isPriority)` | want 게임 is_priority 토글. gameId 있으면 game_id 매칭, null이면 custom_name+game_id IS NULL 매칭. **isPriority=true 시**: userId+voteDate의 want 행 is_priority=true 개수 ≥2이면 `{ok:false, reason:'max_priority'}` 반환. 행 없으면 `{ok:false, reason:'not_found'}`. 성공: `{ok:true}`. learn 행은 WHERE list_type='want' 강제로 차단. |
-| `setMeetingVoteGameCondition(userId, voteDate, gameId, customName, condition)` | want 게임 player_condition 업데이트. condition 유효값: `'any'`\|`'best'`\|`'recommended'`\|`'2'`\|`'3'`\|`'4'`\|`'5+'`. 행 없으면 `{ok:false, reason:'not_found'}`. 성공: `{ok:true}`. WHERE list_type='want' 가드 포함. |
+| `setMeetingVoteGamePriority(userId, voteDate, gameId, customName, listType, isPriority)` | want/learn 게임 is_priority 토글. listType 가드 — 지정 타입 행만 수정. **isPriority=true 시**: userId+voteDate의 is_priority=true 개수 (want+learn 합산) ≥2이면 `{ok:false, reason:'max_priority'}` 반환. 행 없으면 `{ok:false, reason:'not_found'}`. 성공: `{ok:true}`. |
+| `setMeetingVoteGameCondition(userId, voteDate, gameId, customName, listType, condition)` | want/learn 게임 player_condition 업데이트. listType 가드 — 지정 타입 행만 수정. condition 유효값: `'any'`\|`'best'`\|`'recommended'`\|`'2'`\|`'3'`\|`'4'`\|`'5+'`. 행 없으면 `{ok:false, reason:'not_found'}`. 성공: `{ok:true}`. |
 
 ---
 

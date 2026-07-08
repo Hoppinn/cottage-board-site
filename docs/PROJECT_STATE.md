@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-08 (7단계 인원 조건부 선호 UI + setMeetingVoteGameCondition API)
+최종 갱신: 2026-07-08 (setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장)
 
 ---
 
@@ -8,7 +8,8 @@
 
 | 커밋 | 내용 |
 |------|------|
-| (이번) | 7단계 인원 조건부 선호 UI — day-detail.js: buildWantSection에 COND_LABELS+<select class="dd-cond-select"> 추가(isMine 조건, player_condition 초기화, change→setMeetingVoteGameCondition·실패 시 복구), CSS .dd-cond-select 신규. supabase-client.js: setMeetingVoteGameCondition 함수 신규(list_type='want' 가드, not_found/db_error/exception reason, console.error), CottageDB 노출 추가. js-api.md 갱신 |
+| (이번) | setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장 — supabase-client.js: 두 함수에 listType 파라미터 추가(list_type='want' 하드코딩 → 동적), max_priority 카운트 want+learn 합산으로 변경. day-detail.js: buildWantSection+buildLearnSection → buildGameSection 통합, learn 행에 ⭐ 토글+인원조건 select 추가, gameAbbrs 정렬(⭐ 타입 무관 최우선), aggrPriority/chip star learn 포함, data-listtype 속성 추가, myGames.find(+listType 매칭). CHECKPOINT+js-api.md 갱신 |
+| (이전) | 7단계 인원 조건부 선호 UI — day-detail.js: buildWantSection에 COND_LABELS+<select class="dd-cond-select"> 추가(isMine 조건, player_condition 초기화, change→setMeetingVoteGameCondition·실패 시 복구), CSS .dd-cond-select 신규. supabase-client.js: setMeetingVoteGameCondition 함수 신규(list_type='want' 가드, not_found/db_error/exception reason, console.error), CottageDB 노출 추가. js-api.md 갱신 |
 | (이전) | 2.7단계 개인 모달 ⭐ 토글 — day-detail.js: openDateScheduleModal에 isMine 판별(getKakaoUser), want 게임 ⭐/☆ 버튼+dd-game-list--editable·dd-star-btn·dd-star-notice CSS 3종, setMeetingVoteGamePriority 호출·max_priority/not_found 분기·DOM 즉시 반영·postMessage 통보. MEETING_REVAMP_CHECKPOINT.md 정렬 비대칭 설계 확정 기록 |
 | (이전) | 2.7단계 표시/집계 — day-detail.js: gameAbbrs 정렬(want-priority→want→learn), buildGameTags priorityCnt 집계·2차 정렬, aggrMap aggrPriority 집계·aggrItems 정렬+⭐N 렌더링 |
 | (이전) | 일별 뷰 제거 + 달력 날짜 클릭 → 해당 주차 이동 — club-schedule.html: renderCalendar·openDay~removeVote (~359줄) + #viewDay HTML + btnBackCal + 일별뷰 전용 CSS ~230줄 제거. navigateToDate(ds)/getWeekOffset(ds) 추가, renderWeekView에 targetDate 파라미터+is-target CSS 신규. 진입점 2곳(요일 헤더·월간 셀) → navigateToDate로 교체. db-schema.md meeting_profile_click 설명 정리 |
@@ -192,7 +193,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
   - [x] ③: Step3 게임 선택 분리 + "건너뛰고 저장" + 본인 기등록 날짜 disabled
   - [ ] **④ 후보: 내 등록 관리 동선** — 등록은 홈 직행 가능하나 수정·삭제는 플래너 수동 탐색 필요. 방향: Step 1 "등록됨" 칩 클릭 → 해당 날짜 편집 모드(시간/게임 수정 + 삭제). 009 unique 제약·upsert 경로 충돌은 009 Plan에서 선확인.
 - [x] **[Red] 마이그레이션 009 — 실행 완료**: A(is_priority) · B(player_condition) · C(unique 제약) · RLS DISABLE (Supabase 자동 활성화 → 명시적 해제, meeting_votes와 동일)
-- [x] **7단계: 인원 조건부 선호** — openDateScheduleModal want 행에 인원 조건 select(isMine), setMeetingVoteGameCondition API 신규. 360px overflow PASS. DB 실반영은 실제 로그인 세션 필요.
+- [x] **7단계: 인원 조건부 선호** — openDateScheduleModal want+learn 행 모두 인원 조건 select(isMine), setMeetingVoteGameCondition(listType) API. ⭐ want+learn 합산 최대 2개. 개인 막대 ⭐ 타입 무관 최우선 정렬. 센터모달 learn 칩에도 ⭐N 병기. 360px overflow PASS. DB 실반영은 실제 로그인 세션 필요.
 
 ---
 
