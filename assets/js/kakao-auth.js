@@ -747,7 +747,7 @@ async function openProfilePanel(autoSubsheet = null) {
       const desc = n.count === 1
         ? `${escH(n.names[0])}님이 소개글을 올렸어요`
         : `${escH(n.names[0])} 외 ${n.count - 1}명이 소개글을 올렸어요`;
-      return `<li class="${cls}">${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
+      return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
     if (n.type === 'voucher_granted') {
       const reasonLabel = n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
@@ -1338,6 +1338,10 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
             li.addEventListener('click', e => {
               if (e.target.closest('button, a')) return;
+              if (li.dataset.introUid) {
+                openOtherMeetingSheet(li.dataset.introUid);
+                return;
+              }
               let key = null;
               const gameLink = e.target.closest('[data-game-name]');
               if (gameLink) key = _getGameKeyByName(gameLink.dataset.gameName);

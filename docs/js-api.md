@@ -47,7 +47,7 @@
 | `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 `[{event_type, created_at}]`. admin/localhost 제외 없음(쿼리 전용) |
 | `getPageViewCounts(page, daysBack=7)` | page_views에서 특정 page의 최근 N일 로우 반환 `[{created_at}]`. 관리자 이벤트 퍼널의 "메인 방문" 단계용(143차-160) — page_events가 아니라 page_views 기준임에 유의 |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
-| `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임). notifSeenAt=null이면 isNew=true(전체 기간). 반환: `[{type, ..., isNew}]` |
+| `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임) ⑤new_intro(타인 소개글, 로그인 회원 전체 수신, `{type:'new_intro', count, names, firstUserId, date, isNew}`). notifSeenAt=null이면 isNew=true(전체 기간). 반환: `[{type, ..., isNew}]` |
 | `getGameReviews(gameId)` | 게임 리뷰 조회 |
 | `insertGameReview(...)` | 게임 리뷰 등록 |
 | `deleteGameReview(id)` | 게임 리뷰 삭제 |
