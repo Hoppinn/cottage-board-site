@@ -171,7 +171,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | 전역 | 내용 |
 |------|------|
 | `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
-| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn, abbr}`. 게임명 자동완성용. `abbr` = 빌드 시 병합(source/3-abbr/game-abbr.json BGG ID 키), 미등록 시 titleKo 앞 2글자 폴백 |
+| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn, abbr}`. 게임명 자동완성용.<br>`abbr` 결정 3단계 (build-output.js): ① `game-abbr.json[bggId]` → ② `game-abbr-byname.json[ownedName]` → ③ `titleKo.slice(0,2)` 폴백.<br>**abbr 소비처**: 막대 라벨(`resolveGameAbbr` in day-detail.js:918), 룰렛 휠 SVG(day-detail.js:778,789), 룰렛 후보 wantGameMap(day-detail.js:622), 룰렛 수동 추가(day-detail.js:829). 모든 소비처는 `COTTAGE_GAMES[i].abbr` 우선 → 없으면 `titleKo.slice(0,2)` 로컬 폴백. `#` 접두 제거(`replace(/^#/,'')`) 후 slice 필수 — c0a495c(bar), 8052782(roulette)에서 각각 수정됨. |
 | `window.getAllGamesArray` | `getAllGamesArray(gameData)` 직접 참조용 편의 노출. index-page.js / owned-games-page.js가 전역으로 직접 호출. `CottageGameView.getAllGamesArray`와 동일 함수 |
 
 ---
