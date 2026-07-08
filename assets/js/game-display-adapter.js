@@ -543,6 +543,8 @@ if (typeof window !== "undefined") {
     titleKo: g.title?.owned || g.title?.display || '',
     titleEn: g.title?.bgg || '',
     abbr: g.abbr || '',
+    bestPlayers: (Array.isArray(g.bgg?.bestPlayers) && g.bgg.bestPlayers.length) ? g.bgg.bestPlayers : null,
+    recPlayers: (Array.isArray(g.bgg?.recommendedPlayers) && g.bgg.recommendedPlayers.length) ? g.bgg.recommendedPlayers : null,
   }));
 
   // index-page.js / owned-games-page.js 등 외부 직접 참조용

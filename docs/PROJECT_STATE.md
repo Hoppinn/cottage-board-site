@@ -1,8 +1,14 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-08 (A~E 브라우저 테스트 버그픽스 배치)
+최종 갱신: 2026-07-09 (인원조건 라벨 실제 인원수 표시)
 
 ---
+
+## 최근 완료 (2026-07-09)
+
+| 커밋 | 내용 |
+|------|------|
+| (이번) | feat: 인원 조건 라벨에 실제 베스트/추천 인원수 표시 — COTTAGE_GAMES에 bestPlayers/recPlayers 추가(game-display-adapter.js), day-detail.js에 fmtPlayerArr+condLabel+window.formatCondLabel 헬퍼 추가, condBadgeHtml 헬퍼 적용, 개인 모달 isMine=false 조건 표시 추가, club-schedule.html Step 3 칩 레이블 formatCondLabel 적용. 형식: 단일→"베스트 4인", 연속범위→"추천 3~7인", 비연속→"베스트 3·5·6·8인", 데이터없음→"베스트인원" 폴백 |
 
 ## 최근 완료 (2026-07-08)
 

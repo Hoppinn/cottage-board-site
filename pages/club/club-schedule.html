@@ -1189,7 +1189,12 @@
               const noData = (o.val === 'best' && !hasBest) || (o.val === 'recommended' && !hasRec);
               const dis = noData ? ' disabled' : '';
               const act = cond === o.val ? ' is-active' : '';
-              return `<button class="sm-cond-chip${act}" data-cctype="${type}" data-ccidx="${i}" data-ccval="${o.val}" type="button"${dis}>${o.label}</button>`;
+              let chipLabel = o.label;
+              if ((o.val === 'best' || o.val === 'recommended') && !noData) {
+                const fl = window.formatCondLabel?.(o.val, g.game_id);
+                if (fl) chipLabel = fl;
+              }
+              return `<button class="sm-cond-chip${act}" data-cctype="${type}" data-ccidx="${i}" data-ccval="${o.val}" type="button"${dis}>${chipLabel}</button>`;
             }).join('');
             return `<div class="sm-game-item" style="flex-wrap:wrap;padding-bottom:0">
               <span class="sm-game-name">${esc(g.custom_name || resolveGameName(g))}</span>

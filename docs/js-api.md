@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-05 (window.buildBarsInCard 추가)
+최종 갱신: 2026-07-09 (COTTAGE_GAMES bestPlayers/recPlayers 추가, window.formatCondLabel 신규)
 
 ---
 
@@ -171,7 +171,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | 전역 | 내용 |
 |------|------|
 | `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
-| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn, abbr}`. 게임명 자동완성용.<br>`abbr` 결정 3단계 (build-output.js): ① `game-abbr.json[bggId]` → ② `game-abbr-byname.json[ownedName]` → ③ `titleKo.slice(0,2)` 폴백.<br>**abbr 소비처**: 막대 라벨(`resolveGameAbbr` in day-detail.js:918), 룰렛 휠 SVG(day-detail.js:778,789), 룰렛 후보 wantGameMap(day-detail.js:622), 룰렛 수동 추가(day-detail.js:829). 모든 소비처는 `COTTAGE_GAMES[i].abbr` 우선 → 없으면 `titleKo.slice(0,2)` 로컬 폴백. `#` 접두 제거(`replace(/^#/,'')`) 후 slice 필수 — c0a495c(bar), 8052782(roulette)에서 각각 수정됨. |
+| `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn, abbr, bestPlayers, recPlayers}`. 게임명 자동완성·인원 조건 표시용.<br>`abbr` 결정 3단계 (build-output.js): ① `game-abbr.json[bggId]` → ② `game-abbr-byname.json[ownedName]` → ③ `titleKo.slice(0,2)` 폴백.<br>`bestPlayers`/`recPlayers`: gameData.bgg.bestPlayers/recommendedPlayers 배열 원본. 데이터 없으면 `null`. `window.formatCondLabel`이 소비.<br>**abbr 소비처**: 막대 라벨(`resolveGameAbbr` in day-detail.js:918), 룰렛 휠 SVG(day-detail.js:778,789), 룰렛 후보 wantGameMap(day-detail.js:622), 룰렛 수동 추가(day-detail.js:829). 모든 소비처는 `COTTAGE_GAMES[i].abbr` 우선 → 없으면 `titleKo.slice(0,2)` 로컬 폴백. `#` 접두 제거(`replace(/^#/,'')`) 후 slice 필수 — c0a495c(bar), 8052782(roulette)에서 각각 수정됨. |
 | `window.getAllGamesArray` | `getAllGamesArray(gameData)` 직접 참조용 편의 노출. index-page.js / owned-games-page.js가 전역으로 직접 호출. `CottageGameView.getAllGamesArray`와 동일 함수 |
 
 ---
@@ -221,7 +221,8 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
 | `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection, buildCharacterSection, buildAchievementsSection, handleRepCardSelect, buildTitleSection (→ `{html,earnedIds}`), handleRepTitleSelect, getTitleById(id), getCharacterPath(achId), getCharacterName(achId), fetchUserStats(userId, nickname), findNextAchievement(preStats) → `{emoji,name,gap,unit}` or null |
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, game-sheet.js, owned-games-page.js, index-page.js |
-| `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js |
+| `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js, day-detail.js |
+| `window.formatCondLabel` | day-detail.js | club-schedule.html (Step 3 칩) |
 | `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js |
 | `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
@@ -231,4 +232,5 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.openDateScheduleModal` | day-detail.js | 막대 클릭 → DB 조회 후 개인 일정 모달 `(userId, voteDate)`. club-schedule.html에서 호출. |
 | `window.openDateMeetingModal` | day-detail.js | 날짜 전체 집계 모달 `(voteDate, votes, voteGames, opts?)`. 홈 미리보기 카드 클릭 시 index-page.js에서 호출. |
 | `window.buildBarsInCard` | day-detail.js | 주간 카드/홈 미리보기 시간 막대 HTML 반환 `(dayVotes, voteGames, myVote)`. myVote=null이면 is-mine 강조·수정삭제 버튼 없음. club-schedule.html·index-page.js에서 호출. |
+| `window.formatCondLabel` | day-detail.js | `(cond, game_id)` → 인원 조건 표시 문자열. `'best'`/`'recommended'`는 COTTAGE_GAMES에서 실제 인원 배열 조회 후 포맷(`베스트 4인` / `추천 3~4인` / `베스트 3·5·6·8인`). 데이터 없으면 `베스트인원`/`추천인원` 폴백. `'any'`→`''`. `'2'`/`'3'`/`'4'`/`'5+'`→`'N인'`. club-schedule.html Step 3 칩 레이블에서 호출. |
 - 관리자/로컬 제외 기준은 유지한다.
