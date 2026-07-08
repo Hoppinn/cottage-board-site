@@ -165,6 +165,21 @@ function buildCottageGameData() {
     gameData[game.id] = item;
   });
 
+  // ── 약칭 충돌 린트 (경고만, 빌드 중단 없음) ──────────────────────
+  const abbrIndex = {};
+  Object.values(gameData).forEach((g) => {
+    if (!abbrIndex[g.abbr]) abbrIndex[g.abbr] = [];
+    abbrIndex[g.abbr].push(g.title.display);
+  });
+  const abbrConflicts = Object.entries(abbrIndex).filter(([, list]) => list.length > 1);
+  if (abbrConflicts.length > 0) {
+    console.warn(`[ABBR LINT] 약칭 충돌 ${abbrConflicts.length}건:`);
+    abbrConflicts.forEach(([abbr, names]) =>
+      console.warn(`  "${abbr}" → ${names.join(", ")}`)
+    );
+  }
+  // ────────────────────────────────────────────────────────────────────
+
   writeJson(COTTAGE_GAMES_DATA_JSON_PATH, gameData);
 
   const jsText =
