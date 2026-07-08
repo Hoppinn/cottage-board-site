@@ -4179,7 +4179,7 @@ body.embed-mode {
 .taste-bio-edit-btn{background:none;border:none;cursor:pointer;font-size:14px;padding:0;color:var(--muted);flex-shrink:0;}
 .taste-bio-edit-wrap{margin-top:6px;}
 .taste-bio-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
-.taste-bio-chip{padding:4px 10px;border:1px solid var(--border);border-radius:14px;font-size:12px;color:var(--muted);background:#faf9f5;cursor:pointer;transition:background 0.15s,border-color 0.15s,color 0.15s;}
+.taste-bio-chip{padding:3px 8px;border:1px solid var(--border);border-radius:14px;font-size:11px;color:var(--muted);background:#faf9f5;cursor:pointer;transition:background 0.15s,border-color 0.15s,color 0.15s;white-space:nowrap;max-width:calc(50% - 3px);overflow:hidden;text-overflow:ellipsis;}
 .taste-bio-chip:hover{background:#f0ebe5;color:var(--text);}
 .taste-bio-chip.is-selected{background:var(--green);border-color:var(--green);color:#fff;}
 .taste-bio-custom-wrap{display:flex;gap:6px;margin-bottom:6px;}
