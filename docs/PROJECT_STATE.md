@@ -214,7 +214,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - 폴백 충돌: 마라케시→마케, 마라카이보→마카 (후보, 미확정)
 
 **진행 계획**:
-- [ ] **1단계 (Claude Code)**: 덤프 스크립트 — 전체 게임 bggId/titleKo/최종abbr/출처(수동or폴백) 목록 출력. + build-output.js에 약칭 충돌 린트 추가 (경고만, 빌드 중단 없음, output 생성 로직 무변경)
+- [x] **1단계 (Claude Code)**: 덤프 스크립트 — 전체 게임 bggId/titleKo/최종abbr/출처(수동or폴백) 목록 출력. + build-output.js에 약칭 충돌 린트 추가 (경고만, 빌드 중단 없음, output 생성 로직 무변경). 644개 / 충돌 83건. (커밋: ed89c39)
 - [ ] **2단계 (Fable)**: 덤프 기반으로 수동 등록 필요 게임만 선별 → 제안 약칭 표 → 사용자 통용어 교정
 - [ ] **3단계 (Claude Code)**: game-abbr.json 반영 → 빌드 → 린트 통과 확인
 
