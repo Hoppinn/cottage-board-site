@@ -553,6 +553,63 @@
     body.is-embedded .header-bar,
     body.is-embedded .owned-page-nav { display: none !important; }
     body.is-embedded { overflow-x: hidden; }
+
+    .sched-slider-wrap { margin-bottom: 16px; }
+    .sched-dual-range {
+      position: relative;
+      height: 40px;
+      margin: 0 4px;
+    }
+    .sched-range-track {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      left: 0; right: 0;
+      height: 6px;
+      background: #ddd8cc;
+      border-radius: 3px;
+    }
+    .sched-range-fill {
+      position: absolute;
+      height: 100%;
+      background: var(--green);
+      border-radius: 3px;
+    }
+    input.sched-range-input {
+      position: absolute;
+      top: 50%; transform: translateY(-50%);
+      width: 100%; margin: 0;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      pointer-events: none;
+      height: 40px;
+    }
+    input.sched-range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      pointer-events: all;
+      border: 3px solid white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.28);
+    }
+    input.sched-range-input::-moz-range-thumb {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--green);
+      cursor: pointer;
+      pointer-events: all;
+      border: 3px solid white;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.28);
+    }
+    .sched-range-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--muted);
+    }
   </style>
 </head>
 
