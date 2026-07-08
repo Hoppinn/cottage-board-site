@@ -928,7 +928,7 @@
       return (g.custom_name || '').replace(/^#/, '').slice(0, 2);
     }
 
-    function gameAbbrs(voteDate, userId) {
+    function gameAbbrs(voteDate, userId, durationH) {
       const games = voteGames.filter(g =>
         g.vote_date === voteDate && String(g.user_id) === String(userId)
       );
@@ -939,15 +939,16 @@
         return ta - tb;
       });
       const abbrs = sorted.map(g => esc(resolveGameAbbr(g)));
-      if (abbrs.length <= 2) return abbrs.join(' · ');
-      return abbrs.slice(0, 2).join(' · ') + ` +${abbrs.length - 2}`;
+      const maxShow = durationH >= 6 ? 4 : durationH >= 4 ? 3 : 2;
+      if (abbrs.length <= maxShow) return abbrs.join(' · ');
+      return abbrs.slice(0, maxShow).join(' · ') + ` +${abbrs.length - maxShow}`;
     }
 
     function barRow(v) {
       const left     = ((v.time_start - MIN_H) / range * 100).toFixed(1);
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
-      const gameLine = gameAbbrs(v.vote_date, v.user_id);
+      const gameLine = gameAbbrs(v.vote_date, v.user_id, v.time_end - v.time_start);
       const actions = mine
         ? `<div class="sched-bar-actions">
             <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
