@@ -215,8 +215,8 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **진행 계획**:
 - [x] **1단계 (Claude Code)**: 덤프 스크립트 — 전체 게임 bggId/titleKo/최종abbr/출처(수동or폴백) 목록 출력. + build-output.js에 약칭 충돌 린트 추가 (경고만, 빌드 중단 없음, output 생성 로직 무변경). 644개 / 충돌 83건. (커밋: ed89c39)
-- [ ] **2단계 (Fable)**: 덤프 기반으로 수동 등록 필요 게임만 선별 → 제안 약칭 표 → 사용자 통용어 교정
-- [ ] **3단계 (Claude Code)**: game-abbr.json 반영 → 빌드 → 린트 통과 확인
+- [x] **2단계 (Fable)**: 충돌 83건 전체 약칭 확정 → 사용자 검토 완료
+- [x] **3단계 (Claude Code)**: game-abbr.json 전면 갱신(161개 bggId 등록) + game-abbr-byname.json 신설(9건, ownedName 키) + 린트 규칙 수정(fallback 포함 그룹만 경고) → 충돌 0건, build 정상. (커밋: 이번)
 
 ---
 

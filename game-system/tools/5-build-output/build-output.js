@@ -13,6 +13,7 @@ const {
 } = require("../_core/paths");
 
 const GAME_ABBR_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr.json");
+const GAME_ABBR_BYNAME_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr-byname.json");
 
 const THUMB_EXTS = [".png", ".jpg", ".jpeg", ".webp"];
 
@@ -155,30 +156,44 @@ function buildCottageGameData() {
   }
 
   const abbrMap = readJson(GAME_ABBR_PATH, {});
+  const abbrByName = readJson(GAME_ABBR_BYNAME_PATH, {});
 
   const gameData = {};
+  const abbrSourceMap = {};
 
   masterGames.forEach((game) => {
     if (!game.id || !game.ownedName) return;
     const item = buildGameItem(game);
-    item.abbr = abbrMap[String(game.bggId || "")] || (game.ownedName || "").slice(0, 2);
+    const bggId = String(game.bggId || "");
+    if (abbrMap[bggId]) {
+      item.abbr = abbrMap[bggId];
+      abbrSourceMap[game.id] = "manual-id";
+    } else if (abbrByName[game.ownedName]) {
+      item.abbr = abbrByName[game.ownedName];
+      abbrSourceMap[game.id] = "manual-name";
+    } else {
+      item.abbr = (game.ownedName || "").slice(0, 2);
+      abbrSourceMap[game.id] = "fallback";
+    }
     gameData[game.id] = item;
   });
 
-  // ── 약칭 충돌 린트 (경고만, 빌드 중단 없음) ──────────────────────
+  // ── 약칭 충돌 린트: fallback 포함 그룹만 경고 (manual끼리 중복은 의도됨)
   const abbrIndex = {};
-  Object.values(gameData).forEach((g) => {
+  Object.entries(gameData).forEach(([id, g]) => {
     if (!abbrIndex[g.abbr]) abbrIndex[g.abbr] = [];
-    abbrIndex[g.abbr].push(g.title.display);
+    abbrIndex[g.abbr].push({ name: g.title.display, source: abbrSourceMap[id] });
   });
-  const abbrConflicts = Object.entries(abbrIndex).filter(([, list]) => list.length > 1);
+  const abbrConflicts = Object.entries(abbrIndex).filter(
+    ([, list]) => list.length > 1 && list.some((m) => m.source === "fallback")
+  );
   if (abbrConflicts.length > 0) {
-    console.warn(`[ABBR LINT] 약칭 충돌 ${abbrConflicts.length}건:`);
-    abbrConflicts.forEach(([abbr, names]) =>
-      console.warn(`  "${abbr}" → ${names.join(", ")}`)
+    console.warn(`[ABBR LINT] 약칭 충돌 ${abbrConflicts.length}건 (fallback 포함):`);
+    abbrConflicts.forEach(([abbr, members]) =>
+      console.warn(`  "${abbr}" → ${members.map((m) => `${m.name}(${m.source})`).join(", ")}`)
     );
   }
-  // ────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────
 
   writeJson(COTTAGE_GAMES_DATA_JSON_PATH, gameData);
 
