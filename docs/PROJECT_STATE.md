@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-08 (2.7단계 표시/집계 — 대표 게임 막대 우선 정렬 + 센터모달 ⭐N)
+최종 갱신: 2026-07-08 (2.7단계 개인 모달 ⭐ 토글 + 설계 비대칭 확정)
 
 ---
 
@@ -8,7 +8,8 @@
 
 | 커밋 | 내용 |
 |------|------|
-| (이번) | 2.7단계 표시/집계 — day-detail.js: gameAbbrs 정렬(want-priority→want→learn), buildGameTags priorityCnt 집계·2차 정렬, aggrMap aggrPriority 집계·aggrItems 정렬+⭐N 렌더링 |
+| (이번) | 2.7단계 개인 모달 ⭐ 토글 — day-detail.js: openDateScheduleModal에 isMine 판별(getKakaoUser), want 게임 ⭐/☆ 버튼+dd-game-list--editable·dd-star-btn·dd-star-notice CSS 3종, setMeetingVoteGamePriority 호출·max_priority/not_found 분기·DOM 즉시 반영·postMessage 통보. MEETING_REVAMP_CHECKPOINT.md 정렬 비대칭 설계 확정 기록 |
+| (이전) | 2.7단계 표시/집계 — day-detail.js: gameAbbrs 정렬(want-priority→want→learn), buildGameTags priorityCnt 집계·2차 정렬, aggrMap aggrPriority 집계·aggrItems 정렬+⭐N 렌더링 |
 | (이전) | 일별 뷰 제거 + 달력 날짜 클릭 → 해당 주차 이동 — club-schedule.html: renderCalendar·openDay~removeVote (~359줄) + #viewDay HTML + btnBackCal + 일별뷰 전용 CSS ~230줄 제거. navigateToDate(ds)/getWeekOffset(ds) 추가, renderWeekView에 targetDate 파라미터+is-target CSS 신규. 진입점 2곳(요일 헤더·월간 셀) → navigateToDate로 교체. db-schema.md meeting_profile_click 설명 정리 |
 | (이전) | 홈 미리보기 갱신 버그 수정 — club-schedule.html: 모든 쓰기 완료 지점(saveAll/saveVote/removeVote/saveVoteForDate/removeVoteForDate)에 `_notifyParentSaved()` 헬퍼 추가, `window.parent.postMessage({type:'cottage-meeting-saved'})` 전송. index-page.js: `_meetingDirty`+`_meetingReload` 모듈 변수, message 핸들러에 수신 시 dirty 세팅, closeModal에서 dirty면 loadWeek() 1회 재조회 후 플래그 해제. 변경 없이 닫으면 DB 조회 0건 유지. |
 | (이전) | 2.7단계 Step3 ⭐ 지정 — club-schedule.html: initDay에 is_priority 복사, addGameStep2 기본값 false, gameListHtml want칩에 ☆/⭐ 버튼, 로컬 토글 핸들러(최대 2개 초과 시 showToast), saveAll INSERT 후 setMeetingVoteGamePriority 호출, allVoteGames 메모리에 is_priority 포함. CSS .sm-game-star 신규 1개 |

@@ -94,6 +94,11 @@
       text-align: center; padding: 20px 0;
     }
 
+    /* ── 개인 일정 — want 게임 ⭐ 토글 ── */
+    .dd-game-list--editable li { display: flex; align-items: center; justify-content: space-between; }
+    .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
+    .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
+
     /* 홈 미리보기 모달 — 플래너 보기 버튼 */
     .dd-green-btn {
       background: var(--green, #7a4828);
@@ -434,14 +439,83 @@
         ${statChip('🎲', '게임 겹침', gameMatchCount, gameMatchCount > 0)}
       </div>`;
 
-      const wantGames  = myGames.filter(g => g.list_type === 'want').map(resolveGameName);
-      const learnGames = myGames.filter(g => g.list_type === 'learn').map(resolveGameName);
+      const me = window.getKakaoUser?.();
+      const isMine = !!(me && String(me.id) === String(userId));
+
+      const wantGameObjs = myGames.filter(g => g.list_type === 'want');
+      const learnGames   = myGames.filter(g => g.list_type === 'learn').map(resolveGameName);
+
+      function buildWantSection() {
+        if (!wantGameObjs.length) return '';
+        const items = wantGameObjs.map(g => {
+          const name = esc(resolveGameName(g));
+          const key  = gameKey(g);
+          if (isMine) {
+            const star = g.is_priority ? '⭐' : '☆';
+            return `<li><span>${name}</span><button class="dd-star-btn" data-key="${esc(key)}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+          }
+          return `<li>${name}</li>`;
+        }).join('');
+        const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
+        return `<div class="dd-section">
+          <span class="dd-section-label">🎲 하고 싶은 게임</span>
+          <ul class="${ulCls}">${items}</ul>
+          ${isMine ? '<p class="dd-star-notice" style="display:none"></p>' : ''}
+        </div>`;
+      }
+
+      const learnSection = learnGames.length
+        ? `<div class="dd-section">
+            <span class="dd-section-label">📖 배우고 싶은 게임</span>
+            <ul class="dd-game-list">${learnGames.map(n => `<li>${esc(n)}</li>`).join('')}</ul>
+          </div>`
+        : '';
 
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
         ${statsHtml}
-        ${window.renderDayDetailHTML({ date: voteDate, timeStart: myVote.time_start, timeEnd: myVote.time_end, wantGames, learnGames })}
+        <div class="dd-block">
+          <div class="dd-date">${fmtDate(voteDate)}</div>
+          <div class="dd-time">${myVote.time_start}~${myVote.time_end}시</div>
+          ${buildWantSection()}
+          ${learnSection}
+        </div>
       `);
+
+      if (isMine) {
+        el.querySelectorAll('.dd-star-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            if (btn.disabled) return;
+            const key = btn.dataset.key;
+            const curPriority = btn.dataset.priority === 'true';
+            const newPriority = !curPriority;
+            const gameObj = wantGameObjs.find(g => gameKey(g) === key);
+            if (!gameObj) return;
+
+            btn.disabled = true;
+            const result = await window.CottageDB?.setMeetingVoteGamePriority(
+              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, newPriority
+            );
+            btn.disabled = false;
+
+            const noticeEl = el.querySelector('.dd-star-notice');
+            if (!result || !result.ok) {
+              const msg = result?.reason === 'max_priority'
+                ? '대표 게임은 2개까지 지정할 수 있어요'
+                : '오류가 발생했어요. 새로고침 후 다시 시도해 주세요.';
+              if (result?.reason !== 'max_priority') console.error('[openDateScheduleModal] priority:', result);
+              if (noticeEl) { noticeEl.textContent = msg; noticeEl.style.display = ''; }
+              return;
+            }
+
+            gameObj.is_priority = newPriority;
+            btn.dataset.priority = String(newPriority);
+            btn.textContent = newPriority ? '⭐' : '☆';
+            if (noticeEl) noticeEl.style.display = 'none';
+            try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
+          });
+        });
+      }
     } catch (err) {
       console.error('openDateScheduleModal 오류:', err);
       renderModal('<div class="dd-loading">불러오기 실패. 다시 시도해 주세요.</div>');
