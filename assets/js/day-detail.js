@@ -98,6 +98,7 @@
     .dd-game-list--editable li { display: flex; align-items: center; justify-content: space-between; }
     .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
     .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
+    .dd-cond-select { font-size: 11px; padding: 1px 4px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
 
     /* 홈 미리보기 모달 — 플래너 보기 버튼 */
     .dd-green-btn {
@@ -445,6 +446,7 @@
       const wantGameObjs = myGames.filter(g => g.list_type === 'want');
       const learnGames   = myGames.filter(g => g.list_type === 'learn').map(resolveGameName);
 
+      const COND_LABELS = { any:'무관', best:'베스트', recommended:'추천', '2':'2인', '3':'3인', '4':'4인', '5+':'5인+' };
       function buildWantSection() {
         if (!wantGameObjs.length) return '';
         const items = wantGameObjs.map(g => {
@@ -452,7 +454,10 @@
           const key  = gameKey(g);
           if (isMine) {
             const star = g.is_priority ? '⭐' : '☆';
-            return `<li><span>${name}</span><button class="dd-star-btn" data-key="${esc(key)}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            const curCond = g.player_condition || 'any';
+            const selectOpts = Object.entries(COND_LABELS)
+              .map(([v, l]) => `<option value="${v}"${v === curCond ? ' selected' : ''}>${l}</option>`).join('');
+            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           return `<li>${name}</li>`;
         }).join('');
@@ -512,6 +517,30 @@
             btn.dataset.priority = String(newPriority);
             btn.textContent = newPriority ? '⭐' : '☆';
             if (noticeEl) noticeEl.style.display = 'none';
+            try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
+          });
+        });
+
+        el.querySelectorAll('.dd-cond-select').forEach(sel => {
+          sel.dataset.prev = sel.value;
+          sel.addEventListener('change', async () => {
+            const key = sel.dataset.key;
+            const newCond = sel.value;
+            const prevCond = sel.dataset.prev;
+            const gameObj = wantGameObjs.find(g => gameKey(g) === key);
+            if (!gameObj) return;
+            sel.disabled = true;
+            const result = await window.CottageDB?.setMeetingVoteGameCondition(
+              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, newCond
+            );
+            sel.disabled = false;
+            if (!result || !result.ok) {
+              console.error('[openDateScheduleModal] condition:', result);
+              sel.value = prevCond;
+              return;
+            }
+            gameObj.player_condition = newCond;
+            sel.dataset.prev = newCond;
             try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
           });
         });

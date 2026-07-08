@@ -1547,6 +1547,7 @@ window._cottageSess = (function () {
     addMeetingVoteGame,
     removeMeetingVoteGame,
     setMeetingVoteGamePriority,
+    setMeetingVoteGameCondition,
   };
 
   async function updateNotifSeenAt(userId, timestamp) {
@@ -1952,6 +1953,35 @@ window._cottageSess = (function () {
       if (!data || data.length === 0) return { ok: false, reason: 'not_found' };
       return { ok: true };
     } catch (e) { return { ok: false, reason: 'exception' }; }
+  }
+
+  async function setMeetingVoteGameCondition(userId, voteDate, gameId, customName, condition) {
+    if (!userId || !voteDate || (!gameId && !customName) || !condition) return { ok: false, reason: 'invalid' };
+    try {
+      // 1. 대상 행 존재 확인 (list_type='want' 가드)
+      let existQ = db.from('meeting_vote_games').select('id')
+        .eq('user_id', String(userId)).eq('vote_date', voteDate).eq('list_type', 'want');
+      if (gameId) existQ = existQ.eq('game_id', gameId);
+      else existQ = existQ.is('game_id', null).eq('custom_name', customName);
+      const { data: existRows, error: existErr } = await existQ;
+      if (existErr) return { ok: false, reason: 'db_error' };
+      if (!existRows || existRows.length === 0) return { ok: false, reason: 'not_found' };
+
+      // 2. UPDATE
+      let q = db.from('meeting_vote_games')
+        .update({ player_condition: condition })
+        .eq('user_id', String(userId))
+        .eq('vote_date', voteDate)
+        .eq('list_type', 'want')
+        .select('id');
+      if (gameId) q = q.eq('game_id', gameId);
+      else q = q.is('game_id', null).eq('custom_name', customName);
+
+      const { data, error } = await q;
+      if (error) return { ok: false, reason: 'db_error' };
+      if (!data || data.length === 0) return { ok: false, reason: 'not_found' };
+      return { ok: true };
+    } catch (e) { console.error('[setMeetingVoteGameCondition]', e); return { ok: false, reason: 'exception' }; }
   }
 
   async function removeMeetingVoteGame(userId, voteDate, listType, gameId, customName) {
