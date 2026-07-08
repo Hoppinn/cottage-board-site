@@ -152,7 +152,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 | (이 세션) | requests-admin.html `_EVT_LBL` 맵에 모임 이벤트 4종 추가: `home_meeting_date_preview_click`, `home_meeting_preview_card_click`, `meeting_planner_bar_click`, `meeting_profile_click`. 01aea34/71baf5c에서 신규 trackEvent 추가 후 _EVT_LBL 미등록으로 top4에서 집계 제외됐던 버그. 기능 감사에서 발견 → 라벨 등록으로 해결. |
 
 **다음 작업 후보 메모**:
-- `kakao-auth-ready 이벤트 미발화 확인됨(game-reviews.js·index-page.js 두 곳이 수신 등록하지만 실제 발화 파일 없음) — initHub()는 항상 setTimeout(tryInit, 1200) 폴백으로만 실행. 발화가 필요하면 kakao-auth.js의 cottage-auth-changed 발화 시점에 함께 dispatch 추가 검토.`
+- ~~`kakao-auth-ready 이벤트 미발화 확인됨`~~ — 해결됨 (commit 217a93b). `initKakaoAuth()` 끝에 `window.dispatchEvent(new CustomEvent('kakao-auth-ready'))` 추가. 리스너 3곳(game-reviews.js, index-page.js×2) 모두 window 대상 확인. setTimeout 폴백 유지.
 
 ### 홈 모임 미리보기 막대 공용화 (2026-07-05)
 
@@ -298,7 +298,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - 분석 탭 대규모 재구성 — 우선 카운팅 기준을 바로잡은 뒤 별도 작업으로 진행.
 
 **미실행 항목**:
-- 실제 Supabase 운영 DB에 `docs/migrations/007_page_views_session_key.sql` 적용
+- ~~실제 Supabase 운영 DB에 `docs/migrations/007_page_views_session_key.sql` 적용~~ — 해결됨. 쿼리 에러 없이 실행 완료 = 컬럼 존재 확인. played_at NULL 기록 5건은 소급 미적용 설계이므로 정상.
 - 브라우저에서 관리자 분석 화면 수치/콘솔 확인
 
 **다음 작업 후보**: SQL 적용 후 관리자 분석 화면에서 유입 카드와 유입 차트의 `명/회`가 같은 기준으로 표시되는지 확인.
@@ -481,8 +481,8 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - ~~**[143차-155 미완료 — [6] item 13]** 기록보드 게임평/플레이기록 게임타이틀에 썸네일 추가 (JS)~~ — 완료 (143차-158, _getGameThumbKey bgg.id fallback)
 - ~~**[143차-155 미완료 — [9][10][10-1][11][11-1]] 내보드 대공사**~~ / ~~**[내보드 정기모임 위치 재구성]**~~ — 완료 (143차-165, 카드 그리드 재배치 + 모임 보드 카드 신설)
 - **[추천필터 미완료]** "2-3그러면 이제" 이후 잘린 항목 — 사용자에게 재입력 요청 필요
-- **[취향보드 수정 후 내보드 즉시 갱신]** — 취향보드에서 뭔가 수정하고 내보드로 돌아오면 정보가 바로 갱신 안 됨. 닫았다 열어야 갱신됨. 탭 전환 또는 저장 후 관련 섹션 re-render 트리거 필요.
-- **[취향보드 한줄소개 칩 줄바꿈]** — "새로해보는..." / "익숙지않은..." 두 칩이 1줄에 같이 있어야 하는데 현재 줄바꿈됨. 칩 너비 축소 또는 font-size 조정으로 해결 가능 여부 확인.
+- ~~**[취향보드 수정 후 내보드 즉시 갱신]**~~ — 해결됨 (commit 79ac245). 저장 후 `panel` 클로저 변수로 `.profile-card[data-subsheet="taste"] .profile-card-summary` 즉시 갱신.
+- ~~**[취향보드 한줄소개 칩 줄바꿈]**~~ — 해결됨 (commit d0e2741). `.taste-bio-chip`에 `white-space:nowrap;max-width:calc(50% - 3px);overflow:hidden;text-overflow:ellipsis` + padding/font-size 축소.
 - ~~**[guide.html 요청하기 카드 미세조정]**~~ — 완료 (143차-184). 마지막 요청하기 카드의 최대폭을 `calc(50% - 6px)` 고정 반폭에서 `min(360px, 100%)`로 변경해 PC 폭은 기존과 비슷하게 유지하고 모바일에서는 지나치게 좁아지지 않도록 조정.
 - ~~**[플레이기록 기록입력 탭 안내 문구]**~~ — 완료 (143차-186). 기록입력 탭의 게임 검색 위에 `🎁 첫 플레이 기록 작성 시 음료 교환권 1장 지급!` 안내를 추가하되, 기존 교환권 내역에 `first_play` 지급 기록이 있는 사용자는 숨김. 기록보기 탭 변경 없음.
 - ~~**[PC 헤더 삐뚤빼뚤 + 관리자 교환권 안내 버그]**~~ — 완료 (143차-187). ① PC 헤더: `menu-admin-link`의 `flex:0 0 100%`가 PC flex-row 레이아웃에서도 줄바꿈을 강제해 헤더가 2줄이 되던 문제. PC 미디어쿼리에서 `flex:0 0 auto; padding:0 7px` 오버라이드 + `menu-login-area{flex-wrap:nowrap}` + `menu-kakao-login-btn{flex:0 0 auto}` 추가. ② game-reviews.js 기록입력 탭: 관리자는 `first_play` 지급 제외 대상인데 `hasFirstPlayVoucher` 체크가 없어 안내 문구가 항상 노출됐던 버그 — `_isAdmin(cottage_is_admin)` 체크 추가. ③ kakao-auth.js 알림 교환권 카드: 관리자는 카드 자체 숨김(voucherCardHtml=''). 이미 수령한 일반 유저는 "수령 완료" 텍스트+is-seen 스타일로 교체(버튼 없음). 미수령 유저는 기존 동작 유지. `_effectiveVoucherSeen` 플래그로 NEW 카운트·카드 위치 통합 관리.
