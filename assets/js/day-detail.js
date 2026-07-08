@@ -615,10 +615,14 @@
       const key = g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`;
       if (!wantGameMap.has(key)) {
         const name = resolveGameName(g);
-        let abbr = name.slice(0, 2);
+        const pureName = name.replace(/^#/, '');
+        let abbr = pureName.slice(0, 2);
         if (g.game_id && window.COTTAGE_GAMES) {
           const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === String(g.game_id));
-          if (cg) abbr = cg.abbr || (cg.titleKo || cg.display || name).slice(0, 2);
+          if (cg) abbr = cg.abbr || (cg.titleKo || cg.display || pureName).slice(0, 2);
+        } else if (!g.game_id && window.COTTAGE_GAMES && pureName) {
+          const cg = window.COTTAGE_GAMES.find(c => c.display === pureName || c.titleKo === pureName);
+          if (cg) abbr = cg.abbr || (cg.titleKo || cg.display || pureName).slice(0, 2);
         }
         wantGameMap.set(key, { name, abbr });
       }
