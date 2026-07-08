@@ -1173,9 +1173,21 @@
           ];
           return (_gameMap[_activeDay][type] || []).map((g, i) => {
             const cond = g.player_condition ?? 'any';
-            const isManual = g.game_id === null;
+            let rawGame = null;
+            if (g.game_id && window.COTTAGE_GAMES) {
+              const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === String(g.game_id));
+              rawGame = cg ? window.gameData?.[cg.id] : null;
+            }
+            if (!rawGame && g.custom_name && window.COTTAGE_GAMES) {
+              const pureName = (g.custom_name || '').replace(/^#/, '');
+              const cg = window.COTTAGE_GAMES.find(c => c.display === pureName || c.titleKo === pureName);
+              rawGame = cg ? window.gameData?.[cg.id] : null;
+            }
+            const hasBest = (rawGame?.bgg?.bestPlayers?.length ?? 0) > 0;
+            const hasRec  = (rawGame?.bgg?.recommendedPlayers?.length ?? 0) > 0;
             const condChips = COND_OPTS.map(o => {
-              const dis = isManual && (o.val === 'best' || o.val === 'recommended') ? ' disabled' : '';
+              const noData = (o.val === 'best' && !hasBest) || (o.val === 'recommended' && !hasRec);
+              const dis = noData ? ' disabled' : '';
               const act = cond === o.val ? ' is-active' : '';
               return `<button class="sm-cond-chip${act}" data-cctype="${type}" data-ccidx="${i}" data-ccval="${o.val}" type="button"${dis}>${o.label}</button>`;
             }).join('');
