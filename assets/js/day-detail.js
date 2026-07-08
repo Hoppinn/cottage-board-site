@@ -527,23 +527,29 @@
     const rouletteGames = [...wantGameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
 
     // 전체 게임 집계 (want/learn 분리, 투표수 내림차순)
-    const aggrMap = {}, aggrMeta = {};
+    const aggrMap = {}, aggrMeta = {}, aggrPriority = {};
     voteGames.forEach(g => {
       const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
       aggrMap[key] = (aggrMap[key] || 0) + 1;
       if (!aggrMeta[key]) aggrMeta[key] = { name: resolveGameName(g), type: g.list_type };
+      if (g.list_type === 'want' && g.is_priority) aggrPriority[key] = (aggrPriority[key] || 0) + 1;
     });
     const aggrItems = Object.entries(aggrMap)
-      .map(([key, count]) => ({ ...aggrMeta[key], count }))
-      .sort((a, b) => a.type !== b.type ? (a.type === 'want' ? -1 : 1) : b.count - a.count);
+      .map(([key, count]) => ({ ...aggrMeta[key], count, priority: aggrPriority[key] || 0 }))
+      .sort((a, b) => {
+        if (a.type !== b.type) return a.type === 'want' ? -1 : 1;
+        const cd = b.count - a.count;
+        return cd !== 0 ? cd : b.priority - a.priority;
+      });
 
     const gameAggrHtml = aggrItems.length
       ? `<div class="dd-section dd-game-aggr-section">
           <span class="dd-section-label">그날의 게임</span>
-          <div class="dd-game-aggr">${aggrItems.map(({ name, type, count }) => {
+          <div class="dd-game-aggr">${aggrItems.map(({ name, type, count, priority }) => {
             const icon = type === 'want' ? '🎲' : '📖';
             const suffix = count > 1 ? ` ·${count}` : '';
-            return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}</span>`;
+            const star = (type === 'want' && priority >= 1) ? ` ⭐${priority}` : '';
+            return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}${star}</span>`;
           }).join('')}</div>
         </div>`
       : '';
@@ -794,7 +800,12 @@
         g.vote_date === voteDate && String(g.user_id) === String(userId)
       );
       if (!games.length) return '';
-      const abbrs = games.map(g => esc(resolveGameAbbr(g)));
+      const sorted = [...games].sort((a, b) => {
+        const ta = a.list_type === 'want' ? (a.is_priority ? 0 : 1) : 2;
+        const tb = b.list_type === 'want' ? (b.is_priority ? 0 : 1) : 2;
+        return ta - tb;
+      });
+      const abbrs = sorted.map(g => esc(resolveGameAbbr(g)));
       if (abbrs.length <= 2) return abbrs.join(' · ');
       return abbrs.slice(0, 2).join(' · ') + ` +${abbrs.length - 2}`;
     }
@@ -828,7 +839,7 @@
       const dateGames = voteGames.filter(g => g.vote_date === voteDate);
       if (!dateGames.length) return '';
 
-      const nameMap = {}, wantCnt = {}, learnCnt = {};
+      const nameMap = {}, wantCnt = {}, learnCnt = {}, priorityCnt = {};
       dateGames.forEach(g => {
         const name = g.game_id
           ? (window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id))?.display || g.custom_name || `#${g.game_id}`)
@@ -837,12 +848,15 @@
         if (!nameMap[key]) nameMap[key] = name;
         if (g.list_type === 'want')  wantCnt[key]  = (wantCnt[key]  || 0) + 1;
         if (g.list_type === 'learn') learnCnt[key] = (learnCnt[key] || 0) + 1;
+        if (g.list_type === 'want' && g.is_priority) priorityCnt[key] = (priorityCnt[key] || 0) + 1;
       });
 
       const chips = Object.keys(nameMap)
         .sort((a, b) => {
           const wd = (wantCnt[b] || 0) - (wantCnt[a] || 0);
-          return wd !== 0 ? wd : (learnCnt[b] || 0) - (learnCnt[a] || 0);
+          if (wd !== 0) return wd;
+          const pd = (priorityCnt[b] || 0) - (priorityCnt[a] || 0);
+          return pd !== 0 ? pd : (learnCnt[b] || 0) - (learnCnt[a] || 0);
         })
         .map(key => {
           const w = wantCnt[key] || 0;
