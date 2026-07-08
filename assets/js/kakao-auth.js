@@ -165,6 +165,7 @@ function initKakaoAuth() {
     userActions.querySelector('#kakaoLogoutBtn')?.remove();
   }
   if (getKakaoUser()) setTimeout(_updateNotifBadge, 0);
+  window.dispatchEvent(new CustomEvent('kakao-auth-ready'));
 }
 
 function kakaoLogin() {
