@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-08 (Stage 7 판정 — 센터모달 인원 조건 충족/미충족 배지)
+최종 갱신: 2026-07-08 (Step 3 등록 플로우 — ⭐·인원조건 칩 want+learn 공통)
 
 ---
 
@@ -8,7 +8,8 @@
 
 | 커밋 | 내용 |
 |------|------|
-| (이번) | Stage 7 판정 — 센터모달 게임 칩 인원 조건 배지: peakCnt(기존 계산 재사용) 기준 미충족 시 .dd-cond-badge 병기. 판정 로직: '2'/'3'/'4'/'5+' → 수치 비교, 'best'/'recommended' → window.gameData[id].bgg.bestPlayers/recommendedPlayers(숫자 배열) 포함 여부, 직접입력(game_id=null) → 조건명만, 'any' → 표시 없음. aggrConds 중복 제거. CSS .dd-cond-badge 신규. |
+| d438902 | Step 3 등록 플로우 ⭐·인원조건 칩 — club-schedule.html: gameListHtml ⭐ 버튼 want→공통, 조건 칩 행 [무관\|베스트\|추천\|2인~5인+](직접입력 베스트/추천 disabled). ⭐ max 카운트 want+learn 합산. addGameStep2 entry player_condition:'any' 초기화. _gameMap 프리로드 is_priority+player_condition 포함. saveAll is_priority·player_condition want+learn 모두 전송(항상). API 파라미터 순서(listType, value) 준수. CSS 3종 신규. |
+| (이전) | Stage 7 판정 — 센터모달 게임 칩 인원 조건 배지: peakCnt(기존 계산 재사용) 기준 미충족 시 .dd-cond-badge 병기. 판정 로직: '2'/'3'/'4'/'5+' → 수치 비교, 'best'/'recommended' → window.gameData[id].bgg.bestPlayers/recommendedPlayers(숫자 배열) 포함 여부, 직접입력(game_id=null) → 조건명만, 'any' → 표시 없음. aggrConds 중복 제거. CSS .dd-cond-badge 신규. |
 | (이전) | setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장 — supabase-client.js: 두 함수에 listType 파라미터 추가(list_type='want' 하드코딩 → 동적), max_priority 카운트 want+learn 합산으로 변경. day-detail.js: buildWantSection+buildLearnSection → buildGameSection 통합, learn 행에 ⭐ 토글+인원조건 select 추가, gameAbbrs 정렬(⭐ 타입 무관 최우선), aggrPriority/chip star learn 포함, data-listtype 속성 추가, myGames.find(+listType 매칭). CHECKPOINT+js-api.md 갱신 |
 | (이전) | 7단계 인원 조건부 선호 UI — day-detail.js: buildWantSection에 COND_LABELS+<select class="dd-cond-select"> 추가(isMine 조건, player_condition 초기화, change→setMeetingVoteGameCondition·실패 시 복구), CSS .dd-cond-select 신규. supabase-client.js: setMeetingVoteGameCondition 함수 신규(list_type='want' 가드, not_found/db_error/exception reason, console.error), CottageDB 노출 추가. js-api.md 갱신 |
 | (이전) | 2.7단계 개인 모달 ⭐ 토글 — day-detail.js: openDateScheduleModal에 isMine 판별(getKakaoUser), want 게임 ⭐/☆ 버튼+dd-game-list--editable·dd-star-btn·dd-star-notice CSS 3종, setMeetingVoteGamePriority 호출·max_priority/not_found 분기·DOM 즉시 반영·postMessage 통보. MEETING_REVAMP_CHECKPOINT.md 정렬 비대칭 설계 확정 기록 |
@@ -222,7 +223,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 ### MEETING_REVAMP 다음 덩어리 (순서 미정)
 
-- [ ] **Step 3 게임 선택** — 등록 플로우(club-schedule.html 멀티스텝)에서 ⭐·인원 조건 지정. 권고: 먼저. 등록 시점 지정이 자연스럽고, 데이터가 쌓여야 집계 리디자인이 의미 있음.
+- [x] **Step 3 게임 선택** — 등록 플로우에서 ⭐·인원 조건 칩 (want+learn 공통). (커밋: d438902)
 - [ ] **집계 모달 리디자인** — 센터모달 집계 화면 개편. 설계 논의 선행 필요.
 
 ---
