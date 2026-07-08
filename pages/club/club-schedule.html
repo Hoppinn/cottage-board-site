@@ -906,7 +906,7 @@
       function resolveGameName(item) {
         if (item.custom_name) return item.custom_name;
         if (item.game_id) {
-          const g = (window.COTTAGE_GAMES || []).find(g => g.bggId === String(item.game_id));
+          const g = (window.COTTAGE_GAMES || []).find(g => g.bggId === String(item.game_id) || g.id === String(item.game_id));
           return g?.display || `#${item.game_id}`;
         }
         return '?';
@@ -1332,7 +1332,9 @@
             const items  = getPickerItems(type, source);
             const item   = items[parseInt(btn.dataset.pidx)];
             if (!item || isDup(type, item)) return;
-            addGameStep2(type, resolveGameName(item), item.game_id ? Number(item.game_id) : null, false);
+            const _cg = item.game_id ? (window.COTTAGE_GAMES || []).find(c => c.bggId === String(item.game_id) || c.id === String(item.game_id)) : null;
+            const _resolvedId = _cg?.bggId && !isNaN(Number(_cg.bggId)) ? Number(_cg.bggId) : null;
+            addGameStep2(type, resolveGameName(item), _resolvedId, false);
           });
         });
 

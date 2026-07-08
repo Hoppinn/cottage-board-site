@@ -348,7 +348,13 @@
   }
 
   function resolveGameName(g) {
-    if (g.custom_name) return g.custom_name;
+    if (g.custom_name) {
+      if (g.custom_name.startsWith('#') && window.COTTAGE_GAMES) {
+        const found = window.COTTAGE_GAMES.find(c => c.id === g.custom_name.slice(1));
+        if (found) return found.display;
+      }
+      return g.custom_name;
+    }
     if (window.COTTAGE_GAMES) {
       const found = window.COTTAGE_GAMES.find(c => c.bggId === String(g.game_id));
       if (found) return found.display || found.name || `#${g.game_id}`;
@@ -925,7 +931,12 @@
         if (found && found.abbr) return found.abbr;
         if (found) return (found.titleKo || found.display || '').slice(0, 2);
       }
-      return (g.custom_name || '').replace(/^#/, '').slice(0, 2);
+      const rawName = (g.custom_name || '').replace(/^#/, '');
+      if (g.custom_name?.startsWith('#') && window.COTTAGE_GAMES) {
+        const found = window.COTTAGE_GAMES.find(c => c.id === g.custom_name.slice(1));
+        if (found) return found.abbr || (found.titleKo || found.display || rawName).slice(0, 2);
+      }
+      return rawName.slice(0, 2);
     }
 
     function gameAbbrs(voteDate, userId, durationH) {
