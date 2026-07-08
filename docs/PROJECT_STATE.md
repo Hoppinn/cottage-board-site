@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-08 (setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장)
+최종 갱신: 2026-07-08 (Stage 7 판정 — 센터모달 인원 조건 충족/미충족 배지)
 
 ---
 
@@ -8,7 +8,8 @@
 
 | 커밋 | 내용 |
 |------|------|
-| (이번) | setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장 — supabase-client.js: 두 함수에 listType 파라미터 추가(list_type='want' 하드코딩 → 동적), max_priority 카운트 want+learn 합산으로 변경. day-detail.js: buildWantSection+buildLearnSection → buildGameSection 통합, learn 행에 ⭐ 토글+인원조건 select 추가, gameAbbrs 정렬(⭐ 타입 무관 최우선), aggrPriority/chip star learn 포함, data-listtype 속성 추가, myGames.find(+listType 매칭). CHECKPOINT+js-api.md 갱신 |
+| (이번) | Stage 7 판정 — 센터모달 게임 칩 인원 조건 배지: peakCnt(기존 계산 재사용) 기준 미충족 시 .dd-cond-badge 병기. 판정 로직: '2'/'3'/'4'/'5+' → 수치 비교, 'best'/'recommended' → window.gameData[id].bgg.bestPlayers/recommendedPlayers(숫자 배열) 포함 여부, 직접입력(game_id=null) → 조건명만, 'any' → 표시 없음. aggrConds 중복 제거. CSS .dd-cond-badge 신규. |
+| (이전) | setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장 — supabase-client.js: 두 함수에 listType 파라미터 추가(list_type='want' 하드코딩 → 동적), max_priority 카운트 want+learn 합산으로 변경. day-detail.js: buildWantSection+buildLearnSection → buildGameSection 통합, learn 행에 ⭐ 토글+인원조건 select 추가, gameAbbrs 정렬(⭐ 타입 무관 최우선), aggrPriority/chip star learn 포함, data-listtype 속성 추가, myGames.find(+listType 매칭). CHECKPOINT+js-api.md 갱신 |
 | (이전) | 7단계 인원 조건부 선호 UI — day-detail.js: buildWantSection에 COND_LABELS+<select class="dd-cond-select"> 추가(isMine 조건, player_condition 초기화, change→setMeetingVoteGameCondition·실패 시 복구), CSS .dd-cond-select 신규. supabase-client.js: setMeetingVoteGameCondition 함수 신규(list_type='want' 가드, not_found/db_error/exception reason, console.error), CottageDB 노출 추가. js-api.md 갱신 |
 | (이전) | 2.7단계 개인 모달 ⭐ 토글 — day-detail.js: openDateScheduleModal에 isMine 판별(getKakaoUser), want 게임 ⭐/☆ 버튼+dd-game-list--editable·dd-star-btn·dd-star-notice CSS 3종, setMeetingVoteGamePriority 호출·max_priority/not_found 분기·DOM 즉시 반영·postMessage 통보. MEETING_REVAMP_CHECKPOINT.md 정렬 비대칭 설계 확정 기록 |
 | (이전) | 2.7단계 표시/집계 — day-detail.js: gameAbbrs 정렬(want-priority→want→learn), buildGameTags priorityCnt 집계·2차 정렬, aggrMap aggrPriority 집계·aggrItems 정렬+⭐N 렌더링 |

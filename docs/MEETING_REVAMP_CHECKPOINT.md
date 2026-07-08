@@ -133,7 +133,11 @@
    - 검증: 7/27주→7월 다섯째, 8/3주→8월 첫째, 8/31주→9월 첫째 (월요일 기준이었으면 8월 다섯째로 나왔을 것)
    - 홈 미리보기·멀티스텝 모달: "M/D~M/D · 이번주" 형식, 월 귀속 계산 없음 → 통일 대상 아님
    - ✅ 8/1(토)이 7월 다섯째 주 토요일인 것은 의도된 동작 — 버그 아님
-7. [ ] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
+7. [x] 인원 조건부 선호 (Red — DB Plan 필수, 마이그레이션 009 통합)
+   - [x] 7단계 입력 UI: want+learn 행에 인원 조건 <select>, setMeetingVoteGameCondition API (2026-07-08)
+   - [x] ⭐ learn 확장: want+learn 합산 최대 2개, 막대 ⭐ 타입 무관 최우선, 센터모달 learn 칩 ⭐N (2026-07-08)
+   - [x] API listType 파라미터화: setMeetingVoteGamePriority/Condition 모두 listType 동적화 (2026-07-08)
+   - [x] Stage 7 판정: 센터모달 칩 .dd-cond-badge 배지 — peakCnt 기준, '2'~'5+'수치, best/recommended gameData 조회, 직접입력 조건명만, any 생략 (2026-07-08)
 
 완료 조건: 7단계 전부 커밋 + 문서 갱신 후 이 체크포인트 삭제,
 PROJECT_STATE §0에서 해제.

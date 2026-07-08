@@ -99,6 +99,7 @@
     .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
     .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
     .dd-cond-select { font-size: 11px; padding: 1px 4px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
+    .dd-cond-badge { font-size: 10px; padding: 1px 5px; border-radius: 8px; background: #f0ece6; color: var(--green, #7a4828); }
 
     /* 홈 미리보기 모달 — 플래너 보기 버튼 */
     .dd-green-btn {
@@ -625,29 +626,59 @@
     const rouletteGames = [...wantGameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
 
     // 전체 게임 집계 (want/learn 분리, 투표수 내림차순)
-    const aggrMap = {}, aggrMeta = {}, aggrPriority = {};
+    const aggrMap = {}, aggrMeta = {}, aggrPriority = {}, aggrConds = {};
     voteGames.forEach(g => {
       const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
       aggrMap[key] = (aggrMap[key] || 0) + 1;
-      if (!aggrMeta[key]) aggrMeta[key] = { name: resolveGameName(g), type: g.list_type };
+      if (!aggrMeta[key]) aggrMeta[key] = { name: resolveGameName(g), type: g.list_type, game_id: g.game_id ?? null };
       if (g.is_priority) aggrPriority[key] = (aggrPriority[key] || 0) + 1;
+      const cond = g.player_condition || 'any';
+      if (cond !== 'any') {
+        if (!aggrConds[key]) aggrConds[key] = [];
+        aggrConds[key].push(cond);
+      }
     });
     const aggrItems = Object.entries(aggrMap)
-      .map(([key, count]) => ({ ...aggrMeta[key], count, priority: aggrPriority[key] || 0 }))
+      .map(([key, count]) => ({
+        ...aggrMeta[key],
+        count,
+        priority: aggrPriority[key] || 0,
+        conds: [...new Set(aggrConds[key] || [])],
+      }))
       .sort((a, b) => {
         if (a.type !== b.type) return a.type === 'want' ? -1 : 1;
         const cd = b.count - a.count;
         return cd !== 0 ? cd : b.priority - a.priority;
       });
 
+    function condBadgeHtml(conds, game_id, maxN) {
+      if (!conds.length) return '';
+      const badges = [];
+      for (const c of conds) {
+        if (c === '2' || c === '3' || c === '4') {
+          if (maxN < Number(c)) badges.push(`${c}인 필요`);
+        } else if (c === '5+') {
+          if (maxN < 5) badges.push('5인+ 필요');
+        } else if (c === 'best' || c === 'recommended') {
+          const label = c === 'best' ? '베스트 인원' : '추천 인원';
+          const cgEntry = game_id ? window.COTTAGE_GAMES?.find(cg => cg.bggId === String(game_id)) : null;
+          const rawGame = cgEntry ? window.gameData?.[cgEntry.id] : null;
+          const arr = rawGame ? (c === 'best' ? (rawGame.bgg?.bestPlayers || []) : (rawGame.bgg?.recommendedPlayers || [])) : [];
+          if (!arr.length || !arr.some(p => Number(p) === maxN)) badges.push(label);
+        }
+      }
+      return badges.map(b => `<span class="dd-cond-badge">${esc(b)}</span>`).join('');
+    }
+
     const gameAggrHtml = aggrItems.length
       ? `<div class="dd-section dd-game-aggr-section">
           <span class="dd-section-label">그날의 게임</span>
-          <div class="dd-game-aggr">${aggrItems.map(({ name, type, count, priority }) => {
+          <div class="dd-game-aggr">${aggrItems.map(({ name, type, count, priority, conds, game_id }) => {
             const icon = type === 'want' ? '🎲' : '📖';
             const suffix = count > 1 ? ` ·${count}` : '';
             const star = priority >= 1 ? ` ⭐${priority}` : '';
-            return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}${star}</span>`;
+            const badges = condBadgeHtml(conds, game_id, peakCnt);
+            return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}${star}${badges}</span>`;
           }).join('')}</div>
         </div>`
       : '';
