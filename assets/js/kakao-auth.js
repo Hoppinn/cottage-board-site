@@ -1453,6 +1453,20 @@ async function openProfilePanel(autoSubsheet = null) {
             _renderBioDisplay(allTags);
             bioRow.style.display = '';
             bioEditWrap.style.display = 'none';
+            // 메인 패널 취향 카드 요약 즉시 갱신
+            const _newBioPreview = allTags.length
+              ? `${allTags.slice(0, 2).map(t => `#${t}`).join(' ')}${allTags.length > 2 ? ` +${allTags.length - 2}` : ''}`
+              : '';
+            const _tasteSummary = panel.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
+            if (_tasteSummary) {
+              const _bioRow = _tasteSummary.querySelector('.profile-card-bio-row');
+              if (_newBioPreview) {
+                if (_bioRow) _bioRow.textContent = _newBioPreview;
+                else _tasteSummary.insertAdjacentHTML('afterbegin', `<span class="profile-card-bio-row">${escH(_newBioPreview)}</span>`);
+              } else if (_bioRow) {
+                _bioRow.remove();
+              }
+            }
           });
 
           // ── 게임 목록 (좋아요·관심) ──
