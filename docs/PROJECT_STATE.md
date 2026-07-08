@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-08 (Step 3 등록 플로우 — ⭐·인원조건 칩 want+learn 공통)
+최종 갱신: 2026-07-08 (A~E 브라우저 테스트 버그픽스 배치)
 
 ---
 
@@ -8,6 +8,11 @@
 
 | 커밋 | 내용 |
 |------|------|
+| f21c8d7 | 막대 게임명 표기 가변화 — gameAbbrs(durationH) 파라미터화, barRow에서 실제 체류시간 전달. 기준: <4h=2개, 4~5h59m=3개, ≥6h=4개 |
+| 8052782 | 룰렛 약칭 1글자 버그 fix — # 접두사 slice 전 제거 누락(c0a495c bar-only 수정의 룰렛 미적용 경로). game_id=null 게임 이름 기반 COTTAGE_GAMES 조회 추가 |
+| 601af4e | 메이지나이트 얼티밋 에디션 약칭 등록 (248562→메나) + output 재빌드 |
+| 0019bdd | 베스트/추천 칩 disabled 오판 fix — isManual(game_id===null) → gameData bestPlayers/recommendedPlayers 실제 데이터 기준으로 교체, 이름 기반 2차 조회 추가 |
+| 9e539d5 | Step 2 시간 슬라이더 CSS 복원 (8cdc4df에서 삭제됐던 8개 규칙 원상복원) |
 | d438902 | Step 3 등록 플로우 ⭐·인원조건 칩 — club-schedule.html: gameListHtml ⭐ 버튼 want→공통, 조건 칩 행 [무관\|베스트\|추천\|2인~5인+](직접입력 베스트/추천 disabled). ⭐ max 카운트 want+learn 합산. addGameStep2 entry player_condition:'any' 초기화. _gameMap 프리로드 is_priority+player_condition 포함. saveAll is_priority·player_condition want+learn 모두 전송(항상). API 파라미터 순서(listType, value) 준수. CSS 3종 신규. |
 | (이전) | Stage 7 판정 — 센터모달 게임 칩 인원 조건 배지: peakCnt(기존 계산 재사용) 기준 미충족 시 .dd-cond-badge 병기. 판정 로직: '2'/'3'/'4'/'5+' → 수치 비교, 'best'/'recommended' → window.gameData[id].bgg.bestPlayers/recommendedPlayers(숫자 배열) 포함 여부, 직접입력(game_id=null) → 조건명만, 'any' → 표시 없음. aggrConds 중복 제거. CSS .dd-cond-badge 신규. |
 | (이전) | setMeetingVoteGameCondition/Priority listType 파라미터 확장 + ⭐ learn 확장 — supabase-client.js: 두 함수에 listType 파라미터 추가(list_type='want' 하드코딩 → 동적), max_priority 카운트 want+learn 합산으로 변경. day-detail.js: buildWantSection+buildLearnSection → buildGameSection 통합, learn 행에 ⭐ 토글+인원조건 select 추가, gameAbbrs 정렬(⭐ 타입 무관 최우선), aggrPriority/chip star learn 포함, data-listtype 속성 추가, myGames.find(+listType 매칭). CHECKPOINT+js-api.md 갱신 |
