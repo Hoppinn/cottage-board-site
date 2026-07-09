@@ -1589,7 +1589,7 @@
       const date = new Date(y, m - 1, d);
       const action = myVote ? '시간 수정' : '시간 등록';
       document.getElementById('ssTitle').textContent =
-        `${DOW[date.getDay()]} ${m}/${d} ${action}`;
+        `${m}/${d}(${DOW[date.getDay()]}) ${action}`;
 
       const btnSave = document.getElementById('ssSave');
       btnSave.textContent = myVote ? '저장' : '등록';
@@ -1830,7 +1830,7 @@
         html += `<div class="sched-wday-card${pastCls}${todCls}${tgtCls}" data-date="${ds}">
           <div class="sched-wday-header" data-date="${ds}">
             <div class="sched-wday-left">
-              <span class="sched-wday-dow${dowCls}">${DOW[dow]} ${date.getMonth()+1}/${date.getDate()}</span>
+              <span class="sched-wday-dow${dowCls}">${date.getMonth()+1}/${date.getDate()}(${DOW[dow]})</span>
               ${todayBadge}
               <span class="sched-wday-count">👥 ${cnt}명</span>
             </div>
