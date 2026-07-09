@@ -983,7 +983,7 @@
         const tb = b.is_priority ? 0 : (b.list_type === 'want' ? 1 : 2);
         return ta - tb;
       });
-      const abbrs = sorted.map(g => esc(resolveGameAbbr(g)));
+      const abbrs = sorted.map(g => (g.is_priority ? '⭐' : '') + esc(resolveGameAbbr(g)));
       const maxShow = durationH >= 6 ? 4 : durationH >= 4 ? 3 : 2;
       if (abbrs.length <= maxShow) return abbrs.join(' · ');
       return abbrs.slice(0, maxShow).join(' · ') + ` +${abbrs.length - maxShow}`;
