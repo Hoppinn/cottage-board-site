@@ -135,6 +135,19 @@ GPT·Gemini 등 외부 AI/제3자 의견은 구현 지시가 아니라 감사 �
 - 브라우저/CSS 렌더링 버그는 값 조정 전 구조 분리 가능성 먼저 검토.
 - "수정 완료"는 실제 재현 확인 결과와 함께만. 확인 못 했으면 "완료" 금지.
 
+### UI 요소 '안 보임' 버그 디버깅 순서
+
+dropdown/tooltip/modal이 안 보일 때 JS 코드 탐색 전에:
+1. CSS 클리핑 먼저 확인: 부모 체인에서 overflow:hidden/auto/scroll 찾기
+2. z-index 확인: position:fixed/absolute 요소가 다른 stacking context에 묻히는지
+3. display:none / visibility:hidden 여부
+
+JS 탐색은 그 다음. "붙었는지"가 아니라 "보이는지"로 증상을 먼저 분류할 것.
+
+새 등록 vs 수정 같은 "같은 코드, 다른 결과" 패턴:
+→ 상태 차이(empty vs has-data) 기준으로 코드 실행 경로 분기점을 먼저 찾고,
+  그 분기점 이후에 레이아웃이 달라지는 CSS 쪽도 함께 확인.
+
 ### CSS/sticky/바텀시트 원칙 (2026-07-03 교훈)
 
 sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflow 버그는 수치 문제처럼 보여도 실제 원인은 레이아웃 구조인 경우가 많다.
