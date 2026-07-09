@@ -1445,6 +1445,11 @@ async function openProfilePanel(autoSubsheet = null) {
           });
 
           subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
+            if (bioCustomInput?.value.trim()) {
+              window.showToast?.('＋를 눌러 취향을 추가한 뒤 저장해 주세요') || alert('＋를 눌러 취향을 추가한 뒤 저장해 주세요');
+              bioCustomInput.focus();
+              return;
+            }
             const selectedChips = [...subBody.querySelectorAll('.taste-bio-chip.is-selected')].map(c => c.textContent.trim());
             const customTags = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
             const allTags = [...new Set([...selectedChips, ...customTags])].slice(0, 6);
