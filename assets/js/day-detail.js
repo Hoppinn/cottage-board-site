@@ -354,7 +354,7 @@
   function fmtDate(ds) {
     const d = new Date(ds + 'T00:00:00');
     const days = ['일','월','화','수','목','금','토'];
-    return days[d.getDay()] + ' ' + (d.getMonth() + 1) + '/' + d.getDate();
+    return (d.getMonth() + 1) + '/' + d.getDate() + '(' + days[d.getDay()] + ')';
   }
 
   function resolveGameName(g) {
