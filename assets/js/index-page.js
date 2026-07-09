@@ -1322,7 +1322,7 @@ let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주�
 
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
       <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${count}명</div>
-      ${window.buildBarsInCard(dayVotes, dayGames, null)}
+      ${window.buildBarsInCard(dayVotes, dayGames, (() => { const _me = window.getKakaoUser?.(); return _me ? dayVotes.find(v => String(v.user_id) === String(_me.id)) ?? null : null; })())}
       <button class="mpc-detail-btn" type="button">이날 모임 한눈에 보기 →</button>
     </div>`;
 
