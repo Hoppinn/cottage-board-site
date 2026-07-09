@@ -167,7 +167,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 | (이 세션) | index-page.js `renderPreview()`의 이름칩·공통시간 독자 렌더를 `window.buildBarsInCard` 호출로 교체. 더보기 버튼 stopPropagation 추가. |
 
 **다음 작업 후보 메모** (홈 미리보기 막대 관련):
-- `홈 미리보기 막대에 본인 강조(is-mine) 적용 여부 판단 — 현재 myVote=null로 호출해 강조 없음.`
+- ~~`홈 미리보기 막대에 본인 강조(is-mine) 적용 여부 판단`~~ → 완료 (86bf90d+fcab913: myVote 전달, 수정/삭제 동작)
 - `모임 등록 모달 개선 (기획 확정, 구현 필요) — 여러 주차 사전 등록 지원. 방향: 모달 내 주 네비게이션(←→), 주 넘어 선택 상태 유지, 하단 선택 요약 표시, 시간은 날짜별 개별 입력 + 본인 과거 meeting_votes 기반 자주 쓰는 시간대 프리셋(기본값: 최근 시간대).`
 - `접근성 개선 — 아이콘 버튼 title/aria-label, 폼 label 부여 (DevTools Issues 기준).`
 - `모임 룰렛 — 센터모달에서 해당 날짜 want 게임 2개 이상 시 룰렛 버튼 표시, 원판 애니메이션 + 결과 표시. DB 변경 없음, day-detail.js 공용 후보.`
