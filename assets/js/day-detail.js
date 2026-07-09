@@ -73,6 +73,10 @@
       font-size: 13px; color: var(--muted, #9e8e7e);
       margin-bottom: 8px;
     }
+    .dd-date-time {
+      font-size: 13px; color: var(--muted, #9e8e7e);
+      margin-bottom: 10px;
+    }
     .dd-section { margin-bottom: 6px; }
     .dd-section-label {
       font-size: 11px; color: var(--muted, #9e8e7e);
@@ -127,8 +131,10 @@
     .dd-participants-toggle > summary {
       font-size: 12px; color: var(--muted);
       cursor: pointer; list-style: none;
-      padding: 4px 0; user-select: none;
-      display: flex; align-items: center; gap: 4px;
+      padding: 5px 12px;
+      background: #f0ece6; border-radius: 20px;
+      display: inline-flex; align-items: center; gap: 4px;
+      user-select: none;
     }
     .dd-participants-toggle > summary::after { content: '▼'; font-size: 9px; }
     .dd-participants-toggle[open] > summary::after { content: '▲'; }
@@ -522,8 +528,7 @@
 
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
-        <div class="dd-date">${fmtDate(voteDate)}</div>
-        <div class="dd-time">${myVote.time_start}~${myVote.time_end}시</div>
+        <div class="dd-date-time">${fmtDate(voteDate)} · ${myVote.time_start}~${myVote.time_end}시</div>
         ${statsHtml}
         <div class="dd-block">
           ${buildGameSection(wantGameObjs, '🎲', '하고 싶은 게임')}
@@ -745,7 +750,7 @@
       const wantHtml  = wantNames.length  ? `<ul class="dd-game-list">${wantNames.map(n => `<li>${n}</li>`).join('')}</ul>` : '';
       const learnHtml = learnNames.length ? `<ul class="dd-game-list">${learnNames.map(n => `<li>${n}</li>`).join('')}</ul>` : '';
       return `<div class="dd-block">
-        <div class="dd-modal-nick" style="font-size:13px">${esc(v.nickname)}</div>
+        <div class="dd-modal-nick">${esc(v.nickname)}</div>
         <div class="dd-time">${v.time_start}~${v.time_end}시</div>
         ${wantNames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnNames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
