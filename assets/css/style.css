@@ -4283,6 +4283,24 @@ body.embed-mode {
 .mb-detail-btn:hover{background:#f0f7f0;border-color:var(--green,#3a7d44);}
 .mb-planner-cta{display:block;text-align:center;font-size:12px;color:var(--green,#3a7d44);font-weight:600;padding:8px;background:#f0f7f0;border-radius:8px;text-decoration:none;margin-top:8px;}
 .mb-planner-cta:hover{background:#e4f0e4;}
+
+/* 모임보드 — 취향보드 연동 링크 */
+.mb-taste-link{display:inline-block;font-size:11px;color:var(--text-info,#6b8cba);font-weight:500;padding:2px 6px;border:1px solid var(--text-info,#6b8cba);border-radius:10px;background:none;cursor:pointer;margin-left:6px;vertical-align:middle;line-height:1.4;}
+.mb-taste-link:hover{background:rgba(107,140,186,.08);}
+
+/* 모임보드 — 📖 룰설명 버튼 */
+.mb-rule-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:none;border-radius:50%;background:none;cursor:pointer;font-size:13px;opacity:.35;padding:0;flex-shrink:0;transition:opacity .15s;}
+.mb-rule-btn.is-on{opacity:1;}
+.mb-rule-btn:hover{opacity:.7;}
+.mb-rule-badge{font-size:13px;flex-shrink:0;}
+
+/* 모임보드 — 주간 배지 */
+.mb-week-badge{display:inline-block;font-size:10px;font-weight:600;color:#5a3c1e;background:#fdf6ec;border:1px solid #c8a870;border-radius:8px;padding:1px 5px;margin-left:4px;white-space:nowrap;flex-shrink:0;}
+
+/* 모임보드 — 플래너 전용 항목 */
+.mb-planner-only-item{opacity:.7;}
+.mb-planner-hint{display:inline-block;font-size:10px;color:var(--muted,#9e8e7e);background:var(--bg-soft,#f5f3f0);border:1px solid var(--line,#e0d8cc);border-radius:8px;padding:1px 5px;margin-left:4px;white-space:nowrap;flex-shrink:0;}
+
 .meeting-profile-section{margin-bottom:20px;}
 .meeting-profile-display{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
 .meeting-profile-row{display:flex;align-items:baseline;gap:6px;font-size:13px;}
