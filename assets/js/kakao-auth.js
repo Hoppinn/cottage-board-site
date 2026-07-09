@@ -1411,11 +1411,12 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.querySelector('.taste-bio-edit-btn')?.addEventListener('click', () => {
             bioRow.style.display = 'none';
             bioEditWrap.style.display = '';
-            const currentTags = (bioDisplay.dataset.bio || '').split(',').map(t => t.trim()).filter(Boolean);
+            const currentTags = [...new Set((bioDisplay.dataset.bio || '').split(',').map(t => t.trim()).filter(Boolean))];
             subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
               chip.classList.toggle('is-selected', currentTags.includes(chip.textContent.trim()));
             });
-            const customTags = currentTags.filter(t => !_PREDEFINED_CHIPS.includes(t));
+            const menuChipTexts = [...subBody.querySelectorAll('.taste-bio-chip')].map(c => c.textContent.trim());
+            const customTags = currentTags.filter(t => !menuChipTexts.includes(t));
             _renderCustomTags(customTags);
             bioCustomInput.value = '';
             bioCustomInput.focus();
@@ -1446,8 +1447,12 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
             const selectedChips = [...subBody.querySelectorAll('.taste-bio-chip.is-selected')].map(c => c.textContent.trim());
             const customTags = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
-            const allTags = [...selectedChips, ...customTags].slice(0, 6);
+            const allTags = [...new Set([...selectedChips, ...customTags])].slice(0, 6);
             const newBio = allTags.join(',');
+            // 신규 커뮤니티 칩 감지 → 관리자 알림 (page_events 로그)
+            const _allBioSet = new Set(allBioSuggestions || []);
+            allTags.filter(t => !_PREDEFINED_CHIPS.includes(t) && !_allBioSet.has(t))
+              .forEach(() => window.CottageDB?.trackEvent?.('new_bio_chip'));
             await window.CottageDB?.updateUserBio?.(userId, newBio);
             _currentBio = newBio;
             bioDisplay.dataset.bio = newBio;
@@ -1693,7 +1698,26 @@ async function openProfilePanel(autoSubsheet = null) {
                 btn.textContent = t;
                 if ((_currentBio || '').split(',').map(s => s.trim()).includes(t)) btn.classList.add('is-selected');
                 btn.addEventListener('click', () => btn.classList.toggle('is-selected'));
-                _chipsContainer.appendChild(btn);
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'taste-bio-chip-del';
+                delBtn.type = 'button';
+                delBtn.textContent = '×';
+                delBtn.setAttribute('aria-label', '메뉴에서 제거');
+                delBtn.addEventListener('click', e => {
+                  e.stopPropagation();
+                  if (!confirm(`"${t}"은(는) 다른 사용자도 사용 중일 수 있습니다. 내 화면에서 제거하시겠습니까?`)) return;
+                  wrap.remove();
+                  bioCustomTagsWrap?.querySelectorAll('.taste-bio-tag-edit').forEach(tag => {
+                    if (tag.dataset.tag === t) tag.remove();
+                  });
+                });
+
+                const wrap = document.createElement('span');
+                wrap.className = 'taste-bio-chip-wrap';
+                wrap.appendChild(btn);
+                wrap.appendChild(delBtn);
+                _chipsContainer.appendChild(wrap);
               });
             }
           }

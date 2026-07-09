@@ -4182,6 +4182,9 @@ body.embed-mode {
 .taste-bio-chip{padding:3px 8px;border:1px solid var(--border);border-radius:14px;font-size:11px;color:var(--muted);background:#faf9f5;cursor:pointer;transition:background 0.15s,border-color 0.15s,color 0.15s;white-space:nowrap;max-width:calc(50% - 3px);overflow:hidden;text-overflow:ellipsis;}
 .taste-bio-chip:hover{background:#f0ebe5;color:var(--text);}
 .taste-bio-chip.is-selected{background:var(--green);border-color:var(--green);color:#fff;}
+.taste-bio-chip-wrap{position:relative;display:inline-flex;}
+.taste-bio-chip-del{position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;background:var(--muted);color:#fff;border:none;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;line-height:1;z-index:1;}
+.taste-bio-chip-wrap:hover .taste-bio-chip-del{display:flex;}
 .taste-bio-custom-wrap{display:flex;gap:6px;margin-bottom:6px;}
 .taste-bio-custom-input{flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;}
 .taste-bio-custom-add{padding:6px 12px;border:1px solid var(--border);border-radius:8px;background:var(--bg2,#f5f1eb);font-size:14px;cursor:pointer;}
