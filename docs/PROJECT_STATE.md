@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-09 (모임보드 개편 최종 — 미러링 전환 + 주간 배지 + 론칭 후 이월)
+최종 갱신: 2026-07-09 (모임보드 개편 최종 — 미러링 전환 + 주간 배지 + 룰설명 토글 + 론칭 후 이월)
 
 ---
 
@@ -13,7 +13,8 @@
 | 7c98cdc | fix: 본인 일정 모달 인원 조건 드롭다운 옆 라벨 병기(dd-cond-live, formatCondLabel 기반, 변경 즉시 갱신) |
 | ae2c86e | fix: 취향보드 한줄소개 커스텀 칩 중복 누적 + 삭제 UI 없음 2건 수정. ① currentTags dedup, customTags 필터를 메뉴 칩 텍스트 기준으로 변경(커뮤니티 칩 이중 추가 방지), allTags Set dedup safety net. ② 커뮤니티 칩 × 삭제 버튼(hover, confirm 다이얼로그). ③ 1-1: 신규 칩 저장 시 page_events 'new_bio_chip' 기록 |
 | 656e0fa | fix: 모임 플래너 수정 모드 자동완성 클리핑 버그. 근본원인: .sm-body(overflow-y:auto)가 position:absolute 드롭다운을 클리핑. 수정 시 기존 게임이 입력창을 아래로 밀어 잘림. attachAc 후 .pr-autocomplete-list를 position:fixed + getBoundingClientRect() 기반 재지정 |
-| (이번) | feat: 모임보드 주간 배지 — 플래너 등록 게임이 하고싶은/배우고싶은 칩에 요일 배지(금·토) 표시. 플래너에만 있는 게임은 칩 하단에 읽기 전용 항목으로 추가 |
+| (이번) | feat: 모임보드 📖 룰설명 per-chip 토글 + 타인 뷰 뱃지. _buildMeetingGameItems 신규(📖 버튼 내장), _ruleSet(can_explain_rules Set), 클릭 시 addMeetingGamePref/removeMeetingGamePref 토글. 타인 뷰에 mb-rule-badge 표시 |
+| 10c7252 | feat: 모임보드 주간 배지 — 플래너 등록 게임이 하고싶은/배우고싶은 칩에 요일 배지(금·토) 표시. 플래너에만 있는 게임은 칩 하단에 읽기 전용 항목으로 추가 |
 | 631a5ba | feat: 미러링 전환 — 모임보드 하고싶은/배우고싶은 데이터 소스 meeting_game_prefs(want_this_time) → game_likes/game_curious. 본인·타인 뷰 동일 전환. want_this_time UNUSED 처리. db-schema.md·js-api.md 갱신 |
 | c2ae239 | feat: 추천게임찾기 난이도 제한 토글 칩 (기본 ON=2.5 제한, OFF=해제). 난이도 필터(헤비/하드코어) 선택 시 토글 무관하게 5.0 유지. 360px 확인 완료 |
 | 5c81f78 | docs: 론칭 후 이월 섹션 신설 + MEETING_REVAMP_CHECKPOINT 완료 처리 (13개 항목 이월 표 형식으로 분리) |

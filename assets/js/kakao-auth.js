@@ -906,6 +906,27 @@ async function openProfilePanel(autoSubsheet = null) {
     return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
+  // 모임보드 전용 게임 아이템 — 📖 룰설명 토글 버튼 포함
+  function _buildMeetingGameItems(games, ruleSet) {
+    if (!games.length) return '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+    const renderItem = g => {
+      const _gd = g.game_id ? window.gameData?.[g.game_id] : null;
+      const name = _gd
+        ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(g.game_id))
+        : (g.custom_name || String(g.game_id || ''));
+      const thumb = _gd?.images?.thumbnail
+        ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
+        : `<span class="taste-game-thumb-empty"></span>`;
+      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
+      const cnAttr = g.custom_name ? ` data-custom-name="${escH(g.custom_name)}"` : '';
+      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
+      const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
+      const ruleOn = ruleSet?.has(ruleKey) ? ' is-on' : '';
+      return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button></div>`;
+    };
+    return games.map(renderItem).join('');
+  }
+
   const _tasteInnerHtml = `
     <div class="taste-bio-section">
       <div class="taste-section-label">한줄 소개</div>
@@ -1041,6 +1062,7 @@ async function openProfilePanel(autoSubsheet = null) {
   // meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임) 연동. 자기소개 페이지와 동일 데이터 공유.
   const _meetingStyleTags = ['전략게임', '파티게임', '협력게임', '초보환영', '장시간게임', '짧은게임'];
   const _meeting = meetingProfile || { bio: '', location: '', available: '', travelRange: '', meetingStyle: [], likedGames: [], curiousGames: [], ruleGames: [] };
+  const _ruleSet = new Set((_meeting.ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
   const _relDay = iso => {
     if (!iso) return '';
     const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(iso)) ? iso + 'T00:00:00' : iso);
@@ -1109,7 +1131,7 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
     <div class="taste-game-section">
       <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount">${_meeting.likedGames.length}개</span> <button class="mb-taste-link" type="button">취향보드와 연동 →</button></div>
-      <div class="taste-game-list" id="meetinglikedList">${_buildTasteGameItems(_meeting.likedGames)}</div>
+      <div class="taste-game-list" id="meetinglikedList">${_buildMeetingGameItems(_meeting.likedGames, _ruleSet)}</div>
       <button class="taste-add-btn" id="meetinglikedAddBtn" type="button">+ 게임 추가</button>
       <div class="taste-search-wrap" id="meetinglikedSearch" style="display:none">
         <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
@@ -1118,7 +1140,7 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
     <div class="taste-game-section">
       <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount">${_meeting.curiousGames.length}개</span> <button class="mb-taste-link" type="button">취향보드와 연동 →</button></div>
-      <div class="taste-game-list" id="meetingcuriousList">${_buildTasteGameItems(_meeting.curiousGames)}</div>
+      <div class="taste-game-list" id="meetingcuriousList">${_buildMeetingGameItems(_meeting.curiousGames, _ruleSet)}</div>
       <button class="taste-add-btn" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button>
       <div class="taste-search-wrap" id="meetingcuriousSearch" style="display:none">
         <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
@@ -1931,6 +1953,19 @@ async function openProfilePanel(autoSubsheet = null) {
                 }
                 return;
               }
+              const ruleBtn = e.target.closest('.mb-rule-btn');
+              if (ruleBtn) {
+                const item = ruleBtn.closest('.taste-game-item');
+                const gameId = item?.dataset.gameId || null;
+                const customName = item?.dataset.customName || null;
+                const isOn = ruleBtn.classList.toggle('is-on');
+                if (isOn) {
+                  await window.CottageDB?.addMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
+                } else {
+                  await window.CottageDB?.removeMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
+                }
+                return;
+              }
               const delBtn = e.target.closest('.taste-game-del');
               if (!delBtn) return;
               const item = delBtn.closest('.taste-game-item');
@@ -2380,6 +2415,7 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
     ${_buildMiniBarWeekHtml(_myVotes, _myVoteGames, userId, false)}
   </div>`;
 
+  const _otherRuleSet = new Set((ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
   const buildReadOnlyGames = (games) => {
     if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
     return games.map(g => {
@@ -2390,7 +2426,9 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
         : `<span class="taste-game-thumb-empty"></span>`;
       const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
       const clickable = g.game_id ? ' taste-game-item--clickable' : '';
-      return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${_e(name)}</span></div>`;
+      const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
+      const ruleBadge = _otherRuleSet.has(ruleKey) ? '<span class="mb-rule-badge">📖</span>' : '';
+      return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${_e(name)}</span>${ruleBadge}</div>`;
     }).join('');
   };
 
