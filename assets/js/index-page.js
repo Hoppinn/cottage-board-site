@@ -1355,7 +1355,7 @@ let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주�
         const uid  = track.dataset.uid;
         const date = track.dataset.date;
         window.CottageDB?.trackEvent('meeting_planner_bar_click', { date, user_id: uid });
-        window.openDateScheduleModal?.(uid, date);
+        window.openDateScheduleModal?.(uid, date, { onDirtyClosed: () => _meetingReload?.() });
       });
     });
 

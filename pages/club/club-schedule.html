@@ -1858,7 +1858,17 @@
       el.querySelectorAll('.sched-bar-track[data-date]').forEach(track => {
         track.addEventListener('click', () => {
           window.CottageDB?.trackEvent('meeting_planner_bar_click');
-          window.openDateScheduleModal?.(track.dataset.uid, track.dataset.date);
+          const _uid = track.dataset.uid, _date = track.dataset.date;
+          window.openDateScheduleModal?.(_uid, _date, {
+            onDirtyClosed: (updatedGames) => {
+              if (updatedGames) {
+                allVoteGames = allVoteGames.filter(g => !(g.vote_date === _date && String(g.user_id) === _uid));
+                allVoteGames.push(...updatedGames);
+              }
+              renderWeekView(weekOffset);
+              try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
+            },
+          });
         });
       });
 

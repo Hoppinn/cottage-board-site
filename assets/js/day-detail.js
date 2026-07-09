@@ -425,11 +425,18 @@
    * @param {string} userId — 클릭한 막대의 user_id
    * @param {string} voteDate — 'YYYY-MM-DD'
    */
-  window.openDateScheduleModal = async function (userId, voteDate) {
+  window.openDateScheduleModal = async function (userId, voteDate, opts) {
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
     el.className = 'dd-overlay';
+
+    let _schedDirty = false;
+    let _latestMyGames = null;
+    const closeEl = () => {
+      if (_schedDirty) opts?.onDirtyClosed?.(_latestMyGames);
+      el.remove();
+    };
 
     const renderModal = (bodyHtml) => {
       el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
@@ -438,8 +445,8 @@
           <button class="dd-close-btn" type="button">닫기</button>
         </div>
       </div>`;
-      el.querySelector('.dd-close-btn').addEventListener('click', () => el.remove());
-      el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+      el.querySelector('.dd-close-btn').addEventListener('click', closeEl);
+      el.addEventListener('click', e => { if (e.target === el) closeEl(); });
     };
 
     renderModal('<div class="dd-loading">불러오는 중…</div>');
@@ -458,6 +465,7 @@
       }
 
       const myGames = voteGames.filter(g => String(g.user_id) === String(userId));
+      _latestMyGames = myGames;
       const myGameKeys = new Set(myGames.map(gameKey));
 
       const others = votes.filter(v => String(v.user_id) !== String(userId));
@@ -552,7 +560,7 @@
             btn.dataset.priority = String(newPriority);
             btn.textContent = newPriority ? '⭐' : '☆';
             if (noticeEl) noticeEl.style.display = 'none';
-            try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
+            _schedDirty = true;
           });
         });
 
@@ -579,7 +587,7 @@
             sel.dataset.prev = newCond;
             const _liveLabel = sel.closest('li')?.querySelector('.dd-cond-live');
             if (_liveLabel) _liveLabel.textContent = window.formatCondLabel?.(newCond, gameObj.game_id ?? null) || '';
-            try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
+            _schedDirty = true;
           });
         });
       }
