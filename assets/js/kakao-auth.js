@@ -906,8 +906,8 @@ async function openProfilePanel(autoSubsheet = null) {
     return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
-  // 모임보드 전용 게임 아이템 — 📖 룰설명 토글 버튼 포함
-  function _buildMeetingGameItems(games, ruleSet) {
+  // 모임보드 전용 게임 아이템 — 📖 룰설명 토글 버튼 포함, 초기 maxInitial=2(주간 배지 로드 전)
+  function _buildMeetingGameItems(games, ruleSet, maxInitial = 2) {
     if (!games.length) return '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
     const renderItem = g => {
       const _gd = g.game_id ? window.gameData?.[g.game_id] : null;
@@ -924,7 +924,9 @@ async function openProfilePanel(autoSubsheet = null) {
       const ruleOn = ruleSet?.has(ruleKey) ? ' is-on' : '';
       return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button></div>`;
     };
-    return games.map(renderItem).join('');
+    if (games.length <= maxInitial) return games.map(renderItem).join('');
+    const restCount = games.length - maxInitial;
+    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
   const _tasteInnerHtml = `
@@ -1935,7 +1937,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
             listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
               item.addEventListener('click', e => {
-                if (e.target.closest('.taste-game-del')) return;
+                if (e.target.closest('.taste-game-del') || e.target.closest('.mb-rule-btn') || e.target.closest('.mb-week-badge')) return;
                 window.ensureGameSheet?.();
                 window.openGameSheet?.(item.dataset.gameId);
               });
@@ -2041,10 +2043,12 @@ async function openProfilePanel(autoSubsheet = null) {
                     newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
                     if (gameId) newItem.dataset.gameId = gameId;
                     if (customName) newItem.dataset.customName = customName;
-                    newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="taste-game-del" type="button" title="삭제">✕</button>`;
+                    const _dynRuleKey = gameId ? `id:${gameId}` : `cn:${customName || ''}`;
+                    const _dynRuleOn = _ruleSet?.has(_dynRuleKey) ? ' is-on' : '';
+                    newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${_dynRuleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button>`;
                     if (gameId) {
                       newItem.addEventListener('click', e => {
-                        if (e.target.closest('.taste-game-del')) return;
+                        if (e.target.closest('.taste-game-del') || e.target.closest('.mb-rule-btn')) return;
                         window.ensureGameSheet?.();
                         window.openGameSheet?.(String(gameId));
                       });
@@ -2092,11 +2096,18 @@ async function openProfilePanel(autoSubsheet = null) {
 
             // 주간 배지: 플래너 게임 → 하고싶은/배우고싶은 칩에 요일 배지 + 플래너 전용 항목
             const _DOW = '일월화수목금토';
-            const _gKey = g => g.game_id ? `id:${g.game_id}` : `cn:${String(g.custom_name || '')}`;
+            // game_id 정규화: 숫자 bggId / 키 문자열 / #접두 세 형태를 gameData 키로 통일
+            const _canonId = rawId => {
+              if (!rawId) return null;
+              const clean = String(rawId).startsWith('#') ? String(rawId).slice(1) : String(rawId);
+              return _getGameKeyById(clean) || clean;
+            };
+            const _gCanon = g => g.game_id ? `id:${_canonId(g.game_id)}` : `cn:${g.custom_name || ''}`;
+
             const _vgMap = { want: new Map(), learn: new Map() };
             for (const g of myVoteGames) {
               const lt = g.list_type === 'want' ? 'want' : 'learn';
-              const key = _gKey(g);
+              const key = _gCanon(g);
               if (!_vgMap[lt].has(key)) _vgMap[lt].set(key, { g, dates: [] });
               _vgMap[lt].get(key).dates.push(g.vote_date);
             }
@@ -2107,32 +2118,70 @@ async function openProfilePanel(autoSubsheet = null) {
             for (const { lt, listId, games } of _badgeLists) {
               const listEl = subBody.querySelector(`#${listId}`);
               if (!listEl) continue;
-              const meetingSet = new Set(games.map(_gKey));
+              // canonical key → raw game_id (칩 data-game-id 조회용)
+              const meetingMap = new Map(games.map(g => [_gCanon(g), g.game_id ? String(g.game_id) : null]));
+
               for (const [key, { g, dates }] of _vgMap[lt].entries()) {
                 const days = [...new Set(dates.map(d => _DOW[new Date(d + 'T00:00:00').getDay()]))].join('·');
-                if (meetingSet.has(key)) {
-                  // 기존 칩에 요일 배지
-                  const chipEl = key.startsWith('id:')
-                    ? listEl.querySelector(`.taste-game-item[data-game-id="${key.slice(3)}"]`)
+                if (meetingMap.has(key)) {
+                  // 기존 칩에 요일 배지 + mb-has-week 클래스
+                  const rawId = meetingMap.get(key);
+                  const chipEl = rawId
+                    ? listEl.querySelector(`.taste-game-item[data-game-id="${rawId}"]`)
                     : [...listEl.querySelectorAll('.taste-game-item')].find(el => el.dataset.customName === key.slice(3));
                   if (chipEl && !chipEl.querySelector('.mb-week-badge')) {
                     const badge = document.createElement('span');
                     badge.className = 'mb-week-badge';
                     badge.textContent = `(${days})`;
                     chipEl.insertBefore(badge, chipEl.querySelector('.taste-game-del'));
+                    chipEl.classList.add('mb-has-week');
                   }
                 } else {
                   // 플래너에만 있는 게임 — 하단에 읽기 전용 항목 추가
-                  const gd = g.game_id ? window.gameData?.[g.game_id] : null;
-                  const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
+                  const canonKey = _canonId(g.game_id);
+                  const gd = canonKey ? window.gameData?.[canonKey] : null;
+                  const name = gd
+                    ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || canonKey)
+                    : (g.custom_name || canonKey || '');
                   const thumb = gd?.images?.thumbnail
                     ? `<img class="taste-game-thumb" src="${escH(gd.images.thumbnail)}" alt="">`
                     : `<span class="taste-game-thumb-empty"></span>`;
                   const el = document.createElement('div');
-                  el.className = 'taste-game-item mb-planner-only-item';
+                  el.className = 'taste-game-item mb-planner-only-item mb-has-week';
                   el.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><span class="mb-week-badge">(${days})</span><span class="mb-planner-hint">플래너</span>`;
                   listEl.appendChild(el);
                 }
+              }
+
+              // 주간 게임 우선 정렬 + 접기/더보기 (기존 fold 구조 제거 후 재빌드)
+              listEl.querySelector('.taste-game-more-wrap')?.remove();
+              listEl.querySelector('.taste-more-btn')?.remove();
+              const emptyEl = listEl.querySelector('.taste-game-empty');
+              if (emptyEl) continue; // 게임 없음 상태 유지
+              const weekChips = [...listEl.querySelectorAll('.taste-game-item.mb-has-week')];
+              const otherChips = [...listEl.querySelectorAll('.taste-game-item:not(.mb-has-week)')];
+              [...weekChips, ...otherChips].forEach(el => listEl.appendChild(el));
+
+              const maxVisible = weekChips.length > 0 ? 5 : 2;
+              const allChips = [...listEl.querySelectorAll('.taste-game-item')];
+              if (allChips.length > maxVisible) {
+                const visible = allChips.slice(0, maxVisible);
+                const rest = allChips.slice(maxVisible);
+                const wrap = document.createElement('div');
+                wrap.className = 'taste-game-more-wrap';
+                wrap.hidden = true;
+                rest.forEach(el => wrap.appendChild(el));
+                listEl.appendChild(wrap);
+                const moreBtn = document.createElement('button');
+                moreBtn.className = 'taste-more-btn';
+                moreBtn.type = 'button';
+                moreBtn.textContent = `더 보기 (${rest.length}개 더)`;
+                moreBtn.addEventListener('click', () => {
+                  const hidden = wrap.hidden;
+                  wrap.hidden = !hidden;
+                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${rest.length}개 더)`;
+                });
+                listEl.appendChild(moreBtn);
               }
             }
           })();
