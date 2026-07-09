@@ -37,7 +37,7 @@ const hasHardDifficultyFilter =
   normalizedLevel === "hardcore";
 
 const maxWeight =
-  hasHardDifficultyFilter || playerValue === '9+'
+  hasHardDifficultyFilter || playerValue === '9+' || !recommendState.weightCap
     ? 5.0
     : DEFAULT_RECOMMEND_MAX_WEIGHT;
 
@@ -222,7 +222,7 @@ function openRecommendOverlay(){
     const nl = normalizeLevelValue(_overlayLevel);
     return nl === "heavy_mania" || nl === "hardcore";
   })();
-  const _overlayMaxWeight = _overlayHardLevel || _overlayPlayer === '9+' ? 5.0 : DEFAULT_RECOMMEND_MAX_WEIGHT;
+  const _overlayMaxWeight = _overlayHardLevel || _overlayPlayer === '9+' || !recommendState.weightCap ? 5.0 : DEFAULT_RECOMMEND_MAX_WEIGHT;
 
   const allFiltered = getAllGamesArray().filter(game => {
     const data = GameView.getRecommendData(game);
@@ -414,7 +414,8 @@ function _fireRecommendComplete() {
 const recommendState = {
   players: "",
   level: "",
-  mood: ""
+  mood: "",
+  weightCap: true
 };
 
 const playerTextMap = {
@@ -528,6 +529,12 @@ const moodValue = recommendState.mood;
         ${renderInlineOption("mood", "", "상관없어요", moodValue)}
       </div>
 
+      <div class="recommend-weight-cap-row">
+        <button type="button" class="recommend-weight-cap-chip${recommendState.weightCap ? ' is-on' : ' is-off'}" data-action="toggle-weight-cap">
+          ${recommendState.weightCap ? '✓ 난이도 필터 (헤비·하드코어 제외)' : '난이도 필터 (헤비·하드코어 제외)'}
+        </button>
+      </div>
+
     </div>
   `;
 }
@@ -550,6 +557,14 @@ if(recommendFilter){
           if(!wasOpen) group.classList.add('is-open');
         }
 
+        return;
+      }
+
+      const weightCapBtn = event.target.closest('[data-action="toggle-weight-cap"]');
+      if (weightCapBtn) {
+        recommendState.weightCap = !recommendState.weightCap;
+        updateRecommendFilterText();
+        renderGameCards();
         return;
       }
 

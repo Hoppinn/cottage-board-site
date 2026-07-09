@@ -1039,6 +1039,41 @@ body.recommend-page main{
   border-top:0;
 }
 
+/* 추천 필터 난이도 제한 토글 칩 */
+.recommend-weight-cap-row{
+  margin-top:8px;
+  display:flex;
+}
+.recommend-weight-cap-chip{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 12px;
+  border:1.5px solid var(--line);
+  border-radius:20px;
+  background:var(--paper);
+  color:#b0a090;
+  font-size:12px;
+  font-weight:500;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:color 0.15s,border-color 0.15s,background 0.15s;
+}
+.recommend-weight-cap-chip.is-on{
+  border-color:#c8a870;
+  background:#fdf6ec;
+  color:#5a3c1e;
+  font-weight:600;
+}
+.recommend-weight-cap-chip.is-on:hover{
+  background:#f5edda;
+  border-color:#b89060;
+}
+.recommend-weight-cap-chip.is-off:hover{
+  border-color:#ccc;
+  background:#f5f3f0;
+  color:#999;
+}
+
 .recommend-step-head{
   width:100%;
   border:0;
