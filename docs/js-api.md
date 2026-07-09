@@ -86,8 +86,8 @@
 | `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD' |
 | `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert |
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소 |
-| `getMeetingProfile(userId)` | 모임 보드/자기소개 편집용. profiles.bio + member_intros + meeting_game_prefs(want_this_time, can_explain_rules) 통합 조회 → `{bio, nickname, location, available, travelRange, meetingStyle, favoriteGames, cardColor, wantGames, ruleGames}` |
-| `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회 (`openOtherMeetingSheet`용). getUserTasteProfile과 동일 패턴 |
+| `getMeetingProfile(userId)` | 모임 보드/자기소개 편집용. profiles.bio + member_intros + game_likes(getUserLikedGamesAll) + game_curious(getUserCuriousGamesAll) + meeting_game_prefs(can_explain_rules만) 통합 조회 → `{bio, nickname, location, available, travelRange, meetingStyle, favoriteGames, cardColor, likedGames, curiousGames, ruleGames}` (2026-07-09: wantGames → likedGames/curiousGames 미러링 전환) |
+| `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회 (`openOtherMeetingSheet`용). getUserTasteProfile과 동일 패턴. 반환형 동일: `{..., likedGames, curiousGames, ruleGames}` |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |
 | `addMeetingGamePref(userId, listType, gameId, customName)` / `removeMeetingGamePref(...)` | meeting_game_prefs 추가/삭제. listType: `'want_this_time'` \| `'can_explain_rules'`. addGamePref/removeGamePref와 동일 구조 |
 | `getMeetingVoteGames(startDate, endDate)` | 모임 플래너 날짜별 게임 선호 조회. → `[{vote_date, user_id, list_type, game_id, custom_name, is_priority, player_condition}]`. getMeetingVotes와 동일 패턴 |

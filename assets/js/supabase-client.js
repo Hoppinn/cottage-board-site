@@ -779,14 +779,16 @@ window._cottageSess = (function () {
     } catch (e) { return { error: e }; }
   }
 
-  // 본인 모임 보드 / 자기소개 편집용 — profiles.bio + member_intros + meeting_game_prefs 통합 조회
+  // 본인 모임 보드 / 자기소개 편집용 — profiles.bio + member_intros + game_likes/game_curious + can_explain_rules 통합 조회
+  // want_this_time은 game_likes 미러링으로 전환 후 읽기 중단 (db-schema.md UNUSED 참조)
   async function getMeetingProfile(userId) {
     if (!userId) return null;
     try {
-      const [profileRes, introRes, wantGames, ruleGames] = await Promise.all([
+      const [profileRes, introRes, likedGames, curiousGames, ruleGames] = await Promise.all([
         db.from('profiles').select('bio').eq('user_id', userId).maybeSingle(),
         db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
-        getMeetingGamePrefs(userId, 'want_this_time'),
+        getUserLikedGamesAll(userId),
+        getUserCuriousGamesAll(userId),
         getMeetingGamePrefs(userId, 'can_explain_rules'),
       ]);
       const intro = introRes.data || {};
@@ -799,7 +801,8 @@ window._cottageSess = (function () {
         meetingStyle: intro.meeting_style || [],
         favoriteGames: intro.favorite_games || '',
         cardColor: intro.card_color || '',
-        wantGames,
+        likedGames,
+        curiousGames,
         ruleGames,
       };
     } catch (_) { return null; }
@@ -809,10 +812,11 @@ window._cottageSess = (function () {
   async function getUserMeetingProfile(userId) {
     if (!userId) return null;
     try {
-      const [profileRes, introRes, wantGames, ruleGames] = await Promise.all([
+      const [profileRes, introRes, likedGames, curiousGames, ruleGames] = await Promise.all([
         db.from('profiles').select('nickname, photo_url, bio, rep_achievement_id').eq('user_id', userId).maybeSingle(),
         db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
-        getMeetingGamePrefs(userId, 'want_this_time'),
+        getUserLikedGamesAll(userId),
+        getUserCuriousGamesAll(userId),
         getMeetingGamePrefs(userId, 'can_explain_rules'),
       ]);
       const profile = profileRes.data || {};
@@ -827,7 +831,8 @@ window._cottageSess = (function () {
         available: intro.available || '',
         travelRange: intro.travel_range || '',
         meetingStyle: intro.meeting_style || [],
-        wantGames,
+        likedGames,
+        curiousGames,
         ruleGames,
       };
     } catch (_) { return null; }

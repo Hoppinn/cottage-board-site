@@ -1040,7 +1040,7 @@ async function openProfilePanel(autoSubsheet = null) {
   // 모임 보드: 회원 자기소개(member_intros) + profiles.bio(한줄소개, 취향보드와 공유 SSOT) +
   // meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임) 연동. 자기소개 페이지와 동일 데이터 공유.
   const _meetingStyleTags = ['전략게임', '파티게임', '협력게임', '초보환영', '장시간게임', '짧은게임'];
-  const _meeting = meetingProfile || { bio: '', location: '', available: '', travelRange: '', meetingStyle: [], wantGames: [], ruleGames: [] };
+  const _meeting = meetingProfile || { bio: '', location: '', available: '', travelRange: '', meetingStyle: [], likedGames: [], curiousGames: [], ruleGames: [] };
   const _relDay = iso => {
     if (!iso) return '';
     const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(iso)) ? iso + 'T00:00:00' : iso);
@@ -1108,19 +1108,19 @@ async function openProfilePanel(autoSubsheet = null) {
       </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">🎯 이번에 하고 싶은 게임 <span class="taste-count" id="meetingwantCount">${_meeting.wantGames.length}개</span></div>
-      <div class="taste-game-list" id="meetingwantList">${_buildTasteGameItems(_meeting.wantGames)}</div>
-      <button class="taste-add-btn" id="meetingwantAddBtn" type="button">+ 게임 추가</button>
-      <div class="taste-search-wrap" id="meetingwantSearch" style="display:none">
+      <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount">${_meeting.likedGames.length}개</span> <button class="mb-taste-link" type="button">취향보드와 연동 →</button></div>
+      <div class="taste-game-list" id="meetinglikedList">${_buildTasteGameItems(_meeting.likedGames)}</div>
+      <button class="taste-add-btn" id="meetinglikedAddBtn" type="button">+ 게임 추가</button>
+      <div class="taste-search-wrap" id="meetinglikedSearch" style="display:none">
         <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
         <div class="taste-search-results"></div>
       </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">📖 룰 설명 가능한 게임 <span class="taste-count" id="meetingruleCount">${_meeting.ruleGames.length}개</span></div>
-      <div class="taste-game-list" id="meetingruleList">${_buildTasteGameItems(_meeting.ruleGames)}</div>
-      <button class="taste-add-btn" id="meetingruleAddBtn" type="button">+ 게임 추가</button>
-      <div class="taste-search-wrap" id="meetingruleSearch" style="display:none">
+      <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount">${_meeting.curiousGames.length}개</span> <button class="mb-taste-link" type="button">취향보드와 연동 →</button></div>
+      <div class="taste-game-list" id="meetingcuriousList">${_buildTasteGameItems(_meeting.curiousGames)}</div>
+      <button class="taste-add-btn" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button>
+      <div class="taste-search-wrap" id="meetingcuriousSearch" style="display:none">
         <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
         <div class="taste-search-results"></div>
       </div>
@@ -1894,9 +1894,16 @@ async function openProfilePanel(autoSubsheet = null) {
             editWrap.style.display = 'none';
           });
 
-          // ── 게임 목록 (이번에 하고싶은 게임 / 룰 설명 가능한 게임) ──
-          for (const listKey of ['want', 'rule']) {
-            const listType = listKey === 'want' ? 'want_this_time' : 'can_explain_rules';
+          // ── 게임 목록 (하고싶은 게임=game_likes 미러 / 배우고싶은 게임=game_curious 미러) ──
+          // 취향보드와 연동 링크
+          subBody.querySelectorAll('.mb-taste-link').forEach(btn => {
+            btn.addEventListener('click', e => { e.preventDefault(); openProfilePanel('taste'); });
+          });
+
+          for (const { listKey, table } of [
+            { listKey: 'liked', table: 'game_likes' },
+            { listKey: 'curious', table: 'game_curious' },
+          ]) {
             const listEl = subBody.querySelector(`#meeting${listKey}List`);
             const addBtn = subBody.querySelector(`#meeting${listKey}AddBtn`);
             const searchWrap = subBody.querySelector(`#meeting${listKey}Search`);
@@ -1929,7 +1936,7 @@ async function openProfilePanel(autoSubsheet = null) {
               const item = delBtn.closest('.taste-game-item');
               const gameId = item?.dataset.gameId || null;
               const customName = item?.dataset.customName || null;
-              await window.CottageDB?.removeMeetingGamePref?.(userId, listType, gameId, customName);
+              await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
               item.remove();
               if (!listEl.querySelector('.taste-game-item')) {
                 listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
@@ -1983,7 +1990,7 @@ async function openProfilePanel(autoSubsheet = null) {
                       if (existing.some(el => el.dataset.customName === customName)) return;
                     }
 
-                    await window.CottageDB?.addMeetingGamePref?.(userId, listType, gameId, customName);
+                    await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
 
                     const _gd2 = gameId ? window.gameData?.[gameId] : null;
                     const name = _gd2
@@ -2304,7 +2311,7 @@ async function openOtherMeetingSheet(userId) {
 async function _openOtherMeetingSubSheet(userId, nickname, data) {
   document.getElementById('otherMeetingSheet')?.remove();
   const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const { bio, location, available, travelRange, meetingStyle, wantGames, ruleGames } = data;
+  const { bio, location, available, travelRange, meetingStyle, likedGames, curiousGames, ruleGames } = data;
 
   // 이번 주 참여 일정 fetch
   const _today = new Date();
@@ -2354,12 +2361,12 @@ async function _openOtherMeetingSubSheet(userId, nickname, data) {
       </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">🎯 이번에 하고 싶은 게임 <span class="taste-count">${wantGames.length}개</span></div>
-      <div class="taste-game-list">${buildReadOnlyGames(wantGames)}</div>
+      <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count">${likedGames.length}개</span></div>
+      <div class="taste-game-list">${buildReadOnlyGames(likedGames)}</div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">📖 룰 설명 가능한 게임 <span class="taste-count">${ruleGames.length}개</span></div>
-      <div class="taste-game-list">${buildReadOnlyGames(ruleGames)}</div>
+      <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count">${curiousGames.length}개</span></div>
+      <div class="taste-game-list">${buildReadOnlyGames(curiousGames)}</div>
     </div>`;
 
   // 본인 내 보드의 _openSubSheet와 동일한 .profile-subsheet 마크업 — 뒤로가기는 메인 패널만 노출
