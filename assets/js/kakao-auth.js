@@ -2054,6 +2054,52 @@ async function openProfilePanel(autoSubsheet = null) {
             weekEl.querySelectorAll('.mb-detail-btn').forEach(btn =>
               btn.addEventListener('click', () => window.openDateScheduleModal?.(btn.dataset.uid, btn.dataset.date))
             );
+
+            // 주간 배지: 플래너 게임 → 하고싶은/배우고싶은 칩에 요일 배지 + 플래너 전용 항목
+            const _DOW = '일월화수목금토';
+            const _gKey = g => g.game_id ? `id:${g.game_id}` : `cn:${String(g.custom_name || '')}`;
+            const _vgMap = { want: new Map(), learn: new Map() };
+            for (const g of myVoteGames) {
+              const lt = g.list_type === 'want' ? 'want' : 'learn';
+              const key = _gKey(g);
+              if (!_vgMap[lt].has(key)) _vgMap[lt].set(key, { g, dates: [] });
+              _vgMap[lt].get(key).dates.push(g.vote_date);
+            }
+            const _badgeLists = [
+              { lt: 'want',  listId: 'meetinglikedList',  games: _meeting.likedGames },
+              { lt: 'learn', listId: 'meetingcuriousList', games: _meeting.curiousGames },
+            ];
+            for (const { lt, listId, games } of _badgeLists) {
+              const listEl = subBody.querySelector(`#${listId}`);
+              if (!listEl) continue;
+              const meetingSet = new Set(games.map(_gKey));
+              for (const [key, { g, dates }] of _vgMap[lt].entries()) {
+                const days = [...new Set(dates.map(d => _DOW[new Date(d + 'T00:00:00').getDay()]))].join('·');
+                if (meetingSet.has(key)) {
+                  // 기존 칩에 요일 배지
+                  const chipEl = key.startsWith('id:')
+                    ? listEl.querySelector(`.taste-game-item[data-game-id="${key.slice(3)}"]`)
+                    : [...listEl.querySelectorAll('.taste-game-item')].find(el => el.dataset.customName === key.slice(3));
+                  if (chipEl && !chipEl.querySelector('.mb-week-badge')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'mb-week-badge';
+                    badge.textContent = `(${days})`;
+                    chipEl.insertBefore(badge, chipEl.querySelector('.taste-game-del'));
+                  }
+                } else {
+                  // 플래너에만 있는 게임 — 하단에 읽기 전용 항목 추가
+                  const gd = g.game_id ? window.gameData?.[g.game_id] : null;
+                  const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
+                  const thumb = gd?.images?.thumbnail
+                    ? `<img class="taste-game-thumb" src="${escH(gd.images.thumbnail)}" alt="">`
+                    : `<span class="taste-game-thumb-empty"></span>`;
+                  const el = document.createElement('div');
+                  el.className = 'taste-game-item mb-planner-only-item';
+                  el.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><span class="mb-week-badge">(${days})</span><span class="mb-planner-hint">플래너</span>`;
+                  listEl.appendChild(el);
+                }
+              }
+            }
           })();
         }); // end meeting afterRender
       }
