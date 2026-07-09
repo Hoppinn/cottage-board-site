@@ -494,7 +494,8 @@
             const curCond = g.player_condition || 'any';
             const selectOpts = Object.entries(COND_LABELS)
               .map(([v, l]) => `<option value="${v}"${v === curCond ? ' selected' : ''}>${l}</option>`).join('');
-            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" data-listtype="${g.list_type}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            const _initCondLabel = window.formatCondLabel?.(curCond, g.game_id) || '';
+            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><span class="dd-cond-tag dd-cond-live">${esc(_initCondLabel)}</span><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
@@ -576,6 +577,8 @@
             }
             gameObj.player_condition = newCond;
             sel.dataset.prev = newCond;
+            const _liveLabel = sel.closest('li')?.querySelector('.dd-cond-live');
+            if (_liveLabel) _liveLabel.textContent = window.formatCondLabel?.(newCond, gameObj.game_id ?? null) || '';
             try { window.parent?.postMessage({ type: 'cottage-meeting-saved' }, '*'); } catch (_) {}
           });
         });
