@@ -2067,6 +2067,11 @@
         if (_initDone) renderWeekView(weekOffset);
         return;
       }
+      if (e.data?.type === 'cottage-edit') {
+        const ds = e.data.date;
+        if (ds && ds >= toDateStr(TODAY) && _initDone) _openMultiSheet?.({ startStep: 2, dates: [ds] });
+        return;
+      }
       if (e.data?.type !== 'cottage-register') return;
       const ds = e.data.date;
       if (!ds) return;

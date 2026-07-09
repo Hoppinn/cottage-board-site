@@ -1205,6 +1205,7 @@ function toDateStr(d) {
 ========================= */
 
 let _plannerPendingDate = null; // mpeGoPlanner 클릭 → 프레임 준비 전 대기 날짜
+let _plannerPendingEdit = null; // 홈 수정 버튼 → 프레임 준비 전 대기 날짜
 let _meetingDirty  = false;    // 플래너에서 저장 완료 신호 수신 → closeModal 시 재조회
 let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주입
 
@@ -1252,6 +1253,10 @@ let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주�
         const ds = _plannerPendingDate;
         _plannerPendingDate = null;
         frame.contentWindow?.postMessage({ type: 'cottage-register', date: ds }, '*');
+      } else if (_plannerPendingEdit) {
+        const ds = _plannerPendingEdit;
+        _plannerPendingEdit = null;
+        frame.contentWindow?.postMessage({ type: 'cottage-edit', date: ds }, '*');
       }
     }
     if (e.data?.type === 'cottage-meeting-saved') {
@@ -1365,6 +1370,38 @@ let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주�
         const uid = nameEl.dataset.uid;
         window.CottageDB?.trackEvent('meeting_profile_click', { user_id: uid });
         window.openOtherMeetingSheet?.(uid);
+      });
+    });
+
+    previewEl.querySelectorAll('.sched-bar-edit-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const ds = btn.closest('.sched-bar-item')?.querySelector('.sched-bar-track')?.dataset.date;
+        if (!ds) return;
+        const _f = document.getElementById('plannerSheetFrame');
+        document.getElementById('openPlannerBtn')?.click();
+        if (_f?.classList.contains('is-ready')) {
+          _f.contentWindow?.postMessage({ type: 'cottage-edit', date: ds }, '*');
+        } else {
+          _plannerPendingEdit = ds;
+        }
+      });
+    });
+
+    previewEl.querySelectorAll('.sched-bar-del-btn').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        e.stopPropagation();
+        const ds = btn.closest('.sched-bar-item')?.querySelector('.sched-bar-track')?.dataset.date;
+        if (!ds) return;
+        if (!confirm('참여를 취소할까요?')) return;
+        const me = window.getKakaoUser?.();
+        if (!me) return;
+        const result = await window.CottageDB?.deleteMeetingVote(String(me.id), ds);
+        if (result?.success) {
+          _meetingReload?.();
+        } else {
+          alert('취소 중 오류가 발생했어요.');
+        }
       });
     });
 
