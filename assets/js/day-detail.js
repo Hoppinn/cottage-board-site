@@ -128,7 +128,10 @@
       font-size: 12px; color: var(--muted);
       cursor: pointer; list-style: none;
       padding: 4px 0; user-select: none;
+      display: flex; align-items: center; gap: 4px;
     }
+    .dd-participants-toggle > summary::after { content: '▼'; font-size: 9px; }
+    .dd-participants-toggle[open] > summary::after { content: '▲'; }
     .dd-participants-toggle > summary::-webkit-details-marker { display: none; }
     .dd-participants-toggle[open] > summary { margin-bottom: 8px; }
 
@@ -481,7 +484,7 @@
 
       const statsHtml = `<div class="dd-stats-row">
         ${statChip('👥', '같은 날', totalCount, false)}
-        ${statChip('⏱', '시간 겹침', overlapCount, overlapCount > 0)}
+        ${statChip('⏱', '나와 시간겹침', overlapCount, overlapCount > 0)}
         ${statChip('🎲', '게임 겹침', gameMatchCount, gameMatchCount > 0)}
       </div>`;
 
@@ -519,10 +522,10 @@
 
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
+        <div class="dd-date">${fmtDate(voteDate)}</div>
+        <div class="dd-time">${myVote.time_start}~${myVote.time_end}시</div>
         ${statsHtml}
         <div class="dd-block">
-          <div class="dd-date">${fmtDate(voteDate)}</div>
-          <div class="dd-time">${myVote.time_start}~${myVote.time_end}시</div>
           ${buildGameSection(wantGameObjs, '🎲', '하고 싶은 게임')}
           ${buildGameSection(learnGameObjs, '📖', '배우고 싶은 게임')}
           ${isMine ? '<p class="dd-star-notice" style="display:none"></p>' : ''}
