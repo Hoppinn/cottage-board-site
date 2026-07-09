@@ -1308,6 +1308,21 @@
                 el.value = '';
               }
             );
+            // .sm-body(overflow-y:auto)가 드롭다운을 클리핑하는 문제 우회
+            // 수정 모드에서 기존 게임이 있으면 입력창이 아래로 밀려 드롭다운이 잘림
+            const acList = el.parentElement?.querySelector('.pr-autocomplete-list');
+            if (acList) {
+              acList.style.position = 'fixed';
+              acList.style.zIndex = '500';
+              const _repos = () => {
+                const r = el.getBoundingClientRect();
+                acList.style.left = r.left + 'px';
+                acList.style.top = (r.bottom + 2) + 'px';
+                acList.style.width = r.width + 'px';
+              };
+              el.addEventListener('input', _repos, { passive: true });
+              el.addEventListener('focus', _repos, { passive: true });
+            }
           });
         }
 
