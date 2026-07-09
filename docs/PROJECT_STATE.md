@@ -195,7 +195,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [x] **1단계: 게임 약칭 소스** — game-abbr.json 생성, build-output abbr 병합, COTTAGE_GAMES abbr 필드 추가
 - [x] **2단계: 막대 2줄 표기** — buildBarsInCard 시간/약칭 2줄, has-games CSS, sched-bar-time ellipsis
 - [x] **2.5단계: 하루 카드 게임 태그 줄** — buildBarsInCard 하단 flex-wrap 칩 (want 🎲 / learn 📖, ·N 합산, 전량 표시)
-- [x] **2.7단계: 대표 게임** — ① DB 레이어 완료 (getMeetingVoteGames 필드 확장 + setMeetingVoteGamePriority 신설). ② UI 레이어 완료 (막대 대표 우선 정렬, 센터모달 ⭐N 집계·표시, buildGameTags 2차 정렬)
+- [x] **2.7단계: 대표 게임** — ① DB 레이어 완료 (getMeetingVoteGames 필드 확장 + setMeetingVoteGamePriority 신설). ② UI 레이어 완료 (막대 대표 우선 정렬, 센터모달 ⭐N 집계·표시, buildGameTags 2차 정렬). ③ 막대 라벨 ⭐ 표시 — is_priority 게임 약칭 앞 ⭐ 프리픽스 (08989de)
   - ⚠️ **알려진 이슈**: `index-page.js:1358` 홈 top-level에서 `openDateScheduleModal(uid, date)` 직접 호출 경로 존재 확인됨. ⭐ 토글 성공 시 `postMessage({type:'cottage-meeting-saved'})` 발송되나, `_meetingDirty` 소비 로직이 `closeModal`(iframe 닫기)에서만 동작 → 홈 미리보기 즉시 갱신 안 됨. 별도 수정 후보로 등록.
 - [x] **3단계: 센터모달 재정의** — openDateMeetingModal 게임 집계 상단, 참여자별 접힘, fromHome 버튼 문구
 - [x] **3단계(홈 클릭 분화)** — index-page.js .sched-bar-track 클릭 → openDateScheduleModal, fromHome:true 전달
