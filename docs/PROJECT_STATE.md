@@ -8,6 +8,9 @@
 
 | 커밋 | 내용 |
 |------|------|
+| 7929080 | docs: CLAUDE.md UI 요소 안보임 버그 디버깅 순서 원칙 추가 |
+| e1c72be | fix: 취향보드 커스텀 입력 미확정 저장 차단(＋ 안 누른 텍스트 경고) + 편집 모드 칩 말줄임 해제(.taste-bio-edit-wrap 스코프) |
+| 7c98cdc | fix: 본인 일정 모달 인원 조건 드롭다운 옆 라벨 병기(dd-cond-live, formatCondLabel 기반, 변경 즉시 갱신) |
 | ae2c86e | fix: 취향보드 한줄소개 커스텀 칩 중복 누적 + 삭제 UI 없음 2건 수정. ① currentTags dedup, customTags 필터를 메뉴 칩 텍스트 기준으로 변경(커뮤니티 칩 이중 추가 방지), allTags Set dedup safety net. ② 커뮤니티 칩 × 삭제 버튼(hover, confirm 다이얼로그). ③ 1-1: 신규 칩 저장 시 page_events 'new_bio_chip' 기록 |
 | 656e0fa | fix: 모임 플래너 수정 모드 자동완성 클리핑 버그. 근본원인: .sm-body(overflow-y:auto)가 position:absolute 드롭다운을 클리핑. 수정 시 기존 게임이 입력창을 아래로 밀어 잘림. attachAc 후 .pr-autocomplete-list를 position:fixed + getBoundingClientRect() 기반 재지정 |
 | (이번) | feat: 인원 조건 라벨에 실제 베스트/추천 인원수 표시 — COTTAGE_GAMES에 bestPlayers/recPlayers 추가(game-display-adapter.js), day-detail.js에 fmtPlayerArr+condLabel+window.formatCondLabel 헬퍼 추가, condBadgeHtml 헬퍼 적용, 개인 모달 isMine=false 조건 표시 추가, club-schedule.html Step 3 칩 레이블 formatCondLabel 적용. 형식: 단일→"베스트 4인", 연속범위→"추천 3~7인", 비연속→"베스트 3·5·6·8인", 데이터없음→"베스트인원" 폴백 |
