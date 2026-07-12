@@ -104,10 +104,11 @@ GPT·Gemini 등 외부 AI/제3자 의견은 구현 지시가 아니라 감사 �
 
 ## 모델/effort 선택 규칙
 
-- 그린(표기·단순 UI·verify): Sonnet medium
+- 그린(표기·단순UI·verify): Sonnet medium
 - 옐로(명확한 버그·소규모 기능): Sonnet high 또는 Opus medium
-- 레드·원인불명 버그(재현불가·간헐적·가설실패 이력): Opus high, 수정 전 원인 조사 단계를 분리
-- Plan 모드 필수 작업(RLS, 묶음 알림 등)은 Opus high 고정
+- 레드·원인불명 버그(재현불가·간헐적·가설실패 이력): Opus xhigh, 수정 전 원인 조사 단계 분리
+- Plan 모드 필수 작업(RLS, 묶음 알림 등): Opus xhigh 고정
+- max: 규칙 외. xhigh로 2회 실패한 문제에만 세션 한정 사용
 
 ## WIP 제한
 
