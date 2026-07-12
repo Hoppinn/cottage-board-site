@@ -2333,7 +2333,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
 
   const fmtVD = ds => {
     const d = new Date(ds + 'T00:00:00');
-    return _days[d.getDay()] + ' ' + (d.getMonth()+1) + '/' + d.getDate();
+    return (d.getMonth()+1) + '/' + d.getDate() + '(' + _days[d.getDay()] + ')';
   };
   const rows = myVotes.map(v => {
     const total = 14; // 9~23시

@@ -250,6 +250,20 @@
       text-align: center;
     }
     .sched-card-more-btn:hover { color: var(--green); }
+    .sched-card-detail-btn {
+      display: block;
+      width: 100%;
+      margin-top: 8px;
+      padding: 8px 0;
+      background: none;
+      border: none;
+      border-top: 1px solid #e8e0d8;
+      font-size: 12px;
+      color: var(--text-info);
+      cursor: pointer;
+      text-align: center;
+    }
+    .sched-card-detail-btn:hover { color: var(--green); background: #f0ece6; }
     .sched-game-tags {
       display: flex;
       flex-wrap: wrap;
@@ -972,7 +986,7 @@
    */
   window.buildBarsInCard = function (dayVotes, voteGames, myVote) {
     if (!dayVotes.length) return '';
-    const MIN_H = 9, MAX_H = 23, LIMIT = 3;
+    const MIN_H = 9, MAX_H = 23;
     const range = MAX_H - MIN_H;
 
     function resolveGameAbbr(g) {
@@ -1067,19 +1081,12 @@
     }
 
     const voteDate = dayVotes[0].vote_date;
-    const shown  = dayVotes.slice(0, LIMIT);
-    const hidden = dayVotes.slice(LIMIT);
-    const moreHtml = hidden.length
-      ? `<div class="sched-card-hidden-rows" style="display:none">${hidden.map(barRow).join('')}</div>
-         <button class="sched-card-more-btn" type="button">+${hidden.length}명 더보기</button>`
-      : '';
 
     return `<div class="sched-card-bars">
       <div class="sched-bar-axis">
         <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
       </div>
-      ${shown.map(barRow).join('')}
-      ${moreHtml}
+      ${dayVotes.map(barRow).join('')}
       ${buildGameTags(voteDate)}
     </div>`;
   };

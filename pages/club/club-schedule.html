@@ -1837,9 +1837,21 @@
             ${headerBtns}
           </div>
           ${window.buildBarsInCard(dayVotes, allVoteGames, myVote)}
+          ${dayVotes.length ? `<button class="sched-card-detail-btn" type="button" data-date="${ds}">이날 모임 한눈에 보기 →</button>` : ''}
         </div>`;
       }
       el.innerHTML = html;
+
+      // 이날 모임 한눈에 보기 → 집계 모달 (홈 미리보기와 동일 모달)
+      el.querySelectorAll('.sched-card-detail-btn[data-date]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const ds = btn.dataset.date;
+          const dv = allVotes.filter(v => v.vote_date === ds);
+          const dg = allVoteGames.filter(g => g.vote_date === ds);
+          window.openDateMeetingModal?.(ds, dv, dg, {});
+        });
+      });
 
       // 헤더 클릭만 상세(등록) 화면 이동 — 바 영역 클릭은 이동 없음
       el.querySelectorAll('.sched-wday-header[data-date]').forEach(hdr => {

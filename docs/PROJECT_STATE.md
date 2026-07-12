@@ -220,7 +220,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **🟢 그린 (Sonnet medium)**
 
-- A-2 참여자 4~5명 기본표시 · A-3 날짜 "7/5(일)" · A-5 홈 전원표시 · A-6 플래너 버튼 — 4개 묶어서 한 프롬프트, 30~45분. 모임 표시 계열이라 파일 1~2개로 끝날 듯.
+- [x] A-2 참여자 4~5명 기본표시 · A-3 날짜 "7/5(일)" · A-5 홈 전원표시 · A-6 플래너 버튼 — 완료. `buildBarsInCard`(day-detail.js) LIMIT=3 슬라이스+더보기 로직 제거(전원 표시, 홈·플래너 공유 함수라 양쪽 동시 적용), `_buildMiniBarWeekHtml`(kakao-auth.js) `fmtVD` "일 7/5"→"7/5(일)" 형식 변경, club-schedule.html 각 날짜 카드에 `.sched-card-detail-btn`("이날 모임 한눈에 보기 →") 추가 → `openDateMeetingModal` 연결(홈과 동일 집계 모달). Playwright 헤드리스로 홈·플래너 양쪽 실데이터 확인(콘솔 에러 없음, 플래너 버튼 클릭→모달 정상 오픈). 단 4명 이상 참여 날짜가 현재 없어 "전원표시" 자체의 시각적 확인은 더보기 버튼 DOM 미생성 확인으로 대체.
 - 그 외: B 스티키 헤더, B verify 2건(취향보드 갱신·고정헤더), C TITLE_DEFS 확인, D 내 보드 스크롤 진입점 3건.
 
 **작업 아님 / 대화로 처리**: A-11 게임코스 개명(메모), B played_at NULL 판단, D 기록보드 공개 범위 검토, B 이번 주 모임 섹션 기획, A-9 기획.
