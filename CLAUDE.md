@@ -102,6 +102,13 @@ GPT·Gemini 등 외부 AI/제3자 의견은 구현 지시가 아니라 감사 �
 - **BUG FIX MODE** 금지사항: 리팩토링·구조 개선·분리·명명 변경·CSS 정리, 다른 문제 수정(보고만), **git revert(멈추고 사전 설명 → 승인 필수)**
 - **REFACTOR MODE** 금지사항: 신규 기능, UI 변경, 요구사항 변경
 
+## 모델/effort 선택 규칙
+
+- 그린(표기·단순 UI·verify): Sonnet medium
+- 옐로(명확한 버그·소규모 기능): Sonnet high 또는 Opus medium
+- 레드·원인불명 버그(재현불가·간헐적·가설실패 이력): Opus high, 수정 전 원인 조사 단계를 분리
+- Plan 모드 필수 작업(RLS, 묶음 알림 등)은 Opus high 고정
+
 ## WIP 제한
 
 활성 작업(WIP)은 동시에 3개 초과 금지. 작업 중 떠오른 아이디어는 PROJECT_STATE.md 다음 작업 후보에 기록만.
