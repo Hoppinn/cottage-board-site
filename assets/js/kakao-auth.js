@@ -1948,7 +1948,7 @@ async function openProfilePanel(autoSubsheet = null) {
             const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
             if (insertBefore) listEl.insertBefore(newItem, insertBefore);
             else listEl.appendChild(newItem);
-            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item:not(.mb-planner-only-item)').length}개`;
           };
 
           // 게임 추가 센터모달 (초성 자동완성 + 좋아하는 게임 퀵픽)
@@ -2048,9 +2048,9 @@ async function openProfilePanel(autoSubsheet = null) {
             const addBtn = subBody.querySelector(`#meeting${listKey}AddBtn`);
             const countEl = subBody.querySelector(`#meeting${listKey}Count`);
 
+            // 썸네일만 클릭 시 게임시트 오픈 (칩 전체 아님)
             listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
-              item.addEventListener('click', e => {
-                if (e.target.closest('.taste-game-del') || e.target.closest('.mb-rule-btn') || e.target.closest('.mb-week-badge')) return;
+              item.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
                 window.ensureGameSheet?.();
                 window.openGameSheet?.(item.dataset.gameId);
               });
@@ -2091,7 +2091,7 @@ async function openProfilePanel(autoSubsheet = null) {
               if (!listEl.querySelector('.taste-game-item')) {
                 listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
               }
-              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item:not(.mb-planner-only-item)').length}개`;
             });
 
             addBtn?.addEventListener('click', () => _openGameAddModal({ listKey, table, listEl, countEl }));
@@ -2354,11 +2354,17 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
   const _vg = Array.isArray(voteGames) ? voteGames : [];
 
   function _gameName(gameId, customName) {
-    if (gameId && window.COTTAGE_GAMES) {
-      const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === String(gameId));
+    // #접두 제거 후 bggId / 슬러그(id) / gameData 키 순으로 이름 해석 — # 노출 방지
+    const clean = gameId != null ? String(gameId).replace(/^#/, '') : '';
+    if (clean && window.COTTAGE_GAMES) {
+      const cg = window.COTTAGE_GAMES.find(c => String(c.bggId) === clean || String(c.id) === clean);
       if (cg) return cg.display;
     }
-    return customName || (gameId ? `#${gameId}` : '?');
+    if (clean && window.gameData?.[clean]) {
+      const gd = window.gameData[clean];
+      return gd.title?.display || gd.title?.owned || gd.title?.bgg || clean;
+    }
+    return customName || clean || '?';
   }
 
   const fmtVD = ds => {
