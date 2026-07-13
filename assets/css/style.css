@@ -4320,6 +4320,15 @@ body.embed-mode {
 .mb-rule-btn:hover{opacity:.85;}
 .mb-rule-btn.is-on:hover{opacity:1;background:#dcecdc;}
 .mb-rule-badge{font-size:13px;flex-shrink:0;}
+/* 모임보드 이번주 게임 칩 — 좋아요 마커 + ⋯ 케밥 */
+.mb-week-game .mb-like-mark{font-size:11px;margin:0 1px;flex-shrink:0;}
+.mb-kebab-btn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:none;border-radius:50%;background:none;cursor:pointer;font-size:16px;color:var(--muted);padding:0;flex-shrink:0;line-height:1;}
+.mb-kebab-btn:hover{background:#ede8de;color:var(--text);}
+.mb-kebab-menu{position:fixed;z-index:var(--z-sheet-modal);background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.18);padding:4px;min-width:170px;display:flex;flex-direction:column;}
+.mb-kebab-item{background:none;border:none;text-align:left;padding:9px 12px;font-size:13px;color:var(--text);cursor:pointer;border-radius:7px;}
+.mb-kebab-item:hover{background:var(--card-bg,#f5f0e8);}
+.mb-kebab-item--danger{color:#c0433a;}
+.mb-daypick-empty{font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 14px;text-align:center;}
 
 /* 모임보드 — 주간 배지 */
 .mb-week-badge{display:inline-block;font-size:10px;font-weight:600;color:#5a3c1e;background:#fdf6ec;border:1px solid #c8a870;border-radius:8px;padding:1px 5px;margin-left:4px;white-space:nowrap;flex-shrink:0;}

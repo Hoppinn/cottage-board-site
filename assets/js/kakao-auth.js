@@ -1096,12 +1096,12 @@ async function openProfilePanel(autoSubsheet = null) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount">${_meeting.likedGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button></div>
-      <div class="taste-game-list" id="meetinglikedList">${_buildMeetingGameItems(_meeting.likedGames, _ruleSet)}</div>
+      <div class="taste-section-label">❤️ 이번 주 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount">${_meeting.curiousGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button></div>
-      <div class="taste-game-list" id="meetingcuriousList">${_buildMeetingGameItems(_meeting.curiousGames, _ruleSet)}</div>
+      <div class="taste-section-label">💡 이번 주 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
@@ -1123,7 +1123,6 @@ async function openProfilePanel(autoSubsheet = null) {
         ${_meetingProfileRowHtml('📍 활동 지역', _meeting.location)}
         ${_meetingProfileRowHtml('🕐 참여 가능 시간', _meeting.available)}
         ${_meetingProfileRowHtml('🚗 이동 가능 범위', _meeting.travelRange)}
-        ${_meetingProfileRowHtml('📝 한줄소개', _meeting.bio)}
       </div>
       <button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
       <div class="meeting-profile-edit-wrap" style="display:none">
@@ -1138,10 +1137,6 @@ async function openProfilePanel(autoSubsheet = null) {
         <div class="intro-field">
           <label class="intro-label">이동 가능 범위</label>
           <input class="intro-input meeting-edit-travel" type="text" placeholder="예: 차로 30분 이내" maxlength="50" value="${escH(_meeting.travelRange)}">
-        </div>
-        <div class="intro-field">
-          <label class="intro-label">한줄소개</label>
-          <input class="intro-input meeting-edit-bio" type="text" placeholder="나를 짧게 소개해보세요" maxlength="60" value="${escH(_meeting.bio)}">
         </div>
         <div class="taste-bio-actions">
           <button class="meeting-profile-save-btn taste-bio-save-btn" type="button">저장</button>
@@ -1908,220 +1903,239 @@ async function openProfilePanel(autoSubsheet = null) {
             const location = subBody.querySelector('.meeting-edit-location').value.trim();
             const available = subBody.querySelector('.meeting-edit-available').value.trim();
             const travelRange = subBody.querySelector('.meeting-edit-travel').value.trim();
-            const newBio = subBody.querySelector('.meeting-edit-bio').value.trim();
 
-            await Promise.all([
-              // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT — 여기서 저장하면 취향보드에도 즉시 반영됨
-              window.CottageDB?.updateUserBio?.(userId, newBio),
-              // meeting_style은 더 이상 편집하지 않음(선호=bio로 통합). payload에서 생략 → 기존 값 보존
-              window.CottageDB?.upsertMeetingIntro?.(userId, {
-                // 자기소개 페이지에서 설정한 닉네임(단톡방 닉네임 등 카카오 닉네임과 다를 수 있음)이 있으면 보존
-                nickname: _meeting.nickname || user.nickname || '',
-                location: location || null,
-                available: available || null,
-                travel_range: travelRange || null,
-              }),
-            ]);
-            _currentBio = newBio;
+            // bio(한줄소개)는 취향보드에서 편집(선호 스타일). 여기선 로지스틱 정보만 저장.
+            await window.CottageDB?.upsertMeetingIntro?.(userId, {
+              // 자기소개 페이지에서 설정한 닉네임(단톡방 닉네임 등 카카오 닉네임과 다를 수 있음)이 있으면 보존
+              nickname: _meeting.nickname || user.nickname || '',
+              location: location || null,
+              available: available || null,
+              travel_range: travelRange || null,
+            });
 
             displayWrap.innerHTML = `
               ${_meetingProfileRowHtml('📍 활동 지역', location)}
               ${_meetingProfileRowHtml('🕐 참여 가능 시간', available)}
-              ${_meetingProfileRowHtml('🚗 이동 가능 범위', travelRange)}
-              ${_meetingProfileRowHtml('📝 한줄소개', newBio)}`;
+              ${_meetingProfileRowHtml('🚗 이동 가능 범위', travelRange)}`;
             displayWrap.style.display = '';
             editWrap.style.display = 'none';
-            // 상단 선호 스타일 요약(=bio 태그)도 갱신
-            const _likeTagsEl = subBody.querySelector('#mbLikeStyleTags');
-            const _newBioTags = newBio ? newBio.split(',').map(t => t.trim()).filter(Boolean) : [];
-            if (_likeTagsEl) _likeTagsEl.innerHTML = _newBioTags.length
-              ? _newBioTags.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
-              : '<span class="mb-pref-empty">미설정</span>';
           });
 
-          // ── 게임 목록 (하고싶은 게임=game_likes 미러 / 배우고싶은 게임=game_curious 미러) ──
-          // 리스트에 게임 칩 1개 추가 (검색/퀵픽 공용)
-          const _appendMeetingChip = (listEl, countEl, gameId, customName) => {
-            const _gd = gameId ? window.gameData?.[gameId] : null;
-            const name = _gd
-              ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(gameId))
-              : (customName || '');
-            const thumb = _gd?.images?.thumbnail
-              ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
-              : `<span class="taste-game-thumb-empty"></span>`;
-            listEl.querySelector('.taste-game-empty')?.remove();
-            const newItem = document.createElement('div');
-            newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
-            if (gameId) newItem.dataset.gameId = gameId;
-            if (customName) newItem.dataset.customName = customName;
-            const _dynRuleKey = gameId ? `id:${gameId}` : `cn:${customName || ''}`;
-            const _dynRuleOn = _ruleSet?.has(_dynRuleKey) ? ' is-on' : '';
-            newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${_dynRuleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button>`;
-            if (gameId) {
-              newItem.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
-                window.ensureGameSheet?.();
-                window.openGameSheet?.(String(gameId));
-              });
+          // ── 이번 주 하고싶은/배우고싶은 게임 (meeting_vote_games 소스, game_likes 미러 아님) ──
+          // 이번 주 플래너 데이터는 _loadMeetingWeek에서 1회 fetch → _weekData로 공유(재조회 없음)
+          let _weekData = { allV: [], allVG: [], myVotes: [], myVoteGames: [] };
+          const _likedSlugSet = new Set((_meeting.likedGames || []).map(g => g.game_id).filter(Boolean).map(String));
+          const _curiousSlugSet = new Set((_meeting.curiousGames || []).map(g => g.game_id).filter(Boolean).map(String));
+          const _DOWs = '일월화수목금토';
+          const _fmtLocalD = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          const _mbSlug = rawId => {
+            if (rawId == null) return null;
+            const clean = String(rawId).startsWith('#') ? String(rawId).slice(1) : String(rawId);
+            return _getGameKeyById(clean) || clean;
+          };
+          // 이번 주 7일 (월~일)
+          const _mbWeek = (() => {
+            const t0 = new Date(); t0.setHours(0,0,0,0);
+            const mon = new Date(t0); mon.setDate(t0.getDate() + (t0.getDay() === 0 ? -6 : 1 - t0.getDay()));
+            return Array.from({ length: 7 }, (_, i) => {
+              const d = new Date(mon); d.setDate(mon.getDate() + i);
+              return { ds: _fmtLocalD(d), label: _DOWs[d.getDay()], md: `${d.getMonth()+1}/${d.getDate()}`, past: d < t0 };
+            });
+          })();
+
+          // vote_games(list_type) → 게임별 그룹 (이름/요일/좋아요·룰 상태)
+          const _groupWeekGames = (listType, srcSet) => {
+            const map = new Map();
+            for (const g of _weekData.myVoteGames) {
+              if ((g.list_type === 'want' ? 'want' : 'learn') !== listType) continue;
+              const slug = g.game_id != null ? _mbSlug(g.game_id) : null;
+              const key = slug ? `id:${slug}` : `cn:${g.custom_name || ''}`;
+              if (!map.has(key)) map.set(key, { slug, customName: g.custom_name || null, dates: new Set() });
+              map.get(key).dates.add(g.vote_date);
             }
-            const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
-            if (insertBefore) listEl.insertBefore(newItem, insertBefore);
-            else listEl.appendChild(newItem);
-            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item:not(.mb-planner-only-item)').length}개`;
+            return [...map.values()].map(e => {
+              const gd = e.slug ? window.gameData?.[e.slug] : null;
+              const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || e.slug) : (e.customName || e.slug || '');
+              const dateList = _mbWeek.map(w => w.ds).filter(ds => e.dates.has(ds));
+              const days = dateList.map(ds => _mbWeek.find(w => w.ds === ds)?.label).filter(Boolean).join('·');
+              const ruleKey = e.slug ? `id:${e.slug}` : `cn:${e.customName || ''}`;
+              return {
+                slug: e.slug, customName: e.customName, name,
+                thumbUrl: gd?.images?.thumbnail || null,
+                dates: dateList, days,
+                isSource: e.slug ? srcSet.has(e.slug) : false,
+                ruleOn: _ruleSet.has(ruleKey),
+              };
+            });
           };
 
-          // 게임 추가 센터모달 (초성 자동완성 + 좋아하는 게임 퀵픽)
-          const _openGameAddModal = ({ listKey, table, listEl, countEl }) => {
+          const _buildWeekChipHtml = (it, markIcon) => {
+            const thumb = it.thumbUrl ? `<img class="taste-game-thumb" src="${escH(it.thumbUrl)}" alt="">` : `<span class="taste-game-thumb-empty"></span>`;
+            const clickable = it.slug ? ' taste-game-item--clickable' : '';
+            const gidAttr = it.slug ? ` data-game-id="${escH(it.slug)}"` : '';
+            const cnAttr = it.customName ? ` data-custom-name="${escH(it.customName)}"` : '';
+            const mark = it.isSource ? `<span class="mb-like-mark" title="내 목록에 있는 게임">${markIcon}</span>` : '';
+            const badge = it.days ? `<span class="mb-week-badge">(${it.days})</span>` : '';
+            const ruleOn = it.ruleOn ? ' is-on' : '';
+            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${mark}${badge}<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button></div>`;
+          };
+
+          const _renderWeekList = (listType) => {
+            const listId = listType === 'want' ? 'meetinglikedList' : 'meetingcuriousList';
+            const countId = listType === 'want' ? 'meetinglikedCount' : 'meetingcuriousCount';
+            const srcSet = listType === 'want' ? _likedSlugSet : _curiousSlugSet;
+            const markIcon = listType === 'want' ? '❤️' : '👀';
+            const listEl = subBody.querySelector('#' + listId);
+            const countEl = subBody.querySelector('#' + countId);
+            if (!listEl) return;
+            const items = _groupWeekGames(listType, srcSet);
+            listEl.innerHTML = items.length
+              ? items.map(it => _buildWeekChipHtml(it, markIcon)).join('')
+              : '<p class="taste-game-empty">＋ 버튼으로 이번 주 하고 싶은 게임을 추가해보세요</p>';
+            if (countEl) countEl.textContent = `${items.length}개`;
+          };
+
+          // 요일 선택(참여 등록한 날 내에서, 최소 1개) — 추가/수정 공용
+          const _openMbDayPicker = ({ slug, customName, name, listType }, curDates, onDone) => {
+            const partDays = _mbWeek.filter(w => !w.past && _weekData.myVotes.some(v => v.vote_date === w.ds));
+            const overlay = document.createElement('div');
+            overlay.className = 'mb-add-overlay';
+            const vgId = slug ? (window.gameData?.[slug]?.bgg?.id ?? null) : null;
+            const vgCustom = vgId != null ? null : (customName || name);
+            const close = () => overlay.remove();
+            if (!partDays.length) {
+              overlay.innerHTML = `<div class="mb-add-box"><div class="mb-add-head"><span class="mb-add-title">🗓️ 요일 선택</span><button class="mb-add-close" type="button">✕</button></div><p class="mb-daypick-empty">먼저 이번 주 참여 가능한 날을 등록해주세요.<br>플래너에서 참여 요일을 정하면 그날 하고 싶은 게임을 고를 수 있어요.</p><button class="mb-add-daypick-done" type="button">플래너 열기</button></div>`;
+              document.body.appendChild(overlay);
+              overlay.querySelector('.mb-add-close').addEventListener('click', close);
+              overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+              overlay.querySelector('.mb-add-daypick-done').addEventListener('click', () => { close(); window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }); });
+              return;
+            }
+            const selected = new Set(curDates || []);
+            overlay.innerHTML = `<div class="mb-add-box">
+              <div class="mb-add-head"><span class="mb-add-title">🗓️ '${escH(name)}' 이번 주 언제 할까요?</span><button class="mb-add-close" type="button">✕</button></div>
+              <div class="mb-add-daypick-days">${partDays.map(w => `<button class="mb-day-chip${selected.has(w.ds) ? ' is-selected' : ''}" data-date="${w.ds}" type="button"><span class="mb-day-dow">${w.label}</span><span class="mb-day-md">${w.md}</span></button>`).join('')}</div>
+              <p class="mb-add-daypick-hint">참여 등록한 날 중에서 골라요 (최소 1개)</p>
+              <button class="mb-add-daypick-done" type="button">완료</button>
+            </div>`;
+            document.body.appendChild(overlay);
+            overlay.querySelector('.mb-add-close').addEventListener('click', close);
+            overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+            overlay.querySelectorAll('.mb-day-chip').forEach(chip => chip.addEventListener('click', () => {
+              const ds = chip.dataset.date;
+              if (selected.has(ds)) { selected.delete(ds); chip.classList.remove('is-selected'); }
+              else { selected.add(ds); chip.classList.add('is-selected'); }
+            }));
+            overlay.querySelector('.mb-add-daypick-done').addEventListener('click', async () => {
+              const finalDates = [...selected];
+              const cur = new Set(curDates || []);
+              if (!finalDates.length) { window.showToast?.('요일을 최소 1개 골라주세요'); return; }
+              const add = finalDates.filter(d => !cur.has(d));
+              const del = [...cur].filter(d => !selected.has(d));
+              for (const d of add) await window.CottageDB?.addMeetingVoteGame?.(userId, d, listType, vgId, vgCustom);
+              for (const d of del) await window.CottageDB?.removeMeetingVoteGame?.(userId, d, listType, vgId, vgCustom);
+              _weekData.myVoteGames = _weekData.myVoteGames.filter(g => {
+                const gslug = g.game_id != null ? _mbSlug(g.game_id) : null;
+                const same = (slug ? gslug === slug : (g.custom_name === (customName || name))) && g.list_type === listType;
+                return !(same && del.includes(g.vote_date));
+              });
+              add.forEach(d => _weekData.myVoteGames.push({ user_id: userId, vote_date: d, list_type: listType, game_id: vgId, custom_name: vgCustom }));
+              close();
+              _renderWeekList(listType);
+              onDone?.(finalDates);
+            });
+          };
+
+          // ⋯ 케밥 메뉴 (fixed 포지션 — 서브시트 overflow 클리핑 회피)
+          const _openMbKebab = (btn, ctx) => {
+            document.getElementById('__mbKebab')?.remove();
+            const menu = document.createElement('div');
+            menu.id = '__mbKebab';
+            menu.className = 'mb-kebab-menu';
+            menu.innerHTML = `<button class="mb-kebab-item" data-act="edit" type="button">🗓️ 이번 주 일정 수정</button><button class="mb-kebab-item mb-kebab-item--danger" data-act="remove" type="button">🗑️ 이번 주에서 빼기</button>`;
+            document.body.appendChild(menu);
+            const r = btn.getBoundingClientRect();
+            menu.style.top = `${r.bottom + 4}px`;
+            menu.style.left = `${Math.max(8, Math.min(r.right - menu.offsetWidth, window.innerWidth - menu.offsetWidth - 8))}px`;
+            const closeMenu = () => { menu.remove(); document.removeEventListener('click', onDoc, true); };
+            const onDoc = e => { if (!menu.contains(e.target)) closeMenu(); };
+            setTimeout(() => document.addEventListener('click', onDoc, true), 0);
+            menu.querySelector('[data-act="edit"]').addEventListener('click', () => { closeMenu(); _openMbDayPicker(ctx, ctx.dates); });
+            menu.querySelector('[data-act="remove"]').addEventListener('click', async () => {
+              closeMenu();
+              if (!confirm(`'${ctx.name}'을(를) 이번 주 일정에서 뺄까요?`)) return;
+              const vgId = ctx.slug ? (window.gameData?.[ctx.slug]?.bgg?.id ?? null) : null;
+              const vgCustom = vgId != null ? null : (ctx.customName || ctx.name);
+              for (const d of ctx.dates) await window.CottageDB?.removeMeetingVoteGame?.(userId, d, ctx.listType, vgId, vgCustom);
+              _weekData.myVoteGames = _weekData.myVoteGames.filter(g => {
+                const gslug = g.game_id != null ? _mbSlug(g.game_id) : null;
+                const same = (ctx.slug ? gslug === ctx.slug : (g.custom_name === (ctx.customName || ctx.name))) && g.list_type === ctx.listType;
+                return !same;
+              });
+              _renderWeekList(ctx.listType);
+            });
+          };
+
+          // 게임 추가 센터모달 — 검색/퀵픽 → 요일 필수 → (미등록 카탈로그 게임이면) 좋아요 옵션
+          const _openMbAddModal = (listType) => {
             document.getElementById('mbAddModal')?.remove();
-            const isLiked = listKey === 'liked';
+            const isWant = listType === 'want';
+            const srcSet = isWant ? _likedSlugSet : _curiousSlugSet;
+            const srcTable = isWant ? 'game_likes' : 'game_curious';
+            const srcLabel = isWant ? '좋아하는 게임' : '해보고 싶은 게임';
             const overlay = document.createElement('div');
             overlay.id = 'mbAddModal';
             overlay.className = 'mb-add-overlay';
-            const listType = isLiked ? 'want' : 'learn';
-            overlay.innerHTML = `
-              <div class="mb-add-box">
-                <div class="mb-add-head">
-                  <span class="mb-add-title">${isLiked ? '❤️ 하고 싶은 게임' : '💡 배우고 싶은 게임'} 추가</span>
-                  <button class="mb-add-close" type="button" aria-label="닫기">✕</button>
-                </div>
-                <div class="mb-add-main">
-                  <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
-                  <div class="mb-add-results"></div>
-                  <div class="mb-add-quick-wrap">
-                    <div class="mb-add-quick-label">❤️ 내가 좋아하는 게임</div>
-                    <div class="mb-add-quick"></div>
-                  </div>
-                </div>
-                <div class="mb-add-daypick" hidden>
-                  <div class="mb-add-daypick-title"></div>
-                  <div class="mb-add-daypick-days"></div>
-                  <p class="mb-add-daypick-hint">안 고르면 '미정' — 플래너엔 안 떠요</p>
-                  <button class="mb-add-daypick-done" type="button">완료</button>
-                </div>
-              </div>`;
+            overlay.innerHTML = `<div class="mb-add-box">
+              <div class="mb-add-head"><span class="mb-add-title">${isWant ? '❤️ 이번 주 하고 싶은 게임' : '💡 이번 주 배우고 싶은 게임'} 추가</span><button class="mb-add-close" type="button">✕</button></div>
+              <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
+              <div class="mb-add-results"></div>
+              <div class="mb-add-quick-wrap"><div class="mb-add-quick-label">${isWant ? '❤️' : '👀'} 내 ${srcLabel}</div><div class="mb-add-quick"></div></div>
+            </div>`;
             document.body.appendChild(overlay);
             const input = overlay.querySelector('.mb-add-input');
             const resultsEl = overlay.querySelector('.mb-add-results');
             const quickEl = overlay.querySelector('.mb-add-quick');
             const quickWrap = overlay.querySelector('.mb-add-quick-wrap');
-            const mainEl = overlay.querySelector('.mb-add-main');
-            const dayPickEl = overlay.querySelector('.mb-add-daypick');
-            const dayTitleEl = overlay.querySelector('.mb-add-daypick-title');
-            const dayDaysEl = overlay.querySelector('.mb-add-daypick-days');
-
-            // 이번 주 7일 (월~일). 지난 요일은 비활성.
-            // 날짜는 로컬 포맷(planner toDateStr과 동일) — toISOString()은 KST에서 하루 밀림
-            const _DOWK = ['일','월','화','수','목','금','토'];
-            const _fmtLocal = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-            const _today0 = new Date(); _today0.setHours(0,0,0,0);
-            const _dow0 = _today0.getDay();
-            const _mon0 = new Date(_today0); _mon0.setDate(_today0.getDate() + (_dow0 === 0 ? -6 : 1 - _dow0));
-            const _weekDays = Array.from({ length: 7 }, (_, i) => {
-              const d = new Date(_mon0); d.setDate(_mon0.getDate() + i);
-              return { ds: _fmtLocal(d), label: _DOWK[d.getDay()], md: `${d.getMonth()+1}/${d.getDate()}`, past: d < _today0 };
-            });
-
             const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
             const onEsc = e => { if (e.key === 'Escape') close(); };
             overlay.querySelector('.mb-add-close').addEventListener('click', close);
             overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
             document.addEventListener('keydown', onEsc);
 
-            const inList = (gameId, customName) => {
-              if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
-              if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
-              return false;
-            };
-            const _gameDisplayName = (gameId, customName) => {
-              const gd = gameId ? window.gameData?.[gameId] : null;
-              return gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(gameId)) : (customName || '');
-            };
-
-            // 플래너(meeting_vote_games.game_id)는 INT(bggId). 모임보드 칩의 game_id는 슬러그이므로
-            // bggId로 변환해 전달. bggId 없으면 게임명을 custom_name으로 등록.
-            const _toVoteArgs = (gameId, customName) => {
-              if (gameId) {
-                const bgg = window.gameData?.[gameId]?.bgg?.id;
-                if (bgg != null) return { vgId: bgg, vgCustom: null };
-                return { vgId: null, vgCustom: _gameDisplayName(gameId, customName) };
-              }
-              return { vgId: null, vgCustom: customName };
-            };
-
-            // 요일 선택 단계 표시 (게임 추가 직후)
-            let _dpCur = null;
-            const showDayPick = (gameId, customName) => {
-              _dpCur = { gameId, customName };
-              const { vgId, vgCustom } = _toVoteArgs(gameId, customName);
-              dayTitleEl.textContent = `🗓️ '${_gameDisplayName(gameId, customName)}' 이번 주 언제 할까요?`;
-              dayDaysEl.innerHTML = _weekDays.map(d =>
-                `<button class="mb-day-chip${d.past ? ' is-past' : ''}" data-date="${d.ds}" type="button"${d.past ? ' disabled' : ''}><span class="mb-day-dow">${d.label}</span><span class="mb-day-md">${d.md}</span></button>`
-              ).join('');
-              dayDaysEl.querySelectorAll('.mb-day-chip:not(.is-past)').forEach(chip => {
-                chip.addEventListener('click', async () => {
-                  const on = chip.classList.toggle('is-selected');
-                  if (on) await window.CottageDB?.addMeetingVoteGame?.(userId, chip.dataset.date, listType, vgId, vgCustom);
-                  else await window.CottageDB?.removeMeetingVoteGame?.(userId, chip.dataset.date, listType, vgId, vgCustom);
-                });
-              });
-              mainEl.hidden = true;
-              dayPickEl.hidden = false;
-            };
-            // 요일 선택 → 보드 칩에 요일 배지 반영 후 검색 모드 복귀
-            overlay.querySelector('.mb-add-daypick-done').addEventListener('click', () => {
-              const selLabels = [...dayDaysEl.querySelectorAll('.mb-day-chip.is-selected')].map(c => {
-                const d = _weekDays.find(w => w.ds === c.dataset.date); return d ? d.label : '';
-              }).filter(Boolean);
-              if (selLabels.length && _dpCur) {
-                const chip = _dpCur.gameId
-                  ? listEl.querySelector(`.taste-game-item[data-game-id="${_dpCur.gameId}"]`)
-                  : [...listEl.querySelectorAll('.taste-game-item')].find(el => el.dataset.customName === _dpCur.customName);
-                if (chip) {
-                  let badge = chip.querySelector('.mb-week-badge');
-                  if (!badge) {
-                    badge = document.createElement('span');
-                    badge.className = 'mb-week-badge';
-                    chip.insertBefore(badge, chip.querySelector('.mb-rule-btn') || chip.querySelector('.taste-game-del'));
+            const inWeek = () => new Set(_groupWeekGames(listType, srcSet).map(it => it.slug).filter(Boolean));
+            const pickGame = (slug, customName) => {
+              const gd = slug ? window.gameData?.[slug] : null;
+              const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || slug) : (customName || '');
+              const already = _groupWeekGames(listType, srcSet).filter(it => (slug ? it.slug === slug : it.customName === customName)).flatMap(it => it.dates);
+              _openMbDayPicker({ slug, customName, name, listType }, already, async (finalDates) => {
+                renderQuick();
+                if (finalDates.length && slug && !srcSet.has(slug)) {
+                  if (confirm(`'${name}'을(를) 내 ${srcLabel}에도 추가할까요?`)) {
+                    await window.CottageDB?.addGamePref?.(userId, slug, null, srcTable);
+                    srcSet.add(slug);
+                    _renderWeekList(listType);
                   }
-                  badge.textContent = `(${selLabels.join('·')})`;
-                  chip.classList.add('mb-has-week');
                 }
-              }
-              dayPickEl.hidden = true;
-              mainEl.hidden = false;
-              input.value = ''; resultsEl.innerHTML = ''; input.focus();
-            });
-
-            const addGame = async (gameId, customName) => {
-              if (inList(gameId, customName)) return;
-              await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
-              _appendMeetingChip(listEl, countEl, gameId, customName);
-              renderQuick();
-              if (gameId) {
-                const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
-                if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
-              }
-              showDayPick(gameId, customName);
+              });
             };
 
-            // 퀵픽: 좋아하는 게임(game_likes) 중 현재 목록에 없는 것 — 썸네일+이름 행
             function renderQuick() {
-              const src = (_meeting.likedGames || []).filter(g => g.game_id && !inList(g.game_id, null));
-              if (!src.length) { quickWrap.style.display = 'none'; return; }
+              const week = inWeek();
+              const src = (isWant ? _meeting.likedGames : _meeting.curiousGames) || [];
+              const cand = src.filter(g => g.game_id && !week.has(String(g.game_id)));
+              if (!cand.length) { quickWrap.style.display = 'none'; return; }
               quickWrap.style.display = '';
-              quickEl.innerHTML = src.map(g => {
+              quickEl.innerHTML = cand.map(g => {
                 const gd = window.gameData?.[g.game_id];
-                const name = escH(gd?.title?.display || gd?.title?.owned || gd?.title?.bgg || String(g.game_id));
-                const thumb = gd?.images?.thumbnail
-                  ? `<img class="mb-add-quick-thumb" src="${escH(gd.images.thumbnail)}" alt="">`
-                  : `<span class="mb-add-quick-thumb mb-add-quick-thumb--empty"></span>`;
-                return `<button class="mb-add-quick-item" data-game-id="${escH(String(g.game_id))}" type="button">${thumb}<span class="mb-add-quick-name">${name}</span><span class="mb-add-quick-plus">＋</span></button>`;
+                const nm = escH(gd?.title?.display || gd?.title?.owned || gd?.title?.bgg || String(g.game_id));
+                const thumb = gd?.images?.thumbnail ? `<img class="mb-add-quick-thumb" src="${escH(gd.images.thumbnail)}" alt="">` : `<span class="mb-add-quick-thumb mb-add-quick-thumb--empty"></span>`;
+                return `<button class="mb-add-quick-item" data-game-id="${escH(String(g.game_id))}" type="button">${thumb}<span class="mb-add-quick-name">${nm}</span><span class="mb-add-quick-plus">＋</span></button>`;
               }).join('');
-              quickEl.querySelectorAll('.mb-add-quick-item').forEach(chip =>
-                chip.addEventListener('click', () => addGame(chip.dataset.gameId, null)));
+              quickEl.querySelectorAll('.mb-add-quick-item').forEach(chip => chip.addEventListener('click', () => pickGame(chip.dataset.gameId, null)));
             }
             renderQuick();
 
-            // 검색: 초성 스마트 매칭(matchKoreanSmart) + substring 폴백
             const _smart = window.matchKoreanSmart;
             let _t = null;
             input.addEventListener('input', () => {
@@ -2129,82 +2143,49 @@ async function openProfilePanel(autoSubsheet = null) {
               _t = setTimeout(() => {
                 const q = input.value.trim();
                 if (!q) { resultsEl.innerHTML = ''; return; }
+                const week = inWeek();
                 const matches = Object.entries(window.gameData || {}).filter(([, g]) => {
                   const nm = g.title?.display || g.title?.owned || g.title?.bgg || '';
                   return _smart ? _smart(nm, q) : nm.toLowerCase().includes(q.toLowerCase());
                 }).slice(0, 8);
                 const items = matches.map(([id, g]) => {
                   const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
-                  const added = inList(id, null);
-                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
+                  const added = week.has(String(id));
+                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">이번주 등록됨</span>' : ''}</button>`;
                 });
                 const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
                 resultsEl.innerHTML = [...items, direct].join('');
-                resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn =>
-                  btn.addEventListener('click', () => addGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
+                resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn => btn.addEventListener('click', () => pickGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
               }, 180);
             });
             setTimeout(() => input.focus(), 50);
           };
 
-          for (const { listKey, table } of [
-            { listKey: 'liked', table: 'game_likes' },
-            { listKey: 'curious', table: 'game_curious' },
-          ]) {
-            const listEl = subBody.querySelector(`#meeting${listKey}List`);
-            const addBtn = subBody.querySelector(`#meeting${listKey}AddBtn`);
-            const countEl = subBody.querySelector(`#meeting${listKey}Count`);
-
-            // 썸네일만 클릭 시 게임시트 오픈 (칩 전체 아님)
-            listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
-              item.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
-                window.ensureGameSheet?.();
-                window.openGameSheet?.(item.dataset.gameId);
-              });
-            });
-
+          // 리스트 위임 핸들러 (📖 토글 / ⋯ 케밥 / 썸네일) — 리스트 내용은 _renderWeekList가 렌더
+          for (const listType of ['want', 'learn']) {
+            const listId = listType === 'want' ? 'meetinglikedList' : 'meetingcuriousList';
+            const addBtnId = listType === 'want' ? 'meetinglikedAddBtn' : 'meetingcuriousAddBtn';
+            const listEl = subBody.querySelector('#' + listId);
+            const srcSet = listType === 'want' ? _likedSlugSet : _curiousSlugSet;
+            subBody.querySelector('#' + addBtnId)?.addEventListener('click', () => _openMbAddModal(listType));
             listEl?.addEventListener('click', async e => {
-              const moreBtn = e.target.closest('.taste-more-btn');
-              if (moreBtn) {
-                const wrap = moreBtn.previousElementSibling;
-                if (wrap?.classList.contains('taste-game-more-wrap')) {
-                  const hidden = wrap.hidden;
-                  wrap.hidden = !hidden;
-                  const restCount = wrap.querySelectorAll('.taste-game-item').length;
-                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${restCount}개 더)`;
-                }
-                return;
-              }
+              const item = e.target.closest('.taste-game-item');
+              if (!item) return;
+              const slug = item.dataset.gameId || null;
+              const customName = item.dataset.customName || null;
+              const name = item.querySelector('.taste-game-name')?.textContent || '이 게임';
+              const grp = _groupWeekGames(listType, srcSet).find(it => (slug ? it.slug === slug : it.customName === customName));
+              const ctx = { slug, customName, name, listType, dates: grp?.dates || [] };
               const ruleBtn = e.target.closest('.mb-rule-btn');
               if (ruleBtn) {
-                const item = ruleBtn.closest('.taste-game-item');
-                const gameId = item?.dataset.gameId || null;
-                const customName = item?.dataset.customName || null;
-                const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
                 const isOn = ruleBtn.classList.toggle('is-on');
-                if (isOn) {
-                  await window.CottageDB?.addMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
-                  window.showToast?.(`📖 '${gameName}' 룰 설명해줄 수 있어요로 표시했어요`);
-                } else {
-                  await window.CottageDB?.removeMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
-                  window.showToast?.(`'${gameName}' 룰 설명 표시를 해제했어요`);
-                }
+                if (isOn) { await window.CottageDB?.addMeetingGamePref?.(userId, 'can_explain_rules', slug, customName); window.showToast?.(`📖 '${name}' 룰 설명해줄 수 있어요로 표시했어요`); }
+                else { await window.CottageDB?.removeMeetingGamePref?.(userId, 'can_explain_rules', slug, customName); window.showToast?.(`'${name}' 룰 설명 표시를 해제했어요`); }
                 return;
               }
-              const delBtn = e.target.closest('.taste-game-del');
-              if (!delBtn) return;
-              const item = delBtn.closest('.taste-game-item');
-              const gameId = item?.dataset.gameId || null;
-              const customName = item?.dataset.customName || null;
-              await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
-              item.remove();
-              if (!listEl.querySelector('.taste-game-item')) {
-                listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
-              }
-              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item:not(.mb-planner-only-item)').length}개`;
+              if (e.target.closest('.mb-kebab-btn')) { _openMbKebab(e.target.closest('.mb-kebab-btn'), ctx); return; }
+              if (e.target.closest('.taste-game-thumb, .taste-game-thumb-empty') && slug) { window.ensureGameSheet?.(); window.openGameSheet?.(slug); }
             });
-
-            addBtn?.addEventListener('click', () => _openGameAddModal({ listKey, table, listEl, countEl }));
           }
 
           // 최근 모임 참여 → 게임시트 열기
@@ -2221,118 +2202,26 @@ async function openProfilePanel(autoSubsheet = null) {
           // 이번 주 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
           const _loadMeetingWeek = async () => {
             const weekEl = subBody.querySelector('#mbWeekSection');
-            if (!weekEl) return;
             const [wStart, wEnd] = _thisWeekRange();
             const [allV, allVG] = await Promise.all([
               window.CottageDB?.getMeetingVotes?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
               window.CottageDB?.getMeetingVoteGames?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
             ]);
-            const myVotes    = allV.filter(v => String(v.user_id) === userId);
-            const myVoteGames = allVG.filter(g => String(g.user_id) === userId);
-            weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 <button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button></div>` + _buildMiniBarWeekHtml(myVotes, myVoteGames, userId, true);
-            // 편집 아이콘 → 플래너 센터모달(이번 주), 저장 후 닫으면 이번주 일정 재조회
-            weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
-              window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek })
-            );
-            // "자세히" → 그날 참여자 막대그래프 포함 하루치 미리보기 센터모달
-            weekEl.querySelectorAll('.mb-detail-btn').forEach(btn =>
-              btn.addEventListener('click', () => {
+            _weekData.allV = allV; _weekData.allVG = allVG;
+            _weekData.myVotes = allV.filter(v => String(v.user_id) === userId);
+            _weekData.myVoteGames = allVG.filter(g => String(g.user_id) === userId);
+            // 이번 주 하고싶은/배우고싶은 게임 리스트 (fetch 공유 — 재조회 없음)
+            _renderWeekList('want');
+            _renderWeekList('learn');
+            // 이번 주 일정 미니바
+            if (weekEl) {
+              weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 <button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button></div>` + _buildMiniBarWeekHtml(_weekData.myVotes, _weekData.myVoteGames, userId, true);
+              weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
+                window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
+              weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
-                const _dv = allV.filter(v => v.vote_date === _d);
-                const _dg = allVG.filter(g => g.vote_date === _d);
-                const _mv = _dv.find(v => String(v.user_id) === userId) || null;
-                window.openDatePreviewModal?.(_d, _dv, _dg, _mv);
-              })
-            );
-
-            // 주간 배지: 플래너 게임 → 하고싶은/배우고싶은 칩에 요일 배지 + 플래너 전용 항목
-            const _DOW = '일월화수목금토';
-            // game_id 정규화: 숫자 bggId / 키 문자열 / #접두 세 형태를 gameData 키로 통일
-            const _canonId = rawId => {
-              if (!rawId) return null;
-              const clean = String(rawId).startsWith('#') ? String(rawId).slice(1) : String(rawId);
-              return _getGameKeyById(clean) || clean;
-            };
-            const _gCanon = g => g.game_id ? `id:${_canonId(g.game_id)}` : `cn:${g.custom_name || ''}`;
-
-            const _vgMap = { want: new Map(), learn: new Map() };
-            for (const g of myVoteGames) {
-              const lt = g.list_type === 'want' ? 'want' : 'learn';
-              const key = _gCanon(g);
-              if (!_vgMap[lt].has(key)) _vgMap[lt].set(key, { g, dates: [] });
-              _vgMap[lt].get(key).dates.push(g.vote_date);
-            }
-            const _badgeLists = [
-              { lt: 'want',  listId: 'meetinglikedList',  games: _meeting.likedGames },
-              { lt: 'learn', listId: 'meetingcuriousList', games: _meeting.curiousGames },
-            ];
-            for (const { lt, listId, games } of _badgeLists) {
-              const listEl = subBody.querySelector(`#${listId}`);
-              if (!listEl) continue;
-              // canonical key → raw game_id (칩 data-game-id 조회용)
-              const meetingMap = new Map(games.map(g => [_gCanon(g), g.game_id ? String(g.game_id) : null]));
-
-              for (const [key, { g, dates }] of _vgMap[lt].entries()) {
-                const days = [...new Set(dates.map(d => _DOW[new Date(d + 'T00:00:00').getDay()]))].join('·');
-                if (meetingMap.has(key)) {
-                  // 기존 칩에 요일 배지 + mb-has-week 클래스
-                  const rawId = meetingMap.get(key);
-                  const chipEl = rawId
-                    ? listEl.querySelector(`.taste-game-item[data-game-id="${rawId}"]`)
-                    : [...listEl.querySelectorAll('.taste-game-item')].find(el => el.dataset.customName === key.slice(3));
-                  if (chipEl && !chipEl.querySelector('.mb-week-badge')) {
-                    const badge = document.createElement('span');
-                    badge.className = 'mb-week-badge';
-                    badge.textContent = `(${days})`;
-                    chipEl.insertBefore(badge, chipEl.querySelector('.taste-game-del'));
-                    chipEl.classList.add('mb-has-week');
-                  }
-                } else {
-                  // 플래너에만 있는 게임 — 하단에 읽기 전용 항목 추가
-                  const canonKey = _canonId(g.game_id);
-                  const gd = canonKey ? window.gameData?.[canonKey] : null;
-                  const name = gd
-                    ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || canonKey)
-                    : (g.custom_name || canonKey || '');
-                  const thumb = gd?.images?.thumbnail
-                    ? `<img class="taste-game-thumb" src="${escH(gd.images.thumbnail)}" alt="">`
-                    : `<span class="taste-game-thumb-empty"></span>`;
-                  const el = document.createElement('div');
-                  el.className = 'taste-game-item mb-planner-only-item mb-has-week';
-                  el.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><span class="mb-week-badge">(${days})</span><span class="mb-planner-hint">플래너</span>`;
-                  listEl.appendChild(el);
-                }
-              }
-
-              // 주간 게임 우선 정렬 + 접기/더보기 (기존 fold 구조 해제 후 재빌드)
-              // ⚠️ wrap을 remove하면 접혀있던 게임(maxInitial 초과분)이 통째로 삭제됨 →
-              //    반드시 내용물을 리스트로 되돌린 뒤 빈 wrap만 제거
-              const _oldWrap = listEl.querySelector('.taste-game-more-wrap');
-              if (_oldWrap) { while (_oldWrap.firstChild) listEl.appendChild(_oldWrap.firstChild); _oldWrap.remove(); }
-              listEl.querySelector('.taste-more-btn')?.remove();
-              const emptyEl = listEl.querySelector('.taste-game-empty');
-              if (emptyEl) continue; // 게임 없음 상태 유지
-              const weekChips = [...listEl.querySelectorAll('.taste-game-item.mb-has-week')];
-              const otherChips = [...listEl.querySelectorAll('.taste-game-item:not(.mb-has-week)')];
-              [...weekChips, ...otherChips].forEach(el => listEl.appendChild(el));
-
-              const maxVisible = weekChips.length > 0 ? 5 : 2;
-              const allChips = [...listEl.querySelectorAll('.taste-game-item')];
-              if (allChips.length > maxVisible) {
-                const visible = allChips.slice(0, maxVisible);
-                const rest = allChips.slice(maxVisible);
-                const wrap = document.createElement('div');
-                wrap.className = 'taste-game-more-wrap';
-                wrap.hidden = true;
-                rest.forEach(el => wrap.appendChild(el));
-                listEl.appendChild(wrap);
-                const moreBtn = document.createElement('button');
-                moreBtn.className = 'taste-more-btn';
-                moreBtn.type = 'button';
-                moreBtn.textContent = `더 보기 (${rest.length}개 더)`;
-                // 클릭 토글은 listEl 위임 핸들러가 처리 (직접 핸들러 중복 시 이중 토글 → 무동작)
-                listEl.appendChild(moreBtn);
-              }
+                window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null);
+              }));
             }
           };
           _loadMeetingWeek();

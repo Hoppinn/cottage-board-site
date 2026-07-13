@@ -203,10 +203,15 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **Phase (커밋 단위)**:
 - [x] **Phase 1 — 취향보드 개편** 완료: ①칩 [📖][✕] — 📖=can_explain_rules(취향·모임 공유, meeting_game_prefs), _ruleSet을 취향템플릿 앞으로 이동. ②✕ 삭제 시 confirm y/n. ③게임추가 버튼 라벨 옆(taste-add-btn--inline) + 센터모달 `_openTasteAddModal`(검색 초성+직접입력+커스텀제안, 날짜·퀵픽 없음), 인라인 검색 제거, `_appendTasteChip` 추출. 하니스 검증: 📖 상태/토글/토스트/연동, 삭제 확인문구, 라벨옆 버튼+모달+초성.
-- [ ] **Phase 2 — 모임보드 리스트 소스 전환**: _meetingInnerHtml 게임리스트→플레이스홀더, _loadMeetingWeek에서 allVG(myVoteGames) 그룹핑→_buildMeetingWeekGameItems 렌더(칩=[썸네일][이름][요일배지][❤️좋아요표시][📖][⋯]). 기존 미러/배지-append IIFE 제거. 카운트=이번주 distinct. bggId↔슬러그 변환(이름/좋아요/룰). 모임프로필 한줄소개 행 삭제.
-- [ ] **Phase 3 — 추가 흐름 반전**: 모임 add모달 날짜 필수(참여 요일 내) + 좋아요 옵션(미등록 게임일 때).
-- [ ] **Phase 4 — ⋯ 메뉴**: fixed 드롭다운(서브시트 overflow 회피), 요일 수정(데이픽커 프리필·참여 요일 내)/이번주에서 빼기.
-  ※ Phase 2·3·4는 결합도 높아 **한 커밋으로** 진행(중간 비기능 상태 회피), 하니스로 통합 검증.
+- [x] **Phase 2·3·4 — 모임보드 리스트 소스 전환 (한 커밋 완료)**:
+  - 리스트 소스 game_likes 미러 → **이번 주 meeting_vote_games**. _meetingInnerHtml 게임리스트→플레이스홀더, _loadMeetingWeek가 allVG(myVoteGames) 1회 fetch→ `_groupWeekGames`(게임별 그룹+요일)→`_renderWeekList`. 기존 미러/배지-append IIFE 제거. 카운트=이번주 distinct.
+  - 칩=[썸네일][이름][❤️/👀 원천표시][요일배지][📖][⋯]. ❤️=game_likes/👀=game_curious에 있으면(M2 구분). bggId↔슬러그 변환(`_mbSlug`: 이름/좋아요/룰=슬러그, 플래너 등록/삭제=bggId).
+  - **📖** 토글(슬러그, meeting_game_prefs 취향·모임 공유). **⋯ 케밥**(fixed 드롭다운): 이번주 일정 수정(데이픽커 프리필)/이번주에서 빼기(confirm).
+  - **추가**: 검색(초성)+퀵픽(원천 중 이번주 미등록) → **요일 필수(참여 등록한 날만)** → meeting_vote_games 등록 + (미등록 카탈로그 게임이면) "원천에도 추가?" 옵션. 미정 제거.
+  - **금요일 orphan 방지**: 데이픽커 요일=참여 요일(myVotes)만. 참여 없으면 "플래너 열기" 안내.
+  - **모임프로필 한줄소개 행 삭제**(bio=선호스타일, 취향보드에서 편집). 프로필 저장에서 bio 제거.
+  - 하니스 통합 검증: 리스트 렌더(❤️/👀·요일·📖·카운트), 📖 토글(slug), ⋯빼기(bggId), 추가(퀵픽/검색→참여요일만 픽커→등록 bggId→좋아요 옵션→마커 갱신), 콘솔 에러 0.
+  - 잔여: `_buildMeetingGameItems`(구 미러 렌더러) dead code — 다음 정리 때 제거.
 
 **위험요소**: ①단일 fetch 재구조화 로딩 플래시 ②⋯ 드롭다운 클리핑(fixed 필수) ③game_id 형식 vote_games=INT(bggId) vs likes/rule_prefs=슬러그 → 변환(Phase 2에서 📖 bggId↔슬러그 주의) ④#5-1 데이픽커 미정 제거·미러링(631a5ba) 소스 교체 문서 정합성.
 
