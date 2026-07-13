@@ -1102,11 +1102,11 @@ async function openProfilePanel(autoSubsheet = null) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 이번 주 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button> <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">❤️ 좋아하는 게임 보기</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">전체 보기</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">💡 이번 주 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button> <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">👀 해보고 싶은 게임 보기</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">전체 보기</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
@@ -1928,7 +1928,21 @@ async function openProfilePanel(autoSubsheet = null) {
           });
           // 선호(한줄소개)/비선호(피하는 유형) 수정 → 취향보드 열기
           subBody.querySelectorAll('.mb-pref-edit').forEach(btn => {
-            btn.addEventListener('click', () => openProfilePanel('taste'));
+            btn.addEventListener('click', () => {
+              // 취향 서브시트로 전환(기존 카드 경로 재사용) — 모임보드에서 왔으므로 뒤로가기를 "모임 보드"로 재지정
+              body.querySelector('.profile-card[data-subsheet="taste"]')?.click();
+              const tasteSub = document.getElementById('profileSubSheet');
+              const back = tasteSub?.querySelector('.profile-subsheet-back');
+              if (back) {
+                back.textContent = '‹ 모임 보드';
+                const fresh = back.cloneNode(true); // 원래 back 핸들러(→ 메인 패널) 제거
+                back.replaceWith(fresh);
+                fresh.addEventListener('click', () => {
+                  tasteSub.remove();
+                  body.querySelector('.profile-card[data-subsheet="meeting"]')?.click();
+                });
+              }
+            });
           });
 
           subBody.querySelector('.meeting-profile-save-btn')?.addEventListener('click', async () => {
