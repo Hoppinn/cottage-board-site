@@ -1955,17 +1955,26 @@ async function openProfilePanel(autoSubsheet = null) {
             const overlay = document.createElement('div');
             overlay.id = 'mbAddModal';
             overlay.className = 'mb-add-overlay';
+            const listType = isLiked ? 'want' : 'learn';
             overlay.innerHTML = `
               <div class="mb-add-box">
                 <div class="mb-add-head">
                   <span class="mb-add-title">${isLiked ? '❤️ 하고 싶은 게임' : '💡 배우고 싶은 게임'} 추가</span>
                   <button class="mb-add-close" type="button" aria-label="닫기">✕</button>
                 </div>
-                <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
-                <div class="mb-add-results"></div>
-                <div class="mb-add-quick-wrap">
-                  <div class="mb-add-quick-label">❤️ 내가 좋아하는 게임</div>
-                  <div class="mb-add-quick"></div>
+                <div class="mb-add-main">
+                  <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
+                  <div class="mb-add-results"></div>
+                  <div class="mb-add-quick-wrap">
+                    <div class="mb-add-quick-label">❤️ 내가 좋아하는 게임</div>
+                    <div class="mb-add-quick"></div>
+                  </div>
+                </div>
+                <div class="mb-add-daypick" hidden>
+                  <div class="mb-add-daypick-title"></div>
+                  <div class="mb-add-daypick-days"></div>
+                  <p class="mb-add-daypick-hint">안 고르면 '미정' — 플래너엔 안 떠요</p>
+                  <button class="mb-add-daypick-done" type="button">완료</button>
                 </div>
               </div>`;
             document.body.appendChild(overlay);
@@ -1973,6 +1982,22 @@ async function openProfilePanel(autoSubsheet = null) {
             const resultsEl = overlay.querySelector('.mb-add-results');
             const quickEl = overlay.querySelector('.mb-add-quick');
             const quickWrap = overlay.querySelector('.mb-add-quick-wrap');
+            const mainEl = overlay.querySelector('.mb-add-main');
+            const dayPickEl = overlay.querySelector('.mb-add-daypick');
+            const dayTitleEl = overlay.querySelector('.mb-add-daypick-title');
+            const dayDaysEl = overlay.querySelector('.mb-add-daypick-days');
+
+            // 이번 주 7일 (월~일). 지난 요일은 비활성.
+            // 날짜는 로컬 포맷(planner toDateStr과 동일) — toISOString()은 KST에서 하루 밀림
+            const _DOWK = ['일','월','화','수','목','금','토'];
+            const _fmtLocal = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+            const _today0 = new Date(); _today0.setHours(0,0,0,0);
+            const _dow0 = _today0.getDay();
+            const _mon0 = new Date(_today0); _mon0.setDate(_today0.getDate() + (_dow0 === 0 ? -6 : 1 - _dow0));
+            const _weekDays = Array.from({ length: 7 }, (_, i) => {
+              const d = new Date(_mon0); d.setDate(_mon0.getDate() + i);
+              return { ds: _fmtLocal(d), label: _DOWK[d.getDay()], md: `${d.getMonth()+1}/${d.getDate()}`, past: d < _today0 };
+            });
 
             const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
             const onEsc = e => { if (e.key === 'Escape') close(); };
@@ -1985,6 +2010,66 @@ async function openProfilePanel(autoSubsheet = null) {
               if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
               return false;
             };
+            const _gameDisplayName = (gameId, customName) => {
+              const gd = gameId ? window.gameData?.[gameId] : null;
+              return gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(gameId)) : (customName || '');
+            };
+
+            // 플래너(meeting_vote_games.game_id)는 INT(bggId). 모임보드 칩의 game_id는 슬러그이므로
+            // bggId로 변환해 전달. bggId 없으면 게임명을 custom_name으로 등록.
+            const _toVoteArgs = (gameId, customName) => {
+              if (gameId) {
+                const bgg = window.gameData?.[gameId]?.bgg?.id;
+                if (bgg != null) return { vgId: bgg, vgCustom: null };
+                return { vgId: null, vgCustom: _gameDisplayName(gameId, customName) };
+              }
+              return { vgId: null, vgCustom: customName };
+            };
+
+            // 요일 선택 단계 표시 (게임 추가 직후)
+            let _dpCur = null;
+            const showDayPick = (gameId, customName) => {
+              _dpCur = { gameId, customName };
+              const { vgId, vgCustom } = _toVoteArgs(gameId, customName);
+              dayTitleEl.textContent = `🗓️ '${_gameDisplayName(gameId, customName)}' 이번 주 언제 할까요?`;
+              dayDaysEl.innerHTML = _weekDays.map(d =>
+                `<button class="mb-day-chip${d.past ? ' is-past' : ''}" data-date="${d.ds}" type="button"${d.past ? ' disabled' : ''}><span class="mb-day-dow">${d.label}</span><span class="mb-day-md">${d.md}</span></button>`
+              ).join('');
+              dayDaysEl.querySelectorAll('.mb-day-chip:not(.is-past)').forEach(chip => {
+                chip.addEventListener('click', async () => {
+                  const on = chip.classList.toggle('is-selected');
+                  if (on) await window.CottageDB?.addMeetingVoteGame?.(userId, chip.dataset.date, listType, vgId, vgCustom);
+                  else await window.CottageDB?.removeMeetingVoteGame?.(userId, chip.dataset.date, listType, vgId, vgCustom);
+                });
+              });
+              mainEl.hidden = true;
+              dayPickEl.hidden = false;
+            };
+            // 요일 선택 → 보드 칩에 요일 배지 반영 후 검색 모드 복귀
+            overlay.querySelector('.mb-add-daypick-done').addEventListener('click', () => {
+              const selLabels = [...dayDaysEl.querySelectorAll('.mb-day-chip.is-selected')].map(c => {
+                const d = _weekDays.find(w => w.ds === c.dataset.date); return d ? d.label : '';
+              }).filter(Boolean);
+              if (selLabels.length && _dpCur) {
+                const chip = _dpCur.gameId
+                  ? listEl.querySelector(`.taste-game-item[data-game-id="${_dpCur.gameId}"]`)
+                  : [...listEl.querySelectorAll('.taste-game-item')].find(el => el.dataset.customName === _dpCur.customName);
+                if (chip) {
+                  let badge = chip.querySelector('.mb-week-badge');
+                  if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'mb-week-badge';
+                    chip.insertBefore(badge, chip.querySelector('.mb-rule-btn') || chip.querySelector('.taste-game-del'));
+                  }
+                  badge.textContent = `(${selLabels.join('·')})`;
+                  chip.classList.add('mb-has-week');
+                }
+              }
+              dayPickEl.hidden = true;
+              mainEl.hidden = false;
+              input.value = ''; resultsEl.innerHTML = ''; input.focus();
+            });
+
             const addGame = async (gameId, customName) => {
               if (inList(gameId, customName)) return;
               await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
@@ -1994,6 +2079,7 @@ async function openProfilePanel(autoSubsheet = null) {
                 const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
                 if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
               }
+              showDayPick(gameId, customName);
             };
 
             // 퀵픽: 좋아하는 게임(game_likes) 중 현재 목록에 없는 것 — 썸네일+이름 행

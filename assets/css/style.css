@@ -4356,6 +4356,20 @@ body.embed-mode {
 .mb-add-quick-name{flex:1;font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .mb-add-quick-plus{font-size:15px;color:var(--muted);flex-shrink:0;}
 .mb-add-quick-item:hover .mb-add-quick-plus{color:var(--green);}
+/* 게임추가 모달 — 요일 선택 단계 */
+.mb-add-daypick{display:flex;flex-direction:column;}
+.mb-add-daypick-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.4;}
+.mb-add-daypick-days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.mb-day-chip{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;border:1px solid var(--border);border-radius:9px;background:#fff;cursor:pointer;transition:background .12s,border-color .12s;}
+.mb-day-chip .mb-day-dow{font-size:13px;font-weight:600;color:var(--text);}
+.mb-day-chip .mb-day-md{font-size:10px;color:var(--muted);}
+.mb-day-chip:hover:not(.is-past){border-color:var(--green);}
+.mb-day-chip.is-selected{background:#eaf4ea;border-color:var(--green);}
+.mb-day-chip.is-selected .mb-day-dow{color:var(--green);}
+.mb-day-chip.is-past{opacity:.35;cursor:default;}
+.mb-add-daypick-hint{font-size:12px;color:var(--muted);margin:10px 0 14px;text-align:center;}
+.mb-add-daypick-done{background:var(--green);color:#fff;border:none;border-radius:9px;padding:10px 0;font-size:14px;font-weight:600;cursor:pointer;}
+.mb-add-daypick-done:hover{opacity:.9;}
 .record-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 0;}
 .record-photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;display:block;}
 .record-photo-more-badge{grid-column:1/-1;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px 0 0;text-decoration:underline;text-align:left;}
