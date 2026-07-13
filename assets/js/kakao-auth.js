@@ -1999,7 +1999,7 @@ async function openProfilePanel(autoSubsheet = null) {
               }
             };
 
-            // 퀵픽: 좋아하는 게임(game_likes) 중 현재 목록에 없는 것
+            // 퀵픽: 좋아하는 게임(game_likes) 중 현재 목록에 없는 것 — 썸네일+이름 행
             function renderQuick() {
               const src = (_meeting.likedGames || []).filter(g => g.game_id && !inList(g.game_id, null));
               if (!src.length) { quickWrap.style.display = 'none'; return; }
@@ -2007,9 +2007,12 @@ async function openProfilePanel(autoSubsheet = null) {
               quickEl.innerHTML = src.map(g => {
                 const gd = window.gameData?.[g.game_id];
                 const name = escH(gd?.title?.display || gd?.title?.owned || gd?.title?.bgg || String(g.game_id));
-                return `<button class="mb-add-quick-chip" data-game-id="${escH(String(g.game_id))}" type="button">${name}</button>`;
+                const thumb = gd?.images?.thumbnail
+                  ? `<img class="mb-add-quick-thumb" src="${escH(gd.images.thumbnail)}" alt="">`
+                  : `<span class="mb-add-quick-thumb mb-add-quick-thumb--empty"></span>`;
+                return `<button class="mb-add-quick-item" data-game-id="${escH(String(g.game_id))}" type="button">${thumb}<span class="mb-add-quick-name">${name}</span><span class="mb-add-quick-plus">＋</span></button>`;
               }).join('');
-              quickEl.querySelectorAll('.mb-add-quick-chip').forEach(chip =>
+              quickEl.querySelectorAll('.mb-add-quick-item').forEach(chip =>
                 chip.addEventListener('click', () => addGame(chip.dataset.gameId, null)));
             }
             renderQuick();
@@ -2073,11 +2076,14 @@ async function openProfilePanel(autoSubsheet = null) {
                 const item = ruleBtn.closest('.taste-game-item');
                 const gameId = item?.dataset.gameId || null;
                 const customName = item?.dataset.customName || null;
+                const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
                 const isOn = ruleBtn.classList.toggle('is-on');
                 if (isOn) {
                   await window.CottageDB?.addMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
+                  window.showToast?.(`📖 '${gameName}' 룰 설명해줄 수 있어요로 표시했어요`);
                 } else {
                   await window.CottageDB?.removeMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
+                  window.showToast?.(`'${gameName}' 룰 설명 표시를 해제했어요`);
                 }
                 return;
               }

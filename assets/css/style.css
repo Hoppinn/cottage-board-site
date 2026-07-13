@@ -4302,9 +4302,10 @@ body.embed-mode {
 .mb-taste-link:hover{background:rgba(107,140,186,.08);}
 
 /* 모임보드 — 📖 룰설명 버튼 */
-.mb-rule-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border:none;border-radius:50%;background:none;cursor:pointer;font-size:13px;opacity:.35;padding:0;flex-shrink:0;transition:opacity .15s;}
-.mb-rule-btn.is-on{opacity:1;}
-.mb-rule-btn:hover{opacity:.7;}
+.mb-rule-btn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid transparent;border-radius:50%;background:none;cursor:pointer;font-size:13px;opacity:.4;padding:0;flex-shrink:0;filter:grayscale(1);transition:opacity .15s,background .15s,filter .15s;}
+.mb-rule-btn.is-on{opacity:1;filter:none;background:#eaf4ea;border-color:#bcd9bc;box-shadow:0 0 0 2px rgba(111,160,104,0.15);}
+.mb-rule-btn:hover{opacity:.85;}
+.mb-rule-btn.is-on:hover{opacity:1;background:#dcecdc;}
 .mb-rule-badge{font-size:13px;flex-shrink:0;}
 
 /* 모임보드 — 주간 배지 */
@@ -4345,9 +4346,14 @@ body.embed-mode {
 .mb-add-results:empty{margin-top:0;}
 .mb-add-quick-wrap{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
 .mb-add-quick-label{font-size:12px;color:var(--muted);margin-bottom:7px;}
-.mb-add-quick{display:flex;flex-wrap:wrap;gap:6px;overflow-y:auto;max-height:22vh;}
-.mb-add-quick-chip{background:#fff0f0;border:1px solid #f0cfcf;border-radius:16px;padding:5px 12px;font-size:12px;color:#c0433a;cursor:pointer;}
-.mb-add-quick-chip:hover{background:#ffe3e3;}
+.mb-add-quick{display:flex;flex-direction:column;gap:3px;overflow-y:auto;max-height:26vh;}
+.mb-add-quick-item{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:6px 10px;cursor:pointer;text-align:left;width:100%;}
+.mb-add-quick-item:hover{background:var(--card-bg);border-color:var(--text);}
+.mb-add-quick-thumb{width:30px;height:30px;object-fit:contain;border-radius:5px;background:#f5f0eb;flex-shrink:0;}
+.mb-add-quick-thumb--empty{background:#f0ebe5;}
+.mb-add-quick-name{flex:1;font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mb-add-quick-plus{font-size:15px;color:var(--muted);flex-shrink:0;}
+.mb-add-quick-item:hover .mb-add-quick-plus{color:var(--green);}
 .record-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 0;}
 .record-photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;display:block;}
 .record-photo-more-badge{grid-column:1/-1;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px 0 0;text-decoration:underline;text-align:left;}
