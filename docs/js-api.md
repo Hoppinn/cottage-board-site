@@ -232,5 +232,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.openDateScheduleModal` | day-detail.js | 막대 클릭 → DB 조회 후 개인 일정 모달 `(userId, voteDate)`. club-schedule.html에서 호출. |
 | `window.openDateMeetingModal` | day-detail.js | 날짜 전체 집계 모달 `(voteDate, votes, voteGames, opts?)`. 홈 미리보기 카드 클릭 시 index-page.js에서 호출. |
 | `window.buildBarsInCard` | day-detail.js | 주간 카드/홈 미리보기 시간 막대 HTML 반환 `(dayVotes, voteGames, myVote)`. myVote=null이면 is-mine 강조·수정삭제 버튼 없음. club-schedule.html·index-page.js에서 호출. |
+| `window.openDatePreviewModal` | day-detail.js | 하루치 미리보기 센터모달 `(dateStr, dayVotes, dayGames, myVote?)` — buildBarsInCard 재사용, 그날 참여자 막대그래프. 모임보드 "자세히"에서 호출. |
+| `window.openPlannerModal` | day-detail.js | **공용** 모임 플래너 센터모달(전 페이지). `(opts)`: `weekOffset`(주차), `register`/`edit`(date), `onDirtyClose`(저장 후 닫힘 콜백). club-schedule.html?embed=true를 iframe으로 띄우고 open 시 목표 상태 전체 선언(cottage-reset-week/register/edit). 모임보드 "✎ 편집"에서 호출. |
 | `window.formatCondLabel` | day-detail.js | `(cond, game_id)` → 인원 조건 표시 문자열. `'best'`/`'recommended'`는 COTTAGE_GAMES에서 실제 인원 배열 조회 후 포맷(`베스트 4인` / `추천 3~4인` / `베스트 3·5·6·8인`). 데이터 없으면 `베스트인원`/`추천인원` 폴백. `'any'`→`''`. `'2'`/`'3'`/`'4'`/`'5+'`→`'N인'`. club-schedule.html Step 3 칩 레이블에서 호출. |
 - 관리자/로컬 제외 기준은 유지한다.

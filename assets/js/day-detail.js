@@ -690,6 +690,75 @@
         if (hidden) hidden.style.display = hidden.style.display === 'none' ? '' : 'none';
       }));
   };
+
+  // ── 모임 플래너 센터모달 (공용 유틸 — 전 페이지에서 호출, 페이지별 복제 금지) ──
+  // club-schedule.html?embed=true 를 iframe 센터모달로 띄운다. open 시 목표 상태
+  // (주차 오프셋·등록/수정 목적지)를 전부 선언(CLAUDE.md iframe 재사용 원칙).
+  let _pmFrame = null, _pmReady = false, _pmPending = null, _pmDirty = false, _pmOnDirty = null;
+  function _pmDeclare(opts) {
+    const w = _pmFrame?.contentWindow;
+    if (!w) return;
+    w.postMessage({ type: 'cottage-reset-week', offset: opts.weekOffset ?? 0 }, '*');
+    if (opts.register) w.postMessage({ type: 'cottage-register', date: opts.register }, '*');
+    else if (opts.edit) w.postMessage({ type: 'cottage-edit', date: opts.edit }, '*');
+  }
+  function _pmEsc(e) { if (e.key === 'Escape') _pmCloseModal(); }
+  function _pmCloseModal() {
+    const ov = document.getElementById('__plannerModal');
+    if (!ov) return;
+    ov.classList.remove('is-open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', _pmEsc);
+    if (_pmDirty) { _pmDirty = false; const cb = _pmOnDirty; _pmOnDirty = null; cb?.(); }
+  }
+  window.openPlannerModal = function (opts = {}) {
+    _pmOnDirty = opts.onDirtyClose || _pmOnDirty;
+    const p = window.location.pathname;
+    const base = p.includes('/pages/club/') ? 'club-schedule.html'
+               : p.includes('/pages/')      ? '../club/club-schedule.html'
+               :                              'pages/club/club-schedule.html';
+    const src = base + '?embed=true';
+    let ov = document.getElementById('__plannerModal');
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.id = '__plannerModal';
+      ov.className = 'planner-modal-overlay';
+      ov.innerHTML = `<div class="planner-modal-box">
+        <button class="planner-modal-close" type="button" aria-label="닫기">✕</button>
+        <div class="planner-modal-loader">불러오는 중…</div>
+        <iframe class="planner-modal-frame" title="모임 플래너"></iframe>
+      </div>`;
+      document.body.appendChild(ov);
+      _pmFrame = ov.querySelector('.planner-modal-frame');
+      ov.querySelector('.planner-modal-close').addEventListener('click', _pmCloseModal);
+      ov.addEventListener('click', e => { if (e.target === ov) _pmCloseModal(); });
+    }
+    ov.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', _pmEsc);
+    // 조건부 재로드: 이미 플래너 로드됨 → 상태만 선언 / 아니면 로드 후 ready 대기
+    let samePage = false;
+    try { samePage = !!_pmFrame.contentWindow?.location?.pathname?.includes('club-schedule'); } catch (_) { samePage = false; }
+    if (_pmReady && samePage) {
+      _pmDeclare(opts);
+    } else {
+      _pmPending = () => _pmDeclare(opts);
+      const ldr = ov.querySelector('.planner-modal-loader');
+      if (ldr) ldr.style.display = '';
+      if (_pmFrame.getAttribute('src') !== src) _pmFrame.src = src;
+    }
+  };
+  // 플래너 iframe 메시지 (본 모달 프레임만 처리)
+  window.addEventListener('message', e => {
+    if (!_pmFrame || e.source !== _pmFrame.contentWindow) return;
+    if (e.data?.type === 'cottage-planner-ready') {
+      _pmReady = true;
+      const ldr = document.querySelector('#__plannerModal .planner-modal-loader');
+      if (ldr) ldr.style.display = 'none';
+      if (_pmPending) { const f = _pmPending; _pmPending = null; f(); }
+    }
+    if (e.data?.type === 'cottage-meeting-saved') _pmDirty = true;
+  });
   /**
    * 날짜 전체 모임 모달 (홈 미리보기 카드 클릭 — 유저 비중심, 날짜 집계 뷰)
    * @param {string} voteDate — 'YYYY-MM-DD'

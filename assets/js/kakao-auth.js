@@ -2206,8 +2206,8 @@ async function openProfilePanel(autoSubsheet = null) {
             });
           });
 
-          // 이번 주 일정 — mini bar (async)
-          ;(async () => {
+          // 이번 주 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
+          const _loadMeetingWeek = async () => {
             const weekEl = subBody.querySelector('#mbWeekSection');
             if (!weekEl) return;
             const [wStart, wEnd] = _thisWeekRange();
@@ -2217,7 +2217,11 @@ async function openProfilePanel(autoSubsheet = null) {
             ]);
             const myVotes    = allV.filter(v => String(v.user_id) === userId);
             const myVoteGames = allVG.filter(g => String(g.user_id) === userId);
-            weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정</div>` + _buildMiniBarWeekHtml(myVotes, myVoteGames, userId, true);
+            weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 <button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button></div>` + _buildMiniBarWeekHtml(myVotes, myVoteGames, userId, true);
+            // 편집 아이콘 → 플래너 센터모달(이번 주), 저장 후 닫으면 이번주 일정 재조회
+            weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
+              window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek })
+            );
             // "자세히" → 그날 참여자 막대그래프 포함 하루치 미리보기 센터모달
             weekEl.querySelectorAll('.mb-detail-btn').forEach(btn =>
               btn.addEventListener('click', () => {
@@ -2318,7 +2322,8 @@ async function openProfilePanel(autoSubsheet = null) {
                 listEl.appendChild(moreBtn);
               }
             }
-          })();
+          };
+          _loadMeetingWeek();
         }); // end meeting afterRender
       }
     });
@@ -2498,12 +2503,8 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
   const bodyHtml = myVotes.length
     ? `<div class="mb-week-list">${rows}</div>`
     : '<p class="taste-game-empty">이번 주 등록된 일정이 없어요.</p>';
-  if (!isOwner) return bodyHtml;
-  const p = window.location.pathname;
-  const href = p.includes('/pages/club/') ? 'club-schedule.html'
-             : p.includes('/pages/')      ? '../club/club-schedule.html'
-             :                              'pages/club/club-schedule.html';
-  return bodyHtml + `<a href="${href}" class="mb-planner-cta">📅 모임 플래너에서 수정하기 →</a>`;
+  // 편집 진입점은 섹션 타이틀 옆 ✎ 아이콘(openPlannerModal)으로 이동 — 하단 CTA 제거
+  return bodyHtml;
 }
 
 // ── 다른 유저 모임 보드 시트 (읽기 전용) ───────────────────────
