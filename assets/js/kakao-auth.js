@@ -2218,8 +2218,15 @@ async function openProfilePanel(autoSubsheet = null) {
             const myVotes    = allV.filter(v => String(v.user_id) === userId);
             const myVoteGames = allVG.filter(g => String(g.user_id) === userId);
             weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정</div>` + _buildMiniBarWeekHtml(myVotes, myVoteGames, userId, true);
+            // "자세히" → 그날 참여자 막대그래프 포함 하루치 미리보기 센터모달
             weekEl.querySelectorAll('.mb-detail-btn').forEach(btn =>
-              btn.addEventListener('click', () => window.openDateScheduleModal?.(btn.dataset.uid, btn.dataset.date))
+              btn.addEventListener('click', () => {
+                const _d = btn.dataset.date;
+                const _dv = allV.filter(v => v.vote_date === _d);
+                const _dg = allVG.filter(g => g.vote_date === _d);
+                const _mv = _dv.find(v => String(v.user_id) === userId) || null;
+                window.openDatePreviewModal?.(_d, _dv, _dg, _mv);
+              })
             );
 
             // 주간 배지: 플래너 게임 → 하고싶은/배우고싶은 칩에 요일 배지 + 플래너 전용 항목

@@ -27,6 +27,11 @@
       color: var(--green, #7a4828);
       margin-bottom: 8px;
     }
+    .dd-preview-head {
+      font-size: 15px; font-weight: 700;
+      color: var(--green, #7a4828);
+      margin-bottom: 10px;
+    }
     .dd-close-row {
       padding: 12px 20px;
       display: flex; justify-content: center;
@@ -641,6 +646,49 @@
     const close = () => el.remove();
     el.querySelector('.dd-close-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
+  };
+  /**
+   * 하루치 플래너 미리보기 모달 (모임보드 "자세히" — 그날 참여자 막대그래프 포함 카드)
+   * 홈 미리보기 카드(buildBarsInCard)를 센터모달로 재사용.
+   * @param {string} dateStr — 'YYYY-MM-DD'
+   * @param {Array}  dayVotes — 해당 날짜 meeting_votes
+   * @param {Array}  dayGames — 해당 날짜 meeting_vote_games
+   * @param {Object} [myVote] — 본인 vote(막대 is-mine 강조용)
+   */
+  window.openDatePreviewModal = function (dateStr, dayVotes, dayGames, myVote) {
+    document.getElementById('__ddModal')?.remove();
+    const el = document.createElement('div');
+    el.id = '__ddModal';
+    el.className = 'dd-overlay';
+    const dObj = new Date(dateStr + 'T00:00:00');
+    const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+    const dateLabel = `${dObj.getMonth() + 1}/${dObj.getDate()}(${DOW[dObj.getDay()]})`;
+    const count = new Set((dayVotes || []).map(v => v.user_id)).size;
+    const barsHtml = (window.buildBarsInCard && dayVotes && dayVotes.length)
+      ? window.buildBarsInCard(dayVotes, dayGames || [], myVote || null)
+      : '<p class="dd-loading">이 날 등록된 일정이 없어요.</p>';
+    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+      <div class="dd-modal-scroll">
+        <div class="dd-preview-head">📅 ${esc(dateLabel)} · ${count}명</div>
+        ${barsHtml}
+      </div>
+      <div class="dd-close-row">
+        <button class="dd-close-btn" type="button">닫기</button>
+      </div>
+    </div>`;
+    document.body.appendChild(el);
+    const close = () => el.remove();
+    el.querySelector('.dd-close-btn').addEventListener('click', close);
+    el.addEventListener('click', e => { if (e.target === el) close(); });
+    // 참여자 이름 클릭 → 해당 유저 모임 보드 (홈 미리보기와 동일)
+    el.querySelectorAll('.sched-bar-name').forEach(n =>
+      n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid)));
+    // +N명 더보기 토글 (막대가 접힘 구조일 때)
+    el.querySelectorAll('.sched-card-more-btn').forEach(btn =>
+      btn.addEventListener('click', () => {
+        const hidden = btn.previousElementSibling;
+        if (hidden) hidden.style.display = hidden.style.display === 'none' ? '' : 'none';
+      }));
   };
   /**
    * 날짜 전체 모임 모달 (홈 미리보기 카드 클릭 — 유저 비중심, 날짜 집계 뷰)

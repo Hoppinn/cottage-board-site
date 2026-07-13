@@ -199,8 +199,8 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 |------|------|------|
 | [x] E-2 기록보드 플레이기록 썸네일 → 게임기록시트 | 기록보드 썸네일 | 플레이기록+게임평 항목의 `.profile-record-thumb`에 클릭 핸들러 추가(이름 클릭과 동일 `openGameRecordSheet`). CSS cursor 추가. 하니스 검증 |
 | [x] E-3 기록보드 사진 라이트박스 좌하단 게임 썸네일 | 기록보드 썸네일 | `openLightbox`에 opts.gameThumbs/gameKeys/onGameClick 추가(하위호환), 좌하단 `.pr-lightbox-game-thumb` 렌더+클릭 시 라이트박스 닫고 게임기록시트. `_allPhotoData`에 game_id 추가. 하니스 검증(썸네일 표시·클릭→기록시트·닫힘). js-api.md 갱신 |
-| E-4 모임플래너 수정 버튼 이동+아이콘화+센터모달 | 모임보드 모달이식 | "모임플래너에서 수정하기"를 이번주일정 타이틀 옆으로, 추가/수정/삭제 아이콘으로. 클릭 시 **기존 미리보기 모달 이식**(신규 금지) |
-| E-5 이번주일정 "자세히" → 하루치 미리보기 센터모달 | 모임보드 모달이식 | "자세히"는 무의미 → 그날 참여자 막대 포함 하루치 미리보기 카드를 센터모달로(홈 미리보기 카드/openDateMeetingModal 재사용, 신규 금지) |
+| E-4 모임플래너 수정 버튼 이동+아이콘화+센터모달 | 모임보드 모달이식 | "모임플래너에서 수정하기"를 이번주일정 타이틀 옆으로, 추가/수정/삭제 아이콘으로. 클릭 시 **기존 미리보기 모달 이식**(신규 금지). ⚠️ 홈 등록 UI=plannerSheetModal(club-schedule.html iframe, index.html 전용 DOM) — 모임보드는 전역이라 iframe 모달 생성 필요 + 아이콘 3개 동작 불명확 → **확인 후 진행** |
+| [x] E-5 이번주일정 "자세히" → 하루치 미리보기 센터모달 | 모임보드 모달이식 | 완료. `openDatePreviewModal`(day-detail.js) 신설 — 홈 미리보기 카드의 `buildBarsInCard`(막대) 재사용, dd-overlay 센터모달로 그날 참여자 막대그래프+게임태그 표시. mb-detail-btn → allV/allVG를 날짜 필터해 전달. 참여자 이름 클릭→openOtherMeetingSheet. (openDateScheduleModal은 통계칩만 있고 막대 없어 부적합 → 교체). 하니스 검증(3명 막대 렌더) |
 
 **세션 순서**: ① (Sonnet) E-1+E-6 그린 배치 → ② (판단) E-4/E-5 모달이식 묶음, E-2/E-3 기록보드 묶음은 옐로 — 관련끼리. E-2~5는 위치 탐색·기존 모달 식별 필요.
 
