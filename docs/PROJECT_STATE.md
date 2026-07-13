@@ -196,7 +196,7 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - 모임보드 추가=**날짜 필수** 플래너 등록 + (미등록 게임이면) "좋아하는 게임에도 추가?" 옵션. 미정 제거.
 
 **Phase (커밋 단위)**:
-- [ ] **Phase 1 — 취향보드 개편** (분리 가능, 먼저): ①칩에 📖 추가([📖][✕]). ②✕ 삭제 시 확인(confirm y/n). ③게임추가 버튼 라벨 옆 이동 + 센터모달(검색 초성+직접입력, 날짜·퀵픽 없음). 썸네일만 클릭은 E-1에서 완료.
+- [x] **Phase 1 — 취향보드 개편** 완료: ①칩 [📖][✕] — 📖=can_explain_rules(취향·모임 공유, meeting_game_prefs), _ruleSet을 취향템플릿 앞으로 이동. ②✕ 삭제 시 confirm y/n. ③게임추가 버튼 라벨 옆(taste-add-btn--inline) + 센터모달 `_openTasteAddModal`(검색 초성+직접입력+커스텀제안, 날짜·퀵픽 없음), 인라인 검색 제거, `_appendTasteChip` 추출. 하니스 검증: 📖 상태/토글/토스트/연동, 삭제 확인문구, 라벨옆 버튼+모달+초성.
 - [ ] **Phase 2 — 모임보드 리스트 소스 전환**: _meetingInnerHtml 게임리스트→플레이스홀더, _loadMeetingWeek에서 allVG 그룹핑→_buildMeetingWeekGameItems 렌더(칩=[썸네일][이름][요일배지][📖][⋯]). 기존 미러/배지-append IIFE 제거. 카운트=이번주 distinct.
 - [ ] **Phase 3 — 추가 흐름 반전**: 모임 add모달 날짜 필수 + 좋아요 옵션.
 - [ ] **Phase 4 — ⋯ 메뉴**: fixed 드롭다운(서브시트 overflow 회피), 요일 수정(데이픽커 프리필)/이번주에서 빼기.
