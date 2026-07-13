@@ -1102,11 +1102,11 @@ async function openProfilePanel(autoSubsheet = null) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 이번 주 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-section-label">❤️ 이번 주 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button> <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">❤️ 좋아하는 게임 보기</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">💡 이번 주 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-section-label">💡 이번 주 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button> <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">👀 해보고 싶은 게임 보기</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
@@ -2194,13 +2194,54 @@ async function openProfilePanel(autoSubsheet = null) {
             setTimeout(() => input.focus(), 50);
           };
 
+          // 취향 원천(game_likes/curious) 박스만 센터모달로 보기 — 이번 주 리스트와 별개, 평소 취향 전체
+          const _openTasteBoxModal = (listType) => {
+            const isWant = listType === 'want';
+            const games = (isWant ? _meeting.likedGames : _meeting.curiousGames) || [];
+            const title = isWant ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임';
+            document.getElementById('mbTasteBoxModal')?.remove();
+            const overlay = document.createElement('div');
+            overlay.id = 'mbTasteBoxModal';
+            overlay.className = 'mb-add-overlay';
+            const listHtml = games.length
+              ? games.map(g => {
+                  const gd = g.game_id ? window.gameData?.[g.game_id] : null;
+                  const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
+                  const thumb = gd?.images?.thumbnail ? `<img class="taste-game-thumb" src="${escH(gd.images.thumbnail)}" alt="">` : `<span class="taste-game-thumb-empty"></span>`;
+                  const clickable = g.game_id ? ' taste-game-item--clickable' : '';
+                  const gidAttr = g.game_id ? ` data-game-id="${escH(String(g.game_id))}"` : '';
+                  const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
+                  const ruleBadge = _ruleSet.has(ruleKey) ? '<span class="mb-rule-badge">📖</span>' : '';
+                  return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${ruleBadge}</div>`;
+                }).join('')
+              : '<p class="taste-game-empty">아직 없어요</p>';
+            overlay.innerHTML = `<div class="mb-add-box">
+              <div class="mb-add-head"><span class="mb-add-title">${title} <span class="taste-count">${games.length}개</span></span><button class="mb-add-close" type="button" aria-label="닫기">✕</button></div>
+              <p class="mb-taste-box-hint">이번 주 일정과 별개로, 평소 ${isWant ? '좋아하는' : '해보고 싶은'} 게임 전체예요</p>
+              <div class="taste-game-list mb-taste-box-list">${listHtml}</div>
+            </div>`;
+            document.body.appendChild(overlay);
+            const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
+            const onEsc = e => { if (e.key === 'Escape') close(); };
+            overlay.querySelector('.mb-add-close').addEventListener('click', close);
+            overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+            document.addEventListener('keydown', onEsc);
+            // 게임시트(z 9500) < 이 모달(z 9700)이라 클릭 시 모달을 먼저 닫고 게임시트 열기
+            overlay.querySelectorAll('.taste-game-item--clickable').forEach(item => item.addEventListener('click', () => {
+              const gid = item.dataset.gameId;
+              if (gid) { close(); window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
+            }));
+          };
+
           // 리스트 위임 핸들러 (📖 토글 / ⋯ 케밥 / 썸네일) — 리스트 내용은 _renderWeekList가 렌더
           for (const listType of ['want', 'learn']) {
             const listId = listType === 'want' ? 'meetinglikedList' : 'meetingcuriousList';
             const addBtnId = listType === 'want' ? 'meetinglikedAddBtn' : 'meetingcuriousAddBtn';
+            const boxBtnId = listType === 'want' ? 'meetinglikedBoxBtn' : 'meetingcuriousBoxBtn';
             const listEl = subBody.querySelector('#' + listId);
             const srcSet = listType === 'want' ? _likedSlugSet : _curiousSlugSet;
             subBody.querySelector('#' + addBtnId)?.addEventListener('click', () => _openMbAddModal(listType));
+            subBody.querySelector('#' + boxBtnId)?.addEventListener('click', () => _openTasteBoxModal(listType));
             listEl?.addEventListener('click', async e => {
               const item = e.target.closest('.taste-game-item');
               if (!item) return;

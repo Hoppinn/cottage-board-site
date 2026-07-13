@@ -203,10 +203,10 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - 수신: 모임보드 → `_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList`(❤️/👀 마커 즉시 반영). 취향보드 열려있으면 목록 추가/삭제·카운트 갱신. 핸들러 dedupe(`window.__tasteLikesHandler`/`__mbLikesHandler`) + DOM 이탈 self-remove.
 - 범위 밖: game-reviews.js `onPrMenuLike/Curious`(기록 iframe = 별도 window 컨텍스트라 미발화).
 
-**Phase B (소) — 취향 박스 센터모달**:
-- "❤️ 이번 주 하고 싶은 게임" 섹션 라벨에 "좋아하는 게임 보기" 버튼 → 그 사람(또는 내) **game_likes 박스만** 센터모달.
-- "💡 이번 주 배우고 싶은 게임" 섹션 → **game_curious 박스만** 센터모달.
-- 전체 시트 아님, 해당 박스만. 게임 클릭 시 게임시트(썸네일 or 전체 — Phase 결정). 내보드=내 데이터, 읽기전용=그 사람 데이터. 렌더는 buildReadOnlyGames 재사용.
+**Phase B (소) — 취향 박스 센터모달** — ✅ 완료 (2026-07-14, 셀프 보드):
+- 셀프 모임보드 "❤️ 이번 주 하고 싶은 게임" 라벨에 `#meetinglikedBoxBtn`(.mb-taste-link) "❤️ 좋아하는 게임 보기" → **game_likes 박스만** 센터모달(`_openTasteBoxModal('want')`). "💡 배우고 싶은 게임" → game_curious 박스(`'learn'`).
+- 모달: `.mb-add-overlay`/`.mb-add-box` 재사용 + `#mbTasteBoxModal`. 데이터=`_meeting.likedGames`/`curiousGames`(패널 open 시 이미 로드), 📖 룰뱃지(`_ruleSet`) 포함. 게임 클릭=**전체 아이템 클릭** → 게임시트. **z-index 주의**: 모달(--z-sheet-modal 9700) > 게임시트(--z-sheet 9500)라 클릭 시 `close()` 후 openGameSheet(안 그러면 게임시트가 모달 뒤에 묻힘). CSS `.mb-taste-box-hint`/`.mb-taste-box-list` 신규.
+- **읽기전용 버전은 Phase C로 이월**: openOtherMeetingSheet는 아직 옛 미러(likedGames 전체를 인라인 표시)라 "이번주 vs 취향전체" 구분 자체가 없어 이 버튼이 무의미. Phase C에서 읽기전용을 this-week 모델로 전환할 때 함께 적용.
 
 **Phase C (대) — 읽기전용 내 보드 (핵심 리팩토링)**:
 - `openProfilePanel`을 **userId 파라미터화 + 읽기전용 모드**로 확장(현재 self=getKakaoUser 가정 다수 → 대상 userId 주입, 편집 컨트롤 숨김/가드). openOtherTasteSheet/openOtherMeetingSheet를 이걸로 **통합**.
