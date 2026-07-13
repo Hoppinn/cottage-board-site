@@ -1101,18 +1101,10 @@ async function openProfilePanel(autoSubsheet = null) {
     <div class="taste-game-section">
       <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount">${_meeting.likedGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button></div>
       <div class="taste-game-list" id="meetinglikedList">${_buildMeetingGameItems(_meeting.likedGames, _ruleSet)}</div>
-      <div class="taste-search-wrap" id="meetinglikedSearch" style="display:none">
-        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
-        <div class="taste-search-results"></div>
-      </div>
     </div>
     <div class="taste-game-section">
       <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount">${_meeting.curiousGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button></div>
       <div class="taste-game-list" id="meetingcuriousList">${_buildMeetingGameItems(_meeting.curiousGames, _ruleSet)}</div>
-      <div class="taste-search-wrap" id="meetingcuriousSearch" style="display:none">
-        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
-        <div class="taste-search-results"></div>
-      </div>
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
@@ -1930,15 +1922,130 @@ async function openProfilePanel(autoSubsheet = null) {
           });
 
           // ── 게임 목록 (하고싶은 게임=game_likes 미러 / 배우고싶은 게임=game_curious 미러) ──
+          // 리스트에 게임 칩 1개 추가 (검색/퀵픽 공용)
+          const _appendMeetingChip = (listEl, countEl, gameId, customName) => {
+            const _gd = gameId ? window.gameData?.[gameId] : null;
+            const name = _gd
+              ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(gameId))
+              : (customName || '');
+            const thumb = _gd?.images?.thumbnail
+              ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
+              : `<span class="taste-game-thumb-empty"></span>`;
+            listEl.querySelector('.taste-game-empty')?.remove();
+            const newItem = document.createElement('div');
+            newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
+            if (gameId) newItem.dataset.gameId = gameId;
+            if (customName) newItem.dataset.customName = customName;
+            const _dynRuleKey = gameId ? `id:${gameId}` : `cn:${customName || ''}`;
+            const _dynRuleOn = _ruleSet?.has(_dynRuleKey) ? ' is-on' : '';
+            newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${_dynRuleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button>`;
+            if (gameId) {
+              newItem.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
+                window.ensureGameSheet?.();
+                window.openGameSheet?.(String(gameId));
+              });
+            }
+            const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
+            if (insertBefore) listEl.insertBefore(newItem, insertBefore);
+            else listEl.appendChild(newItem);
+            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+          };
+
+          // 게임 추가 센터모달 (초성 자동완성 + 좋아하는 게임 퀵픽)
+          const _openGameAddModal = ({ listKey, table, listEl, countEl }) => {
+            document.getElementById('mbAddModal')?.remove();
+            const isLiked = listKey === 'liked';
+            const overlay = document.createElement('div');
+            overlay.id = 'mbAddModal';
+            overlay.className = 'mb-add-overlay';
+            overlay.innerHTML = `
+              <div class="mb-add-box">
+                <div class="mb-add-head">
+                  <span class="mb-add-title">${isLiked ? '❤️ 하고 싶은 게임' : '💡 배우고 싶은 게임'} 추가</span>
+                  <button class="mb-add-close" type="button" aria-label="닫기">✕</button>
+                </div>
+                <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
+                <div class="mb-add-results"></div>
+                <div class="mb-add-quick-wrap">
+                  <div class="mb-add-quick-label">❤️ 내가 좋아하는 게임</div>
+                  <div class="mb-add-quick"></div>
+                </div>
+              </div>`;
+            document.body.appendChild(overlay);
+            const input = overlay.querySelector('.mb-add-input');
+            const resultsEl = overlay.querySelector('.mb-add-results');
+            const quickEl = overlay.querySelector('.mb-add-quick');
+            const quickWrap = overlay.querySelector('.mb-add-quick-wrap');
+
+            const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
+            const onEsc = e => { if (e.key === 'Escape') close(); };
+            overlay.querySelector('.mb-add-close').addEventListener('click', close);
+            overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+            document.addEventListener('keydown', onEsc);
+
+            const inList = (gameId, customName) => {
+              if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
+              if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
+              return false;
+            };
+            const addGame = async (gameId, customName) => {
+              if (inList(gameId, customName)) return;
+              await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
+              _appendMeetingChip(listEl, countEl, gameId, customName);
+              renderQuick();
+              if (gameId) {
+                const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
+                if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
+              }
+            };
+
+            // 퀵픽: 좋아하는 게임(game_likes) 중 현재 목록에 없는 것
+            function renderQuick() {
+              const src = (_meeting.likedGames || []).filter(g => g.game_id && !inList(g.game_id, null));
+              if (!src.length) { quickWrap.style.display = 'none'; return; }
+              quickWrap.style.display = '';
+              quickEl.innerHTML = src.map(g => {
+                const gd = window.gameData?.[g.game_id];
+                const name = escH(gd?.title?.display || gd?.title?.owned || gd?.title?.bgg || String(g.game_id));
+                return `<button class="mb-add-quick-chip" data-game-id="${escH(String(g.game_id))}" type="button">${name}</button>`;
+              }).join('');
+              quickEl.querySelectorAll('.mb-add-quick-chip').forEach(chip =>
+                chip.addEventListener('click', () => addGame(chip.dataset.gameId, null)));
+            }
+            renderQuick();
+
+            // 검색: 초성 스마트 매칭(matchKoreanSmart) + substring 폴백
+            const _smart = window.matchKoreanSmart;
+            let _t = null;
+            input.addEventListener('input', () => {
+              clearTimeout(_t);
+              _t = setTimeout(() => {
+                const q = input.value.trim();
+                if (!q) { resultsEl.innerHTML = ''; return; }
+                const matches = Object.entries(window.gameData || {}).filter(([, g]) => {
+                  const nm = g.title?.display || g.title?.owned || g.title?.bgg || '';
+                  return _smart ? _smart(nm, q) : nm.toLowerCase().includes(q.toLowerCase());
+                }).slice(0, 8);
+                const items = matches.map(([id, g]) => {
+                  const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
+                  const added = inList(id, null);
+                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
+                });
+                const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
+                resultsEl.innerHTML = [...items, direct].join('');
+                resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn =>
+                  btn.addEventListener('click', () => addGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
+              }, 180);
+            });
+            setTimeout(() => input.focus(), 50);
+          };
+
           for (const { listKey, table } of [
             { listKey: 'liked', table: 'game_likes' },
             { listKey: 'curious', table: 'game_curious' },
           ]) {
             const listEl = subBody.querySelector(`#meeting${listKey}List`);
             const addBtn = subBody.querySelector(`#meeting${listKey}AddBtn`);
-            const searchWrap = subBody.querySelector(`#meeting${listKey}Search`);
-            const searchInput = searchWrap?.querySelector('.taste-search-input');
-            const searchResults = searchWrap?.querySelector('.taste-search-results');
             const countEl = subBody.querySelector(`#meeting${listKey}Count`);
 
             listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
@@ -1987,90 +2094,7 @@ async function openProfilePanel(autoSubsheet = null) {
               if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
             });
 
-            addBtn?.addEventListener('click', () => {
-              const showing = searchWrap.style.display !== 'none';
-              searchWrap.style.display = showing ? 'none' : '';
-              if (!showing) searchInput?.focus();
-            });
-            searchInput?.addEventListener('keydown', e => {
-              if (e.key === 'Escape') {
-                searchWrap.style.display = 'none';
-                searchInput.value = '';
-                searchResults.innerHTML = '';
-              }
-            });
-
-            let _searchTimer = null;
-            searchInput?.addEventListener('input', () => {
-              clearTimeout(_searchTimer);
-              _searchTimer = setTimeout(async () => {
-                const q = searchInput.value.trim();
-                if (!q) { searchResults.innerHTML = ''; return; }
-
-                const catalogItems = Object.entries(window.gameData || {})
-                  .filter(([, g]) => {
-                    const name = g.title?.display || g.title?.owned || g.title?.bgg || '';
-                    return name.toLowerCase().includes(q.toLowerCase());
-                  })
-                  .slice(0, 6)
-                  .map(([id, g]) => {
-                    const name = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
-                    const alreadyAdded = !!listEl.querySelector(`[data-game-id="${id}"]`);
-                    return `<button class="taste-search-item${alreadyAdded ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${name}${alreadyAdded ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
-                  });
-
-                const directItem = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 추가</button>`;
-                searchResults.innerHTML = [...catalogItems, directItem].join('');
-
-                searchResults.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn => {
-                  btn.addEventListener('click', async () => {
-                    const gameId = btn.dataset.gameId || null;
-                    const customName = btn.dataset.customName || null;
-
-                    if (gameId && listEl.querySelector(`[data-game-id="${gameId}"]`)) return;
-                    if (customName) {
-                      const existing = [...listEl.querySelectorAll('[data-custom-name]')];
-                      if (existing.some(el => el.dataset.customName === customName)) return;
-                    }
-
-                    await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
-
-                    const _gd2 = gameId ? window.gameData?.[gameId] : null;
-                    const name = _gd2
-                      ? (_gd2.title?.display || _gd2.title?.owned || _gd2.title?.bgg || String(gameId))
-                      : (customName || '');
-                    const thumb = _gd2?.images?.thumbnail
-                      ? `<img class="taste-game-thumb" src="${escH(_gd2.images.thumbnail)}" alt="">`
-                      : `<span class="taste-game-thumb-empty"></span>`;
-
-                    listEl.querySelector('.taste-game-empty')?.remove();
-
-                    const newItem = document.createElement('div');
-                    newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
-                    if (gameId) newItem.dataset.gameId = gameId;
-                    if (customName) newItem.dataset.customName = customName;
-                    const _dynRuleKey = gameId ? `id:${gameId}` : `cn:${customName || ''}`;
-                    const _dynRuleOn = _ruleSet?.has(_dynRuleKey) ? ' is-on' : '';
-                    newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${_dynRuleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button>`;
-                    if (gameId) {
-                      newItem.addEventListener('click', e => {
-                        if (e.target.closest('.taste-game-del') || e.target.closest('.mb-rule-btn')) return;
-                        window.ensureGameSheet?.();
-                        window.openGameSheet?.(String(gameId));
-                      });
-                    }
-                    const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
-                    if (insertBefore) listEl.insertBefore(newItem, insertBefore);
-                    else listEl.appendChild(newItem);
-
-                    if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
-                    searchWrap.style.display = 'none';
-                    searchInput.value = '';
-                    searchResults.innerHTML = '';
-                  });
-                });
-              }, 200);
-            });
+            addBtn?.addEventListener('click', () => _openGameAddModal({ listKey, table, listEl, countEl }));
           }
 
           // 최근 모임 참여 → 게임시트 열기
