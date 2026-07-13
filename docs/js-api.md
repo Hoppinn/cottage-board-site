@@ -148,7 +148,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 |------|------|--------|
 | `parsePhotoUrls(raw)` | photo_url 문자열 → URL 배열 | game-reviews.js, club-history.html |
 | `buildPhotoHtml(urls)` | 사진 썸네일 HTML 생성 | 동일 |
-| `openLightbox(urls, idx)` | 전체화면 라이트박스 | 동일 |
+| `openLightbox(urls, idx, opts)` | 전체화면 라이트박스. opts: captions[]/caption, onDelete+deletable[], **gameThumbs[]**(사진별 게임 표지 URL, 좌하단 표시)+**gameKeys[]**+**onGameClick(key)**(썸네일 클릭 시) | 동일, kakao-auth.js(기록보드 사진) |
 | `attachAc(input, getSuggestions, onSelect, listRef)` | 자동완성 드롭다운 연결. getSuggestions=후보 배열 반환 함수, listRef=드롭다운 삽입 기준 DOM(없으면 input을 새 div로 감쌈) | game-reviews.js |
 | `initTagInput(wrap, hidden, initialValue, onAdd)` | 태그칩 입력 컴포넌트. wrap=컨테이너, hidden=값 동기화할 hidden input, initialValue=초기값 배열, onAdd=태그 추가 콜백 | game-reviews.js |
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |

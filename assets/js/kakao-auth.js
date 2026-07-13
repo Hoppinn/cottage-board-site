@@ -993,7 +993,7 @@ async function openProfilePanel(autoSubsheet = null) {
     if (!p.photo_url) continue;
     const parsed = window.parsePhotoUrls ? window.parsePhotoUrls(p.photo_url) : [p.photo_url];
     for (const url of parsed) {
-      _allPhotoData.push({ url, record_id: p.id, user_id: p.user_id, nickname: p.nickname || '', played_at: p.played_at || p.created_at?.slice(0,10) || '', group_name: p.group_name || '', player_count: p.player_count || null, player_names: p.player_names || '', play_time_min: p.play_time_min || null, score_note: p.score_note || '' });
+      _allPhotoData.push({ url, record_id: p.id, user_id: p.user_id, game_id: p.game_id || null, nickname: p.nickname || '', played_at: p.played_at || p.created_at?.slice(0,10) || '', group_name: p.group_name || '', player_count: p.player_count || null, player_names: p.player_names || '', play_time_min: p.play_time_min || null, score_note: p.score_note || '' });
     }
   }
   const _photoCount = userStats?.photoCount || 0;
@@ -1779,16 +1779,18 @@ async function openProfilePanel(autoSubsheet = null) {
           subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(toggle => {
             toggle.addEventListener('click', () => setTimeout(() => _bindReviewToggles(subBody), 0));
           });
-          subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
-            const li = btn.closest('[data-game-id]');
-            const gameId = li?.dataset.gameId;
+          // 게임명 + 썸네일 클릭 → 게임 기록 시트
+          subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
+            const gameId = li.dataset.gameId;
             if (!gameId) return;
-            btn.addEventListener('click', () => {
+            const openSheet = () => {
               const key = _getGameKeyById(gameId);
               if (!key) return;
               window.ensureGameSheet?.();
               window.openGameRecordSheet?.(key);
-            });
+            };
+            li.querySelector('.profile-game-link')?.addEventListener('click', openSheet);
+            li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', openSheet);
           });
           // 더보기/접기 — 라이트박스 기능(play-records-utils.js) 유무와 무관하게 항상 동작
           const _moreBadge = subBody.querySelector('.record-photo-more-badge');
@@ -1822,7 +1824,15 @@ async function openProfilePanel(autoSubsheet = null) {
             const _photoUrls = _allPhotoData.map(d => d.url);
             const _photoCaptions = _allPhotoData.map(_buildPhotoCaption);
             const _deletable = _allPhotoData.map(d => !!(_myId && d.user_id && String(d.user_id) === _myId));
-            const _lbOpts = { captions: _photoCaptions };
+            // 라이트박스 좌하단 게임 썸네일 — 사진별 해당 게임 표지 + 클릭 시 게임 기록 시트
+            const _photoGameKeys = _allPhotoData.map(d => d.game_id ? _getGameKeyById(d.game_id) : null);
+            const _photoGameThumbs = _photoGameKeys.map(k => k ? (window.gameData?.[k]?.images?.thumbnail || null) : null);
+            const _lbOpts = {
+              captions: _photoCaptions,
+              gameThumbs: _photoGameThumbs,
+              gameKeys: _photoGameKeys,
+              onGameClick: key => { if (!key) return; window.ensureGameSheet?.(); window.openGameRecordSheet?.(key); },
+            };
             if (_deletable.some(Boolean)) {
               _lbOpts.deletable = _deletable;
               _lbOpts.onDelete = async delIdx => {

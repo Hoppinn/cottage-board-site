@@ -61,6 +61,20 @@
       delBtn.textContent = '삭제';
     }
 
+    // 좌하단 게임 썸네일 (사진별 해당 게임 표지) — 클릭 시 opts.onGameClick(gameKey)
+    const gameThumb = opts?.gameThumbs ? document.createElement('img') : null;
+    if (gameThumb) {
+      gameThumb.className = 'pr-lightbox-game-thumb';
+      gameThumb.alt = '';
+      gameThumb.addEventListener('click', e => {
+        e.stopPropagation();
+        const key = opts.gameKeys ? opts.gameKeys[cur] : null;
+        if (!key) return;
+        closeLb();
+        opts.onGameClick?.(key);
+      });
+    }
+
     function show(idx) {
       cur = ((idx % urls.length) + urls.length) % urls.length;
       img.src = urls[cur];
@@ -75,6 +89,11 @@
       if (delBtn) {
         const canDel = !opts.deletable || opts.deletable[cur];
         delBtn.style.display = canDel ? '' : 'none';
+      }
+      if (gameThumb) {
+        const turl = opts.gameThumbs[cur];
+        if (turl) { gameThumb.src = turl; gameThumb.style.display = ''; }
+        else gameThumb.style.display = 'none';
       }
     }
 
@@ -111,6 +130,7 @@
     lb.append(close, prev, img, next, counter);
     if (cap) lb.appendChild(cap);
     if (delBtn) lb.appendChild(delBtn);
+    if (gameThumb) lb.appendChild(gameThumb);
     document.body.appendChild(lb);
     if (window.parent !== window) window.parent.postMessage({ type: 'cottage-lightbox-open' }, '*');
     show(cur);
