@@ -2183,8 +2183,11 @@ async function openProfilePanel(autoSubsheet = null) {
                 }
               }
 
-              // 주간 게임 우선 정렬 + 접기/더보기 (기존 fold 구조 제거 후 재빌드)
-              listEl.querySelector('.taste-game-more-wrap')?.remove();
+              // 주간 게임 우선 정렬 + 접기/더보기 (기존 fold 구조 해제 후 재빌드)
+              // ⚠️ wrap을 remove하면 접혀있던 게임(maxInitial 초과분)이 통째로 삭제됨 →
+              //    반드시 내용물을 리스트로 되돌린 뒤 빈 wrap만 제거
+              const _oldWrap = listEl.querySelector('.taste-game-more-wrap');
+              if (_oldWrap) { while (_oldWrap.firstChild) listEl.appendChild(_oldWrap.firstChild); _oldWrap.remove(); }
               listEl.querySelector('.taste-more-btn')?.remove();
               const emptyEl = listEl.querySelector('.taste-game-empty');
               if (emptyEl) continue; // 게임 없음 상태 유지
@@ -2206,11 +2209,7 @@ async function openProfilePanel(autoSubsheet = null) {
                 moreBtn.className = 'taste-more-btn';
                 moreBtn.type = 'button';
                 moreBtn.textContent = `더 보기 (${rest.length}개 더)`;
-                moreBtn.addEventListener('click', () => {
-                  const hidden = wrap.hidden;
-                  wrap.hidden = !hidden;
-                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${rest.length}개 더)`;
-                });
+                // 클릭 토글은 listEl 위임 핸들러가 처리 (직접 핸들러 중복 시 이중 토글 → 무동작)
                 listEl.appendChild(moreBtn);
               }
             }

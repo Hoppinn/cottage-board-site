@@ -240,7 +240,10 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - [x] **커밋2 — 게임추가 센터모달**: 인라인 `.taste-search-wrap` 제거. `_openGameAddModal`(z-index `--z-sheet-modal` 9700, 서브시트 위) — 초성 자동완성(`window.matchKoreanSmart` script-nav.js 전역 + substring 폴백) + "내가 좋아하는 게임" 퀵픽(game_likes 중 현재 목록에 없는 것) + 직접입력. `_appendMeetingChip` 헬퍼 추출(검색·퀵픽·삭제 공용). 하니스 검증: 모달 오픈·퀵픽 추가·초성 검색(ㅌㄹㅍ→테라포밍) 추가·퀵픽/카운트 갱신 무에러.
 - [x] **커밋3 — 썸네일만 클릭 + # 강건화 + 카운트 버그**: ①모임보드 칩 클릭을 썸네일(.taste-game-thumb/-empty)에만 바인딩(이름·📖·배지 클릭 시 게임시트 안 열림). CSS도 #meetinglikedList/#meetingcuriousList 스코프로 커서/호버 썸네일 한정(취향보드는 whole-item 유지). ②카운트를 `:not(.mb-planner-only-item)`로 계산 — 플래너 전용 읽기항목이 개수 부풀리던 선재 버그 수정(추가/삭제 시 2→6 점프 해소). ③미니막대 `_gameName` #접두 제거 + bggId/슬러그(id)/gameData키 순 해석 — # 노출 방지. 하니스 검증: 카운트 2/2 정확, 이름·📖 클릭 무반응·썸네일만 오픈, 에러 없음.
 
-**#4/#1 최종 판정**: c2daace 플래너배지/플래너전용 append 로직은 하니스(실데이터 형식=숫자 bggId 투표게임 + 한글슬러그 game_likes)에서 **정상 동작**(요일배지·# 제거·정렬 모두). 프로덕션 배포도 확인. 사용자 실환경 실패 원인은 정적/하니스로 미재현 — 재설계로 코드 경로가 새로 정리됐고 # 강건화·카운트 수정 반영. 실보드에서 여전히 플래너 항목 미표시면 실제 meeting_vote_games 행 확보 필요(list_type·game_id 형식 확인).
+**#4/#5 루트코즈 확정·해결 (2026-07-13)**: 하니스를 **liked 34개**로 재현하니 즉시 재현됨(2개일 땐 안 터짐 — maxInitial=2 미만이라 fold 미생성). 원인 2건:
+1. `_buildMeetingGameItems`가 maxInitial 초과분을 `.taste-game-more-wrap[hidden]`에 넣는데, IIFE 재빌드가 `listEl.querySelector('.taste-game-more-wrap')?.remove()`로 **접힌 게임을 통째로 삭제** → 34개 중 32개가 DOM에서 사라짐(#4 "34개 볼 방법 없음"). 겹치는 플래너 게임(아노1800·리바이브)도 그 안에 있어 배지를 못 받음(#5). → **수정**: remove 대신 wrap 내용물을 listEl로 되돌린 뒤 빈 wrap 제거.
+2. 재빌드가 만든 더보기 버튼에 직접 click 핸들러 + listEl 위임 핸들러가 **이중 토글**로 상쇄 → 더보기 무동작. → **수정**: 직접 핸들러 제거(위임 핸들러가 처리).
+하니스 검증: 34개 전부 보존(칩 35=34+플래너전용1), 더보기 5↔35 토글, 아노1800(토)·리바이브(일) 배지 정상.
 
 **하니스**: `_harness.html`은 작업 검증용 임시 파일 — 커밋3 후 삭제(저장소 미포함).
 
