@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-09 (COTTAGE_GAMES bestPlayers/recPlayers 추가, window.formatCondLabel 신규)
+최종 갱신: 2026-07-14 (cottage-likes-changed 전역 이벤트 — 좋아요 즉시 동기화 Phase A)
 
 ---
 
@@ -194,6 +194,16 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 현재 세션 시작 시각 (Date.now() 값). `startSession()` 및 `visibilitychange` 탭 복귀 시 set. `kakao-auth.js`의 `openProfilePanel`에서 현재 세션 경과 시간 계산에 사용.
 
 내부 cross-file 전역 — 외부 페이지에서 직접 호출하지 않음.
+
+---
+
+## 전역 커스텀 이벤트
+
+| 이벤트 | 발화 | 수신 | detail |
+|--------|------|------|--------|
+| `cottage-likes-changed` | 좋아요/궁금해요 원천(game_likes/game_curious) 변경 시. 발화 지점: ①게임시트 버튼(game-sheet.js `emitLikesChanged`, `onSheetLike`/`onSheetCurious` — 상호배타로 반대 목록 제거 시에도 별도 발화) ②취향보드 추가/삭제(kakao-auth.js `_emitLikesChanged`) ③모임보드 "좋아하는 게임에도 추가"(kakao-auth.js) | 취향보드(열려있으면 목록 추가/삭제·카운트 갱신) / 모임보드(`_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList`로 ❤️/👀 마커 즉시 반영). 수신 핸들러는 `window.__tasteLikesHandler`/`window.__mbLikesHandler`로 dedupe + 서브시트 DOM 이탈 시 self-remove | `{ table:'game_likes'\|'game_curious', gameId(슬러그 문자열), added:bool }` |
+
+> `gameId`는 항상 game_likes 슬러그. 모임 수신부는 `_mbSlug()`로 정규화 후 슬러그 Set과 매칭. game-reviews.js(기록 iframe)의 `onPrMenuLike/Curious`는 별도 window 컨텍스트라 이 이벤트 미발화(Phase A 범위 밖).
 
 ---
 

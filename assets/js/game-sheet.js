@@ -1302,6 +1302,12 @@ async function initSheetLikes(gameKey) {
   _updateReactionSection(likers, curiousUsers);
 }
 
+// 좋아요/궁금해요 변경 전역 통보 (취향보드·모임보드 즉시 동기화)
+function emitLikesChanged(table, gameId, added) {
+  if (!gameId) return;
+  try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), added: !!added } })); } catch (_) {}
+}
+
 async function onSheetLike(btn) {
   requireLogin(async () => {
     const user = window.getKakaoUser?.();
@@ -1311,6 +1317,7 @@ async function onSheetLike(btn) {
     const likeBtn = document.getElementById('sheetLikeBtn');
     const result = await window.CottageDB.toggleGameLike(gameKey, String(user.id));
     if (result.liked !== undefined) {
+      emitLikesChanged('game_likes', gameKey, result.liked);
       const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
       if (likeBtn) {
         likeBtn.textContent = `👍 좋아요 ${likeCount}`;
@@ -1322,6 +1329,7 @@ async function onSheetLike(btn) {
         const wasCurious = await window.CottageDB.hasUserCurious(gameKey, String(user.id));
         if (wasCurious) {
           await window.CottageDB.toggleGameCurious(gameKey, String(user.id));
+          emitLikesChanged('game_curious', gameKey, false);
           showActionToast('😊 궁금해요가 취소됐어요');
         }
         const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
@@ -1349,6 +1357,7 @@ async function onSheetCurious(btn) {
     if (!gameKey) return;
     const result = await window.CottageDB.toggleGameCurious(gameKey, String(user.id));
     if (result.curious !== undefined) {
+      emitLikesChanged('game_curious', gameKey, result.curious);
       const curiousCount = await window.CottageDB.getGameCuriousCount(gameKey);
       const curiousBtn = document.getElementById('sheetCuriousBtn');
       if (curiousBtn) {
@@ -1359,7 +1368,7 @@ async function onSheetCurious(btn) {
       showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste'); } : null);
       if (result.curious) {
         const wasLiked = await window.CottageDB.hasUserLiked(gameKey, String(user.id));
-        if (wasLiked) await window.CottageDB.toggleGameLike(gameKey, String(user.id));
+        if (wasLiked) { await window.CottageDB.toggleGameLike(gameKey, String(user.id)); emitLikesChanged('game_likes', gameKey, false); }
         const likeCount = await window.CottageDB.getGameLikeCount(gameKey);
         const likeBtn = document.getElementById('sheetLikeBtn');
         if (likeBtn) {

@@ -493,6 +493,12 @@ async function openProfilePanel(autoSubsheet = null) {
   const user = getKakaoUser();
   if (!user) return;
 
+  // 좋아요/궁금해요 변경 전역 통보 (취향보드·모임보드·게임시트 간 즉시 동기화)
+  const _emitLikesChanged = (table, gameId, added) => {
+    if (!gameId) return;
+    try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), added: !!added } })); } catch (_) {}
+  };
+
   const existing = document.getElementById('profilePanel');
   if (existing) { existing.remove(); return; }
 
@@ -1557,6 +1563,7 @@ async function openProfilePanel(autoSubsheet = null) {
               if (inList(gameId, customName)) return;
               await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
               _appendTasteChip(listEl, countEl, gameId, customName);
+              _emitLikesChanged(table, gameId, true);
               if (gameId) {
                 const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
                 if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
@@ -1647,10 +1654,35 @@ async function openProfilePanel(autoSubsheet = null) {
                 listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
               }
               if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+              _emitLikesChanged(table, gameId, false);
             });
 
             addBtn?.addEventListener('click', () => _openTasteAddModal({ listKey: listType, table, listEl, countEl }));
           }
+
+          // 다른 화면(게임시트 등)에서 좋아요/궁금해요가 바뀌면 이 목록도 즉시 반영
+          if (window.__tasteLikesHandler) window.removeEventListener('cottage-likes-changed', window.__tasteLikesHandler);
+          const _onTasteLikesChanged = (e) => {
+            const anchorList = subBody.querySelector('#tastelikedList');
+            if (!anchorList || !document.body.contains(anchorList)) { window.removeEventListener('cottage-likes-changed', _onTasteLikesChanged); return; }
+            const { table, gameId, added } = e.detail || {};
+            if (!gameId) return;
+            const lk = table === 'game_likes' ? 'liked' : (table === 'game_curious' ? 'curious' : null);
+            if (!lk) return;
+            const listEl = subBody.querySelector(`#taste${lk}List`);
+            const countEl = subBody.querySelector(`#taste${lk}Count`);
+            if (!listEl) return;
+            const existing = listEl.querySelector(`[data-game-id="${CSS.escape(String(gameId))}"]`);
+            if (added && !existing) {
+              _appendTasteChip(listEl, countEl, String(gameId), null);
+            } else if (!added && existing) {
+              existing.remove();
+              if (!listEl.querySelector('.taste-game-item')) listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+            }
+          };
+          window.__tasteLikesHandler = _onTasteLikesChanged;
+          window.addEventListener('cottage-likes-changed', _onTasteLikesChanged);
 
           // ── 피하는 유형 태그 ──
           let currentAvoidTags = [...(_avoidTags)];
@@ -2114,6 +2146,7 @@ async function openProfilePanel(autoSubsheet = null) {
                   if (confirm(`'${name}'을(를) 내 ${srcLabel}에도 추가할까요?`)) {
                     await window.CottageDB?.addGamePref?.(userId, slug, null, srcTable);
                     srcSet.add(slug);
+                    _emitLikesChanged(srcTable, slug, true);
                     _renderWeekList(listType);
                   }
                 }
@@ -2224,6 +2257,22 @@ async function openProfilePanel(autoSubsheet = null) {
               }));
             }
           };
+          // 다른 화면(게임시트·취향보드)에서 좋아요/궁금해요가 바뀌면 ❤️/👀 마커 즉시 반영
+          if (window.__mbLikesHandler) window.removeEventListener('cottage-likes-changed', window.__mbLikesHandler);
+          const _onMbLikesChanged = (e) => {
+            const anchorList = subBody.querySelector('#meetinglikedList');
+            if (!anchorList || !document.body.contains(anchorList)) { window.removeEventListener('cottage-likes-changed', _onMbLikesChanged); return; }
+            const { table, gameId, added } = e.detail || {};
+            const slug = _mbSlug(gameId);
+            if (!slug) return;
+            const set = table === 'game_likes' ? _likedSlugSet : (table === 'game_curious' ? _curiousSlugSet : null);
+            if (!set) return;
+            if (added) set.add(slug); else set.delete(slug);
+            _renderWeekList(table === 'game_likes' ? 'want' : 'learn');
+          };
+          window.__mbLikesHandler = _onMbLikesChanged;
+          window.addEventListener('cottage-likes-changed', _onMbLikesChanged);
+
           _loadMeetingWeek();
         }); // end meeting afterRender
       }

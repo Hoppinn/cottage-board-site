@@ -197,10 +197,11 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - 타 유저 데이터 함수: `getUserTasteProfile(userId)`, `getUserMeetingProfile(userId)` 존재. `getMyStats(userId, nickname)`는 userId 인자 받음 → 타 유저 가능한지 supabase-client.js에서 확인 필요.
 - 게임시트 좋아요 버튼: game-sheet.js (좋아요 토글 위치 grep 필요).
 
-**Phase A (소) — 좋아요 즉시 동기화**:
-- 전역 이벤트 `cottage-likes-changed`(detail: {table:'game_likes'|'game_curious', gameId(슬러그), added:bool}) 도입.
-- 발화 지점: ①게임시트 좋아요 버튼(game-sheet.js) ②취향보드 추가/삭제(_openTasteAddModal, 삭제 핸들러) ③모임 "좋아하는 게임에도 추가?"(_openMbAddModal pickGame onDone).
-- 수신: 모임보드 → `_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList('want'/'learn')`(❤️/👀 마커 즉시 반영). 취향보드 열려있으면 마커/목록 갱신.
+**Phase A (소) — 좋아요 즉시 동기화** — ✅ 완료 (2026-07-14):
+- 전역 이벤트 `cottage-likes-changed`(detail: {table:'game_likes'|'game_curious', gameId(슬러그), added:bool}) 도입. js-api.md "전역 커스텀 이벤트" 절 신규.
+- 발화 지점: ①게임시트 좋아요/궁금해요 버튼(game-sheet.js `emitLikesChanged` — 상호배타 반대목록 제거 시 별도 발화) ②취향보드 추가/삭제(kakao-auth.js `_emitLikesChanged`) ③모임 "좋아하는 게임에도 추가?"(_openMbAddModal pickGame onDone).
+- 수신: 모임보드 → `_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList`(❤️/👀 마커 즉시 반영). 취향보드 열려있으면 목록 추가/삭제·카운트 갱신. 핸들러 dedupe(`window.__tasteLikesHandler`/`__mbLikesHandler`) + DOM 이탈 self-remove.
+- 범위 밖: game-reviews.js `onPrMenuLike/Curious`(기록 iframe = 별도 window 컨텍스트라 미발화).
 
 **Phase B (소) — 취향 박스 센터모달**:
 - "❤️ 이번 주 하고 싶은 게임" 섹션 라벨에 "좋아하는 게임 보기" 버튼 → 그 사람(또는 내) **game_likes 박스만** 센터모달.
