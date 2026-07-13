@@ -248,8 +248,8 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 **후속 피드백 처리 (2026-07-13)**:
 - [x] **#2 퀵픽 디자인**: 빨간 pill 버튼 → 썸네일+이름+＋ 행(`.mb-add-quick-item`, 검색결과와 통일감).
 - [x] **#3 📖 버튼**: off=grayscale+흐림 / on=초록 배경+테두리+링(명확 구분). 토글 시 토스트("'게임명' 룰 설명해줄 수 있어요로 표시/해제").
-- [ ] **#1 선호/비선호 소스 변경**: 선호=취향보드 한줄소개(bio), 비선호=avoid_tags + 모임보드에서 편집 동선(인라인 or 취향보드 열기) — 데이터 모델 결정 필요(meeting_style 처리 포함), 확인 대기.
-- [ ] **#5-1 양방향 연동**: 플래너→모임보드(요일배지)는 #4/#5 수정으로 동작. 모임보드→플래너 역방향은 game_likes(요일무관) vs meeting_vote_games(요일별) 개념 충돌 — 설계 필요, 확인 대기.
+- [x] **#1 선호/비선호 소스 변경** (결정: bio로 교체 + 취향보드 편집버튼): 선호=취향보드 한줄소개(profiles.bio 파싱, `_bioTags`), 비선호=avoid_tags. 두 블록에 "취향보드에서 수정 →"(`.mb-pref-edit` → openProfilePanel('taste')). 모임프로필 편집폼의 meeting_style 칩 제거(선호=bio로 통합) — upsertMeetingIntro payload에서 meeting_style 생략(기존 DB값 보존). 프로필 저장 시 선호 요약을 새 bio로 갱신. `_meetingStyleTags` 제거(dead). 하니스 검증: 선호=bio태그, 비선호=avoid태그, 수정버튼 2, 스타일칩 제거 확인.
+- [ ] **#5-1 양방향 연동** (결정: 추가 시 요일 묻기 / 복수+미정 / 기존 34개는 미정): 플래너→모임보드(요일배지)는 #4/#5 수정으로 동작. 모임보드에서 게임 추가 시 이번주 요일 복수선택 + "미정"(미정=game_likes만, 플래너 미표시). 기존 게임은 meeting_vote_games 행 없으면 자연히 미정. **planner DB(meeting_vote_games) 쓰기 → API 확인 후 진행 예정.**
 
 **하니스**: `_harness.html`은 작업 검증용 임시 파일 — 후속 작업 후 삭제(저장소 미포함).
 

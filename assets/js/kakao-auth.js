@@ -1062,7 +1062,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
   // 모임 보드: 회원 자기소개(member_intros) + profiles.bio(한줄소개, 취향보드와 공유 SSOT) +
   // meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임) 연동. 자기소개 페이지와 동일 데이터 공유.
-  const _meetingStyleTags = ['전략게임', '파티게임', '협력게임', '초보환영', '장시간게임', '짧은게임'];
+  // 선호=bio(한줄소개), 비선호=avoid_tags — 편집은 취향보드에서. meeting_style은 미사용(하위호환 잔존).
   const _meeting = meetingProfile || { bio: '', location: '', available: '', travelRange: '', meetingStyle: [], likedGames: [], curiousGames: [], ruleGames: [] };
   const _ruleSet = new Set((_meeting.ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
   const _relDay = iso => {
@@ -1085,9 +1085,10 @@ async function openProfilePanel(autoSubsheet = null) {
     return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
   }
 
-  // 선호(모임 스타일) / 비선호(취향보드 피하는 유형) 요약 — 읽기전용 칩
-  const _mbLikeStyleHtml = _meeting.meetingStyle.length
-    ? _meeting.meetingStyle.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
+  // 선호(취향보드 한줄소개=bio) / 비선호(취향보드 피하는 유형=avoid_tags) 요약 — 읽기전용 칩
+  // 편집은 취향보드에서 (mb-pref-edit 버튼 → openProfilePanel('taste'))
+  const _mbLikeStyleHtml = _bioTags.length
+    ? _bioTags.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
     : '<span class="mb-pref-empty">미설정</span>';
   const _mbAvoidHtml = _avoidTags.length
     ? _avoidTags.map(t => `<span class="mb-pref-tag mb-pref-tag--avoid">${escH(t)}</span>`).join('')
@@ -1108,11 +1109,11 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
-        <div class="taste-section-label">👍 선호 스타일</div>
+        <div class="taste-section-label">👍 선호 스타일 <button class="mb-pref-edit" type="button">취향보드에서 수정 →</button></div>
         <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
       </div>
       <div class="mb-pref-block">
-        <div class="taste-section-label">🚫 비선호 유형 <span class="mb-pref-src">· 취향보드에서 설정</span></div>
+        <div class="taste-section-label">🚫 비선호 유형 <button class="mb-pref-edit" type="button">취향보드에서 수정 →</button></div>
         <div class="mb-pref-tags">${_mbAvoidHtml}</div>
       </div>
     </div>
@@ -1145,10 +1146,6 @@ async function openProfilePanel(autoSubsheet = null) {
         <div class="intro-field">
           <label class="intro-label">한줄소개</label>
           <input class="intro-input meeting-edit-bio" type="text" placeholder="나를 짧게 소개해보세요" maxlength="60" value="${escH(_meeting.bio)}">
-        </div>
-        <div class="intro-field">
-          <label class="intro-label">선호 게임/모임 스타일</label>
-          <div class="taste-bio-chips meeting-style-chips">${_meetingStyleTags.map(t => `<button class="taste-bio-chip${_meeting.meetingStyle.includes(t) ? ' is-selected' : ''}" type="button">${escH(t)}</button>`).join('')}</div>
         </div>
         <div class="taste-bio-actions">
           <button class="meeting-profile-save-btn taste-bio-save-btn" type="button">저장</button>
@@ -1881,9 +1878,9 @@ async function openProfilePanel(autoSubsheet = null) {
             displayWrap.style.display = '';
             editWrap.style.display = 'none';
           });
-          // 모임 스타일 칩 (편집폼 안에서만) — 다중 선택 토글
-          subBody.querySelectorAll('.meeting-style-chips .taste-bio-chip').forEach(chip => {
-            chip.addEventListener('click', () => chip.classList.toggle('is-selected'));
+          // 선호(한줄소개)/비선호(피하는 유형) 수정 → 취향보드 열기
+          subBody.querySelectorAll('.mb-pref-edit').forEach(btn => {
+            btn.addEventListener('click', () => openProfilePanel('taste'));
           });
 
           subBody.querySelector('.meeting-profile-save-btn')?.addEventListener('click', async () => {
@@ -1891,18 +1888,17 @@ async function openProfilePanel(autoSubsheet = null) {
             const available = subBody.querySelector('.meeting-edit-available').value.trim();
             const travelRange = subBody.querySelector('.meeting-edit-travel').value.trim();
             const newBio = subBody.querySelector('.meeting-edit-bio').value.trim();
-            const meetingStyle = [...subBody.querySelectorAll('.meeting-style-chips .taste-bio-chip.is-selected')].map(c => c.textContent.trim());
 
             await Promise.all([
               // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT — 여기서 저장하면 취향보드에도 즉시 반영됨
               window.CottageDB?.updateUserBio?.(userId, newBio),
+              // meeting_style은 더 이상 편집하지 않음(선호=bio로 통합). payload에서 생략 → 기존 값 보존
               window.CottageDB?.upsertMeetingIntro?.(userId, {
                 // 자기소개 페이지에서 설정한 닉네임(단톡방 닉네임 등 카카오 닉네임과 다를 수 있음)이 있으면 보존
                 nickname: _meeting.nickname || user.nickname || '',
                 location: location || null,
                 available: available || null,
                 travel_range: travelRange || null,
-                meeting_style: meetingStyle,
               }),
             ]);
             _currentBio = newBio;
@@ -1914,10 +1910,11 @@ async function openProfilePanel(autoSubsheet = null) {
               ${_meetingProfileRowHtml('📝 한줄소개', newBio)}`;
             displayWrap.style.display = '';
             editWrap.style.display = 'none';
-            // 상단 선호 스타일 요약 칩도 갱신
+            // 상단 선호 스타일 요약(=bio 태그)도 갱신
             const _likeTagsEl = subBody.querySelector('#mbLikeStyleTags');
-            if (_likeTagsEl) _likeTagsEl.innerHTML = meetingStyle.length
-              ? meetingStyle.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
+            const _newBioTags = newBio ? newBio.split(',').map(t => t.trim()).filter(Boolean) : [];
+            if (_likeTagsEl) _likeTagsEl.innerHTML = _newBioTags.length
+              ? _newBioTags.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
               : '<span class="mb-pref-empty">미설정</span>';
           });
 

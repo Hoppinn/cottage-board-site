@@ -4328,6 +4328,8 @@ body.embed-mode {
 .mb-pref-summary{display:flex;flex-direction:column;gap:12px;}
 .mb-pref-block{display:flex;flex-direction:column;gap:6px;}
 .mb-pref-src{font-size:11px;color:var(--muted);font-weight:400;}
+.mb-pref-edit{background:none;border:none;font-size:11px;color:var(--text-info);font-weight:400;cursor:pointer;padding:0 0 0 4px;}
+.mb-pref-edit:hover{color:var(--green);text-decoration:underline;}
 .mb-pref-tags{display:flex;flex-wrap:wrap;gap:6px;}
 .mb-pref-tag{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600;}
 .mb-pref-tag--like{background:#eef4ec;color:#4a7a4a;border:1px solid #cfe0c9;}
