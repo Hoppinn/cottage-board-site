@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-13 (c2daace 조사 스냅샷 + 작업 우선순위 레드/옐로/그린 분류 신설)
+최종 갱신: 2026-07-14 (모임보드 이번주 전환 완료 + 읽기전용 내 보드 체크포인트 신설 — 새 세션 시작점)
 
 ---
 
@@ -184,7 +184,49 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-### 🔵 CHECKPOINT: 모임보드 → 이번 주 플래너 기반 전환 (2026-07-13 시작, Red)
+### 🔵 CHECKPOINT: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14 시작, 미착수)
+
+> **새 세션 시작점.** 아래 순서로 진행. Phase C가 큰 리팩토링이라 컨텍스트 깨끗한 상태에서 시작하려고 이전 세션에서 분리함. **모든 결정은 사용자 승인 완료 — 재확인 불필요, 그대로 구현.**
+
+**배경**: 직전 작업으로 모임보드 하고싶은/배우고싶은 게임이 "이번 주 meeting_vote_games"로 바뀜(아래 완료 체크포인트 참조). 그 결과 ①남의 읽기전용 보드에서 "그 사람이 평소 좋아하는 게임(취향 전체)"을 볼 방법이 약해짐 ②모임보드 ❤️ 좋아요 마커가 다른 화면(게임시트/취향보드)에서 좋아요 바꿔도 즉시 반영 안 됨(스냅샷).
+
+**선행 사실 (구현 전 알 것)**:
+- 모임보드 게임 리스트 = 이번 주 `meeting_vote_games`. `game_id`=INT(bggId), `game_likes`/`meeting_game_prefs`(룰)=한글 슬러그. 변환 헬퍼 `_mbSlug`(kakao-auth.js 모임 afterRender 내) 이미 있음.
+- 좋아요 소스: `_likedSlugSet`/`_curiousSlugSet`(패널 open 시 `_meeting.likedGames`/`curiousGames`=game_likes/curious 슬러그 스냅샷).
+- 읽기전용 뷰 현재 2개: `openOtherTasteSheet`(getUserTasteProfile→좋아하는 게임 전체+피하는유형+bio, kakao-auth.js ~2260), `openOtherMeetingSheet`(getUserMeetingProfile→아직 옛 미러=game_likes를 "하고싶은게임"으로, ~2416). `buildReadOnlyGames` 렌더러 2곳(2294, 2510).
+- 타 유저 데이터 함수: `getUserTasteProfile(userId)`, `getUserMeetingProfile(userId)` 존재. `getMyStats(userId, nickname)`는 userId 인자 받음 → 타 유저 가능한지 supabase-client.js에서 확인 필요.
+- 게임시트 좋아요 버튼: game-sheet.js (좋아요 토글 위치 grep 필요).
+
+**Phase A (소) — 좋아요 즉시 동기화**:
+- 전역 이벤트 `cottage-likes-changed`(detail: {table:'game_likes'|'game_curious', gameId(슬러그), added:bool}) 도입.
+- 발화 지점: ①게임시트 좋아요 버튼(game-sheet.js) ②취향보드 추가/삭제(_openTasteAddModal, 삭제 핸들러) ③모임 "좋아하는 게임에도 추가?"(_openMbAddModal pickGame onDone).
+- 수신: 모임보드 → `_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList('want'/'learn')`(❤️/👀 마커 즉시 반영). 취향보드 열려있으면 마커/목록 갱신.
+
+**Phase B (소) — 취향 박스 센터모달**:
+- "❤️ 이번 주 하고 싶은 게임" 섹션 라벨에 "좋아하는 게임 보기" 버튼 → 그 사람(또는 내) **game_likes 박스만** 센터모달.
+- "💡 이번 주 배우고 싶은 게임" 섹션 → **game_curious 박스만** 센터모달.
+- 전체 시트 아님, 해당 박스만. 게임 클릭 시 게임시트(썸네일 or 전체 — Phase 결정). 내보드=내 데이터, 읽기전용=그 사람 데이터. 렌더는 buildReadOnlyGames 재사용.
+
+**Phase C (대) — 읽기전용 내 보드 (핵심 리팩토링)**:
+- `openProfilePanel`을 **userId 파라미터화 + 읽기전용 모드**로 확장(현재 self=getKakaoUser 가정 다수 → 대상 userId 주입, 편집 컨트롤 숨김/가드). openOtherTasteSheet/openOtherMeetingSheet를 이걸로 **통합**.
+- **공개 섹션(읽기전용)**: 프로필카드(닉네임·캐릭터·대표칭호) / 수집보드(캐릭터·업적·칭호·도감) / 취향(좋아하는·해보고싶은·피하는유형·한줄소개) / 모임보드(이번주 게임+취향링크+모임프로필) / 기록보드(플레이기록·게임평).
+- **제외(비공개, 사용자 승인)**: ❌함께한 시간(이용시간 통계) ❌음료교환권(잔액/내역) ❌알림. 프로필카드의 방문일수/기록수 요약은 노출 OK.
+- 편집 제거: 게임 추가/삭제/📖/⋯/프로필 수정/취향 편집 등 모든 편집 컨트롤 read-only 모드에서 숨김.
+
+**Phase D (연계) — 진입점 정리**:
+- **모임 참여자** 닉네임(막대 .sched-bar-name 등) 클릭 → 그 사람 **모임 보드 직행**(읽기전용).
+- **그 외**(게임평·플레이기록 닉네임) 클릭 → 그 사람 **읽기전용 내 보드**(Phase C) 전체.
+- 현재 진입점 산재 확인 후 통일.
+
+**Phase E (후속) — 모임보드 전체 디자인 리뷰**: 아이콘 과다 여부(❤️/📖/⋯/배지 밀도), 동선, 전체 가독성. 스크린샷으로 사용자와 함께.
+
+**위험요소**: ①openProfilePanel 파라미터화 — self 가정(getKakaoUser·_currentBio·세션·업적 자기조회) 다수라 광범위, 편집 핸들러 전수 가드 필요(가장 먼저 깨질 지점). ②이벤트 발화 지점 누락. ③읽기전용 모임뷰 이번주 정렬 시 참여요일/편집불가 처리. ④getMyStats 등 타유저 지원 여부 선확인.
+
+**정리 항목**: `_buildMeetingGameItems`(구 미러 렌더러) dead code 제거.
+
+---
+
+### 🔵 CHECKPOINT: 모임보드 → 이번 주 플래너 기반 전환 (2026-07-13 시작, Red) — ✅ 완료 (2026-07-14)
 
 **목표**: 모임보드 하고싶은/배우고싶은 게임을 game_likes 미러 → **이번 주 meeting_vote_games** 소스로 전환. 취향보드=원천(game_likes) 관리, 모임보드=이번 주에 하고싶은지 관리. 원천 데이터는 모임보드에서 안 건드림(추가 시 옵션 제외).
 
