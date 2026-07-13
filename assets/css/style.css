@@ -4310,6 +4310,17 @@ body.embed-mode {
 .meeting-profile-style-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
 .meeting-profile-edit-wrap{margin-top:8px;}
 .meeting-profile-edit-wrap .intro-field{margin-bottom:10px;}
+/* 모임보드 선호/비선호 요약 */
+.mb-pref-summary{display:flex;flex-direction:column;gap:12px;}
+.mb-pref-block{display:flex;flex-direction:column;gap:6px;}
+.mb-pref-src{font-size:11px;color:var(--muted);font-weight:400;}
+.mb-pref-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.mb-pref-tag{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600;}
+.mb-pref-tag--like{background:#eef4ec;color:#4a7a4a;border:1px solid #cfe0c9;}
+.mb-pref-tag--avoid{background:#fff0f0;color:#c62828;border:1px solid #f0cfcf;}
+.mb-pref-empty{font-size:12px;color:var(--muted);font-style:italic;}
+/* 라벨 우측 인라인 게임추가 버튼 */
+.taste-add-btn--inline{display:inline-block;width:auto;padding:3px 10px;font-size:12px;margin-left:6px;vertical-align:middle;}
 .record-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 0;}
 .record-photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;display:block;}
 .record-photo-more-badge{grid-column:1/-1;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px 0 0;text-decoration:underline;text-align:left;}

@@ -1085,10 +1085,48 @@ async function openProfilePanel(autoSubsheet = null) {
     return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
   }
 
+  // 선호(모임 스타일) / 비선호(취향보드 피하는 유형) 요약 — 읽기전용 칩
+  const _mbLikeStyleHtml = _meeting.meetingStyle.length
+    ? _meeting.meetingStyle.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
+    : '<span class="mb-pref-empty">미설정</span>';
+  const _mbAvoidHtml = _avoidTags.length
+    ? _avoidTags.map(t => `<span class="mb-pref-tag mb-pref-tag--avoid">${escH(t)}</span>`).join('')
+    : '<span class="mb-pref-empty">미설정</span>';
+
   const _meetingInnerHtml = `
     <div class="taste-game-section" id="mbWeekSection">
       <div class="taste-section-label">📅 이번 주 일정</div>
       <p class="taste-game-empty">불러오는 중…</p>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount">${_meeting.likedGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-game-list" id="meetinglikedList">${_buildMeetingGameItems(_meeting.likedGames, _ruleSet)}</div>
+      <div class="taste-search-wrap" id="meetinglikedSearch" style="display:none">
+        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
+        <div class="taste-search-results"></div>
+      </div>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount">${_meeting.curiousGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-game-list" id="meetingcuriousList">${_buildMeetingGameItems(_meeting.curiousGames, _ruleSet)}</div>
+      <div class="taste-search-wrap" id="meetingcuriousSearch" style="display:none">
+        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
+        <div class="taste-search-results"></div>
+      </div>
+    </div>
+    <div class="taste-game-section mb-pref-summary">
+      <div class="mb-pref-block">
+        <div class="taste-section-label">👍 선호 스타일</div>
+        <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
+      </div>
+      <div class="mb-pref-block">
+        <div class="taste-section-label">🚫 비선호 유형 <span class="mb-pref-src">· 취향보드에서 설정</span></div>
+        <div class="mb-pref-tags">${_mbAvoidHtml}</div>
+      </div>
+    </div>
+    <div class="taste-game-section">
+      <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
+      ${_recentPlaysHtml}
     </div>
     <div class="meeting-profile-section">
       <div class="taste-section-label">📍 모임 프로필</div>
@@ -1097,11 +1135,6 @@ async function openProfilePanel(autoSubsheet = null) {
         ${_meetingProfileRowHtml('🕐 참여 가능 시간', _meeting.available)}
         ${_meetingProfileRowHtml('🚗 이동 가능 범위', _meeting.travelRange)}
         ${_meetingProfileRowHtml('📝 한줄소개', _meeting.bio)}
-        <div class="meeting-profile-style-row">${
-          _meeting.meetingStyle.length
-            ? _meeting.meetingStyle.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-            : '<span class="taste-bio-placeholder">선호 스타일 미입력</span>'
-        }</div>
       </div>
       <button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
       <div class="meeting-profile-edit-wrap" style="display:none">
@@ -1130,28 +1163,6 @@ async function openProfilePanel(autoSubsheet = null) {
           <button class="meeting-profile-cancel-btn taste-bio-cancel-btn" type="button">취소</button>
         </div>
       </div>
-    </div>
-    <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count" id="meetinglikedCount">${_meeting.likedGames.length}개</span> <button class="mb-taste-link" type="button">취향보드와 연동 →</button></div>
-      <div class="taste-game-list" id="meetinglikedList">${_buildMeetingGameItems(_meeting.likedGames, _ruleSet)}</div>
-      <button class="taste-add-btn" id="meetinglikedAddBtn" type="button">+ 게임 추가</button>
-      <div class="taste-search-wrap" id="meetinglikedSearch" style="display:none">
-        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
-        <div class="taste-search-results"></div>
-      </div>
-    </div>
-    <div class="taste-game-section">
-      <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count" id="meetingcuriousCount">${_meeting.curiousGames.length}개</span> <button class="mb-taste-link" type="button">취향보드와 연동 →</button></div>
-      <div class="taste-game-list" id="meetingcuriousList">${_buildMeetingGameItems(_meeting.curiousGames, _ruleSet)}</div>
-      <button class="taste-add-btn" id="meetingcuriousAddBtn" type="button">+ 게임 추가</button>
-      <div class="taste-search-wrap" id="meetingcuriousSearch" style="display:none">
-        <input type="text" class="taste-search-input" placeholder="게임 이름 검색..." autocomplete="off">
-        <div class="taste-search-results"></div>
-      </div>
-    </div>
-    <div class="taste-game-section">
-      <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
-      ${_recentPlaysHtml}
     </div>`;
 
   body.innerHTML = `
@@ -1908,22 +1919,17 @@ async function openProfilePanel(autoSubsheet = null) {
               ${_meetingProfileRowHtml('📍 활동 지역', location)}
               ${_meetingProfileRowHtml('🕐 참여 가능 시간', available)}
               ${_meetingProfileRowHtml('🚗 이동 가능 범위', travelRange)}
-              ${_meetingProfileRowHtml('📝 한줄소개', newBio)}
-              <div class="meeting-profile-style-row">${
-                meetingStyle.length
-                  ? meetingStyle.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-                  : '<span class="taste-bio-placeholder">선호 스타일 미입력</span>'
-              }</div>`;
+              ${_meetingProfileRowHtml('📝 한줄소개', newBio)}`;
             displayWrap.style.display = '';
             editWrap.style.display = 'none';
+            // 상단 선호 스타일 요약 칩도 갱신
+            const _likeTagsEl = subBody.querySelector('#mbLikeStyleTags');
+            if (_likeTagsEl) _likeTagsEl.innerHTML = meetingStyle.length
+              ? meetingStyle.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
+              : '<span class="mb-pref-empty">미설정</span>';
           });
 
           // ── 게임 목록 (하고싶은 게임=game_likes 미러 / 배우고싶은 게임=game_curious 미러) ──
-          // 취향보드와 연동 링크
-          subBody.querySelectorAll('.mb-taste-link').forEach(btn => {
-            btn.addEventListener('click', e => { e.preventDefault(); openProfilePanel('taste'); });
-          });
-
           for (const { listKey, table } of [
             { listKey: 'liked', table: 'game_likes' },
             { listKey: 'curious', table: 'game_curious' },
