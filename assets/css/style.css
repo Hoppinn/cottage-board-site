@@ -4243,19 +4243,31 @@ body.embed-mode {
 .taste-game-item:last-child{border-bottom:none;}
 .taste-game-item--clickable{cursor:pointer;}
 .taste-game-item--clickable:hover .taste-game-name{text-decoration:underline;}
-/* 모임보드: 썸네일만 클릭 (칩 전체 아님) */
+/* 모임보드/취향보드: 썸네일만 클릭 (칩 전체 아님) */
 #meetinglikedList .taste-game-item--clickable,
-#meetingcuriousList .taste-game-item--clickable{cursor:default;}
+#meetingcuriousList .taste-game-item--clickable,
+#tastelikedList .taste-game-item--clickable,
+#tastecuriousList .taste-game-item--clickable{cursor:default;}
 #meetinglikedList .taste-game-item--clickable:hover .taste-game-name,
-#meetingcuriousList .taste-game-item--clickable:hover .taste-game-name{text-decoration:none;}
+#meetingcuriousList .taste-game-item--clickable:hover .taste-game-name,
+#tastelikedList .taste-game-item--clickable:hover .taste-game-name,
+#tastecuriousList .taste-game-item--clickable:hover .taste-game-name{text-decoration:none;}
 #meetinglikedList .taste-game-item--clickable .taste-game-thumb,
 #meetinglikedList .taste-game-item--clickable .taste-game-thumb-empty,
 #meetingcuriousList .taste-game-item--clickable .taste-game-thumb,
-#meetingcuriousList .taste-game-item--clickable .taste-game-thumb-empty{cursor:pointer;transition:opacity .12s;}
+#meetingcuriousList .taste-game-item--clickable .taste-game-thumb-empty,
+#tastelikedList .taste-game-item--clickable .taste-game-thumb,
+#tastelikedList .taste-game-item--clickable .taste-game-thumb-empty,
+#tastecuriousList .taste-game-item--clickable .taste-game-thumb,
+#tastecuriousList .taste-game-item--clickable .taste-game-thumb-empty{cursor:pointer;transition:opacity .12s;}
 #meetinglikedList .taste-game-item--clickable .taste-game-thumb:hover,
 #meetinglikedList .taste-game-item--clickable .taste-game-thumb-empty:hover,
 #meetingcuriousList .taste-game-item--clickable .taste-game-thumb:hover,
-#meetingcuriousList .taste-game-item--clickable .taste-game-thumb-empty:hover{opacity:0.7;}
+#meetingcuriousList .taste-game-item--clickable .taste-game-thumb-empty:hover,
+#tastelikedList .taste-game-item--clickable .taste-game-thumb:hover,
+#tastelikedList .taste-game-item--clickable .taste-game-thumb-empty:hover,
+#tastecuriousList .taste-game-item--clickable .taste-game-thumb:hover,
+#tastecuriousList .taste-game-item--clickable .taste-game-thumb-empty:hover{opacity:0.7;}
 .taste-game-thumb{width:36px;height:36px;object-fit:contain;border-radius:5px;flex-shrink:0;background:#f5f0eb;}
 .taste-game-thumb-empty{width:36px;height:36px;background:#f0ebe5;border-radius:5px;flex-shrink:0;}
 .taste-game-name{flex:1;font-size:13px;color:var(--text);}

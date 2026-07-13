@@ -792,9 +792,10 @@ async function openProfilePanel(autoSubsheet = null) {
   ].filter(Boolean);
   const _statsSummary = _summaryParts.length ? _summaryParts.join(' · ') : '활동 없음';
 
-  // 이번달 참여 일정 (내가 투표한 날짜)
+  // 이번달 참여 일정 (내가 투표한 날짜, 오늘 이후만 — 지난 모임 숨김)
+  const _todayLocalStr = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })();
   const _myVoteDates = (_thisMonthVotes || [])
-    .filter(v => String(v.user_id) === String(user.id))
+    .filter(v => String(v.user_id) === String(user.id) && v.vote_date >= _todayLocalStr)
     .map(v => v.vote_date)
     .sort();
   let _scheduleHtml = '';
@@ -1514,10 +1515,9 @@ async function openProfilePanel(autoSubsheet = null) {
             const searchResults = searchWrap?.querySelector('.taste-search-results');
             const countEl = subBody.querySelector(`#taste${listType}Count`);
 
-            // 기존 카탈로그 아이템 클릭 → 게임 시트
+            // 기존 카탈로그 아이템 — 썸네일만 클릭 시 게임 시트
             listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
-              item.addEventListener('click', e => {
-                if (e.target.closest('.taste-game-del')) return;
+              item.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
                 window.ensureGameSheet?.();
                 window.openGameSheet?.(item.dataset.gameId);
               });
@@ -1625,8 +1625,7 @@ async function openProfilePanel(autoSubsheet = null) {
                     if (customName) newItem.dataset.customName = customName;
                     newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="taste-game-del" type="button" title="삭제">✕</button>`;
                     if (gameId) {
-                      newItem.addEventListener('click', e => {
-                        if (e.target.closest('.taste-game-del')) return;
+                      newItem.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
                         window.ensureGameSheet?.();
                         window.openGameSheet?.(String(gameId));
                       });

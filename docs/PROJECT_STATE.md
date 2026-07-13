@@ -188,11 +188,11 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 > 사용자 추가 목록. 그린은 배치로 먼저, 옐로는 관련끼리 묶어 이후.
 
-**🟢 그린 (Sonnet medium) — 배치**
+**🟢 그린 (Sonnet medium) — 완료 (2026-07-13)**
 | 항목 | 위치 | 내용 |
 |------|------|------|
-| E-1 취향보드 썸네일만 클릭 | kakao-auth.js 취향보드 클릭 핸들러(~1521) + style.css | 모임보드와 동일 패턴(썸네일에만 openGameSheet, `#tastelikedList/#tastecuriousList` 스코프 CSS). 이미 검증된 패턴 복제 |
-| E-6 내 보드 미리보기 지난 모임 숨김 | kakao-auth.js `_myVoteDates`(796줄) | 이번달 투표만 필터하고 지난 날짜 미제외 → 오래된 것부터 2개(지난 모임) 표시됨. `v.vote_date >= 오늘(로컬)` 필터 추가. sort 후 오늘 이후만 slice |
+| [x] E-1 취향보드 썸네일만 클릭 | kakao-auth.js 취향보드 클릭 핸들러(초기렌더+동적추가 2곳) + style.css | 모임보드와 동일 패턴 적용 — 썸네일에만 openGameSheet, `#tastelikedList/#tastecuriousList` CSS 스코프 확장(커서/호버). 하니스 검증: 이름클릭 무반응, 썸네일클릭만 게임시트 |
+| [x] E-6 내 보드 미리보기 지난 모임 숨김 | kakao-auth.js `_myVoteDates`(796줄) | `v.vote_date >= 오늘(로컬 YYYY-MM-DD)` 필터 추가 — 지난 날짜 제외 후 앞 2개만 표시. 하니스 검증(과거1·미래2 mock): 지난 모임 제외, 미래 2건만 노출 |
 
 **🟡 옐로 (Sonnet high / Opus medium) — 관련끼리 묶음**
 | 항목 | 묶음 | 내용 |
