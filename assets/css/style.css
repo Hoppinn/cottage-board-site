@@ -5690,7 +5690,8 @@ body.embed-mode {
   right:8px;
 }
 
-.sheet-comment-edit-btn{
+.sheet-comment-edit-btn,
+.sheet-comment-link-btn{
   background:none;
   border:none;
   font-size:12px;
@@ -5700,7 +5701,8 @@ body.embed-mode {
   border-radius:4px;
   opacity:0.6;
 }
-.sheet-comment-edit-btn:hover{
+.sheet-comment-edit-btn:hover,
+.sheet-comment-link-btn:hover{
   opacity:1;
   background:#f0ede8;
 }
@@ -5815,6 +5817,10 @@ body.embed-mode {
   resize:none;
   font-family:inherit;
   line-height:1.5;
+}
+.sheet-comment-modal-input[readonly]{
+  background:var(--bg-soft);
+  color:var(--muted);
 }
 
 .sheet-comment-modal-actions{

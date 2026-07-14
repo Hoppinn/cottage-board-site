@@ -763,6 +763,16 @@ function _gameIds(gameKey) {
   return [gameKey, String(bggId)];
 }
 
+// 게임평↔플레이기록 연동: 내 기록 전체 / 후기 없는 기록만 조회
+async function _getMyUnlinkedPlayRecords(gameKey) {
+  const _cu = window.getKakaoUser?.();
+  if (!_cu?.id || !window.CottageDB) return { all: [], unreviewed: [] };
+  const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
+  const all = records.filter(r => String(r.user_id) === String(_cu.id));
+  const unreviewed = all.filter(r => !r.review_text);
+  return { all, unreviewed };
+}
+
 async function updateSheetPlayCountLink(gameKey) {
   if (!window.CottageDB) return;
   const count = await window.CottageDB.getGamePlayCount(_gameIds(gameKey));
@@ -1474,6 +1484,7 @@ async function initSheetComments(gameKey) {
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
         <button class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
+        <button class="sheet-comment-link-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onLinkCommentToPlay(this)" type="button" title="플레이기록으로 연동">↗</button>
         <button class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>
       </div>` : ''}
     </div>`;
@@ -1597,40 +1608,42 @@ function onOpenCommentInput(btn) {
     const modal = getOrCreateCommentModal();
     modal.dataset.gameId = gameKey;
     delete modal.dataset.editId;
+    delete modal.dataset.linkCommentId;
     const titleEl = modal.querySelector('.sheet-comment-modal-title');
     const submitEl = document.getElementById('sheetCommentModalSubmit');
     if (titleEl) titleEl.textContent = '게임평 남기기';
     if (submitEl) submitEl.textContent = '등록';
-    document.getElementById('sheetCommentModalInput').value = '';
+    const input = document.getElementById('sheetCommentModalInput');
+    if (input) { input.value = ''; input.readOnly = false; }
 
     // 플레이기록 연동: 내 기록 중 게임평 없는 것 조회
     const linkWrap = document.getElementById('sheetCommentPlayLink');
     const linkCheck = document.getElementById('sheetCommentLinkCheck');
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
+    const linkLabel = linkWrap?.querySelector('.sheet-comment-play-link-label');
+    if (linkLabel) linkLabel.style.display = '';
     modal.style.display = 'flex';
-    document.getElementById('sheetCommentModalInput')?.focus();
+    input?.focus();
 
+    modal._myRecordCountAtOpen = 0;
     if (linkWrap && linkCheck && linkSelect) {
       linkCheck.checked = false;
       linkSelect.style.display = 'none';
       linkSelect.innerHTML = '';
       linkWrap.style.display = 'none';
-      const _cu = window.getKakaoUser?.();
-      if (_cu?.id && window.CottageDB) {
-        modal._opening = true;
-        const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
-        if (!modal._opening) return;
-        const mine = records.filter(r => String(r.user_id) === String(_cu.id) && !r.review_text);
-        if (mine.length) {
-          mine.forEach(r => {
-            const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
-            const opt = document.createElement('option');
-            opt.value = r.id;
-            opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
-            linkSelect.appendChild(opt);
-          });
-          linkWrap.style.display = 'block';
-        }
+      modal._opening = true;
+      const { all, unreviewed } = await _getMyUnlinkedPlayRecords(gameKey);
+      if (!modal._opening) return;
+      modal._myRecordCountAtOpen = all.length;
+      if (unreviewed.length) {
+        unreviewed.forEach(r => {
+          const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
+          const opt = document.createElement('option');
+          opt.value = r.id;
+          opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
+          linkSelect.appendChild(opt);
+        });
+        linkWrap.style.display = 'block';
       }
     }
   });
@@ -1640,19 +1653,76 @@ function onEditComment(btn) {
   const modal = getOrCreateCommentModal();
   modal.dataset.gameId = btn.dataset.game;
   modal.dataset.editId = btn.dataset.id;
+  delete modal.dataset.linkCommentId;
   const titleEl = modal.querySelector('.sheet-comment-modal-title');
   const submitEl = document.getElementById('sheetCommentModalSubmit');
   if (titleEl) titleEl.textContent = '게임평 수정';
   if (submitEl) submitEl.textContent = '수정 완료';
   const input = document.getElementById('sheetCommentModalInput');
-  if (input) input.value = btn.dataset.text;
+  if (input) { input.value = btn.dataset.text; input.readOnly = false; }
+  const linkWrap = document.getElementById('sheetCommentPlayLink');
+  if (linkWrap) linkWrap.style.display = 'none';
   modal.style.display = 'flex';
   input?.focus();
 }
 
+// 게임평 → 플레이기록 연동 (기존 코멘트에 "↗ 플레이기록으로")
+async function onLinkCommentToPlay(btn) {
+  const gameKey = btn.dataset.game;
+  const commentId = btn.dataset.id;
+  const text = btn.dataset.text;
+  if (!gameKey || !commentId) return;
+  const { unreviewed } = await _getMyUnlinkedPlayRecords(gameKey);
+  if (!unreviewed.length) {
+    showActionToast('연동할 플레이 기록이 없어요', '↗ 플레이기록 남기기', () => {
+      location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
+    });
+    return;
+  }
+  const modal = getOrCreateCommentModal();
+  modal.dataset.gameId = gameKey;
+  delete modal.dataset.editId;
+  modal.dataset.linkCommentId = commentId;
+  const titleEl = modal.querySelector('.sheet-comment-modal-title');
+  const submitEl = document.getElementById('sheetCommentModalSubmit');
+  const input = document.getElementById('sheetCommentModalInput');
+  if (titleEl) titleEl.textContent = '플레이기록에 연동';
+  if (submitEl) submitEl.textContent = '연동하기';
+  if (input) { input.value = text; input.readOnly = true; }
+
+  const linkWrap = document.getElementById('sheetCommentPlayLink');
+  const linkCheck = document.getElementById('sheetCommentLinkCheck');
+  const linkSelect = document.getElementById('sheetCommentPlaySelect');
+  const linkLabel = linkWrap?.querySelector('.sheet-comment-play-link-label');
+  if (linkLabel) linkLabel.style.display = 'none';
+  if (linkCheck) linkCheck.checked = true;
+  if (linkSelect) {
+    linkSelect.innerHTML = '';
+    unreviewed.forEach(r => {
+      const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
+      linkSelect.appendChild(opt);
+    });
+    linkSelect.style.display = 'block';
+  }
+  if (linkWrap) linkWrap.style.display = 'block';
+  modal.style.display = 'flex';
+}
+
 function onCloseCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
-  if (modal) { modal._opening = false; modal.style.display = 'none'; delete modal.dataset.editId; }
+  if (modal) {
+    modal._opening = false;
+    modal.style.display = 'none';
+    delete modal.dataset.editId;
+    delete modal.dataset.linkCommentId;
+    const input = document.getElementById('sheetCommentModalInput');
+    if (input) input.readOnly = false;
+    const linkLabel = document.querySelector('#sheetCommentPlayLink .sheet-comment-play-link-label');
+    if (linkLabel) linkLabel.style.display = '';
+  }
 }
 
 /* ─── 사진 남기기 모달 ────────────────────────────────────── */
@@ -1821,6 +1891,7 @@ async function onSubmitCommentModal() {
   const modal = document.getElementById('sheetCommentModal');
   const gameKey = modal?.dataset.gameId;
   const editId = modal?.dataset.editId;
+  const linkCommentId = modal?.dataset.linkCommentId;
   const input = document.getElementById('sheetCommentModalInput');
   const text = input?.value?.trim();
   if (!text || !gameKey) { input?.focus(); return; }
@@ -1828,12 +1899,27 @@ async function onSubmitCommentModal() {
   const submitBtn = document.getElementById('sheetCommentModalSubmit');
   if (submitBtn) submitBtn.disabled = true;
   let result;
-  if (editId) {
+  let linkedRecId = null;
+  if (linkCommentId) {
+    const linkSelect = document.getElementById('sheetCommentPlaySelect');
+    linkedRecId = linkSelect?.value;
+    if (!linkedRecId) {
+      if (submitBtn) submitBtn.disabled = false;
+      alert('연동할 기록을 선택해주세요.');
+      return;
+    }
+    result = await window.CottageDB.updateGamePlay(linkedRecId, { review_text: text });
+    if (!result.error) {
+      // 연동 성공 시 원본 게임평 삭제 — 남겨두면 통합 목록(게임평)에 같은 글이 중복 표시됨
+      const delResult = await window.CottageDB.deleteComment(linkCommentId);
+      if (delResult?.error) console.error('[onSubmitCommentModal] 연동 후 원본 게임평 삭제 실패', delResult.error);
+    }
+  } else if (editId) {
     result = await window.CottageDB.updateComment(editId, text);
   } else {
     const linkCheck = document.getElementById('sheetCommentLinkCheck');
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
-    const linkedRecId = linkCheck?.checked ? linkSelect?.value : null;
+    linkedRecId = linkCheck?.checked ? linkSelect?.value : null;
     if (linkedRecId) {
       result = await window.CottageDB.updateGamePlay(linkedRecId, { review_text: text });
     } else {
@@ -1843,9 +1929,19 @@ async function onSubmitCommentModal() {
     }
   }
   if (!result.error) {
+    // 새 게임평(연동 안 됨) + 이 게임에 내 플레이기록이 아예 없으면 → 남기기 넛지
+    const shouldNudge = !linkCommentId && !editId && !linkedRecId && modal._myRecordCountAtOpen === 0;
     onCloseCommentModal();
     await initSheetComments(gameKey);         // 기록전체보기 시트용
     await initSheetCommentsPreview(gameKey);  // 메인 게임시트 미리보기용
+    if (linkCommentId) {
+      await initPlayWidget(gameKey);          // 연동된 기록의 후기 반영
+      showActionToast('플레이기록에 연동했어요');
+    } else if (shouldNudge) {
+      showActionToast('게임평을 남겼어요', '↗ 플레이기록으로 남기기', () => {
+        location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
+      });
+    }
   }
   if (submitBtn) submitBtn.disabled = false;
 }
