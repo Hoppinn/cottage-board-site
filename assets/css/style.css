@@ -7011,6 +7011,9 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-rec-thumb--link { cursor: pointer; }
 .pr-rec-thumb--link:hover { opacity: 0.85; }
 .pr-rec-thumb { width: 38px; height: 38px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+/* 미보유 게임(표지 없음) 로고 플레이스홀더 — 로고가 잘리지 않게 contain + 여백 */
+.pr-rec-thumb--placeholder,
+.pr-game-thumb--placeholder { object-fit: contain; background: var(--bg-soft); padding: 4px; }
 .pr-session-game-link { color: inherit; text-decoration: none; }
 .pr-session-game-link:hover { text-decoration: underline; text-underline-offset: 2px; }
 .pr-rec-game-link { color: inherit; text-decoration: none; }

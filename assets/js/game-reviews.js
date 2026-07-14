@@ -27,6 +27,14 @@
     return found ? (found.bggId || found.id) : name;
   }
 
+  // 미보유 게임(표지 없음) 썸네일 플레이스홀더 — 코티지 로고.
+  // rootPath 전역이 script.js→script-nav.js 개명으로 깨져 있어 로컬에서 견고하게 계산.
+  const GAME_LOGO_PLACEHOLDER = (() => {
+    const el = document.querySelector('script[src*="assets/js/script-nav.js"]');
+    const base = el ? el.src.replace(/assets\/js\/script-nav\.js.*$/, '') : '';
+    return base + 'assets/images/main/logo.png';
+  })();
+
   function formatDate(iso) {
     return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
   }
@@ -1105,7 +1113,9 @@
         onclick="openGameRecordSheet('${safeKey}')"
         onkeydown="if(event.key==='Enter')openGameRecordSheet('${safeKey}')"
       >
-        ${thumbUrl ? `<img class="pr-game-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+        ${thumbUrl
+          ? `<img class="pr-game-thumb" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+          : `<img class="pr-game-thumb pr-game-thumb--placeholder" src="${GAME_LOGO_PLACEHOLDER}" alt="미보유 게임" loading="lazy">`}
         <div class="pr-game-card-info">
           <span class="pr-game-card-name">${escH(gameName)}</span>
           <span class="pr-game-card-meta">🎲 ${recs.length}회 플레이</span>
@@ -1151,8 +1161,12 @@
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
         const gameKey = getGameKey(r.game_id) || r.game_id;
-        const thumbUrl = getGameKey(r.game_id) ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
-        const thumbHtml = thumbUrl ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${escH(thumbUrl)}" alt="" loading="lazy" onerror="this.style.display='none'" ${gameKey ? `onclick="event.stopPropagation();openGameRecordSheet('${gameKey.replace(/'/g,"\\'")}')"` : ''}>` : '';
+        const realThumb = getGameKey(r.game_id) ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
+        const _thumbKey = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
+        const _thumbClick = _thumbKey ? `onclick="event.stopPropagation();openGameRecordSheet('${_thumbKey}')"` : '';
+        const thumbHtml = realThumb
+          ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${escH(realThumb)}" alt="" loading="lazy" onerror="this.style.display='none'" ${_thumbClick}>`
+          : (_thumbKey ? `<img class="pr-rec-thumb pr-rec-thumb--placeholder pr-rec-thumb--link" src="${GAME_LOGO_PLACEHOLDER}" alt="미보유 게임" loading="lazy" ${_thumbClick}>` : '');
         const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()).replace(/\s*\/\s*/g,' | ') : ''].filter(Boolean);
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
         const showEdit = isMine || window.isOwner?.();
