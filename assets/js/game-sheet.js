@@ -449,10 +449,17 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
     window.gameData?.[gameKey];
 
   if(
-    !game ||
     !gameSheet ||
     !gameSheetContent
   ){
+    return;
+  }
+
+  // 미보유 게임(gameData 없음): 정보시트가 없으므로 기록시트로 라우팅
+  if (!game) {
+    if (typeof gameKey === 'string' && gameKey) {
+      return openGameRecordSheet(gameKey);
+    }
     return;
   }
 
@@ -792,6 +799,7 @@ function openGameRecordSheet(gameKey) {
   _savedSheetScrollTop = _recPanel ? _recPanel.scrollTop : 0;
 
   const game = window.gameData?.[gameKey];
+  const _owned = !!game;
   const rawTitle = game?.title?.display || game?.title?.owned || game?.title?.bgg || gameKey;
   const safeTitle = String(rawTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const _recDetail = game ? GameView?.getGameDetailData(game) : null;
@@ -811,8 +819,10 @@ function openGameRecordSheet(gameKey) {
       <button class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
     </div>
 
-    <!-- 뒤로가기 -->
-    <button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>
+    <!-- 뒤로가기 (미보유는 정보시트 없음 → 배지) -->
+    ${_owned
+      ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="openGameSheet('${gameKey}', true)">← 게임 정보</button>`
+      : `<div class="sheet-unowned-badge">🚫 미보유 · 게임 정보 없음</div>`}
     <div class="sheet-top-spacer"></div>
     <div class="sheet-feedback-reactions">
       <div class="sheet-reaction-group">

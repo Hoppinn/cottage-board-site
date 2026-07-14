@@ -3871,6 +3871,16 @@ body.embed-mode {
   font-size:13px;
   color:var(--green);
 }
+.sheet-unowned-badge{
+  display:inline-block;
+  margin-bottom:4px;
+  padding:2px 8px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--text-info);
+  background:var(--bg-soft);
+  border-radius:10px;
+}
 .sheet-record-title{
   font-size:17px;
   font-weight:700;

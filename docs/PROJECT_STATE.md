@@ -96,8 +96,11 @@
 
 **Plan — 3단계 분리 (사용자 판단 위임 → 이 순서 확정)**:
 
-*Stage 1 — item 1: 미보유 게임 기록시트*
-- 읽을 파일: game-sheet.js `openGameSheet`(439~457, 미보유 시 early-return 확인됨), `openGameRecordSheet`(784~), `_gameIds`, 미보유 진입점(game-reviews.js 썸네일/이름 클릭 라우팅).
+*Stage 1 — item 1: 미보유 게임 기록시트* — ✅ 완료 (2026-07-14)
+- **구현**: ①game-sheet.js `openGameSheet` early-return 분기 — DOM 없으면 return, game만 없으면(미보유) `openGameRecordSheet(gameKey)`로 리다이렉트(비어있지 않은 문자열일 때만) → 모든 호출처가 미보유를 단일 진입점에서 처리. ②`openGameRecordSheet` `_owned=!!game` — 미보유면 "← 게임 정보" 버튼 대신 `.sheet-unowned-badge`("🚫 미보유·게임정보 없음"). ③game-reviews.js session row `getGameKey(r.game_id) || r.game_id` — 미보유 기록 세션 행에 ⋯메뉴(좋아요/게임평/사진) 활성화(#1-1-2 해결), 썸네일은 이미지 없어 계속 숨음. ④CSS `.sheet-unowned-badge` 신규.
+- **검증**: Playwright 헤드리스 — 미보유 키 `openGameSheet()` → 기록시트 리다이렉트+배지+back버튼 없음+슬러그 섹션 렌더, 에러 0. 보유 게임(7원더스) 회귀 없음(정보시트 정상, 리다이렉트/배지 없음). 호출처 전수(script-nav/owned/index=getGameKey·game.id 슬러그) → 리다이렉트 오발 없음 확인.
+- js-api.md 갱신(openGameSheet/openGameRecordSheet 미보유 동작).
+- (원본 Plan) 읽을 파일: game-sheet.js `openGameSheet`(439~457), `openGameRecordSheet`(784~), `_gameIds`, 미보유 진입점(game-reviews.js 썸네일/이름 클릭 라우팅).
 - 변경: 미보유 게임(gameData 없음) 클릭 → `openGameRecordSheet`로 라우팅(openGameSheet는 미보유 무반응). openGameRecordSheet에 미보유 분기 — "🚫 미보유·게임정보 없음" 배지, "← 게임 정보" 버튼(815) 숨김. 좋아요/궁금해요/게임평/사진/기록은 game_id(슬러그) 기반이라 그대로.
 - 위험: openGameRecordSheet 하위 렌더가 game 널에서 깨지는 지점(썸네일·rating 등, 795 폴백 있으나 이하 확인), 좋아요 버튼이 슬러그 game_id로 동작하는지. **가장 먼저 깨질 곳=미보유 game 널 전제.**
 
@@ -117,7 +120,7 @@
 - **뽁님 오귀속 코멘트 처리**: 뽁이 레이아탄와일드(미보유) 게임평을 `game_comments`에 game_key=`백로성`으로 2건 등록(id: 06e099d1…, 21dbf84c…). Stage 1(미보유 시트) 완료 후 → ①레이아탄와일드로 game_key 이동 ②수동 삭제 ③방치 중 택1. **미정.**
 - **게시판에 게임평(comments) 노출 여부**: 현재는 안 뜸(설계상 정상). 클로드 추천=**분리 유지**(게임평=게임 단위 의견 / 후기=세션 로그), 대신 Stage 2·3(연동)으로 opt-in 브리지만 제공. **사용자 최종 확정 안 됨** — 통합 원하면 별도 기획.
 
-**다음 세션 시작점**: Stage 1(item 1)부터. 이 Plan 그대로 진행(재조사 최소). Red라 구현 전 Plan 승인 확인.
+**다음 세션 시작점**: ~~Stage 1~~ ✅ 완료 → **Stage 2**(연동 1단계: 게임평 저장 후 토스트 nudge + ⋯메뉴 "↗ 플레이기록으로"). 미결 결정 2건(뽁 오귀속 코멘트 처리 / 게시판 게임평 노출)은 여전히 미정 — Stage 2 비블로커.
 
 ---
 
