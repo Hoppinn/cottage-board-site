@@ -1,6 +1,6 @@
 # localStorage 스키마 — 코티지보드
 
-최종 갱신: 2026-07-05 (143차-190: cottage_session_id가 page_views.session_key에도 저장됨 반영; 추가 기록 섹션 본문 흡수)
+최종 갱신: 2026-07-14 (sessionStorage `cottage_pending_join` 추가 — Stage 3 세션 참여 핸드오프)
 
 ---
 
@@ -27,6 +27,12 @@
 | `cottage_play_records_{gameKey}` | game-sheet.js | 바텀시트용 로컬 플레이 기록 | 영구 |
 | `cottage_played_{gameKey}` | game-sheet.js | 구형 단일 포맷 (마이그레이션 완료, 신규 저장 없음) | 레거시 |
 | `cottage_is_admin` | requests-admin.html | 관리자 페이지 로드 시 set. supabase-client.js의 page_views/__visitor__ 기록에서 admin 세션 필터링에 사용 | 영구 |
+
+### sessionStorage (탭 단위, 1회 소비)
+
+| 키 | 저장 위치 | 내용 | 생명주기 |
+|----|----------|------|----------|
+| `cottage_pending_join` | game-sheet.js(쓰기) → game-reviews.js(읽기·삭제) | Stage 3 세션 참여 핸드오프 `{gameKey, review, sessions:[{game_id,group_name,played_at,player_count,player_names,nickname}]}`. game-sheet에서 "○○님 세션에 후기 추가" 클릭 시 저장 후 game-reviews.html?tab=input로 이동, initHub가 읽고 즉시 삭제하여 잠금 프리필 렌더 | 1회 소비(읽는 즉시 removeItem) |
 
 ---
 

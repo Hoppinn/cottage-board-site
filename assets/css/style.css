@@ -6955,6 +6955,17 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-add-btn:hover { opacity: 0.85; }
 .pr-game-rows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
 .pr-game-row { background: var(--card-bg,#fff); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+/* Stage 3: 남의 세션에 내 후기로 참여 — 배너 + 잠금 필드 */
+.pr-join-banner { background: #f3ede1; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
+.pr-join-banner-title { font-size: 13px; color: var(--text); margin-bottom: 6px; }
+.pr-join-session-select { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px; font-size: 13px; font-family: inherit; background: var(--card-bg,#fff); box-sizing: border-box; }
+.pr-join-session-one { font-size: 12px; color: var(--text-info,#6b6b6b); }
+.pr-join-banner-hint { font-size: 11px; color: var(--text-info,#8a8a8a); margin-top: 6px; line-height: 1.4; }
+.pr-meta-grid input.is-locked, .pr-game-name.is-locked { background: #f0ece3; color: var(--text-info,#6b6b6b); cursor: not-allowed; }
+.pr-count-toggles.is-locked { pointer-events: none; opacity: 0.85; }
+.pr-names-wrap.is-locked { cursor: not-allowed; }
+.pr-names-wrap.is-locked .tag-chip-del { display: none; }
+.pr-names-wrap.is-locked .tag-text-input { display: none; }
 .pr-row-head { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
 .pr-row-head input { flex: 1; border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: 14px; font-family: inherit; background: var(--bg); }
 .pr-rm-btn { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; padding: 2px 6px; flex-shrink: 0; }

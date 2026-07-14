@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-14 (cottage-likes-changed 전역 이벤트 — 좋아요 즉시 동기화 Phase A)
+최종 갱신: 2026-07-14 (Stage 3 — `_getOthersSessions`/`_startJoinSession` 남의 세션에 내 후기로 참여)
 
 ---
 
@@ -167,8 +167,10 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `_fetchGamePhotos(gameKey)` | 해당 게임 플레이 기록에서 사진 URL 목록 추출 |
 | `_getMyUnlinkedPlayRecords(gameKey)` | 게임평↔플레이기록 연동 공용 조회. `{all, unreviewed}` 반환 — all=내 기록 전체, unreviewed=후기(review_text) 없는 것만. `onOpenCommentInput`(작성 시 체크박스 연동)과 `onLinkCommentToPlay`(사후 연동) 양쪽이 공유 |
 | `onOpenCommentInput(btn)` | 게임평 작성 모달. 열 때 `_getMyUnlinkedPlayRecords` 결과의 `all.length`를 `modal._myRecordCountAtOpen`에 캐시(제출 시 넛지 판정용, 추가 쿼리 없이 재사용) |
-| `onLinkCommentToPlay(btn)` | 기존 게임평(코멘트) → 내 플레이기록 사후 연동. 후기 없는 내 기록이 있으면 `getOrCreateCommentModal()`을 link-mode로 재사용(`modal.dataset.linkCommentId` 설정, 텍스트 readonly 프리필, 기록 select 강제 표시). 없으면 `showActionToast`로 game-reviews.html?tab=input 이동 넛지 |
-| `onSubmitCommentModal()` | link-mode(`linkCommentId` 있음)면 `updateGamePlay`로 텍스트 복사 후 원본 `deleteComment`(중복 표시 방지, 실패 시 console.error만·토스트 없음). 신규 게임평 저장 성공 + 연동 안 됨 + 내 기록 0개(`_myRecordCountAtOpen===0`)면 "↗ 플레이기록으로 남기기" 넛지 토스트 |
+| `onLinkCommentToPlay(btn)` | 기존 게임평(코멘트) → 내 플레이기록 사후 연동. 후기 없는 내 기록이 있으면 `getOrCreateCommentModal()`을 link-mode로 재사용(`modal.dataset.linkCommentId` 설정, 텍스트 readonly 프리필, 기록 select 강제 표시). 내 기록 없으면 `_getOthersSessions`로 남의 세션 조회 → 있으면 "↗ ○○님 세션에 후기 추가"(Stage 3 참여), 없으면 game-reviews.html?tab=input 빈 입력 이동 넛지 |
+| `onSubmitCommentModal()` | link-mode(`linkCommentId` 있음)면 `updateGamePlay`로 텍스트 복사 후 원본 `deleteComment`(중복 표시 방지, 실패 시 console.error만·토스트 없음). 신규 게임평 저장 성공 + 연동 안 됨 + 내 기록 0개(`_myRecordCountAtOpen===0`)면 넛지 토스트 — 남의 세션 있으면 "↗ ○○님 세션에 후기 추가"(Stage 3), 없으면 "↗ 플레이기록으로 남기기" |
+| `_getOthersSessions(gameKey)` | Stage 3(남의 세션에 내 후기로 참여): `getGamePlayRecords(_gameIds)`에서 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` 키로 dedupe + 최신순 정렬한 세션 배열 반환. 그룹·날짜 둘 다 없는 기록은 세션으로 안 봄 |
+| `_startJoinSession(gameKey, sessions, reviewText)` | Stage 3 핸드오프: `sessionStorage.cottage_pending_join`에 `{gameKey, review, sessions}` 저장 후 game-reviews.html?tab=input 이동. 수신·잠금 프리필은 game-reviews.js가 처리 |
 
 ---
 

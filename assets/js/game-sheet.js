@@ -773,6 +773,42 @@ async function _getMyUnlinkedPlayRecords(gameKey) {
   return { all, unreviewed };
 }
 
+// 게임평↔플레이기록 연동(Stage 3): 남(내가 아닌 사람)의 세션 목록 — 최신순, dedupe.
+// 세션 식별 = group_name|played_at|player_count|player_names. 그룹·날짜 둘 다 없으면 세션으로 안 봄.
+async function _getOthersSessions(gameKey) {
+  const _cu = window.getKakaoUser?.();
+  if (!window.CottageDB) return [];
+  const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
+  const myId = _cu?.id ? String(_cu.id) : null;
+  const seen = new Set();
+  const sessions = [];
+  for (const r of records) {
+    if (myId && String(r.user_id) === myId) continue;   // 남의 기록만
+    if (!r.group_name && !r.played_at) continue;          // 세션 식별 불가
+    const key = `${r.group_name || ''}|${r.played_at || ''}|${r.player_count || ''}|${r.player_names || ''}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    sessions.push({
+      game_id: r.game_id,
+      group_name: r.group_name || null,
+      played_at: r.played_at || null,
+      player_count: r.player_count || null,
+      player_names: r.player_names || null,
+      nickname: r.nickname || null,
+    });
+  }
+  sessions.sort((a, b) => String(b.played_at || '').localeCompare(String(a.played_at || '')));
+  return sessions;
+}
+
+// Stage 3: 세션 컨텍스트 + 게임평 텍스트를 넘기고 기록 입력 탭으로 이동(잠금 프리필은 game-reviews가 처리)
+function _startJoinSession(gameKey, sessions, reviewText) {
+  try {
+    sessionStorage.setItem('cottage_pending_join', JSON.stringify({ gameKey, review: reviewText || '', sessions }));
+  } catch (_) {}
+  location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
+}
+
 async function updateSheetPlayCountLink(gameKey) {
   if (!window.CottageDB) return;
   const count = await window.CottageDB.getGamePlayCount(_gameIds(gameKey));
@@ -1674,9 +1710,16 @@ async function onLinkCommentToPlay(btn) {
   if (!gameKey || !commentId) return;
   const { unreviewed } = await _getMyUnlinkedPlayRecords(gameKey);
   if (!unreviewed.length) {
-    showActionToast('연동할 플레이 기록이 없어요', '↗ 플레이기록 남기기', () => {
-      location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
-    });
+    // 내 기록이 없으면 → 남의 세션에 내 후기로 참여(Stage 3), 그마저 없으면 빈 입력 폴백
+    const sessions = await _getOthersSessions(gameKey);
+    if (sessions.length) {
+      const who = sessions[0].nickname ? `${window.escH?.(sessions[0].nickname) ?? sessions[0].nickname}님 ` : '';
+      showActionToast('내 플레이 기록이 없어요', `↗ ${who}세션에 후기 추가`, () => _startJoinSession(gameKey, sessions, text));
+    } else {
+      showActionToast('연동할 플레이 기록이 없어요', '↗ 플레이기록 남기기', () => {
+        location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
+      });
+    }
     return;
   }
   const modal = getOrCreateCommentModal();
@@ -1938,9 +1981,16 @@ async function onSubmitCommentModal() {
       await initPlayWidget(gameKey);          // 연동된 기록의 후기 반영
       showActionToast('플레이기록에 연동했어요');
     } else if (shouldNudge) {
-      showActionToast('게임평을 남겼어요', '↗ 플레이기록으로 남기기', () => {
-        location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
-      });
+      // 내 기록이 없을 때: 남의 세션 있으면 그 세션에 후기 추가(Stage 3), 없으면 빈 입력 폴백
+      const sessions = await _getOthersSessions(gameKey);
+      if (sessions.length) {
+        const who = sessions[0].nickname ? `${window.escH?.(sessions[0].nickname) ?? sessions[0].nickname}님 ` : '';
+        showActionToast('게임평을 남겼어요', `↗ ${who}세션에 후기 추가`, () => _startJoinSession(gameKey, sessions, text));
+      } else {
+        showActionToast('게임평을 남겼어요', '↗ 플레이기록으로 남기기', () => {
+          location.href = `${rootPath}pages/game/game-reviews.html?tab=input`;
+        });
+      }
     }
   }
   if (submitBtn) submitBtn.disabled = false;

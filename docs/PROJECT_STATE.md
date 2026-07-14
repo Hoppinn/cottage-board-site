@@ -64,7 +64,7 @@
 
 ---
 
-### 🟠 CHECKPOINT: 미보유 게임 기록시트 + 게임평↔플레이기록 연동 (2026-07-14, Red — Plan 진행 중)
+### 🟢 CHECKPOINT: 미보유 게임 기록시트 + 게임평↔플레이기록 연동 (2026-07-14, Red — Stage 1·2·3 전부 완료, 실서버 스모크만 남음)
 
 > 2026-07-14 세션 "추가사항" 논의에서 확정. item 1(미보유 게임 시트) Plan 작성 대상. **아래 설계는 사용자 승인 완료.**
 
@@ -110,10 +110,11 @@
 - js-api.md 갱신(`_getMyUnlinkedPlayRecords`/`onLinkCommentToPlay`/`onSubmitCommentModal` 항목).
 - 잔여: Stage 3(남 세션에 내 기록으로 참여) 미착수.
 
-*Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여*
-- 읽을 파일: game-reviews.js 입력창(addRow/프리필 경로), `recordGamePlay`, `getGamePlayRecords`.
-- 변경: 그 게임에 내 기록 없고 **남 세션 있으면** → 세션 선택 → 입력창을 게임·날짜·그룹·인원 **잠금 프리필** + 후기(게임평 텍스트)·점수·사진만 입력 → `recordGamePlay`(내 새 기록). 게시판 `group_name+date` 그룹핑으로 같은 세션에 묶임.
-- 위험: 입력창 프리필+필드잠금 UI(iframe 교차 값전달), 세션 식별·선택, 그룹핑 키 정확 매칭.
+*Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여* — ✅ 완료 (2026-07-14, Opus medium)
+- **구현**: ①game-sheet.js `_getOthersSessions(gameKey)` — 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` dedupe + 최신순 세션 배열. `_startJoinSession`이 `sessionStorage.cottage_pending_join`(`{gameKey,review,sessions}`)에 저장 후 game-reviews.html?tab=input 이동. ②넛지/⋯연동 폴백 업그레이드: 내 기록 없을 때 남 세션 있으면 "↗ ○○님 세션에 후기 추가"(게임평 저장 후 넛지 + ⋯메뉴 사후연동 양쪽). ③game-reviews.js `initHub`가 핸드오프 1회 소비 → `renderInputPanel(pendingJoin)` → 배너(세션 select, 1개면 라벨)+첫 행 **잠금 프리필**(게임명·날짜·그룹·인원·참여자 readonly/pointer잠금, 후기·점수·사진만 입력). 저장 시 `row.dataset.lockedGameId`(원본 game_id 그대로)로 `recordGamePlay` → **모임별(group+date)·게임별(group+count+names) 뷰 모두 같은 세션에 nest**. 저장 성공 시 잠금 해제·배너 제거. `labelByGameId` 역해석 헬퍼 신설.
+- **참여자 처리 결정**: 원본 세션의 player_names·player_count를 그대로 복사·잠금(사용자 승인). `putSelfFirst`는 목록에 없는 이름은 추가하지 않으므로 원본 roster가 그대로 유지되어 게임별 뷰 키(정규화 names)도 정확 일치 → 두 뷰 모두 nest.
+- **검증**: Playwright 하니스(실제 game-reviews.js 로드) — 세션2개 select·잠금 프리필·세션 전환(후기 유지)·저장 인자(`["111",4,"뽁, 철수, 영희",...,"코티지보드 동호회","2026-07-10",...,후기]` = 원본 세션 일치)·저장 후 잠금해제 전부 확인. `_getOthersSessions`는 실소스 추출 node 단위테스트로 내기록제외·dedupe·그룹날짜없음제외·최신순 확인. Stage 3 관련 콘솔 에러 0.
+- js-api.md(`_getOthersSessions`/`_startJoinSession`)·ls-schema.md(sessionStorage `cottage_pending_join`) 갱신.
 
 **공통 위험요소**: ①미보유 game 널 전제 광범위(Stage1). ②iframe/모달 교차 프리필·필드잠금(Stage3). ③미보유 식별 키(이름 슬러그) 정규화 일관성.
 
@@ -121,7 +122,7 @@
 - **뽁님 오귀속 코멘트 처리** — ✅ 해결 (2026-07-14, ①game_key 이동): 7/13(월) `06e099d1`→`레비아탄와일드`(플레이기록 game_id와 동일 키라 그 시트에서 보임), 7/11(토) `21dbf84c`→`원더랜드워-풀확`(기존 좋아요 키와 동일해 그 시트에서 보이게, 플레이기록 없음). 7/11 글은 두 게임(레비아탄+원더랜드워) 섞였으나 사용자 지시대로 통째 이동. anon 키 PATCH로 프로덕션 반영, 백로성 잔여 게임평 0건 확인.
 - **게시판에 게임평(comments) 노출 여부** — ✅ 확정 (2026-07-14, 사용자): **분리+브리지**(게임평 원본을 게시판에 그대로 섞지 않음, Stage 2·3 브리지로 처리). **목표 명확화**: 플레이기록(세션=group_name+date) 하나에 **닉네임별 여러 후기가 나란히** 나오게 하는 것. 현재 게시판은 각자 자기 record.review_text를 세션으로 묶어 이미 표시 중(사용자가 "이미 있는 시스템"이라 한 것). **안 되는 2케이스** → ①플레이기록에 연동 안 된 게임평(game_comments)은 안 뜸 = **Stage 2**(게임평→내 기록 연동)로 해결 ②남의 플레이기록엔 내 후기 못 붙임 = **Stage 3**(남 세션에 내 새 기록으로 참여)로 해결. ①②는 서로 연관.
 
-**다음 세션 시작점**: ~~Stage 1~~ ✅ 완료(+후속 썸네일·rootPath) → ~~Stage 2~~ ✅ 완료(토스트 넛지 + ⋯메뉴 연동, 커밋 6f2a638) → **Stage 3**(연동 2단계: 남의 세션에 내 새 기록으로 참여 — 입력창 게임·날짜·그룹·인원 잠금 프리필 + 후기·점수·사진만 입력). 미결 2건 모두 ✅ 해결(뽁 오귀속=game_key 이동 / 게임평 노출=분리+브리지 확정). 목표=플레이기록 하나에 닉네임별 여러 후기.
+**다음 세션 시작점**: ~~Stage 1~~ ✅ → ~~Stage 2~~ ✅ → ~~Stage 3~~ ✅ 완료 — **게임평↔플레이기록 연동 3단계 전부 완료**. 목표(플레이기록 하나에 닉네임별 여러 후기)를 남의 세션 참여로 달성. 남은 스모크 테스트: 실서버에서 미보유/보유 게임 각각 넛지·⋯메뉴 → 잠금 프리필 입력 → 저장 후 게시판(모임별·게임별)에 같은 세션 아래 내 후기가 나란히 뜨는지 눈으로 확인.
 
 ---
 
