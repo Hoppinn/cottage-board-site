@@ -27,13 +27,6 @@
     return found ? (found.bggId || found.id) : name;
   }
 
-  // game_id → 표시명 역해석 (Stage 3 잠금 프리필용). 미보유 게임은 null → 호출부에서 gameKey 폴백.
-  function labelByGameId(gid) {
-    if (!window.COTTAGE_GAMES || gid == null) return null;
-    const g = window.COTTAGE_GAMES.find(x => String(x.bggId) === String(gid) || String(x.id) === String(gid));
-    return g ? (g.display || g.titleKo || g.titleEn || null) : null;
-  }
-
   // 미보유 게임(표지 없음) 썸네일 플레이스홀더 — hero.png(= DEFAULT_GAME_IMAGE, 미보유 기록시트 헤더와 동일).
   // rootPath 전역이 script.js→script-nav.js 개명으로 깨져 있어 로컬에서 견고하게 계산.
   const GAME_LOGO_PLACEHOLDER = (() => {
@@ -151,13 +144,7 @@
 
     const params = new URLSearchParams(location.search);
     if (params.get('embed') === 'true') document.body.classList.add('is-embedded');
-    // Stage 3: 남의 세션에 내 후기로 참여 — game-sheet가 넘긴 세션 컨텍스트(1회 소비)
-    let pendingJoin = null;
-    try {
-      const raw = sessionStorage.getItem('cottage_pending_join');
-      if (raw) { pendingJoin = JSON.parse(raw); sessionStorage.removeItem('cottage_pending_join'); }
-    } catch (_) {}
-    const startInput = params.get('tab') === 'input' || !!pendingJoin;
+    const startInput = params.get('tab') === 'input';
 
     root.innerHTML = `
       <div class="pr-tabs">
@@ -177,7 +164,7 @@
       });
     });
 
-    renderInputPanel(pendingJoin);
+    renderInputPanel();
     loadRecords();
 
     // embedded modal: notify parent that tabs are rendered (hides loading state)
@@ -190,7 +177,7 @@
 
   // ── 기록 입력 탭 ─────────────────────────────────────────────
 
-  async function renderInputPanel(pendingJoin) {
+  async function renderInputPanel() {
     const panel = document.getElementById('prPanelInput');
     if (!panel) return;
 
@@ -389,75 +376,6 @@
 
     document.getElementById('prAddBtn').addEventListener('click', () => addRow(false));
 
-    // ── Stage 3: 남의 세션에 내 후기로 참여 — 첫 행 잠금 프리필 ──
-    if (pendingJoin && Array.isArray(pendingJoin.sessions) && pendingJoin.sessions.length) {
-      applyJoinMode(pendingJoin);
-    }
-
-    function lockRowToSession(row, s) {
-      if (!row) return;
-      row.dataset.lockedGameId = s.game_id != null ? String(s.game_id) : '';
-      const nameInput = row.querySelector('.pr-game-name');
-      const label = labelByGameId(s.game_id) || pendingJoin.gameKey || '';
-      if (nameInput) { nameInput.value = label; nameInput.readOnly = true; nameInput.classList.add('is-locked'); }
-      // 인원
-      const toggles = row.querySelector('.pr-count-toggles');
-      row.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
-      if (s.player_count) row.querySelector(`.pr-count-btn[data-n="${s.player_count}"]`)?.classList.add('is-on');
-      toggles?.classList.add('is-locked');
-      // 참여자 — 원본 세션 값으로 채우고 잠금
-      const wrap = row.querySelector('.pr-names-wrap');
-      const chips = wrap?.querySelector('.tag-chips');
-      const hidden = row.querySelector('.pr-names');
-      if (chips) chips.querySelectorAll('.tag-chip').forEach(c => c.remove());
-      if (hidden) hidden.value = '';
-      if (s.player_names && wrap) {
-        const textInput = wrap.querySelector('.tag-text-input');
-        s.player_names.split(',').forEach(name => {
-          name = name.trim(); if (!name) return;
-          textInput.value = name;
-          textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
-        });
-        textInput.value = '';
-      }
-      wrap?.classList.add('is-locked');
-      // 고정 행: 삭제·"위와 동일" 버튼 숨김
-      row.querySelector('.pr-rm-btn')?.style.setProperty('display', 'none');
-      row.querySelector('.pr-same-as-above-btn')?.style.setProperty('display', 'none');
-    }
-
-    function applyJoinMode(pj) {
-      const sessions = pj.sessions;
-      const sessLabel = s => {
-        const d = s.played_at ? formatKstDateWithDay(s.played_at) : '날짜 미상';
-        return `${d}${s.group_name ? ' · ' + s.group_name : ''}${s.nickname ? ' · ' + s.nickname + '님' : ''}${s.player_count ? ' · ' + s.player_count + '명' : ''}`;
-      };
-      const gameLabel = labelByGameId(sessions[0].game_id) || pj.gameKey || '';
-      const banner = document.createElement('div');
-      banner.className = 'pr-join-banner';
-      banner.innerHTML = `<div class="pr-join-banner-title">🔗 <b>${escH(gameLabel)}</b> 세션에 내 후기 추가</div>
-        ${sessions.length > 1
-          ? `<select class="pr-join-session-select">${sessions.map((s, i) => `<option value="${i}">${escH(sessLabel(s))}</option>`).join('')}</select>`
-          : `<div class="pr-join-session-one">${escH(sessLabel(sessions[0]))}</div>`}
-        <div class="pr-join-banner-hint">게임·날짜·그룹·인원·참여자는 세션에 맞춰 고정돼요. 후기·점수·사진만 입력하세요.</div>`;
-      panel.insertBefore(banner, panel.firstChild);
-
-      const firstRow = document.querySelector('#prGameRows .pr-game-row');
-      const reviewTa = firstRow?.querySelector('.pr-review');
-      if (reviewTa && pj.review) reviewTa.value = pj.review;
-
-      const applySession = (s) => {
-        const dateEl = document.getElementById('prDate');
-        const grpEl = document.getElementById('prGroup');
-        if (dateEl) { dateEl.value = s.played_at || todayKst(); dateEl.readOnly = true; dateEl.classList.add('is-locked'); }
-        if (grpEl) { grpEl.value = s.group_name || ''; grpEl.readOnly = true; grpEl.classList.add('is-locked'); }
-        lockRowToSession(firstRow, s);
-      };
-      applySession(sessions[0]);
-      const sel = banner.querySelector('.pr-join-session-select');
-      if (sel) sel.addEventListener('change', () => applySession(sessions[parseInt(sel.value)]));
-    }
-
     document.getElementById('prSaveBtn').addEventListener('click', async () => {
       if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
       const dateVal = document.getElementById('prDate').value || todayKst();
@@ -470,7 +388,7 @@
         if (!name) continue;
         const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
         entries.push({
-          id: row.dataset.lockedGameId || gameIdByName(name),
+          id: gameIdByName(name),
           label: name,
           count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
           time: parseInt(row.querySelector('.pr-time').value) || null,
@@ -511,10 +429,6 @@
       if (ok) {
         showToast('저장됐어요!'); window._refreshAutocompleteLists?.();
         window.CottageDB?.trackEvent('record_complete');
-        // 세션 참여(Stage 3) 잠금 해제 — 저장 후 일반 입력 상태로 복귀
-        document.querySelector('.pr-join-banner')?.remove();
-        const _d = document.getElementById('prDate'); if (_d) { _d.readOnly = false; _d.classList.remove('is-locked'); }
-        const _g = document.getElementById('prGroup'); if (_g) { _g.readOnly = false; _g.classList.remove('is-locked'); }
         document.getElementById('prGameRows').innerHTML = '';
         addRow(false);
         if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);

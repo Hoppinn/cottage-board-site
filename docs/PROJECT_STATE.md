@@ -110,11 +110,13 @@
 - js-api.md 갱신(`_getMyUnlinkedPlayRecords`/`onLinkCommentToPlay`/`onSubmitCommentModal` 항목).
 - 잔여: Stage 3(남 세션에 내 기록으로 참여) 미착수.
 
-*Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여* — ✅ 완료 (2026-07-14, Opus medium)
-- **구현**: ①game-sheet.js `_getOthersSessions(gameKey)` — 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` dedupe + 최신순 세션 배열. `_startJoinSession`이 `sessionStorage.cottage_pending_join`(`{gameKey,review,sessions}`)에 저장 후 game-reviews.html?tab=input 이동. ②넛지/⋯연동 폴백 업그레이드: 내 기록 없을 때 남 세션 있으면 "↗ ○○님 세션에 후기 추가"(게임평 저장 후 넛지 + ⋯메뉴 사후연동 양쪽). ③game-reviews.js `initHub`가 핸드오프 1회 소비 → `renderInputPanel(pendingJoin)` → 배너(세션 select, 1개면 라벨)+첫 행 **잠금 프리필**(게임명·날짜·그룹·인원·참여자 readonly/pointer잠금, 후기·점수·사진만 입력). 저장 시 `row.dataset.lockedGameId`(원본 game_id 그대로)로 `recordGamePlay` → **모임별(group+date)·게임별(group+count+names) 뷰 모두 같은 세션에 nest**. 저장 성공 시 잠금 해제·배너 제거. `labelByGameId` 역해석 헬퍼 신설.
-- **참여자 처리 결정**: 원본 세션의 player_names·player_count를 그대로 복사·잠금(사용자 승인). `putSelfFirst`는 목록에 없는 이름은 추가하지 않으므로 원본 roster가 그대로 유지되어 게임별 뷰 키(정규화 names)도 정확 일치 → 두 뷰 모두 nest.
-- **검증**: Playwright 하니스(실제 game-reviews.js 로드) — 세션2개 select·잠금 프리필·세션 전환(후기 유지)·저장 인자(`["111",4,"뽁, 철수, 영희",...,"코티지보드 동호회","2026-07-10",...,후기]` = 원본 세션 일치)·저장 후 잠금해제 전부 확인. `_getOthersSessions`는 실소스 추출 node 단위테스트로 내기록제외·dedupe·그룹날짜없음제외·최신순 확인. Stage 3 관련 콘솔 에러 0.
-- js-api.md(`_getOthersSessions`/`_startJoinSession`)·ls-schema.md(sessionStorage `cottage_pending_join`) 갱신.
+*Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여* — ✅ 완료 (2026-07-14 최초 → **2026-07-15 UX 개편으로 재구현**, Opus medium)
+- **⚠️ 사용자 피드백으로 방향 전환 (2026-07-15)**: 최초 구현(토스트 넛지 → game-reviews 잠금 프리필 폼)이 두 가지 문제 — ①토스트가 5초 뒤 사라져 놓침 ②잠금 폼이 "전체 플레이기록을 수정하는 것"처럼 보여 헷갈림(+`+게임추가`로 세션에 엉뚱한 게임 넣을 여지). 데이터 손상은 없었음(항상 INSERT). → **"1안: 확인창 → 즉시 연동" + "게임평/사진 2개 메뉴 분리"로 재설계**.
+- **현재 구현 (1안)**: ①game-sheet.js `_getOthersSessions(gameKey)`(유지) — 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` dedupe + 최신순. ②`_openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId?)` — `#sheetJoinModal` 확인창(세션 정보+후기 미리보기, 세션 여러 개면 select) → [남기기] 시 세션 필드 그대로 복사한 `recordGamePlay`로 **즉시 내 새 기록 생성**(입력폼·페이지이동 없음). sourceCommentId 있으면 성공 후 `deleteComment`(방금 쓴/기존 게임평을 후기로 이동 = 중복 방지). ③게임평 저장 후 넛지·⋯메뉴 사후연동 양쪽이 토스트 대신 `_openJoinConfirm` 호출. ④**사진 남기기 모달**(`onOpenPhotoInput`/`onSubmitPhotoModal`)도 "연동" select에 남의 세션(`data-join="1"`) 추가 → 선택 시 세션 필드 복사한 `recordGamePlay`로 내 새 사진 기록(게임평과 대칭인 별도 메뉴).
+- **game-reviews.js 잠금 프리필 폼 전면 제거**(핸드오프·`applyJoinMode`·`labelByGameId`·`lockedGameId`·`pr-join-*`/`is-locked` CSS·sessionStorage `cottage_pending_join` 모두 되돌림).
+- **세션 필드 복사 = 두 뷰 모두 nest**: game_id·인원·참여자·그룹·날짜를 원본 그대로 복사(putSelfFirst 미적용 → roster 불변) → 모임별(group+date)·게임별(group+count+names) 뷰 모두 같은 세션에 묶임.
+- **검증**: Playwright(실소스 함수 추출) — `_openJoinConfirm` 단일/다중세션·후기이동(deleteComment)·후기없음·취소, 저장 인자 세션 일치. 사진 모달 남세션참여(신규기록)·내기록병합(update)·비연동(사진만) 분기. `_getOthersSessions` node 단위테스트. 콘솔 에러 0.
+- js-api.md(`_openJoinConfirm`/photo 모달)·ls-schema.md(`cottage_pending_join` 제거) 갱신.
 
 **공통 위험요소**: ①미보유 game 널 전제 광범위(Stage1). ②iframe/모달 교차 프리필·필드잠금(Stage3). ③미보유 식별 키(이름 슬러그) 정규화 일관성.
 
