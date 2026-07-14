@@ -103,10 +103,12 @@
 - **후속 — 미보유 진입점 보강 (커밋 a27659b·6a2f44f·50a29ca)**: 세션행(날짜/모임별)은 썸네일이 유일한 기록시트 진입점인데 미보유는 표지가 없어 진입 불가였음 → `hero.png`(= `DEFAULT_GAME_IMAGE`, 일러스트+"Cottage Board" 이름밑 레이아웃, 미보유 기록시트 헤더와 동일 이미지) 플레이스홀더 썸네일 렌더(세션행+게임카드), 클릭 시 `openGameRecordSheet`. CSS `.pr-rec-thumb--placeholder`/`.pr-game-thumb--placeholder`(contain+베이지 #f5eee2 = 게임시트 `.sheet-thumb`/`.sheet-sticky-thumb`와 동일 스타일). ※탐색 경과: 이름옆 원본→이름없는 크롭마크→이름밑 세로조합 커스텀 만들다가, hero.png가 이미 이름밑 레이아웃임을 확인해 **커스텀 자산 버리고 hero.png 재사용**(커밋 7047bc3, 자산·헤더 일관). `GAME_LOGO_PLACEHOLDER` 경로는 rootPath 버그 회피 위해 로컬 계산. Playwright로 실게임(레비아탄와일드) 렌더·로드·클릭·배지 확인.
 - **곁다리 버그 수정 (커밋 9879d41)**: 검증 중 `rootPath`(script-nav.js:110)가 script.js→script-nav.js 개명(65e015a) 미반영으로 정규식 replace 실패 → rootPath가 스크립트 전체 URL이 되어 `DEFAULT_GAME_IMAGE`·헤더검색이동·게임위치버튼·기록히스토리링크가 전부 깨진 URL 생성하던 것 발견. 정규식 `script-nav\.js`로 정정. 미보유 기록시트 헤더 이미지 복구(렌더 콘솔 에러 2→0).
 
-*Stage 2 — 연동 1단계: 토스트 nudge + ⋯메뉴 나중연동 (기존 모달 재활용)*
-- 읽을 파일: onSubmitCommentModal(1810), onOpenCommentInput(1584), 코멘트 액션 렌더(908~910, 1465~1476).
-- 변경: ①게임평 등록 성공 후 그 게임에 **내 플레이기록 없으면** `showActionToast('게임평 남겼어요','↗ 플레이기록으로', 연동콜백)`. ②코멘트 ⋯(수정/삭제)에 "↗ 플레이기록으로" 추가 → 그 텍스트로 연동. 연동콜백=기존 링크 모달(내 기록 있으면) 재사용.
-- 위험: "내 기록 없음" 판정 추가 조회 비용.
+*Stage 2 — 연동 1단계: 토스트 nudge + ⋯메뉴 나중연동 (기존 모달 재활용)* — ✅ 완료 (2026-07-14, 커밋 6f2a638, Sonnet)
+- **구현**: `_getMyUnlinkedPlayRecords(gameKey)` 공용 헬퍼(all/unreviewed) 신설. ①`onOpenCommentInput`이 모달 열 때 이미 하던 조회 결과를 `modal._myRecordCountAtOpen`에 캐시 → 제출 성공 시(신규·비연동·내 기록 0개) `showActionToast`로 "게임평을 남겼어요 · ↗ 플레이기록으로 남기기" 넛지(추가 쿼리 없음). ②기존 코멘트 ⋯ 액션에 "↗"(`onLinkCommentToPlay`) 추가 — 후기 없는 내 기록 있으면 `getOrCreateCommentModal()`을 link-mode로 재활용(제목/라벨 전환, readonly 텍스트 프리필, 새 모달 없음), 없으면 같은 넛지로 폴백. `onSubmitCommentModal`에 link-mode 분기 추가.
+- **⚠️ 설계 보강 (원 Plan에 없던 발견)**: 연동 시 `updateGamePlay`로 텍스트 복사만 하고 원본 `game_comments` row를 남기면, 통합 "게임평" 목록(comment+review 병합)에 **같은 글이 중복 표시**됨. → 연동 성공 후 `deleteComment(linkCommentId)`로 원본 삭제(이동 시맨틱). 실패 시 console.error만(토스트 없음, 드문 edge case).
+- **검증**: Playwright 하니스 5개 시나리오 — 내기록0→넛지, 내기록有(미체크)→넛지없음, 기존코멘트 연동 성공(updateGamePlay→deleteComment 순서 확인)+토스트+refresh 3종 호출, 연동가능기록없음→폴백, **기존 체크박스-연동 플로우 회귀없음**(insertComment/deleteComment 미호출 확인). 콘솔 에러 0.
+- js-api.md 갱신(`_getMyUnlinkedPlayRecords`/`onLinkCommentToPlay`/`onSubmitCommentModal` 항목).
+- 잔여: Stage 3(남 세션에 내 기록으로 참여) 미착수.
 
 *Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여*
 - 읽을 파일: game-reviews.js 입력창(addRow/프리필 경로), `recordGamePlay`, `getGamePlayRecords`.
@@ -119,7 +121,7 @@
 - **뽁님 오귀속 코멘트 처리** — ✅ 해결 (2026-07-14, ①game_key 이동): 7/13(월) `06e099d1`→`레비아탄와일드`(플레이기록 game_id와 동일 키라 그 시트에서 보임), 7/11(토) `21dbf84c`→`원더랜드워-풀확`(기존 좋아요 키와 동일해 그 시트에서 보이게, 플레이기록 없음). 7/11 글은 두 게임(레비아탄+원더랜드워) 섞였으나 사용자 지시대로 통째 이동. anon 키 PATCH로 프로덕션 반영, 백로성 잔여 게임평 0건 확인.
 - **게시판에 게임평(comments) 노출 여부** — ✅ 확정 (2026-07-14, 사용자): **분리+브리지**(게임평 원본을 게시판에 그대로 섞지 않음, Stage 2·3 브리지로 처리). **목표 명확화**: 플레이기록(세션=group_name+date) 하나에 **닉네임별 여러 후기가 나란히** 나오게 하는 것. 현재 게시판은 각자 자기 record.review_text를 세션으로 묶어 이미 표시 중(사용자가 "이미 있는 시스템"이라 한 것). **안 되는 2케이스** → ①플레이기록에 연동 안 된 게임평(game_comments)은 안 뜸 = **Stage 2**(게임평→내 기록 연동)로 해결 ②남의 플레이기록엔 내 후기 못 붙임 = **Stage 3**(남 세션에 내 새 기록으로 참여)로 해결. ①②는 서로 연관.
 
-**다음 세션 시작점**: ~~Stage 1~~ ✅ 완료(+후속 썸네일·rootPath) → **Stage 2**(연동 1단계: 게임평 저장 후 토스트 nudge + ⋯메뉴 "↗ 플레이기록으로"). 미결 2건 모두 ✅ 해결(뽁 오귀속=game_key 이동 / 게임평 노출=분리+브리지 확정). Stage 2 바로 착수 가능. 목표=플레이기록 하나에 닉네임별 여러 후기.
+**다음 세션 시작점**: ~~Stage 1~~ ✅ 완료(+후속 썸네일·rootPath) → ~~Stage 2~~ ✅ 완료(토스트 넛지 + ⋯메뉴 연동, 커밋 6f2a638) → **Stage 3**(연동 2단계: 남의 세션에 내 새 기록으로 참여 — 입력창 게임·날짜·그룹·인원 잠금 프리필 + 후기·점수·사진만 입력). 미결 2건 모두 ✅ 해결(뽁 오귀속=game_key 이동 / 게임평 노출=분리+브리지 확정). 목표=플레이기록 하나에 닉네임별 여러 후기.
 
 ---
 

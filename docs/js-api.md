@@ -165,6 +165,10 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `openGameRecordSheet(gameKey)` | 게임 기록시트(좋아요/궁금해요/게임평/사진/플레이기록). `game` 널이어도 제목·이미지·rating 폴백으로 렌더(미보유 지원). 미보유면 "← 게임 정보" 버튼 대신 `.sheet-unowned-badge`("🚫 미보유·게임정보 없음") 표시. 좋아요·게임평 등은 `_gameIds(gameKey)`(미보유는 슬러그 단건)로 조회 |
 | `_gameIds(gameKey)` | gameKey → `[gameKey]` 또는 `[gameKey, bggId]` 배열 반환. game_id가 gameKey와 BGG ID 두 가지로 저장될 수 있어 CottageDB 조회 시 배열로 전달하여 `.in()` 쿼리 처리 |
 | `_fetchGamePhotos(gameKey)` | 해당 게임 플레이 기록에서 사진 URL 목록 추출 |
+| `_getMyUnlinkedPlayRecords(gameKey)` | 게임평↔플레이기록 연동 공용 조회. `{all, unreviewed}` 반환 — all=내 기록 전체, unreviewed=후기(review_text) 없는 것만. `onOpenCommentInput`(작성 시 체크박스 연동)과 `onLinkCommentToPlay`(사후 연동) 양쪽이 공유 |
+| `onOpenCommentInput(btn)` | 게임평 작성 모달. 열 때 `_getMyUnlinkedPlayRecords` 결과의 `all.length`를 `modal._myRecordCountAtOpen`에 캐시(제출 시 넛지 판정용, 추가 쿼리 없이 재사용) |
+| `onLinkCommentToPlay(btn)` | 기존 게임평(코멘트) → 내 플레이기록 사후 연동. 후기 없는 내 기록이 있으면 `getOrCreateCommentModal()`을 link-mode로 재사용(`modal.dataset.linkCommentId` 설정, 텍스트 readonly 프리필, 기록 select 강제 표시). 없으면 `showActionToast`로 game-reviews.html?tab=input 이동 넛지 |
+| `onSubmitCommentModal()` | link-mode(`linkCommentId` 있음)면 `updateGamePlay`로 텍스트 복사 후 원본 `deleteComment`(중복 표시 방지, 실패 시 console.error만·토스트 없음). 신규 게임평 저장 성공 + 연동 안 됨 + 내 기록 0개(`_myRecordCountAtOpen===0`)면 "↗ 플레이기록으로 남기기" 넛지 토스트 |
 
 ---
 
