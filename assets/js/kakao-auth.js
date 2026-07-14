@@ -1080,7 +1080,14 @@ async function openProfilePanel(autoSubsheet = null) {
     return da < db ? 1 : da > db ? -1 : 0;
   }).slice(0, 5);
   const _recentPlaysHtml = _recentPlays.length
-    ? `<ul class="profile-activity-list">${_recentPlays.map(r => `<li class="profile-activity-item" data-game-id="${escH(String(r.game_id || ''))}"><button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`).join('')}</ul>`
+    ? `<ul class="profile-activity-list">${_recentPlays.map(r => {
+        const _gk = _getGameKeyById(r.game_id);
+        const _gd = _gk ? window.gameData?.[_gk] : null;
+        const _th = _gd?.images?.thumbnail
+          ? `<img class="profile-record-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
+          : `<span class="profile-record-thumb-empty"></span>`;
+        return `<li class="profile-activity-item profile-activity-item--thumb" data-game-id="${escH(String(r.game_id || ''))}">${_th}<button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`;
+      }).join('')}</ul>`
     : _emptyList('아직 플레이 기록이 없어요');
 
   function _meetingProfileRowHtml(label, val) {
@@ -1102,11 +1109,11 @@ async function openProfilePanel(autoSubsheet = null) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">전체 보기</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">전체 보기</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
@@ -2240,9 +2247,10 @@ async function openProfilePanel(autoSubsheet = null) {
             overlay.querySelector('.mb-add-close').addEventListener('click', close);
             overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
             document.addEventListener('keydown', onEsc);
+            // 썸네일만 클릭 → 게임시트 (이름 등 나머지 영역은 무반응, 취향보드 패턴 동일)
             // 게임시트(z 9500) < 이 모달(z 9700)이라 클릭 시 모달을 먼저 닫고 게임시트 열기
-            overlay.querySelectorAll('.taste-game-item--clickable').forEach(item => item.addEventListener('click', () => {
-              const gid = item.dataset.gameId;
+            overlay.querySelectorAll('.taste-game-item--clickable .taste-game-thumb, .taste-game-item--clickable .taste-game-thumb-empty').forEach(th => th.addEventListener('click', () => {
+              const gid = th.closest('.taste-game-item')?.dataset.gameId;
               if (gid) { close(); window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
             }));
           };
@@ -2276,15 +2284,16 @@ async function openProfilePanel(autoSubsheet = null) {
             });
           }
 
-          // 최근 모임 참여 → 게임시트 열기
-          subBody.querySelectorAll('.profile-activity-item[data-game-id] .profile-game-link').forEach(btn => {
-            const li = btn.closest('[data-game-id]');
-            const gameId = li?.dataset.gameId;
+          // 최근 모임 참여 → 게임시트 열기 (이름·썸네일 클릭)
+          subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
+            const gameId = li.dataset.gameId;
             if (!gameId) return;
-            btn.addEventListener('click', () => {
+            const open = () => {
               const key = _getGameKeyById(gameId);
-              if (key && window.openGameSheet) window.openGameSheet(key);
-            });
+              if (key && window.openGameSheet) { window.ensureGameSheet?.(); window.openGameSheet(key); }
+            };
+            li.querySelector('.profile-game-link')?.addEventListener('click', open);
+            li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', open);
           });
 
           // 이번 주 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
