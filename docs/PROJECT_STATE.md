@@ -265,7 +265,31 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **Plan 대상 파일(예정)**: game-sheet.js(openGameSheet/openGameRecordSheet 미보유 분기, 코멘트 저장 후 토스트, 코멘트 ⋯메뉴), game-reviews.js(입력창 프리필+필드 잠금, 기존 세션 조회), supabase-client.js(내 플레이기록 존재 확인 헬퍼 필요 시). **DB 스키마 변경 없음.**
 
-**위험요소**: ①openGameSheet/RecordSheet가 gameData 널 전제 다수 → 미보유 분기 광범위(가장 먼저 깨질 지점). ②게임평↔입력창 프리필이 iframe/모달 교차라 값 전달·필드 잠금 UI 복잡. ③미보유 게임 식별 키(이름 슬러그) 정규화 일관성.
+**⚠️ 기존 코드 발견 (Plan 재검증)**: game-sheet.js에 **이미 게임평↔플레이기록 연동이 부분 존재**.
+- `onOpenCommentInput`(1584~1627): 게임평 모달에 "기존 플레이 기록에 연동" 체크박스+선택. **내 기록 중 후기(review_text) 없는 것만** 나열(`r.user_id===나 && !r.review_text`, 1613).
+- `onSubmitCommentModal`(1810~1841): 체크 시 `updateGamePlay(선택기록,{review_text})` — 내 기존 기록의 후기로. 안 하면 `insertComment`(일반 게임평).
+- → **작성자 불일치는 이미 방어됨**(내 기록만). 확정 설계의 "세션에 내 후기 추가"는 **(A) 내 기존 기록 연동=이미 됨** / **(B) 남이 찍은 세션에 내 새 기록으로 참여=신규**로 갈림.
+
+**Plan — 3단계 분리 (사용자 판단 위임 → 이 순서 확정)**:
+
+*Stage 1 — item 1: 미보유 게임 기록시트*
+- 읽을 파일: game-sheet.js `openGameSheet`(439~457, 미보유 시 early-return 확인됨), `openGameRecordSheet`(784~), `_gameIds`, 미보유 진입점(game-reviews.js 썸네일/이름 클릭 라우팅).
+- 변경: 미보유 게임(gameData 없음) 클릭 → `openGameRecordSheet`로 라우팅(openGameSheet는 미보유 무반응). openGameRecordSheet에 미보유 분기 — "🚫 미보유·게임정보 없음" 배지, "← 게임 정보" 버튼(815) 숨김. 좋아요/궁금해요/게임평/사진/기록은 game_id(슬러그) 기반이라 그대로.
+- 위험: openGameRecordSheet 하위 렌더가 game 널에서 깨지는 지점(썸네일·rating 등, 795 폴백 있으나 이하 확인), 좋아요 버튼이 슬러그 game_id로 동작하는지. **가장 먼저 깨질 곳=미보유 game 널 전제.**
+
+*Stage 2 — 연동 1단계: 토스트 nudge + ⋯메뉴 나중연동 (기존 모달 재활용)*
+- 읽을 파일: onSubmitCommentModal(1810), onOpenCommentInput(1584), 코멘트 액션 렌더(908~910, 1465~1476).
+- 변경: ①게임평 등록 성공 후 그 게임에 **내 플레이기록 없으면** `showActionToast('게임평 남겼어요','↗ 플레이기록으로', 연동콜백)`. ②코멘트 ⋯(수정/삭제)에 "↗ 플레이기록으로" 추가 → 그 텍스트로 연동. 연동콜백=기존 링크 모달(내 기록 있으면) 재사용.
+- 위험: "내 기록 없음" 판정 추가 조회 비용.
+
+*Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여*
+- 읽을 파일: game-reviews.js 입력창(addRow/프리필 경로), `recordGamePlay`, `getGamePlayRecords`.
+- 변경: 그 게임에 내 기록 없고 **남 세션 있으면** → 세션 선택 → 입력창을 게임·날짜·그룹·인원 **잠금 프리필** + 후기(게임평 텍스트)·점수·사진만 입력 → `recordGamePlay`(내 새 기록). 게시판 `group_name+date` 그룹핑으로 같은 세션에 묶임.
+- 위험: 입력창 프리필+필드잠금 UI(iframe 교차 값전달), 세션 식별·선택, 그룹핑 키 정확 매칭.
+
+**공통 위험요소**: ①미보유 game 널 전제 광범위(Stage1). ②iframe/모달 교차 프리필·필드잠금(Stage3). ③미보유 식별 키(이름 슬러그) 정규화 일관성.
+
+**다음 세션 시작점**: Stage 1(item 1)부터. 이 Plan 그대로 진행(재조사 최소). Red라 구현 전 Plan 승인 확인.
 
 ---
 
