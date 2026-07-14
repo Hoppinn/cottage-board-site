@@ -110,7 +110,7 @@ function normalizeSearchText(text=""){
 const rootPath = (()=>{
   const el = document.querySelector('script[src$="assets/js/script-nav.js"]');
   if(!el) return './';
-  return el.src.replace(/assets\/js\/script\.js(\?.*)?$/, '');
+  return el.src.replace(/assets\/js\/script-nav\.js(\?.*)?$/, '');
 })();
 /* =========================
    # MOBILE MENU
