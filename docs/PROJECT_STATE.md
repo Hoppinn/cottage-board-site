@@ -100,7 +100,7 @@
 - **구현**: ①game-sheet.js `openGameSheet` early-return 분기 — DOM 없으면 return, game만 없으면(미보유) `openGameRecordSheet(gameKey)`로 리다이렉트(비어있지 않은 문자열일 때만) → 모든 호출처가 미보유를 단일 진입점에서 처리. ②`openGameRecordSheet` `_owned=!!game` — 미보유면 "← 게임 정보" 버튼 대신 `.sheet-unowned-badge`("🚫 미보유·게임정보 없음"). ③game-reviews.js session row `getGameKey(r.game_id) || r.game_id` — 미보유 기록 세션 행에 ⋯메뉴(좋아요/게임평/사진) 활성화(#1-1-2 해결), 썸네일은 이미지 없어 계속 숨음. ④CSS `.sheet-unowned-badge` 신규.
 - **검증**: Playwright 헤드리스 — 미보유 키 `openGameSheet()` → 기록시트 리다이렉트+배지+back버튼 없음+슬러그 섹션 렌더, 에러 0. 보유 게임(7원더스) 회귀 없음(정보시트 정상, 리다이렉트/배지 없음). 호출처 전수(script-nav/owned/index=getGameKey·game.id 슬러그) → 리다이렉트 오발 없음 확인.
 - js-api.md 갱신(openGameSheet/openGameRecordSheet 미보유 동작). (커밋 cb07c8c)
-- **후속 — 미보유 진입점 보강 (커밋 a27659b·6a2f44f)**: 세션행(날짜/모임별)은 썸네일이 유일한 기록시트 진입점인데 미보유는 표지가 없어 진입 불가였음 → 코티지 로고 마크(`logo-mark.png`, 이름 없는 일러스트만 크롭한 263x221 신규 자산) 플레이스홀더 썸네일 렌더(세션행+게임카드), 클릭 시 `openGameRecordSheet`. CSS `.pr-rec-thumb--placeholder`/`.pr-game-thumb--placeholder`(contain+크림배경). `GAME_LOGO_PLACEHOLDER` 경로는 rootPath 버그 회피 위해 로컬 계산. Playwright로 실게임(레비아탄와일드) 렌더·로드·클릭·배지 확인.
+- **후속 — 미보유 진입점 보강 (커밋 a27659b·6a2f44f·50a29ca)**: 세션행(날짜/모임별)은 썸네일이 유일한 기록시트 진입점인데 미보유는 표지가 없어 진입 불가였음 → 코티지 로고(`logo-stacked.png`, 일러스트 위+"Cottage Board" 아래 세로조합 273x360 신규 자산; 이름옆 원본→이름없는 마크→이름밑 세로조합 순으로 사용자 선택) 플레이스홀더 썸네일 렌더(세션행+게임카드), 클릭 시 `openGameRecordSheet`. CSS `.pr-rec-thumb--placeholder`/`.pr-game-thumb--placeholder`(contain+크림배경). `GAME_LOGO_PLACEHOLDER` 경로는 rootPath 버그 회피 위해 로컬 계산. Playwright로 실게임(레비아탄와일드) 렌더·로드·클릭·배지 확인.
 - **곁다리 버그 수정 (커밋 9879d41)**: 검증 중 `rootPath`(script-nav.js:110)가 script.js→script-nav.js 개명(65e015a) 미반영으로 정규식 replace 실패 → rootPath가 스크립트 전체 URL이 되어 `DEFAULT_GAME_IMAGE`·헤더검색이동·게임위치버튼·기록히스토리링크가 전부 깨진 URL 생성하던 것 발견. 정규식 `script-nav\.js`로 정정. 미보유 기록시트 헤더 이미지 복구(렌더 콘솔 에러 2→0).
 
 *Stage 2 — 연동 1단계: 토스트 nudge + ⋯메뉴 나중연동 (기존 모달 재활용)*
@@ -117,9 +117,9 @@
 
 **미결 결정 (다음 세션에 확정 필요)**:
 - **뽁님 오귀속 코멘트 처리** — ✅ 해결 (2026-07-14, ①game_key 이동): 7/13(월) `06e099d1`→`레비아탄와일드`(플레이기록 game_id와 동일 키라 그 시트에서 보임), 7/11(토) `21dbf84c`→`원더랜드워-풀확`(기존 좋아요 키와 동일해 그 시트에서 보이게, 플레이기록 없음). 7/11 글은 두 게임(레비아탄+원더랜드워) 섞였으나 사용자 지시대로 통째 이동. anon 키 PATCH로 프로덕션 반영, 백로성 잔여 게임평 0건 확인.
-- **게시판에 게임평(comments) 노출 여부** — ⏳ **Stage 2 착수 전 확정 필요**: 게시판=후기만 vs 게임평도 통합표시. **분리+브리지**(Stage 2·3 그대로: 게임평=게임 단위 의견, 후기=세션 로그, opt-in 넛지만) 면 이 미결 자동 닫힘. 통합표시 원하면 Stage 2 설계 달라짐. 클로드 추천=분리+브리지.
+- **게시판에 게임평(comments) 노출 여부** — ✅ 확정 (2026-07-14, 사용자): **분리+브리지**(게임평 원본을 게시판에 그대로 섞지 않음, Stage 2·3 브리지로 처리). **목표 명확화**: 플레이기록(세션=group_name+date) 하나에 **닉네임별 여러 후기가 나란히** 나오게 하는 것. 현재 게시판은 각자 자기 record.review_text를 세션으로 묶어 이미 표시 중(사용자가 "이미 있는 시스템"이라 한 것). **안 되는 2케이스** → ①플레이기록에 연동 안 된 게임평(game_comments)은 안 뜸 = **Stage 2**(게임평→내 기록 연동)로 해결 ②남의 플레이기록엔 내 후기 못 붙임 = **Stage 3**(남 세션에 내 새 기록으로 참여)로 해결. ①②는 서로 연관.
 
-**다음 세션 시작점**: ~~Stage 1~~ ✅ 완료(+후속 썸네일·rootPath) → **Stage 2**(연동 1단계: 게임평 저장 후 토스트 nudge + ⋯메뉴 "↗ 플레이기록으로"). ⚠️ **Stage 2 착수 전 결정 1건**: "게시판 게임평 노출 여부"(분리+브리지 vs 통합표시) — 분리+브리지면 그대로 진행. (뽁 오귀속 미결은 ✅ 해결됨.)
+**다음 세션 시작점**: ~~Stage 1~~ ✅ 완료(+후속 썸네일·rootPath) → **Stage 2**(연동 1단계: 게임평 저장 후 토스트 nudge + ⋯메뉴 "↗ 플레이기록으로"). 미결 2건 모두 ✅ 해결(뽁 오귀속=game_key 이동 / 게임평 노출=분리+브리지 확정). Stage 2 바로 착수 가능. 목표=플레이기록 하나에 닉네임별 여러 후기.
 
 ---
 
