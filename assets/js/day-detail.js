@@ -16,7 +16,16 @@
       border-radius: 16px;
       width: 100%; max-width: 300px;
       overflow: hidden;             /* border-radius 클리핑 */
+      position: relative;           /* 우상단 ✕ 앵커 */
     }
+    .dd-x-btn {
+      position: absolute; top: 8px; right: 10px; z-index: 2;
+      background: none; border: none; padding: 4px 6px;
+      font-size: 17px; line-height: 1; cursor: pointer;
+      color: var(--muted, #9b8f80);
+    }
+    .dd-x-btn:active { color: var(--green, #7a4828); }
+    .dd-preview .dd-modal-scroll { padding-bottom: 20px; }
     .dd-modal-scroll {
       overflow-y: auto;             /* 스크롤만 담당 */
       max-height: 80svh;
@@ -655,7 +664,7 @@
    * @param {Array}  dayGames — 해당 날짜 meeting_vote_games
    * @param {Object} [myVote] — 본인 vote(막대 is-mine 강조용)
    */
-  window.openDatePreviewModal = function (dateStr, dayVotes, dayGames, myVote) {
+  window.openDatePreviewModal = function (dateStr, dayVotes, dayGames, myVote, onChange) {
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
@@ -667,18 +676,16 @@
     const barsHtml = (window.buildBarsInCard && dayVotes && dayVotes.length)
       ? window.buildBarsInCard(dayVotes, dayGames || [], myVote || null)
       : '<p class="dd-loading">이 날 등록된 일정이 없어요.</p>';
-    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+    el.innerHTML = `<div class="dd-modal dd-preview" role="dialog" aria-modal="true">
+      <button class="dd-x-btn" type="button" aria-label="닫기">✕</button>
       <div class="dd-modal-scroll">
         <div class="dd-preview-head">📅 ${esc(dateLabel)} · ${count}명</div>
         ${barsHtml}
       </div>
-      <div class="dd-close-row">
-        <button class="dd-close-btn" type="button">닫기</button>
-      </div>
     </div>`;
     document.body.appendChild(el);
     const close = () => el.remove();
-    el.querySelector('.dd-close-btn').addEventListener('click', close);
+    el.querySelector('.dd-x-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
     // 참여자 이름 클릭 → 해당 유저 모임 보드 (홈 미리보기와 동일)
     el.querySelectorAll('.sched-bar-name').forEach(n =>
@@ -688,6 +695,22 @@
       btn.addEventListener('click', () => {
         const hidden = btn.previousElementSibling;
         if (hidden) hidden.style.display = hidden.style.display === 'none' ? '' : 'none';
+      }));
+    // 내 막대 ✎ 수정 → 플래너 편집(그 날) / ✕ → 참여 취소. 변경 후 onChange로 모임보드 갱신.
+    el.querySelectorAll('.sched-bar-edit-btn').forEach(btn =>
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        close();
+        window.openPlannerModal?.({ weekOffset: 0, edit: dateStr, onDirtyClose: onChange });
+      }));
+    el.querySelectorAll('.sched-bar-del-btn').forEach(btn =>
+      btn.addEventListener('click', async e => {
+        e.stopPropagation();
+        if (!myVote) return;
+        if (!confirm(`${dateLabel} 참여를 취소할까요?`)) return;
+        await window.CottageDB?.deleteMeetingVote?.(String(myVote.user_id), dateStr);
+        close();
+        onChange?.();
       }));
   };
 

@@ -2317,7 +2317,7 @@ async function openProfilePanel(autoSubsheet = null) {
                 window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
-                window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null);
+                window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
               }));
             }
           };
