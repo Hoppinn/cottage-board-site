@@ -2261,29 +2261,27 @@ async function initPlayWidget(gameKey) {
     const _infoTag2 = _ip2.length ? `<span class="sheet-play-info-tag">${_ip2.join(_sep2)}</span>` : '';
     const _scoreTag2 = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${escH(r.score_note).replace(/\s*\/\s*/g,_sep2)}</span>` : '';
     const hasDetail = r.player_count || r.player_names || r.play_time_min || r.score_note;
-    return `<div class="sheet-my-record-item">
+    return `<div class="sheet-my-record-item${isMine ? ' sheet-my-record-item--mine' : ''}">
       <div class="sheet-record-info">
         ${header ? `<span class="sheet-record-nickname">${header}</span>` : ""}
         ${hasDetail ? `<div class="sheet-play-info">
           ${_infoTag2}${_scoreTag2}
         </div>` : ""}
       </div>
-      ${isMine ? `<div class="sheet-play-record-actions">
-        <button class="sheet-play-edit-btn"
+      <div class="sheet-play-record-actions">
+        <button class="sheet-rec-more-btn" type="button" aria-label="사진·게임평 추가">···</button>
+        ${isMine ? `<button class="sheet-play-edit-btn"
           data-game="${gameKey}" data-id="${r.id}"
           data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
           data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
           data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
           data-review="${escH(r.review_text || '')}"
           type="button">✏️</button>
-        <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">✕</button>
-      </div>` : ""}
-      <div class="sheet-rec-more">
-        <button class="sheet-rec-more-btn" type="button" aria-label="사진·게임평 추가">···</button>
-        <div class="sheet-rec-more-actions">
-          <button class="sheet-rec-add-btn" data-game-id="${gameKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button>
-          <button class="sheet-rec-add-btn" data-game-id="${gameKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>
-        </div>
+        <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">✕</button>` : ""}
+      </div>
+      <div class="sheet-rec-more-actions">
+        <button class="sheet-rec-add-btn" data-game-id="${gameKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button>
+        <button class="sheet-rec-add-btn" data-game-id="${gameKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>
       </div>
     </div>`;
   }
@@ -2349,11 +2347,11 @@ async function initPlayWidget(gameKey) {
     ));
   });
 
-  // 기록별 ⋯ 햄버거 — 사진/게임평 추가(인라인 확장, .sheet-play-box overflow:hidden 클리핑 회피)
+  // 기록별 ⋯ 햄버거(우상단) — 사진/게임평 추가 행을 아래로 인라인 확장(.sheet-play-box overflow:hidden 클리핑 회피)
   widget.querySelectorAll('.sheet-rec-more-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      const actions = btn.nextElementSibling;
+      const actions = btn.closest('.sheet-my-record-item')?.querySelector('.sheet-rec-more-actions');
       if (!actions) return;
       const willOpen = !actions.classList.contains('is-open');
       widget.querySelectorAll('.sheet-rec-more-actions.is-open').forEach(a => a.classList.remove('is-open'));
