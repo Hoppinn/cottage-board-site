@@ -214,6 +214,8 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
   1. ✅ **박스 모달 썸네일만 클릭**: `_openTasteBoxModal` 클릭 바인딩을 썸네일(.taste-game-thumb/-empty)로 한정, `.mb-taste-box-list` 스코프 CSS로 아이템 커서 default·썸네일만 pointer/hover.
   2. ✅ **"자세히" 모달 닫기 UI**: 하단 "닫기" 제거 → 박스 우상단 `.dd-x-btn`(position:absolute). `.dd-preview` 스코프 스크롤 하단 패딩.
   2-1. ✅ **"자세히" 모달 편집/취소 버튼 동작**(사용자 선호=눌리게): 내 막대 ✎=플래너 편집(`openPlannerModal` edit, onDirtyClose=onChange) / ✕=참여 취소(confirm→`deleteMeetingVote`)→onChange. openDatePreviewModal에 `onChange`(5번째) 신설, 모임보드가 `_loadMeetingWeek` 전달.
+     - **#2-1-2 후속 (커밋 de89af8)**: ✕ 참여 취소해도 그 날 게임이 "이번 주 하고싶은 게임"에 잔존(orphan) → `deleteMeetingVote`가 같은 user+date의 `meeting_vote_games`도 **cascade 삭제**하도록 수정(호출처 3곳: 프리뷰·홈·플래너 removeVoteForDate). js-api.md 갱신. **사용자 테스트 해결 확인.**
+     - **#2-1 편집 라이브 반영 (커밋 e343ea2) — ⚠️ 실서버 재테스트 대기**: ✎ 편집은 플래너 경유라 "닫을 때만" onDirtyClose 발화 → 미니바 라이브 반영 안 됨. `cottage-meeting-saved` 수신 시 즉시 `_pmOnDirty(_loadMeetingWeek)`도 호출하도록 보강(day-detail.js). **아직 사용자 재테스트 미완.** 그래도 라이브 반영 안 되면 → **후속조사: club-schedule 편집-저장 경로(특히 `cottage-edit` 진입 편집 저장)가 `_notifyParentSaved()`(cottage-meeting-saved)를 실제로 발화하는지** 확인. (취소 ✕는 직접 onChange라 정상 확인됨.)
   3. ✅ **보기 버튼 문구**: want "좋아하는 게임" / learn "궁금한 게임".
   4. ✅ **복귀 스크롤 복원**: mb-pref-edit 클릭 시 scrollTop 저장 → 뒤로가기 시 `_pendingMeetingScrollTop`에 넣고 `_loadMeetingWeek` 말미에서 복원(패널 유지 중 서브시트 스왑 간 보존).
   4-1. ✅ **비선호쪽 진입 스크롤**: mb-pref-edit `data-pref`(like/avoid), avoid면 취향 진입 시 `.taste-avoid-section`으로 scrollTop(getBoundingClientRect).
@@ -288,6 +290,10 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 - 위험: 입력창 프리필+필드잠금 UI(iframe 교차 값전달), 세션 식별·선택, 그룹핑 키 정확 매칭.
 
 **공통 위험요소**: ①미보유 game 널 전제 광범위(Stage1). ②iframe/모달 교차 프리필·필드잠금(Stage3). ③미보유 식별 키(이름 슬러그) 정규화 일관성.
+
+**미결 결정 (다음 세션에 확정 필요)**:
+- **뽁님 오귀속 코멘트 처리**: 뽁이 레이아탄와일드(미보유) 게임평을 `game_comments`에 game_key=`백로성`으로 2건 등록(id: 06e099d1…, 21dbf84c…). Stage 1(미보유 시트) 완료 후 → ①레이아탄와일드로 game_key 이동 ②수동 삭제 ③방치 중 택1. **미정.**
+- **게시판에 게임평(comments) 노출 여부**: 현재는 안 뜸(설계상 정상). 클로드 추천=**분리 유지**(게임평=게임 단위 의견 / 후기=세션 로그), 대신 Stage 2·3(연동)으로 opt-in 브리지만 제공. **사용자 최종 확정 안 됨** — 통합 원하면 별도 기획.
 
 **다음 세션 시작점**: Stage 1(item 1)부터. 이 Plan 그대로 진행(재조사 최소). Red라 구현 전 Plan 승인 확인.
 
