@@ -173,6 +173,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `_getOthersSessions(gameKey)` | 남의 세션에 내 후기/사진으로 참여: `getGamePlayRecords(_gameIds)`에서 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` 키로 dedupe + 최신순 정렬. 각 세션에 `rec_ids`(그 세션 기록 id들, 프리셀렉트 매칭용) 포함. 그룹·날짜 둘 다 없는 기록은 세션으로 안 봄 |
 | `_openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId?)` | 남의 세션에 내 후기로 참여(1안 = 확인창, 입력폼·페이지이동 없음). `#sheetJoinModal`(세션 정보+후기 미리보기, 세션 여러 개면 select) → [남기기] 시 세션 필드(게임·인원·참여자·그룹·날짜) 그대로 복사한 `recordGamePlay`로 내 새 기록 생성 → 모임별·게임별 뷰 모두 같은 세션에 nest. `sourceCommentId` 있으면 성공 후 `deleteComment`(후기 이동=중복 방지). 완료 후 `initSheetComments`/`Preview`/`initPlayWidget` 갱신 |
 | `onOpenPhotoInput(btn)` / `onSubmitPhotoModal()` | 사진 남기기 모달. "연동" select = 내 기록(선택 시 `updateGamePlay`로 photo_url 병합) + **남의 세션**(`data-join="1"`, `data-rec-ids`, `modal._joinSessions`; 선택 시 세션 필드 복사한 `recordGamePlay`로 내 새 사진 기록 = 세션 참여). `btn.dataset.recordId` 있으면 `_preselectLinkOption`으로 기본 연동. 미연동이면 사진만 담은 새 기록 생성 |
+| `initPlayWidget(gameKey)` 기록별 ⋯메뉴 | 게임(기록)시트 플레이위젯의 각 기록 항목에 `.sheet-rec-more`(⋯) 인라인 확장 메뉴 — `💬 게임평 추가`(`onOpenCommentInput`)·`📷 사진 추가`(`onOpenPhotoInput`), 버튼에 `data-game-id`+`data-record-id` → 그 기록/세션이 모달 "연동" 기본값으로. `.sheet-play-box{overflow:hidden}` 클리핑 회피 위해 절대배치 드롭다운 대신 인라인 확장(`.sheet-rec-more-actions.is-open`) |
 
 ---
 

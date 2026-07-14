@@ -117,6 +117,7 @@
 - **세션 필드 복사 = 두 뷰 모두 nest**: game_id·인원·참여자·그룹·날짜를 원본 그대로 복사(putSelfFirst 미적용 → roster 불변) → 모임별(group+date)·게임별(group+count+names) 뷰 모두 같은 세션에 묶임.
 - **검증**: Playwright(실소스 함수 추출) — `_openJoinConfirm` 단일/다중세션·후기이동(deleteComment)·후기없음·취소, 저장 인자 세션 일치. 사진 모달 남세션참여(신규기록)·내기록병합(update)·비연동(사진만) 분기. `_getOthersSessions` node 단위테스트. 콘솔 에러 0.
 - js-api.md(`_openJoinConfirm`/photo 모달)·ls-schema.md(`cottage_pending_join` 제거) 갱신.
+- **후속 (2026-07-15, 커밋 2666afa + item2)**: ①기록 항목 ⋯메뉴에서 사진/게임평 추가 진입 시 그 기록/세션이 "기존 플레이 기록에 연동" 기본 체크+선택(`_preselectLinkOption` 공용, `_getOthersSessions`에 `rec_ids` 추가, 게임평 모달에도 남 세션 옵션+`onSubmitCommentModal` join 분기, game-reviews ⋯버튼에 `data-record-id`). ②게임(기록)시트 플레이위젯 각 기록에 `.sheet-rec-more`(⋯) 인라인 확장 메뉴(사진/게임평 추가, `data-record-id` 프리셀렉트). `.sheet-play-box{overflow:hidden}` 클리핑 회피 위해 인라인 확장 방식. Playwright 검증 완료. **⚠️ 실서버 시각 확인 남음**(⋯메뉴 위치·간격, 특히 내 기록의 ✏️/✕와 공존).
 
 **공통 위험요소**: ①미보유 game 널 전제 광범위(Stage1). ②iframe/모달 교차 프리필·필드잠금(Stage3). ③미보유 식별 키(이름 슬러그) 정규화 일관성.
 
