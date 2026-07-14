@@ -493,6 +493,9 @@ async function openProfilePanel(autoSubsheet = null) {
   const user = getKakaoUser();
   if (!user) return;
 
+  // 취향보드에서 수정 후 "‹ 모임 보드"로 복귀 시 복원할 스크롤 위치(패널 유지되는 동안 서브시트 스왑 간 보존)
+  let _pendingMeetingScrollTop = null;
+
   // 좋아요/궁금해요 변경 전역 통보 (취향보드·모임보드·게임시트 간 즉시 동기화)
   const _emitLikesChanged = (table, gameId, added) => {
     if (!gameId) return;
@@ -1118,11 +1121,11 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
-        <div class="taste-section-label">👍 선호 스타일 <button class="mb-pref-edit" type="button">취향보드에서 수정 →</button></div>
+        <div class="taste-section-label">👍 선호 스타일 <button class="mb-pref-edit" type="button" data-pref="like">취향보드에서 수정 →</button></div>
         <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
       </div>
       <div class="mb-pref-block">
-        <div class="taste-section-label">🚫 비선호 유형 <button class="mb-pref-edit" type="button">취향보드에서 수정 →</button></div>
+        <div class="taste-section-label">🚫 비선호 유형 <button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button></div>
         <div class="mb-pref-tags">${_mbAvoidHtml}</div>
       </div>
     </div>
@@ -1936,6 +1939,8 @@ async function openProfilePanel(autoSubsheet = null) {
           // 선호(한줄소개)/비선호(피하는 유형) 수정 → 취향보드 열기
           subBody.querySelectorAll('.mb-pref-edit').forEach(btn => {
             btn.addEventListener('click', () => {
+              const savedScroll = subBody.scrollTop; // 되돌아왔을 때 복원할 위치
+              const isAvoid = btn.dataset.pref === 'avoid';
               // 취향 서브시트로 전환(기존 카드 경로 재사용) — 모임보드에서 왔으므로 뒤로가기를 "모임 보드"로 재지정
               body.querySelector('.profile-card[data-subsheet="taste"]')?.click();
               const tasteSub = document.getElementById('profileSubSheet');
@@ -1945,9 +1950,18 @@ async function openProfilePanel(autoSubsheet = null) {
                 const fresh = back.cloneNode(true); // 원래 back 핸들러(→ 메인 패널) 제거
                 back.replaceWith(fresh);
                 fresh.addEventListener('click', () => {
+                  _pendingMeetingScrollTop = savedScroll; // 모임보드 재렌더 후 복원(_loadMeetingWeek 말미)
                   tasteSub.remove();
                   body.querySelector('.profile-card[data-subsheet="meeting"]')?.click();
                 });
+              }
+              // 비선호쪽에서 왔으면 취향보드를 피하는 유형 섹션으로 스크롤해서 진입
+              if (isAvoid) {
+                const tBody = tasteSub?.querySelector('.profile-subsheet-body');
+                const avoidSec = tBody?.querySelector('.taste-avoid-section');
+                if (tBody && avoidSec) {
+                  tBody.scrollTop = avoidSec.getBoundingClientRect().top - tBody.getBoundingClientRect().top + tBody.scrollTop;
+                }
               }
             });
           });
@@ -2319,6 +2333,11 @@ async function openProfilePanel(autoSubsheet = null) {
                 const _d = btn.dataset.date;
                 window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
               }));
+            }
+            // 취향보드 수정 후 "‹ 모임 보드"로 복귀 시 눌렀던 스크롤 위치 복원 (렌더 완료 후)
+            if (_pendingMeetingScrollTop != null) {
+              subBody.scrollTop = _pendingMeetingScrollTop;
+              _pendingMeetingScrollTop = null;
             }
           };
           // 다른 화면(게임시트·취향보드)에서 좋아요/궁금해요가 바뀌면 ❤️/👀 마커 즉시 반영
