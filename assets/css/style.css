@@ -4376,6 +4376,7 @@ body.embed-mode {
 .mb-add-results:empty{margin-top:0;}
 /* 취향 원천 박스 센터모달 (모임보드 "좋아하는 게임 보기") */
 .mb-taste-box-hint{font-size:11.5px;color:var(--muted);margin:0 0 8px;line-height:1.4;}
+.mb-box-add-btn{margin-bottom:10px;flex-shrink:0;}
 .mb-taste-box-list{overflow-y:auto;margin-bottom:0;}
 /* 박스 모달: 썸네일만 클릭 가능 (이름 영역 무반응) */
 .mb-taste-box-list .taste-game-item--clickable{cursor:default;}

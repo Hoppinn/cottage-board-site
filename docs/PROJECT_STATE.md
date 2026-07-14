@@ -210,15 +210,16 @@ script.js 분리 검증 → CLAUDE.md 2줄 추가 → CSS 일관성 감사 → �
 
 **Phase B 후속 — 디자인 폴리시(이번 세션 반영) + 추가 발견(다음 세션)**:
 - ✅ 이번 세션 반영: ①라벨 문구 축약(`+ 게임 추가`→`＋추가`, 보기 버튼 `전체 보기` + ❤️/👀 이모지 제거) ②제목을 `.mb-sec-name`(nowrap span)으로 감싸고 `.taste-section-label--mb{flex-wrap:wrap}` 안전망 → 제목이 2줄로 깨지던 문제 해결 ③`.mb-taste-link` 11→10.5px 축소 ④`mb-pref-edit`(선호/비선호 "취향보드에서 수정") 버그 수정: 기존 `openProfilePanel('taste')`가 패널 토글로 **전부 닫히던** 것 → 취향 카드 클릭 경로 재사용으로 취향 서브시트 전환 + 뒤로가기를 "‹ 모임 보드"로 재지정(cloneNode로 원 핸들러 교체).
-- ⚠️ 다음 세션에 처리 (사용자 테스트 중 발견 — 원문 의도 보존):
-  1. **박스 모달 썸네일만 클릭**: "좋아하는 게임/해보고 싶은 게임 보기" 버튼으로 뜬 모달(`_openTasteBoxModal`)에서 지금은 **아이템 전체를 눌러도** 게임정보페이지가 뜸 → **게임 썸네일만** 눌러야 뜨게(취향보드 패턴 동일). 썸네일 아닌 부분 클릭은 무반응.
-  2. **이번주 일정 "자세히" 모달 닫기 UI 교체**: `openDatePreviewModal`(day-detail.js) 하단 **"닫기" 버튼을 없애고**, 박스 **오른쪽 위 ✕ 버튼**으로 바꿈.
-  2-1. **"자세히" 모달의 편집/수정 버튼 무동작**: 그 모달에 내 닉네임 밑에 "편집"·"수정" 버튼이 있는데 **안 눌림**. 눌리게 하든, 아예 없애든 **둘 중 하나는 반드시**. (참고: 이번주 일정 전체에는 편집 버튼이 이미 있음.) **사용자 선호: 버튼이 눌리는 쪽.**
-  3. **보기 버튼 문구 재변경**: 방금 바꾼 "전체 보기" 말고 → want=**"좋아하는 게임"**, learn=**"궁금한 게임"** 이 나음. (meetinglikedBoxBtn / meetingcuriousBoxBtn)
-  4. **뒤로가기 스크롤 위치 복원**: 방금 만든 "취향보드에서 수정 → 뒤로가기(‹ 모임 보드)"로 돌아오면, 모임보드 **최상단이 아니라 (버튼을) 눌렀던 스크롤 지점 상태**로 돌아와야 함.
-  4-1. **비선호쪽 진입 스크롤**: 비선호 유형쪽에서 "취향보드에서 수정" 버튼을 누르면, 취향보드가 **페이지 밑쪽으로 스크롤 내려온 채로**(피하는 유형 섹션이 보이게) 진입해야 함.
-  5. **최근 모임 참여 게임 썸네일**: 모임보드 "최근 모임 참여"에 있는 게임들 앞에 **작은 썸네일** 추가. 크기는 **기록보드>플레이기록**에 있는 썸네일(.profile-record-thumb) 크기로.
-  6. **박스 모달에 게임 추가 기능 이식**: 버튼으로 들어가는 좋아하는게임/배우고싶은게임 모달(`_openTasteBoxModal`)에도 **취향보드의 "게임 추가" 버튼과 기능**(`_openTasteAddModal` 계열)을 가져와서 원천(game_likes/curious) 직접 추가가 되게 구현.
+- ✅ 다음 세션 발견분 6건 완료 (2026-07-14, 이 세션 — 커밋 68e2de4·2e1d4b9·8c27dd0·#6):
+  1. ✅ **박스 모달 썸네일만 클릭**: `_openTasteBoxModal` 클릭 바인딩을 썸네일(.taste-game-thumb/-empty)로 한정, `.mb-taste-box-list` 스코프 CSS로 아이템 커서 default·썸네일만 pointer/hover.
+  2. ✅ **"자세히" 모달 닫기 UI**: 하단 "닫기" 제거 → 박스 우상단 `.dd-x-btn`(position:absolute). `.dd-preview` 스코프 스크롤 하단 패딩.
+  2-1. ✅ **"자세히" 모달 편집/취소 버튼 동작**(사용자 선호=눌리게): 내 막대 ✎=플래너 편집(`openPlannerModal` edit, onDirtyClose=onChange) / ✕=참여 취소(confirm→`deleteMeetingVote`)→onChange. openDatePreviewModal에 `onChange`(5번째) 신설, 모임보드가 `_loadMeetingWeek` 전달.
+  3. ✅ **보기 버튼 문구**: want "좋아하는 게임" / learn "궁금한 게임".
+  4. ✅ **복귀 스크롤 복원**: mb-pref-edit 클릭 시 scrollTop 저장 → 뒤로가기 시 `_pendingMeetingScrollTop`에 넣고 `_loadMeetingWeek` 말미에서 복원(패널 유지 중 서브시트 스왑 간 보존).
+  4-1. ✅ **비선호쪽 진입 스크롤**: mb-pref-edit `data-pref`(like/avoid), avoid면 취향 진입 시 `.taste-avoid-section`으로 scrollTop(getBoundingClientRect).
+  5. ✅ **최근 참여 썸네일**: `.profile-record-thumb`(28px) 추가 + 클릭 시 게임시트. `.profile-activity-item--thumb` flex 스코프.
+  6. ✅ **박스 모달 게임 추가**: `_openBoxAddSearch`(검색 초성+커스텀+직접입력 → `addGamePref`) + `_openTasteBoxModal`에 "＋ 게임 추가" 버튼, 추가 시 `_meeting.likedGames`/curiousGames push→renderList→`_emitLikesChanged`(Phase A 동기화).
+  - ⚠️ **리팩토링 후보**: `_openBoxAddSearch`는 취향보드 `_openTasteAddModal`과 기능 중복(스코프 분리로 복제). Phase C(openProfilePanel 통합) 때 공용 검색-추가 헬퍼로 DRY.
 
 **Phase C (대) — 읽기전용 내 보드 (핵심 리팩토링)**:
 - `openProfilePanel`을 **userId 파라미터화 + 읽기전용 모드**로 확장(현재 self=getKakaoUser 가정 다수 → 대상 userId 주입, 편집 컨트롤 숨김/가드). openOtherTasteSheet/openOtherMeetingSheet를 이걸로 **통합**.
