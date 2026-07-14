@@ -780,7 +780,7 @@
       if (ldr) ldr.style.display = 'none';
       if (_pmPending) { const f = _pmPending; _pmPending = null; f(); }
     }
-    if (e.data?.type === 'cottage-meeting-saved') _pmDirty = true;
+    if (e.data?.type === 'cottage-meeting-saved') { _pmDirty = true; _pmOnDirty?.(); } // 저장 즉시 부모 갱신(닫을 때만 기다리지 않음)
   });
   /**
    * 날짜 전체 모임 모달 (홈 미리보기 카드 클릭 — 유저 비중심, 날짜 집계 뷰)
