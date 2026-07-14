@@ -85,7 +85,7 @@
 | `updateUserAvoidTags(userId, tags)` | profiles.avoid_tags (text[]) 업데이트 |
 | `getMeetingVotes(startDate, endDate)` | 모임 플래너: 날짜 범위 내 전체 투표 조회. startDate/endDate: 'YYYY-MM-DD' |
 | `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert |
-| `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소 |
+| `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소. **cascade**: 같은 user_id+vote_date의 `meeting_vote_games`(하고싶은/배우고싶은 게임)도 함께 삭제 — 참여 취소 시 orphan 게임 방지 |
 | `getMeetingProfile(userId)` | 모임 보드/자기소개 편집용. profiles.bio + member_intros + game_likes(getUserLikedGamesAll) + game_curious(getUserCuriousGamesAll) + meeting_game_prefs(can_explain_rules만) 통합 조회 → `{bio, nickname, location, available, travelRange, meetingStyle, favoriteGames, cardColor, likedGames, curiousGames, ruleGames}` (2026-07-09: wantGames → likedGames/curiousGames 미러링 전환) |
 | `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회 (`openOtherMeetingSheet`용). getUserTasteProfile과 동일 패턴. 반환형 동일: `{..., likedGames, curiousGames, ruleGames}` |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |

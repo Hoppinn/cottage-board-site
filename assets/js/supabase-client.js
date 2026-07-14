@@ -1890,8 +1890,14 @@ window._cottageSess = (function () {
         .delete()
         .eq('vote_date', voteDate)
         .eq('user_id', String(userId));
+      // 참여 취소 시 그 날 하고싶은/배우고싶은 게임(meeting_vote_games)도 함께 제거 — orphan 방지
+      const { error: vgErr } = await db.from('meeting_vote_games')
+        .delete()
+        .eq('vote_date', voteDate)
+        .eq('user_id', String(userId));
+      if (vgErr) console.error('[deleteMeetingVote] vote_games 정리 실패', vgErr);
       return error ? { error } : { success: true };
-    } catch (e) { return { error: e }; }
+    } catch (e) { console.error('[deleteMeetingVote]', e); return { error: e }; }
   }
 
   // ── 모임 플래너 날짜별 게임 선호 (meeting_vote_games) ─────────────
