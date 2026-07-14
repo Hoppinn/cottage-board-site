@@ -27,12 +27,12 @@
     return found ? (found.bggId || found.id) : name;
   }
 
-  // 미보유 게임(표지 없음) 썸네일 플레이스홀더 — 코티지 로고(일러스트+이름 세로조합).
+  // 미보유 게임(표지 없음) 썸네일 플레이스홀더 — hero.png(= DEFAULT_GAME_IMAGE, 미보유 기록시트 헤더와 동일).
   // rootPath 전역이 script.js→script-nav.js 개명으로 깨져 있어 로컬에서 견고하게 계산.
   const GAME_LOGO_PLACEHOLDER = (() => {
     const el = document.querySelector('script[src*="assets/js/script-nav.js"]');
     const base = el ? el.src.replace(/assets\/js\/script-nav\.js.*$/, '') : '';
-    return base + 'assets/images/main/logo-stacked.png';
+    return base + 'assets/images/main/hero.png';
   })();
 
   function formatDate(iso) {
