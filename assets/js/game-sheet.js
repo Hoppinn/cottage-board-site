@@ -780,25 +780,44 @@ async function _getOthersSessions(gameKey) {
   if (!window.CottageDB) return [];
   const records = await window.CottageDB.getGamePlayRecords(_gameIds(gameKey));
   const myId = _cu?.id ? String(_cu.id) : null;
-  const seen = new Set();
-  const sessions = [];
+  const byKey = new Map();
   for (const r of records) {
     if (myId && String(r.user_id) === myId) continue;   // 남의 기록만
     if (!r.group_name && !r.played_at) continue;          // 세션 식별 불가
     const key = `${r.group_name || ''}|${r.played_at || ''}|${r.player_count || ''}|${r.player_names || ''}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    sessions.push({
-      game_id: r.game_id,
-      group_name: r.group_name || null,
-      played_at: r.played_at || null,
-      player_count: r.player_count || null,
-      player_names: r.player_names || null,
-      nickname: r.nickname || null,
-    });
+    if (!byKey.has(key)) {
+      byKey.set(key, {
+        game_id: r.game_id,
+        group_name: r.group_name || null,
+        played_at: r.played_at || null,
+        player_count: r.player_count || null,
+        player_names: r.player_names || null,
+        nickname: r.nickname || null,
+        rec_ids: [],   // 이 세션에 속한 기록 id들 (특정 기록에서 진입 시 프리셀렉트 매칭용)
+      });
+    }
+    if (r.id != null) byKey.get(key).rec_ids.push(String(r.id));
   }
+  const sessions = [...byKey.values()];
   sessions.sort((a, b) => String(b.played_at || '').localeCompare(String(a.played_at || '')));
   return sessions;
+}
+
+// 특정 기록에서 진입(⋯메뉴)했을 때 그 기록/세션을 "연동" 기본값으로 체크+선택.
+// linkSelect에 내 기록(value=id) 또는 남 세션(data-join, data-rec-ids) 옵션이 이미 채워진 뒤 호출.
+function _preselectLinkOption(linkCheck, linkSelect, recordId) {
+  if (!recordId || !linkSelect) return false;
+  const rid = String(recordId);
+  let matched = null;
+  for (const opt of linkSelect.options) {
+    if (opt.value === rid) { matched = opt; break; }                                  // 내 기록 직접 매칭
+    if (opt.dataset.join === '1' && (opt.dataset.recIds || '').split(',').includes(rid)) { matched = opt; break; }  // 남 세션 소속
+  }
+  if (!matched) return false;
+  if (linkCheck) linkCheck.checked = true;
+  linkSelect.value = matched.value;
+  linkSelect.style.display = 'block';
+  return true;
 }
 
 // Stage 3(1안): 남의 세션에 내 후기로 참여 — 확인창에서 바로 내 기록 생성(입력폼·페이지이동 없음).
@@ -1716,6 +1735,7 @@ function onOpenCommentInput(btn) {
     input?.focus();
 
     modal._myRecordCountAtOpen = 0;
+    modal._joinSessions = [];
     if (linkWrap && linkCheck && linkSelect) {
       linkCheck.checked = false;
       linkSelect.style.display = 'none';
@@ -1723,18 +1743,29 @@ function onOpenCommentInput(btn) {
       linkWrap.style.display = 'none';
       modal._opening = true;
       const { all, unreviewed } = await _getMyUnlinkedPlayRecords(gameKey);
+      const others = await _getOthersSessions(gameKey);
       if (!modal._opening) return;
       modal._myRecordCountAtOpen = all.length;
-      if (unreviewed.length) {
-        unreviewed.forEach(r => {
-          const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
-          const opt = document.createElement('option');
-          opt.value = r.id;
-          opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
-          linkSelect.appendChild(opt);
-        });
-        linkWrap.style.display = 'block';
-      }
+      modal._joinSessions = others;
+      unreviewed.forEach(r => {
+        const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.textContent = `${dateStr}${r.group_name ? ' · ' + r.group_name : ''}${r.player_count ? ' · ' + r.player_count + '명' : ''}`;
+        linkSelect.appendChild(opt);
+      });
+      others.forEach((s, i) => {
+        const dateStr = s.played_at ? s.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
+        const opt = document.createElement('option');
+        opt.value = 'join:' + i;
+        opt.dataset.join = '1';
+        opt.dataset.recIds = (s.rec_ids || []).join(',');
+        opt.textContent = `${dateStr}${s.group_name ? ' · ' + s.group_name : ''}${s.nickname ? ' · ' + s.nickname + '님' : ''} (참여)`;
+        linkSelect.appendChild(opt);
+      });
+      // 특정 기록(⋯메뉴)에서 진입 시 그 기록/세션 기본 연동
+      _preselectLinkOption(linkCheck, linkSelect, btn.dataset.recordId);
+      if (linkSelect.options.length) linkWrap.style.display = 'block';
     }
   });
 }
@@ -1905,9 +1936,12 @@ function onOpenPhotoInput(btn) {
           const opt = document.createElement('option');
           opt.value = 'join:' + i;
           opt.dataset.join = '1';
+          opt.dataset.recIds = (s.rec_ids || []).join(',');
           opt.textContent = `${dateStr}${s.group_name ? ' · ' + s.group_name : ''}${s.nickname ? ' · ' + s.nickname + '님' : ''} (참여)`;
           linkSelect.appendChild(opt);
         });
+        // 특정 기록(⋯메뉴)에서 진입 시 그 기록/세션 기본 연동
+        _preselectLinkOption(linkCheck, linkSelect, btn.dataset.recordId);
         if (mine.length || others.length) linkWrap.style.display = 'block';
       }
     }
@@ -2014,6 +2048,7 @@ async function onSubmitCommentModal() {
   if (submitBtn) submitBtn.disabled = true;
   let result;
   let linkedRecId = null;
+  let didJoin = false;
   if (linkCommentId) {
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
     linkedRecId = linkSelect?.value;
@@ -2033,9 +2068,19 @@ async function onSubmitCommentModal() {
   } else {
     const linkCheck = document.getElementById('sheetCommentLinkCheck');
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
-    linkedRecId = linkCheck?.checked ? linkSelect?.value : null;
-    if (linkedRecId) {
-      result = await window.CottageDB.updateGamePlay(linkedRecId, { review_text: text });
+    const selVal = linkCheck?.checked ? linkSelect?.value : null;
+    if (selVal && String(selVal).startsWith('join:')) {
+      // 남의 세션에 참여 — 세션 필드 복사한 내 새 기록(후기)
+      const s = (modal._joinSessions || [])[parseInt(String(selVal).slice(5))];
+      const _cu = window.getKakaoUser?.();
+      result = s ? await window.CottageDB.recordGamePlay(
+        s.game_id, s.player_count || null, s.player_names || null, null, null,
+        _cu?.nickname || null, _cu?.id || null, s.group_name || null, s.played_at || null, null, text
+      ) : { error: 'no_session' };
+      didJoin = true;
+    } else if (selVal) {
+      linkedRecId = selVal;
+      result = await window.CottageDB.updateGamePlay(selVal, { review_text: text });
     } else {
       const _cu = window.getKakaoUser?.();
       result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null);
@@ -2043,14 +2088,14 @@ async function onSubmitCommentModal() {
     }
   }
   if (!result.error) {
-    // 새 게임평(연동 안 됨) + 이 게임에 내 플레이기록이 아예 없으면 → 남기기 넛지
-    const shouldNudge = !linkCommentId && !editId && !linkedRecId && modal._myRecordCountAtOpen === 0;
+    // 새 게임평(어디에도 연동 안 됨) + 이 게임에 내 플레이기록이 아예 없으면 → 남기기 넛지
+    const shouldNudge = !linkCommentId && !editId && !linkedRecId && !didJoin && modal._myRecordCountAtOpen === 0;
     onCloseCommentModal();
     await initSheetComments(gameKey);         // 기록전체보기 시트용
     await initSheetCommentsPreview(gameKey);  // 메인 게임시트 미리보기용
-    if (linkCommentId) {
-      await initPlayWidget(gameKey);          // 연동된 기록의 후기 반영
-      showActionToast('플레이기록에 연동했어요');
+    if (linkCommentId || linkedRecId || didJoin) {
+      await initPlayWidget(gameKey);          // 연동/참여로 바뀐 기록 반영
+      showActionToast(didJoin ? '세션에 후기를 남겼어요' : '플레이기록에 연동했어요');
     } else if (shouldNudge) {
       // 내 기록이 없을 때: 남의 세션 있으면 확인창으로 그 세션에 후기 추가(방금 쓴 게임평은 이동)
       const sessions = await _getOthersSessions(gameKey);
