@@ -1,166 +1,18 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-15 (Phase E 모임보드 밀도 정리 완료 A~D + 읽기전용 자세히 막대차트 버그 수정 — 실서버 스모크 대기)
+최종 갱신: 2026-07-15 (게임평→업적 진행도 표시 버그 수정 + §0 완료 체크포인트 슬림화)
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-### ✅ CHECKPOINT 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14 시작 ~ 2026-07-15 완료, **Phase A~E + 후속 전부 완료, 실서버 스모크 확인 완료**)
+### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 
-> **새 세션 시작점.** 아래 순서로 진행. Phase C가 큰 리팩토링이라 컨텍스트 깨끗한 상태에서 시작하려고 이전 세션에서 분리함. **모든 결정은 사용자 승인 완료 — 재확인 불필요, 그대로 구현.**
+`openProfilePanel(autoSubsheet, {userId, readOnly})`로 남의 보드를 편집 없이 통합 표시(취향/모임/기록보드), 좋아요 전역 이벤트 동기화(`cottage-likes-changed`), 진입점 정리(`.sched-bar-name`→모임보드, 그 외 닉네임 클릭→읽기전용 내 보드), 모임보드 밀도 정리(요일배지·✨마크·게임 썸네일·인원조건 표시 등). 상세는 git log(커밋 68e2de4~3d99561) 참조. 알려진 잔여 한계: readOnly 닉네임 미확정으로 "태그된 참여 기록" 일부 미포함(getMyStats nickname=null).
 
-**배경**: 직전 작업으로 모임보드 하고싶은/배우고싶은 게임이 "이번 주 meeting_vote_games"로 바뀜(아래 완료 체크포인트 참조). 그 결과 ①남의 읽기전용 보드에서 "그 사람이 평소 좋아하는 게임(취향 전체)"을 볼 방법이 약해짐 ②모임보드 ❤️ 좋아요 마커가 다른 화면(게임시트/취향보드)에서 좋아요 바꿔도 즉시 반영 안 됨(스냅샷).
+### ✅ 종료: 미보유 게임 기록시트 + 게임평↔플레이기록 연동 (2026-07-14~15, Red, Stage 1·2·3 전부 완료)
 
-**선행 사실 (구현 전 알 것)**:
-- 모임보드 게임 리스트 = 이번 주 `meeting_vote_games`. `game_id`=INT(bggId), `game_likes`/`meeting_game_prefs`(룰)=한글 슬러그. 변환 헬퍼 `_mbSlug`(kakao-auth.js 모임 afterRender 내) 이미 있음.
-- 좋아요 소스: `_likedSlugSet`/`_curiousSlugSet`(패널 open 시 `_meeting.likedGames`/`curiousGames`=game_likes/curious 슬러그 스냅샷).
-- 읽기전용 뷰 현재 2개: `openOtherTasteSheet`(getUserTasteProfile→좋아하는 게임 전체+피하는유형+bio, kakao-auth.js ~2260), `openOtherMeetingSheet`(getUserMeetingProfile→아직 옛 미러=game_likes를 "하고싶은게임"으로, ~2416). `buildReadOnlyGames` 렌더러 2곳(2294, 2510).
-- 타 유저 데이터 함수: `getUserTasteProfile(userId)`, `getUserMeetingProfile(userId)` 존재. `getMyStats(userId, nickname)`는 userId 인자 받음 → 타 유저 가능한지 supabase-client.js에서 확인 필요.
-- 게임시트 좋아요 버튼: game-sheet.js (좋아요 토글 위치 grep 필요).
-
-**Phase A (소) — 좋아요 즉시 동기화** — ✅ 완료 (2026-07-14):
-- 전역 이벤트 `cottage-likes-changed`(detail: {table:'game_likes'|'game_curious', gameId(슬러그), added:bool}) 도입. js-api.md "전역 커스텀 이벤트" 절 신규.
-- 발화 지점: ①게임시트 좋아요/궁금해요 버튼(game-sheet.js `emitLikesChanged` — 상호배타 반대목록 제거 시 별도 발화) ②취향보드 추가/삭제(kakao-auth.js `_emitLikesChanged`) ③모임 "좋아하는 게임에도 추가?"(_openMbAddModal pickGame onDone).
-- 수신: 모임보드 → `_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList`(❤️/👀 마커 즉시 반영). 취향보드 열려있으면 목록 추가/삭제·카운트 갱신. 핸들러 dedupe(`window.__tasteLikesHandler`/`__mbLikesHandler`) + DOM 이탈 self-remove.
-- 범위 밖: game-reviews.js `onPrMenuLike/Curious`(기록 iframe = 별도 window 컨텍스트라 미발화).
-
-**Phase B (소) — 취향 박스 센터모달** — ✅ 완료 (2026-07-14, 셀프 보드):
-- 셀프 모임보드 "❤️ 이번 주 하고 싶은 게임" 라벨에 `#meetinglikedBoxBtn`(.mb-taste-link) "❤️ 좋아하는 게임 보기" → **game_likes 박스만** 센터모달(`_openTasteBoxModal('want')`). "💡 배우고 싶은 게임" → game_curious 박스(`'learn'`).
-- 모달: `.mb-add-overlay`/`.mb-add-box` 재사용 + `#mbTasteBoxModal`. 데이터=`_meeting.likedGames`/`curiousGames`(패널 open 시 이미 로드), 📖 룰뱃지(`_ruleSet`) 포함. 게임 클릭=**전체 아이템 클릭** → 게임시트. **z-index 주의**: 모달(--z-sheet-modal 9700) > 게임시트(--z-sheet 9500)라 클릭 시 `close()` 후 openGameSheet(안 그러면 게임시트가 모달 뒤에 묻힘). CSS `.mb-taste-box-hint`/`.mb-taste-box-list` 신규.
-- **읽기전용 버전은 Phase C로 이월**: openOtherMeetingSheet는 아직 옛 미러(likedGames 전체를 인라인 표시)라 "이번주 vs 취향전체" 구분 자체가 없어 이 버튼이 무의미. Phase C에서 읽기전용을 this-week 모델로 전환할 때 함께 적용.
-
-**Phase B 후속 — 디자인 폴리시(이번 세션 반영) + 추가 발견(다음 세션)**:
-- ✅ 이번 세션 반영: ①라벨 문구 축약(`+ 게임 추가`→`＋추가`, 보기 버튼 `전체 보기` + ❤️/👀 이모지 제거) ②제목을 `.mb-sec-name`(nowrap span)으로 감싸고 `.taste-section-label--mb{flex-wrap:wrap}` 안전망 → 제목이 2줄로 깨지던 문제 해결 ③`.mb-taste-link` 11→10.5px 축소 ④`mb-pref-edit`(선호/비선호 "취향보드에서 수정") 버그 수정: 기존 `openProfilePanel('taste')`가 패널 토글로 **전부 닫히던** 것 → 취향 카드 클릭 경로 재사용으로 취향 서브시트 전환 + 뒤로가기를 "‹ 모임 보드"로 재지정(cloneNode로 원 핸들러 교체).
-- ✅ 다음 세션 발견분 6건 완료 (2026-07-14, 이 세션 — 커밋 68e2de4·2e1d4b9·8c27dd0·#6):
-  1. ✅ **박스 모달 썸네일만 클릭**: `_openTasteBoxModal` 클릭 바인딩을 썸네일(.taste-game-thumb/-empty)로 한정, `.mb-taste-box-list` 스코프 CSS로 아이템 커서 default·썸네일만 pointer/hover.
-  2. ✅ **"자세히" 모달 닫기 UI**: 하단 "닫기" 제거 → 박스 우상단 `.dd-x-btn`(position:absolute). `.dd-preview` 스코프 스크롤 하단 패딩.
-  2-1. ✅ **"자세히" 모달 편집/취소 버튼 동작**(사용자 선호=눌리게): 내 막대 ✎=플래너 편집(`openPlannerModal` edit, onDirtyClose=onChange) / ✕=참여 취소(confirm→`deleteMeetingVote`)→onChange. openDatePreviewModal에 `onChange`(5번째) 신설, 모임보드가 `_loadMeetingWeek` 전달.
-     - **#2-1-2 후속 (커밋 de89af8)**: ✕ 참여 취소해도 그 날 게임이 "이번 주 하고싶은 게임"에 잔존(orphan) → `deleteMeetingVote`가 같은 user+date의 `meeting_vote_games`도 **cascade 삭제**하도록 수정(호출처 3곳: 프리뷰·홈·플래너 removeVoteForDate). js-api.md 갱신. **사용자 테스트 해결 확인.**
-     - **#2-1 편집 라이브 반영 (커밋 e343ea2) — ⚠️ 실서버 재테스트 대기**: ✎ 편집은 플래너 경유라 "닫을 때만" onDirtyClose 발화 → 미니바 라이브 반영 안 됨. `cottage-meeting-saved` 수신 시 즉시 `_pmOnDirty(_loadMeetingWeek)`도 호출하도록 보강(day-detail.js). **아직 사용자 재테스트 미완.** 그래도 라이브 반영 안 되면 → **후속조사: club-schedule 편집-저장 경로(특히 `cottage-edit` 진입 편집 저장)가 `_notifyParentSaved()`(cottage-meeting-saved)를 실제로 발화하는지** 확인. (취소 ✕는 직접 onChange라 정상 확인됨.)
-  3. ✅ **보기 버튼 문구**: want "좋아하는 게임" / learn "궁금한 게임".
-  4. ✅ **복귀 스크롤 복원**: mb-pref-edit 클릭 시 scrollTop 저장 → 뒤로가기 시 `_pendingMeetingScrollTop`에 넣고 `_loadMeetingWeek` 말미에서 복원(패널 유지 중 서브시트 스왑 간 보존).
-  4-1. ✅ **비선호쪽 진입 스크롤**: mb-pref-edit `data-pref`(like/avoid), avoid면 취향 진입 시 `.taste-avoid-section`으로 scrollTop(getBoundingClientRect).
-  5. ✅ **최근 참여 썸네일**: `.profile-record-thumb`(28px) 추가 + 클릭 시 게임시트. `.profile-activity-item--thumb` flex 스코프.
-  6. ✅ **박스 모달 게임 추가**: `_openBoxAddSearch`(검색 초성+커스텀+직접입력 → `addGamePref`) + `_openTasteBoxModal`에 "＋ 게임 추가" 버튼, 추가 시 `_meeting.likedGames`/curiousGames push→renderList→`_emitLikesChanged`(Phase A 동기화).
-  - ⚠️ **리팩토링 후보**: `_openBoxAddSearch`는 취향보드 `_openTasteAddModal`과 기능 중복(스코프 분리로 복제). Phase C(openProfilePanel 통합) 때 공용 검색-추가 헬퍼로 DRY.
-
-**Phase C (대) — 읽기전용 내 보드 (핵심 리팩토링)**:
-
-**C1 (핵심 파라미터화)** — ✅ 완료 (2026-07-15, 실서버 스모크 사용자 테스트 완료):
-- `openProfilePanel(autoSubsheet?, opts={userId, readOnly})`로 확장. readOnly면 대상 userId 기준 조회, `user={id,nickname}` 분기, 편집 HTML은 `_ro()`로 생략, `.profile-panel--readonly`/`.profile-subsheet--readonly` 클래스.
-- **비공개 제외**: 알림 버튼·음료교환권 카드·함께한 시간 카드 렌더 생략 + 관련 DB 페치(getMyNotifications/getVoucher*) 스킵. 백그라운드 업적 체크(first_record/play)·대표 캐릭터/칭호 선택(_afterGrowthRender)·좋아요 동기화 핸들러 등록도 readOnly 가드.
-- **편집 전수 가드**: 닉/칭호/아바타 ✏️⚙, 취향 게임추가·📖·✕·bio편집·피하는유형 편집, 모임 ＋추가·취향링크·선호수정·모임프로필편집·📖·⋯·플래너편집 모두 생략. 읽기전용 상세는 `openDateScheduleModal`(편집불가).
-- **통합**: `openOtherProfileSheet`/`openOtherMeetingSheet`를 `openProfilePanel(_, {readOnly})` 얇은 래퍼로 축소. 구 `.other-profile-overlay`/otherMainPanel/`_openOtherMeetingSubSheet`(~250줄) 삭제. 진입점 3곳(club-intro/club-schedule/알림) 이름 유지로 무변경.
-- **공개 섹션(읽기전용)**: 프로필카드 / 수집보드(캐릭터·업적·칭호·도감, 선택 불가) / 취향(좋아하는·해보고싶은·피하는유형·한줄소개) / 모임보드(이번주 게임+선호/비선호+모임프로필) / 기록보드(플레이기록·게임평·사진, 남의 사진 삭제 불가).
-- **알려진 한계(C1)**: readOnly에선 닉네임을 stats 페치 후 확정 → getMyStats에 nickname=null 전달되어 **"태그된 참여 기록"(player_names ILIKE) 미포함**(본인 user_id 기록만). 필요 시 프로필 닉 선페치로 개선.
-
-**C2 (모임 폴리시)** — ✅ 완료 (2026-07-15, ⚠️ 실서버 스모크 대기):
-- **Phase B 취향박스 링크 이월 적용**: `mb-taste-link`("좋아하는 게임"/"궁금한 게임" 전체보기 버튼)를 readOnly에서도 노출(이전엔 `_ro()`로 숨김). `_openTasteBoxModal`은 아이템 자체가 이미 읽기전용(룰배지만, 추가/삭제 없음)이라 모달 내부 "＋ 게임 추가" 버튼 1곳만 `_ro()` 가드로 충분. 이번주(this-week) vs 취향전체 구분이 C1에서 이미 확보되어 있어 버튼 무의미 문제(31줄 이월 사유) 해소.
-- 나머지 모임 서브시트 요소(요일선택·⋯케밥·룰토글·플래너편집 등)는 C1에서 이미 편집버튼 자체가 `_ro()`로 숨겨져 열릴 경로가 없음 — 추가 가드 불필요 확인.
-- `_openBoxAddSearch` DRY(46줄, `_openTasteAddModal`과 중복)는 **REFACTOR 세션으로 유지 이월**(구현/리팩토링 분리 원칙).
-
-**C3 (정리)** — ✅ 완료 (2026-07-15): ①`_buildMeetingGameItems`(구 미러 렌더러, kakao-auth.js) 제거 ②구 CSS `.other-profile-*`(style.css, 10줄) 제거 ③미사용 DB fn `getUserTasteProfile`/`getUserMeetingProfile`(supabase-client.js 본체+export) 제거. js-api.md 해당 행 삭제.
-
-**Phase D (연계) — 진입점 정리** — ✅ 완료 (2026-07-15, 실서버 Playwright 검증 완료):
-- 전수 조사 결과 진입점 4곳: ①`.sched-bar-name`(모임 참여자, day-detail.js·index-page.js·club-schedule.html 3곳) → openOtherMeetingSheet(이미 정상) ②회원 자기소개 카드(club-intro.html·kakao-auth.js) → openOtherMeetingSheet(모임 프로필 카드라 의도된 설계, 유지) ③게임시트 좋아요/궁금해요 아바타 칩(game-sheet.js) → openOtherProfileSheet(이미 정상) ④**플레이기록 참여자 태그**(`.pr-tag-who[data-nick]`, game-reviews.js) → **openOtherMeetingSheet로 오배선돼 있던 것 발견, openOtherProfileSheet로 수정**.
-- **사용자 승인으로 범위 확장**: 게임평·리뷰어 이름에 신규 클릭 진입점 추가(기존엔 텍스트로만 존재, 클릭 불가). 대상: game-reviews.js `.pr-rec-reviewer`(플레이기록 후기 작성자, `r.user_id` 직접 사용), game-sheet.js `.sheet-comment-nick`(게임시트 게임평·플레이기록 미리보기 3곳 + 전체목록 initSheetComments 2분기, `item.user_id`/`r.user_id` 사용), index-page.js 홈 "최근 플레이 후기" 미리보기 리뷰어. 전부 `openOtherProfileSheet` 통일. CSS `[data-user-id]:hover{color:var(--green);text-decoration:underline}` 2곳(`.pr-rec-reviewer`, `.sheet-comment-nick`) 추가.
-- **부수 발견**: game-reviews.js `buildGameBody`(게임별 보기 전용 렌더러로 추정되었던 함수)가 **어디서도 호출되지 않는 dead code**임을 실서버 테스트로 확인(게임별 보기는 실제로는 게임 카드 그리드만 표시, 참여자 태그 없음). 이번 세션에서 이 함수에도 `data-nick`/`data-user-id` 속성을 동일하게 추가했으나 호출되지 않아 무해·무의미. **삭제는 이번 작업 범위 밖**(기능 작업 중 리팩토링 금지 원칙) — 코드 품질 주석에 등록.
-- **검증**: Playwright 헤드리스, 실 프로덕션 Supabase 데이터로 라이브 서버(localhost:3000) 대상 — ①게시판 참여자 태그 클릭 → "취향 보드"(읽기전용) 서브시트 오픈 확인(종전 "모임 보드"에서 수정 확인) ②게시판 후기 작성자 클릭 → "취향 보드" 오픈 ③게임시트 전체 게임평 목록 닉네임 클릭 → "취향 보드" 오픈 ④홈 미리보기 리뷰어 data-user-id·cursor 확인 ⑤회귀 확인: `.sched-bar-name` 클릭 → 여전히 "모임 보드" 오픈(불변). 콘솔 에러 0.
-- 커밋 전 문서 갱신: js-api.md(openOtherProfileSheet/openOtherMeetingSheet 항목에 전체 진입점 목록 반영), PROJECT_STRUCTURE.md §5(Phase D 요약 추가).
-
-**Phase E (후속) — 모임보드 밀도 정리** — ✅ 완료 (2026-07-15, 스크린샷 기반 사용자 확정, ⚠️ 실서버 스모크 대기):
-- **A. (요일) 배지 조건부 숨김** (커밋 d70c215) — 참여일이 하루뿐인 주엔 모든 게임 배지가 같은 요일이라 정보가 없어 숨김(`_weekData.myVotes`의 distinct vote_date > 1일 때만 표시).
-- **B. 이번주 게임 마크 로직 반전** (커밋 f506d8f) — 기존 ❤️/👀(취향목록에 있음)는 전부 켜지면 무의미 → **취향 목록엔 없는데 이번 주에만 하고 싶은 게임에만 ✨** 예외 표시(`!it.isSource`). `mb-like-mark--new` 클래스, markIcon 인자 제거. 하고싶은/배우고싶은 동일.
-- **C. 날짜 막대 밑 요약칩 제거** (커밋 51e47c0) — `🎲게임 📖게임` 요약칩이 아래 리스트와 중복(한 화면 2벌) → 제거. 막대·시간·자세히 버튼 유지. (`.mb-week-games` CSS는 dead, REFACTOR 세션 정리 후보.)
-- **D. 섹션/세부메뉴 이모지 전부 제거** (커밋 0f547d1) → **후속(2026-07-15, 커밋 00f4172)으로 큰 제목만 복원**: 사용자 확인 결과 전면 제거는 과했음 판단 → 큰 섹션 제목 6개(📅❤️💡👍👎🕐📍, 🚫는 톤이 세 👎로 완화)만 복원, 세부행(활동지역/참여시간/이동범위)은 계속 글자만.
-- **부수 버그 수정 (item 1, 커밋 cf4f3fe)** — 읽기전용(남의) 보드 "자세히"가 `openDateScheduleModal`(개인 통계)로 열려 내 보드(`openDatePreviewModal`, 전원 막대 차트)와 화면이 달랐음. 읽기전용도 `openDatePreviewModal`로 통일하되 `myVote=null·onChange=null`로 호출해 하이라이트·✎✕ 편집 없이 그날 전원 막대만 표시(남 일정 편집 차단). js-api.md 갱신.
-- **후속 2 (2026-07-15, 사용자 스크린샷 리뷰)**: ①자세히 모달 인원조건 토글 통합(커밋 1b015c5) — select+별도 라벨 태그 이원화를 select 하나로(옵션 텍스트 자체가 "베스트 3인" 등 해석 라벨). ②섹션 간격 20→28px(커밋 efa05a1, `.taste-game-section` 공유 클래스라 취향보드도 동시 적용). 다른 페이지(기록보드) 확장은 보류 — 별도 클래스라 필요 시 후속.
-- **후속 3 (2026-07-15)**: ①헤더 줄바꿈 수정(커밋 a81ec1f) — 이모지 복원 후 "💡 이번 주 배우고 싶은 게임" 라벨이 "❤️ 하고 싶은 게임"보다 길어져 우측 "궁금한 게임" 버튼이 줄바꿈되던 것을 간격/크기 값 축소로 해결. ②좋아하는/궁금한 게임 버튼 간격 확대(커밋 9b226ae) — +추가 버튼과 붙어 보이던 것 margin-left 6px로.
-- **후속 4 (2026-07-15) — 이번주 게임 목록 인원조건 select 토글화(커밋 b5e5c0f 정적표시 → 2c5ff55 select로 교체)**: "자세히"(막대그래프 클릭 → openDateScheduleModal)에서 게임별로 설정한 인원조건(베스트/추천/N인, `meeting_vote_games.player_condition`)을 모임보드 게임 목록(하고싶은/배우고싶은)에도 select로 노출, `setMeetingVoteGameCondition`으로 **양방향 연동**(어느 쪽에서 바꿔도 같은 DB 컬럼이라 다음에 열 때 서로 반영). 같은 게임이 이번 주 여러 날 등록된 경우 select 변경 시 해당 날짜 전부에 동일 조건 적용(그룹 row 1개 = DB 행 여러 개일 수 있음). 읽기전용(남의 보드)은 정적 라벨만, 수정 불가.
-- **후속 5 (2026-07-15) — 홈 미리보기 실시간 반영 버그 + select 화살표 겹침**: ①(커밋 d602b03) 모임보드 조건 변경이 홈 "이날 모임 한눈에 보기"(`openDateMeetingModal`, 캐시된 dayVotes/dayGames를 그대로 렌더 — 실시간 재조회 없음)엔 반영 안 되던 것을 전역 이벤트 `cottage-meeting-changed`(js-api.md 등록)로 해결, index-page.js가 수신해 `_meetingReload()` 호출. club-schedule.html은 자체 reload 함수가 없어 미구독(후속 과제). ②(커밋 e8b47f4→93e0aae) select 옵션 텍스트가 "베스트 3인"으로 길어지며 우측 padding 부족으로 텍스트-네이티브화살표 겹침 → `.mb-cond-select`/`.dd-cond-select` 우측 padding 4→16px, 사용자 재확인 후 여백 과다로 10px로 재축소. 읽기전용 텍스트(`.mb-week-cond`/`.dd-cond-tag`)는 별도 클래스라 화살표 자체가 없어 폭 변화 없음(2-1/2-2 요구사항이 구조상 이미 충족).
-- **후속 6 (2026-07-15, 커밋 39a1be5) — item 3·4 공통 원인 발견·해결**: 홈 모임 미리보기(`index-page.js` `loadWeek()`)의 `selectedDate`가 함수 지역변수라 호출될 때마다 "오늘 이후 vote 있는 가장 빠른 날"로 무조건 재계산됨. ①item 4: 토요일 탭에서 수정 저장 후 리로드 시 더 이른 금요일이 있으면 탭이 금요일로 튕김. ②item 3: 후속5-①의 `cottage-meeting-changed` 리로드도 같은 이유로 다른 날 탭으로 튕겨 "반영 안 됨"처럼 보인 것 — 재조사 결과 데이터 동기화 자체는 정상, 탭 리셋이 진짜 원인. `selectedDate`를 `weekOffset`과 같은 상위 스코프로 올리고, 없거나(최초) 이번 주 날짜 목록에 없을 때(주 이동)만 재계산하도록 수정 — 같은 주 재조회에서는 사용자가 보던 탭 유지.
-- **후속 7 (2026-07-15, 커밋 76ba842·88dad1b) — select 화살표 재조정**: 사용자 재확인 후 10px도 과하다 판단 → 7px로 축소했으나 여전히 여백 남음(네이티브 select가 "가장 긴 옵션" 기준으로 폭을 고정하는 브라우저 기본 동작이 근본 원인, padding만으론 한계). `appearance:none` + 커스텀 SVG 화살표로 전환해 여백 완전 제어(우측 padding 13~14px), 이어서 `window._condSelWidth`(day-detail.js, js-api.md 등록) 헬퍼로 select 폭 자체를 **현재 선택된 라벨 길이에 맞춰 동적 조정**(렌더 시점+change 시점 모두 적용) — "2인"/"3인" 선택 시엔 좁게, "베스트 3인" 선택 시엔 넓게. 모임보드(`mb-cond-select`)·자세히 모달(`dd-cond-select`) 공통.
-- **후속 8 (2026-07-15, 커밋 35daee7) — 모임 일정 모달 4곳 작은 게임 썸네일**: 사용자 브레인스토밍 후 결정(3-2 "미리보기 막대 밑 칩"은 필자가 클러터 우려로 보류 제안했으나 사용자가 "작게" 조건으로 포함 승인). `window.COTTAGE_GAMES`에 `thumbnail` 필드 추가(`getGameImage` 재사용, SSOT 확장). 공용 헬퍼 `dbThumbHtml(game_id, cls)`로 ①자세히 개인 게임 리스트(13px) ②참여자별 보기 개인별 리스트(동일) ③그날의 게임 집계 칩(11px) ④홈/club-schedule 미리보기 막대 밑 태그(10px, 가장 작게) 적용. 커스텀 입력 게임(game_id 없음)은 썸네일 생략.
-- **후속 9 (2026-07-15, 커밋 292d580) — '그날의 게임' 집계 그룹화**: 썸네일 도입 후 집계 칩이 `[표지][🎲/📖][이름]` double-icon으로 붐빔(사용자 디자인 리뷰 지적). 개별 칩의 🎲/📖를 제거하고 `🎲 하고 싶은 게임`/`📖 배우고 싶은 게임` 그룹 헤더(메뉴명) 아래에 칩을 나열하는 구조로 전환(참여자별 보기와 동일 패턴). 칩은 썸네일+이름+카운트·⭐·조건배지, 칩 색(want/learn)은 유지. `.dd-aggr-group`/`-label` CSS 신규.
-- **후속 10 (2026-07-15, 커밋 2f8c6fa) — 이날모임/자세히 미리보기 추가 정리**: ①`openDateMeetingModal`(이날 모임 한눈에 보기) 푸터 '전체 일정 보기'(홈)/'플래너 보기'(club-schedule) 버튼 제거 — 홈은 카드 상단에 이미 플래너 링크 있어 중복, club-schedule은 `onPlannerClick` 없어 닫기와 동일 no-op. 닫기 버튼만 남김. ②`buildGameTags`(막대 밑 게임 태그, `buildBarsInCard` 경유로 홈 미리보기·모임보드 자세히·club-schedule 주간뷰 3곳 공유)도 후속9와 동일하게 개별 🎲/📖 제거 후 `🎲 하고 싶은 게임`/`📖 배우고 싶은 게임` 그룹 헤더로 분리. 게임키 기준이라 want·learn 둘 다인 게임은 양쪽 그룹 표시. `.sched-tag-group`/`-label`/`-row` CSS 신규.
-- **후속 11 (2026-07-15, 커밋 7c0354d) — 이날모임 모달 '그날의 게임' 집계 제거**: 미리보기 카드 막대 밑 태그와 사실상 중복(그룹 구성 통일 후 더 겹침)이라 aggr 섹션 통째 제거. 모달 = 통계칩 + 룰렛 + 참여자별 보기(기본 펼침 `open`)로 목적 명확화. 집계 데이터·`condBadgeHtml`·`_aggrChip/_aggrGroup` 및 dead CSS(`dd-game-aggr/-chip/-badge`, `dd-green-btn`) 정리.
-- **후속 12 (2026-07-15, 커밋 3d99561) — 모달명 변경 + 참여자별 인원조건 표시**: ①(a 확정) 진입 버튼 '이날 모임 한눈에 보기'→'이날 모임 상세'(index-page.js·club-schedule.html) — 집계 제거 후 통계+룰렛+참여자상세 구성에 맞춤. ②(b 재검토 → **전환 취소**) 인원조건을 베스트인원 정적표시로 전면 교체하려던 것을, 무관/추천/특정인원 강제 게임(원더랜드워·루트·헤게모니 등) 존재로 **기존 player_condition 편집 시스템 그대로 유지** 결정. 대신 이날 모임 상세 참여자별 게임 옆에 각자 설정한 조건(무관/베스트 N인/N인)을 **읽기전용 표시만** 추가(`formatCondLabel` 재사용, `.dd-cond-tag`, 무관 포함). 기존 편집 select(모임보드 목록·자세히)는 무변경.
-- **✅ 실서버 스모크 확인 완료 (2026-07-15, 사용자)**: ①(요일) 배지 조건부 ②✨ 마크 반전 ③요약칩 제거 ④모임보드 이모지(큰 제목만 복원) ⑤읽기전용 자세히=전원 막대 차트 ⑥게임 썸네일 4곳 ⑦⑧그날의 게임/막대 태그 그룹화 ⑨이날 모임 상세 집계 제거·참여자 기본 펼침 ⑩모달명 변경·참여자별 인원조건 표시. 전부 확인됨 → **체크포인트 종료.**
-
-**다음 세션 작업 순서 추천 (Phase E 완료 후 갱신)**:
-1. 위 Phase E 실서버 스모크 5건 확인(사용자). 이상 있으면 후속 커밋.
-2. 신규 작업 하나 선택:
-   - **(권장 우선순위 A) 모임 관련 테이블 보안 구멍** — `meeting_votes`/`meeting_vote_games`/`meeting_game_prefs`가 anon 키로 전체 읽기/쓰기/삭제 가능(RLS UNRESTRICTED, §3 P3 "[보안] meeting 계열 쓰기 보호" 항목). 백로그 중 실제 위험도 최고. Red — Edge Function 경유 write 설계 필요, **Plan 모드 + Opus xhigh 고정** (CLAUDE.md Plan-Execute 기준).
-   - **(대안 — 가벼운 시작) 게임평→캐릭터/업적 미반영 버그** (§3 "게임평→캐릭터/업적 미반영", A-7) — 게임평 작성이 review 업적/캐릭터에 반영 안 됨. `checkAchievements('review')` 트리거 재확인부터. 원인 비교적 명확한 옐로급, Sonnet high로 빠르게 처리 가능.
-3. `openProfilePanel`(kakao-auth.js, 1973줄, REFACTOR_CHECKPOINT.md KA1) 리팩토링은 위 항목들과 별개로 **전용 REFACTOR 세션**에서 처리 — 이번 순서에는 포함하지 않음.
-
----
-
-### 🟢 CHECKPOINT: 미보유 게임 기록시트 + 게임평↔플레이기록 연동 (2026-07-14, Red — Stage 1·2·3 전부 완료, 실서버 스모크만 남음)
-
-> 2026-07-14 세션 "추가사항" 논의에서 확정. item 1(미보유 게임 시트) Plan 작성 대상. **아래 설계는 사용자 승인 완료.**
-
-**조사 결과 (#1-1-1, DB 실물 확인 — 버그 아님, 별개 시스템)**:
-- "게임평" = `game_comments` 테이블(컬럼: id, game_key, comment_text, nickname, user_id, created_at). game_key=슬러그(예 `백로성`). 게임(기록)시트에서 `getGameComments(_gameIds(gameKey))`로만 표시.
-- "플레이 후기" = `game_play_records.review_text`. 플레이기록 게시판(game-reviews.js)이 표시. **game_comments를 전혀 참조 안 함** → 게임평이 게시판에 안 뜨는 건 설계상 정상.
-- 실물: game_comments 7건(뽁: 백로성×2·에버델 / 호핀 4), game_reviews는 테스트 1건, play_records 후기 8건엔 백로성·레이아탄 없음.
-- **오귀속 원인**: 뽁님이 레이아탄와일드(미보유) 게임평을 백로성에 단 건, 레이아탄와일드가 미보유라 **시트가 없어 코멘트 달 데가 없어서**. → item 1으로 근본 해결.
-- **식별 키**: game_comments(game_key=문자열)·game_likes/curious(슬러그)가 이미 이름/슬러그 기반이라, 미보유 게임도 `game_key=이름슬러그`로 일관 키 부여 가능(bggID 불필요).
-
-**item 1 — 미보유 게임 기록시트 (확정 방향)**:
-- `openGameRecordSheet`를 미보유 게임(gameData에 없음, game_id=슬러그/이름)도 열리게 확장.
-- 표시: "🚫 미보유 · 게임 정보 없음" 배지, "← 게임 정보" 버튼 숨김(정보시트 없음).
-- 노출: 좋아요/궁금해요/게임평(comments)/사진/플레이기록. (#1-1-2 미보유 게임 ⋯ 메뉴 없음도 이걸로 해결)
-
-**게임평 ↔ 플레이기록 연동 (확정 설계, 스키마 변경 0)**:
-- **트리거**: 게임평 저장 직후, 그 게임에 **내 플레이기록이 없을 때만** → **액션 토스트**(기존 `showActionToast(문구, 라벨, 콜백)` 재사용) "게임평을 남겼어요 · ↗ 플레이기록으로 남기기".
-- **놓쳤을 때**: 게임평 ⋯ 메뉴(현재 수정/삭제 있음)에 **"↗ 플레이기록으로 남기기"** 항목 추가(누구나 자기 게임평에 대해).
-- **연동 = 내 소유 새 플레이기록 생성**(남의 기록 수정 아님, 작성자 불일치 문제 해소). 게임평(코멘트)은 그대로 둠.
-- **기존 세션이 있으면**: 그 세션의 **게임·날짜·그룹·인원을 잠금(수정불가) 프리필**, 내 **후기(=게임평 텍스트 프리필)·점수·사진만** 입력. 게시판이 `그룹명+날짜`로 묶으므로 **같은 세션 아래 내 후기가 나란히** 표시(A 로그 + B·C·D 각자 후기). 세션 여러 개면 최근 기본+선택.
-- **세션 없으면**: 게임+후기 프리필, 날짜·인원은 새로 입력(내 새 세션).
-
-**Plan 대상 파일(예정)**: game-sheet.js(openGameSheet/openGameRecordSheet 미보유 분기, 코멘트 저장 후 토스트, 코멘트 ⋯메뉴), game-reviews.js(입력창 프리필+필드 잠금, 기존 세션 조회), supabase-client.js(내 플레이기록 존재 확인 헬퍼 필요 시). **DB 스키마 변경 없음.**
-
-**⚠️ 기존 코드 발견 (Plan 재검증)**: game-sheet.js에 **이미 게임평↔플레이기록 연동이 부분 존재**.
-- `onOpenCommentInput`(1584~1627): 게임평 모달에 "기존 플레이 기록에 연동" 체크박스+선택. **내 기록 중 후기(review_text) 없는 것만** 나열(`r.user_id===나 && !r.review_text`, 1613).
-- `onSubmitCommentModal`(1810~1841): 체크 시 `updateGamePlay(선택기록,{review_text})` — 내 기존 기록의 후기로. 안 하면 `insertComment`(일반 게임평).
-- → **작성자 불일치는 이미 방어됨**(내 기록만). 확정 설계의 "세션에 내 후기 추가"는 **(A) 내 기존 기록 연동=이미 됨** / **(B) 남이 찍은 세션에 내 새 기록으로 참여=신규**로 갈림.
-
-**Plan — 3단계 분리 (사용자 판단 위임 → 이 순서 확정)**:
-
-*Stage 1 — item 1: 미보유 게임 기록시트* — ✅ 완료 (2026-07-14)
-- **구현**: ①game-sheet.js `openGameSheet` early-return 분기 — DOM 없으면 return, game만 없으면(미보유) `openGameRecordSheet(gameKey)`로 리다이렉트(비어있지 않은 문자열일 때만) → 모든 호출처가 미보유를 단일 진입점에서 처리. ②`openGameRecordSheet` `_owned=!!game` — 미보유면 "← 게임 정보" 버튼 대신 `.sheet-unowned-badge`("🚫 미보유·게임정보 없음"). ③game-reviews.js session row `getGameKey(r.game_id) || r.game_id` — 미보유 기록 세션 행에 ⋯메뉴(좋아요/게임평/사진) 활성화(#1-1-2 해결), 썸네일은 이미지 없어 계속 숨음. ④CSS `.sheet-unowned-badge` 신규.
-- **검증**: Playwright 헤드리스 — 미보유 키 `openGameSheet()` → 기록시트 리다이렉트+배지+back버튼 없음+슬러그 섹션 렌더, 에러 0. 보유 게임(7원더스) 회귀 없음(정보시트 정상, 리다이렉트/배지 없음). 호출처 전수(script-nav/owned/index=getGameKey·game.id 슬러그) → 리다이렉트 오발 없음 확인.
-- js-api.md 갱신(openGameSheet/openGameRecordSheet 미보유 동작). (커밋 cb07c8c)
-- **후속 — 미보유 진입점 보강 (커밋 a27659b·6a2f44f·50a29ca)**: 세션행(날짜/모임별)은 썸네일이 유일한 기록시트 진입점인데 미보유는 표지가 없어 진입 불가였음 → `hero.png`(= `DEFAULT_GAME_IMAGE`, 일러스트+"Cottage Board" 이름밑 레이아웃, 미보유 기록시트 헤더와 동일 이미지) 플레이스홀더 썸네일 렌더(세션행+게임카드), 클릭 시 `openGameRecordSheet`. CSS `.pr-rec-thumb--placeholder`/`.pr-game-thumb--placeholder`(contain+베이지 #f5eee2 = 게임시트 `.sheet-thumb`/`.sheet-sticky-thumb`와 동일 스타일). ※탐색 경과: 이름옆 원본→이름없는 크롭마크→이름밑 세로조합 커스텀 만들다가, hero.png가 이미 이름밑 레이아웃임을 확인해 **커스텀 자산 버리고 hero.png 재사용**(커밋 7047bc3, 자산·헤더 일관). `GAME_LOGO_PLACEHOLDER` 경로는 rootPath 버그 회피 위해 로컬 계산. Playwright로 실게임(레비아탄와일드) 렌더·로드·클릭·배지 확인.
-- **곁다리 버그 수정 (커밋 9879d41)**: 검증 중 `rootPath`(script-nav.js:110)가 script.js→script-nav.js 개명(65e015a) 미반영으로 정규식 replace 실패 → rootPath가 스크립트 전체 URL이 되어 `DEFAULT_GAME_IMAGE`·헤더검색이동·게임위치버튼·기록히스토리링크가 전부 깨진 URL 생성하던 것 발견. 정규식 `script-nav\.js`로 정정. 미보유 기록시트 헤더 이미지 복구(렌더 콘솔 에러 2→0).
-
-*Stage 2 — 연동 1단계: 토스트 nudge + ⋯메뉴 나중연동 (기존 모달 재활용)* — ✅ 완료 (2026-07-14, 커밋 6f2a638, Sonnet)
-- **구현**: `_getMyUnlinkedPlayRecords(gameKey)` 공용 헬퍼(all/unreviewed) 신설. ①`onOpenCommentInput`이 모달 열 때 이미 하던 조회 결과를 `modal._myRecordCountAtOpen`에 캐시 → 제출 성공 시(신규·비연동·내 기록 0개) `showActionToast`로 "게임평을 남겼어요 · ↗ 플레이기록으로 남기기" 넛지(추가 쿼리 없음). ②기존 코멘트 ⋯ 액션에 "↗"(`onLinkCommentToPlay`) 추가 — 후기 없는 내 기록 있으면 `getOrCreateCommentModal()`을 link-mode로 재활용(제목/라벨 전환, readonly 텍스트 프리필, 새 모달 없음), 없으면 같은 넛지로 폴백. `onSubmitCommentModal`에 link-mode 분기 추가.
-- **⚠️ 설계 보강 (원 Plan에 없던 발견)**: 연동 시 `updateGamePlay`로 텍스트 복사만 하고 원본 `game_comments` row를 남기면, 통합 "게임평" 목록(comment+review 병합)에 **같은 글이 중복 표시**됨. → 연동 성공 후 `deleteComment(linkCommentId)`로 원본 삭제(이동 시맨틱). 실패 시 console.error만(토스트 없음, 드문 edge case).
-- **검증**: Playwright 하니스 5개 시나리오 — 내기록0→넛지, 내기록有(미체크)→넛지없음, 기존코멘트 연동 성공(updateGamePlay→deleteComment 순서 확인)+토스트+refresh 3종 호출, 연동가능기록없음→폴백, **기존 체크박스-연동 플로우 회귀없음**(insertComment/deleteComment 미호출 확인). 콘솔 에러 0.
-- js-api.md 갱신(`_getMyUnlinkedPlayRecords`/`onLinkCommentToPlay`/`onSubmitCommentModal` 항목).
-- 잔여: Stage 3(남 세션에 내 기록으로 참여) 미착수.
-
-*Stage 3 — 연동 2단계 (B): 남의 세션에 내 후기로 참여* — ✅ 완료 (2026-07-14 최초 → **2026-07-15 UX 개편으로 재구현**, Opus medium)
-- **⚠️ 사용자 피드백으로 방향 전환 (2026-07-15)**: 최초 구현(토스트 넛지 → game-reviews 잠금 프리필 폼)이 두 가지 문제 — ①토스트가 5초 뒤 사라져 놓침 ②잠금 폼이 "전체 플레이기록을 수정하는 것"처럼 보여 헷갈림(+`+게임추가`로 세션에 엉뚱한 게임 넣을 여지). 데이터 손상은 없었음(항상 INSERT). → **"1안: 확인창 → 즉시 연동" + "게임평/사진 2개 메뉴 분리"로 재설계**.
-- **현재 구현 (1안)**: ①game-sheet.js `_getOthersSessions(gameKey)`(유지) — 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` dedupe + 최신순. ②`_openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId?)` — `#sheetJoinModal` 확인창(세션 정보+후기 미리보기, 세션 여러 개면 select) → [남기기] 시 세션 필드 그대로 복사한 `recordGamePlay`로 **즉시 내 새 기록 생성**(입력폼·페이지이동 없음). sourceCommentId 있으면 성공 후 `deleteComment`(방금 쓴/기존 게임평을 후기로 이동 = 중복 방지). ③게임평 저장 후 넛지·⋯메뉴 사후연동 양쪽이 토스트 대신 `_openJoinConfirm` 호출. ④**사진 남기기 모달**(`onOpenPhotoInput`/`onSubmitPhotoModal`)도 "연동" select에 남의 세션(`data-join="1"`) 추가 → 선택 시 세션 필드 복사한 `recordGamePlay`로 내 새 사진 기록(게임평과 대칭인 별도 메뉴).
-- **game-reviews.js 잠금 프리필 폼 전면 제거**(핸드오프·`applyJoinMode`·`labelByGameId`·`lockedGameId`·`pr-join-*`/`is-locked` CSS·sessionStorage `cottage_pending_join` 모두 되돌림).
-- **세션 필드 복사 = 두 뷰 모두 nest**: game_id·인원·참여자·그룹·날짜를 원본 그대로 복사(putSelfFirst 미적용 → roster 불변) → 모임별(group+date)·게임별(group+count+names) 뷰 모두 같은 세션에 묶임.
-- **검증**: Playwright(실소스 함수 추출) — `_openJoinConfirm` 단일/다중세션·후기이동(deleteComment)·후기없음·취소, 저장 인자 세션 일치. 사진 모달 남세션참여(신규기록)·내기록병합(update)·비연동(사진만) 분기. `_getOthersSessions` node 단위테스트. 콘솔 에러 0.
-- js-api.md(`_openJoinConfirm`/photo 모달)·ls-schema.md(`cottage_pending_join` 제거) 갱신.
-- **후속 (2026-07-15, 커밋 2666afa + item2)**: ①기록 항목 ⋯메뉴에서 사진/게임평 추가 진입 시 그 기록/세션이 "기존 플레이 기록에 연동" 기본 체크+선택(`_preselectLinkOption` 공용, `_getOthersSessions`에 `rec_ids` 추가, 게임평 모달에도 남 세션 옵션+`onSubmitCommentModal` join 분기, game-reviews ⋯버튼에 `data-record-id`). ②게임(기록)시트 플레이위젯 각 기록에 `.sheet-rec-more`(⋯) 인라인 확장 메뉴(사진/게임평 추가, `data-record-id` 프리셀렉트). `.sheet-play-box{overflow:hidden}` 클리핑 회피 위해 인라인 확장 방식. Playwright 검증 완료. **⚠️ 실서버 시각 확인 남음**(⋯메뉴 위치·간격, 특히 내 기록의 ✏️/✕와 공존).
-
-**공통 위험요소**: ①미보유 game 널 전제 광범위(Stage1). ②iframe/모달 교차 프리필·필드잠금(Stage3). ③미보유 식별 키(이름 슬러그) 정규화 일관성.
-
-**미결 결정 (다음 세션에 확정 필요)**:
-- **뽁님 오귀속 코멘트 처리** — ✅ 해결 (2026-07-14, ①game_key 이동): 7/13(월) `06e099d1`→`레비아탄와일드`(플레이기록 game_id와 동일 키라 그 시트에서 보임), 7/11(토) `21dbf84c`→`원더랜드워-풀확`(기존 좋아요 키와 동일해 그 시트에서 보이게, 플레이기록 없음). 7/11 글은 두 게임(레비아탄+원더랜드워) 섞였으나 사용자 지시대로 통째 이동. anon 키 PATCH로 프로덕션 반영, 백로성 잔여 게임평 0건 확인.
-- **게시판에 게임평(comments) 노출 여부** — ✅ 확정 (2026-07-14, 사용자): **분리+브리지**(게임평 원본을 게시판에 그대로 섞지 않음, Stage 2·3 브리지로 처리). **목표 명확화**: 플레이기록(세션=group_name+date) 하나에 **닉네임별 여러 후기가 나란히** 나오게 하는 것. 현재 게시판은 각자 자기 record.review_text를 세션으로 묶어 이미 표시 중(사용자가 "이미 있는 시스템"이라 한 것). **안 되는 2케이스** → ①플레이기록에 연동 안 된 게임평(game_comments)은 안 뜸 = **Stage 2**(게임평→내 기록 연동)로 해결 ②남의 플레이기록엔 내 후기 못 붙임 = **Stage 3**(남 세션에 내 새 기록으로 참여)로 해결. ①②는 서로 연관.
-
-**다음 세션 시작점**: ~~Stage 1~~ ✅ → ~~Stage 2~~ ✅ → ~~Stage 3~~ ✅ 완료 — **게임평↔플레이기록 연동 3단계 전부 완료**. 목표(플레이기록 하나에 닉네임별 여러 후기)를 남의 세션 참여로 달성. 남은 스모크 테스트: 실서버에서 미보유/보유 게임 각각 넛지·⋯메뉴 → 잠금 프리필 입력 → 저장 후 게시판(모임별·게임별)에 같은 세션 아래 내 후기가 나란히 뜨는지 눈으로 확인.
-
-**추가 작업 요청 (2026-07-15, 미착수)**: 뽁님의 7/11 레비아탄와일드·원더랜드워-풀확 게임평(위 "뽁님 오귀속 코멘트 처리"에서 7/13에 game_key만 정정 이동됨, 플레이기록 미연동 상태)을 **사용자(호핀)가 작성한 7/11 플레이기록**과 연결. Stage 3 "남의 세션에 내 후기로 참여" 기능으로 커버 가능한 케이스로 보이나, 실행 주체(뽁님이 직접 UI로 참여 vs 운영자가 DB로 직접 처리)는 미확정 — 착수 시 먼저 확인.
+미보유 게임도 `openGameRecordSheet`로 열리게 확장(좋아요/게임평/사진/플레이기록), 게임평 저장 후 내 플레이기록 연동 넛지, 남의 세션에 내 후기로 즉시 참여(`_openJoinConfirm`, 확인창 방식). 상세는 git log(커밋 cb07c8c~2666afa) 참조. 남은 실서버 확인 항목: ①미보유/보유 게임 넛지·⋯메뉴→저장 후 게시판에 같은 세션 아래 내 후기 나란히 표시되는지 ②`.sheet-rec-more`(⋯) 메뉴 위치·간격(내 기록 ✏️/✕와 공존). 미착수 후속(§3 이관): 뽁님 7/11 게임평↔호핀 플레이기록 연결.
 
 ---
 
@@ -305,6 +157,7 @@
 - [ ] **[보류] 한줄소개 GPT 연동** — 이전 기획 복원 불가, 사용자 재공유 필요.
 - [ ] **[보류] 취향보드 Phase 2 (성향 5축)** — Phase 1 테스트 후 진행.
 - [ ] **[보류] 모임플래너 참여자 UI 추가 개선** — 방향 논의 필요 (현재: 이름 클릭→프로필 시트).
+- [ ] **뽁님 7/11 게임평 ↔ 호핀 플레이기록 연결** (2026-07-15 요청, 미착수) — 뽁님의 7/11 레비아탄와일드·원더랜드워-풀확 게임평(game_key만 정정 이동됨, 플레이기록 미연동)을 호핀이 작성한 7/11 플레이기록과 연결. "남의 세션에 내 후기로 참여"(Stage 3, `_openJoinConfirm`) 기능으로 커버 가능해 보이나 실행 주체(뽁님 직접 UI vs 운영자 DB 처리) 미확정 — 착수 전 확인 필요.
 
 - [ ] **내 보드 수집보드 스크롤 진입점 수정** (JS) — ① 캐릭터 수정 버튼 클릭 → "내 캐릭터" 타이틀 위치로 스크롤 (현재: 그 아래로 진입). ② 칭호 클릭 → "칭호" 타이틀이 화면 상단에 오도록 (현재: 아래로 내려간 채 진입). ③ 캐릭터 이름 클릭 → 캐릭터 타이틀로 이동 (현재: 칭호 섹션으로 진입). 관련 파일: `assets/js/kakao-auth.js` 수집보드 서브시트 open/scroll 로직.
 
