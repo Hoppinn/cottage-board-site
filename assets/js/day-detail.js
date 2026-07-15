@@ -118,29 +118,9 @@
     .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
     .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
     .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 1px 14px 1px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
-    .dd-cond-badge { font-size: 10px; padding: 1px 5px; border-radius: 8px; background: #f0ece6; color: var(--green, #7a4828); }
     .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; }
 
-    /* 홈 미리보기 모달 — 플래너 보기 버튼 */
-    .dd-green-btn {
-      background: var(--green, #7a4828);
-      color: white;
-    }
-    .dd-green-btn:active { background: #5a3318; }
-
-    /* ── 날짜 집계 모달 — 게임 집계 + 참여자 토글 ── */
-    .dd-game-aggr-section { margin-bottom: 12px; }
-    .dd-aggr-group { margin-top: 8px; }
-    .dd-aggr-group-label { font-size: 11px; font-weight: 600; color: var(--muted, #9e8e7e); }
-    .dd-game-aggr { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
-    .dd-game-chip {
-      display: inline-flex; align-items: center;
-      font-size: 11px; padding: 3px 9px;
-      border-radius: 12px; white-space: nowrap;
-    }
-    .dd-game-chip-thumb { width: 11px; height: 11px; border-radius: 3px; object-fit: cover; margin-right: 3px; flex-shrink: 0; }
-    .dd-game-chip--want { background: var(--bg-soft); color: var(--green); }
-    .dd-game-chip--learn { background: var(--line); color: var(--muted); }
+    /* ── 날짜 상세 모달 — 참여자 토글 ── */
     .dd-participants-toggle {
       margin-top: 8px;
       border-top: 1px solid var(--border);
@@ -865,68 +845,6 @@
     });
     const rouletteGames = [...wantGameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
 
-    // 전체 게임 집계 (want/learn 분리, 투표수 내림차순)
-    const aggrMap = {}, aggrMeta = {}, aggrPriority = {}, aggrConds = {};
-    voteGames.forEach(g => {
-      const key = `${g.list_type}::${g.game_id ? `id:${g.game_id}` : `n:${g.custom_name}`}`;
-      aggrMap[key] = (aggrMap[key] || 0) + 1;
-      if (!aggrMeta[key]) aggrMeta[key] = { name: resolveGameName(g), type: g.list_type, game_id: g.game_id ?? null };
-      if (g.is_priority) aggrPriority[key] = (aggrPriority[key] || 0) + 1;
-      const cond = g.player_condition || 'any';
-      if (cond !== 'any') {
-        if (!aggrConds[key]) aggrConds[key] = [];
-        aggrConds[key].push(cond);
-      }
-    });
-    const aggrItems = Object.entries(aggrMap)
-      .map(([key, count]) => ({
-        ...aggrMeta[key],
-        count,
-        priority: aggrPriority[key] || 0,
-        conds: [...new Set(aggrConds[key] || [])],
-      }))
-      .sort((a, b) => {
-        if (a.type !== b.type) return a.type === 'want' ? -1 : 1;
-        const cd = b.count - a.count;
-        return cd !== 0 ? cd : b.priority - a.priority;
-      });
-
-    function condBadgeHtml(conds, game_id, maxN) {
-      if (!conds.length) return '';
-      const badges = [];
-      for (const c of conds) {
-        if (c === '2' || c === '3' || c === '4') {
-          if (maxN < Number(c)) badges.push(`${c}인 필요`);
-        } else if (c === '5+') {
-          if (maxN < 5) badges.push('5인+ 필요');
-        } else if (c === 'best' || c === 'recommended') {
-          const cgEntry = game_id ? window.COTTAGE_GAMES?.find(cg => cg.bggId === String(game_id)) : null;
-          const arr = (c === 'best' ? cgEntry?.bestPlayers : cgEntry?.recPlayers) || [];
-          if (!arr.length || !arr.some(p => Number(p) === maxN)) badges.push(condLabel(c, cgEntry));
-        }
-      }
-      return badges.map(b => `<span class="dd-cond-badge">${esc(b)}</span>`).join('');
-    }
-
-    // 개별 칩에 🎲/📖를 붙이지 않고 하고싶은/배우고싶은 그룹 헤더(메뉴명)로 분리, 칩은 썸네일+이름만
-    const _aggrChip = ({ name, type, count, priority, conds, game_id }) => {
-      const suffix = count > 1 ? ` ·${count}` : '';
-      const star = priority >= 1 ? ` ⭐${priority}` : '';
-      const badges = condBadgeHtml(conds, game_id, peakCnt);
-      const thumb = dbThumbHtml(game_id, 'dd-game-chip-thumb');
-      return `<span class="dd-game-chip dd-game-chip--${type}">${thumb}${esc(name)}${suffix}${star}${badges}</span>`;
-    };
-    const _aggrGroup = (label, items) => items.length
-      ? `<div class="dd-aggr-group"><span class="dd-aggr-group-label">${label}</span><div class="dd-game-aggr">${items.map(_aggrChip).join('')}</div></div>`
-      : '';
-    const gameAggrHtml = aggrItems.length
-      ? `<div class="dd-section dd-game-aggr-section">
-          <span class="dd-section-label">그날의 게임</span>
-          ${_aggrGroup('🎲 하고 싶은 게임', aggrItems.filter(a => a.type === 'want'))}
-          ${_aggrGroup('📖 배우고 싶은 게임', aggrItems.filter(a => a.type === 'learn'))}
-        </div>`
-      : '';
-
     const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
       const _li = g => `<li>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}</li>`;
@@ -965,10 +883,9 @@
       <div class="dd-modal-scroll" id="__ddMainScroll">
         <div class="dd-date">${fmtDate(voteDate)}</div>
         ${statsHtml}
-        ${gameAggrHtml}
         ${rouletteBtnHtml}
         ${participantsBody
-          ? `<details class="dd-participants-toggle">
+          ? `<details class="dd-participants-toggle" open>
               <summary>참여자별 보기</summary>
               <div class="dd-participants-body">${participantsBody}</div>
             </details>`
