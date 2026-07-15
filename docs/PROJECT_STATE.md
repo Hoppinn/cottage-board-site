@@ -15,9 +15,9 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 **스모크 중 발견 버그 배치 (2026-07-16, R1~R5 회귀 아님 — 전부 기존 버그/신규기능):**
 - ✅ **[버그1·1-1 해결]** 게시판 ⋯메뉴로 사진/게임평 추가·세션참여·기록수정 시 게임시트만 갱신되고 **게시판 목록은 리로드 안 돼** 새로고침 전엔 썸네일/삭제버튼 안 뜨던 문제. game-reviews.js `window.refreshPlayRecordsBoard()` 훅 노출 → game-sheet.js 5개 저장 성공 지점(`onSubmitPhotoModal`·`onSubmitCommentModal`·`_openJoinConfirm`·`onSubmitPlayModal` 수정/신규)에서 호출. 원인은 R4와 무관한 기존 구조.
 - 🟡 **[버그2 추정원인 수정, 재확인 대기]** 취향보드 게임추가 후 목록 미반영. 원인: `_openTasteAddModal` onAdd가 DB·DOM칩만 갱신하고 **in-memory 소스배열(`likedGames`/`curiousGames`)엔 push를 안 해서**, 서브시트가 그 배열로 재렌더(`_buildTasteGameItems`)되면 방금 추가분이 사라짐(전체 보드 재오픈=DB 재조회 전까지). onAdd에 배열 push 추가(모임보드 박스모달 `_openBoxAddSearch`는 이미 `games.push` 있어 정상). **⚠️ 정적분석상 즉시 append 자체는 되어야 정상이라, "즉시 안 뜸"이 별개 원인이면 이 수정으로 부족할 수 있음 — 실서버 재확인 필요(안 되면 콘솔 에러 확인).**
-- ⏳ **[신규기능 3-1]** 알림→읽기전용 보드→뒤로가기로 알림 페이지 복귀(현재 복귀 경로 없음, 뒤로가기 스택 필요).
+- ⏭️ **[신규기능 3-1 → 백로그 이월]** 알림→읽기전용 보드→뒤로가기 복귀. 신규 네비게이션 스택이 필요하고 `openProfilePanel`(KA1) 한복판이라, R10(KA1 리팩토링)과 함께/후에 처리로 이월(§3 "타인 보드 내부 네비게이션 통일"에 병합 기록).
 
-**다음 세션 시작점**: 위 스모크 버그배치(2·3-1) 처리 후 **R6(Opus high, Plan 권장)** — ACH5 `buildAchievementsSection`의 숨은 업적 소급지급 side-effect 분리. 이후 R7~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.
+**다음 세션 시작점**: 위 스모크 버그2 실서버 재확인(안 되면 콘솔 에러 공유) 후 **R6(Opus high, Plan 권장)** — ACH5 `buildAchievementsSection`의 숨은 업적 소급지급 side-effect 분리. 이후 R7~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.
 
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 
@@ -162,6 +162,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] ~~[기술부채] 오늘 이벤트 수 집계 날짜 비교~~ — ✅ **해결** (2026-07-15). `initHeroStats`가 `created_at`(UTC)의 `slice(0,10)`을 KST 오늘 날짜와 직접 비교해 KST 00~09시 이벤트가 UTC 전날로 잘려 누락되던 것을, `kstDateStr`(created_at을 +9h 변환 후 slice) 헬퍼로 양쪽 모두 KST 기준 비교하도록 수정. node로 KST 경계(00:30/08:30/23:30/내일/어제/null) 7케이스 검증 통과. 관련 파일: `assets/js/index-page.js`.
 
 - [ ] **[PC 리팩토링] 타인 보드 내부 네비게이션 통일** — 모임보드→취향보드 등 전환이 바텀시트로 뜸. 내 보드와 동일한 센터모달 + 고정 헤더 + 뒤로가기로 통일.
+  - **3-1 (2026-07-16 요청 병합)**: 알림('냐냐뇨뇨님이 소개글 올렸어요') 클릭 → `openOtherMeetingSheet` → `openProfilePanel(readOnly)`가 **내 패널을 제거하고 남의 보드로 교체**(kakao-auth.js:572)라 돌아올 경로 없음. 필요 동작: 남의 보드에 뒤로가기 → 내 보드/알림 페이지로 복귀(진입 전 패널 상태 스택 복원). **신규 기능 = 네비게이션 히스토리 스택 필요. `openProfilePanel`(KA1, 1972줄) 한복판이라 R10(KA1) 리팩토링과 함께/후에 처리 권장** — 지금 넣으면 R10에서 재작업됨.
 - [ ] **[검토] 기록보드 타인 공개** — 요약(플레이 수·게임평)만 부분 공개 또는 본인 설정 온오프. 함께한 시간은 비공개 유지 확정.
 - [ ] **[디자인] 모임보드 개선** — 미입력 필드 노출 방식, 일정 막대 정보 밀도, 하고 싶은 게임 0개 빈 상태.
 - [x] ~~게임평→캐릭터/업적 미반영~~ (A-7, 2026-07-12) — ✅ **해결** (2026-07-15). 원인: 지급 로직(`checkAchievements('review')`→`getUserCommentCount`)은 정상이었으나, 진행도 표시 4곳(achievements.js COUNTS)이 `review` 축에 `ratingCount`(별점 수)를 쓰고 있어 게임평을 써도 진행도가 안 오르는 것처럼 보였음(해금 자체는 DB 업적 기준이라 실제론 됐음). `_fetchUserStats`의 `getUserRatingCount`→`getUserCommentCount` 교체, `ratingCount`→`commentCount` 리네이밍으로 표시를 지급 기준과 통일.
