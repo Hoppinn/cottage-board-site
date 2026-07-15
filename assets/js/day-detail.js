@@ -116,7 +116,7 @@
     .dd-game-list--editable li { display: flex; align-items: center; justify-content: space-between; }
     .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
     .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
-    .dd-cond-select { font-size: 11px; padding: 1px 7px 1px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
+    .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 1px 14px 1px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
     .dd-cond-badge { font-size: 10px; padding: 1px 5px; border-radius: 8px; background: #f0ece6; color: var(--green, #7a4828); }
     .dd-cond-tag { font-size: 11px; color: var(--muted, #9e8e7e); font-weight: 400; }
 
