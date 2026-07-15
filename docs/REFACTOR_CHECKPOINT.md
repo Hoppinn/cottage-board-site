@@ -103,11 +103,11 @@
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
 | GDA1 | **P1** | 파일 헤더 오기재 | 상단 주석 파일명 불일치 | 주석 상단: `game-view-utils.js` 언급 → 실제 파일명: `game-display-adapter.js`. 파일 검색 시 혼란. |
-| GDA2 | **P1** | 전역 오염 | IIFE 없음 — 25개 이상 함수가 전역 노출 | `safeArray`, `safeText`, `safeNumber`, `uniqueArray`, `renderStars`, `getDisplayTags` 등 내부 헬퍼가 모두 `window.*`로 노출. play-records-utils.js, achievements.js는 IIFE 적용됨. |
+| ~~GDA2~~ | ~~**P1**~~ | ~~전역 오염~~ | ~~IIFE 없음 — 25개 이상 함수가 전역 노출~~ | **✅ 해결됨 (R7, 2026-07-16 재검증)** — 현재 파일은 이미 `(function(){…})()` IIFE로 감싸져 있고 내부 헬퍼 전부 IIFE 스코프. 전역은 `window.CottageGameView`(네임스페이스)·`window.COTTAGE_GAMES`(의도된 공개)뿐. 감사가 언급한 `renderStars` 등은 현재 파일에 없음 = 구버전 기준 stale 기록이었음. un-expose 대상 없음. |
 | GDA3 | **P2** | 중복 로직 | `getSearchText`: `getDisplayTags` 호출 + 직접 접근 이중 집계 | `getDisplayTags`가 이미 `moodTags/playTags/relationshipTags`를 반환하는데 동일 필드를 직접 join도 함. 검색 가중치가 2배가 되거나 중복 토큰 생성 가능. |
 | GDA4 | **P2** | 로드 순서 의존 | `window.COTTAGE_GAMES` 실행 시점 즉시 생성 | line 533: `window.gameData`가 로드된 상태여야 함. 로드 순서 변경 시 빈 배열로 초기화. |
 | GDA5 | **P2** | 중복 로직 | `getGameCardData` / `getGameDetailData` / `getRecommendData` 내 서브함수 호출 중복 | 세 함수 모두 `safeArray(g.mood_tags)` 등 동일 파싱 로직을 각자 실행. 공용 파싱 레이어가 없음. |
-| GDA6 | **P2** | 불필요한 파라미터 | `getAllGamesArray(gameData)` — 파라미터가 전역과 중복 | `window.gameData`가 전역이므로 파라미터 불필요. 호출처가 일부는 전달, 일부는 생략 — 혼용됨. |
+| ~~GDA6~~ | ~~**P2**~~ | ~~불필요한 파라미터~~ | ~~`getAllGamesArray(gameData)` — 파라미터가 전역과 중복~~ | **✅ GS3와 함께 종결 (R7, 2026-07-16)** — "혼용"의 실체는 두 개의 서로 다른 `getAllGamesArray`(game-sheet 무인자 vs adapter 인자版)였고 GS3에서 정리됨. adapter의 `CottageGameView.getAllGamesArray(gameData)`는 game-sheet.js:301이 `window.gameData` 명시 전달로 소비하는 순수 유틸이라 파라미터 유지가 맞음(전역 암묵참조보다 명확). 별도 조치 불필요. |
 
 **즉시 수정 가능 (Green)**: GDA1 (파일 헤더 주석 수정)  
 **수정 시 검증 필요 (Yellow)**: GDA3 (getSearchText 실제 동작 확인 후), GDA6 (getAllGamesArray 호출처 일치 후)  
@@ -279,7 +279,7 @@
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
 | Red | ACH3, CSS2 | ✅ 완료 (137차, ACH3는 buildCharacterSection/buildAchievementsSection의 `preStats` 파라미터로 쿼리 공유 확인, CSS2는 `!important` 196→30회로 감소 확인, 2026-07-15 재검증) |
 | Red | ~~KA1~~ | ❌ **미완료 정정 (2026-07-15 재검증)** — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 위 "✅ 완료" 표기는 오기재였던 것으로 확인. 여전히 구조 변경 필요(Red) 항목으로 유지. |
-| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, GDA2, SC4/SC5, GR3 | SC1(R5)·PU2(R4)·ACH5(R6) ✅ 완료 · GDA2(R7)·SC4/SC5(R8)·GR3(R9) ⏳ 미처리. 최신 진행은 아래 "처리 계획" 표 기준. |
+| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, ~~GDA2~~, SC4/SC5, GR3 | SC1(R5)·PU2(R4)·ACH5(R6)·GDA2+GS3(R7) ✅ 완료 · SC4/SC5(R8)·GR3(R9) ⏳ 미처리. 최신 진행은 아래 "처리 계획" 표 기준. |
 
 ---
 
@@ -293,7 +293,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 |---|--------|------|------|------|
 | GS1 | **P1** | 과대함수 | `openGameSheet` 321줄(439~760) | 게임데이터 읽기 + 난이도/협력 계산 + 거대 HTML 빌드 + 서브위젯 초기화 혼합. 단일 함수로는 프로젝트 최상위급(KA1 다음). 부분 수정 회귀 위험 높음. |
 | GS2 | **P1** | 전역 오염 | 파일 전체 **IIFE 없음** — ~90개 함수 전부 전역 노출 | onclick 핸들러(onSheetLike/onOpenPlayModal 등)는 전역 불가피하나, 순수 헬퍼 20+개(getDifficultyData·normalizeLevelValue·formatRating·formatDifficultyWeight·getGameThumbnail·getGameDetailImage·formatPlayers·formatPlayTime·getGameKey·getAllGamesArray·formatDate·_reactionUserChip 등)도 전역. GDA2와 동일 유형이나 규모 최대. |
-| GS3 | **P1** | 중복 정의 | `getAllGamesArray` 2곳 다른 시그니처 | game-sheet.js:298(무인자) vs game-display-adapter.js:471(`gameData` 인자). 로드 순서에 따라 나중 정의가 이김 → 어느 구현이 실제 동작하는지 불명확. **R7(GDA2)과 묶어 처리 권장.** |
+| ~~GS3~~ | ~~**P1**~~ | ~~중복 정의~~ | ~~`getAllGamesArray` 2곳 다른 시그니처~~ | **✅ 해결됨 (R7, 2026-07-16)** — 전 14페이지가 adapter→game-sheet 순 로드라 game-sheet의 전역 무인자版(`{key,...game}`)이 adapter의 `window.getAllGamesArray`(raw·인자版)를 항상 덮어써 후자는 죽은 코드였음. adapter의 `window.getAllGamesArray = …` 노출 제거 → 전역은 game-sheet 단일 소스로 확정. adapter의 순수版은 `CottageGameView.getAllGamesArray(gameData)`로만 남김(game-sheet.js:301 유일 소비). 런타임 무변화(behavior-preserving), node --check 통과. |
 | GS4 | **P2** | 이름 충돌 | `getGameKey` 동명·다른 시그니처 | game-sheet.js:250(게임 **객체** 인자) vs game-reviews.js:14(게임 **id** 인자). 파일 넘나들 때 혼동. |
 | GS5 | **P2** | 중복 코드 | `escH` 로컬 재정의(2248, initPlayWidget 내부) | `window.escH`(supabase-client)와 중복 — escH 계열 5번째 사본(PU4/ACH6/DD3와 동일 패턴). |
 | GS6 | **P2** | 과대함수 다수 | 100줄 안팎 함수 다수 | `buildRecordItemHtml`(128줄, initPlayWidget 내부) · `getOrCreatePlayModal`(110줄) · `openGameRecordSheet`(97줄) · `onSubmitPlayModal`(70+줄). 렌더+이벤트+저장 혼합. |
@@ -343,7 +343,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 5 | R4 | PU2 — `buildPhotoItemAdder` blob URL 미해제(메모리 누수) 수정 | **Sonnet high** | 아니오 | ✅ **완료 (2026-07-16)** — 개별 삭제(✕) 시엔 이미 `revokeObjectURL` 있었으나, **그리드/행/폼을 통째로 `innerHTML=''`·`.remove()`로 지우는 지점**에서 미해제였던 게 진짜 누수. `revokePhotoGridBlobs(root)` 공용 헬퍼(play-records-utils.js) 신설 — root 안의 `blob:` img 전부 해제. 호출처 6곳: game-sheet.js `onOpenPhotoInput`/`onOpenPlayModal`/`onClosePlayModal`(그리드 초기화 3곳), game-reviews.js 행삭제(`.pr-rm-btn`)·편집폼 취소(`.pr-inline-cancel`/`-top` 2곳)·**다중행 저장 성공 후 `prGameRows` 전체 초기화**(가장 빈번한 지점). node --check 전체 통과. |
 | 6 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ✅ **완료 (2026-07-16, 코드변경 없음)** — 조사 선행 결과 감사 이후 `_escapeLike`가 이미 4곳에 적용돼 있어 SC1 핵심(안전성) 해소 확인. 백슬래시 정식 이스케이프로의 업그레이드는 위험>이득이라 현행 유지. 상세는 2-6절 SC1. |
 | 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ✅ **완료 (2026-07-16)** — 인라인 루프는 이미 `_grantRetroAchievements`로 추출돼 있었으나 여전히 `buildAchievementsSection` 내부에서 호출(hidden write)됐던 것이 핵심 문제. `grantRetroAchievements(userId,stats)` public 승격 → buildAchievementsSection 순수화 → kakao-auth.js openProfilePanel에서 빌드 앞·`!readOnly` 가드로 명시 호출. readOnly 열람 시 대상 유저 DB write 발생하던 부수 버그 함께 수정. node --check 통과. 상세는 위 2-3절 ACH5. |
-| 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ⏳ 대기 |
+| 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ✅ **완료 (2026-07-16)** — GDA2는 이미 IIFE 적용돼 있어 un-expose 대상 없음(감사 stale). 실질 작업은 GS3: adapter의 죽은 `window.getAllGamesArray` 노출 제거(551~552줄) → 전역은 game-sheet 단일 소스. GDA6도 함께 종결. 외부참조 전수확인(호출처 6곳 전부 무인자, 14페이지 로드순서 adapter<sheet 전수확인)·node --check 통과. 런타임 무변화. |
 | 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ⏳ 대기 |
 | 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ 대기 |
 | 11 | R11 | **[A1 신규] game-sheet.js 구조 정리** — GS1(`openGameSheet` 321줄)·GS6(100줄대 과대함수 다수) 분리 + GS2(순수 헬퍼 20+개 전역노출, onclick 핸들러와 선별)·GS5(escH 로컬 사본)·GS7(난이도 헬퍼 전역결합). 프로젝트 최대 파일이라 여러 세션 재분할 가능. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |

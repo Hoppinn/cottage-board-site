@@ -183,7 +183,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 |------|------|
 | `window.CottageGameView` | gameData → 화면 출력용 view 함수 모음 |
 | `window.COTTAGE_GAMES` | 게임 플랫 배열 `{id, bggId, display, titleKo, titleEn, abbr, bestPlayers, recPlayers, thumbnail}`. 게임명 자동완성·인원 조건 표시용.<br>`thumbnail`: `getGameImage(g)` 재사용(images.thumbnail→images.main 순, 정규화됨), 없으면 `null`. day-detail.js 자세히/이날모임한눈에보기 모달의 작은 게임 썸네일에 사용(2026-07-15).<br>`abbr` 결정 3단계 (build-output.js): ① `game-abbr.json[bggId]` → ② `game-abbr-byname.json[ownedName]` → ③ `titleKo.slice(0,2)` 폴백.<br>`bestPlayers`/`recPlayers`: gameData.bgg.bestPlayers/recommendedPlayers 배열 원본. 데이터 없으면 `null`. `window.formatCondLabel`이 소비.<br>**abbr 소비처**: 막대 라벨(`resolveGameAbbr` in day-detail.js:918), 룰렛 휠 SVG(day-detail.js:778,789), 룰렛 후보 wantGameMap(day-detail.js:622), 룰렛 수동 추가(day-detail.js:829). 모든 소비처는 `COTTAGE_GAMES[i].abbr` 우선 → 없으면 `titleKo.slice(0,2)` 로컬 폴백. `#` 접두 제거(`replace(/^#/,'')`) 후 slice 필수 — c0a495c(bar), 8052782(roulette)에서 각각 수정됨. |
-| `window.getAllGamesArray` | `getAllGamesArray(gameData)` 직접 참조용 편의 노출. index-page.js / owned-games-page.js가 전역으로 직접 호출. `CottageGameView.getAllGamesArray`와 동일 함수 |
+| `window.getAllGamesArray` | **소유: game-sheet.js** (전역 함수선언, 무인자). `Object.values(gameData).map(g => ({ key: g.id, ...g }))` — 각 게임에 `key` 필드를 붙여 반환. 호출처(script-nav.js 헤더검색·index-page.js·owned-games-page.js) 전부 무인자로 사용.<br>**주의**: adapter의 `CottageGameView.getAllGamesArray(gameData)`는 **별개 함수**(순수 유틸, `key` 없음, 인자 필요) — game-sheet.js 내부에서만 사용. 과거 adapter가 `window.getAllGamesArray`로도 노출했으나 로드순서상 game-sheet가 항상 덮어써 죽은 코드였고 R7(2026-07-16)에서 제거. 전역은 game-sheet 단일 소스. |
 
 ---
 
@@ -247,7 +247,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.formatCondLabel` | day-detail.js | club-schedule.html (Step 3 칩) |
 | `window._condSelWidth` | day-detail.js | kakao-auth.js (모임보드 `.mb-cond-select`) — `(label) => 'Npx'`. 네이티브 select가 가장 긴 옵션 기준으로 폭 고정되는 문제 회피, 선택 라벨 길이 기준 동적 폭 계산(2026-07-15) |
 | `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js |
-| `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
+| `window.getAllGamesArray` | game-sheet.js (전역 함수선언, 무인자·`{key,...game}`) | script-nav.js, index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
 | `window.COTTAGE_PAGE_LABELS` / `window.COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script-nav.js, requests-admin.html (script-nav.js 로드 직전 필수) |
 | `window.renderDayDetailHTML` | day-detail.js | 일정 상세 블록 HTML 반환 `({ date, timeStart, timeEnd, wantGames, learnGames })`. 모달/인라인 공용. |

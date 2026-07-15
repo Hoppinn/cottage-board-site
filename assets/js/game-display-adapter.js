@@ -547,9 +547,9 @@ if (typeof window !== "undefined") {
     recPlayers: (Array.isArray(g.bgg?.recommendedPlayers) && g.bgg.recommendedPlayers.length) ? g.bgg.recommendedPlayers : null,
     thumbnail: getGameImage(g) || null,
   }));
-
-  // index-page.js / owned-games-page.js 등 외부 직접 참조용
-  window.getAllGamesArray = getAllGamesArray;
+  // 전역 window.getAllGamesArray는 game-sheet.js가 소유(무인자·{key,...game} 반환).
+  // 여기서 붙이면 로드순서상 game-sheet가 덮어써 죽은 코드가 되므로 노출하지 않는다.
+  // adapter의 순수 유틸은 CottageGameView.getAllGamesArray(gameData)로만 제공(game-sheet.js 내부 사용).
 }
 
 })();
