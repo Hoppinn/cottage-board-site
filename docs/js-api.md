@@ -19,7 +19,7 @@
 | `uploadPlayPhoto(file, userId)` | 사진 Storage 업로드 |
 | `recordGamePlay(...)` | 플레이 기록 저장 |
 | `deleteGamePlay(id)` | 플레이 기록 삭제 |
-| `updateGamePlay(id, fields)` | 플레이 기록 수정 |
+| `updateGamePlay(id, fields)` | 플레이 기록 수정. 성공 시 `record`/`play`/`balance` 업적 재체크(2026-07-15 추가 — 신규 등록만 체크하고 수정은 안 해서 사진 후추가 등으로 임계값을 채워도 다음 신규 등록 전까지 지급 안 되던 버그 수정) |
 | `getGamePlayRecords(gameId, limit)` | 게임 플레이 기록 조회. `gameId`는 단일 값 또는 배열 (배열 시 `.in()` 쿼리) |
 | `getGroupNames()` | 그룹명 목록 조회 |
 | `getPlayerNames()` | 참여자 이름 목록 조회 (조합+개별) |

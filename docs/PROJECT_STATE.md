@@ -126,6 +126,7 @@
 | 단기 방문 시간 미표시 | heartbeat 전 종료 시 `duration_sec=0` → 관리자 분석에서 시간 표시 안 됨. 추적 로직 변경 필요, 별도 작업 (143차-197 이관) |
 | ~~모바일 "이번주모임 미리보기" 일요일 레이아웃 밀림~~ | ✅ **해결** (2026-07-15, 3차 수정으로 최소화 완료). 원인: `#meetingDays`(`.meeting-day-chip` 7개, `flex-wrap:wrap`)가 좁은 모바일 뷰포트에서 컨테이너 폭을 근소하게 초과 — 투표 인원수 텍스트가 있는 요일 칩만 폭이 넓어져 참여자가 몰린 주(예: 금1·토2·일2)에만 7번째 칩이 다음 줄로 밀림. 1차(gap 6→4, padding 6px10px→6px5px, min-width 36→32) 과다 축소로 사용자 재지적 → 2차(gap 6 복원, padding 6px7px, min-width 34)도 "여전히 필요 이상으로 줄임"이라는 재지적 → **3차: padding만 6px10px→6px9px(각 변 1px), gap·min-width는 원래값(6px/36px) 그대로 유지**로 최소화. 340px 미만은 원래 디자인도 줄바꿈되던 구간이라 그대로 두고, 340px 이상(실사용 전 구간) 줄바꿈 해소 재확인(스크린샷 대조) |
 | ~~이번 주 하고싶은 게임에 취소된 테스트 게임 잔존~~ | ✅ **해결** (2026-07-15). 원인: `meeting_vote_games` orphan 행 2개 — id=22(vote_date 2026-07-08), id=36(vote_date 2026-07-17), 둘 다 user_id=4916417947(오너), 대응하는 `meeting_votes` 행 없음(참여 취소됨). `deleteMeetingVote` cascade 삭제(커밋 de89af8, 2026-07-14)가 이후 취소부터만 적용돼 그 이전 생성분(created_at 07-07·07-13)이 소급 정리 안 된 것. 사용자 승인 후 anon 키 DELETE로 두 행 제거, 재조회로 삭제 확인. 코드 변경 없음(향후 신규 취소는 기존 cascade 로직으로 자동 처리됨) |
+| ~~플레이기록 수정 시 업적 미반영~~ | ✅ **해결** (2026-07-15). 원인: `recordGamePlay`(신규 등록)만 `checkAchievements`를 호출하고 `updateGamePlay`(수정 — 사진 후추가 8곳 + 인라인 전체수정 포함)는 어디서도 호출 안 함. 사진 추가로 photo 축 임계값을 채워도, 참여자 수정으로 play/balance 축을 채워도 다음 신규 기록 등록 전까지 지급 안 됨. `updateGamePlay`(supabase-client.js)에 `record`/`play`/`balance` 재체크를 추가해 8개 호출처 공통 해결. |
 
 ---
 

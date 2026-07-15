@@ -367,10 +367,25 @@ window._cottageSess = (function () {
       if (review_text !== undefined) fields.review_text = review_text || null;
       if (game_id) fields.game_id = game_id;
       if (photo_url !== undefined) fields.photo_url = photo_url || null;
-      const { error } = await db.from("game_play_records")
+      const { data, error } = await db.from("game_play_records")
         .update(fields)
-        .eq("id", id);
-      return error ? { error } : { success: true };
+        .eq("id", id)
+        .select("user_id");
+      if (error) return { error };
+      const userId = data?.[0]?.user_id;
+      if (userId) {
+        window.checkAchievements?.('record', userId, {});
+        const _nick = window.getKakaoUser?.()?.nickname;
+        if (_nick) {
+          getUserParticipationCount(userId, _nick).then(pc => {
+            window.checkAchievements?.('play', userId, { participationCount: pc });
+          }).catch(() => {});
+          getUserUniqueDayCount(userId, _nick).then(dc => {
+            window.checkAchievements?.('balance', userId, { visitingDayCount: dc });
+          }).catch(() => {});
+        }
+      }
+      return { success: true };
     } catch (e) {
       return { error: e };
     }
