@@ -130,6 +130,8 @@
 
     /* ── 날짜 집계 모달 — 게임 집계 + 참여자 토글 ── */
     .dd-game-aggr-section { margin-bottom: 12px; }
+    .dd-aggr-group { margin-top: 8px; }
+    .dd-aggr-group-label { font-size: 11px; font-weight: 600; color: var(--muted, #9e8e7e); }
     .dd-game-aggr { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .dd-game-chip {
       display: inline-flex; align-items: center;
@@ -905,17 +907,22 @@
       return badges.map(b => `<span class="dd-cond-badge">${esc(b)}</span>`).join('');
     }
 
+    // 개별 칩에 🎲/📖를 붙이지 않고 하고싶은/배우고싶은 그룹 헤더(메뉴명)로 분리, 칩은 썸네일+이름만
+    const _aggrChip = ({ name, type, count, priority, conds, game_id }) => {
+      const suffix = count > 1 ? ` ·${count}` : '';
+      const star = priority >= 1 ? ` ⭐${priority}` : '';
+      const badges = condBadgeHtml(conds, game_id, peakCnt);
+      const thumb = dbThumbHtml(game_id, 'dd-game-chip-thumb');
+      return `<span class="dd-game-chip dd-game-chip--${type}">${thumb}${esc(name)}${suffix}${star}${badges}</span>`;
+    };
+    const _aggrGroup = (label, items) => items.length
+      ? `<div class="dd-aggr-group"><span class="dd-aggr-group-label">${label}</span><div class="dd-game-aggr">${items.map(_aggrChip).join('')}</div></div>`
+      : '';
     const gameAggrHtml = aggrItems.length
       ? `<div class="dd-section dd-game-aggr-section">
           <span class="dd-section-label">그날의 게임</span>
-          <div class="dd-game-aggr">${aggrItems.map(({ name, type, count, priority, conds, game_id }) => {
-            const icon = type === 'want' ? '🎲' : '📖';
-            const suffix = count > 1 ? ` ·${count}` : '';
-            const star = priority >= 1 ? ` ⭐${priority}` : '';
-            const badges = condBadgeHtml(conds, game_id, peakCnt);
-            const thumb = dbThumbHtml(game_id, 'dd-game-chip-thumb');
-            return `<span class="dd-game-chip dd-game-chip--${type}">${thumb}${icon} ${esc(name)}${suffix}${star}${badges}</span>`;
-          }).join('')}</div>
+          ${_aggrGroup('🎲 하고 싶은 게임', aggrItems.filter(a => a.type === 'want'))}
+          ${_aggrGroup('📖 배우고 싶은 게임', aggrItems.filter(a => a.type === 'learn'))}
         </div>`
       : '';
 
