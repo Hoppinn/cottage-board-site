@@ -190,7 +190,12 @@
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html / club-rules.html 사진 중심 재구성
 - [ ] **기록게시판 디자인 개선** — 현재 너무 밋밋, 전반적 비주얼 리뉴얼 필요
-- [ ] **[보안] meeting 계열 쓰기 보호** — `meeting_votes` / `meeting_vote_games` / `meeting_game_prefs` 전체 현재 UNRESTRICTED (anon 키로 전체 읽기/쓰기/삭제 가능). auth.uid() 불가(카카오 OAuth 구조상 Supabase Auth 세션 없음 = uid() NULL). 방향: Edge Function 경유 write (서버에서 카카오 토큰 검증 후 service_role로 write), 별도 설계 세션 필요. RLS UNRESTRICTED 배지는 그때까지 의도적 유지. 마이그레이션 010으로 분리.
+- [ ] **[보안] meeting 계열 쓰기 보호** (2026-07-15 조사 완료, **사용자 결정=문서화 후 보류**) — `meeting_votes` / `meeting_vote_games` / `meeting_game_prefs` 전체 현재 UNRESTRICTED (anon 키로 전체 읽기/쓰기/삭제 가능).
+  - **위협 모델**: 서버측 신원 증명 부재가 근본 원인. 클라이언트가 `user_id`(카카오 id)를 자기 주장할 뿐 검증 단계 없음 → anon 키(페이지 소스에 노출, 정상)만 알면 아무 user_id로나 남의 일정 write/delete 가능. **단 meeting 테이블엔 금융·PII 없음**(날짜/시간/게임선호/닉네임) → 실제 위협은 "REST 직접 호출 가능한 사람이 동호회 일정 훼손·사칭" 수준, 심각도 중간 이하.
+  - **범위 주의**: 이건 meeting만의 문제가 아님. 카카오 OAuth라 `auth.uid()` NULL → **전체 테이블이 RLS off + anon 키 직접 write** 동일 구조(game_likes, game_play_records, profiles, member_intros …). meeting만 고치면 반쪽.
+  - **쓰기 호출부 8개**(전부 supabase-client.js): `upsertMeetingVote`/`deleteMeetingVote`(votes), `addMeetingVoteGame`/`setMeetingVoteGamePriority`/`setMeetingVoteGameCondition`/`removeMeetingVoteGame`(vote_games), `saveMeetingGamePref`/`deleteMeetingGamePref`(game_prefs).
+  - **근본 해결 = Edge Function + 카카오 토큰 검증**: 클라가 카카오 액세스 토큰 동봉 → Edge Function이 kakao `/v2/user/me`로 신원 서버검증 → service_role로 user_id 일치 행만 write. **결정적 제약**: 현재 카카오 토큰을 로그인 후 저장 안 하고 버림([auth-callback.html:86](../auth-callback.html#L86)) → **토큰 저장·refresh 흐름을 신규 구축**해야 하고 만료 시 write 실패 UX 처리 필요. 추가로 Edge Function 배포 인프라(Supabase CLI, 지금까지 SQL Editor만 사용 — **배포 권한/환경 확인 선행**) + 마이그레이션 010(테이블 잠그고 Edge Function만 write).
+  - **착수 조건**: Red, Plan 모드 + Opus xhigh 고정. 착수 전 ①Edge Function 배포 가능 환경인지 ②meeting만 vs 앱 전체 범위 재확정. RLS UNRESTRICTED 배지는 그때까지 의도적 유지.
 
 ### V4 아이디어 (장기, 구현 미정)
 
