@@ -940,14 +940,18 @@ function toDateStr(d) {
       ['recommend_complete', 'record_complete'], 1
     );
     if (!events) return;
-    const todayKst = toDateStr(new Date());
+    // created_at은 UTC ISO 문자열이라 KST(+9h)로 변환 후 날짜 비교.
+    // (그냥 slice(0,10)하면 KST 00~09시 이벤트가 UTC 기준 전날로 잘려 오늘 집계에서 누락됨)
+    const kstDateStr = ts => {
+      const t = ts ? new Date(ts).getTime() : NaN;
+      return Number.isNaN(t) ? '' : new Date(t + 9 * 3600000).toISOString().slice(0, 10);
+    };
+    const todayKst = kstDateStr(Date.now());
     const recCount = events.filter(e =>
-      e.event_type === 'recommend_complete' &&
-      (e.created_at || '').slice(0, 10) === todayKst
+      e.event_type === 'recommend_complete' && kstDateStr(e.created_at) === todayKst
     ).length;
     const playCount = events.filter(e =>
-      e.event_type === 'record_complete' &&
-      (e.created_at || '').slice(0, 10) === todayKst
+      e.event_type === 'record_complete' && kstDateStr(e.created_at) === todayKst
     ).length;
     if (recEl) {
       recEl.textContent = recCount > 0
