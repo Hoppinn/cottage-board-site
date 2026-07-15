@@ -1446,6 +1446,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
   // 주 네비게이션 상태 및 UI
   let weekOffset = 0;
+  let selectedDate = null; // loadWeek()가 재호출돼도(조건 변경 등) 사용자가 고른 탭 유지. weekOffset 바뀌면 dateKeys에 없어져 자동 재계산됨.
   const navEl = document.createElement('div');
   navEl.className = 'meeting-week-nav';
   daysEl.parentNode.insertBefore(navEl, daysEl);
@@ -1534,10 +1535,12 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
       const dateKeys = Object.keys(byDate).sort();
 
-      // 초기 선택: 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
-      let selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0)
-        || dateKeys.find(d => d >= todayStr)
-        || dateKeys[0];
+      // 초기 선택(또는 이전 선택이 이번 주 범위 밖이 됐을 때만 재계산): 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
+      if (selectedDate == null || !dateKeys.includes(selectedDate)) {
+        selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0)
+          || dateKeys.find(d => d >= todayStr)
+          || dateKeys[0];
+      }
 
       function renderChips() {
         daysEl.innerHTML = dateKeys.map((ds, i) => {
