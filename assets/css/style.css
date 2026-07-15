@@ -4217,7 +4217,7 @@ body.embed-mode {
 .profile-gamelist-section-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;text-align:left;gap:6px;margin-bottom:8px;}
 .profile-gamelist-body.is-hidden{display:none;}
 /* 취향 보드 */
-.taste-bio-section,.taste-game-section,.taste-avoid-section{margin-bottom:20px;}
+.taste-bio-section,.taste-game-section,.taste-avoid-section{margin-bottom:28px;}
 .taste-section-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
 .taste-count{font-weight:400;color:var(--muted);}
 .taste-bio-row{display:flex;align-items:flex-start;gap:8px;}
@@ -4352,7 +4352,7 @@ body.embed-mode {
 .mb-planner-only-item{opacity:.7;}
 .mb-planner-hint{display:inline-block;font-size:10px;color:var(--muted,#9e8e7e);background:var(--bg-soft,#f5f3f0);border:1px solid var(--line,#e0d8cc);border-radius:8px;padding:1px 5px;margin-left:4px;white-space:nowrap;flex-shrink:0;}
 
-.meeting-profile-section{margin-bottom:20px;}
+.meeting-profile-section{margin-bottom:28px;}
 .meeting-profile-display{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
 .meeting-profile-row{display:flex;align-items:baseline;gap:6px;font-size:13px;}
 .meeting-profile-label{color:var(--muted);flex-shrink:0;}
