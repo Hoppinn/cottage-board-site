@@ -277,5 +277,6 @@
 |------|------|------|
 | Green | ACH4, PU1, ACH8, GDA1, KA8, CSS3 | ✅ 완료 |
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
-| Red | ACH3, KA1, CSS2 | ✅ 완료 (137차) |
+| Red | ACH3, CSS2 | ✅ 완료 (137차, ACH3는 buildCharacterSection/buildAchievementsSection의 `preStats` 파라미터로 쿼리 공유 확인, CSS2는 `!important` 196→30회로 감소 확인, 2026-07-15 재검증) |
+| Red | ~~KA1~~ | ❌ **미완료 정정 (2026-07-15 재검증)** — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 위 "✅ 완료" 표기는 오기재였던 것으로 확인. 여전히 구조 변경 필요(Red) 항목으로 유지. |
 | Red | SC1, PU2, GDA2, ACH5, SC4/SC5 | ⏳ 미처리 |
