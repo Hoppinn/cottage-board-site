@@ -2069,9 +2069,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             const badge = (it.days && _multiDay) ? `<span class="mb-week-badge">(${it.days})</span>` : '';
             const ruleOn = it.ruleOn ? ' is-on' : '';
             // 자세히(막대 클릭) 모달과 연동되는 인원조건 토글. 내 보드=select(수정 가능, 양쪽 연동) / 읽기전용=정적 라벨.
+            const curCondLabel = it.condOptions.find(o => o.value === it.condition)?.label || '';
+            // 네이티브 select는 가장 긴 옵션(베스트 3인 등)에 맞춰 폭이 고정됨 → 현재 선택 라벨 길이로 좁힘(day-detail.js 공유 헬퍼)
+            const selWidth = window._condSelWidth?.(curCondLabel) || '';
             const condTag = readOnly
-              ? (it.condition !== 'any' ? `<span class="mb-week-cond">${escH(it.condOptions.find(o => o.value === it.condition)?.label || '')}</span>` : '')
-              : `<select class="mb-cond-select" aria-label="인원 조건">${it.condOptions.map(o => `<option value="${o.value}"${o.value === it.condition ? ' selected' : ''}>${escH(o.label)}</option>`).join('')}</select>`;
+              ? (it.condition !== 'any' ? `<span class="mb-week-cond">${escH(curCondLabel)}</span>` : '')
+              : `<select class="mb-cond-select" style="width:${selWidth}" aria-label="인원 조건">${it.condOptions.map(o => `<option value="${o.value}"${o.value === it.condition ? ' selected' : ''}>${escH(o.label)}</option>`).join('')}</select>`;
             return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${condTag}${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
           };
 
@@ -2419,7 +2422,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
                 if (!result || !result.ok) { ok = false; console.error('[모임보드] setMeetingVoteGameCondition:', result); }
               }
               sel.disabled = false;
-              if (!ok) { sel.value = prevCond; window.showToast?.('인원 조건 변경에 실패했어요'); return; }
+              if (!ok) { sel.value = prevCond; sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || ''; window.showToast?.('인원 조건 변경에 실패했어요'); return; }
+              sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
               // 로컬 캐시 갱신(다음 자세히 모달 오픈 시 재조회 없이도 일치)
               const dateSet = new Set(grp.dates);
               _weekData.myVoteGames.forEach(g => {

@@ -437,6 +437,12 @@
     return condLabel(cond, cgEntry);
   };
 
+  // 인원조건 select 폭 — 네이티브 select는 "가장 긴 옵션"에 맞춰 폭이 고정돼(브라우저 기본 동작)
+  // "3인" 선택 중에도 "베스트 3인"만큼 넓은 여백이 남음. 현재 선택된 라벨 길이에 맞춰 동적으로 좁힘.
+  window._condSelWidth = function (label) {
+    return Math.max(34, (label || '').length * 9 + 18) + 'px';
+  };
+
   /**
    * 일정 상세 블록 HTML 반환 (모달/인라인 공용)
    * @param {{ date: string, timeStart: number, timeEnd: number, wantGames: string[], learnGames: string[] }} opts
@@ -541,7 +547,8 @@
             const _optLabel = (v) => v === 'any' ? '무관' : (window.formatCondLabel?.(v, g.game_id) || COND_LABELS[v]);
             const selectOpts = Object.keys(COND_LABELS)
               .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
-            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            const selWidth = window._condSelWidth?.(_optLabel(curCond)) || '';
+            return `<li><span>${name}</span><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
@@ -618,11 +625,13 @@
             if (!result || !result.ok) {
               console.error('[openDateScheduleModal] condition:', result);
               sel.value = prevCond;
+              sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
               return;
             }
             gameObj.player_condition = newCond;
             sel.dataset.prev = newCond;
-            // 옵션 텍스트가 이미 해석 라벨이라 select가 스스로 갱신됨(별도 태그 없음)
+            // 옵션 텍스트가 이미 해석 라벨이라 select가 스스로 갱신됨(별도 태그 없음). 폭도 새 라벨 길이에 맞춤.
+            sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
             _schedDirty = true;
           });
         });
