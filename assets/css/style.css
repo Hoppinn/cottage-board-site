@@ -6899,11 +6899,11 @@ body.is-embedded .inner-page{padding-top:16px;}
 .meeting-day-chip{
   display:flex;flex-direction:column;align-items:center;
   gap:2px;
-  padding:6px 7px;
+  padding:6px 9px;
   border-radius:10px;
   background:var(--bg);
   border:1px solid var(--border);
-  min-width:34px;
+  min-width:36px;
   cursor:pointer;
   transition:outline 0.1s;
 }
