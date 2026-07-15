@@ -119,8 +119,8 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 | `promptNicknameChange()` | 닉네임 변경 다이얼로그 |
 | `isOwner()` | OWNER_KAKAO_ID와 일치 여부 |
 | `openProfilePanel(autoSubsheet?, opts?)` | 프로필 보드 열기. `autoSubsheet`: `'taste'\|'records'\|'usage'\|'meeting'\|'voucher'`(자동 진입할 서브시트). **`opts={userId, readOnly}`** (Phase C): `readOnly:true`면 대상 `userId`의 **공개 보드를 편집 컨트롤 없이** 표시(비공개 섹션=알림·교환권·함께한 시간 제외, 로그인 없이도 조회 가능). readOnly=false(기본)면 종전대로 `getKakaoUser()` 기준 내 보드(버튼 재클릭 토글). 편집 HTML은 내부 `_ro()`로 생략, `.profile-panel--readonly`/`.profile-subsheet--readonly` 클래스 부여 |
-| `openOtherProfileSheet(userId)` | **Phase C: 얇은 래퍼** → `openProfilePanel('taste', {userId, readOnly:true})` (본인이면 편집 가능한 내 보드). 구 `.other-profile-overlay` 별도 시트 제거 |
-| `openOtherMeetingSheet(userId)` | **Phase C: 얇은 래퍼** → `openProfilePanel('meeting', {userId, readOnly:true})` (본인이면 `openProfilePanel('meeting')`). 회원 자기소개(club-intro.html)·모임 참여자(club-schedule.html) 닉네임 클릭 진입점. 구 otherMainPanel/`_openOtherMeetingSubSheet` 2단 구조 제거 |
+| `openOtherProfileSheet(userId)` | **Phase C: 얇은 래퍼** → `openProfilePanel('taste', {userId, readOnly:true})` (본인이면 편집 가능한 내 보드). 구 `.other-profile-overlay` 별도 시트 제거. **Phase D(2026-07-15) 진입점 통일**: 게임시트 좋아요·궁금해요 아바타 칩(game-sheet.js), 게임시트 게임평·플레이기록 미리보기/전체목록 닉네임(`.sheet-comment-nick[data-user-id]`), 플레이기록 게시판 참여자 태그(`.pr-tag-who[data-nick]`, game-reviews.js — 종전 `openOtherMeetingSheet` 오배선 수정)·후기 작성자 이름(`.pr-rec-reviewer[data-user-id]`), 홈 최근 플레이 후기 미리보기(index-page.js) — "모임 참여자 외 전부"는 이 함수로 통일 |
+| `openOtherMeetingSheet(userId)` | **Phase C: 얇은 래퍼** → `openProfilePanel('meeting', {userId, readOnly:true})` (본인이면 `openProfilePanel('meeting')`). 회원 자기소개(club-intro.html)·**모임 참여자**(`.sched-bar-name[data-uid]` — day-detail.js/index-page.js/club-schedule.html) 닉네임 클릭 진입점. 구 otherMainPanel/`_openOtherMeetingSubSheet` 2단 구조 제거 |
 
 ---
 

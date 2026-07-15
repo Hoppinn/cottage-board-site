@@ -1039,12 +1039,16 @@ async function initSheetCommentsPreview(gameKey) {
       <button class="sheet-comment-del-btn" data-id="${item.id}" data-game-key="${esc(gameKey)}" onclick="onDeleteCommentPreview(this)" type="button">삭제</button>
     </div>` : '';
     return `<div class="sheet-play-scroll-card">
-      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${_isMineAny ? '<span class="sheet-mine-mark">★</span> ' : ''}${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${editBtns}
     </div>`;
   }).join('');
   el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
+  el.querySelectorAll('.sheet-comment-nick[data-user-id]').forEach(n => {
+    n.style.cursor = 'pointer';
+    n.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(n.dataset.userId); });
+  });
 }
 
 async function initSheetPlayPreview(gameKey) {
@@ -1078,7 +1082,7 @@ async function initSheetPlayPreview(gameKey) {
     const _scoreTag = r.score_note ? `<span class="sheet-play-info-tag">🏆 ${esc(r.score_note).replace(/\s*\/\s*/g,_sep)}</span>` : '';
     return `<div class="sheet-play-scroll-card">
       <span class="sheet-comment-nickname">
-        ${r.nickname ? `<strong class="sheet-comment-nick">${isMine ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
+        ${r.nickname ? `<strong class="sheet-comment-nick"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${isMine ? '<span class="sheet-mine-mark">★</span> ' : ''}${esc(r.nickname)}</strong>` : ''}
         ${dateStr ? `<span class="sheet-comment-date">${dateStr}</span>` : ''}
         ${r.group_name ? `<a class="sheet-preview-group sheet-history-link" href="${rootPath}pages/game/game-reviews.html?group=${encodeURIComponent(r.group_name)}${r.played_at ? '&date=' + encodeURIComponent(r.played_at) : ''}">${esc(r.group_name)}</a>` : ''}
       </span>
@@ -1089,6 +1093,10 @@ async function initSheetPlayPreview(gameKey) {
   }).join('');
 
   el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
+  el.querySelectorAll('.sheet-comment-nick[data-user-id]').forEach(n => {
+    n.style.cursor = 'pointer';
+    n.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(n.dataset.userId); });
+  });
 }
 
 function _attachPhotoLightbox(container, allPhotos, entries, deleteOpts) {
@@ -1589,7 +1597,7 @@ async function initSheetComments(gameKey) {
         ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
         : myIds.includes(c.id);
       return `<div class="sheet-comment-item">
-      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
         <button class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
@@ -1601,7 +1609,7 @@ async function initSheetComments(gameKey) {
     const textAttr = item.text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const mine = currentUserId && item.user_id && String(item.user_id) === String(currentUserId);
     return `<div class="sheet-comment-item">
-      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick">${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
+      <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
         <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${gameKey}" data-text="${textAttr}" onclick="onEditPlayReview(this)" type="button">✏️</button>
@@ -1615,6 +1623,10 @@ async function initSheetComments(gameKey) {
   const moreCount = total - 1;
   listEl.innerHTML = htmlArr[0] +
     (moreCount > 0 ? `<div class="sheet-list-rest" style="display:none">${restHtml}</div><button class="sheet-list-more-btn" type="button">${moreCount}건 더보기 ▾</button>` : '');
+  listEl.querySelectorAll('.sheet-comment-nick[data-user-id]').forEach(n => {
+    n.style.cursor = 'pointer';
+    n.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(n.dataset.userId); });
+  });
   if (moreCount > 0) {
     const moreBtn = listEl.querySelector('.sheet-list-more-btn');
     const restEl = listEl.querySelector('.sheet-list-rest');

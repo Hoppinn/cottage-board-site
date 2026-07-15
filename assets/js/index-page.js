@@ -1057,7 +1057,7 @@ function toDateStr(d) {
       : '';
 
     const reviewHtml = r.review_text
-      ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer">${r.nickname}</span> ` : ''}${r.review_text}</p>`
+      ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${r.nickname}</span> ` : ''}${r.review_text}</p>`
       : '';
 
     const photoUrls = window.parsePhotoUrls?.(r.photo_url) || [];
@@ -1081,6 +1081,14 @@ function toDateStr(d) {
           ${photoHtml}
         </div>
       </div>`;
+
+    body.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
+      span.style.cursor = 'pointer';
+      span.addEventListener('click', e => {
+        e.stopPropagation();
+        window.openOtherProfileSheet?.(span.dataset.userId);
+      });
+    });
   } catch (_) {
     body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
   }

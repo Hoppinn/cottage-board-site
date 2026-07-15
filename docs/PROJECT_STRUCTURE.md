@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-05 (day-detail.js window.buildBarsInCard 추가 반영)
+최종 갱신: 2026-07-15 (Phase D 닉네임 클릭 진입점 통일 반영)
 
 ---
 
@@ -275,6 +275,10 @@ game-reviews.html — 기록 입력 탭
     openProfilePanel('meeting', {userId, readOnly:true}) 호출 — 본인 내 보드와 동일한 통합 패널을 편집
     컨트롤 없이·비공개 섹션(알림/교환권/함께한시간) 제외하고 표시. 본인 카드 클릭 시 openProfilePanel('meeting')으로 위임
     (구 별도 otherMainPanel/_openOtherMeetingSubSheet 구조는 폐지)
+  - **Phase D(2026-07-15) 진입점 통일**: 닉네임 클릭 진입점을 두 갈래로 확정 — **모임 참여자**(`.sched-bar-name`)는
+    openOtherMeetingSheet(모임 보드 직행), **그 외 전부**(게임시트 좋아요/궁금해요 아바타, 게임평·플레이기록 닉네임/리뷰어 이름)는
+    openOtherProfileSheet(읽기전용 내 보드 전체). 플레이기록 게시판 참여자 태그가 기존에 모임 보드로 잘못 연결돼 있던 것을
+    수정하고, 게임평·리뷰어 이름에는 클릭 진입점을 신규 추가. 상세는 js-api.md openOtherProfileSheet/openOtherMeetingSheet 항목.
 ```
 
 ---

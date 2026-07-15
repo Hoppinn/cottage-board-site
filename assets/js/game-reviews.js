@@ -579,14 +579,22 @@
       hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
     });
 
-    // 참여자 이름 클릭 → 해당 회원 보드 열기
+    // 참여자 이름 클릭 → 해당 회원 읽기전용 보드 열기
     panel.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
       const userId = _nickUserMap.get((span.dataset.nick || '').toLowerCase());
       if (!userId) return;
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => {
         e.stopPropagation();
-        window.openOtherMeetingSheet?.(userId);
+        window.openOtherProfileSheet?.(userId);
+      });
+    });
+    // 후기 작성자 이름 클릭 → 해당 회원 읽기전용 보드 열기
+    panel.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
+      span.style.cursor = 'pointer';
+      span.addEventListener('click', e => {
+        e.stopPropagation();
+        window.openOtherProfileSheet?.(span.dataset.userId);
       });
     });
 
@@ -1156,7 +1164,7 @@
           (r.user_id && String(r.user_id) === String(user.id)) ||
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
         );
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer">${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
+        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
@@ -1211,7 +1219,7 @@
       const nameTags = f.player_names
         ? f.player_names.split(',').map(n => {
             const t = n.trim();
-            return `<span class="pr-rec-tag pr-tag-who${grpRecorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}">${escH(t)}</span>`;
+            return `<span class="pr-rec-tag pr-tag-who${grpRecorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}" data-nick="${escH(t)}">${escH(t)}</span>`;
           }).join('')
         : '';
 
@@ -1235,7 +1243,7 @@
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
         );
         const date = r.played_at || r.created_at?.slice(0, 10) || '?';
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer">${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
+        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);

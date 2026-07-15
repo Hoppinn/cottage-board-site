@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-14 (문서 슬림화 — 과거 완료 로그·변경 이력·142/143차 이력·완료 체크포인트 제거, 열린 항목은 §2/§3/이월로 통합. git 로그가 삭제분 보존. 1158→329줄)
+최종 갱신: 2026-07-15 (Phase D 진입점 통일 완료 반영)
 
 ---
 
@@ -62,14 +62,16 @@
 
 **C3 (정리)** — ✅ 완료 (2026-07-15): ①`_buildMeetingGameItems`(구 미러 렌더러, kakao-auth.js) 제거 ②구 CSS `.other-profile-*`(style.css, 10줄) 제거 ③미사용 DB fn `getUserTasteProfile`/`getUserMeetingProfile`(supabase-client.js 본체+export) 제거. js-api.md 해당 행 삭제.
 
-**Phase D (연계) — 진입점 정리**:
-- **모임 참여자** 닉네임(막대 .sched-bar-name 등) 클릭 → 그 사람 **모임 보드 직행**(읽기전용).
-- **그 외**(게임평·플레이기록 닉네임) 클릭 → 그 사람 **읽기전용 내 보드**(Phase C) 전체.
-- 현재 진입점 산재 확인 후 통일.
+**Phase D (연계) — 진입점 정리** — ✅ 완료 (2026-07-15, 실서버 Playwright 검증 완료):
+- 전수 조사 결과 진입점 4곳: ①`.sched-bar-name`(모임 참여자, day-detail.js·index-page.js·club-schedule.html 3곳) → openOtherMeetingSheet(이미 정상) ②회원 자기소개 카드(club-intro.html·kakao-auth.js) → openOtherMeetingSheet(모임 프로필 카드라 의도된 설계, 유지) ③게임시트 좋아요/궁금해요 아바타 칩(game-sheet.js) → openOtherProfileSheet(이미 정상) ④**플레이기록 참여자 태그**(`.pr-tag-who[data-nick]`, game-reviews.js) → **openOtherMeetingSheet로 오배선돼 있던 것 발견, openOtherProfileSheet로 수정**.
+- **사용자 승인으로 범위 확장**: 게임평·리뷰어 이름에 신규 클릭 진입점 추가(기존엔 텍스트로만 존재, 클릭 불가). 대상: game-reviews.js `.pr-rec-reviewer`(플레이기록 후기 작성자, `r.user_id` 직접 사용), game-sheet.js `.sheet-comment-nick`(게임시트 게임평·플레이기록 미리보기 3곳 + 전체목록 initSheetComments 2분기, `item.user_id`/`r.user_id` 사용), index-page.js 홈 "최근 플레이 후기" 미리보기 리뷰어. 전부 `openOtherProfileSheet` 통일. CSS `[data-user-id]:hover{color:var(--green);text-decoration:underline}` 2곳(`.pr-rec-reviewer`, `.sheet-comment-nick`) 추가.
+- **부수 발견**: game-reviews.js `buildGameBody`(게임별 보기 전용 렌더러로 추정되었던 함수)가 **어디서도 호출되지 않는 dead code**임을 실서버 테스트로 확인(게임별 보기는 실제로는 게임 카드 그리드만 표시, 참여자 태그 없음). 이번 세션에서 이 함수에도 `data-nick`/`data-user-id` 속성을 동일하게 추가했으나 호출되지 않아 무해·무의미. **삭제는 이번 작업 범위 밖**(기능 작업 중 리팩토링 금지 원칙) — 코드 품질 주석에 등록.
+- **검증**: Playwright 헤드리스, 실 프로덕션 Supabase 데이터로 라이브 서버(localhost:3000) 대상 — ①게시판 참여자 태그 클릭 → "취향 보드"(읽기전용) 서브시트 오픈 확인(종전 "모임 보드"에서 수정 확인) ②게시판 후기 작성자 클릭 → "취향 보드" 오픈 ③게임시트 전체 게임평 목록 닉네임 클릭 → "취향 보드" 오픈 ④홈 미리보기 리뷰어 data-user-id·cursor 확인 ⑤회귀 확인: `.sched-bar-name` 클릭 → 여전히 "모임 보드" 오픈(불변). 콘솔 에러 0.
+- 커밋 전 문서 갱신: js-api.md(openOtherProfileSheet/openOtherMeetingSheet 항목에 전체 진입점 목록 반영), PROJECT_STRUCTURE.md §5(Phase D 요약 추가).
 
 **Phase E (후속) — 모임보드 전체 디자인 리뷰**: 아이콘 과다 여부(❤️/📖/⋯/배지 밀도), 동선, 전체 가독성. 스크린샷으로 사용자와 함께.
 
-**위험요소(잔여)**: ①C1 실서버 스모크 미완 — 남의 취향/모임/기록/수집 보드 조회 + 편집 컨트롤 부재 + 비공개 섹션 미노출 눈으로 확인 필요. ②Phase D 진입점 통일 시 모임참여자→모임직행 / 그외→내보드전체 분기.
+**위험요소(잔여)**: C1 실서버 스모크 미완 — 남의 취향/모임/기록/수집 보드 조회 + 편집 컨트롤 부재 + 비공개 섹션 미노출 눈으로 확인 필요.
 
 ---
 
@@ -167,6 +169,7 @@
 - `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
+- `game-reviews.js` `buildGameBody` — 어디서도 호출되지 않는 dead code(2026-07-15 Phase D 검증 중 발견, 실서버 테스트로 게임별 보기가 실제론 게임 카드 그리드만 렌더함을 확인). 삭제 시 회귀 위험 낮음, REFACTOR 세션에서 정리 권장.
 
 ---
 
