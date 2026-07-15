@@ -847,7 +847,12 @@
 
     const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
-      const _li = g => `<li>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}</li>`;
+      // 참여자별 게임 옆에 그 사람이 설정한 인원조건 표시(읽기전용). 무관 포함 — 어떤 게임이 특정 인원 필요한지 한눈에.
+      const _li = g => {
+        const c = g.player_condition || 'any';
+        const cl = c === 'any' ? '무관' : (window.formatCondLabel?.(c, g.game_id) || c);
+        return `<li>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+      };
       const wantGames  = myGames.filter(g => g.list_type === 'want');
       const learnGames = myGames.filter(g => g.list_type === 'learn');
       const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
