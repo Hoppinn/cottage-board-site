@@ -243,6 +243,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, game-sheet.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js, day-detail.js |
 | `window.formatCondLabel` | day-detail.js | club-schedule.html (Step 3 칩) |
+| `window._condSelWidth` | day-detail.js | kakao-auth.js (모임보드 `.mb-cond-select`) — `(label) => 'Npx'`. 네이티브 select가 가장 긴 옵션 기준으로 폭 고정되는 문제 회피, 선택 라벨 길이 기준 동적 폭 계산(2026-07-15) |
 | `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js |
 | `window.getAllGamesArray` | game-display-adapter.js | index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
