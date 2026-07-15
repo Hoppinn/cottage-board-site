@@ -999,7 +999,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
-  const _tasteInnerHtml = `
+  let _tasteInnerHtml = `
     <div class="taste-bio-section">
       <div class="taste-section-label">한줄 소개</div>
       <div class="taste-bio-row">
@@ -1065,7 +1065,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _recentPhotoHtml = _allPhotoData.length
     ? `<ul class="profile-activity-list"><li style="display:block;padding:4px 0"><div class="record-photo-grid">${_allPhotoData.map((d, i) => `<img class="record-photo-thumb${i >= _PHOTO_SHOW ? ' record-photo-hidden' : ''}" src="${escH(d.url)}" alt="" data-photo-idx="${i}">`).join('')}${_allPhotoData.length > _PHOTO_SHOW ? `<button class="record-photo-more-badge" type="button">더 보기 (${_allPhotoData.length - _PHOTO_SHOW}장 더)</button>` : ''}</div></li></ul>`
     : _emptyList('아직 사진이 없어요');
-  const _recordInnerHtml = `
+  let _recordInnerHtml = `
     <div class="profile-activity-group profile-activity-group--review">
       <button class="profile-activity-toggle" type="button">💬 게임평 <span class="profile-activity-count">${_allReviews.length}개</span><span class="profile-toggle-arrow">▴</span></button>
       ${_allReviews.length ? _openActivityList(reviewListHtml) : _emptyList('아직 게임평이 없어요')}
@@ -1275,7 +1275,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
-  function _openSubSheet(title, contentHtml, afterRender, bodyClass = '') {
+  function _openSubSheet(title, contentHtml, afterRender, bodyClass = '', onLeave = null) {
     document.getElementById('profileSubSheet')?.remove();
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
@@ -1290,9 +1290,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-subsheet-body${bodyClass ? ' ' + bodyClass : ''}">${contentHtml}</div>
       </div>`;
     document.body.appendChild(sub);
-    sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
+    // 서브시트를 패널로 되돌릴 때(뒤로가기/백드롭) 현재 DOM 상태를 스냅샷 → 재진입 시 변경분 유지.
+    // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 로드하므로 스냅샷 불필요)
+    const _leaveToPanel = () => { try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (_) {} sub.remove(); };
+    sub.querySelector('.profile-subsheet-back').addEventListener('click', _leaveToPanel);
     sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); _restoreMenuExpanded(); });
-    sub.addEventListener('click', e => { if (e.target === sub) sub.remove(); });
+    sub.addEventListener('click', e => { if (e.target === sub) _leaveToPanel(); });
     sub.querySelector('.profile-subsheet-header').addEventListener('click', e => { if (!e.target.closest('button')) sub.querySelector('.profile-subsheet-body')?.scrollTo({top:0,behavior:'smooth'}); });
     if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));
   }
@@ -1608,11 +1611,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               },
               onAdd: async (gameId, customName, resultsEl) => {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
-                // in-memory 소스 배열도 갱신 — 안 하면 서브시트 재렌더(_buildTasteGameItems) 시 방금 추가분이 사라짐
-                const _srcArr = listKey === 'liked' ? likedGames : curiousGames;
-                if (_srcArr && !_srcArr.some(g => (gameId && String(g.game_id) === String(gameId)) || (customName && !g.game_id && g.custom_name === customName))) {
-                  _srcArr.push({ game_id: gameId || null, custom_name: customName || null });
-                }
                 _appendTasteChip(listEl, countEl, gameId, customName);
                 _emitLikesChanged(table, gameId, true);
                 if (gameId) {
@@ -1713,7 +1711,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
           }
 
           // ── 피하는 유형 태그 ──
-          let currentAvoidTags = [...(_avoidTags)];
+          // 현재 DOM(is-active)에서 도출 — 서브시트 재진입(스냅샷 복원) 시에도 _avoidTags(패널 오픈값)와 어긋나지 않게
+          let currentAvoidTags = [...subBody.querySelectorAll('.taste-tag.is-active')].map(b => b.dataset.tag);
           const _avoidCountEl = subBody.querySelector('.taste-avoid-count');
           const _updateAvoidCount = () => {
             if (_avoidCountEl) _avoidCountEl.textContent = currentAvoidTags.length > 0 ? `${currentAvoidTags.length}개 선택됨` : '';
@@ -1816,7 +1815,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               });
             }
           }
-        });
+        }, '', bodyEl => { _tasteInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
 
       } else if (type === 'records') {
         _trackPvOnce('my-board-records');
@@ -1919,7 +1918,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               });
             });
           }
-        }, 'profile-subsheet-body--records');
+        }, 'profile-subsheet-body--records', bodyEl => { _recordInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
 
 
       } else if (type === 'usage') {
