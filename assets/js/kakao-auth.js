@@ -2510,12 +2510,6 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
     const total = 14; // 9~23시
     const left  = ((v.time_start - 9) / total * 100).toFixed(1);
     const width = ((v.time_end - v.time_start) / total * 100).toFixed(1);
-    const dayGames = _vg.filter(g => g.vote_date === v.vote_date && String(g.user_id) === String(userId));
-    const gameParts = [
-      ...dayGames.filter(g => g.list_type === 'want').map(g => `🎲${escH(_gameName(g.game_id, g.custom_name))}`),
-      ...dayGames.filter(g => g.list_type === 'learn').map(g => `📖${escH(_gameName(g.game_id, g.custom_name))}`),
-    ];
-    const gamesHtml = gameParts.length ? `<div class="mb-week-games">${gameParts.join(' ')}</div>` : '';
     return `<div class="mb-week-entry">
       <div class="mb-week-row">
         <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
@@ -2523,7 +2517,6 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
         <span class="mb-week-time">${v.time_start}~${v.time_end}시</span>
         <button class="mb-detail-btn" data-uid="${escH(String(userId))}" data-date="${escH(v.vote_date)}" type="button">자세히</button>
       </div>
-      ${gamesHtml}
     </div>`;
   }).join('');
   const bodyHtml = myVotes.length
