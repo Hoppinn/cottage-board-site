@@ -290,15 +290,18 @@
 | 순서 | 세션 | 항목 | 모델·effort | Plan 필요? | 상태 |
 |------|------|------|------------|-----------|------|
 | 1 | R1 | **그린 배치**: `buildGameBody` dead code 삭제(game-reviews.js) · KA4 `getGameName` 중복 통합 · KA5 `_markAllNotifSeen`/`_markVoucherSeen` 중복 통합 · KA6 이벤트 바인딩 중복 제거 · GR6 `window._pr*` 전역변수 5개 IIFE 내부화 · `.mb-week-games` dead CSS 삭제 | **Sonnet medium** | 아니오 | ⏳ 대기 |
-| 2 | R2 | **옐로 배치**: `_openBoxAddSearch`↔`_openTasteAddModal` DRY 통합 · ACH1 8축 정렬 순서 중복상수 4곳→1곳 · ACH3 재검증(137차 이후 실제 잔여 중복쿼리 있는지 먼저 확인) | **Sonnet high** | 아니오 | ⏳ 대기 |
-| 3 | R3 | KA2(`_` 내부함수 window 노출 제거) · KA3(`_safeInt` regex파싱 → 데이터 전달 방식) | **Opus medium** | 아니오(외부참조 확인만) | ⏳ 대기 |
-| 4 | R4 | PU2 — `buildPhotoItemAdder` blob URL 미해제(메모리 누수) 수정 | **Sonnet high** | 아니오 | ⏳ 대기 |
-| 5 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ⏳ 대기 |
-| 6 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ⏳ 대기 |
-| 7 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ⏳ 대기 |
-| 8 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ⏳ 대기 |
-| 9 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ 대기 |
-| 10 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 항목, 서브시트별로 여러 세션 재분할 가능성 있음) | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
+| 2 | **A1** | **[순서 변경 2026-07-15] Phase 3 감사 — 미감사 대형 파일 3개**: `game-sheet.js`(2693줄, 프로젝트 최대·미감사) · `index-page.js`(1594줄) · `day-detail.js`(1180줄, 141차 신설). Explore 에이전트로 조사만(코드 수정 없음), REFACTOR_CHECKPOINT.md 형식(위험도·분류·이슈)으로 결과 기록. game-sheet.js가 KA1보다 커서 R2~R10보다 우선순위 재조정 필요할 수 있음 — 감사 후 이 표 재정렬. | **Opus (조사 전용)** | 아니오 | ⏳ 대기 |
+| 3 | R2 | **옐로 배치**: `_openBoxAddSearch`↔`_openTasteAddModal` DRY 통합 · ACH1 8축 정렬 순서 중복상수 4곳→1곳 · ACH3 재검증(137차 이후 실제 잔여 중복쿼리 있는지 먼저 확인) | **Sonnet high** | 아니오 | ⏳ 대기 |
+| 4 | R3 | KA2(`_` 내부함수 window 노출 제거) · KA3(`_safeInt` regex파싱 → 데이터 전달 방식) | **Opus medium** | 아니오(외부참조 확인만) | ⏳ 대기 |
+| 5 | R4 | PU2 — `buildPhotoItemAdder` blob URL 미해제(메모리 누수) 수정 | **Sonnet high** | 아니오 | ⏳ 대기 |
+| 6 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ⏳ 대기 |
+| 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ⏳ 대기 |
+| 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ⏳ 대기 |
+| 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ⏳ 대기 |
+| 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ 대기 |
+| 11 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 항목, 서브시트별로 여러 세션 재분할 가능성 있음) | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
+
+**A1(감사) 이후 재정렬 예정**: A1에서 game-sheet.js 등에 R2~R10보다 심각한 문제가 발견되면, 그 항목을 R2 자리로 끌어올리고 이후 번호를 재배정한다. A1은 순수 조사라 재정렬 자체는 문서 갱신만으로 끝남(코드 변경 없음).
 
 **감사 자체가 안 된 파일(계획 밖, 별도 Phase 3 감사 세션 먼저 필요)**: `game-sheet.js`(2693줄, 프로젝트 최대), `index-page.js`(1594줄), `day-detail.js`(1180줄, 141차 신설이라 Phase 2 감사 대상에 없었음). 문제 목록이 아직 없어 "고칠 항목"을 특정할 수 없음 — R1~R10 끝난 뒤 감사 세션(Opus, Explore 활용) 별도 제안 예정.
 
