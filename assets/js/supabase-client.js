@@ -683,21 +683,6 @@ window._cottageSess = (function () {
     } catch (_) { return []; }
   }
 
-  async function getUserTasteProfile(userId) {
-    if (!userId) return null;
-    try {
-      const [profileRes, introRes, likedGames, curiousGames] = await Promise.all([
-        db.from('profiles').select('nickname, photo_url, bio, avoid_tags, rep_achievement_id').eq('user_id', userId).maybeSingle(),
-        db.from('member_intros').select('nickname').eq('user_id', userId).maybeSingle(),
-        getUserLikedGamesAll(userId),
-        getUserCuriousGamesAll(userId),
-      ]);
-      const profile = profileRes.data || {};
-      const nickname = introRes.data?.nickname || profile.nickname || '(알 수 없음)';
-      return { nickname, photo_url: profile.photo_url, rep_achievement_id: profile.rep_achievement_id, bio: profile.bio, avoid_tags: profile.avoid_tags || [], likedGames, curiousGames };
-    } catch (_) { return null; }
-  }
-
   async function addGamePref(userId, gameId, customName, table) {
     if (!userId || (!gameId && !customName)) return { error: 'invalid' };
     try {
@@ -801,36 +786,6 @@ window._cottageSess = (function () {
         meetingStyle: intro.meeting_style || [],
         favoriteGames: intro.favorite_games || '',
         cardColor: intro.card_color || '',
-        likedGames,
-        curiousGames,
-        ruleGames,
-      };
-    } catch (_) { return null; }
-  }
-
-  // 다른 유저 모임 보드 읽기 전용 조회 (openOtherMeetingSheet 용, getUserTasteProfile과 동일 패턴)
-  async function getUserMeetingProfile(userId) {
-    if (!userId) return null;
-    try {
-      const [profileRes, introRes, likedGames, curiousGames, ruleGames] = await Promise.all([
-        db.from('profiles').select('nickname, photo_url, bio, rep_achievement_id').eq('user_id', userId).maybeSingle(),
-        db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
-        getUserLikedGamesAll(userId),
-        getUserCuriousGamesAll(userId),
-        getMeetingGamePrefs(userId, 'can_explain_rules'),
-      ]);
-      const profile = profileRes.data || {};
-      const intro = introRes.data || {};
-      const nickname = intro.nickname || profile.nickname || '(알 수 없음)';
-      return {
-        nickname,
-        photo_url: profile.photo_url,
-        rep_achievement_id: profile.rep_achievement_id,
-        bio: profile.bio || '',
-        location: intro.location || '',
-        available: intro.available || '',
-        travelRange: intro.travel_range || '',
-        meetingStyle: intro.meeting_style || [],
         likedGames,
         curiousGames,
         ruleGames,
@@ -1532,7 +1487,6 @@ window._cottageSess = (function () {
     getUserCuriousGames,
     getUserLikedGamesAll,
     getUserCuriousGamesAll,
-    getUserTasteProfile,
     addGamePref,
     removeGamePref,
     getCustomPrefSuggestions,
@@ -1545,7 +1499,6 @@ window._cottageSess = (function () {
     deleteMeetingVote,
     updateNotifSeenAt,
     getMeetingProfile,
-    getUserMeetingProfile,
     upsertMeetingIntro,
     addMeetingGamePref,
     removeMeetingGamePref,

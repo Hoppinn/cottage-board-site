@@ -940,29 +940,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
-  // 모임보드 전용 게임 아이템 — 📖 룰설명 토글 버튼 포함, 초기 maxInitial=2(주간 배지 로드 전)
-  function _buildMeetingGameItems(games, ruleSet, maxInitial = 2) {
-    if (!games.length) return '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
-    const renderItem = g => {
-      const _gd = g.game_id ? window.gameData?.[g.game_id] : null;
-      const name = _gd
-        ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(g.game_id))
-        : (g.custom_name || String(g.game_id || ''));
-      const thumb = _gd?.images?.thumbnail
-        ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
-        : `<span class="taste-game-thumb-empty"></span>`;
-      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
-      const cnAttr = g.custom_name ? ` data-custom-name="${escH(g.custom_name)}"` : '';
-      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
-      const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
-      const ruleOn = ruleSet?.has(ruleKey) ? ' is-on' : '';
-      return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button></div>`;
-    };
-    if (games.length <= maxInitial) return games.map(renderItem).join('');
-    const restCount = games.length - maxInitial;
-    return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
-  }
-
   const _tasteInnerHtml = `
     <div class="taste-bio-section">
       <div class="taste-section-label">한줄 소개</div>

@@ -6,7 +6,7 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-### 🔵 CHECKPOINT: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14 시작, 미착수)
+### 🔵 CHECKPOINT: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14 시작, Phase A~C3 완료 — Phase D·E 및 실서버 스모크 남음)
 
 > **새 세션 시작점.** 아래 순서로 진행. Phase C가 큰 리팩토링이라 컨텍스트 깨끗한 상태에서 시작하려고 이전 세션에서 분리함. **모든 결정은 사용자 승인 완료 — 재확인 불필요, 그대로 구현.**
 
@@ -60,7 +60,7 @@
 - 나머지 모임 서브시트 요소(요일선택·⋯케밥·룰토글·플래너편집 등)는 C1에서 이미 편집버튼 자체가 `_ro()`로 숨겨져 열릴 경로가 없음 — 추가 가드 불필요 확인.
 - `_openBoxAddSearch` DRY(46줄, `_openTasteAddModal`과 중복)는 **REFACTOR 세션으로 유지 이월**(구현/리팩토링 분리 원칙).
 
-**C3 (정리)** — 다음: dead code 제거 — ①`_buildMeetingGameItems`(구 미러 렌더러) ②구 CSS `.other-profile-*`(style.css ~3950-3982) ③미사용 DB fn `getUserTasteProfile`/`getUserMeetingProfile`.
+**C3 (정리)** — ✅ 완료 (2026-07-15): ①`_buildMeetingGameItems`(구 미러 렌더러, kakao-auth.js) 제거 ②구 CSS `.other-profile-*`(style.css, 10줄) 제거 ③미사용 DB fn `getUserTasteProfile`/`getUserMeetingProfile`(supabase-client.js 본체+export) 제거. js-api.md 해당 행 삭제.
 
 **Phase D (연계) — 진입점 정리**:
 - **모임 참여자** 닉네임(막대 .sched-bar-name 등) 클릭 → 그 사람 **모임 보드 직행**(읽기전용).
