@@ -2044,12 +2044,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             });
           };
 
-          const _buildWeekChipHtml = (it, markIcon) => {
+          const _buildWeekChipHtml = (it) => {
             const thumb = it.thumbUrl ? `<img class="taste-game-thumb" src="${escH(it.thumbUrl)}" alt="">` : `<span class="taste-game-thumb-empty"></span>`;
             const clickable = it.slug ? ' taste-game-item--clickable' : '';
             const gidAttr = it.slug ? ` data-game-id="${escH(it.slug)}"` : '';
             const cnAttr = it.customName ? ` data-custom-name="${escH(it.customName)}"` : '';
-            const mark = it.isSource ? `<span class="mb-like-mark" title="내 목록에 있는 게임">${markIcon}</span>` : '';
+            // 평소 좋아하는/궁금한 게임은 표시 없음. 취향엔 없는데 이번 주에만 하고 싶은 게임에만 예외 표시.
+            const mark = !it.isSource ? `<span class="mb-like-mark mb-like-mark--new" title="평소 목록엔 없지만 이번 주에 하고 싶은 게임">✨</span>` : '';
             // 참여일이 하루뿐이면 모든 게임 배지가 같은 요일이라 정보가 없음 → 숨김(여러 날일 때만 표시)
             const _multiDay = new Set((_weekData.myVotes || []).map(v => v.vote_date)).size > 1;
             const badge = (it.days && _multiDay) ? `<span class="mb-week-badge">(${it.days})</span>` : '';
@@ -2061,13 +2062,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             const listId = listType === 'want' ? 'meetinglikedList' : 'meetingcuriousList';
             const countId = listType === 'want' ? 'meetinglikedCount' : 'meetingcuriousCount';
             const srcSet = listType === 'want' ? _likedSlugSet : _curiousSlugSet;
-            const markIcon = listType === 'want' ? '❤️' : '👀';
             const listEl = subBody.querySelector('#' + listId);
             const countEl = subBody.querySelector('#' + countId);
             if (!listEl) return;
             const items = _groupWeekGames(listType, srcSet);
             listEl.innerHTML = items.length
-              ? items.map(it => _buildWeekChipHtml(it, markIcon)).join('')
+              ? items.map(it => _buildWeekChipHtml(it)).join('')
               : (readOnly ? '<p class="taste-game-empty">아직 없어요</p>' : '<p class="taste-game-empty">＋ 버튼으로 이번 주 하고 싶은 게임을 추가해보세요</p>');
             if (countEl) countEl.textContent = `${items.length}개`;
           };
