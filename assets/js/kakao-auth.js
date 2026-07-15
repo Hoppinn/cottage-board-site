@@ -471,6 +471,60 @@ function _buildGameListHtml(gameIds, emptyMsg) {
   return `<ul class="profile-gamelist">${allItems.slice(0, PREV_GAME).join('')}${hasMore ? `<div class="profile-more-wrap is-hidden">${allItems.slice(PREV_GAME).join('')}</div><li class="profile-more-btn-wrap"><button class="profile-more-btn" data-more-count="${allItems.length - PREV_GAME}" type="button">더 보기 (${allItems.length - PREV_GAME}개 더)</button></li>` : ''}</ul>`;
 }
 
+// R2 DRY: _openTasteAddModal(취향보드)/_openBoxAddSearch(모임보드 취향박스) 공용 검색-추가 모달.
+// 두 호출처의 "목록에 있는지 확인"(inList)·"추가 시 처리"(onAdd)만 다르고 검색 UI는 동일해 헬퍼로 추출.
+function _openGameAddSearchModal({ overlayId, title, inList, onAdd }) {
+  document.getElementById(overlayId)?.remove();
+  const overlay = document.createElement('div');
+  overlay.id = overlayId;
+  overlay.className = 'mb-add-overlay';
+  overlay.innerHTML = `<div class="mb-add-box">
+    <div class="mb-add-head"><span class="mb-add-title">${title}</span><button class="mb-add-close" type="button" aria-label="닫기">✕</button></div>
+    <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
+    <div class="mb-add-results"></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const input = overlay.querySelector('.mb-add-input');
+  const resultsEl = overlay.querySelector('.mb-add-results');
+  const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
+  const onEsc = e => { if (e.key === 'Escape') close(); };
+  overlay.querySelector('.mb-add-close').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', onEsc);
+
+  const addGame = async (gameId, customName) => {
+    if (inList(gameId, customName)) return;
+    await onAdd(gameId, customName, resultsEl);
+  };
+
+  const _smart = window.matchKoreanSmart;
+  let _t = null;
+  input.addEventListener('input', () => {
+    clearTimeout(_t);
+    _t = setTimeout(async () => {
+      const q = input.value.trim();
+      if (!q) { resultsEl.innerHTML = ''; return; }
+      const matches = Object.entries(window.gameData || {}).filter(([, g]) => {
+        const nm = g.title?.display || g.title?.owned || g.title?.bgg || '';
+        return _smart ? _smart(nm, q) : nm.toLowerCase().includes(q.toLowerCase());
+      }).slice(0, 8);
+      const items = matches.map(([id, g]) => {
+        const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
+        const added = inList(id, null);
+        return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
+      });
+      const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
+      const customItems = suggestions.filter(n => (_smart ? _smart(n, q) : n.toLowerCase().includes(q.toLowerCase()))).slice(0, 3)
+        .map(n => `<button class="taste-search-item" data-custom-name="${escH(n)}" type="button">${escH(n)} <span class="taste-search-custom-label">직접입력</span></button>`);
+      const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
+      resultsEl.innerHTML = [...items, ...customItems, direct].join('');
+      resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn =>
+        btn.addEventListener('click', () => addGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
+    }, 180);
+  });
+  setTimeout(() => input.focus(), 50);
+}
+
 function _bindActivityTogglesAndMore(subBody) {
   subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1538,71 +1592,25 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
           // 취향보드 게임 추가 센터모달 (검색 초성 + 직접입력 — 원천 등록, 날짜·퀵픽 없음)
           const _openTasteAddModal = ({ listKey, table, listEl, countEl }) => {
-            document.getElementById('mbAddModal')?.remove();
             const isLiked = listKey === 'liked';
-            const overlay = document.createElement('div');
-            overlay.id = 'mbAddModal';
-            overlay.className = 'mb-add-overlay';
-            overlay.innerHTML = `
-              <div class="mb-add-box">
-                <div class="mb-add-head">
-                  <span class="mb-add-title">${isLiked ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가</span>
-                  <button class="mb-add-close" type="button" aria-label="닫기">✕</button>
-                </div>
-                <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
-                <div class="mb-add-results"></div>
-              </div>`;
-            document.body.appendChild(overlay);
-            const input = overlay.querySelector('.mb-add-input');
-            const resultsEl = overlay.querySelector('.mb-add-results');
-            const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
-            const onEsc = e => { if (e.key === 'Escape') close(); };
-            overlay.querySelector('.mb-add-close').addEventListener('click', close);
-            overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-            document.addEventListener('keydown', onEsc);
-
-            const inList = (gameId, customName) => {
-              if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
-              if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
-              return false;
-            };
-            const addGame = async (gameId, customName) => {
-              if (inList(gameId, customName)) return;
-              await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
-              _appendTasteChip(listEl, countEl, gameId, customName);
-              _emitLikesChanged(table, gameId, true);
-              if (gameId) {
-                const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
-                if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
-              }
-            };
-
-            const _smart = window.matchKoreanSmart;
-            let _t = null;
-            input.addEventListener('input', () => {
-              clearTimeout(_t);
-              _t = setTimeout(async () => {
-                const q = input.value.trim();
-                if (!q) { resultsEl.innerHTML = ''; return; }
-                const matches = Object.entries(window.gameData || {}).filter(([, g]) => {
-                  const nm = g.title?.display || g.title?.owned || g.title?.bgg || '';
-                  return _smart ? _smart(nm, q) : nm.toLowerCase().includes(q.toLowerCase());
-                }).slice(0, 8);
-                const items = matches.map(([id, g]) => {
-                  const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
-                  const added = inList(id, null);
-                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
-                });
-                const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
-                const customItems = suggestions.filter(n => (_smart ? _smart(n, q) : n.toLowerCase().includes(q.toLowerCase()))).slice(0, 3)
-                  .map(n => `<button class="taste-search-item" data-custom-name="${escH(n)}" type="button">${escH(n)} <span class="taste-search-custom-label">직접입력</span></button>`);
-                const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
-                resultsEl.innerHTML = [...items, ...customItems, direct].join('');
-                resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn =>
-                  btn.addEventListener('click', () => addGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
-              }, 180);
+            _openGameAddSearchModal({
+              overlayId: 'mbAddModal',
+              title: `${isLiked ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가`,
+              inList: (gameId, customName) => {
+                if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
+                if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
+                return false;
+              },
+              onAdd: async (gameId, customName, resultsEl) => {
+                await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
+                _appendTasteChip(listEl, countEl, gameId, customName);
+                _emitLikesChanged(table, gameId, true);
+                if (gameId) {
+                  const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
+                  if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
+                }
+              },
             });
-            setTimeout(() => input.focus(), 50);
           };
 
           for (const listType of ['liked', 'curious']) {
@@ -2251,71 +2259,29 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             setTimeout(() => input.focus(), 50);
           };
 
-          // 원천(game_likes/curious) 게임 검색·추가 모달 — 취향보드 _openTasteAddModal과 동일 기능(스코프 분리로 중복, Phase C 통합 예정)
+          // 원천(game_likes/curious) 게임 검색·추가 모달 — 검색 UI는 _openGameAddSearchModal 공유(R2 DRY), 목록추적 방식만 다름(배열 vs DOM)
           const _openBoxAddSearch = (listType, table, games, refresh) => {
             const isWant = listType === 'want';
-            document.getElementById('mbBoxAddSearch')?.remove();
-            const overlay = document.createElement('div');
-            overlay.id = 'mbBoxAddSearch';
-            overlay.className = 'mb-add-overlay';
-            overlay.innerHTML = `<div class="mb-add-box">
-              <div class="mb-add-head"><span class="mb-add-title">${isWant ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가</span><button class="mb-add-close" type="button" aria-label="닫기">✕</button></div>
-              <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
-              <div class="mb-add-results"></div>
-            </div>`;
-            document.body.appendChild(overlay);
-            const input = overlay.querySelector('.mb-add-input');
-            const resultsEl = overlay.querySelector('.mb-add-results');
-            const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
-            const onEsc = e => { if (e.key === 'Escape') close(); };
-            overlay.querySelector('.mb-add-close').addEventListener('click', close);
-            overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-            document.addEventListener('keydown', onEsc);
-
-            const inList = (gameId, customName) => {
-              if (gameId) return games.some(g => String(g.game_id) === String(gameId));
-              if (customName) return games.some(g => !g.game_id && g.custom_name === customName);
-              return false;
-            };
-            const addGame = async (gameId, customName) => {
-              if (inList(gameId, customName)) return;
-              await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
-              games.push({ game_id: gameId || null, custom_name: customName || null });
-              if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).add(String(gameId));
-              _emitLikesChanged(table, gameId, true); // 모임보드 ❤️/👀 마커·취향보드 즉시 동기화(Phase A)
-              refresh();
-              if (gameId) {
-                const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${CSS.escape(String(gameId))}"]`);
-                if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
-              }
-            };
-
-            const _smart = window.matchKoreanSmart;
-            let _t = null;
-            input.addEventListener('input', () => {
-              clearTimeout(_t);
-              _t = setTimeout(async () => {
-                const q = input.value.trim();
-                if (!q) { resultsEl.innerHTML = ''; return; }
-                const matches = Object.entries(window.gameData || {}).filter(([, g]) => {
-                  const nm = g.title?.display || g.title?.owned || g.title?.bgg || '';
-                  return _smart ? _smart(nm, q) : nm.toLowerCase().includes(q.toLowerCase());
-                }).slice(0, 8);
-                const items = matches.map(([id, g]) => {
-                  const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
-                  const added = inList(id, null);
-                  return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
-                });
-                const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
-                const customItems = suggestions.filter(n => (_smart ? _smart(n, q) : n.toLowerCase().includes(q.toLowerCase()))).slice(0, 3)
-                  .map(n => `<button class="taste-search-item" data-custom-name="${escH(n)}" type="button">${escH(n)} <span class="taste-search-custom-label">직접입력</span></button>`);
-                const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
-                resultsEl.innerHTML = [...items, ...customItems, direct].join('');
-                resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn =>
-                  btn.addEventListener('click', () => addGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
-              }, 180);
+            _openGameAddSearchModal({
+              overlayId: 'mbBoxAddSearch',
+              title: `${isWant ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가`,
+              inList: (gameId, customName) => {
+                if (gameId) return games.some(g => String(g.game_id) === String(gameId));
+                if (customName) return games.some(g => !g.game_id && g.custom_name === customName);
+                return false;
+              },
+              onAdd: async (gameId, customName, resultsEl) => {
+                await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
+                games.push({ game_id: gameId || null, custom_name: customName || null });
+                if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).add(String(gameId));
+                _emitLikesChanged(table, gameId, true); // 모임보드 ❤️/👀 마커·취향보드 즉시 동기화(Phase A)
+                refresh();
+                if (gameId) {
+                  const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${CSS.escape(String(gameId))}"]`);
+                  if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
+                }
+              },
             });
-            setTimeout(() => input.focus(), 50);
           };
 
           // 취향 원천(game_likes/curious) 박스만 센터모달로 보기 — 이번 주 리스트와 별개, 평소 취향 전체 (+ 게임 추가 가능)

@@ -10,7 +10,7 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 감사 자체가 안 된 대형 파일(game-sheet.js 2693줄·index-page.js 1594줄·day-detail.js 1180줄)은 R1~R10 이후 별도 Phase 3 감사 세션 필요 — 문제 목록 없음, 지금은 계획 밖.
 
-**진행 상황**: R1 ✅ (그린 배치) · A1 ✅ (미감사 대형파일 3개 감사 완료, GS1~7·IP1~3·DD1~3 기록, 신규 R11·R12 추가) — 2026-07-15. **다음 세션 시작점**: **R2(옐로 배치, Sonnet high)** — `_openBoxAddSearch` DRY·ACH1 8축 중복상수·ACH3 재검증·KA4(getGameName 3~4곳 통합). 이후 R3~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.
+**진행 상황**: R1 ✅ · A1 ✅ · R2 ✅ (2026-07-15) — 옐로 배치: ACH3 재검증(이미 해결 확인)·ACH1(AXIS_ORDER 통합)·KA4(병합 불가 판단, 현행유지 종결)·`_openGameAddSearchModal` 공용헬퍼 추출. **다음 세션 시작점**: **R3(Opus medium)** — KA2(`_` 내부함수 window 노출 제거)·KA3(`_safeInt` regex파싱 개선). 이후 R4~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.
 
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 

@@ -2,6 +2,9 @@
 // rewards 객체로 보상 정참조. ACH_DEFS는 캐릭터·칭호·교환권 개수와 무관하게 독립 확장 가능.
 
 (function () {
+  // ACH1: 8축 표시 순서 SSOT — 캐릭터/칭호/업적 정렬에서 공통 사용 (기존 4곳 중복 통합)
+  const AXIS_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
+
   const ACH_DEFS = [
     // ── record (다람쥐) ── 작성자 기준
     { id: 'record_1',   name: '기록의 시작',        emoji: '🌱', type: 'record', threshold: 1,
@@ -536,8 +539,7 @@
           `</div>`
         : '';
 
-      const _TITLE_AXES = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
-      const _topTitlePerAxis = _TITLE_AXES.map(axis => {
+      const _topTitlePerAxis = AXIS_ORDER.map(axis => {
         const axisTitles = TITLE_DEFS.filter(def => {
           const achId = _titleToAchId[def.id];
           return achId ? ACH_DEFS.find(a => a.id === achId)?.type === axis : false;
@@ -654,8 +656,7 @@
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
     // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시 (balance(여우)부터 시작하는 축 순서로 정렬)
-    const _CHAR_SORT_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
-    const _sortedCharDefs = [...CHAR_DEFS].sort((a, b) => _CHAR_SORT_ORDER.indexOf(a.type) - _CHAR_SORT_ORDER.indexOf(b.type));
+    const _sortedCharDefs = [...CHAR_DEFS].sort((a, b) => AXIS_ORDER.indexOf(a.type) - AXIS_ORDER.indexOf(b.type));
     const gridCardsAll = _sortedCharDefs.map(def => {
       const done = earnedIds.has(def.id);
       const isRep = repAch?.id === def.id;
@@ -677,8 +678,7 @@
         `${progressLabel}` +
         `</button>`;
     });
-    const _CHAR_AXES = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
-    const _topCharPerAxis = _CHAR_AXES.map(axis => {
+    const _topCharPerAxis = AXIS_ORDER.map(axis => {
       const earnedAxis = CHAR_DEFS.filter(d => d.type === axis && earnedIds.has(d.id) && !d.rewards.character.startsWith('rare_'));
       return earnedAxis.length ? earnedAxis[earnedAxis.length - 1] : null;
     }).filter(Boolean);
@@ -759,7 +759,6 @@
 
     await _grantRetroAchievements(db, userId, earnedIds, COUNTS);
 
-    const _ACH_TYPE_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
     const _ACH_DIVIDER_AFTER = new Set(['new_game', 'first_record']);
     const _renderAchItem = def => {
       const done = earnedIds.has(def.id);
@@ -790,7 +789,7 @@
     };
     const itemsAll = [];
     let _lastType = null;
-    [...ACH_DEFS].sort((a, b) => _ACH_TYPE_ORDER.indexOf(a.type) - _ACH_TYPE_ORDER.indexOf(b.type)).forEach(def => {
+    [...ACH_DEFS].sort((a, b) => AXIS_ORDER.indexOf(a.type) - AXIS_ORDER.indexOf(b.type)).forEach(def => {
       if (_lastType && _lastType !== def.type && _ACH_DIVIDER_AFTER.has(_lastType)) {
         itemsAll.push(`<li class="profile-ach-goal-divider"></li>`);
       }
