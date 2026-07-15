@@ -491,10 +491,10 @@
     if (!db) return { html: '', earnedIds: new Set() };
     try {
       const s = preStats || await _fetchUserStats(db, userId, nickname);
-      const { achievements, playCount, distinctCount, photoCount, ratingCount, participationCount, firstRecordCount, uniqueDayCount } = s;
+      const { achievements, playCount, distinctCount, photoCount, commentCount, participationCount, firstRecordCount, uniqueDayCount } = s;
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
-      const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: vc, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+      const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: vc, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
       // ACH_DEFS.rewards.title 정참조 기준으로 획득 여부 판단
       const earnedIds = new Set();
@@ -646,12 +646,12 @@
     if (!db) return '';
 
     const s = preStats || await _fetchUserStats(db, userId, nickname);
-    const { achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
+    const { achievements, repAch, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
 
     const earnedIds = new Set(achievements.map(a => a.id));
     const earnedCount = earnedIds.size;
     const earnedCharCount = CHAR_DEFS.filter(d => earnedIds.has(d.id)).length;
-    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
     // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시 (balance(여우)부터 시작하는 축 순서로 정렬)
     const _CHAR_SORT_ORDER = ['balance', 'play', 'new_game', 'record', 'photo', 'review', 'first_record', 'visit'];
@@ -721,19 +721,19 @@
 
   // 패널 오픈 시 공유 DB 조회 — 세 섹션(캐릭터/업적/칭호)이 동일 데이터를 재사용
   async function _fetchUserStats(db, userId, nickname) {
-    const [achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
+    const [achievements, repAch, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount] = await Promise.all([
       db.getUserAchievements(userId),
       db.getRepAchievement(userId),
       db.getUserPlayCount(userId),
       db.getUserDistinctGameCount(userId),
       db.getUserPhotoCount(userId),
-      db.getUserRatingCount(userId),
+      db.getUserCommentCount(userId),
       db.getUserVisitCount(userId),
       nickname ? db.getUserParticipationCount(userId, nickname) : Promise.resolve(0),
       db.getUserFirstRecordCount(userId),
       db.getUserUniqueDayCount(userId, nickname),
     ]);
-    return { achievements, repAch, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount };
+    return { achievements, repAch, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount };
   }
 
   // 소급 업적 지급 — 카운트 기준은 충족했으나 트리거가 누락된 업적을 DB에 기록
@@ -752,10 +752,10 @@
     if (!db) return '';
 
     const s = preStats || await _fetchUserStats(db, userId, nickname);
-    const { achievements: earned, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
+    const { achievements: earned, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
 
     const earnedIds = new Set(earned.map(a => a.id));
-    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
 
     await _grantRetroAchievements(db, userId, earnedIds, COUNTS);
 
@@ -869,9 +869,9 @@
 
   function findNextAchievement(preStats) {
     if (!preStats) return null;
-    const { achievements, playCount, distinctCount, photoCount, ratingCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = preStats;
+    const { achievements, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = preStats;
     const earnedIds = new Set((achievements || []).map(a => a.id));
-    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: ratingCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+    const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
     let best = null, bestGap = Infinity;
     for (const def of ACH_DEFS) {
       if (earnedIds.has(def.id)) continue;
