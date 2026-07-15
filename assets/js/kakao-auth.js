@@ -2018,15 +2018,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             });
           })();
 
-          // vote_games(list_type) → 게임별 그룹 (이름/요일/좋아요·룰 상태)
+          // vote_games(list_type) → 게임별 그룹 (이름/요일/좋아요·룰 상태/인원조건)
           const _groupWeekGames = (listType, srcSet) => {
             const map = new Map();
             for (const g of _weekData.myVoteGames) {
               if ((g.list_type === 'want' ? 'want' : 'learn') !== listType) continue;
               const slug = g.game_id != null ? _mbSlug(g.game_id) : null;
               const key = slug ? `id:${slug}` : `cn:${g.custom_name || ''}`;
-              if (!map.has(key)) map.set(key, { slug, customName: g.custom_name || null, dates: new Set() });
-              map.get(key).dates.add(g.vote_date);
+              if (!map.has(key)) map.set(key, { slug, customName: g.custom_name || null, dates: new Set(), condition: null });
+              const entry = map.get(key);
+              entry.dates.add(g.vote_date);
+              // 여러 날 같은 게임이면 첫 번째로 발견된 인원조건(무관 제외)을 대표로 표시(날짜별 조건이 다를 수 있으나 단순화)
+              if (!entry.condition && g.player_condition && g.player_condition !== 'any') entry.condition = g.player_condition;
             }
             return [...map.values()].map(e => {
               const gd = e.slug ? window.gameData?.[e.slug] : null;
@@ -2034,12 +2037,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               const dateList = _mbWeek.map(w => w.ds).filter(ds => e.dates.has(ds));
               const days = dateList.map(ds => _mbWeek.find(w => w.ds === ds)?.label).filter(Boolean).join('·');
               const ruleKey = e.slug ? `id:${e.slug}` : `cn:${e.customName || ''}`;
+              const condLabel = e.condition ? (window.formatCondLabel?.(e.condition, gd?.bgg?.id ?? null) || '') : '';
               return {
                 slug: e.slug, customName: e.customName, name,
                 thumbUrl: gd?.images?.thumbnail || null,
                 dates: dateList, days,
                 isSource: e.slug ? srcSet.has(e.slug) : false,
                 ruleOn: _ruleSet.has(ruleKey),
+                condLabel,
               };
             });
           };
@@ -2055,7 +2060,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             const _multiDay = new Set((_weekData.myVotes || []).map(v => v.vote_date)).size > 1;
             const badge = (it.days && _multiDay) ? `<span class="mb-week-badge">(${it.days})</span>` : '';
             const ruleOn = it.ruleOn ? ' is-on' : '';
-            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
+            // 자세히(막대 클릭) 모달에서 설정한 인원조건과 연동해 이름 옆 빈 공간에 표시
+            const condTag = it.condLabel ? `<span class="mb-week-cond">${escH(it.condLabel)}</span>` : '';
+            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${condTag}${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
           };
 
           const _renderWeekList = (listType) => {
