@@ -4323,11 +4323,11 @@ body.embed-mode {
 .mb-planner-cta:hover{background:#e4f0e4;}
 
 /* 모임보드 — 취향보드 연동 링크 */
-.mb-taste-link{display:inline-block;font-size:10.5px;color:var(--text-info,#6b8cba);font-weight:500;padding:2px 7px;border:1px solid var(--text-info,#6b8cba);border-radius:10px;background:none;cursor:pointer;margin-left:0;vertical-align:middle;line-height:1.4;white-space:nowrap;flex-shrink:0;}
+.mb-taste-link{display:inline-block;font-size:10px;color:var(--text-info,#6b8cba);font-weight:500;padding:2px 6px;border:1px solid var(--text-info,#6b8cba);border-radius:10px;background:none;cursor:pointer;margin-left:0;vertical-align:middle;line-height:1.4;white-space:nowrap;flex-shrink:0;}
 .mb-taste-link:hover{background:rgba(107,140,186,.08);}
 /* 모임보드 게임 섹션 라벨 — 제목은 안 깨지게, 버튼은 넘치면 아래로 */
-.taste-section-label--mb{flex-wrap:wrap;}
-.taste-section-label--mb .mb-sec-name{white-space:nowrap;flex-shrink:0;}
+.taste-section-label--mb{flex-wrap:wrap;gap:4px;}
+.taste-section-label--mb .mb-sec-name{white-space:nowrap;flex-shrink:0;font-size:12.5px;}
 
 /* 모임보드 — 📖 룰설명 버튼 */
 .mb-rule-btn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid transparent;border-radius:50%;background:none;cursor:pointer;font-size:13px;opacity:.4;padding:0;flex-shrink:0;filter:grayscale(1);transition:opacity .15s,background .15s,filter .15s;}
@@ -4374,6 +4374,7 @@ body.embed-mode {
 .mb-pref-empty{font-size:12px;color:var(--muted);font-style:italic;}
 /* 라벨 우측 인라인 게임추가 버튼 */
 .taste-add-btn--inline{display:inline-block;width:auto;padding:3px 10px;font-size:12px;margin-left:6px;vertical-align:middle;}
+.taste-section-label--mb .taste-add-btn--inline{padding:3px 8px;margin-left:0;}
 /* 게임 추가 센터모달 */
 .mb-add-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:var(--z-sheet-modal);display:flex;align-items:center;justify-content:center;padding:20px;}
 .mb-add-box{background:#fff;border-radius:16px;width:100%;max-width:400px;max-height:80vh;display:flex;flex-direction:column;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,0.25);}
