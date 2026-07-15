@@ -1139,11 +1139,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} ${_ro('<button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button>')}</div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} ${_ro('<button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button>')}</div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
@@ -2340,7 +2340,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             overlay.innerHTML = `<div class="mb-add-box">
               <div class="mb-add-head"><span class="mb-add-title">${title} <span class="taste-count mb-box-count">${games.length}개</span></span><button class="mb-add-close" type="button" aria-label="닫기">✕</button></div>
               <p class="mb-taste-box-hint">이번 주 일정과 별개로, 평소 ${isWant ? '좋아하는' : '해보고 싶은'} 게임 전체예요</p>
-              <button class="taste-add-btn mb-box-add-btn" type="button">＋ 게임 추가</button>
+              ${_ro('<button class="taste-add-btn mb-box-add-btn" type="button">＋ 게임 추가</button>')}
               <div class="taste-game-list mb-taste-box-list"></div>
             </div>`;
             document.body.appendChild(overlay);
@@ -2372,7 +2372,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               }));
             };
             renderList();
-            overlay.querySelector('.mb-box-add-btn').addEventListener('click', () => _openBoxAddSearch(listType, table, games, renderList));
+            overlay.querySelector('.mb-box-add-btn')?.addEventListener('click', () => _openBoxAddSearch(listType, table, games, renderList));
           };
 
           // 리스트 위임 핸들러 (📖 토글 / ⋯ 케밥 / 썸네일) — 리스트 내용은 _renderWeekList가 렌더

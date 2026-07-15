@@ -53,9 +53,12 @@
 - **편집 전수 가드**: 닉/칭호/아바타 ✏️⚙, 취향 게임추가·📖·✕·bio편집·피하는유형 편집, 모임 ＋추가·취향링크·선호수정·모임프로필편집·📖·⋯·플래너편집 모두 생략. 읽기전용 상세는 `openDateScheduleModal`(편집불가).
 - **통합**: `openOtherProfileSheet`/`openOtherMeetingSheet`를 `openProfilePanel(_, {readOnly})` 얇은 래퍼로 축소. 구 `.other-profile-overlay`/otherMainPanel/`_openOtherMeetingSubSheet`(~250줄) 삭제. 진입점 3곳(club-intro/club-schedule/알림) 이름 유지로 무변경.
 - **공개 섹션(읽기전용)**: 프로필카드 / 수집보드(캐릭터·업적·칭호·도감, 선택 불가) / 취향(좋아하는·해보고싶은·피하는유형·한줄소개) / 모임보드(이번주 게임+선호/비선호+모임프로필) / 기록보드(플레이기록·게임평·사진, 남의 사진 삭제 불가).
-- **알려진 한계(C1)**: ①readOnly에선 닉네임을 stats 페치 후 확정 → getMyStats에 nickname=null 전달되어 **"태그된 참여 기록"(player_names ILIKE) 미포함**(본인 user_id 기록만). 필요 시 프로필 닉 선페치로 개선. ②모임보드는 아직 self afterRender 재사용(취향박스 링크 생략) — C2에서 폴리시.
+- **알려진 한계(C1)**: readOnly에선 닉네임을 stats 페치 후 확정 → getMyStats에 nickname=null 전달되어 **"태그된 참여 기록"(player_names ILIKE) 미포함**(본인 user_id 기록만). 필요 시 프로필 닉 선페치로 개선.
 
-**C2 (모임 폴리시)** — 다음: 읽기전용 모임 서브시트 정돈 + **Phase B 취향박스 링크 이월**(읽기전용 버전, mb-taste-link → 박스 모달 읽기전용). 관련 이월: 상단 §Phase B "읽기전용 버전 Phase C 이월"(31줄), "_openBoxAddSearch DRY"(46줄, 단 REFACTOR 세션).
+**C2 (모임 폴리시)** — ✅ 완료 (2026-07-15, ⚠️ 실서버 스모크 대기):
+- **Phase B 취향박스 링크 이월 적용**: `mb-taste-link`("좋아하는 게임"/"궁금한 게임" 전체보기 버튼)를 readOnly에서도 노출(이전엔 `_ro()`로 숨김). `_openTasteBoxModal`은 아이템 자체가 이미 읽기전용(룰배지만, 추가/삭제 없음)이라 모달 내부 "＋ 게임 추가" 버튼 1곳만 `_ro()` 가드로 충분. 이번주(this-week) vs 취향전체 구분이 C1에서 이미 확보되어 있어 버튼 무의미 문제(31줄 이월 사유) 해소.
+- 나머지 모임 서브시트 요소(요일선택·⋯케밥·룰토글·플래너편집 등)는 C1에서 이미 편집버튼 자체가 `_ro()`로 숨겨져 열릴 경로가 없음 — 추가 가드 불필요 확인.
+- `_openBoxAddSearch` DRY(46줄, `_openTasteAddModal`과 중복)는 **REFACTOR 세션으로 유지 이월**(구현/리팩토링 분리 원칙).
 
 **C3 (정리)** — 다음: dead code 제거 — ①`_buildMeetingGameItems`(구 미러 렌더러) ②구 CSS `.other-profile-*`(style.css ~3950-3982) ③미사용 DB fn `getUserTasteProfile`/`getUserMeetingProfile`.
 
