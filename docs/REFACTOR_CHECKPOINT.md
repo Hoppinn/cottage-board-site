@@ -283,6 +283,53 @@
 
 ---
 
+## Phase 3: 미감사 대형 파일 감사 (A1, 2026-07-15, Opus high — 코드 변경 없이 조사만)
+
+Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 방식: 함수 선언·전역 노출·교차파일 중복·과대함수 경계 grep + 핵심 구간 read.
+
+### 3-1. game-sheet.js (2693줄, 프로젝트 최대 파일) — 약 90개 함수
+
+| # | 위험도 | 분류 | 이슈 | 상세 |
+|---|--------|------|------|------|
+| GS1 | **P1** | 과대함수 | `openGameSheet` 321줄(439~760) | 게임데이터 읽기 + 난이도/협력 계산 + 거대 HTML 빌드 + 서브위젯 초기화 혼합. 단일 함수로는 프로젝트 최상위급(KA1 다음). 부분 수정 회귀 위험 높음. |
+| GS2 | **P1** | 전역 오염 | 파일 전체 **IIFE 없음** — ~90개 함수 전부 전역 노출 | onclick 핸들러(onSheetLike/onOpenPlayModal 등)는 전역 불가피하나, 순수 헬퍼 20+개(getDifficultyData·normalizeLevelValue·formatRating·formatDifficultyWeight·getGameThumbnail·getGameDetailImage·formatPlayers·formatPlayTime·getGameKey·getAllGamesArray·formatDate·_reactionUserChip 등)도 전역. GDA2와 동일 유형이나 규모 최대. |
+| GS3 | **P1** | 중복 정의 | `getAllGamesArray` 2곳 다른 시그니처 | game-sheet.js:298(무인자) vs game-display-adapter.js:471(`gameData` 인자). 로드 순서에 따라 나중 정의가 이김 → 어느 구현이 실제 동작하는지 불명확. **R7(GDA2)과 묶어 처리 권장.** |
+| GS4 | **P2** | 이름 충돌 | `getGameKey` 동명·다른 시그니처 | game-sheet.js:250(게임 **객체** 인자) vs game-reviews.js:14(게임 **id** 인자). 파일 넘나들 때 혼동. |
+| GS5 | **P2** | 중복 코드 | `escH` 로컬 재정의(2248, initPlayWidget 내부) | `window.escH`(supabase-client)와 중복 — escH 계열 5번째 사본(PU4/ACH6/DD3와 동일 패턴). |
+| GS6 | **P2** | 과대함수 다수 | 100줄 안팎 함수 다수 | `buildRecordItemHtml`(128줄, initPlayWidget 내부) · `getOrCreatePlayModal`(110줄) · `openGameRecordSheet`(97줄) · `onSubmitPlayModal`(70+줄). 렌더+이벤트+저장 혼합. |
+| GS7 | **P2** | 전역 결합 | 난이도 헬퍼 전역 의존 | `getDifficultyData`/`normalizeLevelValue`가 game-sheet.js에 정의되고 game-display-adapter·script-nav·owned-games-page가 전역 참조. 로드 순서 결합. |
+
+### 3-2. index-page.js (1594줄) — 상위 전역함수 + IIFE 모듈 혼재
+
+| # | 위험도 | 분류 | 이슈 | 상세 |
+|---|--------|------|------|------|
+| IP1 | **P1** | 과대함수 | `renderGameCards` 208줄(5~213) · `updateRecommendFilterText` 157줄(464~621) · `initMeetingSection` IIFE 289줄(1305~1594, 내부 `renderPreview` 124줄) | |
+| IP2 | **P2** | 구조 일관성 | 부분 모듈화 혼재 | 추천 관련 15+개는 상위 전역함수(onclick), 나머지 init은 IIFE `(function initX(){})()`. 한 파일에 두 방식 혼재 — 경계 기준 불명확. |
+| IP3 | **P2** | 중복/파편화 | `toDateStr`(930) 전역 vs day-detail.js `fmtDate`(368) 별도 | 날짜 포맷 헬퍼가 파일마다 각자. escH·getGameName 계열과 동일 파편화. (※KST 집계 버그는 2026-07-15 이미 수정 완료) |
+
+### 3-3. day-detail.js (1180줄) — **구조 양호(모범)**, 과대함수만 이슈
+
+| # | 위험도 | 분류 | 이슈 | 상세 |
+|---|--------|------|------|------|
+| DD1 | **P1** | 과대함수 | `openDateMeetingModal` 281줄(796~1077) · `openDateScheduleModal` 179줄(465~644) · `buildBarsInCard` 100줄 | 렌더 + 이벤트 바인딩 + DB 조회 혼합. |
+| DD2 | — | (긍정) | **IIFE 래핑 + CSS 자기주입 + window 노출 9개(전부 의도된 공개 API)** | 전역 오염 없음. game-sheet.js와 정반대 — 신규 파일 작성 시 이 구조가 모범. |
+| DD3 | **P2** | 중복 코드 | `esc`(364)·`fmtDate`(368) 로컬 | esc는 escH 계열 사본, fmtDate는 IP3 파편화의 일부. |
+
+### 교차 파일 종합 (기존 등록분 + Phase 3 확장)
+
+- **escH/esc 사본 5곳**: `window.escH`(supabase-client) · `_escH`(play-records-utils, PU4) · `esc`(achievements, ACH6) · `escH`(game-sheet GS5) · `esc`(day-detail DD3). → 공용화하려면 `"` 이스케이프 차이(PU4 지적) 먼저 정리 필요.
+- **게임명 해석 4곳**: getGameName(game-reviews·achievements·kakao-auth) + resolveGameName(day-detail). KA4(R2)에서 3곳 통합 시 day-detail resolveGameName도 함께 검토.
+- **getGameKey 2곳 다른 시그니처**(GS4), **getAllGamesArray 2곳 다른 시그니처**(GS3).
+
+### A1 결론 — 재정렬 판단
+
+- game-sheet.js는 **파일 단위 구조부채는 최대**(GS2, 90개 전역)지만, onclick 핸들러가 다수라 "IIFE로 감싸기"가 클린한 작업이 아님(내보낼 것/숨길 것 선별 필요) → KA1(단일함수 1972줄)만큼 급하진 않으나 규모 큼.
+- **즉시 R7과 병합 가능**: GS3(getAllGamesArray 중복)은 R7(GDA2, game-display-adapter IIFE)과 원인이 같아 함께 처리.
+- **KA4(R2)에 day-detail resolveGameName 검토 추가**.
+- 신규 대형 항목 **R11(game-sheet.js 구조/과대함수)·R12(day-detail.js 과대함수 DD1)**를 계획 말미(R10 KA1 앞뒤)에 추가. game-sheet.js가 KA1보다 먼저인지 뒤인지는 R2~R9 진행하며 체감 후 최종 결정(현재는 KA1을 최후, R11을 그 앞에 잠정 배치).
+
+---
+
 ## 처리 계획 (2026-07-15 수립) — 세션 분할 + 모델 배정
 
 **원칙**: 각 세션 = 1항목(또는 안전하게 묶이는 그린 배치 1건). REFACTOR MODE(신규기능·UI변경 금지) 준수, 세션 끝마다 atomic 커밋 + 이 표 갱신. 낮은 리스크·빠른 종료 순으로 정렬(위험한 것을 뒤로).
@@ -290,18 +337,20 @@
 | 순서 | 세션 | 항목 | 모델·effort | Plan 필요? | 상태 |
 |------|------|------|------------|-----------|------|
 | 1 | R1 | **그린 배치**: `buildGameBody` dead code 삭제(game-reviews.js) · KA4 `getGameName` 중복 통합 · KA5 `_markAllNotifSeen`/`_markVoucherSeen` 중복 통합 · KA6 이벤트 바인딩 중복 제거 · GR6 `window._pr*` 전역변수 5개 IIFE 내부화 · `.mb-week-games` dead CSS 삭제 | **Sonnet medium** | 아니오 | ✅ **완료 (2026-07-15)** — 세부: ①`buildGameBody`(76줄) 삭제, 호출처 0곳 확인 ②KA4는 세 파일 구현이 실제로 다름(game-reviews.js만 fallback 문구·gameData조회 없음) 발견 → 강행 통합 보류, **R2로 재분류** ③KA5 `_markRewardCardSeen`/`_resetNotifBtnAndConfirmAll` 헬퍼 2개로 중복 6+5줄 추출 ④KA6은 `_bindActivityTogglesAndMore` 헬퍼가 이미 존재·양쪽 서브시트가 이미 사용 중이라 **재검증만 하고 종료**(이전 세션에서 이미 해결, 문서 미반영이었던 것) ⑤GR6 4개(`_prGroups`/`_prLatestRecord`/`_prMoreOutsideClickBound`/`_refreshAutocompleteLists`) IIFE 내부화, `_prPlayerNames`는 game-sheet.js 크로스파일 참조 확인돼 **window 유지**(내부화 시 깨짐) ⑥`.mb-week-games` CSS 1줄 삭제. node --check 통과. |
-| 2 | **A1** | **[순서 변경 2026-07-15] Phase 3 감사 — 미감사 대형 파일 3개**: `game-sheet.js`(2693줄, 프로젝트 최대·미감사) · `index-page.js`(1594줄) · `day-detail.js`(1180줄, 141차 신설). Explore 에이전트로 조사만(코드 수정 없음), REFACTOR_CHECKPOINT.md 형식(위험도·분류·이슈)으로 결과 기록. game-sheet.js가 KA1보다 커서 R2~R10보다 우선순위 재조정 필요할 수 있음 — 감사 후 이 표 재정렬. | **Opus (조사 전용)** | 아니오 | ⏳ 대기 |
+| 2 | **A1** | Phase 3 감사 — 미감사 대형 파일 3개(game-sheet.js·index-page.js·day-detail.js) | **Opus high** | 아니오 | ✅ **완료 (2026-07-15)** — 위 "Phase 3" 섹션에 GS1~7·IP1~3·DD1~3 기록. 결론: game-sheet.js 구조부채 최대지만 onclick 다수라 clean IIFE화 어려움. GS3은 R7과 병합, KA4에 day-detail resolveGameName 추가, 신규 R11(game-sheet)·R12(day-detail) 추가. |
 | 3 | R2 | **옐로 배치**: `_openBoxAddSearch`↔`_openTasteAddModal` DRY 통합 · ACH1 8축 정렬 순서 중복상수 4곳→1곳 · ACH3 재검증(137차 이후 실제 잔여 중복쿼리 있는지 먼저 확인) · **KA4**(R1에서 이월 — kakao-auth.js/game-reviews.js/achievements.js 3곳 `getGameName` 동작 차이 있어 통합 전 설계 결정 필요: game-reviews.js만 fallback 문구·gameData조회 상이) | **Sonnet high** | 아니오 | ⏳ 대기 |
 | 4 | R3 | KA2(`_` 내부함수 window 노출 제거) · KA3(`_safeInt` regex파싱 → 데이터 전달 방식) | **Opus medium** | 아니오(외부참조 확인만) | ⏳ 대기 |
 | 5 | R4 | PU2 — `buildPhotoItemAdder` blob URL 미해제(메모리 누수) 수정 | **Sonnet high** | 아니오 | ⏳ 대기 |
 | 6 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ⏳ 대기 |
 | 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ⏳ 대기 |
-| 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ⏳ 대기 |
+| 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ⏳ 대기 |
 | 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ⏳ 대기 |
 | 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ 대기 |
-| 11 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 항목, 서브시트별로 여러 세션 재분할 가능성 있음) | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
+| 11 | R11 | **[A1 신규] game-sheet.js 구조 정리** — GS1(`openGameSheet` 321줄)·GS6(100줄대 과대함수 다수) 분리 + GS2(순수 헬퍼 20+개 전역노출, onclick 핸들러와 선별)·GS5(escH 로컬 사본)·GS7(난이도 헬퍼 전역결합). 프로젝트 최대 파일이라 여러 세션 재분할 가능. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
+| 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | **필요** | ⏳ 대기 |
+| 13 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 단일함수, 서브시트별로 여러 세션 재분할 가능성 있음) | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 
-**A1(감사) 이후 재정렬 예정**: A1에서 game-sheet.js 등에 R2~R10보다 심각한 문제가 발견되면, 그 항목을 R2 자리로 끌어올리고 이후 번호를 재배정한다. A1은 순수 조사라 재정렬 자체는 문서 갱신만으로 끝남(코드 변경 없음).
+**A1 재정렬 결과 (2026-07-15)**: game-sheet.js가 파일 단위로는 최대 부채지만 onclick 핸들러 다수라 clean IIFE화가 어려워, R2~R6(안전·빠른 항목)을 앞당길 이유가 없다고 판단 — 기존 순서 유지하고 신규 R11(game-sheet)·R12(day-detail)을 R9와 R10(KA1) 사이에 삽입. game-sheet.js(R11)와 openProfilePanel(R10=최후)의 선후는 R2~R9 진행하며 체감 후 최종 확정.
 
 **감사 자체가 안 된 파일(계획 밖, 별도 Phase 3 감사 세션 먼저 필요)**: `game-sheet.js`(2693줄, 프로젝트 최대), `index-page.js`(1594줄), `day-detail.js`(1180줄, 141차 신설이라 Phase 2 감사 대상에 없었음). 문제 목록이 아직 없어 "고칠 항목"을 특정할 수 없음 — R1~R10 끝난 뒤 감사 세션(Opus, Explore 활용) 별도 제안 예정.
 
