@@ -188,15 +188,15 @@
 | ~~SC1~~ | ~~**P1**~~ | ~~SQL LIKE 와일드카드~~ | ~~`ilike('%${nickname}%')` 4곳에서 닉네임 미이스케이프~~ | **✅ 해결됨** — 2026-07-16(R5) 재검증: 감사 이후 `_escapeLike(str)`(supabase-client.js:94, 닉네임에서 `%`·`_` **제거**)가 이미 추가돼 4곳(`getMyStats`:1252, `getMyNotifications`:1289, `getUserParticipationCount`:1670, `getUserUniqueDayCount`:1758) 전부 적용됨. 다른 곳엔 미이스케이프 ilike/like 없음(grep 전수 확인). 감사의 핵심 우려(와일드카드 누출로 타인기록 오혼입·크래시)는 제거로 해소. **잔여 한계**: 제거 방식이라 닉네임에 문자 그대로 `_`/`%`가 있으면(예 `a_b`→`%ab%`) 자기 기록을 못 찾는 손실적 매칭 가능(극히 드묾). 백슬래시 정식 이스케이프(`\_`)로 바꾸면 정확해지나 PostgREST/supabase-js의 `\` 처리 의존이라 잘못 시 전체 닉네임 매칭이 깨질 위험 > 이득이라 현행(제거) 유지 결정. |
 | ~~SC2~~ | ~~**P1**~~ | ~~기능 버그~~ | ~~`getRepAchievement` 반환 `{ id }` 만 — `name` 없음~~ | **✅ 해결됨** — 2026-07-03 재검증: `kakao-auth.js`에 `repData?.name` 참조 없음. 이름 조회는 `CottageAchievements.getCharacterName(repAch.id)` → 로컬 ACH_DEFS 경로로 교체됨. 코드 수정 불필요. |
 | ~~SC3~~ | ~~**P1**~~ | ~~숨은 사이드이펙트~~ | ~~`toggleGameCurious` (line 585): 궁금해요 추가 시 game_likes도 삭제~~ | **✅ 해결됨** — 2026-07-03 재검증: `toggleGameCurious` 자체는 game_likes 삭제 안 함. 좋아요↔궁금해요 상호배타 처리는 abe774b에서 호출부(`onSheetCurious`, `onPrMenuCurious`)에서 대칭 처리. 코드 수정 불필요(이미 수정됨). |
-| SC4 | **P1** | 성능 | `getVisitorStats`: `page_views.__visitor__` 전체 조회 (limit 없음) | 데이터 증가 시 수천~수만 행 클라이언트 반환. DB 집계 함수나 limit 추가 필요. |
-| SC5 | **P1** | 성능 | `getUserFirstRecordCount`: 유저 플레이 게임 전체에 대해 모든 기록 조회 | line 1365: `in('game_id', myGameIds)` — 인기 게임 포함 시 수백~수천 행 반환. RPC 또는 범위 제한 필요. |
+| ~~SC4~~ | ~~**P1**~~ | ~~성능~~ | ~~`getVisitorStats`: `page_views.__visitor__` 전체 조회 (limit 없음)~~ | **✅ 해결됨 (R8, 2026-07-16 재검증)** — 현재 구현(supabase-client.js:847)은 `select('id', { count:'exact', head:true })` 2쿼리로 **행을 반환하지 않고 count 숫자만** 받음. 감사가 지적한 "전체 행 반환"은 stale. 데이터 증가와 무관하게 상수 비용. 코드 변경 불필요. |
+| ~~SC5~~ | ~~**P1**~~ | ~~성능~~ | ~~`getUserFirstRecordCount`: 유저 플레이 게임 전체에 대해 모든 기록 조회~~ | **✅ 재검증 종결 (R8, 2026-07-16, 코드변경 없음)** — 현재 `.in('game_id', myGameIds).limit(2000)` 有(감사의 "limit 없음"도 stale). **실측 규모**: `game_play_records` 전체 테이블 = **60행**(2026-07-16 anon 키 count 확인). 이 함수가 긁는 최대치가 테이블 전체(60행)라 성능 문제 실재하지 않음. limit(2000)이 물리는 시점 = 유저 게임들의 누적 기록이 2000행 초과 = 현재 대비 ~33배. RPC(서버측 first-recorder 집계)는 60행짜리에 영구 DB 표면 추가라 선제적 과최적화로 판단, **보류**. **재방문 임계값**: `game_play_records`가 ~1500행 접근 시 RPC 재검토(정확성 엣지 = 유저 게임 누적기록>2000이면 ascending limit이 일부 게임 최초기록을 누락 가능). |
 | SC6 | **P1** | TOCTOU | `redeemVoucher`: 잔액 확인 → insert 사이 race 가능 | DB 레벨 잔액 >= 0 constraint 없으면 동시 요청 시 음수 잔액 가능. 단일 사용자 패턴상 현실적 위험은 낮음. |
 | SC7 | **P2** | 중복 상수 | `_OWNER_ID = '4916417947'` — 3번 중복 | `grantAchievementVoucher`(line 1404), `grantFirstPlayVoucher`(line 1443) 로컬 const + kakao-auth.js의 `OWNER_KAKAO_ID`. |
 | SC8 | **P2** | 구조 | `window.CottageDB = {...}` (line 1076) 이후 함수 정의 (lines 1155-1503) | 호이스팅으로 동작하나 50개 함수 중 절반이 CottageDB 선언 아래에 있어 가독성 혼란. 실제 버그 없음. |
 
 **즉시 수정 가능 (Green)**: SC7 (중복 상수 통합)  
 **수정 시 검증 필요 (Yellow)**: ~~SC2 (`getRepAchievement`에 name 추가 — DB join 또는 클라이언트 resolve)~~ → **✅ 해결됨**, ~~SC3 (game_likes 삭제 의도 확인 후 문서화 또는 제거)~~ → **✅ 해결됨**  
-**구조 변경 필요 (Red)**: SC1 (LIKE 이스케이프 — 4곳 동시 수정, PostgreSQL ilike 이스케이프 방식 확인 필요), SC4/SC5 (성능 개선 — DB RPC 또는 limit 도입)
+**구조 변경 필요 (Red)**: ~~SC1~~ (✅ R5 해결), ~~SC4/SC5~~ (✅ R8 종결 — SC4 이미 count/head, SC5는 60행 규모라 현행 유지·재방문 임계값 기록)
 
 ---
 
@@ -266,7 +266,7 @@
 | KA1 | kakao-auth.js | `openProfilePanel` 843줄 분리 | 프로젝트 내 최대 함수 — 부분 수정도 회귀 위험 높음 |
 | PU2 | play-records-utils.js | blob URL 누수 수정 | `buildPhotoItemAdder` 수명주기 추적 필요 |
 | ~~GR2~~ | ~~game-reviews.js~~ | ~~`renderSingleGame` CottageDB 전환~~ | ✅ GR1과 함께 삭제 완료 (136차-7) |
-| SC4/SC5 | supabase-client.js | 성능 개선 (getVisitorStats, getUserFirstRecordCount) | DB RPC 추가 또는 쿼리 재설계 필요 |
+| ~~SC4/SC5~~ | ~~supabase-client.js~~ | ~~성능 개선 (getVisitorStats, getUserFirstRecordCount)~~ | ✅ R8 종결 — SC4 이미 count/head(행 미반환), SC5는 테이블 60행 규모라 현행 유지. 재방문 임계값(~기록 1500행) 기록. |
 | CSS2 | style.css | !important 196개 특이성 정리 | 전체 레이아웃 영향, 단계적 교체만 가능 |
 
 ---
@@ -279,7 +279,7 @@
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
 | Red | ACH3, CSS2 | ✅ 완료 (137차, ACH3는 buildCharacterSection/buildAchievementsSection의 `preStats` 파라미터로 쿼리 공유 확인, CSS2는 `!important` 196→30회로 감소 확인, 2026-07-15 재검증) |
 | Red | ~~KA1~~ | ❌ **미완료 정정 (2026-07-15 재검증)** — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 위 "✅ 완료" 표기는 오기재였던 것으로 확인. 여전히 구조 변경 필요(Red) 항목으로 유지. |
-| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, ~~GDA2~~, SC4/SC5, GR3 | SC1(R5)·PU2(R4)·ACH5(R6)·GDA2+GS3(R7) ✅ 완료 · SC4/SC5(R8)·GR3(R9) ⏳ 미처리. 최신 진행은 아래 "처리 계획" 표 기준. |
+| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, ~~GDA2~~, ~~SC4/SC5~~, GR3 | SC1(R5)·PU2(R4)·ACH5(R6)·GDA2+GS3(R7)·SC4/SC5(R8) ✅ 완료 · GR3(R9) ⏳ 미처리. 최신 진행은 아래 "처리 계획" 표 기준. |
 
 ---
 
@@ -344,7 +344,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 6 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ✅ **완료 (2026-07-16, 코드변경 없음)** — 조사 선행 결과 감사 이후 `_escapeLike`가 이미 4곳에 적용돼 있어 SC1 핵심(안전성) 해소 확인. 백슬래시 정식 이스케이프로의 업그레이드는 위험>이득이라 현행 유지. 상세는 2-6절 SC1. |
 | 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ✅ **완료 (2026-07-16)** — 인라인 루프는 이미 `_grantRetroAchievements`로 추출돼 있었으나 여전히 `buildAchievementsSection` 내부에서 호출(hidden write)됐던 것이 핵심 문제. `grantRetroAchievements(userId,stats)` public 승격 → buildAchievementsSection 순수화 → kakao-auth.js openProfilePanel에서 빌드 앞·`!readOnly` 가드로 명시 호출. readOnly 열람 시 대상 유저 DB write 발생하던 부수 버그 함께 수정. node --check 통과. 상세는 위 2-3절 ACH5. |
 | 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ✅ **완료 (2026-07-16)** — GDA2는 이미 IIFE 적용돼 있어 un-expose 대상 없음(감사 stale). 실질 작업은 GS3: adapter의 죽은 `window.getAllGamesArray` 노출 제거(551~552줄) → 전역은 game-sheet 단일 소스. GDA6도 함께 종결. 외부참조 전수확인(호출처 6곳 전부 무인자, 14페이지 로드순서 adapter<sheet 전수확인)·node --check 통과. 런타임 무변화. |
-| 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ⏳ 대기 |
+| 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ✅ **완료 (2026-07-16, 코드변경 없음)** — 재검증 결과 SC4는 이미 count/head(행 미반환), SC5는 `game_play_records` 전체 60행(실측) 규모에 limit(2000)도 有라 성능 문제 부재. RPC는 선제적 과최적화로 보류(사용자 승인 A안). 재방문 임계값(~기록 1500행) 기록. DB 변경 없음. 상세는 2-6절 SC4/SC5. |
 | 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ 대기 |
 | 11 | R11 | **[A1 신규] game-sheet.js 구조 정리** — GS1(`openGameSheet` 321줄)·GS6(100줄대 과대함수 다수) 분리 + GS2(순수 헬퍼 20+개 전역노출, onclick 핸들러와 선별)·GS5(escH 로컬 사본)·GS7(난이도 헬퍼 전역결합). 프로젝트 최대 파일이라 여러 세션 재분할 가능. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 | 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | **필요** | ⏳ 대기 |
