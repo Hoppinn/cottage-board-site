@@ -6,6 +6,12 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
+### 🔵 CHECKPOINT: 전체 리팩토링 순차 처리 (2026-07-15 시작, R1~R10 중 진행 예정 — **상세는 `docs/REFACTOR_CHECKPOINT.md` "처리 계획" 표 참조**)
+
+REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 감사 자체가 안 된 대형 파일(game-sheet.js 2693줄·index-page.js 1594줄·day-detail.js 1180줄)은 R1~R10 이후 별도 Phase 3 감사 세션 필요 — 문제 목록 없음, 지금은 계획 밖.
+
+**다음 세션 시작점**: REFACTOR_CHECKPOINT.md "처리 계획" 표에서 ⏳ 대기인 항목 중 순서 1번(R1, 그린 배치)부터. R1은 Sonnet medium — 세션 시작 시 모델 확인.
+
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 
 `openProfilePanel(autoSubsheet, {userId, readOnly})`로 남의 보드를 편집 없이 통합 표시(취향/모임/기록보드), 좋아요 전역 이벤트 동기화(`cottage-likes-changed`), 진입점 정리(`.sched-bar-name`→모임보드, 그 외 닉네임 클릭→읽기전용 내 보드), 모임보드 밀도 정리(요일배지·✨마크·게임 썸네일·인원조건 표시 등). 상세는 git log(커밋 68e2de4~3d99561) 참조. 알려진 잔여 한계: readOnly 닉네임 미확정으로 "태그된 참여 기록" 일부 미포함(getMyStats nickname=null).
