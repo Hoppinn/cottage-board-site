@@ -537,10 +537,11 @@
           if (isMine) {
             const star = g.is_priority ? '⭐' : '☆';
             const curCond = g.player_condition || 'any';
-            const selectOpts = Object.entries(COND_LABELS)
-              .map(([v, l]) => `<option value="${v}"${v === curCond ? ' selected' : ''}>${l}</option>`).join('');
-            const _initCondLabel = window.formatCondLabel?.(curCond, g.game_id) || '';
-            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><span class="dd-cond-tag dd-cond-live">${esc(_initCondLabel)}</span><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            // 옵션 텍스트 자체를 게임별 해석 라벨로(베스트→"베스트 3인", 3인→"3인") → 별도 태그 없이 select 하나로 통합
+            const _optLabel = (v) => v === 'any' ? '무관' : (window.formatCondLabel?.(v, g.game_id) || COND_LABELS[v]);
+            const selectOpts = Object.keys(COND_LABELS)
+              .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
+            return `<li><span>${name}</span><select class="dd-cond-select" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
@@ -621,8 +622,7 @@
             }
             gameObj.player_condition = newCond;
             sel.dataset.prev = newCond;
-            const _liveLabel = sel.closest('li')?.querySelector('.dd-cond-live');
-            if (_liveLabel) _liveLabel.textContent = window.formatCondLabel?.(newCond, gameObj.game_id ?? null) || '';
+            // 옵션 텍스트가 이미 해석 라벨이라 select가 스스로 갱신됨(별도 태그 없음)
             _schedDirty = true;
           });
         });
