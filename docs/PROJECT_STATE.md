@@ -14,7 +14,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 **스모크 중 발견 버그 배치 (2026-07-16, R1~R5 회귀 아님 — 전부 기존 버그/신규기능):**
 - ✅ **[버그1·1-1 해결]** 게시판 ⋯메뉴로 사진/게임평 추가·세션참여·기록수정 시 게임시트만 갱신되고 **게시판 목록은 리로드 안 돼** 새로고침 전엔 썸네일/삭제버튼 안 뜨던 문제. game-reviews.js `window.refreshPlayRecordsBoard()` 훅 노출 → game-sheet.js 5개 저장 성공 지점(`onSubmitPhotoModal`·`onSubmitCommentModal`·`_openJoinConfirm`·`onSubmitPlayModal` 수정/신규)에서 호출. 원인은 R4와 무관한 기존 구조.
-- ⏳ **[버그2 조사중]** 취향/모임보드 게임추가 후 일부 뷰 미갱신(라이브 append는 코드상 정상 → 어느 뷰가 stale인지 특정 필요).
+- 🟡 **[버그2 추정원인 수정, 재확인 대기]** 취향보드 게임추가 후 목록 미반영. 원인: `_openTasteAddModal` onAdd가 DB·DOM칩만 갱신하고 **in-memory 소스배열(`likedGames`/`curiousGames`)엔 push를 안 해서**, 서브시트가 그 배열로 재렌더(`_buildTasteGameItems`)되면 방금 추가분이 사라짐(전체 보드 재오픈=DB 재조회 전까지). onAdd에 배열 push 추가(모임보드 박스모달 `_openBoxAddSearch`는 이미 `games.push` 있어 정상). **⚠️ 정적분석상 즉시 append 자체는 되어야 정상이라, "즉시 안 뜸"이 별개 원인이면 이 수정으로 부족할 수 있음 — 실서버 재확인 필요(안 되면 콘솔 에러 확인).**
 - ⏳ **[신규기능 3-1]** 알림→읽기전용 보드→뒤로가기로 알림 페이지 복귀(현재 복귀 경로 없음, 뒤로가기 스택 필요).
 
 **다음 세션 시작점**: 위 스모크 버그배치(2·3-1) 처리 후 **R6(Opus high, Plan 권장)** — ACH5 `buildAchievementsSection`의 숨은 업적 소급지급 side-effect 분리. 이후 R7~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.

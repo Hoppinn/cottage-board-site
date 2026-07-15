@@ -1608,6 +1608,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               },
               onAdd: async (gameId, customName, resultsEl) => {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
+                // in-memory 소스 배열도 갱신 — 안 하면 서브시트 재렌더(_buildTasteGameItems) 시 방금 추가분이 사라짐
+                const _srcArr = listKey === 'liked' ? likedGames : curiousGames;
+                if (_srcArr && !_srcArr.some(g => (gameId && String(g.game_id) === String(gameId)) || (customName && !g.game_id && g.custom_name === customName))) {
+                  _srcArr.push({ game_id: gameId || null, custom_name: customName || null });
+                }
                 _appendTasteChip(listEl, countEl, gameId, customName);
                 _emitLikesChanged(table, gameId, true);
                 if (gameId) {
