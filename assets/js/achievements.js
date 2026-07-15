@@ -738,14 +738,23 @@
     return { achievements, repAch, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount };
   }
 
-  // 소급 업적 지급 — 카운트 기준은 충족했으나 트리거가 누락된 업적을 DB에 기록
-  async function _grantRetroAchievements(db, userId, earnedIds, COUNTS) {
+  // 소급 업적 지급 — 카운트 기준은 충족했으나 트리거가 누락된 업적을 DB에 기록.
+  // 명시적 write 함수(빌드 함수와 분리, ACH5). 호출부에서 readOnly 열람 시엔 호출하지 않는다.
+  // stats.achievements를 갱신해 이후 빌드되는 캐릭터/업적/칭호 섹션이 신규 지급분을 반영하게 한다.
+  async function grantRetroAchievements(userId, stats) {
+    const db = window.CottageDB;
+    if (!db || !stats) return;
+    const earned = stats.achievements || [];
+    const earnedIds = new Set(earned.map(a => a.id));
+    const COUNTS = { record: stats.playCount, new_game: stats.distinctCount, photo: stats.photoCount, review: stats.commentCount, visit: stats.visitCount, first_record: stats.firstRecordCount, play: stats.participationCount, balance: stats.uniqueDayCount };
     const missed = ACH_DEFS.filter(d => !earnedIds.has(d.id) && (COUNTS[d.type] || 0) >= d.threshold);
-    if (!missed.length) return;
-    await Promise.all(missed.map(async def => {
-      const ok = await db.grantAchievement(userId, def.id).catch(() => false);
-      if (ok) earnedIds.add(def.id);
-    }));
+    if (missed.length) {
+      await Promise.all(missed.map(async def => {
+        const ok = await db.grantAchievement(userId, def.id).catch(() => false);
+        if (ok) earned.push({ id: def.id });
+      }));
+    }
+    stats.achievements = earned;
   }
 
   // 업적 전체 목록 섹션 HTML 빌드
@@ -758,8 +767,7 @@
 
     const earnedIds = new Set(earned.map(a => a.id));
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
-
-    await _grantRetroAchievements(db, userId, earnedIds, COUNTS);
+    // 소급 지급(write)은 호출부에서 grantRetroAchievements로 명시 처리 — 이 함수는 순수 빌드(read-only)
 
     const _ACH_DIVIDER_AFTER = new Set(['new_game', 'first_record']);
     const _renderAchItem = def => {
@@ -890,6 +898,7 @@
     buildCodexSection,
     buildCharacterSection,
     buildAchievementsSection,
+    grantRetroAchievements,
     handleRepCardSelect,
     buildTitleSection,
     handleRepTitleSelect,

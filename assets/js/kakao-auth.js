@@ -626,6 +626,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _emptyChar = { html: '', earnedCharCount: 0, charTotal: 47 };
   const _emptyAch = { html: '', achCount: 0, achTotal: 96 };
   const _emptyTitle = { html: '', earnedIds: new Set(), titleTotal: 33 };
+  // 소급 업적 지급(명시적 write, ACH5) — 내 보드에서만. readOnly 열람은 대상 유저 DB를 건드리지 않는다.
+  // 빌드 앞에서 처리해 userStats.achievements가 갱신 → 아래 3섹션이 신규 지급분을 같은 렌더에 반영.
+  if (!readOnly && userStats) {
+    await (window.CottageAchievements?.grantRetroAchievements?.(String(user.id), userStats) || Promise.resolve()).catch(() => {});
+  }
   const [_charResult, _achResult, _titleResult] = await Promise.all([
     (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null, userStats) || Promise.resolve(_emptyChar)).catch(() => _emptyChar),
     (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null, userStats) || Promise.resolve(_emptyAch)).catch(() => _emptyAch),

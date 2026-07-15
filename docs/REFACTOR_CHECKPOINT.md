@@ -125,7 +125,7 @@
 | ACH2 | **P1** | 과대 함수 | 주요 함수 4개가 과도하게 큼 | `checkAchievements`(175줄), `buildAchievementsSection`(103줄), `buildTitleSection`(89줄), `buildCharacterSection`(85줄). 각 함수가 DB 쿼리 + 계산 + HTML 빌드 + 이벤트 바인딩을 혼합. |
 | ACH3 | **P1** | 성능 | 패널 열 때마다 3개 빌드 함수가 각자 8~9개 DB 쿼리 | `buildAchievementsSection`, `buildTitleSection`, `buildCharacterSection` 각각 독립 DB 쿼리 실행. `getUserAchievements` 등 동일 데이터를 3번 중복 조회. |
 | ACH4 | **P1** | 하드코딩 이미지 경로 | `checkAchievements` line 474에 직접 경로 기재 | `'/assets/images/characters/characters_basic/squirrel_lv1.png'` 하드코딩. `_charImgPath('squirrel_lv1')` 함수가 있음에도 미사용 — 경로 체계 변경 시 이 경로만 깨짐. |
-| ACH5 | **P1** | 숨은 사이드이펙트 | `buildAchievementsSection` 이름과 달리 소급 업적 지급 실행 | lines 801-808: `_retroMissed` 루프에서 `db.grantAchievement()` 호출. "build" 이름이 read-only를 암시하나 실제로는 write 발생. 외부 호출자는 이 부수효과를 예측하기 어려움. |
+| ~~ACH5~~ | ~~**P1**~~ | ~~숨은 사이드이펙트~~ | ~~`buildAchievementsSection` 이름과 달리 소급 업적 지급 실행~~ | **✅ 해결됨 (2026-07-16 R6)** — 소급지급을 `grantRetroAchievements(userId, stats)` public 함수로 분리, `buildAchievementsSection`은 순수 read-only 빌드로 전환(내부 write 제거). 호출부(kakao-auth.js openProfilePanel)에서 빌드 앞·`!readOnly` 가드로 명시 호출. **부수 버그 수정**: 기존엔 남의 보드 readOnly 열람만으로 대상 유저 `user_achievements`에 소급 insert가 발생했으나(readOnly 설계 위반) 이제 차단. grant가 stats.achievements를 in-place 갱신해 캐릭터/업적/칭호 3섹션이 같은 렌더에 신규지급 반영. |
 | ACH6 | **P2** | 중복 코드 | `esc` 함수 (line 656) — `window.escH`의 세 번째 복사본 | `buildCodexSection` 내부 로컬 `esc` 함수 = play-records-utils.js의 `_escH`와 동일 패턴. `window.escH`로 대체 가능. |
 | ~~ACH7~~ | ~~**P2**~~ | ~~미사용 파라미터~~ | ~~`showAchievementToast(name, points)` — `points` 받지만 HTML에 미출력~~ | **✅ 해결됨** — 2026-07-03 재검증: `showAchievementToast(name)` points 파라미터 없음, 호출부도 name만 전달, 함수 내 points 변수 없음. 코드 수정 불필요. |
 | ACH8 | **P2** | 문서 불일치 | `getCharacterPath` js-api.md 미기재 | `window.CottageAchievements.getCharacterPath`가 공개 API인데 js-api.md의 `CottageAchievements` 노출 목록에 없음. kakao-auth.js line 118에서 외부 사용 확인. |
@@ -279,7 +279,7 @@
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
 | Red | ACH3, CSS2 | ✅ 완료 (137차, ACH3는 buildCharacterSection/buildAchievementsSection의 `preStats` 파라미터로 쿼리 공유 확인, CSS2는 `!important` 196→30회로 감소 확인, 2026-07-15 재검증) |
 | Red | ~~KA1~~ | ❌ **미완료 정정 (2026-07-15 재검증)** — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 위 "✅ 완료" 표기는 오기재였던 것으로 확인. 여전히 구조 변경 필요(Red) 항목으로 유지. |
-| Red | SC1, PU2, GDA2, ACH5, SC4/SC5, GR3 | ⏳ 미처리 (GR3는 2-4 게임리뷰 섹션에 있었으나 위 요약 표에서 누락됐던 것 2026-07-15 발견 — 재등록) |
+| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, GDA2, SC4/SC5, GR3 | SC1(R5)·PU2(R4)·ACH5(R6) ✅ 완료 · GDA2(R7)·SC4/SC5(R8)·GR3(R9) ⏳ 미처리. 최신 진행은 아래 "처리 계획" 표 기준. |
 
 ---
 
@@ -342,7 +342,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 4 | R3 | KA2(`_` 내부함수 window 노출 제거) · KA3(`_safeInt` regex파싱 → 데이터 전달 방식) | **Opus medium** (⚠️실제로는 Sonnet high로 실행됨 — R2 이후 모델 전환 없이 이어감, 착수 전 미확인. 검증절차(참조 전수확인·node --check)는 동일하게 거쳐 결과물 자체는 문제없음 확인) | 아니오(외부참조 확인만) | ✅ **완료 (2026-07-15)** — ①KA2: `_updateNotifBadge`/`_showVoucherGrantToast`/`_restoreMenuExpanded` 외부참조 전수 확인(grep 전체 프로젝트) 결과 kakao-auth.js 내부 호출뿐, 다른 파일·HTML 어디서도 미참조 → **현재 무해, 코드 수정 불필요로 종결**. 완전 제거하려면 파일 전체(2500+줄) IIFE 래핑이 필요해 KA1급 규모라 별도 항목 아님. ②KA3: `buildCodexSection`/`buildCharacterSection`/`buildAchievementsSection`(문자열 반환) + `buildTitleSection`(이미 `{html,earnedIds}` 반환)을 전부 `{html, count, total}` 객체 반환으로 통일 — 호출처가 각 함수당 kakao-auth.js 1곳뿐이라 범위 작음 확인 후 진행. `data-char-count` 등 8개 스크래핑용 속성 제거, kakao-auth.js `_safeInt`(regex 파싱) 함수 자체 삭제, 반환값 직접 참조로 교체. node --check 통과. |
 | 5 | R4 | PU2 — `buildPhotoItemAdder` blob URL 미해제(메모리 누수) 수정 | **Sonnet high** | 아니오 | ✅ **완료 (2026-07-16)** — 개별 삭제(✕) 시엔 이미 `revokeObjectURL` 있었으나, **그리드/행/폼을 통째로 `innerHTML=''`·`.remove()`로 지우는 지점**에서 미해제였던 게 진짜 누수. `revokePhotoGridBlobs(root)` 공용 헬퍼(play-records-utils.js) 신설 — root 안의 `blob:` img 전부 해제. 호출처 6곳: game-sheet.js `onOpenPhotoInput`/`onOpenPlayModal`/`onClosePlayModal`(그리드 초기화 3곳), game-reviews.js 행삭제(`.pr-rm-btn`)·편집폼 취소(`.pr-inline-cancel`/`-top` 2곳)·**다중행 저장 성공 후 `prGameRows` 전체 초기화**(가장 빈번한 지점). node --check 전체 통과. |
 | 6 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ✅ **완료 (2026-07-16, 코드변경 없음)** — 조사 선행 결과 감사 이후 `_escapeLike`가 이미 4곳에 적용돼 있어 SC1 핵심(안전성) 해소 확인. 백슬래시 정식 이스케이프로의 업그레이드는 위험>이득이라 현행 유지. 상세는 2-6절 SC1. |
-| 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ⏳ 대기 |
+| 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ✅ **완료 (2026-07-16)** — 인라인 루프는 이미 `_grantRetroAchievements`로 추출돼 있었으나 여전히 `buildAchievementsSection` 내부에서 호출(hidden write)됐던 것이 핵심 문제. `grantRetroAchievements(userId,stats)` public 승격 → buildAchievementsSection 순수화 → kakao-auth.js openProfilePanel에서 빌드 앞·`!readOnly` 가드로 명시 호출. readOnly 열람 시 대상 유저 DB write 발생하던 부수 버그 함께 수정. node --check 통과. 상세는 위 2-3절 ACH5. |
 | 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ⏳ 대기 |
 | 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ⏳ 대기 |
 | 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ 대기 |
