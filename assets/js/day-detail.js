@@ -283,13 +283,14 @@
     }
     .sched-card-detail-btn:hover { color: var(--green); background: #f0ece6; }
     .sched-game-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
       margin-top: 8px;
       padding-top: 6px;
       border-top: 1px solid var(--border);
     }
+    .sched-tag-group { margin-top: 4px; }
+    .sched-tag-group:first-child { margin-top: 0; }
+    .sched-tag-group-label { font-size: 9.5px; font-weight: 600; color: var(--muted, #9e8e7e); }
+    .sched-tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
     .sched-game-tag {
       display: inline-flex;
       align-items: center;
@@ -941,7 +942,6 @@
       </div>`;
     }).join('');
 
-    const plannerBtnLabel = opts.fromHome ? '전체 일정 보기' : '플래너 보기';
     const rouletteBtnHtml = rouletteGames.length >= 2
       ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
       : '';
@@ -976,15 +976,13 @@
         }
       </div>
       ${roulettePanelHtml}
-      <div class="dd-close-row" style="gap:8px">
-        <button class="dd-close-btn dd-green-btn" type="button">${plannerBtnLabel}</button>
+      <div class="dd-close-row">
         <button class="dd-close-btn" type="button">닫기</button>
       </div>
     </div>`;
 
     document.body.appendChild(el);
-    const [plannerBtn, closeBtn] = el.querySelectorAll('.dd-close-btn');
-    plannerBtn.addEventListener('click', () => { el.remove(); opts.onPlannerClick?.(); });
+    const closeBtn = el.querySelector('.dd-close-btn');
     closeBtn.addEventListener('click', () => el.remove());
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
 
@@ -1230,25 +1228,21 @@
         if (g.list_type === 'want' && g.is_priority) priorityCnt[key] = (priorityCnt[key] || 0) + 1;
       });
 
-      const chips = Object.keys(nameMap)
-        .sort((a, b) => {
-          const wd = (wantCnt[b] || 0) - (wantCnt[a] || 0);
-          if (wd !== 0) return wd;
-          const pd = (priorityCnt[b] || 0) - (priorityCnt[a] || 0);
-          return pd !== 0 ? pd : (learnCnt[b] || 0) - (learnCnt[a] || 0);
-        })
-        .map(key => {
-          const w = wantCnt[key] || 0;
-          const l = learnCnt[key] || 0;
-          const parts = [];
-          if (w > 0) parts.push(`🎲${w > 1 ? w : ''}`);
-          if (l > 0) parts.push(`📖${l > 1 ? l : ''}`);
-          const tone = w > 0 ? 'want' : 'learn';
-          const thumb = dbThumbHtml(key.startsWith('id:') ? key.slice(3) : null, 'sched-game-tag-thumb');
-          return `<span class="sched-game-tag sched-game-tag--${tone}">${thumb}${esc(nameMap[key])} ${parts.join(' ')}</span>`;
-        }).join('');
+      // 개별 태그에 🎲/📖를 붙이지 않고 하고싶은/배우고싶은 그룹 헤더로 분리(집계 칩과 동일 구성).
+      // 한 게임이 want·learn 둘 다면 양쪽 그룹에 각각 표시(카운트 기준).
+      const _tag = (key, cnt, tone) => {
+        const suffix = cnt > 1 ? ` ·${cnt}` : '';
+        const thumb = dbThumbHtml(key.startsWith('id:') ? key.slice(3) : null, 'sched-game-tag-thumb');
+        return `<span class="sched-game-tag sched-game-tag--${tone}">${thumb}${esc(nameMap[key])}${suffix}</span>`;
+      };
+      const wantKeys = Object.keys(wantCnt).sort((a, b) =>
+        ((wantCnt[b] || 0) - (wantCnt[a] || 0)) || ((priorityCnt[b] || 0) - (priorityCnt[a] || 0)));
+      const learnKeys = Object.keys(learnCnt).sort((a, b) => (learnCnt[b] || 0) - (learnCnt[a] || 0));
+      const _group = (label, keys, cntObj, tone) => keys.length
+        ? `<div class="sched-tag-group"><span class="sched-tag-group-label">${label}</span><div class="sched-tag-row">${keys.map(k => _tag(k, cntObj[k], tone)).join('')}</div></div>`
+        : '';
 
-      return `<div class="sched-game-tags">${chips}</div>`;
+      return `<div class="sched-game-tags">${_group('🎲 하고 싶은 게임', wantKeys, wantCnt, 'want')}${_group('📖 배우고 싶은 게임', learnKeys, learnCnt, 'learn')}</div>`;
     }
 
     const voteDate = dayVotes[0].vote_date;
