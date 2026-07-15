@@ -276,9 +276,10 @@ function _trackPvOnce(pageName) {
   window.CottageDB?.trackPageView(pageName);
 }
 
-function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
+function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, readOnly = false) {
   const _charBody = subBody.querySelector('.profile-char-body');
-  if (_charBody) {
+  // 읽기전용: 대표 캐릭터 선택/변경 바인딩 스킵(남의 대표를 바꾸면 안 됨). 펼침 토글은 유지.
+  if (_charBody && !readOnly) {
     _charBody.querySelectorAll('.profile-char-card:not(.is-locked)').forEach(card => {
       card.addEventListener('click', () => {
         const achId = card.dataset.achId || '';
@@ -334,7 +335,8 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false) {
     });
   }
   const _titleBody = subBody.querySelector('.profile-title-body');
-  if (_titleBody) {
+  // 읽기전용: 대표 칭호 선택/변경 바인딩 스킵. 펼침 토글은 유지.
+  if (_titleBody && !readOnly) {
     _titleBody.querySelectorAll('.profile-title-card').forEach(card => {
       card.addEventListener('click', () => {
         const earned = card.dataset.earned === 'true';
@@ -489,9 +491,18 @@ function _bindActivityTogglesAndMore(subBody) {
   });
 }
 
-async function openProfilePanel(autoSubsheet = null) {
-  const user = getKakaoUser();
-  if (!user) return;
+async function openProfilePanel(autoSubsheet = null, opts = {}) {
+  // Phase C: userId 파라미터화 + 읽기전용 모드. readOnly면 대상 유저(userId)의 공개 보드를
+  // 편집 컨트롤 없이 표시(비공개 섹션=알림·교환권·함께한 시간 제외). 편집 컨트롤 HTML은 _ro()로 생략.
+  const { userId: _targetUserId = null, readOnly = false } = opts;
+  const _selfUser = getKakaoUser();
+  const user = readOnly
+    ? { id: String(_targetUserId), nickname: opts.nickname || '' }
+    : _selfUser;
+  if (!user || !user.id) return;
+  // 편집 컨트롤 HTML 생략 헬퍼 (읽기전용이면 '' 반환)
+  const _ro = html => (readOnly ? '' : html);
+  const _boardLabel = readOnly ? '보드' : '내 보드';
 
   // 취향보드에서 수정 후 "‹ 모임 보드"로 복귀 시 복원할 스크롤 위치(패널 유지되는 동안 서브시트 스왑 간 보존)
   let _pendingMeetingScrollTop = null;
@@ -503,16 +514,17 @@ async function openProfilePanel(autoSubsheet = null) {
   };
 
   const existing = document.getElementById('profilePanel');
-  if (existing) { existing.remove(); return; }
+  // 자기 보드는 버튼 재클릭 시 토글로 닫힘. 읽기전용은 항상 새로 열기(닉네임 클릭 등 진입).
+  if (existing) { existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly) return; }
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
-  panel.className = 'profile-panel';
+  panel.className = 'profile-panel' + (readOnly ? ' profile-panel--readonly' : '');
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
   panel.innerHTML = `<div class="profile-panel-box">
     <div class="profile-panel-header">
-      <span class="profile-panel-title">${escH(user.nickname || '손님')}의 내 보드</span>
+      <span class="profile-panel-title">${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</span>
       <button class="profile-panel-close" type="button">✕</button>
     </div>
     <div class="profile-panel-body">
@@ -520,7 +532,7 @@ async function openProfilePanel(autoSubsheet = null) {
     </div>
   </div>`;
   document.body.appendChild(panel);
-  _trackPvOnce('my-board');
+  _trackPvOnce(readOnly ? 'other-board' : 'my-board');
   panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); });
   panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); } });
   panel.querySelector('.profile-panel-header').addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
@@ -533,12 +545,13 @@ async function openProfilePanel(autoSubsheet = null) {
   const _monthEndStr = `${_monthEnd.getFullYear()}-${String(_monthEnd.getMonth()+1).padStart(2,'0')}-${String(_monthEnd.getDate()).padStart(2,'0')}`;
   const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
-    window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([]),
+    // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
+    readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
     (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
     (window.CottageAchievements?.fetchUserStats?.(String(user.id), user.nickname || null) || Promise.resolve(null)).catch(() => null),
-    (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
-    (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
+    readOnly ? Promise.resolve(0)  : (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
+    readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
+    readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getUserLikedGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getUserCuriousGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
@@ -546,6 +559,12 @@ async function openProfilePanel(autoSubsheet = null) {
     (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
   ]);
+  // 읽기전용: 대상 유저 닉네임을 stats.profile에서 확정 후 헤더 갱신
+  if (readOnly && !user.nickname) {
+    user.nickname = stats?.profile?.nickname || '회원';
+    const _titleEl = panel.querySelector('.profile-panel-title');
+    if (_titleEl) _titleEl.textContent = `${user.nickname}의 ${_boardLabel}`;
+  }
   // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
   const _visitCount = stats?.profile?.visit_count || 0;
@@ -914,7 +933,7 @@ async function openProfilePanel(autoSubsheet = null) {
       const clickable = g.game_id ? ' taste-game-item--clickable' : '';
       const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
       const ruleOn = ruleSet?.has(ruleKey) ? ' is-on' : '';
-      return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button></div>`;
+      return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="taste-game-del" type="button" title="삭제">✕</button>')}</div>`;
     };
     if (games.length <= maxInitial) return games.map(renderItem).join('');
     const restCount = games.length - maxInitial;
@@ -948,10 +967,10 @@ async function openProfilePanel(autoSubsheet = null) {
     <div class="taste-bio-section">
       <div class="taste-section-label">한줄 소개</div>
       <div class="taste-bio-row">
-        <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bioTags.length ? _bioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('') : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>'}</span>
-        <button class="taste-bio-edit-btn" type="button" title="편집">✏️</button>
+        <span class="taste-bio-display" data-bio="${escH(_bio)}">${_bioTags.length ? _bioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('') : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`}</span>
+        ${_ro('<button class="taste-bio-edit-btn" type="button" title="편집">✏️</button>')}
       </div>
-      <div class="taste-bio-edit-wrap" style="display:none">
+      ${_ro(`<div class="taste-bio-edit-wrap" style="display:none">
         <div class="taste-bio-chips">
           ${_BIO_PREDEFINED.map(ex => `<button class="taste-bio-chip" type="button">${escH(ex)}</button>`).join('')}
         </div>
@@ -964,17 +983,22 @@ async function openProfilePanel(autoSubsheet = null) {
           <button class="taste-bio-save-btn" type="button">저장</button>
           <button class="taste-bio-cancel-btn" type="button">취소</button>
         </div>
-      </div>
+      </div>`)}
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count" id="tastelikedCount">${likedGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastelikedAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastelikedList">${_buildTasteGameItems(likedGames, _ruleSet)}</div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span> <button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button></div>
+      <div class="taste-section-label">👀 해보고 싶은 게임 <span class="taste-count" id="tastecuriousCount">${curiousGames.length}개</span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="tastecuriousAddBtn" type="button">+ 게임 추가</button>')}</div>
       <div class="taste-game-list" id="tastecuriousList">${_buildTasteGameItems(curiousGames, _ruleSet)}</div>
     </div>
-    <div class="taste-avoid-section">
+    ${readOnly
+      ? (_avoidTags.length ? `<div class="taste-avoid-section">
+      <div class="taste-section-label">🚫 피하는 유형</div>
+      <div class="taste-tag-grid">${_avoidTags.map(t => `<span class="taste-avoid-tag is-active" style="pointer-events:none">${escH(t)}</span>`).join('')}</div>
+    </div>` : '')
+      : `<div class="taste-avoid-section">
       <div class="taste-section-label">🚫 피하는 유형 <span class="taste-avoid-count">${_avoidTags.length > 0 ? `${_avoidTags.length}개 선택됨` : ''}</span></div>
       <p class="taste-avoid-desc">선택한 유형은 가급적 피하고 싶어요 <span class="taste-avoid-desc-hint">· 선택 안 하면 제한 없음</span></p>
       ${(() => {
@@ -987,7 +1011,7 @@ async function openProfilePanel(autoSubsheet = null) {
         <input type="text" class="taste-avoid-custom-input" maxlength="15" placeholder="직접 입력 후 Enter">
         <button class="taste-avoid-custom-add" type="button">+</button>
       </div>
-    </div>`;
+    </div>`}`;
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
   const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
@@ -1043,7 +1067,7 @@ async function openProfilePanel(autoSubsheet = null) {
     _repCharPath
       ? `<img class="profile-panel-avatar" src="${_repCharPath}" alt="${escH(_repName || '')}">`
       : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`
-  }<span class="profile-panel-avatar-edit">⚙</span></div>`;
+  }${_ro('<span class="profile-panel-avatar-edit">⚙</span>')}</div>`;
   const _repLabel = _repName ? escH(_repName) : '대표 캐릭터 없음';
   const _repBtnLabel = userStats?.repAch?.id ? '대표 캐릭터 변경' : '대표 캐릭터 설정하기';
   // 대표 칭호: earned 검증 후 표시 (SQL 미실행/미획득 시 null)
@@ -1056,13 +1080,16 @@ async function openProfilePanel(autoSubsheet = null) {
   const _titleBtnLabel = _validRepTitle ? '대표 칭호 변경' : '대표 칭호 설정하기';
 
   // 코티지 최초 기록 + 플레이 참여 업적 lazy check (프로필 열릴 때마다 백그라운드 확인)
-  window.CottageDB?.getUserFirstRecordCount?.(String(user.id)).then(frc => {
-    window.checkAchievements?.('first_record', String(user.id), { firstRecordCount: frc });
-  }).catch(() => {});
-  if (user.nickname) {
-    window.CottageDB?.getUserParticipationCount?.(String(user.id), user.nickname).then(pc => {
-      window.checkAchievements?.('play', String(user.id), { participationCount: pc });
+  // 읽기전용에서는 남의 유저에 업적을 지급하면 안 되므로 스킵
+  if (!readOnly) {
+    window.CottageDB?.getUserFirstRecordCount?.(String(user.id)).then(frc => {
+      window.checkAchievements?.('first_record', String(user.id), { firstRecordCount: frc });
     }).catch(() => {});
+    if (user.nickname) {
+      window.CottageDB?.getUserParticipationCount?.(String(user.id), user.nickname).then(pc => {
+        window.checkAchievements?.('play', String(user.id), { participationCount: pc });
+      }).catch(() => {});
+    }
   }
 
   // 모임 보드: 회원 자기소개(member_intros) + profiles.bio(한줄소개, 취향보드와 공유 SSOT) +
@@ -1112,20 +1139,20 @@ async function openProfilePanel(autoSubsheet = null) {
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} ${_ro('<button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button>')}</div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> <button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button> <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} ${_ro('<button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button>')}</div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
-        <div class="taste-section-label">👍 선호 스타일 <button class="mb-pref-edit" type="button" data-pref="like">취향보드에서 수정 →</button></div>
+        <div class="taste-section-label">👍 선호 스타일 ${_ro('<button class="mb-pref-edit" type="button" data-pref="like">취향보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
       </div>
       <div class="mb-pref-block">
-        <div class="taste-section-label">🚫 비선호 유형 <button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button></div>
+        <div class="taste-section-label">🚫 비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags">${_mbAvoidHtml}</div>
       </div>
     </div>
@@ -1140,7 +1167,7 @@ async function openProfilePanel(autoSubsheet = null) {
         ${_meetingProfileRowHtml('🕐 참여 가능 시간', _meeting.available)}
         ${_meetingProfileRowHtml('🚗 이동 가능 범위', _meeting.travelRange)}
       </div>
-      <button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
+      ${_ro(`<button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
       <div class="meeting-profile-edit-wrap" style="display:none">
         <div class="intro-field">
           <label class="intro-label">활동 지역</label>
@@ -1158,7 +1185,7 @@ async function openProfilePanel(autoSubsheet = null) {
           <button class="meeting-profile-save-btn taste-bio-save-btn" type="button">저장</button>
           <button class="meeting-profile-cancel-btn taste-bio-cancel-btn" type="button">취소</button>
         </div>
-      </div>
+      </div>`)}
     </div>`;
 
   body.innerHTML = `
@@ -1167,11 +1194,12 @@ async function openProfilePanel(autoSubsheet = null) {
         ${_repImgHtml}
         <div class="profile-panel-profile-info">
           <div class="profile-panel-nick-row">
-            <button class="profile-panel-nick" type="button">${escH(user.nickname || '손님')} <span class="profile-nick-edit">✏️</span></button>
-            <button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>
+            <button class="profile-panel-nick" type="button">${escH(user.nickname || (readOnly ? '회원' : '손님'))} ${_ro('<span class="profile-nick-edit">✏️</span>')}</button>
+            ${_ro(`<button class="profile-panel-notif-btn${_newCount === 0 ? ' is-zero' : ''}" data-subsheet="notif" type="button">${_newCount > 0 ? '<span class="notif-red-dot"></span>' : ''}🔔 ${_newCount > 0 ? `새 알림 ${_newCount}건` : '알림'}</button>`)}
           </div>
           <span class="profile-panel-rep-name">${_repLabel}</span>
-          <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} <span class="profile-title-edit">⚙</span>` : '칭호 없음 <span class="profile-title-edit">⚙</span>'}</button>
+          <button class="profile-panel-title-name${_validRepTitle ? '' : ' is-empty'}" type="button">${_validRepTitle ? `${_validRepTitle.emoji} ${escH(_validRepTitle.name)} ${_ro('<span class="profile-title-edit">⚙</span>')}` : `칭호 없음 ${_ro('<span class="profile-title-edit">⚙</span>')}`}</button>
+          ${readOnly ? '<span class="profile-panel-readonly-hint">읽기 전용으로 보고 있어요</span>' : ''}
         </div>
       </div>
       <button class="profile-growth-link" type="button">
@@ -1193,21 +1221,21 @@ async function openProfilePanel(autoSubsheet = null) {
         <span class="profile-card-label">기록 보드</span>
         <span class="profile-card-summary">${escH(_recordCardSummary)}</span>
       </button>
-      <button class="profile-card" data-subsheet="usage" type="button">
+      ${_ro(`<button class="profile-card" data-subsheet="usage" type="button">
         <span class="profile-card-icon">📊</span>
         <span class="profile-card-label">함께한 시간</span>
         <span class="profile-card-summary">${escH(_statsSummary)}</span>
-      </button>
+      </button>`)}
       <button class="profile-card" data-subsheet="meeting" type="button">
         <span class="profile-card-icon">📅</span>
         <span class="profile-card-label">모임 보드</span>
-        <span class="profile-card-summary"><span class="profile-card-meeting-cta">이번 모임 준비하기</span>${_scheduleHtml || '<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>'}</span>
+        <span class="profile-card-summary">${_ro('<span class="profile-card-meeting-cta">이번 모임 준비하기</span>')}${_scheduleHtml || `<span class="profile-card-meeting-empty">아직 등록한 일정이 없어요</span>`}</span>
       </button>
-      <button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
+      ${_ro(`<button class="profile-card profile-card--span2" data-subsheet="voucher" type="button">
         <span class="profile-card-icon">🎫</span>
         <span class="profile-card-label">음료교환권</span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
-      </button>
+      </button>`)}
     </div>`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
@@ -1215,11 +1243,11 @@ async function openProfilePanel(autoSubsheet = null) {
     document.getElementById('profileSubSheet')?.remove();
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
-    sub.className = 'profile-subsheet';
+    sub.className = 'profile-subsheet' + (readOnly ? ' profile-subsheet--readonly' : '');
     sub.innerHTML = `
       <div class="profile-subsheet-box">
         <div class="profile-subsheet-header">
-          <button class="profile-subsheet-back" type="button">‹ ${escH(user.nickname || '손님')}의 내 보드</button>
+          <button class="profile-subsheet-back" type="button">‹ ${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</button>
           <span class="profile-subsheet-title">${title}</span>
           <button class="profile-subsheet-close" type="button">✕</button>
         </div>
@@ -1386,7 +1414,7 @@ async function openProfilePanel(autoSubsheet = null) {
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');
-        _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody));
+        _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, false, readOnly));
 
       } else if (type === 'voucher') {
         _trackPvOnce('my-board-voucher');
@@ -1422,7 +1450,7 @@ async function openProfilePanel(autoSubsheet = null) {
           bioDisplay.dataset.bio = _currentBio;
           bioDisplay.innerHTML = _syncBioTags.length
             ? _syncBioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-            : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
+            : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`;
 
           function _renderBioDisplay(tags) {
             bioDisplay.innerHTML = tags.length
@@ -1671,6 +1699,8 @@ async function openProfilePanel(autoSubsheet = null) {
           }
 
           // 다른 화면(게임시트 등)에서 좋아요/궁금해요가 바뀌면 이 목록도 즉시 반영
+          // 읽기전용: 뷰어 본인의 좋아요 변경이 남의 목록에 반영되면 안 되므로 등록 스킵
+          if (!readOnly) {
           if (window.__tasteLikesHandler) window.removeEventListener('cottage-likes-changed', window.__tasteLikesHandler);
           const _onTasteLikesChanged = (e) => {
             const anchorList = subBody.querySelector('#tastelikedList');
@@ -1693,6 +1723,7 @@ async function openProfilePanel(autoSubsheet = null) {
           };
           window.__tasteLikesHandler = _onTasteLikesChanged;
           window.addEventListener('cottage-likes-changed', _onTasteLikesChanged);
+          }
 
           // ── 피하는 유형 태그 ──
           let currentAvoidTags = [...(_avoidTags)];
@@ -2044,7 +2075,7 @@ async function openProfilePanel(autoSubsheet = null) {
             const mark = it.isSource ? `<span class="mb-like-mark" title="내 목록에 있는 게임">${markIcon}</span>` : '';
             const badge = it.days ? `<span class="mb-week-badge">(${it.days})</span>` : '';
             const ruleOn = it.ruleOn ? ' is-on' : '';
-            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${mark}${badge}<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button></div>`;
+            return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
           };
 
           const _renderWeekList = (listType) => {
@@ -2058,7 +2089,7 @@ async function openProfilePanel(autoSubsheet = null) {
             const items = _groupWeekGames(listType, srcSet);
             listEl.innerHTML = items.length
               ? items.map(it => _buildWeekChipHtml(it, markIcon)).join('')
-              : '<p class="taste-game-empty">＋ 버튼으로 이번 주 하고 싶은 게임을 추가해보세요</p>';
+              : (readOnly ? '<p class="taste-game-empty">아직 없어요</p>' : '<p class="taste-game-empty">＋ 버튼으로 이번 주 하고 싶은 게임을 추가해보세요</p>');
             if (countEl) countEl.textContent = `${items.length}개`;
           };
 
@@ -2401,11 +2432,13 @@ async function openProfilePanel(autoSubsheet = null) {
             _renderWeekList('learn');
             // 이번 주 일정 미니바
             if (weekEl) {
-              weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 <button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button></div>` + _buildMiniBarWeekHtml(_weekData.myVotes, _weekData.myVoteGames, userId, true);
+              weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.myVotes, _weekData.myVoteGames, userId, !readOnly);
               weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
                 window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
+                // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
+                if (readOnly) { window.openDateScheduleModal?.(userId, _d); return; }
                 window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
               }));
             }
@@ -2416,6 +2449,8 @@ async function openProfilePanel(autoSubsheet = null) {
             }
           };
           // 다른 화면(게임시트·취향보드)에서 좋아요/궁금해요가 바뀌면 ❤️/👀 마커 즉시 반영
+          // 읽기전용: 뷰어 본인의 좋아요 변경이 남의 주간 마커에 반영되면 안 되므로 등록 스킵
+          if (!readOnly) {
           if (window.__mbLikesHandler) window.removeEventListener('cottage-likes-changed', window.__mbLikesHandler);
           const _onMbLikesChanged = (e) => {
             const anchorList = subBody.querySelector('#meetinglikedList');
@@ -2430,6 +2465,7 @@ async function openProfilePanel(autoSubsheet = null) {
           };
           window.__mbLikesHandler = _onMbLikesChanged;
           window.addEventListener('cottage-likes-changed', _onMbLikesChanged);
+          }
 
           _loadMeetingWeek();
         }); // end meeting afterRender
@@ -2438,122 +2474,24 @@ async function openProfilePanel(autoSubsheet = null) {
   });
 
   // ── 프로필 영역 버튼 바인딩 ─────────────────────────────────
-  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)); });
-  body.querySelector('.profile-panel-rep-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true)); });
-  body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
-  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true)); });
-  body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody)); });
+  body.querySelector('.profile-panel-avatar-wrap')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true, false, readOnly)); });
+  body.querySelector('.profile-panel-rep-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, true, false, readOnly)); });
+  if (!readOnly) body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
+  body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true, readOnly)); });
+  body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, false, readOnly)); });
 
   if (autoSubsheet) {
     body.querySelector(`[data-subsheet="${autoSubsheet}"]`)?.click();
   }
 }
 
-// ── 다른 플레이어 취향보드 시트 ───────────────────────────────
+// ── 다른 플레이어 보드(읽기 전용) ─────────────────────────────
+// Phase C: openProfilePanel 통합 패널로 위임. 자기 자신이면 편집 가능한 내 보드로.
 async function openOtherProfileSheet(userId) {
   if (!userId) return;
-
-  // 본인 프로필이면 내 보드 취향탭으로
   const self = getKakaoUser();
-  if (self && String(self.id) === String(userId)) {
-    openProfilePanel('taste');
-    return;
-  }
-
-  document.getElementById('otherProfileSheet')?.remove();
-
-  const overlay = document.createElement('div');
-  overlay.id = 'otherProfileSheet';
-  overlay.className = 'other-profile-overlay';
-  overlay.innerHTML = `<div class="other-profile-box">
-    <div class="other-profile-header">
-      <span class="other-profile-title">취향 보드</span>
-      <button class="other-profile-close" type="button">✕</button>
-    </div>
-    <div class="other-profile-body"><div class="other-profile-loading">불러오는 중…</div></div>
-  </div>`;
-  document.body.appendChild(overlay);
-
-  overlay.querySelector('.other-profile-close').addEventListener('click', () => overlay.remove());
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-
-  const data = await window.CottageDB?.getUserTasteProfile?.(userId);
-  const body = overlay.querySelector('.other-profile-body');
-  if (!data) {
-    body.innerHTML = '<div class="other-profile-empty">프로필을 불러올 수 없어요</div>';
-    return;
-  }
-
-  const { nickname, photo_url, rep_achievement_id, bio, avoid_tags, likedGames, curiousGames } = data;
-  const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  const charPath = rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(rep_achievement_id) : null;
-  const avatarSrc = charPath || photo_url;
-  const avatarHtml = avatarSrc
-    ? `<img class="other-profile-avatar" src="${_e(avatarSrc)}" alt="">`
-    : `<span class="other-profile-avatar other-profile-avatar--empty">${(nickname || '?')[0]}</span>`;
-
-  const bioTags = bio ? bio.split(',').map(t => t.trim()).filter(Boolean) : [];
-  const bioHtml = bioTags.length
-    ? bioTags.map(t => `<span class="taste-bio-tag">${_e(t)}</span>`).join('')
-    : '<span class="taste-bio-placeholder">소개 없음</span>';
-
-  const buildReadOnlyGames = (games, max = 5) => {
-    if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
-    const items = games.map(g => {
-      const gd = g.game_id ? window.gameData?.[g.game_id] : null;
-      const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
-      const thumb = gd?.images?.thumbnail
-        ? `<img class="taste-game-thumb" src="${_e(gd.images.thumbnail)}" alt="">`
-        : `<span class="taste-game-thumb-empty"></span>`;
-      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
-      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
-      return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${_e(name)}</span></div>`;
-    });
-    if (items.length <= max) return items.join('');
-    const rest = items.length - max;
-    return `${items.slice(0, max).join('')}<div class="taste-game-more-wrap" hidden>${items.slice(max).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${rest}개 더)</button>`;
-  };
-
-  body.innerHTML = `
-    <div class="other-profile-hero">
-      ${avatarHtml}
-      <span class="other-profile-name">${_e(nickname)}</span>
-    </div>
-    ${bioTags.length ? `<div class="taste-bio-section">
-      <div class="taste-section-label">한줄 소개</div>
-      <div class="taste-bio-row">${bioHtml}</div>
-    </div>` : ''}
-    <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 좋아하는 게임 <span class="taste-count">${likedGames.length}개</span></div>
-      <div class="taste-game-list">${buildReadOnlyGames(likedGames)}</div>
-    </div>
-    <div class="taste-game-section">
-      <div class="taste-section-label">🤔 해보고싶은 게임 <span class="taste-count">${curiousGames.length}개</span></div>
-      <div class="taste-game-list">${buildReadOnlyGames(curiousGames)}</div>
-    </div>
-    ${avoid_tags.length ? `<div class="taste-avoid-section">
-      <div class="taste-section-label">🚫 피하는 유형</div>
-      <div class="taste-tag-grid">${avoid_tags.map(t => `<span class="taste-avoid-tag is-active" style="pointer-events:none">${_e(t)}</span>`).join('')}</div>
-    </div>` : ''}
-  `;
-
-  body.querySelectorAll('.taste-more-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const wrap = btn.previousElementSibling;
-      if (!wrap) return;
-      const hiding = !wrap.hidden;
-      wrap.hidden = hiding;
-      btn.textContent = hiding ? `더 보기 (${wrap.querySelectorAll('.taste-game-item').length}개 더)` : '접기';
-    });
-  });
-
-  body.querySelectorAll('.taste-game-item--clickable').forEach(item => {
-    item.addEventListener('click', () => {
-      const gid = item.dataset.gameId;
-      if (gid && window.openGameSheet) { overlay.remove(); window.openGameSheet(gid); }
-    });
-  });
+  if (self && String(self.id) === String(userId)) return openProfilePanel('taste');
+  return openProfilePanel('taste', { userId: String(userId), readOnly: true });
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
 
@@ -2615,171 +2553,15 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
   return bodyHtml;
 }
 
-// ── 다른 유저 모임 보드 시트 (읽기 전용) ───────────────────────
-// 회원 자기소개 카드 클릭 시 진입. 본인 내 보드(openProfilePanel)와 동일한 .profile-panel +
-// .profile-subsheet 마크업을 그대로 사용 — 뒤로가기 시 그 유저의 "내 보드" 메인 패널(읽기 전용)이
-// 보이고, ✕는 전체 닫기. 공개 범위는 자기소개 페이지에서 보이는 수준으로 한정
-// (최근 플레이 등 개인 활동 이력은 포함하지 않음).
+// ── 다른 유저 모임 보드(읽기 전용) ─────────────────────────────
+// Phase C: openProfilePanel 통합 패널의 모임 서브시트로 위임. 자기 자신이면 편집 가능한 내 보드로.
 async function openOtherMeetingSheet(userId) {
   if (!userId) return;
-
   const self = getKakaoUser();
-  if (self && String(self.id) === String(userId)) {
-    openProfilePanel('meeting');
-    return;
-  }
-
-  document.getElementById('otherMainPanel')?.remove();
-  document.getElementById('otherMeetingSheet')?.remove();
-
-  const data = await window.CottageDB?.getUserMeetingProfile?.(userId);
-  const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-  if (!data) {
-    window.showToast?.('프로필을 불러올 수 없어요', { type: 'error' }) || alert('프로필을 불러올 수 없어요');
-    return;
-  }
-
-  const { nickname, photo_url, rep_achievement_id } = data;
-  const charPath = rep_achievement_id ? window.CottageAchievements?.getCharacterPath?.(rep_achievement_id) : null;
-  const avatarSrc = charPath || photo_url;
-  const avatarHtml = avatarSrc
-    ? `<img class="profile-panel-avatar" src="${_e(avatarSrc)}" alt="">`
-    : `<div class="profile-panel-avatar profile-panel-avatar--empty">🐾</div>`;
-
-  // 본인 내 보드(openProfilePanel)와 동일한 .profile-panel 메인 패널 — 읽기 전용(수정 불가)
-  const mainPanel = document.createElement('div');
-  mainPanel.id = 'otherMainPanel';
-  mainPanel.className = 'profile-panel';
-  mainPanel.innerHTML = `<div class="profile-panel-box">
-    <div class="profile-panel-header">
-      <span class="profile-panel-title">${_e(nickname)}의 내 보드</span>
-      <button class="profile-panel-close" type="button">✕</button>
-    </div>
-    <div class="profile-panel-body">
-      <div class="profile-panel-profile">
-        <div class="profile-panel-profile-top">
-          <div class="profile-panel-avatar-wrap">${avatarHtml}</div>
-          <div class="profile-panel-profile-info">
-            <span class="profile-panel-nick-row"><span class="profile-panel-nick">${_e(nickname)}</span></span>
-            <span class="profile-panel-readonly-hint">읽기 전용으로 보고 있어요</span>
-          </div>
-        </div>
-      </div>
-      <div class="profile-card-grid">
-        <button class="profile-card" data-other-subsheet="taste" type="button">
-          <span class="profile-card-icon">❤️</span>
-          <span class="profile-card-label">취향 보드</span>
-        </button>
-        <button class="profile-card" data-other-subsheet="meeting" type="button">
-          <span class="profile-card-icon">📅</span>
-          <span class="profile-card-label">모임 보드</span>
-        </button>
-      </div>
-    </div>
-  </div>`;
-  document.body.appendChild(mainPanel);
-  mainPanel.querySelector('.profile-panel-close').addEventListener('click', () => mainPanel.remove());
-  mainPanel.addEventListener('click', e => { if (e.target === mainPanel) mainPanel.remove(); });
-  mainPanel.querySelector('[data-other-subsheet="taste"]').addEventListener('click', () => window.openOtherProfileSheet?.(userId));
-  mainPanel.querySelector('[data-other-subsheet="meeting"]').addEventListener('click', () => _openOtherMeetingSubSheet(userId, nickname, data));
-
-  await _openOtherMeetingSubSheet(userId, nickname, data);
+  if (self && String(self.id) === String(userId)) return openProfilePanel('meeting');
+  return openProfilePanel('meeting', { userId: String(userId), readOnly: true });
 }
 
-async function _openOtherMeetingSubSheet(userId, nickname, data) {
-  document.getElementById('otherMeetingSheet')?.remove();
-  const _e = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const { bio, location, available, travelRange, meetingStyle, likedGames, curiousGames, ruleGames } = data;
-
-  // 이번 주 참여 일정 fetch
-  const _today = new Date();
-  const _dow = _today.getDay();
-  const _mon = new Date(_today);
-  _mon.setDate(_today.getDate() + (_dow === 0 ? -6 : 1 - _dow));
-  const _sun = new Date(_mon);
-  _sun.setDate(_mon.getDate() + 6);
-  const _wStart = _mon.toISOString().slice(0, 10);
-  const _wEnd   = _sun.toISOString().slice(0, 10);
-  const [_allVotes, _allVoteGames] = await Promise.all([
-    window.CottageDB?.getMeetingVotes?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
-    window.CottageDB?.getMeetingVoteGames?.(_wStart, _wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
-  ]);
-  const _myVotes     = (_allVotes     || []).filter(v => String(v.user_id) === String(userId));
-  const _myVoteGames = (_allVoteGames || []).filter(g => String(g.user_id) === String(userId));
-
-  const _weekSectionHtml = `<div class="taste-game-section">
-    <div class="taste-section-label">📅 이번 주 일정</div>
-    ${_buildMiniBarWeekHtml(_myVotes, _myVoteGames, userId, false)}
-  </div>`;
-
-  const _otherRuleSet = new Set((ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
-  const buildReadOnlyGames = (games) => {
-    if (!games.length) return '<p class="taste-game-empty">아직 없어요</p>';
-    return games.map(g => {
-      const gd = g.game_id ? window.gameData?.[g.game_id] : null;
-      const name = gd ? (gd.title?.display || gd.title?.owned || gd.title?.bgg || String(g.game_id)) : (g.custom_name || String(g.game_id || ''));
-      const thumb = gd?.images?.thumbnail
-        ? `<img class="taste-game-thumb" src="${_e(gd.images.thumbnail)}" alt="">`
-        : `<span class="taste-game-thumb-empty"></span>`;
-      const gidAttr = g.game_id ? ` data-game-id="${g.game_id}"` : '';
-      const clickable = g.game_id ? ' taste-game-item--clickable' : '';
-      const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
-      const ruleBadge = _otherRuleSet.has(ruleKey) ? '<span class="mb-rule-badge">📖</span>' : '';
-      return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${_e(name)}</span>${ruleBadge}</div>`;
-    }).join('');
-  };
-
-  const contentHtml = `
-    ${_weekSectionHtml}
-    <div class="meeting-profile-section">
-      <div class="taste-section-label">📍 모임 프로필</div>
-      <div class="meeting-profile-display">
-        <div class="meeting-profile-row"><span class="meeting-profile-label">📍 활동 지역</span><span class="meeting-profile-val${location ? '' : ' is-empty'}">${location ? _e(location) : '미입력'}</span></div>
-        <div class="meeting-profile-row"><span class="meeting-profile-label">🕐 참여 가능 시간</span><span class="meeting-profile-val${available ? '' : ' is-empty'}">${available ? _e(available) : '미입력'}</span></div>
-        <div class="meeting-profile-row"><span class="meeting-profile-label">🚗 이동 가능 범위</span><span class="meeting-profile-val${travelRange ? '' : ' is-empty'}">${travelRange ? _e(travelRange) : '미입력'}</span></div>
-        <div class="meeting-profile-row"><span class="meeting-profile-label">📝 한줄소개</span><span class="meeting-profile-val${bio ? '' : ' is-empty'}">${bio ? _e(bio) : '미입력'}</span></div>
-        <div class="meeting-profile-style-row">${meetingStyle.length ? meetingStyle.map(t => `<span class="taste-bio-tag">${_e(t)}</span>`).join('') : '<span class="taste-bio-placeholder">선호 스타일 미입력</span>'}</div>
-      </div>
-    </div>
-    <div class="taste-game-section">
-      <div class="taste-section-label">❤️ 하고 싶은 게임 <span class="taste-count">${likedGames.length}개</span></div>
-      <div class="taste-game-list">${buildReadOnlyGames(likedGames)}</div>
-    </div>
-    <div class="taste-game-section">
-      <div class="taste-section-label">💡 배우고 싶은 게임 <span class="taste-count">${curiousGames.length}개</span></div>
-      <div class="taste-game-list">${buildReadOnlyGames(curiousGames)}</div>
-    </div>`;
-
-  // 본인 내 보드의 _openSubSheet와 동일한 .profile-subsheet 마크업 — 뒤로가기는 메인 패널만 노출
-  const sub = document.createElement('div');
-  sub.id = 'otherMeetingSheet';
-  sub.className = 'profile-subsheet';
-  sub.innerHTML = `
-    <div class="profile-subsheet-box">
-      <div class="profile-subsheet-header">
-        <button class="profile-subsheet-back" type="button">‹ ${_e(nickname)}의 내 보드</button>
-        <span class="profile-subsheet-title">모임 보드</span>
-        <button class="profile-subsheet-close" type="button">✕</button>
-      </div>
-      <div class="profile-subsheet-body">${contentHtml}</div>
-    </div>`;
-  document.body.appendChild(sub);
-  sub.querySelector('.profile-subsheet-back').addEventListener('click', () => sub.remove());
-  sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); document.getElementById('otherMainPanel')?.remove(); });
-  sub.addEventListener('click', e => { if (e.target === sub) sub.remove(); });
-
-  sub.querySelectorAll('.mb-detail-btn').forEach(btn =>
-    btn.addEventListener('click', () => window.openDateScheduleModal?.(btn.dataset.uid, btn.dataset.date))
-  );
-
-  sub.querySelectorAll('.taste-game-item--clickable').forEach(item => {
-    item.addEventListener('click', () => {
-      const gid = item.dataset.gameId;
-      if (gid && window.openGameSheet) { sub.remove(); document.getElementById('otherMainPanel')?.remove(); window.openGameSheet(gid); }
-    });
-  });
-}
 window.openOtherMeetingSheet = openOtherMeetingSheet;
 
 document.addEventListener('DOMContentLoaded', initKakaoAuth);

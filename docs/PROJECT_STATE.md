@@ -46,10 +46,18 @@
   - ⚠️ **리팩토링 후보**: `_openBoxAddSearch`는 취향보드 `_openTasteAddModal`과 기능 중복(스코프 분리로 복제). Phase C(openProfilePanel 통합) 때 공용 검색-추가 헬퍼로 DRY.
 
 **Phase C (대) — 읽기전용 내 보드 (핵심 리팩토링)**:
-- `openProfilePanel`을 **userId 파라미터화 + 읽기전용 모드**로 확장(현재 self=getKakaoUser 가정 다수 → 대상 userId 주입, 편집 컨트롤 숨김/가드). openOtherTasteSheet/openOtherMeetingSheet를 이걸로 **통합**.
-- **공개 섹션(읽기전용)**: 프로필카드(닉네임·캐릭터·대표칭호) / 수집보드(캐릭터·업적·칭호·도감) / 취향(좋아하는·해보고싶은·피하는유형·한줄소개) / 모임보드(이번주 게임+취향링크+모임프로필) / 기록보드(플레이기록·게임평).
-- **제외(비공개, 사용자 승인)**: ❌함께한 시간(이용시간 통계) ❌음료교환권(잔액/내역) ❌알림. 프로필카드의 방문일수/기록수 요약은 노출 OK.
-- 편집 제거: 게임 추가/삭제/📖/⋯/프로필 수정/취향 편집 등 모든 편집 컨트롤 read-only 모드에서 숨김.
+
+**C1 (핵심 파라미터화)** — ✅ 완료 (2026-07-15, ⚠️ 실서버 스모크 대기):
+- `openProfilePanel(autoSubsheet?, opts={userId, readOnly})`로 확장. readOnly면 대상 userId 기준 조회, `user={id,nickname}` 분기, 편집 HTML은 `_ro()`로 생략, `.profile-panel--readonly`/`.profile-subsheet--readonly` 클래스.
+- **비공개 제외**: 알림 버튼·음료교환권 카드·함께한 시간 카드 렌더 생략 + 관련 DB 페치(getMyNotifications/getVoucher*) 스킵. 백그라운드 업적 체크(first_record/play)·대표 캐릭터/칭호 선택(_afterGrowthRender)·좋아요 동기화 핸들러 등록도 readOnly 가드.
+- **편집 전수 가드**: 닉/칭호/아바타 ✏️⚙, 취향 게임추가·📖·✕·bio편집·피하는유형 편집, 모임 ＋추가·취향링크·선호수정·모임프로필편집·📖·⋯·플래너편집 모두 생략. 읽기전용 상세는 `openDateScheduleModal`(편집불가).
+- **통합**: `openOtherProfileSheet`/`openOtherMeetingSheet`를 `openProfilePanel(_, {readOnly})` 얇은 래퍼로 축소. 구 `.other-profile-overlay`/otherMainPanel/`_openOtherMeetingSubSheet`(~250줄) 삭제. 진입점 3곳(club-intro/club-schedule/알림) 이름 유지로 무변경.
+- **공개 섹션(읽기전용)**: 프로필카드 / 수집보드(캐릭터·업적·칭호·도감, 선택 불가) / 취향(좋아하는·해보고싶은·피하는유형·한줄소개) / 모임보드(이번주 게임+선호/비선호+모임프로필) / 기록보드(플레이기록·게임평·사진, 남의 사진 삭제 불가).
+- **알려진 한계(C1)**: ①readOnly에선 닉네임을 stats 페치 후 확정 → getMyStats에 nickname=null 전달되어 **"태그된 참여 기록"(player_names ILIKE) 미포함**(본인 user_id 기록만). 필요 시 프로필 닉 선페치로 개선. ②모임보드는 아직 self afterRender 재사용(취향박스 링크 생략) — C2에서 폴리시.
+
+**C2 (모임 폴리시)** — 다음: 읽기전용 모임 서브시트 정돈 + **Phase B 취향박스 링크 이월**(읽기전용 버전, mb-taste-link → 박스 모달 읽기전용). 관련 이월: 상단 §Phase B "읽기전용 버전 Phase C 이월"(31줄), "_openBoxAddSearch DRY"(46줄, 단 REFACTOR 세션).
+
+**C3 (정리)** — 다음: dead code 제거 — ①`_buildMeetingGameItems`(구 미러 렌더러) ②구 CSS `.other-profile-*`(style.css ~3950-3982) ③미사용 DB fn `getUserTasteProfile`/`getUserMeetingProfile`.
 
 **Phase D (연계) — 진입점 정리**:
 - **모임 참여자** 닉네임(막대 .sched-bar-name 등) 클릭 → 그 사람 **모임 보드 직행**(읽기전용).
@@ -58,9 +66,7 @@
 
 **Phase E (후속) — 모임보드 전체 디자인 리뷰**: 아이콘 과다 여부(❤️/📖/⋯/배지 밀도), 동선, 전체 가독성. 스크린샷으로 사용자와 함께.
 
-**위험요소**: ①openProfilePanel 파라미터화 — self 가정(getKakaoUser·_currentBio·세션·업적 자기조회) 다수라 광범위, 편집 핸들러 전수 가드 필요(가장 먼저 깨질 지점). ②이벤트 발화 지점 누락. ③읽기전용 모임뷰 이번주 정렬 시 참여요일/편집불가 처리. ④getMyStats 등 타유저 지원 여부 선확인.
-
-**정리 항목**: `_buildMeetingGameItems`(구 미러 렌더러) dead code 제거.
+**위험요소(잔여)**: ①C1 실서버 스모크 미완 — 남의 취향/모임/기록/수집 보드 조회 + 편집 컨트롤 부재 + 비공개 섹션 미노출 눈으로 확인 필요. ②Phase D 진입점 통일 시 모임참여자→모임직행 / 그외→내보드전체 분기.
 
 ---
 

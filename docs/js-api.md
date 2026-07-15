@@ -77,7 +77,7 @@
 | `getUserCuriousGames(userId)` | 유저가 궁금해요(🤔)한 game_id 배열 반환 (카탈로그 전용, 하위호환) |
 | `getUserLikedGamesAll(userId)` | 취향보드용: `[{game_id, custom_name}]` 반환. custom_name은 직접입력 게임 |
 | `getUserCuriousGamesAll(userId)` | 취향보드용: `[{game_id, custom_name}]` 반환 |
-| `getUserTasteProfile(userId)` | `{nickname, photo_url, bio, avoid_tags, likedGames, curiousGames}` — 다른 플레이어 취향보드 시트용 |
+| `getUserTasteProfile(userId)` | `{nickname, photo_url, bio, avoid_tags, likedGames, curiousGames}` — 다른 플레이어 취향보드 시트용. **Phase C 통합 후 미사용(dead)** — 읽기전용 보드는 `openProfilePanel(_, {readOnly})`가 `getMyStats`/`getMeetingProfile`로 직접 조회. 정리 후보 |
 | `addGamePref(userId, gameId, customName, table)` | 취향보드: game_likes 또는 game_curious에 항목 추가. gameId/customName 중 하나만 필요 |
 | `removeGamePref(userId, gameId, customName, table)` | 취향보드: 항목 삭제 |
 | `getCustomPrefSuggestions()` | 취향보드: 두 테이블 전체에서 distinct custom_name 목록 반환 |
@@ -87,7 +87,7 @@
 | `upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd)` | 모임 플래너: 가능 시간 등록/수정. UNIQUE(vote_date, user_id) upsert |
 | `deleteMeetingVote(userId, voteDate)` | 모임 플래너: 등록 취소. **cascade**: 같은 user_id+vote_date의 `meeting_vote_games`(하고싶은/배우고싶은 게임)도 함께 삭제 — 참여 취소 시 orphan 게임 방지 |
 | `getMeetingProfile(userId)` | 모임 보드/자기소개 편집용. profiles.bio + member_intros + game_likes(getUserLikedGamesAll) + game_curious(getUserCuriousGamesAll) + meeting_game_prefs(can_explain_rules만) 통합 조회 → `{bio, nickname, location, available, travelRange, meetingStyle, favoriteGames, cardColor, likedGames, curiousGames, ruleGames}` (2026-07-09: wantGames → likedGames/curiousGames 미러링 전환) |
-| `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회 (`openOtherMeetingSheet`용). getUserTasteProfile과 동일 패턴. 반환형 동일: `{..., likedGames, curiousGames, ruleGames}` |
+| `getUserMeetingProfile(userId)` | 다른 유저 모임 보드 읽기 전용 조회. getUserTasteProfile과 동일 패턴. **Phase C 통합 후 미사용(dead)** — 읽기전용 모임 보드도 `getMeetingProfile(userId)` 재사용. 정리 후보 |
 | `upsertMeetingIntro(userId, fields)` | member_intros upsert (`onConflict:'user_id'`). 유저당 1행 보장. fields에 전달한 키만 갱신 |
 | `addMeetingGamePref(userId, listType, gameId, customName)` / `removeMeetingGamePref(...)` | meeting_game_prefs 추가/삭제. listType: `'want_this_time'` \| `'can_explain_rules'`. addGamePref/removeGamePref와 동일 구조 |
 | `getMeetingVoteGames(startDate, endDate)` | 모임 플래너 날짜별 게임 선호 조회. → `[{vote_date, user_id, list_type, game_id, custom_name, is_priority, player_condition}]`. getMeetingVotes와 동일 패턴 |
@@ -120,9 +120,9 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 | `kakaoLogout()` | 로그아웃 (localStorage 삭제) |
 | `promptNicknameChange()` | 닉네임 변경 다이얼로그 |
 | `isOwner()` | OWNER_KAKAO_ID와 일치 여부 |
-| `openProfilePanel(autoSubsheet?)` | 내 활동 패널 열기 (로그인 상태에서만 동작). autoSubsheet: `'taste'\|'records'\|'usage'\|'meeting'\|'voucher'` |
-| `openOtherProfileSheet(userId)` | 다른 유저 취향 보드 읽기 전용 시트 (142차-44) |
-| `openOtherMeetingSheet(userId)` | 다른 유저 모임 보드 읽기 전용 시트. 회원 자기소개(club-intro.html) 카드 클릭 시 진입점. 본인 `.profile-panel`/`.profile-subsheet`와 동일 마크업의 읽기 전용 메인패널+서브시트 2단 구조 — 뒤로가기로 그 유저의 "내 보드" 메인 패널(취향보드/모임보드 카드만 노출) 확인 가능, ✕로 전체 닫기. 본인 클릭 시 `openProfilePanel('meeting')`으로 위임 |
+| `openProfilePanel(autoSubsheet?, opts?)` | 프로필 보드 열기. `autoSubsheet`: `'taste'\|'records'\|'usage'\|'meeting'\|'voucher'`(자동 진입할 서브시트). **`opts={userId, readOnly}`** (Phase C): `readOnly:true`면 대상 `userId`의 **공개 보드를 편집 컨트롤 없이** 표시(비공개 섹션=알림·교환권·함께한 시간 제외, 로그인 없이도 조회 가능). readOnly=false(기본)면 종전대로 `getKakaoUser()` 기준 내 보드(버튼 재클릭 토글). 편집 HTML은 내부 `_ro()`로 생략, `.profile-panel--readonly`/`.profile-subsheet--readonly` 클래스 부여 |
+| `openOtherProfileSheet(userId)` | **Phase C: 얇은 래퍼** → `openProfilePanel('taste', {userId, readOnly:true})` (본인이면 편집 가능한 내 보드). 구 `.other-profile-overlay` 별도 시트 제거 |
+| `openOtherMeetingSheet(userId)` | **Phase C: 얇은 래퍼** → `openProfilePanel('meeting', {userId, readOnly:true})` (본인이면 `openProfilePanel('meeting')`). 회원 자기소개(club-intro.html)·모임 참여자(club-schedule.html) 닉네임 클릭 진입점. 구 otherMainPanel/`_openOtherMeetingSubSheet` 2단 구조 제거 |
 
 ---
 

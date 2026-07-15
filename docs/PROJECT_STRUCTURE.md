@@ -271,8 +271,10 @@ game-reviews.html — 기록 입력 탭
   - 내 보드 > 모임 보드(kakao-auth.js openProfilePanel('meeting'))와
     회원 자기소개(club-intro.html)가 동일 테이블/컬럼을 읽고 씀 — 한쪽 수정이 다른 쪽에 즉시 반영
   - 자기소개 작성은 로그인 필수(member_intros.user_id 기준 upsert, 유저당 1행)
-  - 회원 자기소개 카드 클릭 → openOtherMeetingSheet(userId) — 본인 .profile-panel/.profile-subsheet와
-    동일 마크업의 읽기 전용 메인패널+서브시트. 본인 카드 클릭 시 openProfilePanel('meeting')으로 위임
+  - 회원 자기소개 카드 클릭 → openOtherMeetingSheet(userId). **Phase C(2026-07-15)부터 얇은 래퍼**로
+    openProfilePanel('meeting', {userId, readOnly:true}) 호출 — 본인 내 보드와 동일한 통합 패널을 편집
+    컨트롤 없이·비공개 섹션(알림/교환권/함께한시간) 제외하고 표시. 본인 카드 클릭 시 openProfilePanel('meeting')으로 위임
+    (구 별도 otherMainPanel/_openOtherMeetingSubSheet 구조는 폐지)
 ```
 
 ---
