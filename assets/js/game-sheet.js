@@ -877,6 +877,7 @@ function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
     await initSheetComments(gameKey);
     await initSheetCommentsPreview(gameKey);
     await initPlayWidget(gameKey);
+    window.refreshPlayRecordsBoard?.(); // 세션 참여로 새 기록 생성 → 게시판 반영
     showActionToast('세션에 후기를 남겼어요');
   };
   modal.style.display = 'flex';
@@ -2023,6 +2024,7 @@ async function onSubmitPhotoModal() {
   if (err) { alert('등록에 실패했습니다. 다시 시도해 주세요.'); return; }
   onClosePhotoModal();
   await initSheetPhotos(gameKey);
+  window.refreshPlayRecordsBoard?.(); // 게시판 ⋯메뉴 경유 시 목록 즉시 반영(있을 때만)
 }
 
 function _closeAllMoreMenus() {
@@ -2107,6 +2109,7 @@ async function onSubmitCommentModal() {
     await initSheetCommentsPreview(gameKey);  // 메인 게임시트 미리보기용
     if (linkCommentId || linkedRecId || didJoin) {
       await initPlayWidget(gameKey);          // 연동/참여로 바뀐 기록 반영
+      window.refreshPlayRecordsBoard?.();     // 게시판 목록도 반영(연동/참여로 기록 변경 시)
       showActionToast(didJoin ? '세션에 후기를 남겼어요' : '플레이기록에 연동했어요');
     } else if (shouldNudge) {
       // 내 기록이 없을 때: 남의 세션 있으면 확인창으로 그 세션에 후기 추가(방금 쓴 게임평은 이동)
@@ -2643,6 +2646,7 @@ async function onSubmitPlayModal() {
     if (!result?.error) {
       onClosePlayModal();
       await initPlayWidget(gameKey);
+      window.refreshPlayRecordsBoard?.(); // 기록 수정 → 게시판 반영
     } else {
       const errEl = modal.querySelector('.sheet-play-modal-err') || (() => {
         const el = document.createElement('p');
@@ -2681,6 +2685,7 @@ async function onSubmitPlayModal() {
       });
       onClosePlayModal();
       await initPlayWidget(gameKey);
+      window.refreshPlayRecordsBoard?.(); // 신규 기록 → 게시판 반영
     }
   }
   if (submitBtn) submitBtn.disabled = false;

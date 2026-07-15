@@ -507,6 +507,14 @@
     }
   }
 
+  // 게임(기록)시트 ⋯메뉴(사진/게임평/세션참여)로 기록이 바뀌면 game-sheet.js가 이 훅을 호출 →
+  // 게시판 캐시 무효화 후, 기록 탭이 열려있으면 즉시 리로드(닫혀있으면 다음에 열 때 새로 로드).
+  window.refreshPlayRecordsBoard = () => {
+    recordsLoaded = false;
+    recordsData = null;
+    if (document.getElementById('prPanelRecords')?.classList.contains('is-active')) loadRecords();
+  };
+
   function _saveViewState(panel) {
     const _openSess = new Set(
       [...panel.querySelectorAll('.pr-session.is-open')]
