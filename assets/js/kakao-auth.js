@@ -2050,7 +2050,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             const gidAttr = it.slug ? ` data-game-id="${escH(it.slug)}"` : '';
             const cnAttr = it.customName ? ` data-custom-name="${escH(it.customName)}"` : '';
             const mark = it.isSource ? `<span class="mb-like-mark" title="내 목록에 있는 게임">${markIcon}</span>` : '';
-            const badge = it.days ? `<span class="mb-week-badge">(${it.days})</span>` : '';
+            // 참여일이 하루뿐이면 모든 게임 배지가 같은 요일이라 정보가 없음 → 숨김(여러 날일 때만 표시)
+            const _multiDay = new Set((_weekData.myVotes || []).map(v => v.vote_date)).size > 1;
+            const badge = (it.days && _multiDay) ? `<span class="mb-week-badge">(${it.days})</span>` : '';
             const ruleOn = it.ruleOn ? ' is-on' : '';
             return `<div class="taste-game-item mb-week-game${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(it.name)}</span>${mark}${badge}${_ro(`<button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button>`)}${_ro('<button class="mb-kebab-btn" type="button" title="이번 주 일정 관리" aria-label="메뉴">⋯</button>')}</div>`;
           };
