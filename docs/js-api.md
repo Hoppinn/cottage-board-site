@@ -239,7 +239,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.toInitials` | play-records-utils.js | game-reviews.js |
 | `window.hangulMatch` | play-records-utils.js | game-reviews.js |
 | `window.checkAchievements` | achievements.js | supabase-client.js (recordGamePlay, submitRating 후 호출) |
-| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection, buildCharacterSection, buildAchievementsSection, handleRepCardSelect, buildTitleSection (→ `{html,earnedIds}`), handleRepTitleSelect, getTitleById(id), getCharacterPath(achId), getCharacterName(achId), fetchUserStats(userId, nickname), findNextAchievement(preStats) → `{emoji,name,gap,unit}` or null |
+| `window.CottageAchievements` | achievements.js | kakao-auth.js (패널 섹션 빌드). 노출: checkAchievements, buildCodexSection(userId) → `{html,playedCount,totalGames}`, buildCharacterSection(userId,nickname,preStats) → `{html,earnedCharCount,charTotal}`, buildAchievementsSection(userId,nickname,preStats) → `{html,achCount,achTotal}`, handleRepCardSelect, buildTitleSection → `{html,earnedIds,titleTotal}`, handleRepTitleSelect, getTitleById(id), getCharacterPath(achId), getCharacterName(achId), fetchUserStats(userId, nickname), findNextAchievement(preStats) → `{emoji,name,gap,unit}` or null. (2026-07-15 R3: 4개 build 함수 모두 문자열 대신 `{html,...}` 객체 반환으로 통일 — 호출측 HTML regex 스크래핑(`_safeInt`) 제거 목적) |
 | `window.gameData` | cottage-games-data-output.js | game-display-adapter.js, game-sheet.js, owned-games-page.js, index-page.js |
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js, day-detail.js |
 | `window.formatCondLabel` | day-detail.js | club-schedule.html (Step 3 칩) |

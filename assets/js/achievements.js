@@ -491,7 +491,7 @@
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
   async function buildTitleSection(userId, repTitleId, visitCount, nickname, preStats = null) {
     const db = window.CottageDB;
-    if (!db) return { html: '', earnedIds: new Set() };
+    if (!db) return { html: '', earnedIds: new Set(), titleTotal: TITLE_DEFS.length };
     try {
       const s = preStats || await _fetchUserStats(db, userId, nickname);
       const { achievements, playCount, distinctCount, photoCount, commentCount, participationCount, firstRecordCount, uniqueDayCount } = s;
@@ -558,7 +558,7 @@
               `</button>`;
           }).join('')}</div></div>`
         : `<p class="profile-title-empty">칭호를 획득하려면 업적을 달성해보세요 🏷</p>`;
-      const html = `<div class="profile-title-section" data-earned-count="${earnedIds.size}" data-title-total="${TITLE_DEFS.length}">` +
+      const html = `<div class="profile-title-section">` +
         `<div class="profile-title-header">🏷 칭호 <span class="profile-title-count">${earnedIds.size} / ${TITLE_DEFS.length}종</span>` +
         `<button class="profile-title-toggle-btn" type="button">전체보기 ▾</button></div>` +
         `${_titlePreviewHtml}` +
@@ -567,8 +567,8 @@
         `${repActionHtml}` +
         `</div></div>`;
 
-      return { html, earnedIds };
-    } catch (_) { return { html: '', earnedIds: new Set() }; }
+      return { html, earnedIds, titleTotal: TITLE_DEFS.length };
+    } catch (_) { return { html: '', earnedIds: new Set(), titleTotal: TITLE_DEFS.length }; }
   }
 
   // 대표 칭호 변경 핸들러
@@ -593,7 +593,7 @@
   // 게임 도감 섹션 HTML 빌드
   async function buildCodexSection(userId) {
     const db = window.CottageDB;
-    if (!db) return '';
+    if (!db) return { html: '', playedCount: 0, totalGames: 0 };
 
     const [playedGames] = await Promise.all([
       db.getUserPlayedGames(userId),
@@ -621,7 +621,7 @@
       ? `<ul class="profile-codex-game-list">${playedGames.map(r => `<li class="profile-codex-game-item">✅ ${esc(getGameName(r.game_id))}</li>`).join('')}</ul>`
       : `<p class="profile-codex-empty">아직 수집한 게임이 없어요.</p>`;
 
-    return `<div class="profile-codex-section" data-played-count="${playedCount}" data-total-games="${totalGames}">
+    const html = `<div class="profile-codex-section">
       <div class="profile-codex-header">
         🎲 게임 도감 <span class="profile-codex-summary">${playedCount} / ${totalGames}</span>
         <button class="profile-codex-toggle-btn" type="button">전체보기 ▾</button>
@@ -631,6 +631,7 @@
         ${_fullListHtml}
       </div>
     </div>`;
+    return { html, playedCount, totalGames };
   }
 
   // 캐릭터/대표 캐릭터 섹션 HTML 빌드
@@ -645,7 +646,7 @@
 
   async function buildCharacterSection(userId, nickname, preStats = null) {
     const db = window.CottageDB;
-    if (!db) return '';
+    if (!db) return { html: '', earnedCharCount: 0, charTotal: CHAR_DEFS.length };
 
     const s = preStats || await _fetchUserStats(db, userId, nickname);
     const { achievements, repAch, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
@@ -708,7 +709,7 @@
         `<span class="profile-char-card-name">${_charName(def)}</span>` +
         `</button>`;
     }).join('')}</div></div>`;
-    return `<div class="profile-char-section" data-char-count="${earnedCharCount}" data-char-total="${CHAR_DEFS.length}">
+    const html = `<div class="profile-char-section">
       <div class="profile-char-header">🐾 내 캐릭터 ${_repIconHtml}<span class="profile-char-count">${earnedCharCount} / ${CHAR_DEFS.length}종</span><button class="profile-char-toggle-btn" type="button">전체보기 ▾</button></div>
       ${_charPreviewHtml}
       <div class="profile-char-body is-hidden">
@@ -717,6 +718,7 @@
         ${repActionHtml}
       </div>
     </div>`;
+    return { html, earnedCharCount, charTotal: CHAR_DEFS.length };
   }
 
   // 패널 오픈 시 공유 DB 조회 — 세 섹션(캐릭터/업적/칭호)이 동일 데이터를 재사용
@@ -749,7 +751,7 @@
   // 업적 전체 목록 섹션 HTML 빌드
   async function buildAchievementsSection(userId, nickname, preStats = null) {
     const db = window.CottageDB;
-    if (!db) return '';
+    if (!db) return { html: '', achCount: 0, achTotal: ACH_DEFS.length };
 
     const s = preStats || await _fetchUserStats(db, userId, nickname);
     const { achievements: earned, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
@@ -825,7 +827,7 @@
     }).join('');
     const _goalsDiv = `<div class="profile-ach-goals-wrap"><span class="profile-ach-goals-header">🎯 다음 업적</span><ul class="profile-ach-goals">${_goalsHtml}</ul></div>`;
     const _achListHtml = `<ul class="profile-ach-list is-hidden">${itemsAll.join('')}</ul>`;
-    return `<div class="profile-ach-section" data-ach-count="${earnedIds.size}" data-ach-total="${ACH_DEFS.length}">` +
+    const html = `<div class="profile-ach-section">` +
       `<div class="profile-ach-header">` +
       `<span class="profile-ach-title">🏆 업적 <span class="profile-ach-count">${earnedIds.size} / ${ACH_DEFS.length}</span></span>` +
       `<button class="profile-ach-toggle-btn" type="button">전체보기 ▾</button>` +
@@ -833,6 +835,7 @@
       `${_goalsDiv}` +
       `${_achListHtml}` +
       `</div>`;
+    return { html, achCount: earnedIds.size, achTotal: ACH_DEFS.length };
   }
 
   // 대표 캐릭터 변경 핸들러

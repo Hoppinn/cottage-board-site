@@ -597,11 +597,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _monthStart = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-01`;
   const _monthEnd   = new Date(_now.getFullYear(), _now.getMonth()+1, 0);
   const _monthEndStr = `${_monthEnd.getFullYear()}-${String(_monthEnd.getMonth()+1).padStart(2,'0')}-${String(_monthEnd.getDate()).padStart(2,'0')}`;
-  const [stats, notifs, codexHtml, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
+  const _emptyCodex = { html: '', playedCount: 0, totalGames: 0 };
+  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
-    (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve('')).catch(() => ''),
+    (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve(_emptyCodex)).catch(() => _emptyCodex),
     (window.CottageAchievements?.fetchUserStats?.(String(user.id), user.nickname || null) || Promise.resolve(null)).catch(() => null),
     readOnly ? Promise.resolve(0)  : (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
@@ -622,11 +623,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 칭호/캐릭터/업적 섹션: rep_title_id + visit_count 확정 후, fetchUserStats 결과 공유 → DB 재조회 없음
   const _repTitleId = stats?.profile?.rep_title_id || null;
   const _visitCount = stats?.profile?.visit_count || 0;
-  const [charHtml, achHtml, _titleResult] = await Promise.all([
-    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null, userStats) || Promise.resolve('')).catch(() => ''),
-    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null, userStats) || Promise.resolve('')).catch(() => ''),
-    (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null, userStats) || Promise.resolve({ html: '', earnedIds: new Set() })).catch(() => ({ html: '', earnedIds: new Set() })),
+  const _emptyChar = { html: '', earnedCharCount: 0, charTotal: 47 };
+  const _emptyAch = { html: '', achCount: 0, achTotal: 96 };
+  const _emptyTitle = { html: '', earnedIds: new Set(), titleTotal: 33 };
+  const [_charResult, _achResult, _titleResult] = await Promise.all([
+    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null, userStats) || Promise.resolve(_emptyChar)).catch(() => _emptyChar),
+    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null, userStats) || Promise.resolve(_emptyAch)).catch(() => _emptyAch),
+    (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null, userStats) || Promise.resolve(_emptyTitle)).catch(() => _emptyTitle),
   ]);
+  const codexHtml = _codexResult?.html || '';
+  const charHtml = _charResult?.html || '';
+  const achHtml = _achResult?.html || '';
   const titleHtml = _titleResult?.html || '';
   const _earnedTitleIds = _titleResult?.earnedIds || new Set();
   // seen 처리는 알림 섹션을 펼칠 때로 이동 (아래 toggle 핸들러)
@@ -890,17 +897,15 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }
 
   // 그룹 요약용 카운트 추출 — regex 실패 시 0 fallback
-  function _safeInt(html, pattern, fallback) {
-    try { const m = html.match(pattern); return m ? parseInt(m[1], 10) : fallback; } catch(e) { return fallback; }
-  }
-  const _charCount   = _safeInt(charHtml,  /data-char-count="(\d+)"/,    0);
-  const _charTotal   = _safeInt(charHtml,  /data-char-total="(\d+)"/,    47);
-  const _titleCount  = _safeInt(titleHtml, /data-earned-count="(\d+)"/,  0);
-  const _titleTotal  = _safeInt(titleHtml, /data-title-total="(\d+)"/,   33);
-  const _codexPlayed = _safeInt(codexHtml, /data-played-count="(\d+)"/, 0);
-  const _codexTotal  = _safeInt(codexHtml, /data-total-games="(\d+)"/,  641);
-  const _achCount    = _safeInt(achHtml,   /data-ach-count="(\d+)"/,    0);
-  const _achTotal    = _safeInt(achHtml,   /data-ach-total="(\d+)"/,    96);
+  // KA3: build 함수가 {html, count, total} 객체를 직접 반환하므로 HTML regex 파싱 불필요(구 _safeInt 제거)
+  const _charCount   = _charResult?.earnedCharCount ?? 0;
+  const _charTotal   = _charResult?.charTotal ?? 47;
+  const _titleCount  = _earnedTitleIds.size;
+  const _titleTotal  = _titleResult?.titleTotal ?? 33;
+  const _codexPlayed = _codexResult?.playedCount ?? 0;
+  const _codexTotal  = _codexResult?.totalGames ?? 641;
+  const _achCount    = _achResult?.achCount ?? 0;
+  const _achTotal    = _achResult?.achTotal ?? 96;
 
   const _growthLine = `업적 ${_achCount}/${_achTotal} · 캐릭터 ${_charCount}/${_charTotal} · 칭호 ${_titleCount}/${_titleTotal} · 도감 ${_codexPlayed}/${_codexTotal}`;
   const _growthPct = Math.round((_charCount + _titleCount + _achCount + _codexPlayed) / (_charTotal + _titleTotal + _achTotal + _codexTotal) * 100);
