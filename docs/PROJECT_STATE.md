@@ -10,7 +10,7 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 감사 자체가 안 된 대형 파일(game-sheet.js 2693줄·index-page.js 1594줄·day-detail.js 1180줄)은 R1~R10 이후 별도 Phase 3 감사 세션 필요 — 문제 목록 없음, 지금은 계획 밖.
 
-**진행 상황**: R1 ✅ · A1 ✅ · R2 ✅ · R3 ✅ · R4 ✅ (2026-07-16) — R4: PU2 blob URL 누수 수정. 개별삭제는 이미 해제됐으나 그리드/행/폼을 통째로 지우는 6곳(game-sheet.js 3곳, game-reviews.js 3곳 — 특히 다중행 저장 성공 후 전체초기화)이 미해제였음. `revokePhotoGridBlobs` 공용헬퍼(play-records-utils.js) 신설해 해결. **다음 세션 시작점**: **R5(Opus medium~high)** — SC1 LIKE 와일드카드 미이스케이프 4곳(getMyStats 등). 이후 R6~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.
+**진행 상황**: R1~R4 ✅ · R5 ✅ (2026-07-16) — R5: SC1 조사 결과 `_escapeLike`가 감사 이후 이미 4곳 적용돼 있어 코드변경 없이 검증 종결(백슬래시 정식이스케이프 업그레이드는 위험>이득으로 현행유지). **다음 세션 시작점**: **R6(Opus high, Plan 권장)** — ACH5 `buildAchievementsSection`의 숨은 업적 소급지급 side-effect 분리. 이후 R7~R13은 REFACTOR_CHECKPOINT.md "처리 계획" 표 순서대로.
 
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 
