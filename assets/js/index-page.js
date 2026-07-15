@@ -1232,6 +1232,10 @@ let _plannerPendingEdit = null; // 홈 수정 버튼 → 프레임 준비 전 �
 let _meetingDirty  = false;    // 플래너에서 저장 완료 신호 수신 → closeModal 시 재조회
 let _meetingReload = null;     // initMeetingSection이 loadWeek 참조를 주입
 
+// 모임보드 게임 목록 인원조건 select(kakao-auth.js)에서 바로 반영 — 홈 미리보기는
+// dayVotes/dayGames를 초기 로드 시점 값으로만 렌더해 별도 갱신 신호 없이는 갱신 안 됨.
+window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); });
+
 (function initPlannerModal() {
   const modal    = document.getElementById('plannerSheetModal');
   const frame    = document.getElementById('plannerSheetFrame');

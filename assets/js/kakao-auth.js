@@ -2427,6 +2427,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
                 const same = (slug ? gslug === slug : g.custom_name === (customName || grp.name)) && g.list_type === listType && dateSet.has(g.vote_date);
                 if (same) g.player_condition = newCond;
               });
+              // 홈 미리보기("이날 모임 한눈에 보기")는 자체 캐시라 신호 없이는 갱신 안 됨 → 전역 이벤트로 통지
+              window.dispatchEvent(new CustomEvent('cottage-meeting-changed', { detail: { reason: 'condition' } }));
             });
           }
 
