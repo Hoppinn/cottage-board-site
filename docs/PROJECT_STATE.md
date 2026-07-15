@@ -71,6 +71,13 @@
 
 **Phase E (후속) — 모임보드 전체 디자인 리뷰**: 아이콘 과다 여부(❤️/📖/⋯/배지 밀도), 동선, 전체 가독성. 스크린샷으로 사용자와 함께. **다음 세션에서 이어감.**
 
+**다음 세션 작업 순서 추천 (2026-07-15 결정)**:
+1. **Phase E 먼저 마무리** — 위 체크포인트를 깔끔히 닫기 위해 최우선. 스크린샷 보면서 사용자와 함께 판단.
+2. Phase E 종료 후 신규 작업 하나 선택:
+   - **(권장 우선순위 A) 모임 관련 테이블 보안 구멍** — `meeting_votes`/`meeting_vote_games`/`meeting_game_prefs`가 anon 키로 전체 읽기/쓰기/삭제 가능(RLS UNRESTRICTED, §3 P3 "[보안] meeting 계열 쓰기 보호" 항목). 백로그 중 실제 위험도 최고. Red — Edge Function 경유 write 설계 필요, **Plan 모드 + Opus xhigh 고정** (CLAUDE.md Plan-Execute 기준).
+   - **(대안 — 가벼운 시작) 게임평→캐릭터/업적 미반영 버그** (§3 "게임평→캐릭터/업적 미반영", A-7) — 게임평 작성이 review 업적/캐릭터에 반영 안 됨. `checkAchievements('review')` 트리거 재확인부터. 원인 비교적 명확한 옐로급, Sonnet high로 빠르게 처리 가능.
+3. `openProfilePanel`(kakao-auth.js, 1973줄, REFACTOR_CHECKPOINT.md KA1) 리팩토링은 위 항목들과 별개로 **전용 REFACTOR 세션**에서 처리 — 이번 순서에는 포함하지 않음.
+
 ---
 
 ### 🟢 CHECKPOINT: 미보유 게임 기록시트 + 게임평↔플레이기록 연동 (2026-07-14, Red — Stage 1·2·3 전부 완료, 실서버 스모크만 남음)
