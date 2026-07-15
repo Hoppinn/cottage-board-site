@@ -1,5 +1,8 @@
 (function () {
 
+  // GR6: 파일 내부에서만 쓰이는 상태 — window 노출 제거(IIFE 내부화)
+  let _prGroups, _prLatestRecord, _prMoreOutsideClickBound, _refreshAutocompleteLists;
+
   // ── helpers ─────────────────────────────────────────────────────
 
   function getGameName(id) {
@@ -192,7 +195,7 @@
 
     const groups = await window.CottageDB?.getGroupNames() || [];
     if (!groups.includes('코티지보드 동호회')) groups.unshift('코티지보드 동호회');
-    window._prGroups = groups;
+    _prGroups = groups;
     window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
     const voucherHistory = await window.CottageDB?.getVoucherHistory?.(String(user.id), 1000) || [];
     const hasFirstPlayVoucher = voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
@@ -200,11 +203,11 @@
     async function refreshAutocompleteLists() {
       const fresh = await window.CottageDB?.getGroupNames() || [];
       if (!fresh.includes('코티지보드 동호회')) fresh.unshift('코티지보드 동호회');
-      window._prGroups = fresh;
+      _prGroups = fresh;
       window._prPlayerNames = await window.CottageDB?.getPlayerNames() || [];
-      window._refreshAutocompleteLists = refreshAutocompleteLists;
+      _refreshAutocompleteLists = refreshAutocompleteLists;
     }
-    window._refreshAutocompleteLists = refreshAutocompleteLists;
+    _refreshAutocompleteLists = refreshAutocompleteLists;
 
     panel.innerHTML = `
       ${hasFirstPlayVoucher ? '' : '<p class="pr-reward-note">🎁 첫 플레이 기록 작성 시 음료 교환권 1장 지급!</p>'}
@@ -347,7 +350,7 @@
 
           if (sameBtn.classList.contains('pr-last-record-btn')) {
             // 행 1: 가장 최신 기록에서 그룹명·인원·참여자 가져오기
-            const rec = window._prLatestRecord;
+            const rec = _prLatestRecord;
             if (!rec) return;
             const grpInput = document.getElementById('prGroup');
             if (grpInput && rec.group) grpInput.value = rec.group;
@@ -370,7 +373,7 @@
     }
 
     // 그룹명 자동완성
-    attachAc(document.getElementById('prGroup'), () => window._prGroups || [], null, document.getElementById('prGroupAcList'));
+    attachAc(document.getElementById('prGroup'), () => _prGroups || [], null, document.getElementById('prGroupAcList'));
 
     addRow(false);
 
@@ -427,7 +430,7 @@
       btn.disabled = false; btn.textContent = '저장하기';
 
       if (ok) {
-        showToast('저장됐어요!'); window._refreshAutocompleteLists?.();
+        showToast('저장됐어요!'); _refreshAutocompleteLists?.();
         window.CottageDB?.trackEvent('record_complete');
         document.getElementById('prGameRows').innerHTML = '';
         addRow(false);
@@ -495,7 +498,7 @@
           if (diff !== 0) return diff;
           return new Date(b.created_at) - new Date(a.created_at);
         })[0] : null;
-      window._prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names, group: _myLatest.group_name } : null;
+      _prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names, group: _myLatest.group_name } : null;
       renderRecords(recordsData);
     } catch (err) {
       console.error(err);
@@ -646,8 +649,8 @@
         }
       });
     });
-    if (!window._prMoreOutsideClickBound) {
-      window._prMoreOutsideClickBound = true;
+    if (!_prMoreOutsideClickBound) {
+      _prMoreOutsideClickBound = true;
       document.addEventListener('click', () => {
         document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
           m.classList.remove('is-open');
@@ -748,7 +751,7 @@
         );
 
         // 모임명 자동완성
-        attachAc(form.querySelector('.pie-group'), () => window._prGroups || []);
+        attachAc(form.querySelector('.pie-group'), () => _prGroups || []);
 
         // 참여자 태그칩 (등록폼과 동일 방식, 기존 값 초기 로드)
         initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
@@ -834,7 +837,7 @@
             const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
             if (idx !== -1) Object.assign(recordsData[idx], updFields);
             const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
-            renderRecords(recordsData); window._refreshAutocompleteLists?.();
+            renderRecords(recordsData); _refreshAutocompleteLists?.();
             _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
           } else {
             saveBtn.disabled = false;
@@ -1196,84 +1199,6 @@
           ${photoHtml}
         </div>`;
       }).join('');
-    }
-    return html;
-  }
-
-  function buildGameBody(recs, user) {
-    // group_name + player_count + player_names 동일 시 묶기
-    const groups = new Map();
-    for (const r of recs) {
-      const key = `${r.group_name||''}|${r.player_count||''}|${normalizeNames(r.player_names)||''}`;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(r);
-    }
-
-    let html = '';
-    let isFirst = true;
-    for (const [, grp] of groups) {
-      const f = grp[0];
-      const groupLabel = f.group_name || '';
-      const countTag = f.player_count ? `<span class="pr-rec-tag pr-tag-count-game">${f.player_count}명</span>` : '';
-      const grpRecorderNicks = new Set(grp.map(r => (r.nickname || '').toLowerCase()).filter(Boolean));
-      const nameTags = f.player_names
-        ? f.player_names.split(',').map(n => {
-            const t = n.trim();
-            return `<span class="pr-rec-tag pr-tag-who${grpRecorderNicks.has(t.toLowerCase()) ? ' pr-tag-who-first' : ''}" data-nick="${escH(t)}">${escH(t)}</span>`;
-          }).join('')
-        : '';
-
-      html += `<div class="pr-game-group${isFirst ? ' pr-game-group--first' : ''}">`;
-      if (groupLabel || countTag || nameTags) {
-        html += `<div class="pr-game-group-hd">
-          ${groupLabel ? `<span class="pr-game-group-moim">모임: ${escH(groupLabel)}</span>` : ''}
-          ${countTag}${nameTags}
-        </div>`;
-      }
-
-      const sorted = [...grp].sort((a, b) => {
-        const da = a.played_at || a.created_at?.slice(0, 10) || '';
-        const db = b.played_at || b.created_at?.slice(0, 10) || '';
-        return db.localeCompare(da);
-      });
-
-      html += sorted.map(r => {
-        const isMine = user && (
-          (r.user_id && String(r.user_id) === String(user.id)) ||
-          (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
-        );
-        const date = r.played_at || r.created_at?.slice(0, 10) || '?';
-        const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
-        const photoUrls = parsePhotoUrls(r.photo_url);
-        const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
-        const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
-        const gameKey = getGameKey(r.game_id);
-        const dlParts2 = [
-          date !== '?' ? date.replace(/-/g, '.') : '',
-          r.play_time_min ? `${r.play_time_min}분` : '',
-          r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()).replace(/\s*\/\s*/g,' | ') : ''
-        ].filter(Boolean);
-        const dateline = dlParts2.length ? `<span class="pr-rec-dateline">${dlParts2.join(' · ')}</span>` : '';
-        const showEdit2 = isMine || window.isOwner?.();
-        const editItems2 = showEdit2 ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
-        const _safeGKey2 = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
-        const likeItems2 = _safeGKey2 ? `<button class="pr-rec-add-action pr-rec-like-action" data-game-id="${_safeGKey2}" onclick="onPrMenuLike(this)" type="button">👍 좋아요</button><button class="pr-rec-add-action pr-rec-curious-action" data-game-id="${_safeGKey2}" onclick="onPrMenuCurious(this)" type="button">🤔 궁금해요</button>` : '';
-        const addItems2 = _safeGKey2 ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey2}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey2}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
-        const moreMenu2 = (likeItems2 || addItems2 || editItems2) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems2}${addItems2}${editItems2}</div></div>` : '';
-        return `<div class="pr-rec-row" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
-          <div class="pr-rec-row-top">
-            <div class="pr-rec-main">
-              <div class="pr-rec-meta">${dateline}</div>
-              ${reviewHtml}
-            </div>
-            ${moreMenu2 ? `<div class="pr-rec-actions">${moreMenu2}</div>` : ''}
-          </div>
-          ${photoHtml}
-        </div>`;
-      }).join('');
-
-      html += `</div>`;
-      isFirst = false;
     }
     return html;
   }

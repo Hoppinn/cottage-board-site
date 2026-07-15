@@ -1239,6 +1239,28 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }
 
   // ── _markAllNotifSeen ─────────────────────────────────────────
+  // ── _markAllNotifSeen/_markVoucherSeen 공용 헬퍼 (KA5 DRY) ──
+  function _markRewardCardSeen(container) {
+    const _rewardCard = container.querySelector('.notif-reward-card');
+    if (!_rewardCard) return;
+    _rewardCard.classList.remove('is-new');
+    _rewardCard.classList.add('is-seen');
+    _rewardCard.querySelector('.profile-notif-new-badge')?.remove();
+    _rewardCard.querySelector('.profile-voucher-confirm')?.remove();
+    _rewardCard.querySelector('.notif-reward-btn')?.classList.add('is-seen');
+  }
+  function _resetNotifBtnAndConfirmAll(container) {
+    const _nBtn = body.querySelector('.profile-panel-notif-btn');
+    if (_nBtn) { _nBtn.innerHTML = '🔔 알림'; _nBtn.classList.add('is-zero'); }
+    container.querySelector('.profile-notif-confirm-all')?.remove();
+    _notifInnerHtml = _notifInnerHtml
+      .replace(/\bis-new\b/g, '')
+      .replace(/<span class="profile-notif-new-badge"[^>]*>NEW<\/span>/g, '')
+      .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
+      .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
+      .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
+  }
+
   function _markAllNotifSeen(container = body) {
     if (window._cottageSess) {
       const _s = window._cottageSess.get(String(user.id));
@@ -1253,24 +1275,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       li.classList.remove('is-new');
       li.querySelector('.profile-notif-new-badge')?.remove();
     });
-    const _rewardCard = container.querySelector('.notif-reward-card');
-    if (_rewardCard) {
-      _rewardCard.classList.remove('is-new');
-      _rewardCard.classList.add('is-seen');
-      _rewardCard.querySelector('.profile-notif-new-badge')?.remove();
-      _rewardCard.querySelector('.profile-voucher-confirm')?.remove();
-      _rewardCard.querySelector('.notif-reward-btn')?.classList.add('is-seen');
-    }
-    container.querySelector('.profile-notif-confirm-all')?.remove();
+    _markRewardCardSeen(container);
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    const _nBtn = body.querySelector('.profile-panel-notif-btn');
-    if (_nBtn) { _nBtn.innerHTML = '🔔 알림'; _nBtn.classList.add('is-zero'); }
-    _notifInnerHtml = _notifInnerHtml
-      .replace(/\bis-new\b/g, '')
-      .replace(/<span class="profile-notif-new-badge"[^>]*>NEW<\/span>/g, '')
-      .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
-      .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
-      .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
+    _resetNotifBtnAndConfirmAll(container);
     _updateNotifBadge();
   }
 
@@ -1282,25 +1289,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       window._cottageSess.set(String(user.id), _s);
     }
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    const _vCard = container.querySelector('.notif-reward-card');
-    if (_vCard) {
-      _vCard.classList.remove('is-new');
-      _vCard.classList.add('is-seen');
-      _vCard.querySelector('.profile-notif-new-badge')?.remove();
-      _vCard.querySelector('.profile-voucher-confirm')?.remove();
-      _vCard.querySelector('.notif-reward-btn')?.classList.add('is-seen');
-    }
+    _markRewardCardSeen(container);
     const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
     if (remaining === 0) {
-      const _nvBtn = body.querySelector('.profile-panel-notif-btn');
-      if (_nvBtn) { _nvBtn.innerHTML = '🔔 알림'; _nvBtn.classList.add('is-zero'); }
-      container.querySelector('.profile-notif-confirm-all')?.remove();
-      _notifInnerHtml = _notifInnerHtml
-        .replace(/\bis-new\b/g, '')
-        .replace(/<span class="profile-notif-new-badge"[^>]*>NEW<\/span>/g, '')
-        .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
-        .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
-        .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
+      _resetNotifBtnAndConfirmAll(container);
     }
     _updateNotifBadge();
   }

@@ -289,9 +289,9 @@
 
 | 순서 | 세션 | 항목 | 모델·effort | Plan 필요? | 상태 |
 |------|------|------|------------|-----------|------|
-| 1 | R1 | **그린 배치**: `buildGameBody` dead code 삭제(game-reviews.js) · KA4 `getGameName` 중복 통합 · KA5 `_markAllNotifSeen`/`_markVoucherSeen` 중복 통합 · KA6 이벤트 바인딩 중복 제거 · GR6 `window._pr*` 전역변수 5개 IIFE 내부화 · `.mb-week-games` dead CSS 삭제 | **Sonnet medium** | 아니오 | ⏳ 대기 |
+| 1 | R1 | **그린 배치**: `buildGameBody` dead code 삭제(game-reviews.js) · KA4 `getGameName` 중복 통합 · KA5 `_markAllNotifSeen`/`_markVoucherSeen` 중복 통합 · KA6 이벤트 바인딩 중복 제거 · GR6 `window._pr*` 전역변수 5개 IIFE 내부화 · `.mb-week-games` dead CSS 삭제 | **Sonnet medium** | 아니오 | ✅ **완료 (2026-07-15)** — 세부: ①`buildGameBody`(76줄) 삭제, 호출처 0곳 확인 ②KA4는 세 파일 구현이 실제로 다름(game-reviews.js만 fallback 문구·gameData조회 없음) 발견 → 강행 통합 보류, **R2로 재분류** ③KA5 `_markRewardCardSeen`/`_resetNotifBtnAndConfirmAll` 헬퍼 2개로 중복 6+5줄 추출 ④KA6은 `_bindActivityTogglesAndMore` 헬퍼가 이미 존재·양쪽 서브시트가 이미 사용 중이라 **재검증만 하고 종료**(이전 세션에서 이미 해결, 문서 미반영이었던 것) ⑤GR6 4개(`_prGroups`/`_prLatestRecord`/`_prMoreOutsideClickBound`/`_refreshAutocompleteLists`) IIFE 내부화, `_prPlayerNames`는 game-sheet.js 크로스파일 참조 확인돼 **window 유지**(내부화 시 깨짐) ⑥`.mb-week-games` CSS 1줄 삭제. node --check 통과. |
 | 2 | **A1** | **[순서 변경 2026-07-15] Phase 3 감사 — 미감사 대형 파일 3개**: `game-sheet.js`(2693줄, 프로젝트 최대·미감사) · `index-page.js`(1594줄) · `day-detail.js`(1180줄, 141차 신설). Explore 에이전트로 조사만(코드 수정 없음), REFACTOR_CHECKPOINT.md 형식(위험도·분류·이슈)으로 결과 기록. game-sheet.js가 KA1보다 커서 R2~R10보다 우선순위 재조정 필요할 수 있음 — 감사 후 이 표 재정렬. | **Opus (조사 전용)** | 아니오 | ⏳ 대기 |
-| 3 | R2 | **옐로 배치**: `_openBoxAddSearch`↔`_openTasteAddModal` DRY 통합 · ACH1 8축 정렬 순서 중복상수 4곳→1곳 · ACH3 재검증(137차 이후 실제 잔여 중복쿼리 있는지 먼저 확인) | **Sonnet high** | 아니오 | ⏳ 대기 |
+| 3 | R2 | **옐로 배치**: `_openBoxAddSearch`↔`_openTasteAddModal` DRY 통합 · ACH1 8축 정렬 순서 중복상수 4곳→1곳 · ACH3 재검증(137차 이후 실제 잔여 중복쿼리 있는지 먼저 확인) · **KA4**(R1에서 이월 — kakao-auth.js/game-reviews.js/achievements.js 3곳 `getGameName` 동작 차이 있어 통합 전 설계 결정 필요: game-reviews.js만 fallback 문구·gameData조회 상이) | **Sonnet high** | 아니오 | ⏳ 대기 |
 | 4 | R3 | KA2(`_` 내부함수 window 노출 제거) · KA3(`_safeInt` regex파싱 → 데이터 전달 방식) | **Opus medium** | 아니오(외부참조 확인만) | ⏳ 대기 |
 | 5 | R4 | PU2 — `buildPhotoItemAdder` blob URL 미해제(메모리 누수) 수정 | **Sonnet high** | 아니오 | ⏳ 대기 |
 | 6 | R5 | SC1 — LIKE 와일드카드 미이스케이프 4곳 동시 수정 (PostgreSQL escape 방식 조사 선행) | **Opus medium~high** | 아니오(쿼리 로직만, DB스키마 무변경) | ⏳ 대기 |

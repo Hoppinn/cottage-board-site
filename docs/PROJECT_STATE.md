@@ -10,7 +10,7 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 감사 자체가 안 된 대형 파일(game-sheet.js 2693줄·index-page.js 1594줄·day-detail.js 1180줄)은 R1~R10 이후 별도 Phase 3 감사 세션 필요 — 문제 목록 없음, 지금은 계획 밖.
 
-**다음 세션 시작점**: REFACTOR_CHECKPOINT.md "처리 계획" 표에서 ⏳ 대기인 항목 순서대로. R1(그린 배치, Sonnet medium) → **A1(미감사 대형파일 3개 조사, Opus)** → R2~R10. A1 결과에 따라 R2 이후 순서 재정렬될 수 있음.
+**진행 상황**: R1 ✅ 완료 (2026-07-15, Sonnet medium) — 그린 배치 6건 중 5건 처리, KA4는 3파일 구현 차이 발견돼 R2로 재분류. **다음 세션 시작점**: **A1(미감사 대형파일 3개 game-sheet.js·index-page.js·day-detail.js 조사, Opus)** → R2~R10. A1 결과에 따라 R2 이후 순서 재정렬될 수 있음.
 
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 
