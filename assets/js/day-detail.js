@@ -103,6 +103,7 @@
       font-size: 13px; color: var(--text, #3b2f2f);
       padding: 1px 0;
     }
+    .dd-game-thumb { width: 13px; height: 13px; border-radius: 3px; object-fit: cover; vertical-align: middle; margin-right: 3px; flex-shrink: 0; }
     .dd-empty {
       font-size: 12px; color: var(--muted, #9e8e7e);
       padding: 4px 0;
@@ -135,6 +136,7 @@
       font-size: 11px; padding: 3px 9px;
       border-radius: 12px; white-space: nowrap;
     }
+    .dd-game-chip-thumb { width: 11px; height: 11px; border-radius: 3px; object-fit: cover; margin-right: 3px; flex-shrink: 0; }
     .dd-game-chip--want { background: var(--bg-soft); color: var(--green); }
     .dd-game-chip--learn { background: var(--line); color: var(--muted); }
     .dd-participants-toggle {
@@ -295,6 +297,7 @@
       line-height: 1.5;
       white-space: nowrap;
     }
+    .sched-game-tag-thumb { width: 10px; height: 10px; border-radius: 2px; object-fit: cover; margin-right: 2px; flex-shrink: 0; }
     .sched-game-tag--want { background: var(--bg-soft); color: var(--green); }
     .sched-game-tag--learn { background: var(--line); color: var(--muted); }
 
@@ -406,6 +409,14 @@
 
   function gameKey(g) {
     return g.game_id ? `id:${g.game_id}` : `name:${(g.custom_name || '').trim().toLowerCase()}`;
+  }
+
+  // 작은 게임 썸네일(글자 크기 정도) — 자세히/이날모임한눈에보기/미리보기 게임 목록 공용.
+  // 커스텀 입력 게임(game_id 없음)은 썸네일 없음 → 빈 문자열.
+  function dbThumbHtml(game_id, cls) {
+    if (!game_id) return '';
+    const url = window.COTTAGE_GAMES?.find(c => c.bggId === String(game_id))?.thumbnail;
+    return url ? `<img class="${cls}" src="${esc(url)}" alt="">` : '';
   }
 
   function fmtPlayerArr(arr) {
@@ -540,6 +551,7 @@
         const items = gameObjs.map(g => {
           const name = esc(resolveGameName(g));
           const key  = gameKey(g);
+          const thumb = dbThumbHtml(g.game_id, 'dd-game-thumb');
           if (isMine) {
             const star = g.is_priority ? '⭐' : '☆';
             const curCond = g.player_condition || 'any';
@@ -548,12 +560,12 @@
             const selectOpts = Object.keys(COND_LABELS)
               .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
             const selWidth = window._condSelWidth?.(_optLabel(curCond)) || '';
-            return `<li><span>${name}</span><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            return `<li><span>${thumb}${name}</span><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
           const cl = condLabel(cond, cgEntry);
-          return `<li>${name}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+          return `<li>${thumb}${name}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
         }).join('');
         const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
         return `<div class="dd-section">
@@ -901,22 +913,24 @@
             const suffix = count > 1 ? ` ·${count}` : '';
             const star = priority >= 1 ? ` ⭐${priority}` : '';
             const badges = condBadgeHtml(conds, game_id, peakCnt);
-            return `<span class="dd-game-chip dd-game-chip--${type}">${icon} ${esc(name)}${suffix}${star}${badges}</span>`;
+            const thumb = dbThumbHtml(game_id, 'dd-game-chip-thumb');
+            return `<span class="dd-game-chip dd-game-chip--${type}">${thumb}${icon} ${esc(name)}${suffix}${star}${badges}</span>`;
           }).join('')}</div>
         </div>`
       : '';
 
     const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
-      const wantNames  = myGames.filter(g => g.list_type === 'want').map(g => esc(resolveGameName(g)));
-      const learnNames = myGames.filter(g => g.list_type === 'learn').map(g => esc(resolveGameName(g)));
-      const wantHtml  = wantNames.length  ? `<ul class="dd-game-list">${wantNames.map(n => `<li>${n}</li>`).join('')}</ul>` : '';
-      const learnHtml = learnNames.length ? `<ul class="dd-game-list">${learnNames.map(n => `<li>${n}</li>`).join('')}</ul>` : '';
+      const _li = g => `<li>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}</li>`;
+      const wantGames  = myGames.filter(g => g.list_type === 'want');
+      const learnGames = myGames.filter(g => g.list_type === 'learn');
+      const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
+      const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
       return `<div class="dd-block">
         <div class="dd-modal-nick">${esc(v.nickname)}</div>
         <div class="dd-time">${v.time_start}~${v.time_end}시</div>
-        ${wantNames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
-        ${learnNames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
+        ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
+        ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
       </div>`;
     }).join('');
 
@@ -1223,7 +1237,8 @@
           if (w > 0) parts.push(`🎲${w > 1 ? w : ''}`);
           if (l > 0) parts.push(`📖${l > 1 ? l : ''}`);
           const tone = w > 0 ? 'want' : 'learn';
-          return `<span class="sched-game-tag sched-game-tag--${tone}">${esc(nameMap[key])} ${parts.join(' ')}</span>`;
+          const thumb = dbThumbHtml(key.startsWith('id:') ? key.slice(3) : null, 'sched-game-tag-thumb');
+          return `<span class="sched-game-tag sched-game-tag--${tone}">${thumb}${esc(nameMap[key])} ${parts.join(' ')}</span>`;
         }).join('');
 
       return `<div class="sched-game-tags">${chips}</div>`;
