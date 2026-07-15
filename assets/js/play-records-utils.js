@@ -2,7 +2,7 @@
 // game-reviews.html, club-history.html 공통 유틸
 // 전역 노출: window.parsePhotoUrls / window.buildPhotoHtml / window.openLightbox
 //            window.toInitials / window.hangulMatch / window.attachAc
-//            window.initTagInput / window.buildPhotoItemAdder
+//            window.initTagInput / window.buildPhotoItemAdder / window.revokePhotoGridBlobs
 
 (function () {
   function _escAttr(s) {
@@ -269,6 +269,15 @@
     if (initialValue) initialValue.split(',').forEach(v => addTag(v));
   }
 
+  // PU2: root(그리드/행/폼) 안의 blob: URL 전부 해제 — innerHTML='' 또는 .remove()로
+  // 통째로 지우기 전에 호출해야 createObjectURL로 만든 blob이 페이지 수명 내내 누적되지 않음
+  function revokePhotoGridBlobs(root) {
+    if (!root) return;
+    root.querySelectorAll('img').forEach(img => {
+      if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+    });
+  }
+
   // 공용 사진 그리드 아이템 추가 함수
   function buildPhotoItemAdder(grid, files, maxCount) {
     return async function(file) {
@@ -306,4 +315,5 @@
   window.attachAc = attachAc;
   window.initTagInput = initTagInput;
   window.buildPhotoItemAdder = buildPhotoItemAdder;
+  window.revokePhotoGridBlobs = revokePhotoGridBlobs;
 })();

@@ -150,6 +150,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `attachAc(input, getSuggestions, onSelect, listRef)` | 자동완성 드롭다운 연결. getSuggestions=후보 배열 반환 함수, listRef=드롭다운 삽입 기준 DOM(없으면 input을 새 div로 감쌈) | game-reviews.js |
 | `initTagInput(wrap, hidden, initialValue, onAdd)` | 태그칩 입력 컴포넌트. wrap=컨테이너, hidden=값 동기화할 hidden input, initialValue=초기값 배열, onAdd=태그 추가 콜백 | game-reviews.js |
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
+| `revokePhotoGridBlobs(root)` | root 안의 `blob:` img 전부 `URL.revokeObjectURL` — 그리드/행/폼을 `innerHTML=''`나 `.remove()`로 통째로 지우기 직전에 호출(개별 ✕삭제는 자체 처리돼 있음). 호출처: game-sheet.js 사진/플레이 모달 그리드 초기화 3곳, game-reviews.js 행삭제·편집폼취소·다중행저장성공 3곳 (2026-07-16 PU2) | play-records-utils.js |
 | `toInitials(name)` | 이름 이니셜 변환 | game-reviews.js |
 | `hangulMatch(query, target)` | 한글 초성 검색 | game-reviews.js |
 

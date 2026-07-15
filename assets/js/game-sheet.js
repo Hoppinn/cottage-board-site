@@ -1917,7 +1917,7 @@ function onOpenPhotoInput(btn) {
     modal.dataset.gameId = gameKey;
     modal._photoFiles = [];
     const grid = document.getElementById('sheetPhotoModalGrid');
-    if (grid) grid.innerHTML = '';
+    if (grid) { window.revokePhotoGridBlobs?.(grid); grid.innerHTML = ''; }
     const linkWrap = document.getElementById('sheetPhotoPlayLink');
     const linkCheck = document.getElementById('sheetPhotoLinkCheck');
     const linkSelect = document.getElementById('sheetPhotoPlaySelect');
@@ -2522,7 +2522,7 @@ function onOpenPlayModal(gameKey) {
   if (reviewInput) reviewInput.value = '';
   modal._photoFiles = [];
   const photoGrid = document.getElementById('sheetPlayModalPhotoGrid');
-  if (photoGrid) photoGrid.innerHTML = '';
+  if (photoGrid) { window.revokePhotoGridBlobs?.(photoGrid); photoGrid.innerHTML = ''; }
   modal.style.display = 'flex';
 }
 
@@ -2539,7 +2539,7 @@ function onClosePlayModal() {
   if (reviewInput) reviewInput.value = '';
   modal._photoFiles = [];
   const photoGrid = document.getElementById('sheetPlayModalPhotoGrid');
-  if (photoGrid) photoGrid.innerHTML = '';
+  if (photoGrid) { window.revokePhotoGridBlobs?.(photoGrid); photoGrid.innerHTML = ''; }
 }
 
 function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTimeMin, scoreNote, groupName, playedAt, reviewText) {

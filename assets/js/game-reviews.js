@@ -367,7 +367,7 @@
         });
       }
 
-      div.querySelector('.pr-rm-btn').addEventListener('click', () => div.remove());
+      div.querySelector('.pr-rm-btn').addEventListener('click', () => { window.revokePhotoGridBlobs?.(div); div.remove(); });
       document.getElementById('prGameRows').appendChild(div);
       if (focusInput) div.querySelector('.pr-game-name').focus();
     }
@@ -432,6 +432,7 @@
       if (ok) {
         showToast('저장됐어요!'); _refreshAutocompleteLists?.();
         window.CottageDB?.trackEvent('record_complete');
+        window.revokePhotoGridBlobs?.(document.getElementById('prGameRows'));
         document.getElementById('prGameRows').innerHTML = '';
         addRow(false);
         if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);
@@ -794,8 +795,8 @@
           });
         }
 
-        form.querySelector('.pr-inline-cancel').addEventListener('click', () => { form.remove(); row.classList.remove('is-editing'); });
-        form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => { form.remove(); row.classList.remove('is-editing'); });
+        form.querySelector('.pr-inline-cancel').addEventListener('click', () => { window.revokePhotoGridBlobs?.(form); form.remove(); row.classList.remove('is-editing'); });
+        form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => { window.revokePhotoGridBlobs?.(form); form.remove(); row.classList.remove('is-editing'); });
         form.querySelector('.pr-inline-save').addEventListener('click', async () => {
           const saveBtn = form.querySelector('.pr-inline-save');
           saveBtn.disabled = true;
