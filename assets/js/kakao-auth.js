@@ -2415,7 +2415,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
                 // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
-                if (readOnly) { window.openDateScheduleModal?.(userId, _d); return; }
+                // 읽기전용: 남의 보드도 그날 전원 막대 차트로. 편집은 막기 위해 myVote=null(내 막대 하이라이트·✎✕ 없음).
+                if (readOnly) { window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), null, null); return; }
                 window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
               }));
             }
