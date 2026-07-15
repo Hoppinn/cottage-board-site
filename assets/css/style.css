@@ -4338,7 +4338,7 @@ body.embed-mode {
 /* 모임보드 이번주 게임 칩 — 좋아요 마커 + ⋯ 케밥 */
 .mb-week-game .mb-like-mark{font-size:11px;margin:0 1px;flex-shrink:0;}
 .mb-week-cond{font-size:10.5px;color:var(--muted,#9e8e7e);font-weight:500;white-space:nowrap;flex-shrink:0;margin-left:2px;}
-.mb-cond-select{font-size:10.5px;padding:1px 10px 1px 5px;border-radius:8px;border:1px solid #ede8e0;background:#f0ece6;color:var(--muted,#9e8e7e);cursor:pointer;flex-shrink:0;margin-left:2px;}
+.mb-cond-select{font-size:10.5px;padding:1px 7px 1px 5px;border-radius:8px;border:1px solid #ede8e0;background:#f0ece6;color:var(--muted,#9e8e7e);cursor:pointer;flex-shrink:0;margin-left:2px;}
 .mb-kebab-btn{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:none;border-radius:50%;background:none;cursor:pointer;font-size:16px;color:var(--muted);padding:0;flex-shrink:0;line-height:1;}
 .mb-kebab-btn:hover{background:#ede8de;color:var(--text);}
 .mb-kebab-menu{position:fixed;z-index:var(--z-sheet-modal);background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.18);padding:4px;min-width:170px;display:flex;flex-direction:column;}
