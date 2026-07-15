@@ -1112,37 +1112,37 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   const _meetingInnerHtml = `
     <div class="taste-game-section" id="mbWeekSection">
-      <div class="taste-section-label">📅 이번 주 일정</div>
+      <div class="taste-section-label">이번 주 일정</div>
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">❤️ 이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">이번 주 하고 싶은 게임</span> <span class="taste-count" id="meetinglikedCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetinglikedAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetinglikedBoxBtn" type="button">좋아하는 게임</button></div>
       <div class="taste-game-list" id="meetinglikedList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">💡 이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button></div>
+      <div class="taste-section-label taste-section-label--mb"><span class="mb-sec-name">이번 주 배우고 싶은 게임</span> <span class="taste-count" id="meetingcuriousCount"></span> ${_ro('<button class="taste-add-btn taste-add-btn--inline" id="meetingcuriousAddBtn" type="button">＋추가</button>')} <button class="mb-taste-link" id="meetingcuriousBoxBtn" type="button">궁금한 게임</button></div>
       <div class="taste-game-list" id="meetingcuriousList"><p class="taste-game-empty">불러오는 중…</p></div>
     </div>
     <div class="taste-game-section mb-pref-summary">
       <div class="mb-pref-block">
-        <div class="taste-section-label">👍 선호 스타일 ${_ro('<button class="mb-pref-edit" type="button" data-pref="like">취향보드에서 수정 →</button>')}</div>
+        <div class="taste-section-label">선호 스타일 ${_ro('<button class="mb-pref-edit" type="button" data-pref="like">취향보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags" id="mbLikeStyleTags">${_mbLikeStyleHtml}</div>
       </div>
       <div class="mb-pref-block">
-        <div class="taste-section-label">🚫 비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button>')}</div>
+        <div class="taste-section-label">비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags">${_mbAvoidHtml}</div>
       </div>
     </div>
     <div class="taste-game-section">
-      <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
+      <div class="taste-section-label">최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
       ${_recentPlaysHtml}
     </div>
     <div class="meeting-profile-section">
-      <div class="taste-section-label">📍 모임 프로필</div>
+      <div class="taste-section-label">모임 프로필</div>
       <div class="meeting-profile-display">
-        ${_meetingProfileRowHtml('📍 활동 지역', _meeting.location)}
-        ${_meetingProfileRowHtml('🕐 참여 가능 시간', _meeting.available)}
-        ${_meetingProfileRowHtml('🚗 이동 가능 범위', _meeting.travelRange)}
+        ${_meetingProfileRowHtml('활동 지역', _meeting.location)}
+        ${_meetingProfileRowHtml('참여 가능 시간', _meeting.available)}
+        ${_meetingProfileRowHtml('이동 가능 범위', _meeting.travelRange)}
       </div>
       ${_ro(`<button class="meeting-profile-edit-btn taste-bio-edit-btn" type="button" title="수정">✏️ 수정</button>
       <div class="meeting-profile-edit-wrap" style="display:none">
@@ -1989,9 +1989,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             });
 
             displayWrap.innerHTML = `
-              ${_meetingProfileRowHtml('📍 활동 지역', location)}
-              ${_meetingProfileRowHtml('🕐 참여 가능 시간', available)}
-              ${_meetingProfileRowHtml('🚗 이동 가능 범위', travelRange)}`;
+              ${_meetingProfileRowHtml('활동 지역', location)}
+              ${_meetingProfileRowHtml('참여 가능 시간', available)}
+              ${_meetingProfileRowHtml('이동 가능 범위', travelRange)}`;
             displayWrap.style.display = '';
             editWrap.style.display = 'none';
           });
@@ -2411,7 +2411,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             _renderWeekList('learn');
             // 이번 주 일정 미니바
             if (weekEl) {
-              weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.myVotes, _weekData.myVoteGames, userId, !readOnly);
+              weekEl.innerHTML = `<div class="taste-section-label">이번 주 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.myVotes, _weekData.myVoteGames, userId, !readOnly);
               weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
                 window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
