@@ -502,7 +502,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   if (!user || !user.id) return;
   // 편집 컨트롤 HTML 생략 헬퍼 (읽기전용이면 '' 반환)
   const _ro = html => (readOnly ? '' : html);
-  const _boardLabel = readOnly ? '보드' : '내 보드';
+  const _boardLabel = '내 보드';
 
   // 취향보드에서 수정 후 "‹ 모임 보드"로 복귀 시 복원할 스크롤 위치(패널 유지되는 동안 서브시트 스왑 간 보존)
   let _pendingMeetingScrollTop = null;
