@@ -61,6 +61,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
 - `game-reviews.js` `buildGameBody` — 어디서도 호출되지 않는 dead code(2026-07-15 Phase D 검증 중 발견, 실서버 테스트로 게임별 보기가 실제론 게임 카드 그리드만 렌더함을 확인). 삭제 시 회귀 위험 낮음, REFACTOR 세션에서 정리 권장.
+- `play-records-utils.js` `openLightbox` — 부모가 `cottage-close-lightbox`로 닫을 때 game-reviews의 수신부가 `.pr-lightbox`를 **DOM에서 직접 제거**해 `closeLb()`를 안 거침 → `document`의 `keydown`(onKey) 리스너가 해제되지 않고 누적. 현재 사용자 영향은 없음(고아 핸들러가 detached 노드에 `remove()`+중복 postMessage를 쏘는 정도). 정리하려면 iframe 수신부가 노드 제거 대신 닫기 함수를 호출하도록 바꿔야 함. 2026-07-16 발견(버그 수정 중, BUG FIX MODE라 보고만).
 
 ---
 
@@ -143,6 +144,14 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 | `game-sheet.js` 정리법 / `about`·`price-rules` 홍보사진 | | | | **해당 없음** — 정적 이미지라 삭제 대상도 게임도 없음 |
 
 **남은 스모크**: 기록 허브·동호회 기록에서 사진 클릭 → 좌하단 게임 표지 표시·클릭 시 해당 게임 기록시트 이동 / **내 기록에만 삭제버튼**(남의 기록엔 없어야 함) / 삭제 후 목록 갱신 · 여러 장 중 1장 삭제 시 나머지 유지.
+
+### ✅ 해결: 홈 기록 모달 ✕/ESC가 라이트박스+모달을 한꺼번에 닫음 (2026-07-16, 커밋 3260e65 — 스모크 대기)
+
+`dim`에만 `iframeLightboxOpen` 가드가 있고 `closeBtn`·ESC엔 없어 바로 `closeModal()` 호출 → `closeModal()`이 설계상 iframe에 `cottage-close-lightbox`를 쏘고 모달도 닫으므로 둘 다 닫혔음. 가드를 `closeTopLayer()`로 추출해 세 경로가 공유("닫기 요청은 항상 가장 위 레이어 하나만").
+
+> 💡 **교훈 — iframe 경계에서 z-index 추론 금지**: 처음에 "라이트박스가 z-index:9999·inset:0이라 밑 버튼은 클릭 불가"라고 판단해 사용자 제보를 반박했으나 **틀렸음**. 그 ✕는 부모 문서 요소라 iframe 내부 z-index가 적용되지 않음. 사용자의 "✕가 겹칠 때만"이라는 관찰이 정확했고, "검정 배경은 정상"이라는 반례가 원인 특정의 결정적 단서였음. **크로스 도큐먼트(iframe) 레이어는 같은 문서로 가정하지 말 것.**
+
+**남은 스모크**: 홈 기록 모달 → 사진 띄우고 ✕/ESC/배경 각각 → 라이트박스만 닫히고 모달 유지 / 라이트박스 없을 때 ✕·ESC·배경 → 모달 정상 닫힘.
 
 ### 알려진 제한사항
 
