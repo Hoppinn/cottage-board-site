@@ -509,6 +509,33 @@ function _buildSheetRecordsHtml(gameKey) {
 `;
 }
 
+// 좋아요/궁금해요 버튼 + 사용자 패널. gameKey만 필요.
+function _buildSheetReactionsHtml(gameKey) {
+  return `
+    <!-- 좋아요 / 궁금해요 (게임 정보 영역 끝) -->
+    <div class="sheet-feedback-reactions">
+      <div class="sheet-reaction-group">
+        <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
+          <div class="sheet-reaction-btn-row">
+            <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
+            <button class="sheet-reaction-expand-btn" id="sheetLikeExpandBtn" type="button" aria-label="좋아요한 사람 보기">▾</button>
+          </div>
+          <div class="sheet-reaction-users-panel" id="sheetLikerPanel"></div>
+        </div>
+      </div>
+      <div class="sheet-reaction-group">
+        <div class="sheet-reaction-btn-wrap" id="sheetCuriousBtnWrap">
+          <div class="sheet-reaction-btn-row">
+            <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
+            <button class="sheet-reaction-expand-btn" id="sheetCuriousExpandBtn" type="button" aria-label="궁금해요한 사람 보기">▾</button>
+          </div>
+          <div class="sheet-reaction-users-panel" id="sheetCuriousPanel"></div>
+        </div>
+      </div>
+    </div>
+`;
+}
+
 function _buildSameDesignerHtml(gameKey, detail) {
   const _sameDesignGames = [];
   if (detail.bgg?.designers?.length && window.gameData) {
@@ -744,27 +771,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
 
     ${_sameDesignHtml}
 
-    <!-- 좋아요 / 궁금해요 (게임 정보 영역 끝) -->
-    <div class="sheet-feedback-reactions">
-      <div class="sheet-reaction-group">
-        <div class="sheet-reaction-btn-wrap" id="sheetLikeBtnWrap">
-          <div class="sheet-reaction-btn-row">
-            <button class="sheet-reaction-btn" id="sheetLikeBtn" data-game-id="${gameKey}" onclick="onSheetLike(this)" aria-label="좋아요">👍 좋아요 0</button>
-            <button class="sheet-reaction-expand-btn" id="sheetLikeExpandBtn" type="button" aria-label="좋아요한 사람 보기">▾</button>
-          </div>
-          <div class="sheet-reaction-users-panel" id="sheetLikerPanel"></div>
-        </div>
-      </div>
-      <div class="sheet-reaction-group">
-        <div class="sheet-reaction-btn-wrap" id="sheetCuriousBtnWrap">
-          <div class="sheet-reaction-btn-row">
-            <button class="sheet-reaction-btn" id="sheetCuriousBtn" data-game-id="${gameKey}" onclick="onSheetCurious(this)" aria-label="궁금해요">🤔 궁금해요 0</button>
-            <button class="sheet-reaction-expand-btn" id="sheetCuriousExpandBtn" type="button" aria-label="궁금해요한 사람 보기">▾</button>
-          </div>
-          <div class="sheet-reaction-users-panel" id="sheetCuriousPanel"></div>
-        </div>
-      </div>
-    </div>
+    ${_buildSheetReactionsHtml(gameKey)}
 
     ${_buildSheetRecordsHtml(gameKey)}
 
