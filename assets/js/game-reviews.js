@@ -556,6 +556,20 @@
 
   let _nickUserMap = new Map();
 
+  // 라이트박스 캡션 — rec만 받는 순수 함수
+  function _recCaption(rec) {
+    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const lines = [];
+    if (rec.nick) lines.push(esc(rec.nick));
+    const dateStr = rec.date ? rec.date.slice(2, 10).replace(/-/g, '.') : '';
+    const line1 = [rec.group, dateStr].filter(Boolean).join(' · ');
+    if (line1) lines.push(esc(line1));
+    const line2 = [rec.count ? rec.count + '명' : '', rec.names, rec.time ? rec.time + '분' : ''].filter(Boolean).join(' · ');
+    if (line2) lines.push(esc(line2));
+    if (rec.score) lines.push(esc(rec.score));
+    return lines.join('<br>');
+  }
+
   // 기록 행의 ✏️ 수정 → 인라인 폼 생성·바인딩. panel/user는 renderRecords의 지역이라 파라미터로 받는다.
   function _openInlineEditForm(btn, panel, user) {
     const row = btn.closest('.pr-rec-row');
@@ -870,18 +884,6 @@
     });
 
     // 기록 사진 라이트박스
-    function _recCaption(rec) {
-      const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      const lines = [];
-      if (rec.nick) lines.push(esc(rec.nick));
-      const dateStr = rec.date ? rec.date.slice(2, 10).replace(/-/g, '.') : '';
-      const line1 = [rec.group, dateStr].filter(Boolean).join(' · ');
-      if (line1) lines.push(esc(line1));
-      const line2 = [rec.count ? rec.count + '명' : '', rec.names, rec.time ? rec.time + '분' : ''].filter(Boolean).join(' · ');
-      if (line2) lines.push(esc(line2));
-      if (rec.score) lines.push(esc(rec.score));
-      return lines.join('<br>');
-    }
     panel.querySelectorAll('.pr-rec-photo').forEach(img => {
       img.addEventListener('click', e => {
         e.stopPropagation();
