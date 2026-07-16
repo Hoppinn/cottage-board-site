@@ -90,7 +90,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] 프로필 사진 변경 (프리셋 20종 + 파일 업로드, 다기기 복원)
 - [x] 내 보드 패널 — 메인(4카드) + 서브시트(성장/교환권/이용기록/취향보드) + 프로필 영역(대표캐릭터/닉네임/칭호)
 - [x] 취향 보드 Phase 1 (142차) — 한줄소개(bio), 좋아하는/해보고싶은 게임(추가/삭제/직접입력/ESC 닫기/이미추가됨 표시), 피하는 유형 태그, 좋아요 토스트→취향보드 직접 진입
-  - ⚠️ **SQL 미실행**: Supabase SQL Editor에서 실행 필요 (커밋 메시지 참조)
+  - ~~⚠️ SQL 미실행: Supabase SQL Editor에서 실행 필요~~ → ✅ **실행 완료 확인 (2026-07-16 실측)**: `profiles.bio`·`avoid_tags`·`notif_seen_at` 전부 존재, `game_likes` 44행·`game_curious` 53행, bio/avoid_tags 실데이터 각 2행. **낡은 경고였음**(기능이 운영에서 정상 동작 중인데 경고만 남아 있었음)
   - 게임 시트에 좋아요/궁금해요 유저 아바타 목록 표시 (getGameLikers/getGameCuriousUsers)
 - [x] 약식 카드 클릭 → 해당 본문 카드로 위임 (캐릭터/칭호, 132차)
 - [x] 인앱 알림 시스템 — 배지 + 패널. 2차 개선(날짜/unread 바/보상카드 강조/명칭 "최근 소식") (130차)
@@ -215,7 +215,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] **페이지별방문 내 보드 + 서브시트 카운팅** — trackPageView('my-board*') + admin 가상페이지 집계 (118차)
 - [x] **방문자목록 회원/비회원 분류 버튼** — 전체/회원/비회원 토글 버튼 추가 (118차)
 - [x] **게임 위치 0종 카테고리 숨기기** — games.length === 0 시 렌더 스킵 (140차)
-- [x] **모임 일정 페이지** — club-schedule.html로 통합 완료 (141차). 달력+겹침계산+슬라이더+자유댓글. club-meeting.html → redirect. ⚠️ Supabase meeting_votes 테이블 생성 필요
+- [x] **모임 일정 페이지** — club-schedule.html로 통합 완료 (141차). 달력+겹침계산+슬라이더+자유댓글. club-meeting.html → redirect. ~~⚠️ Supabase meeting_votes 테이블 생성 필요~~ → ✅ **생성 확인 (2026-07-16 실측)**: `meeting_votes` 16행·`meeting_vote_games` 16행·`meeting_game_prefs` 13행. **낡은 경고였음**
 - [ ] **동호회 가입 추적** — page_sessions 데이터 활용
 - [ ] **관심 기반 묶음 알림** (Red, Plan 필수)
   - 개별 알림 → 유형별 묶음 방식 전환

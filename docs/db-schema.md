@@ -1,6 +1,24 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-07-08 (009: meeting_vote_games is_priority·player_condition 컬럼 추가; RLS 미적용 사유 명기)
+최종 갱신: 2026-07-16 (마이그레이션 적용 상태 실측 기록 추가)
+
+---
+
+## 마이그레이션 적용 상태 (2026-07-16 실측)
+
+`docs/migrations/` 000~009 **전부 운영 DB 적용 완료**. anon 키 읽기 전용 조회로 확인:
+
+| 확인 대상 | 결과 |
+|---|---|
+| 007 `page_views.session_key` | ✅ 컬럼 존재. 신규 행 99% 채워짐(최근 7일 384행 중 NULL 3) / 과거 legacy 1,513행은 NULL(소급 보정 안 함) |
+| 009 `meeting_vote_games.is_priority`·`player_condition` | ✅ 둘 다 존재, 실데이터 확인 |
+| 008 `meeting_votes` / `meeting_vote_games` / `meeting_game_prefs` | ✅ 16 / 16 / 13행 |
+| 001·003 `voucher_products` / `voucher_log` | ✅ 13 / 39행 |
+| 취향보드 `profiles.bio`·`avoid_tags`·`notif_seen_at` | ✅ 전부 존재 (bio·avoid_tags 실데이터 각 2행) |
+
+**배경**: PROJECT_STATE에 "⚠️ SQL 미실행"·"⚠️ 테이블 생성 필요"·"007 적용 전" 경고가 남아 있었으나 **전부 낡은 기재**였음(실제론 오래전 적용돼 기능이 운영 중). 세션마다 읽는 문서의 가짜 경고는 판단을 흐리므로 실측 후 닫음. **새 마이그레이션 추가 시 이 표에 적용 여부를 함께 기록할 것.**
+
+⚠️ **컬럼명을 추측해서 확인하지 말 것** — 2026-07-16 점검 중 `priority`/`condition_type`으로 조회해 "009 미적용"이라는 **거짓 결론**이 나올 뻔했음(실제 이름은 `is_priority`/`player_condition`). PostgREST는 없는 컬럼에 HTTP 400을 주므로, 마이그레이션 SQL 파일의 실제 이름으로 조회하고 **HTTP 상태를 반드시 확인**할 것(에러 응답을 "0행"으로 오독하기 쉬움).
 
 ---
 
