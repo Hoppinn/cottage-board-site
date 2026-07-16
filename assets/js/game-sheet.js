@@ -437,6 +437,37 @@ function goBackGameSheet() {
 }
 
 // 같은 디자이너 다른 게임 — gameData 전체를 훑어 designer 교집합을 찾는다.
+// 시트 표시 + 스크롤 복원 + 서브위젯 초기화 (openGameSheet의 마지막 단계)
+function _openAndInitSheet(gameKey, restoreScroll) {
+  _savedBodyScrollY = window.scrollY;
+  gameSheet.classList.add('is-active');
+  document.body.classList.add('sheet-open');
+
+  const _panel = gameSheet.querySelector('.game-sheet-scroll');
+  requestAnimationFrame(() => {
+    if (_panel) _panel.scrollTop = restoreScroll ? _savedSheetScrollTop : 0;
+  });
+
+  if (window.CottageDB) window.CottageDB.trackView(gameKey);
+  initStickyBar();
+  initSheetDescToggle();
+  initSheetMechsToggle();
+  initSheetLikes(gameKey).catch(() => {});
+  initSheetCommentsPreview(gameKey).catch(() => {});
+  initSheetPlayPreview(gameKey).catch(() => {});
+  initSheetPhotoPreview(gameKey).catch(() => {});
+
+  // ?scroll=comments → 코멘트 섹션으로 스크롤
+  const _scrollParam = new URLSearchParams(location.search).get('scroll');
+  if (_scrollParam === 'comments') {
+    setTimeout(() => {
+      const panel = gameSheet.querySelector('.game-sheet-scroll');
+      const commentsEl = document.getElementById(`sheetCommentsList-${gameKey}`);
+      if (panel && commentsEl) panel.scrollTo({ top: commentsEl.offsetTop - 20, behavior: 'smooth' });
+    }, 400);
+  }
+}
+
 function _buildSameDesignerHtml(gameKey, detail) {
   const _sameDesignGames = [];
   if (detail.bgg?.designers?.length && window.gameData) {
@@ -732,33 +763,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
 
   `;
 
-  _savedBodyScrollY = window.scrollY;
-  gameSheet.classList.add('is-active');
-  document.body.classList.add('sheet-open');
-
-  const _panel = gameSheet.querySelector('.game-sheet-scroll');
-  requestAnimationFrame(() => {
-    if (_panel) _panel.scrollTop = restoreScroll ? _savedSheetScrollTop : 0;
-  });
-
-  if (window.CottageDB) window.CottageDB.trackView(gameKey);
-  initStickyBar();
-  initSheetDescToggle();
-  initSheetMechsToggle();
-  initSheetLikes(gameKey).catch(() => {});
-  initSheetCommentsPreview(gameKey).catch(() => {});
-  initSheetPlayPreview(gameKey).catch(() => {});
-  initSheetPhotoPreview(gameKey).catch(() => {});
-
-  // ?scroll=comments → 코멘트 섹션으로 스크롤
-  const _scrollParam = new URLSearchParams(location.search).get('scroll');
-  if (_scrollParam === 'comments') {
-    setTimeout(() => {
-      const panel = gameSheet.querySelector('.game-sheet-scroll');
-      const commentsEl = document.getElementById(`sheetCommentsList-${gameKey}`);
-      if (panel && commentsEl) panel.scrollTo({ top: commentsEl.offsetTop - 20, behavior: 'smooth' });
-    }, 400);
-  }
+  _openAndInitSheet(gameKey, restoreScroll);
 }
 
 function _gameIds(gameKey) {
