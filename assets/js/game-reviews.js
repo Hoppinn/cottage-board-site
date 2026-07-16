@@ -180,6 +180,149 @@
 
   // ── 기록 입력 탭 ─────────────────────────────────────────────
 
+  // rowIdx는 호출자(renderInputPanel)가 증가시켜 넘긴다 — 저장 후 재추가 시에도
+  // 카운터가 이어져야 행 1에만 '최신 기록' 버튼이 붙는 현재 동작이 유지된다.
+  function _buildGameRow(rowIdx, focusInput) {
+    const div = document.createElement('div');
+    div.className = 'pr-game-row';
+    div.dataset.row = rowIdx;
+    div.innerHTML = `
+      <div class="pr-row-head">
+        <div class="pr-autocomplete-wrap">
+          <input type="text" class="pr-game-name" placeholder="게임명 검색" autocomplete="off">
+          <div class="pr-autocomplete-list"></div>
+        </div>
+        <button class="pr-rm-btn" type="button" title="삭제">✕</button>
+      </div>
+      <button class="pr-same-as-above-btn${rowIdx === 1 ? ' pr-last-record-btn' : ''}" type="button">${rowIdx === 1 ? '↑ 최신 기록 (인원·참여자)' : '↑ 위와 동일 (인원·참여자)'}</button>
+      <div class="pr-detail-grid">
+        <div>
+          <label class="pr-field-label">인원수</label>
+          <div class="pr-count-toggles">
+            ${[1,2,3,4,5,6,7,8].map(n => `<button class="pr-count-btn" type="button" data-n="${n}">${n}명</button>`).join('')}
+          </div>
+        </div>
+        <div>
+          <label class="pr-field-label">플레이시간(분)</label>
+          <input type="number" class="pr-time" placeholder="–" min="1">
+        </div>
+        <div>
+          <label class="pr-field-label">참여자</label>
+          <div class="tag-input-wrap pr-names-wrap">
+            <div class="tag-chips"></div>
+            <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
+            <input type="hidden" class="pr-names">
+          </div>
+        </div>
+        <div>
+          <label class="pr-field-label">점수·메모</label>
+          <textarea class="pr-score" placeholder="1등: 홍길동" rows="2"></textarea>
+        </div>
+      </div>
+      <label class="pr-photo-trigger">
+        📷 사진 추가 (선택, 여러 장)
+        <input type="file" class="pr-photo" accept="image/*" multiple style="display:none">
+      </label>
+      <div class="pr-photo-grid"></div>
+      <label class="pr-field-label">게임평 (선택)</label>
+      <textarea class="pr-review-ta pr-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요." rows="2"></textarea>`;
+
+    // 게임명 자동완성
+    attachAc(
+      div.querySelector('.pr-game-name'),
+      () => (window.COTTAGE_GAMES || []).map(g => g.display || g.titleKo || g.titleEn || '').filter(Boolean),
+      null,
+      div.querySelector('.pr-autocomplete-list')
+    );
+
+    div.querySelectorAll('.pr-count-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wasOn = btn.classList.contains('is-on');
+        div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
+        if (!wasOn) btn.classList.add('is-on');
+      });
+    });
+
+    const photoInput = div.querySelector('.pr-photo');
+    const photoGrid  = div.querySelector('.pr-photo-grid');
+    div._photoFiles  = [];
+    const addPhotoItem = buildPhotoItemAdder(photoGrid, div._photoFiles, 5);
+
+    photoInput.addEventListener('change', async () => {
+      for (const f of Array.from(photoInput.files)) await addPhotoItem(f);
+      photoInput.value = '';
+    });
+
+    initTagInput(div.querySelector('.pr-names-wrap'), div.querySelector('.pr-names'), undefined, name => {
+      if (window._prPlayerNames && !window._prPlayerNames.includes(name)) {
+        window._prPlayerNames.push(name);
+      }
+    });
+
+    // 참여자 이름 자동완성 — 콤마 구분 조합 선택 시 개별 칩으로 분리
+    attachAc(
+      div.querySelector('.tag-text-input'),
+      () => {
+        const added = [...div.querySelectorAll('.pr-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+        return (window._prPlayerNames || []).filter(s =>
+          !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
+        );
+      },
+      s => {
+        const ti = div.querySelector('.tag-text-input');
+        s.split(',').forEach(name => {
+          name = name.trim();
+          if (!name) return;
+          ti.value = name;
+          ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+        });
+      },
+      div.querySelector('.pr-names-wrap')
+    );
+
+    const sameBtn = div.querySelector('.pr-same-as-above-btn');
+    if (sameBtn) {
+      sameBtn.addEventListener('click', () => {
+        const fillCountAndNames = (count, namesStr) => {
+          div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
+          if (count) div.querySelector(`.pr-count-btn[data-n="${count}"]`)?.classList.add('is-on');
+          const chipsWrap = div.querySelector('.tag-chips');
+          const textInput = div.querySelector('.tag-text-input');
+          const hiddenInput = div.querySelector('.pr-names');
+          chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
+          hiddenInput.value = '';
+          (namesStr || '').split(',').forEach(name => {
+            name = name.trim(); if (!name) return;
+            textInput.value = name;
+            textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+          });
+          div.querySelector('.pr-names-wrap .pr-autocomplete-list')?.classList.remove('is-open');
+        };
+
+        if (sameBtn.classList.contains('pr-last-record-btn')) {
+          // 행 1: 가장 최신 기록에서 그룹명·인원·참여자 가져오기
+          const rec = _prLatestRecord;
+          if (!rec) return;
+          const grpInput = document.getElementById('prGroup');
+          if (grpInput && rec.group) grpInput.value = rec.group;
+          fillCountAndNames(rec.count, rec.names);
+        } else {
+          // 행 2+: 바로 위 행에서 복사
+          const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
+          const curIdx = allRows.indexOf(div);
+          if (curIdx <= 0) return;
+          const aboveRow = allRows[curIdx - 1];
+          const activeCountBtn = aboveRow.querySelector('.pr-count-btn.is-on');
+          fillCountAndNames(activeCountBtn?.dataset.n, aboveRow.querySelector('.pr-names').value);
+        }
+      });
+    }
+
+    div.querySelector('.pr-rm-btn').addEventListener('click', () => { window.revokePhotoGridBlobs?.(div); div.remove(); });
+    document.getElementById('prGameRows').appendChild(div);
+    if (focusInput) div.querySelector('.pr-game-name').focus();
+  }
+
   async function renderInputPanel() {
     const panel = document.getElementById('prPanelInput');
     if (!panel) return;
@@ -230,147 +373,7 @@
       <button class="pr-submit-btn" id="prSaveBtn" type="button">저장하기</button>`;
 
     let rowIdx = 0;
-
-    function addRow(focusInput) {
-      const div = document.createElement('div');
-      div.className = 'pr-game-row';
-      div.dataset.row = ++rowIdx;
-      div.innerHTML = `
-        <div class="pr-row-head">
-          <div class="pr-autocomplete-wrap">
-            <input type="text" class="pr-game-name" placeholder="게임명 검색" autocomplete="off">
-            <div class="pr-autocomplete-list"></div>
-          </div>
-          <button class="pr-rm-btn" type="button" title="삭제">✕</button>
-        </div>
-        <button class="pr-same-as-above-btn${rowIdx === 1 ? ' pr-last-record-btn' : ''}" type="button">${rowIdx === 1 ? '↑ 최신 기록 (인원·참여자)' : '↑ 위와 동일 (인원·참여자)'}</button>
-        <div class="pr-detail-grid">
-          <div>
-            <label class="pr-field-label">인원수</label>
-            <div class="pr-count-toggles">
-              ${[1,2,3,4,5,6,7,8].map(n => `<button class="pr-count-btn" type="button" data-n="${n}">${n}명</button>`).join('')}
-            </div>
-          </div>
-          <div>
-            <label class="pr-field-label">플레이시간(분)</label>
-            <input type="number" class="pr-time" placeholder="–" min="1">
-          </div>
-          <div>
-            <label class="pr-field-label">참여자</label>
-            <div class="tag-input-wrap pr-names-wrap">
-              <div class="tag-chips"></div>
-              <input type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
-              <input type="hidden" class="pr-names">
-            </div>
-          </div>
-          <div>
-            <label class="pr-field-label">점수·메모</label>
-            <textarea class="pr-score" placeholder="1등: 홍길동" rows="2"></textarea>
-          </div>
-        </div>
-        <label class="pr-photo-trigger">
-          📷 사진 추가 (선택, 여러 장)
-          <input type="file" class="pr-photo" accept="image/*" multiple style="display:none">
-        </label>
-        <div class="pr-photo-grid"></div>
-        <label class="pr-field-label">게임평 (선택)</label>
-        <textarea class="pr-review-ta pr-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요." rows="2"></textarea>`;
-
-      // 게임명 자동완성
-      attachAc(
-        div.querySelector('.pr-game-name'),
-        () => (window.COTTAGE_GAMES || []).map(g => g.display || g.titleKo || g.titleEn || '').filter(Boolean),
-        null,
-        div.querySelector('.pr-autocomplete-list')
-      );
-
-      div.querySelectorAll('.pr-count-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const wasOn = btn.classList.contains('is-on');
-          div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
-          if (!wasOn) btn.classList.add('is-on');
-        });
-      });
-
-      const photoInput = div.querySelector('.pr-photo');
-      const photoGrid  = div.querySelector('.pr-photo-grid');
-      div._photoFiles  = [];
-      const addPhotoItem = buildPhotoItemAdder(photoGrid, div._photoFiles, 5);
-
-      photoInput.addEventListener('change', async () => {
-        for (const f of Array.from(photoInput.files)) await addPhotoItem(f);
-        photoInput.value = '';
-      });
-
-      initTagInput(div.querySelector('.pr-names-wrap'), div.querySelector('.pr-names'), undefined, name => {
-        if (window._prPlayerNames && !window._prPlayerNames.includes(name)) {
-          window._prPlayerNames.push(name);
-        }
-      });
-
-      // 참여자 이름 자동완성 — 콤마 구분 조합 선택 시 개별 칩으로 분리
-      attachAc(
-        div.querySelector('.tag-text-input'),
-        () => {
-          const added = [...div.querySelectorAll('.pr-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
-          return (window._prPlayerNames || []).filter(s =>
-            !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
-          );
-        },
-        s => {
-          const ti = div.querySelector('.tag-text-input');
-          s.split(',').forEach(name => {
-            name = name.trim();
-            if (!name) return;
-            ti.value = name;
-            ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
-          });
-        },
-        div.querySelector('.pr-names-wrap')
-      );
-
-      const sameBtn = div.querySelector('.pr-same-as-above-btn');
-      if (sameBtn) {
-        sameBtn.addEventListener('click', () => {
-          const fillCountAndNames = (count, namesStr) => {
-            div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
-            if (count) div.querySelector(`.pr-count-btn[data-n="${count}"]`)?.classList.add('is-on');
-            const chipsWrap = div.querySelector('.tag-chips');
-            const textInput = div.querySelector('.tag-text-input');
-            const hiddenInput = div.querySelector('.pr-names');
-            chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
-            hiddenInput.value = '';
-            (namesStr || '').split(',').forEach(name => {
-              name = name.trim(); if (!name) return;
-              textInput.value = name;
-              textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
-            });
-            div.querySelector('.pr-names-wrap .pr-autocomplete-list')?.classList.remove('is-open');
-          };
-
-          if (sameBtn.classList.contains('pr-last-record-btn')) {
-            // 행 1: 가장 최신 기록에서 그룹명·인원·참여자 가져오기
-            const rec = _prLatestRecord;
-            if (!rec) return;
-            const grpInput = document.getElementById('prGroup');
-            if (grpInput && rec.group) grpInput.value = rec.group;
-            fillCountAndNames(rec.count, rec.names);
-          } else {
-            // 행 2+: 바로 위 행에서 복사
-            const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
-            const curIdx = allRows.indexOf(div);
-            if (curIdx <= 0) return;
-            const aboveRow = allRows[curIdx - 1];
-            const activeCountBtn = aboveRow.querySelector('.pr-count-btn.is-on');
-            fillCountAndNames(activeCountBtn?.dataset.n, aboveRow.querySelector('.pr-names').value);
-          }
-        });
-      }
-
-      div.querySelector('.pr-rm-btn').addEventListener('click', () => { window.revokePhotoGridBlobs?.(div); div.remove(); });
-      document.getElementById('prGameRows').appendChild(div);
-      if (focusInput) div.querySelector('.pr-game-name').focus();
-    }
+    const addRow = focusInput => _buildGameRow(++rowIdx, focusInput);
 
     // 그룹명 자동완성
     attachAc(document.getElementById('prGroup'), () => _prGroups || [], null, document.getElementById('prGroupAcList'));
