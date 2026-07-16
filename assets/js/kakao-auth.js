@@ -545,6 +545,110 @@ function _bindActivityTogglesAndMore(subBody) {
   });
 }
 
+// ── '기록 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
+// ctx: _allPhotoData는 splice로 변형되지만 재할당은 없음 → 참조 전달 안전
+function _bindRecordSubsheet(subBody, ctx) {
+  const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW } = ctx;
+          _bindActivityTogglesAndMore(subBody);
+          // 게임평 더보기/닫기 — 토글 클릭으로 activity list 열린 후 측정
+          const _bindReviewToggles = container => {
+            container.querySelectorAll('.profile-review-text').forEach(el => {
+              if (el.dataset.toggleBound) return;
+              el.dataset.toggleBound = '1';
+              const needsToggle = el.scrollHeight > el.clientHeight + 3;
+              if (!needsToggle) return;
+              const btn = document.createElement('button');
+              btn.className = 'profile-review-toggle-btn'; btn.type = 'button'; btn.textContent = '더보기';
+              el.after(btn);
+              btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const exp = el.classList.toggle('is-expanded');
+                btn.textContent = exp ? '접기' : '더보기';
+              });
+            });
+          };
+          _bindReviewToggles(subBody);
+          subBody.addEventListener('click', e => {
+            if (e.target.classList.contains('profile-more-btn')) setTimeout(() => _bindReviewToggles(subBody), 0);
+          });
+          subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => setTimeout(() => _bindReviewToggles(subBody), 0));
+          });
+          // 게임명 + 썸네일 클릭 → 게임 기록 시트
+          subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
+            const gameId = li.dataset.gameId;
+            if (!gameId) return;
+            const openSheet = () => {
+              const key = _getGameKeyById(gameId);
+              if (!key) return;
+              window.ensureGameSheet?.();
+              window.openGameRecordSheet?.(key);
+            };
+            li.querySelector('.profile-game-link')?.addEventListener('click', openSheet);
+            li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', openSheet);
+          });
+          // 더보기/접기 — 라이트박스 기능(play-records-utils.js) 유무와 무관하게 항상 동작
+          const _moreBadge = subBody.querySelector('.record-photo-more-badge');
+          if (_moreBadge) {
+            const _hiddenTotal = _allPhotoData.length - _PHOTO_SHOW;
+            let _photoExpanded = false;
+            _moreBadge.addEventListener('click', e => {
+              e.stopPropagation();
+              _photoExpanded = !_photoExpanded;
+              subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
+                const idx = parseInt(img.dataset.photoIdx || '0', 10);
+                if (idx >= _PHOTO_SHOW) img.classList.toggle('record-photo-hidden', !_photoExpanded);
+              });
+              _moreBadge.textContent = _photoExpanded ? '접기' : `더 보기 (${_hiddenTotal}장 더)`;
+            });
+          }
+          // 사진 클릭 → 라이트박스 (캡션+삭제 포함)
+          if (window.openLightbox && _allPhotoData.length) {
+            const _myId = String(window.getKakaoUser?.()?.id || '');
+            const _escC = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+            const _buildPhotoCaption = d => {
+              const lines = [];
+              if (d.nickname) lines.push(_escC(d.nickname));
+              const l1 = [d.group_name, d.played_at ? d.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
+              if (l1) lines.push(l1);
+              const l2 = [d.player_count ? d.player_count+'명' : '', d.player_names, d.play_time_min ? d.play_time_min+'분' : ''].filter(Boolean).join(' · ');
+              if (l2) lines.push(l2);
+              if (d.score_note) lines.push(_escC(d.score_note));
+              return lines.join('<br>');
+            };
+            const _photoUrls = _allPhotoData.map(d => d.url);
+            const _photoCaptions = _allPhotoData.map(_buildPhotoCaption);
+            const _deletable = _allPhotoData.map(d => !!(_myId && d.user_id && String(d.user_id) === _myId));
+            // 라이트박스 좌하단 게임 썸네일 — 사진별 해당 게임 표지 + 클릭 시 게임 기록 시트
+            const _photoGameKeys = _allPhotoData.map(d => d.game_id ? _getGameKeyById(d.game_id) : null);
+            const _photoGameThumbs = _photoGameKeys.map(k => k ? (window.gameData?.[k]?.images?.thumbnail || null) : null);
+            const _lbOpts = {
+              captions: _photoCaptions,
+              gameThumbs: _photoGameThumbs,
+              gameKeys: _photoGameKeys,
+              onGameClick: key => { if (!key) return; window.ensureGameSheet?.(); window.openGameRecordSheet?.(key); },
+            };
+            if (_deletable.some(Boolean)) {
+              _lbOpts.deletable = _deletable;
+              _lbOpts.onDelete = async delIdx => {
+                const d = _allPhotoData[delIdx];
+                if (!d || !window.CottageDB) return;
+                const forRec = _allPhotoData.filter(x => x.record_id === d.record_id);
+                const rem = forRec.filter(x => x !== d).map(x => x.url);
+                const newUrl = rem.length === 0 ? null : rem.length === 1 ? rem[0] : JSON.stringify(rem);
+                await window.CottageDB.updateGamePlay(d.record_id, { photo_url: newUrl });
+                _allPhotoData.splice(delIdx, 1);
+              };
+            }
+            subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
+              img.addEventListener('click', () => {
+                const idx = parseInt(img.dataset.photoIdx || '0', 10);
+                window.openLightbox(_photoUrls, idx, _lbOpts);
+              });
+            });
+          }
+        }
+
 // ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _markAllNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
@@ -1846,106 +1950,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
       } else if (type === 'records') {
         _trackPvOnce('my-board-records');
-        _openSubSheet('기록 보드', _recordInnerHtml, subBody => {
-          _bindActivityTogglesAndMore(subBody);
-          // 게임평 더보기/닫기 — 토글 클릭으로 activity list 열린 후 측정
-          const _bindReviewToggles = container => {
-            container.querySelectorAll('.profile-review-text').forEach(el => {
-              if (el.dataset.toggleBound) return;
-              el.dataset.toggleBound = '1';
-              const needsToggle = el.scrollHeight > el.clientHeight + 3;
-              if (!needsToggle) return;
-              const btn = document.createElement('button');
-              btn.className = 'profile-review-toggle-btn'; btn.type = 'button'; btn.textContent = '더보기';
-              el.after(btn);
-              btn.addEventListener('click', e => {
-                e.stopPropagation();
-                const exp = el.classList.toggle('is-expanded');
-                btn.textContent = exp ? '접기' : '더보기';
-              });
-            });
-          };
-          _bindReviewToggles(subBody);
-          subBody.addEventListener('click', e => {
-            if (e.target.classList.contains('profile-more-btn')) setTimeout(() => _bindReviewToggles(subBody), 0);
-          });
-          subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(toggle => {
-            toggle.addEventListener('click', () => setTimeout(() => _bindReviewToggles(subBody), 0));
-          });
-          // 게임명 + 썸네일 클릭 → 게임 기록 시트
-          subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
-            const gameId = li.dataset.gameId;
-            if (!gameId) return;
-            const openSheet = () => {
-              const key = _getGameKeyById(gameId);
-              if (!key) return;
-              window.ensureGameSheet?.();
-              window.openGameRecordSheet?.(key);
-            };
-            li.querySelector('.profile-game-link')?.addEventListener('click', openSheet);
-            li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', openSheet);
-          });
-          // 더보기/접기 — 라이트박스 기능(play-records-utils.js) 유무와 무관하게 항상 동작
-          const _moreBadge = subBody.querySelector('.record-photo-more-badge');
-          if (_moreBadge) {
-            const _hiddenTotal = _allPhotoData.length - _PHOTO_SHOW;
-            let _photoExpanded = false;
-            _moreBadge.addEventListener('click', e => {
-              e.stopPropagation();
-              _photoExpanded = !_photoExpanded;
-              subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
-                const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                if (idx >= _PHOTO_SHOW) img.classList.toggle('record-photo-hidden', !_photoExpanded);
-              });
-              _moreBadge.textContent = _photoExpanded ? '접기' : `더 보기 (${_hiddenTotal}장 더)`;
-            });
-          }
-          // 사진 클릭 → 라이트박스 (캡션+삭제 포함)
-          if (window.openLightbox && _allPhotoData.length) {
-            const _myId = String(window.getKakaoUser?.()?.id || '');
-            const _escC = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
-            const _buildPhotoCaption = d => {
-              const lines = [];
-              if (d.nickname) lines.push(_escC(d.nickname));
-              const l1 = [d.group_name, d.played_at ? d.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
-              if (l1) lines.push(l1);
-              const l2 = [d.player_count ? d.player_count+'명' : '', d.player_names, d.play_time_min ? d.play_time_min+'분' : ''].filter(Boolean).join(' · ');
-              if (l2) lines.push(l2);
-              if (d.score_note) lines.push(_escC(d.score_note));
-              return lines.join('<br>');
-            };
-            const _photoUrls = _allPhotoData.map(d => d.url);
-            const _photoCaptions = _allPhotoData.map(_buildPhotoCaption);
-            const _deletable = _allPhotoData.map(d => !!(_myId && d.user_id && String(d.user_id) === _myId));
-            // 라이트박스 좌하단 게임 썸네일 — 사진별 해당 게임 표지 + 클릭 시 게임 기록 시트
-            const _photoGameKeys = _allPhotoData.map(d => d.game_id ? _getGameKeyById(d.game_id) : null);
-            const _photoGameThumbs = _photoGameKeys.map(k => k ? (window.gameData?.[k]?.images?.thumbnail || null) : null);
-            const _lbOpts = {
-              captions: _photoCaptions,
-              gameThumbs: _photoGameThumbs,
-              gameKeys: _photoGameKeys,
-              onGameClick: key => { if (!key) return; window.ensureGameSheet?.(); window.openGameRecordSheet?.(key); },
-            };
-            if (_deletable.some(Boolean)) {
-              _lbOpts.deletable = _deletable;
-              _lbOpts.onDelete = async delIdx => {
-                const d = _allPhotoData[delIdx];
-                if (!d || !window.CottageDB) return;
-                const forRec = _allPhotoData.filter(x => x.record_id === d.record_id);
-                const rem = forRec.filter(x => x !== d).map(x => x.url);
-                const newUrl = rem.length === 0 ? null : rem.length === 1 ? rem[0] : JSON.stringify(rem);
-                await window.CottageDB.updateGamePlay(d.record_id, { photo_url: newUrl });
-                _allPhotoData.splice(delIdx, 1);
-              };
-            }
-            subBody.querySelectorAll('.record-photo-thumb').forEach(img => {
-              img.addEventListener('click', () => {
-                const idx = parseInt(img.dataset.photoIdx || '0', 10);
-                window.openLightbox(_photoUrls, idx, _lbOpts);
-              });
-            });
-          }
-        }, 'profile-subsheet-body--records', bodyEl => { _recordInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
+        _openSubSheet('기록 보드', _recordInnerHtml, subBody => _bindRecordSubsheet(subBody, { _getGameKeyById, _allPhotoData, _PHOTO_SHOW }), 'profile-subsheet-body--records', bodyEl => { _recordInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
 
 
       } else if (type === 'usage') {
