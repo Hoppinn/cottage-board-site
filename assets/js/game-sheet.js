@@ -2428,7 +2428,23 @@ function getOrCreatePlayModal() {
   modal = document.createElement('div');
   modal.id = 'sheetPlayModal';
   modal.className = 'sheet-play-modal';
-  modal.innerHTML = `
+  modal.innerHTML = _buildPlayModalHtml();
+  _bindPlayModalEvents(modal);
+  document.body.appendChild(modal);
+  _initPlayModalNamesInput(modal);
+  if (window.CottageDB) {
+    window.CottageDB.getGroupNames().then(names => {
+      const dl = document.getElementById('sheetPlayGroupNameList');
+      if (dl) dl.innerHTML = names.map(n => `<option value="${n}">`).join('');
+    });
+  }
+
+  return modal;
+}
+
+// 플레이 기록 모달의 정적 HTML — 캡처 없음(호출자 상태 불필요)
+function _buildPlayModalHtml() {
+  return `
     <div class="sheet-play-modal-box">
       <p class="sheet-play-modal-title">플레이 기록하기</p>
       <p class="sheet-play-modal-label">몇 명이서 했나요?</p>
@@ -2474,6 +2490,10 @@ function getOrCreatePlayModal() {
       </div>
     </div>
   `;
+}
+
+// 모달 자체 이벤트: 배경 클릭 닫기 · 인원 선택 · 모임 체크 · 사진 추가
+function _bindPlayModalEvents(modal) {
   modal.addEventListener('click', e => { if (e.target === modal) onClosePlayModal(); });
   modal.querySelector('#sheetPlayModalCountBtns').addEventListener('click', e => {
     const btn = e.target.closest('.sheet-player-select-btn');
@@ -2495,8 +2515,10 @@ function getOrCreatePlayModal() {
     for (const f of Array.from(e.target.files || [])) await adder(f);
     e.target.value = '';
   });
-  document.body.appendChild(modal);
+}
 
+// 참여자 이름 태그칩 + 자동완성 (play-records-utils 전역 사용)
+function _initPlayModalNamesInput(modal) {
   // 참여자 이름 태그칩 + 자동완성
   const _namesWrap = modal.querySelector('#sheetPlayModalNamesWrap');
   const _namesHidden = modal.querySelector('#sheetPlayModalNames');
@@ -2521,16 +2543,8 @@ function getOrCreatePlayModal() {
       _namesWrap
     );
   }
-
-  if (window.CottageDB) {
-    window.CottageDB.getGroupNames().then(names => {
-      const dl = document.getElementById('sheetPlayGroupNameList');
-      if (dl) dl.innerHTML = names.map(n => `<option value="${n}">`).join('');
-    });
-  }
-
-  return modal;
 }
+
 
 function onOpenPlayModal(gameKey) {
   const modal = getOrCreatePlayModal();
