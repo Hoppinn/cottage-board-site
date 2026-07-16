@@ -200,6 +200,8 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 ### DB 함수 에러 처리 (2026-07-08 교훈)
 
 - `catch` 블록에서 에러를 삼키지 않는다. `catch (_) { return []; }` 패턴 금지. 최소한 `console.error('[함수명]', e)` 후 반환.
+- ⚠️ **`try/catch`만으론 부족하다 (2026-07-17 실측 정정)**: **supabase-js는 쿼리 오류에 예외를 던지지 않고** `{ data: null, error }`를 반환한다. 그래서 `const { data } = await db.from(...)` 형태면 **컬럼 오타·RLS 차단·테이블 없음이 전부 조용히 빈 배열**이 되고 `catch`도 `console.error`도 안 울린다(= 가장 흔한 실패가 감지 불가). **`const { data, error }`로 error를 받아 `if (error) console.error('[함수명]', error)`** 할 것. try/catch는 네트워크 장애·JS 예외 전용. 상세는 [docs/js-api.md](docs/js-api.md) "CottageDB 에러 처리 규약".
+- **반환 계약은 유지**한다 — 실패 시 `[]`/`null` fallback을 에러 throw로 바꾸면 빈 배열을 전제로 렌더하는 호출부가 깨진다. 바꾸는 건 **관측(로그)이지 동작이 아니다**.
 - **reason 정확성**: 구체적 실패(not_found, invalid 등)를 일반적 실패(max_priority 등)보다 먼저 검사한다. 순서가 뒤바뀌면 잘못된 reason이 반환되어 UI 분기가 오동작한다.
 - **Supabase RLS**: 테이블 생성 시 항상 RLS 상태를 명시한다. 이 프로젝트 기본은 `DISABLE`(카카오 OAuth 구조상 auth.uid() 불가, anon 키 직접 read/write). Supabase는 신규 테이블에 RLS를 자동 활성화하므로 마이그레이션 SQL에 `ALTER TABLE {name} DISABLE ROW LEVEL SECURITY;` 포함. 실행 직후 anon 키 SELECT로 접근 확인.
 

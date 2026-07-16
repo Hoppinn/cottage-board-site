@@ -1,10 +1,30 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-15 (Stage 3 UX 개편 — 확인창 `_openJoinConfirm` + 사진 세션참여, game-reviews 잠금폼 제거)
+최종 갱신: 2026-07-17 (CottageDB 에러 처리 규약 신설 — supabase-js는 쿼리 오류에 예외를 안 던진다)
 
 ---
 
 ## window.CottageDB (supabase-client.js)
+
+### ⚠️ 에러 처리 규약 (2026-07-17 신설 — 신규 DB 함수 작성 시 필독)
+
+**supabase-js는 쿼리가 실패해도 예외를 던지지 않는다.** `{ data: null, error }`를 반환할 뿐이다(실측 확인: 없는 컬럼/없는 테이블 조회 시 예외 0, `error.message`에 사유). 결과적으로:
+
+```js
+// ❌ 사각지대 — 컬럼 오타·RLS 차단·테이블 없음이 전부 "데이터 없음"으로 둔갑
+const { data } = await db.from('profiles').select('avoid_tags');
+return data || [];          // → [] 반환, try/catch도 console.error도 안 울림
+
+// ✅ error를 받아서 확인해야 함
+const { data, error } = await db.from('profiles').select('avoid_tags');
+if (error) console.error('[getAllAvoidTagSuggestions]', error);
+return data || [];
+```
+
+- `try/catch` + `console.error`는 **네트워크 장애·JS 예외만** 잡는다. 쿼리 오류는 못 잡는다.
+- **가장 흔한 실패(컬럼 오타·RLS·테이블 없음)가 정확히 쿼리 오류**라 이 구분이 결정적이다.
+- **현황(2026-07-17 실측)**: `supabase-client.js`에서 `const { data } = await db.` (error 무시) **40곳** / `const { data, error }` (error 받음) 36곳. 40곳 정리는 §3 "[기술부채] DB 조회 에러 삼키기" 2단계로 등록됨.
+- 반환 계약(실패 시 `[]`/`null` fallback)은 **유지**한다 — 호출부가 빈 배열을 전제로 렌더 중이라 에러를 던지게 바꾸면 UI가 깨진다. 바꾸는 건 로그(관측)이지 동작이 아니다.
 
 | 함수 | 용도 |
 |------|------|

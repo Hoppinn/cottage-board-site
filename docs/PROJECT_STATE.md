@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-17 (DB 에러 로그 75곳 추가·커밋 34e79f5 / **R10a ✅ 완료 — 스모크 통과** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. 다음 = **R10b**, 새 세션 권장)
+최종 갱신: 2026-07-17 (**다음 = 감지기 2단계**: DB 조회 error 미확인 40곳 — supabase-js는 쿼리오류에 예외를 안 던져 1단계 로그 75곳이 절반만 감지함이 드러남. 화재 테스트 25개 전부 정상. / **R10a ✅ 완료 — 스모크 통과** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. **다음 세션 = 감지기 2단계 → 그다음 R10b**)
 
 ---
 
@@ -10,7 +10,7 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 대형 파일 3개(game-sheet.js·index-page.js·day-detail.js)는 **A1 Phase 3 감사 완료(2026-07-15)** — 결과는 REFACTOR_CHECKPOINT.md "Phase 3" 절(GS1~7·IP1~3·DD1~3). 이 감사로 R11(game-sheet)·R12(day-detail) 편입. index-page(IP1~3)·GS4는 R번호 미배정 상태.
 
-**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 ✅ 완료**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297, **스모크 통과**(홈 모임모달·룰렛 / 플래너 내일정모달·⭐·인원조건→주간뷰 반영 전 항목 정상). `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **R10a ✅ 코드 완료**(KA1 추출 — `openProfilePanel` 1,940→918줄, 서브시트 6블록 1,043줄을 모듈 함수로, 커밋 c9ab2bd~b3ed30d, **브라우저 스모크 대기**). **다음 = R10a 스모크 → R10b**(크로스보드 stale).
+**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 ✅ 완료**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297, **스모크 통과**(홈 모임모달·룰렛 / 플래너 내일정모달·⭐·인원조건→주간뷰 반영 전 항목 정상). `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **R10a ✅ 완료**(KA1 추출 — `openProfilePanel` 1,940→918줄, 서브시트 6블록 1,043줄을 모듈 함수로, 커밋 c9ab2bd~b3ed30d, **브라우저 스모크 통과**). **다음 = 감지기 2단계(§3 기술부채) → R10b**(크로스보드 stale).
 
 **남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4의 "사진첨부 후 새로고침해야 표시"**·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10b 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
 
@@ -26,7 +26,9 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - **R10b ⏳ 대기**: 크로스보드 stale(아래 버그2-b). 방향 A(진입 시 DB 재조회 = 단일 소스) + 스냅샷 임시방편(11e10b8) 대체. **R10a가 서브시트 경계를 만들어 착수 비용이 내려감**.
 - **R10c ⏳ 대기**: 네비게이션 스택(§3-1 알림 복귀 + §3-2 좋아요 토스트→게임시트 복귀, `openProfilePanel(sub, {backTo:{...}})` 일반화). 신규기능.
 
-**다음 세션 시작점**: **R10b (크로스보드 stale) — 새 세션 단독 권장**. R10a가 스모크까지 통과해 닫혔고 이월 없음 = 깨끗한 인수인계 지점.
+**다음 세션 시작점**: **① 감지기 2단계** (DB 조회 error 미확인 40곳 — §3 "[기술부채] DB 조회 에러 삼키기" ②항, **사용자 지정 2026-07-17**) → **② R10b**(크로스보드 stale).
+
+**순서 이유**: R10b가 조회 로직을 재설계하는데, 그때 진짜 감지기(쿼리 오류 감지)가 꺼져 있으면 **재설계 중 실패가 또 조용히 넘어간다**. 2단계는 동작 무변경·기계적이라 짧게 끝나고, 끝내면 R10b 작업 중 실패가 콘솔에 보인다. 반대 순서면 R10b에서 같은 함정을 다시 밟음.
 
 **R10b 착수 시 바로 쓸 수 있는 R10a 조사 결과** (재조사 불필요):
 - `openProfilePanel`(현재 `kakao-auth.js:1608~2525`, 918줄) 구성: **패널 셸+DB조회 12개**(1608~1715 부근) → **로컬 헬퍼**(getGameName·buildActivityList·_renderNotifItem 등) → **HTML 문자열 빌드 ~390줄**(`_tasteInnerHtml`·`_meetingInnerHtml`·`_recordInnerHtml` 등 서브시트별 innerHTML을 **패널 오픈 시 1회** 생성) → `_openSubSheet`+알림/교환권 헬퍼 → **서브시트 라우터**(2469~2521, `.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭(2522). ※줄번호는 2026-07-16 R10a 직후 실측 — 이후 수정 시 밀림.
@@ -241,8 +243,13 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
     - **① 로그 추가 = 동작 무변경 → 일괄 처리 가능.** 반응형만으로는 **우리가 안 만지는 영역(=원인불명 버그가 사는 곳)에 영원히 로그가 안 생김**. 화재감지기는 전 층에 달아야 의미 있음.
     - **② 반환값·에러 전파 변경 = 동작 변경 → 실제 문제 발생 시 그 자리만.** 호출부가 빈 배열 fallback을 전제로 렌더 중이라 일괄 변경은 UI 파손 위험.
   - **① 진행 상황**: ✅ **`supabase-client.js` 75곳 완료** (2026-07-17, 커밋 34e79f5 — 동작 무변경 기계 검증 + 실패 주입 스모크 통과). ⏳ **남음**: `kakao-auth.js` 24곳(인라인, `openProfilePanel` 조회) — **R10b가 이 영역을 재설계하므로 R10b에서 함께**. `achievements.js` 5곳·`game-sheet.js` 9곳 등 나머지는 미착수(우선순위 낮음).
+  - 🔴 **①은 절반짜리였음 — 2단계 필요 (2026-07-17 발견)**: **supabase-js는 쿼리 오류에 예외를 던지지 않는다**(`{data:null, error}` 반환). 따라서 `try/catch`에 붙인 `console.error` 75개는 **네트워크 장애·JS 예외만** 잡고, **가장 흔한 화재(컬럼 오타·RLS 차단·테이블 없음)는 전혀 못 본다**. 실측 확인: `page_sessions.created_at`(없는 컬럼) 조회 → 예외 0건, `error.message`에 사유, `data=null` → `data || []` → 빈 배열. 즉 **연기감지기만 달고 열감지기를 안 단 상태**. 규약은 [js-api.md](js-api.md) "CottageDB 에러 처리 규약" 참조.
   - **제외 판정(실물 확인 후)**: `index-page.js` — catch에서 이미 "불러오기 실패"를 **화면에 표시**하므로 조용한 실패가 아님. `script-nav.js` — `JSON.parse`/`localStorage` 방어용이라 로그 가치 낮음. **"위반 N곳"을 기계적으로 다 고치려 들지 말 것** — 분류기가 이 둘을 삼킴으로 오분류했었음.
-  - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). 이제 `supabase-client` 로그가 켜졌으니 **재현 시 콘솔을 먼저 확인**할 것.
+  - **② 감지기 2단계 (다음 세션 = 바로 착수, 2026-07-17 사용자 지정)**: `supabase-client.js`의 **`const { data } = await db.` 40곳 → `const { data, error }` + `if (error) console.error('[함수명]', error)`**. 반환 계약(`[]`/`null` fallback)은 **그대로 유지** → 동작 무변경. `const { data, error }`로 이미 받는 36곳은 대상 아님(단 error를 안 읽는 곳이 있는지는 확인 필요).
+    - **1단계와 같은 방식으로 진행**: codemod 스크립트 + ①이름 충돌 사전검사 ②동작 무변경 기계 검증(변경 줄에서 로그만 걷어내면 원본과 동일한지, 반환값 변경은 검출되는지 대조군 포함) ③`node --check` ④실패 주입 스모크. 1단계 커밋 34e79f5의 diff가 그대로 참고자료.
+    - **화재 테스트 하니스 재사용**: `@supabase/supabase-js`가 `node_modules`에 **설치돼 있어** node에서 실제 DB로 읽기 함수를 돌릴 수 있음(window/document/localStorage 스텁 + `eval(supabase-client.js)`). 스크래치패드에만 있으므로 재작성 필요. ⚠️ **읽기 전용 함수만** 호출할 것(`get*`), `window.location.hostname='localhost'`로 두면 추적성 write 경로가 자체 차단됨.
+  - **화재 테스트 결과 (2026-07-17, 읽기 25개 실제 DB 호출)**: **불난 곳 0건** — 메인·내보드·플래너·교환권·관리자 전부 정상 데이터 반환. RPC 2개(`get_popular_games`·`get_all_game_ratings`) 생존 확인. 단 **위 사각지대 때문에 이 "0건"은 반쪽 증거**(쿼리 오류는 애초에 감지 못 함) → 2단계 후 재실행 필요. 참고: 코드가 RPC를 `db.rpc("...")` **큰따옴표**로 호출해 작은따옴표 grep은 "RPC 없음"이라는 오답을 냄.
+  - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). 화재 테스트에서 `getPageAnalytics`는 1000행 정상 반환 → **DB 조회 자체는 살아 있음**. 원인이 조회가 아니라 **화면 렌더/집계 로직 쪽**일 가능성이 올라감(미검증). 2단계 후 재현 시 콘솔 확인.
 - [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
   - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)
