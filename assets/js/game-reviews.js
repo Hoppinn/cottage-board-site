@@ -556,6 +556,155 @@
 
   let _nickUserMap = new Map();
 
+  // 기록 행의 ✏️ 수정 → 인라인 폼 생성·바인딩. panel/user는 renderRecords의 지역이라 파라미터로 받는다.
+  function _openInlineEditForm(btn, panel, user) {
+    const row = btn.closest('.pr-rec-row');
+    if (row.querySelector('.pr-inline-edit')) return;
+    let rec = {};
+    try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
+    const form = document.createElement('div');
+    form.className = 'pr-inline-edit';
+    // 현재 게임 표시 이름
+    const currentGameDisplay = getGameName(rec.gameId || '');
+    form.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:12px;font-weight:700;color:var(--muted)">기록 수정</span>
+        <button class="pr-inline-cancel-top" type="button" style="font-size:12px;background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:3px 10px;cursor:pointer;color:var(--muted);font-family:inherit">✕ 취소</button>
+      </div>
+      <label for="pie-game-${btn.dataset.id}" style="font-size:11px;color:var(--muted);font-weight:700;color:#c0392b">🎲 게임명 수정</label>
+      <input id="pie-game-${btn.dataset.id}" name="pie-game" class="pie-game" placeholder="게임명 검색" value="${escH(currentGameDisplay)}" autocomplete="off" style="border-color:#c0392b">
+      <label for="pie-names-text-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">참여자</label>
+      <div class="tag-input-wrap pie-names-wrap">
+        <div class="tag-chips"></div>
+        <input id="pie-names-text-${btn.dataset.id}" type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
+        <input type="hidden" name="pie-names" class="pie-names">
+      </div>
+      <label for="pie-count-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">인원수</label>
+      <input id="pie-count-${btn.dataset.id}" name="pie-count" class="pie-count" type="number" placeholder="명" value="${escH(String(rec.count||''))}">
+      <label for="pie-time-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
+      <input id="pie-time-${btn.dataset.id}" name="pie-time" class="pie-time" type="number" placeholder="분" value="${escH(String(rec.time||''))}">
+      <label for="pie-score-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">점수·메모</label>
+      <textarea id="pie-score-${btn.dataset.id}" name="pie-score" class="pie-score" placeholder="예: 83 / 75점" rows="2">${escH(rec.score||'')}</textarea>
+      <label for="pie-group-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">모임명</label>
+      <input id="pie-group-${btn.dataset.id}" name="pie-group" class="pie-group" placeholder="예: 코티지보드 동호회" value="${escH(rec.group||'')}">
+      <label for="pie-date-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">날짜</label>
+      <input id="pie-date-${btn.dataset.id}" name="pie-date" class="pie-date" type="date" value="${escH(rec.date||'')}">
+      <label for="pie-review-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">게임평 (선택)</label>
+      <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요.">${escH(rec.review||'')}</textarea>
+      <label style="font-size:11px;color:var(--muted)">사진</label>
+      <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
+        ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
+      </div>
+      <div class="pr-photo-grid pie-new-grid"></div>
+      <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
+      <div class="pr-inline-edit-actions">
+        <button class="pr-inline-cancel" type="button">취소</button>
+        <button class="pr-inline-save" type="button">저장</button>
+      </div>`;
+    row.querySelector('.pr-rec-main').appendChild(form);
+    row.classList.add('is-editing');
+
+    // 게임명 자동완성 (COTTAGE_GAMES display 목록)
+    attachAc(form.querySelector('.pie-game'), () =>
+      (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean)
+    );
+
+    // 모임명 자동완성
+    attachAc(form.querySelector('.pie-group'), () => _prGroups || []);
+
+    // 참여자 태그칩 (등록폼과 동일 방식, 기존 값 초기 로드)
+    initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
+    attachAc(
+      form.querySelector('.pie-names-wrap .tag-text-input'),
+      () => {
+        const added = [...form.querySelectorAll('.pie-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
+        return (window._prPlayerNames || []).filter(s =>
+          !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
+        );
+      },
+      s => {
+        const ti = form.querySelector('.pie-names-wrap .tag-text-input');
+        s.split(',').forEach(name => {
+          name = name.trim();
+          if (!name) return;
+          ti.value = name;
+          ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+        });
+      },
+      form.querySelector('.pie-names-wrap')
+    );
+
+    // 기존 사진 개별 삭제
+    form.querySelectorAll('.pie-existing-del').forEach(btn => {
+      btn.addEventListener('click', () => btn.closest('.pie-existing-item').remove());
+    });
+
+    // 새 사진 추가 (다중)
+    const piePhotoFile = form.querySelector('.pie-photo-file');
+    const pieNewGrid = form.querySelector('.pie-new-grid');
+    const pieNewFiles = [];
+
+    const addPieNewItem = buildPhotoItemAdder(pieNewGrid, pieNewFiles);
+
+    if (piePhotoFile) {
+      piePhotoFile.addEventListener('change', async () => {
+        for (const f of Array.from(piePhotoFile.files)) await addPieNewItem(f);
+        piePhotoFile.value = '';
+      });
+    }
+
+    form.querySelector('.pr-inline-cancel').addEventListener('click', () => { window.revokePhotoGridBlobs?.(form); form.remove(); row.classList.remove('is-editing'); });
+    form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => { window.revokePhotoGridBlobs?.(form); form.remove(); row.classList.remove('is-editing'); });
+    form.querySelector('.pr-inline-save').addEventListener('click', async () => {
+      const saveBtn = form.querySelector('.pr-inline-save');
+      saveBtn.disabled = true;
+      // 게임명 → game_id (gameKey 우선)
+      const gameDisplayInput = form.querySelector('.pie-game').value.trim();
+      let newGameId = null;
+      if (gameDisplayInput) {
+        const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
+        newGameId = found ? (found.bggId || found.id) : gameDisplayInput;
+      }
+      // 사진 처리 — 남은 기존 URL + 새 업로드 URL 합산
+      const remainingUrls = [...form.querySelectorAll('.pie-existing-item')].map(el => el.dataset.url).filter(Boolean);
+      const uploadedUrls = [];
+      let uploadErr = false;
+      for (const pf of pieNewFiles) {
+        const url = await window.CottageDB.uploadPlayPhoto(pf, user.id);
+        if (url) uploadedUrls.push(url);
+        else uploadErr = true;
+      }
+      if (uploadErr) { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
+      const allPhotoUrls = [...remainingUrls, ...uploadedUrls];
+      let photoUrlUpd = null;
+      if (allPhotoUrls.length === 1) photoUrlUpd = allPhotoUrls[0];
+      else if (allPhotoUrls.length > 1) photoUrlUpd = JSON.stringify(allPhotoUrls);
+
+      const updFields = {
+        player_names: form.querySelector('.pie-names').value.trim() || null,
+        player_count: parseInt(form.querySelector('.pie-count').value) || null,
+        play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
+        score_note: form.querySelector('.pie-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
+        group_name: form.querySelector('.pie-group').value.trim() || null,
+        played_at: form.querySelector('.pie-date').value || null,
+        review_text: form.querySelector('.pie-review').value.trim() || null,
+        ...(newGameId ? { game_id: newGameId } : {}),
+        photo_url: photoUrlUpd,
+      };
+      const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, updFields);
+      if (!res?.error) {
+        const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
+        if (idx !== -1) Object.assign(recordsData[idx], updFields);
+        const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
+        renderRecords(recordsData); _refreshAutocompleteLists?.();
+        _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
+      } else {
+        saveBtn.disabled = false;
+        alert('수정에 실패했습니다.');
+      }
+    });
+  }
+
   function renderRecords(data) {
     const panel = document.getElementById('prPanelRecords');
     const user = window.getKakaoUser?.();
@@ -716,151 +865,7 @@
     panel.querySelectorAll('.pr-rec-edit').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        const row = btn.closest('.pr-rec-row');
-        if (row.querySelector('.pr-inline-edit')) return;
-        let rec = {};
-        try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
-        const form = document.createElement('div');
-        form.className = 'pr-inline-edit';
-        // 현재 게임 표시 이름
-        const currentGameDisplay = getGameName(rec.gameId || '');
-        form.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span style="font-size:12px;font-weight:700;color:var(--muted)">기록 수정</span>
-            <button class="pr-inline-cancel-top" type="button" style="font-size:12px;background:none;border:1px solid var(--border,#e8e4dc);border-radius:6px;padding:3px 10px;cursor:pointer;color:var(--muted);font-family:inherit">✕ 취소</button>
-          </div>
-          <label for="pie-game-${btn.dataset.id}" style="font-size:11px;color:var(--muted);font-weight:700;color:#c0392b">🎲 게임명 수정</label>
-          <input id="pie-game-${btn.dataset.id}" name="pie-game" class="pie-game" placeholder="게임명 검색" value="${escH(currentGameDisplay)}" autocomplete="off" style="border-color:#c0392b">
-          <label for="pie-names-text-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">참여자</label>
-          <div class="tag-input-wrap pie-names-wrap">
-            <div class="tag-chips"></div>
-            <input id="pie-names-text-${btn.dataset.id}" type="text" class="tag-text-input" placeholder="이름 입력 후 엔터">
-            <input type="hidden" name="pie-names" class="pie-names">
-          </div>
-          <label for="pie-count-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">인원수</label>
-          <input id="pie-count-${btn.dataset.id}" name="pie-count" class="pie-count" type="number" placeholder="명" value="${escH(String(rec.count||''))}">
-          <label for="pie-time-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">플레이 시간(분)</label>
-          <input id="pie-time-${btn.dataset.id}" name="pie-time" class="pie-time" type="number" placeholder="분" value="${escH(String(rec.time||''))}">
-          <label for="pie-score-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">점수·메모</label>
-          <textarea id="pie-score-${btn.dataset.id}" name="pie-score" class="pie-score" placeholder="예: 83 / 75점" rows="2">${escH(rec.score||'')}</textarea>
-          <label for="pie-group-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">모임명</label>
-          <input id="pie-group-${btn.dataset.id}" name="pie-group" class="pie-group" placeholder="예: 코티지보드 동호회" value="${escH(rec.group||'')}">
-          <label for="pie-date-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">날짜</label>
-          <input id="pie-date-${btn.dataset.id}" name="pie-date" class="pie-date" type="date" value="${escH(rec.date||'')}">
-          <label for="pie-review-${btn.dataset.id}" style="font-size:11px;color:var(--muted)">게임평 (선택)</label>
-          <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요.">${escH(rec.review||'')}</textarea>
-          <label style="font-size:11px;color:var(--muted)">사진</label>
-          <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
-            ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
-          </div>
-          <div class="pr-photo-grid pie-new-grid"></div>
-          <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>
-          <div class="pr-inline-edit-actions">
-            <button class="pr-inline-cancel" type="button">취소</button>
-            <button class="pr-inline-save" type="button">저장</button>
-          </div>`;
-        row.querySelector('.pr-rec-main').appendChild(form);
-        row.classList.add('is-editing');
-
-        // 게임명 자동완성 (COTTAGE_GAMES display 목록)
-        attachAc(form.querySelector('.pie-game'), () =>
-          (window.COTTAGE_GAMES || []).map(g => g.display).filter(Boolean)
-        );
-
-        // 모임명 자동완성
-        attachAc(form.querySelector('.pie-group'), () => _prGroups || []);
-
-        // 참여자 태그칩 (등록폼과 동일 방식, 기존 값 초기 로드)
-        initTagInput(form.querySelector('.pie-names-wrap'), form.querySelector('.pie-names'), rec.names || '');
-        attachAc(
-          form.querySelector('.pie-names-wrap .tag-text-input'),
-          () => {
-            const added = [...form.querySelectorAll('.pie-names-wrap .tag-chip')].map(c => c.dataset.val.trim().toLowerCase());
-            return (window._prPlayerNames || []).filter(s =>
-              !s.split(',').map(n => n.trim().toLowerCase()).some(n => n && added.includes(n))
-            );
-          },
-          s => {
-            const ti = form.querySelector('.pie-names-wrap .tag-text-input');
-            s.split(',').forEach(name => {
-              name = name.trim();
-              if (!name) return;
-              ti.value = name;
-              ti.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
-            });
-          },
-          form.querySelector('.pie-names-wrap')
-        );
-
-        // 기존 사진 개별 삭제
-        form.querySelectorAll('.pie-existing-del').forEach(btn => {
-          btn.addEventListener('click', () => btn.closest('.pie-existing-item').remove());
-        });
-
-        // 새 사진 추가 (다중)
-        const piePhotoFile = form.querySelector('.pie-photo-file');
-        const pieNewGrid = form.querySelector('.pie-new-grid');
-        const pieNewFiles = [];
-
-        const addPieNewItem = buildPhotoItemAdder(pieNewGrid, pieNewFiles);
-
-        if (piePhotoFile) {
-          piePhotoFile.addEventListener('change', async () => {
-            for (const f of Array.from(piePhotoFile.files)) await addPieNewItem(f);
-            piePhotoFile.value = '';
-          });
-        }
-
-        form.querySelector('.pr-inline-cancel').addEventListener('click', () => { window.revokePhotoGridBlobs?.(form); form.remove(); row.classList.remove('is-editing'); });
-        form.querySelector('.pr-inline-cancel-top').addEventListener('click', () => { window.revokePhotoGridBlobs?.(form); form.remove(); row.classList.remove('is-editing'); });
-        form.querySelector('.pr-inline-save').addEventListener('click', async () => {
-          const saveBtn = form.querySelector('.pr-inline-save');
-          saveBtn.disabled = true;
-          // 게임명 → game_id (gameKey 우선)
-          const gameDisplayInput = form.querySelector('.pie-game').value.trim();
-          let newGameId = null;
-          if (gameDisplayInput) {
-            const found = (window.COTTAGE_GAMES || []).find(g => g.display === gameDisplayInput);
-            newGameId = found ? (found.bggId || found.id) : gameDisplayInput;
-          }
-          // 사진 처리 — 남은 기존 URL + 새 업로드 URL 합산
-          const remainingUrls = [...form.querySelectorAll('.pie-existing-item')].map(el => el.dataset.url).filter(Boolean);
-          const uploadedUrls = [];
-          let uploadErr = false;
-          for (const pf of pieNewFiles) {
-            const url = await window.CottageDB.uploadPlayPhoto(pf, user.id);
-            if (url) uploadedUrls.push(url);
-            else uploadErr = true;
-          }
-          if (uploadErr) { saveBtn.disabled = false; alert('사진 업로드에 실패했습니다.'); return; }
-          const allPhotoUrls = [...remainingUrls, ...uploadedUrls];
-          let photoUrlUpd = null;
-          if (allPhotoUrls.length === 1) photoUrlUpd = allPhotoUrls[0];
-          else if (allPhotoUrls.length > 1) photoUrlUpd = JSON.stringify(allPhotoUrls);
-
-          const updFields = {
-            player_names: form.querySelector('.pie-names').value.trim() || null,
-            player_count: parseInt(form.querySelector('.pie-count').value) || null,
-            play_time_min: parseInt(form.querySelector('.pie-time').value) || null,
-            score_note: form.querySelector('.pie-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
-            group_name: form.querySelector('.pie-group').value.trim() || null,
-            played_at: form.querySelector('.pie-date').value || null,
-            review_text: form.querySelector('.pie-review').value.trim() || null,
-            ...(newGameId ? { game_id: newGameId } : {}),
-            photo_url: photoUrlUpd,
-          };
-          const res = await window.CottageDB?.updateGamePlay(btn.dataset.id, updFields);
-          if (!res?.error) {
-            const idx = recordsData.findIndex(r => String(r.id) === String(btn.dataset.id));
-            if (idx !== -1) Object.assign(recordsData[idx], updFields);
-            const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
-            renderRecords(recordsData); _refreshAutocompleteLists?.();
-            _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
-          } else {
-            saveBtn.disabled = false;
-            alert('수정에 실패했습니다.');
-          }
-        });
+        _openInlineEditForm(btn, panel, user);
       });
     });
 
