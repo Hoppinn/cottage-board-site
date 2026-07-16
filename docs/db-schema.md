@@ -18,6 +18,21 @@
 
 **배경**: PROJECT_STATE에 "⚠️ SQL 미실행"·"⚠️ 테이블 생성 필요"·"007 적용 전" 경고가 남아 있었으나 **전부 낡은 기재**였음(실제론 오래전 적용돼 기능이 운영 중). 세션마다 읽는 문서의 가짜 경고는 판단을 흐리므로 실측 후 닫음. **새 마이그레이션 추가 시 이 표에 적용 여부를 함께 기록할 것.**
 
+### ⚠️ RLS 상태 — 마이그레이션에 명시 안 된 테이블 8개 (2026-07-16 발견)
+
+**이 프로젝트 기본 = RLS DISABLE**(카카오 OAuth라 `auth.uid()` 불가, anon 키 직접 read/write). 그런데 마이그레이션 **000·001·004·008**은 테이블을 만들면서 `ALTER TABLE ... DISABLE ROW LEVEL SECURITY;`를 넣지 않았다 — CLAUDE.md 「Supabase RLS: 테이블 생성 시 항상 RLS 상태를 명시」 규칙이 **2026-07-08에 생겨 그 이전 파일에 소급되지 않은 것**.
+
+| 테이블 (생성 마이그레이션) | 운영 실측 (2026-07-16) |
+|---|---|
+| `achievements`·`user_achievements`·`points_log`·`point_rewards` (000) | ✅ anon 읽기 OK → RLS off (22/110/0/6행) |
+| `voucher_products`·`voucher_log` (001) | ✅ RLS off (13/39행) |
+| `member_intros` (004) | ✅ RLS off (8행) |
+| `meeting_votes` (008) | ✅ RLS off (16행) |
+
+**운영 영향 없음** — 전부 실제로 RLS가 꺼져 있음(대시보드 수동 해제 또는 생성 당시 기본값). **위험은 재구축 시**: 마이그레이션만으로 새 DB를 만들면 Supabase가 신규 테이블에 RLS를 **자동 활성화**해 앱이 전면 파손된다. `005_meeting_game_prefs_rls_fix.sql`이 바로 이 사고를 한 번 겪고 사후 수습한 파일 — 규칙이 생긴 이유다.
+
+**대응(미착수, 우선순위 낮음)**: 재구축 계획이 실제로 생길 때 000·001·004·008에 `DISABLE ROW LEVEL SECURITY` 문을 추가하거나, 별도 `011_rls_baseline.sql`로 일괄 선언. 운영 DB엔 무영향(이미 off)이라 **긴급하지 않음**. 단 **새 테이블을 만들 때는 반드시 같은 파일에 명시**할 것.
+
 ⚠️ **컬럼명을 추측해서 확인하지 말 것** — 2026-07-16 점검 중 `priority`/`condition_type`으로 조회해 "009 미적용"이라는 **거짓 결론**이 나올 뻔했음(실제 이름은 `is_priority`/`player_condition`). PostgREST는 없는 컬럼에 HTTP 400을 주므로, 마이그레이션 SQL 파일의 실제 이름으로 조회하고 **HTTP 상태를 반드시 확인**할 것(에러 응답을 "0행"으로 오독하기 쉬움).
 
 ---
