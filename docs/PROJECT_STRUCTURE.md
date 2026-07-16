@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-15 (Phase D 닉네임 클릭 진입점 통일 반영)
+최종 갱신: 2026-07-16 (page-labels.js 라벨 동시갱신 규칙 추가)
 
 ---
 
@@ -122,6 +122,11 @@ assets/js/
 ├── owned-games-page.js         # owned-games.html 전용 (게임 목록 필터·렌더)
 ├── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
 └── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
+                                 # ⚠️ 새 _trackPvOnce/trackPageView 가상 페이지 키를 추가하면
+                                 #   COTTAGE_PAGE_LABELS에 라벨도 같이 추가할 것 — 관리자 분석이
+                                 #   `_pageLabels[r.page] || r.page` 폴백이라 라벨이 없으면 slug가
+                                 #   그대로 노출되고 에러는 안 남(조용히 발생). 2026-07-16에
+                                 #   my-board-meeting·other-board가 실제로 이 상태였음(커밋 aaa0b1d)
                                  # script-nav.js를 로드하는 모든 페이지에서 script-nav.js 직전 로드 필수
                                  # 로드 순서: page-labels.js → script-nav.js → game-sheet.js → 페이지별 JS
 ```

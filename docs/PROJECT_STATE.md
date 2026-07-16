@@ -148,21 +148,21 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 (이월 항목은 §0 참조: 버그2-b 크로스보드 stale → R10b, R4 "사진첨부 후 새로고침해야 표시" → R10b)
 
-- [ ] **'함께한 시간' 서브시트만 방문 집계 누락 (2026-07-16 발견, 미수정)** — `kakao-auth.js` 서브시트 분기 7개 중 `usage`만 `_trackPvOnce('my-board-usage')` 호출이 **없음**(notif·growth·voucher·taste·records·meeting은 전부 있음). R10a 추출 중 발견했으나 **R10a 이전(HEAD~6)부터 그랬으므로 리팩토링과 무관**하고, REFACTOR MODE 규칙상 보고만 하고 보존함. §3의 "페이지별방문 내 보드 + 서브시트 카운팅"(완료 항목)과 어긋나 **버그 가능성** — 의도적 제외인지 누락인지 확인 필요. 고칠 경우 한 줄 추가로 끝나지만 과거 데이터는 소급 불가.
+- [x] ~~**'함께한 시간' 서브시트만 방문 집계 누락**~~ — ✅ **해결** (2026-07-16, 커밋 aaa0b1d, 사용자 지시). `usage` 분기에 `_trackPvOnce('my-board-usage')` 추가. **함께 발견·수정**: `my-board-meeting`·`other-board`는 추적은 되고 있었으나 `page-labels.js`에 **라벨이 없어** 관리자 화면에 slug가 그대로 노출되던 상태(`_pageLabels[r.page] || r.page` 폴백) → 라벨 3개 추가. 코드가 쏘는 가상 페이지 키 9개 ↔ 라벨 전수 대조로 검증. 과거 데이터 소급 불가 = usage/meeting 집계는 이 시점부터 유효.
 
 ### 알려진 제한사항
 
 | 항목 | 내용 |
 |------|------|
 | 관리자/로컬 카운팅 제외 기준 통합 (2026-07-02) | 143차-189에서 localhost/127.0.0.1 및 관리자(OWNER_KAKAO_ID=4916417947)는 `page_views`, `page_events`, `page_sessions`, `anon_sessions`, `profiles.visit_count/total_minutes/today_seconds` 누적에서 제외하도록 통합. 관리자 분석 화면도 관리자 user_id가 붙은 rows/pageViews/profiles를 표시 집계에서 제외. 과거에 user_id 없이 쌓인 관리자 추정 page_views는 식별 불가하므로 삭제/소급 보정하지 않음. |
-| 방문자 통계 명/회 역전 (2026-07-01) | 143차-190에서 `page_views.session_key` 추가 계획/마이그레이션/코드 반영. 신규 데이터는 `__visitor__` 행 안의 `user_id || session_key`로 명/회를 함께 계산한다. 실제 운영 DB에 `docs/migrations/007_page_views_session_key.sql` 적용 전에는 관리자 화면이 fallback 조회를 사용하며, 과거 NULL 행은 행 단위 fallback으로 집계한다. |
+| 방문자 통계 명/회 역전 (2026-07-01) | 143차-190에서 `page_views.session_key` 추가 계획/마이그레이션/코드 반영. 신규 데이터는 `__visitor__` 행 안의 `user_id \|\| session_key`로 명/회를 함께 계산한다. ▶ **2026-07-16 실측 갱신**: `docs/migrations/007_page_views_session_key.sql`은 **운영 DB에 적용 완료**(anon 키로 `page_views.session_key` 조회 성공). 신규 행에도 정상 기록 중(최근 7일 384행 중 NULL 3행 = 99% 채워짐) → **명/회 역전은 신규 데이터 기준 해소**. **잔여**: 과거 legacy 행 1,513/2,171(70%)이 `session_key` NULL이라 그 구간은 여전히 행 단위 fallback 집계(소급 불가). 즉 "적용 전이라 fallback"이라는 기존 기재는 낡았음. |
 | 기록보드 플레이기록 시간 | 기록보드에 표시되는 플레이기록 시간이 전부 09:00으로 표시됨. 원인 미확인 |
 | 서브시트(취향보드 등) 상단 모서리 음영 (2026-06-30) | 사용자가 스크린샷으로 보고한 모서리 음영 — 시도한 가설 3건 모두 효과 없음: ①`.profile-activity-toggle` 상단 radius 제거, ②`.profile-subsheet-header` radius를 box와 맞춤(overflow:hidden이라 무의미함 확인), ③`.profile-subsheet-header`에 `background:#fff` 추가(외부 GPT 의견, 적용했으나 미해결). 다음 시도 전 확대 스크린샷으로 정확한 형태 확인 필요 |
 | 이용시간 기기 중복 | 동일 유저가 여러 기기에서 동시에 사용 시 각 기기 시간이 모두 합산됨 |
 | 사진 배열 전체 삭제 | `deletePlayPhoto`는 photo_url = null로 전체 삭제 (개별 URL 삭제 불가) |
 | 관리자 페이지 금일이용데이터 | 간헐적 미표시 — 원인 불명, 별도 조사 필요 |
 | TITLE_DEFS 미배정 칭호 3개 | `title_record_150` / `title_review_100` / `title_review_500`가 TITLE_DEFS에 정의돼 있으나 ACH_DEFS 어디서도 `rewards.title`로 참조되지 않음. 의도적 예약인지 잔존 버그인지 확인 필요 |
-| 단기 방문 시간 미표시 | heartbeat 전 종료 시 `duration_sec=0` → 관리자 분석에서 시간 표시 안 됨. 추적 로직 변경 필요, 별도 작업 (143차-197 이관) |
+| 단기 방문 시간 미표시 | heartbeat 전 종료 시 `duration_sec=0` → 관리자 분석에서 시간 표시 안 됨. 추적 로직 변경 필요, 별도 작업 (143차-197 이관). ▶ **2026-07-16 실측**: 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**이 `duration_sec=0`. §3 "[통합] 방문/이용 집계 전면 점검" ①번 항목. |
 | ~~모바일 "이번주모임 미리보기" 일요일 레이아웃 밀림~~ | ✅ **해결** (2026-07-15, 3차 수정으로 최소화 완료). 원인: `#meetingDays`(`.meeting-day-chip` 7개, `flex-wrap:wrap`)가 좁은 모바일 뷰포트에서 컨테이너 폭을 근소하게 초과 — 투표 인원수 텍스트가 있는 요일 칩만 폭이 넓어져 참여자가 몰린 주(예: 금1·토2·일2)에만 7번째 칩이 다음 줄로 밀림. 1차(gap 6→4, padding 6px10px→6px5px, min-width 36→32) 과다 축소로 사용자 재지적 → 2차(gap 6 복원, padding 6px7px, min-width 34)도 "여전히 필요 이상으로 줄임"이라는 재지적 → **3차: padding만 6px10px→6px9px(각 변 1px), gap·min-width는 원래값(6px/36px) 그대로 유지**로 최소화. 340px 미만은 원래 디자인도 줄바꿈되던 구간이라 그대로 두고, 340px 이상(실사용 전 구간) 줄바꿈 해소 재확인(스크린샷 대조) |
 | ~~이번 주 하고싶은 게임에 취소된 테스트 게임 잔존~~ | ✅ **해결** (2026-07-15). 원인: `meeting_vote_games` orphan 행 2개 — id=22(vote_date 2026-07-08), id=36(vote_date 2026-07-17), 둘 다 user_id=4916417947(오너), 대응하는 `meeting_votes` 행 없음(참여 취소됨). `deleteMeetingVote` cascade 삭제(커밋 de89af8, 2026-07-14)가 이후 취소부터만 적용돼 그 이전 생성분(created_at 07-07·07-13)이 소급 정리 안 된 것. 사용자 승인 후 anon 키 DELETE로 두 행 제거, 재조회로 삭제 확인. 코드 변경 없음(향후 신규 취소는 기존 cascade 로직으로 자동 처리됨) |
 | ~~플레이기록 수정 시 업적 미반영~~ | ✅ **해결** (2026-07-15). 원인: `recordGamePlay`(신규 등록)만 `checkAchievements`를 호출하고 `updateGamePlay`(수정 — 사진 후추가 8곳 + 인라인 전체수정 포함)는 어디서도 호출 안 함. 사진 추가로 photo 축 임계값을 채워도, 참여자 수정으로 play/balance 축을 채워도 다음 신규 기록 등록 전까지 지급 안 됨. `updateGamePlay`(supabase-client.js)에 `record`/`play`/`balance` 재체크를 추가해 8개 호출처 공통 해결. |
@@ -233,6 +233,14 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] **renderSingleGame / ?game= 처리** — game-reviews.js dead code(GAME_ID) 삭제 완료 (137차)
 - [x] **동호회 소개글 알림** — 소개글 올린 회원에게 new_intro 타입 묶음 알림 (N명이 소개글 올렸어요). supabase-client.js getMyNotifications + kakao-auth.js 렌더링 (138차)
 - [x] **getPageAnalytics 조회 방식 개선** — limit(5000) → 최근 90일 필터 + limit(20000)로 교체. 25일치 → 90일치로 확장, raw는 DB에 유지 (139차)
+- [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
+  - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
+  - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)
+  - ② **과거 session_key NULL 1,513/2,171(70%)** — 007 이전 legacy. 신규는 99% 채워짐. 소급 불가라 이 구간은 영구 fallback 집계. (아래 "명/회 역전" 제한사항)
+  - ③ **이용시간 기기 중복** — 동일 유저 다기기 동시 사용 시 합산 (아래 제한사항 + 이 절의 다음 항목)
+  - ④ **관리자 금일이용데이터 간헐적 미표시** — 원인 불명 (아래 제한사항)
+  - ⑤ **가상 페이지 키↔라벨 정합성** — 2026-07-16 커밋 aaa0b1d로 현재 9개 키 전부 라벨 보유. **신규 `_trackPvOnce` 키 추가 시 `page-labels.js` 동시 갱신 필요**(안 하면 관리자에 slug 노출, 조용히 발생). 이번에 meeting·other-board가 그 상태였음.
+  - **성격**: 대부분 "추적 로직 설계"(heartbeat 타이밍·기기 단위 세션) 문제라 Red + Plan 필수. 코드 리팩토링보다 **집계 모델 재설계**에 가까움. 착수 전 ①~④ 중 실제로 고칠 것을 먼저 확정할 것(②는 소급 불가라 대상 아님).
 - [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html / club-rules.html 사진 중심 재구성
 - [ ] **기록게시판 디자인 개선** — 현재 너무 밋밋, 전반적 비주얼 리뉴얼 필요
