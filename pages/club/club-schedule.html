@@ -554,9 +554,12 @@
     body.is-embedded .owned-page-nav { display: none !important; }
     body.is-embedded { overflow-x: hidden; }
 
-    /* 홈에서 등록/수정으로 바로 진입 시 뒤쪽 주간 뷰를 숨기고 등록 시트만 보이게 함 */
+    /* 홈에서 등록/수정으로 바로 진입 시 — 주간 뷰를 아예 숨기고, body 배경도 투명하게 만들어
+       뒤에 있는 홈 화면이 그대로 비치게 함(플래너 페이지 자체가 안 보여야 함) */
     body.is-quick-entry #viewWeek,
     body.is-quick-entry #mainLoading { display: none !important; }
+    body.is-quick-entry,
+    body.is-quick-entry .inner-page { background: transparent !important; }
 
     .sched-slider-wrap { margin-bottom: 16px; }
     .sched-dual-range {
