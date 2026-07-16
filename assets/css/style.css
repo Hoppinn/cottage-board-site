@@ -6929,6 +6929,13 @@ body.is-embedded .inner-page{padding-top:16px;}
 .mpc-detail-btn{display:block;width:calc(100% + 28px);margin:4px -14px 0;padding:8px 0;background:none;border:none;border-top:1px solid #e8e0d8;border-radius:0 0 10px 10px;font-size:12px;color:var(--text-info);cursor:pointer;text-align:center;}
 .mpc-detail-btn:hover{color:var(--green);background:#f0ece6;}
 .mpc-detail-btn:active{color:var(--green);}
+.mpc-actions-split{display:flex;width:calc(100% + 28px);margin:4px -14px 0;}
+.mpc-actions-split .mpc-detail-btn,
+.mpc-actions-split .mpc-register-btn{width:50%;margin:0;border-radius:0;}
+.mpc-actions-split .mpc-register-btn{background:none;border:none;border-top:1px solid #e8e0d8;border-right:1px solid #e8e0d8;border-radius:0 0 0 10px;padding:8px 0;font-size:12px;color:var(--green);font-weight:700;cursor:pointer;text-align:center;}
+.mpc-actions-split .mpc-register-btn:hover{background:#f0ece6;}
+.mpc-actions-split .mpc-register-btn:active{background:#ede8e2;}
+.mpc-actions-split .mpc-detail-btn{border-radius:0 0 10px 0;}
 .meeting-preview-empty{margin-top:14px;padding:12px 14px;text-align:center;}
 .meeting-preview-empty .mpe-msg{font-size:13px;color:var(--text-info);margin-bottom:8px;}
 .meeting-preview-empty .mpe-link{font-size:12px;color:var(--green);font-weight:700;border:none;background:none;cursor:pointer;padding:0;text-decoration:underline;}

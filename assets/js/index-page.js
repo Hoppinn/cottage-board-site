@@ -1258,17 +1258,32 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   }
   window.addEventListener('kakao-auth-ready', preload);
 
-  function openModal() {
+  function openModal(skipReset) {
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
     if (frame.classList.contains('is-ready')) {
-      frame.contentWindow?.postMessage({ type: 'cottage-reset-week', offset: 0 }, '*');
+      if (!skipReset) frame.contentWindow?.postMessage({ type: 'cottage-reset-week', offset: 0 }, '*');
     } else {
       if (loader) loader.style.display = 'flex';
       if (!preloaded) preload();
     }
   }
+
+  // 등록/수정 진입 전용 — reset-week를 건너뛰어 뒤에서 주간 뷰가 다시 그려지며
+  // 등록 시트와 겹쳐 보이는 현상(센터모달 깜빡임)을 막는다.
+  window.__openPlannerFor = function (dateStr, isEdit) {
+    window.CottageDB?.trackEvent('home_meeting_planner_click');
+    openModal(true);
+    const type = isEdit ? 'cottage-edit' : 'cottage-register';
+    if (frame.classList.contains('is-ready')) {
+      frame.contentWindow?.postMessage({ type, date: dateStr }, '*');
+    } else if (isEdit) {
+      _plannerPendingEdit = dateStr;
+    } else {
+      _plannerPendingDate = dateStr;
+    }
+  };
   function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
@@ -1339,14 +1354,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         <button class="mpe-link" type="button" id="mpeGoPlanner">+ 플래너에서 등록하기</button>
       </div>`;
       document.getElementById('mpeGoPlanner')?.addEventListener('click', () => {
-        window.CottageDB?.trackEvent('home_meeting_planner_click');
-        document.getElementById('openPlannerBtn')?.click();
-        const frame = document.getElementById('plannerSheetFrame');
-        if (frame?.classList.contains('is-ready')) {
-          frame.contentWindow?.postMessage({ type: 'cottage-register', date: dateStr }, '*');
-        } else {
-          _plannerPendingDate = dateStr; // 프레임 로드 완료 시 cottage-planner-ready 핸들러에서 전송
-        }
+        window.__openPlannerFor?.(dateStr);
       });
       return;
     }
@@ -1355,11 +1363,20 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const month   = dateObj.getMonth() + 1;
     const date    = dateObj.getDate();
     const count   = new Set(dayVotes.map(v => v.user_id)).size;
+    const _me     = window.getKakaoUser?.();
+    const myVote  = _me ? dayVotes.find(v => String(v.user_id) === String(_me.id)) ?? null : null;
+
+    const actionsHtml = myVote
+      ? `<button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>`
+      : `<div class="mpc-actions-split">
+          <button class="mpc-register-btn" type="button">+ 이 날 참여 등록</button>
+          <button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>
+        </div>`;
 
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
       <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${count}명</div>
-      ${window.buildBarsInCard(dayVotes, dayGames, (() => { const _me = window.getKakaoUser?.(); return _me ? dayVotes.find(v => String(v.user_id) === String(_me.id)) ?? null : null; })())}
-      <button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>
+      ${window.buildBarsInCard(dayVotes, dayGames, myVote)}
+      ${actionsHtml}
     </div>`;
 
     previewEl.querySelector('.mpc-detail-btn')?.addEventListener('click', e => {
@@ -1372,6 +1389,11 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
           document.getElementById('openPlannerBtn')?.click();
         },
       });
+    });
+
+    previewEl.querySelector('.mpc-register-btn')?.addEventListener('click', e => {
+      e.stopPropagation();
+      window.__openPlannerFor?.(dateStr);
     });
 
     previewEl.querySelectorAll('.sched-card-more-btn').forEach(btn => {
@@ -1409,13 +1431,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         e.stopPropagation();
         const ds = btn.closest('.sched-bar-item')?.querySelector('.sched-bar-track')?.dataset.date;
         if (!ds) return;
-        const _f = document.getElementById('plannerSheetFrame');
-        document.getElementById('openPlannerBtn')?.click();
-        if (_f?.classList.contains('is-ready')) {
-          _f.contentWindow?.postMessage({ type: 'cottage-edit', date: ds }, '*');
-        } else {
-          _plannerPendingEdit = ds;
-        }
+        window.__openPlannerFor?.(ds, true);
       });
     });
 
