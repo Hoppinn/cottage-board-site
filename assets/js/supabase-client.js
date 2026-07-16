@@ -816,6 +816,9 @@ window._cottageSess = (function () {
         getUserCuriousGamesAll(userId),
         getMeetingGamePrefs(userId, 'can_explain_rules'),
       ]);
+      // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
+      if (profileRes.error) console.error('[getMeetingProfile:profiles]', profileRes.error);
+      if (introRes.error) console.error('[getMeetingProfile:member_intros]', introRes.error);
       const intro = introRes.data || {};
       return {
         bio: profileRes.data?.bio || '',
