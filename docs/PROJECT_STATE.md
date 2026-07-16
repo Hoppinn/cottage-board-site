@@ -8,7 +8,7 @@
 
 ### 🔵 CHECKPOINT: 전체 리팩토링 순차 처리 (2026-07-15 시작, R1~R10 중 진행 예정 — **상세는 `docs/REFACTOR_CHECKPOINT.md` "처리 계획" 표 참조**)
 
-REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 감사 자체가 안 된 대형 파일(game-sheet.js 2693줄·index-page.js 1594줄·day-detail.js 1180줄)은 R1~R10 이후 별도 Phase 3 감사 세션 필요 — 문제 목록 없음, 지금은 계획 밖.
+REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 대형 파일 3개(game-sheet.js·index-page.js·day-detail.js)는 **A1 Phase 3 감사 완료(2026-07-15)** — 결과는 REFACTOR_CHECKPOINT.md "Phase 3" 절(GS1~7·IP1~3·DD1~3). 이 감사로 R11(game-sheet)·R12(day-detail) 편입. index-page(IP1~3)·GS4는 R번호 미배정 상태.
 
 **진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + **스모크 통과**, 파생 버그 1건(저장 후 '최신 기록' 버튼 미부착) 별도 fix 90997f0으로 해결. **다음 = R11**.
 

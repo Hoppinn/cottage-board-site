@@ -352,7 +352,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 **A1 재정렬 결과 (2026-07-15)**: game-sheet.js가 파일 단위로는 최대 부채지만 onclick 핸들러 다수라 clean IIFE화가 어려워, R2~R6(안전·빠른 항목)을 앞당길 이유가 없다고 판단 — 기존 순서 유지하고 신규 R11(game-sheet)·R12(day-detail)을 R9와 R10(KA1) 사이에 삽입. game-sheet.js(R11)와 openProfilePanel(R10=최후)의 선후는 R2~R9 진행하며 체감 후 최종 확정.
 
-**감사 자체가 안 된 파일(계획 밖, 별도 Phase 3 감사 세션 먼저 필요)**: `game-sheet.js`(2693줄, 프로젝트 최대), `index-page.js`(1594줄), `day-detail.js`(1180줄, 141차 신설이라 Phase 2 감사 대상에 없었음). 문제 목록이 아직 없어 "고칠 항목"을 특정할 수 없음 — R1~R10 끝난 뒤 감사 세션(Opus, Explore 활용) 별도 제안 예정.
+~~**감사 자체가 안 된 파일**: game-sheet.js·index-page.js·day-detail.js~~ → **✅ 해소됨 (A1 Phase 3 감사, 2026-07-15)**. 세 파일 모두 감사 완료로 위 "Phase 3" 절에 GS1~7·IP1~3·DD1~3 기록됨. 그 결과로 R11(game-sheet)·R12(day-detail)이 계획에 편입됨. index-page(IP1~3)는 아직 R번호 미배정 — 잔여 미배정 항목은 GS4(`getGameKey` 이름 충돌)·IP1~3.
 
 **세션 전환 규칙**: CLAUDE.md 모델전환 원칙대로, 매 항목 시작 직전 이 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청. 그린/옐로 항목은 Plan 없이 바로 진행, Red 중 Plan 표시된 항목(R6~R10)은 착수 전 Plan 작성→승인 필수.
 
