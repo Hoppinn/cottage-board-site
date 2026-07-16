@@ -649,6 +649,361 @@ function _bindRecordSubsheet(subBody, ctx) {
           }
         }
 
+// ── '취향 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
+function _bindTasteSubsheet(subBody, ctx) {
+  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet,
+          getCurrentBio, setCurrentBio } = ctx;
+          const userId = String(user.id);
+
+          // ── 한줄 소개 ──
+          const bioRow = subBody.querySelector('.taste-bio-row');
+          const bioDisplay = subBody.querySelector('.taste-bio-display');
+          const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
+          const bioCustomInput = subBody.querySelector('.taste-bio-custom-input');
+          const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
+          const _PREDEFINED_CHIPS = _BIO_PREDEFINED;
+
+          // 재진입 시 _currentBio 클로저 값으로 display 갱신 (R10a: 패널 스코프 유지 → 접근자로 읽음)
+          const _syncBioTags = getCurrentBio() ? getCurrentBio().split(',').map(t => t.trim()).filter(Boolean) : [];
+          bioDisplay.dataset.bio = getCurrentBio();
+          bioDisplay.innerHTML = _syncBioTags.length
+            ? _syncBioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
+            : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`;
+
+          function _renderBioDisplay(tags) {
+            bioDisplay.innerHTML = tags.length
+              ? tags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
+              : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
+          }
+
+          function _renderCustomTags(customTags) {
+            bioCustomTagsWrap.innerHTML = customTags.map(t =>
+              `<span class="taste-bio-tag-edit" data-tag="${escH(t)}">${escH(t)}<button class="taste-bio-tag-remove" type="button" aria-label="삭제">✕</button></span>`
+            ).join('');
+            bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-remove').forEach(btn => {
+              btn.addEventListener('click', () => { btn.closest('.taste-bio-tag-edit').remove(); });
+            });
+          }
+
+          subBody.querySelector('.taste-bio-edit-btn')?.addEventListener('click', () => {
+            bioRow.style.display = 'none';
+            bioEditWrap.style.display = '';
+            const currentTags = [...new Set((bioDisplay.dataset.bio || '').split(',').map(t => t.trim()).filter(Boolean))];
+            subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+              chip.classList.toggle('is-selected', currentTags.includes(chip.textContent.trim()));
+            });
+            const menuChipTexts = [...subBody.querySelectorAll('.taste-bio-chip')].map(c => c.textContent.trim());
+            const customTags = currentTags.filter(t => !menuChipTexts.includes(t));
+            _renderCustomTags(customTags);
+            bioCustomInput.value = '';
+            bioCustomInput.focus();
+          });
+
+          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
+            chip.addEventListener('click', () => { chip.classList.toggle('is-selected'); });
+          });
+
+          function _addCustomTag() {
+            const val = bioCustomInput.value.trim();
+            if (!val) return;
+            const existing = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
+            if (!existing.includes(val)) {
+              _renderCustomTags([...existing, val]);
+            }
+            bioCustomInput.value = '';
+            bioCustomInput.focus();
+          }
+          bioCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomTag(); } });
+          subBody.querySelector('.taste-bio-custom-add')?.addEventListener('click', _addCustomTag);
+
+          subBody.querySelector('.taste-bio-cancel-btn')?.addEventListener('click', () => {
+            bioRow.style.display = '';
+            bioEditWrap.style.display = 'none';
+          });
+
+          subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
+            if (bioCustomInput?.value.trim()) {
+              window.showToast?.('＋를 눌러 취향을 추가한 뒤 저장해 주세요') || alert('＋를 눌러 취향을 추가한 뒤 저장해 주세요');
+              bioCustomInput.focus();
+              return;
+            }
+            const selectedChips = [...subBody.querySelectorAll('.taste-bio-chip.is-selected')].map(c => c.textContent.trim());
+            const customTags = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
+            const allTags = [...new Set([...selectedChips, ...customTags])].slice(0, 6);
+            const newBio = allTags.join(',');
+            // 신규 커뮤니티 칩 감지 → 관리자 알림 (page_events 로그)
+            const _allBioSet = new Set(allBioSuggestions || []);
+            allTags.filter(t => !_PREDEFINED_CHIPS.includes(t) && !_allBioSet.has(t))
+              .forEach(() => window.CottageDB?.trackEvent?.('new_bio_chip'));
+            await window.CottageDB?.updateUserBio?.(userId, newBio);
+            setCurrentBio(newBio);
+            bioDisplay.dataset.bio = newBio;
+            _renderBioDisplay(allTags);
+            bioRow.style.display = '';
+            bioEditWrap.style.display = 'none';
+            // 메인 패널 취향 카드 요약 즉시 갱신
+            const _newBioPreview = allTags.length
+              ? `${allTags.slice(0, 2).map(t => `#${t}`).join(' ')}${allTags.length > 2 ? ` +${allTags.length - 2}` : ''}`
+              : '';
+            const _tasteSummary = panel.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
+            if (_tasteSummary) {
+              const _bioRow = _tasteSummary.querySelector('.profile-card-bio-row');
+              if (_newBioPreview) {
+                if (_bioRow) _bioRow.textContent = _newBioPreview;
+                else _tasteSummary.insertAdjacentHTML('afterbegin', `<span class="profile-card-bio-row">${escH(_newBioPreview)}</span>`);
+              } else if (_bioRow) {
+                _bioRow.remove();
+              }
+            }
+          });
+
+          // ── 게임 목록 (좋아요·관심) — 원천 관리(game_likes/curious) ──
+          // 칩 1개 추가 (검색 모달 공용)
+          const _appendTasteChip = (listEl, countEl, gameId, customName) => {
+            const _gd = gameId ? window.gameData?.[gameId] : null;
+            const name = _gd ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(gameId)) : (customName || '');
+            const thumb = _gd?.images?.thumbnail
+              ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
+              : `<span class="taste-game-thumb-empty"></span>`;
+            listEl.querySelector('.taste-game-empty')?.remove();
+            const newItem = document.createElement('div');
+            newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
+            if (gameId) newItem.dataset.gameId = gameId;
+            if (customName) newItem.dataset.customName = customName;
+            const ruleKey = gameId ? `id:${gameId}` : `cn:${customName || ''}`;
+            const ruleOn = _ruleSet?.has(ruleKey) ? ' is-on' : '';
+            newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button>`;
+            if (gameId) {
+              newItem.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
+                window.ensureGameSheet?.();
+                window.openGameSheet?.(String(gameId));
+              });
+            }
+            const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
+            if (insertBefore) listEl.insertBefore(newItem, insertBefore);
+            else listEl.appendChild(newItem);
+            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+          };
+
+          // 취향보드 게임 추가 센터모달 (검색 초성 + 직접입력 — 원천 등록, 날짜·퀵픽 없음)
+          const _openTasteAddModal = ({ listKey, table, listEl, countEl }) => {
+            const isLiked = listKey === 'liked';
+            _openGameAddSearchModal({
+              overlayId: 'mbAddModal',
+              title: `${isLiked ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가`,
+              inList: (gameId, customName) => {
+                if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
+                if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
+                return false;
+              },
+              onAdd: async (gameId, customName, resultsEl) => {
+                await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
+                _appendTasteChip(listEl, countEl, gameId, customName);
+                _emitLikesChanged(table, gameId, true);
+                if (gameId) {
+                  const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
+                  if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
+                }
+              },
+            });
+          };
+
+          for (const listType of ['liked', 'curious']) {
+            const table = listType === 'liked' ? 'game_likes' : 'game_curious';
+            const listEl = subBody.querySelector(`#taste${listType}List`);
+            const addBtn = subBody.querySelector(`#taste${listType}AddBtn`);
+            const countEl = subBody.querySelector(`#taste${listType}Count`);
+
+            // 썸네일만 클릭 → 게임 시트
+            listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
+              item.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
+                window.ensureGameSheet?.();
+                window.openGameSheet?.(item.dataset.gameId);
+              });
+            });
+
+            // 위임: 더보기 / 📖 룰토글(양방향 공유) / ✕ 삭제(확인)
+            listEl?.addEventListener('click', async e => {
+              const moreBtn = e.target.closest('.taste-more-btn');
+              if (moreBtn) {
+                const wrap = moreBtn.previousElementSibling;
+                if (wrap?.classList.contains('taste-game-more-wrap')) {
+                  const hidden = wrap.hidden;
+                  wrap.hidden = !hidden;
+                  const restCount = wrap.querySelectorAll('.taste-game-item').length;
+                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${restCount}개 더)`;
+                }
+                return;
+              }
+              const ruleBtn = e.target.closest('.mb-rule-btn');
+              if (ruleBtn) {
+                const item = ruleBtn.closest('.taste-game-item');
+                const gameId = item?.dataset.gameId || null;
+                const customName = item?.dataset.customName || null;
+                const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
+                const isOn = ruleBtn.classList.toggle('is-on');
+                if (isOn) {
+                  await window.CottageDB?.addMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
+                  window.showToast?.(`📖 '${gameName}' 룰 설명해줄 수 있어요로 표시했어요`);
+                } else {
+                  await window.CottageDB?.removeMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
+                  window.showToast?.(`'${gameName}' 룰 설명 표시를 해제했어요`);
+                }
+                return;
+              }
+              const delBtn = e.target.closest('.taste-game-del');
+              if (!delBtn) return;
+              const item = delBtn.closest('.taste-game-item');
+              const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
+              if (!confirm(`'${gameName}'을(를) 목록에서 뺄까요?`)) return;
+              const gameId = item?.dataset.gameId || null;
+              const customName = item?.dataset.customName || null;
+              await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
+              item.remove();
+              if (!listEl.querySelector('.taste-game-item')) {
+                listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+              }
+              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+              _emitLikesChanged(table, gameId, false);
+            });
+
+            addBtn?.addEventListener('click', () => _openTasteAddModal({ listKey: listType, table, listEl, countEl }));
+          }
+
+          // 다른 화면(게임시트 등)에서 좋아요/궁금해요가 바뀌면 이 목록도 즉시 반영
+          // 읽기전용: 뷰어 본인의 좋아요 변경이 남의 목록에 반영되면 안 되므로 등록 스킵
+          if (!readOnly) {
+          if (window.__tasteLikesHandler) window.removeEventListener('cottage-likes-changed', window.__tasteLikesHandler);
+          const _onTasteLikesChanged = (e) => {
+            const anchorList = subBody.querySelector('#tastelikedList');
+            if (!anchorList || !document.body.contains(anchorList)) { window.removeEventListener('cottage-likes-changed', _onTasteLikesChanged); return; }
+            const { table, gameId, added } = e.detail || {};
+            if (!gameId) return;
+            const lk = table === 'game_likes' ? 'liked' : (table === 'game_curious' ? 'curious' : null);
+            if (!lk) return;
+            const listEl = subBody.querySelector(`#taste${lk}List`);
+            const countEl = subBody.querySelector(`#taste${lk}Count`);
+            if (!listEl) return;
+            const existing = listEl.querySelector(`[data-game-id="${CSS.escape(String(gameId))}"]`);
+            if (added && !existing) {
+              _appendTasteChip(listEl, countEl, String(gameId), null);
+            } else if (!added && existing) {
+              existing.remove();
+              if (!listEl.querySelector('.taste-game-item')) listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+            }
+          };
+          window.__tasteLikesHandler = _onTasteLikesChanged;
+          window.addEventListener('cottage-likes-changed', _onTasteLikesChanged);
+          }
+
+          // ── 피하는 유형 태그 ──
+          // 현재 DOM(is-active)에서 도출 — 서브시트 재진입(스냅샷 복원) 시에도 _avoidTags(패널 오픈값)와 어긋나지 않게
+          let currentAvoidTags = [...subBody.querySelectorAll('.taste-tag.is-active')].map(b => b.dataset.tag);
+          const _avoidCountEl = subBody.querySelector('.taste-avoid-count');
+          const _updateAvoidCount = () => {
+            if (_avoidCountEl) _avoidCountEl.textContent = currentAvoidTags.length > 0 ? `${currentAvoidTags.length}개 선택됨` : '';
+          };
+          subBody.querySelectorAll('.taste-tag').forEach(btn => {
+            btn.addEventListener('click', async () => {
+              const tag = btn.dataset.tag;
+              const idx = currentAvoidTags.indexOf(tag);
+              if (idx >= 0) {
+                currentAvoidTags.splice(idx, 1);
+                btn.classList.remove('is-active');
+                btn.textContent = tag;
+              } else {
+                currentAvoidTags.push(tag);
+                btn.classList.add('is-active');
+                btn.textContent = `🚫 ${tag}`;
+              }
+              _updateAvoidCount();
+              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
+            });
+          });
+          // 피하는 유형 더보기 버튼
+          subBody.querySelector('.taste-avoid-more-btn')?.addEventListener('click', function() {
+            const wrap = subBody.querySelector('.taste-avoid-more-wrap');
+            if (!wrap) return;
+            const isHidden = wrap.hasAttribute('hidden');
+            if (isHidden) { wrap.removeAttribute('hidden'); this.textContent = '접기'; }
+            else { wrap.setAttribute('hidden', ''); this.textContent = `더 보기 (${wrap.querySelectorAll('.taste-tag').length}개 더)`; }
+          });
+
+          // ── 피하는 유형 직접입력 ──
+          const avoidCustomInput = subBody.querySelector('.taste-avoid-custom-input');
+          function _attachAvoidTagBtn(btn, tag) {
+            btn.addEventListener('click', async () => {
+              const idx = currentAvoidTags.indexOf(tag);
+              if (idx >= 0) { currentAvoidTags.splice(idx, 1); btn.classList.remove('is-active'); btn.textContent = tag; }
+              else { currentAvoidTags.push(tag); btn.classList.add('is-active'); btn.textContent = `🚫 ${tag}`; }
+              _updateAvoidCount();
+              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
+            });
+          }
+          async function _addCustomAvoidTag() {
+            const val = avoidCustomInput.value.trim();
+            if (!val || subBody.querySelector(`.taste-tag[data-tag="${CSS.escape(val)}"]`)) { avoidCustomInput.value = ''; return; }
+            currentAvoidTags.push(val);
+            const btn = document.createElement('button');
+            btn.className = 'taste-tag is-active';
+            btn.dataset.tag = val;
+            btn.type = 'button';
+            btn.textContent = `🚫 ${val}`;
+            _attachAvoidTagBtn(btn, val);
+            let moreWrap = subBody.querySelector('.taste-avoid-more-wrap');
+            if (moreWrap) {
+              moreWrap.appendChild(btn);
+              moreWrap.removeAttribute('hidden');
+              const moreBtn = subBody.querySelector('.taste-avoid-more-btn');
+              if (moreBtn) moreBtn.textContent = '접기';
+            } else {
+              subBody.querySelector('.taste-tag-grid')?.appendChild(btn);
+            }
+            _updateAvoidCount();
+            await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
+            avoidCustomInput.value = '';
+          }
+          avoidCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomAvoidTag(); } });
+          subBody.querySelector('.taste-avoid-custom-add')?.addEventListener('click', _addCustomAvoidTag);
+
+          // ── 커뮤니티 bio 칩 동적 추가 ──
+          const _communityBioChips = (allBioSuggestions || []).filter(t => !_PREDEFINED_CHIPS.includes(t));
+          if (_communityBioChips.length > 0) {
+            const _chipsContainer = subBody.querySelector('.taste-bio-chips');
+            if (_chipsContainer) {
+              _communityBioChips.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = 'taste-bio-chip';
+                btn.type = 'button';
+                btn.textContent = t;
+                if ((getCurrentBio() || '').split(',').map(s => s.trim()).includes(t)) btn.classList.add('is-selected');
+                btn.addEventListener('click', () => btn.classList.toggle('is-selected'));
+
+                const delBtn = document.createElement('button');
+                delBtn.className = 'taste-bio-chip-del';
+                delBtn.type = 'button';
+                delBtn.textContent = '×';
+                delBtn.setAttribute('aria-label', '메뉴에서 제거');
+                delBtn.addEventListener('click', e => {
+                  e.stopPropagation();
+                  if (!confirm(`"${t}"은(는) 다른 사용자도 사용 중일 수 있습니다. 내 화면에서 제거하시겠습니까?`)) return;
+                  wrap.remove();
+                  bioCustomTagsWrap?.querySelectorAll('.taste-bio-tag-edit').forEach(tag => {
+                    if (tag.dataset.tag === t) tag.remove();
+                  });
+                });
+
+                const wrap = document.createElement('span');
+                wrap.className = 'taste-bio-chip-wrap';
+                wrap.appendChild(btn);
+                wrap.appendChild(delBtn);
+                _chipsContainer.appendChild(wrap);
+              });
+            }
+          }
+        }
+
 // ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _markAllNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
@@ -1596,357 +1951,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
       } else if (type === 'taste') {
         _trackPvOnce('my-board-taste');
-        _openSubSheet('취향 보드', _tasteInnerHtml, subBody => {
-          const userId = String(user.id);
-
-          // ── 한줄 소개 ──
-          const bioRow = subBody.querySelector('.taste-bio-row');
-          const bioDisplay = subBody.querySelector('.taste-bio-display');
-          const bioEditWrap = subBody.querySelector('.taste-bio-edit-wrap');
-          const bioCustomInput = subBody.querySelector('.taste-bio-custom-input');
-          const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
-          const _PREDEFINED_CHIPS = _BIO_PREDEFINED;
-
-          // 재진입 시 _currentBio 클로저 값으로 display 갱신
-          const _syncBioTags = _currentBio ? _currentBio.split(',').map(t => t.trim()).filter(Boolean) : [];
-          bioDisplay.dataset.bio = _currentBio;
-          bioDisplay.innerHTML = _syncBioTags.length
-            ? _syncBioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-            : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`;
-
-          function _renderBioDisplay(tags) {
-            bioDisplay.innerHTML = tags.length
-              ? tags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-              : '<span class="taste-bio-placeholder">소개를 추가해보세요</span>';
-          }
-
-          function _renderCustomTags(customTags) {
-            bioCustomTagsWrap.innerHTML = customTags.map(t =>
-              `<span class="taste-bio-tag-edit" data-tag="${escH(t)}">${escH(t)}<button class="taste-bio-tag-remove" type="button" aria-label="삭제">✕</button></span>`
-            ).join('');
-            bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-remove').forEach(btn => {
-              btn.addEventListener('click', () => { btn.closest('.taste-bio-tag-edit').remove(); });
-            });
-          }
-
-          subBody.querySelector('.taste-bio-edit-btn')?.addEventListener('click', () => {
-            bioRow.style.display = 'none';
-            bioEditWrap.style.display = '';
-            const currentTags = [...new Set((bioDisplay.dataset.bio || '').split(',').map(t => t.trim()).filter(Boolean))];
-            subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
-              chip.classList.toggle('is-selected', currentTags.includes(chip.textContent.trim()));
-            });
-            const menuChipTexts = [...subBody.querySelectorAll('.taste-bio-chip')].map(c => c.textContent.trim());
-            const customTags = currentTags.filter(t => !menuChipTexts.includes(t));
-            _renderCustomTags(customTags);
-            bioCustomInput.value = '';
-            bioCustomInput.focus();
-          });
-
-          subBody.querySelectorAll('.taste-bio-chip').forEach(chip => {
-            chip.addEventListener('click', () => { chip.classList.toggle('is-selected'); });
-          });
-
-          function _addCustomTag() {
-            const val = bioCustomInput.value.trim();
-            if (!val) return;
-            const existing = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
-            if (!existing.includes(val)) {
-              _renderCustomTags([...existing, val]);
-            }
-            bioCustomInput.value = '';
-            bioCustomInput.focus();
-          }
-          bioCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomTag(); } });
-          subBody.querySelector('.taste-bio-custom-add')?.addEventListener('click', _addCustomTag);
-
-          subBody.querySelector('.taste-bio-cancel-btn')?.addEventListener('click', () => {
-            bioRow.style.display = '';
-            bioEditWrap.style.display = 'none';
-          });
-
-          subBody.querySelector('.taste-bio-save-btn')?.addEventListener('click', async () => {
-            if (bioCustomInput?.value.trim()) {
-              window.showToast?.('＋를 눌러 취향을 추가한 뒤 저장해 주세요') || alert('＋를 눌러 취향을 추가한 뒤 저장해 주세요');
-              bioCustomInput.focus();
-              return;
-            }
-            const selectedChips = [...subBody.querySelectorAll('.taste-bio-chip.is-selected')].map(c => c.textContent.trim());
-            const customTags = [...bioCustomTagsWrap.querySelectorAll('.taste-bio-tag-edit')].map(el => el.dataset.tag);
-            const allTags = [...new Set([...selectedChips, ...customTags])].slice(0, 6);
-            const newBio = allTags.join(',');
-            // 신규 커뮤니티 칩 감지 → 관리자 알림 (page_events 로그)
-            const _allBioSet = new Set(allBioSuggestions || []);
-            allTags.filter(t => !_PREDEFINED_CHIPS.includes(t) && !_allBioSet.has(t))
-              .forEach(() => window.CottageDB?.trackEvent?.('new_bio_chip'));
-            await window.CottageDB?.updateUserBio?.(userId, newBio);
-            _currentBio = newBio;
-            bioDisplay.dataset.bio = newBio;
-            _renderBioDisplay(allTags);
-            bioRow.style.display = '';
-            bioEditWrap.style.display = 'none';
-            // 메인 패널 취향 카드 요약 즉시 갱신
-            const _newBioPreview = allTags.length
-              ? `${allTags.slice(0, 2).map(t => `#${t}`).join(' ')}${allTags.length > 2 ? ` +${allTags.length - 2}` : ''}`
-              : '';
-            const _tasteSummary = panel.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
-            if (_tasteSummary) {
-              const _bioRow = _tasteSummary.querySelector('.profile-card-bio-row');
-              if (_newBioPreview) {
-                if (_bioRow) _bioRow.textContent = _newBioPreview;
-                else _tasteSummary.insertAdjacentHTML('afterbegin', `<span class="profile-card-bio-row">${escH(_newBioPreview)}</span>`);
-              } else if (_bioRow) {
-                _bioRow.remove();
-              }
-            }
-          });
-
-          // ── 게임 목록 (좋아요·관심) — 원천 관리(game_likes/curious) ──
-          // 칩 1개 추가 (검색 모달 공용)
-          const _appendTasteChip = (listEl, countEl, gameId, customName) => {
-            const _gd = gameId ? window.gameData?.[gameId] : null;
-            const name = _gd ? (_gd.title?.display || _gd.title?.owned || _gd.title?.bgg || String(gameId)) : (customName || '');
-            const thumb = _gd?.images?.thumbnail
-              ? `<img class="taste-game-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
-              : `<span class="taste-game-thumb-empty"></span>`;
-            listEl.querySelector('.taste-game-empty')?.remove();
-            const newItem = document.createElement('div');
-            newItem.className = `taste-game-item${gameId ? ' taste-game-item--clickable' : ''}`;
-            if (gameId) newItem.dataset.gameId = gameId;
-            if (customName) newItem.dataset.customName = customName;
-            const ruleKey = gameId ? `id:${gameId}` : `cn:${customName || ''}`;
-            const ruleOn = _ruleSet?.has(ruleKey) ? ' is-on' : '';
-            newItem.innerHTML = `${thumb}<span class="taste-game-name">${escH(name)}</span><button class="mb-rule-btn${ruleOn}" type="button" title="룰 설명 가능">📖</button><button class="taste-game-del" type="button" title="삭제">✕</button>`;
-            if (gameId) {
-              newItem.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
-                window.ensureGameSheet?.();
-                window.openGameSheet?.(String(gameId));
-              });
-            }
-            const insertBefore = listEl.querySelector('.taste-game-more-wrap') || listEl.querySelector('.taste-more-btn');
-            if (insertBefore) listEl.insertBefore(newItem, insertBefore);
-            else listEl.appendChild(newItem);
-            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
-          };
-
-          // 취향보드 게임 추가 센터모달 (검색 초성 + 직접입력 — 원천 등록, 날짜·퀵픽 없음)
-          const _openTasteAddModal = ({ listKey, table, listEl, countEl }) => {
-            const isLiked = listKey === 'liked';
-            _openGameAddSearchModal({
-              overlayId: 'mbAddModal',
-              title: `${isLiked ? '❤️ 좋아하는 게임' : '👀 해보고 싶은 게임'} 추가`,
-              inList: (gameId, customName) => {
-                if (gameId) return !!listEl.querySelector(`[data-game-id="${gameId}"]`);
-                if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
-                return false;
-              },
-              onAdd: async (gameId, customName, resultsEl) => {
-                await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
-                _appendTasteChip(listEl, countEl, gameId, customName);
-                _emitLikesChanged(table, gameId, true);
-                if (gameId) {
-                  const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
-                  if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
-                }
-              },
-            });
-          };
-
-          for (const listType of ['liked', 'curious']) {
-            const table = listType === 'liked' ? 'game_likes' : 'game_curious';
-            const listEl = subBody.querySelector(`#taste${listType}List`);
-            const addBtn = subBody.querySelector(`#taste${listType}AddBtn`);
-            const countEl = subBody.querySelector(`#taste${listType}Count`);
-
-            // 썸네일만 클릭 → 게임 시트
-            listEl?.querySelectorAll('.taste-game-item--clickable').forEach(item => {
-              item.querySelector('.taste-game-thumb, .taste-game-thumb-empty')?.addEventListener('click', () => {
-                window.ensureGameSheet?.();
-                window.openGameSheet?.(item.dataset.gameId);
-              });
-            });
-
-            // 위임: 더보기 / 📖 룰토글(양방향 공유) / ✕ 삭제(확인)
-            listEl?.addEventListener('click', async e => {
-              const moreBtn = e.target.closest('.taste-more-btn');
-              if (moreBtn) {
-                const wrap = moreBtn.previousElementSibling;
-                if (wrap?.classList.contains('taste-game-more-wrap')) {
-                  const hidden = wrap.hidden;
-                  wrap.hidden = !hidden;
-                  const restCount = wrap.querySelectorAll('.taste-game-item').length;
-                  moreBtn.textContent = hidden ? '접기' : `더 보기 (${restCount}개 더)`;
-                }
-                return;
-              }
-              const ruleBtn = e.target.closest('.mb-rule-btn');
-              if (ruleBtn) {
-                const item = ruleBtn.closest('.taste-game-item');
-                const gameId = item?.dataset.gameId || null;
-                const customName = item?.dataset.customName || null;
-                const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
-                const isOn = ruleBtn.classList.toggle('is-on');
-                if (isOn) {
-                  await window.CottageDB?.addMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
-                  window.showToast?.(`📖 '${gameName}' 룰 설명해줄 수 있어요로 표시했어요`);
-                } else {
-                  await window.CottageDB?.removeMeetingGamePref?.(userId, 'can_explain_rules', gameId, customName);
-                  window.showToast?.(`'${gameName}' 룰 설명 표시를 해제했어요`);
-                }
-                return;
-              }
-              const delBtn = e.target.closest('.taste-game-del');
-              if (!delBtn) return;
-              const item = delBtn.closest('.taste-game-item');
-              const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
-              if (!confirm(`'${gameName}'을(를) 목록에서 뺄까요?`)) return;
-              const gameId = item?.dataset.gameId || null;
-              const customName = item?.dataset.customName || null;
-              await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
-              item.remove();
-              if (!listEl.querySelector('.taste-game-item')) {
-                listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
-              }
-              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
-              _emitLikesChanged(table, gameId, false);
-            });
-
-            addBtn?.addEventListener('click', () => _openTasteAddModal({ listKey: listType, table, listEl, countEl }));
-          }
-
-          // 다른 화면(게임시트 등)에서 좋아요/궁금해요가 바뀌면 이 목록도 즉시 반영
-          // 읽기전용: 뷰어 본인의 좋아요 변경이 남의 목록에 반영되면 안 되므로 등록 스킵
-          if (!readOnly) {
-          if (window.__tasteLikesHandler) window.removeEventListener('cottage-likes-changed', window.__tasteLikesHandler);
-          const _onTasteLikesChanged = (e) => {
-            const anchorList = subBody.querySelector('#tastelikedList');
-            if (!anchorList || !document.body.contains(anchorList)) { window.removeEventListener('cottage-likes-changed', _onTasteLikesChanged); return; }
-            const { table, gameId, added } = e.detail || {};
-            if (!gameId) return;
-            const lk = table === 'game_likes' ? 'liked' : (table === 'game_curious' ? 'curious' : null);
-            if (!lk) return;
-            const listEl = subBody.querySelector(`#taste${lk}List`);
-            const countEl = subBody.querySelector(`#taste${lk}Count`);
-            if (!listEl) return;
-            const existing = listEl.querySelector(`[data-game-id="${CSS.escape(String(gameId))}"]`);
-            if (added && !existing) {
-              _appendTasteChip(listEl, countEl, String(gameId), null);
-            } else if (!added && existing) {
-              existing.remove();
-              if (!listEl.querySelector('.taste-game-item')) listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
-              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
-            }
-          };
-          window.__tasteLikesHandler = _onTasteLikesChanged;
-          window.addEventListener('cottage-likes-changed', _onTasteLikesChanged);
-          }
-
-          // ── 피하는 유형 태그 ──
-          // 현재 DOM(is-active)에서 도출 — 서브시트 재진입(스냅샷 복원) 시에도 _avoidTags(패널 오픈값)와 어긋나지 않게
-          let currentAvoidTags = [...subBody.querySelectorAll('.taste-tag.is-active')].map(b => b.dataset.tag);
-          const _avoidCountEl = subBody.querySelector('.taste-avoid-count');
-          const _updateAvoidCount = () => {
-            if (_avoidCountEl) _avoidCountEl.textContent = currentAvoidTags.length > 0 ? `${currentAvoidTags.length}개 선택됨` : '';
-          };
-          subBody.querySelectorAll('.taste-tag').forEach(btn => {
-            btn.addEventListener('click', async () => {
-              const tag = btn.dataset.tag;
-              const idx = currentAvoidTags.indexOf(tag);
-              if (idx >= 0) {
-                currentAvoidTags.splice(idx, 1);
-                btn.classList.remove('is-active');
-                btn.textContent = tag;
-              } else {
-                currentAvoidTags.push(tag);
-                btn.classList.add('is-active');
-                btn.textContent = `🚫 ${tag}`;
-              }
-              _updateAvoidCount();
-              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
-            });
-          });
-          // 피하는 유형 더보기 버튼
-          subBody.querySelector('.taste-avoid-more-btn')?.addEventListener('click', function() {
-            const wrap = subBody.querySelector('.taste-avoid-more-wrap');
-            if (!wrap) return;
-            const isHidden = wrap.hasAttribute('hidden');
-            if (isHidden) { wrap.removeAttribute('hidden'); this.textContent = '접기'; }
-            else { wrap.setAttribute('hidden', ''); this.textContent = `더 보기 (${wrap.querySelectorAll('.taste-tag').length}개 더)`; }
-          });
-
-          // ── 피하는 유형 직접입력 ──
-          const avoidCustomInput = subBody.querySelector('.taste-avoid-custom-input');
-          function _attachAvoidTagBtn(btn, tag) {
-            btn.addEventListener('click', async () => {
-              const idx = currentAvoidTags.indexOf(tag);
-              if (idx >= 0) { currentAvoidTags.splice(idx, 1); btn.classList.remove('is-active'); btn.textContent = tag; }
-              else { currentAvoidTags.push(tag); btn.classList.add('is-active'); btn.textContent = `🚫 ${tag}`; }
-              _updateAvoidCount();
-              await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
-            });
-          }
-          async function _addCustomAvoidTag() {
-            const val = avoidCustomInput.value.trim();
-            if (!val || subBody.querySelector(`.taste-tag[data-tag="${CSS.escape(val)}"]`)) { avoidCustomInput.value = ''; return; }
-            currentAvoidTags.push(val);
-            const btn = document.createElement('button');
-            btn.className = 'taste-tag is-active';
-            btn.dataset.tag = val;
-            btn.type = 'button';
-            btn.textContent = `🚫 ${val}`;
-            _attachAvoidTagBtn(btn, val);
-            let moreWrap = subBody.querySelector('.taste-avoid-more-wrap');
-            if (moreWrap) {
-              moreWrap.appendChild(btn);
-              moreWrap.removeAttribute('hidden');
-              const moreBtn = subBody.querySelector('.taste-avoid-more-btn');
-              if (moreBtn) moreBtn.textContent = '접기';
-            } else {
-              subBody.querySelector('.taste-tag-grid')?.appendChild(btn);
-            }
-            _updateAvoidCount();
-            await window.CottageDB?.updateUserAvoidTags?.(userId, currentAvoidTags);
-            avoidCustomInput.value = '';
-          }
-          avoidCustomInput?.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); _addCustomAvoidTag(); } });
-          subBody.querySelector('.taste-avoid-custom-add')?.addEventListener('click', _addCustomAvoidTag);
-
-          // ── 커뮤니티 bio 칩 동적 추가 ──
-          const _communityBioChips = (allBioSuggestions || []).filter(t => !_PREDEFINED_CHIPS.includes(t));
-          if (_communityBioChips.length > 0) {
-            const _chipsContainer = subBody.querySelector('.taste-bio-chips');
-            if (_chipsContainer) {
-              _communityBioChips.forEach(t => {
-                const btn = document.createElement('button');
-                btn.className = 'taste-bio-chip';
-                btn.type = 'button';
-                btn.textContent = t;
-                if ((_currentBio || '').split(',').map(s => s.trim()).includes(t)) btn.classList.add('is-selected');
-                btn.addEventListener('click', () => btn.classList.toggle('is-selected'));
-
-                const delBtn = document.createElement('button');
-                delBtn.className = 'taste-bio-chip-del';
-                delBtn.type = 'button';
-                delBtn.textContent = '×';
-                delBtn.setAttribute('aria-label', '메뉴에서 제거');
-                delBtn.addEventListener('click', e => {
-                  e.stopPropagation();
-                  if (!confirm(`"${t}"은(는) 다른 사용자도 사용 중일 수 있습니다. 내 화면에서 제거하시겠습니까?`)) return;
-                  wrap.remove();
-                  bioCustomTagsWrap?.querySelectorAll('.taste-bio-tag-edit').forEach(tag => {
-                    if (tag.dataset.tag === t) tag.remove();
-                  });
-                });
-
-                const wrap = document.createElement('span');
-                wrap.className = 'taste-bio-chip-wrap';
-                wrap.appendChild(btn);
-                wrap.appendChild(delBtn);
-                _chipsContainer.appendChild(wrap);
-              });
-            }
-          }
-        }, '', bodyEl => { _tasteInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
+        // _currentBio는 패널 수명 동안 유지되는 상태(재진입 시 display 갱신에 사용) → 구조분해 복사 대신 접근자로 전달
+        _openSubSheet('취향 보드', _tasteInnerHtml, subBody => _bindTasteSubsheet(subBody, {
+          user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet,
+          getCurrentBio: () => _currentBio, setCurrentBio: v => { _currentBio = v; },
+        }), '', bodyEl => { _tasteInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
 
       } else if (type === 'records') {
         _trackPvOnce('my-board-records');
