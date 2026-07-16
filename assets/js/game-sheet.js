@@ -536,6 +536,37 @@ function _buildSheetReactionsHtml(gameKey) {
 `;
 }
 
+// 메커니즘·테마·디자이너 블록.
+function _buildSheetMechsHtml(detail, mechanicsDisplay, categoriesDisplay) {
+  return mechanicsDisplay.length || categoriesDisplay.length || detail.bgg.designers?.length ? `
+      <div class="sheet-info-group">
+        ${mechanicsDisplay.length || categoriesDisplay.length ? `
+          <div class="sheet-mechs-wrap" id="sheetMechsWrap">
+            ${mechanicsDisplay.length ? `
+              <div class="sheet-mechs-section">
+                <span class="sheet-mechs-label">진행</span>
+                <p class="sheet-mechs-text is-clamped">${mechanicsDisplay.join(" · ")}</p>
+              </div>
+            ` : ""}
+            ${categoriesDisplay.length ? `
+              <div class="sheet-mechs-section">
+                <span class="sheet-mechs-label">테마</span>
+                <p class="sheet-mechs-text is-clamped">${categoriesDisplay.join(" · ")}</p>
+              </div>
+            ` : ""}
+            <button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">+ 더보기</button>
+          </div>
+        ` : ""}
+        ${detail.bgg.designers?.length ? `
+          <div class="sheet-meta">
+            <span class="sheet-meta-label">디자이너</span>
+            <span>${detail.bgg.designers.join(", ")}</span>
+          </div>
+        ` : ""}
+      </div>
+    ` : "";
+}
+
 function _buildSameDesignerHtml(gameKey, detail) {
   const _sameDesignGames = [];
   if (detail.bgg?.designers?.length && window.gameData) {
@@ -741,33 +772,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
     ` : ""}
 
     <!-- 메커니즘 · 테마 + 디자이너 -->
-    ${mechanicsDisplay.length || categoriesDisplay.length || detail.bgg.designers?.length ? `
-      <div class="sheet-info-group">
-        ${mechanicsDisplay.length || categoriesDisplay.length ? `
-          <div class="sheet-mechs-wrap" id="sheetMechsWrap">
-            ${mechanicsDisplay.length ? `
-              <div class="sheet-mechs-section">
-                <span class="sheet-mechs-label">진행</span>
-                <p class="sheet-mechs-text is-clamped">${mechanicsDisplay.join(" · ")}</p>
-              </div>
-            ` : ""}
-            ${categoriesDisplay.length ? `
-              <div class="sheet-mechs-section">
-                <span class="sheet-mechs-label">테마</span>
-                <p class="sheet-mechs-text is-clamped">${categoriesDisplay.join(" · ")}</p>
-              </div>
-            ` : ""}
-            <button class="sheet-mechs-toggle" id="sheetMechsToggle" onclick="toggleSheetMechs(this)">+ 더보기</button>
-          </div>
-        ` : ""}
-        ${detail.bgg.designers?.length ? `
-          <div class="sheet-meta">
-            <span class="sheet-meta-label">디자이너</span>
-            <span>${detail.bgg.designers.join(", ")}</span>
-          </div>
-        ` : ""}
-      </div>
-    ` : ""}
+    ${_buildSheetMechsHtml(detail, mechanicsDisplay, categoriesDisplay)}
 
     ${_sameDesignHtml}
 
