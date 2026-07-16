@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-17 (CottageDB 에러 처리 규약 신설 — supabase-js는 쿼리 오류에 예외를 안 던진다)
+최종 갱신: 2026-07-17 (감지기 2단계 완료 — supabase-client.js 구조분해 104곳 전부 error 수신·로그)
 
 ---
 
@@ -23,8 +23,11 @@ return data || [];
 
 - `try/catch` + `console.error`는 **네트워크 장애·JS 예외만** 잡는다. 쿼리 오류는 못 잡는다.
 - **가장 흔한 실패(컬럼 오타·RLS·테이블 없음)가 정확히 쿼리 오류**라 이 구분이 결정적이다.
-- **현황(2026-07-17 실측)**: `supabase-client.js`에서 `const { data } = await db.` (error 무시) **40곳** / `const { data, error }` (error 받음) 36곳. 40곳 정리는 §3 "[기술부채] DB 조회 에러 삼키기" 2단계로 등록됨.
 - 반환 계약(실패 시 `[]`/`null` fallback)은 **유지**한다 — 호출부가 빈 배열을 전제로 렌더 중이라 에러를 던지게 바꾸면 UI가 깨진다. 바꾸는 건 로그(관측)이지 동작이 아니다.
+- **현황(2026-07-17 감지기 2단계 완료)**: `supabase-client.js`의 `await` 구조분해 **104곳 전부 error를 받아 로그**한다(2단계에서 59곳 추가, 커밋 참조). error를 받고도 안 읽는 곳은 **0곳**. 신규 DB 함수도 이 규약을 지킬 것.
+  - ⚠️ **대상은 `{ data }`만이 아니다**: 2단계 실측에서 `{ data }` 39곳 외에 **`{ count }` 7곳**(getUserPlayCount·getUserRatingCount 등 카운트 함수 전부)과 **별칭형 `{ data: existing/rows/product… }` 13곳**이 같은 사각지대였다. 이전 기재 "40곳"은 `const { data } = await db.`만 센 좁은 grep 결과였음 — 점검 시 `} = await`로 잡을 것.
+  - **이름 충돌 주의**: 같은 블록에 이미 `const { error }`가 있거나 한 함수에서 두 번 조회하면 `error`를 그대로 추가하면 **재선언 SyntaxError**다. 파일 관용대로 `error: <이름>Err` 별칭을 쓴다(현재 10곳: `rowsErr`·`profsErr`·`existErr`·`productErr` 등).
+  - **로그를 달면 안 되는 catch도 있다**: `getUserPhotoCount`의 안쪽 `JSON.parse` catch처럼 **실패가 정상 경로인 fallback**에 로그를 달면 정상 데이터마다 가짜 에러가 찍혀 콘솔을 오염시킨다(1단계가 기계적으로 붙여 실제 발생). 감지기의 가치는 "울리면 진짜"에서 나온다.
 
 | 함수 | 용도 |
 |------|------|

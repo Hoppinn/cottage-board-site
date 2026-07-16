@@ -120,10 +120,11 @@ window._cottageSess = (function () {
 
   async function getGameRating(gameId) {
     try {
-      const { data } = await db
+      const { data, error } = await db
         .from("game_ratings")
         .select("rating")
         .eq("game_id", gameId);
+      if (error) console.error('[getGameRating]', error);
       if (!data?.length) return null;
       const avg = data.reduce((s, r) => s + r.rating, 0) / data.length;
       return { avg: parseFloat(avg.toFixed(1)), count: data.length };
@@ -180,11 +181,12 @@ window._cottageSess = (function () {
     const userId = window.getKakaoUser?.()?.id;
     if (userId) {
       try {
-        const { data } = await db.from("game_ratings")
+        const { data, error } = await db.from("game_ratings")
           .select("rating")
           .eq("game_id", gameId)
           .eq("user_id", String(userId))
           .maybeSingle();
+        if (error) console.error('[getMyRating]', error);
         if (data?.rating != null) return Number(data.rating);
       } catch (err) { console.error('[getMyRating]', err);}
     }
@@ -196,7 +198,8 @@ window._cottageSess = (function () {
 
   async function getPopularGames(limit = 20) {
     try {
-      const { data } = await db.rpc("get_popular_games", { limit_count: limit });
+      const { data, error } = await db.rpc("get_popular_games", { limit_count: limit });
+      if (error) console.error('[getPopularGames]', error);
       return data || [];
     } catch (err) { console.error('[getPopularGames]', err);
       return [];
@@ -207,7 +210,8 @@ window._cottageSess = (function () {
 
   async function getAllGameRatings() {
     try {
-      const { data } = await db.rpc("get_all_game_ratings");
+      const { data, error } = await db.rpc("get_all_game_ratings");
+      if (error) console.error('[getAllGameRatings]', error);
       if (!data) return {};
       return Object.fromEntries(
         data.map((r) => [
@@ -341,9 +345,10 @@ window._cottageSess = (function () {
       const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
       const base = db.from("game_play_records")
         .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at");
-      const { data } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
+      const { data, error } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
         .order("created_at", { ascending: false })
         .limit(limit);
+      if (error) console.error('[getGamePlayRecords]', error);
       return data || [];
     } catch (err) { console.error('[getGamePlayRecords]', err);
       return [];
@@ -393,11 +398,12 @@ window._cottageSess = (function () {
 
   async function getGroupNames() {
     try {
-      const { data } = await db
+      const { data, error } = await db
         .from("game_play_records")
         .select("group_name")
         .not("group_name", "is", null)
         .neq("group_name", "");
+      if (error) console.error('[getGroupNames]', error);
       if (!data) return [];
       return [...new Set(data.map(r => r.group_name).filter(Boolean))].sort();
     } catch (err) { console.error('[getGroupNames]', err);
@@ -419,11 +425,12 @@ window._cottageSess = (function () {
 
   async function getPlayerNames() {
     try {
-      const { data } = await db
+      const { data, error } = await db
         .from("game_play_records")
         .select("player_names")
         .not("player_names", "is", null)
         .neq("player_names", "");
+      if (error) console.error('[getPlayerNames]', error);
       if (!data) return [];
       // 콤보: MEMBER_ORDER로 정규화 후 중복 제거 → 같은 멤버면 하나만 표시
       const combos = [...new Set(
@@ -446,11 +453,12 @@ window._cottageSess = (function () {
 
   async function getAllPlayRecordsForHistory(limit = 500) {
     try {
-      const { data } = await db
+      const { data, error } = await db
         .from("game_play_records")
         .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at")
         .order("created_at", { ascending: false })
         .limit(limit);
+      if (error) console.error('[getAllPlayRecordsForHistory]', error);
       return data || [];
     } catch (err) { console.error('[getAllPlayRecordsForHistory]', err);
       return [];
@@ -461,7 +469,8 @@ window._cottageSess = (function () {
     try {
       const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
       const base = db.from("game_play_records").select("*", { count: "exact", head: true });
-      const { count } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]));
+      const { count, error } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]));
+      if (error) console.error('[getGamePlayCount]', error);
       return count || 0;
     } catch (err) { console.error('[getGamePlayCount]', err);
       return 0;
@@ -474,9 +483,10 @@ window._cottageSess = (function () {
     try {
       const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
       const base = db.from("play_highlights").select("highlight_text, created_at");
-      const { data } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
+      const { data, error } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
         .order("created_at", { ascending: false })
         .limit(3);
+      if (error) console.error('[getPlayHighlights]', error);
       return data || [];
     } catch (err) { console.error('[getPlayHighlights]', err);
       return [];
@@ -495,7 +505,8 @@ window._cottageSess = (function () {
         .neq('review_text', '')
         .order('created_at', { ascending: false })
         .limit(limit);
-      const { data } = await (ids.length > 1 ? base.in('game_id', ids) : base.eq('game_id', ids[0]));
+      const { data, error } = await (ids.length > 1 ? base.in('game_id', ids) : base.eq('game_id', ids[0]));
+      if (error) console.error('[getPlayReviewsByGame]', error);
       return data || [];
     } catch (err) { console.error('[getPlayReviewsByGame]', err); return []; }
   }
@@ -508,7 +519,8 @@ window._cottageSess = (function () {
         .select("id, comment_text, nickname, user_id, created_at")
         .order("created_at", { ascending: false })
         .limit(limit);
-      const { data } = await (keys.length > 1 ? base.in('game_key', keys) : base.eq('game_key', keys[0]));
+      const { data, error } = await (keys.length > 1 ? base.in('game_key', keys) : base.eq('game_key', keys[0]));
+      if (error) console.error('[getGameComments]', error);
       return data || [];
     } catch (err) { console.error('[getGameComments]', err);
       return [];
@@ -562,10 +574,11 @@ window._cottageSess = (function () {
 
   async function getGameLikeCount(gameId) {
     try {
-      const { count } = await db
+      const { count, error } = await db
         .from("game_likes")
         .select("*", { count: "exact", head: true })
         .eq("game_id", gameId);
+      if (error) console.error('[getGameLikeCount]', error);
       return count || 0;
     } catch (err) { console.error('[getGameLikeCount]', err);
       return 0;
@@ -575,12 +588,13 @@ window._cottageSess = (function () {
   async function toggleGameLike(gameId, userId) {
     if (!gameId || !userId) return { error: "invalid" };
     try {
-      const { data: existing } = await db
+      const { data: existing, error } = await db
         .from("game_likes")
         .select("id")
         .eq("game_id", gameId)
         .eq("user_id", userId)
         .maybeSingle();
+      if (error) console.error('[toggleGameLike]', error);
       if (existing) {
         await db.from("game_likes").delete().eq("id", existing.id);
         return { liked: false };
@@ -596,12 +610,13 @@ window._cottageSess = (function () {
   async function hasUserLiked(gameId, userId) {
     if (!gameId || !userId) return false;
     try {
-      const { data } = await db
+      const { data, error } = await db
         .from("game_likes")
         .select("id")
         .eq("game_id", gameId)
         .eq("user_id", userId)
         .maybeSingle();
+      if (error) console.error('[hasUserLiked]', error);
       return !!data;
     } catch (err) { console.error('[hasUserLiked]', err);
       return false;
@@ -611,10 +626,11 @@ window._cottageSess = (function () {
   // ── 궁금해요 (game_curious) ──────────────────────────
   async function getGameCuriousCount(gameId) {
     try {
-      const { count } = await db
+      const { count, error } = await db
         .from("game_curious")
         .select("*", { count: "exact", head: true })
         .eq("game_id", gameId);
+      if (error) console.error('[getGameCuriousCount]', error);
       return count || 0;
     } catch (err) { console.error('[getGameCuriousCount]', err); return 0; }
   }
@@ -622,12 +638,13 @@ window._cottageSess = (function () {
   async function toggleGameCurious(gameId, userId) {
     if (!gameId || !userId) return { error: "invalid" };
     try {
-      const { data: existing } = await db
+      const { data: existing, error } = await db
         .from("game_curious")
         .select("id")
         .eq("game_id", gameId)
         .eq("user_id", userId)
         .maybeSingle();
+      if (error) console.error('[toggleGameCurious]', error);
       if (existing) {
         await db.from("game_curious").delete().eq("id", existing.id);
         return { curious: false };
@@ -641,12 +658,13 @@ window._cottageSess = (function () {
   async function hasUserCurious(gameId, userId) {
     if (!gameId || !userId) return false;
     try {
-      const { data } = await db
+      const { data, error } = await db
         .from("game_curious")
         .select("id")
         .eq("game_id", gameId)
         .eq("user_id", userId)
         .maybeSingle();
+      if (error) console.error('[hasUserCurious]', error);
       return !!data;
     } catch (err) { console.error('[hasUserCurious]', err); return false; }
   }
@@ -654,7 +672,8 @@ window._cottageSess = (function () {
   async function getUserLikedGames(userId) {
     if (!userId) return [];
     try {
-      const { data } = await db.from('game_likes').select('game_id').eq('user_id', userId);
+      const { data, error } = await db.from('game_likes').select('game_id').eq('user_id', userId);
+      if (error) console.error('[getUserLikedGames]', error);
       return (data || []).map(r => r.game_id);
     } catch (err) { console.error('[getUserLikedGames]', err); return []; }
   }
@@ -662,17 +681,20 @@ window._cottageSess = (function () {
   async function getUserCuriousGames(userId) {
     if (!userId) return [];
     try {
-      const { data } = await db.from('game_curious').select('game_id').eq('user_id', userId);
+      const { data, error } = await db.from('game_curious').select('game_id').eq('user_id', userId);
+      if (error) console.error('[getUserCuriousGames]', error);
       return (data || []).map(r => r.game_id);
     } catch (err) { console.error('[getUserCuriousGames]', err); return []; }
   }
 
   async function _getReactionUsers(table, gameId, limit) {
     try {
-      const { data: rows } = await db.from(table).select('user_id').eq('game_id', gameId).limit(limit);
+      const { data: rows, error: rowsErr } = await db.from(table).select('user_id').eq('game_id', gameId).limit(limit);
+      if (rowsErr) console.error('[_getReactionUsers]', rowsErr);
       if (!rows?.length) return [];
       const ids = rows.map(r => r.user_id);
-      const { data: profs } = await db.from('profiles').select('user_id, nickname, photo_url, rep_achievement_id').in('user_id', ids);
+      const { data: profs, error: profsErr } = await db.from('profiles').select('user_id, nickname, photo_url, rep_achievement_id').in('user_id', ids);
+      if (profsErr) console.error('[_getReactionUsers]', profsErr);
       return profs || [];
     } catch (err) { console.error('[_getReactionUsers]', err); return []; }
   }
@@ -685,7 +707,8 @@ window._cottageSess = (function () {
   async function getUserLikedGamesAll(userId) {
     if (!userId) return [];
     try {
-      const { data } = await db.from('game_likes').select('game_id, custom_name').eq('user_id', userId);
+      const { data, error } = await db.from('game_likes').select('game_id, custom_name').eq('user_id', userId);
+      if (error) console.error('[getUserLikedGamesAll]', error);
       return data || [];
     } catch (err) { console.error('[getUserLikedGamesAll]', err); return []; }
   }
@@ -693,7 +716,8 @@ window._cottageSess = (function () {
   async function getUserCuriousGamesAll(userId) {
     if (!userId) return [];
     try {
-      const { data } = await db.from('game_curious').select('game_id, custom_name').eq('user_id', userId);
+      const { data, error } = await db.from('game_curious').select('game_id, custom_name').eq('user_id', userId);
+      if (error) console.error('[getUserCuriousGamesAll]', error);
       return data || [];
     } catch (err) { console.error('[getUserCuriousGamesAll]', err); return []; }
   }
@@ -749,10 +773,11 @@ window._cottageSess = (function () {
   async function getMeetingGamePrefs(userId, listType) {
     if (!userId) return [];
     try {
-      const { data } = await db.from('meeting_game_prefs')
+      const { data, error } = await db.from('meeting_game_prefs')
         .select('id, game_id, custom_name')
         .eq('user_id', userId)
         .eq('list_type', listType);
+      if (error) console.error('[getMeetingGamePrefs]', error);
       return data || [];
     } catch (err) { console.error('[getMeetingGamePrefs]', err); return []; }
   }
@@ -820,7 +845,8 @@ window._cottageSess = (function () {
 
   async function getAllBioTagSuggestions() {
     try {
-      const { data } = await db.from('profiles').select('bio').not('bio', 'is', null);
+      const { data, error } = await db.from('profiles').select('bio').not('bio', 'is', null);
+      if (error) console.error('[getAllBioTagSuggestions]', error);
       const allTags = (data || []).flatMap(r => (r.bio || '').split(',').map(t => t.trim()).filter(Boolean));
       return [...new Set(allTags)].sort();
     } catch (err) { console.error('[getAllBioTagSuggestions]', err); return []; }
@@ -828,7 +854,8 @@ window._cottageSess = (function () {
 
   async function getAllAvoidTagSuggestions() {
     try {
-      const { data } = await db.from('profiles').select('avoid_tags').not('avoid_tags', 'is', null);
+      const { data, error } = await db.from('profiles').select('avoid_tags').not('avoid_tags', 'is', null);
+      if (error) console.error('[getAllAvoidTagSuggestions]', error);
       const allTags = (data || []).flatMap(r => r.avoid_tags || []);
       return [...new Set(allTags)].sort();
     } catch (err) { console.error('[getAllAvoidTagSuggestions]', err); return []; }
@@ -1046,9 +1073,10 @@ window._cottageSess = (function () {
     const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     let _anonTodaySec = 0;
     try {
-      const { data: existing } = await db.from('anon_sessions')
+      const { data: existing, error } = await db.from('anon_sessions')
         .select('visit_count, today_date, today_seconds')
         .eq('session_key', key).maybeSingle();
+      if (error) console.error('[_startAnonHeartbeat]', error);
       if (!existing) {
         await db.from('anon_sessions').insert({
           session_key: key, last_seen_at: new Date().toISOString(),
@@ -1149,7 +1177,8 @@ window._cottageSess = (function () {
   async function getProfilePhoto(userId) {
     if (!userId) return null;
     try {
-      const { data } = await db.from('profiles').select('photo_url').eq('user_id', userId).maybeSingle();
+      const { data, error } = await db.from('profiles').select('photo_url').eq('user_id', userId).maybeSingle();
+      if (error) console.error('[getProfilePhoto]', error);
       return data?.photo_url || null;
     } catch (err) { console.error('[getProfilePhoto]', err); return null; }
   }
@@ -1157,14 +1186,16 @@ window._cottageSess = (function () {
   async function getProfileSnapshot(userId) {
     if (!userId) return null;
     try {
-      const { data } = await db.from('profiles').select('photo_url,nickname').eq('user_id', userId).maybeSingle();
+      const { data, error } = await db.from('profiles').select('photo_url,nickname').eq('user_id', userId).maybeSingle();
+      if (error) console.error('[getProfileSnapshot]', error);
       return data || null;
     } catch (err) { console.error('[getProfileSnapshot]', err); return null; }
   }
 
   async function getAllProfiles() {
     try {
-      const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
+      const { data, error } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
+      if (error) console.error('[getAllProfiles]', error);
       return data || [];
     } catch (err) { console.error('[getAllProfiles]', err); return []; }
   }
@@ -1193,11 +1224,12 @@ window._cottageSess = (function () {
   async function getPageAnalytics() {
     try {
       const since = new Date(Date.now() - 90 * 24 * 3600 * 1000).toISOString();
-      const { data } = await db.from('page_sessions')
+      const { data, error } = await db.from('page_sessions')
         .select('page, referrer, user_id, session_key, duration_sec, entered_at')
         .gte('entered_at', since)
         .order('entered_at', { ascending: false })
         .limit(20000);
+      if (error) console.error('[getPageAnalytics]', error);
       return data || [];
     } catch (err) { console.error('[getPageAnalytics]', err); return []; }
   }
@@ -1205,10 +1237,11 @@ window._cottageSess = (function () {
   async function getEventCounts(eventTypes, daysBack = 7) {
     try {
       const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
-      const { data } = await db.from('page_events')
+      const { data, error } = await db.from('page_events')
         .select('event_type, created_at')
         .in('event_type', eventTypes)
         .gte('created_at', since);
+      if (error) console.error('[getEventCounts]', error);
       return data || [];
     } catch (err) { console.error('[getEventCounts]', err); return []; }
   }
@@ -1217,21 +1250,23 @@ window._cottageSess = (function () {
   async function getPageViewCounts(page, daysBack = 7) {
     try {
       const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
-      const { data } = await db.from('page_views')
+      const { data, error } = await db.from('page_views')
         .select('created_at')
         .eq('page', page)
         .gte('created_at', since);
+      if (error) console.error('[getPageViewCounts]', error);
       return data || [];
     } catch (err) { console.error('[getPageViewCounts]', err); return []; }
   }
 
   async function checkNicknameAvailable(nickname, currentUserId) {
     try {
-      const { data } = await db.from('profiles')
+      const { data, error } = await db.from('profiles')
         .select('user_id')
         .eq('nickname', nickname)
         .neq('user_id', String(currentUserId))
         .limit(1);
+      if (error) console.error('[checkNicknameAvailable]', error);
       return !data?.length;
     } catch (err) { console.error('[checkNicknameAvailable]', err); return true; }
   }
@@ -1403,7 +1438,8 @@ window._cottageSess = (function () {
         const voucherData = voucherEventsRes.data || [];
         if (voucherData.length > 0) {
           const userIds = [...new Set(voucherData.map(r => r.user_id))];
-          const { data: profData } = await db.from('profiles').select('user_id, nickname').in('user_id', userIds);
+          const { data: profData, error: profErr } = await db.from('profiles').select('user_id, nickname').in('user_id', userIds);
+          if (profErr) console.error('[getMyNotifications]', profErr);
           const nickMap = Object.fromEntries((profData || []).map(p => [p.user_id, p.nickname || p.user_id]));
           for (const r of voucherData) {
             const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
@@ -1534,21 +1570,23 @@ window._cottageSess = (function () {
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
   async function getAllPlayRecordsForHub(limit = 200) {
     try {
-      const { data } = await db.from('game_play_records')
+      const { data, error } = await db.from('game_play_records')
         .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at')
         .order('played_at', { ascending: false })
         .order('created_at', { ascending: false })
         .limit(limit);
+      if (error) console.error('[getAllPlayRecordsForHub]', error);
       return data || [];
     } catch (err) { console.error('[getAllPlayRecordsForHub]', err); return []; }
   }
 
   async function getGameReviews(gameId) {
     try {
-      const { data } = await db.from('game_reviews')
+      const { data, error } = await db.from('game_reviews')
         .select('id, user_id, nickname, content, created_at')
         .eq('game_id', gameId)
         .order('created_at', { ascending: false });
+      if (error) console.error('[getGameReviews]', error);
       return data || [];
     } catch (err) { console.error('[getGameReviews]', err); return []; }
   }
@@ -1573,10 +1611,11 @@ window._cottageSess = (function () {
 
   async function getUserAchievements(userId) {
     try {
-      const { data } = await db.from('user_achievements')
+      const { data, error } = await db.from('user_achievements')
         .select('achievement_id, earned_at')
         .eq('user_id', userId)
         .order('earned_at', { ascending: true });
+      if (error) console.error('[getUserAchievements]', error);
       return (data || []).map(r => ({ id: r.achievement_id, earned_at: r.earned_at }));
     } catch (err) { console.error('[getUserAchievements]', err); return []; }
   }
@@ -1598,24 +1637,27 @@ window._cottageSess = (function () {
 
   async function getUserPlayCount(userId) {
     try {
-      const { count } = await db.from('game_play_records').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      const { count, error } = await db.from('game_play_records').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      if (error) console.error('[getUserPlayCount]', error);
       return count || 0;
     } catch (err) { console.error('[getUserPlayCount]', err); return 0; }
   }
 
   async function getUserDistinctGameCount(userId) {
     try {
-      const { data } = await db.from('game_play_records').select('game_id').eq('user_id', userId);
+      const { data, error } = await db.from('game_play_records').select('game_id').eq('user_id', userId);
+      if (error) console.error('[getUserDistinctGameCount]', error);
       return new Set((data || []).map(r => r.game_id)).size;
     } catch (err) { console.error('[getUserDistinctGameCount]', err); return 0; }
   }
 
   async function getUserPlayedGames(userId) {
     try {
-      const { data } = await db.from('game_play_records')
+      const { data, error } = await db.from('game_play_records')
         .select('game_id, played_at, created_at')
         .eq('user_id', userId)
         .order('played_at', { ascending: false });
+      if (error) console.error('[getUserPlayedGames]', error);
       const seen = new Set();
       return (data || []).filter(r => {
         if (seen.has(r.game_id)) return false;
@@ -1627,7 +1669,8 @@ window._cottageSess = (function () {
 
   async function getUserPhotoCount(userId) {
     try {
-      const { data } = await db.from('game_play_records').select('photo_url').eq('user_id', userId).not('photo_url', 'is', null);
+      const { data, error } = await db.from('game_play_records').select('photo_url').eq('user_id', userId).not('photo_url', 'is', null);
+      if (error) console.error('[getUserPhotoCount]', error);
       return (data || []).reduce((s, r) => {
         if (!r.photo_url) return s;
         try {
@@ -1642,21 +1685,24 @@ window._cottageSess = (function () {
 
   async function getUserRatingCount(userId) {
     try {
-      const { count } = await db.from('game_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      const { count, error } = await db.from('game_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      if (error) console.error('[getUserRatingCount]', error);
       return count || 0;
     } catch (err) { console.error('[getUserRatingCount]', err); return 0; }
   }
 
   async function getUserCommentCount(userId) {
     try {
-      const { count } = await db.from('game_comments').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      const { count, error } = await db.from('game_comments').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+      if (error) console.error('[getUserCommentCount]', error);
       return count || 0;
     } catch (err) { console.error('[getUserCommentCount]', err); return 0; }
   }
 
   async function getUserVisitCount(userId) {
     try {
-      const { data } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
+      const { data, error } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
+      if (error) console.error('[getUserVisitCount]', error);
       return data?.visit_count || 0;
     } catch (err) { console.error('[getUserVisitCount]', err); return 0; }
   }
@@ -1665,9 +1711,10 @@ window._cottageSess = (function () {
     if (!nickname) return 0;
     try {
       // 내 닉네임이 player_names에 포함된 기록 수 (내가 쓴 기록 포함)
-      const { count } = await db.from('game_play_records')
+      const { count, error } = await db.from('game_play_records')
         .select('id', { count: 'exact', head: true })
         .ilike('player_names', `%${_escapeLike(nickname)}%`);
+      if (error) console.error('[getUserParticipationCount]', error);
       return count || 0;
     } catch (err) { console.error('[getUserParticipationCount]', err); return 0; }
   }
@@ -1675,19 +1722,21 @@ window._cottageSess = (function () {
   async function getUserFirstRecordCount(userId) {
     try {
       // 내가 작성한 기록들의 game_id를 가져옴
-      const { data: myRecords } = await db.from('game_play_records')
+      const { data: myRecords, error: myErr } = await db.from('game_play_records')
         .select('game_id, created_at')
         .eq('user_id', String(userId));
+      if (myErr) console.error('[getUserFirstRecordCount]', myErr);
       if (!myRecords || myRecords.length === 0) return 0;
 
       const myGameIds = [...new Set(myRecords.map(r => r.game_id))];
 
       // 해당 game_id들의 전체 기록 중 각 game_id별 가장 오래된 기록 조회
-      const { data: allRecords } = await db.from('game_play_records')
+      const { data: allRecords, error: allErr } = await db.from('game_play_records')
         .select('game_id, user_id, created_at')
         .in('game_id', myGameIds)
         .order('created_at', { ascending: true })
         .limit(2000);
+      if (allErr) console.error('[getUserFirstRecordCount]', allErr);
 
       if (!allRecords) return 0;
 
@@ -1705,7 +1754,8 @@ window._cottageSess = (function () {
 
   async function getRepAchievement(userId) {
     try {
-      const { data } = await db.from('profiles').select('rep_achievement_id').eq('user_id', userId).maybeSingle();
+      const { data, error } = await db.from('profiles').select('rep_achievement_id').eq('user_id', userId).maybeSingle();
+      if (error) console.error('[getRepAchievement]', error);
       if (!data?.rep_achievement_id) return null;
       return { id: data.rep_achievement_id };
     } catch (err) { console.error('[getRepAchievement]', err); return null; }
@@ -1726,8 +1776,9 @@ window._cottageSess = (function () {
     const _OWNER_ID = '4916417947';
     if (!userId || String(userId) === _OWNER_ID) return false;
     try {
-      const { data: existing } = await db.from('voucher_log')
+      const { data: existing, error: existErr } = await db.from('voucher_log')
         .select('id').eq('user_id', String(userId)).eq('reason', 'achievement').eq('note', achievementId).maybeSingle();
+      if (existErr) console.error('[grantAchievementVoucher]', existErr);
       if (existing) return false; // JS 1차 방어
       const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
@@ -1750,12 +1801,14 @@ window._cottageSess = (function () {
         d.setHours(d.getHours() + 9);
         return d.toISOString().slice(0, 10);
       };
-      const { data: authorRows } = await db.from('game_play_records')
+      const { data: authorRows, error: authorErr } = await db.from('game_play_records')
         .select('played_at, created_at').eq('user_id', userId);
+      if (authorErr) console.error('[getUserUniqueDayCount]', authorErr);
       const dateSet = new Set((authorRows || []).map(toDateStr));
       if (nickname) {
-        const { data: participantRows } = await db.from('game_play_records')
+        const { data: participantRows, error: participantErr } = await db.from('game_play_records')
           .select('played_at, created_at').ilike('player_names', `%${_escapeLike(nickname)}%`);
+        if (participantErr) console.error('[getUserUniqueDayCount]', participantErr);
         (participantRows || []).forEach(r => dateSet.add(toDateStr(r)));
       }
       return dateSet.size;
@@ -1765,8 +1818,9 @@ window._cottageSess = (function () {
   async function grantFirstPlayVoucher(userId) {
     if (!userId) return false;
     try {
-      const { data: existing } = await db.from('voucher_log')
+      const { data: existing, error: existErr } = await db.from('voucher_log')
         .select('id').eq('user_id', String(userId)).eq('reason', 'first_play').maybeSingle();
+      if (existErr) console.error('[grantFirstPlayVoucher]', existErr);
       if (existing) return false; // JS 1차 방어
       const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
@@ -1786,24 +1840,27 @@ window._cottageSess = (function () {
 
   async function getVoucherBalance(userId) {
     try {
-      const { data } = await db.from('voucher_log')
+      const { data, error } = await db.from('voucher_log')
         .select('delta').eq('user_id', String(userId));
+      if (error) console.error('[getVoucherBalance]', error);
       return (data || []).reduce((sum, r) => sum + r.delta, 0);
     } catch (err) { console.error('[getVoucherBalance]', err); return 0; }
   }
 
   async function getVoucherProducts() {
     try {
-      const { data } = await db.from('voucher_products')
+      const { data, error } = await db.from('voucher_products')
         .select('id, name, cost').eq('is_active', true).order('id');
+      if (error) console.error('[getVoucherProducts]', error);
       return data || [];
     } catch (err) { console.error('[getVoucherProducts]', err); return []; }
   }
 
   async function redeemVoucher(userId, productId) {
     try {
-      const { data: product } = await db.from('voucher_products')
+      const { data: product, error: productErr } = await db.from('voucher_products')
         .select('cost, name').eq('id', productId).maybeSingle();
+      if (productErr) console.error('[redeemVoucher]', productErr);
       if (!product) return { ok: false, reason: 'no_product' };
       const balance = await getVoucherBalance(userId);
       if (balance < product.cost) return { ok: false, reason: 'insufficient' };
@@ -1817,11 +1874,12 @@ window._cottageSess = (function () {
 
   async function getVoucherHistory(userId, limit = 20) {
     try {
-      const { data } = await db.from('voucher_log')
+      const { data, error } = await db.from('voucher_log')
         .select('id, delta, reason, created_at, voucher_products(name)')
         .eq('user_id', String(userId))
         .order('created_at', { ascending: false })
         .limit(limit);
+      if (error) console.error('[getVoucherHistory]', error);
       return data || [];
     } catch (err) { console.error('[getVoucherHistory]', err); return []; }
   }
@@ -1830,11 +1888,12 @@ window._cottageSess = (function () {
 
   async function getMeetingVotes(startDate, endDate) {
     try {
-      const { data } = await db.from('meeting_votes')
+      const { data, error } = await db.from('meeting_votes')
         .select('vote_date, user_id, nickname, time_start, time_end')
         .gte('vote_date', startDate)
         .lte('vote_date', endDate)
         .order('vote_date');
+      if (error) console.error('[getMeetingVotes]', error);
       return data || [];
     } catch (err) { console.error('[getMeetingVotes]', err); return []; }
   }

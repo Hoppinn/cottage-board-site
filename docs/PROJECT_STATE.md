@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-17 (**다음 = 감지기 2단계**: DB 조회 error 미확인 40곳 — supabase-js는 쿼리오류에 예외를 안 던져 1단계 로그 75곳이 절반만 감지함이 드러남. 화재 테스트 25개 전부 정상. / **R10a ✅ 완료 — 스모크 통과** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. **다음 세션 = 감지기 2단계 → 그다음 R10b**)
+최종 갱신: 2026-07-17 (**감지기 2단계 ✅ 완료** — supabase-client.js 구조분해 59곳에 error 수신+로그 추가 → 104곳 전부 감지. 실제 대상은 문서의 40곳이 아니라 **59곳**이었음(`{count}`·별칭형 누락 = 두 번째 오집계, 정정 완료). 실DB 화재 테스트 42개 **불난 곳 0건**. 신규 발견: `getUserPhotoCount` 로그 노이즈(1단계가 정상 fallback에 붙인 가짜 에러, §3 기록). / **R10a ✅ 완료 — 스모크 통과** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. **다음 세션 = R10b**)
 
 ---
 
@@ -26,15 +26,13 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - **R10b ⏳ 대기**: 크로스보드 stale(아래 버그2-b). 방향 A(진입 시 DB 재조회 = 단일 소스) + 스냅샷 임시방편(11e10b8) 대체. **R10a가 서브시트 경계를 만들어 착수 비용이 내려감**.
 - **R10c ⏳ 대기**: 네비게이션 스택(§3-1 알림 복귀 + §3-2 좋아요 토스트→게임시트 복귀, `openProfilePanel(sub, {backTo:{...}})` 일반화). 신규기능.
 
-**다음 세션 시작점**: **① 감지기 2단계** (DB 조회 error 미확인 40곳 — §3 "[기술부채] DB 조회 에러 삼키기" ②항, **사용자 지정 2026-07-17**) → **② R10b**(크로스보드 stale).
-
-**순서 이유**: R10b가 조회 로직을 재설계하는데, 그때 진짜 감지기(쿼리 오류 감지)가 꺼져 있으면 **재설계 중 실패가 또 조용히 넘어간다**. 2단계는 동작 무변경·기계적이라 짧게 끝나고, 끝내면 R10b 작업 중 실패가 콘솔에 보인다. 반대 순서면 R10b에서 같은 함정을 다시 밟음.
+**다음 세션 시작점**: **R10b**(크로스보드 stale). 선행 조건이던 감지기 2단계는 ✅ 완료 — **이제 R10b 재설계 중 조회가 실패하면 콘솔에 `[함수명]`과 사유가 찍힌다**(쿼리 오류 포함). 이게 2단계를 R10b보다 먼저 한 이유였음.
 
 **R10b 착수 시 바로 쓸 수 있는 R10a 조사 결과** (재조사 불필요):
 - `openProfilePanel`(현재 `kakao-auth.js:1608~2525`, 918줄) 구성: **패널 셸+DB조회 12개**(1608~1715 부근) → **로컬 헬퍼**(getGameName·buildActivityList·_renderNotifItem 등) → **HTML 문자열 빌드 ~390줄**(`_tasteInnerHtml`·`_meetingInnerHtml`·`_recordInnerHtml` 등 서브시트별 innerHTML을 **패널 오픈 시 1회** 생성) → `_openSubSheet`+알림/교환권 헬퍼 → **서브시트 라우터**(2469~2521, `.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭(2522). ※줄번호는 2026-07-16 R10a 직후 실측 — 이후 수정 시 밀림.
 - **stale의 구조적 뿌리 = "오픈 시 1회 빌드 + 떠날 때 DOM 스냅샷"**: `_openSubSheet(title, contentHtml, ...)`가 오픈 시점 정적 문자열을 재진입마다 재주입 → 변경이 되돌아가던 걸 스냅샷(`onLeave`에서 `_tasteInnerHtml = bodyEl.innerHTML`, 커밋 11e10b8)으로 막아둔 상태. **방향 A(진입 시 DB 재조회)로 가면 이 스냅샷 2곳(`kakao-auth.js:2493` taste·`2497` record의 `onLeave` 콜백)이 제거 대상**이고, 서브시트별 HTML 빌드가 `_bind*Subsheet` 옆으로 내려가면서 `openProfilePanel`의 남은 ~390줄도 자연히 갈라짐.
 - ⚠️ **R10b 설계 시 반드시 고려 — 조회 실패가 조용히 "빈 목록"이 된다**: `openProfilePanel`의 인라인 `.catch(() => [])`/`.catch(() => null)`/`.catch(() => 0)` **24곳**이 에러를 삼킨다. **패널 오픈 시 1회 조회인 현재는 실패해도 "처음부터 비어 보임" 수준이지만, 방향 A(진입 시마다 재조회)로 가면 재조회 1번 실패 = 사용자가 보던 게임 목록이 통째로 사라짐**(에러 표시도 없이). 즉 방향 A는 에러 처리 설계를 함께 가져가야 안전하다 — 최소한 실패 시 ①`console.error` ②직전 값 유지(빈 배열로 덮어쓰지 않기) 중 하나 필요.
-  - **참고**: DB 계층(`supabase-client.js` 75곳, `getMeetingProfile` 포함)은 **2026-07-17에 로그가 켜졌다**(커밋 34e79f5). 따라서 R10b 작업 중 조회가 실패하면 이제 콘솔에 `[함수명]`과 이유가 찍힌다 — 재설계 시 이걸 활용할 것. 아직 안 켜진 건 `openProfilePanel` 자신의 인라인 24곳이며 **R10b에서 함께 처리**(§3 "[기술부채] DB 조회 에러 삼키기" 참조).
+  - **참고**: DB 계층(`supabase-client.js`, `getMeetingProfile` 포함)은 **2026-07-17에 감지기가 완전히 켜졌다** — 1단계(커밋 34e79f5, try/catch 로그 75곳 = 네트워크 장애·JS 예외) + **2단계(구조분해 59곳에 error 수신 = 쿼리 오류·RLS 차단·컬럼 오타)**. 따라서 R10b 작업 중 조회가 실패하면 **어떤 유형이든** 콘솔에 `[함수명]`과 사유가 찍힌다 — 재설계 시 이걸 활용할 것. 아직 안 켜진 건 `openProfilePanel` 자신의 인라인 24곳이며 **R10b에서 함께 처리**(§3 "[기술부채] DB 조회 에러 삼키기" 참조). ⚠️ 인라인 24곳은 `.catch(() => [])` 형태라 **2단계와 유형이 다르다** — `.catch()`는 Promise rejection만 받으므로 쿼리 오류는 여기서도 못 잡는다. R10b에서 `{ data, error }` 수신 형태로 바꿔야 실효가 생김.
 - **stale 당사자**: `likedGames`/`curiousGames`(패널 Promise.all에서 1회 조회, taste HTML이 소비) ↔ `_meeting.likedGames`/`_meeting.curiousGames`(`getMeetingProfile`이 **내부에서 `getUserLikedGamesAll`를 재호출**해 만든 **별도 배열**, meeting 블록이 `_likedSlugSet`/`_curiousSlugSet`으로 소비). 두 배열이 같은 `game_likes`의 서로 다른 사본이라 한쪽 변경이 반대편에 안 보임. `cottage-likes-changed` 이벤트는 **열린** 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열은 못 건드림).
 
 **R10b/R10c 착수 전 확인 사항**:
@@ -237,19 +235,22 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] **renderSingleGame / ?game= 처리** — game-reviews.js dead code(GAME_ID) 삭제 완료 (137차)
 - [x] **동호회 소개글 알림** — 소개글 올린 회원에게 new_intro 타입 묶음 알림 (N명이 소개글 올렸어요). supabase-client.js getMyNotifications + kakao-auth.js 렌더링 (138차)
 - [x] **getPageAnalytics 조회 방식 개선** — limit(5000) → 최근 90일 필터 + limit(20000)로 교체. 25일치 → 90일치로 확장, raw는 DB에 유지 (139차)
-- [ ] **[기술부채] DB 조회 에러 삼키기 — 1단계 완료, 2단계 반응형** (2026-07-16 등록 / 2026-07-17 1단계 완료) — CLAUDE.md 「DB 함수 에러 처리」가 `catch (_) { return []; }`를 금지하는데 기존 코드에 소급 적용이 안 돼 있던 건. 감사(Phase 2 SC1~SC8)도 놓쳤음.
+- [ ] **[기술부채] DB 조회 에러 삼키기 — 1·2단계 완료(supabase-client.js), 나머지 파일 반응형** (2026-07-16 등록 / 2026-07-17 1·2단계 완료) — CLAUDE.md 「DB 함수 에러 처리」가 `catch (_) { return []; }`를 금지하는데 기존 코드에 소급 적용이 안 돼 있던 건. 감사(Phase 2 SC1~SC8)도 놓쳤음.
   - **실측(2026-07-17)**: 위반 **134곳**(삼킴 91 + 인라인 `.catch(() => X)` 43). 파일별 삼킴: `supabase-client.js` 75+7 · `kakao-auth.js` 4+24 · 나머지 12+12. 에러를 `{ error: e }`로 **호출부에 넘기는 정상 코드 25곳**은 위반 아님(구분 필요). ⚠️ **2026-07-16에 기록했던 "59곳"은 오집계**(한 줄짜리 좁은 패턴만 grep) — 정정함.
   - **방침 (사용자 결정 2026-07-17): "로그는 전부 켜고, 동작은 그때그때"**
     - **① 로그 추가 = 동작 무변경 → 일괄 처리 가능.** 반응형만으로는 **우리가 안 만지는 영역(=원인불명 버그가 사는 곳)에 영원히 로그가 안 생김**. 화재감지기는 전 층에 달아야 의미 있음.
     - **② 반환값·에러 전파 변경 = 동작 변경 → 실제 문제 발생 시 그 자리만.** 호출부가 빈 배열 fallback을 전제로 렌더 중이라 일괄 변경은 UI 파손 위험.
   - **① 진행 상황**: ✅ **`supabase-client.js` 75곳 완료** (2026-07-17, 커밋 34e79f5 — 동작 무변경 기계 검증 + 실패 주입 스모크 통과). ⏳ **남음**: `kakao-auth.js` 24곳(인라인, `openProfilePanel` 조회) — **R10b가 이 영역을 재설계하므로 R10b에서 함께**. `achievements.js` 5곳·`game-sheet.js` 9곳 등 나머지는 미착수(우선순위 낮음).
   - 🔴 **①은 절반짜리였음 — 2단계 필요 (2026-07-17 발견)**: **supabase-js는 쿼리 오류에 예외를 던지지 않는다**(`{data:null, error}` 반환). 따라서 `try/catch`에 붙인 `console.error` 75개는 **네트워크 장애·JS 예외만** 잡고, **가장 흔한 화재(컬럼 오타·RLS 차단·테이블 없음)는 전혀 못 본다**. 실측 확인: `page_sessions.created_at`(없는 컬럼) 조회 → 예외 0건, `error.message`에 사유, `data=null` → `data || []` → 빈 배열. 즉 **연기감지기만 달고 열감지기를 안 단 상태**. 규약은 [js-api.md](js-api.md) "CottageDB 에러 처리 규약" 참조.
+  - **② 감지기 2단계 ✅ 완료 (2026-07-17)**: `supabase-client.js`의 error 미수신 구조분해 **59곳**에 `error` 수신 + `if (error) console.error('[함수명]', error)` 추가 → 이제 **104곳 전부 error를 받아 로그**한다. 반환 계약 무변경. 검증: 이름충돌 사전검사(음성 대조군 6개 통과) → 동작 무변경 기계 검증(정규화 후 원본과 바이트 동일 + 개수 기대치 강제, **음성 대조군 5개 통과**) → `node --check` → 실패 주입 스모크(없는 컬럼 3개 주입 → 3곳 정확히 울림, 반환값은 `null`/`0`/`[]` 그대로) → 실DB 화재 테스트 42개.
+    - ⚠️ **"40곳"은 또 오집계였음 (정정)**: `const { data } = await db.`만 센 좁은 grep 결과였고, 실제는 **59곳** = `{data}` 39 + **`{count}` 7**(카운트 함수 전부) + **별칭형 `{data: existing/rows/product…}` 13**. 1단계의 "59곳 오집계"와 **같은 종류의 실수를 연달아 두 번** — 점검은 `} = await`로 잡을 것. 부수 확인: `{data, error}`로 받고도 **error를 안 읽는 곳은 0곳**(기존 "확인 필요" 항목 해소).
+    - **이름 충돌 10곳은 별칭 처리**: 같은 블록에 `const { error }`가 이미 있거나(voucher 3함수) 한 함수에서 2회 조회(`_getReactionUsers`·`getUserFirstRecordCount`·`getUserUniqueDayCount`) → `error: rowsErr`/`existErr`/`productErr` 등. 그대로 `error`를 넣었으면 **재선언 SyntaxError**.
+  - **화재 테스트 재실행 결과 (2026-07-17, 2단계 후 / 읽기 42개 실제 DB)**: **불난 곳 0건** — 이번엔 열감지기가 켜진 상태라 1단계의 "반쪽 증거"와 달리 실효가 있음. `getMeetingVotes` 15행·`getMeetingVoteGames` 16행·`getVoucherProducts` 10행 등 전부 정상. ⚠️ 하니스 주의: `getMeetingVotes(startDate, endDate)`는 **인자 필수**(빼먹으면 `vote_date="undefined"`로 진짜 쿼리 오류가 나 오탐), 일반 모드는 **끝에 `process.exit(0)` 필요**(supabase 타이머가 이벤트루프를 잡아 안 끝남).
   - **제외 판정(실물 확인 후)**: `index-page.js` — catch에서 이미 "불러오기 실패"를 **화면에 표시**하므로 조용한 실패가 아님. `script-nav.js` — `JSON.parse`/`localStorage` 방어용이라 로그 가치 낮음. **"위반 N곳"을 기계적으로 다 고치려 들지 말 것** — 분류기가 이 둘을 삼킴으로 오분류했었음.
-  - **② 감지기 2단계 (다음 세션 = 바로 착수, 2026-07-17 사용자 지정)**: `supabase-client.js`의 **`const { data } = await db.` 40곳 → `const { data, error }` + `if (error) console.error('[함수명]', error)`**. 반환 계약(`[]`/`null` fallback)은 **그대로 유지** → 동작 무변경. `const { data, error }`로 이미 받는 36곳은 대상 아님(단 error를 안 읽는 곳이 있는지는 확인 필요).
-    - **1단계와 같은 방식으로 진행**: codemod 스크립트 + ①이름 충돌 사전검사 ②동작 무변경 기계 검증(변경 줄에서 로그만 걷어내면 원본과 동일한지, 반환값 변경은 검출되는지 대조군 포함) ③`node --check` ④실패 주입 스모크. 1단계 커밋 34e79f5의 diff가 그대로 참고자료.
-    - **화재 테스트 하니스 재사용**: `@supabase/supabase-js`가 `node_modules`에 **설치돼 있어** node에서 실제 DB로 읽기 함수를 돌릴 수 있음(window/document/localStorage 스텁 + `eval(supabase-client.js)`). 스크래치패드에만 있으므로 재작성 필요. ⚠️ **읽기 전용 함수만** 호출할 것(`get*`), `window.location.hostname='localhost'`로 두면 추적성 write 경로가 자체 차단됨.
-  - **화재 테스트 결과 (2026-07-17, 읽기 25개 실제 DB 호출)**: **불난 곳 0건** — 메인·내보드·플래너·교환권·관리자 전부 정상 데이터 반환. RPC 2개(`get_popular_games`·`get_all_game_ratings`) 생존 확인. 단 **위 사각지대 때문에 이 "0건"은 반쪽 증거**(쿼리 오류는 애초에 감지 못 함) → 2단계 후 재실행 필요. 참고: 코드가 RPC를 `db.rpc("...")` **큰따옴표**로 호출해 작은따옴표 grep은 "RPC 없음"이라는 오답을 냄.
-  - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). 화재 테스트에서 `getPageAnalytics`는 1000행 정상 반환 → **DB 조회 자체는 살아 있음**. 원인이 조회가 아니라 **화면 렌더/집계 로직 쪽**일 가능성이 올라감(미검증). 2단계 후 재현 시 콘솔 확인.
+    - **화재 테스트 하니스**: `@supabase/supabase-js`가 `node_modules`에 **설치돼 있어** node에서 실제 DB로 읽기 함수를 돌릴 수 있음(window/document/localStorage 스텁 + `eval(supabase-client.js)`). 스크래치패드에만 있으므로 재작성 필요. ⚠️ **읽기 전용 함수만** 호출할 것(`get*`), `window.location.hostname='localhost'`로 두면 추적성 write 경로가 자체 차단됨. 스크립트를 스크래치패드에 두면 모듈 해석이 프로젝트 `node_modules`를 못 찾으므로 **절대경로 require** 필요.
+  - 🟡 **[신규 발견] `getUserPhotoCount` 로그 노이즈 — 1단계가 만든 것 (2026-07-17, 미해결)**: [supabase-client.js:1679](../assets/js/supabase-client.js#L1679)의 **안쪽 `JSON.parse` catch는 사진 1장짜리 기록(단일 URL 문자열)의 정상 fallback 경로**인데, 1단계 codemod가 모든 catch에 기계적으로 `console.error`를 붙여 **정상 데이터마다 가짜 에러**를 찍는다. 화재 테스트에서 이 호출 하나로 9건 발생(오너 기준, 반환값 109은 정상). DB 조회는 멀쩡함. **감지기의 가치는 "울리면 진짜"에서 나오므로 노이즈는 감지기를 무력화한다**(늑대소년). 수정 방향: 그 안쪽 catch의 `console.error` 제거(로그만 제거 = 동작 무변경). **교훈은 [js-api.md](js-api.md) 규약에 반영 완료**.
+  - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). 화재 테스트에서 `getPageAnalytics`는 1000행 정상 반환 → **DB 조회 자체는 살아 있음**(2단계 후 재확인 = 쿼리 오류도 없음). 원인이 조회가 아니라 **화면 렌더/집계 로직 쪽**일 가능성이 더 올라감(미검증). 재현 시 콘솔 확인.
+  - 참고: 코드가 RPC를 `db.rpc("...")` **큰따옴표**로 호출해 작은따옴표 grep은 "RPC 없음"이라는 오답을 냄.
 - [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
   - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)
