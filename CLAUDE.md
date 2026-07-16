@@ -200,6 +200,10 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 ### DB 함수 에러 처리 (2026-07-08 교훈)
 
 - `catch` 블록에서 에러를 삼키지 않는다. `catch (_) { return []; }` 패턴 금지. 최소한 `console.error('[함수명]', e)` 후 반환.
+- ⚠️ **예외 — 실패가 정상 경로인 catch에는 로그를 달지 않는다 (2026-07-17 교훈, 이 규칙이 실제로 사고를 냈음)**. 감지기의 가치는 **"울리면 진짜"**에서 나온다. 정상 데이터마다 울리는 로그는 콘솔을 오염시켜 **진짜 화재를 가린다**(늑대소년). 이 경우 `catch (_)`로 삼키되 **왜 삼키는 게 맞는지 주석**을 남긴다.
+  - 실제 사례: 위 규칙을 기계적으로 적용해 `getUserPhotoCount`의 **`JSON.parse` fallback**(사진 1장은 JSON 배열이 아니라 단일 URL 문자열이라 parse 실패가 **정상**)에 로그가 달려, 정상 기록마다 가짜 에러가 찍혔다(함수 호출 1회에 9건). 커밋 019bd7c에서 제거.
+  - 구분 기준: **"이 로그가 울렸을 때 내가 고칠 게 있는가?"** 있으면 로그(DB 오류·손상된 localStorage 등), 없으면 주석 달고 삼킴(의도된 분기).
+- **로그 라벨은 실제 함수명이어야 한다**. 라벨이 틀리면 디버깅 때 엉뚱한 함수로 사람을 보낸다. 특히 **중첩 함수·객체 메서드 안**에서 바깥 함수명을 그대로 쓰기 쉽다(실제 사례: `get(uid)` 안의 catch가 `[_migrate]`로 잘못 표기, 커밋 019bd7c에서 수정).
 - ⚠️ **`try/catch`만으론 부족하다 (2026-07-17 실측 정정)**: **supabase-js는 쿼리 오류에 예외를 던지지 않고** `{ data: null, error }`를 반환한다. 그래서 `const { data } = await db.from(...)` 형태면 **컬럼 오타·RLS 차단·테이블 없음이 전부 조용히 빈 배열**이 되고 `catch`도 `console.error`도 안 울린다(= 가장 흔한 실패가 감지 불가). **`const { data, error }`로 error를 받아 `if (error) console.error('[함수명]', error)`** 할 것. try/catch는 네트워크 장애·JS 예외 전용. 상세는 [docs/js-api.md](docs/js-api.md) "CottageDB 에러 처리 규약".
 - **반환 계약은 유지**한다 — 실패 시 `[]`/`null` fallback을 에러 throw로 바꾸면 빈 배열을 전제로 렌더하는 호출부가 깨진다. 바꾸는 건 **관측(로그)이지 동작이 아니다**.
 - **reason 정확성**: 구체적 실패(not_found, invalid 등)를 일반적 실패(max_priority 등)보다 먼저 검사한다. 순서가 뒤바뀌면 잘못된 reason이 반환되어 UI 분기가 오동작한다.
