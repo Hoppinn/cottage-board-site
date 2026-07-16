@@ -10,6 +10,8 @@
     'my-board': '내 보드', 'my-board-growth': '내 보드 > 수집보드',
     'my-board-taste': '내 보드 > 취향보드', 'my-board-records': '내 보드 > 기록보드',
     'my-board-voucher': '내 보드 > 교환권', 'my-board-notif': '내 보드 > 소식',
+    'my-board-usage': '내 보드 > 함께한 시간', 'my-board-meeting': '내 보드 > 모임보드',
+    'other-board': '다른 회원 보드',
   };
 
   // pathname 키 (page_sessions.page 컬럼에 저장될 값) — script.js 세션 트래커

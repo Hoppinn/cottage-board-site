@@ -2498,6 +2498,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
 
       } else if (type === 'usage') {
+        _trackPvOnce('my-board-usage');
         _openSubSheet('함께한 시간', _usageInnerHtml, _bindUsageSubsheet);
 
       } else if (type === 'meeting') {
