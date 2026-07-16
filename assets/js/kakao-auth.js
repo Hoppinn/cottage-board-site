@@ -545,6 +545,22 @@ function _bindActivityTogglesAndMore(subBody) {
   });
 }
 
+// ── '함께한 시간' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
+// 바깥 스코프 캡처 없음 → ctx 불필요. 본문은 원본 들여쓰기 보존(diff로 이동 검증).
+function _bindUsageSubsheet(subBody) {
+          // 통계 기본 펼침
+          subBody.querySelector('.profile-panel-stats')?.classList.remove('is-collapsed');
+          const _sa = subBody.querySelector('.profile-stats-toggle .profile-toggle-arrow');
+          if (_sa) _sa.textContent = '▴';
+          subBody.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
+            const list = subBody.querySelector('.profile-panel-stats');
+            const arrow = this.querySelector('.profile-toggle-arrow');
+            const collapsed = list.classList.toggle('is-collapsed');
+            arrow.textContent = collapsed ? '▾' : '▴';
+          });
+          _bindActivityTogglesAndMore(subBody);
+}
+
 async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // Phase C: userId 파라미터화 + 읽기전용 모드. readOnly면 대상 유저(userId)의 공개 보드를
   // 편집 컨트롤 없이 표시(비공개 섹션=알림·교환권·함께한 시간 제외). 편집 컨트롤 HTML은 _ro()로 생략.
@@ -1923,19 +1939,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
 
       } else if (type === 'usage') {
-        _openSubSheet('함께한 시간', _usageInnerHtml, subBody => {
-          // 통계 기본 펼침
-          subBody.querySelector('.profile-panel-stats')?.classList.remove('is-collapsed');
-          const _sa = subBody.querySelector('.profile-stats-toggle .profile-toggle-arrow');
-          if (_sa) _sa.textContent = '▴';
-          subBody.querySelector('.profile-stats-toggle')?.addEventListener('click', function() {
-            const list = subBody.querySelector('.profile-panel-stats');
-            const arrow = this.querySelector('.profile-toggle-arrow');
-            const collapsed = list.classList.toggle('is-collapsed');
-            arrow.textContent = collapsed ? '▾' : '▴';
-          });
-          _bindActivityTogglesAndMore(subBody);
-        }); // end usage afterRender
+        _openSubSheet('함께한 시간', _usageInnerHtml, _bindUsageSubsheet);
 
       } else if (type === 'meeting') {
         _trackPvOnce('my-board-meeting');
