@@ -61,7 +61,7 @@ window._cottageSess = (function () {
     get(uid) {
       if (!localStorage.getItem(`cottage_sess_${uid}`)) _migrate(uid);
       try { return JSON.parse(localStorage.getItem(`cottage_sess_${uid}`) || '{}'); }
-      catch (err) { console.error('[_migrate]', err); return {}; }
+      catch (err) { console.error('[_cottageSess.get]', err); return {}; }
     },
     set(uid, data) {
       localStorage.setItem(`cottage_sess_${uid}`, JSON.stringify(data));
@@ -1676,7 +1676,9 @@ window._cottageSess = (function () {
         try {
           const parsed = JSON.parse(r.photo_url);
           return s + (Array.isArray(parsed) ? parsed.length : 1);
-        } catch (err) { console.error('[getUserPhotoCount]', err);
+        } catch (_) {
+          // 사진 1장은 JSON 배열이 아니라 단일 URL 문자열로 저장된다 → parse 실패가 정상 경로.
+          // 여기에 로그를 달면 정상 데이터마다 가짜 에러가 찍힌다(로그 아님, 의도된 분기).
           return s + (r.photo_url.trim() ? 1 : 0);
         }
       }, 0);
