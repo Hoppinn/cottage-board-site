@@ -2351,6 +2351,11 @@ async function initPlayWidget(gameKey) {
 
   widget.innerHTML = html;
 
+  _bindPlayWidgetEvents(widget, listId, allRecords);
+}
+
+// initPlayWidget이 innerHTML을 넣은 뒤의 이벤트 바인딩 (더보기 토글 · ✏️ 수정 · ⋯ 메뉴)
+function _bindPlayWidgetEvents(widget, listId, allRecords) {
   const moreBtn = document.getElementById(`${listId}-more`);
   if (moreBtn) {
     const restEl = document.getElementById(`${listId}-rest`);
