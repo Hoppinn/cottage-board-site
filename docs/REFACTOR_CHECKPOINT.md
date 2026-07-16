@@ -311,9 +311,9 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
-| DD1 | **P1** | 과대함수 | `openDateMeetingModal` 281줄(796~1077) · `openDateScheduleModal` 179줄(465~644) · `buildBarsInCard` 100줄 | 렌더 + 이벤트 바인딩 + DB 조회 혼합. |
-| DD2 | — | (긍정) | **IIFE 래핑 + CSS 자기주입 + window 노출 9개(전부 의도된 공개 API)** | 전역 오염 없음. game-sheet.js와 정반대 — 신규 파일 작성 시 이 구조가 모범. |
-| DD3 | **P2** | 중복 코드 | `esc`(364)·`fmtDate`(368) 로컬 | esc는 escH 계열 사본, fmtDate는 IP3 파편화의 일부. |
+| ~~DD1~~ | ~~**P1**~~ | ~~과대함수~~ | ~~`openDateMeetingModal` 281줄 · `openDateScheduleModal` 179줄 · `buildBarsInCard` 100줄~~ | **✅ 코드 완료 (R12, 2026-07-16, 스모크 대기)** — 실측은 273/174/103줄(감사 표기와 소폭 드리프트). `openDateMeetingModal` 273→**58**(추출 4), `openDateScheduleModal` 174→**67**(추출 3). **`buildBarsInCard`는 사용자 승인 하에 유지** — 아래 R12 결과 메모 참조. |
+| DD2 | — | (긍정) | **IIFE 래핑 + CSS 자기주입 + window 노출 9개(전부 의도된 공개 API)** | 전역 오염 없음. game-sheet.js와 정반대 — 신규 파일 작성 시 이 구조가 모범. R12 후에도 노출 9개 불변. |
+| ~~DD3~~ | ~~**P2**~~ | ~~중복 코드~~ | ~~`esc`(364)·`fmtDate`(368) 로컬~~ | **✅ 종결/보류로 닫음 (R12, 2026-07-16, 코드변경 없음)** — `fmtDate`는 **중복이 아님**(IP3가 짝지은 index-page `toDateStr(d: Date)→'YYYY-MM-DD'`와 day-detail `fmtDate(ds: string)→'7/16(목)'`는 입력·출력·용도가 전부 다른 별개 함수. supabase-client:1747의 `toDateStr`도 played_at fallback용 로컬로 무관) → 통합 대상 아님. `esc`는 **GS5와 동일 항목이라 보류** — 단독 처리는 5사본 중 1개만 없애는 부분해결인 데다, **club-schedule.html이 day-detail.js(664)를 supabase-client.js(668)보다 먼저 로드**해 IIFE 실행 시점에 `window.escH`가 undefined다(index.html은 554→561로 반대 순서). 스냅샷(`const esc = window.escH`) 방식은 club-schedule에서 즉시 파손 → **로드 순서 통일이 선행 조건**. |
 
 ### 교차 파일 종합 (기존 등록분 + Phase 3 확장)
 
@@ -350,7 +350,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 11b | **R11b** | GS6 — 나머지 과대함수 분리 | **Opus xhigh** | 권장 | ✅ **완료 (2026-07-16, 커밋 3027c24~4fafaa3 + 스모크 통과)** — `initPlayWidget` 146→**99**(이벤트 바인딩 50줄 분리) · `getOrCreatePlayModal` 110→**19**(정적HTML/이벤트/참여자입력 3분할) · `openGameRecordSheet` 97→**77**(아래 중복 제거). **`onSubmitPlayModal`(82) 미분할 — 판단**: `if(editId)/else` 두 갈래로 이미 명확하고, 쪼개려면 폼 값 9개를 DTO로 묶어 접두사를 붙여야 해 diff 검증이 무력화됨(R11a의 vm 기각과 동일 사유). 과도분리 금지 원칙 적용. **`buildRecordItemHtml`(40, initPlayWidget 내부) 보류 → R11c**: 로컬 `escH`(2279)를 캡처하는데, IIFE 없는 현 상태에서 이를 모듈 스코프로 올리면 `function escH`가 곧 `window.escH`를 **덮어써 타 파일 파손**(GS5의 `"` 이스케이프 차이 경고가 이것). IIFE 적용 후 안전. |
 | — | **[신규] GS8** | **중복 마크업** — `openGameRecordSheet`가 `openGameSheet`의 좋아요/궁금해요 블록 20줄을 들여쓰기까지 바이트 동일하게 복사 보유 | — | — | ✅ **해결됨 (R11b, 2026-07-16)** — R11a에서 뽑아둔 `_buildSheetReactionsHtml` 재사용으로 1벌화. 감사에 없던 항목(R11b 진행 중 발견). 함수 안의 HTML 주석은 원래 호출부로 이동시켜 양쪽 출력 무변화 유지(그냥 호출하면 기록시트에 없던 주석 노드가 생김). |
 | 11c | **R11c** | GS2 — 파일 IIFE화 + 선별 노출. **단독 세션 필수** | **Opus xhigh** | **필요, 필수** | ✅ **완료 (2026-07-16, 커밋 7d9fd24·d4d1ac1, 브라우저 클릭 스모크 통과)**. 파일 전체 IIFE화: 최상위 함수 99개 중 **39개(외부참조16 ∪ 자기onclick27)만 노출·60개 은닉**. 노출 39는 기계적 도출(external∪onclick)로 사전조사 39와 **정확히 일치**, 다중호출 onclick 함정(`_openCoverModal`·`_openOrganizerLightbox`) KEEP 포함 교차검증. **사전조사가 함수만 셌기에 놓친 크로스파일 갭 3건 발견·처리**(아래 R11c 결과 메모). buildRecordItemHtml 모듈 스코프 추출(escH 자기내부화, 본문 바이트 동일 확인). node --check·노출 정합성 검증 통과. |
-| 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | **필요** | ⏳ 대기 |
+| 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | 완료(플랜 승인 2026-07-16) | ✅ **코드 완료 (2026-07-16, 커밋 54b6b35·da14297) — ⏳ 브라우저 스모크 대기**. `openDateMeetingModal` 273→**58**(`_initRouletteWidget` 154줄 외 3건) · `openDateScheduleModal` 174→**67**(추출 3건). **`buildBarsInCard`는 유지**(사용자 승인) — 이미 이름 붙은 nested 4개의 컨테이너라 R11b `onSubmitPlayModal` 선례 적용. DD3은 코드변경 없이 종결(fmtDate)/보류(esc). window 노출 9개 불변 → js-api.md 무변경. |
 | 13 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 단일함수, 서브시트별로 여러 세션 재분할 가능성 있음). **+ 크로스보드 stale 버그 동반 해결(2026-07-16)**: 취향보드(`likedGames`)와 모임보드(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 각각 따로 불러와 **별도 배열 2개**로 들고 있어, 한쪽에서 게임 추가/삭제해도 반대 보드엔 새로고침 전까지 미반영(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). 방향 A(진입 시 DB 재조회 = 단일 소스)로 서브시트/박스 데이터 로딩을 재설계 → 현재 취향보드 스냅샷 임시방편(커밋 11e10b8)도 이걸로 대체. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 
 **A1 재정렬 결과 (2026-07-15)**: game-sheet.js가 파일 단위로는 최대 부채지만 onclick 핸들러 다수라 clean IIFE화가 어려워, R2~R6(안전·빠른 항목)을 앞당길 이유가 없다고 판단 — 기존 순서 유지하고 신규 R11(game-sheet)·R12(day-detail)을 R9와 R10(KA1) 사이에 삽입. game-sheet.js(R11)와 openProfilePanel(R10=최후)의 선후는 R2~R9 진행하며 체감 후 최종 확정.
@@ -413,3 +413,21 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 **buildRecordItemHtml 추출**: 캡처 변수명=파라미터명 동일 + 본문 template literal의 HTML 공백 보존 위해 **body 들여쓰기를 원본 그대로** 둠 → `git` 본문 diff 0줄로 출력 바이트 동일 확인. escH는 모듈 신설 대신 함수 내부로 이동(escH 사본 수 불변, GS5는 여전히 별건).
 
 **여전히 별건(미해결)**: GS5(escH 5사본 통합 — `"` 이스케이프 차이 선행 정리 필요) · GS7(난이도 헬퍼 전역결합 — 어차피 전역 유지 대상이라 IIFE로 안 풀림, 헬퍼 별도 파일 분리 필요=신규 결정). **IIFE화로 이 둘이 해결됐다고 착각 금지.**
+
+---
+
+## R12 결과 메모 (2026-07-16 — ✅ 코드 완료, ⏳ 브라우저 스모크 대기)
+
+**커밋**: 54b6b35(openDateMeetingModal 273→58) · da14297(openDateScheduleModal 174→67). 두 원자 커밋 분리 — 스모크 회귀 시 어느 모달인지 이분 탐색.
+
+**⚠️ 교훈 — 함수 추출 시 "바깥 스코프 변수를 인자 없이 참조"는 `node --check`가 못 잡는다**: R11c 교훈(사전조사가 함수만 세면 크로스파일 *변수* 의존을 놓친다)의 **함수 내부판**. 실제로 `_buildMeetingStatsHtml(votes, uniqueVotes)`로 뽑았는데 본문이 `voteGames.forEach`(통계 칩의 공통게임 집계)를 쓰고 있어 인자에서 누락 → **모임 모달을 열면 즉시 `ReferenceError`**. `node --check`는 문법만 보므로 통과했고, diff 검증(본문 바이트 동일)도 이동만 보므로 통과했다 — **두 검증 다 이 유형을 못 잡는다.** 같은 유형이 `_buildSchedStatsHtml`에도 있었음(voteGames·myGameKeys).
+
+→ **대응(재현 가능)**: 추출한 헬퍼별로 `(바깥 함수 지역변수 목록) − (헬퍼 파라미터 ∪ 헬퍼 내부 선언)` 을 정규식으로 계산해 0인지 확인. 파라미터 파싱 시 **구조분해(`{a,b}`)와 중첩 화살표 자체 파라미터**를 안 세면 오탐이 난다(실제로 `statChip = (icon,label,count)=>`의 `count`가 오탐). **검사기 자체를 음성 대조군으로 검증할 것** — 알려진 누수를 일부러 만들어 넣고 잡히는지 확인(안 하면 "전부 통과"가 검사기가 아무것도 안 보는 것과 구별 안 됨). **R10(KA1 1972줄)은 지역변수가 훨씬 많아 이 검사 없이는 위험** — 스크립트는 세션 스크래치패드에만 있으므로 R10 착수 시 재작성 필요(상설화하려면 `scripts/`에 신규 파일 = 별도 승인).
+
+**`buildBarsInCard`(103줄) 유지 — 사용자 승인(2026-07-16)**: 감사가 DD1에 "100줄 과대함수"로 올렸으나 실측 결과 **이름 붙은 nested 함수 4개(`resolveGameAbbr`·`gameAbbrs`·`barRow`·`buildGameTags`, 각 12~32줄) + 본체 8줄**의 컨테이너로, 이미 내부 경계가 있다. 모듈 스코프로 올리려면 `voteGames`·`myVote`를 파라미터로 스레딩해야 해 **인자 목록과 호출부만 길어지고 가독성 이득이 없음**(`.map(barRow)` → `.map(v => barRow(v, voteGames, myVote))`). R11b `onSubmitPlayModal`(과도분리 금지) 선례 적용. 함께 제안했던 `resolveGameAbbr`(캡처 0) 단독 hoist도 "반쯤 나뉜 모양"이 되어 생략. **재방문 조건**: 이 파일을 실제로 만지다 nested 경계가 불편해지면 그때.
+
+**발견(보고만, REFACTOR MODE)**: `openDateMeetingModal(voteDate, votes, voteGames, opts = {})`의 **`opts`가 본문에서 전혀 사용되지 않음**(dead parameter). 공개 API 시그니처라 보존했고 호출부(index-page.js)도 무수정. 제거 판단은 별건.
+
+**추출 목록**: `_initRouletteWidget(el, rouletteGames)`(154줄 — 모임 모달 크기의 절반 이상, 캡처가 el·rouletteGames 2개뿐이라 그대로 분리) · `_buildRouletteGames` · `_buildMeetingStatsHtml` · `_buildParticipantsHtml` / `_bindSchedEditors`(61줄, `_schedDirty` 클로저 대입 → `onDirty` 콜백으로 승격 = R9의 `resetRows` 전달 방식) · `_buildSchedGameSection`(`isMine` 인자 승격) · `_buildSchedStatsHtml` + `COND_LABELS` 모듈 상수화.
+
+**방식**: 이동 본문은 **들여쓰기까지 원본 그대로** 유지(R11c 계승) → diff에서 내용이 바뀐 줄이 호출부·선언부뿐임을 확인해 behavior-preserving 입증. 특히 `_initRouletteWidget`·`_buildSchedStatsHtml` 본문의 template literal 바이트 보존이 목적(들여쓰기 변경 = HTML 문자열 변경).
