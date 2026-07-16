@@ -1384,9 +1384,10 @@ function _bindMeetingSubsheet(subBody, ctx) {
               const thumb = gd?.images?.thumbnail ? `<img class="taste-game-thumb" src="${escH(gd.images.thumbnail)}" alt="">` : `<span class="taste-game-thumb-empty"></span>`;
               const clickable = g.game_id ? ' taste-game-item--clickable' : '';
               const gidAttr = g.game_id ? ` data-game-id="${escH(String(g.game_id))}"` : '';
+              const cnAttr = g.custom_name ? ` data-custom-name="${escH(g.custom_name)}"` : '';
               const ruleKey = g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`;
               const ruleBadge = _ruleSet.has(ruleKey) ? '<span class="mb-rule-badge">📖</span>' : '';
-              return `<div class="taste-game-item${clickable}"${gidAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${ruleBadge}</div>`;
+              return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${ruleBadge}${_ro('<button class="taste-game-del" type="button" title="삭제">✕</button>')}</div>`;
             };
             const renderList = () => {
               listEl.innerHTML = games.length ? games.map(_boxItemHtml).join('') : '<p class="taste-game-empty">아직 없어요</p>';
@@ -1395,6 +1396,22 @@ function _bindMeetingSubsheet(subBody, ctx) {
               listEl.querySelectorAll('.taste-game-item--clickable .taste-game-thumb, .taste-game-item--clickable .taste-game-thumb-empty').forEach(th => th.addEventListener('click', () => {
                 const gid = th.closest('.taste-game-item')?.dataset.gameId;
                 if (gid) { close(); window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
+              }));
+              // ✕ 삭제 — _openBoxAddSearch onAdd의 역순(DB → 로컬 배열 → srcSet → 전역 통보 → 재렌더).
+              // srcSet.delete를 빼면 이번 주 리스트의 ❤️/👀 마커가 남는다(_emitLikesChanged는 이 Set을 안 고침).
+              listEl.querySelectorAll('.taste-game-del').forEach(btn => btn.addEventListener('click', async () => {
+                const item = btn.closest('.taste-game-item');
+                const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
+                if (!confirm(`'${gameName}'을(를) 목록에서 뺄까요?`)) return;
+                const gameId = item?.dataset.gameId || null;
+                const customName = item?.dataset.customName || null;
+                await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
+                const idx = games.findIndex(g => (gameId ? String(g.game_id) === String(gameId) : (!g.game_id && g.custom_name === customName)));
+                if (idx >= 0) games.splice(idx, 1);
+                if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).delete(String(gameId));
+                _emitLikesChanged(table, gameId, false);
+                renderList();
+                _renderWeekList(listType);
               }));
             };
             renderList();
