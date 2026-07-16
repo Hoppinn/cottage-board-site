@@ -311,8 +311,9 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
-| ~~DD1~~ | ~~**P1**~~ | ~~과대함수~~ | ~~`openDateMeetingModal` 281줄 · `openDateScheduleModal` 179줄 · `buildBarsInCard` 100줄~~ | **✅ 코드 완료 (R12, 2026-07-16, 스모크 대기)** — 실측은 273/174/103줄(감사 표기와 소폭 드리프트). `openDateMeetingModal` 273→**58**(추출 4), `openDateScheduleModal` 174→**67**(추출 3). **`buildBarsInCard`는 사용자 승인 하에 유지** — 아래 R12 결과 메모 참조. |
+| ~~DD1~~ | ~~**P1**~~ | ~~과대함수~~ | ~~`openDateMeetingModal` 281줄 · `openDateScheduleModal` 179줄 · `buildBarsInCard` 100줄~~ | **✅ 완료 (R12, 2026-07-16, 스모크 통과)** — 실측은 273/174/103줄(감사 표기와 소폭 드리프트). `openDateMeetingModal` 273→**58**(추출 4), `openDateScheduleModal` 174→**67**(추출 3). **`buildBarsInCard`는 사용자 승인 하에 유지** — 아래 R12 결과 메모 참조. |
 | DD2 | — | (긍정) | **IIFE 래핑 + CSS 자기주입 + window 노출 9개(전부 의도된 공개 API)** | 전역 오염 없음. game-sheet.js와 정반대 — 신규 파일 작성 시 이 구조가 모범. R12 후에도 노출 9개 불변. |
+| **DD4** | **P2** | 미사용 파라미터 | **[R12 신규 발견]** `openDateMeetingModal(voteDate, votes, voteGames, opts = {})`의 **`opts`가 본문에서 전혀 사용되지 않음** | 감사에 없던 항목(R12 진행 중 발견). REFACTOR MODE라 시그니처 보존, 호출부(index-page.js)도 무수정. 제거하려면 공개 API 시그니처 변경이라 별건 — **R번호 미배정**. 참고: 같은 파일 `openDateScheduleModal`의 `opts`는 `opts?.onDirtyClosed?.()`로 실제 사용 중이므로 혼동 주의. |
 | ~~DD3~~ | ~~**P2**~~ | ~~중복 코드~~ | ~~`esc`(364)·`fmtDate`(368) 로컬~~ | **✅ 종결/보류로 닫음 (R12, 2026-07-16, 코드변경 없음)** — `fmtDate`는 **중복이 아님**(IP3가 짝지은 index-page `toDateStr(d: Date)→'YYYY-MM-DD'`와 day-detail `fmtDate(ds: string)→'7/16(목)'`는 입력·출력·용도가 전부 다른 별개 함수. supabase-client:1747의 `toDateStr`도 played_at fallback용 로컬로 무관) → 통합 대상 아님. `esc`는 **GS5와 동일 항목이라 보류** — 단독 처리는 5사본 중 1개만 없애는 부분해결인 데다, **club-schedule.html이 day-detail.js(664)를 supabase-client.js(668)보다 먼저 로드**해 IIFE 실행 시점에 `window.escH`가 undefined다(index.html은 554→561로 반대 순서). 스냅샷(`const esc = window.escH`) 방식은 club-schedule에서 즉시 파손 → **로드 순서 통일이 선행 조건**. |
 
 ### 교차 파일 종합 (기존 등록분 + Phase 3 확장)
@@ -350,12 +351,14 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 11b | **R11b** | GS6 — 나머지 과대함수 분리 | **Opus xhigh** | 권장 | ✅ **완료 (2026-07-16, 커밋 3027c24~4fafaa3 + 스모크 통과)** — `initPlayWidget` 146→**99**(이벤트 바인딩 50줄 분리) · `getOrCreatePlayModal` 110→**19**(정적HTML/이벤트/참여자입력 3분할) · `openGameRecordSheet` 97→**77**(아래 중복 제거). **`onSubmitPlayModal`(82) 미분할 — 판단**: `if(editId)/else` 두 갈래로 이미 명확하고, 쪼개려면 폼 값 9개를 DTO로 묶어 접두사를 붙여야 해 diff 검증이 무력화됨(R11a의 vm 기각과 동일 사유). 과도분리 금지 원칙 적용. **`buildRecordItemHtml`(40, initPlayWidget 내부) 보류 → R11c**: 로컬 `escH`(2279)를 캡처하는데, IIFE 없는 현 상태에서 이를 모듈 스코프로 올리면 `function escH`가 곧 `window.escH`를 **덮어써 타 파일 파손**(GS5의 `"` 이스케이프 차이 경고가 이것). IIFE 적용 후 안전. |
 | — | **[신규] GS8** | **중복 마크업** — `openGameRecordSheet`가 `openGameSheet`의 좋아요/궁금해요 블록 20줄을 들여쓰기까지 바이트 동일하게 복사 보유 | — | — | ✅ **해결됨 (R11b, 2026-07-16)** — R11a에서 뽑아둔 `_buildSheetReactionsHtml` 재사용으로 1벌화. 감사에 없던 항목(R11b 진행 중 발견). 함수 안의 HTML 주석은 원래 호출부로 이동시켜 양쪽 출력 무변화 유지(그냥 호출하면 기록시트에 없던 주석 노드가 생김). |
 | 11c | **R11c** | GS2 — 파일 IIFE화 + 선별 노출. **단독 세션 필수** | **Opus xhigh** | **필요, 필수** | ✅ **완료 (2026-07-16, 커밋 7d9fd24·d4d1ac1, 브라우저 클릭 스모크 통과)**. 파일 전체 IIFE화: 최상위 함수 99개 중 **39개(외부참조16 ∪ 자기onclick27)만 노출·60개 은닉**. 노출 39는 기계적 도출(external∪onclick)로 사전조사 39와 **정확히 일치**, 다중호출 onclick 함정(`_openCoverModal`·`_openOrganizerLightbox`) KEEP 포함 교차검증. **사전조사가 함수만 셌기에 놓친 크로스파일 갭 3건 발견·처리**(아래 R11c 결과 메모). buildRecordItemHtml 모듈 스코프 추출(escH 자기내부화, 본문 바이트 동일 확인). node --check·노출 정합성 검증 통과. |
-| 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | 완료(플랜 승인 2026-07-16) | ✅ **코드 완료 (2026-07-16, 커밋 54b6b35·da14297) — ⏳ 브라우저 스모크 대기**. `openDateMeetingModal` 273→**58**(`_initRouletteWidget` 154줄 외 3건) · `openDateScheduleModal` 174→**67**(추출 3건). **`buildBarsInCard`는 유지**(사용자 승인) — 이미 이름 붙은 nested 4개의 컨테이너라 R11b `onSubmitPlayModal` 선례 적용. DD3은 코드변경 없이 종결(fmtDate)/보류(esc). window 노출 9개 불변 → js-api.md 무변경. |
+| 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | 완료(플랜 승인 2026-07-16) | ✅ **완료 (2026-07-16, 커밋 54b6b35·da14297, 브라우저 스모크 통과)**. `openDateMeetingModal` 273→**58**(`_initRouletteWidget` 154줄 외 3건) · `openDateScheduleModal` 174→**67**(추출 3건). **`buildBarsInCard`는 유지**(사용자 승인) — 이미 이름 붙은 nested 4개의 컨테이너라 R11b `onSubmitPlayModal` 선례 적용. DD3은 코드변경 없이 종결(fmtDate)/보류(esc). window 노출 9개 불변 → js-api.md 무변경. |
 | 13 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 단일함수, 서브시트별로 여러 세션 재분할 가능성 있음). **+ 크로스보드 stale 버그 동반 해결(2026-07-16)**: 취향보드(`likedGames`)와 모임보드(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 각각 따로 불러와 **별도 배열 2개**로 들고 있어, 한쪽에서 게임 추가/삭제해도 반대 보드엔 새로고침 전까지 미반영(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). 방향 A(진입 시 DB 재조회 = 단일 소스)로 서브시트/박스 데이터 로딩을 재설계 → 현재 취향보드 스냅샷 임시방편(커밋 11e10b8)도 이걸로 대체. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 
 **A1 재정렬 결과 (2026-07-15)**: game-sheet.js가 파일 단위로는 최대 부채지만 onclick 핸들러 다수라 clean IIFE화가 어려워, R2~R6(안전·빠른 항목)을 앞당길 이유가 없다고 판단 — 기존 순서 유지하고 신규 R11(game-sheet)·R12(day-detail)을 R9와 R10(KA1) 사이에 삽입. game-sheet.js(R11)와 openProfilePanel(R10=최후)의 선후는 R2~R9 진행하며 체감 후 최종 확정.
 
-~~**감사 자체가 안 된 파일**: game-sheet.js·index-page.js·day-detail.js~~ → **✅ 해소됨 (A1 Phase 3 감사, 2026-07-15)**. 세 파일 모두 감사 완료로 위 "Phase 3" 절에 GS1~7·IP1~3·DD1~3 기록됨. 그 결과로 R11(game-sheet)·R12(day-detail)이 계획에 편입됨. index-page(IP1~3)는 아직 R번호 미배정 — 잔여 미배정 항목은 GS4(`getGameKey` 이름 충돌)·IP1~3.
+~~**감사 자체가 안 된 파일**: game-sheet.js·index-page.js·day-detail.js~~ → **✅ 해소됨 (A1 Phase 3 감사, 2026-07-15)**. 세 파일 모두 감사 완료로 위 "Phase 3" 절에 GS1~7·IP1~3·DD1~3 기록됨. 그 결과로 R11(game-sheet)·R12(day-detail)이 계획에 편입됨(**둘 다 2026-07-16 완료**).
+
+**잔여 미배정 항목 (R10 종료 후 처리 대상)**: GS4(`getGameKey` 이름 충돌) · GS5(escH 5사본 통합 — `"` 이스케이프 차이 선행 정리 필요) · GS7(난이도 헬퍼 전역결합 — 헬퍼 별도 파일 분리 = 신규 결정 필요) · **DD3-esc**(GS5와 동일 항목 + **로드 순서 통일 선행 필요**: club-schedule.html이 day-detail.js를 supabase-client.js보다 먼저 로드) · **DD4**(`openDateMeetingModal`의 미사용 `opts`) · IP1~3(index-page.js 과대함수·구조 혼재·날짜헬퍼 파편화).
 
 **세션 전환 규칙**: CLAUDE.md 모델전환 원칙대로, 매 항목 시작 직전 이 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청. 그린/옐로 항목은 Plan 없이 바로 진행, Red 중 Plan 표시된 항목(R6~R10)은 착수 전 Plan 작성→승인 필수.
 
@@ -416,9 +419,9 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 ---
 
-## R12 결과 메모 (2026-07-16 — ✅ 코드 완료, ⏳ 브라우저 스모크 대기)
+## R12 결과 메모 (2026-07-16 종료 — ✅ 완료, 스모크 통과)
 
-**커밋**: 54b6b35(openDateMeetingModal 273→58) · da14297(openDateScheduleModal 174→67). 두 원자 커밋 분리 — 스모크 회귀 시 어느 모달인지 이분 탐색.
+**커밋**: 54b6b35(openDateMeetingModal 273→58) · da14297(openDateScheduleModal 174→67). 두 원자 커밋 분리 — 스모크 회귀 시 어느 모달인지 이분 탐색(회귀 없어 미사용). **브라우저 스모크 통과 확인(사용자, 2026-07-16)** — 홈 모임모달·통계칩·참여자목록·룰렛(열기/칩토글/게임추가/돌리기), 플래너 내일정모달·통계칩·⭐ 대표지정·인원조건 select→닫기 후 주간뷰 반영(`onDirty`→`onDirtyClosed`, 회귀 1순위로 지목했던 경로) 전 항목 정상.
 
 **⚠️ 교훈 — 함수 추출 시 "바깥 스코프 변수를 인자 없이 참조"는 `node --check`가 못 잡는다**: R11c 교훈(사전조사가 함수만 세면 크로스파일 *변수* 의존을 놓친다)의 **함수 내부판**. 실제로 `_buildMeetingStatsHtml(votes, uniqueVotes)`로 뽑았는데 본문이 `voteGames.forEach`(통계 칩의 공통게임 집계)를 쓰고 있어 인자에서 누락 → **모임 모달을 열면 즉시 `ReferenceError`**. `node --check`는 문법만 보므로 통과했고, diff 검증(본문 바이트 동일)도 이동만 보므로 통과했다 — **두 검증 다 이 유형을 못 잡는다.** 같은 유형이 `_buildSchedStatsHtml`에도 있었음(voteGames·myGameKeys).
 

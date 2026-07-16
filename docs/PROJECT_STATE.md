@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-16 (R12 코드 ✅ 완료 — day-detail.js 과대함수 분리: openDateMeetingModal 273→58, openDateScheduleModal 174→67, 커밋 54b6b35·da14297. **⏳ 브라우저 스모크 대기**. buildBarsInCard는 유지 확정(사용자 승인), DD3은 코드변경 없이 종결/보류. 다음 = R10)
+최종 갱신: 2026-07-16 (R12 ✅ 완료 — day-detail.js 과대함수 분리: openDateMeetingModal 273→58, openDateScheduleModal 174→67, 커밋 54b6b35·da14297, **스모크 통과**. buildBarsInCard는 유지 확정(사용자 승인), DD3은 코드변경 없이 종결/보류. 다음 = R10)
 
 ---
 
@@ -10,7 +10,7 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 대형 파일 3개(game-sheet.js·index-page.js·day-detail.js)는 **A1 Phase 3 감사 완료(2026-07-15)** — 결과는 REFACTOR_CHECKPOINT.md "Phase 3" 절(GS1~7·IP1~3·DD1~3). 이 감사로 R11(game-sheet)·R12(day-detail) 편입. index-page(IP1~3)·GS4는 R번호 미배정 상태.
 
-**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 코드 ✅ 완료 / ⏳ 스모크 대기**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297. `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **다음 = R10**(KA1).
+**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 ✅ 완료**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297, **스모크 통과**(홈 모임모달·룰렛 / 플래너 내일정모달·⭐·인원조건→주간뷰 반영 전 항목 정상). `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **다음 = R10**(KA1).
 
 **남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4의 "사진첨부 후 새로고침해야 표시"**·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
 
@@ -20,12 +20,14 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - ⏭️ **[버그2-b → R10 이월]** **크로스보드 stale**: 취향보드(`likedGames`)와 모임보드 박스(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 **각각 따로 불러와 별도 배열 2개**로 보유 → 한쪽에서 추가/삭제해도 반대 보드엔 **새로고침 전까지 미반영**(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). `cottage-likes-changed` 이벤트는 열린 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열 못 건드림). **해결 방향 A(진입 시 DB 재조회=단일 소스)로 R10(KA1) 리팩토링과 함께 처리 확정** — 그때 스냅샷 임시방편도 대체. 사용자 승인(2026-07-16): R10 맨 마지막이라 그때까지 크로스보드 stale 잔존 감수.
 - ⏭️ **[신규기능 3-1 → 백로그 이월]** 알림→읽기전용 보드→뒤로가기 복귀. 신규 네비게이션 스택이 필요하고 `openProfilePanel`(KA1) 한복판이라, R10(KA1 리팩토링)과 함께/후에 처리로 이월(§3 "타인 보드 내부 네비게이션 통일"에 병합 기록).
 
-**다음 세션 시작점**: **R12 브라우저 스모크**(아래) 확인 후 → **R10**(KA1 `openProfilePanel` 1972줄 + 크로스보드 stale 동반, Opus xhigh, Plan 필수). R12 코드 ✅ 완료(커밋 54b6b35·da14297). 버그2-c도 코드 완료·스모크만 남음(§2).
+**다음 세션 시작점**: **R10 = 리팩토링 계획의 마지막·최고위험 항목. 새 세션 단독 권장**(2026-07-16 판단 — R12까지 전부 스모크 통과로 닫혀 이월 없음 = 깨끗한 인수인계 지점).
 
-**R12 스모크 항목 (미완, 다음 세션 최우선)**:
-- **index.html** — 홈 "이번주 모임 미리보기" 카드 클릭 → 모달 열림 / 통계 칩(참여 인원·최대 겹침·공통 게임) 표시 / 참여자별 보기 목록·썸네일·인원조건 태그 / **룰렛**(want 게임 2종 이상인 날짜): 열기·칩 토글·게임 추가(자동완성)·돌리기·← 목록으로
-- **club-schedule.html** — 주간뷰 막대 클릭 → 내 일정 모달 / 통계 칩 3종 / ⭐ 대표지정 토글(3개째 시도 시 "2개까지" 안내) / 인원조건 select 변경 → **닫은 뒤 주간뷰에 반영되는지**(`onDirty`→`onDirtyClosed` 경로 — R12에서 콜백으로 바뀐 부분이라 여기가 회귀 1순위)
-- 회귀 시 이분 탐색: 모임 모달=54b6b35, 내 일정 모달=da14297
+**R10 착수 전 확인 사항**:
+- 범위가 3개 병합이라 **1세션에 안 끝날 가능성 높음** → 착수 시 서브시트 단위로 재분할 여부 먼저 판단: ①KA1 `openProfilePanel`(1,972줄) 분리 ②크로스보드 stale 해결(방향 A=진입 시 DB 재조회 단일 소스, 취향보드 스냅샷 임시방편 11e10b8 대체) ③네비게이션 스택(§3-1 알림 복귀 + §3-2 좋아요 토스트→게임시트 복귀, `openProfilePanel(subsheet, {backTo:{...}})` 형태로 일반화)
+- **모델: Opus xhigh 고정 + Plan 필수**(REFACTOR_CHECKPOINT 처리 계획 표)
+- **R12 교훈 필수 적용**: 지역변수가 KA1은 R12와 비교가 안 되게 많음 → 함수 추출 시 "바깥 스코프 변수를 인자 없이 참조" 검사를 **먼저 만들고**(node --check·diff 검증 둘 다 이 유형을 못 잡음, R12에서 실제 2건 발생) **음성 대조군으로 검사기 자체를 검증**할 것. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모".
+
+버그2-c도 코드 완료·스모크만 남음(§2).
 
 
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
