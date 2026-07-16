@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-16 (R12 ✅ 완료 — day-detail.js 과대함수 분리: openDateMeetingModal 273→58, openDateScheduleModal 174→67, 커밋 54b6b35·da14297, **스모크 통과**. buildBarsInCard는 유지 확정(사용자 승인), DD3은 코드변경 없이 종결/보류. 다음 = R10)
+최종 갱신: 2026-07-16 (**R10a ✅ 코드 완료, 브라우저 스모크 대기** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. 다음 = R10a 스모크 → R10b)
 
 ---
 
@@ -10,22 +10,27 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 대형 파일 3개(game-sheet.js·index-page.js·day-detail.js)는 **A1 Phase 3 감사 완료(2026-07-15)** — 결과는 REFACTOR_CHECKPOINT.md "Phase 3" 절(GS1~7·IP1~3·DD1~3). 이 감사로 R11(game-sheet)·R12(day-detail) 편입. index-page(IP1~3)·GS4는 R번호 미배정 상태.
 
-**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 ✅ 완료**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297, **스모크 통과**(홈 모임모달·룰렛 / 플래너 내일정모달·⭐·인원조건→주간뷰 반영 전 항목 정상). `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **다음 = R10**(KA1).
+**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 ✅ 완료**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297, **스모크 통과**(홈 모임모달·룰렛 / 플래너 내일정모달·⭐·인원조건→주간뷰 반영 전 항목 정상). `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **R10a ✅ 코드 완료**(KA1 추출 — `openProfilePanel` 1,940→918줄, 서브시트 6블록 1,043줄을 모듈 함수로, 커밋 c9ab2bd~b3ed30d, **브라우저 스모크 대기**). **다음 = R10a 스모크 → R10b**(크로스보드 stale).
 
-**남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4의 "사진첨부 후 새로고침해야 표시"**·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
+**남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4의 "사진첨부 후 새로고침해야 표시"**·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10b 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
 
 > ⚠️ **분류 정정 (2026-07-16)**: R4에 함께 묶여 있던 **"사진클릭 썸네일/삭제버튼 없음"은 stale과 무관**했음 — 라이트박스 컴포넌트는 정상이고 호출부가 옵션을 안 넘기는 문제(아래 §2 버그2-c로 분리). R10은 `kakao-auth.js`(KA1)만 건드리므로 `game-reviews.js`·`club-history.html` 호출부는 손대지 않음 → **그대로 뒀으면 R10에서 조용히 누락될 항목이었음**.
 
-**R10 동반 처리로 이월된 열린 항목 (2026-07-16):**
-- ⏭️ **[버그2-b → R10 이월]** **크로스보드 stale**: 취향보드(`likedGames`)와 모임보드 박스(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 **각각 따로 불러와 별도 배열 2개**로 보유 → 한쪽에서 추가/삭제해도 반대 보드엔 **새로고침 전까지 미반영**(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). `cottage-likes-changed` 이벤트는 열린 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열 못 건드림). **해결 방향 A(진입 시 DB 재조회=단일 소스)로 R10(KA1) 리팩토링과 함께 처리 확정** — 그때 스냅샷 임시방편도 대체. 사용자 승인(2026-07-16): R10 맨 마지막이라 그때까지 크로스보드 stale 잔존 감수.
-- ⏭️ **[신규기능 3-1 → 백로그 이월]** 알림→읽기전용 보드→뒤로가기 복귀. 신규 네비게이션 스택이 필요하고 `openProfilePanel`(KA1) 한복판이라, R10(KA1 리팩토링)과 함께/후에 처리로 이월(§3 "타인 보드 내부 네비게이션 통일"에 병합 기록).
+**R10b/R10c로 이월된 열린 항목 (2026-07-16):**
+- ⏭️ **[버그2-b → R10b]** **크로스보드 stale**: 취향보드(`likedGames`)와 모임보드 박스(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 **각각 따로 불러와 별도 배열 2개**로 보유 → 한쪽에서 추가/삭제해도 반대 보드엔 **새로고침 전까지 미반영**(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). `cottage-likes-changed` 이벤트는 열린 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열 못 건드림). **해결 방향 A(진입 시 DB 재조회=단일 소스)로 R10b에서 처리 확정** — 그때 스냅샷 임시방편도 대체. **R10a(추출) 완료로 서브시트별 경계가 생겨 착수 비용 하락**(각 서브시트가 자기 데이터를 스스로 로드하는 형태 = 방향 A와 그대로 맞물림). 그때까지 크로스보드 stale 잔존 감수(사용자 승인 2026-07-16).
+- ⏭️ **[신규기능 3-1 → R10c]** 알림→읽기전용 보드→뒤로가기 복귀. 신규 네비게이션 스택이 필요하고 `openProfilePanel`(KA1) 한복판이라 이월(§3 "타인 보드 내부 네비게이션 통일"에 병합 기록). **R10a 완료로 `openProfilePanel`이 918줄까지 줄어 착수 여건은 나아짐.**
 
-**다음 세션 시작점**: **R10 = 리팩토링 계획의 마지막·최고위험 항목. 새 세션 단독 권장**(2026-07-16 판단 — R12까지 전부 스모크 통과로 닫혀 이월 없음 = 깨끗한 인수인계 지점).
+**R10 원안 분할 (2026-07-16, 사용자 승인)**: 원안이 리팩토링+버그수정+신규기능 3종을 한 항목에 묶어 CLAUDE.md "구현/리팩토링 분리"를 위반 → **R10a(추출) / R10b(크로스보드 stale) / R10c(네비게이션 스택)**로 분리.
 
-**R10 착수 전 확인 사항**:
-- 범위가 3개 병합이라 **1세션에 안 끝날 가능성 높음** → 착수 시 서브시트 단위로 재분할 여부 먼저 판단: ①KA1 `openProfilePanel`(1,972줄) 분리 ②크로스보드 stale 해결(방향 A=진입 시 DB 재조회 단일 소스, 취향보드 스냅샷 임시방편 11e10b8 대체) ③네비게이션 스택(§3-1 알림 복귀 + §3-2 좋아요 토스트→게임시트 복귀, `openProfilePanel(subsheet, {backTo:{...}})` 형태로 일반화)
+- **R10a ✅ 코드 완료 (스모크 대기)**: `openProfilePanel` **1,940→918줄**. 서브시트 6블록(usage·voucher·notif·record·taste·meeting, 총 1,043줄)을 모듈 함수로 추출, 서브시트별 원자 커밋 6개(c9ab2bd·fd2bd0c·e5e4bad·c6a0bff·682227e·b3ed30d). 캡처는 ctx 전달 + 첫 줄 구조분해로 **본문 바이트 보존**(R11a vm 기각 사유를 회피). 재할당 캡처 2건(`_currentBio`·`_pendingMeetingScrollTop`)만 접근자 콜백으로 승격. window 노출·시그니처 변화 0. 상세·교훈은 REFACTOR_CHECKPOINT.md "R10a 결과 메모".
+- **R10b ⏳ 대기**: 크로스보드 stale(아래 버그2-b). 방향 A(진입 시 DB 재조회 = 단일 소스) + 스냅샷 임시방편(11e10b8) 대체. **R10a가 서브시트 경계를 만들어 착수 비용이 내려감**.
+- **R10c ⏳ 대기**: 네비게이션 스택(§3-1 알림 복귀 + §3-2 좋아요 토스트→게임시트 복귀, `openProfilePanel(sub, {backTo:{...}})` 일반화). 신규기능.
+
+**다음 세션 시작점**: **R10a 브라우저 스모크** → 통과 시 R10b. 스모크 회귀 1순위 2건(접근자 승격 지점) — ①취향보드 한줄소개 저장 → 뒤로가기 → 재진입 시 저장값 유지되는지 ②모임보드→취향보드 편집→"‹ 모임 보드" 복귀 시 스크롤 위치 복원되는지. 그 외 서브시트 6개 전부 열림 확인.
+
+**R10b/R10c 착수 전 확인 사항**:
 - **모델: Opus xhigh 고정 + Plan 필수**(REFACTOR_CHECKPOINT 처리 계획 표)
-- **R12 교훈 필수 적용**: 지역변수가 KA1은 R12와 비교가 안 되게 많음 → 함수 추출 시 "바깥 스코프 변수를 인자 없이 참조" 검사를 **먼저 만들고**(node --check·diff 검증 둘 다 이 유형을 못 잡음, R12에서 실제 2건 발생) **음성 대조군으로 검사기 자체를 검증**할 것. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모".
+- **검사 스크립트는 스크래치패드에만 있어 재작성 필요**(`leak.js`·`writes.js`·`move.js`·`bodydiff.js`). R10a에서 **검사기 자체가 4번 조용히 틀렸고 음성 대조군이 전부 잡아냈다** — "0건 통과"를 신뢰하기 전에 알려진 누수를 심어 잡히는지 먼저 확인할 것. 특히 **bash heredoc·`node -e` 큰따옴표가 정규식 백슬래시를 먹어 검사기를 무력화**하므로 스크립트는 Write 툴로 생성. 상세는 REFACTOR_CHECKPOINT.md "R10a 결과 메모".
 
 버그2-c도 코드 완료·스모크만 남음(§2).
 
@@ -136,7 +141,9 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 ## 2. 현재 버그
 
-(열린 버그 없음 — 2026-07-16 기준. 이월 항목은 §0 참조: 버그2-b 크로스보드 stale → R10 동반, R4 "사진첨부 후 새로고침해야 표시" → R10 동반)
+(이월 항목은 §0 참조: 버그2-b 크로스보드 stale → R10b, R4 "사진첨부 후 새로고침해야 표시" → R10b)
+
+- [ ] **'함께한 시간' 서브시트만 방문 집계 누락 (2026-07-16 발견, 미수정)** — `kakao-auth.js` 서브시트 분기 7개 중 `usage`만 `_trackPvOnce('my-board-usage')` 호출이 **없음**(notif·growth·voucher·taste·records·meeting은 전부 있음). R10a 추출 중 발견했으나 **R10a 이전(HEAD~6)부터 그랬으므로 리팩토링과 무관**하고, REFACTOR MODE 규칙상 보고만 하고 보존함. §3의 "페이지별방문 내 보드 + 서브시트 카운팅"(완료 항목)과 어긋나 **버그 가능성** — 의도적 제외인지 누락인지 확인 필요. 고칠 경우 한 줄 추가로 끝나지만 과거 데이터는 소급 불가.
 
 ### 알려진 제한사항
 
@@ -178,8 +185,8 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] ~~[기술부채] 오늘 이벤트 수 집계 날짜 비교~~ — ✅ **해결** (2026-07-15). `initHeroStats`가 `created_at`(UTC)의 `slice(0,10)`을 KST 오늘 날짜와 직접 비교해 KST 00~09시 이벤트가 UTC 전날로 잘려 누락되던 것을, `kstDateStr`(created_at을 +9h 변환 후 slice) 헬퍼로 양쪽 모두 KST 기준 비교하도록 수정. node로 KST 경계(00:30/08:30/23:30/내일/어제/null) 7케이스 검증 통과. 관련 파일: `assets/js/index-page.js`.
 
 - [ ] **[PC 리팩토링] 타인 보드 내부 네비게이션 통일** — 모임보드→취향보드 등 전환이 바텀시트로 뜸. 내 보드와 동일한 센터모달 + 고정 헤더 + 뒤로가기로 통일.
-  - **3-1 (2026-07-16 요청 병합)**: 알림('냐냐뇨뇨님이 소개글 올렸어요') 클릭 → `openOtherMeetingSheet` → `openProfilePanel(readOnly)`가 **내 패널을 제거하고 남의 보드로 교체**(kakao-auth.js:572)라 돌아올 경로 없음. 필요 동작: 남의 보드에 뒤로가기 → 내 보드/알림 페이지로 복귀(진입 전 패널 상태 스택 복원). **신규 기능 = 네비게이션 히스토리 스택 필요. `openProfilePanel`(KA1, 1972줄) 한복판이라 R10(KA1) 리팩토링과 함께/후에 처리 권장** — 지금 넣으면 R10에서 재작업됨.
-  - **3-2 (2026-07-16 R11c 스모크 피드백)**: 게임시트에서 좋아요/궁금해요 → 토스트('취향 보드 →') 클릭 시 [game-sheet.js:1478·1519](../assets/js/game-sheet.js#L1478)가 `closeGameSheet(); openProfilePanel('taste')`로 **게임시트를 파괴**해 돌아올 경로 소멸. 필요 동작: 취향보드→뒤로가기→내 보드→(신규)뒤로가기→**원래 눌렀던 게임 상세시트**(`openGameSheet(gameKey)`)로 복귀. 3-1과 동일한 네비게이션 히스토리 스택 문제(진입 origin=gameKey를 openProfilePanel에 전달 + 내 보드 헤더에 조건부 뒤로가기 추가). **3-1과 함께 R10(KA1) 병합 처리 확정 (사용자 승인 2026-07-16)** — 지금 openProfilePanel 한복판에 넣으면 R10에서 재작업. 착수 시 origin 컨텍스트를 `openProfilePanel(subsheet, {backTo:{type:'gameSheet', gameKey}})` 형태로 일반화하면 3-1(알림 복귀)과 단일 스택으로 커버 가능.
+  - **3-1 (2026-07-16 요청 병합)**: 알림('냐냐뇨뇨님이 소개글 올렸어요') 클릭 → `openOtherMeetingSheet` → `openProfilePanel(readOnly)`가 **내 패널을 제거하고 남의 보드로 교체**(kakao-auth.js:1632, R10a 추출로 572→1632 이동)라 돌아올 경로 없음. 필요 동작: 남의 보드에 뒤로가기 → 내 보드/알림 페이지로 복귀(진입 전 패널 상태 스택 복원). **신규 기능 = 네비게이션 히스토리 스택 필요 → R10c**(원안에선 R10 병합이었으나 리팩토링과 신규기능 분리를 위해 별도 항목으로 분할). **R10a 완료로 `openProfilePanel`이 918줄까지 줄어 재작업 위험은 해소됨.**
+  - **3-2 (2026-07-16 R11c 스모크 피드백)**: 게임시트에서 좋아요/궁금해요 → 토스트('취향 보드 →') 클릭 시 [game-sheet.js:1478·1519](../assets/js/game-sheet.js#L1478)가 `closeGameSheet(); openProfilePanel('taste')`로 **게임시트를 파괴**해 돌아올 경로 소멸. 필요 동작: 취향보드→뒤로가기→내 보드→(신규)뒤로가기→**원래 눌렀던 게임 상세시트**(`openGameSheet(gameKey)`)로 복귀. 3-1과 동일한 네비게이션 히스토리 스택 문제(진입 origin=gameKey를 openProfilePanel에 전달 + 내 보드 헤더에 조건부 뒤로가기 추가). **3-1과 함께 R10c에서 처리 확정 (사용자 승인 2026-07-16)** — R10a(추출) 완료로 openProfilePanel 918줄 + 서브시트 경계 확보. 착수 시 origin 컨텍스트를 `openProfilePanel(subsheet, {backTo:{type:'gameSheet', gameKey}})` 형태로 일반화하면 3-1(알림 복귀)과 단일 스택으로 커버 가능.
 - [ ] **[검토] 기록보드 타인 공개** — 요약(플레이 수·게임평)만 부분 공개 또는 본인 설정 온오프. 함께한 시간은 비공개 유지 확정.
 - [ ] **[디자인] 모임보드 개선** — 미입력 필드 노출 방식, 일정 막대 정보 밀도, 하고 싶은 게임 0개 빈 상태.
 - [x] ~~게임평→캐릭터/업적 미반영~~ (A-7, 2026-07-12) — ✅ **해결** (2026-07-15). 원인: 지급 로직(`checkAchievements('review')`→`getUserCommentCount`)은 정상이었으나, 진행도 표시 4곳(achievements.js COUNTS)이 `review` 축에 `ratingCount`(별점 수)를 쓰고 있어 게임평을 써도 진행도가 안 오르는 것처럼 보였음(해금 자체는 DB 업적 기준이라 실제론 됐음). `_fetchUserStats`의 `getUserRatingCount`→`getUserCommentCount` 교체, `ratingCount`→`commentCount` 리네이밍으로 표시를 지급 기준과 통일.
