@@ -810,7 +810,7 @@ window._cottageSess = (function () {
     if (!userId) return null;
     try {
       const [profileRes, introRes, likedGames, curiousGames, ruleGames] = await Promise.all([
-        db.from('profiles').select('bio').eq('user_id', userId).maybeSingle(),
+        db.from('profiles').select('bio, avoid_tags').eq('user_id', userId).maybeSingle(),
         db.from('member_intros').select('*').eq('user_id', userId).maybeSingle(),
         getUserLikedGamesAll(userId),
         getUserCuriousGamesAll(userId),
@@ -822,6 +822,9 @@ window._cottageSess = (function () {
       const intro = introRes.data || {};
       return {
         bio: profileRes.data?.bio || '',
+        // 취향보드 '피하는 유형'. 모임보드도 비선호 칩으로 같은 값을 표시하므로 여기서 함께 반환
+        // → 두 보드가 이 함수 하나만 보면 되는 단일 소스가 됨(R10b)
+        avoidTags: profileRes.data?.avoid_tags || [],
         nickname: intro.nickname || '',
         location: intro.location || '',
         available: intro.available || '',
