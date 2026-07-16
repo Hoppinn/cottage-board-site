@@ -370,7 +370,7 @@ function _openCoverModal(src) {
   document.getElementById('coverModal')?.remove();
   const m = document.createElement('div');
   m.id = 'coverModal';
-  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;';
+  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;';
   m.innerHTML = `<img src="${src}" style="max-width:90%;max-height:85vh;object-fit:contain;border-radius:12px;" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
     <button onclick="document.getElementById('coverModal')?.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
   m.addEventListener('click', e => { if (e.target === m) m.remove(); });
