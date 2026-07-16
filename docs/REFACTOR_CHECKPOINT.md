@@ -164,7 +164,7 @@
 
 | # | 위험도 | 분류 | 이슈 | 상세 |
 |---|--------|------|------|------|
-| KA1 | **P1** | 과대 함수 | `openProfilePanel` 843줄 — 프로젝트 내 최대 단일 함수 | 내 보드 전체(12개 병렬 DB 조회 + HTML 빌드 + 서브시트 5개 + 이벤트 바인딩)를 단일 함수에 담음. 수정 위험 매우 높음. |
+| ~~KA1~~ | ~~**P1**~~ | ~~과대 함수~~ | ~~`openProfilePanel` 843줄 — 프로젝트 내 최대 단일 함수~~ | **✅ 해결됨 (R10a, 2026-07-16, 스모크 통과)** — 감사 시점 843줄이 이후 1,940줄까지 커졌던 것을 **918줄로 축소**. 감사가 지적한 4개 관심사 중 **'서브시트 5개 + 이벤트 바인딩'을 경계로 분리**(6블록 1,043줄 → `_bind*Subsheet(subBody, ctx)` 모듈 함수). 남은 918줄 = DB 조회 12개 + HTML 빌드 + 패널 셸 + 서브시트 라우터. **추가 분리(HTML 빌드 ~390줄)는 미착수** — R10b(방향 A: 진입 시 DB 재조회)가 이 영역을 재설계하므로 그때 자연히 갈라짐. |
 | KA2 | **P1** | IIFE 없음 | `initKakaoAuth`, `updateLoginUI`, `_updateNotifBadge`, `_showVoucherGrantToast`, `_restoreMenuExpanded` 전역 노출 | 대부분 의도적이나 `_` 접두사 함수 3개(내부 전용)도 window에 노출됨. |
 | KA3 | **P1** | 취약한 파싱 | `_safeInt` (lines 473-475): HTML 문자열을 regex로 파싱해 count 추출 | `buildCharacterSection/buildAchievementsSection` HTML 구조가 변경되면 regex 미일치 → 0 fallback. 버그 탐지 없이 통계 0 표시. `_charTotal`=47, `_codexTotal`=641, `_achTotal`=96 하드코딩 fallback도 자동 갱신 안 됨. |
 | KA4 | **P2** | 중복 코드 | `getGameName` (lines 308-318) — 세 번째 복사본 | game-reviews.js line 7, achievements.js line 510에 이미 있음. |
@@ -263,7 +263,7 @@
 | GDA2 | game-display-adapter.js | IIFE 미적용 | 25+ 함수 전역화 — 제거 시 외부 참조 확인 필수 |
 | ACH5 | achievements.js | `buildAchievementsSection` 사이드이펙트 분리 | retroMissed 로직 이동 시 업적 소급 지급 타이밍 변경 |
 | ACH3 | achievements.js | 패널 open 시 3중 DB 쿼리 통합 | 세 빌드 함수의 DB 쿼리 공유는 인터페이스 재설계 필요 |
-| KA1 | kakao-auth.js | `openProfilePanel` 843줄 분리 | 프로젝트 내 최대 함수 — 부분 수정도 회귀 위험 높음 |
+| ~~KA1~~ | ~~kakao-auth.js~~ | ~~`openProfilePanel` 843줄 분리~~ | ✅ **해결됨 (R10a, 2026-07-16)** — 1,940→918줄, 서브시트 6블록 추출. 상세는 2-5절 KA1 행 + "R10a 결과 메모" |
 | PU2 | play-records-utils.js | blob URL 누수 수정 | `buildPhotoItemAdder` 수명주기 추적 필요 |
 | ~~GR2~~ | ~~game-reviews.js~~ | ~~`renderSingleGame` CottageDB 전환~~ | ✅ GR1과 함께 삭제 완료 (136차-7) |
 | ~~SC4/SC5~~ | ~~supabase-client.js~~ | ~~성능 개선 (getVisitorStats, getUserFirstRecordCount)~~ | ✅ R8 종결 — SC4 이미 count/head(행 미반환), SC5는 테이블 60행 규모라 현행 유지. 재방문 임계값(~기록 1500행) 기록. |
@@ -278,7 +278,7 @@
 | Green | ACH4, PU1, ACH8, GDA1, KA8, CSS3 | ✅ 완료 |
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
 | Red | ACH3, CSS2 | ✅ 완료 (137차, ACH3는 buildCharacterSection/buildAchievementsSection의 `preStats` 파라미터로 쿼리 공유 확인, CSS2는 `!important` 196→30회로 감소 확인, 2026-07-15 재검증) |
-| Red | ~~KA1~~ | ❌ **미완료 정정 (2026-07-15 재검증)** — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 위 "✅ 완료" 표기는 오기재였던 것으로 확인. 여전히 구조 변경 필요(Red) 항목으로 유지. |
+| Red | KA1 | ~~❌ 미완료 정정 (2026-07-15 재검증) — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 137차의 "✅ 완료" 표기는 오기재였던 것으로 확인.~~ → **✅ 진짜 완료 (R10a, 2026-07-16, 스모크 통과)** — 1,940→**918줄**. 이번엔 실측·커밋·스모크로 확인(c9ab2bd~b3ed30d). **교훈**: 137차의 오기재는 "완료" 표기 전 실측을 안 해서 생겼음 — 줄 수는 추측하지 말고 셀 것. |
 | Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, ~~GDA2~~, ~~SC4/SC5~~, ~~GR3~~ | SC1(R5)·PU2(R4)·ACH5(R6)·GDA2+GS3(R7)·SC4/SC5(R8)·GR3(R9) ✅ **전부 완료**. 최신 진행은 아래 "처리 계획" 표 기준. |
 
 ---
@@ -423,7 +423,11 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 ---
 
-## R10a 결과 메모 (2026-07-16 — ✅ 코드 완료, 브라우저 스모크 대기)
+## R10a 결과 메모 (2026-07-16 — ✅ 완료, 스모크 통과)
+
+**스모크 통과 확인(사용자, 2026-07-16)** — 회귀 1순위 2건(접근자 승격 지점) 정상: ①취향보드 한줄소개 저장 → 뒤로가기 → 재진입 시 저장값 유지(`_currentBio` 접근자) ②모임보드→취향보드 편집→"‹ 모임 보드" 복귀 시 스크롤 복원(`_pendingMeetingScrollTop` 접근자). 이 둘이 "복사했으면 조용히 죽었을" 바로 그 경로라 접근자 승격이 실제로 유효했음이 확인됨.
+
+**⚠️ R10b/R10c가 알아야 할 부수 효과 — 최상위 함수 6개 추가**: `kakao-auth.js`는 IIFE가 없어(KA2) **최상위 `function` 선언 = 전역**이다. R10a가 추가한 `_bindNotifSubsheet`·`_bindVoucherSubsheet`·`_bindTasteSubsheet`·`_bindRecordSubsheet`·`_bindUsageSubsheet`·`_bindMeetingSubsheet` 6개도 전역이 됐다(프로젝트 전체 grep으로 이름 충돌 0·크로스파일 참조 0 확인 — 전부 kakao-auth.js 내부 전용이라 **노출 자체는 불필요**). 이 파일을 훗날 IIFE화한다면 이 6개는 **내부화 대상**(노출 목록에 넣지 말 것). R11c 교훈(최상위 const/let의 크로스파일 bare 참조도 함께 grep)은 이번엔 해당 없음 — IIFE화를 안 했고 상수/변수를 옮기지도 않았기 때문.
 
 **커밋 6개(서브시트별 원자)**: c9ab2bd(usage 13줄) · fd2bd0c(voucher 14) · e5e4bad(notif 30) · c6a0bff(record 101) · 682227e(taste 353) · b3ed30d(meeting 533). **`openProfilePanel` 1,940 → 918줄**(1,043줄 추출). window 노출·시그니처 변화 0 → js-api.md·PROJECT_STRUCTURE.md 무변경.
 
@@ -447,7 +451,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 **발견(보고만, REFACTOR MODE)**: `usage` 분기만 `_trackPvOnce('my-board-usage')`가 **없음**(나머지 6분기는 전부 있음). R10a 이전(HEAD~6)부터 그랬으므로 이번 추출과 무관. PROJECT_STATE §3의 "페이지별방문 내 보드 + 서브시트 카운팅" 완료 항목과 어긋나 **버그 가능성** — '함께한 시간' 서브시트 조회수가 집계에서 빠짐. 의도된 사양인지 확인 필요(§2 등록).
 
-**남은 것**: 브라우저 스모크(6개 서브시트 전부 열기 + 회귀 1순위 2건 = ①취향보드 한줄소개 저장 후 뒤로가기→재진입 시 저장값 유지 ②모임보드→취향보드 편집→"‹ 모임 보드" 복귀 시 스크롤 위치 복원). 이 둘이 접근자 승격 지점이라 깨지면 여기.
+**스모크 범위 주의(정확히 기록)**: 사용자가 확인한 것은 **회귀 1순위 2건**(taste·meeting = 추출 최대 블록 2개, 접근자 승격 지점). 나머지 4블록(usage·voucher·notif·record)은 **본문 변경 0줄 = 순수 이동**이고 캡처도 0~4개로 전부 읽기 전용이라 위험이 낮지만, **명시적 클릭 확인은 안 됨** — R10b 세션에서 그 서브시트를 건드리게 되면 그때 함께 확인.
 
 ---
 

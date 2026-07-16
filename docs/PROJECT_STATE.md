@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-16 (**R10a ✅ 코드 완료, 브라우저 스모크 대기** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. 다음 = R10a 스모크 → R10b)
+최종 갱신: 2026-07-16 (**R10a ✅ 완료 — 스모크 통과** — openProfilePanel 1,940→918줄, 서브시트 6블록 추출, 커밋 c9ab2bd~b3ed30d. R10 원안은 사용자 승인 하에 R10a(추출)/R10b(stale 버그)/R10c(네비스택)로 **분할**. 다음 = **R10b**, 새 세션 권장)
 
 ---
 
@@ -22,11 +22,16 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 **R10 원안 분할 (2026-07-16, 사용자 승인)**: 원안이 리팩토링+버그수정+신규기능 3종을 한 항목에 묶어 CLAUDE.md "구현/리팩토링 분리"를 위반 → **R10a(추출) / R10b(크로스보드 stale) / R10c(네비게이션 스택)**로 분리.
 
-- **R10a ✅ 코드 완료 (스모크 대기)**: `openProfilePanel` **1,940→918줄**. 서브시트 6블록(usage·voucher·notif·record·taste·meeting, 총 1,043줄)을 모듈 함수로 추출, 서브시트별 원자 커밋 6개(c9ab2bd·fd2bd0c·e5e4bad·c6a0bff·682227e·b3ed30d). 캡처는 ctx 전달 + 첫 줄 구조분해로 **본문 바이트 보존**(R11a vm 기각 사유를 회피). 재할당 캡처 2건(`_currentBio`·`_pendingMeetingScrollTop`)만 접근자 콜백으로 승격. window 노출·시그니처 변화 0. 상세·교훈은 REFACTOR_CHECKPOINT.md "R10a 결과 메모".
+- **R10a ✅ 완료 (스모크 통과 2026-07-16)**: `openProfilePanel` **1,940→918줄**. 서브시트 6블록(usage·voucher·notif·record·taste·meeting, 총 1,043줄)을 모듈 함수로 추출, 서브시트별 원자 커밋 6개(c9ab2bd·fd2bd0c·e5e4bad·c6a0bff·682227e·b3ed30d). 캡처는 ctx 전달 + 첫 줄 구조분해로 **본문 바이트 보존**(R11a vm 기각 사유를 회피). 재할당 캡처 2건(`_currentBio`·`_pendingMeetingScrollTop`)만 접근자 콜백으로 승격. window 노출·시그니처 변화 0. 상세·교훈은 REFACTOR_CHECKPOINT.md "R10a 결과 메모".
 - **R10b ⏳ 대기**: 크로스보드 stale(아래 버그2-b). 방향 A(진입 시 DB 재조회 = 단일 소스) + 스냅샷 임시방편(11e10b8) 대체. **R10a가 서브시트 경계를 만들어 착수 비용이 내려감**.
 - **R10c ⏳ 대기**: 네비게이션 스택(§3-1 알림 복귀 + §3-2 좋아요 토스트→게임시트 복귀, `openProfilePanel(sub, {backTo:{...}})` 일반화). 신규기능.
 
-**다음 세션 시작점**: **R10a 브라우저 스모크** → 통과 시 R10b. 스모크 회귀 1순위 2건(접근자 승격 지점) — ①취향보드 한줄소개 저장 → 뒤로가기 → 재진입 시 저장값 유지되는지 ②모임보드→취향보드 편집→"‹ 모임 보드" 복귀 시 스크롤 위치 복원되는지. 그 외 서브시트 6개 전부 열림 확인.
+**다음 세션 시작점**: **R10b (크로스보드 stale) — 새 세션 단독 권장**. R10a가 스모크까지 통과해 닫혔고 이월 없음 = 깨끗한 인수인계 지점.
+
+**R10b 착수 시 바로 쓸 수 있는 R10a 조사 결과** (재조사 불필요):
+- `openProfilePanel`(현재 `kakao-auth.js:1608~2525`, 918줄) 구성: **패널 셸+DB조회 12개**(1608~1715 부근) → **로컬 헬퍼**(getGameName·buildActivityList·_renderNotifItem 등) → **HTML 문자열 빌드 ~390줄**(`_tasteInnerHtml`·`_meetingInnerHtml`·`_recordInnerHtml` 등 서브시트별 innerHTML을 **패널 오픈 시 1회** 생성) → `_openSubSheet`+알림/교환권 헬퍼 → **서브시트 라우터**(2469~2521, `.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭(2522). ※줄번호는 2026-07-16 R10a 직후 실측 — 이후 수정 시 밀림.
+- **stale의 구조적 뿌리 = "오픈 시 1회 빌드 + 떠날 때 DOM 스냅샷"**: `_openSubSheet(title, contentHtml, ...)`가 오픈 시점 정적 문자열을 재진입마다 재주입 → 변경이 되돌아가던 걸 스냅샷(`onLeave`에서 `_tasteInnerHtml = bodyEl.innerHTML`, 커밋 11e10b8)으로 막아둔 상태. **방향 A(진입 시 DB 재조회)로 가면 이 스냅샷 2곳(`kakao-auth.js:2493` taste·`2497` record의 `onLeave` 콜백)이 제거 대상**이고, 서브시트별 HTML 빌드가 `_bind*Subsheet` 옆으로 내려가면서 `openProfilePanel`의 남은 ~390줄도 자연히 갈라짐.
+- **stale 당사자**: `likedGames`/`curiousGames`(패널 Promise.all에서 1회 조회, taste HTML이 소비) ↔ `_meeting.likedGames`/`_meeting.curiousGames`(`getMeetingProfile`이 **내부에서 `getUserLikedGamesAll`를 재호출**해 만든 **별도 배열**, meeting 블록이 `_likedSlugSet`/`_curiousSlugSet`으로 소비). 두 배열이 같은 `game_likes`의 서로 다른 사본이라 한쪽 변경이 반대편에 안 보임. `cottage-likes-changed` 이벤트는 **열린** 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열은 못 건드림).
 
 **R10b/R10c 착수 전 확인 사항**:
 - **모델: Opus xhigh 고정 + Plan 필수**(REFACTOR_CHECKPOINT 처리 계획 표)
