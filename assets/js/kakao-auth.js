@@ -545,6 +545,23 @@ function _bindActivityTogglesAndMore(subBody) {
   });
 }
 
+// ── '음료교환권' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
+// ctx: _bindVoucher (openProfilePanel 지역 — user/isDevMode를 캡처하므로 여기로 못 올림)
+function _bindVoucherSubsheet(subBody, ctx) {
+  const { _bindVoucher } = ctx;
+          // 기본 펼침
+          subBody.querySelector('#profileVoucherInner')?.classList.remove('is-collapsed');
+          const _va = subBody.querySelector('.profile-voucher-toggle .profile-toggle-arrow');
+          if (_va) _va.textContent = '▴';
+          subBody.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
+            const inner = subBody.querySelector('#profileVoucherInner');
+            const arrow = this.querySelector('.profile-toggle-arrow');
+            const collapsed = inner.classList.toggle('is-collapsed');
+            arrow.textContent = collapsed ? '▾' : '▴';
+          });
+          _bindVoucher(subBody);
+}
+
 // ── '함께한 시간' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // 바깥 스코프 캡처 없음 → ctx 불필요. 본문은 원본 들여쓰기 보존(diff로 이동 검증).
 function _bindUsageSubsheet(subBody) {
@@ -1466,19 +1483,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
       } else if (type === 'voucher') {
         _trackPvOnce('my-board-voucher');
-        _openSubSheet('음료교환권', _voucherInnerHtml, subBody => {
-          // 기본 펼침
-          subBody.querySelector('#profileVoucherInner')?.classList.remove('is-collapsed');
-          const _va = subBody.querySelector('.profile-voucher-toggle .profile-toggle-arrow');
-          if (_va) _va.textContent = '▴';
-          subBody.querySelector('.profile-voucher-toggle')?.addEventListener('click', function() {
-            const inner = subBody.querySelector('#profileVoucherInner');
-            const arrow = this.querySelector('.profile-toggle-arrow');
-            const collapsed = inner.classList.toggle('is-collapsed');
-            arrow.textContent = collapsed ? '▾' : '▴';
-          });
-          _bindVoucher(subBody);
-        }); // end voucher afterRender
+        _openSubSheet('음료교환권', _voucherInnerHtml, subBody => _bindVoucherSubsheet(subBody, { _bindVoucher }));
 
       } else if (type === 'taste') {
         _trackPvOnce('my-board-taste');
