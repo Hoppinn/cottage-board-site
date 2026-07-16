@@ -468,6 +468,47 @@ function _openAndInitSheet(gameKey, restoreScroll) {
   }
 }
 
+// 게임평/사진/플레이기록 미리보기 3종 + 기록페이지 링크. gameKey만 필요.
+function _buildSheetRecordsHtml(gameKey) {
+  return `
+    <!-- 기록 섹션 그룹 -->
+    <div class="sheet-records-group">
+
+      <!-- 게임평 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <!-- 사진 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewPhotoLabel-${gameKey}">사진</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetPhotoPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <!-- 플레이기록 미리보기 -->
+      <div class="sheet-preview-section">
+        <div class="sheet-preview-hd">
+          <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
+        </div>
+        <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
+          <span class="sheet-comments-empty">불러오는 중...</span>
+        </div>
+      </div>
+
+      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 페이지에서 보기 &amp; 남기기 →</button>
+    </div>
+`;
+}
+
 function _buildSameDesignerHtml(gameKey, detail) {
   const _sameDesignGames = [];
   if (detail.bgg?.designers?.length && window.gameData) {
@@ -725,41 +766,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
       </div>
     </div>
 
-    <!-- 기록 섹션 그룹 -->
-    <div class="sheet-records-group">
-
-      <!-- 게임평 미리보기 -->
-      <div class="sheet-preview-section">
-        <div class="sheet-preview-hd">
-          <span class="sheet-preview-label" id="sheetPreviewCommentLabel-${gameKey}">게임평</span>
-        </div>
-        <div class="sheet-preview-body" id="sheetCommentsPreview-${gameKey}">
-          <span class="sheet-comments-empty">불러오는 중...</span>
-        </div>
-      </div>
-
-      <!-- 사진 미리보기 -->
-      <div class="sheet-preview-section">
-        <div class="sheet-preview-hd">
-          <span class="sheet-preview-label" id="sheetPreviewPhotoLabel-${gameKey}">사진</span>
-        </div>
-        <div class="sheet-preview-body" id="sheetPhotoPreview-${gameKey}">
-          <span class="sheet-comments-empty">불러오는 중...</span>
-        </div>
-      </div>
-
-      <!-- 플레이기록 미리보기 -->
-      <div class="sheet-preview-section">
-        <div class="sheet-preview-hd">
-          <span class="sheet-preview-label" id="sheetPreviewPlayLabel-${gameKey}">플레이기록</span>
-        </div>
-        <div class="sheet-preview-body" id="sheetPlayPreview-${gameKey}">
-          <span class="sheet-comments-empty">불러오는 중...</span>
-        </div>
-      </div>
-
-      <button class="sheet-records-all-btn" type="button" onclick="openGameRecordSheet('${gameKey}')">기록 페이지에서 보기 &amp; 남기기 →</button>
-    </div>
+    ${_buildSheetRecordsHtml(gameKey)}
 
   `;
 
