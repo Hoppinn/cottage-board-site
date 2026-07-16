@@ -145,7 +145,7 @@
 |---|--------|------|------|------|
 | GR1 | **P1** | 데드코드 | ~~`initGameView` + `renderSingleGame` (133줄) deprecated 명시~~ **✅ 해결됨** | ~~line 937-941 주석: "기본 동선은 바텀시트로 대체됨."~~ 2026-07-03 재검증: `initGameView`/`renderSingleGame` 모두 game-reviews.js에 없음. 호출처도 없음. 136차-7 삭제 완료 확인. |
 | GR2 | **P1** | Supabase 직접 접근 | ~~`renderSingleGame` line 958: `window.supabase.createClient()` 직접 호출~~ **✅ 해결됨** | ~~`window.CottageDB` 추상화 레이어 우회.~~ 2026-07-03 재검증: `window.supabase.createClient()` game-reviews.js에 없음. GR1 함수 삭제와 함께 제거 완료. |
-| GR3 | **P1** | 과대 함수 | `renderRecords`(277줄), `renderInputPanel`(255줄), `addRow`(137줄) | 렌더링·이벤트 바인딩·저장 로직이 단일 함수에 혼합. 테스트 불가 구조. |
+| GR3 | **P1** | 과대 함수 | ~~`renderRecords`(277줄), `renderInputPanel`(255줄), `addRow`(137줄)~~ **✅ 해결됨 (R9, 2026-07-16)** | ~~렌더링·이벤트 바인딩·저장 로직이 단일 함수에 혼합. 테스트 불가 구조.~~ R9에서 중첩 블록 4개를 모듈 함수로 추출(`_buildGameRow`·`_submitInputRows`·`_openInlineEditForm`·`_recCaption`) → renderInputPanel 65줄·renderRecords 212줄. 커밋 e813fe3~159cdd6, 스모크 통과. |
 | GR4 | **P2** | 중복 로직 | `isParticipant` 계산, `score_note` 포맷팅이 `buildSessionBody`/`buildGameBody`에 각각 동일 코드 | 같은 6~7줄 로직이 두 함수에 그대로 복사됨. |
 | GR5 | **P2** | 중복 로직 | 참여자 자동완성 `onSelect → Enter 디스패치` 패턴 2중 구현 | 신규 입력 폼(lines 252-263)과 수정 폼(lines 558-568)에 동일 코드. initTagInput과의 간접 결합 패턴. |
 | GR6 | **P2** | 전역 오염 | `window._prGroups`, `window._prPlayerNames`, `window._prLatestRecord`, `window._prMoreOutsideClickBound`, `window._refreshAutocompleteLists` — 임시 상태 5개 전역 노출 | IIFE 내부 변수로 충분한데 window에 붙어 있음. 외부에서 덮어쓰기 가능. |
@@ -153,7 +153,7 @@
 
 **즉시 수정 가능 (Green)**: 없음  
 **수정 시 검증 필요 (Yellow)**: ~~GR1~~ (2026-07-03 재검증으로 해결됨 확인)  
-**구조 변경 필요 (Red)**: ~~GR2~~ (2026-07-03 재검증으로 해결됨 확인), GR3 (과대 함수 분리)
+**구조 변경 필요 (Red)**: ~~GR2~~ (2026-07-03 재검증으로 해결됨 확인), ~~GR3~~ (과대 함수 분리 — R9에서 완료, 2026-07-16)
 
 ---
 
@@ -279,7 +279,7 @@
 | Yellow | SC2, SC3, CSS1, GR1+GR2, ACH9 | ✅ 완료 |
 | Red | ACH3, CSS2 | ✅ 완료 (137차, ACH3는 buildCharacterSection/buildAchievementsSection의 `preStats` 파라미터로 쿼리 공유 확인, CSS2는 `!important` 196→30회로 감소 확인, 2026-07-15 재검증) |
 | Red | ~~KA1~~ | ❌ **미완료 정정 (2026-07-15 재검증)** — `openProfilePanel`은 분리되지 않았고 오히려 494~2465줄(~1972줄)로 이전(843줄)보다 더 커짐(Phase C readOnly 파라미터화 등 누적). 위 "✅ 완료" 표기는 오기재였던 것으로 확인. 여전히 구조 변경 필요(Red) 항목으로 유지. |
-| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, ~~GDA2~~, ~~SC4/SC5~~, GR3 | SC1(R5)·PU2(R4)·ACH5(R6)·GDA2+GS3(R7)·SC4/SC5(R8) ✅ 완료 · GR3(R9) ⏳ 미처리. 최신 진행은 아래 "처리 계획" 표 기준. |
+| Red | ~~SC1~~, ~~PU2~~, ~~ACH5~~, ~~GDA2~~, ~~SC4/SC5~~, ~~GR3~~ | SC1(R5)·PU2(R4)·ACH5(R6)·GDA2+GS3(R7)·SC4/SC5(R8)·GR3(R9) ✅ **전부 완료**. 최신 진행은 아래 "처리 계획" 표 기준. |
 
 ---
 
@@ -345,7 +345,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 7 | R6 | ACH5 — `buildAchievementsSection`의 숨은 업적 소급지급 side-effect를 명시적 함수로 분리 | **Opus high** | 권장(지급 타이밍 영향) | ✅ **완료 (2026-07-16)** — 인라인 루프는 이미 `_grantRetroAchievements`로 추출돼 있었으나 여전히 `buildAchievementsSection` 내부에서 호출(hidden write)됐던 것이 핵심 문제. `grantRetroAchievements(userId,stats)` public 승격 → buildAchievementsSection 순수화 → kakao-auth.js openProfilePanel에서 빌드 앞·`!readOnly` 가드로 명시 호출. readOnly 열람 시 대상 유저 DB write 발생하던 부수 버그 함께 수정. node --check 통과. 상세는 위 2-3절 ACH5. |
 | 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ✅ **완료 (2026-07-16)** — GDA2는 이미 IIFE 적용돼 있어 un-expose 대상 없음(감사 stale). 실질 작업은 GS3: adapter의 죽은 `window.getAllGamesArray` 노출 제거(551~552줄) → 전역은 game-sheet 단일 소스. GDA6도 함께 종결. 외부참조 전수확인(호출처 6곳 전부 무인자, 14페이지 로드순서 adapter<sheet 전수확인)·node --check 통과. 런타임 무변화. |
 | 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ✅ **완료 (2026-07-16, 코드변경 없음)** — 재검증 결과 SC4는 이미 count/head(행 미반환), SC5는 `game_play_records` 전체 60행(실측) 규모에 limit(2000)도 有라 성능 문제 부재. RPC는 선제적 과최적화로 보류(사용자 승인 A안). 재방문 임계값(~기록 1500행) 기록. DB 변경 없음. 상세는 2-6절 SC4/SC5. |
-| 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ⏳ **코드 완료·브라우저 스모크 대기 (2026-07-16, 커밋 e813fe3·a118763·1b6fe42·159cdd6)** — 승인 플랜의 추출 4건 전부 실행: `_buildGameRow`(141줄)·`_submitInputRows`(90줄)·`_openInlineEditForm`(148줄)·`_recCaption` 모듈화. renderInputPanel 287→**65줄**, renderRecords 367→**212줄**(플랜 목표 ~60/~217 부합). 본문 diff 검증으로 behavior-preserving 확인 — 이동 블록 전체에서 바뀐 문자는 `++rowIdx`→`rowIdx`, `groups`→`_prGroups` 2건뿐. window 노출 변화 0(js-api.md 갱신 불필요). 플랜 대비 1건 이탈: 저장버튼 바인딩을 `onclick` 대신 기존 `addEventListener` 유지(동작 보존에 더 안전, 결과 동일). **UI라 자체확인 불가 → 아래 스모크 포인트 남음.** |
+| 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ✅ **완료 (2026-07-16, 커밋 e813fe3·a118763·1b6fe42·159cdd6 + 스모크 통과)** — 승인 플랜의 추출 4건 전부 실행: `_buildGameRow`(141줄)·`_submitInputRows`(90줄)·`_openInlineEditForm`(148줄)·`_recCaption` 모듈화. renderInputPanel 287→**65줄**, renderRecords 367→**212줄**(플랜 목표 ~60/~217 부합). 본문 diff 검증으로 behavior-preserving 확인 — 이동 블록 전체에서 바뀐 문자는 `++rowIdx`→`rowIdx`, `groups`→`_prGroups` 2건뿐. window 노출 변화 0(js-api.md 갱신 불필요). 플랜 대비 1건 이탈: 저장버튼 바인딩을 `onclick` 대신 기존 `addEventListener` 유지(동작 보존에 더 안전, 결과 동일). 스모크에서 파생 버그 1건 발견 → 별도 fix 90997f0(아래 결과 메모). |
 | 11 | R11 | **[A1 신규] game-sheet.js 구조 정리** — GS1(`openGameSheet` 321줄)·GS6(100줄대 과대함수 다수) 분리 + GS2(순수 헬퍼 20+개 전역노출, onclick 핸들러와 선별)·GS5(escH 로컬 사본)·GS7(난이도 헬퍼 전역결합). 프로젝트 최대 파일이라 여러 세션 재분할 가능. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 | 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | **필요** | ⏳ 대기 |
 | 13 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 단일함수, 서브시트별로 여러 세션 재분할 가능성 있음). **+ 크로스보드 stale 버그 동반 해결(2026-07-16)**: 취향보드(`likedGames`)와 모임보드(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 각각 따로 불러와 **별도 배열 2개**로 들고 있어, 한쪽에서 게임 추가/삭제해도 반대 보드엔 새로고침 전까지 미반영(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). 방향 A(진입 시 DB 재조회 = 단일 소스)로 서브시트/박스 데이터 로딩을 재설계 → 현재 취향보드 스냅샷 임시방편(커밋 11e10b8)도 이걸로 대체. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
@@ -358,13 +358,13 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 ---
 
-## R9 남은 스모크 포인트 (코드 2026-07-16 완료, 실서버 확인 대기)
+## R9 결과 메모 (2026-07-16 종료)
 
-추출 4건 모두 behavior-preserving 검증(본문 diff)까지 끝났으나 **UI 코드라 브라우저 확인 전까지 "완료" 아님**. 실행 상세는 git log(e813fe3~159cdd6) 참조 — 아래는 열린 항목만.
+브라우저 스모크 통과 확인(사용자, 2026-07-16) — 입력탭·보기탭 전 항목 정상.
 
-- **입력탭**: 행 추가 / ✕ 삭제 / 위와동일 / **행 1의 "최신 기록" 버튼** / 사진 첨부 / 저장 → 재추가 · 궁금해요 토스트
-  - ⚠️ 특히 **저장 후 재추가 시 행 1에 "최신 기록"이 아닌 "위와 동일"이 뜨는 기존 quirk가 그대로인지** — `rowIdx`가 리셋되지 않는 동작을 의도적으로 보존했음
-- **보기탭**: 기록 삭제 / 사진 개별 삭제 / **인라인 수정 폼 전체 열기·저장·취소** / 라이트박스 캡션 / 그룹뷰 `?group=&date=` 딥링크 확장
+**스모크에서 파생된 버그 1건 발견·수정 (커밋 90997f0)**: 리팩토링 중 "보존할 quirk"로 분류했던 *저장 후 첫 행에 '최신 기록' 대신 '위와 동일'이 붙는 동작*은 quirk가 아니라 **버그**였음. 사용자가 "최신 기록이 나와야 하는 것 아니냐"고 짚어 재검토한 결과: 저장 시 `rowIdx`가 이어져 새 첫 행이 2번째 이상으로 취급 → 위에 복사할 행이 없어 **무동작 죽은 버튼**이 되고, 새로고침 전까지 복구 불가. R9 종료 후 별도 fix 커밋으로 처리(리팩토링과 미혼합). `resetRows()`를 저장 경로에 전달하는 방식 — 리팩토링으로 경계가 생긴 덕에 "저장 후엔 행을 처음부터"라는 의도가 코드에 명시됨.
+
+**교훈**: 리팩토링 중 발견한 "이상한 기존 동작"을 quirk로 단정해 보존하지 말 것. 보존 자체는 옳았으나(리팩토링과 수정 분리), **버그 가능성을 함께 보고**해야 함 — 그래야 사용자가 판단할 수 있다.
 
 **남은 구조 메모**: renderRecords 잔여 소형 핸들러 블록은 "과도분리 금지" 원칙으로 그대로 뒀음 — 추가 분리 대상 아님.
 
