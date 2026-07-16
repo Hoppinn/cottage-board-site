@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-16 (R1~R8 완료 후 §0 슬림화 — git 중복 진행서술·해결버그 제거, R9 승인 플랜은 REFACTOR_CHECKPOINT.md로 박제)
+최종 갱신: 2026-07-16 (R9 코드 완료 — game-reviews.js 추출 4건, 브라우저 스모크만 대기. 실행된 승인 플랜 상세는 git log로 대체하고 CHECKPOINT에서 슬림화)
 
 ---
 
@@ -10,7 +10,7 @@
 
 REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 감사 자체가 안 된 대형 파일(game-sheet.js 2693줄·index-page.js 1594줄·day-detail.js 1180줄)은 R1~R10 이후 별도 Phase 3 감사 세션 필요 — 문제 목록 없음, 지금은 계획 밖.
 
-**진행 상황**: **R1~R8 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. **다음 = R9(승인 플랜 실행 대기)**.
+**진행 상황**: **R1~R8 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. **R9 ⏳ 코드 완료·브라우저 스모크 대기** (2026-07-16, 커밋 e813fe3~159cdd6): `game-reviews.js` 추출 4건 전부 실행, renderInputPanel 287→65줄·renderRecords 367→212줄. 본문 diff로 behavior-preserving 검증(바뀐 문자 2건뿐), window 노출 변화 0. **다음 = R11**.
 
 **남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4**(사진첨부 후 새로고침해야 표시·사진클릭 썸네일/삭제버튼 없음)·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
 
@@ -18,7 +18,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - ⏭️ **[버그2-b → R10 이월]** **크로스보드 stale**: 취향보드(`likedGames`)와 모임보드 박스(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 **각각 따로 불러와 별도 배열 2개**로 보유 → 한쪽에서 추가/삭제해도 반대 보드엔 **새로고침 전까지 미반영**(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). `cottage-likes-changed` 이벤트는 열린 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열 못 건드림). **해결 방향 A(진입 시 DB 재조회=단일 소스)로 R10(KA1) 리팩토링과 함께 처리 확정** — 그때 스냅샷 임시방편도 대체. 사용자 승인(2026-07-16): R10 맨 마지막이라 그때까지 크로스보드 stale 잔존 감수.
 - ⏭️ **[신규기능 3-1 → 백로그 이월]** 알림→읽기전용 보드→뒤로가기 복귀. 신규 네비게이션 스택이 필요하고 `openProfilePanel`(KA1) 한복판이라, R10(KA1 리팩토링)과 함께/후에 처리로 이월(§3 "타인 보드 내부 네비게이션 통일"에 병합 기록).
 
-**다음 세션 시작점**: **R9 실행** — GR3 `game-reviews.js` 과대함수 분리. **플랜 이미 승인·박제됨**: `REFACTOR_CHECKPOINT.md` 맨 아래 "R9 승인 플랜" 소절을 그대로 실행(4개 추출·줄범위·보존주의·스모크 포인트 전부 기록됨). Opus xhigh. 착수 시 모델만 확인하고 Plan 재작성 불필요. 이후 R11~R13은 "처리 계획" 표 순서.
+**다음 세션 시작점**: ① **R9 브라우저 스모크** (기록 허브 입력/보기탭 — 포인트 목록은 `REFACTOR_CHECKPOINT.md` "R9 남은 스모크 포인트"). 리팩토링이라 새 기능 없음, 기존 동작 그대로인지만 확인. ② 이후 **R11**(game-sheet.js 구조 정리, Opus xhigh, Plan 필수) → R12 → R10 순서("처리 계획" 표).
 
 ### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
 
