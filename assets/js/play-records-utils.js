@@ -3,10 +3,21 @@
 // 전역 노출: window.parsePhotoUrls / window.buildPhotoHtml / window.openLightbox
 //            window.toInitials / window.hangulMatch / window.attachAc
 //            window.initTagInput / window.buildPhotoItemAdder / window.revokePhotoGridBlobs
+//            window.getGameKeyById
 
 (function () {
   function _escAttr(s) {
     return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  }
+
+  // DB의 game_id(gameKey 슬러그 또는 BGG ID) → gameData 키.
+  // openLightbox의 gameThumbs/gameKeys를 만들려면 호출부마다 필요해서 여기 둔다
+  // (원래 kakao-auth.js 지역함수였음 — 사본을 늘리지 않고 단일 소스로 공유).
+  function getGameKeyById(gameId) {
+    if (!gameId || !window.gameData) return null;
+    if (window.gameData[gameId]) return gameId;
+    const entry = Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId));
+    return entry ? entry[0] : null;
   }
 
   function parsePhotoUrls(raw) {
@@ -26,6 +37,44 @@
       ${photoUrls.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${_escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${_escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more">+${more}장</div>` : ''}
     </div>`;
+  }
+
+  // 기록 행(.pr-rec-row) 사진 라이트박스 — 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제.
+  // 기록 허브·동호회 기록이 공유. 한 기록의 사진만 띄우므로 게임·소유권이 전 장에 동일 →
+  // gameThumbs/gameKeys는 같은 값으로 채운다.
+  // 필요 DOM: wrap[data-urls] · row[data-id][data-record] (record에 gameId·mine 포함)
+  // opts: { buildCaption?: (rec) => string, onAfterDelete?: (recId, newPhotoUrl) => void }
+  function openRecordLightbox(wrap, row, startIdx, opts) {
+    let urls = [];
+    try { urls = JSON.parse(wrap?.dataset.urls || '[]'); } catch (e) { console.error('[openRecordLightbox] urls 파싱', e); }
+    if (!urls.length) return;
+    let rec = {};
+    try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (e) { console.error('[openRecordLightbox] record 파싱', e); }
+
+    const gameKey = rec.gameId ? getGameKeyById(rec.gameId) : null;
+    const thumb = gameKey ? (window.gameData?.[gameKey]?.images?.thumbnail || null) : null;
+
+    const lbOpts = {
+      caption: opts?.buildCaption?.(rec) || '',
+      gameThumbs: urls.map(() => thumb),
+      gameKeys: urls.map(() => gameKey),
+      onGameClick: key => { if (!key) return; window.ensureGameSheet?.(); window.openGameRecordSheet?.(key); },
+    };
+
+    // deletable을 생략하면 openLightbox가 '전부 삭제 가능'으로 처리하므로,
+    // 남의 기록에 삭제버튼이 뜨지 않도록 내 기록일 때만 onDelete를 넘긴다.
+    if (rec.mine) {
+      lbOpts.onDelete = async delIdx => {
+        const recId = row?.dataset.id;
+        if (!recId || !window.CottageDB) return;
+        const rem = urls.filter((_, i) => i !== delIdx);
+        const newUrl = rem.length === 0 ? null : rem.length === 1 ? rem[0] : JSON.stringify(rem);
+        const res = await window.CottageDB.updateGamePlay(recId, { photo_url: newUrl });
+        if (res?.error) { console.error('[openRecordLightbox] 사진 삭제', res.error); alert('사진 삭제에 실패했습니다.'); return; }
+        opts?.onAfterDelete?.(recId, newUrl);
+      };
+    }
+    openLightbox(urls, startIdx, lbOpts);
   }
 
   function openLightbox(urls, startIdx, opts) {
@@ -315,5 +364,7 @@
   window.attachAc = attachAc;
   window.initTagInput = initTagInput;
   window.buildPhotoItemAdder = buildPhotoItemAdder;
+  window.getGameKeyById = getGameKeyById;
+  window.openRecordLightbox = openRecordLightbox;
   window.revokePhotoGridBlobs = revokePhotoGridBlobs;
 })();

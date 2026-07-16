@@ -146,7 +146,9 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 |------|------|--------|
 | `parsePhotoUrls(raw)` | photo_url 문자열 → URL 배열 | game-reviews.js, club-history.html |
 | `buildPhotoHtml(urls)` | 사진 썸네일 HTML 생성 | 동일 |
-| `openLightbox(urls, idx, opts)` | 전체화면 라이트박스. opts: captions[]/caption, onDelete+deletable[], **gameThumbs[]**(사진별 게임 표지 URL, 좌하단 표시)+**gameKeys[]**+**onGameClick(key)**(썸네일 클릭 시) | 동일, kakao-auth.js(기록보드 사진) |
+| `openLightbox(urls, idx, opts)` | 전체화면 라이트박스(저수준). opts: captions[]/caption, onDelete+deletable[], **gameThumbs[]**(사진별 게임 표지 URL, 좌하단 표시)+**gameKeys[]**+**onGameClick(key)**(썸네일 클릭 시). ⚠️ **deletable 생략 시 전부 삭제 가능으로 처리** — 남의 기록에도 삭제버튼이 뜨므로 권한 있을 때만 onDelete를 넘길 것 | 동일, kakao-auth.js(기록보드 사진) |
+| `openRecordLightbox(wrap, row, idx, opts)` | **기록 행(.pr-rec-row) 사진용 고수준 래퍼.** 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제를 한 번에 구성하고, 삭제 시 `photo_url` 갱신까지 수행. 한 기록의 사진만 띄우므로 게임·소유권이 전 장 동일. 필요 DOM: `wrap[data-urls]`·`row[data-id][data-record]`(record에 `gameId`·`mine` 포함). opts: `buildCaption(rec)`, `onAfterDelete(recId, newPhotoUrl)`(호출부가 화면 갱신) | game-reviews.js(기록 허브), club-history.html(동호회 기록) |
+| `getGameKeyById(gameId)` | DB `game_id`(gameKey 슬러그 또는 BGG ID) → `gameData` 키. 없으면 null. 원래 kakao-auth.js 지역함수였으나 라이트박스 썸네일 구성에 호출부마다 필요해 공용화(사본 증식 방지) | kakao-auth.js, play-records-utils.js 내부 |
 | `attachAc(input, getSuggestions, onSelect, listRef)` | 자동완성 드롭다운 연결. getSuggestions=후보 배열 반환 함수, listRef=드롭다운 삽입 기준 DOM(없으면 input을 새 div로 감쌈) | game-reviews.js |
 | `initTagInput(wrap, hidden, initialValue, onAdd)` | 태그칩 입력 컴포넌트. wrap=컨테이너, hidden=값 동기화할 hidden input, initialValue=초기값 배열, onAdd=태그 추가 콜백 | game-reviews.js |
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
@@ -236,6 +238,8 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.parsePhotoUrls` | play-records-utils.js | game-reviews.js, club-history.html |
 | `window.buildPhotoHtml` | play-records-utils.js | game-reviews.js, club-history.html |
 | `window.openLightbox` | play-records-utils.js | game-reviews.js, club-history.html |
+| `window.openRecordLightbox` | play-records-utils.js | game-reviews.js, club-history.html |
+| `window.getGameKeyById` | play-records-utils.js | kakao-auth.js |
 | `window.attachAc` | play-records-utils.js | game-reviews.js |
 | `window.initTagInput` | play-records-utils.js | game-reviews.js |
 | `window.toInitials` | play-records-utils.js | game-reviews.js |

@@ -125,7 +125,7 @@
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const editBtn = canEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button>` : '';
           const moreMenu = editBtn ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button">···</button><div class="pr-rec-more-menu">${editBtn}</div></div>` : '';
-          const recJson = escAttr(JSON.stringify({gameId:r.game_id||'',names:r.player_names||'',count:r.player_count||'',time:r.play_time_min||'',score:r.score_note||'',review:r.review_text||'',group:r.group_name||'',date:r.played_at||'',photo:r.photo_url||''}));
+          const recJson = escAttr(JSON.stringify({gameId:r.game_id||'',names:r.player_names||'',count:r.player_count||'',time:r.play_time_min||'',score:r.score_note||'',review:r.review_text||'',group:r.group_name||'',date:r.played_at||'',photo:r.photo_url||'',mine:!!canEdit}));
           return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${recJson}'>
             <div class="pr-rec-row-top">
               ${thumbHtml}
@@ -233,15 +233,13 @@
       root.querySelectorAll('.pr-rec-photo').forEach(img => {
         img.addEventListener('click', e => {
           e.stopPropagation();
-          const wrap = img.closest('.pr-rec-photo-wrap');
-          try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0)); } catch(_) {}
+          window.openRecordLightbox?.(img.closest('.pr-rec-photo-wrap'), img.closest('.pr-rec-row'), Number(img.dataset.idx || 0), { onAfterDelete: () => render() });
         });
       });
       root.querySelectorAll('.pr-rec-photo-more').forEach(el => {
         el.addEventListener('click', e => {
           e.stopPropagation();
-          const wrap = el.closest('.pr-rec-photo-wrap');
-          try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(el.dataset.idx || 3)); } catch(_) {}
+          window.openRecordLightbox?.(el.closest('.pr-rec-photo-wrap'), el.closest('.pr-rec-row'), Number(el.dataset.idx || 3), { onAfterDelete: () => render() });
         });
       });
       root.querySelectorAll('.pr-rec-edit').forEach(btn => {

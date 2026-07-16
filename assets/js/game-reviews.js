@@ -559,6 +559,21 @@
 
   let _nickUserMap = new Map();
 
+  // 기록 사진 라이트박스 — 공용 openRecordLightbox(play-records-utils)에 캡션 생성기와
+  // 삭제 후 갱신만 주입. 라이트박스 구성·삭제 DB 반영은 공용 쪽이 담당.
+  function _openRecordLightbox(wrap, row, startIdx, panel) {
+    window.openRecordLightbox?.(wrap, row, startIdx, {
+      buildCaption: _recCaption,
+      onAfterDelete: (recId, newUrl) => {
+        const idx = recordsData?.findIndex(r => String(r.id) === String(recId));
+        if (idx != null && idx !== -1) recordsData[idx].photo_url = newUrl;
+        const { _openSess, _openSub, _openMonth, _sy } = _saveViewState(panel);
+        renderRecords(recordsData);
+        _restoreViewState(panel, _openSess, _openSub, _sy, _openMonth);
+      },
+    });
+  }
+
   // 라이트박스 캡션 — rec만 받는 순수 함수
   function _recCaption(rec) {
     const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -892,8 +907,7 @@
         e.stopPropagation();
         const wrap = img.closest('.pr-rec-photo-wrap');
         const row = img.closest('.pr-rec-row');
-        let rec = {}; try { rec = JSON.parse(row?.dataset.record || '{}'); } catch (_) {}
-        try { openLightbox(JSON.parse(wrap.dataset.urls || '[]'), Number(img.dataset.idx || 0), { caption: _recCaption(rec) }); } catch(_) {}
+        try { _openRecordLightbox(wrap, row, Number(img.dataset.idx || 0), panel); } catch(_) {}
       });
     });
     panel.querySelectorAll('.pr-rec-photo-more').forEach(el => {
@@ -1213,7 +1227,7 @@
         const likeItems = _safeGKey ? `<button class="pr-rec-add-action pr-rec-like-action" data-game-id="${_safeGKey}" onclick="onPrMenuLike(this)" type="button">👍 좋아요</button><button class="pr-rec-add-action pr-rec-curious-action" data-game-id="${_safeGKey}" onclick="onPrMenuCurious(this)" type="button">🤔 궁금해요</button>` : '';
         const addItems = _safeGKey ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
         const moreMenu = (likeItems || addItems || editItems) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems}${addItems}${editItems}</div></div>` : '';
-        return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||''})}'>
+        return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||'', mine: !!showEdit})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
             <div class="pr-rec-main">

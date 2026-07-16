@@ -800,12 +800,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }
   const _effectiveVoucherSeen = _hasFirstPlayVoucher || voucherSeen;
   const _newCount = notifs.filter(n => n.isNew).length + (_effectiveVoucherSeen ? 0 : 1);
-  function _getGameKeyById(gameId) {
-    if (!gameId || !window.gameData) return null;
-    if (window.gameData[gameId]) return gameId;
-    const entry = Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId));
-    return entry ? entry[0] : null;
-  }
+  // play-records-utils.js의 공용 구현으로 위임(사본 제거). 전 페이지에서 utils가 먼저 로드됨.
+  const _getGameKeyById = gameId => window.getGameKeyById?.(gameId) ?? null;
   function _getGameKeyByName(name) {
     if (!name || !window.COTTAGE_GAMES || !window.gameData) return null;
     const found = window.COTTAGE_GAMES.find(g =>
