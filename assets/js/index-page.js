@@ -1270,11 +1270,13 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     }
   }
 
-  // 등록/수정 진입 전용 — reset-week를 건너뛰어 뒤에서 주간 뷰가 다시 그려지며
-  // 등록 시트와 겹쳐 보이는 현상(센터모달 깜빡임)을 막는다.
+  // 등록/수정 진입 전용 — 뒤쪽 주간 뷰(센터모달)를 보여주지 않고, 등록 시트가
+  // 실제로 뜬 뒤(cottage-sheet-shown) 그 상태 그대로 모달을 드러낸다.
+  let _awaitingSheetReveal = false;
   window.__openPlannerFor = function (dateStr, isEdit) {
     window.CottageDB?.trackEvent('home_meeting_planner_click');
-    openModal(true);
+    _awaitingSheetReveal = true;
+    if (!preloaded) preload();
     const type = isEdit ? 'cottage-edit' : 'cottage-register';
     if (frame.classList.contains('is-ready')) {
       frame.contentWindow?.postMessage({ type, date: dateStr }, '*');
@@ -1307,6 +1309,12 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     }
     if (e.data?.type === 'cottage-meeting-saved') {
       _meetingDirty = true;
+    }
+    if (e.data?.type === 'cottage-sheet-shown' && _awaitingSheetReveal) {
+      _awaitingSheetReveal = false;
+      modal.setAttribute('aria-hidden', 'false');
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
     }
   });
 
@@ -1369,7 +1377,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const actionsHtml = myVote
       ? `<button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>`
       : `<div class="mpc-actions-split">
-          <button class="mpc-register-btn" type="button">+ 이 날 참여 등록</button>
+          <button class="mpc-register-btn" type="button">+ 이날 참여 등록</button>
           <button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>
         </div>`;
 

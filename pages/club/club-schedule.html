@@ -2049,7 +2049,18 @@
       if (_pendingRegister) {
         const ds = _pendingRegister;
         _pendingRegister = null;
-        if (ds >= toDateStr(TODAY)) _openMultiSheet?.({ startStep: 1, dates: [ds] });
+        if (ds >= toDateStr(TODAY)) {
+          _openMultiSheet?.({ startStep: 1, dates: [ds] });
+          _notifySheetShown();
+        }
+      }
+    }
+
+    // 홈에서 등록/수정 진입 시 뒤쪽 주간 뷰를 보여주지 않고 대기 중인 부모창에
+    // 등록 시트가 실제로 떴음을 알려 그 상태 그대로 모달을 드러내게 한다.
+    function _notifySheetShown() {
+      if (new URLSearchParams(location.search).get('embed') === 'true') {
+        window.parent.postMessage({ type: 'cottage-sheet-shown' }, '*');
       }
     }
 
@@ -2081,14 +2092,20 @@
       }
       if (e.data?.type === 'cottage-edit') {
         const ds = e.data.date;
-        if (ds && ds >= toDateStr(TODAY) && _initDone) _openMultiSheet?.({ startStep: 2, dates: [ds] });
+        if (ds && ds >= toDateStr(TODAY) && _initDone) {
+          _openMultiSheet?.({ startStep: 2, dates: [ds] });
+          _notifySheetShown();
+        }
         return;
       }
       if (e.data?.type !== 'cottage-register') return;
       const ds = e.data.date;
       if (!ds) return;
       if (_initDone) {
-        if (ds >= toDateStr(TODAY)) _openMultiSheet?.({ startStep: 1, dates: [ds] });
+        if (ds >= toDateStr(TODAY)) {
+          _openMultiSheet?.({ startStep: 1, dates: [ds] });
+          _notifySheetShown();
+        }
       } else {
         _pendingRegister = ds;
       }
