@@ -349,7 +349,7 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 11 | **R11a** | **[A1 신규] GS1 — `openGameSheet` 321줄 분리** | **Opus xhigh** | 완료(플랜 승인 2026-07-16) | ✅ **완료 (2026-07-16, 커밋 3d09527~3824bf1 + 스모크 통과)** — 5개 추출(`_buildSameDesignerHtml`·`_openAndInitSheet`·`_buildSheetRecordsHtml`·`_buildSheetReactionsHtml`·`_buildSheetMechsHtml`)로 **321→187줄**. 감사가 지적한 4개 관심사 중 '서브위젯 초기화'를 경계로 분리. 본문 diff로 무수정 이동 검증(변경분은 assignment→return 등 각 1~2줄), window 노출 변화 0. 계산부(~93줄)를 vm 객체로 묶는 안은 템플릿 변수 15개에 접두사가 붙어 diff 검증이 무력화되므로 기각. |
 | 11b | **R11b** | GS6 — 나머지 과대함수 분리 | **Opus xhigh** | 권장 | ✅ **완료 (2026-07-16, 커밋 3027c24~4fafaa3 + 스모크 통과)** — `initPlayWidget` 146→**99**(이벤트 바인딩 50줄 분리) · `getOrCreatePlayModal` 110→**19**(정적HTML/이벤트/참여자입력 3분할) · `openGameRecordSheet` 97→**77**(아래 중복 제거). **`onSubmitPlayModal`(82) 미분할 — 판단**: `if(editId)/else` 두 갈래로 이미 명확하고, 쪼개려면 폼 값 9개를 DTO로 묶어 접두사를 붙여야 해 diff 검증이 무력화됨(R11a의 vm 기각과 동일 사유). 과도분리 금지 원칙 적용. **`buildRecordItemHtml`(40, initPlayWidget 내부) 보류 → R11c**: 로컬 `escH`(2279)를 캡처하는데, IIFE 없는 현 상태에서 이를 모듈 스코프로 올리면 `function escH`가 곧 `window.escH`를 **덮어써 타 파일 파손**(GS5의 `"` 이스케이프 차이 경고가 이것). IIFE 적용 후 안전. |
 | — | **[신규] GS8** | **중복 마크업** — `openGameRecordSheet`가 `openGameSheet`의 좋아요/궁금해요 블록 20줄을 들여쓰기까지 바이트 동일하게 복사 보유 | — | — | ✅ **해결됨 (R11b, 2026-07-16)** — R11a에서 뽑아둔 `_buildSheetReactionsHtml` 재사용으로 1벌화. 감사에 없던 항목(R11b 진행 중 발견). 함수 안의 HTML 주석은 원래 호출부로 이동시켜 양쪽 출력 무변화 유지(그냥 호출하면 기록시트에 없던 주석 노드가 생김). |
-| 11c | **R11c** | GS2 — 파일 IIFE화 + 선별 노출. **단독 세션 필수** | **Opus xhigh** | **필요, 필수** | ✅ **코드 완료 (2026-07-16, 커밋 7d9fd24·d4d1ac1) — 브라우저 클릭 스모크 대기**. 파일 전체 IIFE화: 최상위 함수 99개 중 **39개(외부참조16 ∪ 자기onclick27)만 노출·60개 은닉**. 노출 39는 기계적 도출(external∪onclick)로 사전조사 39와 **정확히 일치**, 다중호출 onclick 함정(`_openCoverModal`·`_openOrganizerLightbox`) KEEP 포함 교차검증. **사전조사가 함수만 셌기에 놓친 크로스파일 갭 3건 발견·처리**(아래 R11c 결과 메모). buildRecordItemHtml 모듈 스코프 추출(escH 자기내부화, 본문 바이트 동일 확인). node --check·노출 정합성 검증 통과. |
+| 11c | **R11c** | GS2 — 파일 IIFE화 + 선별 노출. **단독 세션 필수** | **Opus xhigh** | **필요, 필수** | ✅ **완료 (2026-07-16, 커밋 7d9fd24·d4d1ac1, 브라우저 클릭 스모크 통과)**. 파일 전체 IIFE화: 최상위 함수 99개 중 **39개(외부참조16 ∪ 자기onclick27)만 노출·60개 은닉**. 노출 39는 기계적 도출(external∪onclick)로 사전조사 39와 **정확히 일치**, 다중호출 onclick 함정(`_openCoverModal`·`_openOrganizerLightbox`) KEEP 포함 교차검증. **사전조사가 함수만 셌기에 놓친 크로스파일 갭 3건 발견·처리**(아래 R11c 결과 메모). buildRecordItemHtml 모듈 스코프 추출(escH 자기내부화, 본문 바이트 동일 확인). node --check·노출 정합성 검증 통과. |
 | 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | **필요** | ⏳ 대기 |
 | 13 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 단일함수, 서브시트별로 여러 세션 재분할 가능성 있음). **+ 크로스보드 stale 버그 동반 해결(2026-07-16)**: 취향보드(`likedGames`)와 모임보드(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 각각 따로 불러와 **별도 배열 2개**로 들고 있어, 한쪽에서 게임 추가/삭제해도 반대 보드엔 새로고침 전까지 미반영(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). 방향 A(진입 시 DB 재조회 = 단일 소스)로 서브시트/박스 데이터 로딩을 재설계 → 현재 취향보드 스냅샷 임시방편(커밋 11e10b8)도 이걸로 대체. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 
@@ -397,9 +397,9 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 
 ---
 
-## R11c 결과 메모 (2026-07-16 종료 — 코드 완료, 브라우저 스모크 대기)
+## R11c 결과 메모 (2026-07-16 종료 — ✅ 완료, 스모크 통과)
 
-**커밋**: 7d9fd24(IIFE 래핑+선별노출) · d4d1ac1(buildRecordItemHtml 모듈 추출). 두 원자 커밋으로 분리 — IIFE(교차파일 위험)를 격리해 스모크 회귀 시 이분 탐색 가능.
+**커밋**: 7d9fd24(IIFE 래핑+선별노출) · d4d1ac1(buildRecordItemHtml 모듈 추출). 두 원자 커밋으로 분리 — IIFE(교차파일 위험)를 격리해 스모크 회귀 시 이분 탐색 가능. **브라우저 클릭 스모크 통과 확인(사용자, 2026-07-16)** — 죽은 버튼 0. 스모크 중 나온 2건은 R11c 회귀가 아닌 별개 요청: ①표지모달 배경 어둡게(Green, 커밋 8b93e48 처리) ②좋아요 토스트→취향보드→뒤로가기 흐름(네비게이션 스택 = PROJECT_STATE §3-2, R10 병합 후보).
 
 **⚠️ 교훈 — 사전조사가 "함수만" 세면 크로스파일 변수/상수 의존을 놓친다**: IIFE는 함수뿐 아니라 최상위 `const`/`let` 렉시컬 바인딩도 전부 가둔다. R11 사전조사는 함수 참조만 집계(39개)해서, **다른 파일이 bare로 읽던 상수/변수 3건을 누락**했다. 그대로 감쌌으면 로드 에러 없이 홈 추천·카드 이미지가 조용히 죽었을 것:
 - **`DEFAULT_GAME_IMAGE`**(const) — index-page·owned-games-page·script-nav·game-reviews 4파일이 `${DEFAULT_GAME_IMAGE}`로 참조 → **window 노출**(불변이라 스냅샷 안전).
