@@ -12,7 +12,9 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 **진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ⏳ 코드완료·스모크대기**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **다음 = R11c**.
 
-**남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4**(사진첨부 후 새로고침해야 표시·사진클릭 썸네일/삭제버튼 없음)·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
+**남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R4의 "사진첨부 후 새로고침해야 표시"**·**R2**(취향 게임추가 새로고침해야 반영)는 크로스보드 stale/리로딩(아래 버그2-b)과 같은 뿌리라 **R10 동반 검증으로 이월**. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
+
+> ⚠️ **분류 정정 (2026-07-16)**: R4에 함께 묶여 있던 **"사진클릭 썸네일/삭제버튼 없음"은 stale과 무관**했음 — 라이트박스 컴포넌트는 정상이고 호출부가 옵션을 안 넘기는 문제(아래 §2 버그2-c로 분리). R10은 `kakao-auth.js`(KA1)만 건드리므로 `game-reviews.js`·`club-history.html` 호출부는 손대지 않음 → **그대로 뒀으면 R10에서 조용히 누락될 항목이었음**.
 
 **R10 동반 처리로 이월된 열린 항목 (2026-07-16):**
 - ⏭️ **[버그2-b → R10 이월]** **크로스보드 stale**: 취향보드(`likedGames`)와 모임보드 박스(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 **각각 따로 불러와 별도 배열 2개**로 보유 → 한쪽에서 추가/삭제해도 반대 보드엔 **새로고침 전까지 미반영**(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). `cottage-likes-changed` 이벤트는 열린 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열 못 건드림). **해결 방향 A(진입 시 DB 재조회=단일 소스)로 R10(KA1) 리팩토링과 함께 처리 확정** — 그때 스냅샷 임시방편도 대체. 사용자 승인(2026-07-16): R10 맨 마지막이라 그때까지 크로스보드 stale 잔존 감수.
@@ -127,6 +129,25 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 ---
 
 ## 2. 현재 버그
+
+### 🔵 버그2-c: 라이트박스 썸네일·삭제버튼이 페이지마다 다름 (2026-07-16 분리, 미착수)
+
+**증상**: 사진 전체보기에서 좌하단 게임 썸네일 / 우하단 삭제버튼이 페이지마다 있거나 없음.
+
+**원인**: 컴포넌트 문제 아님. `openLightbox(urls, startIdx, opts)`([play-records-utils.js:31](../assets/js/play-records-utils.js#L31))는 **호출부가 넘긴 opts로만** 켜짐 — `opts.gameThumbs`(+`gameKeys`·`onGameClick`) → 썸네일, `opts.onDelete`(+`deletable`) → 삭제. 호출부별 현황:
+
+| 호출부 | captions | gameThumbs | onDelete |
+|---|---|---|---|
+| `kakao-auth.js:1922` 기록보드 | ✅ | ✅ | ✅ |
+| `game-sheet.js:1135` 게임시트 사진 | ✅ | ❌ | ✅ |
+| `game-sheet.js:379` 정리법 | ✅ | ❌ | ❌ |
+| `game-reviews.js:896` 기록 허브 | ✅ | ❌ | ❌ |
+| `club-history.html:237,244` 동호회 | ❌ | ❌ | ❌ |
+| `about.html`·`price-rules.html` 홍보사진 | ❌ | ❌ | ❌ (정적 이미지 — 불필요가 정상) |
+
+**착수 전 결정 필요 (사용자 판단)**: 어느 페이지에 무엇을 켤지. 특히 **게임시트 사진 섹션의 썸네일은 중복 가능성** — 이미 그 게임 하나만 보는 화면이라 좌하단에 같은 표지를 또 띄우게 됨(현재 안 넘기는 게 의도일 수 있음). 기록허브·동호회는 사진마다 게임이 달라 의미 있음.
+
+**작업 성격**: 옵션만 넘기면 되는 게 아니라 호출부마다 데이터 연결 필요 — `gameThumbs`는 사진별 `gameKeys` 배열, `onDelete`는 소유자 판정(`deletable`). 기계적 수정 아님. 등급 옐로.
 
 ### 알려진 제한사항
 
