@@ -346,7 +346,9 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 | 8 | R7 | GDA2 — `game-display-adapter.js` IIFE 적용, 25+ 전역함수 비노출화 **+ GS3**(`getAllGamesArray` 2곳 중복 정의 정리, A1에서 병합) | **Opus xhigh** | **필요**(외부 참조 전수 확인 먼저) | ✅ **완료 (2026-07-16)** — GDA2는 이미 IIFE 적용돼 있어 un-expose 대상 없음(감사 stale). 실질 작업은 GS3: adapter의 죽은 `window.getAllGamesArray` 노출 제거(551~552줄) → 전역은 game-sheet 단일 소스. GDA6도 함께 종결. 외부참조 전수확인(호출처 6곳 전부 무인자, 14페이지 로드순서 adapter<sheet 전수확인)·node --check 통과. 런타임 무변화. |
 | 9 | R8 | SC4/SC5 — `getVisitorStats`/`getUserFirstRecordCount` 성능 개선(limit 또는 RPC) | **Opus xhigh** | **필요**(RPC 신설 시 DB 변경) | ✅ **완료 (2026-07-16, 코드변경 없음)** — 재검증 결과 SC4는 이미 count/head(행 미반환), SC5는 `game_play_records` 전체 60행(실측) 규모에 limit(2000)도 有라 성능 문제 부재. RPC는 선제적 과최적화로 보류(사용자 승인 A안). 재방문 임계값(~기록 1500행) 기록. DB 변경 없음. 상세는 2-6절 SC4/SC5. |
 | 10 | R9 | GR3 — `game-reviews.js` 과대함수 3개(`renderRecords` 277줄 등) 분리 | **Opus xhigh** | **필요** | ✅ **완료 (2026-07-16, 커밋 e813fe3·a118763·1b6fe42·159cdd6 + 스모크 통과)** — 승인 플랜의 추출 4건 전부 실행: `_buildGameRow`(141줄)·`_submitInputRows`(90줄)·`_openInlineEditForm`(148줄)·`_recCaption` 모듈화. renderInputPanel 287→**65줄**, renderRecords 367→**212줄**(플랜 목표 ~60/~217 부합). 본문 diff 검증으로 behavior-preserving 확인 — 이동 블록 전체에서 바뀐 문자는 `++rowIdx`→`rowIdx`, `groups`→`_prGroups` 2건뿐. window 노출 변화 0(js-api.md 갱신 불필요). 플랜 대비 1건 이탈: 저장버튼 바인딩을 `onclick` 대신 기존 `addEventListener` 유지(동작 보존에 더 안전, 결과 동일). 스모크에서 파생 버그 1건 발견 → 별도 fix 90997f0(아래 결과 메모). |
-| 11 | R11 | **[A1 신규] game-sheet.js 구조 정리** — GS1(`openGameSheet` 321줄)·GS6(100줄대 과대함수 다수) 분리 + GS2(순수 헬퍼 20+개 전역노출, onclick 핸들러와 선별)·GS5(escH 로컬 사본)·GS7(난이도 헬퍼 전역결합). 프로젝트 최대 파일이라 여러 세션 재분할 가능. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
+| 11 | **R11a** | **[A1 신규] GS1 — `openGameSheet` 321줄 분리** | **Opus xhigh** | 완료(플랜 승인 2026-07-16) | ⏳ **코드 완료·브라우저 스모크 대기 (2026-07-16, 커밋 22b0f0f·e318bc2·8138371 외 5건)** — 5개 추출(`_buildSameDesignerHtml`·`_openAndInitSheet`·`_buildSheetRecordsHtml`·`_buildSheetReactionsHtml`·`_buildSheetMechsHtml`)로 **321→187줄**. 감사가 지적한 4개 관심사 중 '서브위젯 초기화'를 경계로 분리. 본문 diff로 무수정 이동 검증(변경분은 assignment→return 등 각 1~2줄), window 노출 변화 0. 계산부(~93줄)를 vm 객체로 묶는 안은 템플릿 변수 15개에 접두사가 붙어 diff 검증이 무력화되므로 기각. |
+| 11b | **R11b** | GS6 — 나머지 과대함수 4개 분리: `initPlayWidget`(161)·`getOrCreatePlayModal`(110)·`openGameRecordSheet`(97)·`onSubmitPlayModal`(81) | **Opus xhigh** | 권장 | ⏳ 대기 (R11a와 동일 패턴, 교차파일 위험 없음) |
+| 11c | **R11c** | GS2 — 파일 IIFE화 + 선별 노출. **단독 세션 필수** | **Opus xhigh** | **필요, 필수** | ⏳ 대기 — 유일하게 교차파일 위험 있음. 아래 "R11 사전조사" 참조 |
 | 12 | R12 | **[A1 신규] day-detail.js 과대함수 분리** — DD1(`openDateMeetingModal` 281줄·`openDateScheduleModal` 179줄·`buildBarsInCard`). 구조 자체는 양호(IIFE) — 과대함수만. DD3(esc/fmtDate 로컬)도 함께. | **Opus xhigh** | **필요** | ⏳ 대기 |
 | 13 | R10 | **KA1 — `openProfilePanel` 1,972줄 분리** (최대·최고위험 단일함수, 서브시트별로 여러 세션 재분할 가능성 있음). **+ 크로스보드 stale 버그 동반 해결(2026-07-16)**: 취향보드(`likedGames`)와 모임보드(`_meeting.likedGames`)가 같은 `game_likes`를 패널오픈 시 각각 따로 불러와 **별도 배열 2개**로 들고 있어, 한쪽에서 게임 추가/삭제해도 반대 보드엔 새로고침 전까지 미반영(`getMeetingProfile`이 내부에서 `getUserLikedGamesAll` 재호출). 방향 A(진입 시 DB 재조회 = 단일 소스)로 서브시트/박스 데이터 로딩을 재설계 → 현재 취향보드 스냅샷 임시방편(커밋 11e10b8)도 이걸로 대체. | **Opus xhigh** | **필요, 필수** | ⏳ 대기 |
 
@@ -355,6 +357,28 @@ Phase 2 당시 없었거나 순서 밖이라 감사 안 됐던 3파일. 조사 �
 ~~**감사 자체가 안 된 파일**: game-sheet.js·index-page.js·day-detail.js~~ → **✅ 해소됨 (A1 Phase 3 감사, 2026-07-15)**. 세 파일 모두 감사 완료로 위 "Phase 3" 절에 GS1~7·IP1~3·DD1~3 기록됨. 그 결과로 R11(game-sheet)·R12(day-detail)이 계획에 편입됨. index-page(IP1~3)는 아직 R번호 미배정 — 잔여 미배정 항목은 GS4(`getGameKey` 이름 충돌)·IP1~3.
 
 **세션 전환 규칙**: CLAUDE.md 모델전환 원칙대로, 매 항목 시작 직전 이 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청. 그린/옐로 항목은 Plan 없이 바로 진행, Red 중 Plan 표시된 항목(R6~R10)은 착수 전 Plan 작성→승인 필수.
+
+---
+
+## R11 사전조사 (2026-07-16, R11c 실행 시 재조사 불필요)
+
+`game-sheet.js` IIFE화(GS2)의 핵심은 "전역으로 남겨야 하는 함수" 특정. 실측 결과:
+
+| 구분 | 개수 |
+|---|---|
+| 최상위 함수 전체 | 90 (R11a 후 95) |
+| 파일 밖(js/html)에서 참조 | 16 — `ensureGameSheet` `formatDate` `formatDifficultyWeight` `formatPlayers` `formatRating` `getAllGamesArray` `getAvailBadgeHtml` `getDifficultyData` `getGameKey` `getShelfSpanHtml` `normalizeLevelValue` `onOpenCommentInput` `onOpenPhotoInput` `openGameRecordSheet` `openGameSheet` `requireLogin` |
+| 자기 템플릿 `onclick=`이 호출 | 27 (위와 4개 중복) |
+| **→ 전역 유지 필수** | **39** |
+| **→ 내부화 가능** | **51** (R11a 신규 5개 포함 시 56) |
+
+**감사의 "onclick 다수라 clean IIFE화 어려움" 판단은 과했음** — 목록이 특정되므로 기계적으로 가능. 단 아래 함정 주의:
+
+- ⚠️ **`onclick` 한 속성에 호출이 여러 개**인 경우 있음(3곳). 첫 호출만 잡는 정규식은 `_openCoverModal`을 놓쳐 "내부화 가능"으로 **오분류**함 → 표지 클릭 사망. 속성 단위·줄 단위 두 방식으로 교차검증할 것(2026-07-16 조사에선 두 방식이 27개로 일치).
+- ⚠️ 감사 원문 수치 일부 부정확: `onOpenPlayModal`은 onclick이 아니라 `requireLogin(() => …)` 내부 호출(내부화 가능). `buildRecordItemHtml`은 128줄이 아니라 실측 ~40줄.
+- ⚠️ 노출 누락 시 **로드 에러 없이 버튼만 조용히 죽음** → 페이지별 클릭 스모크 필수.
+
+**보류 권고**: GS5(escH 사본 제거)는 감사 자체가 `"` 이스케이프 차이(PU4) 선행 정리를 조건으로 담. GS7(난이도 헬퍼 전역결합)은 IIFE로 안 풀림 — `getDifficultyData`/`normalizeLevelValue`가 어차피 전역 유지 대상이라, 실제 해결은 헬퍼 별도 파일 분리(신규 파일 = 별도 결정).
 
 ---
 
