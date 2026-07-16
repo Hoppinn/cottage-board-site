@@ -61,7 +61,7 @@ window._cottageSess = (function () {
     get(uid) {
       if (!localStorage.getItem(`cottage_sess_${uid}`)) _migrate(uid);
       try { return JSON.parse(localStorage.getItem(`cottage_sess_${uid}`) || '{}'); }
-      catch (_) { return {}; }
+      catch (err) { console.error('[_migrate]', err); return {}; }
     },
     set(uid, data) {
       localStorage.setItem(`cottage_sess_${uid}`, JSON.stringify(data));
@@ -113,7 +113,7 @@ window._cottageSess = (function () {
     if (!gameId) return;
     try {
       await db.from("game_views").insert({ game_id: gameId });
-    } catch (_) {}
+    } catch (err) { console.error('[trackView]', err);}
   }
 
   // ── 별점 조회 ───────────────────────────────────────────
@@ -127,7 +127,7 @@ window._cottageSess = (function () {
       if (!data?.length) return null;
       const avg = data.reduce((s, r) => s + r.rating, 0) / data.length;
       return { avg: parseFloat(avg.toFixed(1)), count: data.length };
-    } catch (_) {
+    } catch (err) { console.error('[getGameRating]', err);
       return null;
     }
   }
@@ -186,7 +186,7 @@ window._cottageSess = (function () {
           .eq("user_id", String(userId))
           .maybeSingle();
         if (data?.rating != null) return Number(data.rating);
-      } catch (_) {}
+      } catch (err) { console.error('[getMyRating]', err);}
     }
     const stored = localStorage.getItem(`cottage_rated_${gameId}`);
     return stored ? Number(stored) : null;
@@ -198,7 +198,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.rpc("get_popular_games", { limit_count: limit });
       return data || [];
-    } catch (_) {
+    } catch (err) { console.error('[getPopularGames]', err);
       return [];
     }
   }
@@ -215,7 +215,7 @@ window._cottageSess = (function () {
           { avg: Number(r.avg_rating), count: Number(r.rating_count) },
         ])
       );
-    } catch (_) {
+    } catch (err) { console.error('[getAllGameRatings]', err);
       return {};
     }
   }
@@ -248,7 +248,7 @@ window._cottageSess = (function () {
     try {
       const u = JSON.parse(localStorage.getItem('kakao_user') || 'null');
       return u?.id ? String(u.id) : null;
-    } catch (_) { return null; }
+    } catch (err) { console.error('[_currentVisitorUserId]', err); return null; }
   }
   const _ADMIN_USER_ID = '4916417947';
   function _isLocalhost() {
@@ -257,7 +257,7 @@ window._cottageSess = (function () {
   function _isAdminVisitor() {
     try {
       return !!localStorage.getItem('cottage_is_admin') || _currentVisitorUserId() === _ADMIN_USER_ID;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[_isAdminVisitor]', err); return false; }
   }
   function _shouldSkipAnalytics() {
     return _isLocalhost() || _isAdminVisitor();
@@ -274,7 +274,7 @@ window._cottageSess = (function () {
     if (opts.game_id) payload.game_id = opts.game_id;
     try {
       await db.from('page_events').insert(payload);
-    } catch (_) {}
+    } catch (err) { console.error('[trackEvent]', err);}
   }
 
   // ── 플레이 기록 ─────────────────────────────────────────
@@ -345,7 +345,7 @@ window._cottageSess = (function () {
         .order("created_at", { ascending: false })
         .limit(limit);
       return data || [];
-    } catch (_) {
+    } catch (err) { console.error('[getGamePlayRecords]', err);
       return [];
     }
   }
@@ -400,7 +400,7 @@ window._cottageSess = (function () {
         .neq("group_name", "");
       if (!data) return [];
       return [...new Set(data.map(r => r.group_name).filter(Boolean))].sort();
-    } catch (_) {
+    } catch (err) { console.error('[getGroupNames]', err);
       return [];
     }
   }
@@ -439,7 +439,7 @@ window._cottageSess = (function () {
       ];
       // 조합(전체) 먼저, 그 다음 개별 이름
       return [...new Set([...combos, ...individuals])];
-    } catch (_) {
+    } catch (err) { console.error('[getPlayerNames]', err);
       return [];
     }
   }
@@ -452,7 +452,7 @@ window._cottageSess = (function () {
         .order("created_at", { ascending: false })
         .limit(limit);
       return data || [];
-    } catch (_) {
+    } catch (err) { console.error('[getAllPlayRecordsForHistory]', err);
       return [];
     }
   }
@@ -463,7 +463,7 @@ window._cottageSess = (function () {
       const base = db.from("game_play_records").select("*", { count: "exact", head: true });
       const { count } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]));
       return count || 0;
-    } catch (_) {
+    } catch (err) { console.error('[getGamePlayCount]', err);
       return 0;
     }
   }
@@ -478,7 +478,7 @@ window._cottageSess = (function () {
         .order("created_at", { ascending: false })
         .limit(3);
       return data || [];
-    } catch (_) {
+    } catch (err) { console.error('[getPlayHighlights]', err);
       return [];
     }
   }
@@ -497,7 +497,7 @@ window._cottageSess = (function () {
         .limit(limit);
       const { data } = await (ids.length > 1 ? base.in('game_id', ids) : base.eq('game_id', ids[0]));
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getPlayReviewsByGame]', err); return []; }
   }
 
   async function getGameComments(gameKey, limit = 10) {
@@ -510,7 +510,7 @@ window._cottageSess = (function () {
         .limit(limit);
       const { data } = await (keys.length > 1 ? base.in('game_key', keys) : base.eq('game_key', keys[0]));
       return data || [];
-    } catch (_) {
+    } catch (err) { console.error('[getGameComments]', err);
       return [];
     }
   }
@@ -567,7 +567,7 @@ window._cottageSess = (function () {
         .select("*", { count: "exact", head: true })
         .eq("game_id", gameId);
       return count || 0;
-    } catch (_) {
+    } catch (err) { console.error('[getGameLikeCount]', err);
       return 0;
     }
   }
@@ -603,7 +603,7 @@ window._cottageSess = (function () {
         .eq("user_id", userId)
         .maybeSingle();
       return !!data;
-    } catch (_) {
+    } catch (err) { console.error('[hasUserLiked]', err);
       return false;
     }
   }
@@ -616,7 +616,7 @@ window._cottageSess = (function () {
         .select("*", { count: "exact", head: true })
         .eq("game_id", gameId);
       return count || 0;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getGameCuriousCount]', err); return 0; }
   }
 
   async function toggleGameCurious(gameId, userId) {
@@ -648,7 +648,7 @@ window._cottageSess = (function () {
         .eq("user_id", userId)
         .maybeSingle();
       return !!data;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[hasUserCurious]', err); return false; }
   }
 
   async function getUserLikedGames(userId) {
@@ -656,7 +656,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('game_likes').select('game_id').eq('user_id', userId);
       return (data || []).map(r => r.game_id);
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getUserLikedGames]', err); return []; }
   }
 
   async function getUserCuriousGames(userId) {
@@ -664,7 +664,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('game_curious').select('game_id').eq('user_id', userId);
       return (data || []).map(r => r.game_id);
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getUserCuriousGames]', err); return []; }
   }
 
   async function _getReactionUsers(table, gameId, limit) {
@@ -674,7 +674,7 @@ window._cottageSess = (function () {
       const ids = rows.map(r => r.user_id);
       const { data: profs } = await db.from('profiles').select('user_id, nickname, photo_url, rep_achievement_id').in('user_id', ids);
       return profs || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[_getReactionUsers]', err); return []; }
   }
 
   function getGameLikers(gameId, limit = 6) { return _getReactionUsers('game_likes', gameId, limit); }
@@ -687,7 +687,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('game_likes').select('game_id, custom_name').eq('user_id', userId);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getUserLikedGamesAll]', err); return []; }
   }
 
   async function getUserCuriousGamesAll(userId) {
@@ -695,7 +695,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('game_curious').select('game_id, custom_name').eq('user_id', userId);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getUserCuriousGamesAll]', err); return []; }
   }
 
   async function addGamePref(userId, gameId, customName, table) {
@@ -728,7 +728,7 @@ window._cottageSess = (function () {
       ]);
       const names = new Set([...(l.data || []), ...(c.data || [])].map(r => r.custom_name).filter(Boolean));
       return [...names].sort();
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getCustomPrefSuggestions]', err); return []; }
   }
 
   // profiles.bio는 "한줄소개" SSOT다. 취향보드(taste board)와 자기소개(member_intros)
@@ -754,7 +754,7 @@ window._cottageSess = (function () {
         .eq('user_id', userId)
         .eq('list_type', listType);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getMeetingGamePrefs]', err); return []; }
   }
 
   async function addMeetingGamePref(userId, listType, gameId, customName) {
@@ -805,7 +805,7 @@ window._cottageSess = (function () {
         curiousGames,
         ruleGames,
       };
-    } catch (_) { return null; }
+    } catch (err) { console.error('[getMeetingProfile]', err); return null; }
   }
 
   // member_intros upsert — 유저당 1행(UNIQUE user_id), 자기소개/모임보드 양쪽에서 호출
@@ -823,7 +823,7 @@ window._cottageSess = (function () {
       const { data } = await db.from('profiles').select('bio').not('bio', 'is', null);
       const allTags = (data || []).flatMap(r => (r.bio || '').split(',').map(t => t.trim()).filter(Boolean));
       return [...new Set(allTags)].sort();
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getAllBioTagSuggestions]', err); return []; }
   }
 
   async function getAllAvoidTagSuggestions() {
@@ -831,7 +831,7 @@ window._cottageSess = (function () {
       const { data } = await db.from('profiles').select('avoid_tags').not('avoid_tags', 'is', null);
       const allTags = (data || []).flatMap(r => r.avoid_tags || []);
       return [...new Set(allTags)].sort();
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getAllAvoidTagSuggestions]', err); return []; }
   }
 
   async function updateUserAvoidTags(userId, tags) {
@@ -856,7 +856,7 @@ window._cottageSess = (function () {
           .eq('page', '__visitor__').gte('created_at', todayStart).lte('created_at', todayEnd),
       ]);
       return { total: totalRes.count || 0, today: todayRes.count || 0 };
-    } catch (_) {
+    } catch (err) { console.error('[getVisitorStats]', err);
       return null;
     }
   }
@@ -879,7 +879,7 @@ window._cottageSess = (function () {
       try {
         const u = new URL(document.referrer);
         return u.hostname !== location.hostname ? u.hostname : null;
-      } catch (_) { return null; }
+      } catch (err) { console.error('[getVisitorStats]', err); return null; }
     })();
     // 관리자 접속은 방문자 통계 전체 미포함
     if (_shouldSkipAnalytics()) return;
@@ -929,7 +929,7 @@ window._cottageSess = (function () {
       try {
         const u = new URL(document.referrer);
         if (u.hostname !== location.hostname) return u.hostname;
-      } catch (_) {}
+      } catch (err) { console.error('[isUserBanned]', err);}
     }
     // 내부 이동 시 당일 마지막 외부 유입 소스로 귀속
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
@@ -995,7 +995,7 @@ window._cottageSess = (function () {
           db.from('page_sessions').insert({ page, user_id: userId, session_key: getSessionKey(), duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
         }
       }
-    } catch (_) {}
+    } catch (err) { console.error('[_syncTimeToDBNow]', err);}
   }
 
   if (typeof document !== 'undefined') {
@@ -1064,7 +1064,7 @@ window._cottageSess = (function () {
           today_seconds: _anonTodaySec, today_date: todayKst
         }).eq('session_key', key);
       }
-    } catch (_) {}
+    } catch (err) { console.error('[_startAnonHeartbeat]', err);}
     // 비로그인 방문자도 page_sessions에 기록 (명 집계용); 실패해도 anon_sessions 영향 없음
     try {
       const page = window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
@@ -1072,7 +1072,7 @@ window._cottageSess = (function () {
         page, user_id: null, session_key: key,
         duration_sec: 0, entered_at: new Date().toISOString(), referrer: _sessionReferrer
       }).then(() => {}).catch(() => {});
-    } catch (_) {}
+    } catch (err) { console.error('[_startAnonHeartbeat]', err);}
     _anonHeartbeatTimer = setInterval(() => {
       if (_sessionUserId) { _stopAnonHeartbeat(); return; }
       if (document.hidden) return;
@@ -1133,7 +1133,7 @@ window._cottageSess = (function () {
         const newVisitCount = visitCountField.visit_count;
         window.checkAchievements?.('visit', userId, { visitCount: newVisitCount });
       }
-    } catch (_) {}
+    } catch (err) { console.error('[upsertProfile]', err);}
   }
 
   async function updateProfilePhoto(userId, photoUrl) {
@@ -1151,7 +1151,7 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('profiles').select('photo_url').eq('user_id', userId).maybeSingle();
       return data?.photo_url || null;
-    } catch (_) { return null; }
+    } catch (err) { console.error('[getProfilePhoto]', err); return null; }
   }
 
   async function getProfileSnapshot(userId) {
@@ -1159,14 +1159,14 @@ window._cottageSess = (function () {
     try {
       const { data } = await db.from('profiles').select('photo_url,nickname').eq('user_id', userId).maybeSingle();
       return data || null;
-    } catch (_) { return null; }
+    } catch (err) { console.error('[getProfileSnapshot]', err); return null; }
   }
 
   async function getAllProfiles() {
     try {
       const { data } = await db.from('profiles').select('*').order('last_seen_at', { ascending: false });
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getAllProfiles]', err); return []; }
   }
 
   async function banUser(userId) {
@@ -1199,7 +1199,7 @@ window._cottageSess = (function () {
         .order('entered_at', { ascending: false })
         .limit(20000);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getPageAnalytics]', err); return []; }
   }
 
   async function getEventCounts(eventTypes, daysBack = 7) {
@@ -1210,7 +1210,7 @@ window._cottageSess = (function () {
         .in('event_type', eventTypes)
         .gte('created_at', since);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getEventCounts]', err); return []; }
   }
 
   // 관리자 이벤트 퍼널 "메인 방문" 단계용 — page_events가 아니라 page_views(페이지 진입 로그) 기준
@@ -1222,7 +1222,7 @@ window._cottageSess = (function () {
         .eq('page', page)
         .gte('created_at', since);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getPageViewCounts]', err); return []; }
   }
 
   async function checkNicknameAvailable(nickname, currentUserId) {
@@ -1233,7 +1233,7 @@ window._cottageSess = (function () {
         .neq('user_id', String(currentUserId))
         .limit(1);
       return !data?.length;
-    } catch (_) { return true; }
+    } catch (err) { console.error('[checkNicknameAvailable]', err); return true; }
   }
 
   async function getMyStats(userId, nickname) {
@@ -1276,7 +1276,7 @@ window._cottageSess = (function () {
         profile: profile.data || null,
         reviewCount: reviewRes?.count || 0,
       };
-    } catch (_) { return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
+    } catch (err) { console.error('[getMyStats]', err); return { plays: [], comments: [], suggestions: 0, moimCount: 0, profile: null, reviewCount: 0 }; }
   }
 
 
@@ -1420,7 +1420,7 @@ window._cottageSess = (function () {
       }
       notifs.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
       return notifs;
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getMyNotifications]', err); return []; }
   }
 
   window.CottageDB = {
@@ -1528,7 +1528,7 @@ window._cottageSess = (function () {
     if (!userId || !timestamp) return;
     try {
       await db.from('profiles').update({ notif_seen_at: timestamp }).eq('user_id', userId);
-    } catch (_) {}
+    } catch (err) { console.error('[updateNotifSeenAt]', err);}
   }
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
@@ -1540,7 +1540,7 @@ window._cottageSess = (function () {
         .order('created_at', { ascending: false })
         .limit(limit);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getAllPlayRecordsForHub]', err); return []; }
   }
 
   async function getGameReviews(gameId) {
@@ -1550,7 +1550,7 @@ window._cottageSess = (function () {
         .eq('game_id', gameId)
         .order('created_at', { ascending: false });
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getGameReviews]', err); return []; }
   }
 
   async function insertGameReview(gameId, content, nickname, userId) {
@@ -1578,7 +1578,7 @@ window._cottageSess = (function () {
         .eq('user_id', userId)
         .order('earned_at', { ascending: true });
       return (data || []).map(r => ({ id: r.achievement_id, earned_at: r.earned_at }));
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getUserAchievements]', err); return []; }
   }
 
   async function grantAchievement(userId, achievementId) {
@@ -1586,28 +1586,28 @@ window._cottageSess = (function () {
       const { error } = await db.from('user_achievements').insert({ user_id: userId, achievement_id: achievementId });
       if (error) return false; // 중복이면 UNIQUE 위반 → 조용히 false
       return true;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[grantAchievement]', err); return false; }
   }
 
   async function setRepAchievement(userId, achievementId) {
     try {
       const { error } = await db.from('profiles').update({ rep_achievement_id: achievementId }).eq('user_id', userId);
       return !error;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[setRepAchievement]', err); return false; }
   }
 
   async function getUserPlayCount(userId) {
     try {
       const { count } = await db.from('game_play_records').select('id', { count: 'exact', head: true }).eq('user_id', userId);
       return count || 0;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserPlayCount]', err); return 0; }
   }
 
   async function getUserDistinctGameCount(userId) {
     try {
       const { data } = await db.from('game_play_records').select('game_id').eq('user_id', userId);
       return new Set((data || []).map(r => r.game_id)).size;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserDistinctGameCount]', err); return 0; }
   }
 
   async function getUserPlayedGames(userId) {
@@ -1622,7 +1622,7 @@ window._cottageSess = (function () {
         seen.add(r.game_id);
         return true;
       });
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getUserPlayedGames]', err); return []; }
   }
 
   async function getUserPhotoCount(userId) {
@@ -1633,32 +1633,32 @@ window._cottageSess = (function () {
         try {
           const parsed = JSON.parse(r.photo_url);
           return s + (Array.isArray(parsed) ? parsed.length : 1);
-        } catch (_) {
+        } catch (err) { console.error('[getUserPhotoCount]', err);
           return s + (r.photo_url.trim() ? 1 : 0);
         }
       }, 0);
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserPhotoCount]', err); return 0; }
   }
 
   async function getUserRatingCount(userId) {
     try {
       const { count } = await db.from('game_ratings').select('id', { count: 'exact', head: true }).eq('user_id', userId);
       return count || 0;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserRatingCount]', err); return 0; }
   }
 
   async function getUserCommentCount(userId) {
     try {
       const { count } = await db.from('game_comments').select('id', { count: 'exact', head: true }).eq('user_id', userId);
       return count || 0;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserCommentCount]', err); return 0; }
   }
 
   async function getUserVisitCount(userId) {
     try {
       const { data } = await db.from('profiles').select('visit_count').eq('user_id', userId).maybeSingle();
       return data?.visit_count || 0;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserVisitCount]', err); return 0; }
   }
 
   async function getUserParticipationCount(userId, nickname) {
@@ -1669,7 +1669,7 @@ window._cottageSess = (function () {
         .select('id', { count: 'exact', head: true })
         .ilike('player_names', `%${_escapeLike(nickname)}%`);
       return count || 0;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserParticipationCount]', err); return 0; }
   }
 
   async function getUserFirstRecordCount(userId) {
@@ -1700,7 +1700,7 @@ window._cottageSess = (function () {
       return Object.values(firstByGame)
         .filter(r => String(r.user_id) === String(userId))
         .length;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserFirstRecordCount]', err); return 0; }
   }
 
   async function getRepAchievement(userId) {
@@ -1708,14 +1708,14 @@ window._cottageSess = (function () {
       const { data } = await db.from('profiles').select('rep_achievement_id').eq('user_id', userId).maybeSingle();
       if (!data?.rep_achievement_id) return null;
       return { id: data.rep_achievement_id };
-    } catch (_) { return null; }
+    } catch (err) { console.error('[getRepAchievement]', err); return null; }
   }
 
   async function setRepTitle(userId, titleId) {
     try {
       const { error } = await db.from('profiles').update({ rep_title_id: titleId || null }).eq('user_id', userId);
       return !error;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[setRepTitle]', err); return false; }
   }
 
   // ── 음료교환권 ──────────────────────────────────────────────────────────
@@ -1734,7 +1734,7 @@ window._cottageSess = (function () {
         .insert({ user_id: String(userId), delta: 1, reason: 'achievement', note: achievementId, nickname });
       if (error) return false; // partial unique index 위반 포함 — DB 2차 방어
       return true;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[grantAchievementVoucher]', err); return false; }
   }
 
   // 함께한 날 카운팅 — 매장에 함께한 고유 날짜 수
@@ -1759,7 +1759,7 @@ window._cottageSess = (function () {
         (participantRows || []).forEach(r => dateSet.add(toDateStr(r)));
       }
       return dateSet.size;
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getUserUniqueDayCount]', err); return 0; }
   }
 
   async function grantFirstPlayVoucher(userId) {
@@ -1773,7 +1773,7 @@ window._cottageSess = (function () {
         .insert({ user_id: String(userId), delta: 1, reason: 'first_play', nickname });
       if (error) return false; // unique index 위반 포함 — DB 2차 방어
       return true;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[grantFirstPlayVoucher]', err); return false; }
   }
 
   async function grantDevVoucher(userId) {
@@ -1781,7 +1781,7 @@ window._cottageSess = (function () {
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: 1, reason: 'dev_test' });
       return !error;
-    } catch (_) { return false; }
+    } catch (err) { console.error('[grantDevVoucher]', err); return false; }
   }
 
   async function getVoucherBalance(userId) {
@@ -1789,7 +1789,7 @@ window._cottageSess = (function () {
       const { data } = await db.from('voucher_log')
         .select('delta').eq('user_id', String(userId));
       return (data || []).reduce((sum, r) => sum + r.delta, 0);
-    } catch (_) { return 0; }
+    } catch (err) { console.error('[getVoucherBalance]', err); return 0; }
   }
 
   async function getVoucherProducts() {
@@ -1797,7 +1797,7 @@ window._cottageSess = (function () {
       const { data } = await db.from('voucher_products')
         .select('id, name, cost').eq('is_active', true).order('id');
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getVoucherProducts]', err); return []; }
   }
 
   async function redeemVoucher(userId, productId) {
@@ -1812,7 +1812,7 @@ window._cottageSess = (function () {
         .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId, nickname, note: product.name });
       if (error) return { ok: false, reason: 'db_error' };
       return { ok: true };
-    } catch (_) { return { ok: false, reason: 'error' }; }
+    } catch (err) { console.error('[redeemVoucher]', err); return { ok: false, reason: 'error' }; }
   }
 
   async function getVoucherHistory(userId, limit = 20) {
@@ -1823,7 +1823,7 @@ window._cottageSess = (function () {
         .order('created_at', { ascending: false })
         .limit(limit);
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getVoucherHistory]', err); return []; }
   }
 
   // ── 모임 플래너 ────────────────────────────────────────────
@@ -1836,7 +1836,7 @@ window._cottageSess = (function () {
         .lte('vote_date', endDate)
         .order('vote_date');
       return data || [];
-    } catch (_) { return []; }
+    } catch (err) { console.error('[getMeetingVotes]', err); return []; }
   }
 
   async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd) {
@@ -1931,7 +1931,7 @@ window._cottageSess = (function () {
       if (error) return { ok: false, reason: 'db_error' };
       if (!data || data.length === 0) return { ok: false, reason: 'not_found' };
       return { ok: true };
-    } catch (e) { return { ok: false, reason: 'exception' }; }
+    } catch (err) { console.error('[setMeetingVoteGamePriority]', err); return { ok: false, reason: 'exception' }; }
   }
 
   async function setMeetingVoteGameCondition(userId, voteDate, gameId, customName, listType, condition) {
