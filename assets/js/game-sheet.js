@@ -4,6 +4,10 @@
    - assets/js/view/game-view-utils.js 필요
 ========================= */
 
+/* R11c(GS2): 파일 전체를 IIFE로 감싼다.
+   내부 헬퍼 60개·모듈 상태는 은닉하고, 하단에서 공개 API(함수 39 + 크로스파일 const 2 + gameSheet getter)만 명시 노출한다. */
+(function () {
+
 const GameView = window.CottageGameView;
 
 if (!GameView) {
@@ -2722,5 +2726,32 @@ async function onSubmitPlayModal() {
 /* =========================
    # RECOMMEND MODAL ELEMENTS
 ========================= */
+
+/* ===== R11c(GS2) 공개 API 노출 =====
+   전역 유지 필수 = 파일 밖(js/html) 참조 16 ∪ 자기 템플릿 onclick 호출 27 = 함수 39개
+   + 크로스파일에서 bare 참조되는 상수 2개(DEFAULT_GAME_IMAGE·GameView).
+   나머지 최상위 함수 60개와 모듈 상태(gameSheetContent·_gameSheetHistory 등)는 IIFE 내부 은닉. */
+Object.assign(window, {
+  _openCoverModal, _openOrganizerLightbox, closeGameSheet, ensureGameSheet,
+  formatDate, formatDifficultyWeight, formatPlayers, formatRating,
+  getAllGamesArray, getAvailBadgeHtml, getDifficultyData, getGameKey, getShelfSpanHtml,
+  goBackGameSheet, loginFromSheet, normalizeLevelValue,
+  onCancelPlayRecord, onCloseCommentModal, onClosePhotoModal, onClosePlayModal,
+  onDeleteComment, onDeleteCommentPreview, onDeletePlayReview, onEditComment,
+  onEditPlayReview, onLinkCommentToPlay, onOpenCommentInput, onOpenPhotoInput,
+  onSheetCurious, onSheetLike, onSubmitCommentModal, onSubmitPhotoModal, onSubmitPlayModal,
+  openGameRecordSheet, openGameSheet, openShelfSheet, requireLogin,
+  toggleSheetDesc, toggleSheetMechs,
+  DEFAULT_GAME_IMAGE, GameView,
+});
+
+// gameSheet: 재할당되는 시트 요소라 스냅샷 노출 불가 → 라이브 getter.
+// (owned-games-page.js:884 + 자기 인라인 onclick 2곳이 bare `gameSheet` 참조)
+Object.defineProperty(window, 'gameSheet', {
+  get: function () { return gameSheet; },
+  configurable: true,
+});
+
+})();
 
 
