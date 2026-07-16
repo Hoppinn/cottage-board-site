@@ -554,6 +554,10 @@
     body.is-embedded .owned-page-nav { display: none !important; }
     body.is-embedded { overflow-x: hidden; }
 
+    /* 홈에서 등록/수정으로 바로 진입 시 뒤쪽 주간 뷰를 숨기고 등록 시트만 보이게 함 */
+    body.is-quick-entry #viewWeek,
+    body.is-quick-entry #mainLoading { display: none !important; }
+
     .sched-slider-wrap { margin-bottom: 16px; }
     .sched-dual-range {
       position: relative;
@@ -892,6 +896,7 @@
         overlay.style.display = 'none';
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
+        document.body.classList.remove('is-quick-entry');
       }
       $s('smClose').addEventListener('click', close);
       overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
@@ -2050,6 +2055,7 @@
         const ds = _pendingRegister;
         _pendingRegister = null;
         if (ds >= toDateStr(TODAY)) {
+          document.body.classList.add('is-quick-entry');
           _openMultiSheet?.({ startStep: 1, dates: [ds] });
           _notifySheetShown();
         }
@@ -2093,6 +2099,7 @@
       if (e.data?.type === 'cottage-edit') {
         const ds = e.data.date;
         if (ds && ds >= toDateStr(TODAY) && _initDone) {
+          document.body.classList.add('is-quick-entry');
           _openMultiSheet?.({ startStep: 2, dates: [ds] });
           _notifySheetShown();
         }
@@ -2103,6 +2110,7 @@
       if (!ds) return;
       if (_initDone) {
         if (ds >= toDateStr(TODAY)) {
+          document.body.classList.add('is-quick-entry');
           _openMultiSheet?.({ startStep: 1, dates: [ds] });
           _notifySheetShown();
         }
