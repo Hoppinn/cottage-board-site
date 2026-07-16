@@ -462,6 +462,127 @@
    * @param {string} userId — 클릭한 막대의 user_id
    * @param {string} voteDate — 'YYYY-MM-DD'
    */
+  const COND_LABELS = { any:'무관', best:'베스트', recommended:'추천', '2':'2인', '3':'3인', '4':'4인', '5+':'5인+' };
+
+  /** 내 일정 모달 통계 칩 HTML (같은 날 · 나와 시간겹침 · 게임 겹침) */
+  function _buildSchedStatsHtml(votes, myVote, myGames, userId, voteGames) {
+    const myGameKeys = new Set(myGames.map(gameKey));
+      const others = votes.filter(v => String(v.user_id) !== String(userId));
+      const totalCount  = votes.length;
+      const overlapCount = others.filter(v => timeOverlap(myVote, v)).length;
+      const gameMatchCount = others.filter(v => {
+        const theirGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
+        return theirGames.some(g => myGameKeys.has(gameKey(g)));
+      }).length;
+
+      const statChip = (icon, label, count, highlight) =>
+        `<span class="dd-stat-chip${highlight ? ' is-match' : ''}">${icon} ${label} ${count}명</span>`;
+
+      const statsHtml = `<div class="dd-stats-row">
+        ${statChip('👥', '같은 날', totalCount, false)}
+        ${statChip('⏱', '나와 시간겹침', overlapCount, overlapCount > 0)}
+        ${statChip('🎲', '게임 겹침', gameMatchCount, gameMatchCount > 0)}
+      </div>`;
+    return statsHtml;
+  }
+
+  /** 게임 섹션 HTML — isMine이면 ⭐/인원조건 select 편집 컨트롤 포함, 아니면 읽기전용 */
+  function _buildSchedGameSection(gameObjs, icon, label, isMine) {
+        if (!gameObjs.length) return '';
+        const items = gameObjs.map(g => {
+          const name = esc(resolveGameName(g));
+          const key  = gameKey(g);
+          const thumb = dbThumbHtml(g.game_id, 'dd-game-thumb');
+          if (isMine) {
+            const star = g.is_priority ? '⭐' : '☆';
+            const curCond = g.player_condition || 'any';
+            // 옵션 텍스트 자체를 게임별 해석 라벨로(베스트→"베스트 3인", 3인→"3인") → 별도 태그 없이 select 하나로 통합
+            const _optLabel = (v) => v === 'any' ? '무관' : (window.formatCondLabel?.(v, g.game_id) || COND_LABELS[v]);
+            const selectOpts = Object.keys(COND_LABELS)
+              .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
+            const selWidth = window._condSelWidth?.(_optLabel(curCond)) || '';
+            return `<li><span>${thumb}${name}</span><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+          }
+          const cond = g.player_condition || 'any';
+          const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
+          const cl = condLabel(cond, cgEntry);
+          return `<li>${thumb}${name}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+        }).join('');
+        const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
+        return `<div class="dd-section">
+          <span class="dd-section-label">${icon} ${label}</span>
+          <ul class="${ulCls}">${items}</ul>
+        </div>`;
+  }
+
+  /**
+   * 내 일정 모달 편집 컨트롤 바인딩 (⭐ 대표지정 · 인원조건 select)
+   * onDirty: 변경 성공 시 호출 — 호출부가 닫기 시점에 onDirtyClosed로 주간뷰를 갱신한다.
+   */
+  function _bindSchedEditors(el, { userId, voteDate, myGames, onDirty }) {
+        el.querySelectorAll('.dd-star-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            if (btn.disabled) return;
+            const key = btn.dataset.key;
+            const listType = btn.dataset.listtype;
+            const curPriority = btn.dataset.priority === 'true';
+            const newPriority = !curPriority;
+            const gameObj = myGames.find(g => gameKey(g) === key && g.list_type === listType);
+            if (!gameObj) return;
+
+            btn.disabled = true;
+            const result = await window.CottageDB?.setMeetingVoteGamePriority(
+              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, gameObj.list_type, newPriority
+            );
+            btn.disabled = false;
+
+            const noticeEl = el.querySelector('.dd-star-notice');
+            if (!result || !result.ok) {
+              const msg = result?.reason === 'max_priority'
+                ? '대표 게임은 2개까지 지정할 수 있어요'
+                : '오류가 발생했어요. 새로고침 후 다시 시도해 주세요.';
+              if (result?.reason !== 'max_priority') console.error('[openDateScheduleModal] priority:', result);
+              if (noticeEl) { noticeEl.textContent = msg; noticeEl.style.display = ''; }
+              return;
+            }
+
+            gameObj.is_priority = newPriority;
+            btn.dataset.priority = String(newPriority);
+            btn.textContent = newPriority ? '⭐' : '☆';
+            if (noticeEl) noticeEl.style.display = 'none';
+            onDirty();
+          });
+        });
+
+        el.querySelectorAll('.dd-cond-select').forEach(sel => {
+          sel.dataset.prev = sel.value;
+          sel.addEventListener('change', async () => {
+            const key = sel.dataset.key;
+            const listType = sel.dataset.listtype;
+            const newCond = sel.value;
+            const prevCond = sel.dataset.prev;
+            const gameObj = myGames.find(g => gameKey(g) === key && g.list_type === listType);
+            if (!gameObj) return;
+            sel.disabled = true;
+            const result = await window.CottageDB?.setMeetingVoteGameCondition(
+              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, gameObj.list_type, newCond
+            );
+            sel.disabled = false;
+            if (!result || !result.ok) {
+              console.error('[openDateScheduleModal] condition:', result);
+              sel.value = prevCond;
+              sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
+              return;
+            }
+            gameObj.player_condition = newCond;
+            sel.dataset.prev = newCond;
+            // 옵션 텍스트가 이미 해석 라벨이라 select가 스스로 갱신됨(별도 태그 없음). 폭도 새 라벨 길이에 맞춤.
+            sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
+            onDirty();
+          });
+        });
+  }
+
   window.openDateScheduleModal = async function (userId, voteDate, opts) {
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
@@ -503,24 +624,8 @@
 
       const myGames = voteGames.filter(g => String(g.user_id) === String(userId));
       _latestMyGames = myGames;
-      const myGameKeys = new Set(myGames.map(gameKey));
 
-      const others = votes.filter(v => String(v.user_id) !== String(userId));
-      const totalCount  = votes.length;
-      const overlapCount = others.filter(v => timeOverlap(myVote, v)).length;
-      const gameMatchCount = others.filter(v => {
-        const theirGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
-        return theirGames.some(g => myGameKeys.has(gameKey(g)));
-      }).length;
-
-      const statChip = (icon, label, count, highlight) =>
-        `<span class="dd-stat-chip${highlight ? ' is-match' : ''}">${icon} ${label} ${count}명</span>`;
-
-      const statsHtml = `<div class="dd-stats-row">
-        ${statChip('👥', '같은 날', totalCount, false)}
-        ${statChip('⏱', '나와 시간겹침', overlapCount, overlapCount > 0)}
-        ${statChip('🎲', '게임 겹침', gameMatchCount, gameMatchCount > 0)}
-      </div>`;
+      const statsHtml = _buildSchedStatsHtml(votes, myVote, myGames, userId, voteGames);
 
       const me = window.getKakaoUser?.();
       const isMine = !!(me && String(me.id) === String(userId));
@@ -528,109 +633,18 @@
       const wantGameObjs  = myGames.filter(g => g.list_type === 'want');
       const learnGameObjs = myGames.filter(g => g.list_type === 'learn');
 
-      const COND_LABELS = { any:'무관', best:'베스트', recommended:'추천', '2':'2인', '3':'3인', '4':'4인', '5+':'5인+' };
-      function buildGameSection(gameObjs, icon, label) {
-        if (!gameObjs.length) return '';
-        const items = gameObjs.map(g => {
-          const name = esc(resolveGameName(g));
-          const key  = gameKey(g);
-          const thumb = dbThumbHtml(g.game_id, 'dd-game-thumb');
-          if (isMine) {
-            const star = g.is_priority ? '⭐' : '☆';
-            const curCond = g.player_condition || 'any';
-            // 옵션 텍스트 자체를 게임별 해석 라벨로(베스트→"베스트 3인", 3인→"3인") → 별도 태그 없이 select 하나로 통합
-            const _optLabel = (v) => v === 'any' ? '무관' : (window.formatCondLabel?.(v, g.game_id) || COND_LABELS[v]);
-            const selectOpts = Object.keys(COND_LABELS)
-              .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
-            const selWidth = window._condSelWidth?.(_optLabel(curCond)) || '';
-            return `<li><span>${thumb}${name}</span><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
-          }
-          const cond = g.player_condition || 'any';
-          const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
-          const cl = condLabel(cond, cgEntry);
-          return `<li>${thumb}${name}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
-        }).join('');
-        const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
-        return `<div class="dd-section">
-          <span class="dd-section-label">${icon} ${label}</span>
-          <ul class="${ulCls}">${items}</ul>
-        </div>`;
-      }
-
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
         <div class="dd-date-time">${fmtDate(voteDate)} · ${myVote.time_start}~${myVote.time_end}시</div>
         ${statsHtml}
         <div class="dd-block">
-          ${buildGameSection(wantGameObjs, '🎲', '하고 싶은 게임')}
-          ${buildGameSection(learnGameObjs, '📖', '배우고 싶은 게임')}
+          ${_buildSchedGameSection(wantGameObjs, '🎲', '하고 싶은 게임', isMine)}
+          ${_buildSchedGameSection(learnGameObjs, '📖', '배우고 싶은 게임', isMine)}
           ${isMine ? '<p class="dd-star-notice" style="display:none"></p>' : ''}
         </div>
       `);
 
-      if (isMine) {
-        el.querySelectorAll('.dd-star-btn').forEach(btn => {
-          btn.addEventListener('click', async () => {
-            if (btn.disabled) return;
-            const key = btn.dataset.key;
-            const listType = btn.dataset.listtype;
-            const curPriority = btn.dataset.priority === 'true';
-            const newPriority = !curPriority;
-            const gameObj = myGames.find(g => gameKey(g) === key && g.list_type === listType);
-            if (!gameObj) return;
-
-            btn.disabled = true;
-            const result = await window.CottageDB?.setMeetingVoteGamePriority(
-              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, gameObj.list_type, newPriority
-            );
-            btn.disabled = false;
-
-            const noticeEl = el.querySelector('.dd-star-notice');
-            if (!result || !result.ok) {
-              const msg = result?.reason === 'max_priority'
-                ? '대표 게임은 2개까지 지정할 수 있어요'
-                : '오류가 발생했어요. 새로고침 후 다시 시도해 주세요.';
-              if (result?.reason !== 'max_priority') console.error('[openDateScheduleModal] priority:', result);
-              if (noticeEl) { noticeEl.textContent = msg; noticeEl.style.display = ''; }
-              return;
-            }
-
-            gameObj.is_priority = newPriority;
-            btn.dataset.priority = String(newPriority);
-            btn.textContent = newPriority ? '⭐' : '☆';
-            if (noticeEl) noticeEl.style.display = 'none';
-            _schedDirty = true;
-          });
-        });
-
-        el.querySelectorAll('.dd-cond-select').forEach(sel => {
-          sel.dataset.prev = sel.value;
-          sel.addEventListener('change', async () => {
-            const key = sel.dataset.key;
-            const listType = sel.dataset.listtype;
-            const newCond = sel.value;
-            const prevCond = sel.dataset.prev;
-            const gameObj = myGames.find(g => gameKey(g) === key && g.list_type === listType);
-            if (!gameObj) return;
-            sel.disabled = true;
-            const result = await window.CottageDB?.setMeetingVoteGameCondition(
-              String(userId), voteDate, gameObj.game_id ?? null, gameObj.custom_name ?? null, gameObj.list_type, newCond
-            );
-            sel.disabled = false;
-            if (!result || !result.ok) {
-              console.error('[openDateScheduleModal] condition:', result);
-              sel.value = prevCond;
-              sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
-              return;
-            }
-            gameObj.player_condition = newCond;
-            sel.dataset.prev = newCond;
-            // 옵션 텍스트가 이미 해석 라벨이라 select가 스스로 갱신됨(별도 태그 없음). 폭도 새 라벨 길이에 맞춤.
-            sel.style.width = window._condSelWidth?.(sel.options[sel.selectedIndex]?.text) || '';
-            _schedDirty = true;
-          });
-        });
-      }
+      if (isMine) _bindSchedEditors(el, { userId, voteDate, myGames, onDirty: () => { _schedDirty = true; } });
     } catch (err) {
       console.error('openDateScheduleModal 오류:', err);
       renderModal('<div class="dd-loading">불러오기 실패. 다시 시도해 주세요.</div>');
