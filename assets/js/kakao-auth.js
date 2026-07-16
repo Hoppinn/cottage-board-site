@@ -651,8 +651,7 @@ function _bindRecordSubsheet(subBody, ctx) {
 
 // ── '취향 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 function _bindTasteSubsheet(subBody, ctx) {
-  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet,
-          getCurrentBio, setCurrentBio } = ctx;
+  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet } = ctx;
           const userId = String(user.id);
 
           // ── 한줄 소개 ──
@@ -663,12 +662,8 @@ function _bindTasteSubsheet(subBody, ctx) {
           const bioCustomTagsWrap = subBody.querySelector('.taste-bio-custom-tags');
           const _PREDEFINED_CHIPS = _BIO_PREDEFINED;
 
-          // 재진입 시 _currentBio 클로저 값으로 display 갱신 (R10a: 패널 스코프 유지 → 접근자로 읽음)
-          const _syncBioTags = getCurrentBio() ? getCurrentBio().split(',').map(t => t.trim()).filter(Boolean) : [];
-          bioDisplay.dataset.bio = getCurrentBio();
-          bioDisplay.innerHTML = _syncBioTags.length
-            ? _syncBioTags.map(t => `<span class="taste-bio-tag">${escH(t)}</span>`).join('')
-            : `<span class="taste-bio-placeholder">${readOnly ? '소개 없음' : '소개를 추가해보세요'}</span>`;
+          // (R10b) 재진입 시 bio를 다시 그리던 블록 제거 — 이제 진입할 때마다 DB에서 읽어
+          // HTML을 새로 빌드하므로 subBody가 이미 최신이다.
 
           function _renderBioDisplay(tags) {
             bioDisplay.innerHTML = tags.length
@@ -736,7 +731,6 @@ function _bindTasteSubsheet(subBody, ctx) {
             allTags.filter(t => !_PREDEFINED_CHIPS.includes(t) && !_allBioSet.has(t))
               .forEach(() => window.CottageDB?.trackEvent?.('new_bio_chip'));
             await window.CottageDB?.updateUserBio?.(userId, newBio);
-            setCurrentBio(newBio);
             bioDisplay.dataset.bio = newBio;
             _renderBioDisplay(allTags);
             bioRow.style.display = '';
@@ -977,7 +971,8 @@ function _bindTasteSubsheet(subBody, ctx) {
                 btn.className = 'taste-bio-chip';
                 btn.type = 'button';
                 btn.textContent = t;
-                if ((getCurrentBio() || '').split(',').map(s => s.trim()).includes(t)) btn.classList.add('is-selected');
+                // 편집 버튼(_renderCustomTags 경로)과 같은 소스를 봄 — 재조회로 갓 렌더된 최신 bio
+                if ((bioDisplay.dataset.bio || '').split(',').map(s => s.trim()).includes(t)) btn.classList.add('is-selected');
                 btn.addEventListener('click', () => btn.classList.toggle('is-selected'));
 
                 const delBtn = document.createElement('button');
@@ -1007,7 +1002,7 @@ function _bindTasteSubsheet(subBody, ctx) {
 // ── '모임 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 function _bindMeetingSubsheet(subBody, ctx) {
   const { user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet, _meeting, _meetingProfileRowHtml,
-          getPendingScroll, setPendingScroll } = ctx;
+          getPendingScroll, setPendingScroll, setTasteScrollTo } = ctx;
           const userId = String(user.id);
 
           // ── 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) 편집 ──
@@ -1027,6 +1022,10 @@ function _bindMeetingSubsheet(subBody, ctx) {
             btn.addEventListener('click', () => {
               const savedScroll = subBody.scrollTop; // 되돌아왔을 때 복원할 위치
               const isAvoid = btn.dataset.pref === 'avoid';
+              // 비선호쪽에서 왔으면 취향보드를 피하는 유형 섹션으로 스크롤해서 진입.
+              // (R10b) 취향보드 렌더가 DB 재조회를 기다리는 비동기가 됐으므로, 여기서 바로
+              // 섹션을 찾으면 아직 '불러오는 중…'이라 못 찾는다 → 의도만 넘기고 스크롤은 렌더 후에.
+              if (isAvoid) setTasteScrollTo?.('avoid');
               // 취향 서브시트로 전환(기존 카드 경로 재사용) — 모임보드에서 왔으므로 뒤로가기를 "모임 보드"로 재지정
               body.querySelector('.profile-card[data-subsheet="taste"]')?.click();
               const tasteSub = document.getElementById('profileSubSheet');
@@ -1040,14 +1039,6 @@ function _bindMeetingSubsheet(subBody, ctx) {
                   tasteSub.remove();
                   body.querySelector('.profile-card[data-subsheet="meeting"]')?.click();
                 });
-              }
-              // 비선호쪽에서 왔으면 취향보드를 피하는 유형 섹션으로 스크롤해서 진입
-              if (isAvoid) {
-                const tBody = tasteSub?.querySelector('.profile-subsheet-body');
-                const avoidSec = tBody?.querySelector('.taste-avoid-section');
-                if (tBody && avoidSec) {
-                  tBody.scrollTop = avoidSec.getBoundingClientRect().top - tBody.getBoundingClientRect().top + tBody.scrollTop;
-                }
               }
             });
           });
@@ -1658,7 +1649,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _monthEnd   = new Date(_now.getFullYear(), _now.getMonth()+1, 0);
   const _monthEndStr = `${_monthEnd.getFullYear()}-${String(_monthEnd.getMonth()+1).padStart(2,'0')}-${String(_monthEnd.getDate()).padStart(2,'0')}`;
   const _emptyCodex = { html: '', playedCount: 0, totalGames: 0 };
-  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, likedGames, curiousGames, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
+  // likedGames/curiousGames를 따로 조회하지 않는다 — getMeetingProfile이 내부에서 같은
+  // getUserLikedGamesAll/getUserCuriousGamesAll를 부르므로 예전엔 같은 쿼리를 한 Promise.all에서
+  // 두 번 쏘고 결과를 별도 배열로 들고 있었다. 그 중복이 크로스보드 stale의 실체였다(R10b).
+  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
@@ -1667,8 +1661,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     readOnly ? Promise.resolve(0)  : (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherHistory?.(String(user.id), 5) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getUserLikedGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
-    (window.CottageDB?.getUserCuriousGamesAll?.(String(user.id)) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllBioTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
@@ -2030,12 +2022,27 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 취향 보드
   const AVOID_TAGS = ['마피아류', '실시간', '협상', '파티게임', '긴 플레이타임', '고난도 전략', '운 비중 높음', '공격/견제 강함'];
   const _BIO_PREDEFINED = ['전략게임을 좋아해요', '가벼운 파티게임 선호해요', '협력게임 팬이에요', '무거운 유로게임 마니아', '보드게임 처음 시작했어요', '코티지보드 단골이에요', '새로 해보는 게임이 좋아요', '한 게임을 진득하게 파는 걸 좋아해요', '전략을 분석하는 게 좋아요', '창의적인 플레이가 좋아요', '함께 교류하는 걸 좋아해요'];
-  const _bio = stats?.profile?.bio || '';
-  const _bioTags = _bio ? _bio.split(',').map(t => t.trim()).filter(Boolean) : [];
-  let _currentBio = _bio;
-  const _avoidTags = stats?.profile?.avoid_tags || [];
+  // ── 취향·모임 보드 공용 데이터 (R10b: 진입 시 DB 재조회 = 단일 소스) ────────────
+  // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
+  // 사본을 들고 있어 한쪽 편집이 반대편에 새로고침 전까지 안 보였다(크로스보드 stale).
+  // 이제 서브시트에 들어갈 때마다 getMeetingProfile 하나를 다시 읽어 양쪽에 넘긴다.
+  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', available: '', travelRange: '', meetingStyle: [], likedGames: [], curiousGames: [], ruleGames: [] };
+  // 재조회하는 동안 잠깐 보이는 자리(모임보드가 이미 쓰던 클래스 재사용 — 신규 CSS 없음)
+  const _SUBSHEET_LOADING_HTML = '<p class="taste-game-empty">불러오는 중…</p>';
+  let _boardData = meetingProfile || _emptyBoardData; // 패널 오픈 시 값이 최초의 '직전 값'
+  async function _refreshBoardData() {
+    const mp = await (window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null))
+      .catch(e => { console.error('[openProfilePanel:_refreshBoardData]', e); return null; });
+    // 성공했을 때만 교체 — 재조회가 실패해도 보고 있던 목록이 빈 목록으로 덮이지 않는다.
+    // (쿼리 오류는 getMeetingProfile 내부에서 console.error로 울린다)
+    if (mp) _boardData = mp;
+    return _boardData;
+  }
   // 룰 설명 가능(can_explain_rules) — 취향·모임 보드 공유(meeting_game_prefs). game_id는 슬러그.
-  const _ruleSet = new Set((meetingProfile?.ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
+  const _makeRuleSet = d => new Set((d?.ruleGames || []).map(g => g.game_id ? `id:${g.game_id}` : `cn:${g.custom_name || ''}`));
+  const _bioTagsOf = d => (d?.bio ? d.bio.split(',').map(t => t.trim()).filter(Boolean) : []);
+  // 취향보드에서 '비선호 유형 수정 →'으로 들어왔을 때 렌더 후 스크롤할 섹션(모임보드가 세팅)
+  let _pendingTasteScrollTo = null;
 
   // 취향보드 게임 칩 — 📖 룰설명 토글 + ✕ 삭제(모임보드와 동일 패턴, 단 원천 game_likes/curious)
   function _buildTasteGameItems(games, ruleSet, maxInitial = 5) {
@@ -2060,7 +2067,16 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `${games.slice(0, maxInitial).map(renderItem).join('')}<div class="taste-game-more-wrap" hidden>${games.slice(maxInitial).map(renderItem).join('')}</div><button class="taste-more-btn" type="button">더 보기 (${restCount}개 더)</button>`;
   }
 
-  let _tasteInnerHtml = `
+  // 진입할 때마다 최신 데이터로 다시 빌드(R10b). 첫 줄에서 원래 이름을 복원해
+  // 아래 템플릿 본문은 예전 그대로 — 바뀐 건 "언제 빌드하나"지 "무엇을 그리나"가 아니다.
+  function _buildTasteInnerHtml(d) {
+    const _bio = d.bio || '';
+    const _bioTags = _bioTagsOf(d);
+    const _avoidTags = d.avoidTags || [];
+    const _ruleSet = _makeRuleSet(d);
+    const likedGames = d.likedGames || [];
+    const curiousGames = d.curiousGames || [];
+    return `
     <div class="taste-bio-section">
       <div class="taste-section-label">한줄 소개</div>
       <div class="taste-bio-row">
@@ -2109,6 +2125,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <button class="taste-avoid-custom-add" type="button">+</button>
       </div>
     </div>`}`;
+  }
   // 기록 보드: 플레이기록/게임평/사진 3섹션 토글 (항상 표시, 기본 열림)
   const _openActivityList = html => html.replace('class="profile-activity-list is-collapsed"', 'class="profile-activity-list"');
   const _emptyList = msg => `<ul class="profile-activity-list"><li class="profile-gamelist-empty">${msg}</li></ul>`;
@@ -2145,11 +2162,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <button class="profile-stats-toggle" type="button">📊 ${escH(_statsSummary)}<span class="profile-toggle-arrow">▾</span></button>
       <ul class="profile-panel-stats is-collapsed">${_statsListHtml}</ul>
     </div>`;
-  // 카드 요약
+  // 카드 요약 — 패널 오픈 시 1회. 서브시트에서 고친 값은 여기 반영 안 됨(패널을 닫았다 열면 맞음).
+  // 알려진 열린 항목(PROJECT_STATE §3): 서브시트는 pull(진입 시 재조회), 카드는 push(나갈 때 갱신)라
+  // 해법 방향이 반대여서 R10b 범위에서 제외.
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _bioPreview = _bioTags.length ? `${_bioTags.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTags.length > 2 ? ` +${_bioTags.length - 2}` : ''}` : '';
+  const _bioTagsAtOpen = _bioTagsOf(_boardData);
+  const _bioPreview = _bioTagsAtOpen.length ? `${_bioTagsAtOpen.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTagsAtOpen.length > 2 ? ` +${_bioTagsAtOpen.length - 2}` : ''}` : '';
   const _tasteCardSummaryHtml = (_bioPreview ? `<span class="profile-card-bio-row">${escH(_bioPreview)}</span>` : '') +
-    `<span class="profile-card-games-row">❤️ 좋아하는 게임 ${likedGames.length}개\n👀 해보고싶은 게임 ${curiousGames.length}개</span>`;
+    `<span class="profile-card-games-row">❤️ 좋아하는 게임 ${(_boardData.likedGames || []).length}개\n👀 해보고싶은 게임 ${(_boardData.curiousGames || []).length}개</span>`;
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
@@ -2192,8 +2212,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 모임 보드: 회원 자기소개(member_intros) + profiles.bio(한줄소개, 취향보드와 공유 SSOT) +
   // meeting_game_prefs(이번에 하고싶은 게임/룰 설명 가능한 게임) 연동. 자기소개 페이지와 동일 데이터 공유.
   // 선호=bio(한줄소개), 비선호=avoid_tags — 편집은 취향보드에서. meeting_style은 미사용(하위호환 잔존).
-  const _meeting = meetingProfile || { bio: '', location: '', available: '', travelRange: '', meetingStyle: [], likedGames: [], curiousGames: [], ruleGames: [] };
-  // _ruleSet은 취향보드 템플릿보다 먼저 필요 → 위쪽(_avoidTags 근처)에서 정의
+  // 데이터는 _boardData(진입 시 재조회) — 취향보드와 같은 소스를 본다(R10b)
   const _relDay = iso => {
     if (!iso) return '';
     const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(String(iso)) ? iso + 'T00:00:00' : iso);
@@ -2221,16 +2240,21 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
   }
 
-  // 선호(취향보드 한줄소개=bio) / 비선호(취향보드 피하는 유형=avoid_tags) 요약 — 읽기전용 칩
-  // 편집은 취향보드에서 (mb-pref-edit 버튼 → openProfilePanel('taste'))
-  const _mbLikeStyleHtml = _bioTags.length
-    ? _bioTags.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
-    : '<span class="mb-pref-empty">미설정</span>';
-  const _mbAvoidHtml = _avoidTags.length
-    ? _avoidTags.map(t => `<span class="mb-pref-tag mb-pref-tag--avoid">${escH(t)}</span>`).join('')
-    : '<span class="mb-pref-empty">미설정</span>';
+  // 진입할 때마다 최신 데이터로 다시 빌드(R10b) — 취향보드와 동일 기법(첫 줄에서 이름 복원)
+  function _buildMeetingInnerHtml(d) {
+    const _meeting = d;
+    const _bioTags = _bioTagsOf(d);
+    const _avoidTags = d.avoidTags || [];
+    // 선호(취향보드 한줄소개=bio) / 비선호(취향보드 피하는 유형=avoid_tags) 요약 — 읽기전용 칩
+    // 편집은 취향보드에서 (mb-pref-edit 버튼 → openProfilePanel('taste'))
+    const _mbLikeStyleHtml = _bioTags.length
+      ? _bioTags.map(t => `<span class="mb-pref-tag mb-pref-tag--like">${escH(t)}</span>`).join('')
+      : '<span class="mb-pref-empty">미설정</span>';
+    const _mbAvoidHtml = _avoidTags.length
+      ? _avoidTags.map(t => `<span class="mb-pref-tag mb-pref-tag--avoid">${escH(t)}</span>`).join('')
+      : '<span class="mb-pref-empty">미설정</span>';
 
-  const _meetingInnerHtml = `
+    return `
     <div class="taste-game-section" id="mbWeekSection">
       <div class="taste-section-label">📅 이번 주 일정</div>
       <p class="taste-game-empty">불러오는 중…</p>
@@ -2284,6 +2308,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         </div>
       </div>`)}
     </div>`;
+  }
 
   body.innerHTML = `
     <div class="profile-panel-profile">
@@ -2486,11 +2511,21 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
       } else if (type === 'taste') {
         _trackPvOnce('my-board-taste');
-        // _currentBio는 패널 수명 동안 유지되는 상태(재진입 시 display 갱신에 사용) → 구조분해 복사 대신 접근자로 전달
-        _openSubSheet('취향 보드', _tasteInnerHtml, subBody => _bindTasteSubsheet(subBody, {
-          user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet,
-          getCurrentBio: () => _currentBio, setCurrentBio: v => { _currentBio = v; },
-        }), '', bodyEl => { _tasteInnerHtml = bodyEl.innerHTML; }); // 뒤로가기 시 현재 상태 스냅샷(재진입 유지)
+        // 진입 시 DB 재조회 → 모임보드에서 뭘 바꿨든 항상 최신(R10b). 스냅샷 임시방편 제거.
+        _openSubSheet('취향 보드', _SUBSHEET_LOADING_HTML, async subBody => {
+          const d = await _refreshBoardData();
+          if (!subBody.isConnected) return; // 재조회를 기다리는 사이 다른 서브시트로 떠남
+          subBody.innerHTML = _buildTasteInnerHtml(d);
+          _bindTasteSubsheet(subBody, {
+            user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet: _makeRuleSet(d),
+          });
+          // 모임보드 '비선호 유형 수정 →'으로 들어왔으면 해당 섹션으로 스크롤(렌더 후여야 좌표가 나옴)
+          if (_pendingTasteScrollTo === 'avoid') {
+            const avoidSec = subBody.querySelector('.taste-avoid-section');
+            if (avoidSec) subBody.scrollTop = avoidSec.getBoundingClientRect().top - subBody.getBoundingClientRect().top + subBody.scrollTop;
+          }
+          _pendingTasteScrollTo = null;
+        });
 
       } else if (type === 'records') {
         _trackPvOnce('my-board-records');
@@ -2503,12 +2538,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
       } else if (type === 'meeting') {
         _trackPvOnce('my-board-meeting');
+        // 진입 시 DB 재조회 → 취향보드에서 뭘 바꿨든 항상 최신(R10b).
         // _pendingMeetingScrollTop은 취향보드 편집 후 "‹ 모임 보드" 복귀 시 재렌더를 건너 살아남아야 함
         // (다음 afterRender 호출에서 읽음) → 구조분해 복사 대신 접근자로 전달
-        _openSubSheet('모임 보드', _meetingInnerHtml, subBody => _bindMeetingSubsheet(subBody, {
-          user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet, _meeting, _meetingProfileRowHtml,
-          getPendingScroll: () => _pendingMeetingScrollTop, setPendingScroll: v => { _pendingMeetingScrollTop = v; },
-        })); // end meeting afterRender
+        _openSubSheet('모임 보드', _SUBSHEET_LOADING_HTML, async subBody => {
+          const d = await _refreshBoardData();
+          if (!subBody.isConnected) return; // 재조회를 기다리는 사이 다른 서브시트로 떠남
+          subBody.innerHTML = _buildMeetingInnerHtml(d);
+          _bindMeetingSubsheet(subBody, {
+            user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d, _meetingProfileRowHtml,
+            getPendingScroll: () => _pendingMeetingScrollTop, setPendingScroll: v => { _pendingMeetingScrollTop = v; },
+            setTasteScrollTo: v => { _pendingTasteScrollTo = v; },
+          });
+        }); // end meeting afterRender
       }
     });
   });
