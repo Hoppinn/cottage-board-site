@@ -545,6 +545,39 @@ function _bindActivityTogglesAndMore(subBody) {
   });
 }
 
+// ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
+// ctx: _markAllNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
+function _bindNotifSubsheet(subBody, ctx) {
+  const { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById } = ctx;
+          subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
+          subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
+          subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
+          subBody.querySelectorAll('.notif-read-one-btn').forEach(btn => {
+            btn.addEventListener('click', e => { e.stopPropagation(); _markAllNotifSeen(subBody); });
+          });
+          subBody.querySelector('.profile-notif-more-btn')?.addEventListener('click', function() {
+            const moreList = subBody.querySelector('.profile-notif-more-list');
+            if (!moreList) return;
+            const isHidden = moreList.classList.toggle('is-hidden');
+            this.textContent = isHidden ? `외 ${this.dataset.more}건 더 보기 ▾` : '접기 ▴';
+          });
+          subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
+            li.addEventListener('click', e => {
+              if (e.target.closest('button, a')) return;
+              if (li.dataset.introUid) {
+                openOtherMeetingSheet(li.dataset.introUid);
+                return;
+              }
+              let key = null;
+              const gameLink = e.target.closest('[data-game-name]');
+              if (gameLink) key = _getGameKeyByName(gameLink.dataset.gameName);
+              else if (li.dataset.gameKey) key = li.dataset.gameKey;
+              else if (li.dataset.gameId) key = _getGameKeyById(li.dataset.gameId);
+              if (key && window.openGameSheet) window.openGameSheet(key);
+            });
+          });
+}
+
 // ── '음료교환권' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _bindVoucher (openProfilePanel 지역 — user/isDevMode를 캡처하므로 여기로 못 올림)
 function _bindVoucherSubsheet(subBody, ctx) {
@@ -1447,35 +1480,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       if (type === 'notif') {
         _trackPvOnce('my-board-notif');
         const _notifTitle = '최근 소식';
-        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => {
-          subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
-          subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
-          subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
-          subBody.querySelectorAll('.notif-read-one-btn').forEach(btn => {
-            btn.addEventListener('click', e => { e.stopPropagation(); _markAllNotifSeen(subBody); });
-          });
-          subBody.querySelector('.profile-notif-more-btn')?.addEventListener('click', function() {
-            const moreList = subBody.querySelector('.profile-notif-more-list');
-            if (!moreList) return;
-            const isHidden = moreList.classList.toggle('is-hidden');
-            this.textContent = isHidden ? `외 ${this.dataset.more}건 더 보기 ▾` : '접기 ▴';
-          });
-          subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
-            li.addEventListener('click', e => {
-              if (e.target.closest('button, a')) return;
-              if (li.dataset.introUid) {
-                openOtherMeetingSheet(li.dataset.introUid);
-                return;
-              }
-              let key = null;
-              const gameLink = e.target.closest('[data-game-name]');
-              if (gameLink) key = _getGameKeyByName(gameLink.dataset.gameName);
-              else if (li.dataset.gameKey) key = li.dataset.gameKey;
-              else if (li.dataset.gameId) key = _getGameKeyById(li.dataset.gameId);
-              if (key && window.openGameSheet) window.openGameSheet(key);
-            });
-          });
-        });
+        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById }));
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');
