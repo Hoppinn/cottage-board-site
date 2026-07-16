@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-17 (감지기 2단계 완료 — supabase-client.js 구조분해 104곳 전부 error 수신·로그)
+최종 갱신: 2026-07-17 (R10b — getMeetingProfile이 취향·모임 보드 단일 소스로 승격[avoidTags 추가] / 감지기 커버리지 정정: 구조분해 104곳은 완료지만 Promise.all+비구조분해 ~16곳은 여전히 갭)
 
 ---
 
@@ -24,8 +24,10 @@ return data || [];
 - `try/catch` + `console.error`는 **네트워크 장애·JS 예외만** 잡는다. 쿼리 오류는 못 잡는다.
 - **가장 흔한 실패(컬럼 오타·RLS·테이블 없음)가 정확히 쿼리 오류**라 이 구분이 결정적이다.
 - 반환 계약(실패 시 `[]`/`null` fallback)은 **유지**한다 — 호출부가 빈 배열을 전제로 렌더 중이라 에러를 던지게 바꾸면 UI가 깨진다. 바꾸는 건 로그(관측)이지 동작이 아니다.
-- **현황(2026-07-17 감지기 2단계 완료)**: `supabase-client.js`의 `await` 구조분해 **104곳 전부 error를 받아 로그**한다(2단계에서 59곳 추가, 커밋 참조). error를 받고도 안 읽는 곳은 **0곳**. 신규 DB 함수도 이 규약을 지킬 것.
-  - ⚠️ **대상은 `{ data }`만이 아니다**: 2단계 실측에서 `{ data }` 39곳 외에 **`{ count }` 7곳**(getUserPlayCount·getUserRatingCount 등 카운트 함수 전부)과 **별칭형 `{ data: existing/rows/product… }` 13곳**이 같은 사각지대였다. 이전 기재 "40곳"은 `const { data } = await db.`만 센 좁은 grep 결과였음 — 점검 시 `} = await`로 잡을 것.
+- **현황(2026-07-17)**: `supabase-client.js`의 `await` **구조분해** 104곳은 전부 error를 받아 로그한다(2단계에서 59곳 추가). 신규 DB 함수도 이 규약을 지킬 것.
+  - 🔴 **단 "구조분해 104곳 = 전부"가 아니다 (2026-07-17 R10b에서 정정)**: **`const [aRes, bRes] = await Promise.all([...])` 후 `aRes.data`만 읽는 형태**는 구조분해가 아니라서 2단계 대상에서 통째로 빠졌다. 이 자리들은 `.error`를 아무도 안 봐 **쿼리 오류가 여전히 조용히 빈 값**이 된다. 실측(`Res.error` grep = **0건**): `getMyStats`·`getMyNotifications`·`getVisitorStats` 등 **~16곳**. `getMeetingProfile`(2곳)만 R10b가 선처리(507f2e9). → PROJECT_STATE §3 「감지기 갭 — Promise.all + 비구조분해」.
+  - ⚠️ **그래서 점검은 `} = await`로도 부족하다** — **`.data`/`.count` 참조 전수**로 세야 한다. "위반 N곳" 숫자가 좁은 grep 때문에 틀린 게 이번이 **세 번째**다(1단계 40곳 오집계 → 2단계 `{count}`·별칭형 누락 → R10b `Promise.all` 계열 누락).
+  - ⚠️ **대상은 `{ data }`만이 아니다**: 2단계 실측에서 `{ data }` 39곳 외에 **`{ count }` 7곳**(getUserPlayCount·getUserRatingCount 등 카운트 함수 전부)과 **별칭형 `{ data: existing/rows/product… }` 13곳**이 같은 사각지대였다. 이전 기재 "40곳"은 `const { data } = await db.`만 센 좁은 grep 결과였음.
   - **이름 충돌 주의**: 같은 블록에 이미 `const { error }`가 있거나 한 함수에서 두 번 조회하면 `error`를 그대로 추가하면 **재선언 SyntaxError**다. 파일 관용대로 `error: <이름>Err` 별칭을 쓴다(현재 10곳: `rowsErr`·`profsErr`·`existErr`·`productErr` 등).
   - **로그 여부의 기준은 "고칠 게 있는가"** — 조용한 실패(화재를 못 봄)와 정상 경로 로그(가짜 경보가 진짜를 가림)는 **같은 원칙의 양쪽 위반**이다. `getUserPhotoCount`의 안쪽 `JSON.parse` catch처럼 실패가 정상 분기인 곳엔 로그 대신 주석을 단다(1단계가 기계적으로 붙여 실제로 가짜 에러 발생). 상세는 CLAUDE.md 「DB 함수 에러 처리」.
 
