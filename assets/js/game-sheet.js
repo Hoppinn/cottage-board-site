@@ -2241,39 +2241,11 @@ function togglePlayRecords(listId) {
 
 // ── 플레이 위젯 ─────────────────────────────────────────
 
-async function initPlayWidget(gameKey) {
-  const widget = document.getElementById(`sheetPlayWidget-${gameKey}`);
-  if (!widget) return;
-
-  if (!window.CottageDB) {
-    widget.style.display = "none";
-    return;
-  }
-
-  const [playCount, highlights, allRecords] = await Promise.all([
-    window.CottageDB.getGamePlayCount(_gameIds(gameKey)),
-    window.CottageDB.getPlayHighlights(_gameIds(gameKey)),
-    window.CottageDB.getGamePlayRecords(_gameIds(gameKey)),
-  ]);
-
-  const myRecordIds = new Set(
-    getMyPlayRecords(gameKey).map(r => String(r.id)).filter(Boolean)
-  );
-  const currentUserIdForPlay = window.getKakaoUser?.()?.id || null;
-
+// 플레이기록 아이템 렌더러 — R11c에서 initPlayWidget 내부 함수를 모듈 스코프로 추출.
+// 캡처하던 gameKey·currentUserIdForPlay·myRecordIds는 인자로 전달, escH는 자기 로컬로 이동.
+// (body의 template literal이 곧 HTML 출력이라, 출력 바이트 보존 위해 본문 들여쓰기는 원본 그대로 둔다.)
+function buildRecordItemHtml(r, gameKey, currentUserIdForPlay, myRecordIds) {
   function escH(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-
-  let html = "";
-
-  if (highlights.length) {
-    html += `<div class="sheet-highlights">
-      ${highlights.map(h => `<p class="sheet-highlight-item">✨ ${h.highlight_text}</p>`).join("")}
-    </div>`;
-  }
-
-  const listId = `sheetAllRecords-${gameKey}`;
-
-  function buildRecordItemHtml(r) {
     const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
       || (r.id && myRecordIds.has(String(r.id)));
     const showNick = !r.player_names && r.nickname;
@@ -2312,7 +2284,37 @@ async function initPlayWidget(gameKey) {
         <button class="sheet-rec-add-btn" data-game-id="${gameKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>
       </div>
     </div>`;
+}
+
+async function initPlayWidget(gameKey) {
+  const widget = document.getElementById(`sheetPlayWidget-${gameKey}`);
+  if (!widget) return;
+
+  if (!window.CottageDB) {
+    widget.style.display = "none";
+    return;
   }
+
+  const [playCount, highlights, allRecords] = await Promise.all([
+    window.CottageDB.getGamePlayCount(_gameIds(gameKey)),
+    window.CottageDB.getPlayHighlights(_gameIds(gameKey)),
+    window.CottageDB.getGamePlayRecords(_gameIds(gameKey)),
+  ]);
+
+  const myRecordIds = new Set(
+    getMyPlayRecords(gameKey).map(r => String(r.id)).filter(Boolean)
+  );
+  const currentUserIdForPlay = window.getKakaoUser?.()?.id || null;
+
+  let html = "";
+
+  if (highlights.length) {
+    html += `<div class="sheet-highlights">
+      ${highlights.map(h => `<p class="sheet-highlight-item">✨ ${h.highlight_text}</p>`).join("")}
+    </div>`;
+  }
+
+  const listId = `sheetAllRecords-${gameKey}`;
 
   // 플레이 박스 (헤더 + 기록 목록)
   html += `<div class="sheet-play-box">`;
@@ -2322,8 +2324,8 @@ async function initPlayWidget(gameKey) {
   </div>`;
 
   if (allRecords.length) {
-    const firstItem = buildRecordItemHtml(allRecords[0]);
-    const restItems = allRecords.slice(1).map(buildRecordItemHtml).join('');
+    const firstItem = buildRecordItemHtml(allRecords[0], gameKey, currentUserIdForPlay, myRecordIds);
+    const restItems = allRecords.slice(1).map(r => buildRecordItemHtml(r, gameKey, currentUserIdForPlay, myRecordIds)).join('');
     const moreCount = allRecords.length - 1;
     html += `<div class="sheet-my-records-list" id="${listId}">
       ${firstItem}
