@@ -180,8 +180,8 @@
 
   // ── 기록 입력 탭 ─────────────────────────────────────────────
 
-  // rowIdx는 호출자(renderInputPanel)가 증가시켜 넘긴다 — 저장 후 재추가 시에도
-  // 카운터가 이어져야 행 1에만 '최신 기록' 버튼이 붙는 현재 동작이 유지된다.
+  // rowIdx는 호출자(renderInputPanel)가 증가시켜 넘긴다. 1번 행에만 '최신 기록' 버튼이
+  // 붙으므로, 행을 비우고 다시 시작할 때는 호출자가 카운터도 되돌려야 한다(resetRows).
   function _buildGameRow(rowIdx, focusInput) {
     const div = document.createElement('div');
     div.className = 'pr-game-row';
@@ -374,6 +374,9 @@
 
     let rowIdx = 0;
     const addRow = focusInput => _buildGameRow(++rowIdx, focusInput);
+    // 저장 후엔 행을 1번부터 다시 시작 — 안 그러면 새 첫 행이 2번째 이상으로 취급돼
+    // '최신 기록' 대신 '위와 동일'(위에 행이 없어 눌러도 무동작)이 붙는다.
+    const resetRows = () => { rowIdx = 0; addRow(false); };
 
     // 그룹명 자동완성
     attachAc(document.getElementById('prGroup'), () => _prGroups || [], null, document.getElementById('prGroupAcList'));
@@ -382,13 +385,13 @@
 
     document.getElementById('prAddBtn').addEventListener('click', () => addRow(false));
 
-    document.getElementById('prSaveBtn').addEventListener('click', () => _submitInputRows(user, addRow));
+    document.getElementById('prSaveBtn').addEventListener('click', () => _submitInputRows(user, resetRows));
   }
 
   // 그룹명 목록은 _prGroups로 참조 — renderInputPanel의 지역 groups와 같은 배열 객체다.
   // _refreshAutocompleteLists()가 _prGroups를 새 배열로 갈아끼우지만 호출~push 사이에
   // await가 없어, push는 항상 갈아끼우기 전 배열에 닿는다(기존 동작과 동일).
-  async function _submitInputRows(user, addRow) {
+  async function _submitInputRows(user, resetRows) {
     if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
     const dateVal = document.getElementById('prDate').value || todayKst();
     const groupVal = document.getElementById('prGroup').value.trim();
@@ -443,7 +446,7 @@
       window.CottageDB?.trackEvent('record_complete');
       window.revokePhotoGridBlobs?.(document.getElementById('prGameRows'));
       document.getElementById('prGameRows').innerHTML = '';
-      addRow(false);
+      resetRows();
       if (groupVal && !_prGroups.includes(groupVal)) _prGroups.push(groupVal);
       recordsLoaded = false;
       const recTab = root.querySelector('[data-tab="records"]');
