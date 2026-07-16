@@ -382,93 +382,98 @@
 
     document.getElementById('prAddBtn').addEventListener('click', () => addRow(false));
 
-    document.getElementById('prSaveBtn').addEventListener('click', async () => {
-      if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
-      const dateVal = document.getElementById('prDate').value || todayKst();
-      const groupVal = document.getElementById('prGroup').value.trim();
-      const rows = document.querySelectorAll('#prGameRows .pr-game-row');
+    document.getElementById('prSaveBtn').addEventListener('click', () => _submitInputRows(user, addRow));
+  }
 
-      const entries = [];
-      for (const row of rows) {
-        const name = row.querySelector('.pr-game-name').value.trim();
-        if (!name) continue;
-        const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
-        entries.push({
-          id: gameIdByName(name),
-          label: name,
-          count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
-          time: parseInt(row.querySelector('.pr-time').value) || null,
-          names: putSelfFirst(row.querySelector('.pr-names').value.trim() || null, user.nickname),
-          score: row.querySelector('.pr-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
-          review: row.querySelector('.pr-review').value.trim() || null,
-          photoFiles: row._photoFiles || [],
-        });
-      }
+  // 그룹명 목록은 _prGroups로 참조 — renderInputPanel의 지역 groups와 같은 배열 객체다.
+  // _refreshAutocompleteLists()가 _prGroups를 새 배열로 갈아끼우지만 호출~push 사이에
+  // await가 없어, push는 항상 갈아끼우기 전 배열에 닿는다(기존 동작과 동일).
+  async function _submitInputRows(user, addRow) {
+    if (window.CottageDB?.isUserBanned?.()) { showToast('⛔ 이용이 제한된 계정입니다.'); return; }
+    const dateVal = document.getElementById('prDate').value || todayKst();
+    const groupVal = document.getElementById('prGroup').value.trim();
+    const rows = document.querySelectorAll('#prGameRows .pr-game-row');
 
-      if (!entries.length) { alert('게임을 하나 이상 입력해주세요.'); return; }
+    const entries = [];
+    for (const row of rows) {
+      const name = row.querySelector('.pr-game-name').value.trim();
+      if (!name) continue;
+      const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
+      entries.push({
+        id: gameIdByName(name),
+        label: name,
+        count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
+        time: parseInt(row.querySelector('.pr-time').value) || null,
+        names: putSelfFirst(row.querySelector('.pr-names').value.trim() || null, user.nickname),
+        score: row.querySelector('.pr-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
+        review: row.querySelector('.pr-review').value.trim() || null,
+        photoFiles: row._photoFiles || [],
+      });
+    }
 
-      const btn = document.getElementById('prSaveBtn');
-      btn.disabled = true; btn.textContent = '저장 중...';
+    if (!entries.length) { alert('게임을 하나 이상 입력해주세요.'); return; }
 
-      let ok = true;
-      for (const e of entries) {
-        let photoUrl = null;
-        if (e.photoFiles?.length) {
-          const uploaded = [];
-          for (const pf of e.photoFiles) {
-            const url = await window.CottageDB.uploadPlayPhoto(pf, user.id);
-            if (url) uploaded.push(url);
-            else showToast('⚠️ 사진 업로드 실패 (Storage 정책 확인 필요)');
-          }
-          if (uploaded.length === 1) photoUrl = uploaded[0];
-          else if (uploaded.length > 1) photoUrl = JSON.stringify(uploaded);
+    const btn = document.getElementById('prSaveBtn');
+    btn.disabled = true; btn.textContent = '저장 중...';
+
+    let ok = true;
+    for (const e of entries) {
+      let photoUrl = null;
+      if (e.photoFiles?.length) {
+        const uploaded = [];
+        for (const pf of e.photoFiles) {
+          const url = await window.CottageDB.uploadPlayPhoto(pf, user.id);
+          if (url) uploaded.push(url);
+          else showToast('⚠️ 사진 업로드 실패 (Storage 정책 확인 필요)');
         }
-        const res = await window.CottageDB.recordGamePlay(
-          e.id, e.count, e.names, e.time, e.score,
-          user.nickname, user.id, groupVal || null, dateVal, photoUrl, e.review || null
-        );
-        if (res?.error) { ok = false; continue; }
+        if (uploaded.length === 1) photoUrl = uploaded[0];
+        else if (uploaded.length > 1) photoUrl = JSON.stringify(uploaded);
       }
+      const res = await window.CottageDB.recordGamePlay(
+        e.id, e.count, e.names, e.time, e.score,
+        user.nickname, user.id, groupVal || null, dateVal, photoUrl, e.review || null
+      );
+      if (res?.error) { ok = false; continue; }
+    }
 
-      btn.disabled = false; btn.textContent = '저장하기';
+    btn.disabled = false; btn.textContent = '저장하기';
 
-      if (ok) {
-        showToast('저장됐어요!'); _refreshAutocompleteLists?.();
-        window.CottageDB?.trackEvent('record_complete');
-        window.revokePhotoGridBlobs?.(document.getElementById('prGameRows'));
-        document.getElementById('prGameRows').innerHTML = '';
-        addRow(false);
-        if (groupVal && !groups.includes(groupVal)) groups.push(groupVal);
-        recordsLoaded = false;
-        const recTab = root.querySelector('[data-tab="records"]');
-        if (recTab) recTab.click();
+    if (ok) {
+      showToast('저장됐어요!'); _refreshAutocompleteLists?.();
+      window.CottageDB?.trackEvent('record_complete');
+      window.revokePhotoGridBlobs?.(document.getElementById('prGameRows'));
+      document.getElementById('prGameRows').innerHTML = '';
+      addRow(false);
+      if (groupVal && !_prGroups.includes(groupVal)) _prGroups.push(groupVal);
+      recordsLoaded = false;
+      const recTab = root.querySelector('[data-tab="records"]');
+      if (recTab) recTab.click();
 
-        if (user) {
-          const userId = String(user.id);
-          const curiousHits = [];
-          for (const e of entries) {
-            if (!e.id) continue;
-            const _gid = String(e.id);
-            const isCurious = await window.CottageDB.hasUserCurious(_gid, userId);
-            if (isCurious) {
-              await window.CottageDB.toggleGameCurious(_gid, userId);
-              curiousHits.push({ label: e.label, id: _gid });
-            }
-          }
-          if (curiousHits.length) {
-            let idx = 0;
-            const showNext = () => {
-              if (idx >= curiousHits.length) return;
-              const g = curiousHits[idx++];
-              _showCuriousPlayedToast(g.label, g.id, userId, showNext);
-            };
-            setTimeout(showNext, 2400);
+      if (user) {
+        const userId = String(user.id);
+        const curiousHits = [];
+        for (const e of entries) {
+          if (!e.id) continue;
+          const _gid = String(e.id);
+          const isCurious = await window.CottageDB.hasUserCurious(_gid, userId);
+          if (isCurious) {
+            await window.CottageDB.toggleGameCurious(_gid, userId);
+            curiousHits.push({ label: e.label, id: _gid });
           }
         }
-      } else {
-        alert('일부 저장에 실패했어요. 다시 시도해주세요.');
+        if (curiousHits.length) {
+          let idx = 0;
+          const showNext = () => {
+            if (idx >= curiousHits.length) return;
+            const g = curiousHits[idx++];
+            _showCuriousPlayedToast(g.label, g.id, userId, showNext);
+          };
+          setTimeout(showNext, 2400);
+        }
       }
-    });
+    } else {
+      alert('일부 저장에 실패했어요. 다시 시도해주세요.');
+    }
   }
 
     // ── 기록 보기 탭 ─────────────────────────────────────────────
