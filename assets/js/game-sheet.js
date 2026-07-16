@@ -436,6 +436,37 @@ function goBackGameSheet() {
   openGameSheet(prev);
 }
 
+// 같은 디자이너 다른 게임 — gameData 전체를 훑어 designer 교집합을 찾는다.
+function _buildSameDesignerHtml(gameKey, detail) {
+  const _sameDesignGames = [];
+  if (detail.bgg?.designers?.length && window.gameData) {
+    const _dSet = new Set(detail.bgg.designers);
+    for (const [_k, _g] of Object.entries(window.gameData)) {
+      if (_k === gameKey) continue;
+      if (_g.bgg?.designers?.some(d => _dSet.has(d))) {
+        _sameDesignGames.push({ key: _k, g: _g });
+      }
+    }
+  }
+  return _sameDesignGames.length ? `
+    <div class="sheet-same-designer sheet-info-group">
+      <p class="sheet-meta-label" style="margin-bottom:8px">같은 디자이너의 다른 게임</p>
+      <div class="sheet-same-design-scroll">
+        ${_sameDesignGames.map(({ key: _k, g: _g }) => {
+          const _title = _g.title?.display || _g.title?.owned || _k;
+          const _img = getGameDetailImage(_g);
+          const _safeTitle = String(_title).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          const _safeKey = String(_k).replace(/'/g,"\\'");
+          const _safeFromKey = String(gameKey).replace(/'/g,"\\'");
+          return `<button class="sheet-same-design-card" type="button" onclick="openGameSheet('${_safeKey}', false, '${_safeFromKey}')">
+            <img class="sheet-same-design-thumb" src="${_img}" alt="${_safeTitle}" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
+            <span class="sheet-same-design-title">${_safeTitle}</span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>` : '';
+}
+
 function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
   if (_gameSheetNavBack) {
     _gameSheetNavBack = false;
@@ -528,34 +559,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
     ? `(${difficultyLabel})`
     : "";
 
-  // 같은 디자이너 다른 게임
-  const _sameDesignGames = [];
-  if (detail.bgg?.designers?.length && window.gameData) {
-    const _dSet = new Set(detail.bgg.designers);
-    for (const [_k, _g] of Object.entries(window.gameData)) {
-      if (_k === gameKey) continue;
-      if (_g.bgg?.designers?.some(d => _dSet.has(d))) {
-        _sameDesignGames.push({ key: _k, g: _g });
-      }
-    }
-  }
-  const _sameDesignHtml = _sameDesignGames.length ? `
-    <div class="sheet-same-designer sheet-info-group">
-      <p class="sheet-meta-label" style="margin-bottom:8px">같은 디자이너의 다른 게임</p>
-      <div class="sheet-same-design-scroll">
-        ${_sameDesignGames.map(({ key: _k, g: _g }) => {
-          const _title = _g.title?.display || _g.title?.owned || _k;
-          const _img = getGameDetailImage(_g);
-          const _safeTitle = String(_title).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-          const _safeKey = String(_k).replace(/'/g,"\\'");
-          const _safeFromKey = String(gameKey).replace(/'/g,"\\'");
-          return `<button class="sheet-same-design-card" type="button" onclick="openGameSheet('${_safeKey}', false, '${_safeFromKey}')">
-            <img class="sheet-same-design-thumb" src="${_img}" alt="${_safeTitle}" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
-            <span class="sheet-same-design-title">${_safeTitle}</span>
-          </button>`;
-        }).join('')}
-      </div>
-    </div>` : '';
+  const _sameDesignHtml = _buildSameDesignerHtml(gameKey, detail);
 
   const _prevHistKey = _gameSheetHistory.length > 0 ? _gameSheetHistory[_gameSheetHistory.length - 1] : null;
   const _prevHistGame = _prevHistKey ? window.gameData?.[_prevHistKey] : null;
