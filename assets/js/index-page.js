@@ -1172,16 +1172,22 @@ function toDateStr(d) {
 
   openBtn?.addEventListener('click', () => { window.CottageDB?.trackEvent('home_record_write_click'); openModal('input'); });
   openViewBtn?.addEventListener('click', () => { window.CottageDB?.trackEvent('home_record_more_click'); openModal('records'); });
-  dim.addEventListener('click', () => {
+  // 닫기 요청은 항상 '가장 위 레이어' 하나만 닫는다. iframe 안 라이트박스가 떠 있으면
+  // 그것부터. closeModal()은 라이트박스+모달을 함께 닫으므로(위 postMessage) 이 가드가
+  // 없으면 라이트박스만 닫으려 해도 모달까지 같이 닫힌다.
+  // ⚠️ 부모의 ✕(recordIframeClose)는 iframe 밖 요소라 iframe 내부 z-index로 안 가려짐 —
+  //    라이트박스 ✕와 위치가 겹쳐 사용자는 라이트박스를 누른다고 여긴다.
+  function closeTopLayer() {
     if (iframeLightboxOpen) {
       frame.contentWindow?.postMessage({ type: 'cottage-close-lightbox' }, '*');
       iframeLightboxOpen = false;
     } else {
       closeModal();
     }
-  });
-  closeBtn.addEventListener('click', closeModal);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  }
+  dim.addEventListener('click', closeTopLayer);
+  closeBtn.addEventListener('click', closeTopLayer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTopLayer(); });
 })();
 
 
