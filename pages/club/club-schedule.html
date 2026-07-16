@@ -896,7 +896,13 @@
         overlay.style.display = 'none';
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
-        document.body.classList.remove('is-quick-entry');
+        // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
+        if (document.body.classList.contains('is-quick-entry')) {
+          document.body.classList.remove('is-quick-entry');
+          if (new URLSearchParams(location.search).get('embed') === 'true') {
+            window.parent.postMessage({ type: 'cottage-quick-entry-closed' }, '*');
+          }
+        }
       }
       $s('smClose').addEventListener('click', close);
       overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
@@ -1528,9 +1534,9 @@
               if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'learn', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'});
             }
           }
+          _notifyParentSaved();
           close();
           renderWeekView(weekOffset);
-          _notifyParentSaved();
           showToast('저장되었습니다!');
         } catch(err) {
           console.error(err);

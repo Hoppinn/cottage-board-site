@@ -1270,12 +1270,14 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     }
   }
 
-  // 등록/수정 진입 전용 — 뒤쪽 주간 뷰(센터모달)를 보여주지 않고, 등록 시트가
-  // 실제로 뜬 뒤(cottage-sheet-shown) 그 상태 그대로 모달을 드러낸다.
+  // 등록/수정 진입 전용 — 주간 뷰 카드 없이 등록 시트만 전체화면으로 보여주고,
+  // 시트가 실제로 뜬 뒤(cottage-sheet-shown)에만 드러낸다. 시트를 닫으면
+  // 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다(cottage-quick-entry-closed).
   let _awaitingSheetReveal = false;
   window.__openPlannerFor = function (dateStr, isEdit) {
     window.CottageDB?.trackEvent('home_meeting_planner_click');
     _awaitingSheetReveal = true;
+    modal.classList.add('is-quick-entry');
     if (!preloaded) preload();
     const type = isEdit ? 'cottage-edit' : 'cottage-register';
     if (frame.classList.contains('is-ready')) {
@@ -1289,6 +1291,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
+    modal.classList.remove('is-quick-entry');
     document.body.style.overflow = '';
     if (_meetingDirty) { _meetingDirty = false; _meetingReload?.(); }
   }
@@ -1315,6 +1318,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       modal.setAttribute('aria-hidden', 'false');
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
+    }
+    if (e.data?.type === 'cottage-quick-entry-closed') {
+      closeModal();
     }
   });
 
