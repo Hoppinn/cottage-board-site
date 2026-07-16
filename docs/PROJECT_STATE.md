@@ -31,6 +31,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 **R10b 착수 시 바로 쓸 수 있는 R10a 조사 결과** (재조사 불필요):
 - `openProfilePanel`(현재 `kakao-auth.js:1608~2525`, 918줄) 구성: **패널 셸+DB조회 12개**(1608~1715 부근) → **로컬 헬퍼**(getGameName·buildActivityList·_renderNotifItem 등) → **HTML 문자열 빌드 ~390줄**(`_tasteInnerHtml`·`_meetingInnerHtml`·`_recordInnerHtml` 등 서브시트별 innerHTML을 **패널 오픈 시 1회** 생성) → `_openSubSheet`+알림/교환권 헬퍼 → **서브시트 라우터**(2469~2521, `.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭(2522). ※줄번호는 2026-07-16 R10a 직후 실측 — 이후 수정 시 밀림.
 - **stale의 구조적 뿌리 = "오픈 시 1회 빌드 + 떠날 때 DOM 스냅샷"**: `_openSubSheet(title, contentHtml, ...)`가 오픈 시점 정적 문자열을 재진입마다 재주입 → 변경이 되돌아가던 걸 스냅샷(`onLeave`에서 `_tasteInnerHtml = bodyEl.innerHTML`, 커밋 11e10b8)으로 막아둔 상태. **방향 A(진입 시 DB 재조회)로 가면 이 스냅샷 2곳(`kakao-auth.js:2493` taste·`2497` record의 `onLeave` 콜백)이 제거 대상**이고, 서브시트별 HTML 빌드가 `_bind*Subsheet` 옆으로 내려가면서 `openProfilePanel`의 남은 ~390줄도 자연히 갈라짐.
+- ⚠️ **R10b 설계 시 반드시 고려 — 조회 실패가 조용히 "빈 목록"이 된다**: `openProfilePanel`의 Promise.all 11곳이 `.catch(() => [])`/`.catch(() => null)`/`.catch(() => 0)`로 에러를 삼킨다(`getMeetingProfile` 자신도 `catch (_) { return null; }`). **패널 오픈 시 1회 조회인 현재는 실패해도 "처음부터 비어 보임" 수준이지만, 방향 A(진입 시마다 재조회)로 가면 재조회 1번 실패 = 사용자가 보던 게임 목록이 통째로 사라짐**(에러 표시도 없이). 즉 방향 A는 에러 처리 설계를 함께 가져가야 안전하다 — 최소한 실패 시 ①`console.error` ②직전 값 유지(빈 배열로 덮어쓰지 않기) 중 하나 필요. 아래 §3 "[기술부채] DB 조회 에러 삼키기" 항목과 동일 뿌리.
 - **stale 당사자**: `likedGames`/`curiousGames`(패널 Promise.all에서 1회 조회, taste HTML이 소비) ↔ `_meeting.likedGames`/`_meeting.curiousGames`(`getMeetingProfile`이 **내부에서 `getUserLikedGamesAll`를 재호출**해 만든 **별도 배열**, meeting 블록이 `_likedSlugSet`/`_curiousSlugSet`으로 소비). 두 배열이 같은 `game_likes`의 서로 다른 사본이라 한쪽 변경이 반대편에 안 보임. `cottage-likes-changed` 이벤트는 **열린** 서브시트 DOM/슬러그셋만 갱신(닫힌 보드 배열은 못 건드림).
 
 **R10b/R10c 착수 전 확인 사항**:
@@ -233,6 +234,10 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 - [x] **renderSingleGame / ?game= 처리** — game-reviews.js dead code(GAME_ID) 삭제 완료 (137차)
 - [x] **동호회 소개글 알림** — 소개글 올린 회원에게 new_intro 타입 묶음 알림 (N명이 소개글 올렸어요). supabase-client.js getMyNotifications + kakao-auth.js 렌더링 (138차)
 - [x] **getPageAnalytics 조회 방식 개선** — limit(5000) → 최근 90일 필터 + limit(20000)로 교체. 25일치 → 90일치로 확장, raw는 DB에 유지 (139차)
+- [ ] **[기술부채] DB 조회 에러 삼키기 — CLAUDE.md 규칙 위반 다수** (2026-07-16 등록, 미착수) — CLAUDE.md 「DB 함수 에러 처리」가 **`catch (_) { return []; }` 패턴을 명시적으로 금지**하고 "최소한 `console.error('[함수명]', e)` 후 반환"을 요구하는데, 실제로는 `supabase-client.js`에 **48곳**, `kakao-auth.js` `openProfilePanel`의 Promise.all에 **11곳**(`.catch(() => [])` 등)이 그대로 남아 있음. 감사(Phase 2 SC1~SC8)에도 안 잡혔던 항목 — **규칙이 2026-07-08에 생겼고 기존 코드에 소급 적용되지 않은 것**으로 보임(신규 코드만 규칙 준수).
+  - **증상**: 네트워크·RLS·쿼리 오류가 전부 "데이터 없음"으로 둔갑. 콘솔에 흔적이 없어 **원인 조사 자체가 불가능**해짐. PROJECT_STATE의 "관리자 페이지 금일이용데이터 간헐적 미표시 — 원인 불명" 같은 미제 버그가 이 패턴 때문에 조사가 막혔을 가능성 있음(가설, 미검증).
+  - **우선 대상**: R10b가 건드릴 `openProfilePanel` 조회 11곳 + `getMeetingProfile`. 방향 A(진입 시 재조회)와 직접 충돌하므로 **R10b에서 함께 처리 검토**(§0 R10b 인수인계 참조).
+  - **범위 주의**: 48곳 일괄 수정은 별건(각 호출부가 빈 배열 fallback을 전제로 렌더하고 있어, 에러를 던지게 바꾸면 UI가 깨질 수 있음). **`console.error` 추가는 안전(동작 무변경)**, 반환값 변경은 호출부 확인 필요 — 두 단계로 나눌 것.
 - [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
   - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)
