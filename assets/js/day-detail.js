@@ -793,15 +793,9 @@
    * @param {Array}  voteGames — 해당 날짜의 meeting_vote_games 배열 (사전 패치)
    * @param {{ onPlannerClick?: () => void }} [opts]
    */
-  window.openDateMeetingModal = function (voteDate, votes, voteGames, opts = {}) {
-    document.getElementById('__ddModal')?.remove();
-    const el = document.createElement('div');
-    el.id = '__ddModal';
-    el.className = 'dd-overlay';
-
-    const uniqueVotes = [...new Map(votes.map(v => [String(v.user_id), v])).values()];
+  /** 모임 상세 통계 칩 HTML (참여 인원 · 최대 동시 겹침 · 공통 게임 수) */
+  function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
     const count = uniqueVotes.length;
-
     // 최대 동시 참여 가능 인원 (1시간 단위 슬롯)
     const MIN_H = 10, MAX_H = 24;
     let peakCnt = 0;
@@ -823,8 +817,11 @@
       ${peakCnt >= 2 ? `<span class="dd-stat-chip is-match">⏱ 최대 ${peakCnt}명 겹침</span>` : ''}
       ${sharedGameCnt ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${sharedGameCnt}종</span>` : ''}
     </div>`;
+    return statsHtml;
+  }
 
-    // 룰렛 후보: want 게임 중복 제거, 약칭 포함
+  /** 룰렛 후보 목록: want 게임 중복 제거 + 약칭 해석 → [{key, name, abbr}] */
+  function _buildRouletteGames(voteGames) {
     const wantGameMap = new Map();
     voteGames.forEach(g => {
       if (g.list_type !== 'want') return;
@@ -844,7 +841,11 @@
       }
     });
     const rouletteGames = [...wantGameMap.entries()].map(([key, { name, abbr }]) => ({ key, name, abbr }));
+    return rouletteGames;
+  }
 
+  /** 참여자별 보기 블록 HTML (닉네임 · 시간 · 하고싶은/배우고싶은 게임) */
+  function _buildParticipantsHtml(uniqueVotes, voteGames) {
     const participantsBody = uniqueVotes.map(v => {
       const myGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
       // 참여자별 게임 옆에 그 사람이 설정한 인원조건 표시(읽기전용). 무관 포함 — 어떤 게임이 특정 인원 필요한지 한눈에.
@@ -864,52 +865,15 @@
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
       </div>`;
     }).join('');
+    return participantsBody;
+  }
 
-    const rouletteBtnHtml = rouletteGames.length >= 2
-      ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
-      : '';
-    const roulettePanelHtml = rouletteGames.length >= 2
-      ? `<div class="dd-roulette-panel" id="__ddRoulettePanel" style="display:none">
-          <div class="dd-roulette-wheel-wrap">
-            <div class="dd-roulette-ptr">▼</div>
-            <div class="dd-roulette-wheel" id="__rrWheel"></div>
-          </div>
-          <div class="dd-roulette-chips" id="__rrChips"></div>
-          <div class="dd-roulette-add-row" id="__rrAddRow">
-            <input class="dd-roulette-add-input" id="__rrAddInput" placeholder="+ 게임 추가..." type="text" autocomplete="off">
-          </div>
-          <div class="dd-roulette-result" id="__rrResult"></div>
-          <button class="dd-roulette-spin-btn" id="__rrSpin" type="button">돌리기 🎡</button>
-          <button class="dd-roulette-back-btn" id="__rrBack" type="button">← 목록으로</button>
-        </div>`
-      : '';
-
-    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
-      <div class="dd-modal-scroll" id="__ddMainScroll">
-        <div class="dd-date">${fmtDate(voteDate)}</div>
-        ${statsHtml}
-        ${rouletteBtnHtml}
-        ${participantsBody
-          ? `<details class="dd-participants-toggle" open>
-              <summary>참여자별 보기</summary>
-              <div class="dd-participants-body">${participantsBody}</div>
-            </details>`
-          : '<div class="dd-empty">참여자가 없습니다.</div>'
-        }
-      </div>
-      ${roulettePanelHtml}
-      <div class="dd-close-row">
-        <button class="dd-close-btn" type="button">닫기</button>
-      </div>
-    </div>`;
-
-    document.body.appendChild(el);
-    const closeBtn = el.querySelector('.dd-close-btn');
-    closeBtn.addEventListener('click', () => el.remove());
-    el.addEventListener('click', e => { if (e.target === el) el.remove(); });
-
-    // 룰렛 로직
-    if (rouletteGames.length >= 2) {
+  /**
+   * 룰렛 위젯 초기화 (휠·칩·게임추가·돌리기)
+   * ⚠️ el.innerHTML 주입 + appendChild 이후에만 호출할 것 — 내부에서 el.querySelector로
+   *    8개 요소를 잡으므로 그 전에 부르면 전부 null이 되어 조용히 죽는다.
+   */
+  function _initRouletteWidget(el, rouletteGames) {
       const COLORS = ['#e8d8c0','#ddc8a8','#f0e5d4','#d4c0a0','#e4d4bc','#cdb898','#ecddd0','#c8ac8c'];
       const state = rouletteGames.map((g, i) => ({ ...g, active: true, color: COLORS[i % COLORS.length] }));
       let spinTotal = 0;
@@ -1064,7 +1028,65 @@
           window.CottageDB?.trackEvent('roulette_spin', { game_id: gameId });
         }, 3600);
       });
-    }
+  }
+
+  window.openDateMeetingModal = function (voteDate, votes, voteGames, opts = {}) {
+    document.getElementById('__ddModal')?.remove();
+    const el = document.createElement('div');
+    el.id = '__ddModal';
+    el.className = 'dd-overlay';
+
+    const uniqueVotes = [...new Map(votes.map(v => [String(v.user_id), v])).values()];
+
+    const statsHtml = _buildMeetingStatsHtml(votes, uniqueVotes, voteGames);
+    const rouletteGames = _buildRouletteGames(voteGames);
+    const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames);
+
+    const rouletteBtnHtml = rouletteGames.length >= 2
+      ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
+      : '';
+    const roulettePanelHtml = rouletteGames.length >= 2
+      ? `<div class="dd-roulette-panel" id="__ddRoulettePanel" style="display:none">
+          <div class="dd-roulette-wheel-wrap">
+            <div class="dd-roulette-ptr">▼</div>
+            <div class="dd-roulette-wheel" id="__rrWheel"></div>
+          </div>
+          <div class="dd-roulette-chips" id="__rrChips"></div>
+          <div class="dd-roulette-add-row" id="__rrAddRow">
+            <input class="dd-roulette-add-input" id="__rrAddInput" placeholder="+ 게임 추가..." type="text" autocomplete="off">
+          </div>
+          <div class="dd-roulette-result" id="__rrResult"></div>
+          <button class="dd-roulette-spin-btn" id="__rrSpin" type="button">돌리기 🎡</button>
+          <button class="dd-roulette-back-btn" id="__rrBack" type="button">← 목록으로</button>
+        </div>`
+      : '';
+
+    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+      <div class="dd-modal-scroll" id="__ddMainScroll">
+        <div class="dd-date">${fmtDate(voteDate)}</div>
+        ${statsHtml}
+        ${rouletteBtnHtml}
+        ${participantsBody
+          ? `<details class="dd-participants-toggle" open>
+              <summary>참여자별 보기</summary>
+              <div class="dd-participants-body">${participantsBody}</div>
+            </details>`
+          : '<div class="dd-empty">참여자가 없습니다.</div>'
+        }
+      </div>
+      ${roulettePanelHtml}
+      <div class="dd-close-row">
+        <button class="dd-close-btn" type="button">닫기</button>
+      </div>
+    </div>`;
+
+    document.body.appendChild(el);
+    const closeBtn = el.querySelector('.dd-close-btn');
+    closeBtn.addEventListener('click', () => el.remove());
+    el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+
+    // 룰렛 로직
+    if (rouletteGames.length >= 2) _initRouletteWidget(el, rouletteGames);
   };
 
   /**
