@@ -293,31 +293,18 @@
 
 - [ ] **게임 검색 영어 제목 인식** — 검색창에서 영어로 입력 시 `bggTitle`로도 매칭. 게임정보 시트 영어제목 독립 표시 작업 이후 자연스러운 연계.
 
-- [x] **게임 위치 페이지** (game-location.html) — 책장 위치 기능 구현 완료 (이전 세션)
-- [x] **게임위치 협력게임 난이도 분류** — bgg.weight >= 2.5 → 어려운 협력(C-1), 미만 → 쉬운 협력(B-1), 41종 자동 분류 (118차). script.js 바텀시트도 동일 로직 적용 (134차)
-- [x] **페이지별방문 내 보드 + 서브시트 카운팅** — trackPageView('my-board*') + admin 가상페이지 집계 (118차)
-- [x] **방문자목록 회원/비회원 분류 버튼** — 전체/회원/비회원 토글 버튼 추가 (118차)
-- [x] **게임 위치 0종 카테고리 숨기기** — games.length === 0 시 렌더 스킵 (140차)
-- [x] **모임 일정 페이지** — club-schedule.html로 통합 완료 (141차). 달력+겹침계산+슬라이더+자유댓글. club-meeting.html → redirect. ~~⚠️ Supabase meeting_votes 테이블 생성 필요~~ → ✅ **생성 확인 (2026-07-16 실측)**: `meeting_votes` 16행·`meeting_vote_games` 16행·`meeting_game_prefs` 13행. **낡은 경고였음**
 - [ ] **동호회 가입 추적** — page_sessions 데이터 활용
 - [ ] **관심 기반 묶음 알림** (Red, Plan 필수)
   - 개별 알림 → 유형별 묶음 방식 전환
   - notifSeenAt → `{ tagged, review, play_record, purchased }` 확장
-- [x] **유입 경로 first_source 저장** — profiles.first_source TEXT, 신규 유저 upsert 시 _sessionReferrer 1회 저장 (140차)
 
 ### P2-admin — 관리자 분석 페이지 추가 작업
 
-- [x] **유입 차트 바 안에 시간 표시** — `refTimeLabelPlugin` (afterDatasetsDraw) 완료
-- [x] **방문 탭 차트 시간 표시** — `chartHourly` page_views 기반이라 duration_sec 없음, `chartDaily` line 차트라 불가 → 추가 작업 없음으로 확정
 - [ ] **[결정] 관리자 분석 탭 구조 압축안 적용 여부** (2026-07-02 기획, 미결정 — 2026-07-17 `PLAN_admin_analytics_counting.md` 삭제 시 추출) — 탭을 `요약 / 방문자 / 유입·페이지 / 행동` 중심으로 재구성하는 안. 당시 "카운팅 기준부터 안정화하고 큰 UI 재구성은 보류"로 미룬 뒤 그대로 방치됨(같은 건이 `PLAN_refactor_audit_workflow.md` 보류 절에 "관리자 분석 페이지 전체 재구성"으로도 있었음). **선행 조건이던 카운팅 기준 통일은 완료**(007 적용 + 명/회 기준 통일, §2 참조) → 이제 적용 여부만 결정하면 됨. 관련: 아래 "관리자 분석 2단계/3단계"(론칭 후 이월)와 범위가 겹치므로 착수 전 통합 판단 필요.
 - [ ] **[verify] 관리자 분석 화면 수치·콘솔 확인** (2026-07-02 등록, 미실행 — 위와 같은 경로로 추출) — 브라우저에서 직접 방문 표시가 `명 <= 회`로 나오는지 + 콘솔 에러 여부. **2026-07-17 감지기 2단계로 조회 실패가 콘솔에 찍히게 됐으므로 지금 하면 소득이 큼** — §3 "[통합] 방문/이용 집계" ④(금일이용데이터 간헐적 미표시, 원인 불명)의 열린 가설(원인이 조회가 아니라 렌더/집계 쪽)을 이 확인으로 좁힐 수 있음.
 
 ### P3 — 인프라
 
-- [x] **로그인 메뉴 HTML 공통화** — assets/js/header.js 생성, 15개 HTML 파일 script 태그로 교체 (137차)
-- [x] **renderSingleGame / ?game= 처리** — game-reviews.js dead code(GAME_ID) 삭제 완료 (137차)
-- [x] **동호회 소개글 알림** — 소개글 올린 회원에게 new_intro 타입 묶음 알림 (N명이 소개글 올렸어요). supabase-client.js getMyNotifications + kakao-auth.js 렌더링 (138차)
-- [x] **getPageAnalytics 조회 방식 개선** — limit(5000) → 최근 90일 필터 + limit(20000)로 교체. 25일치 → 90일치로 확장, raw는 DB에 유지 (139차)
 - [ ] **[기술부채] DB 조회 에러 삼키기 — 1·2단계 완료(supabase-client.js), 나머지 파일 반응형** (2026-07-16 등록 / 2026-07-17 1·2단계 완료) — CLAUDE.md 「DB 함수 에러 처리」가 `catch (_) { return []; }`를 금지하는데 기존 코드에 소급 적용이 안 돼 있던 건. 감사(Phase 2 SC1~SC8)도 놓쳤음.
   - **방침 (사용자 결정 2026-07-17): "로그는 전부 켜고, 동작은 그때그때"** — ①로그 추가는 동작 무변경이라 일괄 처리(반응형만으론 우리가 안 만지는 영역 = 원인불명 버그가 사는 곳에 영원히 로그가 안 생김) ②반환값·에러 전파 변경은 동작 변경이라 실제 문제 발생 시 그 자리만(호출부가 빈 배열 fallback 전제로 렌더 중).
   - **🟡 `supabase-client.js` 부분 완료** — 1단계(try/catch 로그 75곳, 34e79f5) + 2단계(**구조분해** 59곳 error 수신, 32f73ee) + 노이즈·오라벨 정리(019bd7c). ~~구조분해 104곳 전부 감지~~ → **"전부"가 아님**: `Promise.all`+비구조분해 ~16곳이 대상에서 빠져 있었음(2026-07-17 R10b 발견, 아래 신규 항목). **규약·점검법은 [js-api.md](js-api.md) "CottageDB 에러 처리 규약"이 SSOT**(교훈은 CLAUDE.md 「DB 함수 에러 처리」로 승격).
