@@ -107,6 +107,9 @@
       padding: 1px 0;
     }
     .dd-game-thumb { width: 13px; height: 13px; border-radius: 3px; object-fit: cover; vertical-align: middle; margin-right: 3px; flex-shrink: 0; }
+    /* 썸네일이 13px라 터치 타겟으로 작음 → 행 전체를 클릭 영역으로 */
+    .dd-game-item--clickable { cursor: pointer; border-radius: 4px; }
+    .dd-game-item--clickable:hover { background: rgba(0, 0, 0, 0.04); }
     .dd-empty {
       font-size: 12px; color: var(--muted, #9e8e7e);
       padding: 4px 0;
@@ -869,7 +872,10 @@
       const _li = g => {
         const c = g.player_condition || 'any';
         const cl = c === 'any' ? '무관' : (window.formatCondLabel?.(c, g.game_id) || c);
-        return `<li>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+        // 직접입력(game_id 없음)은 열 시트가 없으므로 클릭 대상에서 제외
+        const clickable = g.game_id ? ' dd-game-item--clickable' : '';
+        const gidAttr = g.game_id ? ` data-game-id="${esc(String(g.game_id))}"` : '';
+        return `<li class="dd-game-item${clickable}"${gidAttr}>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
       };
       const wantGames  = myGames.filter(g => g.list_type === 'want');
       const learnGames = myGames.filter(g => g.list_type === 'learn');
@@ -1108,6 +1114,18 @@
       n.addEventListener('click', () => {
         el.remove();
         window.openOtherMeetingSheet?.(n.dataset.uid);
+      }));
+
+    // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500) > 이 모달(9200)이라 모달은 닫지 않는다
+    // (시트를 닫으면 이 모달로 복귀).
+    // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
+    //    변환 없이 넘기면 미보유 게임으로 오인해 조용히 기록시트로 폴백된다(에러도 안 남).
+    el.querySelectorAll('.dd-game-item--clickable').forEach(li =>
+      li.addEventListener('click', () => {
+        const key = window.getGameKeyById?.(li.dataset.gameId);
+        if (!key) return;
+        window.ensureGameSheet?.();
+        window.openGameSheet?.(key);
       }));
 
     // 룰렛 로직

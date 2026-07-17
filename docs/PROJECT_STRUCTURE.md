@@ -115,7 +115,9 @@ assets/js/
 │                               # 로드 페이지: index.html, club-schedule.html
 │                               # 의존: window.CottageDB (getMeetingVotes, getMeetingVoteGames),
 │                               #   window.COTTAGE_GAMES (게임명 해석, optional),
-│                               #   window.openOtherMeetingSheet (kakao-auth.js — 참여자 닉네임 클릭)
+│                               #   window.openOtherMeetingSheet (kakao-auth.js — 참여자 닉네임 클릭),
+│                               #   window.getGameKeyById (play-records-utils.js) +
+│                               #     window.ensureGameSheet/openGameSheet (game-sheet.js — 게임 행 클릭)
 │                               # ⚠️ 위 전역은 전부 클릭 시점에 window.X?.()로 참조할 것 —
 │                               #   club-schedule.html은 day-detail.js를 kakao-auth.js·game-sheet.js·
 │                               #   play-records-utils.js보다 먼저 로드하므로 IIFE 실행 시점 스냅샷은 undefined

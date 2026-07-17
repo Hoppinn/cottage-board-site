@@ -1,6 +1,7 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-17 — **R10c ✅ 완료·스모크 전부 통과 → 리팩토링 체크포인트(R1~R12) 종료**. 스모크 중 **버그 3건 발견·수정**(affec36·6f3652a·e886af1) + **UX 3건**(22d326b·5838e1b). **`REFACTOR_CHECKPOINT.md` 정리 ✅ 완료**(474→90줄, 감사 잔여 12건은 §3로 이관). **스모크 대기 0건.** **다음 세션 후보**: ①이날모임 상세 클릭 2건(§3, 사용자 요청, Yellow) ②감지기 3단계(§3, 선행 완료) ③GDA3(감사 잔여 중 유일한 버그성).
+최종 갱신: 2026-07-17 (세션 ④) — **이날모임 상세 클릭 진입점 2건 ✅ 구현 완료**(닉네임→모임보드 / 게임 행→게임시트). **브라우저 스모크 1건 대기.** 착수 메모 3건 중 **2건이 실제 코드와 달랐고**(z-index 방향 반대 / `.sched-bar-name` 패턴 부재), 특히 **`openGameSheet(gid)`를 그대로 썼으면 12건 전부 조용히 기록시트로 폴백**될 뻔했다(BGG ID↔슬러그, 실측으로 확정 — §3 참조). **다음 세션 후보**: ①감지기 3단계(§3, 선행 완료) ②GDA3(감사 잔여 중 유일한 버그성).
+> 이전(세션 ③): R10c ✅ 완료·스모크 전부 통과 → **리팩토링 체크포인트(R1~R12) 종료**. 스모크 중 버그 3건(affec36·6f3652a·e886af1) + UX 3건(22d326b·5838e1b) 수정. `REFACTOR_CHECKPOINT.md` 정리 완료(474→90줄, 감사 잔여 12건은 §3로 이관).
 
 > **2026-07-17 세션 요약 ②**: **R10b ✅ 완료**(507f2e9·c0cd874·5f82aed·a03250c, **스모크 통과**) — 크로스보드 stale을 방향 A로 해결. **원인의 실체는 "같은 쿼리를 한 Promise.all에서 두 번"**(`getUserLikedGamesAll` 직접 호출 + `getMeetingProfile` 내부 호출). 착수 후 **당사자가 문서의 2종이 아니라 5종**임을 발견(bio·avoid_tags·ruleSet도 같은 구조) → `getMeetingProfile`에 `avoidTags`를 얹어 단일 소스로 통일. **부산물 2건**: ①감지기 2단계가 **`Promise.all`+비구조분해 패턴을 통째로 놓쳤음**을 발견 — `getMyStats`·`getMyNotifications` 등 ~16곳이 여전히 감지 불가(§3 등록, `getMeetingProfile` 2곳만 선처리) ②스코프 누수 검사기가 `getCurrentBio` 잔존 참조 1건을 잡음(`node --check`는 통과시킨 자리) — R12 교훈이 실전에서 또 맞았음.
 > **2026-07-17 세션 요약 ①**: **감지기 2단계 ✅ 완료** — `supabase-client.js` 구조분해 59곳에 error 수신+로그 추가 → ~~**104곳 전부 감지**~~(커밋 32f73ee). 1단계가 만든 가짜 로그·오라벨도 정리(019bd7c) → 화재 테스트 **울림 0건**. ⚠️ **단 이 "0건"은 `supabase-client.js` 읽기 42개 한정** — 파일 커버리지·쓰기 경로·에러 수집이 아직 사각지대(§3 감지기 3·4단계로 등록). ⚠️⚠️ **"전부 감지"는 틀린 것으로 판명 (2026-07-17 R10b 중 정정)** — 2단계가 센 것은 **구조분해 형태뿐**이고 `const [aRes] = await Promise.all([...])` 후 `aRes.data`만 읽는 형태는 **대상에서 통째로 빠졌다**. `getMyStats`·`getMyNotifications`(= 내 보드 핵심 조회) 포함 ~16곳이 여전히 감지 불가 → **"화재 0건"의 유효 범위가 여기 적힌 것보다 더 좁다**. §3 「감지기 갭 — Promise.all + 비구조분해」 참조. 교훈은 CLAUDE.md 「DB 함수 에러 처리」로 승격, 규약 SSOT는 js-api.md. 문서 정리: 고아 md 3개 삭제(617줄), §3 축약, 그 과정에서 **추적 누락돼 있던 열린 항목 5건 발견·등록**(`squirrel_lv5` 미제작 등).
@@ -10,17 +11,18 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**진행 중 작업 없음 · 스모크 대기 0건** (2026-07-17 세션 ③ 종료 시점)
+**진행 중 작업 없음 · 스모크 대기 1건** (2026-07-17 세션 ④ 종료 시점)
+
+- **이날모임 상세 클릭 진입점 2건** — 구현 완료, **브라우저 확인만 남음**. 포인트 5개는 §3 해당 항목. 특히 **④보유 게임이 정보시트로 열리는지**(BGG ID→슬러그 변환이 실제로 먹었는지 = 이 작업의 핵심 위험).
 
 ### 🎯 다음 세션 시작점 — 우선순위 순
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | **이날모임 상세 클릭 진입점 2건**(닉네임·게임 썸네일) — 사용자 요청 | §3 | Yellow / Sonnet high. 착수 시 재사용할 패턴·z-index 주의를 항목에 적어 둠 |
-| 2 | **감지기 3단계** — 선행(R10b·R10c) 완료로 착수 가능 | §3 | 기술부채 / Opus medium. 실대상 = `achievements.js` 5 + `game-sheet.js` 9 + **`Promise.all` 갭 ~16곳**(후자가 더 중요 — `getMyStats`·`getMyNotifications` = 내 보드 핵심 조회) |
-| 3 | **GDA3** — 감사 잔여 12건 중 **유일하게 실동작 영향 가능**(검색 가중치 2배) | §3 「Phase 1~3 감사 잔여」 | 버그 / Sonnet high |
-| 4 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
-| 5 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
+| 1 | **감지기 3단계** — 선행(R10b·R10c) 완료로 착수 가능 | §3 | 기술부채 / Opus medium. 실대상 = `achievements.js` 5 + `game-sheet.js` 9 + **`Promise.all` 갭 ~16곳**(후자가 더 중요 — `getMyStats`·`getMyNotifications` = 내 보드 핵심 조회) |
+| 2 | **GDA3** — 감사 잔여 12건 중 **유일하게 실동작 영향 가능**(검색 가중치 2배) | §3 「Phase 1~3 감사 잔여」 | 버그 / Sonnet high |
+| 3 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
+| 4 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
 
 ⚠️ **1~5 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
@@ -210,9 +212,13 @@
 > - **트레이드오프**: 알림 복귀 시 목록은 DB 재조회 → 읽음 상태는 유지되나 **스크롤은 상단으로 리셋**(사용자 인지·승인).
 - [ ] **[리팩토링] `_restoreMenuExpanded` 제거 검토** (2026-07-17 등록) — 5838e1b가 script-nav.js에서 보드 클릭을 "메뉴 밖 클릭"에서 제외하면서 **메뉴가 애초에 안 닫히게** 됐다 → 이 함수와 30ms 지연, `_menuWasOpen` 캡처는 이제 대부분 no-op. 제거하면 코드가 단순해지나, `loginBtn`의 `is-expanded`가 [script-nav.js:178](../assets/js/script-nav.js#L178)에서 별도로 remove되는 경로와 얽혀 있어 **그 함수의 호출 시점을 먼저 확인**해야 안전. 급하지 않음(현재 무해).
   - **알려진 트레이드오프**: 알림 복귀 시 목록은 DB 재조회 → 읽음 상태는 유지되나 **스크롤은 상단으로 리셋**(사용자 인지·승인).
-- [ ] **[Yellow] 이날모임 상세 모달 클릭 진입점 2건** (2026-07-17 사용자 요청, 미착수) — 이날모임 상세(`day-detail.js` `openDateMeetingModal`)에 뜨는 칸에서 ①**닉네임 클릭 → 보드 열기** ②**하고 싶은 게임 썸네일 클릭 → 게임시트**.
-  - **착수 시 재사용할 것**: 닉네임은 [js-api.md](js-api.md) Phase D 진입점 규칙대로 **모임 참여자 = `openOtherMeetingSheet`**(`.sched-bar-name[data-uid]` 패턴이 이미 있으니 이 모달에도 같은 속성이 붙는지부터 확인). 썸네일은 `window.ensureGameSheet?.(); window.openGameSheet?.(gid)` — 취향 박스모달([kakao-auth.js](../assets/js/kakao-auth.js) `_openTasteBoxModal` renderList)이 쓰는 것과 동일 패턴.
-  - ⚠️ **z-index 확인 선행**: 박스모달 썸네일은 `close()` 후 게임시트를 연다(모달 9700 > 게임시트 9500). 이 모달도 같은 문제가 있는지 볼 것.
+- [x] ~~**[Yellow] 이날모임 상세 모달 클릭 진입점 2건**~~ — ✅ **완료** (2026-07-17, 커밋 d7a0a88[닉네임]·9865887[게임 행]). **스모크 대기** — 아래 포인트 참조.
+  - **구현**: `_buildParticipantsHtml`의 닉네임에 `.dd-nick-link`+`data-uid` → `openOtherMeetingSheet` / 게임 행 `<li>`에 `.dd-game-item--clickable`+`data-game-id` → `getGameKeyById` 변환 후 `openGameSheet`. 클릭 영역은 **행 전체**(썸네일이 13px라 터치 타겟 미달, 사용자 승인).
+  - ⚠️ **여기서 얻은 교훈 — 이 항목의 착수 메모 3건 중 2건이 틀렸다**(전부 코드 확인 전엔 그럴듯했음). 219행 e2bfefb 교훈("동기화 경로를 문서 메모로 믿지 말 것")과 **같은 뿌리이고 또 맞았다**:
+    - ①"`.sched-bar-name[data-uid]` 패턴이 이미 있으니 같은 속성이 붙는지 확인" → **틀림**. 그 패턴은 `buildBarsInCard`(막대) 것이고 이 모달은 `_buildParticipantsHtml`이 그리는 **별도 마크업**이라 uid도 핸들러도 없었다.
+    - ②"z-index 확인 선행(박스모달 9700 > 게임시트 9500)" → **방향이 반대**. `.dd-overlay`는 **9200**이라 게임시트(9500)가 위 → 썸네일은 `close()` **불필요**(닫으면 모달 복귀 = 오히려 좋음). 반대로 **닉네임은 보드(9100)가 아래라 닫기가 필수**였다. 두 건의 처리가 서로 정반대.
+    - ③ **가장 위험했던 것 — "썸네일은 `openGameSheet?.(gid)`"를 그대로 썼으면 12건 전부 깨졌다**: 그 패턴이 통하는 박스모달은 `game_likes`(**슬러그**)를 읽지만 이 모달은 `meeting_vote_games.game_id`(**BGG ID**)를 읽는다. `openGameSheet`는 `gameData[key]`(슬러그) 조회 후 **미스 시 에러 없이 `openGameRecordSheet`로 폴백**하므로 엉뚱한 미보유 기록시트가 조용히 열린다. → `window.getGameKeyById`(슬러그·BGG ID 양쪽 처리)로 변환 필수. **실측**(2026-07-17, HTTP 200): `meeting_vote_games` 16행 중 game_id 보유 12행이 **전부 BGG ID**(슬러그 0), 변환 시 12/12 해석 성공·음성 대조군으로 폴백 재현 확인.
+  - **스모크 포인트**: ①홈 미리보기 카드 → 상세 → 닉네임 → 모임보드가 **모달 위로** 뜨는지 ②club-schedule "자세히" → 동일 ③게임 행 클릭 → 게임시트가 **위에** 뜨고 닫으면 모달 복귀 ④**보유 게임이 기록시트가 아닌 정보시트로 열리는지**(③의 핵심 — 여기가 깨지면 변환이 안 먹은 것) ⑤직접입력 게임(`custom_name`, 실측 4행) 행은 클릭 무반응.
 - [ ] **[문서-코드 불일치] `squirrel_lv5` 캐릭터 파일 미제작인데 경고가 없음** (Phase 1 감사 A1, 2026-07-02 발견 → **처리 현황 표에 등재된 적 없는 고아 항목**, 2026-07-17 REFACTOR_CHECKPOINT 압축 검토 중 재발견·실측 확인) — 실재하는 lv5 파일은 `bear_lv5`·`hamster_lv5`·`rabbit_lv5` **3개뿐**. `sparrow_lv5`(visit_500)는 [achievement-system.md](achievement-system.md) 234·271행에 **⚠️미완성으로 명시**돼 있으나, **`squirrel_lv5`(record_400)는 167행에 아무 경고 없이 정상 보상처럼 적혀 있고 271행 미완성 목록에도 없음**. → record_400 달성자가 나오면 **깨진 이미지**가 뜬다(sparrow와 달리 아무도 모르는 상태). 조치: ①파일 제작 or ②171행/271행에 미완성 표기 추가. **record_400은 먼 임계값이라 급하진 않으나, 달성 후엔 사용자 자산(캐릭터) 영역이라 사후 대응이 어렵다.**
 - [ ] **[문서] 캐릭터 이미지 경로 체계(`rare/` 서브폴더) 문서 미반영** (Phase 1 감사 A2·A3, 위와 같은 고아 항목) — `achievements.js`의 `_charImgPath()`가 `rare_*`·`season_*`·`cottage_master`를 `characters_basic/rare/` 서브폴더로 라우팅하는데(실측: `assets/images/characters/characters_basic/rare/cottage_master.png` 존재), **SSOT인 [achievement-system.md](achievement-system.md)에 경로 체계 설명이 아예 없음**. 신규 캐릭터 추가 시 어느 폴더에 둘지 문서만 보고는 알 수 없음.
 - [x] ~~**[Yellow] 모임보드 취향 박스모달에 게임 삭제(✕) 추가**~~ — ✅ **완료·스모크 통과** (2026-07-17, 커밋 e2bfefb). 확답 3건대로: confirm 띄움 / readOnly 숨김(`_ro()`) / 룰 배지는 표시 전용 유지. CSS 변경 없음(`.taste-game-del` 전역 선택자 재사용). `data-custom-name`을 함께 추가 — 직접입력 게임은 식별 속성이 없어 삭제 자체가 불가능했음.
