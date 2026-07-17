@@ -1710,7 +1710,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
     document.getElementById('profileSubSheet')?.remove();
     panel.remove();
-    if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey); }
+    // restoreScroll=true — 보던 스크롤 지점으로 복귀(closeGameSheet가 닫을 때 저장해 둔 값)
+    if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey, true); }
     else if (backTo.type === 'panel') openProfilePanel(backTo.autoSubsheet || null, backTo.opts || {});
   });
 

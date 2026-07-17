@@ -933,6 +933,10 @@ function closeGameSheet(){
     delete panel._stickyCleanup;
   }
 
+  // 닫을 때 시트 내부 스크롤을 기억 → openGameSheet(key, true)로 되돌아올 때 보던 지점 복원.
+  // (종전엔 openGameRecordSheet만 저장해서, 토스트로 취향보드에 갔다 backTo로 돌아오면 옛 값이 복원됐다)
+  _savedSheetScrollTop = panel ? panel.scrollTop : 0;
+
   gameSheet.classList.remove('is-active');
   document.body.classList.remove('sheet-open');
   window.scrollTo(0, _savedBodyScrollY);
