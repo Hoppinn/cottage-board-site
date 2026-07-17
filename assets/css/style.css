@@ -3953,6 +3953,11 @@ body.embed-mode {
 .profile-panel-header{display:flex;align-items:center;justify-content:space-between;margin:0 -20px 0;position:sticky;top:0;z-index:5;background:#fff;padding:10px 20px;min-height:48px;border-bottom:1px solid var(--border);cursor:pointer;}
 .profile-panel-title{font-size:14px;font-weight:700;color:var(--text);}
 .profile-panel-close{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:2px 6px;}
+/* backTo로 진입한 패널에만 3열 그리드(서브시트 헤더와 동일 구조). 기본 패널은 위 flex를 그대로 써서
+   제목 왼쪽 정렬을 보존한다 — 무조건 grid로 바꾸면 뒤로가기 없는 모든 보드의 제목이 중앙으로 밀린다. */
+.profile-panel-header--with-back{display:grid;grid-template-columns:1fr auto 1fr;}
+.profile-panel-header--with-back .profile-panel-close{justify-self:end;}
+.profile-panel-back{justify-self:start;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:none;border:none;font-size:13px;font-weight:600;color:var(--green);cursor:pointer;padding:2px 8px 2px 0;}
 .profile-panel-profile{display:flex;flex-direction:column;padding:14px 0 16px;}
 .profile-panel-profile-top{display:flex;align-items:flex-start;gap:14px;}
 .profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}

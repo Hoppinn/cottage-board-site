@@ -1655,7 +1655,12 @@ function _bindUsageSubsheet(subBody) {
 async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // Phase C: userId 파라미터화 + 읽기전용 모드. readOnly면 대상 유저(userId)의 공개 보드를
   // 편집 컨트롤 없이 표시(비공개 섹션=알림·교환권·함께한 시간 제외). 편집 컨트롤 HTML은 _ro()로 생략.
-  const { userId: _targetUserId = null, readOnly = false } = opts;
+  // backTo: 진입 직전 화면으로 돌아갈 경로. 있으면 패널 헤더에 뒤로가기가 생긴다.
+  //   { type:'gameSheet', gameKey, label } — 좋아요 토스트로 들어온 경우 원래 게임시트로
+  //   { type:'panel', autoSubsheet, label, opts? } — 알림에서 남의 보드로 들어온 경우 내 보드로
+  // 서브시트→패널 뒤로가기는 _openSubSheet가 이미 하므로, 여기는 패널 한 칸만 담당(깊이 1).
+  // 체인이 생겨도 각 패널의 클로저가 자기 backTo를 들고 있어 스택 자료구조가 필요 없다.
+  const { userId: _targetUserId = null, readOnly = false, backTo = null } = opts;
   const _selfUser = getKakaoUser();
   const user = readOnly
     ? { id: String(_targetUserId), nickname: opts.nickname || '' }
@@ -1684,7 +1689,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const isOwnerUser = String(user.id) === String(OWNER_KAKAO_ID);
   const isDevMode = location.hostname === 'localhost' || isOwnerUser;
   panel.innerHTML = `<div class="profile-panel-box">
-    <div class="profile-panel-header">
+    <div class="profile-panel-header${backTo ? ' profile-panel-header--with-back' : ''}">
+      ${backTo ? `<button class="profile-panel-back" type="button">‹ ${escH(backTo.label || '뒤로')}</button>` : ''}
       <span class="profile-panel-title">${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</span>
       <button class="profile-panel-close" type="button">✕</button>
     </div>
@@ -1697,6 +1703,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); });
   panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(); } });
   panel.querySelector('.profile-panel-header').addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
+  // ⚠️ 자기 패널을 먼저 지운 뒤 복귀시킨다. 순서가 바뀌면 위 토글 가드(`if (existing) … if (!readOnly) return`)에
+  // 걸려 내 보드가 안 열리고 화면이 텅 빈다. _restoreMenuExpanded는 부르지 않는다 — 닫는 게 아니라 전환이라서.
+  panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
+    document.getElementById('profileSubSheet')?.remove();
+    panel.remove();
+    if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey); }
+    else if (backTo.type === 'panel') openProfilePanel(backTo.autoSubsheet || null, backTo.opts || {});
+  });
 
   if (!window.CottageDB?.getMyStats) return;
   const _sessForNotif = window._cottageSess?.get(String(user.id)) || {};
