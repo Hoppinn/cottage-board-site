@@ -3,7 +3,7 @@
 최종 갱신: 2026-07-17 (세션 ④) — **이날모임 상세에서 참여자 닉네임·게임 클릭 ✅ 완료·스모크 전부 통과**(닉네임→그 사람 모임보드 / 게임→게임 정보시트, 둘 다 모달 위에 겹쳐 뜸). **스모크 대기 0건.** 교훈 3건 중 ①은 **CLAUDE.md 「모달/iframe 재사용 원칙 6」으로 승격**(소급 위반 1건 = 박스모달→게임시트도 §3 등록):
 > ①**"닫고 전환"과 "겹쳐 쌓기"는 다르다** — 닫았을 때 원래 화면이 있어야 하는 관계면 레이어 문제이지 복귀 장치(`backTo`)로 풀 게 아니다. ②**`openGameSheet`엔 DB `game_id`를 그대로 넘기면 안 된다** — 테이블마다 슬러그/BGG ID가 달라 **조용히 기록시트로 폴백**(실측 12/12, js-api.md에 규약 기재). ③**"기능이 없다"를 grep 한 번으로 단정해 문서·커밋에 거짓 기재**(배경클릭 닫기는 [kakao-auth.js:1717](../assets/js/kakao-auth.js#L1717)에 멀쩡히 있었음 — 사용자가 반박해서 발각).
 >
-> **다음 세션 후보**: ①감지기 3단계(§3, 선행 완료). ~~②GDA3~~ → **2026-07-17 종결(오탐)** — 재검증하니 `searchText`가 dead code라 실동작 영향 0. **감사 잔여 12건엔 이제 버그성 항목이 없다**(전부 구조 지적·문서 정합성) → §0 표·§3 참조.
+> **다음 세션 후보**: ~~①감지기 3단계~~ → **2026-07-18 종결**(Promise.all 갭 5 + game-sheet 7 로그 추가, achievements는 대상 아님). ~~②GDA3~~ → **2026-07-17 종결(오탐)** — 재검증하니 `searchText`가 dead code라 실동작 영향 0. **감사 잔여 12건엔 이제 버그성 항목이 없다**(전부 구조 지적·문서 정합성) → §0 표·§3 참조. **다음은 §0 표 참조**(R번호 리팩토링 / 감지기 4단계).
 > 이전(세션 ③): R10c ✅ 완료·스모크 전부 통과 → **리팩토링 체크포인트(R1~R12) 종료**. 스모크 중 버그 3건(affec36·6f3652a·e886af1) + UX 3건(22d326b·5838e1b) 수정. `REFACTOR_CHECKPOINT.md` 정리 완료(474→90줄, 감사 잔여 12건은 §3로 이관).
 
 > **2026-07-17 세션 요약 ②**: **R10b ✅ 완료**(507f2e9·c0cd874·5f82aed·a03250c, **스모크 통과**) — 크로스보드 stale을 방향 A로 해결. **원인의 실체는 "같은 쿼리를 한 Promise.all에서 두 번"**(`getUserLikedGamesAll` 직접 호출 + `getMeetingProfile` 내부 호출). 착수 후 **당사자가 문서의 2종이 아니라 5종**임을 발견(bio·avoid_tags·ruleSet도 같은 구조) → `getMeetingProfile`에 `avoidTags`를 얹어 단일 소스로 통일. **부산물 2건**: ①감지기 2단계가 **`Promise.all`+비구조분해 패턴을 통째로 놓쳤음**을 발견 — `getMyStats`·`getMyNotifications` 등 ~16곳이 여전히 감지 불가(§3 등록, `getMeetingProfile` 2곳만 선처리) ②스코프 누수 검사기가 `getCurrentBio` 잔존 참조 1건을 잡음(`node --check`는 통과시킨 자리) — R12 교훈이 실전에서 또 맞았음.
@@ -20,13 +20,14 @@
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | **감지기 3단계** — 선행(R10b·R10c) 완료로 착수 가능 | §3 | 기술부채 / Opus medium. 실대상 = `achievements.js` 5 + `game-sheet.js` 9 + **`Promise.all` 갭 ~16곳**(후자가 더 중요 — `getMyStats`·`getMyNotifications` = 내 보드 핵심 조회) |
-| 2 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
-| 3 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
+| 1 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
+| 2 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
+| 3 | 감지기 4단계 (쓰기 경로 검증) | §3 | 기술부채 / Opus medium, 선행 = 3단계(완료) |
 
-~~2 GDA3~~ → ✅ **2026-07-17 종결 — 재검증 결과 오탐**(`searchText` 소비처 0건 = dead code, 실동작 영향 없음). 상세·교훈은 §3 「Phase 1~3 감사 잔여」. **이로써 감사 잔여 목록에 "실동작 영향 가능" 항목은 0개** → 남은 건 전부 구조 지적·문서 정합성이다.
+~~감지기 3단계~~ → ✅ **2026-07-18 종결** — Promise.all 갭 5곳(supabase-client) + game-sheet init 함수 7곳 로그 추가, achievements 4곳은 래퍼라 "대상 아님" 재분류. 커밋 80a487c 외. 상세·교훈은 §3 「감지기 3단계」.
+~~GDA3~~ → ✅ **2026-07-17 종결 — 재검증 결과 오탐**(`searchText` 소비처 0건 = dead code, 실동작 영향 없음). 상세·교훈은 §3 「Phase 1~3 감사 잔여」. **이로써 감사 잔여 목록에 "실동작 영향 가능" 항목은 0개** → 남은 건 전부 구조 지적·문서 정합성이다.
 
-⚠️ **1~3 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
+⚠️ **1~2 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
 ### ✅ 종료: 전체 리팩토링 R1~R12 (2026-07-15 ~ 07-17, 전부 스모크 통과)
 
@@ -252,7 +253,7 @@
   - **처리 지점(전부 순수 로그 추가, 반환 무변경)**: `getCustomPrefSuggestions`(l·c) · `getVisitorStats`(totalRes·todayRes) · `getMyStats`(playRes·commentRes·suggestRes·profile·reviewRes·taggedRes) · `getMyNotifications` 바깥(taggedRes·curiousRes·purchasedRes·newGameRes·introListRes·profileSeenRes·voucherEventsRes) · `getMyNotifications` 중첩(rcErr·prErr). 라벨은 `[함수명:테이블명]`. `taggedRes`·`voucherEventsRes`는 조건부 `Promise.resolve`라 `.error` 없음(정상 falsy).
   - ✅ `getMeetingProfile`(profileRes·introRes)은 R10b가 선처리 완료(커밋 507f2e9).
   - **이게 왜 중요했나**: `getMyStats`·`getMyNotifications`는 **내 보드의 핵심 조회**다. 2026-07-17 "화재 테스트 불난 곳 0건"은 이 두 함수에 관한 한 감지 능력이 없는 상태의 결과였음 → 이제 `supabase-client.js`의 Promise.all 갭은 닫혔다.
-  - **⚠️ 남은 사각지대는 파일 커버리지**: 이 항목은 `supabase-client.js` 한정. `achievements.js`·`game-sheet.js`의 `.catch()` 인라인 형태는 아래 「감지기 3단계」에 그대로 남음(별개 유형 — 호출부 구조 변경 필요).
+  - **✅ 파일 커버리지 (2026-07-18 갱신)**: `game-sheet.js`의 `.catch()` 7곳은 처리 완료(init 함수 JS 예외 로그), `achievements.js`는 래퍼라 "대상 아님" 재분류 → 아래 「감지기 3단계」 종결. **당초 "호출부 구조 변경 필요" 전제는 오판이었음**(남은 자리가 raw supabase가 아니었다).
 - [ ] **[기술부채] Phase 1~3 감사 잔여 항목** (2026-06-20~07-15 감사분 → 2026-07-17 `REFACTOR_CHECKPOINT.md` 압축 시 이관. **그 문서에서 감사 상세는 삭제됐으므로 여기가 유일한 기록**) — R1~R12로 처리되지 않고 남은 P2 위주 항목. ⚠️ **전부 "감사 시점 기록"이라 착수 전 재검증 필수** — 감사 이후 코드가 바뀌어 stale이 된 전례가 많다(GDA2·SC1·SC4는 재검증해 보니 **이미 해소돼 있었음**).
   - **2026-07-17 실측으로 닫은 것**: ✅ **GR4 종결** — `isParticipant`/`score_note` 중복의 짝이던 `buildGameBody`가 R1에서 삭제돼 **중복 자체가 소멸**. ✅ **PS2 종결** — scripts/ 폴더 항목이 [PROJECT_STRUCTURE §1](PROJECT_STRUCTURE.md)에 이미 기재됨.
   - **2026-07-17 실측으로 축소된 것(저가치, 굳이 안 해도 됨)**: 🟡 **SC7** — `_OWNER_ID` 3중복 → `supabase-client.js`엔 **1곳뿐**([1784](../assets/js/supabase-client.js#L1784)), `kakao-auth.js`의 `OWNER_KAKAO_ID`와 크로스파일 중복만 잔존. 🟡 **KA7** — R3가 `_safeInt` regex 파싱을 없애 **취약성은 해소**됐고 하드코딩 fallback(`?? 47`·`?? 641`·`?? 96`, [kakao-auth.js:2027~2033](../assets/js/kakao-auth.js#L2027))만 남음. 정상 경로는 build 함수가 반환하는 실제 total을 쓰므로 이 숫자는 **함수가 실패할 때만** 노출된다(= 캐릭터가 47종을 넘어도 평소엔 안 틀림).
@@ -324,15 +325,16 @@
   - **최근 결과 (2026-07-17, 2단계 후 읽기 42개 실DB)**: **불난 곳 0건**. 열감지기가 켜진 상태라 1단계의 "반쪽 증거"와 달리 실효 있음.
   - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). `getPageAnalytics`가 1000행 정상 반환 + 쿼리 오류도 없음 → 원인이 조회가 아니라 **화면 렌더/집계 로직 쪽**일 가능성이 올라감(미검증). 재현 시 콘솔 확인.
   - 🔍 **감지기 현재 커버리지 — "화재 0건"의 유효 범위 (2026-07-17 정직한 한계, 사용자와 확인)**: 아래 3개가 아직 사각지대다. **"불난 곳 0건"은 `supabase-client.js`의 읽기 함수 42개에 한정된 결론**이며 앱 전체 안전 증명이 아니다.
-    - ① **파일 커버리지 절반 이하** — `supabase-client.js`만 완료. `kakao-auth.js` 24곳·`achievements.js` 5곳·`game-sheet.js` 9곳은 미적용(아래 신규 항목).
+    - ① ~~**파일 커버리지 절반 이하**~~ → **2026-07-18 갱신**: raw supabase 쿼리 오류 감지는 `supabase-client.js`(구조분해 59 + Promise.all 5) + `game-sheet.js`(init 함수 JS 예외 7) 처리 완료. `kakao-auth.js` 24곳·`achievements.js` 4곳은 **대상 아님으로 재분류**(전부 CottageDB 래퍼 위 — 래퍼가 내부 수신). 즉 "raw supabase 미수신"은 이제 앱 전역에서 없음.
     - ② **쓰기 경로 미검증** — 하니스가 실DB에 쓰지 않으려고 **읽기(`get*`)만 호출**. `recordGamePlay`·`upsertMeetingVote`·업적 지급 등 write에 불이 났는지는 **모름**(아래 신규 항목).
     - ③ **울려도 아무도 못 듣는다** — `console.error`는 사용자 브라우저 콘솔에만 남고 우리에게 오지 않는다. DevTools를 열어둔 사람만 본다. **④ "관리자 금일이용데이터 간헐적 미표시"가 원인불명인 이유가 정확히 이것일 수 있음**(간헐적이라 재현 시점에 콘솔이 안 열려 있음). 근본 해결 = 에러 수집(`page_events`에 error 이벤트 적재 or 외부 수집기) → **Red + Plan 필수, 별도 기획 필요**(현재 미제안·미착수).
-- [ ] **[기술부채] 감지기 3단계 — 나머지 JS 파일 확장** (2026-07-17 등록, 사용자 지시. **선행이던 R10b·R10c 완료 → 착수 가능**) — `supabase-client.js`는 완료했으나 앱의 나머지 절반은 여전히 사각지대.
-  - ⚠️ **대상이 줄었다 (2026-07-17 정정)**: 원래 여기 있던 **`kakao-auth.js` 24곳은 대상이 아님** — R10b 재검토 결과 그 자리들은 raw supabase가 아니라 **`CottageDB` 래퍼**를 부르므로 `{data, error}`를 받을 대상이 애초에 없다(위 「DB 조회 에러 삼키기」 항목 참조). **남은 실대상은 `achievements.js` 5곳 · `game-sheet.js` 9곳**(`initSheetComments(gameKey).catch(() => {})` 형태 다수, [game-sheet.js:1012](../assets/js/game-sheet.js#L1012) 부근) **+ 아래 「감지기 갭 — `Promise.all` + 비구조분해」 ~16곳**(이게 실질적으로 더 중요 — `getMyStats`·`getMyNotifications` = 내 보드 핵심 조회).
-  - ⚠️ **2단계 방식을 그대로 쓰면 안 된다 — 유형이 다름**: 이 파일들은 `.catch(() => [])` 인라인 형태라 **Promise rejection만** 받는다. supabase-js는 쿼리 오류에 reject하지 않으므로 `.catch()`에 로그를 달아도 **컬럼 오타·RLS 차단은 여전히 못 잡는다**. `{ data, error }`를 받는 형태로 바꿔야 실효가 생김(= 호출부 구조 변경 필요 → 2단계처럼 순수 기계적이지 않음).
+- [x] ~~**[기술부채] 감지기 3단계 — 나머지 JS 파일 확장**~~ (2026-07-17 등록 → **2026-07-18 종결**) — `supabase-client.js` Promise.all 갭(위 항목) + `game-sheet.js`를 처리하고, 나머지 대상은 실측으로 "대상 아님"으로 재분류. **문서가 겁냈던 "`{data, error}` 호출부 구조 변경"은 착수해 보니 불필요했다** — 남은 자리는 raw supabase가 아니었다.
+  - **착수 시 실측으로 드러난 것(문서 전제가 세 군데 틀림)**:
+    - **`achievements.js` = 대상 아님** (kakao-auth 24곳과 동일 재분류). `.catch()`는 4곳(문서는 5)이고 [achievements.js:432·434·441·753](../assets/js/achievements.js#L432) **전부 `db.grantAchievement`·`getRepAchievement`·`grantAchievementVoucher` 등 CottageDB 래퍼 위**다 → 래퍼가 쿼리 오류를 내부에서 이미 수신(2단계). `.catch()`가 삼키는 건 JS 예외뿐이고 래퍼는 대부분 reject 안 함 = 저가치. **R10b의 kakao-auth 판정과 같은 근거인데 이 항목만 옛 이해로 남아 있었다.**
+    - ✅ **`game-sheet.js` = 처리 완료** (7곳, 문서는 9). `.catch(() => {})`가 [game-sheet.js:463~466·1019~1021](../assets/js/game-sheet.js#L463)에 있는데 이건 래퍼가 아니라 **렌더 로직을 담은 내부 init 함수**(`initSheetComments` 등) 위다. 쿼리 오류는 그 안에서 부르는 래퍼가 로그하지만, **init 함수 본문의 JS 예외(`.map`·DOM)는 여기서만 잡혀 조용히 사라지던** 자리 → `.catch(err => console.error('[initFn]', err))`로 로그 추가(순수 log-add, 동작 무변경). [game-sheet.js:1022](../assets/js/game-sheet.js#L1022) `initSheetPhotos`는 이미 로그+사용자 메시지 처리돼 있어 제외.
+  - **결론적으로 "2단계 방식 못 쓴다 = 구조 변경 필요"는 오판이었다** — 남은 자리 어디에도 raw supabase가 없어 `{data, error}` 수신 대상이 애초에 없었다. game-sheet는 순수 로그 추가로 끝났고, achievements는 손댈 가치가 없었다. **"위반 N곳" 숫자는 이번에도 3군데(ach 5→4, gs 9→7, 그리고 대상 여부 자체) 틀렸다** — 착수 전 실측이 매번 옳다.
   - **제외 판정 유지**: `index-page.js`(화면에 실패 표시함) · `script-nav.js`(localStorage 방어용). 위 "제외 판정" 항목 참조.
-  - **방식**: 2단계 절차 재사용(codemod + 이름충돌 사전검사 + 동작 무변경 기계 검증 + 음성 대조군 + `node --check` + 실패 주입). 커밋 32f73ee의 diff가 참고자료. ⚠️ **"위반 N곳" 숫자를 믿지 말 것** — 1·2단계에서 연달아 두 번 오집계됨(좁은 grep). `} = await`·`.catch(` 양쪽으로 세고 검증할 것.
-  - 🔧 **검증기 재작성 시 필수 (스크래치패드에만 있어 남아 있지 않음)**: 동작 무변경 검증은 "양쪽에서 로그를 걷어내고 바이트 대조"하는 방식인데, **이 구조는 로그를 아예 안 단 변경도 통과시킨다**(= 감지기를 도로 꺼도 ✅). 반드시 **개수 기대치를 함께 강제**할 것 — 추가된 로그 N개 = 추가된 error 수신 N개, 1:1. 2단계에서 음성 대조군("로그 줄 삭제")이 이 구멍을 잡아냈다. 대조군은 최소 5개: 반환값 변경·반환계약 변경·조건문 반전·쿼리 변조·**로그 누락**. 상세 교훈은 CLAUDE.md 「검증 결과가 0건이면…」.
+  - **커버리지 상태**: raw supabase 쿼리 오류 감지는 이제 `supabase-client.js`(구조분해 59 + Promise.all 5 + 기존) 전역 커버. 남은 사각지대는 **쓰기 경로 검증(4단계)**과 **에러 수집(③, Red)** 둘뿐 — 아래 참조.
 - [ ] **[기술부채] 감지기 4단계 — 쓰기 경로 검증** (2026-07-17 등록, 사용자 지시. **선행: 3단계**) — 현재 화재 테스트는 **읽기 함수만** 돌린다(실DB 오염 방지). `recordGamePlay`·`updateGamePlay`·`upsertMeetingVote`·`deleteMeetingVote`·`addGamePref`·`grantAchievementVoucher`·`redeemVoucher` 등 **쓰기 경로에 불이 났는지는 아직 모름**.
   - **난점 = 테스트 방법**: 실DB에 쓸 수 없으니 ①테스트 전용 user_id로 쓰고 즉시 정리(고아 행 위험 — 실제로 `meeting_vote_games` orphan 2행 사고 전례 있음, §2 참조) ②Supabase 로컬/브랜치 DB ③쓰기 함수의 error 수신 여부만 **정적 검사**(실행 없이) 중 택1. **③이 가장 싸고 안전** — 쓰기 함수 대부분은 이미 `const { error } = await`로 받고 있어(2단계 실측: error 수신 45곳 중 다수가 write) **실제 갭은 작을 가능성**이 높음. 착수 시 ③으로 갭 규모부터 확인하고 ①②는 갭이 클 때만.
   - ⚠️ 하니스는 `window.location.hostname='localhost'`면 추적성 write가 자체 차단되므로, 쓰기 테스트 시 이 가드를 어떻게 다룰지 먼저 결정할 것.

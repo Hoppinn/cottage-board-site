@@ -460,10 +460,11 @@ function _openAndInitSheet(gameKey, restoreScroll, noAnim) {
   initStickyBar();
   initSheetDescToggle();
   initSheetMechsToggle();
-  initSheetLikes(gameKey).catch(() => {});
-  initSheetCommentsPreview(gameKey).catch(() => {});
-  initSheetPlayPreview(gameKey).catch(() => {});
-  initSheetPhotoPreview(gameKey).catch(() => {});
+  // 래퍼가 쿼리 오류는 내부에서 로그함(2단계). 여기 catch는 init 함수 렌더 로직의 JS 예외를 삼키던 자리
+  initSheetLikes(gameKey).catch(err => console.error('[initSheetLikes]', err));
+  initSheetCommentsPreview(gameKey).catch(err => console.error('[initSheetCommentsPreview]', err));
+  initSheetPlayPreview(gameKey).catch(err => console.error('[initSheetPlayPreview]', err));
+  initSheetPhotoPreview(gameKey).catch(err => console.error('[initSheetPhotoPreview]', err));
 
   // ?scroll=comments → 코멘트 섹션으로 스크롤
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
@@ -1016,9 +1017,10 @@ function openGameRecordSheet(gameKey) {
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
-  initSheetComments(gameKey).catch(() => {});
-  initSheetLikes(gameKey).catch(() => {});
-  initPlayWidget(gameKey).catch(() => {});
+  // 래퍼가 쿼리 오류는 내부에서 로그함(2단계). 여기 catch는 init 함수 렌더 로직의 JS 예외를 삼키던 자리
+  initSheetComments(gameKey).catch(err => console.error('[initSheetComments]', err));
+  initSheetLikes(gameKey).catch(err => console.error('[initSheetLikes]', err));
+  initPlayWidget(gameKey).catch(err => console.error('[initPlayWidget]', err));
   initSheetPhotos(gameKey).catch(err => {
     const _el = document.getElementById(`sheetPhotosArea-${gameKey}`);
     if (_el) _el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
