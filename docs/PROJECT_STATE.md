@@ -3,7 +3,7 @@
 최종 갱신: 2026-07-17 (세션 ④) — **이날모임 상세에서 참여자 닉네임·게임 클릭 ✅ 완료·스모크 전부 통과**(닉네임→그 사람 모임보드 / 게임→게임 정보시트, 둘 다 모달 위에 겹쳐 뜸). **스모크 대기 0건.** 교훈 3건 중 ①은 **CLAUDE.md 「모달/iframe 재사용 원칙 6」으로 승격**(소급 위반 1건 = 박스모달→게임시트도 §3 등록):
 > ①**"닫고 전환"과 "겹쳐 쌓기"는 다르다** — 닫았을 때 원래 화면이 있어야 하는 관계면 레이어 문제이지 복귀 장치(`backTo`)로 풀 게 아니다. ②**`openGameSheet`엔 DB `game_id`를 그대로 넘기면 안 된다** — 테이블마다 슬러그/BGG ID가 달라 **조용히 기록시트로 폴백**(실측 12/12, js-api.md에 규약 기재). ③**"기능이 없다"를 grep 한 번으로 단정해 문서·커밋에 거짓 기재**(배경클릭 닫기는 [kakao-auth.js:1717](../assets/js/kakao-auth.js#L1717)에 멀쩡히 있었음 — 사용자가 반박해서 발각).
 >
-> **다음 세션 후보**: ①감지기 3단계(§3, 선행 완료) ②GDA3(감사 잔여 중 유일한 버그성).
+> **다음 세션 후보**: ①감지기 3단계(§3, 선행 완료). ~~②GDA3~~ → **2026-07-17 종결(오탐)** — 재검증하니 `searchText`가 dead code라 실동작 영향 0. **감사 잔여 12건엔 이제 버그성 항목이 없다**(전부 구조 지적·문서 정합성) → §0 표·§3 참조.
 > 이전(세션 ③): R10c ✅ 완료·스모크 전부 통과 → **리팩토링 체크포인트(R1~R12) 종료**. 스모크 중 버그 3건(affec36·6f3652a·e886af1) + UX 3건(22d326b·5838e1b) 수정. `REFACTOR_CHECKPOINT.md` 정리 완료(474→90줄, 감사 잔여 12건은 §3로 이관).
 
 > **2026-07-17 세션 요약 ②**: **R10b ✅ 완료**(507f2e9·c0cd874·5f82aed·a03250c, **스모크 통과**) — 크로스보드 stale을 방향 A로 해결. **원인의 실체는 "같은 쿼리를 한 Promise.all에서 두 번"**(`getUserLikedGamesAll` 직접 호출 + `getMeetingProfile` 내부 호출). 착수 후 **당사자가 문서의 2종이 아니라 5종**임을 발견(bio·avoid_tags·ruleSet도 같은 구조) → `getMeetingProfile`에 `avoidTags`를 얹어 단일 소스로 통일. **부산물 2건**: ①감지기 2단계가 **`Promise.all`+비구조분해 패턴을 통째로 놓쳤음**을 발견 — `getMyStats`·`getMyNotifications` 등 ~16곳이 여전히 감지 불가(§3 등록, `getMeetingProfile` 2곳만 선처리) ②스코프 누수 검사기가 `getCurrentBio` 잔존 참조 1건을 잡음(`node --check`는 통과시킨 자리) — R12 교훈이 실전에서 또 맞았음.
@@ -21,11 +21,12 @@
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
 | 1 | **감지기 3단계** — 선행(R10b·R10c) 완료로 착수 가능 | §3 | 기술부채 / Opus medium. 실대상 = `achievements.js` 5 + `game-sheet.js` 9 + **`Promise.all` 갭 ~16곳**(후자가 더 중요 — `getMyStats`·`getMyNotifications` = 내 보드 핵심 조회) |
-| 2 | **GDA3** — 감사 잔여 12건 중 **유일하게 실동작 영향 가능**(검색 가중치 2배) | §3 「Phase 1~3 감사 잔여」 | 버그 / Sonnet high |
-| 3 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
-| 4 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
+| 2 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
+| 3 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
 
-⚠️ **1~4 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
+~~2 GDA3~~ → ✅ **2026-07-17 종결 — 재검증 결과 오탐**(`searchText` 소비처 0건 = dead code, 실동작 영향 없음). 상세·교훈은 §3 「Phase 1~3 감사 잔여」. **이로써 감사 잔여 목록에 "실동작 영향 가능" 항목은 0개** → 남은 건 전부 구조 지적·문서 정합성이다.
+
+⚠️ **1~3 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
 ### ✅ 종료: 전체 리팩토링 R1~R12 (2026-07-15 ~ 07-17, 전부 스모크 통과)
 
@@ -89,6 +90,8 @@
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
 - `game-reviews.js` `buildGameBody` — 어디서도 호출되지 않는 dead code(2026-07-15 Phase D 검증 중 발견, 실서버 테스트로 게임별 보기가 실제론 게임 카드 그리드만 렌더함을 확인). 삭제 시 회귀 위험 낮음, REFACTOR 세션에서 정리 권장.
+- `game-display-adapter.js` `getSearchText` + `searchText` 필드 3곳 — **dead code**(2026-07-17 GDA3 재검증 중 확정, §3 「Phase 1~3 감사 잔여」 참조). 소비처 0건이고 실제 검색은 `title`/`originalTitle` 직접 비교로 돈다. 삭제 대상: 함수 [game-display-adapter.js:325](../assets/js/game-display-adapter.js#L325) + export [:530](../assets/js/game-display-adapter.js#L530) + `searchText:` 3줄([:365](../assets/js/game-display-adapter.js#L365)·[:432](../assets/js/game-display-adapter.js#L432)·[:467](../assets/js/game-display-adapter.js#L467)). **삭제 시 회귀 위험 낮음**(그 3개 함수의 반환 객체에서 필드 하나가 빠질 뿐 — 다만 삭제 전 소비처 0건을 **한 번 더** 확인할 것). REFACTOR 세션에서 GDA5(동일 파싱 3중 실행)와 **같은 파일이므로 함께 처리 권장**.
+  - ⚠️ **지금 지우지 않은 이유**: 발견 시점이 BUG FIX 세션이라 CLAUDE.md 「구현/리팩토링 분리」에 따라 등록만. `buildGameBody`와 동일한 처리.
 - `play-records-utils.js` `openLightbox` — 부모가 `cottage-close-lightbox`로 닫을 때 game-reviews의 수신부가 `.pr-lightbox`를 **DOM에서 직접 제거**해 `closeLb()`를 안 거침 → `document`의 `keydown`(onKey) 리스너가 해제되지 않고 누적. 현재 사용자 영향은 없음(고아 핸들러가 detached 노드에 `remove()`+중복 postMessage를 쏘는 정도). 정리하려면 iframe 수신부가 노드 제거 대신 닫기 함수를 호출하도록 바꿔야 함. 2026-07-16 발견(버그 수정 중, BUG FIX MODE라 보고만).
 
 ---
@@ -252,7 +255,12 @@
 - [ ] **[기술부채] Phase 1~3 감사 잔여 항목** (2026-06-20~07-15 감사분 → 2026-07-17 `REFACTOR_CHECKPOINT.md` 압축 시 이관. **그 문서에서 감사 상세는 삭제됐으므로 여기가 유일한 기록**) — R1~R12로 처리되지 않고 남은 P2 위주 항목. ⚠️ **전부 "감사 시점 기록"이라 착수 전 재검증 필수** — 감사 이후 코드가 바뀌어 stale이 된 전례가 많다(GDA2·SC1·SC4는 재검증해 보니 **이미 해소돼 있었음**).
   - **2026-07-17 실측으로 닫은 것**: ✅ **GR4 종결** — `isParticipant`/`score_note` 중복의 짝이던 `buildGameBody`가 R1에서 삭제돼 **중복 자체가 소멸**. ✅ **PS2 종결** — scripts/ 폴더 항목이 [PROJECT_STRUCTURE §1](PROJECT_STRUCTURE.md)에 이미 기재됨.
   - **2026-07-17 실측으로 축소된 것(저가치, 굳이 안 해도 됨)**: 🟡 **SC7** — `_OWNER_ID` 3중복 → `supabase-client.js`엔 **1곳뿐**([1784](../assets/js/supabase-client.js#L1784)), `kakao-auth.js`의 `OWNER_KAKAO_ID`와 크로스파일 중복만 잔존. 🟡 **KA7** — R3가 `_safeInt` regex 파싱을 없애 **취약성은 해소**됐고 하드코딩 fallback(`?? 47`·`?? 641`·`?? 96`, [kakao-auth.js:2027~2033](../assets/js/kakao-auth.js#L2027))만 남음. 정상 경로는 build 함수가 반환하는 실제 total을 쓰므로 이 숫자는 **함수가 실패할 때만** 노출된다(= 캐릭터가 47종을 넘어도 평소엔 안 틀림).
-  - **2026-07-17 실측으로 유효 확인**: **GDA3** — `getSearchText`가 `getDisplayTags` 호출 + 동일 필드 직접 join을 **이중 집계**해 검색 가중치 2배·중복 토큰 가능. **이 목록에서 유일하게 실동작에 영향 가능**(나머지는 구조 지적). **PS1** — `package.json`에 npm 스크립트 8개(`check`/`build:master`/`translate*`/`build`)가 있는데 [PROJECT_STRUCTURE §8](PROJECT_STRUCTURE.md)은 `node …` 직접 경로만 기재.
+  - **2026-07-17 실측으로 닫은 것 (추가)**: ✅ **GDA3 종결 — 오탐이었음**. 기존 기재("`getSearchText`의 이중 집계로 **검색 가중치 2배**, 이 목록에서 **유일하게 실동작 영향 가능**")는 **틀렸다**. 이중 집계 자체는 실재하나([game-display-adapter.js:330~333](../assets/js/game-display-adapter.js#L330)이 `getDisplayTags`를 펼친 뒤 mood/play/relationship을 또 펼침 — `getDisplayTags`의 fallback 분기가 이미 그 셋을 포함) **실동작 영향은 0**:
+    - ① **`searchText`는 아무도 읽지 않는다** — 생산 3곳([:365](../assets/js/game-display-adapter.js#L365)·[:432](../assets/js/game-display-adapter.js#L432)·[:467](../assets/js/game-display-adapter.js#L467))뿐이고 저장소 전체(js 외 파일 포함) 소비처 **0건**. 동적 접근(`GameView[...]`·`Object.values`)도 없음.
+    - ② 실제 검색은 `matchOwnedSearch`([owned-games-page.js:106](../assets/js/owned-games-page.js#L106))가 `detail.title`/`detail.originalTitle`만 비교. 네비 검색([script-nav.js:664](../assets/js/script-nav.js#L664))도 동일.
+    - ③ 설령 읽혔어도 `join(" ")` 문자열에 `includes`를 거는 구조라 **"가중치"라는 개념이 성립하지 않는다** — 중복 토큰은 `includes` 결과를 바꾸지 못함.
+    - **⚠️ 교훈**: 감사가 코드 구조만 보고 **소비처를 확인하지 않은 채 영향을 추정**했고, 그 추정이 §0 우선순위 2번("유일한 버그성")까지 올라와 있었다. → **이제 이 목록에 "실동작 영향 가능" 항목은 0개**다. 실체는 dead code이므로 「코드 품질 주석」에 등록(삭제는 REFACTOR 세션).
+  - **2026-07-17 실측으로 유효 확인**: **PS1** — `package.json`에 npm 스크립트 8개(`check`/`build:master`/`translate*`/`build`)가 있는데 [PROJECT_STRUCTURE §8](PROJECT_STRUCTURE.md)은 `node …` 직접 경로만 기재.
   - **미검증(감사 시점 기록 그대로, 전부 P2 구조 지적)**: PU5(play-records-utils 헤더 주석이 전역 8개 중 3개만 기재) · PU6(`attachAc` 61줄·`openLightbox` 56줄 과대) · PU7(`initTagInput`이 `split(',')`이라 **쉼표 포함 참여자 이름 불가** — 미문서화 제약) · GDA4(`window.COTTAGE_GAMES` 즉시 생성 = 로드 순서 의존) · GDA5(`getGameCardData`/`getGameDetailData`/`getRecommendData`가 동일 파싱을 각자 실행) · ACH2(`checkAchievements` 175줄 등 과대함수 4개) · GR5(자동완성 `onSelect`→Enter 디스패치 2중 구현) · GR7(`KeyboardEvent` 디스패치로 `initTagInput` 간접 트리거 = 깨지기 쉬운 결합) · SC6(`redeemVoucher` TOCTOU — 잔액확인↔insert 사이 race, 단일 사용자 패턴상 현실 위험 낮음) · SC8(`window.CottageDB={…}` 뒤에 함수 절반이 정의 = 호이스팅 의존, 실제 버그 없음) · CSS4(style.css 7395줄 단일 파일) · S1(PROJECT_STATE의 134~135차 session_key 내러티브 혼란 — 그 기록이 슬림화로 이미 사라졌을 수 있음).
   - **여기 넣지 말 것(이미 다른 곳에 등록됨)**: A1·A2·A3 → 위 `squirrel_lv5`·`rare/` 경로 항목 / A4 → §2 「TITLE_DEFS 미배정 칭호 3개」 / PU4·ACH6 → escH 5사본 = GS5 / GS4·GS5·GS7·DD4·IP1~3 → `REFACTOR_CHECKPOINT.md` 「잔여 미배정 항목」.
 - [ ] **[검토] 기록보드 타인 공개** — 요약(플레이 수·게임평)만 부분 공개 또는 본인 설정 온오프. 함께한 시간은 비공개 유지 확정.
