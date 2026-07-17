@@ -43,12 +43,21 @@
 | GS5 | P2 | `escH` 사본 5곳 | `window.escH`(supabase-client) · `_escH`(play-records-utils) · `esc`(achievements) · `escH`(game-sheet) · `esc`(day-detail). ⚠️ 통합하려면 **`"` 이스케이프 차이 정리가 선행**(`_escH`는 `& < >`만, `window.escH`는 `"`까지). |
 | GS7 | P2 | 난이도 헬퍼 전역 결합 | `getDifficultyData`/`normalizeLevelValue`가 game-sheet.js 정의 → game-display-adapter·script-nav·owned-games-page가 전역 참조. **IIFE로 안 풀린다**(어차피 전역 유지 대상) — 실제 해결은 헬퍼 별도 파일 분리 = 신규 파일 결정 필요. |
 | DD4 | P2 | `openDateMeetingModal(voteDate, votes, voteGames, opts={})`의 **`opts` 미사용** | R12 중 발견. 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
-| IP1 | P1 | index-page.js 과대함수 | `renderGameCards` 208줄(5~213) · `updateRecommendFilterText` 157줄(464~621) · `initMeetingSection` IIFE 289줄(1305~1594, 내부 `renderPreview` 124줄) |
+| ~~IP1~~ | P1 | ~~index-page.js 과대함수~~ | ✅ **2026-07-18 종결**(8b4f3ce·380f30f). 상세·실측 정정은 아래 「IP1 처리 결과」. |
 | IP2 | P2 | 구조 일관성 | 추천 관련 15+개는 상위 전역함수(onclick), 나머지 init은 IIFE — 한 파일에 두 방식 혼재, 경계 기준 불명확. |
 | IP3 | P2 | 날짜 헬퍼 파편화 | `toDateStr`(index-page:930) vs day-detail `fmtDate`(368). ⚠️ **R12에서 "중복 아님"으로 판정** — 입력·출력·용도가 전부 다른 별개 함수. 통합 대상 아님. |
 | DD2 | — | **(긍정) day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. game-sheet.js와 정반대 — **신규 파일 작성 시 이 구조를 따를 것**. |
 
 **교차 파일**: escH 5사본(GS5) · 게임명 해석 4곳(KA4 — 아래 판단대로 **통합 안 함**) · `getGameKey` 2곳 다른 시그니처(GS4).
+
+### IP1 처리 결과 (2026-07-18) — 3함수 중 1개만 실제 대상
+
+착수해 실측하니 **문서의 줄 수 3개 중 2개가 부정확**했고, "과대함수 3개"가 아니라 **1개**였다(CLAUDE.md 「줄 수는 세라」 재확인).
+
+- **`renderGameCards` (실측 207줄, 진짜 과대함수)** → 순수 헬퍼 2개 추출(8b4f3ce): `_getRecommendedGames(playerValue, levelValue, moodValue)`(filter+sort) · `_recommendCardHtml(game, index)`(카드 1장 HTML). 전역 노출 없음. 본문 바이트 보존은 **git context 매칭으로 증명**(템플릿 라인이 diff에서 unchanged), 읽기/쓰기 누수 0(지역변수 12개가 전부 함수 내부 6~89행에만 존재).
+- **`updateRecommendFilterText` = 대상 아님** — 문서 "157줄(464~621)"은 **뒤 클릭리스너(542~614, 별개 최상위 블록)까지 잘못 합산**한 값. 실제 함수는 **464~540 = 77줄**이고 단일 HTML 템플릿이라 과대함수 아님. 미추출.
+- **`initMeetingSection` (실측 291줄, 1340~1630) = 강제분리 안 함** — `buildBarsInCard`·`onSubmitPlayModal`과 같은 **클로저 결합 nested 함수 컨테이너**(위 「과도분리 금지 선례」 적용). 모듈로 올리면 weekOffset/selectedDate/votes 등 state 스레딩만 늘어 이득 없음. **단 무해한 중복 1건만 제거**(380f30f): `renderPreview` 안의 `.mpc-detail-btn`·`.meeting-preview-card` 클릭 핸들러 동일 본문 → nested `openMeetingDetail`로 통합(파라미터 클로저 캡처, `e.stopPropagation()` 보존).
+- ⚠️ **관측(보고만, REFACTOR MODE라 미수정)**: `initMeetingSection`의 `loadWeek`는 `getMeetingVotes`/`getMeetingVoteGames`를 `Promise.all` 후 `catch (_)`로 **조용히 삼킨다**(1623행 부근) — PROJECT_STATE §3 「감지기 갭 — Promise.all + 비구조분해」에 이미 등록된 패턴.
 
 ---
 
