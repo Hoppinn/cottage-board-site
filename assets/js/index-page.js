@@ -29,6 +29,71 @@ const moodValue = recommendState.mood;
 
   
 
+const filteredGames = _getRecommendedGames(playerValue, levelValue, moodValue);
+
+
+      
+  if(filteredGames.length === 0){
+    gameScroll.style.cssText = 'max-width:720px;margin:0 auto;padding:20px 40px;box-sizing:border-box;display:block;';
+    gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">조건에 맞는 게임이 아직 없어요.<br>다른 조건으로 다시 찾아보세요.</p>`;
+
+    return;
+  }
+
+  _fireRecommendComplete();
+
+  const MAX_CARDS = window.innerWidth >= 720 ? 4 : 5;
+  const seenBaseTitles = new Set();
+  const dedupedGames = filteredGames.filter(game => {
+    const title = GameView.getDisplayTitle(game);
+    const base = title.replace(/\s*\d+\s*$/, "").trim();
+    if (seenBaseTitles.has(base)) return false;
+    seenBaseTitles.add(base);
+    return true;
+  });
+  const displayGames = dedupedGames.slice(0, MAX_CARDS);
+  const hasMore = filteredGames.length > MAX_CARDS;
+
+  const cardsHtml =
+    displayGames
+      .map((game, index) => _recommendCardHtml(game, index))
+      .join("");
+
+  const moreParams = new URLSearchParams();
+  if(recommendState.players) moreParams.set("players", recommendState.players);
+  if(recommendState.level)   moreParams.set("level",   recommendState.level);
+  if(recommendState.mood)    moreParams.set("mood",     recommendState.mood);
+  moreParams.set("sort", "rating");
+  const isHeavyLevel =
+    recommendState.level === "heavy" ||
+    recommendState.level === "hardcore";
+  if(!isHeavyLevel) moreParams.set("weightCap", "1");
+  const moreQuery = `?${moreParams.toString()}`;
+
+  const moreHtml = hasMore
+    ? `<button class="game-card-more" type="button" onclick="openRecommendOverlay()">전체 ${filteredGames.length}개<br>더보기 →</button>`
+    : "";
+
+  gameScroll.innerHTML = cardsHtml + moreHtml;
+bindGameCardEvents();
+
+  // 추천 결과 게임 클릭 이벤트 (overlay · 일반 목록 카드 제외, gameScroll 스코프)
+  gameScroll.querySelectorAll('.game-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const _gid = card.dataset.game;
+      const _gname = window.COTTAGE_GAMES?.find(g => String(g.bggId) === String(_gid) || g.id === _gid)?.display || _gid;
+      window.CottageDB?.trackEvent('home_recommend_game_detail_click', { game_id: _gid, game_name: _gname, source: 'home_recommend' });
+    });
+  });
+
+gameScroll.scrollTo({
+  left: 0,
+  top: 0,
+  behavior: "smooth"
+});
+}
+
+function _getRecommendedGames(playerValue, levelValue, moodValue){
 const normalizedLevel =
   normalizeLevelValue(levelValue);
 
@@ -41,8 +106,7 @@ const maxWeight =
     ? 5.0
     : DEFAULT_RECOMMEND_MAX_WEIGHT;
 
-const filteredGames =
-  getAllGamesArray()
+return getAllGamesArray()
     .filter((game) => {
       const data =
         GameView.getRecommendData(game);
@@ -94,33 +158,9 @@ if (!isMurderMystery && weight > maxWeight) {
 
       return weightA - weightB;
     });
+}
 
-
-      
-  if(filteredGames.length === 0){
-    gameScroll.style.cssText = 'max-width:720px;margin:0 auto;padding:20px 40px;box-sizing:border-box;display:block;';
-    gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">조건에 맞는 게임이 아직 없어요.<br>다른 조건으로 다시 찾아보세요.</p>`;
-
-    return;
-  }
-
-  _fireRecommendComplete();
-
-  const MAX_CARDS = window.innerWidth >= 720 ? 4 : 5;
-  const seenBaseTitles = new Set();
-  const dedupedGames = filteredGames.filter(game => {
-    const title = GameView.getDisplayTitle(game);
-    const base = title.replace(/\s*\d+\s*$/, "").trim();
-    if (seenBaseTitles.has(base)) return false;
-    seenBaseTitles.add(base);
-    return true;
-  });
-  const displayGames = dedupedGames.slice(0, MAX_CARDS);
-  const hasMore = filteredGames.length > MAX_CARDS;
-
-  const cardsHtml =
-    displayGames
-      .map((game, index)=>{
+function _recommendCardHtml(game, index){
         const gameKey =
           getGameKey(game);
 
@@ -173,41 +213,6 @@ if (!isMurderMystery && weight > maxWeight) {
 
           </button>
         `;
-      })
-      .join("");
-
-  const moreParams = new URLSearchParams();
-  if(recommendState.players) moreParams.set("players", recommendState.players);
-  if(recommendState.level)   moreParams.set("level",   recommendState.level);
-  if(recommendState.mood)    moreParams.set("mood",     recommendState.mood);
-  moreParams.set("sort", "rating");
-  const isHeavyLevel =
-    recommendState.level === "heavy" ||
-    recommendState.level === "hardcore";
-  if(!isHeavyLevel) moreParams.set("weightCap", "1");
-  const moreQuery = `?${moreParams.toString()}`;
-
-  const moreHtml = hasMore
-    ? `<button class="game-card-more" type="button" onclick="openRecommendOverlay()">전체 ${filteredGames.length}개<br>더보기 →</button>`
-    : "";
-
-  gameScroll.innerHTML = cardsHtml + moreHtml;
-bindGameCardEvents();
-
-  // 추천 결과 게임 클릭 이벤트 (overlay · 일반 목록 카드 제외, gameScroll 스코프)
-  gameScroll.querySelectorAll('.game-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const _gid = card.dataset.game;
-      const _gname = window.COTTAGE_GAMES?.find(g => String(g.bggId) === String(_gid) || g.id === _gid)?.display || _gid;
-      window.CottageDB?.trackEvent('home_recommend_game_detail_click', { game_id: _gid, game_name: _gname, source: 'home_recommend' });
-    });
-  });
-
-gameScroll.scrollTo({
-  left: 0,
-  top: 0,
-  behavior: "smooth"
-});
 }
 
 function openRecommendOverlay(){
