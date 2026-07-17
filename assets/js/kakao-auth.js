@@ -79,6 +79,9 @@ window._onVoucherGranted = _showVoucherGrantToast;
 // ⚠️ 종전엔 wasOpen 확인 없이 무조건 add('active')라 이름과 달리 "복원"이 아니라 "항상 열기"였다 →
 // 메뉴가 닫힌 상태에서 연 보드(게임시트 좋아요 토스트·알림 등)를 닫아도 햄버거가 저절로 열렸다.
 // 호출부는 패널 오픈 시점의 메뉴 상태(_menuWasOpen)를 넘긴다.
+// 📌 2026-07-17: script-nav.js가 보드 클릭을 "메뉴 밖 클릭"에서 제외하면서 메뉴가 애초에 안 닫히게 됐다
+//    → 이 함수와 30ms 지연은 이제 대부분 no-op(이미 active면 add는 무해)이고, 그게 깜빡임을 없앤 근본
+//    수정이다. 함수를 지우지 않은 이유는 loginBtn의 is-expanded 경로가 별개로 얽혀 있어서 — 정리는 별건.
 function _restoreMenuExpanded(wasOpen) {
   if (!wasOpen) return;
   setTimeout(() => {
@@ -1718,8 +1721,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
     document.getElementById('profileSubSheet')?.remove();
     panel.remove();
-    // restoreScroll=true — 보던 스크롤 지점으로 복귀(closeGameSheet가 닫을 때 저장해 둔 값)
-    if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey, true); }
+    // restoreScroll=true(보던 지점으로) + noAnim=true(올라오는 연출 없이) — 원래 있던 시트로 돌아가는 것이므로
+    if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey, true, null, true); }
     else if (backTo.type === 'panel') openProfilePanel(backTo.autoSubsheet || null, backTo.opts || {});
   });
 

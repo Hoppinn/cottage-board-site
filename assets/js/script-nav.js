@@ -304,9 +304,15 @@ document.addEventListener(
         ? menuToggle.contains(event.target)
         : false;
 
+    // 보드 패널·서브시트는 메뉴 위에 뜬 별개 레이어라 "메뉴 밖 클릭"으로 치지 않는다.
+    // 종전엔 패널의 ✕ 클릭이 여기로 버블링돼 메뉴를 닫았고, kakao-auth의 _restoreMenuExpanded가
+    // 30ms 뒤에 다시 여는 우회책으로 메웠다 → 닫혔다 다시 열리는 깜빡임의 원인.
+    const clickedInsideBoard = !!event.target.closest?.('.profile-panel, .profile-subsheet');
+
     if(
       !clickedInsideMenu &&
-      !clickedMenuButton
+      !clickedMenuButton &&
+      !clickedInsideBoard
     ){
       mobileMenu.classList.remove('active');
     }

@@ -442,8 +442,12 @@ function goBackGameSheet() {
 
 // 같은 디자이너 다른 게임 — gameData 전체를 훑어 designer 교집합을 찾는다.
 // 시트 표시 + 스크롤 복원 + 서브위젯 초기화 (openGameSheet의 마지막 단계)
-function _openAndInitSheet(gameKey, restoreScroll) {
+function _openAndInitSheet(gameKey, restoreScroll, noAnim) {
   _savedBodyScrollY = window.scrollY;
+  // noAnim: 뒤로가기 복귀(backTo)는 "원래 있던 시트로 돌아가는" 것이라 sheetUp(아래에서 올라옴)을
+  // 재생하면 새 시트가 열리는 것처럼 보인다. 시트는 display:none↔block이라 켤 때마다 애니메이션이
+  // 무조건 재생되므로 클래스로 억제. 새로 여는 경우는 종전대로 올라온다.
+  gameSheet.classList.toggle('no-anim', !!noAnim);
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
 
@@ -600,7 +604,7 @@ function _buildSameDesignerHtml(gameKey, detail) {
     </div>` : '';
 }
 
-function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
+function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = false){
   if (_gameSheetNavBack) {
     _gameSheetNavBack = false;
   } else if (fromKey) {
@@ -786,7 +790,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null){
 
   `;
 
-  _openAndInitSheet(gameKey, restoreScroll);
+  _openAndInitSheet(gameKey, restoreScroll, noAnim);
 }
 
 function _gameIds(gameKey) {

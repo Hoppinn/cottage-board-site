@@ -1753,6 +1753,9 @@ body.recommend-page main{
   box-shadow:0 -10px 30px rgba(100,72,38,0.16);
   animation:sheetUp .22s ease;
 }
+/* 뒤로가기 복귀(backTo)로 다시 켤 때만 — 그 자리에 그대로 있던 것처럼 보이게 올라오는 연출을 끈다.
+   시트는 display:none↔block이라 켤 때마다 sheetUp이 재생되므로 CSS로 억제해야 한다. */
+.game-sheet.no-anim .game-sheet-panel{animation:none;}
 .game-sheet-scroll{
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
