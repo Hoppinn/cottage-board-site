@@ -26,7 +26,7 @@
 | R12 | DD1 day-detail 과대함수 | ✅ `openDateMeetingModal` 273→58 · `openDateScheduleModal` 174→67 |
 | R10a | KA1 `openProfilePanel` 추출 | ✅ **1,940→918줄**(서브시트 6블록 1,043줄 모듈화) |
 | R10b | 크로스보드 stale | ✅ 방향 A(진입 시 재조회). 상세는 PROJECT_STATE §0 |
-| R10c | 네비게이션(backTo) | 🟡 코드 완료·스모크 대기. **"스택"은 불필요했음** — 상세는 PROJECT_STATE §0 |
+| R10c | 네비게이션(backTo) — **신규기능만**(리팩토링은 R10a, stale은 R10b) | ✅ 스모크 통과. §3-1(알림→남의 보드 복귀)·§3-2(토스트→게임시트 복귀) 해결. **"스택"은 불필요했음**. ⚠️ **부모 항목 「타인 보드 내부 네비게이션 통일」(바텀시트→센터모달)은 여전히 열림** — R10c 범위 아니었음. 상세는 PROJECT_STATE §0 |
 
 **모델 배정 실적**: 그린 배치=Sonnet medium · 옐로 배치=Sonnet high · 구조 변경/IIFE/과대함수 분리=Opus xhigh + Plan.
 

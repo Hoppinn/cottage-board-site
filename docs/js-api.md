@@ -188,7 +188,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 | 함수 | 용도 |
 |------|------|
-| `openGameSheet(gameKey, restoreScroll, fromKey)` | 게임 정보시트 열기. **미보유 게임**(`gameData[gameKey]` 없음)이면 정보시트가 없으므로 `openGameRecordSheet(gameKey)`로 리다이렉트(gameKey가 비어있지 않은 문자열일 때만). DOM(gameSheet/gameSheetContent) 없으면 무반응. → 모든 openGameSheet 호출처가 미보유를 한 지점에서 처리하는 단일 진입점 |
+| `openGameSheet(gameKey, restoreScroll, fromKey, noAnim)` | 게임 정보시트 열기. **미보유 게임**(`gameData[gameKey]` 없음)이면 정보시트가 없으므로 `openGameRecordSheet(gameKey)`로 리다이렉트(gameKey가 비어있지 않은 문자열일 때만). DOM(gameSheet/gameSheetContent) 없으면 무반응. → 모든 openGameSheet 호출처가 미보유를 한 지점에서 처리하는 단일 진입점. **`restoreScroll`**: 시트 내부 스크롤을 이전 위치로(`closeGameSheet`/`openGameRecordSheet`가 `_savedSheetScrollTop`에 저장). **`noAnim`**(R10c 후속): `sheetUp`(아래에서 올라옴) 연출 생략 — 시트는 `display:none↔block`이라 켤 때마다 애니메이션이 재생되므로, **뒤로가기 복귀처럼 "원래 있던 시트로 돌아가는" 경우에만** true. 새로 여는 경로는 false(기본) 유지 |
 | `openGameRecordSheet(gameKey)` | 게임 기록시트(좋아요/궁금해요/게임평/사진/플레이기록). `game` 널이어도 제목·이미지·rating 폴백으로 렌더(미보유 지원). 미보유면 "← 게임 정보" 버튼 대신 `.sheet-unowned-badge`("🚫 미보유·게임정보 없음") 표시. 좋아요·게임평 등은 `_gameIds(gameKey)`(미보유는 슬러그 단건)로 조회 |
 | `_gameIds(gameKey)` | gameKey → `[gameKey]` 또는 `[gameKey, bggId]` 배열 반환. game_id가 gameKey와 BGG ID 두 가지로 저장될 수 있어 CottageDB 조회 시 배열로 전달하여 `.in()` 쿼리 처리 |
 | `_fetchGamePhotos(gameKey)` | 해당 게임 플레이 기록에서 사진 URL 목록 추출 |
