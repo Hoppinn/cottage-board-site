@@ -114,9 +114,9 @@
     }
     .dd-game-thumb { width: 13px; height: 13px; border-radius: 3px; object-fit: cover; vertical-align: middle; margin-right: 3px; flex-shrink: 0; }
     /* 썸네일이 13px라 터치 타겟으로 작음 → 썸네일+이름 묶음을 클릭 영역으로.
-       li는 블록이라 그냥 두면 오른쪽 빈 공간까지 눌리므로 fit-content로 내용 폭에 맞춘다. */
-    .dd-game-item--clickable { width: fit-content; max-width: 100%; cursor: pointer; border-radius: 4px; }
-    .dd-game-item--clickable:hover { background: rgba(0, 0, 0, 0.04); }
+       인라인 span이라 정확히 그 폭만 잡는다(li 전체에 주면 인원조건 태그·빈 공간까지 눌림). */
+    .dd-game-hit { cursor: pointer; border-radius: 4px; }
+    .dd-game-hit:hover { background: rgba(0, 0, 0, 0.04); }
     .dd-empty {
       font-size: 12px; color: var(--muted, #9e8e7e);
       padding: 4px 0;
@@ -879,10 +879,13 @@
       const _li = g => {
         const c = g.player_condition || 'any';
         const cl = c === 'any' ? '무관' : (window.formatCondLabel?.(c, g.game_id) || c);
-        // 직접입력(game_id 없음)은 열 시트가 없으므로 클릭 대상에서 제외
-        const clickable = g.game_id ? ' dd-game-item--clickable' : '';
-        const gidAttr = g.game_id ? ` data-game-id="${esc(String(g.game_id))}"` : '';
-        return `<li class="dd-game-item${clickable}"${gidAttr}>${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+        // 클릭 대상은 썸네일+이름 묶음뿐 — 인원조건 태그는 게임이 아니므로 제외한다.
+        // 직접입력(game_id 없음)은 열 시트가 없어 묶음을 감싸지 않는다(= 클릭 불가).
+        const label = `${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}`;
+        const hit = g.game_id
+          ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${label}</span>`
+          : label;
+        return `<li class="dd-game-item">${hit}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
       };
       const wantGames  = myGames.filter(g => g.list_type === 'want');
       const learnGames = myGames.filter(g => g.list_type === 'learn');
@@ -1125,9 +1128,9 @@
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
     // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
     //    변환 없이 넘기면 미보유 게임으로 오인해 조용히 기록시트로 폴백된다(에러도 안 남).
-    el.querySelectorAll('.dd-game-item--clickable').forEach(li =>
-      li.addEventListener('click', () => {
-        const key = window.getGameKeyById?.(li.dataset.gameId);
+    el.querySelectorAll('.dd-game-hit').forEach(hit =>
+      hit.addEventListener('click', () => {
+        const key = window.getGameKeyById?.(hit.dataset.gameId);
         if (!key) return;
         window.ensureGameSheet?.();
         window.openGameSheet?.(key);
