@@ -472,8 +472,10 @@ function _buildGameListHtml(gameIds, emptyMsg) {
 }
 
 // R2 DRY: _openTasteAddModal(취향보드)/_openBoxAddSearch(모임보드 취향박스) 공용 검색-추가 모달.
-// 두 호출처의 "목록에 있는지 확인"(inList)·"추가 시 처리"(onAdd)만 다르고 검색 UI는 동일해 헬퍼로 추출.
-function _openGameAddSearchModal({ overlayId, title, inList, onAdd }) {
+// 두 호출처의 "목록에 있는지 확인"(inList)·"추가 시 처리"(onAdd)·"취소 시 처리"(onRemove)만
+// 다르고 검색 UI는 동일해 헬퍼로 추출. onRemove를 넘기면 "추가됨" 항목 재클릭이 취소로 동작한다.
+function _openGameAddSearchModal({ overlayId, title, inList, onAdd, onRemove }) {
+  const _TOGGLE_HINT = '다시 누르면 목록에서 빼요';
   document.getElementById(overlayId)?.remove();
   const overlay = document.createElement('div');
   overlay.id = overlayId;
@@ -501,12 +503,22 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd }) {
     b.classList.toggle('is-added', added);
     b.querySelector('.taste-search-added-label')?.remove();
     if (added) b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>');
+    if (added && onRemove) b.title = _TOGGLE_HINT; else b.removeAttribute('title');
   };
 
   const addGame = async (gameId, customName) => {
     if (inList(gameId, customName)) return;
     await onAdd(gameId, customName);
     _setAddedState(gameId, true);
+  };
+
+  // "추가됨" 항목 재클릭 = 취소. confirm을 두지 않는 이유: 토글은 되돌리기가 대칭이라
+  // (잘못 눌러도 한 번 더 누르면 그대로 재추가) 확인창 없이도 복구가 싸다.
+  // 리스트의 ✕에 confirm이 붙은 건 거기선 복구하려면 모달을 다시 열어 검색해야 하기 때문.
+  const removeGame = async (gameId, customName) => {
+    if (!onRemove || !inList(gameId, customName)) return;
+    await onRemove(gameId, customName);
+    _setAddedState(gameId, false);
   };
 
   const _smart = window.matchKoreanSmart;
@@ -523,7 +535,8 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd }) {
       const items = matches.map(([id, g]) => {
         const nm = escH(g.title?.display || g.title?.owned || g.title?.bgg || String(id));
         const added = inList(id, null);
-        return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button">${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
+        const hint = added && onRemove ? ` title="${_TOGGLE_HINT}"` : '';
+        return `<button class="taste-search-item${added ? ' is-added' : ''}" data-game-id="${escH(id)}" type="button"${hint}>${nm}${added ? ' <span class="taste-search-added-label">추가됨</span>' : ''}</button>`;
       });
       const suggestions = await (window.CottageDB?.getCustomPrefSuggestions?.() || Promise.resolve([])).catch(() => []);
       const customItems = suggestions.filter(n => (_smart ? _smart(n, q) : n.toLowerCase().includes(q.toLowerCase()))).slice(0, 3)
@@ -531,7 +544,14 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd }) {
       const direct = `<button class="taste-search-direct" data-custom-name="${escH(q)}" type="button">+ "${escH(q)}" 직접 추가</button>`;
       resultsEl.innerHTML = [...items, ...customItems, direct].join('');
       resultsEl.querySelectorAll('[data-game-id],[data-custom-name]').forEach(btn =>
-        btn.addEventListener('click', () => addGame(btn.dataset.gameId || null, btn.dataset.customName || null)));
+        btn.addEventListener('click', () => {
+          const gameId = btn.dataset.gameId || null;
+          const customName = btn.dataset.customName || null;
+          // 화면에 "추가됨"으로 보이는 항목만 취소로 동작 — 어포던스와 동작을 일치시킨다.
+          // "+ 직접 추가"·직접입력 제안은 is-added를 안 달므로 추가 전용으로 남는다(삭제로 오작동하면 최악).
+          if (btn.classList.contains('is-added')) removeGame(gameId, customName);
+          else addGame(gameId, customName);
+        }));
     }, 180);
   });
   setTimeout(() => input.focus(), 50);
@@ -818,6 +838,11 @@ function _bindTasteSubsheet(subBody, ctx) {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
                 _appendTasteChip(listEl, countEl, gameId, customName);
                 _emitLikesChanged(table, gameId, true);
+              },
+              onRemove: async (gameId, customName) => {
+                await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
+                _removeTasteChip(listEl, countEl, gameId, customName);
+                _emitLikesChanged(table, gameId, false);
               },
             });
           };
@@ -1345,7 +1370,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
           };
 
           // 원천(game_likes/curious) 게임 검색·추가 모달 — 검색 UI는 _openGameAddSearchModal 공유(R2 DRY), 목록추적 방식만 다름(배열 vs DOM)
-          const _openBoxAddSearch = (listType, table, games, refresh) => {
+          const _openBoxAddSearch = (listType, table, games, refresh, removeGame) => {
             const isWant = listType === 'want';
             _openGameAddSearchModal({
               overlayId: 'mbBoxAddSearch',
@@ -1362,6 +1387,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 _emitLikesChanged(table, gameId, true); // 모임보드 ❤️/👀 마커·취향보드 즉시 동기화(Phase A)
                 refresh();
               },
+              onRemove: removeGame,
             });
           };
 
@@ -1428,7 +1454,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
               }));
             };
             renderList();
-            overlay.querySelector('.mb-box-add-btn')?.addEventListener('click', () => _openBoxAddSearch(listType, table, games, renderList));
+            overlay.querySelector('.mb-box-add-btn')?.addEventListener('click', () => _openBoxAddSearch(listType, table, games, renderList, _removeBoxGame));
           };
 
           // 리스트 위임 핸들러 (📖 토글 / ⋯ 케밥 / 썸네일) — 리스트 내용은 _renderWeekList가 렌더
