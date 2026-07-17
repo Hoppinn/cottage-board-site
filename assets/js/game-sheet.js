@@ -1065,7 +1065,7 @@ async function initSheetCommentsPreview(gameKey) {
   el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
   el.querySelectorAll('.sheet-comment-nick[data-user-id]').forEach(n => {
     n.style.cursor = 'pointer';
-    n.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(n.dataset.userId); });
+    n.addEventListener('click', e => { e.stopPropagation(); const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(n.dataset.userId, { backTo: _b }); });
   });
 }
 
@@ -1113,7 +1113,7 @@ async function initSheetPlayPreview(gameKey) {
   el.innerHTML = `<div class="sheet-play-scroll">${cards}</div>`;
   el.querySelectorAll('.sheet-comment-nick[data-user-id]').forEach(n => {
     n.style.cursor = 'pointer';
-    n.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(n.dataset.userId); });
+    n.addEventListener('click', e => { e.stopPropagation(); const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(n.dataset.userId, { backTo: _b }); });
   });
 }
 
@@ -1410,7 +1410,7 @@ function _updateReactionSection(likers, curiousUsers) {
 
     panel.innerHTML = users.map(_reactionUserChip).join('');
     panel.querySelectorAll('[data-user-id]').forEach(chip => {
-      chip.addEventListener('click', () => window.openOtherProfileSheet?.(chip.dataset.userId));
+      chip.addEventListener('click', () => { const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(chip.dataset.userId, { backTo: _b }); });
     });
 
     if (users.length) {
@@ -1463,9 +1463,13 @@ function emitLikesChanged(table, gameId, added) {
   try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), added: !!added } })); } catch (_) {}
 }
 
-// 토스트('취향 보드 →')로 취향보드에 들어간 뒤 원래 게임시트로 돌아오기 위한 경로 (R10c).
+// 게임시트에서 보드로 갈 때, 원래 게임시트로 돌아오기 위한 경로 (R10c).
+// 보드 패널(--z-profile:9100)은 게임시트(--z-sheet:9500)보다 아래라 시트를 연 채 열면 뒤에 깔린다.
+// z를 올리면 반대로 "취향보드 → 게임 썸네일 → 게임시트"가 깨지므로(그땐 시트가 위에 떠야 함),
+// 게임시트에서 보드로 가는 경로는 전부 "시트를 닫고 backTo로 돌아온다"로 통일한다.
+// ⚠️ closeGameSheet()가 _currentSheetGameKey를 null로 만드므로 반드시 닫기 전에 만들 것.
 // 라벨에 게임명을 쓰는 건 openShelfSheet 뒤로가기(_prevHistTitle)와 같은 패턴.
-function _tasteBackTo(gameKey) {
+function _sheetBackTo(gameKey) {
   const g = window.gameData?.[gameKey];
   return { type: 'gameSheet', gameKey, label: g?.title?.display || g?.title?.owned || gameKey };
 }
@@ -1486,7 +1490,7 @@ async function onSheetLike(btn) {
         likeBtn.classList.toggle('is-active', result.liked);
         document.getElementById('sheetLikeBtnWrap')?.classList.toggle('is-active', result.liked);
       }
-      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => { closeGameSheet(); window.openProfilePanel?.('taste', { backTo: _tasteBackTo(gameKey) }); } : null);
+      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => { closeGameSheet(); window.openProfilePanel?.('taste', { backTo: _sheetBackTo(gameKey) }); } : null);
       if (result.liked) {
         const wasCurious = await window.CottageDB.hasUserCurious(gameKey, String(user.id));
         if (wasCurious) {
@@ -1527,7 +1531,7 @@ async function onSheetCurious(btn) {
         curiousBtn.classList.toggle('is-active', result.curious);
         document.getElementById('sheetCuriousBtnWrap')?.classList.toggle('is-active', result.curious);
       }
-      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste', { backTo: _tasteBackTo(gameKey) }); } : null);
+      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste', { backTo: _sheetBackTo(gameKey) }); } : null);
       if (result.curious) {
         const wasLiked = await window.CottageDB.hasUserLiked(gameKey, String(user.id));
         if (wasLiked) { await window.CottageDB.toggleGameLike(gameKey, String(user.id)); emitLikesChanged('game_likes', gameKey, false); }
@@ -1650,7 +1654,7 @@ async function initSheetComments(gameKey) {
     (moreCount > 0 ? `<div class="sheet-list-rest" style="display:none">${restHtml}</div><button class="sheet-list-more-btn" type="button">${moreCount}건 더보기 ▾</button>` : '');
   listEl.querySelectorAll('.sheet-comment-nick[data-user-id]').forEach(n => {
     n.style.cursor = 'pointer';
-    n.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(n.dataset.userId); });
+    n.addEventListener('click', e => { e.stopPropagation(); const _b = _sheetBackTo(_currentSheetGameKey); closeGameSheet(); window.openOtherProfileSheet?.(n.dataset.userId, { backTo: _b }); });
   });
   if (moreCount > 0) {
     const moreBtn = listEl.querySelector('.sheet-list-more-btn');
