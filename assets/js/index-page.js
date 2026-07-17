@@ -1404,8 +1404,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       ${actionsHtml}
     </div>`;
 
-    previewEl.querySelector('.mpc-detail-btn')?.addEventListener('click', e => {
-      e.stopPropagation();
+    function openMeetingDetail() {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
       window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
         fromHome: true,
@@ -1414,6 +1413,11 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
           document.getElementById('openPlannerBtn')?.click();
         },
       });
+    }
+
+    previewEl.querySelector('.mpc-detail-btn')?.addEventListener('click', e => {
+      e.stopPropagation();
+      openMeetingDetail();
     });
 
     previewEl.querySelector('.mpc-register-btn')?.addEventListener('click', e => {
@@ -1477,16 +1481,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       });
     });
 
-    previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', () => {
-      window.CottageDB?.trackEvent('home_meeting_preview_card_click');
-      window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
-        fromHome: true,
-        onPlannerClick: () => {
-          window.CottageDB?.trackEvent('home_meeting_planner_click');
-          document.getElementById('openPlannerBtn')?.click();
-        },
-      });
-    });
+    previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', openMeetingDetail);
   }
 
   // 주 네비게이션 상태 및 UI
