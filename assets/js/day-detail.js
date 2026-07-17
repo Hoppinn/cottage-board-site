@@ -11,6 +11,12 @@
       display: flex; align-items: center; justify-content: center;
       padding: 20px;
     }
+    /* 이날모임 상세 전용 — 보드(--z-profile 9100)가 이 위에 겹쳐 뜨고 보드를 닫으면
+       이 모달이 그대로 남아야 하므로 9100 아래에 둔다. 헤더(1000)·게임시트(9500)·
+       플래너(--z-shelf 9600)는 전부 위라 영향 없음. .dd-overlay 뒤에 와야 이긴다.
+       ⚠️ .dd-overlay 기본값(9200) 자체를 낮추지 말 것 — openDatePreviewModal은
+          모임보드 서브시트(9200) '안에서' 열려 낮추면 서브시트 뒤에 깔린다. */
+    .dd-overlay--under-board { z-index: 9050; }
     .dd-modal {
       background: var(--paper, #fffaf0);
       border-radius: 16px;
@@ -107,8 +113,9 @@
       padding: 1px 0;
     }
     .dd-game-thumb { width: 13px; height: 13px; border-radius: 3px; object-fit: cover; vertical-align: middle; margin-right: 3px; flex-shrink: 0; }
-    /* 썸네일이 13px라 터치 타겟으로 작음 → 행 전체를 클릭 영역으로 */
-    .dd-game-item--clickable { cursor: pointer; border-radius: 4px; }
+    /* 썸네일이 13px라 터치 타겟으로 작음 → 썸네일+이름 묶음을 클릭 영역으로.
+       li는 블록이라 그냥 두면 오른쪽 빈 공간까지 눌리므로 fit-content로 내용 폭에 맞춘다. */
+    .dd-game-item--clickable { width: fit-content; max-width: 100%; cursor: pointer; border-radius: 4px; }
     .dd-game-item--clickable:hover { background: rgba(0, 0, 0, 0.04); }
     .dd-empty {
       font-size: 12px; color: var(--muted, #9e8e7e);
@@ -1057,7 +1064,7 @@
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
-    el.className = 'dd-overlay';
+    el.className = 'dd-overlay dd-overlay--under-board';
 
     const uniqueVotes = [...new Map(votes.map(v => [String(v.user_id), v])).values()];
 
@@ -1109,15 +1116,13 @@
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
 
     // 참여자 닉네임 클릭 → 그 사람 모임 보드 (Phase D 진입점 규칙: 모임 참여자 = openOtherMeetingSheet)
-    // ⚠️ 보드 패널(--z-profile 9100) < 이 모달(.dd-overlay 9200) → 모달을 먼저 안 닫으면 보드가 뒤에 깔린다.
+    // 보드는 이 모달 위에 겹쳐 뜬다(--z-profile 9100 > .dd-overlay--under-board 9050) —
+    // 전환이 아니라 레이어를 쌓는 것이므로 모달을 닫지 않는다. 보드를 닫으면 이 모달이 그대로 보인다.
     el.querySelectorAll('.dd-nick-link').forEach(n =>
-      n.addEventListener('click', () => {
-        el.remove();
-        window.openOtherMeetingSheet?.(n.dataset.uid);
-      }));
+      n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid)));
 
-    // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500) > 이 모달(9200)이라 모달은 닫지 않는다
-    // (시트를 닫으면 이 모달로 복귀).
+    // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
+    // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
     // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
     //    변환 없이 넘기면 미보유 게임으로 오인해 조용히 기록시트로 폴백된다(에러도 안 남).
     el.querySelectorAll('.dd-game-item--clickable').forEach(li =>
