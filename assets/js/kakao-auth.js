@@ -492,9 +492,21 @@ function _openGameAddSearchModal({ overlayId, title, inList, onAdd }) {
   overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
   document.addEventListener('keydown', onEsc);
 
+  // 검색 결과의 "추가됨" 표시 갱신 — 결과 목록은 이 모달의 렌더 산물이라 호출부가 아닌 여기서 관리.
+  // gameId 항목만 대상: 직접입력 제안·"+ 직접 추가"는 애초에 추가됨 표시를 렌더하지 않는다.
+  const _setAddedState = (gameId, added) => {
+    if (!gameId) return;
+    const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${CSS.escape(String(gameId))}"]`);
+    if (!b) return;
+    b.classList.toggle('is-added', added);
+    b.querySelector('.taste-search-added-label')?.remove();
+    if (added) b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>');
+  };
+
   const addGame = async (gameId, customName) => {
     if (inList(gameId, customName)) return;
-    await onAdd(gameId, customName, resultsEl);
+    await onAdd(gameId, customName);
+    _setAddedState(gameId, true);
   };
 
   const _smart = window.matchKoreanSmart;
@@ -779,6 +791,18 @@ function _bindTasteSubsheet(subBody, ctx) {
             if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
           };
 
+          // _appendTasteChip의 역 — DOM 칩 제거 + 빈 상태·카운트 갱신. DB 삭제·전역 통보는 호출부 책임.
+          const _removeTasteChip = (listEl, countEl, gameId, customName) => {
+            const item = gameId
+              ? listEl.querySelector(`.taste-game-item[data-game-id="${CSS.escape(String(gameId))}"]`)
+              : [...listEl.querySelectorAll('.taste-game-item[data-custom-name]')].find(el => el.dataset.customName === customName);
+            item?.remove();
+            if (!listEl.querySelector('.taste-game-item')) {
+              listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
+            }
+            if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+          };
+
           // 취향보드 게임 추가 센터모달 (검색 초성 + 직접입력 — 원천 등록, 날짜·퀵픽 없음)
           const _openTasteAddModal = ({ listKey, table, listEl, countEl }) => {
             const isLiked = listKey === 'liked';
@@ -790,14 +814,10 @@ function _bindTasteSubsheet(subBody, ctx) {
                 if (customName) return [...listEl.querySelectorAll('[data-custom-name]')].some(el => el.dataset.customName === customName);
                 return false;
               },
-              onAdd: async (gameId, customName, resultsEl) => {
+              onAdd: async (gameId, customName) => {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
                 _appendTasteChip(listEl, countEl, gameId, customName);
                 _emitLikesChanged(table, gameId, true);
-                if (gameId) {
-                  const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${gameId}"]`);
-                  if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
-                }
               },
             });
           };
@@ -853,11 +873,7 @@ function _bindTasteSubsheet(subBody, ctx) {
               const gameId = item?.dataset.gameId || null;
               const customName = item?.dataset.customName || null;
               await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
-              item.remove();
-              if (!listEl.querySelector('.taste-game-item')) {
-                listEl.innerHTML = '<p class="taste-game-empty">아직 추가된 게임이 없어요</p>';
-              }
-              if (countEl) countEl.textContent = `${listEl.querySelectorAll('.taste-game-item').length}개`;
+              _removeTasteChip(listEl, countEl, gameId, customName);
               _emitLikesChanged(table, gameId, false);
             });
 
@@ -1339,16 +1355,12 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 if (customName) return games.some(g => !g.game_id && g.custom_name === customName);
                 return false;
               },
-              onAdd: async (gameId, customName, resultsEl) => {
+              onAdd: async (gameId, customName) => {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
                 games.push({ game_id: gameId || null, custom_name: customName || null });
                 if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).add(String(gameId));
                 _emitLikesChanged(table, gameId, true); // 모임보드 ❤️/👀 마커·취향보드 즉시 동기화(Phase A)
                 refresh();
-                if (gameId) {
-                  const b = resultsEl.querySelector(`.taste-search-item[data-game-id="${CSS.escape(String(gameId))}"]`);
-                  if (b && !b.classList.contains('is-added')) { b.classList.add('is-added'); b.insertAdjacentHTML('beforeend', ' <span class="taste-search-added-label">추가됨</span>'); }
-                }
               },
             });
           };
@@ -1389,6 +1401,17 @@ function _bindMeetingSubsheet(subBody, ctx) {
               const ruleBadge = _ruleSet.has(ruleKey) ? '<span class="mb-rule-badge">📖</span>' : '';
               return `<div class="taste-game-item${clickable}"${gidAttr}${cnAttr}>${thumb}<span class="taste-game-name">${escH(name)}</span>${ruleBadge}${_ro('<button class="taste-game-del" type="button" title="삭제">✕</button>')}</div>`;
             };
+            // 원천에서 삭제 — _openBoxAddSearch onAdd의 역순(DB → 로컬 배열 → srcSet → 전역 통보 → 재렌더).
+            // srcSet.delete를 빼면 이번 주 리스트의 ❤️/👀 마커가 남는다(_emitLikesChanged는 이 Set을 안 고침).
+            const _removeBoxGame = async (gameId, customName) => {
+              await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
+              const idx = games.findIndex(g => (gameId ? String(g.game_id) === String(gameId) : (!g.game_id && g.custom_name === customName)));
+              if (idx >= 0) games.splice(idx, 1);
+              if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).delete(String(gameId));
+              _emitLikesChanged(table, gameId, false);
+              renderList();
+              _renderWeekList(listType);
+            };
             const renderList = () => {
               listEl.innerHTML = games.length ? games.map(_boxItemHtml).join('') : '<p class="taste-game-empty">아직 없어요</p>';
               if (countEl) countEl.textContent = `${games.length}개`;
@@ -1397,21 +1420,11 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 const gid = th.closest('.taste-game-item')?.dataset.gameId;
                 if (gid) { close(); window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
               }));
-              // ✕ 삭제 — _openBoxAddSearch onAdd의 역순(DB → 로컬 배열 → srcSet → 전역 통보 → 재렌더).
-              // srcSet.delete를 빼면 이번 주 리스트의 ❤️/👀 마커가 남는다(_emitLikesChanged는 이 Set을 안 고침).
               listEl.querySelectorAll('.taste-game-del').forEach(btn => btn.addEventListener('click', async () => {
                 const item = btn.closest('.taste-game-item');
                 const gameName = item?.querySelector('.taste-game-name')?.textContent || '이 게임';
                 if (!confirm(`'${gameName}'을(를) 목록에서 뺄까요?`)) return;
-                const gameId = item?.dataset.gameId || null;
-                const customName = item?.dataset.customName || null;
-                await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
-                const idx = games.findIndex(g => (gameId ? String(g.game_id) === String(gameId) : (!g.game_id && g.custom_name === customName)));
-                if (idx >= 0) games.splice(idx, 1);
-                if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).delete(String(gameId));
-                _emitLikesChanged(table, gameId, false);
-                renderList();
-                _renderWeekList(listType);
+                await _removeBoxGame(item?.dataset.gameId || null, item?.dataset.customName || null);
               }));
             };
             renderList();
