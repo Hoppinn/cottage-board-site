@@ -39,7 +39,7 @@
 
 | # | 위험도 | 이슈 | 상세 |
 |---|--------|------|------|
-| GS4 | P2 | `getGameKey` 동명·다른 시그니처 | game-sheet.js:250(게임 **객체** 인자) vs game-reviews.js:14(게임 **id** 인자). 파일 넘나들 때 혼동. |
+| ~~GS4~~ | P2 | ~~`getGameKey` 동명·다른 시그니처~~ | ✅ **2026-07-18 종결**. 실측: 전역 충돌은 없었음(game-reviews.js 버전은 IIFE 내부 지역함수, 전역 `getGameKey`는 game-sheet.js 것 하나뿐). 대신 game-reviews.js의 `getGameKey(gameId)`가 play-records-utils.js `window.getGameKeyById(gameId)`와 **로직 완전 동일한 사본**임을 발견 → 지역함수 삭제 + 호출 3곳을 `getGameKeyById`로 교체(사본 제거가 곧 개명 효과, 이름 충돌 해소). game-sheet.js의 `getGameKey(game)`(객체 인자)는 별개 용도라 유지. |
 | GS5 | P2 | `escH` 사본 5곳 | `window.escH`(supabase-client) · `_escH`(play-records-utils) · `esc`(achievements) · `escH`(game-sheet) · `esc`(day-detail). ⚠️ 통합하려면 **`"` 이스케이프 차이 정리가 선행**(`_escH`는 `& < >`만, `window.escH`는 `"`까지). |
 | GS7 | P2 | 난이도 헬퍼 전역 결합 | `getDifficultyData`/`normalizeLevelValue`가 game-sheet.js 정의 → game-display-adapter·script-nav·owned-games-page가 전역 참조. **IIFE로 안 풀린다**(어차피 전역 유지 대상) — 실제 해결은 헬퍼 별도 파일 분리 = 신규 파일 결정 필요. |
 | DD4 | P2 | `openDateMeetingModal(voteDate, votes, voteGames, opts={})`의 **`opts` 미사용** | R12 중 발견. 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
@@ -48,7 +48,7 @@
 | IP3 | P2 | 날짜 헬퍼 파편화 | `toDateStr`(index-page:930) vs day-detail `fmtDate`(368). ⚠️ **R12에서 "중복 아님"으로 판정** — 입력·출력·용도가 전부 다른 별개 함수. 통합 대상 아님. |
 | DD2 | — | **(긍정) day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. game-sheet.js와 정반대 — **신규 파일 작성 시 이 구조를 따를 것**. |
 
-**교차 파일**: escH 5사본(GS5) · 게임명 해석 4곳(KA4 — 아래 판단대로 **통합 안 함**) · `getGameKey` 2곳 다른 시그니처(GS4).
+**교차 파일**: escH 5사본(GS5) · 게임명 해석 4곳(KA4 — 아래 판단대로 **통합 안 함**) · ~~`getGameKey` 2곳 다른 시그니처(GS4)~~ → 종결(위 표).
 
 ### IP1 처리 결과 (2026-07-18) — 3함수 중 1개만 실제 대상
 

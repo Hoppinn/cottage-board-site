@@ -18,12 +18,13 @@
 **진행 중 작업 없음** (2026-07-18 세션 ⑥ 종료 시점) · **열린 스모크 1건**: IP1 리팩토링(홈 추천카드·이번주모임 미리보기) — 출력 바이트 동일이 정적으로 증명돼 위험 낮으나, 홈 다시 열 때 추천카드 렌더/미리보기 상세·참여등록 클릭만 한 번 눈으로 확인.
 
 **세션 ⑥ (2026-07-18)**: **IP1 ✅ 종결**(8b4f3ce·380f30f) — `renderGameCards` 순수헬퍼 2개 추출 + `initMeetingSection` 핸들러 중복 제거. 착수 중 **문서 줄 수 2/3 부정확** 발견(`updateRecommendFilterText`는 과대함수 아님=77줄, `initMeetingSection`은 과도분리 금지 선례라 강제분리 안 함). 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「IP1 처리 결과」.
+**세션 ⑦ (2026-07-18)**: **GS4 ✅ 종결** — 감사 원문("동명·다른 시그니처로 혼동")은 실측 결과 **전역 충돌 없음**(game-reviews.js `getGameKey`는 IIFE 지역함수, 전역엔 game-sheet.js 것 하나뿐)으로 확인. 대신 game-reviews.js 버전이 `window.getGameKeyById`(play-records-utils.js)와 **로직 완전 동일한 사본**임을 발견해 지역함수 삭제 + 호출 3곳 교체로 처리(이름 충돌은 사본 제거로 자연 해소). game-sheet.js `getGameKey(game)`은 별개 용도라 유지. `docs/js-api.md` 호출처 목록 갱신 완료.
 
 ### 🎯 다음 세션 시작점 — 우선순위 순
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | R번호 미배정 — **남은 실착수 = GS4·GS7·IP2** (IP1 ✅ 종결 / GS5 보류(선행조건) / DD4·IP3 종결) | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | GS4=Yellow · GS7=Red(신규파일) · IP2=판단 |
+| 1 | R번호 미배정 — **남은 실착수 = GS7·IP2** (IP1·GS4 ✅ 종결 / GS5 보류(선행조건) / DD4·IP3 종결) | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | GS7=Red(신규파일) · IP2=판단 |
 | 2 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
 | 3 | 감지기 4단계 (쓰기 경로 검증) | §3 | 기술부채 / Opus medium, 선행 = 3단계(완료) |
 

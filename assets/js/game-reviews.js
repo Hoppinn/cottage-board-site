@@ -14,13 +14,6 @@
     return id;
   }
 
-  function getGameKey(gameId) {
-    if (!gameId || !window.gameData) return null;
-    if (window.gameData[gameId]) return gameId;
-    const entry = Object.entries(window.gameData).find(([, g]) => String(g.bgg?.id) === String(gameId));
-    return entry ? entry[0] : null;
-  }
-
   function gameIdByName(name) {
     if (!window.COTTAGE_GAMES || !name) return name;
     const found = window.COTTAGE_GAMES.find(g => {
@@ -60,7 +53,7 @@
   }
 
   // toInitials, hangulMatch, attachAc, initTagInput, buildPhotoItemAdder,
-  // parsePhotoUrls, buildPhotoHtml, openLightbox → play-records-utils.js 전역 사용
+  // parsePhotoUrls, buildPhotoHtml, openLightbox, getGameKeyById → play-records-utils.js 전역 사용
 
   // 참여자 이름 정규화 — 그룹핑 키 전용 (가나다순 정렬)
   function normalizeNames(raw) {
@@ -1172,7 +1165,7 @@
     let html = '';
     for (const [gameId, recs] of sortedGames) {
       const gameName = getGameName(gameId);
-      const gKey = getGameKey(gameId) || gameId;
+      const gKey = getGameKeyById(gameId) || gameId;
       const thumbUrl = window.gameData?.[gKey]?.images?.thumbnail || '';
       const safeKey = gKey ? gKey.replace(/'/g, "\\'") : '';
       html += `<div class="pr-game-card" role="button" tabindex="0"
@@ -1226,8 +1219,8 @@
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
-        const gameKey = getGameKey(r.game_id) || r.game_id;
-        const realThumb = getGameKey(r.game_id) ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
+        const gameKey = getGameKeyById(r.game_id) || r.game_id;
+        const realThumb = getGameKeyById(r.game_id) ? (window.gameData?.[gameKey]?.images?.thumbnail || '') : '';
         const _thumbKey = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
         const _thumbClick = _thumbKey ? `onclick="event.stopPropagation();openGameRecordSheet('${_thumbKey}')"` : '';
         const thumbHtml = realThumb
