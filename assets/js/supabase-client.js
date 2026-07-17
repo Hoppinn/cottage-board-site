@@ -750,6 +750,9 @@ window._cottageSess = (function () {
         db.from('game_likes').select('custom_name').not('custom_name', 'is', null),
         db.from('game_curious').select('custom_name').not('custom_name', 'is', null),
       ]);
+      // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
+      if (l.error) console.error('[getCustomPrefSuggestions:game_likes]', l.error);
+      if (c.error) console.error('[getCustomPrefSuggestions:game_curious]', c.error);
       const names = new Set([...(l.data || []), ...(c.data || [])].map(r => r.custom_name).filter(Boolean));
       return [...names].sort();
     } catch (err) { console.error('[getCustomPrefSuggestions]', err); return []; }
@@ -888,6 +891,9 @@ window._cottageSess = (function () {
         db.from('page_views').select('id', { count: 'exact', head: true })
           .eq('page', '__visitor__').gte('created_at', todayStart).lte('created_at', todayEnd),
       ]);
+      // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
+      if (totalRes.error) console.error('[getVisitorStats:page_views total]', totalRes.error);
+      if (todayRes.error) console.error('[getVisitorStats:page_views today]', todayRes.error);
       return { total: totalRes.count || 0, today: todayRes.count || 0 };
     } catch (err) { console.error('[getVisitorStats]', err);
       return null;
@@ -1296,6 +1302,13 @@ window._cottageSess = (function () {
         );
       }
       const [playRes, commentRes, suggestRes, profile, reviewRes, taggedRes] = await Promise.all(queries);
+      // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
+      if (playRes.error) console.error('[getMyStats:game_play_records]', playRes.error);
+      if (commentRes.error) console.error('[getMyStats:game_comments]', commentRes.error);
+      if (suggestRes.error) console.error('[getMyStats:suggestions]', suggestRes.error);
+      if (profile.error) console.error('[getMyStats:profiles]', profile.error);
+      if (reviewRes.error) console.error('[getMyStats:game_reviews]', reviewRes.error);
+      if (taggedRes?.error) console.error('[getMyStats:game_play_records tagged]', taggedRes.error);
       const ownPlays = playRes.data || [];
       const taggedPlays = taggedRes?.data || [];
       // 중복 제거 후 합치기 (내 기록 우선)
@@ -1364,6 +1377,15 @@ window._cottageSess = (function () {
       const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes] = await Promise.all([
         taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise
       ]);
+      // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
+      // (taggedRes·voucherEventsRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
+      if (taggedRes.error) console.error('[getMyNotifications:game_play_records tagged]', taggedRes.error);
+      if (curiousRes.error) console.error('[getMyNotifications:game_curious]', curiousRes.error);
+      if (purchasedRes.error) console.error('[getMyNotifications:game_requests purchased]', purchasedRes.error);
+      if (newGameRes.error) console.error('[getMyNotifications:game_requests new]', newGameRes.error);
+      if (introListRes.error) console.error('[getMyNotifications:member_intros]', introListRes.error);
+      if (profileSeenRes.error) console.error('[getMyNotifications:profiles]', profileSeenRes.error);
+      if (voucherEventsRes.error) console.error('[getMyNotifications:voucher_log]', voucherEventsRes.error);
       const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
       const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
       const effectiveNewGameSeenAt = [newGameSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
@@ -1380,7 +1402,7 @@ window._cottageSess = (function () {
       }
       const curiousKeys = (curiousRes.data || []).map(r => r.game_id);
       if (curiousKeys.length > 0) {
-        const [{ data: recentComments }, { data: playRecords }] = await Promise.all([
+        const [{ data: recentComments, error: rcErr }, { data: playRecords, error: prErr }] = await Promise.all([
           db.from('game_comments')
             .select('id, game_key, nickname, created_at')
             .in('game_key', curiousKeys)
@@ -1394,6 +1416,9 @@ window._cottageSess = (function () {
             .order('created_at', { ascending: false })
             .limit(20),
         ]);
+        // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
+        if (rcErr) console.error('[getMyNotifications:game_comments curious]', rcErr);
+        if (prErr) console.error('[getMyNotifications:game_play_records curious]', prErr);
         for (const c of recentComments || []) {
           const isNew = effectiveSeenAt ? c.created_at > effectiveSeenAt : true;
           notifs.push({ type: 'curious_comment', gameKey: c.game_key, commenter: c.nickname, date: c.created_at, isNew });
