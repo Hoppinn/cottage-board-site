@@ -25,7 +25,7 @@
 | 3 | R번호 미배정 — GS4·GS5·GS7·DD4·IP1~3 | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | 리팩토링 / 항목별 상이 |
 | 4 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
 
-⚠️ **1~5 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
+⚠️ **1~4 중 무엇에 착수하든 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
 ### ✅ 종료: 전체 리팩토링 R1~R12 (2026-07-15 ~ 07-17, 전부 스모크 통과)
 
@@ -77,7 +77,7 @@
 | 게임위치 카테고리 스티키 헤더 | design | 게임위치 바텀시트 내 카테고리 헤더 고정 |
 | 소개글 알림 개별 분리 | feat | 카카오/Discord 알림에서 Make 라우터 분기 (코드 외 작업) |
 | `played_at NULL` 소급 판단 | data | 기존 4개 게임 NULL 기록 — 정상 데이터인지 보정 대상인지 확인 |
-| 취향보드 즉시 갱신 확인 | verify | 게임 추가/삭제 후 홈 카드 미갱신 여부 재확인 |
+| 취향보드 즉시 갱신 확인 | verify | 게임 추가/삭제 후 홈 카드 미갱신 여부 재확인. ⚠️ **"홈 카드"가 무엇인지 이 기재만으론 확정 불가** (2026-07-17 확인) — §3 「내 보드 카드 요약이 서브시트 편집을 반영 안 함」(내 보드 패널 4카드)과 **같은 건일 가능성이 높으나 근거 없음**. 착수 시 재현부터 해서 같으면 이 행을 삭제할 것. §0 열린 스모크 R2(취향보드 **서브시트 자체**가 새로고침해야 반영)는 **다른 건** |
 | 추천게임 전체카드 고정헤더 점검 | verify | 추천 필터 전체화면 모드에서 헤더 sticky 동작 확인 |
 | 이번 주 모임 섹션 추가 기획 | feat | 날짜별 미니 막대 상세화, 모임 참여 버튼 연결 (낮은 우선순위) |
 
@@ -169,7 +169,7 @@
 | 방문자 통계 명/회 역전 (2026-07-01) | 143차-190에서 `page_views.session_key` 추가 계획/마이그레이션/코드 반영. 신규 데이터는 `__visitor__` 행 안의 `user_id \|\| session_key`로 명/회를 함께 계산한다. ▶ **2026-07-16 실측 갱신**: `docs/migrations/007_page_views_session_key.sql`은 **운영 DB에 적용 완료**(anon 키로 `page_views.session_key` 조회 성공). 신규 행에도 정상 기록 중(최근 7일 384행 중 NULL 3행 = 99% 채워짐) → **명/회 역전은 신규 데이터 기준 해소**. **잔여**: 과거 legacy 행 1,513/2,171(70%)이 `session_key` NULL이라 그 구간은 여전히 행 단위 fallback 집계(소급 불가). 즉 "적용 전이라 fallback"이라는 기존 기재는 낡았음. |
 | 기록보드 플레이기록 시간 | 기록보드에 표시되는 플레이기록 시간이 전부 09:00으로 표시됨. 원인 미확인 |
 | 서브시트(취향보드 등) 상단 모서리 음영 (2026-06-30) | 사용자가 스크린샷으로 보고한 모서리 음영 — 시도한 가설 3건 모두 효과 없음: ①`.profile-activity-toggle` 상단 radius 제거, ②`.profile-subsheet-header` radius를 box와 맞춤(overflow:hidden이라 무의미함 확인), ③`.profile-subsheet-header`에 `background:#fff` 추가(외부 GPT 의견, 적용했으나 미해결). 다음 시도 전 확대 스크린샷으로 정확한 형태 확인 필요 |
-| 이용시간 기기 중복 | 동일 유저가 여러 기기에서 동시에 사용 시 각 기기 시간이 모두 합산됨 |
+| 이용시간 기기 중복 | 동일 유저가 여러 기기에서 동시에 사용 시 각 기기 시간이 모두 합산됨. ▶ 작업 항목은 §3 「[통합] 방문/이용 집계 전면 점검」③ (해법 방향·성격 포함) |
 | 사진 배열 전체 삭제 | `deletePlayPhoto`는 photo_url = null로 전체 삭제 (개별 URL 삭제 불가) |
 | 관리자 페이지 금일이용데이터 | 간헐적 미표시 — 원인 불명, 별도 조사 필요 |
 | TITLE_DEFS 미배정 칭호 3개 | `title_record_150` / `title_review_100` / `title_review_500`가 TITLE_DEFS에 정의돼 있으나 ACH_DEFS 어디서도 `rewards.title`로 참조되지 않음. 의도적 예약인지 잔존 버그인지 확인 필요 |
@@ -243,6 +243,7 @@
   - **R10b에 안 넣은 이유**: 해법 방향이 반대다. 서브시트는 **pull**(진입 시 재조회)로 풀리지만 카드는 이미 그려져 있어 **push**(나갈 때 갱신)가 필요 → R10b가 방금 지운 `onLeave` 콜백을 다른 용도로 되살리거나, 방향 A를 패널 레벨로 확장해야 함. 한 세션에 섞으면 설계가 흐려짐.
   - ⚠️ **R10b로 상대적 체감은 커졌을 수 있음** — 서브시트가 항상 최신이 되면서 카드만 옛날 값인 게 눈에 띔.
   - 참고: bio 저장 경로([kakao-auth.js:738](../assets/js/kakao-auth.js#L738) 부근)는 **이미 카드 요약을 직접 갱신**하는 push 코드가 있음 — 착수 시 그 패턴을 일반화할지 검토.
+  - 🔗 **같은 건일 수 있는 다른 기재 2곳** (2026-07-17 교차 확인) — 착수 시 재현으로 판별해 중복이면 정리할 것: ①「론칭 후 이월」 **"취향보드 즉시 갱신 확인"**("홈 카드" 미갱신 — 그 "홈 카드"가 여기 말하는 내 보드 4카드일 가능성 높음) ②§0 열린 스모크 **R2**(취향보드 서브시트 자체가 새로고침해야 반영 — **이건 다른 건으로 보임**. R10b로 해소됐을 가능성 높아 확인만 하면 닫힘).
 - [ ] **[기술부채] 감지기 갭 — `Promise.all` + 비구조분해 결과는 2단계가 통째로 지나쳤다** (2026-07-17 R10b 중 발견) — 2단계는 `const { data, error } = await`(구조분해) 형태 59곳을 고쳤는데, **`const [aRes, bRes] = await Promise.all([...])` 후 `aRes.data`만 읽는 형태는 대상이 아니었다**. 이 자리들은 `.error`를 아무도 안 봐서 **컬럼 오타·RLS 차단이 여전히 조용히 빈 값**이 된다(`catch`도 안 울림).
   - **실측 대상**(`supabase-client.js`, `Res.error` 참조 grep 결과 **0건** = 전부 미수신): `getMyStats`(1292, playRes·commentRes·suggestRes·reviewRes·taggedRes) · `getMyNotifications`(1358, taggedRes·curiousRes·purchasedRes·newGameRes·introListRes·profileSeenRes·voucherEventsRes) · `getVisitorStats`(880, totalRes·todayRes). ~16곳.
   - ⚠️ **이게 왜 중요한가**: `getMyStats`·`getMyNotifications`는 **내 보드의 핵심 조회**다. 즉 2026-07-17 "화재 테스트 불난 곳 0건"은 **이 두 함수에 관한 한 애초에 감지 능력이 없는 상태에서 나온 결과**였다 → 그 결론의 유효 범위가 기록된 것보다 더 좁다.
@@ -330,7 +331,7 @@
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
   - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)
   - ② **과거 session_key NULL 1,513/2,171(70%)** — 007 이전 legacy. 신규는 99% 채워짐. 소급 불가라 이 구간은 영구 fallback 집계. (아래 "명/회 역전" 제한사항)
-  - ③ **이용시간 기기 중복** — 동일 유저 다기기 동시 사용 시 합산 (아래 제한사항 + 이 절의 다음 항목)
+  - ③ **이용시간 기기 중복** — 동일 유저 다기기 동시 사용 시 각 기기 시간이 모두 합산 (증상 기록은 §2 「알려진 제한사항」). **해법 방향: 서버 세션 단위 관리** — 2026-07-17까지 §3에 별도 항목("이용시간 기기 중복 카운트 방지")으로도 있던 것을 여기로 흡수(같은 건이 3곳에 있었음).
   - ④ **관리자 금일이용데이터 간헐적 미표시** — 원인 불명 (아래 제한사항)
   - ⑥ **로그인 시 잔여 누적시간이 `page_sessions`에 안 들어감** (2026-07-04 `PLAN_page_sessions_on_login.md`로 기획됐으나 **미구현 — 2026-07-17 코드 실측 확인**) — `page_sessions` INSERT는 [supabase-client.js:1022](../assets/js/supabase-client.js#L1022) `_syncTimeToDBNow(uid, insertPageSession=true)` **한 경로뿐**이고 이건 `visibilitychange`(탭 숨김)에서만 호출된다. **heartbeat는 `insertPageSession=false`로 부르고**([:972](../assets/js/supabase-client.js#L972)), **`beforeunload`/`pagehide`는 `_flushTime`(localStorage 전용)만 부른다**([:1034~1041](../assets/js/supabase-client.js#L1034)). → visibilitychange가 안 뜨거나 async INSERT가 못 끝난 세션의 시간은 `profiles.total_minutes`에만 남고 `page_sessions`엔 영영 안 들어감(= 월별/주별 차트와 '전체' 수치의 구조적 불일치).
     - **당초 문제("월별 차트에 나나만 보임")는 해소된 것으로 보임** — `page_sessions` 10,975행(최근 7일 753)으로 폭넓게 수집 중. 탭을 닫아도 브라우저가 unload 전에 `visibilitychange`(hidden)를 먼저 쏘기 때문으로 추정(미검증). **즉 급한 건 아니고, 남은 건 위 "영영 안 들어가는 잔여분"뿐.**
@@ -338,7 +339,6 @@
   - ⑤ **가상 페이지 키↔라벨 정합성** — 2026-07-16 커밋 aaa0b1d로 현재 9개 키 전부 라벨 보유. **신규 `_trackPvOnce` 키 추가 시 `page-labels.js` 동시 갱신 필요**(안 하면 관리자에 slug 노출, 조용히 발생). 이번에 meeting·other-board가 그 상태였음.
   - **성격**: 대부분 "추적 로직 설계"(heartbeat 타이밍·기기 단위 세션) 문제라 Red + Plan 필수. 코드 리팩토링보다 **집계 모델 재설계**에 가까움. 착수 전 ①~④ 중 실제로 고칠 것을 먼저 확정할 것(②는 소급 불가라 대상 아님).
 - [ ] **[조건부 트리거] `game_play_records` ~1500행 도달 시 `getUserFirstRecordCount` RPC 재검토** (R8 재검증 결론, 2026-07-16 — REFACTOR_CHECKPOINT.md "Phase 2 SC5"에만 있던 것을 2026-07-17 여기로 보존) — 현재 테이블 **60행**(실측)이라 성능 문제 없음이 확인돼 RPC 전환은 **선제적 과최적화로 보류**. 단 함수가 `.in('game_id', myGameIds).limit(2000)`이라 **유저 게임들의 누적 기록이 2000행을 넘으면 ascending limit이 일부 게임의 최초 기록을 누락**해 업적 오지급이 가능(정확성 엣지). 지금 대비 ~33배 규모. **행수가 1500 근처에 오면 재검토**할 것.
-- [ ] 이용시간 기기 중복 카운트 방지 (서버 세션 단위 관리)
 - [ ] price-rules.html / club-rules.html 사진 중심 재구성
 - [ ] **기록게시판 디자인 개선** — 현재 너무 밋밋, 전반적 비주얼 리뉴얼 필요
 - [ ] **[보안] meeting 계열 쓰기 보호** (2026-07-15 조사 완료, **사용자 결정=문서화 후 보류**) — `meeting_votes` / `meeting_vote_games` / `meeting_game_prefs` 전체 현재 UNRESTRICTED (anon 키로 전체 읽기/쓰기/삭제 가능).
