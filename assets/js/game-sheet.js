@@ -20,97 +20,9 @@ const DEFAULT_GAME_IMAGE =
   `${rootPath}assets/images/main/hero.png`;
 
 
-/* =========================
-   # DIFFICULTY SYSTEM
-   TODO: 추후 game-system/config/difficulty-levels.js와 통합
-========================= */
-
-const DIFFICULTY_LEVELS = [
-  {
-    id: "kids",
-    label: "아이도 할 수 있어요",
-    shortLabel: "아이도가능",
-    icon: "😊",
-    className: "difficulty-kids",
-    minWeight: 0,
-    maxWeight: 1.10
-  },
-  {
-    id: "beginner",
-    label: "입문 추천",
-    shortLabel: "입문추천",
-    icon: "🌱",
-    className: "difficulty-beginner",
-    minWeight: 1.11,
-    maxWeight: 1.50
-  },
-  {
-    id: "light_family",
-    label: "라이트 · 패밀리",
-    shortLabel: "라이트패밀리",
-    icon: "🏡",
-    className: "difficulty-light",
-    minWeight: 1.51,
-    maxWeight: 2.50
-  },
-  {
-    id: "heavy_mania",
-    label: "헤비 · 매니아",
-    shortLabel: "헤비매니아",
-    icon: "🧠",
-    className: "difficulty-heavy",
-    minWeight: 2.51,
-    maxWeight: 3.50
-  },
-  {
-    id: "hardcore",
-    label: "하드코어",
-    shortLabel: "하드코어",
-    icon: "😈",
-    className: "difficulty-hardcore",
-    minWeight: 3.51,
-    maxWeight: 5.00
-  }
-];
-
-const DIFFICULTY_UNKNOWN = { id: "unknown", label: "-", shortLabel: "-", icon: "", className: "" };
-
-function getDifficultyData(weight){
-  const numericWeight =
-    Number(weight) || 0;
-
-  if(numericWeight === 0){
-    return DIFFICULTY_UNKNOWN;
-  }
-
-  return (
-    DIFFICULTY_LEVELS.find((level) =>
-      numericWeight >= level.minWeight &&
-      numericWeight <= level.maxWeight
-    ) ||
-    DIFFICULTY_LEVELS[1]
-  );
-}
-
-function normalizeLevelValue(value){
-  if(value === "light"){
-    return "light_family";
-  }
-
-  if(value === "heavy"){
-    return "heavy_mania";
-  }
-
-  if(value === "easy_coop"){
-    return "easy_coop";
-  }
-
-  if(value === "hard_coop"){
-    return "hard_coop";
-  }
-
-  return value || "";
-}
+/* # DIFFICULTY SYSTEM — game-display-adapter.js로 이관(GS7).
+   getDifficultyData/normalizeLevelValue + DIFFICULTY_LEVELS/UNKNOWN는 이제
+   CottageGameView(=GameView) 네임스페이스. 이 파일 내부는 GameView.getDifficultyData 사용. */
 
 
 /* =========================
@@ -640,7 +552,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
     GameView.getGameDetailData(game);
 
   const difficulty =
-    getDifficultyData(detail.difficultyWeight);
+    GameView.getDifficultyData(detail.difficultyWeight);
 
   const isCooperative =
     game.bgg?.mechanics?.includes("Cooperative Game") || false;
@@ -2751,14 +2663,15 @@ async function onSubmitPlayModal() {
 ========================= */
 
 /* ===== R11c(GS2) 공개 API 노출 =====
-   전역 유지 필수 = 파일 밖(js/html) 참조 16 ∪ 자기 템플릿 onclick 호출 27 = 함수 39개
+   전역 유지 필수 = 파일 밖(js/html) 참조 14 ∪ 자기 템플릿 onclick 호출 27 = 함수 37개
+   (GS7에서 getDifficultyData·normalizeLevelValue 2개를 game-display-adapter로 이관 → 39→37).
    + 크로스파일에서 bare 참조되는 상수 2개(DEFAULT_GAME_IMAGE·GameView).
    나머지 최상위 함수 60개와 모듈 상태(gameSheetContent·_gameSheetHistory 등)는 IIFE 내부 은닉. */
 Object.assign(window, {
   _openCoverModal, _openOrganizerLightbox, closeGameSheet, ensureGameSheet,
   formatDate, formatDifficultyWeight, formatPlayers, formatRating,
-  getAllGamesArray, getAvailBadgeHtml, getDifficultyData, getGameKey, getShelfSpanHtml,
-  goBackGameSheet, loginFromSheet, normalizeLevelValue,
+  getAllGamesArray, getAvailBadgeHtml, getGameKey, getShelfSpanHtml,
+  goBackGameSheet, loginFromSheet,
   onCancelPlayRecord, onCloseCommentModal, onClosePhotoModal, onClosePlayModal,
   onDeleteComment, onDeleteCommentPreview, onDeletePlayReview, onEditComment,
   onEditPlayReview, onLinkCommentToPlay, onOpenCommentInput, onOpenPhotoInput,

@@ -41,7 +41,7 @@
 |---|--------|------|------|
 | ~~GS4~~ | P2 | ~~`getGameKey` 동명·다른 시그니처~~ | ✅ **2026-07-18 종결**. 실측: 전역 충돌은 없었음(game-reviews.js 버전은 IIFE 내부 지역함수, 전역 `getGameKey`는 game-sheet.js 것 하나뿐). 대신 game-reviews.js의 `getGameKey(gameId)`가 play-records-utils.js `window.getGameKeyById(gameId)`와 **로직 완전 동일한 사본**임을 발견 → 지역함수 삭제 + 호출 3곳을 `getGameKeyById`로 교체(사본 제거가 곧 개명 효과, 이름 충돌 해소). game-sheet.js의 `getGameKey(game)`(객체 인자)는 별개 용도라 유지. |
 | GS5 | P2 | `escH` 사본 5곳 | `window.escH`(supabase-client) · `_escH`(play-records-utils) · `esc`(achievements) · `escH`(game-sheet) · `esc`(day-detail). ⚠️ 통합하려면 **`"` 이스케이프 차이 정리가 선행**(`_escH`는 `& < >`만, `window.escH`는 `"`까지). |
-| GS7 | P2 | 난이도 헬퍼 전역 결합 | `getDifficultyData`/`normalizeLevelValue`가 game-sheet.js 정의 → game-display-adapter·script-nav·owned-games-page가 전역 참조. **IIFE로 안 풀린다**(어차피 전역 유지 대상) — 실제 해결은 헬퍼 별도 파일 분리 = 신규 파일 결정 필요. |
+| ~~GS7~~ | P2 | ~~난이도 헬퍼 전역 결합~~ | ✅ **2026-07-18 종결(B2 방안)**. 실측 정정: 소비자는 문서가 적은 game-display-adapter가 **아니라** index-page(4)·script-nav(2)·owned-games(1)+game-sheet 내부(1)=8곳. 감사의 "신규 파일 분리" 가정을 재검증→**부적절**(소비자 14개 HTML에 걸쳐 신규 파일이면 14개 전부 `<script>` 추가·순서맞춤 필요=40줄에 과한 비용). 대신 **game-display-adapter.js가 이미 그 14개 전부에 먼저 로드 + 난이도 메서드(getDifficultyWeight/Id) 보유**→여기로 이관하고 `CottageGameView` 네임스페이스에 노출, 호출 8곳을 `GameView.getDifficultyData/normalizeLevelValue`로 전환(소비자가 이미 쓰는 스타일). bare 전역 2개 제거=전역 위생 개선. 신규파일/HTML편집 0. node 대조 27케이스 PASS. |
 | DD4 | P2 | `openDateMeetingModal(voteDate, votes, voteGames, opts={})`의 **`opts` 미사용** | R12 중 발견. 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
 | ~~IP1~~ | P1 | ~~index-page.js 과대함수~~ | ✅ **2026-07-18 종결**(8b4f3ce·380f30f). 상세·실측 정정은 아래 「IP1 처리 결과」. |
 | IP2 | P2 | 구조 일관성 | 추천 관련 15+개는 상위 전역함수(onclick), 나머지 init은 IIFE — 한 파일에 두 방식 혼재, 경계 기준 불명확. |
@@ -65,7 +65,7 @@
 
 - **KA4 — `getGameName` 3사본은 의도적으로 유지**(R2 종결). 겉보기 중복이지만 **실제로 다른 입력을 처리**한다: `window.gameData`는 **한글 슬러그** 키, `window.COTTAGE_GAMES`는 **bggId** 매칭 — kakao-auth/achievements 버전은 둘 다 처리하고 game-reviews 버전은 슬러그 조회가 없다. 게다가 game-reviews.html 로드 순서가 achievements→kakao-auth→game-reviews라 "하나를 전역 공유"도 안전하지 않다. 강제 병합 = 미보유 게임 이름표시 회귀. day-detail `resolveGameName`(4번째 변형)도 같은 이유로 제외.
 - **과도분리 금지 선례 2건** — 함수가 길다고 다 쪼개지 않는다. ①`onSubmitPlayModal`(82줄, R11b): `if(editId)/else` 두 갈래로 이미 명확하고 쪼개려면 폼 값 9개를 DTO로 묶어야 해 **접두사가 붙어 diff 검증이 무력화**된다(R11a의 vm 기각과 동일 사유). ②`buildBarsInCard`(103줄, R12, 사용자 승인): 이미 **이름 붙은 nested 함수 4개**의 컨테이너라 모듈로 올리면 `voteGames`·`myVote` 스레딩으로 **호출부만 길어지고 이득이 없다**. 재방문 조건 = 그 파일을 실제로 만지다 경계가 불편해질 때.
-- **GS5·GS7은 R11c(IIFE화)로 해결되지 않았다** — IIFE는 로컬 escH를 *안전하게* 만들 뿐 5사본 통합은 별건이고, GS7은 전역 유지 대상이라 IIFE와 무관. **"IIFE 했으니 끝"이라 착각 금지.**
+- **GS5는 R11c(IIFE화)로 해결되지 않았다** — IIFE는 로컬 escH를 *안전하게* 만들 뿐 5사본 통합은 별건. **"IIFE 했으니 끝"이라 착각 금지.** (GS7은 2026-07-18 종결 — 위 표 참조.)
 - **DD3-esc 보류 사유** — GS5와 같은 항목인 데다, **club-schedule.html이 day-detail.js(664)를 supabase-client.js(668)보다 먼저 로드**해 IIFE 실행 시점에 `window.escH`가 undefined다(index.html은 반대 순서). 스냅샷(`const esc = window.escH`) 방식은 club-schedule에서 즉시 파손 → **로드 순서 통일이 선행 조건**.
 
 ---

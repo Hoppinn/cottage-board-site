@@ -538,7 +538,7 @@ function renderOwnedGameList(){
           GameView.getGameDetailData(game);
 
         const difficulty =
-          getDifficultyData(
+          GameView.getDifficultyData(
             Number(detail.difficultyWeight) || 0
           );
 

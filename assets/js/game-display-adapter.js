@@ -94,6 +94,100 @@ function getDifficultyId(game) {
   return safeText(game?.cottage?.difficultyId);
 }
 
+/* =========================
+   # DIFFICULTY LEVELS (game-sheet.js에서 이관 — GS7)
+   raw weight → 난이도 레벨 객체 / 필터 레벨값 정규화.
+   위의 game-객체 메서드(getDifficultyWeight/Id)와 달리 순수 weight·문자열을 받는다.
+   TODO: 추후 game-system/config/difficulty-levels.js와 통합
+========================= */
+
+const DIFFICULTY_LEVELS = [
+  {
+    id: "kids",
+    label: "아이도 할 수 있어요",
+    shortLabel: "아이도가능",
+    icon: "😊",
+    className: "difficulty-kids",
+    minWeight: 0,
+    maxWeight: 1.10
+  },
+  {
+    id: "beginner",
+    label: "입문 추천",
+    shortLabel: "입문추천",
+    icon: "🌱",
+    className: "difficulty-beginner",
+    minWeight: 1.11,
+    maxWeight: 1.50
+  },
+  {
+    id: "light_family",
+    label: "라이트 · 패밀리",
+    shortLabel: "라이트패밀리",
+    icon: "🏡",
+    className: "difficulty-light",
+    minWeight: 1.51,
+    maxWeight: 2.50
+  },
+  {
+    id: "heavy_mania",
+    label: "헤비 · 매니아",
+    shortLabel: "헤비매니아",
+    icon: "🧠",
+    className: "difficulty-heavy",
+    minWeight: 2.51,
+    maxWeight: 3.50
+  },
+  {
+    id: "hardcore",
+    label: "하드코어",
+    shortLabel: "하드코어",
+    icon: "😈",
+    className: "difficulty-hardcore",
+    minWeight: 3.51,
+    maxWeight: 5.00
+  }
+];
+
+const DIFFICULTY_UNKNOWN = { id: "unknown", label: "-", shortLabel: "-", icon: "", className: "" };
+
+function getDifficultyData(weight){
+  const numericWeight =
+    Number(weight) || 0;
+
+  if(numericWeight === 0){
+    return DIFFICULTY_UNKNOWN;
+  }
+
+  return (
+    DIFFICULTY_LEVELS.find((level) =>
+      numericWeight >= level.minWeight &&
+      numericWeight <= level.maxWeight
+    ) ||
+    DIFFICULTY_LEVELS[1]
+  );
+}
+
+function normalizeLevelValue(value){
+  if(value === "light"){
+    return "light_family";
+  }
+
+  if(value === "heavy"){
+    return "heavy_mania";
+  }
+
+  if(value === "easy_coop"){
+    return "easy_coop";
+  }
+
+  if(value === "hard_coop"){
+    return "hard_coop";
+  }
+
+  return value || "";
+}
+
 function getRating(game) {
   return safeNumber(game?.bgg?.rating, 0);
 }
@@ -488,6 +582,8 @@ if (typeof window !== "undefined") {
 
     getDifficultyWeight,
     getDifficultyId,
+    getDifficultyData,
+    normalizeLevelValue,
     getRating,
 
     getBestPlayers,

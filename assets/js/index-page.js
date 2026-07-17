@@ -95,7 +95,7 @@ gameScroll.scrollTo({
 
 function _getRecommendedGames(playerValue, levelValue, moodValue){
 const normalizedLevel =
-  normalizeLevelValue(levelValue);
+  GameView.normalizeLevelValue(levelValue);
 
 const hasHardDifficultyFilter =
   normalizedLevel === "heavy_mania" ||
@@ -168,7 +168,7 @@ function _recommendCardHtml(game, index){
           GameView.getGameCardData(game);
 
         const difficulty =
-          getDifficultyData(
+          GameView.getDifficultyData(
             card.difficultyWeight
           );
 
@@ -224,7 +224,7 @@ function openRecommendOverlay(){
   const _overlayLevel = recommendState.level;
   const _overlayPlayer = recommendState.players;
   const _overlayHardLevel = (()=>{
-    const nl = normalizeLevelValue(_overlayLevel);
+    const nl = GameView.normalizeLevelValue(_overlayLevel);
     return nl === "heavy_mania" || nl === "hardcore";
   })();
   const _overlayMaxWeight = _overlayHardLevel || _overlayPlayer === '9+' || !recommendState.weightCap ? 5.0 : DEFAULT_RECOMMEND_MAX_WEIGHT;
@@ -268,7 +268,7 @@ function openRecommendOverlay(){
 
   list.innerHTML = allFiltered.map(game => {
     const card = GameView.getGameCardData(game);
-    const difficulty = getDifficultyData(card.difficultyWeight);
+    const difficulty = GameView.getDifficultyData(card.difficultyWeight);
     return `<button class="game-card" type="button" data-game="${game.id}">
       <img src="${card.image || DEFAULT_GAME_IMAGE}" alt="${card.title}" loading="lazy" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
       ${card.rating > 0 ? `<span class="game-card-rating">⭐ ${formatRating(card.rating)}</span>` : ''}

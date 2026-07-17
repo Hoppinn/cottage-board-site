@@ -103,8 +103,8 @@ assets/js/
 ├── kakao-auth.js               # 카카오 로그인/로그아웃, 프로필 패널, 알림, 교환권
 │                               # (window.getKakaoUser / openProfilePanel 노출)
 ├── script-nav.js               # 한글 검색 유틸, rootPath, 모바일 메뉴/스크롤스파이, 헤더 검색, 카드 이벤트, 세션 트래커
-├── game-sheet.js               # GameView, 난이도 시스템, 게임 데이터 포매터, 게임시트, 플레이 모달, 코멘트·사진 모달
-├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (window.COTTAGE_GAMES 생성)
+├── game-sheet.js               # GameView, 게임 데이터 포매터, 게임시트, 플레이 모달, 코멘트·사진 모달
+├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (window.COTTAGE_GAMES 생성) · 난이도 시스템(getDifficultyData/normalizeLevelValue, GS7 이관)
 ├── game-reviews.js             # 플레이기록 허브 (game-reviews.html 전용)
 │                               # 기록 등록·수정·삭제, 모임/게임별 보기, 사진 업로드
 ├── achievements.js             # 업적·캐릭터·칭호 체크 및 지급 (window.checkAchievements 노출)

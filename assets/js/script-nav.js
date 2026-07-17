@@ -447,14 +447,14 @@ function matchRecommendLevel(game, levelValue){
   }
 
   const normalizedLevel =
-    normalizeLevelValue(levelValue);
+    GameView.normalizeLevelValue(levelValue);
 
   const recommend =
     GameView?.getRecommendData(game);
 
   const difficultyId =
     recommend?.difficultyId ||
-    getDifficultyData(recommend?.difficultyWeight).id;
+    GameView.getDifficultyData(recommend?.difficultyWeight).id;
 
   if(difficultyId === "unknown"){
     return false;
