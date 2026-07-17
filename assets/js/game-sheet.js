@@ -1459,6 +1459,13 @@ function emitLikesChanged(table, gameId, added) {
   try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), added: !!added } })); } catch (_) {}
 }
 
+// 토스트('취향 보드 →')로 취향보드에 들어간 뒤 원래 게임시트로 돌아오기 위한 경로 (R10c).
+// 라벨에 게임명을 쓰는 건 openShelfSheet 뒤로가기(_prevHistTitle)와 같은 패턴.
+function _tasteBackTo(gameKey) {
+  const g = window.gameData?.[gameKey];
+  return { type: 'gameSheet', gameKey, label: g?.title?.display || g?.title?.owned || gameKey };
+}
+
 async function onSheetLike(btn) {
   requireLogin(async () => {
     const user = window.getKakaoUser?.();
@@ -1475,7 +1482,7 @@ async function onSheetLike(btn) {
         likeBtn.classList.toggle('is-active', result.liked);
         document.getElementById('sheetLikeBtnWrap')?.classList.toggle('is-active', result.liked);
       }
-      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => { closeGameSheet(); window.openProfilePanel?.('taste'); } : null);
+      showActionToast(result.liked ? '❤️ 좋아하는 게임에 추가됐어요' : '좋아요를 취소했어요', result.liked ? '취향 보드 →' : null, result.liked ? () => { closeGameSheet(); window.openProfilePanel?.('taste', { backTo: _tasteBackTo(gameKey) }); } : null);
       if (result.liked) {
         const wasCurious = await window.CottageDB.hasUserCurious(gameKey, String(user.id));
         if (wasCurious) {
@@ -1516,7 +1523,7 @@ async function onSheetCurious(btn) {
         curiousBtn.classList.toggle('is-active', result.curious);
         document.getElementById('sheetCuriousBtnWrap')?.classList.toggle('is-active', result.curious);
       }
-      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste'); } : null);
+      showActionToast(result.curious ? '👀 해보고 싶은 게임에 추가됐어요' : '관심을 취소했어요', result.curious ? '취향 보드 →' : null, result.curious ? () => { closeGameSheet(); window.openProfilePanel?.('taste', { backTo: _tasteBackTo(gameKey) }); } : null);
       if (result.curious) {
         const wasLiked = await window.CottageDB.hasUserLiked(gameKey, String(user.id));
         if (wasLiked) { await window.CottageDB.toggleGameLike(gameKey, String(user.id)); emitLikesChanged('game_likes', gameKey, false); }
