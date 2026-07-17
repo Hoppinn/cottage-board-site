@@ -1589,7 +1589,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
 // ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _markAllNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
-  const { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById } = ctx;
+  const { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle } = ctx;
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
@@ -1606,7 +1606,9 @@ function _bindNotifSubsheet(subBody, ctx) {
             li.addEventListener('click', e => {
               if (e.target.closest('button, a')) return;
               if (li.dataset.introUid) {
-                openOtherMeetingSheet(li.dataset.introUid);
+                // 남의 보드로 교체되므로 알림으로 돌아올 경로를 함께 넘긴다(R10c).
+                // backTo.opts는 비워 둘 것 — readOnly를 실으면 알림 버튼이 _ro()로 사라져 조용히 무시된다.
+                openOtherMeetingSheet(li.dataset.introUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
                 return;
               }
               let key = null;
@@ -2569,7 +2571,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       if (type === 'notif') {
         _trackPvOnce('my-board-notif');
         const _notifTitle = '최근 소식';
-        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById }));
+        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle }));
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');
@@ -2639,11 +2641,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
 // ── 다른 플레이어 보드(읽기 전용) ─────────────────────────────
 // Phase C: openProfilePanel 통합 패널로 위임. 자기 자신이면 편집 가능한 내 보드로.
-async function openOtherProfileSheet(userId) {
+async function openOtherProfileSheet(userId, opts = {}) {
   if (!userId) return;
   const self = getKakaoUser();
-  if (self && String(self.id) === String(userId)) return openProfilePanel('taste');
-  return openProfilePanel('taste', { userId: String(userId), readOnly: true });
+  if (self && String(self.id) === String(userId)) return openProfilePanel('taste', opts);
+  return openProfilePanel('taste', { userId: String(userId), readOnly: true, ...opts });
 }
 window.openOtherProfileSheet = openOtherProfileSheet;
 
@@ -2700,11 +2702,11 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
 
 // ── 다른 유저 모임 보드(읽기 전용) ─────────────────────────────
 // Phase C: openProfilePanel 통합 패널의 모임 서브시트로 위임. 자기 자신이면 편집 가능한 내 보드로.
-async function openOtherMeetingSheet(userId) {
+async function openOtherMeetingSheet(userId, opts = {}) {
   if (!userId) return;
   const self = getKakaoUser();
-  if (self && String(self.id) === String(userId)) return openProfilePanel('meeting');
-  return openProfilePanel('meeting', { userId: String(userId), readOnly: true });
+  if (self && String(self.id) === String(userId)) return openProfilePanel('meeting', opts);
+  return openProfilePanel('meeting', { userId: String(userId), readOnly: true, ...opts });
 }
 
 window.openOtherMeetingSheet = openOtherMeetingSheet;
