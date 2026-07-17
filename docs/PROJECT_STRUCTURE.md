@@ -114,7 +114,11 @@ assets/js/
 │                               #   buildBarsInCard(dayVotes, voteGames, myVote)
 │                               # 로드 페이지: index.html, club-schedule.html
 │                               # 의존: window.CottageDB (getMeetingVotes, getMeetingVoteGames),
-│                               #   window.COTTAGE_GAMES (게임명 해석, optional)
+│                               #   window.COTTAGE_GAMES (게임명 해석, optional),
+│                               #   window.openOtherMeetingSheet (kakao-auth.js — 참여자 닉네임 클릭)
+│                               # ⚠️ 위 전역은 전부 클릭 시점에 window.X?.()로 참조할 것 —
+│                               #   club-schedule.html은 day-detail.js를 kakao-auth.js·game-sheet.js·
+│                               #   play-records-utils.js보다 먼저 로드하므로 IIFE 실행 시점 스냅샷은 undefined
 │                               # index-page.js → openDateMeetingModal 호출 (홈 미리보기 카드 클릭)
 │                               # club-schedule.html → openDateScheduleModal 호출 (막대 클릭)
 ├── index-page.js               # 메인 페이지 전용 (추천게임, 인기게임, 홈 모임 미리보기)

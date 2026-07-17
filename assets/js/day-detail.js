@@ -36,6 +36,9 @@
       color: var(--green, #7a4828);
       margin-bottom: 8px;
     }
+    /* 참여자별 보기 닉네임만 클릭 가능 — 다른 모달의 .dd-modal-nick은 uid가 없어 제외 */
+    .dd-nick-link { display: inline-block; cursor: pointer; }
+    .dd-nick-link:hover { text-decoration: underline; }
     .dd-preview-head {
       font-size: 15px; font-weight: 700;
       color: var(--green, #7a4828);
@@ -873,7 +876,7 @@
       const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
       return `<div class="dd-block">
-        <div class="dd-modal-nick">${esc(v.nickname)}</div>
+        <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</div>
         <div class="dd-time">${v.time_start}~${v.time_end}시</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
@@ -1098,6 +1101,14 @@
     const closeBtn = el.querySelector('.dd-close-btn');
     closeBtn.addEventListener('click', () => el.remove());
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+
+    // 참여자 닉네임 클릭 → 그 사람 모임 보드 (Phase D 진입점 규칙: 모임 참여자 = openOtherMeetingSheet)
+    // ⚠️ 보드 패널(--z-profile 9100) < 이 모달(.dd-overlay 9200) → 모달을 먼저 안 닫으면 보드가 뒤에 깔린다.
+    el.querySelectorAll('.dd-nick-link').forEach(n =>
+      n.addEventListener('click', () => {
+        el.remove();
+        window.openOtherMeetingSheet?.(n.dataset.uid);
+      }));
 
     // 룰렛 로직
     if (rouletteGames.length >= 2) _initRouletteWidget(el, rouletteGames);
