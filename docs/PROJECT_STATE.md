@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-17 — **R10c 🟡 코드 완료·스모크 대기**(6f506d8·9593237·ade71df). **다음 세션**: ①**스모크 2건**(R10c 6포인트 + 검색 모달 토글 6포인트, 둘 다 §3) ②`REFACTOR_CHECKPOINT.md` 정리(**R10c 끝난 지금이 적기** — §0에 절차) ③감지기 3단계.
+최종 갱신: 2026-07-17 — **R10c 🟡 코드 완료·스모크 대기**(6f506d8·9593237·ade71df) + **`REFACTOR_CHECKPOINT.md` 정리 ✅ 완료**(474→90줄, 감사 잔여 12건은 §3로 이관). **다음 세션**: ①**스모크 2건**(R10c 6포인트 + 검색 모달 토글 6포인트, 둘 다 §3) ②감지기 3단계 ③열린 항목(GS4·GS5·GS7·DD4·IP1~3 / GDA3).
 
 > **2026-07-17 세션 요약 ②**: **R10b ✅ 완료**(507f2e9·c0cd874·5f82aed·a03250c, **스모크 통과**) — 크로스보드 stale을 방향 A로 해결. **원인의 실체는 "같은 쿼리를 한 Promise.all에서 두 번"**(`getUserLikedGamesAll` 직접 호출 + `getMeetingProfile` 내부 호출). 착수 후 **당사자가 문서의 2종이 아니라 5종**임을 발견(bio·avoid_tags·ruleSet도 같은 구조) → `getMeetingProfile`에 `avoidTags`를 얹어 단일 소스로 통일. **부산물 2건**: ①감지기 2단계가 **`Promise.all`+비구조분해 패턴을 통째로 놓쳤음**을 발견 — `getMyStats`·`getMyNotifications` 등 ~16곳이 여전히 감지 불가(§3 등록, `getMeetingProfile` 2곳만 선처리) ②스코프 누수 검사기가 `getCurrentBio` 잔존 참조 1건을 잡음(`node --check`는 통과시킨 자리) — R12 교훈이 실전에서 또 맞았음.
 > **2026-07-17 세션 요약 ①**: **감지기 2단계 ✅ 완료** — `supabase-client.js` 구조분해 59곳에 error 수신+로그 추가 → ~~**104곳 전부 감지**~~(커밋 32f73ee). 1단계가 만든 가짜 로그·오라벨도 정리(019bd7c) → 화재 테스트 **울림 0건**. ⚠️ **단 이 "0건"은 `supabase-client.js` 읽기 42개 한정** — 파일 커버리지·쓰기 경로·에러 수집이 아직 사각지대(§3 감지기 3·4단계로 등록). ⚠️⚠️ **"전부 감지"는 틀린 것으로 판명 (2026-07-17 R10b 중 정정)** — 2단계가 센 것은 **구조분해 형태뿐**이고 `const [aRes] = await Promise.all([...])` 후 `aRes.data`만 읽는 형태는 **대상에서 통째로 빠졌다**. `getMyStats`·`getMyNotifications`(= 내 보드 핵심 조회) 포함 ~16곳이 여전히 감지 불가 → **"화재 0건"의 유효 범위가 여기 적힌 것보다 더 좁다**. §3 「감지기 갭 — Promise.all + 비구조분해」 참조. 교훈은 CLAUDE.md 「DB 함수 에러 처리」로 승격, 규약 SSOT는 js-api.md. 문서 정리: 고아 md 3개 삭제(617줄), §3 축약, 그 과정에서 **추적 누락돼 있던 열린 항목 5건 발견·등록**(`squirrel_lv5` 미제작 등).
@@ -10,11 +10,14 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-### 🔵 CHECKPOINT: 전체 리팩토링 순차 처리 (2026-07-15 시작, R1~R10 중 진행 예정 — **상세는 `docs/REFACTOR_CHECKPOINT.md` "처리 계획" 표 참조**)
+### 🔵 CHECKPOINT: 전체 리팩토링 순차 처리 (2026-07-15 시작 — **R1~R12 전부 완료, R10c 스모크만 남음**)
 
-REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 세션 발견분(dead code·중복)을 리스크 오름차순으로 R1~R10 세션으로 분할, 항목별 모델(Sonnet/Opus)·effort·Plan 필요 여부 배정 완료. **매 항목 시작 전 그 표의 모델과 현재 활성 모델이 다르면 멈추고 전환 요청, 진행 상태(⏳/✅)는 그 표에서 갱신.** 대형 파일 3개(game-sheet.js·index-page.js·day-detail.js)는 **A1 Phase 3 감사 완료(2026-07-15)** — 결과는 REFACTOR_CHECKPOINT.md "Phase 3" 절(GS1~7·IP1~3·DD1~3). 이 감사로 R11(game-sheet)·R12(day-detail) 편입. index-page(IP1~3)·GS4는 R번호 미배정 상태.
+R1~R12(+R10a/b/c) 전부 완료. **세션별 결과 요약은 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「진행 요약」 표**, 상세는 git log. 남은 것은 셋:
+1. **R10c 스모크** — §3 「[verify] R10c 스모크」
+2. **R번호 미배정 열린 항목** — GS4·GS5·GS7·DD4·IP1~3. REFACTOR_CHECKPOINT.md 「Phase 3 — 열린 항목만」
+3. **감사 잔여 항목** — §3 「Phase 1~3 감사 잔여 항목」(2026-07-17 CHECKPOINT 압축 시 이관, 실측 결과 포함)
 
-**진행 상황**: **R1~R9 ✅ 완료** (2026-07-16, 상세는 git log + REFACTOR_CHECKPOINT.md 각 항목행). 요약: R5·R7·R8은 재검증 결과 이미 해소/과최적화라 코드변경 없거나 죽은코드 제거만(behavior-preserving), R6은 소급지급 side-effect 분리 + readOnly write 버그 수정. R9는 `game-reviews.js` 추출 4건(renderInputPanel 287→65줄·renderRecords 367→212줄) + 스모크 통과, 파생 버그 1건 별도 fix 90997f0. **R11a ✅ 완료**(openGameSheet 321→187줄, 스모크 통과). **R11b ✅ 완료**(initPlayWidget 146→99, getOrCreatePlayModal 110→19, openGameRecordSheet 97→77 + 반응 마크업 중복 제거). **R11c ✅ 완료**(파일 전체 IIFE화 — 최상위 함수 99개 중 39개[외부16∪onclick27]만 노출·60개 은닉. **사전조사가 함수만 세서 놓친 크로스파일 갭 3건**[`DEFAULT_GAME_IMAGE`·`GameView` 상수, `gameSheet` 변수 — 각각 노출/라이브 getter로 처리] 발견·해결. buildRecordItemHtml 모듈 추출[본문 바이트 동일]. 커밋 7d9fd24·d4d1ac1, node --check·노출 정합성 통과, 스모크 통과). **R12 ✅ 완료**(day-detail.js DD1 — `openDateMeetingModal` 273→58[룰렛 위젯 154줄 등 4건 추출], `openDateScheduleModal` 174→67[3건 추출], 커밋 54b6b35·da14297, **스모크 통과**(홈 모임모달·룰렛 / 플래너 내일정모달·⭐·인원조건→주간뷰 반영 전 항목 정상). `buildBarsInCard`는 **유지 확정**(사용자 승인 — 이미 nested 4개로 나뉜 컨테이너, R11b 과도분리 금지 선례). DD3은 코드변경 없이 닫음: `fmtDate`는 중복이 아니라 별개 함수라 **종결**, `esc`는 GS5와 동일 항목 + **club-schedule.html 로드순서가 day-detail→supabase-client라 스냅샷 방식이 파손**되므로 **보류**. **교훈**: 함수 추출 시 바깥 스코프 변수를 인자 없이 참조하면 `node --check`·diff 검증 **둘 다 못 잡고** 런타임 ReferenceError — 실제 2건 발생·커밋 전 별도 스코프 검사로 차단. 상세는 REFACTOR_CHECKPOINT.md "R12 결과 메모"). **R10a ✅ 완료**(KA1 추출 — `openProfilePanel` 1,940→918줄, 서브시트 6블록 1,043줄을 모듈 함수로, 커밋 c9ab2bd~b3ed30d, **브라우저 스모크 통과**). **다음 = 감지기 2단계(§3 기술부채) → R10b**(크로스보드 stale).
+⚠️ **위 2·3에 착수하기 전 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
 **남은 스모크(선택)**: R3·R6 브라우저 확인 완료. **R1**(알림 읽음)은 알림 부재로 보류(다음 알림 발생 시).
 - ⚠️ **R2·R4 — R10b 동반 검증 앵커 소멸 (2026-07-17)**: 원래 "크로스보드 stale과 같은 뿌리"라는 가설로 R10b에 이월했으나, R10b 스모크는 8포인트 기준이라 **이 둘은 명시적으로 확인되지 않았다**. 현재 추정: **R2**(취향 게임추가 새로고침해야 반영)는 R10b가 고친 경로와 겹쳐 **해소됐을 가능성 높음** → 다음에 취향보드를 열 때 확인만 하면 닫을 수 있음. **R4**(사진첨부 후 새로고침해야 표시)는 **기록보드 = R10b 범위 밖**이었으므로 **그대로 남아 있을 것** → 원인이 스냅샷인지 다른 것인지 미확인 상태. 기록보드를 만지는 세션에서 재현부터 볼 것.
@@ -27,7 +30,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 **R10 원안 분할 (2026-07-16, 사용자 승인)**: 원안이 리팩토링+버그수정+신규기능 3종을 한 항목에 묶어 CLAUDE.md "구현/리팩토링 분리"를 위반 → **R10a(추출) / R10b(크로스보드 stale) / R10c(네비게이션 스택)**로 분리.
 
-- **R10a ✅ 완료 (스모크 통과 2026-07-16)**: `openProfilePanel` **1,940→918줄**. 서브시트 6블록(usage·voucher·notif·record·taste·meeting, 총 1,043줄)을 모듈 함수로 추출, 서브시트별 원자 커밋 6개(c9ab2bd·fd2bd0c·e5e4bad·c6a0bff·682227e·b3ed30d). 캡처는 ctx 전달 + 첫 줄 구조분해로 **본문 바이트 보존**(R11a vm 기각 사유를 회피). 재할당 캡처 2건(`_currentBio`·`_pendingMeetingScrollTop`)만 접근자 콜백으로 승격. window 노출·시그니처 변화 0. 상세·교훈은 REFACTOR_CHECKPOINT.md "R10a 결과 메모".
+- **R10a ✅ 완료 (스모크 통과 2026-07-16)**: `openProfilePanel` **1,940→918줄**. 서브시트 6블록(usage·voucher·notif·record·taste·meeting, 총 1,043줄)을 모듈 함수로 추출, 서브시트별 원자 커밋 6개(c9ab2bd·fd2bd0c·e5e4bad·c6a0bff·682227e·b3ed30d). 캡처는 ctx 전달 + 첫 줄 구조분해로 **본문 바이트 보존**(R11a vm 기각 사유를 회피). 재할당 캡처 2건(`_currentBio`·`_pendingMeetingScrollTop`)만 접근자 콜백으로 승격. window 노출·시그니처 변화 0. 교훈(ctx 기법·쓰기 누수)은 REFACTOR_CHECKPOINT.md 「교훈」 절.
 - **R10b ✅ 완료 (2026-07-17, 커밋 507f2e9·c0cd874·5f82aed·a03250c, 브라우저 스모크 통과)**: 크로스보드 stale을 방향 A(진입 시 DB 재조회 = 단일 소스)로 해결. 취향보드 스냅샷(11e10b8)·`_currentBio` 접근자 제거. **스모크 전 항목 정상**(사용자 확인 2026-07-17) — 아래 8포인트 전부, 비동기 렌더로 바뀐 '비선호 수정 →' 스크롤(회귀 1순위)·스크롤 복원 포함.
   - **원인의 실체 = 같은 쿼리를 한 Promise.all에서 두 번**: 패널 오픈이 `getUserLikedGamesAll`를 직접 부르고, 같은 배열의 `getMeetingProfile`이 **내부에서 또** 불렀다 → 별도 배열 2개. 그 두 벌 위에 "오픈 시 1회 HTML 빌드"가 얹혀 한쪽 편집이 반대편 문자열에 닿을 수 없었음.
   - ⚠️ **당사자는 문서에 적혀 있던 2종이 아니라 5종이었다**(착수 후 발견): `likedGames`·`curiousGames` 외에 **`bio`·`avoid_tags`**(모임보드가 선호/비선호 칩으로 같은 값을 구움 — `_mbAvoidHtml`)와 **`_ruleSet`**(룰 토글이 DB엔 쓰면서 Set은 안 고쳐 모임보드 `ruleOn`이 어긋남)도 같은 구조였음. → `getMeetingProfile`에 `avoidTags`를 얹어 이 함수 하나가 두 보드의 단일 소스가 되게 함.
@@ -39,18 +42,14 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
   - ⚠️ **1순위 실패 지점(재작업 시 주의)**: 뒤로가기 핸들러는 **자기 패널을 먼저 제거한 뒤** 복귀를 호출해야 한다. 순서가 바뀌면 [토글 가드](../assets/js/kakao-auth.js#L1684)(`if (existing) … if (!readOnly) return`)에 걸려 **내 보드가 안 열리고 화면이 텅 빈다**.
   - ⚠️ **구현 중 ReferenceError 1건 차단**: 라벨용 `_notifTitle`이 라우터 분기의 블록 스코프(2573)인데 `_bindNotifSubsheet`는 파일 최상위 함수(1591)라 접근 불가 → ctx로 전달. **`node --check`가 통과시키는 자리** = R12 교훈의 세 번째 재발.
 
-### 📌 미착수 이월 — `REFACTOR_CHECKPOINT.md` 정리 (2026-07-17 사용자 지시, **R10b 세션에서 또 이월됨**)
+### ✅ 종료: `REFACTOR_CHECKPOINT.md` 정리 (2026-07-17 완료 — 두 번 이월 끝에 R10c 종료 직후 실행)
 
-> ⚠️ **두 번 미뤄진 항목**: 원래 R10b 세션에 붙여뒀으나 토큰 소진으로 미실행(2026-07-17). R10b가 끝나 "R10b 세션에서 같이"라는 앵커가 사라졌으므로 **독립 항목으로 분리**해 둔다 — 완료된 R10b 항목 밑에 두면 다음 세션이 못 본다.
-> 📌 **앵커 대체**: "R10b 때 이 문서를 열어보니까 그때 같이"가 원래 이유였는데 그게 사라졌다. **R10c가 이 문서의 「처리 계획」 표를 읽게 되므로 R10c 세션에 붙이는 게 자연스럽다** — 다만 R10c 착수 전에 하면 표를 지웠다 다시 읽는 꼴이니 **R10c 종료 직후**가 적기.
+**474 → 90줄**. 남긴 것: 진행 요약 표 · Phase 3 열린 항목(GS4·GS5·GS7·DD4·IP1~3) · 「재방문 시 필요한 판단」 · 「교훈」 · 세션 전환 규칙. 지운 것: Phase 1·2 감사 상세, Phase 2 요약, 처리 현황(136차), R11 사전조사, R9 결과 메모(전부 R1~R12로 처리 완료 + git log에 상세 있음).
 
-- **내용**: 474줄로 최대 문서인데 대부분 완료된 R1~R9·R11·R12 상세라 압축 대상. **2026-07-17에 압축을 시도했다가 멈췄음** — 완료 상세인 줄 알았던 구간에서 **처리 현황 표에 등재된 적 없는 고아 항목 3건**이 나왔기 때문(`squirrel_lv5` 미제작 / `rare/` 경로 문서 미반영 / RPC 재검토 트리거 — 전부 §3로 추출 완료). **같은 지뢰가 더 있을 수 있으니 "완료 같아 보인다"고 통째로 지우지 말 것.**
-    - **절차**: ①삭제 전 각 구간에서 **취소선(`~~`)도 ✅도 없는 항목**을 grep → 처리 현황 표·§3와 대조해 **어디에도 없으면 §3로 추출** ②그 다음 삭제. 2026-07-17에 이 방법으로 3건을 건졌음.
-    - **보존 필수(지우면 R10b·이후 작업이 손해)**: 「처리 계획」 표(R10b/R10c 행 + 모델 배정) · 「R10a 결과 메모」(R10b 착수 자료) · Phase 3의 **IP1~3·GS4**(R번호 미배정 = 열린 항목) · R10a/R11c/R12 교훈(검사기 음성 대조군 / 크로스파일 갭 / 스코프 캡처 ReferenceError).
-    - **삭제 후보**: Phase 1(MD 감사, 고아 3건 추출 후) · Phase 2 파일별 상세 2-1~2-7 · Phase 2 요약 · 처리 현황(136차) · R11 사전조사(R11c 완료로 소멸) · R9 결과 메모.
-    - **왜 아직 안 했나**: 이 문서는 **세션 시작마다 읽는 파일이 아니라** 압축 이득이 작고 잘못 지우면 손해가 커서 매번 우선순위에서 밀린다. 급하지 않다는 판단이 맞으면 **그냥 계속 미뤄도 되는 항목**임을 명시해 둔다(2026-07-17 두 번째 이월).
+- **§0 절차대로 삭제 전 고아부터 건졌다** — "취소선도 ✅도 없는 항목" 전수 대조 → **§3 「Phase 1~3 감사 잔여 항목」으로 이관**(커밋 a8ca07e). 실측으로 4건의 생사가 갈림: GR4·PS2 **종결**(짝이던 `buildGameBody`가 R1에서 삭제됨 / 이미 문서에 기재됨), SC7·KA7 **축소**, GDA3·PS1 **유효**.
+- **교훈**: 이 절차가 두 번 다 값을 했다 — 7월 초 시도에서 3건(`squirrel_lv5` 등), 이번에 2건 종결 + 12건 이관. **"완료 같아 보인다"고 통째로 지웠으면 전부 조용히 사라졌을 것.**
 
-**다음 세션 시작점 (2026-07-17 세션 ③ 종료)**: **①스모크 2건** — R10c 6포인트 + 검색 모달 토글 6포인트(둘 다 §3, 코드는 완료) **②`REFACTOR_CHECKPOINT.md` 정리 — R10c가 끝나 「처리 계획」 표를 더 읽을 일이 없으므로 지금이 적기**(§0에 절차·보존 목록) ③감지기 3단계.
+**다음 세션 시작점 (2026-07-17 세션 ③ 종료)**: **①스모크 2건** — R10c 6포인트 + 검색 모달 토글 6포인트(둘 다 §3, 코드는 완료) ②**감지기 3단계**(§3, 선행이던 R10b·R10c 완료로 착수 가능) ③R번호 미배정 열린 항목(GS4·GS5·GS7·DD4·IP1~3 — REFACTOR_CHECKPOINT.md) 또는 §3 감사 잔여 항목 중 GDA3(유일한 버그성).
 
 **R10b 구조 메모 (R10c가 같은 파일을 건드리므로 보존)**:
 - `openProfilePanel` 구성: 패널 셸+DB조회 **11개**(R10b가 중복 2개 제거) → 로컬 헬퍼 → **HTML 빌드**(`_buildTasteInnerHtml`·`_buildMeetingInnerHtml`은 이제 **함수**라 진입 시마다 호출됨 / `_recordInnerHtml`·`_growthInnerHtml` 등 나머지는 여전히 오픈 시 1회 문자열) → `_openSubSheet` → **서브시트 라우터**(`.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭. ※줄번호는 자주 밀리므로 grep으로 확인할 것.
@@ -60,7 +59,7 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
 
 **R10b/R10c 착수 전 확인 사항**:
 - **모델: Opus xhigh 고정 + Plan 필수**(REFACTOR_CHECKPOINT 처리 계획 표)
-- **검사 스크립트는 스크래치패드에만 있어 재작성 필요**(`leak.js`·`writes.js`·`move.js`·`bodydiff.js`). R10a에서 **검사기 자체가 4번 조용히 틀렸고 음성 대조군이 전부 잡아냈다** — "0건 통과"를 신뢰하기 전에 알려진 누수를 심어 잡히는지 먼저 확인할 것. 특히 **bash heredoc·`node -e` 큰따옴표가 정규식 백슬래시를 먹어 검사기를 무력화**하므로 스크립트는 Write 툴로 생성. 상세는 REFACTOR_CHECKPOINT.md "R10a 결과 메모".
+- **검사 스크립트는 스크래치패드에만 있어 재작성 필요**(`leak.js`·`writes.js`·`move.js`·`bodydiff.js`). R10a에서 **검사기 자체가 4번 조용히 틀렸고 음성 대조군이 전부 잡아냈다** — "0건 통과"를 신뢰하기 전에 알려진 누수를 심어 잡히는지 먼저 확인할 것. 특히 **bash heredoc·`node -e` 큰따옴표가 정규식 백슬래시를 먹어 검사기를 무력화**하므로 스크립트는 Write 툴로 생성. 상세는 REFACTOR_CHECKPOINT.md 「교훈」 절.
 
 버그2-c도 코드 완료·스모크만 남음(§2).
 
@@ -309,8 +308,8 @@ REFACTOR_CHECKPOINT.md 감사 결과(Red 6건 + 새로 발견된 GR3) + 이번 �
     - ① **파일 커버리지 절반 이하** — `supabase-client.js`만 완료. `kakao-auth.js` 24곳·`achievements.js` 5곳·`game-sheet.js` 9곳은 미적용(아래 신규 항목).
     - ② **쓰기 경로 미검증** — 하니스가 실DB에 쓰지 않으려고 **읽기(`get*`)만 호출**. `recordGamePlay`·`upsertMeetingVote`·업적 지급 등 write에 불이 났는지는 **모름**(아래 신규 항목).
     - ③ **울려도 아무도 못 듣는다** — `console.error`는 사용자 브라우저 콘솔에만 남고 우리에게 오지 않는다. DevTools를 열어둔 사람만 본다. **④ "관리자 금일이용데이터 간헐적 미표시"가 원인불명인 이유가 정확히 이것일 수 있음**(간헐적이라 재현 시점에 콘솔이 안 열려 있음). 근본 해결 = 에러 수집(`page_events`에 error 이벤트 적재 or 외부 수집기) → **Red + Plan 필수, 별도 기획 필요**(현재 미제안·미착수).
-- [ ] **[기술부채] 감지기 3단계 — 나머지 JS 파일 확장** (2026-07-17 등록, 사용자 지시. **선행: R10b**) — `supabase-client.js`는 완료했으나 앱의 나머지 절반은 여전히 사각지대. **R10b가 `kakao-auth.js` 24곳을 이미 처리하므로 그 다음에 착수**해야 중복이 없음.
-  - **대상**: `kakao-auth.js` 24곳(R10b에서 선처리 예정 → 남으면 여기서) · `achievements.js` 5곳 · `game-sheet.js` 9곳(`initSheetComments(gameKey).catch(() => {})` 형태 다수, [game-sheet.js:1012](../assets/js/game-sheet.js#L1012) 부근).
+- [ ] **[기술부채] 감지기 3단계 — 나머지 JS 파일 확장** (2026-07-17 등록, 사용자 지시. **선행이던 R10b·R10c 완료 → 착수 가능**) — `supabase-client.js`는 완료했으나 앱의 나머지 절반은 여전히 사각지대.
+  - ⚠️ **대상이 줄었다 (2026-07-17 정정)**: 원래 여기 있던 **`kakao-auth.js` 24곳은 대상이 아님** — R10b 재검토 결과 그 자리들은 raw supabase가 아니라 **`CottageDB` 래퍼**를 부르므로 `{data, error}`를 받을 대상이 애초에 없다(위 「DB 조회 에러 삼키기」 항목 참조). **남은 실대상은 `achievements.js` 5곳 · `game-sheet.js` 9곳**(`initSheetComments(gameKey).catch(() => {})` 형태 다수, [game-sheet.js:1012](../assets/js/game-sheet.js#L1012) 부근) **+ 아래 「감지기 갭 — `Promise.all` + 비구조분해」 ~16곳**(이게 실질적으로 더 중요 — `getMyStats`·`getMyNotifications` = 내 보드 핵심 조회).
   - ⚠️ **2단계 방식을 그대로 쓰면 안 된다 — 유형이 다름**: 이 파일들은 `.catch(() => [])` 인라인 형태라 **Promise rejection만** 받는다. supabase-js는 쿼리 오류에 reject하지 않으므로 `.catch()`에 로그를 달아도 **컬럼 오타·RLS 차단은 여전히 못 잡는다**. `{ data, error }`를 받는 형태로 바꿔야 실효가 생김(= 호출부 구조 변경 필요 → 2단계처럼 순수 기계적이지 않음).
   - **제외 판정 유지**: `index-page.js`(화면에 실패 표시함) · `script-nav.js`(localStorage 방어용). 위 "제외 판정" 항목 참조.
   - **방식**: 2단계 절차 재사용(codemod + 이름충돌 사전검사 + 동작 무변경 기계 검증 + 음성 대조군 + `node --check` + 실패 주입). 커밋 32f73ee의 diff가 참고자료. ⚠️ **"위반 N곳" 숫자를 믿지 말 것** — 1·2단계에서 연달아 두 번 오집계됨(좁은 grep). `} = await`·`.catch(` 양쪽으로 세고 검증할 것.
