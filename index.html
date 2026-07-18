@@ -85,11 +85,12 @@
       <!-- 모임 바로가기 버튼 -->
       <button class="hero-meeting-btn" id="heroMeetingBtn" type="button">👥 모임</button>
 
-      <!-- 방문자수 하단 오버레이 -->
-      <div class="hero-visitor-bar">
-        <p class="hero-visitor-count" id="heroRecommendCount"></p>
-        <p class="hero-visitor-count" id="heroPlayCount"></p>
-      </div>
+      <!-- 히어로 통계(추천/기록 카운트) 미노출 — 메인은 깔끔하게 유지하기로 결정(2026-07-18).
+           index-page.js의 initHeroStats는 이 요소가 없으면 조기 return 하고,
+           같은 블록 finally의 #recommend 딥링크 자동 열기는 그대로 동작한다(return이어도 finally는 실행).
+           다시 노출하려면 아래 두 줄을 되살리면 된다:
+           <p class="hero-visitor-count" id="heroRecommendCount"></p>
+           <p class="hero-visitor-count" id="heroPlayCount"></p> -->
 
     </section>
 
