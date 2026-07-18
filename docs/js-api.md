@@ -67,7 +67,7 @@ return data || [];
 | `getVisitorStats()` | 방문자 통계 |
 | `startSession(userId)` | 체류 세션 시작. page_sessions.referrer = URL의 `utm_source` 우선, 없으면 `document.referrer` hostname |
 | `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영 |
-| `getAllProfiles()` | 전체 프로필 (어드민용) |
+| `getAllProfiles()` | 전체 프로필. 어드민 회원목록 + **nickname→user_id 해석**(game-reviews 허브 `_profileNickMap`·index-page 홈 최근 플레이 참여자 이름 클릭). ⚠️ 반환 행의 kakao 키는 **`user_id`**(profiles엔 `id` 컬럼 없음) |
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |
 | `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 `[{event_type, created_at}]`. admin/localhost 제외 없음(쿼리 전용) |
@@ -146,7 +146,7 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 | `isOwner()` | OWNER_KAKAO_ID와 일치 여부 |
 | `openProfilePanel(autoSubsheet?, opts?)` | 프로필 보드 열기. `autoSubsheet`: `'taste'\|'records'\|'usage'\|'meeting'\|'voucher'\|'notif'`(자동 진입할 서브시트 — `[data-subsheet]` 요소를 클릭시킴. `'notif'`는 `_ro()`로 감싸져 **내 보드에만 존재**하므로 readOnly와 함께 쓰면 조용히 무시됨). **`opts={userId, readOnly, backTo}`**. `readOnly:true`면 대상 `userId`의 **공개 보드를 편집 컨트롤 없이** 표시(비공개 섹션=알림·교환권·함께한 시간 제외, 로그인 없이도 조회 가능). readOnly=false(기본)면 종전대로 `getKakaoUser()` 기준 내 보드(버튼 재클릭 토글). 편집 HTML은 내부 `_ro()`로 생략, `.profile-panel--readonly`/`.profile-subsheet--readonly` 클래스 부여 |
 | ↳ `opts.backTo` (R10c) | 진입 직전 화면으로 돌아갈 경로. 넘기면 **패널 헤더에 뒤로가기(`.profile-panel-back`)가 생기고** 헤더가 `--with-back` 3열 그리드로 바뀐다(없으면 기존 flex 그대로 = 제목 왼쪽 정렬 보존). 형태: `{type:'gameSheet', gameKey, label}` → `openGameSheet(gameKey)`로 복귀 / `{type:'panel', autoSubsheet, label, opts?}` → `openProfilePanel(autoSubsheet, opts)`로 복귀. **서브시트→패널 뒤로가기는 `_openSubSheet`가 이미 하므로 backTo는 패널 한 칸만 담당**(깊이 1, 스택 자료구조 없음 — 체인은 각 패널 클로저가 자기 backTo를 들고 있어 자연 발생). ⚠️ 핸들러는 **자기 패널을 먼저 제거한 뒤** 복귀를 호출한다 — 순서가 바뀌면 `openProfilePanel` 토글 가드(`if (existing) … if (!readOnly) return`)에 걸려 내 보드가 안 열린다 |
-| `openOtherProfileSheet(userId, opts?)` | **Phase C: 얇은 래퍼** → `openProfilePanel('taste', {userId, readOnly:true, ...opts})` — `opts`는 `backTo` 통과용(R10c, 미전달 시 종전 동작). (본인이면 편집 가능한 내 보드). 구 `.other-profile-overlay` 별도 시트 제거. **Phase D(2026-07-15) 진입점 통일**: 게임시트 좋아요·궁금해요 아바타 칩(game-sheet.js), 게임시트 게임평·플레이기록 미리보기/전체목록 닉네임(`.sheet-comment-nick[data-user-id]`), 플레이기록 게시판 참여자 태그(`.pr-tag-who[data-nick]`, game-reviews.js — 종전 `openOtherMeetingSheet` 오배선 수정)·후기 작성자 이름(`.pr-rec-reviewer[data-user-id]`), 홈 최근 플레이 후기 미리보기(index-page.js) — "모임 참여자 외 전부"는 이 함수로 통일 |
+| `openOtherProfileSheet(userId, opts?)` | **Phase C: 얇은 래퍼** → `openProfilePanel('taste', {userId, readOnly:true, ...opts})` — `opts`는 `backTo` 통과용(R10c, 미전달 시 종전 동작). (본인이면 편집 가능한 내 보드). 구 `.other-profile-overlay` 별도 시트 제거. **Phase D(2026-07-15) 진입점 통일**: 게임시트 좋아요·궁금해요 아바타 칩(game-sheet.js), 게임시트 게임평·플레이기록 미리보기/전체목록 닉네임(`.sheet-comment-nick[data-user-id]`), 플레이기록 게시판 참여자 태그(`.pr-tag-who[data-nick]`, game-reviews.js — 종전 `openOtherMeetingSheet` 오배선 수정)·후기 작성자 이름(`.pr-rec-reviewer[data-user-id]`), 홈 최근 플레이 미리보기의 후기 작성자·참여자 이름(index-page.js, `.pr-tag-who[data-nick]`는 `getAllProfiles`+기록으로 nickname→user_id 해석) — "모임 참여자 외 전부"는 이 함수로 통일 |
 | `openOtherMeetingSheet(userId, opts?)` | **Phase C: 얇은 래퍼** → `openProfilePanel('meeting', {userId, readOnly:true, ...opts})` (본인이면 `openProfilePanel('meeting', opts)`). `opts`는 `backTo` 통과용(R10c) — 알림 소개글 클릭이 `{backTo:{type:'panel', autoSubsheet:'notif'}}`로 복귀 경로를 실어 보낸다. 회원 자기소개(club-intro.html)·**모임 참여자**(`.sched-bar-name[data-uid]` — day-detail.js/index-page.js/club-schedule.html) 닉네임 클릭 진입점. 구 otherMainPanel/`_openOtherMeetingSubSheet` 2단 구조 제거 |
 
 ---
@@ -171,11 +171,11 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 | 함수 | 용도 | 사용처 |
 |------|------|--------|
-| `parsePhotoUrls(raw)` | photo_url 문자열 → URL 배열 | game-reviews.js, club-history.html |
+| `parsePhotoUrls(raw)` | photo_url 문자열 → URL 배열 | game-reviews.js, club-history.html, index-page.js |
 | `buildPhotoHtml(urls)` | 사진 썸네일 HTML 생성 | 동일 |
 | `openLightbox(urls, idx, opts)` | 전체화면 라이트박스(저수준). opts: captions[]/caption, onDelete+deletable[], **gameThumbs[]**(사진별 게임 표지 URL, 좌하단 표시)+**gameKeys[]**+**onGameClick(key)**(썸네일 클릭 시). ⚠️ **deletable 생략 시 전부 삭제 가능으로 처리** — 남의 기록에도 삭제버튼이 뜨므로 권한 있을 때만 onDelete를 넘길 것 | 동일, kakao-auth.js(기록보드 사진) |
-| `openRecordLightbox(wrap, row, idx, opts)` | **기록 행(.pr-rec-row) 사진용 고수준 래퍼.** 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제를 한 번에 구성하고, 삭제 시 `photo_url` 갱신까지 수행. 한 기록의 사진만 띄우므로 게임·소유권이 전 장 동일. 필요 DOM: `wrap[data-urls]`·`row[data-id][data-record]`(record에 `gameId`·`mine` 포함). opts: `buildCaption(rec)`, `onAfterDelete(recId, newPhotoUrl)`(호출부가 화면 갱신) | game-reviews.js(기록 허브), club-history.html(동호회 기록) |
-| `getGameKeyById(gameId)` | DB `game_id`(gameKey 슬러그 또는 BGG ID) → `gameData` 키. 없으면 null. 원래 kakao-auth.js 지역함수였으나 라이트박스 썸네일 구성에 호출부마다 필요해 공용화(사본 증식 방지). ⚠️ **`openGameSheet`에 DB `game_id`를 넘기기 전엔 반드시 이걸 통과시킬 것** — 테이블마다 저장 형식이 다르다(`game_likes`/`game_curious`=슬러그 / `meeting_vote_games`=BGG ID, 2026-07-17 실측 12/12). BGG ID를 그대로 넘기면 `gameData` 미스 → **에러 없이 기록시트로 폴백**([game-sheet.js](../assets/js/game-sheet.js) `openGameSheet` 미보유 분기) | kakao-auth.js, day-detail.js, game-reviews.js, play-records-utils.js 내부 |
+| `openRecordLightbox(wrap, row, idx, opts)` | **기록 행(.pr-rec-row) 사진용 고수준 래퍼.** 캡션 + 좌하단 게임 썸네일 + (내 기록이면) 삭제를 한 번에 구성하고, 삭제 시 `photo_url` 갱신까지 수행. 한 기록의 사진만 띄우므로 게임·소유권이 전 장 동일. 필요 DOM: `wrap[data-urls]`·`row[data-id][data-record]`(record에 `gameId`·`mine` 포함). opts: `buildCaption(rec)`, `onAfterDelete(recId, newPhotoUrl)`(호출부가 화면 갱신) | game-reviews.js(기록 허브), club-history.html(동호회 기록), index-page.js(홈 최근 플레이 미리보기 — opts 미전달, mine은 내 기록/오너면 true) |
+| `getGameKeyById(gameId)` | DB `game_id`(gameKey 슬러그 또는 BGG ID) → `gameData` 키. 없으면 null. 원래 kakao-auth.js 지역함수였으나 라이트박스 썸네일 구성에 호출부마다 필요해 공용화(사본 증식 방지). ⚠️ **`openGameSheet`에 DB `game_id`를 넘기기 전엔 반드시 이걸 통과시킬 것** — 테이블마다 저장 형식이 다르다(`game_likes`/`game_curious`=슬러그 / `meeting_vote_games`=BGG ID, 2026-07-17 실측 12/12). BGG ID를 그대로 넘기면 `gameData` 미스 → **에러 없이 기록시트로 폴백**([game-sheet.js](../assets/js/game-sheet.js) `openGameSheet` 미보유 분기) | kakao-auth.js, day-detail.js, game-reviews.js, index-page.js, play-records-utils.js 내부 |
 | `attachAc(input, getSuggestions, onSelect, listRef)` | 자동완성 드롭다운 연결. getSuggestions=후보 배열 반환 함수, listRef=드롭다운 삽입 기준 DOM(없으면 input을 새 div로 감쌈) | game-reviews.js |
 | `initTagInput(wrap, hidden, initialValue, onAdd)` | 태그칩 입력 컴포넌트. wrap=컨테이너, hidden=값 동기화할 hidden input, initialValue=초기값 배열, onAdd=태그 추가 콜백 | game-reviews.js |
 | `buildPhotoItemAdder(grid, files)` | 사진 추가 UI 컴포넌트 | game-reviews.js |
@@ -263,11 +263,11 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.kakaoLogout` | kakao-auth.js | 각 페이지 |
 | `window.promptNicknameChange` | kakao-auth.js | 각 페이지 |
 | `window.isOwner` | kakao-auth.js | requests-admin.html |
-| `window.parsePhotoUrls` | play-records-utils.js | game-reviews.js, club-history.html |
-| `window.buildPhotoHtml` | play-records-utils.js | game-reviews.js, club-history.html |
+| `window.parsePhotoUrls` | play-records-utils.js | game-reviews.js, club-history.html, index-page.js |
+| `window.buildPhotoHtml` | play-records-utils.js | game-reviews.js, club-history.html, index-page.js |
 | `window.openLightbox` | play-records-utils.js | game-reviews.js, club-history.html |
-| `window.openRecordLightbox` | play-records-utils.js | game-reviews.js, club-history.html |
-| `window.getGameKeyById` | play-records-utils.js | kakao-auth.js, day-detail.js, game-reviews.js |
+| `window.openRecordLightbox` | play-records-utils.js | game-reviews.js, club-history.html, index-page.js |
+| `window.getGameKeyById` | play-records-utils.js | kakao-auth.js, day-detail.js, game-reviews.js, index-page.js |
 | `window.attachAc` | play-records-utils.js | game-reviews.js |
 | `window.initTagInput` | play-records-utils.js | game-reviews.js |
 | `window.toInitials` | play-records-utils.js | game-reviews.js |
