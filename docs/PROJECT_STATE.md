@@ -6,9 +6,9 @@
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**진행 중 작업 없음** (2026-07-18 세션 ⑧ 종료 시점) · **열린 스모크 1건**(IP2 추천버튼 배선 — 확인 대기. 플래너 깜빡임은 2026-07-18 스모크 통과로 종결).
+**진행 중 작업 없음** (2026-07-18 세션 ⑧ 종료 시점) · **열린 스모크 0건**(플래너 깜빡임·IP2 추천버튼 모두 2026-07-18 스모크 통과로 종결).
 
-**세션 ⑧ (2026-07-18)**: ①**문서-코드 참조 정합성 감사 ✅ 종결** — 인덱스 3파일을 rg로 실코드 대조, 음성 대조군 검증 후 드리프트 3건 수정(header.js 역할목록 누락, CottageDB·getKakaoUser 소비처 script-nav.js 오기재). §3 「문서-코드 참조 정합성 감사」. ②**플래너 깜빡임 fix ✅**(1차 4ab32d8 실패 → 2차 511c15e, **스모크 통과**) — 진짜 원인은 부모 패널 흰박스 복귀(닫기 페이드 중 부모 is-quick-entry 제거)+iframe 페이지 크롬 미숨김. 3부분 구조 수정((a)close 유지 (b).inner-page display:none (c)closeModal에서 안 뗌). §2 참조. ③**IP2 ✅ 종결(2번 방안)** — 감사 전제("15+개 onclick") 틀림(실측 onclick 2개), 전체 IIFE 래핑은 R11c 위험 대비 이득 미미라 기각. 대신 onclick 2개를 addEventListener로 전환해 배선 균일화. **스모크 대기**(더보기→오버레이·✕닫기). REFACTOR_CHECKPOINT 「Phase 3」 IP2 행.
+**세션 ⑧ (2026-07-18)**: ①**문서-코드 참조 정합성 감사 ✅ 종결** — 인덱스 3파일을 rg로 실코드 대조, 음성 대조군 검증 후 드리프트 3건 수정(header.js 역할목록 누락, CottageDB·getKakaoUser 소비처 script-nav.js 오기재). §3 「문서-코드 참조 정합성 감사」. ②**플래너 깜빡임 fix ✅**(1차 4ab32d8 실패 → 2차 511c15e, **스모크 통과**) — 진짜 원인은 부모 패널 흰박스 복귀(닫기 페이드 중 부모 is-quick-entry 제거)+iframe 페이지 크롬 미숨김. 3부분 구조 수정((a)close 유지 (b).inner-page display:none (c)closeModal에서 안 뗌). §2 참조. ③**IP2 ✅ 종결(2번 방안)** — 감사 전제("15+개 onclick") 틀림(실측 onclick 2개), 전체 IIFE 래핑은 R11c 위험 대비 이득 미미라 기각. 대신 onclick 2개를 addEventListener로 전환해 배선 균일화. **스모크 통과**(더보기→오버레이·✕닫기). REFACTOR_CHECKPOINT 「Phase 3」 IP2 행.
 
 **세션 ⑦ (2026-07-18)**: **GS7 ✅ 종결(B2 방안)** — 난이도 헬퍼(`getDifficultyData`·`normalizeLevelValue` + 상수 2개)를 game-sheet.js→game-display-adapter.js로 이관, `CottageGameView` 네임스페이스 노출, 호출 8곳을 `GameView.getDifficultyData/normalizeLevelValue`로 전환. **감사의 "신규 파일" 가정을 재검증→기각**(소비자 14 HTML, 신규파일이면 전부 script 추가 필요=40줄에 과한 비용). 어댑터는 이미 그 14개에 먼저 로드되고 난이도 메서드 보유해 개념적 정확한 집. bare 전역 2개 제거=전역 위생 개선. node 대조 27케이스 PASS(엣지 0/undefined/null/NaN/범위밖 포함). 5파일 변경, 신규파일/HTML편집 0. 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 GS7 행. **스모크 ✅ 통과**(2026-07-18 사용자 확인 — 홈 추천카드 난이도 배지·추천 오버레이·게임시트·소장게임·헤더검색 난이도 표기 정상).
 **세션 ⑦ (2026-07-18)**: **GS4 ✅ 종결** — 감사 원문("동명·다른 시그니처로 혼동")은 실측 결과 **전역 충돌 없음**(game-reviews.js `getGameKey`는 IIFE 지역함수, 전역엔 game-sheet.js 것 하나뿐)으로 확인. 대신 game-reviews.js 버전이 `window.getGameKeyById`(play-records-utils.js)와 **로직 완전 동일한 사본**임을 발견해 지역함수 삭제 + 호출 3곳 교체로 처리(이름 충돌은 사본 제거로 자연 해소). game-sheet.js `getGameKey(game)`은 별개 용도라 유지. `docs/js-api.md` 호출처 목록 갱신 완료.
@@ -37,7 +37,6 @@
 
 ### 열린 스모크 (선택 — 해당 화면을 만질 때 함께)
 
-- **IP2 추천버튼 배선 (세션 ⑧, 2026-07-18)** — onclick→addEventListener 전환. 홈 추천결과에서 **"전체 N개 더보기 →" 클릭 시 전체 오버레이가 열리는지**, 오버레이 **✕ 클릭 시 닫히는지** 확인(동작 동일해야 정상).
 - **R1**(알림 읽음) — 알림이 없어 보류. 다음 알림 발생 시.
 - **R2**(취향보드 게임 추가가 새로고침해야 반영) — R10b가 고친 경로와 겹쳐 **해소됐을 가능성 높음**. 취향보드 열 때 **확인만 하면 닫힘**. ※2026-07-17 검색 모달 토글 스모크에서 추가/삭제 즉시 반영은 봤으나 **R2 자체를 명시 확인하진 않았다**.
 - **R4**(사진첨부 후 새로고침해야 표시) — **기록보드 = R10b 범위 밖**이라 그대로 남아 있을 것. 기록보드 만지는 세션에서 **재현부터** 볼 것.
