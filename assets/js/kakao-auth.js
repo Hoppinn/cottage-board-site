@@ -75,23 +75,6 @@ function _showVoucherGrantToast() {
 }
 window._onVoucherGranted = _showVoucherGrantToast;
 
-// 보드를 ✕로 닫을 때 모바일 메뉴를 원래 상태로 되돌린다.
-// ⚠️ 종전엔 wasOpen 확인 없이 무조건 add('active')라 이름과 달리 "복원"이 아니라 "항상 열기"였다 →
-// 메뉴가 닫힌 상태에서 연 보드(게임시트 좋아요 토스트·알림 등)를 닫아도 햄버거가 저절로 열렸다.
-// 호출부는 패널 오픈 시점의 메뉴 상태(_menuWasOpen)를 넘긴다.
-// 📌 2026-07-17: script-nav.js가 보드 클릭을 "메뉴 밖 클릭"에서 제외하면서 메뉴가 애초에 안 닫히게 됐다
-//    → 이 함수와 30ms 지연은 이제 대부분 no-op(이미 active면 add는 무해)이고, 그게 깜빡임을 없앤 근본
-//    수정이다. 함수를 지우지 않은 이유는 loginBtn의 is-expanded 경로가 별개로 얽혀 있어서 — 정리는 별건.
-function _restoreMenuExpanded(wasOpen) {
-  if (!wasOpen) return;
-  setTimeout(() => {
-    const menu = document.getElementById('mobileMenu');
-    const loginBtn = document.getElementById('kakaoLoginBtn');
-    if (menu) menu.classList.add('active');
-    if (loginBtn) loginBtn.classList.add('is-expanded');
-  }, 30);
-}
-
 function initKakaoAuth() {
   const saved = localStorage.getItem(KAKAO_USER_KEY);
   if (saved) {
@@ -1671,9 +1654,6 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 서브시트→패널 뒤로가기는 _openSubSheet가 이미 하므로, 여기는 패널 한 칸만 담당(깊이 1).
   // 체인이 생겨도 각 패널의 클로저가 자기 backTo를 들고 있어 스택 자료구조가 필요 없다.
   const { userId: _targetUserId = null, readOnly = false, backTo = null } = opts;
-  // 패널을 여는 시점의 모바일 메뉴 상태 — ✕로 닫을 때 이 상태로만 되돌린다(_restoreMenuExpanded 참조).
-  // 햄버거→프로필버튼 경로는 클릭 직후라 아직 열려 있고, 토스트·알림 경로는 닫혀 있다.
-  const _menuWasOpen = !!document.getElementById('mobileMenu')?.classList.contains('active');
   const _selfUser = getKakaoUser();
   const user = readOnly
     ? { id: String(_targetUserId), nickname: opts.nickname || '' }
@@ -1713,11 +1693,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   </div>`;
   document.body.appendChild(panel);
   _trackPvOnce(readOnly ? 'other-board' : 'my-board');
-  panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(_menuWasOpen); });
-  panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); _restoreMenuExpanded(_menuWasOpen); } });
+  panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); });
+  panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); } });
   panel.querySelector('.profile-panel-header').addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
   // ⚠️ 자기 패널을 먼저 지운 뒤 복귀시킨다. 순서가 바뀌면 위 토글 가드(`if (existing) … if (!readOnly) return`)에
-  // 걸려 내 보드가 안 열리고 화면이 텅 빈다. _restoreMenuExpanded는 부르지 않는다 — 닫는 게 아니라 전환이라서.
+  // 걸려 내 보드가 안 열리고 화면이 텅 빈다.
   panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
     document.getElementById('profileSubSheet')?.remove();
     panel.remove();
@@ -2464,7 +2444,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 로드하므로 스냅샷 불필요)
     const _leaveToPanel = () => { try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (_) {} sub.remove(); };
     sub.querySelector('.profile-subsheet-back').addEventListener('click', _leaveToPanel);
-    sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); _restoreMenuExpanded(_menuWasOpen); });
+    sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); });
     sub.addEventListener('click', e => { if (e.target === sub) _leaveToPanel(); });
     sub.querySelector('.profile-subsheet-header').addEventListener('click', e => { if (!e.target.closest('button')) sub.querySelector('.profile-subsheet-body')?.scrollTo({top:0,behavior:'smooth'}); });
     if (afterRender) afterRender(sub.querySelector('.profile-subsheet-body'));
