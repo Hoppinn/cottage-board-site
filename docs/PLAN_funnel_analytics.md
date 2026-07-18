@@ -4,7 +4,11 @@
 
 ## 진행 상태 (2026-06-30, 143차-161)
 
-**1단계 완료** — 이벤트 7개 전부 연결(hero_recommend_click, hero_record_click, recommend_start, recommend_complete, record_start, record_complete, signup_complete), page_events에 session_key/user_id 컬럼 추가, 관리자 이벤트 퍼널에 "메인 방문" 단계 추가.
+**1단계 완료** — 이벤트 7개 전부 연결(hero_recommend_click, hero_record_click, recommend_start, recommend_complete, record_start, record_complete, signup_complete), page_events에 session_key/user_id 컬럼 추가.
+
+> ⚠️ **정정 (2026-07-19 실측)**: 위 문장에 있던 **"관리자 이벤트 퍼널에 「메인 방문」 단계 추가"는 사실이 아니었다.** `getPageViewCounts('index')` 조회와 `pv0`/`pv7` 집계는 있었지만 **화면에 그리는 코드가 없어** 결과를 아무도 읽지 않았다(변수 참조 1회 = 선언뿐, 음성 대조로 확인). 즉 매 로드마다 쓰이지 않는 쿼리를 한 번 더 던지고 있었다 → 세션 ⑪에서 그 조회를 제거했다. **「메인 방문」 단계를 실제로 원하면 신규 구현이 필요하다**(퍼널에 단계 행을 추가하고 `page_views` 기준임을 표기). `recommend_complete`/`record_complete`도 같은 상태였고 이쪽은 조회 목록엔 남겨뒀다.
+>
+> 참고: `record_complete`는 저장 경로 6곳 중 1곳에서만 발화한다(§3 별도 항목) → 완료 단계를 퍼널에 그리기 전에 그것부터 해결해야 수치가 의미를 갖는다.
 
 **2단계(보류)** — §2(Hero 하단 실시간 문구 교체), §3(분석 대상 탭 UI), §5~7의 unique 카운트 기반 전환율/차트/추천조건 통계/회원가입 퍼널은 미착수. session_key 기반 unique 카운팅은 2026-06-30 이후 데이터부터만 가능(과거 행 NULL).
 

@@ -90,11 +90,23 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
   console.log(`  DOM 카드 ${r.cardsInDom} / 날짜필터 통과 ${r.dateVisible} / 더보기 "${r.moreBtn}"`);
   console.log('  판정:', chipTotal === r.dateVisible ? '✅ 일치' : `🔴 불일치 — 칩 ${chipTotal} vs 목록 ${r.dateVisible}`);
 
-  console.log('\n=== 발견 #6 — 퍼널 전환율 (오늘 표본이라 대부분 "-") ===');
-  const dash = r.funnelRates.filter(x => x === '-').length;
-  console.log('  전환율 칸:', r.funnelRates.join(' , ') || '(없음)');
-  console.log('  판정:', r.funnelRates.length && dash === r.funnelRates.length
-    ? `🔴 ${dash}/${r.funnelRates.length}칸 전부 "-" — 7일 값 미사용 확인` : `🟡 ${dash}/${r.funnelRates.length}칸 공백`);
+  // 퍼널은 날짜 네비를 따르므로 기간을 바꿔가며 본다.
+  // "오늘"이 "-"인 건 정상(그날 클릭이 0일 뿐) — 기간을 넓혔을 때 살아나는지가 판정 기준이다.
+  console.log('\n=== 발견 #6 — 퍼널 전환율 (기간별) ===');
+  await clickTab('event');
+  let anyLive = false;
+  for (const [days, nm] of [['1', '오늘'], ['7', '7일'], ['30', '30일'], ['0', '전체']]) {
+    await page.evaluate(d => document.querySelector(`.admin-chart-period-btn[data-days="${d}"]`)?.click(), days);
+    await page.waitForTimeout(900);
+    const f = await page.evaluate(() => {
+      const t = document.getElementById('eventFunnelBody')?.innerText || '';
+      return { period: (t.match(/기간:\s*(.+)/) || [])[1] || '(없음)', rates: [...t.matchAll(/↓\s*(\S+)/g)].map(x => x[1]) };
+    });
+    const live = f.rates.filter(x => x !== '-').length;
+    if (live > 0) anyLive = true;
+    console.log(`  [${nm}] "${f.period}" → ${f.rates.join(',') || '(없음)'}  (살아있는 칸 ${live}/${f.rates.length})`);
+  }
+  console.log('  판정:', anyLive ? '✅ 기간을 넓히면 전환율이 계산됨' : '🔴 어느 기간에서도 전부 "-" — 배선 확인');
 
   console.log('\n=== 발견 #7 — 이용시간 차트 x축 눈금 (초 데이터 + 분 라벨) ===');
   if (r.memberChart) {

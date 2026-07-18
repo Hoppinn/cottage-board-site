@@ -601,8 +601,12 @@
           el.querySelectorAll('.admin-tab-panel').forEach(p => {
             p.classList.toggle('is-active', p.dataset.panel === tab);
           });
-          // 요약/방문/유입/페이지/회원 탭만 날짜 필터 사용 — 이벤트는 숨김
-          const usesDateFilter = tab === 'summary' || tab === 'visit' || tab === 'referrer' || tab === 'page' || tab === 'member';
+          // 날짜 필터를 쓰는 탭 — 회원 탭은 제외한다.
+          // 회원 카드는 그 자체가 개인 타임라인 요약("46분 전 · 오늘 19초 · 방문 13회 · 가입 5/31")이라
+          // 목록을 다시 날짜로 거르면 필터 칩 숫자(누적)와 목록(그날 활동자)의 모집단이 어긋난다.
+          // 실제로 칩 "전체 (341)"에 목록은 4명이었다. 누적 회원 수는 요약 탭 「회원」 카드가 보여준다.
+          // 반대로 이벤트는 "기간별 몇 건"이 본질이라 날짜 필터가 있어야 한다.
+          const usesDateFilter = tab === 'summary' || tab === 'visit' || tab === 'referrer' || tab === 'page' || tab === 'event';
           const periodBtns = document.getElementById('chartPeriodBtns');
           const dateNav = document.getElementById('chartDateNav');
           if (periodBtns) periodBtns.style.display = usesDateFilter ? '' : 'none';
@@ -1844,16 +1848,16 @@
           }
         }
 
-        // ── 회원 탭: 날짜 필터 적용 ──────────────────────────────────────
-        {
-          document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card').forEach(c => {
-            const ls = c.dataset.lastSeen;
-            const inDate = !start || !ls || (ls >= start && (!end || ls < end));
-            c.dataset.dateHidden = inDate ? '0' : '1';
-          });
-          const _activeBtn = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active');
-          applyVisitorFilter(_activeBtn?.dataset.filter || 'all', _activeBtn);
-        }
+        // ── 이벤트 탭 퍼널도 같은 기간을 따른다 ─────────────────────────
+        // loadEventStats가 renderCharts보다 나중에 끝나므로 최초 1회는 그쪽이 이 함수를
+        // 다시 호출해준다(_adminRedrawForNav). 그 전까지는 아직 없으므로 옵셔널 호출.
+        window._adminRenderFunnel?.(start, end, label);
+
+        // ── 회원 탭은 날짜 네비를 따르지 않는다 ──────────────────────────
+        // 예전엔 여기서 data-last-seen으로 카드를 걸러 dateHidden을 세웠는데, 그러면
+        // 필터 칩(누적 341)과 목록(그날 활동자 4명)이 다른 모집단을 세게 된다.
+        // 카드 자체가 이미 기간 정보를 담고 있으므로 목록은 항상 전체를 보여주고,
+        // dateHidden을 아예 세우지 않는다(applyVisitorFilter는 미설정을 '보임'으로 취급).
       }
 
       // 날짜 탐색 상태
@@ -1995,57 +1999,28 @@
       const el = document.getElementById('eventFunnelBody');
       if (!el || !window.CottageDB?.getEventCounts) return;
       try {
+        // 전 기간 조회 — 퍼널이 날짜 네비를 따르므로 '전체'나 오래된 월을 골라도 비지 않아야 한다.
+        // page_events는 전체 1,500행 수준이라 전량 받아도 가볍다(max-rows 50000).
+        // 'recommend_complete'/'record_complete'는 아직 화면에 그리는 단계가 없지만, 퍼널의 최종
+        // 완료 단계로 예정된 이벤트라 조회 목록엔 남겨둔다(배열 원소라 비용 0).
+        const ALL_DAYS = 3650;
         const events = await window.CottageDB.getEventCounts(
           ['home_recommend_main_click','home_recommend_game_detail_click','home_recommend_all_click','recommend_complete',
            'home_record_main_click','home_record_write_click','home_record_more_click','record_complete',
-           'home_meeting_main_click','home_meeting_planner_click'], 30
+           'home_meeting_main_click','home_meeting_planner_click'], ALL_DAYS
         );
-        // "메인 방문" 단계 — page_events가 아니라 page_views(페이지 진입 로그) 기준 집계임에 유의
-        const pageViews = window.CottageDB.getPageViewCounts
-          ? await window.CottageDB.getPageViewCounts('index', 30)
-          : [];
-        const todayKst = new Date(Date.now() + 9*3600000).toISOString().slice(0,10);
-        function countDayIn(rows, daysAgo) {
-          const dt = new Date(Date.now() + 9*3600000 - daysAgo*86400000).toISOString().slice(0,10);
-          return rows.filter(r => (r.created_at||'').slice(0,10) === dt).length;
-        }
-        function count7In(rows) {
-          return rows.filter(r => {
-            const d = (r.created_at||'').slice(0,10);
-            return d <= todayKst && d >= new Date(Date.now()+9*3600000-6*86400000).toISOString().slice(0,10);
-          }).length;
-        }
-        function countDay(type, daysAgo) { return countDayIn(events.filter(e => e.event_type === type), daysAgo); }
-        function count7(type) { return count7In(events.filter(e => e.event_type === type)); }
+
+        // 선택 기간으로 거른다 — renderCharts의 filterByRange와 같은 규칙(start 포함, end 미포함).
+        const inRange = (rows, start, end) => (!start && !end) ? rows
+          : rows.filter(r => (!start || r.created_at >= start) && (!end || r.created_at < end));
+
         function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
-        const pv0 = countDayIn(pageViews, 0), pv7 = count7In(pageViews);
-        // 추천게임 퍼널
-        const hr0=countDay('home_recommend_main_click',0), rc0=countDay('recommend_complete',0),
-              rgd0=countDay('home_recommend_game_detail_click',0), rall0=countDay('home_recommend_all_click',0);
-        const hr7=count7('home_recommend_main_click'), rc7=count7('recommend_complete'),
-              rgd7=count7('home_recommend_game_detail_click'), rall7=count7('home_recommend_all_click');
-        // 플레이기록 퍼널
-        const hg0=countDay('home_record_main_click',0), rd0=countDay('record_complete',0),
-              rw0=countDay('home_record_write_click',0), rm0=countDay('home_record_more_click',0);
-        const hg7=count7('home_record_main_click'), rd7=count7('record_complete'),
-              rw7=count7('home_record_write_click'), rm7=count7('home_record_more_click');
-        // 모임 퍼널
-        const mt0=countDay('home_meeting_main_click',0), mp0=countDay('home_meeting_planner_click',0);
-        const mt7=count7('home_meeting_main_click'), mp7=count7('home_meeting_planner_click');
-        function stepRow(badge, label, todayN, weekN) {
-          const badgeHtml = `<span style="font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0;width:22px;line-height:1">${badge}</span>`;
+        function stepRow(badge, label, n) {
           return `<div style="display:flex;align-items:center;gap:8px">
-            ${badgeHtml}
+            <span style="font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0;width:22px;line-height:1">${badge}</span>
             <span style="font-size:12px;color:var(--muted);font-weight:500;flex:1;min-width:0;line-height:1.3">${label}</span>
-            <div style="display:flex;gap:10px;flex-shrink:0">
-              <div style="text-align:center;min-width:28px">
-                <div style="font-size:9px;color:var(--muted);font-weight:500;margin-bottom:1px">오늘</div>
-                <div style="font-size:17px;font-weight:900;color:var(--text);line-height:1">${todayN}</div>
-              </div>
-              <div style="text-align:center;min-width:28px">
-                <div style="font-size:9px;color:var(--muted);font-weight:500;margin-bottom:1px">7일</div>
-                <div style="font-size:14px;font-weight:700;color:var(--muted);line-height:1">${weekN}</div>
-              </div>
+            <div style="text-align:center;min-width:34px;flex-shrink:0">
+              <div style="font-size:17px;font-weight:900;color:var(--text);line-height:1">${n}</div>
             </div>
           </div>`;
         }
@@ -2065,27 +2040,38 @@
             <div style="display:flex;flex-direction:column">${steps}</div>
           </div>`;
         }
-        el.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px">
+        // 선택 기간 기준으로 퍼널을 그린다. 날짜 네비가 바뀔 때마다 draw()가 다시 부른다.
+        // 이전엔 '오늘' 값으로만 전환율을 계산해 오늘 클릭이 0이면 5칸 전부 '-'였다.
+        function renderFunnel(start, end, label) {
+          const evts = inRange(events, start, end);
+          const c = t => evts.filter(e => e.event_type === t).length;
+          const hr = c('home_recommend_main_click'), rgd = c('home_recommend_game_detail_click'), rall = c('home_recommend_all_click');
+          const hg = c('home_record_main_click'), rm = c('home_record_more_click'), rw = c('home_record_write_click');
+          const mt = c('home_meeting_main_click'), mp = c('home_meeting_planner_click');
+          el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')}</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
           ${axisCard('🔍', '추천게임 찾기', `
-            ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr0, hr7)}
-            ${convArrow(hr0, rgd0)}
-            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd0, rgd7)}
-            ${convArrow(rgd0, rall0)}
-            ${stepRow('1-3', '추천 섹션 전체보기 클릭', rall0, rall7)}
+            ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr)}
+            ${convArrow(hr, rgd)}
+            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd)}
+            ${convArrow(rgd, rall)}
+            ${stepRow('1-3', '추천 섹션 전체보기 클릭', rall)}
           `, 3)}
           ${axisCard('📋', '플레이 기록', `
-            ${stepRow('2-1', '히어로 기록남기기 클릭', hg0, hg7)}
-            ${convArrow(hg0, rm0)}
-            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm0, rm7)}
-            ${convArrow(rm0, rw0)}
-            ${stepRow('2-3', '최근 플레이 기록 남기기 클릭', rw0, rw7)}
+            ${stepRow('2-1', '히어로 기록남기기 클릭', hg)}
+            ${convArrow(hg, rm)}
+            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm)}
+            ${convArrow(rm, rw)}
+            ${stepRow('2-3', '최근 플레이 기록 남기기 클릭', rw)}
           `, 3)}
           ${axisCard('🤝', '모임', `
-            ${stepRow('3-1', '히어로 모임 클릭', mt0, mt7)}
-            ${convArrow(mt0, mp0)}
-            ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp0, mp7)}
+            ${stepRow('3-1', '히어로 모임 클릭', mt)}
+            ${convArrow(mt, mp)}
+            ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp)}
           `, 2)}
         </div>`;
+        }
+        window._adminRenderFunnel = renderFunnel;
         window._adminSetEvents && window._adminSetEvents(events);
         window._adminRedrawForNav && window._adminRedrawForNav();
       } catch(e) {
