@@ -2038,10 +2038,10 @@
     }
 
     // ── 초기화 ────────────────────────────────────────────────
-    async function init() {
-      initScheduleSheet();
-      initMultiSheet();
-      const todayStr = toDateStr(TODAY);
+    // allVotes/allVoteGames 로더. 재사용 iframe이라 홈에서 다시 열 때(cottage-reset-week)도
+    // 이걸로 재조회한다 — 외부(홈 프리뷰 ✕ 등)에서 삭제/등록된 변경이 stale allVotes에 안 반영되면
+    // 재등록 시 "등록됨"이 잔류해 막힌다(모달/iframe 재사용 원칙).
+    async function _loadAllVotes() {
       const end = new Date(TODAY);
       end.setDate(end.getDate() + 62); // 달력 다음달 이동까지 커버
       const endStr = toDateStr(end);
@@ -2059,6 +2059,12 @@
       const _isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
       const _devScenario = _isLocal ? new URLSearchParams(location.search).get('dev') : null;
       if (_devScenario) _injectDevVotes(_devScenario);
+    }
+
+    async function init() {
+      initScheduleSheet();
+      initMultiSheet();
+      await _loadAllVotes();
 
       document.getElementById('mainLoading').style.display = 'none';
       document.getElementById('viewWeek').style.display = '';
@@ -2099,7 +2105,7 @@
       renderWeekView(weekOffset);  // 로그인 시 is-mine 갱신
     });
 
-    window.addEventListener('message', e => {
+    window.addEventListener('message', async e => {
       if (e.data?.type === 'cottage-reset-week') {
         // 홈 빠른진입(is-quick-entry) 잔여 클래스를 여기서 정리 — 주간뷰를 실제로
         // 보여주는 유일한 진입점이라, 닫기(close)가 아니라 이 자리에서 떼야 깜빡임이 없다.
@@ -2109,7 +2115,8 @@
         const _calBtn = document.getElementById('btnToggleCal');
         if (_cal) _cal.style.display = 'none';
         if (_calBtn) { _calBtn.textContent = '달력 보기 ▾'; _calBtn.classList.remove('is-open'); }
-        if (_initDone) renderWeekView(weekOffset);
+        // 재사용 iframe이라 외부 변경(홈 프리뷰 삭제 등)을 반영하려면 다시 열 때 재조회 필요.
+        if (_initDone) { await _loadAllVotes(); renderWeekView(weekOffset); }
         return;
       }
       if (e.data?.type === 'cottage-edit') {
