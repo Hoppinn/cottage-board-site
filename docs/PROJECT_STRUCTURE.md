@@ -54,6 +54,9 @@
 │   ├── split-seasons.js            # 시즌 캐릭터 시트 분할 (완료, 보관)
 │   ├── test-subsheet.js            # 서브시트 레이아웃 테스트
 │   ├── test-profile-area.js        # 프로필 영역 테스트
+│   ├── verify-notif-read.js        # 개별 알림 읽음 E2E 스모크 ⚠️운영DB 일시변경(finally 복원)
+│   ├── audit-admin-analytics.js    # 관리자 분석 감사 — 절단/RLS + 렌더 (읽기전용)
+│   ├── verify-home-hero.js         # 히어로 미노출 + #recommend 딥링크 회귀 (읽기전용)
 │   ├── ss_subsheet/                # 서브시트 스크린샷 (비교용 이미지)
 │   ├── ss_4axis/                   # 4축 UI 스크린샷
 │   └── ss_profile/                 # 프로필 패널 스크린샷
