@@ -1056,6 +1056,13 @@ function toDateStr(d) {
     const date  = rpDate(r.played_at, r.created_at);
     const gameKey = window.getGameKeyById?.(r.game_id) || r.game_id;
 
+    // 참여자 이름 → user_id 해석용 맵 (이미 로드한 기록에서 — recorder의 user_id+nickname)
+    const _nickUser = new Map();
+    for (const rec of records) { if (rec.user_id && rec.nickname) _nickUser.set(String(rec.nickname).trim().toLowerCase(), String(rec.user_id)); }
+    // 이 기록이 내 것(또는 오너)인지 — 사진 삭제 권한
+    const _me = window.getKakaoUser?.();
+    const _canManagePhoto = !!(_me && ((r.user_id && String(r.user_id) === String(_me.id)) || (!r.user_id && r.nickname && r.nickname === (_me.nickname || _me.kakaoNickname)))) || window.isOwner?.() || false;
+
     const thumbHtml = thumb
       ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none'">`
       : '';
@@ -1064,7 +1071,7 @@ function toDateStr(d) {
       ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${r.player_count}명</span>`
       : '';
     const nameTags = r.player_names
-      ? r.player_names.split(',').map(n => `<span class="pr-rec-tag pr-tag-who">${n.trim()}</span>`).join('')
+      ? r.player_names.split(',').map(n => { const nm = n.trim(); return `<span class="pr-rec-tag pr-tag-who" data-nick="${window.escH?.(nm) ?? nm}">${nm}</span>`; }).join('')
       : '';
     const playerHtml = (countTag || nameTags)
       ? `<div class="pr-player-header">${countTag}${nameTags}</div>`
@@ -1090,7 +1097,7 @@ function toDateStr(d) {
     body.innerHTML = `
       <div class="rp-rich-card">
         <div class="rp-rich-date">${date}</div>
-        <div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({ gameId: r.game_id || '', mine: false })}'>
+        <div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({ gameId: r.game_id || '', mine: _canManagePhoto })}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
             <div class="pr-rec-main">
@@ -1104,14 +1111,22 @@ function toDateStr(d) {
         </div>
       </div>`;
 
-    // 게임 썸네일·이름·인원 → 게임시트 (게임-리뷰 허브와 동일 진입점)
+    // 게임 썸네일 → 게임시트 (게임-리뷰 허브와 동일 진입점). ※게임명·인원 텍스트는 클릭 대상 아님.
     if (gameKey) {
-      const openSheet = e => { e.stopPropagation(); window.ensureGameSheet?.(); window.openGameRecordSheet?.(gameKey); };
-      body.querySelectorAll('.pr-rec-thumb, .pr-rec-game, .pr-player-header').forEach(el => {
-        el.style.cursor = 'pointer';
-        el.addEventListener('click', openSheet);
-      });
+      const thumbEl = body.querySelector('.pr-rec-thumb');
+      if (thumbEl) {
+        thumbEl.style.cursor = 'pointer';
+        thumbEl.addEventListener('click', e => { e.stopPropagation(); window.ensureGameSheet?.(); window.openGameRecordSheet?.(gameKey); });
+      }
     }
+
+    // 참여자 이름 → 해당 회원 읽기전용 보드 (기록에서 user_id가 해석되는 이름만 클릭 가능)
+    body.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
+      const uid = _nickUser.get((span.dataset.nick || '').toLowerCase());
+      if (!uid) return;
+      span.style.cursor = 'pointer';
+      span.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(uid); });
+    });
 
     // 사진 → 라이트박스 (공용 openRecordLightbox — wrap[data-urls] + row[data-record] 사용)
     body.querySelectorAll('.pr-rec-photo').forEach(img => {
