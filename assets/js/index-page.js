@@ -1044,7 +1044,10 @@ function toDateStr(d) {
   }
 
   try {
-    const records = await window.CottageDB?.getAllPlayRecordsForHub(50);
+    const [records, profiles] = await Promise.all([
+      window.CottageDB?.getAllPlayRecordsForHub(50),
+      window.CottageDB?.getAllProfiles?.() || Promise.resolve([]),
+    ]);
     if (!records || records.length === 0) {
       body.innerHTML = '<p class="rp-empty">아직 기록된 플레이가 없어요.</p>';
       return;
@@ -1056,8 +1059,10 @@ function toDateStr(d) {
     const date  = rpDate(r.played_at, r.created_at);
     const gameKey = window.getGameKeyById?.(r.game_id) || r.game_id;
 
-    // 참여자 이름 → user_id 해석용 맵 (이미 로드한 기록에서 — recorder의 user_id+nickname)
+    // 참여자 이름 → user_id 해석용 맵 (전체 프로필 기준 + 기록에서 보강).
+    // ⚠️ profiles엔 id 컬럼이 없고 kakao 키는 user_id — game-reviews의 p.id 프로필맵은 빈 맵이었음.
     const _nickUser = new Map();
+    for (const p of (profiles || [])) { if (p.user_id && p.nickname) _nickUser.set(String(p.nickname).trim().toLowerCase(), String(p.user_id)); }
     for (const rec of records) { if (rec.user_id && rec.nickname) _nickUser.set(String(rec.nickname).trim().toLowerCase(), String(rec.user_id)); }
     // 이 기록이 내 것(또는 오너)인지 — 사진 삭제 권한
     const _me = window.getKakaoUser?.();
