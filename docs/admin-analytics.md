@@ -159,6 +159,27 @@
 
 ---
 
+## 5-1. 변경된 코드 범위 (2026-07-19 세션 ⑪)
+
+**이 화면을 다시 만질 때 "무엇이 왜 그렇게 돼 있는지" 알아야 하는 것들.** 커밋은 git에 있지만 *왜*는 여기 있다.
+
+| 대상 | 무엇이 바뀌었나 | 왜 |
+|---|---|---|
+| `usesDateFilter` ([:604](../pages/admin/requests-admin.html#L604)) | `member` 제거 · `event` 추가 | 회원=명부라 기간 무관, 이벤트=기간별 건수가 본질. **#5·#6의 단일 원인** |
+| `draw()` 내 회원 탭 블록 | 날짜필터(`dateHidden`) **삭제** | 세우지 않으면 `applyVisitorFilter`가 전부 '보임'으로 취급 → 칩과 목록의 모집단 일치 |
+| `draw()` | `window._adminRenderFunnel?.(start,end,label)` 호출 추가 | 퍼널을 날짜 네비에 연결. `loadEventStats`가 나중에 끝나므로 **옵셔널 호출 + 그쪽에서 `_adminRedrawForNav`로 최초 1회 재호출** |
+| `EVENT_FAMILIES` / `EVENT_ALL_TYPES` (신설, [:1150](../pages/admin/requests-admin.html#L1150)) | 계열 표 단일 출처 + 조회목록 파생 | 조회목록·라벨표가 **두 벌이라 어긋나 77%가 안 보였다**(#13). 🚨 **새 이벤트는 여기만 등록하면 됨** |
+| `countEvents` / `eventPersonId` (신설) | 건수 + 사람집합 + 고유수를 함께 반환 | 사람 단위 집계의 공용 계산. 식별자 = `user_id \|\| session_key`, 없는 행(3%)은 명에서 제외 |
+| `stepRow` / `convArrow` | 인자가 숫자 → **집계 객체**로. 전환율은 **집합 교집합** | 건수끼리 나눠 167%가 나오던 것(#10). 교집합 ⊆ 앞단계라 100% 초과 불가 |
+| `loadEventStats` | 조회 30일 → **전 기간**, `getPageViewCounts` 호출 **제거** | 날짜 네비가 '전체'를 지원해야 함 / 후자는 결과를 아무도 안 읽는 죽은 왕복이었음 |
+| `getEventCounts` ([supabase-client.js](../assets/js/supabase-client.js)) | select에 `user_id, session_key` 추가 | **가산적 변경** — `index-page.js`는 `event_type`/`created_at`만 읽어 무영향 |
+| `memberPageMap` / `_visitorPagesHtml` / `_visitorPagesToggle` (신설) | 방문자 카드에 페이지 분포 펼침 | B단계. **`dedupUserPageDay`를 쓰지 않았다** — 그건 (유저·페이지·일)을 접어 체류가 그날 첫 세션 것만 합산되고, 비회원 경로는 원본을 써서 기준이 어긋나 있었음 |
+| 펼침 토글 리스너 | `el.addEventListener` 위임 | 카드가 매 렌더 새로 생김. 같은 카드 안 **밴 버튼과 오발동하지 않음을 검증에 포함** |
+
+**아직 살아 있는 죽은 코드**: `renderUserDetailAll`·`renderUserDetailDay`·`userDayParts`/`userAllDetail` — B단계가 대체했으나 삭제는 안 함(구현/리팩토링 분리). §4 열림 목록 참조.
+
+---
+
 ## 6. 재조사 금지 — 기각된 가설
 
 「관리자 금일이용데이터 간헐 미표시」 추적에서 **근거를 갖고 기각**된 것들. 다시 파지 말 것.

@@ -24,6 +24,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | 게임 데이터·파이프라인 | `docs/PROJECT_STRUCTURE.md` §7~8 (작업 전 `npm run check`) |
 | UI/CSS 디자인 | `docs/DESIGN_RULES.md` |
 | 업적/칭호/캐릭터/교환권/성장보드 | `docs/achievement-system.md` (SSOT) |
+| 관리자 분석(`requests-admin.html` 분석 영역)·방문/이용 집계·이벤트 퍼널 | `docs/admin-analytics.md` (SSOT) |
 
 ## 문서 관리
 
@@ -54,6 +55,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 | CottageDB 함수·window 전역 변경 | `docs/js-api.md` |
 | localStorage 키/구조 변경 | `docs/ls-schema.md` |
 | 페이지 이동/추가/삭제, 인증·데이터 흐름 변경 | `docs/PROJECT_STRUCTURE.md` |
+| 관리자 분석 화면/지표 변경, 새 `trackEvent` 타입 추가 | `docs/admin-analytics.md` |
 | 기능 완료·버그 발견·작업 추가 | `docs/PROJECT_STATE.md` |
 
 ## 외부 의견 수렴
