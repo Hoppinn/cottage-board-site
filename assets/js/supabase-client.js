@@ -1379,7 +1379,7 @@ window._cottageSess = (function () {
         .not('user_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(20);
-      const profileSeenPromise = db.from('profiles').select('notif_seen_at').eq('user_id', userId).maybeSingle();
+      const profileSeenPromise = db.from('profiles').select('notif_seen_at, notif_read_keys').eq('user_id', userId).maybeSingle();
       const _ADMIN_ID = '4916417947';
       const voucherEventsPromise = String(userId) === _ADMIN_ID
         ? db.from('voucher_log').select('id, user_id, delta, reason, created_at').order('created_at', { ascending: false }).limit(30)
@@ -1399,14 +1399,20 @@ window._cottageSess = (function () {
       const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
       const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
       const effectiveNewGameSeenAt = [newGameSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
+      // 개별 읽음 키 — `${type}:${소스행 id}`. notif_seen_at(지평선)이 못 표현하는
+      // "이것만 읽음"을 담는다. 지평선을 새로 그으면(모두 읽기) 전부 무의미해지므로
+      // updateNotifSeenAt이 이 배열을 비운다 → 무한 증가 없음.
+      const _rawReadKeys = profileSeenRes?.data?.notif_read_keys;
+      const readKeys = new Set(Array.isArray(_rawReadKeys) ? _rawReadKeys : []);
       const notifs = [];
       if (nickname) {
         for (const r of taggedRes.data || []) {
           const names = (r.player_names || '').split(',').map(n => n.trim());
           if (names.some(n => n.toLowerCase() === nickname.toLowerCase())) {
             const date = r.played_at || r.created_at.slice(0, 10);
-            const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
-            notifs.push({ type: 'tagged', gameId: r.game_id, groupName: r.group_name, date, isNew });
+            const key = `tagged:${r.id}`;
+            const isNew = (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(key);
+            notifs.push({ type: 'tagged', key, gameId: r.game_id, groupName: r.group_name, date, isNew });
           }
         }
       }
@@ -1430,33 +1436,42 @@ window._cottageSess = (function () {
         if (rcErr) console.error('[getMyNotifications:game_comments curious]', rcErr);
         if (prErr) console.error('[getMyNotifications:game_play_records curious]', prErr);
         for (const c of recentComments || []) {
-          const isNew = effectiveSeenAt ? c.created_at > effectiveSeenAt : true;
-          notifs.push({ type: 'curious_comment', gameKey: c.game_key, commenter: c.nickname, date: c.created_at, isNew });
+          const key = `curious_comment:${c.id}`;
+          const isNew = (effectiveSeenAt ? c.created_at > effectiveSeenAt : true) && !readKeys.has(key);
+          notifs.push({ type: 'curious_comment', key, gameKey: c.game_key, commenter: c.nickname, date: c.created_at, isNew });
         }
         const seenPlayGameIds = new Set();
         for (const r of playRecords || []) {
           if (seenPlayGameIds.has(r.game_id)) continue;
           seenPlayGameIds.add(r.game_id);
-          const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
-          notifs.push({ type: 'curious_play', gameId: r.game_id, date: r.created_at, isNew });
+          const key = `curious_play:${r.id}`;
+          const isNew = (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(key);
+          notifs.push({ type: 'curious_play', key, gameId: r.game_id, date: r.created_at, isNew });
         }
       }
       for (const r of purchasedRes.data || []) {
-        const isNew = effectiveSeenAt ? new Date(r.purchased_at) > new Date(effectiveSeenAt) : true;
-        notifs.push({ type: 'ordered', gameName: r.game_name, date: r.purchased_at, isNew });
+        const key = `ordered:${r.id}`;
+        const isNew = (effectiveSeenAt ? new Date(r.purchased_at) > new Date(effectiveSeenAt) : true) && !readKeys.has(key);
+        notifs.push({ type: 'ordered', key, gameName: r.game_name, date: r.purchased_at, isNew });
       }
       for (const r of newGameRes.data || []) {
-        const isNew = effectiveNewGameSeenAt ? new Date(r.added_at) > new Date(effectiveNewGameSeenAt) : true;
+        const key = `new_game:${r.id}`;
+        const isNew = (effectiveNewGameSeenAt ? new Date(r.added_at) > new Date(effectiveNewGameSeenAt) : true) && !readKeys.has(key);
         const actualGames = Array.isArray(r.actual_games) && r.actual_games.length ? r.actual_games : null;
-        notifs.push({ type: 'new_game', gameName: r.game_name, actualGames, date: r.added_at, isNew });
+        notifs.push({ type: 'new_game', key, gameName: r.game_name, actualGames, date: r.added_at, isNew });
       }
       // 동호회 소개글 알림: 로그인 회원 전체, 새 소개글 N개 묶음
       {
         const allIntros = introListRes.data || [];
-        const newIntros = allIntros.filter(r => effectiveSeenAt ? r.created_at > effectiveSeenAt : true);
+        // 묶음 알림이라 키가 N개 — 읽음 처리 시 구성원 전부를 한 번에 마킹해야 한다
+        const newIntros = allIntros.filter(r =>
+          (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(`new_intro:${r.id}`)
+        );
         if (newIntros.length > 0) {
           notifs.push({
             type: 'new_intro',
+            key: `new_intro:${newIntros[0].id}`,
+            keys: newIntros.map(r => `new_intro:${r.id}`),
             count: newIntros.length,
             names: newIntros.map(r => r.nickname),
             firstUserId: newIntros[0].user_id,
@@ -1467,6 +1482,8 @@ window._cottageSess = (function () {
           // 이미 본 소개글 — 최신 1건만 기록용으로 표시
           notifs.push({
             type: 'new_intro',
+            key: `new_intro:${allIntros[0].id}`,
+            keys: [`new_intro:${allIntros[0].id}`],
             count: 1,
             names: [allIntros[0].nickname],
             firstUserId: allIntros[0].user_id,
@@ -1483,9 +1500,11 @@ window._cottageSess = (function () {
           if (profErr) console.error('[getMyNotifications]', profErr);
           const nickMap = Object.fromEntries((profData || []).map(p => [p.user_id, p.nickname || p.user_id]));
           for (const r of voucherData) {
-            const isNew = effectiveSeenAt ? r.created_at > effectiveSeenAt : true;
+            const key = `voucher:${r.id}`;
+            const isNew = (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(key);
             notifs.push({
               type: r.delta > 0 ? 'voucher_granted' : 'voucher_used',
+              key,
               nickname: nickMap[r.user_id] || '사용자',
               reason: r.reason,
               delta: r.delta,
@@ -1590,6 +1609,7 @@ window._cottageSess = (function () {
     upsertMeetingVote,
     deleteMeetingVote,
     updateNotifSeenAt,
+    addNotifReadKeys,
     getMeetingProfile,
     upsertMeetingIntro,
     addMeetingGamePref,
@@ -1604,9 +1624,30 @@ window._cottageSess = (function () {
   async function updateNotifSeenAt(userId, timestamp) {
     if (!userId || !timestamp) return;
     try {
-      const { error } = await db.from('profiles').update({ notif_seen_at: timestamp }).eq('user_id', userId);
+      // notif_read_keys를 함께 비운다 — 지평선을 지금으로 옮기면 그 이전의 개별
+      // 읽음 키는 전부 지평선에 흡수돼 중복이다. 이게 배열 크기의 상한선 역할.
+      const { error } = await db.from('profiles')
+        .update({ notif_seen_at: timestamp, notif_read_keys: [] })
+        .eq('user_id', userId);
       if (error) console.error('[updateNotifSeenAt]', error);
     } catch (err) { console.error('[updateNotifSeenAt]', err);}
+  }
+
+  // 개별 알림 읽음 — 키 배열을 기존 notif_read_keys에 합집합으로 추가.
+  // 묶음 알림(new_intro)은 구성원 키를 한 번에 넘긴다.
+  async function addNotifReadKeys(userId, keys) {
+    if (!userId || !Array.isArray(keys) || keys.length === 0) return { error: null };
+    try {
+      const { data, error: selectError } = await db.from('profiles')
+        .select('notif_read_keys').eq('user_id', userId).maybeSingle();
+      if (selectError) { console.error('[addNotifReadKeys] select', selectError); return { error: selectError }; }
+      const existing = Array.isArray(data?.notif_read_keys) ? data.notif_read_keys : [];
+      const merged = [...new Set([...existing, ...keys])];
+      const { error } = await db.from('profiles')
+        .update({ notif_read_keys: merged }).eq('user_id', userId);
+      if (error) console.error('[addNotifReadKeys] update', error);
+      return { error: error || null };
+    } catch (err) { console.error('[addNotifReadKeys]', err); return { error: err }; }
   }
 
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)

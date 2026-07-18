@@ -1578,14 +1578,14 @@ function _bindMeetingSubsheet(subBody, ctx) {
         }
 
 // ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
-// ctx: _markAllNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
+// ctx: _markAllNotifSeen/_markOneNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
-  const { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle } = ctx;
+  const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle } = ctx;
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelectorAll('.notif-read-one-btn').forEach(btn => {
-            btn.addEventListener('click', e => { e.stopPropagation(); _markAllNotifSeen(subBody); });
+            btn.addEventListener('click', e => { e.stopPropagation(); _markOneNotifSeen(btn.closest('li'), subBody); });
           });
           subBody.querySelector('.profile-notif-more-btn')?.addEventListener('click', function() {
             const moreList = subBody.querySelector('.profile-notif-more-list');
@@ -1931,7 +1931,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const cls = ['notif-card', 'is-clickable', n.isNew ? 'is-new' : ''].filter(Boolean).join(' ');
     const badge = n.isNew ? '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>' : '';
     const dt = `<div class="notif-card-date">${fmtShort(n.date)}</div>`;
-    const readBtn = n.isNew ? '<button class="notif-read-one-btn" type="button">읽음</button>' : '';
+    // 개별 읽음 키를 버튼에 실어둔다 — <li> 8종에 각각 붙이는 대신 한 곳으로.
+    // 묶음(new_intro)은 구성원 키가 여러 개라 콤마로 이어 붙인다.
+    const _keys = (n.keys || (n.key ? [n.key] : [])).join(',');
+    const readBtn = n.isNew ? `<button class="notif-read-one-btn" type="button" data-notif-keys="${escH(_keys)}">읽음</button>` : '';
     const _card = (icon, title, desc) =>
       `<div class="notif-card-icon">${icon}</div><div class="notif-card-body"><div class="notif-card-title">${title} ${badge}</div><div class="notif-card-desc">${desc}</div>${dt}</div>`;
     if (n.type === 'tagged')
@@ -2442,7 +2445,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     document.body.appendChild(sub);
     // 서브시트를 패널로 되돌릴 때(뒤로가기/백드롭) 현재 DOM 상태를 스냅샷 → 재진입 시 변경분 유지.
     // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 로드하므로 스냅샷 불필요)
-    const _leaveToPanel = () => { try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (_) {} sub.remove(); };
+    // onLeave가 조용히 실패하면 스냅샷이 누락돼 재진입 시 상태가 되돌아간다(개별 읽음이 이걸 의존) → 로그 필수
+    const _leaveToPanel = () => { try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (e) { console.error('[_openSubSheet onLeave]', e); } sub.remove(); };
     sub.querySelector('.profile-subsheet-back').addEventListener('click', _leaveToPanel);
     sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); });
     sub.addEventListener('click', e => { if (e.target === sub) _leaveToPanel(); });
@@ -2471,6 +2475,24 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
       .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
       .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
+  }
+
+  // 개별 읽음 — 이 카드 하나만. notif_seen_at(지평선)은 건드리지 않고
+  // profiles.notif_read_keys에 이 알림의 키만 추가한다.
+  async function _markOneNotifSeen(li, container = body) {
+    if (!li) return;
+    const btn = li.querySelector('.notif-read-one-btn');
+    const keys = (btn?.dataset.notifKeys || '').split(',').filter(Boolean);
+    li.classList.remove('is-new');
+    li.querySelector('.profile-notif-new-badge')?.remove();
+    btn?.remove();
+    if (keys.length) {
+      await window.CottageDB?.addNotifReadKeys?.(String(user.id), keys);
+    }
+    // 남은 미읽음이 없으면 '모두 읽기'와 패널 버튼 상태도 정리 (더보기 목록 포함해서 셈)
+    const remaining = container.querySelectorAll('.profile-notif-list .is-new, .profile-notif-more-list .is-new').length;
+    if (remaining === 0) _resetNotifBtnAndConfirmAll(container);
+    _updateNotifBadge(); // DB 재조회로 배지 재계산 — 위 write가 끝난 뒤라야 정확
   }
 
   function _markAllNotifSeen(container = body) {
@@ -2564,7 +2586,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       if (type === 'notif') {
         _trackPvOnce('my-board-notif');
         const _notifTitle = '최근 소식';
-        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle }));
+        // onLeave 스냅샷: 개별 읽음은 DOM만 바꾸므로, 뒤로가기/백드롭으로 나갔다 다시 들어와도
+        // 유지되려면 캐시 문자열을 현재 DOM으로 갱신해야 한다(기록보드와 같은 방식).
+        // ✕닫기는 패널째 제거 → 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요.
+        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');

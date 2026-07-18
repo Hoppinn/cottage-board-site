@@ -73,7 +73,11 @@ return data || [];
 | `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 `[{event_type, created_at}]`. admin/localhost 제외 없음(쿼리 전용) |
 | `getPageViewCounts(page, daysBack=7)` | page_views에서 특정 page의 최근 N일 로우 반환 `[{created_at}]`. 관리자 이벤트 퍼널의 "메인 방문" 단계용(143차-160) — page_events가 아니라 page_views 기준임에 유의 |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
-| `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. 각 항목에 `isNew: created_at > notifSeenAt` 포함. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임) ⑤new_intro(타인 소개글, 로그인 회원 전체 수신, `{type:'new_intro', count, names, firstUserId, date, isNew}`). notifSeenAt=null이면 isNew=true(전체 기간). 반환: `[{type, ..., isNew}]` |
+| `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임) ⑤new_intro(타인 소개글, 로그인 회원 전체 수신, `{type:'new_intro', count, names, firstUserId, date, isNew}`). notifSeenAt=null이면 지평선 없음(전체 기간). 반환: `[{type, key, keys?, ..., isNew}]` |
+| ↳ **`isNew` 판정 (2026-07-18 변경)** | `(지평선 이후) && !notif_read_keys.has(key)` — 지평선(`max(notifSeenAt, profiles.notif_seen_at)`)**과** 개별 읽음 키를 **함께** 본다. 이전엔 지평선만 봤음 |
+| ↳ **`key` / `keys`** | `key`는 `${type}:${소스행 id}`(예: `tagged:17`·`new_intro:42`). **묶음 알림(`new_intro`)만 `keys` 배열**을 추가로 가짐(구성원 전부를 한 번에 읽음 처리해야 하므로). 소비처는 `n.keys \|\| [n.key]`로 받을 것. ⚠️ 소스 select 7개가 **이미 전부 `id`를 조회**하고 있어 신규 쿼리는 없음 |
+| `addNotifReadKeys(userId, keys[])` | **개별** 알림 읽음 — `profiles.notif_read_keys`에 키 배열을 합집합으로 추가(중복 제거). `notif_seen_at`(지평선)은 **건드리지 않음**. 반환 `{error}`. 소비처: kakao-auth.js `_markOneNotifSeen` |
+| `updateNotifSeenAt(userId, timestamp)` | **모두 읽기** — 지평선을 `timestamp`로 옮기고 **`notif_read_keys`를 `[]`로 함께 비운다**(2026-07-18. 지평선 이전 개별 키는 전부 흡수되므로 중복 — 이게 배열 크기의 상한선). 소비처: kakao-auth.js `_markAllNotifSeen`. ※2026-07-18 이전까지 이 표에 **누락돼 있던 항목**(문서 드리프트, 발견 즉시 보강) |
 | `getGameReviews(gameId)` | 게임 리뷰 조회 |
 | `insertGameReview(...)` | 게임 리뷰 등록 |
 | `deleteGameReview(id)` | 게임 리뷰 삭제 |

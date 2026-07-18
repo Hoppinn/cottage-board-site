@@ -11,8 +11,15 @@
 **세션 ⑩ (2026-07-18)**:
 - **R1(알림 읽음) ✅ 스모크 통과·종결** — 무지님 소개글로 `new_intro` 알림이 발생해 확인 가능해짐. 배지·NEW 표시·클릭 라우팅·backTo 복귀·모두 읽기·새로고침 후 유지 전부 통과. 열린 스모크에서 제거.
 - **알림 '모두 읽기'가 8건 초과분을 안 지우던 버그 ✅** — `_markAllNotifSeen`·`_markVoucherSeen`이 `.profile-notif-list`만 훑어 9번째부터 들어가는 별도 `<ul>`(`.profile-notif-more-list`, [kakao-auth.js:1971](../assets/js/kakao-auth.js#L1971))의 NEW 배지가 남았음. 선택자에 more-list 추가. ※다시 열면 정상이었음(`_notifInnerHtml` 정규식은 전역 치환) — 그 세션 한정 표시 버그.
-- **개별 '읽음' 버튼이 실제로는 '모두 읽기' 🔴 Plan 진행 중** — [kakao-auth.js:1588](../assets/js/kakao-auth.js#L1588)이 `_markAllNotifSeen`을 호출. 읽음 상태가 `notif_seen_at` **타임스탬프 하나**뿐이고 알림도 DB 행이 아닌 파생 생성물이라 개별 읽음을 저장할 자리가 구조적으로 없음. **사용자 결정: 개별 읽음을 제대로 구현**(Red, Plan 필수).
-- **관리자 금일이용데이터 조사 — 가설 3건 기각** (§3 「방문/이용 집계 전면 점검」④). 브라우저 확인 대기 중.
+- **개별 '읽음' 버튼이 실제로는 '모두 읽기' 🔴 Plan 진행 중** — [kakao-auth.js:1588](../assets/js/kakao-auth.js#L1588)이 `_markAllNotifSeen`을 호출. 읽음 상태가 `notif_seen_at` **타임스탬프 하나**뿐이고 알림도 DB 행이 아닌 파생 생성물이라 개별 읽음을 저장할 자리가 구조적으로 없음. **사용자 결정: 개별 읽음을 제대로 구현**(Red) → **코드 완료, ⏳ 마이그레이션 실행 + 스모크 대기**.
+  - **설계**: 지평선(`notif_seen_at`) + 개별키(`notif_read_keys` jsonb, 010) **2층**. `isNew = (지평선 이후) && !readKeys.has(key)`. 키는 `${type}:${소스행 id}`. **신규 쿼리 0개** — select 7개가 이미 전부 `id`를 가져오는데 notif 객체에 안 넣고 버리고 있었음.
+  - **배열 무한 증가 방지**: `updateNotifSeenAt`(모두 읽기)이 `notif_read_keys`를 `[]`로 함께 비운다. 지평선을 옮기면 그 이전 개별 키는 전부 흡수되므로 중복.
+  - **캐시 일관성(Plan에서 "첫 번째로 실패할 지점"으로 지목했던 것)**: 알림 서브시트는 `_notifInnerHtml` **문자열 캐시**로 재렌더되므로 개별 읽음이 DOM만 바꾸면 재진입 시 되돌아감. → 정규식 패치가 아니라 **기록보드가 이미 쓰던 `_openSubSheet`의 `onLeave` 스냅샷**을 재사용해 해결(신규 개념 0). ✕닫기는 패널째 제거→DB 재조회라 스냅샷 불필요([kakao-auth.js:2443-2444](../assets/js/kakao-auth.js#L2443-L2444) 주석이 근거).
+  - **저장소를 DB로 택한 이유**: `notif_seen_at`이 이미 DB라 개별 읽음만 로컬이면 "모두 읽기는 기기 간 따라오는데 개별은 안 따라오는" 비일관이 생김.
+  - **검증**: node 테스트 19케이스 통과(음성 대조군 4건 포함) — 특히 **기존 `_resetNotifBtnAndConfirmAll` 정규식이 새 마크업(`data-notif-keys`)을 여전히 매치**함을 확인(깨지면 조용히 발생할 자리였음). `notifs.push` 8지점 전수 키 부착 확인.
+  - **곁다리 처리**: `_openSubSheet`의 `catch (_) {}` 조용한 삼킴에 로그 추가 — 개별 읽음이 이 onLeave에 의존하게 됐으므로(CLAUDE.md 「소급 위반이 작업 범위와 겹치면 함께 처리」).
+  - ⏳ **남은 것**: ①Supabase SQL Editor에서 `docs/migrations/010_profiles_notif_read_keys.sql` 실행 ②스모크(아래).
+- **관리자 금일이용데이터 — 단일버그 추적 종료, 페이지 전체 감사로 전환** (사용자 결정). 콘솔 실측 에러 0건 + 가설 3건 기각 + 확정 버그 1건(자정 넘김)을 §3에 남기고 「[감사] 관리자 페이지 전체」 신규 등록.
 
 **세션 ⑨ (2026-07-18)** — 전부 스모크/검증 통과, 열린 스모크 0:
 - **감지기 4단계(쓰기 경로 검증) ✅** — 정적 census로 supabase-client.js 쓰기 전수 확인. record/comment/pref/meeting은 이미 `return {error}` 전파(갭 없음), 갭은 **추적성 write·toggle·업적/교환권 지급 family**에 집중 → 전부 로그 추가(반환계약 무변경). 커밋 c5b5f68 + 5fcc962(🔗 UNIQUE `23505`만 조용). **감지기 1~4단계 전부 종결, 남은 건 ③ 에러 수집(Red)뿐.**
@@ -29,7 +36,8 @@
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | 관리자 분석 화면 수치·콘솔 확인 (감지기 로그 켜진 지금 유리, 금일이용데이터 간헐 미표시 단서) | §3 | verify / Sonnet medium (원인불명 파고들면 Opus) |
+| 1 | **개별 알림 읽음 구현** — Plan 승인됨(저장소=DB `profiles.notif_read_keys`), 마이그레이션 010 | §0 세션 ⑩ | Red / **Opus xhigh** |
+| 1b | **[감사] 관리자 페이지 전체** — 착수 시 범위부터 합의 | §3 | 감사 / Opus |
 | 2 | 남은 버그: 기록보드 플레이기록 09:00 고정 / 서브시트 모서리 음영 / 단기방문 시간 미표시 | §2 | 버그 / 개별 판단 |
 | 3 | 기록게시판 디자인 개선 (+ GS5 esc 2사본 겸사겸사) | §3 | design·feat |
 | 4 | GS5(escH ~11개) — **보류**(선행: 로드순서), 착수 시 REFACTOR_CHECKPOINT 필독 | §3·[REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) | 보류 / Opus xhigh+Plan |
@@ -321,7 +329,7 @@
   - **제외 판정(실물 확인 후 — 기계적으로 다 고치려 들지 말 것)**: `index-page.js`는 catch에서 "불러오기 실패"를 **화면에 표시**하므로 조용한 실패가 아님. `script-nav.js`는 `JSON.parse`/`localStorage` 방어용이라 로그 가치 낮음. 분류기가 이 둘을 삼킴으로 오분류했었음.
   - **화재 테스트 하니스 (재작성 필요 — 스크래치패드에만 있음)**: `@supabase/supabase-js`가 `node_modules`에 설치돼 있어 node에서 실DB로 읽기 함수를 돌릴 수 있음(window/document/localStorage 스텁 + `eval(supabase-client.js)`). **읽기 전용(`get*`)만** 호출, `window.location.hostname='localhost'`면 추적성 write가 자체 차단됨. 함정: 스크래치패드 배치 시 **절대경로 require** 필요 / `getMeetingVotes(startDate, endDate)` **인자 필수**(빼먹으면 진짜 쿼리 오류가 나 오탐) / 끝에 **`process.exit(0)`** 필요(supabase 타이머가 이벤트루프를 잡음) / RPC는 `db.rpc("...")` **큰따옴표**라 작은따옴표 grep은 "RPC 없음" 오답.
   - **최근 결과 (2026-07-17, 2단계 후 읽기 42개 실DB)**: **불난 곳 0건**. 열감지기가 켜진 상태라 1단계의 "반쪽 증거"와 달리 실효 있음.
-  - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). `getPageAnalytics`가 1000행 정상 반환 + 쿼리 오류도 없음 → 원인이 조회가 아니라 **화면 렌더/집계 로직 쪽**일 가능성이 올라감(미검증). 재현 시 콘솔 확인.
+  - ~~**다음 관찰 포인트**~~ → **2026-07-18 확인 완료**: 관리자 페이지 콘솔에 대괄호 라벨 에러 **0건**. 감지기가 켜진 상태의 결과이므로 "조회 실패가 조용히 빈 값" 가설은 배제. 원인은 렌더/집계 쪽으로 좁혀졌고, 단일버그 추적 대신 **페이지 전체 감사로 전환**(위 「방문/이용 집계」④ 참조).
   - 🔍 **감지기 현재 커버리지 — "화재 0건"의 유효 범위 (2026-07-17 정직한 한계, 사용자와 확인)**: 아래 3개가 아직 사각지대다. **"불난 곳 0건"은 `supabase-client.js`의 읽기 함수 42개에 한정된 결론**이며 앱 전체 안전 증명이 아니다.
     - ① ~~**파일 커버리지 절반 이하**~~ → **2026-07-18 갱신**: raw supabase 쿼리 오류 감지는 `supabase-client.js`(구조분해 59 + Promise.all 5) + `game-sheet.js`(init 함수 JS 예외 7) 처리 완료. `kakao-auth.js` 24곳·`achievements.js` 4곳은 **대상 아님으로 재분류**(전부 CottageDB 래퍼 위 — 래퍼가 내부 수신). 즉 "raw supabase 미수신"은 이제 앱 전역에서 없음.
     - ② ~~**쓰기 경로 미검증**~~ → **2026-07-18 종결(4단계)**: 정적 census로 쓰기 경로 전수 확인 후 갭 전부 로그 추가(커밋 c5b5f68 + 🔗 family). record/meeting/pref 계열은 이미 전파, 갭은 추적성 write·toggle·업적/교환권 지급 family에 집중했음. 아래 「감지기 4단계」 종결 항목 참조.
@@ -346,12 +354,21 @@
     3. `js-api.md:260` `window.getKakaoUser` 소비처에도 **동일하게 `script-nav.js` 오기재** → 동일하게 정정.
   - **드리프트 아님으로 확인(검토했으나 정확했던 것들)**: `CottageGameView`/`getAllGamesArray`의 script-nav.js 소비 표기(`GameView` 별칭으로 실사용 확인), `COTTAGE_PAGE_LABELS_BY_PATH`, day-detail.js 의존관계 전체(`ensureGameSheet` 등), page-labels.js↔script-nav.js 로드 순서(14개 HTML 전수 확인), 빌드 파이프라인 경로, game-system 디렉터리 구조, `cottage-likes-changed`/`cottage-meeting-changed` 발화·수신처, GS5 escH 5사본, REFACTOR_CHECKPOINT.md 전체(이미 최신 상태).
   - **결론**: 실제 드리프트는 "소비처 리스트에 있으면 안 될 파일이 잘못 끼어든 것"(2건, 같은 파일명 script-nav.js가 반복 오기재)과 "파일 자체 누락"(1건) 패턴. 전체 문장 재작성 아닌 표 항목만 수정(zero-blast-radius).
+- [ ] **[감사] 관리자 페이지(`requests-admin.html`) 전체** (2026-07-18 등록 — 사용자 결정: "페이지 전체 리팩토링 한다고 생각하고 감사부터") — 「금일이용데이터 간헐 미표시」 단일버그 추적을 **종료하고 대체**한 항목. 전환 사유: 증상이 오래돼 재현 조건이 불확실("어떤 에런지 긴가민가")하고, 콘솔 에러 0건 + 가설 3건 기각으로 **단일 원인 추적의 기대값이 낮아짐**.
+  - **성격**: 감사(읽기)라 Yellow 이하. 단 **결과가 §3 항목 다발로 나올 것**이므로 착수 시 WIP 제한 확인.
+  - **범위 미확정 — 착수 시 사용자와 먼저 합의할 것**: 이 페이지는 요청관리 + 방문자/이용 분석 + 이벤트 퍼널이 한 파일에 있다(2100줄+). "기능이 조금씩 아쉬운 것들"(사용자 표현)이 어느 영역인지 먼저 좁히지 않으면 감사가 발산한다.
+  - **이미 확보된 입력 (재조사 금지)**: 아래 「방문/이용 집계」④의 기각 가설 3건 + 확정 버그 1건(`_startAnonHeartbeat` 자정 넘김) + 구조적 특성(`todayS > 0`이면 항목이 DOM에서 빠짐).
+  - ⚠️ **CLAUDE.md 「구현/리팩토링 분리」**: 감사 중 발견한 버그는 **등록만** 하고 그 자리에서 고치지 않는다.
 - [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
   - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)
   - ② **과거 session_key NULL 1,513/2,171(70%)** — 007 이전 legacy. 신규는 99% 채워짐. 소급 불가라 이 구간은 영구 fallback 집계. (아래 "명/회 역전" 제한사항)
   - ③ **이용시간 기기 중복** — 동일 유저 다기기 동시 사용 시 각 기기 시간이 모두 합산 (증상 기록은 §2 「알려진 제한사항」). **해법 방향: 서버 세션 단위 관리** — 2026-07-17까지 §3에 별도 항목("이용시간 기기 중복 카운트 방지")으로도 있던 것을 여기로 흡수(같은 건이 3곳에 있었음).
-  - ④ **관리자 금일이용데이터 간헐적 미표시** — 원인 불명 (아래 제한사항)
+  - ④ ~~**관리자 금일이용데이터 간헐적 미표시**~~ → **2026-07-18 단일버그 추적 종료, 페이지 전체 감사로 전환**(사용자 결정). 아래 「[감사] 관리자 페이지 전체」 항목으로 이관.
+    - **기각된 가설 3건 (정적 추적, 재조사 금지 — 근거 있음)**: ⓐ 로드순서 레이스 → 스크립트가 전부 classic이고 인라인 IIFE가 `supabase-client.js` 뒤라 `window.CottageDB`는 항상 정의됨(`requests-admin.html:813`의 조용한 early-return은 도달 불가). ⓑ `tried` 래치+1200ms 게이트 → `isOwner()`가 동기 localStorage 읽기([kakao-auth.js:202](../assets/js/kakao-auth.js#L202))라 그 시점에 확정됨. ⓒ KST 타임존 불일치 → 읽기/쓰기가 전부 동일 공식(`Date.now()+9h`).
+    - **콘솔 실측 (2026-07-18)**: 대괄호 라벨 에러 **0건**. 감지기 1~4단계가 켜진 상태의 결과라 "조회 실패로 조용히 빈 값" 경로는 사실상 배제됨.
+    - **확정된 실제 버그 1건 (미수정, 감사에서 처리)**: `_startAnonHeartbeat`의 1분 인터벌([supabase-client.js:1125-1132](../assets/js/supabase-client.js#L1125-L1132))이 `today_seconds`만 갱신하고 `today_date`는 세션 시작값에 고정 → 탭을 KST 자정 너머로 열어두면 `today_date`가 어제로 남아 관리자의 `today_date === todayKst` 조건이 거짓이 됨. 단 `page_sessions` 파생값(`ent`)을 우선 쓰므로([requests-admin.html:1088](../pages/admin/requests-admin.html#L1088)) 그 행이 없을 때만 발현.
+    - **구조적 특성**: 회원·비회원 모두 표시 조건이 `todayS > 0`이라 **0이면 항목이 DOM에서 빠진다**(0으로 표시되는 게 아님). ①번 `duration_sec=0`과 같은 뿌리.
   - ⑥ **로그인 시 잔여 누적시간이 `page_sessions`에 안 들어감** (2026-07-04 `PLAN_page_sessions_on_login.md`로 기획됐으나 **미구현 — 2026-07-17 코드 실측 확인**) — `page_sessions` INSERT는 [supabase-client.js:1022](../assets/js/supabase-client.js#L1022) `_syncTimeToDBNow(uid, insertPageSession=true)` **한 경로뿐**이고 이건 `visibilitychange`(탭 숨김)에서만 호출된다. **heartbeat는 `insertPageSession=false`로 부르고**([:972](../assets/js/supabase-client.js#L972)), **`beforeunload`/`pagehide`는 `_flushTime`(localStorage 전용)만 부른다**([:1034~1041](../assets/js/supabase-client.js#L1034)). → visibilitychange가 안 뜨거나 async INSERT가 못 끝난 세션의 시간은 `profiles.total_minutes`에만 남고 `page_sessions`엔 영영 안 들어감(= 월별/주별 차트와 '전체' 수치의 구조적 불일치).
     - **당초 문제("월별 차트에 나나만 보임")는 해소된 것으로 보임** — `page_sessions` 10,975행(최근 7일 753)으로 폭넓게 수집 중. 탭을 닫아도 브라우저가 unload 전에 `visibilitychange`(hidden)를 먼저 쏘기 때문으로 추정(미검증). **즉 급한 건 아니고, 남은 건 위 "영영 안 들어가는 잔여분"뿐.**
     - **기획됐던 해법**(삭제된 PLAN, `git show 4838691^:docs/PLAN_page_sessions_on_login.md`로 복원 가능): `upsertProfile`에서 `accumulated > 0`이면 `page_sessions` INSERT 추가, `entered_at`은 `_sessionEnterAt` 폴백. 중복 삽입은 `_popAccumulatedSecs`가 localStorage를 이미 비운 뒤라 없음. 착수 시 이 설계 재검토부터.
