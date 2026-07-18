@@ -193,7 +193,7 @@
 
 ### P2 — 기능 (선택)
 
-- [ ] **[feat] 기록입력 '최신 기록' 버튼 → 최근 세팅 드롭다운 선택** (2026-07-18 등록 → **드롭다운 구현, 스모크 대기**) — 1번 행 `↑ 최신 기록` 버튼([game-reviews.js:190](../assets/js/game-reviews.js#L190))이 최신 1건만 채우던 것을 개선. **1차(순회 토글)는 폐기** — 사용자 스모크에서 "실수로 지나치면 되돌리기 힘들다"(오버슈트) 지적 → **드롭다운 직접 선택으로 전환**. **구현**: `_prRecents`(내 기록 최신순 dedup 배열, `(group,count,names)` 시그니처로 중복 제거) 재사용. 버튼 클릭 → 최근 세팅 목록(`그룹 · N명 · 참여자`)이 드롭다운으로 뜨고 항목 클릭 시 그 세팅으로 채움([:276~](../assets/js/game-reviews.js#L276) 핸들러, `.pr-last-record-wrap/menu/item` CSS는 [style.css:7000](../assets/css/style.css#L7000)). 바깥클릭·ESC 닫기(setTimeout으로 오픈 클릭 즉시닫힘 방지). DB 추가조회 0. **스모크**: 기록입력 1번 행 '최신 기록' 클릭 → 최근 세팅 목록 뜨는지, 항목 클릭 시 그룹·인원·참여자 채워지는지, 바깥/ESC 닫힘, 2번+ 행 '위와 동일' 유지.
+- [x] ~~**[feat] 기록입력 '최신 기록' 버튼 → 최근 세팅 드롭다운 선택**~~ — ✅ **해결·스모크 통과** (2026-07-18). 1번 행 `↑ 최신 기록` 버튼([game-reviews.js:190](../assets/js/game-reviews.js#L190))이 최신 1건만 채우던 것 → **최근 세팅 드롭다운 선택**. (1차 순회 토글은 오버슈트 UX 문제로 폐기.) `_prRecents`(내 기록 최신순 dedup, `(group,count,names)` 시그니처) 목록을 버튼 클릭 시 표시, 항목 클릭 시 그룹·인원·참여자 채움([:276~](../assets/js/game-reviews.js#L276), CSS `.pr-last-record-*` [style.css:7000](../assets/css/style.css#L7000)). 바깥클릭·ESC 닫기. DB 추가조회 0.
 
 - [x] **게임시트 상단 레이아웃 개편** (커밋: 39fe161) — sheet-img-col 제거, sheet-en-title을 sheet-title-block 최상단으로 이동, 버튼 한 줄 배치([꽂혀있는 책장 보기][룰영상 보기]), 헤더 썸네일 클릭 시 _openCoverModal() 표지 확대 모달.
 
