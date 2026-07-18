@@ -554,12 +554,13 @@
     body.is-embedded .owned-page-nav { display: none !important; }
     body.is-embedded { overflow-x: hidden; }
 
-    /* 홈에서 등록/수정으로 바로 진입 시 — 주간 뷰를 아예 숨기고, body 배경도 투명하게 만들어
-       뒤에 있는 홈 화면이 그대로 비치게 함(플래너 페이지 자체가 안 보여야 함) */
-    body.is-quick-entry #viewWeek,
-    body.is-quick-entry #mainLoading { display: none !important; }
-    body.is-quick-entry,
-    body.is-quick-entry .inner-page { background: transparent !important; }
+    /* 홈에서 등록/수정으로 바로 진입 시 — 플래너 페이지 전체(.inner-page)를 숨기고 등록/수정
+       오버레이만 남긴다(오버레이는 position:fixed라 .inner-page display:none과 독립). body 배경도
+       투명하게 만들어 뒤 홈 화면이 비치게 함.
+       ⚠️ 과거엔 #viewWeek만 숨겼는데, 브레드크럼(동호회›모임 플래너)·<h1>모임 플래너</h1> 헤더가
+          남아 오버레이를 닫을 때 그 크롬이 한 프레임 드러나며 깜빡였다(2026-07-18 규명). */
+    body.is-quick-entry .inner-page { display: none !important; }
+    body.is-quick-entry { background: transparent !important; }
 
     .sched-slider-wrap { margin-bottom: 16px; }
     .sched-dual-range {
@@ -900,10 +901,10 @@
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
-        // ⚠️ is-quick-entry를 여기서 제거하지 말 것 — 제거하면 #viewWeek(주간뷰)가
-        //    부모가 모달을 숨기기 전에 한 프레임 그려져 "플래너가 켜졌다 꺼지는" 깜빡임이
-        //    난다(postMessage가 비동기라 부모 closeModal이 다음 태스크에 실행됨). 클래스는
-        //    다음 정상 오픈(cottage-reset-week)에서 정리한다 = 주간뷰를 실제로 보여줄 때만.
+        // ⚠️ is-quick-entry를 여기서 제거하지 말 것 — 이 클래스가 .inner-page(플래너 페이지
+        //    전체)를 display:none으로 숨기고 있는데, 제거하면 브레드크럼·"모임 플래너" 헤더가
+        //    부모가 모달을 숨기기 전에 한 프레임 그려져 깜빡인다(postMessage 비동기라 부모
+        //    closeModal이 다음 태스크에 실행됨). 클래스 정리는 다음 정상 오픈(cottage-reset-week).
         if (document.body.classList.contains('is-quick-entry')) {
           if (new URLSearchParams(location.search).get('embed') === 'true') {
             window.parent.postMessage({ type: 'cottage-quick-entry-closed' }, '*');

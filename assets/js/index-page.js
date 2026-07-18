@@ -1282,6 +1282,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   window.addEventListener('kakao-auth-ready', preload);
 
   function openModal(skipReset) {
+    // 정상(주간뷰) 오픈 — 이전 빠른진입 잔여 상태 정리. (닫기에선 안 뗀다: 닫기 페이드 중
+    // is-quick-entry가 빠지면 패널이 흰 480px 박스로 되돌아가 깜빡이므로, 정리는 여기서만.)
+    modal.classList.remove('is-quick-entry');
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
@@ -1314,7 +1317,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   function closeModal() {
     modal.setAttribute('aria-hidden', 'true');
     modal.classList.remove('is-open');
-    modal.classList.remove('is-quick-entry');
+    // ⚠️ is-quick-entry는 여기서 제거하지 말 것 — is-open 제거는 opacity 0.25s로 페이드되는데,
+    //    그 사이 is-quick-entry가 빠지면 .planner-sheet-panel이 흰 480px 박스(background:#fff)로
+    //    되돌아가 슬라이드·페이드하며 "플래너 모달이 켜졌다 꺼짐". 정리는 openModal(정상 오픈)에서.
     document.body.style.overflow = '';
     if (_meetingDirty) { _meetingDirty = false; _meetingReload?.(); }
   }
