@@ -1,12 +1,14 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-18 (세션 ⑧ — 문서감사·플래너 깜빡임(2차 규명·수정)·IP2·CLAUDE.md 규칙 전부 종결, 열린 스모크 0). **최근 2세션(⑦·⑧) 요약은 §0 상단.** 이전 세션(①~⑥) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
+최종 갱신: 2026-07-18 (세션 ⑨ — 감지기 4단계(쓰기 경로 검증) 종결, 감지기 1~4단계 전부 완료). **최근 세션(⑨·⑧·⑦) 요약은 §0 상단.** 이전 세션(①~⑥) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**진행 중 작업 없음** (2026-07-18 세션 ⑧ 종료 시점) · **열린 스모크 0건**(플래너 깜빡임·IP2 추천버튼 모두 2026-07-18 스모크 통과로 종결).
+**진행 중 작업 없음** (2026-07-18 세션 ⑨ 종료 시점) · **열린 스모크 0건**.
+
+**세션 ⑨ (2026-07-18)**: **감지기 4단계(쓰기 경로 검증) ✅ 종결** — 정적 census(③)로 supabase-client.js 쓰기 경로 전수 확인. record/comment/pref/meeting 계열은 이미 `return {error}` 전파라 갭 없음, 갭은 **추적성 write·toggle 계열·업적/교환권 지급 family**에 집중. 전부 로그 추가로 닫음(반환 계약 무변경, 실DB 쓰기 테스트 ①② 불필요). 커밋 c5b5f68(조용한 쓰기) + 🔗 UNIQUE 오삼킴 family(`error.code!=='23505'`만 로그). **감지기 1~4단계 전부 종결, 남은 건 ③ 에러 수집(Red)뿐.** §3 「감지기 4단계」 참조.
 
 **세션 ⑧ (2026-07-18)**: ①**문서-코드 참조 정합성 감사 ✅ 종결** — 인덱스 3파일을 rg로 실코드 대조, 음성 대조군 검증 후 드리프트 3건 수정(header.js 역할목록 누락, CottageDB·getKakaoUser 소비처 script-nav.js 오기재). §3 「문서-코드 참조 정합성 감사」. ②**플래너 깜빡임 fix ✅**(1차 4ab32d8 실패 → 2차 511c15e, **스모크 통과**) — 진짜 원인은 부모 패널 흰박스 복귀(닫기 페이드 중 부모 is-quick-entry 제거)+iframe 페이지 크롬 미숨김. 3부분 구조 수정((a)close 유지 (b).inner-page display:none (c)closeModal에서 안 뗌). §2 참조. ③**IP2 ✅ 종결(2번 방안)** — 감사 전제("15+개 onclick") 틀림(실측 onclick 2개), 전체 IIFE 래핑은 R11c 위험 대비 이득 미미라 기각. 대신 onclick 2개를 addEventListener로 전환해 배선 균일화. **스모크 통과**(더보기→오버레이·✕닫기). REFACTOR_CHECKPOINT 「Phase 3」 IP2 행.
 
@@ -16,9 +18,8 @@
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | 감지기 4단계 (쓰기 경로 검증) | §3 | 기술부채 / Opus medium, 선행 = 3단계(완료) |
-| 2 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
-| 3 | GS5(escH 5사본) — **선행조건: 로드순서 통일** | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「재방문 시 판단」 | 보류 / 착수 전 선행 확인 |
+| 1 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
+| 2 | GS5(escH 5사본) — **선행조건: 로드순서 통일** | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「재방문 시 판단」 | 보류 / 착수 전 선행 확인 |
 
 **Phase 3 감사 실착수 전부 종결** (IP1·IP2·GS4·GS7·문서감사 ✅ / GS5만 선행조건 대기, DD4·IP3 판정종결). REFACTOR_CHECKPOINT 「Phase 3」 표에 남은 열린 항목은 GS5뿐.
 
@@ -308,7 +309,7 @@
   - **다음 관찰 포인트**: "관리자 금일이용데이터 간헐적 미표시(원인 불명)"이 이 패턴 때문에 조사가 막혔을 가능성(가설). `getPageAnalytics`가 1000행 정상 반환 + 쿼리 오류도 없음 → 원인이 조회가 아니라 **화면 렌더/집계 로직 쪽**일 가능성이 올라감(미검증). 재현 시 콘솔 확인.
   - 🔍 **감지기 현재 커버리지 — "화재 0건"의 유효 범위 (2026-07-17 정직한 한계, 사용자와 확인)**: 아래 3개가 아직 사각지대다. **"불난 곳 0건"은 `supabase-client.js`의 읽기 함수 42개에 한정된 결론**이며 앱 전체 안전 증명이 아니다.
     - ① ~~**파일 커버리지 절반 이하**~~ → **2026-07-18 갱신**: raw supabase 쿼리 오류 감지는 `supabase-client.js`(구조분해 59 + Promise.all 5) + `game-sheet.js`(init 함수 JS 예외 7) 처리 완료. `kakao-auth.js` 24곳·`achievements.js` 4곳은 **대상 아님으로 재분류**(전부 CottageDB 래퍼 위 — 래퍼가 내부 수신). 즉 "raw supabase 미수신"은 이제 앱 전역에서 없음.
-    - ② **쓰기 경로 미검증** — 하니스가 실DB에 쓰지 않으려고 **읽기(`get*`)만 호출**. `recordGamePlay`·`upsertMeetingVote`·업적 지급 등 write에 불이 났는지는 **모름**(아래 신규 항목).
+    - ② ~~**쓰기 경로 미검증**~~ → **2026-07-18 종결(4단계)**: 정적 census로 쓰기 경로 전수 확인 후 갭 전부 로그 추가(커밋 c5b5f68 + 🔗 family). record/meeting/pref 계열은 이미 전파, 갭은 추적성 write·toggle·업적/교환권 지급 family에 집중했음. 아래 「감지기 4단계」 종결 항목 참조.
     - ③ **울려도 아무도 못 듣는다** — `console.error`는 사용자 브라우저 콘솔에만 남고 우리에게 오지 않는다. DevTools를 열어둔 사람만 본다. **④ "관리자 금일이용데이터 간헐적 미표시"가 원인불명인 이유가 정확히 이것일 수 있음**(간헐적이라 재현 시점에 콘솔이 안 열려 있음). 근본 해결 = 에러 수집(`page_events`에 error 이벤트 적재 or 외부 수집기) → **Red + Plan 필수, 별도 기획 필요**(현재 미제안·미착수).
 - [x] ~~**[기술부채] 감지기 3단계 — 나머지 JS 파일 확장**~~ (2026-07-17 등록 → **2026-07-18 종결**) — `supabase-client.js` Promise.all 갭(위 항목) + `game-sheet.js`를 처리하고, 나머지 대상은 실측으로 "대상 아님"으로 재분류. **문서가 겁냈던 "`{data, error}` 호출부 구조 변경"은 착수해 보니 불필요했다** — 남은 자리는 raw supabase가 아니었다.
   - **착수 시 실측으로 드러난 것(문서 전제가 세 군데 틀림)**:
@@ -317,10 +318,10 @@
   - **결론적으로 "2단계 방식 못 쓴다 = 구조 변경 필요"는 오판이었다** — 남은 자리 어디에도 raw supabase가 없어 `{data, error}` 수신 대상이 애초에 없었다. game-sheet는 순수 로그 추가로 끝났고, achievements는 손댈 가치가 없었다. **"위반 N곳" 숫자는 이번에도 3군데(ach 5→4, gs 9→7, 그리고 대상 여부 자체) 틀렸다** — 착수 전 실측이 매번 옳다.
   - **제외 판정 유지**: `index-page.js`(화면에 실패 표시함) · `script-nav.js`(localStorage 방어용). 위 "제외 판정" 항목 참조.
   - **커버리지 상태**: raw supabase 쿼리 오류 감지는 이제 `supabase-client.js`(구조분해 59 + Promise.all 5 + 기존) 전역 커버. 남은 사각지대는 **쓰기 경로 검증(4단계)**과 **에러 수집(③, Red)** 둘뿐 — 아래 참조.
-- [ ] **[기술부채] 감지기 4단계 — 쓰기 경로 검증** (2026-07-17 등록, 사용자 지시. **선행: 3단계**) — 현재 화재 테스트는 **읽기 함수만** 돌린다(실DB 오염 방지). `recordGamePlay`·`updateGamePlay`·`upsertMeetingVote`·`deleteMeetingVote`·`addGamePref`·`grantAchievementVoucher`·`redeemVoucher` 등 **쓰기 경로에 불이 났는지는 아직 모름**.
-  - **난점 = 테스트 방법**: 실DB에 쓸 수 없으니 ①테스트 전용 user_id로 쓰고 즉시 정리(고아 행 위험 — 실제로 `meeting_vote_games` orphan 2행 사고 전례 있음, §2 참조) ②Supabase 로컬/브랜치 DB ③쓰기 함수의 error 수신 여부만 **정적 검사**(실행 없이) 중 택1. **③이 가장 싸고 안전** — 쓰기 함수 대부분은 이미 `const { error } = await`로 받고 있어(2단계 실측: error 수신 45곳 중 다수가 write) **실제 갭은 작을 가능성**이 높음. 착수 시 ③으로 갭 규모부터 확인하고 ①②는 갭이 클 때만.
-  - ⚠️ 하니스는 `window.location.hostname='localhost'`면 추적성 write가 자체 차단되므로, 쓰기 테스트 시 이 가드를 어떻게 다룰지 먼저 결정할 것.
-  - 🔗 **4단계 착수 시 함께 볼 것 — `grantAchievement` 진짜 에러를 UNIQUE 위반으로 오삼킴** (2026-07-18 감지기 3단계 중 부수 발견): [supabase-client.js:1657](../assets/js/supabase-client.js#L1657)이 `if (error) return false; // 중복이면 UNIQUE 위반 → 조용히 false`인데, **error가 UNIQUE 위반(정상)인지 컬럼 오타·RLS 차단(진짜 실패)인지 구분하지 않고 전부 false**로 삼킨다. 즉 업적 지급이 조용히 실패해도 감지 불가. 같은 패턴이 `setRepAchievement`(1665, `return !error`)에도 있음. **정정 방향**: UNIQUE 위반 코드(Postgres `23505`)만 조용히 넘기고 그 외 `error`는 `console.error('[grantAchievement]', error)`. **동작 변경**(로그 추가는 무변경이나 이건 "정상 분기 판별" 로직이라 신중)이라 감지기 4단계(쓰기 경로)와 성격이 같아 여기 묶음. 급하지 않음 — 현재 오지급/미지급 사용자 보고 없음.
+- [x] ~~**[기술부채] 감지기 4단계 — 쓰기 경로 검증**~~ (2026-07-17 등록 → **2026-07-18 종결**, 정적 검사 ③) — 실DB 쓰기 없이 정적 census로 쓰기 경로(insert/update/delete/upsert) 전수 확인. **③만으로 끝** — 갭이 전부 로그 추가로 닫혀 ①②(실DB 쓰기 테스트)는 불필요했다.
+  - **결과 = §3 예측 반쪽 맞음**: `recordGamePlay`·`updateGamePlay`·insert/delete/updateComment·`addGamePref`·`upsertMeetingVote`·`deleteMeetingVote`·`addMeetingVoteGame`·`setMeetingVoteGame*`·`removeMeetingVoteGame`·`submitGameReview`·`deletePlayPhoto`·`banUser` 등은 이미 `return {error}` 전파(또는 로그)라 **갭 없음**(예측대로). **갭은 두 family에 집중** — ①추적성 write(`trackView`·`trackEvent`·`_startAnonHeartbeat` anon_sessions·`page_sessions` fire-and-forget)가 쿼리 오류 조용 ②`toggleGameLike`/`toggleGameCurious`가 SELECT 에러만 로그하고 실제 delete/insert 에러를 삼킴 ③수신했으나 미로그(`_syncTimeToDBNow`·`upsertProfile`·`updateNotifSeenAt`). **커밋 c5b5f68** — 전부 반환 계약 무변경(로그만 추가).
+  - **🔗 UNIQUE 오삼킴 family 동반 종결**(이 커밋): `grantAchievement`·`grantAchievementVoucher`·`grantFirstPlayVoucher`는 `error.code !== '23505'`일 때만 로그(23505=정상 중복 방어, 파일 관용 상수 = `addMeetingVoteGame`도 사용)로 진짜 실패와 분리. `setRepAchievement`·`setRepTitle`·`grantDevVoucher`(UNIQUE 없음)·`redeemVoucher`는 무조건 로그. **반환 계약 전부 무변경**(return false/reason 그대로) → 방침 "로그는 전부 켜고" 범위, 동작 변경 아님.
+  - **남은 사각지대 = ③ 에러 수집(Red)뿐** — `console.error`는 사용자 브라우저 콘솔에만 남고 우리에게 안 옴. 위 「감지기 현재 커버리지」③(관리자 금일이용데이터 간헐 미표시 가설 포함) 참조. 이것만 열려 있고 감지기 1~4단계는 전부 종결.
 - [x] ~~**[기술부채] 문서-코드 참조 정합성 감사**~~ — ✅ **2026-07-18 종결** (2026-07-18 등록 — 사용자 제기 "참조가 잘못돼 못 찾거나 토큰 낭비하는 것들도 리팩토링해야 하지 않나"). 범위 = `PROJECT_STRUCTURE.md` 파일역할 표·`js-api.md` 소비처 열·`REFACTOR_CHECKPOINT.md` 감사 항목(네비게이션 인덱스 3파일).
   - **착수 전 확인**: 이 세션 착수 전 이미 고쳐져 있던 2건(GS7 감사 항목·js-api.md CottageGameView 소비처, 커밋 9b8c946·4e178b4) 확인 완료 — 중복 수정 없음.
   - **음성 대조군**: 가짜 함수명(`totallyFakeFn_XYZ123`)을 실제 파일에 grep해 0건 확인 + 실존 함수(`getGameKeyById`) grep으로 15건 확인 → grep 도구 자체가 정상 동작함을 먼저 검증(CLAUDE.md 「검증 결과 0건이면 검사기 의심」).

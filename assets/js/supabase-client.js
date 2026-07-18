@@ -1665,7 +1665,11 @@ window._cottageSess = (function () {
   async function grantAchievement(userId, achievementId) {
     try {
       const { error } = await db.from('user_achievements').insert({ user_id: userId, achievement_id: achievementId });
-      if (error) return false; // 중복이면 UNIQUE 위반 → 조용히 false
+      if (error) {
+        // 23505 = UNIQUE 위반(이미 달성 = 정상 중복)만 조용히, 그 외는 컬럼오타·RLS 등 진짜 실패라 로그
+        if (error.code !== '23505') console.error('[grantAchievement]', error);
+        return false;
+      }
       return true;
     } catch (err) { console.error('[grantAchievement]', err); return false; }
   }
@@ -1673,6 +1677,7 @@ window._cottageSess = (function () {
   async function setRepAchievement(userId, achievementId) {
     try {
       const { error } = await db.from('profiles').update({ rep_achievement_id: achievementId }).eq('user_id', userId);
+      if (error) console.error('[setRepAchievement]', error);
       return !error;
     } catch (err) { console.error('[setRepAchievement]', err); return false; }
   }
@@ -1808,6 +1813,7 @@ window._cottageSess = (function () {
   async function setRepTitle(userId, titleId) {
     try {
       const { error } = await db.from('profiles').update({ rep_title_id: titleId || null }).eq('user_id', userId);
+      if (error) console.error('[setRepTitle]', error);
       return !error;
     } catch (err) { console.error('[setRepTitle]', err); return false; }
   }
@@ -1827,7 +1833,11 @@ window._cottageSess = (function () {
       const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: 1, reason: 'achievement', note: achievementId, nickname });
-      if (error) return false; // partial unique index 위반 포함 — DB 2차 방어
+      if (error) {
+        // 23505 = partial unique 위반(중복 지급 방어 = 정상)만 조용히, 그 외는 진짜 실패라 로그
+        if (error.code !== '23505') console.error('[grantAchievementVoucher]', error);
+        return false;
+      }
       return true;
     } catch (err) { console.error('[grantAchievementVoucher]', err); return false; }
   }
@@ -1869,7 +1879,11 @@ window._cottageSess = (function () {
       const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: 1, reason: 'first_play', nickname });
-      if (error) return false; // unique index 위반 포함 — DB 2차 방어
+      if (error) {
+        // 23505 = unique 위반(중복 지급 방어 = 정상)만 조용히, 그 외는 진짜 실패라 로그
+        if (error.code !== '23505') console.error('[grantFirstPlayVoucher]', error);
+        return false;
+      }
       return true;
     } catch (err) { console.error('[grantFirstPlayVoucher]', err); return false; }
   }
@@ -1878,6 +1892,7 @@ window._cottageSess = (function () {
     try {
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: 1, reason: 'dev_test' });
+      if (error) console.error('[grantDevVoucher]', error);
       return !error;
     } catch (err) { console.error('[grantDevVoucher]', err); return false; }
   }
@@ -1911,7 +1926,7 @@ window._cottageSess = (function () {
       const nickname = window.getKakaoUser?.()?.nickname || null;
       const { error } = await db.from('voucher_log')
         .insert({ user_id: String(userId), delta: -product.cost, reason: 'redeem', product_id: productId, nickname, note: product.name });
-      if (error) return { ok: false, reason: 'db_error' };
+      if (error) { console.error('[redeemVoucher]', error); return { ok: false, reason: 'db_error' }; }
       return { ok: true };
     } catch (err) { console.error('[redeemVoucher]', err); return { ok: false, reason: 'error' }; }
   }
