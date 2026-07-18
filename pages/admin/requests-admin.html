@@ -1162,6 +1162,23 @@
     ];
     const EVENT_ALL_TYPES = EVENT_FAMILIES.flatMap(f => f.types);
 
+    // 이벤트를 "사람" 단위로 세기 위한 식별자. 로그인 회원은 user_id, 비로그인은
+    // session_key. 둘 다 없는 행(전체의 3%)은 누구 것인지 알 수 없어 명 집계에서 뺀다.
+    // ⚠️ session_key는 2026-07부터 100%, 06월은 8%뿐이라 그 이전 구간은 명이 과소집계된다.
+    const eventPersonId = e => e.user_id || e.session_key || null;
+    // 건수와 사람수는 다르다 — 한 사람이 여러 번 누르므로(실측 443회=38명, 평균 11.7).
+    function countEvents(evts, types) {
+      const set = new Set(types);
+      let n = 0; const people = new Set();
+      for (const e of evts) {
+        if (!set.has(e.event_type)) continue;
+        n++;
+        const p = eventPersonId(e);
+        if (p) people.add(String(p));
+      }
+      return { n, people, u: people.size };
+    }
+
     function renderCharts(rows, allProfiles, profilesMap, pageViews = []) {
       if (!window.Chart) return;
 
@@ -1847,17 +1864,17 @@
         // 계열당 한 줄 = "어느 영역이 활발한가"를 한눈에, 상세는 카드 클릭 → 이벤트 탭.
         if (_cachedEvents !== null) {
           const evts = (start || end) ? filterByRange(_cachedEvents, start, end, 'created_at') : _cachedEvents;
-          const perType = {};
-          for (const e of evts) perType[e.event_type] = (perType[e.event_type] || 0) + 1;
           const famRows = EVENT_FAMILIES
-            .map(f => ({ f, n: f.types.reduce((s, t) => s + (perType[t] || 0), 0) }))
+            .map(f => ({ f, ...countEvents(evts, f.types) }))
             .filter(x => x.n > 0)
             .sort((a, b) => b.n - a.n);
           const _sumEvt = document.getElementById('sumEventCount');
           if (_sumEvt) {
+            // 건수와 명을 함께 — 건수만 보면 소수의 반복 클릭이 활동량으로 오독된다.
             _sumEvt.innerHTML = famRows.length
-              ? famRows.map(({ f, n }) =>
-                  `<span style="white-space:nowrap;display:block">${f.emoji} ${escH(f.label)} <span>(${n.toLocaleString()})</span></span>`
+              ? famRows.map(({ f, n, u }) =>
+                  `<span style="white-space:nowrap;display:block">${f.emoji} ${escH(f.label)} <span>${n.toLocaleString()}회</span>` +
+                  (u ? `<span style="color:var(--muted)"> · ${u}명</span>` : '') + `</span>`
                 ).join('')
               : '—';
           }
@@ -2026,18 +2043,27 @@
           : rows.filter(r => (!start || r.created_at >= start) && (!end || r.created_at < end));
 
         function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
-        function stepRow(badge, label, n) {
+        // 건수 / 사람수 / 평균을 함께 — 443회가 38명이면 완전히 다른 이야기다.
+        function stepRow(badge, label, s) {
+          const avg = s.u ? (s.n / s.u).toFixed(1) : null;
           return `<div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0;width:22px;line-height:1">${badge}</span>
             <span style="font-size:12px;color:var(--muted);font-weight:500;flex:1;min-width:0;line-height:1.3">${label}</span>
-            <div style="text-align:center;min-width:34px;flex-shrink:0">
-              <div style="font-size:17px;font-weight:900;color:var(--text);line-height:1">${n}</div>
+            <div style="text-align:right;flex-shrink:0;line-height:1.25">
+              <div style="font-size:17px;font-weight:900;color:var(--text)">${s.n.toLocaleString()}<span style="font-size:10px;font-weight:600;color:var(--muted)">회</span></div>
+              <div style="font-size:10px;color:var(--muted);font-weight:600">${s.u}명${avg ? ` · 평균 ${avg}` : ''}</div>
             </div>
           </div>`;
         }
-        function convArrow(fromN, toN) {
-          const c = fromN > 0 ? pct(toN, fromN) : '-';
-          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1">↓ <span style="color:var(--green);font-weight:700">${c}</span></div>`;
+        // 전환율은 **사람 집합의 교집합**으로 센다 — "앞 단계를 한 사람 중 몇 %가 다음도 했나".
+        // 예전엔 건수끼리 나눠 167%·118% 같은 값이 나왔다(퍼널이면 불가능한 수). 사람 기준이면
+        // 교집합 ⊆ 앞 단계라 원리상 100%를 넘을 수 없다.
+        // ⚠️ 순서는 보지 않는다(둘 다 한 사람 비율) — 엄밀한 "이후에 했나"는 세션·시각 비교가 필요.
+        function convArrow(from, to) {
+          let inter = 0;
+          for (const p of to.people) if (from.people.has(p)) inter++;
+          const c = from.u > 0 ? pct(inter, from.u) : '-';
+          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1" title="${from.u}명 중 ${inter}명이 다음 단계도 함">↓ <span style="color:var(--green);font-weight:700">${c}</span></div>`;
         }
         function axisCard(emoji, title, steps, nDots) {
           const dots = Array.from({length: nDots}, (_, i) =>
@@ -2055,11 +2081,11 @@
         // 이전엔 '오늘' 값으로만 전환율을 계산해 오늘 클릭이 0이면 5칸 전부 '-'였다.
         function renderFunnel(start, end, label) {
           const evts = inRange(events, start, end);
-          const c = t => evts.filter(e => e.event_type === t).length;
+          const c = t => countEvents(evts, [t]);
           const hr = c('home_recommend_main_click'), rgd = c('home_recommend_game_detail_click'), rall = c('home_recommend_all_click');
           const hg = c('home_record_main_click'), rm = c('home_record_more_click'), rw = c('home_record_write_click');
           const mt = c('home_meeting_main_click'), mp = c('home_meeting_planner_click');
-          el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')}</div>
+          el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')} <span style="font-weight:400">· 전환율은 사람 기준(앞 단계를 한 사람 중 다음도 한 비율)</span></div>
           <div style="display:flex;flex-direction:column;gap:6px">
           ${axisCard('🔍', '추천게임 찾기', `
             ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr)}

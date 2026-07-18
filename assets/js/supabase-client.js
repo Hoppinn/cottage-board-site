@@ -1256,11 +1256,16 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getPageAnalytics]', err); return []; }
   }
 
+  // user_id/session_key도 함께 반환한다 — 관리자 분석이 "몇 건"뿐 아니라 "몇 명"을
+  // 세기 위함(한 사람이 여러 번 누르므로 건수만으론 과대평가된다. 실측: 홈 모임
+  // 날짜칩 443회 = 38명). 사람 식별은 `user_id || session_key` 순.
+  // ⚠️ session_key는 2026-07부터 100% 채워지고 그 이전(06월)은 8%뿐이라, 오래된
+  //    구간의 "명" 집계는 과소집계된다. 건수는 영향 없음.
   async function getEventCounts(eventTypes, daysBack = 7) {
     try {
       const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
       const { data, error } = await db.from('page_events')
-        .select('event_type, created_at')
+        .select('event_type, created_at, user_id, session_key')
         .in('event_type', eventTypes)
         .gte('created_at', since);
       if (error) console.error('[getEventCounts]', error);

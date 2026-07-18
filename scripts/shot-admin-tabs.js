@@ -94,7 +94,7 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
   // "오늘"이 "-"인 건 정상(그날 클릭이 0일 뿐) — 기간을 넓혔을 때 살아나는지가 판정 기준이다.
   console.log('\n=== 발견 #6 — 퍼널 전환율 (기간별) ===');
   await clickTab('event');
-  let anyLive = false;
+  let anyLive = false, over100 = 0, checked = 0;
   for (const [days, nm] of [['1', '오늘'], ['7', '7일'], ['30', '30일'], ['0', '전체']]) {
     await page.evaluate(d => document.querySelector(`.admin-chart-period-btn[data-days="${d}"]`)?.click(), days);
     await page.waitForTimeout(900);
@@ -104,9 +104,15 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
     });
     const live = f.rates.filter(x => x !== '-').length;
     if (live > 0) anyLive = true;
+    f.rates.filter(x => x.endsWith('%')).forEach(x => { checked++; if (parseInt(x, 10) > 100) over100++; });
     console.log(`  [${nm}] "${f.period}" → ${f.rates.join(',') || '(없음)'}  (살아있는 칸 ${live}/${f.rates.length})`);
   }
   console.log('  판정:', anyLive ? '✅ 기간을 넓히면 전환율이 계산됨' : '🔴 어느 기간에서도 전부 "-" — 배선 확인');
+  // 전환율은 사람 집합의 교집합/앞단계라 100%를 넘을 수 없다(교집합 ⊆ 앞단계).
+  // 넘으면 건수 기준으로 되돌아갔다는 뜻 — 발견 #10의 재발 신호다.
+  console.log('  100% 초과:', over100 === 0
+    ? `✅ 0건 / 검사 ${checked}건 (사람 기준이라 원리상 불가)`
+    : `🔴 ${over100}건 — 건수 기준으로 회귀했는지 확인`);
 
   console.log('\n=== 발견 #7 — 이용시간 차트 x축 눈금 (초 데이터 + 분 라벨) ===');
   if (r.memberChart) {

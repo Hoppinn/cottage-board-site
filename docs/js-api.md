@@ -70,8 +70,9 @@ return data || [];
 | `getAllProfiles()` | 전체 프로필. 어드민 회원목록 + **nickname→user_id 해석**(game-reviews 허브 `_profileNickMap`·index-page 홈 최근 플레이 참여자 이름 클릭). ⚠️ 반환 행의 kakao 키는 **`user_id`**(profiles엔 `id` 컬럼 없음) |
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |
-| `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 `[{event_type, created_at}]`. admin/localhost 제외 없음(쿼리 전용) |
-| `getPageViewCounts(page, daysBack=7)` | page_views에서 특정 page의 최근 N일 로우 반환 `[{created_at}]`. 관리자 이벤트 퍼널의 "메인 방문" 단계용(143차-160) — page_events가 아니라 page_views 기준임에 유의 |
+| `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 **`[{event_type, created_at, user_id, session_key}]`**. admin/localhost 제외 없음(쿼리 전용). 소비처: `index-page.js`(히어로 통계 — `event_type`/`created_at`만 읽음)·`requests-admin.html`(요약 계열 카드 + 이벤트 퍼널) |
+| ↳ **식별자 2개 추가 (2026-07-19)** | "몇 건"뿐 아니라 **"몇 명"**을 세기 위함 — 한 사람이 여러 번 누르므로 건수만으론 과대평가된다(실측: 홈 모임 날짜칩 **443회 = 38명**, 평균 11.7회). 사람 식별은 **`user_id \|\| session_key`** 순, 둘 다 없는 행(전체의 3%)은 명 집계에서 제외. **가산적 변경이라 기존 소비처 무영향**. ⚠️ `session_key`는 **2026-07부터 100%**, 그 이전(06월)은 **8%**뿐이라 오래된 구간의 명 집계는 과소집계됨(건수는 무관) |
+| `getPageViewCounts(page, daysBack=7)` | page_views에서 특정 page의 최근 N일 로우 반환 `[{created_at}]`. ⚠️ **2026-07-19 기준 소비처 0건** — 관리자 퍼널의 "메인 방문" 단계용으로 만들었으나 그 단계를 그리는 코드가 없어 결과를 아무도 읽지 않았고, 헛도는 왕복이라 호출을 제거했다([PLAN_funnel_analytics.md](PLAN_funnel_analytics.md) 정정 참조). 함수 자체는 보존 |
 | `getMyStats(userId, nickname)` | 내 활동 통계 |
 | `getMyNotifications(userId, nickname, notifSeenAt)` | 최근 알림 목록 반환. ①태그된 기록(최근20) ②궁금해요 게임 코멘트(최근20) ③구매완료(최근10) ④new_game(newGameSeenAt 이후 추가된 게임) ⑤new_intro(타인 소개글, 로그인 회원 전체 수신, `{type:'new_intro', count, names, firstUserId, date, isNew}`). notifSeenAt=null이면 지평선 없음(전체 기간). 반환: `[{type, key, keys?, ..., isNew}]` |
 | ↳ **`isNew` 판정 (2026-07-18 변경)** | `(지평선 이후) && !notif_read_keys.has(key)` — 지평선(`max(notifSeenAt, profiles.notif_seen_at)`)**과** 개별 읽음 키를 **함께** 본다. 이전엔 지평선만 봤음 |
