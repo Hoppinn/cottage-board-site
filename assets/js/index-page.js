@@ -1054,9 +1054,10 @@ function toDateStr(d) {
     const name  = rpGameName(r.game_id);
     const thumb = rpThumb(r.game_id);
     const date  = rpDate(r.played_at, r.created_at);
+    const gameKey = window.getGameKeyById?.(r.game_id) || r.game_id;
 
     const thumbHtml = thumb
-      ? `<img class="pr-rec-thumb" src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      ? `<img class="pr-rec-thumb${gameKey ? ' pr-rec-thumb--link' : ''}" src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none'">`
       : '';
 
     const countTag = r.player_count
@@ -1089,7 +1090,7 @@ function toDateStr(d) {
     body.innerHTML = `
       <div class="rp-rich-card">
         <div class="rp-rich-date">${date}</div>
-        <div class="pr-rec-row pr-rec-row--game">
+        <div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({ gameId: r.game_id || '', mine: false })}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}
             <div class="pr-rec-main">
@@ -1103,6 +1104,34 @@ function toDateStr(d) {
         </div>
       </div>`;
 
+    // 게임 썸네일·이름·인원 → 게임시트 (게임-리뷰 허브와 동일 진입점)
+    if (gameKey) {
+      const openSheet = e => { e.stopPropagation(); window.ensureGameSheet?.(); window.openGameRecordSheet?.(gameKey); };
+      body.querySelectorAll('.pr-rec-thumb, .pr-rec-game, .pr-player-header').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', openSheet);
+      });
+    }
+
+    // 사진 → 라이트박스 (공용 openRecordLightbox — wrap[data-urls] + row[data-record] 사용)
+    body.querySelectorAll('.pr-rec-photo').forEach(img => {
+      img.addEventListener('click', e => {
+        e.stopPropagation();
+        const wrap = img.closest('.pr-rec-photo-wrap');
+        const row = img.closest('.pr-rec-row');
+        try { window.openRecordLightbox?.(wrap, row, Number(img.dataset.idx || 0)); } catch (_) {}
+      });
+    });
+    body.querySelectorAll('.pr-rec-photo-more').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        const wrap = el.closest('.pr-rec-photo-wrap');
+        wrap.querySelectorAll('.sheet-photo-hidden').forEach(item => item.classList.remove('sheet-photo-hidden'));
+        el.remove();
+      });
+    });
+
+    // 리뷰어 닉네임 → 프로필 (기존)
     body.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => {
