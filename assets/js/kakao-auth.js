@@ -2483,7 +2483,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       window._cottageSess.set(String(user.id), _s);
       window.CottageDB?.updateNotifSeenAt?.(String(user.id), _now);
     }
-    container.querySelectorAll('.profile-notif-list .is-new').forEach(li => {
+    // 9번째부터는 '외 N건 더 보기'의 별도 <ul>(.profile-notif-more-list)에 있어 함께 훑어야 함
+    container.querySelectorAll('.profile-notif-list .is-new, .profile-notif-more-list .is-new').forEach(li => {
       li.classList.remove('is-new');
       li.querySelector('.profile-notif-new-badge')?.remove();
     });
@@ -2502,7 +2503,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     }
     document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
     _markRewardCardSeen(container);
-    const remaining = container.querySelectorAll('.profile-notif-list .is-new').length;
+    const remaining = container.querySelectorAll('.profile-notif-list .is-new, .profile-notif-more-list .is-new').length;
     if (remaining === 0) {
       _resetNotifBtnAndConfirmAll(container);
     }
