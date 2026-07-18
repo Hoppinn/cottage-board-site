@@ -12,6 +12,7 @@
 | CottageDB 함수 / JS 전역 API | [docs/js-api.md](js-api.md) |
 | localStorage 키/구조/크로스파일 의존관계 | [docs/ls-schema.md](ls-schema.md) |
 | 업적/칭호/캐릭터/교환권/성장보드 (SSOT) | [docs/achievement-system.md](achievement-system.md) |
+| 관리자 분석 — 표시 원칙·발견 대장·실행계획 (SSOT) | [docs/admin-analytics.md](admin-analytics.md) |
 
 ---
 
