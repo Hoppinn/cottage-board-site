@@ -1,7 +1,7 @@
 (function () {
 
   // GR6: 파일 내부에서만 쓰이는 상태 — window 노출 제거(IIFE 내부화)
-  let _prGroups, _prLatestRecord, _prMoreOutsideClickBound, _refreshAutocompleteLists;
+  let _prGroups, _prRecents = [], _prRecentIdx = -1, _prMoreOutsideClickBound, _refreshAutocompleteLists;
 
   // ── helpers ─────────────────────────────────────────────────────
 
@@ -293,12 +293,15 @@
         };
 
         if (sameBtn.classList.contains('pr-last-record-btn')) {
-          // 행 1: 가장 최신 기록에서 그룹명·인원·참여자 가져오기
-          const rec = _prLatestRecord;
-          if (!rec) return;
+          // 행 1: 내 최근 기록을 최신순으로 순회(중복 세팅 제외) — 누를 때마다 다음 세팅으로.
+          if (!_prRecents.length) return;
+          _prRecentIdx = (_prRecentIdx + 1) % _prRecents.length;
+          const rec = _prRecents[_prRecentIdx];
           const grpInput = document.getElementById('prGroup');
-          if (grpInput && rec.group) grpInput.value = rec.group;
+          if (grpInput) grpInput.value = rec.group || '';
           fillCountAndNames(rec.count, rec.names);
+          // 어떤 세팅을 불러왔는지 버튼에 표시(맹목 순회 방지)
+          sameBtn.textContent = `↑ ${_prRecentIdx + 1}/${_prRecents.length} · ${rec.group || '그룹없음'} · ${rec.count || '?'}명`;
         } else {
           // 행 2+: 바로 위 행에서 복사
           const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
@@ -502,7 +505,7 @@
       }
       const _uid = String(window.getKakaoUser?.()?.id || '');
       const _myNick = window.getKakaoUser?.()?.nickname?.toLowerCase() || '';
-      const _myLatest = _uid ? (recordsData || [])
+      const _mySorted = _uid ? (recordsData || [])
         .filter(r =>
           String(r.user_id) === _uid ||
           (_myNick && (r.player_names || '').split(',').some(n => n.trim().toLowerCase() === _myNick))
@@ -513,8 +516,18 @@
           const diff = new Date(db) - new Date(da);
           if (diff !== 0) return diff;
           return new Date(b.created_at) - new Date(a.created_at);
-        })[0] : null;
-      _prLatestRecord = _myLatest ? { count: _myLatest.player_count, names: _myLatest.player_names, group: _myLatest.group_name } : null;
+        }) : [];
+      // '최신 기록' 토글용: 서로 다른 세팅(그룹·인원·참여자)만 최신순으로 모음.
+      // 같은 모임의 여러 게임 기록은 세팅이 같아 중복이므로 시그니처로 dedup(무의미한 순회 방지).
+      const _seenSetup = new Set();
+      _prRecents = [];
+      for (const r of _mySorted) {
+        const sig = `${r.group_name || ''}|${r.player_count || ''}|${(r.player_names || '').trim()}`;
+        if (_seenSetup.has(sig)) continue;
+        _seenSetup.add(sig);
+        _prRecents.push({ count: r.player_count, names: r.player_names, group: r.group_name });
+      }
+      _prRecentIdx = -1;
       renderRecords(recordsData);
     } catch (err) {
       console.error(err);
