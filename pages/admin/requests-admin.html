@@ -1141,6 +1141,27 @@
       renderCharts(rows, allProfiles, profilesMap, pageViews);
     }
 
+    // ── 이벤트 계열 표 (단일 출처) ──────────────────────────────────────
+    // 🚨 새 trackEvent 타입을 추가하면 **여기에도 등록**할 것. 조회 목록이 이 표에서
+    //    파생되므로, 여기 없는 이벤트는 관리자 화면이 아예 조회하지 않는다(조용히 안 보임).
+    //    예전엔 조회 목록과 라벨 표가 따로 있어서 어긋났고, 실제로 2026-07-19 기준
+    //    1,493행 중 1,149행(77%)이 안 보였다 — 최다 이벤트 home_meeting_date_preview_click
+    //    443행이 통째로 누락. 두 목록을 하나로 합쳐 그 드리프트를 구조적으로 막는다.
+    const EVENT_FAMILIES = [
+      { key: 'meeting',   emoji: '🤝', label: '모임', types: [
+        'home_meeting_main_click', 'home_meeting_planner_click', 'home_meeting_date_preview_click',
+        'home_meeting_preview_card_click', 'home_meeting_week_nav', 'meeting_planner_bar_click',
+        'meeting_profile_click' ] },
+      { key: 'record',    emoji: '📋', label: '플레이기록', types: [
+        'home_record_main_click', 'home_record_more_click', 'home_record_write_click',
+        'record_start', 'record_complete' ] },
+      { key: 'recommend', emoji: '🔍', label: '추천게임', types: [
+        'home_recommend_main_click', 'home_recommend_game_detail_click', 'home_recommend_all_click',
+        'recommend_start', 'recommend_complete', 'recommend_game_click', 'hero_recommend_click' ] },
+      { key: 'signup',    emoji: '👤', label: '가입', types: ['signup_complete'] },
+    ];
+    const EVENT_ALL_TYPES = EVENT_FAMILIES.flatMap(f => f.types);
+
     function renderCharts(rows, allProfiles, profilesMap, pageViews = []) {
       if (!window.Chart) return;
 
@@ -1821,29 +1842,23 @@
         }
 
         // ── 요약: 이벤트 카드 (날짜 연동, loadEventStats 이후 갱신됨) ────
+        // 개별 이벤트를 건수순으로 평평하게 나열하면 같은 계열이 흩어져 읽기 어렵다
+        // (이벤트 탭은 이미 계열로 묶여 있으므로 표현도 그쪽에 맞춘다).
+        // 계열당 한 줄 = "어느 영역이 활발한가"를 한눈에, 상세는 카드 클릭 → 이벤트 탭.
         if (_cachedEvents !== null) {
-          const _EVT_LBL = {
-            home_recommend_main_click: '추천게임찾기 클릭',
-            home_recommend_game_detail_click: '게임정보 클릭',
-            home_recommend_all_click: '추천 전체보기',
-            home_record_main_click: '기록남기기 클릭',
-            home_record_more_click: '기록 더보기',
-            home_record_write_click: '기록 남기기',
-            home_meeting_main_click: '모임 클릭',
-            home_meeting_planner_click: '플래너 보기',
-            home_meeting_date_preview_click: '홈 모임 날짜칩',
-            home_meeting_preview_card_click: '홈 모임 카드',
-            meeting_planner_bar_click: '플래너 막대',
-            meeting_profile_click: '모임 프로필 클릭',
-          };
           const evts = (start || end) ? filterByRange(_cachedEvents, start, end, 'created_at') : _cachedEvents;
-          const evtC = {};
-          for (const e of evts) if (_EVT_LBL[e.event_type]) evtC[e.event_type] = (evtC[e.event_type] || 0) + 1;
-          const top4 = Object.entries(evtC).sort((a, b) => b[1] - a[1]).slice(0, 4);
+          const perType = {};
+          for (const e of evts) perType[e.event_type] = (perType[e.event_type] || 0) + 1;
+          const famRows = EVENT_FAMILIES
+            .map(f => ({ f, n: f.types.reduce((s, t) => s + (perType[t] || 0), 0) }))
+            .filter(x => x.n > 0)
+            .sort((a, b) => b.n - a.n);
           const _sumEvt = document.getElementById('sumEventCount');
           if (_sumEvt) {
-            _sumEvt.innerHTML = top4.length
-              ? top4.map(([t, n]) => `<span style="white-space:nowrap;display:block">${escH(_EVT_LBL[t])} <span>(${n})</span></span>`).join('')
+            _sumEvt.innerHTML = famRows.length
+              ? famRows.map(({ f, n }) =>
+                  `<span style="white-space:nowrap;display:block">${f.emoji} ${escH(f.label)} <span>(${n.toLocaleString()})</span></span>`
+                ).join('')
               : '—';
           }
         }
@@ -2001,14 +2016,10 @@
       try {
         // 전 기간 조회 — 퍼널이 날짜 네비를 따르므로 '전체'나 오래된 월을 골라도 비지 않아야 한다.
         // page_events는 전체 1,500행 수준이라 전량 받아도 가볍다(max-rows 50000).
-        // 'recommend_complete'/'record_complete'는 아직 화면에 그리는 단계가 없지만, 퍼널의 최종
-        // 완료 단계로 예정된 이벤트라 조회 목록엔 남겨둔다(배열 원소라 비용 0).
+        // 조회 타입은 EVENT_FAMILIES에서 파생한다 — 목록을 두 벌 두면 어긋난다(그래서 실제로
+        // 77%가 안 보였다). 새 이벤트는 그 표에만 등록하면 조회·요약이 함께 따라온다.
         const ALL_DAYS = 3650;
-        const events = await window.CottageDB.getEventCounts(
-          ['home_recommend_main_click','home_recommend_game_detail_click','home_recommend_all_click','recommend_complete',
-           'home_record_main_click','home_record_write_click','home_record_more_click','record_complete',
-           'home_meeting_main_click','home_meeting_planner_click'], ALL_DAYS
-        );
+        const events = await window.CottageDB.getEventCounts(EVENT_ALL_TYPES, ALL_DAYS);
 
         // 선택 기간으로 거른다 — renderCharts의 filterByRange와 같은 규칙(start 포함, end 미포함).
         const inRange = (rows, start, end) => (!start && !end) ? rows
