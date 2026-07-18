@@ -348,6 +348,7 @@
 - [ ] **[조건부 트리거] `game_play_records` ~1500행 도달 시 `getUserFirstRecordCount` RPC 재검토** (R8 재검증 결론, 2026-07-16 — REFACTOR_CHECKPOINT.md "Phase 2 SC5"에만 있던 것을 2026-07-17 여기로 보존) — 현재 테이블 **60행**(실측)이라 성능 문제 없음이 확인돼 RPC 전환은 **선제적 과최적화로 보류**. 단 함수가 `.in('game_id', myGameIds).limit(2000)`이라 **유저 게임들의 누적 기록이 2000행을 넘으면 ascending limit이 일부 게임의 최초 기록을 누락**해 업적 오지급이 가능(정확성 엣지). 지금 대비 ~33배 규모. **행수가 1500 근처에 오면 재검토**할 것.
 - [ ] price-rules.html / club-rules.html 사진 중심 재구성
 - [ ] **기록게시판 디자인 개선** — 현재 너무 밋밋, 전반적 비주얼 리뉴얼 필요
+  - 🧹 **겸사겸사**: 이 작업이 `game-reviews.js`를 만지므로, GS5(escH 통합)의 **이 파일 로컬 사본 2개**([:85](../assets/js/game-reviews.js#L85)·[:583](../assets/js/game-reviews.js#L583))를 그 자리에서 `window.escH` 호출시점 위임으로 함께 정리하면 GS5 일부가 해소됨. 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) GS5 행.
 - [ ] **[보안] meeting 계열 쓰기 보호** (2026-07-15 조사 완료, **사용자 결정=문서화 후 보류**) — `meeting_votes` / `meeting_vote_games` / `meeting_game_prefs` 전체 현재 UNRESTRICTED (anon 키로 전체 읽기/쓰기/삭제 가능).
   - **위협 모델**: 서버측 신원 증명 부재가 근본 원인. 클라이언트가 `user_id`(카카오 id)를 자기 주장할 뿐 검증 단계 없음 → anon 키(페이지 소스에 노출, 정상)만 알면 아무 user_id로나 남의 일정 write/delete 가능. **단 meeting 테이블엔 금융·PII 없음**(날짜/시간/게임선호/닉네임) → 실제 위협은 "REST 직접 호출 가능한 사람이 동호회 일정 훼손·사칭" 수준, 심각도 중간 이하.
   - **범위 주의**: 이건 meeting만의 문제가 아님. 카카오 OAuth라 `auth.uid()` NULL → **전체 테이블이 RLS off + anon 키 직접 write** 동일 구조(game_likes, game_play_records, profiles, member_intros …). meeting만 고치면 반쪽.
