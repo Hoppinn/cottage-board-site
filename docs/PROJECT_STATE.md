@@ -372,8 +372,9 @@
     - **원인**: [supabase-setup.sql:705-711](supabase-setup.sql#L705-L711)이 `enable row level security` 후 **INSERT는 `anon`, SELECT는 `authenticated`**로 정책을 걸었다. 이 프로젝트는 **카카오 OAuth라 `authenticated` 세션이 생기지 않아** 모든 클라이언트가 영원히 `anon` → **SELECT가 영구 차단**. RLS는 차단 시 에러가 아니라 **빈 결과를 조용히** 반환하므로 콘솔에도 안 찍힌다(감지기 사각지대의 실제 사례).
     - **대조 증거**: `page_views`([:24-31](supabase-setup.sql#L24-L31))·`page_sessions`([:469-476](supabase-setup.sql#L469-L476))는 **SELECT도 `anon`**이라 정상(2,309행·11,439행 읽힘). 같은 파일 안에서 `page_events`만 다르다.
     - **음성 대조군**: 존재하지 않는 테이블은 count가 `null`, `page_events`는 숫자 `0` → "테이블 없음"이 아니라 "RLS 필터링"임을 구분 확인.
-    - ⏳ **미확정**: 실제 행이 존재하는지는 anon으로 알 수 없다. **Supabase SQL Editor(postgres 역할, RLS 우회)에서 `select count(*) from public.page_events;`** 로 확인 필요. INSERT 정책은 정상이므로 **데이터는 쌓여 있고 읽기만 막힌 것**일 가능성이 높다(그렇다면 과거 데이터 전부 복구됨).
-    - **예상 수정(Red, Plan 후)**: 형제 테이블과 동일하게 `create policy "anon_select_page_events" on public.page_events for select to anon using (true);` — 마이그레이션 011.
+    - ✅ **행 존재 확인 (2026-07-18, postgres 역할)**: **1,452행**. 데이터는 그동안 정상 수집되고 있었고 **읽기만** 막혀 있었다 → 정책 수정만으로 과거분 전부 복구.
+    - ✅ **Plan 승인 → `011_page_events_anon_select.sql` 작성 완료** (⏳ 실행 대기): ①`anon_select_page_events` 추가 ②`auth_select_page_events` 제거(증명 가능한 dead policy). **애플리케이션 코드 변경 0** — 기존 집계가 빈 배열만 받고 있었을 뿐이라 권한만 열면 그대로 돈다. 롤백은 정책 drop 한 줄, 데이터 무변경.
+    - ⚠️ **"전부 복구"는 DB 기준이지 화면 기준이 아님** — 퍼널은 30일 창(`getEventCounts(…, 30)`)이라 1,452행 중 최근 30일분만 뜬다.
     - 📌 **교훈 후보**: CLAUDE.md 「Supabase RLS 상태 명시」가 **신규 테이블의 RLS 활성화**만 경고하는데, 이 건은 **RLS는 켜고 정책은 걸었으나 대상 역할이 틀린** 경우다. 규칙에 "정책의 `to` 역할이 `anon`인지"를 추가할지 검토.
 - [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.

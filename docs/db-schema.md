@@ -16,6 +16,7 @@
 | 001·003 `voucher_products` / `voucher_log` | ✅ 13 / 39행 |
 | 취향보드 `profiles.bio`·`avoid_tags`·`notif_seen_at` | ✅ 전부 존재 (bio·avoid_tags 실데이터 각 2행) |
 | 010 `profiles.notif_read_keys` | ✅ **실행 완료 (2026-07-18 실측)** — 컬럼 존재, 5행 전부 기본값 `[]` 확인 |
+| 011 `page_events` anon SELECT 정책 | ⏳ **미실행 — Supabase SQL Editor에서 실행 필요** (2026-07-18). 실행 후 관리자 퍼널에 숫자가 뜨는지 확인하고 ✅로 갱신 |
 
 **배경**: PROJECT_STATE에 "⚠️ SQL 미실행"·"⚠️ 테이블 생성 필요"·"007 적용 전" 경고가 남아 있었으나 **전부 낡은 기재**였음(실제론 오래전 적용돼 기능이 운영 중). 세션마다 읽는 문서의 가짜 경고는 판단을 흐리므로 실측 후 닫음. **새 마이그레이션 추가 시 이 표에 적용 여부를 함께 기록할 것.**
 
@@ -32,7 +33,26 @@
 
 **운영 영향 없음** — 전부 실제로 RLS가 꺼져 있음(대시보드 수동 해제 또는 생성 당시 기본값). **위험은 재구축 시**: 마이그레이션만으로 새 DB를 만들면 Supabase가 신규 테이블에 RLS를 **자동 활성화**해 앱이 전면 파손된다. `005_meeting_game_prefs_rls_fix.sql`이 바로 이 사고를 한 번 겪고 사후 수습한 파일 — 규칙이 생긴 이유다.
 
-**대응(미착수, 우선순위 낮음)**: 재구축 계획이 실제로 생길 때 000·001·004·008에 `DISABLE ROW LEVEL SECURITY` 문을 추가하거나, 별도 `011_rls_baseline.sql`로 일괄 선언. 운영 DB엔 무영향(이미 off)이라 **긴급하지 않음**. 단 **새 테이블을 만들 때는 반드시 같은 파일에 명시**할 것.
+**대응(미착수, 우선순위 낮음)**: 재구축 계획이 실제로 생길 때 000·001·004·008에 `DISABLE ROW LEVEL SECURITY` 문을 추가하거나, 별도 `012_rls_baseline.sql`로 일괄 선언(※011은 아래 page_events 건이 가져갔음). 운영 DB엔 무영향(이미 off)이라 **긴급하지 않음**. 단 **새 테이블을 만들 때는 반드시 같은 파일에 명시**할 것.
+
+### 🔴 RLS 두 번째 실패 모드 — 정책은 있는데 역할이 틀린 경우 (2026-07-18 발견)
+
+위 8개가 "RLS 상태 **미명시**"였다면, `page_events`는 **RLS를 켜고 정책까지 걸었는데 `to` 역할이 틀린** 경우다. 규칙이 못 잡던 새 유형.
+
+```sql
+-- supabase-setup.sql:705-711 (문제의 원본)
+alter table public.page_events enable row level security;
+create policy "anon_insert_page_events" on ... for insert to anon          -- ✅ 쓰기 됨
+create policy "auth_select_page_events" on ... for select to authenticated -- ❌ 읽기 영구 차단
+```
+
+**이 프로젝트엔 `authenticated` 역할이 존재할 수 없다**(카카오 OAuth라 Supabase Auth 세션이 안 생김 → 모든 요청이 `anon`). 따라서 SELECT 정책이 아무에게도 매치되지 않아 **RLS가 전 행을 필터링**했다. 결과는 **에러가 아니라 빈 결과**라 관리자 이벤트 퍼널이 조용히 0으로만 렌더됐고 콘솔에도 안 찍혔다.
+
+**실측(2026-07-18)**: anon 0행 / postgres **1,452행**. 데이터는 계속 쌓이고 있었고 **읽기만** 막혀 있었다.
+
+**비교 — 형제 테이블은 맞게 돼 있다**: `page_views`(:24-31)·`page_sessions`(:469-476)는 INSERT·SELECT 둘 다 `anon`. 같은 파일 안에서 `page_events`만 갈렸으니 **정책 판단이 아니라 실수**다. (이 형제들이 이미 `user_id`·`session_key`를 anon에 노출하므로 page_events를 여는 것이 **새로운 종류의 노출은 아니다**.)
+
+**교훈**: 「테이블 생성 시 RLS 상태 명시」만으로는 부족하다 — **정책을 쓸 땐 `to` 역할이 `anon`인지도 확인**해야 한다. `authenticated`/`auth.uid()`는 이 프로젝트에서 항상 죽은 코드다. 조치는 `011_page_events_anon_select.sql`.
 
 ⚠️ **컬럼명을 추측해서 확인하지 말 것** — 2026-07-16 점검 중 `priority`/`condition_type`으로 조회해 "009 미적용"이라는 **거짓 결론**이 나올 뻔했음(실제 이름은 `is_priority`/`player_condition`). PostgREST는 없는 컬럼에 HTTP 400을 주므로, 마이그레이션 SQL 파일의 실제 이름으로 조회하고 **HTTP 상태를 반드시 확인**할 것(에러 응답을 "0행"으로 오독하기 쉬움).
 
