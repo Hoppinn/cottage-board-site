@@ -900,8 +900,11 @@
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
+        // ⚠️ is-quick-entry를 여기서 제거하지 말 것 — 제거하면 #viewWeek(주간뷰)가
+        //    부모가 모달을 숨기기 전에 한 프레임 그려져 "플래너가 켜졌다 꺼지는" 깜빡임이
+        //    난다(postMessage가 비동기라 부모 closeModal이 다음 태스크에 실행됨). 클래스는
+        //    다음 정상 오픈(cottage-reset-week)에서 정리한다 = 주간뷰를 실제로 보여줄 때만.
         if (document.body.classList.contains('is-quick-entry')) {
-          document.body.classList.remove('is-quick-entry');
           if (new URLSearchParams(location.search).get('embed') === 'true') {
             window.parent.postMessage({ type: 'cottage-quick-entry-closed' }, '*');
           }
@@ -2097,6 +2100,9 @@
 
     window.addEventListener('message', e => {
       if (e.data?.type === 'cottage-reset-week') {
+        // 홈 빠른진입(is-quick-entry) 잔여 클래스를 여기서 정리 — 주간뷰를 실제로
+        // 보여주는 유일한 진입점이라, 닫기(close)가 아니라 이 자리에서 떼야 깜빡임이 없다.
+        document.body.classList.remove('is-quick-entry');
         weekOffset = e.data.offset ?? 0;
         const _cal = document.getElementById('viewCalendar');
         const _calBtn = document.getElementById('btnToggleCal');
