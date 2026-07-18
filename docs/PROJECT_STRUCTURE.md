@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-16 (page-labels.js 라벨 동시갱신 규칙 추가)
+최종 갱신: 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -97,6 +97,9 @@
 
 ```
 assets/js/
+├── header.js                   # 헤더 HTML 주입(로고·메뉴·검색버튼) + embed 모드 처리(embed=1 시 헤더 미삽입,
+│                               #   내부 .html 링크 클릭에 embed=1 자동 전파). data-index="true" 스크립트 속성으로
+│                               #   index.html vs 하위 페이지 상대경로 분기. 상세는 §2-A "embed 모드"
 ├── supabase-config.js          # Supabase URL + anonKey 설정 (window.SUPABASE_CONFIG)
 ├── supabase-client.js          # DB 접근 모듈 (window.CottageDB, window._cottageSess, window.escH 노출)
 │                               # 방문자 추적(__visitor__), 체류시간, 비로그인 heartbeat 포함

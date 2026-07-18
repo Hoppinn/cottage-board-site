@@ -1,14 +1,15 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-18 (세션 ⑦ — GS4·GS7 종결·스모크 통과, 문서-코드 참조 정합성 규칙(CLAUDE.md) + 감사 후보(§3) 등록, 상단 세션요약 프루닝). **최근 2세션(⑥·⑦) 요약은 §0 상단.** 이전 세션(①~⑤) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
+최종 갱신: 2026-07-18 (세션 ⑧ — 문서-코드 참조 정합성 감사 종결, 드리프트 3건 수정). **최근 2세션(⑦·⑧) 요약은 §0 상단.** 이전 세션(①~⑥) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
 
 ---
 
 ## 0. 진행 중 작업 (세션 시작 시 확인)
 
-**진행 중 작업 없음** (2026-07-18 세션 ⑦ 종료 시점) · **열린 스모크 0건** — GS7·IP1 스모크 모두 **2026-07-18 사용자 확인 완료**(홈 추천카드 난이도 배지·추천 오버레이·미리보기, 게임시트/소장게임/헤더검색 난이도 표기 정상). **세션 ⑦에서 새 후보 1건 등록**: 문서-코드 참조 정합성 감사(§3 P3 「문서 참조 정합성」).
+**진행 중 작업 없음** (2026-07-18 세션 ⑧ 종료 시점) · **열린 스모크 0건**.
 
-**세션 ⑥ (2026-07-18)**: **IP1 ✅ 종결**(8b4f3ce·380f30f) — `renderGameCards` 순수헬퍼 2개 추출 + `initMeetingSection` 핸들러 중복 제거. 착수 중 **문서 줄 수 2/3 부정확** 발견(`updateRecommendFilterText`는 과대함수 아님=77줄, `initMeetingSection`은 과도분리 금지 선례라 강제분리 안 함). 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「IP1 처리 결과」.
+**세션 ⑧ (2026-07-18)**: **문서-코드 참조 정합성 감사 ✅ 종결** — `PROJECT_STRUCTURE.md`·`js-api.md`·`REFACTOR_CHECKPOINT.md` 3파일을 rg로 실제 코드와 대조. 음성 대조군(가짜 함수명 0건 확인)으로 grep 방법론 검증 후 착수. 드리프트 3건 발견·수정(header.js 파일역할 목록 누락, CottageDB·getKakaoUser 소비처에 script-nav.js 오기재 2건 — 실측 0건인데 등재돼 있었음). 상세는 §3 「문서-코드 참조 정합성 감사」.
+
 **세션 ⑦ (2026-07-18)**: **GS7 ✅ 종결(B2 방안)** — 난이도 헬퍼(`getDifficultyData`·`normalizeLevelValue` + 상수 2개)를 game-sheet.js→game-display-adapter.js로 이관, `CottageGameView` 네임스페이스 노출, 호출 8곳을 `GameView.getDifficultyData/normalizeLevelValue`로 전환. **감사의 "신규 파일" 가정을 재검증→기각**(소비자 14 HTML, 신규파일이면 전부 script 추가 필요=40줄에 과한 비용). 어댑터는 이미 그 14개에 먼저 로드되고 난이도 메서드 보유해 개념적 정확한 집. bare 전역 2개 제거=전역 위생 개선. node 대조 27케이스 PASS(엣지 0/undefined/null/NaN/범위밖 포함). 5파일 변경, 신규파일/HTML편집 0. 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 GS7 행. **스모크 ✅ 통과**(2026-07-18 사용자 확인 — 홈 추천카드 난이도 배지·추천 오버레이·게임시트·소장게임·헤더검색 난이도 표기 정상).
 **세션 ⑦ (2026-07-18)**: **GS4 ✅ 종결** — 감사 원문("동명·다른 시그니처로 혼동")은 실측 결과 **전역 충돌 없음**(game-reviews.js `getGameKey`는 IIFE 지역함수, 전역엔 game-sheet.js 것 하나뿐)으로 확인. 대신 game-reviews.js 버전이 `window.getGameKeyById`(play-records-utils.js)와 **로직 완전 동일한 사본**임을 발견해 지역함수 삭제 + 호출 3곳 교체로 처리(이름 충돌은 사본 제거로 자연 해소). game-sheet.js `getGameKey(game)`은 별개 용도라 유지. `docs/js-api.md` 호출처 목록 갱신 완료.
 
@@ -16,10 +17,9 @@
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 (추천) | **문서-코드 참조 정합성 감사** (세션 ⑦ 등록, 옵션 2) — 인덱스 문서의 소비처·파일역할 참조를 `rg`로 실제 코드와 대조·수정 | §3 P3 「문서 참조 정합성」 | **Yellow · Sonnet medium**(기계적 grep, zero-blast-radius) |
-| 2 | R번호 미배정 — **남은 실착수 = IP2** (IP1·GS4·GS7 ✅ 종결 / GS5 보류(선행조건) / DD4·IP3 종결) | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | IP2=판단 · **Opus**(구조 일관성 판단) |
-| 3 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
-| 4 | 감지기 4단계 (쓰기 경로 검증) | §3 | 기술부채 / Opus medium, 선행 = 3단계(완료) |
+| 1 (추천) | R번호 미배정 — **남은 실착수 = IP2** (IP1·GS4·GS7·문서감사 ✅ 종결 / GS5 보류(선행조건) / DD4·IP3 종결) | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 | IP2=판단 · **Opus**(구조 일관성 판단) — **모델 전환 필요** |
+| 2 | `_restoreMenuExpanded` 제거 검토 (5838e1b로 no-op이 됨) | §3 | 리팩토링 / 저우선 |
+| 3 | 감지기 4단계 (쓰기 경로 검증) | §3 | 기술부채 / Opus medium, 선행 = 3단계(완료) |
 
 ~~감지기 3단계~~ → ✅ **2026-07-18 종결** — Promise.all 갭 5곳(supabase-client) + game-sheet init 함수 7곳 로그 추가, achievements 4곳은 래퍼라 "대상 아님" 재분류. 커밋 80a487c 외. 상세·교훈은 §3 「감지기 3단계」.
 ~~GDA3~~ → ✅ **2026-07-17 종결 — 재검증 결과 오탐**(`searchText` 소비처 0건 = dead code, 실동작 영향 없음). 상세·교훈은 §3 「Phase 1~3 감사 잔여」. **이로써 감사 잔여 목록에 "실동작 영향 가능" 항목은 0개** → 남은 건 전부 구조 지적·문서 정합성이다.
@@ -323,12 +323,15 @@
   - **난점 = 테스트 방법**: 실DB에 쓸 수 없으니 ①테스트 전용 user_id로 쓰고 즉시 정리(고아 행 위험 — 실제로 `meeting_vote_games` orphan 2행 사고 전례 있음, §2 참조) ②Supabase 로컬/브랜치 DB ③쓰기 함수의 error 수신 여부만 **정적 검사**(실행 없이) 중 택1. **③이 가장 싸고 안전** — 쓰기 함수 대부분은 이미 `const { error } = await`로 받고 있어(2단계 실측: error 수신 45곳 중 다수가 write) **실제 갭은 작을 가능성**이 높음. 착수 시 ③으로 갭 규모부터 확인하고 ①②는 갭이 클 때만.
   - ⚠️ 하니스는 `window.location.hostname='localhost'`면 추적성 write가 자체 차단되므로, 쓰기 테스트 시 이 가드를 어떻게 다룰지 먼저 결정할 것.
   - 🔗 **4단계 착수 시 함께 볼 것 — `grantAchievement` 진짜 에러를 UNIQUE 위반으로 오삼킴** (2026-07-18 감지기 3단계 중 부수 발견): [supabase-client.js:1657](../assets/js/supabase-client.js#L1657)이 `if (error) return false; // 중복이면 UNIQUE 위반 → 조용히 false`인데, **error가 UNIQUE 위반(정상)인지 컬럼 오타·RLS 차단(진짜 실패)인지 구분하지 않고 전부 false**로 삼킨다. 즉 업적 지급이 조용히 실패해도 감지 불가. 같은 패턴이 `setRepAchievement`(1665, `return !error`)에도 있음. **정정 방향**: UNIQUE 위반 코드(Postgres `23505`)만 조용히 넘기고 그 외 `error`는 `console.error('[grantAchievement]', error)`. **동작 변경**(로그 추가는 무변경이나 이건 "정상 분기 판별" 로직이라 신중)이라 감지기 4단계(쓰기 경로)와 성격이 같아 여기 묶음. 급하지 않음 — 현재 오지급/미지급 사용자 보고 없음.
-- [ ] **[기술부채] 문서-코드 참조 정합성 감사** (2026-07-18 등록 — 사용자 제기 "참조가 잘못돼 못 찾거나 토큰 낭비하는 것들도 리팩토링해야 하지 않나") — 세션 시작마다 읽는 인덱스(`PROJECT_STRUCTURE.md` 파일역할 표·`js-api.md` 소비처 열·`REFACTOR_CHECKPOINT.md` 감사 항목)의 **참조가 실제 코드와 어긋나 매 세션 오도·재탐색 비용**이 든다.
-  - **실측 표본 2/2 드리프트 확인 (2026-07-18)**: ①GS7 감사 항목이 소비처를 "game-display-adapter·script-nav·owned-games"로 적었으나 **adapter는 소비자가 아니고**(오히려 이관 대상지) 실제 소비자 index-page 누락 → 이번 GS7 착수 시 재탐색 유발. ②`js-api.md:279` `CottageGameView` 소비처에 **script-nav.js 누락**(595·698행에서 `GameView.getGameDetailData` 사용 중). **표본 2곳 다 어긋남 = 개별 실수 아닌 드리프트.**
-  - **왜 진작 안 했나 (정직한 진단)**: 리팩토링은 **코드 구조**(.js 추출·IIFE·중복제거)로 스코프됐고, 문서는 **"변경 시 동기화"(sync-on-change)**로만 유지됐다. 그런데 sync-on-change는 **바뀌는 자리만** 손대므로 **이미 어긋나 쌓인 참조(pre-existing drift)는 영영 안 건드린다**. 이건 CLAUDE.md 「새 규칙 추가 시 소급 위반 확인」이 **코드 규칙**에 대해 이미 인정한 소급 위반 문제의 **문서판 재발**이다 — 의도를 능동적으로 버린 게 아니라, "문서 참조를 grep으로 정합성 검증"하는 별도 소급 감사가 **작업으로 정의된 적이 없어** 같은 실패 모드가 문서에서 반복됐다.
-  - **접근 = grep 대조(기계적, 검증 가능)**: `js-api.md` 소비처 열·`PROJECT_STRUCTURE.md` 파일역할을 `rg`로 실제 참조와 대조해 불일치만 수정. CLAUDE.md 「검사기 대조」 철학에 정확히 맞음(grep = ground truth). **범위 = 네비게이션 인덱스 3파일의 참조 표만**(전체 문장 재작성 아님). 음성 대조군: 일부러 틀린 참조 하나 넣어 스캐너가 잡는지 확인.
-  - **등급·모델**: Yellow(문서 구조/검증, 코드 동작 무변경) · Sonnet medium(기계적 grep 대조). WIP 여유 시 착수. **착수 시 이 세션에서 이미 고친 2건(GS7 감사 항목·js-api.md CottageGameView 소비처)은 커밋 9b8c946·4e178b4에 반영됐는지 먼저 확인** — 중복 수정 방지.
-  - **결정 (2026-07-18, 사용자 승인)**: 옵션 1(CLAUDE.md 규칙)+옵션 2(실제 감사) **둘 다, 티어로 분리**. 규칙이 상위 프레임(「소급 위반」의 문서판 = 규칙이 소급 감사를 트리거), 감사는 그 규칙이 시키는 실행. ✅ **옵션 1 완료** — CLAUDE.md 「문서-코드 동기화」에 소급 조항 추가(이 커밋). **옵션 2 = 이 항목(다음 Sonnet 세션)**. 문서 수정은 zero-blast-radius라 코드 소급 위반과 달리 "등록에 그치지 말고 값 싸면 바로 고침"이 규칙에 명시됨.
+- [x] ~~**[기술부채] 문서-코드 참조 정합성 감사**~~ — ✅ **2026-07-18 종결** (2026-07-18 등록 — 사용자 제기 "참조가 잘못돼 못 찾거나 토큰 낭비하는 것들도 리팩토링해야 하지 않나"). 범위 = `PROJECT_STRUCTURE.md` 파일역할 표·`js-api.md` 소비처 열·`REFACTOR_CHECKPOINT.md` 감사 항목(네비게이션 인덱스 3파일).
+  - **착수 전 확인**: 이 세션 착수 전 이미 고쳐져 있던 2건(GS7 감사 항목·js-api.md CottageGameView 소비처, 커밋 9b8c946·4e178b4) 확인 완료 — 중복 수정 없음.
+  - **음성 대조군**: 가짜 함수명(`totallyFakeFn_XYZ123`)을 실제 파일에 grep해 0건 확인 + 실존 함수(`getGameKeyById`) grep으로 15건 확인 → grep 도구 자체가 정상 동작함을 먼저 검증(CLAUDE.md 「검증 결과 0건이면 검사기 의심」).
+  - **발견한 드리프트 3건, 전부 수정**:
+    1. `PROJECT_STRUCTURE.md` §2 JS 파일 역할 목록에 **`header.js` 자체가 통째로 누락**(§2-A에서 경로만 언급되고 정작 파일 역할 표엔 없었음) → 항목 추가.
+    2. `js-api.md:255` `window.CottageDB` 소비처에 **`script-nav.js`가 잘못 포함**(실측: script-nav.js는 CottageDB 대소문자 무관 0건 참조) → 제거 + 실제 소비처(achievements.js·day-detail.js·play-records-utils.js 등) 보강.
+    3. `js-api.md:260` `window.getKakaoUser` 소비처에도 **동일하게 `script-nav.js` 오기재** → 동일하게 정정.
+  - **드리프트 아님으로 확인(검토했으나 정확했던 것들)**: `CottageGameView`/`getAllGamesArray`의 script-nav.js 소비 표기(`GameView` 별칭으로 실사용 확인), `COTTAGE_PAGE_LABELS_BY_PATH`, day-detail.js 의존관계 전체(`ensureGameSheet` 등), page-labels.js↔script-nav.js 로드 순서(14개 HTML 전수 확인), 빌드 파이프라인 경로, game-system 디렉터리 구조, `cottage-likes-changed`/`cottage-meeting-changed` 발화·수신처, GS5 escH 5사본, REFACTOR_CHECKPOINT.md 전체(이미 최신 상태).
+  - **결론**: 실제 드리프트는 "소비처 리스트에 있으면 안 될 파일이 잘못 끼어든 것"(2건, 같은 파일명 script-nav.js가 반복 오기재)과 "파일 자체 누락"(1건) 패턴. 전체 문장 재작성 아닌 표 항목만 수정(zero-blast-radius).
 - [ ] **[통합] 방문/이용 집계 전면 점검** (2026-07-16 등록 — 사용자 제기 "방문 집계가 잘 안 작동, 전체 리팩토링 필요") — **지금까지 개별 증상으로만 흩어져 있고 통합 항목이 없어 신규 등록**. 아래가 이 주제의 전부이며, 착수 시 이 목록부터 확인:
   - **2026-07-16 실측 결과 — "안 쌓임"은 아님**: `page_views` 2,171행(그중 `__visitor__` 758, `my-board*` 314), `page_sessions` **10,975행**(최근 7일 753) 정상 수집 중. 007 마이그레이션도 적용 완료. 즉 문제는 **수집이 아니라 정확도·표시 구멍**.
   - ① **duration_sec=0** — 최근 7일 `page_sessions` 753행 중 **111행(14.7%)**. heartbeat(1분) 전 이탈 시 0으로 기록 → 관리자 분석에서 시간 미표시. (아래 "단기 방문 시간 미표시" 제한사항과 동일 건, 실측치 추가)

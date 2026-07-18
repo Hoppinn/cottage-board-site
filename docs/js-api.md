@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-17 (R10b — getMeetingProfile이 취향·모임 보드 단일 소스로 승격[avoidTags 추가] / 감지기 커버리지 정정: 구조분해 104곳은 완료지만 Promise.all+비구조분해 ~16곳은 여전히 갭)
+최종 갱신: 2026-07-18 (문서-코드 참조 정합성 감사 — CottageDB·getKakaoUser 소비처의 script-nav.js 오기재 정정)
 
 ---
 
@@ -252,12 +252,12 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 | 전역 | 정의 파일 | 사용 파일 |
 |------|----------|----------|
-| `window.CottageDB` | supabase-client.js | script-nav.js, game-sheet.js, kakao-auth.js, game-reviews.js, index-page.js, club-history.html, requests-admin.html 등 |
+| `window.CottageDB` | supabase-client.js | game-sheet.js, kakao-auth.js, game-reviews.js, index-page.js, achievements.js, day-detail.js, play-records-utils.js, club-history.html, club-intro.html, club-schedule.html, requests.html, requests-admin.html 등 (**script-nav.js는 미사용** — 2026-07-18 감사에서 정정) |
 | `window._cottageSess` | supabase-client.js | kakao-auth.js |
 | `window._cottageSessionStart` | supabase-client.js | kakao-auth.js |
 | `window.escH` | supabase-client.js | 전체 |
 | `window.resizeImageFile` | supabase-client.js | play-records-utils.js (optional) |
-| `window.getKakaoUser` | kakao-auth.js | script-nav.js, game-sheet.js, game-reviews.js, supabase-client.js, requests.html 등 |
+| `window.getKakaoUser` | kakao-auth.js | game-sheet.js, game-reviews.js, index-page.js, day-detail.js, supabase-client.js, requests.html, club-history.html, club-intro.html, club-schedule.html, guide.html 등 (**script-nav.js는 미사용** — 2026-07-18 감사에서 정정) |
 | `window.kakaoLogin` | kakao-auth.js | game-reviews.js, 각 페이지 |
 | `window.kakaoLogout` | kakao-auth.js | 각 페이지 |
 | `window.promptNicknameChange` | kakao-auth.js | 각 페이지 |
