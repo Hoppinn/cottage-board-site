@@ -71,11 +71,13 @@ const filteredGames = _getRecommendedGames(playerValue, levelValue, moodValue);
   const moreQuery = `?${moreParams.toString()}`;
 
   const moreHtml = hasMore
-    ? `<button class="game-card-more" type="button" onclick="openRecommendOverlay()">전체 ${filteredGames.length}개<br>더보기 →</button>`
+    ? `<button class="game-card-more" type="button">전체 ${filteredGames.length}개<br>더보기 →</button>`
     : "";
 
   gameScroll.innerHTML = cardsHtml + moreHtml;
 bindGameCardEvents();
+  // 더보기 → 전체 추천 오버레이 (매 렌더마다 재생성되는 버튼이라 여기서 재배선)
+  gameScroll.querySelector('.game-card-more')?.addEventListener('click', openRecommendOverlay);
 
   // 추천 결과 게임 클릭 이벤트 (overlay · 일반 목록 카드 제외, gameScroll 스코프)
   gameScroll.querySelectorAll('.game-card').forEach(card => {
@@ -338,6 +340,9 @@ const goHomeLogo =
 
 const recommendFilter =
   document.querySelector('#recommendFilter');
+
+const closeRecommendOverlayButton =
+  document.querySelector('.recommend-overlay-close');
 
 
 /* =========================
@@ -725,6 +730,13 @@ if(closeRecommendModalDim){
   closeRecommendModalDim.addEventListener(
     'click',
     closeRecommendModal
+  );
+}
+
+if(closeRecommendOverlayButton){
+  closeRecommendOverlayButton.addEventListener(
+    'click',
+    closeRecommendOverlay
   );
 }
 
