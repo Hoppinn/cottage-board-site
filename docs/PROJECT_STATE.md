@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-18 (세션 ⑧ — 문서-코드 참조 정합성 감사 종결, 드리프트 3건 수정). **최근 2세션(⑦·⑧) 요약은 §0 상단.** 이전 세션(①~⑥) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
+최종 갱신: 2026-07-18 (세션 ⑧ — 문서감사·플래너 깜빡임(2차 규명·수정)·IP2·CLAUDE.md 규칙 전부 종결, 열린 스모크 0). **최근 2세션(⑦·⑧) 요약은 §0 상단.** 이전 세션(①~⑥) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
 
 ---
 
@@ -10,8 +10,7 @@
 
 **세션 ⑧ (2026-07-18)**: ①**문서-코드 참조 정합성 감사 ✅ 종결** — 인덱스 3파일을 rg로 실코드 대조, 음성 대조군 검증 후 드리프트 3건 수정(header.js 역할목록 누락, CottageDB·getKakaoUser 소비처 script-nav.js 오기재). §3 「문서-코드 참조 정합성 감사」. ②**플래너 깜빡임 fix ✅**(1차 4ab32d8 실패 → 2차 511c15e, **스모크 통과**) — 진짜 원인은 부모 패널 흰박스 복귀(닫기 페이드 중 부모 is-quick-entry 제거)+iframe 페이지 크롬 미숨김. 3부분 구조 수정((a)close 유지 (b).inner-page display:none (c)closeModal에서 안 뗌). §2 참조. ③**IP2 ✅ 종결(2번 방안)** — 감사 전제("15+개 onclick") 틀림(실측 onclick 2개), 전체 IIFE 래핑은 R11c 위험 대비 이득 미미라 기각. 대신 onclick 2개를 addEventListener로 전환해 배선 균일화. **스모크 통과**(더보기→오버레이·✕닫기). REFACTOR_CHECKPOINT 「Phase 3」 IP2 행.
 
-**세션 ⑦ (2026-07-18)**: **GS7 ✅ 종결(B2 방안)** — 난이도 헬퍼(`getDifficultyData`·`normalizeLevelValue` + 상수 2개)를 game-sheet.js→game-display-adapter.js로 이관, `CottageGameView` 네임스페이스 노출, 호출 8곳을 `GameView.getDifficultyData/normalizeLevelValue`로 전환. **감사의 "신규 파일" 가정을 재검증→기각**(소비자 14 HTML, 신규파일이면 전부 script 추가 필요=40줄에 과한 비용). 어댑터는 이미 그 14개에 먼저 로드되고 난이도 메서드 보유해 개념적 정확한 집. bare 전역 2개 제거=전역 위생 개선. node 대조 27케이스 PASS(엣지 0/undefined/null/NaN/범위밖 포함). 5파일 변경, 신규파일/HTML편집 0. 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 GS7 행. **스모크 ✅ 통과**(2026-07-18 사용자 확인 — 홈 추천카드 난이도 배지·추천 오버레이·게임시트·소장게임·헤더검색 난이도 표기 정상).
-**세션 ⑦ (2026-07-18)**: **GS4 ✅ 종결** — 감사 원문("동명·다른 시그니처로 혼동")은 실측 결과 **전역 충돌 없음**(game-reviews.js `getGameKey`는 IIFE 지역함수, 전역엔 game-sheet.js 것 하나뿐)으로 확인. 대신 game-reviews.js 버전이 `window.getGameKeyById`(play-records-utils.js)와 **로직 완전 동일한 사본**임을 발견해 지역함수 삭제 + 호출 3곳 교체로 처리(이름 충돌은 사본 제거로 자연 해소). game-sheet.js `getGameKey(game)`은 별개 용도라 유지. `docs/js-api.md` 호출처 목록 갱신 완료.
+**세션 ⑦ (2026-07-18)**: **GS7·GS4 ✅ 종결**(둘 다 스모크/실측 통과) — GS7=난이도 헬퍼(`getDifficultyData`·`normalizeLevelValue`)를 game-sheet.js→game-display-adapter.js로 이관해 `CottageGameView` 네임스페이스에 노출(bare 전역 2개 제거) / GS4=game-reviews.js `getGameKey` 사본을 `window.getGameKeyById`로 통합(전역 충돌은 없었음). 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 GS7·GS4 행.
 
 ### 🎯 다음 세션 시작점 — 우선순위 순
 
@@ -23,10 +22,7 @@
 
 **Phase 3 감사 실착수 전부 종결** (IP1·IP2·GS4·GS7·문서감사 ✅ / GS5만 선행조건 대기, DD4·IP3 판정종결). REFACTOR_CHECKPOINT 「Phase 3」 표에 남은 열린 항목은 GS5뿐.
 
-~~감지기 3단계~~ → ✅ **2026-07-18 종결** — Promise.all 갭 5곳(supabase-client) + game-sheet init 함수 7곳 로그 추가, achievements 4곳은 래퍼라 "대상 아님" 재분류. 커밋 80a487c 외. 상세·교훈은 §3 「감지기 3단계」.
-~~GDA3~~ → ✅ **2026-07-17 종결 — 재검증 결과 오탐**(`searchText` 소비처 0건 = dead code, 실동작 영향 없음). 상세·교훈은 §3 「Phase 1~3 감사 잔여」. **이로써 감사 잔여 목록에 "실동작 영향 가능" 항목은 0개** → 남은 건 전부 구조 지적·문서 정합성이다.
-
-⚠️ **R번호/리팩토링(2번 IP2 등)에 착수하면 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발). **1번 문서감사는 코드 추출이 아니라 무관.**
+⚠️ **리팩토링(GS5 등)에 착수하면 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
 ### ✅ 종료: 전체 리팩토링 R1~R12 (2026-07-15 ~ 07-17, 전부 스모크 통과)
 
