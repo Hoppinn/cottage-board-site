@@ -220,6 +220,12 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
   - ⚠️ 이 원칙은 원래 **"항상 로그"**였고, 그게 틀려서 2026-07-17에 고쳤다. 틀린 버전을 codemod가 성실히 적용해 위 `JSON.parse` fallback에 로그가 달렸고 **정상 기록마다 가짜 에러**가 찍혔다(호출 1회에 9건, 019bd7c에서 제거). **규칙이 부정확하면 기계적 적용이 그걸 증폭한다.**
   - **라벨은 실제 실패 지점의 이름으로.** 틀리면 디버깅 때 엉뚱한 함수로 사람을 보낸다. 중첩 함수·객체 메서드 안에서 바깥 함수명을 쓰기 쉽다(실제: `get(uid)` 안의 catch가 `[_migrate]`로 표기, 019bd7c에서 수정).
 - ⚠️ **`try/catch`만으론 부족하다 (2026-07-17 실측 정정)**: **supabase-js는 쿼리 오류에 예외를 던지지 않고** `{ data: null, error }`를 반환한다. 그래서 `const { data } = await db.from(...)` 형태면 **컬럼 오타·RLS 차단·테이블 없음이 전부 조용히 빈 배열**이 되고 `catch`도 `console.error`도 안 울린다(= 가장 흔한 실패가 감지 불가). **`const { data, error }`로 error를 받아 `if (error) console.error('[함수명]', error)`** 할 것. try/catch는 네트워크 장애·JS 예외 전용. 상세는 [docs/js-api.md](docs/js-api.md) "CottageDB 에러 처리 규약".
+- 🚨 **`error`를 받아도 부족하다 — 행 수 자체가 거짓말한다 (2026-07-18, 하루에 두 건 발각)**: 아래 둘은 **`error`가 `null`이고 `catch`도 안 걸린다**. 감지기 1~4단계를 전부 돌린 뒤였는데도 못 잡았다 — 실패가 **에러가 아니라 "그냥 데이터가 이만큼"**의 모습을 하고 있기 때문이다.
+  - **행 수가 정확히 `1000` → 절단을 의심**. PostgREST `max-rows` 상한이고 **클라이언트 `.limit(20000)`으로 못 넘는다**(실측). 실제 사고: `getPageAnalytics`가 90일을 요청하고 1,000행을 받아 **11,439행 중 91%가 조용히 사라졌다**(= "90일 분석"이 실제로는 7일). 관리자 화면의 총 체류시간이 **12시간으로 보였으나 실제 276시간**.
+  - **행 수가 `0` → RLS를 의심**. 정책이 아무에게도 매치되지 않으면 **에러가 아니라 빈 결과**가 온다. 실제 사고: `page_events`가 `SELECT ... to authenticated`로 걸려 있었는데 이 프로젝트엔 **`authenticated` 역할이 존재할 수 없어**(카카오 OAuth) 1,452행이 전부 안 보였다. 이벤트 퍼널이 "데이터 없음"으로 몇 주간 방치됨.
+  - **판정법**: `count: 'exact'`로 **실제 행 수와 대조하기 전엔 "데이터 없음"으로 결론짓지 않는다.** 없는 테이블은 `count`가 `null`, 비었지만 존재하면 숫자 `0` — 이걸로 구분된다.
+  - **정책을 쓸 땐 `to` 역할이 `anon`인지 확인**한다. 이 프로젝트에서 `authenticated`·`auth.uid()`는 항상 죽은 코드다. (기존 「RLS 상태 명시」 규칙은 *상태 미명시*만 잡고 *역할 오지정*은 못 잡았다.)
+  - ⚠️ **`max-rows`는 대시보드 설정이라 마이그레이션에 안 남는다** — DB 재구축 시 1000으로 돌아가 증상이 조용히 재발한다. 상세는 [docs/db-schema.md](docs/db-schema.md) "PostgREST max-rows".
 - **반환 계약은 유지**한다 — 실패 시 `[]`/`null` fallback을 에러 throw로 바꾸면 빈 배열을 전제로 렌더하는 호출부가 깨진다. 바꾸는 건 **관측(로그)이지 동작이 아니다**.
 - **reason 정확성**: 구체적 실패(not_found, invalid 등)를 일반적 실패(max_priority 등)보다 먼저 검사한다. 순서가 뒤바뀌면 잘못된 reason이 반환되어 UI 분기가 오동작한다.
 - **Supabase RLS**: 테이블 생성 시 항상 RLS 상태를 명시한다. 이 프로젝트 기본은 `DISABLE`(카카오 OAuth 구조상 auth.uid() 불가, anon 키 직접 read/write). Supabase는 신규 테이블에 RLS를 자동 활성화하므로 마이그레이션 SQL에 `ALTER TABLE {name} DISABLE ROW LEVEL SECURITY;` 포함. 실행 직후 anon 키 SELECT로 접근 확인.
