@@ -112,7 +112,8 @@ window._cottageSess = (function () {
   async function trackView(gameId) {
     if (!gameId) return;
     try {
-      await db.from("game_views").insert({ game_id: gameId });
+      const { error } = await db.from("game_views").insert({ game_id: gameId });
+      if (error) console.error('[trackView]', error);
     } catch (err) { console.error('[trackView]', err);}
   }
 
@@ -277,7 +278,8 @@ window._cottageSess = (function () {
     const payload = { event_type: eventType, referrer, session_key: getSessionKey(), user_id: _sessionUserId || null };
     if (opts.game_id) payload.game_id = opts.game_id;
     try {
-      await db.from('page_events').insert(payload);
+      const { error } = await db.from('page_events').insert(payload);
+      if (error) console.error('[trackEvent]', error);
     } catch (err) { console.error('[trackEvent]', err);}
   }
 
@@ -596,10 +598,12 @@ window._cottageSess = (function () {
         .maybeSingle();
       if (error) console.error('[toggleGameLike]', error);
       if (existing) {
-        await db.from("game_likes").delete().eq("id", existing.id);
+        const { error: delErr } = await db.from("game_likes").delete().eq("id", existing.id);
+        if (delErr) console.error('[toggleGameLike] delete', delErr);
         return { liked: false };
       } else {
-        await db.from("game_likes").insert({ game_id: gameId, user_id: userId });
+        const { error: insErr } = await db.from("game_likes").insert({ game_id: gameId, user_id: userId });
+        if (insErr) console.error('[toggleGameLike] insert', insErr);
         return { liked: true };
       }
     } catch (e) {
@@ -646,10 +650,12 @@ window._cottageSess = (function () {
         .maybeSingle();
       if (error) console.error('[toggleGameCurious]', error);
       if (existing) {
-        await db.from("game_curious").delete().eq("id", existing.id);
+        const { error: delErr } = await db.from("game_curious").delete().eq("id", existing.id);
+        if (delErr) console.error('[toggleGameCurious] delete', delErr);
         return { curious: false };
       } else {
-        await db.from("game_curious").insert({ game_id: gameId, user_id: userId });
+        const { error: insErr } = await db.from("game_curious").insert({ game_id: gameId, user_id: userId });
+        if (insErr) console.error('[toggleGameCurious] insert', insErr);
         return { curious: true };
       }
     } catch (e) { return { error: e }; }
@@ -1021,6 +1027,7 @@ window._cottageSess = (function () {
         today_date: todayStr,
         last_seen_at: new Date().toISOString(),
       }).eq('user_id', userId);
+      if (error) console.error('[_syncTimeToDBNow] profiles', error);
       if (!error) {
         const s = window._cottageSess.get(userId);
         s.timeSec = 0;
@@ -1031,7 +1038,7 @@ window._cottageSess = (function () {
             ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
             : 'unknown';
           const referrer = _sessionReferrer;
-          db.from('page_sessions').insert({ page, user_id: userId, session_key: getSessionKey(), duration_sec: secs, entered_at: enterAt, referrer }).then(() => {});
+          db.from('page_sessions').insert({ page, user_id: userId, session_key: getSessionKey(), duration_sec: secs, entered_at: enterAt, referrer }).then(({ error }) => { if (error) console.error('[_syncTimeToDBNow] page_sessions', error); });
         }
       }
     } catch (err) { console.error('[_syncTimeToDBNow]', err);}
@@ -1090,19 +1097,21 @@ window._cottageSess = (function () {
         .eq('session_key', key).maybeSingle();
       if (error) console.error('[_startAnonHeartbeat]', error);
       if (!existing) {
-        await db.from('anon_sessions').insert({
+        const { error: insErr } = await db.from('anon_sessions').insert({
           session_key: key, last_seen_at: new Date().toISOString(),
           first_seen_at: new Date().toISOString(),
           visit_count: 1, today_seconds: 0, today_date: todayKst
         });
+        if (insErr) console.error('[_startAnonHeartbeat] insert', insErr);
       } else {
         const isNewDay = existing.today_date !== todayKst;
         _anonTodaySec = isNewDay ? 0 : (existing.today_seconds || 0);
-        await db.from('anon_sessions').update({
+        const { error: updErr } = await db.from('anon_sessions').update({
           last_seen_at: new Date().toISOString(),
           visit_count: (existing.visit_count || 0) + (isNewDay ? 1 : 0),
           today_seconds: _anonTodaySec, today_date: todayKst
         }).eq('session_key', key);
+        if (updErr) console.error('[_startAnonHeartbeat] update', updErr);
       }
     } catch (err) { console.error('[_startAnonHeartbeat]', err);}
     // 비로그인 방문자도 page_sessions에 기록 (명 집계용); 실패해도 anon_sessions 영향 없음
@@ -1111,7 +1120,7 @@ window._cottageSess = (function () {
       db.from('page_sessions').insert({
         page, user_id: null, session_key: key,
         duration_sec: 0, entered_at: new Date().toISOString(), referrer: _sessionReferrer
-      }).then(() => {}).catch(() => {});
+      }).then(({ error }) => { if (error) console.error('[_startAnonHeartbeat] page_sessions', error); }).catch(() => {});
     } catch (err) { console.error('[_startAnonHeartbeat]', err);}
     _anonHeartbeatTimer = setInterval(() => {
       if (_sessionUserId) { _stopAnonHeartbeat(); return; }
@@ -1119,7 +1128,7 @@ window._cottageSess = (function () {
       _anonTodaySec += 60;
       db.from('anon_sessions').update({
         last_seen_at: new Date().toISOString(), today_seconds: _anonTodaySec
-      }).eq('session_key', key).then(() => {}).catch(() => {});
+      }).eq('session_key', key).then(({ error }) => { if (error) console.error('[_startAnonHeartbeat] heartbeat', error); }).catch(() => {});
     }, 60 * 1000);
   }
 
@@ -1163,6 +1172,7 @@ window._cottageSess = (function () {
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
         ...(isNewUser ? { first_source: _sessionReferrer || null } : {}),
       }, { onConflict: 'user_id' });
+      if (upsertError) console.error('[upsertProfile]', upsertError);
       if (!upsertError && isNewUser) trackEvent('signup_complete');
       if (!upsertError && !selectError) {
         const s = window._cottageSess.get(userId);
@@ -1594,7 +1604,8 @@ window._cottageSess = (function () {
   async function updateNotifSeenAt(userId, timestamp) {
     if (!userId || !timestamp) return;
     try {
-      await db.from('profiles').update({ notif_seen_at: timestamp }).eq('user_id', userId);
+      const { error } = await db.from('profiles').update({ notif_seen_at: timestamp }).eq('user_id', userId);
+      if (error) console.error('[updateNotifSeenAt]', error);
     } catch (err) { console.error('[updateNotifSeenAt]', err);}
   }
 
