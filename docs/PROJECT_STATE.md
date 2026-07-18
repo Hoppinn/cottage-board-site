@@ -1,6 +1,6 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-18 (세션 ⑨ — 감지기 4단계(쓰기 경로 검증) 종결, 감지기 1~4단계 전부 완료). **최근 세션(⑨·⑧·⑦) 요약은 §0 상단.** 이전 세션(①~⑥) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
+최종 갱신: 2026-07-18 (세션 ⑨ — 감지기 4단계·`_restoreMenuExpanded` 제거·모임삭제 버그·최근플레이 클릭·'최신 기록' 드롭다운 등 다수 종결, 열린 스모크 0). **최근 세션(⑨·⑧) 요약은 §0 상단.** 이전 세션(①~⑦) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md로 이관 완료.
 
 ---
 
@@ -8,17 +8,25 @@
 
 **진행 중 작업 없음** (2026-07-18 세션 ⑨ 종료 시점) · **열린 스모크 0건**.
 
-**세션 ⑨ (2026-07-18)**: ①**감지기 4단계(쓰기 경로 검증) ✅ 종결** — 정적 census(③)로 supabase-client.js 쓰기 경로 전수 확인. record/comment/pref/meeting 계열은 이미 `return {error}` 전파라 갭 없음, 갭은 **추적성 write·toggle 계열·업적/교환권 지급 family**에 집중. 전부 로그 추가로 닫음(반환 계약 무변경, 실DB 쓰기 테스트 ①② 불필요). 커밋 c5b5f68(조용한 쓰기) + 5fcc962(🔗 UNIQUE 오삼킴 family, `error.code!=='23505'`만 로그). **감지기 1~4단계 전부 종결, 남은 건 ③ 에러 수집(Red)뿐.** ②**`_restoreMenuExpanded` 제거 ✅ 종결** — 검토 결과 모든 경로 완전 no-op으로 확인(유일 제거자 `resetMenuGroups`가 햄버거 토글에서만 발화, 보드 오버레이 뒤라 도달 불가) → 함수+호출3+죽은 `_menuWasOpen` 제거. §3 참조.
+**세션 ⑨ (2026-07-18)** — 전부 스모크/검증 통과, 열린 스모크 0:
+- **감지기 4단계(쓰기 경로 검증) ✅** — 정적 census로 supabase-client.js 쓰기 전수 확인. record/comment/pref/meeting은 이미 `return {error}` 전파(갭 없음), 갭은 **추적성 write·toggle·업적/교환권 지급 family**에 집중 → 전부 로그 추가(반환계약 무변경). 커밋 c5b5f68 + 5fcc962(🔗 UNIQUE `23505`만 조용). **감지기 1~4단계 전부 종결, 남은 건 ③ 에러 수집(Red)뿐.**
+- **`_restoreMenuExpanded` 제거 ✅** — 모든 경로 완전 no-op 확인(유일 제거자 `resetMenuGroups`가 햄버거 토글에서만 발화, 보드 오버레이 뒤라 도달 불가) → 함수+호출3+죽은 `_menuWasOpen` 제거(c2b429b).
+- **GS5 census 교정 ✅** — 사본 실측 **~11개**(문서 "5곳" 오집계), 로드순서 선행은 호출시점 위임으로 회피 가능. **GS5는 사용자 결정으로 보류**(44acef8·348b6e5). 기록게시판 디자인 개선에 esc 2사본 겸사겸사 링크.
+- **모임 삭제 후 재등록 막힘 버그 ✅ 스모크통과** — 재사용 iframe이 `cottage-reset-week`에서 재조회 안 해 stale → `_loadAllVotes` 추출·재조회(644fb90). §2.
+- **최근 플레이 미리보기 클릭 ✅ 스모크통과** — 썸네일→게임시트, 참여자 이름→각 회원 보드(전체 회원, `getAllProfiles` 병렬), 내 사진 라이트박스 삭제(eed55fe→b14b812). §3.
+- **허브 참여자 이름 `p.id`→`p.user_id` ✅** — profiles에 `id` 컬럼 없어 프로필맵이 빈 맵이던 파생버그(165ef6f).
+- **'최신 기록' 드롭다운 ✅ 스모크통과** — 사용자 아이디어. 순회 토글(오버슈트 지적)→최근 세팅 드롭다운 직접선택(bc6432c→0a01b07). §3.
 
 **세션 ⑧ (2026-07-18)**: ①**문서-코드 참조 정합성 감사 ✅ 종결** — 인덱스 3파일을 rg로 실코드 대조, 음성 대조군 검증 후 드리프트 3건 수정(header.js 역할목록 누락, CottageDB·getKakaoUser 소비처 script-nav.js 오기재). §3 「문서-코드 참조 정합성 감사」. ②**플래너 깜빡임 fix ✅**(1차 4ab32d8 실패 → 2차 511c15e, **스모크 통과**) — 진짜 원인은 부모 패널 흰박스 복귀(닫기 페이드 중 부모 is-quick-entry 제거)+iframe 페이지 크롬 미숨김. 3부분 구조 수정((a)close 유지 (b).inner-page display:none (c)closeModal에서 안 뗌). §2 참조. ③**IP2 ✅ 종결(2번 방안)** — 감사 전제("15+개 onclick") 틀림(실측 onclick 2개), 전체 IIFE 래핑은 R11c 위험 대비 이득 미미라 기각. 대신 onclick 2개를 addEventListener로 전환해 배선 균일화. **스모크 통과**(더보기→오버레이·✕닫기). REFACTOR_CHECKPOINT 「Phase 3」 IP2 행.
-
-**세션 ⑦ (2026-07-18)**: **GS7·GS4 ✅ 종결**(둘 다 스모크/실측 통과) — GS7=난이도 헬퍼(`getDifficultyData`·`normalizeLevelValue`)를 game-sheet.js→game-display-adapter.js로 이관해 `CottageGameView` 네임스페이스에 노출(bare 전역 2개 제거) / GS4=game-reviews.js `getGameKey` 사본을 `window.getGameKeyById`로 통합(전역 충돌은 없었음). 상세는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「Phase 3」 GS7·GS4 행.
 
 ### 🎯 다음 세션 시작점 — 우선순위 순
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | GS5(escH 5사본) — **선행조건: 로드순서 통일** | [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「재방문 시 판단」 | 보류 / 착수 전 선행 확인 |
+| 1 | 관리자 분석 화면 수치·콘솔 확인 (감지기 로그 켜진 지금 유리, 금일이용데이터 간헐 미표시 단서) | §3 | verify / Sonnet medium (원인불명 파고들면 Opus) |
+| 2 | 남은 버그: 기록보드 플레이기록 09:00 고정 / 서브시트 모서리 음영 / 단기방문 시간 미표시 | §2 | 버그 / 개별 판단 |
+| 3 | 기록게시판 디자인 개선 (+ GS5 esc 2사본 겸사겸사) | §3 | design·feat |
+| 4 | GS5(escH ~11개) — **보류**(선행: 로드순서), 착수 시 REFACTOR_CHECKPOINT 필독 | §3·[REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) | 보류 / Opus xhigh+Plan |
 
 **Phase 3 감사 실착수 전부 종결** (IP1·IP2·GS4·GS7·문서감사 ✅ / GS5만 선행조건 대기, DD4·IP3 판정종결). REFACTOR_CHECKPOINT 「Phase 3」 표에 남은 열린 항목은 GS5뿐.
 
