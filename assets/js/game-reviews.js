@@ -1,7 +1,7 @@
 (function () {
 
   // GR6: 파일 내부에서만 쓰이는 상태 — window 노출 제거(IIFE 내부화)
-  let _prGroups, _prRecents = [], _prRecentIdx = -1, _prMoreOutsideClickBound, _refreshAutocompleteLists;
+  let _prGroups, _prRecents = [], _prMoreOutsideClickBound, _refreshAutocompleteLists;
 
   // ── helpers ─────────────────────────────────────────────────────
 
@@ -187,7 +187,9 @@
         </div>
         <button class="pr-rm-btn" type="button" title="삭제">✕</button>
       </div>
-      <button class="pr-same-as-above-btn${rowIdx === 1 ? ' pr-last-record-btn' : ''}" type="button">${rowIdx === 1 ? '↑ 최신 기록 (인원·참여자)' : '↑ 위와 동일 (인원·참여자)'}</button>
+      ${rowIdx === 1
+        ? `<div class="pr-last-record-wrap"><button class="pr-same-as-above-btn pr-last-record-btn" type="button">↑ 최신 기록 (인원·참여자)</button><div class="pr-last-record-menu" hidden></div></div>`
+        : `<button class="pr-same-as-above-btn" type="button">↑ 위와 동일 (인원·참여자)</button>`}
       <div class="pr-detail-grid">
         <div>
           <label class="pr-field-label">인원수</label>
@@ -275,34 +277,59 @@
 
     const sameBtn = div.querySelector('.pr-same-as-above-btn');
     if (sameBtn) {
-      sameBtn.addEventListener('click', () => {
-        const fillCountAndNames = (count, namesStr) => {
-          div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
-          if (count) div.querySelector(`.pr-count-btn[data-n="${count}"]`)?.classList.add('is-on');
-          const chipsWrap = div.querySelector('.tag-chips');
-          const textInput = div.querySelector('.tag-text-input');
-          const hiddenInput = div.querySelector('.pr-names');
-          chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
-          hiddenInput.value = '';
-          (namesStr || '').split(',').forEach(name => {
-            name = name.trim(); if (!name) return;
-            textInput.value = name;
-            textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
-          });
-          div.querySelector('.pr-names-wrap .pr-autocomplete-list')?.classList.remove('is-open');
-        };
+      const fillCountAndNames = (count, namesStr) => {
+        div.querySelectorAll('.pr-count-btn').forEach(b => b.classList.remove('is-on'));
+        if (count) div.querySelector(`.pr-count-btn[data-n="${count}"]`)?.classList.add('is-on');
+        const chipsWrap = div.querySelector('.tag-chips');
+        const textInput = div.querySelector('.tag-text-input');
+        const hiddenInput = div.querySelector('.pr-names');
+        chipsWrap.querySelectorAll('.tag-chip').forEach(c => c.remove());
+        hiddenInput.value = '';
+        (namesStr || '').split(',').forEach(name => {
+          name = name.trim(); if (!name) return;
+          textInput.value = name;
+          textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+        });
+        div.querySelector('.pr-names-wrap .pr-autocomplete-list')?.classList.remove('is-open');
+      };
 
-        if (sameBtn.classList.contains('pr-last-record-btn')) {
-          // 행 1: 내 최근 기록을 최신순으로 순회(중복 세팅 제외) — 누를 때마다 다음 세팅으로.
+      if (sameBtn.classList.contains('pr-last-record-btn')) {
+        // 행 1: 내 최근 세팅을 드롭다운으로 직접 선택 — 순회(오버슈트) 대신 목록에서 고른다.
+        const menu = div.querySelector('.pr-last-record-menu');
+        const closeMenu = () => {
+          if (menu) menu.hidden = true;
+          document.removeEventListener('click', onDocClick);
+          document.removeEventListener('keydown', onEsc);
+        };
+        const onDocClick = e => { if (!e.target.closest('.pr-last-record-wrap')) closeMenu(); };
+        const onEsc = e => { if (e.key === 'Escape') closeMenu(); };
+        sameBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          if (!menu) return;
+          if (!menu.hidden) { closeMenu(); return; }
           if (!_prRecents.length) return;
-          _prRecentIdx = (_prRecentIdx + 1) % _prRecents.length;
-          const rec = _prRecents[_prRecentIdx];
-          const grpInput = document.getElementById('prGroup');
-          if (grpInput) grpInput.value = rec.group || '';
-          fillCountAndNames(rec.count, rec.names);
-          // 어떤 세팅을 불러왔는지 버튼에 표시(맹목 순회 방지)
-          sameBtn.textContent = `↑ ${_prRecentIdx + 1}/${_prRecents.length} · ${rec.group || '그룹없음'} · ${rec.count || '?'}명`;
-        } else {
+          menu.innerHTML = _prRecents.map((rec, i) =>
+            `<button class="pr-last-record-item" type="button" data-i="${i}">${escH(rec.group || '그룹없음')} · ${rec.count || '?'}명${rec.names ? ' · ' + escH(rec.names) : ''}</button>`
+          ).join('');
+          menu.querySelectorAll('.pr-last-record-item').forEach(item => {
+            item.addEventListener('click', ev => {
+              ev.stopPropagation();
+              const rec = _prRecents[Number(item.dataset.i)];
+              const grpInput = document.getElementById('prGroup');
+              if (grpInput) grpInput.value = rec.group || '';
+              fillCountAndNames(rec.count, rec.names);
+              closeMenu();
+            });
+          });
+          menu.hidden = false;
+          // 이번 클릭이 바깥클릭으로 즉시 닫는 것 방지 — 다음 틱에 바인딩
+          setTimeout(() => {
+            document.addEventListener('click', onDocClick);
+            document.addEventListener('keydown', onEsc);
+          }, 0);
+        });
+      } else {
+        sameBtn.addEventListener('click', () => {
           // 행 2+: 바로 위 행에서 복사
           const allRows = [...document.querySelectorAll('#prGameRows .pr-game-row')];
           const curIdx = allRows.indexOf(div);
@@ -310,8 +337,8 @@
           const aboveRow = allRows[curIdx - 1];
           const activeCountBtn = aboveRow.querySelector('.pr-count-btn.is-on');
           fillCountAndNames(activeCountBtn?.dataset.n, aboveRow.querySelector('.pr-names').value);
-        }
-      });
+        });
+      }
     }
 
     div.querySelector('.pr-rm-btn').addEventListener('click', () => { window.revokePhotoGridBlobs?.(div); div.remove(); });
@@ -527,7 +554,6 @@
         _seenSetup.add(sig);
         _prRecents.push({ count: r.player_count, names: r.player_names, group: r.group_name });
       }
-      _prRecentIdx = -1;
       renderRecords(recordsData);
     } catch (err) {
       console.error(err);

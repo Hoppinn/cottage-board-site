@@ -6997,6 +6997,14 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-rm-btn:hover { color: #c0392b; }
 .pr-same-as-above-btn { font-size: 11px; color: var(--green); background: #f5ede6; border: 1px solid #d4a98a; border-radius: 6px; padding: 3px 10px; cursor: pointer; margin-bottom: 6px; font-family: inherit; }
 .pr-same-as-above-btn:hover { background: #ecddd4; }
+/* '최신 기록' 드롭다운 — 최근 세팅 직접 선택(순회 오버슈트 방지). 자동완성 목록 톤에 맞춤 */
+.pr-last-record-wrap { position: relative; display: inline-block; margin-bottom: 6px; }
+.pr-last-record-wrap .pr-same-as-above-btn { margin-bottom: 0; }
+.pr-last-record-menu { position: absolute; top: calc(100% + 2px); left: 0; min-width: 200px; max-width: min(340px, 92vw); background: var(--card-bg,#fff); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 3px 12px rgba(0,0,0,0.12); z-index: 200; max-height: 200px; overflow-y: auto; }
+.pr-last-record-menu[hidden] { display: none; }
+.pr-last-record-item { display: block; width: 100%; text-align: left; padding: 7px 10px; font-size: 12px; line-height: 1.35; cursor: pointer; color: var(--text); background: none; border: none; border-bottom: 1px solid var(--border); font-family: inherit; white-space: normal; word-break: break-word; }
+.pr-last-record-item:last-child { border-bottom: none; }
+.pr-last-record-item:hover { background: var(--bg); }
 .pr-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .pr-detail-grid input { border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; background: var(--bg); width: 100%; box-sizing: border-box; }
 .pr-score,.pie-score { width: 100%; box-sizing: border-box; border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: 13px; font-family: inherit; background: var(--bg); resize: none; display: block; }
