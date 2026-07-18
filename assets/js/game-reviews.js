@@ -498,7 +498,7 @@
       recordsData = _recs;
       _profileNickMap = new Map();
       for (const p of _profiles) {
-        if (p.id && p.nickname) _profileNickMap.set(String(p.nickname).trim().toLowerCase(), String(p.id));
+        if (p.user_id && p.nickname) _profileNickMap.set(String(p.nickname).trim().toLowerCase(), String(p.user_id));
       }
       const _uid = String(window.getKakaoUser?.()?.id || '');
       const _myNick = window.getKakaoUser?.()?.nickname?.toLowerCase() || '';
