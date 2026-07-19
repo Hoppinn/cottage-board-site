@@ -1830,6 +1830,15 @@
           .filter(m => m.secs > 0)
           .sort((a, b) => b.secs - a.secs)
           .slice(0, 10);
+        // x축 눈금을 60초(또는 1시간) 배수로 고정한다 — #7.
+        // 데이터가 초라서 Chart.js는 0·500·1000…처럼 초 기준으로 눈금을 잡는데, 라벨만
+        // Math.floor(v/60)로 분으로 바꾸면 "0m 8m 16m 25m 33m 41m"처럼 간격이 들쭉날쭉해
+        // 보인다(값은 균등한데 라벨이 반올림돼 어긋난 것). step을 60의 배수로 잡고 축 끝을
+        // 그 배수에 맞추면 v/60이 항상 정수라 라벨이 실제 간격과 일치한다.
+        const _maxSecs = topMembers.length ? topMembers[0].secs : 0;
+        const _tickStep = [60, 120, 300, 600, 900, 1800, 3600, 7200, 10800, 21600, 43200]
+          .find(s => _maxSecs / s <= 6) || 86400;
+        const _tickMax = Math.max(_tickStep, Math.ceil(_maxSecs / _tickStep) * _tickStep);
         if (topMembers.length) {
           makeOrUpdate('chartMemberTime', 'bar', {
             labels: topMembers.map(m => m.name),
@@ -1846,7 +1855,13 @@
             scales: {
               x: {
                 grid: { color: GRID },
-                ticks: { callback: v => v >= 3600 ? `${Math.floor(v/3600)}h` : `${Math.floor(v/60)}m`, font: { size: 10 } },
+                max: _tickMax,
+                ticks: {
+                  stepSize: _tickStep,
+                  // step이 60(또는 3600)의 배수라 나눗셈이 항상 정수 — 반올림이 필요 없다.
+                  callback: v => _tickStep >= 3600 ? `${v / 3600}h` : `${v / 60}m`,
+                  font: { size: 10 },
+                },
               },
               y: { grid: { display: false }, ticks: { font: { size: 11 } } },
             },
