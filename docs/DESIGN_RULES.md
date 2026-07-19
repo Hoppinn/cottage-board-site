@@ -113,3 +113,38 @@ Chrome 컴포지터는 `overflow-y:auto` 요소를 GPU 레이어로 승격할 �
 - sticky 헤더 축소 목적으로 `top`, `min-height`, `position` 변경
 - 공백을 scroll body의 `padding-top`으로 만들고 본문이 그 틈으로 올라가는 구조 방치
 - bottom-sheet 상단 여백 조정을 위해 `border-radius`, `margin`, `overflow` 변경
+
+---
+
+> 아래 3절은 2026-07-20에 CLAUDE.md에서 이관했다. 매 세션 읽을 필요는 없고 **해당 증상을 만질 때 읽는다**.
+
+## 8. UI 요소 '안 보임' 버그 디버깅 순서
+
+dropdown/tooltip/modal이 안 보일 때 JS 코드 탐색 전에:
+1. CSS 클리핑 먼저 확인: 부모 체인에서 overflow:hidden/auto/scroll 찾기
+2. z-index 확인: position:fixed/absolute 요소가 다른 stacking context에 묻히는지
+3. display:none / visibility:hidden 여부
+
+JS 탐색은 그 다음. "붙었는지"가 아니라 "보이는지"로 증상을 먼저 분류할 것.
+
+새 등록 vs 수정 같은 "같은 코드, 다른 결과" 패턴:
+→ 상태 차이(empty vs has-data) 기준으로 코드 실행 경로 분기점을 먼저 찾고,
+  그 분기점 이후에 레이아웃이 달라지는 CSS 쪽도 함께 확인.
+
+## 9. CSS/sticky/바텀시트 원칙 (2026-07-03 교훈)
+
+sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflow 버그는 수치 문제처럼 보여도 실제 원인은 레이아웃 구조인 경우가 많다.
+
+1. **사용자가 말한 기준 컴포넌트를 다시 확인한다.** 최근 수정한 값을 기준으로 삼지 말고, 현재 요청의 비교 대상을 다시 확인.
+2. **공백이 스크롤 영역인지 고정 영역인지 먼저 구분한다.** `헤더1+공백+헤더2`가 함께 고정돼야 하면 공백도 sticky/fixed 영역에 포함.
+3. **패널 시작 위치·height·sticky top을 건드리지 말라는 요청은 그대로 지킨다.** 고정되는 영역 자체의 padding/margin만 조정. 위치·height 변경은 다른 버그를 만든다.
+4. **같은 선택자를 2번 이상 건드려도 안 되면 값 추측을 멈춘다.** DevTools 런타임 값으로 확인 후 수정.
+5. **커밋 전 diff에서 의도 밖 선택자가 바뀌었는지 선택자 이름까지 확인한다.**
+
+## 10. 닫기 애니메이션·show-then-hide 깜빡임 (2026-07-18 교훈)
+
+"열 땐 멀쩡한데 **닫을 때 뭔가 한 프레임 켜졌다 꺼지는**" 깜빡임의 두 원인. 실제 사고: 홈 플래너 빠른진입 모달을 닫으면 플래너가 순간 떴다 사라짐(1차 수정 실패 후 2차에 규명, 커밋 511c15e).
+
+1. **transition 진행 중 상태 클래스 제거 금지.** opacity/transform transition이 걸린 요소를 **닫는 도중** 상태 클래스를 떼면 요소가 '기본 모습'으로 복귀해 애니메이션되며 깜빡인다. 실제: `closeModal`이 `is-open`(opacity 0.25s 페이드)과 `is-quick-entry`를 **동시 제거** → 페이드 도중 quick-entry가 빠져 `.planner-sheet-panel`이 투명·풀스크린에서 기본 `background:#fff`·480px 박스로 복귀하며 슬라이드·페이드. **해결: 닫기에선 상태 클래스를 안 떼고 다음 정상 오픈에서 정리**(요소가 완전히 사라진 뒤 떼야 페이드에 안 걸림).
+2. **show-then-hide(전체 로드 후 일부 숨김) 패턴은 컨테이너 전체를 숨겨라.** 일부만 숨기면 나머지가 닫을 때 드러난다. 실제: `is-quick-entry`가 `#viewWeek`만 숨겨 브레드크럼·페이지 헤더가 남아 오버레이 닫을 때 노출 → `.inner-page` 전체를 `display:none`으로 바꿔 해결. 사용자 표현 "**애초에 안 켜지게**"가 이 뜻(켜놓고 지우는 게 아니라 아예 렌더 안 되게).
+3. ⚠️ **1차 실패의 뿌리 = 추론으로 먼저 고침.** iframe `#viewWeek` 토글 타이밍만 가정해 옮겼다가 실패 — 진짜 원인은 부모 패널의 transition+배경 복귀였다. 「런타임 값 검증」의 재확인: **닫기 깜빡임은 닫는 요소의 CSS(transition 있는가·상태클래스가 뭘 되돌리는가·숨김이 완전한가)부터 읽을 것.** 그걸 먼저 읽었으면 1차에서 잡혔다.
