@@ -818,6 +818,7 @@ function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
       _u.nickname || null, _u.id, s.group_name || null, s.played_at || null, null, rv || null
     );
     if (res?.error) { okBtn.disabled = false; alert('저장에 실패했어요. 다시 시도해 주세요.'); return; }
+    window.CottageDB?.trackEvent('record_complete', { game_id: s.game_id });
     if (sourceCommentId) {
       const del = await window.CottageDB.deleteComment(sourceCommentId);
       if (del?.error) console.error('[_openJoinConfirm] 연동 후 원본 게임평 삭제 실패', del.error);
@@ -1940,6 +1941,9 @@ async function onSubmitPhotoModal() {
   const linked = linkCheck?.checked && linkSelect?.value;
 
   let err = null;
+  // 새 플레이기록을 만든 경우에만 record_complete를 쏜다(기존 기록에 사진만 추가한 건 제외).
+  // 생성 여부와 game_id를 분리한다 — 겸하면 game_id가 없을 때 이벤트가 조용히 누락된다.
+  let created = false, createdGameId = null;
   const selectedOpt = linked ? linkSelect.options[linkSelect.selectedIndex] : null;
   if (linked && selectedOpt?.dataset.join === '1') {
     // 남의 세션에 참여 — 세션 필드 복사한 내 새 기록(사진)
@@ -1949,7 +1953,7 @@ async function onSubmitPhotoModal() {
       s.game_id, s.player_count || null, s.player_names || null, null, null,
       _u.nickname || null, _u.id, s.group_name || null, s.played_at || null, newPhotoUrl, null
     ) : { error: 'no_session' };
-    if (result?.error) err = result.error;
+    if (result?.error) err = result.error; else { created = true; createdGameId = s?.game_id || null; }
   } else if (linked) {
     const existingUrls = window.parsePhotoUrls ? window.parsePhotoUrls(selectedOpt.dataset.photoUrl) : [];
     const allUrls = [...existingUrls, ...uploaded];
@@ -1963,11 +1967,12 @@ async function onSubmitPhotoModal() {
       storeGameId, null, null, null, null,
       _u.nickname || null, _u.id, null, null, newPhotoUrl, null
     );
-    if (result?.error) err = result.error;
+    if (result?.error) err = result.error; else { created = true; createdGameId = storeGameId; }
   }
 
   if (submitBtn) submitBtn.disabled = false;
   if (err) { alert('등록에 실패했습니다. 다시 시도해 주세요.'); return; }
+  if (created) window.CottageDB?.trackEvent('record_complete', { game_id: createdGameId });
   onClosePhotoModal();
   await initSheetPhotos(gameKey);
   window.refreshPlayRecordsBoard?.(); // 게시판 ⋯메뉴 경유 시 목록 즉시 반영(있을 때만)
@@ -2009,6 +2014,7 @@ async function onSubmitCommentModal() {
   let result;
   let linkedRecId = null;
   let didJoin = false;
+  let joinedGameId = null;
   if (linkCommentId) {
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
     linkedRecId = linkSelect?.value;
@@ -2038,6 +2044,7 @@ async function onSubmitCommentModal() {
         _cu?.nickname || null, _cu?.id || null, s.group_name || null, s.played_at || null, null, text
       ) : { error: 'no_session' };
       didJoin = true;
+      joinedGameId = s?.game_id || null;
     } else if (selVal) {
       linkedRecId = selVal;
       result = await window.CottageDB.updateGamePlay(selVal, { review_text: text });
@@ -2048,6 +2055,8 @@ async function onSubmitCommentModal() {
     }
   }
   if (!result.error) {
+    // 남의 세션 참여만 새 플레이기록을 만든다 — 연동(updateGamePlay)·게임평 단독은 아님
+    if (didJoin) window.CottageDB?.trackEvent('record_complete', { game_id: joinedGameId });
     // 새 게임평(어디에도 연동 안 됨) + 이 게임에 내 플레이기록이 아예 없으면 → 남기기 넛지
     const shouldNudge = !linkCommentId && !editId && !linkedRecId && !didJoin && modal._myRecordCountAtOpen === 0;
     onCloseCommentModal();
@@ -2643,6 +2652,7 @@ async function onSubmitPlayModal() {
       _u?.nickname || null, _u?.id || null, groupName, playedAt, photoUrl, reviewText
     );
     if (!playResult?.error) {
+      window.CottageDB?.trackEvent('record_complete', { game_id: storeGameId });
       addMyPlayRecord(gameKey, {
         id: playResult?.id || null,
         playerCount: count || null,
