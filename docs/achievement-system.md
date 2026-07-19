@@ -44,6 +44,19 @@ ACH_DEFS / TITLE_DEFS / 보상 / 지급 경로는 모두 이 문서를 기준으
 ## 캐릭터 ID — 파일명 기준
 - 형식: `{animal}_lv{n}` / `rare_{name}` / `season_{name}` (예: `rabbit_lv1`, `rare_lightning`, `season_spring`)
 
+### 이미지 경로 — 접두사가 폴더를 결정한다
+
+`assets/images/characters/characters_basic/` 아래에 있고, **`rare_`·`season_`·`cottage_master`로 시작하면 `rare/` 서브폴더**에 들어간다([achievements.js:643](../assets/js/achievements.js#L643)).
+
+```
+characters_basic/{id}.png            ← rabbit_lv1, squirrel_lv3 …
+characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_master
+```
+
+🚨 **새 캐릭터를 추가할 땐 접두사에 맞는 폴더에 넣어야 한다** — 규칙이 파일명에서 파생되므로 폴더가 틀리면 **에러 없이 이미지만 깨진다**. 현재 `rare/`에 11개.
+
+⚠️ **`squirrel_lv5`는 정의돼 있으나 파일이 없다**(lv1~lv4만 존재). 경고도 안 뜬다 — PROJECT_STATE §3의 열린 항목.
+
 ⚠️ 업적 ID는 사용자 자산(획득 업적, 교환권, 도감 진행률)의 기준값이므로 배포 후 변경 금지. `CLAUDE.md §영구 식별자` 참조.
 
 ---
