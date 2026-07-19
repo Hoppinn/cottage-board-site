@@ -66,7 +66,7 @@ return data || [];
 | `hasUserCurious(gameId, userId)` | 궁금해요 여부 확인 |
 | `getVisitorStats()` | 방문자 통계 |
 | `startSession(userId)` | 체류 세션 시작. page_sessions.referrer = URL의 `utm_source` 우선, 없으면 `document.referrer` hostname |
-| `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영 |
+| `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영. **2왕복이다** — ①upsert(닉네임 보호·`real_name`·`photo_url`·`first_source`, SELECT가 필요해 RPC로 못 옮김) ②`increment_profile_counters` RPC로 숫자 카운터 증가(012, #22). ⚠️ **`visitCount` 인자는 이제 플래그로만 쓴다** — `undefined`면 방문을 올리지 않고, 값을 줘도 그 숫자는 무시된다(실제 증가는 DB에서 원자적으로 `+1`). 예전엔 SELECT 실패 시 이 값을 fallback으로 썼으나 RPC가 DB 기준으로 올리므로 불필요해졌다. 업적 `visit` 축에 넘기는 카운트도 RPC 반환값에서 온다 |
 | `getAllProfiles()` | 전체 프로필. 어드민 회원목록 + **nickname→user_id 해석**(game-reviews 허브 `_profileNickMap`·index-page 홈 최근 플레이 참여자 이름 클릭). ⚠️ 반환 행의 kakao 키는 **`user_id`**(profiles엔 `id` 컬럼 없음) |
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
 | `getPageAnalytics()` | 페이지 분석 (어드민용) |

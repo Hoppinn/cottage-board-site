@@ -1,6 +1,12 @@
 // #22 재현 — profiles의 read-modify-write가 동시 쓰기에서 증가분을 잃는지 실측.
 //
-//   node scripts/verify-lost-update.js [동시성]        기본 30
+//   node scripts/verify-lost-update.js [동시성]        기본 30 — 옛 방식(비원자) 재현
+//   node scripts/verify-lost-update.js [동시성] --rpc  마이그레이션 012 RPC로 같은 실험
+//
+// before/after 대조가 이 스크립트의 목적이다. 같은 동시성에서
+//   기본  → 손실 발생(수정 전 재현)
+//   --rpc → 손실 0     (수정 검증)
+// 이어야 한다.
 //
 // ⚠️ **운영 DB에 임시 행을 1개 만든다** (verify-notif-read.js와 같은 방식).
 //    user_id = `__racetest_<epoch>` 이고 finally에서 삭제하며, 마지막에 삭제를 재확인한다.
@@ -21,9 +27,10 @@ eval(fs.readFileSync(path.join(__dirname, '..', 'assets', 'js', 'supabase-config
 const db = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
 
 const N = parseInt(process.argv[2] || '30', 10);
+const USE_RPC = process.argv.includes('--rpc');
 const UID = `__racetest_${Date.now()}`;
 
-// 운영 코드(_syncTimeToDBNow)와 같은 형태의 비원자적 증가
+// (수정 전) 옛 코드와 같은 형태의 비원자적 증가
 async function rmwIncrement(uid, by = 1) {
   const { data, error: selErr } = await db.from('profiles')
     .select('total_minutes').eq('user_id', uid).maybeSingle();
@@ -32,6 +39,18 @@ async function rmwIncrement(uid, by = 1) {
     .update({ total_minutes: (data.total_minutes || 0) + by }).eq('user_id', uid);
   return updErr ? { ok: false, err: updErr.message } : { ok: true };
 }
+
+// (수정 후) 마이그레이션 012의 원자적 증가
+async function rpcIncrement(uid, by = 1) {
+  const { data, error } = await db.rpc('increment_profile_counters', {
+    p_user_id: uid, p_secs: by, p_today: null, p_bump_visit: false,
+  });
+  if (error) return { ok: false, err: error.message };
+  if (!data || !data.length) return { ok: false, err: 'no row' };
+  return { ok: true };
+}
+
+const increment = USE_RPC ? rpcIncrement : rmwIncrement;
 
 const read = async uid => {
   const { data } = await db.from('profiles').select('total_minutes').eq('user_id', uid).maybeSingle();
@@ -54,7 +73,7 @@ const reset = async uid => db.from('profiles').update({ total_minutes: 0 }).eq('
 
     // ── 음성 대조군: 순차 증가 ──
     await reset(UID);
-    for (let i = 0; i < N; i++) await rmwIncrement(UID);
+    for (let i = 0; i < N; i++) await increment(UID);
     const seq = await read(UID);
     console.log(`[음성 대조군] 순차 ${N}회 → ${seq}`);
     if (seq !== N) {
@@ -68,7 +87,7 @@ const reset = async uid => db.from('profiles').update({ total_minutes: 0 }).eq('
     let totLost = 0;
     for (let r = 1; r <= rounds; r++) {
       await reset(UID);
-      const res = await Promise.all(Array.from({ length: N }, () => rmwIncrement(UID)));
+      const res = await Promise.all(Array.from({ length: N }, () => increment(UID)));
       const failed = res.filter(x => !x.ok);
       const got = await read(UID);
       const lost = N - got - failed.length;
@@ -78,9 +97,17 @@ const reset = async uid => db.from('profiles').update({ total_minutes: 0 }).eq('
     }
     const avg = totLost / rounds;
     console.log(`\n평균 손실 ${avg.toFixed(1)}/${N}회 (${(avg / N * 100).toFixed(0)}%)`);
-    console.log(avg > 0
-      ? '→ ✅ #22 재현됨: 동시 read-modify-write에서 증가분이 실제로 사라진다.'
-      : '→ ❌ 손실 0 — 이 동시성 수준에선 재현 안 됨. 동시성을 올리거나 가설을 재검토할 것.');
+    // 판정 방향이 모드에 따라 **반대**다 — 옛 방식은 손실이 나야 재현 성공,
+    // RPC는 손실이 0이어야 수정 성공. 한쪽 문구를 그대로 쓰면 결과를 거꾸로 읽는다.
+    if (USE_RPC) {
+      console.log(avg === 0
+        ? '→ ✅ 수정 검증 통과: 원자적 증가라 동시 실행에도 손실이 없다.'
+        : `→ ❌ RPC인데도 손실 ${avg.toFixed(1)} — 012가 안 올라갔거나 함수가 원자적이지 않다.`);
+    } else {
+      console.log(avg > 0
+        ? '→ ✅ #22 재현됨: 동시 read-modify-write에서 증가분이 실제로 사라진다.'
+        : '→ ❌ 손실 0 — 이 동시성 수준에선 재현 안 됨. 동시성을 올리거나 가설을 재검토할 것.');
+    }
   } finally {
     if (created) {
       const { error } = await db.from('profiles').delete().eq('user_id', UID);

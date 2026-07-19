@@ -1016,19 +1016,17 @@ window._cottageSess = (function () {
     const secs = _popAccumulatedSecs(userId);
     if (secs <= 0) return;
     try {
-      const { data, error: selectError } = await db.from('profiles').select('total_minutes, today_seconds, today_date').eq('user_id', userId).maybeSingle();
-      if (selectError || !data) return; // 에러 또는 row 없으면 localStorage 유지 — upsertProfile 실행 시 처리
-      const newTotal = (data.total_minutes || 0) + secs;
       const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
-      const prevToday = data.today_date === todayStr ? (data.today_seconds || 0) : 0;
-      const { error } = await db.from('profiles').update({
-        total_minutes: newTotal,
-        today_seconds: prevToday + secs,
-        today_date: todayStr,
-        last_seen_at: new Date().toISOString(),
-      }).eq('user_id', userId);
-      if (error) console.error('[_syncTimeToDBNow] profiles', error);
-      if (!error) {
+      // 원자적 증가(마이그레이션 012). 예전엔 select → 계산 → update라 탭이 겹치면
+      // 나중 write가 앞 증가분을 덮어 조용히 사라졌다(#22 — 동시성 2에서 33% 손실 실측).
+      // ⚠️ 실패 시 timeSec을 **리셋하지 않고** 반환한다 → 누적분이 localStorage에 남아
+      //    다음 heartbeat에서 다시 시도된다. 012 미적용 상태로 배포돼도 시간이 유실되지 않는다.
+      const { data, error } = await db.rpc('increment_profile_counters', {
+        p_user_id: String(userId), p_secs: secs, p_today: todayStr, p_bump_visit: false,
+      });
+      if (error) console.error('[_syncTimeToDBNow] increment_profile_counters', error);
+      // 행 없음 = 프로필 미생성 → 기존과 동일하게 아무것도 하지 않는다(upsertProfile이 처리).
+      if (!error && data && data.length) {
         const s = window._cottageSess.get(userId);
         s.timeSec = 0;
         window._cottageSess.set(userId, s);
@@ -1145,43 +1143,39 @@ window._cottageSess = (function () {
       const nickToSave = (data?.nickname && effectiveRealName && data.nickname !== effectiveRealName && nickname === effectiveRealName)
         ? data.nickname
         : nickname;
-      // 일일 방문 시 DB값 기준 +1 (dedup은 kakao-auth.js의 sess.lastVisitDate !== kstDate 조건이 담당)
-      // explicitVisitCount=undefined인 닉네임 변경 등의 호출은 visit_count를 건드리지 않음
-      const visitCountField = {};
-      if (explicitVisitCount !== undefined && !skipAnalyticsForUser) {
-        visitCountField.visit_count = (!selectError && data)
-          ? (data.visit_count || 0) + 1      // DB값 기준 +1 (새 기기에서도 올바르게 증가)
-          : explicitVisitCount;               // SELECT 실패 시 localStorage 값 fallback
-      }
-      const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
-      const prevToday = data?.today_date === todayStr ? (data?.today_seconds || 0) : 0;
-      // SELECT 실패 시 total_minutes를 upsert 대상에서 제외 — 에러로 data=null 상태에서 0으로 덮어쓰는 것 방지
-      const timeFields = !selectError && !skipAnalyticsForUser ? {
-        total_minutes: (data?.total_minutes || 0) + accumulated,
-        today_seconds: prevToday + accumulated,
-        today_date: todayStr,
-      } : {};
       const isNewUser = !selectError && !data;
+      // 숫자 카운터(total_minutes/today_seconds/visit_count)는 여기서 쓰지 않는다 —
+      // 아래 원자적 증가 RPC가 담당한다(012, #22). upsert에 계산값을 실으면
+      // select → 계산 → write가 되어 탭이 겹칠 때 증가분이 사라진다.
       const { error: upsertError } = await db.from('profiles').upsert({
         user_id: userId,
         nickname: nickToSave,
         real_name: data?.real_name || realName || null,
         last_seen_at: new Date().toISOString(),
-        ...visitCountField,
-        ...timeFields,
         ...(data?.photo_url ? { photo_url: data.photo_url } : {}),
         ...(isNewUser ? { first_source: _sessionReferrer || null } : {}),
       }, { onConflict: 'user_id' });
       if (upsertError) console.error('[upsertProfile]', upsertError);
       if (!upsertError && isNewUser) trackEvent('signup_complete');
-      if (!upsertError && !selectError) {
-        const s = window._cottageSess.get(userId);
-        s.timeSec = 0;
-        window._cottageSess.set(userId, s);
-      }
-      if (!upsertError && explicitVisitCount !== undefined && !skipAnalyticsForUser) {
-        const newVisitCount = visitCountField.visit_count;
-        window.checkAchievements?.('visit', userId, { visitCount: newVisitCount });
+
+      // 일일 방문 +1의 dedup은 kakao-auth.js의 sess.lastVisitDate !== kstDate 조건이 담당한다.
+      // explicitVisitCount는 이제 **플래그로만** 쓴다(undefined면 방문을 올리지 않음) —
+      // 실제 값은 DB에서 원자적으로 +1 되므로 localStorage fallback이 필요 없어졌다.
+      // 신규 유저도 위 upsert가 행을 먼저 만들었으므로 coalesce(...,0)+n으로 올바르게 시작한다.
+      const bumpVisit = explicitVisitCount !== undefined && !skipAnalyticsForUser;
+      if (!upsertError && !skipAnalyticsForUser && (accumulated > 0 || bumpVisit)) {
+        const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
+        const { data: bumped, error: bumpError } = await db.rpc('increment_profile_counters', {
+          p_user_id: String(userId), p_secs: accumulated, p_today: todayStr, p_bump_visit: bumpVisit,
+        });
+        if (bumpError) console.error('[upsertProfile] increment_profile_counters', bumpError);
+        // 성공했을 때만 로컬 누적을 비운다 — 실패 시 남겨두면 다음 호출에서 재시도된다.
+        if (!bumpError && bumped && bumped.length) {
+          const s = window._cottageSess.get(userId);
+          s.timeSec = 0;
+          window._cottageSess.set(userId, s);
+          if (bumpVisit) window.checkAchievements?.('visit', userId, { visitCount: bumped[0].visit_count });
+        }
       }
     } catch (err) { console.error('[upsertProfile]', err);}
   }

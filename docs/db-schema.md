@@ -17,6 +17,7 @@
 | 취향보드 `profiles.bio`·`avoid_tags`·`notif_seen_at` | ✅ 전부 존재 (bio·avoid_tags 실데이터 각 2행) |
 | 010 `profiles.notif_read_keys` | ✅ **실행 완료 (2026-07-18 실측)** — 컬럼 존재, 5행 전부 기본값 `[]` 확인 |
 | 011 `page_events` anon SELECT 정책 | ✅ **실행 완료 + 검증 (2026-07-18)** — anon SELECT 1,452행 정상, 관리자 이벤트 퍼널이 실수치로 렌더됨(Playwright 확인) |
+| 012 `increment_profile_counters` RPC | 🚨 **미실행 (2026-07-19 작성)** — Supabase SQL Editor에서 실행 필요. **코드는 이미 이 RPC를 호출하므로 실행 전까지 회원 이용시간·방문수가 DB에 반영되지 않는다**(단 누적분은 localStorage에 남아 실행 후 자동 반영 — 유실 아님). 실행 후 `node scripts/verify-lost-update.js 5 --rpc`로 손실 0 확인 |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
@@ -118,6 +119,10 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 |------|------|
 | `get_popular_games(limit_count)` | 최근 30일 조회수 기반 인기 게임 집계 |
 | `get_all_game_ratings()` | 전체 게임 별점 평균+건수 집계 |
+| `increment_profile_counters(p_user_id, p_secs, p_today, p_bump_visit)` | **profiles 카운터 원자적 증가**(012, #22). `total_minutes` += secs / `today_seconds`는 `today_date`가 다르면 리셋 후 시작 / `p_bump_visit`일 때만 `visit_count` +1 / `last_seen_at` 갱신. **`returns setof profiles`** — 반환이 비면 "그 user_id의 행이 없다"는 뜻이다. 🚨 **UPDATE만 하고 upsert하지 않는다** — 행 생성은 `upsertProfile`의 몫이고, 여기서 만들면 프로필 없는 사용자에게 빈 행이 생겨 회원 수가 부풀려진다 |
+
+🚨 **`profiles`의 `total_minutes`/`today_seconds`/`visit_count`는 클라이언트에서 직접 `update`하지 말 것** — 반드시 위 RPC를 쓴다. `select` → 계산 → `update`로 쓰면 탭이 겹칠 때 증가분이 사라진다(실측: 동시성 2에서 33% 손실). 상세는 [admin-analytics.md](admin-analytics.md) §4 #22.
+⚠️ **`anon_sessions`는 아직 옛 방식이다**(`_startAnonHeartbeat`) — 같은 병이 남아 있으며 별도 항목으로 열려 있다.
 
 ---
 
