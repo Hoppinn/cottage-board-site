@@ -75,7 +75,8 @@
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 1 | 🔴 **#22 수정 — 원자적 증가(RPC) 전환** ✅**재현 완료**(동시성 2에서 33% 손실, `scripts/verify-lost-update.js`). 남은 건 수정뿐이고 **Plan부터**. 대상은 `_syncTimeToDBNow`·`upsertProfile`의 `total_minutes`/`today_seconds`/`visit_count`. 수정 후 같은 스크립트로 손실 0 확인 | [admin-analytics.md](admin-analytics.md) §4 | **Plan 필수** / Opus (Red) |
+| 0 | 🚨 **#24 다중 프레임 삼중계상 — `#22` 배포 전 선행 필수.** `index.html`이 프레임 3개(본문+플래너+기록 iframe)라 각자 heartbeat를 돌려 같은 실시간을 3번 센다. **A/B 실측 옛 2.65배 / 새 3.50배.** #22와 서로를 가리던 관계라 **둘을 함께 내보내야 값이 맞는다** | [admin-analytics.md](admin-analytics.md) §4 | Plan / Opus (Red) |
+| 1 | ✅ **#22 수정 완료 — 원자적 증가(RPC) 전환** (미배포, #24 대기) ✅**재현 완료**(동시성 2에서 33% 손실, `scripts/verify-lost-update.js`). 남은 건 수정뿐이고 **Plan부터**. 대상은 `_syncTimeToDBNow`·`upsertProfile`의 `total_minutes`/`today_seconds`/`visit_count`. 수정 후 같은 스크립트로 손실 0 확인 | [admin-analytics.md](admin-analytics.md) §4 | **Plan 필수** / Opus (Red) |
 | 2 | 🎯 **P3 — 드릴다운 + 「시간」 통합 설계** (이벤트·페이지 → **그걸 한 사람들**로). ⚠️ **#12·#20·#21·#23을 여기에 흡수해 한 설계로 풀 것** — 전부 "회원 탭의 시간·기간"이 뿌리라 따로 고치면 또 갈린다. 그다음 **P4=C단계**(보드 연동, Red) | 〃 §5 | Plan / Opus |
 | 3 | 남은 버그: 기록보드 플레이기록 09:00 고정 / 서브시트 모서리 음영 / 단기방문 시간 미표시(`duration_sec=0` 14.7%) | §2 | 버그 / 개별 판단 |
 | 4 | 기록게시판 디자인 개선 (+ GS5 esc 2사본 겸사겸사) | §3 | design·feat |
