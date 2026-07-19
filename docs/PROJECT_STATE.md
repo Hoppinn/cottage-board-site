@@ -38,6 +38,13 @@
 - ✅ **#22 재현 완료** (커밋 참조) — `scripts/verify-lost-update.js`로 통제 실험. **동시성 2에서 33% · 3에서 56% · 5에서 73% · 30에서 93% 손실**, 순차 대조군은 정확히 N. **탭 2개만 겹쳐도 3분의 1이 사라진다.**
   - 📌 **읽기 전용 관찰이 먼저 실패했고, 그게 정보였다** — 겹침시간 vs 손실 상관이 `r≈-0.03`으로 무의미. 원인은 **두 기전이 동시에 작동**해서(lost update는 TM을 내리고 heartbeat-only는 올린다) 관측값이 둘의 합이기 때문. 설애는 겹침 294분인데 손실 −430분(반대). **관측에서 원인을 캐려다 막힌 뒤 통제 실험으로 전환한 것이 정답이었다.**
   - 다음은 **수정(Red, Plan 필수)** — 원자적 증가 RPC. 같은 스크립트로 수정 후 손실 0을 확인할 수 있다(before/after 대조가 이미 준비됨).
+  - 📥 **Plan 착수 시 읽을 것** (2026-07-19 재현 직후 기록 — Plan이 아니라 Plan의 입구다. 아래는 **미확인 질문 목록**이지 결론이 아니다):
+    - `_syncTimeToDBNow` [supabase-client.js:1011](../assets/js/supabase-client.js#L1011) — `select`→계산→`update` 본체. `insertPageSession` 분기와 `s.timeSec = 0` 리셋 위치 주의.
+    - `upsertProfile` — **가드 2개가 있다**: `selectError`면 시간 필드를 아예 빼서 0 덮어쓰기를 막고, `skipAnalyticsForUser`면 누적을 건너뛴다. **RPC로 옮길 때 이 의미를 잃으면 안 된다**(단순 `col = col + n`으로 바꾸면 두 가드가 사라진다).
+    - `today_seconds`는 **단순 증가가 아니다** — `today_date`가 오늘이 아니면 리셋 후 시작. 이 분기가 RPC 안에 들어가야 원자성이 성립한다.
+    - ❓ **전수 확인 필요**: `total_minutes`/`today_seconds`/`visit_count`를 쓰는 경로가 위 둘뿐인가? (복구 스크립트 `recover-time-data.js`·`recover-visit-count.js`도 이 컬럼을 만진다 — 보관용이지만 계약이 바뀌면 같이 낡는다.)
+    - ❓ **소비처 영향**: `total_minutes`는 내 보드 「함께한 시간」·업적 판정([achievements.js](../assets/js/achievements.js))이 읽는다. 값이 (정확해지면서) **커지므로 업적이 소급 달성될 수 있다** — 그게 허용인지 먼저 판단할 것. **이게 이 작업의 진짜 위험**이고 순수 기술 문제가 아니다.
+    - PostgREST는 `col = col + n`을 지원하지 않아 **RPC가 불가피**하다(마이그레이션 012 예정). RLS는 이 프로젝트 기본대로 `DISABLE` 명시.
 - ⚠️ **도구 함정 발견 — ripgrep의 `\b`는 유니코드 인식이라 한글 조사에서 끊기지 않는다.** `\bvAvgSub\b`가 `vAvgSub의`를 **못 찾아** GNU `grep -c`(2줄)와 Grep 도구(1줄)의 카운트가 갈렸다. 이번엔 주석이라 무해했지만 **한글 산문이 많은 이 리포에서 "참조 0건" 판정에 쓰면 위험**하다. 죽은 코드 판정엔 영향 없음(코드 식별자 뒤에 조사가 붙을 수 없음) — 문서·주석 언급을 셀 때 주의.
 
 **세션 ⑫ (2026-07-19)** — 관리자 분석 **P1(도달률) + #15(사람 세기) + P2(기준 표기)** 완료. 커밋 6개(`3b8cd63` P1 / `eefa6b1` #15 / `8c6e7bf`·`acb1da7` P2 / `90ec214`·`22b55a8` 문서). **코드가 바뀐 파일은 `requests-admin.html`과 `shot-admin-tabs.js` 둘뿐**이다. 상세는 [admin-analytics.md](admin-analytics.md) §5 「이미 끝난 것」·§5-1.
