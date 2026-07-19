@@ -1085,7 +1085,13 @@
         const rest = sorted.slice(_PAGE_ROWS_MAX);
         const restSec = rest.reduce((s, [, d]) => s + d.totalSec, 0);
         const restVisits = rest.reduce((s, [, d]) => s + d.visits, 0);
+        // 기준 표기(원칙 ①) — 이 표는 buildUserMap(rows)/buildAnonUserMap(rows)로 **원본 rows**에서
+        // 만들어져 항상 전 기간이다. 회원 탭은 날짜 네비가 숨겨져 있어(usesDateFilter) 사용자가
+        // 다른 탭의 선택 기간이 여기에도 걸린 줄 알 여지가 있다 → 무엇을 센 값인지 밝힌다.
+        // ⚠️ 기간 선택을 붙이면(발견 #20) 이 문구도 실제 기간에서 파생시킬 것 — 하드코딩 라벨이
+        //    데이터와 어긋나는 건 시간문제다(#9·#11이 그 사례).
         return `<div class="admin-visitor-pages" hidden>
+          <div style="font-size:11px;color:var(--muted);padding:4px 2px 2px" title="page_sessions 전량 기준. 상단 기간 선택은 이 표에 적용되지 않습니다.">전 기간 누적 · 날짜 선택 미적용</div>
           <table class="admin-analytics-table">
             <thead><tr><th>페이지</th><th>진입</th><th>체류</th></tr></thead>
             <tbody>
