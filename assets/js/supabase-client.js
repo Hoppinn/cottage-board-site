@@ -268,6 +268,18 @@ window._cottageSess = (function () {
     return _isLocalhost() || _isAdminVisitor();
   }
 
+  // 최상위 프레임인가. index.html은 플래너·기록 모달을 **iframe으로 미리 로드**하는데,
+  // 각 iframe이 이 파일을 다시 로드해 자기 세션 추적을 돌린다. 그러면 한 사람이 한 탭만
+  // 열어도 같은 실시간이 프레임 수만큼 계상된다(#24 — E2E 실측 3.5배). page_views도
+  // 사용자가 이동한 적 없는 페이지에 쌓인다.
+  // 🚨 **세션·방문 추적에만 쓸 것.** trackEvent(사용자 행동)에는 쓰면 안 된다 —
+  //    기록 모달(iframe) 안에서 실제로 저장한 record_complete 같은 이벤트는 진짜이고,
+  //    프레임을 이유로 버리면 퍼널이 다시 비어버린다.
+  function _isEmbeddedFrame() {
+    try { return typeof window !== 'undefined' && window.top !== window.self; }
+    catch (err) { return true; } // 크로스오리진 접근 차단 = 남의 프레임 안 = 추적 안 함
+  }
+
   // ── 이벤트 트래킹 ───────────────────────────────────────
 
   async function trackEvent(eventType, opts = {}) {
@@ -928,6 +940,9 @@ window._cottageSess = (function () {
     })();
     // 관리자 접속은 방문자 통계 전체 미포함
     if (_shouldSkipAnalytics()) return;
+    // iframe은 부모 페이지의 구성요소지 별도 방문이 아니다 — 여기서 막지 않으면
+    // 홈을 한 번 열 때마다 club-schedule·game-reviews에 유령 page_views가 쌓인다(#24).
+    if (_isEmbeddedFrame()) return;
     // 외부 유입 감지 시 당일 소스 갱신 (last-touch 모델 — 채널 효과 측정 목적)
     const origSrcKey = `cottage_orig_src_${kstDate}`;
     if (referrer) localStorage.setItem(origSrcKey, referrer);
@@ -993,6 +1008,10 @@ window._cottageSess = (function () {
 
   function _flushTime(userId) {
     if (!userId) return;
+    // 🚨 여기가 중복 계상의 뿌리다(#24) — _cottageSess는 localStorage 공유라
+    //    iframe이 자기 경과시간을 여기 더하면 최상위 프레임이 그걸 함께 전송한다.
+    //    최상위 프레임만 누적하게 막으면 프레임 수와 무관하게 실시간 1배가 된다.
+    if (_isEmbeddedFrame()) return;
     const elapsed = Math.floor((Date.now() - _sessionStart) / 1000);
     if (elapsed <= 0) return;
     const s = window._cottageSess.get(userId);
@@ -1011,6 +1030,8 @@ window._cottageSess = (function () {
   async function _syncTimeToDBNow(userId, insertPageSession = true) {
     if (!userId) return;
     if (_shouldSkipAnalytics()) return;
+    // 시간 누적은 **최상위 프레임만** 한다 — 프레임마다 돌면 같은 실시간이 중복 계상된다(#24).
+    if (_isEmbeddedFrame()) return;
     const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
     const secs = _popAccumulatedSecs(userId);
@@ -1086,6 +1107,7 @@ window._cottageSess = (function () {
   async function _startAnonHeartbeat() {
     if (_anonHeartbeatTimer || _sessionUserId) return;
     if (_shouldSkipAnalytics()) return;
+    if (_isEmbeddedFrame()) return; // 비로그인 체류도 최상위 프레임만 센다(#24)
     const key = getSessionKey();
     const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     let _anonTodaySec = 0;
@@ -1162,8 +1184,10 @@ window._cottageSess = (function () {
       // explicitVisitCount는 이제 **플래그로만** 쓴다(undefined면 방문을 올리지 않음) —
       // 실제 값은 DB에서 원자적으로 +1 되므로 localStorage fallback이 필요 없어졌다.
       // 신규 유저도 위 upsert가 행을 먼저 만들었으므로 coalesce(...,0)+n으로 올바르게 시작한다.
-      const bumpVisit = explicitVisitCount !== undefined && !skipAnalyticsForUser;
-      if (!upsertError && !skipAnalyticsForUser && (accumulated > 0 || bumpVisit)) {
+      // iframe에서도 initKakaoAuth가 돌아 여기까지 온다 — 프로필 자체는 갱신해도 되지만
+      // 카운터는 최상위 프레임만 올려야 한다(#24).
+      const bumpVisit = explicitVisitCount !== undefined && !skipAnalyticsForUser && !_isEmbeddedFrame();
+      if (!upsertError && !skipAnalyticsForUser && !_isEmbeddedFrame() && (accumulated > 0 || bumpVisit)) {
         const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
         const { data: bumped, error: bumpError } = await db.rpc('increment_profile_counters', {
           p_user_id: String(userId), p_secs: accumulated, p_today: todayStr, p_bump_visit: bumpVisit,

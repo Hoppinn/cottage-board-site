@@ -37,7 +37,13 @@
   - 🔬 **#23이 #22를 강화했다** — `today_seconds`는 같은 UPDATE에서 갱신되므로 **오늘 하루만** 비교하면 legacy·복구 스크립트 혼입이 없다. 그 조건에서도 손실이 재현됐다(무지 2319초 vs 1595초 = **31%**).
 - ✅ **#22 재현 완료** (커밋 참조) — `scripts/verify-lost-update.js`로 통제 실험. **동시성 2에서 33% · 3에서 56% · 5에서 73% · 30에서 93% 손실**, 순차 대조군은 정확히 N. **탭 2개만 겹쳐도 3분의 1이 사라진다.**
   - 📌 **읽기 전용 관찰이 먼저 실패했고, 그게 정보였다** — 겹침시간 vs 손실 상관이 `r≈-0.03`으로 무의미. 원인은 **두 기전이 동시에 작동**해서(lost update는 TM을 내리고 heartbeat-only는 올린다) 관측값이 둘의 합이기 때문. 설애는 겹침 294분인데 손실 −430분(반대). **관측에서 원인을 캐려다 막힌 뒤 통제 실험으로 전환한 것이 정답이었다.**
-  - 다음은 **수정(Red, Plan 필수)** — 원자적 증가 RPC. 같은 스크립트로 수정 후 손실 0을 확인할 수 있다(before/after 대조가 이미 준비됨).
+  - ✅ **수정 완료** — 마이그레이션 012 `increment_profile_counters` RPC. **손실 0 확인**(동시성 2·5·30 전부 9라운드 0건), 보존 동작 14/14 통과(행 없음·날짜 리셋·bump 플래그·`p_today=null`).
+- 🚨 **#24 발견 및 수정 — #22만 고쳤으면 더 나빠질 뻔했다.** 012 적용 후 E2E가 **"✅ 통과"를 찍었는데** 75초 대기에 240초가 쌓여 파고들었다. 원인: `index.html`이 **프레임 3개**(본문+플래너+기록 iframe)이고 각 프레임이 `supabase-client.js`를 로드해 자기 heartbeat를 돌린다.
+  - 📌 **두 버그가 서로를 가리고 있었다** — #22는 시간을 깎고 #24는 부풀린다. **A/B 실측: 옛 2.65배 → #22만 고친 뒤 3.50배.** 과대계상은 원래 있던 것이고 lost update가 상쇄해 감춰뒀던 것. **한쪽만 배포했으면 "고쳤는데 더 이상해졌다"가 됐다.**
+  - ✅ 수정: `_isEmbeddedFrame()` 가드를 `_flushTime`·`_syncTimeToDBNow`·`_startAnonHeartbeat`·방문마커·`upsertProfile` 카운터에. **E2E 3.50배 → 0.88배**(0.88은 정상 — 마지막 heartbeat 전 잔여분), 유령 `page_views` 2→0건.
+  - 🚨 **`trackEvent`에는 일부러 안 걸었다** — iframe 안의 실제 저장 행동은 진짜라, 전역 가드로 막으면 같은 날 붙인 `record_complete`가 죽는다. iframe에서 `trackEvent` 생존을 별도 검증했다.
+  - 📌 **부산물 #25**: 기록 iframe 프리로드가 `record_start`도 홈 로드마다 쏘고 있었다 → **#18/#19 해석 변경**(분자만 빈 게 아니라 분모도 부풀어 있었다).
+  - ⚠️ **부수 효과**: `guide.html`·게임위치 오버레이 등 **사용자가 실제로 보는 iframe의 `page_views`도 이제 안 잡힌다**(부모 조회에 흡수). 그 페이지별 유입이 다시 필요하면 별도 설계.
   - 📥 **Plan 착수 시 읽을 것** (2026-07-19 재현 직후 기록 — Plan이 아니라 Plan의 입구다. 아래는 **미확인 질문 목록**이지 결론이 아니다):
     - `_syncTimeToDBNow` [supabase-client.js:1011](../assets/js/supabase-client.js#L1011) — `select`→계산→`update` 본체. `insertPageSession` 분기와 `s.timeSec = 0` 리셋 위치 주의.
     - `upsertProfile` — **가드 2개가 있다**: `selectError`면 시간 필드를 아예 빼서 0 덮어쓰기를 막고, `skipAnalyticsForUser`면 누적을 건너뛴다. **RPC로 옮길 때 이 의미를 잃으면 안 된다**(단순 `col = col + n`으로 바꾸면 두 가드가 사라진다).
@@ -75,8 +81,9 @@
 
 | # | 항목 | 위치 | 등급·모델 |
 |---|------|------|----------|
-| 0 | 🚨 **#24 다중 프레임 삼중계상 — `#22` 배포 전 선행 필수.** `index.html`이 프레임 3개(본문+플래너+기록 iframe)라 각자 heartbeat를 돌려 같은 실시간을 3번 센다. **A/B 실측 옛 2.65배 / 새 3.50배.** #22와 서로를 가리던 관계라 **둘을 함께 내보내야 값이 맞는다** | [admin-analytics.md](admin-analytics.md) §4 | Plan / Opus (Red) |
-| 1 | ✅ **#22 수정 완료 — 원자적 증가(RPC) 전환** (미배포, #24 대기) ✅**재현 완료**(동시성 2에서 33% 손실, `scripts/verify-lost-update.js`). 남은 건 수정뿐이고 **Plan부터**. 대상은 `_syncTimeToDBNow`·`upsertProfile`의 `total_minutes`/`today_seconds`/`visit_count`. 수정 후 같은 스크립트로 손실 0 확인 | [admin-analytics.md](admin-analytics.md) §4 | **Plan 필수** / Opus (Red) |
+| 0 | 🚀 **#22+#24 배포** — 둘 다 코드·검증 완료, **push만 남았다**. 마이그레이션 012는 **이미 운영 DB 적용됨**. 배포 후 관리자 화면에서 총이용시간이 **줄어드는 게 정상**(3배 부풀어 있던 게 1배로) | §0 | 배포 |
+| 1 | 🟡 **#25 `record_start` 유령 발사** — 기록 iframe 프리로드로 홈 로드마다 자동 발사. **#18/#19 해석이 바뀐다**(분모도 부풀어 있었다) | [admin-analytics.md](admin-analytics.md) §4 | 옐로 |
+| 2 | ~~#22 수정~~ ✅ 완료 (원자적 증가 RPC) ✅**재현 완료**(동시성 2에서 33% 손실, `scripts/verify-lost-update.js`). 남은 건 수정뿐이고 **Plan부터**. 대상은 `_syncTimeToDBNow`·`upsertProfile`의 `total_minutes`/`today_seconds`/`visit_count`. 수정 후 같은 스크립트로 손실 0 확인 | [admin-analytics.md](admin-analytics.md) §4 | **Plan 필수** / Opus (Red) |
 | 2 | 🎯 **P3 — 드릴다운 + 「시간」 통합 설계** (이벤트·페이지 → **그걸 한 사람들**로). ⚠️ **#12·#20·#21·#23을 여기에 흡수해 한 설계로 풀 것** — 전부 "회원 탭의 시간·기간"이 뿌리라 따로 고치면 또 갈린다. 그다음 **P4=C단계**(보드 연동, Red) | 〃 §5 | Plan / Opus |
 | 3 | 남은 버그: 기록보드 플레이기록 09:00 고정 / 서브시트 모서리 음영 / 단기방문 시간 미표시(`duration_sec=0` 14.7%) | §2 | 버그 / 개별 판단 |
 | 4 | 기록게시판 디자인 개선 (+ GS5 esc 2사본 겸사겸사) | §3 | design·feat |
