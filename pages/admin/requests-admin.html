@@ -1243,6 +1243,17 @@
       const ADMIN_UID = '4916417947';
       rows = rows.filter(r => String(r.user_id) !== ADMIN_UID);
 
+      // ── '전체'가 정말 전체인지 실행 시점에 감지한다 (#16) ────────────────────
+      // getPageAnalytics는 page_sessions를 **90일치만** 가져온다. 데이터가 그 경계에 닿는
+      // 순간부터 '전체'는 사실 '최근 90일'이 되는데, 잘린 쪽은 에러도 빈 값도 아니라
+      // **그냥 데이터가 이만큼**의 모습이라 아무 감지기에도 안 걸린다(CLAUDE.md 「행 수 자체가
+      // 거짓말한다」의 시간축 판). 지금은 미발현이지만(최초행 2026-05-31) 2026-08-29경부터
+      // 물리기 시작하므로, 그때 라벨이 조용히 거짓이 되지 않도록 미리 감지해 둔다.
+      // 판정: 가장 오래된 행이 90일 컷에 닿아 있으면(여유 1일) 그 너머가 잘렸다고 본다.
+      const _oldestSession = rows.reduce((m, r) => (!m || (r.entered_at && r.entered_at < m)) ? r.entered_at : m, null);
+      const _cut89 = new Date(Date.now() - 89 * 86400000).toISOString();
+      const _sessionsTruncated = !!_oldestSession && _oldestSession <= _cut89;
+
       let _cachedEvents = null;
       window._adminSetEvents = (evts) => { _cachedEvents = evts; };
 
@@ -1364,6 +1375,9 @@
       }
 
       function draw(start, end, label, type) {
+        // '전체'인데 실제로는 90일치뿐이면 라벨을 정직하게 바꾼다(#16). 이 label은
+        // 차트 부제·퍼널 기간·도달률 툴팁까지 함께 흐르므로 한 곳만 고치면 된다.
+        if (type === 'all' && _sessionsTruncated) label = '전체 (최근 90일)';
         const filtered = filterByRange(rows, start, end, 'entered_at');
         const filteredPV = filterByRange(pageViews, start, end, 'created_at').filter(r => r.page !== '__visitor__');
 
@@ -1747,10 +1761,13 @@
         const topPages = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 8);
         const chartPagesSub = document.getElementById('chartPagesSub');
         if (chartPagesSub) chartPagesSub.textContent = label;
+        // ⏱ 접두사는 장식이 아니라 **단위 구분**이다(#8) — 막대 길이는 '방문 수'인데
+        // 막대 위 텍스트는 '체류시간'이라 서로 다른 지표다. 표식이 없으면 텍스트가
+        // 막대의 값처럼 읽히고, 방문 수가 동률이면 막대가 전부 같은 길이라 정반대로 읽힌다.
         const pageTimeStrs = topPages.map(([p, v]) => {
           const totS = pageTotSec[p] || 0;
           const avgS = v > 0 ? Math.round(totS / v) : 0;
-          return totS > 0 ? `총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
+          return totS > 0 ? `⏱ 총${fmtTime(totS)} (평균${fmtTime(avgS)})` : '';
         });
         makeOrUpdate('chartPages', 'bar', {
           labels: topPages.map(([p]) => PAGE_LABEL[p] || p),
@@ -1760,7 +1777,13 @@
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            x: { grid: { color: GRID }, ticks: { font: { size: 10 }, stepSize: 1, precision: 0 } },
+            // 막대가 무엇을 센 것인지 축에 밝힌다(#8·원칙 ①). pageUniq는 (사람·페이지·날짜)를
+            // 접은 값이라 같은 사람이 같은 날 여러 번 봐도 1이다 — '조회수'가 아니다.
+            x: {
+              grid: { color: GRID },
+              ticks: { font: { size: 10 }, stepSize: 1, precision: 0 },
+              title: { display: true, text: '방문 (같은 사람·같은 날은 1회)', font: { size: 9 }, color: CMUTED },
+            },
             y: { grid: { display: false }, ticks: { font: { size: 10 }, autoSkip: false } },
           },
         }, [{
@@ -1774,13 +1797,22 @@
               if (!text) return;
               const barRight = bar.x;
               const barWidth = barRight - x0;
-              if (barWidth < 50) return;
               ctx.save();
               ctx.font = '9px sans-serif';
-              ctx.fillStyle = 'rgba(255,255,255,0.92)';
-              ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
-              ctx.fillText(text, x0 + barWidth / 2, bar.y);
+              // 막대 안에 안 들어가면 **오른쪽 바깥에** 어두운 색으로 그린다.
+              // 예전엔 폭 50px만 넘으면 흰 글씨를 무조건 막대 중앙에 그려서, 텍스트가 막대보다
+              // 길면 크림색 배경 위로 흰 글씨가 넘쳐 읽을 수 없었다(짧은 막대일수록 심함).
+              const textW = ctx.measureText(text).width;
+              if (textW <= barWidth - 10) {
+                ctx.fillStyle = 'rgba(255,255,255,0.92)';
+                ctx.textAlign = 'center';
+                ctx.fillText(text, x0 + barWidth / 2, bar.y);
+              } else {
+                ctx.fillStyle = '#8c7a68';
+                ctx.textAlign = 'left';
+                ctx.fillText(text, barRight + 5, bar.y);
+              }
               ctx.restore();
             });
           },
