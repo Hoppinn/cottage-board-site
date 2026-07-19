@@ -95,7 +95,7 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
   console.log('\n=== 발견 #6 — 퍼널 전환율 (기간별) ===');
   await clickTab('event');
   let anyLive = false, over100 = 0, checked = 0;
-  for (const [days, nm] of [['1', '오늘'], ['7', '7일'], ['30', '30일'], ['0', '전체']]) {
+  for (const [days, nm] of [['1', '오늘'], ['7', '이번주'], ['30', '이번달'], ['0', '전체']]) {
     await page.evaluate(d => document.querySelector(`.admin-chart-period-btn[data-days="${d}"]`)?.click(), days);
     await page.waitForTimeout(900);
     const f = await page.evaluate(() => {

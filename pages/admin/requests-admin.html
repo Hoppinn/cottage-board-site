@@ -408,8 +408,12 @@
               <div class="admin-date-controls" id="analysisDateControls">
                 <div class="admin-chart-filter" id="chartPeriodBtns">
                   <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
-                  <button class="admin-chart-period-btn" data-days="7">7일</button>
-                  <button class="admin-chart-period-btn" data-days="30">30일</button>
+                  <!-- 라벨은 실제 동작과 일치해야 한다(#11): data-days는 과거 롤링 일수의 잔재이고
+                       실제로는 _navType을 week/month로 바꾸는 **단위 선택기**다. "7일"은 최근 7일이
+                       아니라 이번 주(월~일), "30일"은 이번 달이었다 — 실증: 30일 합계 1,453 vs 전체 1,493.
+                       ◀▶로 과거 주/월로 이동하면 옆 날짜 네비 라벨이 실제 기간을 보여준다. -->
+                  <button class="admin-chart-period-btn" data-days="7">이번 주</button>
+                  <button class="admin-chart-period-btn" data-days="30">이번 달</button>
                   <button class="admin-chart-period-btn" data-days="0">전체</button>
                 </div>
                 <div class="admin-date-nav is-visible" id="chartDateNav">
@@ -1488,17 +1492,15 @@
             if (!refUsers[cat]) refUsers[cat] = new Set();
             refUsers[cat].add(visitorKey(r, idx, cat));
           });
-          const sumRefSec = {};
-          for (const r of filtered) {
-            const cat = categorizeRef(r.referrer) || '직접 방문';
-            sumRefSec[cat] = (sumRefSec[cat] || 0) + (r.duration_sec || 0);
-          }
+          // 요약 카드에서 체류시간을 뺐다(#9) — 두 가지 이유:
+          //  ① 모집단이 달랐다. 명·회는 page_views.__visitor__에서, 체류는 page_sessions에서
+          //     왔다. 한 줄에 서로 다른 모집단의 수를 나란히 놓으면 같은 것의 세 측면처럼 읽힌다(원칙 ②).
+          //  ② 그 부분이 카드 폭을 넘겨 말줄임(…)을 만들던 당사자였다.
+          // 유입별 체류시간은 **유입 탭**에 같은 소스 기준으로 남아 있다(원칙 ④: 요약은 '어디가 활발한가'만).
           const topRefEntries = Object.entries(refSessions).sort((a, b) => b[1] - a[1]);
           const topRefHtml = topRefEntries.length
             ? topRefEntries.map(([cat, cnt]) => {
-                const totS = sumRefSec[cat] || 0;
-                const timeStr = totS > 0 ? ` · ${fmtTime(totS)}` : '';
-                return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span>(${cnt}회${timeStr})</span></span>`;
+                return `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(cat)} <span style="font-weight:500">${refUsers[cat]?.size ?? '?'}명</span> <span>(${cnt}회)</span></span>`;
               }).join('')
             : '—';
 
@@ -1510,25 +1512,31 @@
             lToday = '방문자'; vToday = dayCnt;
             lAvg = '7일 평균'; vAvg = thisCnt7 / 7; vAvgSub = `이번 7일 ${thisCnt7}명`;
             lDelta = '지난주 대비'; vDeltaHtml = makeDeltaHtml(thisCnt7, prevCnt7); vDeltaSub = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
-            lTopRef = '주요 유입 (7일)';
           } else if (type === 'week') {
             lToday = '이번 주'; vToday = periodCnt;
             lAvg = '일 평균'; vAvg = periodCnt / 7; vAvgSub = `기간 합계 ${periodCnt}명`;
             lDelta = '전주 대비'; vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt); vDeltaSub = `이번 ${periodCnt} / 이전 ${prevCnt}`;
-            lTopRef = '주요 유입 (이번주)';
           } else if (type === 'month') {
             const days = start ? Math.round((new Date(end) - new Date(start)) / 86400000) : 30;
             lToday = '이번 달'; vToday = periodCnt;
             lAvg = '일 평균'; vAvg = periodCnt / days; vAvgSub = `기간 합계 ${periodCnt}명`;
             lDelta = '전달 대비'; vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt); vDeltaSub = `이번 ${periodCnt} / 이전 ${prevCnt}`;
-            lTopRef = '주요 유입 (이번달)';
           } else {
             const months = visitorRows.reduce((s, r) => { const m = kstDate(r.created_at)?.slice(0,7); if(m) s.add(m); return s; }, new Set()).size || 1;
             lToday = '전체 방문자'; vToday = periodCnt;
             lAvg = '월 평균'; vAvg = Math.round(periodCnt / months); vAvgSub = `${months}개월 합산`;
             lDelta = '전기간 대비'; vDeltaHtml = '<span class="admin-summary-delta flat">—</span>'; vDeltaSub = '';
-            lTopRef = '주요 유입 (전체)';
           }
+
+          // 「주요 유입」 라벨은 **실제 집계 기간에서 파생**한다(#9).
+          // topRefHtml은 periodVis(=선택 기간)로 계산되는데 예전엔 라벨이 분기마다 하드코딩돼
+          // 데이터와 어긋났다: type='day'인데 '주요 유입 (7일)'이라 적혀 있었고(실제 데이터는 그날 하루),
+          // week/month도 ◀로 과거 주·달을 보면 '이번주'·'이번달'이 거짓이 됐다.
+          const _t = type || 'day';
+          const _refPeriod = _t === 'all' ? '전체'
+            : (_t === 'day' && (_navValue || todayStr) === todayStr) ? '오늘'
+            : compactPeriodLabelFor(_t, _navValue || todayStr);
+          lTopRef = `주요 유입 (${_refPeriod})`;
 
           // summaryCards[0] = 주요유입 카드 (7일평균/지난주대비 카드 제거됨)
           const summaryCards = document.querySelectorAll('.admin-period-summary-card');
