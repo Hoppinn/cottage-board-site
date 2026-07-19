@@ -134,6 +134,13 @@ assets/js/
 │                               # club-schedule.html → openDateScheduleModal 호출 (막대 클릭)
 ├── index-page.js               # 메인 페이지 전용 (추천게임, 인기게임, 홈 모임 미리보기)
 │                               # day-detail.js 함수 호출 (openDateMeetingModal)
+│                               # ⚠️ initHeroStats 블록을 정리할 때 주의 — 그 finally에
+│                               #   index.html#recommend 딥링크 자동 열기가 얹혀 있다.
+│                               #   히어로 통계 요소가 없으면 조기 return 하지만
+│                               #   **return이어도 finally는 실행**되므로 딥링크는 살아 있다
+│                               #   (Playwright 실측: scrollY 740). 블록을 지우면 딥링크가
+│                               #   같이 죽는다. 히어로 <p>는 제거됐어도 JS는 살아 있어
+│                               #   record_complete/recommend_complete를 계속 읽는다
 ├── owned-games-page.js         # owned-games.html 전용 (게임 목록 필터·렌더)
 ├── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
 └── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
