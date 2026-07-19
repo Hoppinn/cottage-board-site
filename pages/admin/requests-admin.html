@@ -1936,7 +1936,20 @@
         // ── 이벤트 탭 퍼널도 같은 기간을 따른다 ─────────────────────────
         // loadEventStats가 renderCharts보다 나중에 끝나므로 최초 1회는 그쪽이 이 함수를
         // 다시 호출해준다(_adminRedrawForNav). 그 전까지는 아직 없으므로 옵셔널 호출.
-        window._adminRenderFunnel?.(start, end, label);
+        //
+        // 도달률 분모("그 기간에 온 사람")를 함께 넘긴다. 절대수 23명만으로는 많은지
+        // 적은지 판단할 수 없다(원칙 ②).
+        // 🚨 분모로 __visitor__(방문자 도넛의 소스)를 쓰면 안 된다 — 2026-07-19 실측에서
+        //    이벤트를 일으킨 회원 14명 중 9명(64%)만 그 안에 있었다. 분자가 분모 밖으로
+        //    새므로 도달률이 100%를 넘는다(#10과 같은 종류의 거짓말). page_sessions는
+        //    같은 실측에서 회원·비회원 모두 100% 포함 — 그래서 이쪽만 분모 자격이 있다.
+        // 식별 규칙은 eventPersonId와 같아야 교집합이 성립한다(user_id 우선, 없으면 session_key).
+        const reachMem = new Set(), reachAnon = new Set();
+        for (const r of filtered) {
+          if (r.user_id) reachMem.add(String(r.user_id));
+          else if (r.session_key) reachAnon.add(String(r.session_key));
+        }
+        window._adminRenderFunnel?.(start, end, label, { mem: reachMem, anon: reachAnon });
 
         // ── 회원 탭은 날짜 네비를 따르지 않는다 ──────────────────────────
         // 예전엔 여기서 data-last-seen으로 카드를 걸러 dateHidden을 세웠는데, 그러면
@@ -2118,6 +2131,43 @@
           const c = from.u > 0 ? pct(inter, from.u) : '-';
           return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1" title="${from.u}명 중 ${inter}명이 다음 단계도 함">↓ <span style="color:var(--green);font-weight:700">${c}</span></div>`;
         }
+        // 도달률 — "그 기간에 온 사람 중 몇 %가 하나라도 액션했나".
+        // 분모는 renderCharts가 page_sessions에서 만들어 넘긴다(위 주석의 실측 근거 참조).
+        // ⚠️ 화면 위쪽 「방문자 구성」 도넛과 숫자가 다른 게 정상이다 — 그건 __visitor__ 행
+        //    기준이라 모집단이 다르다(게다가 비회원을 행 단위로 세는 과대집계가 있다, #15).
+        //    원칙 ①에 따라 어느 기준인지를 문구와 title에 밝힌다.
+        // ⚠️ 식별자가 없는 이벤트 행(6월 legacy 43행)은 명에서 빠져 도달률이 약간 과소.
+        function reachRow(evts, reach) {
+          if (!reach) return '';
+          const mTot = reach.mem.size, aTot = reach.anon.size, tot = mTot + aTot;
+          if (!tot) return '';
+          const people = countEvents(evts, EVENT_ALL_TYPES).people;
+          let mHit = 0, aHit = 0, orphan = 0;
+          for (const p of people) {
+            if (reach.mem.has(p)) mHit++;
+            else if (reach.anon.has(p)) aHit++;
+            else orphan++;  // 분모 밖 = 세션 기록이 없는 사람. 0이 정상, 늘면 조사 신호.
+          }
+          const hit = mHit + aHit;
+          // 회원과 비회원은 갈라서 보여준다 — 합친 값 하나는 두 이야기를 다 지운다(원칙 ②).
+          const seg = (n, d) => `${n}/${d}<span style="color:var(--muted)">(${pct(n, d)})</span>`;
+          const tip = `분모=선택 기간에 세션 기록이 있는 사람(page_sessions 기준)`
+            + `\n분자=그 기간에 추적 이벤트를 하나 이상 일으킨 사람`
+            + (orphan ? `\n⚠️ 분모 밖 ${orphan}명 — 이벤트는 있는데 세션 기록이 없음` : '');
+          return `<div title="${escH(tip)}" style="border:1px solid var(--border);border-radius:10px;padding:8px 12px;margin-bottom:6px;background:var(--card-bg,#fff)">
+            <div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">
+              <span style="font-size:12px;font-weight:800;color:var(--text)">📊 도달률</span>
+              <span style="font-size:12px;color:var(--muted);font-weight:500">방문 ${tot}명 중</span>
+              <span style="font-size:17px;font-weight:900;color:var(--text);line-height:1.1">${hit}명</span>
+              <span style="font-size:14px;font-weight:800;color:var(--green)">${pct(hit, tot)}</span>
+              <span style="font-size:11px;color:var(--muted);font-weight:500">가 하나 이상 액션</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);font-weight:600;margin-top:3px">
+              회원 ${seg(mHit, mTot)} · 비회원 ${seg(aHit, aTot)}
+              <span style="font-weight:400">· 방문=세션 기록 기준</span>
+            </div>
+          </div>`;
+        }
         function axisCard(emoji, title, steps, nDots) {
           const dots = Array.from({length: nDots}, (_, i) =>
             `<span style="font-size:7px">●</span>${i < nDots-1 ? '<span style="font-size:9px;margin:0 1px">─</span>' : ''}`
@@ -2132,13 +2182,14 @@
         }
         // 선택 기간 기준으로 퍼널을 그린다. 날짜 네비가 바뀔 때마다 draw()가 다시 부른다.
         // 이전엔 '오늘' 값으로만 전환율을 계산해 오늘 클릭이 0이면 5칸 전부 '-'였다.
-        function renderFunnel(start, end, label) {
+        function renderFunnel(start, end, label, reach) {
           const evts = inRange(events, start, end);
           const c = t => countEvents(evts, [t]);
           const hr = c('home_recommend_main_click'), rgd = c('home_recommend_game_detail_click'), rall = c('home_recommend_all_click');
           const hg = c('home_record_main_click'), rm = c('home_record_more_click'), rw = c('home_record_write_click');
           const mt = c('home_meeting_main_click'), mp = c('home_meeting_planner_click');
           el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')} <span style="font-weight:400">· 전환율은 사람 기준(앞 단계를 한 사람 중 다음도 한 비율)</span></div>
+          ${reachRow(evts, reach)}
           <div style="display:flex;flex-direction:column;gap:6px">
           ${axisCard('🔍', '추천게임 찾기', `
             ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr)}
