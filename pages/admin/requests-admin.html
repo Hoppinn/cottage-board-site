@@ -442,7 +442,8 @@
                     </div>
                     <div class="admin-visitor-breakdown-item">
                       <span class="admin-visitor-breakdown-label">평균</span>
-                      <span class="admin-visitor-breakdown-value" id="sumAvg">—</span><span class="admin-visitor-breakdown-value">명</span>
+                      <!-- 방문 '횟수'의 일/월 평균이다(vAvg = periodCnt ÷ 기간). 사람 수가 아니라 회. -->
+                      <span class="admin-visitor-breakdown-value" id="sumAvg">—</span><span class="admin-visitor-breakdown-value">회</span>
                     </div>
                     <div class="admin-visitor-breakdown-item" id="sumDelta">—</div>
                   </div>
@@ -1544,17 +1545,25 @@
         // ── 회원/비회원/봇 방문자 요약 카드 (143차-178, is_bot/user_id 컬럼 기반) ──
         {
           const periodVisForBreakdown = (start || end) ? filterByRange(visitorRows, start, end, 'created_at') : visitorRows;
-          const memberCnt = periodVisForBreakdown.filter(r => r.user_id).length;
-          const guestCnt = periodVisForBreakdown.length - memberCnt;
+          // "N명"이라 쓰므로 사람 단위로 센다(#15) — 도넛과 같은 visitorKey 규칙.
+          // 예전엔 행 수를 세면서 명이라 불렀다(전체 기준 770행 = 실제 694명).
+          const _mSet = new Set(), _gSet = new Set();
+          periodVisForBreakdown.forEach((r, idx) => {
+            (r.user_id ? _mSet : _gSet).add(visitorKey(r, idx, 'bd'));
+          });
+          const memberCnt = _mSet.size;
+          const guestCnt = _gSet.size;
+          // 봇은 사람이 아니라 요청이므로 행 수가 맞다 — 라벨도 '회'로 둔다.
           const botCnt = ((start || end) ? filterByRange(botVisitorRows, start, end, 'created_at') : botVisitorRows).length;
           const elTotal = document.getElementById('sumVisitorTotal');
           const elMember = document.getElementById('sumVisitorMember');
           const elGuest = document.getElementById('sumVisitorGuest');
           const elBot = document.getElementById('sumVisitorBot');
-          if (elTotal) elTotal.textContent = periodVisForBreakdown.length;
+          // 총계는 방문 '횟수'(행 수)라 단위가 다르다 — 회원+비회원 명과 더해지지 않는다.
+          if (elTotal) elTotal.textContent = `${periodVisForBreakdown.length}회`;
           if (elMember) elMember.textContent = `${memberCnt}명`;
           if (elGuest) elGuest.textContent = `${guestCnt}명`;
-          if (elBot) elBot.textContent = `${botCnt}명`;
+          if (elBot) elBot.textContent = `${botCnt}회`;
         }
 
         // ── 1. 날짜별 방문자 — __visitor__ 마커 기준, 단위별 집계 ──
@@ -1832,10 +1841,21 @@
         });
 
         // ── 보조: 방문자 구성 도넛 ──────────────────────────────────
+        // 회원·비회원 **둘 다 사람 단위**로 센다 — visitorKey는 이 페이지의 공용 식별 규칙이고
+        // 유입 경로·교차분석도 같은 키를 쓴다(#15 이전엔 여기와 요약카드만 이 규칙 밖에 있었다).
+        // 🚨 예전 계산 `비회원 = 전체 행 - 고유 회원수`는 두 가지를 동시에 틀렸다:
+        //    ①비회원을 사람이 아니라 행(=하루 첫 방문 1건) 단위로 셌고
+        //    ②회원의 재방문 행이 통째로 비회원 칸으로 넘어갔다(회원이 자주 올수록 비회원이 늘어남).
+        //    실측 7일: 비회원 84명으로 표시됐으나 실제 45명, 그중 36명이 회원 재방문분이었다.
+        // ⚠️ legacy 행(session_key 없음, 2026-07 이전)은 visitorKey가 행마다 다른 키를 주므로
+        //    각각 1명으로 잡힌다 = 상한값. 소급 식별이 불가능해 이 페이지 전체가 쓰는 관례다.
         const ratioVisitors = filteredVisitor;
-        const memberUidSet = new Set(ratioVisitors.map(r => r.user_id).filter(Boolean));
-        const mCnt = memberUidSet.size;
-        const gCnt = Math.max(0, ratioVisitors.length - mCnt);
+        const mSet = new Set(), gSet = new Set();
+        ratioVisitors.forEach((r, idx) => {
+          (r.user_id ? mSet : gSet).add(visitorKey(r, idx, 'ratio'));
+        });
+        const mCnt = mSet.size;
+        const gCnt = gSet.size;
         const chartRatioSub = document.getElementById('chartRatioSub');
         if (chartRatioSub) chartRatioSub.textContent = label;
         makeOrUpdate('chartMemberRatio', 'doughnut', {
