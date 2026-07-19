@@ -44,6 +44,9 @@
   - 🚨 **`trackEvent`에는 일부러 안 걸었다** — iframe 안의 실제 저장 행동은 진짜라, 전역 가드로 막으면 같은 날 붙인 `record_complete`가 죽는다. iframe에서 `trackEvent` 생존을 별도 검증했다.
   - 📌 **부산물 #25**: 기록 iframe 프리로드가 `record_start`도 홈 로드마다 쏘고 있었다 → **#18/#19 해석 변경**(분자만 빈 게 아니라 분모도 부풀어 있었다).
   - ⚠️ **부수 효과**: `guide.html`·게임위치 오버레이 등 **사용자가 실제로 보는 iframe의 `page_views`도 이제 안 잡힌다**(부모 조회에 흡수). 그 페이지별 유입이 다시 필요하면 별도 설계.
+- 🧹 **내가 운영 DB를 오염시켰고 정리했다 (2026-07-19)** — 검증 중 브라우저에 가짜 `kakao_user`를 심자 **사이트 코드가 실제로 `upsertProfile`을 실행**해 `profiles` 4행이 생겼고(관리자 회원 수 20→24), `page_views`·`page_events`도 각 14행 쌓였다. 전용 실험 스크립트엔 정리 코드를 넣었으나 **중간에 급히 만든 프로브 3개에 빠뜨린 것**이 원인. 전부 삭제하고 346/20 복귀를 실측 확인.
+  - 🚨 **`page_views`·`page_events`는 anon DELETE 정책이 없어 스크립트로 못 지운다** — 삭제가 **`error: null`에 0행 처리**되고 성공을 반환한다. SQL Editor에서 처리했다. **`ok`만 보고 "정리 완료"라 보고할 뻔했고, 잔여 건수를 세어서 잡았다** — 오늘 종일 다룬 「행 수 자체가 거짓말한다」에 내가 걸린 셈이다.
+  - 재발 방지 메모는 [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) §1 scripts 주석 + [db-schema.md](db-schema.md).
   - 📥 **Plan 착수 시 읽을 것** (2026-07-19 재현 직후 기록 — Plan이 아니라 Plan의 입구다. 아래는 **미확인 질문 목록**이지 결론이 아니다):
     - `_syncTimeToDBNow` [supabase-client.js:1011](../assets/js/supabase-client.js#L1011) — `select`→계산→`update` 본체. `insertPageSession` 분기와 `s.timeSec = 0` 리셋 위치 주의.
     - `upsertProfile` — **가드 2개가 있다**: `selectError`면 시간 필드를 아예 빼서 0 덮어쓰기를 막고, `skipAnalyticsForUser`면 누적을 건너뛴다. **RPC로 옮길 때 이 의미를 잃으면 안 된다**(단순 `col = col + n`으로 바꾸면 두 가드가 사라진다).

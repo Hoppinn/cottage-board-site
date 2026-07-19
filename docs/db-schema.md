@@ -63,6 +63,9 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 
 **비교 — 형제 테이블은 맞게 돼 있다**: `page_views`(:24-31)·`page_sessions`(:469-476)는 INSERT·SELECT 둘 다 `anon`. 같은 파일 안에서 `page_events`만 갈렸으니 **정책 판단이 아니라 실수**다. (이 형제들이 이미 `user_id`·`session_key`를 anon에 노출하므로 page_events를 여는 것이 **새로운 종류의 노출은 아니다**.)
 
+🧹 **anon 키로는 `page_views`·`page_events`를 지울 수 없다 (2026-07-19 실측)** — 두 테이블은 RLS ON에 **INSERT·SELECT 정책만** 있어 DELETE 정책이 없다. 그래서 anon DELETE는 **`error: null`에 0행 처리**되고 PostgREST는 성공을 반환한다. 테스트 데이터를 남겼다면 **SQL Editor에서 지워야 하며, 삭제 후 반드시 건수를 재확인할 것**(성공 반환을 믿으면 안 지워진 걸 놓친다 — 「행 수 자체가 거짓말한다」의 삭제판). `profiles`·`page_sessions`는 RLS OFF라 anon 삭제가 실제로 먹는다.
+- ⚠️ **SQL `LIKE`에서 `_`는 와일드카드다** — `'__racetest%'`는 임의의 두 글자로 시작하는 모든 행을 잡는다. 접두사로 지울 땐 `'\_\_racetest%'`로 이스케이프할 것.
+
 **교훈**: 「테이블 생성 시 RLS 상태 명시」만으로는 부족하다 — **정책을 쓸 땐 `to` 역할이 `anon`인지도 확인**해야 한다. `authenticated`/`auth.uid()`는 이 프로젝트에서 항상 죽은 코드다. 조치는 `011_page_events_anon_select.sql`.
 
 ⚠️ **컬럼명을 추측해서 확인하지 말 것** — 2026-07-16 점검 중 `priority`/`condition_type`으로 조회해 "009 미적용"이라는 **거짓 결론**이 나올 뻔했음(실제 이름은 `is_priority`/`player_condition`). PostgREST는 없는 컬럼에 HTTP 400을 주므로, 마이그레이션 SQL 파일의 실제 이름으로 조회하고 **HTTP 상태를 반드시 확인**할 것(에러 응답을 "0행"으로 오독하기 쉬움).

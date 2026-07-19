@@ -63,6 +63,15 @@
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
+│   │
+│   # 🚨 브라우저로 사이트를 띄우는 검증 스크립트 주의 (2026-07-19 실제 오염)
+│   #   localStorage에 가짜 kakao_user를 심으면 **사이트 코드가 실제로 upsertProfile을
+│   #   실행해 운영 profiles에 행을 만든다**. page_views·page_events도 함께 쌓인다.
+│   #   → 반드시 finally에서 정리하고, **삭제 후 건수를 재확인**할 것.
+│   #   → page_views·page_events는 anon DELETE 정책이 없어 **스크립트로는 못 지운다**
+│   #      (SQL Editor 필요). 상세는 db-schema.md 「anon 키로는 지울 수 없다」.
+│   #   → 실측 사례: 프로브 3개가 정리 없이 끝나 profiles 4행·page_views 14행·
+│   #      page_events 14행이 남았고, 관리자 회원 수가 20→24로 보였다.
 │   ├── ss_subsheet/                # 서브시트 스크린샷 (비교용 이미지)
 │   ├── ss_4axis/                   # 4축 UI 스크린샷
 │   └── ss_profile/                 # 프로필 패널 스크린샷
