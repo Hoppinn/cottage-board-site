@@ -1,6 +1,9 @@
 # PROJECT_STATE — 코티지보드 현재 상태 보고서
 
-최종 갱신: 2026-07-19 (세션 ⑬ — `record_complete` 5경로 보강. 발견 #19 종결, #18·#20·#21 등록).
+최종 갱신: 2026-07-20 (「시간」 계열 전부 종결 + **문서 감사** — 469→337줄. §1 완료 로그 삭제, §3 닫힌 항목 20건 제거).
+
+> 🧹 **이 문서의 편집 기준 (2026-07-20)**: **닫힌 것은 남기지 않는다.** 완료 기록은 git log가 갖고, 여기엔 **열린 것과 재방문 시 필요한 판단**만 둔다.
+> 닫을 땐 그 항목을 지우고, 되돌리면 손해인 판단만 §0에 한 줄로 남긴다. 같은 기준을 [CLAUDE.md](../CLAUDE.md)·[REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md)에도 적용했다.
 
 > 📍 **관리자 분석을 만질 땐 [admin-analytics.md](admin-analytics.md)를 먼저 읽을 것** — 표시 원칙 5개·발견 대장 #1~#21·부위별 실행계획 P1~P7·재조사 금지 가설이 전부 거기 있다. 아래 §0 세션 요약의 `#숫자`도 그 문서의 발견 번호다. **최근 세션(⑬·⑫) 요약은 §0 상단.** 이전 세션(①~⑪) 상세는 git log + [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md), 그때 발생한 열린 항목·교훈은 전부 §3·CLAUDE.md·js-api.md·PROJECT_STRUCTURE.md로 이관 완료.
 
@@ -95,12 +98,10 @@
 
 ⚠️ **리팩토링(GS5 등)에 착수하면 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
-### ✅ 종료: 전체 리팩토링 R1~R12 (2026-07-15 ~ 07-17, 전부 스모크 통과)
+### 리팩토링 R1~R12 — 종료 (2026-07-15~17)
 
-세션별 결과는 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「진행 요약」 표, 상세는 git log. `REFACTOR_CHECKPOINT.md` 정리(474→90줄)도 완료 — 감사 잔여 12건은 §3로 이관(a8ca07e).
-
-> ⚠️ **"R10c 완료 = 그 주제 전체 완료"가 아니다 (2026-07-17 확인)**: R10 원안은 **리팩토링 + stale 버그 + 네비스택**을 한 항목에 묶었으나 CLAUDE.md 「구현/리팩토링 분리」 위반이라 2026-07-16에 **R10a(추출) / R10b(stale) / R10c(네비스택)로 분할 승인**됐다. 따라서 **R10c = 신규기능(backTo)만**이고 그건 끝났다.
-> **그러나 부모 항목은 열려 있다** → §3 「[PC 리팩토링] 타인 보드 내부 네비게이션 통일」: 남의 보드 안에서 서브시트를 전환할 때 **바텀시트로 뜨는** 것을 내 보드처럼 센터모달 + 고정 헤더로 통일하는 건. **R10c가 만든 `backTo`를 재사용할 수 있는지가 착수 시 첫 검토 사항.**
+세션별 상세는 `git log --grep="R1"`. **되돌리면 안 되는 판단과 교훈은 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md)** — 리팩토링 착수 전 그것만 읽으면 된다.
+⚠️ **R10c는 신규기능(backTo)만 끝난 것**이고, 부모 항목 「타인 보드 내부 네비게이션 통일」은 §3에 열려 있다.
 
 ### 열린 스모크 (선택 — 해당 화면을 만질 때 함께)
 
@@ -118,14 +119,6 @@
 - **게임시트 ↔ 보드는 "닫고 backTo로 복귀"가 규칙**: 패널(`--z-profile` 9100) < 게임시트(`--z-sheet` 9500)이라 시트를 연 채 패널을 열면 뒤에 깔린다. **z를 올려 고치지 말 것** — 반대로 "취향보드 → 게임 썸네일 → 게임시트"가 깨진다(그땐 시트가 위에 떠야 함). 상세는 §3 R10c 인용절.
 
 
-
-### ✅ 종료: 읽기전용 내 보드 + 취향 연동 + 좋아요 동기화 (2026-07-14~15, Phase A~E 전부 완료 + 실서버 스모크 확인 완료)
-
-`openProfilePanel(autoSubsheet, {userId, readOnly})`로 남의 보드를 편집 없이 통합 표시(취향/모임/기록보드), 좋아요 전역 이벤트 동기화(`cottage-likes-changed`), 진입점 정리(`.sched-bar-name`→모임보드, 그 외 닉네임 클릭→읽기전용 내 보드), 모임보드 밀도 정리(요일배지·✨마크·게임 썸네일·인원조건 표시 등). 상세는 git log(커밋 68e2de4~3d99561) 참조. 알려진 잔여 한계: readOnly 닉네임 미확정으로 "태그된 참여 기록" 일부 미포함(getMyStats nickname=null).
-
-### ✅ 종료: 미보유 게임 기록시트 + 게임평↔플레이기록 연동 (2026-07-14~15, Red, Stage 1·2·3 전부 완료)
-
-미보유 게임도 `openGameRecordSheet`로 열리게 확장(좋아요/게임평/사진/플레이기록), 게임평 저장 후 내 플레이기록 연동 넛지, 남의 세션에 내 후기로 즉시 참여(`_openJoinConfirm`, 확인창 방식). 상세는 git log(커밋 cb07c8c~2666afa) 참조. 남은 실서버 확인 항목: ①미보유/보유 게임 넛지·⋯메뉴→저장 후 게시판에 같은 세션 아래 내 후기 나란히 표시되는지 ②`.sheet-rec-more`(⋯) 메뉴 위치·간격(내 기록 ✏️/✕와 공존). 미착수 후속(§3 이관): 뽁님 7/11 게임평↔호핀 플레이기록 연결.
 
 ---
 
@@ -161,67 +154,10 @@
 
 ---
 
-## 1. 현재 완료 기능
+## 1. 무엇이 이미 있는가
 
-### 핵심 기능
-- [x] 카카오 OAuth 로그인/로그아웃
-- [x] 닉네임 변경 (localStorage + DB 저장)
-- [x] 프로필 사진 변경 (프리셋 20종 + 파일 업로드, 다기기 복원)
-- [x] 내 보드 패널 — 메인(4카드) + 서브시트(성장/교환권/이용기록/취향보드) + 프로필 영역(대표캐릭터/닉네임/칭호)
-- [x] 취향 보드 Phase 1 (142차) — 한줄소개(bio), 좋아하는/해보고싶은 게임(추가/삭제/직접입력/ESC 닫기/이미추가됨 표시), 피하는 유형 태그, 좋아요 토스트→취향보드 직접 진입
-  - ~~⚠️ SQL 미실행: Supabase SQL Editor에서 실행 필요~~ → ✅ **실행 완료 확인 (2026-07-16 실측)**: `profiles.bio`·`avoid_tags`·`notif_seen_at` 전부 존재, `game_likes` 44행·`game_curious` 53행, bio/avoid_tags 실데이터 각 2행. **낡은 경고였음**(기능이 운영에서 정상 동작 중인데 경고만 남아 있었음)
-  - 게임 시트에 좋아요/궁금해요 유저 아바타 목록 표시 (getGameLikers/getGameCuriousUsers)
-- [x] 약식 카드 클릭 → 해당 본문 카드로 위임 (캐릭터/칭호, 132차)
-- [x] 인앱 알림 시스템 — 배지 + 패널. 2차 개선(날짜/unread 바/보상카드 강조/명칭 "최근 소식") (130차)
-
-### 게임 기록
-- [x] 신규 기록 등록 (다중 게임 행, 날짜/그룹명/참여자/인원/시간/점수/후기)
-- [x] 사진 다중 업로드 (최대 5장, 1200px/JPEG 0.85 리사이즈)
-- [x] 기존 기록 수정 (인라인 수정폼, 사진 개별 삭제/신규 추가)
-- [x] 기록 삭제
-- [x] 모임별 보기 (그룹 > 날짜 > 게임) / 게임별 보기 (게임 > 모임/인원 > 날짜)
-- [x] 그룹명 / 게임명 / 참여자 이름 자동완성
-- [x] 사진 썸네일 표시 (80px, 최대 3장 + +N장 배지, 라이트박스 연동)
-
-### 게임 목록 / 바텀시트
-- [x] 전체 게임 목록 (필터: 인원 1인~9인+, 난이도, 분위기, 키워드)
-- [x] 게임 바텀시트 (별점, 게임평, 따봉/궁금해요, 플레이기록, 사진 3섹션)
-- [x] 별점 제출/조회 (user_id 기반, 비로그인 세션키 중복 방지)
-- [x] 게임평 등록/삭제/수정 (user_id 기반 권한)
-- [x] 따봉/궁금해요 토글 + 좋아요/궁금해요한 유저 아바타 목록 표시 (142차-2)
-
-### 업적 / 캐릭터 / 칭호 / 교환권
-
-상세 정의: `docs/achievement-system.md` (SSOT)
-
-- [x] 업적 시스템 — ACH_DEFS 기반 8축 (record/new_game/photo/review/visit/play/first_record/balance)
-  - checkAchievements: 기록/별점/방문/함께한 날 트리거 후 자동 체크
-  - 달성 → 캐릭터/칭호/교환권 자동 지급. 포인트 비활성화 (UI 숨김, DB/로직 유지)
-  - ⚠️ play/balance 카운팅은 player_names 텍스트 기반 — 닉네임 변경/동명이인 오탐 가능. 장기 과제: game_play_participants 테이블
-- [x] 캐릭터 — 47종 픽셀아트 PNG, 대표 캐릭터 선택/저장/프로필 표시
-- [x] 칭호 — TITLE_DEFS, 대표 칭호 선택, 프로필 표시
-- [x] 교환권 시스템 — 전 단계 완료
-  - DB: voucher_products/voucher_log (001_vouchers.sql)
-  - voucher_log.note + achievement reason CHECK + partial unique index (003_voucher_achievement.sql ← Supabase 실행 완료)
-  - grantFirstPlayVoucher (첫 플레이, record_1 경로) / grantAchievementVoucher (업적별, JS + DB 이중 중복방지)
-  - 관리자 UI: 전체 지급/사용 로그, 당시 잔액 역산 표시
-  - 정책: 계정당 1회 자동 지급, 오너 제외, 승인 없음, 사용 즉시 차감
-- [x] 업적 소급 부여 SQL 실행 완료 (002_sogeup_achievements.sql, 129차)
-
-### 어드민
-- [x] 게임/간식 요청 관리 — 상태 시스템 (purchase_status/status_date + 상태 피커)
-- [x] 건의사항 관리 / 회원 목록 및 차단
-- [x] 페이지 분석 대시보드 — 요약 카드, 날짜/주/월 필터, 유입경로, 교차분석
-
-### 인프라
-- [x] 방문자 통계 — `__visitor__` 마커 방식 (113차 버그 수정, 118차 filteredPV 중복 제거)
-- [x] 채널 귀속 추적 — last-touch 모델, UTM 파라미터, 날짜+source+page dedup
-- [x] 추천게임찾기 이벤트 추적 (page_events 테이블)
-- [x] 체류 시간 누적 (초 단위, localStorage → DB, 1분마다 heartbeat)
-- [x] localStorage 세션 키 통합 (`cottage_sess_{id}` 단일 JSON, 자동 마이그레이션)
-- [x] 업로드 전 이미지 리사이즈 (1200px, JPEG 0.85)
-
----
+**완료 기능 체크리스트(33항목)는 2026-07-20에 삭제했다** — 전부 [x]인 순수 완료 로그였고 코드에서 확인 가능하다.
+기능이 이미 있는지 확인하려면: 화면·페이지는 [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md), DB는 [db-schema.md](db-schema.md), 함수는 [js-api.md](js-api.md), 업적은 [achievement-system.md](achievement-system.md).
 
 ## 2. 현재 버그
 
@@ -254,21 +190,10 @@
 
 ### P1 — 기능 (중요)
 
-- [x] **관리자 카카오 알림 확장** — 신규 회원 가입(profiles INSERT) + 교환권 사용(voucher_log INSERT) 시 카톡 알림. Supabase DB webhook → Make.com 시나리오 5213346 Router 3개 분기 (140차)
-- [x] **업적 8축 순서 재배열** — record→first_record→new_game→play→photo→review→visit→balance (118차)
-- [x] **달성 업적 아이콘 컬러 적용** — .is-achieved .profile-ach-img-lock { filter: none } 추가 (118차)
-- [x] **업적명·내용·아이콘 불일치 수정** — new_game_10/30/300 🦉→게임이모지, review_5/25/300 🦊→글쓰기이모지 (118차)
-- [x] **rare 캐릭터 축 대표 오탐 수정** — _topCharPerAxis에서 rare_ 접두사 캐릭터 제외 (118차)
-
 ### P2 — 기능 (선택)
-
-- [x] ~~**[feat] 기록입력 '최신 기록' 버튼 → 최근 세팅 드롭다운 선택**~~ — ✅ **해결·스모크 통과** (2026-07-18). 1번 행 `↑ 최신 기록` 버튼([game-reviews.js:190](../assets/js/game-reviews.js#L190))이 최신 1건만 채우던 것 → **최근 세팅 드롭다운 선택**. (1차 순회 토글은 오버슈트 UX 문제로 폐기.) `_prRecents`(내 기록 최신순 dedup, `(group,count,names)` 시그니처) 목록을 버튼 클릭 시 표시, 항목 클릭 시 그룹·인원·참여자 채움([:276~](../assets/js/game-reviews.js#L276), CSS `.pr-last-record-*` [style.css:7000](../assets/css/style.css#L7000)). 바깥클릭·ESC 닫기. DB 추가조회 0.
-
-- [x] **게임시트 상단 레이아웃 개편** (커밋: 39fe161) — sheet-img-col 제거, sheet-en-title을 sheet-title-block 최상단으로 이동, 버튼 한 줄 배치([꽂혀있는 책장 보기][룰영상 보기]), 헤더 썸네일 클릭 시 _openCoverModal() 표지 확대 모달.
 
 ---
 
-- [x] ~~[기술부채] 오늘 이벤트 수 집계 날짜 비교~~ — ✅ **해결** (2026-07-15). `initHeroStats`가 `created_at`(UTC)의 `slice(0,10)`을 KST 오늘 날짜와 직접 비교해 KST 00~09시 이벤트가 UTC 전날로 잘려 누락되던 것을, `kstDateStr`(created_at을 +9h 변환 후 slice) 헬퍼로 양쪽 모두 KST 기준 비교하도록 수정. node로 KST 경계(00:30/08:30/23:30/내일/어제/null) 7케이스 검증 통과. 관련 파일: `assets/js/index-page.js`.
 
 - [ ] **[PC 리팩토링] 타인 보드 내부 네비게이션 통일** — 모임보드→취향보드 등 전환이 바텀시트로 뜸. 내 보드와 동일한 센터모달 + 고정 헤더 + 뒤로가기로 통일.
   - ⚠️ **R10c(3-1·3-2)와 별개 이슈로 남아 있음** — R10c가 만든 건 **패널 레벨 뒤로가기**(backTo)이고, 이 항목은 **남의 보드 안에서 서브시트를 전환할 때 바텀시트로 뜨는 표현** 문제라 그대로 열려 있다. 착수 시 R10c의 `backTo`를 재사용할 수 있는지 먼저 검토할 것.
@@ -281,44 +206,16 @@
 > - 📌 **햄버거 깜빡임의 근본**(5838e1b): script-nav.js의 "메뉴 밖 클릭 시 닫기"가 보드 ✕ 클릭을 메뉴 밖으로 오인 → 닫힘. `_restoreMenuExpanded`의 30ms는 그 뒤에 다시 여는 **우회책**이었다(= 그 함수가 "무조건 add"였던 이유). 이제 보드 클릭을 제외해 애초에 안 닫힌다. **그 우회책 함수는 2026-07-18 완전 no-op으로 확인돼 제거됨**(위 §3 종결 항목).
 > - **알려진 차이**: 기록시트(`openGameRecordSheet`)에서 닉네임을 누르면 복귀 대상이 기록시트가 아니라 **게임시트** — 둘 다 `_currentSheetGameKey`를 쓰기 때문. 무해로 판단. 거슬리면 `backTo.type` 분화.
 > - **트레이드오프**: 알림 복귀 시 목록은 DB 재조회 → 읽음 상태는 유지되나 **스크롤은 상단으로 리셋**(사용자 인지·승인).
-- [x] ~~**[리팩토링] `_restoreMenuExpanded` 제거 검토**~~ — ✅ **2026-07-18 종결·제거 완료**. 검토 결과 **모든 경로에서 완전 no-op**으로 확인돼 함수+호출 3곳+죽은 `_menuWasOpen` 제거. **커밋 메시지가 걱정한 "loginBtn is-expanded 얽힘"은 과다 우려였음**: `is-expanded`(및 `menu.active`)를 제거하는 유일한 함수 `resetMenuGroups`의 호출처가 **오직 햄버거 토글(script-nav.js:275)** 하나뿐이고, 스크롤 핸들러 `refreshMenuActive`는 loginBtn을 안 건드린다 → 보드가 풀스크린 오버레이라 그 뒤 햄버거 탭이 불가능해 보드 열린 동안 두 클래스가 절대 안 빠짐 → ✕ 때 `add`는 이미 붙은 클래스에 대한 no-op. 오히려 30ms 타이머의 잠재 레이스가 사라져 더 안전.
-- [x] ~~**[Yellow] 이날모임 상세 — 참여자 닉네임·게임 클릭해서 열기**~~ — ✅ **완료·스모크 통과** (2026-07-17, 커밋 d7a0a88·8957e8b·83b8df4·fd928c1).
-  - **무엇을 한 건가** (나중에 읽고 알아볼 수 있게 — "진입점 2건" 같은 압축 표기는 6개월 뒤 아무 의미 없다): 홈 "이번주 모임 미리보기" 카드나 모임 플래너(club-schedule)의 **"자세히"를 누르면 그 날짜의 모임 상세 모달**이 뜬다(`day-detail.js` `openDateMeetingModal`). 그 안엔 참여자별로 [닉네임 / 참여 시간 / 하고싶은 게임·배우고싶은 게임 목록]이 나온다. **거기서 ①닉네임을 누르면 그 사람 모임보드가 열리고, ②게임을 누르면 그 게임 정보시트가 열리게** 한 것. 사용자 요청.
-  - **구현**: 닉네임 = `.dd-nick-link`+`data-uid` → `openOtherMeetingSheet`(Phase D 규칙: 모임 참여자는 모임보드 직행). 게임 = 썸네일+이름을 `.dd-game-hit` span으로 감싸고 `data-game-id` → **`getGameKeyById`로 변환 후** `openGameSheet`. **둘 다 모달을 닫지 않고 위에 겹쳐 띄운다.**
-  - **스모크 ✅ 전부 통과** (2026-07-17 사용자 확인): 닉네임→보드→✕/배경클릭으로 닫으면 모달 복귀 / 게임→정보시트→닫으면 복귀 / 직접입력 게임 무반응 / club-schedule 경로 / 썸네일·이름에서만 반응(인원조건 태그 무반응). **클릭 범위는 2회 반려 후 통과.**
-  - **클릭 범위**: **썸네일+이름만.** 인원조건 태그(`(베스트 4인)`)는 게임 이름이 아니므로 **제외**. 썸네일이 13px라 터치 타겟에 미달해 이름까지 묶은 것이지 "행"이 단위가 아니다. ⚠️ 처음에 `<li>` 전체에 줬다가 빈 공간이, `fit-content`로 고쳤더니 인원조건 태그가 눌려 **2회 반려**. → **교훈: "행 전체"는 클릭 범위 명세로 부정확하다. 무엇이 눌리면 안 되는지까지 정하고 시작할 것.**
-  - ⚠️ **착수 메모 3건 중 2건이 틀렸다** — 219행 e2bfefb 교훈("동기화 경로를 문서 메모로 믿지 말 것")과 **같은 뿌리이고 또 맞았다**:
-    - ① "`.sched-bar-name[data-uid]` 패턴이 이미 있으니 확인만" → **틀림**. 그건 `buildBarsInCard`(막대) 것이고 이 모달은 `_buildParticipantsHtml`이 그리는 **별도 마크업**이라 uid도 핸들러도 없었다.
-    - ② "z-index 확인 선행(박스모달 9700 > 게임시트 9500)" → **무관한 모달 얘기였음**. `.dd-overlay`는 9200이라 게임시트(9500)가 이미 위였다.
-    - ③ **가장 위험 — "썸네일은 `openGameSheet?.(gid)`"를 그대로 썼으면 12건 전부 깨졌다**: 그 패턴이 통하는 박스모달은 `game_likes`(**슬러그**)를 읽지만 이 모달은 `meeting_vote_games.game_id`(**BGG ID**)를 읽는다. `openGameSheet`는 `gameData[key]`(슬러그) 조회 후 **미스 시 에러 없이 `openGameRecordSheet`로 폴백**하므로 엉뚱한 기록시트가 조용히 열린다. → `getGameKeyById` 변환 필수. **실측**(HTTP 200): `meeting_vote_games` 16행 중 game_id 보유 12행이 **전부 BGG ID**(슬러그 0), 변환 시 12/12 성공·음성 대조군으로 폴백 재현 확인.
-  - ⚠️⚠️ **가장 큰 교훈 — "닫고 전환"과 "겹쳐 쌓기"를 혼동했다** (사용자 지적으로 발견): 보드(9100)가 모달(9200) 아래라 처음엔 **모달을 닫고 보드를 열었다** → 사용자가 보드를 닫자 **돌아갈 화면이 사라졌다**. 이어서 R10c의 `backTo`(뒤로가기 버튼)를 끌어오려 했으나 **그것도 오답**이었다. 사용자 지적대로 이건 패널→패널 **전환**이 아니라 모달 위에 보드가 **겹쳐 뜨는** 것이고, 그러면 닫았을 때 아래가 그대로 있는 게 당연하다. **해법은 복귀 장치가 아니라 레이어 순서** → `.dd-overlay--under-board`(9050)로 이 모달만 보드 아래로 내리고 닫지 않는다. **판단 기준: 사용자가 "닫으면 원래 화면이 있어야지"라고 느끼는 관계면 전환이 아니라 레이어다.**
-    - 📌 **`.dd-overlay` 기본값(9200)은 낮추지 말 것** — `openDatePreviewModal`은 모임보드 서브시트(9200) **안에서** 열려([kakao-auth.js:1565](../assets/js/kakao-auth.js#L1565)) 낮추면 뒤에 깔린다. 그래서 **이 모달에만** 클래스를 준 것. 9050은 헤더(1000)·게임시트(9500)·플래너(`--z-shelf` 9600) 전부와 무관함을 확인.
-    - 📌 **CSS 선언 순서**: `.dd-overlay--under-board`는 `.dd-overlay`와 우선순위가 같아 **뒤에 와야** 이긴다(실제로 앞에 뒀다가 발견).
-  - ⚠️ **검사기 오판 1건 — "배경 클릭으로 보드 닫기는 기능이 없다"고 문서·커밋 메시지에 적었으나 새빨간 거짓이었다**(사용자가 "동작하는데?"로 반박). 실제로는 [kakao-auth.js:1717](../assets/js/kakao-auth.js#L1717)에 **있다** — 내가 본 1716행(✕) **바로 다음 줄**인데 grep을 좁게 걸고 `head -8`로 잘라놓고 "핸들러 0건 = 기능 없음"이라 단정했다. **CLAUDE.md 「0건이면 검사기를 먼저 의심」의 정확한 재발** — 사용자의 실사용 경험과 충돌했으면 코드를 다시 봤어야 했다. **"없다"는 결론은 "있다"보다 훨씬 강한 주장이고 grep 한 번으로 낼 수 없다.**
-  - **알려진 엣지케이스**(기존 구조, 미수정): 이 모달과 `openDatePreviewModal`이 **같은 `__ddModal` id**를 쓴다 → 이날모임 상세 → 닉네임 → 남의 모임보드 → 거기서 "자세히"를 열면 원래 모달이 제거된다(보드를 닫으면 preview 모달이 대신 남음). 빈도 낮다고 판단해 보고만.
 - [ ] **[검토] 모임보드 취향 박스모달에서 게임을 누르면 박스모달이 닫힌다** (2026-07-17 등록 — CLAUDE.md 「모달/iframe 재사용 원칙 6: 닫고 전환 vs 겹쳐 쌓기」를 새로 추가하면서 한 **소급 위반 확인**의 결과. 미착수) — [kakao-auth.js:1455](../assets/js/kakao-auth.js#L1455)가 `close(); ensureGameSheet(); openGameSheet(gid)` 형태다. 박스모달(`--z-sheet-modal` 9700) > 게임시트(9500)라 **닫지 않으면 시트가 뒤에 깔리기 때문**에 그렇게 짠 것 → 그 결과 **게임시트를 닫아도 박스모달로 돌아오지 않는다**. 이날모임 상세에서 나온 것과 **같은 종류의 불만**이 나올 수 있는 자리.
   - **착수 시 확인 순서**: ①박스모달이 9700인 이유 = 모임보드 서브시트(9200) 위에 떠야 함 → **9200 < x < 9500**(예: 9300)으로 내리면 레이어로 풀리는지 ②`.mb-add-overlay`는 공유 클래스이므로 **다른 호출부가 "무엇 안에서" 열리는지 먼저 grep**(규칙 6의 `.dd-overlay` 사례와 동일 함정) ③그 자리 `gid`는 `game_likes` **슬러그**라 `getGameKeyById` 변환은 불필요(이날모임 건과 다름 — 혼동 주의).
   - **급하지 않음**: 현재 사용자 불만 보고 없음. 규칙상 **등록이 목적**이고 즉시 수정 대상 아님.
 - [ ] **[문서-코드 불일치] `squirrel_lv5` 캐릭터 파일 미제작인데 경고가 없음** (Phase 1 감사 A1, 2026-07-02 발견 → **처리 현황 표에 등재된 적 없는 고아 항목**, 2026-07-17 REFACTOR_CHECKPOINT 압축 검토 중 재발견·실측 확인) — 실재하는 lv5 파일은 `bear_lv5`·`hamster_lv5`·`rabbit_lv5` **3개뿐**. `sparrow_lv5`(visit_500)는 [achievement-system.md](achievement-system.md) 234·271행에 **⚠️미완성으로 명시**돼 있으나, **`squirrel_lv5`(record_400)는 167행에 아무 경고 없이 정상 보상처럼 적혀 있고 271행 미완성 목록에도 없음**. → record_400 달성자가 나오면 **깨진 이미지**가 뜬다(sparrow와 달리 아무도 모르는 상태). 조치: ①파일 제작 or ②171행/271행에 미완성 표기 추가. **record_400은 먼 임계값이라 급하진 않으나, 달성 후엔 사용자 자산(캐릭터) 영역이라 사후 대응이 어렵다.**
 - [ ] **[문서] 캐릭터 이미지 경로 체계(`rare/` 서브폴더) 문서 미반영** (Phase 1 감사 A2·A3, 위와 같은 고아 항목) — `achievements.js`의 `_charImgPath()`가 `rare_*`·`season_*`·`cottage_master`를 `characters_basic/rare/` 서브폴더로 라우팅하는데(실측: `assets/images/characters/characters_basic/rare/cottage_master.png` 존재), **SSOT인 [achievement-system.md](achievement-system.md)에 경로 체계 설명이 아예 없음**. 신규 캐릭터 추가 시 어느 폴더에 둘지 문서만 보고는 알 수 없음.
-- [x] ~~**[Yellow] 모임보드 취향 박스모달에 게임 삭제(✕) 추가**~~ — ✅ **완료·스모크 통과** (2026-07-17, 커밋 e2bfefb). 확답 3건대로: confirm 띄움 / readOnly 숨김(`_ro()`) / 룰 배지는 표시 전용 유지. CSS 변경 없음(`.taste-game-del` 전역 선택자 재사용). `data-custom-name`을 함께 추가 — 직접입력 게임은 식별 속성이 없어 삭제 자체가 불가능했음.
-  - ⚠️ **여기서 얻은 교훈 — "이벤트를 쐈으니 동기화됐겠지"가 이 코드베이스에선 안 통한다**: 이 항목의 옛 메모는 "splice + `_emitLikesChanged` 둘이면 stale이 안 되살아난다"고 적었으나 **틀렸다**. `_emitLikesChanged`([1616](../assets/js/kakao-auth.js#L1616))는 이벤트를 dispatch할 뿐이고, 그걸 듣는 취향보드 리스너([869~](../assets/js/kakao-auth.js#L869))는 앵커 `#tastelikedList`가 **모임보드엔 없어 스스로 해제**된다 → 모임보드의 `_likedSlugSet`/`_curiousSlugSet`은 **아무도 안 고친다**. 삭제 시 `.delete()`를 직접 해야 이번 주 리스트의 ❤️/👀 마커가 안 남는다(추가 경로 `onAdd`가 `.add`를 직접 하는 이유도 이것). **동기화 경로를 문서 메모로 믿지 말고 리스너의 앵커가 그 화면에 실재하는지 확인할 것.**
-- [x] ~~**[Yellow] 검색 모달 "추가됨" 항목 재클릭 = 취소**~~ — ✅ **완료·스모크 통과** (2026-07-17 사용자 제안·확인, 커밋 9d8d06f[refactor]·0db1f03[feat]).
-  - **왜 했나**: 기존엔 이미 추가된 항목을 누르면 `addGame`의 `inList` 가드([496 부근](../assets/js/kakao-auth.js#L496))에 걸려 **아무 일도 안 일어났다**(버튼인데 죽은 클릭). 취향보드·모임보드 취향박스 양쪽 동시 적용(`_openGameAddSearchModal` 공유).
-  - **설계 결정 2건**: ①**토글 대상은 `is-added` 붙은 항목만** — "+ 직접 추가"·직접입력 제안은 라벨이 없어 추가 전용으로 남긴다(그 버튼이 삭제로 동작하면 최악). ②**confirm 없음** — 토글은 되돌리기가 대칭이라(한 번 더 누르면 재추가) 복구가 싸다. 리스트 ✕의 confirm은 거기선 복구에 재검색이 필요해서지, 두 자리의 안전장치 차이는 이 비대칭에서 나온다.
-  - **선행 리팩토링(9d8d06f, 동작 무변경)**: `_removeTasteChip`(=`_appendTasteChip`의 역) / `_removeBoxGame` 추출 / `_setAddedState`로 "추가됨" 라벨 갱신을 모달 내부로 이동(`onAdd` 시그니처에서 `resultsEl` 제거).
-  - **스모크 포인트**: ①취향보드 ＋추가 → 검색 → "추가됨" 항목 클릭 → 라벨·목록에서 사라짐 ②한 번 더 클릭 → 재추가(대칭 복구) ③모임보드 박스모달 ＋게임 추가에서도 동일 ④박스모달 토글 취소 시 뒤 이번주 리스트 마커도 갱신 ⑤"+ 직접 추가"는 여전히 추가로만 동작 ⑥토글로 지운 뒤 모달 닫으면 리스트에도 반영.
 - [ ] **[버그] 내 보드 카드 요약이 서브시트 편집을 반영 안 함** (2026-07-17 R10b에서 범위 밖으로 분리, 사용자 승인) — 취향보드에서 게임을 추가하고 뒤로 나오면 카드엔 "❤️ 좋아하는 게임 3개"인데 들어가면 4개. `_tasteCardSummaryHtml` 등 카드 요약 6종이 **패널 오픈 시 1회** 빌드되기 때문. **R10b가 만든 문제가 아니고 그 전부터 그랬음**(패널을 닫았다 열면 맞는 값).
   - **R10b에 안 넣은 이유**: 해법 방향이 반대다. 서브시트는 **pull**(진입 시 재조회)로 풀리지만 카드는 이미 그려져 있어 **push**(나갈 때 갱신)가 필요 → R10b가 방금 지운 `onLeave` 콜백을 다른 용도로 되살리거나, 방향 A를 패널 레벨로 확장해야 함. 한 세션에 섞으면 설계가 흐려짐.
   - ⚠️ **R10b로 상대적 체감은 커졌을 수 있음** — 서브시트가 항상 최신이 되면서 카드만 옛날 값인 게 눈에 띔.
   - 참고: bio 저장 경로([kakao-auth.js:738](../assets/js/kakao-auth.js#L738) 부근)는 **이미 카드 요약을 직접 갱신**하는 push 코드가 있음 — 착수 시 그 패턴을 일반화할지 검토.
   - 🔗 **같은 건일 수 있는 다른 기재 2곳** (2026-07-17 교차 확인) — 착수 시 재현으로 판별해 중복이면 정리할 것: ①「론칭 후 이월」 **"취향보드 즉시 갱신 확인"**("홈 카드" 미갱신 — 그 "홈 카드"가 여기 말하는 내 보드 4카드일 가능성 높음) ②§0 열린 스모크 **R2**(취향보드 서브시트 자체가 새로고침해야 반영 — **이건 다른 건으로 보임**. R10b로 해소됐을 가능성 높아 확인만 하면 닫힘).
-- [x] ~~**[기술부채] 감지기 갭 — `Promise.all` + 비구조분해 결과는 2단계가 통째로 지나쳤다**~~ (2026-07-17 R10b 중 발견) — ✅ **2026-07-18 완료** (`supabase-client.js` 5개 지점 error 수신 추가). 2단계는 `const { data, error } = await`(구조분해) 형태 59곳을 고쳤는데, **`const [aRes, bRes] = await Promise.all([...])` 후 `aRes.data`만 읽는 형태는 대상이 아니었다**. 이 자리들은 `.error`를 아무도 안 봐서 **컬럼 오타·RLS 차단이 여전히 조용히 빈 값**이 됐었다(`catch`도 안 울림).
-  - **착수 시 재측정 결과 — 기록된 목록이 또 틀렸다**(§3 3단계 「위반 N곳 믿지 말 것」 경고의 세 번째 실증): `await Promise.all` 전수 grep = 6지점. `getMeetingProfile`(R10b 기존 처리)을 뺀 **5지점**이 대상이었고, 기존 기록은 이 중 **2개를 통째로 누락**했다 — ①`getCustomPrefSuggestions`(749, l·c) 목록에 없었음 ②`getMyNotifications` 중첩(1405, recentComments·playRecords) 별도 지점인데 없었음. `getMyStats`도 5개로 적혔으나 실제 6개(`profile` 누락).
-  - **처리 지점(전부 순수 로그 추가, 반환 무변경)**: `getCustomPrefSuggestions`(l·c) · `getVisitorStats`(totalRes·todayRes) · `getMyStats`(playRes·commentRes·suggestRes·profile·reviewRes·taggedRes) · `getMyNotifications` 바깥(taggedRes·curiousRes·purchasedRes·newGameRes·introListRes·profileSeenRes·voucherEventsRes) · `getMyNotifications` 중첩(rcErr·prErr). 라벨은 `[함수명:테이블명]`. `taggedRes`·`voucherEventsRes`는 조건부 `Promise.resolve`라 `.error` 없음(정상 falsy).
-  - ✅ `getMeetingProfile`(profileRes·introRes)은 R10b가 선처리 완료(커밋 507f2e9).
-  - **이게 왜 중요했나**: `getMyStats`·`getMyNotifications`는 **내 보드의 핵심 조회**다. 2026-07-17 "화재 테스트 불난 곳 0건"은 이 두 함수에 관한 한 감지 능력이 없는 상태의 결과였음 → 이제 `supabase-client.js`의 Promise.all 갭은 닫혔다.
-  - **✅ 파일 커버리지 (2026-07-18 갱신)**: `game-sheet.js`의 `.catch()` 7곳은 처리 완료(init 함수 JS 예외 로그), `achievements.js`는 래퍼라 "대상 아님" 재분류 → 아래 「감지기 3단계」 종결. **당초 "호출부 구조 변경 필요" 전제는 오판이었음**(남은 자리가 raw supabase가 아니었다).
 - [ ] **[기술부채] Phase 1~3 감사 잔여 항목** (2026-06-20~07-15 감사분 → 2026-07-17 `REFACTOR_CHECKPOINT.md` 압축 시 이관. **그 문서에서 감사 상세는 삭제됐으므로 여기가 유일한 기록**) — R1~R12로 처리되지 않고 남은 P2 위주 항목. ⚠️ **전부 "감사 시점 기록"이라 착수 전 재검증 필수** — 감사 이후 코드가 바뀌어 stale이 된 전례가 많다(GDA2·SC1·SC4는 재검증해 보니 **이미 해소돼 있었음**).
   - **2026-07-17 실측으로 닫은 것**: ✅ **GR4 종결** — `isParticipant`/`score_note` 중복의 짝이던 `buildGameBody`가 R1에서 삭제돼 **중복 자체가 소멸**. ✅ **PS2 종결** — scripts/ 폴더 항목이 [PROJECT_STRUCTURE §1](PROJECT_STRUCTURE.md)에 이미 기재됨.
   - **2026-07-17 실측으로 축소된 것(저가치, 굳이 안 해도 됨)**: 🟡 **SC7** — `_OWNER_ID` 3중복 → `supabase-client.js`엔 **1곳뿐**([1784](../assets/js/supabase-client.js#L1784)), `kakao-auth.js`의 `OWNER_KAKAO_ID`와 크로스파일 중복만 잔존. 🟡 **KA7** — R3가 `_safeInt` regex 파싱을 없애 **취약성은 해소**됐고 하드코딩 fallback(`?? 47`·`?? 641`·`?? 96`, [kakao-auth.js:2027~2033](../assets/js/kakao-auth.js#L2027))만 남음. 정상 경로는 build 함수가 반환하는 실제 total을 쓰므로 이 숫자는 **함수가 실패할 때만** 노출된다(= 캐릭터가 47종을 넘어도 평소엔 안 틀림).
@@ -338,7 +235,6 @@
   - **모임보드는 "표시" 뷰**: 상시선호(`meeting_game_prefs`) + 이번주 일정/게임(`meeting_votes`/`meeting_vote_games`)을 합쳐 보여줄 뿐, **저장은 분리 유지**.
   - **대표 게임(⭐) 범위**: want+learn 모두 가능, 유저+날짜 단위 합산 **최대 2개**.
   - ※ 문서 사양이 코드보다 낡았던 사례: 사양엔 "시간축 10~22 / 약칭 최대 2개"였으나 실제 코드는 `MIN_H=9, MAX_H=23` + 막대 길이 적응형(6h↑ 4개·4h↑ 3개·그 외 2개). [day-detail.js:1113](../assets/js/day-detail.js#L1113) `buildBarsInCard` 참조.
-- [x] ~~게임평→캐릭터/업적 미반영~~ (A-7, 2026-07-12) — ✅ **해결** (2026-07-15). 원인: 지급 로직(`checkAchievements('review')`→`getUserCommentCount`)은 정상이었으나, 진행도 표시 4곳(achievements.js COUNTS)이 `review` 축에 `ratingCount`(별점 수)를 쓰고 있어 게임평을 써도 진행도가 안 오르는 것처럼 보였음(해금 자체는 DB 업적 기준이라 실제론 됐음). `_fetchUserStats`의 `getUserRatingCount`→`getUserCommentCount` 교체, `ratingCount`→`commentCount` 리네이밍으로 표시를 지급 기준과 통일.
 - [ ] **[verify] 오늘 고친 업적 버그 2건 실서버 확인** (2026-07-15) — ①게임평 진행도(커밋 22488d7): 게임평 쓰고 성장보드에서 review 진행도(게임평 N개 기준)가 오르는지 ②플레이기록 수정 후 업적(커밋 7a1b68d): 기존 기록에 사진 후추가/참여자 수정으로 photo·play·balance 임계값 채웠을 때 즉시 업적 뜨는지. 브라우저 눈 확인만 남음.
 - [ ] **지난 일정 흐리게+수정불가** (A-10) — 모임보드/플래너에서 지난 날짜 일정 흐리게 + 편집 차단. (2026-07-16 추가) 메인 "이번주 모임 미리보기"의 "플래너에서 등록하기"/"이날 참여 등록" 버튼도 대상 — 지난 날짜는 클릭해도 무반응(`club-schedule.html`의 `ds >= toDateStr(TODAY)` 체크로 무시됨)인데 흐림 처리가 없어 비활성 상태를 알 수 없음. 관련: `assets/js/index-page.js` renderPreview/empty-state 렌더.
   - ⚠️ **확정된 `is-past` 원칙과 위 제목이 어긋남 — 착수 전 확인 필요** (2026-07-09 확정, 2026-07-17 `MEETING_REVAMP_CHECKPOINT.md` 삭제 시 흡수): **홈·플래너 공통으로 `opacity` 시각 처리만 하고 `pointer-events:none` 차단은 하지 않는다.** 클릭 → 보기(막대·겹침·상세)는 **허용**하고, **등록 행동만 JS 레벨에서 차단**한다(홈 날짜 칩은 클릭 허용해 모달 조회, 플래너 `renderMyVote`는 과거 날짜면 등록/수정/취소 버튼을 숨기고 읽기 전용 표시, 멀티스텝 Step1 날짜 칩은 기존 `disabled` 유지). 즉 "수정불가"는 맞지만 **"클릭 차단"으로 구현하면 확정 사양 위반** — 지난 모임도 내용은 볼 수 있어야 함.
@@ -349,17 +245,12 @@
 - [ ] **[보류] 모임플래너 참여자 UI 추가 개선** — 방향 논의 필요 (현재: 이름 클릭→프로필 시트).
 - [ ] **뽁님 7/11 게임평 ↔ 호핀 플레이기록 연결** (2026-07-15 요청, 미착수) — 뽁님의 7/11 레비아탄와일드·원더랜드워-풀확 게임평(game_key만 정정 이동됨, 플레이기록 미연동)을 호핀이 작성한 7/11 플레이기록과 연결. "남의 세션에 내 후기로 참여"(Stage 3, `_openJoinConfirm`) 기능으로 커버 가능해 보이나 실행 주체(뽁님 직접 UI vs 운영자 DB 처리) 미확정 — 착수 전 확인 필요.
 
-- [x] ~~**메인 최근 플레이 미리보기 클릭 비활성**~~ — ✅ **해결·스모크 통과** (2026-07-16 기록 → 2026-07-18 수정, 스모크 2차 통과). [index-page.js `initRecentPlay`](../assets/js/index-page.js#L1017). 최종 동작: ①썸네일→게임시트(`openGameRecordSheet`) ②게임명·인원 텍스트는 비클릭(의도) ③참여자 이름→각 회원 읽기전용 보드(`openOtherProfileSheet`) — `data-nick` + `getAllProfiles`(전체 회원, 기록 조회와 `Promise.all` 병렬) 기준 nickname→user_id 해석. **비회원(미가입) 이름은 프로필이 없어 비클릭 = 정상**(스모크에서 '춘팝' 미가입 확인). ④내 기록/오너면 `data-record.mine=true`로 라이트박스 사진 삭제 노출. 리뷰어 닉네임→프로필 유지. **잔여(무해)**: 라이트박스 삭제 후 홈 카드는 새로고침 전까지 stale(onAfterDelete 미전달). **파생 발견(별건)**: game-reviews 허브 참여자 이름 해석도 `p.id`(profiles에 없는 컬럼)라 프로필맵이 빈 맵 → 기록 있는 회원만 걸림. 여기선 `p.user_id`로 정정했으나 허브는 범위 밖이라 미수정 — 아래 신규 항목.
-- [x] ~~**[버그] game-reviews 허브 참여자 이름 해석 `p.id` → `p.user_id`**~~ — ✅ **수정 적용** (2026-07-18 발견·수정, 허브 만질 때 확인). [game-reviews.js:501](../assets/js/game-reviews.js#L501) `_profileNickMap`이 `p.id`로 세팅하는데 profiles엔 `id` 컬럼이 없어(kakao 키=`user_id`) **맵이 빈 채**로 돌던 것 → `p.user_id`로 정정(1줄). 허브 참여자 이름이 이제 **전원**(미기록 회원 포함) 보드로 연결됨. `getAllProfiles`는 이미 호출 중이라 추가 fetch 없음. 홈 카드에서 동일 로직이 2차 스모크 통과했으므로 저위험 — 허브 재현(미기록 회원 이름 클릭→보드)은 그 페이지 만질 때 겸사겸사 확인.
 
 - [ ] **내 보드 수집보드 스크롤 진입점 수정** (JS) — ① 캐릭터 수정 버튼 클릭 → "내 캐릭터" 타이틀 위치로 스크롤 (현재: 그 아래로 진입). ② 칭호 클릭 → "칭호" 타이틀이 화면 상단에 오도록 (현재: 아래로 내려간 채 진입). ③ 캐릭터 이름 클릭 → 캐릭터 타이틀로 이동 (현재: 칭호 섹션으로 진입). 관련 파일: `assets/js/kakao-auth.js` 수집보드 서브시트 open/scroll 로직.
 
 - [ ] **게임 검색 영어 제목 인식** — 검색창에서 영어로 입력 시 `bggTitle`로도 매칭. 게임정보 시트 영어제목 독립 표시 작업 이후 자연스러운 연계.
 
 - [ ] **동호회 가입 추적** — page_sessions 데이터 활용
-- [x] ~~**`record_complete` 이벤트가 저장 경로 6개 중 1곳에서만 발화**~~ (2026-07-18 등록 → **2026-07-19 종결**, 발견 #19) — `game-sheet.js` 5곳(816·1948·1962·2036·2641) 성공 분기에 `trackEvent('record_complete', {game_id})` 추가. `updateGamePlay` 7곳은 **기존 기록 수정이라 의도적 제외**. 상세·교훈은 [admin-analytics.md](admin-analytics.md) §4 #19.
-  - ⚠️ **착수 시 문서 전제가 틀린 것으로 드러남** — "퍼널의 기록 단계가 무의미"라고 적혀 있었으나 **퍼널은 `record_*`를 아예 안 쓴다**(`home_record_*` 클릭 3개로 구성). 퍼널 2-3단계가 0인 진짜 원인은 **`home_record_write_click` DB 0건** → 발견 **#18**로 분리 등록.
-  - ⚠️ **관리자는 트래킹에서 영구 제외**된다(`_shouldSkipAnalytics`, [supabase-client.js:275](../assets/js/supabase-client.js#L275)) — **이벤트 기반 지표는 관리자 활동을 절대 반영하지 않는다.** 이 수정의 효과도 관리자 계정으로는 검증 불가.
 - [ ] **관리자 알림이 교환권 로그로 도배됨** (2026-07-18 등록, 개별 읽음 스모크 중 실측) — 알림 **35건 중 30건이 `voucher:*`**(관리자만 받는 교환권 지급/사용 로그, [supabase-client.js:1384](../assets/js/supabase-client.js#L1384)에서 `limit(30)`). 소개글·태그 같은 실제 알림이 묻힌다. **의도된 사양인지 먼저 확인** 후 처리 방향 결정(묶음 표시 / 별도 탭 분리 / limit 축소). 아래 「관심 기반 묶음 알림」과 함께 다루면 자연스러움.
 - [ ] **회원 탭 페이지 분포에 기간 선택 추가** (2026-07-19 사용자 요청) — 회원 카드 `📄 페이지 N개 ▾` 펼침(B단계 산물)을 전체기간 외에 **오늘·어제·7일** 등으로도 보고 싶다. **착수 시 Plan 필수** — 아래는 등록 시점 실측이며, 구현 결정이 아니다.
   - **실측한 현재 상태**: 펼침 데이터는 `memberPageMap = new Map(buildUserMap(rows))` ([requests-admin.html:1076](../pages/admin/requests-admin.html#L1076))로 만들어지는데, 인자가 기간 필터를 거친 `filtered`가 아니라 **원본 `rows`(전 기간)**다. 비회원 경로(`buildAnonUserMap(rows)`, [:1071](../pages/admin/requests-admin.html#L1071))도 동일. 즉 **지금은 전 기간 고정이 맞다.**
@@ -397,26 +288,6 @@
     - ① ~~**파일 커버리지 절반 이하**~~ → **2026-07-18 갱신**: raw supabase 쿼리 오류 감지는 `supabase-client.js`(구조분해 59 + Promise.all 5) + `game-sheet.js`(init 함수 JS 예외 7) 처리 완료. `kakao-auth.js` 24곳·`achievements.js` 4곳은 **대상 아님으로 재분류**(전부 CottageDB 래퍼 위 — 래퍼가 내부 수신). 즉 "raw supabase 미수신"은 이제 앱 전역에서 없음.
     - ② ~~**쓰기 경로 미검증**~~ → **2026-07-18 종결(4단계)**: 정적 census로 쓰기 경로 전수 확인 후 갭 전부 로그 추가(커밋 c5b5f68 + 🔗 family). record/meeting/pref 계열은 이미 전파, 갭은 추적성 write·toggle·업적/교환권 지급 family에 집중했음. 아래 「감지기 4단계」 종결 항목 참조.
     - ③ **울려도 아무도 못 듣는다** — `console.error`는 사용자 브라우저 콘솔에만 남고 우리에게 오지 않는다. DevTools를 열어둔 사람만 본다. **④ "관리자 금일이용데이터 간헐적 미표시"가 원인불명인 이유가 정확히 이것일 수 있음**(간헐적이라 재현 시점에 콘솔이 안 열려 있음). 근본 해결 = 에러 수집(`page_events`에 error 이벤트 적재 or 외부 수집기) → **Red + Plan 필수, 별도 기획 필요**(현재 미제안·미착수).
-- [x] ~~**[기술부채] 감지기 3단계 — 나머지 JS 파일 확장**~~ (2026-07-17 등록 → **2026-07-18 종결**) — `supabase-client.js` Promise.all 갭(위 항목) + `game-sheet.js`를 처리하고, 나머지 대상은 실측으로 "대상 아님"으로 재분류. **문서가 겁냈던 "`{data, error}` 호출부 구조 변경"은 착수해 보니 불필요했다** — 남은 자리는 raw supabase가 아니었다.
-  - **착수 시 실측으로 드러난 것(문서 전제가 세 군데 틀림)**:
-    - **`achievements.js` = 대상 아님** (kakao-auth 24곳과 동일 재분류). `.catch()`는 4곳(문서는 5)이고 [achievements.js:432·434·441·753](../assets/js/achievements.js#L432) **전부 `db.grantAchievement`·`getRepAchievement`·`grantAchievementVoucher` 등 CottageDB 래퍼 위**다 → 래퍼가 쿼리 오류를 내부에서 이미 수신(2단계). `.catch()`가 삼키는 건 JS 예외뿐이고 래퍼는 대부분 reject 안 함 = 저가치. **R10b의 kakao-auth 판정과 같은 근거인데 이 항목만 옛 이해로 남아 있었다.**
-    - ✅ **`game-sheet.js` = 처리 완료** (7곳, 문서는 9). `.catch(() => {})`가 [game-sheet.js:463~466·1019~1021](../assets/js/game-sheet.js#L463)에 있는데 이건 래퍼가 아니라 **렌더 로직을 담은 내부 init 함수**(`initSheetComments` 등) 위다. 쿼리 오류는 그 안에서 부르는 래퍼가 로그하지만, **init 함수 본문의 JS 예외(`.map`·DOM)는 여기서만 잡혀 조용히 사라지던** 자리 → `.catch(err => console.error('[initFn]', err))`로 로그 추가(순수 log-add, 동작 무변경). [game-sheet.js:1022](../assets/js/game-sheet.js#L1022) `initSheetPhotos`는 이미 로그+사용자 메시지 처리돼 있어 제외.
-  - **결론적으로 "2단계 방식 못 쓴다 = 구조 변경 필요"는 오판이었다** — 남은 자리 어디에도 raw supabase가 없어 `{data, error}` 수신 대상이 애초에 없었다. game-sheet는 순수 로그 추가로 끝났고, achievements는 손댈 가치가 없었다. **"위반 N곳" 숫자는 이번에도 3군데(ach 5→4, gs 9→7, 그리고 대상 여부 자체) 틀렸다** — 착수 전 실측이 매번 옳다.
-  - **제외 판정 유지**: `index-page.js`(화면에 실패 표시함) · `script-nav.js`(localStorage 방어용). 위 "제외 판정" 항목 참조.
-  - **커버리지 상태**: raw supabase 쿼리 오류 감지는 이제 `supabase-client.js`(구조분해 59 + Promise.all 5 + 기존) 전역 커버. 남은 사각지대는 **쓰기 경로 검증(4단계)**과 **에러 수집(③, Red)** 둘뿐 — 아래 참조.
-- [x] ~~**[기술부채] 감지기 4단계 — 쓰기 경로 검증**~~ (2026-07-17 등록 → **2026-07-18 종결**, 정적 검사 ③) — 실DB 쓰기 없이 정적 census로 쓰기 경로(insert/update/delete/upsert) 전수 확인. **③만으로 끝** — 갭이 전부 로그 추가로 닫혀 ①②(실DB 쓰기 테스트)는 불필요했다.
-  - **결과 = §3 예측 반쪽 맞음**: `recordGamePlay`·`updateGamePlay`·insert/delete/updateComment·`addGamePref`·`upsertMeetingVote`·`deleteMeetingVote`·`addMeetingVoteGame`·`setMeetingVoteGame*`·`removeMeetingVoteGame`·`submitGameReview`·`deletePlayPhoto`·`banUser` 등은 이미 `return {error}` 전파(또는 로그)라 **갭 없음**(예측대로). **갭은 두 family에 집중** — ①추적성 write(`trackView`·`trackEvent`·`_startAnonHeartbeat` anon_sessions·`page_sessions` fire-and-forget)가 쿼리 오류 조용 ②`toggleGameLike`/`toggleGameCurious`가 SELECT 에러만 로그하고 실제 delete/insert 에러를 삼킴 ③수신했으나 미로그(`_syncTimeToDBNow`·`upsertProfile`·`updateNotifSeenAt`). **커밋 c5b5f68** — 전부 반환 계약 무변경(로그만 추가).
-  - **🔗 UNIQUE 오삼킴 family 동반 종결**(이 커밋): `grantAchievement`·`grantAchievementVoucher`·`grantFirstPlayVoucher`는 `error.code !== '23505'`일 때만 로그(23505=정상 중복 방어, 파일 관용 상수 = `addMeetingVoteGame`도 사용)로 진짜 실패와 분리. `setRepAchievement`·`setRepTitle`·`grantDevVoucher`(UNIQUE 없음)·`redeemVoucher`는 무조건 로그. **반환 계약 전부 무변경**(return false/reason 그대로) → 방침 "로그는 전부 켜고" 범위, 동작 변경 아님.
-  - **남은 사각지대 = ③ 에러 수집(Red)뿐** — `console.error`는 사용자 브라우저 콘솔에만 남고 우리에게 안 옴. 위 「감지기 현재 커버리지」③(관리자 금일이용데이터 간헐 미표시 가설 포함) 참조. 이것만 열려 있고 감지기 1~4단계는 전부 종결.
-- [x] ~~**[기술부채] 문서-코드 참조 정합성 감사**~~ — ✅ **2026-07-18 종결** (2026-07-18 등록 — 사용자 제기 "참조가 잘못돼 못 찾거나 토큰 낭비하는 것들도 리팩토링해야 하지 않나"). 범위 = `PROJECT_STRUCTURE.md` 파일역할 표·`js-api.md` 소비처 열·`REFACTOR_CHECKPOINT.md` 감사 항목(네비게이션 인덱스 3파일).
-  - **착수 전 확인**: 이 세션 착수 전 이미 고쳐져 있던 2건(GS7 감사 항목·js-api.md CottageGameView 소비처, 커밋 9b8c946·4e178b4) 확인 완료 — 중복 수정 없음.
-  - **음성 대조군**: 가짜 함수명(`totallyFakeFn_XYZ123`)을 실제 파일에 grep해 0건 확인 + 실존 함수(`getGameKeyById`) grep으로 15건 확인 → grep 도구 자체가 정상 동작함을 먼저 검증(CLAUDE.md 「검증 결과 0건이면 검사기 의심」).
-  - **발견한 드리프트 3건, 전부 수정**:
-    1. `PROJECT_STRUCTURE.md` §2 JS 파일 역할 목록에 **`header.js` 자체가 통째로 누락**(§2-A에서 경로만 언급되고 정작 파일 역할 표엔 없었음) → 항목 추가.
-    2. `js-api.md:255` `window.CottageDB` 소비처에 **`script-nav.js`가 잘못 포함**(실측: script-nav.js는 CottageDB 대소문자 무관 0건 참조) → 제거 + 실제 소비처(achievements.js·day-detail.js·play-records-utils.js 등) 보강.
-    3. `js-api.md:260` `window.getKakaoUser` 소비처에도 **동일하게 `script-nav.js` 오기재** → 동일하게 정정.
-  - **드리프트 아님으로 확인(검토했으나 정확했던 것들)**: `CottageGameView`/`getAllGamesArray`의 script-nav.js 소비 표기(`GameView` 별칭으로 실사용 확인), `COTTAGE_PAGE_LABELS_BY_PATH`, day-detail.js 의존관계 전체(`ensureGameSheet` 등), page-labels.js↔script-nav.js 로드 순서(14개 HTML 전수 확인), 빌드 파이프라인 경로, game-system 디렉터리 구조, `cottage-likes-changed`/`cottage-meeting-changed` 발화·수신처, GS5 escH 5사본, REFACTOR_CHECKPOINT.md 전체(이미 최신 상태).
-  - **결론**: 실제 드리프트는 "소비처 리스트에 있으면 안 될 파일이 잘못 끼어든 것"(2건, 같은 파일명 script-nav.js가 반복 오기재)과 "파일 자체 누락"(1건) 패턴. 전체 문장 재작성 아닌 표 항목만 수정(zero-blast-radius).
 - [ ] 🎯 **관리자 분석 (감사·사람단위·집계정확도) → [admin-analytics.md](admin-analytics.md)로 통합 이관** (2026-07-19) — 이 주제가 §3 3곳 + 「론칭 후 이월」 + `PLAN_funnel_analytics.md`로 **6곳에 흩어져** 다음 세션에 무엇부터 볼지 판단이 안 되던 것을, 사용자 지시("전체 정리 및 통합 정리, 이후에 플랜, 부위별로 분리 후 하나씩")로 도메인 SSOT를 신설해 옮겼다. **여기엔 포인터만 둔다 — 상세를 여기에 다시 쓰지 말 것.**
   - **그 문서가 가진 것**: 표시 원칙 5개(①기준 표기 ②분모 ③파생값 중복 금지 ④한 화면 한 질문 ⑤드릴다운) · 탭별 역할표 · 데이터 소스와 함정 · **발견 대장 #1~#14**(종결 6 / 열림 8) · 방문·이용 집계 정확도 ①~⑥ · **부위별 실행계획 P1~P7** · 재조사 금지 가설 4건.
   - **2026-07-19 종결분**: #1·#2(RLS·절단) · #5·#6(날짜 네비가 반대 탭에 배선) · #10(전환율 100% 초과) · #13(이벤트 77% 미조회) · 사람단위 A·B단계.

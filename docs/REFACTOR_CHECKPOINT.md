@@ -1,100 +1,52 @@
-# REFACTOR_CHECKPOINT — 리팩토링 감사 기록
+# REFACTOR_CHECKPOINT — 리팩토링에서 남길 판단과 교훈
 
-생성: 2026-06-20 · **압축: 2026-07-17** (475 → 이 크기)
+생성 2026-06-20 · 압축 2026-07-17(475줄→100) · **재압축 2026-07-20**(100→이 크기)
 
-**남긴 것**: 아직 열린 항목 + 되돌리면 손해인 판단 + 재사용 가치가 있는 교훈.
-**지운 것**: Phase 1(MD 감사)·Phase 2(JS 파일별 감사) 상세, Phase 2 요약, 처리 현황(136차), R11 사전조사, R9 결과 메모 — 전부 R1~R12로 처리 완료됐고 상세는 git log에 있다.
-**이관**: 감사 항목 중 처리되지 않은 잔여분(PU5·ACH2·SC6 등)은 [PROJECT_STATE §3 「Phase 1~3 감사 잔여 항목」](PROJECT_STATE.md)으로 옮겼다(2026-07-17 실측 결과 포함). ⚠️ **감사 항목을 다시 찾을 땐 그 목록을 볼 것 — 이 문서엔 더 이상 없다.**
-> ⚠️ **감사 항목의 "영향" 기재를 믿고 우선순위를 매기지 말 것** (2026-07-17 GDA3 교훈): GDA3는 이관 목록에서 **"유일하게 실동작 영향 가능"**으로 분류돼 §0 우선순위 2번까지 올라갔으나, 재검증하니 **소비처 0건인 dead code라 영향이 0**이었다. 감사는 코드 구조만 보고 **소비처를 확인하지 않은 채 영향을 추정**한다. → 착수 전 재검증 필수라는 기존 경고는 "코드가 바뀌어 stale"뿐 아니라 **"애초에 영향 판정이 틀렸을 수 있다"**까지 포함한다.
+**이 문서에 남는 것은 두 가지뿐이다** — ①**되돌리면 손해인 판단** ②**재사용 가치가 있는 교훈**.
+R1~R12 진행 표·종결 항목 상세·모델 배정 실적은 **git log와 중복**이라 2026-07-20에 삭제했다(`git log --grep="R1[0-2]"`).
+감사 잔여 항목은 [PROJECT_STATE §3 「Phase 1~3 감사 잔여」](PROJECT_STATE.md)에 있다 — **이 문서엔 없다.**
 
----
-
-## 진행 요약 — R1~R12 전부 완료 (2026-07-15 ~ 07-17)
-
-| 세션 | 항목 | 결과 |
-|------|------|------|
-| R1 | 그린 배치(dead code·중복 통합) | ✅ `buildGameBody` 삭제 · KA5/KA6 정리 · GR6 전역 4개 내부화 |
-| A1 | Phase 3 감사(대형 파일 3개) | ✅ 아래 「Phase 3」 절 |
-| R2 | 옐로 배치(ACH1·ACH3·KA4·검색모달 DRY) | ✅ `AXIS_ORDER` 단일화 · `_openGameAddSearchModal` 추출. **KA4는 종결(아래 판단 참조)** |
-| R3 | KA2·KA3 | ✅ KA2 무해 종결 · KA3 `_safeInt` regex 파싱 제거(build 함수가 `{html,count,total}` 반환) |
-| R4 | PU2 blob URL 누수 | ✅ `revokePhotoGridBlobs` 헬퍼 + 호출처 6곳 |
-| R5 | SC1 LIKE 이스케이프 | ✅ 코드변경 없음 — `_escapeLike`가 이미 적용돼 있었음(감사 stale) |
-| R6 | ACH5 소급지급 side-effect 분리 | ✅ `grantRetroAchievements` public 승격 + readOnly write 버그 수정 |
-| R7 | GDA2 + GS3 | ✅ GDA2는 이미 IIFE(감사 stale). 실질은 GS3 — 죽은 `window.getAllGamesArray` 노출 제거 |
-| R8 | SC4/SC5 성능 | ✅ 코드변경 없음 — SC4는 이미 count/head, SC5는 테이블 60행 규모. **RPC 재검토 트리거는 PROJECT_STATE §3에 등록** |
-| R9 | GR3 과대함수 | ✅ 추출 4건 → `renderInputPanel` 287→65 · `renderRecords` 367→212. 파생 버그 1건 별도 fix(90997f0) |
-| R11a/b/c | GS1·GS6·GS2 | ✅ `openGameSheet` 321→187 · 과대함수 3건 분리 · **파일 IIFE화**(99개 중 39 노출·60 은닉) |
-| R12 | DD1 day-detail 과대함수 | ✅ `openDateMeetingModal` 273→58 · `openDateScheduleModal` 174→67 |
-| R10a | KA1 `openProfilePanel` 추출 | ✅ **1,940→918줄**(서브시트 6블록 1,043줄 모듈화) |
-| R10b | 크로스보드 stale | ✅ 방향 A(진입 시 재조회). 상세는 PROJECT_STATE §0 |
-| R10c | 네비게이션(backTo) — **신규기능만**(리팩토링은 R10a, stale은 R10b) | ✅ 스모크 통과. §3-1(알림→남의 보드 복귀)·§3-2(토스트→게임시트 복귀) 해결. **"스택"은 불필요했음**. ⚠️ **부모 항목 「타인 보드 내부 네비게이션 통일」(바텀시트→센터모달)은 여전히 열림** — R10c 범위 아니었음. 상세는 PROJECT_STATE §0 |
-
-**모델 배정 실적**: 그린 배치=Sonnet medium · 옐로 배치=Sonnet high · 구조 변경/IIFE/과대함수 분리=Opus xhigh + Plan.
+> ⚠️ **감사 항목의 "영향" 기재를 믿고 우선순위를 매기지 말 것.** GDA3는 이관 목록에서 "유일하게 실동작 영향 가능"으로 분류돼 우선순위 2번까지 올라갔으나, 재검증하니 **소비처 0건인 dead code라 영향이 0**이었다. 감사는 코드 구조만 보고 **소비처를 확인하지 않은 채 영향을 추정**한다. → 착수 전 재검증은 "코드가 바뀌어 stale"뿐 아니라 **"애초에 영향 판정이 틀렸을 수 있다"**까지 포함한다.
 
 ---
 
-## Phase 3 감사 (A1, 2026-07-15) — 열린 항목만
+## 열린 항목
 
-완료분(GS1→R11a · GS2→R11c · GS3→R7 · GS6→R11b · DD1/DD3→R12)은 위 표로 대체.
-
-| # | 위험도 | 이슈 | 상세 |
-|---|--------|------|------|
-| ~~GS4~~ | P2 | ~~`getGameKey` 동명·다른 시그니처~~ | ✅ **2026-07-18 종결**. 실측: 전역 충돌은 없었음(game-reviews.js 버전은 IIFE 내부 지역함수, 전역 `getGameKey`는 game-sheet.js 것 하나뿐). 대신 game-reviews.js의 `getGameKey(gameId)`가 play-records-utils.js `window.getGameKeyById(gameId)`와 **로직 완전 동일한 사본**임을 발견 → 지역함수 삭제 + 호출 3곳을 `getGameKeyById`로 교체(사본 제거가 곧 개명 효과, 이름 충돌 해소). game-sheet.js의 `getGameKey(game)`(객체 인자)는 별개 용도라 유지. |
-| GS5 | P2 | `escH` 사본 **~11개**(문서 "5곳"은 오집계 — 2026-07-18 실측) | **정본 = `window.escH`**(supabase-client.js:2, 유일하게 `& < > "` 4자 + `s ?? ''`). 로컬 사본: **game-sheet.js 7개**(966·1007·1042·1100·1147·2181, +777은 이미 `window.escH \|\| fallback`) · game-reviews.js 2(85·583) · day-detail.js 1(377) · achievements.js 1(608) · play-records-utils.js 1(190 `_escH`). **전부 `& < >`만**(3자, `s \|\| ''`). ⚠️ **통합 = 동작 변경**: 정본으로 모으면 ⓐ`"`→`&quot;` 추가(text엔 무해, **attribute 컨텍스트엔 보안 강화**지만 `"` 미이스케이프를 전제로 JSON/JS를 attr에 넣는 소비처가 없는지 확인 필요) ⓑ`esc(0)`가 `''`→`'0'`으로 바뀜(`\|\|`→`??`). **저위험이나 무변경은 아님** → Plan 필수. 📌 **로드순서 선행은 회피 가능성 높음**: game-sheet.js:777이 이미 `window.escH \|\| fallback`(호출시점 해석)을 써 스냅샷 없이 돈다 → 각 사본을 **호출시점 위임**(`window.escH`를 렌더 함수 안에서 참조)으로 바꾸면 IIFE-init 스냅샷 파손(아래 DD3 우려)이 애초에 안 생김. 착수 Plan에서 확정. |
-| ~~GS7~~ | P2 | ~~난이도 헬퍼 전역 결합~~ | ✅ **2026-07-18 종결(B2 방안)**. 실측 정정: 소비자는 문서가 적은 game-display-adapter가 **아니라** index-page(4)·script-nav(2)·owned-games(1)+game-sheet 내부(1)=8곳. 감사의 "신규 파일 분리" 가정을 재검증→**부적절**(소비자 14개 HTML에 걸쳐 신규 파일이면 14개 전부 `<script>` 추가·순서맞춤 필요=40줄에 과한 비용). 대신 **game-display-adapter.js가 이미 그 14개 전부에 먼저 로드 + 난이도 메서드(getDifficultyWeight/Id) 보유**→여기로 이관하고 `CottageGameView` 네임스페이스에 노출, 호출 8곳을 `GameView.getDifficultyData/normalizeLevelValue`로 전환(소비자가 이미 쓰는 스타일). bare 전역 2개 제거=전역 위생 개선. 신규파일/HTML편집 0. node 대조 27케이스 PASS. |
-| DD4 | P2 | `openDateMeetingModal(voteDate, votes, voteGames, opts={})`의 **`opts` 미사용** | R12 중 발견. 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
-| ~~IP1~~ | P1 | ~~index-page.js 과대함수~~ | ✅ **2026-07-18 종결**(8b4f3ce·380f30f). 상세·실측 정정은 아래 「IP1 처리 결과」. |
-| ~~IP2~~ | P2 | ~~구조 일관성~~ | ✅ **2026-07-18 종결(2번 방안 — 전체 IIFE 래핑은 기각)**. **감사 전제가 틀렸음**: "추천 15+개가 onclick 전역"이라 했으나 실측 onclick은 **2개뿐**(index.html:503 정적 `closeRecommendOverlay`·index-page.js:74 생성HTML `openRecommendOverlay`), 나머지는 전부 `id`+addEventListener = IIFE들과 같은 배선. 실제 차이는 "flat 최상위 vs IIFE 래핑"일 뿐. **전체 래핑 기각 사유**: 크로스파일 소비 0건이라 전역 노출이 무해한데, 래핑해도 `showRecommendResults`(initHeroStats가 977행에서 위로 호출)·`closeRecommendOverlay`(HTML onclick) window 노출 2개 + 공유 `toDateStr`(initMeetingSection이 4곳 사용) 재배치가 남아 initPlannerModal↔initMeetingSection의 기존 window 결합과 동형 = 이득 미미, ~930행 diff가 R11c 「IIFE 크로스파일 갭」 지뢰밭. **대신 2번**: onclick 2개를 addEventListener로 전환해 **전 배선 균일화**(마지막 인라인 onclick 제거). `.recommend-overlay-close`는 `closeRecommendModalButton` 패턴(const ref+EVENT LISTENERS), `.game-card-more`는 renderGameCards의 기존 `.game-card` 재배선 옆. 동작 동일(무인자 클릭 핸들러), node --check 통과. **스모크**: 홈 추천결과 "더보기 →" 클릭 시 전체 오버레이 열림 + 오버레이 ✕ 클릭 시 닫힘. |
-| IP3 | P2 | 날짜 헬퍼 파편화 | `toDateStr`(index-page:935) vs day-detail `fmtDate`(368). ⚠️ **R12에서 "중복 아님"으로 판정** — 입력·출력·용도가 전부 다른 별개 함수. 통합 대상 아님. (IP2 조사 중 재확인: index-page `toDateStr`는 전역이나 크로스파일 소비 0, supabase-client의 동명은 함수 내부 지역 const라 충돌 아님.) |
-| DD2 | — | **(긍정) day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. game-sheet.js와 정반대 — **신규 파일 작성 시 이 구조를 따를 것**. |
-
-**교차 파일**: escH 5사본(GS5) · 게임명 해석 4곳(KA4 — 아래 판단대로 **통합 안 함**) · ~~`getGameKey` 2곳 다른 시그니처(GS4)~~ → 종결(위 표).
-
-### IP1 처리 결과 (2026-07-18) — 3함수 중 1개만 실제 대상
-
-착수해 실측하니 **문서의 줄 수 3개 중 2개가 부정확**했고, "과대함수 3개"가 아니라 **1개**였다(CLAUDE.md 「줄 수는 세라」 재확인).
-
-- **`renderGameCards` (실측 207줄, 진짜 과대함수)** → 순수 헬퍼 2개 추출(8b4f3ce): `_getRecommendedGames(playerValue, levelValue, moodValue)`(filter+sort) · `_recommendCardHtml(game, index)`(카드 1장 HTML). 전역 노출 없음. 본문 바이트 보존은 **git context 매칭으로 증명**(템플릿 라인이 diff에서 unchanged), 읽기/쓰기 누수 0(지역변수 12개가 전부 함수 내부 6~89행에만 존재).
-- **`updateRecommendFilterText` = 대상 아님** — 문서 "157줄(464~621)"은 **뒤 클릭리스너(542~614, 별개 최상위 블록)까지 잘못 합산**한 값. 실제 함수는 **464~540 = 77줄**이고 단일 HTML 템플릿이라 과대함수 아님. 미추출.
-- **`initMeetingSection` (실측 291줄, 1340~1630) = 강제분리 안 함** — `buildBarsInCard`·`onSubmitPlayModal`과 같은 **클로저 결합 nested 함수 컨테이너**(위 「과도분리 금지 선례」 적용). 모듈로 올리면 weekOffset/selectedDate/votes 등 state 스레딩만 늘어 이득 없음. **단 무해한 중복 1건만 제거**(380f30f): `renderPreview` 안의 `.mpc-detail-btn`·`.meeting-preview-card` 클릭 핸들러 동일 본문 → nested `openMeetingDetail`로 통합(파라미터 클로저 캡처, `e.stopPropagation()` 보존).
-- ⚠️ **관측(보고만, REFACTOR MODE라 미수정)**: `initMeetingSection`의 `loadWeek`는 `getMeetingVotes`/`getMeetingVoteGames`를 `Promise.all` 후 `catch (_)`로 **조용히 삼킨다**(1623행 부근) — PROJECT_STATE §3 「감지기 갭 — Promise.all + 비구조분해」에 이미 등록된 패턴.
+| # | 이슈 | 착수 시 알아야 할 것 |
+|---|---|---|
+| **GS5** | `escH` 사본 **~11개**(문서 "5곳"은 오집계, 2026-07-18 실측) | **정본 = `window.escH`**(supabase-client.js:2 — 유일하게 `& < > "` 4자 + `s ?? ''`). 사본: game-sheet 7 · game-reviews 2 · day-detail 1 · achievements 1 · play-records-utils 1(`_escH`). **전부 `& < >` 3자 + `s \|\| ''`**. ⚠️ **통합 = 동작 변경**: ⓐ`"`→`&quot;` 추가(attribute 컨텍스트엔 보안 강화지만 `"` 미이스케이프를 전제로 JSON을 attr에 넣는 소비처가 없는지 확인) ⓑ`esc(0)`이 `''`→`'0'`(`\|\|`→`??`). 저위험이나 **무변경은 아니다.** |
+| DD4 | `openDateMeetingModal`의 `opts` 미사용 | 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
+| ~~IP3~~ | ~~날짜 헬퍼 파편화~~ | ✅ **통합 대상 아님으로 판정 종결.** `toDateStr`(index-page)와 `fmtDate`(day-detail)는 입력·출력·용도가 전부 다른 별개 함수다. **재조사 금지.** |
+| DD2 | (긍정) **day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. **신규 파일 작성 시 이 구조를 따를 것.** |
 
 ---
 
-## 재방문 시 필요한 판단 (되돌리지 말 것)
+## 되돌리지 말 것
 
-- **KA4 — `getGameName` 3사본은 의도적으로 유지**(R2 종결). 겉보기 중복이지만 **실제로 다른 입력을 처리**한다: `window.gameData`는 **한글 슬러그** 키, `window.COTTAGE_GAMES`는 **bggId** 매칭 — kakao-auth/achievements 버전은 둘 다 처리하고 game-reviews 버전은 슬러그 조회가 없다. 게다가 game-reviews.html 로드 순서가 achievements→kakao-auth→game-reviews라 "하나를 전역 공유"도 안전하지 않다. 강제 병합 = 미보유 게임 이름표시 회귀. day-detail `resolveGameName`(4번째 변형)도 같은 이유로 제외.
-- **과도분리 금지 선례 2건** — 함수가 길다고 다 쪼개지 않는다. ①`onSubmitPlayModal`(82줄, R11b): `if(editId)/else` 두 갈래로 이미 명확하고 쪼개려면 폼 값 9개를 DTO로 묶어야 해 **접두사가 붙어 diff 검증이 무력화**된다(R11a의 vm 기각과 동일 사유). ②`buildBarsInCard`(103줄, R12, 사용자 승인): 이미 **이름 붙은 nested 함수 4개**의 컨테이너라 모듈로 올리면 `voteGames`·`myVote` 스레딩으로 **호출부만 길어지고 이득이 없다**. 재방문 조건 = 그 파일을 실제로 만지다 경계가 불편해질 때.
-- **GS5는 R11c(IIFE화)로 해결되지 않았다** — IIFE는 로컬 escH를 *안전하게* 만들 뿐 5사본 통합은 별건. **"IIFE 했으니 끝"이라 착각 금지.** (GS7은 2026-07-18 종결 — 위 표 참조.)
-- **DD3-esc 보류 사유** — GS5와 같은 항목인 데다, **club-schedule.html이 day-detail.js(664)를 supabase-client.js(668)보다 먼저 로드**해 IIFE 실행 시점에 `window.escH`가 undefined다(index.html은 반대 순서). 스냅샷(`const esc = window.escH`) 방식은 club-schedule에서 즉시 파손 → 스냅샷을 쓴다면 로드 순서 통일이 선행. **📌 단 로드순서 통일이 필수는 아니다(2026-07-18 재검토)**: 스냅샷 대신 **호출시점 위임**(렌더 함수 본문에서 `window.escH(...)` 직접 참조, 또는 game-sheet.js:777처럼 `const esc = s => (window.escH||fallback)(s)`)을 쓰면 IIFE-init 때 `window.escH` 미정이어도 무방 — 클릭/렌더 시점엔 이미 로드됨. day-detail의 다른 window 전역(`openOtherMeetingSheet` 등)이 이미 이 방식이다. → **GS5 착수 시 스냅샷 대신 호출시점 위임을 택하면 로드순서 선행이 사라진다.**
+- **KA4 — `getGameName` 3사본은 의도적으로 유지한다.** 겉보기 중복이지만 **입력이 다르다**: `window.gameData`는 **한글 슬러그** 키, `window.COTTAGE_GAMES`는 **bggId** 매칭 — kakao-auth/achievements 버전은 둘 다 처리하고 game-reviews 버전은 슬러그 조회가 없다. 게다가 game-reviews.html 로드 순서가 achievements→kakao-auth→game-reviews라 "하나를 전역 공유"도 안전하지 않다. **강제 병합 = 미보유 게임 이름표시 회귀.** day-detail `resolveGameName`(4번째 변형)도 같은 이유로 제외.
+- **과도분리 금지 선례 2건 — 함수가 길다고 다 쪼개지 않는다.** ①`onSubmitPlayModal`(82줄): `if(editId)/else` 두 갈래로 이미 명확하고, 쪼개려면 폼 값 9개를 DTO로 묶어야 해 **접두사가 붙어 diff 검증이 무력화**된다. ②`buildBarsInCard`(103줄, 사용자 승인): 이미 **이름 붙은 nested 함수 4개**의 컨테이너라 모듈로 올리면 `voteGames`·`myVote` 스레딩으로 **호출부만 길어진다**. → 재방문 조건 = **그 파일을 실제로 만지다 경계가 불편해질 때**.
+- **GS5는 IIFE화(R11c)로 해결되지 않았다.** IIFE는 로컬 `escH`를 *안전하게* 만들 뿐 사본 통합은 별건. **"IIFE 했으니 끝"이라 착각 금지.**
+- 📌 **GS5의 로드순서 선행조건은 회피 가능하다 (2026-07-18 재검토).** club-schedule.html이 day-detail.js를 supabase-client.js보다 **먼저** 로드해 IIFE 실행 시점엔 `window.escH`가 undefined다 → 스냅샷(`const esc = window.escH`)은 즉시 파손. **하지만 호출시점 위임**(렌더 함수 본문에서 `window.escH(...)` 직접 참조, 또는 game-sheet.js:777의 `const esc = s => (window.escH||fallback)(s)`)을 쓰면 init 때 미정이어도 무방하다 — 클릭/렌더 시점엔 이미 로드돼 있다. day-detail의 다른 window 전역(`openOtherMeetingSheet` 등)이 이미 이 방식이다. **→ 위임을 택하면 "로드순서 통일 선행"이 사라진다.**
 
 ---
 
-## 교훈 (재사용 가치)
+## 교훈
 
 ### ⚠️ 함수 추출 3종 함정 — `node --check`도 diff도 못 잡는다
 
-R12 → R10a로 이어지며 실증된 것. 추출 작업 전 반드시 읽을 것.
+**추출 작업 전 반드시 읽을 것.** R12 → R10a → R10c로 이어지며 실증됐다.
 
-1. **읽기 누수(R12)**: 바깥 스코프 변수를 인자 없이 참조 → **런타임 ReferenceError**. 실제로 `_buildMeetingStatsHtml`이 `voteGames`를 인자에서 누락해 모달이 즉시 터졌다. `node --check`는 문법만 보고, diff 검증은 이동만 보므로 **둘 다 통과**한다. ▶ 2026-07-17 R10c에서 **세 번째 재발**(`_notifTitle`이 라우터 블록 스코프인데 최상위 함수에서 참조) — 커밋 전 grep으로 차단.
-   - **대응**: 헬퍼별로 `(바깥 지역변수) − (파라미터 ∪ 내부 선언)`이 0인지 계산. 파라미터 파싱 시 **구조분해·중첩 화살표 자체 파라미터**를 안 세면 오탐(`statChip=(icon,label,count)=>`의 `count`가 실제로 오탐났음).
-2. **쓰기 누수(R10a)**: 재할당되는 캡처를 구조분해로 받으면 **복사**라 바깥에 전파되지 않는다. `node --check`·diff·**런타임 셋 다 통과하며 조용히 죽으므로 1번보다 나쁘다.** 실제 2건(`_currentBio`·`_pendingMeetingScrollTop`) — 둘 다 **접근자 콜백으로 승격**해 해결. 반면 `_allPhotoData`는 `splice` 변형일 뿐이라 참조 전달로 안전.
-3. **크로스파일 갭(R11c)**: IIFE는 함수뿐 아니라 최상위 `const`/`let`도 가둔다. 사전조사가 **함수만 세어** 3건을 놓쳤고, 그대로 감쌌으면 로드 에러 없이 홈 추천·카드 이미지가 조용히 죽었다 — `DEFAULT_GAME_IMAGE`·`GameView`(→window 노출) · `gameSheet`(재할당 let → **라이브 getter**). ▶ **다음 IIFE 작업 시 "최상위 const/let의 크로스파일 bare 참조"도 함수와 함께 grep할 것.**
+1. **읽기 누수** — 바깥 스코프 변수를 인자 없이 참조 → **런타임 ReferenceError**. 실제로 `_buildMeetingStatsHtml`이 `voteGames`를 인자에서 누락해 모달이 즉시 터졌다. `node --check`는 문법만 보고 diff는 이동만 보므로 **둘 다 통과**한다. ▶ R10c에서 **세 번째 재발**(`_notifTitle`이 라우터 블록 스코프인데 최상위 함수에서 참조).
+   - **대응**: 헬퍼별로 `(바깥 지역변수) − (파라미터 ∪ 내부 선언)`이 0인지 계산. 파라미터 파싱에서 **구조분해·중첩 화살표 자체 파라미터**를 안 세면 오탐이 난다(`statChip=(icon,label,count)=>`의 `count`가 실제로 오탐).
+2. **쓰기 누수** — 재할당되는 캡처를 구조분해로 받으면 **복사**라 바깥에 전파되지 않는다. `node --check`·diff·**런타임 셋 다 통과하며 조용히 죽으므로 1번보다 나쁘다.** 실제 2건(`_currentBio`·`_pendingMeetingScrollTop`) — 둘 다 **접근자 콜백으로 승격**해 해결. 반면 `_allPhotoData`는 `splice` 변형일 뿐이라 참조 전달로 안전.
+3. **크로스파일 갭** — IIFE는 함수뿐 아니라 최상위 `const`/`let`도 가둔다. 사전조사가 **함수만 세어** 3건을 놓쳤고, 그대로 감쌌으면 로드 에러 없이 홈 추천·카드 이미지가 조용히 죽었다(`DEFAULT_GAME_IMAGE`·`GameView`·재할당 `let gameSheet`). ▶ **IIFE 작업 시 "최상위 const/let의 크로스파일 bare 참조"도 함수와 함께 grep할 것.**
 
-### 핵심 기법 — ctx + 첫 줄 구조분해로 본문 바이트 보존 (R10a)
+### 본문 바이트 보존 — ctx + 첫 줄 구조분해
 
-캡처를 `ctx` 객체로 넘기고 추출 함수 첫 줄에서 `const { user, readOnly, … } = ctx;`로 **원래 이름을 복원** → 이동 본문을 한 글자도 안 고친다. R11a가 vm 객체안을 기각한 사유(`vm.` 접두사가 diff 검증을 무력화)를 구조분해로 회피. 이동 본문은 **들여쓰기까지 원본 그대로** 둘 것(template literal의 공백 = HTML 출력 바이트).
+캡처를 `ctx` 객체로 넘기고 추출 함수 첫 줄에서 `const { user, readOnly, … } = ctx;`로 **원래 이름을 복원** → 이동 본문을 한 글자도 안 고친다. `vm.` 접두사 방식을 기각한 이유가 **접두사가 diff 검증을 무력화**하기 때문이다. 이동 본문은 **들여쓰기까지 원본 그대로** 둘 것 — template literal의 공백이 곧 HTML 출력 바이트다.
 
-### 검사기 자체를 믿지 말 것
+### 줄 수는 추측하지 말고 센다
 
-R10a에서 **검사기가 4번 조용히 틀렸고 음성 대조군이 전부 잡아냈다**. 교훈은 [CLAUDE.md 「검증 결과가 0건·전부 통과면 검사기 자체를 먼저 의심한다」](../CLAUDE.md)로 **승격됨(SSOT)** — 실제 사례 4건: ①bash heredoc이 정규식 백슬래시를 먹어 **아무것도 매치 못 함**(→ 스크립트는 Write 툴로 생성) ②문자열·주석 내용을 코드로 오탐 ③프로퍼티 접근(`document.body`)을 지역참조로 오탐 ④여러 줄 구조분해를 선언으로 못 읽음.
+"KA1 ✅ 완료"라고 실측 없이 적어둔 탓에 **실제로는 843→1,972줄로 더 커진 상태**가 R10a 때까지 방치됐다. IP1도 문서의 줄 수 3개 중 2개가 부정확해 "과대함수 3개"가 실은 **1개**였다(다른 하나는 뒤따르는 별개 블록까지 잘못 합산한 값).
 
-**137차의 "KA1 ✅ 완료" 오기재**도 같은 뿌리 — 실측 없이 완료로 적어 R10a 때까지 방치됐다(실제론 843→1,972줄로 **더 커져 있었음**). **줄 수는 추측하지 말고 셀 것.**
-
-**검사 스크립트는 세션 스크래치패드에만 있다**(`capture.js`/`writes.js`/`leak.js`/`move.js`/`bodydiff.js`) — 착수 시 재작성 필요. 상설화하려면 `scripts/`에 신규 파일 = 별도 승인.
-
----
-
-## 세션 전환 규칙
-
-CLAUDE.md 모델 전환 원칙대로, 매 항목 시작 직전 현재 활성 모델이 그 항목에 맞는지 확인하고 다르면 멈추고 전환 요청. 그린/옐로는 Plan 없이 진행, Red는 착수 전 Plan 작성 → 승인 필수.
+> 검사기 관련 교훈은 [CLAUDE.md 「검사기를 먼저 의심한다」](../CLAUDE.md)로 승격됐다(SSOT). 여기서 중복 보관하지 않는다.
