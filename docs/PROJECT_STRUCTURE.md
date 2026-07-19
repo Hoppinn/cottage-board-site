@@ -60,6 +60,9 @@
 │   ├── shot-admin-tabs.js          # 관리자 6개 탭 스크린샷 + 표시층 발견 #5~#7 판정 (읽기전용)
 │   │                               # ⚠️출력 폴더를 리포 안으로 주지 말 것(Live Server 리로드로 죽음)
 │   ├── verify-home-hero.js         # 히어로 미노출 + #recommend 딥링크 회귀 (읽기전용)
+│   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
+│   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
+│   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
 │   ├── ss_subsheet/                # 서브시트 스크린샷 (비교용 이미지)
 │   ├── ss_4axis/                   # 4축 UI 스크린샷
 │   └── ss_profile/                 # 프로필 패널 스크린샷
