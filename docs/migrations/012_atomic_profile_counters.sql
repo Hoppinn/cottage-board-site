@@ -33,12 +33,15 @@ language sql
 as $$
   update public.profiles p
      set total_minutes = coalesce(p.total_minutes, 0) + greatest(coalesce(p_secs, 0), 0),
+         -- ⚠️ profiles.today_date는 **date 타입**이고 p_today는 클라이언트가 보내는
+         --    'YYYY-MM-DD' 문자열이라 명시적 캐스트가 필요하다.
+         --    (캐스트 없이 쓰면 `operator does not exist: date = text`로 실패한다.)
          today_seconds = case
-           when p_today is null            then p.today_seconds
-           when p.today_date = p_today     then coalesce(p.today_seconds, 0) + greatest(coalesce(p_secs, 0), 0)
+           when p_today is null              then p.today_seconds
+           when p.today_date = p_today::date then coalesce(p.today_seconds, 0) + greatest(coalesce(p_secs, 0), 0)
            else greatest(coalesce(p_secs, 0), 0)   -- 날짜가 바뀌었으면 리셋 후 시작
          end,
-         today_date    = coalesce(p_today, p.today_date),
+         today_date    = coalesce(p_today::date, p.today_date),
          visit_count   = case when p_bump_visit then coalesce(p.visit_count, 0) + 1 else p.visit_count end,
          last_seen_at  = now()
    where p.user_id = p_user_id
