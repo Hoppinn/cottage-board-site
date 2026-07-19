@@ -137,12 +137,16 @@
 | 17 | 🟢 | **요약 카드 블록의 죽은 변수 6개** — `lToday`/`vToday`/`lAvg`/`vAvgSub`/`lDelta`/`vDeltaSub`가 4개 분기에서 전부 계산되지만 **어디서도 읽히지 않는다**(실제 렌더는 `vAvg`·`vDeltaHtml`·`lTopRef`만). 2026-07-19 #15 작업 중 발견 — `vAvgSub`의 "기간 합계 N**명**" 표기를 고치려다 **화면에 안 나오는 문자열**임을 확인하고 되돌렸다. 되살릴 거면 단위를 회로 고쳐야 함. P5 청소 대상 |
 | 18 | 🟡 | **`home_record_write_click`이 DB 0건** — 「📋 플레이 기록」 퍼널 2-3단계가 늘 0인 **진짜 이유**. `record_complete`(#19)와는 별건이다: 퍼널은 `record_*`를 안 쓴다 |
 | 20 | 🟡 | **회원 카드 페이지 분포가 전 기간 고정인데 그 기준이 화면에 없다**(원칙 ① 위반). `buildUserMap(rows)`가 `filtered`가 아닌 원본 `rows`를 씀. 사용자 요청 = 오늘·어제·7일로도 보기 → **#12와 한 뿌리**(둘 다 "회원 탭의 기간 집계에 조작 수단이 없다"). 선택지·기울기는 [PROJECT_STATE.md](PROJECT_STATE.md) §3. **표기 추가(그린)와 기간 선택기(Plan)는 분리 가능** |
-| 21 | 🔴 | **회원 카드 한 장 안에서 헤더 `⏱`와 펼침 표 합계가 다르다** — 소스가 둘이다(원칙 ② 위반). 헤더=`profiles.total_minutes`([:1128](../pages/admin/requests-admin.html#L1128)), 펼침 표=`page_sessions`. **비회원 카드는 헤더도 `page_sessions`([:1155](../pages/admin/requests-admin.html#L1155))라 정확히 일치** — 이 갈림이 원인을 확정한다. 실측(2026-07-19, 9명): 비회원 4명 전원 **0초 차이**, 회원 5명 **전원 불일치 + 방향도 제각각**(무지 +23분, 뽁 +64분, 냐냐뇨뇨 +109분, DK +49분, **설애 −431분**). ⚠️ **어느 쪽이 옳은지는 미판정** — `total_minutes`는 「이용시간 기기 중복」(§4 방문/이용 정확도 ③) 영향을, `page_sessions`는 `duration_sec=0` 14.7%(①) 영향을 각각 받는다. **둘 다 편향돼 있어 "표가 맞다"고 단정하면 안 된다.** #20 기간 선택기를 설계할 때 함께 판단 |
+| 21 | 🔴 | **회원 카드 한 장 안에서 헤더 `⏱`와 펼침 표 합계가 다르다** — 소스가 둘이다(원칙 ② 위반). 헤더=`profiles.total_minutes`([:1128](../pages/admin/requests-admin.html#L1128)), 펼침 표=`page_sessions`. **비회원 카드는 헤더도 `page_sessions`([:1155](../pages/admin/requests-admin.html#L1155))라 정확히 일치** — 이 갈림이 원인을 확정했다. **2026-07-19 원인조사 완료 → 판정: 어느 쪽도 옳지 않다.** 전수 실측 19명에서 **PS>TM 15명 / PS<TM 2명 / 일치 2명**, 최대 편차 +149분(죠르디)·−430분(설애). 방향별 기전이 다르다: **PS>TM은 #22(경쟁 조건으로 TM 증가분 손실)**, **TM>PS는 heartbeat가 `insertPageSession=false`라 TM만 올리고 PS 행을 안 만들기 때문**([supabase-client.js:990](../assets/js/supabase-client.js#L990)). 즉 **TM은 손실분만큼 과소, PS는 heartbeat 시간이 통째로 빠진 하한** — 실제 체류는 둘 다보다 크다. 표시를 통일하려면 #22를 먼저 정리해야 한다 |
+| 22 | 🔴 | **`profiles.total_minutes`가 비원자적 read-modify-write로 유지된다 — 증가분이 조용히 사라진다.** `_syncTimeToDBNow`([:1019~1029](../assets/js/supabase-client.js#L1019))와 `upsertProfile`이 둘 다 `select` → 계산 → `update` 형태라, 탭·페이지가 겹쳐 동시에 flush하면 **나중 write가 앞 증가분을 덮는다**(lost update). `page_sessions`는 append-only INSERT라 경쟁하지 않아 전부 남는다 → **PS>TM 15/19명의 기전.** 🚨 **표시 문제가 아니라 데이터 정합성 문제다** — `total_minutes`는 내 보드 「함께한 시간」·업적 판정에도 쓰이므로 **사용자가 보는 값도 과소집계**다. ⚠️ **기전은 코드로 확정했으나 +149분 같은 크기를 전부 설명하는지는 미재현** — 수정 착수 전 재현 필요. 해법 방향: 원자적 증가(RPC/`increment`)로 전환, Red |
 | — | 🟡 | 관리자 알림이 교환권 로그로 도배(35건 중 30건이 `voucher:*`). 의도된 사양인지 먼저 확인 |
 
 ### 🔬 방문/이용 집계 정확도 (별도 계열)
 
-- ① **`duration_sec=0`이 14.7%** — heartbeat(1분) 전 이탈. 관리자 분석에서 시간 미표시. 표시 조건이 `todayS > 0`이라 **0이면 항목이 DOM에서 빠진다**(0으로 표시되는 게 아님).
+- ① **`duration_sec=0` — ⚠️ 2026-07-19 실측으로 원인·범위 정정.** 기존 기재는 "14.7%, heartbeat 전 이탈"이었으나 **둘 다 틀렸다.** 전수 실측: 전체 11,710행 중 507행(4.3%)이 0이고 **그중 100%가 비회원**이다(회원 10,504행 중 **0건**). 원인은 이탈이 아니라 `_startAnonHeartbeat`이 INSERT 시 **`duration_sec: 0`을 하드코딩하고 이후 갱신하지 않는 것**([supabase-client.js:1122](../assets/js/supabase-client.js#L1122)) — **설계값이지 결손이 아니다.** 비로그인 체류는 `anon_sessions.today_seconds`에만 쌓이고 `page_sessions`로 역류하지 않는다.
+  - 🚨 **따라서 "회원 쪽 `page_sessions`가 `duration_sec=0`으로 편향돼 있다"는 추론은 성립하지 않는다** — #21 판정 때 이 낡은 기재를 근거로 잘못 쓸 뻔했다.
+  - ❓ **미해결 하위 질문**: 비회원 1,206행 중 **699행은 `duration_sec > 0`**이다. 위 INSERT는 항상 0을 넣으므로 다른 경로나 legacy가 있다는 뜻 — 필요할 때 추적할 것.
+  - 표시 영향은 그대로: 조건이 `todayS > 0`이라 **0이면 항목이 DOM에서 빠진다**(0으로 표시되는 게 아님).
 - ② **과거 `session_key` NULL 70%** — 007 이전 legacy, **소급 불가**. 대상 아님.
 - ③ **이용시간 기기 중복** — 다기기 동시 사용 시 합산. 해법 방향은 서버 세션 단위 관리(Red).
 - ④ **`_startAnonHeartbeat` 자정 넘김 버그** — 1분 인터벌이 `today_seconds`만 갱신하고 `today_date`는 세션 시작값 고정. `page_sessions` 파생값을 우선 쓰므로 그 행이 없을 때만 발현.
