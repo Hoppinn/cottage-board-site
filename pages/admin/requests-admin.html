@@ -886,34 +886,8 @@
       const profilesMap = new Map(allProfiles.map(p => [p.user_id, dispName(p)]));
       const profilesByUid = new Map(allProfiles.map(p => [String(p.user_id), p]));
 
-      let subIdx = 0;
-      function subSection(title, content, open = false) {
-        const id = `asub${subIdx++}`;
-        return `<div class="admin-sub-section${open?' is-open':''}" id="${id}">
-          <div class="admin-sub-section-title" onclick="document.getElementById('${id}').classList.toggle('is-open')">
-            ${title}<span class="admin-sub-section-arrow">▾</span>
-          </div>
-          <div class="admin-sub-section-body">${content}</div>
-        </div>`;
-      }
 
-      // KST 날짜 범위 헬퍼
-      const DAY_MS = 86400000;
-      function kstDayBounds(daysAgo) {
-        const nowKst = Date.now() + 9 * 3600000;
-        const todayMidKst = Math.floor(nowKst / DAY_MS) * DAY_MS;
-        return [
-          new Date(todayMidKst - daysAgo * DAY_MS - 9 * 3600000).toISOString(),
-          new Date(todayMidKst - (daysAgo - 1) * DAY_MS - 9 * 3600000).toISOString(),
-        ];
-      }
       const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
-      const DAY_LABELS = ['오늘', '어제', '그제', '3일 전', '4일 전', '5일 전', '6일 전'];
-
-      function rowsForDay(daysAgo) {
-        const [s, e] = kstDayBounds(daysAgo);
-        return rows.filter(r => r.entered_at >= s && r.entered_at < e);
-      }
 
       // ── 집계 헬퍼 ────────────────────────────────────────────
       // 같은 사람이 같은 페이지를 당일 여러 번 방문해도 1회로 카운트
@@ -986,76 +960,9 @@
       }
 
 
-      // 이용상세 > 전체: 로그인 회원 + 비회원 통합 표시
-      function renderUserDetailAll(sortedUsers, anonMap = []) {
-        const memberHtml = sortedUsers.map(([uid, pm]) => {
-          const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
-          const profile = profilesByUid.get(String(uid));
-          const visitCount = profile?.visit_count != null ? profile.visit_count + '회' : '-';
-          const totalSec = profile?.total_minutes || 0;
-          const todayS   = profile?.today_date === todayKst ? (profile?.today_seconds || 0) : 0;
-          const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
-          return `<div style="margin-bottom:6px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.04);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
-              <span class="acc-arr">▶ </span>${escH(nick)}
-              <span style="font-size:11px;color:var(--muted);font-weight:400;">
-                방문 ${visitCount} · 총체류 ${fmtTime(totalSec)}${todayS > 0 ? ` · 오늘 ${fmtTime(todayS)}` : ''}
-              </span>
-            </div>
-            <div style="display:none;">
-            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>
-            ${sortedPages.map(([page, d]) => `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`).join('')}
-            </tbody></table></div></div>`;
-        }).join('');
-
-        const anonHtml = anonMap.map(([sk, entry]) => {
-          const shortKey = sk.slice(0, 8) + '…';
-          const visitCount = entry.days.size + '회';
-          const totalSec = [...entry.pm.values()].reduce((s, v) => s + v.totalSec, 0);
-          const sortedPages = [...entry.pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
-          return `<div style="margin-bottom:6px;">
-            <div style="font-size:13px;font-weight:700;color:var(--muted);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.03);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
-              <span class="acc-arr">▶ </span>비회원 <code style="font-size:10px">${escH(shortKey)}</code>
-              <span style="font-size:11px;color:var(--muted);font-weight:400;">
-                방문 ${visitCount} · 총체류 ${fmtTime(totalSec)}${entry.todaySec > 0 ? ` · 오늘 ${fmtTime(entry.todaySec)}` : ''}
-              </span>
-            </div>
-            <div style="display:none;">
-            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류(로그)</th></tr></thead><tbody>
-            ${sortedPages.map(([page, d]) => `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`).join('')}
-            </tbody></table></div></div>`;
-        }).join('');
-
-        if (!sortedUsers.length && !anonMap.length) return '<div class="admin-empty">데이터 없음</div>';
-        return memberHtml + (anonHtml ? `<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);padding:4px 0 6px;font-weight:600;">비로그인 방문자</div>${anonHtml}</div>` : '');
-      }
-
-      // 이용상세 > 날짜별: O/X 방문 여부 + 체류시간 (n회 없음)
-      function renderUserDetailDay(sortedUsers) {
-        if (!sortedUsers.length) return '<div class="admin-empty">데이터 없음 (로그인 세션 필요)</div>';
-        let h = '';
-        for (const [uid, pm] of sortedUsers) {
-          const nick = profilesMap.get(uid) || uid.slice(0,8)+'…';
-          const totalSec = [...pm.values()].reduce((s,v)=>s+v.totalSec,0);
-          const sortedPages = [...pm.entries()].sort((a,b)=>b[1].totalSec-a[1].totalSec);
-          h += `<div style="margin-bottom:6px;">
-            <div style="font-size:13px;font-weight:700;color:var(--green);padding:6px 8px 6px;cursor:pointer;user-select:none;background:rgba(0,0,0,0.04);border-radius:6px;" onclick="const b=this.nextElementSibling;const c=b.style.display==='none';b.style.display=c?'block':'none';this.querySelector('.acc-arr').textContent=c?'▼ ':'▶ ';">
-              <span class="acc-arr">▶ </span>${escH(nick)} <span style="font-size:11px;color:var(--muted);font-weight:400;">체류 ${fmtTime(totalSec)}</span>
-            </div>
-            <div style="display:none;">
-            <table class="admin-analytics-table"><thead><tr><th>페이지</th><th>방문</th><th>체류시간</th></tr></thead><tbody>`;
-          for (const [page, d] of sortedPages) {
-            h += `<tr><td class="anat-page">${escH(page)}</td><td style="color:#4a8c4a">O</td><td>${fmtTime(d.totalSec)}</td></tr>`;
-          }
-          h += '</tbody></table></div></div>';
-        }
-        return h;
-      }
-
       // ── 요약 카드 + 통합 방문자 목록 ───────────────────────────
-      const memberCountEl = document.getElementById('memberCountBadge');
-      if (memberCountEl) memberCountEl.textContent = `${allProfiles.length}명`;
-
+      // (#memberCountBadge 갱신 코드가 여기 있었으나 그 요소가 HTML에 없어 항상 no-op이었다 — #4, 2026-07-19 제거.
+      //  회원 수는 아래 sumMemberTotal 카드가 보여준다.)
       const _now = Date.now();
       const cnt30dNew = allProfiles.filter(p => p.first_seen_at && _now - new Date(p.first_seen_at).getTime() < 30 * 86400000).length;
       const _sumMemberTotal = document.getElementById('sumMemberTotal');
@@ -1181,16 +1088,6 @@
       ) : '<div class="admin-empty">방문자 없음</div>';
 
 
-      // ── 사용자별 이용 상세 (page_sessions 기반, 날짜별) ─────────
-      const userDayParts = DAY_LABELS.map((label, i) => {
-        const dr = dedupUserPageDay(rowsForDay(i));
-        return subSection(
-          `${label} <span style="font-size:11px;color:var(--muted)">${dr.length}세션</span>`,
-          renderUserDetailDay(buildUserMap(dr)),
-          false
-        );
-      }).join('');
-      const userAllDetail = renderUserDetailAll(buildUserMap(dedupUserPageDay(rows)), buildAnonUserMap(rows));
 
       // ── DOM 반영 ─────────────────────────────────────────────
       const membersBody = document.getElementById('membersBody');
@@ -1524,28 +1421,27 @@
               }).join('')
             : '—';
 
-          let lToday, vToday, lAvg, vAvg, vAvgSub, lDelta, vDeltaHtml, vDeltaSub, lTopRef;
+          // 실제로 렌더되는 값은 vAvg(sumAvg) · vDeltaHtml(sumDelta) · lTopRef(카드 라벨) 셋뿐이다.
+          // 예전엔 lToday/vToday/lAvg/vAvgSub/lDelta/vDeltaSub도 4개 분기에서 전부 계산했으나
+          // 어디서도 읽지 않는 죽은 변수였다(#17, 2026-07-19 제거). 카드 UI가 축소되면서
+          // 소비처만 사라지고 계산이 남은 것 — 되살릴 거면 vAvgSub의 단위는 '명'이 아니라 '회'다
+          // (vAvg는 방문 횟수의 평균이지 사람 수가 아니다. 449줄 주석 참조).
+          let vAvg, vDeltaHtml, lTopRef;
 
           if (type === 'day' || !type) {
-            const dateStr = _navValue || todayStr;
-            const dayCnt = visitorRows.filter(r => kstDate(r.created_at) === dateStr).length;
-            lToday = '방문자'; vToday = dayCnt;
-            lAvg = '7일 평균'; vAvg = thisCnt7 / 7; vAvgSub = `이번 7일 ${thisCnt7}명`;
-            lDelta = '지난주 대비'; vDeltaHtml = makeDeltaHtml(thisCnt7, prevCnt7); vDeltaSub = `이번 ${thisCnt7} / 이전 ${prevCnt7}`;
+            vAvg = thisCnt7 / 7;
+            vDeltaHtml = makeDeltaHtml(thisCnt7, prevCnt7);
           } else if (type === 'week') {
-            lToday = '이번 주'; vToday = periodCnt;
-            lAvg = '일 평균'; vAvg = periodCnt / 7; vAvgSub = `기간 합계 ${periodCnt}명`;
-            lDelta = '전주 대비'; vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt); vDeltaSub = `이번 ${periodCnt} / 이전 ${prevCnt}`;
+            vAvg = periodCnt / 7;
+            vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt);
           } else if (type === 'month') {
             const days = start ? Math.round((new Date(end) - new Date(start)) / 86400000) : 30;
-            lToday = '이번 달'; vToday = periodCnt;
-            lAvg = '일 평균'; vAvg = periodCnt / days; vAvgSub = `기간 합계 ${periodCnt}명`;
-            lDelta = '전달 대비'; vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt); vDeltaSub = `이번 ${periodCnt} / 이전 ${prevCnt}`;
+            vAvg = periodCnt / days;
+            vDeltaHtml = makeDeltaHtml(periodCnt, prevCnt);
           } else {
             const months = visitorRows.reduce((s, r) => { const m = kstDate(r.created_at)?.slice(0,7); if(m) s.add(m); return s; }, new Set()).size || 1;
-            lToday = '전체 방문자'; vToday = periodCnt;
-            lAvg = '월 평균'; vAvg = Math.round(periodCnt / months); vAvgSub = `${months}개월 합산`;
-            lDelta = '전기간 대비'; vDeltaHtml = '<span class="admin-summary-delta flat">—</span>'; vDeltaSub = '';
+            vAvg = Math.round(periodCnt / months);
+            vDeltaHtml = '<span class="admin-summary-delta flat">—</span>';
           }
 
           // 「주요 유입」 라벨은 **실제 집계 기간에서 파생**한다(#9).
