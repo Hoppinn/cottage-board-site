@@ -270,14 +270,28 @@ window._cottageSess = (function () {
 
   // 최상위 프레임인가. index.html은 플래너·기록 모달을 **iframe으로 미리 로드**하는데,
   // 각 iframe이 이 파일을 다시 로드해 자기 세션 추적을 돌린다. 그러면 한 사람이 한 탭만
-  // 열어도 같은 실시간이 프레임 수만큼 계상된다(#24 — E2E 실측 3.5배). page_views도
-  // 사용자가 이동한 적 없는 페이지에 쌓인다.
-  // 🚨 **세션·방문 추적에만 쓸 것.** trackEvent(사용자 행동)에는 쓰면 안 된다 —
-  //    기록 모달(iframe) 안에서 실제로 저장한 record_complete 같은 이벤트는 진짜이고,
-  //    프레임을 이유로 버리면 퍼널이 다시 비어버린다.
+  // 열어도 같은 실시간이 프레임 수만큼 계상된다(#24 — E2E 실측 3.5배).
   function _isEmbeddedFrame() {
     try { return typeof window !== 'undefined' && window.top !== window.self; }
     catch (err) { return true; } // 크로스오리진 접근 차단 = 남의 프레임 안 = 추적 안 함
+  }
+
+  // ── 추적 게이트는 둘뿐이다. 새 추적을 추가할 땐 반드시 이 중 하나를 골라 쓴다 ──
+  //
+  //   _shouldSkipAnalytics()       ← **사용자 행동**(trackEvent). 프레임 무관.
+  //   _shouldSkipSessionTracking() ← **세션·방문**(체류시간·page_views·page_sessions·방문수)
+  //
+  // 둘을 가르는 기준은 하나다: **"iframe 안에서 일어나도 진짜인가?"**
+  //   - 기록 모달(iframe)에서 실제로 저장한 record_complete → **진짜다.** 프레임을 이유로
+  //     버리면 퍼널이 다시 빈다. 그래서 이벤트는 프레임을 안 본다.
+  //   - 반대로 "방문"과 "체류시간"은 사람·탭 단위 개념이라 **부모 페이지 1회**가 맞다.
+  //     iframe은 부모 페이지의 구성요소지 별도 방문이 아니다.
+  //
+  // ⚠️ 예전엔 호출부마다 `_shouldSkipAnalytics()`와 `_isEmbeddedFrame()`을 **나란히 두 줄**로
+  //    적었다(3곳). 같은 규칙을 흩뿌리면 새 추적을 넣을 때 한쪽만 빠뜨린다 — 실제로 #24가
+  //    그런 종류의 누락이었다. 규칙은 여기 한 곳에만 둔다.
+  function _shouldSkipSessionTracking() {
+    return _shouldSkipAnalytics() || _isEmbeddedFrame();
   }
 
   // ── 이벤트 트래킹 ───────────────────────────────────────
@@ -921,8 +935,9 @@ window._cottageSess = (function () {
   // ── 자동 페이지 뷰 트래킹 ──────────────────────────────
 
   document.addEventListener("DOMContentLoaded", function () {
-    // localhost 개발 환경에서는 카운팅 안 함
-    if (_shouldSkipAnalytics()) return;
+    // 이 블록 전체가 "방문" 기록이다 — 게이트는 여기 하나뿐이어야 한다.
+    // (로컬·관리자 제외 + iframe은 부모 페이지의 구성요소지 별도 방문이 아님, #24)
+    if (_shouldSkipSessionTracking()) return;
     // 유입 경로 캡처 — 날짜+source+page 기준 1회 dedup, 채널별 페이지 이동 각각 기록
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     const visitedKey = "cottage_visited_" + kstDate;
@@ -938,11 +953,6 @@ window._cottageSess = (function () {
         return u.hostname !== location.hostname ? u.hostname : null;
       } catch (err) { console.error('[getVisitorStats]', err); return null; }
     })();
-    // 관리자 접속은 방문자 통계 전체 미포함
-    if (_shouldSkipAnalytics()) return;
-    // iframe은 부모 페이지의 구성요소지 별도 방문이 아니다 — 여기서 막지 않으면
-    // 홈을 한 번 열 때마다 club-schedule·game-reviews에 유령 page_views가 쌓인다(#24).
-    if (_isEmbeddedFrame()) return;
     // 외부 유입 감지 시 당일 소스 갱신 (last-touch 모델 — 채널 효과 측정 목적)
     const origSrcKey = `cottage_orig_src_${kstDate}`;
     if (referrer) localStorage.setItem(origSrcKey, referrer);
@@ -1029,9 +1039,7 @@ window._cottageSess = (function () {
   // insertPageSession: 탭 숨김처럼 실제 페이지 이탈 시에만 true
   async function _syncTimeToDBNow(userId, insertPageSession = true) {
     if (!userId) return;
-    if (_shouldSkipAnalytics()) return;
-    // 시간 누적은 **최상위 프레임만** 한다 — 프레임마다 돌면 같은 실시간이 중복 계상된다(#24).
-    if (_isEmbeddedFrame()) return;
+    if (_shouldSkipSessionTracking()) return;
     const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
     const secs = _popAccumulatedSecs(userId);
@@ -1106,8 +1114,7 @@ window._cottageSess = (function () {
 
   async function _startAnonHeartbeat() {
     if (_anonHeartbeatTimer || _sessionUserId) return;
-    if (_shouldSkipAnalytics()) return;
-    if (_isEmbeddedFrame()) return; // 비로그인 체류도 최상위 프레임만 센다(#24)
+    if (_shouldSkipSessionTracking()) return;
     const key = getSessionKey();
     const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     let _anonTodaySec = 0;
@@ -1184,10 +1191,11 @@ window._cottageSess = (function () {
       // explicitVisitCount는 이제 **플래그로만** 쓴다(undefined면 방문을 올리지 않음) —
       // 실제 값은 DB에서 원자적으로 +1 되므로 localStorage fallback이 필요 없어졌다.
       // 신규 유저도 위 upsert가 행을 먼저 만들었으므로 coalesce(...,0)+n으로 올바르게 시작한다.
-      // iframe에서도 initKakaoAuth가 돌아 여기까지 온다 — 프로필 자체는 갱신해도 되지만
-      // 카운터는 최상위 프레임만 올려야 한다(#24).
-      const bumpVisit = explicitVisitCount !== undefined && !skipAnalyticsForUser && !_isEmbeddedFrame();
-      if (!upsertError && !skipAnalyticsForUser && !_isEmbeddedFrame() && (accumulated > 0 || bumpVisit)) {
+      // iframe에서도 initKakaoAuth가 돌아 여기까지 온다 — 프로필(닉네임·사진)은 갱신해도 되지만
+      // 방문수·체류시간은 세션 개념이라 최상위 프레임만 올린다(#24).
+      const skipSession = skipAnalyticsForUser || _isEmbeddedFrame();
+      const bumpVisit = explicitVisitCount !== undefined && !skipSession;
+      if (!upsertError && !skipSession && (accumulated > 0 || bumpVisit)) {
         const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // KST
         const { data: bumped, error: bumpError } = await db.rpc('increment_profile_counters', {
           p_user_id: String(userId), p_secs: accumulated, p_today: todayStr, p_bump_visit: bumpVisit,
