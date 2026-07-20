@@ -52,11 +52,19 @@ async function rpcIncrement(uid, by = 1) {
 
 const increment = USE_RPC ? rpcIncrement : rmwIncrement;
 
+// ⚠️ error를 반드시 받는다 — RLS 차단·컬럼 오타·권한 만료는 예외가 아니라
+//    { data: null, error }로 온다. 여기서 삼키면 손실률이 조용히 "측정 불가"가 아니라
+//    "0" 또는 "100%"로 나와 실험 결과 자체가 거짓이 된다.
+//    (2026-07-20: 일회성 조회 스크립트가 HTTP 401을 "RPC 없음"으로 오독한 직후 점검해 발견)
 const read = async uid => {
-  const { data } = await db.from('profiles').select('total_minutes').eq('user_id', uid).maybeSingle();
+  const { data, error } = await db.from('profiles').select('total_minutes').eq('user_id', uid).maybeSingle();
+  if (error) { console.error('[read] 조회 실패 — 아래 수치를 신뢰하지 말 것', error); return null; }
   return data?.total_minutes ?? null;
 };
-const reset = async uid => db.from('profiles').update({ total_minutes: 0 }).eq('user_id', uid);
+const reset = async uid => {
+  const { error } = await db.from('profiles').update({ total_minutes: 0 }).eq('user_id', uid);
+  if (error) console.error('[reset] 초기화 실패 — 라운드 시작값이 0이 아니다', error);
+};
 
 (async () => {
   let created = false;
