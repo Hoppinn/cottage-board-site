@@ -106,9 +106,10 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
   console.log(`  DOM 카드 ${r.cardsInDom} / 날짜필터 통과 ${r.dateVisible} / 더보기 "${r.moreBtn}"`);
   console.log('  판정:', chipTotal === r.dateVisible ? '✅ 일치' : `🔴 불일치 — 칩 ${chipTotal} vs 목록 ${r.dateVisible}`);
 
-  // 퍼널은 날짜 네비를 따르므로 기간을 바꿔가며 본다.
-  // "오늘"이 "-"인 건 정상(그날 클릭이 0일 뿐) — 기간을 넓혔을 때 살아나는지가 판정 기준이다.
-  console.log('\n=== 발견 #6 — 퍼널 전환율 (기간별) ===');
+  // 이벤트 탭은 날짜 네비를 따르므로 기간을 바꿔가며 본다.
+  // "오늘"이 0%인 건 정상(그날 클릭이 0일 뿐) — 기간을 넓혔을 때 살아나는지가 판정 기준이다.
+  // ⚠️ 이름은 「발견 #6」으로 두되 대상은 **퍼널이 아니라 「행동 묶음 + 겹침」**이다(#26에서 교체).
+  console.log('\n=== 발견 #6 — 이벤트 탭 겹침 비율 (기간별) ===');
   await clickTab('event');
   let anyLive = false, over100 = 0, checked = 0;
   for (const [days, nm] of [['1', '오늘'], ['7', '이번주'], ['30', '이번달'], ['0', '전체']]) {
@@ -116,19 +117,38 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
     await page.waitForTimeout(900);
     const f = await page.evaluate(() => {
       const t = document.getElementById('eventFunnelBody')?.innerText || '';
-      return { period: (t.match(/기간:\s*(.+)/) || [])[1] || '(없음)', rates: [...t.matchAll(/↓\s*(\S+)/g)].map(x => x[1]) };
+      // #26 이후 형태: "1-1 한 9명 중 1-2도 4명 44% · 1-3도 2명 22%"
+      // 앵커(분모)와 겹친 사람(분자)을 쌍으로 뽑아야 100% 초과를 판정할 수 있다.
+      const pairs = [];
+      for (const m of t.matchAll(/한\s*(\d+)\s*명\s*중([^\n]*)/g)) {
+        const anchor = parseInt(m[1], 10);
+        for (const o of m[2].matchAll(/(\d+)\s*명\s*(\d+)\s*%/g)) {
+          pairs.push({ anchor, inter: parseInt(o[1], 10), pct: parseInt(o[2], 10) });
+        }
+      }
+      return { period: (t.match(/기간:\s*(.+)/) || [])[1] || '(없음)', pairs };
     });
-    const live = f.rates.filter(x => x !== '-').length;
+    const live = f.pairs.length;
     if (live > 0) anyLive = true;
-    f.rates.filter(x => x.endsWith('%')).forEach(x => { checked++; if (parseInt(x, 10) > 100) over100++; });
-    console.log(`  [${nm}] "${f.period}" → ${f.rates.join(',') || '(없음)'}  (살아있는 칸 ${live}/${f.rates.length})`);
+    f.pairs.forEach(p => { checked++; if (p.pct > 100 || p.inter > p.anchor) over100++; });
+    console.log(`  [${nm}] "${(f.period || '').slice(0, 40)}…" → ${
+      f.pairs.map(p => `${p.inter}/${p.anchor}=${p.pct}%`).join(', ') || '(겹침 줄 없음)'}`);
   }
-  console.log('  판정:', anyLive ? '✅ 기간을 넓히면 전환율이 계산됨' : '🔴 어느 기간에서도 전부 "-" — 배선 확인');
-  // 전환율은 사람 집합의 교집합/앞단계라 100%를 넘을 수 없다(교집합 ⊆ 앞단계).
+  console.log('  판정:', anyLive
+    ? '✅ 기간을 넓히면 겹침 비율이 계산됨'
+    : '🔴 어느 기간에서도 겹침 줄이 안 나옴 — 배선 확인');
+  // 겹침 비율은 사람 집합의 교집합/앵커라 100%를 넘을 수 없다(교집합 ⊆ 앵커).
   // 넘으면 건수 기준으로 되돌아갔다는 뜻 — 발견 #10의 재발 신호다.
-  console.log('  100% 초과:', over100 === 0
-    ? `✅ 0건 / 검사 ${checked}건 (사람 기준이라 원리상 불가)`
-    : `🔴 ${over100}건 — 건수 기준으로 회귀했는지 확인`);
+  //
+  // 🚨 **검사 0건은 통과가 아니다.** 이 가드는 #26이 퍼널 도형(↓ 화살표)을 없앤 뒤
+  //    옛 정규식이 아무것도 못 잡아 **"검사 0건 / ✅"를 찍는 죽은 감지기**가 돼 있었다
+  //    (2026-07-20 발견). 감지기의 가치는 "울리면 진짜"에서 나오는데, 이건 반대로
+  //    **안 울리는 게 보장된 상태**였다. 그래서 표본 수를 판정에 포함한다.
+  console.log('  100% 초과:', checked === 0
+    ? '🔴 검사 0건 — 파싱이 화면 형식과 어긋났다. 이걸 통과로 읽지 말 것'
+    : (over100 === 0
+      ? `✅ 0건 / 검사 ${checked}건 (사람 기준이라 원리상 불가)`
+      : `🔴 ${over100}건 — 건수 기준으로 회귀했는지 확인`));
 
   console.log('\n=== 발견 #7 — 이용시간 차트 x축 눈금 (초 데이터 + 분 라벨) ===');
   if (r.memberChart) {
