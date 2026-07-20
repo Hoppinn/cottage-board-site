@@ -45,5 +45,19 @@
       "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\assets\\images\\characters\\split",
       "d:\\Documents\\��Ƽ������\\������\\Ȩ������\\cottage-board-site\\assets\\images\\characters"
     ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/task-continue.js\"",
+            "shell": "bash",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }
