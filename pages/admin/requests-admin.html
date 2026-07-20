@@ -1058,7 +1058,16 @@
           const shortKey = a.session_key.slice(0, 8) + '…';
           const ent = anonPageMap.get(a.session_key);
           const anonVisitCount = ent ? ent.days.size + '회' : (a.visit_count != null ? a.visit_count + '회' : '-');
-          const anonTodayS = ent ? ent.todaySec : (a.today_date === todayKst ? (a.today_seconds || 0) : 0);
+          // 비회원의 「오늘」은 **두 경로가 서로를 못 대체한다** (2026-07-20 실측으로 확정).
+          //   · page_sessions(ent.todaySec) — script-nav.js 세션 트래커가 실제 초를 넣지만
+          //     **3초 미만은 안 보내고**, 이탈 flush를 못 타면 그 방문이 통째로 빠진다.
+          //   · anon_sessions.today_seconds — heartbeat라 **60초 단위**로만 오른다.
+          //     1분 미만 방문은 영영 0이다(오늘 방문한 세션이 실제로 이 상태였다: PS 7초 / AS 0초).
+          // 둘 다 실제 체류의 **하한**이므로 큰 쪽을 쓴다. 예전엔 ent가 있으면 무조건 PS를 써서,
+          // heartbeat만 잡힌 방문의 「오늘」이 0으로 덮여 사라졌다(실측: today_seconds>0인 33개 중 4개).
+          const anonTodayPS = ent ? ent.todaySec : 0;
+          const anonTodayAS = a.today_date === todayKst ? (a.today_seconds || 0) : 0;
+          const anonTodayS = Math.max(anonTodayPS, anonTodayAS);
           const anonTotalS = ent ? [...ent.pm.values()].reduce((s, v) => s + v.totalSec, 0) : 0;
           return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" style="opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:var(--bg-soft);color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
@@ -1068,8 +1077,8 @@
               <span>첫 방문 ${fmtDate(a.first_seen_at)}</span>
               <span>최근 ${fmtDate(a.last_seen_at)}</span>
               <span>방문 ${anonVisitCount}</span>
-              ${anonTodayS > 0 ? `<span style="color:var(--green);font-weight:600">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
-              ${anonTotalS > 0 ? `<span>⏱ ${fmtTime(anonTotalS)}</span>` : ''}
+              ${anonTodayS > 0 ? `<span style="color:var(--green);font-weight:600" title="오늘 체류 — page_sessions(실측 초, 3초 미만 누락)와 anon_sessions(heartbeat, 60초 단위) 중 큰 값. 둘 다 하한이라 실제는 이보다 큽니다">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
+              ${anonTotalS > 0 ? `<span title="page_sessions 합계 — 비회원은 누적 컬럼이 없어 입장 기록 기준이며 heartbeat 분이 빠진 하한입니다">⏱ ${fmtTime(anonTotalS)}</span>` : ''}
               ${_visitorPagesToggle(ent?.pm)}
             </div>
             ${_visitorPagesHtml(ent?.pm)}
