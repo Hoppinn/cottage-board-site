@@ -78,7 +78,30 @@
       "WebFetch(domain:www.bear.cool)",
       "WebFetch(domain:boardlife.co.kr)",
       "Bash(git -C 'd:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site' commit -m 'feat: 인라인 필터 단체 서브버튼 로직 모달과 통일 *)",
-      "Bash(git -C 'd:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site' commit -m 'fix: 인라인 인원 선택 드롭다운 열림/닫힘 로직 재설계 *)"
+      "Bash(git -C 'd:\\\\Documents\\\\코티지보드\\\\리뉴얼\\\\홈페이지\\\\cottage-board-site' commit -m 'fix: 인라인 인원 선택 드롭다운 열림/닫힘 로직 재설계 *)",
+      "Bash(awk -F: '$1>=300 && $1<=935')",
+      "Bash(echo \"onclick exit=$?\")",
+      "Bash(awk '/\\\\.sched-multi-overlay ?\\\\{/,/\\\\}/' pages/club/club-schedule.html)",
+      "Bash(awk 'NR<=95 && /^#{2,4} |^### |^\\\\*\\\\*세션|^~~|^> ⚠️|^⚠️|^### ✅|^### 열린|^### 📌|^### 🎯/' docs/PROJECT_STATE.md)",
+      "Bash(awk 'NR>=376 && NR<=380' docs/PROJECT_STATE.md)",
+      "Bash(awk 'NR>=486 && NR<=492' docs/PROJECT_STATE.md)",
+      "Bash(awk 'NR>=500 && NR<=506' docs/PROJECT_STATE.md)",
+      "Bash(awk 'NR>=374 && NR<=376' docs/PROJECT_STATE.md)",
+      "Bash(awk 'NR>=502 && NR<=504' docs/PROJECT_STATE.md)",
+      "Bash(awk '/^### P2-admin/,/^### P3/' docs/PROJECT_STATE.md)",
+      "Bash(python -)",
+      "Bash(command -v python python3 py)",
+      "Bash(read f *)",
+      "Bash([ -f \"docs/$f\" ])",
+      "Bash(awk 'NR==34||NR==52||NR==359' docs/PROJECT_STATE.md)",
+      "Bash(awk 'NR==29' docs/db-schema.md)",
+      "Bash(awk 'NR==359' docs/PROJECT_STATE.md)",
+      "Bash(curl -s -o /dev/null -w \"server: %{http_code}\\\\n\" http://127.0.0.1:5500/pages/admin/requests-admin.html)",
+      "Bash(ls \"C:/Users/HOPPYN~1/AppData/Local/Temp/cottage-admin-shots\")",
+      "Read(//c/Users/HOPPYN~1/AppData/Local/Temp/cottage-admin-shots/**)",
+      "Bash(grep -n \"periodCnt\\\\|명</\\\\|명'\\\\|명\\\\`\\\\|\\(\\\\${.*}명\" pages/admin/requests-admin.html)",
+      "Bash(ls -la \"C:/Users/HOPPYN~1/AppData/Local/Temp/cottage-admin-shots/\" | grep chk)",
+      "Bash(cd \"d:/Documents/코티지보드/리뉴얼/홈페이지/cottage-board-site\" && node \"C:/Users/HOPPYN~1/AppData/Local/Temp/claude/d--Documents----------------cottage-board-site/9231374d-4a3e-4356-aaa7-85451dd8807c/scratchpad/shot-donut.js\" && ls \"C:/Users/HOPPYN~1/AppData/Local/Temp/cottage-admin-shots/\" | grep chk)"
     ]
   }
 }
