@@ -253,10 +253,10 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 | 이벤트 | 발화 | 수신 | detail |
 |--------|------|------|--------|
-| `cottage-likes-changed` | 좋아요/궁금해요 원천(game_likes/game_curious) 변경 시. 발화 지점: ①게임시트 버튼(game-sheet.js `emitLikesChanged`, `onSheetLike`/`onSheetCurious` — 상호배타로 반대 목록 제거 시에도 별도 발화) ②취향보드 추가/삭제(kakao-auth.js `_emitLikesChanged`) ③모임보드 "좋아하는 게임에도 추가"(kakao-auth.js) | 취향보드(열려있으면 목록 추가/삭제·카운트 갱신) / 모임보드(`_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList`로 ❤️/👀 마커 즉시 반영). 수신 핸들러는 `window.__tasteLikesHandler`/`window.__mbLikesHandler`로 dedupe + 서브시트 DOM 이탈 시 self-remove | `{ table:'game_likes'\|'game_curious', gameId(슬러그 문자열), added:bool }` |
+| `cottage-likes-changed` | 좋아요/궁금해요 원천(game_likes/game_curious) 변경 시. 발화 지점: ①게임시트 버튼(game-sheet.js `emitLikesChanged`, `onSheetLike`/`onSheetCurious` — 상호배타로 반대 목록 제거 시에도 별도 발화) ②취향보드 추가/삭제(kakao-auth.js `_emitLikesChanged`) ③모임보드 "좋아하는 게임에도 추가"(kakao-auth.js) | 취향보드(열려있으면 목록 추가/삭제·카운트 갱신) / 모임보드(`_likedSlugSet`/`_curiousSlugSet` 갱신 후 `_renderWeekList`로 ❤️/👀 마커 즉시 반영) / **내 보드 패널(`window.__panelLikesHandler` — `_boardData`의 likedGames/curiousGames를 고치고 `_syncTasteCard()`로 취향 카드 요약을 다시 그린다. 멱등이라 이미 배열을 고친 발화 지점과 중복되지 않는다. 읽기전용 패널은 미등록)**. 수신 핸들러는 `window.__tasteLikesHandler`/`window.__mbLikesHandler`/`window.__panelLikesHandler`로 dedupe + DOM 이탈 시 self-remove | `{ table:'game_likes'\|'game_curious', gameId(슬러그 문자열\|null), customName(직접입력 이름\|null), added:bool }` |
 | `cottage-meeting-changed` | 모임보드 이번주 게임 목록의 인원조건 select 변경 시(kakao-auth.js, `setMeetingVoteGameCondition` 성공 후) (2026-07-15) | index-page.js — 홈 "이번 주 모임 진행 중" 미리보기는 `dayVotes`/`dayGames`를 초기 로드 시점 값으로 캐시해 렌더하므로(`openDateMeetingModal`이 실시간 DB 재조회 안 함) 이 신호 없이는 "이날 모임 한눈에 보기" 모달이 갱신되지 않음. 수신 시 `_meetingReload?.()`(=loadWeek) 호출. club-schedule.html은 아직 미구독(자체 reload 함수 부재, 후속 과제) | `{ reason:'condition' }` |
 
-> `gameId`는 항상 game_likes 슬러그. 모임 수신부는 `_mbSlug()`로 정규화 후 슬러그 Set과 매칭. game-reviews.js(기록 iframe)의 `onPrMenuLike/Curious`는 별도 window 컨텍스트라 이 이벤트 미발화(Phase A 범위 밖).
+> `gameId`는 항상 game_likes 슬러그이며, **직접입력 게임은 `gameId=null` + `customName`으로 온다**(개수 집계는 이것도 세야 맞아서 2026-07-21에 추가). 목록 DOM을 고치는 기존 수신부 둘은 `if (!gameId) return`으로 그대로 무시한다. 모임 수신부는 `_mbSlug()`로 정규화 후 슬러그 Set과 매칭. game-reviews.js(기록 iframe)의 `onPrMenuLike/Curious`는 별도 window 컨텍스트라 이 이벤트 미발화(Phase A 범위 밖).
 
 ---
 

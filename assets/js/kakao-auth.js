@@ -674,7 +674,7 @@ function _bindRecordSubsheet(subBody, ctx) {
 
 // ── '취향 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 function _bindTasteSubsheet(subBody, ctx) {
-  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet } = ctx;
+  const { user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet, onBioSaved } = ctx;
           const userId = String(user.id);
 
           // ── 한줄 소개 ──
@@ -758,20 +758,9 @@ function _bindTasteSubsheet(subBody, ctx) {
             _renderBioDisplay(allTags);
             bioRow.style.display = '';
             bioEditWrap.style.display = 'none';
-            // 메인 패널 취향 카드 요약 즉시 갱신
-            const _newBioPreview = allTags.length
-              ? `${allTags.slice(0, 2).map(t => `#${t}`).join(' ')}${allTags.length > 2 ? ` +${allTags.length - 2}` : ''}`
-              : '';
-            const _tasteSummary = panel.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
-            if (_tasteSummary) {
-              const _bioRow = _tasteSummary.querySelector('.profile-card-bio-row');
-              if (_newBioPreview) {
-                if (_bioRow) _bioRow.textContent = _newBioPreview;
-                else _tasteSummary.insertAdjacentHTML('afterbegin', `<span class="profile-card-bio-row">${escH(_newBioPreview)}</span>`);
-              } else if (_bioRow) {
-                _bioRow.remove();
-              }
-            }
+            // 메인 패널 취향 카드 요약 즉시 갱신 — 미리보기 포맷을 여기서 다시 조립하지 않고
+            // 카드 빌더 한 곳(_tasteCardSummaryHtml)에 맡긴다(포맷이 갈리지 않게).
+            onBioSaved?.(newBio);
           });
 
           // ── 게임 목록 (좋아요·관심) — 원천 관리(game_likes/curious) ──
@@ -828,12 +817,12 @@ function _bindTasteSubsheet(subBody, ctx) {
               onAdd: async (gameId, customName) => {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
                 _appendTasteChip(listEl, countEl, gameId, customName);
-                _emitLikesChanged(table, gameId, true);
+                _emitLikesChanged(table, gameId, customName, true);
               },
               onRemove: async (gameId, customName) => {
                 await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
                 _removeTasteChip(listEl, countEl, gameId, customName);
-                _emitLikesChanged(table, gameId, false);
+                _emitLikesChanged(table, gameId, customName, false);
               },
             });
           };
@@ -890,7 +879,7 @@ function _bindTasteSubsheet(subBody, ctx) {
               const customName = item?.dataset.customName || null;
               await window.CottageDB?.removeGamePref?.(userId, gameId, customName, table);
               _removeTasteChip(listEl, countEl, gameId, customName);
-              _emitLikesChanged(table, gameId, false);
+              _emitLikesChanged(table, gameId, customName, false);
             });
 
             addBtn?.addEventListener('click', () => _openTasteAddModal({ listKey: listType, table, listEl, countEl }));
@@ -1312,7 +1301,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                   if (confirm(`'${name}'을(를) 내 ${srcLabel}에도 추가할까요?`)) {
                     await window.CottageDB?.addGamePref?.(userId, slug, null, srcTable);
                     srcSet.add(slug);
-                    _emitLikesChanged(srcTable, slug, true);
+                    _emitLikesChanged(srcTable, slug, null, true);
                     _renderWeekList(listType);
                   }
                 }
@@ -1375,7 +1364,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
                 await window.CottageDB?.addGamePref?.(userId, gameId, customName, table);
                 games.push({ game_id: gameId || null, custom_name: customName || null });
                 if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).add(String(gameId));
-                _emitLikesChanged(table, gameId, true); // 모임보드 ❤️/👀 마커·취향보드 즉시 동기화(Phase A)
+                _emitLikesChanged(table, gameId, customName, true); // 모임보드 ❤️/👀 마커·취향보드 즉시 동기화(Phase A)
                 refresh();
               },
               onRemove: removeGame,
@@ -1425,7 +1414,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
               const idx = games.findIndex(g => (gameId ? String(g.game_id) === String(gameId) : (!g.game_id && g.custom_name === customName)));
               if (idx >= 0) games.splice(idx, 1);
               if (gameId) (isWant ? _likedSlugSet : _curiousSlugSet).delete(String(gameId));
-              _emitLikesChanged(table, gameId, false);
+              _emitLikesChanged(table, gameId, customName, false);
               renderList();
               _renderWeekList(listType);
             };
@@ -1667,9 +1656,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   let _pendingMeetingScrollTop = null;
 
   // 좋아요/궁금해요 변경 전역 통보 (취향보드·모임보드·게임시트 간 즉시 동기화)
-  const _emitLikesChanged = (table, gameId, added) => {
-    if (!gameId) return;
-    try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), added: !!added } })); } catch (_) {}
+  // customName은 직접입력 게임(game_id 없음)용 — 개수 집계는 이것도 세야 맞다.
+  // 목록 DOM을 고치는 기존 수신부들은 gameId가 없으면 그냥 무시한다.
+  const _emitLikesChanged = (table, gameId, customName, added) => {
+    if (!gameId && !customName) return;
+    try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: gameId ? String(gameId) : null, customName: customName || null, added: !!added } })); } catch (_) {}
   };
 
   const existing = document.getElementById('profilePanel');
@@ -2238,10 +2229,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 알려진 열린 항목(PROJECT_STATE §3): 서브시트는 pull(진입 시 재조회), 카드는 push(나갈 때 갱신)라
   // 해법 방향이 반대여서 R10b 범위에서 제외.
   const _voucherCardSummary = `${voucherBalance}장 보유`;
-  const _bioTagsAtOpen = _bioTagsOf(_boardData);
-  const _bioPreview = _bioTagsAtOpen.length ? `${_bioTagsAtOpen.slice(0, 2).map(t => `#${t}`).join(' ')}${_bioTagsAtOpen.length > 2 ? ` +${_bioTagsAtOpen.length - 2}` : ''}` : '';
-  const _tasteCardSummaryHtml = (_bioPreview ? `<span class="profile-card-bio-row">${escH(_bioPreview)}</span>` : '') +
-    `<span class="profile-card-games-row">❤️ 좋아하는 게임 ${(_boardData.likedGames || []).length}개\n👀 해보고싶은 게임 ${(_boardData.curiousGames || []).length}개</span>`;
+  // 취향 카드 요약: 예전엔 패널 오픈 시 1회 문자열이라 서브시트에서 게임을 추가해도
+  // 카드는 옛 개수 그대로였다(들어가면 4개, 나오면 3개). 이제 _boardData(취향·모임 공용
+  // 단일 소스)를 받는 함수이고, 변경이 일어난 자리에서 _syncTasteCard()로 다시 그린다.
+  const _tasteCardSummaryHtml = (d) => {
+    const tags = _bioTagsOf(d);
+    const preview = tags.length ? `${tags.slice(0, 2).map(t => `#${t}`).join(' ')}${tags.length > 2 ? ` +${tags.length - 2}` : ''}` : '';
+    return (preview ? `<span class="profile-card-bio-row">${escH(preview)}</span>` : '') +
+      `<span class="profile-card-games-row">❤️ 좋아하는 게임 ${(d.likedGames || []).length}개\n👀 해보고싶은 게임 ${(d.curiousGames || []).length}개</span>`;
+  };
+  const _syncTasteCard = () => {
+    const el = body.querySelector('.profile-card[data-subsheet="taste"] .profile-card-summary');
+    if (el) el.innerHTML = _tasteCardSummaryHtml(_boardData);
+  };
   const _recordCardSummary = `플레이 기록 ${stats.plays.length}건\n게임평 ${stats.reviewCount}개\n사진 ${userStats?.photoCount || 0}장`;
   const _usageCardSummary = _statsSummary;
 
@@ -2408,7 +2408,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       <button class="profile-card" data-subsheet="taste" type="button">
         <span class="profile-card-icon">❤️</span>
         <span class="profile-card-label">취향 보드</span>
-        <span class="profile-card-summary">${_tasteCardSummaryHtml}</span>
+        <span class="profile-card-summary">${_tasteCardSummaryHtml(_boardData)}</span>
       </button>
       <button class="profile-card" data-subsheet="records" type="button">
         <span class="profile-card-icon">📝</span>
@@ -2610,9 +2610,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         _openSubSheet('취향 보드', _SUBSHEET_LOADING_HTML, async subBody => {
           const d = await _refreshBoardData();
           if (!subBody.isConnected) return; // 재조회를 기다리는 사이 다른 서브시트로 떠남
+          _syncTasteCard(); // 다른 기기·탭에서 바뀐 값도 카드에 반영(재조회한 값이 곧 진실)
           subBody.innerHTML = _buildTasteInnerHtml(d);
           _bindTasteSubsheet(subBody, {
             user, readOnly, panel, _emitLikesChanged, allBioSuggestions, _BIO_PREDEFINED, _ruleSet: _makeRuleSet(d),
+            onBioSaved: (newBio) => { _boardData.bio = newBio; _syncTasteCard(); },
           });
           // 모임보드 '비선호 유형 수정 →'으로 들어왔으면 해당 섹션으로 스크롤(렌더 후여야 좌표가 나옴)
           if (_pendingTasteScrollTo === 'avoid') {
@@ -2639,6 +2641,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         _openSubSheet('모임 보드', _SUBSHEET_LOADING_HTML, async subBody => {
           const d = await _refreshBoardData();
           if (!subBody.isConnected) return; // 재조회를 기다리는 사이 다른 서브시트로 떠남
+          _syncTasteCard(); // 모임보드도 같은 소스(_boardData)를 쓴다 → 취향 카드 함께 최신화
           subBody.innerHTML = _buildMeetingInnerHtml(d);
           _bindMeetingSubsheet(subBody, {
             user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d, _meetingProfileRowHtml,
@@ -2656,6 +2659,28 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   if (!readOnly) body.querySelector('.profile-panel-nick')?.addEventListener('click', () => promptNicknameChange());
   body.querySelector('.profile-panel-title-name')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, true, readOnly)); });
   body.querySelector('.profile-growth-link')?.addEventListener('click', () => { _trackPvOnce('my-board-growth'); _openSubSheet('수집 보드', _growthInnerHtml, subBody => _afterGrowthRender(subBody, false, false, readOnly)); });
+
+  // ── 취향 카드 요약 동기화 (좋아요/궁금해요가 어디서 바뀌든 한 곳에서 받는다) ──
+  // 게임시트·취향보드·모임보드가 모두 'cottage-likes-changed'를 쏘므로, 발생 지점마다
+  // 카드를 고치지 않고 여기서 _boardData를 갱신하고 카드를 다시 그린다.
+  // 읽기전용(남의 보드)에서는 내 좋아요 변경이 남의 카드에 반영되면 안 되므로 등록하지 않는다.
+  if (!readOnly) {
+    if (window.__panelLikesHandler) window.removeEventListener('cottage-likes-changed', window.__panelLikesHandler);
+    const _onPanelLikesChanged = (e) => {
+      if (!body.isConnected) { window.removeEventListener('cottage-likes-changed', _onPanelLikesChanged); return; }
+      const { table, gameId, customName, added } = e.detail || {};
+      const list = table === 'game_likes' ? _boardData.likedGames
+        : table === 'game_curious' ? _boardData.curiousGames : null;
+      if (!list) return;
+      const idx = list.findIndex(g => (gameId ? String(g.game_id) === String(gameId) : (!g.game_id && g.custom_name === customName)));
+      // 모임보드 박스모달은 자기 배열(=_boardData)을 이미 고친 뒤 쏜다 → 중복 반영되지 않게 멱등으로
+      if (added) { if (idx < 0) list.push({ game_id: gameId || null, custom_name: customName || null }); }
+      else if (idx >= 0) list.splice(idx, 1);
+      _syncTasteCard();
+    };
+    window.__panelLikesHandler = _onPanelLikesChanged;
+    window.addEventListener('cottage-likes-changed', _onPanelLikesChanged);
+  }
 
   if (autoSubsheet) {
     body.querySelector(`[data-subsheet="${autoSubsheet}"]`)?.click();

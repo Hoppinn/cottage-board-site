@@ -1379,7 +1379,8 @@ async function initSheetLikes(gameKey) {
 // 좋아요/궁금해요 변경 전역 통보 (취향보드·모임보드 즉시 동기화)
 function emitLikesChanged(table, gameId, added) {
   if (!gameId) return;
-  try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), added: !!added } })); } catch (_) {}
+  // customName은 직접입력 게임용 — 게임시트에는 실제 게임만 있어 항상 null (payload 형태 통일)
+  try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), customName: null, added: !!added } })); } catch (_) {}
 }
 
 // 게임시트에서 보드로 갈 때, 원래 게임시트로 돌아오기 위한 경로 (R10c).
