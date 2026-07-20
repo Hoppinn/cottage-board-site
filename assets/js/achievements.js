@@ -423,7 +423,20 @@
     const achieved = checks.filter(c => c.v !== null && c.v >= c.t);
     if (!achieved.length) return;
 
-    for (const { id } of achieved) {
+    // 이미 가진 업적은 지급 시도조차 하지 않는다 (2026-07-20).
+    // 예전엔 조건을 만족한 전부를 매번 INSERT하고 **중복은 DB UNIQUE(23505)가 튕겨내는** 구조라,
+    // 오래 쓴 사용자일수록 접속마다 헛된 쓰기가 늘었다(관리자 실측: 홈 1회 로드에 10건).
+    // 동작은 그대로다 — 어차피 중복이면 grantAchievement가 false를 반환해 토스트·보상이 안 돌았다.
+    // ⚠️ 조회 실패 시엔 빈 배열이라 **옛 동작(전부 시도)으로 되돌아간다** — DB의 UNIQUE가 여전히
+    //    최종 방어선이므로 중복 지급이 새지 않는다. 이 순서를 뒤집지 말 것.
+    let ownedIds = new Set();
+    try {
+      ownedIds = new Set((await db.getUserAchievements?.(userId) || []).map(a => a.id));
+    } catch (e) { console.error('[checkAchievements] getUserAchievements', e); }
+    const pending = achieved.filter(c => !ownedIds.has(c.id));
+    if (!pending.length) return;
+
+    for (const { id } of pending) {
       const def = ACH_DEFS.find(d => d.id === id);
       const granted = await db.grantAchievement(userId, id);
       if (granted) {

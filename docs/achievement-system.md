@@ -93,6 +93,10 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 
 `grantAchievementVoucher` 중복 방지: JS 사전 SELECT 확인 + DB partial unique index (`voucher_log(user_id, note) WHERE reason='achievement'`) 이중 방어. 오너(`_OWNER_ID = '4916417947'`) 제외.
 
+**업적 지급도 같은 이중 방어다 (2026-07-20 정비)**: `checkAchievements`가 **보유 목록을 먼저 읽어 이미 가진 것을 빼고**(`getUserAchievements`), 그래도 새는 건 `user_achievements`의 **UNIQUE(23505)**가 막는다.
+- ⚠️ **JS 필터는 최적화이고 최종 방어선은 DB다** — 보유 목록 조회가 실패하면 빈 배열이 되어 **옛 동작(전부 시도)으로 안전하게 되돌아간다.** 이 순서를 뒤집어 DB 제약을 없애면 중복 지급이 샌다.
+- 📌 **왜 넣었나**: 예전엔 조건을 만족한 업적 **전부**를 접속마다 INSERT하고 중복을 DB가 튕겨냈다. 오래 쓴 사용자일수록 헛된 쓰기가 늘었다 — **관리자 계정 실측: 홈 1회 로드에 10건 → 0건.** 동작은 그대로다(중복이면 어차피 `false` 반환이라 토스트·보상이 안 돌았다).
+
 ---
 
 # 시스템 철학 (요약)
