@@ -1412,8 +1412,18 @@ window._cottageSess = (function () {
         .limit(20);
       const profileSeenPromise = db.from('profiles').select('notif_seen_at, notif_read_keys').eq('user_id', userId).maybeSingle();
       const _ADMIN_ID = '4916417947';
+      // 교환권 이벤트는 **관리자에게만** 뜨는 감시용 피드다(의도된 사양). 문제는 존재가 아니라 비중이었다:
+      // 2026-07-20 실측에서 관리자 알림 35건 중 30건이 교환권이었는데, 그 30건 중 **26건이
+      // 2026-06-24 하루치**이고 **13건이 `dev_test`**(개발 중 발급)였다. 실제 유입은 월 3~4건이라
+      // **알림 설계 문제가 아니라 오래된 테스트 로그가 limit 창을 점유한 것**이다.
+      //   → ①개발용 발급 제외 ②최근 30일로 제한. **voucher_log 행은 건드리지 않는다** —
+      //      잔액·이력의 원장이고, 데이터 삭제는 표시 문제의 해법이 아니다.
+      const _VOUCHER_NOTIF_SINCE = new Date(Date.now() - 30 * 86400000).toISOString();
       const voucherEventsPromise = String(userId) === _ADMIN_ID
-        ? db.from('voucher_log').select('id, user_id, delta, reason, created_at').order('created_at', { ascending: false }).limit(30)
+        ? db.from('voucher_log').select('id, user_id, delta, reason, created_at')
+            .neq('reason', 'dev_test')
+            .gte('created_at', _VOUCHER_NOTIF_SINCE)
+            .order('created_at', { ascending: false }).limit(30)
         : Promise.resolve({ data: [] });
       const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes] = await Promise.all([
         taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise
@@ -1530,16 +1540,34 @@ window._cottageSess = (function () {
           const { data: profData, error: profErr } = await db.from('profiles').select('user_id, nickname').in('user_id', userIds);
           if (profErr) console.error('[getMyNotifications]', profErr);
           const nickMap = Object.fromEntries((profData || []).map(p => [p.user_id, p.nickname || p.user_id]));
+          // 유형+날짜(KST)로 묶는다 — `new_intro`와 같은 묶음 알림 방식.
+          // 개별로 넣으면 하루에 몰린 이벤트가 목록을 통째로 차지한다(2026-07-20 실측:
+          // 06-24 하루에 교환 13건이 몰려 관리자 알림 8칸이 전부 교환권이었다).
+          // 30일 제한만으로는 안 풀린다 — 그 하루가 창 안에 있으면 그대로 13줄이다.
+          const _kstDay = iso => new Date(new Date(iso).getTime() + 9 * 3600000).toISOString().slice(0, 10);
+          const groups = new Map();
           for (const r of voucherData) {
-            const key = `voucher:${r.id}`;
-            const isNew = (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(key);
+            const type = r.delta > 0 ? 'voucher_granted' : 'voucher_used';
+            const gk = `${type}|${_kstDay(r.created_at)}`;
+            if (!groups.has(gk)) groups.set(gk, { type, rows: [] });
+            groups.get(gk).rows.push(r);
+          }
+          for (const g of groups.values()) {
+            // 묶음 안에 안 읽은 게 하나라도 있으면 NEW — 읽음 처리는 keys 전부를 한 번에 마킹한다.
+            const keys = g.rows.map(r => `voucher:${r.id}`);
+            const isNew = g.rows.some(r =>
+              (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(`voucher:${r.id}`));
+            const names = [...new Set(g.rows.map(r => nickMap[r.user_id] || '사용자'))];
             notifs.push({
-              type: r.delta > 0 ? 'voucher_granted' : 'voucher_used',
-              key,
-              nickname: nickMap[r.user_id] || '사용자',
-              reason: r.reason,
-              delta: r.delta,
-              date: r.created_at,
+              type: g.type,
+              key: keys[0],
+              keys,
+              count: g.rows.length,
+              nickname: names[0],
+              names,
+              reason: g.rows[0].reason,
+              delta: g.rows[0].delta,
+              date: g.rows[0].created_at,
               isNew,
             });
           }

@@ -1959,12 +1959,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         : `${escH(n.names[0])} 외 ${n.count - 1}명이 소개글을 올렸어요`;
       return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
-    if (n.type === 'voucher_granted') {
-      const reasonLabel = n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
-      return `<li class="${cls}">${_card('🎫', escH(n.nickname) + ' 교환권 획득', reasonLabel)}${readBtn}</li>`;
+    // 교환권은 유형+날짜로 묶여서 온다(관리자 전용). names는 중복 제거된 사람 목록,
+    // count는 건수라 서로 다를 수 있다 — 한 사람이 하루에 여러 번 쓰면 names 1 / count 13.
+    if (n.type === 'voucher_granted' || n.type === 'voucher_used') {
+      const used = n.type === 'voucher_used';
+      const names = n.names || [n.nickname];
+      const who = names.length > 1 ? `${escH(names[0])} 외 ${names.length - 1}명` : escH(names[0] || '사용자');
+      const cnt = n.count > 1 ? ` ${n.count}건` : '';
+      const reasonLabel = used ? '음료 교환권 사용'
+        : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
+      return `<li class="${cls}">${_card('🎫', `${who} 교환권 ${used ? '사용' : '획득'}${cnt}`, reasonLabel)}${readBtn}</li>`;
     }
-    if (n.type === 'voucher_used')
-      return `<li class="${cls}">${_card('🎫', escH(n.nickname) + ' 교환권 사용', '음료 교환권 사용')}${readBtn}</li>`;
     return '';
   }
   const _hasAnyNew = _newCount > 0;
