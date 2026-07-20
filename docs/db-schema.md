@@ -72,6 +72,17 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 
 ---
 
+## 영구 식별자 — 배포 후 변경 금지
+
+사용자 자산(캐릭터·도감·포인트)의 기준이다.
+
+- `achievements.id` (예: `record_1`)
+- `game_play_records.game_id` (BGG ID)
+
+변경 가능한 건 이름·설명·이미지·포인트뿐. **DB 변경 전 "기존 사용자가 무엇을 잃는가?"를 먼저 확인**하고, 불가피하면 기존 ID 유지 + 데이터 이전 설계 후 승인.
+
+---
+
 ## 테이블 목록
 
 | 테이블 | 주요 컬럼 | 용도 |

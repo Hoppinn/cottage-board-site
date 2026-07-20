@@ -33,7 +33,7 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 
 | 작업 종류 | 필독 |
 |---|---|
-| DB 테이블/컬럼 | `docs/db-schema.md` |
+| DB 테이블/컬럼 | `docs/db-schema.md` (영구 식별자 규칙 포함) |
 | CottageDB 함수 / window 전역 | `docs/js-api.md` |
 | localStorage / 세션 키 | `docs/ls-schema.md` |
 | 인증·프로필·사진 | `PROJECT_STRUCTURE.md` §3~5 |
@@ -208,17 +208,6 @@ Claude Code가 이 프로젝트에서 따라야 할 규칙.
 **RLS**: 이 프로젝트 기본은 `DISABLE`. 테이블 생성 시 마이그레이션에 `ALTER TABLE {name} DISABLE ROW LEVEL SECURITY;`를 명시하고, 실행 직후 anon 키 SELECT로 확인한다.
 
 **반환 계약은 유지한다** — 실패 시 `[]`/`null` fallback을 throw로 바꾸면 빈 배열을 전제로 렌더하는 호출부가 깨진다. 바꾸는 건 **관측(로그)이지 동작이 아니다**.
-
----
-
-## 영구 식별자 — 배포 후 변경 금지
-
-사용자 자산(캐릭터·도감·포인트)의 기준이다.
-
-- `achievements.id` (예: `record_1`)
-- `game_play_records.game_id` (BGG ID)
-
-변경 가능한 건 이름·설명·이미지·포인트뿐. **DB 변경 전 "기존 사용자가 무엇을 잃는가?"를 먼저 확인**하고, 불가피하면 기존 ID 유지 + 데이터 이전 설계 후 승인.
 
 ---
 
