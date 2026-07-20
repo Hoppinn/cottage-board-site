@@ -124,6 +124,8 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 | `get_all_game_ratings()` | 전체 게임 별점 평균+건수 집계 |
 | `increment_profile_counters(p_user_id, p_secs, p_today, p_bump_visit)` | **profiles 카운터 원자적 증가**(012, #22). `total_minutes` += secs / `today_seconds`는 `today_date`가 다르면 리셋 후 시작 / `p_bump_visit`일 때만 `visit_count` +1 / `last_seen_at` 갱신. **`returns setof profiles`** — 반환이 비면 "그 user_id의 행이 없다"는 뜻이다. 🚨 **UPDATE만 하고 upsert하지 않는다** — 행 생성은 `upsertProfile`의 몫이고, 여기서 만들면 프로필 없는 사용자에게 빈 행이 생겨 회원 수가 부풀려진다 |
 
+📖 **이 세 컬럼을 읽는 곳**(계약을 바꾸기 전 영향 판단용, 2026-07-19 실측): `total_minutes` → 내 보드 「함께한 시간」([kakao-auth.js:1988](../assets/js/kakao-auth.js#L1988)) · 관리자 회원 카드·차트. `visit_count` → **업적 `visit` 축**([supabase-client.js:1184](../assets/js/supabase-client.js#L1184)) — **업적과 연결된 건 여기뿐이고 `total_minutes`는 업적이 아예 안 읽는다.** 보관용 복구 스크립트(`recover-time-data.js`·`recover-visit-count.js`)도 이 컬럼을 만지므로 계약이 바뀌면 같이 낡는다.
+
 🚨 **`profiles`의 `total_minutes`/`today_seconds`/`visit_count`는 클라이언트에서 직접 `update`하지 말 것** — 반드시 위 RPC를 쓴다. `select` → 계산 → `update`로 쓰면 탭이 겹칠 때 증가분이 사라진다(실측: 동시성 2에서 33% 손실). 상세는 [admin-analytics.md](admin-analytics.md) §4 #22.
 ⚠️ **`anon_sessions`는 아직 옛 방식이다**(`_startAnonHeartbeat`) — 같은 병이 남아 있으며 별도 항목으로 열려 있다.
 
