@@ -1143,7 +1143,10 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[_startAnonHeartbeat]', err);}
     // 비로그인 방문자도 page_sessions에 기록 (명 집계용); 실패해도 anon_sessions 영향 없음
     try {
-      const page = window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index';
+      // 슬러그 규칙은 page-labels.js가 SSOT — 트래커(script-nav.js)와 같은 값을 넣어야 한다(#14)
+      const page = window.COTTAGE_PAGE_SLUG
+        ? window.COTTAGE_PAGE_SLUG(window.location?.pathname)
+        : (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index');
       db.from('page_sessions').insert({
         page, user_id: null, session_key: key,
         duration_sec: 0, entered_at: new Date().toISOString(), referrer: _sessionReferrer

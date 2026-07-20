@@ -145,4 +145,19 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
   - 방문자 수/경로 집계 기준 (관리자 방문경로 도넛 차트)
   - 동일 도메인 방문·직접 접속은 `null` → '직접 방문'으로 분류
   - 관리자 분석에서 유입 `명` 집계는 `__visitor__` 행의 `user_id || session_key` 기준. `page_sessions`와 섞지 않음
-- `page_sessions.referrer`: 동일 형식, 세션 분석 전용 (방문경로 집계에는 미사용)
+- `page_sessions.referrer`: ⚠️ **동일 형식이 아니다** (2026-07-21 실측 정정). `script-nav.js`가
+  **내부 유입은 한글 라벨**(`'메인'`), **외부 유입은 호스트를 버린 pathname**만 넣는다 →
+  관리자 유입 탭에서 전부 `'직접 방문'`으로 접힌다. 세션 분석 전용이라 현재 표시 영향은 없으나
+  **외부 유입 체류 귀속이 불가능**한 상태다. `page` 컬럼과 달리 아직 안 고쳤다(#28로 등록).
+
+## `page_sessions.page` 저장 형식
+
+**슬러그 하나로 저장한다** (예: `index`, `game-reviews`). 규칙은 `page-labels.js`의
+`window.COTTAGE_PAGE_SLUG(pathname)`이 SSOT이고, 저장 경로 둘(`script-nav.js` 세션 트래커 /
+`supabase-client.js` `_startAnonHeartbeat`)이 **같은 함수**를 쓴다.
+
+🚨 **표시 라벨을 저장하지 말 것** (#14, 2026-07-20 수정) — 2026-07-20 이전엔 트래커가 한글
+라벨을 넣어서, **라벨을 개명할 때마다 같은 페이지가 새 버킷으로 쪼개졌다.** 실측 결과 11,777행이
+**42종 값**으로 흩어져 있었고 그중 14종이 중복 버킷이었다(`메인` 2,914 ↔ `index` 999 등).
+과거 행은 그대로 남아 있으므로 **읽는 쪽(`requests-admin.html`의 `normalizePageKey`)이 접는다** —
+그 별칭표에서 한글 키를 지우면 과거 행이 다시 독립 버킷으로 튀어나온다.

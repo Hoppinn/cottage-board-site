@@ -223,16 +223,21 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 
 ---
 
-## window.COTTAGE_PAGE_LABELS / window.COTTAGE_PAGE_LABELS_BY_PATH (page-labels.js)
+## window.COTTAGE_PAGE_SLUG / COTTAGE_PAGE_LABELS / COTTAGE_PAGE_LABELS_BY_PATH (page-labels.js)
 
 페이지 경로 → 한글 라벨 매핑 단일 소스. 구 script.js(현 script-nav.js)의 PAGE_LABELS(pathname 키, 세션 트래커용)와 requests-admin.html의 PAGE_LABEL(slug 키, 분석 대시보드 표시용)이 별도 하드코딩이라 about.html 개명 시 드리프트가 발생했던 것을 통합(143차-161).
 
 | 전역 | 키 형식 | 용도 |
 |------|--------|------|
-| `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | requests-admin.html — `page_views.page`(slug 저장) 표시용 |
-| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname (예: `'/pages/info/about.html'`) | script-nav.js — `page_sessions.page`에 저장될 한글 라벨 자체를 동기 평가로 만들 때 사용 |
+| `window.COTTAGE_PAGE_SLUG(pathname)` | — (함수) | **저장용 SSOT** (#14). `page_sessions.page`에 넣을 슬러그를 만든다. `script-nav.js` 세션 트래커와 `supabase-client.js` `_startAnonHeartbeat`이 **둘 다 이 함수**를 쓴다 |
+| `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | **표시용 SSOT.** requests-admin.html의 `page_views`·`page_sessions` 양쪽 화면이 전부 이 맵으로 이름을 붙인다 |
+| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname | script-nav.js — `page_sessions.referrer`(내부 유입)에만 남은 잔여 용도. ⚠️ `page` 컬럼엔 더 이상 안 쓴다 |
 
-두 맵은 같은 페이지라도 값이 다를 수 있음(예: `game-reviews`는 "플레이 기록" vs "기록 보기") — 기존부터 그랬던 것이라 통합 시에도 의도적으로 보존함. **`script-nav.js`가 로드 시점에 동기 평가하므로, page-labels.js는 반드시 script-nav.js 로드 직전에 위치해야 함** (14개 HTML 전체 적용 완료).
+🚨 **표시 라벨을 DB에 저장하지 않는다** (#14, 2026-07-20). 예전엔 트래커가 `BY_PATH`의 한글 라벨을 `page_sessions.page`에 그대로 넣어서, **라벨을 개명할 때마다 같은 페이지가 새 버킷으로 쪼개졌다**(11,777행이 42종으로 흩어짐). 지금은 **저장=슬러그 / 표시=라벨**로 분리돼 있어 `COTTAGE_PAGE_LABELS` 값은 자유롭게 고쳐도 데이터가 안 갈린다.
+
+⚠️ **두 맵의 값이 어긋나 있었다 (2026-07-21 정정)** — `COTTAGE_PAGE_LABELS`가 개명을 못 따라가 `club-intro`가 `'동호회 소개'`(실제로는 club.html의 옛 이름)로 표시되는 등 6개가 틀렸다. 이제 **각 페이지의 실제 `<title>`과 맞춘다** — 값을 바꿀 땐 title을 보고 바꿀 것.
+
+**`script-nav.js`가 로드 시점에 동기 평가하므로, page-labels.js는 반드시 script-nav.js 로드 직전에 위치해야 함** (14개 HTML 전체 적용 완료).
 
 ---
 
@@ -287,7 +292,7 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 | `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js, script-nav.js |
 | `window.getAllGamesArray` | game-sheet.js (전역 함수선언, 무인자·`{key,...game}`) | script-nav.js, index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |
-| `window.COTTAGE_PAGE_LABELS` / `window.COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script-nav.js, requests-admin.html (script-nav.js 로드 직전 필수) |
+| `window.COTTAGE_PAGE_SLUG` / `COTTAGE_PAGE_LABELS` / `COTTAGE_PAGE_LABELS_BY_PATH` | page-labels.js | script-nav.js, supabase-client.js(`_startAnonHeartbeat`), requests-admin.html (script-nav.js 로드 직전 필수) |
 | `window.renderDayDetailHTML` | day-detail.js | 일정 상세 블록 HTML 반환 `({ date, timeStart, timeEnd, wantGames, learnGames })`. 모달/인라인 공용. |
 | `window.openDayDetailModal` | day-detail.js | 레거시 — 직접 데이터 전달 방식으로 개인 일정 모달 열기 `(opts)`. |
 | `window.openDateScheduleModal` | day-detail.js | 막대 클릭 → DB 조회 후 개인 일정 모달 `(userId, voteDate)`. club-schedule.html에서 호출. |

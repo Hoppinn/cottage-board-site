@@ -848,6 +848,54 @@
 
     }
 
+    // ── 페이지 키 정규화 (#14) ────────────────────────────────────────
+    // `page_sessions.page`에는 역사적으로 **네 형태**가 섞여 있다: 슬러그(heartbeat 경로),
+    // 한글 표시 라벨(구 세션 트래커), 원시 pathname(초기 데이터), 그리고 **개명 전 옛 라벨**.
+    // 2026-07-20부터 저장은 슬러그로 통일했지만 **과거 행은 그대로 남아 있으므로**
+    // 읽는 쪽에서 슬러그로 접는다. 접는 자리는 **loadAnalytics의 rows 진입점 한 곳**이고,
+    // 그 뒤의 모든 집계(회원·비회원 카드 펼침 / 페이지 탭 막대 / 요약 페이지 카드)는
+    // 슬러그를 키로 쓴다 — 화면에 라벨을 붙이는 건 렌더 시점의 PAGE_LABEL이다.
+    // ⚠️ 아래 별칭표에서 **한글 키를 지우지 말 것**. 지우면 그 라벨로 저장된 과거 행이
+    //    다시 독립 버킷으로 튀어나온다.
+    const PAGE_LABEL = window.COTTAGE_PAGE_LABELS || {};
+    const PAGE_KEY_ALIASES = {
+      '/': 'index',
+      '/index.html': 'index',
+      index: 'index',
+      '메인': 'index',
+      '게임 목록': 'owned-games',
+      '보유 게임': 'owned-games',
+      '플레이 기록': 'game-reviews',
+      '기록 보기': 'game-reviews',
+      '게임 위치': 'game-location',
+      '코티지가 만들어진 이유': 'about',
+      '코티지보드 소개': 'about',          // ~2026-06-30 개명 전 라벨 (357행)
+      '가격·이용안내': 'price-rules',
+      '가격 & 규칙': 'price-rules',        // ~2026-07-01 개명 전 라벨 (174행)
+      '홈페이지 기능': 'guide',
+      '동호회 소개': 'club',
+      '회원 자기소개': 'club-intro',
+      '모임 플래너': 'club-schedule',
+      '모임 일정': 'club-schedule',
+      '일정 투표': 'club-schedule',        // ~2026-06-18 개명 전 라벨 (32행)
+      '모임 기록': 'club-history',
+      '동호회 규칙': 'club-rules',
+      '요청하기': 'requests',
+      '관리자': 'requests-admin',
+    };
+    function normalizePageKey(page) {
+      if (!page) return page;
+      let key = String(page);
+      try {
+        if (key.startsWith('http')) key = new URL(key).pathname;
+      } catch (_) {}
+      key = key.replace(/^https?:\/\/[^/]+/, '');
+      if (key.startsWith('/pages/')) key = key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
+      if (key.startsWith('/')) key = key === '/' ? '/' : key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
+      key = key.replace(/\.html$/, '');
+      return PAGE_KEY_ALIASES[key] || key;
+    }
+
     async function loadAnalytics() {
       if (!window.CottageDB?.getPageAnalytics) return;
 
@@ -875,9 +923,11 @@
         db2 ? db2.from('anon_sessions').select('session_key, first_seen_at, last_seen_at, visit_count, today_seconds, today_date').order('last_seen_at', { ascending: false }).limit(500) : Promise.resolve({ data: [] }),
       ]);
       const ADMIN_UID = '4916417947';
-      const _pageLabels = window.COTTAGE_PAGE_LABELS || {};
+      // ⚠️ 여기서 **슬러그로 접는다**(#14). 예전엔 슬러그→한글 라벨로 바꿨는데, 그러면
+      //    라벨맵 두 개가 서로 달라(`game-reviews`가 '기록 보기' vs '플레이 기록') 오히려
+      //    같은 페이지가 **이름까지 갈린 두 줄**이 됐다. 표시는 렌더에서 PAGE_LABEL로 붙인다.
       const rows = (rawRows || []).filter(r => String(r.user_id || '') !== ADMIN_UID)
-        .map(r => ({ ...r, page: _pageLabels[r.page] || r.page }));
+        .map(r => ({ ...r, page: normalizePageKey(r.page) }));
       const allProfiles = (rawProfiles || []).filter(p => String(p.user_id || '') !== ADMIN_UID);
       const pageViews = (pvResult?.data || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
       const anonSessions = anonResult?.data || [];
@@ -1024,7 +1074,7 @@
             <thead><tr><th>페이지</th><th>진입</th><th>체류</th></tr></thead>
             <tbody>
               ${head.map(([page, d]) =>
-                `<tr><td class="anat-page">${escH(page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`
+                `<tr><td class="anat-page">${escH(PAGE_LABEL[page] || page)}</td><td>${d.visits}회</td><td>${fmtTime(d.totalSec)}</td></tr>`
               ).join('')}
               ${rest.length
                 ? `<tr><td style="color:var(--muted)">외 ${rest.length}개 페이지</td><td>${restVisits}회</td><td>${fmtTime(restSec)}</td></tr>`
@@ -1369,41 +1419,8 @@
           const dt = new Date(ms);
           return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;
         }
-        const PAGE_LABEL = window.COTTAGE_PAGE_LABELS || {};
-        const PAGE_KEY_ALIASES = {
-          '/': 'index',
-          '/index.html': 'index',
-          index: 'index',
-          '메인': 'index',
-          '게임 목록': 'owned-games',
-          '보유 게임': 'owned-games',
-          '플레이 기록': 'game-reviews',
-          '기록 보기': 'game-reviews',
-          '게임 위치': 'game-location',
-          '코티지가 만들어진 이유': 'about',
-          '가격·이용안내': 'price-rules',
-          '홈페이지 기능': 'guide',
-          '동호회 소개': 'club',
-          '회원 자기소개': 'club-intro',
-          '모임 플래너': 'club-schedule',
-          '모임 일정': 'club-schedule',
-          '모임 기록': 'club-history',
-          '동호회 규칙': 'club-rules',
-          '요청하기': 'requests',
-          '관리자': 'requests-admin',
-        };
-        function normalizePageKey(page) {
-          if (!page) return page;
-          let key = String(page);
-          try {
-            if (key.startsWith('http')) key = new URL(key).pathname;
-          } catch (_) {}
-          key = key.replace(/^https?:\/\/[^/]+/, '');
-          if (key.startsWith('/pages/')) key = key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
-          if (key.startsWith('/')) key = key === '/' ? '/' : key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
-          key = key.replace(/\.html$/, '');
-          return PAGE_KEY_ALIASES[key] || key;
-        }
+        // PAGE_LABEL / PAGE_KEY_ALIASES / normalizePageKey는 loadAnalytics 위 공용 스코프로
+        // 올렸다(#14) — 회원 카드 펼침과 페이지 탭 막대가 **같은 규칙**을 써야 하기 때문이다.
         function _punycodeLabel(s) {
           if (!s.startsWith('xn--')) return s;
           s = s.slice(4);
@@ -2058,12 +2075,13 @@
           const _src = start ? filtered : rows;
           const _pageC = {};
           for (const r of _src) { if (r.page) _pageC[r.page] = (_pageC[r.page] || 0) + 1; }
-          const _PAGE_SHORT = { '코티지가 만들어진 이유': '소개', '홈페이지 기능': '기능안내', '동호회 소개': '동호회' };
+          // 키는 슬러그(#14) — 카드가 좁아 라벨이 긴 셋만 줄여 쓴다.
+          const _PAGE_SHORT = { about: '소개', guide: '기능안내', club: '동호회' };
           const _topP = Object.entries(_pageC).sort((a, b) => b[1] - a[1]).slice(0, 4);
           const _sumPage = document.getElementById('sumPageCount');
           if (_sumPage) {
             _sumPage.innerHTML = _topP.length
-              ? _topP.map(([p, n]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(_PAGE_SHORT[p] || p)} <span>(${n}회)</span></span>`).join('')
+              ? _topP.map(([p, n]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(_PAGE_SHORT[p] || PAGE_LABEL[p] || p)} <span>(${n}회)</span></span>`).join('')
               : '—';
           }
         }
