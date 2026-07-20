@@ -63,6 +63,10 @@
 │   ├── audit-anon-count.js         # #27 「비회원」 — 두 화면이 각각 무엇을 세는지 + 고아 마커 (읽기전용)
 │   ├── probe-orphan-markers.js     # #27 고아 마커의 정체 — 사람 대조군 포함 (읽기전용)
 │   ├── verify-anon-definition.js   # #27 옛/새 규칙 대조 + 음성 대조군 + 불변식 12건 (읽기전용)
+│   ├── audit-drilldown.js          # P3b 「이걸 한 사람들」 명단을 DB에서 직접 집계 (읽기전용)
+│   ├── verify-drilldown.js         # P3b 드릴다운 — 화면 명단 vs DB 교차 검증 (읽기전용)
+│   │                               # 🚨 --negctl(음성 대조군)을 먼저 돌릴 것. 기대값을 1 비틀어
+│   │                               #    그 줄에서만 🔴이 뜨는 걸 본 뒤에야 「전부 통과」를 믿는다
 │   ├── verify-home-hero.js         # 히어로 미노출 + #recommend 딥링크 회귀 (읽기전용)
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)

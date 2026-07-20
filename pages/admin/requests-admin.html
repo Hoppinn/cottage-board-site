@@ -76,6 +76,20 @@
     .admin-visitor-pages { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 4px; overflow-x: auto; }
     .admin-visitor-pages[hidden] { display: none; }
     .anat-ref { color: var(--muted); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* 드릴다운(원칙 ⑤) — 숫자 → 「이걸 한 사람들」. 이벤트 탭·페이지 탭이 같은 스타일을 쓴다 */
+    .admin-dd-btn { font-size: 11px; font-weight: 700; border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px; background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; white-space: nowrap; }
+    .admin-dd-btn:hover { background: var(--bg); color: var(--text); }
+    .admin-dd-btn.is-open { color: var(--green); border-color: var(--green); }
+    /* 패널이 「바로 위 줄에 속한다」는 걸 왼쪽 선으로 묶어준다 — 형제 줄이 위아래로 이어지는
+       자리(이벤트 축 카드)에서 어느 줄의 명단인지가 여백만으로는 안 읽힌다 */
+    .admin-dd-panel { margin: 4px 0 8px 10px; border-left: 2px solid var(--border); padding: 3px 0 3px 10px; }
+    .admin-dd-panel[hidden] { display: none; }
+    .admin-dd-note { font-size: 10px; color: var(--muted); font-weight: 600; padding: 1px 2px 4px; line-height: 1.4; }
+    .admin-dd-row { display: flex; align-items: baseline; gap: 6px; font-size: 11px; padding: 2px 2px; border-bottom: 1px solid var(--border); }
+    .admin-dd-row:last-child { border-bottom: none; }
+    .admin-dd-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--text); }
+    .admin-dd-row.is-anon .admin-dd-name { font-weight: 500; color: var(--muted); }
+    .admin-dd-meta { flex-shrink: 0; font-size: 10px; color: var(--muted); font-weight: 600; }
     /* 분석 기간 섹션 */
     .admin-period-section { margin-bottom: 12px; }
     .admin-period-title { font-size: 13px; font-weight: 800; color: var(--text); padding: 8px 4px; border-bottom: 2px solid var(--border); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
@@ -885,6 +899,13 @@
       }
       const profilesMap = new Map(allProfiles.map(p => [p.user_id, dispName(p)]));
       const profilesByUid = new Map(allProfiles.map(p => [String(p.user_id), p]));
+      // 드릴다운 명단이 회원 이름을 붙이려면 profiles가 필요한데 loadEventStats는 그걸 안 받는다.
+      // 키를 String으로 고정한다 — page_events.user_id와 profiles.user_id의 타입이 섞이면
+      // 이름이 조용히 안 붙고 회원이 「회원 4916…」로 보인다.
+      window._adminNameOfUid = uid => {
+        const p = profilesByUid.get(String(uid));
+        return p ? dispName(p) : null;
+      };
 
 
       const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
@@ -1137,17 +1158,65 @@
     // ⚠️ session_key는 2026-07부터 100%, 06월은 8%뿐이라 그 이전 구간은 명이 과소집계된다.
     const eventPersonId = e => e.user_id || e.session_key || null;
     // 건수와 사람수는 다르다 — 한 사람이 여러 번 누르므로(실측 443회=38명, 평균 11.7).
+    // detail은 드릴다운(원칙 ⑤)용 — people(Set)과 **같은 순회에서** 만든다. 따로 세면
+    // 명단과 집계가 조용히 갈린다(#15: 공용 헬퍼가 있는데 일부만 쓰면 그 일부가 다른 답을 낸다).
     function countEvents(evts, types) {
       const set = new Set(types);
-      let n = 0; const people = new Set();
+      let n = 0, noId = 0; const people = new Set(); const detail = new Map();
       for (const e of evts) {
         if (!set.has(e.event_type)) continue;
         n++;
         const p = eventPersonId(e);
-        if (p) people.add(String(p));
+        if (!p) { noId++; continue; }
+        const k = String(p);
+        people.add(k);
+        if (!detail.has(k)) detail.set(k, { n: 0, isMember: false });
+        const d = detail.get(k);
+        d.n++;
+        if (e.user_id) d.isMember = true;
       }
-      return { n, people, u: people.size };
+      return { n, people, u: people.size, detail, noId };
     }
+
+    // ── 드릴다운(원칙 ⑤) — 「이 숫자를 만든 사람들」 ──────────────────────
+    // 이벤트 탭과 페이지 탭 **둘 다** 이 렌더러 하나만 쓴다. 같은 개념에 사본을 두면
+    // 한쪽만 규칙이 바뀌어도 조용히 다른 답을 낸다(#15가 정확히 그 사고였다).
+    //
+    // 🚨 이 목록이 주장하는 것은 **"이걸 한 사람"**뿐이다 — 순서도, 앞 단계를 거쳤는지도
+    //    아니다(#26). 계산이 무순서 사람 집합이라 "A 다음에 B"를 셀 수 없다. 문구를
+    //    「~한 사람」으로 고정하고 「~로 이어진 사람」 같은 표현을 쓰지 않는다.
+    const _DD_ROWS_MAX = 15;
+    // people: [{ name, isMember, meta }] — 정렬은 호출부 책임(무엇이 중요한지가 탭마다 다르다)
+    function ddPanelHtml(people, { note = '', unknown = 0, unknownUnit = '회' } = {}) {
+      const head = people.slice(0, _DD_ROWS_MAX);
+      const rest = people.length - head.length;
+      return `<div class="admin-dd-panel" hidden>
+        ${note ? `<div class="admin-dd-note">${escH(note)}</div>` : ''}
+        ${unknown ? `<div class="admin-dd-note">⚠️ 식별 불가 ${unknown}${unknownUnit} — 누구인지 알 수 없어 이 명단에 없습니다(2026-06 이전 legacy 행은 session_key가 없습니다)</div>` : ''}
+        ${head.map(p => `<div class="admin-dd-row${p.isMember ? '' : ' is-anon'}">
+          <span class="admin-dd-name">${escH(p.name)}</span>
+          <span class="admin-dd-meta">${escH(p.meta)}</span>
+        </div>`).join('')}
+        ${rest > 0 ? `<div class="admin-dd-row"><span class="admin-dd-name" style="color:var(--muted);font-weight:500">외 ${rest}명</span></div>` : ''}
+        ${!people.length ? `<div class="admin-dd-note">명단 없음</div>` : ''}
+      </div>`;
+    }
+    // force=true면 0명이어도 버튼을 낸다 — "0명"의 이유(식별 불가)를 패널에서 밝혀야 하는
+    // 자리가 있다(recommend_game_click은 7회 전부가 식별 불가라 명단이 비는 게 정상이다).
+    const ddToggle = (u, force = false) => (u || force) ? `<button class="admin-dd-btn" type="button">👥 ${u}명 ▾</button>` : '';
+
+    // 펼침은 **위임 하나**로 처리한다 — 이벤트 탭은 기간이 바뀔 때마다 innerHTML을 통째로
+    // 다시 그리므로 버튼에 직접 건 리스너는 그때 사라진다(방문자 카드와 같은 이유).
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.admin-dd-btn');
+      if (!btn) return;
+      const panel = btn.closest('.admin-dd-host')?.querySelector('.admin-dd-panel');
+      if (!panel) return;
+      const opening = panel.hasAttribute('hidden');
+      panel.toggleAttribute('hidden', !opening);
+      btn.classList.toggle('is-open', opening);
+      btn.textContent = btn.textContent.replace(opening ? '▾' : '▴', opening ? '▴' : '▾');
+    });
 
     function renderCharts(rows, allProfiles, profilesMap, pageViews = [], anonSessions = []) {
       if (!window.Chart) return;
@@ -1677,12 +1746,24 @@
         // ── 3. 페이지별 방문 — (유저+페이지+날짜) 유니크 기준 ─────────
         const pageUniq = {};
         const pageTotSec = {};
+        // 드릴다운(원칙 ⑤) — 「이 페이지를 본 사람들」. 막대와 **같은 순회**에서 만들어야
+        // 명단과 막대가 어긋나지 않는다. 사람 식별은 이 화면의 기존 규칙 그대로
+        // (user_id 우선, 없으면 anon:session_key) — 새 규칙을 만들면 #15가 재발한다.
+        const pagePeople = {};
         const seen2 = new Set();
         for (const r of filtered) {
           if (!r.page) continue;
           const pageKey = normalizePageKey(r.page);
           pageTotSec[pageKey] = (pageTotSec[pageKey] || 0) + (r.duration_sec || 0);
-          const key = (r.user_id || (r.session_key ? `anon:${r.session_key}` : 'anon')) + '|' + pageKey + '|' + kstDate(r.entered_at);
+          const pid = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+          if (pid) {
+            if (!pagePeople[pageKey]) pagePeople[pageKey] = new Map();
+            const pp = pagePeople[pageKey];
+            if (!pp.has(pid)) pp.set(pid, { visits: 0, sec: 0 });
+            pp.get(pid).visits++;
+            pp.get(pid).sec += r.duration_sec || 0;
+          }
+          const key = (pid || 'anon') + '|' + pageKey + '|' + kstDate(r.entered_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
           pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
@@ -1692,6 +1773,14 @@
         for (const r of filteredPV) {
           const pageKey = normalizePageKey(r.page);
           if (!pageKey?.startsWith(VIRTUAL_PAGE_PREFIX)) continue;
+          const pid = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+          if (pid) {
+            if (!pagePeople[pageKey]) pagePeople[pageKey] = new Map();
+            const pp = pagePeople[pageKey];
+            // 가상 페이지는 page_sessions가 없어 체류를 모른다 — 0으로 두고 명단엔 '진입 N회'만.
+            if (!pp.has(pid)) pp.set(pid, { visits: 0, sec: 0 });
+            pp.get(pid).visits++;
+          }
           const key = (r.user_id || 'pv') + '|' + pageKey + '|' + kstDate(r.created_at);
           if (seen2.has(key)) continue;
           seen2.add(key);
@@ -1756,6 +1845,48 @@
             });
           },
         }]);
+
+        // ── 3-b. 페이지 → 「이 페이지를 본 사람들」 (원칙 ⑤ 드릴다운) ──────
+        // 막대 자체를 클릭 대상으로 삼지 않는다 — 차트는 좁고 라벨이 잘리며, 무엇보다
+        // "몇 명인지"가 막대에 안 보인다(막대는 사람·날짜 유니크 = 방문 수라 사람 수와 다르다).
+        // 차트 바로 아래 목록에 **명 수를 먼저 보여주고** 그 숫자를 눌러 내려가게 한다.
+        {
+          const pagesBodyEl = document.getElementById('pagesBody');
+          if (pagesBodyEl) {
+            const rowsHtml = topPages.map(([p, v]) => {
+              const pp = pagePeople[p];
+              const people = pp
+                ? [...pp.entries()].sort((a, b) => b[1].sec - a[1].sec || b[1].visits - a[1].visits)
+                    .map(([pid, d]) => ({
+                      // 🚨 이름을 못 찾은 user_id를 「회원」이라 부르지 않는다 — 실제로
+                      //    `__racetest_*`(#22 통제 실험 잔여)·`test_meeting_999` 두 개가
+                      //    profiles 없이 page_sessions에 남아 있고, 「회원 __racete」로 보이면
+                      //    사람으로 읽힌다. 이름이 없다는 사실 자체를 표시한다(드릴다운이
+                      //    이걸 드러낸 것이 바로 원칙 ⑤가 하는 일이다).
+                      name: pid.startsWith('anon:')
+                        ? `비회원 ${pid.slice(5, 13)}…`
+                        : (profilesMap?.get(pid) || profilesMap?.get(Number(pid)) || `미등록 ID ${pid.slice(0, 14)}…`),
+                      isMember: !pid.startsWith('anon:'),
+                      meta: d.sec > 0 ? `${d.visits}회 · ${fmtTime(d.sec)}` : `${d.visits}회`,
+                    }))
+                : [];
+              const memCnt = people.filter(x => x.isMember).length;
+              return `<div class="admin-dd-host" style="border-bottom:1px solid var(--border);padding:6px 2px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="anat-page" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">${escH(PAGE_LABEL[p] || p)}</span>
+                  <span style="font-size:11px;color:var(--muted);font-weight:600;flex-shrink:0">방문 ${v}</span>
+                  ${ddToggle(people.length)}
+                </div>
+                ${people.length ? ddPanelHtml(people, {
+                  note: `이 페이지를 본 사람 · 체류 긴 순 · 회원 ${memCnt}명 · 비회원 ${people.length - memCnt}명`,
+                }) : ''}
+              </div>`;
+            }).join('');
+            pagesBodyEl.innerHTML = topPages.length
+              ? `<div style="font-size:11px;color:var(--muted);font-weight:600;margin:4px 2px 2px" title="방문 = 같은 사람·같은 날은 1회로 접은 값(위 막대와 같은 값). 명 = 그 방문을 만든 사람 수라 서로 다릅니다.">👥 누가 봤나 · 기간 ${escH(label || '전체')} <span style="font-weight:400">· 방문 수와 명 수는 다른 값</span></div>${rowsHtml}`
+              : '<div class="admin-empty">페이지 데이터 없음</div>';
+          }
+        }
 
         // ── 4. 유입경로 × 페이지 교차분석 ───────────────────────────
         {
@@ -2135,16 +2266,39 @@
           : rows.filter(r => (!start || r.created_at >= start) && (!end || r.created_at < end));
 
         function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
+        // 이벤트 명단 — 「이 행동을 한 사람」. 회 많은 순(누가 이 행동을 이끌었나가 질문).
+        // detail은 countEvents가 people(Set)과 같은 순회에서 만든 것이라 명단과 「N명」이
+        // 원리상 어긋날 수 없다.
+        function ddPeopleFromEvents(s) {
+          return [...s.detail.entries()]
+            .sort((a, b) => b[1].n - a[1].n)
+            .map(([pid, d]) => ({
+              name: d.isMember
+                ? (window._adminNameOfUid?.(pid) || `미등록 ID ${String(pid).slice(0, 14)}…`)
+                : `비회원 ${String(pid).slice(0, 8)}…`,
+              isMember: d.isMember,
+              meta: `${d.n}회`,
+            }));
+        }
         // 건수 / 사람수 / 평균을 함께 — 443회가 38명이면 완전히 다른 이야기다.
+        // 「N명」이 곧 드릴다운 버튼이다(원칙 ⑤) — 숫자를 눌러 그걸 만든 사람으로 내려간다.
         function stepRow(badge, label, s) {
           const avg = s.u ? (s.n / s.u).toFixed(1) : null;
-          return `<div style="display:flex;align-items:center;gap:8px">
+          return `<div class="admin-dd-host">
+            <div style="display:flex;align-items:center;gap:8px">
             <span style="font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0;width:22px;line-height:1">${badge}</span>
             <span style="font-size:12px;color:var(--muted);font-weight:500;flex:1;min-width:0;line-height:1.3">${label}</span>
             <div style="text-align:right;flex-shrink:0;line-height:1.25">
               <div style="font-size:17px;font-weight:900;color:var(--text)">${s.n.toLocaleString()}<span style="font-size:10px;font-weight:600;color:var(--muted)">회</span></div>
-              <div style="font-size:10px;color:var(--muted);font-weight:600">${s.u}명${avg ? ` · 평균 ${avg}` : ''}</div>
+              <div style="font-size:10px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:2px">
+                ${ddToggle(s.u, s.n > 0)}${avg ? `<span>· 평균 ${avg}</span>` : ''}
+              </div>
             </div>
+            </div>
+            ${s.n > 0 ? ddPanelHtml(ddPeopleFromEvents(s), {
+              note: '이 행동을 한 사람 · 회 많은 순 · 순서도, 앞 단계를 거쳤는지도 세지 않음',
+              unknown: s.noId,
+            }) : ''}
           </div>`;
         }
         // 🚨 이 화면은 퍼널도 분기 트리도 아니다 — **행동 관계(교집합)**다. (#26, 2026-07-20 실측)
