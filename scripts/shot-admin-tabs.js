@@ -28,9 +28,25 @@ const UID = '4916417947';
 const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
 
 (async () => {
+  // 🚨 지난 실행의 PNG를 먼저 지운다. 안 지우면 이번에 못 찍은 파일이 **낡은 채로 남아**
+  //    다음 사람이 그걸 이번 결과로 읽는다 — 2026-07-20에 실제로 하루 지난 chk-summary.png를
+  //    읽고 "라벨이 반영 안 됐다"는 틀린 결론을 낼 뻔했다(파일 시각을 보고서야 알았다).
+  fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({ headless: true });
-  const page = await (await browser.newContext({ viewport: { width: 1280, height: 1000 } })).newPage();
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 1000 } });
+  // 🚨 이 하니스는 **읽기 전용**인데, 아래에서 가짜 kakao_user를 심으므로 사이트 코드가
+  //    upsertProfile 등 **진짜 쓰기**를 시도한다(2026-07-19에 실제로 운영 DB가 오염됐다).
+  //    청소하는 대신 애초에 막는다 — GET만 통과시키면 실데이터로 화면을 그대로 보면서
+  //    쓰기는 0이 된다. 차단된 요청을 찍어두면 "무엇이 쓰려 했는지"도 함께 보인다.
+  const blockedWrites = [];
+  let allowedReads = 0; // 가드가 실제로 붙었는지 판정용 — 0이면 "쓰기가 없었다"가 아니라 "패턴 불일치"다
+  await ctx.route('**://*.supabase.co/**', r => {
+    if (r.request().method() === 'GET') { allowedReads++; return r.continue(); }
+    blockedWrites.push(`${r.request().method()} ${r.request().url().split('/rest/v1/')[1] || r.request().url()}`);
+    return r.abort();
+  });
+  const page = await ctx.newPage();
   const errors = [];
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   page.on('pageerror', e => errors.push('pageerror: ' + e.message));
@@ -125,6 +141,14 @@ const TABS = ['summary', 'visit', 'referrer', 'page', 'event', 'member'];
 
   const rel = errors.filter(e => !/favicon|net::ERR|Failed to load resource/i.test(e));
   console.log('\n콘솔 에러:', rel.length ? rel.slice(0, 8).join('\n  ') : '없음');
+  // 차단된 쓰기 — 0이 아니어도 정상이다(사이트가 시도했고 우리가 막았다는 뜻).
+  // 여기가 비면 "쓰기가 없었다"가 아니라 "가드가 안 걸렸을 수도" 있으니 함께 본다.
+  console.log('쓰기 가드:', allowedReads === 0
+    ? '🔴 통과한 GET이 0건 = 라우트가 안 걸렸다. 아래 "차단 0건"을 안전의 근거로 쓰지 말 것'
+    : `✅ 부착됨 (GET ${allowedReads}건 통과)`);
+  console.log('차단된 쓰기:', blockedWrites.length
+    ? `${blockedWrites.length}건 — ${[...new Set(blockedWrites)].slice(0, 8).join(', ')}`
+    : '0건');
   await browser.close();
   process.exit(0);
 })();
