@@ -17,7 +17,7 @@
 | 취향보드 `profiles.bio`·`avoid_tags`·`notif_seen_at` | ✅ 전부 존재 (bio·avoid_tags 실데이터 각 2행) |
 | 010 `profiles.notif_read_keys` | ✅ **실행 완료 (2026-07-18 실측)** — 컬럼 존재, 5행 전부 기본값 `[]` 확인 |
 | 011 `page_events` anon SELECT 정책 | ✅ **실행 완료 + 검증 (2026-07-18)** — anon SELECT 1,452행 정상, 관리자 이벤트 퍼널이 실수치로 렌더됨(Playwright 확인) |
-| 012 `increment_profile_counters` RPC | 🚨 **미실행 (2026-07-19 작성)** — Supabase SQL Editor에서 실행 필요. **코드는 이미 이 RPC를 호출하므로 실행 전까지 회원 이용시간·방문수가 DB에 반영되지 않는다**(단 누적분은 localStorage에 남아 실행 후 자동 반영 — 유실 아님). 실행 후 `node scripts/verify-lost-update.js 5 --rpc`로 손실 0 확인 |
+| 012 `increment_profile_counters` RPC | ✅ **실행 완료 + 검증 (2026-07-20 재확인)** — anon RPC 호출이 HTTP 200, 없는 `user_id`로 불러도 빈 행이 안 생김(012 파일의 검증 ②). ⚠️ **이 칸은 2026-07-20까지 「미실행」으로 남아 PROJECT_STATE의 「완료」와 충돌하고 있었다** — 문서 두 곳이 갈리면 그럴듯한 쪽으로 잇지 말고 이렇게 **DB에 직접 물어서** 닫을 것 |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
