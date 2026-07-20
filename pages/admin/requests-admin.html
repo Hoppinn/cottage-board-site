@@ -2108,11 +2108,21 @@
 
         function pct(a, b) { return b > 0 ? Math.round(a/b*100) + '%' : '-'; }
         // 건수 / 사람수 / 평균을 함께 — 443회가 38명이면 완전히 다른 이야기다.
-        function stepRow(badge, label, s) {
+        // opt.tree('├'|'└')가 오면 **갈래 행**이다 — 진입 행 아래로 들여쓰고,
+        // opt.of/ofBadge가 있으면 「무엇의 몇 %인가」를 라벨 밑에 **화면에 직접** 적는다.
+        // (툴팁에만 두면 분모를 모른 채 숫자만 읽힌다 — 원칙 ①)
+        function stepRow(badge, label, s, opt = {}) {
           const avg = s.u ? (s.n / s.u).toFixed(1) : null;
-          return `<div style="display:flex;align-items:center;gap:8px">
+          let ofLine = '';
+          if (opt.of) {
+            let inter = 0;
+            for (const p of s.people) if (opt.of.people.has(p)) inter++;
+            ofLine = `<div style="font-size:10px;color:var(--muted);font-weight:500;margin-top:1px">${escH(opt.ofBadge)} 한 ${opt.of.u}명 중 <b style="color:var(--green);font-weight:700">${inter}명 ${opt.of.u > 0 ? pct(inter, opt.of.u) : '-'}</b></div>`;
+          }
+          return `<div style="display:flex;align-items:center;gap:8px${opt.tree ? ';padding-left:8px' : ''}">
+            ${opt.tree ? `<span style="font-size:12px;color:var(--border);flex-shrink:0;line-height:1">${opt.tree}</span>` : ''}
             <span style="font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0;width:22px;line-height:1">${badge}</span>
-            <span style="font-size:12px;color:var(--muted);font-weight:500;flex:1;min-width:0;line-height:1.3">${label}</span>
+            <span style="font-size:12px;color:var(--muted);font-weight:500;flex:1;min-width:0;line-height:1.3">${label}${ofLine}</span>
             <div style="text-align:right;flex-shrink:0;line-height:1.25">
               <div style="font-size:17px;font-weight:900;color:var(--text)">${s.n.toLocaleString()}<span style="font-size:10px;font-weight:600;color:var(--muted)">회</span></div>
               <div style="font-size:10px;color:var(--muted);font-weight:600">${s.u}명${avg ? ` · 평균 ${avg}` : ''}</div>
@@ -2130,19 +2140,26 @@
         //        (index-page.js: gameScroll의 .game-card 와 .game-card-more)
         //      · 2-2 기록 더보기 / 2-3 기록 남기기 → 최근 플레이 섹션 헤더의 **나란한 두 버튼**
         //        (index.html의 openRecordViewBtn / openRecordModalBtn)
-        //    갈림길을 ↓로 그리면 27.8%가 "여기서 72%가 이탈했다"로 읽힌다. 실제로는
-        //    **둘 다 누른 사람 비율**이고, 낮은 게 정상이며 개선 대상도 아니다.
-        //    seq(↓)와 branch(⇄)를 섞어 쓰는 이유가 이것이다 — 라벨만 바꾸면 도형이 계속 거짓말한다.
-        function convArrow(from, to, rel = 'seq') {
+        //    갈림길을 ↓ 한 줄로 그리면 "여기서 몇 %가 이탈했다"로 읽힌다. 실제로는
+        //    **어느 쪽을 골랐나**의 문제이고, 한쪽이 낮은 게 정상이며 개선 대상도 아니다.
+        //    그래서 갈래는 **진입 아래로 들여쓴 두 행**(├/└)으로 그리고, 각 행에 「진입자 중 몇 명」을
+        //    적는다. ⚠️ **라벨만 고치고 도형을 두면 거짓말이 한 겹 남는다** — 1차 수정에서 ⇄ 기호만
+        //    바꿨더니 점선이 여전히 ●─●⇄●(한 줄)이라 선형으로 읽혔다(외부 감사 지적, 같은 날 재수정).
+        function convArrow(from, to) {
           let inter = 0;
           for (const p of to.people) if (from.people.has(p)) inter++;
           const c = from.u > 0 ? pct(inter, from.u) : '-';
-          const branch = rel === 'branch';
-          const mark = branch ? '⇄' : '↓';
-          const tip = branch
-            ? `나란한 두 동작 — ${from.u}명 중 ${inter}명이 둘 다 함(순서 무관). 이탈률이 아닙니다`
-            : `${from.u}명 중 ${inter}명이 다음 단계도 함`;
-          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1" title="${escH(tip)}">${mark} <span style="color:var(--green);font-weight:700">${c}</span>${branch ? ' <span style="font-weight:500">둘 다 함</span>' : ''}</div>`;
+          return `<div style="padding:3px 0 3px 30px;font-size:11px;color:var(--muted);line-height:1" title="${escH(`${from.u}명 중 ${inter}명이 다음 단계도 함`)}">↓ <span style="color:var(--green);font-weight:700">${c}</span></div>`;
+        }
+        // 두 갈래를 **둘 다** 한 사람 — 갈래 행 아래에 한 줄. 분모를 문장에 그대로 적는다.
+        function overlapRow(a, b, aBadge, bBadge) {
+          let inter = 0;
+          for (const p of b.people) if (a.people.has(p)) inter++;
+          const base = new Set([...a.people, ...b.people]).size;
+          return `<div style="padding:4px 0 0 18px;font-size:10px;color:var(--muted);line-height:1.3"
+            title="${escH(`둘 중 하나라도 한 ${base}명 중 ${inter}명이 ${aBadge}·${bBadge}를 모두 함(순서 무관). 이탈률이 아닙니다`)}">
+            ⇄ 둘 다 한 사람 <b style="color:var(--text);font-weight:700">${inter}명</b>
+            <span style="font-weight:500">(둘 중 하나라도 한 ${base}명 중)</span></div>`;
         }
         // 도달률 — "그 기간에 온 사람 중 몇 %가 하나라도 액션했나".
         // 분모는 renderCharts가 page_sessions에서 만들어 넘긴다(위 주석의 실측 근거 참조).
@@ -2181,12 +2198,16 @@
             </div>
           </div>`;
         }
-        // conns = 점 사이 연결자 배열. 점 개수는 conns.length + 1.
-        // ⚠️ 여기도 관계를 따라간다(#26) — 갈래인 자리를 '─'로 그리면 헤더의 작은 도형이
-        //    본문과 반대말을 한다. 라벨만 고치고 도형을 두면 거짓말이 한 겹 남는다.
-        function axisCard(emoji, title, steps, conns) {
-          const dot = '<span style="font-size:7px">●</span>';
-          const dots = conns.map(c => dot + `<span style="font-size:9px;margin:0 1px">${c}</span>`).join('') + dot;
+        // 갈래 안내 — 진입 행과 갈래 행 사이 한 줄.
+        function branchLead(text) {
+          return `<div style="padding:3px 0 2px 30px;font-size:10px;color:var(--muted);font-weight:500;line-height:1.2">↳ ${escH(text)}</div>`;
+        }
+        // shape: 'seq'(순차 2단계) | 'branch'(진입 1 + 갈래 2)
+        // ⚠️ 헤더의 작은 도형도 관계를 따라간다(#26) — 갈래를 한 줄로 그리면 본문과 반대말을 한다.
+        function axisCard(emoji, title, steps, shape) {
+          const dots = shape === 'branch'
+            ? '<span style="font-size:9px">●─&lt;</span><span style="font-size:7px">●●</span>'
+            : '<span style="font-size:7px">●</span><span style="font-size:9px;margin:0 1px">─</span><span style="font-size:7px">●</span>';
           return `<div style="border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:var(--card-bg,#fff)">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
               <div style="font-size:13px;font-weight:800;color:var(--text)">${emoji} ${title}</div>
@@ -2203,28 +2224,28 @@
           const hr = c('home_recommend_main_click'), rgd = c('home_recommend_game_detail_click'), rall = c('home_recommend_all_click');
           const hg = c('home_record_main_click'), rm = c('home_record_more_click'), rw = c('home_record_write_click');
           const mt = c('home_meeting_main_click'), mp = c('home_meeting_planner_click');
-          el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')} <span style="font-weight:400">· 비율은 사람 기준 · <b>↓</b>=다음 단계로 이어진 비율, <b>⇄</b>=나란한 두 버튼을 둘 다 누른 비율(이탈률 아님)</span></div>
+          el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')} <span style="font-weight:400">· 비율은 사람 기준 · <b>↓</b>=다음 단계로 이어진 비율 · <b>├└</b>=한 자리에서 갈라지는 선택지(둘 중 하나가 낮은 건 이탈이 아니다)</span></div>
           ${reachRow(evts, reach)}
           <div style="display:flex;flex-direction:column;gap:6px">
           ${axisCard('🔍', '추천게임 찾기', `
             ${stepRow('1-1', '히어로 추천게임찾기 클릭', hr)}
-            ${convArrow(hr, rgd)}
-            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd)}
-            ${convArrow(rgd, rall, 'branch')}
-            ${stepRow('1-3', '추천 섹션 전체보기 클릭', rall)}
-          `, ['─','⇄'])}
+            ${branchLead('여기서 갈라짐')}
+            ${stepRow('1-2', '추천 결과 게임정보 클릭', rgd, { tree: '├', of: hr, ofBadge: '1-1' })}
+            ${stepRow('1-3', '추천 섹션 전체보기 클릭', rall, { tree: '└', of: hr, ofBadge: '1-1' })}
+            ${overlapRow(rgd, rall, '1-2', '1-3')}
+          `, 'branch')}
           ${axisCard('📋', '플레이 기록', `
             ${stepRow('2-1', '히어로 기록남기기 클릭', hg)}
-            ${convArrow(hg, rm)}
-            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm)}
-            ${convArrow(rm, rw, 'branch')}
-            ${stepRow('2-3', '최근 플레이 기록 남기기 클릭', rw)}
-          `, ['─','⇄'])}
+            ${branchLead('여기서 갈라짐 — 최근 플레이 섹션의 나란한 두 버튼')}
+            ${stepRow('2-2', '최근 플레이 기록 더보기 클릭', rm, { tree: '├', of: hg, ofBadge: '2-1' })}
+            ${stepRow('2-3', '최근 플레이 기록 남기기 클릭', rw, { tree: '└', of: hg, ofBadge: '2-1' })}
+            ${overlapRow(rm, rw, '2-2', '2-3')}
+          `, 'branch')}
           ${axisCard('🤝', '모임', `
             ${stepRow('3-1', '히어로 모임 클릭', mt)}
             ${convArrow(mt, mp)}
             ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp)}
-          `, ['─'])}
+          `, 'seq')}
         </div>`;
         }
         window._adminRenderFunnel = renderFunnel;
