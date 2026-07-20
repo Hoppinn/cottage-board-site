@@ -59,6 +59,10 @@
 │   ├── audit-admin-analytics.js    # 관리자 분석 감사 — 절단/RLS + 렌더 (읽기전용)
 │   ├── shot-admin-tabs.js          # 관리자 6개 탭 스크린샷 + 표시층 발견 #5~#7 판정 (읽기전용)
 │   │                               # ⚠️출력 폴더를 리포 안으로 주지 말 것(Live Server 리로드로 죽음)
+│   │                               # supabase 쓰기는 라우트로 차단(GET만 통과) + 실행 시 출력폴더 비움
+│   ├── audit-anon-count.js         # #27 「비회원」 — 두 화면이 각각 무엇을 세는지 + 고아 마커 (읽기전용)
+│   ├── probe-orphan-markers.js     # #27 고아 마커의 정체 — 사람 대조군 포함 (읽기전용)
+│   ├── verify-anon-definition.js   # #27 옛/새 규칙 대조 + 음성 대조군 + 불변식 12건 (읽기전용)
 │   ├── verify-home-hero.js         # 히어로 미노출 + #recommend 딥링크 회귀 (읽기전용)
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
