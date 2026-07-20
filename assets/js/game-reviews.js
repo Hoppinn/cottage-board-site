@@ -115,8 +115,17 @@
   const headerEl = document.getElementById('reviewPageHeader');
   const root = document.getElementById('reviewRoot');
 
+  // record_start는 '사용자가 기록 입력 화면에 실제로 들어온 시점'에만 쏜다.
+  // 홈(index.html)이 이 페이지를 ?tab=input iframe으로 **미리 로드**하므로 초기화 시점에
+  // 쏘면 홈을 열기만 해도 발사된다(발견 #25). 발사 지점은 아래 3곳뿐:
+  //   ① 비embed 진입 + ?tab=input (게임시트 → 기록하기)
+  //   ② 탭 클릭으로 '기록 입력' 전환
+  //   ③ 부모가 모달을 input 탭으로 열 때(cottage-switch-tab) — 프리로드로 이미 활성이라
+  //      ②의 click이 안 일어나는 경로다
+  function trackRecordStart() { window.CottageDB?.trackEvent('record_start'); }
+
   let tried = false;
-  function tryInit() { if (tried) return; tried = true; window.CottageDB?.trackEvent('record_start'); initHub(); }
+  function tryInit() { if (tried) return; tried = true; initHub(); }
   window.addEventListener('kakao-auth-ready', tryInit);
   window.addEventListener('cottage-auth-changed', () => { renderInputPanel(); });
   setTimeout(tryInit, 1200);
@@ -126,6 +135,7 @@
     if (e.data?.type === 'cottage-switch-tab' && e.data.tab && root) {
       const tab = root.querySelector(`.pr-tab[data-tab="${e.data.tab}"]`);
       if (tab && !tab.classList.contains('is-active')) tab.click();
+      else if (e.data.tab === 'input') trackRecordStart();  // ③ 이미 활성이라 click이 안 일어남
     } else if (e.data?.type === 'cottage-close-lightbox') {
       document.querySelectorAll('.pr-lightbox').forEach(el => el.remove());
     }
@@ -139,8 +149,11 @@
     document.title = '플레이 기록 | 코티지보드';
 
     const params = new URLSearchParams(location.search);
-    if (params.get('embed') === 'true') document.body.classList.add('is-embedded');
+    const embedded = params.get('embed') === 'true';
+    if (embedded) document.body.classList.add('is-embedded');
     const startInput = params.get('tab') === 'input';
+    // ① embed는 홈의 프리로드(사용자가 연 적 없음)라 제외 — 열릴 땐 ③으로 잡힌다
+    if (startInput && !embedded) trackRecordStart();
 
     root.innerHTML = `
       <div class="pr-tabs">
@@ -157,6 +170,7 @@
         tab.classList.add('is-active');
         document.getElementById('prPanel' + cap(tab.dataset.tab)).classList.add('is-active');
         if (tab.dataset.tab === 'records') loadRecords();
+        if (tab.dataset.tab === 'input') trackRecordStart();  // ②
       });
     });
 
