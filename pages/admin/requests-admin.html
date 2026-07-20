@@ -440,8 +440,8 @@
                       <span class="admin-visitor-breakdown-label">비회원</span>
                       <span class="admin-visitor-breakdown-value" id="sumVisitorGuest">—</span>
                     </div>
-                    <div class="admin-visitor-breakdown-item">
-                      <span class="admin-visitor-breakdown-label">봇</span>
+                    <div class="admin-visitor-breakdown-item" title="알려진 봇 User-Agent + 세션이 형성되지 않은 접속(들어온 표시만 남기고 0.5초 안에 사라진 것). 사람이 아니라 요청 단위라 '회'입니다.">
+                      <span class="admin-visitor-breakdown-label">봇·자동</span>
                       <span class="admin-visitor-breakdown-value" id="sumVisitorBot">—</span>
                     </div>
                     <div class="admin-visitor-breakdown-item">
@@ -1108,7 +1108,7 @@
 
       if (pagesBody) pagesBody.innerHTML = '';
 
-      renderCharts(rows, allProfiles, profilesMap, pageViews);
+      renderCharts(rows, allProfiles, profilesMap, pageViews, anonSessions);
     }
 
     // ── 이벤트 계열 표 (단일 출처) ──────────────────────────────────────
@@ -1149,7 +1149,7 @@
       return { n, people, u: people.size };
     }
 
-    function renderCharts(rows, allProfiles, profilesMap, pageViews = []) {
+    function renderCharts(rows, allProfiles, profilesMap, pageViews = [], anonSessions = []) {
       if (!window.Chart) return;
 
       const ADMIN_UID = '4916417947';
@@ -1378,8 +1378,36 @@
         // "전체 방문자"는 봇 제외가 기준 — is_bot=true 행은 visitorRows에서 빠지고 botVisitorRows로 별도 집계
         // (is_bot/user_id 컬럼은 143차-178부터 추가돼 그 이전 데이터는 전부 is_bot=false/user_id=null로 채워짐)
         const visitorRowsAll = pageViews.filter(r => r.page === '__visitor__');
-        const visitorRows = visitorRowsAll.filter(r => !r.is_bot);
-        const botVisitorRows = visitorRowsAll.filter(r => r.is_bot);
+
+        // ── 「비회원 1명」의 정의 (#27, 2026-07-20 사용자 결정) ──────────────────
+        // **세션이 형성된 접속만 사람으로 센다.** 마커(__visitor__)는 DOMContentLoaded 즉시
+        // 들어가지만 세션(anon_sessions·page_sessions)은 _startAnonHeartbeat이 **500ms 뒤**에
+        // 만든다(supabase-client.js:982) → 그 사이에 사라지는 접속은 "들어왔다"는 표시만 남긴다.
+        //
+        // 🚨 이걸 왜 넣었나: is_bot은 **User-Agent 목록 매칭**이라 목록에 없는 새 크롤러를 못 잡는다.
+        //    2026-07-20 실측 — 그날 비회원 15명 중 11명(73%)이 전부 이 서명이었다:
+        //    새벽 0~1시 · index 한 장 · 체류 0.0초 · 유입 없음 · 이벤트 0 · 매번 새 session_key.
+        //    직전 13일은 0%였으므로 사람의 행동 변화가 아니라 새 자동 접속원이다.
+        //
+        // 🚨 판정은 **여기 한 곳에서만** 한다 — visitorRows를 읽는 소비처(요약 카드·도넛·날짜별
+        //    차트·유입·교차표)가 여럿이라, 일부만 거르면 그 일부가 조용히 다른 답을 낸다(#15).
+        const _sessionKeys = new Set();
+        for (const r of rows) if (r.session_key) _sessionKeys.add(r.session_key);
+        for (const a of (anonSessions || [])) if (a.session_key) _sessionKeys.add(a.session_key);
+        // page_sessions(rows)는 90일치만 온다. 그 창보다 오래된 마커는 **판정할 근거가 없으므로**
+        // 종전대로 센다 — 창을 값으로 박지 않고 실제 데이터에서 파생시킨다(#16의 교훈).
+        const _sessionWindowStart = rows.reduce(
+          (m, r) => (r.entered_at && r.entered_at < m ? r.entered_at : m), '9999');
+        const _hasSession = r =>
+          !!r.user_id                           // 회원 마커: localStorage에 kakao_user가 있었다는 뜻 = 사람 확정.
+                                                //   회원은 로그인 즉시 anon heartbeat이 멈춰 anon_sessions가 안 생기고,
+                                                //   page_sessions 행도 3초 미만 체류면 없다 → 판정에 걸면 오분류된다.
+          || !r.session_key                     // legacy(2026-07 이전): session_key가 아예 없어 판정 불가
+          || r.created_at < _sessionWindowStart  // 세션 표가 닿지 않는 과거 구간
+          || _sessionKeys.has(r.session_key);
+        const visitorRows = visitorRowsAll.filter(r => !r.is_bot && _hasSession(r));
+        // 걸러낸 접속은 버리지 않고 '봇·자동' 칸으로 보낸다 — 사라지면 총계와 안 맞아 보인다.
+        const botVisitorRows = visitorRowsAll.filter(r => r.is_bot || !_hasSession(r));
 
         // ── 요약 카드 (__visitor__ 마커 기준, 기간 연동) ───────────────
         {
