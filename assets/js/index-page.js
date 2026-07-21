@@ -1479,12 +1479,10 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
       window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
         fromHome: true,
-        plannerLabel: myVote ? '내 등록 수정하기' : '+ 이날 참여 등록',
-        // ⚠️ 여기서 trackEvent를 부르지 말 것 — __openPlannerFor가 home_meeting_planner_click을
-        //    자체 발사한다(index-page.js 내 정의). 둘 다 부르면 관리자 분석에서 2배로 잡힌다.
-        // ⚠️ openPlannerBtn.click()으로 열지 말 것 — 그건 날짜 없는 주간 뷰라 사용자가 이 모달에서
-        //    보던 날짜를 플래너에서 다시 찾아야 한다. __openPlannerFor는 그 날짜로 바로 진입한다.
-        onPlannerClick: () => window.__openPlannerFor?.(dateStr, !!myVote),
+        onPlannerClick: () => {
+          window.CottageDB?.trackEvent('home_meeting_planner_click');
+          document.getElementById('openPlannerBtn')?.click();
+        },
       });
     }
 

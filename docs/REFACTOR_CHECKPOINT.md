@@ -15,7 +15,7 @@ R1~R12 진행 표·종결 항목 상세·모델 배정 실적은 **git log와 �
 | # | 이슈 | 착수 시 알아야 할 것 |
 |---|---|---|
 | ~~GS5~~ | ~~`escH` 사본 ~11개~~ | ✅ **2026-07-22 종결 — 호출시점 위임으로 통합.** 사본 12곳(명명 헬퍼 7 + 인라인 체인 5)이 전부 `window.escH` 위임이 됐고, 검증은 `node scripts/verify-esch-unify.js --negctl`. **남긴 예외 4종**(속성 전용 이스케이퍼·JSON attr·부분 이스케이프 2)은 그 스크립트의 `ALLOW`에 이유와 함께 있다 — **재통합하려 들지 말 것.** |
-| ~~DD4~~ | ~~`openDateMeetingModal`의 `opts` 미사용~~ | ✅ **2026-07-22 종결 — 지우는 대신 쓰기로 했다.** `opts.onPlannerClick`은 호출부(index-page)가 넘기고 있었는데 소비처가 0건이라 **홈에서 모달을 열면 플래너로 갈 길이 없었다.** 등록 진입 버튼을 붙여 소비처를 만들었다(git log). 검증은 `node scripts/verify-meeting-modal-planner.js --negctl`. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
+| DD4 | `openDateMeetingModal`의 `opts` 미사용 | 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
 | ~~IP3~~ | ~~날짜 헬퍼 파편화~~ | ✅ **통합 대상 아님으로 판정 종결.** `toDateStr`(index-page)와 `fmtDate`(day-detail)는 입력·출력·용도가 전부 다른 별개 함수다. **재조사 금지.** |
 | DD2 | (긍정) **day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. **신규 파일 작성 시 이 구조를 따를 것.** |
 

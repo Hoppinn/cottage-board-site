@@ -52,15 +52,8 @@
     }
     .dd-close-row {
       padding: 12px 20px;
-      display: flex; justify-content: center; gap: 8px;
+      display: flex; justify-content: center;
     }
-    /* 등록 진입(주행동) — 같은 줄의 닫기(중립 회색)와 구분되게 초록 채움 */
-    .dd-planner-btn {
-      background: var(--green, #7a4828); border: none; border-radius: 20px;
-      padding: 6px 20px; font-size: 13px; cursor: pointer;
-      color: #fff; font-weight: 700;
-    }
-    .dd-planner-btn:active { filter: brightness(0.92); }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -852,12 +845,7 @@
    * @param {string} voteDate — 'YYYY-MM-DD'
    * @param {Array}  votes    — 해당 날짜의 meeting_votes 배열 (사전 패치)
    * @param {Array}  voteGames — 해당 날짜의 meeting_vote_games 배열 (사전 패치)
-   * @param {Object}   [opts]
-   * @param {() => void} [opts.onPlannerClick] — 있으면 닫기 줄에 등록 진입 버튼을 렌더한다.
-   *   ⚠️ **지난 날짜에서는 opts와 무관하게 렌더하지 않는다**(A-10 — 등록 행동만 빼고 보기는 그대로).
-   *   호출부가 트래킹을 중복 발사하지 않도록 주의: index-page의 `__openPlannerFor`는
-   *   `home_meeting_planner_click`을 **자체 발사**하므로 콜백 안에서 또 부르면 2배로 잡힌다.
-   * @param {string}   [opts.plannerLabel] — 그 버튼의 글자 (기본 '플래너에서 등록하기')
+   * @param {{ onPlannerClick?: () => void }} [opts]
    */
   /** 모임 상세 통계 칩 HTML (참여 인원 · 최대 동시 겹침 · 공통 게임 수) */
   function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
@@ -1114,13 +1102,6 @@
     const rouletteGames = _buildRouletteGames(voteGames);
     const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames);
 
-    // 지난 날짜엔 등록 행동을 렌더하지 않는다(A-10). 판정은 여기 한 곳에서 — 호출부가
-    // 깜빡해도 지난 날짜에 등록 버튼이 뜨지 않아야 한다(플래너 iframe이 `ds >= 오늘`만
-    // 받으므로, 렌더되면 눌러도 아무 일이 안 일어나는 버튼이 된다).
-    const plannerBtnHtml = (opts.onPlannerClick && voteDate >= _todayStr())
-      ? `<button class="dd-planner-btn" type="button">${esc(opts.plannerLabel || '플래너에서 등록하기')}</button>`
-      : '';
-
     const rouletteBtnHtml = rouletteGames.length >= 2
       ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
       : '';
@@ -1155,7 +1136,6 @@
       </div>
       ${roulettePanelHtml}
       <div class="dd-close-row">
-        ${plannerBtnHtml}
         <button class="dd-close-btn" type="button">닫기</button>
       </div>
     </div>`;
@@ -1164,14 +1144,6 @@
     const closeBtn = el.querySelector('.dd-close-btn');
     closeBtn.addEventListener('click', () => el.remove());
     el.addEventListener('click', e => { if (e.target === el) el.remove(); });
-
-    // 등록 진입은 레이어가 아니라 **전환**이다 — 등록하고 돌아오면 이 모달이 들고 있는
-    // votes/voteGames 스냅샷이 낡아 내가 방금 넣은 등록이 안 보인다. 그래서 닫고 넘긴다.
-    // (PROJECT_STRUCTURE §2-A 6의 "닫기 전에 레이어로 풀리는지 보라"에 걸어본 결과가 이것)
-    el.querySelector('.dd-planner-btn')?.addEventListener('click', () => {
-      el.remove();
-      opts.onPlannerClick();
-    });
 
     // 참여자 닉네임 클릭 → 그 사람 모임 보드 (Phase D 진입점 규칙: 모임 참여자 = openOtherMeetingSheet)
     // 보드는 이 모달 위에 겹쳐 뜬다(--z-profile 9100 > .dd-overlay--under-board 9050) —
