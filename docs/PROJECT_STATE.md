@@ -118,6 +118,12 @@
 
 ### P1 — 기능 (중요)
 
+- [ ] **[기능+DB] 모임 플래너 참여 방식 확장 — 지인 동반·지인팟** (2026-07-21 사용자 요청. 계기: 홈페이지를 **모임팟 잡는 용도**로 쓰려는 사람이 실제로 나타남) — 참여 방식 3종(혼자 / 지인 동반 / 지인끼리만)을 등록·수정에 추가. `meeting_votes`에 `participation_type`·`guest_count` 추가 필요 → **착수 시 Plan 필수**.
+  - **의도(원문 스펙이 아니라 이것에 맞춘다)**: ①**등록 건수 ≠ 방문 인원**을 분리한다 ②**방문 인원**과 **합류 가능한 인원**을 분리한다(지인팟은 방문엔 세고 매칭엔 안 센다) ③**지인팟이 없는 날은 화면이 지금과 완전히 같아야 한다**(조건부 분리 렌더).
+  - ⟹ **영향 대상 — 「N명」을 표시·계산하는 화면 5곳 전부.** 원문 스펙은 플래너와 상세 모달 2곳만 다루지만, `getMeetingVotes` 소비처는 실측 **5곳**이다: 주간 플래너 날짜칩·카드([club-schedule.html:1030](../pages/club/club-schedule.html#L1030)·[:1853](../pages/club/club-schedule.html#L1853)), 월간 캘린더 칩([:1741](../pages/club/club-schedule.html#L1741)), 이날 상세 모달([day-detail.js:484](../assets/js/day-detail.js#L484)·[:830](../assets/js/day-detail.js#L830)), 홈 이번 주 모임([index-page.js:1639](../assets/js/index-page.js#L1639)), 프로필 모임보드 주간/월간([kakao-auth.js:1519](../assets/js/kakao-auth.js#L1519)·[:1721](../assets/js/kakao-auth.js#L1721)). **전부 `.length` 또는 `Set(user_id)` 기반**이라 손대지 않으면 조용히 옛 숫자를 낸다(#15 `visitorKey` 사건과 동형 — 공용 헬퍼 없이 일부만 고치면 그 일부가 다른 답을 낸다).
+  - ⟹ **수정·검증 경로**: `getPartySize(vote)` **공용 헬퍼 하나**를 `supabase-client.js`에 두고 위 5곳이 전부 그것만 쓰게 한다. 최대 난점은 [club-schedule.html:733 `calcOverlap`](../pages/club/club-schedule.html#L733) — **`count`가 `names.length`로 묶여 있어** 지인 수를 실을 자리가 없다. `names`(표시)와 `count`(인원)를 분리하는 게 이 작업의 실제 구조 변경이다. 검증: 지인팟 0인 날짜의 렌더 결과가 **변경 전과 바이트 동일**한지 + 5개 화면의 인원 숫자가 서로 일치하는지.
+  - **범위 밖(원문도 동의)**: 같은 날짜에 동호회 참여와 지인팟을 **동시 2건** 등록. `UNIQUE(vote_date, user_id)` 유지.
+
 ### P2 — 기능 (선택)
 
 ---
