@@ -546,7 +546,7 @@
       recordsData = _recs;
       _profileNickMap = new Map();
       for (const p of _profiles) {
-        if (p.user_id && p.nickname) _profileNickMap.set(String(p.nickname).trim().toLowerCase(), String(p.user_id));
+        if (p.user_id && p.nickname) _profileNickMap.set(window.normalizeNick(p.nickname), String(p.user_id));
       }
       const _uid = String(window.getKakaoUser?.()?.id || '');
       const _myNick = window.getKakaoUser?.()?.nickname?.toLowerCase() || '';
@@ -809,7 +809,7 @@
     _nickUserMap = new Map(_profileNickMap);
     if (data?.length) {
       for (const r of data) {
-        if (r.user_id && r.nickname) _nickUserMap.set(r.nickname.trim().toLowerCase(), String(r.user_id));
+        if (r.user_id && r.nickname) _nickUserMap.set(window.normalizeNick(r.nickname), String(r.user_id));
       }
     }
 
@@ -846,7 +846,7 @@
 
     // 참여자 이름 클릭 → 해당 회원 읽기전용 보드 열기
     panel.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
-      const userId = _nickUserMap.get((span.dataset.nick || '').toLowerCase());
+      const userId = _nickUserMap.get(window.normalizeNick(span.dataset.nick));
       if (!userId) return;
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => {

@@ -355,6 +355,14 @@
     };
   }
 
+  // 참여자 이름 ↔ 회원 닉네임 대조용 정규화.
+  // 참여자 이름은 사람이 손으로 친 자유 텍스트라 회원 닉네임과 공백·대소문자가 어긋난다.
+  // 실제 사건(2026-07-22): 회원 닉네임이 「덕 지」인데 기록엔 「덕지」로 적혀 있어 13건이
+  // 조용히 클릭 불가였다. 맵을 만들 때와 조회할 때 **양쪽 다** 이 함수를 통과시킬 것.
+  function normalizeNick(s) {
+    return String(s ?? '').replace(/\s+/g, '').toLowerCase();
+  }
+
   // ── 크로스 페이지 복귀 링크 (플레이기록 ↔ 동호회 기록&사진) ────────────────
   // 두 게시판이 서로를 링크하는데 돌아올 길이 없었다(2026-07-22 사용자 지적).
   // 「닫고 전환」이지 「겹쳐 쌓기」가 아니므로(PROJECT_STRUCTURE §2-A 6) 모달이 아니라
@@ -395,6 +403,7 @@
 
   // 전역 노출
   window.renderCrossBackLink = renderCrossBackLink;
+  window.normalizeNick = normalizeNick;
   window.parsePhotoUrls = parsePhotoUrls;
   window.buildPhotoHtml = buildPhotoHtml;
   window.openLightbox = openLightbox;

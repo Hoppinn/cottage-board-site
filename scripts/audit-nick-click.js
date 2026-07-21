@@ -37,14 +37,30 @@ const db = createClient(url, anonKey);
   console.log(`profiles ${profiles.length}행 (count=${pCount}) / records ${recs.length}행 (count=${rCount})`);
   if (recs.length === 1000) console.log('🚨 정확히 1000행 — PostgREST max-rows 절단 의심');
 
+  // play-records-utils.js normalizeNick과 같은 규칙 (공백 제거 + 소문자)
+  const norm = s => String(s ?? '').replace(/\s+/g, '').toLowerCase();
+
+  // 🚨 정규화가 서로 다른 회원을 한 사람으로 합치면 엉뚱한 보드가 열린다 — 먼저 센다
+  const collide = new Map();
+  for (const p of profiles) {
+    if (!p.nickname) continue;
+    const k = norm(p.nickname);
+    if (!collide.has(k)) collide.set(k, []);
+    collide.get(k).push(p.nickname);
+  }
+  const dup = [...collide.values()].filter(v => v.length > 1);
+  console.log(dup.length
+    ? `🔴 공백 제거 후 겹치는 회원 닉네임 ${dup.length}쌍: ${JSON.stringify(dup)} — 정규화를 쓰면 안 된다`
+    : '✅ 공백 제거 후 회원 닉네임 충돌 0쌍 — 정규화해도 사람이 섞이지 않는다');
+
   // game-reviews.js renderRecords의 맵 구성을 그대로 재현
   const nickMap = new Map();
   if (!NEG) {
     for (const p of profiles) {
-      if (p.user_id && p.nickname) nickMap.set(String(p.nickname).trim().toLowerCase(), String(p.user_id));
+      if (p.user_id && p.nickname) nickMap.set(norm(p.nickname), String(p.user_id));
     }
     for (const r of recs) {
-      if (r.user_id && r.nickname) nickMap.set(r.nickname.trim().toLowerCase(), String(r.user_id));
+      if (r.user_id && r.nickname) nickMap.set(norm(r.nickname), String(r.user_id));
     }
   }
   console.log(`닉네임→userId 맵: ${nickMap.size}개${NEG ? ' (음성 대조군: 비움)' : ''}`);
@@ -59,7 +75,7 @@ const db = createClient(url, anonKey);
       const t = raw.trim();
       if (!t) continue;
       total++;
-      if (nickMap.has(t.toLowerCase())) hit++;
+      if (nickMap.has(norm(t))) hit++;
       else {
         missCount.set(t, (missCount.get(t) || 0) + 1);
         if (r.group_name === '코티지보드 동호회') clubMiss.set(t, (clubMiss.get(t) || 0) + 1);

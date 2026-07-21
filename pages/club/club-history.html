@@ -178,10 +178,10 @@
       const profiles = await window.CottageDB.getAllProfiles?.() || [];
       nickUserMap = new Map();
       for (const p of profiles) {
-        if (p.user_id && p.nickname) nickUserMap.set(String(p.nickname).trim().toLowerCase(), String(p.user_id));
+        if (p.user_id && p.nickname) nickUserMap.set(window.normalizeNick(p.nickname), String(p.user_id));
       }
       for (const r of records) {
-        if (r.user_id && r.nickname) nickUserMap.set(String(r.nickname).trim().toLowerCase(), String(r.user_id));
+        if (r.user_id && r.nickname) nickUserMap.set(window.normalizeNick(r.nickname), String(r.user_id));
       }
 
       const tipHtml = `<div class="history-tip">💡 <span><a href="../game/game-reviews.html?from=club-history" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
@@ -257,7 +257,7 @@
       // (Phase D 진입점 규칙: 모임 참여자 외 전부 openOtherProfileSheet — PROJECT_STRUCTURE §5)
       // 회원과 연결되지 않는 이름(비회원 손님 등)은 커서도 안 바뀌고 아무 일도 일어나지 않는다.
       root.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
-        const uid = nickUserMap.get((span.dataset.nick || '').trim().toLowerCase());
+        const uid = nickUserMap.get(window.normalizeNick(span.dataset.nick));
         if (!uid) return;
         span.style.cursor = 'pointer';
         span.addEventListener('click', e => {
