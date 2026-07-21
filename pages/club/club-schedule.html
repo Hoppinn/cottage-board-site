@@ -1478,9 +1478,9 @@
                   title="지난 모임에서 ${pastLabel} 게임 불러오기" aria-label="지난 모임에서 ${pastLabel} 게임 불러오기"
                   aria-pressed="${_pastOpen[type] ? 'true' : 'false'}">지난 모임</button>
               </div>
-              ${gameListHtml(type) ? `<div class="sm-game-picked"><div class="sm-game-picked-label">고른 게임 ${count}개</div>${gameListHtml(type)}</div>` : ''}
               ${_pickerCache[source] !== undefined ? pickerHtml(type, source) : ''}
               ${_pastOpen[type] ? pickerHtml(type, 'past') : ''}
+              ${gameListHtml(type) ? `<div class="sm-game-picked"><div class="sm-game-picked-label">고른 게임 ${count}개</div>${gameListHtml(type)}</div>` : ''}
             </div>
           </div>`;
         }
