@@ -584,6 +584,62 @@
     } catch (_) { return { html: '', earnedIds: new Set(), titleTotal: TITLE_DEFS.length }; }
   }
 
+  // 🚨 대표 표시를 고치는 자리는 여기 두 함수뿐이다 (2026-07-21 신설).
+  // 예전엔 각 핸들러가 넘겨받은 charBody/titleBody **안에서만** 클래스를 고쳤는데,
+  // 수집 보드의 **미리보기 줄과 헤더 아이콘은 그 바깥**이라 옛 캐릭터가 그대로 남았다
+  // (실측: 아바타 2곳은 즉시 바뀌고 미리보기·헤더만 새로고침해야 바뀜).
+  // 표시하는 자리를 새로 만들면 클래스·선택자를 여기 추가할 것.
+
+  // 대표 캐릭터가 없던 사용자의 패널 아바타는 <div>🐾</div>다 — src를 넣어도 안 바뀐다
+  function _setPanelAvatar(src) {
+    const el = document.querySelector('#profilePanel .profile-panel-avatar');
+    if (!el) return;
+    if (el.tagName === 'IMG') { el.src = src; return; }
+    const img = document.createElement('img');
+    img.className = 'profile-panel-avatar';
+    img.src = src;
+    img.alt = '';
+    el.replaceWith(img);
+  }
+
+  function _applyRepCharacterUI(achId) {
+    document.querySelectorAll('.profile-char-card').forEach(c => {
+      c.classList.remove('is-rep', 'is-selected');
+      if (achId && c.dataset.achId === achId) c.classList.add('is-rep');
+    });
+    const def = achId ? ACH_DEFS.find(d => d.id === achId) : null;
+    const charPath = def?.rewards?.character ? _charImgPath(def.rewards.character) : null;
+    if (!charPath) return;
+    document.querySelectorAll('.profile-char-header').forEach(header => {
+      let icon = header.querySelector('.profile-char-rep-icon');
+      if (!icon) { // 대표가 없던 사용자는 아이콘 요소 자체가 없다
+        icon = document.createElement('img');
+        icon.className = 'profile-char-rep-icon';
+        icon.alt = '';
+        header.insertBefore(icon, header.querySelector('.profile-char-count'));
+      }
+      icon.src = charPath;
+    });
+    _setPanelAvatar(charPath);
+    const menuAvatar = document.getElementById('kakaoProfileImg');
+    if (menuAvatar) menuAvatar.src = charPath;
+  }
+
+  function _applyRepTitleUI(titleId) {
+    document.querySelectorAll('.profile-title-card').forEach(c => {
+      c.classList.remove('is-rep', 'is-selected');
+      if (titleId && c.dataset.titleId === titleId) c.classList.add('is-rep');
+    });
+    const def = titleId ? TITLE_DEFS.find(t => t.id === titleId) : null;
+    const nameEl = document.querySelector('#profilePanel .profile-panel-title-name');
+    if (!nameEl || !def) return;
+    nameEl.classList.remove('is-empty');
+    // ⚙(수정 진입) 아이콘을 살려둔다 — textContent로 통째 덮으면 사라져 수정 경로가 없어졌다
+    const gear = nameEl.querySelector('.profile-title-edit');
+    nameEl.textContent = `${def.emoji} ${def.name} `;
+    if (gear) nameEl.appendChild(gear);
+  }
+
   // 대표 칭호 변경 핸들러
   async function handleRepTitleSelect(userId, titleId, origId, titleBody) {
     if (!userId || !titleId) return;
@@ -593,13 +649,9 @@
       titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-selected'));
       if (origId) titleBody.querySelector(`.profile-title-card[data-title-id="${origId}"]`)?.classList.add('is-selected');
     } else {
-      titleBody.querySelectorAll('.profile-title-card').forEach(c => c.classList.remove('is-rep', 'is-selected'));
-      if (titleId) titleBody.querySelector(`.profile-title-card[data-title-id="${titleId}"]`)?.classList.add('is-rep');
+      _applyRepTitleUI(titleId);
       const actionRow = titleBody.querySelector('#profileTitleActionRow');
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = titleId || ''; }
-      const titleDef = TITLE_DEFS.find(t => t.id === titleId);
-      const panelTitleEl = document.querySelector('#profilePanel .profile-panel-title-name');
-      if (panelTitleEl && titleDef) panelTitleEl.textContent = `${titleDef.emoji} ${titleDef.name}`;
     }
   }
 
@@ -868,18 +920,9 @@
       charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-selected'));
       if (origId) charBody.querySelector(`.profile-char-card[data-ach-id="${origId}"]`)?.classList.add('is-selected');
     } else {
-      charBody.querySelectorAll('.profile-char-card').forEach(c => c.classList.remove('is-rep', 'is-selected'));
-      if (achId) charBody.querySelector(`.profile-char-card[data-ach-id="${achId}"]`)?.classList.add('is-rep');
+      _applyRepCharacterUI(achId);
       const actionRow = charBody.querySelector('#profileRepActionRow');
       if (actionRow) { actionRow.style.display = 'none'; actionRow.dataset.origRepId = achId || ''; }
-      const _repDef = achId ? ACH_DEFS.find(d => d.id === achId) : null;
-      const _repCharPath = _repDef?.rewards?.character
-        ? _charImgPath(_repDef.rewards.character)
-        : null;
-      const panelAvatar = document.querySelector('#profilePanel .profile-panel-avatar');
-      if (panelAvatar && _repCharPath) panelAvatar.src = _repCharPath;
-      const menuAvatar = document.getElementById('kakaoProfileImg');
-      if (menuAvatar && _repCharPath) menuAvatar.src = _repCharPath;
     }
   }
 

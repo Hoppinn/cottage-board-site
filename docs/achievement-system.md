@@ -55,7 +55,15 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 
 🚨 **새 캐릭터를 추가할 땐 접두사에 맞는 폴더에 넣어야 한다** — 규칙이 파일명에서 파생되므로 폴더가 틀리면 **에러 없이 이미지만 깨진다**. 현재 `rare/`에 11개.
 
-⚠️ **`squirrel_lv5`는 정의돼 있으나 파일이 없다**(lv1~lv4만 존재). 경고도 안 뜬다 — PROJECT_STATE §3의 열린 항목.
+⚠️ **정의돼 있는데 파일이 없는 캐릭터는 3개다 — `squirrel_lv5`·`sparrow_lv5`·`hedgehog_lv5`** (2026-07-21 실측: 수집 보드를 열면 이 셋이 매번 404). `onerror` 폴백이 이모지로 바꿔치기해 **화면상 티가 안 나고 경고도 없다** → PROJECT_STATE §3의 열린 항목.
+
+### 대표 캐릭터·칭호 표시를 고치는 자리는 두 함수뿐이다
+
+`_applyRepCharacterUI(achId)` / `_applyRepTitleUI(titleId)` ([achievements.js](../assets/js/achievements.js)). 저장 핸들러(`handleRepCardSelect`/`handleRepTitleSelect`)는 DB 성공 후 이 둘만 부른다.
+
+🚨 **대표 표시를 보여주는 자리를 새로 만들면 그 선택자를 이 함수에 추가할 것.** 예전엔 각 핸들러가 넘겨받은 `charBody`/`titleBody` **안에서만** 클래스를 고쳤는데, 수집 보드의 **미리보기 줄·헤더 아이콘은 그 바깥**이라 새로고침 전까지 옛 캐릭터가 남아 있었다(2026-07-21 실측·수정). 함께 처리해야 하는 특수 케이스 둘:
+- 대표가 **없던** 사용자의 패널 아바타는 `<img>`가 아니라 `<div>🐾</div>`다 → `src`를 넣어도 안 바뀐다(요소 교체 필요). 헤더의 대표 아이콘도 **요소 자체가 없다**(삽입 필요).
+- 패널 칭호를 `textContent`로 덮으면 옆의 **⚙(수정 진입) 아이콘이 사라진다** → 떼뒀다 다시 붙인다.
 
 ⚠️ 업적 ID는 사용자 자산(획득 업적, 교환권, 도감 진행률)의 기준값이므로 배포 후 변경 금지. `CLAUDE.md §영구 식별자` 참조.
 
