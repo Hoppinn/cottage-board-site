@@ -151,6 +151,10 @@
     const params = new URLSearchParams(location.search);
     const embedded = params.get('embed') === 'true';
     if (embedded) document.body.classList.add('is-embedded');
+
+    // 동호회 기록&사진에서 건너온 경우에만 복귀 링크. 홈이 이 페이지를 iframe으로 미리 로드하므로
+    // embed 모드에선 띄우지 않는다(모달 안에 「돌아가기」가 뜨면 갈 곳이 없다).
+    if (!embedded && !document.body.classList.contains('embed-mode')) window.renderCrossBackLink?.();
     const startInput = params.get('tab') === 'input';
     // ① embed는 홈의 프리로드(사용자가 연 적 없음)라 제외 — 열릴 땐 ③으로 잡힌다
     if (startInput && !embedded) trackRecordStart();
@@ -1114,7 +1118,7 @@
       }
 
       if (groupName === '코티지보드 동호회') {
-        html += `<div class="pr-club-link-row"><a class="pr-club-link" href="../club/club-history.html">📸 동호회 기록 &amp; 사진 게시판에서 보러가기 →</a></div>`;
+        html += `<div class="pr-club-link-row"><a class="pr-club-link" href="../club/club-history.html?from=game-reviews">📸 동호회 기록 &amp; 사진 게시판에서 보러가기 →</a></div>`;
       }
 
       html += `</div></div>`;

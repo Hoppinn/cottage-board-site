@@ -184,7 +184,7 @@
         if (r.user_id && r.nickname) nickUserMap.set(String(r.nickname).trim().toLowerCase(), String(r.user_id));
       }
 
-      const tipHtml = `<div class="history-tip">💡 <span><a href="../game/game-reviews.html" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
+      const tipHtml = `<div class="history-tip">💡 <span><a href="../game/game-reviews.html?from=club-history" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
 
       const clubRecords = records.filter(r => r.group_name === '코티지보드 동호회');
       if (!clubRecords.length) {
@@ -223,7 +223,7 @@
         </div>`;
       }
 
-      html += `</div><a class="history-cross-link" href="../game/game-reviews.html">🎲 전체 플레이 기록 보기 →</a></div>`;
+      html += `</div><a class="history-cross-link" href="../game/game-reviews.html?from=club-history">🎲 전체 플레이 기록 보기 →</a></div>`;
       root.innerHTML = html;
       attachHandlers(root);
 
@@ -405,7 +405,7 @@
     });
 
     window.addEventListener('cottage-auth-changed', () => render());
-    document.addEventListener('DOMContentLoaded', () => render());
+    document.addEventListener('DOMContentLoaded', () => { window.renderCrossBackLink?.(); render(); });
   })();
   </script>
 

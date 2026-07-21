@@ -3,7 +3,7 @@
 // 전역 노출: window.parsePhotoUrls / window.buildPhotoHtml / window.openLightbox
 //            window.toInitials / window.hangulMatch / window.attachAc
 //            window.initTagInput / window.buildPhotoItemAdder / window.revokePhotoGridBlobs
-//            window.getGameKeyById
+//            window.getGameKeyById / window.renderCrossBackLink
 
 (function () {
   function _escAttr(s) {
@@ -355,7 +355,46 @@
     };
   }
 
+  // ── 크로스 페이지 복귀 링크 (플레이기록 ↔ 동호회 기록&사진) ────────────────
+  // 두 게시판이 서로를 링크하는데 돌아올 길이 없었다(2026-07-22 사용자 지적).
+  // 「닫고 전환」이지 「겹쳐 쌓기」가 아니므로(PROJECT_STRUCTURE §2-A 6) 모달이 아니라
+  // 복귀 링크가 맞다 — 넘어간 페이지 자체를 계속 쓰다가 돌아오는 동선이기 때문.
+  // 링크에 ?from=키 를 붙이면 도착 페이지 맨 위에 「← ○○로」가 뜬다.
+  const _BACK_TARGETS = {
+    'club-history': { href: '../club/club-history.html', label: '모임 기록 & 사진' },
+    'game-reviews': { href: '../game/game-reviews.html', label: '플레이 기록' },
+  };
+
+  function renderCrossBackLink() {
+    const key = new URLSearchParams(location.search).get('from');
+    const target = _BACK_TARGETS[key];
+    if (!target) return;
+    const anchor = document.querySelector('.inner-page > .breadcrumb');
+    if (!anchor || document.querySelector('.cross-back-link')) return;
+
+    // 조사: 마지막 글자에 받침이 있으면 「으로」, 없으면 「로」
+    // (「사진로 돌아가기」가 실제로 나왔다 — 라벨을 새로 추가할 때도 이 판정이 알아서 맞춘다)
+    const last = target.label.trim().slice(-1).charCodeAt(0);
+    const josa = (last >= 0xAC00 && last <= 0xD7A3 && (last - 0xAC00) % 28 !== 0) ? '으로' : '로';
+
+    const a = document.createElement('a');
+    a.className = 'cross-back-link';
+    a.href = target.href;
+    a.textContent = `← ${target.label}${josa} 돌아가기`;
+    // 뒤로가기로 갈 수 있으면 그쪽을 쓴다 — 스크롤 위치가 보존된다.
+    // (referrer가 비거나 다른 경로로 들어왔으면 href 그대로 이동)
+    a.addEventListener('click', e => {
+      const ref = document.referrer || '';
+      if (history.length > 1 && ref.includes(target.href.replace('../', '/'))) {
+        e.preventDefault();
+        history.back();
+      }
+    });
+    anchor.parentNode.insertBefore(a, anchor);
+  }
+
   // 전역 노출
+  window.renderCrossBackLink = renderCrossBackLink;
   window.parsePhotoUrls = parsePhotoUrls;
   window.buildPhotoHtml = buildPhotoHtml;
   window.openLightbox = openLightbox;
