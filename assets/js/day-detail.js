@@ -201,6 +201,17 @@
       text-underline-offset: 2px;
     }
     .sched-bar-name:hover { color: var(--green); text-decoration: underline; }
+    .sched-bar-guest {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--green);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0 4px;
+      line-height: 15px;
+      flex-shrink: 0;
+    }
     .sched-bar-track {
       flex: 1;
       min-height: 24px;
@@ -899,7 +910,7 @@
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
       return `<div class="dd-block">
         <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</div>
-        <div class="dd-time">${v.time_start}~${v.time_end}시</div>
+        <div class="dd-time">${v.time_start}~${v.time_end}시${partyCount([v]) > 1 ? ` · 지인 ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
       </div>`;
@@ -1193,6 +1204,8 @@
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
       const gameLine = gameAbbrs(v.vote_date, v.user_id, v.time_end - v.time_start);
+      // 이름은 등록자 1명뿐이지만 인원은 지인 포함이라 다르다 → 막대에 「+N」으로 드러낸다
+      const guestN   = partyCount([v]) - 1;
       const actions = mine
         ? `<div class="sched-bar-actions">
             <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
@@ -1202,6 +1215,7 @@
       return `<div class="sched-bar-item">
         <div class="sched-bar-left">
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
+          ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 지인 ${guestN}명">+${guestN}</span>` : ''}
           ${actions}
         </div>
         <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">

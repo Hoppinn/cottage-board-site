@@ -98,7 +98,27 @@ check('sumPartySize(배열 아님) → 0', sumPartySize('x') === 0);
 console.log('=== ④ 중복 행: 같은 유저가 두 번 들어와도 한 번만 센다 ===');
 check('같은 user_id 2행(지인 2) → 3명', sumPartySize([v('u1', 2), v('u1', 2)]) === 3);
 
-console.log(fail === 0
-  ? (NEG ? '\n⚠️ --negctl인데 전부 통과 — 검사기가 고장 났다. 결과를 믿지 말 것.' : '\n✅ 전부 통과')
-  : (NEG ? `\n✅ 음성 대조군 정상: 비튼 ${fail}줄에서만 🔴` : `\n❌ ${fail}건 실패`));
-process.exit(NEG ? (fail > 0 ? 0 : 1) : (fail > 0 ? 1 : 0));
+// ── ⑤ 실DB 조회 (읽기 전용) ────────────────────────────────
+// 013 실행 후 getMeetingVotes가 guest_count를 실제로 실어 오는지 본다.
+// 컬럼이 없으면 PostgREST가 400을 내고 함수가 []를 반환하므로 "0행"으로 나타난다
+// → 행 수만 보면 오독한다. 그래서 error 로그와 컬럼 존재를 함께 본다.
+(async () => {
+  if (!process.argv.includes('--live')) {
+    console.log('\n(실DB 조회는 --live 옵션에서만 — 건너뜀)');
+    process.exit(NEG ? (fail > 0 ? 0 : 1) : (fail > 0 ? 1 : 0));
+  }
+  console.log('\n=== ⑤ 실DB: getMeetingVotes가 guest_count를 실어 오는가 (읽기 전용) ===');
+  const rows = await db.getMeetingVotes('2000-01-01', '2099-12-31');
+  check('행이 비어 있지 않다 (0이면 400 절단 의심)', rows.length > 0, `${rows.length}행`);
+  const hasCol = rows.length > 0 && Object.prototype.hasOwnProperty.call(rows[0], 'guest_count');
+  check('응답에 guest_count 필드가 있다', hasCol,
+        rows.length ? `키: ${Object.keys(rows[0]).join(', ')}` : '행 없음');
+  check('전 행의 guest_count가 숫자다', rows.every(r => Number.isFinite(Number(r.guest_count))));
+  const totalParty = rows.reduce((a, r) => a + getPartySize(r), 0);
+  check('총 인원 ≥ 등록 건수', totalParty >= rows.length, `인원 ${totalParty} / 등록 ${rows.length}건`);
+
+  console.log(fail === 0
+    ? (NEG ? '\n⚠️ --negctl인데 전부 통과 — 검사기가 고장 났다.' : '\n✅ 전부 통과')
+    : (NEG ? `\n✅ 음성 대조군 정상: 비튼 ${fail}줄에서만 🔴` : `\n❌ ${fail}건 실패`));
+  process.exit(NEG ? (fail > 0 ? 0 : 1) : (fail > 0 ? 1 : 0));
+})();

@@ -2779,6 +2779,11 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
     const d = new Date(ds + 'T00:00:00');
     return (d.getMonth()+1) + '/' + d.getDate() + '(' + _days[d.getDay()] + ')';
   };
+  // 동반 지인이 있는 날만 「+N」 — 인원 계산은 공용 헬퍼에 위임(자체 계산 금지)
+  const _guestSuffix = v => {
+    const n = (window.CottageDB?.getPartySize?.(v) ?? 1) - 1;
+    return n > 0 ? ` <span class="mb-week-guest">+${n}</span>` : '';
+  };
   const rows = myVotes.map(v => {
     const total = 14; // 9~23시
     const left  = ((v.time_start - 9) / total * 100).toFixed(1);
@@ -2787,7 +2792,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
       <div class="mb-week-row">
         <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
         <div class="mb-mini-bar-wrap"><div class="mb-mini-bar-fill" style="left:${left}%;width:${width}%"></div></div>
-        <span class="mb-week-time">${v.time_start}~${v.time_end}시</span>
+        <span class="mb-week-time">${v.time_start}~${v.time_end}시${_guestSuffix(v)}</span>
         <button class="mb-detail-btn" data-uid="${escH(String(userId))}" data-date="${escH(v.vote_date)}" type="button">자세히</button>
       </div>
     </div>`;

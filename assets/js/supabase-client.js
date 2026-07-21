@@ -2067,7 +2067,7 @@ window._cottageSess = (function () {
   async function getMeetingVotes(startDate, endDate) {
     try {
       const { data, error } = await db.from('meeting_votes')
-        .select('vote_date, user_id, nickname, time_start, time_end')
+        .select('vote_date, user_id, nickname, time_start, time_end, guest_count')
         .gte('vote_date', startDate)
         .lte('vote_date', endDate)
         .order('vote_date');
@@ -2094,14 +2094,19 @@ window._cottageSess = (function () {
     return total;
   }
 
-  async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd) {
+  // guestCount(동반 지인 수)는 기본값 0 — 인자를 안 넘기는 기존 호출부는 동작이 바뀌지 않는다.
+  // 상한 99는 DB CHECK와 같은 값(오타 방지). 음수·NaN·소수는 0/정수로 접는다.
+  async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount = 0) {
     try {
+      const g = Number(guestCount);
+      const guest = Number.isFinite(g) && g > 0 ? Math.min(99, Math.floor(g)) : 0;
       const { error } = await db.from('meeting_votes').upsert({
         vote_date: voteDate,
         user_id: String(userId),
         nickname,
         time_start: timeStart,
         time_end: timeEnd,
+        guest_count: guest,
       }, { onConflict: 'vote_date,user_id' });
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
