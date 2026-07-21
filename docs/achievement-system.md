@@ -189,7 +189,7 @@ game_play_participants
 | record_150 | 백오십 번의 기록 | squirrel_lv4 | 겨울준비 다람쥐 |
 | record_200 | 이백 번의 기록 | title_record_200 | 코티지 사서 |
 | record_300 | 삼백 번의 기록 | title_record_300 | 코티지 골수팬 |
-| record_400 | 여름의 플레이어 | squirrel_lv5 | 사서 다람쥐 |
+| record_400 | 여름의 플레이어 | squirrel_lv5 ⚠️미완성 | 사서 다람쥐 (lv5 파일 미제작) |
 | record_500 | 코티지 마스터 | cottage_master + title_record_500 | 코티지 마스터 / 코티지 마스터 |
 
 ---
@@ -292,8 +292,15 @@ game_play_participants
 
 | 항목 | 내용 |
 |------|------|
+| squirrel_lv5.png | record_400 보상 파일 미제작. 달성자 발생 전 추가 필요. |
 | hedgehog_lv5.png | photo_500 보상 파일 미제작. 달성자 발생 전 추가 필요. |
 | sparrow_lv5.png | visit_500 보상 파일 미제작. 달성자 발생 전 추가 필요. |
+
+**이 목록은 손으로 세지 말 것** — `node scripts/verify-character-assets.js`가 `ACH_DEFS.rewards.character` 40종을 디스크와 대조한다(2026-07-21 실측: 누락 정확히 위 3건). 손으로 세던 시절 `squirrel_lv5`가 이 표에서 빠진 채 보상표에는 **경고 없이 정상 보상처럼** 적혀 있었다.
+
+🔎 **왜 눈으로는 안 잡히나**: 캐릭터 `<img>`에 `onerror` 폴백이 걸려 있어 파일이 없으면 조용히 이모지로 바뀐다. 수집 보드를 열 때마다 404가 3건 나지만 **화면은 멀쩡해 보이고 콘솔 경고도 없다.** 달성자가 나오기 전엔 아무도 모른다.
+
+📌 **어떤 업적도 안 쓰는 이미지 11종**(`rare/` 7 + `season_*` 4 + `_contact_sheet.png`)이 같은 검사에서 나온다. 레어·시즌 캐릭터는 `ACH_DEFS` 밖의 별도 지급 경로를 전제로 만들어 둔 것으로 보이며 **누락이 아니다** — 지급 경로가 실재하는지는 미확인(열린 항목).
 
 ---
 
