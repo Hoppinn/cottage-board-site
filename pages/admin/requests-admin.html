@@ -1045,18 +1045,6 @@
         return out;
       }
 
-      function buildPageMap(rowset) {
-        const m = new Map();
-        for (const r of rowset) {
-          if (!m.has(r.page)) m.set(r.page, { visits: 0, totalSec: 0, users: new Set() });
-          const p = m.get(r.page);
-          p.visits++; p.totalSec += r.duration_sec || 0;
-          if (r.user_id) p.users.add(r.user_id);
-          else if (r.session_key) p.users.add(`anon:${r.session_key}`);
-        }
-        return [...m.entries()].sort((a, b) => b[1].visits - a[1].visits);
-      }
-
       function buildUserMap(rowset) {
         const m = new Map();
         for (const r of rowset) {

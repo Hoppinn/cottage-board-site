@@ -416,24 +416,6 @@ function isActiveGame(game) {
   return getGameStatus(game) === "active";
 }
 
-function getSearchText(game) {
-  return [
-    getDisplayTitle(game),
-    getOwnedTitle(game),
-    getBggTitle(game),
-    ...getDisplayTags(game),
-    ...getMoodTags(game),
-    ...getPlayTags(game),
-    ...getRelationshipTags(game),
-    ...getBggCategories(game),
-    ...getBggMechanics(game),
-    ...getDesigners(game),
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-}
-
 function getGameCardData(game) {
   return {
     id: game?.id || "",
@@ -456,7 +438,6 @@ function getGameCardData(game) {
 
     tags: getPrimaryTags(game),
     status: getGameStatus(game),
-    searchText: getSearchText(game),
   };
 }
 
@@ -523,7 +504,6 @@ function getGameDetailData(game) {
 
     community: getCommunityData(game),
     status: getGameStatus(game),
-    searchText: getSearchText(game),
   };
 }
 
@@ -558,7 +538,6 @@ function getRecommendData(game) {
     comment: getCommentText(game),
     recommendPoint: getRecommendPointText(game),
     status: getGameStatus(game),
-    searchText: getSearchText(game),
   };
 }
 
@@ -623,7 +602,6 @@ if (typeof window !== "undefined") {
     getCommunityData,
     getGameStatus,
     isActiveGame,
-    getSearchText,
 
     getGameCardData,
     getGameDetailData,
