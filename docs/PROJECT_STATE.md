@@ -33,7 +33,7 @@
 > - #3 "현재 발현 0건" — 실제로는 326세션 중 13개에서 발현 중이었다.
 > - **2026-07-22 iframe 검증** — 음성 대조군(178건 검출)까지 통과한 "✅ 0건"이 **틀린 통과**였다. 판정 구간에 **증상이 나타날 기회(로그인 홈 방문)가 2번뿐**이었기 때문. → **음성 대조군은 「판정기가 작동하나」에만 답하고 「표본이 있나」엔 답하지 않는다.** 통과를 믿기 전에 **기회가 몇 번 있었는지를 따로 센다.**
 
-**Phase 3 감사 실착수 전부 종결** (IP1·IP2·GS4·GS5·GS7·문서감사 ✅ / DD4·IP3 판정종결). REFACTOR_CHECKPOINT 「열린 항목」에 남은 건 DD4(보존 판정)뿐 = **리팩토링 대기열이 비었다.**
+**Phase 3 감사 실착수 전부 종결** (IP1·IP2·GS4·GS5·GS7·문서감사 ✅ / DD4·IP3 판정종결). DD4도 2026-07-22 종결(지우는 대신 소비처를 만들었다) = **REFACTOR_CHECKPOINT 「열린 항목」에 남은 건 DD2(긍정 사례)뿐 = 리팩토링 대기열이 비었다.**
 
 ⚠️ **리팩토링에 착수하면 REFACTOR_CHECKPOINT.md 「재방문 시 필요한 판단」·「교훈」을 먼저 읽을 것** — KA4 3사본을 통합하면 안 되는 이유, 과도분리 금지 선례 2건, **함수 추출 3종 함정**(읽기누수·쓰기누수·크로스파일 갭 — `node --check`도 diff도 못 잡는다. R10c에서 세 번째 재발).
 
@@ -93,7 +93,7 @@
 
 ### 코드 품질 주석 (리팩토링 참고용)
 
-- `day-detail.js` `openDateMeetingModal(voteDate, votes, voteGames, opts)`의 **`opts`가 함수 안에서 한 번도 안 읽힌다** — JSDoc에는 `onPlannerClick`이 있고 [index-page.js:1477](../assets/js/index-page.js#L1477)이 실제로 넘기지만 소비처 0건(2026-07-22 센터모달 z-index 작업 중 발견). 홈 미리보기 → 이날 모임 상세 모달에 「플래너로」 진입 버튼이 없다는 뜻이라, **죽은 인자를 지울지 버튼을 붙일지는 기획 판단**이다. 같은 자리에서: 홈은 공용 `openPlannerModal`(day-detail.js, "페이지별 복제 금지" 주석 있음)을 안 쓰고 자체 `plannerSheetModal`을 갖는데 **빠른진입(is-quick-entry) 때문이라 정당한 분기**다 — 그 주석만 실상과 어긋나 있다.
+- 홈은 공용 `openPlannerModal`(day-detail.js, "페이지별 복제 금지" 주석 있음)을 안 쓰고 자체 `plannerSheetModal`을 갖는데 **빠른진입(is-quick-entry) 때문이라 정당한 분기**다 — **그 주석만 실상과 어긋나 있다**(고칠 것은 코드가 아니라 주석). ※같은 줄에 있던 `openDateMeetingModal` `opts` 미사용 건은 2026-07-22 종결(git log).
 - `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)

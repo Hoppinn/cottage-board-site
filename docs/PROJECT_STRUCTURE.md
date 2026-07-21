@@ -110,6 +110,10 @@
 │   ├── verify-past-meeting-actions.js # A-10 지난 날짜의 무반응 버튼(✎/✕·등록) 제거 검증 (DB 불필요)
 │   │                               #   --negctl 먼저. day-detail.js를 실제 eval하고,
 │   │                               #   index-page.js의 판정식은 원문 그대로 잘라 eval한다
+│   ├── verify-meeting-modal-planner.js # 이날모임 상세 모달의 플래너 진입 버튼 (DB 불필요)
+│   │                               #   --negctl 먼저. openDateMeetingModal을 실제 eval해 모달
+│   │                               #   innerHTML과 클릭 핸들러를 꺼내 본다. 호출부 검사는
+│   │                               #   ⚠️ 주석 제거 전에 `\r`를 지울 것 — CRLF라 `//.*$`가 안 먹는다
 │   ├── verify-esch-unify.js        # GS5 escH 사본 통합 — 정본 동작(eval) + 남은 사본 스캔 (DB 불필요)
 │   │                               #   --negctl 먼저. ALLOW에 「통합 대상 아님」 4종의 이유가 있다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
