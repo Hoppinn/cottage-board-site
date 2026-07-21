@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-22 (GS5 — scripts/ 목록에 verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -101,6 +101,12 @@
 │   │                               #   kakao-auth-ready 이후, 세션당 1회). 그 기회 수를 세어
 │   │                               #   판정에 필요한 표본(현재 11건)과 대조한다. 2026-07-22에
 │   │                               #   verify-iframe-rows의 「✅ 0건」이 무증상 구간이었음을 이걸로 잡았다
+│   ├── audit-session-double-insert.js # 「방문 1회 = page_sessions 몇 행인가」 실측 (읽기전용)
+│   │                               #   --negctl 먼저. 화면의 normalizePageKey를 원문 그대로
+│   │                               #   잘라 eval한다 — 원본 page로 묶으면 과거 쌍을 못 본다
+│   ├── verify-session-dedup.js     # 위 부풀림의 읽기측 접기(collapseTwinInserts) 검증 (읽기전용)
+│   │                               #   --negctl(창 -1ms) 먼저. 0ms는 `<=0`이라 동시 행이 접혀
+│   │                               #   대조군이 성립하지 않는다. 불변식 6종 + 화면 「진입 N회」 변화
 │   ├── verify-esch-unify.js        # GS5 escH 사본 통합 — 정본 동작(eval) + 남은 사본 스캔 (DB 불필요)
 │   │                               #   --negctl 먼저. ALLOW에 「통합 대상 아님」 4종의 이유가 있다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
