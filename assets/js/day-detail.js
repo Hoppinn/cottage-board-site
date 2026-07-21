@@ -392,6 +392,13 @@
     return window.escH(s);
   }
 
+  // 지난 날짜 판정용 오늘(YYYY-MM-DD, 로컬). vote_date와 같은 형식이라 문자열 비교로 충분하다.
+  // ⚠️ new Date().toISOString()은 UTC라 한국시간 오전 9시 전에 어제로 나온다 — 쓰지 말 것.
+  function _todayStr() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
   function fmtDate(ds) {
     const d = new Date(ds + 'T00:00:00');
     const days = ['일','월','화','수','목','금','토'];
@@ -1171,6 +1178,7 @@
     if (!dayVotes.length) return '';
     const MIN_H = 9, MAX_H = 23;
     const range = MAX_H - MIN_H;
+    const today = _todayStr();
 
     function resolveGameAbbr(g) {
       if (g.game_id && window.COTTAGE_GAMES) {
@@ -1209,7 +1217,10 @@
       const gameLine = gameAbbrs(v.vote_date, v.user_id, v.time_end - v.time_start);
       // 이름은 등록자 1명뿐이지만 인원은 동반 포함이라 다르다 → 막대에 「+N」으로 드러낸다
       const guestN   = partyCount([v]) - 1;
-      const actions = mine
+      // 지난 날짜엔 수정·취소를 렌더하지 않는다 — 등록 경로(cottage-edit/register)가
+      // `ds >= 오늘`에서 조용히 버려져 눌러도 아무 일이 안 일어나던 자리다.
+      // 보기(막대·상세·모달)는 그대로 열린다(확정 사양: opacity만, pointer-events 차단 없음).
+      const actions = (mine && v.vote_date >= today)
         ? `<div class="sched-bar-actions">
             <button class="sched-bar-edit-btn" type="button" aria-label="참여 시간 수정">✎</button>
             <button class="sched-bar-del-btn" type="button" aria-label="참여 취소">✕</button>

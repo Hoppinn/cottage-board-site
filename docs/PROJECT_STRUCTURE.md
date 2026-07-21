@@ -107,6 +107,9 @@
 │   ├── verify-session-dedup.js     # 위 부풀림의 읽기측 접기(collapseTwinInserts) 검증 (읽기전용)
 │   │                               #   --negctl(창 -1ms) 먼저. 0ms는 `<=0`이라 동시 행이 접혀
 │   │                               #   대조군이 성립하지 않는다. 불변식 6종 + 화면 「진입 N회」 변화
+│   ├── verify-past-meeting-actions.js # A-10 지난 날짜의 무반응 버튼(✎/✕·등록) 제거 검증 (DB 불필요)
+│   │                               #   --negctl 먼저. day-detail.js를 실제 eval하고,
+│   │                               #   index-page.js의 판정식은 원문 그대로 잘라 eval한다
 │   ├── verify-esch-unify.js        # GS5 escH 사본 통합 — 정본 동작(eval) + 남은 사본 스캔 (DB 불필요)
 │   │                               #   --negctl 먼저. ALLOW에 「통합 대상 아님」 4종의 이유가 있다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증

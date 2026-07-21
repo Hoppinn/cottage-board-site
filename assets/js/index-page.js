@@ -1441,10 +1441,13 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
   function renderPreview(dateStr, dayVotes, dayGames) {
     if (!previewEl) return;
+    // 지난 날짜는 등록 진입을 렌더하지 않는다 — 플래너 iframe이 `ds >= 오늘`에서
+    // 조용히 버려(club-schedule.html) 눌러도 모달조차 안 떴다. 보기는 그대로 허용.
+    const isPastDate = dateStr < toDateStr(new Date());
     if (!dayVotes.length) {
       previewEl.innerHTML = `<div class="meeting-preview-empty">
-        <div class="mpe-msg">등록된 일정이 없어요</div>
-        <button class="mpe-link" type="button" id="mpeGoPlanner">+ 플래너에서 등록하기</button>
+        <div class="mpe-msg">${isPastDate ? '이날은 등록된 일정이 없었어요' : '등록된 일정이 없어요'}</div>
+        ${isPastDate ? '' : `<button class="mpe-link" type="button" id="mpeGoPlanner">+ 플래너에서 등록하기</button>`}
       </div>`;
       document.getElementById('mpeGoPlanner')?.addEventListener('click', () => {
         window.__openPlannerFor?.(dateStr);
@@ -1459,7 +1462,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const _me     = window.getKakaoUser?.();
     const myVote  = _me ? dayVotes.find(v => String(v.user_id) === String(_me.id)) ?? null : null;
 
-    const actionsHtml = myVote
+    const actionsHtml = (myVote || isPastDate)
       ? `<button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>`
       : `<div class="mpc-actions-split">
           <button class="mpc-register-btn" type="button">+ 이날 참여 등록</button>
