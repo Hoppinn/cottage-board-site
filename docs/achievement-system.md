@@ -297,9 +297,11 @@ game_play_participants
 
 ---
 
-# 고아 칭호 (TITLE_DEFS에 정의됐으나 ACH_DEFS에서 미참조)
+# 고아 칭호 — 2026-07-21 해소 (현재 0건)
 
-| 칭호 ID | 칭호이름 | 비고 |
-|---------|---------|------|
-| title_record_150 | 코티지 단골손님 | record_150는 squirrel_lv4만 지급. 향후 추가 예정인지 확인 필요. |
-| title_review_500 | 코티지의 감식가 | review_500은 hamster_lv5만 지급. 향후 추가 예정인지 확인 필요. |
+`TITLE_DEFS` 35종이 전부 `ACH_DEFS.rewards.title`로 연결돼 있다. 고아 칭호가 있으면 **칭호 카운트 분모(`${earnedIds.size} / ${TITLE_DEFS.length}종`)에는 들어가는데 획득 경로가 없어** 아무도 100%에 도달할 수 없고, 잠금 카드에 진행도 문구조차 안 뜬다(`_titleToAchId`가 비어 `progressHtml`이 공백).
+
+옛 기재는 고아 2건(`title_record_150`·`title_review_500`)이었으나 **실제로는 3건**이었다 — `title_review_100`이 목록에서 빠져 있었다. 셋 다 임계값이 같은 업적이 이미 있었고 그 업적의 `rewards`에 캐릭터만 있고 `title`이 누락된 것이었으므로, **칭호를 지우지 않고 연결을 채웠다**(`record_150`·`review_100`·`review_500`).
+
+- 획득 여부는 `earnedAchIds` 기준 파생값이라 **별도 저장이 없다** → 이미 해당 업적을 가진 회원은 다음 진입부터 칭호가 바로 보인다(마이그레이션 불필요).
+- 🔁 **재발 방지**: `ACH_DEFS`나 `TITLE_DEFS`를 손대면 고아/허수/중복/임계값 불일치를 한 번에 보는 검사를 돌릴 것. 형태는 커밋 메시지 참조(IIFE 끝에 `window.__DEFS` 주입 후 eval).
