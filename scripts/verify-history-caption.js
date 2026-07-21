@@ -28,23 +28,35 @@ function check(label, actual, expected) {
 }
 
 // ── 화면 코드에서 원문 그대로 잘라온다 ────────────────────────
-const src = fs.readFileSync(path.join(ROOT, 'pages/club/club-history.html'), 'utf8');
+// 2026-07-22: 캡션 조립은 club-history.html 인라인에서 play-records-utils.js로 이관됐다
+// (동호회 기록&사진 + 플레이기록 게시판이 같은 함수를 쓴다). 그래서 여기서도 그 파일을 자른다.
+const src = fs.readFileSync(path.join(ROOT, 'assets/js/play-records-utils.js'), 'utf8');
 function cut(name, re) {
   const m = src.match(re);
   if (!m) {
-    console.log(`🔴 club-history.html에서 ${name}을 못 찾았다 — 코드가 바뀌었거나 검사기가 낡았다. 결과 신뢰 금지`);
+    console.log(`🔴 play-records-utils.js에서 ${name}을 못 찾았다 — 코드가 바뀌었거나 검사기가 낡았다. 결과 신뢰 금지`);
     process.exit(1);
   }
   return m[0];
 }
-const srcTime  = cut('formatPlayTime', /function formatPlayTime\(min\)[\s\S]*?\n    \}/);
-const srcScore = cut('formatScore',    /function formatScore\(note\)[\s\S]*?\n    \}/);
-const srcCap   = cut('buildCaption',   /function buildCaption\(records\)[\s\S]*?\n    \}/);
+const srcTime  = cut('_captionPlayTime', /function _captionPlayTime\(min\)[\s\S]*?\n  \}/);
+const srcScore = cut('_captionScore',    /function _captionScore\(note\)[\s\S]*?\n  \}/);
+const srcCap   = cut('buildRecordCaption', /function buildRecordCaption\(records, getName\)[\s\S]*?\n  \}/);
 
 // getGameName은 게임 데이터에 의존 → 검사기에선 이름을 그대로 돌려주는 스텁으로 고정한다
 // (검증 대상은 「이름 해석」이 아니라 「조립 양식」이다).
-let getGameName = id => String(id);
+const getGameName = id => String(id);
 eval(srcTime); eval(srcScore); eval(srcCap);
+const formatPlayTime = _captionPlayTime;
+const formatScore = _captionScore;
+const buildCaption = recs => buildRecordCaption(recs, getGameName);
+
+// 🚨 옛 사본이 남아 있으면 양식이 두 벌이 된다 — 여기서 막는다
+const histSrc = fs.readFileSync(path.join(ROOT, 'pages/club/club-history.html'), 'utf8');
+if (/function (buildCaption|formatPlayTime|formatScore)\s*\(/.test(histSrc)) {
+  console.log('🔴 club-history.html에 캡션 함수 사본이 다시 생겼다 — 공용(play-records-utils.js)만 남길 것');
+  process.exit(1);
+}
 
 // ── ① 시간 변환 ──────────────────────────────────────────────
 console.log(`\n=== ① 분 → 시간 표기 ===${NEG ? '  ⚠️ 음성 대조군 — 기대값을 옛 양식으로 뒤집음' : ''}`);

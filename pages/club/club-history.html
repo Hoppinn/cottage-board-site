@@ -82,32 +82,8 @@
       const [y, m, d] = dateStr.split('-');
       return `${y}년 ${Number(m)}월 ${Number(d)}일`;
     }
-    // 캡션은 인스타·단톡에 그대로 붙여넣는 용도라 **실제로 쓰던 양식**을 따른다(2026-07-22 확정).
-    // 게임 블록 3줄: 「게임명 (N인)」 / 「2시간30분」 / 「154 / 143 / 141점」.
-    // 참여자 이름·해시태그·🎲 헤더는 넣지 않는다 — 앞뒤 인사말은 사람이 직접 쓴다.
-    // ⚠️ player_count·play_time_min·score_note는 비어 있을 수 있고, 그 줄은 통째로 빠진다.
-    function formatPlayTime(min) {
-      const m = Number(min);
-      if (!Number.isFinite(m) || m <= 0) return '';
-      const h = Math.floor(m / 60), r = m % 60;
-      if (!h) return `${r}분`;
-      return r ? `${h}시간${r}분` : `${h}시간`;
-    }
-    // score_note는 자유 텍스트다 — 실측(70행)에 「154 / 143 / 141」뿐 아니라 「실패」·「1패 1승」·
-    // 「볼테어 이지모드 클리어」·「탐험가120 / 인간94」가 실재한다. 무조건 「점」을 붙이면
-    // 「실패점」이 되므로, 숫자와 구분자로만 이뤄졌을 때만 붙인다.
-    function formatScore(note) {
-      const s = String(note ?? '').trim();
-      if (!s) return '';
-      return /^[0-9\s/]+$/.test(s) ? `${s}점` : s;
-    }
-    function buildCaption(records) {
-      return (records || []).map(r => [
-        `${getGameName(r.game_id)}${r.player_count ? ` (${r.player_count}인)` : ''}`,
-        formatPlayTime(r.play_time_min),
-        formatScore(r.score_note),
-      ].filter(Boolean).join('\n')).join('\n\n');
-    }
+    // 캡션 조립은 play-records-utils.js의 buildRecordCaption 하나뿐이다 —
+    // 플레이기록 게시판과 양식이 갈리면 한쪽만 고쳐진다(2026-07-22 통합).
     function escH(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function escAttr(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
 
@@ -119,6 +95,8 @@
 
     // ── buildBody: game-reviews.js buildSessionBody와 동일 구조, pr-* 클래스 사용 ──
     function buildBody(recs) {
+      // 이 날 전체 캡션 — 행마다 다시 만들지 않고 한 번만 만들어 각 ⋯ 메뉴에 심는다
+      const dayCaption = escAttr(window.buildRecordCaption?.(recs, getGameName) || '');
       const playerGroups = new Map();
       for (const r of recs) {
         const key = `${r.player_count||''}|${(r.player_names||'').split(',').map(n=>n.trim()).sort().join(',')}`;
@@ -146,7 +124,10 @@
           const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
           const reviewHtml = r.review_text ? `<p class="pr-rec-review">${escH(r.review_text)}</p>` : '';
           const editBtn = canEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button>` : '';
-          const moreMenu = editBtn ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button">···</button><div class="pr-rec-more-menu">${editBtn}</div></div>` : '';
+          // 캡션 복사는 로그인·소유 여부를 안 본다 — 회원이 아니어도 필요하면 쓰라는 결정(2026-07-22).
+          // 그래서 수정 권한이 없어도 ⋯ 메뉴 자체는 뜬다.
+          const captionBtn = dayCaption ? `<button class="pr-rec-caption-action" data-caption="${dayCaption}" type="button">📋 이 날 캡션 복사</button>` : '';
+          const moreMenu = (editBtn || captionBtn) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editBtn}${captionBtn}</div></div>` : '';
           const recJson = escAttr(JSON.stringify({gameId:r.game_id||'',names:r.player_names||'',count:r.player_count||'',time:r.play_time_min||'',score:r.score_note||'',review:r.review_text||'',group:r.group_name||'',date:r.played_at||'',photo:r.photo_url||'',mine:!!canEdit}));
           return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${recJson}'>
             <div class="pr-rec-row-top">
@@ -212,11 +193,11 @@
         <div class="pr-session-body">`;
 
       for (const [dateStr, recs] of Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]))) {
-        const captionAttr = escAttr(buildCaption(recs));
+        // 캡션복사는 날짜 헤더에서 각 기록의 ⋯ 메뉴로 옮겼다(2026-07-22) —
+        // 모든 날짜에 버튼이 깔려 목록이 시끄러웠고, 플레이기록 게시판과 자리도 달랐다
         html += `<div class="pr-sub-session">
           <div class="pr-sub-hd">
             <span class="pr-sub-date">${formatKstDate(dateStr)}</span>
-            <button class="history-copy-btn" data-caption="${captionAttr}" type="button">캡션복사</button>
             <span class="pr-sub-arrow">▾</span>
           </div>
           <div class="pr-sub-body">${buildBody(recs)}</div>
@@ -239,18 +220,23 @@
         hd.addEventListener('click', () => hd.closest('.pr-session').classList.toggle('is-open'));
       });
       root.querySelectorAll('.pr-sub-hd').forEach(hd => {
-        hd.addEventListener('click', e => {
-          if (e.target.closest('.history-copy-btn')) return;
-          hd.closest('.pr-sub-session').classList.toggle('is-open');
-        });
+        hd.addEventListener('click', () => hd.closest('.pr-sub-session').classList.toggle('is-open'));
       });
       root.querySelectorAll('.pr-rec-more-btn').forEach(btn => {
         btn.addEventListener('click', e => {
           e.stopPropagation();
           const m = btn.closest('.pr-rec-more');
           const wasOpen = m.classList.contains('is-open');
-          root.querySelectorAll('.pr-rec-more.is-open').forEach(x => x.classList.remove('is-open'));
-          if (!wasOpen) m.classList.add('is-open');
+          root.querySelectorAll('.pr-rec-more.is-open').forEach(x => {
+            x.classList.remove('is-open');
+            x.querySelector('.pr-rec-more-menu')?.removeAttribute('style');
+          });
+          window.untrackMoreMenu?.();
+          if (!wasOpen) {
+            m.classList.add('is-open');
+            // 카드의 overflow:hidden에 잘리지 않도록 fixed로 띄우고 스크롤을 따라가게 한다(공용)
+            window.trackMoreMenu?.(btn, m.querySelector('.pr-rec-more-menu'));
+          }
         });
       });
       // 참여자 이름 클릭 → 그 회원의 읽기전용 내 보드
@@ -265,13 +251,9 @@
           window.openOtherProfileSheet?.(uid);
         });
       });
-      root.querySelectorAll('.history-copy-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          navigator.clipboard.writeText(btn.dataset.caption).then(() => {
-            btn.textContent = '복사됨!'; btn.classList.add('is-copied');
-            setTimeout(() => { btn.textContent = '캡션복사'; btn.classList.remove('is-copied'); }, 2000);
-          }).catch(() => prompt('아래 텍스트를 복사해주세요', btn.dataset.caption));
-        });
+      // ⋯ 메뉴 「이 날 캡션 복사」 — 메뉴를 닫지 않도록 전파를 멈춘다(복사됨! 표시를 봐야 한다)
+      root.querySelectorAll('.pr-rec-caption-action').forEach(btn => {
+        btn.addEventListener('click', e => { e.stopPropagation(); window.copyCaption?.(btn); });
       });
       root.querySelectorAll('.pr-rec-photo').forEach(img => {
         img.addEventListener('click', e => {
@@ -400,7 +382,12 @@
     // 더보기 메뉴 외부 클릭 시 닫기
     document.addEventListener('click', e => {
       document.querySelectorAll('.pr-rec-more.is-open').forEach(m => {
-        if (!m.contains(e.target)) m.classList.remove('is-open');
+        // fixed로 띄운 메뉴는 .pr-rec-more 안에 그려지지만 화면상으론 떨어져 있다 —
+        // contains로만 판정하면 메뉴 안 버튼 클릭도 「밖」으로 오인하지 않도록 메뉴도 함께 본다
+        if (m.contains(e.target)) return;
+        m.classList.remove('is-open');
+        m.querySelector('.pr-rec-more-menu')?.removeAttribute('style');
+        window.untrackMoreMenu?.();
       });
     });
 

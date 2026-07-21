@@ -58,6 +58,49 @@ const OUT = process.argv[3] || path.join(os.tmpdir(), 'cottage-cross-nav');
     await page.screenshot({ path: path.join(OUT, '2-board-opened.png') });
   }
 
+  // ── ①-b ⋯ 메뉴: 캡션 복사 항목 + 스크롤 추종 ──
+  // 보드 패널이 떠 있으면 클릭이 가로막힌다 — 닫으려 애쓰지 말고 새로 연다
+  await page.goto(`${BASE}/pages/club/club-history.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('.pr-sub-hd', { timeout: 15000 });
+  await page.locator('.pr-sub-hd').first().click();
+  await page.waitForTimeout(600);
+
+  const moreBtn = await page.$('.pr-rec-more-btn');
+  if (moreBtn) {
+    await moreBtn.click();
+    await page.waitForTimeout(400);
+    const items = await page.$$eval('.pr-rec-more.is-open .pr-rec-more-menu button', els => els.map(e => e.textContent.trim()));
+    console.log(`\n⋯ 메뉴 항목: ${JSON.stringify(items)}`);
+    const cap = await page.$eval('.pr-rec-more.is-open .pr-rec-caption-action', e => e.dataset.caption).catch(() => null);
+    console.log(`캡션 데이터: ${cap ? `${cap.split('\n').length}줄 / 첫 줄 "${cap.split('\n')[0]}"` : '❌ 없음'}`);
+    await page.screenshot({ path: path.join(OUT, '4-more-menu.png') });
+
+    // 스크롤하면 메뉴가 버튼을 따라오는가 (fixed로 화면에 붙어 있던 버그)
+    const before = await page.evaluate(() => {
+      const b = document.querySelector('.pr-rec-more.is-open .pr-rec-more-btn').getBoundingClientRect();
+      const m = document.querySelector('.pr-rec-more.is-open .pr-rec-more-menu').getBoundingClientRect();
+      return { btn: b.top, menu: m.top };
+    });
+    await page.evaluate(() => window.scrollBy(0, 150));
+    await page.waitForTimeout(300);
+    const after = await page.evaluate(() => {
+      const mo = document.querySelector('.pr-rec-more.is-open');
+      if (!mo) return null;
+      const b = mo.querySelector('.pr-rec-more-btn').getBoundingClientRect();
+      const m = mo.querySelector('.pr-rec-more-menu').getBoundingClientRect();
+      return { btn: b.top, menu: m.top };
+    });
+    if (!after) console.log('스크롤 후 메뉴가 닫혔다 (버튼이 화면 밖으로 나갔을 때의 정상 동작)');
+    else {
+      const dBtn = Math.round(after.btn - before.btn), dMenu = Math.round(after.menu - before.menu);
+      console.log(`스크롤 150px → 버튼 ${dBtn}px 이동 / 메뉴 ${dMenu}px 이동 ` +
+        `${Math.abs(dBtn - dMenu) <= 1 ? '✅ 함께 움직인다' : '🔴 따로 논다(메뉴가 화면에 고정)'}`);
+    }
+    await page.screenshot({ path: path.join(OUT, '5-after-scroll.png') });
+  } else {
+    console.log('\n🔴 ⋯ 메뉴 버튼을 못 찾았다 — 캡션 항목 판정 불가');
+  }
+
   // ── ② 플레이기록: 복귀 링크 ──
   const page2 = await ctx.newPage();
   await page2.goto(`${BASE}/pages/game/game-reviews.html?from=club-history`, { waitUntil: 'domcontentloaded' });

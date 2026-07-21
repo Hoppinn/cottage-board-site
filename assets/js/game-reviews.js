@@ -854,6 +854,10 @@
         window.openOtherProfileSheet?.(userId);
       });
     });
+    // ⋯ 메뉴 「이 날 캡션 복사」 — 메뉴를 닫지 않도록 전파를 멈춘다(복사됨! 표시를 봐야 한다)
+    panel.querySelectorAll('.pr-rec-caption-action').forEach(btn => {
+      btn.addEventListener('click', e => { e.stopPropagation(); window.copyCaption?.(btn); });
+    });
     // 후기 작성자 이름 클릭 → 해당 회원 읽기전용 보드 열기
     panel.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
       span.style.cursor = 'pointer';
@@ -882,6 +886,7 @@
           const mm = m.querySelector('.pr-rec-more-menu');
           if (mm) mm.removeAttribute('style');
         });
+        window.untrackMoreMenu?.();
         if (!isOpen) {
           more.classList.add('is-open');
           // 좋아요/궁금해요 상태 lazy load
@@ -898,16 +903,8 @@
               });
             }
           }
-          const rect = btn.getBoundingClientRect();
-          const menu = more.querySelector('.pr-rec-more-menu');
-          if (menu) {
-            menu.style.display = '';
-            menu.style.position = 'fixed';
-            menu.style.top = (rect.bottom + 4) + 'px';
-            menu.style.right = (window.innerWidth - rect.right) + 'px';
-            menu.style.left = 'auto';
-            menu.style.zIndex = '9400';
-          }
+          // 위치 계산 + 스크롤 추종은 공용(play-records-utils.js trackMoreMenu)
+          window.trackMoreMenu?.(btn, more.querySelector('.pr-rec-more-menu'));
         }
       });
     });
@@ -919,6 +916,7 @@
           const mm = m.querySelector('.pr-rec-more-menu');
           if (mm) mm.removeAttribute('style');
         });
+        window.untrackMoreMenu?.();
       });
     }
 
@@ -1243,6 +1241,10 @@
   }
 
   function buildSessionBody(recs, user, orderMap = new Map()) {
+    // 이 날(=이 블록) 전체 캡션. 행마다 다시 만들지 않고 한 번만 만들어 각 ⋯ 메뉴에 심는다.
+    // 캡션 단위는 「모임 하루치」다 — 게임 하나가 아니라 그날 한 게임 전부가 들어간다.
+    const _dayCaption = window.escAttr(window.buildRecordCaption?.(recs, getGameName) || '');
+
     // 참여자(인원+이름) 기준으로 묶기
     const playerGroups = new Map();
     for (const r of recs) {
@@ -1290,7 +1292,10 @@
         const _safeGKey = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
         const likeItems = _safeGKey ? `<button class="pr-rec-add-action pr-rec-like-action" data-game-id="${_safeGKey}" onclick="onPrMenuLike(this)" type="button">👍 좋아요</button><button class="pr-rec-add-action pr-rec-curious-action" data-game-id="${_safeGKey}" onclick="onPrMenuCurious(this)" type="button">🤔 궁금해요</button>` : '';
         const addItems = _safeGKey ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
-        const moreMenu = (likeItems || addItems || editItems) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems}${addItems}${editItems}</div></div>` : '';
+        // 캡션 복사는 로그인·소유 여부를 안 본다 — 회원이 아니어도 필요하면 쓰라는 결정(2026-07-22).
+        // 그래서 다른 항목이 하나도 없어도 ⋯ 메뉴 자체는 뜬다.
+        const captionItem = _dayCaption ? `<button class="pr-rec-caption-action" data-caption="${_dayCaption}" type="button">📋 이 날 캡션 복사</button>` : '';
+        const moreMenu = (likeItems || addItems || editItems || captionItem) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems}${addItems}${editItems}${captionItem}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||'', mine: !!showEdit})}'>
           <div class="pr-rec-row-top">
             ${thumbHtml}

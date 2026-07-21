@@ -3,7 +3,8 @@
 // 전역 노출: window.parsePhotoUrls / window.buildPhotoHtml / window.openLightbox
 //            window.toInitials / window.hangulMatch / window.attachAc
 //            window.initTagInput / window.buildPhotoItemAdder / window.revokePhotoGridBlobs
-//            window.getGameKeyById / window.renderCrossBackLink
+//            window.getGameKeyById / window.renderCrossBackLink / window.normalizeNick
+//            window.buildRecordCaption / window.copyCaption / window.trackMoreMenu
 
 (function () {
   function _escAttr(s) {
@@ -355,6 +356,102 @@
     };
   }
 
+  // ── 캡션 복사 (동호회 기록&사진 + 플레이기록 공용) ─────────────────────────
+  // 캡션은 인스타·단톡에 그대로 붙여넣는 용도라 **실제로 쓰던 양식**을 따른다(2026-07-22 확정).
+  // 게임 블록 3줄: 「게임명 (N인)」 / 「2시간30분」 / 「154 / 143 / 141점」.
+  // 참여자 이름·해시태그·🎲 헤더는 넣지 않는다 — 앞뒤 인사말은 사람이 직접 쓴다.
+  // ⚠️ player_count·play_time_min·score_note는 비어 있을 수 있고, 그 줄은 통째로 빠진다.
+  // ⚠️ window에 formatPlayTime을 그대로 노출하지 않는다 — game-sheet.js에 같은 이름의
+  //    전역 함수가 있고(「N분」 반환) 의미가 다르다.
+  function _captionPlayTime(min) {
+    const m = Number(min);
+    if (!Number.isFinite(m) || m <= 0) return '';
+    const h = Math.floor(m / 60), r = m % 60;
+    if (!h) return `${r}분`;
+    return r ? `${h}시간${r}분` : `${h}시간`;
+  }
+
+  // score_note는 자유 텍스트다 — 실측(70행)에 「154 / 143 / 141」뿐 아니라 「실패」·「1패 1승」·
+  // 「볼테어 이지모드 클리어」·「탐험가120 / 인간94」가 실재한다. 무조건 「점」을 붙이면
+  // 「실패점」이 되므로, 숫자와 구분자로만 이뤄졌을 때만 붙인다.
+  function _captionScore(note) {
+    const s = String(note ?? '').trim();
+    if (!s) return '';
+    return /^[0-9\s/]+$/.test(s) ? `${s}점` : s;
+  }
+
+  // 게임명 해석 기본값 — 호출부가 자기 resolver를 넘기면 그걸 쓴다.
+  function _captionGameName(gameId) {
+    if (!window.COTTAGE_GAMES) return gameId;
+    const g = window.COTTAGE_GAMES.find(x => String(x.bggId) === String(gameId) || x.id === gameId);
+    return g ? (g.display || g.titleKo || g.titleEn || gameId) : gameId;
+  }
+
+  function buildRecordCaption(records, getName) {
+    const name = typeof getName === 'function' ? getName : _captionGameName;
+    return (records || []).map(r => [
+      `${name(r.game_id)}${r.player_count ? ` (${r.player_count}인)` : ''}`,
+      _captionPlayTime(r.play_time_min),
+      _captionScore(r.score_note),
+    ].filter(Boolean).join('\n')).join('\n\n');
+  }
+
+  // ⋯ 메뉴의 「캡션 복사」 — 클립보드가 막힌 환경(비보안 컨텍스트 등)엔 prompt 폴백.
+  // 로그인·회원 여부를 보지 않는다: 캡션은 누구나 쓸 수 있어야 한다(2026-07-22 사용자 결정).
+  function copyCaption(btn) {
+    const text = btn.dataset.caption || '';
+    const done = () => {
+      const old = btn.textContent;
+      btn.textContent = '📋 복사됨!';
+      setTimeout(() => { btn.textContent = old; }, 1600);
+    };
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => prompt('아래 텍스트를 복사해주세요', text));
+    } else {
+      prompt('아래 텍스트를 복사해주세요', text);
+    }
+  }
+
+  // ── 기록 행 ⋯ 메뉴의 위치 추적 ────────────────────────────────────────────
+  // 이 메뉴는 `.pr-session { overflow: hidden }`(둥근 모서리 클리핑)에 잘려서
+  // position:fixed로 띄운다. 그런데 fixed는 화면 좌표라 **스크롤해도 안 따라와** 페이지만
+  // 움직이고 메뉴는 제자리에 남았다(2026-07-22 사용자 지적).
+  // → 열려 있는 동안 스크롤·리사이즈마다 버튼 위치로 다시 붙인다.
+  //   overflow:hidden을 지워서 고치지 말 것 — 카드 모서리 클리핑이 깨진다.
+  let _moreBtn = null, _moreMenu = null;
+
+  function _placeMoreMenu() {
+    const rect = _moreBtn.getBoundingClientRect();
+    _moreMenu.style.position = 'fixed';
+    _moreMenu.style.top = (rect.bottom + 4) + 'px';
+    _moreMenu.style.right = (window.innerWidth - rect.right) + 'px';
+    _moreMenu.style.left = 'auto';
+    _moreMenu.style.zIndex = '9400';
+  }
+
+  function trackMoreMenu(btn, menu) {
+    if (!btn || !menu) return;
+    _moreBtn = btn; _moreMenu = menu;
+    menu.style.display = '';
+    _placeMoreMenu();
+  }
+
+  function untrackMoreMenu() { _moreBtn = null; _moreMenu = null; }
+
+  function _onMoreScroll() {
+    if (!_moreBtn || !_moreMenu || !_moreMenu.isConnected) return untrackMoreMenu();
+    const r = _moreBtn.getBoundingClientRect();
+    // 버튼이 화면 밖으로 나가면 닫는다 — 주인 없는 메뉴가 모서리에 떠 있게 두지 않는다
+    if (r.bottom < 0 || r.top > window.innerHeight) {
+      _moreBtn.closest('.pr-rec-more')?.classList.remove('is-open');
+      _moreMenu.removeAttribute('style');
+      return untrackMoreMenu();
+    }
+    _placeMoreMenu();
+  }
+  window.addEventListener('scroll', _onMoreScroll, { passive: true, capture: true });
+  window.addEventListener('resize', _onMoreScroll, { passive: true });
+
   // 참여자 이름 ↔ 회원 닉네임 대조용 정규화.
   // 참여자 이름은 사람이 손으로 친 자유 텍스트라 회원 닉네임과 공백·대소문자가 어긋난다.
   // 실제 사건(2026-07-22): 회원 닉네임이 「덕 지」인데 기록엔 「덕지」로 적혀 있어 13건이
@@ -404,6 +501,11 @@
   // 전역 노출
   window.renderCrossBackLink = renderCrossBackLink;
   window.normalizeNick = normalizeNick;
+  window.escAttr = _escAttr;   // 속성값 이스케이프(& 와 ")는 escH가 안 해준다
+  window.buildRecordCaption = buildRecordCaption;
+  window.copyCaption = copyCaption;
+  window.trackMoreMenu = trackMoreMenu;
+  window.untrackMoreMenu = untrackMoreMenu;
   window.parsePhotoUrls = parsePhotoUrls;
   window.buildPhotoHtml = buildPhotoHtml;
   window.openLightbox = openLightbox;
