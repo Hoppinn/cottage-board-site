@@ -87,6 +87,7 @@
 ### 코드 품질 주석 (리팩토링 참고용)
 
 - `requests-admin.html` `buildPageMap` — 어디서도 호출되지 않는 dead code(2026-07-20 #14 작업 중 발견, 저장소 전체에서 정의 1건 외 참조 0건). 같은 파일의 `buildUserMap`/`buildAnonUserMap`과 형제라 남아 있던 것으로 보임. 삭제 시 회귀 위험 낮음, REFACTOR 세션에서 정리.
+- `day-detail.js` `openDateMeetingModal(voteDate, votes, voteGames, opts)`의 **`opts`가 함수 안에서 한 번도 안 읽힌다** — JSDoc에는 `onPlannerClick`이 있고 [index-page.js:1477](../assets/js/index-page.js#L1477)이 실제로 넘기지만 소비처 0건(2026-07-22 센터모달 z-index 작업 중 발견). 홈 미리보기 → 이날 모임 상세 모달에 「플래너로」 진입 버튼이 없다는 뜻이라, **죽은 인자를 지울지 버튼을 붙일지는 기획 판단**이다. 같은 자리에서: 홈은 공용 `openPlannerModal`(day-detail.js, "페이지별 복제 금지" 주석 있음)을 안 쓰고 자체 `plannerSheetModal`을 갖는데 **빠른진입(is-quick-entry) 때문이라 정당한 분기**다 — 그 주석만 실상과 어긋나 있다.
 - `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
