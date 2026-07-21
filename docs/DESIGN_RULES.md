@@ -75,6 +75,20 @@ Chrome 컴포지터는 `overflow-y:auto` 요소를 GPU 레이어로 승격할 �
 - `-webkit-overflow-scrolling:touch` 제거 (원인 아님)
 - `overflow:hidden`만 추가 (스크롤이 죽음)
 
+### 6-a. 모서리를 위한 `overflow:hidden`은 **그 안에서 열리는 팝업을 자른다** (2026-07-22 교훈)
+
+`overflow:hidden`이 **스크롤 없이 오직 모서리 클리핑만을 위해** 걸려 있다면, 그 카드 안에서 열리는 드롭다운·툴팁은 카드 경계에서 잘린다. `.pr-session`(기록 카드)이 정확히 그랬고 ⋯ 메뉴가 잘렸다.
+
+**해결 순서 — 위에서부터 시도한다:**
+1. **각진 배경을 가진 자식이 자기 `border-radius`를 갖게 하고, 부모의 `overflow:hidden`을 뗀다.** ✅ 이게 정답이었다. 여기선 헤더(`.pr-session-hd`)에 `13px 13px 0 0`을, 접힌 상태엔 네 모서리를 줬다.
+2. 자식이 여럿이라 1번이 번거로우면 그때 다른 방법을 찾는다.
+
+🚫 **하지 말 것 (둘 다 2026-07-22에 실제로 해보고 되돌렸다):**
+- **`position:fixed`로 카드 밖에 띄우고 스크롤마다 좌표 재계산** — 메뉴가 스크롤을 쫓아다니고 sticky 헤더 위로 떠오른다. 사용자가 바로 잡아냈다.
+- **자리가 없으면 위로 펼치기** — 카드가 짧으면 위에도 자리가 없어 결국 잘린다. 증상을 줄일 뿐 원인을 안 없앤다.
+
+⚠️ **판정 함정 3개** (전부 이날 실제로 오진했다): `getComputedStyle(el).bottom`은 absolute 요소에서 **항상 px**라 방향 판정에 못 쓴다 / `elementFromPoint`는 **뷰포트 밖이면 null**이라 「잘림」으로 오독된다 / 「마지막 행」을 화면에 보이는 것 중 마지막으로 고르면 **경계를 안 밟는다**(카드 끝에서 754px 떨어진 행이었다).
+
 ## 7. sticky 헤더 / bottom-sheet 높이 조정 원칙 ⚠️
 
 **sticky 헤더를 줄일 때는 `top`·`height`·패널 위치를 건드리지 않고, 헤더 자체의 `padding`/`margin`만 줄인다.** bottom-sheet 상단 여백은 `height: calc(100dvh - Npx)`에서 Npx가 결정하므로, height 값만 조정하고 `border-radius`/`overflow`/`margin`은 건드리지 않는다.

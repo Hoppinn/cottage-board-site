@@ -413,29 +413,16 @@
   }
 
   // ── 기록 행 ⋯ 메뉴의 위치 ──────────────────────────────────────────────────
-  // 메뉴는 **페이지에 붙는다**(CSS 기본 position:absolute). 페이지와 함께 움직이는 게 정상이고
-  // 헤더 위로 떠오르지도 않는다.
-  // ⚠️ 한때 position:fixed로 화면에 띄운 적이 있다(2026-07-22 오전) — 카드의
-  //    `overflow:hidden`에 잘리는 걸 피하려던 것인데, 스크롤을 쫓아다니고 헤더를 덮어
-  //    같은 날 되돌렸다. **fixed로 돌아가지 말 것.**
-  // 잘림은 방향으로 푼다: 카드 아래쪽에 자리가 없으면 메뉴를 **위로** 편다.
-  function trackMoreMenu(btn, menu) {
-    if (!btn || !menu) return;
-    menu.removeAttribute('style');   // 이전 인라인 값 제거 → CSS 기본(top:100%)로 시작
-    const card = btn.closest('.pr-session') || btn.closest('.pr-sub-session');
-    if (!card) return;
-    const b = btn.getBoundingClientRect();
-    const c = card.getBoundingClientRect();
-    const h = menu.getBoundingClientRect().height;   // is-open이 이미 붙어 있어 실측 가능
-    // 카드 하단까지 남은 공간이 메뉴보다 작으면 위로 편다.
-    // 위로도 자리가 없으면(짧은 카드) 그냥 아래로 둔다 — 잘려도 카드 밖으로 나가는 것보단 낫다
-    if (h > (c.bottom - b.bottom) - 6 && (b.top - c.top) > h + 6) {
-      menu.style.top = 'auto';
-      menu.style.bottom = '100%';
-    }
-  }
-
-  function untrackMoreMenu() { /* fixed 추적을 없앤 뒤로 할 일이 없다 — 호출부 호환용 */ }
+  // **JS는 이 메뉴의 위치를 계산하지 않는다.** CSS의 position:absolute 하나로 끝이다 —
+  // 페이지와 함께 움직이고, 헤더 위로 떠오르지 않고, 잘리지도 않는다.
+  // 2026-07-22 하루에 두 번 틀린 자리다. 남기는 이유는 세 번째를 막기 위해서다:
+  //   ①position:fixed + 스크롤마다 좌표 재계산 → 메뉴가 스크롤을 쫓아다니고 헤더를 덮었다
+  //   ②자리가 없으면 위로 펼치기 → 카드가 짧으면 위에도 자리가 없어 그대로 잘렸다
+  //   ③(현재) 자르는 주체인 `.pr-session { overflow: hidden }`을 없앴다 — 그게 근원이었고,
+  //     헤더의 각진 배경은 헤더 자신의 border-radius로 해결했다(style.css).
+  // 남은 두 함수는 호출부 호환용 빈 껍데기다. 여기에 좌표 계산을 다시 넣지 말 것.
+  function trackMoreMenu(btn, menu) { menu?.removeAttribute('style'); }
+  function untrackMoreMenu() { /* no-op */ }
 
   // 참여자 이름 ↔ 회원 닉네임 대조용 정규화.
   // 참여자 이름은 사람이 손으로 친 자유 텍스트라 회원 닉네임과 공백·대소문자가 어긋난다.

@@ -230,10 +230,12 @@ assets/js/
 │                               #   ⚠️ 페이지에 사본을 만들지 말 것 — verify-history-caption.js가 막는다
 │                               # normalizeNick: 참여자 이름↔회원 닉네임 대조(공백 제거+소문자).
 │                               #   맵을 만들 때와 조회할 때 **양쪽 다** 통과시킬 것
-│                               # trackMoreMenu: ⋯ 메뉴 펼침 방향 결정(카드 아래 자리가 없으면 위로).
-│                               #   메뉴는 **페이지에 붙는다**(absolute). 🚫 position:fixed로 띄우지 말 것 —
-│                               #   2026-07-22에 `.pr-session{overflow:hidden}` 클리핑을 피하려다 그렇게
-│                               #   했는데 스크롤을 쫓아다니고 헤더 위로 떠올라 같은 날 되돌렸다
+│                               # trackMoreMenu/untrackMoreMenu: 이제 빈 껍데기(호출부 호환용).
+│                               #   ⋯ 메뉴 위치는 **CSS의 absolute 하나로 끝난다** — JS로 좌표를
+│                               #   계산하지 말 것. 2026-07-22에 두 번 틀렸다(fixed+스크롤 추종 →
+│                               #   위로 펼치기). 근원은 `.pr-session{overflow:hidden}`이었고 그걸
+│                               #   없앤 뒤 헤더가 자기 border-radius를 갖게 해 모서리를 지켰다.
+│                               #   회귀 방지: scripts/verify-cross-nav.js ②-b
 └── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
                                  # ⚠️ 새 _trackPvOnce/trackPageView 가상 페이지 키를 추가하면
                                  #   COTTAGE_PAGE_LABELS에 라벨도 같이 추가할 것 — 관리자 분석이

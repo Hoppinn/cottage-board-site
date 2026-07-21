@@ -7053,7 +7053,13 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-save-btn:disabled { opacity: 0.5; }
 
 /* records view — 3단 계층 */
-.pr-session { border: 1px solid #e8e2d8; border-radius: 14px; margin-bottom: 22px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+/* 🚫 overflow:hidden 금지 — ⋯ 메뉴가 카드 경계에서 잘린다(2026-07-22 실측).
+   원래는 헤더의 각진 배경을 카드 반경에 맞추려고 걸었던 것이라, 그 일은 헤더가 직접 한다.
+   fixed로 띄워 피하려던 적이 있으나 스크롤을 쫓아다니고 헤더 위로 떠올라 폐기했다. */
+.pr-session { border: 1px solid #e8e2d8; border-radius: 14px; margin-bottom: 22px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+.pr-session > .pr-session-hd { border-radius: 13px 13px 0 0; }
+/* 접히면 헤더가 곧 카드다 — 네 모서리 전부 */
+.pr-session:not(.is-open) > .pr-session-hd { border-radius: 13px; }
 .pr-session-hd { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-session > .pr-session-hd { background: #3b4f3a; }
 .pr-session > .pr-session-hd:hover { background: #4a6149; }

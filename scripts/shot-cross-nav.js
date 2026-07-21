@@ -118,22 +118,63 @@ const OUT = process.argv[3] || path.join(os.tmpdir(), 'cottage-cross-nav');
     await last.scrollIntoViewIfNeeded();
     await last.click();
     await page.waitForTimeout(400);
+    // 🚨 판정은 「카드를 넘었는가」가 아니라 **「실제로 보이는가」**다.
+    //    카드를 넘어도 안 잘리는 게 지금 설계이므로, 넘은 부분이 화면에 그려지는지를 본다
+    //    (elementFromPoint로 메뉴 맨 아랫줄을 찍어 그 지점의 주인이 메뉴인지 확인).
     const clip = await page.evaluate(() => {
       const mo = document.querySelector('.pr-rec-more.is-open');
       const menu = mo.querySelector('.pr-rec-more-menu');
       const card = mo.closest('.pr-session');
       const m = menu.getBoundingClientRect(), c = card.getBoundingClientRect();
+      const probeY = m.bottom - 6, probeX = m.left + m.width / 2;
+      const hit = document.elementFromPoint(probeX, probeY);
       return {
-        // ⚠️ getComputedStyle(menu).bottom은 absolute 요소에서 항상 px로 나온다 —
-        //    방향 판정에 쓰면 늘 「위로」가 된다. 우리 코드가 넣는 인라인 값으로 본다
-        dir: menu.style.bottom === '100%' ? '위로' : '아래로',
-        overflowPx: Math.round(m.bottom - c.bottom),
-        visible: m.height > 0 && m.width > 0,
+        pastCardPx: Math.round(m.bottom - c.bottom),
+        lastRowVisible: !!(hit && menu.contains(hit)),
+        menuH: Math.round(m.height),
       };
     });
-    console.log(`마지막 행 메뉴: ${clip.dir} 펼침 / 카드 밖으로 ${clip.overflowPx}px ` +
-      `${clip.overflowPx <= 0 ? '✅ 안 잘림' : '🔴 잘린다'}`);
+    console.log(`마지막 행 메뉴: 높이 ${clip.menuH}px / 카드 경계 대비 ${clip.pastCardPx}px / ` +
+      `맨 아랫줄 ${clip.lastRowVisible ? '✅ 보인다' : '🔴 안 보인다(잘림)'}`);
     await page.screenshot({ path: path.join(OUT, '6-last-row-menu.png') });
+
+    // 🚨 사용자가 실제로 잡은 장면 재현: 로그인 상태에선 메뉴가 6줄(좋아요·궁금해요·게임평·사진·
+    //    수정·삭제·캡션)이라 훨씬 길다. 헤드리스는 비로그인이라 1줄뿐이므로 **일부러 늘려** 잰다.
+    //    이걸 안 하면 「짧아서 안 잘린 것」을 「안 잘린다」로 오독한다(1차 판정이 그랬다).
+    await page.evaluate(() => {
+      const menu = document.querySelector('.pr-rec-more.is-open .pr-rec-more-menu');
+      for (let i = 0; i < 6; i++) {
+        const b = document.createElement('button');
+        b.className = 'pr-rec-add-action';
+        b.textContent = `테스트 항목 ${i + 1}`;
+        menu.appendChild(b);
+      }
+      // 🚨 elementFromPoint는 **뷰포트 밖이면 null**이다 — 그걸 「잘림」으로 읽어 한 번 오진했다.
+      //    찍기 전에 메뉴 바닥을 화면 안으로 들여놓는다
+      const m = menu.getBoundingClientRect();
+      if (m.bottom > innerHeight - 10) window.scrollBy(0, m.bottom - innerHeight + 30);
+    });
+    await page.waitForTimeout(300);
+    const stress = await page.evaluate(() => {
+      const mo = document.querySelector('.pr-rec-more.is-open');
+      const menu = mo.querySelector('.pr-rec-more-menu');
+      const m = menu.getBoundingClientRect();
+      const card = mo.closest('.pr-session').getBoundingClientRect();
+      // 자르는 조상이 있는지도 함께 본다(잘림의 진짜 원인은 조상의 overflow다)
+      const clippers = [];
+      for (let el = menu.parentElement; el && el !== document.documentElement; el = el.parentElement) {
+        const cs = getComputedStyle(el);
+        if (cs.overflow !== 'visible' || cs.overflowY !== 'visible') clippers.push(el.className);
+      }
+      const hit = document.elementFromPoint(m.left + m.width / 2, m.bottom - 6);
+      return { menuH: Math.round(m.height), pastCardPx: Math.round(m.bottom - card.bottom),
+               inViewport: m.bottom <= innerHeight, clippers,
+               lastRowVisible: !!(hit && menu.contains(hit)) };
+    });
+    console.log(`  ↳ 7줄로 늘렸을 때: 높이 ${stress.menuH}px / 카드 경계를 ${stress.pastCardPx}px 넘음 / ` +
+      `자르는 조상 ${stress.clippers.length ? '🔴 ' + JSON.stringify(stress.clippers) : '✅ 없음'} / ` +
+      `맨 아랫줄 ${stress.lastRowVisible ? '✅ 보인다' : (stress.inViewport ? '🔴 가려졌다' : '⚠️ 화면 밖이라 판정 불가')}`);
+    await page.screenshot({ path: path.join(OUT, '7-tall-menu.png') });
   } else {
     console.log('\n🔴 ⋯ 메뉴 버튼을 못 찾았다 — 캡션 항목 판정 불가');
   }
