@@ -57,6 +57,7 @@
 | `notifSeenAt` | string (ISO) \| undefined | 마지막으로 알림 패널을 열었던 시각. 이 이후 이벤트가 "새 알림". 없으면 전체 기간 조회 |
 | `newGameSeenAt` | string (ISO) \| undefined | [모두 확인] 클릭 시점. 이 이후 added_at인 게임이 new_game 알림으로 표시. 없으면 전체 기간 조회 |
 | `voucherNoticeSeen` | boolean \| undefined | 음료교환권 공지 확인 여부. 미설정 또는 false이면 공지 표시 + 빨간점. [확인했어요] 또는 [플레이 기록 남기기] 클릭 시 true 저장 |
+| `feeNoticeSeen` | boolean \| undefined | 전체 공지(요금 안내 변경) 확인 여부. `voucherNoticeSeen`과 **별도 키** — 하나를 읽어도 다른 하나는 NEW로 남아야 한다. [확인했어요] 또는 [모두 읽기] 시 true. ⚠️ 공지 카드는 `kakao-auth.js`의 `FEE_NOTICE.until`이 지나면 이 키와 무관하게 렌더 자체를 건너뛴다 |
 
 ### 마이그레이션
 

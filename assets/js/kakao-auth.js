@@ -18,13 +18,26 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   }
 })();
 
+// ── 전체 공지 (알림 패널 상단 카드) ──────────────────────────
+// 한 건짜리 공지를 카드로 띄운다. 음료교환권 공지와 같은 장치를 쓰되 확인 여부는
+// 별도 키(feeNoticeSeen)로 관리한다 — 하나를 확인해도 다른 하나는 남아야 하므로.
+// ⚠️ UNTIL이 지나면 렌더 자체를 건너뛴다. 안 그러면 철 지난 공지가 영구히 쌓인다.
+const FEE_NOTICE = {
+  from:  '2026-08-01',   // 시행일
+  until: '2026-09-01',   // 이 날짜부터 카드 미표시
+  title: '요금 안내 변경',
+};
+window._isFeeNoticeLive = function () {
+  return new Date().toISOString().slice(0, 10) < FEE_NOTICE.until;
+};
+
 async function _updateNotifBadge() {
   const user = getKakaoUser();
   if (!user || !window.CottageDB?.getMyNotifications) return;
   const btn = document.getElementById('kakaoLoginBtn');
   if (!btn) return;
   const sess = window._cottageSess?.get(String(user.id)) || {};
-  if (!sess.voucherNoticeSeen) {
+  if (!sess.voucherNoticeSeen || (window._isFeeNoticeLive?.() && !sess.feeNoticeSeen)) {
     if (!btn.querySelector('.notif-badge')) {
       const b = document.createElement('span');
       b.className = 'notif-badge';
@@ -1567,12 +1580,13 @@ function _bindMeetingSubsheet(subBody, ctx) {
         }
 
 // ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
-// ctx: _markAllNotifSeen/_markOneNotifSeen/_markVoucherSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
+// ctx: _markAllNotifSeen/_markOneNotifSeen/_markVoucherSeen/_markNoticeSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
-  const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle } = ctx;
+  const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle } = ctx;
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
+          subBody.querySelector('.profile-notice-confirm')?.addEventListener('click', () => _markNoticeSeen(subBody));
           subBody.querySelectorAll('.notif-read-one-btn').forEach(btn => {
             btn.addEventListener('click', e => { e.stopPropagation(); _markOneNotifSeen(btn.closest('li'), subBody); });
           });
@@ -1875,9 +1889,27 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
   const VOUCHER_NOTICE_DATE = '2026-06-16';
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
+  // ── 전체 공지 카드 (기간 내에만) ──
+  const _feeNoticeLive = window._isFeeNoticeLive();
+  const _feeSeen = !!_sessForNotif.feeNoticeSeen;
+  const _feeNoticeHtml = !_feeNoticeLive ? '' : `<div class="notif-reward-card notif-reward-card--notice${_feeSeen ? ' is-seen' : ' is-new'}">
+    <div class="notif-reward-row">
+      <div class="notif-reward-icon-col">📢</div>
+      <div class="notif-reward-body">
+        <div class="notif-reward-title">${escH(FEE_NOTICE.title)} ${_feeSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}</div>
+        <div class="notif-reward-desc"><strong>${escH(fmtShort(FEE_NOTICE.from))}부터 지인팟 전용 요금 할인이 폐지됩니다.</strong><br>
+        동호회 회원 없이 지인들끼리만 이용하시는 경우, 일반 이용 요금(1인 7,000원)이 적용됩니다.<br><br>
+        <strong>모임에 함께 참여하시는 동반 지인 할인은 그대로 유지됩니다</strong>(1인 5,000원).<br><br>
+        요금 할인은 모임을 활성화하고 모임에 기여해주시는 분들께 드리는 혜택이라는 취지에서 마련된 것이라, 이렇게 정리하게 되었습니다. 그동안 이용해주신 분들께 감사드리며 앞으로도 많은 모임 참여 부탁드립니다.</div>
+        <div class="notif-card-date">${escH(fmtShort(FEE_NOTICE.from))} 시행</div>
+      </div>
+    </div>
+    ${_feeSeen ? '' : '<div class="notif-reward-actions"><button class="profile-notice-confirm" type="button">확인했어요</button></div>'}
+  </div>`;
+
   let voucherCardHtml = '';
   if (_hasFirstPlayVoucher) {
-    voucherCardHtml = `<div class="notif-reward-card is-seen">
+    voucherCardHtml = `<div class="notif-reward-card notif-reward-card--voucher is-seen">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
@@ -1890,7 +1922,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   } else {
     // 미수령: voucherSeen 여부와 무관하게 is-seen 사용 금지 (수령완료와 혼동 방지)
     // voucherSeen은 NEW 배지·확인했어요 버튼·카드 위치만 제어
-    voucherCardHtml = `<div class="notif-reward-card${voucherSeen ? '' : ' is-new'}">
+    voucherCardHtml = `<div class="notif-reward-card notif-reward-card--voucher${voucherSeen ? '' : ' is-new'}">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">🎫</div>
       <div class="notif-reward-body">
@@ -1906,7 +1938,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   </div>`;
   }
   const _effectiveVoucherSeen = _hasFirstPlayVoucher || voucherSeen;
-  const _newCount = notifs.filter(n => n.isNew).length + (_effectiveVoucherSeen ? 0 : 1);
+  const _newCount = notifs.filter(n => n.isNew).length + (_effectiveVoucherSeen ? 0 : 1)
+    + (_feeNoticeLive && !_feeSeen ? 1 : 0);
   // play-records-utils.js의 공용 구현으로 위임(사본 제거). 전 페이지에서 utils가 먼저 로드됨.
   const _getGameKeyById = gameId => window.getGameKeyById?.(gameId) ?? null;
   function _getGameKeyByName(name) {
@@ -1973,7 +2006,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     ? `<div class="notif-help">새 알림이 없으면 여기에서 보상, 게임 요청, 업적 달성 소식을 확인할 수 있어요.</div>`
     : '';
   const _voucherFirst = !_effectiveVoucherSeen;
-  let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_notifHelpHtml}`;
+  // 공지는 미확인이면 맨 위, 확인했으면 맨 아래 — 보상 카드와 같은 규칙
+  const _noticeFirst = _feeNoticeLive && !_feeSeen;
+  let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_noticeFirst ? _feeNoticeHtml : ''}${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_noticeFirst ? '' : _feeNoticeHtml}${_notifHelpHtml}`;
 
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;
 
@@ -2461,14 +2496,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   // ── _markAllNotifSeen ─────────────────────────────────────────
   // ── _markAllNotifSeen/_markVoucherSeen 공용 헬퍼 (KA5 DRY) ──
-  function _markRewardCardSeen(container) {
-    const _rewardCard = container.querySelector('.notif-reward-card');
-    if (!_rewardCard) return;
-    _rewardCard.classList.remove('is-new');
-    _rewardCard.classList.add('is-seen');
-    _rewardCard.querySelector('.profile-notif-new-badge')?.remove();
-    _rewardCard.querySelector('.profile-voucher-confirm')?.remove();
-    _rewardCard.querySelector('.notif-reward-btn')?.classList.add('is-seen');
+  // sel로 대상을 좁힌다 — 카드가 2종(보상·공지)이라 querySelector 단수로는
+  // 첫 카드만 잡혀 나머지가 조용히 안 읽힌 채 남는다. '모두 읽기'는 기본값으로 전부.
+  function _markRewardCardSeen(container, sel = '.notif-reward-card') {
+    container.querySelectorAll(sel).forEach(card => {
+      card.classList.remove('is-new');
+      card.classList.add('is-seen');
+      card.querySelector('.profile-notif-new-badge')?.remove();
+      card.querySelector('.profile-voucher-confirm')?.remove();
+      card.querySelector('.profile-notice-confirm')?.remove();
+      card.querySelector('.notif-reward-btn')?.classList.add('is-seen');
+    });
   }
   function _resetNotifBtnAndConfirmAll(container) {
     const _nBtn = body.querySelector('.profile-panel-notif-btn');
@@ -2479,7 +2517,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       .replace(/<span class="profile-notif-new-badge"[^>]*>NEW<\/span>/g, '')
       .replace(/<button class="notif-read-one-btn"[^>]*>읽음<\/button>/g, '')
       .replace(/<button class="profile-notif-confirm-all"[^>]*>모두 읽기<\/button>/, '')
-      .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '');
+      .replace(/<button class="profile-voucher-confirm"[^>]*>확인했어요<\/button>/, '')
+      .replace(/<button class="profile-notice-confirm"[^>]*>확인했어요<\/button>/, '');
   }
 
   // 개별 읽음 — 이 카드 하나만. notif_seen_at(지평선)은 건드리지 않고
@@ -2507,6 +2546,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       _s.notifSeenAt = _now;
       _s.newGameSeenAt = _now;
       _s.voucherNoticeSeen = true;
+      _s.feeNoticeSeen = true;
       window._cottageSess.set(String(user.id), _s);
       window.CottageDB?.updateNotifSeenAt?.(String(user.id), _now);
     }
@@ -2523,15 +2563,26 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   // ── _markVoucherSeen (컨테이너 파라미터, 기본값 = body) ──────
   function _markVoucherSeen(container = body) {
+    _markOneCardSeen(container, 'voucherNoticeSeen', '.notif-reward-card--voucher');
+  }
+
+  // ── _markNoticeSeen — 전체 공지 카드의 [확인했어요] ──────────
+  function _markNoticeSeen(container = body) {
+    _markOneCardSeen(container, 'feeNoticeSeen', '.notif-reward-card--notice');
+  }
+
+  // 카드 한 종류만 읽음 처리. 다른 카드가 아직 미확인이면 배지를 지우지 않는다
+  // (_updateNotifBadge가 두 키를 모두 보고 다시 계산한다).
+  function _markOneCardSeen(container, sessKey, sel) {
     if (window._cottageSess) {
       const _s = window._cottageSess.get(String(user.id));
-      _s.voucherNoticeSeen = true;
+      _s[sessKey] = true;
       window._cottageSess.set(String(user.id), _s);
     }
-    document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
-    _markRewardCardSeen(container);
-    const remaining = container.querySelectorAll('.profile-notif-list .is-new, .profile-notif-more-list .is-new').length;
+    _markRewardCardSeen(container, sel);
+    const remaining = container.querySelectorAll('.profile-notif-list .is-new, .profile-notif-more-list .is-new, .notif-reward-card.is-new').length;
     if (remaining === 0) {
+      document.getElementById('kakaoLoginBtn')?.querySelector('.notif-badge')?.remove();
       _resetNotifBtnAndConfirmAll(container);
     }
     _updateNotifBadge();
@@ -2594,7 +2645,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         // onLeave 스냅샷: 개별 읽음은 DOM만 바꾸므로, 뒤로가기/백드롭으로 나갔다 다시 들어와도
         // 유지되려면 캐시 문자열을 현재 DOM으로 갱신해야 한다(기록보드와 같은 방식).
         // ✕닫기는 패널째 제거 → 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요.
-        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _getGameKeyByName, _getGameKeyById, _notifTitle }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
+        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');
