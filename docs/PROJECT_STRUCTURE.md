@@ -73,6 +73,8 @@
 │   │                               #   eval해 검증 (읽기전용). --negctl 먼저 돌릴 것
 │   │                               # ⚠️ setInterval을 스텁하지 말 것 — undici가 .unref()를 부른다.
 │   │                               #   덮으면 전 쿼리가 죽고 검사기가 0행을 정상처럼 보고한다
+│   ├── verify-party-size.js        # 모임 인원(등록 건수 ≠ 방문 인원) — 회귀 불변식 + 엣지 (읽기전용)
+│   │                               #   --negctl 먼저. --live를 줘야 실DB 조회(guest_count 필드 확인)
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지

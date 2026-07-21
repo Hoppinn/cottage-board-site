@@ -17,7 +17,7 @@
 | 취향보드 `profiles.bio`·`avoid_tags`·`notif_seen_at` | ✅ 전부 존재 (bio·avoid_tags 실데이터 각 2행) |
 | 010 `profiles.notif_read_keys` | ✅ **실행 완료 (2026-07-18 실측)** — 컬럼 존재, 5행 전부 기본값 `[]` 확인 |
 | 011 `page_events` anon SELECT 정책 | ✅ **실행 완료 + 검증 (2026-07-18)** — anon SELECT 1,452행 정상, 관리자 이벤트 퍼널이 실수치로 렌더됨(Playwright 확인) |
-| 013 `meeting_votes.guest_count` | ⏳ **작성만 됨 — SQL Editor 실행 대기 (2026-07-21)**. 실행 전에는 `getMeetingVotes`의 select에 `guest_count`를 넣지 말 것(PostgREST 400 → 플래너 백지). 실행 후 확인: `select count(*) from meeting_votes where guest_count <> 0;` → 0 |
+| 013 `meeting_votes.guest_count` | ✅ **실행 완료 + 검증 (2026-07-21)** — 22행 전부 default 0. anon 조회 응답에 `guest_count` 필드 존재를 실측(`scripts/verify-party-size.js --live`). **행 수만 보면 안 된다** — 컬럼이 없으면 PostgREST가 400을 내고 클라이언트는 `[]`를 반환해 「0행」으로 보인다 |
 | 012 `increment_profile_counters` RPC | ✅ **실행 완료 + 검증 (2026-07-20 재확인)** — anon RPC 호출이 HTTP 200, 없는 `user_id`로 불러도 빈 행이 안 생김(012 파일의 검증 ②). ⚠️ **이 칸은 2026-07-20까지 「미실행」으로 남아 PROJECT_STATE의 「완료」와 충돌하고 있었다** — 문서 두 곳이 갈리면 그럴듯한 쪽으로 잇지 말고 이렇게 **DB에 직접 물어서** 닫을 것 |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
