@@ -110,6 +110,10 @@
 │   ├── verify-past-meeting-actions.js # A-10 지난 날짜의 무반응 버튼(✎/✕·등록) 제거 검증 (DB 불필요)
 │   │                               #   --negctl 먼저. day-detail.js를 실제 eval하고,
 │   │                               #   index-page.js의 판정식은 원문 그대로 잘라 eval한다
+│   ├── link-bbok-0711-records.js   # 뽁님 7/11 게임평 → 호핀 세션에 뽁님 기록 추가 (완료, 보관)
+│   │                               #   ⚠️운영DB INSERT. 기본 드라이런, --commit이라야 실행.
+│   │                               #   원본 game_comments는 지우지 않는다(코멘트 유지가 전제).
+│   │                               #   중복 가드 (user_id,game_id,played_at) — 두 번 돌려도 안 겹침
 │   ├── verify-history-caption.js   # 모임 기록 「캡션복사」 양식 (DB 불필요, --live로 실DB 대조)
 │   │                               #   --negctl 먼저. club-history.html의 formatPlayTime·
 │   │                               #   formatScore·buildCaption을 원문 그대로 잘라 eval한다
