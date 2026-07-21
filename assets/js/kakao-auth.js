@@ -432,6 +432,10 @@ function _afterGrowthRender(subBody, expandChar = false, expandTitle = false, re
       btn.textContent = isHidden ? `더 보기 (${btn.dataset.moreCount}건 더)` : '접기';
     });
   });
+  // 🚨 `_growthInnerHtml`은 패널 오픈 시 **1회** 만들어진 문자열이라, 수집 보드에
+  //    다시 들어오면 그때의 대표 캐릭터·칭호가 되살아난다(= 방금 바꾼 게 되돌아간 것처럼 보임).
+  //    렌더 직후 이번 세션에서 바꾼 값을 다시 입혀 맞춘다. 남의 보드(readOnly)엔 적용 금지.
+  if (!readOnly) window.CottageAchievements?.reapplyRepOverrides?.();
 }
 
 function _buildVoucherInner(bal, prods, hist, isDevMode) {

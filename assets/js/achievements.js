@@ -590,6 +590,16 @@
   // (실측: 아바타 2곳은 즉시 바뀌고 미리보기·헤더만 새로고침해야 바뀜).
   // 표시하는 자리를 새로 만들면 클래스·선택자를 여기 추가할 것.
 
+  // 이번 세션에서 바꾼 대표값. 수집 보드 HTML은 패널 오픈 시 1회 만들어진 문자열이라
+  // (kakao-auth.js `_growthInnerHtml`) 다시 들어가면 옛 대표가 되살아난다 →
+  // `_afterGrowthRender`가 렌더 직후 `reapplyRepOverrides()`로 다시 입힌다.
+  let _repCharOverride = null;
+  let _repTitleOverride = null;
+  function reapplyRepOverrides() {
+    if (_repCharOverride) _applyRepCharacterUI(_repCharOverride);
+    if (_repTitleOverride) _applyRepTitleUI(_repTitleOverride);
+  }
+
   // 대표 캐릭터가 없던 사용자의 패널 아바타는 <div>🐾</div>다 — src를 넣어도 안 바뀐다
   function _setPanelAvatar(src) {
     const el = document.querySelector('#profilePanel .profile-panel-avatar');
@@ -603,6 +613,7 @@
   }
 
   function _applyRepCharacterUI(achId) {
+    _repCharOverride = achId || null;
     document.querySelectorAll('.profile-char-card').forEach(c => {
       c.classList.remove('is-rep', 'is-selected');
       if (achId && c.dataset.achId === achId) c.classList.add('is-rep');
@@ -626,6 +637,7 @@
   }
 
   function _applyRepTitleUI(titleId) {
+    _repTitleOverride = titleId || null;
     document.querySelectorAll('.profile-title-card').forEach(c => {
       c.classList.remove('is-rep', 'is-selected');
       if (titleId && c.dataset.titleId === titleId) c.classList.add('is-rep');
@@ -960,6 +972,7 @@
     handleRepTitleSelect,
     getTitleById: (id) => TITLE_DEFS.find(t => t.id === id) || null,
     getCharacterPath,
+    reapplyRepOverrides,
     getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
     fetchUserStats: (userId, nickname) => _fetchUserStats(window.CottageDB, userId, nickname),
     findNextAchievement,
