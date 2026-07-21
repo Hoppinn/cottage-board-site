@@ -62,6 +62,8 @@
   --overlay-z:2000;
   --z-profile:9100;      /* 내 보드 패널 */
   --z-subsheet:9200;     /* 서브시트, 다른 프로필 오버레이 */
+  --z-board-modal:9300;  /* 보드 서브시트 위 센터모달 (.mb-add-overlay) — 서브시트보다 위, 게임시트보다 아래.
+                            게임시트가 이 위에 겹쳐 떠야 닫았을 때 모달로 돌아온다. 9500 위로 올리지 말 것. */
   --z-sheet:9500;        /* 게임 바텀시트 */
   --sheet-z:9500;        /* 하위 호환 별칭 */
   --z-shelf:9600;        /* 선반/가이드 iframe 오버레이 */
@@ -4390,7 +4392,7 @@ body.embed-mode {
 .taste-add-btn--inline{display:inline-block;width:auto;padding:3px 10px;font-size:12px;margin-left:6px;vertical-align:middle;}
 .taste-section-label--mb .taste-add-btn--inline{padding:3px 8px;margin-left:0;}
 /* 게임 추가 센터모달 */
-.mb-add-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:var(--z-sheet-modal);display:flex;align-items:center;justify-content:center;padding:20px;}
+.mb-add-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:var(--z-board-modal);display:flex;align-items:center;justify-content:center;padding:20px;}
 .mb-add-box{background:#fff;border-radius:16px;width:100%;max-width:400px;max-height:80vh;display:flex;flex-direction:column;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,0.25);}
 .mb-add-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .mb-add-title{font-size:15px;font-weight:700;color:var(--text);}

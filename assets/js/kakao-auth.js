@@ -1404,7 +1404,13 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const listEl = overlay.querySelector('.mb-taste-box-list');
             const countEl = overlay.querySelector('.mb-box-count');
             const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc); };
-            const onEsc = e => { if (e.key === 'Escape') close(); };
+            // 게임시트가 이 모달 위에 떠 있으면 Esc를 무시한다 — 게임시트엔 Esc 핸들러가 없어서,
+            // 안 막으면 시트 뒤에서 이 모달만 조용히 닫히고 시트를 닫았을 때 돌아올 곳이 사라진다.
+            const onEsc = e => {
+              if (e.key !== 'Escape') return;
+              if (document.getElementById('gameSheet')?.classList.contains('is-active')) return;
+              close();
+            };
             overlay.querySelector('.mb-add-close').addEventListener('click', close);
             overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
             document.addEventListener('keydown', onEsc);
@@ -1434,10 +1440,12 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const renderList = () => {
               listEl.innerHTML = games.length ? games.map(_boxItemHtml).join('') : '<p class="taste-game-empty">아직 없어요</p>';
               if (countEl) countEl.textContent = `${games.length}개`;
-              // 썸네일만 클릭 → 게임시트 (모달 z 9700 > 게임시트 9500 → 먼저 닫고 열기)
+              // 썸네일만 클릭 → 게임시트. 이 모달은 --z-board-modal(9300) < 게임시트(9500)이라
+              // 닫지 않아도 시트가 위에 겹쳐 뜨고, 시트를 닫으면 이 모달로 돌아온다.
+              // (이번 주 리스트의 썸네일 핸들러가 서브시트 9200에서 쓰는 것과 같은 방식)
               listEl.querySelectorAll('.taste-game-item--clickable .taste-game-thumb, .taste-game-item--clickable .taste-game-thumb-empty').forEach(th => th.addEventListener('click', () => {
                 const gid = th.closest('.taste-game-item')?.dataset.gameId;
-                if (gid) { close(); window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
+                if (gid) { window.ensureGameSheet?.(); window.openGameSheet?.(gid); }
               }));
               listEl.querySelectorAll('.taste-game-del').forEach(btn => btn.addEventListener('click', async () => {
                 const item = btn.closest('.taste-game-item');
