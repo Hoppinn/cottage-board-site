@@ -75,6 +75,13 @@
     .admin-visitor-pages-btn:hover { background: var(--bg); }
     .admin-visitor-pages { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 4px; overflow-x: auto; }
     .admin-visitor-pages[hidden] { display: none; }
+    /* 펼침 표 안의 기간 선택 — 목록 위 필터/정렬 칩과 같은 시각 언어(알약+초록 활성)를 쓰되
+       카드 안에 들어가므로 한 치수 작다. 좁은 화면에서 줄바꿈되도록 wrap. */
+    .admin-vp-periods { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 2px 6px; }
+    .admin-vp-period-btn { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px;
+      border: 1px solid var(--border); background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; }
+    .admin-vp-period-btn.is-active { background: var(--green); color: #fff; border-color: var(--green); }
+    .admin-vp-empty { font-size: 11px; color: var(--muted); font-weight: 600; padding: 8px 2px; }
     .anat-ref { color: var(--muted); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     /* 드릴다운(원칙 ⑤) — 숫자 → 「이걸 한 사람들」. 이벤트 탭·페이지 탭이 같은 스타일을 쓴다 */
     .admin-dd-btn { font-size: 11px; font-weight: 700; border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px; background: var(--card-bg,#fff); color: var(--muted); cursor: pointer; white-space: nowrap; }
@@ -1065,6 +1072,48 @@
       function _toKstDate(isoStr) {
         return new Date(new Date(isoStr).getTime() + 9 * 3600000).toISOString().slice(0, 10);
       }
+
+      // ── 펼침 표의 기간 선택 (2026-07-22 사용자 요청) ─────────────────
+      // ⚠️ 이건 **탭 필터가 아니라 펼친 표 안의 선택기**다. 목록(명부)은 계속 전 기간이다 —
+      //    탭 전체를 기간으로 거르면 필터 칩 341 vs 목록 4명이 된다(#5, 위 usesDateFilter 주석).
+      //    명부가 답하는 질문("누가 있나")과 이 표가 답하는 질문("이 사람이 그 기간에 뭘 봤나")이
+      //    서로 다르므로 선택기도 그 표에만 붙는다(원칙 ④).
+      // ⚠️ renderCharts의 calcRange/filterByRange를 쓰지 않는다 — 스코프가 다르고(그건 날짜 네비
+      //    경로다) 여기 필요한 건 고정 프리셋 4개뿐이라 KST 날짜 문자열 비교로 끝난다.
+      //    _toKstDate는 buildAnonUserMap의 todaySec 판정과 **같은 함수**라 자정 경계가 갈리지 않는다.
+      const VP_PERIODS = [
+        { key: 'all',   label: '전 기간' },
+        { key: 'today', label: '오늘' },
+        { key: 'yesterday', label: '어제' },
+        { key: '7d',    label: '7일' },
+      ];
+      const _kstShift = n => new Date(Date.now() + 9 * 3600000 + n * 86400000).toISOString().slice(0, 10);
+      // 행이 그 기간에 속하는가. 'all'은 **아무것도 거르지 않는다** — 기본값이 기존 동작과
+      // 한 글자도 달라지면 안 된다(회귀 가드가 이걸 본다).
+      function _inVpPeriod(r, period) {
+        if (!period || period === 'all') return true;
+        if (!r.entered_at) return false;          // 날짜가 없으면 기간을 물을 수 없다
+        const d = _toKstDate(r.entered_at);
+        if (period === 'today') return d === todayKst;
+        if (period === 'yesterday') return d === _kstShift(-1);
+        if (period === '7d') return d > _kstShift(-7) && d <= todayKst;  // 오늘 포함 7일
+        return true;
+      }
+      // 한 사람의 그 기간 페이지 맵. buildUserMap/buildAnonUserMap을 통째로 다시 돌리지 않는다
+      // (그건 전원 + 정렬까지 하는 함수다). 누적 식은 **그 둘과 같아야** 값이 갈리지 않는다.
+      // ⚠️ dedupUserPageDay를 거치지 않는 것이 의도다 — dedup하면 체류가 그날 첫 세션 것만
+      //    합산돼 과소집계된다(memberPageMap 주석과 같은 이유).
+      function pageMapFor(idType, id, period) {
+        const pm = new Map();
+        for (const r of rows) {
+          if (idType === 'member') { if (String(r.user_id || '') !== String(id)) continue; }
+          else { if (r.user_id || r.session_key !== id) continue; }
+          if (!_inVpPeriod(r, period)) continue;
+          if (!pm.has(r.page)) pm.set(r.page, { visits: 0, totalSec: 0 });
+          pm.get(r.page).visits++; pm.get(r.page).totalSec += r.duration_sec || 0;
+        }
+        return pm;
+      }
       function buildAnonUserMap(rowset) {
         const m = new Map(); // session_key → { pm, days, todaySec, lastAt }
         for (const r of rowset) {
@@ -1109,21 +1158,26 @@
       // 한 사람의 페이지 분포 표. 체류시간 내림차순 — "어떤 페이지에 오래 머물렀나"가 질문이라
       // 진입 횟수보다 체류가 먼저다. 너무 길어지지 않게 상위 10개만 펼치고 나머지는 합계로.
       const _PAGE_ROWS_MAX = 10;
-      function _visitorPagesHtml(pm) {
-        if (!pm || !pm.size) return '';
+      // 패널 **안쪽**만 만든다 — 기간 버튼을 누르면 이 부분만 갈아끼운다(껍데기는 유지해야
+      // 열림 상태와 위임 대상이 살아남는다).
+      function _visitorPagesInner(pm, period) {
         const sorted = [...pm.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
         const head = sorted.slice(0, _PAGE_ROWS_MAX);
         const rest = sorted.slice(_PAGE_ROWS_MAX);
         const restSec = rest.reduce((s, [, d]) => s + d.totalSec, 0);
         const restVisits = rest.reduce((s, [, d]) => s + d.visits, 0);
-        // 기준 표기(원칙 ①) — 이 표는 buildUserMap(rows)/buildAnonUserMap(rows)로 **원본 rows**에서
-        // 만들어져 항상 전 기간이다. 회원 탭은 날짜 네비가 숨겨져 있어(usesDateFilter) 사용자가
-        // 다른 탭의 선택 기간이 여기에도 걸린 줄 알 여지가 있다 → 무엇을 센 값인지 밝힌다.
-        // ⚠️ 기간 선택을 붙이면(발견 #20) 이 문구도 실제 기간에서 파생시킬 것 — 하드코딩 라벨이
-        //    데이터와 어긋나는 건 시간문제다(#9·#11이 그 사례).
-        return `<div class="admin-visitor-pages" hidden>
-          <div style="font-size:11px;color:var(--muted);padding:4px 2px 2px" title="page_sessions(페이지별 체류 기록) 전량 기준. heartbeat 분은 이 표에 안 들어오므로 위 '⏱ 총'보다 작습니다 — 서로 다른 것을 세는 값이라 정상입니다. 상단 기간 선택은 적용되지 않습니다.">페이지별 체류 · 전 기간 · <b>합계는 위 ⏱ 총과 다름</b></div>
-          <table class="admin-analytics-table">
+        const pLabel = (VP_PERIODS.find(p => p.key === period) || VP_PERIODS[0]).label;
+        // 기준 표기(원칙 ①) — 무엇을 센 값인지 밝힌다. **라벨을 하드코딩하지 않고 고른 기간에서
+        // 파생**시킨다. 문구와 데이터가 어긋나는 건 시간문제다(#9·#11이 그 사례).
+        const periodBar = `<div class="admin-vp-periods">${VP_PERIODS.map(p =>
+          `<button class="admin-vp-period-btn${p.key === period ? ' is-active' : ''}" type="button" data-vp-period="${p.key}">${p.label}</button>`
+        ).join('')}</div>`;
+        const note = `<div style="font-size:11px;color:var(--muted);padding:2px 2px" title="page_sessions(페이지별 체류 기록) 기준. heartbeat 분은 이 표에 안 들어오므로 위 '⏱ 총'보다 작습니다 — 서로 다른 것을 세는 값이라 정상입니다. 기간은 이 표에만 적용되며 위 목록·카드 숫자는 전 기간 그대로입니다.">페이지별 체류 · <b>${escH(pLabel)}</b> · 합계는 위 ⏱ 총과 다름</div>`;
+        // 「0」과 「없음」을 구분한다 — 빈 표를 내면 "고장인가"로 읽힌다(_todayChip과 같은 판단).
+        if (!pm.size) {
+          return periodBar + note + `<div class="admin-vp-empty">이 기간에 기록된 페이지 체류가 없습니다.</div>`;
+        }
+        return periodBar + note + `<table class="admin-analytics-table">
             <thead><tr><th>페이지</th><th>진입</th><th>체류</th></tr></thead>
             <tbody>
               ${head.map(([page, d]) =>
@@ -1133,11 +1187,17 @@
                 ? `<tr><td style="color:var(--muted)">외 ${rest.length}개 페이지</td><td>${restVisits}회</td><td>${fmtTime(restSec)}</td></tr>`
                 : ''}
             </tbody>
-          </table>
-        </div>`;
+          </table>`;
       }
+      function _visitorPagesHtml(pm) {
+        if (!pm || !pm.size) return '';
+        return `<div class="admin-visitor-pages" hidden>${_visitorPagesInner(pm, 'all')}</div>`;
+      }
+      // 토글 버튼 라벨. 기간을 바꾸면 이 숫자도 함께 간다 — 버튼 12개 / 표 3줄로 갈리면
+      // #5와 같은 종류의 어긋남이다(원칙 ⑤: 명단과 「N개」는 같은 순회에서 만든다).
+      const _pagesBtnLabel = (count, open) => `📄 페이지 ${count}개 ${open ? '▴' : '▾'}`;
       const _visitorPagesToggle = pm => pm && pm.size
-        ? `<button class="admin-visitor-pages-btn" type="button">📄 페이지 ${pm.size}개 ▾</button>`
+        ? `<button class="admin-visitor-pages-btn" type="button">${_pagesBtnLabel(pm.size, false)}</button>`
         : '';
 
       const unified = [
@@ -1219,7 +1279,7 @@
           const anonTodayAS = a.today_date === todayKst ? (a.today_seconds || 0) : 0;
           const anonTodayS = Math.max(anonTodayPS, anonTodayAS);
           const anonTotalS = ent ? [...ent.pm.values()].reduce((s, v) => s + v.totalSec, 0) : 0;
-          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" data-total-sec="${anonTotalS}" data-today-sec="${anonTodayS}" style="${hid}opacity:${online ? 1 : 0.7}">
+          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" data-session-key="${escH(a.session_key)}" data-total-sec="${anonTotalS}" data-today-sec="${anonTodayS}" style="${hid}opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:var(--bg-soft);color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
             </div>
@@ -1267,8 +1327,30 @@
         // 주석: 기간으로 거르면 필터 칩 341 vs 목록 4명처럼 모집단이 어긋난다 = #5), 그 결과
         // "다른 탭에서 고른 기간이 여기에도 걸린 것"으로 오해할 여지가 남았다. 카드의 방문 횟수도
         // 「📄 페이지 N개」 펼침도 전부 **전 기간 누적**이므로 그렇다고 적는다.
-        const scopeNote = '<div class="admin-scope-note">📋 이 탭은 <b>전 기간 누적</b>입니다 — 위 날짜 선택은 적용되지 않습니다. (명부라 기간으로 거르면 목록과 숫자의 모집단이 어긋납니다)</div>';
+        // 2026-07-22: 펼침 표에 자체 기간 선택이 붙어 "전 기간 누적"이 이제 **목록·카드 숫자에만**
+        // 해당한다. 한쪽만 적으면 두 말이 충돌하므로 함께 밝힌다.
+        const scopeNote = '<div class="admin-scope-note">📋 이 탭의 <b>목록과 카드 숫자는 전 기간 누적</b>입니다 — 위 날짜 선택은 적용되지 않습니다. (명부라 기간으로 거르면 목록과 숫자의 모집단이 어긋납니다)<br>「📄 페이지 N개」를 펼치면 <b>그 표 안에서 기간을 고를 수 있습니다.</b></div>';
         membersBody.innerHTML = scopeNote + summaryCardsHtml + unifiedHtml;
+
+        // 펼침 표의 기간 버튼 — 위임 하나로 처리한다. 여기(loadAnalytics 스코프)에 둬야
+        // rows·pageMapFor·_visitorPagesInner에 닿는다. loadAnalytics는 tryLoad의 tried 가드로
+        // **정확히 한 번** 실행되므로 중복 바인딩이 생기지 않는다.
+        membersBody.addEventListener('click', (e) => {
+          const pb = e.target.closest('.admin-vp-period-btn');
+          if (!pb) return;
+          const card = pb.closest('.admin-member-card');
+          const panel = card?.querySelector('.admin-visitor-pages');
+          if (!panel) return;
+          const period = pb.dataset.vpPeriod || 'all';
+          const isMember = card.dataset.visitorType === 'member';
+          const id = isMember ? card.dataset.uid : card.dataset.sessionKey;
+          if (!id) return;
+          const pm = pageMapFor(isMember ? 'member' : 'anon', id, period);
+          panel.innerHTML = _visitorPagesInner(pm, period);
+          // 토글 버튼 숫자도 같은 계산에서 갱신한다(원칙 ⑤). 화살표 방향은 현재 열림 상태 그대로.
+          const btn = card.querySelector('.admin-visitor-pages-btn');
+          if (btn) btn.textContent = _pagesBtnLabel(pm.size, !panel.hasAttribute('hidden'));
+        });
       }
 
       if (pagesBody) pagesBody.innerHTML = '';

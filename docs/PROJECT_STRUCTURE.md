@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -129,6 +129,18 @@
 │   │                               #   --negctl 먼저. renderCrossBackLink를 원문 그대로 잘라 eval
 │   ├── shot-cross-nav.js           # 위 둘의 육안 확인 스크린샷 (읽기전용, supabase 쓰기 차단)
 │   │                               #   ⚠️ HEAD(count) 요청도 함께 막히므로 보드 안의 개수는 가짜다
+│   ├── verify-member-period.js     # 회원 카드 펼침의 기간 선택 — 계산 층 (읽기전용)
+│   │                               #   --negctl 먼저. 화면의 기간 헬퍼·pageMapFor를 원문 그대로
+│   │                               #   잘라 eval하고, 대조군 집계는 일부러 손으로 따로 짰다
+│   │                               #   (같은 코드를 두 번 부르면 검증이 아니라 반복이다).
+│   │                               #   ⚠️ 잘라오는 조각은 **한 번의 eval**에 몰 것 — const는
+│   │                               #      eval 밖으로 안 새서 나눠 부르면 서로도 못 본다
+│   │                               #   ⚠️ 합성 데이터의 날짜를 박지 말 것(내일 썩는다)
+│   ├── shot-member-period.js       # 위의 화면 층 + 스크린샷 (읽기전용, supabase 쓰기 차단)
+│   │                               #   표·버튼 숫자·기준 표기가 같은 기간을 말하는지 + 390px
+│   │                               #   🚨 회원 탭 키는 **member**(단수)다. 'members'로 쓰면 클릭이
+│   │                               #      무효인데 querySelector는 숨은 카드도 찾아줘서
+│   │                               #      「숨겨진 패널을 재고 전부 통과」가 된다(실제로 그랬다)
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
