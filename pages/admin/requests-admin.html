@@ -888,6 +888,63 @@
       '요청하기': 'requests',
       '관리자': 'requests-admin',
     };
+    // ── 쌍둥이 INSERT 접기 ────────────────────────────────────────────
+    // `page_sessions`에 INSERT하는 경로가 **셋**인데 한 번의 방문에 둘이 함께 발사된다:
+    //   ① supabase-client.js `_syncTimeToDBNow` — 로그인, visibilitychange(탭 숨김)
+    //   ② supabase-client.js `_startAnonHeartbeat` — 비로그인, 입장 1회, duration_sec=0 하드코딩
+    //   ③ script-nav.js `_send` — 전원, visibilitychange/pagehide, 3초 미만 제외
+    //      (raw fetch라 `db.from('page_sessions')` grep에 안 걸린다 — 경로를 셀 때 놓치기 쉽다)
+    // 로그인=①+③, 비로그인=②+③ → **방문 1회가 2행**이 되고 「진입 N회」가 그만큼 부풀었다.
+    // 실측(2026-07-22, `scripts/audit-session-double-insert.js`): 정규화 후 전 구간 방문 9,467건 중
+    // **1,064건(11%)이 2행**, #14 통일 이후 구간은 28%. 체류 합계는 2% 과다(비회원 쌍은 0초라 무영향).
+    // 창이 3초인 건 임의값이 아니다 — 같은 (사람·페이지) 이웃 행 간격에 **절벽**이 있다:
+    // 쌍 16개가 전부 ≤1.9초이고 그다음 값이 8.6초다. 2~5초 어디를 잡아도 같은 16쌍이 잡힌다.
+    // ⚠️ 저장 쪽은 그대로 둔다 — ①과 ③은 서로 다른 것을 재고(누적초 vs 진입 후 실제초,
+    //    3초 미만 유무) 한쪽을 지우면 그 차이가 사라진다. 고치는 건 **읽기**다(#14와 같은 방침).
+    const TWIN_WINDOW_MS = 3000;
+    function collapseTwinInserts(rowset) {
+      const byKey = new Map();
+      for (const r of rowset) {
+        const pid = r.user_id ? 'u:' + r.user_id : (r.session_key ? 's:' + r.session_key : null);
+        if (!pid || !r.entered_at) { byKey.set(Symbol(), [r]); continue; } // 묶을 근거가 없으면 그대로 둔다
+        const k = pid + '\x00' + r.page;
+        if (!byKey.has(k)) byKey.set(k, []);
+        byKey.get(k).push(r);
+      }
+      // referrer 고르기 — 2026-07-21(#28) 이후로는 두 경로가 같은 `COTTAGE_SESSION_REF`를 써서
+      // 값이 같지만, **그 이전 행은 ③이 유입 소스 대신 내부 라벨**(`메인`·`/pages/...`)을 넣었다.
+      // 체류만 보고 대표를 고르면 그 내부 라벨 쪽이 남아 진짜 유입(naver_place·google 등)이
+      // 사라진다 — 실측 31쌍이 그렇게 새고 있었다. 내부인지 아닌지는 **바로 위 별칭표를 그대로
+      // 재사용**해 판정한다(같은 개념에 판정 규칙을 두 벌 만들면 #15가 재발한다).
+      const _isInternalRef = ref => !!ref && (ref.startsWith('/') || Object.prototype.hasOwnProperty.call(PAGE_KEY_ALIASES, ref));
+      const out = [];
+      for (const list of byKey.values()) {
+        if (list.length === 1) { out.push(list[0]); continue; }
+        list.sort((a, b) => new Date(a.entered_at) - new Date(b.entered_at));
+        let group = [list[0]];
+        const flush = () => {
+          // 대표는 **체류가 가장 긴 행**. ①과 ③이 같은 방문을 서로 다른 기준으로 잰 값이라
+          // 합치면 중복이고, 큰 쪽이 그 방문의 최선 추정이다.
+          let best = group[0];
+          for (const r of group) if ((r.duration_sec || 0) > (best.duration_sec || 0)) best = r;
+          if (_isInternalRef(best.referrer) || !best.referrer) {
+            const better = group.find(r => r.referrer && !_isInternalRef(r.referrer));
+            if (better) best = { ...best, referrer: better.referrer };
+          }
+          out.push(best);
+        };
+        // ⚠️ 다음 행과의 간격은 **직전 행 기준**으로 본다(묶음 첫 행 기준이 아니라).
+        //    첫 행 기준으로 끊으면 대표가 묶음 끝 행일 때 다음 묶음 대표와 3초 안에 남아
+        //    접은 뒤에도 중복이 잔존한다 — 실제로 1건 잔존해 검사기에 걸렸다.
+        for (let i = 1; i < list.length; i++) {
+          if (new Date(list[i].entered_at) - new Date(list[i - 1].entered_at) <= TWIN_WINDOW_MS) group.push(list[i]);
+          else { flush(); group = [list[i]]; }
+        }
+        flush();
+      }
+      return out;
+    }
+
     function normalizePageKey(page) {
       if (!page) return page;
       let key = String(page);
@@ -931,8 +988,11 @@
       // ⚠️ 여기서 **슬러그로 접는다**(#14). 예전엔 슬러그→한글 라벨로 바꿨는데, 그러면
       //    라벨맵 두 개가 서로 달라(`game-reviews`가 '기록 보기' vs '플레이 기록') 오히려
       //    같은 페이지가 **이름까지 갈린 두 줄**이 됐다. 표시는 렌더에서 PAGE_LABEL로 붙인다.
-      const rows = (rawRows || []).filter(r => String(r.user_id || '') !== ADMIN_UID)
-        .map(r => ({ ...r, page: normalizePageKey(r.page) }));
+      // 접는 순서가 중요하다 — **정규화 먼저**. 과거 행은 두 경로가 라벨/슬러그로 다른 page를
+      // 넣었으므로(#14) 정규화 전에 묶으면 같은 방문의 쌍이 서로 다른 페이지로 보여 안 접힌다.
+      const rows = collapseTwinInserts(
+        (rawRows || []).filter(r => String(r.user_id || '') !== ADMIN_UID)
+          .map(r => ({ ...r, page: normalizePageKey(r.page) })));
       const allProfiles = (rawProfiles || []).filter(p => String(p.user_id || '') !== ADMIN_UID);
       const pageViews = (pvResult?.data || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
       const anonSessions = anonResult?.data || [];
