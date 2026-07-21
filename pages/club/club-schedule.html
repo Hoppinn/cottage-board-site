@@ -496,10 +496,15 @@
     .sm-time-preset-chip.is-active { border-color: var(--green); background: var(--green); color: white; }
     /* 게임 추가 섹션 (Step 3 이동 후 유지) */
     .sm-game-toggle-wrap { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
-    /* 펼쳐진 섹션은 다음 토글과 더 벌린다 — 8px만으로는 아래 토글이 위 목록에 붙어
-       "배우고 싶은 게임"이 "하고 싶은 게임"의 일부로 읽힌다. 접힘 상태는 8px 유지. */
+    /* 펼쳐진 섹션은 구분선 + 여백으로 다음 토글과 확실히 끊는다 — 여백만으로는
+       아래 토글이 위 내용에 붙어 "배우고 싶은 게임"이 "하고 싶은 게임"의
+       일부로 읽힌다. 접힘 상태는 wrap의 8px 그대로(그땐 두 줄이 명확하다). */
     .sm-game-block { display: flex; flex-direction: column; }
-    .sm-game-block.is-open { margin-bottom: 10px; }
+    .sm-game-block.is-open { padding-bottom: 14px; margin-bottom: 6px; border-bottom: 1px solid #e2dcd2; }
+    .sm-game-block.is-open:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: none; }
+    /* 고른 게임 목록은 입력·피커 아래 */
+    .sm-game-picked { margin-top: 12px; }
+    .sm-game-picked-label { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
     .sm-game-toggle {
       width: 100%; padding: 10px 14px;
       border: 1.5px dashed #c8c0b4; border-radius: 10px;
@@ -1466,7 +1471,6 @@
           return `<div class="sm-game-block is-open">
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
             <div class="sm-game-section">
-              ${gameListHtml(type)}
               <div class="sm-game-input-row">
                 <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 직접 입력" autocomplete="off">
                 <button class="sm-game-add-btn" data-gadd="${type}" type="button">추가</button>
@@ -1474,6 +1478,7 @@
                   title="지난 모임에서 ${pastLabel} 게임 불러오기" aria-label="지난 모임에서 ${pastLabel} 게임 불러오기"
                   aria-pressed="${_pastOpen[type] ? 'true' : 'false'}">지난 모임</button>
               </div>
+              ${gameListHtml(type) ? `<div class="sm-game-picked"><div class="sm-game-picked-label">고른 게임 ${count}개</div>${gameListHtml(type)}</div>` : ''}
               ${_pickerCache[source] !== undefined ? pickerHtml(type, source) : ''}
               ${_pastOpen[type] ? pickerHtml(type, 'past') : ''}
             </div>
