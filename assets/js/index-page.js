@@ -1636,11 +1636,13 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         d.setDate(monDate.getDate() + i);
         byDate[toDateStr(d)] = [];
       }
-      // 날짜별 vote 행을 그대로 담는다 — 인원은 sumPartySize(동반 지인 포함)로 세므로 Set(user_id)로 접지 않는다
+      // 날짜별 vote 행을 그대로 담는다 — 인원은 sumPartySize(동반 인원 포함)로 세므로 Set(user_id)로 접지 않는다
       votes.forEach(v => { if (byDate[v.vote_date]) byDate[v.vote_date].push(v); });
 
-      const allUsers = new Set(votes.map(v => v.user_id));
-      statusEl.textContent = getMeetingStatusMsg(allUsers.size);
+      // 이번 주 인원 = 등록자 + 동반 인원 (유저별 최대치 합산 — 공용 헬퍼가 규칙의 단일 출처)
+      const weekPeople = window.CottageDB?.sumWeeklyPartySize?.(votes)
+        ?? new Set(votes.map(v => String(v.user_id))).size;
+      statusEl.textContent = getMeetingStatusMsg(weekPeople);
 
       const dateKeys = Object.keys(byDate).sort();
 

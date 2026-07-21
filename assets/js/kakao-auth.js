@@ -2779,7 +2779,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
     const d = new Date(ds + 'T00:00:00');
     return (d.getMonth()+1) + '/' + d.getDate() + '(' + _days[d.getDay()] + ')';
   };
-  // 동반 지인이 있는 날만 「+N」 — 인원 계산은 공용 헬퍼에 위임(자체 계산 금지)
+  // 동반 인원이 있는 날만 「+N」 — 인원 계산은 공용 헬퍼에 위임(자체 계산 금지)
   const _guestSuffix = v => {
     const n = (window.CottageDB?.getPartySize?.(v) ?? 1) - 1;
     return n > 0 ? ` <span class="mb-week-guest">+${n}</span>` : '';

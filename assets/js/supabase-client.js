@@ -1671,6 +1671,7 @@ window._cottageSess = (function () {
     getMeetingVotes,
     getPartySize,
     sumPartySize,
+    sumWeeklyPartySize,
     upsertMeetingVote,
     deleteMeetingVote,
     updateNotifSeenAt,
@@ -2076,7 +2077,7 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getMeetingVotes]', err); return []; }
   }
 
-  // 등록 1건 ≠ 방문 인원. 철수가 지인 2명을 데려오면 등록은 1건이고 인원은 3명이다.
+  // 등록 1건 ≠ 방문 인원. 철수가 2명을 데려오면 등록은 1건이고 인원은 3명이다.
   // 「N명」을 세는 자리는 전부 이 둘만 쓴다 — 일부만 자체 계산하면 그 일부가 조용히 다른 답을 낸다.
   function getPartySize(vote) {
     const g = Number(vote?.guest_count);
@@ -2094,8 +2095,25 @@ window._cottageSess = (function () {
     return total;
   }
 
-  // guestCount(동반 지인 수)는 기본값 0 — 인자를 안 넘기는 기존 호출부는 동작이 바뀌지 않는다.
+  // guestCount(동반 인원 수)는 기본값 0 — 인자를 안 넘기는 기존 호출부는 동작이 바뀌지 않는다.
   // 상한 99는 DB CHECK와 같은 값(오타 방지). 음수·NaN·소수는 0/정수로 접는다.
+  // 여러 날짜에 걸친 「이번 주 인원」. 한 사람이 여러 날 등록해도 중복으로 세지 않도록
+  // 유저별 **최대** 인원을 합산한다(월 3명·수 1명이면 그 사람 몫은 3).
+  // sumPartySize와 다른 질문이다 — 저건 "그날 몇 명", 이건 "이 기간에 올 사람이 몇 명".
+  // 동반이 전부 0이면 각자 1이 되어 옛 Set(user_id).size와 정확히 같다(회귀 없음).
+  function sumWeeklyPartySize(votes) {
+    if (!Array.isArray(votes) || !votes.length) return 0;
+    const maxByUser = new Map();
+    for (const v of votes) {
+      const uid = String(v.user_id);
+      const size = getPartySize(v);
+      if (size > (maxByUser.get(uid) || 0)) maxByUser.set(uid, size);
+    }
+    let total = 0;
+    for (const n of maxByUser.values()) total += n;
+    return total;
+  }
+
   async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd, guestCount = 0) {
     try {
       const g = Number(guestCount);

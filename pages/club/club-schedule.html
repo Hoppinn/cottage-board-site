@@ -253,7 +253,7 @@
       color: var(--muted);
       margin: 0 6px;
     }
-    /* 동반 지인 스테퍼 — 단일 시트·멀티스텝 Step2 공용 */
+    /* 동반 인원 스테퍼 — 단일 시트·멀티스텝 Step2 공용 */
     .sched-guest-row {
       display: flex;
       align-items: center;
@@ -731,7 +731,7 @@
   <script>
   (function () {
     const MIN_H = 9, MAX_H = 23;
-    // 동반 지인 입력 상한 — 정책이 아니라 오타 방지(DB CHECK와 같은 값). 20명도 정상 입력이다.
+    // 동반 인원 입력 상한 — 정책이 아니라 오타 방지(DB CHECK와 같은 값). 20명도 정상 입력이다.
     const GUEST_MAX = 99;
     const DOW = ['일','월','화','수','목','금','토'];
     const TODAY = new Date();
@@ -768,7 +768,7 @@
     function isPast(s) { return parseDate(s) < TODAY; }
     function isToday(s) { return parseDate(s).getTime() === TODAY.getTime(); }
 
-    // 방문 인원 = 등록자 + 동반 지인. 인원을 세는 자리는 전부 이 함수만 쓴다(등록 건수와 구분).
+    // 방문 인원 = 등록자 + 동반 인원. 인원을 세는 자리는 전부 이 함수만 쓴다(등록 건수와 구분).
     // supabase-client.js의 공용 헬퍼에 위임 — 로드 순서 때문에 호출 시점에 참조한다.
     function partyCount(votes) {
       return window.CottageDB?.sumPartySize?.(votes) ?? (votes ? votes.length : 0);
@@ -822,7 +822,7 @@
       const slots = [];
       for (let h = MIN_H; h < MAX_H; h++) {
         // vote 행을 그대로 담는다 — names(누가)와 count(몇 명)를 분리하기 위함.
-        // 이름은 등록자 수만큼이지만 인원은 동반 지인을 포함하므로 둘은 더 이상 같은 수가 아니다.
+        // 이름은 등록자 수만큼이지만 인원은 동반 인원을 포함하므로 둘은 더 이상 같은 수가 아니다.
         slots.push({ h, votes: votes.filter(v => v.time_start <= h && v.time_end > h) });
       }
       const blocks = [];
@@ -895,12 +895,12 @@
             </div>
           </div>
           <div class="sched-guest-row">
-            <span class="sched-guest-label">👥 동반 지인</span>
+            <span class="sched-guest-label">👥 동반 인원</span>
             <div class="sched-guest-ctrl">
-              <button class="sched-guest-btn" id="ssGuestMinus" type="button" aria-label="동반 지인 수 줄이기">−</button>
+              <button class="sched-guest-btn" id="ssGuestMinus" type="button" aria-label="동반 인원 수 줄이기">−</button>
               <input class="sched-guest-input" id="ssGuest" type="number" inputmode="numeric"
-                min="0" max="${GUEST_MAX}" step="1" value="0" aria-label="동반 지인 수">
-              <button class="sched-guest-btn" id="ssGuestPlus" type="button" aria-label="동반 지인 수 늘리기">+</button>
+                min="0" max="${GUEST_MAX}" step="1" value="0" aria-label="동반 인원 수">
+              <button class="sched-guest-btn" id="ssGuestPlus" type="button" aria-label="동반 인원 수 늘리기">+</button>
             </div>
             <span class="sched-guest-total" id="ssGuestTotal">나 포함 1명</span>
           </div>
@@ -974,7 +974,7 @@
       let _step        = 1;
       let _days        = [];   // 선택된 날짜 배열 (정렬 유지)
       let _timeMap     = {};   // { ds: {s, e} }
-      let _guestMap    = {};   // { ds: 동반 지인 수 } — 미입력이면 키 없음(=0)
+      let _guestMap    = {};   // { ds: 동반 인원 수 } — 미입력이면 키 없음(=0)
       let _gameMap     = {};   // { ds: {want:[{custom_name,game_id}], learn:[...]} }
       let _activeDay   = null;
       let _fromStep1   = false;
@@ -1239,12 +1239,12 @@
               </div>
             </div>
             <div class="sched-guest-row">
-              <span class="sched-guest-label">👥 동반 지인</span>
+              <span class="sched-guest-label">👥 동반 인원</span>
               <div class="sched-guest-ctrl">
-                <button class="sched-guest-btn" id="smGM_${ds}" type="button" aria-label="동반 지인 수 줄이기">−</button>
+                <button class="sched-guest-btn" id="smGM_${ds}" type="button" aria-label="동반 인원 수 줄이기">−</button>
                 <input class="sched-guest-input" id="smG_${ds}" type="number" inputmode="numeric"
-                  min="0" max="${GUEST_MAX}" step="1" value="${_guestMap[ds] || 0}" aria-label="동반 지인 수">
-                <button class="sched-guest-btn" id="smGP_${ds}" type="button" aria-label="동반 지인 수 늘리기">+</button>
+                  min="0" max="${GUEST_MAX}" step="1" value="${_guestMap[ds] || 0}" aria-label="동반 인원 수">
+                <button class="sched-guest-btn" id="smGP_${ds}" type="button" aria-label="동반 인원 수 늘리기">+</button>
               </div>
               <span class="sched-guest-total" id="smGT_${ds}">나 포함 1명</span>
             </div>
@@ -1746,7 +1746,7 @@
       document.getElementById('ssLblS').textContent = initS + '시';
       document.getElementById('ssLblE').textContent = initE + '시';
 
-      // 수정 진입이면 기존 지인 수를 그대로 보여준다(비워두면 저장 시 0으로 덮인다)
+      // 수정 진입이면 기존 동반 인원을 그대로 보여준다(비워두면 저장 시 0으로 덮인다)
       const ssGuest = document.getElementById('ssGuest');
       if (ssGuest) {
         ssGuest.value = clampGuest(myVote?.guest_count);

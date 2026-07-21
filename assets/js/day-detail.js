@@ -418,7 +418,7 @@
     return g.game_id ? `id:${g.game_id}` : `name:${(g.custom_name || '').trim().toLowerCase()}`;
   }
 
-  // 방문 인원(등록자 + 동반 지인). supabase-client.js 공용 헬퍼에 위임 —
+  // 방문 인원(등록자 + 동반 인원). supabase-client.js 공용 헬퍼에 위임 —
   // day-detail.js가 supabase-client.js보다 먼저 로드될 수 있어 호출 시점에 참조한다.
   function partyCount(votes) {
     return window.CottageDB?.sumPartySize?.(votes) ?? (votes ? votes.length : 0);
@@ -840,7 +840,7 @@
   /** 모임 상세 통계 칩 HTML (참여 인원 · 최대 동시 겹침 · 공통 게임 수) */
   function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
     const count = partyCount(uniqueVotes);
-    // 최대 동시 참여 가능 인원 (1시간 단위 슬롯) — 동반 지인 포함
+    // 최대 동시 참여 가능 인원 (1시간 단위 슬롯) — 동반 인원 포함
     const MIN_H = 10, MAX_H = 24;
     let peakCnt = 0;
     for (let h = MIN_H; h < MAX_H; h++) {
@@ -910,7 +910,7 @@
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
       return `<div class="dd-block">
         <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</div>
-        <div class="dd-time">${v.time_start}~${v.time_end}시${partyCount([v]) > 1 ? ` · 지인 ${partyCount([v]) - 1}명 동반` : ''}</div>
+        <div class="dd-time">${v.time_start}~${v.time_end}시${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
       </div>`;
@@ -1204,7 +1204,7 @@
       const width    = ((v.time_end - v.time_start) / range * 100).toFixed(1);
       const mine     = myVote && String(v.user_id) === String(myVote.user_id);
       const gameLine = gameAbbrs(v.vote_date, v.user_id, v.time_end - v.time_start);
-      // 이름은 등록자 1명뿐이지만 인원은 지인 포함이라 다르다 → 막대에 「+N」으로 드러낸다
+      // 이름은 등록자 1명뿐이지만 인원은 동반 포함이라 다르다 → 막대에 「+N」으로 드러낸다
       const guestN   = partyCount([v]) - 1;
       const actions = mine
         ? `<div class="sched-bar-actions">
@@ -1215,7 +1215,7 @@
       return `<div class="sched-bar-item">
         <div class="sched-bar-left">
           <span class="sched-bar-name" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</span>
-          ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 지인 ${guestN}명">+${guestN}</span>` : ''}
+          ${guestN > 0 ? `<span class="sched-bar-guest" title="동반 인원 ${guestN}명">+${guestN}</span>` : ''}
           ${actions}
         </div>
         <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">

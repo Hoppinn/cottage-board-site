@@ -52,7 +52,7 @@ const check = (label, ok, detail) => {
 };
 
 const db = window.CottageDB;
-const { getPartySize, sumPartySize } = db;
+const { getPartySize, sumPartySize, sumWeeklyPartySize } = db;
 
 // 옛 계산 재현 — 회귀 대조군
 const oldCount = votes => new Set(votes.map(v => String(v.user_id))).size;
@@ -96,7 +96,23 @@ check('sumPartySize(null) → 0', sumPartySize(null) === 0);
 check('sumPartySize(배열 아님) → 0', sumPartySize('x') === 0);
 
 console.log('=== ④ 중복 행: 같은 유저가 두 번 들어와도 한 번만 센다 ===');
-check('같은 user_id 2행(지인 2) → 3명', sumPartySize([v('u1', 2), v('u1', 2)]) === 3);
+check('같은 user_id 2행(동반 2) → 3명', sumPartySize([v('u1', 2), v('u1', 2)]) === 3);
+
+console.log('=== ④-b 주간 인원(홈 상태 문구): 유저별 최대치 합산 ===');
+const wk = sumWeeklyPartySize;
+// 날짜가 달라도 같은 사람이면 한 번만 — 단 그 사람의 최대 동반 인원을 쓴다
+const d = (uid, ds, guest) => ({ vote_date: ds, user_id: uid, guest_count: guest });
+check('빈 배열 → 0', wk([]) === 0);
+check('회귀: 동반 0인 3명(각 2일 등록) → 3', wk([
+  d('u1','2026-07-20',0), d('u1','2026-07-22',0),
+  d('u2','2026-07-20',0), d('u2','2026-07-21',0),
+  d('u3','2026-07-23',0),
+]) === 3);
+check('한 사람이 월 동반2·수 동반0 → 3 (합산 4가 아니다)', wk([
+  d('u1','2026-07-20',2), d('u1','2026-07-22',0),
+]) === (NEG ? 4 : 3));
+check('u1(동반2) + u2(동반0) → 4', wk([d('u1','2026-07-20',2), d('u2','2026-07-21',0)]) === 4);
+check('sumWeeklyPartySize(null) → 0', wk(null) === 0);
 
 // ── ⑤ 실DB 조회 (읽기 전용) ────────────────────────────────
 // 013 실행 후 getMeetingVotes가 guest_count를 실제로 실어 오는지 본다.
