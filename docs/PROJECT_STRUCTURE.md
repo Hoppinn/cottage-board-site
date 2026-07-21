@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -121,6 +121,14 @@
 │   │                               #      「실패점」이 된다(실측 51행 중 21건이 숫자가 아님)
 │   ├── verify-esch-unify.js        # GS5 escH 사본 통합 — 정본 동작(eval) + 남은 사본 스캔 (DB 불필요)
 │   │                               #   --negctl 먼저. ALLOW에 「통합 대상 아님」 4종의 이유가 있다
+│   ├── audit-nick-click.js         # 참여자 닉네임 태그 중 몇 개가 회원과 연결되는가 (읽기전용)
+│   │                               #   --negctl 먼저(맵을 비우면 0%). game-reviews.js의 맵 구성을
+│   │                               #   원문 그대로 재현한다. 안 열리는 이름 목록을 함께 낸다 —
+│   │                               #   비회원 손님 이름이면 정상, 회원인데 빠졌으면 버그다
+│   ├── verify-cross-nav.js         # 닉네임 클릭 + 크로스 페이지 복귀 링크 (DB 불필요)
+│   │                               #   --negctl 먼저. renderCrossBackLink를 원문 그대로 잘라 eval
+│   ├── shot-cross-nav.js           # 위 둘의 육안 확인 스크린샷 (읽기전용, supabase 쓰기 차단)
+│   │                               #   ⚠️ HEAD(count) 요청도 함께 막히므로 보드 안의 개수는 가짜다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
@@ -216,6 +224,8 @@ assets/js/
 │                               #   record_complete/recommend_complete를 계속 읽는다
 ├── owned-games-page.js         # owned-games.html 전용 (게임 목록 필터·렌더)
 ├── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
+│                               # renderCrossBackLink: ?from= 키로 게시판 간 복귀 링크 삽입
+│                               #   (플레이기록 ↔ 동호회 기록&사진. 키 추가는 _BACK_TARGETS 한 곳)
 └── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
                                  # ⚠️ 새 _trackPvOnce/trackPageView 가상 페이지 키를 추가하면
                                  #   COTTAGE_PAGE_LABELS에 라벨도 같이 추가할 것 — 관리자 분석이
@@ -397,6 +407,10 @@ game-reviews.html — 기록 입력 탭
     openOtherMeetingSheet(모임 보드 직행), **그 외 전부**(게임시트 좋아요/궁금해요 아바타, 게임평·플레이기록 닉네임/리뷰어 이름)는
     openOtherProfileSheet(읽기전용 내 보드 전체). 플레이기록 게시판 참여자 태그가 기존에 모임 보드로 잘못 연결돼 있던 것을
     수정하고, 게임평·리뷰어 이름에는 클릭 진입점을 신규 추가. 상세는 js-api.md openOtherProfileSheet/openOtherMeetingSheet 항목.
+  - ⚠️ **Phase D가 club-history.html(동호회 기록 & 사진)을 빠뜨렸고 2026-07-22에 보강**했다 — 그 페이지 참여자 태그엔
+    `data-nick`도 핸들러도 없어 구조상 100% 안 열렸다. **닉네임을 렌더하는 화면을 새로 만들면 이 진입점을 함께 붙일 것.**
+    닉네임→userId 맵 규칙은 **회원 명부 ∪ 기록 작성자**(한쪽만 쓰면 닉네임 변경자·미기록 회원이 조용히 빠진다).
+    검사: `node scripts/audit-nick-click.js`(회원 연결률) + `node scripts/verify-cross-nav.js`.
 ```
 
 ---
