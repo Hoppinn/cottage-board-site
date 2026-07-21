@@ -84,7 +84,7 @@ return data || [];
 | `insertGameReview(...)` | 게임 리뷰 등록 |
 | `deleteGameReview(id)` | 게임 리뷰 삭제 |
 | `banUser(userId)` / `unbanUser(userId)` | 차단/해제 |
-| `deletePlayPhoto(recordId)` | 기록 사진 삭제 |
+| ~~`deletePlayPhoto(recordId)`~~ | **없다 (2026-07-21 제거)** — 기록 사진 **개별** 삭제는 DB 함수가 아니라 `game-reviews.js`의 `.pr-rec-photo-del` 핸들러가 한다: `parsePhotoUrls`로 남은 URL을 다시 조립(1장이면 문자열·2장 이상이면 JSON 배열·0장이면 `null`)해 `updateGamePlay(id, { photo_url })`로 넘긴다. 옛 `deletePlayPhoto`는 `photo_url`을 통째로 `null`로 밀어 **그 기록의 사진을 전부 지우는** 함수였고 호출부가 0건이었다. 「사진 개별 삭제 불가」라는 버그 기재가 이 함수만 보고 쓰인 것이었다 |
 | `isUserBanned()` | 현재 유저 차단 여부 |
 | `getProfilePhoto(userId)` | profiles.photo_url 단일 조회 |
 | `getProfileSnapshot(userId)` | profiles.photo_url + nickname 단일 조회 (다기기 동기화용) |

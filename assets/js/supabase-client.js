@@ -1265,12 +1265,10 @@ window._cottageSess = (function () {
     } catch (e) { return { error: e }; }
   }
 
-  async function deletePlayPhoto(recordId) {
-    try {
-      const { error } = await db.from('game_play_records').update({ photo_url: null }).eq('id', recordId);
-      return error ? { error } : { success: true };
-    } catch (e) { return { error: e }; }
-  }
+  // 사진 삭제는 여기가 아니다 — game-reviews.js의 `.pr-rec-photo-del` 핸들러가
+  // parsePhotoUrls로 남은 URL을 다시 조립해 updateGamePlay로 넘긴다(= 개별 삭제).
+  // photo_url을 통째로 null로 미는 deletePlayPhoto가 여기 있었으나 호출부 0건이었고,
+  // 이름만 보고 부르면 그 기록의 사진이 전부 날아가는 함정이라 제거했다(2026-07-21).
 
   async function getPageAnalytics() {
     try {
@@ -1628,7 +1626,6 @@ window._cottageSess = (function () {
     deleteGameReview,
     banUser,
     unbanUser,
-    deletePlayPhoto,
     isUserBanned,
     updateProfilePhoto,
     getProfilePhoto,
