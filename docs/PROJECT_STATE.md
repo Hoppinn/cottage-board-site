@@ -50,6 +50,8 @@
 - **task-continue 훅 시험 (미검증 — 다음 긴 작업에서)** — 증명된 건 「미완 상태에서 한 번 되돌려졌다」뿐이다. 볼 것 셋: ①작업 파일을 스스로 여는가 ②질문에 답한 뒤 이어가는가 ③진전 없이 반복하지 않는가. **실패하면 더 고치지 말고 폐기한다**(`.claude/settings.json`의 `hooks` + `.claude/hooks/` 삭제).
 
 - **#19 `record_complete` 실브라우저 미확인** — 관리자는 `_shouldSkipAnalytics`로 트래킹 **영구 제외**라 관리자 계정으론 원리상 검증 불가. **비관리자 계정**으로 게임시트에서 기록 저장 시 `page_events`에 `record_complete`가 쌓이는지 확인할 것.
+  - 🚨 **계정을 바꾸는 것만으론 부족하다 — 브라우저를 바꿔야 한다.** `cottage_is_admin`은 requests-admin.html 진입 시 set되고 **어디에서도 remove되지 않는다**(로그아웃 포함, `ls-schema.md`에 「영구」). `_shouldSkipAnalytics`가 **user_id가 아니라 이 플래그도 본다** → 관리자 브라우저에서는 **어떤 계정으로 로그인해도 트래킹이 꺼져 있다.** 시크릿 창이나 다른 기기에서 할 것. **모르고 하면 「안 쌓임 = 버그」라는 거짓 결론이 난다.**
+  - 📌 **비관리자 계정을 만드는 법**: 로그인 수단은 카카오 하나뿐이고 별도 가입 체계는 없다. 관리자는 `OWNER_KAKAO_ID` **한 개만** 하드코딩이라 **그 외 카카오 계정은 전부 자동으로 비관리자**(승인 절차 없음). ⚠️ **가짜 `kakao_user`를 localStorage에 심는 방식은 스모크용으로 쓰지 말 것** — Supabase 프로젝트가 **운영 하나뿐**이라 가짜 회원이 실제 명부·모임 일정에 뜬다(PROJECT_STRUCTURE §1 「브라우저 검증 스크립트 주의」의 오염 사례). **localhost도 안전지대가 아니다** — 꺼지는 건 트래킹뿐이고 일반 write는 운영 DB에 그대로 들어간다.
 
 ### 📌 `openProfilePanel` 구조 메모 (그 파일을 다시 만질 때 — R10a/b/c의 산물)
 - `openProfilePanel` 구성: 패널 셸+DB조회 **11개**(R10b가 중복 2개 제거) → 로컬 헬퍼 → **HTML 빌드**(`_buildTasteInnerHtml`·`_buildMeetingInnerHtml`은 이제 **함수**라 진입 시마다 호출됨 / `_recordInnerHtml`·`_growthInnerHtml` 등 나머지는 여전히 오픈 시 1회 문자열) → `_openSubSheet` → **서브시트 라우터**(`.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭. ※줄번호는 자주 밀리므로 grep으로 확인할 것.
