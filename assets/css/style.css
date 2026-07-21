@@ -66,7 +66,10 @@
                             게임시트가 이 위에 겹쳐 떠야 닫았을 때 모달로 돌아온다. 9500 위로 올리지 말 것. */
   --z-sheet:9500;        /* 게임 바텀시트 */
   --sheet-z:9500;        /* 하위 호환 별칭 */
-  --z-shelf:9600;        /* 선반/가이드 iframe 오버레이 */
+  --z-shelf:9600;        /* 선반/가이드 iframe 오버레이 + 페이지를 iframe으로 띄우는 센터모달
+                            (.planner-modal-overlay / 홈의 .planner-sheet-modal·.record-iframe-modal).
+                            🚨 이 계열을 헤더(1000) 아래에 두면 dim이 헤더를 못 덮어
+                               "모달이 뜬 채로 로고 클릭이 먹는" 상태가 된다(2026-07-21 신고). */
   --z-sheet-modal:9700;  /* 시트 위 모달 (게임평, 플레이기록) */
   --z-top:9999;          /* 토스트, 라이트박스 */
 }
@@ -6845,11 +6848,16 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .rp-header-actions{display:flex;align-items:center;gap:10px;}
 .rp-header-actions .home-section-more + .home-section-more::before{content:"·";margin-right:10px;color:var(--border);font-weight:400;}
 
-/* ── 기록 남기기 센터모달 ── */
-.record-iframe-modal{display:flex;position:fixed;inset:0;z-index:900;align-items:flex-end;justify-content:center;padding-bottom:3dvh;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+/* ── 기록 남기기 센터모달 ──
+   📌 크기·레이어는 공용 플래너 센터모달(.planner-modal-overlay / .planner-modal-box)에 맞춘다.
+      이 둘은 같은 종류(홈에서 페이지를 iframe으로 띄우는 센터모달)라 따로 놀 이유가 없다.
+   🚨 z-index를 헤더(.site-header 1000) 아래로 내리지 말 것 — 2026-07-21 사용자 신고의 원인이
+      정확히 그것이었다(900). dim이 헤더를 못 덮어 ①헤더 영역은 안 어두워지고 ②로고를 누르면
+      모달이 뜬 채로 페이지가 이동하고 ③그 영역을 눌러도 dim 클릭이 안 잡혀 안 닫혔다. */
+.record-iframe-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
 .record-iframe-modal.is-open{opacity:1;pointer-events:auto;}
 .record-iframe-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
-.record-iframe-panel{position:relative;width:min(480px,94vw);height:min(600px,82dvh);background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateY(80px);transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);}
+.record-iframe-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateY(80px);transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);}
 .record-iframe-modal.is-open .record-iframe-panel{transform:translateY(0);}
 .record-iframe-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .record-iframe-frame{width:100%;flex:1;border:none;opacity:0;transition:opacity 0.2s;}
@@ -6858,11 +6866,12 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .record-iframe-loader::after{content:'';width:28px;height:28px;border:3px solid #eee;border-top-color:var(--green);border-radius:50%;animation:ri-spin 0.7s linear infinite;}
 @keyframes ri-spin{to{transform:rotate(360deg);}}
 
-/* ── 플래너 바텀시트 ── */
-.planner-sheet-modal{display:flex;position:fixed;inset:0;z-index:900;align-items:flex-end;justify-content:center;padding-bottom:3dvh;opacity:0;pointer-events:none;transition:opacity 0.25s;}
+/* ── 플래너 센터모달 (홈 전용 — 빠른진입 모드가 있어 공용 .planner-modal-overlay와 별개) ──
+   크기·레이어 규칙은 위 .record-iframe-modal 주석과 동일. */
+.planner-sheet-modal{display:flex;position:fixed;inset:0;z-index:var(--z-shelf);align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity 0.25s;}
 .planner-sheet-modal.is-open{opacity:1;pointer-events:auto;}
 .planner-sheet-dim{position:absolute;inset:0;background:rgba(0,0,0,0.55);}
-.planner-sheet-panel{position:relative;width:min(480px,94vw);height:min(600px,82dvh);background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateY(80px);transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);}
+.planner-sheet-panel{position:relative;width:100%;max-width:480px;height:88dvh;max-height:88dvh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;z-index:1;box-shadow:0 8px 32px rgba(0,0,0,0.18);transform:translateY(80px);transition:transform 0.48s cubic-bezier(0.32,0.72,0,1);}
 .planner-sheet-modal.is-open .planner-sheet-panel{transform:translateY(0);}
 .planner-sheet-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:18px;line-height:1;cursor:pointer;color:var(--ink);padding:4px;z-index:2;}
 .planner-sheet-frame{width:100%;flex:1;border:none;opacity:0;transition:opacity 0.2s;}
@@ -6871,9 +6880,10 @@ button.home-section-more{background:none;border:none;cursor:pointer;padding:0;}
 .planner-sheet-loader::after{content:'';width:28px;height:28px;border:3px solid #eee;border-top-color:var(--green);border-radius:50%;animation:ri-spin 0.7s linear infinite;}
 /* 홈에서 등록/수정으로 바로 진입 — 플래너 페이지를 보여주지 않고 배경은 홈 화면 그대로 유지,
    등록 시트(iframe 내부)만 그 위에 뜨게 함 */
-.planner-sheet-modal.is-quick-entry{padding-bottom:0;}
+.planner-sheet-modal.is-quick-entry{padding:0;}
 .planner-sheet-modal.is-quick-entry .planner-sheet-dim{background:transparent;}
-.planner-sheet-modal.is-quick-entry .planner-sheet-panel{width:100%;height:100%;border-radius:0;box-shadow:none;transform:none;transition:none;background:transparent;}
+/* ⚠️ max-width/max-height도 함께 풀어야 전체화면이 된다 — 기본 규칙이 480px·88dvh로 제한하고 있다 */
+.planner-sheet-modal.is-quick-entry .planner-sheet-panel{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;transform:none;transition:none;background:transparent;}
 .planner-sheet-modal.is-quick-entry .planner-sheet-close,
 .planner-sheet-modal.is-quick-entry .sheet-fullscreen-link{display:none;}
 .planner-sheet-modal.is-quick-entry .planner-sheet-loader{background:transparent;}
