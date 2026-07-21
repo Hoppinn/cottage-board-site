@@ -226,6 +226,13 @@ assets/js/
 ├── play-records-utils.js       # 공유 유틸 (parsePhotoUrls / openLightbox / attachAc / initTagInput 등)
 │                               # renderCrossBackLink: ?from= 키로 게시판 간 복귀 링크 삽입
 │                               #   (플레이기록 ↔ 동호회 기록&사진. 키 추가는 _BACK_TARGETS 한 곳)
+│                               # buildRecordCaption/copyCaption: 「이 날 캡션 복사」 조립·복사 (SSOT)
+│                               #   ⚠️ 페이지에 사본을 만들지 말 것 — verify-history-caption.js가 막는다
+│                               # normalizeNick: 참여자 이름↔회원 닉네임 대조(공백 제거+소문자).
+│                               #   맵을 만들 때와 조회할 때 **양쪽 다** 통과시킬 것
+│                               # trackMoreMenu/untrackMoreMenu: ⋯ 메뉴를 fixed로 띄우고 스크롤 추종.
+│                               #   `.pr-session{overflow:hidden}` 때문에 fixed가 필수다 —
+│                               #   overflow를 지워서 고치면 카드 모서리 클리핑이 깨진다
 └── page-labels.js              # 페이지 경로→한글 라벨 단일 소스 (window.COTTAGE_PAGE_LABELS{,_BY_PATH})
                                  # ⚠️ 새 _trackPvOnce/trackPageView 가상 페이지 키를 추가하면
                                  #   COTTAGE_PAGE_LABELS에 라벨도 같이 추가할 것 — 관리자 분석이
