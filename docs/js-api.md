@@ -235,13 +235,34 @@ window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
 |------|--------|------|
 | `window.COTTAGE_PAGE_SLUG(pathname)` | — (함수) | **저장용 SSOT** (#14). `page_sessions.page`에 넣을 슬러그를 만든다. `script-nav.js` 세션 트래커와 `supabase-client.js` `_startAnonHeartbeat`이 **둘 다 이 함수**를 쓴다 |
 | `window.COTTAGE_PAGE_LABELS` | slug (예: `'about'`) | **표시용 SSOT.** requests-admin.html의 `page_views`·`page_sessions` 양쪽 화면이 전부 이 맵으로 이름을 붙인다 |
-| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname | script-nav.js — `page_sessions.referrer`(내부 유입)에만 남은 잔여 용도. ⚠️ `page` 컬럼엔 더 이상 안 쓴다 |
+| `window.COTTAGE_PAGE_LABELS_BY_PATH` | pathname | ⚠️ **앱 코드에 소비처가 없다** (2026-07-21, #28). 마지막 용도였던 `page_sessions.referrer` 저장이 `COTTAGE_SESSION_REF`로 바뀌면서 비었고, 지금 읽는 건 `scripts/audit-page-buckets.js` 하나뿐이다. **그래서 삭제하지 않았다** — 지우려면 그 스크립트를 먼저 옮길 것 |
 
 🚨 **표시 라벨을 DB에 저장하지 않는다** (#14, 2026-07-20). 예전엔 트래커가 `BY_PATH`의 한글 라벨을 `page_sessions.page`에 그대로 넣어서, **라벨을 개명할 때마다 같은 페이지가 새 버킷으로 쪼개졌다**(11,777행이 42종으로 흩어짐). 지금은 **저장=슬러그 / 표시=라벨**로 분리돼 있어 `COTTAGE_PAGE_LABELS` 값은 자유롭게 고쳐도 데이터가 안 갈린다.
 
 ⚠️ **두 맵의 값이 어긋나 있었다 (2026-07-21 정정)** — `COTTAGE_PAGE_LABELS`가 개명을 못 따라가 `club-intro`가 `'동호회 소개'`(실제로는 club.html의 옛 이름)로 표시되는 등 6개가 틀렸다. 이제 **각 페이지의 실제 `<title>`과 맞춘다** — 값을 바꿀 땐 title을 보고 바꿀 것.
 
 **`script-nav.js`가 로드 시점에 동기 평가하므로, page-labels.js는 반드시 script-nav.js 로드 직전에 위치해야 함** (14개 HTML 전체 적용 완료).
+
+---
+
+## window.COTTAGE_SESSION_REF (supabase-client.js)
+
+`page_sessions.referrer`에 넣을 **유입 소스**의 SSOT (#28, 2026-07-21). 값(함수 아님)이며 규칙은
+**`utm_source` > 외부 호스트 > 당일 last-touch(`cottage_orig_src_{KST날짜}`) > `null`**.
+`supabase-client.js`가 파싱 시점에 1회 계산해 노출하고, `script-nav.js` 세션 트래커가 그대로 쓴다.
+
+| 저장 경로 | 어디 |
+|---|---|
+| `supabase-client.js` `_syncTimeToDBNow` / anon heartbeat | 내부 `_sessionReferrer` 직접 사용 |
+| `script-nav.js` PAGE SESSION TRACKER | `window.COTTAGE_SESSION_REF` |
+
+🚨 **사본을 만들지 말 것.** 2026-07-21 이전엔 트래커가 자체 규칙으로 **referrer 페이지의 내부
+라벨**(`'메인'`·`/pages/info/guide.html`)을 넣었고, 읽는 쪽 `categorizeRef`는 호스트·utm 토큰을
+기대하므로 전부 `null`로 떨어져 **11,825행 중 8,382행(71%)이 「직접 방문」으로 접혔다** —
+채널별 체류시간이 통째로 과소집계됐다. `page` 컬럼의 #14와 **완전히 같은 병**이다.
+
+⚠️ **`page-labels.js`가 아니라 `supabase-client.js`에 있다** — 로드 순서가 `supabase-client.js`
+→ `page-labels.js` → `script-nav.js`라서 문제없다(14개 HTML 전수 확인, `scripts/verify-referrer.js` ①이 상시 검사).
 
 ---
 

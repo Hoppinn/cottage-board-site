@@ -1719,14 +1719,27 @@
           refUserMap[cat].add(visitorKey(r, idx, cat));
         });
         // page_sessions에 referrer 컬럼이 있으므로 직접 집계 (join 불필요)
+        //
+        // 🚨 `|| '직접 방문'` 폴백을 여기에 쓰면 안 된다(#28, 2026-07-21). 이 루프만 모집단이
+        //    page_sessions인데, 2026-07-21 이전 행은 script-nav.js가 **유입 소스 대신 referrer
+        //    페이지의 내부 라벨**(`메인`·`/pages/info/guide.html`)을 넣어뒀다. categorizeRef는
+        //    그걸 전부 null로 떨구므로 폴백을 걸면 **귀속 불가를 진짜 직접 방문으로 위조**한다
+        //    (실측: 11,825행 중 8,382행 = 71%가 「직접 방문」 272h로 뭉쳐 채널별 체류가 과소).
+        //    referrer가 아예 없는 행만 직접 방문이고, 값이 있는데 분류 실패면 **세지 않고 따로 센다**.
+        //    ※ 위 refMap/아래 crossMap은 page_views(`effectiveSource`, 올바른 규칙)라 해당 없음.
         const refSecMap = {};
+        let refUnattribSec = 0, refUnattribRows = 0;
         for (const r of filtered) {
-          const cat = categorizeRef(r.referrer) || '직접 방문';
+          const cat = r.referrer ? categorizeRef(r.referrer) : '직접 방문';
+          if (!cat) { refUnattribSec += (r.duration_sec || 0); refUnattribRows++; continue; }
           refSecMap[cat] = (refSecMap[cat] || 0) + (r.duration_sec || 0);
         }
         const refEntries = Object.entries(refMap).sort((a, b) => b[1] - a[1]);
         const chartRefSub = document.getElementById('chartRefSub');
-        if (chartRefSub) chartRefSub.textContent = label;
+        // 원칙 ① — 제외된 체류를 조용히 없애지 않는다. 막대의 체류시간 합이 전체와 안 맞는
+        // 이유를 화면에서 바로 알 수 있어야 한다(#28의 옛 행은 유입 소스가 기록되지 않았다).
+        if (chartRefSub) chartRefSub.textContent = label +
+          (refUnattribRows ? ` · 유입 소스 미기록 ${refUnattribRows}건(${fmtTime(refUnattribSec)})은 체류 집계에서 제외` : '');
         const refEmpty = document.getElementById('chartRefEmpty');
         const refCanvas = document.getElementById('chartReferrer');
         const refWrap = document.getElementById('chartReferrerWrap');

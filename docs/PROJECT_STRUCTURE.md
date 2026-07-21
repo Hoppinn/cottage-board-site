@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-21 (#28 — scripts/ 목록에 referrer 검증 2개 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -83,6 +83,11 @@
 │   ├── verify-character-assets.js  # ACH_DEFS.rewards.character ↔ 실제 png 대조 (DB 불필요)
 │   │                               #   onerror 폴백이 404를 가려 눈으론 안 잡히는 자리.
 │   │                               #   --negctl 먼저. 전건 누락이면 경로 규칙 어긋남으로 보고 중단
+│   ├── audit-referrer.js           # #28 page_sessions.referrer 실제 값 분포 + 「직접 방문」으로
+│   │                               #   접힌 행 (읽기전용). 착수 첫 동작인 재측정용
+│   ├── verify-referrer.js          # #28 유입 소스가 「직접 방문」에서 갈라지는가 (읽기전용)
+│   │                               #   --negctl 먼저. categorizeRef와 집계 루프를 화면 코드에서
+│   │                               #   원문 그대로 잘라 eval + 14개 페이지 로드 순서 전수
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지

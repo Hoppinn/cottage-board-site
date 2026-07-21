@@ -1005,6 +1005,13 @@ window._cottageSess = (function () {
     const kstDate = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     return localStorage.getItem(`cottage_orig_src_${kstDate}`) || null;
   })();
+  // page_sessions.referrer에 들어갈 값의 **단일 규칙**(#28, 2026-07-21). script-nav.js의 PAGE
+  // SESSION TRACKER도 같은 테이블에 쓰는데, 예전엔 자체 규칙으로 **referrer 페이지의 내부 라벨**
+  // (`메인`·`/pages/info/guide.html`)을 넣었다 → 읽는 쪽 categorizeRef가 전부 null로 떨궈
+  // 11,825행 중 8,382행이 「직접 방문」으로 접혔고 채널별 체류시간이 통째로 과소집계됐다.
+  // #14(page 컬럼)와 똑같이 **두 쓰는 경로가 규칙 하나를 공유**하는 것으로 해결한다.
+  // ⚠️ 전 페이지에서 supabase-client.js가 script-nav.js보다 먼저 로드된다(14개 전수 확인).
+  window.COTTAGE_SESSION_REF = _sessionReferrer;
 
   // ── heartbeat: 1분 주기, 로그인+탭 활성 상태에서 이용시간 누적 반영 ──
   let _heartbeatTimer = null;

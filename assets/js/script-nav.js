@@ -815,16 +815,17 @@ function bindGameCardEvents(){
    페이지별 체류 시간 + 유입 경로 기록 → page_sessions 테이블
 ========================= */
 (function() {
-  const PAGE_LABELS = window.COTTAGE_PAGE_LABELS_BY_PATH || {};
-
   const _entryTime = Date.now();
   // page_sessions.page에는 **슬러그**를 넣는다(#14, 2026-07-20). 예전엔 한글 라벨을 넣어
   // heartbeat 경로(슬러그)와 갈라졌고, 라벨을 개명할 때마다 같은 페이지가 새 버킷으로
   // 쪼개졌다(`가격 & 규칙` 174행 ↔ `가격·이용안내` 65행). 표시 라벨은 읽는 쪽에서 붙인다.
   const _page = (window.COTTAGE_PAGE_SLUG || (p => p))(location.pathname);
-  const _ref = document.referrer
-    ? (PAGE_LABELS[new URL(document.referrer).pathname] || new URL(document.referrer).pathname)
-    : '';
+  // page_sessions.referrer에는 **유입 소스**를 넣는다(#28, 2026-07-21). 예전엔 여기서 referrer
+  // 페이지의 내부 라벨/경로를 넣었는데(`메인`·`/pages/info/guide.html`), 그 컬럼을 읽는
+  // categorizeRef는 호스트·utm 토큰을 기대하므로 전부 null → 「직접 방문」으로 접혔다.
+  // 규칙은 supabase-client.js가 SSOT(utm_source > 외부 호스트 > 당일 last-touch > null).
+  // 사본을 만들지 않는다 — #14가 정확히 "같은 테이블에 두 규칙"으로 난 병이었다.
+  const _ref = window.COTTAGE_SESSION_REF ?? '';
   const ADMIN_UID = '4916417947';
 
   function _getUid() {
