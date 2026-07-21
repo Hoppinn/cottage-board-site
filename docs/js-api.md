@@ -165,11 +165,16 @@ localStorage 세션 유틸. supabase-client.js와 kakao-auth.js가 공유.
 
 ## window.escH (supabase-client.js)
 
-HTML 특수문자 이스케이프. 전체 파일에서 공용.
+HTML 특수문자 이스케이프. **이스케이프의 정본이며 사본을 만들지 않는다**(GS5, 2026-07-22).
 
 ```js
-window.escH = (s) => String(s ?? '').replace(/[&<>"']/g, ...)
+window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+                                    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 ```
+
+- ⚠️ **`'`(작은따옴표)는 이스케이프하지 않는다** — 이 문서가 2026-07-22까지 `[&<>"']`로 잘못 적고 있었다. 작은따옴표로 감싼 속성이나 `onclick="fn('${x}')"` 안에 넣을 값은 이 함수로 안전해지지 않는다.
+- **쓰는 쪽은 호출시점에 참조한다**: `const esc = s => window.escH(s);`. `const esc = window.escH` **스냅샷은 금지** — club-schedule.html이 day-detail.js를 supabase-client.js보다 먼저 로드해 그 시점엔 undefined다. **폴백도 붙이지 않는다**(폴백이 곧 사본).
+- 통합 대상이 아닌 이스케이퍼 4종(속성 전용·JSON attr·부분 이스케이프 2)의 이유는 `scripts/verify-esch-unify.js`의 `ALLOW`에 있다. 사본이 다시 생겼는지는 `node scripts/verify-esch-unify.js --negctl`.
 
 ---
 
