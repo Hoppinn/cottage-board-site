@@ -1099,6 +1099,27 @@
         <button class="admin-visitor-filter-btn" data-filter="member" onclick="applyVisitorFilter('member',this)">회원 (${memberCount})</button>
         <button class="admin-visitor-filter-btn" data-filter="anon" onclick="applyVisitorFilter('anon',this)">비회원 (${anonCount})</button>
       </div>`;
+      // 「오늘」 칩 — 「0」과 「없음」을 화면에서 구분한다.
+      //
+      // 예전엔 `todayS > 0`일 때만 칩을 그렸다. 그래서 **오늘 온 게 확실한 회원인데도**
+      // today_seconds가 0이면 칩이 통째로 사라졌고, 화면만 봐서는 아래 셋이 구별되지 않았다:
+      //   ① 오늘 안 왔다  ② 왔는데 0초로 잡혔다  ③ 조회·렌더가 실패했다
+      // 「관리자 금일이용데이터 간헐 미표시」라는 버그 기재가 이 구별 불가에서 나왔다.
+      // 이제 **오늘 흔적(last_seen_at)이 있으면 값이 0이어도 칩을 그린다** — 0이면 0이라고 말한다.
+      // 오늘 안 온 회원은 지금처럼 칩이 없다(노이즈를 늘리지 않기 위해).
+      //
+      // 0이 정상적으로 나오는 경로가 실제로 있다(= 이 칩은 고장 신호가 아니다):
+      //   · today_seconds는 heartbeat(1분)·visibilitychange로만 오른다 → 1분 미만 방문은 0
+      //   · 자정 넘김 시 today_date가 세션 시작값에 고정되는 알려진 건(§4 ④)
+      const _todayChip = (p, todayS) => {
+        const seenToday = p.last_seen_at && _toKstDate(p.last_seen_at) === todayKst;
+        if (!seenToday && todayS === 0) return '';
+        if (todayS > 0) {
+          return `<span style="color:var(--green);font-weight:600" title="profiles.today_seconds — 오늘 누적(heartbeat 포함). 1분 미만 방문은 0으로 남을 수 있어 실제의 하한입니다">오늘 ${fmtTime(todayS)}</span>`;
+        }
+        return `<span style="color:var(--muted);font-weight:600" title="오늘 방문 흔적(last_seen_at)은 있는데 today_seconds가 0입니다. 1분 미만 방문이거나 동기화가 안 실린 경우로, 「데이터 없음」이 아니라 「0으로 기록됨」입니다">오늘 0분</span>`;
+      };
+
       const _renderVisitorCard = u => {
         if (u._type === 'member') {
           const p = u;
@@ -1116,7 +1137,7 @@
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
-              ${todayS > 0 ? `<span style="color:var(--green);font-weight:600" title="profiles.today_seconds — 오늘 누적(heartbeat 포함)">오늘 ${fmtTime(todayS)}</span>` : ''}
+              ${_todayChip(p, todayS)}
               <span title="profiles.total_minutes — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작습니다.">⏱ 총 ${fmtTime(totalS)}</span>
               ${_visitorPagesToggle(memberPageMap.get(p.user_id))}
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
