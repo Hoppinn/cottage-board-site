@@ -88,6 +88,10 @@
 │   ├── verify-referrer.js          # #28 유입 소스가 「직접 방문」에서 갈라지는가 (읽기전용)
 │   │                               #   --negctl 먼저. categorizeRef와 집계 루프를 화면 코드에서
 │   │                               #   원문 그대로 잘라 eval + 14개 페이지 로드 순서 전수
+│   ├── verify-iframe-rows.js       # #24 「홈 방문 1회 = page_sessions 1행」 사후 확인 (읽기전용)
+│   │                               #   --negctl 먼저. 같은 session_key+같은 초에 index와
+│   │                               #   프레임 페이지가 함께 들어온 묶음을 센다. 수정 이후
+│   │                               #   구간에 행이 없으면 「통과」가 아니라 「판정 불가」로 보고한다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
