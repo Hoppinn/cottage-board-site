@@ -1634,6 +1634,7 @@ window._cottageSess = (function () {
     getProfilePhoto,
     getProfileSnapshot,
     getAllPlayRecordsForHub,
+    playRecordSortDate,
     getUserAchievements,
     grantAchievement,
     setRepAchievement,
@@ -1712,16 +1713,29 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[addNotifReadKeys]', err); return { error: err }; }
   }
 
+  // 기록의 정렬·표시 기준 날짜 — played_at이 없으면 작성일로 본다.
+  // ⚠️ played_at NULL 기록이 실재한다(2026-07-21 실측 70행 중 8건). Postgres는 DESC 정렬에서
+  //    NULL을 **맨 앞**에 두므로, 이 폴백 없이 DB 정렬만 믿으면 옛 기록이 목록 선두를 점유한다
+  //    (홈 히어로가 6월 27일 기록을 최신으로 보여주던 원인).
+  function playRecordSortDate(rec) {
+    return rec?.played_at || (rec?.created_at || '').slice(0, 10);
+  }
+
   // 플레이기록 허브용 — 모든 기록 조회 (200건, played_at/created_at 정렬)
   async function getAllPlayRecordsForHub(limit = 200) {
     try {
       const { data, error } = await db.from('game_play_records')
         .select('id, game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at')
-        .order('played_at', { ascending: false })
+        // nullsFirst:false — NULL이 선두를 먹으면 limit 절단이 엉뚱한 행을 남긴다
+        .order('played_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
         .limit(limit);
       if (error) console.error('[getAllPlayRecordsForHub]', error);
-      return data || [];
+      // DB는 두 컬럼을 각각 정렬할 뿐 COALESCE 정렬을 못 한다 → 폴백 기준으로 한 번 더 세운다.
+      return (data || []).sort((a, b) => {
+        const d = playRecordSortDate(b).localeCompare(playRecordSortDate(a));
+        return d !== 0 ? d : String(b.created_at || '').localeCompare(String(a.created_at || ''));
+      });
     } catch (err) { console.error('[getAllPlayRecordsForHub]', err); return []; }
   }
 

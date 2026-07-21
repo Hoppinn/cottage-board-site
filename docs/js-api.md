@@ -50,7 +50,8 @@ return data || [];
 | `getGroupNames()` | 그룹명 목록 조회 |
 | `getPlayerNames()` | 참여자 이름 목록 조회 (조합+개별) |
 | `getAllPlayRecordsForHistory(limit)` | 모임별 기록 전체 조회 |
-| `getAllPlayRecordsForHub(options)` | 기록 허브 전체 조회 |
+| `getAllPlayRecordsForHub(limit)` | 기록 허브 전체 조회(기본 200). **반환 순서는 `playRecordSortDate` 기준 내림차순이 보장된다** — DB 정렬만으로는 `played_at NULL`이 선두를 점유하므로 반환 전 재정렬한다 |
+| `playRecordSortDate(rec)` | 기록의 정렬·표시 기준 날짜 = `played_at ?? created_at의 날짜부분`. 🚨 **플레이기록을 날짜순으로 다룰 땐 반드시 이걸 쓴다** — `played_at`은 NULL일 수 있고(2026-07-21 실측 70행 중 8건), Postgres는 `DESC`에서 NULL을 **맨 앞**에 둔다. 각자 폴백을 재구현하면 화면마다 다른 「최신」이 나온다 |
 | `getGamePlayCount(gameId)` | 게임 플레이 건수. `gameId` 배열 지원 |
 | `getPlayHighlights(gameId)` | 플레이 하이라이트. `gameId` 배열 지원 |
 | `getPlayReviewsByGame(gameId, limit)` | game_play_records에서 review_text IS NOT NULL인 기록. `gameId` 배열 지원 |

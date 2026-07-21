@@ -68,6 +68,11 @@
 │   │                               # 🚨 --negctl(음성 대조군)을 먼저 돌릴 것. 기대값을 1 비틀어
 │   │                               #    그 줄에서만 🔴이 뜨는 걸 본 뒤에야 「전부 통과」를 믿는다
 │   ├── verify-home-hero.js         # 히어로 미노출 + #recommend 딥링크 회귀 (읽기전용)
+│   ├── probe-home-hero-recent.js   # 「최근 플레이」가 옛 기록을 보이던 원인 실측 (읽기전용)
+│   ├── verify-home-hero-recent.js  # 「최근 플레이」 선택 로직 — supabase-client.js를 실제로
+│   │                               #   eval해 검증 (읽기전용). --negctl 먼저 돌릴 것
+│   │                               # ⚠️ setInterval을 스텁하지 말 것 — undici가 .unref()를 부른다.
+│   │                               #   덮으면 전 쿼리가 죽고 검사기가 0행을 정상처럼 보고한다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
