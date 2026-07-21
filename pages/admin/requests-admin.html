@@ -1125,7 +1125,12 @@
         return `<span style="color:var(--muted);font-weight:600" title="오늘 방문 흔적(last_seen_at)은 있는데 today_seconds가 0입니다. 1분 미만 방문이거나 동기화가 안 실린 경우로, 「데이터 없음」이 아니라 「0으로 기록됨」입니다">오늘 0분</span>`;
       };
 
-      const _renderVisitorCard = u => {
+      // i는 목록에서의 위치 — 초기엔 상위 3개만 보이고 나머지는 접힌다(더보기 버튼).
+      // 예전엔 이 3개를 #visitorList, 나머지를 #visitorExtras로 **DOM을 갈라** 담았는데,
+      // 정렬을 붙이려면 카드가 한 컨테이너 안에 있어야 순서를 바꿀 수 있어 한 곳으로 합쳤다.
+      // (applyVisitorFilter/expandVisitorMore는 원래부터 두 컨테이너를 합쳐 훑으므로 그대로 동작한다.)
+      const _renderVisitorCard = (u, i) => {
+        const hid = i >= 3 ? 'display:none;' : '';
         if (u._type === 'member') {
           const p = u;
           const todayS = p.today_date === todayKst ? (p.today_seconds || 0) : 0;
@@ -1136,7 +1141,7 @@
           const dnHtml = p.real_name
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
-          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member">
+          return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member" data-total-sec="${totalS}" data-today-sec="${todayS}" style="${hid}">
             <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
@@ -1166,7 +1171,7 @@
           const anonTodayAS = a.today_date === todayKst ? (a.today_seconds || 0) : 0;
           const anonTodayS = Math.max(anonTodayPS, anonTodayAS);
           const anonTotalS = ent ? [...ent.pm.values()].reduce((s, v) => s + v.totalSec, 0) : 0;
-          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" style="opacity:${online ? 1 : 0.7}">
+          return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" data-total-sec="${anonTotalS}" data-today-sec="${anonTodayS}" style="${hid}opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:var(--bg-soft);color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
             </div>
@@ -1182,14 +1187,24 @@
           </div>`;
         }
       };
-      const _visFirst = unified.slice(0, 3);
-      const _visExtra = unified.slice(3);
+      // ── 정렬 선택 (2026-07-21 사용자 요청) ──────────────────────────
+      // 기본은 예전 그대로 「최근 방문순」이다. 나머지 둘은 **기간이 아니라 순서만** 바꾼다 —
+      // 이 탭은 명부라 모집단(전 기간)은 그대로 두는 게 원칙 ④·#5의 결론이었다.
+      // ⚠️ 시간 정렬은 회원과 비회원의 기준이 서로 다르다(회원=profiles 누적, heartbeat 포함 /
+      //    비회원=page_sessions 합, heartbeat 없는 하한). 섞어 세우면 회원이 구조적으로 위로
+      //    올라가므로, 시간 정렬을 고르면 아래 주의 문구를 띄운다(원칙 ① 기준 표기).
+      const visitorSortBar = `<div class="admin-visitor-filter" id="visitorSortBar">
+        <button class="admin-visitor-filter-btn is-active" data-sort="recent" onclick="applyVisitorSort('recent',this)" title="last_seen_at 내림차순 — 기존 기본 정렬">🕒 최근 방문순</button>
+        <button class="admin-visitor-filter-btn" data-sort="total" onclick="applyVisitorSort('total',this)" title="회원은 profiles 누적(heartbeat 포함), 비회원은 page_sessions 합계라 기준이 다릅니다">⏱ 누적 시간순</button>
+        <button class="admin-visitor-filter-btn" data-sort="today" onclick="applyVisitorSort('today',this)" title="회원은 today_seconds, 비회원은 page_sessions·heartbeat 중 큰 값. 오늘 흔적이 없으면 0입니다">📅 오늘 이용시간순</button>
+      </div>
+      <div class="admin-scope-note" id="visitorSortNote" hidden>⚠️ 시간 정렬은 <b>회원과 비회원의 계산 기준이 다릅니다</b> — 회원은 heartbeat까지 포함한 누적이고 비회원은 페이지 체류 기록 합(하한)이라, 같은 시간을 머물러도 회원이 위로 올라갑니다.</div>`;
+
       const unifiedHtml = unified.length ? (
-        visitorFilterBar +
-        `<div class="admin-req-list" id="visitorList">${_visFirst.map(_renderVisitorCard).join('')}</div>` +
-        (_visExtra.length
-          ? `<div id="visitorExtras" style="display:none"><div class="admin-req-list">${_visExtra.map(_renderVisitorCard).join('')}</div></div>
-             <button class="admin-visitor-more-btn" id="visitorMoreBtn" onclick="expandVisitorMore()">더보기 (${_visExtra.length}명 더) ▾</button>`
+        visitorFilterBar + visitorSortBar +
+        `<div class="admin-req-list" id="visitorList">${unified.map(_renderVisitorCard).join('')}</div>` +
+        (unified.length > 3
+          ? `<button class="admin-visitor-more-btn" id="visitorMoreBtn" onclick="expandVisitorMore()">더보기 (${unified.length - 3}명 더) ▾</button>`
           : '')
       ) : '<div class="admin-empty">방문자 없음</div>';
 
@@ -2503,10 +2518,9 @@
   function applyVisitorFilter(type, btn) {
     document.querySelectorAll('#visitorFilterBar .admin-visitor-filter-btn').forEach(b => b.classList.remove('is-active'));
     if (btn) btn.classList.add('is-active');
-    const extrasEl = document.getElementById('visitorExtras');
-    if (extrasEl) extrasEl.style.display = 'block';
     document.getElementById('visitorCloseBtn')?.remove();
-    const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
+    // 카드는 전부 #visitorList 한 곳에 있다(정렬을 붙이며 #visitorExtras 분리 폐지).
+    const allCards = [...document.querySelectorAll('#visitorList .admin-member-card')];
     const dateVisible = allCards.filter(c => c.dataset.dateHidden !== '1');
     const matched = type === 'all' ? dateVisible : dateVisible.filter(c => c.dataset.visitorType === type);
     allCards.forEach(c => c.style.display = 'none');
@@ -2524,11 +2538,33 @@
     }
   }
 
+  // 방문자 목록 정렬 — 카드를 다시 만들지 않고 #visitorList 안에서 **순서만** 바꾼다.
+  // (다시 그리면 밴 버튼·펼침 상태 같은 바인딩을 전부 되살려야 한다.)
+  // 정렬 후에는 반드시 현재 필터를 다시 적용해야 한다 — 안 그러면 "상위 3개만 보임"이
+  // 옛 순서 기준으로 남아 목록 중간이 비어 보인다.
+  function applyVisitorSort(mode, btn) {
+    document.querySelectorAll('#visitorSortBar .admin-visitor-filter-btn').forEach(b => b.classList.remove('is-active'));
+    if (btn) btn.classList.add('is-active');
+    const note = document.getElementById('visitorSortNote');
+    if (note) note.hidden = (mode === 'recent');
+    const list = document.getElementById('visitorList');
+    if (list) {
+      const cards = [...list.querySelectorAll(':scope > .admin-member-card')];
+      const last = c => c.dataset.lastSeen || '';
+      const num  = c => Number(mode === 'total' ? c.dataset.totalSec : c.dataset.todaySec) || 0;
+      // 시간 정렬에서 동점(특히 0초)이 대량으로 생기므로 2차 키는 최근 방문순.
+      cards.sort((a, b) => mode === 'recent'
+        ? last(b).localeCompare(last(a))
+        : (num(b) - num(a)) || last(b).localeCompare(last(a)));
+      cards.forEach(c => list.appendChild(c));
+    }
+    const ab = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active');
+    applyVisitorFilter(ab?.dataset.filter || 'all', ab);
+  }
+
   function expandVisitorMore() {
     const activeFilter = document.querySelector('#visitorFilterBar .admin-visitor-filter-btn.is-active')?.dataset.filter || 'all';
-    const extrasEl = document.getElementById('visitorExtras');
-    if (extrasEl) extrasEl.style.display = 'block';
-    const allCards = [...document.querySelectorAll('#visitorList .admin-member-card, #visitorExtras .admin-member-card')];
+    const allCards = [...document.querySelectorAll('#visitorList .admin-member-card')];
     const dateVisible = allCards.filter(c => c.dataset.dateHidden !== '1');
     const matched = activeFilter === 'all' ? dateVisible : dateVisible.filter(c => c.dataset.visitorType === activeFilter);
     matched.forEach(c => c.style.display = '');
