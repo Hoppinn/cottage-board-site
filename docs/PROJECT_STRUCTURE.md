@@ -110,6 +110,11 @@
 │   ├── verify-past-meeting-actions.js # A-10 지난 날짜의 무반응 버튼(✎/✕·등록) 제거 검증 (DB 불필요)
 │   │                               #   --negctl 먼저. day-detail.js를 실제 eval하고,
 │   │                               #   index-page.js의 판정식은 원문 그대로 잘라 eval한다
+│   ├── verify-history-caption.js   # 모임 기록 「캡션복사」 양식 (DB 불필요, --live로 실DB 대조)
+│   │                               #   --negctl 먼저. club-history.html의 formatPlayTime·
+│   │                               #   formatScore·buildCaption을 원문 그대로 잘라 eval한다
+│   │                               #   🚨 score_note는 자유 텍스트다 — 「점」을 무조건 붙이면
+│   │                               #      「실패점」이 된다(실측 51행 중 21건이 숫자가 아님)
 │   ├── verify-esch-unify.js        # GS5 escH 사본 통합 — 정본 동작(eval) + 남은 사본 스캔 (DB 불필요)
 │   │                               #   --negctl 먼저. ALLOW에 「통합 대상 아님」 4종의 이유가 있다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증

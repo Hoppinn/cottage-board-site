@@ -82,13 +82,31 @@
       const [y, m, d] = dateStr.split('-');
       return `${y}년 ${Number(m)}월 ${Number(d)}일`;
     }
-    function buildCaption(groupName, dateStr, records) {
-      const lines = records.map(r => {
-        const name = getGameName(r.game_id);
-        const tags = [r.player_count ? `${r.player_count}명` : null, r.player_names || null, r.play_time_min ? `${r.play_time_min}분` : null, r.score_note || null].filter(Boolean);
-        return `- ${name}${tags.length ? ' · ' + tags.join(' · ') : ''}`;
-      });
-      return `🎲 ${groupName} (${formatKstDate(dateStr)})\n${lines.join('\n')}\n\n#코티지보드 #보드게임`;
+    // 캡션은 인스타·단톡에 그대로 붙여넣는 용도라 **실제로 쓰던 양식**을 따른다(2026-07-22 확정).
+    // 게임 블록 3줄: 「게임명 (N인)」 / 「2시간30분」 / 「154 / 143 / 141점」.
+    // 참여자 이름·해시태그·🎲 헤더는 넣지 않는다 — 앞뒤 인사말은 사람이 직접 쓴다.
+    // ⚠️ player_count·play_time_min·score_note는 비어 있을 수 있고, 그 줄은 통째로 빠진다.
+    function formatPlayTime(min) {
+      const m = Number(min);
+      if (!Number.isFinite(m) || m <= 0) return '';
+      const h = Math.floor(m / 60), r = m % 60;
+      if (!h) return `${r}분`;
+      return r ? `${h}시간${r}분` : `${h}시간`;
+    }
+    // score_note는 자유 텍스트다 — 실측(70행)에 「154 / 143 / 141」뿐 아니라 「실패」·「1패 1승」·
+    // 「볼테어 이지모드 클리어」·「탐험가120 / 인간94」가 실재한다. 무조건 「점」을 붙이면
+    // 「실패점」이 되므로, 숫자와 구분자로만 이뤄졌을 때만 붙인다.
+    function formatScore(note) {
+      const s = String(note ?? '').trim();
+      if (!s) return '';
+      return /^[0-9\s/]+$/.test(s) ? `${s}점` : s;
+    }
+    function buildCaption(records) {
+      return (records || []).map(r => [
+        `${getGameName(r.game_id)}${r.player_count ? ` (${r.player_count}인)` : ''}`,
+        formatPlayTime(r.play_time_min),
+        formatScore(r.score_note),
+      ].filter(Boolean).join('\n')).join('\n\n');
     }
     function escH(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function escAttr(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
@@ -181,7 +199,7 @@
         <div class="pr-session-body">`;
 
       for (const [dateStr, recs] of Object.entries(byDate).sort((a, b) => b[0].localeCompare(a[0]))) {
-        const captionAttr = escAttr(buildCaption('코티지보드 동호회', dateStr, recs));
+        const captionAttr = escAttr(buildCaption(recs));
         html += `<div class="pr-sub-session">
           <div class="pr-sub-hd">
             <span class="pr-sub-date">${formatKstDate(dateStr)}</span>
