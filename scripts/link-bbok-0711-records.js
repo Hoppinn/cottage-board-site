@@ -19,6 +19,13 @@ const ROOT = path.join(__dirname, '..');
 const { createClient } = require(path.join(ROOT, 'node_modules/@supabase/supabase-js'));
 
 const COMMIT = process.argv.includes('--commit');
+const UNDO = process.argv.includes('--undo');
+
+// ⚠️ 2026-07-22 이 작업은 **되돌렸다.** 「남의 세션에 참여」는 새 플레이기록을 만드는
+//    모델이라, 사용자가 원한 「기존 기록 1개에 뽁님 게임평만 달리는 것」이 아니었다.
+//    화면에 같은 게임이 두 번 뜨고 원본이 「(2번째 플레이)」로 밀렸다.
+//    --undo 는 그때 삽입한 행만 지운다(뽁님의 다른 기록은 건드리지 않는다).
+const UNDO_IDS = [110, 111];
 const win = {}; global.window = win;
 eval(fs.readFileSync(path.join(ROOT, 'assets/js/supabase-config.js'), 'utf8'));
 const db = createClient(win.SUPABASE_CONFIG.url, win.SUPABASE_CONFIG.anonKey);
@@ -27,6 +34,23 @@ const TARGET_NICK = '뽁';
 const PLAYED_AT = '2026-07-11';
 
 (async () => {
+  if (UNDO) {
+    // 지우기 전에 무엇을 지우는지 먼저 본다 — id만 믿고 지우면 남의 행을 지울 수 있다
+    const { data: before, error: bErr } = await db.from('game_play_records')
+      .select('id, game_id, user_id, nickname, played_at, review_text').in('id', UNDO_IDS);
+    if (bErr) { console.error('[undo/select]', bErr); process.exit(1); }
+    console.log(`지울 대상 ${before.length}건:`);
+    before.forEach(r => console.log(`  id=${r.id} · ${r.nickname}(${r.user_id}) · ${r.game_id} · ${r.played_at}`));
+    if (before.length !== UNDO_IDS.length) { console.error('🔴 id 개수가 안 맞는다 — 중단'); process.exit(1); }
+    if (!COMMIT) { console.log('\n⚪ 드라이런. 실제로 지우려면 --undo --commit'); process.exit(0); }
+    const { error: dErr } = await db.from('game_play_records').delete().in('id', UNDO_IDS);
+    if (dErr) { console.error('[undo/delete]', dErr); process.exit(1); }
+    const { count } = await db.from('game_play_records')
+      .select('id', { count: 'exact', head: true }).in('id', UNDO_IDS);
+    console.log(`\n✅ 삭제 완료 — 남은 행 ${count}건(0이어야 정상)`);
+    process.exit(0);
+  }
+
   // ① 뽁님 user_id — 닉네임이 아니라 id로 기록을 만들어야 본인 보드에 잡힌다
   const { data: profs, error: pErr } = await db.from('profiles')
     .select('user_id, nickname').eq('nickname', TARGET_NICK);
