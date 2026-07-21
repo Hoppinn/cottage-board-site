@@ -85,6 +85,11 @@
     .admin-dd-panel { margin: 4px 0 8px 10px; border-left: 2px solid var(--border); padding: 3px 0 3px 10px; }
     .admin-dd-panel[hidden] { display: none; }
     .admin-dd-note { font-size: 10px; color: var(--muted); font-weight: 600; padding: 1px 2px 4px; line-height: 1.4; }
+    /* 원칙 ① — 이 탭의 숫자가 「어느 기간」인지 화면에 적는다. 회원 탭만 날짜 네비가
+       숨겨져 있어(usesDateFilter 제외) 다른 탭에서 고른 기간이 여기에도 걸린 줄 오해할 수 있다. */
+    .admin-scope-note { font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.4;
+      padding: 6px 9px; margin: 0 0 8px; border-radius: 6px; background: var(--surface-2, rgba(0,0,0,.04));
+      border-left: 3px solid var(--border); }
     .admin-dd-row { display: flex; align-items: baseline; gap: 6px; font-size: 11px; padding: 2px 2px; border-bottom: 1px solid var(--border); }
     .admin-dd-row:last-child { border-bottom: none; }
     .admin-dd-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--text); }
@@ -1195,7 +1200,12 @@
       const pagesBody = document.getElementById('pagesBody');
 
       if (membersBody) {
-        membersBody.innerHTML = summaryCardsHtml + unifiedHtml;
+        // 원칙 ① — 기준 표기. 이 탭은 **명부**라 날짜 네비를 의도적으로 숨겼는데(위 usesDateFilter
+        // 주석: 기간으로 거르면 필터 칩 341 vs 목록 4명처럼 모집단이 어긋난다 = #5), 그 결과
+        // "다른 탭에서 고른 기간이 여기에도 걸린 것"으로 오해할 여지가 남았다. 카드의 방문 횟수도
+        // 「📄 페이지 N개」 펼침도 전부 **전 기간 누적**이므로 그렇다고 적는다.
+        const scopeNote = '<div class="admin-scope-note">📋 이 탭은 <b>전 기간 누적</b>입니다 — 위 날짜 선택은 적용되지 않습니다. (명부라 기간으로 거르면 목록과 숫자의 모집단이 어긋납니다)</div>';
+        membersBody.innerHTML = scopeNote + summaryCardsHtml + unifiedHtml;
       }
 
       if (pagesBody) pagesBody.innerHTML = '';
