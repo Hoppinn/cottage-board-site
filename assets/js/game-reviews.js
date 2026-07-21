@@ -551,12 +551,12 @@
           String(r.user_id) === _uid ||
           (_myNick && (r.player_names || '').split(',').some(n => n.trim().toLowerCase() === _myNick))
         )
+        // 정렬 기준은 CottageDB.playRecordSortDate 하나만 쓴다 — played_at NULL 폴백을
+        // 여기서 다시 구현하면 홈과 허브가 서로 다른 「최신」을 내놓는다(js-api.md 참조).
         .sort((a, b) => {
-          const da = a.played_at || a.created_at.slice(0, 10);
-          const db = b.played_at || b.created_at.slice(0, 10);
-          const diff = new Date(db) - new Date(da);
-          if (diff !== 0) return diff;
-          return new Date(b.created_at) - new Date(a.created_at);
+          const sd = window.CottageDB.playRecordSortDate;
+          const diff = sd(b).localeCompare(sd(a));
+          return diff !== 0 ? diff : String(b.created_at || '').localeCompare(String(a.created_at || ''));
         }) : [];
       // '최신 기록' 토글용: 서로 다른 세팅(그룹·인원·참여자)만 최신순으로 모음.
       // 같은 모임의 여러 게임 기록은 세팅이 같아 중복이므로 시그니처로 dedup(무의미한 순회 방지).

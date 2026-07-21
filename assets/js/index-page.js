@@ -1036,7 +1036,9 @@ function toDateStr(d) {
   }
 
   function rpDate(played_at, created_at) {
-    const iso = played_at || (created_at || '').slice(0, 10);
+    // 표시 날짜도 정렬과 같은 기준을 쓴다 — 어긋나면 "최신"으로 뽑힌 행에 다른 날짜가 찍힌다.
+    const iso = window.CottageDB?.playRecordSortDate?.({ played_at, created_at })
+      ?? (played_at || (created_at || '').slice(0, 10));
     if (!iso) return '';
     const [y, m, d] = iso.split('-');
     const wd = ['일','월','화','수','목','금','토'][new Date(`${y}-${m}-${d}T00:00:00`).getDay()];
