@@ -112,6 +112,10 @@
     function escAttr(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
 
     let allRecordsData = [], currentUser = null, playerNames = [];
+    // 참여자 이름 → userId. game-reviews.js와 같은 규칙으로 만든다(회원 명부 ∪ 기록 작성자).
+    // 명부만 쓰면 닉네임을 바꾼 회원의 옛 이름(player_names에 텍스트로 박혀 있음)이 안 잡히고,
+    // 작성자만 쓰면 기록을 등록한 적 없는 회원이 조용히 클릭 불가가 된다.
+    let nickUserMap = new Map();
 
     // ── buildBody: game-reviews.js buildSessionBody와 동일 구조, pr-* 클래스 사용 ──
     function buildBody(recs) {
@@ -126,7 +130,7 @@
         const f = grp[0];
         const countTag = f.player_count ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${f.player_count}명</span>` : '';
         const nameTags = f.player_names
-          ? f.player_names.split(',').map((n, i) => { const t = n.trim(); return t ? `<span class="pr-rec-tag pr-tag-who${i===0?' pr-tag-who-first':''}">${escH(t)}</span>` : ''; }).join('')
+          ? f.player_names.split(',').map((n, i) => { const t = n.trim(); return t ? `<span class="pr-rec-tag pr-tag-who${i===0?' pr-tag-who-first':''}" data-nick="${escAttr(t)}">${escH(t)}</span>` : ''; }).join('')
           : '';
         if (countTag || nameTags) html += `<div class="pr-player-header">${countTag}${nameTags}</div>`;
         html += grp.map(r => {
@@ -170,6 +174,15 @@
 
       const records = await window.CottageDB.getAllPlayRecordsForHistory();
       allRecordsData = records;
+
+      const profiles = await window.CottageDB.getAllProfiles?.() || [];
+      nickUserMap = new Map();
+      for (const p of profiles) {
+        if (p.user_id && p.nickname) nickUserMap.set(String(p.nickname).trim().toLowerCase(), String(p.user_id));
+      }
+      for (const r of records) {
+        if (r.user_id && r.nickname) nickUserMap.set(String(r.nickname).trim().toLowerCase(), String(r.user_id));
+      }
 
       const tipHtml = `<div class="history-tip">💡 <span><a href="../game/game-reviews.html" style="color:inherit;text-decoration:underline">플레이 기록</a> 시 <strong>"코티지보드 동호회"</strong>에 기록하면 동호회 게시판에도 함께 표시돼요</span></div>`;
 
@@ -238,6 +251,18 @@
           const wasOpen = m.classList.contains('is-open');
           root.querySelectorAll('.pr-rec-more.is-open').forEach(x => x.classList.remove('is-open'));
           if (!wasOpen) m.classList.add('is-open');
+        });
+      });
+      // 참여자 이름 클릭 → 그 회원의 읽기전용 내 보드
+      // (Phase D 진입점 규칙: 모임 참여자 외 전부 openOtherProfileSheet — PROJECT_STRUCTURE §5)
+      // 회원과 연결되지 않는 이름(비회원 손님 등)은 커서도 안 바뀌고 아무 일도 일어나지 않는다.
+      root.querySelectorAll('.pr-tag-who[data-nick]').forEach(span => {
+        const uid = nickUserMap.get((span.dataset.nick || '').trim().toLowerCase());
+        if (!uid) return;
+        span.style.cursor = 'pointer';
+        span.addEventListener('click', e => {
+          e.stopPropagation();
+          window.openOtherProfileSheet?.(uid);
         });
       });
       root.querySelectorAll('.history-copy-btn').forEach(btn => {
