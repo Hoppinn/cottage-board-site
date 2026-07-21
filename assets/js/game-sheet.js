@@ -800,7 +800,7 @@ function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
   const body = modal.querySelector('.sheet-join-body');
   body.innerHTML = `
     ${sessions.length > 1
-      ? `<select class="sheet-join-select">${sessions.map((s, i) => `<option value="${i}">${sessLabel(s)}</option>`).join('')}</select>`
+      ? `<select aria-label="참여할 기록 고르기" class="sheet-join-select">${sessions.map((s, i) => `<option value="${i}">${sessLabel(s)}</option>`).join('')}</select>`
       : `<div class="sheet-join-session">📅 ${sessLabel(sessions[0])}</div>`}
     ${rv ? `<div class="sheet-join-review">💬 “${esc(rv.slice(0, 60))}${rv.length > 60 ? '…' : ''}”</div>` : ''}
     <p class="sheet-join-hint">이 세션에 <b>내 플레이 기록</b>으로 후기를 남깁니다.</p>`;
@@ -1608,7 +1608,7 @@ function onEditPlayReview(btn) {
 
   const editDiv = document.createElement('div');
   editDiv.className = 'sheet-review-edit-wrap';
-  editDiv.innerHTML = `<textarea class="sheet-review-edit-area" rows="3"></textarea>
+  editDiv.innerHTML = `<textarea aria-label="게임평 고치기" class="sheet-review-edit-area" rows="3"></textarea>
     <div class="sheet-review-edit-row">
       <button class="sheet-review-save-btn" type="button">저장</button>
       <button class="sheet-review-cancel-btn" type="button">취소</button>
@@ -1656,7 +1656,7 @@ function getOrCreateCommentModal() {
           <input type="checkbox" id="sheetCommentLinkCheck">
           <span>기존 플레이 기록에 연동</span>
         </label>
-        <select class="sheet-comment-play-select" id="sheetCommentPlaySelect" style="display:none;"></select>
+        <select aria-label="연동할 플레이 기록" class="sheet-comment-play-select" id="sheetCommentPlaySelect" style="display:none;"></select>
       </div>
       <div class="sheet-comment-modal-actions">
         <button class="sheet-comment-form-cancel" onclick="onCloseCommentModal()">취소</button>
@@ -1827,7 +1827,7 @@ function getOrCreatePhotoModal() {
         <div class="sheet-play-photo-grid" id="sheetPhotoModalGrid"></div>
         <label class="sheet-play-photo-add-btn" id="sheetPhotoModalAddBtn">
           📷
-          <input type="file" accept="image/*" multiple id="sheetPhotoModalInput" style="display:none;">
+          <input aria-label="사진 고르기" type="file" accept="image/*" multiple id="sheetPhotoModalInput" style="display:none;">
         </label>
       </div>
       <div class="sheet-comment-play-link" id="sheetPhotoPlayLink" style="display:none;">
@@ -1835,7 +1835,7 @@ function getOrCreatePhotoModal() {
           <input type="checkbox" id="sheetPhotoLinkCheck">
           <span>기존 플레이 기록에 연동</span>
         </label>
-        <select class="sheet-comment-play-select" id="sheetPhotoPlaySelect" style="display:none;"></select>
+        <select aria-label="연동할 플레이 기록" class="sheet-comment-play-select" id="sheetPhotoPlaySelect" style="display:none;"></select>
       </div>
       <div class="sheet-comment-modal-actions">
         <button class="sheet-comment-form-cancel" onclick="onClosePhotoModal()">취소</button>
@@ -2394,7 +2394,7 @@ function _buildPlayModalHtml() {
       </div>
       <div class="sheet-play-date-wrap">
         <span class="sheet-play-date-lbl">📅 플레이 날짜</span>
-        <input class="sheet-play-detail-input" id="sheetPlayModalDate" type="date">
+        <input aria-label="플레이 날짜" class="sheet-play-detail-input" id="sheetPlayModalDate" type="date">
       </div>
       <label class="sheet-play-group-check-label">
         <input type="checkbox" id="sheetPlayModalGroupCheck">
@@ -2411,7 +2411,7 @@ function _buildPlayModalHtml() {
         <div class="sheet-play-photo-grid" id="sheetPlayModalPhotoGrid"></div>
         <label class="sheet-play-photo-add-btn" id="sheetPlayModalPhotoAddBtn">
           📷
-          <input type="file" accept="image/*" multiple id="sheetPlayModalPhotoInput" style="display:none;">
+          <input aria-label="사진 고르기" type="file" accept="image/*" multiple id="sheetPlayModalPhotoInput" style="display:none;">
         </label>
       </div>
       <div class="sheet-play-modal-actions">

@@ -910,9 +910,9 @@
           <div class="sched-slider-wrap">
             <div class="sched-dual-range">
               <div class="sched-range-track"><div class="sched-range-fill" id="ssRangeFill"></div></div>
-              <input type="range" class="sched-range-input" id="ssRS"
+              <input aria-label="시작 시각" type="range" class="sched-range-input" id="ssRS"
                 min="${MIN_H}" max="${MAX_H - 1}" step="1" value="10">
-              <input type="range" class="sched-range-input" id="ssRE"
+              <input aria-label="끝 시각" type="range" class="sched-range-input" id="ssRE"
                 min="${MIN_H + 1}" max="${MAX_H}" step="1" value="22">
             </div>
             <div class="sched-range-axis">
@@ -1324,8 +1324,8 @@
                 <div class="sched-range-track">
                   <div class="sched-range-fill" id="smF_${ds}" style="left:${fl}%;width:${fw}%"></div>
                 </div>
-                <input type="range" class="sched-range-input" id="smRS_${ds}" min="${MIN_H}" max="${MAX_H-1}" step="1" value="${t.s}">
-                <input type="range" class="sched-range-input" id="smRE_${ds}" min="${MIN_H+1}" max="${MAX_H}" step="1" value="${t.e}">
+                <input aria-label="시작 시각" type="range" class="sched-range-input" id="smRS_${ds}" min="${MIN_H}" max="${MAX_H-1}" step="1" value="${t.s}">
+                <input aria-label="끝 시각" type="range" class="sched-range-input" id="smRE_${ds}" min="${MIN_H+1}" max="${MAX_H}" step="1" value="${t.e}">
               </div>
               <div class="sched-range-axis">
                 <span>${MIN_H}시</span><span>${Math.round((MIN_H+MAX_H)/2)}시</span><span>${MAX_H}시</span>

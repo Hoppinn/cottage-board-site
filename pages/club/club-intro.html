@@ -184,27 +184,27 @@
       cardEl.innerHTML = `
         <div class="intro-edit-form">
           <div class="intro-field">
-            <label class="intro-label">닉네임 <span class="intro-required">*</span></label>
+            <label class="intro-label" for="editNick_${id}">닉네임 <span class="intro-required">*</span></label>
             <input class="intro-input" id="editNick_${id}" type="text" value="${escHtml(r.nickname)}" maxlength="20">
           </div>
           <div class="intro-field">
-            <label class="intro-label">한줄소개</label>
+            <label class="intro-label" for="editBio_${id}">한줄소개</label>
             <input class="intro-input" id="editBio_${id}" type="text" value="${escHtml(r._bio || '')}" maxlength="60" placeholder="모임 보드와 공유돼요">
           </div>
           <div class="intro-field">
-            <label class="intro-label">좋아하는 게임</label>
+            <label class="intro-label" for="editGames_${id}">좋아하는 게임</label>
             <input class="intro-input" id="editGames_${id}" type="text" value="${escHtml(r.favorite_games || '')}" maxlength="100">
           </div>
           <div class="intro-field">
-            <label class="intro-label">참여 가능 요일 / 시간</label>
+            <label class="intro-label" for="editAvail_${id}">참여 가능 요일 / 시간</label>
             <input class="intro-input" id="editAvail_${id}" type="text" value="${escHtml(r.available || '')}" maxlength="100">
           </div>
           <div class="intro-field">
-            <label class="intro-label">활동 지역</label>
+            <label class="intro-label" for="editLoc_${id}">활동 지역</label>
             <input class="intro-input" id="editLoc_${id}" type="text" value="${escHtml(r.location || '')}" maxlength="50">
           </div>
           <div class="intro-field">
-            <label class="intro-label">이동 가능 범위</label>
+            <label class="intro-label" for="editTravel_${id}">이동 가능 범위</label>
             <input class="intro-input" id="editTravel_${id}" type="text" value="${escHtml(r.travel_range || '')}" maxlength="50">
           </div>
           <div class="intro-edit-btns">

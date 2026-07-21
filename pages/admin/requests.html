@@ -373,7 +373,7 @@
           const row = document.createElement('div');
           row.id = 'gameAdminStatusRow';
           row.className = 'req-admin-status-row';
-          row.innerHTML = `<span class="req-admin-status-label">게임 상태</span><select id="gameAdminStatus" class="req-admin-status-select"><option value="">상태 없음 (희망 요청으로만 추가)</option><option value="구매예정">구매 예정</option><option value="선주문완료">선주문 완료</option><option value="배송중">배송중</option></select>`;
+          row.innerHTML = `<span class="req-admin-status-label">게임 상태</span><select aria-label="게임 상태" id="gameAdminStatus" class="req-admin-status-select"><option value="">상태 없음 (희망 요청으로만 추가)</option><option value="구매예정">구매 예정</option><option value="선주문완료">선주문 완료</option><option value="배송중">배송중</option></select>`;
           inputRow.insertAdjacentElement('afterend', row);
         }
       }
@@ -711,7 +711,7 @@
       const original = li.innerHTML;
       li.innerHTML = `
         <div class="req-edit-row">
-          <input class="req-edit-input" type="text" value="${escHtml(currentName)}" maxlength="100">
+          <input aria-label="이름 고치기" class="req-edit-input" type="text" value="${escHtml(currentName)}" maxlength="100">
           <button class="req-edit-save" type="button">저장</button>
           <button class="req-edit-cancel" type="button">취소</button>
         </div>`;

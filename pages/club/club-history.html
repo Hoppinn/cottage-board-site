@@ -278,7 +278,7 @@
         <label style="font-size:11px;color:var(--muted)">점수·메모</label>
         <textarea class="pie-score" placeholder="예: 83 / 75점" rows="2">${escH(rec.score||'')}</textarea>
         <label style="font-size:11px;color:var(--muted)">날짜</label>
-        <input class="pie-date" type="date" value="${escH(rec.date||'')}">
+        <input aria-label="플레이 날짜" class="pie-date" type="date" value="${escH(rec.date||'')}">
         <label style="font-size:11px;color:var(--muted)">게임평</label>
         <textarea class="pie-review" placeholder="게임평">${escH(rec.review||'')}</textarea>
         <label style="font-size:11px;color:var(--muted)">사진</label>

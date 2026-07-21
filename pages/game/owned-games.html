@@ -45,7 +45,7 @@
   <div class="sort-select-wrap">
     <span class="sort-select-label" id="sortTitleLabel">1.이름 ↑</span>
 
-    <select id="sortTitle">
+    <select aria-label="이름 정렬" id="sortTitle">
       <option value="asc">이름 ↑</option>
       <option value="desc">이름 ↓</option>
       <option value="none">이름 -</option>
@@ -55,7 +55,7 @@
   <div class="sort-select-wrap">
     <span class="sort-select-label" id="sortWeightLabel">난이도 -</span>
 
-    <select id="sortWeight">
+    <select aria-label="난이도 정렬" id="sortWeight">
       <option value="none">난이도 -</option>
       <option value="asc">난이도 ↑</option>
       <option value="desc">난이도 ↓</option>
@@ -65,7 +65,7 @@
   <div class="sort-select-wrap">
     <span class="sort-select-label" id="sortRatingLabel">평점 -</span>
 
-    <select id="sortRating">
+    <select aria-label="평점 정렬" id="sortRating">
       <option value="none">평점 -</option>
       <option value="asc">평점 ↑</option>
       <option value="desc">평점 ↓</option>
@@ -90,7 +90,7 @@
 
       <div class="owned-filter-grid">
 
-        <select id="ownedPlayerFilter">
+        <select aria-label="인원수로 거르기" id="ownedPlayerFilter">
           <option value="" selected hidden>👥 인원수</option>
           <option value="">🌐 전체</option>
           <option value="1">1인</option>
@@ -104,7 +104,7 @@
           <option value="9+">9인+</option>
         </select>
 
-        <select id="ownedDifficultyFilter">
+        <select aria-label="체감 난이도로 거르기" id="ownedDifficultyFilter">
           <option value="" selected hidden>🎯 체감 난이도</option>
           <option value="">🌐 전체</option>
           <option value="kids">😊 아이도 가능</option>
@@ -114,7 +114,7 @@
           <option value="hardcore">😈 하드코어</option>
         </select>
 
-        <select id="ownedMoodFilter">
+        <select aria-label="게임 방식으로 거르기" id="ownedMoodFilter">
           <option value="" selected hidden>🎮 게임 방식</option>
           <option value="">🌐 전체</option>
           <option value="talk">💬 말·이야기 게임</option>
@@ -130,7 +130,7 @@
           <option value="murder">🔍 머더미스터리</option>
         </select>
 
-        <select id="ownedMechanicFilter">
+        <select aria-label="게임 유형으로 거르기" id="ownedMechanicFilter">
           <option value="" selected hidden>🎲 게임 유형</option>
           <option value="">🌐 전체</option>
         </select>
