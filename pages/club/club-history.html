@@ -41,7 +41,7 @@
   <div class="game-sheet" id="gameSheet">
     <div class="game-sheet-dim" id="closeGameSheetDim"></div>
     <div class="game-sheet-panel">
-      <button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button>
+      <button aria-label="게임 정보 닫기" class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button>
       <div class="game-sheet-scroll">
         <div id="gameSheetContent"></div>
       </div>
@@ -283,7 +283,7 @@
         <textarea class="pie-review" placeholder="게임평">${escH(rec.review||'')}</textarea>
         <label style="font-size:11px;color:var(--muted)">사진</label>
         <div class="pie-cur-photos">
-          ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}"><img src="${escAttr(u)}" alt=""><button type="button" class="pie-existing-del">×</button></div>`).join('')}
+          ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escAttr(u)}"><img src="${escAttr(u)}" alt=""><button aria-label="사진 빼기" type="button" class="pie-existing-del">×</button></div>`).join('')}
         </div>
         <div class="pr-photo-grid pie-new-grid"></div>
         <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>

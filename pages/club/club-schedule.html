@@ -896,7 +896,7 @@
       overlay.innerHTML = `<div class="sched-sheet">
         <div class="sched-sheet-header">
           <span class="sched-sheet-title" id="ssTitle"></span>
-          <button class="sched-sheet-close-btn" id="ssClose" type="button">✕</button>
+          <button aria-label="닫기" class="sched-sheet-close-btn" id="ssClose" type="button">✕</button>
         </div>
         <div class="sched-sheet-body">
           <div class="sched-sheet-prevweek-row" id="ssPrevWeekRow">
@@ -1246,9 +1246,9 @@
 
         $s('smBody').innerHTML = `
           <div class="sm-week-nav">
-            <button class="sm-week-nav-btn" id="smWkPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
+            <button aria-label="이전 주" class="sm-week-nav-btn" id="smWkPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
             <span class="sm-week-label">${wkRange} · ${wkLabel}</span>
-            <button class="sm-week-nav-btn" id="smWkNext" type="button">▶</button>
+            <button aria-label="다음 주" class="sm-week-nav-btn" id="smWkNext" type="button">▶</button>
           </div>
           <p class="sm-hint">참여할 요일을 선택하세요 (여러 날 선택 가능)</p>
           <div class="sm-day-chips" id="smDayChips">${chips}</div>
@@ -2015,9 +2015,9 @@
 
       cal.innerHTML = `
         <div class="mcal-nav">
-          <button class="mcal-nav-btn" id="calPrev" type="button">‹</button>
+          <button aria-label="이전 달" class="mcal-nav-btn" id="calPrev" type="button">‹</button>
           <span class="mcal-title">${y}년 ${MONTH_NAMES[m]}</span>
-          <button class="mcal-nav-btn" id="calNext" type="button">›</button>
+          <button aria-label="다음 달" class="mcal-nav-btn" id="calNext" type="button">›</button>
         </div>
         <div class="mcal-header"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span class="is-sat">토</span><span class="is-sun">일</span></div>
         <div class="mcal-grid">${cells}</div>`;

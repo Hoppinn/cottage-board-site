@@ -34,7 +34,7 @@
     const more = photoUrls.length - SHOW;
     const allAttr = _escAttr(JSON.stringify(photoUrls));
     return `<div class="pr-rec-photo-wrap" data-urls="${allAttr}">
-      ${photoUrls.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${_escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button class="pr-rec-photo-del" data-id="${recordId}" data-url="${_escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
+      ${photoUrls.map((u, i) => `<div class="pr-rec-photo-item${i >= SHOW ? ' sheet-photo-hidden' : ''}"><img class="pr-rec-photo" src="${_escAttr(u)}" alt="사진" loading="lazy" data-idx="${i}">${canDelPhoto ? `<button aria-label="사진 빼기" class="pr-rec-photo-del" data-id="${recordId}" data-url="${_escAttr(u)}" type="button">×</button>` : ''}</div>`).join('')}
       ${more > 0 ? `<div class="pr-rec-photo-more">+${more}장</div>` : ''}
     </div>`;
   }
@@ -286,7 +286,7 @@
       if ([...chips.querySelectorAll('.tag-chip')].some(c => c.dataset.val.trim().toLowerCase() === val.toLowerCase())) return;
       const chip = document.createElement('span');
       chip.className = 'tag-chip'; chip.dataset.val = val;
-      chip.innerHTML = _escH(val) + '<button type="button" class="tag-chip-del">×</button>';
+      chip.innerHTML = _escH(val) + '<button aria-label="참여자 빼기" type="button" class="tag-chip-del">×</button>';
       chip.querySelector('.tag-chip-del').addEventListener('click', () => { chip.remove(); updateHidden(); });
       chips.appendChild(chip); updateHidden();
       if (onAdd) onAdd(val);

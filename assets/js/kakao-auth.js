@@ -1208,7 +1208,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             const vgCustom = vgId != null ? null : (customName || name);
             const close = () => overlay.remove();
             if (!partDays.length) {
-              overlay.innerHTML = `<div class="mb-add-box"><div class="mb-add-head"><span class="mb-add-title">🗓️ 요일 선택</span><button class="mb-add-close" type="button">✕</button></div><p class="mb-daypick-empty">먼저 이번 주 참여 가능한 날을 등록해주세요.<br>플래너에서 참여 요일을 정하면 그날 하고 싶은 게임을 고를 수 있어요.</p><button class="mb-add-daypick-done" type="button">플래너 열기</button></div>`;
+              overlay.innerHTML = `<div class="mb-add-box"><div class="mb-add-head"><span class="mb-add-title">🗓️ 요일 선택</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div><p class="mb-daypick-empty">먼저 이번 주 참여 가능한 날을 등록해주세요.<br>플래너에서 참여 요일을 정하면 그날 하고 싶은 게임을 고를 수 있어요.</p><button class="mb-add-daypick-done" type="button">플래너 열기</button></div>`;
               document.body.appendChild(overlay);
               overlay.querySelector('.mb-add-close').addEventListener('click', close);
               overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
@@ -1217,7 +1217,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             }
             const selected = new Set(curDates || []);
             overlay.innerHTML = `<div class="mb-add-box">
-              <div class="mb-add-head"><span class="mb-add-title">🗓️ '${escH(name)}' 이번 주 언제 할까요?</span><button class="mb-add-close" type="button">✕</button></div>
+              <div class="mb-add-head"><span class="mb-add-title">🗓️ '${escH(name)}' 이번 주 언제 할까요?</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div>
               <div class="mb-add-daypick-days">${partDays.map(w => `<button class="mb-day-chip${selected.has(w.ds) ? ' is-selected' : ''}" data-date="${w.ds}" type="button"><span class="mb-day-dow">${w.label}</span><span class="mb-day-md">${w.md}</span></button>`).join('')}</div>
               <p class="mb-add-daypick-hint">참여 등록한 날 중에서 골라요 (최소 1개)</p>
               <button class="mb-add-daypick-done" type="button">완료</button>
@@ -1291,7 +1291,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
             overlay.id = 'mbAddModal';
             overlay.className = 'mb-add-overlay';
             overlay.innerHTML = `<div class="mb-add-box">
-              <div class="mb-add-head"><span class="mb-add-title">${isWant ? '❤️ 이번 주 하고 싶은 게임' : '💡 이번 주 배우고 싶은 게임'} 추가</span><button class="mb-add-close" type="button">✕</button></div>
+              <div class="mb-add-head"><span class="mb-add-title">${isWant ? '❤️ 이번 주 하고 싶은 게임' : '💡 이번 주 배우고 싶은 게임'} 추가</span><button aria-label="닫기" class="mb-add-close" type="button">✕</button></div>
               <input class="mb-add-input" type="text" placeholder="게임 이름 검색 (초성 가능)" autocomplete="off">
               <div class="mb-add-results"></div>
               <div class="mb-add-quick-wrap"><div class="mb-add-quick-label">${isWant ? '❤️' : '👀'} 내 ${srcLabel}</div><div class="mb-add-quick"></div></div>
@@ -1706,7 +1706,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     <div class="profile-panel-header${backTo ? ' profile-panel-header--with-back' : ''}">
       ${backTo ? `<button class="profile-panel-back" type="button">‹ ${escH(backTo.label || '뒤로')}</button>` : ''}
       <span class="profile-panel-title">${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</span>
-      <button class="profile-panel-close" type="button">✕</button>
+      <button aria-label="내 보드 닫기" class="profile-panel-close" type="button">✕</button>
     </div>
     <div class="profile-panel-body">
       <p class="profile-panel-loading">불러오는 중...</p>
@@ -2214,7 +2214,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         </div>
         <div class="taste-bio-custom-wrap">
           <input type="text" class="taste-bio-custom-input" maxlength="20" placeholder="직접 입력 후 Enter">
-          <button class="taste-bio-custom-add" type="button">+</button>
+          <button aria-label="직접 입력한 것 추가" class="taste-bio-custom-add" type="button">+</button>
         </div>
         <div class="taste-bio-custom-tags"></div>
         <div class="taste-bio-actions">
@@ -2247,7 +2247,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       })()}
       <div class="taste-avoid-custom-wrap">
         <input type="text" class="taste-avoid-custom-input" maxlength="15" placeholder="직접 입력 후 Enter">
-        <button class="taste-avoid-custom-add" type="button">+</button>
+        <button aria-label="직접 입력한 것 추가" class="taste-avoid-custom-add" type="button">+</button>
       </div>
     </div>`}`;
   }
@@ -2505,7 +2505,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="profile-subsheet-header">
           <button class="profile-subsheet-back" type="button">‹ ${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</button>
           <span class="profile-subsheet-title">${title}</span>
-          <button class="profile-subsheet-close" type="button">✕</button>
+          <button aria-label="닫기" class="profile-subsheet-close" type="button">✕</button>
         </div>
         <div class="profile-subsheet-body${bodyClass ? ' ' + bodyClass : ''}">${contentHtml}</div>
       </div>`;

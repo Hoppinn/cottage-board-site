@@ -87,14 +87,14 @@
     const resolve = () => { if (!resolved) { resolved = true; t.classList.remove('show', 'has-action'); onDone?.(); } };
 
     const showMain = () => {
-      t.innerHTML = `<button class="pr-toast-close-btn" type="button">✕</button>🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br><span style="font-size:12px;opacity:.85">궁금해요가 취소됐어요.</span><br><button class="pr-toast-action-btn">좋아하는 게임으로 추가하기</button>`;
+      t.innerHTML = `<button aria-label="알림 닫기" class="pr-toast-close-btn" type="button">✕</button>🎲 <b>${esc(gameName)}</b> 드디어 해보셨군요!<br><span style="font-size:12px;opacity:.85">궁금해요가 취소됐어요.</span><br><button class="pr-toast-action-btn">좋아하는 게임으로 추가하기</button>`;
       t.classList.add('show', 'has-action');
       t.querySelector('.pr-toast-action-btn')?.addEventListener('click', showConfirm);
       t.querySelector('.pr-toast-close-btn')?.addEventListener('click', resolve);
     };
 
     const showConfirm = () => {
-      t.innerHTML = `<button class="pr-toast-close-btn" type="button">✕</button><span style="font-size:13px"><b>${esc(gameName)}</b>을<br>좋아하는 게임에 추가할까요?</span><br><button class="pr-toast-action-btn">✓ 추가하기</button> <button class="pr-toast-cancel-btn" type="button">취소</button>`;
+      t.innerHTML = `<button aria-label="알림 닫기" class="pr-toast-close-btn" type="button">✕</button><span style="font-size:13px"><b>${esc(gameName)}</b>을<br>좋아하는 게임에 추가할까요?</span><br><button class="pr-toast-action-btn">✓ 추가하기</button> <button class="pr-toast-cancel-btn" type="button">취소</button>`;
       t.querySelector('.pr-toast-action-btn')?.addEventListener('click', async () => {
         await window.CottageDB?.toggleGameLike(gameId, userId);
         t.classList.remove('has-action');
@@ -682,7 +682,7 @@
       <textarea id="pie-review-${btn.dataset.id}" name="pie-review" class="pie-review" placeholder="평가를 남겨주시면 다른 플레이어에게 도움이 돼요.">${escH(rec.review||'')}</textarea>
       <label style="font-size:11px;color:var(--muted)">사진</label>
       <div class="pie-cur-photos" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px">
-        ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
+        ${parsePhotoUrls(rec.photo).map(u => `<div class="pie-existing-item" data-url="${escH(u)}" style="position:relative;width:80px;height:80px;flex-shrink:0"><img src="${escH(u)}" style="width:100%;height:100%;object-fit:cover;border-radius:7px;display:block"><button aria-label="사진 빼기" type="button" class="pr-photo-item-del pie-existing-del">×</button></div>`).join('')}
       </div>
       <div class="pr-photo-grid pie-new-grid"></div>
       <label class="pr-photo-trigger">📷 사진 추가<input type="file" class="pie-photo-file" accept="image/*" multiple style="display:none"></label>

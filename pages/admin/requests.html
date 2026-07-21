@@ -319,7 +319,7 @@
           <details class="req-actual-wrap" data-id="${r.id}" data-games="${escHtml(JSON.stringify(actualList))}">
             <summary class="req-actual-toggle">실제 게임${actualList.length ? ` <span class="req-actual-count">${actualList.length}개</span>` : ''}</summary>
             <div class="req-actual-body">
-              <div class="req-actual-tags">${actualList.map(g => `<span class="req-actual-tag">${escHtml(g)}<button class="req-actual-remove" type="button" data-action="remove-actual-game" data-id="${r.id}" data-game="${escHtml(g)}">×</button></span>`).join('')}</div>
+              <div class="req-actual-tags">${actualList.map(g => `<span class="req-actual-tag">${escHtml(g)}<button aria-label="이 게임 빼기" class="req-actual-remove" type="button" data-action="remove-actual-game" data-id="${r.id}" data-game="${escHtml(g)}">×</button></span>`).join('')}</div>
               <div class="req-actual-input-wrap">
                 <input type="text" class="req-actual-input" placeholder="초성 검색..." autocomplete="off" data-req-id="${r.id}">
                 <ul class="req-actual-dropdown" hidden></ul>

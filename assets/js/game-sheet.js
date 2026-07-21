@@ -248,7 +248,7 @@ let closeGameSheetDim =
 function ensureGameSheet() {
   if (document.getElementById('gameSheet')) return;
   const wrap = document.createElement('div');
-  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim" id="closeGameSheetDim"></div><div class="game-sheet-panel"><button class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div class="game-sheet-scroll"><div id="gameSheetContent"></div></div></div></div>';
+  wrap.innerHTML = '<div class="game-sheet" id="gameSheet"><div class="game-sheet-dim" id="closeGameSheetDim"></div><div class="game-sheet-panel"><button aria-label="게임 정보 닫기" class="game-sheet-close" id="closeGameSheetButton" type="button">✕</button><div class="game-sheet-scroll"><div id="gameSheetContent"></div></div></div></div>';
   document.body.appendChild(wrap.firstChild);
   gameSheet          = document.getElementById('gameSheet');
   gameSheetContent   = document.getElementById('gameSheetContent');
@@ -284,7 +284,7 @@ function _openCoverModal(src) {
   m.id = 'coverModal';
   m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;';
   m.innerHTML = `<img src="${src}" style="max-width:90%;max-height:85vh;object-fit:contain;border-radius:12px;" onerror="this.onerror=null;this.src='${DEFAULT_GAME_IMAGE}';">
-    <button onclick="document.getElementById('coverModal')?.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
+    <button aria-label="표지 크게 보기 닫기" onclick="document.getElementById('coverModal')?.remove()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;line-height:1;">✕</button>`;
   m.addEventListener('click', e => { if (e.target === m) m.remove(); });
   document.body.appendChild(m);
 }
@@ -627,7 +627,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
       >
       <span class="sheet-sticky-title">${detail.title}</span>
       ${detail.rating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(detail.rating)}</span>` : ""}
-      <button class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
+      <button aria-label="게임 정보 닫기" class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
     </div>
 
     <!-- 뒤로가기 (게임→게임 이동 시) -->
@@ -890,7 +890,7 @@ function openGameRecordSheet(gameKey) {
       >
       <span class="sheet-sticky-title">${safeTitle} 기록</span>
       ${_recRating ? `<span class="sheet-sticky-bgg">⭐ ${formatRating(_recRating)}</span>` : ""}
-      <button class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
+      <button aria-label="게임 정보 닫기" class="sheet-sticky-close" type="button" onclick="closeGameSheet()">✕</button>
     </div>
 
     <!-- 뒤로가기 (미보유는 정보시트 없음 → 배지) -->
@@ -1549,9 +1549,9 @@ async function initSheetComments(gameKey) {
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
-        <button class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
+        <button aria-label="코멘트 고치기" class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
         <button class="sheet-comment-link-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onLinkCommentToPlay(this)" type="button" title="플레이기록으로 연동">↗</button>
-        <button class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>
+        <button aria-label="코멘트 지우기" class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>
       </div>` : ''}
     </div>`;
     }
@@ -1561,8 +1561,8 @@ async function initSheetComments(gameKey) {
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
       ${mine ? `<div class="sheet-comment-actions">
-        <button class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${gameKey}" data-text="${textAttr}" onclick="onEditPlayReview(this)" type="button">✏️</button>
-        <button class="sheet-comment-delete-btn" data-id="${item.id}" data-game="${gameKey}" onclick="onDeletePlayReview(this)" type="button">✕</button>
+        <button aria-label="게임평 고치기" class="sheet-comment-edit-btn" data-id="${item.id}" data-game="${gameKey}" data-text="${textAttr}" onclick="onEditPlayReview(this)" type="button">✏️</button>
+        <button aria-label="게임평 지우기" class="sheet-comment-delete-btn" data-id="${item.id}" data-game="${gameKey}" onclick="onDeletePlayReview(this)" type="button">✕</button>
       </div>` : ''}
     </div>`;
   }).join('');
@@ -2213,14 +2213,14 @@ function buildRecordItemHtml(r, gameKey, currentUserIdForPlay, myRecordIds) {
       </div>
       <div class="sheet-play-record-actions">
         <button class="sheet-rec-more-btn" type="button" aria-label="사진·게임평 추가">···</button>
-        ${isMine ? `<button class="sheet-play-edit-btn"
+        ${isMine ? `<button aria-label="플레이 기록 고치기" class="sheet-play-edit-btn"
           data-game="${gameKey}" data-id="${r.id}"
           data-count="${r.player_count || ''}" data-names="${escH(r.player_names || '')}"
           data-time="${r.play_time_min || ''}" data-score="${escH(r.score_note || '')}"
           data-group="${escH(r.group_name || '')}" data-played-at="${r.played_at || ''}"
           data-review="${escH(r.review_text || '')}"
           type="button">✏️</button>
-        <button class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">✕</button>` : ""}
+        <button aria-label="플레이 기록 지우기" class="sheet-play-cancel-btn" onclick="onCancelPlayRecord('${gameKey}','${r.id}')" type="button">✕</button>` : ""}
       </div>
       <div class="sheet-rec-more-actions">
         <button class="sheet-rec-add-btn" data-game-id="${gameKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button>
