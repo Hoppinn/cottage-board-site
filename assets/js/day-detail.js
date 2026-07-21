@@ -407,6 +407,12 @@
     return g.game_id ? `id:${g.game_id}` : `name:${(g.custom_name || '').trim().toLowerCase()}`;
   }
 
+  // 방문 인원(등록자 + 동반 지인). supabase-client.js 공용 헬퍼에 위임 —
+  // day-detail.js가 supabase-client.js보다 먼저 로드될 수 있어 호출 시점에 참조한다.
+  function partyCount(votes) {
+    return window.CottageDB?.sumPartySize?.(votes) ?? (votes ? votes.length : 0);
+  }
+
   // 작은 게임 썸네일(글자 크기 정도) — 자세히/이날모임한눈에보기/미리보기 게임 목록 공용.
   // 커스텀 입력 게임(game_id 없음)은 썸네일 없음 → 빈 문자열.
   function dbThumbHtml(game_id, cls) {
@@ -481,8 +487,8 @@
   function _buildSchedStatsHtml(votes, myVote, myGames, userId, voteGames) {
     const myGameKeys = new Set(myGames.map(gameKey));
       const others = votes.filter(v => String(v.user_id) !== String(userId));
-      const totalCount  = votes.length;
-      const overlapCount = others.filter(v => timeOverlap(myVote, v)).length;
+      const totalCount  = partyCount(votes);
+      const overlapCount = partyCount(others.filter(v => timeOverlap(myVote, v)));
       const gameMatchCount = others.filter(v => {
         const theirGames = voteGames.filter(g => String(g.user_id) === String(v.user_id));
         return theirGames.some(g => myGameKeys.has(gameKey(g)));
@@ -703,7 +709,7 @@
     const dObj = new Date(dateStr + 'T00:00:00');
     const DOW = ['일', '월', '화', '수', '목', '금', '토'];
     const dateLabel = `${dObj.getMonth() + 1}/${dObj.getDate()}(${DOW[dObj.getDay()]})`;
-    const count = new Set((dayVotes || []).map(v => v.user_id)).size;
+    const count = partyCount(dayVotes || []);
     const barsHtml = (window.buildBarsInCard && dayVotes && dayVotes.length)
       ? window.buildBarsInCard(dayVotes, dayGames || [], myVote || null)
       : '<p class="dd-loading">이 날 등록된 일정이 없어요.</p>';
@@ -822,12 +828,12 @@
    */
   /** 모임 상세 통계 칩 HTML (참여 인원 · 최대 동시 겹침 · 공통 게임 수) */
   function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
-    const count = uniqueVotes.length;
-    // 최대 동시 참여 가능 인원 (1시간 단위 슬롯)
+    const count = partyCount(uniqueVotes);
+    // 최대 동시 참여 가능 인원 (1시간 단위 슬롯) — 동반 지인 포함
     const MIN_H = 10, MAX_H = 24;
     let peakCnt = 0;
     for (let h = MIN_H; h < MAX_H; h++) {
-      const c = votes.filter(v => v.time_start <= h && v.time_end > h).length;
+      const c = partyCount(votes.filter(v => v.time_start <= h && v.time_end > h));
       if (c > peakCnt) peakCnt = c;
     }
 

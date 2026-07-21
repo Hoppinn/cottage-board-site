@@ -1669,6 +1669,8 @@ window._cottageSess = (function () {
     getAllBioTagSuggestions,
     getAllAvoidTagSuggestions,
     getMeetingVotes,
+    getPartySize,
+    sumPartySize,
     upsertMeetingVote,
     deleteMeetingVote,
     updateNotifSeenAt,
@@ -2072,6 +2074,24 @@ window._cottageSess = (function () {
       if (error) console.error('[getMeetingVotes]', error);
       return data || [];
     } catch (err) { console.error('[getMeetingVotes]', err); return []; }
+  }
+
+  // 등록 1건 ≠ 방문 인원. 철수가 지인 2명을 데려오면 등록은 1건이고 인원은 3명이다.
+  // 「N명」을 세는 자리는 전부 이 둘만 쓴다 — 일부만 자체 계산하면 그 일부가 조용히 다른 답을 낸다.
+  function getPartySize(vote) {
+    const g = Number(vote?.guest_count);
+    return 1 + (Number.isFinite(g) && g > 0 ? Math.floor(g) : 0);
+  }
+
+  // votes 배열의 총 방문 인원. UNIQUE(vote_date,user_id)라 같은 날 중복 행은 없지만,
+  // 호출부가 여러 날짜를 섞어 넘길 수 있어 user_id 기준 dedupe 후 합산한다(기존 Set 의미 보존).
+  function sumPartySize(votes) {
+    if (!Array.isArray(votes) || !votes.length) return 0;
+    const byUser = new Map();
+    for (const v of votes) byUser.set(String(v.user_id), v);
+    let total = 0;
+    for (const v of byUser.values()) total += getPartySize(v);
+    return total;
   }
 
   async function upsertMeetingVote(userId, nickname, voteDate, timeStart, timeEnd) {

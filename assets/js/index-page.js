@@ -1634,9 +1634,10 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       for (let i = 0; i < 7; i++) {
         const d = new Date(monDate);
         d.setDate(monDate.getDate() + i);
-        byDate[toDateStr(d)] = new Set();
+        byDate[toDateStr(d)] = [];
       }
-      votes.forEach(v => { if (byDate[v.vote_date]) byDate[v.vote_date].add(v.user_id); });
+      // 날짜별 vote 행을 그대로 담는다 — 인원은 sumPartySize(동반 지인 포함)로 세므로 Set(user_id)로 접지 않는다
+      votes.forEach(v => { if (byDate[v.vote_date]) byDate[v.vote_date].push(v); });
 
       const allUsers = new Set(votes.map(v => v.user_id));
       statusEl.textContent = getMeetingStatusMsg(allUsers.size);
@@ -1645,14 +1646,14 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
       // 초기 선택(또는 이전 선택이 이번 주 범위 밖이 됐을 때만 재계산): 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
       if (selectedDate == null || !dateKeys.includes(selectedDate)) {
-        selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].size > 0)
+        selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].length > 0)
           || dateKeys.find(d => d >= todayStr)
           || dateKeys[0];
       }
 
       function renderChips() {
         daysEl.innerHTML = dateKeys.map((ds, i) => {
-          const cnt = byDate[ds].size;
+          const cnt = window.CottageDB?.sumPartySize?.(byDate[ds]) ?? byDate[ds].length;
           const hasVote  = cnt > 0;
           const isPast   = ds < todayStr;
           const isSelected = ds === selectedDate;

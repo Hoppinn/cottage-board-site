@@ -712,6 +712,12 @@
     function isPast(s) { return parseDate(s) < TODAY; }
     function isToday(s) { return parseDate(s).getTime() === TODAY.getTime(); }
 
+    // 방문 인원 = 등록자 + 동반 지인. 인원을 세는 자리는 전부 이 함수만 쓴다(등록 건수와 구분).
+    // supabase-client.js의 공용 헬퍼에 위임 — 로드 순서 때문에 호출 시점에 참조한다.
+    function partyCount(votes) {
+      return window.CottageDB?.sumPartySize?.(votes) ?? (votes ? votes.length : 0);
+    }
+
     // ── 날짜별 요약 계산 ─────────────────────────────────────
     function calcSummary(votes) {
       if (!votes.length) return null;
@@ -720,7 +726,7 @@
       const blocks = calcOverlap(votes);
       const top = blocks[0] || null;
       return {
-        count: votes.length,
+        count: partyCount(votes),
         totalStart, totalEnd,
         overlapStart: top?.start,
         overlapEnd: top?.end,
@@ -734,21 +740,20 @@
       if (!votes.length) return [];
       const slots = [];
       for (let h = MIN_H; h < MAX_H; h++) {
-        slots.push({
-          h,
-          names: votes.filter(v => v.time_start <= h && v.time_end > h).map(v => v.nickname)
-        });
+        // vote 행을 그대로 담는다 — names(누가)와 count(몇 명)를 분리하기 위함.
+        // 이름은 등록자 수만큼이지만 인원은 동반 지인을 포함하므로 둘은 더 이상 같은 수가 아니다.
+        slots.push({ h, votes: votes.filter(v => v.time_start <= h && v.time_end > h) });
       }
       const blocks = [];
       let i = 0;
       while (i < slots.length) {
-        const names = slots[i].names;
+        const names = slots[i].votes.map(v => v.nickname);
         const key = [...names].sort().join('§');
         let j = i + 1;
-        while (j < slots.length && [...slots[j].names].sort().join('§') === key) j++;
+        while (j < slots.length && [...slots[j].votes.map(v => v.nickname)].sort().join('§') === key) j++;
         if (names.length > 0) {
           const endH = j < slots.length ? slots[j].h : MAX_H;
-          blocks.push({ start: slots[i].h, end: endH, count: names.length, names: [...names] });
+          blocks.push({ start: slots[i].h, end: endH, count: partyCount(slots[i].votes), names: [...names] });
         }
         i = j;
       }
@@ -1027,7 +1032,7 @@
           const tod  = d.getTime() === TODAY.getTime();
           const sel  = _days.includes(ds);
           const mine = user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
-          const cnt  = allVotes.filter(v => v.vote_date === ds).length;
+          const cnt  = partyCount(allVotes.filter(v => v.vote_date === ds));
           return `<button class="sm-day-chip${sel?' is-sel':''}${past?' is-past':''}${tod?' is-today':''}${mine?' is-registered':''}"
             data-ds="${ds}" type="button"${(past||mine)?' disabled':''}>
             <span class="sm-dc-dow">${DOW_KR[d.getDay()]}</span>
@@ -1714,11 +1719,12 @@
       const myDates   = new Set();
       const user      = window.getKakaoUser?.();
       const todayStr  = toDateStr(TODAY);
+      const votesByDate = {};
       for (const v of allVotes) {
-        if (!cntByDate[v.vote_date]) cntByDate[v.vote_date] = 0;
-        cntByDate[v.vote_date]++;
+        (votesByDate[v.vote_date] = votesByDate[v.vote_date] || []).push(v);
         if (user && String(v.user_id) === String(user.id)) myDates.add(v.vote_date);
       }
+      for (const ds in votesByDate) cntByDate[ds] = partyCount(votesByDate[ds]);
 
       const totalCells = Math.ceil((startOff + lastDate) / 7) * 7;
       let cells = '';
@@ -1830,7 +1836,7 @@
 
         const dayVotes = allVotes.filter(v => v.vote_date === ds);
         const myVote   = dayVotes.find(v => user && String(v.user_id) === String(user.id));
-        const cnt      = new Set(dayVotes.map(v => v.user_id)).size;
+        const cnt      = partyCount(dayVotes);
 
         const dowCls  = dow === 0 ? ' is-sun' : dow === 6 ? ' is-sat' : '';
         const pastCls = past ? ' is-past' : '';
