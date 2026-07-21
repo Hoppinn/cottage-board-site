@@ -1294,7 +1294,7 @@
         const addItems = _safeGKey ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
         // 캡션 복사는 로그인·소유 여부를 안 본다 — 회원이 아니어도 필요하면 쓰라는 결정(2026-07-22).
         // 그래서 다른 항목이 하나도 없어도 ⋯ 메뉴 자체는 뜬다.
-        const captionItem = _dayCaption ? `<button class="pr-rec-caption-action" data-caption="${_dayCaption}" type="button">📋 이 날 캡션 복사</button>` : '';
+        const captionItem = _dayCaption ? `<button class="pr-rec-caption-action" data-caption="${_dayCaption}" type="button">📋 캡션 복사</button>` : '';
         const moreMenu = (likeItems || addItems || editItems || captionItem) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems}${addItems}${editItems}${captionItem}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||'', mine: !!showEdit})}'>
           <div class="pr-rec-row-top">

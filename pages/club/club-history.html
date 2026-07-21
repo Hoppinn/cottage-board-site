@@ -126,7 +126,7 @@
           const editBtn = canEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button>` : '';
           // 캡션 복사는 로그인·소유 여부를 안 본다 — 회원이 아니어도 필요하면 쓰라는 결정(2026-07-22).
           // 그래서 수정 권한이 없어도 ⋯ 메뉴 자체는 뜬다.
-          const captionBtn = dayCaption ? `<button class="pr-rec-caption-action" data-caption="${dayCaption}" type="button">📋 이 날 캡션 복사</button>` : '';
+          const captionBtn = dayCaption ? `<button class="pr-rec-caption-action" data-caption="${dayCaption}" type="button">📋 캡션 복사</button>` : '';
           const moreMenu = (editBtn || captionBtn) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${editBtn}${captionBtn}</div></div>` : '';
           const recJson = escAttr(JSON.stringify({gameId:r.game_id||'',names:r.player_names||'',count:r.player_count||'',time:r.play_time_min||'',score:r.score_note||'',review:r.review_text||'',group:r.group_name||'',date:r.played_at||'',photo:r.photo_url||'',mine:!!canEdit}));
           return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${recJson}'>

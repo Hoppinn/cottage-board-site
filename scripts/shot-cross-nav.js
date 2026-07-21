@@ -75,7 +75,12 @@ const OUT = process.argv[3] || path.join(os.tmpdir(), 'cottage-cross-nav');
     console.log(`캡션 데이터: ${cap ? `${cap.split('\n').length}줄 / 첫 줄 "${cap.split('\n')[0]}"` : '❌ 없음'}`);
     await page.screenshot({ path: path.join(OUT, '4-more-menu.png') });
 
-    // 스크롤하면 메뉴가 버튼을 따라오는가 (fixed로 화면에 붙어 있던 버그)
+    // 메뉴는 페이지에 붙어야 한다 — fixed면 스크롤을 쫓아다니고 헤더 위로 떠오른다
+    const posMode = await page.$eval('.pr-rec-more.is-open .pr-rec-more-menu',
+      e => getComputedStyle(e).position);
+    console.log(`메뉴 배치: ${posMode} ${posMode === 'absolute' ? '✅ 페이지에 붙음' : '🔴 화면에 고정(fixed)'}`);
+
+    // 스크롤해도 버튼과의 상대 위치가 그대로여야 한다
     const before = await page.evaluate(() => {
       const b = document.querySelector('.pr-rec-more.is-open .pr-rec-more-btn').getBoundingClientRect();
       const m = document.querySelector('.pr-rec-more.is-open .pr-rec-more-menu').getBoundingClientRect();
@@ -97,6 +102,38 @@ const OUT = process.argv[3] || path.join(os.tmpdir(), 'cottage-cross-nav');
         `${Math.abs(dBtn - dMenu) <= 1 ? '✅ 함께 움직인다' : '🔴 따로 논다(메뉴가 화면에 고정)'}`);
     }
     await page.screenshot({ path: path.join(OUT, '5-after-scroll.png') });
+
+    // 🚨 핵심 경계: 카드 **마지막 행**의 메뉴. 아래로 펴면 카드의 overflow:hidden에 잘린다
+    await page.evaluate(() => document.body.click());
+    // 잘림이 실제로 일어나는 자리는 **카드의 맨 마지막 행**뿐이다(그 위는 카드 안에 여유가 있다).
+    // 그래서 마지막 날짜 블록을 펼치고 그 마지막 행을 고른다 — 아무 행이나 잡으면
+    // 「안 잘림」이 나와도 경계를 통과한 게 아니다(1차 시도가 그랬다: 카드 밖으로 -754px).
+    await page.evaluate(() => {
+      const subs = [...document.querySelectorAll('.pr-sub-session')];
+      subs.forEach(s => s.classList.remove('is-open'));
+      subs[subs.length - 1]?.classList.add('is-open');
+    });
+    await page.waitForTimeout(300);
+    const last = (await page.$$('.pr-sub-session.is-open .pr-rec-more-btn')).slice(-1)[0];
+    await last.scrollIntoViewIfNeeded();
+    await last.click();
+    await page.waitForTimeout(400);
+    const clip = await page.evaluate(() => {
+      const mo = document.querySelector('.pr-rec-more.is-open');
+      const menu = mo.querySelector('.pr-rec-more-menu');
+      const card = mo.closest('.pr-session');
+      const m = menu.getBoundingClientRect(), c = card.getBoundingClientRect();
+      return {
+        // ⚠️ getComputedStyle(menu).bottom은 absolute 요소에서 항상 px로 나온다 —
+        //    방향 판정에 쓰면 늘 「위로」가 된다. 우리 코드가 넣는 인라인 값으로 본다
+        dir: menu.style.bottom === '100%' ? '위로' : '아래로',
+        overflowPx: Math.round(m.bottom - c.bottom),
+        visible: m.height > 0 && m.width > 0,
+      };
+    });
+    console.log(`마지막 행 메뉴: ${clip.dir} 펼침 / 카드 밖으로 ${clip.overflowPx}px ` +
+      `${clip.overflowPx <= 0 ? '✅ 안 잘림' : '🔴 잘린다'}`);
+    await page.screenshot({ path: path.join(OUT, '6-last-row-menu.png') });
   } else {
     console.log('\n🔴 ⋯ 메뉴 버튼을 못 찾았다 — 캡션 항목 판정 불가');
   }

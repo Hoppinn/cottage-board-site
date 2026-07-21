@@ -89,6 +89,38 @@ check('이미 링크가 있으면 두 번 안 만든다',
 check('브레드크럼이 없는 페이지 → 조용히 통과(크래시 없음)',
   run('club-history', '', { noAnchor: true }).inserted.length, 0);
 
+// ── ②-b ⋯ 메뉴 펼침 방향 ────────────────────────────────────────────────
+// 브라우저 실측(shot-cross-nav.js)에선 실제 데이터에 여유가 있어 「위로」 갈래가 안 걸린다.
+// 검증 안 된 채로 두지 않으려고 결정 로직만 떼어 세 경우를 직접 돌린다.
+console.log('\n=== ②-b ⋯ 메뉴 펼침 방향 ===');
+const srcTrack = utils.match(/function trackMoreMenu\(btn, menu\)[\s\S]*?\n  \}/);
+if (!srcTrack) { console.log('🔴 trackMoreMenu 원문을 못 잘랐다'); process.exit(1); }
+
+function place({ btnTop, btnBottom, cardTop, cardBottom, menuH }) {
+  const style = {};
+  const menu = {
+    style,
+    removeAttribute() { delete style.top; delete style.bottom; },
+    getBoundingClientRect: () => ({ height: menuH }),
+  };
+  const btn = {
+    closest: sel => (sel === '.pr-session'
+      ? { getBoundingClientRect: () => ({ top: cardTop, bottom: cardBottom }) } : null),
+    getBoundingClientRect: () => ({ top: btnTop, bottom: btnBottom }),
+  };
+  new Function('btn', 'menu', `${srcTrack[0]}\nreturn trackMoreMenu(btn, menu);`)(btn, menu);
+  return style.bottom === '100%' ? '위로' : '아래로';
+}
+
+check('아래에 자리가 넉넉하면 아래로',
+  place({ btnTop: 100, btnBottom: 120, cardTop: 0, cardBottom: 900, menuH: 120 }), NEG ? '위로' : '아래로');
+check('아래에 자리가 없고 위엔 있으면 위로',
+  place({ btnTop: 800, btnBottom: 820, cardTop: 0, cardBottom: 860, menuH: 120 }), '위로');
+check('양쪽 다 자리가 없으면 아래로(카드 밖으로 나가느니 잘리는 게 낫다)',
+  place({ btnTop: 40, btnBottom: 60, cardTop: 0, cardBottom: 100, menuH: 300 }), '아래로');
+check('경계 바로 위 — 6px 여유까지 계산에 넣는다',
+  place({ btnTop: 700, btnBottom: 720, cardTop: 0, cardBottom: 845, menuH: 120 }), '위로');
+
 // ── ③ club-history 참여자 태그 ──────────────────────────────────────────
 console.log('\n=== ③ 동호회 기록 참여자 닉네임 ===');
 check('참여자 태그에 data-nick이 붙는다', /pr-tag-who[^`]*data-nick="\$\{escAttr\(t\)\}"/.test(history), NEG ? false : true);

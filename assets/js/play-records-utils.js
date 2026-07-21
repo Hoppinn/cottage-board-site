@@ -412,45 +412,30 @@
     }
   }
 
-  // ── 기록 행 ⋯ 메뉴의 위치 추적 ────────────────────────────────────────────
-  // 이 메뉴는 `.pr-session { overflow: hidden }`(둥근 모서리 클리핑)에 잘려서
-  // position:fixed로 띄운다. 그런데 fixed는 화면 좌표라 **스크롤해도 안 따라와** 페이지만
-  // 움직이고 메뉴는 제자리에 남았다(2026-07-22 사용자 지적).
-  // → 열려 있는 동안 스크롤·리사이즈마다 버튼 위치로 다시 붙인다.
-  //   overflow:hidden을 지워서 고치지 말 것 — 카드 모서리 클리핑이 깨진다.
-  let _moreBtn = null, _moreMenu = null;
-
-  function _placeMoreMenu() {
-    const rect = _moreBtn.getBoundingClientRect();
-    _moreMenu.style.position = 'fixed';
-    _moreMenu.style.top = (rect.bottom + 4) + 'px';
-    _moreMenu.style.right = (window.innerWidth - rect.right) + 'px';
-    _moreMenu.style.left = 'auto';
-    _moreMenu.style.zIndex = '9400';
-  }
-
+  // ── 기록 행 ⋯ 메뉴의 위치 ──────────────────────────────────────────────────
+  // 메뉴는 **페이지에 붙는다**(CSS 기본 position:absolute). 페이지와 함께 움직이는 게 정상이고
+  // 헤더 위로 떠오르지도 않는다.
+  // ⚠️ 한때 position:fixed로 화면에 띄운 적이 있다(2026-07-22 오전) — 카드의
+  //    `overflow:hidden`에 잘리는 걸 피하려던 것인데, 스크롤을 쫓아다니고 헤더를 덮어
+  //    같은 날 되돌렸다. **fixed로 돌아가지 말 것.**
+  // 잘림은 방향으로 푼다: 카드 아래쪽에 자리가 없으면 메뉴를 **위로** 편다.
   function trackMoreMenu(btn, menu) {
     if (!btn || !menu) return;
-    _moreBtn = btn; _moreMenu = menu;
-    menu.style.display = '';
-    _placeMoreMenu();
-  }
-
-  function untrackMoreMenu() { _moreBtn = null; _moreMenu = null; }
-
-  function _onMoreScroll() {
-    if (!_moreBtn || !_moreMenu || !_moreMenu.isConnected) return untrackMoreMenu();
-    const r = _moreBtn.getBoundingClientRect();
-    // 버튼이 화면 밖으로 나가면 닫는다 — 주인 없는 메뉴가 모서리에 떠 있게 두지 않는다
-    if (r.bottom < 0 || r.top > window.innerHeight) {
-      _moreBtn.closest('.pr-rec-more')?.classList.remove('is-open');
-      _moreMenu.removeAttribute('style');
-      return untrackMoreMenu();
+    menu.removeAttribute('style');   // 이전 인라인 값 제거 → CSS 기본(top:100%)로 시작
+    const card = btn.closest('.pr-session') || btn.closest('.pr-sub-session');
+    if (!card) return;
+    const b = btn.getBoundingClientRect();
+    const c = card.getBoundingClientRect();
+    const h = menu.getBoundingClientRect().height;   // is-open이 이미 붙어 있어 실측 가능
+    // 카드 하단까지 남은 공간이 메뉴보다 작으면 위로 편다.
+    // 위로도 자리가 없으면(짧은 카드) 그냥 아래로 둔다 — 잘려도 카드 밖으로 나가는 것보단 낫다
+    if (h > (c.bottom - b.bottom) - 6 && (b.top - c.top) > h + 6) {
+      menu.style.top = 'auto';
+      menu.style.bottom = '100%';
     }
-    _placeMoreMenu();
   }
-  window.addEventListener('scroll', _onMoreScroll, { passive: true, capture: true });
-  window.addEventListener('resize', _onMoreScroll, { passive: true });
+
+  function untrackMoreMenu() { /* fixed 추적을 없앤 뒤로 할 일이 없다 — 호출부 호환용 */ }
 
   // 참여자 이름 ↔ 회원 닉네임 대조용 정규화.
   // 참여자 이름은 사람이 손으로 친 자유 텍스트라 회원 닉네임과 공백·대소문자가 어긋난다.
