@@ -131,6 +131,13 @@ JS 탐색은 그 다음. "붙었는지"가 아니라 "보이는지"로 증상을
 → 상태 차이(empty vs has-data) 기준으로 코드 실행 경로 분기점을 먼저 찾고,
   그 분기점 이후에 레이아웃이 달라지는 CSS 쪽도 함께 확인.
 
+### 8-a. flex 줄이 안 줄어들 때 — 내가 지정한 게 flex 항목이 맞나 (2026-07-21 교훈)
+
+입력칸 옆에 버튼을 늘렸더니 마지막 버튼이 **화면 밖으로 63px 잘렸다.** `input`에 `flex:1; min-width:0`을 줬는데도 안 줄어들었는데, 원인은 **`attachAc`가 입력칸을 클래스 없는 `<div style="position:relative">`로 감싸는 것**([play-records-utils.js](../assets/js/play-records-utils.js) `attachAc`) — **flex 항목은 input이 아니라 그 래퍼**였다. 자동완성을 붙인 입력칸을 flex 줄에 넣을 땐 `부모 > div`에 `min-width:0`을 건다.
+
+- 🚨 **판정은 "같은 줄인가"가 아니라 "넘치는가"로 한다** — `flex-wrap`이 없으면 줄바꿈 대신 **옆으로 넘쳐 잘린다.** 자식들의 `top`이 같은지만 보면 잘림을 통과시킨다(실제로 통과시켰고 스크린샷에서 잡았다). `scrollWidth - clientWidth`와 **컨테이너 오른쪽 경계를 넘는 자식**을 함께 잴 것.
+- 📌 자동완성 드롭다운의 폭·좌표는 **입력칸이 아니라 입력줄 전체**를 기준으로 잡는다. 입력칸이 좁아지면 드롭다운도 같이 좁아져 항목 글자가 두 줄로 접힌다.
+
 ## 9. CSS/sticky/바텀시트 원칙 (2026-07-03 교훈)
 
 sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflow 버그는 수치 문제처럼 보여도 실제 원인은 레이아웃 구조인 경우가 많다.
