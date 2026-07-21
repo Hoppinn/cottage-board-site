@@ -552,8 +552,12 @@
     }
     .sm-cond-chip:disabled { opacity: .35; cursor: default; }
     .sm-game-input-row { display: flex; gap: 8px; margin-top: 4px; }
-    /* min-width:0 필수 — flex 항목 기본값(auto)이면 입력칸이 안 줄어들어
-       「지난 모임」 버튼이 두 번째 줄로 밀린다. */
+    /* 🚨 줄어들어야 하는 건 input이 아니라 **그 래퍼**다 — attachAc가 입력칸을
+       클래스 없는 <div style="position:relative">로 감싼다(play-records-utils.js).
+       래퍼에 min-width:0을 안 주면 입력칸이 안 줄고 오른쪽 버튼이 화면 밖으로 잘린다
+       (실측 2026-07-21: 63px 넘침. 줄바꿈이 아니라 잘림이라 "한 줄인가" 검사로는 안 잡힌다). */
+    .sm-game-input-row > div { flex: 1 1 auto; min-width: 0; }
+    .sm-game-input-row > div > .sm-game-input { width: 100%; }
     .sm-game-input {
       flex: 1; min-width: 0; padding: 9px 12px;
       border: 1.5px solid #d0c8bc; border-radius: 8px;
@@ -1003,6 +1007,7 @@
       let _pickerOpen  = null; // 미사용(Step3 제거), 호환용 유지
       let _gameOpen    = {want:false, learn:false}; // 게임 섹션 열림 상태
       let _pastOpen    = {want:false, learn:false}; // 「지난 모임」 피커 열림 상태
+      let _srcOpen     = {want:false, learn:false}; // 「좋아요/궁금」 피커 열림 상태(상시 노출 아님)
       let _modalWeekOffset = 0;
       let _historicalVotes = null; // 8주 이력 조회 결과 (프리셋·초기값용)
 
@@ -1026,7 +1031,7 @@
       function close() {
         overlay.style.display = 'none';
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
-        _pastOpen = {want:false, learn:false};
+        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
         // ⚠️ is-quick-entry를 여기서 제거하지 말 것 — 이 클래스가 .inner-page(플래너 페이지
@@ -1468,17 +1473,22 @@
 
           if (!open) return `<div class="sm-game-block"><button class="sm-game-toggle" data-gtoggle="${type}" type="button">${btnLabel}</button></div>`;
           const pastLabel = type === 'want' ? '하고 싶었던' : '배우고 싶었던';
+          const srcLabel   = type === 'want' ? '좋아요한 게임' : '궁금한 게임';
+          const srcBtnText = type === 'want' ? '좋아요' : '궁금';
           return `<div class="sm-game-block is-open">
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
             <div class="sm-game-section">
               <div class="sm-game-input-row">
                 <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 직접 입력" autocomplete="off">
                 <button class="sm-game-add-btn" data-gadd="${type}" type="button">추가</button>
+                <button class="sm-game-past-btn${_srcOpen[type] ? ' is-open' : ''}" data-gsrc="${type}" type="button"
+                  title="${srcLabel} 목록에서 고르기" aria-label="${srcLabel} 목록에서 고르기"
+                  aria-pressed="${_srcOpen[type] ? 'true' : 'false'}">${srcBtnText}</button>
                 <button class="sm-game-past-btn${_pastOpen[type] ? ' is-open' : ''}" data-gpast="${type}" type="button"
                   title="지난 모임에서 ${pastLabel} 게임 불러오기" aria-label="지난 모임에서 ${pastLabel} 게임 불러오기"
                   aria-pressed="${_pastOpen[type] ? 'true' : 'false'}">지난 모임</button>
               </div>
-              ${_pickerCache[source] !== undefined ? pickerHtml(type, source) : ''}
+              ${_srcOpen[type] ? pickerHtml(type, source) : ''}
               ${_pastOpen[type] ? pickerHtml(type, 'past') : ''}
               ${gameListHtml(type) ? `<div class="sm-game-picked"><div class="sm-game-picked-label">고른 게임 ${count}개</div>${gameListHtml(type)}</div>` : ''}
             </div>
@@ -1490,13 +1500,22 @@
           ${sectionHtml('learn')}
         </div>`;
 
-        // 토글
+        // 섹션 펼침/접기 — 피커 조회는 여기서 하지 않는다(버튼을 눌렀을 때만)
         wrap.querySelectorAll('[data-gtoggle]').forEach(btn => {
-          btn.addEventListener('click', async () => {
-            const type   = btn.dataset.gtoggle;
-            const source = type === 'want' ? 'like' : 'curious';
+          btn.addEventListener('click', () => {
+            const type = btn.dataset.gtoggle;
             _gameOpen[type] = !_gameOpen[type];
-            if (_gameOpen[type] && _pickerCache[source] === undefined) {
+            renderStep2Games();
+          });
+        });
+
+        // 「좋아요/궁금」 피커 토글 — 상시 노출 대신 버튼으로 연다(사용자 요청 2026-07-21)
+        wrap.querySelectorAll('[data-gsrc]').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const type   = btn.dataset.gsrc;
+            const source = type === 'want' ? 'like' : 'curious';
+            _srcOpen[type] = !_srcOpen[type];
+            if (_srcOpen[type] && _pickerCache[source] === undefined) {
               _pickerCache[source] = 'loading';
               renderStep2Games();
               await fetchPickerData(source);
@@ -1685,6 +1704,9 @@
         const user = window.getKakaoUser?.();
         if (!user) return;
         const source = type === 'want' ? 'like' : 'curious';
+        // 피커가 버튼 토글이 된 뒤로는 한 번도 안 열었으면 캐시가 비어 있다 →
+        // 여기서 조회하지 않으면 "좋아요한 게임에도 추가할까요?"가 통째로 안 뜬다
+        if (_pickerCache[source] === undefined) await fetchPickerData(source);
         const cached = _pickerCache[source];
         if (!Array.isArray(cached)) return;
         // 정규화한 목록과 비교한다 — 원본은 슬러그 표기라 bggId·이름 어느 쪽과도 안 맞아
@@ -1805,7 +1827,7 @@
         _historicalVotes = null;
         _days = [...dates].sort();
         _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
-        _pastOpen = {want:false, learn:false};
+        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
         if (startStep === 2) renderStep2();
