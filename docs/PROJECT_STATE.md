@@ -28,6 +28,7 @@
 | # | 항목 | 위치 | 등급 | 왜 이 순서 |
 |---|------|------|------|---|
 | **1** | 단독 버그 2건: 서브시트 모서리 음영(**확대 스크린샷 대기**) · 금일이용데이터 간헐 미표시(**증상 발생 시점 대기**) | §2 | 개별 판단 | 둘 다 **사용자 입력이 있어야** 진행된다. 그 전엔 내가 더 볼 게 없다 |
+| **1-b** | 🔴 **iframe 3배 계상 수정의 사후 확인** — `script-nav.js`에 프레임 가드를 넣었다(2026-07-21). 배포 후 하루치가 쌓이면 홈 방문 1회가 `page_sessions` **1행**인지 실측할 것 | [admin-analytics.md](admin-analytics.md) §4 ①·⑦ | 검증 | 수정 근거는 실측이지만 **수정 결과는 실서버에서만 확인된다**(localhost·관리자는 추적 제외라 로컬 재현 불가) |
 | **1-a** | 🎨 **lv5 캐릭터 png 3종 제작 — 사용자 작업** (`squirrel_lv5`·`hedgehog_lv5`·`sparrow_lv5`) | [achievement-system.md](achievement-system.md) 「미완성 항목」 | 사용자 | 코드·문서는 닫혔고 **그림만 남았다**. `node scripts/verify-character-assets.js`가 ✅면 끝 |
 | 2 | 🔔 **관심 기반 묶음 알림** | §3 | Red+Plan | 무거운 신규 기능 |
 | 3 | 🟡 **#28 `page_sessions.referrer`도 라벨/pathname 저장** — 외부 유입 체류가 전부 「직접 방문」으로 접힌다. #14와 같은 파일이지만 **다른 화면·다른 판정**이라 분리 | [admin-analytics.md](admin-analytics.md) §4 | 옐로 | 관리자만 보는 화면 |

@@ -77,6 +77,9 @@
 │   │                               #   --negctl 먼저. --live를 줘야 실DB 조회(guest_count 필드 확인)
 │   ├── verify-title-links.js       # TITLE_DEFS ↔ ACH_DEFS.rewards.title 정합성 (DB 불필요)
 │   │                               #   고아/허수/중복/임계값 불일치 4종. --negctl 먼저 돌릴 것
+│   ├── audit-member-today.js       # 회원 카드 「오늘」 칩이 사라지는 조건 실측 (읽기전용)
+│   │                               #   --negctl 먼저. 오늘 회원 체류가 0건이면 아무것도
+│   │                               #   판정 못 한다고 스스로 보고한다(--days N으로 범위 확대)
 │   ├── verify-character-assets.js  # ACH_DEFS.rewards.character ↔ 실제 png 대조 (DB 불필요)
 │   │                               #   onerror 폴백이 404를 가려 눈으론 안 잡히는 자리.
 │   │                               #   --negctl 먼저. 전건 누락이면 경로 규칙 어긋남으로 보고 중단

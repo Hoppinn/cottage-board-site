@@ -836,8 +836,20 @@ function bindGameCardEvents(){
   function _isAdminVisitor() {
     try { return !!localStorage.getItem('cottage_is_admin') || String(_getUid() || '') === ADMIN_UID; } catch(_) { return false; }
   }
+  // index.html은 플래너·기록 모달을 iframe으로 **미리 로드**한다. 각 iframe이 이 파일을 다시
+  // 로드하므로, 프레임을 거르지 않으면 홈 방문 1회가 page_sessions 3행이 된다(#24와 같은 병).
+  // 실측(2026-07-21): 홈 방문마다 index·game-reviews·club-schedule 3행이 같은 초에 함께 들어와
+  // 있었다 — 사용자가 그 두 페이지를 연 적이 없는데도.
+  // ⚠️ supabase-client.js에도 **같은 이름의 함수**가 있고 그쪽은 `_isEmbeddedFrame()`을 포함한다.
+  //    #24를 고칠 때 그 파일만 고쳐져 이 사본이 남았다 — 이름이 같아 고쳐진 것처럼 보이던 자리다.
+  //    가르는 기준은 그 파일에 적힌 그대로다: "iframe 안에서 일어나도 진짜인가?"
+  //    체류·방문은 사람·탭 단위라 부모 1회가 맞고, 사용자 행동(trackEvent)은 프레임을 안 본다.
+  function _isEmbeddedFrame() {
+    try { return window.top !== window.self; }
+    catch (_) { return true; } // 크로스오리진 차단 = 남의 프레임 안 = 추적 안 함
+  }
   function _shouldSkipSessionTracking() {
-    return _isLocalhost() || _isAdminVisitor();
+    return _isLocalhost() || _isAdminVisitor() || _isEmbeddedFrame();
   }
   if (_shouldSkipSessionTracking()) return;
 
