@@ -1059,7 +1059,8 @@ function _attachPhotoLightbox(container, allPhotos, entries, deleteOpts) {
   container.querySelectorAll('.pr-rec-photo').forEach(img => {
     img.addEventListener('click', () => {
       const idx = Number(img.dataset.idx || 0);
-      try { window.openLightbox(allPhotos, idx, lbOpts); } catch(_) {}
+      // 삼키면 사진 클릭이 조용히 무반응이 된다(전역 부재·렌더 예외 둘 다 여기로 온다) → 로그 필수
+      try { window.openLightbox(allPhotos, idx, lbOpts); } catch (e) { console.error('[openLightbox 호출]', e); }
     });
   });
 }
