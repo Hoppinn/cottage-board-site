@@ -4327,7 +4327,7 @@ body.embed-mode {
 .mb-mini-bar-wrap{position:relative;height:8px;background:#ede8e0;border-radius:4px;overflow:hidden;}
 .mb-mini-bar-fill{position:absolute;top:0;height:100%;background:var(--green,#3a7d44);border-radius:4px;}
 .mb-week-time{font-size:11px;color:var(--muted,#9e8e7e);white-space:nowrap;text-align:right;}
-/* 동반 지인 표기 — 등록 1건이 방문 N명임을 드러낸다 */
+/* 동반 인원 표기 — 등록 1건이 방문 N명임을 드러낸다 */
 .mb-week-guest{font-weight:700;color:var(--green);}
 .mb-detail-btn{font-size:11px;color:var(--green,#3a7d44);background:none;border:1px solid #c8c0b4;border-radius:12px;padding:2px 7px;cursor:pointer;font-family:inherit;white-space:nowrap;}
 .mb-detail-btn:hover{background:#f0f7f0;border-color:var(--green,#3a7d44);}

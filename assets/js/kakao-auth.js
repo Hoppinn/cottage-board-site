@@ -1899,7 +1899,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="notif-reward-title">${escH(FEE_NOTICE.title)} ${_feeSeen ? '' : '<span class="profile-notif-new-badge" style="color:#fff">NEW</span>'}</div>
         <div class="notif-reward-desc"><strong>${escH(fmtShort(FEE_NOTICE.from))}부터 지인팟 전용 요금 할인이 폐지됩니다.</strong><br>
         동호회 회원 없이 지인들끼리만 이용하시는 경우, 일반 이용 요금(1인 7,000원)이 적용됩니다.<br><br>
-        <strong>모임에 함께 참여하시는 동반 지인 할인은 그대로 유지됩니다</strong>(1인 5,000원).<br><br>
+        <strong>모임에 함께 참여하시는 동반 인원 할인은 그대로 유지됩니다</strong>(1인 5,000원).<br><br>
         요금 할인은 모임을 활성화하고 모임에 기여해주시는 분들께 드리는 혜택이라는 취지에서 마련된 것이라, 이렇게 정리하게 되었습니다. 그동안 이용해주신 분들께 감사드리며 앞으로도 많은 이용 부탁드립니다.</div>
         <div class="notif-card-date">${escH(fmtShort(FEE_NOTICE.from))} 시행</div>
       </div>
