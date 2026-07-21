@@ -505,7 +505,7 @@ function _buildSameDesignerHtml(gameKey, detail) {
         ${_sameDesignGames.map(({ key: _k, g: _g }) => {
           const _title = _g.title?.display || _g.title?.owned || _k;
           const _img = getGameDetailImage(_g);
-          const _safeTitle = String(_title).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+          const _safeTitle = window.escH(_title);
           const _safeKey = String(_k).replace(/'/g,"\\'");
           const _safeFromKey = String(gameKey).replace(/'/g,"\\'");
           return `<button class="sheet-same-design-card" type="button" onclick="openGameSheet('${_safeKey}', false, '${_safeFromKey}')">
@@ -631,7 +631,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
     </div>
 
     <!-- 뒤로가기 (게임→게임 이동 시) -->
-    ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? String(_prevHistTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : '이전 게임'}</button>` : ''}
+    ${_prevHistKey ? `<button class="sheet-back-btn sheet-back-btn--hist" type="button" onclick="goBackGameSheet()">← ${_prevHistTitle ? window.escH(_prevHistTitle) : '이전 게임'}</button>` : ''}
 
     <!-- 설명 + 버튼 -->
     <div class="sheet-header">
@@ -774,7 +774,7 @@ function _preselectLinkOption(linkCheck, linkSelect, recordId) {
 function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
   const _u = window.getKakaoUser?.();
   if (!_u?.id || !window.CottageDB || !sessions?.length) return;
-  const esc = window.escH || (s => String(s == null ? '' : s));
+  const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
   const sessLabel = s => {
     const d = s.played_at ? s.played_at.slice(0, 10).replace(/-/g, '.') : '날짜 미상';
     return `${d}${s.group_name ? ' · ' + esc(s.group_name) : ''}${s.player_count ? ' · ' + s.player_count + '명' : ''}${s.nickname ? ' · ' + esc(s.nickname) + '님' : ''}`;
@@ -875,7 +875,7 @@ function openGameRecordSheet(gameKey) {
   const game = window.gameData?.[gameKey];
   const _owned = !!game;
   const rawTitle = game?.title?.display || game?.title?.owned || game?.title?.bgg || gameKey;
-  const safeTitle = String(rawTitle).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safeTitle = window.escH(rawTitle);
   const _recDetail = game ? GameView?.getGameDetailData(game) : null;
   const _recImg = _recDetail?.image || DEFAULT_GAME_IMAGE;
   const _recRating = _recDetail?.rating;
@@ -964,7 +964,7 @@ async function initSheetCommentsPreview(gameKey) {
     return;
   }
 
-  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
   const cards = allItems.map(item => {
     const txt = esc(item.text);
     const nick = esc(item.nick);
@@ -1005,7 +1005,7 @@ async function initSheetPlayPreview(gameKey) {
     return;
   }
 
-  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
   const _me = window.getKakaoUser?.();
 
   const cards = records.map(r => {
@@ -1040,7 +1040,7 @@ function _attachPhotoLightbox(container, allPhotos, entries, deleteOpts) {
   if (!window.openLightbox) return;
   function _buildCaption(e) {
     if (!e) return '';
-    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
     const lines = [];
     if (e.nickname) lines.push(esc(e.nickname));
     const line1 = [e.group_name, e.played_at ? e.played_at.slice(2,10).replace(/-/g,'.') : ''].filter(Boolean).join(' · ');
@@ -1098,7 +1098,7 @@ async function initSheetPhotoPreview(gameKey) {
     return;
   }
 
-  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
   const uniqueNicks1 = new Set(entries.map(e => e.nickname).filter(Boolean));
   const headerName1 = uniqueNicks1.size > 1 ? uniqueNicks1.size + '명의 사진' : (entries[0].nickname ? esc(entries[0].nickname) : '');
   const headerDate1 = uniqueNicks1.size > 1 ? '' : (entries[0].played_at ? entries[0].played_at.slice(2, 10).replace(/-/g, '.') : '');
@@ -1145,7 +1145,7 @@ async function initSheetPhotos(gameKey) {
     return;
   }
 
-  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
   const uniqueNicks = new Set(entries.map(e => e.nickname).filter(Boolean));
   const multiUploader = uniqueNicks.size > 1;
   const headerName = multiUploader ? uniqueNicks.size + '명의 사진' : (entries[0].nickname ? esc(entries[0].nickname) : '');
@@ -1536,12 +1536,12 @@ async function initSheetComments(gameKey) {
   listEl.classList.add('has-comments');
 
   const allHtml = allItems.map(item => {
-    const txt = item.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    const nick = item.nick.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const txt = window.escH(item.text);
+    const nick = window.escH(item.nick);
     const dateStr = formatDate(item.date);
     if (item.type === 'comment') {
       const c = item.raw;
-      const attr = c.comment_text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const attr = window.escH(c.comment_text);
       const mine = currentUserId
         ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
         : myIds.includes(c.id);
@@ -1555,7 +1555,7 @@ async function initSheetComments(gameKey) {
       </div>` : ''}
     </div>`;
     }
-    const textAttr = item.text.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const textAttr = window.escH(item.text);
     const mine = currentUserId && item.user_id && String(item.user_id) === String(currentUserId);
     return `<div class="sheet-comment-item">
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
@@ -2188,7 +2188,7 @@ function togglePlayRecords(listId) {
 // 캡처하던 gameKey·currentUserIdForPlay·myRecordIds는 인자로 전달, escH는 자기 로컬로 이동.
 // (body의 template literal이 곧 HTML 출력이라, 출력 바이트 보존 위해 본문 들여쓰기는 원본 그대로 둔다.)
 function buildRecordItemHtml(r, gameKey, currentUserIdForPlay, myRecordIds) {
-  function escH(s) { return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  const escH = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
     const isMine = (currentUserIdForPlay && r.user_id && String(r.user_id) === String(currentUserIdForPlay))
       || (r.id && myRecordIds.has(String(r.id)));
     const showNick = !r.player_names && r.nickname;

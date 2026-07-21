@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-21 (#28 — scripts/ 목록에 referrer 검증 2개 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-22 (GS5 — scripts/ 목록에 verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -101,6 +101,8 @@
 │   │                               #   kakao-auth-ready 이후, 세션당 1회). 그 기회 수를 세어
 │   │                               #   판정에 필요한 표본(현재 11건)과 대조한다. 2026-07-22에
 │   │                               #   verify-iframe-rows의 「✅ 0건」이 무증상 구간이었음을 이걸로 잡았다
+│   ├── verify-esch-unify.js        # GS5 escH 사본 통합 — 정본 동작(eval) + 남은 사본 스캔 (DB 불필요)
+│   │                               #   --negctl 먼저. ALLOW에 「통합 대상 아님」 4종의 이유가 있다
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지

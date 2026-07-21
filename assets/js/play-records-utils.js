@@ -187,8 +187,8 @@
 
   // 한글 초성 검색
   const _INITIALS = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
-  function _escH(s) {
-    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  function _escH(s) {   // GS5: 정본 위임 (supabase-client.js의 window.escH) — 호출시점 참조
+    return window.escH(s);
   }
 
   function toInitials(str) {

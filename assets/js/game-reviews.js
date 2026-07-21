@@ -82,7 +82,7 @@
 
   function _showCuriousPlayedToast(gameName, gameId, userId, onDone) {
     const t = document.getElementById('prToast');
-    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
     let resolved = false;
     const resolve = () => { if (!resolved) { resolved = true; t.classList.remove('show', 'has-action'); onDone?.(); } };
 
@@ -633,7 +633,7 @@
 
   // 라이트박스 캡션 — rec만 받는 순수 함수
   function _recCaption(rec) {
-    const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
     const lines = [];
     if (rec.nick) lines.push(esc(rec.nick));
     const dateStr = rec.date ? rec.date.slice(2, 10).replace(/-/g, '.') : '';

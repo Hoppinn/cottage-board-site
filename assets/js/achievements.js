@@ -682,7 +682,7 @@
     const grade = getCodexGrade(pct);
     const barWidth = Math.min(pct, 100);
 
-    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const esc = s => window.escH(s);   // GS5: 정본 위임 (supabase-client.js)
 
     const _recentGames = playedGames.slice(0, 3);
     const _codexPreviewHtml = `<div class="profile-codex-preview">` +

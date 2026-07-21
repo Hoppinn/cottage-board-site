@@ -14,7 +14,7 @@ R1~R12 진행 표·종결 항목 상세·모델 배정 실적은 **git log와 �
 
 | # | 이슈 | 착수 시 알아야 할 것 |
 |---|---|---|
-| **GS5** | `escH` 사본 **~11개**(문서 "5곳"은 오집계, 2026-07-18 실측) | **정본 = `window.escH`**(supabase-client.js:2 — 유일하게 `& < > "` 4자 + `s ?? ''`). 사본: game-sheet 7 · game-reviews 2 · day-detail 1 · achievements 1 · play-records-utils 1(`_escH`). **전부 `& < >` 3자 + `s \|\| ''`**. ⚠️ **통합 = 동작 변경**: ⓐ`"`→`&quot;` 추가(attribute 컨텍스트엔 보안 강화지만 `"` 미이스케이프를 전제로 JSON을 attr에 넣는 소비처가 없는지 확인) ⓑ`esc(0)`이 `''`→`'0'`(`\|\|`→`??`). 저위험이나 **무변경은 아니다.** |
+| ~~GS5~~ | ~~`escH` 사본 ~11개~~ | ✅ **2026-07-22 종결 — 호출시점 위임으로 통합.** 사본 12곳(명명 헬퍼 7 + 인라인 체인 5)이 전부 `window.escH` 위임이 됐고, 검증은 `node scripts/verify-esch-unify.js --negctl`. **남긴 예외 4종**(속성 전용 이스케이퍼·JSON attr·부분 이스케이프 2)은 그 스크립트의 `ALLOW`에 이유와 함께 있다 — **재통합하려 들지 말 것.** |
 | DD4 | `openDateMeetingModal`의 `opts` 미사용 | 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
 | ~~IP3~~ | ~~날짜 헬퍼 파편화~~ | ✅ **통합 대상 아님으로 판정 종결.** `toDateStr`(index-page)와 `fmtDate`(day-detail)는 입력·출력·용도가 전부 다른 별개 함수다. **재조사 금지.** |
 | DD2 | (긍정) **day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. **신규 파일 작성 시 이 구조를 따를 것.** |
@@ -25,8 +25,7 @@ R1~R12 진행 표·종결 항목 상세·모델 배정 실적은 **git log와 �
 
 - **KA4 — `getGameName` 3사본은 의도적으로 유지한다.** 겉보기 중복이지만 **입력이 다르다**: `window.gameData`는 **한글 슬러그** 키, `window.COTTAGE_GAMES`는 **bggId** 매칭 — kakao-auth/achievements 버전은 둘 다 처리하고 game-reviews 버전은 슬러그 조회가 없다. 게다가 game-reviews.html 로드 순서가 achievements→kakao-auth→game-reviews라 "하나를 전역 공유"도 안전하지 않다. **강제 병합 = 미보유 게임 이름표시 회귀.** day-detail `resolveGameName`(4번째 변형)도 같은 이유로 제외.
 - **과도분리 금지 선례 2건 — 함수가 길다고 다 쪼개지 않는다.** ①`onSubmitPlayModal`(82줄): `if(editId)/else` 두 갈래로 이미 명확하고, 쪼개려면 폼 값 9개를 DTO로 묶어야 해 **접두사가 붙어 diff 검증이 무력화**된다. ②`buildBarsInCard`(103줄, 사용자 승인): 이미 **이름 붙은 nested 함수 4개**의 컨테이너라 모듈로 올리면 `voteGames`·`myVote` 스레딩으로 **호출부만 길어진다**. → 재방문 조건 = **그 파일을 실제로 만지다 경계가 불편해질 때**.
-- **GS5는 IIFE화(R11c)로 해결되지 않았다.** IIFE는 로컬 `escH`를 *안전하게* 만들 뿐 사본 통합은 별건. **"IIFE 했으니 끝"이라 착각 금지.**
-- 📌 **GS5의 로드순서 선행조건은 회피 가능하다 (2026-07-18 재검토).** club-schedule.html이 day-detail.js를 supabase-client.js보다 **먼저** 로드해 IIFE 실행 시점엔 `window.escH`가 undefined다 → 스냅샷(`const esc = window.escH`)은 즉시 파손. **하지만 호출시점 위임**(렌더 함수 본문에서 `window.escH(...)` 직접 참조, 또는 game-sheet.js:777의 `const esc = s => (window.escH||fallback)(s)`)을 쓰면 init 때 미정이어도 무방하다 — 클릭/렌더 시점엔 이미 로드돼 있다. day-detail의 다른 window 전역(`openOtherMeetingSheet` 등)이 이미 이 방식이다. **→ 위임을 택하면 "로드순서 통일 선행"이 사라진다.**
+- 📌 **`escH`는 호출시점 위임이다 — 스냅샷으로 되돌리지 말 것 (GS5, 2026-07-22 적용).** club-schedule.html이 day-detail.js를 supabase-client.js보다 **먼저** 로드하므로 IIFE 실행 시점의 `const esc = window.escH` 스냅샷은 즉시 undefined가 된다. 그래서 전부 `s => window.escH(s)` **본문 안 참조**로 통일했다(렌더·클릭 시점엔 이미 로드돼 있다). 폴백을 다시 붙이는 것도 **되돌림**이다 — 폴백이 곧 사본이고, 없어야 결함이 조용히 아닌 소리를 낸다.
 
 ---
 

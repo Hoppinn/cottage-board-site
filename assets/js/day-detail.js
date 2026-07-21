@@ -385,8 +385,11 @@
   `;
   document.head.appendChild(s);
 
+  // GS5: 정본 위임 (supabase-client.js의 window.escH).
+  // ⚠️ 호출시점 참조 — club-schedule.html이 day-detail.js를 supabase-client.js보다 먼저 로드하므로
+  //    IIFE 실행 시점 스냅샷(const esc = window.escH)은 undefined가 된다.
   function esc(s) {
-    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    return window.escH(s);
   }
 
   function fmtDate(ds) {
