@@ -1585,9 +1585,12 @@
               acList.style.zIndex = '500';
               const _repos = () => {
                 const r = el.getBoundingClientRect();
-                acList.style.left = r.left + 'px';
+                // 폭은 **입력칸이 아니라 입력줄 전체**에 맞춘다 — 버튼이 늘어 입력칸이
+                // 114px까지 줄면(실측 356px 화면) 게임 이름이 두 줄로 접혀 못 읽는다.
+                const rowR = el.closest('.sm-game-input-row')?.getBoundingClientRect() || r;
+                acList.style.left = rowR.left + 'px';
                 acList.style.top = (r.bottom + 2) + 'px';
-                acList.style.width = r.width + 'px';
+                acList.style.width = rowR.width + 'px';
               };
               el.addEventListener('input', _repos, { passive: true });
               el.addEventListener('focus', _repos, { passive: true });
