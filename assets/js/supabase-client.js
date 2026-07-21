@@ -1455,14 +1455,37 @@ window._cottageSess = (function () {
       const readKeys = new Set(Array.isArray(_rawReadKeys) ? _rawReadKeys : []);
       const notifs = [];
       if (nickname) {
+        // 태그 알림은 **모임(그룹명+날짜) 단위로 묶는다** — `new_intro`·`voucher_*`와 같은 방식.
+        // 한 모임에서 게임 여러 개를 한 번에 기록하므로 1:1로 넣으면 그 모임 하나가 목록을
+        // 통째로 차지한다(2026-07-21 실측: 김기성 14줄 → 모임 3개, 설애 15줄 → 6개).
+        // ⚠️ 게임별로 묶으면 안 접힌다 — 같은 실측에서 16건 중 게임이 11종이었다(거의 전부 다른 게임).
+        const tagGroups = new Map();
         for (const r of taggedRes.data || []) {
           const names = (r.player_names || '').split(',').map(n => n.trim());
-          if (names.some(n => n.toLowerCase() === nickname.toLowerCase())) {
-            const date = r.played_at || r.created_at.slice(0, 10);
-            const key = `tagged:${r.id}`;
-            const isNew = (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(key);
-            notifs.push({ type: 'tagged', key, gameId: r.game_id, groupName: r.group_name, date, isNew });
-          }
+          if (!names.some(n => n.toLowerCase() === nickname.toLowerCase())) continue;
+          const date = r.played_at || r.created_at.slice(0, 10);
+          const gk = `${r.group_name || ''}|${date}`;
+          if (!tagGroups.has(gk)) tagGroups.set(gk, { groupName: r.group_name, date, rows: [] });
+          tagGroups.get(gk).rows.push(r);
+        }
+        for (const g of tagGroups.values()) {
+          // taggedRes가 created_at 내림차순이라 rows[0]이 그 모임의 최신 기록이다.
+          const keys = g.rows.map(r => `tagged:${r.id}`);
+          const isNew = g.rows.some(r =>
+            (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(`tagged:${r.id}`));
+          notifs.push({
+            type: 'tagged',
+            key: keys[0],
+            keys,
+            count: g.rows.length,
+            gameId: g.rows[0].game_id,
+            // 한 모임에서 같은 게임을 여러 판 하면 행이 여러 개다 → 칩은 게임 단위로 중복 제거.
+            // count는 그대로 **기록 수**다(둘이 다를 수 있음 — voucher 묶음의 names/count와 같은 관계).
+            gameIds: [...new Set(g.rows.map(r => r.game_id))],
+            groupName: g.groupName,
+            date: g.date,
+            isNew,
+          });
         }
       }
       const curiousKeys = (curiousRes.data || []).map(r => r.game_id);

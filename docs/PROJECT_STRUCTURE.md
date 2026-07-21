@@ -88,6 +88,9 @@
 │   ├── verify-referrer.js          # #28 유입 소스가 「직접 방문」에서 갈라지는가 (읽기전용)
 │   │                               #   --negctl 먼저. categorizeRef와 집계 루프를 화면 코드에서
 │   │                               #   원문 그대로 잘라 eval + 14개 페이지 로드 순서 전수
+│   ├── audit-notifications.js      # 알림 — 사람별 줄 수 + 유형별 「줄 vs 원본행」 (읽기전용)
+│   │                               #   getMyNotifications를 실제 회원 전원에게 돌린다.
+│   │                               #   묶음을 새로 넣기 전후로 돌려 줄 수가 실제로 줄었는지 볼 것
 │   ├── verify-iframe-rows.js       # #24 「홈 방문 1회 = page_sessions 1행」 사후 확인 (읽기전용)
 │   │                               #   --negctl 먼저. 같은 session_key+같은 초에 index와
 │   │                               #   프레임 페이지가 함께 들어온 묶음을 센다. 수정 이후

@@ -1608,7 +1608,9 @@ function _bindNotifSubsheet(subBody, ctx) {
             const isHidden = moreList.classList.toggle('is-hidden');
             this.textContent = isHidden ? `외 ${this.dataset.more}건 더 보기 ▾` : '접기 ▴';
           });
-          subBody.querySelectorAll('.profile-notif-list li.is-clickable').forEach(li => {
+          // ⚠️ 「외 N건 더 보기」로 접힌 9번째부터는 형제 <ul>(.profile-notif-more-list)에 있다 —
+          //    .profile-notif-list만 훑으면 그 항목들은 클릭이 조용히 안 먹는다(2026-07-21 발견).
+          subBody.querySelectorAll('.profile-notif-list li.is-clickable, .profile-notif-more-list li.is-clickable').forEach(li => {
             li.addEventListener('click', e => {
               if (e.target.closest('button, a')) return;
               if (li.dataset.introUid) {
@@ -1618,8 +1620,10 @@ function _bindNotifSubsheet(subBody, ctx) {
                 return;
               }
               let key = null;
+              const idChip = e.target.closest('[data-notif-game-id]');
               const gameLink = e.target.closest('[data-game-name]');
-              if (gameLink) key = _getGameKeyByName(gameLink.dataset.gameName);
+              if (idChip) key = _getGameKeyById(idChip.dataset.notifGameId);
+              else if (gameLink) key = _getGameKeyByName(gameLink.dataset.gameName);
               else if (li.dataset.gameKey) key = li.dataset.gameKey;
               else if (li.dataset.gameId) key = _getGameKeyById(li.dataset.gameId);
               if (key && window.openGameSheet) window.openGameSheet(key);
@@ -1973,8 +1977,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const readBtn = n.isNew ? `<button class="notif-read-one-btn" type="button" data-notif-keys="${escH(_keys)}">읽음</button>` : '';
     const _card = (icon, title, desc) =>
       `<div class="notif-card-icon">${icon}</div><div class="notif-card-body"><div class="notif-card-title">${title} ${badge}</div><div class="notif-card-desc">${desc}</div>${dt}</div>`;
-    if (n.type === 'tagged')
-      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요 · <a class="notif-inline-link" href="/pages/game/game-reviews.html" onclick="event.stopPropagation()">게임평 쓰러 가기 →</a>')}${readBtn}</li>`;
+    // 태그는 모임(그룹+날짜) 단위 묶음으로 온다. 1건이면 기존 카드 그대로.
+    const _reviewCta = '<a class="notif-inline-link" href="/pages/game/game-reviews.html" onclick="event.stopPropagation()">게임평 쓰러 가기 →</a>';
+    if (n.type === 'tagged') {
+      if (!(n.count > 1))
+        return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 기록 태그', '새 기록에 내 닉네임이 태그됐어요 · ' + _reviewCta)}${readBtn}</li>`;
+      // 게임 칩은 `data-notif-game-id`로 준다 — `data-game-id`를 쓰면 closest()가 <li>까지
+      // 올라가 어느 칩을 눌러도 대표 게임이 열린다(new_game의 data-game-name과 같은 역할).
+      const chips = (n.gameIds || []).map(id =>
+        `<span class="notif-game-link" data-notif-game-id="${escH(String(id))}">${escH(getGameName(id))}</span>`).join(', ');
+      const who = n.groupName ? escH(n.groupName) + ' ' : '';
+      // 칩과 조사 사이에 공백을 두지 말 것 — "펄서2849 에"로 렌더된다(2026-07-21 스크린샷에서 잡음).
+      return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', `${who}기록 ${n.count}개 태그`, `${chips}에 내 닉네임이 태그됐어요 · ${_reviewCta}`)}${readBtn}</li>`;
+    }
     if (n.type === 'curious_comment')
       return `<li class="${cls}" data-game-key="${escH(String(n.gameKey))}">${_card('🤔', escH(getGameName(n.gameKey)) + ' 새 코멘트', '궁금해요 게임에 코멘트가 달렸어요')}${readBtn}</li>`;
     if (n.type === 'curious_play')
