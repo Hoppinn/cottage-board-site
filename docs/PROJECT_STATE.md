@@ -51,12 +51,11 @@
 
 - **#19 `record_complete` 실브라우저 미확인** — 관리자는 `_shouldSkipAnalytics`로 트래킹 **영구 제외**라 관리자 계정으론 원리상 검증 불가. **비관리자 계정**으로 게임시트에서 기록 저장 시 `page_events`에 `record_complete`가 쌓이는지 확인할 것.
 
-- **R4**(사진첨부 후 새로고침해야 표시) — **기록보드 = R10b 범위 밖**이라 그대로 남아 있을 것. 기록보드 만지는 세션에서 **재현부터** 볼 것.
-
 ### 📌 `openProfilePanel` 구조 메모 (그 파일을 다시 만질 때 — R10a/b/c의 산물)
 - `openProfilePanel` 구성: 패널 셸+DB조회 **11개**(R10b가 중복 2개 제거) → 로컬 헬퍼 → **HTML 빌드**(`_buildTasteInnerHtml`·`_buildMeetingInnerHtml`은 이제 **함수**라 진입 시마다 호출됨 / `_recordInnerHtml`·`_growthInnerHtml` 등 나머지는 여전히 오픈 시 1회 문자열) → `_openSubSheet` → **서브시트 라우터**(`.profile-card` 클릭 → `type`별 분기 7개) → 프로필 영역 바인딩 + `autoSubsheet` 자동클릭. ※줄번호는 자주 밀리므로 grep으로 확인할 것.
 - **taste/meeting 라우터 분기는 이제 async**(재조회 대기). 진입 시 `_SUBSHEET_LOADING_HTML`로 먼저 열리고 데이터 도착 후 `subBody.innerHTML` 교체 → **렌더 직후를 전제로 하는 코드는 afterRender 안에 둘 것**. 실제로 모임보드 '비선호 수정 →'의 스크롤이 이 때문에 옮겨졌고(`setTasteScrollTo`), 대기 중 이탈은 `subBody.isConnected` 가드로 처리.
 - **record 스냅샷(`_recordInnerHtml`의 `onLeave`)은 남아 있다** — 기록보드는 크로스보드 중복이 아니라 범위에서 제외(사용자 승인 2026-07-17). 없애려면 진입 시 `getMyStats` 재조회 설계가 필요(무거운 조회 + `_allPhotoData` 재구성).
+  - 📌 **범위는 「패널을 열어둔 동안」뿐이다** — `_recordInnerHtml`은 `openProfilePanel` 지역 `let`이고 `getMyStats`는 **매 오픈마다 await**되므로, 보드를 닫았다 열면 새 값이다. **페이지 새로고침이 필요하다는 서술은 틀렸다**(2026-07-22 실측으로 R4 이월 줄 삭제 — 게시판 갈래는 `refreshPlayRecordsBoard` 훅 5곳으로 2026-07-16에 이미 해결). 남는 유일한 stale 경로는 **기록보드 → 게임시트에서 사진 추가 → 보드 복귀**이고, 이건 위 설계 판정 그대로다.
 - ⚠️ **낡은 지시 정정 (2026-07-17)**: 여기 있던 "`openProfilePanel` 인라인 `.catch()` 24곳을 `{data, error}` 수신 형태로 바꿔야 한다"는 **레이어를 잘못 짚은 지시였음**. 이 자리들은 raw supabase가 아니라 **`CottageDB` 래퍼**를 부르고, 래퍼는 내부에서 이미 try/catch + error 수신을 한다(2단계) → 여기서 `{data, error}`를 받을 수 있는 대상이 애초에 없다. 쿼리 오류 감지는 **DB 계층의 일**이고 그건 §3 「감지기 갭」으로 이관. 이 인라인 `.catch()`들이 삼키는 건 **JS 예외뿐**이며, 실효가 있는 건 `CottageAchievements.build*`(자체 try/catch 없음) 정도 → 저가치·저위험이라 미실행.
 
 - **`backTo` 네비게이션(R10c)**: `openProfilePanel(sub, {backTo})` — 시그니처·형태는 [js-api.md](js-api.md). ⚠️ 뒤로가기 핸들러는 **자기 패널을 먼저 제거한 뒤** 복귀를 호출해야 한다. 순서가 바뀌면 토글 가드(`if (existing) … if (!readOnly) return`)에 걸려 **내 보드가 안 열리고 화면이 텅 빈다**. 깊이 1(스택 자료구조 없음 — 체인은 각 패널 클로저가 자기 backTo를 들고 있어 자연 발생).
