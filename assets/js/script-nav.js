@@ -599,7 +599,7 @@ function renderHeaderSearchResults(keyword){
         String(detail.title || "");
 
       const originalTitle =
-        String(detail.originalTitle || "");
+        String(detail.bggTitle || "");
 
       const lowerTitle =
         title.toLowerCase();

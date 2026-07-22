@@ -118,7 +118,7 @@ function matchOwnedSearch(game){
 
   return (
     matchKoreanSmart(detail.title, query) ||
-    matchKoreanSmart(detail.originalTitle, query)
+    matchKoreanSmart(detail.bggTitle, query)
   );
 }
 
