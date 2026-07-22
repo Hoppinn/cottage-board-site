@@ -231,7 +231,7 @@
 - ③ ~~**이용시간 기기 중복** — 다기기 동시 사용 시 합산~~ → 🚨 **2026-07-19 정체 규명: 다기기가 아니라 `index.html`의 다중 프레임이다(#24).** 한 사람이 한 탭만 열어도 3배가 된다(E2E 실측). 다기기 합산도 이론상 성립하지만 **주된 원인이 아니었다** — 이 기재를 근거로 "다기기 쓰는 사람만의 문제"라 넘기지 말 것.
 - ④ ✅ **`_startAnonHeartbeat` 자정 넘김 버그 — 2026-07-22 수정.** 1분 인터벌이 `today_seconds`만 갱신하고 `today_date`를 세션 시작값에 고정해, 안 닫힌 비로그인 세션의 자정 후 체류가 **전날로 적립**되던 것. 인터벌 안에서 KST 날짜를 매번 재계산해 바뀌면 카운터를 0으로 리셋하고 `today_date`도 넘기도록 고침([supabase-client.js:1162](../assets/js/supabase-client.js#L1162), 롤오버 로직 4/4 테스트). `page_sessions` 파생값 우선이라 그 행이 없을 때만 발현하던 저영향 엣지.
 - ⑤ **가상 페이지 키↔라벨 정합성** — 새 `_trackPvOnce` 키 추가 시 `page-labels.js` 동시 갱신 필요(안 하면 slug 노출, 조용히 발생).
-- ⑥ **로그인 시 잔여 누적시간이 `page_sessions`에 안 들어감** — INSERT 경로가 `visibilitychange` 하나뿐. `beforeunload`/`pagehide`는 localStorage만 갱신. 설계는 `git show 4838691^:docs/PLAN_page_sessions_on_login.md`로 복원 가능.
+- ⑥ **로그인 잔여 누적시간이 `page_sessions`에 안 들어감 — 🟡 2026-07-22 「지금 고치지 않음」 판정(방치 아님, 우선순위 하향).** INSERT 경로가 `visibilitychange:hidden` 하나뿐이고 `beforeunload`/`pagehide`는 localStorage만 갱신. **다만 현대 브라우저는 탭 닫기·이동 시 unload 전에 `visibilitychange:hidden`을 먼저 발화**하므로 흔한 종료 경로는 이미 잡힌다([supabase-client.js:1082](../assets/js/supabase-client.js#L1082), 주석 "페이지 살아있는 동안 완료"). 남는 갭은 "보이는 상태에서 곧장 종료 + hidden 미발화"라는 드문 경우뿐이고, 잔여는 다음 방문 때 `profiles` 누적으로 회수된다(page_sessions 귀속만 지연). 고치려면 `sendBeacon`으로 unload를 건드려야 하는데 그 위험·복잡성이 근-제로 이득을 넘는다. **재개 조건**: 데이터로 실제 갭이 관측될 때. 설계는 `git show 4838691^:docs/PLAN_page_sessions_on_login.md`.
 
 **성격**: 대부분 "추적 로직 설계"(heartbeat 타이밍·기기 단위 세션) 문제라 Red + Plan. 코드 리팩토링보다 **집계 모델 재설계**에 가깝다.
 
