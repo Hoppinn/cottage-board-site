@@ -1324,6 +1324,36 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getPageViewCounts]', err); return []; }
   }
 
+  // ── P4: 한 회원의 세션·이벤트 (관리자 보드 오너 섹션 전용, 읽기 전용) ──────
+  // getPageAnalytics/getEventCounts는 전원치(수만 행)를 받아온다 — 보드는 한 사람만
+  // 필요하므로 user_id로 걸러 가볍게 받는다. ⚠️ page는 **정규화 전 원문**이라 소비처가
+  // MemberAnalytics.normalizePageKey로 접어야 관리자 페이지와 같은 버킷이 된다(#14).
+  async function getUserPageSessions(userId, daysBack = 90) {
+    try {
+      const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
+      const { data, error } = await db.from('page_sessions')
+        .select('page, referrer, user_id, session_key, duration_sec, entered_at')
+        .eq('user_id', String(userId))
+        .gte('entered_at', since)
+        .order('entered_at', { ascending: false })
+        .limit(20000);
+      if (error) console.error('[getUserPageSessions]', error);
+      return data || [];
+    } catch (err) { console.error('[getUserPageSessions]', err); return []; }
+  }
+
+  async function getUserEvents(userId, daysBack = 90) {
+    try {
+      const since = new Date(Date.now() - daysBack * 24 * 3600 * 1000).toISOString();
+      const { data, error } = await db.from('page_events')
+        .select('event_type, created_at, user_id, session_key')
+        .eq('user_id', String(userId))
+        .gte('created_at', since);
+      if (error) console.error('[getUserEvents]', error);
+      return data || [];
+    } catch (err) { console.error('[getUserEvents]', err); return []; }
+  }
+
   async function checkNicknameAvailable(nickname, currentUserId) {
     try {
       const { data, error } = await db.from('profiles')
@@ -1653,6 +1683,8 @@ window._cottageSess = (function () {
     getPageAnalytics,
     getEventCounts,
     getPageViewCounts,
+    getUserPageSessions,
+    getUserEvents,
     getMyStats,
     getMyNotifications,
     getGameReviews,
