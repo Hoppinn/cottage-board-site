@@ -92,7 +92,14 @@ const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!o
     await page.locator('.amb-period-btn[data-period="today"]').click();
     await page.waitForTimeout(600);
     ck(await page.locator('.amb-period-btn.is-active[data-period="today"]').count() === 1, `기간 버튼 전환 동작(오늘)`);
-    await page.screenshot({ path: path.join(OUT, '3-amb-today.png') });
+    // 날짜 네비 — ◀ 화살표로 특정 날짜 모드 진입(달력 라벨 활성)
+    await page.locator('.amb-date-arrow[data-amb-arrow="-1"]').click();
+    await page.waitForTimeout(600);
+    ck(await page.locator('.amb-date-label.is-active').count() === 1, `날짜 화살표 → 특정 날짜 모드`);
+    await page.screenshot({ path: path.join(OUT, '3-amb-datenav.png') });
+    // 활동 라벨 한글화 — raw 타입명(_click/_start/_complete)이 안 보인다
+    const evText = await page.locator('.amb-ev-types').first().innerText().catch(() => '');
+    ck(evText.length === 0 || !/_click|_start|_complete/.test(evText), `활동 라벨이 한글(raw 타입명 없음): "${evText.split('\n')[0].slice(0, 30)}"`);
   }
 
   // ── ② 비오너로 열기 → 카드 없음 ──────────────────────────────────

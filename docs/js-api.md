@@ -194,7 +194,8 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `PAGE_KEY_ALIASES` / `normalizePageKey(page)` | 페이지 키 정규화(#14). ⚠️ 별칭표에서 **한글 키 삭제 금지**(과거 행이 독립 버킷이 됨) |
 | `buildPageMap(rows, idType, id, period, todayKst)` | 한 사람 페이지 맵 `Map<page,{visits,totalSec}>`. rows는 **정규화된 page** 가정. `dedupUserPageDay`를 일부러 안 거친다(과소집계 방지, 5-1 제약) |
 | `EVENT_FAMILIES` / `EVENT_ALL_TYPES` / `eventPersonId` | 이벤트 계열 **단일 출처**. 🚨 **새 `trackEvent` 타입은 여기 등록**(안 하면 조회 안 됨, #13) |
-| `countMemberEvents(events, userId)` | 그 회원 이벤트를 계열별 카운트 `[{key,emoji,label,total,types:[{type,n}]}]`(총계 내림차순). 명단(`ddPanelHtml`)은 여기 없다 — 그건 「여러 사람」 드릴다운 |
+| `EVENT_TYPE_LABELS` / `eventTypeLabel(type)` | 타입 → 한글 라벨(보드 「무엇을 했나」가 raw 타입명 대신 이걸 보여줌). 없는 타입은 raw 폴백 — **새 타입 추가 시 여기도 한 줄**(안 하면 raw 노출) |
+| `countMemberEvents(events, userId)` | 그 회원 이벤트를 계열별 카운트 `[{key,emoji,label,total,types:[{type,label,n}]}]`(총계 내림차순, `types`의 `label`은 한글). 명단(`ddPanelHtml`)은 여기 없다 — 그건 「여러 사람」 드릴다운 |
 
 - **관리자 페이지는 별칭·래퍼로 소비**한다(`const _inVpPeriod = (r,p) => MemberAnalytics.inVpPeriod(r,p,todayKst)` 등). 검증 스크립트도 이 모듈을 eval한다(`scripts/_member-analytics.js` 공용 로더, `--negctl`용 소스 변형 지원).
 - **로드**: `requests-admin.html`은 인라인 별칭을 위해 명시 `<script>`(kakao-auth.js 앞). 그 외 페이지는 `kakao-auth.js`가 **자기경로 동적 로드**(day-detail.js와 같은 방식)라 HTML 편집 불필요.

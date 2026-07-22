@@ -255,7 +255,7 @@
 
 > ✅ **P4 종결 (2026-07-22)** — 오너 전용 「회원 분석」 섹션이 회원 보드에 붙었다.
 > - **집계 단일 소스화가 본체였다**: 기간 헬퍼·페이지 키 정규화·페이지 맵·이벤트 계열을 `requests-admin.html` 인라인에서 `assets/js/member-analytics.js`로 추출하고, 관리자 페이지는 별칭·래퍼로 재배선(거동 무변경). 두 소비처가 한 소스를 공유해 #15(계산이 두 벌이면 갈림)을 구조적으로 막았다. 🚨 **새 `trackEvent` 타입 등록처가 그 파일의 `EVENT_FAMILIES`로 이동**(5-1 제약 #1 갱신).
-> - **표시 범위**(사용자 결정): 페이지 분포(기간 선택 4프리셋) + 이용 요약(방문·누적·오늘·방문일수) + 활동(계열별 무엇을 했나). 누적·방문은 `profiles` 정본(R3), 방문일수·페이지 표는 `page_sessions`(하한) — 화면에 기준 표기(원칙 ①).
+> - **표시 범위**(사용자 결정): 페이지 분포(4프리셋 + **특정 날짜 달력 점프·◀▶** — 관리자 회원 카드와 같은 날짜 네비, `inVpPeriod`가 `YYYY-MM-DD` 처리) + 이용 요약(방문·누적·오늘·방문일수) + 활동(계열별 무엇을 했나, **타입은 한글 라벨** `EVENT_TYPE_LABELS`). 누적·방문은 `profiles` 정본(R3), 방문일수·페이지 표는 `page_sessions`(하한) — 화면에 기준 표기(원칙 ①).
 > - **오너 가드**: `kakao-auth.js`의 `_adminView`(뷰어=오너 + readOnly + 대상≠오너)로만 카드 렌더. 🚨 **표시 게이팅이지 접근 제어가 아니다** — RLS off라 anon 키로 이미 읽히는 데이터고, P4가 새 노출을 만들지 않는다. 서버측 신원검증은 §3 「meeting 쓰기 보호」와 동급 Red 인프라라 범위 밖.
 > - **데이터**: `getUserPageSessions`/`getUserEvents`/`getProfileUsage`로 그 회원만 필터 조회(전원치를 보드마다 받는 낭비 회피, 스키마 무변경). `member-analytics.js`는 `kakao-auth.js`가 자기경로 동적 로드(day-detail.js와 같은 방식)라 HTML 편집 불필요.
 > - **검증**: `verify-member-board-admin.js`(가드 진리표 6종 + `countMemberEvents` 독립대조 + 실회원 계열 일치 + 필터조회 충실도, `--negctl` 먼저) + `shot-member-board-admin.js`(브라우저 — 오너엔 렌더·비오너엔 미표시·콘솔에러 0·쓰기 0, 스크린샷 육안). 관리자 페이지 무회귀는 `shot-admin-tabs`·`verify-member-period`·`verify-drilldown`(검증 스크립트도 단일 소스를 eval하도록 갱신).

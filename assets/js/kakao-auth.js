@@ -1705,6 +1705,14 @@ function _ambInjectStyle() {
     .amb-period-btn { border:1px solid var(--border,#e5d9c9); background:#fff; color:var(--text-info,#8a7a6a);
       border-radius:999px; padding:4px 12px; font-size:12px; cursor:pointer; }
     .amb-period-btn.is-active { background:var(--brown-700,#6b4f3a); color:#fff; border-color:var(--brown-700,#6b4f3a); }
+    .amb-datenav { display:flex; align-items:center; gap:5px; margin-top:6px; position:relative; }
+    .amb-date-arrow { font-size:12px; padding:3px 10px; border-radius:7px; border:1px solid var(--border,#e5d9c9);
+      background:#fff; color:var(--text-info,#8a7a6a); cursor:pointer; }
+    .amb-date-arrow:disabled { opacity:.35; cursor:default; }
+    .amb-date-label { font-size:12px; font-weight:600; padding:3px 11px; border-radius:7px;
+      border:1px dashed var(--border,#e5d9c9); background:#fff; color:var(--text-info,#8a7a6a); cursor:pointer; }
+    .amb-date-label.is-active { border-style:solid; background:var(--brown-700,#6b4f3a); color:#fff; border-color:var(--brown-700,#6b4f3a); }
+    .amb-date-input { position:absolute; opacity:0; pointer-events:none; width:0; height:0; }
     .amb-page-table { display:flex; flex-direction:column; }
     .amb-row { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center;
       padding:7px 4px; border-bottom:1px solid var(--border,#efe6d8); font-size:13px; }
@@ -1723,22 +1731,42 @@ function _ambInjectStyle() {
       border-radius:6px; padding:1px 5px; margin-left:4px; vertical-align:middle; }`;
   document.head.appendChild(s);
 }
-function _ambPageTableInner(rows, userId, period, MA) {
+// 페이지 분포 한 통 — 프리셋 바 + 날짜 네비(◀ 라벨/달력 ▶) + 표. 관리자 페이지
+// _visitorPagesInner와 같은 구조라 갈래별로 복사하면 #15가 재발한다. 기간이 바뀌면 이 통을
+// 통째로 다시 그린다(프리셋 활성·화살표 disabled·표가 한 계산에서 나온다).
+function _ambPageInner(rows, userId, period, MA) {
   const esc = window.escH, labels = window.COTTAGE_PAGE_LABELS || {};
-  const pm = MA.buildPageMap(rows, 'member', userId, period);
+  const todayKst = MA.kstToday();
+  const pm = MA.buildPageMap(rows, 'member', userId, period, todayKst);
   const sorted = [...pm.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
-  if (!sorted.length) return `<div class="amb-empty">${esc(MA.vpLabel(period))} 기록이 없어요.</div>`;
-  const MAX = 10, head = sorted.slice(0, MAX), rest = sorted.slice(MAX);
-  let html = head.map(([page, d]) => `<div class="amb-row">
-    <span class="amb-page">${esc(labels[page] || page)}</span>
-    <span class="amb-visits">${d.visits}회</span>
-    <span class="amb-dur">${_ambDur(d.totalSec)}</span>
-  </div>`).join('');
-  if (rest.length) {
-    const rv = rest.reduce((s, [, d]) => s + d.visits, 0), rs = rest.reduce((s, [, d]) => s + d.totalSec, 0);
-    html += `<div class="amb-row amb-row--rest"><span class="amb-page">외 ${rest.length}개</span><span class="amb-visits">${rv}회</span><span class="amb-dur">${_ambDur(rs)}</span></div>`;
+  const isDateMode = MA.VP_DATE_RE.test(period);
+  const pLabel = MA.vpLabel(period);
+  const presetBar = `<div class="amb-periods">${MA.VP_PERIODS.map(p =>
+    `<button class="amb-period-btn${p.key === period ? ' is-active' : ''}" data-period="${p.key}" type="button">${esc(p.label)}</button>`).join('')}</div>`;
+  // 특정 날짜 — 주력은 달력 점프(오래 머문 날로 바로 간다), 화살표는 보조. ▶는 미래로 못 간다
+  // (input의 max도 오늘이라 달력에서도 미래가 안 골라진다 — 이중 가드).
+  const dateNav = `<div class="amb-datenav">
+    <button class="amb-date-arrow" type="button" data-amb-arrow="-1" aria-label="하루 전">◀</button>
+    <button class="amb-date-label${isDateMode ? ' is-active' : ''}" type="button" data-amb-datelabel>${isDateMode ? esc(pLabel) : '특정 날 📅'}</button>
+    <input class="amb-date-input" type="date" data-amb-dateinput max="${todayKst}" value="${isDateMode ? period : ''}" aria-label="날짜 고르기">
+    <button class="amb-date-arrow" type="button" data-amb-arrow="1" aria-label="하루 후"${isDateMode && period >= todayKst ? ' disabled' : ''}>▶</button>
+  </div>`;
+  let table;
+  if (!sorted.length) {
+    table = `<div class="amb-empty">${esc(pLabel)} 기록이 없어요.</div>`;
+  } else {
+    const MAX = 10, head = sorted.slice(0, MAX), rest = sorted.slice(MAX);
+    table = head.map(([page, d]) => `<div class="amb-row">
+      <span class="amb-page">${esc(labels[page] || page)}</span>
+      <span class="amb-visits">${d.visits}회</span>
+      <span class="amb-dur">${_ambDur(d.totalSec)}</span>
+    </div>`).join('');
+    if (rest.length) {
+      const rv = rest.reduce((s, [, d]) => s + d.visits, 0), rs = rest.reduce((s, [, d]) => s + d.totalSec, 0);
+      table += `<div class="amb-row amb-row--rest"><span class="amb-page">외 ${rest.length}개</span><span class="amb-visits">${rv}회</span><span class="amb-dur">${_ambDur(rs)}</span></div>`;
+    }
   }
-  return html;
+  return presetBar + dateNav + `<div class="amb-page-table">${table}</div>`;
 }
 async function _renderAdminMemberBoard(subBody, userId) {
   const esc = window.escH, MA = window.MemberAnalytics;
@@ -1759,12 +1787,10 @@ async function _renderAdminMemberBoard(subBody, userId) {
   const todaySec = (usage?.today_date === todayKst) ? (usage?.today_seconds ?? 0) : 0;
   const activeDays = new Set(rows.filter(r => r.entered_at).map(r => MA.toKstDate(r.entered_at))).size;
 
-  const periodBar = `<div class="amb-periods">${MA.VP_PERIODS.map(p =>
-    `<button class="amb-period-btn${p.key === 'all' ? ' is-active' : ''}" data-period="${p.key}" type="button">${esc(p.label)}</button>`).join('')}</div>`;
   const eventsHtml = fams.length
     ? fams.map(f => `<div class="amb-ev-fam">
         <div class="amb-ev-fam-head"><span>${f.emoji} ${esc(f.label)}</span><span class="amb-ev-total">${f.total}회</span></div>
-        <div class="amb-ev-types">${f.types.map(t => `<span class="amb-ev-type">${esc(t.type)} ${t.n}</span>`).join('')}</div>
+        <div class="amb-ev-types">${f.types.map(t => `<span class="amb-ev-type">${esc(t.label)} ${t.n}</span>`).join('')}</div>
       </div>`).join('')
     : '<div class="amb-empty">기록된 활동이 없어요.</div>';
 
@@ -1778,18 +1804,41 @@ async function _renderAdminMemberBoard(subBody, userId) {
     </div>
     <div class="amb-note">방문·누적은 profiles 기준(heartbeat 포함) · 방문일수*와 아래 표는 page_sessions 기준(체류 하한)</div>
     <div class="amb-sec-label">📄 페이지 분포 <span class="amb-sec-sub">기간 선택</span></div>
-    ${periodBar}
-    <div class="amb-page-table">${_ambPageTableInner(rows, userId, 'all', MA)}</div>
+    <div class="amb-vp" data-vp-period="all">${_ambPageInner(rows, userId, 'all', MA)}</div>
     <div class="amb-sec-label">🎯 활동 <span class="amb-sec-sub">무엇을 했나</span></div>
     ${eventsHtml}
   </div>`;
 
-  // 기간 버튼: 위임 하나로 처리하고 표 안쪽만 교체한다(관리자 페이지 applyVpPeriod와 같은 방식).
-  subBody.querySelector('.amb-periods')?.addEventListener('click', e => {
-    const btn = e.target.closest('.amb-period-btn'); if (!btn) return;
-    const period = btn.dataset.period;
-    subBody.querySelectorAll('.amb-period-btn').forEach(b => b.classList.toggle('is-active', b.dataset.period === period));
-    const c = subBody.querySelector('.amb-page-table'); if (c) c.innerHTML = _ambPageTableInner(rows, userId, period, MA);
+  // 프리셋·화살표·달력을 **한 자리에서** 재계산·재렌더한다(관리자 페이지 applyVpPeriod와 같은
+  // 방식). 갈래별로 복사하면 조용히 갈린다(#15). data-vp-period가 화살표 ±1의 기준점이다.
+  const applyVp = (period) => {
+    const vp = subBody.querySelector('.amb-vp'); if (!vp) return;
+    vp.dataset.vpPeriod = period;
+    vp.innerHTML = _ambPageInner(rows, userId, period, MA);
+  };
+  subBody.addEventListener('click', e => {
+    const vp = subBody.querySelector('.amb-vp'); if (!vp) return;
+    const cur = vp.dataset.vpPeriod || 'all';
+    const pb = e.target.closest('.amb-period-btn');
+    const dlabel = e.target.closest('.amb-date-label');
+    const arrow = e.target.closest('.amb-date-arrow');
+    if (pb) { applyVp(pb.dataset.period || 'all'); return; }
+    if (dlabel) { vp.querySelector('.amb-date-input')?.showPicker?.(); return; }
+    if (arrow) {
+      // 프리셋 상태에서 화살표를 누르면 오늘을 기준으로 날짜 모드에 진입한다.
+      const todayKst = MA.kstToday();
+      const base = MA.VP_DATE_RE.test(cur) ? cur : todayKst;
+      const d = new Date(base + 'T00:00:00Z');
+      d.setUTCDate(d.getUTCDate() + Number(arrow.dataset.ambArrow));
+      const nd = d.toISOString().slice(0, 10);
+      if (nd > todayKst) return;   // 미래로는 못 간다(버튼 disabled + 이 컷의 이중 가드)
+      applyVp(nd);
+    }
+  });
+  // 달력에서 고르면 change로 온다(click 위임으론 안 잡힌다).
+  subBody.addEventListener('change', e => {
+    const input = e.target.closest('.amb-date-input');
+    if (input && input.value) applyVp(input.value);
   });
 }
 

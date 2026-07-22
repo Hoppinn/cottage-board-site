@@ -84,6 +84,11 @@ console.log('\n=== ② 이벤트 계열 집계 (합성) ===');
   ck(fams.length > 0 && fams[0].total >= (fams[fams.length - 1].total), '계열이 총계 내림차순으로 정렬');
   ck(!fams.some(f => f.types.some(t => t.type === 'unknown_type_xyz')), '계열 밖 이벤트는 세지 않는다');
   ck(!MA.countMemberEvents(events, 'U-bob').some(f => f.total > 1), '남의 user_id는 섞이지 않는다');
+  // 이벤트 타입 한글 라벨(보드 「무엇을 했나」가 raw 타입명 대신 이걸 보여준다)
+  ck(MA.eventTypeLabel('home_record_write_click') === '홈 · 기록 작성 버튼', 'eventTypeLabel 한글 매핑');
+  ck(MA.eventTypeLabel('nonexistent_xyz') === 'nonexistent_xyz', '없는 타입은 raw 폴백');
+  ck(rec.types.every(t => t.label && t.label !== t.type), 'countMemberEvents types에 한글 label이 실린다');
+  ck(MA.EVENT_ALL_TYPES.every(t => MA.EVENT_TYPE_LABELS[t]), '모든 이벤트 타입에 라벨이 있다(누락 시 raw 노출)');
 }
 
 if (NODB) { console.log(fail ? `\n🔴 ${fail}건 실패` : '\n✅ 가드·이벤트 층 통과 (--nodb라 DB 대조는 건너뜀)'); process.exit(fail ? 1 : 0); }

@@ -135,6 +135,33 @@
   // 이벤트를 "사람" 단위로 세기 위한 식별자. 로그인 회원은 user_id, 비로그인은 session_key.
   const eventPersonId = e => e.user_id || e.session_key || null;
 
+  // 이벤트 타입 → 한글 라벨. 보드 오너 섹션의 「무엇을 했나」가 raw 타입명 대신 이걸 보여준다.
+  // (관리자 이벤트 탭은 계열 단위로만 보여줘 지금껏 필요 없었다.) 새 타입을 EVENT_FAMILIES에
+  // 추가하면 여기도 한 줄 추가한다 — 빠지면 eventTypeLabel이 raw 타입명으로 폴백한다.
+  const EVENT_TYPE_LABELS = {
+    home_meeting_main_click: '홈 · 모임 메뉴',
+    home_meeting_planner_click: '홈 · 플래너 열기',
+    home_meeting_date_preview_click: '홈 · 날짜 미리보기',
+    home_meeting_preview_card_click: '홈 · 모임 카드',
+    home_meeting_week_nav: '홈 · 주간 넘김',
+    meeting_planner_bar_click: '플래너 · 일정 막대',
+    meeting_profile_click: '모임 · 참여자 프로필',
+    home_record_main_click: '홈 · 기록 메뉴',
+    home_record_more_click: '홈 · 기록 더보기',
+    home_record_write_click: '홈 · 기록 작성 버튼',
+    record_start: '기록 · 작성 시작',
+    record_complete: '기록 · 저장 완료',
+    home_recommend_main_click: '홈 · 추천 메뉴',
+    home_recommend_game_detail_click: '홈 · 추천 게임 상세',
+    home_recommend_all_click: '홈 · 추천 전체보기',
+    recommend_start: '추천 · 시작',
+    recommend_complete: '추천 · 완료',
+    recommend_game_click: '추천 · 게임 클릭',
+    hero_recommend_click: '홈 · 히어로 추천',
+    signup_complete: '가입 완료',
+  };
+  const eventTypeLabel = t => EVENT_TYPE_LABELS[t] || t;
+
   // ── 한 회원의 이벤트 집계 (보드 오너 섹션 전용) ────────────────────
   // 그 회원(user_id === userId) 행만 계열별·타입별로 센다. 명단(ddPanelHtml)은 여기 없다 —
   // 그건 「여러 사람」 드릴다운이고 단일 보드엔 불필요하다. 반환: 계열 배열(총계 내림차순),
@@ -147,7 +174,7 @@
       perType.set(e.event_type, (perType.get(e.event_type) || 0) + 1);
     }
     const fams = EVENT_FAMILIES.map(f => {
-      const types = f.types.map(t => ({ type: t, n: perType.get(t) || 0 })).filter(x => x.n > 0);
+      const types = f.types.map(t => ({ type: t, label: eventTypeLabel(t), n: perType.get(t) || 0 })).filter(x => x.n > 0);
       const total = types.reduce((s, x) => s + x.n, 0);
       return { key: f.key, emoji: f.emoji, label: f.label, total, types };
     }).filter(f => f.total > 0);
@@ -161,5 +188,6 @@
     PAGE_KEY_ALIASES, normalizePageKey,
     buildPageMap,
     EVENT_FAMILIES, EVENT_ALL_TYPES, eventPersonId, countMemberEvents,
+    EVENT_TYPE_LABELS, eventTypeLabel,
   };
 })();
