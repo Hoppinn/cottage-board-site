@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -141,6 +141,14 @@
 │   │                               #   🚨 회원 탭 키는 **member**(단수)다. 'members'로 쓰면 클릭이
 │   │                               #      무효인데 querySelector는 숨은 카드도 찾아줘서
 │   │                               #      「숨겨진 패널을 재고 전부 통과」가 된다(실제로 그랬다)
+│   ├── _member-analytics.js        # (P4) 검증 스크립트용 공용 로더 — member-analytics.js를
+│   │                               #   eval해 window.MemberAnalytics를 꺼내온다(사본 금지, #15).
+│   │                               #   mutate(src)로 음성 대조군용 소스 변형 지원
+│   ├── verify-member-board-admin.js # (P4) 오너 「회원 분석」 섹션 — 가드 진리표 + countMemberEvents
+│   │                               #   독립대조 + 필터조회 충실도 (읽기전용). --negctl 먼저
+│   ├── shot-member-board-admin.js  # (P4) 위의 브라우저 렌더 — 오너엔 카드·amb, 비오너엔 미표시
+│   │                               #   (읽기전용, 뮤테이션만 차단). 🚨 HEAD(count)는 통과시킬 것 —
+│   │                               #   막으면 getMyStats가 깨져 패널이 안 뜬다(카드 0으로 오판)
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
@@ -204,6 +212,12 @@ assets/js/
 │                               # 방문자 추적(__visitor__), 체류시간, 비로그인 heartbeat 포함
 ├── kakao-auth.js               # 카카오 로그인/로그아웃, 프로필 패널, 알림, 교환권
 │                               # (window.getKakaoUser / openProfilePanel 노출)
+│                               # day-detail.js + member-analytics.js를 자기경로 동적 로드(모든 페이지)
+│                               # 오너가 남의 보드 열면 「회원 분석」 오너 섹션(_renderAdminMemberBoard, P4)
+├── member-analytics.js         # 관리자 「한 사람」 집계 단일 소스(window.MemberAnalytics, P4)
+│                               # 기간 헬퍼·페이지 정규화·페이지 맵·이벤트 계열(EVENT_FAMILIES)
+│                               # requests-admin.html과 kakao-auth 오너 섹션이 공유(#15 방지)
+│                               # 순수 함수만 — 상세는 docs/js-api.md MemberAnalytics
 ├── script-nav.js               # 한글 검색 유틸, rootPath, 모바일 메뉴/스크롤스파이, 헤더 검색, 카드 이벤트, 세션 트래커
 ├── game-sheet.js               # GameView, 게임 데이터 포매터, 게임시트, 플레이 모달, 코멘트·사진 모달
 ├── game-display-adapter.js     # gameData → 화면 출력용 view adapter (window.COTTAGE_GAMES 생성) · 난이도 시스템(getDifficultyData/normalizeLevelValue, GS7 이관)

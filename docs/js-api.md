@@ -70,7 +70,10 @@ return data || [];
 | `upsertProfile(userId, nickname, realName, visitCount)` | 프로필 upsert + 방문 카운트 + 시간 반영. **2왕복이다** — ①upsert(닉네임 보호·`real_name`·`photo_url`·`first_source`, SELECT가 필요해 RPC로 못 옮김) ②`increment_profile_counters` RPC로 숫자 카운터 증가(012, #22). ⚠️ **`visitCount` 인자는 이제 플래그로만 쓴다** — `undefined`면 방문을 올리지 않고, 값을 줘도 그 숫자는 무시된다(실제 증가는 DB에서 원자적으로 `+1`). 예전엔 SELECT 실패 시 이 값을 fallback으로 썼으나 RPC가 DB 기준으로 올리므로 불필요해졌다. 업적 `visit` 축에 넘기는 카운트도 RPC 반환값에서 온다 |
 | `getAllProfiles()` | 전체 프로필. 어드민 회원목록 + **nickname→user_id 해석**(game-reviews 허브 `_profileNickMap`·index-page 홈 최근 플레이 참여자 이름 클릭). ⚠️ 반환 행의 kakao 키는 **`user_id`**(profiles엔 `id` 컬럼 없음) |
 | `checkNicknameAvailable(nickname, userId)` | 닉네임 중복 확인 |
-| `getPageAnalytics()` | 페이지 분석 (어드민용) |
+| `getPageAnalytics()` | 페이지 분석 (어드민용) — 전체 `page_sessions` 90일(≤2만행) |
+| `getUserPageSessions(userId, daysBack=90)` | **한 회원**의 `page_sessions` 필터 조회 (P4 보드 오너 섹션). `page`는 **정규화 전 원문** → 소비처가 `MemberAnalytics.normalizePageKey`로 접는다(#14). 전원치를 보드마다 받는 낭비 회피 |
+| `getUserEvents(userId, daysBack=90)` | **한 회원**의 `page_events` 필터 조회 (P4). `[{event_type, created_at, user_id, session_key}]` |
+| `getProfileUsage(userId)` | **한 회원**의 이용 누적 `{visit_count, total_minutes, today_seconds, today_date, last_seen_at, first_seen_at}` (P4 「이용 요약」 — 누적·방문은 R3대로 profiles가 정본). `getAllProfiles(*, 전원)`을 안 부른다 |
 | `getEventCounts(eventTypes[], daysBack=7)` | page_events에서 지정 이벤트 타입들의 최근 N일 로우 반환 **`[{event_type, created_at, user_id, session_key}]`**. admin/localhost 제외 없음(쿼리 전용). 소비처: `index-page.js`(히어로 통계 — `event_type`/`created_at`만 읽음)·`requests-admin.html`(요약 계열 카드 + 이벤트 퍼널) |
 | ↳ **식별자 2개 추가 (2026-07-19)** | "몇 건"뿐 아니라 **"몇 명"**을 세기 위함 — 한 사람이 여러 번 누르므로 건수만으론 과대평가된다(실측: 홈 모임 날짜칩 **443회 = 38명**, 평균 11.7회). 사람 식별은 **`user_id \|\| session_key`** 순, 둘 다 없는 행(전체의 3%)은 명 집계에서 제외. **가산적 변경이라 기존 소비처 무영향**. ⚠️ `session_key`는 **2026-07부터 100%**, 그 이전(06월)은 **8%**뿐이라 오래된 구간의 명 집계는 과소집계됨(건수는 무관) |
 | `getPageViewCounts(page, daysBack=7)` | page_views에서 특정 page의 최근 N일 로우 반환 `[{created_at}]`. ⚠️ **2026-07-19 기준 소비처 0건** — 관리자 퍼널의 "메인 방문" 단계용으로 만들었으나 그 단계를 그리는 코드가 없어 결과를 아무도 읽지 않았고, 헛도는 왕복이라 호출을 제거했다([PLAN_funnel_analytics.md](PLAN_funnel_analytics.md) 정정 참조). 함수 자체는 보존 |
@@ -175,6 +178,27 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 - ⚠️ **`'`(작은따옴표)는 이스케이프하지 않는다** — 이 문서가 2026-07-22까지 `[&<>"']`로 잘못 적고 있었다. 작은따옴표로 감싼 속성이나 `onclick="fn('${x}')"` 안에 넣을 값은 이 함수로 안전해지지 않는다.
 - **쓰는 쪽은 호출시점에 참조한다**: `const esc = s => window.escH(s);`. `const esc = window.escH` **스냅샷은 금지** — club-schedule.html이 day-detail.js를 supabase-client.js보다 먼저 로드해 그 시점엔 undefined다. **폴백도 붙이지 않는다**(폴백이 곧 사본).
 - 통합 대상이 아닌 이스케이퍼 4종(속성 전용·JSON attr·부분 이스케이프 2)의 이유는 `scripts/verify-esch-unify.js`의 `ALLOW`에 있다. 사본이 다시 생겼는지는 `node scripts/verify-esch-unify.js --negctl`.
+
+---
+
+## window.MemberAnalytics (assets/js/member-analytics.js)
+
+관리자 분석의 **「한 사람」 집계 단일 소스** (P4, 2026-07-22). `requests-admin.html`(관리자 페이지)과 `kakao-auth.js`의 오너 전용 「회원 분석」 섹션이 **둘 다** 이 모듈을 쓴다 — 두 곳이 각자 계산하면 조용히 갈린다(#15). 🚨 **순수 함수만** 둔다(전역·클로저 누수 없이 인자로만 동작 — 「함수 추출 3종 함정」 회피).
+
+| export | 설명 |
+|---|---|
+| `toKstDate(iso)` / `kstToday()` / `kstShift(n)` | KST 날짜 `'YYYY-MM-DD'` |
+| `VP_PERIODS` / `VP_DATE_RE` | 기간 프리셋 4종(`all/today/yesterday/7d`) + 날짜정규식 |
+| `inVpPeriod(r, period, todayKst)` | 행이 그 기간에 속하나. `'all'`은 아무것도 안 거른다(회귀 가드). `todayKst`는 호출부가 넘긴다 |
+| `vpLabel(period)` | 고른 값에서 라벨 파생 — 프리셋이면 그 라벨, 날짜면 「M월 D일」(원칙 ①) |
+| `PAGE_KEY_ALIASES` / `normalizePageKey(page)` | 페이지 키 정규화(#14). ⚠️ 별칭표에서 **한글 키 삭제 금지**(과거 행이 독립 버킷이 됨) |
+| `buildPageMap(rows, idType, id, period, todayKst)` | 한 사람 페이지 맵 `Map<page,{visits,totalSec}>`. rows는 **정규화된 page** 가정. `dedupUserPageDay`를 일부러 안 거친다(과소집계 방지, 5-1 제약) |
+| `EVENT_FAMILIES` / `EVENT_ALL_TYPES` / `eventPersonId` | 이벤트 계열 **단일 출처**. 🚨 **새 `trackEvent` 타입은 여기 등록**(안 하면 조회 안 됨, #13) |
+| `countMemberEvents(events, userId)` | 그 회원 이벤트를 계열별 카운트 `[{key,emoji,label,total,types:[{type,n}]}]`(총계 내림차순). 명단(`ddPanelHtml`)은 여기 없다 — 그건 「여러 사람」 드릴다운 |
+
+- **관리자 페이지는 별칭·래퍼로 소비**한다(`const _inVpPeriod = (r,p) => MemberAnalytics.inVpPeriod(r,p,todayKst)` 등). 검증 스크립트도 이 모듈을 eval한다(`scripts/_member-analytics.js` 공용 로더, `--negctl`용 소스 변형 지원).
+- **로드**: `requests-admin.html`은 인라인 별칭을 위해 명시 `<script>`(kakao-auth.js 앞). 그 외 페이지는 `kakao-auth.js`가 **자기경로 동적 로드**(day-detail.js와 같은 방식)라 HTML 편집 불필요.
+- **오너 섹션 렌더**: `kakao-auth.js`의 `_renderAdminMemberBoard(subBody, userId)` — `getUserPageSessions`/`getUserEvents`/`getProfileUsage` 조회 → 이 모듈로 집계 → 페이지 분포(기간 버튼 위임)·이용 요약·활동 렌더. 카드는 `_adminView`(뷰어=오너 + readOnly + 대상≠오너)일 때만(`data-subsheet="adminboard"`). 🚨 **표시 게이팅이지 접근 제어가 아니다**(RLS off).
 
 ---
 
