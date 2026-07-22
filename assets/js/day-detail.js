@@ -294,6 +294,7 @@
     .sched-tag-group { margin-top: 4px; }
     .sched-tag-group:first-child { margin-top: 0; }
     .sched-tag-group-label { font-size: 9.5px; font-weight: 600; color: var(--muted, #9e8e7e); }
+    .sched-game-empty { font-size: 10.5px; color: var(--muted, #9e8e7e); }
     .sched-tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
     .sched-game-tag {
       display: inline-flex;
@@ -1243,7 +1244,13 @@
 
     function buildGameTags(voteDate) {
       const dateGames = voteGames.filter(g => g.vote_date === voteDate);
-      if (!dateGames.length) return '';
+      if (!dateGames.length) {
+        // 참여자는 있으나(막대는 렌더됨) 아무도 게임을 안 고른 날 — 게임 영역이 통째로
+        // 사라지는 대신 넛지로 등록을 유도한다. 지난 날짜는 등록이 무의미하므로 숨긴다.
+        return voteDate >= today
+          ? '<div class="sched-game-tags"><div class="sched-game-empty">🎲 아직 하고 싶은 게임이 없어요</div></div>'
+          : '';
+      }
 
       const nameMap = {}, wantCnt = {}, learnCnt = {}, priorityCnt = {};
       dateGames.forEach(g => {
