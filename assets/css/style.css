@@ -7146,13 +7146,26 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-rec-review { position: relative; font-size: 13px; color: var(--text); margin: 8px 0 0; line-height: 1.6; white-space: pre-wrap; border-left: 3px solid var(--review-accent); padding-left: 10px; }
 /* 한 기록에 게임평이 여러 개 쌓이면(뽁님 게임평 등, 014) 서로 뭉쳐 보이므로 간격을 넓혀 분리 */
 .pr-rec-review + .pr-rec-review { margin-top: 13px; }
-.pr-rec-review--deletable { padding-right: 20px; }
+.pr-rec-review--managed { padding-right: 22px; }
 .pr-rec-reviewer { display: inline-block; font-size: 11px; font-weight: 600; color: var(--green); margin-right: 5px; }
 .pr-rec-reviewer[data-user-id] { cursor: pointer; }
 .pr-rec-reviewer[data-user-id]:hover { color: var(--green-2); text-decoration: underline; }
-/* 개별 게임평 삭제(✕) — 작성자 본인·오너만 렌더됨(_linkedReviewHtml canDel) */
-.pr-rec-review-del { position: absolute; top: 0; right: 0; border: 0; background: none; padding: 0 3px; cursor: pointer; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.pr-rec-review-del:hover { color: #c0392b; }
+/* 개별 게임평 ⋯ 메뉴(수정·삭제) — 작성자 본인·오너만 렌더됨(_linkedReviewHtml canManage) */
+.pr-rev-menu-wrap { position: absolute; top: 0; right: 0; }
+.pr-rev-menu-btn { border: 0; background: none; padding: 0 4px; cursor: pointer; color: var(--muted); font-size: 13px; line-height: 1.4; letter-spacing: 1px; border-radius: 6px; font-family: inherit; }
+.pr-rev-menu-btn:hover { background: #ece7dc; color: var(--text); }
+.pr-rev-menu { display: none; position: absolute; right: 0; top: 100%; background: #fff; border: 1px solid #e8e4dc; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.12); z-index: 20; min-width: 88px; overflow: hidden; }
+.pr-rev-menu-wrap.is-open .pr-rev-menu { display: flex; flex-direction: column; }
+.pr-rev-menu button { border: 0; background: none; padding: 8px 14px; text-align: left; cursor: pointer; font-size: 12px; color: var(--text); white-space: nowrap; font-family: inherit; }
+.pr-rev-menu button:hover { background: var(--bg-soft, #f5f0e8); }
+.pr-rev-del:hover { color: #c0392b; }
+/* 게임평 인라인 수정 */
+.pr-rev-edit-wrap { display: block; margin-top: 5px; }
+.pr-rev-edit-area { width: 100%; box-sizing: border-box; font-family: inherit; font-size: 13px; line-height: 1.5; padding: 6px 8px; border: 1px solid var(--line, #e7dbc7); border-radius: 6px; resize: vertical; }
+.pr-rev-edit-actions { display: flex; gap: 6px; margin-top: 5px; }
+.pr-rev-edit-actions button { border: 0; border-radius: 6px; padding: 4px 13px; cursor: pointer; font-size: 12px; font-family: inherit; }
+.pr-rev-edit-save { background: var(--green); color: #fff; }
+.pr-rev-edit-cancel { background: var(--bg-soft, #ece5d6); color: var(--text); }
 .pr-rec-tag { font-size: 12px; background: var(--bg); border-radius: 6px; padding: 2px 8px; color: var(--text-info); font-weight: 500; }
 .pr-tag-who { background: #fdf0e8; color: var(--green); }
 .pr-tag-who-first { border-bottom: 2px solid var(--green) !important; padding-bottom: 1px !important; }

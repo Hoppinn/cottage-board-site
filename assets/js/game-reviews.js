@@ -610,30 +610,76 @@
   };
 
   // (014) 한 기록에 매인 게임평 한 줄의 HTML — buildSessionBody와 surgical 삽입이 공유(사본 금지).
-  // 작성자 본인 또는 오너면 개별 삭제(✕) 버튼을 붙인다(사진 삭제 canDelPhoto = isMine||isOwner와 같은 규칙).
+  // 작성자 본인 또는 오너면 ⋯ 메뉴(수정·삭제)를 붙인다(사진 삭제 canDelPhoto = isMine||isOwner와 같은 규칙).
   function _linkedReviewHtml(c, recordId, user) {
-    const canDel = !!(user && ((c.user_id && String(c.user_id) === String(user.id)) || window.isOwner?.()));
-    const delBtn = canDel ? `<button class="pr-rec-review-del" data-comment-id="${escH(String(c.id))}" data-record-id="${escH(String(recordId))}" type="button" aria-label="게임평 삭제">✕</button>` : '';
+    const canManage = !!(user && ((c.user_id && String(c.user_id) === String(user.id)) || window.isOwner?.()));
+    const menuHtml = canManage ? `<span class="pr-rev-menu-wrap"><button class="pr-rev-menu-btn" type="button" aria-label="게임평 수정·삭제">⋯</button><span class="pr-rev-menu"><button class="pr-rev-edit" type="button">✏️ 수정</button><button class="pr-rev-del" type="button">✕ 삭제</button></span></span>` : '';
     const nameHtml = c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : '';
-    return `<p class="pr-rec-review pr-rec-review--linked${canDel ? ' pr-rec-review--deletable' : ''}">${nameHtml}${escH(c.comment_text)}${delBtn}</p>`;
+    return `<p class="pr-rec-review pr-rec-review--linked${canManage ? ' pr-rec-review--managed' : ''}" data-comment-id="${escH(String(c.id))}" data-record-id="${escH(String(recordId))}">${menuHtml}${nameHtml}<span class="pr-rev-text">${escH(c.comment_text)}</span></p>`;
   }
-  // 삽입/재렌더 공통 바인딩: 작성자 이름 클릭 + 개별 삭제
+  // 삽입/재렌더 공통 바인딩: 작성자 이름 클릭 + ⋯ 메뉴(토글/수정/삭제)
   function _bindLinkedReview(scope) {
     scope.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
       span.style.cursor = 'pointer';
       span.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(span.dataset.userId); });
     });
-    scope.querySelectorAll('.pr-rec-review-del').forEach(btn => btn.addEventListener('click', _onDeleteLinkedReview));
+    scope.querySelectorAll('.pr-rev-menu-btn').forEach(btn => btn.addEventListener('click', _onRevMenuToggle));
+    scope.querySelectorAll('.pr-rev-edit').forEach(btn => btn.addEventListener('click', _onEditLinkedReview));
+    scope.querySelectorAll('.pr-rev-del').forEach(btn => btn.addEventListener('click', _onDeleteLinkedReview));
+  }
+  function _closeRevMenus() {
+    document.querySelectorAll('.pr-rev-menu-wrap.is-open').forEach(w => w.classList.remove('is-open'));
+  }
+  function _onRevMenuToggle(e) {
+    e.stopPropagation();
+    const wrap = e.currentTarget.closest('.pr-rev-menu-wrap');
+    const open = wrap.classList.contains('is-open');
+    _closeRevMenus();
+    if (!open) wrap.classList.add('is-open');
   }
   async function _onDeleteLinkedReview(e) {
     e.stopPropagation();
-    const btn = e.currentTarget;
+    _closeRevMenus();
+    const p = e.currentTarget.closest('.pr-rec-review');
+    if (!p) return;
     if (!confirm('이 게임평을 삭제할까요?')) return;
-    const res = await window.CottageDB?.deleteComment(btn.dataset.commentId);
+    const res = await window.CottageDB?.deleteComment(p.dataset.commentId);
     if (res?.error) { alert('게임평 삭제에 실패했어요.'); return; }
-    const k = String(btn.dataset.recordId);
-    if (_recordCommentsMap.has(k)) _recordCommentsMap.set(k, _recordCommentsMap.get(k).filter(c => String(c.id) !== String(btn.dataset.commentId)));
-    btn.closest('.pr-rec-review')?.remove();   // 그 줄만 제거 — 전체 재렌더 안 함
+    const k = String(p.dataset.recordId);
+    if (_recordCommentsMap.has(k)) _recordCommentsMap.set(k, _recordCommentsMap.get(k).filter(c => String(c.id) !== String(p.dataset.commentId)));
+    p.remove();   // 그 줄만 제거 — 전체 재렌더 안 함
+  }
+  // 인라인 수정 — 게임평 텍스트를 그 자리에서 textarea로. 저장 시 updateComment 후 그 줄만 갱신.
+  function _onEditLinkedReview(e) {
+    e.stopPropagation();
+    _closeRevMenus();
+    const p = e.currentTarget.closest('.pr-rec-review');
+    if (!p || p.querySelector('.pr-rev-edit-wrap')) return;   // 이미 편집 중이면 무시
+    const commentId = p.dataset.commentId;
+    const recordId = p.dataset.recordId;
+    const textSpan = p.querySelector('.pr-rev-text');
+    const cur = textSpan ? textSpan.textContent : '';
+    const wrap = document.createElement('span');
+    wrap.className = 'pr-rev-edit-wrap';
+    wrap.innerHTML = `<textarea class="pr-rev-edit-area" rows="2" aria-label="게임평 수정"></textarea><span class="pr-rev-edit-actions"><button class="pr-rev-edit-save" type="button">저장</button><button class="pr-rev-edit-cancel" type="button">취소</button></span>`;
+    const ta = wrap.querySelector('.pr-rev-edit-area');
+    ta.value = cur;
+    if (textSpan) { textSpan.style.display = 'none'; textSpan.after(wrap); }
+    ta.focus();
+    const done = () => { wrap.remove(); if (textSpan) textSpan.style.display = ''; };
+    wrap.querySelector('.pr-rev-edit-cancel').addEventListener('click', ev => { ev.stopPropagation(); done(); });
+    wrap.querySelector('.pr-rev-edit-save').addEventListener('click', async ev => {
+      ev.stopPropagation();
+      const nt = ta.value.trim();
+      if (!nt) { alert('게임평 내용을 입력해주세요.'); return; }
+      if (nt === cur) { done(); return; }
+      const res = await window.CottageDB?.updateComment(commentId, nt);
+      if (res?.error) { alert('게임평 수정에 실패했어요.'); return; }
+      if (textSpan) textSpan.textContent = nt;
+      const arr = _recordCommentsMap.get(String(recordId));
+      if (arr) { const c = arr.find(x => String(x.id) === String(commentId)); if (c) c.comment_text = nt; }
+      done();
+    });
   }
   // 게임평을 기록에 매단 직후, 게시판을 다시 그리지 않고 그 기록 줄에만 한 줄 꽂는다(위치 이동 없음).
   window.addRecordCommentToBoard = (recordId, comment) => {
@@ -982,6 +1028,7 @@
           if (mm) mm.removeAttribute('style');
         });
         window.untrackMoreMenu?.();
+        _closeRevMenus();   // 게임평 ⋯ 메뉴도 바깥 클릭에 닫는다
       });
     }
 
