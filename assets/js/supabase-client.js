@@ -1123,7 +1123,7 @@ window._cottageSess = (function () {
     if (_anonHeartbeatTimer || _sessionUserId) return;
     if (_shouldSkipSessionTracking()) return;
     const key = getSessionKey();
-    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    let todayKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
     let _anonTodaySec = 0;
     try {
       const { data: existing, error } = await db.from('anon_sessions')
@@ -1162,9 +1162,13 @@ window._cottageSess = (function () {
     _anonHeartbeatTimer = setInterval(() => {
       if (_sessionUserId) { _stopAnonHeartbeat(); return; }
       if (document.hidden) return;
+      // 자정(KST) 롤오버: 세션이 안 닫힌 채 날이 바뀌면 새 날의 체류가 전날로 적립되던 버그(④).
+      // today_date를 안 갱신하던 것이 원인 — 날이 바뀌면 카운터를 0으로 리셋하고 날짜도 넘긴다.
+      const nowKst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+      if (nowKst !== todayKst) { todayKst = nowKst; _anonTodaySec = 0; }
       _anonTodaySec += 60;
       db.from('anon_sessions').update({
-        last_seen_at: new Date().toISOString(), today_seconds: _anonTodaySec
+        last_seen_at: new Date().toISOString(), today_seconds: _anonTodaySec, today_date: todayKst
       }).eq('session_key', key).then(({ error }) => { if (error) console.error('[_startAnonHeartbeat] heartbeat', error); }).catch(() => {});
     }, 60 * 1000);
   }
