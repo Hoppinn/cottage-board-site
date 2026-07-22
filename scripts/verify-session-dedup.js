@@ -18,12 +18,18 @@ const db = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonK
 
 const NEGCTL = process.argv.includes('--negctl');
 
+// P4(2026-07-22)부터 정규화·별칭표는 member-analytics.js가 단일 소스다 — 그 모듈을 eval해
+// 그대로 쓴다. collapseTwinInserts만 아직 requests-admin.html에 있어 원문을 잘라 eval한다.
+const { loadMemberAnalytics } = require('./_member-analytics');
 function loadScreenFns() {
-  const html = fs.readFileSync(path.join(__dirname, '..', 'pages', 'admin', 'requests-admin.html'), 'utf8');
-  const from = html.indexOf('const PAGE_KEY_ALIASES = {');
-  const to = html.indexOf('async function loadAnalytics()');
-  if (from < 0 || to < 0 || to <= from) { console.error('🔴 화면 코드를 못 잘랐다 — 구조가 바뀌었다. 판정 중단'); process.exit(1); }
-  let src = html.slice(from, to);
+  const MA = loadMemberAnalytics();
+  const normalizePageKey = MA.normalizePageKey;
+  const PAGE_KEY_ALIASES = MA.PAGE_KEY_ALIASES;   // collapseTwinInserts가 클로저로 읽는다
+  const html = fs.readFileSync(path.join(__dirname, '..', 'pages', 'admin', 'requests-admin.html'), 'utf8').replace(/\r\n/g, '\n');
+  const from = html.indexOf('const TWIN_WINDOW_MS = 3000;');
+  const to = html.indexOf('\n    }', from);
+  if (from < 0 || to < 0) { console.error('🔴 collapseTwinInserts를 못 잘랐다 — 구조가 바뀌었다. 판정 중단'); process.exit(1); }
+  let src = html.slice(from, to + '\n    }'.length);
   if (!src.includes('collapseTwinInserts')) { console.error('🔴 자른 범위에 collapseTwinInserts가 없다. 판정 중단'); process.exit(1); }
   if (NEGCTL) {
     const before = src;
@@ -32,9 +38,11 @@ function loadScreenFns() {
     src = src.replace('const TWIN_WINDOW_MS = 3000;', 'const TWIN_WINDOW_MS = -1;');
     if (src === before) { console.error('🔴 음성 대조군 주입 실패 — 창 상수를 못 찾았다. 판정 중단'); process.exit(1); }
   }
-  const fns = new Function(src + '\n return { normalizePageKey, collapseTwinInserts };')();
-  if (fns.normalizePageKey('메인') !== 'index') { console.error('🔴 정규화기 자기검사 실패. 판정 중단'); process.exit(1); }
-  return fns;
+  // IIFE로 감싼다 — 직접 eval의 function 선언이 loadScreenFns 스코프로 새면 아래 const와
+  // 「already been declared」로 부딪친다(실제로 그렇게 죽었다). 새는 걸 arrow 안에 가둔다.
+  const collapseTwinInserts = (() => eval(src + '\n(collapseTwinInserts)'))();
+  if (normalizePageKey('메인') !== 'index') { console.error('🔴 정규화기 자기검사 실패. 판정 중단'); process.exit(1); }
+  return { normalizePageKey, collapseTwinInserts };
 }
 const { normalizePageKey, collapseTwinInserts } = loadScreenFns();
 
@@ -96,9 +104,7 @@ const check = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if 
   // ④ **외부** 유입 소스가 접기로 사라지면 안 된다.
   //    내부 라벨(`메인`·`/pages/...`)이 사라지는 건 #28 보정이라 정상 — 그래서 값을 나눠 센다.
   //    처음엔 전체 짝 보존으로 걸었다가 naver_place 13·google 9가 사라지는 걸 잡았다.
-  const html = fs.readFileSync(path.join(__dirname, '..', 'pages', 'admin', 'requests-admin.html'), 'utf8');
-  const aliasSrc = html.slice(html.indexOf('const PAGE_KEY_ALIASES = {'), html.indexOf('function normalizePageKey'));
-  const ALIASES = new Function(aliasSrc + '\n return PAGE_KEY_ALIASES;')();
+  const ALIASES = loadMemberAnalytics().PAGE_KEY_ALIASES;  // 단일 소스: member-analytics.js (P4)
   const isInternal = ref => !!ref && (ref.startsWith('/') || Object.prototype.hasOwnProperty.call(ALIASES, ref));
   const pairSet = (s, pred) => new Set(s.filter(r => r.referrer && pred(r.referrer))
     .map(r => (r.user_id ? 'u:' + r.user_id : 's:' + r.session_key) + '|' + r.referrer));

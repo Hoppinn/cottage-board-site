@@ -26,9 +26,15 @@ const ADMIN_UID = '4916417947';
 let fail = 0;
 const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!ok) fail++; };
 
-// ── 화면 코드 잘라오기 ────────────────────────────────────────────
-// 줄바꿈을 LF로 통일한다 — 이 리포는 CRLF라 '\n      }' 같은 마커가 그냥은 안 걸린다.
-// (여기서 한 번 데어 「원문에서 못 찾았다」가 코드 변경이 아니라 개행 문제였다.)
+// ── 단일 소스(member-analytics.js) + 화면 잔여 코드 가져오기 ──────────
+// P4(2026-07-22)부터 기간 헬퍼·pageMapFor·정규화는 member-analytics.js가 단일 소스다
+// (관리자 페이지와 회원 보드가 공유). 사본을 만들지 않고 그 모듈을 **실제로 eval**해
+// window.MemberAnalytics를 그대로 쓴다(#15: 계산이 두 벌이면 갈린다).
+// collapseTwinInserts만 아직 requests-admin.html 안에 있어 원문을 잘라 eval한다.
+const { loadMemberAnalytics } = require('./_member-analytics');
+const MA = loadMemberAnalytics();
+const normalizePageKey = MA.normalizePageKey;
+
 const HTML = fs.readFileSync(path.join(__dirname, '..', 'pages', 'admin', 'requests-admin.html'), 'utf8').replace(/\r\n/g, '\n');
 function cut(startsWith, endsWith, label) {
   const i = HTML.indexOf(startsWith);
@@ -37,28 +43,27 @@ function cut(startsWith, endsWith, label) {
   if (j < 0) { console.log(`🔴 「${label}」의 끝을 못 찾았다`); process.exit(1); }
   return HTML.slice(i, j + endsWith.length);
 }
-const SRC_ALIASES  = cut('const PAGE_KEY_ALIASES = {', '\n    };', 'PAGE_KEY_ALIASES');
-const SRC_NORMKEY  = cut('function normalizePageKey(page) {', '\n    }', 'normalizePageKey');
-const SRC_TWIN     = cut('const TWIN_WINDOW_MS = 3000;', '\n    }', 'collapseTwinInserts');
-// ⚠️ 사이에 '\n'을 반드시 넣는다 — 앞 조각이 주석 한 줄로 끝나므로 그냥 붙이면
-//    뒤 조각의 첫 줄이 그 주석에 먹혀 통째로 사라진다(실제로 한 번 그렇게 죽었다).
-const SRC_PERIOD   = cut('function _toKstDate(isoStr) {', '\n      }\n\n      // ── 펼침 표의 기간 선택', 'KST 날짜 헬퍼')
-                   + '\n'
-                   + cut('const VP_PERIODS = [', '\n        return pm;\n      }', '기간 선택 + pageMapFor');
-
-// pageMapFor는 rows·todayKst를 클로저로 읽는다 → 그 둘을 가진 스코프에서 eval한다.
-// ⚠️ 서로 참조하는 조각은 **한 번의 eval에 몰아넣고 마지막 줄로 꺼낸다.**
-//    const/let은 eval 밖으로 안 새고(함수 선언만 샌다) eval을 나눠 부르면 서로도 못 본다 —
-//    실제로 「VP_PERIODS is not defined」로 두 번 죽었다. 받을 이름을 미리 선언하는 것도 안 된다
-//    (eval 안의 const와 부딪쳐 「already been declared」).
+const SRC_TWIN = cut('const TWIN_WINDOW_MS = 3000;', '\n    }', 'collapseTwinInserts');
 const _pick = names => `\n({ ${names.join(', ')} })`;
+// collapseTwinInserts는 PAGE_KEY_ALIASES를 클로저로 읽는다 → 모듈 것을 스코프에 실어 eval한다.
+const { collapseTwinInserts } = (() => {
+  const PAGE_KEY_ALIASES = MA.PAGE_KEY_ALIASES;
+  return eval(SRC_TWIN + _pick(['collapseTwinInserts']));
+})();
+
+// pageMapFor·_inVpPeriod는 rows·todayKst를 받는 지역 래퍼로 감싼다 — requests-admin.html의
+// 실제 래퍼와 **같은 모양**이다(그 파일도 MemberAnalytics.buildPageMap/inVpPeriod를 이렇게 부른다).
+// 핵심 로직은 전부 모듈 것이라 사본이 아니다.
 function mountPeriodApi(rows, todayKst) {
-  return eval(SRC_PERIOD + _pick(['VP_PERIODS', '_inVpPeriod', 'pageMapFor', '_toKstDate', '_kstShift', '_vpLabel']));
+  return {
+    VP_PERIODS: MA.VP_PERIODS,
+    _toKstDate: MA.toKstDate,
+    _kstShift: MA.kstShift,
+    _vpLabel: MA.vpLabel,
+    _inVpPeriod: (r, period) => MA.inVpPeriod(r, period, todayKst),
+    pageMapFor: (idType, id, period) => MA.buildPageMap(rows, idType, id, period, todayKst),
+  };
 }
-// IIFE로 감싸는 것도 필수다 — 모듈 최상위에서 eval하면 새 나온 function 선언이
-// 받는 쪽 const와 같은 스코프에서 부딪친다.
-const { normalizePageKey, collapseTwinInserts } = (() =>
-  eval([SRC_ALIASES, SRC_NORMKEY, SRC_TWIN].join('\n') + _pick(['normalizePageKey', 'collapseTwinInserts'])))();
 
 // ── 대조군 집계 (일부러 화면 코드를 안 쓴다) ───────────────────────
 const kstDay = iso => new Date(new Date(iso).getTime() + 9 * 3600000).toISOString().slice(0, 10);

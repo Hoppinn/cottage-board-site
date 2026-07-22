@@ -250,6 +250,7 @@
   <script src="../../assets/js/script-nav.js"></script>
   <script src="../../assets/js/game-sheet.js"></script>
   <script src="../../assets/js/play-records-utils.js"></script>
+  <script src="../../assets/js/member-analytics.js"></script>
   <script src="../../assets/js/kakao-auth.js"></script>
 
   <script>
@@ -878,34 +879,10 @@
     // 읽는 쪽에서 슬러그로 접는다. 접는 자리는 **loadAnalytics의 rows 진입점 한 곳**이고,
     // 그 뒤의 모든 집계(회원·비회원 카드 펼침 / 페이지 탭 막대 / 요약 페이지 카드)는
     // 슬러그를 키로 쓴다 — 화면에 라벨을 붙이는 건 렌더 시점의 PAGE_LABEL이다.
-    // ⚠️ 아래 별칭표에서 **한글 키를 지우지 말 것**. 지우면 그 라벨로 저장된 과거 행이
-    //    다시 독립 버킷으로 튀어나온다.
     const PAGE_LABEL = window.COTTAGE_PAGE_LABELS || {};
-    const PAGE_KEY_ALIASES = {
-      '/': 'index',
-      '/index.html': 'index',
-      index: 'index',
-      '메인': 'index',
-      '게임 목록': 'owned-games',
-      '보유 게임': 'owned-games',
-      '플레이 기록': 'game-reviews',
-      '기록 보기': 'game-reviews',
-      '게임 위치': 'game-location',
-      '코티지가 만들어진 이유': 'about',
-      '코티지보드 소개': 'about',          // ~2026-06-30 개명 전 라벨 (357행)
-      '가격·이용안내': 'price-rules',
-      '가격 & 규칙': 'price-rules',        // ~2026-07-01 개명 전 라벨 (174행)
-      '홈페이지 기능': 'guide',
-      '동호회 소개': 'club',
-      '회원 자기소개': 'club-intro',
-      '모임 플래너': 'club-schedule',
-      '모임 일정': 'club-schedule',
-      '일정 투표': 'club-schedule',        // ~2026-06-18 개명 전 라벨 (32행)
-      '모임 기록': 'club-history',
-      '동호회 규칙': 'club-rules',
-      '요청하기': 'requests',
-      '관리자': 'requests-admin',
-    };
+    // 페이지 키 정규화·별칭표는 member-analytics.js가 단일 소스(P4, 2026-07-22). 여기선 가리킨다.
+    // ⚠️ 별칭표에서 한글 키를 지우지 말 것 — 상세 이유는 member-analytics.js 헤더.
+    const PAGE_KEY_ALIASES = MemberAnalytics.PAGE_KEY_ALIASES;
     // ── 쌍둥이 INSERT 접기 ────────────────────────────────────────────
     // `page_sessions`에 INSERT하는 경로가 **셋**인데 한 번의 방문에 둘이 함께 발사된다:
     //   ① supabase-client.js `_syncTimeToDBNow` — 로그인, visibilitychange(탭 숨김)
@@ -963,18 +940,7 @@
       return out;
     }
 
-    function normalizePageKey(page) {
-      if (!page) return page;
-      let key = String(page);
-      try {
-        if (key.startsWith('http')) key = new URL(key).pathname;
-      } catch (_) {}
-      key = key.replace(/^https?:\/\/[^/]+/, '');
-      if (key.startsWith('/pages/')) key = key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
-      if (key.startsWith('/')) key = key === '/' ? '/' : key.split('/').filter(Boolean).pop()?.replace('.html', '') || key;
-      key = key.replace(/\.html$/, '');
-      return PAGE_KEY_ALIASES[key] || key;
-    }
+    const normalizePageKey = MemberAnalytics.normalizePageKey;  // 단일 소스: member-analytics.js (P4)
 
     async function loadAnalytics() {
       if (!window.CottageDB?.getPageAnalytics) return;
@@ -1080,60 +1046,20 @@
       }
 
       // 비회원 통계 — session_key 기반, page_sessions에서 파생
-      function _toKstDate(isoStr) {
-        return new Date(new Date(isoStr).getTime() + 9 * 3600000).toISOString().slice(0, 10);
-      }
+      const _toKstDate = MemberAnalytics.toKstDate;  // 단일 소스: member-analytics.js (P4)
 
-      // ── 펼침 표의 기간 선택 (2026-07-22 사용자 요청) ─────────────────
-      // ⚠️ 이건 **탭 필터가 아니라 펼친 표 안의 선택기**다. 목록(명부)은 계속 전 기간이다 —
-      //    탭 전체를 기간으로 거르면 필터 칩 341 vs 목록 4명이 된다(#5, 위 usesDateFilter 주석).
-      //    명부가 답하는 질문("누가 있나")과 이 표가 답하는 질문("이 사람이 그 기간에 뭘 봤나")이
-      //    서로 다르므로 선택기도 그 표에만 붙는다(원칙 ④).
-      // ⚠️ renderCharts의 calcRange/filterByRange를 쓰지 않는다 — 스코프가 다르고(그건 날짜 네비
-      //    경로다) 여기 필요한 건 고정 프리셋 4개뿐이라 KST 날짜 문자열 비교로 끝난다.
-      //    _toKstDate는 buildAnonUserMap의 todaySec 판정과 **같은 함수**라 자정 경계가 갈리지 않는다.
-      const VP_PERIODS = [
-        { key: 'all',   label: '전 기간' },
-        { key: 'today', label: '오늘' },
-        { key: 'yesterday', label: '어제' },
-        { key: '7d',    label: '7일' },
-      ];
-      const _kstShift = n => new Date(Date.now() + 9 * 3600000 + n * 86400000).toISOString().slice(0, 10);
-      // 행이 그 기간에 속하는가. 'all'은 **아무것도 거르지 않는다** — 기본값이 기존 동작과
-      // 한 글자도 달라지면 안 된다(회귀 가드가 이걸 본다).
-      const _VP_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-      function _inVpPeriod(r, period) {
-        if (!period || period === 'all') return true;
-        if (!r.entered_at) return false;          // 날짜가 없으면 기간을 물을 수 없다
-        const d = _toKstDate(r.entered_at);
-        if (period === 'today') return d === todayKst;
-        if (period === 'yesterday') return d === _kstShift(-1);
-        if (period === '7d') return d > _kstShift(-7) && d <= todayKst;  // 오늘 포함 7일
-        if (_VP_DATE_RE.test(period)) return d === period;  // 특정 날 하루
-        return true;
-      }
-      // 라벨은 고른 값에서 파생시킨다(원칙 ①) — 프리셋이면 그 라벨, 날짜면 「M월 D일」.
-      function _vpLabel(period) {
-        const preset = VP_PERIODS.find(p => p.key === period);
-        if (preset) return preset.label;
-        if (_VP_DATE_RE.test(period)) { const [, m, d] = period.split('-'); return `${+m}월 ${+d}일`; }
-        return VP_PERIODS[0].label;
-      }
-      // 한 사람의 그 기간 페이지 맵. buildUserMap/buildAnonUserMap을 통째로 다시 돌리지 않는다
-      // (그건 전원 + 정렬까지 하는 함수다). 누적 식은 **그 둘과 같아야** 값이 갈리지 않는다.
-      // ⚠️ dedupUserPageDay를 거치지 않는 것이 의도다 — dedup하면 체류가 그날 첫 세션 것만
-      //    합산돼 과소집계된다(memberPageMap 주석과 같은 이유).
-      function pageMapFor(idType, id, period) {
-        const pm = new Map();
-        for (const r of rows) {
-          if (idType === 'member') { if (String(r.user_id || '') !== String(id)) continue; }
-          else { if (r.user_id || r.session_key !== id) continue; }
-          if (!_inVpPeriod(r, period)) continue;
-          if (!pm.has(r.page)) pm.set(r.page, { visits: 0, totalSec: 0 });
-          pm.get(r.page).visits++; pm.get(r.page).totalSec += r.duration_sec || 0;
-        }
-        return pm;
-      }
+      // ── 펼침 표의 기간 선택 ──────────────────────────────────────────
+      // 기간 헬퍼·페이지 맵은 member-analytics.js가 단일 소스(P4, 2026-07-22). _inVpPeriod와
+      // pageMapFor만 loadAnalytics의 todayKst/rows를 넘기는 지역 래퍼로 둔다 — 그래야 관리자
+      // 페이지가 loadAnalytics 시점의 고정 todayKst와 그때의 rows를 그대로 쓴다.
+      // ⚠️ 이건 탭 필터가 아니라 펼친 표 안의 선택기다 — 탭 전체를 기간으로 거르면 #5 재발.
+      //    명부가 답하는 질문("누가 있나")과 이 표("그 기간에 뭘 봤나")가 달라 선택기는 표에만.
+      const VP_PERIODS = MemberAnalytics.VP_PERIODS;
+      const _VP_DATE_RE = MemberAnalytics.VP_DATE_RE;
+      const _kstShift = MemberAnalytics.kstShift;
+      const _vpLabel = MemberAnalytics.vpLabel;
+      const _inVpPeriod = (r, period) => MemberAnalytics.inVpPeriod(r, period, todayKst);
+      const pageMapFor = (idType, id, period) => MemberAnalytics.buildPageMap(rows, idType, id, period, todayKst);
       function buildAnonUserMap(rowset) {
         const m = new Map(); // session_key → { pm, days, todaySec, lastAt }
         for (const r of rowset) {
@@ -1413,30 +1339,12 @@
     }
 
     // ── 이벤트 계열 표 (단일 출처) ──────────────────────────────────────
-    // 🚨 새 trackEvent 타입을 추가하면 **여기에도 등록**할 것. 조회 목록이 이 표에서
-    //    파생되므로, 여기 없는 이벤트는 관리자 화면이 아예 조회하지 않는다(조용히 안 보임).
-    //    예전엔 조회 목록과 라벨 표가 따로 있어서 어긋났고, 실제로 2026-07-19 기준
-    //    1,493행 중 1,149행(77%)이 안 보였다 — 최다 이벤트 home_meeting_date_preview_click
-    //    443행이 통째로 누락. 두 목록을 하나로 합쳐 그 드리프트를 구조적으로 막는다.
-    const EVENT_FAMILIES = [
-      { key: 'meeting',   emoji: '🤝', label: '모임', types: [
-        'home_meeting_main_click', 'home_meeting_planner_click', 'home_meeting_date_preview_click',
-        'home_meeting_preview_card_click', 'home_meeting_week_nav', 'meeting_planner_bar_click',
-        'meeting_profile_click' ] },
-      { key: 'record',    emoji: '📋', label: '플레이기록', types: [
-        'home_record_main_click', 'home_record_more_click', 'home_record_write_click',
-        'record_start', 'record_complete' ] },
-      { key: 'recommend', emoji: '🔍', label: '추천게임', types: [
-        'home_recommend_main_click', 'home_recommend_game_detail_click', 'home_recommend_all_click',
-        'recommend_start', 'recommend_complete', 'recommend_game_click', 'hero_recommend_click' ] },
-      { key: 'signup',    emoji: '👤', label: '가입', types: ['signup_complete'] },
-    ];
-    const EVENT_ALL_TYPES = EVENT_FAMILIES.flatMap(f => f.types);
-
-    // 이벤트를 "사람" 단위로 세기 위한 식별자. 로그인 회원은 user_id, 비로그인은
-    // session_key. 둘 다 없는 행(전체의 3%)은 누구 것인지 알 수 없어 명 집계에서 뺀다.
-    // ⚠️ session_key는 2026-07부터 100%, 06월은 8%뿐이라 그 이전 구간은 명이 과소집계된다.
-    const eventPersonId = e => e.user_id || e.session_key || null;
+    // 🚨 새 trackEvent 타입은 member-analytics.js의 EVENT_FAMILIES에 등록한다(P4, 2026-07-22).
+    //    조회 목록(EVENT_ALL_TYPES)이 거기서 파생되고, 이 페이지와 회원 보드가 그 표를 공유한다.
+    //    빠지면 관리자 화면이 아예 조회하지 않아 조용히 안 보인다(#13 — 상세는 그 파일 헤더).
+    const EVENT_FAMILIES = MemberAnalytics.EVENT_FAMILIES;
+    const EVENT_ALL_TYPES = MemberAnalytics.EVENT_ALL_TYPES;
+    const eventPersonId = MemberAnalytics.eventPersonId;  // user_id 우선, 없으면 session_key
     // 건수와 사람수는 다르다 — 한 사람이 여러 번 누르므로(실측 443회=38명, 평균 11.7).
     // detail은 드릴다운(원칙 ⑤)용 — people(Set)과 **같은 순회에서** 만든다. 따로 세면
     // 명단과 집계가 조용히 갈린다(#15: 공용 헬퍼가 있는데 일부만 쓰면 그 일부가 다른 답을 낸다).

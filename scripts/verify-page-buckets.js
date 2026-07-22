@@ -18,17 +18,14 @@ eval(fs.readFileSync(path.join(__dirname, '..', 'assets', 'js', 'supabase-config
 eval(fs.readFileSync(path.join(__dirname, '..', 'assets', 'js', 'page-labels.js'), 'utf8'));
 const db = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
 
-// ── 화면 코드에서 정규화기를 그대로 떼어온다 ────────────────────────
-// ⚠️ 리포가 CRLF라 개행을 정규화하고 자른다 — 안 하면 마커가 안 잡혀 "못 찾음"이 난다
-const html = fs.readFileSync(path.join(__dirname, '..', 'pages', 'admin', 'requests-admin.html'), 'utf8').replace(/\r\n/g, '\n');
-const s = html.indexOf('const PAGE_KEY_ALIASES = {');
-const e = html.indexOf('return PAGE_KEY_ALIASES[key] || key;\n    }', s);
-if (s < 0 || e < 0) { console.error('🔴 requests-admin.html에서 정규화기를 못 찾음 — 검사기가 낡았다'); process.exit(1); }
-let src = html.slice(s, e) + 'return PAGE_KEY_ALIASES[key] || key;\n    }';
-if (NEG) src = src.replace("'메인': 'index',", '');
+// ── 정규화기를 단일 소스에서 그대로 가져온다 ────────────────────────
+// P4(2026-07-22)부터 PAGE_KEY_ALIASES·normalizePageKey는 member-analytics.js가 단일 소스다.
+// 사본을 만들지 않고 그 모듈을 eval해 그대로 쓴다(#15). 음성 대조군은 모듈 소스에서
+// '메인' 별칭 한 줄을 지워 normalizePageKey를 일부러 망가뜨린다(판정기가 그걸 잡는지 본다).
+const { loadMemberAnalytics } = require('./_member-analytics');
+const MA = loadMemberAnalytics(NEG ? (s => s.replace("'메인': 'index',", '')) : null);
 const PAGE_LABEL = window.COTTAGE_PAGE_LABELS || {};
-const { PAGE_KEY_ALIASES, normalizePageKey } =
-  new Function(src + '\nreturn { PAGE_KEY_ALIASES, normalizePageKey };')();
+const normalizePageKey = MA.normalizePageKey;
 
 // script-nav.js / supabase-client.js가 앞으로 저장할 값 (슬러그) — 두 경로가 같은지도 본다
 const SLUG = window.COTTAGE_PAGE_SLUG;
