@@ -1262,6 +1262,19 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getAllProfiles]', err); return []; }
   }
 
+  // P4: 한 회원의 이용 요약(누적) — 보드 오너 섹션의 「이용 요약」용. 누적 체류·방문수는
+  // R3대로 profiles가 정본이다(page_sessions는 하한). getAllProfiles(*, 전원)를 안 부른다.
+  async function getProfileUsage(userId) {
+    if (!userId) return null;
+    try {
+      const { data, error } = await db.from('profiles')
+        .select('visit_count, total_minutes, today_seconds, today_date, last_seen_at, first_seen_at')
+        .eq('user_id', String(userId)).maybeSingle();
+      if (error) console.error('[getProfileUsage]', error);
+      return data || null;
+    } catch (err) { console.error('[getProfileUsage]', err); return null; }
+  }
+
   async function banUser(userId) {
     try {
       const { error } = await db.from('profiles').update({ is_banned: true }).eq('user_id', userId);
@@ -1685,6 +1698,7 @@ window._cottageSess = (function () {
     getPageViewCounts,
     getUserPageSessions,
     getUserEvents,
+    getProfileUsage,
     getMyStats,
     getMyNotifications,
     getGameReviews,

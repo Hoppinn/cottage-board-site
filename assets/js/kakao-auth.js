@@ -18,6 +18,19 @@ if (typeof Kakao !== 'undefined' && !Kakao.isInitialized()) {
   }
 })();
 
+// member-analytics.js 동적 로드 (오너 전용 「회원 분석」 섹션 P4용, 모든 페이지 대응).
+// 오너가 남의 보드를 열 때만 쓰이므로 비동기 로드로 충분하다(파싱 시점엔 안 쓴다).
+// requests-admin.html은 인라인 별칭을 위해 이미 명시 로드하므로 여기선 건너뛴다(중복 방지).
+(function () {
+  const cs = document.currentScript;
+  if (cs && !window.MemberAnalytics && !document.getElementById('__memberAnalyticsJS')) {
+    const s = document.createElement('script');
+    s.id = '__memberAnalyticsJS';
+    s.src = cs.src.replace('kakao-auth.js', 'member-analytics.js');
+    document.head.appendChild(s);
+  }
+})();
+
 // ── 전체 공지 (알림 패널 상단 카드) ──────────────────────────
 // 한 건짜리 공지를 카드로 띄운다. 음료교환권 공지와 같은 장치를 쓰되 확인 여부는
 // 별도 키(feeNoticeSeen)로 관리한다 — 하나를 확인해도 다른 하나는 남아야 하므로.
@@ -1664,6 +1677,122 @@ function _bindUsageSubsheet(subBody) {
           _bindActivityTogglesAndMore(subBody);
 }
 
+// ── P4: 오너 전용 「회원 분석」 서브시트 렌더 ────────────────────────────
+// 오너가 남의 보드를 열었을 때만 붙는 섹션. 관리자 분석 페이지의 「회원 카드 펼침」과 같은
+// 집계를 그 사람 보드로 가져온다 — 계산은 전부 member-analytics.js(단일 소스, #15 방지).
+// 🚨 이건 표시 게이팅이지 접근 제어가 아니다 — RLS off라 anon 키로 이미 읽히는 데이터다.
+function _ambDur(sec) {
+  sec = Math.round(sec || 0);
+  if (sec < 60) return sec + '초';
+  const m = Math.floor(sec / 60), h = Math.floor(m / 60);
+  return h > 0 ? `${h}시간 ${m % 60}분` : `${m}분`;
+}
+function _ambInjectStyle() {
+  if (document.getElementById('__ambStyle')) return;
+  const s = document.createElement('style');
+  s.id = '__ambStyle';
+  s.textContent = `
+    .amb { display:flex; flex-direction:column; gap:6px; }
+    .amb-sec-label { font-weight:700; color:var(--brown-700,#6b4f3a); margin:14px 2px 4px; font-size:14px; }
+    .amb-sec-label:first-child { margin-top:2px; }
+    .amb-sec-sub { font-weight:500; color:var(--text-info,#8a7a6a); font-size:12px; }
+    .amb-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+    .amb-stat { background:var(--card-bg,#faf6f0); border-radius:10px; padding:8px 4px; text-align:center; }
+    .amb-stat-v { display:block; font-weight:700; font-size:14px; color:var(--brown-700,#6b4f3a); }
+    .amb-stat-l { display:block; font-size:11px; color:var(--text-info,#8a7a6a); margin-top:2px; }
+    .amb-note { font-size:11px; color:var(--text-info,#8a7a6a); line-height:1.5; margin:2px; }
+    .amb-periods { display:flex; gap:6px; flex-wrap:wrap; }
+    .amb-period-btn { border:1px solid var(--border,#e5d9c9); background:#fff; color:var(--text-info,#8a7a6a);
+      border-radius:999px; padding:4px 12px; font-size:12px; cursor:pointer; }
+    .amb-period-btn.is-active { background:var(--brown-700,#6b4f3a); color:#fff; border-color:var(--brown-700,#6b4f3a); }
+    .amb-page-table { display:flex; flex-direction:column; }
+    .amb-row { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center;
+      padding:7px 4px; border-bottom:1px solid var(--border,#efe6d8); font-size:13px; }
+    .amb-row--rest .amb-page { color:var(--text-info,#8a7a6a); }
+    .amb-page { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .amb-visits { color:var(--text-info,#8a7a6a); font-size:12px; }
+    .amb-dur { font-weight:600; color:var(--brown-700,#6b4f3a); min-width:56px; text-align:right; }
+    .amb-ev-fam { background:var(--card-bg,#faf6f0); border-radius:10px; padding:8px 10px; margin-bottom:6px; }
+    .amb-ev-fam-head { display:flex; justify-content:space-between; font-weight:600; font-size:13px; }
+    .amb-ev-total { color:var(--brown-700,#6b4f3a); }
+    .amb-ev-types { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+    .amb-ev-type { font-size:11px; color:var(--text-info,#8a7a6a); background:#fff; border-radius:6px; padding:2px 6px; }
+    .amb-empty { color:var(--text-info,#8a7a6a); font-size:13px; padding:10px 4px; }
+    .profile-card--admin { border:1px dashed var(--brown-700,#6b4f3a); background:var(--card-bg,#faf6f0); }
+    .profile-card-admin-tag { font-size:10px; font-weight:700; color:#fff; background:var(--brown-700,#6b4f3a);
+      border-radius:6px; padding:1px 5px; margin-left:4px; vertical-align:middle; }`;
+  document.head.appendChild(s);
+}
+function _ambPageTableInner(rows, userId, period, MA) {
+  const esc = window.escH, labels = window.COTTAGE_PAGE_LABELS || {};
+  const pm = MA.buildPageMap(rows, 'member', userId, period);
+  const sorted = [...pm.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
+  if (!sorted.length) return `<div class="amb-empty">${esc(MA.vpLabel(period))} 기록이 없어요.</div>`;
+  const MAX = 10, head = sorted.slice(0, MAX), rest = sorted.slice(MAX);
+  let html = head.map(([page, d]) => `<div class="amb-row">
+    <span class="amb-page">${esc(labels[page] || page)}</span>
+    <span class="amb-visits">${d.visits}회</span>
+    <span class="amb-dur">${_ambDur(d.totalSec)}</span>
+  </div>`).join('');
+  if (rest.length) {
+    const rv = rest.reduce((s, [, d]) => s + d.visits, 0), rs = rest.reduce((s, [, d]) => s + d.totalSec, 0);
+    html += `<div class="amb-row amb-row--rest"><span class="amb-page">외 ${rest.length}개</span><span class="amb-visits">${rv}회</span><span class="amb-dur">${_ambDur(rs)}</span></div>`;
+  }
+  return html;
+}
+async function _renderAdminMemberBoard(subBody, userId) {
+  const esc = window.escH, MA = window.MemberAnalytics;
+  if (!MA) { subBody.innerHTML = '<div class="amb-empty">분석 모듈을 불러오지 못했어요. 새로고침 후 다시 시도하세요.</div>'; return; }
+  _ambInjectStyle();
+  const [rawSessions, events, usage] = await Promise.all([
+    window.CottageDB?.getUserPageSessions?.(userId) || [],
+    window.CottageDB?.getUserEvents?.(userId) || [],
+    window.CottageDB?.getProfileUsage?.(userId) || null,
+  ]);
+  if (!subBody.isConnected) return; // 조회 대기 중 다른 서브시트로 이탈
+  // page는 정규화 전 원문이라 관리자 페이지와 같은 버킷이 되도록 접는다(#14).
+  const rows = (rawSessions || []).map(r => ({ ...r, page: MA.normalizePageKey(r.page) }));
+  const fams = MA.countMemberEvents(events || [], userId);
+  const todayKst = MA.kstToday();
+  const visitCount = usage?.visit_count ?? 0;
+  const totalMin = usage?.total_minutes ?? 0;
+  const todaySec = (usage?.today_date === todayKst) ? (usage?.today_seconds ?? 0) : 0;
+  const activeDays = new Set(rows.filter(r => r.entered_at).map(r => MA.toKstDate(r.entered_at))).size;
+
+  const periodBar = `<div class="amb-periods">${MA.VP_PERIODS.map(p =>
+    `<button class="amb-period-btn${p.key === 'all' ? ' is-active' : ''}" data-period="${p.key}" type="button">${esc(p.label)}</button>`).join('')}</div>`;
+  const eventsHtml = fams.length
+    ? fams.map(f => `<div class="amb-ev-fam">
+        <div class="amb-ev-fam-head"><span>${f.emoji} ${esc(f.label)}</span><span class="amb-ev-total">${f.total}회</span></div>
+        <div class="amb-ev-types">${f.types.map(t => `<span class="amb-ev-type">${esc(t.type)} ${t.n}</span>`).join('')}</div>
+      </div>`).join('')
+    : '<div class="amb-empty">기록된 활동이 없어요.</div>';
+
+  subBody.innerHTML = `<div class="amb">
+    <div class="amb-sec-label">📊 이용 요약</div>
+    <div class="amb-summary">
+      <div class="amb-stat"><span class="amb-stat-v">${visitCount}</span><span class="amb-stat-l">방문</span></div>
+      <div class="amb-stat"><span class="amb-stat-v">${_ambDur(totalMin * 60)}</span><span class="amb-stat-l">누적 체류</span></div>
+      <div class="amb-stat"><span class="amb-stat-v">${_ambDur(todaySec)}</span><span class="amb-stat-l">오늘</span></div>
+      <div class="amb-stat"><span class="amb-stat-v">${activeDays}일</span><span class="amb-stat-l">방문일수*</span></div>
+    </div>
+    <div class="amb-note">방문·누적은 profiles 기준(heartbeat 포함) · 방문일수*와 아래 표는 page_sessions 기준(체류 하한)</div>
+    <div class="amb-sec-label">📄 페이지 분포 <span class="amb-sec-sub">기간 선택</span></div>
+    ${periodBar}
+    <div class="amb-page-table">${_ambPageTableInner(rows, userId, 'all', MA)}</div>
+    <div class="amb-sec-label">🎯 활동 <span class="amb-sec-sub">무엇을 했나</span></div>
+    ${eventsHtml}
+  </div>`;
+
+  // 기간 버튼: 위임 하나로 처리하고 표 안쪽만 교체한다(관리자 페이지 applyVpPeriod와 같은 방식).
+  subBody.querySelector('.amb-periods')?.addEventListener('click', e => {
+    const btn = e.target.closest('.amb-period-btn'); if (!btn) return;
+    const period = btn.dataset.period;
+    subBody.querySelectorAll('.amb-period-btn').forEach(b => b.classList.toggle('is-active', b.dataset.period === period));
+    const c = subBody.querySelector('.amb-page-table'); if (c) c.innerHTML = _ambPageTableInner(rows, userId, period, MA);
+  });
+}
+
 async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // Phase C: userId 파라미터화 + 읽기전용 모드. readOnly면 대상 유저(userId)의 공개 보드를
   // 편집 컨트롤 없이 표시(비공개 섹션=알림·교환권·함께한 시간 제외). 편집 컨트롤 HTML은 _ro()로 생략.
@@ -1680,6 +1809,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   if (!user || !user.id) return;
   // 편집 컨트롤 HTML 생략 헬퍼 (읽기전용이면 '' 반환)
   const _ro = html => (readOnly ? '' : html);
+  // P4 오너 게이트: **보는 사람(self)이 오너 + 남의 보드(readOnly) + 대상이 오너가 아닐 때만**.
+  //   isOwnerUser(1703)는 *대상* 기준이라 못 쓴다 — 여기 필요한 건 *뷰어* 기준이다.
+  //   🚨 표시 게이팅이지 접근 제어가 아니다(RLS off). _ro의 반대 방향이라 별도 헬퍼로 둔다.
+  const _adminView = readOnly && !!_selfUser && String(_selfUser.id) === String(OWNER_KAKAO_ID)
+    && String(_targetUserId) !== String(OWNER_KAKAO_ID);
+  const _adminOnly = html => (_adminView ? html : '');
   const _boardLabel = '내 보드';
 
   // 취향보드에서 수정 후 "‹ 모임 보드"로 복귀 시 복원할 스크롤 위치(패널 유지되는 동안 서브시트 스왑 간 보존)
@@ -2492,6 +2627,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <span class="profile-card-label">음료교환권</span>
         <span class="profile-card-summary">${escH(_voucherCardSummary)}</span>
       </button>`)}
+      ${_adminOnly(`<button class="profile-card profile-card--span2 profile-card--admin" data-subsheet="adminboard" type="button">
+        <span class="profile-card-icon">🛠️</span>
+        <span class="profile-card-label">회원 분석<span class="profile-card-admin-tag">관리자</span></span>
+        <span class="profile-card-summary">이 회원의 페이지·이용·활동 보기</span>
+      </button>`)}
     </div>`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
@@ -2710,6 +2850,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       } else if (type === 'usage') {
         _trackPvOnce('my-board-usage');
         _openSubSheet('함께한 시간', _usageInnerHtml, _bindUsageSubsheet);
+
+      } else if (type === 'adminboard') {
+        // 오너 전용(카드가 _adminOnly로만 렌더됨). _trackPvOnce 안 함 — 오너는 트래킹 제외라
+        // 무의미하고, 새 가상 페이지 키는 page-labels.js 갱신을 요구한다(안 하면 slug 노출).
+        _openSubSheet('회원 분석', _SUBSHEET_LOADING_HTML, async subBody => {
+          await _renderAdminMemberBoard(subBody, String(user.id));
+        });
 
       } else if (type === 'meeting') {
         _trackPvOnce('my-board-meeting');
