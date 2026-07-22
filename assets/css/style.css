@@ -7218,8 +7218,13 @@ body.is-embedded .inner-page{padding-top:16px;}
    새 색 하드코딩 없이 기존 변수(--line·--card-bg)만 사용. */
 .pr-group-card { border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); overflow: hidden; margin: 0 12px 15px; }
 .pr-group-card:last-child { margin-bottom: 10px; }
-/* 인원 헤더: 위 구분선 없이 아래로 구분선 하나(모임 카드의 내부 섹션에서도 동일하게 손자까지 닿게 descendant) */
-.pr-group-card .pr-player-header { border-top: none; border-bottom: 1px solid var(--line); }
+/* 인원 헤더: 띠·구분선 없이 옅은 보조정보 한 줄로(GPT안 ②③, 2026-07-22).
+   두 겹 띠(모임+인원)를 한 겹으로 정리 — 인원은 "누가 했나" 부가정보다.
+   인원 묶음 사이 구분은 .pr-moim-section 구분선이 담당하므로 여기선 뺀다. */
+.pr-group-card .pr-player-header { border-top: none; border-bottom: none; background: transparent; padding-top: 7px; padding-bottom: 2px; }
+/* 이름 색을 약하게(개수 '3명'은 앵커로 남기고 이름만 옅게) */
+.pr-group-card .pr-player-header .pr-tag-who { color: #9a8f82; }
+.pr-group-card .pr-player-header .pr-tag-who-first { color: #7d7264 !important; }
 /* 개별 게임: 별도 외곽선 없이 내부 섹션 — 게임 사이 위아래 여백 확보(pr-rec-row의 border-bottom이 얇은 가로선) */
 .pr-group-card .pr-rec-row { padding-top: 13px; padding-bottom: 13px; }
 /* 날짜별 보기의 36px 들여쓰기는 카드가 이미 그룹을 묶으므로 카드 안에서 상쇄 */
@@ -7227,8 +7232,9 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session--bydate .pr-group-card .pr-player-header { padding-left: 16px; }
 
 /* 날짜별 보기: 모임 하나 = 카드, 모임명은 카드 최상단 헤더로 흡수(밖에 안 뜨게).
-   인원 묶음(.pr-moim-section)은 그 안의 내부 섹션 — 박스는 한 겹뿐(카드-속-카드 아님). */
-.pr-moim-header { font-size: 12px; font-weight: 600; color: var(--muted); padding: 8px 16px; background: var(--bg-soft); border-bottom: 1px solid var(--line); }
+   인원 묶음(.pr-moim-section)은 그 안의 내부 섹션 — 박스는 한 겹뿐(카드-속-카드 아님).
+   모임명은 진한 브랜드 브라운·굵게로 '그룹 시작점' 강조(GPT안 ①, 2026-07-22). */
+.pr-moim-header { font-size: 13px; font-weight: 700; color: var(--green); padding: 10px 16px 9px; background: var(--bg-soft); border-bottom: 1px solid var(--line); }
 .pr-session--bydate .pr-moim-header { padding-left: 16px; }
 .pr-moim-section + .pr-moim-section { border-top: 1px solid var(--line); }
 
