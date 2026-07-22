@@ -531,6 +531,10 @@
   // (014) 기록 id → 그 기록에 매인 게임평(game_comments.record_id) 배열. loadRecords에서 1회 로드,
   // buildSessionBody가 동기로 읽는다. 위 맵과 같은 이유로 여기 한 번만 조회한다.
   let _recordCommentsMap = new Map();
+  // 게임평/사진 추가 등 전체 리로드(refreshPlayRecordsBoard) 시 펼침·스크롤 보존용.
+  // loadRecords가 "불러오는 중"으로 DOM을 지우기 전에 _saveViewState 결과를 여기 담아두고,
+  // 재렌더가 끝나는 renderRecords 끝에서 _restoreViewState로 되살린다(동기 편집 경로가 쓰는 것과 같은 헬퍼).
+  let _pendingBoardState = null;
 
   async function loadRecords() {
     if (recordsLoaded && recordsData !== null) {
@@ -596,9 +600,13 @@
   // 게임(기록)시트 ⋯메뉴(사진/게임평/세션참여)로 기록이 바뀌면 game-sheet.js가 이 훅을 호출 →
   // 게시판 캐시 무효화 후, 기록 탭이 열려있으면 즉시 리로드(닫혀있으면 다음에 열 때 새로 로드).
   window.refreshPlayRecordsBoard = () => {
+    const panel = document.getElementById('prPanelRecords');
+    const active = panel?.classList.contains('is-active');
+    // DOM을 "불러오는 중"으로 지우기 전에 펼침·스크롤을 캡처 → 재렌더 끝에서 복원(게임평/사진 추가 후 보던 자리 유지)
+    if (active && panel) _pendingBoardState = _saveViewState(panel);
     recordsLoaded = false;
     recordsData = null;
-    if (document.getElementById('prPanelRecords')?.classList.contains('is-active')) loadRecords();
+    if (active) loadRecords();
   };
 
   function _saveViewState(panel) {
@@ -814,6 +822,8 @@
 
   function renderRecords(data) {
     const panel = document.getElementById('prPanelRecords');
+    // 전체 리로드 경로가 미리 담아둔 펼침·스크롤 상태(있으면). 여기서 꺼내 비워 다음 렌더로 새지 않게 한다.
+    const _restoreState = _pendingBoardState; _pendingBoardState = null;
     const user = window.getKakaoUser?.();
 
     // 닉네임 → userId 맵: 회원 전체(현재 닉네임)를 깔고, 기록의 recorder 정보(당시 닉네임)로 보강.
@@ -1022,6 +1032,8 @@
         });
       }
     }
+    // 전체 리로드(refreshPlayRecordsBoard) 경로: 지웠던 펼침·스크롤을 복원(동기 편집 경로와 같은 헬퍼)
+    if (_restoreState) _restoreViewState(panel, _restoreState._openSess, _restoreState._openSub, _restoreState._sy, _restoreState._openMonth);
   }
 
   function bindToggle(panel) {
