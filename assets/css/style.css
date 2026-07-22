@@ -7081,7 +7081,6 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-month-body .pr-sub-session.is-open > .pr-sub-hd::before,
 .pr-session--bydate .pr-sub-session.is-open > .pr-sub-hd::before { content: ''; position: absolute; left: 8px; top: 0; bottom: -3px; width: 3px; background: #a06040; pointer-events: none; }
 .pr-month-body .pr-date-group-label,
-.pr-session--bydate .pr-date-group-label { padding-left: 36px; }
 .pr-month-body .pr-player-header,
 .pr-session--bydate .pr-player-header { padding-left: 36px; }
 .pr-month-body .pr-rec-row,
@@ -7119,7 +7118,6 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-month-body { display: none; }
 .pr-month-session.is-open .pr-month-body { display: block; }
 .pr-month-body > .pr-sub-session:first-child.is-open { margin-top: 8px; }
-.pr-date-group-label { font-size: 11px; font-weight: 500; color: #7a6a58; padding: 6px 16px 2px; letter-spacing: 0.2px; }
 
 .pr-sub-session { border-top: 1px solid #e8e4dc; background: var(--bg); }
 .pr-sub-session:first-child { border-top: none; }
@@ -7220,13 +7218,19 @@ body.is-embedded .inner-page{padding-top:16px;}
    새 색 하드코딩 없이 기존 변수(--line·--card-bg)만 사용. */
 .pr-group-card { border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); overflow: hidden; margin: 0 12px 15px; }
 .pr-group-card:last-child { margin-bottom: 10px; }
-/* 그룹 헤더: 카드 상단에 붙고 아래로 구분선 하나 */
-.pr-group-card > .pr-player-header { border-top: none; border-bottom: 1px solid var(--line); }
+/* 인원 헤더: 위 구분선 없이 아래로 구분선 하나(모임 카드의 내부 섹션에서도 동일하게 손자까지 닿게 descendant) */
+.pr-group-card .pr-player-header { border-top: none; border-bottom: 1px solid var(--line); }
 /* 개별 게임: 별도 외곽선 없이 내부 섹션 — 게임 사이 위아래 여백 확보(pr-rec-row의 border-bottom이 얇은 가로선) */
-.pr-group-card > .pr-rec-row { padding-top: 13px; padding-bottom: 13px; }
+.pr-group-card .pr-rec-row { padding-top: 13px; padding-bottom: 13px; }
 /* 날짜별 보기의 36px 들여쓰기는 카드가 이미 그룹을 묶으므로 카드 안에서 상쇄 */
 .pr-session--bydate .pr-group-card .pr-rec-row { padding-left: 14px; }
 .pr-session--bydate .pr-group-card .pr-player-header { padding-left: 16px; }
+
+/* 날짜별 보기: 모임 하나 = 카드, 모임명은 카드 최상단 헤더로 흡수(밖에 안 뜨게).
+   인원 묶음(.pr-moim-section)은 그 안의 내부 섹션 — 박스는 한 겹뿐(카드-속-카드 아님). */
+.pr-moim-header { font-size: 12px; font-weight: 600; color: var(--muted); padding: 8px 16px; background: var(--bg-soft); border-bottom: 1px solid var(--line); }
+.pr-session--bydate .pr-moim-header { padding-left: 16px; }
+.pr-moim-section + .pr-moim-section { border-top: 1px solid var(--line); }
 
 .pr-game-group { border-top: 1px solid var(--border); }
 .pr-game-group:first-child { border-top: none; }

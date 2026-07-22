@@ -1307,8 +1307,8 @@
         const sortedGroupEntries = [...groupMap.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ko'));
 
         for (const [groupName, recs] of sortedGroupEntries) {
-          html += `<div class="pr-date-group-label">${escH(groupName || '모임 미선택')}</div>`;
-          html += buildSessionBody(recs, user, _orderMap);
+          // 날짜별 보기: 모임명을 buildSessionBody에 넘겨 카드 안 헤더로 흡수(밖에 안 뜨게)
+          html += buildSessionBody(recs, user, _orderMap, groupName || '모임 미선택');
         }
 
         html += `</div></div>`;
@@ -1354,7 +1354,7 @@
     return html;
   }
 
-  function buildSessionBody(recs, user, orderMap = new Map()) {
+  function buildSessionBody(recs, user, orderMap = new Map(), moimLabel = '') {
     // 이 날(=이 블록) 전체 캡션. 행마다 다시 만들지 않고 한 번만 만들어 각 ⋯ 메뉴에 심는다.
     // 캡션 단위는 「모임 하루치」다 — 게임 하나가 아니라 그날 한 게임 전부가 들어간다.
     const _dayCaption = window.escAttr(window.buildRecordCaption?.(recs, getGameName) || '');
@@ -1367,7 +1367,7 @@
       playerGroups.get(key).push(r);
     }
 
-    let html = '';
+    const _sections = [];
     for (const [, groupRecs] of playerGroups) {
       const first = groupRecs[0];
       const countTag = first.player_count ? `<span class="pr-rec-tag pr-tag-count"><span class="pr-tag-icon">👥</span> ${first.player_count}명</span>` : '';
@@ -1426,12 +1426,19 @@
         </div>`;
       }).join('');
 
-      // 같은 인원으로 플레이한 게임 묶음 전체를 하나의 카드로 감싼다(2026-07-22).
-      // GPT 원안은 게임마다 개별 카드였으나 월→날짜→인원→게임의 다중 중첩 위에
-      // 또 카드를 얹으면 카드-속-카드가 되어 기각 — 그룹(인원) 단위가 사용자 확정.
-      html += `<div class="pr-group-card">${_headerHtml}${_rowsHtml}</div>`;
+      _sections.push(`${_headerHtml}${_rowsHtml}`);
     }
-    return html;
+
+    // 같은 인원으로 플레이한 게임 묶음 = 카드(2026-07-22). 게임별 개별 카드는
+    // 월→날짜→인원→게임 다중 중첩 위 카드-속-카드라 기각 — 그룹(인원) 단위 확정.
+    // 날짜별 보기(moimLabel 있음)에선 모임 하나를 카드로 삼고 인원 묶음을 내부
+    // 섹션으로 둔다 — 모임명이 카드 밖에 맨몸으로 뜨지 않게(2026-07-22). 여기서도
+    // 박스는 한 겹뿐이라 카드-속-카드가 아니다.
+    if (moimLabel) {
+      const _inner = _sections.map(s => `<div class="pr-moim-section">${s}</div>`).join('');
+      return `<div class="pr-group-card pr-group-card--moim"><div class="pr-moim-header">${escH(moimLabel)}</div>${_inner}</div>`;
+    }
+    return _sections.map(s => `<div class="pr-group-card">${s}</div>`).join('');
   }
 
 })();
