@@ -544,7 +544,7 @@ window._cottageSess = (function () {
       const keys = Array.isArray(gameKey) ? gameKey.map(String) : [String(gameKey)];
       const base = db
         .from("game_comments")
-        .select("id, comment_text, nickname, user_id, created_at")
+        .select("id, comment_text, nickname, user_id, record_id, created_at")
         .order("created_at", { ascending: false })
         .limit(limit);
       const { data, error } = await (keys.length > 1 ? base.in('game_key', keys) : base.eq('game_key', keys[0]));
@@ -555,7 +555,24 @@ window._cottageSess = (function () {
     }
   }
 
-  async function insertComment(gameKey, commentText, nickname, userId) {
+  // (014) 특정 플레이기록들에 매인 게임평 조회 — buildSessionBody가 화면 기록 id로 한 번에 로드.
+  async function getRecordComments(recordIds) {
+    const ids = (Array.isArray(recordIds) ? recordIds : [recordIds]).map(String).filter(Boolean);
+    if (!ids.length) return [];
+    try {
+      const { data, error } = await db
+        .from("game_comments")
+        .select("id, game_key, comment_text, nickname, user_id, record_id, created_at")
+        .in('record_id', ids)
+        .order("created_at", { ascending: true });
+      if (error) console.error('[getRecordComments]', error);
+      return data || [];
+    } catch (err) { console.error('[getRecordComments]', err);
+      return [];
+    }
+  }
+
+  async function insertComment(gameKey, commentText, nickname, userId, recordId) {
     if (!gameKey || !commentText?.trim()) return { error: "invalid" };
     try {
       const { data, error } = await db
@@ -565,6 +582,7 @@ window._cottageSess = (function () {
           comment_text: commentText.trim(),
           nickname: nickname || null,
           user_id: userId || null,
+          record_id: recordId || null,   // (014) 기록에 매인 게임평이면 그 기록 id
         })
         .select("id");
       if (error) return { error };
@@ -1674,6 +1692,7 @@ window._cottageSess = (function () {
     getVisitorStats,
     getPlayReviewsByGame,
     getGameComments,
+    getRecordComments,
     insertComment,
     deleteComment,
     updateComment,

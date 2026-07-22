@@ -150,11 +150,13 @@ create table if not exists public.game_comments (
   comment_text text not null check (char_length(comment_text) between 1 and 500),
   nickname     text,
   user_id      text,
+  record_id    text,   -- (014) 특정 플레이기록에 매인 게임평. NULL이면 게임 단위 독립 게임평
   created_at   timestamptz not null default now()
 );
 
 create index if not exists game_comments_game_key_idx  on public.game_comments (game_key);
 create index if not exists game_comments_created_at_idx on public.game_comments (created_at desc);
+create index if not exists game_comments_record_id_idx  on public.game_comments (record_id);
 
 alter table public.game_comments enable row level security;
 
@@ -178,6 +180,7 @@ create policy "anon_delete_game_comments"
 -- 기존 DB에 컬럼 없을 경우 추가
 alter table public.game_comments add column if not exists nickname text;
 alter table public.game_comments add column if not exists user_id  text;
+alter table public.game_comments add column if not exists record_id text;  -- (014)
 
 
 -- ── game_likes (따봉) ─────────────────────────────────────────

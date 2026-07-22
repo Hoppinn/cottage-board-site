@@ -1675,6 +1675,7 @@ function getOrCreateCommentModal() {
 
 function onOpenCommentInput(btn) {
   const gameKey = btn.dataset.gameId;
+  const recordId = btn.dataset.recordId || '';   // (014) 특정 기록의 ⋯메뉴에서 진입했으면 존재
   requireLogin(async () => {
     const modal = getOrCreateCommentModal();
     modal.dataset.gameId = gameKey;
@@ -1682,16 +1683,33 @@ function onOpenCommentInput(btn) {
     delete modal.dataset.linkCommentId;
     const titleEl = modal.querySelector('.sheet-comment-modal-title');
     const submitEl = document.getElementById('sheetCommentModalSubmit');
-    if (titleEl) titleEl.textContent = '게임평 남기기';
     if (submitEl) submitEl.textContent = '등록';
     const input = document.getElementById('sheetCommentModalInput');
     if (input) { input.value = ''; input.readOnly = false; }
 
-    // 플레이기록 연동: 내 기록 중 게임평 없는 것 조회
     const linkWrap = document.getElementById('sheetCommentPlayLink');
     const linkCheck = document.getElementById('sheetCommentLinkCheck');
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
     const linkLabel = linkWrap?.querySelector('.sheet-comment-play-link-label');
+
+    // (014) 특정 기록에서 진입 → 그 기록에 게임평을 매단다(누구 기록이든). 연동 select 없이 바로 첨부.
+    //   연동 select(내 기록 채우기·남 세션 참여)는 '남기기'(기록과 무관) 진입에만 쓴다 — 그 UX를 여기
+    //   섞으면 남의 세션에 preselect돼 새 기록이 생기는 옛 함정이 재발한다.
+    if (recordId) {
+      modal.dataset.recordId = recordId;
+      modal._myRecordCountAtOpen = 0;
+      modal._joinSessions = [];
+      modal._opening = false;
+      if (titleEl) titleEl.textContent = '게임평 추가';
+      if (linkWrap) linkWrap.style.display = 'none';
+      modal.style.display = 'flex';
+      input?.focus();
+      return;
+    }
+    delete modal.dataset.recordId;
+
+    // 기록과 무관한 '남기기' — 내 기록 연동/남 세션 참여 select UX
+    if (titleEl) titleEl.textContent = '게임평 남기기';
     if (linkLabel) linkLabel.style.display = '';
     modal.style.display = 'flex';
     input?.focus();
@@ -1807,6 +1825,7 @@ function onCloseCommentModal() {
     modal.style.display = 'none';
     delete modal.dataset.editId;
     delete modal.dataset.linkCommentId;
+    delete modal.dataset.recordId;   // (014) 기록 첨부 모드 해제
     const input = document.getElementById('sheetCommentModalInput');
     if (input) input.readOnly = false;
     const linkLabel = document.querySelector('#sheetCommentPlayLink .sheet-comment-play-link-label');
@@ -2017,6 +2036,7 @@ async function onSubmitCommentModal() {
   let linkedRecId = null;
   let didJoin = false;
   let joinedGameId = null;
+  let attachedRecId = null;   // (014) 특정 기록에 매단 게임평이면 그 기록 id
   if (linkCommentId) {
     const linkSelect = document.getElementById('sheetCommentPlaySelect');
     linkedRecId = linkSelect?.value;
@@ -2052,7 +2072,8 @@ async function onSubmitCommentModal() {
       result = await window.CottageDB.updateGamePlay(selVal, { review_text: text });
     } else {
       const _cu = window.getKakaoUser?.();
-      result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null);
+      attachedRecId = modal?.dataset.recordId || null;   // (014) 기록 ⋯메뉴 진입이면 그 기록에 매단다
+      result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null, attachedRecId);
       if (!result.error && result.id) saveMyCommentId(result.id);
     }
   }
@@ -2060,7 +2081,7 @@ async function onSubmitCommentModal() {
     // 남의 세션 참여만 새 플레이기록을 만든다 — 연동(updateGamePlay)·게임평 단독은 아님
     if (didJoin) window.CottageDB?.trackEvent('record_complete', { game_id: joinedGameId });
     // 새 게임평(어디에도 연동 안 됨) + 이 게임에 내 플레이기록이 아예 없으면 → 남기기 넛지
-    const shouldNudge = !linkCommentId && !editId && !linkedRecId && !didJoin && modal._myRecordCountAtOpen === 0;
+    const shouldNudge = !linkCommentId && !editId && !linkedRecId && !didJoin && !attachedRecId && modal._myRecordCountAtOpen === 0;
     onCloseCommentModal();
     await initSheetComments(gameKey);         // 기록전체보기 시트용
     await initSheetCommentsPreview(gameKey);  // 메인 게임시트 미리보기용
@@ -2068,6 +2089,10 @@ async function onSubmitCommentModal() {
       await initPlayWidget(gameKey);          // 연동/참여로 바뀐 기록 반영
       window.refreshPlayRecordsBoard?.();     // 게시판 목록도 반영(연동/참여로 기록 변경 시)
       showActionToast(didJoin ? '세션에 후기를 남겼어요' : '플레이기록에 연동했어요');
+    } else if (attachedRecId) {
+      // (014) 기록에 매단 게임평 — 게시판(기록 아래)·게임시트 미리보기에 반영
+      window.refreshPlayRecordsBoard?.();
+      showActionToast('기록에 게임평을 남겼어요');
     } else if (shouldNudge) {
       // 내 기록이 없을 때: 남의 세션 있으면 확인창으로 그 세션에 후기 추가(방금 쓴 게임평은 이동)
       const sessions = await _getOthersSessions(gameKey);

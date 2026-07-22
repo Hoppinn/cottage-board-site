@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-07-22 (**P1 — `game_comments.record_id`(014)로 한 플레이기록에 여러 사람 게임평. supabase-client에 `getRecordComments`, insertComment에 recordId 인자, buildSessionBody에 매인 게임평 렌더, scripts에 `link-bbok-0711-comments.js` 추가**) / 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -110,10 +110,13 @@
 │   ├── verify-past-meeting-actions.js # A-10 지난 날짜의 무반응 버튼(✎/✕·등록) 제거 검증 (DB 불필요)
 │   │                               #   --negctl 먼저. day-detail.js를 실제 eval하고,
 │   │                               #   index-page.js의 판정식은 원문 그대로 잘라 eval한다
-│   ├── link-bbok-0711-records.js   # 뽁님 7/11 게임평 → 호핀 세션에 뽁님 기록 추가 (완료, 보관)
-│   │                               #   ⚠️운영DB INSERT. 기본 드라이런, --commit이라야 실행.
-│   │                               #   원본 game_comments는 지우지 않는다(코멘트 유지가 전제).
-│   │                               #   중복 가드 (user_id,game_id,played_at) — 두 번 돌려도 안 겹침
+│   ├── link-bbok-0711-records.js   # (구·되돌림) 뽁님 게임평 → 호핀 세션에 새 기록 삽입 접근.
+│   │                               #   같은 게임 2번 뜨는 문제로 --undo 완료. 보관만
+│   ├── link-bbok-0711-comments.js  # (P1) 뽁님 7/11 게임평 game_comments.record_id를 호핀
+│   │                               #   7/11 기록 id로 세팅 → 기록 아래 표시(새 기록 안 만듦).
+│   │                               #   ⚠️운영DB UPDATE. 기본 드라이런, --commit. --undo로 NULL 복원.
+│   │                               #   🚨 마이그레이션 014 선행 필수(없으면 드라이런도 400).
+│   │                               #   멱등(이미 그 record_id면 건너뜀). 원본 코멘트는 안 지움
 │   ├── verify-history-caption.js   # 모임 기록 「캡션복사」 양식 (DB 불필요, --live로 실DB 대조)
 │   │                               #   --negctl 먼저. club-history.html의 formatPlayTime·
 │   │                               #   formatScore·buildCaption을 원문 그대로 잘라 eval한다

@@ -55,8 +55,9 @@ return data || [];
 | `getGamePlayCount(gameId)` | 게임 플레이 건수. `gameId` 배열 지원 |
 | `getPlayHighlights(gameId)` | 플레이 하이라이트. `gameId` 배열 지원 |
 | `getPlayReviewsByGame(gameId, limit)` | game_play_records에서 review_text IS NOT NULL인 기록. `gameId` 배열 지원 |
-| `getGameComments(gameKey)` | 게임 코멘트 조회 |
-| `insertComment(...)` | 코멘트 등록 |
+| `getGameComments(gameKey)` | 게임 코멘트 조회. select에 `record_id` 포함(014) |
+| `getRecordComments(recordIds)` | (014) 특정 플레이기록들에 매인 게임평 조회. `record_id IN (...)` 배치. `buildSessionBody`가 화면 기록 id로 한 번에 로드해 기록 아래 렌더 |
+| `insertComment(gameKey, text, nickname, userId, recordId?)` | 코멘트 등록. `recordId` 있으면(⋯메뉴로 특정 기록에 게임평 첨부, 014) `game_comments.record_id`에 저장 → 그 기록 아래 표시 |
 | `deleteComment(id)` | 코멘트 삭제 |
 | `updateComment(id, text)` | 코멘트 수정 |
 | `getGameLikeCount(gameId)` | 따봉 수 조회 |
@@ -236,15 +237,16 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `_gameIds(gameKey)` | gameKey → `[gameKey]` 또는 `[gameKey, bggId]` 배열 반환. game_id가 gameKey와 BGG ID 두 가지로 저장될 수 있어 CottageDB 조회 시 배열로 전달하여 `.in()` 쿼리 처리 |
 | `_fetchGamePhotos(gameKey)` | 해당 게임 플레이 기록에서 사진 URL 목록 추출 |
 | `_getMyUnlinkedPlayRecords(gameKey)` | 게임평↔플레이기록 연동 공용 조회. `{all, unreviewed}` 반환 — all=내 기록 전체, unreviewed=후기(review_text) 없는 것만. `onOpenCommentInput`(작성 시 체크박스 연동)과 `onLinkCommentToPlay`(사후 연동) 양쪽이 공유 |
-| `onOpenCommentInput(btn)` | 게임평 작성 모달. "연동" select = 내 후기없는 기록(value=id) + 남의 세션(`data-join`, `modal._joinSessions`, `data-rec-ids`). `all.length`→`modal._myRecordCountAtOpen` 캐시(넛지 판정). `btn.dataset.recordId` 있으면(⋯메뉴 특정 기록 진입) `_preselectLinkOption`으로 그 기록/세션을 기본 체크+선택 |
+| `onOpenCommentInput(btn)` | 게임평 작성 모달. **두 모드(014)**: ①`btn.dataset.recordId` **있으면**(기록 ⋯메뉴 진입) = **첨부 모드** — 연동 select를 아예 숨기고 `modal.dataset.recordId`만 세팅해, 저장 시 그 기록에 게임평을 매단다(누구 기록이든). ②record_id **없으면**(게임시트 「남기기」) = 기존 연동 select 모드: 내 후기없는 기록(value=id) + 남의 세션(`data-join`, `modal._joinSessions`, `data-rec-ids`), `all.length`→`modal._myRecordCountAtOpen` 캐시(넛지 판정). ⚠️ **①이 별도 모드인 이유**: 예전엔 record_id를 `_preselectLinkOption`으로 남 세션에 매칭해 「남 세션 참여」(=새 기록 생성)로 흘렀고, 그게 사용자가 거부한 「같은 게임 2번」 함정이었다. 첨부 모드는 그 경로를 타지 않는다 |
 | `_preselectLinkOption(linkCheck, linkSelect, recordId)` | ⋯메뉴 특정 기록에서 모달 진입 시 그 기록을 "연동" 기본값으로: select에서 value===recordId(내 기록) 또는 `data-join`+`data-rec-ids`에 recordId 포함(남 세션) 옵션을 찾아 체크박스 ON+선택. 게임평·사진 모달 공용 |
 | `onLinkCommentToPlay(btn)` | 기존 게임평(코멘트) → 내 플레이기록 사후 연동. 후기 없는 내 기록이 있으면 `getOrCreateCommentModal()`을 link-mode로 재사용(`modal.dataset.linkCommentId` 설정, 텍스트 readonly 프리필, 기록 select 강제 표시). 내 기록 없으면 `_getOthersSessions` 조회 → 있으면 `_openJoinConfirm`(확인창 → 즉시 참여, 원본 코멘트 이동), 없으면 game-reviews.html?tab=input 빈 입력 넛지 |
-| `onSubmitCommentModal()` | link-mode(`linkCommentId`)면 `updateGamePlay`+원본 `deleteComment`. select 연동 분기: `join:` 옵션이면 세션 필드 복사한 `recordGamePlay`(남 세션 참여), 내 기록 id면 `updateGamePlay(review_text)`, 미선택이면 `insertComment`. 셋 다 아니고 내 기록 0개면 남 세션 있을 때 `_openJoinConfirm`(방금 쓴 게임평 이동), 없으면 넛지 토스트 |
+| `onSubmitCommentModal()` | link-mode(`linkCommentId`)면 `updateGamePlay`+원본 `deleteComment`. select 연동 분기: `join:` 옵션이면 세션 필드 복사한 `recordGamePlay`(남 세션 참여), 내 기록 id면 `updateGamePlay(review_text)`, 미선택이면 `insertComment`. **미선택이면서 `modal.dataset.recordId` 있으면(첨부 모드, 014)** `insertComment(..., recordId)` → 그 기록에 매인 게임평 → `refreshPlayRecordsBoard`로 게시판 반영, 넛지 건너뜀. 셋 다 아니고 내 기록 0개면 남 세션 있을 때 `_openJoinConfirm`(방금 쓴 게임평 이동), 없으면 넛지 토스트 |
 | `_getOthersSessions(gameKey)` | 남의 세션에 내 후기/사진으로 참여: `getGamePlayRecords(_gameIds)`에서 내 기록 제외 + `group_name\|played_at\|player_count\|player_names` 키로 dedupe + 최신순 정렬. 각 세션에 `rec_ids`(그 세션 기록 id들, 프리셀렉트 매칭용) 포함. 그룹·날짜 둘 다 없는 기록은 세션으로 안 봄 |
 | `_openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId?)` | 남의 세션에 내 후기로 참여(1안 = 확인창, 입력폼·페이지이동 없음). `#sheetJoinModal`(세션 정보+후기 미리보기, 세션 여러 개면 select) → [남기기] 시 세션 필드(게임·인원·참여자·그룹·날짜) 그대로 복사한 `recordGamePlay`로 내 새 기록 생성 → 모임별·게임별 뷰 모두 같은 세션에 nest. `sourceCommentId` 있으면 성공 후 `deleteComment`(후기 이동=중복 방지). 완료 후 `initSheetComments`/`Preview`/`initPlayWidget` 갱신 |
 | `onOpenPhotoInput(btn)` / `onSubmitPhotoModal()` | 사진 남기기 모달. "연동" select = 내 기록(선택 시 `updateGamePlay`로 photo_url 병합) + **남의 세션**(`data-join="1"`, `data-rec-ids`, `modal._joinSessions`; 선택 시 세션 필드 복사한 `recordGamePlay`로 내 새 사진 기록 = 세션 참여). `btn.dataset.recordId` 있으면 `_preselectLinkOption`으로 기본 연동. 미연동이면 사진만 담은 새 기록 생성 |
 | `window.refreshPlayRecordsBoard()` | game-reviews.js가 노출하는 게시판 리로드 훅(정의: game-reviews.js). game-sheet.js의 ⋯메뉴 모달 저장(사진/게임평/세션참여/플레이기록 수정·신규) 성공 시 호출 → 게시판 캐시 무효화 후 기록 탭 열려있으면 즉시 리로드. 게시판 없는 페이지(index/owned 등)에선 `undefined`라 `?.()`로 no-op. (2026-07-16: ⋯메뉴로 사진/게임평 추가해도 새로고침 전엔 게시판에 안 뜨던 버그 수정) |
-| `initPlayWidget(gameKey)` 기록별 ⋯메뉴 | 게임(기록)시트 플레이위젯의 각 기록 항목에 `.sheet-rec-more`(⋯) 인라인 확장 메뉴 — `💬 게임평 추가`(`onOpenCommentInput`)·`📷 사진 추가`(`onOpenPhotoInput`), 버튼에 `data-game-id`+`data-record-id` → 그 기록/세션이 모달 "연동" 기본값으로. `.sheet-play-box{overflow:hidden}` 클리핑 회피 위해 절대배치 드롭다운 대신 인라인 확장(`.sheet-rec-more-actions.is-open`) |
+| `initPlayWidget(gameKey)` 기록별 ⋯메뉴 | 게임(기록)시트 플레이위젯의 각 기록 항목에 `.sheet-rec-more`(⋯) 인라인 확장 메뉴 — `💬 게임평 추가`(`onOpenCommentInput`)·`📷 사진 추가`(`onOpenPhotoInput`), 버튼에 `data-game-id`+`data-record-id`. `💬 게임평 추가`는 그 기록에 **첨부**(014, 위 `onOpenCommentInput` ①모드), `📷 사진 추가`는 그 기록/세션을 "연동" 기본값으로(`_preselectLinkOption`). `.sheet-play-box{overflow:hidden}` 클리핑 회피 위해 절대배치 드롭다운 대신 인라인 확장(`.sheet-rec-more-actions.is-open`) |
+| `buildSessionBody(recs, user, orderMap)` (game-reviews.js) | 플레이기록 게시판의 기록 행 렌더(날짜별·모임별·게임별 세 뷰 공유). 기록 주인 후기(`review_text`)를 `pr-rec-review`로, 그 뒤에 **그 기록에 매인 남의 게임평**(`_recordCommentsMap[record.id]`, 014)을 `pr-rec-review--linked`로 잇는다. 맵은 `loadRecords`가 `getRecordComments(모든 기록 id)`로 1회 로드(동기 재렌더라 여기서 조회 안 함). 첨부/해제 후 반영은 `refreshPlayRecordsBoard`(캐시 무효화 → 재로드) |
 
 ---
 

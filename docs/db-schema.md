@@ -19,6 +19,7 @@
 | 011 `page_events` anon SELECT 정책 | ✅ **실행 완료 + 검증 (2026-07-18)** — anon SELECT 1,452행 정상, 관리자 이벤트 퍼널이 실수치로 렌더됨(Playwright 확인) |
 | 013 `meeting_votes.guest_count` | ✅ **실행 완료 + 검증 (2026-07-21)** — 22행 전부 default 0. anon 조회 응답에 `guest_count` 필드 존재를 실측(`scripts/verify-party-size.js --live`). **행 수만 보면 안 된다** — 컬럼이 없으면 PostgREST가 400을 내고 클라이언트는 `[]`를 반환해 「0행」으로 보인다 |
 | 012 `increment_profile_counters` RPC | ✅ **실행 완료 + 검증 (2026-07-20 재확인)** — anon RPC 호출이 HTTP 200, 없는 `user_id`로 불러도 빈 행이 안 생김(012 파일의 검증 ②). ⚠️ **이 칸은 2026-07-20까지 「미실행」으로 남아 PROJECT_STATE의 「완료」와 충돌하고 있었다** — 문서 두 곳이 갈리면 그럴듯한 쪽으로 잇지 말고 이렇게 **DB에 직접 물어서** 닫을 것 |
+| 014 `game_comments.record_id` | 🔴 **미적용 (2026-07-22 실측)** — anon SELECT에 `record_id`가 없어 HTTP 400(`column game_comments.record_id does not exist`). **코드(`getGameComments`가 이 컬럼을 select)를 배포하기 전에 SQL Editor에서 014를 먼저 실행할 것** — 안 하면 게임시트 「게임평」 목록이 400으로 빈다. 컬럼 추가는 nullable이라 현재 라이브 코드엔 무해(언제 실행해도 안전) |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
@@ -92,7 +93,7 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 | `game_ratings` | game_id, rating, session_key | 별점 |
 | `game_likes` | game_id (nullable), user_id, custom_name (nullable text) | 따봉. custom_name은 직접입력 게임명 (game_id IS NULL일 때 사용). 🚨 **`game_id`에 들어 있는 건 bggId가 아니라 COTTAGE_GAMES 슬러그다**(실측 2026-07-21: `"리바이브"`·`"메이지나이트-얼티밋-에디션"`). `meeting_vote_games.game_id`는 **bggId 숫자**(`332772`)라 **같은 게임인데 두 테이블의 값이 다르다** — 두 출처를 한 화면에서 비교할 땐 반드시 한쪽으로 변환할 것. 안 하면 "이미 담은 게임"을 못 알아본다(모임 플래너 Step3 피커에서 실제로 발생, `normalizePickerItem`이 그 자리의 변환기). 옛 `meeting_vote_games` 행에는 `custom_name`에 `#슬러그`가 들어간 것도 있다(2026-07-09 이전) |
 | `game_curious` | game_id (nullable), user_id, custom_name (nullable text) | 궁금해요. 동일 구조 |
-| `game_comments` | game_key, comment_text, nickname, user_id | 코멘트 |
+| `game_comments` | game_key, comment_text, nickname, user_id, **record_id** (nullable, 014) | 게임 코멘트/게임평. `record_id`가 있으면 특정 플레이기록(`game_play_records.id`)에 매인 게임평 → 그 기록 아래 표시(P1). NULL이면 게임 단위 독립 게임평(종전 동작). FK 제약 없음(text) |
 | `game_reviews` | game_id, content, nickname, user_id | 리뷰 |
 | `game_play_records` | game_id, user_id, nickname, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text | 플레이 기록 |
 | `page_views` | page, created_at, referrer, is_bot (boolean, default false), user_id (text, nullable), session_key (text, nullable) | 페이지 방문 (referrer: utm_source 또는 외부 도메인 hostname). is_bot/user_id는 143차-178부터 추가 — `__visitor__` 마커 삽입 시점에 navigator.userAgent로 알려진 크롤러 패턴 매칭 시 is_bot=true, 로그인 상태면 user_id 채움(회원/비회원 구분용). session_key는 143차-190부터 추가 — `trackPageView()`가 `cottage_session_id` 값을 함께 저장. **과거 행은 session_key=NULL이며 소급 보정하지 않음** |

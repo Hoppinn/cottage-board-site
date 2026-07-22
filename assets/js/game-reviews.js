@@ -528,6 +528,9 @@
   // 회원 전체의 현재 닉네임 → userId. loadRecords에서 1회 채운다(renderRecords는 7곳에서 불리는
   // 동기 재렌더라 그 안에서 조회하면 안 됨). 참여자 태그 클릭 진입점이 이 맵을 쓴다.
   let _profileNickMap = new Map();
+  // (014) 기록 id → 그 기록에 매인 게임평(game_comments.record_id) 배열. loadRecords에서 1회 로드,
+  // buildSessionBody가 동기로 읽는다. 위 맵과 같은 이유로 여기 한 번만 조회한다.
+  let _recordCommentsMap = new Map();
 
   async function loadRecords() {
     if (recordsLoaded && recordsData !== null) {
@@ -548,6 +551,17 @@
       for (const p of _profiles) {
         if (p.user_id && p.nickname) _profileNickMap.set(window.normalizeNick(p.nickname), String(p.user_id));
       }
+      // (014) 각 기록에 매인 남의 게임평을 한 번에 로드 — 기록 id로 묶어 buildSessionBody가 읽는다.
+      _recordCommentsMap = new Map();
+      try {
+        const _recIds = (_recs || []).map(r => r.id).filter(id => id != null);
+        const _rComments = await window.CottageDB?.getRecordComments?.(_recIds) || [];
+        for (const c of _rComments) {
+          const k = String(c.record_id);
+          if (!_recordCommentsMap.has(k)) _recordCommentsMap.set(k, []);
+          _recordCommentsMap.get(k).push(c);
+        }
+      } catch (e) { console.error('[loadRecords:recordComments]', e); }
       const _uid = String(window.getKakaoUser?.()?.id || '');
       const _myNick = window.getKakaoUser?.()?.nickname?.toLowerCase() || '';
       const _mySorted = _uid ? (recordsData || [])
@@ -1275,6 +1289,10 @@
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
         );
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
+        // (014) 이 기록에 매인 남의 게임평 — 기록 주인 후기(review_text)와 같은 형식으로 뒤에 잇는다.
+        const linkedHtml = (_recordCommentsMap.get(String(r.id)) || []).map(c =>
+          `<p class="pr-rec-review pr-rec-review--linked">${c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : ''}${escH(c.comment_text)}</p>`
+        ).join('');
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
@@ -1302,7 +1320,7 @@
             <div class="pr-rec-main">
               <span class="pr-rec-game">${escH(getGameName(r.game_id))}${orderMap.get(r.id) >= 2 ? `<span class="pr-play-order"> (${orderMap.get(r.id)}번째 플레이)</span>` : ''}</span>
               <div class="pr-rec-meta">${dateline}</div>
-              ${reviewHtml}
+              ${reviewHtml}${linkedHtml}
             </div>
             ${moreMenu ? `<div class="pr-rec-actions">${moreMenu}</div>` : ''}
           </div>
