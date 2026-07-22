@@ -86,20 +86,27 @@ const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!o
     ck(amb === 1, `amb 섹션이 렌더됨`);
     ck(stats === 4, `이용 요약 4칸 (${stats})`);
     ck(periods === 4, `기간 버튼 4개 (${periods})`);
-    console.log(`     페이지 표 ${rows}줄 · 활동 계열 ${await page.locator('.amb-ev-fam').count()}개`);
+    // 페이지 분포와 활동이 **둘 다 기간 통(.amb-vp) 안**에 있다(함께 기간에 반응)
+    ck(await page.locator('.amb-vp .amb-page-table').count() === 1, `페이지 분포가 기간 통 안에 있다`);
+    ck(await page.locator('.amb-vp .amb-ev-fam').count() >= 0 && await page.locator('.amb-vp .amb-sec-label').count() === 2, `활동도 기간 통 안(📄·🎯 두 라벨)`);
+    const famAll = await page.locator('.amb-vp .amb-ev-fam').count();
+    console.log(`     [전 기간] 페이지 표 ${rows}줄 · 활동 계열 ${famAll}개`);
+    // 활동 라벨 한글화 — 데이터 있는 전 기간에서 raw 타입명(_click/_start/_complete)이 안 보인다
+    const evText = await page.locator('.amb-vp .amb-ev-types').first().innerText().catch(() => '');
+    ck(evText.length === 0 || !/_click|_start|_complete/.test(evText), `활동 라벨이 한글: "${evText.split('\n')[0].slice(0, 30)}"`);
     await page.screenshot({ path: path.join(OUT, '2-amb-section.png') });
-    // 기간 버튼 동작 — '오늘'을 눌러도 죽지 않고 표가 다시 그려진다
+    // 기간 버튼 동작 — '오늘'을 누르면 페이지 분포와 활동이 **함께** 그 기간으로 바뀐다
     await page.locator('.amb-period-btn[data-period="today"]').click();
     await page.waitForTimeout(600);
-    ck(await page.locator('.amb-period-btn.is-active[data-period="today"]').count() === 1, `기간 버튼 전환 동작(오늘)`);
+    ck(await page.locator('.amb-period-btn.is-active[data-period="today"]').count() === 1, `기간 전환(오늘) — 프리셋 활성`);
+    ck(await page.locator('.amb-vp .amb-sec-label').count() === 2, `기간 전환 후에도 페이지·활동 둘 다 재렌더됨`);
+    const famToday = await page.locator('.amb-vp .amb-ev-fam').count();
+    console.log(`     [오늘] 활동 계열 ${famToday}개 (전 기간 ${famAll}개에서 기간 반응)`);
     // 날짜 네비 — ◀ 화살표로 특정 날짜 모드 진입(달력 라벨 활성)
     await page.locator('.amb-date-arrow[data-amb-arrow="-1"]').click();
     await page.waitForTimeout(600);
     ck(await page.locator('.amb-date-label.is-active').count() === 1, `날짜 화살표 → 특정 날짜 모드`);
     await page.screenshot({ path: path.join(OUT, '3-amb-datenav.png') });
-    // 활동 라벨 한글화 — raw 타입명(_click/_start/_complete)이 안 보인다
-    const evText = await page.locator('.amb-ev-types').first().innerText().catch(() => '');
-    ck(evText.length === 0 || !/_click|_start|_complete/.test(evText), `활동 라벨이 한글(raw 타입명 없음): "${evText.split('\n')[0].slice(0, 30)}"`);
   }
 
   // ── ② 비오너로 열기 → 카드 없음 ──────────────────────────────────

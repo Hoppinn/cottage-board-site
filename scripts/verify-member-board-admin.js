@@ -91,6 +91,32 @@ console.log('\n=== ② 이벤트 계열 집계 (합성) ===');
   ck(MA.EVENT_ALL_TYPES.every(t => MA.EVENT_TYPE_LABELS[t]), '모든 이벤트 타입에 라벨이 있다(누락 시 raw 노출)');
 }
 
+// ── ②-b 활동도 기간 필터를 받는다 (페이지 분포와 같은 기간 규칙) ─────────
+console.log('\n=== ②-b 이벤트 기간 필터 (합성) ===');
+{
+  const U = 'U-carol';
+  const TODAY = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+  const dayAgo = n => new Date(new Date(TODAY + 'T00:00:00Z') - n * 86400000).toISOString().slice(0, 10);
+  const rt = MA.EVENT_FAMILIES.find(f => f.key === 'record').types;
+  // KST 기준 정오로 심어 자정 경계 오염을 피한다.
+  const at = kstDate => new Date(new Date(kstDate + 'T00:00:00Z').getTime() + 3 * 3600000).toISOString();
+  const events = [
+    { user_id: U, event_type: rt[0], created_at: at(TODAY) },
+    { user_id: U, event_type: rt[0], created_at: at(TODAY) },
+    { user_id: U, event_type: rt[1], created_at: at(dayAgo(1)) },
+    { user_id: U, event_type: rt[1], created_at: at(dayAgo(6)) },   // 7일 안
+    { user_id: U, event_type: rt[1], created_at: at(dayAgo(7)) },   // 7일 밖
+  ];
+  const tot = p => MA.countMemberEvents(events, U, p, TODAY).reduce((s, f) => s + f.total, 0);
+  ck(tot('all') === 5, `전 기간 = 5건 (${tot('all')})`);
+  ck(tot('today') === 2, `오늘 = 2건 (${tot('today')})`);
+  ck(tot('yesterday') === 1, `어제 = 1건 (${tot('yesterday')})`);
+  ck(tot('7d') === 4, `7일 = 4건 (오늘2+어제1+6일전1, ${tot('7d')})`);
+  ck(tot(dayAgo(1)) === 1, `특정 날짜(어제) = 1건 (${tot(dayAgo(1))})`);
+  ck(tot('today') <= tot('7d') && tot('7d') <= tot('all'), '기간 좁힐수록 단조 감소');
+  ck(MA.inPeriodByKst(at(TODAY), 'today', TODAY) && !MA.inPeriodByKst(at(dayAgo(1)), 'today', TODAY), 'inPeriodByKst가 created_at을 기간으로 판정');
+}
+
 if (NODB) { console.log(fail ? `\n🔴 ${fail}건 실패` : '\n✅ 가드·이벤트 층 통과 (--nodb라 DB 대조는 건너뜀)'); process.exit(fail ? 1 : 0); }
 
 // ── ③ 실DB — 필터 조회 충실도 + 실회원 이벤트 대조 ───────────────────

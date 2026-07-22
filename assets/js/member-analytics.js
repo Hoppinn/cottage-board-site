@@ -30,20 +30,23 @@
   ];
   const VP_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
-  // 행이 그 기간에 속하는가. 'all'은 **아무것도 거르지 않는다** — 기본값이 기존 동작과
-  // 한 글자도 달라지면 안 된다(회귀 가드가 이걸 본다). todayKst는 호출부가 넘긴다
-  // (관리자 페이지는 loadAnalytics 시점 todayKst 고정값, 보드는 kstToday()).
-  function inVpPeriod(r, period, todayKst) {
+  // ISO 날짜 하나가 그 기간에 속하는가. 'all'은 **아무것도 거르지 않는다** — 기본값이 기존
+  // 동작과 한 글자도 달라지면 안 된다(회귀 가드가 이걸 본다). todayKst는 호출부가 넘긴다.
+  // page_sessions(entered_at)와 page_events(created_at)가 **같은 기간 규칙**을 쓰도록
+  // 필드에 안 묶고 ISO 문자열을 직접 받는다.
+  function inPeriodByKst(isoDate, period, todayKst) {
     if (!period || period === 'all') return true;
-    if (!r.entered_at) return false;              // 날짜가 없으면 기간을 물을 수 없다
+    if (!isoDate) return false;                   // 날짜가 없으면 기간을 물을 수 없다
     const today = todayKst || kstToday();
-    const d = toKstDate(r.entered_at);
+    const d = toKstDate(isoDate);
     if (period === 'today') return d === today;
     if (period === 'yesterday') return d === kstShift(-1);
     if (period === '7d') return d > kstShift(-7) && d <= today;   // 오늘 포함 7일
     if (VP_DATE_RE.test(period)) return d === period;             // 특정 날 하루
     return true;
   }
+  // page_sessions 행 전용 얇은 래퍼(entered_at 기준) — buildPageMap이 쓴다.
+  function inVpPeriod(r, period, todayKst) { return inPeriodByKst(r.entered_at, period, todayKst); }
 
   // 라벨은 고른 값에서 파생시킨다(원칙 ①) — 프리셋이면 그 라벨, 날짜면 「M월 D일」.
   function vpLabel(period) {
@@ -165,12 +168,14 @@
   // ── 한 회원의 이벤트 집계 (보드 오너 섹션 전용) ────────────────────
   // 그 회원(user_id === userId) 행만 계열별·타입별로 센다. 명단(ddPanelHtml)은 여기 없다 —
   // 그건 「여러 사람」 드릴다운이고 단일 보드엔 불필요하다. 반환: 계열 배열(총계 내림차순),
-  // 각 { key, emoji, label, total, types:[{type,n}] }.
-  function countMemberEvents(events, userId) {
+  // 각 { key, emoji, label, total, types:[{type,label,n}] }.
+  // period는 페이지 분포와 **같은 기간 규칙**(created_at 기준). 안 넘기면 'all'(전 기간).
+  function countMemberEvents(events, userId, period, todayKst) {
     const uid = String(userId);
     const perType = new Map();
     for (const e of events) {
       if (String(e.user_id || '') !== uid) continue;
+      if (!inPeriodByKst(e.created_at, period, todayKst)) continue;
       perType.set(e.event_type, (perType.get(e.event_type) || 0) + 1);
     }
     const fams = EVENT_FAMILIES.map(f => {
@@ -184,7 +189,7 @@
 
   window.MemberAnalytics = {
     toKstDate, kstToday, kstShift,
-    VP_PERIODS, VP_DATE_RE, inVpPeriod, vpLabel,
+    VP_PERIODS, VP_DATE_RE, inVpPeriod, inPeriodByKst, vpLabel,
     PAGE_KEY_ALIASES, normalizePageKey,
     buildPageMap,
     EVENT_FAMILIES, EVENT_ALL_TYPES, eventPersonId, countMemberEvents,

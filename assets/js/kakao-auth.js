@@ -1731,14 +1731,15 @@ function _ambInjectStyle() {
       border-radius:6px; padding:1px 5px; margin-left:4px; vertical-align:middle; }`;
   document.head.appendChild(s);
 }
-// 페이지 분포 한 통 — 프리셋 바 + 날짜 네비(◀ 라벨/달력 ▶) + 표. 관리자 페이지
-// _visitorPagesInner와 같은 구조라 갈래별로 복사하면 #15가 재발한다. 기간이 바뀌면 이 통을
-// 통째로 다시 그린다(프리셋 활성·화살표 disabled·표가 한 계산에서 나온다).
-function _ambPageInner(rows, userId, period, MA) {
+// 기간에 반응하는 한 통 — 기간 컨트롤(프리셋 + 날짜 네비) + 📄 페이지 분포 + 🎯 활동.
+// 🚨 기간이 페이지 분포와 활동을 **함께** 지배한다 — 「이 회원이 (그 기간에) 뭘 봤고 뭘 했나」가
+//    한 질문이라, 반쪽만 반응하면 혼란스럽다(사용자 지적, 2026-07-22). 페이지=page_sessions,
+//    활동=page_events가 같은 기간 규칙(inPeriodByKst)을 쓴다. 기간이 바뀌면 이 통을 통째로 다시
+//    그린다(프리셋 활성·화살표 disabled·페이지 표·활동이 한 계산에서, #15 방지). 이용 요약
+//    (profiles 누적)만 기간 무관이라 이 통 밖에 둔다.
+function _ambPeriodInner(rows, events, userId, period, MA) {
   const esc = window.escH, labels = window.COTTAGE_PAGE_LABELS || {};
   const todayKst = MA.kstToday();
-  const pm = MA.buildPageMap(rows, 'member', userId, period, todayKst);
-  const sorted = [...pm.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
   const isDateMode = MA.VP_DATE_RE.test(period);
   const pLabel = MA.vpLabel(period);
   const presetBar = `<div class="amb-periods">${MA.VP_PERIODS.map(p =>
@@ -1751,9 +1752,13 @@ function _ambPageInner(rows, userId, period, MA) {
     <input class="amb-date-input" type="date" data-amb-dateinput max="${todayKst}" value="${isDateMode ? period : ''}" aria-label="날짜 고르기">
     <button class="amb-date-arrow" type="button" data-amb-arrow="1" aria-label="하루 후"${isDateMode && period >= todayKst ? ' disabled' : ''}>▶</button>
   </div>`;
+
+  // 📄 페이지 분포 (그 기간)
+  const pm = MA.buildPageMap(rows, 'member', userId, period, todayKst);
+  const sorted = [...pm.entries()].sort((a, b) => b[1].totalSec - a[1].totalSec);
   let table;
   if (!sorted.length) {
-    table = `<div class="amb-empty">${esc(pLabel)} 기록이 없어요.</div>`;
+    table = `<div class="amb-empty">${esc(pLabel)} 페이지 기록이 없어요.</div>`;
   } else {
     const MAX = 10, head = sorted.slice(0, MAX), rest = sorted.slice(MAX);
     table = head.map(([page, d]) => `<div class="amb-row">
@@ -1766,7 +1771,21 @@ function _ambPageInner(rows, userId, period, MA) {
       table += `<div class="amb-row amb-row--rest"><span class="amb-page">외 ${rest.length}개</span><span class="amb-visits">${rv}회</span><span class="amb-dur">${_ambDur(rs)}</span></div>`;
     }
   }
-  return presetBar + dateNav + `<div class="amb-page-table">${table}</div>`;
+
+  // 🎯 활동 (같은 기간)
+  const fams = MA.countMemberEvents(events, userId, period, todayKst);
+  const evHtml = fams.length
+    ? fams.map(f => `<div class="amb-ev-fam">
+        <div class="amb-ev-fam-head"><span>${f.emoji} ${esc(f.label)}</span><span class="amb-ev-total">${f.total}회</span></div>
+        <div class="amb-ev-types">${f.types.map(t => `<span class="amb-ev-type">${esc(t.label)} ${t.n}</span>`).join('')}</div>
+      </div>`).join('')
+    : `<div class="amb-empty">${esc(pLabel)} 활동이 없어요.</div>`;
+
+  return presetBar + dateNav
+    + `<div class="amb-sec-label">📄 페이지 분포 <span class="amb-sec-sub">${esc(pLabel)}</span></div>`
+    + `<div class="amb-page-table">${table}</div>`
+    + `<div class="amb-sec-label">🎯 활동 <span class="amb-sec-sub">${esc(pLabel)} · 무엇을 했나</span></div>`
+    + evHtml;
 }
 async function _renderAdminMemberBoard(subBody, userId) {
   const esc = window.escH, MA = window.MemberAnalytics;
@@ -1780,41 +1799,32 @@ async function _renderAdminMemberBoard(subBody, userId) {
   if (!subBody.isConnected) return; // 조회 대기 중 다른 서브시트로 이탈
   // page는 정규화 전 원문이라 관리자 페이지와 같은 버킷이 되도록 접는다(#14).
   const rows = (rawSessions || []).map(r => ({ ...r, page: MA.normalizePageKey(r.page) }));
-  const fams = MA.countMemberEvents(events || [], userId);
+  const evs = events || [];
   const todayKst = MA.kstToday();
   const visitCount = usage?.visit_count ?? 0;
   const totalMin = usage?.total_minutes ?? 0;
   const todaySec = (usage?.today_date === todayKst) ? (usage?.today_seconds ?? 0) : 0;
   const activeDays = new Set(rows.filter(r => r.entered_at).map(r => MA.toKstDate(r.entered_at))).size;
 
-  const eventsHtml = fams.length
-    ? fams.map(f => `<div class="amb-ev-fam">
-        <div class="amb-ev-fam-head"><span>${f.emoji} ${esc(f.label)}</span><span class="amb-ev-total">${f.total}회</span></div>
-        <div class="amb-ev-types">${f.types.map(t => `<span class="amb-ev-type">${esc(t.label)} ${t.n}</span>`).join('')}</div>
-      </div>`).join('')
-    : '<div class="amb-empty">기록된 활동이 없어요.</div>';
-
   subBody.innerHTML = `<div class="amb">
-    <div class="amb-sec-label">📊 이용 요약</div>
+    <div class="amb-sec-label">📊 이용 요약 <span class="amb-sec-sub">전 기간 누적</span></div>
     <div class="amb-summary">
       <div class="amb-stat"><span class="amb-stat-v">${visitCount}</span><span class="amb-stat-l">방문</span></div>
       <div class="amb-stat"><span class="amb-stat-v">${_ambDur(totalMin * 60)}</span><span class="amb-stat-l">누적 체류</span></div>
       <div class="amb-stat"><span class="amb-stat-v">${_ambDur(todaySec)}</span><span class="amb-stat-l">오늘</span></div>
       <div class="amb-stat"><span class="amb-stat-v">${activeDays}일</span><span class="amb-stat-l">방문일수*</span></div>
     </div>
-    <div class="amb-note">방문·누적은 profiles 기준(heartbeat 포함) · 방문일수*와 아래 표는 page_sessions 기준(체류 하한)</div>
-    <div class="amb-sec-label">📄 페이지 분포 <span class="amb-sec-sub">기간 선택</span></div>
-    <div class="amb-vp" data-vp-period="all">${_ambPageInner(rows, userId, 'all', MA)}</div>
-    <div class="amb-sec-label">🎯 활동 <span class="amb-sec-sub">무엇을 했나</span></div>
-    ${eventsHtml}
+    <div class="amb-note">방문·누적은 profiles 기준(heartbeat 포함, 전 기간 고정) · 방문일수*와 아래 표는 page_sessions 기준(체류 하한). 아래 기간 선택은 페이지 분포·활동에 함께 적용됩니다.</div>
+    <div class="amb-vp" data-vp-period="all">${_ambPeriodInner(rows, evs, userId, 'all', MA)}</div>
   </div>`;
 
   // 프리셋·화살표·달력을 **한 자리에서** 재계산·재렌더한다(관리자 페이지 applyVpPeriod와 같은
   // 방식). 갈래별로 복사하면 조용히 갈린다(#15). data-vp-period가 화살표 ±1의 기준점이다.
+  // 페이지 분포와 활동이 이 통 안에 함께 있어 기간 하나로 둘 다 바뀐다.
   const applyVp = (period) => {
     const vp = subBody.querySelector('.amb-vp'); if (!vp) return;
     vp.dataset.vpPeriod = period;
-    vp.innerHTML = _ambPageInner(rows, userId, period, MA);
+    vp.innerHTML = _ambPeriodInner(rows, evs, userId, period, MA);
   };
   subBody.addEventListener('click', e => {
     const vp = subBody.querySelector('.amb-vp'); if (!vp) return;
