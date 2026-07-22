@@ -53,7 +53,7 @@ const SRC_PERIOD   = cut('function _toKstDate(isoStr) {', '\n      }\n\n      //
 //    (eval 안의 const와 부딪쳐 「already been declared」).
 const _pick = names => `\n({ ${names.join(', ')} })`;
 function mountPeriodApi(rows, todayKst) {
-  return eval(SRC_PERIOD + _pick(['VP_PERIODS', '_inVpPeriod', 'pageMapFor', '_toKstDate', '_kstShift']));
+  return eval(SRC_PERIOD + _pick(['VP_PERIODS', '_inVpPeriod', 'pageMapFor', '_toKstDate', '_kstShift', '_vpLabel']));
 }
 // IIFE로 감싸는 것도 필수다 — 모듈 최상위에서 eval하면 새 나온 function 선언이
 // 받는 쪽 const와 같은 스코프에서 부딪친다.
@@ -125,6 +125,11 @@ const sameMap = (a, b) => a.size === b.size && [...a].every(([k, v]) => b.get(k)
     ck(sumVis(api.pageMapFor('member', 'U1', 'all')) === 7 && sumVis(api.pageMapFor('member', 'U1', undefined)) === 7,
       "'all'과 기본값(undefined)이 전량 — 기존 동작 회귀 가드");
     ck(api.VP_PERIODS.map(p => p.key).join(',') === 'all,today,yesterday,7d', '기간 프리셋 4종의 키와 순서');
+    // 특정 날짜(YYYY-MM-DD) — 그날 하루만 걸러야 한다
+    ck(api._inVpPeriod(rows[0], TODAY) && !api._inVpPeriod(rows[2], TODAY), '특정 날짜는 그날 하루만 (오늘 행 O, 어제 행 X)');
+    ck(sumSec(api.pageMapFor('member', 'U1', dayAgo(1))) === 70, '특정 날짜(어제)의 값이 yesterday 프리셋과 일치');
+    ck(api.pageMapFor('member', 'U1', TODAY).size === 1 && sumSec(api.pageMapFor('member', 'U1', TODAY)) === 30, '특정 날짜(오늘): index 1종 30초');
+    ck(api._vpLabel(dayAgo(1)).endsWith('일') && api._vpLabel('7d') === '7일' && api._vpLabel('all') === '전 기간', `라벨 파생 — 날짜는 「M월 D일」, 프리셋은 그 라벨 (예: ${api._vpLabel(dayAgo(1))})`);
   }
 
   if (NODB) { console.log(fail ? `\n🔴 ${fail}건 실패` : '\n✅ 합성 층 전부 통과 (--nodb라 DB 층은 건너뜀)'); process.exit(0); }

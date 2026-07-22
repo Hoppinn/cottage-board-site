@@ -138,6 +138,57 @@ const ck = (ok, msg) => { console.log(`  ${ok ? '✅' : '🔴'} ${msg}`); if (!o
   ck(seen.today.btnN <= seen['7d'].btnN && seen['7d'].btnN <= seen.all.btnN,
     `페이지 수 단조 감소 — 오늘 ${seen.today.btnN} ≤ 7일 ${seen['7d'].btnN} ≤ 전 기간 ${seen.all.btnN}`);
 
+  console.log('\n=== ②-b 특정 날짜 — 달력 점프 + 화살표 ===');
+  // 데이터가 있는 날을 하나 고른다(전 기간 표의 최근 진입일을 못 읽으니, 어제부터 하루씩
+  // 뒤로 가며 표가 뜨는 날을 찾는다). 이 사이트는 옆날이 비므로 "며칠 뒤에 데이터"가 정상이다.
+  await page.evaluate(() => document.querySelector('.admin-member-card[data-shot-target="1"] .admin-vp-period-btn[data-vp-period="all"]')?.click());
+  await page.waitForTimeout(200);
+  // 달력 점프: input에 값 넣고 change 발생 → 그 날 하루만
+  const jump = await page.evaluate(() => {
+    const card = document.querySelector('.admin-member-card[data-shot-target="1"]');
+    // 전 기간 표 첫 행이 있는 → 데이터가 있는 사람이다. 어제 날짜로 점프해 본다.
+    const y = new Date(Date.now() + 9 * 3600000 - 86400000).toISOString().slice(0, 10);
+    const input = card.querySelector('.admin-vp-date-input');
+    input.value = y;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+    const panel = card.querySelector('.admin-visitor-pages');
+    const [, mm, dd] = y.split('-');
+    return {
+      picked: y, wantLabel: `${+mm}월 ${+dd}일`,
+      activeLabel: panel.querySelector('.admin-vp-date-label')?.textContent.trim() || '',
+      labelActive: !!panel.querySelector('.admin-vp-date-label.is-active'),
+      note: panel.querySelector('div[title]')?.textContent.trim() || '',
+      presetActive: !!panel.querySelector('.admin-vp-period-btn.is-active'),
+      vpPeriod: panel.dataset.vpPeriod,
+      nextDisabled: !!panel.querySelector('.admin-vp-date-arrow[data-vp-arrow="1"][disabled]'),
+    };
+  });
+  ck(jump.vpPeriod === jump.picked, `달력 점프: 패널 상태가 그 날짜 (${jump.vpPeriod})`);
+  ck(jump.activeLabel === jump.wantLabel && jump.labelActive, `달력 라벨이 「${jump.wantLabel}」로 활성 (표시=${jump.activeLabel})`);
+  ck(jump.note.includes(jump.wantLabel), `기준 표기가 그 날짜를 말한다 — "${jump.note.slice(0, 30)}"`);
+  ck(!jump.presetActive, '날짜 모드에선 프리셋 버튼이 활성 아님');
+  await page.evaluate(() => document.querySelector('.admin-member-card[data-shot-target="1"]').scrollIntoView({ block: 'center' }));
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: path.join(OUT, '1280-datejump.png'), fullPage: false });
+
+  // 화살표: 어제에서 ▶(하루 후) → 오늘, 오늘에서 ▶는 미래라 막힘
+  const arrowed = await page.evaluate(() => {
+    const card = document.querySelector('.admin-member-card[data-shot-target="1"]');
+    card.querySelector('.admin-vp-date-arrow[data-vp-arrow="1"]')?.click();
+    const panel = card.querySelector('.admin-visitor-pages');
+    return { vpPeriod: panel.dataset.vpPeriod, nextDisabled: !!panel.querySelector('.admin-vp-date-arrow[data-vp-arrow="1"][disabled]') };
+  });
+  const todayStr = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+  ck(arrowed.vpPeriod === todayStr, `▶ 한 번에 어제→오늘 (${arrowed.vpPeriod})`);
+  ck(arrowed.nextDisabled, '오늘에선 ▶(미래)가 비활성');
+  const future = await page.evaluate(() => {
+    const card = document.querySelector('.admin-member-card[data-shot-target="1"]');
+    const before = card.querySelector('.admin-visitor-pages').dataset.vpPeriod;
+    card.querySelector('.admin-vp-date-arrow[data-vp-arrow="1"]')?.click();  // disabled라 무시돼야
+    return { before, after: card.querySelector('.admin-visitor-pages').dataset.vpPeriod };
+  });
+  ck(future.before === future.after, '비활성 ▶를 눌러도 미래로 안 넘어간다');
+
   console.log('\n=== ③ 회귀 — 정렬·필터·더보기 뒤에도 살아남는가 ===');
   await page.evaluate(() => document.querySelector('.admin-member-card[data-shot-target="1"] .admin-vp-period-btn[data-vp-period="7d"]')?.click());
   await page.waitForTimeout(200);
