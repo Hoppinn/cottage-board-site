@@ -1379,11 +1379,11 @@
           }).join('')
         : '';
 
-      if (countTag || nameTags) {
-        html += `<div class="pr-player-header">${countTag}${nameTags}</div>`;
-      }
+      const _headerHtml = (countTag || nameTags)
+        ? `<div class="pr-player-header">${countTag}${nameTags}</div>`
+        : '';
 
-      html += groupRecs.map(r => {
+      const _rowsHtml = groupRecs.map(r => {
         const isMine = user && (
           (r.user_id && String(r.user_id) === String(user.id)) ||
           (!r.user_id && r.nickname && r.nickname === (user.nickname || user.kakaoNickname))
@@ -1425,6 +1425,11 @@
           ${photoHtml}
         </div>`;
       }).join('');
+
+      // 같은 인원으로 플레이한 게임 묶음 전체를 하나의 카드로 감싼다(2026-07-22).
+      // GPT 원안은 게임마다 개별 카드였으나 월→날짜→인원→게임의 다중 중첩 위에
+      // 또 카드를 얹으면 카드-속-카드가 되어 기각 — 그룹(인원) 단위가 사용자 확정.
+      html += `<div class="pr-group-card">${_headerHtml}${_rowsHtml}</div>`;
     }
     return html;
   }

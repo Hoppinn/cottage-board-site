@@ -7215,6 +7215,19 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-rec-sheet-link:hover { background: #f0e8dc; }
 .pr-rec-row--game { padding-left: 14px; }
 
+/* 같은 인원으로 플레이한 게임 묶음 = 하나의 카드 (2026-07-22, GPT안 축소 채택).
+   게임마다 개별 카드는 월→날짜→인원→게임 다중 중첩 위 카드-속-카드라 기각.
+   새 색 하드코딩 없이 기존 변수(--line·--card-bg)만 사용. */
+.pr-group-card { border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); overflow: hidden; margin: 0 12px 15px; }
+.pr-group-card:last-child { margin-bottom: 10px; }
+/* 그룹 헤더: 카드 상단에 붙고 아래로 구분선 하나 */
+.pr-group-card > .pr-player-header { border-top: none; border-bottom: 1px solid var(--line); }
+/* 개별 게임: 별도 외곽선 없이 내부 섹션 — 게임 사이 위아래 여백 확보(pr-rec-row의 border-bottom이 얇은 가로선) */
+.pr-group-card > .pr-rec-row { padding-top: 13px; padding-bottom: 13px; }
+/* 날짜별 보기의 36px 들여쓰기는 카드가 이미 그룹을 묶으므로 카드 안에서 상쇄 */
+.pr-session--bydate .pr-group-card .pr-rec-row { padding-left: 14px; }
+.pr-session--bydate .pr-group-card .pr-player-header { padding-left: 16px; }
+
 .pr-game-group { border-top: 1px solid var(--border); }
 .pr-game-group:first-child { border-top: none; }
 .pr-game-group-hd { padding: 7px 14px; background: #ece7dc; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; border-left: 3px solid #a06040; }
