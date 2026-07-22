@@ -2090,8 +2090,9 @@ async function onSubmitCommentModal() {
       window.refreshPlayRecordsBoard?.();     // 게시판 목록도 반영(연동/참여로 기록 변경 시)
       showActionToast(didJoin ? '세션에 후기를 남겼어요' : '플레이기록에 연동했어요');
     } else if (attachedRecId) {
-      // (014) 기록에 매단 게임평 — 게시판(기록 아래)·게임시트 미리보기에 반영
-      window.refreshPlayRecordsBoard?.();
+      // (014) 기록에 매단 게임평 — 게시판을 통째로 다시 그리지 않고 그 기록 줄에만 한 줄 꽂는다(위치 이동 없음)
+      const _cu2 = window.getKakaoUser?.();
+      window.addRecordCommentToBoard?.(attachedRecId, { id: result.id, nickname: _cu2?.nickname || null, user_id: _cu2?.id || null, comment_text: text, record_id: String(attachedRecId) });
       showActionToast('기록에 게임평을 남겼어요');
     } else if (shouldNudge) {
       // 내 기록이 없을 때: 남의 세션 있으면 확인창으로 그 세션에 후기 추가(방금 쓴 게임평은 이동)

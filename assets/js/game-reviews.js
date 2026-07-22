@@ -602,11 +602,58 @@
   window.refreshPlayRecordsBoard = () => {
     const panel = document.getElementById('prPanelRecords');
     const active = panel?.classList.contains('is-active');
-    // DOM을 "불러오는 중"으로 지우기 전에 펼침·스크롤을 캡처 → 재렌더 끝에서 복원(게임평/사진 추가 후 보던 자리 유지)
+    // DOM을 "불러오는 중"으로 지우기 전에 펼침·스크롤을 캡처 → 재렌더 끝에서 복원(사진 추가 등 리로드 경로)
     if (active && panel) _pendingBoardState = _saveViewState(panel);
     recordsLoaded = false;
     recordsData = null;
     if (active) loadRecords();
+  };
+
+  // (014) 한 기록에 매인 게임평 한 줄의 HTML — buildSessionBody와 surgical 삽입이 공유(사본 금지).
+  // 작성자 본인 또는 오너면 개별 삭제(✕) 버튼을 붙인다(사진 삭제 canDelPhoto = isMine||isOwner와 같은 규칙).
+  function _linkedReviewHtml(c, recordId, user) {
+    const canDel = !!(user && ((c.user_id && String(c.user_id) === String(user.id)) || window.isOwner?.()));
+    const delBtn = canDel ? `<button class="pr-rec-review-del" data-comment-id="${escH(String(c.id))}" data-record-id="${escH(String(recordId))}" type="button" aria-label="게임평 삭제">✕</button>` : '';
+    const nameHtml = c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : '';
+    return `<p class="pr-rec-review pr-rec-review--linked${canDel ? ' pr-rec-review--deletable' : ''}">${nameHtml}${escH(c.comment_text)}${delBtn}</p>`;
+  }
+  // 삽입/재렌더 공통 바인딩: 작성자 이름 클릭 + 개별 삭제
+  function _bindLinkedReview(scope) {
+    scope.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
+      span.style.cursor = 'pointer';
+      span.addEventListener('click', e => { e.stopPropagation(); window.openOtherProfileSheet?.(span.dataset.userId); });
+    });
+    scope.querySelectorAll('.pr-rec-review-del').forEach(btn => btn.addEventListener('click', _onDeleteLinkedReview));
+  }
+  async function _onDeleteLinkedReview(e) {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    if (!confirm('이 게임평을 삭제할까요?')) return;
+    const res = await window.CottageDB?.deleteComment(btn.dataset.commentId);
+    if (res?.error) { alert('게임평 삭제에 실패했어요.'); return; }
+    const k = String(btn.dataset.recordId);
+    if (_recordCommentsMap.has(k)) _recordCommentsMap.set(k, _recordCommentsMap.get(k).filter(c => String(c.id) !== String(btn.dataset.commentId)));
+    btn.closest('.pr-rec-review')?.remove();   // 그 줄만 제거 — 전체 재렌더 안 함
+  }
+  // 게임평을 기록에 매단 직후, 게시판을 다시 그리지 않고 그 기록 줄에만 한 줄 꽂는다(위치 이동 없음).
+  window.addRecordCommentToBoard = (recordId, comment) => {
+    if (!recordId || !comment) return;
+    const k = String(recordId);
+    if (recordsData) {   // 캐시에도 반영(다음 전체 렌더 일관성)
+      if (!_recordCommentsMap.has(k)) _recordCommentsMap.set(k, []);
+      if (!_recordCommentsMap.get(k).some(c => String(c.id) === String(comment.id))) _recordCommentsMap.get(k).push(comment);
+    }
+    const panel = document.getElementById('prPanelRecords');
+    if (!panel) return;
+    const user = window.getKakaoUser?.();
+    panel.querySelectorAll('.pr-rec-row').forEach(row => {
+      if (String(row.dataset.id) !== k) return;
+      const main = row.querySelector('.pr-rec-main');
+      if (!main) return;
+      if (comment.id && main.querySelector(`.pr-rec-review-del[data-comment-id="${escH(String(comment.id))}"]`)) return;  // 중복 방지
+      main.insertAdjacentHTML('beforeend', _linkedReviewHtml(comment, recordId, user));
+      _bindLinkedReview(main.lastElementChild);
+    });
   };
 
   function _saveViewState(panel) {
@@ -882,14 +929,8 @@
     panel.querySelectorAll('.pr-rec-caption-action').forEach(btn => {
       btn.addEventListener('click', e => { e.stopPropagation(); window.copyCaption?.(btn); });
     });
-    // 후기 작성자 이름 클릭 → 해당 회원 읽기전용 보드 열기
-    panel.querySelectorAll('.pr-rec-reviewer[data-user-id]').forEach(span => {
-      span.style.cursor = 'pointer';
-      span.addEventListener('click', e => {
-        e.stopPropagation();
-        window.openOtherProfileSheet?.(span.dataset.userId);
-      });
-    });
+    // 후기·게임평 작성자 이름 클릭(보드 열기) + 개별 게임평(✕) 삭제 바인딩
+    _bindLinkedReview(panel);
 
     panel.querySelectorAll('.pr-dates-more-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1302,9 +1343,7 @@
         );
         const reviewHtml = r.review_text ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${escH(r.nickname)}</span> ` : ''}${escH(r.review_text)}</p>` : '';
         // (014) 이 기록에 매인 남의 게임평 — 기록 주인 후기(review_text)와 같은 형식으로 뒤에 잇는다.
-        const linkedHtml = (_recordCommentsMap.get(String(r.id)) || []).map(c =>
-          `<p class="pr-rec-review pr-rec-review--linked">${c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : ''}${escH(c.comment_text)}</p>`
-        ).join('');
+        const linkedHtml = (_recordCommentsMap.get(String(r.id)) || []).map(c => _linkedReviewHtml(c, r.id, user)).join('');
         const photoUrls = parsePhotoUrls(r.photo_url);
         const canDelPhoto = photoUrls.length && (isMine || window.isOwner?.());
         const photoHtml = buildPhotoHtml(photoUrls, r.id, canDelPhoto);
