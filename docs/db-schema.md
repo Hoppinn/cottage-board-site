@@ -19,7 +19,7 @@
 | 011 `page_events` anon SELECT 정책 | ✅ **실행 완료 + 검증 (2026-07-18)** — anon SELECT 1,452행 정상, 관리자 이벤트 퍼널이 실수치로 렌더됨(Playwright 확인) |
 | 013 `meeting_votes.guest_count` | ✅ **실행 완료 + 검증 (2026-07-21)** — 22행 전부 default 0. anon 조회 응답에 `guest_count` 필드 존재를 실측(`scripts/verify-party-size.js --live`). **행 수만 보면 안 된다** — 컬럼이 없으면 PostgREST가 400을 내고 클라이언트는 `[]`를 반환해 「0행」으로 보인다 |
 | 012 `increment_profile_counters` RPC | ✅ **실행 완료 + 검증 (2026-07-20 재확인)** — anon RPC 호출이 HTTP 200, 없는 `user_id`로 불러도 빈 행이 안 생김(012 파일의 검증 ②). ⚠️ **이 칸은 2026-07-20까지 「미실행」으로 남아 PROJECT_STATE의 「완료」와 충돌하고 있었다** — 문서 두 곳이 갈리면 그럴듯한 쪽으로 잇지 말고 이렇게 **DB에 직접 물어서** 닫을 것 |
-| 014 `game_comments.record_id` | 🔴 **미적용 (2026-07-22 실측)** — anon SELECT에 `record_id`가 없어 HTTP 400(`column game_comments.record_id does not exist`). **코드(`getGameComments`가 이 컬럼을 select)를 배포하기 전에 SQL Editor에서 014를 먼저 실행할 것** — 안 하면 게임시트 「게임평」 목록이 400으로 빈다. 컬럼 추가는 nullable이라 현재 라이브 코드엔 무해(언제 실행해도 안전) |
+| 014 `game_comments.record_id` | ✅ **실행 완료 + 검증 (2026-07-22)** — anon SELECT에 `record_id` 존재(드라이런 200), 뽁님 게임평 2건에 record_id=96/97 세팅 후 되읽기 확인. `getRecordComments(['96','97'])`가 2건 반환. ⚠️ **코드 배포 전 이 마이그레이션이 선행돼야 함**(`getGameComments`가 컬럼 select) — 순서가 뒤바뀌면 게임시트 「게임평」이 400으로 빈다 |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
