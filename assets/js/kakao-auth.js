@@ -2215,6 +2215,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
       return `<li class="${cls}">${_card('🎫', `${who} 교환권 ${used ? '사용' : '획득'}${cnt}`, reasonLabel)}${readBtn}</li>`;
     }
+    // 간식·음료 요청도 유형+날짜로 묶여서 온다(관리자 전용, voucher와 같은 패턴).
+    if (n.type === 'snack_request') {
+      const items = n.names || [];
+      const desc = items.length > 1
+        ? `${escH(items[0])} 외 ${items.length - 1}건이 새로 요청됐어요`
+        : `${escH(items[0] || '')}이(가) 새로 요청됐어요`;
+      return `<li class="${cls}">${_card('🍿', `간식·음료 요청 ${n.count}건`, desc)}${readBtn}</li>`;
+    }
     return '';
   }
   const _hasAnyNew = _newCount > 0;

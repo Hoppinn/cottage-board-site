@@ -1498,11 +1498,18 @@ window._cottageSess = (function () {
             .gte('created_at', _VOUCHER_NOTIF_SINCE)
             .order('created_at', { ascending: false }).limit(30)
         : Promise.resolve({ data: [] });
-      const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise
+      // 간식·음료 요청 — 관리자에게만, voucher와 같은 30일 창 + 날짜 묶음(새 항목만: 기존 항목
+      // 재요청은 request_count UPDATE라 created_at이 안 바뀌어 여기 안 잡힘 = 의도된 동작).
+      const snackRequestPromise = String(userId) === _ADMIN_ID
+        ? db.from('snack_requests').select('id, item_name, created_at')
+            .gte('created_at', _VOUCHER_NOTIF_SINCE)
+            .order('created_at', { ascending: false }).limit(30)
+        : Promise.resolve({ data: [] });
+      const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes, snackRequestRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise
       ]);
       // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
-      // (taggedRes·voucherEventsRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
+      // (taggedRes·voucherEventsRes·snackRequestRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
       if (taggedRes.error) console.error('[getMyNotifications:game_play_records tagged]', taggedRes.error);
       if (curiousRes.error) console.error('[getMyNotifications:game_curious]', curiousRes.error);
       if (purchasedRes.error) console.error('[getMyNotifications:game_requests purchased]', purchasedRes.error);
@@ -1510,6 +1517,7 @@ window._cottageSess = (function () {
       if (introListRes.error) console.error('[getMyNotifications:member_intros]', introListRes.error);
       if (profileSeenRes.error) console.error('[getMyNotifications:profiles]', profileSeenRes.error);
       if (voucherEventsRes.error) console.error('[getMyNotifications:voucher_log]', voucherEventsRes.error);
+      if (snackRequestRes.error) console.error('[getMyNotifications:snack_requests]', snackRequestRes.error);
       const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
       const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
       const effectiveNewGameSeenAt = [newGameSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
@@ -1630,6 +1638,30 @@ window._cottageSess = (function () {
         }
       }
       if (String(userId) === _ADMIN_ID) {
+        const snackData = snackRequestRes.data || [];
+        if (snackData.length > 0) {
+          const _kstDaySnack = iso => new Date(new Date(iso).getTime() + 9 * 3600000).toISOString().slice(0, 10);
+          const snackGroups = new Map();
+          for (const r of snackData) {
+            const gk = _kstDaySnack(r.created_at);
+            if (!snackGroups.has(gk)) snackGroups.set(gk, []);
+            snackGroups.get(gk).push(r);
+          }
+          for (const rows of snackGroups.values()) {
+            const keys = rows.map(r => `snack:${r.id}`);
+            const isNew = rows.some(r =>
+              (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(`snack:${r.id}`));
+            notifs.push({
+              type: 'snack_request',
+              key: keys[0],
+              keys,
+              count: rows.length,
+              names: rows.map(r => r.item_name),
+              date: rows[0].created_at,
+              isNew,
+            });
+          }
+        }
         const voucherData = voucherEventsRes.data || [];
         if (voucherData.length > 0) {
           const userIds = [...new Set(voucherData.map(r => r.user_id))];
