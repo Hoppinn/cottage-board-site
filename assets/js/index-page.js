@@ -1014,7 +1014,7 @@ function toDateStr(d) {
    # RECENT PLAY SECTION
 ========================= */
 
-(async function initRecentPlay() {
+async function initRecentPlay() {
   const body = document.getElementById('recentPlayBody');
   if (!body) return;
 
@@ -1164,7 +1164,13 @@ function toDateStr(d) {
   } catch (_) {
     body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
   }
-})();
+}
+initRecentPlay();
+// 기록 추가/수정/삭제 후 재조회 — 같은 창에서 직접 호출된 경우(window 이벤트)와
+// record 모달이 iframe으로 열린 경우(message) 둘 다 온다. 아래 initRecordModal의
+// message 리스너에서도 같은 타입을 받아 한 번 더 호출하지만 초기화 순서가 갈릴 수 있어
+// 여기서도 독립적으로 듣는다 — 두 번 불려도 재조회일 뿐 부작용 없음.
+window.addEventListener('cottage-record-changed', initRecentPlay);
 
 
 /* =========================
@@ -1235,6 +1241,10 @@ function toDateStr(d) {
       iframeLightboxOpen = true;
     } else if (e.data?.type === 'cottage-lightbox-close') {
       iframeLightboxOpen = false;
+    } else if (e.data?.type === 'cottage-record-changed') {
+      // iframe(game-reviews.html embed) 안에서 기록을 쓰면 window.dispatchEvent는
+      // iframe 자신의 window에서만 울려 부모(홈)엔 안 닿는다 — postMessage로 받는다.
+      window.initRecentPlay?.();
     }
   });
 

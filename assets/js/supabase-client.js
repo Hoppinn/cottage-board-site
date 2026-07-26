@@ -95,6 +95,14 @@ window._cottageSess = (function () {
     return String(str || '').replace(/[%_]/g, '');
   }
 
+  // 기록 추가/수정/삭제 후 "최근 기록"류 화면에 알리는 신호. 홈의 recordIframeFrame처럼
+  // game-reviews.html이 iframe으로 임베드된 경로에선 window.dispatchEvent가 부모(홈)에
+  // 안 닿는다 — postMessage도 같이 쏴야 부모 쪽 리스너가 받는다.
+  function _emitRecordChanged() {
+    try { window.dispatchEvent(new CustomEvent('cottage-record-changed')); } catch (_) {}
+    try { if (window.parent && window.parent !== window) window.parent.postMessage({ type: 'cottage-record-changed' }, '*'); } catch (_) {}
+  }
+
   // ── 세션 키 (익명 중복 방지용) ──────────────────────────
 
   function getSessionKey() {
@@ -360,6 +368,7 @@ window._cottageSess = (function () {
             }
           }).catch(e => console.warn('[voucher] grantFirstPlayVoucher 오류:', e));
         }
+        _emitRecordChanged();
         return { success: true, id };
       }
       return { error };
@@ -387,7 +396,9 @@ window._cottageSess = (function () {
     if (!id) return { error: "invalid" };
     try {
       const { error } = await db.from("game_play_records").delete().eq("id", id);
-      return error ? { error } : { success: true };
+      if (error) return { error };
+      _emitRecordChanged();
+      return { success: true };
     } catch (e) {
       return { error: e };
     }
@@ -418,6 +429,7 @@ window._cottageSess = (function () {
           }).catch(() => {});
         }
       }
+      _emitRecordChanged();
       return { success: true };
     } catch (e) {
       return { error: e };
