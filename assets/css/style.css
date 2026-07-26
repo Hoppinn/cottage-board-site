@@ -7216,7 +7216,10 @@ body.is-embedded .inner-page{padding-top:16px;}
 /* 같은 인원으로 플레이한 게임 묶음 = 하나의 카드 (2026-07-22, GPT안 축소 채택).
    게임마다 개별 카드는 월→날짜→인원→게임 다중 중첩 위 카드-속-카드라 기각.
    새 색 하드코딩 없이 기존 변수(--line·--card-bg)만 사용. */
-.pr-group-card { border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); overflow: hidden; margin: 0 12px 15px; }
+/* overflow:hidden을 여기 두지 않는다 — DESIGN_RULES.md 6-a와 같은 함정: 이 카드 안에서
+   열리는 ⋯ 더보기 메뉴(.pr-rec-more-menu)가 카드 바닥에서 잘린다. 각진 배경을 가진
+   .pr-moim-header가 대신 자기 radius를 갖는다(2026-07-27, 실측: 잘린 높이 → 187px 정상). */
+.pr-group-card { border: 1px solid var(--line); border-radius: 12px; background: var(--card-bg); margin: 0 12px 15px; }
 .pr-group-card:last-child { margin-bottom: 10px; }
 /* 인원 헤더: 띠·구분선 없이 옅은 보조정보 한 줄로(GPT안 ②③, 2026-07-22).
    두 겹 띠(모임+인원)를 한 겹으로 정리 — 인원은 "누가 했나" 부가정보다.
@@ -7234,7 +7237,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 /* 날짜별 보기: 모임 하나 = 카드, 모임명은 카드 최상단 헤더로 흡수(밖에 안 뜨게).
    인원 묶음(.pr-moim-section)은 그 안의 내부 섹션 — 박스는 한 겹뿐(카드-속-카드 아님).
    모임명은 진한 브랜드 브라운·굵게로 '그룹 시작점' 강조(GPT안 ①, 2026-07-22). */
-.pr-moim-header { font-size: 13px; font-weight: 700; color: var(--green); padding: 10px 16px 9px; background: var(--bg-soft); border-bottom: 1px solid var(--line); }
+.pr-moim-header { font-size: 13px; font-weight: 700; color: var(--green); padding: 10px 16px 9px; background: var(--bg-soft); border-bottom: 1px solid var(--line); border-radius: 11px 11px 0 0; }
 .pr-session--bydate .pr-moim-header { padding-left: 16px; }
 .pr-moim-section + .pr-moim-section { border-top: 1px solid var(--line); }
 
