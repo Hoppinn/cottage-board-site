@@ -1849,33 +1849,49 @@ window._cottageSess = (function () {
     setMeetingVoteGameCondition,
   };
 
+  // notif_seen_at/notif_read_keys에 쓰는 두 함수는 select→merge→update라 원자적이지 않다.
+  // 사용자가 알림 두 개를 빠르게 연달아 "읽음" 누르면 두 호출이 겹쳐 나중 쓰기가 먼저
+  // 쓰기의 select 스냅샷을 덮어써 한쪽 읽음이 사라진다(실측: 동시 호출 시 유실 재현) —
+  // "읽었는데 또 뜸"의 원인. 유저별 체인으로 직렬화해 같은 탭 안에서는 겹치지 않게 한다.
+  const _notifWriteChains = new Map();
+  function _queueNotifWrite(userId, fn) {
+    const prev = _notifWriteChains.get(userId) || Promise.resolve();
+    const next = prev.catch(() => {}).then(fn);
+    _notifWriteChains.set(userId, next);
+    return next;
+  }
+
   async function updateNotifSeenAt(userId, timestamp) {
     if (!userId || !timestamp) return;
-    try {
-      // notif_read_keys를 함께 비운다 — 지평선을 지금으로 옮기면 그 이전의 개별
-      // 읽음 키는 전부 지평선에 흡수돼 중복이다. 이게 배열 크기의 상한선 역할.
-      const { error } = await db.from('profiles')
-        .update({ notif_seen_at: timestamp, notif_read_keys: [] })
-        .eq('user_id', userId);
-      if (error) console.error('[updateNotifSeenAt]', error);
-    } catch (err) { console.error('[updateNotifSeenAt]', err);}
+    return _queueNotifWrite(userId, async () => {
+      try {
+        // notif_read_keys를 함께 비운다 — 지평선을 지금으로 옮기면 그 이전의 개별
+        // 읽음 키는 전부 지평선에 흡수돼 중복이다. 이게 배열 크기의 상한선 역할.
+        const { error } = await db.from('profiles')
+          .update({ notif_seen_at: timestamp, notif_read_keys: [] })
+          .eq('user_id', userId);
+        if (error) console.error('[updateNotifSeenAt]', error);
+      } catch (err) { console.error('[updateNotifSeenAt]', err);}
+    });
   }
 
   // 개별 알림 읽음 — 키 배열을 기존 notif_read_keys에 합집합으로 추가.
   // 묶음 알림(new_intro)은 구성원 키를 한 번에 넘긴다.
   async function addNotifReadKeys(userId, keys) {
     if (!userId || !Array.isArray(keys) || keys.length === 0) return { error: null };
-    try {
-      const { data, error: selectError } = await db.from('profiles')
-        .select('notif_read_keys').eq('user_id', userId).maybeSingle();
-      if (selectError) { console.error('[addNotifReadKeys] select', selectError); return { error: selectError }; }
-      const existing = Array.isArray(data?.notif_read_keys) ? data.notif_read_keys : [];
-      const merged = [...new Set([...existing, ...keys])];
-      const { error } = await db.from('profiles')
-        .update({ notif_read_keys: merged }).eq('user_id', userId);
-      if (error) console.error('[addNotifReadKeys] update', error);
-      return { error: error || null };
-    } catch (err) { console.error('[addNotifReadKeys]', err); return { error: err }; }
+    return _queueNotifWrite(userId, async () => {
+      try {
+        const { data, error: selectError } = await db.from('profiles')
+          .select('notif_read_keys').eq('user_id', userId).maybeSingle();
+        if (selectError) { console.error('[addNotifReadKeys] select', selectError); return { error: selectError }; }
+        const existing = Array.isArray(data?.notif_read_keys) ? data.notif_read_keys : [];
+        const merged = [...new Set([...existing, ...keys])];
+        const { error } = await db.from('profiles')
+          .update({ notif_read_keys: merged }).eq('user_id', userId);
+        if (error) console.error('[addNotifReadKeys] update', error);
+        return { error: error || null };
+      } catch (err) { console.error('[addNotifReadKeys]', err); return { error: err }; }
+    });
   }
 
   // 기록의 정렬·표시 기준 날짜 — played_at이 없으면 작성일로 본다.
