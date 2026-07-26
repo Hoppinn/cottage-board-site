@@ -1665,7 +1665,7 @@
 
           const refSessions = {}, refUsers = {};
           periodVis.forEach((r, idx) => {
-            const cat = categorizeRef(r.referrer) || '직접 방문';
+            const cat = (r.referrer ? (categorizeRef(r.referrer) || '귀속 불가') : '직접 방문');
             refSessions[cat] = (refSessions[cat] || 0) + 1;
             if (!refUsers[cat]) refUsers[cat] = new Set();
             refUsers[cat].add(visitorKey(r, idx, cat));
@@ -1830,7 +1830,7 @@
         const filteredVisitor = filterByRange(visitorRows, start, end, 'created_at');
         const refMap = {}, refUserMap = {};
         filteredVisitor.forEach((r, idx) => {
-          const cat = categorizeRef(r.referrer) || '직접 방문';
+          const cat = (r.referrer ? (categorizeRef(r.referrer) || '귀속 불가') : '직접 방문');
           refMap[cat] = (refMap[cat] || 0) + 1;
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
           refUserMap[cat].add(visitorKey(r, idx, cat));
@@ -2062,12 +2062,12 @@
           // 명 카운트: filteredVisitor(__visitor__ 행) 기준
           const crossUserMap = {};
           filteredVisitor.forEach((r, idx) => {
-            const cat = categorizeRef(r.referrer) || '직접 방문';
+            const cat = (r.referrer ? (categorizeRef(r.referrer) || '귀속 불가') : '직접 방문');
             if (!crossUserMap[cat]) crossUserMap[cat] = new Set();
             crossUserMap[cat].add(visitorKey(r, idx, cat));
           });
           for (const r of filteredPV) {
-            const cat = categorizeRef(r.referrer) || '직접 방문';
+            const cat = (r.referrer ? (categorizeRef(r.referrer) || '귀속 불가') : '직접 방문');
             const pg = PAGE_LABEL[r.page] || r.page || '?';
             if (!crossMap[cat]) crossMap[cat] = {};
             crossMap[cat][pg] = (crossMap[cat][pg] || 0) + 1;
