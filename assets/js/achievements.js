@@ -668,12 +668,12 @@
   }
 
   // 게임 도감 섹션 HTML 빌드
-  async function buildCodexSection(userId) {
+  async function buildCodexSection(userId, nickname) {
     const db = window.CottageDB;
     if (!db) return { html: '', playedCount: 0, totalGames: 0 };
 
     const [playedGames] = await Promise.all([
-      db.getUserPlayedGames(userId),
+      db.getUserPlayedGames(userId, nickname),
     ]);
 
     const totalGames = window.gameData ? Object.keys(window.gameData).length : 0;

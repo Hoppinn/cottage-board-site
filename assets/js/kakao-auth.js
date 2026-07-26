@@ -1935,7 +1935,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
-    (window.CottageAchievements?.buildCodexSection(String(user.id)) || Promise.resolve(_emptyCodex)).catch(() => _emptyCodex),
+    (window.CottageAchievements?.buildCodexSection(String(user.id), user.nickname || null) || Promise.resolve(_emptyCodex)).catch(() => _emptyCodex),
     (window.CottageAchievements?.fetchUserStats?.(String(user.id), user.nickname || null) || Promise.resolve(null)).catch(() => null),
     readOnly ? Promise.resolve(0)  : (window.CottageDB?.getVoucherBalance?.(String(user.id)) || Promise.resolve(0)).catch(() => 0),
     readOnly ? Promise.resolve([]) : (window.CottageDB?.getVoucherProducts?.() || Promise.resolve([])).catch(() => []),

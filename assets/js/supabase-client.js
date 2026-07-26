@@ -1914,19 +1914,28 @@ window._cottageSess = (function () {
     } catch (err) { console.error('[getUserDistinctGameCount]', err); return 0; }
   }
 
-  async function getUserPlayedGames(userId) {
+  // 기록자(user_id)뿐 아니라 player_names에 참여자로만 적힌 사람도 "플레이한 게임"에 잡는다.
+  // getUserUniqueDayCount/getUserParticipationCount와 같은 패턴 — 여긴 그동안 기록자만 봤다.
+  async function getUserPlayedGames(userId, nickname) {
     try {
-      const { data, error } = await db.from('game_play_records')
+      const { data: authorRows, error } = await db.from('game_play_records')
         .select('game_id, played_at, created_at')
-        .eq('user_id', userId)
-        .order('played_at', { ascending: false });
+        .eq('user_id', userId);
       if (error) console.error('[getUserPlayedGames]', error);
-      const seen = new Set();
-      return (data || []).filter(r => {
-        if (seen.has(r.game_id)) return false;
-        seen.add(r.game_id);
-        return true;
-      });
+      let participantRows = [];
+      if (nickname) {
+        const { data, error: pErr } = await db.from('game_play_records')
+          .select('game_id, played_at, created_at')
+          .ilike('player_names', `%${_escapeLike(nickname)}%`);
+        if (pErr) console.error('[getUserPlayedGames]', pErr);
+        participantRows = data || [];
+      }
+      const byGame = new Map();
+      for (const r of [...(authorRows || []), ...participantRows]) {
+        const existing = byGame.get(r.game_id);
+        if (!existing || playRecordSortDate(r) > playRecordSortDate(existing)) byGame.set(r.game_id, r);
+      }
+      return [...byGame.values()].sort((a, b) => playRecordSortDate(b).localeCompare(playRecordSortDate(a)));
     } catch (err) { console.error('[getUserPlayedGames]', err); return []; }
   }
 
