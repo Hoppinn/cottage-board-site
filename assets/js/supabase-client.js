@@ -1505,8 +1505,15 @@ window._cottageSess = (function () {
             .gte('created_at', _VOUCHER_NOTIF_SINCE)
             .order('created_at', { ascending: false }).limit(30)
         : Promise.resolve({ data: [] });
-      const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes, snackRequestRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise
+      // 업적 달성은 지금까지 showAchievementToast(일회성 토스트)만 있고 알림판엔 안 남았다.
+      // user_achievements.earned_at 그대로 써서 tagged/new_game과 같은 패턴으로 추가한다.
+      const achievementPromise = db.from('user_achievements')
+        .select('achievement_id, earned_at')
+        .eq('user_id', userId)
+        .order('earned_at', { ascending: false })
+        .limit(20);
+      const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise
       ]);
       // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
       // (taggedRes·voucherEventsRes·snackRequestRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
@@ -1518,6 +1525,7 @@ window._cottageSess = (function () {
       if (profileSeenRes.error) console.error('[getMyNotifications:profiles]', profileSeenRes.error);
       if (voucherEventsRes.error) console.error('[getMyNotifications:voucher_log]', voucherEventsRes.error);
       if (snackRequestRes.error) console.error('[getMyNotifications:snack_requests]', snackRequestRes.error);
+      if (achievementRes.error) console.error('[getMyNotifications:user_achievements]', achievementRes.error);
       const dbSeenAt = profileSeenRes?.data?.notif_seen_at || null;
       const effectiveSeenAt = [notifSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
       const effectiveNewGameSeenAt = [newGameSeenAt, dbSeenAt].filter(Boolean).sort().pop() || null;
@@ -1635,6 +1643,32 @@ window._cottageSess = (function () {
             date: allIntros[0].created_at,
             isNew: false,
           });
+        }
+      }
+      {
+        const achData = achievementRes.data || [];
+        if (achData.length > 0) {
+          const _kstDayAch = iso => new Date(new Date(iso).getTime() + 9 * 3600000).toISOString().slice(0, 10);
+          const achGroups = new Map();
+          for (const r of achData) {
+            const gk = _kstDayAch(r.earned_at);
+            if (!achGroups.has(gk)) achGroups.set(gk, []);
+            achGroups.get(gk).push(r);
+          }
+          for (const rows of achGroups.values()) {
+            const keys = rows.map(r => `achievement:${r.achievement_id}`);
+            const isNew = rows.some(r =>
+              (effectiveSeenAt ? r.earned_at > effectiveSeenAt : true) && !readKeys.has(`achievement:${r.achievement_id}`));
+            notifs.push({
+              type: 'achievement',
+              key: keys[0],
+              keys,
+              count: rows.length,
+              achievementIds: rows.map(r => r.achievement_id),
+              date: rows[0].earned_at,
+              isNew,
+            });
+          }
         }
       }
       if (String(userId) === _ADMIN_ID) {

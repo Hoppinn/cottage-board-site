@@ -2215,6 +2215,17 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
       return `<li class="${cls}">${_card('🎫', `${who} 교환권 ${used ? '사용' : '획득'}${cnt}`, reasonLabel)}${readBtn}</li>`;
     }
+    // 업적도 유형+날짜로 묶여서 온다 — showAchievementToast는 그 순간에만 보이는
+    // 일회성 토스트라 알림판에 안 남던 걸 여기서 보충한다.
+    if (n.type === 'achievement') {
+      const defs = (n.achievementIds || []).map(id => window.CottageAchievements?.getAchievementDef?.(id)).filter(Boolean);
+      const first = defs[0];
+      const emoji = first?.emoji || '🏆';
+      const desc = defs.length > 1
+        ? `${escH(first?.name || '')} 외 ${defs.length - 1}개 업적을 달성했어요`
+        : `${escH(first?.name || '')} 업적을 달성했어요`;
+      return `<li class="${cls}">${_card(emoji, `업적 달성${n.count > 1 ? ` ${n.count}건` : ''}`, desc)}${readBtn}</li>`;
+    }
     // 간식·음료 요청도 유형+날짜로 묶여서 온다(관리자 전용, voucher와 같은 패턴).
     if (n.type === 'snack_request') {
       const items = n.names || [];

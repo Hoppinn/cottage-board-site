@@ -974,6 +974,7 @@
     getCharacterPath,
     reapplyRepOverrides,
     getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
+    getAchievementDef: (achId) => { const d = ACH_DEFS.find(x => x.id === achId); return d ? { name: d.name, emoji: d.emoji } : null; },
     fetchUserStats: (userId, nickname) => _fetchUserStats(window.CottageDB, userId, nickname),
     findNextAchievement,
   };
