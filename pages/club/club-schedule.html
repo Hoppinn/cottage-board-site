@@ -697,6 +697,15 @@
       font-size: 10px;
       color: var(--muted);
     }
+
+    /* PC — 모임 등록 멀티스텝 바텀시트가 폭 제한 없이 화면 끝까지 늘어나던 것 수정
+       (2026-07-27 사용자 결정: 사이트 다른 센터모달·바텀시트와 같은 650px+ 정책). */
+    @media (min-width: 720px) {
+      .sched-multi-sheet {
+        max-width: 650px;
+        max-height: 85vh;
+      }
+    }
   </style>
 </head>
 
