@@ -14,6 +14,7 @@
     { "source": "/store",       "destination": "/?utm_source=store_qr",    "permanent": false },
     { "source": "/boardlife",   "destination": "/?utm_source=boardlife",   "permanent": false },
     { "source": "/flyer",       "destination": "/?utm_source=flyer_qr",   "permanent": false },
-    { "source": "/daangn",      "destination": "/?utm_source=daangn",     "permanent": false }
+    { "source": "/daangn",      "destination": "/?utm_source=daangn",     "permanent": false },
+    { "source": "/qr-game-recommend", "destination": "/?utm_source=game_recommend_qr", "permanent": false }
   ]
 }

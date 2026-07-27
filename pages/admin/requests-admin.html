@@ -1618,7 +1618,7 @@
           return String.fromCodePoint(...out);
         }
         function _decodeHost(host) { return host.split('.').map(_punycodeLabel).join('.'); }
-        const _utmBrandMap = { kakao: '카카오', kakao_club: '카카오 동호회', qr: 'QR', store_qr: '매장 QR', flyer_qr: '전단지 QR', boardlife: '보드라이프', naver: '네이버', naver_place: '네이버 플레이스', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
+        const _utmBrandMap = { kakao: '카카오', kakao_club: '카카오 동호회', qr: 'QR', store_qr: '매장 QR', flyer_qr: '전단지 QR', game_recommend_qr: '추천게임 책자 QR', boardlife: '보드라이프', naver: '네이버', naver_place: '네이버 플레이스', google: '구글', daangn: '당근마켓', instagram: '인스타그램', blog: '블로그', cafe: '카페', youtube: '유튜브' };
         const _siteHost = window.location.hostname.replace(/^www\./, '');
         function categorizeRef(ref) {
           if (!ref) return '직접 방문';
