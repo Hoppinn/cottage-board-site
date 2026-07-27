@@ -113,9 +113,10 @@
       padding: 1px 0;
     }
     .dd-game-thumb { width: 13px; height: 13px; border-radius: 3px; object-fit: cover; vertical-align: middle; margin-right: 3px; flex-shrink: 0; }
-    /* 썸네일이 13px라 터치 타겟으로 작음 → 썸네일+이름 묶음을 클릭 영역으로.
-       인라인 span이라 정확히 그 폭만 잡는다(li 전체에 주면 인원조건 태그·빈 공간까지 눌림). */
-    .dd-game-hit { cursor: pointer; border-radius: 4px; }
+    /* 클릭 대상은 썸네일만(2026-07-27 결정 — 이름까지 감싸면 "읽으려고 눌렀는데 화면이
+       넘어간다"는 인상을 준다). 대신 썸네일 자체가 13px라 터치 타겟이 작으므로 보이지
+       않는 padding으로 히트박스만 넓히고 음수 margin으로 레이아웃엔 안 끼게 한다. */
+    .dd-game-hit { cursor: pointer; border-radius: 4px; padding: 4px; margin: -4px; display: inline-block; vertical-align: middle; }
     .dd-game-hit:hover { background: rgba(0, 0, 0, 0.04); }
     .dd-empty {
       font-size: 12px; color: var(--muted, #9e8e7e);
@@ -553,9 +554,12 @@
           const name = esc(resolveGameName(g));
           const key  = gameKey(g);
           const thumb = dbThumbHtml(g.game_id, 'dd-game-thumb');
-          // 직접입력(game_id 없음)은 열 시트가 없어 묶음을 감싸지 않는다(= 클릭 불가, _buildParticipantsHtml과 같은 규칙).
+          // 클릭 대상은 썸네일만(_buildParticipantsHtml과 같은 2026-07-27 결정). 썸네일이
+          // 없으면 이름이 대신 클릭 대상. 직접입력(game_id 없음)은 열 시트가 없어 클릭 불가.
+          const hitTarget = thumb || name;
+          const rest = thumb ? name : '';
           const hit = g.game_id
-            ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${thumb}${name}</span>`
+            ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${hitTarget}</span>${rest}`
             : `${thumb}${name}`;
           if (isMine) {
             const star = g.is_priority ? '⭐' : '☆';
@@ -964,12 +968,17 @@
       const _li = g => {
         const c = g.player_condition || 'any';
         const cl = c === 'any' ? '무관' : (window.formatCondLabel?.(c, g.game_id) || c);
-        // 클릭 대상은 썸네일+이름 묶음뿐 — 인원조건 태그는 게임이 아니므로 제외한다.
-        // 직접입력(game_id 없음)은 열 시트가 없어 묶음을 감싸지 않는다(= 클릭 불가).
-        const label = `${dbThumbHtml(g.game_id, 'dd-game-thumb')}${esc(resolveGameName(g))}`;
+        // 클릭 대상은 썸네일만(2026-07-27 결정 — 이름까지 감싸면 "글자를 읽으려 눌렀는데
+        // 화면이 넘어간다"는 인상을 준다). 썸네일이 없으면(썸네일 유실) 이름이 대신 클릭
+        // 대상이 된다 — 아예 못 여는 것보다는 낫다. 직접입력(game_id 없음)은 열 시트가
+        // 없어 묶지 않는다(= 클릭 불가).
+        const thumb = dbThumbHtml(g.game_id, 'dd-game-thumb');
+        const name = esc(resolveGameName(g));
+        const hitTarget = thumb || name;
+        const rest = thumb ? name : '';
         const hit = g.game_id
-          ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${label}</span>`
-          : label;
+          ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${hitTarget}</span>${rest}`
+          : `${thumb}${name}`;
         return `<li class="dd-game-item">${hit}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
       };
       const wantGames  = myGames.filter(g => g.list_type === 'want');
