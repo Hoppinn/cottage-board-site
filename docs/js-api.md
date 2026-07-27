@@ -349,6 +349,7 @@ window.escH = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 | `window.COTTAGE_GAMES` | game-display-adapter.js | game-reviews.js, day-detail.js |
 | `window.formatCondLabel` | day-detail.js | club-schedule.html (Step 3 칩) |
 | `window._condSelWidth` | day-detail.js | kakao-auth.js (모임보드 `.mb-cond-select`) — `(label) => 'Npx'`. 네이티브 select가 가장 긴 옵션 기준으로 폭 고정되는 문제 회피, 선택 라벨 길이 기준 동적 폭 계산(2026-07-15) |
+| `window.formatVoteHour` | day-detail.js | `(h, {compact}?) => string`. meeting_votes.time_start/end(017부터 30분 단위, `.5`=30분)를 "9시"/"9시30분"로. `compact:true`면 "9"/"9:30"(막대 안처럼 좁은 자리용). club-schedule.html에서 호출(day-detail.js가 항상 먼저 로드됨). ⚠️ **kakao-auth.js는 이 전역에 기대지 않는다** — day-detail.js를 안 불러오는 페이지(club.html·requests.html 등)에서도 모임보드 미니바가 뜨므로, `_buildMiniBarWeekHtml` 안에 로직이 같은 지역 헬퍼(`_fmtVoteH`)를 따로 둔다(크로스파일 갭 회피, 2026-07-28). |
 | `window.CottageGameView` | game-display-adapter.js | game-sheet.js, owned-games-page.js, index-page.js, script-nav.js |
 | `window.getAllGamesArray` | game-sheet.js (전역 함수선언, 무인자·`{key,...game}`) | script-nav.js, index-page.js, owned-games-page.js |
 | `window.SUPABASE_CONFIG` | supabase-config.js | supabase-client.js |

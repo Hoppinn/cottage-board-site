@@ -3048,6 +3048,13 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
     const n = (window.CottageDB?.getPartySize?.(v) ?? 1) - 1;
     return n > 0 ? ` <span class="mb-week-guest">+${n}</span>` : '';
   };
+  // day-detail.js의 window.formatVoteHour와 로직은 같지만 의존하지 않고 이 파일 안에 둔다 —
+  // kakao-auth.js는 day-detail.js를 안 불러오는 페이지(club.html·requests.html 등)에서도
+  // 로드되므로, 전역에 기대면 그 페이지들에서 이 함수가 조용히 죽는다(크로스파일 갭).
+  const _fmtVoteH = h => {
+    const whole = Math.floor(h);
+    return Math.round((h - whole) * 10) === 5 ? `${whole}시30분` : `${whole}시`;
+  };
   const rows = myVotes.map(v => {
     const total = 14; // 9~23시
     const left  = ((v.time_start - 9) / total * 100).toFixed(1);
@@ -3056,7 +3063,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
       <div class="mb-week-row">
         <span class="mb-week-date">${escH(fmtVD(v.vote_date))}</span>
         <div class="mb-mini-bar-wrap"><div class="mb-mini-bar-fill" style="left:${left}%;width:${width}%"></div></div>
-        <span class="mb-week-time">${v.time_start}~${v.time_end}시${_guestSuffix(v)}</span>
+        <span class="mb-week-time">${_fmtVoteH(v.time_start)}~${_fmtVoteH(v.time_end)}${_guestSuffix(v)}</span>
         <button class="mb-detail-btn" data-uid="${escH(String(userId))}" data-date="${escH(v.vote_date)}" type="button">자세히</button>
       </div>
     </div>`;

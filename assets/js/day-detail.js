@@ -499,6 +499,16 @@
     return Math.max(34, (label || '').length * 9 + 18) + 'px';
   };
 
+  // 모임 가능 시간(9~23, .5=30분)을 사람이 읽는 문자열로. compact:true는 막대 안처럼
+  // 자리가 좁은 곳용("9:30") — 그 외엔 "9시30분" 형태(017 마이그레이션으로 소수 지원).
+  window.formatVoteHour = function (h, opts = {}) {
+    if (h == null) return '';
+    const whole = Math.floor(h);
+    const isHalf = Math.round((h - whole) * 10) === 5;
+    if (opts.compact) return isHalf ? `${whole}:30` : `${whole}`;
+    return isHalf ? `${whole}시30분` : `${whole}시`;
+  };
+
   /**
    * 일정 상세 블록 HTML 반환 (모달/인라인 공용)
    * @param {{ date: string, timeStart: number, timeEnd: number, wantGames: string[], learnGames: string[] }} opts
@@ -513,7 +523,7 @@
     };
     return `<div class="dd-block">
       <div class="dd-date">${fmtDate(date)}</div>
-      <div class="dd-time">${timeStart}~${timeEnd}시</div>
+      <div class="dd-time">${window.formatVoteHour(timeStart)}~${window.formatVoteHour(timeEnd)}</div>
       ${gamesSection('🎲', '하고 싶은 게임', wantGames)}
       ${gamesSection('📖', '배우고 싶은 게임', learnGames)}
     </div>`;
@@ -704,7 +714,7 @@
 
       renderModal(`
         <div class="dd-modal-nick">${esc(myVote.nickname)}</div>
-        <div class="dd-date-time">${fmtDate(voteDate)} · ${myVote.time_start}~${myVote.time_end}시</div>
+        <div class="dd-date-time">${fmtDate(voteDate)} · ${window.formatVoteHour(myVote.time_start)}~${window.formatVoteHour(myVote.time_end)}</div>
         ${statsHtml}
         <div class="dd-block">
           ${_buildSchedGameSection(wantGameObjs, '🎲', '하고 싶은 게임', isMine)}
@@ -885,7 +895,7 @@
     // 최대 동시 참여 가능 인원 (1시간 단위 슬롯) — 동반 인원 포함
     const MIN_H = 10, MAX_H = 24;
     let peakCnt = 0;
-    for (let h = MIN_H; h < MAX_H; h++) {
+    for (let h = MIN_H; h < MAX_H; h += 0.5) {
       const c = partyCount(votes.filter(v => v.time_start <= h && v.time_end > h));
       if (c > peakCnt) peakCnt = c;
     }
@@ -977,7 +987,7 @@
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
       return `<div class="dd-block">
         <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</div>
-        <div class="dd-time">${v.time_start}~${v.time_end}시${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
+        <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
       </div>`;
@@ -1283,7 +1293,7 @@
         </div>
         <div class="sched-bar-track${gameLine ? ' has-games' : ''}" data-date="${esc(v.vote_date)}" data-uid="${esc(v.user_id)}" style="cursor:pointer">
           <div class="sched-bar-fill${mine ? ' is-mine' : ''}" style="left:${left}%;width:${width}%">
-            <span class="sched-bar-time">${v.time_start}~${v.time_end}</span>
+            <span class="sched-bar-time">${window.formatVoteHour(v.time_start, {compact:true})}~${window.formatVoteHour(v.time_end, {compact:true})}</span>
             ${gameLine ? `<span class="sched-bar-game-line">${gameLine}</span>` : ''}
           </div>
         </div>

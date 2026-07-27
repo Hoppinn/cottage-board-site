@@ -854,7 +854,7 @@
     function calcOverlap(votes) {
       if (!votes.length) return [];
       const slots = [];
-      for (let h = MIN_H; h < MAX_H; h++) {
+      for (let h = MIN_H; h < MAX_H; h += 0.5) {
         // vote 행을 그대로 담는다 — names(누가)와 count(몇 명)를 분리하기 위함.
         // 이름은 등록자 수만큼이지만 인원은 동반 인원을 포함하므로 둘은 더 이상 같은 수가 아니다.
         slots.push({ h, votes: votes.filter(v => v.time_start <= h && v.time_end > h) });
@@ -920,9 +920,9 @@
             <div class="sched-dual-range">
               <div class="sched-range-track"><div class="sched-range-fill" id="ssRangeFill"></div></div>
               <input aria-label="시작 시각" type="range" class="sched-range-input" id="ssRS"
-                min="${MIN_H}" max="${MAX_H - 1}" step="1" value="10">
+                min="${MIN_H}" max="${MAX_H - 1}" step="0.5" value="10">
               <input aria-label="끝 시각" type="range" class="sched-range-input" id="ssRE"
-                min="${MIN_H + 1}" max="${MAX_H}" step="1" value="22">
+                min="${MIN_H + 1}" max="${MAX_H}" step="0.5" value="22">
             </div>
             <div class="sched-range-axis">
               <span>${MIN_H}시</span><span>${Math.round((MIN_H+MAX_H)/2)}시</span><span>${MAX_H}시</span>
@@ -954,20 +954,20 @@
       const lblE = document.getElementById('ssLblE');
 
       function syncSheet() {
-        const s = parseInt(ssRS.value), e = parseInt(ssRE.value);
+        const s = parseFloat(ssRS.value), e = parseFloat(ssRE.value);
         fill.style.left  = ((s - MIN_H) / range * 100) + '%';
         fill.style.width = ((e - s)     / range * 100) + '%';
-        lblS.textContent = s + '시';
-        lblE.textContent = e + '시';
+        lblS.textContent = window.formatVoteHour(s);
+        lblE.textContent = window.formatVoteHour(e);
       }
       _syncSheet = syncSheet;  // 외부(지난주와 동일 버튼)에서 호출 가능하도록 노출
 
       ssRS.addEventListener('input', () => {
-        if (parseInt(ssRS.value) >= parseInt(ssRE.value)) ssRS.value = parseInt(ssRE.value) - 1;
+        if (parseFloat(ssRS.value) >= parseFloat(ssRE.value)) ssRS.value = parseFloat(ssRE.value) - 0.5;
         syncSheet();
       });
       ssRE.addEventListener('input', () => {
-        if (parseInt(ssRE.value) <= parseInt(ssRS.value)) ssRE.value = parseInt(ssRS.value) + 1;
+        if (parseFloat(ssRE.value) <= parseFloat(ssRS.value)) ssRE.value = parseFloat(ssRS.value) + 0.5;
         syncSheet();
       });
 
@@ -981,7 +981,7 @@
       document.getElementById('ssSave').addEventListener('click', () => {
         const btnSave = document.getElementById('ssSave');
         const guest = clampGuest(document.getElementById('ssGuest')?.value);
-        saveVoteForDate(_sheetDs, parseInt(ssRS.value), parseInt(ssRE.value), btnSave, guest);
+        saveVoteForDate(_sheetDs, parseFloat(ssRS.value), parseFloat(ssRE.value), btnSave, guest);
       });
       document.getElementById('ssDiscard').addEventListener('click', closeScheduleSheet);
       document.getElementById('ssClose').addEventListener('click', closeScheduleSheet);
@@ -1320,12 +1320,12 @@
           const fw = ((t.e - t.s) / R * 100).toFixed(1);
           const chipsHtml = presets.map(p =>
             `<button class="sm-time-preset-chip${t.s===p.s&&t.e===p.e?' is-active':''}"
-             data-ds="${esc(ds)}" data-s="${p.s}" data-e="${p.e}" type="button">${p.s}~${p.e}시</button>`
+             data-ds="${esc(ds)}" data-s="${p.s}" data-e="${p.e}" type="button">${window.formatVoteHour(p.s)}~${window.formatVoteHour(p.e)}</button>`
           ).join('');
           return `<div class="sm-time-row">
             <div class="sm-time-row-hdr">
               <span class="sm-time-row-label">${esc(label)}</span>
-              <span class="sm-time-row-val" id="smTV_${ds}">${t.s}~${t.e}시</span>
+              <span class="sm-time-row-val" id="smTV_${ds}">${window.formatVoteHour(t.s)}~${window.formatVoteHour(t.e)}</span>
             </div>
             ${chipsHtml ? `<div class="sm-time-preset-chips">${chipsHtml}</div>` : ''}
             <div class="sm-time-slider-wrap">
@@ -1333,8 +1333,8 @@
                 <div class="sched-range-track">
                   <div class="sched-range-fill" id="smF_${ds}" style="left:${fl}%;width:${fw}%"></div>
                 </div>
-                <input aria-label="시작 시각" type="range" class="sched-range-input" id="smRS_${ds}" min="${MIN_H}" max="${MAX_H-1}" step="1" value="${t.s}">
-                <input aria-label="끝 시각" type="range" class="sched-range-input" id="smRE_${ds}" min="${MIN_H+1}" max="${MAX_H}" step="1" value="${t.e}">
+                <input aria-label="시작 시각" type="range" class="sched-range-input" id="smRS_${ds}" min="${MIN_H}" max="${MAX_H-1}" step="0.5" value="${t.s}">
+                <input aria-label="끝 시각" type="range" class="sched-range-input" id="smRE_${ds}" min="${MIN_H+1}" max="${MAX_H}" step="0.5" value="${t.e}">
               </div>
               <div class="sched-range-axis">
                 <span>${MIN_H}시</span><span>${Math.round((MIN_H+MAX_H)/2)}시</span><span>${MAX_H}시</span>
@@ -1370,22 +1370,22 @@
           if (!rsEl || !reEl) return;
 
           function syncRow() {
-            const s = parseInt(rsEl.value), e = parseInt(reEl.value);
+            const s = parseFloat(rsEl.value), e = parseFloat(reEl.value);
             fillEl.style.left = ((s-MIN_H)/R*100) + '%';
             fillEl.style.width = ((e-s)/R*100) + '%';
-            valEl.textContent = `${s}~${e}시`;
+            valEl.textContent = `${window.formatVoteHour(s)}~${window.formatVoteHour(e)}`;
             _timeMap[ds] = { s, e };
             $s('smBody').querySelectorAll(`.sm-time-preset-chip[data-ds="${ds}"]`).forEach(c => {
-              c.classList.toggle('is-active', parseInt(c.dataset.s)===s && parseInt(c.dataset.e)===e);
+              c.classList.toggle('is-active', parseFloat(c.dataset.s)===s && parseFloat(c.dataset.e)===e);
             });
           }
 
           rsEl.addEventListener('input', () => {
-            if (parseInt(rsEl.value) >= parseInt(reEl.value)) rsEl.value = parseInt(reEl.value) - 1;
+            if (parseFloat(rsEl.value) >= parseFloat(reEl.value)) rsEl.value = parseFloat(reEl.value) - 0.5;
             syncRow();
           });
           reEl.addEventListener('input', () => {
-            if (parseInt(reEl.value) <= parseInt(rsEl.value)) reEl.value = parseInt(rsEl.value) + 1;
+            if (parseFloat(reEl.value) <= parseFloat(rsEl.value)) reEl.value = parseFloat(rsEl.value) + 0.5;
             syncRow();
           });
 
@@ -1915,7 +1915,7 @@
       const rowPrev = document.getElementById('ssPrevWeekRow');
       if (prevVote) {
         document.getElementById('ssPrevWeek').textContent =
-          `지난주 ${prevVote.time_start}~${prevVote.time_end} 적용`;
+          `지난주 ${window.formatVoteHour(prevVote.time_start)}~${window.formatVoteHour(prevVote.time_end)} 적용`;
         rowPrev.style.display = '';
       } else {
         rowPrev.style.display = 'none';

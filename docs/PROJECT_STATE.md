@@ -33,7 +33,7 @@
 
 | # | 항목 | 위치 | 등급 | 왜 이 순서 |
 |---|------|------|------|---|
-| 1 | **모임시간 30분단위 설정** (QR 추천게임 집계는 2026-07-27 종결) | §3 P1 1번 | 기능 | 명확한 스펙, club-schedule.html 시간 선택 UI만 |
+| 1 | **건의사항(개선 건의) 관리자 가시성 — requests.html 개선건의 탭에 admin용 목록 추가 (2026-07-28 사용자 요청, "급한대로")** | 신규 | 기능 | Make 알림이 죽어있는 동안 건의사항이 통째로 안 보이던 것의 임시 대체 경로. 스키마 무변경 |
 | 2 | **게임정리(사진)+룰설명(신규 텍스트) 관리자입력 (2026-07-27 범위 확정 — 룰영상 유튜브링크는 무관·그대로)** | §3 P1 2번 | 기능/Plan | 하드코딩 메커니즘 확인됨 — Supabase 테이블화 설계 필요, Plan 모드 |
 | 3 | **플래너 「다른 날짜에도 추가」 confirm→토글+일괄 (2026-07-27 사양 확정)** | §3 P1 4번 | 기능/Plan | DB 변경 없음, UX 엣지케이스 결정 필요 — Plan 권장 |
 | 4 | 🚫 **「이날모임 상세창에 등록·수정 버튼」** — 승인 없이 만들었다가 2026-07-22 되돌림(git `d315b314`). 되살리려면 먼저 기획(진입점 개수·복귀 동선) | — | 기획 | 오늘 안건과 무관한 기존 항목, 결정 대기라 낮은 순위 유지 |
@@ -108,6 +108,8 @@
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
 - `play-records-utils.js` `openLightbox` — 부모가 `cottage-close-lightbox`로 닫을 때 game-reviews의 수신부가 `.pr-lightbox`를 **DOM에서 직접 제거**해 `closeLb()`를 안 거침 → `document`의 `keydown`(onKey) 리스너가 해제되지 않고 누적. 현재 사용자 영향은 없음(고아 핸들러가 detached 노드에 `remove()`+중복 postMessage를 쏘는 정도). 정리하려면 iframe 수신부가 노드 제거 대신 닫기 함수를 호출하도록 바꿔야 함. 2026-07-16 발견(버그 수정 중, BUG FIX MODE라 보고만).
 - **`pages/admin/requests.html`(공개 요청 탭 페이지)와 `pages/admin/requests-admin.html`(분석 대시보드의 요청관리 모달)이 game_requests/snack_requests/suggestions 렌더링·상태 피커를 각각 독립적으로 중복 구현** — STATUS_LABEL/STATUS_CLASS, 상태 설정 드롭다운, 삭제/투표 핸들러가 두 파일에 따로 존재해 한쪽만 고치면 다른 쪽이 조용히 뒤처진다(2026-07-27 간식 상태피커 추가 중 실제로 requests-admin.html만 먼저 고쳤다가 사용자가 실사용 화면인 requests.html에서 다르다고 지적해 발견). 공용 렌더 함수로 통합하면 좋지만 두 화면이 관리자 판별 방식(`isAdmin()` vs 항상 관리자)·표시 범위(공개 vs 관리자 전용)가 달라 단순 추출은 아님 — 리팩토링 착수 전 두 화면의 실제 사용 빈도부터 확인 필요.
+- `pages/club/club-schedule.html` `calcSummary`/`calcOverlap`(겹침 시간대 계산, ~40줄)이 **완전히 죽은 코드다** — 둘 다 서로만 호출하고 파일 어디서도 `calcSummary(`가 안 불린다(2026-07-28 모임시간 30분단위 작업 중 발견, 겹침 히트맵 루프를 고치려다 실사용처가 `day-detail.js`의 `_buildMeetingStatsHtml`(자체 MIN_H=10/MAX_H=24)뿐임을 확인). 삭제해도 안전하지만 이번 작업 범위 밖이라 손 안 댐.
+- `kakao-auth.js` `_buildMiniBarWeekHtml`(모임보드 이번 주 미니바)이 `day-detail.js`의 `buildBarsInCard`와 **별개의 독립 렌더러**다(위치 산술 `total=14` 하드코딩, 자체 구현). day-detail.js를 안 불러오는 페이지에서도 kakao-auth.js는 로드되므로(club.html·requests.html 등) 전역 헬퍼에 기대면 크로스파일 갭이 난다 — 2026-07-28 `formatVoteHour` 추가 때 실제로 이 문제를 피하려고 kakao-auth.js에 같은 로직을 로컬로 중복시켰다(`_fmtVoteH`). 통합하려면 day-detail.js를 모든 kakao-auth.js 로드 페이지에 추가하거나, 이 렌더러 자체를 공용 파일(예: script.js)로 옮겨야 함.
 
 ---
 
@@ -135,7 +137,7 @@
 
 (간식·음료 요청 Part2(관리자 처리완료 표시 + 요청자 완료 알림)는 2026-07-27 종결 — 마이그레이션 015(`is_done`/`done_at`)+016(`purchase_status`/`status_date`) + `getMyNotifications` `snack_done` 케이스(ordered와 동일 패턴). 상태는 게임구매요청과 같은 UI로 2단계(구매예정→구매완료, 사용자 요청 반영). `scripts/verify-snack-done.js` 실DB 왕복 + Playwright 실클릭 검증 완료.
   ⚠️ **실제 요청 관리 화면은 `pages/admin/requests.html`이었다** — 처음에 `pages/admin/requests-admin.html`(분석 대시보드 안의 별도 요청관리 모달)에만 구현했다가 사용자가 실사용 화면 스크린샷을 보내 지적, 재확인 후 `requests.html`(공개 요청 탭 페이지, 관리자 로그인 시 배지+상태피커 노출)에도 동일하게 구현했다. **두 파일이 game_requests/snack_requests 렌더링을 각각 독립 구현하는 중복 구조** — 리팩토링 후보로 `코드 품질 주석`에 등록.)
-- [ ] **모임 시간 설정 — 30분 단위 지원** (club-schedule.html 시간 선택 UI). 미착수.
+(모임 시간 설정 30분 단위 지원은 2026-07-28 종결 — 마이그레이션 017(`meeting_votes.time_start/end` → `numeric(4,1)`) + `window.formatVoteHour`(day-detail.js) + 슬라이더 `step=0.5`·`parseInt`→`parseFloat`(club-schedule.html, 방치했으면 9.5가 9로 잘리는 버그) + 히트맵/피크 루프 `h+=0.5`. `scripts/verify-half-hour-vote.js`로 DB 왕복+포맷 검증, Playwright로 `buildBarsInCard`·슬라이더 라이브 동기화·`_buildMiniBarWeekHtml` 전부 확인(NaN 없음, 기존 정시 투표 회귀 없음). 발견: `_buildMiniBarWeekHtml`가 day-detail.js 없이도 로드되는 페이지에서 쓰이는 크로스파일 갭이라 자체 로컬 헬퍼로 분리, `calcSummary`/`calcOverlap`(club-schedule.html) 완전 죽은 코드 발견 — 둘 다 「코드 품질 주석」에 등록.)
 - [ ] **게임정리·룰설명 — 관리자 페이지에서 추가 가능하게 (2026-07-27 조사 완료·범위 확정, 미착수)** — DB에는 이 개념이 아예 없다(db-schema.md에 관련 컬럼 0건).
   - **정리법 사진(기존 메커니즘, 확인됨)**: `game-sheet.js` `_ORGANIZER_GAMES`(267줄, **현재 빈 객체 `{}`** — 활성 게임 0개) — `{게임명: 사진장수}` 하드코딩 맵 + `/game-system/game-data/library/images/organizer/{게임명}/1.jpg...` 고정 경로 파일. 추가하려면 파일 업로드 + 소스 코드 수정(배포 필요) 둘 다 필요.
   - **룰설명(신규 필드, 2026-07-27 범위 확정)**: ⚠️ 룰영상(`detail.youtubeUrl`, 정적 게임데이터 JSON 필드)은 **그대로 둔다 — 이 항목과 무관**. "룰설명"은 그것과 별개로 **커스텀 텍스트**(글로 쓴 규칙 요약/설명)를 「정리법」 자리에 새로 추가하겠다는 뜻 — 기존 유튜브 링크를 건드리는 게 아니다.
