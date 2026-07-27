@@ -21,7 +21,13 @@
     .admin-group.is-open .admin-group-arrow { transform: rotate(180deg); }
     .admin-group-body { display: none; }
     .admin-group.is-open .admin-group-body { display: block; }
-    .admin-section { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    /* 🚫 overflow:hidden 금지 — 이 안에서 열리는 상태 설정 드롭다운(.req-status-picker)이
+       섹션 경계에서 잘린다(2026-07-27 실측, play-records .pr-session과 동일 패턴, DESIGN_RULES 6-a).
+       원래는 title의 각진 배경을 섹션 반경에 맞추려고 걸었던 것이라, 그 일은 title이 직접 한다. */
+    .admin-section { margin-bottom: 16px; border: 1px solid var(--border); border-radius: 12px; }
+    .admin-section > .admin-section-title { border-radius: 11px 11px 0 0; }
+    /* 접히면 title이 곧 섹션이다 — 네 모서리 전부 */
+    .admin-section:not(.is-open) > .admin-section-title { border-radius: 11px; }
     .admin-section-title { font-size: 15px; font-weight: 700; color: var(--green); padding: 12px 16px; border-bottom: 2px solid var(--green); cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; margin: 0; background: var(--bg); }
     .admin-section-title:hover { background: #ede8df; }
     .admin-section-count { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--card-bg,#fff); border-radius: 20px; padding: 1px 8px; margin-left: 6px; }
