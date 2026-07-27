@@ -5453,6 +5453,11 @@ body.embed-mode {
 .req-purchase-date{font-size:12px;border:1px solid var(--border);border-radius:5px;padding:3px 7px;}
 .req-purchase-confirm{font-size:12px;background:var(--green);color:#fff;border:none;border-radius:5px;padding:3px 10px;cursor:pointer;}
 .req-purchase-cancel{font-size:12px;background:none;border:1px solid var(--border);border-radius:5px;padding:3px 8px;cursor:pointer;color:var(--muted);}
+.req-suggest-admin-list{display:flex;flex-direction:column;gap:8px;margin-top:16px;}
+.req-suggest-admin-title{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 4px;}
+.req-suggest-admin-item{background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:12px;}
+.req-suggest-admin-meta{font-size:11px;color:var(--text-info);margin-bottom:4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.req-suggest-admin-content{font-size:14px;line-height:1.5;color:#111;white-space:pre-wrap;}
 .req-plan-btn{
   background:none;
   border:none;
