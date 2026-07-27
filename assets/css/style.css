@@ -7076,9 +7076,10 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-session--bydate .pr-sub-hd { padding-left: 28px; background: #fdfaf5; }
 .pr-month-body .pr-sub-hd:hover,
 .pr-session--bydate .pr-sub-hd:hover { background: var(--bg-soft); }
-.pr-month-body .pr-sub-session.is-open > .pr-sub-hd,
+/* .pr-month-body(모임별 탭)만 .pr-sub-hd-row로 감싸져 있어 direct child 선택자가 다르다(2026-07-27) */
+.pr-month-body .pr-sub-session.is-open > .pr-sub-hd-row > .pr-sub-hd,
 .pr-session--bydate .pr-sub-session.is-open > .pr-sub-hd { background: #f8f3ec; box-shadow: none; position: relative; }
-.pr-month-body .pr-sub-session.is-open > .pr-sub-hd::before,
+.pr-month-body .pr-sub-session.is-open > .pr-sub-hd-row > .pr-sub-hd::before,
 .pr-session--bydate .pr-sub-session.is-open > .pr-sub-hd::before { content: ''; position: absolute; left: 8px; top: 0; bottom: -3px; width: 3px; background: #a06040; pointer-events: none; }
 .pr-month-body .pr-date-group-label,
 .pr-month-body .pr-player-header,
@@ -7123,10 +7124,18 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-sub-session:first-child { border-top: none; }
 .pr-sub-hd { width: 100%; display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--bg); border: none; cursor: pointer; text-align: left; font-family: inherit; }
 .pr-sub-hd:hover { background: #ece7dc; }
-.pr-sub-session.is-open > .pr-sub-hd { background: var(--bg-soft); box-shadow: inset 3px 0 0 #a06040; }
+.pr-sub-session.is-open > .pr-sub-hd,
+.pr-sub-session.is-open > .pr-sub-hd-row > .pr-sub-hd { background: var(--bg-soft); box-shadow: inset 3px 0 0 #a06040; }
 .pr-sub-session.is-open { margin-bottom: 16px; }
 .pr-sub-date { font-size: 14px; font-weight: 600; color: #6b5040; flex-shrink: 0; }
-.pr-sub-session.is-open > .pr-sub-hd .pr-sub-date { color: #8a4028; }
+.pr-sub-session.is-open > .pr-sub-hd .pr-sub-date,
+.pr-sub-session.is-open > .pr-sub-hd-row > .pr-sub-hd .pr-sub-date { color: #8a4028; }
+/* 모임별 탭: 날짜 토글 옆에 캡션 ⋯를 나란히 두는 wrapper(2026-07-27, .pr-sub-hd는 <button>이라
+   그 안에 또 다른 button을 못 넣는다 — 형제 요소로 분리). 날짜별 탭의 .pr-sub-hd(모임 미포함, 최상위
+   날짜 토글)는 감싸지 않았으므로 영향 없음. */
+.pr-sub-hd-row { display: flex; align-items: center; }
+.pr-sub-hd-row .pr-sub-hd { width: auto; flex: 1; min-width: 0; }
+.pr-sub-hd-row .pr-hd-caption-menu { flex-shrink: 0; margin-right: 10px; }
 .pr-sub-summary { font-size: 12px; font-weight: 700; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; }
 .pr-sub-arrow { font-size: 13px; color: #a09080; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
@@ -7237,8 +7246,11 @@ body.is-embedded .inner-page{padding-top:16px;}
 /* 날짜별 보기: 모임 하나 = 카드, 모임명은 카드 최상단 헤더로 흡수(밖에 안 뜨게).
    인원 묶음(.pr-moim-section)은 그 안의 내부 섹션 — 박스는 한 겹뿐(카드-속-카드 아님).
    모임명은 진한 브랜드 브라운·굵게로 '그룹 시작점' 강조(GPT안 ①, 2026-07-22). */
-.pr-moim-header { font-size: 13px; font-weight: 700; color: var(--green); padding: 10px 16px 9px; background: var(--bg-soft); border-bottom: 1px solid var(--line); border-radius: 11px 11px 0 0; }
+.pr-moim-header { font-size: 13px; font-weight: 700; color: var(--green); padding: 10px 16px 9px; background: var(--bg-soft); border-bottom: 1px solid var(--line); border-radius: 11px 11px 0 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .pr-session--bydate .pr-moim-header { padding-left: 16px; }
+/* 헤더 라벨은 남는 공간을 다 갖고, 캡션 ⋯는 오른쪽 끝에 고정(2026-07-27) */
+.pr-moim-header-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pr-moim-header .pr-hd-caption-menu { flex-shrink: 0; }
 .pr-moim-section + .pr-moim-section { border-top: 1px solid var(--line); }
 
 .pr-game-group { border-top: 1px solid var(--border); }

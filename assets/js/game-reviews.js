@@ -1207,12 +1207,19 @@
         const hiddenDates = sortedDates.slice(MAX_DATES);
 
         const renderDateBlock = ([dateStr, recs]) => {
+          // 모임별 탭: 모임은 이미 위 세션 헤더로 고정돼 있으므로 이 날짜 토글 옆 ⋯가
+          // 「그 날짜 + 그 모임」 캡션을 담당한다(2026-07-27 역할분리).
+          const _dateCaption = window.escAttr(window.buildRecordCaption?.(recs, getGameName) || '');
+          const _dateCaptionMenu = _dateCaption ? `<div class="pr-rec-more pr-hd-caption-menu"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-caption-action" data-caption="${_dateCaption}" type="button">📋 캡션 복사</button></div></div>` : '';
           return `<div class="pr-sub-session" data-date="${dateStr}">
-            <button class="pr-sub-hd" type="button">
-              <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
-              <span class="pr-sub-summary">${recs.length}게임</span>
-              <span class="pr-sub-arrow">▾</span>
-            </button>
+            <div class="pr-sub-hd-row">
+              <button class="pr-sub-hd" type="button">
+                <span class="pr-sub-date">${escH(formatKstDate(dateStr))}</span>
+                <span class="pr-sub-summary">${recs.length}게임</span>
+                <span class="pr-sub-arrow">▾</span>
+              </button>
+              ${_dateCaptionMenu}
+            </div>
             <div class="pr-sub-body">${buildSessionBody(recs, user, _orderMap)}</div>
           </div>`;
         };
@@ -1355,8 +1362,8 @@
   }
 
   function buildSessionBody(recs, user, orderMap = new Map(), moimLabel = '') {
-    // 이 날(=이 블록) 전체 캡션. 행마다 다시 만들지 않고 한 번만 만들어 각 ⋯ 메뉴에 심는다.
-    // 캡션 단위는 「모임 하루치」다 — 게임 하나가 아니라 그날 한 게임 전부가 들어간다.
+    // 이 날+이 모임 전체 캡션 — 게임별 행 메뉴가 아니라 날짜·모임 헤더(.pr-moim-header/.pr-sub-hd)의
+    // ⋯ 메뉴에 심는다(2026-07-27 역할분리). 행마다의 캡션은 아래 각 행에서 [r] 하나로 따로 만든다.
     const _dayCaption = window.escAttr(window.buildRecordCaption?.(recs, getGameName) || '');
 
     // 참여자(인원+이름) 기준으로 묶기
@@ -1410,7 +1417,9 @@
         const addItems = _safeGKey ? `<button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenCommentInput(this)" type="button">💬 게임평 추가</button><button class="pr-rec-add-action" data-game-id="${_safeGKey}" data-record-id="${r.id}" onclick="onOpenPhotoInput(this)" type="button">📷 사진 추가</button>` : '';
         // 캡션 복사는 로그인·소유 여부를 안 본다 — 회원이 아니어도 필요하면 쓰라는 결정(2026-07-22).
         // 그래서 다른 항목이 하나도 없어도 ⋯ 메뉴 자체는 뜬다.
-        const captionItem = _dayCaption ? `<button class="pr-rec-caption-action" data-caption="${_dayCaption}" type="button">📋 캡션 복사</button>` : '';
+        // 게임별 캡션은 이 기록 하나만(2026-07-27) — 하루 전체 캡션은 날짜·모임 헤더 ⋯로 옮겼다.
+        const _gameCaption = window.escAttr(window.buildRecordCaption?.([r], getGameName) || '');
+        const captionItem = _gameCaption ? `<button class="pr-rec-caption-action" data-caption="${_gameCaption}" type="button">📋 캡션 복사</button>` : '';
         const moreMenu = (likeItems || addItems || editItems || captionItem) ? `<div class="pr-rec-more"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu">${likeItems}${addItems}${editItems}${captionItem}</div></div>` : '';
         return `<div class="pr-rec-row pr-rec-row--game" data-id="${r.id}" data-record='${JSON.stringify({gameId: r.game_id||'', nick: r.nickname||'', names: r.player_names||'', count: r.player_count||'', time: r.play_time_min||'', score: r.score_note||'', review: r.review_text||'', group: r.group_name||'', date: r.played_at||'', photo: r.photo_url||'', mine: !!showEdit})}'>
           <div class="pr-rec-row-top">
@@ -1436,7 +1445,9 @@
     // 박스는 한 겹뿐이라 카드-속-카드가 아니다.
     if (moimLabel) {
       const _inner = _sections.map(s => `<div class="pr-moim-section">${s}</div>`).join('');
-      return `<div class="pr-group-card pr-group-card--moim"><div class="pr-moim-header">${escH(moimLabel)}</div>${_inner}</div>`;
+      // 날짜별 탭: 이 카드가 곧 「그 날짜 + 그 모임」이므로 헤더의 ⋯가 그 범위 캡션을 담당한다.
+      const _moimCaptionMenu = _dayCaption ? `<div class="pr-rec-more pr-hd-caption-menu"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-caption-action" data-caption="${_dayCaption}" type="button">📋 캡션 복사</button></div></div>` : '';
+      return `<div class="pr-group-card pr-group-card--moim"><div class="pr-moim-header"><span class="pr-moim-header-label">${escH(moimLabel)}</span>${_moimCaptionMenu}</div>${_inner}</div>`;
     }
     return _sections.map(s => `<div class="pr-group-card">${s}</div>`).join('');
   }
