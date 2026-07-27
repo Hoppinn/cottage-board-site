@@ -8493,9 +8493,9 @@ body.is-embedded .inner-page{padding-top:16px;}
   .game-sheet-panel {
     left: 50%;
     right: auto;
-    top: 52px;
-    bottom: 52px;
-    width: min(92vw, 560px);
+    top: 32px;
+    bottom: 32px;
+    width: min(92vw, 650px);
     transform: translateX(-50%);
     border-radius: 20px;
     animation: sheetModalIn .22s ease;
@@ -8520,6 +8520,28 @@ body.is-embedded .inner-page{padding-top:16px;}
   @keyframes sheetModalIn {
     from { opacity: 0; transform: translateX(-50%) translateY(14px); }
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+
+  /* ── PC 센터모달·바텀시트 폭·높이 통일 (2026-07-27 사용자 결정: 650px+, 상하 여백도 축소) ──
+     .game-sheet-panel만 PC 전용 크기가 있었고 나머지는 max-width:480px 그대로라 화면 대비
+     작아 보인다는 지적. 앵커 방식(센터/바텀)과 등장 애니메이션은 그대로 두고 폭·높이만 키운다. */
+  .profile-panel-box,
+  .profile-subsheet-box {
+    max-width: 650px;
+    height: calc(100dvh - 24px);
+    max-height: calc(100dvh - 24px);
+    margin: 0 10px 8px;
+  }
+  .planner-modal-box,
+  .record-iframe-panel,
+  .planner-sheet-panel {
+    max-width: 650px;
+    height: 92dvh;
+    max-height: 92dvh;
+  }
+  .mb-add-box {
+    max-width: 650px;
+    max-height: 85vh;
   }
 
   /* ── owned-games 2컬럼 게임 목록 ── */
