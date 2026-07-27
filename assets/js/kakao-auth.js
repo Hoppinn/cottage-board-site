@@ -2229,10 +2229,11 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const defs = (n.achievementIds || []).map(id => window.CottageAchievements?.getAchievementDef?.(id)).filter(Boolean);
       const first = defs[0];
       const emoji = first?.emoji || '🏆';
-      // "OOO 외 N개"로 뭉개지 않고 전부 이름을 나열한다(2026-07-27) — "외 1건은 뭔지 안 보인다"는 지적.
+      // "OOO 외 N개"로 뭉개지 않고 이름+조건을 전부 나열한다(2026-07-27) — "외 1건은 뭔지, 조건이 뭔지 안 보인다"는 지적.
+      const _label = d => `${escH(d.name || '')}${d.conditionText ? `(${escH(d.conditionText)})` : ''}`;
       const desc = defs.length > 1
-        ? `${defs.map(d => escH(d.name || '')).join(' · ')} 업적을 달성했어요`
-        : `${escH(first?.name || '')} 업적을 달성했어요`;
+        ? `${defs.map(_label).join(', ')} 업적을 달성했어요`
+        : `${_label(first || {})} 업적을 달성했어요`;
       return `<li class="${cls}">${_card(emoji, `업적 달성${n.count > 1 ? ` ${n.count}건` : ''}`, desc)}${readBtn}</li>`;
     }
     // 간식·음료 요청도 유형+날짜로 묶여서 온다(관리자 전용, voucher와 같은 패턴).

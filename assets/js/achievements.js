@@ -265,6 +265,8 @@
 
   const TYPE_LABELS = { record: '플레이기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '홈페이지 탐방', first_record: '코티지 최초 기록', play: '플레이', balance: '함께한 날' };
   const SHORT_TYPE_LABELS = { record: '기록 작성', new_game: '새 게임', photo: '사진', review: '게임평', visit: '홈페이지', first_record: '최초 기록', play: '플레이', balance: '함께한 날' };
+  // 업적 알림 등 "달성 조건" 문구 조립용 단위 — _GOAL_AXES_GROUPS(진행도 목록)와 같은 값(2026-07-27)
+  const UNIT_LABELS = { record: '회', new_game: '종', photo: '장', review: '개', visit: '일', first_record: '종', play: '회', balance: '일' };
 
   // 업적 체크 진입점 — supabase-client.js에서 호출
   async function checkAchievements(category, userId, opts = {}) {
@@ -991,7 +993,12 @@
     getCharacterPath,
     reapplyRepOverrides,
     getCharacterName: (achId) => ACH_DEFS.find(d => d.id === achId)?.rewards?.char_name || null,
-    getAchievementDef: (achId) => { const d = ACH_DEFS.find(x => x.id === achId); return d ? { name: d.name, emoji: d.emoji } : null; },
+    getAchievementDef: (achId) => {
+      const d = ACH_DEFS.find(x => x.id === achId);
+      if (!d) return null;
+      const unit = UNIT_LABELS[d.type] || '';
+      return { name: d.name, emoji: d.emoji, conditionText: `${TYPE_LABELS[d.type] || d.type} ${d.threshold}${unit}` };
+    },
     fetchUserStats: (userId, nickname) => _fetchUserStats(window.CottageDB, userId, nickname),
     findNextAchievement,
   };
