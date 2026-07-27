@@ -306,9 +306,10 @@
       line-height: 1.5;
       white-space: nowrap;
     }
-    .sched-game-tag-thumb { width: 10px; height: 10px; border-radius: 2px; object-fit: cover; margin-right: 2px; flex-shrink: 0; }
-    .sched-game-tag[data-game-id] { cursor: pointer; }
-    .sched-game-tag[data-game-id]:hover { filter: brightness(0.96); }
+    .sched-game-tag-thumb { width: 10px; height: 10px; border-radius: 2px; object-fit: cover; margin-right: 2px; flex-shrink: 0; vertical-align: middle; }
+    /* 클릭 대상(.dd-game-hit)은 이 안의 썸네일만 — 히트박스 확장용 padding/margin이 팁 밖으로
+       튀지 않게 pill 안에서만 눌러쓴다(2026-07-27). */
+    .sched-game-tag .dd-game-hit { padding: 2px; margin: -2px; }
     .sched-game-tag--want { background: var(--bg-soft); color: var(--green); }
     .sched-game-tag--learn { background: var(--line); color: var(--muted); }
 
@@ -799,24 +800,8 @@
         close();
         onChange?.();
       }));
-    // 「하고 싶은/배우고 싶은 게임」 콩알 썸네일 칩 클릭 → 게임시트(2026-07-27, 예전엔 안 뚫려 있었음)
-    window._bindSchedGameTagClicks?.(el);
-  };
-
-  // .sched-game-tag(하고싶은/배우고싶은 게임 칩)의 게임시트 진입 바인딩 — buildBarsInCard가 쓰이는
-  // 곳(플래너 막대바 모달·홈 미리보기)마다 삽입 뒤 이걸 불러야 클릭이 뚫린다. dd-game-hit과 같은
-  // BGG ID→gameData 슬러그 변환 규칙(위 ⚠️ 주석 참조).
-  window._bindSchedGameTagClicks = function (container) {
-    container?.querySelectorAll('.sched-game-tag[data-game-id]').forEach(tag =>
-      tag.addEventListener('click', e => {
-        // 홈 미리보기 카드는 카드 전체에 클릭 리스너(상세 모달 열기)가 있어 전파를 막아야 한다
-        // (안 막으면 게임시트 + 상세 모달이 같이 열린다).
-        e.stopPropagation();
-        const key = window.getGameKeyById?.(tag.dataset.gameId);
-        if (!key) return;
-        window.ensureGameSheet?.();
-        window.openGameSheet?.(key);
-      }));
+    // 「하고 싶은/배우고 싶은 게임」 썸네일 클릭 → 게임시트(2026-07-27, 예전엔 안 뚫려 있었음)
+    _bindDdGameHitClicks(el);
   };
 
   // ── 모임 플래너 센터모달 (공용 유틸 — 전 페이지에서 호출, 페이지별 복제 금지) ──
@@ -921,20 +906,25 @@
     return statsHtml;
   }
 
-  // .dd-game-hit(썸네일+게임명 묶음) 클릭 → 게임시트. openDateMeetingModal·openDateScheduleModal이
-  // 공유(2026-07-27, 전에는 openDateMeetingModal에만 붙어 있어서 다른 모달의 콩알 썸네일은 안 눌렸다).
-  // 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 모달을 안 닫는다(닫으면 이 모달로 복귀).
+  // .dd-game-hit(게임 썸네일) 클릭 → 게임시트. openDateMeetingModal·openDateScheduleModal·
+  // buildGameTags(.sched-game-tag 안, 홈 미리보기·플래너 막대바 모달·플래너 페이지 주간뷰가 공유)
+  // 전부 이걸로 통일(2026-07-27) — 예전엔 셋 중 일부만 뚫려 있었다.
+  // 게임시트(--z-sheet 9500)가 겹쳐 뜨므로 모달/카드를 안 닫는다(닫으면 아래로 복귀).
   // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
   //    변환 없이 넘기면 미보유 게임으로 오인해 조용히 기록시트로 폴백된다(에러도 안 남).
   function _bindDdGameHitClicks(el) {
     el.querySelectorAll('.dd-game-hit').forEach(hit =>
-      hit.addEventListener('click', () => {
+      hit.addEventListener('click', e => {
+        // 홈 미리보기 카드·주간뷰 카드처럼 조상에 "카드 전체 클릭" 리스너가 있는 곳도 있어
+        // 항상 막는다(안 막으면 게임시트 + 그 리스너가 같이 발동).
+        e.stopPropagation();
         const key = window.getGameKeyById?.(hit.dataset.gameId);
         if (!key) return;
         window.ensureGameSheet?.();
         window.openGameSheet?.(key);
       }));
   }
+  window._bindDdGameHitClicks = _bindDdGameHitClicks;
 
   /** 룰렛 후보 목록: want 게임 중복 제거 + 약칭 해석 → [{key, name, abbr}] */
   function _buildRouletteGames(voteGames) {
@@ -1328,9 +1318,15 @@
         const suffix = cnt > 1 ? ` ·${cnt}` : '';
         const gameId = key.startsWith('id:') ? key.slice(3) : null;
         const thumb = dbThumbHtml(gameId, 'sched-game-tag-thumb');
-        // 직접입력(game_id 없음)은 열 시트가 없어 data-game-id를 안 붙인다 = 클릭 불가(dd-game-hit과 같은 규칙).
-        const idAttr = gameId ? ` data-game-id="${esc(String(gameId))}"` : '';
-        return `<span class="sched-game-tag sched-game-tag--${tone}"${idAttr}>${thumb}${esc(nameMap[key])}${suffix}</span>`;
+        const name = esc(nameMap[key]);
+        // 클릭 대상은 썸네일만(2026-07-27 통일 — .dd-game-hit 재사용, 다른 두 목록과 같은 규칙·같은
+        // 바인딩). 썸네일이 없으면 이름이 대신 클릭 대상. 직접입력(game_id 없음)은 클릭 불가.
+        const hitTarget = thumb || name;
+        const rest = thumb ? name : '';
+        const hit = gameId
+          ? `<span class="dd-game-hit" data-game-id="${esc(String(gameId))}">${hitTarget}</span>${rest}`
+          : `${thumb}${name}`;
+        return `<span class="sched-game-tag sched-game-tag--${tone}">${hit}${suffix}</span>`;
       };
       const wantKeys = Object.keys(wantCnt).sort((a, b) =>
         ((wantCnt[b] || 0) - (wantCnt[a] || 0)) || ((priorityCnt[b] || 0) - (priorityCnt[a] || 0)));
