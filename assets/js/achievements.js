@@ -502,7 +502,7 @@
   }
 
   // 칭호 섹션 HTML 빌드 — { html, earnedIds } 반환
-  async function buildTitleSection(userId, repTitleId, visitCount, nickname, preStats = null) {
+  async function buildTitleSection(userId, repTitleId, visitCount, nickname, preStats = null, achSeenAt = null) {
     const db = window.CottageDB;
     if (!db) return { html: '', earnedIds: new Set(), titleTotal: TITLE_DEFS.length };
     try {
@@ -511,6 +511,12 @@
       const earnedAchIds = new Set(achievements.map(a => a.id));
       const vc = Number(visitCount) || 0;
       const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: vc, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+      // 칭호는 자체 earned_at이 없다 — 연결된 업적(_titleToAchId)의 earned_at을 대신 쓴다(2026-07-27).
+      const _earnedAtMap = new Map(achievements.map(a => [a.id, a.earned_at]));
+      const _isNewlyEarned = titleId => {
+        const achId = _titleToAchId[titleId];
+        return !!(achId && achSeenAt && _earnedAtMap.get(achId) && _earnedAtMap.get(achId) > achSeenAt);
+      };
 
       // ACH_DEFS.rewards.title 정참조 기준으로 획득 여부 판단
       const earnedIds = new Set();
@@ -527,6 +533,7 @@
         let cls = 'profile-title-card';
         if (!earned) cls += ' is-locked';
         if (isRep) cls += ' is-rep';
+        if (earned && _isNewlyEarned(def.id)) cls += ' is-newly-earned';
         const rarityColor = RARITY_COLOR[def.rarity] || '#888';
 
         let progressHtml = '';
@@ -564,7 +571,8 @@
         ? `<div class="profile-title-preview"><div class="profile-title-grid">${_topTitlePerAxis.map(def => {
             const isRep = repTitleId === def.id;
             const rarityColor = RARITY_COLOR[def.rarity] || '#888';
-            return `<button class="profile-title-card${isRep ? ' is-rep' : ''}" data-title-id="${def.id}" data-earned="true" type="button">` +
+            const _newCls = _isNewlyEarned(def.id) ? ' is-newly-earned' : '';
+            return `<button class="profile-title-card${isRep ? ' is-rep' : ''}${_newCls}" data-title-id="${def.id}" data-earned="true" type="button">` +
               `<span class="profile-title-emoji">${def.emoji}</span>` +
               `<span class="profile-title-name">${def.name}</span>` +
               `<span class="profile-title-rarity" style="color:${rarityColor}">${def.rarity}</span>` +
@@ -721,7 +729,7 @@
     return `/assets/images/characters/characters_basic/${isRare ? 'rare/' : ''}${character}.png`;
   }
 
-  async function buildCharacterSection(userId, nickname, preStats = null) {
+  async function buildCharacterSection(userId, nickname, preStats = null, achSeenAt = null) {
     const db = window.CottageDB;
     if (!db) return { html: '', earnedCharCount: 0, charTotal: CHAR_DEFS.length };
 
@@ -732,6 +740,9 @@
     const earnedCount = earnedIds.size;
     const earnedCharCount = CHAR_DEFS.filter(d => earnedIds.has(d.id)).length;
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
+    // achSeenAt 이후 earned_at인 항목 = 이번이 첫 열람(2026-07-27). readOnly(남 보드)는 호출부가 null로 넘겨 항상 꺼진다.
+    const _earnedAtMap = new Map(achievements.map(a => [a.id, a.earned_at]));
+    const _isNewlyEarned = id => !!(achSeenAt && _earnedAtMap.get(id) && _earnedAtMap.get(id) > achSeenAt);
 
     // CHAR_DEFS: 캐릭터 보상 있는 종만 그리드에 표시 (balance(여우)부터 시작하는 축 순서로 정렬)
     const _sortedCharDefs = [...CHAR_DEFS].sort((a, b) => AXIS_ORDER.indexOf(a.type) - AXIS_ORDER.indexOf(b.type));
@@ -742,6 +753,7 @@
       let cls = 'profile-char-card';
       if (!done) cls += ' is-locked';
       if (isRep) cls += ' is-rep';
+      if (done && _isNewlyEarned(def.id)) cls += ' is-newly-earned';
       const dataAttr = done ? ` data-ach-id="${def.id}"` : '';
       const disabledAttr = done ? '' : ' disabled';
 
@@ -780,7 +792,8 @@
     const _charPreviewHtml = `<div class="profile-char-preview"><div class="profile-char-grid">${_topCharPerAxis.map(def => {
       const isRep = repAch?.id === def.id;
       const imgSrc = _charImgPath(def.rewards.character);
-      return `<button class="profile-char-card${isRep ? ' is-rep' : ''}" title="${_charName(def)}" type="button" data-ach-id="${def.id}">` +
+      const _newCls = _isNewlyEarned(def.id) ? ' is-newly-earned' : '';
+      return `<button class="profile-char-card${isRep ? ' is-rep' : ''}${_newCls}" title="${_charName(def)}" type="button" data-ach-id="${def.id}">` +
         `<img src="${imgSrc}" alt="${_charName(def)}" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex'">` +
         `<span class="profile-char-emoji-fallback" style="display:none">${def.emoji}</span>` +
         `<span class="profile-char-card-name">${_charName(def)}</span>` +
@@ -835,7 +848,7 @@
   }
 
   // 업적 전체 목록 섹션 HTML 빌드
-  async function buildAchievementsSection(userId, nickname, preStats = null) {
+  async function buildAchievementsSection(userId, nickname, preStats = null, achSeenAt = null) {
     const db = window.CottageDB;
     if (!db) return { html: '', achCount: 0, achTotal: ACH_DEFS.length };
 
@@ -843,12 +856,16 @@
     const { achievements: earned, playCount, distinctCount, photoCount, commentCount, visitCount, participationCount, firstRecordCount, uniqueDayCount } = s;
 
     const earnedIds = new Set(earned.map(a => a.id));
+    // achSeenAt 이후 earned_at인 항목 = 이번이 첫 열람(2026-07-27). readOnly(남 보드)는 호출부가 null로 넘겨 항상 꺼진다.
+    const _earnedAtMap = new Map(earned.map(a => [a.id, a.earned_at]));
+    const _isNewlyEarned = id => !!(achSeenAt && _earnedAtMap.get(id) && _earnedAtMap.get(id) > achSeenAt);
     const COUNTS = { record: playCount, new_game: distinctCount, photo: photoCount, review: commentCount, visit: visitCount, first_record: firstRecordCount, play: participationCount, balance: uniqueDayCount };
     // 소급 지급(write)은 호출부에서 grantRetroAchievements로 명시 처리 — 이 함수는 순수 빌드(read-only)
 
     const _ACH_DIVIDER_AFTER = new Set(['new_game', 'first_record']);
     const _renderAchItem = def => {
       const done = earnedIds.has(def.id);
+      const isNew = done && _isNewlyEarned(def.id);
       const cur = Math.min(COUNTS[def.type] || 0, def.threshold);
       const typeLabel = TYPE_LABELS[def.type] || def.type;
       const rewardParts = [];
@@ -869,7 +886,7 @@
       }
       const statusCls = done ? ' is-done' : '';
       const statusText = done ? `✓ ${typeLabel} · ${def.threshold}` : `${typeLabel} · ${cur}/${def.threshold}`;
-      return `<li class="profile-ach-item${done ? ' is-achieved' : ' is-locked'}">` +
+      return `<li class="profile-ach-item${done ? ' is-achieved' : ' is-locked'}${isNew ? ' is-newly-earned' : ''}">` +
         `${iconHtml}` +
         `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
         `<span class="profile-ach-status${statusCls}">${statusText}</span></li>`;

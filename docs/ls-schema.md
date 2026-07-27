@@ -42,7 +42,8 @@
   "prevSeenDt":     "2026-06-11T20:00:00.000Z",
   "timeSec":        0,
   "visitCount":     5,
-  "notifSeenAt":    "2026-06-12T10:30:00.000Z"
+  "notifSeenAt":    "2026-06-12T10:30:00.000Z",
+  "achSeenAt":      "2026-07-27T10:30:00.000Z"
 }
 ```
 
@@ -58,6 +59,7 @@
 | `newGameSeenAt` | string (ISO) \| undefined | [모두 확인] 클릭 시점. 이 이후 added_at인 게임이 new_game 알림으로 표시. 없으면 전체 기간 조회 |
 | `voucherNoticeSeen` | boolean \| undefined | 음료교환권 공지 확인 여부. 미설정 또는 false이면 공지 표시 + 빨간점. [확인했어요] 또는 [플레이 기록 남기기] 클릭 시 true 저장 |
 | `feeNoticeSeen` | boolean \| undefined | 전체 공지(요금 안내 변경) 확인 여부. `voucherNoticeSeen`과 **별도 키** — 하나를 읽어도 다른 하나는 NEW로 남아야 한다. [확인했어요] 또는 [모두 읽기] 시 true. ⚠️ 공지 카드는 `kakao-auth.js`의 `FEE_NOTICE.until`이 지나면 이 키와 무관하게 렌더 자체를 건너뛴다 |
+| `achSeenAt` | string (ISO) \| undefined | 수집 보드(업적/캐릭터/칭호) 마지막 열람 시각(2026-07-27). `user_achievements.earned_at`이 이 값보다 최신이면 `.is-newly-earned` 표시. **`notifSeenAt`과 반대로 "없으면 전체 조회"가 아니다** — 없으면 아무것도 NEW로 안 켜고 그 자리에서 지금 시각으로만 세팅한다(기존 유저가 이 기능 배포 직후 과거 업적 전부가 NEW로 뜨는 걸 막기 위해). 매 열람마다 즉시 지금 시각으로 덮어써 "그 다음 열람부턴 꺼짐"을 만든다(readOnly 열람은 항상 null → 표시 안 함). |
 
 ### 마이그레이션
 

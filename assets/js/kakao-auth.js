@@ -1962,11 +1962,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   if (!readOnly && userStats) {
     await (window.CottageAchievements?.grantRetroAchievements?.(String(user.id), userStats) || Promise.resolve()).catch(() => {});
   }
+  // 수집 보드 신규 해금 표시(2026-07-27) — 남 보드(readOnly)는 항상 null이라 표시 안 됨.
+  // 이 렌더가 "처음 열람"이므로, 빌드에 쓴 뒤 바로 지금 시각으로 갱신해 다음 열람부턴 NEW가 꺼진다.
+  const _achSeenAt = readOnly ? null : (_sessForNotif.achSeenAt || null);
   const [_charResult, _achResult, _titleResult] = await Promise.all([
-    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null, userStats) || Promise.resolve(_emptyChar)).catch(() => _emptyChar),
-    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null, userStats) || Promise.resolve(_emptyAch)).catch(() => _emptyAch),
-    (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null, userStats) || Promise.resolve(_emptyTitle)).catch(() => _emptyTitle),
+    (window.CottageAchievements?.buildCharacterSection(String(user.id), user.nickname || null, userStats, _achSeenAt) || Promise.resolve(_emptyChar)).catch(() => _emptyChar),
+    (window.CottageAchievements?.buildAchievementsSection(String(user.id), user.nickname || null, userStats, _achSeenAt) || Promise.resolve(_emptyAch)).catch(() => _emptyAch),
+    (window.CottageAchievements?.buildTitleSection?.(String(user.id), _repTitleId, _visitCount, user.nickname || null, userStats, _achSeenAt) || Promise.resolve(_emptyTitle)).catch(() => _emptyTitle),
   ]);
+  if (!readOnly && window._cottageSess) {
+    const _s = window._cottageSess.get(String(user.id));
+    _s.achSeenAt = new Date().toISOString();
+    window._cottageSess.set(String(user.id), _s);
+  }
   const codexHtml = _codexResult?.html || '';
   const charHtml = _charResult?.html || '';
   const achHtml = _achResult?.html || '';

@@ -4167,6 +4167,9 @@ body.embed-mode {
 .profile-ach-list.is-hidden{display:none;}
 .profile-ach-item{display:flex;align-items:center;gap:8px;}
 .profile-ach-item.is-locked{opacity:0.4;}
+/* 새로 해금(2026-07-27) — 처음 열람했을 때만 켜짐(kakao-auth.js achSeenAt), 다음 열람부턴 꺼진다.
+   .notif-card.is-new와 같은 amber 팔레트로 통일. */
+.profile-ach-item.is-newly-earned{background:#fff8f0;border-radius:8px;padding:4px 8px;margin:-4px -8px;box-shadow:inset 3px 0 0 #e09a3c;}
 .profile-ach-img{width:28px;height:28px;object-fit:contain;flex-shrink:0;}
 .profile-ach-img-fallback{font-size:20px;flex-shrink:0;}
 .profile-ach-img-lock{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;filter:grayscale(1);}
@@ -4510,6 +4513,9 @@ body.embed-mode {
 .profile-char-card:not(.is-locked){cursor:pointer;}
 .profile-char-card.is-rep{border:2px solid var(--green);box-shadow:0 0 0 1px var(--green);}
 .profile-char-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
+/* 새로 해금(2026-07-27) — .is-rep(대표, 초록)과 헷갈리지 않게 amber로. overflow:hidden이라
+   ::after 배지는 클리핑되므로(2026-07-27 실측 교훈) 테두리+box-shadow만 쓴다. */
+.profile-char-card.is-newly-earned{border:2px solid #e09a3c;box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);}
 .profile-char-card-name{font-size:10px;line-height:1.2;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;margin-top:2px;}
 .profile-char-card.is-locked .profile-char-card-name{opacity:0.4;}
 .profile-char-card-progress{font-size:9px;color:var(--muted);text-align:center;width:100%;line-height:1;margin-top:1px;}
@@ -4536,6 +4542,8 @@ body.embed-mode {
 .profile-title-card.is-locked .profile-title-name,.profile-title-card.is-locked .profile-title-rarity,.profile-title-card.is-locked .profile-title-progress,.profile-title-card.is-locked .profile-title-cond{opacity:0.4;}
 .profile-title-card.is-rep{border:2px solid var(--green);box-shadow:0 0 0 1px var(--green);}
 .profile-title-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
+/* 새로 해금(2026-07-27) — .profile-char-card.is-newly-earned과 같은 amber */
+.profile-title-card.is-newly-earned{border:2px solid #e09a3c;box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);}
 .profile-title-emoji{font-size:22px;line-height:1;}
 .profile-title-name{font-size:10px;line-height:1.3;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
 .profile-title-rarity{font-size:9px;font-weight:700;}
