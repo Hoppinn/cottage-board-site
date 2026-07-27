@@ -8503,8 +8503,10 @@ body.is-embedded .inner-page{padding-top:16px;}
   /* PC에서 툴바 토글 버튼 유지 (JS에서 기본 펼침으로 초기화) */
 
   /* ── game-reviews PC: 탭 전환 (전체 너비 단일 패널) ── */
+  /* #reviewRoot는 .inner-page-body이기도 해서(id가 클래스 규칙 720px를 이긴다),
+     720px가 아니면 사이트 전체 폭 규격(--page-x 계산 기준)과 어긋난다. */
   #reviewRoot {
-    max-width: 760px;
+    max-width: 720px;
     margin-left: auto;
     margin-right: auto;
   }
