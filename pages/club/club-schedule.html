@@ -1800,6 +1800,11 @@
               if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'learn', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'});
             }
           }
+          // 「지난 모임」 피커 캐시 무효화 — 여기서 방금 저장한 게임이 다음에 그 탭을
+          // 열 때 바로 잡히게 한다. 캐시는 세션 내내 한 번 채우면 다시 안 채웠으므로
+          // (fetchPickerData가 `=== undefined`일 때만 재조회), 저장 후에도 리로드 전까지
+          // 방금 등록한 게임이 「지난 모임」 목록에 영영 안 보였다.
+          _pickerCache.past = undefined;
           _notifyParentSaved();
           close();
           renderWeekView(weekOffset);
