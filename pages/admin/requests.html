@@ -569,11 +569,17 @@
       if (!window.SUPABASE_CONFIG?.url || window.SUPABASE_CONFIG?.url === 'YOUR_SUPABASE_URL') {
         el.innerHTML = '<div class="req-list-empty">준비 중이에요.</div>'; return;
       }
-      const { data, error } = await getDb().from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }).limit(50);
+      const { data, error } = await getDb().from('snack_requests').select('id, item_name, request_count, user_id, is_done, done_at, purchase_status, status_date').order('request_count', { ascending: false }).limit(50);
       if (error || !data?.length) {
         el.innerHTML = '<div class="req-list-empty">아직 요청이 없어요. 원하는 간식을 알려주세요!</div>'; return;
       }
       const snackVotes = getSnackVotes();
+      // 간식·음료는 게임구매요청과 같은 상태 배지·피커를 쓰되 자동 입고 파이프라인이 없어
+      // 2단계(구매예정/구매완료)로 축소 — "구매완료" 선택 시 is_done/done_at도 함께 채워
+      // getMyNotifications의 snack_done 알림을 트리거한다.
+      const SNACK_STATUS_LABEL = { '구매예정': '구매 예정', '구매완료': '구매 완료' };
+      const SNACK_STATUS_CLASS = { '구매예정': 'req-status-planned', '구매완료': 'req-status-done' };
+      const snackFmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
       el.innerHTML = '<ul class="req-list">' + data.map(r => {
         const can = canManage(r, MY_SNACK_KEY);
         const voted = snackVotes.has(r.id);
@@ -581,12 +587,60 @@
         const countLabel = voted
           ? `<span class="req-list-count req-count-voted">${r.request_count}명 희망 ✓</span>`
           : `<span class="req-list-count">${r.request_count}명 희망</span>`;
+        let statusBadge = '';
+        if (r.purchase_status) {
+          const label = SNACK_STATUS_LABEL[r.purchase_status] || r.purchase_status;
+          const cls = SNACK_STATUS_CLASS[r.purchase_status] || 'req-status-planned';
+          const dateEl = r.status_date ? ` · ${snackFmtDate(r.status_date)}` : '';
+          statusBadge = `<span class="req-status-badge ${cls}">${label}${dateEl}</span>`;
+        }
+        const badgesHtml = statusBadge ? `<span class="req-card-badges">${statusBadge}</span>` : '';
+        let adminActions = '';
+        if (isAdmin()) {
+          adminActions = `<span class="req-status-picker-wrap"><button class="req-action-btn req-action-status req-status-picker-btn" type="button" data-id="${r.id}">상태 설정 ▾</button><div class="req-status-picker" hidden><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매예정">구매 예정</button><button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매완료">구매 완료</button><button type="button" class="req-status-option req-status-option--unset" data-action="unset-all" data-id="${r.id}">해제</button></div></span>`;
+        }
         const canEdit = can && r.request_count <= 1;
         const canDel  = isAdmin() || (can && r.request_count <= 1);
-        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-card-name">${escHtml(r.item_name)}</span><span class="req-card-count">${countLabel}</span>${(canEdit || canDel) ? `<span class="req-card-actions">${canEdit ? editBtn('snack_requests', r.id, r.item_name) : ''}${canDel ? delBtn('snack_requests', r.id, r.request_count) : ''}</span>` : ''}</li>`;
+        const actionsHtml = (adminActions || canEdit || canDel) ? `<span class="req-card-actions">${adminActions}${canEdit ? editBtn('snack_requests', r.id, r.item_name) : ''}${canDel ? delBtn('snack_requests', r.id, r.request_count) : ''}</span>` : '';
+        return `<li class="${liClass}" data-id="${r.id}" data-table="snack_requests" data-name="${escHtml(r.item_name)}" data-count="${r.request_count}"><span class="req-card-name">${escHtml(r.item_name)}</span><span class="req-card-count">${countLabel}</span>${badgesHtml}${actionsHtml}</li>`;
       }).join('') + '</ul>';
       el.querySelectorAll('.req-delete-btn').forEach(b => b.addEventListener('click', handleDeleteReq));
       el.querySelectorAll('.req-edit-btn').forEach(b => b.addEventListener('click', handleEditReq));
+
+      // 관리자: 상태 설정 피커 토글 (game 피커와 동일 패턴 — el이 snackRequestList로 분리돼 있어 충돌 없음)
+      el.querySelectorAll('.req-status-picker-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const picker = btn.nextElementSibling;
+          el.querySelectorAll('.req-status-picker').forEach(p => { if (p !== picker) p.hidden = true; });
+          picker.hidden = !picker.hidden;
+        });
+      });
+      if (!window._reqStatusPickerCloseHandler) {
+        window._reqStatusPickerCloseHandler = () => {
+          document.querySelectorAll('.req-status-picker').forEach(p => { p.hidden = true; });
+        };
+        document.addEventListener('click', window._reqStatusPickerCloseHandler);
+      }
+      el.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.stopPropagation();
+          const id = btn.dataset.id;
+          const action = btn.dataset.action;
+          if (action === 'set-status') {
+            const status = btn.dataset.status;
+            if (!confirm(`"${SNACK_STATUS_LABEL[status] || status}"으로 등록할까요?`)) return;
+            const today = new Date().toISOString().slice(0, 10);
+            const isDone = status === '구매완료';
+            await getDb().from('snack_requests').update({ purchase_status: status, status_date: today, is_done: isDone, done_at: isDone ? new Date().toISOString() : null }).eq('id', id);
+          } else if (action === 'unset-all') {
+            if (!confirm('상태를 해제할까요?')) return;
+            await getDb().from('snack_requests').update({ purchase_status: null, status_date: null, is_done: false, done_at: null }).eq('id', id);
+          }
+          loadSnackRequests();
+        });
+      });
+
       el.querySelectorAll('.req-item-votable').forEach(li => {
         li.addEventListener('click', async e => {
           if (e.target.closest('button, input, a, details, .req-edit-wrap, [data-action]')) return;

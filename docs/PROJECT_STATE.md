@@ -102,6 +102,7 @@
 - `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
 - `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
 - `play-records-utils.js` `openLightbox` — 부모가 `cottage-close-lightbox`로 닫을 때 game-reviews의 수신부가 `.pr-lightbox`를 **DOM에서 직접 제거**해 `closeLb()`를 안 거침 → `document`의 `keydown`(onKey) 리스너가 해제되지 않고 누적. 현재 사용자 영향은 없음(고아 핸들러가 detached 노드에 `remove()`+중복 postMessage를 쏘는 정도). 정리하려면 iframe 수신부가 노드 제거 대신 닫기 함수를 호출하도록 바꿔야 함. 2026-07-16 발견(버그 수정 중, BUG FIX MODE라 보고만).
+- **`pages/admin/requests.html`(공개 요청 탭 페이지)와 `pages/admin/requests-admin.html`(분석 대시보드의 요청관리 모달)이 game_requests/snack_requests/suggestions 렌더링·상태 피커를 각각 독립적으로 중복 구현** — STATUS_LABEL/STATUS_CLASS, 상태 설정 드롭다운, 삭제/투표 핸들러가 두 파일에 따로 존재해 한쪽만 고치면 다른 쪽이 조용히 뒤처진다(2026-07-27 간식 상태피커 추가 중 실제로 requests-admin.html만 먼저 고쳤다가 사용자가 실사용 화면인 requests.html에서 다르다고 지적해 발견). 공용 렌더 함수로 통합하면 좋지만 두 화면이 관리자 판별 방식(`isAdmin()` vs 항상 관리자)·표시 범위(공개 vs 관리자 전용)가 달라 단순 추출은 아님 — 리팩토링 착수 전 두 화면의 실제 사용 빈도부터 확인 필요.
 
 ---
 
@@ -127,7 +128,8 @@
 
 (간식·음료 알림 Part1(관리자: 새 요청 알림)은 2026-07-27 종결 — `getMyNotifications` snack_request 쿼리+날짜묶음 + `_renderNotifItem` 🍿 카드 렌더링, node 트레이스 검증 완료. git `10839a00`)
 
-(간식·음료 요청 Part2(관리자 처리완료 표시 + 요청자 완료 알림)는 2026-07-27 종결 — 마이그레이션 015(`is_done`/`done_at`) + requests-admin.html 토글/배지 + `getMyNotifications` `snack_done` 케이스(ordered와 동일 패턴). `scripts/verify-snack-done.js`로 실DB 왕복(토글 ON→알림 생성→OFF→알림 소멸) 검증 완료. git 커밋 예정)
+(간식·음료 요청 Part2(관리자 처리완료 표시 + 요청자 완료 알림)는 2026-07-27 종결 — 마이그레이션 015(`is_done`/`done_at`)+016(`purchase_status`/`status_date`) + `getMyNotifications` `snack_done` 케이스(ordered와 동일 패턴). 상태는 게임구매요청과 같은 UI로 2단계(구매예정→구매완료, 사용자 요청 반영). `scripts/verify-snack-done.js` 실DB 왕복 + Playwright 실클릭 검증 완료.
+  ⚠️ **실제 요청 관리 화면은 `pages/admin/requests.html`이었다** — 처음에 `pages/admin/requests-admin.html`(분석 대시보드 안의 별도 요청관리 모달)에만 구현했다가 사용자가 실사용 화면 스크린샷을 보내 지적, 재확인 후 `requests.html`(공개 요청 탭 페이지, 관리자 로그인 시 배지+상태피커 노출)에도 동일하게 구현했다. **두 파일이 game_requests/snack_requests 렌더링을 각각 독립 구현하는 중복 구조** — 리팩토링 후보로 `코드 품질 주석`에 등록.)
 - [ ] **모임 시간 설정 — 30분 단위 지원** (club-schedule.html 시간 선택 UI). 미착수.
 - [ ] **게임정리·룰설명 — 관리자 페이지에서 추가 가능하게 (2026-07-27 조사 완료·범위 확정, 미착수)** — DB에는 이 개념이 아예 없다(db-schema.md에 관련 컬럼 0건).
   - **정리법 사진(기존 메커니즘, 확인됨)**: `game-sheet.js` `_ORGANIZER_GAMES`(267줄, **현재 빈 객체 `{}`** — 활성 게임 0개) — `{게임명: 사진장수}` 하드코딩 맵 + `/game-system/game-data/library/images/organizer/{게임명}/1.jpg...` 고정 경로 파일. 추가하려면 파일 업로드 + 소스 코드 수정(배포 필요) 둘 다 필요.

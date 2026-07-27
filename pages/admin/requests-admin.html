@@ -276,7 +276,7 @@
 
       const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes, voucherRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, purchase_status, status_date, purchased_at, is_planned, added_at, actual_games, user_id').order('request_count', { ascending: false }),
-        db.from('snack_requests').select('id, item_name, request_count, user_id, is_done, done_at').order('is_done', { ascending: true }).order('request_count', { ascending: false }),
+        db.from('snack_requests').select('id, item_name, request_count, user_id, is_done, done_at, purchase_status, status_date').order('is_done', { ascending: true }).order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname, real_name'),
         db.from('game_request_votes').select('request_id, user_id'),
@@ -312,6 +312,10 @@
 
       const STATUS_LABEL = { '구매예정':'구매 예정', '선주문완료':'선주문 완료', '배송중':'배송중', '추가됨':'추가됨' };
       const STATUS_CLASS = { '구매예정':'req-status-planned', '선주문완료':'req-status-ordered', '배송중':'req-status-shipping', '추가됨':'req-status-added' };
+      // 간식·음료는 게임구매요청과 같은 UI를 쓰되 상태를 2단계로 축소(자동 입고 파이프라인이 없어
+      // "구매완료"를 고르는 순간 배지(purchase_status)와 알림 트리거(is_done/done_at)를 함께 채운다)
+      const SNACK_STATUS_LABEL = { '구매예정': '구매 예정', '구매완료': '구매 완료' };
+      const SNACK_STATUS_CLASS = { '구매예정': 'req-status-planned', '구매완료': 'req-status-done' };
       const fmtDate = s => { if (!s) return ''; const d = new Date(s); return `${d.getMonth()+1}월${d.getDate()}일`; };
 
       function gameReqItem(r) {
@@ -361,13 +365,27 @@
       function snackReqItem(r) {
         const voters = voteMap[r.id] || [];
         const votersHtml = voters.length ? `<span class="req-voters-names">${voters.map(n => escH(n)).join(', ')}</span>` : '';
-        const doneBadge = r.is_done ? `<span class="req-card-badges"><span class="req-status-badge req-status-done">처리완료 · ${fmtDate(r.done_at)}</span></span>` : '';
+        let statusBadge = '';
+        if (r.purchase_status) {
+          const lbl = SNACK_STATUS_LABEL[r.purchase_status] || r.purchase_status;
+          const cls = SNACK_STATUS_CLASS[r.purchase_status] || 'req-status-planned';
+          const dateEl = r.status_date ? ` · ${fmtDate(r.status_date)}` : '';
+          statusBadge = `<span class="req-card-badges"><span class="req-status-badge ${cls}">${lbl}${dateEl}</span></span>`;
+        }
+        const statusPicker = `<span class="req-status-picker-wrap">
+          <button class="req-action-btn req-action-status req-status-picker-btn" type="button" data-id="${r.id}">상태 설정 ▾</button>
+          <div class="req-status-picker" hidden>
+            <button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매예정">구매 예정</button>
+            <button type="button" class="req-status-option" data-action="set-status" data-id="${r.id}" data-status="구매완료">구매 완료</button>
+            <button type="button" class="req-status-option req-status-option--unset" data-action="unset-all" data-id="${r.id}">해제</button>
+          </div>
+        </span>`;
         return `<li class="req-list-item" data-id="${r.id}" data-table="snack_requests" data-name="${escH(r.item_name)}" data-count="${r.request_count}">
           <span class="req-card-name">${escH(r.item_name)}</span>
           <span class="req-card-count"><span class="req-list-count">${r.request_count}명 희망</span></span>
           ${votersHtml}
-          ${doneBadge}
-          <span class="req-card-actions"><button class="req-action-btn admin-snack-done${r.is_done?' is-done':''}" type="button" data-id="${r.id}">${r.is_done?'처리완료':'처리완료로 표시'}</button><button class="req-action-btn admin-req-del" type="button" data-id="${r.id}" data-table="snack_requests">삭제</button></span>
+          ${statusBadge}
+          <span class="req-card-actions">${statusPicker}<button class="req-action-btn admin-req-del" type="button" data-id="${r.id}" data-table="snack_requests">삭제</button></span>
         </li>`;
       }
 
@@ -735,6 +753,26 @@
           const picker = opt.closest('.req-status-picker');
           if (picker) picker.hidden = true;
           const today = new Date().toISOString().slice(0, 10);
+          const table = li?.dataset.table || 'game_requests';
+          if (table === 'snack_requests') {
+            // 간식·음료 — 2단계(구매예정/구매완료). "구매완료"를 고르는 순간
+            // is_done/done_at도 함께 채워 getMyNotifications의 snack_done 알림을 트리거한다.
+            if (opt.dataset.action === 'unset-all') {
+              await db.from('snack_requests').update({ purchase_status: null, status_date: null, is_done: false, done_at: null }).eq('id', id);
+              if (li) li.querySelector('.req-card-badges')?.remove();
+            } else if (opt.dataset.action === 'set-status') {
+              const status = opt.dataset.status;
+              const isDone = status === '구매완료';
+              await db.from('snack_requests').update({ purchase_status: status, status_date: today, is_done: isDone, done_at: isDone ? new Date().toISOString() : null }).eq('id', id);
+              if (li) {
+                let badges = li.querySelector('.req-card-badges');
+                if (!badges) { badges = document.createElement('span'); badges.className = 'req-card-badges'; li.querySelector('.req-card-count').after(badges); }
+                const cls = SNACK_STATUS_CLASS[status] || 'req-status-planned';
+                badges.innerHTML = `<span class="req-status-badge ${cls}">${SNACK_STATUS_LABEL[status] || status} · ${fmtDate(today)}</span>`;
+              }
+            }
+            return;
+          }
           if (opt.dataset.action === 'unset-all') {
             await db.from('game_requests').update({ purchase_status: null, status_date: null, purchased_at: null, is_planned: false }).eq('id', id);
             if (li) { li.classList.remove('req-item-done', 'req-item-planned'); li.querySelector('.req-card-badges')?.remove(); }
@@ -755,25 +793,6 @@
         });
       });
       document.addEventListener('click', () => el.querySelectorAll('.req-status-picker').forEach(p => { p.hidden = true; }));
-
-      // 간식·음료 요청 처리완료 토글 (suggestions is_done과 동일 패턴)
-      el.querySelectorAll('.admin-snack-done').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const item = btn.closest('[data-table]');
-          const isDone = btn.classList.contains('is-done');
-          const now = new Date().toISOString();
-          await db.from('snack_requests').update({ is_done: !isDone, done_at: isDone ? null : now }).eq('id', btn.dataset.id);
-          btn.classList.toggle('is-done', !isDone);
-          btn.textContent = isDone ? '처리완료로 표시' : '처리완료';
-          let badges = item.querySelector('.req-card-badges');
-          if (!isDone) {
-            if (!badges) { badges = document.createElement('span'); badges.className = 'req-card-badges'; item.querySelector('.req-card-count').after(badges); }
-            badges.innerHTML = `<span class="req-status-badge req-status-done">처리완료 · ${fmtDate(now)}</span>`;
-          } else {
-            badges?.remove();
-          }
-        });
-      });
 
       // 건의사항 상태 버튼
       el.querySelectorAll('.admin-suggest-plan').forEach(btn => {
