@@ -8505,31 +8505,23 @@ body.is-embedded .inner-page{padding-top:16px;}
     border-radius: 20px;
     animation: sheetModalIn .22s ease;
   }
-  /* 상단 여백은 scroll body의 padding-top이 아니라 별도 sticky 덮개(::before)로 준다
-     (DESIGN_RULES.md §7 "sticky 헤더 사이 공백으로 본문이 지나가는 패턴"). padding-top으로
-     주면 그 28px는 scroll body 안이라 스크롤된 본문이 그 틈을 통과해 올라온다(2026-07-27 1차
-     실측: "+더보기" 링크가 sticky 헤더 위로 삐져나옴). 그렇다고 그 28px를 헤더 자신의
-     padding으로 흡수시키면(1차 수정) 이번엔 헤더 자체가 두꺼워진다(2026-07-27 2차 지적) —
-     헤더는 얇게 유지하고, 덮개를 헤더와는 별개의 sticky 요소로 그 위에 얹는다. 두 sticky가
-     겹치지 않도록 헤더의 top을 덮개 높이(28px)만큼 내린다. */
+  /* sticky 헤더는 top:0로 패널 상단에 완전히 flush — 위쪽에 별도 여백을 안 둔다.
+     (2026-07-27 3차) 1차: scroll body에 padding-top:28px를 줬더니 그 틈으로 스크롤된
+     본문이 비쳤다(DESIGN_RULES.md §7). 2차: 그 28px를 헤더 자신의 padding으로 옮겨
+     막았더니 이번엔 헤더 자체가 두꺼워 보였다. 근본 원인은 애초에 "헤더 위 여백"이
+     불필요했다는 것 — 여백을 없애면 가릴 틈 자체가 없어져 스크롤 버그도 같이 사라진다.
+     좌우로 32px 넓어진 폭(PC scroll padding)에 맞춰 헤더도 그만큼 bleed시킨다(기존
+     -20px/20px는 모바일 20px 패딩 기준이라 32px 폭에서 옆면이 안 맞았다). */
   .game-sheet-scroll {
     padding: 0 32px 60px;
-    position: relative;
-  }
-  .game-sheet-scroll::before {
-    content: '';
-    display: block;
-    position: sticky;
-    top: 0;
-    height: 28px;
-    background: var(--paper-2);
-    z-index: 21;
   }
   .sheet-sticky-bar {
-    top: 28px; /* 덮개 아래에 스택 */
+    margin-left: -32px;
+    margin-right: -32px;
+    padding-left: 32px;
+    padding-right: 32px;
   }
   .sheet-record-header {
-    top: 28px;
     margin-left: -32px;
     margin-right: -32px;
     padding-left: 32px;
