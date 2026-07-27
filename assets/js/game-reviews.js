@@ -610,9 +610,10 @@
   };
 
   // (014) 한 기록에 매인 게임평 한 줄의 HTML — buildSessionBody와 surgical 삽입이 공유(사본 금지).
-  // 작성자 본인 또는 오너면 ⋯ 메뉴(수정·삭제)를 붙인다(사진 삭제 canDelPhoto = isMine||isOwner와 같은 규칙).
+  // 플레이기록게시판에서는 작성자 본인만 ⋯(수정·삭제)를 본다(2026-07-27 사용자 결정 — 오너 모더레이션은
+  // 게임 시트 쪽 게임평 목록(game-sheet.js initSheetComments)으로 옮겼다. 사진 삭제 canDelPhoto은 별개 유지).
   function _linkedReviewHtml(c, recordId, user) {
-    const canManage = !!(user && ((c.user_id && String(c.user_id) === String(user.id)) || window.isOwner?.()));
+    const canManage = !!(user && c.user_id && String(c.user_id) === String(user.id));
     const menuHtml = canManage ? `<span class="pr-rev-menu-wrap"><button class="pr-rev-menu-btn" type="button" aria-label="게임평 수정·삭제">⋯</button><span class="pr-rev-menu"><button class="pr-rev-edit" type="button">✏️ 수정</button><button class="pr-rev-del" type="button">✕ 삭제</button></span></span>` : '';
     const nameHtml = c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${escH(String(c.user_id))}"` : ''}>${escH(c.nickname)}</span> ` : '';
     return `<p class="pr-rec-review pr-rec-review--linked${canManage ? ' pr-rec-review--managed' : ''}" data-comment-id="${escH(String(c.id))}" data-record-id="${escH(String(recordId))}">${menuHtml}${nameHtml}<span class="pr-rev-text">${escH(c.comment_text)}</span></p>`;
@@ -1410,7 +1411,9 @@
           : (_thumbKey ? `<img class="pr-rec-thumb pr-rec-thumb--placeholder pr-rec-thumb--link" src="${GAME_LOGO_PLACEHOLDER}" alt="미보유 게임" loading="lazy" ${_thumbClick}>` : '');
         const dlParts = [r.play_time_min ? `${r.play_time_min}분` : '', r.score_note ? (s => /\d$/.test(s) ? s.replace(/점$/, '') + '점' : s)(escH(r.score_note).trimEnd()).replace(/\s*\/\s*/g,' | ') : ''].filter(Boolean);
         const dateline = dlParts.length ? `<span class="pr-rec-dateline">${dlParts.join(' · ')}</span>` : '';
-        const showEdit = isMine || window.isOwner?.();
+        // 플레이기록게시판의 전체 기록 수정은 본인만(2026-07-27 사용자 결정) — 오너도 남의 인원·시간·평점을
+        // 한번에 바꾸는 이 편집은 못 하게 한다. 게임평 텍스트만 다루는 가벼운 모더레이션은 게임 시트 쪽에 둔다.
+        const showEdit = isMine;
         const editItems = showEdit ? `<button class="pr-rec-edit" data-id="${r.id}" type="button">✏️ 수정</button><button class="pr-rec-del" data-id="${r.id}" type="button">✕ 삭제</button>` : '';
         const _safeGKey = gameKey ? String(gameKey).replace(/'/g,"\\'") : '';
         const likeItems = _safeGKey ? `<button class="pr-rec-add-action pr-rec-like-action" data-game-id="${_safeGKey}" onclick="onPrMenuLike(this)" type="button">👍 좋아요</button><button class="pr-rec-add-action pr-rec-curious-action" data-game-id="${_safeGKey}" onclick="onPrMenuCurious(this)" type="button">🤔 궁금해요</button>` : '';

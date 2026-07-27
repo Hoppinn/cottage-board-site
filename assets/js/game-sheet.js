@@ -1534,6 +1534,10 @@ async function initSheetComments(gameKey) {
   listEl.classList.remove('is-collapsed');
   const myIds = getMyCommentIds();
   const currentUserId = window.getKakaoUser?.()?.id || null;
+  // 게임 시트의 게임평은 review_text/game_comments 텍스트만 지우는 가벼운 모더레이션이라
+  // 오너에게 전체 유저 수정·삭제를 허용한다(2026-07-27 사용자 결정 — 플레이기록게시판의 전체
+  // 기록 편집과는 반대로, 여기는 오너 권한을 새로 연다).
+  const _isOwner = window.isOwner?.() || false;
   listEl.classList.add('has-comments');
 
   const allHtml = allItems.map(item => {
@@ -1543,21 +1547,23 @@ async function initSheetComments(gameKey) {
     if (item.type === 'comment') {
       const c = item.raw;
       const attr = window.escH(c.comment_text);
-      const mine = currentUserId
+      const isSelf = currentUserId
         ? (c.user_id ? String(c.user_id) === String(currentUserId) : false)
         : myIds.includes(c.id);
+      const canManage = isSelf || _isOwner;
+      // 「플레이기록으로 연동」은 내 기록에만 의미가 있어 오너 모더레이션 범위에서 뺀다 — 본인 것만.
       return `<div class="sheet-comment-item">
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
-      ${mine ? `<div class="sheet-comment-actions">
+      ${canManage ? `<div class="sheet-comment-actions">
         <button aria-label="코멘트 고치기" class="sheet-comment-edit-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onEditComment(this)" type="button">✏️</button>
-        <button class="sheet-comment-link-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onLinkCommentToPlay(this)" type="button" title="플레이기록으로 연동">↗</button>
+        ${isSelf ? `<button class="sheet-comment-link-btn" data-id="${c.id}" data-game="${gameKey}" data-text="${attr}" onclick="onLinkCommentToPlay(this)" type="button" title="플레이기록으로 연동">↗</button>` : ''}
         <button aria-label="코멘트 지우기" class="sheet-comment-delete-btn" onclick="onDeleteComment('${c.id}','${gameKey}')" type="button">✕</button>
       </div>` : ''}
     </div>`;
     }
     const textAttr = window.escH(item.text);
-    const mine = currentUserId && item.user_id && String(item.user_id) === String(currentUserId);
+    const mine = _isOwner || (currentUserId && item.user_id && String(item.user_id) === String(currentUserId));
     return `<div class="sheet-comment-item">
       <span class="sheet-comment-nickname"><strong class="sheet-comment-nick"${item.user_id ? ` data-user-id="${item.user_id}"` : ''}>${nick}</strong>${dateStr ? ` <span class="sheet-comment-date">${dateStr}</span>` : ''}</span>
       <p class="sheet-comment-text">${txt}</p>
