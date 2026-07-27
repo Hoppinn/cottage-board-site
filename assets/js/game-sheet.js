@@ -2531,8 +2531,11 @@ function onOpenPlayModal(gameKey) {
   document.getElementById('sheetPlayModalGroupName').value = '';
   const dateInput = document.getElementById('sheetPlayModalDate');
   if (dateInput) {
-    dateInput.value = new Date().toISOString().split('T')[0];
-    dateInput.max = new Date().toISOString().split('T')[0];
+    // new Date().toISOString()은 UTC라 한국시간 오전 9시 전엔 "오늘"이 하루 전으로 나온다
+    // (day-detail.js의 경고 주석과 동일 함정, 2026-07-28 실측으로 발견).
+    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().split('T')[0];
+    dateInput.value = todayKst;
+    dateInput.max = todayKst;
   }
   const reviewInput = document.getElementById('sheetPlayModalReview');
   if (reviewInput) reviewInput.value = '';
@@ -2609,8 +2612,10 @@ function onOpenEditPlayModal(gameKey, recordId, playerCount, playerNames, playTi
 
   const dateInput = document.getElementById('sheetPlayModalDate');
   if (dateInput) {
-    dateInput.value = playedAt || new Date().toISOString().split('T')[0];
-    dateInput.max = new Date().toISOString().split('T')[0];
+    // KST 보정(위 sheetPlayModalDate 초기화 자리와 동일 이유)
+    const todayKst = new Date(Date.now() + 9 * 3600000).toISOString().split('T')[0];
+    dateInput.value = playedAt || todayKst;
+    dateInput.max = todayKst;
   }
 
   const errEl = modal.querySelector('.sheet-play-modal-err');

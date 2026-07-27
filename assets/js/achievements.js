@@ -473,7 +473,7 @@
         <div class="achievement-toast-title">캐릭터 해금!</div>
         <div class="achievement-toast-name">${name}</div>
       </div>
-      <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoProfileBtn')?.click()">내 보드 →</a>
+      <a class="achievement-toast-link" href="#" onclick="event.preventDefault();document.querySelector('#kakaoLoginBtn')?.click()">내 보드 →</a>
       <button class="achievement-toast-close" type="button" aria-label="닫기">✕</button>
     `;
     document.body.appendChild(toast);

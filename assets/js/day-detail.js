@@ -252,7 +252,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      text-align: center;
+      text-align: left;
       line-height: 1.4;
     }
     .sched-card-bars {
