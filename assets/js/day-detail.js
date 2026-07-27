@@ -129,6 +129,11 @@
 
     /* ── 개인 일정 — want 게임 ⭐ 토글 ── */
     .dd-game-list--editable li { display: flex; align-items: center; justify-content: space-between; }
+    /* 아이콘+이름을 한 flex item으로, select+별을 한 flex item으로 — 이름이 텍스트 노드로
+       li에 바로 들어가면 아이콘과 별개 item이 돼 justify-content:space-between이 넷을
+       흩어놓는다(2026-07-28 실측). min-width:0로 긴 이름도 컨트롤 폭을 안 밀어내게. */
+    .dd-game-name-wrap { min-width: 0; }
+    .dd-game-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
     .dd-star-btn { background: none; border: none; font-size: 14px; cursor: pointer; padding: 0 2px; flex-shrink: 0; }
     .dd-star-notice { font-size: 11px; color: var(--muted, #9e8e7e); margin: 4px 0 0; }
     .dd-cond-select { appearance: none; -webkit-appearance: none; -moz-appearance: none; font-size: 11px; padding: 1px 14px 1px 5px; border-radius: 10px; border: 1px solid #ede8e0; background: #f0ece6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7' viewBox='0 0 8 8'%3E%3Cpath d='M1 2l3 3 3-3' stroke='%239e8e7e' stroke-width='1.3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 3px center; background-size: 7px 7px; color: var(--muted, #9e8e7e); cursor: pointer; flex-shrink: 0; }
@@ -580,7 +585,13 @@
             const selectOpts = Object.keys(COND_LABELS)
               .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
             const selWidth = window._condSelWidth?.(_optLabel(curCond)) || '';
-            return `<li>${hit}<select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            // 🚫 hit(아이콘)와 이름을 <li> 바로 밑에 나란히 두지 않는다 — flex 컨테이너에서
+            //    글자만 있는 텍스트 노드는 아이콘과 **별개의 flex item**이 돼(익명 박스),
+            //    justify-content:space-between이 아이콘·이름·select·별 4개를 각각 흩어
+            //    이름 뒤에 큰 빈 칸이 생기고 select가 오른쪽 끝으로 쏠려 짧은 이름일수록
+            //    "가운데 떠 있는" 것처럼 보였다(2026-07-28 사용자 스크린샷으로 확인).
+            //    이름·아이콘을 한 덩어리로, select·별을 한 덩어리로 묶어 flex item을 2개로 줄인다.
+            return `<li><span class="dd-game-name-wrap">${hit}</span><span class="dd-game-controls"><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></span></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
