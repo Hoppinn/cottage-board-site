@@ -1674,7 +1674,8 @@ function getOrCreateCommentModal() {
   modal.querySelector('#sheetCommentLinkCheck').addEventListener('change', e => {
     document.getElementById('sheetCommentPlaySelect').style.display = e.target.checked ? 'block' : 'none';
   });
-  modal.addEventListener('click', (e) => { if (e.target === modal) onCloseCommentModal(); });
+  // 🚫 바깥 클릭으로 닫지 않는다 — 작성 중 실수로 바깥을 눌러 내용이 날아간다는 제보(2026-07-28).
+  //    닫기는 "취소" 버튼(onCloseCommentModal)이나 등록 성공으로만.
   document.body.appendChild(modal);
   return modal;
 }
