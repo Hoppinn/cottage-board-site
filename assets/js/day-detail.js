@@ -383,6 +383,23 @@
       cursor: pointer;
     }
     .dd-roulette-back-btn:active { background: #f5f0eb; }
+
+    /* PC — 이 막대(.sched-bar-*)는 홈 「이번 주 모임」 미리보기와 「하루치 플래너 미리보기」
+       센터모달이 공유한다. 두 컨테이너는 이미 PC에서 넓어졌는데(624e47ea, 410ef7e0) 내용
+       크기는 모바일 값 그대로라 헐렁해 보인다(2026-07-27 사용자 지적). 폰트·칩만 키운다 —
+       레이아웃 구조(grid-template-columns 등)는 건드리지 않는다. */
+    @media (min-width: 720px) {
+      .sched-bar-axis { font-size: 12px; padding-left: 76px; }
+      .sched-card-bars .sched-bar-axis { padding-left: 62px; }
+      .sched-bar-item { grid-template-columns: 56px 1fr; }
+      .sched-bar-name { font-size: 13px; width: 68px; }
+      .sched-bar-track { min-height: 30px; }
+      .sched-bar-track.has-games { min-height: 48px; }
+      .sched-bar-fill { padding: 3px 8px; }
+      .sched-bar-time { font-size: 12px; }
+      .sched-bar-game-line { font-size: 10.5px; }
+      .sched-bar-guest { font-size: 11px; }
+    }
   `;
   document.head.appendChild(s);
 
