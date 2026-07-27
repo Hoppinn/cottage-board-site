@@ -7138,12 +7138,13 @@ body.is-embedded .inner-page{padding-top:16px;}
 .pr-sub-date { font-size: 14px; font-weight: 600; color: #6b5040; flex-shrink: 0; }
 .pr-sub-session.is-open > .pr-sub-hd .pr-sub-date,
 .pr-sub-session.is-open > .pr-sub-hd-row > .pr-sub-hd .pr-sub-date { color: #8a4028; }
-/* 모임별 탭: 날짜 토글 옆에 캡션 ⋯를 나란히 두는 wrapper(2026-07-27, .pr-sub-hd는 <button>이라
-   그 안에 또 다른 button을 못 넣는다 — 형제 요소로 분리). 날짜별 탭의 .pr-sub-hd(모임 미포함, 최상위
-   날짜 토글)는 감싸지 않았으므로 영향 없음. */
-.pr-sub-hd-row { display: flex; align-items: center; }
-.pr-sub-hd-row .pr-sub-hd { width: auto; flex: 1; min-width: 0; }
-.pr-sub-hd-row .pr-hd-caption-menu { flex-shrink: 0; margin-right: 10px; }
+/* 모임별 탭: 날짜 토글 옆에 캡션 ⋯를 두는 wrapper(2026-07-27, .pr-sub-hd는 <button>이라
+   그 안에 또 다른 button을 못 넣는다 — 형제 요소로 분리). flex row로 폭을 나눠 가지면
+   .pr-sub-hd가 원래 100%보다 좁아져 화살표가 안쪽으로 밀리는 회귀가 났다(같은 날 실측) —
+   대신 .pr-sub-hd는 원래 폭 그대로 두고, ⋯를 화살표 왼쪽에 절대위치로 얹는다
+   (play-records-utils.js "JS는 메뉴 위치를 계산하지 않는다" 원칙과 같은 패턴). */
+.pr-sub-hd-row { position: relative; }
+.pr-sub-hd-row .pr-hd-caption-menu { position: absolute; right: 38px; top: 50%; transform: translateY(-50%); }
 .pr-sub-summary { font-size: 12px; font-weight: 700; color: #8c7e6e; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: none; }
 .pr-sub-arrow { font-size: 13px; color: #a09080; flex-shrink: 0; transition: transform 0.2s; margin-left: auto; }
 .pr-sub-session.is-open .pr-sub-arrow { transform: rotate(180deg); }
