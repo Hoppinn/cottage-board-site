@@ -731,9 +731,14 @@
       }
 
       // 삭제 버튼 (게임요청·간식·건의 공통)
+      // 🚫 `.closest('[data-table]')`는 버튼 자신도 후보다 — 이 버튼들은 재사용 편의상
+      //    data-table을 부모 행뿐 아니라 버튼 자기 자신에도 실어놨는데(위 각 템플릿 참조),
+      //    closest()는 시작 요소 자신부터 검사하므로 버튼이 먼저 매치돼 **버튼만** 지워지고
+      //    행 나머지는 화면에 남는다(DB는 그 순간 이미 삭제돼 새로고침하면 사라짐 — 그래서
+      //    "삭제는 됐는데 화면만 안 지워진" 것처럼 보였다, 2026-07-28 사용자 제보).
       el.querySelectorAll('.admin-req-del').forEach(btn => {
         btn.addEventListener('click', async () => {
-          const item = btn.closest('[data-table]');
+          const item = btn.closest('[data-table]:not(button)');
           if (!confirm('삭제할까요?')) return;
           const table = btn.dataset.table || item?.dataset.table;
           const id = btn.dataset.id || item?.dataset.id;
