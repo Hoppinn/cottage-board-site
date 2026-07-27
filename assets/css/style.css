@@ -7649,6 +7649,15 @@ body.is-embedded .inner-page{padding-top:16px;}
     max-width:760px;
   }
 
+  /* 최근 플레이 / 이번 주 모임 — hero(.hero-inner) 안이 아니라 <main> 아래 독립 섹션이라
+     PC 폭 규격을 못 받고 있었다(2026-07-27 실측: 1440px에서 1414px 풀와이드로 늘어남).
+     .hero-inner와 같은 760px로 맞춘다. */
+  .home-section{
+    max-width:760px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
   .hero h1{ line-height:1.28; }
   .desc{ line-height:1.6; }
 
