@@ -7667,6 +7667,11 @@ body.is-embedded .inner-page{padding-top:16px;}
     margin-right:auto;
   }
 
+  /* 이번 주 모임 요일칩(월~일) — 컨테이너는 넓어졌는데 flex-start 기본값이라 왼쪽에
+     쏠려 보였다(2026-07-27 사용자 지적). 7칸이 폭을 균등하게 나눠 갖게 한다. */
+  .meeting-days{ flex-wrap:nowrap; }
+  .meeting-day-chip{ flex:1; }
+
   .hero h1{ line-height:1.28; }
   .desc{ line-height:1.6; }
 
