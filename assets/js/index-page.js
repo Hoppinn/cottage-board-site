@@ -1562,6 +1562,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       });
     });
 
+    // 「하고 싶은/배우고 싶은 게임」 콩알 썸네일 칩 클릭 → 게임시트 (2026-07-27, 예전엔 안 뚫려 있었음)
+    window._bindSchedGameTagClicks?.(previewEl);
+
     previewEl.querySelector('.meeting-preview-card')?.addEventListener('click', openMeetingDetail);
   }
 

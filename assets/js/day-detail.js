@@ -306,6 +306,8 @@
       white-space: nowrap;
     }
     .sched-game-tag-thumb { width: 10px; height: 10px; border-radius: 2px; object-fit: cover; margin-right: 2px; flex-shrink: 0; }
+    .sched-game-tag[data-game-id] { cursor: pointer; }
+    .sched-game-tag[data-game-id]:hover { filter: brightness(0.96); }
     .sched-game-tag--want { background: var(--bg-soft); color: var(--green); }
     .sched-game-tag--learn { background: var(--line); color: var(--muted); }
 
@@ -551,6 +553,10 @@
           const name = esc(resolveGameName(g));
           const key  = gameKey(g);
           const thumb = dbThumbHtml(g.game_id, 'dd-game-thumb');
+          // 직접입력(game_id 없음)은 열 시트가 없어 묶음을 감싸지 않는다(= 클릭 불가, _buildParticipantsHtml과 같은 규칙).
+          const hit = g.game_id
+            ? `<span class="dd-game-hit" data-game-id="${esc(String(g.game_id))}">${thumb}${name}</span>`
+            : `${thumb}${name}`;
           if (isMine) {
             const star = g.is_priority ? '⭐' : '☆';
             const curCond = g.player_condition || 'any';
@@ -559,12 +565,12 @@
             const selectOpts = Object.keys(COND_LABELS)
               .map(v => `<option value="${v}"${v === curCond ? ' selected' : ''}>${esc(_optLabel(v))}</option>`).join('');
             const selWidth = window._condSelWidth?.(_optLabel(curCond)) || '';
-            return `<li><span>${thumb}${name}</span><select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
+            return `<li>${hit}<select class="dd-cond-select" style="width:${selWidth}" data-key="${esc(key)}" data-listtype="${g.list_type}" data-gameid="${esc(String(g.game_id ?? ''))}" aria-label="인원 조건">${selectOpts}</select><button class="dd-star-btn" data-key="${esc(key)}" data-listtype="${g.list_type}" data-priority="${g.is_priority}" type="button" aria-label="대표 게임 지정">${star}</button></li>`;
           }
           const cond = g.player_condition || 'any';
           const cgEntry = g.game_id ? window.COTTAGE_GAMES?.find(c => c.bggId === String(g.game_id)) : null;
           const cl = condLabel(cond, cgEntry);
-          return `<li>${thumb}${name}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
+          return `<li>${hit}${cl ? ` <span class="dd-cond-tag">(${esc(cl)})</span>` : ''}</li>`;
         }).join('');
         const ulCls = isMine ? 'dd-game-list dd-game-list--editable' : 'dd-game-list';
         return `<div class="dd-section">
@@ -703,6 +709,7 @@
       `);
 
       if (isMine) _bindSchedEditors(el, { userId, voteDate, myGames, onDirty: () => { _schedDirty = true; } });
+      _bindDdGameHitClicks(el);
     } catch (err) {
       console.error('openDateScheduleModal 오류:', err);
       renderModal('<div class="dd-loading">불러오기 실패. 다시 시도해 주세요.</div>');
@@ -787,6 +794,24 @@
         await window.CottageDB?.deleteMeetingVote?.(String(myVote.user_id), dateStr);
         close();
         onChange?.();
+      }));
+    // 「하고 싶은/배우고 싶은 게임」 콩알 썸네일 칩 클릭 → 게임시트(2026-07-27, 예전엔 안 뚫려 있었음)
+    window._bindSchedGameTagClicks?.(el);
+  };
+
+  // .sched-game-tag(하고싶은/배우고싶은 게임 칩)의 게임시트 진입 바인딩 — buildBarsInCard가 쓰이는
+  // 곳(플래너 막대바 모달·홈 미리보기)마다 삽입 뒤 이걸 불러야 클릭이 뚫린다. dd-game-hit과 같은
+  // BGG ID→gameData 슬러그 변환 규칙(위 ⚠️ 주석 참조).
+  window._bindSchedGameTagClicks = function (container) {
+    container?.querySelectorAll('.sched-game-tag[data-game-id]').forEach(tag =>
+      tag.addEventListener('click', e => {
+        // 홈 미리보기 카드는 카드 전체에 클릭 리스너(상세 모달 열기)가 있어 전파를 막아야 한다
+        // (안 막으면 게임시트 + 상세 모달이 같이 열린다).
+        e.stopPropagation();
+        const key = window.getGameKeyById?.(tag.dataset.gameId);
+        if (!key) return;
+        window.ensureGameSheet?.();
+        window.openGameSheet?.(key);
       }));
   };
 
@@ -890,6 +915,21 @@
       ${sharedGameCnt ? `<span class="dd-stat-chip is-match">🎲 공통 게임 ${sharedGameCnt}종</span>` : ''}
     </div>`;
     return statsHtml;
+  }
+
+  // .dd-game-hit(썸네일+게임명 묶음) 클릭 → 게임시트. openDateMeetingModal·openDateScheduleModal이
+  // 공유(2026-07-27, 전에는 openDateMeetingModal에만 붙어 있어서 다른 모달의 콩알 썸네일은 안 눌렸다).
+  // 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 모달을 안 닫는다(닫으면 이 모달로 복귀).
+  // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
+  //    변환 없이 넘기면 미보유 게임으로 오인해 조용히 기록시트로 폴백된다(에러도 안 남).
+  function _bindDdGameHitClicks(el) {
+    el.querySelectorAll('.dd-game-hit').forEach(hit =>
+      hit.addEventListener('click', () => {
+        const key = window.getGameKeyById?.(hit.dataset.gameId);
+        if (!key) return;
+        window.ensureGameSheet?.();
+        window.openGameSheet?.(key);
+      }));
   }
 
   /** 룰렛 후보 목록: want 게임 중복 제거 + 약칭 해석 → [{key, name, abbr}] */
@@ -1171,15 +1211,7 @@
 
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
-    // ⚠️ meeting_vote_games.game_id는 BGG ID인데 openGameSheet는 gameData 슬러그 키를 받는다 —
-    //    변환 없이 넘기면 미보유 게임으로 오인해 조용히 기록시트로 폴백된다(에러도 안 남).
-    el.querySelectorAll('.dd-game-hit').forEach(hit =>
-      hit.addEventListener('click', () => {
-        const key = window.getGameKeyById?.(hit.dataset.gameId);
-        if (!key) return;
-        window.ensureGameSheet?.();
-        window.openGameSheet?.(key);
-      }));
+    _bindDdGameHitClicks(el);
 
     // 룰렛 로직
     if (rouletteGames.length >= 2) _initRouletteWidget(el, rouletteGames);
@@ -1285,8 +1317,11 @@
       // 한 게임이 want·learn 둘 다면 양쪽 그룹에 각각 표시(카운트 기준).
       const _tag = (key, cnt, tone) => {
         const suffix = cnt > 1 ? ` ·${cnt}` : '';
-        const thumb = dbThumbHtml(key.startsWith('id:') ? key.slice(3) : null, 'sched-game-tag-thumb');
-        return `<span class="sched-game-tag sched-game-tag--${tone}">${thumb}${esc(nameMap[key])}${suffix}</span>`;
+        const gameId = key.startsWith('id:') ? key.slice(3) : null;
+        const thumb = dbThumbHtml(gameId, 'sched-game-tag-thumb');
+        // 직접입력(game_id 없음)은 열 시트가 없어 data-game-id를 안 붙인다 = 클릭 불가(dd-game-hit과 같은 규칙).
+        const idAttr = gameId ? ` data-game-id="${esc(String(gameId))}"` : '';
+        return `<span class="sched-game-tag sched-game-tag--${tone}"${idAttr}>${thumb}${esc(nameMap[key])}${suffix}</span>`;
       };
       const wantKeys = Object.keys(wantCnt).sort((a, b) =>
         ((wantCnt[b] || 0) - (wantCnt[a] || 0)) || ((priorityCnt[b] || 0) - (priorityCnt[a] || 0)));
