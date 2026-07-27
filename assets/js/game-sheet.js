@@ -1728,12 +1728,15 @@ function onOpenCommentInput(btn) {
       linkSelect.innerHTML = '';
       linkWrap.style.display = 'none';
       modal._opening = true;
-      const { all, unreviewed } = await _getMyUnlinkedPlayRecords(gameKey);
+      const { all } = await _getMyUnlinkedPlayRecords(gameKey);
       const others = await _getOthersSessions(gameKey);
       if (!modal._opening) return;
       modal._myRecordCountAtOpen = all.length;
       modal._joinSessions = others;
-      unreviewed.forEach(r => {
+      // 새 game_comments를 매다는 것뿐이라 review_text 유무와 무관하다 — 사진 추가(onOpenPhotoInput)와
+      // 같은 기준(all)으로 통일. 예전엔 unreviewed만 써서 이미 후기를 쓴 기록만 있으면 드롭다운
+      // 자체가 안 떠 "연동 체크박스가 안 보인다"는 지적을 받았다(2026-07-27).
+      all.forEach(r => {
         const dateStr = r.played_at ? r.played_at.slice(2,10).replace(/-/g,'.') : '날짜 미상';
         const opt = document.createElement('option');
         opt.value = r.id;
