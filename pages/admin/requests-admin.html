@@ -276,7 +276,7 @@
 
       const [gameRes, snackRes, suggestRes, profileRes, votesRes, introsRes, voucherRes] = await Promise.all([
         db.from('game_requests').select('id, game_name, request_count, purchase_status, status_date, purchased_at, is_planned, added_at, actual_games, user_id').order('request_count', { ascending: false }),
-        db.from('snack_requests').select('id, item_name, request_count, user_id').order('request_count', { ascending: false }),
+        db.from('snack_requests').select('id, item_name, request_count, user_id, is_done, done_at').order('is_done', { ascending: true }).order('request_count', { ascending: false }),
         db.from('suggestions').select('id, content, created_at, user_id, is_done, is_planned').order('is_done', { ascending: true }).order('created_at', { ascending: false }),
         db.from('profiles').select('user_id, nickname, real_name'),
         db.from('game_request_votes').select('request_id, user_id'),
@@ -361,11 +361,13 @@
       function snackReqItem(r) {
         const voters = voteMap[r.id] || [];
         const votersHtml = voters.length ? `<span class="req-voters-names">${voters.map(n => escH(n)).join(', ')}</span>` : '';
+        const doneBadge = r.is_done ? `<span class="req-card-badges"><span class="req-status-badge req-status-done">처리완료 · ${fmtDate(r.done_at)}</span></span>` : '';
         return `<li class="req-list-item" data-id="${r.id}" data-table="snack_requests" data-name="${escH(r.item_name)}" data-count="${r.request_count}">
           <span class="req-card-name">${escH(r.item_name)}</span>
           <span class="req-card-count"><span class="req-list-count">${r.request_count}명 희망</span></span>
           ${votersHtml}
-          <span class="req-card-actions"><button class="req-action-btn admin-req-del" type="button" data-id="${r.id}" data-table="snack_requests">삭제</button></span>
+          ${doneBadge}
+          <span class="req-card-actions"><button class="req-action-btn admin-snack-done${r.is_done?' is-done':''}" type="button" data-id="${r.id}">${r.is_done?'처리완료':'처리완료로 표시'}</button><button class="req-action-btn admin-req-del" type="button" data-id="${r.id}" data-table="snack_requests">삭제</button></span>
         </li>`;
       }
 
@@ -753,6 +755,25 @@
         });
       });
       document.addEventListener('click', () => el.querySelectorAll('.req-status-picker').forEach(p => { p.hidden = true; }));
+
+      // 간식·음료 요청 처리완료 토글 (suggestions is_done과 동일 패턴)
+      el.querySelectorAll('.admin-snack-done').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const item = btn.closest('[data-table]');
+          const isDone = btn.classList.contains('is-done');
+          const now = new Date().toISOString();
+          await db.from('snack_requests').update({ is_done: !isDone, done_at: isDone ? null : now }).eq('id', btn.dataset.id);
+          btn.classList.toggle('is-done', !isDone);
+          btn.textContent = isDone ? '처리완료로 표시' : '처리완료';
+          let badges = item.querySelector('.req-card-badges');
+          if (!isDone) {
+            if (!badges) { badges = document.createElement('span'); badges.className = 'req-card-badges'; item.querySelector('.req-card-count').after(badges); }
+            badges.innerHTML = `<span class="req-status-badge req-status-done">처리완료 · ${fmtDate(now)}</span>`;
+          } else {
+            badges?.remove();
+          }
+        });
+      });
 
       // 건의사항 상태 버튼
       el.querySelectorAll('.admin-suggest-plan').forEach(btn => {

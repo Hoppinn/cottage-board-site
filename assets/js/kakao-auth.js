@@ -2198,6 +2198,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       return `<li class="${cls}" data-game-id="${escH(String(n.gameId))}">${_card('🎲', escH(getGameName(n.gameId)) + ' 플레이됐어요', '궁금해요 게임을 누군가 플레이했어요')}${readBtn}</li>`;
     if (n.type === 'ordered')
       return `<li class="${cls}" data-game-name="${escH(String(n.gameName))}">${_card('🛒', escH(n.gameName) + ' 주문 완료', '게임 요청이 접수/주문되었습니다')}${readBtn}</li>`;
+    if (n.type === 'snack_done')
+      return `<li class="${cls}">${_card('🍿', escH(n.itemName) + ' 준비 완료', '요청하신 간식·음료가 준비됐어요')}${readBtn}</li>`;
     if (n.type === 'new_game') {
       const games = n.actualGames?.length ? n.actualGames : [n.gameName].filter(Boolean);
       if (games.length === 1) {

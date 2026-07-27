@@ -1481,6 +1481,13 @@ window._cottageSess = (function () {
         .not('purchased_at', 'is', null)
         .order('purchased_at', { ascending: false })
         .limit(10);
+      const snackDonePromise = db.from('snack_requests')
+        .select('id, item_name, done_at')
+        .eq('user_id', userId)
+        .eq('is_done', true)
+        .not('done_at', 'is', null)
+        .order('done_at', { ascending: false })
+        .limit(10);
       const oneMinAgo = new Date(Date.now() - 60000).toISOString();
       const newGamePromise = db.from('game_requests')
         .select('id, game_name, added_at, actual_games')
@@ -1524,14 +1531,15 @@ window._cottageSess = (function () {
         .eq('user_id', userId)
         .order('earned_at', { ascending: false })
         .limit(20);
-      const [taggedRes, curiousRes, purchasedRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise
+      const [taggedRes, curiousRes, purchasedRes, snackDoneRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, snackDonePromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise
       ]);
       // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
       // (taggedRes·voucherEventsRes·snackRequestRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
       if (taggedRes.error) console.error('[getMyNotifications:game_play_records tagged]', taggedRes.error);
       if (curiousRes.error) console.error('[getMyNotifications:game_curious]', curiousRes.error);
       if (purchasedRes.error) console.error('[getMyNotifications:game_requests purchased]', purchasedRes.error);
+      if (snackDoneRes.error) console.error('[getMyNotifications:snack_requests done]', snackDoneRes.error);
       if (newGameRes.error) console.error('[getMyNotifications:game_requests new]', newGameRes.error);
       if (introListRes.error) console.error('[getMyNotifications:member_intros]', introListRes.error);
       if (profileSeenRes.error) console.error('[getMyNotifications:profiles]', profileSeenRes.error);
@@ -1618,6 +1626,11 @@ window._cottageSess = (function () {
         const key = `ordered:${r.id}`;
         const isNew = (effectiveSeenAt ? new Date(r.purchased_at) > new Date(effectiveSeenAt) : true) && !readKeys.has(key);
         notifs.push({ type: 'ordered', key, gameName: r.game_name, date: r.purchased_at, isNew });
+      }
+      for (const r of snackDoneRes.data || []) {
+        const key = `snack_done:${r.id}`;
+        const isNew = (effectiveSeenAt ? new Date(r.done_at) > new Date(effectiveSeenAt) : true) && !readKeys.has(key);
+        notifs.push({ type: 'snack_done', key, itemName: r.item_name, date: r.done_at, isNew });
       }
       for (const r of newGameRes.data || []) {
         const key = `new_game:${r.id}`;

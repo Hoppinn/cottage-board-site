@@ -101,7 +101,7 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 | `page_sessions` | page, referrer, user_id, session_key, duration_sec, entered_at | 세션 분석 |
 | `profiles` | user_id, nickname, real_name, last_seen_at, visit_count, total_minutes, is_banned, photo_url, today_seconds, today_date, rep_achievement_id, rep_title_id, first_source, bio (text), avoid_tags (text[]), notif_seen_at (timestamptz) | 유저 프로필. **bio: 한줄소개 SSOT** — 취향보드/회원 자기소개(club-intro.html)/모임 보드 3곳이 동일 컬럼을 공유 읽기·쓰기(`updateUserBio`). 한쪽에서 수정하면 나머지에도 즉시 반영됨(의도된 동작). avoid_tags: 피하는 유형 태그 배열, notif_seen_at: 알림 마지막 읽은 시각 (기기 간 동기화용), notif_read_keys (jsonb, default `[]`): **개별** 알림 읽음 키 배열 — `${type}:${소스행 id}` 형식(예: `new_intro:42`). notif_seen_at이 "이 시각 이전 전부 읽음"이라는 지평선만 표현할 수 있어 "이것만 읽음"을 담지 못하는 문제를 보완(010). **`updateNotifSeenAt`(모두 읽기)이 이 배열을 `[]`로 비운다** — 지평선을 새로 그으면 그 이전 개별 키는 전부 흡수되므로. 이게 배열 크기의 상한선 |
 | `game_requests` | game_name, request_count, status, is_planned, user_id, purchase_status, status_date, purchased_at, actual_games, added_at | 게임 요청 |
-| `snack_requests` | item_name, request_count, user_id | 간식 요청 |
+| `snack_requests` | item_name, request_count, user_id, is_done, done_at | 간식 요청 (015: 처리완료 상태) |
 | `suggestions` | content, user_id, is_done, is_planned | 건의사항 |
 | `play_highlights` | game_id, highlight_text | 플레이 하이라이트 |
 | `game_request_votes` | request_id, user_id | 요청 투표 |
