@@ -35,7 +35,7 @@
 |---|------|------|------|---|
 | 1 | **간식·음료 요청 Part2(관리자 처리됨 표시 + 요청자 완료알림)** | §3 P1 2번 | 기능/Plan | DB 컬럼 신규 — Plan 모드 먼저 |
 | 2 | **모임시간 30분단위 / QR 추천게임 집계** | §3 P1 3·5번 | 기능 | 명확한 스펙, 서로 독립 — 순서 무관하게 진행 가능 |
-| 3 | **게임정리·룰설명 관리자입력 (2026-07-27 구조 확인 완료)** | §3 P1 4번 | 기능/Plan | 하드코딩 두 메커니즘 확인됨 — Supabase 테이블화 설계 필요, Plan 모드 |
+| 3 | **게임정리(사진)+룰설명(신규 텍스트) 관리자입력 (2026-07-27 범위 확정 — 룰영상 유튜브링크는 무관·그대로)** | §3 P1 4번 | 기능/Plan | 하드코딩 메커니즘 확인됨 — Supabase 테이블화 설계 필요, Plan 모드 |
 | 4 | **플래너 「다른 날짜에도 추가」 confirm→토글+일괄 (2026-07-27 사양 확정)** | §3 P1 신규 | 기능/Plan | DB 변경 없음, UX 엣지케이스 결정 필요 — Plan 권장 |
 | 5 | 🚫 **「이날모임 상세창에 등록·수정 버튼」** — 승인 없이 만들었다가 2026-07-22 되돌림(git `d315b314`). 되살리려면 먼저 기획(진입점 개수·복귀 동선) | — | 기획 | 오늘 안건과 무관한 기존 항목, 결정 대기라 낮은 순위 유지 |
 | 6 | **유형검사(MBTI식) 신규 기능** | §3 P2 1번 | 기획/Plan | 규모 최대 — 다른 항목 정리 후 |
@@ -133,10 +133,10 @@
   - **(b) 요청자에게 완료 알림이 안 감** — (a)가 있어야 "언제 완료됐는지"를 알림 쿼리가 읽을 수 있음.
   - Plan 초안: 컬럼(`is_done boolean default false`, `done_at timestamptz`) 추가 → requests-admin.html에 "완료" 토글/배지 추가(삭제 버튼 옆) → getMyNotifications에 요청자용 `snack_done` 케이스 추가(ordered/game_requests purchased와 같은 패턴).
 - [ ] **모임 시간 설정 — 30분 단위 지원** (club-schedule.html 시간 선택 UI). 미착수.
-- [ ] **게임정리·룰설명 — 관리자 페이지에서 추가 가능하게 (2026-07-27 조사 완료, 미착수)** — DB에는 이 개념이 아예 없다(db-schema.md에 관련 컬럼 0건). 실제로는 **완전히 다른 두 메커니즘**이 각각 하드코딩돼 있다, 둘 다 관리자 입력 UI 없음:
-  - **정리법 사진**: `game-sheet.js` `_ORGANIZER_GAMES`(267줄, **현재 빈 객체 `{}`** — 활성 게임 0개) — `{게임명: 사진장수}` 하드코딩 맵 + `/game-system/game-data/library/images/organizer/{게임명}/1.jpg...` 고정 경로 파일. 추가하려면 파일 업로드 + 소스 코드 수정(배포 필요) 둘 다 필요.
-  - **룰영상**: `detail.youtubeUrl` — 정적 게임데이터 JSON(game-system/game-data 파이프라인) 필드. 비어 있으면 유튜브 검색 링크로 폴백. 수정하려면 JSON 소스 편집 + `build:master` 재실행.
-  - **Plan 방향(미확정)**: 정리법을 Supabase 테이블(예: `game_overrides` — game_id, organizer_photo_urls, youtube_url 등)로 옮기고 Storage 업로드 + requests-admin.html 입력 폼을 새로 만드는 안이 유력 — 기존 파이프라인 재빌드 없이 즉시 반영되는 장점. 착수 시 **Plan 모드 필수**(신규 테이블 + Storage 버킷).
+- [ ] **게임정리·룰설명 — 관리자 페이지에서 추가 가능하게 (2026-07-27 조사 완료·범위 확정, 미착수)** — DB에는 이 개념이 아예 없다(db-schema.md에 관련 컬럼 0건).
+  - **정리법 사진(기존 메커니즘, 확인됨)**: `game-sheet.js` `_ORGANIZER_GAMES`(267줄, **현재 빈 객체 `{}`** — 활성 게임 0개) — `{게임명: 사진장수}` 하드코딩 맵 + `/game-system/game-data/library/images/organizer/{게임명}/1.jpg...` 고정 경로 파일. 추가하려면 파일 업로드 + 소스 코드 수정(배포 필요) 둘 다 필요.
+  - **룰설명(신규 필드, 2026-07-27 범위 확정)**: ⚠️ 룰영상(`detail.youtubeUrl`, 정적 게임데이터 JSON 필드)은 **그대로 둔다 — 이 항목과 무관**. "룰설명"은 그것과 별개로 **커스텀 텍스트**(글로 쓴 규칙 요약/설명)를 「정리법」 자리에 새로 추가하겠다는 뜻 — 기존 유튜브 링크를 건드리는 게 아니다.
+  - **Plan 방향(미확정)**: 정리법 사진 + 룰설명 텍스트를 한 Supabase 테이블(예: `game_overrides` — game_id, organizer_photo_urls, rule_note 등)로 묶어 옮기고 Storage 업로드 + requests-admin.html 입력 폼을 새로 만드는 안이 유력 — 기존 파이프라인 재빌드 없이 즉시 반영되는 장점. 착수 시 **Plan 모드 필수**(신규 테이블 + Storage 버킷).
 - [ ] **QR 추천게임 책자 유입 집계** — `https://cottageboard.com/qr-game-recommend` 같은 신규 경로. `vercel.json`의 `/store`(→`utm_source=store_qr`) 패턴 그대로 재사용(redirect 1줄 추가) + `requests-admin.html`의 `_utmBrandMap`에 라벨 추가. **스키마 변경 없음**, 기존 패턴 그대로.
 - [ ] **플래너 「다른 날짜에도 추가」 — confirm() 반복 대신 토글 버튼 + 일괄 적용 (2026-07-27 사용자 요청, 조사 완료·미착수)** — DB 변경 없음(클라이언트 로직만), 그러나 UX 설계 결정이 여러 개라 **Plan 권장**.
   - **현재 동작**: `club-schedule.html` `promptOtherDates(type, entry)`(1741줄대)가 게임 하나 추가할 때마다(`addGameStep2` 안, 1712줄) `confirm()`으로 "다른 날짜에도 추가할까요?" 물어봄 — 게임이 여러 개면 매번 확인창이 뜬다. 조건(`player_condition`)은 추가 시점의 기본값 `'any'`로 복사되고(1705줄 `entry` 생성), **나중에 베스트인원을 바꿔도 이미 복사된 다른 날짜엔 반영 안 됨**.
