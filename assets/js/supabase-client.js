@@ -332,11 +332,18 @@ window._cottageSess = (function () {
 
   // ── 게임 정리법 사진 / 룰설명 (관리자 입력, game_overrides) ────────
 
+  // Supabase Storage 키는 ASCII 외 문자를 거부한다(한글 game_key를 그대로 쓰면
+  // "Invalid key" 에러 — encodeURIComponent로도 안 됨, 서버가 디코드 후 재검증함).
+  // UTF-8 바이트를 hex로 바꿔 순수 ASCII 경로 세그먼트를 만든다(실DB로 검증됨).
+  function _storageSafeKey(s) {
+    return Array.from(new TextEncoder().encode(String(s))).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
   async function uploadOrganizerPhoto(file, gameKey) {
     if (!file || !gameKey) return null;
     try {
       const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-      const path = `${gameKey}/${Date.now()}.${ext}`;
+      const path = `${_storageSafeKey(gameKey)}/${Date.now()}.${ext}`;
       const { data, error } = await db.storage.from('organizer-photos').upload(path, file, { upsert: false });
       if (error) { console.error('[uploadOrganizerPhoto]', error); return null; }
       return db.storage.from('organizer-photos').getPublicUrl(data.path).data.publicUrl;

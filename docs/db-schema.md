@@ -128,7 +128,9 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 | 버킷 | 경로 패턴 | 용도 |
 |------|----------|------|
 | `play-photos` | `{userId}/{timestamp}.{ext}` | 플레이 기록 사진 |
-| `organizer-photos` | `{gameKey}/{timestamp}.{ext}` | 게임 정리법 사진 (019, 관리자 전용 업로드 — 페이지 게이트만, RLS는 다른 버킷과 동일하게 anon 전체 허용) |
+| `organizer-photos` | `{hexOf(gameKey)}/{timestamp}.{ext}` | 게임 정리법 사진 (019, 관리자 전용 업로드 — 페이지 게이트만, RLS는 다른 버킷과 동일하게 anon 전체 허용) |
+
+🚨 **Supabase Storage 키는 ASCII 외 문자를 거부한다** — `game_key`(한글)를 경로에 그대로 쓰면 `Invalid key` 에러(2026-07-28 실측). `encodeURIComponent`로도 안 된다 — 서버가 디코드 후 재검증해 결국 원문 한글로 되돌아가 다시 걸린다. `uploadOrganizerPhoto`(supabase-client.js)는 파일 스코프 헬퍼 `_storageSafeKey()`로 UTF-8 바이트를 hex 문자열로 바꿔 우회한다(모듈 내부 전용, `window.CottageDB`에 노출 안 됨). **다른 버킷에 한글 등 비ASCII를 경로에 넣을 일이 생기면 같은 방식을 그대로 복제할 것** — `play-photos`는 지금까지 `userId`(카카오 숫자 ID)만 써서 이 문제를 안 만난 것뿐이다.
 
 ---
 
