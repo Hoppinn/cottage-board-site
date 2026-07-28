@@ -219,6 +219,9 @@
     /* 바텀시트 */
     .admin-bs-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9200; align-items: flex-end; justify-content: center; }
     .admin-bs-panel { background: #fff; border-radius: 18px 18px 0 0; width: 100%; max-width: 600px; max-height: 88vh; display: flex; flex-direction: column; }
+    /* 게임 관리 시트는 내용(검색창 1개)이 짧아 화면 맨 아래에 붙어 자동완성 목록이 잘렸다 —
+       최소 높이를 줘서 검색창을 위로 밀어 올리고 그 아래 펼침 공간을 확보한다. */
+    #bsGameAdmin .admin-bs-panel { min-height: 60vh; }
     .admin-bs-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .admin-bs-title { font-size: 16px; font-weight: 800; color: var(--text); }
     .admin-bs-close { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; padding: 2px 6px; line-height: 1; }
