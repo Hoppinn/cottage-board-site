@@ -378,6 +378,7 @@ function _openAndInitSheet(gameKey, restoreScroll, noAnim) {
   initSheetCommentsPreview(gameKey).catch(err => console.error('[initSheetCommentsPreview]', err));
   initSheetPlayPreview(gameKey).catch(err => console.error('[initSheetPlayPreview]', err));
   initSheetPhotoPreview(gameKey).catch(err => console.error('[initSheetPhotoPreview]', err));
+  initSheetOrganizerContent(gameKey).catch(err => console.error('[initSheetOrganizerContent]', err));
 
   // ?scroll=comments → 코멘트 섹션으로 스크롤
   const _scrollParam = new URLSearchParams(location.search).get('scroll');
@@ -939,7 +940,6 @@ function openGameRecordSheet(gameKey) {
     if (_el) _el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
     console.error('[initSheetPhotos]', err);
   });
-  initSheetOrganizerContent(gameKey).catch(err => console.error('[initSheetOrganizerContent]', err));
 }
 
 async function initSheetOrganizerContent(gameKey) {
@@ -949,7 +949,8 @@ async function initSheetOrganizerContent(gameKey) {
   const photos = override?.organizer_photo_urls || [];
   const ruleNote = override?.rule_note || '';
   if (!photos.length && !ruleNote) { area.innerHTML = ''; return; }
-  const gameName = getGameName(gameKey) || String(gameKey);
+  const _og = window.gameData?.[gameKey];
+  const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
