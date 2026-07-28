@@ -553,11 +553,14 @@
     }
     .sm-cond-chip:disabled { opacity: .35; cursor: default; }
     .sm-game-sync {
-      background: none; border: none; cursor: pointer;
-      font-size: 14px; line-height: 1; color: var(--muted);
-      padding: 4px 6px; margin: -4px 0 -4px -2px;
+      border: none; cursor: pointer; border-radius: 6px;
+      font-size: 14px; line-height: 1; color: var(--muted); background: transparent;
+      padding: 5px 7px; margin: -4px 0 -4px -2px;
+      transition: color .15s, background .15s;
     }
-    .sm-game-sync.is-active { color: var(--green); }
+    /* 눌러도 색만 살짝 바뀌어 "눌렸는지 안 눌렸는지" 구분이 안 된다는 지적(2026-07-28) —
+       배경까지 채워 star(⭐/☆)처럼 상태가 한눈에 갈리게 한다. */
+    .sm-game-sync.is-active { color: white; background: var(--green); }
     .sm-sync-all-btn {
       width: 100%; padding: 8px 12px; margin-bottom: 10px;
       border: 1.5px dashed #c8c0b4; border-radius: 8px;
@@ -1635,10 +1638,16 @@
           });
         }
 
-        // 삭제
+        // 삭제 — ↔로 동기화해 둔 항목이면 다른 날짜에 심어둔 사본도 같이 뗀다.
+        // "다른 날짜에도 같이 해제되는 기능도 있어야 한다"(2026-07-28 사용자 요청) —
+        // 동기화는 양방향이라 넣을 때 같이 넣었으면 지울 때도 같이 지워야 짝이 맞는다.
         wrap.querySelectorAll('.sm-game-del').forEach(btn => {
           btn.addEventListener('click', () => {
-            _gameMap[_activeDay][btn.dataset.type].splice(parseInt(btn.dataset.idx), 1);
+            const type = btn.dataset.type;
+            const idx = parseInt(btn.dataset.idx);
+            const g = (_gameMap[_activeDay]?.[type] || [])[idx];
+            if (g?._syncOther) removeFromOtherDates(type, g);
+            _gameMap[_activeDay][type].splice(idx, 1);
             renderStep2Games();
           });
         });
