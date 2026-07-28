@@ -1663,7 +1663,9 @@
             if (!g) return;
             g._syncOther = !g._syncOther;
             if (g._syncOther) applyToOtherDates(type, g); else removeFromOtherDates(type, g);
-            renderStep2Games();
+            // 단일 날짜 수정에서 동기화하면 _days가 늘어 탭이 새로 생길 수 있다 —
+            // renderStep2Games()만으론 탭바(#smGameTabs)가 안 그려져 renderStep3() 통째로.
+            renderStep3();
           });
         });
 
@@ -1675,7 +1677,7 @@
               applyToOtherDates(type, g);
             });
           });
-          renderStep2Games();
+          renderStep3();
         });
 
         // 인원 조건 칩 선택
@@ -1783,13 +1785,37 @@
         }
       }
 
+      // ↔ 동기화 대상 날짜. Step1에서 여러 날짜를 골라 등록하는 중이면(_days.length>1)
+      // 그 날짜들이 대상이지만, 「수정」 진입(cottage-edit)은 dates:[ds] 하나만 열기
+      // 때문에 그 경로에선 _days가 항상 1개뿐이라 대상이 없어 토글이 아무 효과가 없었다
+      // (2026-07-28 사용자 지적 — "모임 수정에서도 다른 시트 연동이 되게 하려는 거").
+      // 단일 날짜 수정일 땐 이 사용자가 이미 등록해 둔 다른 미래 날짜 전부를 대상으로 한다.
+      function _syncTargetDates() {
+        if (_days.length > 1) return _days.filter(d => d !== _activeDay);
+        const user = window.getKakaoUser?.();
+        if (!user) return [];
+        const todayStr = toDateStr(TODAY);
+        return [...new Set(
+          allVotes
+            .filter(v => String(v.user_id) === String(user.id) && v.vote_date !== _activeDay && v.vote_date >= todayStr)
+            .map(v => v.vote_date)
+        )];
+      }
+
+      // 동기화 대상 날짜를 건드리기 전에 그 날짜의 기존 시간·게임을 _timeMap/_gameMap에
+      // 채워 넣고 _days에 편입한다. 안 하면 initDay를 거치지 않은 빈 _gameMap을 그대로
+      // saveAll()이 저장해 그 날짜에 이미 등록돼 있던 다른 게임들을 전부 지워버린다.
+      function _ensureSyncTarget(ds) {
+        initDay(ds);
+        if (!_days.includes(ds)) _days.push(ds);
+      }
+
       // ↔ 토글 ON: 이 항목(대표게임·인원조건 포함 현재 값)을 다른 날짜에 동기화.
       // 그 날짜에 같은 게임(game_id 또는 custom_name 일치)이 이미 있으면 덮어쓴다 —
       // 토글은 "이 상태로 맞춘다"는 명시적 행동이라 기존 값 보존보다 동기화가 우선.
       function applyToOtherDates(type, entry) {
-        const otherDays = _days.filter(d => d !== _activeDay);
-        otherDays.forEach(ds => {
-          if (!_gameMap[ds]) _gameMap[ds] = {want:[], learn:[]};
+        _syncTargetDates().forEach(ds => {
+          _ensureSyncTarget(ds);
           const list = _gameMap[ds][type];
           const idx = list.findIndex(g =>
             (entry.game_id && g.game_id && String(g.game_id) === String(entry.game_id)) ||
@@ -1802,8 +1828,7 @@
 
       // ↔ 토글 OFF: 위에서 동기화해둔 사본을 다른 날짜에서 제거.
       function removeFromOtherDates(type, entry) {
-        const otherDays = _days.filter(d => d !== _activeDay);
-        otherDays.forEach(ds => {
+        _syncTargetDates().forEach(ds => {
           const list = _gameMap[ds]?.[type];
           if (!list) return;
           const idx = list.findIndex(g =>
