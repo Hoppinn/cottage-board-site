@@ -1866,6 +1866,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     ? { id: String(_targetUserId), nickname: opts.nickname || '' }
     : _selfUser;
   if (!user || !user.id) return;
+  // 🚨 타인 보드 진입부(openOtherProfileSheet 등)가 nickname을 안 넘겨 늘 ''였다 —
+  // 패널 제목이 "회원"으로 뜨고, getUserPlayedGames/getUserParticipationCount 등
+  // nickname 기반 집계(게임도감·참여횟수)가 본인이 작성 안 한 태그 참여 기록을 못 잡아
+  // 0으로 보이는 원인이었다(2026-07-28 실사용 중 발견). DB에서 채워 넣는다.
+  if (readOnly && !user.nickname) {
+    const snap = await window.CottageDB?.getProfileSnapshot?.(user.id);
+    if (snap?.nickname) user.nickname = snap.nickname;
+  }
   // 편집 컨트롤 HTML 생략 헬퍼 (읽기전용이면 '' 반환)
   const _ro = html => (readOnly ? '' : html);
   // P4 오너 게이트: **보는 사람(self)이 오너 + 남의 보드(readOnly) + 대상이 오너가 아닐 때만**.
