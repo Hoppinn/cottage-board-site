@@ -20,7 +20,7 @@
 | 013 `meeting_votes.guest_count` | ✅ **실행 완료 + 검증 (2026-07-21)** — 22행 전부 default 0. anon 조회 응답에 `guest_count` 필드 존재를 실측(`scripts/verify-party-size.js --live`). **행 수만 보면 안 된다** — 컬럼이 없으면 PostgREST가 400을 내고 클라이언트는 `[]`를 반환해 「0행」으로 보인다 |
 | 012 `increment_profile_counters` RPC | ✅ **실행 완료 + 검증 (2026-07-20 재확인)** — anon RPC 호출이 HTTP 200, 없는 `user_id`로 불러도 빈 행이 안 생김(012 파일의 검증 ②). ⚠️ **이 칸은 2026-07-20까지 「미실행」으로 남아 PROJECT_STATE의 「완료」와 충돌하고 있었다** — 문서 두 곳이 갈리면 그럴듯한 쪽으로 잇지 말고 이렇게 **DB에 직접 물어서** 닫을 것 |
 | 014 `game_comments.record_id` | ✅ **실행 완료 + 검증 (2026-07-22)** — anon SELECT에 `record_id` 존재(드라이런 200), 뽁님 게임평 2건에 record_id=96/97 세팅 후 되읽기 확인. `getRecordComments(['96','97'])`가 2건 반환. ⚠️ **코드 배포 전 이 마이그레이션이 선행돼야 함**(`getGameComments`가 컬럼 select) — 순서가 뒤바뀌면 게임시트 「게임평」이 400으로 빈다 |
-| 019 `game_overrides` 테이블 + `organizer-photos` 버킷 | 🔴 **미실행 (2026-07-28 실측)** — `scripts/verify-game-overrides.js`가 `PGRST205`(테이블 없음)로 확인. 사용자가 Supabase SQL Editor에서 실행 필요, 실행 후 재검증 스크립트로 이 줄 갱신할 것 |
+| 019 `game_overrides` 테이블 + `organizer-photos` 버킷 | ✅ **실행 완료 + 검증 (2026-07-28)** — `scripts/verify-game-overrides.js` anon 왕복 6건 전부 통과(upsert/되읽기/null 처리), `organizer-photos` 버킷도 anon `list()` 정상 응답 확인 |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
@@ -119,7 +119,7 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 | `club_polls` | id, week_label, question, is_active | ⚠️ UNUSED — 구 week_label 방식 투표 (club-meeting.html 폐기로 미사용) |
 | `club_poll_options` | id, poll_id, option_text, sort_order | ⚠️ UNUSED |
 | `club_poll_votes` | id, poll_id, option_id, user_id | ⚠️ UNUSED |
-| `game_overrides` | game_key (PK), organizer_photo_urls (text[]), rule_note, updated_at | 게임정리 사진·룰설명 관리자 입력(019, ⚠️ **2026-07-28 실행 여부 미확인** — 사용자가 Supabase SQL Editor에서 실행 후 이 줄 갱신 필요). game_key = `COTTAGE_GAMES[].id`(= `game_likes.game_id`와 동일한 slugifyKorean(ownedName) 값, bggId 아님). `requests-admin.html` 「게임 관리」에서 편집, `game-sheet.js` `initSheetOrganizerContent`가 읽어 표시 |
+| `game_overrides` | game_key (PK), organizer_photo_urls (text[]), rule_note, updated_at | 게임정리 사진·룰설명 관리자 입력(019, ✅ 실행 완료 2026-07-28). game_key = `COTTAGE_GAMES[].id`(= `game_likes.game_id`와 동일한 slugifyKorean(ownedName) 값, bggId 아님). `requests-admin.html` 「게임 관리」에서 편집, `game-sheet.js` `initSheetOrganizerContent`가 읽어 표시 |
 
 ---
 
