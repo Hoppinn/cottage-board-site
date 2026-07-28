@@ -43,6 +43,9 @@ return data || [];
 | `getPopularGames(limit)` | 인기 게임 (RPC) |
 | `getAllGameRatings()` | 전체 게임 별점 요약 (RPC) |
 | `uploadPlayPhoto(file, userId)` | 사진 Storage 업로드 |
+| `getGameOverride(gameKey)` | `game_overrides`(019) 단건 조회 — 게임정리 사진 URL 배열 + 룰설명. 없으면 `null` |
+| `upsertGameOverride(gameKey, {organizerPhotoUrls, ruleNote})` | 게임정리·룰설명 저장(관리자 전용 UI에서만 호출, DB 레벨 게이트 없음) |
+| `uploadOrganizerPhoto(file, gameKey)` | 게임정리 사진 Storage 업로드(`organizer-photos` 버킷), `uploadPlayPhoto`와 동일 구조 |
 | `recordGamePlay(...)` | 플레이 기록 저장 |
 | `deleteGamePlay(id)` | 플레이 기록 삭제 |
 | `updateGamePlay(id, fields)` | 플레이 기록 수정. 성공 시 `record`/`play`/`balance` 업적 재체크(2026-07-15 추가 — 신규 등록만 체크하고 수정은 안 해서 사진 후추가 등으로 임계값을 채워도 다음 신규 등록 전까지 지급 안 되던 버그 수정) |

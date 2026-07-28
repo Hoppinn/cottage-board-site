@@ -264,20 +264,6 @@ let _gameSheetHistory = [];
 let _gameSheetNavBack = false;
 let _savedBodyScrollY = 0;
 
-// 게임 정리법 사진 데이터 — { '게임명': 사진장수 }
-// 사진 경로: /game-system/game-data/library/images/organizer/게임명/1.jpg, 2.jpg, ...
-const _ORGANIZER_GAMES = {
-};
-
-function _getOrganizerPhotos(gameKey) {
-  const name = (window.getGameName?.(gameKey)) || String(gameKey);
-  const count = _ORGANIZER_GAMES[name] || 0;
-  if (!count) return [];
-  return Array.from({ length: count }, (_, i) =>
-    `/game-system/game-data/library/images/organizer/${encodeURIComponent(name)}/${i + 1}.jpg`
-  );
-}
-
 function _openCoverModal(src) {
   document.getElementById('coverModal')?.remove();
   const m = document.createElement('div');
@@ -293,6 +279,21 @@ function _openOrganizerLightbox(urls, gameName) {
   if (!urls?.length || !window.openLightbox) return;
   const captions = urls.map(() => `${gameName} 정리법`);
   window.openLightbox(urls, 0, { captions });
+}
+
+function _openRuleNoteModal(text, gameName) {
+  if (!text) return;
+  document.getElementById('ruleNoteModal')?.remove();
+  const m = document.createElement('div');
+  m.id = 'ruleNoteModal';
+  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:24px;';
+  m.innerHTML = `<div style="background:#fff;border-radius:12px;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;position:relative;">
+    <button aria-label="룰 설명 닫기" onclick="document.getElementById('ruleNoteModal')?.remove()" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    <h3 style="margin:0 0 12px;padding-right:28px;">${window.escH(gameName)} 룰 설명</h3>
+    <p style="white-space:pre-wrap;margin:0;line-height:1.6;">${window.escH(text)}</p>
+  </div>`;
+  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+  document.body.appendChild(m);
 }
 
 function openShelfSheet(url) {
@@ -591,7 +592,6 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
   })();
   const mechanicsDisplay  = (detail.bgg.mechanicsKo?.length  ? detail.bgg.mechanicsKo  : detail.bgg.mechanics)  || [];
   const categoriesDisplay = (detail.bgg.categoriesKo?.length ? detail.bgg.categoriesKo : detail.bgg.categories) || [];
-  const _orgPhotos = _getOrganizerPhotos(gameKey);
 
   // 인원 정보
   const bestDisplayMain = bestText !== "-"
@@ -650,7 +650,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
               룰영상 보기
             </a>
           </div>
-          ${_orgPhotos.length ? `<button class="sheet-org-btn" type="button" onclick="_openOrganizerLightbox(${JSON.stringify(_orgPhotos)}, '${esc(getGameName(gameKey) || String(gameKey))}')">📦 정리법 보기</button>` : ''}
+          <div class="sheet-org-area" id="sheetOrgArea-${gameKey}"></div>
         </div>
       </div>
     </div>
@@ -939,6 +939,25 @@ function openGameRecordSheet(gameKey) {
     if (_el) _el.innerHTML = '<span class="sheet-comments-empty">사진을 불러올 수 없습니다</span>';
     console.error('[initSheetPhotos]', err);
   });
+  initSheetOrganizerContent(gameKey).catch(err => console.error('[initSheetOrganizerContent]', err));
+}
+
+async function initSheetOrganizerContent(gameKey) {
+  const area = document.getElementById(`sheetOrgArea-${gameKey}`);
+  if (!area || !window.CottageDB?.getGameOverride) return;
+  const override = await window.CottageDB.getGameOverride(gameKey);
+  const photos = override?.organizer_photo_urls || [];
+  const ruleNote = override?.rule_note || '';
+  if (!photos.length && !ruleNote) { area.innerHTML = ''; return; }
+  const gameName = getGameName(gameKey) || String(gameKey);
+
+  let html = '';
+  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
+  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 설명 보기</button>`;
+  area.innerHTML = html;
+
+  area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openOrganizerLightbox(photos, gameName));
+  area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleNoteModal(ruleNote, gameName));
 }
 
 async function initSheetCommentsPreview(gameKey) {

@@ -330,6 +330,42 @@ window._cottageSess = (function () {
     } catch (e) { console.error('[uploadPlayPhoto]', e); return null; }
   }
 
+  // ── 게임 정리법 사진 / 룰설명 (관리자 입력, game_overrides) ────────
+
+  async function uploadOrganizerPhoto(file, gameKey) {
+    if (!file || !gameKey) return null;
+    try {
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const path = `${gameKey}/${Date.now()}.${ext}`;
+      const { data, error } = await db.storage.from('organizer-photos').upload(path, file, { upsert: false });
+      if (error) { console.error('[uploadOrganizerPhoto]', error); return null; }
+      return db.storage.from('organizer-photos').getPublicUrl(data.path).data.publicUrl;
+    } catch (e) { console.error('[uploadOrganizerPhoto]', e); return null; }
+  }
+
+  async function getGameOverride(gameKey) {
+    if (!gameKey) return null;
+    try {
+      const { data, error } = await db.from('game_overrides').select('*').eq('game_key', gameKey).maybeSingle();
+      if (error) { console.error('[getGameOverride]', error); return null; }
+      return data;
+    } catch (e) { console.error('[getGameOverride]', e); return null; }
+  }
+
+  async function upsertGameOverride(gameKey, { organizerPhotoUrls, ruleNote }) {
+    if (!gameKey) return false;
+    try {
+      const { error } = await db.from('game_overrides').upsert({
+        game_key: gameKey,
+        organizer_photo_urls: organizerPhotoUrls || [],
+        rule_note: ruleNote || null,
+        updated_at: new Date().toISOString(),
+      });
+      if (error) { console.error('[upsertGameOverride]', error); return false; }
+      return true;
+    } catch (e) { console.error('[upsertGameOverride]', e); return false; }
+  }
+
   async function recordGamePlay(gameId, playerCount, playerNames, playTimeMin, scoreNote, nickname, userId, groupName, playedAt, photoUrl, reviewText) {
     try {
       const { data, error } = await db.from("game_play_records").insert({
@@ -1775,6 +1811,9 @@ window._cottageSess = (function () {
     getPopularGames,
     getAllGameRatings,
     uploadPlayPhoto,
+    uploadOrganizerPhoto,
+    getGameOverride,
+    upsertGameOverride,
     recordGamePlay,
     deleteGamePlay,
     updateGamePlay,
