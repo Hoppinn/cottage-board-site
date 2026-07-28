@@ -644,6 +644,9 @@
     _setPanelAvatar(charPath);
     const menuAvatar = document.getElementById('kakaoProfileImg');
     if (menuAvatar) menuAvatar.src = charPath;
+    document.querySelectorAll('.profile-panel-rep-name').forEach(nameEl => {
+      nameEl.textContent = _charName(def);
+    });
   }
 
   function _applyRepTitleUI(titleId) {

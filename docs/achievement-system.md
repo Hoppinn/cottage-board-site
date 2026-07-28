@@ -61,7 +61,7 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 
 `_applyRepCharacterUI(achId)` / `_applyRepTitleUI(titleId)` ([achievements.js](../assets/js/achievements.js)). 저장 핸들러(`handleRepCardSelect`/`handleRepTitleSelect`)는 DB 성공 후 이 둘만 부른다.
 
-🚨 **대표 표시를 보여주는 자리를 새로 만들면 그 선택자를 이 함수에 추가할 것.** 예전엔 각 핸들러가 넘겨받은 `charBody`/`titleBody` **안에서만** 클래스를 고쳤는데, 수집 보드의 **미리보기 줄·헤더 아이콘은 그 바깥**이라 새로고침 전까지 옛 캐릭터가 남아 있었다(2026-07-21 실측·수정). 함께 처리해야 하는 특수 케이스 둘:
+🚨 **대표 표시를 보여주는 자리를 새로 만들면 그 선택자를 이 함수에 추가할 것.** 예전엔 각 핸들러가 넘겨받은 `charBody`/`titleBody` **안에서만** 클래스를 고쳤는데, 수집 보드의 **미리보기 줄·헤더 아이콘은 그 바깥**이라 새로고침 전까지 옛 캐릭터가 남아 있었다(2026-07-21 실측·수정). 이때 목록에서 **패널 헤더의 캐릭터 이름 텍스트**(`.profile-panel-rep-name`, kakao-auth.js — 아바타 바로 옆)가 빠져 있었다 — 이미지는 즉시 바뀌는데 이름만 새로고침해야 바뀌는 증상으로 2026-07-28 재발견, `_applyRepCharacterUI`에 한 줄 추가로 종결(`_applyRepTitleUI`가 `.profile-panel-title-name`에 이미 하던 것과 동일 패턴). 함께 처리해야 하는 특수 케이스 둘:
 - 대표가 **없던** 사용자의 패널 아바타는 `<img>`가 아니라 `<div>🐾</div>`다 → `src`를 넣어도 안 바뀐다(요소 교체 필요). 헤더의 대표 아이콘도 **요소 자체가 없다**(삽입 필요).
 - 패널 칭호를 `textContent`로 덮으면 옆의 **⚙(수정 진입) 아이콘이 사라진다** → 떼뒀다 다시 붙인다.
 
