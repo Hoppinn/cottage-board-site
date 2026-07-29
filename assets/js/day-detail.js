@@ -367,6 +367,17 @@
       opacity: 0.3; text-decoration: line-through;
       background: #f0ece6 !important; border-color: #e0d8cc !important;
     }
+    .dd-roulette-chip.is-custom { border-style: dashed; }
+    .dd-roulette-add-row { margin: 4px 0 8px; }
+    .dd-roulette-add-input {
+      width: 100%; box-sizing: border-box;
+      background: none; border: 1px solid #e0d8cc;
+      border-radius: 16px; padding: 6px 12px;
+      font-size: 12px; color: var(--text, #3b2f2f); outline: none;
+    }
+    .dd-roulette-add-input:focus { border-color: var(--green, #7a4828); }
+    .dd-roulette-add-input::placeholder { color: var(--muted, #9e8e7e); }
+    .dd-roulette-add-row .pr-autocomplete-list { top: auto; bottom: calc(100% + 2px); }
     .dd-roulette-result {
       min-height: 26px; text-align: center;
       font-size: 15px; font-weight: 700; color: var(--green, #7a4828);
@@ -1016,6 +1027,7 @@
       const mainScroll    = el.querySelector('#__ddMainScroll');
       const roulettePanel = el.querySelector('#__ddRoulettePanel');
       const openBtn       = el.querySelector('.dd-roulette-open-btn');
+      const plannerBtn    = el.querySelector('.dd-planner-btn');
       const wheelEl       = el.querySelector('#__rrWheel');
       const chipsEl       = el.querySelector('#__rrChips');
       const resultEl      = el.querySelector('#__rrResult');
@@ -1054,7 +1066,7 @@
 
       function buildChips() {
         chipsEl.innerHTML = state.map(g =>
-          `<button class="dd-roulette-chip${g.active ? '' : ' is-excluded'}"
+          `<button class="dd-roulette-chip${g.active ? '' : ' is-excluded'}${g.isCustom ? ' is-custom' : ''}"
             style="${g.active ? `background:${g.color};border-color:${g.color}` : ''}"
             data-key="${esc(g.key)}" type="button">${esc(g.name)}</button>`
         ).join('');
@@ -1076,9 +1088,54 @@
         spinBtn.disabled = state.filter(g => g.active).length < 2 || spinning;
       }
 
+      const addRow   = el.querySelector('#__rrAddRow');
+      const addInput = el.querySelector('#__rrAddInput');
+
+      function handleAddGame(displayName) {
+        const name = displayName.trim();
+        if (!name) return;
+        const cg = (window.COTTAGE_GAMES || []).find(g => g.display === name);
+        const key  = cg ? `id:${cg.bggId}` : `custom:${name}`;
+        const abbr = cg ? (cg.abbr || (cg.titleKo || cg.display || name).slice(0, 2)) : name.slice(0, 2);
+        const dup = state.findIndex(g => g.key === key);
+        if (dup >= 0) {
+          const chip = chipsEl.querySelector(`[data-key="${esc(state[dup].key)}"]`);
+          if (chip) { chip.style.outline = '2px solid var(--green,#7a4828)'; setTimeout(() => { chip.style.outline = ''; }, 700); }
+          return;
+        }
+        state.push({ key, name, abbr, active: true, color: COLORS[state.length % COLORS.length], isCustom: true });
+        buildChips();
+        buildWheel();
+        updateSpinBtn();
+      }
+
+      if (window.attachAc) {
+        window.attachAc(
+          addInput,
+          () => (window.COTTAGE_GAMES || []).map(g => g.display),
+          (selected) => { handleAddGame(selected); addInput.value = ''; },
+          addRow
+        );
+      }
+
+      addInput.addEventListener('keydown', e => {
+        if (e.key !== 'Enter') return;
+        const acList = addRow?.querySelector('.pr-autocomplete-list');
+        if (acList?.classList.contains('is-open')) return;
+        const val = addInput.value.trim();
+        if (!val) return;
+        e.preventDefault();
+        handleAddGame(val);
+        addInput.value = '';
+      });
+
+      // 룰렛은 "이미 정한 후보 중 하나를 고르는" 화면이지 등록 화면이 아니다 —
+      // 룰렛 보는 동안은 등록/수정 버튼을 숨긴다(2026-07-29 사용자 판단: "룰렛창에서까지
+      // 모임등록을 할 필요가 있냐").
       openBtn.addEventListener('click', () => {
         mainScroll.style.display = 'none';
         roulettePanel.style.display = '';
+        if (plannerBtn) plannerBtn.style.display = 'none';
         buildWheel();
         buildChips();
         updateSpinBtn();
@@ -1087,6 +1144,7 @@
       backBtn.addEventListener('click', () => {
         roulettePanel.style.display = 'none';
         mainScroll.style.display = '';
+        if (plannerBtn) plannerBtn.style.display = '';
         resultEl.textContent = '';
       });
 
@@ -1153,6 +1211,9 @@
             <div class="dd-roulette-wheel" id="__rrWheel"></div>
           </div>
           <div class="dd-roulette-chips" id="__rrChips"></div>
+          <div class="dd-roulette-add-row" id="__rrAddRow">
+            <input class="dd-roulette-add-input" id="__rrAddInput" placeholder="+ 게임 추가..." type="text" autocomplete="off">
+          </div>
           <div class="dd-roulette-result" id="__rrResult"></div>
           <button class="dd-roulette-spin-btn" id="__rrSpin" type="button">돌리기 🎡</button>
           <button class="dd-roulette-back-btn" id="__rrBack" type="button">← 목록으로</button>
