@@ -52,7 +52,7 @@
     }
     .dd-close-row {
       padding: 12px 20px;
-      display: flex; justify-content: center;
+      display: flex; justify-content: center; gap: 8px;
     }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
@@ -60,6 +60,13 @@
       color: var(--green, #7a4828); font-weight: 600;
     }
     .dd-close-btn:active { background: #ddd6cb; }
+    /* 등록 진입(주행동) — 같은 줄의 닫기(중립 회색)와 구분되게 초록 채움 */
+    .dd-planner-btn {
+      background: var(--green, #7a4828); border: none; border-radius: 20px;
+      padding: 6px 20px; font-size: 13px; cursor: pointer;
+      color: #fff; font-weight: 700;
+    }
+    .dd-planner-btn:active { filter: brightness(0.92); }
 
     /* ── 통계 칩 ── */
     .dd-stats-row {
@@ -898,7 +905,7 @@
    * @param {string} voteDate — 'YYYY-MM-DD'
    * @param {Array}  votes    — 해당 날짜의 meeting_votes 배열 (사전 패치)
    * @param {Array}  voteGames — 해당 날짜의 meeting_vote_games 배열 (사전 패치)
-   * @param {{ onPlannerClick?: () => void }} [opts]
+   * @param {Object} [opts] — 현재 미사용, 재오픈(onDirtyClose) 시 그대로 다시 넘겨주기 위해 보존
    */
   /** 모임 상세 통계 칩 HTML (참여 인원 · 최대 동시 겹침 · 공통 게임 수) */
   function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
@@ -1180,6 +1187,14 @@
     const rouletteGames = _buildRouletteGames(voteGames);
     const participantsBody = _buildParticipantsHtml(uniqueVotes, voteGames);
 
+    // 등록/수정 진입 버튼 — 지난 날짜엔 등록 행동을 렌더하지 않는다(A-10, 판정은
+    // 이 한 곳에서). 로그인 안 했으면 어차피 등록할 수 없으니 숨긴다.
+    const user = window.getKakaoUser?.();
+    const myVote = user && votes.find(v => String(v.user_id) === String(user.id));
+    const plannerBtnHtml = (user && voteDate >= _todayStr())
+      ? `<button class="dd-planner-btn" type="button">${myVote ? '내 등록 수정하기' : '플래너에서 등록하기'}</button>`
+      : '';
+
     const rouletteBtnHtml = rouletteGames.length >= 2
       ? '<button class="dd-roulette-open-btn" type="button">🎡 룰렛으로 정하기</button>'
       : '';
@@ -1214,6 +1229,7 @@
       </div>
       ${roulettePanelHtml}
       <div class="dd-close-row">
+        ${plannerBtnHtml}
         <button class="dd-close-btn" type="button">닫기</button>
       </div>
     </div>`;
@@ -1232,6 +1248,26 @@
     // 게임 행 클릭 → 게임시트. 게임시트(--z-sheet 9500)가 이 모달 위에 겹쳐 뜨므로 닫지 않는다
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
     _bindDdGameHitClicks(el);
+
+    // 등록/수정 → 플래너. 저장하고 닫으면(onDirtyClose) 최신 데이터로 이 모달을 다시 연다 —
+    // openDatePreviewModal의 .sched-bar-edit-btn과 같은, 이미 검증된 복귀 패턴을 그대로 재사용
+    // (2026-07-22에 되돌린 1차 시도는 openPlannerBtn.click()으로 날짜 없는 주간뷰만 열고
+    //  돌아올 콜백이 아예 없었다 — 이번엔 그 자리를 채운다).
+    el.querySelector('.dd-planner-btn')?.addEventListener('click', () => {
+      window.CottageDB?.trackEvent('meeting_detail_planner_click');
+      el.remove();
+      window.openPlannerModal?.({
+        weekOffset: 0,
+        edit: voteDate,
+        onDirtyClose: async () => {
+          const [freshVotes, freshGames] = await Promise.all([
+            window.CottageDB?.getMeetingVotes(voteDate, voteDate) ?? [],
+            window.CottageDB?.getMeetingVoteGames(voteDate, voteDate) ?? [],
+          ]);
+          window.openDateMeetingModal(voteDate, freshVotes, freshGames, opts);
+        },
+      });
+    });
 
     // 룰렛 로직
     if (rouletteGames.length >= 2) _initRouletteWidget(el, rouletteGames);

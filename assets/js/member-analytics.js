@@ -124,7 +124,7 @@
     { key: 'meeting',   emoji: '🤝', label: '모임', types: [
       'home_meeting_main_click', 'home_meeting_planner_click', 'home_meeting_date_preview_click',
       'home_meeting_preview_card_click', 'home_meeting_week_nav', 'meeting_planner_bar_click',
-      'meeting_profile_click' ] },
+      'meeting_profile_click', 'meeting_detail_planner_click' ] },
     { key: 'record',    emoji: '📋', label: '플레이기록', types: [
       'home_record_main_click', 'home_record_more_click', 'home_record_write_click',
       'record_start', 'record_complete' ] },
@@ -149,6 +149,7 @@
     home_meeting_week_nav: '홈 · 주간 넘김',
     meeting_planner_bar_click: '플래너 · 일정 막대',
     meeting_profile_click: '모임 · 참여자 프로필',
+    meeting_detail_planner_click: '이날 모임 상세 · 등록/수정하기',
     home_record_main_click: '홈 · 기록 메뉴',
     home_record_more_click: '홈 · 기록 더보기',
     home_record_write_click: '홈 · 기록 작성 버튼',

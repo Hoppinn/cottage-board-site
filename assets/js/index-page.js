@@ -1487,13 +1487,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
     function openMeetingDetail() {
       window.CottageDB?.trackEvent('home_meeting_preview_card_click');
-      window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, {
-        fromHome: true,
-        onPlannerClick: () => {
-          window.CottageDB?.trackEvent('home_meeting_planner_click');
-          document.getElementById('openPlannerBtn')?.click();
-        },
-      });
+      // 등록/수정 진입 버튼은 이제 openDateMeetingModal이 자체적으로 그려서 처리한다
+      // (day-detail.js — 저장 후 이 모달로 복귀하는 onDirtyClose까지 자체 완결).
+      window.openDateMeetingModal?.(dateStr, dayVotes, dayGames, { fromHome: true });
     }
 
     previewEl.querySelector('.mpc-detail-btn')?.addEventListener('click', e => {

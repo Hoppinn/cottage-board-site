@@ -797,6 +797,7 @@
     let _openMultiSheet = null; // initMultiSheet에서 주입되는 외부 진입점
     let _initDone       = false;
     let _pendingRegister = null; // 홈 등록하기 버튼 → init 완료 전 도착한 date
+    let _pendingEdit     = null; // 「이날 모임 상세」 등록/수정 버튼 → init 완료 전 도착한 date (_pendingRegister와 동일한 이유)
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -2462,6 +2463,15 @@
           _notifySheetShown();
         }
       }
+      if (_pendingEdit) {
+        const ds = _pendingEdit;
+        _pendingEdit = null;
+        if (ds >= toDateStr(TODAY)) {
+          document.body.classList.add('is-quick-entry');
+          _openMultiSheet?.({ startStep: 2, dates: [ds] });
+          _notifySheetShown();
+        }
+      }
     }
 
     // 홈에서 등록/수정 진입 시 뒤쪽 주간 뷰를 보여주지 않고 대기 중인 부모창에
@@ -2504,10 +2514,20 @@
       }
       if (e.data?.type === 'cottage-edit') {
         const ds = e.data.date;
-        if (ds && ds >= toDateStr(TODAY) && _initDone) {
-          document.body.classList.add('is-quick-entry');
-          _openMultiSheet?.({ startStep: 2, dates: [ds] });
-          _notifySheetShown();
+        if (!ds) return;
+        if (_initDone) {
+          if (ds >= toDateStr(TODAY)) {
+            document.body.classList.add('is-quick-entry');
+            _openMultiSheet?.({ startStep: 2, dates: [ds] });
+            _notifySheetShown();
+          }
+        } else {
+          // 🚨 cottage-planner-ready는 init()의 await _loadAllVotes()를 기다리지 않고
+          // 곧바로 발사된다(embed 모드 진입 직후, 파일 끝 kwloc). 부모가 그 신호를 받자마자
+          // cottage-edit를 보내면 _initDone이 아직 false라 조용히 무시됐다 — 「등록/수정
+          // 버튼을 눌렀는데 날짜 없는 주간 뷰로 갔다」는 2026-07-22 버그가 바로 이 경로였다
+          // (cottage-register는 _pendingRegister로 이미 막아뒀는데 cottage-edit만 빠져 있었음).
+          _pendingEdit = ds;
         }
         return;
       }
