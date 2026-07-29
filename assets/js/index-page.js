@@ -1385,7 +1385,15 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     if (_meetingDirty) { _meetingDirty = false; _meetingReload?.(); }
   }
 
+  // 🚨 e.source가 이 iframe(frame)이 맞는지 반드시 먼저 확인한다 — day-detail.js가
+  // 「이날 모임 상세」 등록 버튼용으로 club-schedule.html?embed=true를 여는 **별도의
+  // 독립 iframe**(window.openPlannerModal, #__plannerModal)을 똑같이 띄우는데, 그쪽도
+  // 똑같은 cottage-planner-ready/cottage-sheet-shown을 window.parent로 쏜다. 이 검사가
+  // 없으면 그 iframe이 준비됐다는 신호에 **이 홈 전용 미리로드 패널(#plannerSheetModal)이
+  // 엉뚱하게 열려**, 아무 날짜도 지시받지 못한 빈(주간뷰 로딩 중) 박스가 진짜 등록 시트
+  // 위에 겹쳐 뜬다(2026-07-29 사용자가 스크린샷으로 잡은 "흰 빈 배경 모달").
   window.addEventListener('message', e => {
+    if (e.source !== frame.contentWindow) return;
     if (e.data?.type === 'cottage-planner-ready') {
       frame.classList.add('is-ready');
       if (loader) loader.style.display = 'none';
