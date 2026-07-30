@@ -1545,6 +1545,15 @@ window._cottageSess = (function () {
         .not('user_id', 'is', null)
         .order('created_at', { ascending: false })
         .limit(20);
+      // 신규 회원가입: new_intro와 동일하게 로그인 회원 전체 수신(관리자 action 필요 없는 정보성 알림).
+      // 새 테이블·컬럼 없이 이미 있는 signup_complete 이벤트(page_events)를 그대로 쓴다.
+      const newMemberPromise = db.from('page_events')
+        .select('id, user_id, created_at')
+        .eq('event_type', 'signup_complete')
+        .neq('user_id', userId)
+        .not('user_id', 'is', null)
+        .order('created_at', { ascending: false })
+        .limit(20);
       const profileSeenPromise = db.from('profiles').select('notif_seen_at, notif_read_keys').eq('user_id', userId).maybeSingle();
       const _ADMIN_ID = '4916417947';
       // 교환권 이벤트는 **관리자에게만** 뜨는 감시용 피드다(의도된 사양). 문제는 존재가 아니라 비중이었다:
@@ -1574,8 +1583,8 @@ window._cottageSess = (function () {
         .eq('user_id', userId)
         .order('earned_at', { ascending: false })
         .limit(20);
-      const [taggedRes, curiousRes, purchasedRes, snackDoneRes, newGameRes, introListRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes] = await Promise.all([
-        taggedPromise, curiousPromise, purchasedPromise, snackDonePromise, newGamePromise, introListPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise
+      const [taggedRes, curiousRes, purchasedRes, snackDoneRes, newGameRes, introListRes, newMemberRes, profileSeenRes, voucherEventsRes, snackRequestRes, achievementRes] = await Promise.all([
+        taggedPromise, curiousPromise, purchasedPromise, snackDonePromise, newGamePromise, introListPromise, newMemberPromise, profileSeenPromise, voucherEventsPromise, snackRequestPromise, achievementPromise
       ]);
       // Promise.all + 비구조분해 결과라 2단계 codemod가 지나친 자리 — 쿼리 오류가 조용히 빈 값이 됨
       // (taggedRes·voucherEventsRes·snackRequestRes는 조건부 Promise.resolve라 .error 없음 = 정상 falsy)
@@ -1585,6 +1594,7 @@ window._cottageSess = (function () {
       if (snackDoneRes.error) console.error('[getMyNotifications:snack_requests done]', snackDoneRes.error);
       if (newGameRes.error) console.error('[getMyNotifications:game_requests new]', newGameRes.error);
       if (introListRes.error) console.error('[getMyNotifications:member_intros]', introListRes.error);
+      if (newMemberRes.error) console.error('[getMyNotifications:page_events signup_complete]', newMemberRes.error);
       if (profileSeenRes.error) console.error('[getMyNotifications:profiles]', profileSeenRes.error);
       if (voucherEventsRes.error) console.error('[getMyNotifications:voucher_log]', voucherEventsRes.error);
       if (snackRequestRes.error) console.error('[getMyNotifications:snack_requests]', snackRequestRes.error);
@@ -1711,6 +1721,41 @@ window._cottageSess = (function () {
             date: allIntros[0].created_at,
             isNew: false,
           });
+        }
+      }
+      // 신규 회원가입: new_intro와 동일한 묶음 알림 패턴. page_events엔 닉네임이 없어 profiles에서 별도 조회.
+      {
+        const allNewMembers = newMemberRes.data || [];
+        if (allNewMembers.length > 0) {
+          const memberIds = [...new Set(allNewMembers.map(r => r.user_id))];
+          const { data: nickRows, error: nickErr } = await db.from('profiles')
+            .select('user_id, nickname').in('user_id', memberIds);
+          if (nickErr) console.error('[getMyNotifications:profiles new_member nicks]', nickErr);
+          const nickMap = new Map((nickRows || []).map(r => [String(r.user_id), r.nickname]));
+          const newOnes = allNewMembers.filter(r =>
+            (effectiveSeenAt ? r.created_at > effectiveSeenAt : true) && !readKeys.has(`new_member:${r.id}`)
+          );
+          if (newOnes.length > 0) {
+            notifs.push({
+              type: 'new_member',
+              key: `new_member:${newOnes[0].id}`,
+              keys: newOnes.map(r => `new_member:${r.id}`),
+              count: newOnes.length,
+              names: newOnes.map(r => nickMap.get(String(r.user_id)) || '회원'),
+              date: newOnes[0].created_at,
+              isNew: true,
+            });
+          } else {
+            notifs.push({
+              type: 'new_member',
+              key: `new_member:${allNewMembers[0].id}`,
+              keys: [`new_member:${allNewMembers[0].id}`],
+              count: 1,
+              names: [nickMap.get(String(allNewMembers[0].user_id)) || '회원'],
+              date: allNewMembers[0].created_at,
+              isNew: false,
+            });
+          }
         }
       }
       {

@@ -2203,6 +2203,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         : `${escH(n.names[0])} 외 ${n.count - 1}명이 소개글을 올렸어요`;
       return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
+    if (n.type === 'new_member') {
+      const desc = n.count === 1
+        ? `${escH(n.names[0])}님이 새로 가입했어요`
+        : `${escH(n.names[0])} 외 ${n.count - 1}명이 새로 가입했어요`;
+      return `<li class="${cls}">${_card('🎉', '신규 회원', desc)}${readBtn}</li>`;
+    }
     // 교환권은 유형+날짜로 묶여서 온다(관리자 전용). names는 중복 제거된 사람 목록,
     // count는 건수라 서로 다를 수 있다 — 한 사람이 하루에 여러 번 쓰면 names 1 / count 13.
     if (n.type === 'voucher_granted' || n.type === 'voucher_used') {
