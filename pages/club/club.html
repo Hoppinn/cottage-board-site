@@ -74,7 +74,7 @@
             <strong>참여 안내 확인</strong><br>
             <span style="color:var(--muted);font-weight:400">참여 방법과 회칙을 참여 전에 확인해주세요.</span>
           </div>
-          <a class="club-card-link" href="./club-rules.html" aria-label="참여 안내 확인"></a>
+          <a class="club-card-link" href="./club-rules.html" aria-label="참여 안내 확인" onclick="window.CottageDB?.trackEvent?.('club_join_rules_click')"></a>
         </li>
         <li class="about-for-item">
           <span class="about-for-icon">👋</span>
@@ -82,7 +82,7 @@
             <strong>회원 자기소개</strong><br>
             <span style="color:var(--muted);font-weight:400">여기에 간단한 소개를 남기고, 단톡방에 인사를 남겨주세요.</span>
           </div>
-          <a class="club-card-link" href="./club-intro.html" aria-label="회원 자기소개"></a>
+          <a class="club-card-link" href="./club-intro.html" aria-label="회원 자기소개" onclick="window.CottageDB?.trackEvent?.('club_join_intro_click')"></a>
         </li>
       </ul>
     </div>
@@ -197,7 +197,12 @@
       });
     });
     document.getElementById('extConfirmOk').addEventListener('click', () => {
-      if (pendingUrl) window.open(pendingUrl, '_blank', 'noopener,noreferrer');
+      if (pendingUrl) {
+        // 이 페이지의 유일한 data-ext-confirm 링크가 단톡방이라 무조건 이 이벤트로 고정.
+        // 다른 외부링크 확인창이 이 페이지에 추가되면 어떤 링크였는지 구분해야 한다.
+        window.CottageDB?.trackEvent?.('club_join_chat_click');
+        window.open(pendingUrl, '_blank', 'noopener,noreferrer');
+      }
       overlay.style.display = 'none';
       pendingUrl = null;
     });
