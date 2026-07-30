@@ -836,6 +836,7 @@
   // club-schedule.html?embed=true 를 iframe 센터모달로 띄운다. open 시 목표 상태
   // (주차 오프셋·등록/수정 목적지)를 전부 선언(CLAUDE.md iframe 재사용 원칙).
   let _pmFrame = null, _pmReady = false, _pmPending = null, _pmDirty = false, _pmOnDirty = null;
+  let _pmAwaitingReveal = false; // 등록/수정(edit·register) 진입 시 시트가 실제로 뜬 뒤에만 박스를 드러낸다
   function _pmDeclare(opts) {
     const w = _pmFrame?.contentWindow;
     if (!w) return;
@@ -844,9 +845,17 @@
     else if (opts.edit) w.postMessage({ type: 'cottage-edit', date: opts.edit }, '*');
   }
   function _pmEsc(e) { if (e.key === 'Escape') _pmCloseModal(); }
+  function _pmReveal() {
+    const ov = document.getElementById('__plannerModal');
+    if (!ov) return;
+    ov.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', _pmEsc);
+  }
   function _pmCloseModal() {
     const ov = document.getElementById('__plannerModal');
     if (!ov) return;
+    _pmAwaitingReveal = false;
     ov.classList.remove('is-open');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', _pmEsc);
@@ -874,9 +883,15 @@
       ov.querySelector('.planner-modal-close').addEventListener('click', _pmCloseModal);
       ov.addEventListener('click', e => { if (e.target === ov) _pmCloseModal(); });
     }
-    ov.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-    document.addEventListener('keydown', _pmEsc);
+    // 🚨 등록/수정(edit·register) 진입은 이 박스를 바로 드러내지 않는다 — 로드 중엔 "이날
+    // 모임 상세" 뒤 화면이 그대로 유지되다가, 등록 시트가 **실제로 뜬 뒤에만**(club-schedule.html이
+    // 보내는 cottage-sheet-shown) 이 박스가 나타난다. 예전엔 클릭 즉시 이 박스를 열어
+    // "불러오는 중…" 빈 상자가 (짧게라도) 보였다 — 사용자가 원한 건 그 자체를 아예 안 보여주는
+    // 것이었다("떴다 없어지는 것도 아니고"). 일반 오픈(주간뷰, edit/register 없음)은 기존대로
+    // 즉시 드러낸다 — kakao-auth.js의 두 호출부는 이 신호를 안 보내므로 대기하면 영영 안 열린다.
+    const isQuickEntry = !!(opts.edit || opts.register);
+    if (isQuickEntry) _pmAwaitingReveal = true;
+    else _pmReveal();
     // 조건부 재로드: 이미 플래너 로드됨 → 상태만 선언 / 아니면 로드 후 ready 대기
     let samePage = false;
     try { samePage = !!_pmFrame.contentWindow?.location?.pathname?.includes('club-schedule'); } catch (_) { samePage = false; }
@@ -897,6 +912,10 @@
       const ldr = document.querySelector('#__plannerModal .planner-modal-loader');
       if (ldr) ldr.style.display = 'none';
       if (_pmPending) { const f = _pmPending; _pmPending = null; f(); }
+    }
+    if (e.data?.type === 'cottage-sheet-shown' && _pmAwaitingReveal) {
+      _pmAwaitingReveal = false;
+      _pmReveal();
     }
     if (e.data?.type === 'cottage-meeting-saved') { _pmDirty = true; _pmOnDirty?.(); } // 저장 즉시 부모 갱신(닫을 때만 기다리지 않음)
     // 🚨 club-schedule.html의 등록/수정 시트는 저장 성공 직후 *자기 자신*을 자동으로
