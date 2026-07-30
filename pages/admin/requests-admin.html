@@ -2912,6 +2912,7 @@
     if (moreBtn) moreBtn.style.display = 'none';
     const thirdCard = matched[2];
     if (thirdCard) {
+      document.getElementById('visitorCloseBtn')?.remove(); // 두 번 불려도 "닫기 ▲"가 중복 생성되지 않게
       const closeBtn = document.createElement('button');
       closeBtn.id = 'visitorCloseBtn';
       closeBtn.className = 'admin-visitor-more-btn';

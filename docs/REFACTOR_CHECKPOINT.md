@@ -16,6 +16,7 @@ R1~R12 진행 표·종결 항목 상세·모델 배정 실적은 **git log와 �
 |---|---|---|
 | ~~GS5~~ | ~~`escH` 사본 ~11개~~ | ✅ **2026-07-22 종결 — 호출시점 위임으로 통합.** 사본 12곳(명명 헬퍼 7 + 인라인 체인 5)이 전부 `window.escH` 위임이 됐고, 검증은 `node scripts/verify-esch-unify.js --negctl`. **남긴 예외 4종**(속성 전용 이스케이퍼·JSON attr·부분 이스케이프 2)은 그 스크립트의 `ALLOW`에 이유와 함께 있다 — **재통합하려 들지 말 것.** |
 | DD4 | `openDateMeetingModal`의 `opts` — 내부 필드는 여전히 안 읽지만 **2026-07-29부터 재오픈 시 그대로 전달만 함**(등록/수정 버튼 클릭 → 저장 후 같은 `opts`로 자기 자신을 다시 연다) | 공개 API 시그니처라 보존. ※같은 파일 `openDateScheduleModal`의 `opts`는 `onDirtyClosed`로 **실제 사용 중** — 혼동 주의. |
+| RQ1 | `pages/admin/requests.html`(공개 요청 탭)과 `pages/admin/requests-admin.html`(분석 대시보드 요청관리 모달)이 `game_requests`/`snack_requests`/`suggestions` 렌더링·상태 피커를 각각 독립 구현 | **KA4와 달리 구조적으로 갈릴 이유가 없다**(단지 순서대로 만들며 안 합친 것) — 이미 한 번 실제 사고로 드러남(2026-07-27, requests-admin.html만 먼저 고쳤다가 실사용 화면인 requests.html이 안 맞아 사용자가 지적). 통합하려면 두 화면의 관리자 판별 방식(`isAdmin()` vs 항상 관리자)·표시 범위(공개 vs 관리자 전용) 차이부터 정리해야 함. **착수 조건**: 둘 중 하나를 다시 고칠 일이 생겼을 때 — 무인 운영 상태에선 이 자리를 고치는 사람이 "두 파일 다 고쳐야 한다"는 걸 모르고 한쪽만 고칠 위험이 가장 크다. |
 | ~~IP3~~ | ~~날짜 헬퍼 파편화~~ | ✅ **통합 대상 아님으로 판정 종결.** `toDateStr`(index-page)와 `fmtDate`(day-detail)는 입력·출력·용도가 전부 다른 별개 함수다. **재조사 금지.** |
 | DD2 | (긍정) **day-detail.js가 모범 구조** | IIFE 래핑 + CSS 자기주입 + window 노출 9개 전부 의도된 공개 API. **신규 파일 작성 시 이 구조를 따를 것.** |
 

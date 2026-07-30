@@ -862,48 +862,6 @@
       render();
     }
 
-    // ── 날짜별 요약 계산 ─────────────────────────────────────
-    function calcSummary(votes) {
-      if (!votes.length) return null;
-      const totalStart = Math.min(...votes.map(v => v.time_start));
-      const totalEnd = Math.max(...votes.map(v => v.time_end));
-      const blocks = calcOverlap(votes);
-      const top = blocks[0] || null;
-      return {
-        count: partyCount(votes),
-        totalStart, totalEnd,
-        overlapStart: top?.start,
-        overlapEnd: top?.end,
-        overlapCount: top?.count,
-        names: votes.map(v => v.nickname),
-      };
-    }
-
-    // ── 겹침 계산 ─────────────────────────────────────────────
-    function calcOverlap(votes) {
-      if (!votes.length) return [];
-      const slots = [];
-      for (let h = MIN_H; h < MAX_H; h += 0.5) {
-        // vote 행을 그대로 담는다 — names(누가)와 count(몇 명)를 분리하기 위함.
-        // 이름은 등록자 수만큼이지만 인원은 동반 인원을 포함하므로 둘은 더 이상 같은 수가 아니다.
-        slots.push({ h, votes: votes.filter(v => v.time_start <= h && v.time_end > h) });
-      }
-      const blocks = [];
-      let i = 0;
-      while (i < slots.length) {
-        const names = slots[i].votes.map(v => v.nickname);
-        const key = [...names].sort().join('§');
-        let j = i + 1;
-        while (j < slots.length && [...slots[j].votes.map(v => v.nickname)].sort().join('§') === key) j++;
-        if (names.length > 0) {
-          const endH = j < slots.length ? slots[j].h : MAX_H;
-          blocks.push({ start: slots[i].h, end: endH, count: partyCount(slots[i].votes), names: [...names] });
-        }
-        i = j;
-      }
-      return blocks.sort((a, b) => b.count - a.count || (b.end - b.start) - (a.end - a.start));
-    }
-
     // ── 주간 카드 등록/변경/취소 (Phase 3) ──────────────────────────
 
     function showToast(msg) {
