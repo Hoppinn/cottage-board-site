@@ -48,7 +48,13 @@ DROP POLICY IF EXISTS "anon_select_voucher_log" ON voucher_log;
 CREATE POLICY "anon_select_voucher_log"
   ON voucher_log FOR SELECT TO anon USING (true);
 
--- 6. 초기 상품 데이터
+-- 6-1. RLS 비활성화 — 000_schema.sql과 동일 이유(auth.uid() 없음, 프로젝트 기본 RLS OFF).
+--      이 파일만으로 재구축하면 RLS ON + SELECT/INSERT만 있어 조용히 막히는 경로라 명시적으로 끈다
+--      (2026-07-31, 무인 운영 내구성 감사).
+ALTER TABLE voucher_products DISABLE ROW LEVEL SECURITY;
+ALTER TABLE voucher_log DISABLE ROW LEVEL SECURITY;
+
+-- 7. 초기 상품 데이터
 INSERT INTO voucher_products (id, name, cost, is_active) VALUES
   (1, '물 2병',  1, true),
   (2, '홈런볼', 1, true),

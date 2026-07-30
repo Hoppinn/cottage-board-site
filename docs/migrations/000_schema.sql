@@ -78,7 +78,17 @@ DROP POLICY IF EXISTS "anon_select_point_rewards" ON point_rewards;
 CREATE POLICY "anon_select_point_rewards"
   ON point_rewards FOR SELECT TO anon USING (true);
 
--- 7. V1 초기 업적 데이터 (17개)
+-- 7. RLS 비활성화 — 이 프로젝트는 카카오 OAuth 기반이라 auth.uid()가 없고
+--    프로젝트 기본이 RLS OFF다(운영 DB 실측 확인, docs/db-schema.md 참조).
+--    위 6번은 ENABLE + SELECT/INSERT 정책만 걸어놔서, 이 파일만으로 재구축하면
+--    RLS는 켜진 채 UPDATE/DELETE 정책이 없어 조용히 막힌다 — 009/013/018과 동일하게
+--    명시적으로 끈다(2026-07-31, 무인 운영 내구성 감사).
+ALTER TABLE achievements DISABLE ROW LEVEL SECURITY;
+ALTER TABLE user_achievements DISABLE ROW LEVEL SECURITY;
+ALTER TABLE points_log DISABLE ROW LEVEL SECURITY;
+ALTER TABLE point_rewards DISABLE ROW LEVEL SECURITY;
+
+-- 8. V1 초기 업적 데이터 (17개)
 INSERT INTO achievements (id, name, emoji, category, threshold, points) VALUES
   -- 탐험가 계열 (토끼) — 새로운 게임 경험
   ('rabbit_first', '새싹 토끼',          '🌱', 'play_record', 1,   300),

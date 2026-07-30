@@ -34,20 +34,22 @@ Supabase 대시보드 **Project Settings → API → Max rows**. 기본값 `1000
 
 **배경**: PROJECT_STATE에 "⚠️ SQL 미실행"·"⚠️ 테이블 생성 필요"·"007 적용 전" 경고가 남아 있었으나 **전부 낡은 기재**였음(실제론 오래전 적용돼 기능이 운영 중). 세션마다 읽는 문서의 가짜 경고는 판단을 흐리므로 실측 후 닫음. **새 마이그레이션 추가 시 이 표에 적용 여부를 함께 기록할 것.**
 
-### ⚠️ RLS 상태 — 마이그레이션에 명시 안 된 테이블 8개 (2026-07-16 발견)
+### ✅ RLS 상태 — 재구축 시 조용히 파손되던 6개 테이블, 파일 보강 완료 (2026-07-16 발견 → 2026-07-31 조치)
 
-**이 프로젝트 기본 = RLS DISABLE**(카카오 OAuth라 `auth.uid()` 불가, anon 키 직접 read/write). 그런데 마이그레이션 **000·001·004·008**은 테이블을 만들면서 `ALTER TABLE ... DISABLE ROW LEVEL SECURITY;`를 넣지 않았다 — CLAUDE.md 「Supabase RLS: 테이블 생성 시 항상 RLS 상태를 명시」 규칙이 **2026-07-08에 생겨 그 이전 파일에 소급되지 않은 것**.
+**이 프로젝트 기본 = RLS DISABLE**(카카오 OAuth라 `auth.uid()` 불가, anon 키 직접 read/write). 마이그레이션 **000·001**은 테이블을 만들며 `ENABLE ROW LEVEL SECURITY` + SELECT/INSERT anon 정책만 걸고 `DISABLE`을 넣지 않았다 — CLAUDE.md 「Supabase RLS: 테이블 생성 시 항상 RLS 상태를 명시」 규칙이 **2026-07-08에 생겨 그 이전 파일에 소급되지 않은 것**.
 
-| 테이블 (생성 마이그레이션) | 운영 실측 (2026-07-16) |
-|---|---|
-| `achievements`·`user_achievements`·`points_log`·`point_rewards` (000) | ✅ anon 읽기 OK → RLS off (22/110/0/6행) |
-| `voucher_products`·`voucher_log` (001) | ✅ RLS off (13/39행) |
-| `member_intros` (004) | ✅ RLS off (8행) |
-| `meeting_votes` (008) | ✅ RLS off (16행) |
+| 테이블 (생성 마이그레이션) | 운영 실측 (2026-07-16) | 조치 |
+|---|---|---|
+| `achievements`·`user_achievements`·`points_log`·`point_rewards` (000) | RLS off (22/110/0/6행) | ✅ **2026-07-31 `000_schema.sql`에 `DISABLE ROW LEVEL SECURITY` 4줄 추가** — 앱 코드에 이 4개 테이블 UPDATE/DELETE 호출이 없음을 grep으로 확인 후 조치(있었다면 재구축 시 그 경로만 조용히 막혔을 것) |
+| `voucher_products`·`voucher_log` (001) | RLS off (13/39행) | ✅ **2026-07-31 `001_vouchers.sql`에 동일 조치** |
 
-**운영 영향 없음** — 전부 실제로 RLS가 꺼져 있음(대시보드 수동 해제 또는 생성 당시 기본값). **위험은 재구축 시**: 마이그레이션만으로 새 DB를 만들면 Supabase가 신규 테이블에 RLS를 **자동 활성화**해 앱이 전면 파손된다. `005_meeting_game_prefs_rls_fix.sql`이 바로 이 사고를 한 번 겪고 사후 수습한 파일 — 규칙이 생긴 이유다.
+**운영 DB엔 실행하지 않음** — 이미 off라 무의미(멱등이라 해도 될 이유가 없음). **파일만 현실과 맞춘 것** — 재구축 시에만 의미가 생긴다.
 
-**대응(미착수, 우선순위 낮음)**: 재구축 계획이 실제로 생길 때 000·001·004·008에 `DISABLE ROW LEVEL SECURITY` 문을 추가하거나, 별도 `012_rls_baseline.sql`로 일괄 선언(※011은 아래 page_events 건이 가져갔음). 운영 DB엔 무영향(이미 off)이라 **긴급하지 않음**. 단 **새 테이블을 만들 때는 반드시 같은 파일에 명시**할 것.
+**재분류된 항목 2건 (2026-07-31 재조사에서 실제로는 위험이 아니었음이 확인됨)**:
+- `member_intros`(진짜 생성 지점은 004가 아니라 `supabase-setup.sql:359-389`) — RLS ON이지만 SELECT/INSERT/**UPDATE**/**DELETE** anon 정책이 전부 있어 재구축해도 기능이 안 막힌다. 운영 실측이 "off"인 건 대시보드에서 수동으로 껐기 때문이지, 파일이 위험해서가 아니다. **조치 불필요.**
+- `meeting_votes`(008) — **이미 013에서 해결됨**(`013_meeting_votes_guest_count.sql:51` `ALTER TABLE meeting_votes DISABLE ROW LEVEL SECURITY;`). `meeting_vote_games`도 009에서 이미 해결(`:95`). **이 표에 남아있던 게 낡은 기재였다.**
+
+**교훈**: `005_meeting_game_prefs_rls_fix.sql`이 이 유형 사고(재구축 시 RLS 자동 활성화로 전면 파손)를 한 번 실제로 겪고 사후 수습한 파일 — 새 테이블을 만들 때는 반드시 같은 파일에 RLS 상태를 명시할 것.
 
 ### 🔴 RLS 두 번째 실패 모드 — 정책은 있는데 역할이 틀린 경우 (2026-07-18 발견)
 
