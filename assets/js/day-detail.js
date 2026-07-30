@@ -890,6 +890,12 @@
     // 것이었다("떴다 없어지는 것도 아니고"). 일반 오픈(주간뷰, edit/register 없음)은 기존대로
     // 즉시 드러낸다 — kakao-auth.js의 두 호출부는 이 신호를 안 보내므로 대기하면 영영 안 열린다.
     const isQuickEntry = !!(opts.edit || opts.register);
+    // 🚨 진짜 "빈 흰 박스"의 정체는 타이밍이 아니라 레이아웃이었다(2026-07-30 스크린샷으로 확정) —
+    // 안쪽 club-schedule.html은 등록/수정 시트를 하단 바텀시트(.sched-multi-sheet, max-height:72vh,
+    // 아래쪽 정렬)로만 그리는데, 이 박스는 고정 88dvh 흰 카드라 시트가 안 닿는 위쪽 구간이
+    // 빈 흰 카드처럼 남아 "박스가 두 개 겹쳐 보인다"로 보였다. is-quick-entry 클래스로 이 박스를
+    // 풀블리드·투명화해(위 CSS) 그 구간이 바깥 어두운 배경으로 자연스럽게 채워지게 한다.
+    ov.classList.toggle('is-quick-entry', isQuickEntry);
     if (isQuickEntry) _pmAwaitingReveal = true;
     else _pmReveal();
     // 조건부 재로드: 이미 플래너 로드됨 → 상태만 선언 / 아니면 로드 후 ready 대기

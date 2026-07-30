@@ -4453,6 +4453,17 @@ body.embed-mode {
 .planner-modal-close{position:absolute;top:10px;right:12px;z-index:2;background:none;border:none;font-size:18px;line-height:1;color:var(--text,#333);cursor:pointer;padding:4px;}
 .planner-modal-close:hover{color:var(--green);}
 .planner-modal-loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px;background:#fff;}
+/* 등록/수정(quick-entry) 진입 — 안쪽 club-schedule.html이 하단 바텀시트(.sched-multi-sheet,
+   max-height:72vh, 아래쪽 정렬)만 그리므로, 고정 88dvh 흰 박스를 그대로 쓰면 시트가 안 닿는
+   위쪽 구간이 빈 흰 카드처럼 남는다("빈 흰 박스가 뜬다" — 2026-07-30 스크린샷으로 확인,
+   타이밍 문제가 아니라 레이아웃 불일치였다). 박스를 홈 전용 .planner-sheet-modal.is-quick-entry와
+   동일하게 풀블리드·투명화해 이 위쪽 구간이 바깥 어두운 배경(불투명 유지, 뒤 상세모달을 계속
+   가림)으로 채워지게 한다 — 안쪽 시트 자체의 어두운 오버레이와 자연스럽게 이어진다. */
+.planner-modal-overlay.is-quick-entry{padding:0;}
+.planner-modal-overlay.is-quick-entry .planner-modal-box{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;background:transparent;}
+.planner-modal-overlay.is-quick-entry .planner-modal-close{display:none;}
+.planner-modal-overlay.is-quick-entry .planner-modal-frame{background:transparent;}
+.planner-modal-overlay.is-quick-entry .planner-modal-loader{background:transparent;}
 .record-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 0;}
 .record-photo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;display:block;}
 .record-photo-more-badge{grid-column:1/-1;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:6px 0 0;text-decoration:underline;text-align:left;}
