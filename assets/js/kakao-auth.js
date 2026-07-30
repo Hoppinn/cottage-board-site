@@ -50,7 +50,11 @@ async function _updateNotifBadge() {
   const btn = document.getElementById('kakaoLoginBtn');
   if (!btn) return;
   const sess = window._cottageSess?.get(String(user.id)) || {};
-  if (!sess.voucherNoticeSeen || (window._isFeeNoticeLive?.() && !sess.feeNoticeSeen)) {
+  // 로컬 세션(기기별)만 보면 다른 기기·브라우저에서 재노출된다 — DB ack(notice:*)도 함께 본다.
+  const _dbAckKeys = await window.CottageDB?.getNoticeAckKeys?.(String(user.id)) || [];
+  const voucherAcked = !!sess.voucherNoticeSeen || _dbAckKeys.includes('notice:voucher');
+  const feeAcked = !!sess.feeNoticeSeen || _dbAckKeys.includes('notice:fee');
+  if (!voucherAcked || (window._isFeeNoticeLive?.() && !feeAcked)) {
     if (!btn.querySelector('.notif-badge')) {
       const b = document.createElement('span');
       b.className = 'notif-badge';
@@ -1920,7 +1924,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // likedGames/curiousGames를 따로 조회하지 않는다 — getMeetingProfile이 내부에서 같은
   // getUserLikedGamesAll/getUserCuriousGamesAll를 부르므로 예전엔 같은 쿼리를 한 Promise.all에서
   // 두 번 쏘고 결과를 별도 배열로 들고 있었다. 그 중복이 크로스보드 stale의 실체였다(R10b).
-  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile] = await Promise.all([
+  const [stats, notifs, _codexResult, userStats, voucherBalance, voucherProducts, voucherHistory, allBioSuggestions, allAvoidSuggestions, _thisMonthVotes, meetingProfile, _noticeAckKeys] = await Promise.all([
     window.CottageDB.getMyStats(String(user.id), user.nickname || null),
     // 알림·교환권은 비공개 → 읽기전용에서는 조회하지 않음(개인정보)
     readOnly ? Promise.resolve([]) : (window.CottageDB.getMyNotifications?.(String(user.id), user.nickname || null, _sessForNotif.notifSeenAt || null, _sessForNotif.newGameSeenAt || null) || Promise.resolve([])),
@@ -1933,6 +1937,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     (window.CottageDB?.getAllAvoidTagSuggestions?.() || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingVotes?.(_monthStart, _monthEndStr) || Promise.resolve([])).catch(() => []),
     (window.CottageDB?.getMeetingProfile?.(String(user.id)) || Promise.resolve(null)).catch(() => null),
+    // 전체공지·교환권공지 확인 여부 — 기기 간 동기화용(로컬 세션만으론 재노출됨)
+    readOnly ? Promise.resolve([]) : (window.CottageDB?.getNoticeAckKeys?.(String(user.id)) || Promise.resolve([])).catch(() => []),
   ]);
   // 읽기전용: 대상 유저 닉네임을 stats.profile에서 확정 후 헤더 갱신
   if (readOnly && !user.nickname) {
@@ -2093,12 +2099,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   }, 1);
 
   const _hasFirstPlayVoucher = voucherHistory.some((item) => item.reason === 'first_play' && Number(item.delta) > 0);
-  const voucherSeen = !!_sessForNotif.voucherNoticeSeen;
+  // 로컬 세션(기기별) 또는 DB(notice:voucher, 기기 간 동기화) 둘 중 하나라도 확인됐으면 seen.
+  const voucherSeen = !!_sessForNotif.voucherNoticeSeen || (_noticeAckKeys || []).includes('notice:voucher');
   const VOUCHER_NOTICE_DATE = '2026-06-16';
   const _voucherDateLabel = fmtShort(VOUCHER_NOTICE_DATE);
   // ── 전체 공지 카드 (기간 내에만) ──
   const _feeNoticeLive = window._isFeeNoticeLive();
-  const _feeSeen = !!_sessForNotif.feeNoticeSeen;
+  const _feeSeen = !!_sessForNotif.feeNoticeSeen || (_noticeAckKeys || []).includes('notice:fee');
   const _feeNoticeHtml = !_feeNoticeLive ? '' : `<div class="notif-reward-card notif-reward-card--notice${_feeSeen ? ' is-seen' : ' is-new'}">
     <div class="notif-reward-row">
       <div class="notif-reward-icon-col">📢</div>
@@ -2802,6 +2809,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       _s.voucherNoticeSeen = true;
       _s.feeNoticeSeen = true;
       window._cottageSess.set(String(user.id), _s);
+      // addNotifReadKeys를 먼저 큐에 넣어야 updateNotifSeenAt의 notice: 보존 로직이 이 키를 본다
+      // (같은 유저 체인으로 직렬화되므로 호출 순서 = 실행 순서, _queueNotifWrite 참조).
+      window.CottageDB?.addNotifReadKeys?.(String(user.id), ['notice:fee', 'notice:voucher']);
       window.CottageDB?.updateNotifSeenAt?.(String(user.id), _now);
     }
     // 9번째부터는 '외 N건 더 보기'의 별도 <ul>(.profile-notif-more-list)에 있어 함께 훑어야 함
@@ -2833,6 +2843,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       _s[sessKey] = true;
       window._cottageSess.set(String(user.id), _s);
     }
+    // DB에도 남겨 기기·브라우저를 바꿔도 재노출되지 않게 한다(notif_seen_at과 같은 방식).
+    const _noticeDbKey = sessKey === 'feeNoticeSeen' ? 'notice:fee' : sessKey === 'voucherNoticeSeen' ? 'notice:voucher' : null;
+    if (_noticeDbKey) window.CottageDB?.addNotifReadKeys?.(String(user.id), [_noticeDbKey]);
     _markRewardCardSeen(container, sel);
     const remaining = container.querySelectorAll('.profile-notif-list .is-new, .profile-notif-more-list .is-new, .notif-reward-card.is-new').length;
     if (remaining === 0) {

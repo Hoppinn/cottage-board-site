@@ -1954,6 +1954,7 @@ window._cottageSess = (function () {
     deleteMeetingVote,
     updateNotifSeenAt,
     addNotifReadKeys,
+    getNoticeAckKeys,
     getMeetingProfile,
     upsertMeetingIntro,
     addMeetingGamePref,
@@ -1981,10 +1982,14 @@ window._cottageSess = (function () {
     if (!userId || !timestamp) return;
     return _queueNotifWrite(userId, async () => {
       try {
-        // notif_read_keys를 함께 비운다 — 지평선을 지금으로 옮기면 그 이전의 개별
+        // notif_read_keys를 대부분 비운다 — 지평선을 지금으로 옮기면 그 이전의 개별
         // 읽음 키는 전부 지평선에 흡수돼 중복이다. 이게 배열 크기의 상한선 역할.
+        // 단 'notice:' 접두사(전체공지·교환권공지 확인)는 시간 지평선과 무관한 1회성
+        // ack라 지평선 리셋에 휩쓸리면 안 된다 — 보존한다.
+        const { data: cur } = await db.from('profiles').select('notif_read_keys').eq('user_id', userId).maybeSingle();
+        const kept = (Array.isArray(cur?.notif_read_keys) ? cur.notif_read_keys : []).filter(k => k.startsWith('notice:'));
         const { error } = await db.from('profiles')
-          .update({ notif_seen_at: timestamp, notif_read_keys: [] })
+          .update({ notif_seen_at: timestamp, notif_read_keys: kept })
           .eq('user_id', userId);
         if (error) console.error('[updateNotifSeenAt]', error);
       } catch (err) { console.error('[updateNotifSeenAt]', err);}
@@ -2008,6 +2013,18 @@ window._cottageSess = (function () {
         return { error: error || null };
       } catch (err) { console.error('[addNotifReadKeys]', err); return { error: err }; }
     });
+  }
+
+  // 전체공지·교환권공지 확인(ack) 여부 — profiles.notif_read_keys를 'notice:' 접두사로 재사용.
+  // feeNoticeSeen/voucherNoticeSeen이 localStorage(기기별)에만 있어 기기·브라우저를 바꾸면
+  // 재노출되던 문제를 notif_seen_at과 같은 방식(DB 동기화)으로 해소한다.
+  async function getNoticeAckKeys(userId) {
+    if (!userId) return [];
+    try {
+      const { data, error } = await db.from('profiles').select('notif_read_keys').eq('user_id', userId).maybeSingle();
+      if (error) { console.error('[getNoticeAckKeys]', error); return []; }
+      return Array.isArray(data?.notif_read_keys) ? data.notif_read_keys : [];
+    } catch (err) { console.error('[getNoticeAckKeys]', err); return []; }
   }
 
   // 기록의 정렬·표시 기준 날짜 — played_at이 없으면 작성일로 본다.
