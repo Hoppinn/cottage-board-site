@@ -2101,14 +2101,20 @@
           const pageKey = normalizePageKey(r.page);
           pageTotSec[pageKey] = (pageTotSec[pageKey] || 0) + (r.duration_sec || 0);
           const pid = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+          const day = kstDate(r.entered_at);
           if (pid) {
             if (!pagePeople[pageKey]) pagePeople[pageKey] = new Map();
             const pp = pagePeople[pageKey];
-            if (!pp.has(pid)) pp.set(pid, { visits: 0, sec: 0 });
-            pp.get(pid).visits++;
-            pp.get(pid).sec += r.duration_sec || 0;
+            if (!pp.has(pid)) pp.set(pid, { visits: 0, sec: 0, _days: new Set() });
+            const person = pp.get(pid);
+            person.sec += r.duration_sec || 0;
+            // 🚨 visits는 raw 행 수가 아니라 **방문일수**로 센다 — 위 pageUniq와 같은 (pid·page·day)
+            // 기준이라야 "방문 N"(막대·상단 숫자)과 개인별 합계가 정확히 같아진다. 예전엔 raw
+            // 행 수를 셌는데, 그러면 하루에 여러 번 들어온 사람 때문에 개인별 합이 방문N을
+            // 넘어서 "12명인데 왜 3회·4회가 있냐"는 혼란이 났다(사용자 신고, 2026-07-30).
+            if (!person._days.has(day)) { person._days.add(day); person.visits++; }
           }
-          const key = (pid || 'anon') + '|' + pageKey + '|' + kstDate(r.entered_at);
+          const key = (pid || 'anon') + '|' + pageKey + '|' + day;
           if (seen2.has(key)) continue;
           seen2.add(key);
           pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
@@ -2119,14 +2125,16 @@
           const pageKey = normalizePageKey(r.page);
           if (!pageKey?.startsWith(VIRTUAL_PAGE_PREFIX)) continue;
           const pid = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+          const day = kstDate(r.created_at);
           if (pid) {
             if (!pagePeople[pageKey]) pagePeople[pageKey] = new Map();
             const pp = pagePeople[pageKey];
-            // 가상 페이지는 page_sessions가 없어 체류를 모른다 — 0으로 두고 명단엔 '진입 N회'만.
-            if (!pp.has(pid)) pp.set(pid, { visits: 0, sec: 0 });
-            pp.get(pid).visits++;
+            // 가상 페이지는 page_sessions가 없어 체류를 모른다 — 0으로 두고 명단엔 '진입 N일'만.
+            if (!pp.has(pid)) pp.set(pid, { visits: 0, sec: 0, _days: new Set() });
+            const person = pp.get(pid);
+            if (!person._days.has(day)) { person._days.add(day); person.visits++; }
           }
-          const key = (r.user_id || 'pv') + '|' + pageKey + '|' + kstDate(r.created_at);
+          const key = (r.user_id || 'pv') + '|' + pageKey + '|' + day;
           if (seen2.has(key)) continue;
           seen2.add(key);
           pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
@@ -2212,7 +2220,9 @@
                         ? `비회원 ${pid.slice(5, 13)}…`
                         : (profilesMap?.get(pid) || profilesMap?.get(Number(pid)) || `미등록 ID ${pid.slice(0, 14)}…`),
                       isMember: !pid.startsWith('anon:'),
-                      meta: d.sec > 0 ? `${d.visits}회 · ${fmtTime(d.sec)}` : `${d.visits}회`,
+                      // visits는 이제 위 방문N과 같은 (pid·page·day) 기준(방문일수)이라
+                      // "일"로 표기한다 — "회"였을 때는 raw 행 수라 위 방문N과 안 맞았다.
+                      meta: d.sec > 0 ? `${d.visits}일 · ${fmtTime(d.sec)}` : `${d.visits}일`,
                     }))
                 : [];
               const memCnt = people.filter(x => x.isMember).length;
@@ -2223,11 +2233,12 @@
                   ${ddToggle(people.length)}
                 </div>
                 ${people.length ? ddPanelHtml(people, {
-                  // 개인별 회수(meta)는 raw 행 수(같은 날 중복 방문도 각각 셈)라, 위 "방문 N"
-                  // (사람+페이지+날짜 유니크로 접은 값)과 기준이 다르다 — 안 밝히면 합계가
-                  // 안 맞아 보인다(사용자 신고, 2026-07-30). 방문N 자체는 #27과 같은 이유로
-                  // 통일하지 않는다 — "며칠에 걸쳐 왔나"와 "몇 번 접속했나"는 다른 질문이다.
-                  note: `이 페이지를 본 사람 · 체류 긴 순 · 회원 ${memCnt}명 · 비회원 ${people.length - memCnt}명 · 아래 회수는 접속 건수(같은 날 중복 포함)로 위 방문수와 기준이 다름`,
+                  // 개인별 방문일수(meta)를 위 방문N과 **같은 (pid·page·day) 기준**으로 바꿔서
+                  // (2026-07-30) 이제 이 명단의 일수를 다 더하면 위 "방문 N"과 같다 — raw 행 수를
+                  // 셀 때는 하루 중복 방문 때문에 합이 방문N을 넘어 "12명인데 왜 3일·4일이
+                  // 있냐"는 혼란이 났었다(사용자 신고). 체류시간(sec)은 여전히 그 날의 모든
+                  // 접속을 합산한 실제 값 — 이것까지 첫 세션만으로 줄이면 과소집계된다(R3와 같은 이유).
+                  note: `이 페이지를 본 사람 · 체류 긴 순 · 회원 ${memCnt}명 · 비회원 ${people.length - memCnt}명 · 아래 일수의 합 = 위 방문수`,
                 }) : ''}
               </div>`;
             }).join('');
@@ -2701,10 +2712,18 @@
             const base = new Set([...a.people, ...b.people]).size;
             both = base ? `<div style="margin-top:2px">${ab}·${bb} 둘 다 한 사람 <b style="color:var(--text);font-weight:700">${inter}명</b> <span style="font-weight:500">(둘 중 하나라도 한 ${base}명 중)</span></div>` : '';
           }
-          return `<div style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--border);font-size:10px;color:var(--muted);font-weight:600;line-height:1.45"
-            title="같은 사람이 두 행동을 모두 했는지만 셉니다. 순서도, 한쪽을 거쳐야 하는지도 세지 않습니다">
-            🔗 겹친 사람 <span style="font-weight:500">· 순서·경로는 세지 않음</span>
-            <div style="margin-top:2px">${anchorBadge} 한 ${anchor.u}명 중 ${line}</div>${both}</div>`;
+          // 기본은 접어둔다 — 회·명·평균만으로도 숫자가 여럿인데 겹침 설명까지 늘 펼쳐두면
+          // 한 화면 정보가 과밀해진다(사용자 지적 2026-07-30: 페이지·이벤트 탭 둘 다 "숫자가
+          // 다 다르면 뭐가뭔지 모른다"). 정보는 안 지운다 — 이미 있는 드릴다운 인프라
+          // (.admin-dd-btn/.admin-dd-panel, document 위임)를 그대로 재사용해 필요할 때만 편다.
+          return `<div class="admin-dd-host" style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--border)">
+            <button class="admin-dd-btn" type="button" style="font-size:10px">🔗 겹친 사람 보기 ▾</button>
+            <div class="admin-dd-panel" hidden style="font-size:10px;color:var(--muted);font-weight:600;line-height:1.45;margin-left:0;border-left:none;padding-left:0"
+              title="같은 사람이 두 행동을 모두 했는지만 셉니다. 순서도, 한쪽을 거쳐야 하는지도 세지 않습니다">
+              <span style="font-weight:500">순서·경로는 세지 않음</span>
+              <div style="margin-top:2px">${anchorBadge} 한 ${anchor.u}명 중 ${line}</div>${both}
+            </div>
+          </div>`;
         }
         // 도달률 — "그 기간에 온 사람 중 몇 %가 하나라도 액션했나".
         // 분모는 renderCharts가 page_sessions에서 만들어 넘긴다(위 주석의 실측 근거 참조).
