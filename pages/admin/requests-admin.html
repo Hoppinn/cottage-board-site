@@ -2777,14 +2777,19 @@
         }
         // 도달률(전체 사이트 합산)과 기능별 카드 숫자가 왜 안 맞는지 "다른 스코프"라고만
         // 밝히는 데서 그치지 않고, 실제 겹침 인원을 계산해 보여준다(사용자 요청, 2026-07-30).
-        // "다른 기능도 함께 M명"으로 뭉치지 않고 — 카드가 3개뿐이니 "2번 기능도 N명 · 3번
-        // 기능도 M명"처럼 상대를 하나씩 짚어 보여달라는 후속 요청(같은 날)까지 반영.
+        // "다른 기능도 함께 M명"으로 뭉치지 않고 상대를 하나씩 짚되(같은 날 후속 요청),
+        // 번호(1번·2번)가 아니라 **기능 이름**으로 부른다 — 번호는 예시였을 뿐, 실제로 부를 땐
+        // 그 기능이 뭔지 바로 알아야 한다는 게 요청의 요지였다.
         // 각 계열의 "이 기능 이용자"는 그 계열의 전체 타입(EVENT_FAMILIES.types)으로 다시 센다 —
         // 카드에 보이는 낱개 스텝(1-1·1-2·1-3)만 합치면 그 계열의 다른 타입(예: 추천게임의
         // recommend_game_click 등)에서만 활동한 사람이 빠져 과소집계된다.
-        // 번호는 카드 순서(추천게임=1·플레이 기록=2·모임=3)와 같다 — 스텝 배지(1-1·2-1·3-1)가
-        // 이미 이 번호를 쓰고 있어 새 규칙을 만들지 않는다. 가입(signup) 계열은 카드가 없어 제외.
-        const FAM_ORDER = [{ idx: 1, key: 'recommend' }, { idx: 2, key: 'record' }, { idx: 3, key: 'meeting' }];
+        // label은 아래 axisCard 제목과 그대로 맞춘다(카드에서 본 이름과 다르면 또 헷갈린다).
+        // 가입(signup) 계열은 카드가 없어 제외.
+        const FAM_ORDER = [
+          { key: 'recommend', label: '추천게임 찾기' },
+          { key: 'record', label: '플레이 기록' },
+          { key: 'meeting', label: '모임' },
+        ];
         function famOverlapSubline(evts, myKey) {
           const famPeople = {};
           for (const f of EVENT_FAMILIES) famPeople[f.key] = countEvents(evts, f.types).people;
@@ -2793,7 +2798,7 @@
           const parts = FAM_ORDER.filter(f => f.key !== myKey).map(f => {
             const other = famPeople[f.key] || new Set();
             let n = 0; for (const p of mine) if (other.has(p)) n++;
-            return `${f.idx}번 기능도 ${n}명`;
+            return `${f.label}도 ${n}명`;
           });
           return `이 기능 이용 ${mine.size}명 · ${parts.join(' · ')}`;
         }
@@ -2808,7 +2813,7 @@
           el.innerHTML = `<div style="font-size:11px;color:var(--muted);font-weight:600;margin-bottom:8px">기간: ${escH(label || '전체')} <span style="font-weight:400">· 각 축은 <b>같은 기능의 행동 묶음</b>이다 — 퍼널이 아니다. 비율은 <b>같은 사람이 둘 다 했나</b>이고, 순서도 「거쳐야 하는 길」도 세지 않는다(실제로 앞을 안 거치고 뒤를 한 사람이 있다)</span></div>
           ${reachRow(evts, reach)}
           <div style="font-size:10px;color:var(--muted);font-weight:700;margin:2px 2px 6px">
-            🔻 기능별 상세(1 추천게임 · 2 플레이 기록 · 3 모임) <span style="font-weight:400">— 위 도달률은 전체 사이트 합산(겹쳐 세지 않음), 아래는 기능마다 따로 센 값이라 단순히 더해서는 안 맞음. 각 카드의 "N번 기능도 M명"이 그 카드와 N번 기능을 함께 쓴 사람 수</span>
+            🔻 기능별 상세 <span style="font-weight:400">— 위 도달률은 전체 사이트 합산(겹쳐 세지 않음), 아래는 기능마다 따로 센 값이라 단순히 더해서는 안 맞음. 각 카드의 "OO도 M명"이 그 카드와 OO 기능을 함께 쓴 사람 수</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px">
           ${axisCard('🔍', '추천게임 찾기', `
