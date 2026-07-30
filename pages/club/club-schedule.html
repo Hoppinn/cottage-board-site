@@ -1345,10 +1345,20 @@
           .sort((a, b) => b.count - a.count || b.latest.localeCompare(a.latest))
           .slice(0, 3);
 
-        // 날짜 변경 버튼은 "기존 등록을 단건 수정 진입(cottage-edit)"일 때만 — 새로 등록 중이면
-        // Step1에서 바로 다른 날을 고르면 되고, 여러 날을 묶어 고른 상태면 어느 날을 바꾼다는 건지
-        // 모호해진다(그 경우는 이미 있는 "다른 날짜 동기화" 기능의 영역).
-        const _canChangeDate = !_fromStep1 && _days.length === 1;
+        // 날짜 변경 버튼은 "선택된 날이 정확히 하루 + 그 날이 이미 내 등록(DB)"일 때만 — 아직
+        // 저장 안 된 새 날짜면 Step1에서 바로 다른 날을 고르면 되니 옮길 대상이 없고, 여러 날을
+        // 묶어 고른 상태면 어느 날을 바꾼다는 건지 모호해진다(그 경우는 이미 있는 "다른 날짜
+        // 동기화" 기능의 영역). 🚨 처음엔 "!_fromStep1"(수정 버튼으로 들어왔는지)로 판정했는데,
+        // "모임 등록"으로 들어가 Step1에서 이미 등록된 날을 다시 골라 Step2로 넘어온 경우
+        // _fromStep1이 true라 버튼이 안 떴다(2026-07-30 사용자 실사용 확인) — 진입 경로가 아니라
+        // "이 날짜가 이미 내 DB 등록인가"로 직접 판정해야 두 경로 다 커버된다.
+        // _dateChangeFrom이 이미 있다는 건 한 번 옮긴 뒤 재변경하는 중이라는 뜻 — 그 새 날짜는
+        // 아직 DB(allVotes)엔 없고 메모리에만 있으므로, DB 등록 여부만으로 판정하면 첫 이동
+        // 직후 버튼이 사라진다(다시 못 바꿈). 둘 중 하나만 참이어도 보여준다.
+        const _canChangeDate = _days.length === 1 && (
+          !!_dateChangeFrom ||
+          !!(user && allVotes.some(v => v.vote_date===_days[0] && String(v.user_id)===String(user.id)))
+        );
 
         const rowsHtml = _days.map(ds => {
           const d = parseDate(ds);
