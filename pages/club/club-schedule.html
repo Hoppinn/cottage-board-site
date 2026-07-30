@@ -1044,7 +1044,7 @@
       let _srcOpen     = {want:false, learn:false}; // 「좋아요/궁금」 피커 열림 상태(상시 노출 아님)
       let _modalWeekOffset = 0;
       let _historicalVotes = null; // 8주 이력 조회 결과 (프리셋·초기값용)
-      let _dateChangeFrom  = null; // 날짜 변경 진행 중 원본 날짜(저장 시 이 날짜를 삭제) — 단일수정(cottage-edit) 전용
+      let _dateChangeMap = {}; // { 지금키: 원래DB날짜 } — 날짜 변경 진행 중인 행들(여러 행 동시 가능). 저장 시 원래 날짜를 삭제
       let _dateChangeWeekOffset = 0; // 날짜 변경 picker 자체 주 네비(Step1과 별개)
 
       const overlay = document.createElement('div');
@@ -1069,7 +1069,7 @@
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
-        _dateChangeFrom = null; _dateChangeWeekOffset = 0;
+        _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
         // ⚠️ is-quick-entry를 여기서 제거하지 말 것 — 이 클래스가 .inner-page(플래너 페이지
         //    전체)를 display:none으로 숨기고 있는데, 제거하면 브레드크럼·"모임 플래너" 헤더가
@@ -1345,20 +1345,15 @@
           .sort((a, b) => b.count - a.count || b.latest.localeCompare(a.latest))
           .slice(0, 3);
 
-        // 날짜 변경 버튼은 "선택된 날이 정확히 하루 + 그 날이 이미 내 등록(DB)"일 때만 — 아직
-        // 저장 안 된 새 날짜면 Step1에서 바로 다른 날을 고르면 되니 옮길 대상이 없고, 여러 날을
-        // 묶어 고른 상태면 어느 날을 바꾼다는 건지 모호해진다(그 경우는 이미 있는 "다른 날짜
-        // 동기화" 기능의 영역). 🚨 처음엔 "!_fromStep1"(수정 버튼으로 들어왔는지)로 판정했는데,
-        // "모임 등록"으로 들어가 Step1에서 이미 등록된 날을 다시 골라 Step2로 넘어온 경우
-        // _fromStep1이 true라 버튼이 안 떴다(2026-07-30 사용자 실사용 확인) — 진입 경로가 아니라
-        // "이 날짜가 이미 내 DB 등록인가"로 직접 판정해야 두 경로 다 커버된다.
-        // _dateChangeFrom이 이미 있다는 건 한 번 옮긴 뒤 재변경하는 중이라는 뜻 — 그 새 날짜는
-        // 아직 DB(allVotes)엔 없고 메모리에만 있으므로, DB 등록 여부만으로 판정하면 첫 이동
-        // 직후 버튼이 사라진다(다시 못 바꿈). 둘 중 하나만 참이어도 보여준다.
-        const _canChangeDate = _days.length === 1 && (
-          !!_dateChangeFrom ||
-          !!(user && allVotes.some(v => v.vote_date===_days[0] && String(v.user_id)===String(user.id)))
-        );
+        // 날짜 변경 버튼은 "그 행의 날짜가 이미 내 등록(DB)" 이거나 "이미 한 번 옮긴 중(재변경)"일 때
+        // 행마다 각각 뜬다 — 여러 날짜(목·일 등)를 한 번에 편집 중이어도 각자 독립적으로 옮길 수 있다
+        // (2026-07-30, 사용자 요청). 아직 저장 안 된 새 날짜(Step1에서 방금 고른 미등록일)는 애초에
+        // Step1에서 다른 날을 고르면 되므로 옮길 대상이 아니다.
+        // 🚨 처음엔 "선택된 날이 정확히 하루일 때만"으로 좁혀놨었는데, 여러 날 동시 수정 중엔
+        // 하나도 안 떴다(사용자 요청으로 발견). _days.length 조건을 없애고 행 단위 판정으로 바꿈.
+        const _canChangeDate = ds =>
+          !!_dateChangeMap[ds] ||
+          !!(user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id)));
 
         const rowsHtml = _days.map(ds => {
           const d = parseDate(ds);
@@ -1372,7 +1367,7 @@
           ).join('');
           return `<div class="sm-time-row">
             <div class="sm-time-row-hdr">
-              <span class="sm-time-row-label">${esc(label)}${_canChangeDate ? ' <button class="sm-date-change-btn" id="smDateChangeBtn" type="button">📅 날짜 변경</button>' : ''}</span>
+              <span class="sm-time-row-label">${esc(label)}${_canChangeDate(ds) ? ` <button class="sm-date-change-btn" data-ds="${esc(ds)}" type="button">📅 날짜 변경</button>` : ''}</span>
               <span class="sm-time-row-val" id="smTV_${ds}">${window.formatVoteHour(t.s)}~${window.formatVoteHour(t.e)}</span>
             </div>
             ${chipsHtml ? `<div class="sm-time-preset-chips">${chipsHtml}</div>` : ''}
@@ -1404,7 +1399,9 @@
         $s('smBody').innerHTML = rowsHtml;
         $s('smFooter').innerHTML = `<button class="sched-confirm-btn" id="smNext2" type="button">다음 →</button>`;
 
-        if (_canChangeDate) $s('smDateChangeBtn')?.addEventListener('click', e => { e.stopPropagation(); renderDateChangePicker(); });
+        $s('smBody').querySelectorAll('.sm-date-change-btn').forEach(btn => {
+          btn.addEventListener('click', e => { e.stopPropagation(); renderDateChangePicker(btn.dataset.ds); });
+        });
 
         _days.forEach(ds => {
           bindGuestStepper({
@@ -1451,18 +1448,17 @@
         $s('smNext2').addEventListener('click', () => renderStep3());
       }
 
-      // ── 날짜 변경 (단건 수정 전용) ─────────────────────────────
+      // ── 날짜 변경 (행 단위) ─────────────────────────────────────
       // 등록된 요일 하나를 다른 날로 옮긴다 — 지금까지 입력한 시간/동반인원/게임은 그대로 새 날짜로
       // 옮기고, 저장 시 원래 날짜의 DB 등록을 삭제한다(saveAll 참조). 삭제+재등록을 한 번의
-      // 흐름으로 감싼 것뿐이라 DB 스키마 변경은 없다.
-      function renderDateChangePicker() {
-        // 시간/게임 데이터는 항상 _days[0](지금 작업 중인 키)에 들어있다 — 한 번 옮긴 뒤 또 옮기면
-        // _dateChangeFrom(최초 원본, 삭제 대상)과 _days[0](방금 고른 중간값)이 서로 달라지므로
-        // 데이터 복사 출발점은 반드시 _days[0]이어야 한다. _dateChangeFrom을 여기서 쓰면
-        // 두 번째 이동부터 이미 비운 옛 키를 복사해 데이터가 사라진다.
-        const currentDs = _days[0];
+      // 흐름으로 감싼 것뿐이라 DB 스키마 변경은 없다. 여러 날짜를 동시에 편집 중이면(목·일 등)
+      // 각 행이 독립적으로 이 picker를 열 수 있다 — currentDs로 "어느 행"인지 받는다.
+      function renderDateChangePicker(currentDs) {
         const DOW_KR = ['일','월','화','수','목','금','토'];
         const user = window.getKakaoUser?.();
+        // 같이 편집 중인 다른 행의 날짜들 — 옮기려는 곳이 그 날짜와 겹치면 두 행이 합쳐져야
+        // 하는 모호한 상황이라 막는다(자기 자신은 제외).
+        const otherRowDays = _days.filter(d => d !== currentDs);
         const dow = TODAY.getDay();
         const monday = new Date(TODAY);
         monday.setDate(TODAY.getDate() + (dow === 0 ? -6 : 1 - dow) + _dateChangeWeekOffset * 7);
@@ -1475,18 +1471,21 @@
           const past = d < TODAY;
           const isCurrent = ds === currentDs;
           // 지금 날짜(currentDs) 자신은 골라도 그대로(=취소)라 막지 않는다.
-          // 그 외에 내가 이미 등록해둔 다른 날은 고르면 두 등록이 합쳐져야 하는 모호한 상황이라 막는다.
-          const takenByMe = user && ds !== currentDs && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
-          const disabled = past || takenByMe;
+          // 그 외에 내가 이미 등록해둔 다른 날, 또는 지금 함께 편집 중인 다른 행의 날짜는
+          // 고르면 두 등록이 합쳐져야 하는 모호한 상황이라 막는다.
+          const takenByMe = ds !== currentDs && user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
+          const inOtherRow = ds !== currentDs && otherRowDays.includes(ds);
+          const disabled = past || takenByMe || inOtherRow;
           return `<button class="sm-day-chip${isCurrent?' is-sel':''}${past?' is-past':''}"
             data-ds="${ds}" type="button"${disabled?' disabled':''}>
             <span class="sm-dc-dow">${DOW_KR[d.getDay()]}</span>
             <span class="sm-dc-date">${d.getMonth()+1}/${d.getDate()}</span>
-            ${takenByMe?'<span class="sm-dc-mine">등록됨</span>':''}
+            ${takenByMe?'<span class="sm-dc-mine">등록됨</span>':inOtherRow?'<span class="sm-dc-mine">편집중</span>':''}
           </button>`;
         }).join('');
 
-        $s('smTitle').textContent = '날짜 변경';
+        const d0 = parseDate(currentDs);
+        $s('smTitle').textContent = `날짜 변경 · ${DOW_KR[d0.getDay()]} ${d0.getMonth()+1}/${d0.getDate()}`;
         // 헤더의 "← 날짜 더 선택"은 _step(=2)만 보고 renderStep1로 보내버려 이 picker와
         // 겹친다 — picker에 있는 동안은 숨기고, 취소(smDcCancel)로만 Step2에 돌아가게 한다.
         $s('smBack').style.visibility = 'hidden';
@@ -1500,8 +1499,8 @@
           <div class="sm-day-chips" id="smDcChips">${chips}</div>`;
         $s('smFooter').innerHTML = `<button class="sched-discard-btn" id="smDcCancel" type="button">취소</button>`;
 
-        $s('smDcPrev').addEventListener('click', () => { _dateChangeWeekOffset--; renderDateChangePicker(); });
-        $s('smDcNext').addEventListener('click', () => { _dateChangeWeekOffset++; renderDateChangePicker(); });
+        $s('smDcPrev').addEventListener('click', () => { _dateChangeWeekOffset--; renderDateChangePicker(currentDs); });
+        $s('smDcNext').addEventListener('click', () => { _dateChangeWeekOffset++; renderDateChangePicker(currentDs); });
         $s('smDcCancel').addEventListener('click', () => { _dateChangeWeekOffset = 0; renderStep2(); });
         $s('smDcChips').querySelectorAll('.sm-day-chip:not([disabled])').forEach(btn => {
           btn.addEventListener('click', () => applyDateChange(currentDs, btn.dataset.ds));
@@ -1511,14 +1510,17 @@
       function applyDateChange(oldDs, newDs) {
         _dateChangeWeekOffset = 0;
         if (newDs === oldDs) { renderStep2(); return; }
-        // 최초 1회만 "진짜 원본"(DB에 등록된 날짜)을 고정한다 — 두 번째부터 oldDs는 아직
-        // 저장 안 된 중간값이라 삭제 대상이 아니다. 이미 세팅돼 있으면 덮어쓰지 않는다.
-        if (!_dateChangeFrom) _dateChangeFrom = oldDs;
+        // 이 행이 이미 한 번 이상 옮겨진 적 있으면(재변경) 그 "진짜 원본"(DB 등록 날짜)을 이어받는다 —
+        // oldDs 자신은 아직 저장 안 된 중간값이라 삭제 대상이 아니다.
+        const trueOriginal = _dateChangeMap[oldDs] || oldDs;
+        delete _dateChangeMap[oldDs];
+        _dateChangeMap[newDs] = trueOriginal;
         _timeMap[newDs] = _timeMap[oldDs]; delete _timeMap[oldDs];
         _guestMap[newDs] = _guestMap[oldDs]; delete _guestMap[oldDs];
         _gameMap[newDs] = _gameMap[oldDs]; delete _gameMap[oldDs];
-        _days = [newDs];
-        _activeDay = newDs;
+        // 이 행만 새 날짜로 교체 — 같이 편집 중인 다른 날짜(행)는 그대로 둔다.
+        _days = _days.map(d => d === oldDs ? newDs : d).sort();
+        if (_activeDay === oldDs) _activeDay = newDs;
         renderStep2();
       }
 
@@ -2003,15 +2005,17 @@
               if (g.custom_name || g.game_id) allVoteGames.push({vote_date:ds, user_id:String(user.id), list_type:'learn', game_id:g.game_id??null, custom_name:g.custom_name??null, is_priority:g.is_priority??false, player_condition:g.player_condition??'any'});
             }
           }
-          // 날짜 변경(applyDateChange) 진행 중이었다면 원래 날짜의 등록을 삭제 — "옮기기"의 뒷정리.
-          // _days에 원래 날짜가 이미 없으므로 위 루프가 그 날짜는 안 건드렸다(안 지우면 두 날짜에 중복 등록됨).
-          if (_dateChangeFrom && !_days.includes(_dateChangeFrom)) {
-            const delResult = await window.CottageDB?.deleteMeetingVote(String(user.id), _dateChangeFrom);
-            if (!delResult?.success) console.error('[saveAll] 날짜 변경 — 원본 날짜 삭제 실패', delResult?.error);
-            allVotes = allVotes.filter(v => !(v.vote_date === _dateChangeFrom && String(v.user_id) === String(user.id)));
-            allVoteGames = allVoteGames.filter(g => !(g.vote_date === _dateChangeFrom && String(g.user_id) === String(user.id)));
-            _dateChangeFrom = null;
+          // 날짜 변경(applyDateChange) 진행 중이었던 행들 — 원래 날짜의 등록을 삭제(=옮기기의 뒷정리).
+          // 여러 행을 동시에 옮겼을 수 있어 _dateChangeMap 전체를 돈다. _days에 원래 날짜가 이미
+          // 없으므로 위 루프가 그 날짜는 안 건드렸다(안 지우면 두 날짜에 중복 등록됨).
+          for (const [newDs, originalDs] of Object.entries(_dateChangeMap)) {
+            if (originalDs === newDs || _days.includes(originalDs)) continue;
+            const delResult = await window.CottageDB?.deleteMeetingVote(String(user.id), originalDs);
+            if (!delResult?.success) console.error('[saveAll] 날짜 변경 — 원본 날짜 삭제 실패', originalDs, delResult?.error);
+            allVotes = allVotes.filter(v => !(v.vote_date === originalDs && String(v.user_id) === String(user.id)));
+            allVoteGames = allVoteGames.filter(g => !(g.vote_date === originalDs && String(g.user_id) === String(user.id)));
           }
+          _dateChangeMap = {};
           // 「지난 모임」 피커 캐시 무효화 — 여기서 방금 저장한 게임이 다음에 그 탭을
           // 열 때 바로 잡히게 한다. 캐시는 세션 내내 한 번 채우면 다시 안 채웠으므로
           // (fetchPickerData가 `=== undefined`일 때만 재조회), 저장 후에도 리로드 전까지
@@ -2045,7 +2049,7 @@
           _modalWeekOffset = weekOffset;
         }
         _historicalVotes = null;
-        _dateChangeFrom = null; _dateChangeWeekOffset = 0;
+        _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         _days = [...dates].sort();
         _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
