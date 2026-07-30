@@ -1401,6 +1401,7 @@ async function initSheetLikes(gameKey) {
 function emitLikesChanged(table, gameId, added) {
   if (!gameId) return;
   // customName은 직접입력 게임용 — 게임시트에는 실제 게임만 있어 항상 null (payload 형태 통일)
+  // CustomEvent 생성·dispatch는 정상 브라우저 환경에서 실패하지 않는다 — 방어적 삼킴, 로그 불필요
   try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: String(gameId), customName: null, added: !!added } })); } catch (_) {}
 }
 
@@ -1509,6 +1510,7 @@ function initSheetCommentGate() {
 }
 
 function getMyCommentIds() {
+  // localStorage 손상 시 "댓글 단 적 없음"으로 처리 — 낮은 위험(내 댓글 강조 표시만 영향)
   try { return JSON.parse(localStorage.getItem('cottage_my_comments') || '[]'); } catch { return []; }
 }
 function saveMyCommentId(id) {
@@ -2196,7 +2198,7 @@ function getMyPlayRecords(gameKey) {
   try {
     const d = localStorage.getItem(`cottage_play_records_${gameKey}`);
     if (d) return JSON.parse(d);
-  } catch {}
+  } catch {} // 새 포맷 파싱 실패 — 아래 구형 포맷 마이그레이션으로 폴백, 의도된 제어흐름(에러 아님)
   // 구형 단일 포맷 마이그레이션
   try {
     const old = localStorage.getItem(`cottage_played_${gameKey}`);
@@ -2209,6 +2211,7 @@ function getMyPlayRecords(gameKey) {
       return arr;
     }
   } catch {
+    // old가 JSON이 아니라 단일 id 문자열이던 가장 오래된 포맷 — 그 경우로 재폴백
     const old = localStorage.getItem(`cottage_played_${gameKey}`);
     if (old) {
       const arr = [{ id: old !== "1" ? old : null }];

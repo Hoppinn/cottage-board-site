@@ -89,6 +89,7 @@
     if (!page) return page;
     let key = String(page);
     try {
+      // 'http'로 시작하지만 URL로 못 만드는 기형 문자열 방어 — 실패하면 원본 key를 그대로 씀(낮은 위험)
       if (key.startsWith('http')) key = new URL(key).pathname;
     } catch (_) {}
     key = key.replace(/^https?:\/\/[^/]+/, '');

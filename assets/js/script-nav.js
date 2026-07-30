@@ -829,12 +829,14 @@ function bindGameCardEvents(){
   const ADMIN_UID = '4916417947';
 
   function _getUid() {
+    // localStorage 손상 시 "로그인 안 함"으로 처리 — 트래킹 귀속만 영향받는 낮은 위험
     try { return JSON.parse(localStorage.getItem('kakao_user') || 'null')?.id || null; } catch(_) { return null; }
   }
   function _isLocalhost() {
     return location.hostname === '127.0.0.1' || location.hostname === 'localhost';
   }
   function _isAdminVisitor() {
+    // localStorage 접근 실패 시 "관리자 아님"으로 처리 — 안전한 쪽으로 fail(트래킹을 계속 켜둠)
     try { return !!localStorage.getItem('cottage_is_admin') || String(_getUid() || '') === ADMIN_UID; } catch(_) { return false; }
   }
   // index.html은 플래너·기록 모달을 iframe으로 **미리 로드**한다. 각 iframe이 이 파일을 다시

@@ -980,7 +980,8 @@ function toDateStr(d) {
         ? `오늘 ${playCount}개의 플레이기록이 작성됐어요. 📝`
         : '';
     }
-  } catch (_) {
+  } catch (err) {
+    console.error('[히어로 오늘 통계]', err);
   } finally {
     // index.html#recommend 로 직접 진입 시 추천 섹션 자동 열기.
     // 히어로 통계 텍스트가 늦게 채워지며 #recommend 위쪽 높이가 바뀌므로,
@@ -1141,7 +1142,7 @@ async function initRecentPlay() {
         e.stopPropagation();
         const wrap = img.closest('.pr-rec-photo-wrap');
         const row = img.closest('.pr-rec-row');
-        try { window.openRecordLightbox?.(wrap, row, Number(img.dataset.idx || 0)); } catch (_) {}
+        try { window.openRecordLightbox?.(wrap, row, Number(img.dataset.idx || 0)); } catch (err) { console.error('[openRecordLightbox]', err); }
       });
     });
     body.querySelectorAll('.pr-rec-photo-more').forEach(el => {
@@ -1161,7 +1162,8 @@ async function initRecentPlay() {
         window.openOtherProfileSheet?.(span.dataset.userId);
       });
     });
-  } catch (_) {
+  } catch (err) {
+    console.error('[홈 최근기록 패널]', err);
     body.innerHTML = '<p class="rp-empty">불러오기 실패</p>';
   }
 }
@@ -1711,7 +1713,8 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         votes.filter(v => v.vote_date === selectedDate),
         voteGames.filter(g => g.vote_date === selectedDate),
       );
-    } catch (_) {
+    } catch (err) {
+      console.error('[홈 이번 주 모임 미리보기]', err);
       statusEl.textContent = '🎲 이번 주 모임 모집 중';
     }
   }

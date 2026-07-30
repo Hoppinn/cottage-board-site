@@ -25,6 +25,8 @@
     if (!raw) return [];
     if (raw.trimStart().startsWith('[')) {
       try { return JSON.parse(raw).filter(Boolean); } catch (_) {}
+      // 파싱 실패 시 아래 return [raw]로 폴백 — supabase-client.js의 같은 필드 처리와 동일하게
+      // "사진 1장은 배열이 아니라 단일 URL 문자열"인 경우를 그대로 통과시킨다(에러 아님)
     }
     return [raw];
   }

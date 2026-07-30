@@ -1877,6 +1877,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 목록 DOM을 고치는 기존 수신부들은 gameId가 없으면 그냥 무시한다.
   const _emitLikesChanged = (table, gameId, customName, added) => {
     if (!gameId && !customName) return;
+    // CustomEvent 생성·dispatch는 정상 브라우저 환경에서 실패하지 않는다 — 방어적 삼킴, 로그 불필요
     try { window.dispatchEvent(new CustomEvent('cottage-likes-changed', { detail: { table, gameId: gameId ? String(gameId) : null, customName: customName || null, added: !!added } })); } catch (_) {}
   };
 

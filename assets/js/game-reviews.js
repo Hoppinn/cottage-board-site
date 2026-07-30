@@ -770,7 +770,8 @@
     const row = btn.closest('.pr-rec-row');
     if (row.querySelector('.pr-inline-edit')) return;
     let rec = {};
-    try { rec = JSON.parse(row.dataset.record || '{}'); } catch (_) {}
+    // 같은 코드가 방금 써넣은 dataset이라 실패하면 직렬화 쪽 버그일 가능성이 높다 — 로그로 남긴다
+    try { rec = JSON.parse(row.dataset.record || '{}'); } catch (err) { console.error('[_openInlineEditForm] record parse', err); }
     const form = document.createElement('div');
     form.className = 'pr-inline-edit';
     // 현재 게임 표시 이름
@@ -1082,7 +1083,7 @@
         e.stopPropagation();
         const wrap = img.closest('.pr-rec-photo-wrap');
         const row = img.closest('.pr-rec-row');
-        try { _openRecordLightbox(wrap, row, Number(img.dataset.idx || 0), panel); } catch(_) {}
+        try { _openRecordLightbox(wrap, row, Number(img.dataset.idx || 0), panel); } catch (err) { console.error('[_openRecordLightbox]', err); }
       });
     });
     panel.querySelectorAll('.pr-rec-photo-more').forEach(el => {

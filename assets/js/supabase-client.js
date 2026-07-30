@@ -99,6 +99,7 @@ window._cottageSess = (function () {
   // game-reviews.html이 iframe으로 임베드된 경로에선 window.dispatchEvent가 부모(홈)에
   // 안 닿는다 — postMessage도 같이 쏴야 부모 쪽 리스너가 받는다.
   function _emitRecordChanged() {
+    // dispatchEvent/postMessage는 정상 브라우저 환경에서 실패하지 않는다 — 방어적 삼킴, 로그 불필요
     try { window.dispatchEvent(new CustomEvent('cottage-record-changed')); } catch (_) {}
     try { if (window.parent && window.parent !== window) window.parent.postMessage({ type: 'cottage-record-changed' }, '*'); } catch (_) {}
   }

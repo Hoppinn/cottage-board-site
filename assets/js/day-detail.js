@@ -900,6 +900,7 @@
     else _pmReveal();
     // 조건부 재로드: 이미 플래너 로드됨 → 상태만 선언 / 아니면 로드 후 ready 대기
     let samePage = false;
+    // 크로스오리진이면 .contentWindow.location 접근 자체가 SecurityError를 던진다 — 정상 경로
     try { samePage = !!_pmFrame.contentWindow?.location?.pathname?.includes('club-schedule'); } catch (_) { samePage = false; }
     if (_pmReady && samePage) {
       _pmDeclare(opts);

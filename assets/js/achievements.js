@@ -591,7 +591,7 @@
         `</div></div>`;
 
       return { html, earnedIds, titleTotal: TITLE_DEFS.length };
-    } catch (_) { return { html: '', earnedIds: new Set(), titleTotal: TITLE_DEFS.length }; }
+    } catch (err) { console.error('[buildTitleSection]', err); return { html: '', earnedIds: new Set(), titleTotal: TITLE_DEFS.length }; }
   }
 
   // 🚨 대표 표시를 고치는 자리는 여기 두 함수뿐이다 (2026-07-21 신설).
