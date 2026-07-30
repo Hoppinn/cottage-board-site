@@ -2231,8 +2231,16 @@
                 }) : ''}
               </div>`;
             }).join('');
+            // 🚨 "방문 수와 명 수는 다른 값"이 하루짜리 기간(type==='day')에선 거짓말이 된다 —
+            // 방문N은 (사람·페이지·날짜) 유니크인데 날짜가 하루뿐이면 날짜 차원이 사라져
+            // 방문N=명N이 **항상** 성립한다(사용자 스크린샷: 방문12=👥12명, 우연이 아니라 필연).
+            // 여러 날짜를 보는 기간에서만 실제로 갈린다 — 그 경우만 "다른 값" 문구를 쓴다.
+            const _dayCoincide = type === 'day';
+            const _visitorCaption = _dayCoincide
+              ? '<span style="font-weight:400">· 하루만 보고 있어 방문 수 = 명 수(날짜가 하나뿐이라 항상 같음)</span>'
+              : '<span style="font-weight:400">· 방문 수와 명 수는 다른 값(한 사람이 여러 날 오면 방문 수가 더 큼)</span>';
             pagesBodyEl.innerHTML = topPages.length
-              ? `<div style="font-size:11px;color:var(--muted);font-weight:600;margin:4px 2px 2px" title="방문 = 같은 사람·같은 날은 1회로 접은 값(위 막대와 같은 값). 명 = 그 방문을 만든 사람 수라 서로 다릅니다.">👥 누가 봤나 · 기간 ${escH(label || '전체')} <span style="font-weight:400">· 방문 수와 명 수는 다른 값</span></div>${rowsHtml}`
+              ? `<div style="font-size:11px;color:var(--muted);font-weight:600;margin:4px 2px 2px" title="방문 = 같은 사람·같은 날은 1회로 접은 값(위 막대와 같은 값). 명 = 그 방문을 만든 사람 수. 기간이 하루면 두 값이 항상 같고, 여러 날이면 갈립니다.">👥 누가 봤나 · 기간 ${escH(label || '전체')} ${_visitorCaption}</div>${rowsHtml}`
               : '<div class="admin-empty">페이지 데이터 없음</div>';
           }
         }
