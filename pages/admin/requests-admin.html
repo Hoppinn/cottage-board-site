@@ -1260,11 +1260,11 @@
       // (#memberCountBadge 갱신 코드가 여기 있었으나 그 요소가 HTML에 없어 항상 no-op이었다 — #4, 2026-07-19 제거.
       //  회원 수는 아래 sumMemberTotal 카드가 보여준다.)
       const _now = Date.now();
+      // 회원 탭(명부) 안쪽 미니카드는 날짜 네비가 없으므로(원칙 ④) 고정 30일 그대로 둔다.
+      // 요약 탭의 sumMemberNew는 draw()가 선택 기간에 맞춰 갱신한다(아래 "요약: 회원 카드").
       const cnt30dNew = allProfiles.filter(p => p.first_seen_at && _now - new Date(p.first_seen_at).getTime() < 30 * 86400000).length;
       const _sumMemberTotal = document.getElementById('sumMemberTotal');
       if (_sumMemberTotal) _sumMemberTotal.textContent = allProfiles.length + '명';
-      const _sumMemberNew = document.getElementById('sumMemberNew');
-      if (_sumMemberNew) _sumMemberNew.textContent = '신규 ' + cnt30dNew + '명 (30일)';
       const summaryCardsHtml = `<div class="admin-summary-grid" style="grid-template-columns:1fr;margin-bottom:12px">
         <div class="admin-summary-card"><div class="admin-summary-label">30일 신규</div><div class="admin-summary-value">${cnt30dNew}명</div></div>
       </div>`;
@@ -2223,7 +2223,11 @@
                   ${ddToggle(people.length)}
                 </div>
                 ${people.length ? ddPanelHtml(people, {
-                  note: `이 페이지를 본 사람 · 체류 긴 순 · 회원 ${memCnt}명 · 비회원 ${people.length - memCnt}명`,
+                  // 개인별 회수(meta)는 raw 행 수(같은 날 중복 방문도 각각 셈)라, 위 "방문 N"
+                  // (사람+페이지+날짜 유니크로 접은 값)과 기준이 다르다 — 안 밝히면 합계가
+                  // 안 맞아 보인다(사용자 신고, 2026-07-30). 방문N 자체는 #27과 같은 이유로
+                  // 통일하지 않는다 — "며칠에 걸쳐 왔나"와 "몇 번 접속했나"는 다른 질문이다.
+                  note: `이 페이지를 본 사람 · 체류 긴 순 · 회원 ${memCnt}명 · 비회원 ${people.length - memCnt}명 · 아래 회수는 접속 건수(같은 날 중복 포함)로 위 방문수와 기준이 다름`,
                 }) : ''}
               </div>`;
             }).join('');
@@ -2412,6 +2416,16 @@
               ? _topP.map(([p, n]) => `<span style="white-space:nowrap;display:block;overflow:hidden;text-overflow:ellipsis">${escH(_PAGE_SHORT[p] || PAGE_LABEL[p] || p)} <span>(${n}회)</span></span>`).join('')
               : '—';
           }
+        }
+
+        // ── 요약: 회원 카드 신규 (날짜 연동) ─────────────────────────────
+        // 전체 회원 수(sumMemberTotal)는 명부 총량이라 기간과 무관 — loadAnalytics에서 1회 고정.
+        // 신규 수만 선택 기간(start/end)에 맞춰 갱신한다. 라벨은 하드코딩하지 않고
+        // 실제 선택값에서 파생시킨다(원칙 ① — #9·#11이 라벨 하드코딩으로 터진 전례).
+        {
+          const _newMembers = (start || end) ? filterByRange(allProfiles, start, end, 'first_seen_at') : allProfiles;
+          const _sumMemberNewEl = document.getElementById('sumMemberNew');
+          if (_sumMemberNewEl) _sumMemberNewEl.textContent = `신규 ${_newMembers.length}명 · ${label}`;
         }
 
         // ── 요약: 이벤트 카드 (날짜 연동, loadEventStats 이후 갱신됨) ────
