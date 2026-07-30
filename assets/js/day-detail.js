@@ -899,6 +899,12 @@
       if (_pmPending) { const f = _pmPending; _pmPending = null; f(); }
     }
     if (e.data?.type === 'cottage-meeting-saved') { _pmDirty = true; _pmOnDirty?.(); } // 저장 즉시 부모 갱신(닫을 때만 기다리지 않음)
+    // 🚨 club-schedule.html의 등록/수정 시트는 저장 성공 직후 *자기 자신*을 자동으로
+    // 닫는다(is-quick-entry라 돌아갈 주간 뷰가 없어서) — 그런데 이 바깥 래퍼(#__plannerModal)는
+    // 그 신호를 안 듣고 있었다. 그래서 안쪽 시트만 사라지고 **바깥 흰 박스가 빈 채로 계속
+    // 떠 있는 채**로 남아, 사용자가 직접 ✕를 눌러야만 이 모달로 복귀됐다("등록해도 빈 흰
+    // 배경 모달이 남는다" — 2026-07-29~30 재지적의 실제 원인). 여기서도 같이 닫는다.
+    if (e.data?.type === 'cottage-quick-entry-closed') { _pmCloseModal(); }
   });
   /**
    * 날짜 전체 모임 모달 (홈 미리보기 카드 클릭 — 유저 비중심, 날짜 집계 뷰)
@@ -1255,12 +1261,16 @@
     // (시트를 닫으면 이 모달로 복귀 — 닉네임→보드와 같은 레이어 방식).
     _bindDdGameHitClicks(el);
 
-    // 등록/수정 → 플래너. 닉네임→보드·게임행→게임시트와 같은 레이어 방식 —
-    // 이 모달을 닫지 않는다(플래너 --z-shelf 9600 > 이 모달 9050, 위 CSS 주석이
-    // 이미 이 스택을 예정해뒀다). 처음엔 el.remove()로 닫고 다시 열었다가
-    // "배경이 사라지고 흰 창만 뜬다"는 지적을 받아 되돌렸다(2026-07-29) —
-    // 저장하고 플래너를 닫으면 onDirtyClose가 최신 데이터로 이 모달을 다시 그린다
-    // (그 사이 이 모달은 화면엔 안 보이지만 DOM엔 계속 있었을 뿐이라 깜빡임이 없다).
+    // 등록/수정 → 플래너. 이 모달을 닫지 않는다(닉네임→보드·게임행→게임시트와 같은
+    // 레이어 방식 — 플래너 --z-shelf 9600 > 이 모달 9050이라 겹쳐 뜬다).
+    //
+    // ⚠️ __openPlannerFor(홈 전용 빠른진입, index-page.js)로 바꿔봤다가 되돌렸다
+    // (2026-07-29) — is-quick-entry 모드는 "뒤에 아무 것도 없다"는 전제로
+    // .planner-sheet-dim/.planner-sheet-panel/.planner-sheet-frame을 전부
+    // background:transparent로 만든다(style.css:6910~6916). 그 전제가 이 화면에선
+    // 깨진다 — 이 모달(rich한 상세 내용)이 뒤에 있는데 그게 훤히 비쳐 보였다
+    // (steady-state 스크린샷으로 확인, opacity 전환 문제 아님). window.openPlannerModal
+    // (day-detail.js 전용, 자체 어두운 배경의 #__plannerModal)로 되돌린다.
     el.querySelector('.dd-planner-btn')?.addEventListener('click', () => {
       window.CottageDB?.trackEvent('meeting_detail_planner_click');
       window.openPlannerModal?.({
