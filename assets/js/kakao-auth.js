@@ -603,36 +603,9 @@ function _bindActivityTogglesAndMore(subBody) {
 function _bindRecordSubsheet(subBody, ctx) {
   const { _getGameKeyById, _allPhotoData, _PHOTO_SHOW } = ctx;
           _bindActivityTogglesAndMore(subBody);
-          // 게임평 더보기/닫기 — 토글 클릭으로 activity list 열린 후 측정
-          const _bindReviewToggles = container => {
-            container.querySelectorAll('.profile-review-text').forEach(el => {
-              if (el.dataset.toggleBound) return;
-              // previewCount=1이라 2번째 게임평부터는 .profile-more-wrap.is-hidden(display:none) 안에서
-              // 시작한다 — 그 상태로 재면 scrollHeight===clientHeight===0이라 매번 "안 잘림"으로 오판되고,
-              // toggleBound를 먼저 찍어버리면 "더 보기"로 나중에 드러나도 다시 안 잰다(2026-07-30 발견:
-              // 최근 게임평 1건만 버튼이 붙고 그 아래는 영영 안 붙던 원인). 안 보이는 동안은 아예 건너뛰고
-              // toggleBound도 찍지 않아 보일 때 다시 시도되게 한다.
-              if (el.offsetParent === null) return;
-              el.dataset.toggleBound = '1';
-              const needsToggle = el.scrollHeight > el.clientHeight + 3;
-              if (!needsToggle) return;
-              const btn = document.createElement('button');
-              btn.className = 'profile-review-toggle-btn'; btn.type = 'button'; btn.textContent = '더보기';
-              el.after(btn);
-              btn.addEventListener('click', e => {
-                e.stopPropagation();
-                const exp = el.classList.toggle('is-expanded');
-                btn.textContent = exp ? '접기' : '더보기';
-              });
-            });
-          };
-          _bindReviewToggles(subBody);
-          subBody.addEventListener('click', e => {
-            if (e.target.classList.contains('profile-more-btn')) setTimeout(() => _bindReviewToggles(subBody), 0);
-          });
-          subBody.querySelectorAll('.profile-activity-toggle, .profile-sub-toggle').forEach(toggle => {
-            toggle.addEventListener('click', () => setTimeout(() => _bindReviewToggles(subBody), 0));
-          });
+          // 게임평 텍스트: 2줄로 자르고 항목별 "더보기"를 붙이던 방식은 2026-07-30 제거 —
+          // 대부분 짧은 글인데 거의 매 항목마다 잘려서 "더보기"가 반복되니 오히려 산만하고,
+          // 텍스트와 떨어진 줄에 떠서 어느 리뷰 것인지도 헷갈렸다(사용자 지적). 그냥 전문 표시.
           // 게임명 + 썸네일 클릭 → 게임 기록 시트
           subBody.querySelectorAll('.profile-activity-item[data-game-id]').forEach(li => {
             const gameId = li.dataset.gameId;
