@@ -4463,7 +4463,7 @@ body.embed-mode {
    (.sched-multi-overlay, rgba(0,0,0,.35))가 이미 한 겹 있어서 바깥 기본값(.5)까지 겹치면
    플래너 미리보기의 닉네임 밑 ✎(홈 전용 #plannerSheetModal, 바깥 dim이 투명이라 안쪽 .35만
    보임)보다 눈에 띄게 더 어두워 보였다(2026-07-30 사용자 지적). .5 → .35로 맞춘다. */
-.planner-modal-overlay.is-quick-entry{padding:0;background:rgba(0,0,0,0.35);}
+.planner-modal-overlay.is-quick-entry{padding:0;background:rgba(0,0,0,0.25);}
 .planner-modal-overlay.is-quick-entry .planner-modal-box{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;box-shadow:none;background:transparent;}
 .planner-modal-overlay.is-quick-entry .planner-modal-close{display:none;}
 .planner-modal-overlay.is-quick-entry .planner-modal-frame{background:transparent;}
