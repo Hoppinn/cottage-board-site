@@ -81,36 +81,7 @@
 
 ---
 
-### 론칭 후 이월 (2026-07-09 기준)
-
-모임 개편 완료 후 미착수 또는 기획만 된 항목. 론칭 후 별도 세션에서 진행.
-
-| 항목 | 분류 | 비고 |
-|------|------|------|
-| 집계 모달 리디자인 | feat | 센터모달 집계 화면 개편. 이식 후보: renderHourlyBreakdown/renderOverlap (git 8cdc4df 직전 club-schedule.html) |
-| 내 등록 관리 동선 | feat | Step 1 "등록됨" 칩 클릭 → 해당 날짜 편집 모드 직행. 009 upsert 경로 선확인 필요 |
-| 여러 주차 사전 등록 확장 | feat | 현재 Step1 주 네비로 선택 가능하나, 주 단위 복수 예약(사전등록 대량 입력) UX 미완 |
-| Hero CTA A/B | design | 버튼 문구·보조 문구·크기 비교 테스트 |
-| 관리자 분석 2·3단계 / 퍼널 | feat | → **[admin-analytics.md](admin-analytics.md) §5**로 이관. 2단계(요일별·재방문율)는 **방문 탭에 `disabled` 자리표시자가 이미 있음** — 거기부터 붙이면 됨 |
-| 게임위치 카테고리 스티키 헤더 | design | 게임위치 바텀시트 내 카테고리 헤더 고정 |
-| 소개글 알림 개별 분리 | feat | 카카오/Discord 알림에서 Make 라우터 분기 (코드 외 작업) |
-| ~~`played_at NULL` 소급 판단~~ | ✅ | **2026-07-22 「그대로 둔다」로 결정 — 재등록 금지**(폴백이 작성일로 대신하고 오차는 중앙값 1일. 일괄 추정은 65%만 맞고 추정값이 확정값으로 굳는다. 근거는 git log). 되살리려면 "특정 건의 실제 날짜를 안다"는 근거가 먼저 있어야 한다 |
-| 추천게임 전체카드 고정헤더 점검 | verify | 추천 필터 전체화면 모드에서 헤더 sticky 동작 확인 |
-| 이번 주 모임 섹션 추가 기획 | feat | 날짜별 미니 막대 상세화, 모임 참여 버튼 연결 (낮은 우선순위) |
-
----
-
-### 코드 품질 주석 (리팩토링 참고용)
-
-- `day-detail.js` `openDateMeetingModal(voteDate, votes, voteGames, opts)`의 **`opts`가 함수 안에서 한 번도 안 읽힌다** — JSDoc에는 `onPlannerClick`이 있고 [index-page.js:1477](../assets/js/index-page.js#L1477)이 실제로 넘기지만 소비처 0건(2026-07-22 센터모달 z-index 작업 중 발견). 홈 미리보기 → 이날 모임 상세 모달에 「플래너로」 진입 버튼이 없다는 뜻이라, **죽은 인자를 지울지 버튼을 붙일지는 기획 판단**이다. 같은 자리에서: 홈은 공용 `openPlannerModal`(day-detail.js, "페이지별 복제 금지" 주석 있음)을 안 쓰고 자체 `plannerSheetModal`을 갖는데 **빠른진입(is-quick-entry) 때문이라 정당한 분기**다 — 그 주석만 실상과 어긋나 있다.
-- `requests-admin.html` `expandVisitorMore`가 **기존 `#visitorCloseBtn`을 안 지우고** 새로 만든다 → 두 번 부르면 「닫기 ▲」가 두 개 생긴다(같은 id 중복). **실사용에선 더보기 버튼이 스스로 숨어 두 번 못 누르므로 화면 버그는 아니다** — 검증 스크립트가 프로그램으로 두 번 불러 드러났다(2026-07-22 기간 선택 작업 중 발견). 고치면 한 줄(`applyVisitorFilter`처럼 앞에서 `?.remove()`).
-- `kakao-auth.js` 취향보드 이벤트 핸들러: for 루프 + 이벤트 위임 혼용. 추후 서브파일 분리 검토.
-- `_buildTasteGameItems` 더보기: 아이템 추가 시 `insertBefore` 처리. 대량 추가 시 재렌더 방식 검토.
-- `script.js` `onSheetLike`/`onSheetCurious`: is-active wrap 동기화가 여러 곳에 분산. 리팩토링 시 `_setLikeActive(active)` / `_setCuriousActive(active)` 헬퍼 함수로 통합 권장. (142차-57에서 onSheetLike 단순화 — 확인 토스트 제거)
-- `play-records-utils.js` `openLightbox` — 부모가 `cottage-close-lightbox`로 닫을 때 game-reviews의 수신부가 `.pr-lightbox`를 **DOM에서 직접 제거**해 `closeLb()`를 안 거침 → `document`의 `keydown`(onKey) 리스너가 해제되지 않고 누적. 현재 사용자 영향은 없음(고아 핸들러가 detached 노드에 `remove()`+중복 postMessage를 쏘는 정도). 정리하려면 iframe 수신부가 노드 제거 대신 닫기 함수를 호출하도록 바꿔야 함. 2026-07-16 발견(버그 수정 중, BUG FIX MODE라 보고만).
-- **`pages/admin/requests.html`(공개 요청 탭 페이지)와 `pages/admin/requests-admin.html`(분석 대시보드의 요청관리 모달)이 game_requests/snack_requests/suggestions 렌더링·상태 피커를 각각 독립적으로 중복 구현** — STATUS_LABEL/STATUS_CLASS, 상태 설정 드롭다운, 삭제/투표 핸들러가 두 파일에 따로 존재해 한쪽만 고치면 다른 쪽이 조용히 뒤처진다(2026-07-27 간식 상태피커 추가 중 실제로 requests-admin.html만 먼저 고쳤다가 사용자가 실사용 화면인 requests.html에서 다르다고 지적해 발견). 공용 렌더 함수로 통합하면 좋지만 두 화면이 관리자 판별 방식(`isAdmin()` vs 항상 관리자)·표시 범위(공개 vs 관리자 전용)가 달라 단순 추출은 아님 — 리팩토링 착수 전 두 화면의 실제 사용 빈도부터 확인 필요.
-- `pages/club/club-schedule.html` `calcSummary`/`calcOverlap`(겹침 시간대 계산, ~40줄)이 **완전히 죽은 코드다** — 둘 다 서로만 호출하고 파일 어디서도 `calcSummary(`가 안 불린다(2026-07-28 모임시간 30분단위 작업 중 발견, 겹침 히트맵 루프를 고치려다 실사용처가 `day-detail.js`의 `_buildMeetingStatsHtml`(자체 MIN_H=10/MAX_H=24)뿐임을 확인). 삭제해도 안전하지만 이번 작업 범위 밖이라 손 안 댐.
-- `kakao-auth.js` `_buildMiniBarWeekHtml`(모임보드 이번 주 미니바)이 `day-detail.js`의 `buildBarsInCard`와 **별개의 독립 렌더러**다(위치 산술 `total=14` 하드코딩, 자체 구현). day-detail.js를 안 불러오는 페이지에서도 kakao-auth.js는 로드되므로(club.html·requests.html 등) 전역 헬퍼에 기대면 크로스파일 갭이 난다 — 2026-07-28 `formatVoteHour` 추가 때 실제로 이 문제를 피하려고 kakao-auth.js에 같은 로직을 로컬로 중복시켰다(`_fmtVoteH`). 통합하려면 day-detail.js를 모든 kakao-auth.js 로드 페이지에 추가하거나, 이 렌더러 자체를 공용 파일(예: script.js)로 옮겨야 함.
+> ✅ **「론칭 후 이월」·「코드 품질 주석」 목록은 2026-07-30 정리하며 폐기 — 재등록 금지.** 전부 버그 아닌 기능 아이디어/코드 미학 메모라 「닫기 우선」 기준상 계속 열어둘 이유가 없었다(무인 운영 전환 후엔 아무도 픽업할 사람이 없음). 필요하면 git log(이 파일의 과거 버전)에서 그대로 복원 가능. **예외 2건은 실제로 처리**: `expandVisitorMore` id 중복(`requests-admin.html`)은 그 자리에서 1줄 수정, `calcSummary`/`calcOverlap`(`club-schedule.html`, 완전 죽은 코드)은 삭제. **`requests.html`/`requests-admin.html` 렌더 중복**(이미 한 번 실제 사고로 이어진 진짜 위험)만 [REFACTOR_CHECKPOINT.md](REFACTOR_CHECKPOINT.md) 「RQ1」으로 옮겨 계속 추적.
 
 ---
 
@@ -173,13 +144,7 @@
 > ✅ **R10c·박스모달·카드요약 종결 (2026-07-17~21, 스모크 통과).** 재건드릴 때 SSOT를 볼 것 — **z레이어 규칙 = style.css 변수 주석**("9500 위로 올리지 말 것" 등 gotcha 포함), **서브시트 이벤트·backTo = [js-api.md](js-api.md)**. 상세 경과는 git log.
 > - 📌 **시트에 겹치는 새 모달 3규칙**: ①게임시트엔 Esc 핸들러가 없으니 겹치는 모달은 Esc를 **자체 차단**(안 하면 시트 뒤에서 조용히 닫혀 복귀 대상이 사라짐) ②`.mb-add-overlay`(9300, 공유 클래스 4곳)를 **게임시트 위에서** 여는 호출부를 새로 만들면 시트에 가려짐 ③`.no-anim`은 **복귀 경로에만**(새로 여는 건 `sheetUp`으로 올라와야 정상).
 > - ⚠️ **카드 요약은 취향만 실시간**(`cottage-likes-changed`→`_syncTasteCard`), 나머지 5종(기록·시간·모임·교환권)은 오픈 시 1회 — 서브시트 안에서 값이 안 바뀌어 증상 없음(나오면 `_syncTasteCard` 형제 함수).
-- [ ] **[기술부채] Phase 1~3 감사 잔여 항목** (2026-06-20~07-15 감사분 → 2026-07-17 `REFACTOR_CHECKPOINT.md` 압축 시 이관. **그 문서에서 감사 상세는 삭제됐으므로 여기가 유일한 기록**) — R1~R12로 처리되지 않고 남은 P2 위주 항목. ⚠️ **전부 "감사 시점 기록"이라 착수 전 재검증 필수** — 감사 이후 코드가 바뀌어 stale이 된 전례가 많다(GDA2·SC1·SC4는 재검증해 보니 **이미 해소돼 있었음**).
-  - **2026-07-17 실측으로 닫은 것**: ✅ **GR4 종결** — `isParticipant`/`score_note` 중복의 짝이던 `buildGameBody`가 R1에서 삭제돼 **중복 자체가 소멸**. ✅ **PS2 종결** — scripts/ 폴더 항목이 [PROJECT_STRUCTURE §1](PROJECT_STRUCTURE.md)에 이미 기재됨.
-  - **2026-07-17 실측으로 축소된 것(저가치, 굳이 안 해도 됨)**: 🟡 **SC7** — `_OWNER_ID` 3중복 → `supabase-client.js`엔 **1곳뿐**([1784](../assets/js/supabase-client.js#L1784)), `kakao-auth.js`의 `OWNER_KAKAO_ID`와 크로스파일 중복만 잔존. 🟡 **KA7** — R3가 `_safeInt` regex 파싱을 없애 **취약성은 해소**됐고 하드코딩 fallback(`?? 47`·`?? 641`·`?? 96`, [kakao-auth.js:2027~2033](../assets/js/kakao-auth.js#L2027))만 남음. 정상 경로는 build 함수가 반환하는 실제 total을 쓰므로 이 숫자는 **함수가 실패할 때만** 노출된다(= 캐릭터가 47종을 넘어도 평소엔 안 틀림).
-  - **2026-07-17 실측으로 닫은 것 (추가)**: ✅ **GDA3 종결 — 오탐이었고, 실체인 dead code는 2026-07-22 삭제**(git log). **⚠️ 교훈만 남긴다**: 감사가 코드 구조만 보고 **소비처를 확인하지 않은 채 영향을 추정**했고("검색 가중치 2배"), 그 추정이 §0 우선순위 2번("유일한 버그성")까지 올라왔다. 실제 검색은 `matchOwnedSearch`·네비 검색 둘 다 `title`/`originalTitle`만 비교한다. → **이 목록에 "실동작 영향 가능" 항목은 0개**다.
-  - **2026-07-17 실측으로 유효 확인**: **PS1** — `package.json`에 npm 스크립트 8개(`check`/`build:master`/`translate*`/`build`)가 있는데 [PROJECT_STRUCTURE §8](PROJECT_STRUCTURE.md)은 `node …` 직접 경로만 기재.
-  - **미검증(감사 시점 기록 그대로, 전부 P2 구조 지적)**: PU5(play-records-utils 헤더 주석이 전역 8개 중 3개만 기재) · PU6(`attachAc` 61줄·`openLightbox` 56줄 과대) · PU7(`initTagInput`이 `split(',')`이라 **쉼표 포함 참여자 이름 불가** — 미문서화 제약) · GDA4(`window.COTTAGE_GAMES` 즉시 생성 = 로드 순서 의존) · GDA5(`getGameCardData`/`getGameDetailData`/`getRecommendData`가 동일 파싱을 각자 실행) · ACH2(`checkAchievements` 175줄 등 과대함수 4개) · GR5(자동완성 `onSelect`→Enter 디스패치 2중 구현) · GR7(`KeyboardEvent` 디스패치로 `initTagInput` 간접 트리거 = 깨지기 쉬운 결합) · SC6(`redeemVoucher` TOCTOU — 잔액확인↔insert 사이 race, 단일 사용자 패턴상 현실 위험 낮음) · SC8(`window.CottageDB={…}` 뒤에 함수 절반이 정의 = 호이스팅 의존, 실제 버그 없음) · CSS4(style.css 7395줄 단일 파일) · S1(PROJECT_STATE의 134~135차 session_key 내러티브 혼란 — 그 기록이 슬림화로 이미 사라졌을 수 있음).
-  - **여기 넣지 말 것(이미 다른 곳에 등록됨)**: A1·A2·A3 → 위 `squirrel_lv5`·`rare/` 경로 항목 / A4 → §2 「TITLE_DEFS 미배정 칭호 3개」 / PU4·ACH6(escH 사본) → **2026-07-22 GS5로 종결** / GS4·GS7·DD4·IP1~3 → `REFACTOR_CHECKPOINT.md`.
+> ✅ **「[기술부채] Phase 1~3 감사 잔여 항목」은 2026-07-30 폐기 — 재등록 금지.** 2026-06-20~07-15 감사분 중 R1~R12로 처리 안 된 P2 구조 지적(PU5~7·GDA4~5·ACH2·GR5·GR7·SC6·SC8·CSS4 등) — 실측으로 "실동작 영향 가능 항목 0개"임이 이미 확인돼 있었고 나머지는 전부 "미검증 stale 감사 기록"이었다. 코드 미학 지적이라 durability 우선 기준(2026-07-30)상 유지할 이유가 없다. 필요하면 git log(이 파일의 과거 버전)에서 복원.
 - [ ] **[verify] 오늘 고친 업적 버그 2건 실서버 확인** (2026-07-15) — ①게임평 진행도(커밋 22488d7): 게임평 쓰고 성장보드에서 review 진행도(게임평 N개 기준)가 오르는지 ②플레이기록 수정 후 업적(커밋 7a1b68d): 기존 기록에 사진 후추가/참여자 수정으로 photo·play·balance 임계값 채웠을 때 즉시 업적 뜨는지. 브라우저 눈 확인만 남음.
 > ✅ **「한 플레이기록에 여러 사람의 게임평」은 2026-07-22 종결 — 재등록 금지.** `game_comments.record_id`(마이그레이션 014, 운영 적용 완료)로 게임평을 특정 기록에 매단다. 새 기록을 만들지 않는다(옛 「남 세션 참여」 삽입 접근은 되돌림). 뽁님 7/11 게임평 2건(레비아탄→기록97·원더랜드→기록96)이 호핀 기록 아래 뜨는 것을 로컬 확인. **에버델은 호핀 7/11 기록이 없어 제외** — 되살리려면 「호핀이 에버델을 플레이한 날짜」가 먼저다. 구조는 [js-api.md](js-api.md) `getRecordComments`·`onOpenCommentInput` ①첨부모드, 근거·설계는 git `7365308c`. **남은 것: push(사용자) + 아래 스모크 1건(쓰기 경로).**
 
