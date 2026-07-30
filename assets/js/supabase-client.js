@@ -1986,10 +1986,14 @@ window._cottageSess = (function () {
         // 읽음 키는 전부 지평선에 흡수돼 중복이다. 이게 배열 크기의 상한선 역할.
         // 단 'notice:' 접두사(전체공지·교환권공지 확인)는 시간 지평선과 무관한 1회성
         // ack라 지평선 리셋에 휩쓸리면 안 된다 — 보존한다.
-        const { data: cur } = await db.from('profiles').select('notif_read_keys').eq('user_id', userId).maybeSingle();
-        const kept = (Array.isArray(cur?.notif_read_keys) ? cur.notif_read_keys : []).filter(k => k.startsWith('notice:'));
+        const { data: cur, error: selError } = await db.from('profiles').select('notif_read_keys').eq('user_id', userId).maybeSingle();
+        if (selError) console.error('[updateNotifSeenAt] select', selError);
+        // select 실패 시 현재 값을 모르니 notif_read_keys를 건드리지 않는다 — 잘못 비우면
+        // notice:* ack가 조용히 사라져 공지가 재노출된다(방금 고친 버그의 재발 경로가 되므로 방어).
+        const _updatePayload = { notif_seen_at: timestamp };
+        if (!selError) _updatePayload.notif_read_keys = (Array.isArray(cur?.notif_read_keys) ? cur.notif_read_keys : []).filter(k => k.startsWith('notice:'));
         const { error } = await db.from('profiles')
-          .update({ notif_seen_at: timestamp, notif_read_keys: kept })
+          .update(_updatePayload)
           .eq('user_id', userId);
         if (error) console.error('[updateNotifSeenAt]', error);
       } catch (err) { console.error('[updateNotifSeenAt]', err);}
