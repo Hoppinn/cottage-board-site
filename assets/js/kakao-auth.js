@@ -607,6 +607,12 @@ function _bindRecordSubsheet(subBody, ctx) {
           const _bindReviewToggles = container => {
             container.querySelectorAll('.profile-review-text').forEach(el => {
               if (el.dataset.toggleBound) return;
+              // previewCount=1이라 2번째 게임평부터는 .profile-more-wrap.is-hidden(display:none) 안에서
+              // 시작한다 — 그 상태로 재면 scrollHeight===clientHeight===0이라 매번 "안 잘림"으로 오판되고,
+              // toggleBound를 먼저 찍어버리면 "더 보기"로 나중에 드러나도 다시 안 잰다(2026-07-30 발견:
+              // 최근 게임평 1건만 버튼이 붙고 그 아래는 영영 안 붙던 원인). 안 보이는 동안은 아예 건너뛰고
+              // toggleBound도 찍지 않아 보일 때 다시 시도되게 한다.
+              if (el.offsetParent === null) return;
               el.dataset.toggleBound = '1';
               const needsToggle = el.scrollHeight > el.clientHeight + 3;
               if (!needsToggle) return;
