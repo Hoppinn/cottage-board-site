@@ -411,6 +411,10 @@
       position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
       font-size: 8px; line-height: 1; color: #c0843a; white-space: nowrap;
     }
+    .sm-dc-original {
+      position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+      font-size: 8px; line-height: 1; color: var(--green); white-space: nowrap; font-weight: 700;
+    }
     .sm-day-chip.is-registered { border-color: #d8b88a; }
     .sm-day-chip.is-registered.is-sel { border-color: var(--green); background: #f0f7f0; }
     .sm-dc-cnt { font-size: 9px; color: #b0a090; line-height: 1; }
@@ -1459,6 +1463,11 @@
         // 같이 편집 중인 다른 행의 날짜들 — 옮기려는 곳이 그 날짜와 겹치면 두 행이 합쳐져야
         // 하는 모호한 상황이라 막는다(자기 자신은 제외).
         const otherRowDays = _days.filter(d => d !== currentDs);
+        // 이 행의 "진짜 원본"(DB에 남아있는 날짜) — 이미 한 번 옮긴 상태라면 원래 날짜는
+        // 저장 전까지 allVotes에 여전히 남아있다(삭제는 saveAll에서만 일어남). 그래서 원본을
+        // takenByMe에서 빼주지 않으면 "이미 등록됨"으로 오판돼 되돌리기를 막아버린다
+        // (2026-07-30 사용자 지적: 일요일→금요일로 옮긴 뒤 다시 일요일을 눌러도 안 먹힘).
+        const trueOriginal = _dateChangeMap[currentDs] || currentDs;
         const dow = TODAY.getDay();
         const monday = new Date(TODAY);
         monday.setDate(TODAY.getDate() + (dow === 0 ? -6 : 1 - dow) + _dateChangeWeekOffset * 7);
@@ -1470,17 +1479,17 @@
           const ds = toDateStr(d);
           const past = d < TODAY;
           const isCurrent = ds === currentDs;
-          // 지금 날짜(currentDs) 자신은 골라도 그대로(=취소)라 막지 않는다.
-          // 그 외에 내가 이미 등록해둔 다른 날, 또는 지금 함께 편집 중인 다른 행의 날짜는
-          // 고르면 두 등록이 합쳐져야 하는 모호한 상황이라 막는다.
-          const takenByMe = ds !== currentDs && user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
+          const isOriginal = ds === trueOriginal && ds !== currentDs;
+          // 지금 날짜(currentDs)와 이 행의 원래 날짜(trueOriginal)는 골라도 막지 않는다 —
+          // 원래 날짜로 되돌리는 것도 "그대로"와 같은 정당한 선택이다.
+          const takenByMe = ds !== currentDs && ds !== trueOriginal && user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id));
           const inOtherRow = ds !== currentDs && otherRowDays.includes(ds);
           const disabled = past || takenByMe || inOtherRow;
           return `<button class="sm-day-chip${isCurrent?' is-sel':''}${past?' is-past':''}"
             data-ds="${ds}" type="button"${disabled?' disabled':''}>
             <span class="sm-dc-dow">${DOW_KR[d.getDay()]}</span>
             <span class="sm-dc-date">${d.getMonth()+1}/${d.getDate()}</span>
-            ${takenByMe?'<span class="sm-dc-mine">등록됨</span>':inOtherRow?'<span class="sm-dc-mine">편집중</span>':''}
+            ${takenByMe?'<span class="sm-dc-mine">등록됨</span>':inOtherRow?'<span class="sm-dc-mine">편집중</span>':isOriginal?'<span class="sm-dc-original">↩ 원래 날짜</span>':''}
           </button>`;
         }).join('');
 
