@@ -1062,6 +1062,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
           getPendingScroll, setPendingScroll, setTasteScrollTo } = ctx;
           const userId = String(user.id);
 
+          _bindActivityTogglesAndMore(subBody); // 최근 모임 참여 "더 보기" (2026-07-30)
+
           // ── 모임 프로필 (활동지역/참여시간/이동범위/한줄소개/스타일) 편집 ──
           const displayWrap = subBody.querySelector('.meeting-profile-display');
           const editWrap = subBody.querySelector('.meeting-profile-edit-wrap');
@@ -2597,17 +2599,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     const da = a.played_at || (a.created_at || '').slice(0, 10);
     const db = b.played_at || (b.created_at || '').slice(0, 10);
     return da < db ? 1 : da > db ? -1 : 0;
-  }).slice(0, 5);
+  });
+  const _recentPlayItemHtml = r => {
+    const _gk = _getGameKeyById(r.game_id);
+    const _gd = _gk ? window.gameData?.[_gk] : null;
+    const _th = _gd?.images?.thumbnail
+      ? `<img class="profile-record-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
+      : `<span class="profile-record-thumb-empty"></span>`;
+    return `<li class="profile-activity-item profile-activity-item--thumb" data-game-id="${escH(String(r.game_id || ''))}">${_th}<button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`;
+  };
+  // 5개 초과분은 buildActivityList의 더 보기 뒤로 — 기록 보드 3섹션과 같은 패턴(2026-07-30)
   const _recentPlaysHtml = _recentPlays.length
-    ? `<ul class="profile-activity-list">${_recentPlays.map(r => {
-        const _gk = _getGameKeyById(r.game_id);
-        const _gd = _gk ? window.gameData?.[_gk] : null;
-        const _th = _gd?.images?.thumbnail
-          ? `<img class="profile-record-thumb" src="${escH(_gd.images.thumbnail)}" alt="">`
-          : `<span class="profile-record-thumb-empty"></span>`;
-        return `<li class="profile-activity-item profile-activity-item--thumb" data-game-id="${escH(String(r.game_id || ''))}">${_th}<button class="profile-game-link profile-game-link--light" type="button">${escH(getGameName(r.game_id))}</button><span class="profile-review-date">${_relDay(r.played_at || r.created_at)}</span></li>`;
-      }).join('')}</ul>`
-    : _emptyList('아직 플레이 기록이 없어요');
+    ? _openActivityList(buildActivityList(_recentPlays, _recentPlayItemHtml, 5))
+    : _emptyList('아직 모임 참여 기록이 없어요');
 
   function _meetingProfileRowHtml(label, val) {
     return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
