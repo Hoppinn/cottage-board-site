@@ -49,7 +49,7 @@ return data || [];
 | `recordGamePlay(...)` | 플레이 기록 저장 |
 | `deleteGamePlay(id)` | 플레이 기록 삭제 |
 | `updateGamePlay(id, fields)` | 플레이 기록 수정. **진짜 부분 갱신**이다 — `fields`에 안 넘긴 키는 안 건드린다. `{ photo_url }`만 넘기면 photo_url만 바뀐다(2026-07-31 수정 — 그 전엔 `group_name`/`played_at`을 안 넘겨도 항상 포함시켜 `null`로 덮어써서, 사진·후기만 추가하는 8곳 호출부가 매번 모임명·날짜를 지웠다). 성공 시 `record`/`play`/`balance` 업적 재체크(2026-07-15 추가 — 신규 등록만 체크하고 수정은 안 해서 사진 후추가 등으로 임계값을 채워도 다음 신규 등록 전까지 지급 안 되던 버그 수정) |
-| `getGamePlayRecords(gameId, limit)` | 게임 플레이 기록 조회. `gameId`는 단일 값 또는 배열 (배열 시 `.in()` 쿼리) |
+| `getGamePlayRecords(gameId, limit)` | 게임 플레이 기록 조회. `gameId`는 단일 값 또는 배열 (배열 시 `.in()` 쿼리). SELECT에 `game_id` 포함(2026-07-31 추가 — 필터 조건이라 없어도 조회는 되지만, 반환 행을 `_getOthersSessions`처럼 다시 `game_id`로 써야 하는 호출부에선 `undefined`가 `recordGamePlay`에서 `NULL`이 돼 NOT NULL 위반으로 저장이 통째로 실패했다) |
 | `getGroupNames()` | 그룹명 목록 조회 |
 | `getPlayerNames()` | 참여자 이름 목록 조회 (조합+개별) |
 | `getAllPlayRecordsForHistory(limit)` | 모임별 기록 전체 조회 |
