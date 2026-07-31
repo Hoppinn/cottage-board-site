@@ -5863,6 +5863,10 @@ body.embed-mode {
   box-shadow:0 8px 32px rgba(100,72,38,0.18);
 }
 
+/* 모달 안에서 입력↔연동확인 전환(별도 팝업을 안 띄우고 같은 모달 내용만 바꾼다, 2026-07-31) */
+.sheet-comment-modal-normal{ display:flex; flex-direction:column; gap:10px; }
+.sheet-link-confirm-inline{ display:flex; flex-direction:column; gap:8px; }
+
 .sheet-comment-modal-title{
   margin:0;
   font-size:14px;

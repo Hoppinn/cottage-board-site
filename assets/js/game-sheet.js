@@ -837,39 +837,36 @@ function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
 // 체크박스를 안 켜고 등록하려는데 연동 대상(이 게임에 내 미연동 기록이 정확히 1건)이
 // 뻔히 있을 때만 부른다(2건 이상은 어느 게 맞는지 애매해 여기서 다루지 않는다).
 // 🚨 쓰기 전에 물어본다 — 처음엔 게임평만 "일단 독립으로 써놓고 사후에 연동할지" 물었는데,
-// 취소해도 이미 써진 독립 게임평이 남는 구조가 이상하다는 지적(2026-07-31)을 받아 사진
-// 흐름과 동일하게 맞췄다: [취소]는 아무 것도 안 쓰고 입력창으로 돌아간다, [그냥 남기기]는
+// 취소해도 이미 써진 독립 게임평이 남는 구조가 이상하다는 지적을 받아 사진 흐름과 맞췄다.
+// 🚨 팝업 위에 팝업이 겹치는 게 오히려 복잡해 보인다는 지적(2026-07-31)을 받아, 별도 모달을
+// 새로 띄우지 않고 **같은 모달 안에서** 입력 영역(.sheet-comment-modal-normal)을 숨기고
+// 그 자리에 확인 UI(.sheet-link-confirm-inline)를 펼치는 방식으로 변경 — 겉보기엔 모달 하나가
+// 유지된 채 내용만 바뀐다. [취소]는 원래 입력 화면으로 돌아간다(아무 것도 안 씀), [그냥 남기기]는
 // 원래 하려던 대로(미연동), [연동하기]는 그 자리에서 바로 기존 기록에 합친다.
-// Promise로 'cancel'/'plain'/'link' 중 하나를 반환.
-function _confirmLinkOrPlain(record) {
+// modalEl = getOrCreateCommentModal()/getOrCreatePhotoModal()이 반환한 그 모달. Promise로
+// 'cancel'/'plain'/'link' 중 하나를 반환.
+function _confirmLinkOrPlain(modalEl, record) {
   return new Promise(resolve => {
     const esc = s => window.escH(s);
     const d = record.played_at ? record.played_at.slice(2, 10).replace(/-/g, '.') : '날짜 미상';
     const label = `${d}${record.group_name ? ' · ' + esc(record.group_name) : ''}${record.player_count ? ' · ' + record.player_count + '명' : ''}`;
-    let modal = document.getElementById('sheetLinkConfirmModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'sheetLinkConfirmModal';
-      modal.className = 'sheet-comment-modal';
-      modal.innerHTML = `
-        <div class="sheet-comment-modal-box">
-          <p class="sheet-comment-modal-title">이미 있는 기록에 남길까요?</p>
-          <div class="sheet-join-body"></div>
-          <div class="sheet-comment-modal-actions sheet-comment-modal-actions--triple">
-            <button class="sheet-comment-form-cancel" type="button" data-act="cancel">취소</button>
-            <button class="sheet-comment-form-plain" type="button" data-act="plain">그냥 남기기</button>
-            <button class="sheet-comment-form-submit" type="button" data-act="link">연동하기</button>
-          </div>
-        </div>`;
-      document.body.appendChild(modal);
-    }
-    const body = modal.querySelector('.sheet-join-body');
-    body.innerHTML = `<div class="sheet-join-session">📅 ${label}</div><p class="sheet-join-hint">이 게임에 이미 남긴 <b>내 플레이 기록</b>이 있어요. 새로 남길까요, 여기에 이어서 남길까요?</p>`;
-    modal.onclick = e => { if (e.target === modal) { modal.style.display = 'none'; resolve('cancel'); } };
-    modal.querySelector('[data-act="cancel"]').onclick = () => { modal.style.display = 'none'; resolve('cancel'); };
-    modal.querySelector('[data-act="plain"]').onclick = () => { modal.style.display = 'none'; resolve('plain'); };
-    modal.querySelector('[data-act="link"]').onclick = () => { modal.style.display = 'none'; resolve('link'); };
-    modal.style.display = 'flex';
+    const normalEl = modalEl.querySelector('.sheet-comment-modal-normal');
+    const inlineEl = modalEl.querySelector('.sheet-link-confirm-inline');
+    inlineEl.innerHTML = `
+      <p class="sheet-comment-modal-title">이미 있는 기록에 남길까요?</p>
+      <div class="sheet-join-session">📅 ${label}</div>
+      <p class="sheet-join-hint">이 게임에 이미 남긴 <b>내 플레이 기록</b>이 있어요. 새로 남길까요, 여기에 이어서 남길까요?</p>
+      <div class="sheet-comment-modal-actions sheet-comment-modal-actions--triple">
+        <button class="sheet-comment-form-cancel" type="button" data-act="cancel">취소</button>
+        <button class="sheet-comment-form-plain" type="button" data-act="plain">그냥 남기기</button>
+        <button class="sheet-comment-form-submit" type="button" data-act="link">연동하기</button>
+      </div>`;
+    const restore = () => { inlineEl.style.display = 'none'; inlineEl.innerHTML = ''; normalEl.style.display = ''; };
+    inlineEl.querySelector('[data-act="cancel"]').onclick = () => { restore(); resolve('cancel'); };
+    inlineEl.querySelector('[data-act="plain"]').onclick = () => { restore(); resolve('plain'); };
+    inlineEl.querySelector('[data-act="link"]').onclick = () => { restore(); resolve('link'); };
+    normalEl.style.display = 'none';
+    inlineEl.style.display = '';
   });
 }
 
@@ -1717,19 +1714,22 @@ function getOrCreateCommentModal() {
   modal.className = 'sheet-comment-modal';
   modal.innerHTML = `
     <div class="sheet-comment-modal-box">
-      <p class="sheet-comment-modal-title">게임평 남기기</p>
-      <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 평가를 남겨주세요"></textarea>
-      <div class="sheet-comment-play-link" id="sheetCommentPlayLink" style="display:none;">
-        <label class="sheet-comment-play-link-label">
-          <input type="checkbox" id="sheetCommentLinkCheck">
-          <span>기존 플레이 기록에 연동</span>
-        </label>
-        <select aria-label="연동할 플레이 기록" class="sheet-comment-play-select" id="sheetCommentPlaySelect" style="display:none;"></select>
+      <div class="sheet-comment-modal-normal">
+        <p class="sheet-comment-modal-title">게임평 남기기</p>
+        <textarea class="sheet-comment-modal-input" id="sheetCommentModalInput" rows="4" placeholder="게임에 대한 평가를 남겨주세요"></textarea>
+        <div class="sheet-comment-play-link" id="sheetCommentPlayLink" style="display:none;">
+          <label class="sheet-comment-play-link-label">
+            <input type="checkbox" id="sheetCommentLinkCheck">
+            <span>기존 플레이 기록에 연동</span>
+          </label>
+          <select aria-label="연동할 플레이 기록" class="sheet-comment-play-select" id="sheetCommentPlaySelect" style="display:none;"></select>
+        </div>
+        <div class="sheet-comment-modal-actions">
+          <button class="sheet-comment-form-cancel" onclick="onCloseCommentModal()">취소</button>
+          <button class="sheet-comment-form-submit" id="sheetCommentModalSubmit" onclick="onSubmitCommentModal()">등록</button>
+        </div>
       </div>
-      <div class="sheet-comment-modal-actions">
-        <button class="sheet-comment-form-cancel" onclick="onCloseCommentModal()">취소</button>
-        <button class="sheet-comment-form-submit" id="sheetCommentModalSubmit" onclick="onSubmitCommentModal()">등록</button>
-      </div>
+      <div class="sheet-link-confirm-inline" style="display:none;"></div>
     </div>
   `;
   modal.querySelector('#sheetCommentLinkCheck').addEventListener('change', e => {
@@ -1914,25 +1914,28 @@ function getOrCreatePhotoModal() {
   modal.className = 'sheet-comment-modal';
   modal.innerHTML = `
     <div class="sheet-comment-modal-box">
-      <p class="sheet-comment-modal-title">사진 남기기</p>
-      <div class="sheet-play-photo-row" style="margin-bottom:8px;">
-        <div class="sheet-play-photo-grid" id="sheetPhotoModalGrid"></div>
-        <label class="sheet-play-photo-add-btn" id="sheetPhotoModalAddBtn">
-          📷
-          <input aria-label="사진 고르기" type="file" accept="image/*" multiple id="sheetPhotoModalInput" style="display:none;">
-        </label>
+      <div class="sheet-comment-modal-normal">
+        <p class="sheet-comment-modal-title">사진 남기기</p>
+        <div class="sheet-play-photo-row" style="margin-bottom:8px;">
+          <div class="sheet-play-photo-grid" id="sheetPhotoModalGrid"></div>
+          <label class="sheet-play-photo-add-btn" id="sheetPhotoModalAddBtn">
+            📷
+            <input aria-label="사진 고르기" type="file" accept="image/*" multiple id="sheetPhotoModalInput" style="display:none;">
+          </label>
+        </div>
+        <div class="sheet-comment-play-link" id="sheetPhotoPlayLink" style="display:none;">
+          <label class="sheet-comment-play-link-label">
+            <input type="checkbox" id="sheetPhotoLinkCheck">
+            <span>기존 플레이 기록에 연동</span>
+          </label>
+          <select aria-label="연동할 플레이 기록" class="sheet-comment-play-select" id="sheetPhotoPlaySelect" style="display:none;"></select>
+        </div>
+        <div class="sheet-comment-modal-actions">
+          <button class="sheet-comment-form-cancel" onclick="onClosePhotoModal()">취소</button>
+          <button class="sheet-comment-form-submit" id="sheetPhotoModalSubmit" onclick="onSubmitPhotoModal()">등록</button>
+        </div>
       </div>
-      <div class="sheet-comment-play-link" id="sheetPhotoPlayLink" style="display:none;">
-        <label class="sheet-comment-play-link-label">
-          <input type="checkbox" id="sheetPhotoLinkCheck">
-          <span>기존 플레이 기록에 연동</span>
-        </label>
-        <select aria-label="연동할 플레이 기록" class="sheet-comment-play-select" id="sheetPhotoPlaySelect" style="display:none;"></select>
-      </div>
-      <div class="sheet-comment-modal-actions">
-        <button class="sheet-comment-form-cancel" onclick="onClosePhotoModal()">취소</button>
-        <button class="sheet-comment-form-submit" id="sheetPhotoModalSubmit" onclick="onSubmitPhotoModal()">등록</button>
-      </div>
+      <div class="sheet-link-confirm-inline" style="display:none;"></div>
     </div>
   `;
   modal._photoFiles = [];
@@ -2059,7 +2062,7 @@ async function onSubmitPhotoModal() {
     // 체크 안 하고 등록하려는데 연동 대상(내 기록 1건)이 뻔히 있음 — 쓰기 전에 확인.
     // 안 하면 지금까지처럼 사진만 달린 새 기록(유령 기록)이 조용히 하나 더 생긴다(2026-07-31).
     const rec = modal._myUnlinkedRecords[0];
-    const choice = await _confirmLinkOrPlain(rec);
+    const choice = await _confirmLinkOrPlain(modal, rec);
     if (choice === 'cancel') { if (submitBtn) submitBtn.disabled = false; return; }
     if (choice === 'link') {
       const existingUrls = window.parsePhotoUrls ? window.parsePhotoUrls(rec.photo_url) : [];
@@ -2172,7 +2175,7 @@ async function onSubmitCommentModal() {
       // (2건 이상은 애매해 다루지 않는다). [취소]면 아무 것도 안 쓰고 입력창으로 돌아간다.
       if (!attachedRecId && modal._myUnlinkedRecords?.length === 1) {
         const rec = modal._myUnlinkedRecords[0];
-        const choice = await _confirmLinkOrPlain(rec);
+        const choice = await _confirmLinkOrPlain(modal, rec);
         if (choice === 'cancel') { if (submitBtn) submitBtn.disabled = false; return; }
         if (choice === 'link') {
           linkedRecId = rec.id;
