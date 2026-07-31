@@ -818,7 +818,7 @@ function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
       s.game_id, s.player_count || null, s.player_names || null, null, null,
       _u.nickname || null, _u.id, s.group_name || null, s.played_at || null, null, rv || null
     );
-    if (res?.error) { okBtn.disabled = false; alert('저장에 실패했어요. 다시 시도해 주세요.'); return; }
+    if (res?.error) { console.error('[_openJoinConfirm] recordGamePlay 실패', res.error); okBtn.disabled = false; alert('저장에 실패했어요. 다시 시도해 주세요.'); return; }
     window.CottageDB?.trackEvent('record_complete', { game_id: s.game_id });
     if (sourceCommentId) {
       const del = await window.CottageDB.deleteComment(sourceCommentId);
@@ -2082,7 +2082,7 @@ async function onSubmitPhotoModal() {
   }
 
   if (submitBtn) submitBtn.disabled = false;
-  if (err) { alert('등록에 실패했습니다. 다시 시도해 주세요.'); return; }
+  if (err) { console.error('[onSubmitPhotoModal] 저장 실패', err); alert('등록에 실패했습니다. 다시 시도해 주세요.'); return; }
   if (created) window.CottageDB?.trackEvent('record_complete', { game_id: createdGameId });
   onClosePhotoModal();
   await initSheetPhotos(gameKey);
@@ -2216,6 +2216,13 @@ async function onSubmitCommentModal() {
         });
       }
     }
+  } else {
+    // 🚨 예전엔 여기가 비어 있어서 연동(updateGamePlay)·세션참여(recordGamePlay) 실패 시
+    // 모달이 그대로 떠 있는 채 아무 안내도 없었다(2026-07-31, "저장에 실패했어요" 재현 중 발견 —
+    // 그 사건 자체는 getGamePlayRecords에 game_id가 안 잡히던 별도 원인이었지만, 이 자리가
+    // 조용했던 것도 같이 드러났다).
+    console.error('[onSubmitCommentModal] 저장 실패', result.error);
+    alert('저장에 실패했어요. 다시 시도해 주세요.');
   }
   if (submitBtn) submitBtn.disabled = false;
 }
