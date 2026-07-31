@@ -1308,6 +1308,10 @@
             window.CottageDB?.getMeetingVoteGames(voteDate, voteDate) ?? [],
           ]);
           window.openDateMeetingModal(voteDate, freshVotes, freshGames, opts);
+          // 이 모달은 자기 자신(같은 날짜)만 새로 그린다 — 홈 상단 주간 미리보기(index-page.js
+          // loadWeek)는 별도 캐시라 신호 없이는 갱신 안 됨(kakao-auth.js 인원조건 변경과 동일
+          // 이유). 전역 이벤트로 통지해 새로고침 없이도 반영되게 한다(2026-07-31).
+          window.dispatchEvent(new CustomEvent('cottage-meeting-changed', { detail: { reason: 'edit' } }));
         },
       });
     });
