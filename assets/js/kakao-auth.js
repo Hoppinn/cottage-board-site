@@ -2212,9 +2212,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
     if (n.type === 'new_member') {
+      // "OOO 외 N명"으로 뭉개지 않고 전원 나열한다(2026-07-31) — "다른 N명은 누군지
+      // 모른다"는 지적. 목록을 열게 하는 대신 이름 자체를 카드에 다 보여주는 쪽으로
+      // 통일(업적 알림도 2026-07-27 같은 이유로 같은 방식 채택, js-api.md 참조 없음 —
+      // 이 함수 안에서만 완결).
       const desc = n.count === 1
         ? `${escH(n.names[0])}님이 새로 가입했어요`
-        : `${escH(n.names[0])} 외 ${n.count - 1}명이 새로 가입했어요`;
+        : `${n.names.map(escH).join(', ')}님이 새로 가입했어요`;
       return `<li class="${cls}">${_card('🎉', '신규 회원', desc)}${readBtn}</li>`;
     }
     // 교환권은 유형+날짜로 묶여서 온다(관리자 전용). names는 중복 제거된 사람 목록,
