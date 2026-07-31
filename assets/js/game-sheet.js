@@ -835,10 +835,12 @@ function _openJoinConfirm(gameKey, sessions, reviewText, sourceCommentId) {
 }
 
 // 체크박스를 안 켜고 등록하려는데 연동 대상(이 게임에 내 미연동 기록이 정확히 1건)이
-// 뻔히 있을 때만 부른다(2건 이상은 어느 게 맞는지 애매해 여기서 다루지 않는다, 2026-07-31).
-// Promise로 선택을 기다린다 — 사진 흐름은 쓰기 전에 결과가 필요하고, 게임평 흐름은
-// 이미 등록된 뒤 후속 처리라 fire-and-forget으로 써도 되지만 같은 함수를 그대로 쓴다.
-// [연동하기]는 그 자리에서 바로 연동까지 끝낸다 — 체크박스 다시 켜고 재입력하는 왕복이 없다.
+// 뻔히 있을 때만 부른다(2건 이상은 어느 게 맞는지 애매해 여기서 다루지 않는다).
+// 🚨 쓰기 전에 물어본다 — 처음엔 게임평만 "일단 독립으로 써놓고 사후에 연동할지" 물었는데,
+// 취소해도 이미 써진 독립 게임평이 남는 구조가 이상하다는 지적(2026-07-31)을 받아 사진
+// 흐름과 동일하게 맞췄다: [취소]는 아무 것도 안 쓰고 입력창으로 돌아간다, [그냥 남기기]는
+// 원래 하려던 대로(미연동), [연동하기]는 그 자리에서 바로 기존 기록에 합친다.
+// Promise로 'cancel'/'plain'/'link' 중 하나를 반환.
 function _confirmLinkOrPlain(record) {
   return new Promise(resolve => {
     const esc = s => window.escH(s);
@@ -851,20 +853,22 @@ function _confirmLinkOrPlain(record) {
       modal.className = 'sheet-comment-modal';
       modal.innerHTML = `
         <div class="sheet-comment-modal-box">
-          <p class="sheet-comment-modal-title">연동 안 하고 등록할까요?</p>
+          <p class="sheet-comment-modal-title">이미 있는 기록에 남길까요?</p>
           <div class="sheet-join-body"></div>
-          <div class="sheet-comment-modal-actions">
-            <button class="sheet-comment-form-cancel" type="button" data-act="plain">그냥 등록</button>
+          <div class="sheet-comment-modal-actions sheet-comment-modal-actions--triple">
+            <button class="sheet-comment-form-cancel" type="button" data-act="cancel">취소</button>
+            <button class="sheet-comment-form-plain" type="button" data-act="plain">그냥 남기기</button>
             <button class="sheet-comment-form-submit" type="button" data-act="link">연동하기</button>
           </div>
         </div>`;
       document.body.appendChild(modal);
     }
     const body = modal.querySelector('.sheet-join-body');
-    body.innerHTML = `<div class="sheet-join-session">📅 ${label}</div><p class="sheet-join-hint">이 게임에 이미 남긴 <b>내 플레이 기록</b>이 있어요. 여기에 이어서 남길까요?</p>`;
-    modal.onclick = e => { if (e.target === modal) { modal.style.display = 'none'; resolve('plain'); } };
-    modal.querySelector('[data-act="link"]').onclick = () => { modal.style.display = 'none'; resolve('link'); };
+    body.innerHTML = `<div class="sheet-join-session">📅 ${label}</div><p class="sheet-join-hint">이 게임에 이미 남긴 <b>내 플레이 기록</b>이 있어요. 새로 남길까요, 여기에 이어서 남길까요?</p>`;
+    modal.onclick = e => { if (e.target === modal) { modal.style.display = 'none'; resolve('cancel'); } };
+    modal.querySelector('[data-act="cancel"]').onclick = () => { modal.style.display = 'none'; resolve('cancel'); };
     modal.querySelector('[data-act="plain"]').onclick = () => { modal.style.display = 'none'; resolve('plain'); };
+    modal.querySelector('[data-act="link"]').onclick = () => { modal.style.display = 'none'; resolve('link'); };
     modal.style.display = 'flex';
   });
 }
@@ -2056,6 +2060,7 @@ async function onSubmitPhotoModal() {
     // 안 하면 지금까지처럼 사진만 달린 새 기록(유령 기록)이 조용히 하나 더 생긴다(2026-07-31).
     const rec = modal._myUnlinkedRecords[0];
     const choice = await _confirmLinkOrPlain(rec);
+    if (choice === 'cancel') { if (submitBtn) submitBtn.disabled = false; return; }
     if (choice === 'link') {
       const existingUrls = window.parsePhotoUrls ? window.parsePhotoUrls(rec.photo_url) : [];
       const allUrls = [...existingUrls, ...uploaded];
@@ -2163,8 +2168,21 @@ async function onSubmitCommentModal() {
     } else {
       const _cu = window.getKakaoUser?.();
       attachedRecId = modal?.dataset.recordId || null;   // (014) 기록 ⋯메뉴 진입이면 그 기록에 매단다
-      result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null, attachedRecId);
-      if (!result.error && result.id) saveMyCommentId(result.id);
+      // 체크 안 하고 등록하려는데 연동 대상(내 미연동 기록 1건)이 뻔히 있으면 쓰기 전에 확인
+      // (2건 이상은 애매해 다루지 않는다). [취소]면 아무 것도 안 쓰고 입력창으로 돌아간다.
+      if (!attachedRecId && modal._myUnlinkedRecords?.length === 1) {
+        const rec = modal._myUnlinkedRecords[0];
+        const choice = await _confirmLinkOrPlain(rec);
+        if (choice === 'cancel') { if (submitBtn) submitBtn.disabled = false; return; }
+        if (choice === 'link') {
+          linkedRecId = rec.id;
+          result = await window.CottageDB.updateGamePlay(rec.id, { review_text: text });
+        }
+      }
+      if (!linkedRecId) {
+        result = await window.CottageDB.insertComment(gameKey, text, _cu?.nickname || null, _cu?.id || null, attachedRecId);
+        if (!result.error && result.id) saveMyCommentId(result.id);
+      }
     }
   }
   if (!result.error) {
@@ -2172,10 +2190,6 @@ async function onSubmitCommentModal() {
     if (didJoin) window.CottageDB?.trackEvent('record_complete', { game_id: joinedGameId });
     // 새 게임평(어디에도 연동 안 됨) + 이 게임에 내 플레이기록이 아예 없으면 → 남기기 넛지
     const shouldNudge = !linkCommentId && !editId && !linkedRecId && !didJoin && !attachedRecId && modal._myRecordCountAtOpen === 0;
-    // 내 미연동 기록이 정확히 1건 있는데 체크 안 하고 등록했으면 → 연동 안 했다는 걸 확인만
-    // (2건 이상은 어느 게 맞는지 애매해 다루지 않는다, 2026-07-31 — 서동국님 케이스: 기록 있는데
-    // 체크를 깜빡해도 지금까진 아무 안내가 없었다)
-    const shouldOfferLink = !linkCommentId && !editId && !linkedRecId && !didJoin && !attachedRecId && modal._myRecordCountAtOpen === 1;
     onCloseCommentModal();
     await initSheetComments(gameKey);         // 기록전체보기 시트용
     await initSheetCommentsPreview(gameKey);  // 메인 게임시트 미리보기용
@@ -2188,23 +2202,6 @@ async function onSubmitCommentModal() {
       const _cu2 = window.getKakaoUser?.();
       window.addRecordCommentToBoard?.(attachedRecId, { id: result.id, nickname: _cu2?.nickname || null, user_id: _cu2?.id || null, comment_text: text, record_id: String(attachedRecId) });
       showActionToast('기록에 게임평을 남겼어요');
-    } else if (shouldOfferLink) {
-      const rec = (modal._myUnlinkedRecords || [])[0];
-      if (rec) {
-        _confirmLinkOrPlain(rec).then(async choice => {
-          if (choice !== 'link') return;
-          const upd = await window.CottageDB.updateGamePlay(rec.id, { review_text: text });
-          if (upd?.error) { console.error('[onSubmitCommentModal] 뒤늦은 연동 실패', upd.error); return; }
-          // 연동 성공 시 원본 게임평 삭제 — 남겨두면 통합 목록에 같은 글이 중복 표시됨
-          const del = await window.CottageDB.deleteComment(result.id);
-          if (del?.error) console.error('[onSubmitCommentModal] 연동 후 원본 게임평 삭제 실패', del.error);
-          await initSheetComments(gameKey);
-          await initSheetCommentsPreview(gameKey);
-          await initPlayWidget(gameKey);
-          window.refreshPlayRecordsBoard?.();
-          showActionToast('플레이기록에 연동했어요');
-        });
-      }
     } else if (shouldNudge) {
       // 내 기록이 없을 때: 남의 세션 있으면 확인창으로 그 세션에 후기 추가(방금 쓴 게임평은 이동)
       const sessions = await _getOthersSessions(gameKey);

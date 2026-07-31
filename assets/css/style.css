@@ -5825,6 +5825,20 @@ body.embed-mode {
   cursor:pointer;
 }
 
+/* 3버튼 확인창(취소/그냥 남기기/연동하기, 2026-07-31) — 취소는 폭 고정, 나머지 둘이 남는 폭 분배 */
+.sheet-comment-modal-actions--triple .sheet-comment-form-cancel{ flex:0 0 auto; }
+.sheet-comment-form-plain{
+  flex:1;
+  padding:7px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  background:#fff;
+  color:var(--text-dark);
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
 /* 코멘트 입력 모달 */
 .sheet-comment-modal{
   display:none;

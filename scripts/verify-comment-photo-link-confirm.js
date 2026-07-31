@@ -55,16 +55,10 @@ const ok = (name, cond, extra = '') => {
     recId = created?.id;
     if (!recId) throw new Error('기록 생성 실패 — 이후 단계 중단');
 
-    console.log('\n③ 게임평 흐름 — "체크 안 하고 등록" 후 확인창에서 "연동하기" 선택 시퀀스 재현');
+    console.log('\n③ 게임평 흐름 — 쓰기 전 확인창에서 "연동하기" 선택 시퀀스 재현(2026-07-31 재설계: 이제 독립 게임평을 먼저 만들지 않고 바로 합친다)');
     const NEW_REVIEW = '__검증용_연동된_게임평__';
-    const cIns = await db.insertComment(TEST_GAME_ID, NEW_REVIEW, NICK, UID, null);
-    ok('1차: 미연동 게임평 생성(체크 안 한 상태)', !!cIns?.id, JSON.stringify(cIns));
-    commentId = cIns?.id;
     const cUpd = await db.updateGamePlay(recId, { review_text: NEW_REVIEW });
-    ok('2차: [연동하기] 클릭 → 기록에 review_text 반영', !cUpd?.error, JSON.stringify(cUpd));
-    const cDel = await db.deleteComment(commentId);
-    ok('3차: 연동 성공 후 원본(미연동) 게임평 삭제', !cDel?.error, JSON.stringify(cDel));
-    commentId = null; // 이미 삭제됨 — finally에서 재삭제 방지
+    ok('[연동하기] 클릭 → insertComment 없이 곧바로 기록에 review_text 반영', !cUpd?.error, JSON.stringify(cUpd));
 
     const afterComment = await db.getGamePlayRecords(TEST_GAME_ID, 50);
     const recAfterComment = (afterComment || []).find(r => r.id === recId);
