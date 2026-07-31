@@ -424,8 +424,12 @@ window._cottageSess = (function () {
   async function getGamePlayRecords(gameId, limit = 30) {
     try {
       const ids = Array.isArray(gameId) ? gameId.map(String) : [String(gameId)];
+      // 🚨 game_id는 필터(.eq/.in) 조건이라 SELECT에 없어도 조회 자체는 되지만, 반환된 행을
+      // 다시 game_id로 써야 하는 호출부(남의 세션 참여 → recordGamePlay)에선 undefined가
+      // NULL로 들어가 NOT NULL 제약 위반으로 저장이 통째로 실패했다(2026-07-31 발견,
+      // "저장에 실패했어요" — _getOthersSessions의 세션 객체가 매번 game_id 없이 만들어졌었다).
       const base = db.from("game_play_records")
-        .select("id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at");
+        .select("id, game_id, nickname, user_id, player_count, player_names, play_time_min, score_note, group_name, played_at, photo_url, review_text, created_at");
       const { data, error } = await (ids.length > 1 ? base.in("game_id", ids) : base.eq("game_id", ids[0]))
         .order("created_at", { ascending: false })
         .limit(limit);
