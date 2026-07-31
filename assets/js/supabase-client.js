@@ -1747,12 +1747,15 @@ window._cottageSess = (function () {
               isNew: true,
             });
           } else {
+            // 이미 읽은 뒤에도 "누가 왔었는지"는 유지한다 — 최신 1건으로 접으면 나머지는
+            // 다시 볼 방법이 없다(2026-07-31 지적: "읽었더니 나머지 2명이 사라짐"). new_intro의
+            // "최신 1건만 기록용" 접기와 같은 패턴이었으나 여기선 의도적으로 안 따른다.
             notifs.push({
               type: 'new_member',
               key: `new_member:${allNewMembers[0].id}`,
-              keys: [`new_member:${allNewMembers[0].id}`],
-              count: 1,
-              names: [nickMap.get(String(allNewMembers[0].user_id)) || '회원'],
+              keys: allNewMembers.map(r => `new_member:${r.id}`),
+              count: allNewMembers.length,
+              names: allNewMembers.map(r => nickMap.get(String(r.user_id)) || '회원'),
               date: allNewMembers[0].created_at,
               isNew: false,
             });
