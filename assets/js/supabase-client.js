@@ -451,7 +451,17 @@ window._cottageSess = (function () {
   async function updateGamePlay(id, { player_count, player_names, play_time_min, score_note, group_name, played_at, review_text, game_id, photo_url }) {
     if (!id) return { error: "invalid" };
     try {
-      const fields = { player_count, player_names, play_time_min, score_note, group_name: group_name || null, played_at: played_at || null };
+      // 🚨 부분 갱신이다 — 호출부가 넘기지 않은 필드는 손대지 않는다(2026-07-31 발견: 예전엔
+      // group_name/played_at을 항상 포함해 photo_url·review_text만 바꾸려는 호출(전 프로젝트에
+      // 8곳)이 매번 그 둘을 조용히 NULL로 지웠다 — 모임 그룹명·플레이 날짜가 사진 하나 추가할
+      // 때마다 사라지는 실제 데이터 손실이었다).
+      const fields = {};
+      if (player_count !== undefined) fields.player_count = player_count;
+      if (player_names !== undefined) fields.player_names = player_names;
+      if (play_time_min !== undefined) fields.play_time_min = play_time_min;
+      if (score_note !== undefined) fields.score_note = score_note;
+      if (group_name !== undefined) fields.group_name = group_name || null;
+      if (played_at !== undefined) fields.played_at = played_at || null;
       if (review_text !== undefined) fields.review_text = review_text || null;
       if (game_id) fields.game_id = game_id;
       if (photo_url !== undefined) fields.photo_url = photo_url || null;
