@@ -1711,13 +1711,14 @@ window._cottageSess = (function () {
             isNew: true,
           });
         } else if (allIntros.length > 0) {
-          // 이미 본 소개글 — 최신 1건만 기록용으로 표시
+          // 최신 1건으로 접지 않고 전원 유지 — new_member와 같은 이유(2026-07-31,
+          // 읽음 처리 후 재조회하면 나머지가 사라지는 게 실제로 불편했다).
           notifs.push({
             type: 'new_intro',
             key: `new_intro:${allIntros[0].id}`,
-            keys: [`new_intro:${allIntros[0].id}`],
-            count: 1,
-            names: [allIntros[0].nickname],
+            keys: allIntros.map(r => `new_intro:${r.id}`),
+            count: allIntros.length,
+            names: allIntros.map(r => r.nickname),
             firstUserId: allIntros[0].user_id,
             date: allIntros[0].created_at,
             isNew: false,

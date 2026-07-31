@@ -2206,9 +2206,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}${readBtn}</li>`;
     }
     if (n.type === 'new_intro') {
+      // new_member와 같은 이유로 "외 N명" 대신 전원 나열(2026-07-31).
       const desc = n.count === 1
         ? `${escH(n.names[0])}님이 소개글을 올렸어요`
-        : `${escH(n.names[0])} 외 ${n.count - 1}명이 소개글을 올렸어요`;
+        : `${n.names.map(escH).join(', ')}님이 소개글을 올렸어요`;
       return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
     if (n.type === 'new_member') {
