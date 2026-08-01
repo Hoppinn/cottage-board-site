@@ -3022,8 +3022,10 @@ body.embed-mode {
   cursor:pointer;
   text-align:left;
 }
-.sheet-org-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;line-height:1;color:var(--green);background:var(--card-bg);border:1.5px dashed #c8a87a;border-radius:8px;padding:4px 9px;cursor:pointer;white-space:nowrap;}
-.sheet-org-btn.is-warn{background:#fdf6ec;border-color:#c0392b;color:#9e3a2a;}
+.sheet-org-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;line-height:1;color:var(--green);background:var(--card-bg);border:1.5px dashed #c8a87a;border-radius:8px;padding:4px 9px;cursor:pointer;white-space:nowrap;--org-glow:rgba(200,168,122,0.6);animation:orgBtnGlow 2.4s ease-in-out infinite;}
+.sheet-org-btn.is-warn{background:#fdf6ec;border-color:#c0392b;color:#9e3a2a;--org-glow:rgba(192,57,43,0.55);}
+@keyframes orgBtnGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 7px 2px var(--org-glow);}}
+@media (prefers-reduced-motion: reduce){.sheet-org-btn{animation:none;}}
 .sheet-org-area{display:flex;gap:5px;flex-wrap:wrap;}
 
 .sheet-links-block{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:10px 0 0;}
