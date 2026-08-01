@@ -999,7 +999,7 @@ async function initSheetOrganizerContent(gameKey) {
 
   let html = '';
   if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 요약 보기</button>`;
-  if (errorNote) html += `<button class="sheet-org-btn" type="button" data-org-action="error">⚠️ 에러플로그 보기</button>`;
+  if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 에러플로그 보기</button>`;
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
   area.innerHTML = html;
 
