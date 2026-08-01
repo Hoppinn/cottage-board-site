@@ -1457,6 +1457,11 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     return '🔥 이번 주 모임 진행 중';
   }
 
+  // 모집 중(0명, 참여 유도)·진행 중(4명+, 활발함) — 극단 상태만 강조. 중간 대기 인원수는 밋밋해서 제외.
+  function isGlowworthyMeetingCount(count) {
+    return count === 0 || count >= 4;
+  }
+
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 
   function renderPreview(dateStr, dayVotes, dayGames) {
@@ -1619,7 +1624,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         window.CottageDB?.getMeetingVotes(start, end) ?? [],
         window.CottageDB?.getMeetingVoteGames(start, end) ?? [],
       ]);
-      if (!votes) { statusEl.textContent = '🎲 이번 주 모임 모집 중'; return; }
+      if (!votes) { statusEl.textContent = '🎲 이번 주 모임 모집 중'; statusEl.classList.add('is-glow'); return; }
 
       // [DEV] localhost ?dev=N — 메모리 더미 주입 (이번 주만)
       const _devN = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
@@ -1665,6 +1670,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       const weekPeople = window.CottageDB?.sumWeeklyPartySize?.(votes)
         ?? new Set(votes.map(v => String(v.user_id))).size;
       statusEl.textContent = getMeetingStatusMsg(weekPeople);
+      statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(weekPeople));
 
       const dateKeys = Object.keys(byDate).sort();
 
@@ -1675,16 +1681,22 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
           || dateKeys[0];
       }
 
+      // 다가오는 가장 빠른 일정 — 클릭으로 바뀌는 is-selected와 별개로 고정. 사용자가 다른 요일을 눌러도
+      // 이 칩의 강조는 그대로 남아야 "가장 빠른 일정"이라는 의미가 유지된다.
+      const earliestVoteDate = dateKeys.find(d => d >= todayStr && byDate[d].length > 0) || null;
+
       function renderChips() {
         daysEl.innerHTML = dateKeys.map((ds, i) => {
           const cnt = window.CottageDB?.sumPartySize?.(byDate[ds]) ?? byDate[ds].length;
           const hasVote  = cnt > 0;
           const isPast   = ds < todayStr;
           const isSelected = ds === selectedDate;
+          const isEarliest = ds === earliestVoteDate;
           let cls = 'meeting-day-chip';
           if (hasVote)    cls += ' has-vote';
           if (isPast)     cls += ' is-past';
           if (isSelected) cls += ' is-selected';
+          if (isEarliest) cls += ' is-earliest';
           return `<div class="${cls}" data-date="${ds}">
             <span class="mdc-day">${DAY_LABELS[i]}</span>
             <span class="mdc-count">${hasVote ? cnt + '명' : '-'}</span>
