@@ -762,7 +762,8 @@
           try {
             const files = Array.from(photoInput.files || []);
             for (const file of files) {
-              const url = await window.CottageDB.uploadOrganizerPhoto(file, selectedGameKey);
+              const resized = window.resizeImageFile ? await window.resizeImageFile(file) : file;
+              const url = await window.CottageDB.uploadOrganizerPhoto(resized, selectedGameKey);
               if (url) currentPhotoUrls.push(url);
             }
             const ok = await window.CottageDB.upsertGameOverride(selectedGameKey, {
