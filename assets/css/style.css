@@ -7016,11 +7016,11 @@ body.is-embedded .inner-page{padding-top:16px;}
 .meeting-status-msg.is-glow{
   padding:3px 10px;
   border-radius:999px;
-  animation:meetingStatusGlow 2.2s ease-in-out infinite;
+  animation:meetingStatusGlow 3s ease-in-out infinite;
 }
 @keyframes meetingStatusGlow{
-  0%,100%{background:rgba(224,154,60,0.10);box-shadow:0 0 0 0 transparent;}
-  50%{background:rgba(224,154,60,0.28);box-shadow:0 0 10px 3px rgba(224,154,60,0.6);}
+  0%,100%{background:rgba(224,154,60,0.06);box-shadow:0 0 0 0 transparent;}
+  50%{background:rgba(224,154,60,0.16);box-shadow:0 0 6px 1px rgba(224,154,60,0.3);}
 }
 @media (prefers-reduced-motion: reduce){.meeting-status-msg.is-glow{animation:none;}}
 .meeting-days{display:flex;gap:6px;flex-wrap:wrap;}
