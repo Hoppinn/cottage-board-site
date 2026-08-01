@@ -169,3 +169,16 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 1. **transition 진행 중 상태 클래스 제거 금지.** opacity/transform transition이 걸린 요소를 **닫는 도중** 상태 클래스를 떼면 요소가 '기본 모습'으로 복귀해 애니메이션되며 깜빡인다. 실제: `closeModal`이 `is-open`(opacity 0.25s 페이드)과 `is-quick-entry`를 **동시 제거** → 페이드 도중 quick-entry가 빠져 `.planner-sheet-panel`이 투명·풀스크린에서 기본 `background:#fff`·480px 박스로 복귀하며 슬라이드·페이드. **해결: 닫기에선 상태 클래스를 안 떼고 다음 정상 오픈에서 정리**(요소가 완전히 사라진 뒤 떼야 페이드에 안 걸림).
 2. **show-then-hide(전체 로드 후 일부 숨김) 패턴은 컨테이너 전체를 숨겨라.** 일부만 숨기면 나머지가 닫을 때 드러난다. 실제: `is-quick-entry`가 `#viewWeek`만 숨겨 브레드크럼·페이지 헤더가 남아 오버레이 닫을 때 노출 → `.inner-page` 전체를 `display:none`으로 바꿔 해결. 사용자 표현 "**애초에 안 켜지게**"가 이 뜻(켜놓고 지우는 게 아니라 아예 렌더 안 되게).
 3. ⚠️ **1차 실패의 뿌리 = 추론으로 먼저 고침.** iframe `#viewWeek` 토글 타이밍만 가정해 옮겼다가 실패 — 진짜 원인은 부모 패널의 transition+배경 복귀였다. 「런타임 값 검증」의 재확인: **닫기 깜빡임은 닫는 요소의 CSS(transition 있는가·상태클래스가 뭘 되돌리는가·숨김이 완전한가)부터 읽을 것.** 그걸 먼저 읽었으면 1차에서 잡혔다.
+
+## 11. 글로우 펄스(반짝임) 표준 (2026-08-02 확정)
+
+"조건부로만 나타나고 놓치면 안 되는 정보"(관리자가 채워둔 게임정리·룰요약·에러플로그, 입고예정 안내, 안 읽은 알림, 이번 주 모임 상태, 추천게임 1위, 대표 캐릭터/칭호 등)에 시선을 끌기 위해 쓰는 표준 애니메이션. 실제로 여러 차례 강도를 잘못 잡아(너무 어둡다/밝다/부담스럽다/줄 전체가 번진다) 반복 조정한 끝에 정착한 값이라 **새로 만들지 말고 그대로 재사용**한다.
+
+**표준값**: `animation-duration: 3.6s ease-in-out infinite`, 트로프(0%, 100%)는 **완전히 투명**(`border-color:transparent` 또는 `box-shadow:0 0 0 0 transparent`), 피크(50%)는 `box-shadow: 0 0 9px 2px <색상>`. `prefers-reduced-motion: reduce`에서 항상 `animation:none`.
+
+- **테두리 있는 박스**(버튼·배지·카드)는 `border-color`+`box-shadow`를 함께 펄스(`.sheet-org-btn`, `.sheet-avail-notice--pending/--preorder` 참고).
+- **배경/테두리 없는 순수 텍스트**는 `text-shadow`만으론 거의 안 보인다 — 투명 테두리(`border:1.5px solid transparent`)를 깔아두고 `border-color`+`box-shadow`로 펄스시킬 것(`.profile-panel-rep-name`/`.profile-panel-title-name` 참고). **배경 필(pill)로 채우는 방식은 시도했다가 "부담스럽다"는 피드백으로 폐기** — 테두리만 펄스하는 쪽으로 통일.
+- **이미 큰 정적 그림자가 있는 카드**(`.game-card.active`)에 얹으면 기존 그림자에 묻힌다 — 피크 강도를 확실히 올리거나(9px/2px 이상) 별도 레이어로 분리.
+- **여러 개가 동시에 뜰 수 있는 목록 컨텍스트**(검색 자동완성 배지, 알림 리스트의 NEW 여러 건, 관리자 목록형 뱃지)에는 **적용하지 않는다** — 여러 개가 같이 반짝이면 산만해진다는 이유로 의도적으로 제외한 전례가 있다(`.avail-badge-sm`, `.profile-notif-new-badge`는 안 읽은 알림이 정확히 1건일 때만 켜짐, `kakao-auth.js`의 `is-multi-new` 참고).
+- **예외**: `.profile-char-card/.profile-title-card.is-newly-earned`(신규 해금 캐릭터·칭호 카드)는 순수 펄스가 아니라 "새로 얻음" 상태를 계속 표시하는 뱃지라 트로프에도 정적 링(`0 0 0 1px #e09a3c`)이 남아있다 — 완전 투명 규칙의 의도적 예외.
+- **색상은 문맥에 맞춰 변주**(주의/경고는 붉은 계열 `#9e3a2a`, 정보/특수정보는 베이지·황금 계열 `rgba(200,168,122,*)`/`rgba(224,154,60,*)`, 알림은 빨강 `#e53935`) — 다만 주기·번짐 수치는 위 표준값을 벗어나지 않는다.
