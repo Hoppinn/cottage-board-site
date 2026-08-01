@@ -2363,8 +2363,8 @@ const gameData = {
   "디셉션": {
     "id": "디셉션",
     "title": {
-      "display": "디셉션:홍콩살인사건",
-      "owned": "디셉션:홍콩살인사건",
+      "display": "디셉션",
+      "owned": "디셉션",
       "bgg": "Deception: Murder in Hong Kong"
     },
     "bgg": {
@@ -2439,9 +2439,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -3586,9 +3586,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -4198,9 +4198,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.63,
       "moodTags": [
@@ -4526,9 +4526,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.67,
       "moodTags": [
@@ -5297,9 +5297,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "heavy_strategy",
-      "shelfLabel": "헤비 전략게임",
-      "shelfFullLabel": "헤비 전략게임",
+      "shelfGroupId": "별도",
+      "shelfLabel": "별도",
+      "shelfFullLabel": "별도",
       "difficultyId": "heavy_mania",
       "difficultyWeight": 3.04,
       "moodTags": [
@@ -5625,9 +5625,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.74,
       "moodTags": [
@@ -7392,9 +7392,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.51,
       "moodTags": [
@@ -8467,9 +8467,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.87,
       "moodTags": [
@@ -10850,9 +10850,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.7,
       "moodTags": [
@@ -11121,9 +11121,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -11634,9 +11634,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -13197,9 +13197,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "popular",
-      "shelfLabel": "대중적인 게임",
-      "shelfFullLabel": "파티게임 - 대중적인 게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.62,
       "moodTags": [
@@ -16135,18 +16135,19 @@ const gameData = {
     "title": {
       "display": "옛날옛적에",
       "owned": "옛날옛적에",
-      "bgg": "1848"
+      "bgg": "Once Upon a Time: The Storytelling Card Game"
     },
     "bgg": {
-      "id": "989",
+      "id": "1234",
       "matchStatus": "forced",
-      "year": "1998",
-      "rating": 5.09697,
-      "weight": 3,
+      "year": "1993",
+      "rating": 6.35229,
+      "weight": 1.3716,
       "minPlayers": 2,
-      "maxPlayers": 2,
+      "maxPlayers": 6,
       "bestPlayers": [
-        2
+        5,
+        6
       ],
       "recommendedPlayers": [
         3,
@@ -16156,26 +16157,43 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        2
+        2,
+        6
       ],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
       "categories": [
-        "Card Game"
+        "Card Game",
+        "Humor",
+        "Party Game",
+        "Real-time"
       ],
       "categoriesKo": [
-        "카드게임"
+        "카드게임",
+        "유머",
+        "파티게임",
+        "실시간"
       ],
       "mechanics": [
-        "이야기만들기"
+        "Hand Management",
+        "Interrupts",
+        "Storytelling",
+        "Voting"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "패 관리",
+        "인터럽트",
+        "스토리텔링",
+        "투표"
+      ],
       "designers": [
-        "Gerhard H. Kuhlmann"
+        "Richard Lambert",
+        "Andrew Rilstone",
+        "James Wallis"
       ],
-      "description": "A two-player card game of the German Revolution by Gerhard H. Kuhlmann\n Rules for 1848 (Basic game)\nGame Contents\n26 Event cards (A01-A26)\n42 Personality cards (PE01-PE42)\n34 Supplementary cards (Z01-Z34)\n4 Rules cards 1(4) to 4(4)\n\nThe Goal of the Game\nThe goal of game is to play the Personality and Supplementary cards in such a way that you have authoritative control over the course of the revolution and control the most popular party at the end of the game.",
-      "descriptionKo": "**1848 - 독일 혁명 2인 카드게임**\n저자: Gerhard H. Kuhlmann\n\n**게임 구성**\n- 이벤트 카드 26장 (A01-A26)\n- 인물 카드 42장 (PE01-PE42)\n- 보조 카드 34장 (Z01-Z34)\n- 규칙 카드 4장\n\n**게임의 목표**\n인물 카드와 보조 카드를 전략적으로 배치하여 혁명의 흐름을 주도적으로 통제하고, 게임 종료 시 가장 인기 있는 진영을 장악하는 것이 목표입니다."
+      "description": "Once Upon A Time is a game in which the players create a story together, using cards that show typical elements from fairy tales. One player is the Storyteller and creates a story using the ingredients on their cards. They try to guide the plot towards their own ending. The other players try to use cards to interrupt the Storyteller and become the new Storyteller. The winner is the first player to play out all their cards and end with their Happy Ever After card.\n\nThe second edition, published in 1995, features an expanded card set.\n\nThe third edition, published in 2012, features multiple changes, including new artwork by Omar Rayyan, a new card set, and a simplified rulesheet.\n\nBox says: Contains 110 story cards, 55 ending cards and a rulebook(my box has 114 role cards)\nSee Also\n\n\n    Dark Cults\n    The Secret Adventures of The Old Hellfire Club",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
@@ -16185,31 +16203,60 @@ const gameData = {
       "difficultyId": "beginner",
       "difficultyWeight": 1.37,
       "moodTags": [
-        "cozy"
+        "cozy",
+        "immersive",
+        "funny",
+        "chaotic",
+        "tense"
       ],
       "playTags": [
-        "card_play"
+        "card_play",
+        "strategy",
+        "storytelling",
+        "party",
+        "dexterity"
       ],
       "situationTags": [
+        "group",
         "beginner",
+        "large_group",
         "first_game",
-        "couple"
+        "quick_play"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "competitive",
+        "table_talk",
+        "simultaneous"
+      ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "cozy",
+        "immersive",
+        "funny",
+        "chaotic",
+        "tense",
         "card_play",
+        "strategy",
+        "storytelling",
+        "party",
+        "dexterity",
+        "group",
         "beginner",
+        "large_group",
         "first_game",
-        "couple"
+        "quick_play",
+        "competitive",
+        "table_talk",
+        "simultaneous"
       ],
       "displayTags": [
         "머리쓰게",
+        "빠져들게",
+        "즐기고",
         "편안하게"
       ],
-      "summaryKo": "인물 카드와 보조 카드를 배치하여 1848년 독일 혁명의 흐름을 통제하는 2인 카드게임.",
+      "summaryKo": "",
       "comment": {
         "text": "",
         "source": "none"
@@ -16226,8 +16273,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/Yv1VtegOkaTHweQA1qLM0g__original/img/oHTs8j_IKGXcXRSdC2thjJJKUkk=/0x0/filters:format(jpeg)/pic337503.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/Yv1VtegOkaTHweQA1qLM0g__small/img/hz6dav5CHF4j_4ISi4WJlBeLslU=/fit-in/200x150/filters:strip_icc()/pic337503.jpg",
+      "main": "https://cf.geekdo-images.com/IHYBF2QWcZwlYfH4doj06Q__original/img/YzblvnFHp0ez4tJGmtI4ywKJ2Cw=/0x0/filters:format(jpeg)/pic1494028.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/IHYBF2QWcZwlYfH4doj06Q__small/img/XkT-0Bj73aLec9BYdqWSqIpIKis=/fit-in/200x150/filters:strip_icc()/pic1494028.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -18129,9 +18176,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "popular",
-      "shelfLabel": "대중적인 게임",
-      "shelfFullLabel": "파티게임 - 대중적인 게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -23776,9 +23823,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "mini_box",
-      "shelfLabel": "작은상자에 담긴 게임",
-      "shelfFullLabel": "작은상자에 담긴 게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.27,
       "moodTags": [],
@@ -24049,9 +24096,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -24178,9 +24225,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -24789,9 +24836,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "display",
-      "shelfLabel": "전시된 게임",
-      "shelfFullLabel": "파티게임 - 전시된 게임",
+      "shelfGroupId": "별도",
+      "shelfLabel": "별도",
+      "shelfFullLabel": "별도",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -29326,9 +29373,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "따로",
+      "shelfLabel": "따로",
+      "shelfFullLabel": "따로",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -29444,9 +29491,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "beginner",
       "difficultyWeight": 1.13,
       "moodTags": [
@@ -35581,9 +35628,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.04,
       "moodTags": [
@@ -37043,9 +37090,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.55,
       "moodTags": [
@@ -38100,9 +38147,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "popular",
-      "shelfLabel": "대중적인 게임",
-      "shelfFullLabel": "파티게임 - 대중적인 게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [],
@@ -41269,18 +41316,18 @@ const gameData = {
     "title": {
       "display": "벨에포크파리",
       "owned": "벨에포크파리",
-      "bgg": "Paris: La Cité de la Lumière"
+      "bgg": "Paris"
     },
     "bgg": {
-      "id": "276498",
-      "matchStatus": "auto-confirmed",
-      "year": "2019",
-      "rating": 7.21076,
-      "weight": 2.0267,
+      "id": "282954",
+      "matchStatus": "forced",
+      "year": "2020",
+      "rating": 7.19693,
+      "weight": 2.7545,
       "minPlayers": 2,
-      "maxPlayers": 2,
+      "maxPlayers": 4,
       "bestPlayers": [
-        2
+        4
       ],
       "recommendedPlayers": [
         2,
@@ -41289,42 +41336,47 @@ const gameData = {
       ],
       "notRecommendedPlayers": [
         1,
-        2
+        4
       ],
-      "playingTime": 30,
-      "minPlayTime": 30,
-      "maxPlayTime": 30,
+      "playingTime": 90,
+      "minPlayTime": 90,
+      "maxPlayTime": 90,
       "categories": [
-        "Abstract Strategy",
-        "Puzzle",
-        "Territory Building"
+        "City Building",
+        "Economic",
+        "Post-Napoleonic"
       ],
       "categoriesKo": [
-        "추상 전략",
-        "퍼즐",
-        "영토 건설"
+        "도시 건설",
+        "경제",
+        "나폴레옹 이후"
       ],
       "mechanics": [
-        "Action Drafting",
-        "Grid Coverage",
+        "Area Majority / Influence",
+        "End Game Bonuses",
+        "Hand Management",
+        "Income",
         "Modular Board",
-        "Open Drafting",
-        "Square Grid",
-        "Tile Placement"
+        "Set Collection",
+        "Tags",
+        "Worker Placement"
       ],
       "mechanicsKo": [
-        "액션 드래프팅",
-        "격자 커버리지",
+        "영역 지배",
+        "최종 보너스",
+        "패 관리",
+        "수입",
         "모듈형 보드",
-        "공개 드래프팅",
-        "사각 격자",
-        "타일 배치"
+        "세트 수집",
+        "태그",
+        "워커 배치"
       ],
       "designers": [
-        "José Antonio Abascal Acebo"
+        "Michael Kiesling",
+        "Wolfgang Kramer"
       ],
-      "description": "Paris is a two-player board game by Jos&eacute; Antonio Abascal infused with Parisian aesthetics by the boardgame&rsquo;s artist Oriol Hern&aacute;ndez. The game is set in late 19th century Paris during the 1889 &ldquo;Exposition Universelle,&rdquo; or World&rsquo;s Fair, when public electricity was a hot topic. Electricity spread throughout the city, creating today&rsquo;s beautiful nocturnal Parisian streets and coining Paris&rsquo;s nickname &ldquo;La Cit&eacute; de la Lumi&egrave;re&rdquo; - The City of Light.\n\nThe most well-lit buildings are admired more highly by passers-by. In the first phase, players can either place tiles or grow their reserve of buildings. The cobblestone tiles are divided into 4 random spaces (their color, their opponents&rsquo; color, a streetlight or a mixed-color space where either player can build).\n\nThen, in the second phase, players build on top of their color or the mixed spaces, in effort to position their buildings as close to as many streetlights as possible. More streetlights solicit more adoration and points. The player with the best lit buildings steals the hearts of Parisian pedestrians and wins the game.\n\n&mdash;description from the publisher",
-      "descriptionKo": "파리는 조제 안토니오 아바스칼이 디자인하고 아르티스트 오리올 에르난데스의 파리지앙 미학으로 완성한 2인용 보드게임입니다. 1889년 파리 만국박람회 시대를 배경으로 하며, 당시 공중 전기가 화제였던 시대입니다. 전기가 도시 전역으로 퍼지면서 오늘날의 아름다운 파리의 야경이 탄생했고, 파리는 \"빛의 도시\"라는 별명을 얻게 됩니다.\n\n가장 밝게 빛나는 건물들이 행인들에게 더 높이 평가됩니다. 첫 번째 단계에서 플레이어는 타일을 놓거나 건물 예비군을 확보합니다. 자갈길 타일은 4개의 무작위 공간으로 나뉘는데, 각각 자신의 색깔, 상대방의 색깔, 가로등, 또는 양쪽 플레이어 모두 건설 가능한 혼합 색상 공간입니다.\n\n두 번째 단계에서 플레이어는 자신의 색깔이나 혼합 공간에 건물을 지으며, 가능한 많은 가로등에 가깝게 건물을 배치하려고 노력합니다. 더 많은 가로등이 더 많은 칭찬과 점수를 가져옵니다. 가장 밝게 빛나는 건물을 가진 플레이어가 파리 행인들의 마음을 사로잡고 게임에서 승리합니다."
+      "description": "Explore Paris in the 19th century. Discover its renowned architecture and obtain the most eminent buildings in the right districts to achieve victory.\n\nParis is a typical medium-weight Kramer and Kiesling Eurostyle-game with straightforward gameplay, short player turns, and an ingenious point salad mechanism. You mainly score points by obtaining the right buildings and collecting the right bonus cards.\n\nIn Paris, you take on the role of wealthy real estate investors in the Paris of the 1900s. Paris is at the height of its transformation into one of the most beautiful cities in the world. After having successfully organized the World Fair in 1889, topped by the construction of the Eiffel Tower and celebrating the centennial of the Storming of the Bastille, Paris goes through a period known as &ldquo;la Belle &Eacute;poque&rdquo;. The architecture of Paris created during this period ranged from the Beaux-Arts, neo-Byzantine, and neo-Gothic to Art Nouveau and Art Deco. It is your task to purchase some of these magnificent Parisian buildings in order to make a profit and invest in the development and upkeep of some of Paris&rsquo; most iconic buildings and landmarks.",
+      "descriptionKo": ""
     },
     "cottage": {
       "status": "active",
@@ -41337,36 +41389,36 @@ const gameData = {
         "immersive"
       ],
       "playTags": [
-        "puzzle",
-        "strategy"
+        "strategy",
+        "card_play"
       ],
       "situationTags": [
         "experienced",
         "long_stay",
-        "couple"
+        "group"
       ],
       "interactionTags": [
         "competitive",
-        "silent_focus"
+        "turn_based"
       ],
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
         "immersive",
-        "puzzle",
         "strategy",
+        "card_play",
         "experienced",
         "long_stay",
-        "couple",
+        "group",
         "competitive",
-        "silent_focus"
+        "turn_based"
       ],
       "displayTags": [
         "머리쓰게",
         "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "1889년 파리를 배경으로 가로등 근처에 건물을 지어 더 많은 점수를 얻는 2인용 게임.",
+      "summaryKo": "",
       "comment": {
         "text": "",
         "source": "none"
@@ -41383,8 +41435,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/6mIsd0NbfluAAZxwS-3P8Q__original/img/NB6DNhFOUVEcrF-FcjSBBTLcU6Y=/0x0/filters:format(jpeg)/pic4664437.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/6mIsd0NbfluAAZxwS-3P8Q__small/img/mHdyyRSxXnnDNcQsG79crnWDnEw=/fit-in/200x150/filters:strip_icc()/pic4664437.jpg",
+      "main": "https://cf.geekdo-images.com/ImP902coxwYfSUF4sbw_nw__original/img/CtyoaR2V8T6UAx9y5_wMf1EkLNo=/0x0/filters:format(jpeg)/pic5159421.jpg",
+      "thumbnail": "https://cf.geekdo-images.com/ImP902coxwYfSUF4sbw_nw__small/img/zVVJ_sf29MY9LLk-PnnzsxPVy4o=/fit-in/200x150/filters:strip_icc()/pic5159421.jpg",
       "source": "bgg",
       "type": "jpg"
     },
@@ -41563,7 +41615,11 @@ const gameData = {
         "Environmental",
         "Puzzle"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "카드게임",
+        "환경",
+        "퍼즐"
+      ],
       "mechanics": [
         "Increase Value of Unchosen Resources",
         "Open Drafting",
@@ -41573,7 +41629,15 @@ const gameData = {
         "Tile Placement",
         "Variable Set-up"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "미선택 자원 가치 증가",
+        "공개 드래프팅",
+        "패턴 만들기",
+        "세트 수집",
+        "솔로 게임",
+        "타일 배치",
+        "가변 셋업"
+      ],
       "designers": [
         "Molly Johnson",
         "Robert Melvin",
@@ -42232,9 +42296,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "popular",
-      "shelfLabel": "대중적인 게임",
-      "shelfFullLabel": "파티게임 - 대중적인 게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.58,
       "moodTags": [
@@ -42621,9 +42685,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "heavy_strategy",
-      "shelfLabel": "헤비 전략게임",
-      "shelfFullLabel": "헤비 전략게임",
+      "shelfGroupId": "따로",
+      "shelfLabel": "따로",
+      "shelfFullLabel": "따로",
       "difficultyId": "light_family",
       "difficultyWeight": 2.15,
       "moodTags": [],
@@ -44445,9 +44509,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.88,
       "moodTags": [],
@@ -52248,9 +52312,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 1.65,
       "moodTags": [
@@ -53906,9 +53970,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "따로",
+      "shelfLabel": "따로",
+      "shelfFullLabel": "따로",
       "difficultyId": "kids",
       "difficultyWeight": 1,
       "moodTags": [
@@ -59451,12 +59515,18 @@ const gameData = {
         "Deduction",
         "Puzzle"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "추리",
+        "퍼즐"
+      ],
       "mechanics": [
         "Deduction",
         "Paper-and-Pencil"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "추리",
+        "종이와 연필"
+      ],
       "designers": [
         "Junghee Choi",
         "Wanjin Gill"
@@ -62550,9 +62620,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "party",
-      "shelfLabel": "파티게임",
-      "shelfFullLabel": "파티게임",
+      "shelfGroupId": "light_family",
+      "shelfLabel": "라이트패밀리게임",
+      "shelfFullLabel": "라이트패밀리게임",
       "difficultyId": "light_family",
       "difficultyWeight": 2.25,
       "moodTags": [
@@ -83568,9 +83638,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "dexterity",
-      "shelfLabel": "몸으로 하는 게임",
-      "shelfFullLabel": "파티게임 - 몸으로 하는 게임",
+      "shelfGroupId": "party",
+      "shelfLabel": "파티게임",
+      "shelfFullLabel": "파티게임",
       "difficultyId": "kids",
       "difficultyWeight": 1.04,
       "moodTags": [
@@ -85887,9 +85957,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "to_buy",
-      "shelfLabel": "구매예정",
-      "shelfFullLabel": "발매후 도착예정 - 구매예정",
+      "shelfGroupId": "x",
+      "shelfLabel": "x",
+      "shelfFullLabel": "x",
       "difficultyId": "light_family",
       "difficultyWeight": 2.16,
       "moodTags": [],
@@ -86550,9 +86620,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "murder_mystery",
-      "shelfLabel": "머더미스터리",
-      "shelfFullLabel": "머더미스터리",
+      "shelfGroupId": "shipping",
+      "shelfLabel": "배송중",
+      "shelfFullLabel": "발매후 도착예정 - 배송중",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
@@ -86695,9 +86765,9 @@ const gameData = {
     },
     "cottage": {
       "status": "active",
-      "shelfGroupId": "murder_mystery",
-      "shelfLabel": "머더미스터리",
-      "shelfFullLabel": "머더미스터리",
+      "shelfGroupId": "shipping",
+      "shelfLabel": "배송중",
+      "shelfFullLabel": "발매후 도착예정 - 배송중",
       "difficultyId": "",
       "difficultyWeight": 0,
       "moodTags": [
@@ -86820,7 +86890,12 @@ const gameData = {
         "Exploration",
         "Fantasy"
       ],
-      "categoriesKo": [],
+      "categoriesKo": [
+        "어드벤처",
+        "카드게임",
+        "탐험",
+        "판타지"
+      ],
       "mechanics": [
         "Area Movement",
         "Contracts",
@@ -86837,7 +86912,22 @@ const gameData = {
         "Turn Order: Progressive",
         "Worker Placement"
       ],
-      "mechanicsKo": [],
+      "mechanicsKo": [
+        "영역 이동",
+        "계약",
+        "덱/백/풀 빌딩",
+        "지연 구매",
+        "최종 보너스",
+        "패 관리",
+        "다목적 카드",
+        "게임당 1회 능력",
+        "공개 드래프팅",
+        "자원 이동",
+        "솔로 게임",
+        "트랙 이동",
+        "순차 진행",
+        "워커 배치"
+      ],
       "designers": [
         "Elwen",
         "Mín"

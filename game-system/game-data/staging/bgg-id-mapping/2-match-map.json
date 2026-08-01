@@ -723,7 +723,7 @@
   },
   "옛날옛적에": {
     "status": "forced",
-    "bggId": "989",
+    "bggId": "1234",
     "ownedName": "옛날옛적에"
   },
   "오딘": {
@@ -1925,12 +1925,9 @@
     "scoreGap": 30
   },
   "벨에포크파리": {
-    "status": "auto-confirmed",
-    "bggId": "276498",
-    "ownedName": "벨에포크파리",
-    "bggName": "Paris: La Cité de la Lumière",
-    "score": 115,
-    "scoreGap": 20
+    "status": "forced",
+    "bggId": "282954",
+    "ownedName": "벨에포크파리"
   },
   "보랏못리라이트 (머더미스터리미니)": {
     "status": "forced",

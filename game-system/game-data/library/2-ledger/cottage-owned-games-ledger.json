@@ -2551,16 +2551,17 @@
   {
     "id": "옛날옛적에",
     "ownedName": "옛날옛적에",
-    "titleEn": "1848",
-    "bggId": "989",
+    "titleEn": "Once Upon a Time: The Storytelling Card Game",
+    "bggId": "1234",
     "matchStatus": "forced",
     "status": "ready",
     "location": "파티",
-    "difficulty": 3,
+    "difficulty": 1.3716,
     "difficultyWeight": 1.37,
-    "rating": 5.09697,
+    "rating": 6.35229,
     "bestPlayers": [
-      2
+      5,
+      6
     ],
     "recommendedPlayers": [
       3,
@@ -6409,16 +6410,16 @@
   {
     "id": "벨에포크파리",
     "ownedName": "벨에포크파리",
-    "titleEn": "Paris: La Cité de la Lumière",
-    "bggId": "276498",
-    "matchStatus": "auto-confirmed",
+    "titleEn": "Paris",
+    "bggId": "282954",
+    "matchStatus": "forced",
     "status": "ready",
     "location": "전략",
-    "difficulty": 2.0267,
+    "difficulty": 2.7545,
     "difficultyWeight": 2.78,
-    "rating": 7.21076,
+    "rating": 7.19693,
     "bestPlayers": [
-      2
+      4
     ],
     "recommendedPlayers": [
       2,

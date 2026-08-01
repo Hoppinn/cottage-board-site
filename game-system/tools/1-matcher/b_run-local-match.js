@@ -147,3 +147,10 @@ async function autoResolveBggMatches() {
 module.exports = {
   autoResolveBggMatches,
 };
+
+if (require.main === module) {
+  autoResolveBggMatches().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
