@@ -278,7 +278,7 @@ function _openCoverModal(src) {
 function _openOrganizerLightbox(urls, gameName) {
   if (!urls?.length || !window.openLightbox) return;
   const captions = urls.map(() => `${gameName} 정리법`);
-  window.openLightbox(urls, 0, { captions, dim: 'rgba(0,0,0,0.75)' });
+  window.openLightbox(urls, 0, { captions, dim: 'rgba(0,0,0,0.5)', frame: true });
 }
 
 function _openNoteModal(modalId, heading, text) {

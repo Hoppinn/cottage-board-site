@@ -184,6 +184,12 @@
     if (delBtn) lb.appendChild(delBtn);
     if (gameThumb) lb.appendChild(gameThumb);
     if (opts?.dim) lb.style.background = opts.dim;
+    if (opts?.frame) {
+      img.style.background = '#fff';
+      img.style.padding = '16px';
+      img.style.boxSizing = 'border-box';
+      img.style.borderRadius = '12px';
+    }
     document.body.appendChild(lb);
     if (window.parent !== window) window.parent.postMessage({ type: 'cottage-lightbox-open' }, '*');
     show(cur);
