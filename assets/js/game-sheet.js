@@ -82,28 +82,29 @@ function formatDifficultyLabel(difficulty){
   return `(${difficulty.icon} ${difficulty.label})`;
 }
 
+// BGG 베스트/추천 인원 배열([1,4,5] 등)은 연속 구간이 아닐 수 있다 — min~max로 뭉치면
+// 실제로는 표에 없는 인원수(위 예시면 2,3명)까지 "베스트"인 것처럼 보이는 오표시가 된다.
+// 연속이면 범위로, 아니면 값을 그대로 나열한다.
+function _formatPlayerSet(players){
+  if(!Array.isArray(players) || players.length === 0) return null;
+
+  const sorted =
+    [...players]
+      .map(Number)
+      .sort((a, b) => a - b);
+
+  const min = sorted[0];
+  const max = sorted[sorted.length - 1];
+  if(min === max) return `${min}`;
+
+  const isContiguous = sorted.every((v, i) => i === 0 || v === sorted[i - 1] + 1);
+  return isContiguous ? `${min}~${max}` : sorted.join(", ");
+}
+
 function formatPlayers(players){
   if(Array.isArray(players)){
-    if(players.length === 0){
-      return "-";
-    }
-
-    const sorted =
-      [...players]
-        .map(Number)
-        .sort((a, b) => a - b);
-
-    const min =
-      sorted[0];
-
-    const max =
-      sorted[sorted.length - 1];
-
-    if(min === max){
-      return `${min}명`;
-    }
-
-    return `${min}~${max}명`;
+    const set = _formatPlayerSet(players);
+    return set ? `${set}명` : "-";
   }
 
   if(!players){
@@ -577,12 +578,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
 
   const bestText = formatPlayers(detail.bestPlayers);
   const recArr   = detail.recommendedPlayers;
-  const recShort = (Array.isArray(recArr) && recArr.length)
-    ? (() => {
-        const s = [...recArr].map(Number).sort((a,b)=>a-b);
-        return s[0] === s[s.length-1] ? `${s[0]}` : `${s[0]}~${s[s.length-1]}`;
-      })()
-    : null;
+  const recShort = _formatPlayerSet(recArr);
   const playersLine =
     bestText !== "-" && recShort ? `베스트 ${bestText} (추천 ${recShort}명)`
     : bestText !== "-" ? `베스트 ${bestText}`
