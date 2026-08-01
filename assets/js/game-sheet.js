@@ -286,7 +286,7 @@ function _openNoteModal(modalId, heading, text) {
   document.getElementById(modalId)?.remove();
   const m = document.createElement('div');
   m.id = modalId;
-  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:24px;';
+  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;padding:24px;';
   m.innerHTML = `<div style="background:#fff;border-radius:12px;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;position:relative;">
     <button aria-label="닫기" onclick="document.getElementById('${modalId}')?.remove()" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;line-height:1;">✕</button>
     <h3 style="margin:0 0 12px;padding-right:28px;">${window.escH(heading)}</h3>
@@ -998,9 +998,9 @@ async function initSheetOrganizerContent(gameKey) {
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
-  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
   if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 설명 보기</button>`;
   if (errorNote) html += `<button class="sheet-org-btn" type="button" data-org-action="error">⚠️ 에러로그 보기</button>`;
+  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
   area.innerHTML = html;
 
   area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openOrganizerLightbox(photos, gameName));
