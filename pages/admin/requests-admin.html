@@ -652,6 +652,8 @@
                 <input type="file" id="gameAdminPhotoInput" accept="image/*" multiple>
                 <div class="admin-section-title" style="cursor:default;margin-top:12px;">📖 룰 설명</div>
                 <textarea id="gameAdminRuleNote" class="admin-game-rule-textarea" rows="6" placeholder="룰 설명을 입력하세요"></textarea>
+                <div class="admin-section-title" style="cursor:default;margin-top:12px;">⚠️ 에러로그</div>
+                <textarea id="gameAdminErrorNote" class="admin-game-rule-textarea" rows="6" placeholder="자주 하는 실수·헷갈리는 룰 포인트를 입력하세요"></textarea>
                 <button type="button" class="admin-save-btn" id="gameAdminSaveBtn">저장</button>
                 <span class="admin-game-save-status" id="gameAdminSaveStatus"></span>
               </div>
@@ -692,6 +694,7 @@
         const photoGrid = document.getElementById('gameAdminPhotoGrid');
         const photoInput = document.getElementById('gameAdminPhotoInput');
         const ruleTextarea = document.getElementById('gameAdminRuleNote');
+        const errorTextarea = document.getElementById('gameAdminErrorNote');
         const saveBtn = document.getElementById('gameAdminSaveBtn');
         const statusEl = document.getElementById('gameAdminSaveStatus');
         if (!searchInput || !window.attachAc) return;
@@ -721,6 +724,7 @@
           const override = await window.CottageDB.getGameOverride(gameKey);
           currentPhotoUrls = override?.organizer_photo_urls || [];
           ruleTextarea.value = override?.rule_note || '';
+          errorTextarea.value = override?.error_note || '';
           photoInput.value = '';
           renderPhotoGrid();
           statusEl.textContent = '';
@@ -764,6 +768,7 @@
             const ok = await window.CottageDB.upsertGameOverride(selectedGameKey, {
               organizerPhotoUrls: currentPhotoUrls,
               ruleNote: ruleTextarea.value.trim(),
+              errorNote: errorTextarea.value.trim(),
             });
             photoInput.value = '';
             renderPhotoGrid();

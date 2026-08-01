@@ -360,13 +360,14 @@ window._cottageSess = (function () {
     } catch (e) { console.error('[getGameOverride]', e); return null; }
   }
 
-  async function upsertGameOverride(gameKey, { organizerPhotoUrls, ruleNote }) {
+  async function upsertGameOverride(gameKey, { organizerPhotoUrls, ruleNote, errorNote }) {
     if (!gameKey) return false;
     try {
       const { error } = await db.from('game_overrides').upsert({
         game_key: gameKey,
         organizer_photo_urls: organizerPhotoUrls || [],
         rule_note: ruleNote || null,
+        error_note: errorNote || null,
         updated_at: new Date().toISOString(),
       });
       if (error) { console.error('[upsertGameOverride]', error); return false; }

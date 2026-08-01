@@ -281,19 +281,27 @@ function _openOrganizerLightbox(urls, gameName) {
   window.openLightbox(urls, 0, { captions });
 }
 
-function _openRuleNoteModal(text, gameName) {
+function _openNoteModal(modalId, heading, text) {
   if (!text) return;
-  document.getElementById('ruleNoteModal')?.remove();
+  document.getElementById(modalId)?.remove();
   const m = document.createElement('div');
-  m.id = 'ruleNoteModal';
+  m.id = modalId;
   m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;padding:24px;';
   m.innerHTML = `<div style="background:#fff;border-radius:12px;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;position:relative;">
-    <button aria-label="룰 설명 닫기" onclick="document.getElementById('ruleNoteModal')?.remove()" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;line-height:1;">✕</button>
-    <h3 style="margin:0 0 12px;padding-right:28px;">${window.escH(gameName)} 룰 설명</h3>
+    <button aria-label="닫기" onclick="document.getElementById('${modalId}')?.remove()" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    <h3 style="margin:0 0 12px;padding-right:28px;">${window.escH(heading)}</h3>
     <p style="white-space:pre-wrap;margin:0;line-height:1.6;">${window.escH(text)}</p>
   </div>`;
   m.addEventListener('click', e => { if (e.target === m) m.remove(); });
   document.body.appendChild(m);
+}
+
+function _openRuleNoteModal(text, gameName) {
+  _openNoteModal('ruleNoteModal', `${gameName} 룰 설명`, text);
+}
+
+function _openErrorNoteModal(text, gameName) {
+  _openNoteModal('errorNoteModal', `${gameName} 에러로그`, text);
 }
 
 function openShelfSheet(url) {
@@ -984,17 +992,20 @@ async function initSheetOrganizerContent(gameKey) {
   const override = await window.CottageDB.getGameOverride(gameKey);
   const photos = override?.organizer_photo_urls || [];
   const ruleNote = override?.rule_note || '';
-  if (!photos.length && !ruleNote) { area.innerHTML = ''; return; }
+  const errorNote = override?.error_note || '';
+  if (!photos.length && !ruleNote && !errorNote) { area.innerHTML = ''; return; }
   const _og = window.gameData?.[gameKey];
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
   if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 설명 보기</button>`;
+  if (errorNote) html += `<button class="sheet-org-btn" type="button" data-org-action="error">⚠️ 에러로그 보기</button>`;
   area.innerHTML = html;
 
   area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openOrganizerLightbox(photos, gameName));
   area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleNoteModal(ruleNote, gameName));
+  area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openErrorNoteModal(errorNote, gameName));
 }
 
 async function initSheetCommentsPreview(gameKey) {
