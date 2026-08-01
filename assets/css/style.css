@@ -1495,13 +1495,14 @@ body.recommend-page main{
 }
 
 .game-card.active{
+  border-width:2px;
   border-color:#cfd9bd;
   box-shadow:0 8px 18px rgba(79,116,69,0.10);
   animation:gameCardActiveGlow 2.4s ease-in-out infinite;
 }
 @keyframes gameCardActiveGlow{
-  0%,100%{box-shadow:0 8px 18px rgba(79,116,69,0.10);}
-  50%{box-shadow:0 8px 18px rgba(79,116,69,0.10),0 0 10px 2px rgba(79,116,69,0.4);}
+  0%,100%{box-shadow:0 8px 18px rgba(79,116,69,0.10);border-color:#cfd9bd;}
+  50%{box-shadow:0 8px 18px rgba(79,116,69,0.10),0 0 18px 5px rgba(79,116,69,0.75);border-color:#5c8a4a;}
 }
 @media (prefers-reduced-motion: reduce){.game-card.active{animation:none;}}
 
@@ -3983,7 +3984,10 @@ body.embed-mode {
 .profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}
 .profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;animation:repAuraGlow 3.6s ease-in-out infinite;}
 @keyframes repAuraGlow{0%,100%{box-shadow:0 0 0 0 rgba(224,154,60,0.4);}50%{box-shadow:0 0 12px 4px rgba(224,154,60,0.5);}}
-@keyframes repTextGlow{0%,100%{text-shadow:0 0 3px rgba(224,154,60,0.3);}50%{text-shadow:0 0 7px rgba(224,154,60,0.55);}}
+@keyframes repTextGlow{
+  0%,100%{text-shadow:0 0 3px rgba(224,154,60,0.3);background:rgba(224,154,60,0.06);}
+  50%{text-shadow:0 0 8px rgba(224,154,60,0.75);background:rgba(224,154,60,0.22);}
+}
 @media (prefers-reduced-motion: reduce){.profile-panel-avatar,.profile-panel-rep-name,.profile-panel-title-name{animation:none;}}
 .profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;flex-shrink:0;}
 .profile-panel-avatar-edit{position:absolute;top:-1px;right:-1px;font-size:10px;background:#fff;border:1px solid #e8ddd4;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;pointer-events:none;line-height:1;}
@@ -3997,9 +4001,9 @@ body.embed-mode {
 .profile-panel-notif-btn:hover{text-decoration:underline;}
 .profile-panel-notif-btn.is-zero{color:var(--muted,#9b8b7a);font-weight:400;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
-.profile-panel-rep-name{font-size:12px;color:var(--text-info);cursor:pointer;animation:repTextGlow 3.6s ease-in-out infinite;}
+.profile-panel-rep-name{font-size:12px;color:var(--text-info);cursor:pointer;padding:1px 5px;border-radius:6px;animation:repTextGlow 3.6s ease-in-out infinite;}
 .profile-panel-readonly-hint{font-size:12px;color:var(--muted,#9b8b7a);}
-.profile-panel-title-name{font-size:12px;color:var(--green);font-weight:600;background:none;border:none;padding:0;cursor:pointer;text-align:left;animation:repTextGlow 3.6s ease-in-out infinite;}
+.profile-panel-title-name{font-size:12px;color:var(--green);font-weight:600;border:none;padding:1px 5px;border-radius:6px;cursor:pointer;text-align:left;animation:repTextGlow 3.6s ease-in-out infinite;}
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;animation:none;}
 .profile-growth-link{display:block;width:100%;background:#f5f0ea;border:1px solid #e8e0d4;border-radius:8px;padding:10px 12px;margin-top:4px;cursor:pointer;text-align:left;box-sizing:border-box;transition:background .15s, border-color .15s, transform .1s;}
@@ -7009,8 +7013,15 @@ body.is-embedded .inner-page{padding-top:16px;}
   color:var(--ink);
   line-height:1.4;
 }
-.meeting-status-msg.is-glow{animation:meetingStatusGlow 2.2s ease-in-out infinite;}
-@keyframes meetingStatusGlow{0%,100%{text-shadow:0 0 4px rgba(224,154,60,0.35);}50%{text-shadow:0 0 9px rgba(224,154,60,0.65);}}
+.meeting-status-msg.is-glow{
+  padding:3px 10px;
+  border-radius:999px;
+  animation:meetingStatusGlow 2.2s ease-in-out infinite;
+}
+@keyframes meetingStatusGlow{
+  0%,100%{background:rgba(224,154,60,0.10);box-shadow:0 0 0 0 transparent;}
+  50%{background:rgba(224,154,60,0.28);box-shadow:0 0 10px 3px rgba(224,154,60,0.6);}
+}
 @media (prefers-reduced-motion: reduce){.meeting-status-msg.is-glow{animation:none;}}
 .meeting-days{display:flex;gap:6px;flex-wrap:wrap;}
 .meeting-day-chip{
