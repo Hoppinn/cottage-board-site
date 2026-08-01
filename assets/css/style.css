@@ -2472,8 +2472,10 @@ body.embed-mode {
   margin:0 0 10px;
 }
 .sheet-avail-notice--shipping{background:#dde8f7;color:#2a5a9c;border:1px solid #a8c4e8;}
-.sheet-avail-notice--pending{background:#f5e0c8;color:var(--green);border:1px dashed #c8944a;}
-.sheet-avail-notice--preorder{background:#ede8f7;color:#5c3d8f;border:1px dashed #b8a0d8;}
+.sheet-avail-notice--pending{background:#f5e0c8;color:var(--green);border:1px dashed #c8944a;--avail-glow:rgba(200,148,74,0.55);animation:sheetAvailGlow 2.4s ease-in-out infinite;}
+.sheet-avail-notice--preorder{background:#ede8f7;color:#5c3d8f;border:1px dashed #b8a0d8;--avail-glow:rgba(184,160,216,0.55);animation:sheetAvailGlow 2.4s ease-in-out infinite;}
+@keyframes sheetAvailGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 8px 2px var(--avail-glow);}}
+@media (prefers-reduced-motion: reduce){.sheet-avail-notice--pending,.sheet-avail-notice--preorder{animation:none;}}
 
 .avail-badge-sm{display:inline-flex;align-items:center;padding:2px 6px;border:1px solid;border-radius:999px;font-size:10px;font-weight:700;line-height:1.3;white-space:nowrap;flex-shrink:0;}
 .avail-badge-sm.avail-shipping{background:#dde8f7;color:#2a5a9c;border-color:#a8c4e8;}
@@ -4053,7 +4055,9 @@ body.embed-mode {
 .profile-more-btn:hover{color:var(--green);}
 /* 알림 배지 */
 #kakaoLoginBtn{position:relative;}
-.notif-badge{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#e53935;pointer-events:none;}
+.notif-badge{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#e53935;pointer-events:none;animation:notifBadgeGlow 2s ease-in-out infinite;}
+@keyframes notifBadgeGlow{0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,0.7);}50%{box-shadow:0 0 6px 3px rgba(229,57,53,0.7);}}
+@media (prefers-reduced-motion: reduce){.notif-badge{animation:none;}}
 /* 알림 섹션 */
 .profile-notif-section{background:#fff8f0;border:1px solid #f5c89a;border-radius:10px;overflow:hidden;margin-bottom:14px;}
 .profile-notif-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:none;border:none;cursor:pointer;}
@@ -4532,7 +4536,7 @@ body.embed-mode {
 .profile-char-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
 /* 새로 해금(2026-07-27) — .is-rep(대표, 초록)과 헷갈리지 않게 amber로. overflow:hidden이라
    ::after 배지는 클리핑되므로(2026-07-27 실측 교훈) 테두리+box-shadow만 쓴다. */
-.profile-char-card.is-newly-earned{border:2px solid #e09a3c;box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);}
+.profile-char-card.is-newly-earned{border:2px solid #e09a3c;box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);animation:newlyEarnedGlow 2.4s ease-in-out infinite;}
 .profile-char-card-name{font-size:10px;line-height:1.2;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;margin-top:2px;}
 .profile-char-card.is-locked .profile-char-card-name{opacity:0.4;}
 .profile-char-card-progress{font-size:9px;color:var(--muted);text-align:center;width:100%;line-height:1;margin-top:1px;}
@@ -4560,7 +4564,9 @@ body.embed-mode {
 .profile-title-card.is-rep{border:2px solid var(--green);box-shadow:0 0 0 1px var(--green);}
 .profile-title-card.is-selected{border:2px solid #4caf50;box-shadow:0 0 0 1px #4caf50;}
 /* 새로 해금(2026-07-27) — .profile-char-card.is-newly-earned과 같은 amber */
-.profile-title-card.is-newly-earned{border:2px solid #e09a3c;box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);}
+.profile-title-card.is-newly-earned{border:2px solid #e09a3c;box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);animation:newlyEarnedGlow 2.4s ease-in-out infinite;}
+@keyframes newlyEarnedGlow{0%,100%{box-shadow:0 0 0 1px #e09a3c,0 0 5px rgba(224,154,60,0.6);}50%{box-shadow:0 0 0 1px #e09a3c,0 0 14px 3px rgba(224,154,60,0.85);}}
+@media (prefers-reduced-motion: reduce){.profile-char-card.is-newly-earned,.profile-title-card.is-newly-earned{animation:none;}}
 .profile-title-emoji{font-size:22px;line-height:1;}
 .profile-title-name{font-size:10px;line-height:1.3;color:var(--text);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
 .profile-title-rarity{font-size:9px;font-weight:700;}
