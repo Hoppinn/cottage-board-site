@@ -278,7 +278,7 @@ function _openCoverModal(src) {
 function _openOrganizerLightbox(urls, gameName) {
   if (!urls?.length || !window.openLightbox) return;
   const captions = urls.map(() => `${gameName} 정리법`);
-  window.openLightbox(urls, 0, { captions });
+  window.openLightbox(urls, 0, { captions, dim: 'rgba(0,0,0,0.5)' });
 }
 
 function _openNoteModal(modalId, heading, text) {
@@ -297,7 +297,7 @@ function _openNoteModal(modalId, heading, text) {
 }
 
 function _openRuleNoteModal(text, gameName) {
-  _openNoteModal('ruleNoteModal', `${gameName} 룰 설명`, text);
+  _openNoteModal('ruleNoteModal', `${gameName} 룰 요약`, text);
 }
 
 function _openErrorNoteModal(text, gameName) {
@@ -998,7 +998,7 @@ async function initSheetOrganizerContent(gameKey) {
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
-  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 설명 보기</button>`;
+  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 요약 보기</button>`;
   if (errorNote) html += `<button class="sheet-org-btn" type="button" data-org-action="error">⚠️ 에러로그 보기</button>`;
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
   area.innerHTML = html;

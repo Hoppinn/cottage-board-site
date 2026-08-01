@@ -183,6 +183,7 @@
     if (cap) lb.appendChild(cap);
     if (delBtn) lb.appendChild(delBtn);
     if (gameThumb) lb.appendChild(gameThumb);
+    if (opts?.dim) lb.style.background = opts.dim;
     document.body.appendChild(lb);
     if (window.parent !== window) window.parent.postMessage({ type: 'cottage-lightbox-open' }, '*');
     show(cur);
