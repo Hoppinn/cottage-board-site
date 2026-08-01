@@ -3985,7 +3985,7 @@ body.embed-mode {
 .profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;animation:repAuraGlow 3.6s ease-in-out infinite;}
 @keyframes repAuraGlow{0%,100%{box-shadow:0 0 0 0 rgba(224,154,60,0.4);}50%{box-shadow:0 0 12px 4px rgba(224,154,60,0.5);}}
 @keyframes repTextGlow{
-  0%,100%{border-color:rgba(224,154,60,0.15);box-shadow:0 0 0 0 transparent;}
+  0%,100%{border-color:transparent;box-shadow:0 0 0 0 transparent;}
   50%{border-color:rgba(224,154,60,0.85);box-shadow:0 0 5px 0 rgba(224,154,60,0.5);}
 }
 @media (prefers-reduced-motion: reduce){.profile-panel-avatar,.profile-panel-rep-name,.profile-panel-title-name{animation:none;}}
@@ -7020,7 +7020,7 @@ body.is-embedded .inner-page{padding-top:16px;}
   animation:meetingStatusGlow 3.6s ease-in-out infinite;
 }
 @keyframes meetingStatusGlow{
-  0%,100%{border-color:rgba(224,154,60,0.15);box-shadow:0 0 0 0 transparent;}
+  0%,100%{border-color:transparent;box-shadow:0 0 0 0 transparent;}
   50%{border-color:rgba(224,154,60,0.8);box-shadow:0 0 4px 0 rgba(224,154,60,0.35);}
 }
 @media (prefers-reduced-motion: reduce){.meeting-status-msg.is-glow{animation:none;}}
