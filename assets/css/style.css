@@ -2459,7 +2459,7 @@ body.embed-mode {
 .owned-game-meta .difficulty-hardcore{background:#f5e7df;}
 .owned-game-meta .avail-shipping{background:#dde8f7;color:#2a5a9c;border-color:#a8c4e8;}
 .owned-game-meta .avail-pending{background:#f5e0c8;color:var(--green);border-color:#c8944a;border-style:dashed;}
-.owned-game-meta .avail-preorder{background:#ede8f7;color:#5c3d8f;border-color:#b8a0d8;border-style:dashed;}
+.owned-game-meta .avail-preorder{background:#fbe2df;color:#9e3a2a;border-color:#d98a7a;border-style:dashed;}
 
 .sheet-avail-notice{
   display:flex;
@@ -2473,14 +2473,14 @@ body.embed-mode {
 }
 .sheet-avail-notice--shipping{background:#dde8f7;color:#2a5a9c;border:1px solid #a8c4e8;}
 .sheet-avail-notice--pending{background:#f5e0c8;color:var(--green);border:1px dashed #c8944a;--avail-glow:rgba(200,148,74,0.55);animation:sheetAvailGlow 2.4s ease-in-out infinite;}
-.sheet-avail-notice--preorder{background:#ede8f7;color:#5c3d8f;border:1px dashed #b8a0d8;--avail-glow:rgba(184,160,216,0.55);animation:sheetAvailGlow 2.4s ease-in-out infinite;}
+.sheet-avail-notice--preorder{background:#fbe2df;color:#9e3a2a;border:1px dashed #d98a7a;--avail-glow:rgba(158,58,42,0.5);animation:sheetAvailGlow 2.4s ease-in-out infinite;}
 @keyframes sheetAvailGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 8px 2px var(--avail-glow);}}
 @media (prefers-reduced-motion: reduce){.sheet-avail-notice--pending,.sheet-avail-notice--preorder{animation:none;}}
 
 .avail-badge-sm{display:inline-flex;align-items:center;padding:2px 6px;border:1px solid;border-radius:999px;font-size:10px;font-weight:700;line-height:1.3;white-space:nowrap;flex-shrink:0;}
 .avail-badge-sm.avail-shipping{background:#dde8f7;color:#2a5a9c;border-color:#a8c4e8;}
 .avail-badge-sm.avail-pending{background:#f5e0c8;color:var(--green);border-color:#c8944a;border-style:dashed;}
-.avail-badge-sm.avail-preorder{background:#ede8f7;color:#5c3d8f;border-color:#b8a0d8;border-style:dashed;}
+.avail-badge-sm.avail-preorder{background:#fbe2df;color:#9e3a2a;border-color:#d98a7a;border-style:dashed;}
 
 .owned-pagination{
   max-width:720px;
