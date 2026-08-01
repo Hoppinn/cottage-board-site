@@ -7017,7 +7017,7 @@ body.is-embedded .inner-page{padding-top:16px;}
   padding:2px 7px;
   border-radius:999px;
   border:1.5px solid transparent;
-  animation:meetingStatusGlow 2.2s ease-in-out infinite;
+  animation:meetingStatusGlow 3.6s ease-in-out infinite;
 }
 @keyframes meetingStatusGlow{
   0%,100%{border-color:rgba(224,154,60,0.15);box-shadow:0 0 0 0 transparent;}
