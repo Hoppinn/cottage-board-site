@@ -17,6 +17,23 @@
  * 환경변수: ANTHROPIC_API_KEY 필수
  */
 
+const fs = require("fs");
+const path = require("path");
+
+// .env 로드 (dotenv 없이 직접 파싱) — a_fetch-bgg-game-data-by-id.js와 동일 패턴
+try {
+  const envPath = path.resolve(process.cwd(), ".env");
+  fs.readFileSync(envPath, "utf-8")
+    .split("\n")
+    .forEach((line) => {
+      const eq = line.indexOf("=");
+      if (eq < 1) return;
+      const key = line.slice(0, eq).trim();
+      const val = line.slice(eq + 1).trim();
+      if (key && !process.env[key]) process.env[key] = val;
+    });
+} catch {}
+
 const Anthropic = require("@anthropic-ai/sdk");
 const { readJson, writeJson } = require("../_core/file-read-writer");
 const { COTTAGE_OWNED_GAMES_MASTER_PATH } = require("../_core/paths");
