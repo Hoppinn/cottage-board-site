@@ -4076,7 +4076,10 @@ body.embed-mode {
 .profile-notif-empty{justify-content:flex-start!important;gap:8px;color:var(--muted);font-size:12px;padding:6px 0;}
 .profile-notif-list li.is-new{font-weight:600;}
 .profile-notif-list li.is-clickable{cursor:pointer;}
-.profile-notif-new-badge{display:inline-block;font-size:9px;font-weight:700;color:#fff!important;background:#e53935;border-radius:3px;padding:1px 4px;vertical-align:middle;margin-right:2px;}
+.profile-notif-new-badge{display:inline-block;font-size:9px;font-weight:700;color:#fff!important;background:#e53935;border-radius:3px;padding:1px 4px;vertical-align:middle;margin-right:2px;animation:notifBadgeGlow2 2s ease-in-out infinite;}
+@keyframes notifBadgeGlow2{0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,0.6);}50%{box-shadow:0 0 6px 2px rgba(229,57,53,0.6);}}
+.profile-notif-body.is-multi-new .profile-notif-new-badge{animation:none;box-shadow:none;}
+@media (prefers-reduced-motion: reduce){.profile-notif-new-badge{animation:none;}}
 .profile-notif-confirm-row{display:flex !important;justify-content:flex-end;padding-top:4px;border-top:1px solid var(--border);margin-top:4px;}
 .profile-notif-confirm-all{font-size:12px;font-weight:700;color:#fff;background:#e53935;border:none;border-radius:6px;padding:5px 14px;cursor:pointer;}
 /* 음료교환권 공지 항목 */

@@ -2268,7 +2268,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   const _voucherFirst = !_effectiveVoucherSeen;
   // 공지는 미확인이면 맨 위, 확인했으면 맨 아래 — 보상 카드와 같은 규칙
   const _noticeFirst = _feeNoticeLive && !_feeSeen;
-  let _notifInnerHtml = `<div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_noticeFirst ? _feeNoticeHtml : ''}${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_noticeFirst ? '' : _feeNoticeHtml}${_notifHelpHtml}`;
+  // 새 알림이 1건뿐일 때만 NEW 뱃지가 반짝임 — 여러 건이 동시에 반짝이면 산만해서(2026-08-02 판단) is-multi-new로 막는다.
+  let _notifInnerHtml = `<div class="profile-notif-body${_newCount === 1 ? '' : ' is-multi-new'}"><div class="notif-list-header">${_hasAnyNew ? '<button class="profile-notif-confirm-all" type="button">모두 읽기</button>' : ''}</div>${_noticeFirst ? _feeNoticeHtml : ''}${_voucherFirst ? voucherCardHtml : ''}<ul class="profile-notif-list">${_allNotifItems}</ul>${_hiddenNotifHtml}${_voucherFirst ? '' : voucherCardHtml}${_noticeFirst ? '' : _feeNoticeHtml}${_notifHelpHtml}</div>`;
 
   const voucherHtml = `<div class="profile-voucher-section"><button class="profile-voucher-toggle" type="button"><span class="profile-voucher-header">🎫 음료교환권 <span class="profile-voucher-bal-label">${voucherBalance}장 보유</span></span><span class="profile-toggle-arrow">▾</span></button><div id="profileVoucherInner" class="is-collapsed">${_buildVoucherInner(voucherBalance, voucherProducts, voucherHistory, isDevMode)}</div></div>`;
 

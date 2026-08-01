@@ -183,9 +183,9 @@ function getGameShelfLabel(game){
 // 카드용 위치 span (특수 상태면 배지, 아니면 📦 위치)
 function getShelfSpanHtml(game){
   const loc = game?.cottage?.shelfGroupId || "";
-  if (loc === "배송중")          return '<span class="avail-shipping">🚚 배송중</span>';
-  if (loc === "구매예정")        return '<span class="avail-pending">🛒 구매예정</span>';
-  if (loc === "발매후 도착예정") return '<span class="avail-preorder">⏳ 발매후 도착예정</span>';
+  if (loc === "배송중")   return '<span class="avail-shipping">🚚 배송중</span>';
+  if (loc === "to_buy")   return '<span class="avail-pending">🛒 구매예정</span>';
+  if (loc === "incoming") return '<span class="avail-preorder">⏳ 발매후 도착예정</span>';
   const label = getGameShelfLabel(game);
   return label && label !== "-" ? `<span>📦 ${label}</span>` : "";
 }
@@ -193,9 +193,9 @@ function getShelfSpanHtml(game){
 // 검색 자동완성용 소형 배지
 function getAvailBadgeHtml(game){
   const loc = game?.cottage?.shelfGroupId || "";
-  if (loc === "배송중")          return '<span class="avail-badge-sm avail-shipping">🚚 배송중</span>';
-  if (loc === "구매예정")        return '<span class="avail-badge-sm avail-pending">🛒 구매예정</span>';
-  if (loc === "발매후 도착예정") return '<span class="avail-badge-sm avail-preorder">⏳ 발매후 도착예정</span>';
+  if (loc === "배송중")   return '<span class="avail-badge-sm avail-shipping">🚚 배송중</span>';
+  if (loc === "to_buy")   return '<span class="avail-badge-sm avail-pending">🛒 구매예정</span>';
+  if (loc === "incoming") return '<span class="avail-badge-sm avail-preorder">⏳ 발매후 도착예정</span>';
   return "";
 }
 
@@ -204,9 +204,9 @@ function getAvailNoticHtml(game){
   const loc = game?.cottage?.shelfGroupId || "";
   if (loc === "배송중")
     return '<p class="sheet-avail-notice sheet-avail-notice--shipping">🚚 배송중 · 아직 매장에 입고되지 않았습니다</p>';
-  if (loc === "구매예정")
+  if (loc === "to_buy")
     return '<p class="sheet-avail-notice sheet-avail-notice--pending">🛒 구매예정 · 아직 구매되지 않았습니다</p>';
-  if (loc === "발매후 도착예정")
+  if (loc === "incoming")
     return '<p class="sheet-avail-notice sheet-avail-notice--preorder">⏳ 발매후 도착예정 · 선주문 완료, 발매 후 도착 예정입니다</p>';
   return "";
 }
