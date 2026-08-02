@@ -7018,7 +7018,21 @@ body.is-embedded .inner-page{padding-top:16px;}
   line-height:1.4;
 }
 .meeting-status-msg.is-glow{
-  animation:textGlowPulse 3.6s ease-in-out infinite;
+  animation:statusBlinkGlow 3.6s ease-in-out infinite;
+}
+/* 이번 주 모임 상태 전용 — 글자가 완전히 사라졌다 나타나며, 불투명도 최대치와 그림자
+   최대치가 정확히 같은 시점(50%)에 겹치도록 동기화(2026-08-02, 사용자가 4안 확정 선택).
+   textGlowPulse(캐릭터명·칭호)와 달리 여기만 opacity를 같이 움직인다 — 저 둘은 항상
+   읽혀야 하는 라벨이라 완전 소멸시키지 않기로 별도 판단했다. */
+@keyframes statusBlinkGlow{
+  0%,100%{
+    opacity:0;
+    text-shadow:0 0 0 rgba(224,154,60,0),0 0 0 rgba(224,154,60,0),0 0 0 rgba(224,154,60,0);
+  }
+  50%{
+    opacity:1;
+    text-shadow:0 0 5px rgba(224,154,60,1),0 0 12px rgba(224,154,60,.6),0 0 20px rgba(224,154,60,.3);
+  }
 }
 @media (prefers-reduced-motion: reduce){.meeting-status-msg.is-glow{animation:none;}}
 .meeting-days{display:flex;gap:6px;flex-wrap:wrap;}
