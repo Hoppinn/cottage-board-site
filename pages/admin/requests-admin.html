@@ -1776,8 +1776,15 @@
             return _decodeHost(rawHost);
           } catch (_) { return null; }
         }
+        // 로그인 전(익명 session_key)·후(회원 user_id) 활동이 같은 session_key를 공유한다
+        // (getSessionKey()는 로그인 여부와 무관하게 브라우저에 고정) — 그런데 user_id 유무로
+        // 다른 키 공간을 쓰면 실제로는 1명인데 anon:X / user:Y로 갈린다(2026-08-02 발견).
+        // 조회된 행 전체에서 session_key↔user_id 연결이 한 번이라도 보이면 그 매핑을 써서
+        // 뒤늦게 로그인한 익명 행도 같은 사람으로 합친다. **채우기는 아래에서, 참조는 여기 한 곳.**
+        const _sessionOwnerMap = {};
         function visitorKey(row, idx, prefix = 'visitor') {
-          if (row.user_id) return `user:${row.user_id}`;
+          const uid = row.user_id || _sessionOwnerMap[row.session_key];
+          if (uid) return `user:${uid}`;
           if (row.session_key) return `anon:${row.session_key}`;
           return `${prefix}:legacy:${idx}`;
         }
@@ -1786,6 +1793,11 @@
         // "전체 방문자"는 봇 제외가 기준 — is_bot=true 행은 visitorRows에서 빠지고 botVisitorRows로 별도 집계
         // (is_bot/user_id 컬럼은 143차-178부터 추가돼 그 이전 데이터는 전부 is_bot=false/user_id=null로 채워짐)
         const visitorRowsAll = pageViews.filter(r => r.page === '__visitor__');
+        // _sessionOwnerMap 채우기 — rows(page_sessions)·visitorRowsAll(page_views) 둘 다에서
+        // user_id가 찍힌 session_key를 모아둔다. visitorKey를 부르는 모든 소비처가 이 시점 이후에
+        // 실행되므로(아래부터) 채우는 자리는 여기 한 곳으로 충분하다.
+        for (const r of rows) if (r.user_id && r.session_key) _sessionOwnerMap[r.session_key] = r.user_id;
+        for (const r of visitorRowsAll) if (r.user_id && r.session_key) _sessionOwnerMap[r.session_key] = r.user_id;
 
         // ── 「비회원 1명」의 정의 (#27, 2026-07-20 사용자 결정) ──────────────────
         // **세션이 형성된 접속만 사람으로 센다.** 마커(__visitor__)는 DOMContentLoaded 즉시
