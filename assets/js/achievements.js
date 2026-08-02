@@ -891,7 +891,7 @@
       }
       const statusCls = done ? ' is-done' : '';
       const statusText = done ? `✓ ${typeLabel} · ${def.threshold}` : `${typeLabel} · ${cur}/${def.threshold}`;
-      return `<li class="profile-ach-item${done ? ' is-achieved' : ' is-locked'}${isNew ? ' is-newly-earned' : ''}">` +
+      return `<li class="profile-ach-item${done ? ' is-achieved' : ' is-locked'}${isNew ? ' is-newly-earned' : ''}" data-ach-id="${def.id}">` +
         `${iconHtml}` +
         `<div class="profile-ach-info"><span class="profile-ach-name">${def.name}</span>${rewardHtml}</div>` +
         `<span class="profile-ach-status${statusCls}">${statusText}</span></li>`;

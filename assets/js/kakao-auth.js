@@ -1592,7 +1592,8 @@ function _bindMeetingSubsheet(subBody, ctx) {
 // ── '최근 소식'(알림) 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 // ctx: _markAllNotifSeen/_markOneNotifSeen/_markVoucherSeen/_markNoticeSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
-  const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle } = ctx;
+  const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle,
+    _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly } = ctx;
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
@@ -1622,6 +1623,26 @@ function _bindNotifSubsheet(subBody, ctx) {
                 // new_intro와 같은 이동(위 참고) — 신규 회원 알림은 이름이 여러 개 묶일 수
                 // 있어 li 전체가 아니라 이름 각각에 uid를 실었다(2026-08-02).
                 openOtherMeetingSheet(memberLink.dataset.memberUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
+                return;
+              }
+              if (li.dataset.notifAchIds && _openSubSheet && _growthInnerHtml) {
+                // 업적 알림 클릭 → 내 수집 보드로 이동, 업적 목록을 펼치고 해당 항목으로
+                // 스크롤+강조(2026-08-02, 사용자 요청). 업적은 항상 "내" 것이라 readOnly만
+                // 그대로 물려주면 되고(남의 알림을 보는 경로 자체가 없음), 캐릭터/칭호
+                // 펼침(expandChar/expandTitle)은 이 진입과 무관해 둘 다 false로 둔다.
+                const achIds = li.dataset.notifAchIds.split(',').filter(Boolean);
+                _openSubSheet('수집 보드', _growthInnerHtml, gsubBody => {
+                  _afterGrowthRender(gsubBody, false, false, readOnly);
+                  const achToggleBtn = gsubBody.querySelector('.profile-ach-toggle-btn');
+                  const achList = gsubBody.querySelector('.profile-ach-list');
+                  if (achToggleBtn && achList?.classList.contains('is-hidden')) achToggleBtn.click();
+                  const target = achIds.map(id => gsubBody.querySelector(`.profile-ach-item[data-ach-id="${id}"]`)).find(Boolean);
+                  if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.classList.add('is-notif-highlight');
+                    setTimeout(() => target.classList.remove('is-notif-highlight'), 2200);
+                  }
+                });
                 return;
               }
               let key = null;
@@ -2258,7 +2279,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const desc = defs.length > 1
         ? `${defs.map(_label).join(', ')} 업적을 달성했어요`
         : `${_label(first || {})} 업적을 달성했어요`;
-      return `<li class="${cls}">${_card(emoji, `업적 달성${n.count > 1 ? ` ${n.count}건` : ''}`, desc)}${readBtn}</li>`;
+      // 클릭 시 내 수집 보드의 업적 목록으로 이동 + 해당 항목 스크롤·강조(2026-08-02, 사용자 요청).
+      const achIdsAttr = defs.length ? ` data-notif-ach-ids="${escH(defs.map(d => d.id).join(','))}"` : '';
+      return `<li class="${cls}"${achIdsAttr}>${_card(emoji, `업적 달성${n.count > 1 ? ` ${n.count}건` : ''}`, desc)}${readBtn}</li>`;
     }
     // 간식·음료 요청도 유형+날짜로 묶여서 온다(관리자 전용, voucher와 같은 패턴).
     if (n.type === 'snack_request') {
@@ -2933,7 +2956,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         // onLeave 스냅샷: 개별 읽음은 DOM만 바꾸므로, 뒤로가기/백드롭으로 나갔다 다시 들어와도
         // 유지되려면 캐시 문자열을 현재 DOM으로 갱신해야 한다(기록보드와 같은 방식).
         // ✕닫기는 패널째 제거 → 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요.
-        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
+        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle, _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');

@@ -4197,6 +4197,9 @@ body.embed-mode {
 /* 새로 해금(2026-07-27) — 처음 열람했을 때만 켜짐(kakao-auth.js achSeenAt), 다음 열람부턴 꺼진다.
    .notif-card.is-new와 같은 amber 팔레트로 통일. */
 .profile-ach-item.is-newly-earned{background:#fff8f0;border-radius:8px;padding:4px 8px;margin:-4px -8px;box-shadow:inset 3px 0 0 #e09a3c;}
+/* 알림 클릭으로 찾아왔을 때 잠깐만 켜지는 강조 — is-newly-earned(계속 남는 표시)와
+   달리 2.2초 뒤 자동으로 꺼진다(2026-08-02, JS에서 setTimeout으로 클래스 제거). */
+.profile-ach-item.is-notif-highlight{background:#fff3e0;border-radius:8px;padding:4px 8px;margin:-4px -8px;box-shadow:0 0 0 2px #e09a3c;transition:background .3s,box-shadow .3s;}
 .profile-ach-img{width:28px;height:28px;object-fit:contain;flex-shrink:0;}
 .profile-ach-img-fallback{font-size:20px;flex-shrink:0;}
 .profile-ach-img-lock{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;filter:grayscale(1);}
