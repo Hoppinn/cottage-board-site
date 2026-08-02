@@ -1457,9 +1457,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     return '🔥 이번 주 모임 진행 중';
   }
 
-  // 모집 중(0명, 참여 유도)·진행 중(4명+, 활발함) — 극단 상태만 강조. 중간 대기 인원수는 밋밋해서 제외.
+  // 상태 메시지가 뜨는 모든 인원수에서 반짝임 — 모임 요일칩(has-vote)과 같은 정도로 항상 강조.
   function isGlowworthyMeetingCount(count) {
-    return count === 0 || count >= 4;
+    return true;
   }
 
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
