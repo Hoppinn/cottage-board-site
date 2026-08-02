@@ -1461,25 +1461,25 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   // weekOffset을 안 받던 시절엔 지난 주·다음 주를 봐도 무조건 "이번 주 모임 진행 중"이라고
   // 떴다(2026-08-02 사용자 지적 — 이미 끝난 주인데 "진행 중", 다음 주인데도 "이번 주").
   // 과거/현재/미래를 나눠 시제와 라벨을 맞춘다. 현재 주(weekOffset===0)는 기존 문구 그대로.
-  function getMeetingStatusMsg(count, weekOffset = 0) {
+  //
+  // 🚨 실제 "모임"은 같은 날 2명 이상이 모여야 성사된다(2026-08-02, 사용자 예시: 월 1명+수
+  // 1명=총 2명이지만 어느 날도 안 뭉쳐서 모임이 아님). maxDayCount(하루 최댓값)가 2 미만이면
+  // 총원이 몇이든 "모였다/진행 중/진행 예정"으로 부풀리지 않는다 — 과거는 "없었어요", 현재·
+  // 미래는 총원 기준 "기다리고 있어요"(약한 신호, 관심은 있으나 아직 안 뭉침)로 낮춘다.
+  function getMeetingStatusMsg(count, weekOffset = 0, maxDayCount = 0) {
     const label = _weekSuffix(weekOffset);
+    const clustered = maxDayCount >= 2; // 최소 하루에 2명 이상 뭉쳤는가
     if (weekOffset < 0) {
-      // 과거 — "모집 중"·"진행 중"은 이미 지난 일에 안 맞는다. 전부 완료형으로.
-      if (count === 0) return `📭 ${label}엔 모임이 없었어요`;
-      if (count === 1) return `🙋 ${label}에 1명이 참여했어요`;
-      if (count === 2) return `👥 ${label}에 2명이 참여했어요`;
+      if (!clustered) return `📭 ${label}엔 모임이 없었어요`;
       return `✅ ${label} 모임에 ${count}명이 모였어요`;
     }
     if (weekOffset > 0) {
-      // 미래 — "진행 중"은 아직 안 왔으니 "예정"으로.
       if (count === 0) return `🎲 ${label} 모임 모집 중`;
-      if (count === 1) return `🙋 ${label}에 1명이 참여 예정이에요`;
-      if (count === 2) return `👥 ${label}에 2명이 참여 예정이에요`;
+      if (!clustered) return `${count === 1 ? '🙋' : '👥'} ${label}에 ${count}명이 기다리고 있어요`;
       return `📅 ${label} 모임에 ${count}명 참여 예정이에요`;
     }
     if (count === 0) return '🎲 이번 주 모임 모집 중';
-    if (count === 1) return '🙋 1명이 기다리고 있어요';
-    if (count === 2) return '👥 2명이 기다리고 있어요';
+    if (!clustered) return `${count === 1 ? '🙋' : '👥'} ${count}명이 기다리고 있어요`;
     if (count === 3) return '🎲 3명이 모였어요';
     return '🔥 이번 주 모임 진행 중';
   }
@@ -1693,7 +1693,12 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       // 이번 주 인원 = 등록자 + 동반 인원 (유저별 최대치 합산 — 공용 헬퍼가 규칙의 단일 출처)
       const weekPeople = window.CottageDB?.sumWeeklyPartySize?.(votes)
         ?? new Set(votes.map(v => String(v.user_id))).size;
-      statusEl.textContent = getMeetingStatusMsg(weekPeople, weekOffset);
+      // 실제 "모임"은 같은 날 2명 이상이 모여야 성사된다(2026-08-02 사용자 지적) — 요일이
+      // 갈려 있으면(월 1명+수 1명=총 2명) 총원은 2여도 아무 날도 안 뭉쳐 모임이 아니다.
+      // 요일칩 인원수(mdc-count)와 같은 sumPartySize를 하루 단위로 재사용해 최댓값을 구한다.
+      const maxDayCount = Math.max(0, ...Object.values(byDate).map(
+        rows => window.CottageDB?.sumPartySize?.(rows) ?? rows.length));
+      statusEl.textContent = getMeetingStatusMsg(weekPeople, weekOffset, maxDayCount);
       statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(weekPeople, weekOffset));
 
       const dateKeys = Object.keys(byDate).sort();
