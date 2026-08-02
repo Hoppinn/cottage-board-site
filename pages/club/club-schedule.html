@@ -530,6 +530,9 @@
     }
     .sm-time-preset-chip:hover { border-color: var(--green); color: var(--green); }
     .sm-time-preset-chip.is-active { border-color: var(--green); background: var(--green); color: white; }
+    .sm-time-match-label { font-size: 11px; color: var(--muted); margin: 2px 0 4px; }
+    .sm-time-match-chip { border-color: #dba07a; }
+    .sm-time-match-chip.is-active { border-color: #96522a; background: #96522a; }
     /* 게임 추가 섹션 (Step 3 이동 후 유지) */
     .sm-game-toggle-wrap { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
     /* 펼쳐진 섹션은 구분선 + 여백으로 다음 토글과 확실히 끊는다 — 여백만으로는
@@ -1342,6 +1345,21 @@
           !!_dateChangeMap[ds] ||
           !!(user && allVotes.some(v => v.vote_date===ds && String(v.user_id)===String(user.id)));
 
+        // 이 날 이미 등록한 다른 사람들의 시간 — 동일 시간(time_start·time_end 둘 다 일치)은
+        // 한 그룹으로 묶는다. 내 프리셋(presets, 위)과는 출처가 다르다(내 과거 기록 vs 그 날
+        // 다른 사람들의 현재 기록)라 별도 계산이지만, 렌더는 같은 .sm-time-preset-chip 클래스를
+        // 재사용해 기존 활성표시·클릭 바인딩(아래 forEach)이 그대로 먹도록 한다.
+        const _otherGroupsByDs = ds => {
+          const others = allVotes.filter(v => v.vote_date === ds && (!user || String(v.user_id) !== String(user.id)));
+          const groups = new Map();
+          others.forEach(v => {
+            const key = v.time_start + '-' + v.time_end;
+            if (!groups.has(key)) groups.set(key, { s: v.time_start, e: v.time_end, names: [] });
+            groups.get(key).names.push(v.nickname || '익명');
+          });
+          return [...groups.values()].sort((a, b) => b.names.length - a.names.length || a.s - b.s);
+        };
+
         const rowsHtml = _days.map(ds => {
           const d = parseDate(ds);
           const t = _timeMap[ds] || { s: 10, e: 22 };
@@ -1352,12 +1370,24 @@
             `<button class="sm-time-preset-chip${t.s===p.s&&t.e===p.e?' is-active':''}"
              data-ds="${esc(ds)}" data-s="${p.s}" data-e="${p.e}" type="button">${window.formatVoteHour(p.s)}~${window.formatVoteHour(p.e)}</button>`
           ).join('');
+          const otherGroups = _otherGroupsByDs(ds);
+          const matchHtml = otherGroups.length
+            ? `<div class="sm-time-match-label">이 날 참여자 시간에 맞추기</div><div class="sm-time-preset-chips">` +
+              otherGroups.map(g => {
+                const nameText = g.names.length <= 2
+                  ? g.names.join(', ')
+                  : `${g.names.slice(0, 2).join(', ')} 외 ${g.names.length - 2}명`;
+                return `<button class="sm-time-preset-chip sm-time-match-chip${t.s===g.s&&t.e===g.e?' is-active':''}"
+                 data-ds="${esc(ds)}" data-s="${g.s}" data-e="${g.e}" type="button">${window.escH(nameText)} · ${window.formatVoteHour(g.s)}~${window.formatVoteHour(g.e)}</button>`;
+              }).join('') + `</div>`
+            : '';
           return `<div class="sm-time-row">
             <div class="sm-time-row-hdr">
               <span class="sm-time-row-label">${esc(label)}${_canChangeDate(ds) ? ` <button class="sm-date-change-btn" data-ds="${esc(ds)}" type="button">📅 날짜 변경</button>` : ''}</span>
               <span class="sm-time-row-val" id="smTV_${ds}">${window.formatVoteHour(t.s)}~${window.formatVoteHour(t.e)}</span>
             </div>
             ${chipsHtml ? `<div class="sm-time-preset-chips">${chipsHtml}</div>` : ''}
+            ${matchHtml}
             <div class="sm-time-slider-wrap">
               <div class="sched-dual-range">
                 <div class="sched-range-track">
