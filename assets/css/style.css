@@ -3984,14 +3984,11 @@ body.embed-mode {
 .profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}
 .profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;animation:repAuraGlow 3.6s ease-in-out infinite;}
 @keyframes repAuraGlow{0%,100%{box-shadow:0 0 0 0 rgba(224,154,60,0.4);}50%{box-shadow:0 0 12px 4px rgba(224,154,60,0.5);}}
-/* 배경·테두리 없는 순수 텍스트 글로우 — 박스가 아니라 글씨 자체에 음영(text-shadow)을 준다.
-   테두리+박스쉐도우로 펄스하던 이전 방식(DESIGN_RULES.md §11 구버전)은 "박스가 반짝인다"는
-   인상이 강해 사용자 요청으로 교체(2026-08-02). 배경/테두리가 실제로 있는 버튼·배지·카드
+/* 배경·테두리 없는 순수 텍스트 글로우 — 박스가 아니라 글씨 자체가 나타났다 사라진다.
+   키프레임 textBlinkGlow는 style.css 아래쪽(.meeting-status-msg.is-glow 근처)에 정의돼
+   있다 — 대표 캐릭터명·칭호·이번 주 모임 상태 셋이 전부 이 방식을 쓴다(2026-08-02,
+   사용자가 시안 비교 후 확정). 배경/테두리가 실제로 있는 버튼·배지·카드
    (.sheet-org-btn, .sheet-avail-notice 등)는 이 대상이 아니다 — 그쪽은 기존 박스 글로우 유지. */
-@keyframes textGlowPulse{
-  0%,100%{text-shadow:none;}
-  50%{text-shadow:0 0 3px rgba(224,154,60,0.95),0 0 6px rgba(224,154,60,0.5);}
-}
 @media (prefers-reduced-motion: reduce){.profile-panel-avatar,.profile-panel-rep-name,.profile-panel-title-name{animation:none;}}
 .profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;flex-shrink:0;}
 .profile-panel-avatar-edit{position:absolute;top:-1px;right:-1px;font-size:10px;background:#fff;border:1px solid #e8ddd4;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;pointer-events:none;line-height:1;}
@@ -4005,9 +4002,9 @@ body.embed-mode {
 .profile-panel-notif-btn:hover{text-decoration:underline;}
 .profile-panel-notif-btn.is-zero{color:var(--muted,#9b8b7a);font-weight:400;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
-.profile-panel-rep-name{align-self:flex-start;font-size:12px;color:var(--text-info);cursor:pointer;padding:1px 5px;animation:textGlowPulse 3.6s ease-in-out infinite;}
+.profile-panel-rep-name{align-self:flex-start;font-size:12px;color:var(--text-info);cursor:pointer;padding:1px 5px;animation:textBlinkGlow 3.6s ease-in-out infinite;}
 .profile-panel-readonly-hint{font-size:12px;color:var(--muted,#9b8b7a);}
-.profile-panel-title-name{align-self:flex-start;font-size:12px;color:var(--green);font-weight:600;background:none;border:none;padding:1px 5px;cursor:pointer;text-align:left;animation:textGlowPulse 3.6s ease-in-out infinite;}
+.profile-panel-title-name{align-self:flex-start;font-size:12px;color:var(--green);font-weight:600;background:none;border:none;padding:1px 5px;cursor:pointer;text-align:left;animation:textBlinkGlow 3.6s ease-in-out infinite;}
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;animation:none;}
 .profile-growth-link{display:block;width:100%;background:#f5f0ea;border:1px solid #e8e0d4;border-radius:8px;padding:10px 12px;margin-top:4px;cursor:pointer;text-align:left;box-sizing:border-box;transition:background .15s, border-color .15s, transform .1s;}
@@ -7018,13 +7015,16 @@ body.is-embedded .inner-page{padding-top:16px;}
   line-height:1.4;
 }
 .meeting-status-msg.is-glow{
-  animation:statusBlinkGlow 3.6s ease-in-out infinite;
+  animation:textBlinkGlow 3.6s ease-in-out infinite;
 }
-/* 이번 주 모임 상태 전용 — 글자가 완전히 사라졌다 나타나며, 불투명도 최대치와 그림자
-   최대치가 정확히 같은 시점(50%)에 겹치도록 동기화(2026-08-02, 사용자가 4안 확정 선택).
-   textGlowPulse(캐릭터명·칭호)와 달리 여기만 opacity를 같이 움직인다 — 저 둘은 항상
-   읽혀야 하는 라벨이라 완전 소멸시키지 않기로 별도 판단했다. */
-@keyframes statusBlinkGlow{
+/* 배경 없는 순수 텍스트 글로우 — 글자 자체가 완전히 사라졌다 나타난다(opacity 1↔0).
+   대표 캐릭터명·칭호(.profile-panel-rep-name/-title-name, 3987번째 줄 근처)와
+   이번 주 모임 상태가 전부 이 키프레임을 공유한다(2026-08-02, 시안 비교 후 확정).
+   핵심 조건 — opacity와 text-shadow의 피크·트로프가 정확히 같은 시점이어야 한다.
+   어긋나면 "그림자가 최대일 때 글자가 투명이라 그림자 자체가 안 보이는" 실수가 난다
+   (처음 구현이 실제로 이랬다). 트로프에서 text-shadow:none 대신 레이어 수를 맞춘
+   명시적 투명값(0 0 0 rgba(...,0))을 쓴 것도 같은 이유 — none은 보간이 안 매끄럽다. */
+@keyframes textBlinkGlow{
   0%,100%{
     opacity:0;
     text-shadow:0 0 0 rgba(224,154,60,0),0 0 0 rgba(224,154,60,0),0 0 0 rgba(224,154,60,0);
