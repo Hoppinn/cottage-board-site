@@ -2233,18 +2233,22 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const gameLinks = games.map(g => `<span class="notif-game-link" data-game-name="${escH(g)}">${escH(g)}</span>`).join(', ');
       return `<li class="${cls}">${_card('📦', gameLinks, '새 게임이 추가됐어요')}${readBtn}</li>`;
     }
+    // new_intro/new_member 둘 다 "OOO 외 N명"으로 뭉개지 말고 이름을 보여주자는 결정이었는데
+    // (2026-07-31, "다른 N명은 누군지 모른다"는 지적), 인원이 늘면서 한 줄에 이름이 끝없이
+    // 쌓이는 반대쪽 문제가 생겼다(2026-08-02 사용자 지적). 5명까지는 전부 보여주고 그 이상만
+    // "외 N명"으로 접는다 — 적을 땐 원래 취지(누군지 보임) 그대로, 많을 때만 안전장치.
+    const MAX_NOTIF_NAMES = 5;
     if (n.type === 'new_intro') {
-      // new_member와 같은 이유로 "외 N명" 대신 전원 나열(2026-07-31).
+      const shown = n.names.slice(0, MAX_NOTIF_NAMES);
+      const rest = n.names.length - shown.length;
       const desc = n.count === 1
         ? `${escH(n.names[0])}님이 소개글을 올렸어요`
-        : `${n.names.map(escH).join(', ')}님이 소개글을 올렸어요`;
+        : rest > 0
+          ? `${shown.map(escH).join(', ')}님 외 ${rest}명이 소개글을 올렸어요`
+          : `${shown.map(escH).join(', ')}님이 소개글을 올렸어요`;
       return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
     if (n.type === 'new_member') {
-      // "OOO 외 N명"으로 뭉개지 않고 전원 나열한다(2026-07-31) — "다른 N명은 누군지
-      // 모른다"는 지적. 목록을 열게 하는 대신 이름 자체를 카드에 다 보여주는 쪽으로
-      // 통일(업적 알림도 2026-07-27 같은 이유로 같은 방식 채택, js-api.md 참조 없음 —
-      // 이 함수 안에서만 완결).
       // 이름마다 그 사람의 uid를 실어 클릭 시 보드로 이동(2026-08-02, 사용자 요청 —
       // 나뿐 아니라 모든 사용자가 클릭하면 그 신규회원 보드로 가야 함). new_intro는
       // 1명(firstUserId)만 이동 가능했는데, 여러 명이 묶여도 이름 각각을 개별 링크로.
@@ -2252,9 +2256,14 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         const uid = n.userIds?.[i];
         return uid ? `<span class="notif-member-link" data-member-uid="${escH(String(uid))}">${escH(name)}</span>` : escH(name);
       };
+      const shownCount = Math.min(n.names.length, MAX_NOTIF_NAMES);
+      const rest = n.names.length - shownCount;
+      const shownLinks = n.names.slice(0, shownCount).map(nameLink).join(', ');
       const desc = n.count === 1
         ? `${nameLink(n.names[0], 0)}님이 새로 가입했어요`
-        : `${n.names.map((nm, i) => nameLink(nm, i)).join(', ')}님이 새로 가입했어요`;
+        : rest > 0
+          ? `${shownLinks} 외 ${rest}명이 새로 가입했어요`
+          : `${shownLinks}님이 새로 가입했어요`;
       return `<li class="${cls}">${_card('🎉', '신규 회원', desc)}${readBtn}</li>`;
     }
     // 교환권은 유형+날짜로 묶여서 온다(관리자 전용). names는 중복 제거된 사람 목록,

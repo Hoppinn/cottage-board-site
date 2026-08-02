@@ -1522,6 +1522,11 @@ window._cottageSess = (function () {
   async function getMyNotifications(userId, nickname, notifSeenAt, newGameSeenAt) {
     if (!userId) return [];
     try {
+      // new_intro/new_member는 "읽은 뒤에도 누가 왔었는지 유지"가 의도(2026-07-31)인데,
+      // 날짜 제한 없이 limit(20)만 걸려 있어 회원이 늘수록 한 문장에 이름이 끝없이
+      // 쌓였다(2026-08-02 사용자 지적 — "춘팝,이파리...등등" 실제 관찰). 교환권 알림에
+      // 이미 쓰던 30일 창을 여기도 공유해 상한을 만든다.
+      const _NOTIF_RECENT_SINCE = new Date(Date.now() - 30 * 86400000).toISOString();
       const taggedPromise = nickname
         ? db.from('game_play_records')
             .select('id, game_id, group_name, played_at, created_at, player_names')
@@ -1559,6 +1564,7 @@ window._cottageSess = (function () {
         .select('id, user_id, nickname, created_at')
         .neq('user_id', userId)
         .not('user_id', 'is', null)
+        .gte('created_at', _NOTIF_RECENT_SINCE)
         .order('created_at', { ascending: false })
         .limit(20);
       // 신규 회원가입: new_intro와 동일하게 로그인 회원 전체 수신(관리자 action 필요 없는 정보성 알림).
@@ -1568,6 +1574,7 @@ window._cottageSess = (function () {
         .eq('event_type', 'signup_complete')
         .neq('user_id', userId)
         .not('user_id', 'is', null)
+        .gte('created_at', _NOTIF_RECENT_SINCE)
         .order('created_at', { ascending: false })
         .limit(20);
       const profileSeenPromise = db.from('profiles').select('notif_seen_at, notif_read_keys').eq('user_id', userId).maybeSingle();
