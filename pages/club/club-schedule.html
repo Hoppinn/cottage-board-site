@@ -329,6 +329,30 @@
       text-underline-offset: 2px;
     }
     .sched-sheet-prevweek-btn:hover { color: var(--green); }
+    .sched-sheet-match-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+    .sched-sheet-match-label {
+      width: 100%;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 1px;
+    }
+    .sched-sheet-match-btn {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .sched-sheet-match-btn:hover { border-color: var(--green); color: var(--green); }
 
     /* ── 모임 등록 버튼 ──────────────────────────────── */
     .sched-register-row {
@@ -895,6 +919,7 @@
           <button aria-label="닫기" class="sched-sheet-close-btn" id="ssClose" type="button">✕</button>
         </div>
         <div class="sched-sheet-body">
+          <div class="sched-sheet-match-row" id="ssMatchRow" style="display:none"></div>
           <div class="sched-sheet-prevweek-row" id="ssPrevWeekRow">
             <button class="sched-sheet-prevweek-btn" id="ssPrevWeek" type="button"></button>
           </div>
@@ -2094,6 +2119,40 @@
         rowPrev.style.display = '';
       } else {
         rowPrev.style.display = 'none';
+      }
+
+      // 이 날 이미 등록한 다른 사람들의 시간에 맞추기 — 동일 시간(time_start·time_end
+      // 둘 다 같음)은 한 버튼으로 묶어 "OO 외 N명 · 10~22시"로 보여준다. 자동저장 없음
+      // (지난주 버튼과 같은 동작 — 슬라이더만 옮기고 등록은 사용자가 직접 누른다).
+      const matchRow = document.getElementById('ssMatchRow');
+      const others = allVotes.filter(v => v.vote_date === ds && (!_user || String(v.user_id) !== String(_user.id)));
+      const _matchGroups = new Map();
+      others.forEach(v => {
+        const key = v.time_start + '-' + v.time_end;
+        if (!_matchGroups.has(key)) _matchGroups.set(key, { s: v.time_start, e: v.time_end, names: [] });
+        _matchGroups.get(key).names.push(v.nickname || '익명');
+      });
+      const _sortedGroups = [..._matchGroups.values()].sort((a, b) => b.names.length - a.names.length || a.s - b.s);
+      if (_sortedGroups.length) {
+        matchRow.innerHTML = '<span class="sched-sheet-match-label">이 날 참여자 시간에 맞추기</span>' +
+          _sortedGroups.map((g, i) => {
+            const nameText = g.names.length <= 2
+              ? g.names.join(', ')
+              : `${g.names.slice(0, 2).join(', ')} 외 ${g.names.length - 2}명`;
+            return `<button class="sched-sheet-match-btn" type="button" data-i="${i}">${window.escH(nameText)} · ${window.formatVoteHour(g.s)}~${window.formatVoteHour(g.e)}</button>`;
+          }).join('');
+        matchRow.querySelectorAll('.sched-sheet-match-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const g = _sortedGroups[Number(btn.dataset.i)];
+            document.getElementById('ssRS').value = g.s;
+            document.getElementById('ssRE').value = g.e;
+            if (_syncSheet) _syncSheet();
+          });
+        });
+        matchRow.style.display = '';
+      } else {
+        matchRow.innerHTML = '';
+        matchRow.style.display = 'none';
       }
 
       document.getElementById('schedSheetOverlay').style.display = '';
