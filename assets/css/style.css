@@ -3984,9 +3984,13 @@ body.embed-mode {
 .profile-panel-avatar-wrap{position:relative;flex-shrink:0;width:64px;height:64px;cursor:pointer;}
 .profile-panel-avatar{width:64px;height:64px;border-radius:50%;object-fit:contain;border:2px solid #e8ddd4;flex-shrink:0;animation:repAuraGlow 3.6s ease-in-out infinite;}
 @keyframes repAuraGlow{0%,100%{box-shadow:0 0 0 0 rgba(224,154,60,0.4);}50%{box-shadow:0 0 12px 4px rgba(224,154,60,0.5);}}
-@keyframes repTextGlow{
-  0%,100%{border-color:transparent;box-shadow:0 0 0 0 transparent;}
-  50%{border-color:rgba(224,154,60,0.85);box-shadow:0 0 9px 2px rgba(224,154,60,0.5);}
+/* 배경·테두리 없는 순수 텍스트 글로우 — 박스가 아니라 글씨 자체에 음영(text-shadow)을 준다.
+   테두리+박스쉐도우로 펄스하던 이전 방식(DESIGN_RULES.md §11 구버전)은 "박스가 반짝인다"는
+   인상이 강해 사용자 요청으로 교체(2026-08-02). 배경/테두리가 실제로 있는 버튼·배지·카드
+   (.sheet-org-btn, .sheet-avail-notice 등)는 이 대상이 아니다 — 그쪽은 기존 박스 글로우 유지. */
+@keyframes textGlowPulse{
+  0%,100%{text-shadow:none;}
+  50%{text-shadow:0 0 6px rgba(224,154,60,0.9),0 0 10px rgba(224,154,60,0.5);}
 }
 @media (prefers-reduced-motion: reduce){.profile-panel-avatar,.profile-panel-rep-name,.profile-panel-title-name{animation:none;}}
 .profile-panel-avatar--empty{display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0eb;border:2px solid #e8ddd4;border-radius:50%;width:64px;height:64px;flex-shrink:0;}
@@ -4001,9 +4005,9 @@ body.embed-mode {
 .profile-panel-notif-btn:hover{text-decoration:underline;}
 .profile-panel-notif-btn.is-zero{color:var(--muted,#9b8b7a);font-weight:400;}
 .notif-red-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#e03333;flex-shrink:0;}
-.profile-panel-rep-name{align-self:flex-start;font-size:12px;color:var(--text-info);cursor:pointer;padding:1px 5px;border-radius:6px;border:1.5px solid transparent;animation:repTextGlow 3.6s ease-in-out infinite;}
+.profile-panel-rep-name{align-self:flex-start;font-size:12px;color:var(--text-info);cursor:pointer;padding:1px 5px;animation:textGlowPulse 3.6s ease-in-out infinite;}
 .profile-panel-readonly-hint{font-size:12px;color:var(--muted,#9b8b7a);}
-.profile-panel-title-name{align-self:flex-start;font-size:12px;color:var(--green);font-weight:600;background:none;padding:1px 5px;border-radius:6px;border:1.5px solid transparent;cursor:pointer;text-align:left;animation:repTextGlow 3.6s ease-in-out infinite;}
+.profile-panel-title-name{align-self:flex-start;font-size:12px;color:var(--green);font-weight:600;background:none;padding:1px 5px;cursor:pointer;text-align:left;animation:textGlowPulse 3.6s ease-in-out infinite;}
 .profile-panel-title-name:hover{text-decoration:underline;}
 .profile-panel-title-name.is-empty{color:#b0a090;font-weight:400;animation:none;}
 .profile-growth-link{display:block;width:100%;background:#f5f0ea;border:1px solid #e8e0d4;border-radius:8px;padding:10px 12px;margin-top:4px;cursor:pointer;text-align:left;box-sizing:border-box;transition:background .15s, border-color .15s, transform .1s;}
@@ -7014,14 +7018,7 @@ body.is-embedded .inner-page{padding-top:16px;}
   line-height:1.4;
 }
 .meeting-status-msg.is-glow{
-  padding:2px 7px;
-  border-radius:999px;
-  border:1.5px solid transparent;
-  animation:meetingStatusGlow 3.6s ease-in-out infinite;
-}
-@keyframes meetingStatusGlow{
-  0%,100%{border-color:transparent;box-shadow:0 0 0 0 transparent;}
-  50%{border-color:rgba(224,154,60,0.8);box-shadow:0 0 9px 2px rgba(224,154,60,0.35);}
+  animation:textGlowPulse 3.6s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce){.meeting-status-msg.is-glow{animation:none;}}
 .meeting-days{display:flex;gap:6px;flex-wrap:wrap;}

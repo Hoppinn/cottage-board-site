@@ -176,8 +176,8 @@ sticky·scroll·bottom sheet·fixed header·iframe sheet·border-radius·overflo
 
 **표준값**: `animation-duration: 3.6s ease-in-out infinite`, 트로프(0%, 100%)는 **완전히 투명**(`border-color:transparent` 또는 `box-shadow:0 0 0 0 transparent`), 피크(50%)는 `box-shadow: 0 0 9px 2px <색상>`. `prefers-reduced-motion: reduce`에서 항상 `animation:none`.
 
-- **테두리 있는 박스**(버튼·배지·카드)는 `border-color`+`box-shadow`를 함께 펄스(`.sheet-org-btn`, `.sheet-avail-notice--pending/--preorder` 참고).
-- **배경/테두리 없는 순수 텍스트**는 `text-shadow`만으론 거의 안 보인다 — 투명 테두리(`border:1.5px solid transparent`)를 깔아두고 `border-color`+`box-shadow`로 펄스시킬 것(`.profile-panel-rep-name`/`.profile-panel-title-name` 참고). **배경 필(pill)로 채우는 방식은 시도했다가 "부담스럽다"는 피드백으로 폐기** — 테두리만 펄스하는 쪽으로 통일.
+- **테두리 있는 박스**(실제 `background`가 있는 버튼·배지·카드)는 `border-color`+`box-shadow`를 함께 펄스(`.sheet-org-btn`, `.sheet-avail-notice--pending/--preorder` 참고 — 게임정리/룰설명/에러로그 버튼, 입고예정 안내가 이 부류).
+- **배경 없는 순수 텍스트**(대표 캐릭터명·칭호, 이번 주 모임 상태 메시지 등)는 **박스가 아니라 글자 자체에 `text-shadow`로 펄스**한다(`textGlowPulse` 키프레임, `.profile-panel-rep-name`/`.profile-panel-title-name`/`.meeting-status-msg.is-glow` 참고). **2026-08-02 정정**: 이전엔 "text-shadow만으론 안 보인다"며 투명 테두리+box-shadow로 박스 모양을 흉내냈으나, 사용자가 실제 화면을 보고 "박스 테두리 말고 글씨 자체가 반짝이는 게 낫다"고 판단 — 이중 레이어 `text-shadow`(`0 0 6px`+`0 0 10px`)로 교체. **배경 필(pill)로 채우는 방식은 그 이전에 시도했다가 "부담스럽다"는 피드백으로 폐기**됐던 것과는 다른 방향(필 대신 아예 박스 자체를 없앰).
 - **이미 큰 정적 그림자가 있는 카드**(`.game-card.active`)에 얹으면 기존 그림자에 묻힌다 — 피크 강도를 확실히 올리거나(9px/2px 이상) 별도 레이어로 분리.
 - **여러 개가 동시에 뜰 수 있는 목록 컨텍스트**(검색 자동완성 배지, 알림 리스트의 NEW 여러 건, 관리자 목록형 뱃지)에는 **적용하지 않는다** — 여러 개가 같이 반짝이면 산만해진다는 이유로 의도적으로 제외한 전례가 있다(`.avail-badge-sm`, `.profile-notif-new-badge`는 안 읽은 알림이 정확히 1건일 때만 켜짐, `kakao-auth.js`의 `is-multi-new` 참고).
 - **예외**: `.profile-char-card/.profile-title-card.is-newly-earned`(신규 해금 캐릭터·칭호 카드)는 순수 펄스가 아니라 "새로 얻음" 상태를 계속 표시하는 뱃지라 트로프에도 정적 링(`0 0 0 1px #e09a3c`)이 남아있다 — 완전 투명 규칙의 의도적 예외.
