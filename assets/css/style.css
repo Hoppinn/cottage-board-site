@@ -2479,9 +2479,12 @@ body.embed-mode {
   margin:0 0 10px;
 }
 .sheet-avail-notice--shipping{background:#dde8f7;color:#2a5a9c;border:1px solid #a8c4e8;}
-.sheet-avail-notice--pending{background:#f5e0c8;color:var(--green);border:1px dashed #c8944a;--avail-glow:rgba(200,148,74,0.85);animation:sheetAvailGlow 3.6s ease-in-out infinite;}
-.sheet-avail-notice--preorder{background:#fbe2df;color:#9e3a2a;border:1px dashed #d98a7a;--avail-glow:rgba(158,58,42,0.8);animation:sheetAvailGlow 3.6s ease-in-out infinite;}
-@keyframes sheetAvailGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 16px 5px var(--avail-glow);}}
+.sheet-avail-notice--pending{background:#f5e0c8;color:var(--green);border:1px dashed #c8944a;--avail-glow:rgba(200,148,74,0.85);--avail-border:#c8944a;animation:sheetAvailGlow 3.6s ease-in-out infinite;}
+.sheet-avail-notice--preorder{background:#fbe2df;color:#9e3a2a;border:1px dashed #d98a7a;--avail-glow:rgba(158,58,42,0.8);--avail-border:#d98a7a;animation:sheetAvailGlow 3.6s ease-in-out infinite;}
+/* 트로프에서 border-color도 함께 투명해진다 — box-shadow만 펄스하면 정적 테두리가
+   최소 상태에도 남아 "이미 강조돼 있다"는 인상을 준다(2026-08-02 사용자 지적).
+   배경은 그대로 둔다(입고예정이라는 정보 자체는 항상 보여야 함) — 테두리·링만 펄스. */
+@keyframes sheetAvailGlow{0%,100%{border-color:transparent;box-shadow:0 0 0 0 transparent;}50%{border-color:var(--avail-border);box-shadow:0 0 16px 5px var(--avail-glow);}}
 @media (prefers-reduced-motion: reduce){.sheet-avail-notice--pending,.sheet-avail-notice--preorder{animation:none;}}
 
 .avail-badge-sm{display:inline-flex;align-items:center;padding:2px 6px;border:1px solid;border-radius:999px;font-size:10px;font-weight:700;line-height:1.3;white-space:nowrap;flex-shrink:0;}
@@ -3031,9 +3034,9 @@ body.embed-mode {
   cursor:pointer;
   text-align:left;
 }
-.sheet-org-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;line-height:1;color:var(--green);background:var(--card-bg);border:1.5px dashed #c8a87a;border-radius:8px;padding:4px 9px;cursor:pointer;white-space:nowrap;--org-glow:rgba(200,168,122,0.9);animation:orgBtnGlow 3.6s ease-in-out infinite;}
-.sheet-org-btn.is-warn{background:#fdf6ec;border-color:#c0392b;color:#9e3a2a;--org-glow:rgba(192,57,43,0.85);}
-@keyframes orgBtnGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 16px 5px var(--org-glow);}}
+.sheet-org-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;line-height:1;color:var(--green);background:var(--card-bg);border:1.5px dashed #c8a87a;border-radius:8px;padding:4px 9px;cursor:pointer;white-space:nowrap;--org-glow:rgba(200,168,122,0.9);--org-border:#c8a87a;animation:orgBtnGlow 3.6s ease-in-out infinite;}
+.sheet-org-btn.is-warn{background:#fdf6ec;border-color:#c0392b;color:#9e3a2a;--org-glow:rgba(192,57,43,0.85);--org-border:#c0392b;}
+@keyframes orgBtnGlow{0%,100%{border-color:transparent;box-shadow:0 0 0 0 transparent;}50%{border-color:var(--org-border);box-shadow:0 0 16px 5px var(--org-glow);}}
 @media (prefers-reduced-motion: reduce){.sheet-org-btn{animation:none;}}
 .sheet-org-area{display:flex;gap:5px;flex-wrap:wrap;}
 
@@ -7054,7 +7057,11 @@ body.is-embedded .inner-page{padding-top:16px;}
 .meeting-day-chip.is-past{opacity:0.45;}
 .meeting-day-chip.is-selected{outline:2px solid var(--green);outline-offset:1px;}
 .meeting-day-chip.is-earliest{animation:earliestChipGlow 3.6s ease-in-out infinite;}
-@keyframes earliestChipGlow{0%,100%{box-shadow:0 0 0 0 transparent;}50%{box-shadow:0 0 16px 5px rgba(224,154,60,0.85);}}
+/* 트로프에서 border-color도 var(--border)(=일반 칩과 동일)로 돌아간다 — has-vote가
+   미리 깔아둔 정적 테두리색(#dba07a)만 남으면 최소 상태에도 이미 강조돼 보인다
+   (2026-08-02 사용자 지적: "최소일 때 다른 메뉴들과 구분 안 되는 지점부터 시작해야
+   극명하다"). 배경(#fdece2)은 그대로 — "그 날 활동이 있다"는 정보는 안 지운다. */
+@keyframes earliestChipGlow{0%,100%{border-color:var(--border);box-shadow:0 0 0 0 transparent;}50%{border-color:#dba07a;box-shadow:0 0 16px 5px rgba(224,154,60,0.85);}}
 @media (prefers-reduced-motion: reduce){.meeting-day-chip.is-earliest{animation:none;}}
 .meeting-day-chip .mdc-day{font-size:11px;font-weight:700;color:var(--text-info);}
 .meeting-day-chip .mdc-count{font-size:13px;font-weight:800;color:var(--ink);}
