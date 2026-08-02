@@ -1620,9 +1620,10 @@ function _bindNotifSubsheet(subBody, ctx) {
               }
               const memberLink = e.target.closest('[data-member-uid]');
               if (memberLink) {
-                // new_intro와 같은 이동(위 참고) — 신규 회원 알림은 이름이 여러 개 묶일 수
-                // 있어 li 전체가 아니라 이름 각각에 uid를 실었다(2026-08-02).
-                openOtherMeetingSheet(memberLink.dataset.memberUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
+                // 신규 회원은 "모임 보드"가 아니라 "내 보드"(프로필 전체)로 들어간다 —
+                // new_intro(openOtherMeetingSheet)와 다르게 판단(2026-08-02 사용자 요청).
+                // 이름이 여러 개 묶일 수 있어 li 전체가 아니라 이름 각각에 uid를 실었다.
+                openOtherProfileSheet(memberLink.dataset.memberUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
                 return;
               }
               if (li.dataset.notifAchIds && _openSubSheet && _growthInnerHtml) {
