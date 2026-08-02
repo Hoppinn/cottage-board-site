@@ -552,6 +552,12 @@
       transition: border-color .15s, color .15s, background .15s;
     }
     .sm-game-toggle:hover { border-color: var(--green); color: var(--green); }
+    .sm-game-others-hint {
+      margin-top: 4px; align-self: flex-start;
+      background: none; border: none; padding: 0;
+      font-size: 12px; color: var(--green);
+      cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
+    }
     .sm-game-toggle.is-open {
       border-color: var(--green); color: var(--green);
       background: #f0f7f0; border-style: solid;
@@ -1664,7 +1670,18 @@
             ? `${icon} ${label} (${count}) ▲`
             : `${icon} ${label} (${count}) ▾`;
 
-          if (!open) return `<div class="sm-game-block"><button class="sm-game-toggle" data-gtoggle="${type}" type="button">${btnLabel}</button></div>`;
+          if (!open) {
+            // 섹션을 안 펼쳐도 "이 날 참여자가 뭘 골랐는지"는 놓치면 안 되는 정보라
+            // 접힌 상태에도 힌트를 보여준다(사용자 지적 — 시간 맞추기는 안 접혀서
+            // 바로 보이는데 게임 맞추기는 토글 두 번 눌러야 보였음). 클릭하면 섹션과
+            // 「이 날 참여자」 피커를 한 번에 같이 연다. 있을 때만 보이고, 없으면
+            // 「좋아요/지난모임」처럼 접힌 채로 조용히 있는다(원래 접힘 취지 유지).
+            const othersCount = othersPickedGames(type).length;
+            const jumpHtml = othersCount
+              ? `<button class="sm-game-others-hint" data-gothersjump="${type}" type="button">👀 이 날 참여자 ${othersCount}명이 고른 게임 보기</button>`
+              : '';
+            return `<div class="sm-game-block"><button class="sm-game-toggle" data-gtoggle="${type}" type="button">${btnLabel}</button>${jumpHtml}</div>`;
+          }
           const pastLabel = type === 'want' ? '하고 싶었던' : '배우고 싶었던';
           const srcLabel   = type === 'want' ? '좋아요한 게임' : '궁금한 게임';
           const srcBtnText = type === 'want' ? '좋아요' : '궁금';
@@ -1709,6 +1726,17 @@
           btn.addEventListener('click', () => {
             const type = btn.dataset.gtoggle;
             _gameOpen[type] = !_gameOpen[type];
+            renderStep2Games();
+          });
+        });
+
+        // 접힌 상태의 "이 날 참여자 N명이 고른 게임 보기" 힌트 — 섹션과 이 날 참여자
+        // 피커를 한 번에 같이 연다(두 번 클릭하지 않도록).
+        wrap.querySelectorAll('[data-gothersjump]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.dataset.gothersjump;
+            _gameOpen[type] = true;
+            _othersOpen[type] = true;
             renderStep2Games();
           });
         });
