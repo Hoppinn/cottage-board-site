@@ -1759,6 +1759,7 @@ window._cottageSess = (function () {
               keys: newOnes.map(r => `new_member:${r.id}`),
               count: newOnes.length,
               names: newOnes.map(r => nickMap.get(String(r.user_id)) || '회원'),
+              userIds: newOnes.map(r => r.user_id),
               date: newOnes[0].created_at,
               isNew: true,
             });
@@ -1772,6 +1773,7 @@ window._cottageSess = (function () {
               keys: allNewMembers.map(r => `new_member:${r.id}`),
               count: allNewMembers.length,
               names: allNewMembers.map(r => nickMap.get(String(r.user_id)) || '회원'),
+              userIds: allNewMembers.map(r => r.user_id),
               date: allNewMembers[0].created_at,
               isNew: false,
             });

@@ -1617,6 +1617,13 @@ function _bindNotifSubsheet(subBody, ctx) {
                 openOtherMeetingSheet(li.dataset.introUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
                 return;
               }
+              const memberLink = e.target.closest('[data-member-uid]');
+              if (memberLink) {
+                // new_intro와 같은 이동(위 참고) — 신규 회원 알림은 이름이 여러 개 묶일 수
+                // 있어 li 전체가 아니라 이름 각각에 uid를 실었다(2026-08-02).
+                openOtherMeetingSheet(memberLink.dataset.memberUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
+                return;
+              }
               let key = null;
               const idChip = e.target.closest('[data-notif-game-id]');
               const gameLink = e.target.closest('[data-game-name]');
@@ -2217,9 +2224,16 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       // 모른다"는 지적. 목록을 열게 하는 대신 이름 자체를 카드에 다 보여주는 쪽으로
       // 통일(업적 알림도 2026-07-27 같은 이유로 같은 방식 채택, js-api.md 참조 없음 —
       // 이 함수 안에서만 완결).
+      // 이름마다 그 사람의 uid를 실어 클릭 시 보드로 이동(2026-08-02, 사용자 요청 —
+      // 나뿐 아니라 모든 사용자가 클릭하면 그 신규회원 보드로 가야 함). new_intro는
+      // 1명(firstUserId)만 이동 가능했는데, 여러 명이 묶여도 이름 각각을 개별 링크로.
+      const nameLink = (name, i) => {
+        const uid = n.userIds?.[i];
+        return uid ? `<span class="notif-member-link" data-member-uid="${escH(String(uid))}">${escH(name)}</span>` : escH(name);
+      };
       const desc = n.count === 1
-        ? `${escH(n.names[0])}님이 새로 가입했어요`
-        : `${n.names.map(escH).join(', ')}님이 새로 가입했어요`;
+        ? `${nameLink(n.names[0], 0)}님이 새로 가입했어요`
+        : `${n.names.map((nm, i) => nameLink(nm, i)).join(', ')}님이 새로 가입했어요`;
       return `<li class="${cls}">${_card('🎉', '신규 회원', desc)}${readBtn}</li>`;
     }
     // 교환권은 유형+날짜로 묶여서 온다(관리자 전용). names는 중복 제거된 사람 목록,
