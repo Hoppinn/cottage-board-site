@@ -560,12 +560,6 @@
       transition: border-color .15s, color .15s, background .15s;
     }
     .sm-game-toggle:hover { border-color: var(--green); color: var(--green); }
-    .sm-game-others-hint {
-      margin-top: 4px; align-self: flex-start;
-      background: none; border: none; padding: 0;
-      font-size: 12px; color: var(--green);
-      cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
-    }
     .sm-game-toggle.is-open {
       border-color: var(--green); color: var(--green);
       background: #f0f7f0; border-style: solid;
@@ -1059,7 +1053,6 @@
       let _gameOpen    = {want:false, learn:false}; // 게임 섹션 열림 상태
       let _pastOpen    = {want:false, learn:false}; // 「지난 모임」 피커 열림 상태
       let _srcOpen     = {want:false, learn:false}; // 「좋아요/궁금」 피커 열림 상태(상시 노출 아님)
-      let _othersOpen  = {want:false, learn:false}; // 「이 날 참여자가 고른 게임」 피커 열림 상태
       let _modalWeekOffset = 0;
       let _historicalVotes = null; // 8주 이력 조회 결과 (프리셋·초기값용)
       let _dateChangeMap = {}; // { 지금키: 원래DB날짜 } — 날짜 변경 진행 중인 행들(여러 행 동시 가능). 저장 시 원래 날짜를 삭제
@@ -1085,7 +1078,7 @@
       function close() {
         overlay.style.display = 'none';
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
-        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
+        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
@@ -1714,25 +1707,23 @@
             ? `${icon} ${label} (${count}) ▲`
             : `${icon} ${label} (${count}) ▾`;
 
+          // 「이 날 참여자가 고른 게임」은 토글 여부와 무관하게 항상 보인다(시간 맞추기 칩과
+          // 같은 원칙 — 2026-08-02 사용자 지적: "토글 안 열어도 보이게"는 링크 하나 두는 게
+          // 아니라 좋아요/지난모임처럼 접었다 펴는 방식 자체를 안 쓰라는 뜻이었음). 있을 때만
+          // 렌더되고, 없으면 조용히 아무것도 안 보인다 — pickerHtml의 "없어요" 빈 메시지는
+          // 사용자가 직접 열어본 다른 피커(좋아요·지난모임)용이라, 상시노출인 여기선 안 쓴다.
+          const othersCount = othersPickedGames(type).length;
+          const othersHtml = othersCount ? pickerHtml(type, 'others') : '';
+
           if (!open) {
-            // 섹션을 안 펼쳐도 "이 날 참여자가 뭘 골랐는지"는 놓치면 안 되는 정보라
-            // 접힌 상태에도 힌트를 보여준다(사용자 지적 — 시간 맞추기는 안 접혀서
-            // 바로 보이는데 게임 맞추기는 토글 두 번 눌러야 보였음). 클릭하면 섹션과
-            // 「이 날 참여자」 피커를 한 번에 같이 연다. 있을 때만 보이고, 없으면
-            // 「좋아요/지난모임」처럼 접힌 채로 조용히 있는다(원래 접힘 취지 유지).
-            const othersCount = othersPickedGames(type).length;
-            const jumpHtml = othersCount
-              ? `<button class="sm-game-others-hint" data-gothersjump="${type}" type="button">👀 이 날 참여자 ${othersCount}명이 고른 게임 보기</button>`
-              : '';
-            return `<div class="sm-game-block"><button class="sm-game-toggle" data-gtoggle="${type}" type="button">${btnLabel}</button>${jumpHtml}</div>`;
+            return `<div class="sm-game-block"><button class="sm-game-toggle" data-gtoggle="${type}" type="button">${btnLabel}</button>${othersHtml}</div>`;
           }
           const pastLabel = type === 'want' ? '하고 싶었던' : '배우고 싶었던';
           const srcLabel   = type === 'want' ? '좋아요한 게임' : '궁금한 게임';
           const srcBtnText = type === 'want' ? '좋아요' : '궁금';
-          const othersCount = othersPickedGames(type).length;
-          const othersBtnText = othersCount ? `이 날 참여자 (${othersCount})` : '이 날 참여자';
           return `<div class="sm-game-block is-open">
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
+            ${othersHtml}
             <div class="sm-game-section">
               <div class="sm-game-input-row">
                 <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 직접 입력" autocomplete="off">
@@ -1743,13 +1734,9 @@
                 <button class="sm-game-past-btn${_pastOpen[type] ? ' is-open' : ''}" data-gpast="${type}" type="button"
                   title="지난 모임에서 ${pastLabel} 게임 불러오기" aria-label="지난 모임에서 ${pastLabel} 게임 불러오기"
                   aria-pressed="${_pastOpen[type] ? 'true' : 'false'}">지난 모임</button>
-                <button class="sm-game-past-btn${_othersOpen[type] ? ' is-open' : ''}" data-gothers="${type}" type="button"
-                  title="이 날 다른 참여자가 고른 게임에 맞추기" aria-label="이 날 다른 참여자가 고른 게임에 맞추기"
-                  aria-pressed="${_othersOpen[type] ? 'true' : 'false'}">${othersBtnText}</button>
               </div>
               ${_srcOpen[type] ? pickerHtml(type, source) : ''}
               ${_pastOpen[type] ? pickerHtml(type, 'past') : ''}
-              ${_othersOpen[type] ? pickerHtml(type, 'others') : ''}
               ${gameListHtml(type) ? `<div class="sm-game-picked"><div class="sm-game-picked-label">고른 게임 ${count}개</div>${gameListHtml(type)}</div>` : ''}
             </div>
           </div>`;
@@ -1770,17 +1757,6 @@
           btn.addEventListener('click', () => {
             const type = btn.dataset.gtoggle;
             _gameOpen[type] = !_gameOpen[type];
-            renderStep2Games();
-          });
-        });
-
-        // 접힌 상태의 "이 날 참여자 N명이 고른 게임 보기" 힌트 — 섹션과 이 날 참여자
-        // 피커를 한 번에 같이 연다(두 번 클릭하지 않도록).
-        wrap.querySelectorAll('[data-gothersjump]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const type = btn.dataset.gothersjump;
-            _gameOpen[type] = true;
-            _othersOpen[type] = true;
             renderStep2Games();
           });
         });
@@ -1810,15 +1786,6 @@
               renderStep2Games();
               await fetchPickerData('past');
             }
-            renderStep2Games();
-          });
-        });
-
-        // 「이 날 참여자가 고른 게임」 피커 토글 — allVoteGames가 이미 메모리에 있어 fetch 없이 즉시 토글
-        wrap.querySelectorAll('[data-gothers]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const type = btn.dataset.gothers;
-            _othersOpen[type] = !_othersOpen[type];
             renderStep2Games();
           });
         });
@@ -2196,7 +2163,7 @@
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         _days = [...dates].sort();
         _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
-        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
+        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
         if (startStep === 2) renderStep2();
