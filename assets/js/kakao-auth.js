@@ -1620,10 +1620,12 @@ function _bindNotifSubsheet(subBody, ctx) {
               }
               const memberLink = e.target.closest('[data-member-uid]');
               if (memberLink) {
-                // 신규 회원은 "모임 보드"가 아니라 "내 보드"(프로필 전체)로 들어간다 —
-                // new_intro(openOtherMeetingSheet)와 다르게 판단(2026-08-02 사용자 요청).
+                // 신규 회원은 "모임 보드"도 "취향 보드"도 아니라 보드 홈(패널 메인, 서브시트
+                // 자동 오픈 없음)으로 들어간다(2026-08-02 사용자 요청 — openOtherProfileSheet를
+                // 써봤더니 'taste'를 하드코딩해서 취향 보드로 바로 들어가버렸다). 알림이 새
+                // 회원 본인 것일 수 없어(쿼리 자체가 neq user_id) self-체크는 불필요.
                 // 이름이 여러 개 묶일 수 있어 li 전체가 아니라 이름 각각에 uid를 실었다.
-                openOtherProfileSheet(memberLink.dataset.memberUid, { backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
+                openProfilePanel(null, { userId: String(memberLink.dataset.memberUid), readOnly: true, backTo: { type: 'panel', autoSubsheet: 'notif', label: _notifTitle } });
                 return;
               }
               if (li.dataset.notifAchIds && _openSubSheet && _growthInnerHtml) {
