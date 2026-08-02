@@ -2238,14 +2238,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     // 쌓이는 반대쪽 문제가 생겼다(2026-08-02 사용자 지적). 5명까지는 전부 보여주고 그 이상만
     // "외 N명"으로 접는다 — 적을 땐 원래 취지(누군지 보임) 그대로, 많을 때만 안전장치.
     const MAX_NOTIF_NAMES = 5;
+    // 조회 자체가 최근 30일 창(supabase-client.js _NOTIF_RECENT_SINCE)이라 그 기준을
+    // 문구에도 명시한다 — "무엇을 언제 셌는지"가 안 붙으면 몇 명인지만 보고 "오늘 갑자기
+    // 이렇게 많이?"로 오해하기 쉽다(2026-08-02 사용자 요청).
+    const _period = '최근 한 달간 ';
     if (n.type === 'new_intro') {
       const shown = n.names.slice(0, MAX_NOTIF_NAMES);
       const rest = n.names.length - shown.length;
       const desc = n.count === 1
         ? `${escH(n.names[0])}님이 소개글을 올렸어요`
         : rest > 0
-          ? `${shown.map(escH).join(', ')}님 외 ${rest}명이 소개글을 올렸어요`
-          : `${shown.map(escH).join(', ')}님이 소개글을 올렸어요`;
+          ? `${_period}${shown.map(escH).join(', ')}님 외 ${rest}명이 소개글을 올렸어요`
+          : `${_period}${shown.map(escH).join(', ')}님이 소개글을 올렸어요`;
       return `<li class="${cls}"${n.firstUserId ? ` data-intro-uid="${escH(String(n.firstUserId))}"` : ''}>${_card('👋', '동호회 소개글', desc)}${readBtn}</li>`;
     }
     if (n.type === 'new_member') {
@@ -2262,8 +2266,8 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const desc = n.count === 1
         ? `${nameLink(n.names[0], 0)}님이 새로 가입했어요`
         : rest > 0
-          ? `${shownLinks} 외 ${rest}명이 새로 가입했어요`
-          : `${shownLinks}님이 새로 가입했어요`;
+          ? `${_period}${shownLinks} 외 ${rest}명이 새로 가입했어요`
+          : `${_period}${shownLinks}님이 새로 가입했어요`;
       return `<li class="${cls}">${_card('🎉', '신규 회원', desc)}${readBtn}</li>`;
     }
     // 교환권은 유형+날짜로 묶여서 온다(관리자 전용). names는 중복 제거된 사람 목록,
