@@ -10,9 +10,9 @@
   "redirects": [
     { "source": "/kakao_club",  "destination": "/?utm_source=kakao_club",  "permanent": false },
     { "source": "/insta",       "destination": "/?utm_source=instagram",   "permanent": false },
-    { "source": "/nplace",      "destination": "/?utm_source=naver_place", "permanent": false },
+    { "source": "/naverplace",  "destination": "/?utm_source=naver_place", "permanent": false },
     { "source": "/store",       "destination": "/?utm_source=store_qr",    "permanent": false },
-    { "source": "/blife",       "destination": "/?utm_source=boardlife",   "permanent": false },
+    { "source": "/boardlife",   "destination": "/?utm_source=boardlife",   "permanent": false },
     { "source": "/flyer",       "destination": "/?utm_source=flyer_qr",   "permanent": false },
     { "source": "/daangn",      "destination": "/?utm_source=daangn",     "permanent": false },
     { "source": "/daangn_club", "destination": "/?utm_source=daangn_club", "permanent": false },
