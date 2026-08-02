@@ -47625,13 +47625,10 @@
         "Role Playing"
       ],
       "recommendedPlayers": [
-        3,
         4,
         5
       ],
       "bestPlayers": [
-        1,
-        4,
         5
       ],
       "notRecommendedPlayers": [
@@ -47659,7 +47656,7 @@
       ],
       "status": "ready",
       "createdAt": "2026-05-23T17:43:25.684Z",
-      "updatedAt": "2026-08-01T17:01:59.812Z",
+      "updatedAt": "2026-08-02T03:42:20.761Z",
       "source": {
         "base": "xlsx-import",
         "overrides": [

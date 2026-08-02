@@ -62712,12 +62712,9 @@ const gameData = {
       "minPlayers": 4,
       "maxPlayers": 5,
       "bestPlayers": [
-        1,
-        4,
         5
       ],
       "recommendedPlayers": [
-        3,
         4,
         5
       ],
