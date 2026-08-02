@@ -1032,6 +1032,7 @@
       let _gameOpen    = {want:false, learn:false}; // 게임 섹션 열림 상태
       let _pastOpen    = {want:false, learn:false}; // 「지난 모임」 피커 열림 상태
       let _srcOpen     = {want:false, learn:false}; // 「좋아요/궁금」 피커 열림 상태(상시 노출 아님)
+      let _othersOpen  = {want:false, learn:false}; // 「이 날 참여자가 고른 게임」 피커 열림 상태
       let _modalWeekOffset = 0;
       let _historicalVotes = null; // 8주 이력 조회 결과 (프리셋·초기값용)
       let _dateChangeMap = {}; // { 지금키: 원래DB날짜 } — 날짜 변경 진행 중인 행들(여러 행 동시 가능). 저장 시 원래 날짜를 삭제
@@ -1057,7 +1058,7 @@
       function close() {
         overlay.style.display = 'none';
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
-        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
+        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         // 홈에서 바로 진입한 경우 돌아갈 주간 뷰가 없으므로 플래너 자체를 닫는다.
@@ -1174,6 +1175,25 @@
         }
       }
 
+      // 이 날 다른 참여자가 이미 고른 게임 — allVoteGames는 이미 메모리에 있어 like/curious/past처럼
+      // 별도 fetch가 필요 없다(동기). 같은 게임을 여러 명이 골랐으면 한 항목으로 묶고 count를 단다
+      // (시간 맞추기 버튼과 같은 원칙 — 동일 시간을 "OO 외 N명"으로 묶은 것과 대응).
+      function othersPickedGames(section) {
+        const user = window.getKakaoUser?.();
+        const uid = user ? String(user.id) : null;
+        const rows = (allVoteGames || []).filter(g =>
+          g.vote_date === _activeDay && g.list_type === section && (!uid || String(g.user_id) !== uid));
+        const groups = new Map();
+        rows.forEach(raw => {
+          const norm = normalizePickerItem(raw);
+          if (!norm) return;
+          const key = (norm.game_id ?? '') + '|' + (norm.custom_name ?? '');
+          if (!groups.has(key)) groups.set(key, { ...norm, count: 0 });
+          groups.get(key).count++;
+        });
+        return [...groups.values()].sort((a, b) => b.count - a.count);
+      }
+
       function getPickerItems(section, source) {
         // like/curious는 슬러그 표기라 그대로 두면 "이미 담김"을 못 알아본다 → 정규화해서 반환
         if (source === 'like')    return (_pickerCache.like    || []).map(normalizePickerItem).filter(Boolean);
@@ -1188,6 +1208,7 @@
           if (!p || p === 'loading') return [];
           return section === 'want' ? (p.want || []) : (p.learn || []);
         }
+        if (source === 'others') return othersPickedGames(section);
         return [];
       }
 
@@ -1195,6 +1216,7 @@
         if (source === 'like')    return '좋아하는 게임 (취향보드)';
         if (source === 'curious') return '궁금한 게임 (취향보드)';
         if (source === 'meeting') return section === 'want' ? '하고 싶은 게임 (모임보드)' : '룰 설명 가능 게임 (모임보드 참고)';
+        if (source === 'others')  return '이 날 참여자가 고른 게임';
         return '';
       }
 
@@ -1596,22 +1618,35 @@
         }
 
         function pickerHtml(type, source) {
-          const cached = _pickerCache[source];
-          if (cached === 'loading') return `<div class="sm-picker-panel"><div class="sm-picker-loading">불러오는 중…</div></div>`;
-          if (!cached) return '';
+          // others는 allVoteGames에서 즉시 계산되는 동기 소스라 like/curious/past처럼
+          // _pickerCache의 loading/fetch 게이트를 안 탄다 — 게이트를 그대로 적용하면
+          // _pickerCache.others가 항상 undefined라 영영 빈 값으로 보인다.
+          if (source !== 'others') {
+            const cached = _pickerCache[source];
+            if (cached === 'loading') return `<div class="sm-picker-panel"><div class="sm-picker-loading">불러오는 중…</div></div>`;
+            if (!cached) return '';
+          }
           const items = getPickerItems(type, source);
           const isPast = source === 'past';
-          if (!items.length) return `<div class="sm-picker-panel"><div class="sm-picker-empty">${isPast ? `지난 ${PAST_PICKER_WEEKS}주 모임에 등록한 게임이 없어요` : '등록된 게임이 없어요'}</div></div>`;
+          const isOthers = source === 'others';
+          if (!items.length) {
+            const emptyMsg = isPast ? `지난 ${PAST_PICKER_WEEKS}주 모임에 등록한 게임이 없어요`
+              : isOthers ? '이 날 다른 참여자가 아직 고른 게임이 없어요'
+              : '등록된 게임이 없어요';
+            return `<div class="sm-picker-panel"><div class="sm-picker-empty">${emptyMsg}</div></div>`;
+          }
           const label = isPast
             ? (type === 'want' ? '지난 모임에서 하고 싶었던 게임' : '지난 모임에서 배우고 싶었던 게임')
+            : isOthers ? '이 날 참여자가 고른 게임'
             : (type === 'want' ? '좋아요한 게임' : '궁금한 게임');
           return `<div class="sm-picker-panel">
             <div class="sm-picker-label">${esc(label)}</div>
             ${items.map((g, i) => {
               const name = resolveGameName(g);
               const dup  = isDup(type, g);
+              const countSuffix = (isOthers && g.count > 1) ? ` · ${g.count}명` : '';
               return `<button class="sm-picker-item${dup?' is-added':''}" data-pidx="${i}" data-ptype="${type}" data-psrc="${source}" type="button"${dup?' disabled':''}>
-                <span>${esc(name)}</span>
+                <span>${esc(name)}${countSuffix}</span>
                 <span class="sm-picker-tag">${dup?'추가됨':'+ 추가'}</span>
               </button>`;
             }).join('')}
@@ -1633,6 +1668,8 @@
           const pastLabel = type === 'want' ? '하고 싶었던' : '배우고 싶었던';
           const srcLabel   = type === 'want' ? '좋아요한 게임' : '궁금한 게임';
           const srcBtnText = type === 'want' ? '좋아요' : '궁금';
+          const othersCount = othersPickedGames(type).length;
+          const othersBtnText = othersCount ? `이 날 참여자 (${othersCount})` : '이 날 참여자';
           return `<div class="sm-game-block is-open">
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
             <div class="sm-game-section">
@@ -1645,9 +1682,13 @@
                 <button class="sm-game-past-btn${_pastOpen[type] ? ' is-open' : ''}" data-gpast="${type}" type="button"
                   title="지난 모임에서 ${pastLabel} 게임 불러오기" aria-label="지난 모임에서 ${pastLabel} 게임 불러오기"
                   aria-pressed="${_pastOpen[type] ? 'true' : 'false'}">지난 모임</button>
+                <button class="sm-game-past-btn${_othersOpen[type] ? ' is-open' : ''}" data-gothers="${type}" type="button"
+                  title="이 날 다른 참여자가 고른 게임에 맞추기" aria-label="이 날 다른 참여자가 고른 게임에 맞추기"
+                  aria-pressed="${_othersOpen[type] ? 'true' : 'false'}">${othersBtnText}</button>
               </div>
               ${_srcOpen[type] ? pickerHtml(type, source) : ''}
               ${_pastOpen[type] ? pickerHtml(type, 'past') : ''}
+              ${_othersOpen[type] ? pickerHtml(type, 'others') : ''}
               ${gameListHtml(type) ? `<div class="sm-game-picked"><div class="sm-game-picked-label">고른 게임 ${count}개</div>${gameListHtml(type)}</div>` : ''}
             </div>
           </div>`;
@@ -1697,6 +1738,15 @@
               renderStep2Games();
               await fetchPickerData('past');
             }
+            renderStep2Games();
+          });
+        });
+
+        // 「이 날 참여자가 고른 게임」 피커 토글 — allVoteGames가 이미 메모리에 있어 fetch 없이 즉시 토글
+        wrap.querySelectorAll('[data-gothers]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.dataset.gothers;
+            _othersOpen[type] = !_othersOpen[type];
             renderStep2Games();
           });
         });
@@ -2074,7 +2124,7 @@
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         _days = [...dates].sort();
         _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
-        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
+        _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
         if (startStep === 2) renderStep2();
