@@ -627,13 +627,7 @@
       font-size: 14px; outline: none; font-family: inherit;
     }
     .sm-game-input:focus { border-color: var(--green); }
-    .sm-game-add-btn {
-      padding: 8px 10px; border: none; border-radius: 8px;
-      background: var(--green); color: white;
-      font-size: 13px; font-weight: 600; cursor: pointer;
-      flex: none;
-    }
-    /* 축이 4개(입력+추가 / 좋아요 / 지난모임 / 다른참여자)로 늘어 한 줄에 다 들어가야 해서
+    /* 축이 4개(입력 / 좋아요 / 지난모임 / 다른참여자)로 늘어 한 줄에 다 들어가야 해서
        패딩·글자크기를 줄였다(2026-08-02) — 줄바꿈 대신 크기를 줄이는 쪽을 택한 이유는
        위 2026-07-21 주석의 잘림 사고 때문에 wrap보다 압축이 더 안전하다고 판단해서다. */
     .sm-game-past-btn {
@@ -1731,8 +1725,7 @@
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
             <div class="sm-game-section">
               <div class="sm-game-input-row">
-                <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 직접 입력" autocomplete="off">
-                <button class="sm-game-add-btn" data-gadd="${type}" type="button">추가</button>
+                <input class="sm-game-input" id="sm_${type}_input" type="text" placeholder="게임 이름 입력 후 Enter" autocomplete="off">
                 <button class="sm-game-past-btn${_srcOpen[type] ? ' is-open' : ''}" data-gsrc="${type}" type="button"
                   title="${srcLabel} 목록에서 고르기" aria-label="${srcLabel} 목록에서 고르기"
                   aria-pressed="${_srcOpen[type] ? 'true' : 'false'}">${srcBtnText}</button>
@@ -1805,16 +1798,6 @@
             const type = btn.dataset.gothers;
             _othersOpen[type] = !_othersOpen[type];
             renderStep2Games();
-          });
-        });
-
-        // 추가 버튼
-        wrap.querySelectorAll('[data-gadd]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const type  = btn.dataset.gadd;
-            const input = document.getElementById(`sm_${type}_input`);
-            const val   = input?.value.trim();
-            if (val) { addGameStep2(type, val, null, true); input.value = ''; }
           });
         });
 
