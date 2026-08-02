@@ -533,6 +533,14 @@
     .sm-time-match-label { font-size: 11px; color: var(--muted); margin: 2px 0 4px; }
     .sm-time-match-chip { border-color: #dba07a; }
     .sm-time-match-chip.is-active { border-color: #96522a; background: #96522a; }
+    .sm-time-preset-wrap { display: inline-flex; align-items: center; gap: 2px; }
+    .sm-preset-del-btn {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: none; background: none; color: var(--muted);
+      font-size: 11px; line-height: 1; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sm-preset-del-btn:hover { background: #fdecea; color: #d94f4f; }
     /* 게임 추가 섹션 (Step 3 이동 후 유지) */
     .sm-game-toggle-wrap { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
     /* 펼쳐진 섹션은 구분선 + 여백으로 다음 토글과 확실히 끊는다 — 여백만으로는
@@ -845,6 +853,19 @@
 
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // 더 이상 쓰지 않을 시간 프리셋을 계정별로 숨긴다(ls-schema.md 신규 키
+    // cottage_hidden_time_presets_{userId} — 기존 cottage_req_votes_{userId} 등과 같은 패턴).
+    // DB의 실제 과거 참여 기록은 그대로 두고, "빈도 상위 3개" 후보 계산에서만 뺀다.
+    function _getHiddenTimePresets(userId) {
+      try { return new Set(JSON.parse(localStorage.getItem(`cottage_hidden_time_presets_${userId}`) || '[]')); }
+      catch (_) { return new Set(); }
+    }
+    function _hideTimePreset(userId, s, e) {
+      const set = _getHiddenTimePresets(userId);
+      set.add(`${s}-${e}`);
+      localStorage.setItem(`cottage_hidden_time_presets_${userId}`, JSON.stringify([...set]));
     }
 
     function toDateStr(date) {
@@ -1359,7 +1380,12 @@
           freq[key].count++;
           if ((v.vote_date || '') > freq[key].latest) freq[key].latest = v.vote_date;
         });
+        // 더 이상 안 쓰고 싶은 프리셋은 로컬에 숨김 처리(계정별) — 실제 과거 참여 기록(DB)은
+        // 안 건드리고 "빈도 상위 3개" 후보에서만 뺀다(2026-08-02, 사용자 요청). 숨기면 그
+        // 자리에 다음 순위가 올라오도록 slice(0,3) 전에 거른다.
+        const _hiddenPresets = user ? _getHiddenTimePresets(user.id) : new Set();
         const presets = Object.values(freq)
+          .filter(p => !_hiddenPresets.has(`${p.s}-${p.e}`))
           .sort((a, b) => b.count - a.count || b.latest.localeCompare(a.latest))
           .slice(0, 3);
 
@@ -1394,9 +1420,14 @@
           const label = `${DOW_KR[d.getDay()]} ${d.getMonth()+1}/${d.getDate()}`;
           const fl = ((t.s - MIN_H) / R * 100).toFixed(1);
           const fw = ((t.e - t.s) / R * 100).toFixed(1);
+          // 내 프리셋만 ✕로 숨길 수 있다(아래 sm-preset-del-btn) — 버튼 안에 버튼을 못 넣으므로
+          // 칩과 ✕를 wrap span으로 묶는다. 재사용 칩(이 날 참여자·지난주)에는 안 붙인다.
           const chipsHtml = presets.map(p =>
+            `<span class="sm-time-preset-wrap">` +
             `<button class="sm-time-preset-chip${t.s===p.s&&t.e===p.e?' is-active':''}"
-             data-ds="${esc(ds)}" data-s="${p.s}" data-e="${p.e}" type="button">${window.formatVoteHour(p.s)}~${window.formatVoteHour(p.e)}</button>`
+             data-ds="${esc(ds)}" data-s="${p.s}" data-e="${p.e}" type="button">${window.formatVoteHour(p.s)}~${window.formatVoteHour(p.e)}</button>` +
+            `<button class="sm-preset-del-btn" data-s="${p.s}" data-e="${p.e}" type="button" aria-label="이 시간 프리셋 삭제" title="이 시간 프리셋 삭제">✕</button>` +
+            `</span>`
           ).join('');
           const otherGroups = _otherGroupsByDs(ds);
           const matchHtml = otherGroups.length
@@ -1446,6 +1477,19 @@
 
         $s('smBody').querySelectorAll('.sm-date-change-btn').forEach(btn => {
           btn.addEventListener('click', e => { e.stopPropagation(); renderDateChangePicker(btn.dataset.ds); });
+        });
+
+        // 프리셋 ✕ — 확인 후 계정별로 숨기고 다시 그린다(presets는 날짜 무관 — 내 과거
+        // 전체 기록 기준이라 한 번 숨기면 모든 날짜 행에서 같이 빠진다).
+        $s('smBody').querySelectorAll('.sm-preset-del-btn').forEach(btn => {
+          btn.addEventListener('click', e => {
+            e.stopPropagation();
+            if (!user) return;
+            const s = parseFloat(btn.dataset.s), eVal = parseFloat(btn.dataset.e);
+            if (!confirm(`${window.formatVoteHour(s)}~${window.formatVoteHour(eVal)} 프리셋을 다시 안 보이게 할까요?`)) return;
+            _hideTimePreset(user.id, s, eVal);
+            renderStep2();
+          });
         });
 
         _days.forEach(ds => {

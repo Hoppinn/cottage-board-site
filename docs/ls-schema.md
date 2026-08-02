@@ -27,6 +27,7 @@
 | `cottage_play_records_{gameKey}` | game-sheet.js | 바텀시트용 로컬 플레이 기록 | 영구 |
 | `cottage_played_{gameKey}` | game-sheet.js | 구형 단일 포맷 (마이그레이션 완료, 신규 저장 없음) | 레거시 |
 | `cottage_is_admin` | requests-admin.html | 관리자 페이지 로드 시 set. supabase-client.js의 page_views/__visitor__ 기록에서 admin 세션 필터링에 사용 | 영구 |
+| `cottage_hidden_time_presets_{userId}` | club-schedule.html | 참여 시간 등록 시 더 이상 안 볼 "내 자주 쓰는 시간" 프리셋의 `"s-e"` 문자열 배열(2026-08-02). DB의 실제 과거 참여 기록은 안 건드리고 프리셋 후보 계산에서만 제외 | 영구 |
 
 ---
 
