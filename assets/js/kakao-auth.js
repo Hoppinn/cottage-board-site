@@ -1593,7 +1593,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
 // ctx: _markAllNotifSeen/_markOneNotifSeen/_markVoucherSeen/_markNoticeSeen(user·body 캡처), _getGameKeyByName/_getGameKeyById
 function _bindNotifSubsheet(subBody, ctx) {
   const { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle,
-    _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly } = ctx;
+    _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly, _openNotifSubsheet } = ctx;
           subBody.querySelector('.profile-notif-confirm-all')?.addEventListener('click', () => _markAllNotifSeen(subBody));
           subBody.querySelector('.profile-voucher-confirm')?.addEventListener('click', () => _markVoucherSeen(subBody));
           subBody.querySelector('.profile-voucher-link')?.addEventListener('click', () => _markVoucherSeen(subBody));
@@ -1642,7 +1642,7 @@ function _bindNotifSubsheet(subBody, ctx) {
                     target.classList.add('is-notif-highlight');
                     setTimeout(() => target.classList.remove('is-notif-highlight'), 2200);
                   }
-                });
+                }, '', null, _openNotifSubsheet ? { label: _notifTitle, onClick: _openNotifSubsheet } : null);
                 return;
               }
               let key = null;
@@ -2293,7 +2293,12 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         ? `${defs.map(_label).join(', ')} 업적을 달성했어요`
         : `${_label(first || {})} 업적을 달성했어요`;
       // 클릭 시 내 수집 보드의 업적 목록으로 이동 + 해당 항목 스크롤·강조(2026-08-02, 사용자 요청).
-      const achIdsAttr = defs.length ? ` data-notif-ach-ids="${escH(defs.map(d => d.id).join(','))}"` : '';
+      // 🚨 defs.map(d => d.id)로 뽑으면 안 된다 — getAchievementDef가 반환하는 객체엔 id 필드가
+      // 없다({name,emoji,conditionText}만 있음). 그래서 1건짜리 알림은 id가 ""(빈 문자열,
+      // Array.join의 undefined 처리)가 돼 속성 자체가 안 붙어 클릭이 씹혔다(실제 신고 사례:
+      // "장인 게이머" 1건만 안 눌림 — 6건 묶음은 콤마가 여러 개라 우연히 값이 남아 열리긴 했다).
+      // 원본 n.achievementIds를 그대로 쓴다.
+      const achIdsAttr = (n.achievementIds && n.achievementIds.length) ? ` data-notif-ach-ids="${escH(n.achievementIds.join(','))}"` : '';
       return `<li class="${cls}"${achIdsAttr}>${_card(emoji, `업적 달성${n.count > 1 ? ` ${n.count}건` : ''}`, desc)}${readBtn}</li>`;
     }
     // 간식·음료 요청도 유형+날짜로 묶여서 온다(관리자 전용, voucher와 같은 패턴).
@@ -2786,15 +2791,21 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     </div>`;
 
   // ── 서브시트 헬퍼 ──────────────────────────────────────────────
-  function _openSubSheet(title, contentHtml, afterRender, bodyClass = '', onLeave = null) {
+  // backTo: {label, onClick} — 지정하면 뒤로가기가 패널 메인이 아니라 그 자리(예: 알림
+  // 목록)로 돌아간다. R10c 패턴(openOtherMeetingSheet의 backTo)을 _openSubSheet 자체에도
+  // 들여온 것 — 지금까지는 서브시트에서 또 다른 서브시트를 열면(수집 보드 등) "온 곳"이
+  // 사라지고 무조건 "{닉네임}의 {보드}"로만 돌아갔다(2026-08-02 사용자 지적 — 알림에서
+  // 업적 클릭 → 수집 보드로 갔는데 뒤로가기가 알림이 아니라 내 보드였음).
+  function _openSubSheet(title, contentHtml, afterRender, bodyClass = '', onLeave = null, backTo = null) {
     document.getElementById('profileSubSheet')?.remove();
     const sub = document.createElement('div');
     sub.id = 'profileSubSheet';
     sub.className = 'profile-subsheet' + (readOnly ? ' profile-subsheet--readonly' : '');
+    const backLabel = backTo?.label || `${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}`;
     sub.innerHTML = `
       <div class="profile-subsheet-box">
         <div class="profile-subsheet-header">
-          <button class="profile-subsheet-back" type="button">‹ ${escH(user.nickname || (readOnly ? '회원' : '손님'))}의 ${_boardLabel}</button>
+          <button class="profile-subsheet-back" type="button">‹ ${backLabel}</button>
           <span class="profile-subsheet-title">${title}</span>
           <button aria-label="닫기" class="profile-subsheet-close" type="button">✕</button>
         </div>
@@ -2802,9 +2813,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>`;
     document.body.appendChild(sub);
     // 서브시트를 패널로 되돌릴 때(뒤로가기/백드롭) 현재 DOM 상태를 스냅샷 → 재진입 시 변경분 유지.
-    // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 로드하므로 스냅샷 불필요)
+    // (✕닫기는 패널 자체를 제거해 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요)
     // onLeave가 조용히 실패하면 스냅샷이 누락돼 재진입 시 상태가 되돌아간다(개별 읽음이 이걸 의존) → 로그 필수
-    const _leaveToPanel = () => { try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (e) { console.error('[_openSubSheet onLeave]', e); } sub.remove(); };
+    const _leaveToPanel = () => {
+      try { onLeave?.(sub.querySelector('.profile-subsheet-body')); } catch (e) { console.error('[_openSubSheet onLeave]', e); }
+      sub.remove();
+      if (backTo?.onClick) backTo.onClick();
+    };
     sub.querySelector('.profile-subsheet-back').addEventListener('click', _leaveToPanel);
     sub.querySelector('.profile-subsheet-close').addEventListener('click', () => { sub.remove(); panel.remove(); });
     sub.addEventListener('click', e => { if (e.target === sub) _leaveToPanel(); });
@@ -2958,18 +2973,24 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     }
   }
 
+  // 알림 서브시트 열기 — 카드 클릭과 "업적 클릭 → 수집 보드"의 backTo(뒤로가기) 양쪽에서
+  // 똑같이 쓴다(2026-08-02). 하나로 뽑아두지 않으면 두 자리가 미묘하게 갈릴 위험이 있다(#15류).
+  const _notifTitle = '최근 소식';
+  function _openNotifSubsheet() {
+    _trackPvOnce('my-board-notif');
+    // onLeave 스냅샷: 개별 읽음은 DOM만 바꾸므로, 뒤로가기/백드롭으로 나갔다 다시 들어와도
+    // 유지되려면 캐시 문자열을 현재 DOM으로 갱신해야 한다(기록보드와 같은 방식).
+    // ✕닫기는 패널째 제거 → 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요.
+    _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle, _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly, _openNotifSubsheet }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
+  }
+
   // ── 카드 클릭 → 서브시트 ─────────────────────────────────────
   body.querySelectorAll('.profile-card, .profile-panel-notif-btn').forEach(card => {
     card.addEventListener('click', () => {
       const type = card.dataset.subsheet;
 
       if (type === 'notif') {
-        _trackPvOnce('my-board-notif');
-        const _notifTitle = '최근 소식';
-        // onLeave 스냅샷: 개별 읽음은 DOM만 바꾸므로, 뒤로가기/백드롭으로 나갔다 다시 들어와도
-        // 유지되려면 캐시 문자열을 현재 DOM으로 갱신해야 한다(기록보드와 같은 방식).
-        // ✕닫기는 패널째 제거 → 다음 오픈 시 DB에서 새로 읽으므로 스냅샷 불필요.
-        _openSubSheet(_notifTitle, _notifInnerHtml, subBody => _bindNotifSubsheet(subBody, { _markAllNotifSeen, _markOneNotifSeen, _markVoucherSeen, _markNoticeSeen, _getGameKeyByName, _getGameKeyById, _notifTitle, _openSubSheet, _growthInnerHtml, _afterGrowthRender, readOnly }), '', bodyEl => { _notifInnerHtml = bodyEl.innerHTML; });
+        _openNotifSubsheet();
 
       } else if (type === 'growth') {
         _trackPvOnce('my-board-growth');
