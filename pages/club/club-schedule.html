@@ -1050,7 +1050,9 @@
       let _fromStep1   = false;
       let _pickerCache = {};   // { like:[], curious:[], past:{want,learn} } — lazy fetch
       let _pickerOpen  = null; // 미사용(Step3 제거), 호환용 유지
-      let _gameOpen    = {want:false, learn:false}; // 게임 섹션 열림 상태
+      // 기본 펼침(2026-08-02, 사용자 요청) — 닫혀있으면 입력창·추가 버튼이 안 보여서
+      // 매번 한 번 더 눌러야 하는 게 불편하다는 지적. 접고 싶으면 토글로 여전히 접을 수 있다.
+      let _gameOpen    = {want:true, learn:true}; // 게임 섹션 열림 상태
       let _pastOpen    = {want:false, learn:false}; // 「지난 모임」 피커 열림 상태
       let _srcOpen     = {want:false, learn:false}; // 「좋아요/궁금」 피커 열림 상태(상시 노출 아님)
       let _modalWeekOffset = 0;
@@ -1077,7 +1079,7 @@
 
       function close() {
         overlay.style.display = 'none';
-        _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:false, learn:false};
+        _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:true, learn:true};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
@@ -2162,7 +2164,7 @@
         _historicalVotes = null;
         _dateChangeMap = {}; _dateChangeWeekOffset = 0;
         _days = [...dates].sort();
-        _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:false, learn:false};
+        _timeMap = {}; _gameMap = {}; _activeDay = null; _gameOpen = {want:true, learn:true};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
