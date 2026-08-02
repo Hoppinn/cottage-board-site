@@ -1449,7 +1449,34 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     return { start: fmt(mon), end: fmt(sun), monDate: mon };
   }
 
-  function getMeetingStatusMsg(count) {
+  // updateNav()의 주간 네비 라벨과 같은 문구 — 사본을 두지 않고 여기 하나만 쓴다(#15류 방지).
+  function _weekSuffix(weekOffset) {
+    return weekOffset === 0  ? '이번 주'
+         : weekOffset === 1  ? '다음 주'
+         : weekOffset === -1 ? '지난 주'
+         : weekOffset > 0    ? `${weekOffset}주 후`
+         :                     `${Math.abs(weekOffset)}주 전`;
+  }
+
+  // weekOffset을 안 받던 시절엔 지난 주·다음 주를 봐도 무조건 "이번 주 모임 진행 중"이라고
+  // 떴다(2026-08-02 사용자 지적 — 이미 끝난 주인데 "진행 중", 다음 주인데도 "이번 주").
+  // 과거/현재/미래를 나눠 시제와 라벨을 맞춘다. 현재 주(weekOffset===0)는 기존 문구 그대로.
+  function getMeetingStatusMsg(count, weekOffset = 0) {
+    const label = _weekSuffix(weekOffset);
+    if (weekOffset < 0) {
+      // 과거 — "모집 중"·"진행 중"은 이미 지난 일에 안 맞는다. 전부 완료형으로.
+      if (count === 0) return `📭 ${label}엔 모임이 없었어요`;
+      if (count === 1) return `🙋 ${label}에 1명이 참여했어요`;
+      if (count === 2) return `👥 ${label}에 2명이 참여했어요`;
+      return `✅ ${label} 모임에 ${count}명이 모였어요`;
+    }
+    if (weekOffset > 0) {
+      // 미래 — "진행 중"은 아직 안 왔으니 "예정"으로.
+      if (count === 0) return `🎲 ${label} 모임 모집 중`;
+      if (count === 1) return `🙋 ${label}에 1명이 참여 예정이에요`;
+      if (count === 2) return `👥 ${label}에 2명이 참여 예정이에요`;
+      return `📅 ${label} 모임에 ${count}명 참여 예정이에요`;
+    }
     if (count === 0) return '🎲 이번 주 모임 모집 중';
     if (count === 1) return '🙋 1명이 기다리고 있어요';
     if (count === 2) return '👥 2명이 기다리고 있어요';
@@ -1458,8 +1485,9 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   }
 
   // 상태 메시지가 뜨는 모든 인원수에서 반짝임 — 모임 요일칩(has-vote)과 같은 정도로 항상 강조.
-  function isGlowworthyMeetingCount(count) {
-    return true;
+  // 단, 지난 주(이미 끝난 일)는 반짝일 이유가 없어 현재·미래 주만 켠다(2026-08-02).
+  function isGlowworthyMeetingCount(count, weekOffset = 0) {
+    return weekOffset >= 0;
   }
 
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
@@ -1590,11 +1618,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const { start, end } = getWeekRange(weekOffset);
     const s = start.slice(5).replace('-', '/');
     const e = end.slice(5).replace('-', '/');
-    const suffix = weekOffset === 0  ? '이번 주'
-                 : weekOffset === 1  ? '다음 주'
-                 : weekOffset === -1 ? '지난 주'
-                 : weekOffset > 0   ? `${weekOffset}주 후`
-                 :                    `${Math.abs(weekOffset)}주 전`;
+    const suffix = _weekSuffix(weekOffset);
     navEl.innerHTML = `
       <button class="mwn-btn" type="button" data-dir="prev">◀ 이전주</button>
       <span class="mwn-label">${s} ~ ${e} · ${suffix}</span>
@@ -1624,7 +1648,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         window.CottageDB?.getMeetingVotes(start, end) ?? [],
         window.CottageDB?.getMeetingVoteGames(start, end) ?? [],
       ]);
-      if (!votes) { statusEl.textContent = '🎲 이번 주 모임 모집 중'; statusEl.classList.add('is-glow'); return; }
+      if (!votes) { statusEl.textContent = getMeetingStatusMsg(0, weekOffset); statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(0, weekOffset)); return; }
 
       // [DEV] localhost ?dev=N — 메모리 더미 주입 (이번 주만)
       const _devN = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
@@ -1669,8 +1693,8 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       // 이번 주 인원 = 등록자 + 동반 인원 (유저별 최대치 합산 — 공용 헬퍼가 규칙의 단일 출처)
       const weekPeople = window.CottageDB?.sumWeeklyPartySize?.(votes)
         ?? new Set(votes.map(v => String(v.user_id))).size;
-      statusEl.textContent = getMeetingStatusMsg(weekPeople);
-      statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(weekPeople));
+      statusEl.textContent = getMeetingStatusMsg(weekPeople, weekOffset);
+      statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(weekPeople, weekOffset));
 
       const dateKeys = Object.keys(byDate).sort();
 
