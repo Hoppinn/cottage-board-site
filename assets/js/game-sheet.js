@@ -278,7 +278,7 @@ function _openCoverModal(src) {
 
 function _openOrganizerLightbox(urls, gameName) {
   if (!urls?.length || !window.openLightbox) return;
-  const captions = urls.map(() => `${gameName} 정리방법`);
+  const captions = urls.map(() => `${gameName} 정리 방법`);
   window.openLightbox(urls, 0, { captions, dim: 'rgba(0,0,0,0.5)', frame: true });
 }
 
@@ -298,7 +298,7 @@ function _openNoteModal(modalId, heading, text) {
 }
 
 function _openRuleNoteModal(text, gameName) {
-  _openNoteModal('ruleNoteModal', `${gameName} 게임방법`, text);
+  _openNoteModal('ruleNoteModal', `${gameName} 게임 방법`, text);
 }
 
 function _openErrorNoteModal(text, gameName) {
@@ -652,7 +652,7 @@ function openGameSheet(gameKey, restoreScroll = false, fromKey = null, noAnim = 
               onclick="return confirm('유튜브로 이동할까요?')"
               target="_blank" rel="noopener noreferrer">
               <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
-              룰영상 보기
+              룰 영상
             </a>
           </div>
           <div class="sheet-org-area" id="sheetOrgArea-${gameKey}"></div>
@@ -994,9 +994,9 @@ async function initSheetOrganizerContent(gameKey) {
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
-  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임방법</button>`;
+  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임 방법</button>`;
   if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 자주 틀리는 규칙</button>`;
-  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리방법</button>`;
+  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리 방법</button>`;
   area.innerHTML = html;
 
   area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openOrganizerLightbox(photos, gameName));
