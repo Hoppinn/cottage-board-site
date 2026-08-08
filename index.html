@@ -140,6 +140,43 @@
 
 
 
+      <!-- =========================
+           # RECOMMEND TABS
+      ========================== -->
+
+      <div class="rec-tab-row" id="recTabRow">
+        <button class="rec-tab-btn is-active" type="button" data-rec-tab="course">추천 코스</button>
+        <button class="rec-tab-btn" type="button" data-rec-tab="filter">게임 더 찾기</button>
+      </div>
+
+      <!-- =========================
+           # 추천 코스 탭
+      ========================== -->
+
+      <div class="rec-tab-panel" id="recTabCourse" data-rec-panel="course">
+
+        <p class="course-chip-caption" id="courseChipCaption">플레이할 인원에 맞는 코스를 골라보세요.</p>
+
+        <div class="course-chip-grid" id="courseChipGrid">
+          <!-- index-page.js에서 window.BOOKLET_COURSES 기반 렌더링 -->
+        </div>
+
+        <div class="course-sticky-bar is-hidden" id="courseStickyBar">
+          <button class="course-sticky-btn" type="button" id="courseStickyBtn">
+            <span id="courseStickyName"></span> 변경 ▾
+          </button>
+        </div>
+
+        <div class="course-list" id="courseList"></div>
+
+      </div>
+
+      <!-- =========================
+           # 게임 더 찾기 탭
+      ========================== -->
+
+      <div class="rec-tab-panel is-hidden" id="recTabFilter" data-rec-panel="filter">
+
     <!-- =========================
      # RECOMMEND FILTER
 ========================== -->
@@ -206,6 +243,8 @@
         </div>
         </div><!-- /.dg-body -->
       </div>
+
+      </div><!-- /.rec-tab-panel[filter] -->
 
     </section>
 
@@ -558,6 +597,7 @@
   <script src="./assets/js/page-labels.js"></script>
   <script src="./assets/js/script-nav.js"></script>
   <script src="./assets/js/game-sheet.js"></script>
+  <script src="./assets/js/booklet-courses-data.js"></script>
   <script src="./assets/js/index-page.js"></script>
   <script src="./assets/js/day-detail.js"></script>
   <script src="./assets/js/kakao-auth.js"></script>

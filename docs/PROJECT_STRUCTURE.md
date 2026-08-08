@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-08-08 (추천게임 책자 연동 착수 — `booklet-courses-data.js` 신설, §2에 등재. 홈 "추천게임 찾기"를 추천 코스/게임 더 찾기 2탭 구조로 재편 중) / 2026-07-22 (**P1 — `game_comments.record_id`(014)로 한 플레이기록에 여러 사람 게임평. supabase-client에 `getRecordComments`, insertComment에 recordId 인자, buildSessionBody에 매인 게임평 렌더, scripts에 `link-bbok-0711-comments.js` 추가**) / 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-08-08 (추천게임 책자 연동 완료 — `booklet-courses-data.js` 신설(책자 6개 코스, 52개 gameKey 검증됨). 홈 "추천게임 찾기"를 추천 코스/게임 더 찾기 2탭으로 재편, 히어로·헤더메뉴·QR 전부 추천 코스 탭 기본 진입. 죽어 있던 recommendModal은 되살리지 않고 기존 recommendFilter를 게임 더 찾기 탭에 재사용) / 2026-07-22 (**P1 — `game_comments.record_id`(014)로 한 플레이기록에 여러 사람 게임평. supabase-client에 `getRecordComments`, insertComment에 recordId 인자, buildSessionBody에 매인 게임평 렌더, scripts에 `link-bbok-0711-comments.js` 추가**) / 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -248,6 +248,13 @@ assets/js/
 │                               # index.html에서 index-page.js보다 먼저 로드(추천 코스 탭이 참조)
 ├── index-page.js               # 메인 페이지 전용 (추천게임, 인기게임, 홈 모임 미리보기)
 │                               # day-detail.js 함수 호출 (openDateMeetingModal)
+│                               # 🎲 추천 섹션(#recommend)은 '추천 코스'/'게임 더 찾기' 2탭(2026-08).
+│                               #   기본 탭은 항상 추천 코스 — 히어로 버튼·헤더메뉴·QR
+│                               #   (/qr-game-recommend) 전부 openRecommendSectionOnTab('course')로
+│                               #   진입. '게임 더 찾기' 탭은 기존 recommendFilter+gameScroll 그대로.
+│                               #   ⚠️ recommendModal(전체화면 조건선택 모달)은 죽은 코드 —
+│                               #   여는 버튼이 DOM에 없다(2026-08 확인). 되살리지 말 것,
+│                               #   '게임 더 찾기' 탭은 인라인 recommendFilter를 그대로 쓴다.
 │                               # ⚠️ initHeroStats 블록을 정리할 때 주의 — 그 finally에
 │                               #   index.html#recommend 딥링크 자동 열기가 얹혀 있다.
 │                               #   히어로 통계 요소가 없으면 조기 return 하지만

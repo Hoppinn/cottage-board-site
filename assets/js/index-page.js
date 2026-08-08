@@ -346,6 +346,191 @@ const closeRecommendOverlayButton =
 
 
 /* =========================
+   # RECOMMEND TABS (추천 코스 / 게임 더 찾기)
+   2026-08 — 책자 연동. 기본 탭은 항상 '추천 코스'(히어로·헤더메뉴·QR 전부 동일 진입).
+   '게임 더 찾기'는 기존 recommendFilter+gameScroll을 그대로 옮긴 것 — 죽어 있던
+   recommendModal은 되살리지 않는다(PROJECT_STATE 2026-08 기획 합의).
+========================= */
+
+function switchRecTab(tabName){
+  document.querySelectorAll('.rec-tab-btn').forEach(btn=>{
+    btn.classList.toggle('is-active', btn.dataset.recTab === tabName);
+  });
+  document.querySelectorAll('.rec-tab-panel').forEach(panel=>{
+    panel.classList.toggle('is-hidden', panel.dataset.recPanel !== tabName);
+  });
+}
+
+const recTabRow = document.getElementById('recTabRow');
+if(recTabRow){
+  recTabRow.addEventListener('click', (event)=>{
+    const btn = event.target.closest('[data-rec-tab]');
+    if(!btn) return;
+    switchRecTab(btn.dataset.recTab);
+    window.CottageDB?.trackEvent('home_recommend_tab_click', { tab: btn.dataset.recTab });
+  });
+}
+
+// 히어로 버튼·헤더메뉴·QR 진입이 공유하는 진입 함수 — 항상 지정한 탭을 켜고 섹션을 연다.
+function openRecommendSectionOnTab(tabName){
+  switchRecTab(tabName);
+  setRecommendMenuActive(true);
+
+  if(recommendSection){
+    recommendSection.classList.remove('is-hidden');
+
+    const header = document.querySelector('.site-header');
+    const headerHeight = header ? header.offsetHeight : 0;
+
+    window.scrollTo({
+      top: recommendSection.offsetTop - headerHeight + 12,
+      behavior: 'smooth',
+    });
+  }
+}
+
+
+/* =========================
+   # RECOMMEND COURSE (추천 코스 탭)
+   window.BOOKLET_COURSES(booklet-courses-data.js)를 그대로 렌더링.
+   기존 .game-card와 다른 가로형 리스트 카드(.course-item-card) — 비교용이 아니라
+   책자 순서를 그대로 훑는 용도라 세로 리스트 + 번호 배지로 간다.
+========================= */
+
+let _selectedCourseId = null;
+
+function _courseItemCardHtml(gameKey, note, opts){
+  opts = opts || {};
+  const game = window.gameData?.[gameKey];
+  if(!game) return '';
+
+  const card = GameView.getGameCardData(game);
+  const titleText = opts.subtitle ? `${card.title} · ${opts.subtitle}` : card.title;
+  const badgeHtml = opts.slot ? `<span class="course-item-badge">${opts.slot}</span>` : '';
+  const variantClass =
+    (opts.branch ? ' course-item-card--branch' : '') +
+    (opts.bonus  ? ' course-item-card--bonus'  : '');
+
+  return `
+    <button class="course-item-card${variantClass}" type="button" data-game="${gameKey}">
+      ${badgeHtml}
+      <img
+        src="${card.image || DEFAULT_GAME_IMAGE}"
+        alt="${card.title}"
+        loading="lazy"
+        onerror="this.onerror=null; this.src='${DEFAULT_GAME_IMAGE}';"
+      >
+      <span class="course-item-text">
+        <strong>${titleText}</strong>
+        ${note ? `<em>${note}</em>` : ''}
+      </span>
+    </button>
+  `;
+}
+
+function renderCourseList(course){
+  const listEl = document.getElementById('courseList');
+  if(!listEl) return;
+
+  listEl.innerHTML = course.items.map(item => {
+    if(item.type === 'bonus'){
+      return `
+        <div class="course-row course-row--bonus">
+          <span class="course-bonus-label">🔍 추가 추천</span>
+          ${_courseItemCardHtml(item.gameKey, item.note, { subtitle: item.subtitle, bonus: true })}
+        </div>
+      `;
+    }
+
+    const mainHtml = _courseItemCardHtml(item.gameKey, item.note, { slot: item.slot });
+    const branchHtml = item.branchGameKey
+      ? `
+        <div class="course-branch-row">
+          <span class="course-branch-label">🔼 심화</span>
+          ${_courseItemCardHtml(item.branchGameKey, item.branchNote, { branch: true })}
+        </div>
+      `
+      : '';
+
+    return `
+      <div class="course-row">
+        ${mainHtml}
+        ${branchHtml}
+      </div>
+    `;
+  }).join('');
+}
+
+function renderCourseChips(){
+  const grid = document.getElementById('courseChipGrid');
+  if(!grid || !window.BOOKLET_COURSES) return;
+
+  grid.innerHTML = window.BOOKLET_COURSES
+    .map(c => `<button class="course-chip" type="button" data-course="${c.id}">${c.name}</button>`)
+    .join('');
+}
+
+function selectCourse(courseId){
+  const course = window.BOOKLET_COURSES?.find(c => c.id === courseId);
+  if(!course) return;
+
+  _selectedCourseId = courseId;
+
+  document.getElementById('courseChipCaption')?.classList.add('is-hidden');
+  document.getElementById('courseChipGrid')?.classList.add('is-hidden');
+
+  const stickyBar = document.getElementById('courseStickyBar');
+  const stickyName = document.getElementById('courseStickyName');
+  if(stickyBar) stickyBar.classList.remove('is-hidden');
+  if(stickyName) stickyName.textContent = course.name;
+
+  renderCourseList(course);
+  window.CottageDB?.trackEvent('home_recommend_course_select', { course: courseId });
+}
+
+function deselectCourse(){
+  _selectedCourseId = null;
+
+  document.getElementById('courseChipCaption')?.classList.remove('is-hidden');
+  document.getElementById('courseChipGrid')?.classList.remove('is-hidden');
+  document.getElementById('courseStickyBar')?.classList.add('is-hidden');
+
+  const listEl = document.getElementById('courseList');
+  if(listEl) listEl.innerHTML = '';
+}
+
+const courseChipGrid = document.getElementById('courseChipGrid');
+if(courseChipGrid){
+  courseChipGrid.addEventListener('click', (event)=>{
+    const chip = event.target.closest('[data-course]');
+    if(!chip) return;
+    selectCourse(chip.dataset.course);
+  });
+}
+
+const courseStickyBtn = document.getElementById('courseStickyBtn');
+if(courseStickyBtn){
+  courseStickyBtn.addEventListener('click', deselectCourse);
+}
+
+const courseListEl = document.getElementById('courseList');
+if(courseListEl){
+  courseListEl.addEventListener('click', (event)=>{
+    const card = event.target.closest('[data-game]');
+    if(!card) return;
+    const gameKey = card.dataset.game;
+    window.CottageDB?.trackEvent('home_recommend_course_game_click', {
+      game_id: gameKey,
+      course: _selectedCourseId,
+    });
+    openGameSheet(gameKey);
+  });
+}
+
+renderCourseChips();
+
+
+/* =========================
    # OPEN / CLOSE MODAL
 ========================= */
 
@@ -698,7 +883,7 @@ function backToHero(){
 if(openRecommendModalButton){
   openRecommendModalButton.addEventListener('click', () => {
     window.CottageDB?.trackEvent('home_recommend_main_click');
-    showRecommendResults();
+    openRecommendSectionOnTab('course');
   });
 }
 
@@ -707,7 +892,7 @@ if(openRecommendMenuButton){
     'click',
     (event)=>{
       event.preventDefault();
-      showRecommendResults();
+      openRecommendSectionOnTab('course');
     }
   );
 }
@@ -987,7 +1172,7 @@ function toDateStr(d) {
     // 히어로 통계 텍스트가 늦게 채워지며 #recommend 위쪽 높이가 바뀌므로,
     // 통계 반영(성공/실패 무관)이 끝난 뒤에 스크롤 위치를 계산해야 정확하다.
     if (location.hash === '#recommend' && document.getElementById('recommend')) {
-      showRecommendResults();
+      openRecommendSectionOnTab('course');
     }
   }
 })();
