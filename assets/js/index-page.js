@@ -432,6 +432,10 @@ function renderCourseList(course){
   const listEl = document.getElementById('courseList');
   if(!listEl) return;
 
+  // 책자와 같은 좌(메인)→우(심화) 배치는 코스 안에 심화가 하나라도 있을 때만 쓴다.
+  // 인원무관처럼 심화가 전혀 없는 코스는 굳이 빈 오른쪽 칸을 만들지 않고 1열 그대로.
+  const hasAnyBranch = course.items.some(it => it.type === 'main' && it.branchGameKey);
+
   listEl.innerHTML = course.items.map(item => {
     if(item.type === 'bonus'){
       return `
@@ -443,19 +447,34 @@ function renderCourseList(course){
     }
 
     const mainHtml = _courseItemCardHtml(item.gameKey, item.note, { slot: item.slot });
+
+    if(!hasAnyBranch){
+      return `<div class="course-row">${mainHtml}</div>`;
+    }
+
+    // 이 코스는 좌우 분기 레이아웃 — 이 행에 심화가 없어도 오른쪽 칸을 비워
+    // 아래위 행과 왼쪽(메인) 칸 폭이 흔들리지 않게 맞춘다(책자와 동일한 규칙).
     const branchHtml = item.branchGameKey
       ? `
-        <div class="course-branch-row">
-          <span class="course-branch-label">↳ 심화</span>
+        <div class="course-row-arrow">
+          <span class="course-arrow-glyph" aria-hidden="true">→</span>
+          <span class="course-arrow-label">심화</span>
+        </div>
+        <div class="course-row-branch">
           ${_courseItemCardHtml(item.branchGameKey, item.branchNote, { branch: true })}
         </div>
       `
-      : '';
+      : `
+        <div class="course-row-arrow"></div>
+        <div class="course-row-branch"></div>
+      `;
 
     return `
       <div class="course-row">
-        ${mainHtml}
-        ${branchHtml}
+        <div class="course-row-split">
+          <div class="course-row-main">${mainHtml}</div>
+          ${branchHtml}
+        </div>
       </div>
     `;
   }).join('');
