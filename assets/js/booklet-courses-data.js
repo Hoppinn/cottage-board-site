@@ -78,41 +78,52 @@
     {
       id: 'party-5-6',
       name: '5~6인',
-      // 책자 이 페이지는 순수 텍스트 목록(썸네일·설명 문구 없음) — note는 전부 null.
+      // 2026-08 최종 PSD 확인 — 초기 PNG엔 이 설명 문구가 통째로 빠져 있었음(재발 방지 기록).
       items: [
-        { type: 'main', slot: 1, gameKey: '저스트원', note: null, branchGameKey: '딕싯', branchNote: null },
-        { type: 'main', slot: 2, gameKey: '코드네임', note: null, branchGameKey: '플립7', branchNote: null },
-        { type: 'main', slot: 3, gameKey: '카멜업2판', note: null, branchGameKey: '스컬킹', branchNote: null },
-        { type: 'main', slot: 4, gameKey: '스컬', note: null, branchGameKey: '페루도', branchNote: null },
-        { type: 'main', slot: 5, gameKey: '셀레스티아-빅박스', note: null, branchGameKey: '프리세이지', branchNote: null },
-        { type: 'main', slot: 6, gameKey: '메디치', note: null, branchGameKey: '히트', branchNote: null },
+        { type: 'main', slot: 1, gameKey: '저스트원', note: '단어 힌트 협력게임',
+          branchGameKey: '딕싯', branchNote: '그림 연상으로 사고방식 알아가기' },
+        { type: 'main', slot: 2, gameKey: '코드네임', note: '단어 연결 팀게임',
+          branchGameKey: '플립7', branchNote: '숫자 카드 치킨게임' },
+        { type: 'main', slot: 3, gameKey: '카멜업2판', note: '주사위 경마 베팅게임',
+          branchGameKey: '스컬킹', branchNote: '트릭테이킹과 베팅' },
+        { type: 'main', slot: 4, gameKey: '스컬', note: '단순하고 치열한 블러핑',
+          branchGameKey: '페루도', branchNote: '주사위 블러핑' },
+        { type: 'main', slot: 5, gameKey: '셀레스티아-빅박스', note: '모험을 이어가는 치킨게임',
+          branchGameKey: '프리세이지', branchNote: '6인 전용 2:2:2 팀게임' },
+        { type: 'main', slot: 6, gameKey: '메디치', note: '상품 경매 게임',
+          branchGameKey: '히트', branchNote: '떼로 활발한 자원쟁탈' },
       ],
     },
     {
       id: 'party-7-8',
       name: '7~8인',
-      // 이 페이지도 순수 텍스트 목록 — note는 전부 null.
+      // 2026-08 최종 PSD 확인 — 초기 PNG엔 이 설명 문구가 통째로 빠져 있었음.
       items: [
-        { type: 'main', slot: 1, gameKey: '텔레스트레이션', note: null, branchGameKey: '탑텐티비', branchNote: null },
-        { type: 'main', slot: 2, gameKey: '뱅-주사위', note: null, branchGameKey: '블러드바운드', branchNote: null },
-        { type: 'main', slot: 3, gameKey: '스파이폴', note: null, branchGameKey: '가짜예술가뉴욕에가다', branchNote: null },
-        { type: 'main', slot: 4, gameKey: '두부왕국', note: null, branchGameKey: '디셉션', branchNote: null },
+        { type: 'main', slot: 1, gameKey: '텔레스트레이션', note: '그림으로 이어가는 릴레이 퀴즈',
+          branchGameKey: '탑텐티비', branchNote: '강약을 맞춰 순서를 맞추는 협력 파티게임' },
+        { type: 'main', slot: 2, gameKey: '뱅-주사위', note: '빠른 템포로 즐기는 주사위 3파전 마피아 액션',
+          branchGameKey: '블러드바운드', branchNote: '빠르게 진행되는 두 진영 마피아 액션' },
+        { type: 'main', slot: 3, gameKey: '스파이폴', note: '질문으로 스파이 찾기 (라이어게임)',
+          branchGameKey: '가짜예술가뉴욕에가다', branchNote: '한 획씩 그려 가짜 화가 찾기' },
+        { type: 'main', slot: 4, gameKey: '두부왕국', note: '질문으로 범인을 찾는 정체추리',
+          branchGameKey: '디셉션', branchNote: '법의학자의 단서로 범인을 찾는 협력추리' },
         // 책자엔 "머더미스터리 파티 시리즈"로만 표기 — 시리즈 1번인 늑대인간마을의축제로 대표.
-        { type: 'main', slot: 5, gameKey: '늑대인간마을의축제미스터리파티시리즈', note: null, branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 5, gameKey: '늑대인간마을의축제미스터리파티시리즈', note: '역할극으로 풀어가는 살인사건',
+          branchGameKey: null, branchNote: null },
       ],
     },
     {
       id: 'any-count',
       name: '인원무관',
-      // 이 페이지는 썸네일도 설명도 없는 순수 텍스트 목록.
+      // 2026-08 최종 PSD 확인 — 초기 PNG엔 이 설명 문구가 통째로 빠져 있었음.
       items: [
-        { type: 'main', slot: 1, gameKey: '마헤', note: null, branchGameKey: null, branchNote: null },
-        { type: 'main', slot: 2, gameKey: '젝스님트', note: null, branchGameKey: null, branchNote: null },
-        { type: 'main', slot: 3, gameKey: '갈팡질팡', note: null, branchGameKey: null, branchNote: null },
-        { type: 'main', slot: 4, gameKey: '달무티', note: null, branchGameKey: null, branchNote: null },
-        { type: 'main', slot: 5, gameKey: '콘셉트', note: null, branchGameKey: null, branchNote: null },
-        { type: 'main', slot: 6, gameKey: '다잉메시지-공범만화가-확장', note: null, branchGameKey: null, branchNote: null },
-        { type: 'main', slot: 7, gameKey: '육식동물짓이야', note: null, branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 1, gameKey: '마헤', note: '업고 업히는 주사위 거북이 경주', branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 2, gameKey: '젝스님트', note: '별점을 피하는 숫자 카드 눈치싸움', branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 3, gameKey: '갈팡질팡', note: '힌트가 어떤 단어에 가까운지 추측하는 협력게임', branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 4, gameKey: '달무티', note: '계급이 뒤바뀌는 카드털기(클라이밍) 게임', branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 5, gameKey: '콘셉트', note: '아이콘 조합으로 단어 설명하기 팀게임', branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 6, gameKey: '다잉메시지-공범만화가-확장', note: '단어 타일로 범인·도구·동기 찾는 협력추리', branchGameKey: null, branchNote: null },
+        { type: 'main', slot: 7, gameKey: '육식동물짓이야', note: '진실의 참과 거짓으로 범인 찾기', branchGameKey: null, branchNote: null },
       ],
     },
   ];
