@@ -436,7 +436,13 @@ function renderCourseList(course){
   // 인원무관처럼 심화가 전혀 없는 코스는 굳이 빈 오른쪽 칸을 만들지 않고 1열 그대로.
   const hasAnyBranch = course.items.some(it => it.type === 'main' && it.branchGameKey);
 
-  listEl.innerHTML = course.items.map(item => {
+  // 메인 게임끼리는 ↓로 진행을 잇는다 — 마지막 메인 항목(보너스 앞)에는 안 그린다.
+  const mainIndexes = course.items
+    .map((it, i) => (it.type === 'main' ? i : -1))
+    .filter(i => i >= 0);
+  const lastMainIndex = mainIndexes[mainIndexes.length - 1];
+
+  listEl.innerHTML = course.items.map((item, idx) => {
     if(item.type === 'bonus'){
       return `
         <div class="course-row course-row--bonus">
@@ -446,10 +452,11 @@ function renderCourseList(course){
       `;
     }
 
+    const rowClass = 'course-row' + (idx === lastMainIndex ? '' : ' course-row--has-next');
     const mainHtml = _courseItemCardHtml(item.gameKey, item.note, { slot: item.slot });
 
     if(!hasAnyBranch){
-      return `<div class="course-row">${mainHtml}</div>`;
+      return `<div class="${rowClass}"><div class="course-row-main">${mainHtml}</div></div>`;
     }
 
     // 이 코스는 좌우 분기 레이아웃 — 이 행에 심화가 없어도 오른쪽 칸을 비워
@@ -470,7 +477,7 @@ function renderCourseList(course){
       `;
 
     return `
-      <div class="course-row">
+      <div class="${rowClass}">
         <div class="course-row-split">
           <div class="course-row-main">${mainHtml}</div>
           ${branchHtml}

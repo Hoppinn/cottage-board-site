@@ -1757,8 +1757,36 @@ body.recommend-page main{
   align-items:center;
   gap:4px;
 }
-.course-row-main{ min-width:0; }
+.course-row-main{ min-width:0; position:relative; }
 .course-row-branch{ min-width:0; }
+
+/* 메인 게임끼리 진행을 잇는 ↓ — 얇은 선 + 작은 화살촉, 오른쪽 심화 화살표보다
+   한 단계 덜 강조(굵기·크기 모두 축소). 기존 행 간격(10px) 안에 그려서
+   레이아웃 높이는 그대로 둔다. 카드 폭이 아니라 .course-row-main 기준으로
+   중앙정렬 — 좌우 분기 행에서도 메인 칸 중앙에만 그려지게. */
+.course-row--has-next .course-row-main::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-7px;
+  transform:translateX(-50%);
+  width:1.5px;
+  height:5px;
+  background:#c9a97a;
+}
+.course-row--has-next .course-row-main::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-11px;
+  transform:translateX(-50%);
+  width:0;
+  height:0;
+  border-left:3.5px solid transparent;
+  border-right:3.5px solid transparent;
+  border-top:4px solid #c9a97a;
+  z-index:1;
+}
 
 .course-row-arrow{
   display:flex;
