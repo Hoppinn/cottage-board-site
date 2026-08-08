@@ -446,7 +446,7 @@ function renderCourseList(course){
     const branchHtml = item.branchGameKey
       ? `
         <div class="course-branch-row">
-          <span class="course-branch-label">🔼 심화</span>
+          <span class="course-branch-label">↳ 심화</span>
           ${_courseItemCardHtml(item.branchGameKey, item.branchNote, { branch: true })}
         </div>
       `
@@ -484,6 +484,8 @@ function selectCourse(courseId){
   if(stickyBar) stickyBar.classList.remove('is-hidden');
   if(stickyName) stickyName.textContent = course.name;
 
+  document.getElementById('courseListHint')?.classList.remove('is-hidden');
+
   renderCourseList(course);
   window.CottageDB?.trackEvent('home_recommend_course_select', { course: courseId });
 }
@@ -494,6 +496,7 @@ function deselectCourse(){
   document.getElementById('courseChipCaption')?.classList.remove('is-hidden');
   document.getElementById('courseChipGrid')?.classList.remove('is-hidden');
   document.getElementById('courseStickyBar')?.classList.add('is-hidden');
+  document.getElementById('courseListHint')?.classList.add('is-hidden');
 
   const listEl = document.getElementById('courseList');
   if(listEl) listEl.innerHTML = '';
