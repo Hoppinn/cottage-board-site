@@ -1754,11 +1754,15 @@ body.recommend-page main{
 .course-row-split{
   display:grid;
   grid-template-columns:1.6fr 20px 1fr;
-  align-items:center;
+  align-items:stretch;
   gap:4px;
 }
-.course-row-main{ min-width:0; position:relative; }
-.course-row-branch{ min-width:0; }
+/* stretch로 칸 높이를 행 전체(=제일 큰 칸, 보통 심화)에 맞추고, 안에서 카드만
+   다시 가운데 정렬 — 카드가 보이는 위치는 그대로 두면서 .course-row-main의
+   실제 바닥을 행의 진짜 바닥과 맞춘다. 아래 진행 화살표가 이 바닥을 기준으로
+   그려지므로 심화가 있든 없든 다음 행까지 간격이 항상 똑같아진다. */
+.course-row-main{ min-width:0; position:relative; display:flex; align-items:center; }
+.course-row-branch{ min-width:0; display:flex; align-items:center; }
 
 /* 메인 게임끼리 진행을 잇는 ↓ — 처음엔 연한 색+짧은 길이로 넣었다가 "카드가
    따로 떠 보인다"는 재확인을 받아 진하게·길게 키움(간격도 10→18px로 확보).
