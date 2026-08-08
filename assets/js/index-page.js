@@ -485,7 +485,55 @@ function renderCourseList(course){
       </div>
     `;
   }).join('');
+
+  // 화살표는 실제 렌더된 카드 위치를 재서 꽂는다 — 다음 프레임까지 기다려
+  // innerHTML 반영 후 레이아웃이 끝난 값을 잡는다.
+  requestAnimationFrame(positionCourseFlowArrows);
 }
+
+// 심화 유무로 카드 높이가 달라도 항상 "이 카드 바닥 ~ 다음 카드 위쪽"의
+// 정중앙에 ↓를 꽂는다. CSS만으로 세 번 시도해도 안 맞았던 문제라
+// 실측(getBoundingClientRect) 기반으로 전환(2026-08).
+function positionCourseFlowArrows(){
+  const listEl = document.getElementById('courseList');
+  if(!listEl) return;
+
+  listEl.querySelectorAll('.course-flow-arrow').forEach(el => el.remove());
+
+  const listRect = listEl.getBoundingClientRect();
+  const hasNextRows = Array.from(listEl.querySelectorAll('.course-row--has-next'));
+
+  hasNextRows.forEach(row => {
+    const mainCard = row.querySelector('.course-row-main .course-item-card');
+    if(!mainCard) return;
+
+    let nextRow = row.nextElementSibling;
+    while(nextRow && !nextRow.classList.contains('course-row')) nextRow = nextRow.nextElementSibling;
+    if(!nextRow) return;
+
+    const nextCard =
+      nextRow.querySelector('.course-row-main .course-item-card') ||
+      nextRow.querySelector('.course-item-card');
+    if(!nextCard) return;
+
+    const mainRect = mainCard.getBoundingClientRect();
+    const nextRect = nextCard.getBoundingClientRect();
+
+    const midY = (mainRect.bottom + nextRect.top) / 2;
+    const centerX = mainRect.left + mainRect.width / 2;
+
+    const arrow = document.createElement('div');
+    arrow.className = 'course-flow-arrow';
+    arrow.style.top = (midY - listRect.top) + 'px';
+    arrow.style.left = (centerX - listRect.left) + 'px';
+    arrow.innerHTML = '<span class="course-flow-arrow-glyph" aria-hidden="true">↓</span>';
+    listEl.appendChild(arrow);
+  });
+}
+
+window.addEventListener('resize', () => {
+  if(document.querySelector('.course-flow-arrow')) positionCourseFlowArrows();
+});
 
 function renderCourseChips(){
   const grid = document.getElementById('courseChipGrid');
