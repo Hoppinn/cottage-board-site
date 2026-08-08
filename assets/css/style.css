@@ -1918,15 +1918,20 @@ body.recommend-page main{
   -webkit-box-orient:vertical;
   overflow:hidden;
 }
+/* 1줄+말줄임이었다가 "문장 중간에 잘려 의미가 손실된다"는 재검토로 2줄
+   클램프로 전환(2026-08) — 제목과 같은 패턴. 예전엔 카드 높이를 행마다
+   맞추려고 1줄로 눌렀지만, 진행 화살표가 실측 좌표 기반으로 바뀌면서
+   카드 높이가 달라도 더는 문제가 안 돼 그 제약이 사라졌다. */
 .course-item-text em{
   font-style:normal;
   font-size:11.5px;
   color:var(--muted);
   line-height:1.3;
-  display:block;
-  white-space:nowrap;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  line-clamp:2;
+  -webkit-box-orient:vertical;
   overflow:hidden;
-  text-overflow:ellipsis;
 }
 
 /* ── 추천게임 전체보기 오버레이 ── */

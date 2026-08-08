@@ -994,9 +994,9 @@ async function initSheetOrganizerContent(gameKey) {
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
-  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임방법 보기</button>`;
-  if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 자주 틀리는 규칙 보기</button>`;
-  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리방법 보기</button>`;
+  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임방법</button>`;
+  if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 자주 틀리는 규칙</button>`;
+  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리방법</button>`;
   area.innerHTML = html;
 
   area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openOrganizerLightbox(photos, gameName));
