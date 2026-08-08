@@ -1730,7 +1730,7 @@ body.recommend-page main{
   padding:0 18px 8px;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:18px;
 }
 .course-row{
   display:flex;
@@ -1760,31 +1760,32 @@ body.recommend-page main{
 .course-row-main{ min-width:0; position:relative; }
 .course-row-branch{ min-width:0; }
 
-/* 메인 게임끼리 진행을 잇는 ↓ — 얇은 선 + 작은 화살촉, 오른쪽 심화 화살표보다
-   한 단계 덜 강조(굵기·크기 모두 축소). 기존 행 간격(10px) 안에 그려서
-   레이아웃 높이는 그대로 둔다. 카드 폭이 아니라 .course-row-main 기준으로
-   중앙정렬 — 좌우 분기 행에서도 메인 칸 중앙에만 그려지게. */
+/* 메인 게임끼리 진행을 잇는 ↓ — 처음엔 연한 색+짧은 길이로 넣었다가 "카드가
+   따로 떠 보인다"는 재확인을 받아 진하게·길게 키움(간격도 10→18px로 확보).
+   오른쪽 심화 화살표(var(--green))와 같은 색으로 맞추되, 굵기·글자 없음으로
+   여전히 한 단계는 덜 강조 — 오른쪽을 죽이면 책자 심화 추천이 덜 보이게 된다.
+   카드 폭이 아니라 .course-row-main 기준으로 중앙정렬. */
 .course-row--has-next .course-row-main::after{
   content:"";
   position:absolute;
   left:50%;
-  bottom:-7px;
+  bottom:-13px;
   transform:translateX(-50%);
-  width:1.5px;
-  height:5px;
-  background:#c9a97a;
+  width:2px;
+  height:11px;
+  background:var(--green);
 }
 .course-row--has-next .course-row-main::before{
   content:"";
   position:absolute;
   left:50%;
-  bottom:-11px;
+  bottom:-18px;
   transform:translateX(-50%);
   width:0;
   height:0;
-  border-left:3.5px solid transparent;
-  border-right:3.5px solid transparent;
-  border-top:4px solid #c9a97a;
+  border-left:4.5px solid transparent;
+  border-right:4.5px solid transparent;
+  border-top:5px solid var(--green);
   z-index:1;
 }
 
