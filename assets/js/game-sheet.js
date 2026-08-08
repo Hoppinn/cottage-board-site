@@ -298,7 +298,7 @@ function _openNoteModal(modalId, heading, text) {
 }
 
 function _openRuleNoteModal(text, gameName) {
-  _openNoteModal('ruleNoteModal', `${gameName} 룰 요약`, text);
+  _openNoteModal('ruleNoteModal', `${gameName} 게임방법`, text);
 }
 
 function _openErrorNoteModal(text, gameName) {
@@ -994,7 +994,7 @@ async function initSheetOrganizerContent(gameKey) {
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
-  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 룰 요약 보기</button>`;
+  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임방법 보기</button>`;
   if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 에러플로그 보기</button>`;
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리법 보기</button>`;
   area.innerHTML = html;
