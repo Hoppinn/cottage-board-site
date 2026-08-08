@@ -1754,7 +1754,11 @@ body.recommend-page main{
    비운 채 같은 그리드를 쓴다 — 코스 안에서 왼쪽(메인) 폭이 행마다 안 흔들리게. */
 .course-row-split{
   display:grid;
-  grid-template-columns:1.6fr 20px 1fr;
+  /* fr만 쓰면 트랙 최소너비가 auto(=내용이 다 담기는 만큼)라, white-space:nowrap
+     텍스트가 길면 칸이 계속 넓어져 행마다 폭이 달라진다(2026-08 실측으로 확인 —
+     "어떤 칸은 넘치고 어떤 칸은 잘린다"의 원인). minmax(0,Nfr)로 최소값을 0으로
+     고정해야 fr 비율이 실제로 지켜지고 overflow:hidden/ellipsis가 작동한다. */
+  grid-template-columns:minmax(0,1.6fr) 20px minmax(0,1fr);
   align-items:stretch;
   gap:4px;
 }
@@ -1826,7 +1830,12 @@ body.recommend-page main{
    썸네일을 위, 텍스트를 아래로 쌓아 칸 너비를 통째로 텍스트에 쓴다. */
 .course-item-card--branch{
   flex-direction:column;
-  align-items:center;
+  /* align-items:center였으면 자식이 "자기 글자 폭만큼"만 차지하고 가운데
+     배치돼, white-space:nowrap 텍스트가 카드 폭(100px대)을 넘어 그대로
+     삐져나갔다(2026-08 실측 — "내용이 넘어간다"의 진짜 원인, 그리드 트랙
+     fr 문제와는 별개). stretch로 텍스트 블록을 카드 폭까지 채워야
+     overflow:hidden이 실제로 작동한다 — 보이는 정렬은 text-align:center로 유지. */
+  align-items:stretch;
   text-align:center;
   gap:2px;
   padding:5px;
@@ -1836,9 +1845,10 @@ body.recommend-page main{
 .course-item-card--branch img{
   width:28px;
   height:28px;
+  align-self:center;
 }
 .course-item-card--branch .course-item-text{
-  align-items:center;
+  align-items:stretch;
   gap:0;
 }
 /* 메인(70px대)과 높이 차가 크면(원래 96px대) 그리드가 메인을 위아래로
