@@ -780,7 +780,9 @@
    * @param {Array}  dayGames — 해당 날짜 meeting_vote_games
    * @param {Object} [myVote] — 본인 vote(막대 is-mine 강조용)
    */
-  window.openDatePreviewModal = function (dateStr, dayVotes, dayGames, myVote, onChange) {
+  // backTo(선택) — 여기서 참여자 이름을 눌러 다른 보드로 넘어갈 때, 그 보드의 패널 헤더에
+  // "‹ 뒤로"를 달아 이 모달을 연 보드(진입점)로 되돌아올 수 있게 한다(openProfilePanel opts.backTo 그대로 위임).
+  window.openDatePreviewModal = function (dateStr, dayVotes, dayGames, myVote, onChange, backTo) {
     document.getElementById('__ddModal')?.remove();
     const el = document.createElement('div');
     el.id = '__ddModal';
@@ -808,7 +810,7 @@
     // 같은 9100이라 안 닫으면 이 모달에 가려 안 보인다(먼저 닫아야 클릭 1번에 보드로 넘어간다).
     // openDateScheduleModal의 .dd-nick-link는 반대로 자기가 더 아래(9050)라 닫지 않는 게 맞는 설계 — 그쪽은 그대로 둔다.
     el.querySelectorAll('.sched-bar-name').forEach(n =>
-      n.addEventListener('click', () => { close(); window.openOtherMeetingSheet?.(n.dataset.uid); }));
+      n.addEventListener('click', () => { close(); window.openOtherMeetingSheet?.(n.dataset.uid, backTo ? { backTo } : {}); }));
     // +N명 더보기 토글 (막대가 접힘 구조일 때)
     el.querySelectorAll('.sched-card-more-btn').forEach(btn =>
       btn.addEventListener('click', () => {

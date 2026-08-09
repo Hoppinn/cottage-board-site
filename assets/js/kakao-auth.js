@@ -1561,13 +1561,17 @@ function _bindMeetingSubsheet(subBody, ctx) {
               weekEl.innerHTML = `<div class="taste-section-label">📅 다가오는 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.upcomingVotes, _weekData.myVoteGames, userId, !readOnly);
               weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
                 window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
+              // 상세팝업에서 참여자 이름을 눌러 다른 보드로 넘어간 뒤, "‹ 뒤로"로 지금 이 보드
+              // (모임보드 서브시트, 진입점)로 되돌아올 수 있게 — openProfilePanel의 panel-level
+              // backTo(패널 헤더 back 버튼)를 그대로 재사용한다(2026-08-09, 넘어간 뒤 끊기던 것).
+              const _mbBackTo = { type: 'panel', autoSubsheet: 'meeting', label: `${user.nickname || '이전'}의 모임보드`, opts: { userId: String(userId), readOnly, nickname: user.nickname || '' } };
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
                 // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
                 // 읽기전용: 남의 보드도 그날 전원 막대 차트로. 편집은 막기 위해 myVote=null(내 막대 하이라이트·✎✕ 없음).
                 // 미니바가 upcoming 범위라 detail도 upcomingAllV/upcomingAllVG를 써야 이번 주 밖 날짜도 채워진다.
-                if (readOnly) { window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), null, null); return; }
-                window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), _weekData.upcomingVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
+                if (readOnly) { window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), null, null, _mbBackTo); return; }
+                window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), _weekData.upcomingVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek, _mbBackTo);
               }));
             }
             // 취향보드 수정 후 "‹ 모임 보드"로 복귀 시 눌렀던 스크롤 위치 복원 (렌더 완료 후)
