@@ -1923,7 +1923,13 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
   const existing = document.getElementById('profilePanel');
   // 자기 보드는 버튼 재클릭 시 토글로 닫힘. 읽기전용은 항상 새로 열기(닉네임 클릭 등 진입).
-  if (existing) { existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly) return; }
+  // ⚠️ 토글은 "지금 열려 있는 게 이미 내 보드일 때"만이다 — 남의 보드(readOnly)가 열린
+  // 상태에서 그 안의 참여자 목록에 내 이름이 있어 클릭한 경우(openOtherMeetingSheet의
+  // self.id===userId 분기, opts에 readOnly가 없어 여기선 false로 들어온다)까지 "이미 열려
+  // 있으니 닫기"로 처리하면, 남의 보드만 닫히고 내 보드는 안 열린 채 끝난다(2026-08-09
+  // 실사용 발견 — 남의 보드 참여자 목록에서 자기 자신 클릭 시 "그냥 꺼져버림").
+  const _existingWasReadOnly = existing?.classList.contains('profile-panel--readonly');
+  if (existing) { existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
