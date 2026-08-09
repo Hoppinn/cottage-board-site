@@ -804,8 +804,11 @@
     el.querySelector('.dd-x-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
     // 참여자 이름 클릭 → 해당 유저 모임 보드 (홈 미리보기와 동일)
+    // 이 모달은 자신을 연 보드보다 위(z 9200 > --z-profile 9100)라서, 새로 열리는 남의 보드도
+    // 같은 9100이라 안 닫으면 이 모달에 가려 안 보인다(먼저 닫아야 클릭 1번에 보드로 넘어간다).
+    // openDateScheduleModal의 .dd-nick-link는 반대로 자기가 더 아래(9050)라 닫지 않는 게 맞는 설계 — 그쪽은 그대로 둔다.
     el.querySelectorAll('.sched-bar-name').forEach(n =>
-      n.addEventListener('click', () => window.openOtherMeetingSheet?.(n.dataset.uid)));
+      n.addEventListener('click', () => { close(); window.openOtherMeetingSheet?.(n.dataset.uid); }));
     // +N명 더보기 토글 (막대가 접힘 구조일 때)
     el.querySelectorAll('.sched-card-more-btn').forEach(btn =>
       btn.addEventListener('click', () => {
