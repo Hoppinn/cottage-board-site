@@ -276,33 +276,50 @@ function _openCoverModal(src) {
   document.body.appendChild(m);
 }
 
-function _openOrganizerLightbox(urls, gameName) {
-  if (!urls?.length || !window.openLightbox) return;
-  const captions = urls.map(() => `${gameName} 정리 방법`);
-  window.openLightbox(urls, 0, { captions, dim: 'rgba(0,0,0,0.5)', frame: true });
-}
+// 룰 허브 모달 — 게임 방법/자주 틀리는 규칙/정리 방법(사진) 통합 (2026-08-09).
+// 예전엔 _openNoteModal(480px 고정폭 팝업) 2개 + _openOrganizerLightbox(사진 단독 진입)로
+// 나뉘어 있었다 — 콘텐츠가 길어지면(패치워크 등 실제 룰 원고) 그 작은 팝업이 답답해질
+// 것으로 보여 site 표준 650px 센터모달(.game-sheet-panel과 동일 폭)+아코디언으로 통합.
+// "준비"는 별도 필드가 아니라 rule_note(게임 방법) 글 안에 섞어 쓴다 — DB엔 그대로
+// rule_note/error_note/organizer_photo_urls 3필드만 있다(스키마 변경 없음, 사용자 확정).
+// focusSection: 어느 버튼으로 들어왔는지에 따라 그 섹션만 펼치고 나머지는 접어서 시작.
+function _openRuleHubModal(gameName, { ruleNote, errorNote, photos } = {}, focusSection) {
+  if (!ruleNote && !errorNote && !photos?.length) return;
+  document.getElementById('ruleHubModal')?.remove();
+  const sections = [];
+  if (ruleNote) sections.push({ key: 'rule', icon: '📖', label: '게임 방법', warn: false,
+    body: `<div class="rule-hub-body">${window.escH(ruleNote)}</div>` });
+  if (errorNote) sections.push({ key: 'error', icon: '⚠️', label: '자주 틀리는 규칙', warn: true,
+    body: `<div class="rule-hub-body">${window.escH(errorNote)}</div>` });
+  if (photos?.length) sections.push({ key: 'photos', icon: '📦', label: '정리 방법', warn: false,
+    body: `<div class="rule-hub-photos">${photos.map((u, i) => `<img class="rule-hub-photo" src="${window.escH(u)}" alt="" data-idx="${i}">`).join('')}</div>` });
+  const openKey = sections.some(s => s.key === focusSection) ? focusSection : sections[0]?.key;
 
-function _openNoteModal(modalId, heading, text) {
-  if (!text) return;
-  document.getElementById(modalId)?.remove();
-  const m = document.createElement('div');
-  m.id = modalId;
-  m.style.cssText = 'position:fixed;inset:0;z-index:9650;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;padding:24px;';
-  m.innerHTML = `<div style="background:#fff;border-radius:12px;max-width:480px;max-height:80vh;overflow-y:auto;padding:20px;position:relative;">
-    <button aria-label="닫기" onclick="document.getElementById('${modalId}')?.remove()" style="position:absolute;top:12px;right:12px;background:none;border:none;font-size:20px;cursor:pointer;line-height:1;">✕</button>
-    <h3 style="margin:0 0 12px;padding-right:28px;">${window.escH(heading)}</h3>
-    <p style="white-space:pre-wrap;margin:0;line-height:1.6;">${window.escH(text)}</p>
+  const overlay = document.createElement('div');
+  overlay.id = 'ruleHubModal';
+  overlay.className = 'rule-hub-overlay';
+  overlay.innerHTML = `<div class="rule-hub-box" role="dialog" aria-modal="true">
+    <div class="rule-hub-header">
+      <span class="rule-hub-title">${window.escH(gameName)}</span>
+      <button class="rule-hub-close" type="button" aria-label="닫기">✕</button>
+    </div>
+    <div class="rule-hub-scroll">
+      ${sections.map(s => `<details class="rule-hub-section${s.warn ? ' is-warn' : ''}"${s.key === openKey ? ' open' : ''}>
+        <summary>${s.icon} ${window.escH(s.label)}</summary>
+        ${s.body}
+      </details>`).join('')}
+    </div>
   </div>`;
-  m.addEventListener('click', e => { if (e.target === m) m.remove(); });
-  document.body.appendChild(m);
-}
-
-function _openRuleNoteModal(text, gameName) {
-  _openNoteModal('ruleNoteModal', `${gameName} 게임 방법`, text);
-}
-
-function _openErrorNoteModal(text, gameName) {
-  _openNoteModal('errorNoteModal', `${gameName} 자주 틀리는 규칙`, text);
+  document.body.appendChild(overlay);
+  const close = () => overlay.remove();
+  overlay.querySelector('.rule-hub-close').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  if (photos?.length && window.openLightbox) {
+    const captions = photos.map(() => `${gameName} 정리 방법`);
+    overlay.querySelectorAll('.rule-hub-photo').forEach(img => img.addEventListener('click', () => {
+      window.openLightbox(photos, Number(img.dataset.idx), { captions, dim: 'rgba(0,0,0,0.5)', frame: true });
+    }));
+  }
 }
 
 function openShelfSheet(url) {
@@ -999,9 +1016,11 @@ async function initSheetOrganizerContent(gameKey) {
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리 방법</button>`;
   area.innerHTML = html;
 
-  area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openOrganizerLightbox(photos, gameName));
-  area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleNoteModal(ruleNote, gameName));
-  area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openErrorNoteModal(errorNote, gameName));
+  // 세 버튼 전부 같은 룰 허브 모달을 연다 — 누른 섹션만 펼치고 나머지는 접어서 시작(_openRuleHubModal 참조).
+  const _org = { ruleNote, errorNote, photos };
+  area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'rule'));
+  area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'error'));
+  area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'photos'));
 }
 
 async function initSheetCommentsPreview(gameKey) {
@@ -2834,10 +2853,13 @@ async function onSubmitPlayModal() {
 /* ===== R11c(GS2) 공개 API 노출 =====
    전역 유지 필수 = 파일 밖(js/html) 참조 14 ∪ 자기 템플릿 onclick 호출 27 = 함수 37개
    (GS7에서 getDifficultyData·normalizeLevelValue 2개를 game-display-adapter로 이관 → 39→37).
+   (2026-08-09 룰 허브 모달 통합: _openOrganizerLightbox 제거 — grep 결과 파일 밖 참조가
+   실제로는 0건이라 export 목록에 있을 이유가 없었다(죽은 export) → 37→36)
    + 크로스파일에서 bare 참조되는 상수 2개(DEFAULT_GAME_IMAGE·GameView).
-   나머지 최상위 함수 60개와 모듈 상태(gameSheetContent·_gameSheetHistory 등)는 IIFE 내부 은닉. */
+   나머지 최상위 함수(_openNoteModal류 3개 삭제 + _openRuleHubModal 1개 신설, 순감 2)는
+   IIFE 내부 은닉. */
 Object.assign(window, {
-  _openCoverModal, _openOrganizerLightbox, closeGameSheet, ensureGameSheet,
+  _openCoverModal, closeGameSheet, ensureGameSheet,
   formatDate, formatDifficultyWeight, formatPlayers, formatRating,
   getAllGamesArray, getAvailBadgeHtml, getGameKey, getShelfSpanHtml,
   goBackGameSheet, loginFromSheet,
