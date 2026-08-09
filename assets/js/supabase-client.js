@@ -1500,12 +1500,15 @@ window._cottageSess = (function () {
       const seenIds = new Set(ownPlays.map(r => r.id));
       const merged = [...ownPlays, ...taggedPlays.filter(r => !seenIds.has(r.id))];
       merged.sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+      // group_name이 비어 있어도(그룹명 미입력) 날짜로는 묶는다 — getMyNotifications의
+      // 태그묶음(tagGroups, `${group_name||''}|${date}`)과 같은 방식. group_name 있을 때만
+      // 세던 옛 코드는 전체 기록의 14%(group_name null)를 통째로 못 셌다(2026-08-09 실측,
+      // 회원 「덕 지」 08-03 기록 2건이 여기 걸려 모임참여 3회가 2회로 보였음).
       const moimSessions = new Set();
       for (const r of merged) {
-        if (r.group_name) {
-          const d = r.played_at || (r.created_at || '').slice(0, 10);
-          moimSessions.add(`${r.group_name}_${d}`);
-        }
+        const d = r.played_at || (r.created_at || '').slice(0, 10);
+        if (!r.group_name && !d) continue; // 세션 식별 불가(game-sheet.js 731번 줄과 같은 기준)
+        moimSessions.add(`${r.group_name || ''}_${d}`);
       }
       return {
         plays: merged,
