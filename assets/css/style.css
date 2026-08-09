@@ -3366,17 +3366,26 @@ body.embed-mode {
    PROJECT_STATE 참조). 모바일은 게임시트와 같은 근접 풀스크린 바텀시트, PC는
    .game-sheet-panel과 동일한 720px+ 650px 센터모달 전환(사이트 표준 폭 재사용 — 이 모달만
    700~850px 같은 새 폭을 쓰지 않는다). */
+/* 모바일 기본형은 .shelf-sheet-overlay/.shelf-sheet-box(게임 위치 시트)와 같은 패턴으로
+   맞춘다 — 화면을 꽉 채우지 않고 위에 여백을 남겨 헤더 시작 위치를 낮춘다(2026-08-09,
+   사용자 지적: 예전 top:36px 근접풀스크린은 헤더가 화면 맨 위 가까이 붙어 있었다).
+   overlay를 flex-end로 바닥에 붙이고, box 높이를 "100dvh - 100px"로 고정해 그 차액이
+   전부 위쪽 여백이 되게 한다(.shelf-sheet-box의 102px와 같은 계산 방식, 여기는 하단
+   margin이 12px라 100px로 맞춰 비율을 비슷하게 뒀다). */
 .rule-hub-overlay{
   position:fixed; inset:0; z-index:var(--z-sheet-modal);
   background:rgba(0,0,0,0.5);
+  display:flex; align-items:flex-end; justify-content:center;
 }
 .rule-hub-box{
-  position:absolute; left:10px; right:10px; top:36px; bottom:12px;
+  width:calc(100% - 20px);
+  height:calc(100vh - 100px); height:calc(100dvh - 100px);
+  margin:0 10px 12px;
   background:var(--paper-2);
-  border-radius:18px;
+  border-radius:20px 20px 18px 18px;
   overflow:hidden;
   display:flex; flex-direction:column;
-  animation:sheetUp .22s ease;
+  animation:sheetUp .3s ease-out both;
   box-shadow:0 -10px 30px rgba(100,72,38,0.16);
 }
 .rule-hub-header{
@@ -8987,11 +8996,14 @@ body.is-embedded .inner-page{padding-top:16px;}
     animation: sheetModalIn .22s ease;
   }
   .rule-hub-box {
+    position: absolute;
     left: 50%;
     right: auto;
     top: 32px;
     bottom: 32px;
     width: min(92vw, 650px);
+    height: auto;
+    margin: 0;
     transform: translateX(-50%);
     border-radius: 20px;
     animation: sheetModalIn .22s ease;
