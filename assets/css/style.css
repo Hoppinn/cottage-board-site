@@ -3388,20 +3388,32 @@ body.embed-mode {
 }
 .rule-hub-title{font-size:16px; font-weight:800; color:var(--ink);}
 .rule-hub-close{background:none; border:none; font-size:20px; color:var(--muted); cursor:pointer; padding:2px 8px; line-height:1;}
-.rule-hub-scroll{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px 20px 24px;}
-.rule-hub-section{border-bottom:1px solid var(--line-soft); padding:14px 0;}
-.rule-hub-section:last-child{border-bottom:none;}
-.rule-hub-section>summary{
-  font-size:15px; font-weight:700; color:var(--ink);
-  cursor:pointer; list-style:none; user-select:none;
-  display:flex; align-items:center; justify-content:space-between; gap:8px;
+.rule-hub-scroll{flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px 20px 24px; display:flex; flex-direction:column; gap:8px;}
+/* 카드형 구분(2026-08-09, 사용자 지적 — game-location.html의 .loc-section류처럼 얇은
+   구분선 대신 테두리+둥근모서리+간격으로 섹션을 시각적으로 확실히 나눈다).
+   그 페이지 스타일은 game-location.html 안 인라인이라 여기서 못 가져다 쓰고, 같은
+   시각언어로 새로 만든다(카드·아이콘+라벨+화살표 헤더, 열리면 회전하는 화살표). */
+.rule-hub-section{
+  border:1.5px solid var(--line-soft);
+  border-radius:10px;
+  overflow:hidden;
+  background:var(--card-bg);
 }
+.rule-hub-section>summary{
+  display:flex; align-items:center; gap:10px;
+  padding:13px 14px;
+  cursor:pointer; list-style:none; user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.rule-hub-section[open]>summary{border-bottom:1px solid var(--line-soft);}
 .rule-hub-section>summary::-webkit-details-marker{display:none;}
-.rule-hub-section>summary::after{content:"▾"; font-size:12px; color:var(--muted);}
-.rule-hub-section[open]>summary::after{content:"▴";}
-.rule-hub-section.is-warn>summary{color:#9e3a2a;} /* .sheet-org-btn.is-warn과 같은 톤 */
-.rule-hub-body{margin-top:10px; font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-wrap;}
-.rule-hub-photos{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:10px;}
+.rule-hub-icon{font-size:16px; flex-shrink:0;}
+.rule-hub-label{flex:1; min-width:0; font-size:15px; font-weight:700; color:var(--ink);}
+.rule-hub-arrow{font-size:12px; color:var(--muted); transition:transform .2s; flex-shrink:0;}
+.rule-hub-section[open] .rule-hub-arrow{transform:rotate(180deg);}
+.rule-hub-section.is-warn .rule-hub-label{color:#9e3a2a;} /* .sheet-org-btn.is-warn과 같은 톤 */
+.rule-hub-body{padding:12px 14px 14px; background:var(--paper); font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-wrap;}
+.rule-hub-photos{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px 14px 14px; background:var(--paper);}
 .rule-hub-photo{width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; cursor:pointer; display:block;}
 
 .sheet-links-block{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:10px 0 0;}

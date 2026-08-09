@@ -305,7 +305,7 @@ function _openRuleHubModal(gameName, { ruleNote, errorNote, photos } = {}, focus
     </div>
     <div class="rule-hub-scroll">
       ${sections.map(s => `<details class="rule-hub-section${s.warn ? ' is-warn' : ''}"${s.key === openKey ? ' open' : ''}>
-        <summary>${s.icon} ${window.escH(s.label)}</summary>
+        <summary><span class="rule-hub-icon">${s.icon}</span><span class="rule-hub-label">${window.escH(s.label)}</span><span class="rule-hub-arrow">▾</span></summary>
         ${s.body}
       </details>`).join('')}
     </div>
