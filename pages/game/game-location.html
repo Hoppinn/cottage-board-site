@@ -88,6 +88,21 @@
       text-align: center;
       flex-shrink: 0;
     }
+    .loc-section-thumb-wrap {
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ece6df;
+      cursor: zoom-in;
+    }
+    .loc-section-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
     .loc-series-A .loc-section-code        { background: #c0632a; }
     .loc-series-A.loc-section--sub .loc-section-code { background: #d4845a; }
     .loc-series-B .loc-section-code        { background: #3a7a52; }
@@ -268,6 +283,17 @@
 
     window._locOpenGame = openGame;
 
+    function openShelfPhoto(sectionId, label, ev) {
+      if (ev) ev.stopPropagation();
+      const src = `../../assets/images/shelf-locations/${sectionId}.jpg`;
+      if (typeof window.openLightbox === 'function') {
+        window.openLightbox([src], 0, { caption: label });
+      } else {
+        window.open(src, '_blank');
+      }
+    }
+    window._locOpenPhoto = openShelfPhoto;
+
     function renderSections(groupMap, highlightId) {
       const container = document.getElementById('locSections');
       if (!container) return;
@@ -293,10 +319,17 @@
           ? (gameChips + manualChips)
           : `<span class="loc-empty">${emptyMsg}</span>`;
 
+        const thumbSrc = `../../assets/images/shelf-locations/${s.id}.jpg`;
+
         return `
           <div class="loc-section ${modClass} loc-series-${series}" data-section-id="${s.id}">
             <div class="loc-section-header" onclick="this.closest('.loc-section').classList.toggle('is-open')">
               <span class="loc-section-code">${s.code}</span>
+              <span class="loc-section-thumb-wrap" onclick="window._locOpenPhoto('${s.id}', '${s.label}', event)" style="display:none">
+                <img class="loc-section-thumb" src="${thumbSrc}" alt="${s.label} 책장 사진"
+                  onload="this.closest('.loc-section-thumb-wrap').style.display=''"
+                  onerror="this.closest('.loc-section-thumb-wrap').remove()">
+              </span>
               <div class="loc-section-info">
                 <div class="loc-section-label">${s.label}</div>
                 <div class="loc-section-count">${(() => { const n = games.length + manualItems.length; if (n > 0) return n + '개'; if (Z_EMPTY[s.id]) return '없음'; if (ALWAYS_COUNT.has(s.id)) return '0개'; return '매장 내 확인'; })()}</div>

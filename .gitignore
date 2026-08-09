@@ -3,3 +3,4 @@ node_modules/
 .claude/settings.local.json
 .claude/current-task.json
 .wrangler/
+assets/images/shelf-locations/raw/
