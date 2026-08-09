@@ -1,6 +1,6 @@
 # PROJECT_STRUCTURE — 코티지보드 홈페이지 구조 문서
 
-최종 갱신: 2026-08-09 (게임위치 페이지에 책장 사진 추가 — `game-location.html` 섹션 헤더에 썸네일(코드뱃지 옆) + 탭하면 `openLightbox`로 확대. 사진은 `assets/images/shelf-locations/{sectionId}.jpg`(19개 섹션 중 16개, Z 계열 3개는 없음 — img onerror로 조용히 숨김), 원본은 `raw/`(gitignore, 커밋 안 됨). scripts에 `build-shelf-photos.js` 추가) / 2026-08-08 (추천게임 책자 연동 완료 — `booklet-courses-data.js` 신설(책자 6개 코스, 52개 gameKey 검증됨). 홈 "추천게임 찾기"를 추천 코스/게임 더 찾기 2탭으로 재편, 히어로·헤더메뉴·QR 전부 추천 코스 탭 기본 진입. 죽어 있던 recommendModal은 되살리지 않고 기존 recommendFilter를 게임 더 찾기 탭에 재사용) / 2026-07-22 (**P1 — `game_comments.record_id`(014)로 한 플레이기록에 여러 사람 게임평. supabase-client에 `getRecordComments`, insertComment에 recordId 인자, buildSessionBody에 매인 게임평 렌더, scripts에 `link-bbok-0711-comments.js` 추가**) / 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
+최종 갱신: 2026-08-09 (게임위치 페이지에 책장 사진 추가 — `game-location.html` 섹션 헤더에 작은 썸네일(코드뱃지 옆) + 펼치면 목록 위에 큰 배너, 탭하면 `openLightbox`로 확대. 사진은 `assets/images/shelf-locations/{sectionId}.webp`(19개 섹션 중 16개, Z 계열 3개는 없음 — img onerror로 조용히 숨김). 원본이 배경제거 컷아웃이라 ①webp로 투명 유지(jpeg면 라이트박스에서 검은 박스로 보임) ②`build-shelf-photos.js`가 알파채널 연결요소 분석으로 "가장 큰 덩어리"만 남기고 크롭(귀퉁이에 안 지워진 배경 조각·과도한 여백 제거, 단순 trim()은 조각까지 bbox에 포함시켜 실패). 원본은 `raw/`(gitignore, 커밋 안 됨)) / 2026-08-08 (추천게임 책자 연동 완료 — `booklet-courses-data.js` 신설(책자 6개 코스, 52개 gameKey 검증됨). 홈 "추천게임 찾기"를 추천 코스/게임 더 찾기 2탭으로 재편, 히어로·헤더메뉴·QR 전부 추천 코스 탭 기본 진입. 죽어 있던 recommendModal은 되살리지 않고 기존 recommendFilter를 게임 더 찾기 탭에 재사용) / 2026-07-22 (**P1 — `game_comments.record_id`(014)로 한 플레이기록에 여러 사람 게임평. supabase-client에 `getRecordComments`, insertComment에 recordId 인자, buildSessionBody에 매인 게임평 렌더, scripts에 `link-bbok-0711-comments.js` 추가**) / 2026-07-22 (**P4 — `member-analytics.js` 신설(관리자 「한 사람」 집계 단일 소스), 회원 보드 오너 섹션, scripts에 `_member-analytics`·`verify-member-board-admin`·`shot-member-board-admin` 추가**) / 2026-07-22 (scripts에 verify-member-period·shot-member-period 추가 — 회원 카드 펼침 기간 선택) / 2026-07-22 (Phase D 진입점에 club-history 보강 + renderCrossBackLink + scripts 3개 추가) / 2026-07-22 (scripts/ 목록에 audit-session-double-insert.js·verify-session-dedup.js 추가) / 2026-07-22 (GS5 — verify-esch-unify.js 추가) / 2026-07-18 (문서-코드 참조 정합성 감사 — §2 JS 파일 역할에 header.js 누락 추가)
 
 ---
 
@@ -155,9 +155,14 @@
 │   ├── verify-lost-update.js       # #22 profiles read-modify-write 손실 재현 + 수정 후 검증
 │   │                               # ⚠️운영DB에 임시 행 1개 생성(finally 삭제 + 삭제 재확인)
 │   │                               # 순차 대조군 내장 — 순차가 N이 아니면 결과 신뢰 금지
-│   ├── build-shelf-photos.js       # (2026-08) 게임위치 페이지 책장 사진 원본(raw/, gitignore)을
-│   │                               #   shelf-locations.js SHELF_GROUPS id 기준 assets/images/
-│   │                               #   shelf-locations/{id}.jpg 로 리사이즈(긴 쪽 1000px)+압축(mozjpeg q78).
+│   ├── build-shelf-photos.js       # (2026-08) 게임위치 페이지 책장 사진 원본(raw/, gitignore,
+│   │                               #   배경제거 컷아웃 PNG)을 shelf-locations.js SHELF_GROUPS id
+│   │                               #   기준 assets/images/shelf-locations/{id}.webp 로 크롭+압축.
+│   │                               #   computeContentBBox: 알파채널 축소+blur로 상자 사이 틈을
+│   │                               #   이어붙인 뒤 연결요소(flood fill)에서 가장 큰 덩어리의 bbox만
+│   │                               #   취해 원본을 크롭 — 단순 trim()은 귀퉁이에 안 지워진 배경
+│   │                               #   조각 하나에도 bbox가 거기까지 넓어져 실패(전량 재작업 사례).
+│   │                               #   webp로 저장(알파 유지, jpeg면 라이트박스에서 검은 박스로 보임).
 │   │                               #   raw 파일명은 섹션 코드(A, A-1, C-1...)로 매칭 — 사진 교체 시
 │   │                               #   raw/에 같은 코드 파일명으로 넣고 재실행. DB 무관, 읽기전용 아님(로컬 파일 쓰기만)
 │   │

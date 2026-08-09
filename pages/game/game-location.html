@@ -103,6 +103,14 @@
       object-fit: cover;
       display: block;
     }
+    .loc-section-banner {
+      display: block;
+      width: calc(100% + 28px);
+      max-height: 340px;
+      object-fit: contain;
+      margin: -10px -14px 6px;
+      cursor: zoom-in;
+    }
     .loc-series-A .loc-section-code        { background: #c0632a; }
     .loc-series-A.loc-section--sub .loc-section-code { background: #d4845a; }
     .loc-series-B .loc-section-code        { background: #3a7a52; }
@@ -285,7 +293,7 @@
 
     function openShelfPhoto(sectionId, label, ev) {
       if (ev) ev.stopPropagation();
-      const src = `../../assets/images/shelf-locations/${sectionId}.jpg`;
+      const src = `../../assets/images/shelf-locations/${sectionId}.webp`;
       if (typeof window.openLightbox === 'function') {
         window.openLightbox([src], 0, { caption: label });
       } else {
@@ -319,7 +327,9 @@
           ? (gameChips + manualChips)
           : `<span class="loc-empty">${emptyMsg}</span>`;
 
-        const thumbSrc = `../../assets/images/shelf-locations/${s.id}.jpg`;
+        const thumbSrc = `../../assets/images/shelf-locations/${s.id}.webp`;
+        // 펼쳤을 때 목록 위에 큰 사진 — 작은 썸네일(헤더)과 함께 사용, A 테스트 후 전체 적용 확정
+        const bannerHtml = `<img class="loc-section-banner" src="${thumbSrc}" alt="${s.label} 책장 사진" onclick="window._locOpenPhoto('${s.id}', '${s.label}', event)" onerror="this.remove()">`;
 
         return `
           <div class="loc-section ${modClass} loc-series-${series}" data-section-id="${s.id}">
@@ -337,6 +347,7 @@
               <span class="loc-section-arrow">▾</span>
             </div>
             <div class="loc-section-body">
+              ${bannerHtml}
               <div class="loc-game-list">${chips}</div>
             </div>
           </div>
