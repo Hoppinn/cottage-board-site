@@ -234,7 +234,9 @@
     .admin-game-photo-item { position: relative; width: 72px; height: 72px; }
     .admin-game-photo-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); }
     .admin-game-photo-del { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: #d9534f; color: #fff; border: none; font-size: 12px; line-height: 1; cursor: pointer; }
-    .admin-game-rule-textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; }
+    .admin-game-rule-textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; margin-bottom: 10px; }
+    .admin-game-rule-sublabel { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin: 8px 0 4px; }
+    .admin-game-rule-optional { font-weight: 400; color: #aaa; }
     .admin-save-btn { align-self: flex-start; background: var(--green); color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px; }
     .admin-game-save-status { font-size: 12px; color: var(--muted); }
   </style>
@@ -648,10 +650,20 @@
               <input type="text" id="gameAdminSearchInput" class="admin-game-search-input" placeholder="게임명 검색" autocomplete="off">
               <div class="admin-game-form" id="gameAdminForm" style="display:none;">
                 <div class="admin-game-form-title" id="gameAdminSelectedName"></div>
-                <div class="admin-section-title" style="cursor:default;">📖 게임 방법</div>
-                <textarea id="gameAdminRuleNote" class="admin-game-rule-textarea" rows="6" placeholder="게임 방법을 입력하세요"></textarea>
-                <div class="admin-section-title" style="cursor:default;margin-top:12px;">⚠️ 자주 틀리는 규칙</div>
-                <textarea id="gameAdminErrorNote" class="admin-game-rule-textarea" rows="6" placeholder="자주 하는 실수·헷갈리는 룰 포인트를 입력하세요"></textarea>
+                <!-- 021: 게임 방법을 4칸으로 분리(목표/준비/진행/종료) — 관리자가 소제목을
+                     직접 안 쳐도 되게(52개 손입력 부담 완화), 프론트가 자동으로 안내형
+                     제목을 붙이고 빈 칸은 숨긴다. 각 칸은 본문만 붙여넣으면 됨(라벨=칸 자체). -->
+                <div class="admin-section-title" style="cursor:default;">📖 게임 방법 (칸마다 본문만 — 소제목은 자동으로 붙습니다)</div>
+                <label class="admin-game-rule-sublabel">게임 목표 <span class="admin-game-rule-optional">(선택, 짧게)</span></label>
+                <textarea id="gameAdminRuleGoal" class="admin-game-rule-textarea" rows="2" placeholder="예) 빈칸은 적게, 단추는 많이 모아 가장 높은 점수를 만드는 게임입니다."></textarea>
+                <label class="admin-game-rule-sublabel">준비하기 <span class="admin-game-rule-optional">(선택 — 비우면 "먼저 준비하세요" 자체가 안 뜸)</span></label>
+                <textarea id="gameAdminRuleSetup" class="admin-game-rule-textarea" rows="4" placeholder="각자 퀼트판과 시간 말을 하나씩 가져가고 단추 5개씩 받습니다."></textarea>
+                <label class="admin-game-rule-sublabel">게임 진행</label>
+                <textarea id="gameAdminRulePlay" class="admin-game-rule-textarea" rows="6" placeholder="차례에는 둘 중 하나만 하면 됩니다."></textarea>
+                <label class="admin-game-rule-sublabel">게임 종료</label>
+                <textarea id="gameAdminRuleEnd" class="admin-game-rule-textarea" rows="4" placeholder="두 사람 모두 마지막 칸에 도착하면 게임이 끝납니다."></textarea>
+                <div class="admin-section-title" style="cursor:default;margin-top:12px;">⚠️ 자주 틀리는 규칙 <span class="admin-game-rule-optional">(한 줄에 하나씩 — 프론트에서 자동으로 목록(•)이 됩니다)</span></div>
+                <textarea id="gameAdminErrorNote" class="admin-game-rule-textarea" rows="6" placeholder="단추는 판 밖에서도 셀 수 있다고 착각하기 쉽습니다.&#10;(줄바꿈으로 항목을 구분하세요)"></textarea>
                 <div class="admin-section-title" style="cursor:default;margin-top:12px;">📦 정리 방법 사진</div>
                 <div class="admin-game-photo-grid" id="gameAdminPhotoGrid"></div>
                 <input type="file" id="gameAdminPhotoInput" accept="image/*" multiple>
@@ -694,7 +706,12 @@
         const nameEl = document.getElementById('gameAdminSelectedName');
         const photoGrid = document.getElementById('gameAdminPhotoGrid');
         const photoInput = document.getElementById('gameAdminPhotoInput');
-        const ruleTextarea = document.getElementById('gameAdminRuleNote');
+        // 021: rule_note(레거시 단일 텍스트) 대신 4칸으로 구조화 — 이 폼은 더 이상 rule_note를
+        // 읽거나 쓰지 않는다(기존 rule_note는 그대로 DB에 남지만 편집 UI에서 손을 뗀 값).
+        const goalTextarea = document.getElementById('gameAdminRuleGoal');
+        const setupTextarea = document.getElementById('gameAdminRuleSetup');
+        const playTextarea = document.getElementById('gameAdminRulePlay');
+        const endTextarea = document.getElementById('gameAdminRuleEnd');
         const errorTextarea = document.getElementById('gameAdminErrorNote');
         const saveBtn = document.getElementById('gameAdminSaveBtn');
         const statusEl = document.getElementById('gameAdminSaveStatus');
@@ -724,7 +741,11 @@
           statusEl.textContent = '불러오는 중...';
           const override = await window.CottageDB.getGameOverride(gameKey);
           currentPhotoUrls = override?.organizer_photo_urls || [];
-          ruleTextarea.value = override?.rule_note || '';
+          const sections = override?.rule_sections || {};
+          goalTextarea.value = sections.goal || '';
+          setupTextarea.value = sections.setup || '';
+          playTextarea.value = sections.play || '';
+          endTextarea.value = sections.end || '';
           errorTextarea.value = override?.error_note || '';
           photoInput.value = '';
           renderPhotoGrid();
@@ -769,8 +790,13 @@
             }
             const ok = await window.CottageDB.upsertGameOverride(selectedGameKey, {
               organizerPhotoUrls: currentPhotoUrls,
-              ruleNote: ruleTextarea.value.trim(),
               errorNote: errorTextarea.value.trim(),
+              ruleSections: {
+                goal: goalTextarea.value.trim(),
+                setup: setupTextarea.value.trim(),
+                play: playTextarea.value.trim(),
+                end: endTextarea.value.trim(),
+              },
             });
             photoInput.value = '';
             renderPhotoGrid();

@@ -276,24 +276,35 @@ function _openCoverModal(src) {
   document.body.appendChild(m);
 }
 
-// 룰 허브 모달 — 게임 방법/자주 틀리는 규칙/정리 방법(사진) 통합 (2026-08-09).
-// 예전엔 _openNoteModal(480px 고정폭 팝업) 2개 + _openOrganizerLightbox(사진 단독 진입)로
-// 나뉘어 있었다 — 콘텐츠가 길어지면(패치워크 등 실제 룰 원고) 그 작은 팝업이 답답해질
-// 것으로 보여 site 표준 650px 센터모달(.game-sheet-panel과 동일 폭)+아코디언으로 통합.
-// "준비"는 별도 필드가 아니라 rule_note(게임 방법) 글 안에 섞어 쓴다 — DB엔 그대로
-// rule_note/error_note/organizer_photo_urls 3필드만 있다(스키마 변경 없음, 사용자 확정).
+// 룰 허브 모달 — 게임 방법(목표/준비/진행/종료 4칸)/자주 틀리는 규칙/정리 방법(사진) 통합.
+// (2026-08-09, 021로 게임 방법을 rule_note 단일 텍스트 대신 구조화 필드로 재설계.)
+// 관리자는 requests-admin.html에서 4칸에 본문만 넣고, 여기서 안내형 제목을 자동으로 붙인다 —
+// 소제목을 매번 직접 타이핑하지 않아 52개 손입력 부담이 줄고 서식이 안 깨진다. 빈 칸은 렌더를
+// 건너뛴다(예: 도블처럼 "준비"가 불필요한 게임은 그 소제목 자체가 안 뜬다).
+// 자주 틀리는 규칙은 한 줄=한 항목으로 받아 여기서 자동으로 불릿(•) 목록으로 만든다.
 // focusSection: 어느 버튼으로 들어왔는지에 따라 그 섹션만 펼치고 나머지는 접어서 시작.
-function _openRuleHubModal(gameName, { ruleNote, errorNote, photos } = {}, focusSection) {
-  if (!ruleNote && !errorNote && !photos?.length) return;
+const _RULE_SECTION_LABELS = { goal: '게임 목표', setup: '먼저 준비하세요', play: '게임은 이렇게 진행해요', end: '게임이 끝나면' };
+const _RULE_SECTION_ORDER = ['goal', 'setup', 'play', 'end'];
+function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos } = {}, focusSection) {
+  const hasRule = ruleSections && Object.keys(ruleSections).length > 0;
+  if (!hasRule && !errorNote && !photos?.length) return;
   document.getElementById('ruleHubModal')?.remove();
-  const sections = [];
-  if (ruleNote) sections.push({ key: 'rule', icon: '📖', label: '게임 방법', warn: false,
-    body: `<div class="rule-hub-body">${window.escH(ruleNote)}</div>` });
-  if (errorNote) sections.push({ key: 'error', icon: '⚠️', label: '자주 틀리는 규칙', warn: true,
-    body: `<div class="rule-hub-body">${window.escH(errorNote)}</div>` });
-  if (photos?.length) sections.push({ key: 'photos', icon: '📦', label: '정리 방법', warn: false,
+  const panels = [];
+  if (hasRule) {
+    const subHtml = _RULE_SECTION_ORDER
+      .filter(k => ruleSections[k])
+      .map(k => `<div class="rule-hub-subsec"><div class="rule-hub-subhead">${window.escH(_RULE_SECTION_LABELS[k])}</div><div class="rule-hub-subbody">${window.escH(ruleSections[k])}</div></div>`)
+      .join('');
+    panels.push({ key: 'rule', icon: '📖', label: '게임 방법', warn: false, body: `<div class="rule-hub-body">${subHtml}</div>` });
+  }
+  if (errorNote) {
+    const items = errorNote.split('\n').map(s => s.trim()).filter(Boolean);
+    panels.push({ key: 'error', icon: '⚠️', label: '자주 틀리는 규칙', warn: true,
+      body: `<ul class="rule-hub-list">${items.map(t => `<li>${window.escH(t)}</li>`).join('')}</ul>` });
+  }
+  if (photos?.length) panels.push({ key: 'photos', icon: '📦', label: '정리 방법', warn: false,
     body: `<div class="rule-hub-photos">${photos.map((u, i) => `<img class="rule-hub-photo" src="${window.escH(u)}" alt="" data-idx="${i}">`).join('')}</div>` });
-  const openKey = sections.some(s => s.key === focusSection) ? focusSection : sections[0]?.key;
+  const openKey = panels.some(s => s.key === focusSection) ? focusSection : panels[0]?.key;
 
   const overlay = document.createElement('div');
   overlay.id = 'ruleHubModal';
@@ -304,7 +315,7 @@ function _openRuleHubModal(gameName, { ruleNote, errorNote, photos } = {}, focus
       <button class="rule-hub-close" type="button" aria-label="닫기">✕</button>
     </div>
     <div class="rule-hub-scroll">
-      ${sections.map(s => `<details class="rule-hub-section${s.warn ? ' is-warn' : ''}"${s.key === openKey ? ' open' : ''}>
+      ${panels.map(s => `<details class="rule-hub-section${s.warn ? ' is-warn' : ''}"${s.key === openKey ? ' open' : ''}>
         <summary><span class="rule-hub-icon">${s.icon}</span><span class="rule-hub-label">${window.escH(s.label)}</span><span class="rule-hub-arrow">▾</span></summary>
         ${s.body}
       </details>`).join('')}
@@ -1004,20 +1015,26 @@ async function initSheetOrganizerContent(gameKey) {
   if (!area || !window.CottageDB?.getGameOverride) return;
   const override = await window.CottageDB.getGameOverride(gameKey);
   const photos = override?.organizer_photo_urls || [];
-  const ruleNote = override?.rule_note || '';
+  // 021: rule_sections(구조화 4칸)이 정본. 구버전 rule_note(단일 텍스트)만 있는 게임은
+  // 그걸 "게임 진행" 한 칸으로 보여준다(소제목 없이 통째로 넣던 옛 방식과 제일 가까운 자리) —
+  // 재입력 전까지 화면에서 사라지지 않게 하는 하위호환용이다.
+  const sections = override?.rule_sections && Object.keys(override.rule_sections).length
+    ? override.rule_sections
+    : (override?.rule_note ? { play: override.rule_note } : null);
   const errorNote = override?.error_note || '';
-  if (!photos.length && !ruleNote && !errorNote) { area.innerHTML = ''; return; }
+  const hasRule = !!sections;
+  if (!photos.length && !hasRule && !errorNote) { area.innerHTML = ''; return; }
   const _og = window.gameData?.[gameKey];
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
-  if (ruleNote) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임 방법</button>`;
+  if (hasRule) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임 방법</button>`;
   if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 자주 틀리는 규칙</button>`;
   if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리 방법</button>`;
   area.innerHTML = html;
 
   // 세 버튼 전부 같은 룰 허브 모달을 연다 — 누른 섹션만 펼치고 나머지는 접어서 시작(_openRuleHubModal 참조).
-  const _org = { ruleNote, errorNote, photos };
+  const _org = { sections, errorNote, photos };
   area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'rule'));
   area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'error'));
   area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'photos'));

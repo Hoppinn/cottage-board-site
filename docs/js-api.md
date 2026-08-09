@@ -43,8 +43,8 @@ return data || [];
 | `getPopularGames(limit)` | 인기 게임 (RPC) |
 | `getAllGameRatings()` | 전체 게임 별점 요약 (RPC) |
 | `uploadPlayPhoto(file, userId)` | 사진 Storage 업로드 |
-| `getGameOverride(gameKey)` | `game_overrides`(019+020) 단건 조회 — 게임정리 사진 URL 배열 + 룰설명 + 에러로그. 없으면 `null` |
-| `upsertGameOverride(gameKey, {organizerPhotoUrls, ruleNote, errorNote})` | 게임정리·룰설명·에러로그 저장(관리자 전용 UI에서만 호출, DB 레벨 게이트 없음) |
+| `getGameOverride(gameKey)` | `game_overrides`(019+020+021) 단건 조회 — 게임정리 사진 URL 배열 + 룰설명(레거시) + 룰 섹션(jsonb) + 에러로그. 없으면 `null` |
+| `upsertGameOverride(gameKey, {organizerPhotoUrls, ruleNote, errorNote, ruleSections})` | 게임정리·룰설명·에러로그·룰 섹션 저장(관리자 전용 UI에서만 호출, DB 레벨 게이트 없음). `ruleSections`는 `{goal,setup,play,end}` 중 값 있는 키만 저장(빈 키는 null로 접힘) — `requests-admin.html` 「게임 관리」 저장 버튼 하나가 4칸을 항상 같이 보내는 단일 폼이라 부분 갱신 경합 없음 |
 | `uploadOrganizerPhoto(file, gameKey)` | 게임정리 사진 Storage 업로드(`organizer-photos` 버킷), `uploadPlayPhoto`와 동일 구조 |
 | `recordGamePlay(...)` | 플레이 기록 저장 |
 | `deleteGamePlay(id)` | 플레이 기록 삭제 |

@@ -3412,7 +3412,13 @@ body.embed-mode {
 .rule-hub-arrow{font-size:12px; color:var(--muted); transition:transform .2s; flex-shrink:0;}
 .rule-hub-section[open] .rule-hub-arrow{transform:rotate(180deg);}
 .rule-hub-section.is-warn .rule-hub-label{color:#9e3a2a;} /* .sheet-org-btn.is-warn과 같은 톤 */
-.rule-hub-body{padding:12px 14px 14px; background:var(--paper); font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-wrap;}
+.rule-hub-body{padding:12px 14px 14px; background:var(--paper);}
+/* 게임 방법 내부 소제목(목표/준비/진행/종료) — 021, 관리자가 4칸에 넣은 본문에 자동으로 붙는 라벨 */
+.rule-hub-subsec + .rule-hub-subsec{margin-top:14px;}
+.rule-hub-subhead{font-size:13px; font-weight:800; color:var(--green); margin-bottom:4px;}
+.rule-hub-subbody{font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-wrap;}
+.rule-hub-list{margin:0; padding:12px 14px 14px 30px; background:var(--paper); font-size:14px; line-height:1.8; color:var(--ink);}
+.rule-hub-list li + li{margin-top:4px;}
 .rule-hub-photos{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px 14px 14px; background:var(--paper);}
 .rule-hub-photo{width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; cursor:pointer; display:block;}
 
