@@ -2439,6 +2439,15 @@ body.embed-mode {
   --safe-top: 0px;
   --header-total-h: 0px;
 }
+/* 위와 같은 병(헤더 안 뜨는데 헤더 높이만큼 여백 남음)의 변종 — 이건 padding이 아니라
+   scroll-padding-top(81번째 줄, html{scroll-padding-top:var(--header-total-h)})이었다.
+   --header-total-h를 body에서 0으로 재정의해도 안 먹힌 이유: 이 속성은 html 자기 자신에
+   선언돼 있어서 조상(html)이 자손(body)의 변수 재정의를 못 받는다(변수는 아래로만 흐른다) —
+   body.embed-mode에 아무리 재정의해도 html의 scroll-padding-top은 여전히 :root 원본
+   52px를 본다. 2026-08-09 실사용 발견 — 게임위치 시트 shelf= 자동 스크롤이 그 52px만큼
+   못 미쳐(목표 섹션 위에 이전 섹션이 그만큼 계속 걸쳐 보임) "코드가 안 먹힌다"로 오인,
+   두 번이나 스크롤 타이밍 쪽을 잘못 고쳤었다. html 자신을 :has()로 잡아야 한다. */
+html:has(body.embed-mode) { scroll-padding-top: 0; }
 
 /* =========================
    # 6-A. SITE FOOTER

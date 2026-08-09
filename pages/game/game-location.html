@@ -440,16 +440,12 @@
         const el = document.querySelector(`[data-section-id="${shelfParam}"]`);
         if (el) {
           el.classList.add('is-open');
-          const scrollToTarget = () => el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // rAF+600ms 고정 타이밍(직전 시도)으로도 실기기에서 여전히 안 맞았다(사용자 재확인,
-          // 하드새로고침 후에도 동일) — 특정 지연시간을 더 추측하는 대신 ResizeObserver로 문서
-          // 높이가 실제로 바뀔 때마다 다시 정렬한다. 원인이 이미지든 폰트든 게임 목록이든 상관없이
-          // "뭔가 자라면 그때마다 다시 맞춘다"는 방식이라 원인을 몰라도 결국 수렴한다. 진입 후
-          // 3초만 감시하고 끈다(그 이후는 사용자가 직접 스크롤 중일 수 있어 건드리면 안 됨).
-          requestAnimationFrame(() => requestAnimationFrame(scrollToTarget));
-          const _shelfRO = new ResizeObserver(() => scrollToTarget());
-          _shelfRO.observe(document.body);
-          setTimeout(() => _shelfRO.disconnect(), 3000);
+          // ⚠️ 진짜 원인은 타이밍이 아니라 CSS였다(style.css `html:has(body.embed-mode)`
+          // 참조) — html{scroll-padding-top:var(--header-total-h)}가 embed 모드에서도
+          // 52px를 그대로 물고 있어서 몇 번을 다시 스크롤해도 항상 그만큼 못 미쳤다.
+          // rAF 2회만 남겨 최초 레이아웃(썸네일 자리 확보는 이미 고쳐둠) 안정을 기다린다.
+          requestAnimationFrame(() => requestAnimationFrame(() =>
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' })));
         }
       }
 
