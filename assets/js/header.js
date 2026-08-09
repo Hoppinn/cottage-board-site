@@ -82,3 +82,27 @@
     _s.insertAdjacentHTML('afterend', html);
   }
 })();
+
+// 푸터 외부 이동 링크(지도·전화·카카오채널·인스타그램) — 바로 이동하지 않고 확인창 먼저.
+// 마크업은 pages/*.html 15곳에 중복돼 있지만 header.js는 그 전부에 공통 로드되므로 여기 한 곳만 고치면 된다.
+(function () {
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest('.site-footer a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    let msg;
+    if (href.indexOf('tel:') === 0) {
+      msg = href.slice(4) + '로 전화를 거시겠어요?';
+    } else {
+      const label = (a.textContent || '').replace(/^←\s*/, '').trim() || '외부 사이트';
+      msg = label + '(으)로 이동할까요? 코티지보드를 벗어납니다.';
+    }
+    e.preventDefault();
+    if (!window.confirm(msg)) return;
+    if (a.target === '_blank') {
+      window.open(a.href, '_blank', 'noopener,noreferrer');
+    } else {
+      location.href = a.href;
+    }
+  });
+})();
