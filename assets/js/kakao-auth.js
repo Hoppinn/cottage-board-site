@@ -1036,7 +1036,7 @@ function _bindTasteSubsheet(subBody, ctx) {
 // ── '모임 보드' 서브시트 afterRender (R10a: openProfilePanel에서 추출) ──
 function _bindMeetingSubsheet(subBody, ctx) {
   const { user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet, _meeting, _meetingProfileRowHtml,
-          getPendingScroll, setPendingScroll, setTasteScrollTo } = ctx;
+          getPendingScroll, setPendingScroll, setTasteScrollTo, backTo } = ctx;
           const userId = String(user.id);
 
           _bindActivityTogglesAndMore(subBody); // 최근 모임 참여 "더 보기" (2026-07-30)
@@ -1564,7 +1564,12 @@ function _bindMeetingSubsheet(subBody, ctx) {
               // 상세팝업에서 참여자 이름을 눌러 다른 보드로 넘어간 뒤, "‹ 뒤로"로 지금 이 보드
               // (모임보드 서브시트, 진입점)로 되돌아올 수 있게 — openProfilePanel의 panel-level
               // backTo(패널 헤더 back 버튼)를 그대로 재사용한다(2026-08-09, 넘어간 뒤 끊기던 것).
-              const _mbBackTo = { type: 'panel', autoSubsheet: 'meeting', label: `${user.nickname || '이전'}의 모임보드`, opts: { userId: String(userId), readOnly, nickname: user.nickname || '' } };
+              // ⚠️ opts에 **이 보드 자신이 들어온 backTo**(위 openProfilePanel destructure의 `backTo`,
+              // 이 보드로 넘어오기 전 화면)도 같이 심어야 체인이 이어진다 — 안 심으면 덕지→호핀→춘팝처럼
+              // 계속 넘어가도 "뒤로"가 한 칸만 기억해 중간(춘팝→호핀)에서 끊긴다(2026-08-09 실사용 지적:
+              // "몇 번이고 뒤로가기가 누적돼야" 하는데 2~3번까지만 되던 것). 각 패널이 자기 backTo를
+              // 그대로 물려주는 재귀 링크드리스트라 별도 스택 자료구조는 필요 없다(설계 원문 그대로).
+              const _mbBackTo = { type: 'panel', autoSubsheet: 'meeting', label: `${user.nickname || '이전'}의 모임보드`, opts: { userId: String(userId), readOnly, nickname: user.nickname || '', backTo } };
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
                 // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
@@ -3072,6 +3077,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
             user, readOnly, body, _ro, _emitLikesChanged, _getGameKeyById, _ruleSet: _makeRuleSet(d), _meeting: d, _meetingProfileRowHtml,
             getPendingScroll: () => _pendingMeetingScrollTop, setPendingScroll: v => { _pendingMeetingScrollTop = v; },
             setTasteScrollTo: v => { _pendingTasteScrollTo = v; },
+            backTo, // 상세팝업 뒤로가기 체인용(2026-08-09) — 이 패널 자신이 들어온 backTo를 그대로 물려준다
           });
         }); // end meeting afterRender
       }
