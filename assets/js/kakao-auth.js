@@ -1103,7 +1103,7 @@ function _bindMeetingSubsheet(subBody, ctx) {
 
           // ── 이번 주 하고싶은/배우고싶은 게임 (meeting_vote_games 소스, game_likes 미러 아님) ──
           // 이번 주 플래너 데이터는 _loadMeetingWeek에서 1회 fetch → _weekData로 공유(재조회 없음)
-          let _weekData = { allV: [], allVG: [], myVotes: [], myVoteGames: [] };
+          let _weekData = { allV: [], allVG: [], myVotes: [], myVoteGames: [], upcomingVotes: [] };
           const _likedSlugSet = new Set((_meeting.likedGames || []).map(g => g.game_id).filter(Boolean).map(String));
           const _curiousSlugSet = new Set((_meeting.curiousGames || []).map(g => g.game_id).filter(Boolean).map(String));
           const _DOWs = '일월화수목금토';
@@ -1534,31 +1534,40 @@ function _bindMeetingSubsheet(subBody, ctx) {
             li.querySelector('.profile-record-thumb, .profile-record-thumb-empty')?.addEventListener('click', open);
           });
 
-          // 이번 주 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
+          // 다가오는 일정 — mini bar (async, 플래너 편집 후 재호출 가능)
           const _loadMeetingWeek = async () => {
             const weekEl = subBody.querySelector('#mbWeekSection');
             const [wStart, wEnd] = _thisWeekRange();
-            const [allV, allVG] = await Promise.all([
+            const [uStart, uEnd] = _upcomingRange();
+            // 「다가오는 일정」(오늘~+180일)은 「이번 주」(월~일)와 범위가 다른 별도 fetch —
+            // 하고싶은/배우고싶은 게임 리스트는 이번 주 fetch(allV/allVG)를 그대로 쓰고,
+            // 미니바만 upcoming fetch로 갈아탄다(2026-08-09, 다음 주 참여자가 "이번 주 일정 없음"으로
+            // 뜨던 오해 소지를 없애되, 하고싶은/배우고싶은 게임에 다른 주 항목이 섞이지 않게 분리).
+            const [allV, allVG, upcomingAllV, upcomingAllVG] = await Promise.all([
               window.CottageDB?.getMeetingVotes?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
               window.CottageDB?.getMeetingVoteGames?.(wStart, wEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+              window.CottageDB?.getMeetingVotes?.(uStart, uEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
+              window.CottageDB?.getMeetingVoteGames?.(uStart, uEnd).then(r => r || []).catch(() => []) || Promise.resolve([]),
             ]);
             _weekData.allV = allV; _weekData.allVG = allVG;
             _weekData.myVotes = allV.filter(v => String(v.user_id) === userId);
             _weekData.myVoteGames = allVG.filter(g => String(g.user_id) === userId);
-            // 이번 주 하고싶은/배우고싶은 게임 리스트 (fetch 공유 — 재조회 없음)
+            _weekData.upcomingVotes = upcomingAllV.filter(v => String(v.user_id) === userId);
+            // 이번 주 하고싶은/배우고싶은 게임 리스트 (이번 주 fetch 공유 — 재조회 없음)
             _renderWeekList('want');
             _renderWeekList('learn');
-            // 이번 주 일정 미니바
+            // 다가오는 일정 미니바 (이번 주에 국한하지 않음)
             if (weekEl) {
-              weekEl.innerHTML = `<div class="taste-section-label">📅 이번 주 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.myVotes, _weekData.myVoteGames, userId, !readOnly);
+              weekEl.innerHTML = `<div class="taste-section-label">📅 다가오는 일정 ${_ro('<button class="mb-planner-edit" type="button" title="모임 플래너 편집">✎ 편집</button>')}</div>` + _buildMiniBarWeekHtml(_weekData.upcomingVotes, _weekData.myVoteGames, userId, !readOnly);
               weekEl.querySelector('.mb-planner-edit')?.addEventListener('click', () =>
                 window.openPlannerModal?.({ weekOffset: 0, onDirtyClose: _loadMeetingWeek }));
               weekEl.querySelectorAll('.mb-detail-btn').forEach(btn => btn.addEventListener('click', () => {
                 const _d = btn.dataset.date;
                 // 읽기전용: 남의 보드 상세는 편집 불가 스케줄 뷰로. 자기 보드는 편집 가능한 프리뷰 모달.
                 // 읽기전용: 남의 보드도 그날 전원 막대 차트로. 편집은 막기 위해 myVote=null(내 막대 하이라이트·✎✕ 없음).
-                if (readOnly) { window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), null, null); return; }
-                window.openDatePreviewModal?.(_d, allV.filter(v => v.vote_date === _d), allVG.filter(g => g.vote_date === _d), _weekData.myVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
+                // 미니바가 upcoming 범위라 detail도 upcomingAllV/upcomingAllVG를 써야 이번 주 밖 날짜도 채워진다.
+                if (readOnly) { window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), null, null); return; }
+                window.openDatePreviewModal?.(_d, upcomingAllV.filter(v => v.vote_date === _d), upcomingAllVG.filter(g => g.vote_date === _d), _weekData.upcomingVotes.find(v => v.vote_date === _d) || null, _loadMeetingWeek);
               }));
             }
             // 취향보드 수정 후 "‹ 모임 보드"로 복귀 시 눌렀던 스크롤 위치 복원 (렌더 완료 후)
@@ -2684,7 +2693,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
 
     return `
     <div class="taste-game-section" id="mbWeekSection">
-      <div class="taste-section-label">📅 이번 주 일정</div>
+      <div class="taste-section-label">📅 다가오는 일정</div>
       <p class="taste-game-empty">불러오는 중…</p>
     </div>
     <div class="taste-game-section">
@@ -3112,6 +3121,19 @@ function _thisWeekRange() {
   return [mon.toISOString().slice(0, 10), sun.toISOString().slice(0, 10)];
 }
 
+// 「다가오는 일정」 미니바 전용 범위 — 오늘부터 +180일. _thisWeekRange(월~일)와는 별개다:
+// 하고싶은/배우고싶은 게임 리스트는 여전히 이번 주 범위를 쓰고, 이 범위는 일정 미니바에만 쓰인다
+// (2026-08-09, 다음 주만 참여 예정인 회원이 "이번 주 일정 없음"으로만 보이던 문제).
+function _upcomingRange() {
+  // toISOString()은 UTC 변환이라 KST(UTC+9)에서 자정을 0시로 맞추면 하루 앞으로 밀린다
+  // (_thisWeekRange는 시각을 안 건드려 우연히 안 드러났지만, 여기선 setHours(0,0,0,0)로
+  // 직접 자정을 만들기 때문에 로컬 Y/M/D를 직접 포맷해야 한다).
+  const fmt = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const end = new Date(today); end.setDate(end.getDate() + 180);
+  return [fmt(today), fmt(end)];
+}
+
 function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
   const _days = ['일','월','화','수','목','금','토'];
   const _vg = Array.isArray(voteGames) ? voteGames : [];
@@ -3161,7 +3183,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
   }).join('');
   const bodyHtml = myVotes.length
     ? `<div class="mb-week-list">${rows}</div>`
-    : '<p class="taste-game-empty">이번 주 등록된 일정이 없어요.</p>';
+    : '<p class="taste-game-empty">다가오는 일정이 없어요.</p>';
   // 편집 진입점은 섹션 타이틀 옆 ✎ 아이콘(openPlannerModal)으로 이동 — 하단 CTA 제거
   return bodyHtml;
 }
