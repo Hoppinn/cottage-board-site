@@ -652,14 +652,21 @@
       font-size: 11px; color: var(--muted);
       font-weight: 600; margin-bottom: 6px;
     }
+    .sm-picker-item-row { display: flex; align-items: center; gap: 2px; }
     .sm-picker-item {
       display: flex; align-items: center; justify-content: space-between;
-      width: 100%; padding: 7px 8px; border: none; background: none;
+      flex: 1; min-width: 0; padding: 7px 8px; border: none; background: none;
       cursor: pointer; font-size: 13px; text-align: left;
       border-radius: 6px; transition: background .1s; font-family: inherit;
     }
     .sm-picker-item:hover:not(:disabled) { background: #ede8de; }
     .sm-picker-item:disabled { opacity: .45; cursor: default; }
+    .sm-picker-del {
+      flex-shrink: 0; background: none; border: none; font-size: 13px;
+      color: var(--muted); cursor: pointer; padding: 6px 6px;
+      transition: color .15s;
+    }
+    .sm-picker-del:hover { color: #d94f4f; }
     .sm-picker-tag {
       font-size: 11px; color: var(--green);
       font-weight: 600; flex-shrink: 0; margin-left: 8px;
@@ -860,6 +867,20 @@
       const set = _getHiddenTimePresets(userId);
       set.add(`${s}-${e}`);
       localStorage.setItem(`cottage_hidden_time_presets_${userId}`, JSON.stringify([...set]));
+    }
+
+    // 지난 모임 게임 피커에서 "더 이상 안 보고 싶은" 항목 숨김 — 위 시간 프리셋과 완전히
+    // 같은 패턴(cottage_hidden_past_games_{userId}). DB의 실제 과거 투표 기록은 안 지우고
+    // fetchPastVoteGames의 후보 계산에서만 뺀다. 키는 want/learn 리스트별로 분리
+    // (`{listType}:id:{bggId}` 또는 `{listType}:nm:{커스텀이름}`).
+    function _getHiddenPastGames(userId) {
+      try { return new Set(JSON.parse(localStorage.getItem(`cottage_hidden_past_games_${userId}`) || '[]')); }
+      catch (_) { return new Set(); }
+    }
+    function _hidePastGame(userId, listType, key) {
+      const set = _getHiddenPastGames(userId);
+      set.add(`${listType}:${key}`);
+      localStorage.setItem(`cottage_hidden_past_games_${userId}`, JSON.stringify([...set]));
     }
 
     function toDateStr(date) {
@@ -1165,6 +1186,7 @@
         const mine = rows
           .filter(r => String(r.user_id) === String(userId))
           .sort((a, b) => String(b.vote_date || '').localeCompare(String(a.vote_date || '')));
+        const hidden = _getHiddenPastGames(userId);
         const pick = listType => {
           const seen = new Set(); const out = [];
           mine.forEach(r => {
@@ -1172,9 +1194,9 @@
             const g = normalizePickerItem(r);
             if (!g) return;
             const key = g.game_id ? `id:${g.game_id}` : `nm:${String(g.custom_name || '').trim()}`;
-            if (key === 'nm:' || seen.has(key)) return;
+            if (key === 'nm:' || seen.has(key) || hidden.has(`${listType}:${key}`)) return;
             seen.add(key);
-            out.push(g);
+            out.push({ ...g, _pastKey: key }); // 삭제 버튼에서 키 재계산 없이 재사용
           });
           return out;
         };
@@ -1204,17 +1226,22 @@
       // 이 날 다른 참여자가 이미 고른 게임 — allVoteGames는 이미 메모리에 있어 like/curious/past처럼
       // 별도 fetch가 필요 없다(동기). 같은 게임을 여러 명이 골랐으면 한 항목으로 묶고 count를 단다
       // (시간 맞추기 버튼과 같은 원칙 — 동일 시간을 "OO 외 N명"으로 묶은 것과 대응).
-      function othersPickedGames(section) {
+      // 🚨 want/learn 둘 다 섞어서 반환한다(2026-08-09) — 다른 참여자가 "배우고 싶은" 게임을
+      // 내가 "하고 싶을" 수도, 그 반대도 있어서 want 섹션이든 learn 섹션이든 다른참여자
+      // 버튼을 누르면 둘 다 보여준다. 어느 리스트에 담길지는 items[i].listType이 아니라
+      // 지금 연 섹션(want/learn) 기준 — pickerHtml에서 listType별로 나눠 그리기만 하고,
+      // "+추가"는 항상 지금 섹션에 담는다(좋아요/지난모임 피커와 같은 동작 원칙 유지).
+      function othersPickedGamesAll() {
         const user = window.getKakaoUser?.();
         const uid = user ? String(user.id) : null;
         const rows = (allVoteGames || []).filter(g =>
-          g.vote_date === _activeDay && g.list_type === section && (!uid || String(g.user_id) !== uid));
+          g.vote_date === _activeDay && (g.list_type === 'want' || g.list_type === 'learn') && (!uid || String(g.user_id) !== uid));
         const groups = new Map();
         rows.forEach(raw => {
           const norm = normalizePickerItem(raw);
           if (!norm) return;
-          const key = (norm.game_id ?? '') + '|' + (norm.custom_name ?? '');
-          if (!groups.has(key)) groups.set(key, { ...norm, count: 0 });
+          const key = raw.list_type + '|' + (norm.game_id ?? '') + '|' + (norm.custom_name ?? '');
+          if (!groups.has(key)) groups.set(key, { ...norm, listType: raw.list_type, count: 0 });
           groups.get(key).count++;
         });
         return [...groups.values()].sort((a, b) => b.count - a.count);
@@ -1234,7 +1261,7 @@
           if (!p || p === 'loading') return [];
           return section === 'want' ? (p.want || []) : (p.learn || []);
         }
-        if (source === 'others') return othersPickedGames(section);
+        if (source === 'others') return othersPickedGamesAll();
         return [];
       }
 
@@ -1684,21 +1711,40 @@
               : '등록된 게임이 없어요';
             return `<div class="sm-picker-panel"><div class="sm-picker-empty">${emptyMsg}</div></div>`;
           }
+
+          function itemBtnHtml(g, i, removable) {
+            const name = resolveGameName(g);
+            const dup  = isDup(type, g);
+            const countSuffix = (isOthers && g.count > 1) ? ` · ${g.count}명` : '';
+            const delBtn = removable ? `<button class="sm-picker-del" data-pdelidx="${i}" data-ptype="${type}" type="button" aria-label="목록에서 지우기" title="목록에서 지우기">✕</button>` : '';
+            return `<div class="sm-picker-item-row">
+              <button class="sm-picker-item${dup?' is-added':''}" data-pidx="${i}" data-ptype="${type}" data-psrc="${source}" type="button"${dup?' disabled':''}>
+                <span>${esc(name)}${countSuffix}</span>
+                <span class="sm-picker-tag">${dup?'추가됨':'+ 추가'}</span>
+              </button>${delBtn}
+            </div>`;
+          }
+
+          // 다른 참여자 피커는 want/learn이 섞여 있어 "OO가 하고 싶어하는" / "배우고 싶어하는"
+          // 둘로 나눠 보여준다 — 원래 리스트 타입과 무관하게 "+추가"는 항상 지금 섹션에 담긴다.
+          if (isOthers) {
+            const wantIdx = [], learnIdx = [];
+            items.forEach((g, i) => (g.listType === 'learn' ? learnIdx : wantIdx).push(i));
+            const groupHtml = (idxs, label) => idxs.length
+              ? `<div class="sm-picker-label">${esc(label)}</div>${idxs.map(i => itemBtnHtml(items[i], i, false)).join('')}`
+              : '';
+            return `<div class="sm-picker-panel">
+              ${groupHtml(wantIdx, '다른 참여자가 하고 싶어하는 게임')}
+              ${groupHtml(learnIdx, '다른 참여자가 배우고 싶어하는 게임')}
+            </div>`;
+          }
+
           const label = isPast
             ? (type === 'want' ? '지난 모임에서 하고 싶었던 게임' : '지난 모임에서 배우고 싶었던 게임')
-            : isOthers ? '이 날 다른 참여자가 고른 게임'
             : (type === 'want' ? '좋아요한 게임' : '궁금한 게임');
           return `<div class="sm-picker-panel">
             <div class="sm-picker-label">${esc(label)}</div>
-            ${items.map((g, i) => {
-              const name = resolveGameName(g);
-              const dup  = isDup(type, g);
-              const countSuffix = (isOthers && g.count > 1) ? ` · ${g.count}명` : '';
-              return `<button class="sm-picker-item${dup?' is-added':''}" data-pidx="${i}" data-ptype="${type}" data-psrc="${source}" type="button"${dup?' disabled':''}>
-                <span>${esc(name)}${countSuffix}</span>
-                <span class="sm-picker-tag">${dup?'추가됨':'+ 추가'}</span>
-              </button>`;
-            }).join('')}
+            ${items.map((g, i) => itemBtnHtml(g, i, isPast)).join('')}
           </div>`;
         }
 
@@ -1722,7 +1768,7 @@
           // 4개 축: [게임이름 입력+추가] / 좋아요 / 지난모임 / 다른참여자 — 전부 한 행,
           // 셋 다 같은 클릭-토글 패턴(2026-08-02, 사용자가 순서까지 직접 지정). 상시노출
           // 실험(패널을 행 위에 항상 그리기)은 폐기하고 좋아요·지난모임과 완전히 같은 축으로.
-          const othersCount = othersPickedGames(type).length;
+          const othersCount = othersPickedGamesAll().length;
           const othersBtnText = othersCount ? `다른참여자 (${othersCount})` : '다른참여자';
           return `<div class="sm-game-block is-open">
             <button class="sm-game-toggle is-open" data-gtoggle="${type}" type="button">${btnLabel}</button>
@@ -1935,6 +1981,26 @@
             const _cg = item.game_id ? (window.COTTAGE_GAMES || []).find(c => c.bggId === String(item.game_id) || c.id === String(item.game_id)) : null;
             const _resolvedId = _cg?.bggId && !isNaN(Number(_cg.bggId)) ? Number(_cg.bggId) : null;
             addGameStep2(type, resolveGameName(item), _resolvedId, false);
+          });
+        });
+
+        // 「지난 모임」 목록에서 지우기 — DB의 과거 투표 기록은 안 건드리고
+        // localStorage 숨김 목록에만 추가(위 _hidePastGame). 다음 조회부터 후보에서 빠진다.
+        wrap.querySelectorAll('.sm-picker-del').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const type = btn.dataset.ptype;
+            const idx  = parseInt(btn.dataset.pdelidx);
+            const items = getPickerItems(type, 'past');
+            const item  = items[idx];
+            const user  = window.getKakaoUser?.();
+            if (!item || !user) return;
+            if (!confirm(`"${resolveGameName(item)}"을(를) 목록에서 지우시겠습니까?`)) return;
+            const key = item._pastKey || (item.game_id ? `id:${item.game_id}` : `nm:${String(item.custom_name || '').trim()}`);
+            _hidePastGame(String(user.id), type, key);
+            if (_pickerCache.past?.[type]) {
+              _pickerCache.past[type] = _pickerCache.past[type].filter((_, i) => i !== idx);
+            }
+            renderStep2Games();
           });
         });
 
