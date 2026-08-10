@@ -1324,6 +1324,11 @@ async function initRecentPlay() {
     const date  = rpDate(r.played_at, r.created_at);
     const gameKey = window.getGameKeyById?.(r.game_id) || r.game_id;
 
+    // (P1) 이 기록에 매인 남의 게임평(game_comments.record_id) — 한 기록에 여러 명이 각자
+    // 게임평을 남길 수 있는데, 종전엔 r.review_text(기록 작성자 1인분)만 보여줘서 몇 명이
+    // 썼든 항상 1개만 떴다(2026-08-10 버그 리포트). game-reviews.js buildSessionBody와 같은 소스.
+    const linkedComments = await window.CottageDB?.getRecordComments?.(r.id) || [];
+
     // 참여자 이름 → user_id 해석용 맵 (전체 프로필 기준 + 기록에서 보강).
     // ⚠️ profiles엔 id 컬럼이 없고 kakao 키는 user_id — game-reviews의 p.id 프로필맵은 빈 맵이었음.
     const _nickUser = new Map();
@@ -1358,6 +1363,10 @@ async function initRecentPlay() {
     const reviewHtml = r.review_text
       ? `<p class="pr-rec-review">${r.nickname ? `<span class="pr-rec-reviewer"${r.user_id ? ` data-user-id="${r.user_id}"` : ''}>${r.nickname}</span> ` : ''}${r.review_text}</p>`
       : '';
+    // 기록 작성자 본인 후기와 같은 형식으로 뒤에 잇는다 — game-reviews.js buildSessionBody와 동일 패턴.
+    const linkedHtml = linkedComments.map(c =>
+      `<p class="pr-rec-review pr-rec-review--linked">${c.nickname ? `<span class="pr-rec-reviewer"${c.user_id ? ` data-user-id="${c.user_id}"` : ''}>${c.nickname}</span> ` : ''}${c.comment_text}</p>`
+    ).join('');
 
     const photoUrls = window.parsePhotoUrls?.(r.photo_url) || [];
     const photoHtml = photoUrls.length
@@ -1374,7 +1383,7 @@ async function initRecentPlay() {
               <span class="pr-rec-game">${name}</span>
               ${playerHtml}
               ${metaHtml}
-              ${reviewHtml}
+              ${reviewHtml}${linkedHtml}
             </div>
           </div>
           ${photoHtml}
