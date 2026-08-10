@@ -285,6 +285,20 @@ function _openCoverModal(src) {
 // focusSection: 어느 버튼으로 들어왔는지에 따라 그 섹션만 펼치고 나머지는 접어서 시작.
 const _RULE_SECTION_LABELS = { goal: '게임 목표', setup: '먼저 준비하세요', play: '게임은 이렇게 진행해요', end: '게임이 끝나면' };
 const _RULE_SECTION_ORDER = ['goal', 'setup', 'play', 'end'];
+// 관리자가 빈 줄(\n\n)로 구분해 입력한 각 항목을 실제 <p>로 쪼갠다 — 종전엔 통짜 텍스트에
+// white-space:pre-wrap만 씌워서 "문단 사이 간격"과 "소제목 사이 간격"이 똑같은 빈 줄 1개
+// 굵기라 구분이 안 됐다(2026-08-10 GPT 의견 검토 후 반영 — 실제 DB 데이터로 확인: 관리자가
+// 이미 항목마다 빈 줄로 구분해 입력하고 있었다). 문단 사이는 짧게(rule-hub-para 간격),
+// 소제목 사이는 크게(rule-hub-subsec 간격) 둬 계층을 나눈다. 문단 내부 단일 줄바꿈은
+// white-space:pre-line으로 그대로 유지(예: setup의 "천 조각들을...\n가장 작은..." 두 줄).
+function _ruleHubParagraphsHtml(text) {
+  return String(text || '')
+    .split(/\n{2,}/)
+    .map(p => p.trim())
+    .filter(Boolean)
+    .map(p => `<p class="rule-hub-para">${window.escH(p)}</p>`)
+    .join('');
+}
 function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos } = {}, focusSection) {
   const hasRule = ruleSections && Object.keys(ruleSections).length > 0;
   if (!hasRule && !errorNote && !photos?.length) return;
@@ -293,7 +307,7 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
   if (hasRule) {
     const subHtml = _RULE_SECTION_ORDER
       .filter(k => ruleSections[k])
-      .map(k => `<div class="rule-hub-subsec"><div class="rule-hub-subhead">${window.escH(_RULE_SECTION_LABELS[k])}</div><div class="rule-hub-subbody">${window.escH(ruleSections[k])}</div></div>`)
+      .map(k => `<div class="rule-hub-subsec"><div class="rule-hub-subhead">${window.escH(_RULE_SECTION_LABELS[k])}</div><div class="rule-hub-subbody">${_ruleHubParagraphsHtml(ruleSections[k])}</div></div>`)
       .join('');
     panels.push({ key: 'rule', icon: '📖', label: '게임 방법', warn: false, body: `<div class="rule-hub-body">${subHtml}</div>` });
   }
