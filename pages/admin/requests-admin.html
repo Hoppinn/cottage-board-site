@@ -228,10 +228,10 @@
     .admin-bs-body { overflow-y: auto; padding: 16px; flex: 1; -webkit-overflow-scrolling: touch; }
     /* 게임 관리 */
     .admin-game-search-input { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
-    /* 기본 입문 코스(추천게임 책자) 게임 빠른 선택 — 52개 손검색 부담 완화 */
+    /* 기본 입문 코스(추천게임 책자) 게임 빠른 선택 — 52개 손검색 부담 완화, 코스별 아코디언(기본 접힘) */
     .admin-game-quickpick { margin-top: 12px; }
-    .admin-game-quickpick-course { margin-bottom: 10px; }
-    .admin-game-quickpick-course-name { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+    .admin-game-quickpick-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+    .admin-game-quickpick .admin-sub-section-body { padding: 8px 12px 10px; }
     .admin-game-quickpick-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .admin-game-quickpick-chip { border: 1px solid var(--border); background: #f7f7f7; border-radius: 999px; padding: 5px 10px; font-size: 12px; color: var(--text); cursor: pointer; white-space: nowrap; }
     .admin-game-quickpick-chip:hover { background: #eee; }
@@ -785,7 +785,7 @@
         (function buildQuickpick() {
           if (!quickpickEl || !window.BOOKLET_COURSES) return;
           const seen = new Set();
-          const html = window.BOOKLET_COURSES.map(course => {
+          const sections = window.BOOKLET_COURSES.map(course => {
             const chips = [];
             course.items.forEach(item => {
               [item.gameKey, item.branchGameKey].forEach(key => {
@@ -797,9 +797,16 @@
               });
             });
             if (!chips.length) return '';
-            return `<div class="admin-game-quickpick-course"><div class="admin-game-quickpick-course-name">${escH(course.name)}</div><div class="admin-game-quickpick-chips">${chips.join('')}</div></div>`;
+            // 기본 접힘 — 코스 6개를 전부 펼치면 칩이 52개라 목록이 너무 길어짐(사용자 피드백)
+            return `<div class="admin-sub-section admin-game-quickpick-course">
+              <div class="admin-sub-section-title">${escH(course.name)} <span class="admin-section-count">${chips.length}개</span><span class="admin-sub-section-arrow">▾</span></div>
+              <div class="admin-sub-section-body"><div class="admin-game-quickpick-chips">${chips.join('')}</div></div>
+            </div>`;
           }).join('');
-          quickpickEl.innerHTML = html;
+          quickpickEl.innerHTML = `<div class="admin-game-quickpick-label">🔖 기본 입문 코스에서 빠른 선택 — 코스를 펼쳐 고르세요</div>${sections}`;
+          quickpickEl.querySelectorAll('.admin-game-quickpick-course > .admin-sub-section-title').forEach(title => {
+            title.addEventListener('click', () => title.closest('.admin-game-quickpick-course').classList.toggle('is-open'));
+          });
           quickpickEl.querySelectorAll('.admin-game-quickpick-chip').forEach(btn => {
             btn.addEventListener('click', () => {
               markQuickpickSelected(btn.dataset.key);
