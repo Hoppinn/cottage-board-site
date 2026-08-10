@@ -86,6 +86,11 @@
     // 플레이기록 게시판과 양식이 갈리면 한쪽만 고쳐진다(2026-07-22 통합).
     function escH(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function escAttr(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;'); }
+    // 같은 날 안에서의 "입력한 순서" — getAllPlayRecordsForHistory가 최신순(created_at DESC)으로
+    // 내려주는 걸 그대로 밀어넣으면 나중에 입력한 게임이 먼저 뜬다. game-reviews.js와 같은 수정(2026-08-10).
+    function byEntryOrderAsc(recs) {
+      return (recs || []).slice().sort((a, b) => String(a.created_at || '').localeCompare(String(b.created_at || '')));
+    }
 
     let allRecordsData = [], currentUser = null, playerNames = [];
     // 참여자 이름 → userId. game-reviews.js와 같은 규칙으로 만든다(회원 명부 ∪ 기록 작성자).
@@ -200,7 +205,7 @@
             <span class="pr-sub-date">${formatKstDate(dateStr)}</span>
             <span class="pr-sub-arrow">▾</span>
           </div>
-          <div class="pr-sub-body">${buildBody(recs)}</div>
+          <div class="pr-sub-body">${buildBody(byEntryOrderAsc(recs))}</div>
         </div>`;
       }
 

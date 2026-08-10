@@ -35,6 +35,14 @@
     return new Date(iso).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
+  // 같은 날(+같은 모임) 안에서의 "입력한 순서" — id는 uuid라 순번을 못 주므로 created_at 오름차순.
+  // getAllPlayRecordsForHub가 최신순(created_at DESC)으로 내려주는 걸 그대로 그룹에 밀어넣으면
+  // 나중에 입력한 게임이 먼저 뜬다(2026-08-10 버그 리포트) — 표시 목록과 캡션 복사 둘 다
+  // 이 정렬을 거친 배열을 받아야 첫 입력이 첫 줄로 나온다.
+  function _byEntryOrderAsc(recs) {
+    return (recs || []).slice().sort((a, b) => String(a.created_at || '').localeCompare(String(b.created_at || '')));
+  }
+
   function todayKst() {
     return new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
   }
@@ -1209,9 +1217,10 @@
         const hiddenDates = sortedDates.slice(MAX_DATES);
 
         const renderDateBlock = ([dateStr, recs]) => {
+          const orderedRecs = _byEntryOrderAsc(recs);
           // 모임별 탭: 모임은 이미 위 세션 헤더로 고정돼 있으므로 이 날짜 토글 옆 ⋯가
           // 「그 날짜 + 그 모임」 캡션을 담당한다(2026-07-27 역할분리).
-          const _dateCaption = window.escAttr(window.buildRecordCaption?.(recs, getGameName) || '');
+          const _dateCaption = window.escAttr(window.buildRecordCaption?.(orderedRecs, getGameName) || '');
           const _dateCaptionMenu = _dateCaption ? `<div class="pr-rec-more pr-hd-caption-menu"><button class="pr-rec-more-btn" type="button" title="더보기">···</button><div class="pr-rec-more-menu"><button class="pr-rec-caption-action" data-caption="${_dateCaption}" type="button">📋 캡션 복사</button></div></div>` : '';
           return `<div class="pr-sub-session" data-date="${dateStr}">
             <div class="pr-sub-hd-row">
@@ -1222,7 +1231,7 @@
               </button>
               ${_dateCaptionMenu}
             </div>
-            <div class="pr-sub-body">${buildSessionBody(recs, user, _orderMap)}</div>
+            <div class="pr-sub-body">${buildSessionBody(orderedRecs, user, _orderMap)}</div>
           </div>`;
         };
 
@@ -1317,7 +1326,7 @@
 
         for (const [groupName, recs] of sortedGroupEntries) {
           // 날짜별 보기: 모임명을 buildSessionBody에 넘겨 카드 안 헤더로 흡수(밖에 안 뜨게)
-          html += buildSessionBody(recs, user, _orderMap, groupName || '모임 미선택');
+          html += buildSessionBody(_byEntryOrderAsc(recs), user, _orderMap, groupName || '모임 미선택');
         }
 
         html += `</div></div>`;
