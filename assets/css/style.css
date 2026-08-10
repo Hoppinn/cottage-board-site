@@ -3438,19 +3438,20 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .rule-hub-section.is-warn .rule-hub-label{color:#9e3a2a;} /* .sheet-org-btn.is-warn과 같은 톤 */
 .rule-hub-body{padding:12px 14px 14px; background:var(--paper);}
 /* 게임 방법 내부 소제목(목표/준비/진행/종료) — 021, 관리자가 4칸에 넣은 본문에 자동으로 붙는 라벨.
-   2026-08-10: 소제목 사이(큰 구분)와 문단 사이(작은 구분)를 다른 폭으로 둬 계층을 나눈다 —
-   전부 60px로 벌렸을 땐 문단 사이도 덩달아 넓어 보여 화면만 길어지고 정작 소제목 전환이
-   두드러지지 않았다(GPT 의견 검토, _ruleHubParagraphsHtml로 문단을 실제 <p>로 쪼갠 것과 짝). */
-.rule-hub-subsec + .rule-hub-subsec{margin-top:32px;}
+   2026-08-10: 소제목 사이(큰 구분)·진행 내부 단계 사이(중간 구분)·일반 문단 사이(작은 구분)
+   3단으로 폭을 다르게 둬 스크롤하며 훑을 때 소제목 전환이 한눈에 걸리게 한다(사용자 지적 —
+   스크롤 중 큰 구간을 빠르게 구분하는 용도). 문단 사이는 그대로 12px 유지. */
+.rule-hub-subsec + .rule-hub-subsec{margin-top:44px;}
 .rule-hub-subhead{font-size:13px; font-weight:800; color:var(--green); margin-bottom:4px;}
 .rule-hub-para{font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-line; margin:0;}
 .rule-hub-para + .rule-hub-para{margin-top:12px;}
 /* 진행 내부 단계 소제목("## 문장" 표기, _ruleHubParagraphsHtml 참조) — 글자 크기·색은 본문과
    동일, font-weight만 한 단계(700) 올려 큰 제목(.rule-hub-subhead, 800+초록)과 확실히 구분한다.
-   위 문단과는 살짝 띄우고(16px), 바로 아래 문단과는 본문처럼 자연스럽게 붙게(6px) 둔다 —
+   위 문단과의 간격도 일반 문단(12px)과 소제목(44px) 사이 중간값(28px)으로 둬 "소제목까진 아니지만
+   일반 문단보다는 확실히 구분되는" 위계를 만든다. 아래 문단과는 본문처럼 자연스럽게 붙게(6px) —
    선택자 specificity를 위 .rule-hub-para+.rule-hub-para(2클래스)보다 높여야 이긴다(2026-08-10). */
 .rule-hub-para.rule-hub-para--step{font-weight:700;}
-.rule-hub-para + .rule-hub-para.rule-hub-para--step{margin-top:16px;}
+.rule-hub-para + .rule-hub-para.rule-hub-para--step{margin-top:28px;}
 .rule-hub-para.rule-hub-para--step + .rule-hub-para{margin-top:6px;}
 .rule-hub-list{margin:0; padding:12px 14px 14px 30px; background:var(--paper); font-size:14px; line-height:1.8; color:var(--ink);}
 .rule-hub-list li + li{margin-top:4px;}
