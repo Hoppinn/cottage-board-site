@@ -228,10 +228,18 @@
     .admin-bs-body { overflow-y: auto; padding: 16px; flex: 1; -webkit-overflow-scrolling: touch; }
     /* 게임 관리 */
     .admin-game-search-input { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
-    /* 기본 입문 코스(추천게임 책자) 게임 빠른 선택 — 52개 손검색 부담 완화, 코스별 아코디언(기본 접힘) */
-    .admin-game-quickpick { margin-top: 12px; }
-    .admin-game-quickpick-outer.admin-section { margin-bottom: 0; }
-    .admin-game-quickpick .admin-sub-section-body { padding: 8px 12px 10px; }
+    /* 게임 검색 / 기본 입문 코스 2탭 — 검색만 할 때 코스 버튼이 칸을 안 차지하도록 분리 */
+    .admin-game-tab-panel { display: none; }
+    .admin-game-tab-panel.is-active { display: block; }
+    /* 기본 입문 코스(추천게임 책자) 게임 빠른 선택 — 52개 손검색 부담 완화.
+       코스 6개는 작은 버튼 한 줄로만 두고, 누른 버튼의 게임만 그 아래 토글 표시
+       (사용자 피드백: 코스마다 전체폭 아코디언 줄을 쓰면 안 펼쳐도 칸을 많이 차지함) */
+    .admin-game-quickpick-course-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .admin-game-quickpick-course-btn { border: 1px solid var(--border); background: var(--card-bg,#fff); border-radius: 8px; padding: 6px 10px; font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer; }
+    .admin-game-quickpick-course-btn:hover { background: #ede8df; }
+    .admin-game-quickpick-course-btn.is-active { background: var(--green); border-color: var(--green); color: #fff; }
+    .admin-game-quickpick-course-panel { display: none; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-top: 8px; background: var(--bg); }
+    .admin-game-quickpick-course-panel.is-open { display: block; }
     .admin-game-quickpick-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .admin-game-quickpick-chip { border: 1px solid var(--border); background: #f7f7f7; border-radius: 999px; padding: 5px 10px; font-size: 12px; color: var(--text); cursor: pointer; white-space: nowrap; }
     .admin-game-quickpick-chip:hover { background: #eee; }
@@ -656,8 +664,16 @@
           <div class="admin-bs-panel">
             <div class="admin-bs-header"><span class="admin-bs-title">🎮 게임 관리</span><button aria-label="닫기" class="admin-bs-close" type="button">✕</button></div>
             <div class="admin-bs-body">
-              <input type="text" id="gameAdminSearchInput" class="admin-game-search-input" placeholder="게임명 검색" autocomplete="off">
-              <div class="admin-game-quickpick" id="gameAdminQuickpick"></div>
+              <div class="admin-analysis-tabs" id="gameAdminTabs">
+                <button class="admin-analysis-tab is-active" data-gtab="search" type="button">🔍 게임 검색</button>
+                <button class="admin-analysis-tab" data-gtab="course" type="button">📖 기본 입문 코스</button>
+              </div>
+              <div class="admin-game-tab-panel is-active" data-gtab-panel="search">
+                <input type="text" id="gameAdminSearchInput" class="admin-game-search-input" placeholder="게임명 검색" autocomplete="off">
+              </div>
+              <div class="admin-game-tab-panel" data-gtab-panel="course">
+                <div class="admin-game-quickpick" id="gameAdminQuickpick"></div>
+              </div>
               <div class="admin-game-form" id="gameAdminForm" style="display:none;">
                 <div class="admin-game-form-title" id="gameAdminSelectedName"></div>
                 <!-- 021: 게임 방법을 4칸으로 분리(목표/준비/진행/종료) — 관리자가 소제목을
@@ -785,7 +801,9 @@
         (function buildQuickpick() {
           if (!quickpickEl || !window.BOOKLET_COURSES) return;
           const seen = new Set();
-          const sections = window.BOOKLET_COURSES.map(course => {
+          const btns = [];
+          const panels = [];
+          window.BOOKLET_COURSES.forEach(course => {
             const chips = [];
             course.items.forEach(item => {
               [item.gameKey, item.branchGameKey].forEach(key => {
@@ -796,22 +814,19 @@
                 chips.push(`<button type="button" class="admin-game-quickpick-chip" data-key="${escH(key)}" data-display="${escH(display)}">${escH(display)}</button>`);
               });
             });
-            if (!chips.length) return '';
-            // 기본 접힘 — 코스 6개를 전부 펼치면 칩이 52개라 목록이 너무 길어짐(사용자 피드백)
-            return `<div class="admin-sub-section admin-game-quickpick-course">
-              <div class="admin-sub-section-title">${escH(course.name)} <span class="admin-section-count">${chips.length}개</span><span class="admin-sub-section-arrow">▾</span></div>
-              <div class="admin-sub-section-body"><div class="admin-game-quickpick-chips">${chips.join('')}</div></div>
-            </div>`;
-          }).join('');
-          // 전체 접기 토글 — 게임명 검색만 하고 싶을 때 이 칸 전체를 접어 치울 수 있게(사용자 피드백)
-          quickpickEl.innerHTML = `<div class="admin-section is-open admin-game-quickpick-outer">
-            <div class="admin-section-title">🔖 기본 입문 코스에서 빠른 선택<span class="admin-section-arrow">▾</span></div>
-            <div class="admin-section-body">${sections}</div>
-          </div>`;
-          const outerSection = quickpickEl.querySelector('.admin-game-quickpick-outer');
-          outerSection.querySelector('.admin-section-title').addEventListener('click', () => outerSection.classList.toggle('is-open'));
-          quickpickEl.querySelectorAll('.admin-game-quickpick-course > .admin-sub-section-title').forEach(title => {
-            title.addEventListener('click', () => title.closest('.admin-game-quickpick-course').classList.toggle('is-open'));
+            if (!chips.length) return;
+            // 코스 버튼은 한 줄로만 두고, 누른 버튼의 게임 목록만 그 아래 토글 표시
+            // (사용자 피드백: 코스마다 전체폭 아코디언 줄을 쓰면 안 펼쳐도 칸을 많이 차지함)
+            btns.push(`<button type="button" class="admin-game-quickpick-course-btn" data-course="${escH(course.id)}">${escH(course.name)} <span class="admin-section-count">${chips.length}</span></button>`);
+            panels.push(`<div class="admin-game-quickpick-course-panel" data-course="${escH(course.id)}"><div class="admin-game-quickpick-chips">${chips.join('')}</div></div>`);
+          });
+          quickpickEl.innerHTML = `<div class="admin-game-quickpick-course-btns">${btns.join('')}</div>${panels.join('')}`;
+          quickpickEl.querySelectorAll('.admin-game-quickpick-course-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              btn.classList.toggle('is-active');
+              const panel = quickpickEl.querySelector(`.admin-game-quickpick-course-panel[data-course="${btn.dataset.course}"]`);
+              if (panel) panel.classList.toggle('is-open');
+            });
           });
           quickpickEl.querySelectorAll('.admin-game-quickpick-chip').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -821,6 +836,20 @@
             });
           });
         })();
+
+        // 게임 검색 / 기본 입문 코스 탭 전환 — 패널만 교체(전역 .admin-tab-panel과
+        // 클래스가 겹치면 대시보드 분석탭 클릭 시 이 패널까지 같이 토글돼버려 별도 클래스 사용)
+        const gameTabsEl = document.getElementById('gameAdminTabs');
+        if (gameTabsEl) {
+          gameTabsEl.addEventListener('click', e => {
+            const btn = e.target.closest('.admin-analysis-tab');
+            if (!btn) return;
+            gameTabsEl.querySelectorAll('.admin-analysis-tab').forEach(b => b.classList.toggle('is-active', b === btn));
+            formEl.closest('.admin-bs-body').querySelectorAll('.admin-game-tab-panel').forEach(p => {
+              p.classList.toggle('is-active', p.dataset.gtabPanel === btn.dataset.gtab);
+            });
+          });
+        }
         // .admin-bs-body(overflow-y:auto)가 드롭다운을 클리핑하는 문제 우회 (club-schedule.html과 동일 패턴)
         const acList = searchInput.parentElement?.querySelector('.pr-autocomplete-list');
         if (acList) {
