@@ -3438,7 +3438,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .rule-hub-section.is-warn .rule-hub-label{color:#9e3a2a;} /* .sheet-org-btn.is-warn과 같은 톤 */
 .rule-hub-body{padding:12px 14px 14px; background:var(--paper);}
 /* 게임 방법 내부 소제목(목표/준비/진행/종료) — 021, 관리자가 4칸에 넣은 본문에 자동으로 붙는 라벨 */
-.rule-hub-subsec + .rule-hub-subsec{margin-top:14px;}
+.rule-hub-subsec + .rule-hub-subsec{margin-top:60px;} /* 2026-08-10 사용자 지적 — 14px는 붙어 보임, 엔터 두 줄 정도(본문 line-height 24px×2)만큼 더 벌림 */
 .rule-hub-subhead{font-size:13px; font-weight:800; color:var(--green); margin-bottom:4px;}
 .rule-hub-subbody{font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-wrap;}
 .rule-hub-list{margin:0; padding:12px 14px 14px 30px; background:var(--paper); font-size:14px; line-height:1.8; color:var(--ink);}
