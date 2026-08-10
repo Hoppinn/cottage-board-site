@@ -363,7 +363,7 @@ window._cottageSess = (function () {
   // ruleSections: {goal, setup, play, end} 전부 선택값(021) — 관리자 폼이 매번 4칸을
   // 전부 같이 저장하는 단일 폼이라(requests-admin.html 「게임 관리」 저장 버튼 하나) 여기서
   // 부분 필드만 받는 걸 걱정할 필요는 없다. 빈 문자열 키는 null로 접어 DB에 잡동사니를 안 남긴다.
-  async function upsertGameOverride(gameKey, { organizerPhotoUrls, ruleNote, errorNote, ruleSections }) {
+  async function upsertGameOverride(gameKey, { organizerPhotoUrls, organizerNote, ruleNote, errorNote, ruleSections }) {
     if (!gameKey) return false;
     try {
       let sections = null;
@@ -378,6 +378,7 @@ window._cottageSess = (function () {
       const { error } = await db.from('game_overrides').upsert({
         game_key: gameKey,
         organizer_photo_urls: organizerPhotoUrls || [],
+        organizer_note: organizerNote || null,
         rule_note: ruleNote || null,
         error_note: errorNote || null,
         rule_sections: sections,

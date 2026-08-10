@@ -311,9 +311,9 @@ function _ruleHubParagraphsHtml(text) {
     })
     .join('');
 }
-function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos } = {}, focusSection) {
+function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos, organizerNote } = {}, focusSection) {
   const hasRule = ruleSections && Object.keys(ruleSections).length > 0;
-  if (!hasRule && !errorNote && !photos?.length) return;
+  if (!hasRule && !errorNote && !photos?.length && !organizerNote) return;
   document.getElementById('ruleHubModal')?.remove();
   const panels = [];
   if (hasRule) {
@@ -328,8 +328,14 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
     panels.push({ key: 'error', icon: '⚠️', label: '자주 틀리는 규칙', warn: true,
       body: `<ul class="rule-hub-list">${items.map(t => `<li>${window.escH(t)}</li>`).join('')}</ul>` });
   }
-  if (photos?.length) panels.push({ key: 'photos', icon: '📦', label: '정리 방법', warn: false,
-    body: `<div class="rule-hub-photos">${photos.map((u, i) => `<img class="rule-hub-photo" src="${window.escH(u)}" alt="" data-idx="${i}">`).join('')}</div>` });
+  // 정리 방법 — 글과 사진 병행(2026-08). 글이 있으면 먼저, 사진이 있으면 그 아래 갤러리.
+  // 사진만 있던 기존 게임은 organizerNote가 비어 있어 글 블록 없이 지금과 동일하게 보인다.
+  if (photos?.length || organizerNote) {
+    let body = '';
+    if (organizerNote) body += `<div class="rule-hub-body">${_ruleHubParagraphsHtml(organizerNote)}</div>`;
+    if (photos?.length) body += `<div class="rule-hub-photos">${photos.map((u, i) => `<img class="rule-hub-photo" src="${window.escH(u)}" alt="" data-idx="${i}">`).join('')}</div>`;
+    panels.push({ key: 'photos', icon: '📦', label: '정리 방법', warn: false, body });
+  }
   const openKey = panels.some(s => s.key === focusSection) ? focusSection : panels[0]?.key;
 
   const overlay = document.createElement('div');
@@ -1045,6 +1051,7 @@ async function initSheetOrganizerContent(gameKey) {
   if (!area || !window.CottageDB?.getGameOverride) return;
   const override = await window.CottageDB.getGameOverride(gameKey);
   const photos = override?.organizer_photo_urls || [];
+  const organizerNote = override?.organizer_note || ''; // 022: 정리 방법 글(사진과 병행)
   // 021: rule_sections(구조화 4칸)이 정본. 구버전 rule_note(단일 텍스트)만 있는 게임은
   // 그걸 "게임 진행" 한 칸으로 보여준다(소제목 없이 통째로 넣던 옛 방식과 제일 가까운 자리) —
   // 재입력 전까지 화면에서 사라지지 않게 하는 하위호환용이다.
@@ -1053,18 +1060,18 @@ async function initSheetOrganizerContent(gameKey) {
     : (override?.rule_note ? { play: override.rule_note } : null);
   const errorNote = override?.error_note || '';
   const hasRule = !!sections;
-  if (!photos.length && !hasRule && !errorNote) { area.innerHTML = ''; return; }
+  if (!photos.length && !hasRule && !errorNote && !organizerNote) { area.innerHTML = ''; return; }
   const _og = window.gameData?.[gameKey];
   const gameName = _og?.title?.display || _og?.title?.owned || String(gameKey);
 
   let html = '';
   if (hasRule) html += `<button class="sheet-org-btn" type="button" data-org-action="rule">📖 게임 방법</button>`;
   if (errorNote) html += `<button class="sheet-org-btn is-warn" type="button" data-org-action="error">⚠️ 자주 틀리는 규칙</button>`;
-  if (photos.length) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리 방법</button>`;
+  if (photos.length || organizerNote) html += `<button class="sheet-org-btn" type="button" data-org-action="photos">📦 정리 방법</button>`;
   area.innerHTML = html;
 
   // 세 버튼 전부 같은 룰 허브 모달을 연다 — 누른 섹션만 펼치고 나머지는 접어서 시작(_openRuleHubModal 참조).
-  const _org = { sections, errorNote, photos };
+  const _org = { sections, errorNote, photos, organizerNote };
   area.querySelector('[data-org-action="rule"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'rule'));
   area.querySelector('[data-org-action="error"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'error'));
   area.querySelector('[data-org-action="photos"]')?.addEventListener('click', () => _openRuleHubModal(gameName, _org, 'photos'));

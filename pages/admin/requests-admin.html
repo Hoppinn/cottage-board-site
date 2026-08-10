@@ -690,7 +690,8 @@
                 <textarea id="gameAdminRuleEnd" class="admin-game-rule-textarea" rows="4" placeholder="두 사람 모두 마지막 칸에 도착하면 게임이 끝납니다."></textarea>
                 <div class="admin-section-title" style="cursor:default;margin-top:12px;">⚠️ 자주 틀리는 규칙 <span class="admin-game-rule-optional">(한 줄에 하나씩 — 프론트에서 자동으로 목록(•)이 됩니다)</span></div>
                 <textarea id="gameAdminErrorNote" class="admin-game-rule-textarea" rows="6" placeholder="단추는 판 밖에서도 셀 수 있다고 착각하기 쉽습니다.&#10;(줄바꿈으로 항목을 구분하세요)"></textarea>
-                <div class="admin-section-title" style="cursor:default;margin-top:12px;">📦 정리 방법 사진</div>
+                <div class="admin-section-title" style="cursor:default;margin-top:12px;">📦 정리 방법 <span class="admin-game-rule-optional">(사진과 글, 둘 다 남겨도 됩니다)</span></div>
+                <textarea id="gameAdminOrganizerNote" class="admin-game-rule-textarea" rows="4" placeholder="사진만으로 설명하기 어려운 부분을 글로 남겨보세요.&#10;(줄바꿈 두 번으로 문단을 나눌 수 있어요)"></textarea>
                 <div class="admin-game-photo-grid" id="gameAdminPhotoGrid"></div>
                 <input type="file" id="gameAdminPhotoInput" accept="image/*" multiple>
                 <button type="button" class="admin-save-btn" id="gameAdminSaveBtn">저장</button>
@@ -739,6 +740,7 @@
         const playTextarea = document.getElementById('gameAdminRulePlay');
         const endTextarea = document.getElementById('gameAdminRuleEnd');
         const errorTextarea = document.getElementById('gameAdminErrorNote');
+        const organizerNoteTextarea = document.getElementById('gameAdminOrganizerNote');
         const saveBtn = document.getElementById('gameAdminSaveBtn');
         const statusEl = document.getElementById('gameAdminSaveStatus');
         if (!searchInput || !window.attachAc) return;
@@ -773,6 +775,7 @@
           playTextarea.value = sections.play || '';
           endTextarea.value = sections.end || '';
           errorTextarea.value = override?.error_note || '';
+          organizerNoteTextarea.value = override?.organizer_note || '';
           photoInput.value = '';
           renderPhotoGrid();
           statusEl.textContent = '';
@@ -878,6 +881,7 @@
             }
             const ok = await window.CottageDB.upsertGameOverride(selectedGameKey, {
               organizerPhotoUrls: currentPhotoUrls,
+              organizerNote: organizerNoteTextarea.value.trim(),
               errorNote: errorTextarea.value.trim(),
               ruleSections: {
                 goal: goalTextarea.value.trim(),
