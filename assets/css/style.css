@@ -3416,6 +3416,12 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
   border-radius:10px;
   overflow:hidden;
   background:var(--card-bg);
+  /* .rule-hub-scroll이 display:flex;flex-direction:column이라 이 카드도 그 flex item이다.
+     기본 flex-shrink:1이면 내용이 스크롤 영역보다 길 때 컨테이너가 넘치는 대신 이 카드
+     자체가 눌려 찌그러지고, 위 overflow:hidden이 그 잘린 부분을 조용히 가려서 스크롤바조차
+     안 뜬다(2026-08-10 실측: flex-shrink:1일 때 scrollHeight===clientHeight로 항상 같아
+     "스크롤이 안 내려간다"는 증상이 남. flex-shrink:0으로 실제 오버플로 발생 확인). */
+  flex-shrink:0;
 }
 .rule-hub-section>summary{
   display:flex; align-items:center; gap:10px;
