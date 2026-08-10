@@ -291,12 +291,24 @@ const _RULE_SECTION_ORDER = ['goal', 'setup', 'play', 'end'];
 // 이미 항목마다 빈 줄로 구분해 입력하고 있었다). 문단 사이는 짧게(rule-hub-para 간격),
 // 소제목 사이는 크게(rule-hub-subsec 간격) 둬 계층을 나눈다. 문단 내부 단일 줄바꿈은
 // white-space:pre-line으로 그대로 유지(예: setup의 "천 조각들을...\n가장 작은..." 두 줄).
+//
+// 진행 단계 소제목("① 천 조각 가져오기", "시간판 표시를 지나가면" 등) — 텍스트 내용을
+// 추측해 스타일링하지 않는다(2026-08-10 사용자 지시). 문단 맨 앞에 관리자가 명시적으로
+// "## "를 붙이면 그 문단만 rule-hub-para--step 클래스가 붙어 살짝 굵게 렌더된다. ①②
+// 같은 번호는 이 마커와 별개로 관리자가 계속 손으로 적는 텍스트일 뿐이라, 번호 없는
+// 문장("## 시간판 표시를 지나가면")도 동일하게 적용된다. DB 컬럼은 늘리지 않음 —
+// rule_sections의 기존 텍스트 칸 안에서만 통하는 표기 규칙(admin-game-rule-textarea 힌트 참조).
 function _ruleHubParagraphsHtml(text) {
   return String(text || '')
     .split(/\n{2,}/)
     .map(p => p.trim())
     .filter(Boolean)
-    .map(p => `<p class="rule-hub-para">${window.escH(p)}</p>`)
+    .map(p => {
+      const stepMatch = p.match(/^##\s*([\s\S]+)$/);
+      return stepMatch
+        ? `<p class="rule-hub-para rule-hub-para--step">${window.escH(stepMatch[1].trim())}</p>`
+        : `<p class="rule-hub-para">${window.escH(p)}</p>`;
+    })
     .join('');
 }
 function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos } = {}, focusSection) {

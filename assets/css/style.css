@@ -3445,6 +3445,13 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 .rule-hub-subhead{font-size:13px; font-weight:800; color:var(--green); margin-bottom:4px;}
 .rule-hub-para{font-size:14px; line-height:1.7; color:var(--ink); white-space:pre-line; margin:0;}
 .rule-hub-para + .rule-hub-para{margin-top:12px;}
+/* 진행 내부 단계 소제목("## 문장" 표기, _ruleHubParagraphsHtml 참조) — 글자 크기·색은 본문과
+   동일, font-weight만 한 단계(700) 올려 큰 제목(.rule-hub-subhead, 800+초록)과 확실히 구분한다.
+   위 문단과는 살짝 띄우고(16px), 바로 아래 문단과는 본문처럼 자연스럽게 붙게(6px) 둔다 —
+   선택자 specificity를 위 .rule-hub-para+.rule-hub-para(2클래스)보다 높여야 이긴다(2026-08-10). */
+.rule-hub-para.rule-hub-para--step{font-weight:700;}
+.rule-hub-para + .rule-hub-para.rule-hub-para--step{margin-top:16px;}
+.rule-hub-para.rule-hub-para--step + .rule-hub-para{margin-top:6px;}
 .rule-hub-list{margin:0; padding:12px 14px 14px 30px; background:var(--paper); font-size:14px; line-height:1.8; color:var(--ink);}
 .rule-hub-list li + li{margin-top:4px;}
 .rule-hub-photos{display:grid; grid-template-columns:repeat(3,1fr); gap:6px; padding:12px 14px 14px; background:var(--paper);}
