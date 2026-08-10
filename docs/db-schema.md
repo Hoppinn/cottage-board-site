@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-08-10 (021 `game_overrides.rule_sections` 추가 + 020 "미실행" 낡은 기재 실측 정정 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음)
+최종 갱신: 2026-08-10 (021 `game_overrides.rule_sections` 추가 + 020 "미실행" 낡은 기재 실측 정정 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음) / 2026-08-10 2차 (021도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 + `rule_sections` 텍스트 칸의 `## ` 소제목 표기 규칙 추가)
 
 ---
 
@@ -22,7 +22,7 @@
 | 014 `game_comments.record_id` | ✅ **실행 완료 + 검증 (2026-07-22)** — anon SELECT에 `record_id` 존재(드라이런 200), 뽁님 게임평 2건에 record_id=96/97 세팅 후 되읽기 확인. `getRecordComments(['96','97'])`가 2건 반환. ⚠️ **코드 배포 전 이 마이그레이션이 선행돼야 함**(`getGameComments`가 컬럼 select) — 순서가 뒤바뀌면 게임시트 「게임평」이 400으로 빈다 |
 | 019 `game_overrides` 테이블 + `organizer-photos` 버킷 | ✅ **실행 완료 + 검증 (2026-07-28)** — `scripts/verify-game-overrides.js` anon 왕복 6건 전부 통과(upsert/되읽기/null 처리), `organizer-photos` 버킷도 anon `list()` 정상 응답 확인 |
 | 020 `game_overrides.error_note` 컬럼 (에러로그) | ✅ **실행 완료 + 검증 (2026-08-09 재확인)** — anon SELECT로 `error_note` 포함 3행 정상 응답(에러 없음). ⚠️ 이 칸이 오래 "미실행"으로 남아 PROJECT_STATE의 "2026-08-02 종결" 기록과 충돌하고 있었다 — DB에 직접 물어서 해소(같은 패턴 012 사건 참조) |
-| 021 `game_overrides.rule_sections` 컬럼 (jsonb, 게임 방법 구조화) | ⚠️ **미실행 — 사용자가 Supabase에서 SQL 실행 필요.** `{goal, setup, play, end}` 4키(전부 선택), 빈 키는 프론트에서 자동 숨김. 기존 `rule_note`(텍스트)는 유지하되 신규 콘텐츠는 이 컬럼 사용 — 실행 전 배포 시 `upsertGameOverride`가 없는 컬럼에 쓰려다 실패한다(014·020과 동일 순서 주의) |
+| 021 `game_overrides.rule_sections` 컬럼 (jsonb, 게임 방법 구조화) | ✅ **실행 완료 + 검증 (2026-08-10 실측 정정)** — anon REST로 패치워크-크리스마스에디션 행을 직접 조회해 `{goal, setup, play, end}` 4키 전부 실데이터로 채워진 것 확인. ⚠️ 이 칸이 오래 "미실행"으로 남아 PROJECT_STATE의 "룰 허브 모달 실화면 미확인" 기재와 충돌 중이었다 — 012·020과 같은 패턴, DB에 직접 물어서 해소. **각 텍스트 칸 안에서 문단 맨 앞에 `## `를 붙이면 그 문단만 렌더링 시 살짝 굵게 표시된다**(진행 단계 소제목 표기, `_ruleHubParagraphsHtml`/game-sheet.js SSOT — DB 구조 추가 없이 순수 텍스트 관례) |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
