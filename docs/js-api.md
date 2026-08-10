@@ -1,6 +1,6 @@
 # JS API 레퍼런스 — 코티지보드
 
-최종 갱신: 2026-07-18 (문서-코드 참조 정합성 감사 — CottageDB·getKakaoUser 소비처의 script-nav.js 오기재 정정)
+최종 갱신: 2026-08-10 (`upsertGameOverride`/`getGameOverride`에 `ruleSections`(021) 반영 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음)
 
 ---
 

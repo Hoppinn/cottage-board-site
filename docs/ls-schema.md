@@ -1,6 +1,6 @@
 # localStorage 스키마 — 코티지보드
 
-최종 갱신: 2026-07-15 (sessionStorage `cottage_pending_join` 제거 — Stage 3 확인창 개편으로 핸드오프 폐기)
+최종 갱신: 2026-08-09 (`cottage_hidden_past_games_{userId}` 추가 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것 정정)
 
 ---
 

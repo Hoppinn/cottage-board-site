@@ -313,6 +313,8 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
 - `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
 
+⚠️ **헤더 높이 기반 CSS는 `body.embed-mode{--header-total-h:0px}` 하나로 다 안 잡힌다** — 이 재정의는 **body의 자손**에게만 적용되고, `html{scroll-padding-top:var(--header-total-h)}`(style.css 81번째 줄)처럼 **`<html>` 자신에** 선언된 속성은 `<body>`가 그 조상이라 변수 재정의가 거꾸로 안 흐른다(2026-08-10, `game-location.html`의 `shelf=` 자동 스크롤이 헤더 없는 embed 화면에서도 매번 52px씩 못 미치던 사건 — `html:has(body.embed-mode){scroll-padding-top:0}`로 별도 수정, CLAUDE.md 「반복 패치 정지」에도 기록). **새 embed 대응 CSS를 `<html>` 셀렉터에 선언하려면 `body.embed-mode` 변수 재정의로는 안 되고 `html:has(body.embed-mode)`(또는 JS로 `<html>`에도 클래스 부여)가 필요하다.**
+
 ### openShelfSheet (game-sheet.js)
 
 게임 상세시트 위에 게임위치 페이지를 바텀시트로 표시하는 스택 내비게이션.
