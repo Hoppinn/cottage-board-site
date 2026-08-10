@@ -256,6 +256,8 @@ assets/js/
 │                               # DB 아님 — 책자가 자주 안 바뀐다는 전제로 코드 배포로만 갱신
 │                               # gameKey는 cottage-games-data-output.js(window.gameData) 키와 일치해야 함
 │                               # index.html에서 index-page.js보다 먼저 로드(추천 코스 탭이 참조)
+│                               # requests-admin.html도 로드 — 「게임 관리」 시트의 빠른 선택 칩(52개,
+│                               #   코스별 그룹)이 이 데이터로 검색 없이 게임을 고를 수 있게 함(2026-08-10)
 ├── index-page.js               # 메인 페이지 전용 (추천게임, 인기게임, 홈 모임 미리보기)
 │                               # day-detail.js 함수 호출 (openDateMeetingModal)
 │                               # 🎲 추천 섹션(#recommend)은 '추천 코스'/'게임 더 찾기' 2탭(2026-08).
