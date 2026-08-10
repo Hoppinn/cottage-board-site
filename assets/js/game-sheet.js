@@ -309,9 +309,13 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
   const overlay = document.createElement('div');
   overlay.id = 'ruleHubModal';
   overlay.className = 'rule-hub-overlay';
-  overlay.innerHTML = `<div class="rule-hub-box" role="dialog" aria-modal="true">
+  // 헤더는 게임명이 아니라 고정 라벨 "게임 안내" — 게임 방법/자주 틀리는 규칙/정리 방법이
+  // 한 화면 안에서 같이 스크롤되므로 헤더는 이 화면 전체의 역할을 대표해야 한다(개별 섹션명도,
+  // 게임명 반복도 아님). openShelfSheet(게임 위치)가 이미 같은 패턴(고정 라벨) — 그쪽과 통일.
+  // 게임명은 시각적으로는 안 보이지만 aria-label로는 남겨 스크린리더 사용자는 여전히 알 수 있다.
+  overlay.innerHTML = `<div class="rule-hub-box" role="dialog" aria-modal="true" aria-label="게임 안내 – ${window.escH(gameName)}">
     <div class="rule-hub-header">
-      <span class="rule-hub-title">${window.escH(gameName)}</span>
+      <span class="rule-hub-title">게임 안내</span>
       <button class="rule-hub-close" type="button" aria-label="닫기">✕</button>
     </div>
     <div class="rule-hub-scroll">
