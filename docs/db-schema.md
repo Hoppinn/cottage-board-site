@@ -1,6 +1,6 @@
 # DB 스키마 — 코티지보드
 
-최종 갱신: 2026-08-10 (021 `game_overrides.rule_sections` 추가 + 020 "미실행" 낡은 기재 실측 정정 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음) / 2026-08-10 2차 (021도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 + `rule_sections` 텍스트 칸의 `## ` 소제목 표기 규칙 추가) / 2026-08-10 3차 (022 `game_overrides.organizer_note` 추가 — 정리 방법을 사진과 글 병행 지원, **미실행 — 사용자가 SQL Editor에서 실행 필요**)
+최종 갱신: 2026-08-10 (021 `game_overrides.rule_sections` 추가 + 020 "미실행" 낡은 기재 실측 정정 — 헤더 타임스탬프가 실제 내용보다 3주 넘게 낡아 있던 것도 같이 바로잡음) / 2026-08-10 2차 (021도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 + `rule_sections` 텍스트 칸의 `## ` 소제목 표기 규칙 추가) / 2026-08-10 3차 (022 `game_overrides.organizer_note` 추가 — 정리 방법을 사진과 글 병행 지원) / 2026-08-11 (022도 실은 실행 완료 상태였음을 anon REST 직접 조회로 재확인·정정 — 012·020·021과 같은 패턴 4번째 재발. "미실행" 낡은 기재가 게임 안내 콘텐츠 입력 작업 착수를 막을 뻔했다)
 
 ---
 
@@ -23,7 +23,7 @@
 | 019 `game_overrides` 테이블 + `organizer-photos` 버킷 | ✅ **실행 완료 + 검증 (2026-07-28)** — `scripts/verify-game-overrides.js` anon 왕복 6건 전부 통과(upsert/되읽기/null 처리), `organizer-photos` 버킷도 anon `list()` 정상 응답 확인 |
 | 020 `game_overrides.error_note` 컬럼 (에러로그) | ✅ **실행 완료 + 검증 (2026-08-09 재확인)** — anon SELECT로 `error_note` 포함 3행 정상 응답(에러 없음). ⚠️ 이 칸이 오래 "미실행"으로 남아 PROJECT_STATE의 "2026-08-02 종결" 기록과 충돌하고 있었다 — DB에 직접 물어서 해소(같은 패턴 012 사건 참조) |
 | 021 `game_overrides.rule_sections` 컬럼 (jsonb, 게임 방법 구조화) | ✅ **실행 완료 + 검증 (2026-08-10 실측 정정)** — anon REST로 패치워크-크리스마스에디션 행을 직접 조회해 `{goal, setup, play, end}` 4키 전부 실데이터로 채워진 것 확인. ⚠️ 이 칸이 오래 "미실행"으로 남아 PROJECT_STATE의 "룰 허브 모달 실화면 미확인" 기재와 충돌 중이었다 — 012·020과 같은 패턴, DB에 직접 물어서 해소. **각 텍스트 칸 안에서 문단 맨 앞에 `## `를 붙이면 그 문단만 렌더링 시 살짝 굵게 표시된다**(진행 단계 소제목 표기, `_ruleHubParagraphsHtml`/game-sheet.js SSOT — DB 구조 추가 없이 순수 텍스트 관례) |
-| 022 `game_overrides.organizer_note` 컬럼 (text, 정리 방법 글) | 🚧 **미실행 — 사용자가 Supabase SQL Editor에서 실행 필요.** 정리 방법이 사진(`organizer_photo_urls`)만 지원하던 걸 글도 병행 가능하게(사용자 요청, 2026-08-10). error_note와 동일한 단일 텍스트 컬럼 패턴. 코드(`requests-admin.html`/`supabase-client.js`/`game-sheet.js`)는 이미 이 컬럼을 읽고 쓰도록 반영됨 — ⚠️ **`upsert`는 한 행 전체를 한 요청으로 보낸다. 존재하지 않는 컬럼이 하나라도 섞이면 PostgREST가 그 요청 전체를 400으로 거절한다** — 마이그레이션 실행 전까지는 「게임 관리」 저장 버튼을 누르면 정리 방법뿐 아니라 게임 방법·자주 틀리는 규칙까지 그 게임의 저장이 통째로 실패한다(콘솔에 `[upsertGameOverride]` 에러). **반드시 이 SQL을 먼저 실행할 것.** |
+| 022 `game_overrides.organizer_note` 컬럼 (text, 정리 방법 글) | ✅ **실행 완료 + 검증 (2026-08-11 실측 정정)** — anon REST로 `game_overrides?select=game_key,organizer_note`가 HTTP 200 정상 응답(3행, 컬럼 존재 확인). 정리 방법이 사진(`organizer_photo_urls`)만 지원하던 걸 글도 병행 가능하게(사용자 요청, 2026-08-10). error_note와 동일한 단일 텍스트 컬럼 패턴. ⚠️ 이 칸이 하루 남짓 "미실행"으로 남아 PROJECT_STATE의 「열린 마이그레이션 1건」 기재와 충돌하고 있었다 — 012·020·021과 같은 패턴 4번째 재발, DB에 직접 물어서 해소 |
 
 ### ⚙️ PostgREST `max-rows` = 50000 (2026-07-18 변경, 마이그레이션 아님)
 
@@ -124,7 +124,7 @@ create policy "auth_select_page_events" on ... for select to authenticated -- �
 | `club_polls` | id, week_label, question, is_active | ⚠️ UNUSED — 구 week_label 방식 투표 (club-meeting.html 폐기로 미사용) |
 | `club_poll_options` | id, poll_id, option_text, sort_order | ⚠️ UNUSED |
 | `club_poll_votes` | id, poll_id, option_id, user_id | ⚠️ UNUSED |
-| `game_overrides` | game_key (PK), organizer_photo_urls (text[]), organizer_note (text, ⚠️ 022 미실행), rule_note, error_note, rule_sections (jsonb), updated_at | 게임정리 사진·글·룰설명·에러로그(자주 하는 실수 메모) 관리자 입력(019+020+021 실행 완료, 022는 아직). `rule_sections`(021)은 rule_note를 대체하는 구조화 필드 — `{goal, setup, play, end}` 4키(전부 선택), 프론트가 빈 키는 자동 숨기고 안내형 제목("게임 목표"/"먼저 준비하세요"/"게임은 이렇게 진행해요"/"게임이 끝나면")을 붙인다. `organizer_note`(022)는 정리 방법을 사진과 병행할 수 있는 텍스트 — 게임시트에서 글이 있으면 먼저, 사진이 있으면 그 아래 갤러리로 같이 뜬다. `rule_note`는 레거시로 유지(신규 콘텐츠는 안 씀). game_key = `COTTAGE_GAMES[].id`(= `game_likes.game_id`와 동일한 slugifyKorean(ownedName) 값, bggId 아님). `requests-admin.html` 「게임 관리」에서 편집, `game-sheet.js` `initSheetOrganizerContent`/`_openRuleHubModal`이 읽어 표시 |
+| `game_overrides` | game_key (PK), organizer_photo_urls (text[]), organizer_note (text), rule_note, error_note, rule_sections (jsonb), updated_at | 게임정리 사진·글·룰설명·에러로그(자주 하는 실수 메모) 관리자 입력(019~022 전부 실행 완료). `rule_sections`(021)은 rule_note를 대체하는 구조화 필드 — `{goal, setup, play, end}` 4키(전부 선택), 프론트가 빈 키는 자동 숨기고 안내형 제목("게임 목표"/"먼저 준비하세요"/"게임은 이렇게 진행해요"/"게임이 끝나면")을 붙인다. `organizer_note`(022)는 정리 방법을 사진과 병행할 수 있는 텍스트 — 게임시트에서 글이 있으면 먼저, 사진이 있으면 그 아래 갤러리로 같이 뜬다. `rule_note`는 레거시로 유지(신규 콘텐츠는 안 씀). game_key = `COTTAGE_GAMES[].id`(= `game_likes.game_id`와 동일한 slugifyKorean(ownedName) 값, bggId 아님). `requests-admin.html` 「게임 관리」에서 편집, `game-sheet.js` `initSheetOrganizerContent`/`_openRuleHubModal`이 읽어 표시 |
 
 ---
 
