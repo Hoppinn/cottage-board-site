@@ -2348,10 +2348,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/UKRta3KA3Ozxj06xuoS7cA__original/img/KwkDKuds7dh480zrz0wIiyhtZpo=/0x0/filters:format(jpeg)/pic3915582.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/UKRta3KA3Ozxj06xuoS7cA__small/img/KFGk8wKywtX1qkawn45Bs14cV0M=/fit-in/200x150/filters:strip_icc()/pic3915582.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/두부왕국.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/두부왕국.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/두부왕국.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -5045,10 +5046,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/Ehx72XRdSeQHISVXcZVnHg__original/img/bI3PgKtvAGiD59QYya-pqasF_tk=/0x0/filters:format(jpeg)/pic2453926.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/Ehx72XRdSeQHISVXcZVnHg__small/img/sPJVWjzGcEpiseZGdoD6HNR9nRI=/fit-in/200x150/filters:strip_icc()/pic2453926.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/스파이폴.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/스파이폴.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/스파이폴.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -7152,10 +7154,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/WuOY1XAIJQ-RGAmT_apW_w__original/img/06TSBC2s-cwbxfPmy_pf7n5p-jM=/0x0/filters:format(jpeg)/pic8632998.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/WuOY1XAIJQ-RGAmT_apW_w__small/img/dhNHd8Ztln_lUFAdti6WkPnGTGg=/fit-in/200x150/filters:strip_icc()/pic8632998.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/젝스님트.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/젝스님트.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/젝스님트.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -13000,10 +13003,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/iif2Nv17Vhw8puN2bATaaw__original/img/imp-iw4Sq2_rv7pEWbGRIpcmVTw=/0x0/filters:format(png)/pic7794273.png",
-      "thumbnail": "https://cf.geekdo-images.com/iif2Nv17Vhw8puN2bATaaw__small/img/GtXKwk8tJkmHtUvWPT2FIabXh0w=/fit-in/200x150/filters:strip_icc()/pic7794273.png",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/메디치.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/메디치.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/메디치.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -18942,10 +18946,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/wX4cTWNjTG7XiGHGgSpiiw__original/img/86bXDwl4gmMb_GehNQ-9y6O9G0E=/0x0/filters:format(png)/pic8630033.png",
-      "thumbnail": "https://cf.geekdo-images.com/wX4cTWNjTG7XiGHGgSpiiw__small/img/vU6kaL3f06BaVfmwUV91trrvDng=/fit-in/200x150/filters:strip_icc()/pic8630033.png",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/페루도.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/페루도.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/페루도.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -33626,10 +33631,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "",
-      "thumbnail": "",
-      "source": "none",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/로그.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/로그.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/로그.png"
     },
     "community": {
       "reviewEnabled": true,
@@ -37021,10 +37027,11 @@
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/6eQXDEMIWldaut9w7jXihg__original/img/E_d5wpS2jEaH7mdO6humOGULycA=/0x0/filters:format(jpeg)/pic6771265.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/6eQXDEMIWldaut9w7jXihg__small/img/CpRGL9nRUlwYERQzds6WyXRvJ4Y=/fit-in/200x150/filters:strip_icc()/pic6771265.jpg",
-      "source": "bgg",
-      "type": "jpg"
+      "main": "game-system/game-data/library/images/thumb/맨덤의던전.png",
+      "thumbnail": "game-system/game-data/library/images/thumb/맨덤의던전.png",
+      "source": "local",
+      "type": "png",
+      "localOverride": "game-system/game-data/library/images/thumb/맨덤의던전.png"
     },
     "community": {
       "reviewEnabled": true,
