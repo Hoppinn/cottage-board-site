@@ -33570,8 +33570,8 @@
       "matchStatus": "no-bgg",
       "year": "",
       "rating": 0,
-      "weight": 0,
-      "minPlayers": 3,
+      "weight": 2,
+      "minPlayers": 2,
       "maxPlayers": 5,
       "bestPlayers": [],
       "recommendedPlayers": [
@@ -33580,41 +33580,54 @@
         5
       ],
       "notRecommendedPlayers": [],
-      "playingTime": 0,
-      "minPlayTime": 0,
-      "maxPlayTime": 0,
+      "playingTime": 40,
+      "minPlayTime": 40,
+      "maxPlayTime": 40,
       "categories": [],
-      "categoriesKo": [],
-      "mechanics": [
-        "손패털기"
+      "categoriesKo": [
+        "타일게임"
       ],
-      "mechanicsKo": [],
+      "mechanics": [],
+      "mechanicsKo": [
+        "패 관리",
+        "패턴 만들기",
+        "세트 수집"
+      ],
       "designers": [],
       "description": "",
-      "descriptionKo": "마스터 없이 플레이하는 던전 탐험 게임. 카드와 주사위로 무작위 던전을 탐험하며 보물을 모으고 몬스터를 처치합니다."
+      "descriptionKo": "패를 한 장 뽑고 한 장 버리며 6장의 족보를 만드는 게임입니다.\n7가지 족보를 먼저 완성해 '로그'를 외치거나, 페어 큐와 트리플 큐를 이용해 손패를 2장까지 줄여 또 다른 방식의 로그를 노릴 수 있습니다.\n\n단순히 좋은 패를 기다리는 것뿐 아니라 앞사람이 버리는 패를 보고 페어 큐를 노리고, 특수패와 큐널티를 이용해 마지막 순간까지 승부를 뒤집을 수 있습니다.\n\n진행: 1장 뽑기 → 족보 확인 → 1장 버리기\n조건을 만족하면 페어 큐 / 트리플 큐 / 로그 선언"
     },
     "cottage": {
       "status": "active",
       "shelfGroupId": "poker_mahjong",
       "shelfLabel": "범용코인 · 포커칩 · 마작패",
       "shelfFullLabel": "파티게임 - 범용코인 · 포커칩 · 마작패",
-      "difficultyId": "",
-      "difficultyWeight": 0,
+      "difficultyId": "light_family",
+      "difficultyWeight": 2,
       "moodTags": [],
       "playTags": [],
       "situationTags": [
+        "beginner",
         "group",
         "large_group"
       ],
-      "interactionTags": [],
+      "interactionTags": [
+        "low_conflict"
+      ],
       "relationshipTags": [],
-      "manualTags": [],
-      "autoTags": [
-        "group",
-        "large_group"
+      "manualTags": [
+        "strategy"
       ],
-      "displayTags": [],
-      "summaryKo": "카드와 주사위로 무작위 던전을 탐험하며 보물을 모으고 몬스터를 처치하는 게임",
+      "autoTags": [
+        "beginner",
+        "group",
+        "large_group",
+        "low_conflict"
+      ],
+      "displayTags": [
+        "머리쓰게"
+      ],
+      "summaryKo": "마작패처럼 묵직한 타일을 뽑고 버리며, 포커처럼 족보를 먼저 완성하는 핸드관리 게임",
       "comment": {
         "text": "",
         "source": "none"
@@ -33628,7 +33641,7 @@
         "source": "none"
       },
       "caution": "",
-      "youtubeUrl": ""
+      "youtubeUrl": "https://www.youtube.com/watch?v=-MgXsMg1V0g"
     },
     "images": {
       "main": "game-system/game-data/library/images/thumb/로그.png",

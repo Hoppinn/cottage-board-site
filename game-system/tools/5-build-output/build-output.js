@@ -120,7 +120,7 @@ function buildRawGameItem(game) {
       ruleSummary: makeTextBlock("", "none"),
       recommendPoint: makeTextBlock("", "none"),
       caution: "",
-      youtubeUrl: "",
+      youtubeUrl: game.youtubeUrl || "",
     },
 
     images: (() => {

@@ -73,6 +73,7 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGa
     // Human-editable — preserve if already in existing master
     comment: existing?.comment || "",
     tags: existing?.tags?.length ? existing.tags : [],
+    youtubeUrl: existing?.youtubeUrl || "",
 
     // Translation fields — preserve unless BGG ID changed (stale translation guard)
     // bggId 변경 시 번역 무효화 → 다음 translate 실행에서 새 게임 기준으로 재생성됨
