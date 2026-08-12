@@ -62732,9 +62732,12 @@ const gameData = {
       "minPlayers": 4,
       "maxPlayers": 5,
       "bestPlayers": [
+        1,
+        4,
         5
       ],
       "recommendedPlayers": [
+        3,
         4,
         5
       ],
@@ -83846,61 +83849,57 @@ const gameData = {
     "title": {
       "display": "항로개척자",
       "owned": "항로개척자",
-      "bgg": "Explorers"
+      "bgg": "Uncharted Passage"
     },
     "bgg": {
-      "id": "330174",
+      "id": "434343",
       "matchStatus": "forced",
-      "year": "2021",
-      "rating": 7.10783,
-      "weight": 1.8852,
+      "year": "2025",
+      "rating": 7.7,
+      "weight": 2,
       "minPlayers": 1,
-      "maxPlayers": 4,
+      "maxPlayers": 1,
       "bestPlayers": [
-        2
+        1
       ],
       "recommendedPlayers": [
         1
       ],
       "notRecommendedPlayers": [
-        4
+        1
       ],
-      "playingTime": 20,
-      "minPlayTime": 20,
-      "maxPlayTime": 20,
+      "playingTime": 30,
+      "minPlayTime": 30,
+      "maxPlayTime": 30,
       "categories": [
-        "Abstract Strategy",
-        "Exploration"
+        "Adventure",
+        "Dice",
+        "Travel"
       ],
       "categoriesKo": [
-        "추상 전략",
-        "탐험"
+        "어드벤처",
+        "주사위",
+        "여행"
       ],
       "mechanics": [
-        "End Game Bonuses",
-        "Line Drawing",
-        "Modular Board",
-        "Paper-and-Pencil",
+        "Action Points",
+        "Network and Route Building",
         "Pick-up and Deliver",
-        "Set Collection",
-        "Square Grid",
-        "Variable Set-up"
+        "Push Your Luck",
+        "Solo / Solitaire Game"
       ],
       "mechanicsKo": [
-        "최종 보너스",
-        "선 긋기",
-        "모듈형 보드",
-        "종이와 연필",
+        "액션 포인트",
+        "네트워크/루트 건설",
         "픽업 앤 딜리버",
-        "세트 수집",
-        "사각 격자",
-        "가변 셋업"
+        "욕심 부리기",
+        "솔로 게임"
       ],
       "designers": [
-        "Phil Walker-Harding"
+        "Bonghwan Ju"
       ],
-      "description": "At the beginning of Explorers, you and each other explorer place four landscape tiles &mdash; grasslands, bodies of water, desert or mountains &mdash; and three different scoring tiles in your game frame. Then from your starting village, you go on an exploratory tour.\n\nThe exploration cards, each of which shows two landscapes, indicates which landscapes you are allowed to cross (off). On your turn, you reveal an exploration card, chooses one of the two types of terrain, then cross off three spaces ahead of your current location. Your fellow players must then decide whether to place only two crosses on the same landscape, or choose the other landscape and tick off three crosses. All of your crosses must be orthogonally adjacent, so you need to plan well to avoid being stuck due to \"bad\" landscape choices.\n\nOver four rounds, you expand your territory, receiving a special action for each checked box with an object in it. You receive points for provisions and gems, with a map you can place crosses on any type of terrain, and lost temples can be explored with keys &mdash; but whoever reaches the temple first receives the most points for it...\n\nExplorers contains a solo version as well as additional task tiles for experienced players, with more than a million possible game combinations.",
-      "descriptionKo": "주사위가 아닌 '항해 나침반'으로 진행되는 경주 게임입니다. 각 플레이어마다 하나씩 총 5개의 트랙이 있습니다.\n\n플레이어들은 상상의 군도를 통해 여행합니다."
+      "description": "In the 1400s, you are tasked by the Portuguese royal family to explore and chart unknown territories.\n\nOver the next year, you will traverse the globe, discovering exotic ports, rare goods, strange creatures, and breathtaking vistas.\n\nHowever, long voyages may endanger your crew with scurvy, and ruthless pirates lurk around every corner, ready to strike.\n\nCan you overcome these challenges and hardships to forge the greatest trade routes in history?",
+      "descriptionKo": "1400년대, 포르투갈 왕실로부터 미지의 영토를 탐험하고 지도에 표시할 임무를 받았습니다.\n\n앞으로 1년간 지구를 누비며 이국적인 항구, 희귀한 물품, 신비로운 생물, 그리고 숨 막힐 듯 아름다운 경치들을 발견하게 됩니다.\n\n하지만 긴 항해는 괴혈병으로 선원들을 위험에 빠뜨릴 수 있으며, 무자비한 해적들이 모든 곳에 숨어 있다가 언제든 습격할 준비가 되어 있습니다.\n\n이러한 도전과 어려움을 극복하고 역사상 최고의 무역로를 개척할 수 있을까요?"
     },
     "cottage": {
       "status": "active",
@@ -83909,15 +83908,15 @@ const gameData = {
       "shelfFullLabel": "협력",
       "difficultyId": "light_family",
       "difficultyWeight": 2,
-      "moodTags": [],
+      "moodTags": [
+        "tense",
+        "funny"
+      ],
       "playTags": [
-        "card_play",
-        "strategy"
+        "party"
       ],
       "situationTags": [
         "beginner",
-        "couple",
-        "group",
         "quick_play"
       ],
       "interactionTags": [
@@ -83927,20 +83926,20 @@ const gameData = {
       "relationshipTags": [],
       "manualTags": [],
       "autoTags": [
-        "card_play",
-        "strategy",
+        "tense",
+        "funny",
+        "party",
         "beginner",
-        "couple",
-        "group",
         "quick_play",
         "competitive",
         "low_conflict"
       ],
       "displayTags": [
-        "머리쓰게",
+        "즐기고",
+        "빠져들게",
         "경쟁형"
       ],
-      "summaryKo": "항해 나침반으로 다섯 개의 트랙을 진행하며 군도를 누비는 경주 게임.",
+      "summaryKo": "미지의 항해를 통해 새로운 영토를 탐험하고 최고의 무역로를 개척하는 게임.",
       "comment": {
         "text": "",
         "source": "none"
@@ -83957,8 +83956,8 @@ const gameData = {
       "youtubeUrl": ""
     },
     "images": {
-      "main": "https://cf.geekdo-images.com/t_QgPTCtmsw2xUn4JM6Kxw__original/img/widbnaUDMSIofUte0ODzh6oVVpw=/0x0/filters:format(jpeg)/pic5950783.jpg",
-      "thumbnail": "https://cf.geekdo-images.com/t_QgPTCtmsw2xUn4JM6Kxw__small/img/qZaY4ILm3b4tS9mVcefAkMWGdVE=/fit-in/200x150/filters:strip_icc()/pic5950783.jpg",
+      "main": "https://cf.geekdo-images.com/7Omm-yOFtpjo6zZAMrFD0A__original/img/IaSVl3aQ1ZKirUzHa-Hcg8kMJ7I=/0x0/filters:format(png)/pic8582189.png",
+      "thumbnail": "https://cf.geekdo-images.com/7Omm-yOFtpjo6zZAMrFD0A__small/img/6xCIqm0KUwabEb-LHx0Bpzq_ZBg=/fit-in/200x150/filters:strip_icc()/pic8582189.png",
       "source": "bgg",
       "type": "jpg"
     },

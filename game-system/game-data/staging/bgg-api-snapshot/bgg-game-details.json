@@ -43239,6 +43239,55 @@
       ]
     }
   },
+  "434343": {
+    "bggId": "434343",
+    "title": "Uncharted Passage",
+    "image": "https://cf.geekdo-images.com/7Omm-yOFtpjo6zZAMrFD0A__original/img/IaSVl3aQ1ZKirUzHa-Hcg8kMJ7I=/0x0/filters:format(png)/pic8582189.png",
+    "thumbnail": "https://cf.geekdo-images.com/7Omm-yOFtpjo6zZAMrFD0A__small/img/6xCIqm0KUwabEb-LHx0Bpzq_ZBg=/fit-in/200x150/filters:strip_icc()/pic8582189.png",
+    "description": "In the 1400s, you are tasked by the Portuguese royal family to explore and chart unknown territories.\n\nOver the next year, you will traverse the globe, discovering exotic ports, rare goods, strange creatures, and breathtaking vistas.\n\nHowever, long voyages may endanger your crew with scurvy, and ruthless pirates lurk around every corner, ready to strike.\n\nCan you overcome these challenges and hardships to forge the greatest trade routes in history?",
+    "yearpublished": "2025",
+    "minplayers": "1",
+    "minage": "14",
+    "maxplayers": "1",
+    "playingtime": "30",
+    "minplaytime": "30",
+    "maxplaytime": "30",
+    "averageweight": "2",
+    "average": "7.7",
+    "bayesaverage": "0",
+    "usersrated": "18",
+    "rank": "Not Ranked",
+    "designers": [
+      "Bonghwan Ju"
+    ],
+    "artists": [
+      "Reader on Jupiter"
+    ],
+    "publishers": [
+      "Pluto Games"
+    ],
+    "categories": [
+      "Adventure",
+      "Dice",
+      "Travel"
+    ],
+    "mechanics": [
+      "Action Points",
+      "Network and Route Building",
+      "Pick-up and Deliver",
+      "Push Your Luck",
+      "Solo / Solitaire Game"
+    ],
+    "suggested_numplayers": {
+      "best": [
+        1
+      ],
+      "recommended": [],
+      "not_recommended": [
+        1
+      ]
+    }
+  },
   "436650": {
     "bggId": "436650",
     "title": "Kingdom of Dice",

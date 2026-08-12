@@ -9613,9 +9613,12 @@
     "difficultyWeight": 2,
     "rating": 8.51745,
     "bestPlayers": [
+      1,
+      4,
       5
     ],
     "recommendedPlayers": [
+      3,
       4,
       5
     ]
@@ -12789,16 +12792,16 @@
   {
     "id": "항로개척자",
     "ownedName": "항로개척자",
-    "titleEn": "Explorers",
-    "bggId": "330174",
+    "titleEn": "Uncharted Passage",
+    "bggId": "434343",
     "matchStatus": "forced",
     "status": "ready",
     "location": "협력",
-    "difficulty": 1.8852,
+    "difficulty": 2,
     "difficultyWeight": 2,
-    "rating": 7.10783,
+    "rating": 7.7,
     "bestPlayers": [
-      2
+      1
     ],
     "recommendedPlayers": [
       1
