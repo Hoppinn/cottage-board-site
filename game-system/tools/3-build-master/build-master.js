@@ -77,8 +77,10 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGa
 
     // Translation fields — preserve unless BGG ID changed (stale translation guard)
     // bggId 변경 시 번역 무효화 → 다음 translate 실행에서 새 게임 기준으로 재생성됨
+    // ⚠️ "있음→null"(BGG 연결 해제)도 무효화 대상 — "있음→다른 있음"만 잡으면
+    // 오매칭을 null로 되돌린 뒤에도 이전 BGG의 번역이 영구히 남는다(2026-08-12, 로그 게임 사건).
     ...(() => {
-      const bggIdChanged = existing?.bggId && bggId && existing.bggId !== bggId;
+      const bggIdChanged = existing?.bggId && existing.bggId !== bggId;
       if (bggIdChanged) {
         invalidatedGames.push(xlsxRow.ownedName || xlsxRow.id);
         return { summaryKo: "", descriptionKo: "", categoriesKo: [], mechanicsKo: [] };
