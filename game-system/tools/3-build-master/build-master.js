@@ -23,9 +23,15 @@ function buildMasterGame(xlsxRow, matchInfo, bggDetails, existing, invalidatedGa
   const bggRecommended = suggestedPlayers.recommended || [];
   const bggNotRecommended = suggestedPlayers.not_recommended || [];
 
+  // 박스 인원 범위(min~max) 밖의 값은 BGG 커뮤니티 투표에 섞여 있어도 제외한다.
+  // 예: 4~5인 전용 박스인데 BGG 베스트인원 투표에 "1인"이 섞여 들어옴(2026-08-02, 2026-08-13 웬디 사건).
+  const boxMin = toNumber(d.minplayers);
+  const boxMax = toNumber(d.maxplayers);
+  const clampToBox = (arr) => (arr || []).filter((n) => (!boxMin || n >= boxMin) && (!boxMax || n <= boxMax));
+
   // bestPlayers: BGG 우선, BGG 데이터 없을 때만 XLSX fallback
-  const bestPlayers = bggBest.length ? bggBest : (xlsxRow.bestPlayers || []);
-  const recommendedPlayers = xlsxRow.recommendedPlayers?.length ? xlsxRow.recommendedPlayers : bggRecommended;
+  const bestPlayers = clampToBox(bggBest.length ? bggBest : (xlsxRow.bestPlayers || []));
+  const recommendedPlayers = clampToBox(xlsxRow.recommendedPlayers?.length ? xlsxRow.recommendedPlayers : bggRecommended);
 
   const now = new Date().toISOString();
   const hasBggData = Boolean(bggId && d.image);
