@@ -1783,7 +1783,11 @@
         return `${d.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
       }
       function calcRange(type, value) {
-        if (type === 'all' || !type) return { start: null, end: null };
+        // 🚨 2026-08-18: "전체"가 v1(활성 뷰 이전)까지 포함해 v2 cutoff이 적용된 페이지 카드와
+        // 기간이 안 맞아 화면 전체가 헷갈린다는 사용자 지적 — "전체"의 시작점 자체를 v2
+        // cutoff으로 바꾼다(사용자 결정: "방문자도 8/18부터 분리해서 봐야 안 헷갈림"). _v2Cutoff이
+        // null이면(v2 데이터 아직 0건) 예전처럼 진짜 무제한 — 자를 게 없는데 자르면 0건이 된다.
+        if (type === 'all' || !type) return { start: _v2Cutoff || null, end: null };
         if (type === 'day') {
           const [y, m, d] = value.split('-').map(Number);
           const s = Date.UTC(y, m - 1, d) - 9 * 3600000;
@@ -2295,11 +2299,18 @@
           seen2.add(key);
           pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
         }
-        // 내 보드 가상 페이지 — page_views에서 추가 (page_sessions 미기록)
+        // 내 보드 가상 페이지 — page_views에서 추가 (page_sessions **아직** 미기록인 서브시트만).
+        // 🚨 2026-08-18: my-board/other-board는 이제 활성 뷰 추적(v2)이 page_sessions에 직접
+        // 쓴다(위 filtered 루프가 이미 반영) — 여기서 또 더하면 같은 방문이 이중계상된다.
+        // 나머지 서브시트(수집보드·소식 등)는 2차 배선 전까지 page_sessions가 없어 여전히
+        // page_views로만 보충한다. filteredPV는 위 calcRange 수정으로 이미 v2 cutoff이 걸려
+        // 있어(전체 탭 기준) 몇 주치 옛 조회수가 다시 섞이지는 않는다.
         const VIRTUAL_PAGE_PREFIX = 'my-board';
+        const ALREADY_IN_PAGE_SESSIONS = new Set(['my-board', 'other-board']);
         for (const r of filteredPV) {
           const pageKey = normalizePageKey(r.page);
           if (!pageKey?.startsWith(VIRTUAL_PAGE_PREFIX)) continue;
+          if (ALREADY_IN_PAGE_SESSIONS.has(pageKey)) continue;
           const pid = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
           const day = kstDate(r.created_at);
           if (pid) {
@@ -2752,7 +2763,8 @@
           if (days === 0) {
             _navType = 'all'; _navValue = '';
             navEl?.classList.remove('is-visible');
-            draw(null, null, '전체', 'all');
+            // calcRange('all')과 같은 규칙 — "전체" 버튼도 v2 cutoff부터로 통일(위 calcRange 참조)
+            draw(_v2Cutoff || null, null, '전체', 'all');
           } else if (days === 1) {
             _navType = 'day'; _navValue = _today;
             if (di) { di.type = 'date'; di.value = _today; di.max = _today; }
