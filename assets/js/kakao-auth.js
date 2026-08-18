@@ -3185,7 +3185,7 @@ function _buildMiniBarWeekHtml(myVotes, voteGames, userId, isOwner) {
     return Math.round((h - whole) * 10) === 5 ? `${whole}시30분` : `${whole}시`;
   };
   const rows = myVotes.map(v => {
-    const total = 14; // 9~23시
+    const total = 18; // 9~27시(익일 새벽 3시까지 등록 가능, 2026-08-18)
     const left  = ((v.time_start - 9) / total * 100).toFixed(1);
     const width = ((v.time_end - v.time_start) / total * 100).toFixed(1);
     return `<div class="mb-week-entry">

@@ -948,7 +948,7 @@
   function _buildMeetingStatsHtml(votes, uniqueVotes, voteGames) {
     const count = partyCount(uniqueVotes);
     // 최대 동시 참여 가능 인원 (1시간 단위 슬롯) — 동반 인원 포함
-    const MIN_H = 10, MAX_H = 24;
+    const MIN_H = 10, MAX_H = 28; // 등록 상한 27시(익일 새벽 3시)까지 슬롯을 포함하려면 28이 필요(h<MAX_H)
     let peakCnt = 0;
     for (let h = MIN_H; h < MAX_H; h += 0.5) {
       const c = partyCount(votes.filter(v => v.time_start <= h && v.time_end > h));
@@ -1334,7 +1334,7 @@
    */
   window.buildBarsInCard = function (dayVotes, voteGames, myVote) {
     if (!dayVotes.length) return '';
-    const MIN_H = 9, MAX_H = 23;
+    const MIN_H = 9, MAX_H = 27; // 27시 = 익일 새벽 3시(club-schedule.html의 등록 상한과 동일하게 유지)
     const range = MAX_H - MIN_H;
     const today = _todayStr();
 
