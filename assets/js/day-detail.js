@@ -1334,7 +1334,21 @@
    */
   window.buildBarsInCard = function (dayVotes, voteGames, myVote) {
     if (!dayVotes.length) return '';
-    const MIN_H = 9, MAX_H = 27; // 27시 = 익일 새벽 3시(club-schedule.html의 등록 상한과 동일하게 유지)
+    // 고정 9~27시 축 대신 그날 실제 등록된 범위로 확대(반응형, 2026-08-18 사용자 스크린샷 리포트).
+    // 등록 상한이 23시→27시로 넓어지며(range 14→18h) 흔한 8~9시간짜리 등록이 막대 폭의 절반도
+    // 안 채워 안쪽 텍스트가 짓눌려 보였다. floor/ceil로 정시 단위로만 반올림(딱 붙지 않게 약간의
+    // 여백). 범위가 너무 좁으면(다들 겹치는 한두 시간) 축 눈금 3개가 겹쳐 보여 최소 3시간은 보장.
+    const rawMin = Math.min(...dayVotes.map(v => v.time_start));
+    const rawMax = Math.max(...dayVotes.map(v => v.time_end));
+    let MIN_H = Math.floor(rawMin);
+    let MAX_H = Math.ceil(rawMax);
+    const MIN_RANGE = 3;
+    if (MAX_H - MIN_H < MIN_RANGE) {
+      const mid = (rawMin + rawMax) / 2;
+      MIN_H = Math.max(9, Math.floor(mid - MIN_RANGE / 2));
+      MAX_H = Math.min(27, MIN_H + MIN_RANGE);
+      MIN_H = Math.max(9, MAX_H - MIN_RANGE); // MAX_H가 27에서 잘렸으면 왼쪽으로 재보정
+    }
     const range = MAX_H - MIN_H;
     const today = _todayStr();
 
