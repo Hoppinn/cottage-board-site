@@ -1465,7 +1465,7 @@
 
     return `<div class="sched-card-bars">
       <div class="sched-bar-axis">
-        <span>${MIN_H}시</span><span>${Math.round((MIN_H + MAX_H) / 2)}시</span><span>${MAX_H}시</span>
+        <span>${MIN_H}시</span><span>${window.formatVoteHour((MIN_H + MAX_H) / 2)}</span><span>${MAX_H}시</span>
       </div>
       ${dayVotes.map(barRow).join('')}
       ${buildGameTags(voteDate)}
