@@ -447,20 +447,43 @@
     const rows = document.querySelectorAll('#prGameRows .pr-game-row');
 
     const entries = [];
+    // 이름만 비고 다른 칸(인원/시간/참여자/점수/후기/사진)에 뭔가 입력된 행은 그냥 건너뛰면
+    // 그 내용이 통째로 사라진다(2026-08-18 사용자 리포트: 게임 2개 동시 작성 중 1개 제목을
+    // 빠뜨렸더니 그 기록 전체가 조용히 증발). 완전히 빈 행(=쓰지 않은 여분 행)만 조용히 skip하고,
+    // 뭔가 입력됐는데 이름만 없는 행은 저장을 막고 알려준다.
+    let firstEmptyTitleRow = null;
+    let rowNum = 0;
     for (const row of rows) {
+      rowNum++;
       const name = row.querySelector('.pr-game-name').value.trim();
-      if (!name) continue;
       const activeCountBtn = row.querySelector('.pr-count-btn.is-on');
+      const time = row.querySelector('.pr-time').value.trim();
+      const names = row.querySelector('.pr-names').value.trim();
+      const score = row.querySelector('.pr-score').value.trim();
+      const review = row.querySelector('.pr-review').value.trim();
+      const hasPhotos = (row._photoFiles || []).length > 0;
+
+      if (!name) {
+        const hasOtherData = activeCountBtn || time || names || score || review || hasPhotos;
+        if (hasOtherData && !firstEmptyTitleRow) firstEmptyTitleRow = { rowNum, input: row.querySelector('.pr-game-name') };
+        continue;
+      }
       entries.push({
         id: gameIdByName(name),
         label: name,
         count: activeCountBtn ? parseInt(activeCountBtn.dataset.n) : null,
-        time: parseInt(row.querySelector('.pr-time').value) || null,
-        names: putSelfFirst(row.querySelector('.pr-names').value.trim() || null, user.nickname),
-        score: row.querySelector('.pr-score').value.trim().split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
-        review: row.querySelector('.pr-review').value.trim() || null,
+        time: parseInt(time) || null,
+        names: putSelfFirst(names || null, user.nickname),
+        score: score.split(/\n+/).map(s=>s.trim()).filter(Boolean).join(' / ') || null,
+        review: review || null,
         photoFiles: row._photoFiles || [],
       });
+    }
+
+    if (firstEmptyTitleRow) {
+      alert(`${firstEmptyTitleRow.rowNum}번째 게임에 내용을 입력했는데 게임 이름이 비어 있어요.\n저장할 수 없습니다 — 게임 이름을 입력해주세요.`);
+      firstEmptyTitleRow.input.focus();
+      return;
     }
 
     if (!entries.length) { alert('게임을 하나 이상 입력해주세요.'); return; }
