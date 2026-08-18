@@ -2093,6 +2093,16 @@
           periodVisForBreakdown.forEach((r, idx) => {
             (r.user_id ? _mSet : _gSet).add(visitorKey(r, idx, 'bd'));
           });
+          // 🚨 2026-08-18: 방문자 마커는 "오늘 그 사람의 첫 방문 순간"에 딱 1번만 찍힌다.
+          // v2 cutoff **이전**에 이미 마커가 찍혔지만 그 이후에도 계속 사이트를 쓴 사람은
+          // 마커 기준 "그 이후 방문자"엔 안 잡히는데, page_sessions·이벤트엔 계속 잡혀서
+          // "방문자 4명인데 페이지는 12명이 봤다"는 혼란이 생겼다(사용자 지적 — 세 지표가
+          // 같은 시점부터 시작하도록 맞춰달라는 요청). "전체"(v2)일 때만 page_sessions
+          // (rowsV2)의 실제 활동 인원도 같은 인원 집합에 합친다 — 다른 기간 선택(오늘·이번주
+          // 등)은 안 건드려서 #27 비회원 정의에 영향 없다.
+          if (type === 'all' && _v2Cutoff) {
+            rowsV2.forEach((r, idx) => { (r.user_id ? _mSet : _gSet).add(visitorKey(r, idx, 'ps')); });
+          }
           const memberCnt = _mSet.size;
           const guestCnt = _gSet.size;
           // 봇은 사람이 아니라 요청이므로 행 수가 맞다 — 라벨도 '회'로 둔다.
@@ -2101,8 +2111,14 @@
           const elMember = document.getElementById('sumVisitorMember');
           const elGuest = document.getElementById('sumVisitorGuest');
           const elBot = document.getElementById('sumVisitorBot');
-          // 총계는 방문 '횟수'(행 수)라 단위가 다르다 — 회원+비회원 명과 더해지지 않는다.
-          if (elTotal) elTotal.textContent = `${periodVisForBreakdown.length}회`;
+          // 총계는 원래 방문 '횟수'(마커 행 수)라 단위가 다르지만, "전체"(v2)일 때는 위에서
+          // 합친 인원 집합과 **같은 숫자**(명)로 보여준다 — 안 그러면 큰 숫자(총계)와 작은
+          // 숫자(회원+비회원)가 서로 안 맞아 보이는 새 혼란이 생긴다.
+          if (elTotal) {
+            elTotal.textContent = (type === 'all' && _v2Cutoff)
+              ? `${memberCnt + guestCnt}명`
+              : `${periodVisForBreakdown.length}회`;
+          }
           if (elMember) elMember.textContent = `${memberCnt}명`;
           if (elGuest) elGuest.textContent = `${guestCnt}명`;
           if (elBot) elBot.textContent = `${botCnt}회`;
