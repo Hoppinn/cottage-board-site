@@ -1881,7 +1881,16 @@
         // page_sessions 기반 차트는 rowsV2(v2 cutoff 적용) — 페이지별 체류/유입경로 체류시간이
         // 여기서 갈린다. page_views 기반(filteredPV)은 측정 방식이 안 바뀌어서 그대로 rows 아님,
         // pageViews(전체 누적) 사용.
-        const filtered = filterByRange(rowsV2, start, end, 'entered_at');
+        // 🚨 2026-08-18: v1/v2가 섞이는 문제는 "전체"(론칭~지금, 여러 날에 걸친 통합)에서만
+        // 실제로 생긴다 — 특정 날짜/이번주/이번달처럼 좁은 기간은 그 안에서 v1/v2가 섞일 일이
+        // 없다(그 날짜가 통째로 v1 시절이거나 통째로 v2 시절이거나 둘 중 하나). 그런데 rowsV2로
+        // 무조건 갈아탔더니, rowsV2엔 "오늘 이후" 데이터만 있어서 **과거 날짜를 고르면 결과가
+        // 통째로 0건**이 됐다(사용자 리포트: "도달률이 오늘은 나오는데 다른 날짜로 넘기면
+        // 안 나온다" — 페이지 탭·유입경로 체류도 같은 이유로 과거 날짜에서 비어 보였을 것).
+        // "전체"일 때만 rowsV2(v2 cutoff 적용), 그 외엔 원래 rows를 쓴다.
+        const filtered = type === 'all'
+          ? filterByRange(rowsV2, start, end, 'entered_at')
+          : filterByRange(rows, start, end, 'entered_at');
         const filteredPV = filterByRange(pageViews, start, end, 'created_at').filter(r => r.page !== '__visitor__');
 
         // 🚨 2026-08-18: "방문자"를 세는 자리가 여럿(요약 카드·유입경로·방문 구성 도넛)인데
