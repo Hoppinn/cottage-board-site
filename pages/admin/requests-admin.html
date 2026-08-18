@@ -1893,36 +1893,6 @@
           : filterByRange(rows, start, end, 'entered_at');
         const filteredPV = filterByRange(pageViews, start, end, 'created_at').filter(r => r.page !== '__visitor__');
 
-        // 🚨 2026-08-18: "방문자"를 세는 자리가 여럿(요약 카드·유입경로·방문 구성 도넛)인데
-        // 각자 따로 계산하다 하나씩 빠뜨려 세 번 연속 사용자가 다시 찾아야 했다(패치 whack-a-
-        // mole). **여기 한 곳에서만** "이 기간의 방문자 목록"을 만들고, 아래 모든 소비처가
-        // 이 배열 하나만 쓴다 — 새 소비처가 생기면 반드시 이걸 재사용할 것, 따로 계산 금지.
-        // "전체"(v2)에서는 방문자 마커(오늘 첫 방문 시점에만 찍힘)에 없어도 page_sessions
-        // (rowsV2) 활동이 있는 사람은 합친다 — 마커가 v2 cutoff 이전에 이미 찍혔는데 그
-        // 이후에도 계속 사이트를 쓴 사람은 마커만 보면 그 활동이 안 잡히기 때문(사용자 리포트:
-        // "방문자 12명인데 유입은 3명·방문 탭 도넛은 4명"이 세 번 따로 나던 원인).
-        const filteredVisitor = (() => {
-          const marker = filterByRange(visitorRows, start, end, 'created_at');
-          if (!(type === 'all' && _v2Cutoff)) return marker;
-          const seen = new Set();
-          for (const r of marker) {
-            const k = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
-            if (k) seen.add(k);
-          }
-          const extra = [];
-          for (const r of rowsV2) {
-            const k = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
-            if (!k || seen.has(k)) continue;
-            seen.add(k);
-            extra.push({ user_id: r.user_id || null, session_key: r.session_key || null, referrer: r.referrer || null, created_at: r.entered_at });
-          }
-          return marker.concat(extra);
-        })();
-        // 위 filteredVisitor에서 그대로 파생 — 툴팁 라벨("그 사이 방문자 N명")용 사람 수.
-        const _v2VisitorCount = (type === 'all' && _v2Cutoff)
-          ? new Set(filteredVisitor.map((r, i) => visitorKey(r, i, 'v2cnt'))).size
-          : null;
-
         // ── 공통 헬퍼 ────────────────────────────────────────────────
         function _addDays(dateStr, n) {
           const [y, m, d] = dateStr.split('-').map(Number);
@@ -2017,6 +1987,41 @@
         const visitorRows = visitorRowsAll.filter(r => !r.is_bot && _hasSession(r));
         // 걸러낸 접속은 버리지 않고 '봇·자동' 칸으로 보낸다 — 사라지면 총계와 안 맞아 보인다.
         const botVisitorRows = visitorRowsAll.filter(r => r.is_bot || !_hasSession(r));
+
+        // 🚨 2026-08-19: 이 블록은 원래 draw() 맨 위(filtered/filteredPV 옆)에 있었는데,
+        // 거기서 바로 아래의 visitorRows를 참조해 "선언 전 사용"으로 매 호출마다 예외가 나서
+        // draw() 전체가 중간에 멈췄다(요약 탭이 통째로 "—"로 보이던 사고 — 문법 검사로는 실행
+        // 순서 문제를 못 잡아서 못 걸렀다). visitorRows 선언 **뒤**로 옮겨야 한다.
+        //
+        // "방문자"를 세는 자리가 여럿(요약 카드·유입경로·방문 구성 도넛)인데 각자 따로
+        // 계산하다 하나씩 빠뜨려 세 번 연속 사용자가 다시 찾아야 했다(패치 whack-a-mole).
+        // **여기 한 곳에서만** "이 기간의 방문자 목록"을 만들고, 아래 모든 소비처가 이 배열
+        // 하나만 쓴다 — 새 소비처가 생기면 반드시 이걸 재사용할 것, 따로 계산 금지.
+        // "전체"(v2)에서는 방문자 마커(오늘 첫 방문 시점에만 찍힘)에 없어도 page_sessions
+        // (rowsV2) 활동이 있는 사람은 합친다 — 마커가 v2 cutoff 이전에 이미 찍혔는데 그
+        // 이후에도 계속 사이트를 쓴 사람은 마커만 보면 그 활동이 안 잡히기 때문(사용자 리포트:
+        // "방문자 12명인데 유입은 3명·방문 탭 도넛은 4명"이 세 번 따로 나던 원인).
+        const filteredVisitor = (() => {
+          const marker = filterByRange(visitorRows, start, end, 'created_at');
+          if (!(type === 'all' && _v2Cutoff)) return marker;
+          const seen = new Set();
+          for (const r of marker) {
+            const k = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+            if (k) seen.add(k);
+          }
+          const extra = [];
+          for (const r of rowsV2) {
+            const k = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+            if (!k || seen.has(k)) continue;
+            seen.add(k);
+            extra.push({ user_id: r.user_id || null, session_key: r.session_key || null, referrer: r.referrer || null, created_at: r.entered_at });
+          }
+          return marker.concat(extra);
+        })();
+        // 위 filteredVisitor에서 그대로 파생 — 툴팁 라벨("그 사이 방문자 N명")용 사람 수.
+        const _v2VisitorCount = (type === 'all' && _v2Cutoff)
+          ? new Set(filteredVisitor.map((r, i) => visitorKey(r, i, 'v2cnt'))).size
+          : null;
 
         // ── 요약 카드 (__visitor__ 마커 기준, 기간 연동) ───────────────
         {
