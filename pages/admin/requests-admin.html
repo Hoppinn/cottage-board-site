@@ -2202,12 +2202,31 @@
         // ── 2. 유입 경로 — 수평 막대 (__visitor__ 기준 명/회) ──
         const filteredVisitor = filterByRange(visitorRows, start, end, 'created_at');
         const refMap = {}, refUserMap = {};
+        const _refSeenKeys = new Set();
         filteredVisitor.forEach((r, idx) => {
           const cat = (r.referrer ? (categorizeRef(r.referrer) || '귀속 불가') : '직접 방문');
           refMap[cat] = (refMap[cat] || 0) + 1;
           if (!refUserMap[cat]) refUserMap[cat] = new Set();
           refUserMap[cat].add(visitorKey(r, idx, cat));
+          const _k = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+          if (_k) _refSeenKeys.add(_k);
         });
+        // 🚨 2026-08-18: 위 방문자 카드와 같은 이유로 여기도 12명 중 마커 population(3명)만
+        // 잡혀 "방문자 12명인데 유입은 3명뿐"이 됐다(사용자 지적). type==='all'일 때만
+        // page_sessions(rowsV2)에서 마커에 없던 사람을 그 사람의 referrer로 추가 분류한다
+        // — 한 사람이 여러 세그먼트를 내도 처음 만나는 행 하나로만 1회 센다(중복 방지).
+        if (type === 'all' && _v2Cutoff) {
+          const _addedKeys = new Set();
+          rowsV2.forEach((r, idx) => {
+            const _k = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
+            if (!_k || _refSeenKeys.has(_k) || _addedKeys.has(_k)) return;
+            _addedKeys.add(_k);
+            const cat = (r.referrer ? (categorizeRef(r.referrer) || '귀속 불가') : '직접 방문');
+            refMap[cat] = (refMap[cat] || 0) + 1;
+            if (!refUserMap[cat]) refUserMap[cat] = new Set();
+            refUserMap[cat].add(visitorKey(r, idx, cat));
+          });
+        }
         // page_sessions에 referrer 컬럼이 있으므로 직접 집계 (join 불필요)
         //
         // 🚨 `|| '직접 방문'` 폴백을 여기에 쓰면 안 된다(#28, 2026-07-21). 이 루프만 모집단이
