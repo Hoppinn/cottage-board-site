@@ -67,7 +67,13 @@ function mountPeriodApi(rows, todayKst) {
 
 // ── 대조군 집계 (일부러 화면 코드를 안 쓴다) ───────────────────────
 const kstDay = iso => new Date(new Date(iso).getTime() + 9 * 3600000).toISOString().slice(0, 10);
+// 🚨 2026-08-18: buildPageMap이 이제 v2(활성 뷰) cutoff을 내부적으로 건다(PLAN_active_
+//    view_tracking.md — v1/v2 섞으면 "메인이 압도적" 착시가 오래 안 없어짐). 대조군도 같은
+//    경계를 적용해야 화면 코드와 계속 맞대볼 수 있다 — computeV2Cutoff 자체는 별도
+//    verify-v2-tracking-cutoff.js가 이미 검증한 작은 순수 함수라 여기서 재사용해도(집계
+//    로직 자체를 베끼는 게 아니라 "경계가 어디냐"라는 사실 하나만 공유) #15 위반이 아니다.
 function expectMap(rows, idType, id, todayKst, period) {
+  const v2Cutoff = MA.computeV2Cutoff(rows);
   const days = new Set();
   if (period === 'today') days.add(todayKst);
   if (period === 'yesterday') days.add(new Date(new Date(todayKst + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10));
@@ -76,6 +82,7 @@ function expectMap(rows, idType, id, todayKst, period) {
   for (const r of rows) {
     const mine = idType === 'member' ? String(r.user_id || '') === String(id) : (!r.user_id && r.session_key === id);
     if (!mine) continue;
+    if (v2Cutoff && (!r.entered_at || r.entered_at < v2Cutoff)) continue;
     if (period !== 'all') { if (!r.entered_at || !days.has(kstDay(r.entered_at))) continue; }
     if (!out.has(r.page)) out.set(r.page, { visits: 0, totalSec: 0 });
     out.get(r.page).visits++; out.get(r.page).totalSec += r.duration_sec || 0;

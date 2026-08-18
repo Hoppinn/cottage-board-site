@@ -99,18 +99,69 @@
     return PAGE_KEY_ALIASES[key] || key;
   }
 
+  // ── 추적 버전 경계(v1→v2, 2026-08-18) ─────────────────────────────
+  // v1(~2026-08-18): page_sessions 1행 = 방문 전체(URL 기준, 시트·모달 안 구분).
+  // v2(2026-08-18~): 시트·모달(활성 뷰) 세그먼트별로 여러 행(PLAN_active_view_tracking.md).
+  // 소급 재분류는 불가능하다 — v1 행엔 "그 안에서 뭘 봤는지" 정보 자체가 없다(억지로
+  // 나누면 추정이 아니라 조작이 된다). 대신 v2가 처음 등장한 시점 이후로만 페이지별
+  // 체류/비중을 집계한다 — 안 그러면 v1 시절 "메인 통짜" 체류가 압도적으로 커서 v2
+  // 데이터가 아무리 정확하게 쌓여도 오랫동안 "메인이 압도적"이라는 착시가 안 없어진다
+  // (큰 수의 법칙). **과거 행은 안 지운다** — page_views/anon_sessions 기반 통계(방문자
+  // 수·유입경로 등, 측정 방식이 안 바뀜)는 이 필터와 무관하게 계속 전체 누적을 쓴다.
+  //
+  // 여기 있는 키들은 v2에서만 나올 수 있는 page 값이다(v1은 location.pathname만 썼으므로
+  // 이런 가상 키가 page_sessions에 들어갈 수 없었다) — 그래서 이 중 하나라도 있는 행의
+  // entered_at 최솟값이 "v2가 실제로 처음 쓰인 시각"이고, 배포일을 코드에 하드코딩하는
+  // 것보다 정확하다(캐시된 구버전 JS가 배포 이후에도 한동안 v1 행을 계속 낼 수 있어서
+  // 날짜 하드코딩은 그 경계에서 어차피 정확하지 않다 — 반대로 이 값은 실측이라 안 흔들림).
+  // 🚨 2차/3차에서 새 가상 키(game-sheet 등)를 배선하면 여기도 같이 추가할 것 — 안 그래도
+  //    필터링 자체(entered_at 비교)는 안 깨지지만, cutoff이 그 키 등장 이전 시각에 멈춰
+  //    있으면 "v2 시작"을 실제보다 늦게 배선된 화면 기준으로만 잡는 셈이라 부정확해진다.
+  const V2_ONLY_PAGE_KEYS = new Set([
+    'my-board', 'other-board', 'my-board-growth', 'my-board-taste', 'my-board-records',
+    'my-board-voucher', 'my-board-notif', 'my-board-usage', 'my-board-meeting',
+  ]);
+
+  // rows(정규화된 page_sessions)에서 v2 시작 시각(entered_at, ISO 문자열)을 계산.
+  // v2 행이 아직 하나도 없으면(예: 배포 직후) null — 호출부는 null이면 필터링을
+  // 생략해야 한다(자르면 데이터가 통째로 사라진다, "0건"과 "아직 없음"은 다르다).
+  function computeV2Cutoff(rows) {
+    let min = null;
+    for (const r of rows) {
+      if (!V2_ONLY_PAGE_KEYS.has(r.page)) continue;
+      const t = r.entered_at;
+      if (!t) continue;
+      if (min === null || t < min) min = t;
+    }
+    return min;
+  }
+
+  // cutoff(entered_at ISO 문자열) 이후 행만 남긴다. cutoff이 null이면 원본 그대로
+  // 반환(위 computeV2Cutoff의 null 계약과 짝) — "전부 잘라서 0건"을 방지.
+  function filterToV2(rows, cutoff) {
+    if (!cutoff) return rows;
+    return rows.filter(r => r.entered_at && r.entered_at >= cutoff);
+  }
+
   // ── 한 사람의 페이지 분포 ──────────────────────────────────────────
   // idType 'member'면 user_id로, 아니면 session_key로(비회원) 거른다. 누적식은 관리자
   // 페이지 buildUserMap/buildAnonUserMap과 **같아야** 값이 갈리지 않는다.
   // ⚠️ dedupUserPageDay를 거치지 않는 것이 의도다 — dedup하면 체류가 그날 첫 세션 것만
   //    합산돼 과소집계된다(admin-analytics 5-1 제약).
   // rows는 정규화된 page를 가진다고 가정(위 파일 헤더). 반환: Map<page, {visits,totalSec}>.
+  // 🚨 v2 cutoff을 여기서 직접 건다(호출부마다 따로 거는 게 아니라) — 이 함수를 부르는
+  //    곳이 admin 페이지 탭과 회원 보드 오너 섹션(kakao-auth.js) 둘인데, 한쪽만 필터링을
+  //    기억하면 같은 사람의 "페이지 분포"가 화면마다 다른 값으로 보인다(#15류 재발).
+  //    period='전 기간'이어도 v2 cutoff 이전은 계속 제외한다 — "체류 안정 집계"의
+  //    전 기간은 "신뢰 가능한 전 기간"이지 문자 그대로의 전체 역사가 아니다.
   function buildPageMap(rows, idType, id, period, todayKst) {
+    const v2Cutoff = computeV2Cutoff(rows);
     const pm = new Map();
     for (const r of rows) {
       if (idType === 'member') { if (String(r.user_id || '') !== String(id)) continue; }
       else { if (r.user_id || r.session_key !== id) continue; }
       if (!inVpPeriod(r, period, todayKst)) continue;
+      if (v2Cutoff && (!r.entered_at || r.entered_at < v2Cutoff)) continue;
       if (!pm.has(r.page)) pm.set(r.page, { visits: 0, totalSec: 0 });
       pm.get(r.page).visits++; pm.get(r.page).totalSec += r.duration_sec || 0;
     }
@@ -193,6 +244,7 @@
     toKstDate, kstToday, kstShift,
     VP_PERIODS, VP_DATE_RE, inVpPeriod, inPeriodByKst, vpLabel,
     PAGE_KEY_ALIASES, normalizePageKey,
+    V2_ONLY_PAGE_KEYS, computeV2Cutoff, filterToV2,
     buildPageMap,
     EVENT_FAMILIES, EVENT_ALL_TYPES, eventPersonId, countMemberEvents,
     EVENT_TYPE_LABELS, eventTypeLabel,

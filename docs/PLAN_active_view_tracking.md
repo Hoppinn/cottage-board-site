@@ -130,3 +130,16 @@ pagehide: _finalized=true로 잠그고 마지막 세그먼트 flush(스택 상�
 **3차**: day-detail.js·club-schedule.html 배선 + iframe postMessage + 재검증.
 
 각 차수 끝에 커밋 + 관리자 페이지 육안 확인 1회.
+
+## 부록 — 읽기 측 v2 cutoff (2026-08-18, 1차와 별도로 처리·완료)
+
+1차 배포 직후 실사용 데이터(user 5038837936이 실제로 my-board↔other-board를 여러 번 오간
+세션)가 실제로 들어온 걸 확인하면서, 사용자가 "v1/v2를 그대로 합쳐 집계하면 v1 시절의
+통짜 체류가 압도적으로 커서 v2가 아무리 정확히 쌓여도 오랫동안 착시가 안 없어진다(큰 수의
+법칙)"는 지적을 함. 과거 데이터 소급 재분류는 불가능(정보 자체가 없음)하고 삭제할 필요도
+없어서, **읽기 측에서만** v2 최초 등장 시점 이후로 페이지별 체류/비중 집계를 끊기로 결정.
+상세 설계·구현·검증은 `member-analytics.js`/`requests-admin.html` diff와
+`scripts/verify-v2-tracking-cutoff.js`, admin-analytics.md 2026-08-18 항목 참조 — 이
+문서엔 "왜 write-path Plan과 같은 날 나온 별개 결정인가"만 남긴다. 쓰기 경로(단일 writer
+원칙)는 전혀 안 건드림 — 순수 집계 쿼리 필터 + UI 라벨 추가뿐이라 Plan 승인 없이 바로
+진행(되돌리기 쉬움, DB 스키마 무관).
