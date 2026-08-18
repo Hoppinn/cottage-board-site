@@ -1,75 +1,132 @@
 # PLAN — 활성 뷰(시트/모달/iframe) 단위 체류시간 추적
 
-작성: 2026-08-18. 사용자 요청("시트·모달도 다 마찬가지, 지금 페이지가 어디냐가 아니라 어떤 시트/모달을 보고 있는지로 카운팅해야") → 판단(안전한 쪽만 건드리는 설계 확정) → Plan. **미승인 — 실행 전 승인 대기.**
+작성: 2026-08-18. 1차 개정: 같은 날, 사용자가 "단일 writer 원칙" 승인조건을 걸어 재설계. **승인됨(조건부) — 조건은 아래 「승인 조건」 그대로 고정.**
 
 ## 배경 — 왜 필요한가
 
 지금 체류시간은 전부 `window.location.pathname` 기준이다. 그런데 실사용의 상당 시간이 **URL이 안 바뀌는 오버레이**(프로필 패널 서브시트, 게임시트, 일정 상세 모달, 플래너 바텀시트, index.html이 미리 로드하는 iframe 모달) 안에서 일어난다. 그 결과 "메인 체류가 압도적으로 길다"는 집계가 나오는데, 실제로는 사람들이 메인 화면 자체가 아니라 그 위에 뜬 플래너·내 보드·게임시트를 보고 있었을 뿐이다 — 지금 지표로는 이 둘을 구분할 수 없다.
 
-## 설계 원칙 — 왜 이 모양인가
+## 승인 조건 (사용자, 2026-08-18) — 전부 고정 요구사항
 
-`profiles.today_seconds`/`total_minutes`(하루 누적 총합)는 **상태 누적값**이라 fire-and-forget 재시도와 상성이 나쁘다(2026-08-18 세션에서 실측 확인: `pagehide`에서 이 값만 못 들어가는 사고가 이미 있고, 억지로 고치려 하면 이중계상·유실 둘 중 하나를 반드시 감수해야 함 — 상세는 git log 2026-08-18 세션 대화, `_syncTimeToDBNow`의 로컬 accumulator+RPC 재시도 구조 때문).
+1. **`page_sessions` 기록 경로는 끝까지 하나만 유지한다.** `pushActiveView`/`popActiveView`는 기존 writer의 "지금 라벨"을 전환·분할하는 역할만 하고, 별도의 독립 타이머·독립 INSERT 경로를 새로 만들지 않는다.
+2. **스택 정합성**: A→B→B닫기→A 복귀가 정확해야 한다. 중첩 상태에서 단순 `pop()`으로 엉뚱한 화면으로 돌아가면 안 된다.
+3. **중복 close 방어**: 같은 시트에서 close/overlay click/Escape/DOM removal이 겹쳐 `popActiveView()`가 두 번 불려도 스택이 안 무너져야 한다 → **토큰 기반**으로 방어(현재 top의 토큰과 일치할 때만 pop).
+4. **visibility/pagehide는 현재 세그먼트만 flush, 스택은 안 건드림** — 탭이 숨겨져도 active view를 pop하지 않는다. 지금 보고 있던 뷰의 시간만 한 번 보내고, 돌아오면 같은 뷰에서 이어진다.
+5. **검증은 DB 결과로, 단계마다 강제로 끊는다** — 1차(핵심 인프라 + 실제 화면 1곳) 완료 후 실제 DB 값으로 위 2~4번을 확인하고, 이상 없을 때만 다음 단계로 넘어간다. 화면이 멀쩡해도 데이터만 틀리는 게 이 영역에서 제일 위험하다는 전제.
 
-`page_sessions`(행 추가, append-only)는 그 문제가 없다. **그래서 이번 설계는 `page_sessions`에 세분화된 `page` 값만 새로 넣고, `profiles.today_seconds`/`total_minutes`(하루 총합)는 건드리지 않는다.** 총합 지표는 그대로 정확하고, "무엇을 보고 있었나"라는 새 지표만 얻는다 — 기존 지표를 깨뜨릴 위험이 없는 쪽으로 범위를 좁힌 것.
+## 재설계의 핵심 — "기존 writer"는 어느 쪽인가
+
+`page_sessions`에 실제로 쓰는 코드는 이미 **두 곳**이었다(재발견, 2026-08-18 세션 "오늘 0분" 조사 중 확인):
+
+- **`script-nav.js`의 `_send()`** — `visibilitychange:hidden` 또는 `pagehide`에서 `fetch(..., {keepalive:true})`로 씀. keepalive 덕분에 탭이 찢겨나가는 순간에도 살아남는다(실측: 다아님 케이스에서 44초가 정확히 여기로 들어갔다).
+- **`supabase-client.js`의 `_syncTimeToDBNow(insertPageSession=true)`** — `visibilitychange:hidden`에서만 DB에 쓰고, `pagehide`/`beforeunload`에서는 로컬에만 남긴다(덜 안정적). 이게 같은 순간에 `script-nav.js`와 **동시에** 발사되는 경우가 있어 이미 발견 ⑧("한 방문이 page_sessions 2행")로 기록돼 있었고, 읽는 쪽(`collapseTwinInserts`)에서 사후 접기로만 덮어놨었다.
+
+**결정**: 살아남길 writer는 `script-nav.js` 쪽이다(keepalive라 더 안정적, pagehide도 커버). `supabase-client.js`의 `_syncTimeToDBNow`는 이번에 **page_sessions insert 책임을 완전히 내려놓는다**(`insertPageSession` 파라미터·해당 블록 삭제) — profiles.today_seconds/total_minutes RPC만 남는다. 이러면 승인조건 1번이 원천적으로 지켜지고, **기존 발견 ⑧(이중 insert)도 이번 작업으로 같이 닫힌다** — 별도 작업 아님, 같은 원인.
+
+## 설계 원칙 — profiles 쪽은 왜 안 건드리나 (유지)
+
+`profiles.today_seconds`/`total_minutes`(하루 누적 총합)는 **상태 누적값**이라 fire-and-forget 재시도와 상성이 나쁘다(pagehide에서 이 값만 못 들어가는 사고가 이미 실측됨 — 억지로 고치면 이중계상 아니면 유실, 둘 중 하나를 반드시 감수해야 함). `page_sessions`(append-only)는 그 문제가 없다. **그래서 이번 설계는 `page_sessions`에 세분화된 `page` 값만 새로 넣고, profiles 쪽 총합은 그대로 둔다.**
 
 ## 변경할 대상
 
-### 1. 핵심 API — `assets/js/supabase-client.js`
+### 1. 핵심 API — `assets/js/script-nav.js` (writer 자체를 세그먼트 인식형으로 재작성)
 
-- 기존: `_syncTimeToDBNow`가 `insertPageSession=true`일 때 `page`를 `location.pathname`에서 파생([supabase-client.js:1174-1176](../assets/js/supabase-client.js#L1174-L1176)).
-- 신규: 모듈 스코프에 `_activeViewStack = []` 추가. `window.CottageDB.pushActiveView(key)` / `popActiveView()` 노출.
-  - `pushActiveView(key)`: 현재까지 누적된 시간을 **지금 라벨**(스택 top 또는 location 기반 기본값)로 먼저 flush(`_syncTimeToDBNow`를 페이지 오버라이드 인자와 함께 호출) → 스택에 `key` push → 타이머 리셋.
-  - `popActiveView()`: 지금 라벨(=방금 push한 key)로 flush → 스택 pop → 새 top(또는 기본 페이지)으로 복귀, 타이머 리셋.
-  - `_syncTimeToDBNow`에 `pageOverride` 파라미터 추가(기본값 없으면 기존 동작 그대로 — 하위호환).
-  - **`profiles.today_seconds`/`total_minutes` RPC 호출은 각 flush마다 그대로 실행**(총합은 지금처럼 계속 누적, 변경 없음). 바뀌는 건 `page_sessions.page`에 들어가는 문자열뿐.
-  - 중첩 시트(예: 게임시트 위에 게임위치 바텀시트, `openShelfSheet`)는 스택이라 자연히 해결 — push/push/…/pop/pop 순서만 지키면 됨.
-  - iframe 경계: iframe 자신은 지금처럼 추적을 계속 끈 채로 둔다(#24 재발 방지 — 이 규칙은 안 건드림). 대신 iframe이 자기 표시 상태를 `postMessage({type:'cottage-view-active', key})` / `{type:'cottage-view-inactive'}`로 부모에 알리고, **부모(index.html)가 그 메시지를 받아 자기 `pushActiveView`/`popActiveView`를 대신 호출**한다. 실제 타이머는 항상 최상위 프레임 하나만 돈다는 원칙 유지.
+기존(`_send`는 페이지 하나에 딱 1번만 발사되는 1회성 함수, [script-nav.js:866-892](../assets/js/script-nav.js#L866-L892))을 **여러 번 재호출 가능한 세그먼트 flush**로 바꾼다.
 
-### 2. 가상 페이지 키 등록 — 기존 체계 재사용
+```
+상태: _basePage(최초 location 기반 라벨, 고정) · _currentLabel · _segStart(현재 세그먼트 시작 시각)
+      · _stack = [{key, token}] · _tokenSeq · _finalized(pagehide 이후 true)
 
-`kakao-auth.js`의 `_trackPvOnce` 가상 키(예: `other-board`, `my-board-meeting`)는 **조회수**(`page_views`)만 센다. 이번 건 **체류시간**(`page_sessions`)이라 같은 이름을 공유하되 별개 호출로 `pushActiveView`도 같이 부른다. 새 키가 필요하면(게임시트·일정상세모달 등은 지금 가상 키가 아예 없음) 다음을 신설:
-  - `game-sheet` (게임시트, [game-sheet.js:595](../assets/js/game-sheet.js#L595) `openGameSheet`)
-  - `game-location-shelf` (게임위치 바텀시트, [game-sheet.js:372](../assets/js/game-sheet.js#L372) `openShelfSheet`)
-  - `day-detail` (일정 상세 모달, [day-detail.js:756](../assets/js/day-detail.js#L756) `openDayDetailModal`, [:1221](../assets/js/day-detail.js#L1221) `openDateMeetingModal`)
-  - `planner-register` (등록/수정 바텀시트, [club-schedule.html:956](../pages/club/club-schedule.html#L956) `initScheduleSheet`, [:1064](../pages/club/club-schedule.html#L1064) `initMultiSheet`)
-  - (기존 재사용) `my-board`/`other-board`/`my-board-meeting`/`my-board-growth`/`my-board-records`/`my-board-usage`/`my-board-taste`/`my-board-notif`/`my-board-voucher` — [kakao-auth.js:1959](../assets/js/kakao-auth.js#L1959), [:3007-3067](../assets/js/kakao-auth.js#L3007-L3067)
+_flushAndSwitch(nextLabel):
+  dur = round((now - _segStart)/1000)
+  prevLabel = _currentLabel; _segStart = now; _currentLabel = nextLabel
+  dur >= 3초일 때만 fetch(keepalive) 전송 — 기존 "3초 미만 무시" 문턱 유지
 
-새 키는 `page-labels.js`(`COTTAGE_PAGE_LABELS`)와 `member-analytics.js`(`PAGE_KEY_ALIASES`) 양쪽에 동시 등록 — 안 하면 관리자 화면에 slug가 그대로 노출되거나(#16 재발 패턴) 회원별 집계에서 조용히 빠진다.
+window.pushActiveView(key) -> token:
+  _finalized거나 스킵조건이면 null
+  _flushAndSwitch(key) → 지금까지 분을 이전 라벨로 전송, 새 라벨로 전환
+  token = ++_tokenSeq; _stack.push({key, token}); return token
 
-### 3. 호출부 배선 — 열 때 push, 닫을 때 pop
+window.popActiveView(token):
+  top = _stack 마지막
+  top이 없거나 top.token !== token → console.warn 후 그냥 return (스택 안 건드림, 승인조건 3)
+  _stack.pop()
+  restoreLabel = 스택에 남은 게 있으면 그 top.key, 없으면 _basePage
+  _flushAndSwitch(restoreLabel) → 승인조건 2(중첩 복귀) 자동 충족
 
-| 파일 | 함수 | push 시점 | pop 시점 |
-|---|---|---|---|
-| kakao-auth.js | `openProfilePanel`/`openOtherProfileSheet`/`openOtherMeetingSheet` | 패널 오픈 | 패널 닫기(기존 `closeTopLayer` 계열에 이미 있는 단일 닫기 경로에 편승) |
-| kakao-auth.js | `_openSubSheet` | 서브시트 오픈 | 서브시트 뒤로가기/패널 닫기 |
-| game-sheet.js | `openGameSheet`/`_openAndInitSheet` | 시트 오픈 | 시트 닫기(MutationObserver로 `.is-active` 제거 감지하는 기존 패턴 재사용) |
-| game-sheet.js | `openShelfSheet` | 오버레이 오픈 | 뒤로가기/닫기 |
-| day-detail.js | `openDayDetailModal`/`openDateMeetingModal`/`openDateScheduleModal` | 모달 오픈 | 모달 닫기(`closeTopLayer` 경유) |
-| club-schedule.html | `initScheduleSheet`/`initMultiSheet` | 바텀시트 오픈 | 닫기/저장 후 닫힘 |
-| index.html (부모) | 신규: `message` 리스너에 `cottage-view-active`/`cottage-view-inactive` 케이스 추가 | iframe이 보내는 신호 수신 시 | 동일 |
+visibilitychange (hidden): _flushAndSwitch(_currentLabel) — 같은 라벨로 "재전환"해 지금까지 분만 보내고 스택은 안 건드림(승인조건 4)
+visibilitychange (visible): _segStart = now — 숨겨져 있던 시간은 안 셈(기존 supabase-client.js의 동일 패턴과 동일 원칙)
+pagehide: _finalized=true로 잠그고 마지막 세그먼트 flush(스택 상태와 무관하게 1회)
+```
+
+`window.pushActiveView`/`window.popActiveView`는 **bare global**로 노출(CottageDB 네임스페이스 아님) — script-nav.js가 supabase-client.js보다 먼저 로드되는 페이지가 있어 로드 순서 의존을 만들지 않기 위함. 호출부는 전부 `window.pushActiveView?.(key)`로 옵셔널 체이닝(day-detail.js 기존 관례와 동일).
+
+### 2. `assets/js/supabase-client.js` — page_sessions insert 책임 제거
+
+- `_syncTimeToDBNow(userId, insertPageSession=true)` → `_syncTimeToDBNow(userId)`로 시그니처 단순화, [supabase-client.js:1173-1179](../assets/js/supabase-client.js#L1173-L1179)의 `if (insertPageSession) { ... page_sessions insert ... }` 블록 삭제.
+- 호출부 2곳([:1125](../assets/js/supabase-client.js#L1125) 헤어트비트, [:1187](../assets/js/supabase-client.js#L1187) visibilitychange) 인자 정리.
+- profiles RPC(`increment_profile_counters`) 로직은 **그대로**.
+
+### 3. 가상 페이지 키 등록 — 기존 체계 재사용
+
+`_trackPvOnce`(조회수, page_views)와 이름만 공유하고 별개로 동작. 신설 필요:
+  - `game-sheet` ([game-sheet.js:595](../assets/js/game-sheet.js#L595) `openGameSheet`)
+  - `game-location-shelf` ([game-sheet.js:372](../assets/js/game-sheet.js#L372) `openShelfSheet`)
+  - `day-detail` ([day-detail.js:756](../assets/js/day-detail.js#L756) `openDayDetailModal`, [:1221](../assets/js/day-detail.js#L1221) `openDateMeetingModal`)
+  - `planner-register` ([club-schedule.html:956](../pages/club/club-schedule.html#L956) `initScheduleSheet`, [:1064](../pages/club/club-schedule.html#L1064) `initMultiSheet`)
+  - (재사용) `my-board`/`other-board`/`my-board-meeting`/`my-board-growth`/`my-board-records`/`my-board-usage`/`my-board-taste`/`my-board-notif`/`my-board-voucher`
+
+새 키는 `page-labels.js`(`COTTAGE_PAGE_LABELS`)와 `member-analytics.js`(`PAGE_KEY_ALIASES`) 양쪽에 동시 등록.
+
+### 4. 호출부 배선 — 열 때 push, 닫을 때 pop (토큰 보관 필수)
+
+각 sheet/modal은 자기 스코프에 `let _viewToken = null;`를 두고 `_viewToken = window.pushActiveView?.('key')` / `window.popActiveView?.(_viewToken)`로 짝을 맞춘다 — 전역 변수 하나로 여러 시트가 토큰을 공유하면 안 됨(교차 오염).
+
+| 파일 | 함수 | 비고 |
+|---|---|---|
+| kakao-auth.js | `openProfilePanel`/`openOtherProfileSheet`/`openOtherMeetingSheet` | **1차 대상** — 사용 빈도 최다 |
+| kakao-auth.js | `_openSubSheet` | 2차 |
+| game-sheet.js | `openGameSheet`/`_openAndInitSheet`, `openShelfSheet` | 2차 |
+| day-detail.js | `openDayDetailModal`/`openDateMeetingModal`/`openDateScheduleModal` | 3차 |
+| club-schedule.html | `initScheduleSheet`/`initMultiSheet` | 3차 |
+| index.html (부모) | `message` 리스너에 `cottage-view-active`/`cottage-view-inactive` 추가, iframe 대신 push/pop 호출 | 3차 |
 
 ## 보존해야 할 기존 동작
 
-- `profiles.today_seconds`/`total_minutes` 값과 계산 로직 — **절대 변경 없음** (그대로 각 flush에서 누적).
-- iframe 자체 추적 차단(#24 방지 로직) — 그대로 유지, 이번 설계는 그 위에 얹는 것.
-- 기존 `page_sessions` 조회부(관리자 페이지·요약 탭) — `page` 값 종류가 늘어나는 것뿐이라 집계 자체는 자동으로 세분화된다. 단 `normalizePageKey`/`PAGE_KEY_ALIASES` 미등록 시 slug 노출 위험(위 2번 항목).
-- `openShelfSheet` 같은 중첩 스택 — push/pop 짝이 안 맞으면(예: 강제 종료 경로에서 pop 누락) 다음 전환까지 시간이 잘못된 키에 붙는다. 각 닫기 경로가 **정말 한 함수로 모여 있는지**(PROJECT_STRUCTURE.md §2-A 4번 원칙) 먼저 확인하고 그 자리 하나에 pop을 건다 — 여러 닫기 경로에 각각 심으면 #16류 누락 재발.
+- `profiles.today_seconds`/`total_minutes` — 절대 변경 없음.
+- iframe 자체 추적 차단(#24 방지) — 유지.
+- 기존 "3초 미만 세그먼트는 무시" 문턱 — 유지(세분화되며 더 자주 걸릴 수 있음, 알려진 트레이드오프로 수용).
+- `collapseTwinInserts`(읽기 측 방어) — 이번 수정으로 애초에 쌍이 안 생기지만, 남겨둔다(해가 없고 과거 데이터엔 여전히 필요).
 
-## 위험요소 — 첫 번째로 실패할 가능성이 높은 지점
+## 위험요소
 
-1. **닫기 경로 누락으로 인한 스택 어긋남**: 어떤 시트가 ESC·배경클릭·버튼 3갈래로 닫히는데 pop을 한 곳에만 걸면, 그 경로로 닫힌 다음 사용자가 보는 다음 화면 시간이 이전 시트 이름으로 계속 잡힌다. → 착수 시 각 대상 시트의 실제 닫기 경로 개수부터 grep으로 센다.
-2. **iframe postMessage 유실**: 부모가 언마운트되거나 리스너 등록 전에 iframe이 신호를 보내면(기존 `_pendingEdit` 큐잉 패턴이 이미 겪은 문제) push가 누락돼 그 구간이 통째로 "메인"으로 남는다 — 완전한 실패는 아니고 기존 수준으로 회귀할 뿐이라 안전하지만, 큐잉 처리를 빠뜨리면 안 됨.
-3. **가상 키 등록 누락**: `page-labels.js`/`PAGE_KEY_ALIASES` 둘 중 하나만 갱신하면 화면엔 라벨이 보이는데 회원별 집계에선 빠지는 식으로 반쪽 반영된다(#16과 동일 패턴).
+1. **닫기 경로 누락** — 시트가 ESC·배경클릭·버튼 3갈래로 닫히는데 pop을 한 곳에만 걸면 다음 화면 시간이 이전 라벨로 계속 잡힌다. 착수 시 각 대상의 실제 닫기 경로부터 grep.
+2. **토큰 스코프 오염** — 시트 A의 pop 호출부가 실수로 시트 B의 토큰 변수를 참조하면 잘못된 pop(무시됨, 경고만 남고 스택은 안 깨짐 — 승인조건 3이 정확히 이 상황의 안전망).
+3. **iframe postMessage 유실** — 부모 리스너 등록 전 신호 도착 시 push 누락, 그 구간은 그냥 "메인"으로 남음(회귀는 아님, 기존 수준 유지).
+4. **가상 키 등록 누락** — `page-labels.js`/`PAGE_KEY_ALIASES` 한쪽만 갱신하면 반쪽 반영.
 
-## 검증 계획
+## 검증 계획 (1차 종료 시점, DB 실측)
 
-- 새 스크립트(`scripts/verify-active-view-tracking.js`): `pushActiveView`/`popActiveView` eval 테스트 — 단일 push/pop, 중첩 2단 push/pop, pop 없이 다음 push(강제 전환) 3가지 케이스에서 `page_sessions` insert에 들어가는 `page` 값과 각 구간 duration 합이 전체 경과시간과 일치하는지 검증. `today_seconds` 누적값은 이번 변경으로 값이 달라지지 않아야 함(회귀 확인 — 위 "보존해야 할 기존 동작" 1번을 자동 검사로 확정).
-- 실브라우저로 게임시트 열기→닫기, 프로필 패널 서브시트 이동 2~3회, 플래너 바텀시트 열기→저장 시나리오에서 관리자 페이지 「페이지」 탭에 새 가상 키가 정확한 duration으로 뜨는지 육안 확인.
+- `scripts/verify-active-view-tracking.js`: script-nav.js 트래커 로직을 원문 그대로 eval해 아래 확인(음성 대조군 포함).
+  - 단일 push→pop: 두 개의 행(구간1, 구간2)이 duration 합 = 전체 경과와 일치.
+  - 중첩 2단(A push→B push→B pop→A pop): 복귀 라벨이 정확히 A인지, 3개 행의 라벨 순서가 [원본→A→B→A→원본] 구조로 맞는지.
+  - **중복 pop**: 같은 토큰으로 popActiveView 2번 호출 시 두 번째는 no-op(스택 길이·라벨 불변) 확인.
+  - **stale 토큰**: 이미 pop된 토큰으로 다시 pop 호출 시 no-op.
+  - **visibility hidden→visible**: hidden 시 flush 발생(라벨 불변), 스택 길이 불변, visible 복귀 후 다음 pop이 여전히 올바른 라벨로 돌아가는지.
+  - **3초 미만 세그먼트**: 행이 안 생기는지(기존 문턱 유지 확인).
+  - **writer 단일성**: 코드베이스 전체에서 `page_sessions` INSERT를 시도하는 지점이 이 파일 한 곳뿐인지 grep으로 재확인(supabase-client.js 쪽 삭제 확인 포함).
+- **1차 끝나면 여기서 멈춘다.** 위 검증이 전부 통과하고, 실브라우저로 프로필 패널 열기→서브시트 이동→닫기 시나리오를 1회 실행해 관리자 페이지 「페이지」 탭에 `my-board`류 duration이 정확히 찍히는지 확인한 뒤에만 2차(게임시트 등)로 진행한다.
 
-## 실행 단위 — 한 세션에 다 안 되면 이렇게 자른다
+## 실행 단위
 
-1차(핵심 인프라): supabase-client.js API + page-labels.js/member-analytics.js 키 등록 + 검증 스크립트. 이것만으로는 화면 변화 없음(아무도 아직 안 부르므로) — 그래도 노드 테스트로 닫을 수 있는 독립 단위.
-2차: kakao-auth.js 배선(프로필 패널류) — 사용자가 가장 자주 여는 화면이라 우선순위 최상단.
-3차: game-sheet.js·day-detail.js·club-schedule.html 배선 + iframe postMessage.
+**1차(핵심 인프라 + 실제 화면 1곳) — ✅ 완료 (2026-08-18)**: script-nav.js 재작성 + supabase-client.js 정리 + page-labels.js/member-analytics.js 키 확인(`my-board`류는 이미 있어 신규 등록 불필요, 게임시트 등 신규 키는 2차) + kakao-auth.js 프로필 패널(`openProfilePanel`/`openOtherProfileSheet`/`openOtherMeetingSheet`, 닫기 경로 4곳 전부: ✕·배경클릭·뒤로가기·재오픈 시 강제치우기) 배선.
 
-각 차수 끝에 커밋 + 관리자 페이지 육안 확인 1회(Vertical slice 원칙).
+**검증 결과**:
+- `scripts/verify-active-view-tracking.js`(Node, DB 안 건드림) — 9개 테스트 전부 통과(단일 push/pop·중첩 2단 복귀·중복 pop 방어·stale 토큰 방어·visibility flush-without-pop·3초 문턱·트래킹 스킵·단일 writer 확인·profiles 로직 무변경) + `--negctl`로 3초 문턱이 실제로 걸려 있음을 확인(문턱 없앤 트래커에선 검출됨).
+- `scripts/verify-active-view-live.js`(Playwright, 운영 DB 쓰기 0건 — GET 이외 전부 route.abort) — 로컬 서버(`verify-active-view.local`→127.0.0.1 host-resolver 매핑으로 `_isLocalhost()` 스킵 우회, 실서비스 도메인은 아직 미배포라 사용 불가) 실브라우저에서 `window.pushActiveView`/`popActiveView` 실재 확인 + 실제 fetch(keepalive) 경로로 세그먼트 3개(index/index/verify-live-test-view) 전환, 차단된 POST payload에서 라벨·duration_sec·session_key 전부 정상 확인. 콘솔 에러는 차단이 유발한 `_startAnonHeartbeat`(무관) 2건 외 0건.
+- **미검증**: 실제 로그인 후 프로필 패널을 클릭으로 열고 닫는 UI 시나리오(로그인 게이트가 있어 자동화 스크립트로는 실행 불가 — 가짜 로그인은 운영 DB에 실제 프로필 행을 만들어 금지). 사용자가 실제로 로그인해 내 보드를 한 번 열고 닫아주면 관리자 페이지 「페이지」 탭에서 `my-board` duration이 찍히는지 읽기 전용으로 확인 가능.
+
+**2차**: game-sheet.js(게임시트·게임위치) 배선 + 재검증.
+**3차**: day-detail.js·club-schedule.html 배선 + iframe postMessage + 재검증.
+
+각 차수 끝에 커밋 + 관리자 페이지 육안 확인 1회.

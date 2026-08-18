@@ -1091,7 +1091,6 @@ window._cottageSess = (function () {
 
   // ── 체류 시간 누적 ──────────────────────────────────────
   let _sessionStart = Date.now();
-  let _sessionEnterAt = Date.now();
   let _sessionUserId = null;
   // 페이지 최초 진입 시점의 referrer 캡처 (이후 navigate하면 URL이 바뀌므로 여기서만 읽음)
   const _sessionReferrer = (() => {
@@ -1122,7 +1121,7 @@ window._cottageSess = (function () {
     if (_heartbeatTimer) return;
     _heartbeatTimer = setInterval(async () => {
       if (!_sessionUserId || document.hidden) return;
-      await _syncTimeToDBNow(_sessionUserId, false);
+      await _syncTimeToDBNow(_sessionUserId);
     }, 60 * 1000);
   }
 
@@ -1145,12 +1144,15 @@ window._cottageSess = (function () {
     return window._cottageSess.get(userId).timeSec || 0;
   }
 
-  // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/heartbeat에서 호출
-  // insertPageSession: 탭 숨김처럼 실제 페이지 이탈 시에만 true
-  async function _syncTimeToDBNow(userId, insertPageSession = true) {
+  // 당일 누적 시간을 즉시 DB에 반영 — visibilitychange/heartbeat에서 호출.
+  // 🚨 page_sessions는 여기서 더 이상 안 쓴다(2026-08-18) — writer는 script-nav.js
+  //    하나로 통일했다(PLAN_active_view_tracking.md 승인조건). 예전엔 이 함수도
+  //    visibilitychange에서 page_sessions에 동시에 insert해서 한 방문이 2행 되는
+  //    사고(발견 ⑧)가 있었다 — 이 함수는 이제 profiles.today_seconds/total_minutes
+  //    누적만 책임진다.
+  async function _syncTimeToDBNow(userId) {
     if (!userId) return;
     if (_shouldSkipSessionTracking()) return;
-    const enterAt = new Date(_sessionEnterAt).toISOString(); // flush 전 세션 진입 시각 캡처
     _flushTime(userId); // 현재 세션 시간을 localStorage에 먼저 저장
     const secs = _popAccumulatedSecs(userId);
     if (secs <= 0) return;
@@ -1169,14 +1171,6 @@ window._cottageSess = (function () {
         const s = window._cottageSess.get(userId);
         s.timeSec = 0;
         window._cottageSess.set(userId, s);
-        _sessionEnterAt = Date.now();
-        if (insertPageSession) {
-          const page = typeof window !== 'undefined'
-            ? (window.location?.pathname?.split('/').filter(Boolean).pop()?.replace('.html', '') || 'index')
-            : 'unknown';
-          const referrer = _sessionReferrer;
-          db.from('page_sessions').insert({ page, user_id: userId, session_key: getSessionKey(), duration_sec: secs, entered_at: enterAt, referrer }).then(({ error }) => { if (error) console.error('[_syncTimeToDBNow] page_sessions', error); });
-        }
       }
     } catch (err) { console.error('[_syncTimeToDBNow]', err);}
   }
@@ -1185,7 +1179,7 @@ window._cottageSess = (function () {
     document.addEventListener('visibilitychange', () => {
       // 탭 숨김 시 DB에 즉시 반영 (async이므로 페이지 살아있는 동안 완료)
       if (document.hidden && _sessionUserId) _syncTimeToDBNow(_sessionUserId);
-      else { _sessionStart = Date.now(); _sessionEnterAt = Date.now(); window._cottageSessionStart = _sessionStart; }
+      else { _sessionStart = Date.now(); window._cottageSessionStart = _sessionStart; }
     });
     window.addEventListener('beforeunload', () => {
       // 페이지 종료 시 best-effort 반영 (완료 보장 불가, localStorage가 백업)
@@ -1210,7 +1204,6 @@ window._cottageSess = (function () {
     if (_sessionUserId) _flushTime(_sessionUserId);
     _sessionUserId = userId;
     _sessionStart = Date.now();
-    _sessionEnterAt = Date.now();
     window._cottageSessionStart = _sessionStart;
     _ensureHeartbeat();
   }

@@ -1938,7 +1938,9 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 있으니 닫기"로 처리하면, 남의 보드만 닫히고 내 보드는 안 열린 채 끝난다(2026-08-09
   // 실사용 발견 — 남의 보드 참여자 목록에서 자기 자신 클릭 시 "그냥 꺼져버림").
   const _existingWasReadOnly = existing?.classList.contains('profile-panel--readonly');
-  if (existing) { existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
+  // 기존 패널을 자기 close 핸들러를 안 거치고 강제로 치우는 경로 — 그 패널이 push해둔
+  // activeView도 여기서 같이 pop해야 한다(토큰은 DOM 노드에 저장돼 있어 이 클로저 밖에서도 접근 가능).
+  if (existing) { window.popActiveView?.(existing._viewToken); existing.remove(); document.getElementById('profileSubSheet')?.remove(); if (!readOnly && !_existingWasReadOnly) return; }
 
   const panel = document.createElement('div');
   panel.id = 'profilePanel';
@@ -1957,13 +1959,19 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   </div>`;
   document.body.appendChild(panel);
   _trackPvOnce(readOnly ? 'other-board' : 'my-board');
-  panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); panel.remove(); });
-  panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); panel.remove(); } });
+  // 활성 뷰 체류시간 추적(2026-08-18, PLAN_active_view_tracking.md 1차) — 토큰을 패널
+  // DOM 노드에 저장한다(클로저 변수가 아님). 위 "기존 패널 강제 치우기" 경로처럼 **다른**
+  // openProfilePanel 호출이 이 패널을 닫는 경우에도 토큰을 꺼내 pop할 수 있어야 하기 때문.
+  panel._viewToken = window.pushActiveView?.(readOnly ? 'other-board' : 'my-board') ?? null;
+  const _popView = () => window.popActiveView?.(panel._viewToken);
+  panel.querySelector('.profile-panel-close').addEventListener('click', () => { document.getElementById('profileSubSheet')?.remove(); _popView(); panel.remove(); });
+  panel.addEventListener('click', e => { if (e.target === panel) { document.getElementById('profileSubSheet')?.remove(); _popView(); panel.remove(); } });
   panel.querySelector('.profile-panel-header').addEventListener('click', e => { if (!e.target.closest('button')) panel.querySelector('.profile-panel-body')?.scrollTo({top:0,behavior:'smooth'}); });
   // ⚠️ 자기 패널을 먼저 지운 뒤 복귀시킨다. 순서가 바뀌면 위 토글 가드(`if (existing) … if (!readOnly) return`)에
   // 걸려 내 보드가 안 열리고 화면이 텅 빈다.
   panel.querySelector('.profile-panel-back')?.addEventListener('click', () => {
     document.getElementById('profileSubSheet')?.remove();
+    _popView();
     panel.remove();
     // restoreScroll=true(보던 지점으로) + noAnim=true(올라오는 연출 없이) — 원래 있던 시트로 돌아가는 것이므로
     if (backTo.type === 'gameSheet') { window.ensureGameSheet?.(); window.openGameSheet?.(backTo.gameKey, true, null, true); }

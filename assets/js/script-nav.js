@@ -811,15 +811,22 @@ function bindGameCardEvents(){
 
 
 /* =========================
-   # PAGE SESSION TRACKER
-   페이지별 체류 시간 + 유입 경로 기록 → page_sessions 테이블
+   # PAGE SESSION TRACKER (+ 활성 뷰 세그먼트, 2026-08-18)
+   페이지/뷰별 체류 시간 + 유입 경로 기록 → page_sessions 테이블
+   🚨 이 파일이 page_sessions에 **실제 지속시간(duration_sec>0)을 쓰는 유일한 writer**다
+      (승인조건, PLAN_active_view_tracking.md). supabase-client.js의 _syncTimeToDBNow는
+      profiles.today_seconds/total_minutes만 갱신하고 page_sessions는 더 이상 안 건드린다 —
+      예전엔 두 곳이 같이 써서 한 방문이 2행 되던 사고(발견 ⑧, 로그인 쪽)가 있었다.
+      ⚠️ 비로그인 방문자의 `_startAnonHeartbeat`(supabase-client.js)가 넣는 duration_sec=0
+      "입장 마커" 행은 별개다 — 명 집계용으로 의도적으로 유지되는 기존 구조(발견 ⑧ 문서에
+      이미 기록됨)라 이번 변경과 무관, 안 건드림. 새 **지속시간** writer가 필요해도 이 파일을
+      확장할 것, 별도 경로 금지.
 ========================= */
 (function() {
-  const _entryTime = Date.now();
   // page_sessions.page에는 **슬러그**를 넣는다(#14, 2026-07-20). 예전엔 한글 라벨을 넣어
   // heartbeat 경로(슬러그)와 갈라졌고, 라벨을 개명할 때마다 같은 페이지가 새 버킷으로
   // 쪼개졌다(`가격 & 규칙` 174행 ↔ `가격·이용안내` 65행). 표시 라벨은 읽는 쪽에서 붙인다.
-  const _page = (window.COTTAGE_PAGE_SLUG || (p => p))(location.pathname);
+  const _basePage = (window.COTTAGE_PAGE_SLUG || (p => p))(location.pathname);
   // page_sessions.referrer에는 **유입 소스**를 넣는다(#28, 2026-07-21). 예전엔 여기서 referrer
   // 페이지의 내부 라벨/경로를 넣었는데(`메인`·`/pages/info/guide.html`), 그 컬럼을 읽는
   // categorizeRef는 호스트·utm 토큰을 기대하므로 전부 null → 「직접 방문」으로 접혔다.
@@ -847,6 +854,9 @@ function bindGameCardEvents(){
   //    #24를 고칠 때 그 파일만 고쳐져 이 사본이 남았다 — 이름이 같아 고쳐진 것처럼 보이던 자리다.
   //    가르는 기준은 그 파일에 적힌 그대로다: "iframe 안에서 일어나도 진짜인가?"
   //    체류·방문은 사람·탭 단위라 부모 1회가 맞고, 사용자 행동(trackEvent)은 프레임을 안 본다.
+  // 🚨 iframe 자신은 이 조기 return 때문에 window.pushActiveView/popActiveView가 아예
+  //    정의되지 않는다(의도됨) — iframe은 postMessage로 부모에게 알리고, 부모가 대신
+  //    push/pop을 호출한다(PLAN_active_view_tracking.md 3차, 아직 미배선).
   function _isEmbeddedFrame() {
     try { return window.top !== window.self; }
     catch (_) { return true; } // 크로스오리진 차단 = 남의 프레임 안 = 추적 안 함
@@ -862,15 +872,20 @@ function bindGameCardEvents(){
     return k;
   }
 
-  let _sent = false;
-  function _send() {
-    if (_sent) return;
-    if (_shouldSkipSessionTracking()) return;
+  // ── 활성 뷰 세그먼트 상태 ──────────────────────────────────────
+  // _currentLabel: 지금 시간이 귀속되는 중인 라벨(기본 _basePage, push되면 그 key로 전환)
+  // _segStart: 현재 세그먼트가 시작된 시각(ms) — 다음 flush의 entered_at·duration 기준
+  // _stack: 열려 있는 뷰들의 LIFO. {key, token} — token은 중복/어긋난 pop을 무시하기 위한 식별자
+  // _finalized: pagehide 이후 true — 이후 push/pop/visibilitychange는 전부 무시(마지막 flush 보존)
+  let _currentLabel = _basePage;
+  let _segStart = Date.now();
+  const _stack = [];
+  let _tokenSeq = 0;
+  let _finalized = false;
+
+  function _sendRow(page, dur, enteredAtMs) {
     const cfg = window.SUPABASE_CONFIG;
     if (!cfg?.url || !cfg?.anonKey) return;
-    const dur = Math.round((Date.now() - _entryTime) / 1000);
-    if (dur < 3) return;
-    _sent = true;
     fetch(cfg.url + '/rest/v1/page_sessions', {
       method: 'POST',
       headers: {
@@ -880,18 +895,72 @@ function bindGameCardEvents(){
         'Prefer': 'return=minimal',
       },
       body: JSON.stringify({
-        page: _page,
+        page,
         referrer: _ref || null,
         user_id: _getUid(),
         session_key: _getSk(),
         duration_sec: dur,
-        entered_at: new Date(_entryTime).toISOString(),
+        entered_at: new Date(enteredAtMs).toISOString(),
       }),
       keepalive: true,
     }).catch(() => {});
   }
 
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') _send(); });
-  window.addEventListener('pagehide', _send);
+  // 지금 세그먼트를 flush하고 라벨을 nextLabel로 전환. 같은 값을 주면 "재시작"만 하는
+  // 것 — visibilitychange:hidden이 이 방식으로 스택은 안 건드리고 시간만 끊어 보낸다.
+  // 3초 미만 세그먼트는 기존 _send()의 문턱을 그대로 유지해 무시(노이즈 제거).
+  function _flushAndSwitch(nextLabel) {
+    if (_finalized) return;
+    const enteredAtMs = _segStart;
+    const dur = Math.round((Date.now() - _segStart) / 1000);
+    _segStart = Date.now();
+    const prevLabel = _currentLabel;
+    _currentLabel = nextLabel;
+    if (dur >= 3) _sendRow(prevLabel, dur, enteredAtMs);
+  }
+
+  // 열림 — 지금까지 분을 이전 라벨로 보내고 key로 전환, 스택에 push. 반환하는 token을
+  // 호출부가 **자기 스코프 변수**에 보관했다가 닫을 때 popActiveView(token)으로 넘겨야
+  // 한다(전역 변수 하나를 여러 시트가 공유하면 교차 오염됨).
+  window.pushActiveView = function (key) {
+    if (_shouldSkipSessionTracking() || _finalized || !key) return null;
+    _flushAndSwitch(key);
+    const token = ++_tokenSeq;
+    _stack.push({ key, token });
+    return token;
+  };
+
+  // 닫힘 — token이 지금 스택 맨 위와 일치할 때만 pop한다. 같은 시트가 close·배경클릭·
+  // ESC 등 여러 경로로 겹쳐 두 번 불려도, 두 번째 호출의 token은 이미 스택에서 빠진
+  // 뒤라 조용히 무시된다(경고만 로그) — 스택이 절대 안 무너진다.
+  window.popActiveView = function (token) {
+    if (_shouldSkipSessionTracking() || _finalized) return;
+    const top = _stack[_stack.length - 1];
+    if (!top || top.token !== token) {
+      console.warn('[popActiveView] stale/mismatched token — 무시(스택 보존)', { expected: top?.token ?? null, got: token });
+      return;
+    }
+    _stack.pop();
+    const restoreLabel = _stack.length ? _stack[_stack.length - 1].key : _basePage;
+    _flushAndSwitch(restoreLabel);
+  };
+
+  document.addEventListener('visibilitychange', () => {
+    if (_finalized) return;
+    if (document.visibilityState === 'hidden') {
+      // 지금 보고 있던 뷰(스택 top 또는 기본 페이지)의 시간만 끊어 보낸다 — pop 안 함,
+      // 스택은 그대로 둬서 돌아오면 같은 뷰에서 이어진다.
+      _flushAndSwitch(_currentLabel);
+    } else {
+      // 숨겨져 있던 시간은 안 센다 — 다시 보이는 시점부터 재시작.
+      _segStart = Date.now();
+    }
+  });
+  window.addEventListener('pagehide', () => {
+    if (_finalized) return;
+    _finalized = true;
+    const dur = Math.round((Date.now() - _segStart) / 1000);
+    if (dur >= 3) _sendRow(_currentLabel, dur, _segStart);
+  });
 })();
 
