@@ -1625,6 +1625,18 @@ function _bindNotifSubsheet(subBody, ctx) {
             const isHidden = moreList.classList.toggle('is-hidden');
             this.textContent = isHidden ? `외 ${this.dataset.more}건 더 보기 ▾` : '접기 ▴';
           });
+          // "신규 회원" 묶음 알림의 "외 N명"이 누군지 안 보이던 문제(2026-08-19 사용자 지적) —
+          // 클릭하면 숨겨둔 나머지 이름(각각 클릭 시 그 사람 보드로 이동)을 펼친다.
+          // e.target.closest('button, a')에서 li 클릭 위임이 이미 막히므로 stopPropagation은 방어용.
+          subBody.querySelectorAll('.notif-member-toggle').forEach(btn => {
+            btn.addEventListener('click', e => {
+              e.stopPropagation();
+              const rest = btn.nextElementSibling;
+              if (!rest || !rest.classList.contains('notif-member-rest')) return;
+              const isHidden = rest.classList.toggle('is-hidden');
+              btn.textContent = isHidden ? `외 ${btn.dataset.more}명` : '접기';
+            });
+          });
           // ⚠️ 「외 N건 더 보기」로 접힌 9번째부터는 형제 <ul>(.profile-notif-more-list)에 있다 —
           //    .profile-notif-list만 훑으면 그 항목들은 클릭이 조용히 안 먹는다(2026-07-21 발견).
           subBody.querySelectorAll('.profile-notif-list li.is-clickable, .profile-notif-more-list li.is-clickable').forEach(li => {
@@ -2298,10 +2310,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const shownCount = Math.min(n.names.length, MAX_NOTIF_NAMES);
       const rest = n.names.length - shownCount;
       const shownLinks = n.names.slice(0, shownCount).map(nameLink).join(', ');
+      // "외 N명"이 누군지 안 보이던 문제(2026-08-19 사용자 지적) — 접힌 나머지도 이름+링크로
+      // 보여주되 한 줄이 끝없이 늘어지지 않도록 토글 뒤에 숨겨둔다. 펼쳐진 이름도
+      // nameLink()를 그대로 써서 클릭하면 그 사람 보드로 이동(기존 5명과 동일 동작).
+      const restToggle = rest > 0
+        // ⚠️ .slice(shownCount).map(nameLink)로 쓰면 안 된다 — map의 인덱스가 잘라낸
+        // 배열 기준으로 0부터 다시 시작해 n.userIds[i]가 엉뚱한(앞쪽 5명의) uid를 가리킨다.
+        ? `<button class="notif-member-toggle" type="button" data-more="${rest}">외 ${rest}명</button><span class="notif-member-rest is-hidden">, ${n.names.slice(shownCount).map((name, i) => nameLink(name, i + shownCount)).join(', ')}</span>`
+        : '';
       const desc = n.count === 1
         ? `${nameLink(n.names[0], 0)}님이 새로 가입했어요`
         : rest > 0
-          ? `${_period}${shownLinks} 외 ${rest}명이 새로 가입했어요`
+          ? `${_period}${shownLinks} ${restToggle}이 새로 가입했어요`
           : `${_period}${shownLinks}님이 새로 가입했어요`;
       return `<li class="${cls}">${_card('🎉', '신규 회원', desc)}${readBtn}</li>`;
     }
