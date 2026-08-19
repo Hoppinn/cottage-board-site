@@ -2362,7 +2362,12 @@
             const person = pp.get(pid);
             if (!person._days.has(day)) { person._days.add(day); person.visits++; }
           }
-          const key = (r.user_id || 'pv') + '|' + pageKey + '|' + day;
+          // 🚨 여기 r.user_id를 그대로 쓰면(비회원은 항상 null) 서로 다른 비회원 세션이 전부
+          // 같은 키('pv|page|day')로 뭉개져 방문N이 실제보다 적게 잡히는데, 바로 위 pagePeople은
+          // pid(anon:session_key)로 세션별로 갈라 넣고 있어 명 수는 정확하다 — 그 결과 "방문
+          // 2인데 명은 4"처럼 명이 방문보다 커지는 모순이 났다(2026-08-19 육안 점검에서 발견,
+          // 첫 번째 루프는 pid를 써서 이 버그가 없다 — 여기만 짝이 안 맞았다).
+          const key = (pid || 'pv') + '|' + pageKey + '|' + day;
           if (seen2.has(key)) continue;
           seen2.add(key);
           pageUniq[pageKey] = (pageUniq[pageKey] || 0) + 1;
