@@ -19,6 +19,8 @@
     'other-board': '다른 회원 보드',
     // PLAN_active_view_tracking.md 2차(2026-08-19) — 게임시트/게임위치 선반도 활성 뷰로 추적.
     'game-sheet': '게임 정보 시트', 'game-location-shelf': '게임 위치(시트)',
+    // PLAN_active_view_tracking.md 3차(2026-08-19) — 이날 모임 상세·플래너 등록/수정 모달.
+    'day-detail': '이날 모임 상세', 'planner-register': '모임 플래너(등록/수정)',
   };
 
   // pathname → slug. `page_sessions.page`에 저장되는 값은 **항상 이 함수의 결과**다.

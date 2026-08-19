@@ -419,6 +419,25 @@
   `;
   document.head.appendChild(s);
 
+  // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — openDateScheduleModal·
+  // openDayDetailModal·openDatePreviewModal·openDateMeetingModal 4개가 전부 같은 #__ddModal
+  // 오버레이를 공유한다(한쪽이 열리면 위쪽 document.getElementById('__ddModal')?.remove()로
+  // 다른 쪽을 대체). "이날 모임 상세" 한 뷰로 보고, 넷 중 아무거나로 전환돼도 재-push 안
+  // 하게 가드한다(game-sheet.js `_ensureGameSheetViewToken`과 같은 패턴).
+  let _ddViewToken = null;
+  let _ddViewActive = false;
+  function _ensureDdViewToken() {
+    if (_ddViewActive) return;
+    _ddViewActive = true;
+    _ddViewToken = window.pushActiveView?.('day-detail') ?? null;
+  }
+  function _popDdViewToken() {
+    if (!_ddViewActive) return;
+    window.popActiveView?.(_ddViewToken);
+    _ddViewActive = false;
+    _ddViewToken = null;
+  }
+
   // GS5: 정본 위임 (supabase-client.js의 window.escH).
   // ⚠️ 호출시점 참조 — club-schedule.html이 day-detail.js를 supabase-client.js보다 먼저 로드하므로
   //    IIFE 실행 시점 스냅샷(const esc = window.escH)은 undefined가 된다.
@@ -690,6 +709,7 @@
     let _latestMyGames = null;
     const closeEl = () => {
       if (_schedDirty) opts?.onDirtyClosed?.(_latestMyGames);
+      _popDdViewToken();
       el.remove();
     };
 
@@ -706,6 +726,7 @@
 
     renderModal('<div class="dd-loading">불러오는 중…</div>');
     document.body.appendChild(el);
+    _ensureDdViewToken();
 
     try {
       const [votes, voteGames] = await Promise.all([
@@ -768,7 +789,8 @@
       </div>
     </div>`;
     document.body.appendChild(el);
-    const close = () => el.remove();
+    _ensureDdViewToken();
+    const close = () => { _popDdViewToken(); el.remove(); };
     el.querySelector('.dd-close-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
   };
@@ -802,7 +824,8 @@
       </div>
     </div>`;
     document.body.appendChild(el);
-    const close = () => el.remove();
+    _ensureDdViewToken();
+    const close = () => { _popDdViewToken(); el.remove(); };
     el.querySelector('.dd-x-btn').addEventListener('click', close);
     el.addEventListener('click', e => { if (e.target === el) close(); });
     // 참여자 이름 클릭 → 해당 유저 모임 보드 (홈 미리보기와 동일)
@@ -842,6 +865,14 @@
   // (주차 오프셋·등록/수정 목적지)를 전부 선언(CLAUDE.md iframe 재사용 원칙).
   let _pmFrame = null, _pmReady = false, _pmPending = null, _pmDirty = false, _pmOnDirty = null;
   let _pmAwaitingReveal = false; // 등록/수정(edit·register) 진입 시 시트가 실제로 뜬 뒤에만 박스를 드러낸다
+  // 활성 뷰 체류시간 추적(3차) — 이 모달은 iframe(club-schedule.html?embed=true) 안에서
+  // 실제 등록/수정 UI가 그려지지만, 그 iframe은 임베드라 자체 트래킹이 원천 차단돼 있다
+  // (#24 방지, "보존해야 할 기존 동작" 참조) — 그래서 push/pop은 **부모(day-detail.js가
+  // 실행 중인 window)** 쪽에서, "박스가 실제로 보이는 순간"인 _pmReveal 기준으로 건다.
+  // _pmReveal은 같은 박스가 열린 채로 다른 날짜를 다시 여는 경우 두 번 불릴 수 있어
+  // (재선언만 하고 새 cottage-sheet-shown을 다시 기다림) active 플래그로 재-push을 막는다.
+  let _pmViewToken = null;
+  let _pmViewActive = false;
   function _pmDeclare(opts) {
     const w = _pmFrame?.contentWindow;
     if (!w) return;
@@ -856,6 +887,7 @@
     ov.classList.add('is-open');
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', _pmEsc);
+    if (!_pmViewActive) { _pmViewActive = true; _pmViewToken = window.pushActiveView?.('planner-register') ?? null; }
   }
   function _pmCloseModal() {
     const ov = document.getElementById('__plannerModal');
@@ -864,6 +896,7 @@
     ov.classList.remove('is-open');
     document.body.style.overflow = '';
     document.removeEventListener('keydown', _pmEsc);
+    if (_pmViewActive) { window.popActiveView?.(_pmViewToken); _pmViewActive = false; _pmViewToken = null; }
     if (_pmDirty) { _pmDirty = false; const cb = _pmOnDirty; _pmOnDirty = null; cb?.(); }
   }
   window.openPlannerModal = function (opts = {}) {
@@ -1278,9 +1311,10 @@
     </div>`;
 
     document.body.appendChild(el);
+    _ensureDdViewToken();
     const closeBtn = el.querySelector('.dd-close-btn');
-    closeBtn.addEventListener('click', () => el.remove());
-    el.addEventListener('click', e => { if (e.target === el) el.remove(); });
+    closeBtn.addEventListener('click', () => { _popDdViewToken(); el.remove(); });
+    el.addEventListener('click', e => { if (e.target === el) { _popDdViewToken(); el.remove(); } });
 
     // 참여자 닉네임 클릭 → 그 사람 모임 보드 (Phase D 진입점 규칙: 모임 참여자 = openOtherMeetingSheet)
     // 보드는 이 모달 위에 겹쳐 뜬다(--z-profile 9100 > .dd-overlay--under-board 9050) —

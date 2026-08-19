@@ -1463,6 +1463,14 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
   let preloaded = false;
   let pendingTab = null;
   let iframeLightboxOpen = false;
+  // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — 이 모달은 game-reviews.html을
+  // embed=true iframe으로 보여준다. iframe 내부는 _isEmbeddedFrame() 가드로 자기 트래킹이
+  // 이미 꺼져 있으니(#24 방지), 부모(이 파일)가 대신 push/pop한다. 새 가상 키를 만들지 않고
+  // 기존 실페이지 키 'game-reviews'를 그대로 쓴다 — 직접 이동해서 보든 이 팝업으로 보든
+  // 같은 화면이라 같은 라벨이 맞다(V2_ONLY_PAGE_KEYS엔 추가하지 않는다 — 이미 v1부터 있던
+  // 진짜 페이지 키라 추가하면 v2 cutoff 계산이 과거 v1 방문까지 "v2 마커"로 오인한다).
+  let _recordModalViewToken = null;
+  let _recordModalViewActive = false;
 
   function preloadIfLoggedIn() {
     if (preloaded || !window.getKakaoUser?.()) return;
@@ -1478,6 +1486,7 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    if (!_recordModalViewActive) { _recordModalViewActive = true; _recordModalViewToken = window.pushActiveView?.('game-reviews') ?? null; }
 
     if (frame.classList.contains('is-ready')) {
       if (tab) frame.contentWindow?.postMessage({ type: 'cottage-switch-tab', tab }, '*');
@@ -1494,6 +1503,7 @@ window.addEventListener('cottage-record-changed', initRecentPlay);
     modal.classList.remove('is-open');
     document.body.style.overflow = '';
     pendingTab = null;
+    if (_recordModalViewActive) { window.popActiveView?.(_recordModalViewToken); _recordModalViewActive = false; _recordModalViewToken = null; }
     // 내부 탐색으로 game-reviews에서 이탈한 경우에만 재로드 (src 속성은 내부 탐색 시 불변)
     const curPath = frame.contentWindow?.location?.pathname ?? '';
     if (!curPath.endsWith('game-reviews.html')) {
@@ -1607,6 +1617,15 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
   if (!modal || !openBtn) return;
 
   let preloaded = false;
+  // 활성 뷰 체류시간 추적(3차) — club-schedule.html?embed=true를 iframe으로 보여주는 홈 전용
+  // 모달. day-detail.js의 #__plannerModal(같은 iframe 소스, 다른 진입점)과 같은 이유로
+  // 'planner-register' 키를 공유한다 — 등록/수정 빠른진입뿐 아니라 주간뷰만 보는 일반 오픈도
+  // "플래너를 보고 있다"는 점은 같아 굳이 키를 더 쪼개지 않는다(reveal 지점이 두 곳 — 일반
+  // openModal / 빠른진입 cottage-sheet-shown — 이라 active 플래그로 재-push을 막는다).
+  let _viewToken = null;
+  let _viewActive = false;
+  function _ensureView() { if (_viewActive) return; _viewActive = true; _viewToken = window.pushActiveView?.('planner-register') ?? null; }
+  function _popView() { if (!_viewActive) return; window.popActiveView?.(_viewToken); _viewActive = false; _viewToken = null; }
 
   function preload() {
     if (preloaded) return;
@@ -1622,6 +1641,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     modal.setAttribute('aria-hidden', 'false');
     modal.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    _ensureView();
     if (frame.classList.contains('is-ready')) {
       if (!skipReset) frame.contentWindow?.postMessage({ type: 'cottage-reset-week', offset: 0 }, '*');
     } else {
@@ -1655,6 +1675,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     //    그 사이 is-quick-entry가 빠지면 .planner-sheet-panel이 흰 480px 박스(background:#fff)로
     //    되돌아가 슬라이드·페이드하며 "플래너 모달이 켜졌다 꺼짐". 정리는 openModal(정상 오픈)에서.
     document.body.style.overflow = '';
+    _popView();
     if (_meetingDirty) { _meetingDirty = false; _meetingReload?.(); }
   }
 
@@ -1688,6 +1709,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       modal.setAttribute('aria-hidden', 'false');
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
+      _ensureView();
     }
     if (e.data?.type === 'cottage-quick-entry-closed') {
       closeModal();

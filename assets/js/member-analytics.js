@@ -122,6 +122,10 @@
     'my-board-voucher', 'my-board-notif', 'my-board-usage', 'my-board-meeting',
     // 2차(2026-08-19)에서 신규 배선 — 위 🚨 주석의 지시대로 여기도 같이 추가.
     'game-sheet', 'game-location-shelf',
+    // 3차(2026-08-19) — day-detail.js 4개 모달 + club-schedule.html 등록시트 + index.html
+    // 홈 전용 플래너 모달, 전부 'day-detail'/'planner-register' 두 키로 수렴(본문 주석 참조).
+    // 'game-reviews'는 실페이지 키를 재사용한 것이라 여기 추가하지 않는다(v2 cutoff 오염 방지).
+    'day-detail', 'planner-register',
   ]);
 
   // rows(정규화된 page_sessions)에서 v2 시작 시각(entered_at, ISO 문자열)을 계산.

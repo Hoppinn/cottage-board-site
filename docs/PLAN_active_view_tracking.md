@@ -129,9 +129,16 @@ pagehide: _finalized=true로 잠그고 마지막 세그먼트 flush(스택 상�
 **2차(game-sheet.js: 게임시트·게임위치 선반) — ✅ 완료 (2026-08-19)**: 새 가상 키 `game-sheet`(정보+기록 시트, `#gameSheet` 오버레이 공유)·`game-location-shelf`(선반 오버레이) 신설(page-labels.js·member-analytics.js `V2_ONLY_PAGE_KEYS` 동시 등록). `_ensureGameSheetViewToken()` 가드로 정보↔기록 전환 시 재-push 안 하게 처리(같은 뷰), `closeGameSheet()`에서 pop(닫기 경로는 이 함수 하나로 이미 수렴돼 있어 위험요소①이 해당 없었음 — dim/✕/버튼 3곳 전부 확인). 선반은 토큰을 오버레이 DOM 노드에 저장(kakao-auth.js 패널과 동일 패턴), 뒤로가기·배경클릭·"기존 오버레이 강제 치우기" 3곳에서 pop. 선반 안에서 게임 클릭 시 게임시트가 **중첩 push**되고(선반은 안 닫히고 뒤에 숨을 뿐), 게임시트 닫힘이 자동으로 선반을 스택 top으로 복원 — 별도 배선 불필요.
   - **검증**: script-nav.js 트래커를 원문 eval해 두 시나리오 확인(스크래치패드 임시 스크립트, 커밋 안 함) — ①게임시트 정보→기록→정보 전환 시 push 1번만(15초 단일 행, 재호출로 안 쪼개짐) ②선반→게임시트 중첩→게임시트 닫힘(선반 자동 복귀)→선반 닫힘이 `[index, game-location-shelf, game-sheet, game-location-shelf]` 순서로 정확히 나옴. 기존 `scripts/verify-active-view-tracking.js` 9종 재실행해 회귀 없음 확인(script-nav.js 자체는 무변경).
   - **미검증**: 실제 로그인 후 게임시트·선반을 실제로 열고 닫는 UI 시나리오(1차와 같은 사유로 자동화 불가) — 사용자가 실사용 후 관리자 페이지 「페이지」 탭에서 `game-sheet`/`game-location-shelf` duration이 찍히는지 확인.
-**3차**: day-detail.js·club-schedule.html 배선 + iframe postMessage + 재검증.
+**3차(day-detail.js·club-schedule.html·index.html 부모 iframe) — ✅ 완료 (2026-08-19)**: 새 가상 키 2개(`day-detail`, `planner-register`) 신설(page-labels.js·member-analytics.js `V2_ONLY_PAGE_KEYS` 동시 등록). 계획 시점엔 안 보였던 실제 구조를 코드로 확인하며 아래처럼 매핑을 정교화했다:
+  - **`day-detail`** — `openDateScheduleModal`/`openDayDetailModal`/`openDatePreviewModal`/`openDateMeetingModal` **4개 함수 전부**가 같은 `#__ddModal` 오버레이를 공유(한쪽이 열리면 다른 쪽을 강제 치움) — game-sheet.js와 같은 active-플래그 가드(`_ensureDdViewToken`/`_popDdViewToken`)로 묶어 하나의 뷰로 취급. 이 안에서 참여자 클릭(other-board)·게임 클릭(game-sheet)이 열려도 **레이어로 겹칠 뿐 day-detail을 닫지 않으므로** 자연히 중첩 push가 된다(배선 불필요). 「등록/수정」 저장 후 `openDateMeetingModal`이 자기 자신을 다시 그려도(같은 `#__ddModal` 재생성) active 플래그 덕에 재-push 안 됨.
+  - **`planner-register`** — 계획엔 club-schedule.html의 `initScheduleSheet`/`initMultiSheet`만 적혀 있었으나, 실제로 등록/수정 UI를 담는 iframe 래퍼가 **3곳**이나 더 있었다(day-detail.js `openPlannerModal`의 `#__plannerModal`, index.html 홈 전용 `initPlannerModal`의 `#plannerSheetModal` — 둘 다 club-schedule.html?embed=true를 감싼다). embed 모드에서는 iframe 자체 트래킹이 `_isEmbeddedFrame()`으로 이미 꺼져 있어(#24 방지, 기존 동작 유지) club-schedule.html 내부에서의 push는 embed일 때 자동 no-op이고, **부모 쪽(day-detail.js/index-page.js)에서 "박스가 실제로 보이는 순간"(`_pmReveal`/`cottage-sheet-shown` 반영 지점)에 같은 키로 push**해 실질적인 카운팅을 담당한다. club-schedule.html을 standalone 페이지로 직접 방문할 때는 그 자체 push가 정상 동작(embed 아님).
+  - **`recordIframeModal`(index.html 홈, game-reviews.html embed)도 발견해 같이 배선** — 새 가상 키를 만들지 않고 기존 실페이지 키 `game-reviews`를 재사용(V2_ONLY_PAGE_KEYS엔 미등록 — 실페이지 키를 넣으면 v1 시절 방문까지 v2 마커로 오인해 cutoff이 오염된다).
+  - **검증**: script-nav.js 트래커 원문 eval 시뮬레이션(스크래치패드, 커밋 안 함) — day-detail 안에서 other-board→game-sheet→planner-register를 차례로 중첩·복귀하고 마지막에 openDateMeetingModal 재렌더를 거쳐도 day-detail이 정확히 4개 행으로만 쪼개짐(재호출로 5번째가 안 생김) 확인, `scripts/verify-active-view-tracking.js` 9종 재실행 회귀 없음.
+  - **미검증**: 실사용 확인(1·2차와 동일 사유로 자동화 불가) — push 후 사용자가 이날 모임 상세·플래너 등록·홈 플래너/기록 팝업을 실제로 열고 닫아보고 관리자 페이지 「페이지」 탭에 `day-detail`/`planner-register`/`game-reviews`(팝업 경유분) duration이 찍히는지 확인.
 
 각 차수 끝에 커밋 + 관리자 페이지 육안 확인 1회.
+
+**활성 뷰 추적 배선 — 1·2·3차 전부 완료.** 남은 건 실사용 확인뿐(위 각 차수의 "미검증" 항목들을 사용자가 실기기로 확인). 새 화면이 추가되면 그때 같은 패턴(overlay 생성 지점에 `pushActiveView`, 그 overlay의 모든 닫기 경로에 `popActiveView`, 재-push 방지가 필요하면 active 플래그 가드)으로 확장.
 
 ## 부록 — 읽기 측 v2 cutoff (2026-08-18, 1차와 별도로 처리·완료)
 

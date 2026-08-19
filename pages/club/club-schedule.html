@@ -852,6 +852,26 @@
     let _pendingRegister = null; // 홈 등록하기 버튼 → init 완료 전 도착한 date
     let _pendingEdit     = null; // 「이날 모임 상세」 등록/수정 버튼 → init 완료 전 도착한 date (_pendingRegister와 동일한 이유)
 
+    // 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 3차) — schedSheetOverlay(단일 날짜
+    // 시간 수정)와 schedMultiOverlay(멀티스텝 등록) 둘 다 "플래너에서 등록/수정 중"이라는
+    // 같은 뷰로 본다(game-sheet.js 정보↔기록과 같은 패턴). embed=true(iframe)로 실행 중일 땐
+    // window.pushActiveView 자체가 이미 _isEmbeddedFrame() 가드로 no-op이라(#24 방지, 기존
+    // 동작 그대로) 여기서 따로 embed 분기할 필요가 없다 — 그 경우 실제 카운팅은 day-detail.js
+    // _pmReveal/_pmCloseModal(부모 window)이 대신 담당한다.
+    let _plannerViewToken = null;
+    let _plannerViewActive = false;
+    function _ensurePlannerViewToken() {
+      if (_plannerViewActive) return;
+      _plannerViewActive = true;
+      _plannerViewToken = window.pushActiveView?.('planner-register') ?? null;
+    }
+    function _popPlannerViewToken() {
+      if (!_plannerViewActive) return;
+      window.popActiveView?.(_plannerViewToken);
+      _plannerViewActive = false;
+      _plannerViewToken = null;
+    }
+
     function esc(s) {
       return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
@@ -1104,6 +1124,7 @@
 
       function close() {
         overlay.style.display = 'none';
+        _popPlannerViewToken();
         _days = []; _timeMap = {}; _gameMap = {}; _activeDay = null; _step = 1; _pickerOpen = null; _gameOpen = {want:true, learn:true};
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
         _modalWeekOffset = 0; _historicalVotes = null;
@@ -2236,6 +2257,7 @@
         _pastOpen = {want:false, learn:false}; _srcOpen = {want:false, learn:false}; _othersOpen = {want:false, learn:false};
         _days.forEach(initDay);
         overlay.style.display = '';
+        _ensurePlannerViewToken();
         if (startStep === 2) renderStep2();
         else renderStep1();
 
@@ -2345,6 +2367,7 @@
       }
 
       document.getElementById('schedSheetOverlay').style.display = '';
+      _ensurePlannerViewToken();
 
       // 마지막 카드가 시트에 가려지지 않도록 여백 추가
       const listEl = document.getElementById('weekDayList');
@@ -2367,6 +2390,7 @@
       if (listEl) listEl.style.paddingBottom = '';
       document.removeEventListener('click', _closeSheetOnOutsideClick);
       _sheetDs = null;
+      _popPlannerViewToken();
     }
 
     async function saveVoteForDate(ds, start, end, btnSave, guestCount = 0) {
