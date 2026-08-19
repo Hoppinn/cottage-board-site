@@ -120,6 +120,8 @@
   const V2_ONLY_PAGE_KEYS = new Set([
     'my-board', 'other-board', 'my-board-growth', 'my-board-taste', 'my-board-records',
     'my-board-voucher', 'my-board-notif', 'my-board-usage', 'my-board-meeting',
+    // 2차(2026-08-19)에서 신규 배선 — 위 🚨 주석의 지시대로 여기도 같이 추가.
+    'game-sheet', 'game-location-shelf',
   ]);
 
   // rows(정규화된 page_sessions)에서 v2 시작 시각(entered_at, ISO 문자열)을 계산.

@@ -17,6 +17,8 @@
     'my-board-voucher': '내 보드 > 교환권', 'my-board-notif': '내 보드 > 소식',
     'my-board-usage': '내 보드 > 함께한 시간', 'my-board-meeting': '내 보드 > 모임보드',
     'other-board': '다른 회원 보드',
+    // PLAN_active_view_tracking.md 2차(2026-08-19) — 게임시트/게임위치 선반도 활성 뷰로 추적.
+    'game-sheet': '게임 정보 시트', 'game-location-shelf': '게임 위치(시트)',
   };
 
   // pathname → slug. `page_sessions.page`에 저장되는 값은 **항상 이 함수의 결과**다.

@@ -265,6 +265,18 @@ let _gameSheetHistory = [];
 let _gameSheetNavBack = false;
 let _savedBodyScrollY = 0;
 
+// 활성 뷰 체류시간 추적(PLAN_active_view_tracking.md 2차) — 게임 정보(_openAndInitSheet)와
+// 기록(openGameRecordSheet) 둘 다 같은 #gameSheet 오버레이를 공유하는 "게임시트" 한 뷰라,
+// 그 안에서 정보↔기록을 오가도 push를 두 번 하지 않는다. _active 플래그로 "이미 열려 있나"를
+// 판단한다(토큰 자체가 null일 수 있어 — 트래커가 스킵 조건이면 — 토큰만으로는 구분 불가).
+let _gameSheetViewToken = null;
+let _gameSheetViewActive = false;
+function _ensureGameSheetViewToken() {
+  if (_gameSheetViewActive) return;
+  _gameSheetViewActive = true;
+  _gameSheetViewToken = window.pushActiveView?.('game-sheet') ?? null;
+}
+
 function _openCoverModal(src) {
   document.getElementById('coverModal')?.remove();
   const m = document.createElement('div');
@@ -370,7 +382,10 @@ function _openRuleHubModal(gameName, { sections: ruleSections, errorNote, photos
 }
 
 function openShelfSheet(url) {
-  document.getElementById('shelfSheetOverlay')?.remove();
+  // 기존에 남아있던(하이드된 채 뒤에 깔린 경우 포함) 오버레이를 강제로 치울 때도
+  // 그게 push해둔 토큰을 같이 pop한다 — kakao-auth.js openProfilePanel의 "existing" 패턴과 동일.
+  const _existingShelf = document.getElementById('shelfSheetOverlay');
+  if (_existingShelf) { window.popActiveView?.(_existingShelf._viewToken); _existingShelf.remove(); }
   const overlay = document.createElement('div');
   overlay.id = 'shelfSheetOverlay';
   overlay.className = 'shelf-sheet-overlay';
@@ -383,20 +398,28 @@ function openShelfSheet(url) {
       <iframe class="shelf-sheet-iframe" src="${url}"></iframe>
     </div>`;
   document.body.appendChild(overlay);
+  // 활성 뷰 체류시간 추적(2차) — 토큰은 오버레이 DOM 노드에 저장(패널 재생성마다 클로저 변수가
+  // 아니라 노드에 실어야 위 "existing 강제 치우기"에서도 꺼낼 수 있다, kakao-auth.js와 동일 이유).
+  overlay._viewToken = window.pushActiveView?.('game-location-shelf') ?? null;
 
   // ← 뒤로가기: 선반 닫고 직전 게임시트 복원
   const prevGameKey = (typeof _currentSheetGameKey !== 'undefined') ? _currentSheetGameKey : null;
   overlay.querySelector('.shelf-sheet-back').addEventListener('click', () => {
+    window.popActiveView?.(overlay._viewToken);
     overlay.remove();
     if (prevGameKey) openGameSheet(prevGameKey);
   });
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  overlay.addEventListener('click', e => { if (e.target === overlay) { window.popActiveView?.(overlay._viewToken); overlay.remove(); } });
 
   function registerMsg() { window.addEventListener('message', handleShelfMsg); }
   function handleShelfMsg(e) {
     if (e.data?.action !== 'openGame' || !e.data?.gameId) return;
     window.removeEventListener('message', handleShelfMsg);
 
+    // 선반은 안 닫힌다(게임시트 뒤에 잠시 숨을 뿐) — 그래서 여기서 pop하지 않는다. 게임시트가
+    // 위에 쌓이는(nested push) 것만으로 스택이 [game-location-shelf, game-sheet]가 되고,
+    // 아래 MutationObserver가 게임시트 닫힘을 감지해 선반을 되살릴 때는 이미 game-sheet 쪽
+    // popActiveView(closeGameSheet 안)가 스택 top을 다시 game-location-shelf로 복원해 둔 뒤다.
     overlay.style.zIndex = '0';
     overlay.style.pointerEvents = 'none';
     openGameSheet(decodeURIComponent(e.data.gameId));
@@ -436,6 +459,7 @@ function _openAndInitSheet(gameKey, restoreScroll, noAnim) {
   gameSheet.classList.toggle('no-anim', !!noAnim);
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
+  _ensureGameSheetViewToken();
 
   const _panel = gameSheet.querySelector('.game-sheet-scroll');
   requestAnimationFrame(() => {
@@ -964,6 +988,11 @@ function closeGameSheet(){
   document.body.classList.remove('sheet-open');
   window.scrollTo(0, _savedBodyScrollY);
   _currentSheetGameKey = null;
+  if (_gameSheetViewActive) {
+    window.popActiveView?.(_gameSheetViewToken);
+    _gameSheetViewActive = false;
+    _gameSheetViewToken = null;
+  }
 }
 
 // ── 게임평/기록 전용 바텀시트 ────────────────────────────────────────
@@ -1034,6 +1063,7 @@ function openGameRecordSheet(gameKey) {
   _savedBodyScrollY = window.scrollY;
   gameSheet.classList.add('is-active');
   document.body.classList.add('sheet-open');
+  _ensureGameSheetViewToken();
 
   // 래퍼가 쿼리 오류는 내부에서 로그함(2단계). 여기 catch는 init 함수 렌더 로직의 JS 예외를 삼키던 자리
   initSheetComments(gameKey).catch(err => console.error('[initSheetComments]', err));

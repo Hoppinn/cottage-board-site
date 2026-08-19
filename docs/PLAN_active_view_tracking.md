@@ -126,7 +126,9 @@ pagehide: _finalized=true로 잠그고 마지막 세그먼트 flush(스택 상�
 - `scripts/verify-active-view-live.js`(Playwright, 운영 DB 쓰기 0건 — GET 이외 전부 route.abort) — 로컬 서버(`verify-active-view.local`→127.0.0.1 host-resolver 매핑으로 `_isLocalhost()` 스킵 우회, 실서비스 도메인은 아직 미배포라 사용 불가) 실브라우저에서 `window.pushActiveView`/`popActiveView` 실재 확인 + 실제 fetch(keepalive) 경로로 세그먼트 3개(index/index/verify-live-test-view) 전환, 차단된 POST payload에서 라벨·duration_sec·session_key 전부 정상 확인. 콘솔 에러는 차단이 유발한 `_startAnonHeartbeat`(무관) 2건 외 0건.
 - **미검증**: 실제 로그인 후 프로필 패널을 클릭으로 열고 닫는 UI 시나리오(로그인 게이트가 있어 자동화 스크립트로는 실행 불가 — 가짜 로그인은 운영 DB에 실제 프로필 행을 만들어 금지). 사용자가 실제로 로그인해 내 보드를 한 번 열고 닫아주면 관리자 페이지 「페이지」 탭에서 `my-board` duration이 찍히는지 읽기 전용으로 확인 가능.
 
-**2차**: game-sheet.js(게임시트·게임위치) 배선 + 재검증.
+**2차(game-sheet.js: 게임시트·게임위치 선반) — ✅ 완료 (2026-08-19)**: 새 가상 키 `game-sheet`(정보+기록 시트, `#gameSheet` 오버레이 공유)·`game-location-shelf`(선반 오버레이) 신설(page-labels.js·member-analytics.js `V2_ONLY_PAGE_KEYS` 동시 등록). `_ensureGameSheetViewToken()` 가드로 정보↔기록 전환 시 재-push 안 하게 처리(같은 뷰), `closeGameSheet()`에서 pop(닫기 경로는 이 함수 하나로 이미 수렴돼 있어 위험요소①이 해당 없었음 — dim/✕/버튼 3곳 전부 확인). 선반은 토큰을 오버레이 DOM 노드에 저장(kakao-auth.js 패널과 동일 패턴), 뒤로가기·배경클릭·"기존 오버레이 강제 치우기" 3곳에서 pop. 선반 안에서 게임 클릭 시 게임시트가 **중첩 push**되고(선반은 안 닫히고 뒤에 숨을 뿐), 게임시트 닫힘이 자동으로 선반을 스택 top으로 복원 — 별도 배선 불필요.
+  - **검증**: script-nav.js 트래커를 원문 eval해 두 시나리오 확인(스크래치패드 임시 스크립트, 커밋 안 함) — ①게임시트 정보→기록→정보 전환 시 push 1번만(15초 단일 행, 재호출로 안 쪼개짐) ②선반→게임시트 중첩→게임시트 닫힘(선반 자동 복귀)→선반 닫힘이 `[index, game-location-shelf, game-sheet, game-location-shelf]` 순서로 정확히 나옴. 기존 `scripts/verify-active-view-tracking.js` 9종 재실행해 회귀 없음 확인(script-nav.js 자체는 무변경).
+  - **미검증**: 실제 로그인 후 게임시트·선반을 실제로 열고 닫는 UI 시나리오(1차와 같은 사유로 자동화 불가) — 사용자가 실사용 후 관리자 페이지 「페이지」 탭에서 `game-sheet`/`game-location-shelf` duration이 찍히는지 확인.
 **3차**: day-detail.js·club-schedule.html 배선 + iframe postMessage + 재검증.
 
 각 차수 끝에 커밋 + 관리자 페이지 육안 확인 1회.
