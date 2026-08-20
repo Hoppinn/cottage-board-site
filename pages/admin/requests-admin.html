@@ -1415,6 +1415,12 @@
       //    (유저·페이지·일)을 한 행으로 접어서 체류시간이 그날 첫 세션 것만 합산돼 과소집계된다.
       //    비회원 경로(buildAnonUserMap)도 같은 rowsV2를 쓰므로 회원/비회원 간에도 일관적이다.
       const memberPageMap = new Map(buildUserMap(rowsV2));
+      // 펼침 기본값이 '오늘'로 바뀌면서(2026-08-20) 토글 라벨·초기 표도 오늘 기준으로 맞춰야
+      // 한다(원칙 ⑤) — 카드마다 pageMapFor를 다시 돌리면 회원 수 × rowsV2만큼 반복이라,
+      // 여기서 한 번만 오늘 행으로 거른 뒤 같은 buildUserMap/buildAnonUserMap을 재사용한다.
+      const _todayRowsV2 = rowsV2.filter(r => _inVpPeriod(r, 'today'));
+      const anonPageMapToday = new Map(buildAnonUserMap(_todayRowsV2));
+      const memberPageMapToday = new Map(buildUserMap(_todayRowsV2));
 
       // 한 사람의 페이지 분포 표. 체류시간 내림차순 — "어떤 페이지에 오래 머물렀나"가 질문이라
       // 진입 횟수보다 체류가 먼저다. 너무 길어지지 않게 상위 10개만 펼치고 나머지는 합계로.
@@ -1459,17 +1465,29 @@
             </tbody>
           </table>`;
       }
-      function _visitorPagesHtml(pm) {
-        if (!pm || !pm.size) return '';
+      // allPm은 "이 사람이 페이지 기록 자체가 있나"(펼침 버튼 노출 여부)만 판단하는 전 기간
+      // 값이고, 실제로 펼쳤을 때 처음 보이는 표는 todayPm('오늘')이다. 원칙 ⑤(명단과 「N개」는
+      // 같은 순회에서 만든다)를 지키려고 토글 버튼 라벨도 todayPm 기준으로 맞춘다 — allPm 기준
+      // 개수를 쓰면 "페이지 5개"라 적혀 있는데 펼치면(오늘 기본) 1줄만 보이는 어긋남이 난다.
+      // ⚠️ todayPm은 오늘 방문 기록이 없는 사람이면 undefined다(memberPageMapToday에 그
+      // user_id 자체가 없음) — allPm(전 기간)엔 있어도 오늘은 없을 수 있으므로(어제 이전
+      // 방문자), .size에 바로 접근하면 안 되고 빈 Map으로 기본값을 준다.
+      function _visitorPagesToggle(allPm, todayPm) {
+        if (!allPm || !allPm.size) return '';
+        const tp = todayPm || new Map();
+        return `<button class="admin-visitor-pages-btn" type="button">${_pagesBtnLabel(tp.size, false)}</button>`;
+      }
+      function _visitorPagesHtml(allPm, todayPm) {
+        if (!allPm || !allPm.size) return '';
+        todayPm = todayPm || new Map();
         // data-vp-period는 위임 핸들러가 「지금 무슨 기간인지」를 읽는 자리다(화살표 ±1의 기준).
-        return `<div class="admin-visitor-pages" hidden data-vp-period="all">${_visitorPagesInner(pm, 'all')}</div>`;
+        // 기본값은 '오늘'(2026-08-20 사용자 요청 — 펼치면 바로 오늘 방문이 보이길 원함,
+        // 예전엔 '전 기간'이 기본이라 매번 '오늘' 버튼을 다시 눌러야 했다).
+        return `<div class="admin-visitor-pages" hidden data-vp-period="today">${_visitorPagesInner(todayPm, 'today')}</div>`;
       }
       // 토글 버튼 라벨. 기간을 바꾸면 이 숫자도 함께 간다 — 버튼 12개 / 표 3줄로 갈리면
       // #5와 같은 종류의 어긋남이다(원칙 ⑤: 명단과 「N개」는 같은 순회에서 만든다).
       const _pagesBtnLabel = (count, open) => `📄 페이지 ${count}개 ${open ? '▴' : '▾'}`;
-      const _visitorPagesToggle = pm => pm && pm.size
-        ? `<button class="admin-visitor-pages-btn" type="button">${_pagesBtnLabel(pm.size, false)}</button>`
-        : '';
 
       const unified = [
         ...allProfiles.map(p => ({ _type: 'member', _last: p.last_seen_at || '', ...p })),
@@ -1520,6 +1538,8 @@
           const dnHtml = p.real_name
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
+          // 펼침 기본값이 '오늘'이라(위 _visitorPagesHtml) 토글 라벨·초기 표를 같은 오늘 pm으로 맞춘다.
+          const _todayPm = memberPageMapToday.get(p.user_id);
           return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member" data-total-sec="${totalS}" data-today-sec="${todayS}" style="${hid}">
             <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
@@ -1528,10 +1548,10 @@
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
               ${_todayChip(p, todayS)}
               <span title="profiles.total_minutes — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작습니다.">⏱ 총 ${fmtTime(totalS)}</span>
-              ${_visitorPagesToggle(memberPageMap.get(p.user_id))}
+              ${_visitorPagesToggle(memberPageMap.get(p.user_id), _todayPm)}
               ${isMe ? '' : `<button class="admin-ban-btn ${isBanned?'unban':'ban'}" data-uid="${escH(p.user_id)}">${isBanned?'✅ 밴 해제':'🚫 밴'}</button>`}
             </div>
-            ${_visitorPagesHtml(memberPageMap.get(p.user_id))}
+            ${_visitorPagesHtml(memberPageMap.get(p.user_id), _todayPm)}
           </div>`;
         } else {
           const a = u;
@@ -1550,6 +1570,8 @@
           const anonTodayAS = a.today_date === todayKst ? (a.today_seconds || 0) : 0;
           const anonTodayS = Math.max(anonTodayPS, anonTodayAS);
           const anonTotalS = ent ? [...ent.pm.values()].reduce((s, v) => s + v.totalSec, 0) : 0;
+          // 펼침 기본값이 '오늘'이라(위 _visitorPagesHtml) 토글 라벨·초기 표를 같은 오늘 pm으로 맞춘다.
+          const _todayPm = anonPageMapToday.get(a.session_key)?.pm;
           return `<div class="admin-member-card" data-last-seen="${a.last_seen_at || ''}" data-visitor-type="anon" data-session-key="${escH(a.session_key)}" data-total-sec="${anonTotalS}" data-today-sec="${anonTodayS}" style="${hid}opacity:${online ? 1 : 0.7}">
             <div class="admin-member-name">비회원 <code style="font-size:11px;color:var(--muted)">${escH(shortKey)}</code><span style="font-size:10px;background:var(--bg-soft);color:var(--muted);border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">비로그인</span>
               <span class="admin-online-status${online ? ' is-online' : ''}">${escH(statusText)}</span>
@@ -1560,9 +1582,9 @@
               <span>방문 ${anonVisitCount}</span>
               ${anonTodayS > 0 ? `<span style="color:var(--green);font-weight:600" title="오늘 체류 — page_sessions(실측 초, 3초 미만 누락)와 anon_sessions(heartbeat, 60초 단위) 중 큰 값. 둘 다 하한이라 실제는 이보다 큽니다">오늘 ${fmtTime(anonTodayS)}</span>` : ''}
               ${anonTotalS > 0 ? `<span title="page_sessions 합계 — 비회원은 누적 컬럼이 없어 입장 기록 기준이며 heartbeat 분이 빠진 하한입니다">⏱ ${fmtTime(anonTotalS)}</span>` : ''}
-              ${_visitorPagesToggle(ent?.pm)}
+              ${_visitorPagesToggle(ent?.pm, _todayPm)}
             </div>
-            ${_visitorPagesHtml(ent?.pm)}
+            ${_visitorPagesHtml(ent?.pm, _todayPm)}
           </div>`;
         }
       };
@@ -2379,9 +2401,15 @@
         // **방문자 수도 같은 기간으로 맞춰 같이 보여준다** — 안 그러면 이 카드의 분자(페이지
         // 방문·체류)와 요약 카드의 분모(방문자, 전체 누적)가 기간이 안 맞아 "이 기간 방문자 중
         // 몇 %가 이 페이지를 봤나" 같은 비교가 안 된다(사용자 지적, 2026-08-18).
+        // 🚨 _v2VisitorCount는 "전체" 탭일 때만 계산되고(그 외엔 null, 위 #2022 참조 —
+        // 기간이 안 맞는 분모를 보여주지 않기 위한 의도적 설계) 그 사실이 문구에는 반영이
+        // 안 돼 있었다 — "오늘"·"이번 주" 등을 보는 중엔 "그 사이 방문자 null명"이 그대로
+        // 화면에 찍혔다(2026-08-20 사용자 스크린샷으로 발견). null이면 그 절 자체를 뺀다.
         if (chartPagesSub) {
           chartPagesSub.textContent = _v2CutoffKst
-            ? `${label} · 새 추적 ${_v2CutoffKst}부터 · 그 사이 방문자 ${_v2VisitorCount}명`
+            ? (_v2VisitorCount !== null
+                ? `${label} · 새 추적 ${_v2CutoffKst}부터 · 그 사이 방문자 ${_v2VisitorCount}명`
+                : `${label} · 새 추적 ${_v2CutoffKst}부터`)
             : `${label} · 새 추적 데이터 아직 없음`;
         }
         // ⏱ 접두사는 장식이 아니라 **단위 구분**이다(#8) — 막대 길이는 '방문 수'인데
@@ -2612,8 +2640,13 @@
         // 기간뿐 아니라 **무엇을 센 값인지**도 밝힌다(원칙 ①) — 카드 ⏱와 값이 다른 게 정상이고,
         // 그 이유(heartbeat 미포함)를 모르면 또 "숫자가 안 맞는다"가 된다.
         if (chartMemberTimeSub) {
+          // 이 카드는 항상 "전 기간"(rowsV2, 위 주석)인데 _v2VisitorCount는 상단 기간 탭이
+          // "전체"일 때만 계산돼(null 아님) 있다 — "오늘" 등을 보는 중엔 여기서도 그대로
+          // "null명"이 찍혔다(chartPagesSub와 같은 원인, 2026-08-20 발견). null이면 절 생략.
           chartMemberTimeSub.textContent = _v2CutoffKst
-            ? `새 추적 ${_v2CutoffKst}부터(방문자 ${_v2VisitorCount}명) · 페이지 체류 합계`
+            ? (_v2VisitorCount !== null
+                ? `새 추적 ${_v2CutoffKst}부터(방문자 ${_v2VisitorCount}명) · 페이지 체류 합계`
+                : `새 추적 ${_v2CutoffKst}부터 · 페이지 체류 합계`)
             : '전 기간 · 페이지 체류 합계';
           chartMemberTimeSub.title = `회원 탭은 명부라 기간 선택이 없어 "전 기간"으로 고정하되, v2(활성 뷰) 추적 시작(${_v2CutoffKst || '아직 없음'}) 이전 데이터는 측정 방식이 달라 뺍니다. 페이지별 체류 기록(page_sessions) 합계이며, 카드의 ⏱ 총 누적은 heartbeat 분까지 포함한 profiles 값(v2 cutoff 무관, 전 기간)이라 더 큽니다.`;
         }
