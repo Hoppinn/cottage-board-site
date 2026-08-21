@@ -2704,21 +2704,18 @@
         // 새로 끊겨(사용자 리포트: "메인 39회"인데 "방문자 4회") 행 수가 방문 수보다 훨씬
         // 커진다. 아래 pageUniq(페이지 탭)와 같은 (사람·페이지·날짜) 유니크 기준으로 맞춘다
         // — 사본을 새로 짜지 않고 같은 dedup 키 규칙만 재사용(#15 방지).
+        // 🚨 2026-08-21: 그런데도 사본을 하나 더 만들어서(_pageC를 여기서 독자적으로 다시
+        // 계산) 「페이지」 탭의 pageUniq와 다시 갈렸다 — 이 사본은 rowsV2/filtered만 훑고
+        // page_views로만 보충되는 가상 서브페이지(내 보드 > 소식·수집보드·모임보드 등, 2차
+        // 배선 전까지 page_sessions가 없는 화면)를 아예 안 셌다. 그 결과 실사용 데이터에서
+        // "내 보드 > 소식"이 8회로 페이지 탭 2위인데 요약 카드 top4엔 아예 안 보이는 어긋남이
+        // 났다(사용자 스크린샷으로 발견). **사본을 없애고 pageUniq를 그대로 재사용**한다 —
+        // pageUniq는 이미 같은 화면 안에서 이 가상 페이지 보충까지 끝낸 값이라 사본을 만들
+        // 이유가 없었다.
         {
-          const _src = start ? filtered : rowsV2;
-          const _pageC = {};
-          const _pageSeen = new Set();
-          for (const r of _src) {
-            if (!r.page) continue;
-            const pid = r.user_id ? String(r.user_id) : (r.session_key ? `anon:${r.session_key}` : null);
-            const dKey = (pid || 'anon') + '|' + r.page + '|' + kstDate(r.entered_at);
-            if (_pageSeen.has(dKey)) continue;
-            _pageSeen.add(dKey);
-            _pageC[r.page] = (_pageC[r.page] || 0) + 1;
-          }
           // 키는 슬러그(#14) — 카드가 좁아 라벨이 긴 셋만 줄여 쓴다.
           const _PAGE_SHORT = { about: '소개', guide: '기능안내', club: '동호회' };
-          const _topP = Object.entries(_pageC).sort((a, b) => b[1] - a[1]).slice(0, 4);
+          const _topP = Object.entries(pageUniq).sort((a, b) => b[1] - a[1]).slice(0, 4);
           const _sumPage = document.getElementById('sumPageCount');
           if (_sumPage) {
             _sumPage.title = !start && _v2CutoffKst
