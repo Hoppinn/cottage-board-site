@@ -797,7 +797,7 @@
         <!-- 주간 뷰 (Phase 1) ─ 기본 화면 -->
         <div id="viewWeek" style="display:none">
           <div class="sched-week-nav">
-            <button class="sched-week-nav-btn" id="btnPrevWeek">← 이전 주</button>
+            <button class="sched-week-nav-btn" id="btnPrevWeek">← 이전주</button>
             <span class="sched-week-title" id="weekTitle"></span>
             <button class="sched-week-nav-btn" id="btnNextWeek">다음 주 →</button>
           </div>
@@ -1374,7 +1374,7 @@
 
         $s('smBody').innerHTML = `
           <div class="sm-week-nav">
-            <button aria-label="이전 주" class="sm-week-nav-btn" id="smWkPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
+            <button aria-label="이전주" class="sm-week-nav-btn" id="smWkPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
             <span class="sm-week-label">${wkRange} · ${wkLabel}</span>
             <button aria-label="다음 주" class="sm-week-nav-btn" id="smWkNext" type="button">▶</button>
           </div>
@@ -1633,7 +1633,7 @@
         $s('smBody').innerHTML = `
           <p class="sm-hint">옮길 날짜를 선택하세요</p>
           <div class="sm-week-nav">
-            <button aria-label="이전 주" class="sm-week-nav-btn" id="smDcPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
+            <button aria-label="이전주" class="sm-week-nav-btn" id="smDcPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
             <span class="sm-week-label">${wkRange}</span>
             <button aria-label="다음 주" class="sm-week-nav-btn" id="smDcNext" type="button">▶</button>
           </div>

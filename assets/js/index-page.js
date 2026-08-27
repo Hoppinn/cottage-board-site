@@ -2049,7 +2049,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       );
     } catch (err) {
       console.error('[홈 이번 주 모임 미리보기]', err);
-      statusEl.textContent = '🎲 이번 주 모임 모집 중';
+      statusEl.textContent = '🎲 이번주, 함께할 사람을 기다려요';
     }
   }
 
