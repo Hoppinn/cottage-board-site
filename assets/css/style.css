@@ -8365,25 +8365,13 @@ body.is-embedded .inner-page{padding-top:16px;}
     display:none;
   }
 
-  /* about 본문은 main의 직계 블록으로 고정한다. 공용 .about-* 규칙의 내용폭 수축을 받지 않는다. */
-  body.owned-page main > .about-section,
-  body.owned-page main > .about-why-block{
-    display:block !important;
-    inline-size:min(900px, calc(100vw - 48px)) !important;
-    max-inline-size:none !important;
-    box-sizing:border-box;
-    margin-inline:auto !important;
-  }
-  /* 풀스크린에서 WHY 내부 항목이 내용 폭으로만 수축하는 경로를 차단한다. */
-  body.owned-page main > .about-why-block > .about-section-label,
-  body.owned-page main > .about-why-block > .about-why-heading,
-  body.owned-page main > .about-why-block > .about-why-text,
-  body.owned-page main > .about-why-block > .about-why-photo,
-  body.owned-page main > .about-why-block .about-why-text > p{
-    inline-size:100% !important;
-    max-inline-size:100% !important;
-  }
+  /* about·동호회 본문은 같은 컨테이너 규격을 쓴다. */
   .about-section{
+    width:min(900px, calc(100vw - 48px));
+    max-width:none;
+    box-sizing:border-box;
+    margin-left:auto;
+    margin-right:auto;
     padding-left:var(--page-x);
     padding-right:var(--page-x);
   }
