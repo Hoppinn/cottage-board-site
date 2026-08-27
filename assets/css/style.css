@@ -8365,14 +8365,14 @@ body.is-embedded .inner-page{padding-top:16px;}
     display:none;
   }
 
-  /* about 본문: 히어로와 같은 실제 폭을 가져야 풀스크린에서도 내용 폭으로 수축하지 않는다. */
-  .about-section,
-  .about-why-block{
-    width:min(900px, calc(100% - 48px));
-    max-width:none;
+  /* about 본문은 main의 직계 블록으로 고정한다. 공용 .about-* 규칙의 내용폭 수축을 받지 않는다. */
+  body.owned-page main > .about-section,
+  body.owned-page main > .about-why-block{
+    display:block !important;
+    inline-size:min(900px, calc(100vw - 48px)) !important;
+    max-inline-size:none !important;
     box-sizing:border-box;
-    margin-left:auto;
-    margin-right:auto;
+    margin-inline:auto !important;
   }
   .about-section{
     padding-left:var(--page-x);
