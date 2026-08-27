@@ -640,6 +640,7 @@ body.owned-page .site-header{
   font-size:clamp(13px,3.6vw,15px);
   font-weight:700;
   backdrop-filter:blur(4px);
+  transform:translateY(-18px);
 }
 
 .hero h1{
@@ -650,7 +651,7 @@ body.owned-page .site-header{
   font-weight:900;
   letter-spacing:-1px;
   text-shadow:0 2px 18px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.55);
-  transform:translateY(-28px);
+  transform:translateY(-46px);
 }
 
 .hero-link-dots{
@@ -658,8 +659,8 @@ body.owned-page .site-header{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:3px;
-  transform:translateY(-34px);
+  gap:6px;
+  transform:translateY(-46px);
   pointer-events:none;
 }
 .hero-link-dots span{
@@ -688,6 +689,7 @@ body.owned-page .site-header{
   line-height:1.55;
   font-weight:600;
   text-shadow:0 1px 10px rgba(0,0,0,0.58), 0 0 22px rgba(0,0,0,0.35);
+  transform:translateY(-18px);
 }
 
 .hero-visitor-count{
