@@ -28,7 +28,7 @@
 │   │   ├── game-reviews.html       # 플레이 기록 허브 (핵심 기능 페이지)
 │   │   └── game-location.html      # 게임 위치 안내
 │   ├── info/                       # 코티지보드 소개
-│   │   ├── about.html              # 코티지가 만들어진 이유 (브랜드 스토리: Hero→WHY1→WHY2→제약 2x2 카드→WHY 회수→버튼)
+│   │   ├── about.html              # 코티지가 만들어진 이유 (브랜드 스토리: Hero→WHY1→WHY2→4개 제약 목록→WHY 회수→버튼)
 │   │   ├── price-rules.html        # 가격·이용안내 (이용요금→운영시간→이용 약속→음식 안내)
 │   │   └── guide.html              # 홈페이지 기능 안내
 │   ├── club/                       # 동호회
