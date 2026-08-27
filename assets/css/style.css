@@ -536,7 +536,7 @@ body.owned-page .site-header{
   content:"";
   position:absolute;
   inset:0;
-  background:url('../images/main/photo-exterior.jpg') center 90%/auto calc(100% + 120px) no-repeat;
+  background:url('../images/main/photo-exterior.jpg') center center/cover no-repeat;
   filter:brightness(0.65);
   z-index:0;
 }
@@ -638,40 +638,18 @@ body.owned-page .site-header{
   background:rgba(255,255,255,0.18);
   color:#fff;
   font-size:clamp(13px,3.6vw,15px);
-  font-weight:700;
+  font-weight:900;
   backdrop-filter:blur(4px);
-  transform:translateY(-18px);
 }
 
 .hero h1{
-  margin:0 0 clamp(24px,6vw,40px);
+  margin:0 0 clamp(100px,17vw,126px);
   color:#fff;
   font-size:clamp(26px,7.2vw,52px);
   line-height:1.22;
   font-weight:900;
   letter-spacing:-1px;
   text-shadow:0 2px 18px rgba(0,0,0,0.8), 0 0 50px rgba(0,0,0,0.55);
-  transform:translateY(-46px);
-}
-
-.hero-link-dots{
-  height:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  transform:translateY(-48px);
-  pointer-events:none;
-}
-.hero-link-dots span{
-  flex:0 0 3px;
-  width:3px;
-  height:3px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.85);
-  box-shadow:0 0 5px rgba(255,255,255,0.40);
-}
-.hero-link-dots--upper{ transform:translateY(-94px); }
 .dotted-line{
   width:100%;
   max-width:300px;
@@ -683,13 +661,12 @@ body.owned-page .site-header{
 }
 
 .desc{
-  margin:0 0 clamp(88px,15vw,110px);
-  color:rgba(255,255,255,0.84);
-  font-size:clamp(13px,3.4vw,20px);
-  line-height:1.55;
-  font-weight:600;
-  text-shadow:0 1px 10px rgba(0,0,0,0.58), 0 0 22px rgba(0,0,0,0.35);
-  transform:translateY(-28px);
+  margin:0 0 clamp(14px,2.5vw,22px);
+  color:rgba(255,255,255,0.92);
+  font-size:clamp(14px,3.8vw,22px);
+  line-height:1.45;
+  font-weight:700;
+  text-shadow:0 1px 14px rgba(0,0,0,0.7), 0 0 35px rgba(0,0,0,0.45);
 }
 
 .hero-visitor-count{
