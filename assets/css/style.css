@@ -8374,6 +8374,15 @@ body.is-embedded .inner-page{padding-top:16px;}
     box-sizing:border-box;
     margin-inline:auto !important;
   }
+  /* 풀스크린에서 WHY 내부 항목이 내용 폭으로만 수축하는 경로를 차단한다. */
+  body.owned-page main > .about-why-block > .about-section-label,
+  body.owned-page main > .about-why-block > .about-why-heading,
+  body.owned-page main > .about-why-block > .about-why-text,
+  body.owned-page main > .about-why-block > .about-why-photo,
+  body.owned-page main > .about-why-block .about-why-text > p{
+    inline-size:100% !important;
+    max-inline-size:100% !important;
+  }
   .about-section{
     padding-left:var(--page-x);
     padding-right:var(--page-x);
