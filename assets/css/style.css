@@ -8365,15 +8365,19 @@ body.is-embedded .inner-page{padding-top:16px;}
     display:none;
   }
 
-  /* about·동호회 본문은 같은 컨테이너 규격을 쓴다. */
+  /* 공용 소개 페이지(동호회·가이드 등)는 기존 전체 폭 규격을 유지한다. */
   .about-section{
+    max-width:none;
+    padding-left:var(--page-x);
+    padding-right:var(--page-x);
+  }
+  /* about.html만 다른 소개 페이지와 같은 900px PC 콘텐츠 폭을 쓴다. */
+  body.about-page .about-section{
     width:min(900px, calc(100vw - 48px));
     max-width:none;
     box-sizing:border-box;
     margin-left:auto;
     margin-right:auto;
-    padding-left:var(--page-x);
-    padding-right:var(--page-x);
   }
 
   /* 추천 전체보기: PC 본문·about/club과 같은 720px 최대폭 */
