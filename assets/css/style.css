@@ -668,8 +668,8 @@ body.owned-page .site-header{
   width:3px;
   height:3px;
   border-radius:50%;
-  background:rgba(255,255,255,0.55);
-  box-shadow:0 0 5px rgba(255,255,255,0.35);
+  background:rgba(255,255,255,0.64);
+  box-shadow:0 0 5px rgba(255,255,255,0.40);
 }
 
 .dotted-line{
