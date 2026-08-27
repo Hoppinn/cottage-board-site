@@ -8365,9 +8365,11 @@ body.is-embedded .inner-page{padding-top:16px;}
     display:none;
   }
 
-  /* about-section: inner-page와 동일하게 --page-x로 720px 중앙 정렬 */
+  /* about-section: about PC 본문과 같은 900px 중앙 정렬 */
   .about-section{
-    max-width:none;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
     padding-left:var(--page-x);
     padding-right:var(--page-x);
   }
@@ -8598,18 +8600,21 @@ body.is-embedded .inner-page{padding-top:16px;}
     background-position:center 30%;
   }
 
-  /* ── about 사진 그리드: 텍스트와 같은 720px 안으로 ── */
+  /* ── about: PC 본문 폭을 900px로 통일 ── */
+  .about-why-block{
+    max-width:900px;
+  }
   .about-photo-strip{
-    max-width:720px;
+    max-width:900px;
     margin-left:auto;
     margin-right:auto;
     border-radius:0;
   }
 
-  /* ── about 히어로: PC에서 720px 중앙 + 라운딩 ── */
+  /* ── about 히어로: PC 본문과 같은 900px 중앙 + 라운딩 ── */
   .about-hero{
     position:relative;
-    max-width:720px;
+    max-width:900px;
     margin-top:calc(var(--header-total-h) + 46px);
     margin-left:auto;
     margin-right:auto;
