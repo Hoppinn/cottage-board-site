@@ -42,6 +42,7 @@
     .admin-member-card { background: var(--card-bg,#fff); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; }
     .admin-member-card.is-banned { border-color: #f5c6c6; background: #fff8f8; }
     .admin-member-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+    .admin-member-board-link { border: 0; background: none; padding: 0; color: inherit; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
     .admin-member-metas { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
     .admin-member-metas span { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .admin-ban-btn { font-size: 11px; border: none; border-radius: 5px; padding: 3px 9px; cursor: pointer; margin-left: auto; }
@@ -1141,6 +1142,13 @@
         btn.textContent = btn.textContent.replace(opening ? '▾' : '▴', opening ? '▴' : '▾');
       });
 
+      // 회원 닉네임 → 해당 회원의 공개 보드. 관리자 페이지는 닫지 않아 보드를 닫으면 이 탭으로 돌아온다.
+      el.addEventListener('click', (e) => {
+        const link = e.target.closest('.admin-member-board-link[data-member-uid]');
+        if (!link) return;
+        window.openProfilePanel?.(null, { userId: String(link.dataset.memberUid), readOnly: true });
+      });
+
       // 밴/밴해제 버튼 — event delegation으로 동적 생성된 카드도 처리
       el.addEventListener('click', async (e) => {
         const btn = e.target.closest('.admin-ban-btn');
@@ -1541,7 +1549,7 @@
           // 펼침 기본값이 '오늘'이라(위 _visitorPagesHtml) 토글 라벨·초기 표를 같은 오늘 pm으로 맞춘다.
           const _todayPm = memberPageMapToday.get(p.user_id);
           return `<div class="admin-member-card${isBanned?' is-banned':''}" data-uid="${escH(p.user_id)}" data-banned="${isBanned}" data-last-seen="${escH(p.last_seen_at||'')}" data-visitor-type="member" data-total-sec="${totalS}" data-today-sec="${todayS}" style="${hid}">
-            <div class="admin-member-name">${dnHtml}<span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
+            <div class="admin-member-name"><button class="admin-member-board-link" type="button" data-member-uid="${escH(p.user_id)}">${dnHtml}</button><span style="font-size:10px;background:#e8f4e8;color:#2e7d32;border-radius:3px;padding:1px 5px;margin-left:4px;font-weight:600">회원</span>${isBanned?' <span class="admin-banned-badge">🚫 밴됨</span>':''}${isMe?' <span style="font-size:11px;color:var(--green)">👑 관리자</span>':''}<span class="admin-online-status" data-uid="${escH(p.user_id)}"></span></div>
             <div class="admin-member-metas">
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
