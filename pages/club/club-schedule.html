@@ -799,7 +799,7 @@
           <div class="sched-week-nav">
             <button class="sched-week-nav-btn" id="btnPrevWeek">← 이전주</button>
             <span class="sched-week-title" id="weekTitle"></span>
-            <button class="sched-week-nav-btn" id="btnNextWeek">다음 주 →</button>
+            <button class="sched-week-nav-btn" id="btnNextWeek">다음주 →</button>
           </div>
           <button class="sched-toggle-cal-btn" id="btnToggleCal">달력 보기 ▾</button>
           <!-- 월간 달력 (토글) -->
@@ -1322,7 +1322,7 @@
       // ── Step 1: 요일 선택 ──────────────────────────────────────
       function renderStep1() {
         _step = 1;
-        $s('smTitle').textContent = '모임 등록';
+        $s('smTitle').textContent = '함께할 날 고르기';
         $s('smBack').style.visibility = 'hidden';
 
         const DOW_KR = ['일','월','화','수','목','금','토'];
@@ -1334,9 +1334,9 @@
           const d = new Date(monday); d.setDate(monday.getDate() + i); return d;
         });
 
-        const wkLabel = _modalWeekOffset === 0 ? '이번 주'
-          : _modalWeekOffset === -1 ? '지난 주'
-          : _modalWeekOffset === 1 ? '다음 주'
+        const wkLabel = _modalWeekOffset === 0 ? '이번주'
+          : _modalWeekOffset === -1 ? '지난주'
+          : _modalWeekOffset === 1 ? '다음주'
           : _modalWeekOffset > 0 ? `${_modalWeekOffset}주 후` : `${-_modalWeekOffset}주 전`;
         const wkRange = `${monday.getMonth()+1}/${monday.getDate()}~${weekDates[6].getMonth()+1}/${weekDates[6].getDate()}`;
         const prevDisabled = weekDates[6] < TODAY; // 주 전체가 과거
@@ -1376,9 +1376,9 @@
           <div class="sm-week-nav">
             <button aria-label="이전주" class="sm-week-nav-btn" id="smWkPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
             <span class="sm-week-label">${wkRange} · ${wkLabel}</span>
-            <button aria-label="다음 주" class="sm-week-nav-btn" id="smWkNext" type="button">▶</button>
+            <button aria-label="다음주" class="sm-week-nav-btn" id="smWkNext" type="button">▶</button>
           </div>
-          <p class="sm-hint">참여할 요일을 선택하세요 (여러 날 선택 가능, 등록된 날도 다시 골라 함께 수정할 수 있어요)</p>
+          <p class="sm-hint">함께할 수 있는 날을 골라주세요. (여러 날 선택할 수 있고, 등록한 날도 다시 눌러 수정할 수 있어요.)</p>
           <div class="sm-day-chips" id="smDayChips">${chips}</div>
           <div id="smSelSummary">${buildSummary()}</div>`;
         $s('smFooter').innerHTML =
@@ -1635,7 +1635,7 @@
           <div class="sm-week-nav">
             <button aria-label="이전주" class="sm-week-nav-btn" id="smDcPrev" type="button"${prevDisabled?' disabled':''}>◀</button>
             <span class="sm-week-label">${wkRange}</span>
-            <button aria-label="다음 주" class="sm-week-nav-btn" id="smDcNext" type="button">▶</button>
+            <button aria-label="다음주" class="sm-week-nav-btn" id="smDcNext" type="button">▶</button>
           </div>
           <div class="sm-day-chips" id="smDcChips">${chips}</div>`;
         $s('smFooter').innerHTML = `<button class="sched-discard-btn" id="smDcCancel" type="button">취소</button>`;
@@ -2535,7 +2535,7 @@
       const monday = new Date(TODAY);
       monday.setDate(TODAY.getDate() + daysToMon + offset * 7);
 
-      const _relLabel = offset === 0 ? '이번 주' : offset === -1 ? '지난 주' : offset === 1 ? '다음 주' : null;
+      const _relLabel = offset === 0 ? '이번주' : offset === -1 ? '지난주' : offset === 1 ? '다음주' : null;
       document.getElementById('weekTitle').textContent = getWeekTitle(monday) + (_relLabel ? ` (${_relLabel})` : '');
 
       const user = window.getKakaoUser?.();

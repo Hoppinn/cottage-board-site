@@ -20,7 +20,7 @@ const moodValue = recommendState.mood;
   !moodValue
 ){
   gameScroll.style.cssText = 'max-width:720px;margin:0 auto;padding:10px 16px;box-sizing:border-box;display:block;';
-  gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">하나만 선택해도 추천해드려요.</p>`;
+  gameScroll.innerHTML = `<p class="recommend-empty" style="max-width:480px;width:100%;margin:0 auto;display:block;text-align:center;">하나만 골라도, 맞는 게임이 보여요.</p>`;
 
   return;
 }
@@ -1744,15 +1744,15 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
   // updateNav()의 주간 네비 라벨과 같은 문구 — 사본을 두지 않고 여기 하나만 쓴다(#15류 방지).
   function _weekSuffix(weekOffset) {
-    return weekOffset === 0  ? '이번 주'
-         : weekOffset === 1  ? '다음 주'
-         : weekOffset === -1 ? '지난 주'
+    return weekOffset === 0  ? '이번주'
+         : weekOffset === 1  ? '다음주'
+         : weekOffset === -1 ? '지난주'
          : weekOffset > 0    ? `${weekOffset}주 후`
          :                     `${Math.abs(weekOffset)}주 전`;
   }
 
-  // weekOffset을 안 받던 시절엔 지난 주·다음 주를 봐도 무조건 "이번 주 모임 진행 중"이라고
-  // 떴다(2026-08-02 사용자 지적 — 이미 끝난 주인데 "진행 중", 다음 주인데도 "이번 주").
+  // weekOffset을 안 받던 시절엔 지난주·다음주를 봐도 무조건 "이번주 모임 진행 중"이라고
+  // 떴다(2026-08-02 사용자 지적 — 이미 끝난 주인데 "진행 중", 다음주인데도 "이번주").
   // 과거/현재/미래를 나눠 시제와 라벨을 맞춘다. 현재 주(weekOffset===0)는 기존 문구 그대로.
   //
   // 🚨 실제 "모임"은 같은 날 2명 이상이 모여야 성사된다(2026-08-02, 사용자 예시: 월 1명+수
@@ -1763,22 +1763,22 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const label = _weekSuffix(weekOffset);
     const clustered = maxDayCount >= 2; // 최소 하루에 2명 이상 뭉쳤는가
     if (weekOffset < 0) {
-      if (!clustered) return `📭 ${label}엔 모임이 없었어요`;
-      return `✅ ${label} 모임에 ${count}명이 모였어요`;
+      if (!clustered) return `📭 ${label}엔 함께한 판이 없었어요`;
+      return `✅ ${label}엔 ${count}명이 함께했어요`;
     }
     if (weekOffset > 0) {
-      if (count === 0) return `🎲 ${label} 모임 모집 중`;
-      if (!clustered) return `${count === 1 ? '🙋' : '👥'} ${label}에 ${count}명이 기다리고 있어요`;
-      return `📅 ${label} 모임에 ${count}명 참여 예정이에요`;
+      if (count === 0) return `🎲 ${label}, 함께할 사람을 기다려요`;
+      if (!clustered) return `${count === 1 ? '🙋' : '👥'} ${label}에 ${count}명이 함께할 사람을 기다리고 있어요`;
+      return `📅 ${label} 모임에 ${count}명이 함께할 예정이에요`;
     }
-    if (count === 0) return '🎲 이번 주 모임 모집 중';
-    if (!clustered) return `${count === 1 ? '🙋' : '👥'} ${count}명이 기다리고 있어요`;
+    if (count === 0) return '🎲 이번주, 함께할 사람을 기다려요';
+    if (!clustered) return `${count === 1 ? '🙋' : '👥'} ${count}명이 함께할 사람을 기다리고 있어요`;
     if (count === 3) return '🎲 3명이 모였어요';
-    return '🔥 이번 주 모임 진행 중';
+    return '🔥 이번주 함께할 판이 열렸어요';
   }
 
   // 상태 메시지가 뜨는 모든 인원수에서 반짝임 — 모임 요일칩(has-vote)과 같은 정도로 항상 강조.
-  // 단, 지난 주(이미 끝난 일)는 반짝일 이유가 없어 현재·미래 주만 켠다(2026-08-02).
+  // 단, 지난주(이미 끝난 일)는 반짝일 이유가 없어 현재·미래 주만 켠다(2026-08-02).
   function isGlowworthyMeetingCount(count, weekOffset = 0) {
     return weekOffset >= 0;
   }
@@ -1792,7 +1792,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const isPastDate = dateStr < toDateStr(new Date());
     if (!dayVotes.length) {
       previewEl.innerHTML = `<div class="meeting-preview-empty">
-        <div class="mpe-msg">${isPastDate ? '이날은 등록된 일정이 없었어요' : '등록된 일정이 없어요'}</div>
+        <div class="mpe-msg">${isPastDate ? '이날은 모임이 없었어요' : '아직 모임이 없어요'}</div>
         ${isPastDate ? '' : `<button class="mpe-link" type="button" id="mpeGoPlanner">+ 플래너에서 등록하기</button>`}
       </div>`;
       document.getElementById('mpeGoPlanner')?.addEventListener('click', () => {
@@ -1811,7 +1811,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
     const actionsHtml = (myVote || isPastDate)
       ? `<button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>`
       : `<div class="mpc-actions-split">
-          <button class="mpc-register-btn" type="button">+ 이날 참여 등록</button>
+          <button class="mpc-register-btn" type="button">+ 이날 함께하기</button>
           <button class="mpc-detail-btn" type="button">이날 모임 상세 →</button>
         </div>`;
 
@@ -1943,12 +1943,12 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       ]);
       if (!votes) { statusEl.textContent = getMeetingStatusMsg(0, weekOffset); statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(0, weekOffset)); return; }
 
-      // [DEV] localhost ?dev=N — 메모리 더미 주입 (이번 주만)
+      // [DEV] localhost ?dev=N — 메모리 더미 주입 (이번주만)
       const _devN = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
         ? parseInt(new URLSearchParams(location.search).get('dev') || '0') : 0;
       if (_devN >= 2 && weekOffset === 0) {
         const tgt = new Date(monDate);
-        tgt.setDate(monDate.getDate() + 1); // 이번 주 화요일 고정
+        tgt.setDate(monDate.getDate() + 1); // 이번주 화요일 고정
         const tgtStr = toDateStr(tgt);
         const NAMES = ['더미1','더미2','더미3','더미4','더미5','더미6','더미7'];
         const TIMES = [[10,15],[9,12],[12,17],[14,19],[16,21],[18,23],[9,23]];
@@ -1983,7 +1983,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       // 날짜별 vote 행을 그대로 담는다 — 인원은 sumPartySize(동반 인원 포함)로 세므로 Set(user_id)로 접지 않는다
       votes.forEach(v => { if (byDate[v.vote_date]) byDate[v.vote_date].push(v); });
 
-      // 이번 주 인원 = 등록자 + 동반 인원 (유저별 최대치 합산 — 공용 헬퍼가 규칙의 단일 출처)
+      // 이번주 인원 = 등록자 + 동반 인원 (유저별 최대치 합산 — 공용 헬퍼가 규칙의 단일 출처)
       const weekPeople = window.CottageDB?.sumWeeklyPartySize?.(votes)
         ?? new Set(votes.map(v => String(v.user_id))).size;
       // 실제 "모임"은 같은 날 2명 이상이 모여야 성사된다(2026-08-02 사용자 지적) — 요일이
@@ -1996,7 +1996,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
       const dateKeys = Object.keys(byDate).sort();
 
-      // 초기 선택(또는 이전 선택이 이번 주 범위 밖이 됐을 때만 재계산): 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
+      // 초기 선택(또는 이전 선택이 이번주 범위 밖이 됐을 때만 재계산): 오늘 이후 vote 있는 가장 빠른 날 → 없으면 오늘 이후 첫 날
       if (selectedDate == null || !dateKeys.includes(selectedDate)) {
         selectedDate = dateKeys.find(d => d >= todayStr && byDate[d].length > 0)
           || dateKeys.find(d => d >= todayStr)
@@ -2048,7 +2048,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         voteGames.filter(g => g.vote_date === selectedDate),
       );
     } catch (err) {
-      console.error('[홈 이번 주 모임 미리보기]', err);
+      console.error('[홈 이번주 모임 미리보기]', err);
       statusEl.textContent = '🎲 이번주, 함께할 사람을 기다려요';
     }
   }

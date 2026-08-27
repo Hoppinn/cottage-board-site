@@ -4406,7 +4406,7 @@ html:has(body.embed-mode) { scroll-padding-top: 0; }
 @keyframes repAuraGlow{0%,100%{box-shadow:0 0 0 0 rgba(224,154,60,0.4);}50%{box-shadow:0 0 12px 4px rgba(224,154,60,0.5);}}
 /* 배경·테두리 없는 순수 텍스트 글로우 — 박스가 아니라 글씨 자체가 나타났다 사라진다.
    키프레임 textBlinkGlow는 style.css 아래쪽(.meeting-status-msg.is-glow 근처)에 정의돼
-   있다 — 대표 캐릭터명·칭호·이번 주 모임 상태 셋이 전부 이 방식을 쓴다(2026-08-02,
+   있다 — 대표 캐릭터명·칭호·이번주 모임 상태 셋이 전부 이 방식을 쓴다(2026-08-02,
    사용자가 시안 비교 후 확정). 배경/테두리가 실제로 있는 버튼·배지·카드
    (.sheet-org-btn, .sheet-avail-notice 등)는 이 대상이 아니다 — 그쪽은 기존 박스 글로우 유지. */
 @media (prefers-reduced-motion: reduce){.profile-panel-avatar,.profile-panel-rep-name,.profile-panel-title-name{animation:none;}}
@@ -7431,7 +7431,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 .rp-rich-card{padding:12px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--border);}
 .rp-rich-date{font-size:12px;color:var(--text-info);margin-bottom:8px;}
 
-/* 이번 주 모임 */
+/* 이번주 모임 */
 .meeting-status{margin-bottom:14px;}
 .meeting-status-msg{
   display:inline-block;
@@ -7444,7 +7444,7 @@ body.is-embedded .inner-page{padding-top:16px;}
 }
 /* 배경 없는 순수 텍스트 글로우 — 글자 자체가 완전히 사라졌다 나타난다(opacity 1↔0).
    대표 캐릭터명·칭호(.profile-panel-rep-name/-title-name, 3987번째 줄 근처)와
-   이번 주 모임 상태가 전부 이 키프레임을 공유한다(2026-08-02, 시안 비교 후 확정).
+   이번주 모임 상태가 전부 이 키프레임을 공유한다(2026-08-02, 시안 비교 후 확정).
    핵심 조건 — opacity와 text-shadow의 피크·트로프가 정확히 같은 시점이어야 한다.
    어긋나면 "그림자가 최대일 때 글자가 투명이라 그림자 자체가 안 보이는" 실수가 난다
    (처음 구현이 실제로 이랬다). 트로프에서 text-shadow:none 대신 레이어 수를 맞춘
@@ -8175,7 +8175,7 @@ body.is-embedded .inner-page{padding-top:16px;}
     max-width:760px;
   }
 
-  /* 최근 플레이 / 이번 주 모임 — hero(.hero-inner) 안이 아니라 <main> 아래 독립 섹션이라
+  /* 최근 플레이 / 이번주 모임 — hero(.hero-inner) 안이 아니라 <main> 아래 독립 섹션이라
      PC 폭 규격을 못 받고 있었다(2026-07-27 실측: 1440px에서 1414px 풀와이드로 늘어남).
      .hero-inner와 같은 760px로 맞춘다. */
   .home-section{
@@ -8184,7 +8184,7 @@ body.is-embedded .inner-page{padding-top:16px;}
     margin-right:auto;
   }
 
-  /* 이번 주 모임 요일칩(월~일) — 컨테이너는 넓어졌는데 flex-start 기본값이라 왼쪽에
+  /* 이번주 모임 요일칩(월~일) — 컨테이너는 넓어졌는데 flex-start 기본값이라 왼쪽에
      쏠려 보였다(2026-07-27 사용자 지적). 7칸이 폭을 균등하게 나눠 갖게 한다. */
   .meeting-days{ flex-wrap:nowrap; }
   .meeting-day-chip{ flex:1; }

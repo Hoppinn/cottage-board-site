@@ -508,9 +508,9 @@
                   <button class="admin-chart-period-btn is-active" data-days="1">오늘</button>
                   <!-- 라벨은 실제 동작과 일치해야 한다(#11): data-days는 과거 롤링 일수의 잔재이고
                        실제로는 _navType을 week/month로 바꾸는 **단위 선택기**다. "7일"은 최근 7일이
-                       아니라 이번 주(월~일), "30일"은 이번 달이었다 — 실증: 30일 합계 1,453 vs 전체 1,493.
+                       아니라 이번주(월~일), "30일"은 이번 달이었다 — 실증: 30일 합계 1,453 vs 전체 1,493.
                        ◀▶로 과거 주/월로 이동하면 옆 날짜 네비 라벨이 실제 기간을 보여준다. -->
-                  <button class="admin-chart-period-btn" data-days="7">이번 주</button>
+                  <button class="admin-chart-period-btn" data-days="7">이번주</button>
                   <button class="admin-chart-period-btn" data-days="30">이번 달</button>
                   <button class="admin-chart-period-btn" data-days="0">전체</button>
                 </div>
@@ -2403,7 +2403,7 @@
         // 몇 %가 이 페이지를 봤나" 같은 비교가 안 된다(사용자 지적, 2026-08-18).
         // 🚨 _v2VisitorCount는 "전체" 탭일 때만 계산되고(그 외엔 null, 위 #2022 참조 —
         // 기간이 안 맞는 분모를 보여주지 않기 위한 의도적 설계) 그 사실이 문구에는 반영이
-        // 안 돼 있었다 — "오늘"·"이번 주" 등을 보는 중엔 "그 사이 방문자 null명"이 그대로
+        // 안 돼 있었다 — "오늘"·"이번주" 등을 보는 중엔 "그 사이 방문자 null명"이 그대로
         // 화면에 찍혔다(2026-08-20 사용자 스크린샷으로 발견). null이면 그 절 자체를 뺀다.
         if (chartPagesSub) {
           chartPagesSub.textContent = _v2CutoffKst
@@ -3121,7 +3121,7 @@
           `, famOverlapSubline(evts, 'record'))}
           ${axisCard('🤝', '모임', `
             ${stepRow('3-1', '히어로 모임 클릭', mt)}
-            ${stepRow('3-2', '이번 주 모임 플래너 보기 클릭', mp)}
+            ${stepRow('3-2', '이번주 모임 플래너 보기 클릭', mp)}
             ${relBlock('3-1', mt, [['3-2', mp]])}
           `, famOverlapSubline(evts, 'meeting'))}
         </div>`;

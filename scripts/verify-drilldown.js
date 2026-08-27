@@ -28,7 +28,7 @@ const iso = d => new Date(Date.now() - d * 86400000).toISOString();
 // 화면이 대조군으로 쓰는 이벤트 — 계열이 다르고 회원/비회원이 섞인 것으로 고른다.
 const CHECK_EVENTS = {
   '히어로 모임 클릭': 'home_meeting_main_click',
-  '이번 주 모임 플래너 보기 클릭': 'home_meeting_planner_click',
+  '이번주 모임 플래너 보기 클릭': 'home_meeting_planner_click',
   '히어로 기록남기기 클릭': 'home_record_main_click',
   '최근 플레이 기록 남기기 클릭': 'home_record_write_click',
   '히어로 추천게임찾기 클릭': 'home_recommend_main_click',
