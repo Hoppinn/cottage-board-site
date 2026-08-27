@@ -29,7 +29,7 @@ return data || [];
   - ⚠️ **그래서 점검은 `} = await`로도 부족하다** — **`.data`/`.count` 참조 전수**로 세야 한다. "위반 N곳" 숫자가 좁은 grep 때문에 틀린 게 이번이 **세 번째**다(1단계 40곳 오집계 → 2단계 `{count}`·별칭형 누락 → R10b `Promise.all` 계열 누락).
   - ⚠️ **대상은 `{ data }`만이 아니다**: 2단계 실측에서 `{ data }` 39곳 외에 **`{ count }` 7곳**(getUserPlayCount·getUserRatingCount 등 카운트 함수 전부)과 **별칭형 `{ data: existing/rows/product… }` 13곳**이 같은 사각지대였다. 이전 기재 "40곳"은 `const { data } = await db.`만 센 좁은 grep 결과였음.
   - **이름 충돌 주의**: 같은 블록에 이미 `const { error }`가 있거나 한 함수에서 두 번 조회하면 `error`를 그대로 추가하면 **재선언 SyntaxError**다. 파일 관용대로 `error: <이름>Err` 별칭을 쓴다(현재 10곳: `rowsErr`·`profsErr`·`existErr`·`productErr` 등).
-  - **로그 여부의 기준은 "고칠 게 있는가"** — 조용한 실패(화재를 못 봄)와 정상 경로 로그(가짜 경보가 진짜를 가림)는 **같은 원칙의 양쪽 위반**이다. `getUserPhotoCount`의 안쪽 `JSON.parse` catch처럼 실패가 정상 분기인 곳엔 로그 대신 주석을 단다(1단계가 기계적으로 붙여 실제로 가짜 에러 발생). 상세는 CLAUDE.md 「DB 함수 에러 처리」.
+  - **로그 여부의 기준은 "고칠 게 있는가"** — 조용한 실패(화재를 못 봄)와 정상 경로 로그(가짜 경보가 진짜를 가림)는 **같은 원칙의 양쪽 위반**이다. `getUserPhotoCount`의 안쪽 `JSON.parse` catch처럼 실패가 정상 분기인 곳엔 로그 대신 주석을 단다(1단계가 기계적으로 붙여 실제로 가짜 에러 발생). 상세는 현재 사용하는 작업 규칙 파일([AGENTS.md](../AGENTS.md) 또는 [CLAUDE.md](../CLAUDE.md))의 DB 오류 처리 규칙.
   - **쓰기 경로(2026-07-18 4단계 종결)**: insert/update/delete/upsert도 전수 확인 완료. 대부분 `return {error}`로 호출부에 전파(record/comment/pref/meeting 계열)라 이 계층에선 갭 없음. 갭은 **추적성 write**(trackView·trackEvent·anon_sessions·page_sessions fire-and-forget)·**toggle**(like/curious가 SELECT 에러만 로그하고 쓰기 에러 삼킴)·**업적/교환권 지급 family**에 있었고 전부 로그 추가로 닫음(커밋 c5b5f68 외). ⚠️ 업적/교환권 **지급 함수는 UNIQUE 위반(이미 달성/중복 지급 방어)이 정상 경로**라 `if (error.code !== '23505') console.error(...)`로 진짜 실패만 로그 — 여기에 무조건 로그를 달면 정상 중복마다 가짜 경보(늑대소년). `23505`는 파일 관용 상수(`addMeetingVoteGame`도 사용).
 
 | 함수 | 용도 |

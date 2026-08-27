@@ -67,7 +67,7 @@ characters_basic/rare/{id}.png       ← rare_lightning, season_spring, cottage_
 
 🚨 **DOM만 고치면 수집 보드를 다시 열 때 되돌아간다.** `_growthInnerHtml`(kakao-auth.js)은 **패널 오픈 시 1회** 만들어진 문자열이라 서브시트에 재진입할 때마다 **그때의 대표값이 다시 깔린다** — 「바꿨는데 다시 들어가니 옛 캐릭터」의 정체가 이것이다(2026-07-21). 그래서 `_applyRep*UI`가 바꾼 값을 모듈 변수에 남기고, `_afterGrowthRender`가 렌더 직후 **`reapplyRepOverrides()`**로 다시 입힌다(남의 보드 `readOnly`엔 적용 안 함). **패널 오픈 시 1회 문자열로 만드는 다른 섹션(`_recordInnerHtml` 등)에 같은 종류의 즉시 반영을 붙일 때도 이 재적용이 필요하다.**
 
-⚠️ 업적 ID는 사용자 자산(획득 업적, 교환권, 도감 진행률)의 기준값이므로 배포 후 변경 금지. `CLAUDE.md §영구 식별자` 참조.
+⚠️ 업적 ID는 사용자 자산(획득 업적, 교환권, 도감 진행률)의 기준값이므로 배포 후 변경 금지. 현재 사용하는 작업 규칙 파일([AGENTS.md](../AGENTS.md) 또는 [CLAUDE.md](../CLAUDE.md))의 영구 식별자 규칙을 따른다.
 
 ---
 

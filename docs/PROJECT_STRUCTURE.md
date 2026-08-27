@@ -315,7 +315,7 @@ embed 모드에서는 `header.js`가 `document` 클릭을 가로채 내부 `.htm
 - `game-location.html` — `openShelfSheet(url)`이 `?embed=1&highlight=GAMEID` URL로 호출
 - `guide.html` — `openGuideOverlay(href)` 내부에서 `?embed=1` 자동 추가
 
-⚠️ **헤더 높이 기반 CSS는 `body.embed-mode{--header-total-h:0px}` 하나로 다 안 잡힌다** — 이 재정의는 **body의 자손**에게만 적용되고, `html{scroll-padding-top:var(--header-total-h)}`(style.css 81번째 줄)처럼 **`<html>` 자신에** 선언된 속성은 `<body>`가 그 조상이라 변수 재정의가 거꾸로 안 흐른다(2026-08-10, `game-location.html`의 `shelf=` 자동 스크롤이 헤더 없는 embed 화면에서도 매번 52px씩 못 미치던 사건 — `html:has(body.embed-mode){scroll-padding-top:0}`로 별도 수정, CLAUDE.md 「반복 패치 정지」에도 기록). **새 embed 대응 CSS를 `<html>` 셀렉터에 선언하려면 `body.embed-mode` 변수 재정의로는 안 되고 `html:has(body.embed-mode)`(또는 JS로 `<html>`에도 클래스 부여)가 필요하다.**
+⚠️ **헤더 높이 기반 CSS는 `body.embed-mode{--header-total-h:0px}` 하나로 다 안 잡힌다** — 이 재정의는 **body의 자손**에게만 적용되고, `html{scroll-padding-top:var(--header-total-h)}`(style.css 81번째 줄)처럼 **`<html>` 자신에** 선언된 속성은 `<body>`가 그 조상이라 변수 재정의가 거꾸로 안 흐른다(2026-08-10, `game-location.html`의 `shelf=` 자동 스크롤이 헤더 없는 embed 화면에서도 매번 52px씩 못 미치던 사건 — `html:has(body.embed-mode){scroll-padding-top:0}`로 별도 수정, 현재 사용하는 작업 규칙 파일의 반복 패치 정지 규칙에도 기록). **새 embed 대응 CSS를 `<html>` 셀렉터에 선언하려면 `body.embed-mode` 변수 재정의로는 안 되고 `html:has(body.embed-mode)`(또는 JS로 `<html>`에도 클래스 부여)가 필요하다.**
 
 ### openShelfSheet (game-sheet.js)
 
@@ -495,17 +495,22 @@ game-reviews.html — 기록 입력 탭
     elapsed = Date.now() - _sessionStart (초 단위)
     cottageSess.timeSec += elapsed
 
-[DB 반영]
-  _syncTimeToDBNow() ← visibilitychange/beforeunload/heartbeat(1분)
+[로그인 누적 DB 반영]
+  _syncTimeToDBNow() ← visibilitychange:hidden / heartbeat(1분)
     localhost 방문 시 즉시 return (dev 환경 카운팅 제외)
     profiles.total_minutes / today_seconds UPDATE
-    page_sessions INSERT (page, user_id, session_key, duration_sec, entered_at, referrer)
+  beforeunload / pagehide → _flushTime()으로 localStorage에 백업
+
+[page_sessions 지속시간 writer]
+  script-nav.js PAGE SESSION TRACKER ← visibilitychange / pagehide / 활성 뷰 push·pop
+    현재 페이지·활성 뷰 구간을 3초 이상일 때 keepalive POST
+    실제 duration_sec > 0을 쓰는 유일한 writer
 
 [비로그인 방문자 추적]
   cottage-auth-changed 이벤트 없거나 user=null → _startAnonHeartbeat()
     localhost 방문 시 즉시 return
     anon_sessions UPSERT (session_key, last_seen_at) — 1분 주기 갱신
-    page_sessions INSERT (user_id: null, session_key, page, referrer) — 입장 1회
+    page_sessions INSERT (user_id: null, session_key, page, duration_sec: 0, referrer) — 입장 마커 1회
 
 [방문자 마커 (__visitor__)]
   DOMContentLoaded → localhost/admin 제외

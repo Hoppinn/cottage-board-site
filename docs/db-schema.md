@@ -39,7 +39,7 @@ Supabase 대시보드 **Project Settings → API → Max rows**. 기본값 `1000
 
 ### ✅ RLS 상태 — 재구축 시 조용히 파손되던 6개 테이블, 파일 보강 완료 (2026-07-16 발견 → 2026-07-31 조치)
 
-**이 프로젝트 기본 = RLS DISABLE**(카카오 OAuth라 `auth.uid()` 불가, anon 키 직접 read/write). 마이그레이션 **000·001**은 테이블을 만들며 `ENABLE ROW LEVEL SECURITY` + SELECT/INSERT anon 정책만 걸고 `DISABLE`을 넣지 않았다 — CLAUDE.md 「Supabase RLS: 테이블 생성 시 항상 RLS 상태를 명시」 규칙이 **2026-07-08에 생겨 그 이전 파일에 소급되지 않은 것**.
+**이 프로젝트의 다수 테이블 기본 = RLS DISABLE**(카카오 OAuth라 `auth.uid()` 불가, anon 키 직접 read/write). 단 `page_views`·`page_events`·`page_sessions`·`game_comments`·`member_intros`처럼 RLS ON + anon 정책을 쓰는 예외가 있으므로, 신규·변경 작업은 이 문서의 **테이블별 실제 계약**을 따른다. 마이그레이션 **000·001**은 테이블을 만들며 `ENABLE ROW LEVEL SECURITY` + SELECT/INSERT anon 정책만 걸고 `DISABLE`을 넣지 않았다 — 2026-07-08에 생긴 규칙은 “항상 DISABLE”이 아니라 **테이블 생성 시 RLS 상태를 명시하고 실제 접근 경로를 검증**하는 것이며, 그 이전 파일에는 소급되지 않은 상태였다.
 
 | 테이블 (생성 마이그레이션) | 운영 실측 (2026-07-16) | 조치 |
 |---|---|---|

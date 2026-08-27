@@ -856,7 +856,7 @@ function bindGameCardEvents(){
   //    체류·방문은 사람·탭 단위라 부모 1회가 맞고, 사용자 행동(trackEvent)은 프레임을 안 본다.
   // 🚨 iframe 자신은 이 조기 return 때문에 window.pushActiveView/popActiveView가 아예
   //    정의되지 않는다(의도됨) — iframe은 postMessage로 부모에게 알리고, 부모가 대신
-  //    push/pop을 호출한다(PLAN_active_view_tracking.md 3차, 아직 미배선).
+  //    push/pop을 호출한다(PLAN_active_view_tracking.md 3차 배선 완료).
   function _isEmbeddedFrame() {
     try { return window.top !== window.self; }
     catch (_) { return true; } // 크로스오리진 차단 = 남의 프레임 안 = 추적 안 함
