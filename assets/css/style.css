@@ -671,18 +671,7 @@ body.owned-page .site-header{
   background:rgba(255,255,255,0.64);
   box-shadow:0 0 5px rgba(255,255,255,0.40);
 }
-.hero-link-dots--upper{
-  gap:4px;
-  transform:translateY(-96px);
-}
-.hero-link-dots--upper span{
-  flex-basis:2px;
-  width:2px;
-  height:2px;
-  background:rgba(255,255,255,0.42);
-  box-shadow:0 0 4px rgba(255,255,255,0.24);
-}
-
+.hero-link-dots--upper{ transform:translateY(-96px); }
 .dotted-line{
   width:100%;
   max-width:300px;
