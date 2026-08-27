@@ -34,6 +34,12 @@
 - 신규 CSS 클래스를 만들기 전에 기존 패턴(`page-mini-hero--*` 등)을 먼저 확인한다.
 - 비슷한 역할의 요소가 페이지마다 다른 스타일을 갖는 상황을 만들지 않는다.
 
+### 5-a. PC 720px 본문의 `--page-x` 사용 계약
+
+- PC의 `--page-x` 값은 `calc((100vw - 720px) / 2)`로 계산한 **페이지 외부 좌우 거터**다. 컴포넌트 내부의 일반 padding으로 쓰지 않는다.
+- `padding-inline:var(--page-x)`를 쓰는 PC 본문은 `.about-section`처럼 박스의 `max-width`를 풀어 전체 폭에서 거터를 빼는 공용 패턴을 재사용한다. 중앙 `max-width` 박스와 함께 적용하면 폭을 두 번 제한한다.
+- 2026-08-27 `about.html` WHY에서 `max-width` 박스에 `--page-x` 패딩을 덮어 1,174px 박스의 좌우 padding이 각 587px가 되고 본문 폭이 0px로 붕괴했다. 폭 수치를 반복 조정하지 말고 `getBoundingClientRect()`와 계산된 padding을 함께 측정한다.
+
 ## 6. border-radius + 스크롤 분리 원칙 ⚠️
 
 **같은 요소에 `border-radius`와 `overflow-y:auto`를 동시에 쓰지 않는다.**

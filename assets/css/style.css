@@ -8365,19 +8365,11 @@ body.is-embedded .inner-page{padding-top:16px;}
     display:none;
   }
 
-  /* 공용 소개 페이지(동호회·가이드 등)는 기존 전체 폭 규격을 유지한다. */
+  /* about-section: inner-page와 동일하게 --page-x로 720px 중앙 정렬 */
   .about-section{
     max-width:none;
     padding-left:var(--page-x);
     padding-right:var(--page-x);
-  }
-  /* about.html만 다른 소개 페이지와 같은 900px PC 콘텐츠 폭을 쓴다. */
-  body.about-page .about-section{
-    width:min(900px, calc(100vw - 48px));
-    max-width:none;
-    box-sizing:border-box;
-    margin-left:auto;
-    margin-right:auto;
   }
 
   /* 추천 전체보기: PC 본문·about/club과 같은 720px 최대폭 */
@@ -8606,17 +8598,18 @@ body.is-embedded .inner-page{padding-top:16px;}
     background-position:center 30%;
   }
 
+  /* ── about 사진 그리드: 텍스트와 같은 720px 안으로 ── */
   .about-photo-strip{
-    max-width:900px;
+    max-width:720px;
     margin-left:auto;
     margin-right:auto;
     border-radius:0;
   }
 
-  /* ── about 히어로: PC 본문과 같은 900px 중앙 + 라운딩 ── */
+  /* ── about 히어로: PC에서 720px 중앙 + 라운딩 ── */
   .about-hero{
     position:relative;
-    max-width:900px;
+    max-width:720px;
     margin-top:calc(var(--header-total-h) + 46px);
     margin-left:auto;
     margin-right:auto;
