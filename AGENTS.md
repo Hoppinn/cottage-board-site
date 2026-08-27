@@ -292,6 +292,7 @@ Plan이 필요했던 신규 기능·API·상태 변경은 커밋 전에 사용�
 
 - 자동 assert는 질문한 것만 확인한다. UI를 수정한 경우 실제 화면이나 스크린샷을 **읽고** 확인한다.
 - UI/CSS 버그는 브라우저 육안 확인 전까지 완료가 아니다.
+- 사용자가 스크린샷을 보내면 먼저 **주소·뷰포트·열린 화면·비교 기준**을 화면에서 식별하고, 그 증거를 현재 가설과 대조한다. 화면에 이미 있는 기준을 다시 요구하거나, 텍스트 설명만 좇아 다른 화면으로 분류하지 않는다. 2026-08-27 추천 목록 패널 작업에서 `pages/info/about.html` 스크린샷의 720px 본문 폭을 참조 기준으로 읽지 않고 PC/모바일 검증 대상으로 오분류해, 같은 CSS 추측을 반복한 사례가 있다.
 - 레이아웃·scroll·sticky·position·offset·CSS 변수는 추론만으로 고치지 않는다. `getComputedStyle()`, `getBoundingClientRect()`, `offsetHeight`, `clientHeight` 등 실제 값을 확인한다.
 - `calc()`·`var()`·`env()`가 섞인 값을 `parseFloat()`로 단순 숫자화하지 않는다. 실제 DOM 크기를 재거나 CSS가 처리하게 둔다.
 - CSS·iframe·bottom sheet·깜빡임의 구체 규칙은 `DESIGN_RULES.md`와 `PROJECT_STRUCTURE.md §2-A`를 따른다.
