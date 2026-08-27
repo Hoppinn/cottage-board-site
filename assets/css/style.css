@@ -8365,11 +8365,16 @@ body.is-embedded .inner-page{padding-top:16px;}
     display:none;
   }
 
-  /* about-section: about PC 본문과 같은 900px 중앙 정렬 */
-  .about-section{
-    max-width:900px;
+  /* about 본문: 히어로와 같은 실제 폭을 가져야 풀스크린에서도 내용 폭으로 수축하지 않는다. */
+  .about-section,
+  .about-why-block{
+    width:min(900px, calc(100% - 48px));
+    max-width:none;
+    box-sizing:border-box;
     margin-left:auto;
     margin-right:auto;
+  }
+  .about-section{
     padding-left:var(--page-x);
     padding-right:var(--page-x);
   }
@@ -8600,10 +8605,6 @@ body.is-embedded .inner-page{padding-top:16px;}
     background-position:center 30%;
   }
 
-  /* ── about: PC 본문 폭을 900px로 통일 ── */
-  .about-why-block{
-    max-width:900px;
-  }
   .about-photo-strip{
     max-width:900px;
     margin-left:auto;
