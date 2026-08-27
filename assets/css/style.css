@@ -668,7 +668,7 @@ body.owned-page .site-header{
   width:3px;
   height:3px;
   border-radius:50%;
-  background:rgba(255,255,255,0.64);
+  background:rgba(255,255,255,0.8);
   box-shadow:0 0 5px rgba(255,255,255,0.40);
 }
 .hero-link-dots--upper{ transform:translateY(-96px); }
