@@ -8378,11 +8378,11 @@ body.is-embedded .inner-page{padding-top:16px;}
     padding:0;
   }
   .recommend-overlay-panel{
-    width:100%;
-    max-width:720px;
+    width:min(720px, calc(100vw - 48px));
+    max-width:none;
     height:calc(100dvh - 24px);
     max-height:calc(100dvh - 24px);
-    margin:0 10px 8px;
+    margin:0 auto 8px;
     border-radius:18px;
   }
   .recommend-overlay-header{
