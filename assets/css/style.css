@@ -536,7 +536,7 @@ body.owned-page .site-header{
   content:"";
   position:absolute;
   inset:0;
-  background:url('../images/main/photo-exterior.jpg') center/auto calc(100% + 60px) no-repeat;
+  background:url('../images/main/photo-exterior.jpg') center 75%/auto calc(100% + 120px) no-repeat;
   filter:brightness(0.65);
   z-index:0;
 }
