@@ -1933,20 +1933,17 @@ body.recommend-page main{
   overflow:hidden;
 }
 
-/* ── 추천게임 전체보기: 메인 헤더 아래의 대형 패널 ──
-   전체 화면을 덮던 이전 구조(inset:0)는 헤더까지 가렸다. shell은 헤더 아래만
-   차지하고, 목록은 내 보드 계열의 별도 스크롤 패널로 둔다. */
+/* ── 추천게임 전체보기: 센터 모듈과 같은 딤 배경 + 대형 패널 ──
+   배경은 헤더까지 딤 처리해 모달 상태를 통일하되, 패널의 상단 여백은 실제
+   헤더 높이 뒤에서 시작한다. 따라서 헤더는 뒤로 물러나 보이지만 가려지지 않는다. */
 .recommend-overlay{
   position:fixed;
-  top:var(--header-total-h);
-  left:0;
-  right:0;
-  bottom:0;
+  inset:0;
   z-index:1500;
   display:flex;
   align-items:flex-end;
   justify-content:center;
-  padding:8px 10px max(12px,var(--safe-bottom));
+  padding:calc(var(--header-total-h) + 8px) 10px max(12px,var(--safe-bottom));
   box-sizing:border-box;
   background:rgba(0,0,0,0.45);
   transform:translateY(100%);
@@ -8374,7 +8371,7 @@ body.is-embedded .inner-page{padding-top:16px;}
   /* 추천 전체보기: 내 보드/센터 모듈과 같은 650px급 패널, 4열 카드 */
   .recommend-overlay{
     align-items:flex-end;
-    padding:16px 10px 8px;
+    padding:calc(var(--header-total-h) + 16px) 10px 8px;
   }
   .recommend-overlay-panel{
     max-width:650px;
