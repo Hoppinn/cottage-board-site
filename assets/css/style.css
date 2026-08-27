@@ -536,7 +536,7 @@ body.owned-page .site-header{
   content:"";
   position:absolute;
   inset:0;
-  background:url('../images/main/photo-exterior.jpg') center center/cover no-repeat;
+  background:url('../images/main/photo-exterior.jpg') center calc(50% - 30px)/cover no-repeat;
   filter:brightness(0.65);
   z-index:0;
 }
@@ -689,7 +689,7 @@ body.owned-page .site-header{
   line-height:1.55;
   font-weight:600;
   text-shadow:0 1px 10px rgba(0,0,0,0.58), 0 0 22px rgba(0,0,0,0.35);
-  transform:translateY(-18px);
+  transform:translateY(-28px);
 }
 
 .hero-visitor-count{
