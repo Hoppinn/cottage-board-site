@@ -643,7 +643,7 @@ body.owned-page .site-header{
 }
 
 .hero h1{
-  margin:0 0 clamp(100px,17vw,126px);
+  margin:0 0 clamp(24px,6vw,40px);
   color:#fff;
   font-size:clamp(26px,7.2vw,52px);
   line-height:1.22;
@@ -663,7 +663,7 @@ body.owned-page .site-header{
 }
 
 .desc{
-  margin:0 0 clamp(14px,2.5vw,22px);
+  margin:0 0 clamp(88px,15vw,110px);
   color:rgba(255,255,255,0.92);
   font-size:clamp(14px,3.8vw,22px);
   line-height:1.45;
