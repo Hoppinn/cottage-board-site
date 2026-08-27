@@ -1934,8 +1934,8 @@ body.recommend-page main{
 }
 
 /* ── 추천게임 전체보기: 센터 모듈과 같은 딤 배경 + 대형 패널 ──
-   배경은 헤더까지 딤 처리해 모달 상태를 통일하되, 패널의 상단 여백은 실제
-   헤더 높이 뒤에서 시작한다. 따라서 헤더는 뒤로 물러나 보이지만 가려지지 않는다. */
+   모바일은 메인 헤더 아래에서 시작하는 대형 시트, PC는 game-sheet-panel과
+   같은 위·아래 32px 센터 모달 규격을 쓴다. */
 .recommend-overlay{
   position:fixed;
   inset:0;
@@ -8368,24 +8368,25 @@ body.is-embedded .inner-page{padding-top:16px;}
     padding-right:var(--page-x);
   }
 
-  /* 추천 전체보기: 내 보드/센터 모듈과 같은 650px급 패널, 4열 카드 */
+  /* 추천 전체보기: game-sheet-panel과 같은 PC 센터 모달 규격 */
   .recommend-overlay{
-    align-items:flex-end;
-    padding:calc(var(--header-total-h) + 16px) 10px 8px;
+    align-items:center;
+    padding:32px 0;
   }
   .recommend-overlay-panel{
-    max-width:650px;
+    width:min(92vw,650px);
+    max-width:none;
     height:100%;
     border-radius:20px;
   }
   .recommend-overlay-header{
-    padding-left:20px;
-    padding-right:20px;
+    padding-left:32px;
+    padding-right:32px;
   }
   .recommend-overlay-list{
     grid-template-columns:repeat(4,1fr);
-    padding-left:20px;
-    padding-right:20px;
+    padding-left:32px;
+    padding-right:32px;
     gap:14px;
   }
   .recommend-overlay-list .game-card{
