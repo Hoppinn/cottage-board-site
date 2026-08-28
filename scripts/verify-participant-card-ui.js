@@ -218,6 +218,100 @@ async function verifyViewport(browser, width, height) {
     ({uid, date}) => window.__dayPersonalCall?.uid === uid && window.__dayPersonalCall?.date === date,
     {uid:homeVote.user_id, date:fixtureDate}));
 
+  // 날짜 전체 센터 모달: 2명·6명에서 요약→룰렛→참여자→내 액션 순서와 기존 동작을 검증한다.
+  for (const participantCount of [2, 6]) {
+    const expected = await page.evaluate(({date, count, myUserId}) => {
+      const games = window.COTTAGE_GAMES || [];
+      const votes = Array.from({length:count}, (_, i) => ({
+        vote_date:date,
+        user_id:i === 0 ? myUserId : `center-fixture-${i + 1}`,
+        nickname:i === 0 ? '내 일정' : `참여자${i + 1}`,
+        time_start:10 + i * .5,
+        time_end:18 + i * .5,
+        guest_count:i % 2,
+      }));
+      const voteGames = votes.flatMap((vote, i) => i % 2 ? [] : [
+        {vote_date:date, user_id:vote.user_id, list_type:'want', game_id:games[i * 3]?.bggId || null, custom_name:games[i * 3]?.display || `하고싶은게임${i + 1}`, player_condition:'any'},
+        {vote_date:date, user_id:vote.user_id, list_type:'want', game_id:games[i * 3 + 1]?.bggId || null, custom_name:games[i * 3 + 1]?.display || `하고싶은게임${i + 2}`, player_condition:'any'},
+        {vote_date:date, user_id:vote.user_id, list_type:'learn', game_id:games[i * 3 + 2]?.bggId || null, custom_name:games[i * 3 + 2]?.display || `배울게임${i + 1}`, player_condition:'any'},
+      ]);
+      window.__centerProfileCall = null;
+      window.__centerPlannerCall = null;
+      window.openOtherMeetingSheet = uid => { window.__centerProfileCall = uid; };
+      window.openPlannerModal = opts => { window.__centerPlannerCall = opts; };
+      window.openDateMeetingModal(date, votes, voteGames, {});
+      return {
+        participantCount:count,
+        partyCount:votes.reduce((sum, vote) => sum + 1 + vote.guest_count, 0),
+        myUserId,
+      };
+    }, {date:fixtureDate, count:participantCount, myUserId:'__ui_only_cards__'});
+
+    const center = page.locator('#__ddModal .dd-meeting-modal');
+    const metrics = await center.evaluate((modal, expectedValues) => {
+      const summary = modal.querySelector('.dd-meeting-summary');
+      const roulette = modal.querySelector('.dd-roulette-cta');
+      const participants = modal.querySelector('.dd-participants-toggle');
+      const footer = modal.querySelector('.dd-close-row');
+      const blocks = [...modal.querySelectorAll('.dd-participant-block')];
+      const modalRect = modal.getBoundingClientRect();
+      return {
+        ordered:summary.getBoundingClientRect().top < roulette.getBoundingClientRect().top
+          && roulette.getBoundingClientRect().top < participants.getBoundingClientRect().top
+          && participants.getBoundingClientRect().top < footer.getBoundingClientRect().top,
+        participantBlocks:blocks.length,
+        ownership:blocks.every((block, index) => {
+          const expectedName = index === 0 ? '내 일정' : `참여자${index + 1}`;
+          const hasOwnIdentity = block.querySelector('.dd-modal-nick')?.textContent === expectedName
+            && !!block.querySelector('.dd-time')?.textContent.includes('~');
+          const gameCount = block.querySelectorAll('.dd-game-item').length;
+          return hasOwnIdentity && (index % 2 === 0 ? gameCount === 3 : gameCount === 0);
+        }),
+        summaryText:summary.textContent.replace(/\s+/g, ' ').trim(),
+        footerPosition:getComputedStyle(footer).position,
+        ctaText:modal.querySelector('.dd-planner-btn')?.textContent,
+        fitsViewport:modalRect.height <= innerHeight - 32,
+        noOverflow:modal.scrollWidth <= modal.clientWidth
+          && [...modal.querySelectorAll('*')].every(node => node.getBoundingClientRect().right <= modalRect.right + 1),
+        viewportWidth:innerWidth,
+        expectedPartyCount:expectedValues.partyCount,
+      };
+    }, expected);
+
+    check(`${width}px 센터 모달 ${participantCount}명: 4개 영역 순서`, metrics.ordered, JSON.stringify(metrics));
+    check(`${width}px 센터 모달 ${participantCount}명: 참여자별 정보 귀속`, metrics.participantBlocks === participantCount && metrics.ownership, JSON.stringify(metrics));
+    check(`${width}px 센터 모달 ${participantCount}명: 본인+동반 요약`, metrics.summaryText.includes(`${expected.partyCount}명 참여`), metrics.summaryText);
+    check(`${width}px 센터 모달 ${participantCount}명: 하단 액션 비고정`, metrics.footerPosition !== 'fixed' && metrics.footerPosition !== 'sticky');
+    check(`${width}px 센터 모달 ${participantCount}명: 내 참여 수정 문구`, metrics.ctaText === '내 참여 수정하기');
+    check(`${width}px 센터 모달 ${participantCount}명: 높이·가로 overflow 정상`, metrics.fitsViewport && metrics.noOverflow, JSON.stringify(metrics));
+
+    const details = page.locator('#__ddModal .dd-participants-toggle');
+    await details.locator('summary').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 참여자 접기`, !(await details.evaluate(node => node.open)));
+    await details.locator('summary').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 참여자 펼치기`, await details.evaluate(node => node.open));
+
+    await page.locator('#__ddModal .dd-nick-link').first().click();
+    check(`${width}px 센터 모달 ${participantCount}명: 개인 상세 진입`, await page.evaluate(
+      uid => window.__centerProfileCall === uid, expected.myUserId));
+
+    await page.locator('#__ddModal .dd-roulette-open-btn').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 룰렛 독립 화면 진입`,
+      await page.locator('#__ddRoulettePanel').isVisible() && !(await page.locator('#__ddMainScroll').isVisible()));
+    await page.locator('#__rrBack').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 룰렛에서 목록 복귀`, await page.locator('#__ddMainScroll').isVisible());
+
+    const shot = path.join(os.tmpdir(), `cottage-center-modal-${participantCount}-${width}.png`);
+    await center.screenshot({path:shot});
+    console.log(`  SCREENSHOT ${shot}`);
+
+    await page.locator('#__ddModal .dd-planner-btn').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 내 참여 수정 진입`, await page.evaluate(
+      date => window.__centerPlannerCall?.edit === date, fixtureDate));
+    await page.locator('#__ddModal .dd-close-btn').click();
+    check(`${width}px 센터 모달 ${participantCount}명: 닫기`, await page.locator('#__ddModal').count() === 0);
+  }
+
   await context.close();
   return shot;
 }

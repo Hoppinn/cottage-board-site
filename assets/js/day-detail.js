@@ -54,6 +54,14 @@
       padding: 12px 20px;
       display: flex; justify-content: center; gap: 8px;
     }
+    .dd-meeting-modal .dd-close-row {
+      justify-content: stretch;
+      padding: 10px 20px 12px;
+      border-top: 1px solid var(--line, #e5ddd2);
+      background: #f5ede3;
+    }
+    .dd-meeting-modal .dd-planner-btn { flex: 1; }
+    .dd-meeting-modal .dd-close-btn { padding-inline: 18px; }
     .dd-close-btn {
       background: #ede8e0; border: none; border-radius: 20px;
       padding: 6px 24px; font-size: 13px; cursor: pointer;
@@ -99,6 +107,15 @@
       color: var(--text, #3b2f2f);
       margin-bottom: 4px;
     }
+    .dd-meeting-summary {
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line, #e5ddd2);
+    }
+    .dd-meeting-summary .dd-date {
+      margin-bottom: 6px;
+      font-size: 18px; line-height: 1.25;
+    }
+    .dd-meeting-summary .dd-stats-row { margin-bottom: 0; }
     .dd-time {
       font-size: 13px; color: var(--muted, #9e8e7e);
       margin-bottom: 8px;
@@ -148,22 +165,27 @@
 
     /* ── 날짜 상세 모달 — 참여자 토글 ── */
     .dd-participants-toggle {
-      margin-top: 8px;
-      border-top: 1px solid var(--border);
-      padding-top: 8px;
+      margin-top: 12px;
+      border-top: 1px solid var(--line, #e5ddd2);
+      padding-top: 11px;
     }
     .dd-participants-toggle > summary {
-      font-size: 12px; color: var(--muted);
+      width: 100%; box-sizing: border-box;
+      font-size: 13px; font-weight: 700; color: var(--text);
       cursor: pointer; list-style: none;
-      padding: 5px 12px;
-      background: #f0ece6; border-radius: 20px;
+      padding: 0 2px 8px;
       display: inline-flex; align-items: center; gap: 4px;
       user-select: none;
     }
-    .dd-participants-toggle > summary::after { content: '▼'; font-size: 9px; }
+    .dd-participants-toggle > summary::after { content: '▼'; margin-left: auto; font-size: 9px; color: var(--muted); }
     .dd-participants-toggle[open] > summary::after { content: '▲'; }
     .dd-participants-toggle > summary::-webkit-details-marker { display: none; }
-    .dd-participants-toggle[open] > summary { margin-bottom: 8px; }
+    .dd-participants-body { border-top: 1px solid var(--line, #e5ddd2); }
+    .dd-participant-block { padding: 10px 2px 9px; }
+    .dd-participant-block + .dd-participant-block { border-top: 1px solid var(--line, #e5ddd2); }
+    .dd-participant-block .dd-modal-nick { margin-bottom: 3px; }
+    .dd-participant-block .dd-time { margin-bottom: 6px; }
+    .dd-participant-block .dd-section:last-child { margin-bottom: 0; }
 
     /* ── 막대 공용 CSS (주간 카드 + 홈 미리보기) ── */
     .sched-bar-axis {
@@ -329,11 +351,22 @@
     }
     .sched-card-detail-btn:hover { color: var(--green); background: #f0ece6; }
     /* ── 룰렛 패널 ── */
+    .dd-roulette-cta {
+      margin-top: 10px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: #f5ede3;
+    }
+    .dd-roulette-context {
+      display: block;
+      font-size: 10px; font-weight: 700;
+      color: var(--muted, #9e8e7e);
+    }
     .dd-roulette-open-btn {
-      display: block; width: 100%; margin: 8px 0 4px;
-      background: #f5ede3; border: none; border-radius: 20px;
-      padding: 8px 0; font-size: 13px; font-weight: 600;
-      color: var(--green, #7a4828); cursor: pointer; text-align: center;
+      display: block; width: 100%; margin: 0;
+      background: none; border: none;
+      padding: 5px 0 3px; font-size: 13px; font-weight: 700;
+      color: var(--green, #7a4828); cursor: pointer; text-align: left;
     }
     .dd-roulette-open-btn:active { background: #ede5d8; }
     .dd-roulette-panel {
@@ -1089,12 +1122,12 @@
       const learnGames = myGames.filter(g => g.list_type === 'learn');
       const wantHtml  = wantGames.length  ? `<ul class="dd-game-list">${wantGames.map(_li).join('')}</ul>` : '';
       const learnHtml = learnGames.length ? `<ul class="dd-game-list">${learnGames.map(_li).join('')}</ul>` : '';
-      return `<div class="dd-block">
+      return `<section class="dd-participant-block">
         <div class="dd-modal-nick dd-nick-link" data-uid="${esc(v.user_id)}">${esc(v.nickname)}</div>
         <div class="dd-time">${window.formatVoteHour(v.time_start)}~${window.formatVoteHour(v.time_end)}${partyCount([v]) > 1 ? ` · ${partyCount([v]) - 1}명 동반` : ''}</div>
         ${wantGames.length  ? `<div class="dd-section"><span class="dd-section-label">🎲 하고 싶은 게임</span>${wantHtml}</div>`  : ''}
         ${learnGames.length ? `<div class="dd-section"><span class="dd-section-label">📖 배우고 싶은 게임</span>${learnHtml}</div>` : ''}
-      </div>`;
+      </section>`;
     }).join('');
     return participantsBody;
   }
@@ -1284,7 +1317,7 @@
     const user = window.getKakaoUser?.();
     const myVote = user && votes.find(v => String(v.user_id) === String(user.id));
     const plannerBtnHtml = (user && voteDate >= _todayStr())
-      ? `<button class="dd-planner-btn" type="button">${myVote ? '내 등록 수정하기' : '플래너에서 등록하기'}</button>`
+      ? `<button class="dd-planner-btn" type="button">${myVote ? '내 참여 수정하기' : '플래너에서 등록하기'}</button>`
       : '';
 
     const rouletteBtnHtml = rouletteGames.length >= 2
@@ -1306,11 +1339,18 @@
         </div>`
       : '';
 
-    el.innerHTML = `<div class="dd-modal" role="dialog" aria-modal="true">
+    el.innerHTML = `<div class="dd-modal dd-meeting-modal" role="dialog" aria-modal="true">
       <div class="dd-modal-scroll" id="__ddMainScroll">
-        <div class="dd-date">${fmtDate(voteDate)}</div>
-        ${statsHtml}
-        ${rouletteBtnHtml}
+        <section class="dd-meeting-summary">
+          <div class="dd-date">${fmtDate(voteDate)}</div>
+          ${statsHtml}
+        </section>
+        ${rouletteBtnHtml
+          ? `<section class="dd-roulette-cta" aria-label="모임 전체 룰렛">
+              <span class="dd-roulette-context">모임 전체</span>
+              ${rouletteBtnHtml}
+            </section>`
+          : ''}
         ${participantsBody
           ? `<details class="dd-participants-toggle" open>
               <summary>참여자별 보기</summary>
