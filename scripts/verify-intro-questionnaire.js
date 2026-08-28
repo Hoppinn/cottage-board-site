@@ -22,6 +22,12 @@ const failures = [];
 const check = (ok, message) => { if (!ok) failures.push(message); };
 const inOrder = (source, values) => values.every((value, i) => i === 0 || source.indexOf(values[i - 1]) < source.indexOf(value));
 
+check((html.match(/class="intro-wizard-step/g) || []).length === 6, 'Wizard step count mismatch');
+check(html.includes('id="introWizardProgress"'), 'Wizard progress missing');
+check(html.includes('validateStep(wizardStep)'), 'Wizard step validation missing');
+check(html.includes('openWizard({ edit: !!r.questionnaire_completed_at })'), 'Wizard edit entry missing');
+check(html.includes("document.getElementById('introWizardReward').hidden = !result.voucherGranted"), 'Voucher completion branch missing');
+
 // 브라우저가 없어도 인라인 스크립트의 파싱 오류는 잡는다.
 for (const [file, source] of [['club-intro.html', html], ['requests-admin.html', adminHtml]]) {
   const scripts = [...source.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
