@@ -6,7 +6,7 @@
   <link rel="icon" href="/assets/images/main/favicon-square.png" type="image/png">
   <link rel="apple-touch-icon" href="/assets/images/main/favicon-square.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>멤버 게임 프로필 | 코티지보드 동호회</title>
+  <title>모임원 프로필 | 코티지보드 동호회</title>
   <link rel="stylesheet" href="../../assets/css/style.css">
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
 </head>
@@ -17,30 +17,30 @@
   <main>
     <section class="inner-page">
       <div class="club-breadcrumb">
-        <a class="club-breadcrumb-parent" href="./club.html#club-join">동호회</a>
+        <a class="club-breadcrumb-parent" href="./club.html">동호회</a>
         <span class="club-breadcrumb-sep">›</span>
-        <span class="club-breadcrumb-current">게임 프로필</span>
+        <span class="club-breadcrumb-current">모임원 프로필</span>
       </div>
       <div class="page-mini-hero page-mini-hero--club page-mini-hero--sm">
-        <h1>멤버 게임 프로필</h1>
+        <h1>모임원 프로필</h1>
       </div>
       <div class="inner-page-body">
 
         <!-- 비로그인 안내 -->
         <div class="intro-form-card" id="introLoginPrompt" style="display:none">
-          <p class="intro-login-msg">게임 프로필을 남기려면 로그인이 필요해요. (모임 보드와 정보가 함께 연동돼요)</p>
+          <p class="intro-login-msg">모임원 프로필을 남기려면 로그인이 필요해요. (모임 보드와 정보가 함께 연동돼요)</p>
           <button class="intro-submit-btn" onclick="document.getElementById('kakaoLoginBtn')?.click()" type="button">카카오 로그인</button>
         </div>
 
         <!-- 입력 폼 (로그인 시에만 노출) -->
         <div class="intro-form-card" id="introFormCard" style="display:none">
           <button class="intro-form-toggle" id="introFormToggle" type="button">
-            같이 게임할 사람들이 알아볼 수 있게, 게임 프로필을 남겨주세요.
+            같이 게임할 사람들이 서로 알아볼 수 있도록, 모임원 프로필을 남겨주세요.
             <span class="intro-form-toggle-arrow" id="introFormArrow">▾</span>
           </button>
           <div class="intro-form-body" id="introFormBody">
-            <div class="intro-reward-note"><strong>🎁 게임 프로필을 처음 작성하면 음료 2,000원 쿠폰을 드려요.</strong><span>최초 1회만 지급되며, 음료·과자에 사용하거나 2,000원 상당으로 나누어 사용할 수 있어요.</span></div>
-            <p class="intro-field-hint">게임 프로필은 가입 후 7일 이내 작성해주세요. 프로필을 작성하지 않은 계정은 정기적으로 정리되며, 이후 참여하고 싶을 때 언제든 다시 가입할 수 있어요.</p>
+            <div class="intro-reward-note"><strong>🎁 모임원 프로필을 처음 작성하면 음료 2,000원 쿠폰을 드려요.</strong><span>최초 1회만 지급되며, 음료·과자에 사용하거나 2,000원 상당으로 나누어 사용할 수 있어요.</span></div>
+            <p class="intro-field-hint">모임원 프로필은 가입 후 7일 이내 작성해주세요. 프로필을 작성하지 않은 계정은 정기적으로 정리되며, 이후 참여하고 싶을 때 언제든 다시 가입할 수 있어요.</p>
             <div class="intro-form-fields">
               <div class="intro-field">
                 <label class="intro-label" for="introNickname">닉네임 <span class="intro-required">*</span></label>
@@ -116,7 +116,7 @@
                 <span class="intro-field-hint">10~500자</span>
               </div>
             </div>
-            <button class="intro-submit-btn" id="introSubmitBtn" type="button">게임 프로필 저장하고 쿠폰 받기</button>
+            <button class="intro-submit-btn" id="introSubmitBtn" type="button">모임원 프로필 저장하고 쿠폰 받기</button>
             <p class="intro-submit-msg" id="introSubmitMsg"></p>
           </div>
         </div>
@@ -265,7 +265,7 @@
     }
 
     async function deleteIntro(id) {
-      if (!confirm('이 게임 프로필을 삭제할까요?')) return;
+      if (!confirm('이 모임원 프로필을 삭제할까요?')) return;
       const { error } = await db.from('member_intros').delete().eq('id', id);
       if (!error) {
         removeMyId(id);
@@ -289,7 +289,7 @@
       const clocktower = document.querySelector(`[name="clocktowerPreference"][value="${r.clocktower_preference || ''}"]`);
       document.querySelectorAll('[name="clocktowerPreference"]').forEach(input => { input.checked = input === clocktower; });
       document.getElementById('introExpectation').value = r.expectation || '';
-      document.getElementById('introSubmitBtn').textContent = r.questionnaire_completed_at ? '게임 프로필 수정하기' : '게임 프로필 저장하고 쿠폰 받기';
+      document.getElementById('introSubmitBtn').textContent = r.questionnaire_completed_at ? '모임원 프로필 수정하기' : '모임원 프로필 저장하고 쿠폰 받기';
       if (focusForm) {
         openForm();
         document.getElementById('introFormCard').scrollIntoView({ behavior:'smooth', block:'start' });
@@ -308,7 +308,7 @@
         .select('*')
         .order('created_at', { ascending: false });
       if (error) {
-        el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">게임 프로필을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</p>';
+        el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">모임원 프로필을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</p>';
         return;
       }
       if (!data?.length) {
@@ -318,7 +318,7 @@
           document.getElementById('introNickname').value = currentUser.nickname;
           openForm();
         }
-        el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">아직 게임 프로필이 없어요. 첫 번째로 남겨보세요!</p>';
+        el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">아직 모임원 프로필이 없어요. 첫 번째로 남겨보세요!</p>';
         return;
       }
 
@@ -490,12 +490,12 @@
       const result = await window.CottageDB?.submitMemberIntro?.(String(u.id), answers) || { error:'api_unavailable' };
 
       btn.disabled = false;
-      btn.textContent = result.success ? '게임 프로필 수정하기' : '게임 프로필 저장하고 쿠폰 받기';
+      btn.textContent = result.success ? '모임원 프로필 수정하기' : '모임원 프로필 저장하고 쿠폰 받기';
 
       if (result.error) return fail('저장에 실패했어요. 잠시 후 다시 시도해주세요.');
 
       if (result.id) saveMyId(result.id);
-      msg.textContent = result.voucherGranted ? '게임 프로필을 저장하고 음료 2,000원 쿠폰을 지급했어요!' : '게임 프로필을 수정했어요.';
+      msg.textContent = result.voucherGranted ? '모임원 프로필을 저장하고 음료 2,000원 쿠폰을 지급했어요!' : '모임원 프로필을 수정했어요.';
       msg.style.color = 'var(--green)';
       msg.style.display = 'block';
       if (result.voucherGranted) window._onVoucherGranted?.();

@@ -57,51 +57,65 @@
 
     <hr class="about-divider">
 
-    <div class="about-section" id="club-join">
-      <nav class="breadcrumb"><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">동호회</a> <span class="bc-sep">›</span> 가입하기</nav>
+    <div class="about-section" id="club-first">
+      <nav class="breadcrumb"><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">동호회</a> <span class="bc-sep">›</span> 처음이라면</nav>
       <ul class="about-for-list">
         <li class="about-for-item">
           <span class="about-for-icon">💬</span>
           <div class="about-for-text">
             <strong>단톡방 들어가기</strong><br>
-            <span style="color:var(--muted);font-weight:400">참여코드: <strong>CottageB</strong></span>
+            <span style="color:var(--muted);font-weight:400">참여코드로 코티지 모임 단톡방에 들어와주세요.</span>
           </div>
           <a class="club-card-link" href="https://open.kakao.com/o/gwfkA1Eg" data-ext-confirm="카카오 오픈채팅이 새 창에서 열려요." aria-label="단톡방 들어가기"></a>
         </li>
         <li class="about-for-item">
           <span class="about-for-icon">📋</span>
           <div class="about-for-text">
-            <strong>참여 안내 확인</strong><br>
-            <span style="color:var(--muted);font-weight:400">참여 방법과 회칙을 참여 전에 확인해주세요.</span>
+            <strong>참여 안내</strong><br>
+            <span style="color:var(--muted);font-weight:400">모임 참여 방법과 기본 약속을 먼저 확인해주세요.</span>
           </div>
-          <a class="club-card-link" href="./club-rules.html" aria-label="참여 안내 확인" onclick="window.CottageDB?.trackEvent?.('club_join_rules_click')"></a>
+          <a class="club-card-link" href="./club-rules.html" aria-label="참여 안내" onclick="window.CottageDB?.trackEvent?.('club_join_rules_click')"></a>
         </li>
         <li class="about-for-item">
           <span class="about-for-icon">👋</span>
           <div class="about-for-text">
-            <strong>게임 프로필</strong><br>
-            <span style="color:var(--muted);font-weight:400">같이 게임할 사람들이 알아볼 수 있게 게임 프로필을 남겨주세요.</span>
+            <strong>모임원 프로필</strong><br>
+            <span style="color:var(--muted);font-weight:400">같이 게임할 사람들이 서로 알아볼 수 있도록 프로필을 남겨주세요.</span>
           </div>
-          <a class="club-card-link" href="./club-intro.html" aria-label="게임 프로필" onclick="window.CottageDB?.trackEvent?.('club_join_intro_click')"></a>
+          <a class="club-card-link" href="./club-intro.html" aria-label="모임원 프로필" onclick="window.CottageDB?.trackEvent?.('club_join_intro_click')"></a>
         </li>
       </ul>
     </div>
 
-    <div class="about-section" id="club-meeting">
-      <nav class="breadcrumb"><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">동호회</a> <span class="bc-sep">›</span> 모임참여하기</nav>
+    <div class="about-section" id="club-together">
+      <nav class="breadcrumb"><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">동호회</a> <span class="bc-sep">›</span> 함께하기</nav>
       <ul class="about-for-list">
         <li class="about-for-item">
           <span class="about-for-icon">📅</span>
           <div class="about-for-text">
             <strong>모임 플래너</strong><br>
-            <span style="color:var(--muted);font-weight:400">가능한 날짜와 시간을 남기고, 같이 할 사람을 확인해 보세요.</span>
+            <span style="color:var(--muted);font-weight:400">가능한 날짜와 원하는 판을 등록하고, 같이 할 사람을 찾아보세요.</span>
           </div>
           <a class="club-card-link" href="./club-schedule.html" aria-label="모임 플래너"></a>
         </li>
+      </ul>
+    </div>
+
+    <div class="about-section" id="club-explore">
+      <nav class="breadcrumb"><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">동호회</a> <span class="bc-sep">›</span> 모임 둘러보기</nav>
+      <ul class="about-for-list">
         <li class="about-for-item">
-          <span class="about-for-icon">📋</span>
+          <span class="about-for-icon">👥</span>
           <div class="about-for-text">
-            <strong>코티지보드 모임 기록 &amp; 사진</strong>
+            <strong>모임원 프로필</strong><br>
+            <span style="color:var(--muted);font-weight:400">같이 게임할 사람들이 서로 알아볼 수 있도록 프로필을 남겨주세요.</span>
+          </div>
+          <a class="club-card-link" href="./club-intro.html" aria-label="모임원 프로필" onclick="window.CottageDB?.trackEvent?.('club_join_intro_click')"></a>
+        </li>
+        <li class="about-for-item">
+          <span class="about-for-icon">📷</span>
+          <div class="about-for-text">
+            <strong>모임 기록 &amp; 사진</strong>
           </div>
           <a class="club-card-link" href="./club-history.html" aria-label="모임 기록 보기"></a>
         </li>
