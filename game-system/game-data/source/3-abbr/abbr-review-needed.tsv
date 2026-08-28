@@ -1,0 +1,489 @@
+# Review candidates only. `manual-abbr-missing` means the current UI falls back to the first two characters.
+# game_name	bgg_id	current_abbr	source	reason
+# Below: manual aliases shared by two or more game entries; verify whether the shared label is intentional.
+개구리벌주기	6387	개구리	bgg-id	duplicate-abbr
+개구리사탕먹기	5895	개구리	bgg-id	duplicate-abbr
+기차섬 탑승하세요	355224	기차섬	bgg-id	duplicate-abbr
+기차섬(영)	154906	기차섬	bgg-id	duplicate-abbr
+나나	352515	나나	bgg-id	duplicate-abbr
+나나 크리스마스에디션	352515	나나	bgg-id	duplicate-abbr
+다빈치코드	8946	다빈	bgg-id	duplicate-abbr
+다빈치코드플러스	8946	다빈	bgg-id	duplicate-abbr
+도미니언	36218	도미	bgg-id	duplicate-abbr
+도미니언 약속된번영	66690	도미	bgg-id	duplicate-abbr
+도미니언 위대한제국	192951	도미	bgg-id	duplicate-abbr
+도미니언 장막뒤의사람들	40834	도미	bgg-id	duplicate-abbr
+도블	63268	도블	bgg-id	duplicate-abbr
+도블 동물원	63268	도블	bgg-id	duplicate-abbr
+디스워오브마인	188920	디워마	bgg-id	duplicate-abbr
+디스워오브마인 폐허가된도시이야기 확장	247665	디워마	bgg-id	duplicate-abbr
+레지스탕스 쿠	131357	쿠	bgg-id	duplicate-abbr
+메이지나이트 얼티밋 에디션	248562	메나	bgg-id	duplicate-abbr
+서스펙트게임 : 클로즈드 서클 미스터리	322785	서스	bgg-id	duplicate-abbr
+서스펙트게임 리로드	322785	서스	bgg-id	duplicate-abbr
+스플렌더	148228	스플	bgg-id	duplicate-abbr
+스플렌더 찬란한도시확장	220653	스플	bgg-id	duplicate-abbr
+엑시트 버려진오두막	203420	엑시트	bgg-id	duplicate-abbr
+엑시트 불길한고성	226520	엑시트	bgg-id	duplicate-abbr
+엑시트 연구실의비밀	203417	엑시트	bgg-id	duplicate-abbr
+엑시트 저주받은 섬	215841	엑시트	bgg-id	duplicate-abbr
+오딘	406854	오딘	bgg-id	duplicate-abbr
+오딘을위하여 + 노르웨이 사람들 확장 + 소형확장1	177736	오딘	bgg-id	duplicate-abbr
+우봉고 3D프로	46396	우봉고	bgg-id	duplicate-abbr
+우봉고3D	269971	우봉고	bgg-id	duplicate-abbr
+우봉고미니	28258	우봉고	bgg-id	duplicate-abbr
+코드네임	178900	코드	bgg-id	duplicate-abbr
+코드네임(영어)	178900	코드	bgg-id	duplicate-abbr
+쿠	131357	쿠	bgg-id	duplicate-abbr
+페이퍼사파리	39534	페이	bgg-id	duplicate-abbr
+페이퍼사파리(스모키)	39534	페이	bgg-id	duplicate-abbr
+1%의기적	378040	1%	auto	manual-abbr-missing
+12칩트릭	358669	12	auto	manual-abbr-missing
+1862 이스턴 카운티	66837	18	auto	manual-abbr-missing
+5분 마블	253618	5분	auto	manual-abbr-missing
+5초준다	86073	5초	auto	manual-abbr-missing
+7원더스	68448	7원	auto	manual-abbr-missing
+가이아프로젝트	220308	가이	auto	manual-abbr-missing
+가짜예술가뉴욕에가다	135779	가짜	auto	manual-abbr-missing
+갈팡질팡	370444	갈팡	auto	manual-abbr-missing
+갤러리스트	125153	갤러	auto	manual-abbr-missing
+갱오브포	3085	갱오	auto	manual-abbr-missing
+게놈의탑		게놈	auto	manual-abbr-missing,no-bgg-id
+고고시티	264638	고고	auto	manual-abbr-missing
+고스트	2290	고스	auto	manual-abbr-missing
+고질라도쿄클래시	303051	고질	auto	manual-abbr-missing
+구두룡저택의살인 (미스터리파티시리즈)	336495	구두	auto	manual-abbr-missing
+궁신	402283	궁신	auto	manual-abbr-missing
+그것이문제로다	226322	그것	auto	manual-abbr-missing
+그라운드플로어	38765	그라	auto	manual-abbr-missing
+그랜드오스트리아호텔	182874	그랜	auto	manual-abbr-missing
+글래스로드	143693	글래	auto	manual-abbr-missing
+글렌모어연대기	265188	글렌	auto	manual-abbr-missing
+글룸헤이븐	174430	글룸	auto	manual-abbr-missing
+기도하고일하라	70149	기도	auto	manual-abbr-missing
+기즈모	246192	기즈	auto	manual-abbr-missing
+김밥요리사	377941	김밥	auto	manual-abbr-missing
+꼬치의달인	264797	꼬치	auto	manual-abbr-missing
+끝나지않는한여름(미스터리파티시리즈)		끝나	auto	manual-abbr-missing,no-bgg-id
+나르	379629	나르	auto	manual-abbr-missing
+나의최애명대사	427325	나의	auto	manual-abbr-missing
+남티그리스의학자들	367041	남티	auto	manual-abbr-missing
+내마음의주파수	262543	내마	auto	manual-abbr-missing
+냥냥집사	440029	냥냥	auto	manual-abbr-missing
+냥자역학연구소	324345	냥자	auto	manual-abbr-missing
+너도나도	348532	너도	auto	manual-abbr-missing
+노땡스	12942	노땡	auto	manual-abbr-missing
+노터치크라켄	253786	노터	auto	manual-abbr-missing
+노팅엄의지방관	298638	노팅	auto	manual-abbr-missing
+놉놉테이블	365979	놉놉	auto	manual-abbr-missing
+누가치즈를훔쳤을까	294175	누가	auto	manual-abbr-missing
+뉴클리엄	396790	뉴클	auto	manual-abbr-missing
+늑대인간마을의축제(미스터리파티시리즈)	393283	늑대	auto	manual-abbr-missing
+니다벨리르	293014	니다	auto	manual-abbr-missing
+니말리아	361850	니말	auto	manual-abbr-missing
+니어앤파	195421	니어	auto	manual-abbr-missing
+다섯부족	157354	다섯	auto	manual-abbr-missing
+다운포스	215311	다운	auto	manual-abbr-missing
+다이너스티 혼인과통치	191972	다이	auto	manual-abbr-missing
+다잉메시지 + 공범,만화가 확장	400958	다잉	auto	manual-abbr-missing
+달무티	929	달무	auto	manual-abbr-missing
+당나귀다리	386470	당나	auto	manual-abbr-missing
+대만차연대기	287941	대만	auto	manual-abbr-missing
+더게임	173090	더게	auto	manual-abbr-missing
+더루프	316412	더루	auto	manual-abbr-missing
+더리치앤더굿	38863	더리	auto	manual-abbr-missing
+더마인드	244992	더마	auto	manual-abbr-missing
+덤불속	102181	덤불	auto	manual-abbr-missing
+도르프로만틱	370591	도르	auto	manual-abbr-missing
+도망자	370597	도망	auto	manual-abbr-missing
+도적단의월급날	391761	도적	auto	manual-abbr-missing
+독수리눈치싸움	175	독수	auto	manual-abbr-missing
+동물왕와일드사파리	398	동물	auto	manual-abbr-missing
+동인도회사	354132	동인	auto	manual-abbr-missing
+두근두근악어이빨	10453	두근	auto	manual-abbr-missing
+두리안	307963	두리	auto	manual-abbr-missing
+두부왕국	186475	두부	auto	manual-abbr-missing
+뒤죽박죽서커스	220738	뒤죽	auto	manual-abbr-missing
+뒤집어줘캡틴	393325	뒤집	auto	manual-abbr-missing
+드라큘라VS반헬싱	381278	드라	auto	manual-abbr-missing
+드랍잇 (독)	244916	드랍	auto	manual-abbr-missing
+드림홈	194880	드림	auto	manual-abbr-missing
+디센트	104162	디센	auto	manual-abbr-missing
+디셉션	156129	디셉	auto	manual-abbr-missing
+딕싯	39856	딕싯	auto	manual-abbr-missing
+딥씨크루		딥씨	auto	manual-abbr-missing,no-bgg-id
+딩고디스크	319598	딩고	auto	manual-abbr-missing
+라그랑하 디럭스 마스터	341945	라그	auto	manual-abbr-missing
+라온	88633	라온	auto	manual-abbr-missing
+라운드더월드(영)	244951	라운	auto	manual-abbr-missing
+라이		라이	owned-name	no-bgg-id
+라이노교수가아는다가오는죽음		라이노	owned-name	no-bgg-id
+라타	374201	라타	auto	manual-abbr-missing
+래드랜드	329082	래드	auto	manual-abbr-missing
+랩터	177639	랩터	auto	manual-abbr-missing
+랭카스터	96913	랭카	auto	manual-abbr-missing
+럭키넘버스	118247	럭키	auto	manual-abbr-missing
+럼블네이션	266722	럼블	auto	manual-abbr-missing
+레드룸	442306	레드	auto	manual-abbr-missing
+레디셋벳	351040	레디	auto	manual-abbr-missing
+레벨10	211940	레벨	auto	manual-abbr-missing
+레이스포더갤럭시 + 첫번째아크 확장	28143	레이	auto	manual-abbr-missing
+레인보우세븐	351149	레인	auto	manual-abbr-missing
+레즈아르카나 + 확장	262712	레즈	auto	manual-abbr-missing
+레지사이드 레거시		레지사	owned-name	no-bgg-id
+레코 플러스		레코	auto	manual-abbr-missing,no-bgg-id
+렉시오	19184	렉시	auto	manual-abbr-missing
+로그		로그	auto	manual-abbr-missing,no-bgg-id
+로나에나: 재앙의 선물	350585	로나	auto	manual-abbr-missing
+로보77	3337	로보	auto	manual-abbr-missing
+로빈슨크루소	121921	로빈	auto	manual-abbr-missing
+로스트시티	50	로스	auto	manual-abbr-missing
+롤포더갤럭시	132531	롤포	auto	manual-abbr-missing
+루미큐브	811	루미	auto	manual-abbr-missing
+루이스앤클라크	140620	루이	auto	manual-abbr-missing
+루핑루이	327	루핑	auto	manual-abbr-missing
+뤄양의사람들	39683	뤄양	auto	manual-abbr-missing
+르네상스의거장들	280453	르네	auto	manual-abbr-missing
+리바이브	332772	리바	auto	manual-abbr-missing
+리버탈리아	356033	리버	auto	manual-abbr-missing
+리볼버2	128733	리볼	auto	manual-abbr-missing
+리코셰로봇	51	리코	auto	manual-abbr-missing
+마닐라	15817	마닐	auto	manual-abbr-missing
+마르코폴로2	283948	마르	auto	manual-abbr-missing
+마법사의물약(독)	95231	마법	auto	manual-abbr-missing
+마블좀비	351817	마블	auto	manual-abbr-missing
+마스크맨	159581	마스	auto	manual-abbr-missing
+마운틴고트	63975	마운	auto	manual-abbr-missing
+마작 (미니마작)	2093	마작	auto	manual-abbr-missing
+마헤	3383	마헤	auto	manual-abbr-missing
+맥주와빵	369880	맥주	auto	manual-abbr-missing
+맨덤의던전	150312	맨덤	auto	manual-abbr-missing
+메나라	244608	메나	auto	manual-abbr-missing
+메도우 + 하류 확장	314491	메도	auto	manual-abbr-missing
+메디치	46	메디	auto	manual-abbr-missing
+메르브:실크로드의심장	306040	메르	auto	manual-abbr-missing
+메모리아일랜드	371785	메모	auto	manual-abbr-missing
+메시나1347	238799	메시	auto	manual-abbr-missing
+멘네페르	404431	멘네	auto	manual-abbr-missing
+몇번이고푸른달에불을붙였다	357173	몇번	auto	manual-abbr-missing
+모노폴리 딜럭스	7098	모노	auto	manual-abbr-missing
+모던아트 (페가수스)	118	모던	auto	manual-abbr-missing
+모두의마블		모두	auto	manual-abbr-missing,no-bgg-id
+모렐	122298	모렐	auto	manual-abbr-missing
+모아보새	245476	모아	auto	manual-abbr-missing
+몰타의관문	181960	몰타	auto	manual-abbr-missing
+문명의시대	264647	문명	auto	manual-abbr-missing
+뮤제	234396	뮤제	auto	manual-abbr-missing
+미노다이스	191071	미노	auto	manual-abbr-missing
+미드가르드의챔피언	172287	미드	auto	manual-abbr-missing
+밀레니엄블레이즈	151347	밀레	auto	manual-abbr-missing
+바람의부족	362986	바람	auto	manual-abbr-missing
+바르셀로나 (영)	383607	바르	auto	manual-abbr-missing
+바퀴벌레포커	11971	바퀴	auto	manual-abbr-missing
+반디도	191925	반디	auto	manual-abbr-missing
+방방곡곡 세계유랑	230667	방방	auto	manual-abbr-missing
+뱀파이어퀸	191073	뱀파	auto	manual-abbr-missing
+뱅	3955	뱅	auto	manual-abbr-missing
+뱅 주사위	143741	뱅 	auto	manual-abbr-missing
+버건디의성 20주년	84876	버건	auto	manual-abbr-missing
+버라지 (+레이흐바터르 + 나일강 확장)	251247	버라	auto	manual-abbr-missing
+번레이트	3341	번레	auto	manual-abbr-missing
+범고래고래	388413	범고	auto	manual-abbr-missing
+베일오브이터니티	385529	베일	auto	manual-abbr-missing
+베티보터보우트썸버터	426314	베티	auto	manual-abbr-missing
+벨라티	259374	벨라	auto	manual-abbr-missing
+벨에포크파리	282954	벨에	auto	manual-abbr-missing
+보난자	11	보난	auto	manual-abbr-missing
+보랏못리라이트 (머더미스터리미니)	379873	보랏	auto	manual-abbr-missing
+보타닉가든	334065	보타	auto	manual-abbr-missing
+보틀임프	619	보틀	auto	manual-abbr-missing
+본파이어 빅박스	304420	본파	auto	manual-abbr-missing
+봄버스터즈	413246	봄버	auto	manual-abbr-missing
+봉잡았다	351809	봉잡	auto	manual-abbr-missing
+부루마불 클래식	10506	부루	auto	manual-abbr-missing
+북쪽숲을 위하여	334590	북쪽	auto	manual-abbr-missing
+분레이크	343905	분레	auto	manual-abbr-missing
+분수(영)	440509	분수	auto	manual-abbr-missing
+붉은대성당	227224	붉은	auto	manual-abbr-missing
+붑	355433	붑	auto	manual-abbr-missing
+브레인토피아	206175	브레	auto	manual-abbr-missing
+브뤼셀1897	275913	브뤼	auto	manual-abbr-missing
+블러드바운드	130877	블러	auto	manual-abbr-missing
+블로커스3D	6411	블로	auto	manual-abbr-missing
+비티컬처 에센셜	183394	비티	auto	manual-abbr-missing
+빅샷	1125	빅샷	auto	manual-abbr-missing
+빌라봉	464	빌라	auto	manual-abbr-missing
+사그라다	199561	사그	auto	manual-abbr-missing
+사라진속옷과 하늘을나는물고기	350586	사라	auto	manual-abbr-missing
+사보타지	9220	사보	auto	manual-abbr-missing
+산타마리아	229220	산타	auto	manual-abbr-missing
+생츄어리 아크노바게임	441696	생츄	auto	manual-abbr-missing
+섀도우레이더스	288098	섀도	auto	manual-abbr-missing
+서머너워즈	332800	서머	auto	manual-abbr-missing
+서퍼사우르스맥스	394887	서퍼	auto	manual-abbr-missing
+석기시대	34635	석기	auto	manual-abbr-missing
+선물입니다	420887	선물	auto	manual-abbr-missing
+선셋오버워터	224904	선셋	auto	manual-abbr-missing
+성투	760	성투	auto	manual-abbr-missing
+세트	1198	세트	auto	manual-abbr-missing
+세티	418059	세티	auto	manual-abbr-missing
+셀레스티아 빅박스	175117	셀레	auto	manual-abbr-missing
+셜록13	149869	셜록	auto	manual-abbr-missing
+솔튼씨	402663	솔튼	auto	manual-abbr-missing
+쇼텐토텐	372	쇼텐	auto	manual-abbr-missing
+수목원 (영)	140934	수목	auto	manual-abbr-missing
+수상한생선들	359893	수상	auto	manual-abbr-missing
+숲속의음악대	999	숲속	auto	manual-abbr-missing
+슈뢰딩거의고양이	172235	슈뢰	auto	manual-abbr-missing
+스릴팡	9539	스릴	auto	manual-abbr-missing
+스위스사는스미스씨	418896	스위	auto	manual-abbr-missing
+스크래블 딜럭스	320	스크	auto	manual-abbr-missing
+스키티아의침략자	301880	스키	auto	manual-abbr-missing
+스탁파일	161614	스탁	auto	manual-abbr-missing
+스트라테고 퀵배틀	197108	스트	auto	manual-abbr-missing
+스파이vs스파이	299569	스파vs	bgg-id	abbr-over-3-chars
+스파이폴2	193308	스파폴2	bgg-id	abbr-over-3-chars
+스페이스 크루	284083	스페	auto	manual-abbr-missing
+스플렌더 마블	293296	마블렌더	bgg-id	abbr-over-3-chars
+스플렌더 포켓몬	406291	포플렌더	bgg-id	abbr-over-3-chars
+슬리핑퀸즈	17053	슬리	auto	manual-abbr-missing
+시간을달리는트라이앵글 (머더미스터리미니 )	379872	시간	auto	manual-abbr-missing
+시계탑에흐른피	240980	시계	auto	manual-abbr-missing
+시냅스챌린지2	251481	시냅	auto	manual-abbr-missing
+시볼루션	400602	시볼	auto	manual-abbr-missing
+시즌스 (+마법에걸린왕국, 운명의길 확장)	108745	시즌	auto	manual-abbr-missing
+시체와온천 (머더미스터리미니)	370748	시체	auto	manual-abbr-missing
+시퀀스 해리포터	2375	시퀀	auto	manual-abbr-missing
+시타델	205398	시타	auto	manual-abbr-missing
+시티체이스	346625	시티	auto	manual-abbr-missing
+실버 아뮬렛	278553	실버	auto	manual-abbr-missing
+썬플라워밸리	228390	썬플	auto	manual-abbr-missing
+쓰루디에이지스 신판	182028	쓰루	auto	manual-abbr-missing
+아노1800	311193	아노	auto	manual-abbr-missing
+아르낙의잊혀진유적	312484	아르	auto	manual-abbr-missing
+아를의평원	159675	아를	auto	manual-abbr-missing
+아발론 클래식	526	아발	auto	manual-abbr-missing
+아브라카왓	163930	아브	auto	manual-abbr-missing
+아야르	429438	아야	auto	manual-abbr-missing
+아임더보스	115	아임	auto	manual-abbr-missing
+아줄	230802	아줄	auto	manual-abbr-missing
+아컴호러카드게임 + 던위치 확장	205637	아컴	auto	manual-abbr-missing
+아쿠아티카	283393	아쿠	auto	manual-abbr-missing
+아키텍추라	256390	아키	auto	manual-abbr-missing
+악마성의마차	25951	악마	auto	manual-abbr-missing
+알렉산드리아 도서관	432834	알렉	auto	manual-abbr-missing
+알마마터	299960	알마	auto	manual-abbr-missing
+알케미스트 (왕의골렘 합본)	161970	알케	auto	manual-abbr-missing
+암스테르담	314582	암스	auto	manual-abbr-missing
+애꾸눈선장룰렛게임		애꾸	auto	manual-abbr-missing,no-bgg-id
+액시스앤얼라이어스1941 (영)	123185	액시41	bgg-id	abbr-over-3-chars
+액시스앤얼라이어스1942 (영)	41863	액시42	bgg-id	abbr-over-3-chars
+야옹섬	281259	야옹	auto	manual-abbr-missing
+야채주식	328211	야채	auto	manual-abbr-missing
+양적완화(Q.E.)	266830	양적	auto	manual-abbr-missing
+어비스	155987	어비	auto	manual-abbr-missing
+어센션	69789	어센	auto	manual-abbr-missing
+어스	350184	어스	auto	manual-abbr-missing
+언매치드	274637	언매	auto	manual-abbr-missing
+얼티밋레일로드	329591	얼티	auto	manual-abbr-missing
+에메랄드스컬	421762	에메	auto	manual-abbr-missing
+에에스오브스페이드	429861	에에	auto	manual-abbr-missing
+에이다		에이다	owned-name	no-bgg-id
+에즈라와 느헤미아	386368	에즈	auto	manual-abbr-missing
+엔들리스윈(+확장2)	305096	엔들	auto	manual-abbr-missing
+엘더베일의거처	271055	엘더	auto	manual-abbr-missing
+엘드리치호러 (+확장)	146021	엘드	auto	manual-abbr-missing
+엘리베이터앞에서	278751	엘리	auto	manual-abbr-missing
+영리한여우	244522	영리	auto	manual-abbr-missing
+영웅을빌려줘	135116	영웅	auto	manual-abbr-missing
+옛날옛적에	1234	옛날	auto	manual-abbr-missing
+오 미우바우	311031	오 	auto	manual-abbr-missing
+오라파마인	424152	오라	auto	manual-abbr-missing
+오리진스+확장	322588	오리	auto	manual-abbr-missing
+오버부킹	354328	오버	auto	manual-abbr-missing
+오스티아	347767	오스	auto	manual-abbr-missing
+오토배틀 챌린저스	359970	오토	auto	manual-abbr-missing
+오하나미	270314	오하	auto	manual-abbr-missing
+온마스	184267	온마	auto	manual-abbr-missing
+왓츠잇투야	5772	왓츠	auto	manual-abbr-missing
+왕국의수도 프라하	308765	왕국	auto	manual-abbr-missing
+요람에서무덤까지	371787	요람	auto	manual-abbr-missing
+요코하마	196340	요코	auto	manual-abbr-missing
+요트다이스	2243	요트	auto	manual-abbr-missing
+용사가죽었다(미스터리파티시리즈)		용사	auto	manual-abbr-missing,no-bgg-id
+우노(포켓몬우노)	37330	우노	auto	manual-abbr-missing
+우드크래프트	355093	우드	auto	manual-abbr-missing
+워체스트	249259	워체	auto	manual-abbr-missing
+원덱던전 + 스토리즈 확장	179275	원덱	auto	manual-abbr-missing
+원드러스크리처	400366	원드	auto	manual-abbr-missing
+웨일스트리트 + 전용매트	396995	웨일	auto	manual-abbr-missing
+웬디어른이되렴(머더미스터리미니)	370749	웬디	auto	manual-abbr-missing
+위대한로렌초	203993	위대	auto	manual-abbr-missing
+위자드	1465	위자	auto	manual-abbr-missing
+위치스톤	318560	위치	auto	manual-abbr-missing
+윈드밀밸리	403441	윈드	auto	manual-abbr-missing
+윙스팬 + 아시아 + 오세아니아	266192	윙스	auto	manual-abbr-missing
+유포리아+확장	133848	유포	auto	manual-abbr-missing
+육식동물짓이야	451594	육식	auto	manual-abbr-missing
+이매진	191894	이매	auto	manual-abbr-missing
+이베큐에이션	382843	이베	auto	manual-abbr-missing
+이봐그건내물고기야(영)	8203	이봐	auto	manual-abbr-missing
+이스탄불 주사위게임	235488	이스	auto	manual-abbr-missing
+이지컴이지고	10672	이지	auto	manual-abbr-missing
+익스플로딩키튼	172225	익스	auto	manual-abbr-missing
+인더스트리아	8124	인더	auto	manual-abbr-missing
+인생게임	2921	인생	auto	manual-abbr-missing
+인쉬	155821	인쉬	auto	manual-abbr-missing
+임페리얼스팀	338760	임페	auto	manual-abbr-missing
+잉카의황금	15512	잉카	auto	manual-abbr-missing
+자금성 디럭스	250458	자금	auto	manual-abbr-missing
+자반도르의셉터	13884	자반	auto	manual-abbr-missing
+자이푸르	54043	자이	auto	manual-abbr-missing
+잠만보다이스	411245	잠만	auto	manual-abbr-missing
+재치와눈치	66588	재치	auto	manual-abbr-missing
+저스트원	254640	저스	auto	manual-abbr-missing
+전국 첫번째제국	381819	전국	auto	manual-abbr-missing
+전지적추리시점	400995	전지	auto	manual-abbr-missing
+점박이	372559	점박	auto	manual-abbr-missing
+정령섬 + 가지와발톱 확장	162886	정령	auto	manual-abbr-missing
+젝스님트	432	젝스	auto	manual-abbr-missing
+젠가	2452	젠가	auto	manual-abbr-missing
+젬블로	19427	젬블	auto	manual-abbr-missing
+좀비사이드 무기를 들어라	364792	좀비	auto	manual-abbr-missing
+종이와바다	367220	종이	auto	manual-abbr-missing
+죄와벌의도서관(미스터리파티시리즈)	11612	죄와	auto	manual-abbr-missing
+줄로레또	27588	줄로	auto	manual-abbr-missing
+지킬&하이드&스코틀랜드야드	377793	지킬	auto	manual-abbr-missing
+차가운그녀가눈을뜨기전에	326054	차가	auto	manual-abbr-missing
+차이나타운	47	차이	auto	manual-abbr-missing
+챠오챠오	1163	챠오	auto	manual-abbr-missing
+첫번째화성인	192455	첫번	auto	manual-abbr-missing
+체스	171	체스	auto	manual-abbr-missing
+촐킨	126163	촐킨	auto	manual-abbr-missing
+치킨차차 미니	3570	치킨	auto	manual-abbr-missing
+칠교신도시	391497	칠교	auto	manual-abbr-missing
+카나가와	200147	카나	auto	manual-abbr-missing
+카네기	310873	카네	auto	manual-abbr-missing
+카리바	84732	카리	auto	manual-abbr-missing
+카보	271321	카보	auto	manual-abbr-missing
+카이사르	338957	카이	auto	manual-abbr-missing
+카탄(영) + 기사,56인 확장	13	카탄	auto	manual-abbr-missing
+카후나	394	카후	auto	manual-abbr-missing
+캐노피	295607	캐노	auto	manual-abbr-missing
+캐스캐디아	295947	캐스	auto	manual-abbr-missing
+캐슬콤보	416851	캐슬	auto	manual-abbr-missing
+캐시앤건즈	155362	캐시	auto	manual-abbr-missing
+캘리코	283155	캘리	auto	manual-abbr-missing
+캡틴블랙잭	183528	캡틴	auto	manual-abbr-missing
+캣레이디	228504	캣레	auto	manual-abbr-missing
+커피러시	377061	커피	auto	manual-abbr-missing
+컬러레또	5782	컬러	auto	manual-abbr-missing
+케일러스1303	284818	케일	auto	manual-abbr-missing
+코덱스	314503	코덱	auto	manual-abbr-missing
+코티지가든	204027	코티	auto	manual-abbr-missing
+콘셉트	147151	콘셉	auto	manual-abbr-missing
+콩코르디아 + 비너스 확장	124361	콩코	auto	manual-abbr-missing
+콰이어트하우스	411396	콰이	auto	manual-abbr-missing
+쿠트나호라	385610	쿠트	auto	manual-abbr-missing
+쿼리도	624	쿼리	auto	manual-abbr-missing
+쿼키서킷	274093	쿼키	auto	manual-abbr-missing
+퀘스트	316287	퀘스	auto	manual-abbr-missing
+퀵소	3190	퀵소	auto	manual-abbr-missing
+퀸도미노	232043	퀸도	auto	manual-abbr-missing
+큐비토스	298069	큐비	auto	manual-abbr-missing
+크라스카리어트	243430	크라	auto	manual-abbr-missing
+크로스클루	300753	크로	auto	manual-abbr-missing
+크루세이더	170624	크루	auto	manual-abbr-missing
+크리스탈팰리스	280480	크리	auto	manual-abbr-missing
+크베들린부르크의돌팔이약장수	244521	크베	auto	manual-abbr-missing
+클라스크	165722	클라	auto	manual-abbr-missing
+클랜오브칼레도니아	216132	클랜	auto	manual-abbr-missing
+클러스터	277458	클러	auto	manual-abbr-missing
+클레임1+클레임2	233961	클레	auto	manual-abbr-missing
+클루	1294	클루	auto	manual-abbr-missing
+클리닉	272739	클리	auto	manual-abbr-missing
+키친러시	223953	키친	auto	manual-abbr-missing
+키플라워 + 농부들 확장	122515	키플	auto	manual-abbr-missing
+킹덤오브다이스	436650	킹덤	auto	manual-abbr-missing
+킹도미노	204583	킹도	auto	manual-abbr-missing
+타르기	118048	타르	auto	manual-abbr-missing
+타코캣고트치즈피자	253664	타코	auto	manual-abbr-missing
+탁상탐정단1		탁상1	owned-name	no-bgg-id
+탁상탐정단2		탁상2	owned-name	no-bgg-id
+탁상탐정단3		탁상3	owned-name	no-bgg-id
+탁상탐정단4		탁상4	owned-name	no-bgg-id
+탐험가들	368413	탐험	auto	manual-abbr-missing
+탑텐티비	300905	탑텐	auto	manual-abbr-missing
+텀블링다이스	16747	텀블	auto	manual-abbr-missing
+테베	30869	테베	auto	manual-abbr-missing
+테오티우아칸	229853	테오	auto	manual-abbr-missing
+테케누	297030	테케	auto	manual-abbr-missing
+텔레스트레이션	46213	텔레	auto	manual-abbr-missing
+텔미모어	378256	텔미	auto	manual-abbr-missing
+투카나여행길	283864	투카	auto	manual-abbr-missing
+트라야누스	102680	트라	auto	manual-abbr-missing
+트래블블로그(영)	85105	트래	auto	manual-abbr-missing
+트루아 (영)	73439	트루	auto	manual-abbr-missing
+티츄 딜럭스	215	티츄	auto	manual-abbr-missing
+티칼	54	티칼	auto	manual-abbr-missing
+티켓투라이드 유럽 15주년 기념판	9209	티켓	auto	manual-abbr-missing
+티키토플	34373	티키	auto	manual-abbr-missing
+틸레툼	351913	틸레	auto	manual-abbr-missing
+팀3 핑크	247694	팀3	auto	manual-abbr-missing
+파러웨이	385761	파러	auto	manual-abbr-missing
+파수꾼	228855	파수	auto	manual-abbr-missing
+파워그리드	2651	파워	auto	manual-abbr-missing
+팍스파미르	256960	팍스	auto	manual-abbr-missing
+팔레오	300531	팔레	auto	manual-abbr-missing
+패치워크 크리스마스에디션	163412	패치	auto	manual-abbr-missing
+팬데믹 + 벼랑끝에서 확장	30549	팬데	auto	manual-abbr-missing
+팬암(영)	303057	팬암	auto	manual-abbr-missing
+퍼스트클래스	206941	퍼스	auto	manual-abbr-missing
+펄서2849	228341	펄서	auto	manual-abbr-missing
+페루도	45	페루	auto	manual-abbr-missing
+페야의늪	438442	페야	auto	manual-abbr-missing
+펜스테르담		펜스	auto	manual-abbr-missing,no-bgg-id
+펠리시티 자루속고양이	32125	펠리	auto	manual-abbr-missing
+포가튼워터스	302723	포가	auto	manual-abbr-missing
+포레스트셔플	391163	포레	auto	manual-abbr-missing
+포션폭발 + 다섯번째학생 확장	180974	포션	auto	manual-abbr-missing
+포인트샐러드 이브이에디션	274960	포인	auto	manual-abbr-missing
+포커칩세트		포커	auto	manual-abbr-missing,no-bgg-id
+포켓몬사다리게임		사다리	owned-name	no-bgg-id
+포트로얄	156009	포트	auto	manual-abbr-missing
+폭시	359318	폭시	auto	manual-abbr-missing
+푸들택시	429662	푸들	auto	manual-abbr-missing
+푸에르토리코 2014	3076	푸에	auto	manual-abbr-missing
+프라이머 각성	303731	프라	auto	manual-abbr-missing
+프레스코	66188	프레	auto	manual-abbr-missing
+프로젝트L	260180	프로	auto	manual-abbr-missing
+프리세이지	428787	프리	auto	manual-abbr-missing
+플래시포인트 (영)	100901	플래	auto	manual-abbr-missing
+피렌체의제후 (영)	555	피렌	auto	manual-abbr-missing
+핀카	40628	핀카	auto	manual-abbr-missing
+필름을감아(일)	215471	필름	auto	manual-abbr-missing
+하다라	269144	하다	auto	manual-abbr-missing
+하드리아누스방벽	304783	하드	auto	manual-abbr-missing
+하모니즈	414317	하모	auto	manual-abbr-missing
+하베스트	15390	하베	auto	manual-abbr-missing
+하트오브크라운페어리 + 확장2	131904	하트	auto	manual-abbr-missing
+한밤의늑대인간	147949	한밤	auto	manual-abbr-missing
+한자토이토니카 빅박스	286749	한자	auto	manual-abbr-missing
+할라피노	206	할라	auto	manual-abbr-missing
+할러타우	300322	할러	auto	manual-abbr-missing
+항로개척자	434343	항로	auto	manual-abbr-missing
+해기스	37628	해기	auto	manual-abbr-missing
+핵클레드 + 확장	352228	핵클	auto	manual-abbr-missing
+햄버거타이쿤	223094	햄버	auto	manual-abbr-missing
+행복을찾아서	181687	행복	auto	manual-abbr-missing
+행성x를찾아서	279537	행성	auto	manual-abbr-missing
+허리컵	38504	허리	auto	manual-abbr-missing
+허즐방탈출 Hex-it		허즐	auto	manual-abbr-missing,no-bgg-id
+헤게모니 + 역사적사건들 확장	321608	헤게	auto	manual-abbr-missing
+혁신의시대	383179	혁신	auto	manual-abbr-missing
+화이트채플	59959	화이	auto	manual-abbr-missing
+황하와장강	244114	황하	auto	manual-abbr-missing
+황혼의비문	361545	황혼	auto	manual-abbr-missing
+후지	258308	후지	auto	manual-abbr-missing
+휘슬마운틴	301255	휘슬	auto	manual-abbr-missing
+히트	366013	히트	auto	manual-abbr-missing
