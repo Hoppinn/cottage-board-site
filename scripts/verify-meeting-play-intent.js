@@ -15,6 +15,7 @@ const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
 const sql = read('docs/migrations/024_meeting_vote_play_intent.sql');
 const clientSrc = read('assets/js/supabase-client.js');
 const detailSrc = read('assets/js/day-detail.js');
+const indexSrc = read('assets/js/index-page.js');
 const plannerHtml = read('pages/club/club-schedule.html');
 
 let failures = 0;
@@ -33,6 +34,7 @@ check('레거시 play_traits 빈 배열 보정', sql.includes('WHERE play_traits
 console.log('\n=== 2. 소스 문법과 API 하위 호환 ===');
 new vm.Script(clientSrc, { filename: 'assets/js/supabase-client.js' });
 new vm.Script(detailSrc, { filename: 'assets/js/day-detail.js' });
+new vm.Script(indexSrc, { filename: 'assets/js/index-page.js' });
 const inlineScripts = [...plannerHtml.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
   .map(match => match[1]).filter(source => source.trim());
 inlineScripts.forEach((source, index) => new vm.Script(source, { filename: `club-schedule:inline-${index + 1}.js` }));
@@ -57,6 +59,11 @@ check('성격·깊이·성향·모집 문구 소비', ['v.game_style', 'v.game_d
 check('want/learn 게임이 참여자 카드에 귀속', detailSrc.includes("groupHtml('want', '하고 싶음')")
   && detailSrc.includes("groupHtml('learn', '배우고 싶음')"));
 check('시간 막대 안에 텍스트 없음', !detailSrc.includes('class="sched-bar-time"'));
+
+check('home selected-day preview has no duplicate date header', !indexSrc.includes('class="mpc-date"'));
+check('home day tabs reuse party-size helper', indexSrc.includes('const cnt = partyCount(byDate[ds]);'));
+check('day-only preview keeps date header with party-size helper', detailSrc.includes('const count = partyCount(dayVotes || []);')
+  && detailSrc.includes('class="dd-preview-head"'));
 
 async function runLiveContract() {
   console.log('\n=== 5. 운영 DB/API 왕복 (격리 테스트 행) ===');

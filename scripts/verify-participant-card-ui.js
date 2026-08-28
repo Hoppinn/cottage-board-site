@@ -56,15 +56,23 @@ async function verifyViewport(browser, width, height) {
     ]);
     const html3 = window.buildBarsInCard(votes.slice(0, 3), voteGames, null);
     const html6 = window.buildBarsInCard(votes, voteGames, null);
+    // 공용 헬퍼 자체는 verify-party-size.js가 실제 소스를 eval해 검증한다.
+    // 이 UI fixture는 네트워크 SDK 초기화와 무관하게 그 결과(본인+동반)를 시각화한다.
+    const homePartyCount = votes.reduce((sum, vote) => sum + 1 + vote.guest_count, 0);
     document.body.innerHTML = `<main style="max-width:${innerWidth >= 720 ? '650px' : '100%'};margin:0 auto;padding:12px;box-sizing:border-box">
       <h1 style="font-size:16px">본 플래너 · 3명</h1><section id="plannerHost">${html3}</section>
-      <h1 style="font-size:16px">홈 히어로 미리보기 · 6명</h1><section class="meeting-preview-card" id="homeHost">${html6}</section>
+      <h1 style="font-size:16px">홈 히어로 미리보기 · 6명</h1>
+      <div class="meeting-days"><div class="meeting-day-chip has-vote is-selected"><span class="mdc-day">토</span><span class="mdc-count" id="homeDayCount">${homePartyCount}명</span></div></div>
+      <section class="meeting-preview-card" id="homeHost">${html6}</section>
       <h1 style="font-size:16px">하루치 미리보기 · 6명</h1><section class="dd-preview" id="modalHost">${html6}</section>
     </main>`;
-    return {sameHtml:html6 === window.buildBarsInCard(votes, voteGames, null)};
+    return {sameHtml:html6 === window.buildBarsInCard(votes, voteGames, null), homePartyCount};
   });
 
   check(`${width}px: 공용 렌더 결과 결정적`, fixture.sameHtml);
+  check(`${width}px: 홈 요일 탭은 본인+동반 합계`, fixture.homePartyCount === 12
+    && await page.locator('#homeDayCount').textContent() === '12명');
+  check(`${width}px: 홈 카드 위 중복 날짜 헤더 없음`, await page.locator('#homeHost .mpc-date').count() === 0);
   for (const [hostId, expected] of [['plannerHost',3],['homeHost',6],['modalHost',6]]) {
     const result = await page.locator(`#${hostId}`).evaluate((host, count) => {
       const cards = [...host.querySelectorAll('.sched-bar-item')];

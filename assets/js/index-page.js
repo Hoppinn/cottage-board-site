@@ -1785,6 +1785,12 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
   const DAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'];
 
+  // 날짜별 참여 인원은 등록 행 수가 아니라 등록자 본인 + 동반 인원 합계다.
+  // 상단 요일 탭과 상태 판정이 같은 공용 규칙을 사용하도록 한 곳에서 위임한다.
+  function partyCount(votes) {
+    return window.CottageDB?.sumPartySize?.(votes) ?? (votes ? votes.length : 0);
+  }
+
   function renderPreview(dateStr, dayVotes, dayGames) {
     if (!previewEl) return;
     // 지난 날짜는 등록 진입을 렌더하지 않는다 — 플래너 iframe이 `ds >= 오늘`에서
@@ -1800,11 +1806,6 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       });
       return;
     }
-    const dateObj = new Date(dateStr + 'T00:00:00');
-    const dayIdx  = ((dateObj.getDay() + 6) % 7);
-    const month   = dateObj.getMonth() + 1;
-    const date    = dateObj.getDate();
-    const count   = new Set(dayVotes.map(v => v.user_id)).size;
     const _me     = window.getKakaoUser?.();
     const myVote  = _me ? dayVotes.find(v => String(v.user_id) === String(_me.id)) ?? null : null;
 
@@ -1816,7 +1817,6 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
         </div>`;
 
     previewEl.innerHTML = `<div class="meeting-preview-card" role="button" tabindex="0">
-      <div class="mpc-date">${month}/${date} (${DAY_LABELS[dayIdx]}) · ${count}명</div>
       ${window.buildBarsInCard(dayVotes, dayGames, myVote)}
       ${actionsHtml}
     </div>`;
@@ -1989,8 +1989,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
       // 실제 "모임"은 같은 날 2명 이상이 모여야 성사된다(2026-08-02 사용자 지적) — 요일이
       // 갈려 있으면(월 1명+수 1명=총 2명) 총원은 2여도 아무 날도 안 뭉쳐 모임이 아니다.
       // 요일칩 인원수(mdc-count)와 같은 sumPartySize를 하루 단위로 재사용해 최댓값을 구한다.
-      const maxDayCount = Math.max(0, ...Object.values(byDate).map(
-        rows => window.CottageDB?.sumPartySize?.(rows) ?? rows.length));
+      const maxDayCount = Math.max(0, ...Object.values(byDate).map(partyCount));
       statusEl.textContent = getMeetingStatusMsg(weekPeople, weekOffset, maxDayCount);
       statusEl.classList.toggle('is-glow', isGlowworthyMeetingCount(weekPeople, weekOffset));
 
@@ -2009,7 +2008,7 @@ window.addEventListener('cottage-meeting-changed', () => { _meetingReload?.(); }
 
       function renderChips() {
         daysEl.innerHTML = dateKeys.map((ds, i) => {
-          const cnt = window.CottageDB?.sumPartySize?.(byDate[ds]) ?? byDate[ds].length;
+          const cnt = partyCount(byDate[ds]);
           const hasVote  = cnt > 0;
           const isPast   = ds < todayStr;
           const isSelected = ds === selectedDate;
