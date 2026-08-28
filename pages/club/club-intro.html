@@ -39,33 +39,83 @@
             <span class="intro-form-toggle-arrow" id="introFormArrow">▾</span>
           </button>
           <div class="intro-form-body" id="introFormBody">
+            <div class="intro-reward-note"><strong>🎫 모든 문항을 작성하면 음료교환권 1장</strong><span>최초 1회만 지급되며, 받은 교환권은 내 보드에서 사용할 수 있어요.</span></div>
             <div class="intro-form-fields">
               <div class="intro-field">
                 <label class="intro-label" for="introNickname">닉네임 <span class="intro-required">*</span></label>
                 <input class="intro-input" id="introNickname" type="text" placeholder="단톡방 닉네임" maxlength="20">
               </div>
+              <fieldset class="intro-question" data-group="joinSources">
+                <legend>가입 경로 <span class="intro-required">*</span><small>복수 선택 가능 · 회원 카드에는 공개되지 않아요</small></legend>
+                <div class="intro-choice-grid">
+                  <label><input type="checkbox" value="store_visit">매장 방문</label>
+                  <label><input type="checkbox" value="friend_referral">지인 추천</label>
+                  <label><input type="checkbox" value="cottage_homepage">코티지 홈페이지</label>
+                  <label><input type="checkbox" value="open_chat_search">오픈카톡 검색</label>
+                  <label><input type="checkbox" value="daangn">당근 동호회·광고</label>
+                  <label><input type="checkbox" value="naver_place">네이버(플레이스) 검색</label>
+                  <label><input type="checkbox" value="social_media">인스타그램·기타 SNS</label>
+                </div>
+              </fieldset>
+              <fieldset class="intro-question" data-group="companionTypes">
+                <legend>주로 함께 게임하는 사람 <span class="intro-required">*</span><small>복수 선택 가능</small></legend>
+                <div class="intro-choice-grid">
+                  <label><input type="checkbox" value="friends">친구·지인</label>
+                  <label><input type="checkbox" value="partner">연인·배우자</label>
+                  <label><input type="checkbox" value="family">가족</label>
+                  <label><input type="checkbox" value="boardgame_group">보드게임 모임·동호회</label>
+                  <label><input type="checkbox" value="various">상황에 따라 다양함</label>
+                </div>
+              </fieldset>
               <div class="intro-field">
-                <label class="intro-label" for="introBio">한줄소개</label>
-                <input class="intro-input" id="introBio" type="text" placeholder="나를 짧게 소개해보세요 (모임 보드와 공유돼요)" maxlength="60">
+                <label class="intro-label" for="introAverageFrequency">평균 보드게임 플레이 빈도 <span class="intro-required">*</span></label>
+                <select class="intro-input" id="introAverageFrequency"><option value="">선택해주세요</option></select>
               </div>
+              <fieldset class="intro-question">
+                <legend>모임 참여 가능 빈도 <span class="intro-required">*</span><small>현실적으로 가능한 최소~최대</small></legend>
+                <div class="intro-range-row"><select class="intro-input" id="introPossibleMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introPossibleMax"><option value="">최대</option></select></div>
+              </fieldset>
+              <fieldset class="intro-question">
+                <legend>모임 참여 희망 빈도 <span class="intro-required">*</span><small>원하는 최소~최대</small></legend>
+                <div class="intro-range-row"><select class="intro-input" id="introDesiredMin"><option value="">최소</option></select><span>~</span><select class="intro-input" id="introDesiredMax"><option value="">최대</option></select></div>
+              </fieldset>
+              <fieldset class="intro-question" data-group="availableDays">
+                <legend>주로 참여 가능한 요일 <span class="intro-required">*</span><small>복수 선택 가능</small></legend>
+                <div class="intro-choice-grid intro-choice-grid--days">
+                  <label><input type="checkbox" value="mon">월</label><label><input type="checkbox" value="tue">화</label><label><input type="checkbox" value="wed">수</label><label><input type="checkbox" value="thu">목</label><label><input type="checkbox" value="fri">금</label><label><input type="checkbox" value="sat">토</label><label><input type="checkbox" value="sun">일</label><label data-exclusive="true"><input type="checkbox" value="flexible">일정에 따라 유동적</label>
+                </div>
+              </fieldset>
+              <fieldset class="intro-question" data-group="availableTimes">
+                <legend>주로 참여 가능한 시간대 <span class="intro-required">*</span><small>복수 선택 가능</small></legend>
+                <div class="intro-choice-grid">
+                  <label><input type="checkbox" value="morning">오전 6~12시</label><label><input type="checkbox" value="afternoon">오후 12~18시</label><label><input type="checkbox" value="evening">저녁 18~24시</label><label><input type="checkbox" value="late_night">심야 0~6시</label><label data-exclusive="true"><input type="checkbox" value="flexible">시간대 유동적</label>
+                </div>
+              </fieldset>
+              <fieldset class="intro-question" data-group="preferredGameTypes">
+                <legend>좋아하는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend>
+                <div class="intro-choice-grid">
+                  <label><input type="checkbox" value="party">파티·친목</label><label><input type="checkbox" value="mystery">추리·미스터리</label><label><input type="checkbox" value="strategy">전략·유로</label><label><input type="checkbox" value="thematic">테마·몰입</label><label><input type="checkbox" value="cooperative">협력</label><label><input type="checkbox" value="social_deduction">마피아·블러핑</label><label><input type="checkbox" value="card_deckbuilding">카드·덱빌딩</label><label><input type="checkbox" value="puzzle_abstract">퍼즐·추상</label><label><input type="checkbox" value="campaign_legacy">캠페인·레거시</label><label data-exclusive="true"><input type="checkbox" value="any">장르를 가리지 않음</label>
+                </div>
+              </fieldset>
+              <fieldset class="intro-question" data-group="avoidGameTypes">
+                <legend>꺼리는 게임 유형 <span class="intro-required">*</span><small>복수 선택 가능</small></legend>
+                <div class="intro-choice-grid">
+                  <label><input type="checkbox" value="마피아류">마피아류</label><label><input type="checkbox" value="실시간">실시간</label><label><input type="checkbox" value="협상">협상</label><label><input type="checkbox" value="파티게임">파티게임</label><label><input type="checkbox" value="긴 플레이타임">긴 플레이타임</label><label><input type="checkbox" value="고난도 전략">고난도 전략</label><label><input type="checkbox" value="운 비중 높음">운 비중 높음</label><label><input type="checkbox" value="공격/견제 강함">공격·견제 강함</label><label data-exclusive="true"><input type="checkbox" value="none">딱히 없음</label>
+                </div>
+              </fieldset>
+              <fieldset class="intro-question" data-group="clocktowerPreference">
+                <legend>시계탑 게임 선호도 <span class="intro-required">*</span></legend>
+                <div class="intro-choice-grid intro-choice-grid--radio">
+                  <label><input type="radio" name="clocktowerPreference" value="love">매우 좋아함</label><label><input type="radio" name="clocktowerPreference" value="interested">기회가 되면 참여하고 싶음</label><label><input type="radio" name="clocktowerPreference" value="curious">아직 모르지만 해보고 싶음</label><label><input type="radio" name="clocktowerPreference" value="not_preferred">별로 선호하지 않음</label><label><input type="radio" name="clocktowerPreference" value="no">참여하고 싶지 않음</label>
+                </div>
+              </fieldset>
               <div class="intro-field">
-                <label class="intro-label" for="introGames">좋아하는 게임</label>
-                <input class="intro-input" id="introGames" type="text" placeholder="ex. 윙스팬, 아줄, 코드네임" maxlength="100">
-              </div>
-              <div class="intro-field">
-                <label class="intro-label" for="introAvailable">참여 가능 요일 / 시간</label>
-                <input class="intro-input" id="introAvailable" type="text" placeholder="ex. 주말 오후, 평일 저녁 가능" maxlength="100">
-              </div>
-              <div class="intro-field">
-                <label class="intro-label" for="introLocation">활동 지역</label>
-                <input class="intro-input" id="introLocation" type="text" placeholder="ex. 용인, 수원, 성남, 서울 남부" maxlength="50">
-              </div>
-              <div class="intro-field">
-                <label class="intro-label" for="introTravel">이동 가능 범위</label>
-                <input class="intro-input" id="introTravel" type="text" placeholder="ex. 차로 30분 이내" maxlength="50">
+                <label class="intro-label" for="introExpectation">모임에 바라는 점 및 각오 <span class="intro-required">*</span></label>
+                <textarea class="intro-input intro-textarea" id="introExpectation" minlength="10" maxlength="500" placeholder="서로 즐겁게 게임하기 위해 바라는 점이나 나의 각오를 적어주세요."></textarea>
+                <span class="intro-field-hint">10~500자</span>
               </div>
             </div>
-            <button class="intro-submit-btn" id="introSubmitBtn" type="button">인사 남기기</button>
+            <button class="intro-submit-btn" id="introSubmitBtn" type="button">소개 저장하고 교환권 받기</button>
             <p class="intro-submit-msg" id="introSubmitMsg"></p>
           </div>
         </div>
@@ -98,11 +148,10 @@
     const toggle = document.getElementById('introFormToggle');
     const body   = document.getElementById('introFormBody');
     const arrow  = document.getElementById('introFormArrow');
-    let open = false;
     body.style.display = 'none';
     arrow.textContent  = '▸';
     toggle.addEventListener('click', () => {
-      open = !open;
+      const open = body.style.display === 'none';
       body.style.display = open ? '' : 'none';
       arrow.textContent  = open ? '▾' : '▸';
     });
@@ -144,6 +193,51 @@
     function isAdmin() { return window.isOwner?.() || false; }
     function getCurrentUser() { return window.getKakaoUser?.() || null; }
 
+    const FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
+    const COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
+    const DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
+    const TIME_LABELS = { morning:'오전', afternoon:'오후', evening:'저녁', late_night:'심야', flexible:'유동적' };
+    const GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
+    const CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
+    let didPrefill = false;
+
+    function setupFrequencySelects() {
+      ['introAverageFrequency','introPossibleMin','introPossibleMax','introDesiredMin','introDesiredMax'].forEach(id => {
+        const select = document.getElementById(id);
+        FREQUENCY_LABELS.forEach((label, value) => select.insertAdjacentHTML('beforeend', `<option value="${value}">${escHtml(label)}</option>`));
+      });
+    }
+    function selectedValues(group) {
+      return [...document.querySelectorAll(`[data-group="${group}"] input:checked`)].map(input => input.value);
+    }
+    function setSelectedValues(group, values) {
+      const selected = new Set(values || []);
+      document.querySelectorAll(`[data-group="${group}"] input`).forEach(input => { input.checked = selected.has(input.value); });
+    }
+    function labelList(values, map) {
+      return (values || []).map(value => map[value] || value).join(', ');
+    }
+    function frequencyRange(min, max) {
+      if (min == null || max == null) return '';
+      return min === max ? FREQUENCY_LABELS[min] : `${FREQUENCY_LABELS[min]} ~ ${FREQUENCY_LABELS[max]}`;
+    }
+    function openForm() {
+      document.getElementById('introFormBody').style.display = '';
+      document.getElementById('introFormArrow').textContent = '▾';
+    }
+
+    // '유동적/없음/장르 무관'은 같은 그룹의 다른 답과 동시에 선택하지 않는다.
+    document.querySelectorAll('.intro-choice-grid label[data-exclusive="true"] input').forEach(exclusive => {
+      exclusive.addEventListener('change', () => {
+        if (exclusive.checked) exclusive.closest('.intro-choice-grid').querySelectorAll('input').forEach(input => { if (input !== exclusive) input.checked = false; });
+      });
+      exclusive.closest('.intro-choice-grid').querySelectorAll('input').forEach(input => {
+        if (input === exclusive) return;
+        input.addEventListener('change', () => { if (input.checked) exclusive.checked = false; });
+      });
+    });
+    setupFrequencySelects();
+
     // 자기소개 작성은 로그인 필수 (모임 보드와 user_id 기준으로 연동되기 때문)
     function _syncLoginUI() {
       const loggedIn = !!getCurrentUser();
@@ -178,74 +272,27 @@
       }
     }
 
-    function editIntro(id, r) {
-      const cardEl = document.querySelector(`.intro-card-news[data-id="${id}"]`);
-      if (!cardEl) return;
-      cardEl.innerHTML = `
-        <div class="intro-edit-form">
-          <div class="intro-field">
-            <label class="intro-label" for="editNick_${id}">닉네임 <span class="intro-required">*</span></label>
-            <input class="intro-input" id="editNick_${id}" type="text" value="${escHtml(r.nickname)}" maxlength="20">
-          </div>
-          <div class="intro-field">
-            <label class="intro-label" for="editBio_${id}">한줄소개</label>
-            <input class="intro-input" id="editBio_${id}" type="text" value="${escHtml(r._bio || '')}" maxlength="60" placeholder="모임 보드와 공유돼요">
-          </div>
-          <div class="intro-field">
-            <label class="intro-label" for="editGames_${id}">좋아하는 게임</label>
-            <input class="intro-input" id="editGames_${id}" type="text" value="${escHtml(r.favorite_games || '')}" maxlength="100">
-          </div>
-          <div class="intro-field">
-            <label class="intro-label" for="editAvail_${id}">참여 가능 요일 / 시간</label>
-            <input class="intro-input" id="editAvail_${id}" type="text" value="${escHtml(r.available || '')}" maxlength="100">
-          </div>
-          <div class="intro-field">
-            <label class="intro-label" for="editLoc_${id}">활동 지역</label>
-            <input class="intro-input" id="editLoc_${id}" type="text" value="${escHtml(r.location || '')}" maxlength="50">
-          </div>
-          <div class="intro-field">
-            <label class="intro-label" for="editTravel_${id}">이동 가능 범위</label>
-            <input class="intro-input" id="editTravel_${id}" type="text" value="${escHtml(r.travel_range || '')}" maxlength="50">
-          </div>
-          <div class="intro-edit-btns">
-            <button class="intro-edit-save-btn" type="button">저장</button>
-            <button class="intro-edit-cancel-btn" type="button">취소</button>
-          </div>
-          <p class="intro-edit-msg"></p>
-        </div>`;
-      cardEl.querySelector('.intro-edit-cancel-btn').addEventListener('click', loadIntros);
-      cardEl.querySelector('.intro-edit-save-btn').addEventListener('click', async () => {
-        const nickname = cardEl.querySelector(`#editNick_${id}`).value.trim();
-        const msg = cardEl.querySelector('.intro-edit-msg');
-        if (!nickname) {
-          msg.textContent = '닉네임을 입력해주세요.';
-          msg.style.display = 'block';
-          return;
-        }
-        const saveBtn = cardEl.querySelector('.intro-edit-save-btn');
-        saveBtn.disabled = true;
-        saveBtn.textContent = '저장 중...';
-        const newBio = cardEl.querySelector(`#editBio_${id}`).value.trim();
-        const { error } = await db.from('member_intros').update({
-          nickname,
-          favorite_games: cardEl.querySelector(`#editGames_${id}`).value.trim() || null,
-          available: cardEl.querySelector(`#editAvail_${id}`).value.trim() || null,
-          location: cardEl.querySelector(`#editLoc_${id}`).value.trim() || null,
-          travel_range: cardEl.querySelector(`#editTravel_${id}`).value.trim() || null,
-        }).eq('id', id);
-        // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT — 여기서 저장하면 모임 보드/취향보드에도 즉시 반영됨
-        if (!error && r.user_id) {
-          await window.CottageDB?.updateUserBio?.(r.user_id, newBio);
-        }
-        if (!error) {
-          await loadIntros();
-        } else {
-          saveBtn.disabled = false;
-          saveBtn.textContent = '저장';
-          msg.textContent = '저장에 실패했어요. 다시 시도해주세요.';
-          msg.style.display = 'block';
-        }
-      });
+    function editIntro(id, r, focusForm = true) {
+      document.getElementById('introNickname').value = r.nickname || '';
+      setSelectedValues('joinSources', r.join_sources);
+      setSelectedValues('companionTypes', r.companion_types);
+      document.getElementById('introAverageFrequency').value = r.average_play_frequency ?? '';
+      document.getElementById('introPossibleMin').value = r.possible_frequency_min ?? '';
+      document.getElementById('introPossibleMax').value = r.possible_frequency_max ?? '';
+      document.getElementById('introDesiredMin').value = r.desired_frequency_min ?? '';
+      document.getElementById('introDesiredMax').value = r.desired_frequency_max ?? '';
+      setSelectedValues('availableDays', r.available_days);
+      setSelectedValues('availableTimes', r.available_times);
+      setSelectedValues('preferredGameTypes', r.preferred_game_types);
+      setSelectedValues('avoidGameTypes', r._avoid_tags?.length ? r._avoid_tags : (r.questionnaire_completed_at ? ['none'] : []));
+      const clocktower = document.querySelector(`[name="clocktowerPreference"][value="${r.clocktower_preference || ''}"]`);
+      document.querySelectorAll('[name="clocktowerPreference"]').forEach(input => { input.checked = input === clocktower; });
+      document.getElementById('introExpectation').value = r.expectation || '';
+      document.getElementById('introSubmitBtn').textContent = r.questionnaire_completed_at ? '자기소개 수정하기' : '소개 저장하고 교환권 받기';
+      if (focusForm) {
+        openForm();
+        document.getElementById('introFormCard').scrollIntoView({ behavior:'smooth', block:'start' });
+      }
     }
 
     async function loadIntros() {
@@ -259,24 +306,46 @@
         .from('member_intros')
         .select('*')
         .order('created_at', { ascending: false });
-      if (error || !data?.length) {
+      if (error) {
+        el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">자기소개를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</p>';
+        return;
+      }
+      if (!data?.length) {
+        const currentUser = getCurrentUser();
+        if (!didPrefill && currentUser?.nickname) {
+          didPrefill = true;
+          document.getElementById('introNickname').value = currentUser.nickname;
+          openForm();
+        }
         el.innerHTML = '<p class="intro-list-empty" style="grid-column:1/-1">아직 인사가 없어요. 첫 번째로 남겨보세요!</p>';
         return;
       }
 
-      // profiles.bio(한줄소개 SSOT) 일괄 조회 — 취향보드/모임보드와 공유하는 값을 카드에도 표시
+      // profiles.avoid_tags는 꺼리는 게임 유형의 기존 SSOT다.
       const userIds = [...new Set(data.map(r => r.user_id).filter(Boolean))];
-      let bioByUser = {};
+      let profileByUser = {};
       if (userIds.length) {
-        const { data: profilesData } = await db.from('profiles').select('user_id, bio').in('user_id', userIds);
-        bioByUser = Object.fromEntries((profilesData || []).map(p => [p.user_id, p.bio || '']));
+        const { data: profilesData } = await db.from('profiles').select('user_id, bio, avoid_tags').in('user_id', userIds);
+        profileByUser = Object.fromEntries((profilesData || []).map(p => [p.user_id, p]));
       }
-      data.forEach(r => { r._bio = r.user_id ? (bioByUser[r.user_id] || '') : ''; });
+      data.forEach(r => {
+        r._bio = r.user_id ? (profileByUser[r.user_id]?.bio || '') : '';
+        r._avoid_tags = r.user_id ? (profileByUser[r.user_id]?.avoid_tags || []) : [];
+      });
+
+      const currentUser = getCurrentUser();
+      const myRow = currentUser ? data.find(r => String(r.user_id) === String(currentUser.id)) : null;
+      if (!didPrefill) {
+        didPrefill = true;
+        if (myRow) editIntro(myRow.id, myRow, !myRow.questionnaire_completed_at);
+        else if (currentUser?.nickname) document.getElementById('introNickname').value = currentUser.nickname;
+      }
 
       el.innerHTML = data.map((r, idx) => {
         const canAct = canDelete(r);
         const del    = canAct ? `<button class="intro-card-del"       data-id="${r.id}" type="button" title="삭제">✕</button>` : '';
-        const edit   = canAct ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정">✎</button>` : '';
+        const canEdit = !!currentUser && String(r.user_id) === String(currentUser.id);
+        const edit   = canEdit ? `<button class="intro-card-edit"      data-id="${r.id}" type="button" title="수정">✎</button>` : '';
         const color  = canAct ? `<button class="intro-card-color-btn" data-id="${r.id}" type="button" title="색상 변경">🎨</button>` : '';
         const clickable = !!r.user_id;
         return `
@@ -288,8 +357,12 @@
           </div>
           <div class="intro-card-news-body">
             ${r._bio ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📝</span><span class="intro-card-news-val">${escHtml(r._bio)}</span></div>` : ''}
-            ${r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : ''}
-            ${r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : ''}
+            ${r.companion_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">👥</span><span class="intro-card-news-val">${escHtml(labelList(r.companion_types, COMPANION_LABELS))}</span></div>` : ''}
+            ${r.average_play_frequency != null ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">평균 ${escHtml(FREQUENCY_LABELS[r.average_play_frequency])}</span></div>` : (r.favorite_games ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🎲</span><span class="intro-card-news-val">${escHtml(r.favorite_games)}</span></div>` : '')}
+            ${r.available_days?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(labelList(r.available_days, DAY_LABELS))} · ${escHtml(labelList(r.available_times, TIME_LABELS))}</span></div>` : (r.available ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📅</span><span class="intro-card-news-val">${escHtml(r.available)}</span></div>` : '')}
+            ${r.preferred_game_types?.length ? `<div class="intro-card-news-row"><span class="intro-card-news-label">❤️</span><span class="intro-card-news-val">${escHtml(labelList(r.preferred_game_types, GAME_TYPE_LABELS))}</span></div>` : ''}
+            ${r.clocktower_preference ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🕰️</span><span class="intro-card-news-val">${escHtml(CLOCKTOWER_LABELS[r.clocktower_preference])}</span></div>` : ''}
+            ${r.expectation ? `<div class="intro-card-news-row"><span class="intro-card-news-label">💬</span><span class="intro-card-news-val">${escHtml(r.expectation.length > 70 ? `${r.expectation.slice(0, 70)}…` : r.expectation)}</span></div>` : ''}
             ${r.location ? `<div class="intro-card-news-row"><span class="intro-card-news-label">📍</span><span class="intro-card-news-val">${escHtml(r.location)}</span></div>` : ''}
             ${r.travel_range ? `<div class="intro-card-news-row"><span class="intro-card-news-label">🚗</span><span class="intro-card-news-val">${escHtml(r.travel_range)}</span></div>` : ''}
           </div>
@@ -364,71 +437,69 @@
     document.getElementById('introSubmitBtn').addEventListener('click', async () => {
       const u = getCurrentUser();
       const msg = document.getElementById('introSubmitMsg');
-      if (!u?.id) {
-        msg.textContent = '로그인 후 작성할 수 있어요.';
+      const fail = (text, target) => {
+        msg.textContent = text;
         msg.style.color = '#c0392b';
         msg.style.display = 'block';
+        target?.focus?.();
+        target?.scrollIntoView?.({ behavior:'smooth', block:'center' });
+      };
+      if (!u?.id) {
+        fail('로그인 후 작성할 수 있어요.');
         return;
       }
 
       const nickname = document.getElementById('introNickname').value.trim();
-      const bio      = document.getElementById('introBio').value.trim();
-      const games    = document.getElementById('introGames').value.trim();
-      const avail    = document.getElementById('introAvailable').value.trim();
-      const loc      = document.getElementById('introLocation').value.trim();
-      const travel   = document.getElementById('introTravel').value.trim();
+      const answers = {
+        nickname,
+        joinSources: selectedValues('joinSources'),
+        companionTypes: selectedValues('companionTypes'),
+        averagePlayFrequency: Number(document.getElementById('introAverageFrequency').value),
+        possibleFrequencyMin: Number(document.getElementById('introPossibleMin').value),
+        possibleFrequencyMax: Number(document.getElementById('introPossibleMax').value),
+        desiredFrequencyMin: Number(document.getElementById('introDesiredMin').value),
+        desiredFrequencyMax: Number(document.getElementById('introDesiredMax').value),
+        availableDays: selectedValues('availableDays'),
+        availableTimes: selectedValues('availableTimes'),
+        preferredGameTypes: selectedValues('preferredGameTypes'),
+        avoidGameTypes: selectedValues('avoidGameTypes'),
+        clocktowerPreference: document.querySelector('[name="clocktowerPreference"]:checked')?.value || '',
+        expectation: document.getElementById('introExpectation').value.trim(),
+      };
 
-      if (!nickname) {
-        msg.textContent = '닉네임을 입력해주세요.';
-        msg.style.color = '#c0392b';
-        msg.style.display = 'block';
-        document.getElementById('introNickname').focus();
-        return;
+      if (!nickname) return fail('닉네임을 입력해주세요.', document.getElementById('introNickname'));
+      const requiredGroups = [
+        ['joinSources','가입 경로'], ['companionTypes','주로 함께 게임하는 사람'],
+        ['availableDays','참여 가능한 요일'], ['availableTimes','참여 가능한 시간대'],
+        ['preferredGameTypes','좋아하는 게임 유형'], ['avoidGameTypes','꺼리는 게임 유형'],
+      ];
+      for (const [key, label] of requiredGroups) {
+        if (!answers[key].length) return fail(`${label}을(를) 하나 이상 선택해주세요.`, document.querySelector(`[data-group="${key}"]`));
       }
+      const frequencyIds = ['introAverageFrequency','introPossibleMin','introPossibleMax','introDesiredMin','introDesiredMax'];
+      if (frequencyIds.some(id => document.getElementById(id).value === '')) return fail('플레이 빈도와 참여 빈도를 모두 선택해주세요.', document.getElementById(frequencyIds.find(id => document.getElementById(id).value === '')));
+      if (answers.possibleFrequencyMin > answers.possibleFrequencyMax) return fail('참여 가능 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introPossibleMin'));
+      if (answers.desiredFrequencyMin > answers.desiredFrequencyMax) return fail('참여 희망 최소 빈도는 최대 빈도보다 높을 수 없어요.', document.getElementById('introDesiredMin'));
+      if (!answers.clocktowerPreference) return fail('시계탑 게임 선호도를 선택해주세요.', document.querySelector('[data-group="clocktowerPreference"]'));
+      if (answers.expectation.length < 10) return fail('모임에 바라는 점 및 각오를 10자 이상 적어주세요.', document.getElementById('introExpectation'));
 
       const btn = document.getElementById('introSubmitBtn');
       btn.disabled = true;
-      btn.textContent = '등록 중...';
-
-      // member_intros: 유저당 1행(UNIQUE user_id) — 재작성 시 upsert로 기존 행 갱신
-      const { data: ins, error } = await db.from('member_intros').upsert({
-        nickname,
-        favorite_games: games || null,
-        available: avail || null,
-        location: loc || null,
-        travel_range: travel || null,
-        user_id: String(u.id),
-      }, { onConflict: 'user_id' }).select('id');
-
-      // profiles.bio: 취향보드와 공유하는 한줄소개 SSOT
-      if (!error) await window.CottageDB?.updateUserBio?.(String(u.id), bio);
+      btn.textContent = '저장 중...';
+      const result = await window.CottageDB?.submitMemberIntro?.(String(u.id), answers) || { error:'api_unavailable' };
 
       btn.disabled = false;
-      btn.textContent = '인사 남기기';
+      btn.textContent = result.success ? '자기소개 수정하기' : '소개 저장하고 교환권 받기';
 
-      if (error) {
-        msg.textContent = '오류가 발생했어요. 다시 시도해주세요.';
-        msg.style.color = '#c0392b';
-        msg.style.display = 'block';
-        return;
-      }
+      if (result.error) return fail('저장에 실패했어요. 잠시 후 다시 시도해주세요.');
 
-      if (ins?.[0]?.id) saveMyId(ins[0].id);
-
-      ['introNickname','introBio','introGames','introAvailable','introLocation','introTravel'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      msg.textContent = '인사를 남겼어요!';
+      if (result.id) saveMyId(result.id);
+      msg.textContent = result.voucherGranted ? '자기소개를 저장하고 음료교환권 1장을 지급했어요!' : '자기소개를 수정했어요.';
       msg.style.color = 'var(--green)';
       msg.style.display = 'block';
+      if (result.voucherGranted) window._onVoucherGranted?.();
       setTimeout(() => { msg.style.display = 'none'; }, 3000);
       await loadIntros();
-    });
-
-    ['introNickname','introBio','introGames','introAvailable','introLocation','introTravel'].forEach(id => {
-      document.getElementById(id).addEventListener('keydown', e => {
-        if (e.key === 'Enter') document.getElementById('introSubmitBtn').click();
-      });
     });
 
     // 로그인/로그아웃 시 폼 표시 + 삭제 버튼 표시 여부 갱신

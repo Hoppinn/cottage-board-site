@@ -970,6 +970,18 @@ window._cottageSess = (function () {
         meetingStyle: intro.meeting_style || [],
         favoriteGames: intro.favorite_games || '',
         cardColor: intro.card_color || '',
+        companionTypes: intro.companion_types || [],
+        averagePlayFrequency: intro.average_play_frequency,
+        possibleFrequencyMin: intro.possible_frequency_min,
+        possibleFrequencyMax: intro.possible_frequency_max,
+        desiredFrequencyMin: intro.desired_frequency_min,
+        desiredFrequencyMax: intro.desired_frequency_max,
+        availableDays: intro.available_days || [],
+        availableTimes: intro.available_times || [],
+        preferredGameTypes: intro.preferred_game_types || [],
+        clocktowerPreference: intro.clocktower_preference || '',
+        expectation: intro.expectation || '',
+        questionnaireCompletedAt: intro.questionnaire_completed_at || null,
         likedGames,
         curiousGames,
         ruleGames,
@@ -985,6 +997,40 @@ window._cottageSess = (function () {
       const { error } = await db.from('member_intros').upsert(row, { onConflict: 'user_id' });
       return error ? { error } : { success: true };
     } catch (e) { return { error: e }; }
+  }
+
+  // 필수 자기소개 전체 저장 + 최초 1회 음료교환권 지급.
+  // DB RPC가 두 작업을 한 트랜잭션으로 묶고 intro_complete partial unique로 중복 지급을 막는다.
+  async function submitMemberIntro(userId, answers) {
+    if (!userId || !answers) return { error: 'invalid' };
+    try {
+      const { data, error } = await db.rpc('submit_member_intro', {
+        p_user_id: String(userId),
+        p_nickname: answers.nickname,
+        p_join_sources: answers.joinSources,
+        p_companion_types: answers.companionTypes,
+        p_average_play_frequency: answers.averagePlayFrequency,
+        p_possible_frequency_min: answers.possibleFrequencyMin,
+        p_possible_frequency_max: answers.possibleFrequencyMax,
+        p_desired_frequency_min: answers.desiredFrequencyMin,
+        p_desired_frequency_max: answers.desiredFrequencyMax,
+        p_available_days: answers.availableDays,
+        p_available_times: answers.availableTimes,
+        p_preferred_game_types: answers.preferredGameTypes,
+        p_avoid_game_types: answers.avoidGameTypes,
+        p_clocktower_preference: answers.clocktowerPreference,
+        p_expectation: answers.expectation,
+      });
+      if (error) {
+        console.error('[submitMemberIntro]', error);
+        return { error };
+      }
+      const row = data?.[0] || {};
+      return { success: true, id: row.intro_id || null, voucherGranted: !!row.voucher_granted };
+    } catch (e) {
+      console.error('[submitMemberIntro]', e);
+      return { error: e };
+    }
   }
 
   async function getAllBioTagSuggestions() {
@@ -1996,6 +2042,7 @@ window._cottageSess = (function () {
     getNoticeAckKeys,
     getMeetingProfile,
     upsertMeetingIntro,
+    submitMemberIntro,
     addMeetingGamePref,
     removeMeetingGamePref,
     getMeetingVoteGames,

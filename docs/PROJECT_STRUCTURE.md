@@ -75,6 +75,8 @@
 │   │                               #   덮으면 전 쿼리가 죽고 검사기가 0행을 정상처럼 보고한다
 │   ├── verify-party-size.js        # 모임 인원(등록 건수 ≠ 방문 인원) — 회귀 불변식 + 엣지 (읽기전용)
 │   │                               #   --negctl 먼저. --live를 줘야 실DB 조회(guest_count 필드 확인)
+│   ├── verify-intro-questionnaire.js # 필수 자기소개 문항·원자적 RPC·교환권 1회 unique 계약 (DB 불필요)
+│   │                               #   --negctl은 unique index를 제거해 검사기가 누락을 잡는지 확인
 │   ├── verify-title-links.js       # TITLE_DEFS ↔ ACH_DEFS.rewards.title 정합성 (DB 불필요)
 │   │                               #   고아/허수/중복/임계값 불일치 4종. --negctl 먼저 돌릴 것
 │   ├── audit-member-today.js       # 회원 카드 「오늘」 칩이 사라지는 조건 실측 (읽기전용)

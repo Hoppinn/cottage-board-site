@@ -1301,8 +1301,10 @@
       const allProfiles = (rawProfiles || []).filter(p => String(p.user_id || '') !== ADMIN_UID);
       const pageViews = (pvResult?.data || []).filter(r => String(r.user_id || '') !== ADMIN_UID);
       const anonSessions = anonResult?.data || [];
-      const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname').not('user_id','is',null)).data || [] : [];
+      const intros = db2 ? (await db2.from('member_intros').select('user_id,nickname,join_sources').not('user_id','is',null)).data || [] : [];
       const introNickMap = new Map(intros.map(i => [String(i.user_id), i.nickname]));
+      const introJoinSourceMap = new Map(intros.map(i => [String(i.user_id), i.join_sources || []]));
+      const INTRO_JOIN_SOURCE_LABELS = { store_visit:'매장 방문', friend_referral:'지인 추천', cottage_homepage:'코티지 홈페이지', open_chat_search:'오픈카톡 검색', daangn:'당근 동호회·광고', naver_place:'네이버(플레이스) 검색', social_media:'인스타그램·기타 SNS' };
 
       // ── 헬퍼 ────────────────────────────────────────────────────
       const fmtTime = s => {
@@ -1543,6 +1545,8 @@
           const isBanned = !!p.is_banned;
           const isMe = String(p.user_id) === '4916417947';
           const nick = introNickMap.get(String(p.user_id)) || p.nickname || p.real_name || '(닉네임없음)';
+          const joinSources = introJoinSourceMap.get(String(p.user_id)) || [];
+          const joinSourceHtml = joinSources.length ? `<span>가입 경로 ${joinSources.map(source => escH(INTRO_JOIN_SOURCE_LABELS[source] || source)).join(', ')}</span>` : '';
           const dnHtml = p.real_name
             ? `${escH(nick)}<span class="admin-real-name">(${escH(p.real_name)})</span>`
             : escH(nick);
@@ -1554,6 +1558,7 @@
               <span>가입 ${fmtDate(p.first_seen_at)}</span>
               <span>최근 ${fmtDate(p.last_seen_at)}</span>
               <span>방문 ${p.visit_count != null ? p.visit_count + '회' : '-'}</span>
+              ${joinSourceHtml}
               ${_todayChip(p, todayS)}
               <span title="profiles.total_minutes — 전 기간 누적(heartbeat 포함). 아래 페이지별 합계는 page_sessions 기준이라 이보다 작습니다.">⏱ 총 ${fmtTime(totalS)}</span>
               ${_visitorPagesToggle(memberPageMap.get(p.user_id), _todayPm)}

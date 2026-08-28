@@ -471,7 +471,7 @@ function _buildVoucherInner(bal, prods, hist, isDevMode) {
   const histHtml = hist.slice(0, 5).map((h, i, arr) => {
     const isGrant = h.delta > 0;
     const label = isGrant
-      ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
+      ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'intro_complete' ? '자기소개 작성 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
       : escH(h.voucher_products?.name || '사용');
     const balAfter = bal - arr.slice(0, i).reduce((s, e) => s + e.delta, 0);
     return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span><span class="profile-voucher-hist-bal">→ ${balAfter}장</span></li>`;
@@ -2333,7 +2333,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const who = names.length > 1 ? `${escH(names[0])} 외 ${names.length - 1}명` : escH(names[0] || '사용자');
       const cnt = n.count > 1 ? ` ${n.count}건` : '';
       const reasonLabel = used ? '음료 교환권 사용'
-        : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
+        : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'intro_complete' ? '자기소개 작성 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
       return `<li class="${cls}">${_card('🎫', `${who} 교환권 ${used ? '사용' : '획득'}${cnt}`, reasonLabel)}${readBtn}</li>`;
     }
     // 업적도 유형+날짜로 묶여서 온다 — showAchievementToast는 그 순간에만 보이는
@@ -2495,7 +2495,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
   // 두 보드는 좋아요·궁금해요·한줄소개·피하는유형·룰설명을 똑같이 보여준다. 예전엔 각자
   // 사본을 들고 있어 한쪽 편집이 반대편에 새로고침 전까지 안 보였다(크로스보드 stale).
   // 이제 서브시트에 들어갈 때마다 getMeetingProfile 하나를 다시 읽어 양쪽에 넘긴다.
-  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', available: '', travelRange: '', meetingStyle: [], likedGames: [], curiousGames: [], ruleGames: [] };
+  const _emptyBoardData = { bio: '', avoidTags: [], nickname: '', location: '', available: '', travelRange: '', meetingStyle: [], companionTypes: [], averagePlayFrequency: null, possibleFrequencyMin: null, possibleFrequencyMax: null, desiredFrequencyMin: null, desiredFrequencyMax: null, availableDays: [], availableTimes: [], preferredGameTypes: [], clocktowerPreference: '', expectation: '', questionnaireCompletedAt: null, likedGames: [], curiousGames: [], ruleGames: [] };
   // 재조회하는 동안 잠깐 보이는 자리(모임보드가 이미 쓰던 클래스 재사용 — 신규 CSS 없음)
   const _SUBSHEET_LOADING_HTML = '<p class="taste-game-empty">불러오는 중…</p>';
   let _boardData = meetingProfile || _emptyBoardData; // 패널 오픈 시 값이 최초의 '직전 값'
@@ -2720,6 +2720,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
     return `<div class="meeting-profile-row"><span class="meeting-profile-label">${label}</span><span class="meeting-profile-val${val ? '' : ' is-empty'}">${val ? escH(val) : '미입력'}</span></div>`;
   }
 
+  const _INTRO_FREQUENCY_LABELS = ['몇 달에 1회 이하','월 1회','월 2~3회','주 1회','주 2회','주 3회','주 4회 이상'];
+  const _INTRO_COMPANION_LABELS = { friends:'친구·지인', partner:'연인·배우자', family:'가족', boardgame_group:'보드게임 모임·동호회', various:'상황에 따라 다양함' };
+  const _INTRO_DAY_LABELS = { mon:'월', tue:'화', wed:'수', thu:'목', fri:'금', sat:'토', sun:'일', flexible:'유동적' };
+  const _INTRO_TIME_LABELS = { morning:'오전', afternoon:'오후', evening:'저녁', late_night:'심야', flexible:'유동적' };
+  const _INTRO_GAME_TYPE_LABELS = { party:'파티·친목', mystery:'추리·미스터리', strategy:'전략·유로', thematic:'테마·몰입', cooperative:'협력', social_deduction:'마피아·블러핑', card_deckbuilding:'카드·덱빌딩', puzzle_abstract:'퍼즐·추상', campaign_legacy:'캠페인·레거시', any:'장르 무관' };
+  const _INTRO_CLOCKTOWER_LABELS = { love:'매우 좋아함', interested:'기회가 되면 참여하고 싶음', curious:'아직 모르지만 해보고 싶음', not_preferred:'별로 선호하지 않음', no:'참여하고 싶지 않음' };
+  const _introLabels = (values, map) => (values || []).map(value => map[value] || value).join(', ');
+  const _introFrequencyRange = (min, max) => {
+    if (min == null || max == null) return '';
+    return min === max ? _INTRO_FREQUENCY_LABELS[min] : `${_INTRO_FREQUENCY_LABELS[min]} ~ ${_INTRO_FREQUENCY_LABELS[max]}`;
+  };
+
   // 진입할 때마다 최신 데이터로 다시 빌드(R10b) — 취향보드와 동일 기법(첫 줄에서 이름 복원)
   function _buildMeetingInnerHtml(d) {
     const _meeting = d;
@@ -2732,7 +2744,18 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       : '<span class="mb-pref-empty">미설정</span>';
     const _mbAvoidHtml = _avoidTags.length
       ? _avoidTags.map(t => `<span class="mb-pref-tag mb-pref-tag--avoid">${escH(t)}</span>`).join('')
-      : '<span class="mb-pref-empty">미설정</span>';
+      : (_meeting.questionnaireCompletedAt ? '<span class="mb-pref-empty">딱히 없음</span>' : '<span class="mb-pref-empty">미설정</span>');
+
+    const _questionnaireHtml = _meeting.questionnaireCompletedAt ? `
+      ${_meetingProfileRowHtml('함께 게임하는 사람', _introLabels(_meeting.companionTypes, _INTRO_COMPANION_LABELS))}
+      ${_meetingProfileRowHtml('평균 플레이 빈도', _INTRO_FREQUENCY_LABELS[_meeting.averagePlayFrequency])}
+      ${_meetingProfileRowHtml('참여 가능 빈도', _introFrequencyRange(_meeting.possibleFrequencyMin, _meeting.possibleFrequencyMax))}
+      ${_meetingProfileRowHtml('참여 희망 빈도', _introFrequencyRange(_meeting.desiredFrequencyMin, _meeting.desiredFrequencyMax))}
+      ${_meetingProfileRowHtml('가능한 요일·시간', `${_introLabels(_meeting.availableDays, _INTRO_DAY_LABELS)} · ${_introLabels(_meeting.availableTimes, _INTRO_TIME_LABELS)}`)}
+      ${_meetingProfileRowHtml('좋아하는 게임 유형', _introLabels(_meeting.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
+      ${_meetingProfileRowHtml('시계탑 선호도', _INTRO_CLOCKTOWER_LABELS[_meeting.clocktowerPreference])}
+      ${_meetingProfileRowHtml('바라는 점 및 각오', _meeting.expectation)}
+    ` : '<p class="taste-game-empty">아직 자기소개 설문을 작성하지 않았어요.</p>';
 
     return `
     <div class="taste-game-section" id="mbWeekSection">
@@ -2756,6 +2779,10 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
         <div class="taste-section-label">👎 비선호 유형 ${_ro('<button class="mb-pref-edit" type="button" data-pref="avoid">취향보드에서 수정 →</button>')}</div>
         <div class="mb-pref-tags">${_mbAvoidHtml}</div>
       </div>
+    </div>
+    <div class="meeting-profile-section meeting-questionnaire-section">
+      <div class="taste-section-label">👋 회원 자기소개 ${_ro('<a class="mb-pref-edit" href="/pages/club/club-intro.html">자기소개 수정 →</a>')}</div>
+      <div class="meeting-profile-display">${_questionnaireHtml}</div>
     </div>
     <div class="taste-game-section">
       <div class="taste-section-label">🕐 최근 모임 참여${stats.moimCount ? ` <span class="taste-count">${stats.moimCount}회</span>` : ''}</div>
