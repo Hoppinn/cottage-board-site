@@ -471,7 +471,7 @@ function _buildVoucherInner(bal, prods, hist, isDevMode) {
   const histHtml = hist.slice(0, 5).map((h, i, arr) => {
     const isGrant = h.delta > 0;
     const label = isGrant
-      ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'intro_complete' ? '자기소개 작성 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
+      ? (h.reason === 'first_play' ? '첫 기록 보상' : h.reason === 'intro_complete' ? '게임 프로필 작성 보상' : h.reason === 'dev_test' ? '테스트 지급 [DEV]' : '지급')
       : escH(h.voucher_products?.name || '사용');
     const balAfter = bal - arr.slice(0, i).reduce((s, e) => s + e.delta, 0);
     return `<li class="profile-voucher-hist-item${isGrant?' profile-voucher-hist-grant':' profile-voucher-hist-redeem'}"><span class="profile-voucher-hist-prefix">${isGrant?'+':'-'}</span> ${label} <span class="profile-voucher-hist-dt">${fmtDt(h.created_at)}</span><span class="profile-voucher-hist-bal">→ ${balAfter}장</span></li>`;
@@ -2333,7 +2333,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       const who = names.length > 1 ? `${escH(names[0])} 외 ${names.length - 1}명` : escH(names[0] || '사용자');
       const cnt = n.count > 1 ? ` ${n.count}건` : '';
       const reasonLabel = used ? '음료 교환권 사용'
-        : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'intro_complete' ? '자기소개 작성 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
+        : n.reason === 'first_play' ? '첫 기록 보상' : n.reason === 'intro_complete' ? '게임 프로필 작성 보상' : n.reason === 'achievement' ? '업적 달성 보상' : '관리자 지급';
       return `<li class="${cls}">${_card('🎫', `${who} 교환권 ${used ? '사용' : '획득'}${cnt}`, reasonLabel)}${readBtn}</li>`;
     }
     // 업적도 유형+날짜로 묶여서 온다 — showAchievementToast는 그 순간에만 보이는
@@ -2755,7 +2755,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       ${_meetingProfileRowHtml('좋아하는 게임 유형', _introLabels(_meeting.preferredGameTypes, _INTRO_GAME_TYPE_LABELS))}
       ${_meetingProfileRowHtml('시계탑 선호도', _INTRO_CLOCKTOWER_LABELS[_meeting.clocktowerPreference])}
       ${_meetingProfileRowHtml('바라는 점 및 각오', _meeting.expectation)}
-    ` : '<p class="taste-game-empty">아직 자기소개 설문을 작성하지 않았어요.</p>';
+    ` : '<p class="taste-game-empty">아직 게임 프로필을 작성하지 않았어요.</p>';
 
     return `
     <div class="taste-game-section" id="mbWeekSection">
@@ -2781,7 +2781,7 @@ async function openProfilePanel(autoSubsheet = null, opts = {}) {
       </div>
     </div>
     <div class="meeting-profile-section meeting-questionnaire-section">
-      <div class="taste-section-label">👋 회원 자기소개 ${_ro('<a class="mb-pref-edit" href="/pages/club/club-intro.html">자기소개 수정 →</a>')}</div>
+      <div class="taste-section-label">👋 게임 프로필 ${_ro('<a class="mb-pref-edit" href="/pages/club/club-intro.html">게임 프로필 수정 →</a>')}</div>
       <div class="meeting-profile-display">${_questionnaireHtml}</div>
     </div>
     <div class="taste-game-section">
