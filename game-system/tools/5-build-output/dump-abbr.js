@@ -8,6 +8,7 @@
 
 const path = require("path");
 const { readJson } = require("../_core/file-read-writer");
+const { resolveAbbrEntry } = require("../_core/abbr-audit");
 const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
   SOURCE_DIR,
@@ -26,17 +27,7 @@ function run() {
     .filter((g) => g.id && g.ownedName)
     .map((g) => {
       const bggId = String(g.bggId || "");
-      let abbr, source;
-      if (abbrMap[bggId]) {
-        abbr = abbrMap[bggId];
-        source = "manual-id";
-      } else if (abbrByName[g.ownedName]) {
-        abbr = abbrByName[g.ownedName];
-        source = "manual-name";
-      } else {
-        abbr = (g.ownedName || "").slice(0, 2);
-        source = "fallback";
-      }
+      const { abbr, source } = resolveAbbrEntry(g, abbrMap, abbrByName);
       return { bggId, titleKo: g.ownedName, abbr, source };
     })
     .sort((a, b) => a.abbr.localeCompare(b.abbr, "ko"));

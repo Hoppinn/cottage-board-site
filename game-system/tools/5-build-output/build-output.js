@@ -7,13 +7,17 @@ const {
   COTTAGE_OWNED_GAMES_MASTER_PATH,
   COTTAGE_GAMES_DATA_JS_PATH,
   COTTAGE_GAMES_DATA_JSON_PATH,
+  GAME_ABBR_PATH,
+  GAME_ABBR_BYNAME_PATH,
+  GAME_ABBR_MIGRATION_MANIFEST_PATH,
   LIBRARY_IMAGES_THUMB_DIR,
   ROOT_DIR,
-  SOURCE_DIR,
 } = require("../_core/paths");
-
-const GAME_ABBR_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr.json");
-const GAME_ABBR_BYNAME_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr-byname.json");
+const {
+  loadAbbrMigrationManifest,
+  resolveAbbrEntry,
+  auditAbbrSources,
+} = require("../_core/abbr-audit");
 
 const THUMB_EXTS = [".png", ".jpg", ".jpeg", ".webp"];
 
@@ -157,6 +161,23 @@ function buildCottageGameData() {
 
   const abbrMap = readJson(GAME_ABBR_PATH, {});
   const abbrByName = readJson(GAME_ABBR_BYNAME_PATH, {});
+  const migrationManifest = loadAbbrMigrationManifest(GAME_ABBR_MIGRATION_MANIFEST_PATH);
+  const sourceAudit = auditAbbrSources(
+    masterGames,
+    abbrMap,
+    abbrByName,
+    migrationManifest.requiredBggIds
+  );
+  if (sourceAudit.migrationMissing.length || sourceAudit.duplicateSources.length) {
+    const details = [];
+    if (sourceAudit.migrationMissing.length) {
+      details.push(`이관 manifest 누락: ${sourceAudit.migrationMissing.join(", ")}`);
+    }
+    if (sourceAudit.duplicateSources.length) {
+      details.push(`ID/이름 맵 중복 정본: ${sourceAudit.duplicateSources.map((g) => g.ownedName).join(", ")}`);
+    }
+    throw new Error(`[ABBR SOURCE] ${details.join(" / ")}`);
+  }
 
   const gameData = {};
   const abbrSourceMap = {};
@@ -164,17 +185,9 @@ function buildCottageGameData() {
   masterGames.forEach((game) => {
     if (!game.id || !game.ownedName) return;
     const item = buildGameItem(game);
-    const bggId = String(game.bggId || "");
-    if (abbrMap[bggId]) {
-      item.abbr = abbrMap[bggId];
-      abbrSourceMap[game.id] = "manual-id";
-    } else if (abbrByName[game.ownedName]) {
-      item.abbr = abbrByName[game.ownedName];
-      abbrSourceMap[game.id] = "manual-name";
-    } else {
-      item.abbr = (game.ownedName || "").slice(0, 2);
-      abbrSourceMap[game.id] = "fallback";
-    }
+    const resolved = resolveAbbrEntry(game, abbrMap, abbrByName);
+    item.abbr = resolved.abbr;
+    abbrSourceMap[game.id] = resolved.source;
     gameData[game.id] = item;
   });
 

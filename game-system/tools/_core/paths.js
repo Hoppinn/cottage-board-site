@@ -76,6 +76,13 @@ const SOURCE_COTTAGE_MANUAL_DIR = path.join(SOURCE_DIR, "2-cottage-manual");
 
 const BGG_RANKS_CSV_PATH = path.join(SOURCE_BGG_CSV_DIR, "boardgames_ranks.csv");
 const COTTAGE_OWNED_GAMES_XLSX_PATH = path.join(SOURCE_COTTAGE_MANUAL_DIR, "cottage-owned-games.xlsx");
+const GAME_ABBR_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr.json");
+const GAME_ABBR_BYNAME_PATH = path.join(SOURCE_DIR, "3-abbr", "game-abbr-byname.json");
+const GAME_ABBR_MIGRATION_MANIFEST_PATH = path.join(
+  SOURCE_DIR,
+  "3-abbr",
+  "game-abbr-migration-manifest.json"
+);
 
 /* =========================
    STAGING DATA
@@ -167,6 +174,9 @@ module.exports = {
   SOURCE_COTTAGE_MANUAL_DIR,
   BGG_RANKS_CSV_PATH,
   COTTAGE_OWNED_GAMES_XLSX_PATH,
+  GAME_ABBR_PATH,
+  GAME_ABBR_BYNAME_PATH,
+  GAME_ABBR_MIGRATION_MANIFEST_PATH,
 
   STAGING_BGG_ID_MAPPING_DIR,
   STAGING_BGG_API_SNAPSHOT_DIR,

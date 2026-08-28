@@ -551,6 +551,7 @@ game-system/
       2-cottage-manual/           ← cottage-owned-games.xlsx
       3-abbr/game-abbr.json       ← BGG ID → 약칭 매핑 (수동 관리)
       3-abbr/game-abbr-byname.json ← 게임명 → 약칭 매핑 (bggId 없는 보유 게임 + 직접입력 게임)
+      3-abbr/game-abbr-migration-manifest.json ← 2026-08-29 정본 전환 완료를 보증하는 ID-only invariant
                                     보유 게임: abbrMap[bggId] → abbrByName[ownedName] → titleKo 앞 2글자 폴백
                                     직접입력: abbrByName[custom_name] → 게임명 앞 2글자 폴백
     staging/                      ← 자동 생성 중간물 (재생성 가능)
@@ -563,6 +564,17 @@ game-system/
 - 사람이 확정한 수동 약칭은 자동 앞 2글자보다 우선하는 durable 데이터다. 약칭 소스를 통합할 때 기존 정본에 값이 없으면 누락 없이 이관하고, 서로 충돌하면 최신 정본을 보존하되 사용자가 명시한 값으로만 덮는다.
 - 서로 다른 게임의 약칭은 겹치지 않게 한다. 같은 본판·확장·언어판처럼 의도적으로 한 게임군으로 묶는 경우의 수동 중복은 허용하며, `build-output.js` 린트는 fallback이 포함된 충돌만 실패 후보로 알린다.
 - 약칭 수정 정본은 `game-abbr.json`과 `game-abbr-byname.json` 두 파일뿐이다. 구 `assets/data/game-short-names.js`는 런타임에서 더 이상 로드하지 않는 레거시 자료이므로 새 값을 추가하지 않는다.
+
+#### 수동 약칭 정본 전환 누락 사례와 방지선 (2026-08-29)
+
+- **발생 경로와 단위:** 2026-07-02 `assets/data/game-short-names.js`에 엑셀 기반 수동 약칭 **148 BGG-ID 키**가 먼저 생겼다(`602f9a7a`). 2026-07-04~05 막대 렌더가 공용 경로로 이동한 뒤 새 정본 `game-abbr.json`은 **2키**만 가진 채 시작했다(`65b3ba0c`). 2026-07-08 직전 fallback 충돌 **83건은 약칭 문자열 그룹 수**이며, 그 그룹 안에는 게임 행 204개·고유 BGG-ID 189키가 있었다. 따라서 83과 누락 키 수는 합산 대상이 아니다.
+- **실제 집합 관계:** 레거시 148키와 충돌 대상 189키의 교집합은 **47키**, 차집합은 `레거시-충돌=101키`, `충돌-레거시=142키`였다. `bb92e265` 직후 정본 192키는 `충돌 대상 189키 + 충돌 밖 레거시 3키(12333·173346·227935)`로 구성됐다. 그 결과 레거시에서 실제 이관된 것은 **50키**, 미이관은 **98키**였다. 이후 `601af4e1`에서 레거시 키 `248562`가 별도 추가되어 이번 발견 직전에는 이관 51키·미이관 **97키**, `a91f4fb0` 이후 현재 미이관은 **0키**다. 전체 키 목록과 교집합·차집합은 `node game-system/tools/5-build-output/audit-abbr-migration.js`로 역사 커밋에서 재현한다.
+- **원인 판정:** 자동 빌드가 수동 정본을 덮은 사건이 아니다. 정본 전환 때 기존 수동값의 집합 포함관계를 검사하지 않았고, 충돌 검사만으로 이관 완료를 판정한 것이 원인이다. 이후 렌더가 `COTTAGE_GAMES[].abbr`만 읽으면서 남아 있던 레거시 파일은 로드돼도 실질적으로 죽은 두 번째 소스가 됐다.
+- **자동 되돌림 경계:** `npm run build`는 두 정본 JSON을 읽기만 하며 수정하지 않는다. 반대로 `library/3-output/cottage-games-data-output.{json,js}`는 산출물이므로 직접 고친 값은 다음 빌드에서 정본값으로 되돌아간다. 산출물을 약칭 수정 장소로 사용하지 않는다.
+- **우선순위 충돌 금지:** 같은 보유 게임을 BGG-ID 맵과 게임명 맵 양쪽에 등록하지 않는다. 값이 달라 ID 맵이 조용히 이기거나, 지금은 같아도 나중에 한쪽만 바뀌는 이중 정본을 모두 오류로 취급한다.
+- **이관 manifest의 지위:** `game-abbr-migration-manifest.json`은 레거시의 약칭 **값을 복제하지 않고**, 이관되어야 했던 148개 BGG ID만 고정한다. 이번 정본 전환의 집합 포함관계를 보증하는 migration invariant이며 새 약칭을 추가하는 곳도, 값 충돌 때 참조하는 곳도 아니다. 앞으로 새 약칭은 두 정본 JSON에만 추가하고 manifest는 갱신하지 않는다. 검사기는 manifest의 버전·출처·ID 수 148·정렬된 ID 집합 checksum도 고정 계약과 대조한다. 따라서 레거시 파일이나 manifest가 세 번째 값 정본이 되지 않는다.
+- **자동 검사:** `npm run check`는 ①manifest의 148개 BGG ID가 현재 ID 정본에 전부 포함되는지 ②ID/이름 맵 중복 정본이 없는지 ③정본 계산값과 JSON·JS 산출물이 같은지 ④직접입력 이름맵이 JS 전역에 그대로 실렸는지를 검사한다. ①·②는 수동 해결 전 실패, ③·④는 `npm run build` 재실행 대상으로 보고한다. `npm run build`도 ①·②가 깨지면 산출물을 쓰기 전에 중단한다. 검사·빌드는 레거시 파일을 읽지 않는다.
+- **판정 단일화:** 빌드·`npm run check`·`dump-abbr.js`는 `_core/abbr-audit.js`의 `resolveAbbrEntry()`를 함께 쓴다. 약칭 우선순위를 소비처마다 다시 구현하지 않는다.
 
 ---
 
